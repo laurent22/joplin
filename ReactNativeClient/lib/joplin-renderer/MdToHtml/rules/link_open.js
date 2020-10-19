@@ -47,7 +47,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				if (!mime) {
 					iconType = 'fa-joplin';
 				}
-				// Icons are defined in lib/renderers/noteStyle.js using inline svg
+				// Icons are defined in lib/renderers/noteStyle using inline svg
 				// The icons are taken from fork-awesome but use the font-awesome naming scheme in order
 				// to be more compatible with the getClass library
 				icon = `<span class="resource-icon ${iconType}"></span>`;

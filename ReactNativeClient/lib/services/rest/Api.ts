@@ -3,7 +3,7 @@ import Logger from 'lib/Logger';
 import shim from 'lib/shim';
 import uuid from 'lib/uuid';
 
-const { ltrimSlashes } = require('lib/path-utils.js');
+const { ltrimSlashes } = require('lib/path-utils');
 const { Database } = require('lib/database.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
@@ -12,7 +12,7 @@ const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
 const BaseModel = require('lib/BaseModel');
 const htmlUtils = require('lib/htmlUtils');
-const markupLanguageUtils = require('lib/markupLanguageUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils').default;
 const mimeUtils = require('lib/mime-utils.js').mime;
 const md5 = require('md5');
 const HtmlToMd = require('lib/HtmlToMd');

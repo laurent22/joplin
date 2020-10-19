@@ -2,7 +2,7 @@ import { ImportExportResult } from './types';
 
 const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
 const Folder = require('lib/models/Folder.js');
-const { filename } = require('lib/path-utils.js');
+const { filename } = require('lib/path-utils');
 
 export default class InteropService_Importer_EnexToMd extends InteropService_Importer_Base {
 	async exec(result:ImportExportResult) {

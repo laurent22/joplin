@@ -1,6 +1,6 @@
 import Plugin from '../Plugin';
 import Logger from 'lib/Logger';
-import { Script } from './types';
+import { ContentScriptType, Script } from './types';
 
 /**
  * This class provides access to plugin-related features.
@@ -47,5 +47,9 @@ export default class JoplinPlugins {
 				this.logger.info(`Finished running onStart handler: ${this.plugin.id} (Took ${Date.now() - startTime}ms)`);
 			});
 		}
+	}
+
+	async registerContentScript(type:ContentScriptType, id:string, scriptPath:string) {
+		return this.plugin.registerContentScript(type, id, scriptPath);
 	}
 }

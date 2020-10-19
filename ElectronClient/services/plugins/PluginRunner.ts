@@ -96,11 +96,14 @@ export default class PluginRunner extends BasePluginRunner {
 			if (message.pluginId !== plugin.id) return;
 
 			const mappedArgs = mapEventIdsToHandlers(plugin.id, message.args);
+			const fullPath = `joplin.${message.path}`;
+
+			this.logger().debug(`PluginRunner: execute call: ${fullPath}: ${mappedArgs}`);
 
 			let result:any = null;
 			let error:any = null;
 			try {
-				result = await executeSandboxCall(plugin.id, pluginApi, `joplin.${message.path}`, mappedArgs, this.eventHandler);
+				result = await executeSandboxCall(plugin.id, pluginApi, fullPath, mappedArgs, this.eventHandler);
 			} catch (e) {
 				error = e ? e : new Error('Unknown error');
 			}

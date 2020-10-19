@@ -1,14 +1,14 @@
 const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base').default;
-const { basename, friendlySafeFilename, rtrimSlashes } = require('lib/path-utils.js');
+const { basename, friendlySafeFilename, rtrimSlashes } = require('lib/path-utils');
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim').default;
 const { themeStyle } = require('lib/theme');
-const { dirname } = require('lib/path-utils.js');
+const { dirname } = require('lib/path-utils');
 const { escapeHtml } = require('lib/string-utils.js');
-const markupLanguageUtils = require('lib/markupLanguageUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils').default;
 const { assetsToHeaders } = require('lib/joplin-renderer');
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {

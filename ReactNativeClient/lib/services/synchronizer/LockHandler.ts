@@ -3,7 +3,7 @@ import shim from 'lib/shim';
 
 const JoplinError = require('lib/JoplinError');
 const { time } = require('lib/time-utils');
-const { fileExtension, filename } = require('lib/path-utils.js');
+const { fileExtension, filename } = require('lib/path-utils');
 
 export enum LockType {
 	None = '',

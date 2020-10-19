@@ -4,13 +4,13 @@ require('app-module-path').addPath(__dirname);
 
 const os = require('os');
 const { time } = require('lib/time-utils.js');
-const { filename } = require('lib/path-utils.js');
+const { filename } = require('lib/path-utils');
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
 const shim = require('lib/shim').default;
-const MdToHtml = require('lib/joplin-renderer/MdToHtml');
+const MdToHtml = require('lib/joplin-renderer/MdToHtml').default;
 const { enexXmlToMd } = require('lib/import-enex-md-gen.js');
 const { themeStyle } = require('lib/theme');
 

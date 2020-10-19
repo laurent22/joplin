@@ -1,4 +1,4 @@
-const { isHidden } = require('lib/path-utils.js');
+const { isHidden } = require('lib/path-utils');
 const Logger = require('lib/Logger').default;
 const shim = require('lib/shim').default;
 const BaseItem = require('lib/models/BaseItem.js');

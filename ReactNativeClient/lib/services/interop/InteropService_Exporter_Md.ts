@@ -1,5 +1,5 @@
 const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base').default;
-const { basename, dirname, friendlySafeFilename } = require('lib/path-utils.js');
+const { basename, dirname, friendlySafeFilename } = require('lib/path-utils');
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');

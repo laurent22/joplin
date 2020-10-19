@@ -6,7 +6,7 @@ import { _ } from 'lib/locale';
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting').default;
 const { themeStyle } = require('lib/theme');
-const pathUtils = require('lib/path-utils.js');
+const pathUtils = require('lib/path-utils');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const shared = require('lib/components/shared/config-shared.js');
 const bridge = require('electron').remote.require('./bridge').default;

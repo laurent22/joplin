@@ -5,7 +5,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseItem = require('lib/models/BaseItem');
 const Setting = require('lib/models/Setting').default;
 const shim = require('lib/shim').default;
-const pathUtils = require('lib/path-utils.js');
+const pathUtils = require('lib/path-utils');
 const imageType = require('image-type');
 const readChunk = require('read-chunk');
 

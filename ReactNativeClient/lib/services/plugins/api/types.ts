@@ -312,3 +312,12 @@ export interface SettingSection {
  * [2]: (Optional) Resource link.
  */
 export type Path = string[];
+
+// =================================================================
+// Plugins type
+// =================================================================
+
+export enum ContentScriptType {
+	MarkdownItPlugin = 'markdownItPlugin',
+	CodeMirrorPlugin = 'codeMirrorPlugin',
+}

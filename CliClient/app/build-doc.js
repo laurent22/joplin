@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { fileExtension, dirname } = require('lib/path-utils.js');
+const { fileExtension, dirname } = require('lib/path-utils');
 const wrap_ = require('word-wrap');
 const { languageCode } = require('lib/locale');
 

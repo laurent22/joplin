@@ -1,11 +1,25 @@
+import InMemoryCache from 'lib/InMemoryCache';
+import noteStyle from './noteStyle';
+import { fileExtension } from './pathUtils';
+
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
-const noteStyle = require('./noteStyle');
-const { fileExtension } = require('./pathUtils');
-const InMemoryCache = require('lib/InMemoryCache').default;
+
+interface RendererRules {
+	[pluginName:string]: any,
+}
+
+interface RendererPlugin {
+	module: any,
+	options?: any,
+}
+
+interface RendererPlugins {
+	[pluginName:string]: RendererPlugin,
+}
 
 // /!\/!\ Note: the order of rules is important!! /!\/!\
-const rules = {
+const rules:RendererRules = {
 	fence: require('./MdToHtml/rules/fence').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 	image: require('./MdToHtml/rules/image'),
@@ -24,8 +38,9 @@ const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const uslug = require('uslug');
 const markdownItAnchor = require('markdown-it-anchor');
+
 // The keys must match the corresponding entry in Setting.js
-const plugins = {
+const plugins:RendererPlugins = {
 	mark: { module: require('markdown-it-mark') },
 	footnote: { module: require('markdown-it-footnote') },
 	sub: { module: require('markdown-it-sub') },
@@ -40,24 +55,81 @@ const plugins = {
 };
 const defaultNoteStyle = require('./defaultNoteStyle');
 
-function slugify(s) {
+function slugify(s:string):string {
 	return uslug(s);
 }
 
 // Share across all instances of MdToHtml
 const inMemoryCache = new InMemoryCache(20);
 
-class MdToHtml {
-	constructor(options = null) {
+export interface ExtraRendererRule {
+	id: string,
+	module: any,
+}
+
+export interface Options {
+	resourceBaseUrl?: string,
+	ResourceModel?: any,
+	pluginOptions?: any,
+	tempDir?: string,
+	fsDriver?: any,
+	extraRendererRules?: ExtraRendererRule[],
+}
+
+interface PluginAsset {
+	mime?: string,
+	inline?: boolean,
+	name?: string,
+	text?: string,
+}
+
+// Types are a bit of a mess when it comes to plugin assets. Something
+// called "pluginAsset" in this class might refer to sublty different
+// types. The logic should be cleaned up before types are added.
+interface PluginAssets {
+	[pluginName:string]: PluginAsset[];
+}
+
+interface PluginContext {
+	css: any
+	pluginAssets: any,
+	cache: any,
+};
+
+interface RenderResultPluginAsset {
+	name: string,
+	path: string,
+	mime: string,
+}
+
+interface RenderResult {
+	html: string,
+	pluginAssets: RenderResultPluginAsset[];
+	cssStrings: string[],
+}
+
+export default class MdToHtml {
+
+	private resourceBaseUrl_:string;
+	private ResourceModel_:any;
+	private contextCache_:any;
+	private tempDir_:string;
+	private fsDriver_:any;
+
+	private cachedOutputs_:any = {};
+	private lastCodeHighlightCacheKey_:string = null;
+	private cachedHighlightedCode_:any = {};
+
+	// Markdown-It plugin options (not Joplin plugin options)
+	private pluginOptions_:any = {};
+	private extraRendererRules_:RendererRules = {};
+		
+	constructor(options:Options = null) {
 		if (!options) options = {};
 
 		// Must include last "/"
 		this.resourceBaseUrl_ = 'resourceBaseUrl' in options ? options.resourceBaseUrl : null;
 
-		this.cachedOutputs_ = {};
-
-		this.lastCodeHighlightCacheKey_ = null;
-		this.cachedHighlightedCode_ = {};
 		this.ResourceModel_ = options.ResourceModel;
 		this.pluginOptions_ = options.pluginOptions ? options.pluginOptions : {};
 		this.contextCache_ = inMemoryCache;
@@ -73,6 +145,12 @@ class MdToHtml {
 			if (options.fsDriver.writeFile) this.fsDriver_.writeFile = options.fsDriver.writeFile;
 			if (options.fsDriver.exists) this.fsDriver_.exists = options.fsDriver.exists;
 			if (options.fsDriver.cacheCssToFile) this.fsDriver_.cacheCssToFile = options.fsDriver.cacheCssToFile;
+		}
+
+		if (options.extraRendererRules) {
+			for (const rule of options.extraRendererRules) {
+				this.loadExtraRendererRule(rule.id, rule.module);
+			}
 		}
 	}
 
@@ -91,7 +169,7 @@ class MdToHtml {
 		return output;
 	}
 
-	pluginOptions(name) {
+	pluginOptions(name:string) {
 		let o = this.pluginOptions_[name] ? this.pluginOptions_[name] : {};
 		o = Object.assign({
 			enabled: true,
@@ -99,12 +177,18 @@ class MdToHtml {
 		return o;
 	}
 
-	pluginEnabled(name) {
+	pluginEnabled(name:string) {
 		return this.pluginOptions(name).enabled;
 	}
 
-	processPluginAssets(pluginAssets) {
-		const files = [];
+	// `module` is a file that has already been `required()`
+	public loadExtraRendererRule(id:string, module:any) {
+		if (this.extraRendererRules_[id]) throw new Error('A renderer rule with this ID has already been loaded: ' + id);
+		this.extraRendererRules_[id] = module;
+	}
+
+	processPluginAssets(pluginAssets:PluginAssets):RenderResult {
+		const files:RenderResultPluginAsset[] = [];
 		const cssStrings = [];
 		for (const pluginName in pluginAssets) {
 			for (const asset of pluginAssets[pluginName]) {
@@ -140,13 +224,14 @@ class MdToHtml {
 		}
 
 		return {
+			html: '',
 			pluginAssets: files,
 			cssStrings: cssStrings,
 		};
 	}
 
-	async allAssets(theme) {
-		const assets = {};
+	async allAssets(theme:any) {
+		const assets:any = {};
 		for (const key in rules) {
 			if (!this.pluginEnabled(key)) continue;
 			const rule = rules[key];
@@ -157,12 +242,12 @@ class MdToHtml {
 		}
 
 		const processedAssets = this.processPluginAssets(assets);
-		processedAssets.cssStrings.splice(0, 0, noteStyle(theme));
+		processedAssets.cssStrings.splice(0, 0, noteStyle(theme).join('\n'));
 		const output = await this.outputAssetsToExternalAssets_(processedAssets);
 		return output.pluginAssets;
 	}
 
-	async outputAssetsToExternalAssets_(output) {
+	async outputAssetsToExternalAssets_(output:any) {
 		for (const cssString of output.cssStrings) {
 			output.pluginAssets.push(await this.fsDriver().cacheCssToFile(cssString));
 		}
@@ -170,7 +255,7 @@ class MdToHtml {
 		return output;
 	}
 
-	removeMarkdownItWrappingParagraph_(html) {
+	removeMarkdownItWrappingParagraph_(html:string) {
 		// <p></p>\n
 		if (html.length < 8) return html;
 		if (html.substr(0, 3) !== '<p>') return html;
@@ -183,7 +268,7 @@ class MdToHtml {
 	}
 
 	// "theme" is the theme as returned by themeStyle()
-	async render(body, theme = null, options = null) {
+	public async render(body:string, theme:any = null, options:any = null):Promise<RenderResult> {
 		options = Object.assign({}, {
 			// In bodyOnly mode, the rendered Markdown is returned without the wrapper DIV
 			bodyOnly: false,
@@ -213,7 +298,7 @@ class MdToHtml {
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 
-		const context = {
+		const context:PluginContext = {
 			css: {},
 			pluginAssets: {},
 			cache: this.contextCache_,
@@ -229,7 +314,7 @@ class MdToHtml {
 			typographer: this.pluginEnabled('typographer'),
 			linkify: true,
 			html: true,
-			highlight: (str, lang) => {
+			highlight: (str:string, lang:string) => {
 				let outputCodeHtml = '';
 
 				// The strings includes the last \n that is part of the fence,
@@ -296,9 +381,11 @@ class MdToHtml {
 		// Using the `context` object, a plugin can define what additional assets they need (css, fonts, etc.) using context.pluginAssets.
 		// The calling application will need to handle loading these assets.
 
-		for (const key in rules) {
+		const allRules = Object.assign({}, rules, this.extraRendererRules_);
+
+		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;
-			const rule = rules[key];
+			const rule = allRules[key];
 			const ruleInstall = rule.install ? rule.install : rule;
 			markdownIt.use(ruleInstall(context, { ...ruleOptions }));
 		}
@@ -358,5 +445,3 @@ class MdToHtml {
 		return '';
 	}
 }
-
-module.exports = MdToHtml;

@@ -5,7 +5,7 @@ require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 const fs = require('fs-extra');
 const request = require('request');
 
-const { fileExtension } = require('lib/path-utils.js');
+const { fileExtension } = require('lib/path-utils');
 const url = 'https://api.github.com/repos/laurent22/joplin/releases/latest';
 const readmePath = `${__dirname}/../README.md`;
 

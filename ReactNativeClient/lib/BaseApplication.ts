@@ -43,7 +43,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
-const { toSystemSlashes } = require('lib/path-utils.js');
+const { toSystemSlashes } = require('lib/path-utils');
 const { setAutoFreeze } = require('immer');
 
 // const ntpClient = require('lib/vendor/ntp-client');
