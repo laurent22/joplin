@@ -1,26 +1,27 @@
-const markdownUtils = require('lib/markdownUtils').default;
+import markdownUtils from 'lib/markdownUtils';
+import Setting from 'lib/models/Setting';
+import shim from 'lib/shim';
+import MarkupToHtml, { MarkupLanguage } from 'lib/joplin-renderer/MarkupToHtml';
+
 const htmlUtils = require('lib/htmlUtils');
-const Setting = require('lib/models/Setting').default;
 const Resource = require('lib/models/Resource');
-const shim = require('lib/shim').default;
-const { MarkupToHtml } = require('lib/joplin-renderer');
 
 class MarkupLanguageUtils {
-	lib_(language) {
-		if (language === MarkupToHtml.MARKUP_LANGUAGE_HTML) return htmlUtils;
-		if (language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) return markdownUtils;
+	lib_(language:MarkupLanguage) {
+		if (language === MarkupLanguage.Html) return htmlUtils;
+		if (language === MarkupLanguage.Markdown) return markdownUtils;
 		throw new Error(`Unsupported markup language: ${language}`);
 	}
 
-	extractImageUrls(language, text) {
+	extractImageUrls(language:MarkupLanguage, text:string) {
 		return this.lib_(language).extractImageUrls(text);
 	}
 
 	// Create a new MarkupToHtml instance while injecting options specific to Joplin
 	// desktop and mobile applications.
-	newMarkupToHtml(options = null) {
+	newMarkupToHtml(options:any = null) {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
-		const pluginOptions = {};
+		const pluginOptions:any = {};
 		for (const n in subValues) {
 			pluginOptions[n] = { enabled: subValues[n] };
 		}
@@ -38,4 +39,4 @@ class MarkupLanguageUtils {
 
 const markupLanguageUtils = new MarkupLanguageUtils();
 
-module.exports = markupLanguageUtils;
+export default markupLanguageUtils;

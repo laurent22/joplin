@@ -1,5 +1,5 @@
 const { basicDelta } = require('lib/file-api');
-const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
 
 class FileApiDriverWebDav {

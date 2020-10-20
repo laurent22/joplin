@@ -1,8 +1,4 @@
-/* eslint prefer-const: 0*/
-
-// Based on https://github.com/waylonflinn/markdown-it-katex
-
-'use strict';
+import { RuleOptions } from "lib/joplin-renderer/MdToHtml";
 
 let katex = require('katex');
 const md5 = require('md5');
@@ -46,7 +42,7 @@ function katexStyle() {
 
 // Test if potential opening or closing delimieter
 // Assumes that there is a "$" at state.src[pos]
-function isValidDelim(state, pos) {
+function isValidDelim(state:any, pos:number) {
 	let prevChar,
 		nextChar,
 		max = state.posMax,
@@ -71,7 +67,7 @@ function isValidDelim(state, pos) {
 	};
 }
 
-function math_inline(state, silent) {
+function math_inline(state:any, silent:boolean) {
 	let start, match, token, res, pos;
 
 	if (state.src[state.pos] !== '$') {
@@ -146,7 +142,7 @@ function math_inline(state, silent) {
 	return true;
 }
 
-function math_block(state, start, end, silent) {
+function math_block(state:any, start:number, end:number, silent:boolean) {
 	let firstLine,
 		lastLine,
 		next,
@@ -212,80 +208,71 @@ function math_block(state, start, end, silent) {
 	return true;
 }
 
-const cache_ = {};
+const cache_:any = {};
 
-module.exports = {
-	install: function(context) {
+function renderToStringWithCache(latex:string, katexOptions:any) {
+	const cacheKey = md5(escape(latex) + escape(stringifySafe(katexOptions)));
+	if (cacheKey in cache_) {
+		return cache_[cacheKey];
+	} else {
+		const beforeMacros = stringifySafe(katexOptions.macros);
+		const output = katex.renderToString(latex, katexOptions);
+		const afterMacros = stringifySafe(katexOptions.macros);
+
+		// Don't cache the formulas that add macros, otherwise
+		// they won't be added on second run.
+		if (beforeMacros === afterMacros) cache_[cacheKey] = output;
+		return output;
+	}
+}
+
+export default {
+	plugin: function(markdownIt:any, options:RuleOptions) {
 		// Keep macros that persist across Katex blocks to allow defining a macro
 		// in one block and re-using it later in other blocks.
 		// https://github.com/laurent22/joplin/issues/1105
-		context.__katex = { macros: {} };
+		if (!options.context.userData.__katex) options.context.userData.__katex = { macros: {} };
 
-		const addContextAssets = () => {
-			context.pluginAssets['katex'] = katexStyle();
-		};
+		const katexOptions:any = {}
+		katexOptions.macros = options.context.userData.__katex.macros;
+		katexOptions.trust = true;
 
-		function renderToStringWithCache(latex, options) {
-			const cacheKey = md5(escape(latex) + escape(stringifySafe(options)));
-			if (cacheKey in cache_) {
-				return cache_[cacheKey];
-			} else {
-				const beforeMacros = stringifySafe(options.macros);
-				const output = katex.renderToString(latex, options);
-				const afterMacros = stringifySafe(options.macros);
-
-				// Don't cache the formulas that add macros, otherwise
-				// they won't be added on second run.
-				if (beforeMacros === afterMacros) cache_[cacheKey] = output;
-				return output;
+		// set KaTeX as the renderer for markdown-it-simplemath
+		const katexInline = function(latex:string) {
+			katexOptions.displayMode = false;
+			try {
+				return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${markdownIt.utils.escapeHtml(latex)}</span>${renderToStringWithCache(latex, katexOptions)}</span>`;
+			} catch (error) {
+				console.error('Katex error for:', latex, error);
+				return latex;
 			}
-		}
-
-		return function(md, options) {
-			// Default options
-
-			options = options || {};
-			options.macros = context.__katex.macros;
-			options.trust = true;
-
-			// set KaTeX as the renderer for markdown-it-simplemath
-			const katexInline = function(latex) {
-				options.displayMode = false;
-				try {
-					return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${md.utils.escapeHtml(latex)}</span>${renderToStringWithCache(latex, options)}</span>`;
-				} catch (error) {
-					console.error('Katex error for:', latex, error);
-					return latex;
-				}
-			};
-
-			const inlineRenderer = function(tokens, idx) {
-				addContextAssets();
-				return katexInline(tokens[idx].content);
-			};
-
-			const katexBlock = function(latex) {
-				options.displayMode = true;
-				try {
-					return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${md.utils.escapeHtml(latex)}</pre>${renderToStringWithCache(latex, options)}</div>`;
-				} catch (error) {
-					console.error('Katex error for:', latex, error);
-					return latex;
-				}
-			};
-
-			const blockRenderer = function(tokens, idx) {
-				addContextAssets();
-				return `${katexBlock(tokens[idx].content)}\n`;
-			};
-
-			md.inline.ruler.after('escape', 'math_inline', math_inline);
-			md.block.ruler.after('blockquote', 'math_block', math_block, {
-				alt: ['paragraph', 'reference', 'blockquote', 'list'],
-			});
-			md.renderer.rules.math_inline = inlineRenderer;
-			md.renderer.rules.math_block = blockRenderer;
 		};
+
+		const inlineRenderer = function(tokens:any[], idx:number) {
+			return katexInline(tokens[idx].content);
+		};
+
+		const katexBlock = function(latex:string) {
+			katexOptions.displayMode = true;
+			try {
+				return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${renderToStringWithCache(latex, katexOptions)}</div>`;
+			} catch (error) {
+				console.error('Katex error for:', latex, error);
+				return latex;
+			}
+		};
+
+		const blockRenderer = function(tokens:any[], idx:number) {
+			return `${katexBlock(tokens[idx].content)}\n`;
+		};
+
+		markdownIt.inline.ruler.after('escape', 'math_inline', math_inline);
+		markdownIt.block.ruler.after('blockquote', 'math_block', math_block, {
+			alt: ['paragraph', 'reference', 'blockquote', 'list'],
+		});
+		markdownIt.renderer.rules.math_inline = inlineRenderer;
+		markdownIt.renderer.rules.math_block = blockRenderer;
 	},
-	style: katexStyle,
+
+	assets: katexStyle,
 };

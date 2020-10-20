@@ -3,7 +3,7 @@ const { connect } = require('react-redux');
 const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale');
-const { filename, basename } = require('lib/path-utils.js');
+const { filename, basename } = require('lib/path-utils');
 const { importEnex } = require('lib/import-enex');
 
 class ImportScreenComponent extends React.Component {

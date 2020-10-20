@@ -1,11 +1,13 @@
+import { RuleOptions } from 'lib/joplin-renderer/MdToHtml';
+
 // const Resource = require('lib/models/Resource.js');
 const utils = require('../../utils');
 const htmlUtils = require('../../htmlUtils.js');
 
-function installRule(markdownIt, mdOptions, ruleOptions) {
+function plugin(markdownIt:any, ruleOptions:RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.image;
 
-	markdownIt.renderer.rules.image = (tokens, idx, options, env, self) => {
+	markdownIt.renderer.rules.image = (tokens:any[], idx:number, options:any, env:any, self:any) => {
 		const Resource = ruleOptions.ResourceModel;
 
 		const token = tokens[idx];
@@ -19,12 +21,10 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		if (r) {
 			let js = '';
 			if (ruleOptions.enableLongPress) {
-				const longPressDelay = ruleOptions.longPressDelay ? ruleOptions.longPressDelay : 500;
 				const id = r['data-resource-id'];
 
 				const longPressHandler = `${ruleOptions.postMessageSyntax}('longclick:${id}')`;
-
-				const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${longPressDelay});`;
+				const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${ruleOptions.longPressDelay});`;
 				const cancel = 'if (!!t) clearTimeout(t); t=null';
 
 				js = ` ontouchstart="${touchStart}" ontouchend="${cancel}" ontouchcancel="${cancel}" ontouchmove="${cancel}"`;
@@ -36,8 +36,4 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 	};
 }
 
-module.exports = function(context, ruleOptions) {
-	return function(md, mdOptions) {
-		installRule(md, mdOptions, ruleOptions);
-	};
-};
+export default { plugin };

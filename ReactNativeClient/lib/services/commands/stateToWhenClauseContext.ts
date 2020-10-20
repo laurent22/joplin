@@ -2,7 +2,7 @@ import { stateUtils } from 'lib/reducer';
 
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
-const MarkupToHtml = require('lib/joplin-renderer/MarkupToHtml');
+const MarkupToHtml = require('lib/joplin-renderer/MarkupToHtml').default;
 
 export default function stateToWhenClauseContext(state:any) {
 	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;

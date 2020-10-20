@@ -15,7 +15,7 @@ const { time } = require('lib/time-utils.js');
 const ReactTooltip = require('react-tooltip');
 const { urlDecode, substrWithEllipsis } = require('lib/string-utils');
 const bridge = require('electron').remote.require('./bridge').default;
-const markupLanguageUtils = require('lib/markupLanguageUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils').default;
 
 class NoteRevisionViewerComponent extends React.PureComponent {
 	constructor() {

@@ -117,13 +117,14 @@ export default class PluginService extends BaseService {
 		// such folders but to keep things sane we disallow it.
 		if (this.plugins_[pluginId]) throw new Error(`There is already a plugin with this ID: ${pluginId}`);
 
-		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger());
+		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger(), (action:any) => this.store_.dispatch(action));
 
 		this.store_.dispatch({
 			type: 'PLUGIN_ADD',
 			plugin: {
 				id: pluginId,
 				views: {},
+				contentScripts: {},
 			},
 		});
 

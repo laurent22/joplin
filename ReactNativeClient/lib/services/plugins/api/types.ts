@@ -312,3 +312,54 @@ export interface SettingSection {
  * [2]: (Optional) Resource link.
  */
 export type Path = string[];
+
+// =================================================================
+// Plugins type
+// =================================================================
+
+export enum ContentScriptType {
+	/**
+	 * Registers a new Markdown-It plugin, which should follow this template:
+	 *
+	 * ```javascript
+	 * // The module should export an object as below:
+	 *
+	 * module.exports = {
+	 *
+	 *     // The "context" variable is currently unused but could be used later on to provide
+	 *     // access to your own plugin so that the content script and plugin can communicate.
+	 *     default: function(context) {
+	 *         return {
+	 *
+	 *             // This is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information
+	 *             // The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml.ts), which
+	 *             // contains a number of options, mostly useful for Joplin's internal code.
+	 *             plugin: function(markdownIt, options) {
+	 *                 // ...
+	 *             },
+	 *
+	 *             // You may also specify additional assets such as JS or CSS that should be loaded in the rendered HTML document.
+	 *             // Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to
+	 *             // see how the data should be structured.
+	 *             assets: {},
+	 *         }
+	 *     }
+	 * }
+	 * ```
+	 *
+	 * To include a regular Markdown-It plugin, that doesn't make use of any Joplin-specific feature, you
+	 * would simply create a file such as this:
+	 *
+	 * ```javascript
+	 * module.exports = {
+	 *     default: function(context) {
+	 *         return {
+	 *             plugin: require('markdown-it-toc-done-right');
+	 *         }
+	 *     }
+	 * }
+	 * ```
+	 */
+	MarkdownItPlugin = 'markdownItPlugin',
+	CodeMirrorPlugin = 'codeMirrorPlugin',
+}

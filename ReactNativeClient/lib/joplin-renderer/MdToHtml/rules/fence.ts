@@ -8,7 +8,7 @@
 // So we modify the code below to allow highlight() to return an object that tells how to render
 // the code.
 
-function installRule(markdownIt:any) {
+function plugin(markdownIt:any) {
 	// @ts-ignore: Keep the function signature as-is despite unusued arguments
 	markdownIt.renderer.rules.fence = function(tokens:any[], idx:number, options:any, env:any, slf:any) {
 		let token = tokens[idx],
@@ -63,8 +63,7 @@ function installRule(markdownIt:any) {
 	};
 }
 
-export default function() {
-	return function(md:any) {
-		installRule(md);
-	};
-}
+export default {
+	plugin,
+};
+

@@ -8,7 +8,7 @@ const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
 const { Linking, Platform } = require('react-native');
 const mimeUtils = require('lib/mime-utils.js').mime;
-const { basename, fileExtension } = require('lib/path-utils.js');
+const { basename, fileExtension } = require('lib/path-utils');
 const uuid = require('lib/uuid').default;
 const Resource = require('lib/models/Resource');
 

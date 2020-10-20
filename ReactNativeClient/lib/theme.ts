@@ -8,8 +8,8 @@ import theme_solarizedDark from './themes/solarizedDark';
 import theme_nord from './themes/nord';
 import theme_aritimDark from './themes/aritimDark';
 import theme_oledDark from './themes/oledDark';
+import Setting from 'lib/models/Setting';
 
-const Setting = require('lib/models/Setting').default;
 const Color = require('color');
 
 const themes:any = {
@@ -364,13 +364,13 @@ function addExtraStyles(style:any) {
 
 const themeCache_:any = {};
 
-function themeStyle(theme:any) {
-	if (!theme) throw new Error('Theme must be specified');
+function themeStyle(themeId:number) {
+	if (!themeId) throw new Error('Theme must be specified');
 
 	const zoomRatio = 1; // Setting.value('style.zoom') / 100;
 	const editorFontSize = Setting.value('style.editor.fontSize');
 
-	const cacheKey = [theme, zoomRatio, editorFontSize].join('-');
+	const cacheKey = [themeId, zoomRatio, editorFontSize].join('-');
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
 	// Font size are not theme specific, but they must be referenced
@@ -390,9 +390,10 @@ function themeStyle(theme:any) {
 
 	// All theme are based on the light style, and just override the
 	// relevant properties
-	output = Object.assign({}, globalStyle, fontSizes, themes[theme]);
+	output = Object.assign({}, globalStyle, fontSizes, themes[themeId]);
 	output = addMissingProperties(output);
 	output = addExtraStyles(output);
+	output.cacheKey = cacheKey;
 
 	themeCache_[cacheKey] = output;
 	return themeCache_[cacheKey];
@@ -406,7 +407,7 @@ const cachedStyles_:any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
-function buildStyle(cacheKey:any, themeId:string, callback:Function) {
+function buildStyle(cacheKey:any, themeId:number, callback:Function) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 
 	// We clear the cache whenever switching themes

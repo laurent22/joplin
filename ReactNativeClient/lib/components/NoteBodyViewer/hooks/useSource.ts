@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import shim from 'lib/shim';
 import Setting from 'lib/models/Setting';
 const { themeStyle } = require('lib/components/global-style.js');
-const markupLanguageUtils = require('lib/markupLanguageUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils').default;
 const { assetsToHeaders } = require('lib/joplin-renderer');
 
 interface Source {

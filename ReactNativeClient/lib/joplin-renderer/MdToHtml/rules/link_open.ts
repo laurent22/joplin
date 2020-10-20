@@ -1,18 +1,13 @@
+import { RuleOptions } from 'lib/joplin-renderer/MdToHtml';
+
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const utils = require('../../utils');
 const urlUtils = require('../../urlUtils.js');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
-function installRule(markdownIt, mdOptions, ruleOptions) {
-	const pluginOptions = {
-		// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
-		// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
-		linkRenderingType: 1,
-		...ruleOptions.plugins['link_open'],
-	};
-
-	markdownIt.renderer.rules.link_open = function(tokens, idx) {
+function plugin(markdownIt:any, ruleOptions:RuleOptions) {
+	markdownIt.renderer.rules.link_open = function(tokens:any[], idx:number) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);
@@ -47,7 +42,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				if (!mime) {
 					iconType = 'fa-joplin';
 				}
-				// Icons are defined in lib/renderers/noteStyle.js using inline svg
+				// Icons are defined in lib/renderers/noteStyle using inline svg
 				// The icons are taken from fork-awesome but use the font-awesome naming scheme in order
 				// to be more compatible with the getClass library
 				icon = `<span class="resource-icon ${iconType}"></span>`;
@@ -65,12 +60,9 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		let js = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)} }); return false;`;
 		if (ruleOptions.enableLongPress && !!resourceId) {
-			const longPressDelay = ruleOptions.longPressDelay ? ruleOptions.longPressDelay : 500;
-
 			const onClick = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)})`;
 			const onLongClick = `${ruleOptions.postMessageSyntax}("longclick:${resourceId}")`;
-
-			const touchStart = `t=setTimeout(()=>{t=null; ${onLongClick};}, ${longPressDelay});`;
+			const touchStart = `t=setTimeout(()=>{t=null; ${onLongClick};}, ${ruleOptions.longPressDelay});`;
 			const cancel = 'if (!!t) {clearTimeout(t); t=null;';
 			const touchEnd = `${cancel} ${onClick};}`;
 			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}' ontouchcancel='${cancel} ontouchmove="${cancel}'`;
@@ -80,7 +72,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
 
-		if (ruleOptions.plainResourceRendering || pluginOptions.linkRenderingType === 2) {
+		if (ruleOptions.plainResourceRendering || ruleOptions.linkRenderingType === 2) {
 			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${htmlentities(href)}' type='${htmlentities(mime)}'>`;
 		} else {
 			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' ${js} type='${htmlentities(mime)}'>${icon}`;
@@ -88,9 +80,4 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 	};
 }
 
-module.exports = function(context, ruleOptions) {
-
-	return function(md, mdOptions) {
-		installRule(md, mdOptions, ruleOptions);
-	};
-};
+export default { plugin };

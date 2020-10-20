@@ -1,6 +1,6 @@
 const fountain = require('../../vendor/fountain.min.js');
 
-const fountainCss = function() {
+const pluginAssets = function() {
 	return [
 		{
 			inline: true,
@@ -102,7 +102,7 @@ const fountainCss = function() {
 	];
 };
 
-function renderFountainScript(markdownIt, content) {
+function renderFountainScript(markdownIt:any, content:string) {
 	const result = fountain.parse(content);
 
 	return `
@@ -118,30 +118,19 @@ function renderFountainScript(markdownIt, content) {
 	`;
 }
 
-function addContextAssets(context) {
-	if ('fountain' in context.pluginAssets) return;
-
-	context.pluginAssets['fountain'] = fountainCss();
-}
-
-function installRule(markdownIt, mdOptions, ruleOptions, context) {
-	const defaultRender = markdownIt.renderer.rules.fence || function(tokens, idx, options, env, self) {
+function plugin(markdownIt:any) {
+	const defaultRender = markdownIt.renderer.rules.fence || function(tokens:any[], idx:number, options:any, _env:any, self:any) {
 		return self.renderToken(tokens, idx, options);
 	};
 
-	markdownIt.renderer.rules.fence = function(tokens, idx, options, env, self) {
+	markdownIt.renderer.rules.fence = function(tokens:any[], idx:number, options:any, env:any, self:any) {
 		const token = tokens[idx];
 		if (token.info !== 'fountain') return defaultRender(tokens, idx, options, env, self);
-		addContextAssets(context);
 		return renderFountainScript(markdownIt, token.content);
 	};
 }
 
-module.exports = {
-	install: function(context, ruleOptions) {
-		return function(md, mdOptions) {
-			installRule(md, mdOptions, ruleOptions, context);
-		};
-	},
-	style: fountainCss,
+export default {
+	plugin,
+	assets: pluginAssets,
 };

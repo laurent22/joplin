@@ -3,7 +3,7 @@ const shim = require('lib/shim').default;
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
-const { rtrimSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes } = require('lib/path-utils');
 const base64 = require('base-64');
 
 

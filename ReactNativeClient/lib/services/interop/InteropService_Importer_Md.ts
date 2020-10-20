@@ -4,7 +4,7 @@ import { _ } from 'lib/locale';
 const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
-const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('lib/path-utils.js');
+const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('lib/path-utils');
 const shim = require('lib/shim').default;
 const { extractImageUrls } = require('lib/markdownUtils').default;
 const { unique } = require('lib/ArrayUtils');

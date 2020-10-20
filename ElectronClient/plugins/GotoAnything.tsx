@@ -16,7 +16,7 @@ const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
-const markupLanguageUtils = require('lib/markupLanguageUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils').default;
 
 const PLUGIN_NAME = 'gotoAnything';
 

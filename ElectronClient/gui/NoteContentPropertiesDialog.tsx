@@ -4,7 +4,7 @@ import { _ } from 'lib/locale';
 const { themeStyle } = require('lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Countable = require('countable');
-const markupLanguageUtils = require('lib/markupLanguageUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils').default;
 
 interface NoteContentPropertiesDialogProps {
 	themeId: number,

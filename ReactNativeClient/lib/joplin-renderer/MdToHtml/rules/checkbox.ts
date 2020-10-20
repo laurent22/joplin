@@ -1,23 +1,20 @@
+import { RuleOptions } from '../../MdToHtml';
+
 let checkboxIndex_ = -1;
 
-const pluginAssets:Function[] = [];
-
-pluginAssets[1] = function() {
+function pluginAssets(theme:any) {
 	return [
 		{
 			inline: true,
 			mime: 'text/css',
 			text: `
+				/*
+					FOR THE MARKDOWN EDITOR
+				*/
+
 				/* Remove the indentation from the checkboxes at the root of the document
 				   (otherwise they are too far right), but keep it for their children to allow
 				   nested lists. Make sure this value matches the UL margin. */
-
-				/*
-				.md-checkbox .checkbox-wrapper {
-					display: flex;
-					align-items: center;
-				}
-				*/
 
 				li.md-checkbox {
 					list-style-type: none;
@@ -26,29 +23,15 @@ pluginAssets[1] = function() {
 				li.md-checkbox input[type=checkbox] {
 					margin-left: -1.71em;
 					margin-right: 0.7em;
-				}`,
-		},
-	];
-};
-
-pluginAssets[2] = function(theme:any) {
-	return [
-		{
-			inline: true,
-			mime: 'text/css',
-			text: `
-				/* https://stackoverflow.com/questions/7478336/only-detect-click-event-on-pseudo-element#comment39751366_7478344 */
-				/* Not doing this trick anymore. See Modules/TinyMCE/JoplinLists/src/main/ts/ui/Buttons.ts */
-				
-				/*
-				ul.joplin-checklist li {
-					pointer-events: none;
 				}
-				*/
-
+				
 				ul.joplin-checklist {
 					list-style:none;
 				}
+
+				/*
+					FOR THE RICH TEXT EDITOR
+				*/
 
 				ul.joplin-checklist li::before {
 					content:"\\f14a";
@@ -68,7 +51,7 @@ pluginAssets[2] = function(theme:any) {
 				}`,
 		},
 	];
-};
+}
 
 function createPrefixTokens(Token:any, id:string, checked:boolean, label:string, postMessageSyntax:string, sourceToken:any):any[] {
 	let token = null;
@@ -129,9 +112,8 @@ function createSuffixTokens(Token:any):any[] {
 	];
 }
 
-// @ts-ignore: Keep the function signature as-is despite unusued arguments
-function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any) {
-	const pluginOptions = { renderingType: 1, ...ruleOptions.plugins['checkbox'] };
+function checkboxPlugin(markdownIt:any, options:RuleOptions) {
+	const renderingType = options.checkboxRenderingType || 1;
 
 	markdownIt.core.ruler.push('checkbox', (state:any) => {
 		const tokens = state.tokens;
@@ -180,14 +162,14 @@ function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any
 
 				const currentList = lists[lists.length - 1];
 
-				if (pluginOptions.renderingType === 1) {
+				if (renderingType === 1) {
 					checkboxIndex_++;
 					const id = `md-checkbox-${checkboxIndex_}`;
 
 					// Prepend the text content with the checkbox markup and the opening <label> tag
 					// then append the </label> tag at the end of the text content.
 
-					const prefix = createPrefixTokens(Token, id, checked, label, ruleOptions.postMessageSyntax, token);
+					const prefix = createPrefixTokens(Token, id, checked, label, options.postMessageSyntax, token);
 					const suffix = createSuffixTokens(Token);
 
 					token.children = markdownIt.utils.arrayReplaceAt(token.children, 0, prefix);
@@ -214,20 +196,12 @@ function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any
 						currentListItem.attrSet('class', (`${currentListItem.attrGet('class') || ''} checked`).trim());
 					}
 				}
-
-				if (!('checkbox' in context.pluginAssets)) {
-					context.pluginAssets['checkbox'] = pluginAssets[pluginOptions.renderingType](ruleOptions.theme);
-				}
 			}
 		}
 	});
 }
 
 export default {
-	install: function(context:any, ruleOptions:any) {
-		return function(md:any, mdOptions:any) {
-			installRule(md, mdOptions, ruleOptions, context);
-		};
-	},
-	style: pluginAssets[2],
+	plugin: checkboxPlugin,
+	assets: pluginAssets,
 };

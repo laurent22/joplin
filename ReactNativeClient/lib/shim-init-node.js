@@ -3,7 +3,7 @@ const shim = require('lib/shim').default;
 const { GeolocationNode } = require('lib/geolocation-node.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale');
-const { FsDriverNode } = require('lib/fs-driver-node.js');
+const FsDriverNode = require('lib/fs-driver-node').default;
 const mimeUtils = require('lib/mime-utils.js').mime;
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
@@ -153,7 +153,7 @@ function shimInit() {
 		const imageType = require('image-type');
 
 		const uuid = require('lib/uuid').default;
-		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils.js');
+		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 

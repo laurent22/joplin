@@ -1,20 +1,31 @@
-const MdToHtml = require('./MdToHtml');
+const MdToHtml = require('./MdToHtml').default;
 const HtmlToHtml = require('./HtmlToHtml');
 const htmlUtils = require('lib/htmlUtils');
 const MarkdownIt = require('markdown-it');
 
-class MarkupToHtml {
-	constructor(options) {
+export enum MarkupLanguage {
+	Markdown = 1,
+	Html = 2,
+}
+
+export default class MarkupToHtml {
+
+	static MARKUP_LANGUAGE_MARKDOWN:number = MarkupLanguage.Markdown;
+	static MARKUP_LANGUAGE_HTML:number = MarkupLanguage.Html;
+
+	private renderers_:any = {};
+	private options_:any;
+	private rawMarkdownIt_:any;
+
+	constructor(options:any) {
 		this.options_ = Object.assign({}, {
 			ResourceModel: {
 				isResourceUrl: () => false,
 			},
 		}, options);
-
-		this.renderers_ = {};
 	}
 
-	renderer(markupLanguage) {
+	renderer(markupLanguage:MarkupLanguage) {
 		if (this.renderers_[markupLanguage]) return this.renderers_[markupLanguage];
 
 		let RendererClass = null;
@@ -31,11 +42,7 @@ class MarkupToHtml {
 		return this.renderers_[markupLanguage];
 	}
 
-	injectedJavaScript() {
-		return '';
-	}
-
-	stripMarkup(markupLanguage, markup, options = null) {
+	stripMarkup(markupLanguage:MarkupLanguage, markup:string, options:any = null) {
 		if (!markup) return '';
 
 		options = Object.assign({}, {
@@ -63,21 +70,16 @@ class MarkupToHtml {
 		return output;
 	}
 
-	clearCache(markupLanguage) {
+	clearCache(markupLanguage:MarkupLanguage) {
 		const r = this.renderer(markupLanguage);
 		if (r.clearCache) r.clearCache();
 	}
 
-	async render(markupLanguage, markup, theme, options) {
+	async render(markupLanguage:MarkupLanguage, markup:string, theme:any, options:any) {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
 
-	async allAssets(markupLanguage, theme) {
+	async allAssets(markupLanguage:MarkupLanguage, theme:any) {
 		return this.renderer(markupLanguage).allAssets(theme);
 	}
 }
-
-MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN = 1;
-MarkupToHtml.MARKUP_LANGUAGE_HTML = 2;
-
-module.exports = MarkupToHtml;

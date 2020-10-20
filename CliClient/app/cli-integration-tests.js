@@ -2,7 +2,7 @@
 
 const fs = require('fs-extra');
 const Logger = require('lib/Logger').default;
-const { dirname } = require('lib/path-utils.js');
+const { dirname } = require('lib/path-utils');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const BaseModel = require('lib/BaseModel.js');

@@ -3,7 +3,7 @@ const shim = require('lib/shim').default;
 const Logger = require('lib/Logger').default;
 const { _ } = require('lib/locale');
 const fetch = require('node-fetch');
-const { fileExtension } = require('lib/path-utils.js');
+const { fileExtension } = require('lib/path-utils');
 const packageInfo = require('./packageInfo.js');
 const compareVersions = require('compare-versions');
 

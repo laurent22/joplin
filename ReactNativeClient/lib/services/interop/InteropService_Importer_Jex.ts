@@ -2,7 +2,7 @@ import { ImportExportResult } from './types';
 
 const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
 const InteropService_Importer_Raw = require('lib/services/interop/InteropService_Importer_Raw').default;
-const { filename } = require('lib/path-utils.js');
+const { filename } = require('lib/path-utils');
 const fs = require('fs-extra');
 
 export default class InteropService_Importer_Jex extends InteropService_Importer_Base {

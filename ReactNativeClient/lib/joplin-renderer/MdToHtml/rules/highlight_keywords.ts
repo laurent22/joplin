@@ -1,7 +1,11 @@
+// This plugin is used only on mobile, to highlight search results.
+
+import { RuleOptions } from "lib/joplin-renderer/MdToHtml";
+
 const stringUtils = require('../../stringUtils.js');
 const md5 = require('md5');
 
-function createHighlightedTokens(Token, splitted) {
+function createHighlightedTokens(Token:any, splitted:string[]) {
 	let token;
 	const output = [];
 
@@ -30,10 +34,11 @@ function createHighlightedTokens(Token, splitted) {
 	return output;
 }
 
-function installRule(markdownIt, mdOptions, ruleOptions) {
+// function installRule(markdownIt, mdOptions, ruleOptions) {
+function plugin(markdownIt:any, ruleOptions:RuleOptions) {
 	const divider = md5(Date.now().toString() + Math.random().toString());
 
-	markdownIt.core.ruler.push('highlight_keywords', state => {
+	markdownIt.core.ruler.push('highlight_keywords', (state:any) => {
 		const keywords = ruleOptions.highlightedKeywords;
 		if (!keywords || !keywords.length) return;
 
@@ -60,8 +65,6 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 	});
 }
 
-module.exports = function(context, ruleOptions) {
-	return function(md, mdOptions) {
-		installRule(md, mdOptions, ruleOptions);
-	};
-};
+export default {
+	plugin,
+}

@@ -33,7 +33,7 @@ const { substrWithEllipsis } = require('lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
-const markupLanguageUtils = require('lib/markupLanguageUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils').default;
 const usePrevious = require('lib/hooks/usePrevious').default;
 const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
@@ -150,7 +150,11 @@ function NoteEditor(props: NoteEditorProps) {
 		return formNote.saveActionQueue.waitForAllDone();
 	}
 
-	const markupToHtml = useMarkupToHtml({ themeId: props.themeId, customCss: props.customCss });
+	const markupToHtml = useMarkupToHtml({
+		themeId: props.themeId,
+		customCss: props.customCss,
+		plugins: props.plugins,
+	});
 
 	const allAssets = useCallback(async (markupLanguage: number): Promise<any[]> => {
 		const theme = themeStyle(props.themeId);

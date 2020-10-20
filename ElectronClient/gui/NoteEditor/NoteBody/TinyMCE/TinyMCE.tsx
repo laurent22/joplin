@@ -27,7 +27,7 @@ function markupRenderOptions(override:any = null) {
 	return {
 		plugins: {
 			checkbox: {
-				renderingType: 2,
+				checkboxRenderingType: 2,
 			},
 			link_open: {
 				linkRenderingType: 2,

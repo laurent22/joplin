@@ -7,7 +7,7 @@ const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
-const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils');
 
 export enum SettingItemType {
 	Int = 1,

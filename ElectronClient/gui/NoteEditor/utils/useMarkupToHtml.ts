@@ -1,13 +1,17 @@
-import { useCallback } from 'react';
+import { PluginStates } from 'lib/services/plugins/reducer';
+import contentScriptsToRendererRules from 'lib/services/plugins/utils/contentScriptsToRendererRules';
+import { useCallback, useMemo } from 'react';
 import { ResourceInfos } from './types';
+import markupLanguageUtils from 'lib/markupLanguageUtils';
+import Setting from 'lib/models/Setting';
+
 const { themeStyle } = require('lib/theme');
 const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting').default;
-const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 interface HookDependencies {
 	themeId: number,
 	customCss: string,
+	plugins: PluginStates,
 }
 
 interface MarkupToHtmlOptions {
@@ -15,8 +19,15 @@ interface MarkupToHtmlOptions {
 	resourceInfos?: ResourceInfos,
 }
 
-export default function useMarkupToHtml(dependencies:HookDependencies) {
-	const { themeId, customCss } = dependencies;
+export default function useMarkupToHtml(deps:HookDependencies) {
+	const { themeId, customCss, plugins } = deps;
+
+	const markupToHtml = useMemo(() => {
+		return markupLanguageUtils.newMarkupToHtml({
+			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			extraRendererRules: contentScriptsToRendererRules(plugins),
+		});
+	}, [plugins]);
 
 	return useCallback(async (markupLanguage: number, md: string, options: MarkupToHtmlOptions = null): Promise<any> => {
 		options = {
@@ -38,10 +49,6 @@ export default function useMarkupToHtml(dependencies:HookDependencies) {
 
 		delete options.replaceResourceInternalToExternalLinks;
 
-		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
-			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
-		});
-
 		const result = await markupToHtml.render(markupLanguage, md, theme, Object.assign({}, {
 			codeTheme: theme.codeThemeCss,
 			userCss: customCss || '',
@@ -52,5 +59,5 @@ export default function useMarkupToHtml(dependencies:HookDependencies) {
 		}, options));
 
 		return result;
-	}, [themeId, customCss]);
+	}, [themeId, customCss, markupToHtml]);
 }

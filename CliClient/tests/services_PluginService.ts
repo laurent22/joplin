@@ -1,5 +1,10 @@
 import PluginRunner from '../app/services/plugins/PluginRunner';
 import PluginService from 'lib/services/plugins/PluginService';
+import { ContentScriptType } from 'lib/services/plugins/api/types';
+import MdToHtml from 'lib/joplin-renderer/MdToHtml';
+import Setting from 'lib/models/Setting';
+import shim from 'lib/shim';
+import uuid from 'lib/uuid';
 
 require('app-module-path').addPath(__dirname);
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow } = require('test-utils.js');
@@ -146,6 +151,54 @@ describe('services_PluginService', function() {
 		for (const jsBundle of invalidJsBundles) {
 			await expectThrow(async () => await service.loadPluginFromString('example', '/tmp', jsBundle));
 		}
+	}));
+
+	it('should register a Markdown-it plugin', asyncTest(async () => {
+		const contentScriptPath = `${Setting.value('tempDir')}/markdownItTestPlugin${uuid.createNano()}.js`;
+		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.js`, contentScriptPath);
+
+		const service = newPluginService();
+
+		const plugin = await service.loadPluginFromString('example', Setting.value('tempDir'), `
+			/* joplin-manifest:
+			{
+				"manifest_version": 1,
+				"name": "JS Bundle test",
+				"description": "JS Bundle Test plugin",
+				"version": "1.0.0",
+				"author": "Laurent Cozic",
+				"homepage_url": "https://joplinapp.org"
+			}
+			*/
+			
+			joplin.plugins.register({
+				onStart: async function() {
+					await joplin.plugins.registerContentScript('markdownItPlugin', 'justtesting', '${contentScriptPath}');
+				},
+			});
+		`);
+
+		await service.runPlugin(plugin);
+
+		const contentScripts = plugin.contentScriptsByType(ContentScriptType.MarkdownItPlugin);
+		expect(contentScripts.length).toBe(1);
+		expect(!!contentScripts[0].path).toBe(true);
+
+		const contentScript = contentScripts[0];
+
+		const mdToHtml = new MdToHtml();
+		const module = require(contentScript.path).default;
+		mdToHtml.loadExtraRendererRule(contentScript.id, module({}));
+
+		const result = await mdToHtml.render([
+			'```justtesting',
+			'something',
+			'```',
+		].join('\n'));
+
+		expect(result.html.includes('JUST TESTING: something')).toBe(true);
+
+		await shim.fsDriver().remove(contentScriptPath);
 	}));
 
 });

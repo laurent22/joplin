@@ -14,8 +14,18 @@ interface PluginViewStates {
 	[key:string]: PluginViewState,
 }
 
+interface PluginContentScriptState {
+	id: string,
+	path: string,
+}
+
+interface PluginContentScriptStates {
+	[type:string]: PluginContentScriptState[];
+}
+
 interface PluginState {
 	id:string,
+	contentScripts: PluginContentScriptStates,
 	views:PluginViewStates,
 }
 
@@ -110,6 +120,18 @@ const reducer = (draft: Draft<any>, action:any) => {
 
 			draft.pluginService.plugins[action.pluginId].views[action.id][action.name].push(action.value);
 			break;
+
+		case 'PLUGIN_CONTENT_SCRIPTS_ADD': {
+
+			const type = action.contentScript.type;
+			if (!draft.pluginService.plugins[action.pluginId].contentScripts[type]) draft.pluginService.plugins[action.pluginId].contentScripts[type] = [];
+
+			draft.pluginService.plugins[action.pluginId].contentScripts[type].push({
+				id: action.contentScript.id,
+				path: action.contentScript.path,
+			});
+			break;
+		}
 
 		}
 	} catch (error) {

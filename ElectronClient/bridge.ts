@@ -2,7 +2,7 @@ import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from 'lib/shim';
 
 import { _, setLocale } from 'lib/locale';
-const { dirname, toSystemSlashes } = require('lib/path-utils.js');
+const { dirname, toSystemSlashes } = require('lib/path-utils');
 const { BrowserWindow, nativeTheme } = require('electron');
 
 interface LastSelectedPath {

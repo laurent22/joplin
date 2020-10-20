@@ -1,6 +1,6 @@
 const { formatCssSize } = require('lib/string-utils');
 
-module.exports = function(theme) {
+export default function(theme:any) {
 	theme = theme ? theme : {};
 
 	const fontFamily = '\'Avenir\', \'Arial\', sans-serif';
