@@ -274,6 +274,17 @@ class Setting extends BaseModel {
 				label: () => _('AWS S3 bucket'),
 				description: () => emptyDirWarning,
 			},
+			'sync.8.url': {
+				value: 'https://s3.amazonaws.com/',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings:any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+				},
+				public: true,
+				label: () => _('AWS S3 URL'),
+				secure: false,
+			},
 			'sync.8.username': {
 				value: '',
 				type: SettingItemType.String,

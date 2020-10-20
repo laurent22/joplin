@@ -425,7 +425,7 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().name), click: () => { app.window().show(); } },
 				{ type: 'separator' },
-				{ label: _('Exit'), click: () => { app.quit(); } },
+				{ label: _('Quit'), click: () => { app.quit(); } },
 			]);
 			app.createTray(contextMenu);
 		}
