@@ -30,7 +30,7 @@ export default class JoplinCommands {
      * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
      * ```
      */
-    execute(commandName: string, ...args: any[]): Promise<any>;
+    execute(commandName: string, ...args: any[]): Promise<any | void>;
     /**
      * <span class="platform-desktop">desktop</span> Registers a new command.
      *

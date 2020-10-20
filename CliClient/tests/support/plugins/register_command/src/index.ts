@@ -21,6 +21,15 @@ joplin.plugins.register({
 			},
 		});
 
+		// Commands that return a result and take argument can only be used
+		// programmatically, so it's not necessary to set a label and icon.
+		await joplin.commands.register({
+			name: 'commandWithResult',
+			execute: async (arg1:string, arg2:number) => {
+				return 'I got: ' + arg1 + ' and ' + arg2;
+			},
+		});
+
 		// Add the first command to the note toolbar
 		await joplin.views.toolbarButtons.create('testCommand1', ToolbarButtonLocation.NoteToolbar);
 
@@ -30,5 +39,9 @@ joplin.plugins.register({
 		// Also add the commands to the menu
 		await joplin.views.menuItems.create('testCommand1', MenuItemLocation.Tools, { accelerator: 'CmdOrCtrl+Alt+Shift+B' });
 		await joplin.views.menuItems.create('testCommand2', MenuItemLocation.Tools);
+
+		console.info('Running command with arguments...');
+		const result = await joplin.commands.execute('commandWithResult', 'abcd', 123);
+		console.info('Result was: ' + result);
 	},
 });

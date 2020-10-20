@@ -14,7 +14,7 @@ export interface CommandContext {
 }
 
 export interface CommandRuntime {
-	execute(context:CommandContext, ...args:any[]):Promise<any>
+	execute(context:CommandContext, ...args:any[]):Promise<any | void>
 	enabledCondition?: EnabledCondition;
 	// Used for the (optional) toolbar button title
 	mapStateToTitle?(state:any):string,
