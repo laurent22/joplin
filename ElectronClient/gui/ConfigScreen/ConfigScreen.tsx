@@ -10,6 +10,7 @@ const pathUtils = require('lib/path-utils.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const shared = require('lib/components/shared/config-shared.js');
 const bridge = require('electron').remote.require('./bridge').default;
+const { shell } = require('electron');
 const { EncryptionConfigScreen } = require('../EncryptionConfigScreen.min');
 const { ClipperConfigScreen } = require('../ClipperConfigScreen.min');
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
@@ -126,11 +127,28 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (!description) return null;
 
 		const theme = themeStyle(this.props.themeId);
-		return (
-			<div style={Object.assign({}, theme.textStyle, { marginBottom: 15 })}>
-				{description}
-			</div>
-		);
+
+		if (section.name === 'general') {
+			return (
+				<div style={Object.assign({}, theme.textStyle, { marginBottom: 15 })}>
+					<a
+						onClick={() => {
+							shell.openItem(Setting.value('profileDir'));
+						}}
+						href="#"
+						style={theme.urlStyle}
+					>
+						{description}
+					</a>
+				</div>
+			);
+		} else {
+			return (
+				<div style={Object.assign({}, theme.textStyle, { marginBottom: 15 })}>
+					{description}
+				</div>
+			);
+		}
 	}
 
 	sectionToComponent(key:string, section:any, settings:any, selected:boolean) {
