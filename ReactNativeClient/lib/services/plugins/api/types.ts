@@ -318,6 +318,25 @@ export type Path = string[];
 // =================================================================
 
 export enum ContentScriptType {
+	/**
+	 * Registers a new Markdown-It plugin, which should follow this template:
+	 *
+	 * ```javascript
+	 * // The module should export a function that takes a `pluginContext` as argument (currently unused)
+	 * module.exports = function(pluginContext) {
+	 *     // That function should return an object with a number of properties:
+	 *     return {
+	 *         // Required:
+	 *         install: function(context, ruleOptions) {
+	 *             return function(md, mdOptions) {
+	 *                 installRule(md, mdOptions, ruleOptions, context);
+	 *             };
+	 *         },
+	 *         assets: {},
+	 *     }
+	 * }
+	 * ```
+	 */
 	MarkdownItPlugin = 'markdownItPlugin',
 	CodeMirrorPlugin = 'codeMirrorPlugin',
 }

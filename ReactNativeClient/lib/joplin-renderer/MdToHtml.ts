@@ -8,6 +8,8 @@ const md5 = require('md5');
 interface RendererRule {
 	install(context:any, ruleOptions:any):any,
 	assets?(theme:any):any,
+	rule?: any, // TODO: remove
+	plugin?: any,
 }
 
 interface RendererRules {
@@ -111,6 +113,15 @@ interface RenderResult {
 	html: string,
 	pluginAssets: RenderResultPluginAsset[];
 	cssStrings: string[],
+}
+
+export interface RuleOptions {
+	context: PluginContext,
+	theme: any,
+	postMessageSyntax: string,
+
+	// Used by checkboxes to specify how it should be rendered
+	checkboxRenderingType?: number,
 }
 
 export default class MdToHtml {
@@ -235,6 +246,21 @@ export default class MdToHtml {
 		};
 	}
 
+	private allUnprocessedAssets(theme:any) {
+		const assets:any = {};
+		for (const key in rules) {
+			if (!this.pluginEnabled(key)) continue;
+			const rule = rules[key];
+
+			if (rule.assets) {
+				assets[key] = rule.assets(theme);
+			}
+		}
+
+		return assets;
+	}
+
+	// TODO: remove
 	async allAssets(theme:any) {
 		const assets:any = {};
 		for (const key in rules) {
@@ -303,16 +329,17 @@ export default class MdToHtml {
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 
-		const context:PluginContext = {
-			css: {},
-			pluginAssets: {},
-			cache: this.contextCache_,
-		};
-
 		const ruleOptions = Object.assign({}, options, {
 			resourceBaseUrl: this.resourceBaseUrl_,
 			ResourceModel: this.ResourceModel_,
 		});
+
+		const context:PluginContext = {
+			css: {},
+			pluginAssets: {},
+			cache: this.contextCache_,
+			// options: ruleOptions,
+		};
 
 		const markdownIt = new MarkdownIt({
 			breaks: !this.pluginEnabled('softbreaks'),
@@ -391,8 +418,18 @@ export default class MdToHtml {
 		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;
 			const rule = allRules[key];
-			const ruleInstall:Function = rule.install ? rule.install : (rule as any);
-			markdownIt.use(ruleInstall(context, { ...ruleOptions }));
+			if (rule.plugin) {
+				const pluginOptions = {
+					context: context,
+					...ruleOptions,
+					...(ruleOptions.plugins[key] ? ruleOptions.plugins[key] : {}),
+				};
+
+				markdownIt.use(rule.plugin, pluginOptions);
+			} else {
+				const ruleInstall:Function = rule.install ? rule.install : (rule as any);
+				markdownIt.use(ruleInstall(context, { ...ruleOptions }));
+			}
 		}
 
 		markdownIt.use(markdownItAnchor, { slugify: slugify });
@@ -410,11 +447,13 @@ export default class MdToHtml {
 
 		setupLinkify(markdownIt);
 
-		const renderedBody = markdownIt.render(body);
+		const renderedBody = markdownIt.render(body, context);
+
+		const pluginAssets = this.allUnprocessedAssets(theme);
 
 		let cssStrings = noteStyle(options.theme);
 
-		let output = this.processPluginAssets(context.pluginAssets);
+		let output = this.processPluginAssets(pluginAssets); // context.pluginAssets);
 		cssStrings = cssStrings.concat(output.cssStrings);
 
 		if (options.userCss) cssStrings.push(options.userCss);

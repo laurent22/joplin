@@ -59,7 +59,7 @@ describe('MdToHtml', function() {
 			if (mdFilename === 'checkbox_alternative.md') {
 				mdToHtmlOptions.plugins = {
 					checkbox: {
-						renderingType: 2,
+						checkboxRenderingType: 2,
 					},
 				};
 			}

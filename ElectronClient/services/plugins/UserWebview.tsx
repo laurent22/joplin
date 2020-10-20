@@ -10,7 +10,7 @@ export interface Props {
 	onMessage:Function,
 	pluginId:string,
 	viewId:string,
-	themeId:string,
+	themeId:number,
 	minWidth?: number,
 	minHeight?: number,
 	fitToContent?: boolean,

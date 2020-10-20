@@ -49,6 +49,17 @@ export default class JoplinPlugins {
 		}
 	}
 
+	/**
+	 * Registers a new content script. Unlike regular plugin code, which runs in a separate process, content scripts run within the main process code
+	 * and thus allow improved performances and more customisations in specific cases. It can be used for example to load a Markdown or editor plugin.
+	 *
+	 * Note that registering a content script in itself will do nothing - it will only be loaded in specific cases by the relevant app modules
+	 * (eg. the Markdown renderer or the code editor). So it is not a way to inject and run arbitrary code in the app, which for safety and performance reasons is not supported.
+	 *
+	 * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/content_script)
+	 *
+	 * @param scriptPath Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set `scriptPath` to `"./content_script.js`.
+	 */
 	async registerContentScript(type:ContentScriptType, id:string, scriptPath:string) {
 		return this.plugin.registerContentScript(type, id, scriptPath);
 	}

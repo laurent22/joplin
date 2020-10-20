@@ -6,7 +6,7 @@ const { camelCaseToDash, formatCssSize } = require('lib/string-utils');
 
 interface HookDependencies {
 	pluginId: string,
-	themeId: string,
+	themeId: number,
 }
 
 function themeToCssVariables(theme:any) {

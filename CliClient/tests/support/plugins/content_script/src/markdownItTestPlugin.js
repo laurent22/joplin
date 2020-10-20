@@ -17,6 +17,6 @@ module.exports = function(pluginContext) {
 				installRule(md, mdOptions, ruleOptions, context);
 			};
 		},
-		style: {},
+		assets: {},
 	}
 }
