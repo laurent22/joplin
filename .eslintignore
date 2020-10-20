@@ -66,6 +66,7 @@ CliClient/app/LinkSelector.js
 CliClient/app/services/plugins/PluginRunner.js
 CliClient/tests/fsDriver.js
 CliClient/tests/InMemoryCache.js
+CliClient/tests/MdToHtml.js
 CliClient/tests/models_Setting.js
 CliClient/tests/services_CommandService.js
 CliClient/tests/services_InteropService.js
