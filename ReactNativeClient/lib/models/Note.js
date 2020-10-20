@@ -587,10 +587,29 @@ class Note extends BaseItem {
 		// decide what to keep and what to ignore, but in practice keeping the previous content is a bit
 		// heavy - the note needs to be reloaded here, the JSON blob needs to be saved, etc.
 		// So the check for old note here is basically an optimisation.
+
+		// 2020-10-19: It's not ideal to reload the previous version of the note before saving it again
+		// but it should be relatively fast anyway. This is so that code that listens to the NOTE_UPDATE_ONE
+		// action can decide what to do based on the fields that have been modified.
+		// This is necessary for example so that the folder list is not refreshed every time a note is changed.
+		// Now it can look at the properties and refresh only if the "parent_id" property is changed.
+		// Trying to fix: https://github.com/laurent22/joplin/issues/3893
+		const oldNote = await Note.load(o.id);
+
 		let beforeNoteJson = null;
 		if (!isNew && this.revisionService().isOldNote(o.id)) {
-			beforeNoteJson = await Note.load(o.id);
-			if (beforeNoteJson) beforeNoteJson = JSON.stringify(beforeNoteJson);
+			if (oldNote) beforeNoteJson = JSON.stringify(oldNote);
+		}
+
+		const changedFields = [];
+
+		if (oldNote) {
+			for (const field in o) {
+				if (!o.hasOwnProperty(field)) continue;
+				if (o[field] !== oldNote[field]) {
+					changedFields.push(field);
+				}
+			}
 		}
 
 		const note = await super.save(o, options);
@@ -603,6 +622,7 @@ class Note extends BaseItem {
 				type: 'NOTE_UPDATE_ONE',
 				note: note,
 				provisional: isProvisional,
+				changedFields: changedFields,
 			});
 		}
 

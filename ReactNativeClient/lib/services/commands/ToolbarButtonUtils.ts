@@ -1,5 +1,4 @@
-import CommandService from '../CommandService';
-import propsHaveChanged from './propsHaveChanged';
+import CommandService from 'lib/services/CommandService';
 import { stateUtils } from 'lib/reducer';
 
 const separatorItem = { type: 'separator' };
@@ -14,7 +13,6 @@ export interface ToolbarButtonInfo {
 }
 
 interface ToolbarButtonCacheItem {
-	props: any,
 	info: ToolbarButtonInfo,
 }
 
@@ -35,8 +33,15 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
-	private commandToToolbarButton(commandName:string, props:any):ToolbarButtonInfo {
-		if (this.toolbarButtonCache_[commandName] && !propsHaveChanged(this.toolbarButtonCache_[commandName].props, props)) {
+	private commandToToolbarButton(commandName:string, whenClauseContext:any):ToolbarButtonInfo {
+		const newEnabled = this.service.isEnabled(commandName, whenClauseContext);
+		const newTitle = this.service.title(commandName);
+
+		if (
+			this.toolbarButtonCache_[commandName] &&
+			this.toolbarButtonCache_[commandName].info.enabled === newEnabled &&
+			this.toolbarButtonCache_[commandName].info.title === newTitle
+		) {
 			return this.toolbarButtonCache_[commandName].info;
 		}
 
@@ -46,15 +51,14 @@ export default class ToolbarButtonUtils {
 			name: commandName,
 			tooltip: this.service.label(commandName),
 			iconName: command.declaration.iconName,
-			enabled: this.service.isEnabled(commandName, props),
+			enabled: newEnabled,
 			onClick: async () => {
-				this.service.execute(commandName, props);
+				this.service.execute(commandName);
 			},
-			title: this.service.title(commandName, props),
+			title: newTitle,
 		};
 
 		this.toolbarButtonCache_[commandName] = {
-			props: props,
 			info: output,
 		};
 
@@ -64,7 +68,7 @@ export default class ToolbarButtonUtils {
 	// This method ensures that if the provided commandNames and state hasn't changed
 	// the output also won't change. Invididual toolbarButtonInfo also won't changed
 	// if the state they use hasn't changed. This is to avoid useless renders of the toolbars.
-	public commandsToToolbarButtons(state:any, commandNames:string[]):ToolbarButtonInfo[] {
+	public commandsToToolbarButtons(commandNames:string[], whenClauseContext:any):ToolbarButtonInfo[] {
 		const output:ToolbarButtonInfo[] = [];
 
 		for (const commandName of commandNames) {
@@ -73,8 +77,7 @@ export default class ToolbarButtonUtils {
 				continue;
 			}
 
-			const props = this.service.commandMapStateToProps(commandName, state);
-			output.push(this.commandToToolbarButton(commandName, props));
+			output.push(this.commandToToolbarButton(commandName, whenClauseContext));
 		}
 
 		return stateUtils.selectArrayShallow({ array: output }, commandNames.join('_'));

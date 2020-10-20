@@ -59,7 +59,6 @@
 			"ElectronClient/dist/": true,
 			"ElectronClient/fonts/": true,
 			"ElectronClient/gui/note-viewer/highlight/styles/": true,
-			"ElectronClient/lib/": true,
 			"ElectronClient/locale/": true,
 			"ElectronClient/build/": true,
 			"node_modules/": true,
@@ -255,6 +254,7 @@
 			"ElectronClient/**/.DS_Store": true,
 			"ElectronClient/**/gui/note-viewer/pluginAssets/": true,
 			"ElectronClient/**/pluginAssets/": true,
+			"ElectronClient/lib/": true,
 			"Clipper/popup/**/node_modules": true,
 			"Clipper/popup/**/coverage": true,
 			"Clipper/popup/**/build": true,
@@ -360,7 +360,9 @@
 			"CliClient/tests/support/plugins/settings/**/node_modules/": true,
 			"CliClient/tests/support/plugins/selected_text/dist/*": true,
 			"CliClient/tests/support/plugins/selected_text/**/node_modules/": true,
-			"**/CliClient/build/": true
+			"**/CliClient/build/": true,
+			"**/*.js": {"when": "$(basename).ts"},
+			"**/*?.js": { "when": "$(basename).tsx"},
 		},
 		"spellright.language": [
 			"en"

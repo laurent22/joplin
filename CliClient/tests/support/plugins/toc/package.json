@@ -20,6 +20,6 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "slug": "^3.3.4"
+    "uslug": "git+https://github.com/laurent22/uslug.git#emoji-support"
   }
 }

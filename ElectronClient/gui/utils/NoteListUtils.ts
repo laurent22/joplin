@@ -40,11 +40,11 @@ export default class NoteListUtils {
 
 		if (!hasEncrypted) {
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', { noteIds }))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds))
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', { noteIds }))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds))
 			);
 
 			menu.append(
@@ -63,7 +63,7 @@ export default class NoteListUtils {
 
 			if (singleNoteId) {
 				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, { noteId: singleNoteId })));
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId)));
 			}
 
 			if (noteIds.length <= 1) {
@@ -132,7 +132,7 @@ export default class NoteListUtils {
 
 			menu.append(
 				new MenuItem(
-					menuUtils.commandToStatefulMenuItem('showShareNoteDialog', { noteIds: noteIds.slice() })
+					menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice())
 				)
 			);
 
@@ -157,7 +157,7 @@ export default class NoteListUtils {
 
 			exportMenu.append(
 				new MenuItem(
-					menuUtils.commandToStatefulMenuItem('exportPdf', { noteIds: noteIds })
+					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds)
 				)
 			);
 

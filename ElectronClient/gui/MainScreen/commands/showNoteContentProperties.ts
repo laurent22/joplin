@@ -1,5 +1,6 @@
-import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
 import { _ } from 'lib/locale';
+import { stateUtils } from 'lib/reducer';
 const Note = require('lib/models/Note');
 
 export const declaration:CommandDeclaration = {
@@ -9,7 +10,9 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async ({ noteId }:any) => {
+		execute: async (context:CommandContext, noteId:string = null) => {
+			noteId = noteId || stateUtils.selectedNoteId(context.state);
+
 			const note = await Note.load(noteId);
 			if (note) {
 				comp.setState({
@@ -21,11 +24,7 @@ export const runtime = (comp:any):CommandRuntime => {
 				});
 			}
 		},
-		isEnabled: (props:any) => {
-			return !!props.noteId;
-		},
-		mapStateToProps: (state:any) => {
-			return { noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null };
-		},
+
+		enabledCondition: 'oneNoteSelected',
 	};
 };

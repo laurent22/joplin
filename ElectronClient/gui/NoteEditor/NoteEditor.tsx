@@ -25,6 +25,8 @@ import eventManager from 'lib/eventManager';
 import { AppState } from '../../app';
 import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
 import { _ } from 'lib/locale';
+import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
+import TagList from '../TagList';
 
 const { themeStyle } = require('lib/theme');
 const { substrWithEllipsis } = require('lib/string-utils');
@@ -38,7 +40,6 @@ const Note = require('lib/models/Note.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
-const TagList = require('../TagList.min.js');
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -247,9 +248,9 @@ function NoteEditor(props: NoteEditorProps) {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', { target: 'noteList' });
+				CommandService.instance().execute('focusElement', 'noteList');
 			} else {
-				CommandService.instance().execute('focusElement', { target: 'noteBody' });
+				CommandService.instance().execute('focusElement', 'noteBody');
 			}
 		}
 	}, [props.dispatch]);
@@ -364,7 +365,7 @@ function NoteEditor(props: NoteEditorProps) {
 	function renderTagBar() {
 		const theme = themeStyle(props.themeId);
 		const noteIds = [formNote.id];
-		const instructions = <span onClick={() => { CommandService.instance().execute('setTags', { noteIds }); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
+		const instructions = <span onClick={() => { CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
 		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 
 		return (
@@ -565,6 +566,7 @@ export {
 
 const mapStateToProps = (state: AppState) => {
 	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+	const whenClauseContext = stateToWhenClauseContext(state);
 
 	return {
 		noteId: noteId,
@@ -587,15 +589,15 @@ const mapStateToProps = (state: AppState) => {
 		watchedResources: state.watchedResources,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
-		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons(state, [
+		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([
 			'historyBackward',
 			'historyForward',
 			'toggleEditors',
 			'toggleExternalEditing',
-		]),
-		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons(state, [
+		], whenClauseContext),
+		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
 			'setTags',
-		])[0],
+		], whenClauseContext)[0],
 	};
 };
 

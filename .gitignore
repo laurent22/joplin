@@ -108,7 +108,7 @@ ElectronClient/gui/MainScreen/commands/showNoteProperties.js
 ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js
 ElectronClient/gui/MainScreen/commands/toggleEditors.js
 ElectronClient/gui/MainScreen/commands/toggleNoteList.js
-ElectronClient/gui/MainScreen/commands/toggleSidebar.js
+ElectronClient/gui/MainScreen/commands/toggleSideBar.js
 ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js
 ElectronClient/gui/MainScreen/MainScreen.js
 ElectronClient/gui/MenuBar.js
@@ -174,6 +174,7 @@ ElectronClient/gui/SideBar/styles/index.js
 ElectronClient/gui/StatusScreen/StatusScreen.js
 ElectronClient/gui/style/StyledInput.js
 ElectronClient/gui/style/StyledTextInput.js
+ElectronClient/gui/TagList.js
 ElectronClient/gui/ToggleEditorsButton/styles/index.js
 ElectronClient/gui/ToggleEditorsButton/ToggleEditorsButton.js
 ElectronClient/gui/ToolbarBase.js
@@ -181,7 +182,9 @@ ElectronClient/gui/ToolbarButton/styles/index.js
 ElectronClient/gui/ToolbarButton/ToolbarButton.js
 ElectronClient/gui/utils/NoteListUtils.js
 ElectronClient/InteropServiceHelper.js
+ElectronClient/plugins/GotoAnything.js
 ElectronClient/services/bridge.js
+ElectronClient/services/commands/types.js
 ElectronClient/services/plugins/hooks/useThemeCss.js
 ElectronClient/services/plugins/hooks/useViewIsReady.js
 ElectronClient/services/plugins/PlatformImplementation.js
@@ -229,9 +232,10 @@ ReactNativeClient/lib/services/AlarmServiceDriver.android.js
 ReactNativeClient/lib/services/AlarmServiceDriver.ios.js
 ReactNativeClient/lib/services/AlarmServiceDriverNode.js
 ReactNativeClient/lib/services/BaseService.js
-ReactNativeClient/lib/services/BooleanExpression.js
+ReactNativeClient/lib/services/commands/commandsToMarkdownTable.js
 ReactNativeClient/lib/services/commands/MenuUtils.js
 ReactNativeClient/lib/services/commands/propsHaveChanged.js
+ReactNativeClient/lib/services/commands/stateToWhenClauseContext.js
 ReactNativeClient/lib/services/commands/ToolbarButtonUtils.js
 ReactNativeClient/lib/services/CommandService.js
 ReactNativeClient/lib/services/contextkey/contextkey.js
@@ -303,6 +307,7 @@ ReactNativeClient/lib/services/synchronizer/migrations/1.js
 ReactNativeClient/lib/services/synchronizer/migrations/2.js
 ReactNativeClient/lib/services/synchronizer/utils/types.js
 ReactNativeClient/lib/services/UndoRedoService.js
+ReactNativeClient/lib/services/WhenClause.js
 ReactNativeClient/lib/ShareExtension.js
 ReactNativeClient/lib/shareHandler.js
 ReactNativeClient/lib/shim.js

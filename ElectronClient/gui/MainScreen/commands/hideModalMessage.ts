@@ -1,4 +1,4 @@
-import { CommandDeclaration, CommandRuntime } from '../../../lib/services/CommandService';
+import { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
 
 export const declaration:CommandDeclaration = {
 	name: 'hideModalMessage',

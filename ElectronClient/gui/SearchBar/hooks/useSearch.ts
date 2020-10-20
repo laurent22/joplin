@@ -5,7 +5,7 @@ const debounce = require('debounce');
 export default function useSearch(query:string) {
 	useEffect(() => {
 		const search = debounce((query:string) => {
-			CommandService.instance().execute('search', { query });
+			CommandService.instance().execute('search', query);
 		}, 500);
 
 		search(query);

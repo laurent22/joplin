@@ -1,8 +1,12 @@
-const React = require('react');
+import * as React from 'react';
+import { AppState } from '../app';
+import CommandService, { SearchResult as CommandSearchResult } from 'lib/services/CommandService';
+import KeymapService from 'lib/services/KeymapService';
+import shim from 'lib/shim';
+
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
-const CommandService = require('lib/services/CommandService').default;
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
@@ -12,32 +16,73 @@ const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
-const PLUGIN_NAME = 'gotoAnything';
 const markupLanguageUtils = require('lib/markupLanguageUtils');
-const KeymapService = require('lib/services/KeymapService.js').default;
-const shim = require('lib/shim').default;
+
+const PLUGIN_NAME = 'gotoAnything';
+
+interface SearchResult {
+	id: string,
+	title: string,
+	parent_id: string,
+	fields: string[],
+	fragments?: string,
+	path?: string,
+	type?: number,
+}
+
+interface Props {
+	themeId: number,
+	dispatch: Function,
+	folders: any[],
+	showCompletedTodos: boolean,
+	userData: any,
+}
+
+interface State {
+	query: string,
+	results: SearchResult[],
+	selectedItemId: string,
+	keywords: string[],
+	listType: number,
+	showHelp: boolean,
+	resultsInBody: boolean,
+}
 
 class GotoAnything {
 
-	onTrigger() {
+	public dispatch:Function;
+	public static Dialog:any;
+	public static manifest:any;
+
+	onTrigger(event:any) {
 		this.dispatch({
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
 			pluginName: PLUGIN_NAME,
+			userData: event.userData,
 		});
 	}
 
 }
 
-class Dialog extends React.PureComponent {
+class Dialog extends React.PureComponent<Props, State> {
 
-	constructor() {
-		super();
+	private fuzzy_:boolean;
+	private styles_:any;
+	private inputRef:any;
+	private itemListRef:any;
+	private listUpdateIID_:any;
+	private markupToHtml_:any;
+
+	constructor(props:Props) {
+		super(props);
 
 		this.fuzzy_ = false;
 
+		const startString = props?.userData?.startString ? props?.userData?.startString : '';
+
 		this.state = {
-			query: '',
+			query: startString,
 			results: [],
 			selectedItemId: null,
 			keywords: [],
@@ -55,19 +100,25 @@ class Dialog extends React.PureComponent {
 		this.input_onChange = this.input_onChange.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
 		this.modalLayer_onClick = this.modalLayer_onClick.bind(this);
-		this.listItemRenderer = this.listItemRenderer.bind(this);
+		this.renderItem = this.renderItem.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
+
+		if (startString) this.scheduleListUpdate();
 	}
 
 	style() {
-		const styleKey = [this.props.themeId, this.state.resultsInBody ? '1' : '0'].join('-');
+		const styleKey = [this.props.themeId, this.state.listType, this.state.resultsInBody ? '1' : '0'].join('-');
 
 		if (this.styles_[styleKey]) return this.styles_[styleKey];
 
 		const theme = themeStyle(this.props.themeId);
 
-		const itemHeight = this.state.resultsInBody ? 84 : 64;
+		let itemHeight = this.state.resultsInBody ? 84 : 64;
+
+		if (this.state.listType === BaseModel.TYPE_COMMAND) {
+			itemHeight = 40;
+		}
 
 		this.styles_[styleKey] = {
 			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
@@ -138,7 +189,7 @@ class Dialog extends React.PureComponent {
 		});
 	}
 
-	onKeyDown(event) {
+	onKeyDown(event:any) {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -148,7 +199,7 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	modalLayer_onClick(event) {
+	modalLayer_onClick(event:any) {
 		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -162,7 +213,7 @@ class Dialog extends React.PureComponent {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
-	input_onChange(event) {
+	input_onChange(event:any) {
 		this.setState({ query: event.target.value });
 
 		this.scheduleListUpdate();
@@ -177,7 +228,7 @@ class Dialog extends React.PureComponent {
 		}, 100);
 	}
 
-	makeSearchQuery(query) {
+	makeSearchQuery(query:string) {
 		const output = [];
 		const splitted = query.split(' ');
 
@@ -190,7 +241,7 @@ class Dialog extends React.PureComponent {
 		return output.join(' ');
 	}
 
-	async keywords(searchQuery) {
+	async keywords(searchQuery:string) {
 		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, this.fuzzy_);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
@@ -207,11 +258,28 @@ class Dialog extends React.PureComponent {
 		if (!this.state.query) {
 			this.setState({ results: [], keywords: [] });
 		} else {
-			let results = [];
+			let results:SearchResult[] = [];
 			let listType = null;
 			let searchQuery = '';
+			let keywords = null;
 
-			if (this.state.query.indexOf('#') === 0) { // TAGS
+			if (this.state.query.indexOf(':') === 0) { // COMMANDS
+				const query = this.state.query.substr(1);
+				listType = BaseModel.TYPE_COMMAND;
+				keywords = [query];
+
+				const commandResults = CommandService.instance().searchCommands(query, true);
+
+				results = commandResults.map((result:CommandSearchResult) => {
+					return {
+						id: result.commandName,
+						title: result.title,
+						parent_id: null,
+						fields: [],
+						type: BaseModel.TYPE_COMMAND,
+					};
+				});
+			} else if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
 				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
 				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
@@ -230,7 +298,7 @@ class Dialog extends React.PureComponent {
 				searchQuery = this.makeSearchQuery(this.state.query);
 				results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
 
-				resultsInBody = !!results.find(row => row.fields.includes('body'));
+				resultsInBody = !!results.find((row:any) => row.fields.includes('body'));
 
 				if (!resultsInBody || this.state.query.length <= 1) {
 					for (let i = 0; i < results.length; i++) {
@@ -241,7 +309,9 @@ class Dialog extends React.PureComponent {
 				} else {
 					const limit = 20;
 					const searchKeywords = await this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+					const notes = await Note.byIds(results.map((result:any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+					// Can't make any sense of this code so...
+					// @ts-ignore
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
 					for (let i = 0; i < results.length; i++) {
@@ -272,7 +342,7 @@ class Dialog extends React.PureComponent {
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
 								const mergedIndices = mergeOverlappingIntervals(indices, 3);
-								fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
+								fragments = mergedIndices.map((f:any) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 
@@ -285,7 +355,7 @@ class Dialog extends React.PureComponent {
 					}
 
 					if (!this.props.showCompletedTodos) {
-						results = results.filter((row) => !row.is_todo || !row.todo_completed);
+						results = results.filter((row:any) => !row.is_todo || !row.todo_completed);
 					}
 				}
 			}
@@ -296,19 +366,24 @@ class Dialog extends React.PureComponent {
 			this.setState({
 				listType: listType,
 				results: results,
-				keywords: await this.keywords(searchQuery),
+				keywords: keywords ? keywords : await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : results[0].id,
 				resultsInBody: resultsInBody,
 			});
 		}
 	}
 
-	async gotoItem(item) {
+	async gotoItem(item:any) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: false,
 		});
+
+		if (item.type === BaseModel.TYPE_COMMAND) {
+			CommandService.instance().execute(item.id);
+			return;
+		}
 
 		if (this.state.listType === BaseModel.TYPE_NOTE || this.state.listType === BaseModel.TYPE_FOLDER) {
 			const folderPath = await Folder.folderPath(this.props.folders, item.parent_id);
@@ -329,7 +404,7 @@ class Dialog extends React.PureComponent {
 				noteId: item.id,
 			});
 
-			CommandService.instance().scheduleExecute('focusElement', { target: 'noteBody' });
+			CommandService.instance().scheduleExecute('focusElement', 'noteBody');
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
 				type: 'TAG_SELECT',
@@ -343,17 +418,19 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	listItem_onClick(event) {
+	listItem_onClick(event:any) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
+		const itemType = event.currentTarget.getAttribute('data-type');
 
 		this.gotoItem({
 			id: itemId,
 			parent_id: parentId,
+			type: itemType,
 		});
 	}
 
-	listItemRenderer(item) {
+	renderItem(item:SearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
@@ -368,7 +445,7 @@ class Dialog extends React.PureComponent {
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
-			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
+			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}
@@ -376,7 +453,7 @@ class Dialog extends React.PureComponent {
 		);
 	}
 
-	selectedItemIndex(results, itemId) {
+	selectedItemIndex(results:any[] = undefined, itemId:string = undefined) {
 		if (typeof results === 'undefined') results = this.state.results;
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
 		for (let i = 0; i < results.length; i++) {
@@ -392,7 +469,7 @@ class Dialog extends React.PureComponent {
 		return this.state.results[index];
 	}
 
-	input_onKeyDown(event) {
+	input_onKeyDown(event:any) {
 		const keyCode = event.keyCode;
 
 		if (this.state.results.length > 0 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP
@@ -428,7 +505,7 @@ class Dialog extends React.PureComponent {
 
 		const itemListStyle = {
 			marginTop: 5,
-			height: Math.min(style.itemHeight * this.state.results.length, 7 * style.itemHeight),
+			height: Math.min(style.itemHeight * this.state.results.length, 10 * style.itemHeight),
 		};
 
 		return (
@@ -437,7 +514,7 @@ class Dialog extends React.PureComponent {
 				itemHeight={style.itemHeight}
 				items={this.state.results}
 				style={itemListStyle}
-				itemRenderer={this.listItemRenderer}
+				itemRenderer={this.renderItem}
 			/>
 		);
 	}
@@ -445,7 +522,7 @@ class Dialog extends React.PureComponent {
 	render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
-		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>;
+		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
 
 		return (
 			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
@@ -463,7 +540,7 @@ class Dialog extends React.PureComponent {
 
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:AppState) => {
 	return {
 		folders: state.folders,
 		themeId: state.settings.theme,
@@ -485,8 +562,18 @@ GotoAnything.manifest = {
 			accelerator: () => KeymapService.instance().getAccelerator('gotoAnything'),
 			screens: ['Main'],
 		},
+		{
+			name: 'main',
+			parent: 'tools',
+			label: _('Command palette'),
+			accelerator: () => KeymapService.instance().getAccelerator('commandPalette'),
+			screens: ['Main'],
+			userData: {
+				startString: ':',
+			},
+		},
 	],
 
 };
 
-module.exports = GotoAnything;
+export default GotoAnything;

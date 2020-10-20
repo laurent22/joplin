@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { View, Button, Text } from 'react-native';
 import { themeStyle } from 'lib/theme';
 import { _ } from 'lib/locale';
+const { View, Button, Text } = require('react-native');
 
 const PopupDialog = require('react-native-popup-dialog').default;
 const { DialogTitle, DialogButton } = require('react-native-popup-dialog');

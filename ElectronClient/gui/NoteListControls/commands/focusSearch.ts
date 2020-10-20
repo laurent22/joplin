@@ -1,4 +1,4 @@
-import { CommandRuntime, CommandDeclaration } from '../../../lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration } from 'lib/services/CommandService';
 import { _ } from 'lib/locale';
 
 export const declaration:CommandDeclaration = {

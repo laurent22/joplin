@@ -230,7 +230,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', { parentId: itemId }))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', itemId))
 			);
 		}
 
@@ -259,7 +259,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		);
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
-			menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('renameFolder', { folderId: itemId })));
+			menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('renameFolder', itemId)));
 
 			menu.append(new MenuItem({ type: 'separator' }));
 
@@ -290,7 +290,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(new MenuItem(
-				menuUtils.commandToStatefulMenuItem('renameTag', { tagId: itemId })
+				menuUtils.commandToStatefulMenuItem('renameTag', itemId)
 			));
 		}
 
@@ -510,9 +510,9 @@ class SideBarComponent extends React.Component<Props, State> {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', { target: 'noteBody' });
+				CommandService.instance().execute('focusElement', 'noteBody');
 			} else {
-				CommandService.instance().execute('focusElement', { target: 'noteList' });
+				CommandService.instance().execute('focusElement', 'noteList');
 			}
 		}
 
@@ -559,7 +559,7 @@ class SideBarComponent extends React.Component<Props, State> {
 				iconAnimation={iconAnimation}
 				title={label}
 				onClick={() => {
-					CommandService.instance().execute('synchronize', { syncStarted: type !== 'sync' });
+					CommandService.instance().execute('synchronize', type !== 'sync');
 				}}
 			/>
 		);
@@ -568,6 +568,20 @@ class SideBarComponent extends React.Component<Props, State> {
 	onAddFolderButtonClick() {
 		CommandService.instance().execute('newFolder');
 	}
+
+	// componentDidUpdate(prevProps:any, prevState:any) {
+	// 	for (const n in prevProps) {
+	// 		if (prevProps[n] !== (this.props as any)[n]) {
+	// 			console.info('CHANGED PROPS', n);
+	// 		}
+	// 	}
+
+	// 	for (const n in prevState) {
+	// 		if (prevState[n] !== (this.state as any)[n]) {
+	// 			console.info('CHANGED STATE', n);
+	// 		}
+	// 	}
+	// }
 
 	render() {
 		const theme = themeStyle(this.props.themeId);

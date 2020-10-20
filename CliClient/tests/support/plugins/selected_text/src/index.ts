@@ -45,7 +45,7 @@ joplin.plugins.register({
 					newLines.push(newCells.join(' | '));
 				}
 
-				await joplin.commands.execute('replaceSelection', { value: newLines.join('\n') });
+				await joplin.commands.execute('replaceSelection', newLines.join('\n'));
 			},
 		});
 		

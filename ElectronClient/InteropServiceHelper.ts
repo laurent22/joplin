@@ -155,7 +155,7 @@ export default class InteropServiceHelper {
 
 		if (Array.isArray(path)) path = path[0];
 
-		CommandService.instance().execute('showModalMessage', { message: _('Exporting to "%s" as "%s" format. Please wait...', path, module.format) });
+		CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
 		const exportOptions:ExportOptions = {};
 		exportOptions.path = path;

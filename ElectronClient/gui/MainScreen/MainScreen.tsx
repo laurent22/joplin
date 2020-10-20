@@ -61,7 +61,7 @@ const commands = [
 	require('./commands/showShareNoteDialog'),
 	require('./commands/toggleEditors'),
 	require('./commands/toggleNoteList'),
-	require('./commands/toggleSidebar'),
+	require('./commands/toggleSideBar'),
 	require('./commands/toggleVisiblePanes'),
 ];
 
@@ -320,7 +320,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		window.removeEventListener('resize', this.window_resize);
 	}
 
-	toggleSidebar() {
+	toggleSideBar() {
 		this.props.dispatch({
 			type: 'SIDEBAR_VISIBILITY_TOGGLE',
 		});
