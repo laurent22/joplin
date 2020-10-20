@@ -25,9 +25,9 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				const longPressHandler = `${ruleOptions.postMessageSyntax}('longclick:${id}')`;
 
 				const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${longPressDelay});`;
-				const touchEnd = 'if (!!t) clearTimeout(t); t=null';
+				const cancel = 'if (!!t) clearTimeout(t); t=null';
 
-				js = ` ontouchstart="${touchStart}" ontouchend="${touchEnd}"`;
+				js = ` ontouchstart="${touchStart}" ontouchend="${cancel}" ontouchcancel="${cancel}" ontouchmove="${cancel}"`;
 			}
 
 			return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title }))}${js}/>`;
