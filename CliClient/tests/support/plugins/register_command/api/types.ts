@@ -3,12 +3,47 @@
 // =================================================================
 
 export interface Command {
+	/**
+	 * Name of command - must be globally unique
+	 */
 	name: string
+
+	/**
+	 * Label to be displayed on menu items or keyboard shortcut editor for example
+	 */
 	label: string
+
+	/**
+	 * Icon to be used on toolbar buttons for example
+	 */
 	iconName?: string,
+
+	/**
+	 * Code to be ran when the command is executed. It maybe return a result.
+	 */
 	execute(props:any):Promise<any>
-	isEnabled?(props:any):boolean
-	mapStateToProps?(state:any):any
+
+	/**
+	 * Defines whether the command should be enabled or disabled, which in turns affects
+	 * the enabled state of any associated button or menu item.
+	 *
+	 * The condition should be expressed as a "when-clause" (as in Visual Studio Code). It's a simple boolean expression that evaluates to
+	 * `true` or `false`. It supports the following operators:
+	 *
+	 * Operator | Symbol | Example
+	 * -- | -- | --
+	 * Equality | == | "editorType == markdown"
+	 * Inequality | != | "currentScreen != config"
+	 * Or | \|\| | "noteIsTodo \|\| noteTodoCompleted"
+	 * And | && | "oneNoteSelected && !inConflictFolder"
+	 *
+	 * Currently the supported context variables aren't documented, but you can find the list there:
+	 *
+	 * https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/services/commands/stateToWhenClauseContext.ts
+	 *
+	 * Note: Commands are enabled by default unless you use this property.
+	 */
+	enabledCondition?: string
 }
 
 // =================================================================
@@ -26,7 +61,7 @@ export enum ImportModuleOutputFormat {
 }
 
 /**
- * Used to implement a module to export data from Joplin. [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/json_export) for an example.
+ * Used to implement a module to export data from Joplin. [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/json_export) for an example.
  *
  * In general, all the event handlers you'll need to implement take a `context` object as a first argument. This object will contain the export or import path as well as various optional properties, such as which notes or notebooks need to be exported.
  *
@@ -154,16 +189,8 @@ export interface Script {
 }
 
 // =================================================================
-// View API types
+// Menu types
 // =================================================================
-
-export type ButtonId = string;
-
-export interface ButtonSpec {
-	id: ButtonId,
-	title?: string,
-	onClick?():void,
-}
 
 export interface CreateMenuItemOptions {
 	accelerator: string,
@@ -178,6 +205,41 @@ export enum MenuItemLocation {
 	Help = 'help',
 	Context = 'context',
 }
+
+export interface MenuItem {
+	/**
+	 * Command that should be associated with the menu item. All menu item should
+	 * have a command associated with them unless they are a sub-menu.
+	 */
+	commandName?: string,
+
+	/**
+	 * Accelerator associated with the menu item
+	 */
+	accelerator?: string,
+
+	/**
+	 * Menu items that should appear below this menu item. Allows creating a menu tree.
+	 */
+	submenu?: MenuItem[],
+
+	/**
+	 * Menu item label. If not specified, the command label will be used instead.
+	 */
+	label?: string,
+}
+
+// =================================================================
+// View API types
+// =================================================================
+
+export interface ButtonSpec {
+	id: ButtonId,
+	title?: string,
+	onClick?():void,
+}
+
+export type ButtonId = string;
 
 export enum ToolbarButtonLocation {
 	/**
@@ -250,3 +312,54 @@ export interface SettingSection {
  * [2]: (Optional) Resource link.
  */
 export type Path = string[];
+
+// =================================================================
+// Plugins type
+// =================================================================
+
+export enum ContentScriptType {
+	/**
+	 * Registers a new Markdown-It plugin, which should follow this template:
+	 *
+	 * ```javascript
+	 * // The module should export an object as below:
+	 *
+	 * module.exports = {
+	 *
+	 *     // The "context" variable is currently unused but could be used later on to provide
+	 *     // access to your own plugin so that the content script and plugin can communicate.
+	 *     default: function(context) {
+	 *         return {
+	 *
+	 *             // This is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information
+	 *             // The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml.ts), which
+	 *             // contains a number of options, mostly useful for Joplin's internal code.
+	 *             plugin: function(markdownIt, options) {
+	 *                 // ...
+	 *             },
+	 *
+	 *             // You may also specify additional assets such as JS or CSS that should be loaded in the rendered HTML document.
+	 *             // Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to
+	 *             // see how the data should be structured.
+	 *             assets: {},
+	 *         }
+	 *     }
+	 * }
+	 * ```
+	 *
+	 * To include a regular Markdown-It plugin, that doesn't make use of any Joplin-specific feature, you
+	 * would simply create a file such as this:
+	 *
+	 * ```javascript
+	 * module.exports = {
+	 *     default: function(context) {
+	 *         return {
+	 *             plugin: require('markdown-it-toc-done-right');
+	 *         }
+	 *     }
+	 * }
+	 * ```
+	 */
+	MarkdownItPlugin = 'markdownItPlugin',
+	CodeMirrorPlugin = 'codeMirrorPlugin',
+}

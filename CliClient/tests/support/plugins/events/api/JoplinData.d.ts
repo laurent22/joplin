@@ -1,12 +1,12 @@
 import { Path } from './types';
 /**
- * This module provides access to the Joplin data API: https://joplinapp.org/api/
+ * This module provides access to the Joplin data API: https://joplinapp.org/api/references/rest_api/
  * This is the main way to retrieve data, such as notes, notebooks, tags, etc.
  * or to update them or delete them.
  *
  * This is also what you would use to search notes, via the `search` endpoint.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/simple)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/simple)
  *
  * In general you would use the methods in this class as if you were using a REST API. There are four methods that map to GET, POST, PUT and DELETE calls.
  * And each method takes these parameters:
@@ -16,7 +16,7 @@ import { Path } from './types';
  * * `data`: (Optional) Applies to PUT and POST calls only. The request body contains the data you want to create or modify, for example the content of a note or folder.
  * * `files`: (Optional) Used to create new resources and associate them with files.
  *
- * Please refer to the [Joplin API documentation](https://joplinapp.org/api/) for complete details about each call. As the plugin runs within the Joplin application **you do not need an authorisation token** to use this API.
+ * Please refer to the [Joplin API documentation](https://joplinapp.org/api/references/rest_api/) for complete details about each call. As the plugin runs within the Joplin application **you do not need an authorisation token** to use this API.
  *
  * For example:
  *

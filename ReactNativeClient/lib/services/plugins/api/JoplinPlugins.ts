@@ -10,7 +10,7 @@ export default class JoplinPlugins {
 	private logger: Logger;
 	private plugin: Plugin;
 
-	constructor(logger:Logger, plugin:Plugin) {
+	public constructor(logger:Logger, plugin:Plugin) {
 		this.logger = logger;
 		this.plugin = plugin;
 	}

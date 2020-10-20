@@ -3,7 +3,7 @@ import Plugin from '../Plugin';
 /**
  * Allows creating and managing toolbar buttons.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/CliClient/tests/support/plugins/register_command)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/register_command)
  */
 export default class JoplinViewsToolbarButtons {
     private store;

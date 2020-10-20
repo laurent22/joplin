@@ -3,12 +3,47 @@
 // =================================================================
 
 export interface Command {
+	/**
+	 * Name of command - must be globally unique
+	 */
 	name: string
+
+	/**
+	 * Label to be displayed on menu items or keyboard shortcut editor for example
+	 */
 	label: string
+
+	/**
+	 * Icon to be used on toolbar buttons for example
+	 */
 	iconName?: string,
+
+	/**
+	 * Code to be ran when the command is executed. It maybe return a result.
+	 */
 	execute(props:any):Promise<any>
-	isEnabled?(props:any):boolean
-	mapStateToProps?(state:any):any
+
+	/**
+	 * Defines whether the command should be enabled or disabled, which in turns affects
+	 * the enabled state of any associated button or menu item.
+	 *
+	 * The condition should be expressed as a "when-clause" (as in Visual Studio Code). It's a simple boolean expression that evaluates to
+	 * `true` or `false`. It supports the following operators:
+	 *
+	 * Operator | Symbol | Example
+	 * -- | -- | --
+	 * Equality | == | "editorType == markdown"
+	 * Inequality | != | "currentScreen != config"
+	 * Or | \|\| | "noteIsTodo \|\| noteTodoCompleted"
+	 * And | && | "oneNoteSelected && !inConflictFolder"
+	 *
+	 * Currently the supported context variables aren't documented, but you can find the list there:
+	 *
+	 * https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/services/commands/stateToWhenClauseContext.ts
+	 *
+	 * Note: Commands are enabled by default unless you use this property.
+	 */
+	enabledCondition?: string
 }
 
 // =================================================================
@@ -277,3 +312,54 @@ export interface SettingSection {
  * [2]: (Optional) Resource link.
  */
 export type Path = string[];
+
+// =================================================================
+// Plugins type
+// =================================================================
+
+export enum ContentScriptType {
+	/**
+	 * Registers a new Markdown-It plugin, which should follow this template:
+	 *
+	 * ```javascript
+	 * // The module should export an object as below:
+	 *
+	 * module.exports = {
+	 *
+	 *     // The "context" variable is currently unused but could be used later on to provide
+	 *     // access to your own plugin so that the content script and plugin can communicate.
+	 *     default: function(context) {
+	 *         return {
+	 *
+	 *             // This is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information
+	 *             // The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml.ts), which
+	 *             // contains a number of options, mostly useful for Joplin's internal code.
+	 *             plugin: function(markdownIt, options) {
+	 *                 // ...
+	 *             },
+	 *
+	 *             // You may also specify additional assets such as JS or CSS that should be loaded in the rendered HTML document.
+	 *             // Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to
+	 *             // see how the data should be structured.
+	 *             assets: {},
+	 *         }
+	 *     }
+	 * }
+	 * ```
+	 *
+	 * To include a regular Markdown-It plugin, that doesn't make use of any Joplin-specific feature, you
+	 * would simply create a file such as this:
+	 *
+	 * ```javascript
+	 * module.exports = {
+	 *     default: function(context) {
+	 *         return {
+	 *             plugin: require('markdown-it-toc-done-right');
+	 *         }
+	 *     }
+	 * }
+	 * ```
+	 */
+	MarkdownItPlugin = 'markdownItPlugin',
+	CodeMirrorPlugin = 'codeMirrorPlugin',
+}

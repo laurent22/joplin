@@ -17,5 +17,6 @@ rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-l
 rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/settings/" 
 rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/toc/" 
 rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/withExternalModules/" 
+rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/content_script/" 
 
 rm -rf "$TEMP_DIR"
