@@ -594,11 +594,11 @@ class Note extends BaseItem {
 		// This is necessary for example so that the folder list is not refreshed every time a note is changed.
 		// Now it can look at the properties and refresh only if the "parent_id" property is changed.
 		// Trying to fix: https://github.com/laurent22/joplin/issues/3893
-		const oldNote = await Note.load(o.id);
+		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 
 		let beforeNoteJson = null;
-		if (!isNew && this.revisionService().isOldNote(o.id)) {
-			if (oldNote) beforeNoteJson = JSON.stringify(oldNote);
+		if (oldNote && this.revisionService().isOldNote(o.id)) {
+			beforeNoteJson = JSON.stringify(oldNote);
 		}
 
 		const changedFields = [];
