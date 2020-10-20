@@ -1,13 +1,8 @@
 const os = require('os');
-const { time } = require('lib/time-utils.js');
 const { filename } = require('lib/path-utils');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
-const BaseModel = require('lib/BaseModel.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
 const shim = require('lib/shim').default;
 const MdToHtml = require('lib/joplin-renderer/MdToHtml').default;
-const { enexXmlToMd } = require('lib/import-enex-md-gen.js');
 const { themeStyle } = require('lib/theme');
 
 function newTestMdToHtml(options:any = null) {
@@ -118,7 +113,7 @@ describe('MdToHtml', function() {
 		// In this case, the HTML contains both the style and
 		// the rendered markdown wrapped in a DIV.
 		const result = await mdToHtml.render('just **testing**');
-		expect(result.cssStrings.length).toBe(0);
+		expect(result.cssStrings.length).toBeGreaterThan(0);
 		expect(result.html.indexOf('rendered-md') >= 0).toBe(true);
 	}));
 
