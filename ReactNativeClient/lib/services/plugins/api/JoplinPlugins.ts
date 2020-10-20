@@ -58,6 +58,8 @@ export default class JoplinPlugins {
 	 *
 	 * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/content_script)
 	 *
+	 * @param type Defines how the script will be used. See the type definition for more information about each supported type.
+	 * @param id A unique ID for the content script.
 	 * @param scriptPath Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set `scriptPath` to `"./content_script.js`.
 	 */
 	async registerContentScript(type:ContentScriptType, id:string, scriptPath:string) {
