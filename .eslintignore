@@ -224,7 +224,14 @@ ReactNativeClient/lib/InMemoryCache.js
 ReactNativeClient/lib/joplin-renderer/MarkupToHtml.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/code_inline.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fountain.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/highlight_keywords.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/html_image.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/image.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/katex.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/link_open.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/joplin-renderer/noteStyle.js

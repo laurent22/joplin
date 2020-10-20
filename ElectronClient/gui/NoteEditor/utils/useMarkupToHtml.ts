@@ -1,6 +1,6 @@
 import { PluginStates } from 'lib/services/plugins/reducer';
 import contentScriptsToRendererRules from 'lib/services/plugins/utils/contentScriptsToRendererRules';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ResourceInfos } from './types';
 import markupLanguageUtils from 'lib/markupLanguageUtils';
 import Setting from 'lib/models/Setting';
@@ -22,6 +22,13 @@ interface MarkupToHtmlOptions {
 export default function useMarkupToHtml(deps:HookDependencies) {
 	const { themeId, customCss, plugins } = deps;
 
+	const markupToHtml = useMemo(() => {
+		return markupLanguageUtils.newMarkupToHtml({
+			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			extraRendererRules: contentScriptsToRendererRules(plugins),
+		});
+	}, [plugins]);
+
 	return useCallback(async (markupLanguage: number, md: string, options: MarkupToHtmlOptions = null): Promise<any> => {
 		options = {
 			replaceResourceInternalToExternalLinks: false,
@@ -42,11 +49,6 @@ export default function useMarkupToHtml(deps:HookDependencies) {
 
 		delete options.replaceResourceInternalToExternalLinks;
 
-		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
-			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
-			extraRendererRules: contentScriptsToRendererRules(plugins),
-		});
-
 		const result = await markupToHtml.render(markupLanguage, md, theme, Object.assign({}, {
 			codeTheme: theme.codeThemeCss,
 			userCss: customCss || '',
@@ -57,5 +59,5 @@ export default function useMarkupToHtml(deps:HookDependencies) {
 		}, options));
 
 		return result;
-	}, [themeId, customCss, plugins]);
+	}, [themeId, customCss, markupToHtml]);
 }

@@ -393,6 +393,7 @@ function themeStyle(themeId:number) {
 	output = Object.assign({}, globalStyle, fontSizes, themes[themeId]);
 	output = addMissingProperties(output);
 	output = addExtraStyles(output);
+	output.cacheKey = cacheKey;
 
 	themeCache_[cacheKey] = output;
 	return themeCache_[cacheKey];

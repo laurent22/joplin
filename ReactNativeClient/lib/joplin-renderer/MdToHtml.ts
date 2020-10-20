@@ -8,7 +8,6 @@ const md5 = require('md5');
 interface RendererRule {
 	install(context:any, ruleOptions:any):any,
 	assets?(theme:any):any,
-	rule?: any, // TODO: remove
 	plugin?: any,
 }
 
@@ -29,18 +28,17 @@ interface RendererPlugins {
 const rules:RendererRules = {
 	fence: require('./MdToHtml/rules/fence').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
-	image: require('./MdToHtml/rules/image'),
+	image: require('./MdToHtml/rules/image').default,
 	checkbox: require('./MdToHtml/rules/checkbox').default,
-	katex: require('./MdToHtml/rules/katex'),
-	link_open: require('./MdToHtml/rules/link_open'),
-	html_image: require('./MdToHtml/rules/html_image'),
-	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
-	code_inline: require('./MdToHtml/rules/code_inline'),
-	fountain: require('./MdToHtml/rules/fountain'),
+	katex: require('./MdToHtml/rules/katex').default,
+	link_open: require('./MdToHtml/rules/link_open').default,
+	html_image: require('./MdToHtml/rules/html_image').default,
+	highlight_keywords: require('./MdToHtml/rules/highlight_keywords').default,
+	code_inline: require('./MdToHtml/rules/code_inline').default,
+	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 };
 
-// const eventManager = require('lib/eventManager').default;
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const uslug = require('uslug');
@@ -101,6 +99,7 @@ interface PluginContext {
 	css: any
 	pluginAssets: any,
 	cache: any,
+	userData: any,
 }
 
 interface RenderResultPluginAsset {
@@ -119,9 +118,33 @@ export interface RuleOptions {
 	context: PluginContext,
 	theme: any,
 	postMessageSyntax: string,
+	ResourceModel: any,
+	resourceBaseUrl: string,
+	resources: any, // resourceId: Resource
 
 	// Used by checkboxes to specify how it should be rendered
 	checkboxRenderingType?: number,
+
+	// Used by the keyword highlighting plugin (mobile only)
+	highlightedKeywords?: any[],
+
+	// Use by resource-rendering logic to signify that it should be rendered
+	// as a plain HTML string without any attached JavaScript. Used for example
+	// when exporting to HTML.
+	plainResourceRendering?: boolean,
+
+	// Use in mobile app to enable long-pressing an image or a linkg
+	// to display a context menu. Used in `image.ts` and `link_open.ts`
+	enableLongPress?: boolean,
+
+	// Used in mobile app when enableLongPress = true. Tells for how long
+	// the resource should be pressed before the menu is shown.
+	longPressDelay?: number,
+
+	// Use by `link_open` rule.
+	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
+	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
+	linkRenderingType?: number,
 }
 
 export default class MdToHtml {
@@ -129,7 +152,6 @@ export default class MdToHtml {
 	private resourceBaseUrl_:string;
 	private ResourceModel_:any;
 	private contextCache_:any;
-	private tempDir_:string;
 	private fsDriver_:any;
 
 	private cachedOutputs_:any = {};
@@ -139,8 +161,9 @@ export default class MdToHtml {
 	// Markdown-It plugin options (not Joplin plugin options)
 	private pluginOptions_:any = {};
 	private extraRendererRules_:RendererRules = {};
+	private allProcessedAssets_:any = {};
 
-	constructor(options:Options = null) {
+	public constructor(options:Options = null) {
 		if (!options) options = {};
 
 		// Must include last "/"
@@ -150,7 +173,6 @@ export default class MdToHtml {
 		this.pluginOptions_ = options.pluginOptions ? options.pluginOptions : {};
 		this.contextCache_ = inMemoryCache;
 
-		this.tempDir_ = options.tempDir;
 		this.fsDriver_ = {
 			writeFile: (/* path, content, encoding = 'base64'*/) => { throw new Error('writeFile not set'); },
 			exists: (/* path*/) => { throw new Error('exists not set'); },
@@ -170,22 +192,18 @@ export default class MdToHtml {
 		}
 	}
 
-	fsDriver() {
+	private fsDriver() {
 		return this.fsDriver_;
 	}
 
-	tempDir() {
-		return this.tempDir_;
-	}
-
-	static pluginNames() {
+	public static pluginNames() {
 		const output = [];
 		for (const n in rules) output.push(n);
 		for (const n in plugins) output.push(n);
 		return output;
 	}
 
-	pluginOptions(name:string) {
+	private pluginOptions(name:string) {
 		let o = this.pluginOptions_[name] ? this.pluginOptions_[name] : {};
 		o = Object.assign({
 			enabled: true,
@@ -193,7 +211,7 @@ export default class MdToHtml {
 		return o;
 	}
 
-	pluginEnabled(name:string) {
+	private pluginEnabled(name:string) {
 		return this.pluginOptions(name).enabled;
 	}
 
@@ -203,7 +221,7 @@ export default class MdToHtml {
 		this.extraRendererRules_[id] = module;
 	}
 
-	processPluginAssets(pluginAssets:PluginAssets):RenderResult {
+	private processPluginAssets(pluginAssets:PluginAssets):RenderResult {
 		const files:RenderResultPluginAsset[] = [];
 		const cssStrings = [];
 		for (const pluginName in pluginAssets) {
@@ -246,7 +264,13 @@ export default class MdToHtml {
 		};
 	}
 
-	private allUnprocessedAssets(theme:any) {
+	// This return all the assets for all the plugins. Since it is called
+	// on each render, the result is cached.
+	private allProcessedAssets(theme:any, codeTheme:string) {
+		const cacheKey:string = theme.cacheKey + codeTheme;
+
+		if (this.allProcessedAssets_[cacheKey]) return this.allProcessedAssets_[cacheKey];
+
 		const assets:any = {};
 		for (const key in rules) {
 			if (!this.pluginEnabled(key)) continue;
@@ -257,11 +281,19 @@ export default class MdToHtml {
 			}
 		}
 
-		return assets;
+		assets['highlight.js'] = [{ name: codeTheme }];
+
+		const output = this.processPluginAssets(assets);
+
+		this.allProcessedAssets_ = {
+			[cacheKey]: output,
+		};
+
+		return output;
 	}
 
-	// TODO: remove
-	async allAssets(theme:any) {
+	// This is similar to allProcessedAssets() but used only by the Rich Text editor
+	public async allAssets(theme:any) {
 		const assets:any = {};
 		for (const key in rules) {
 			if (!this.pluginEnabled(key)) continue;
@@ -278,7 +310,7 @@ export default class MdToHtml {
 		return output.pluginAssets;
 	}
 
-	async outputAssetsToExternalAssets_(output:any) {
+	private async outputAssetsToExternalAssets_(output:any) {
 		for (const cssString of output.cssStrings) {
 			output.pluginAssets.push(await this.fsDriver().cacheCssToFile(cssString));
 		}
@@ -286,7 +318,7 @@ export default class MdToHtml {
 		return output;
 	}
 
-	removeMarkdownItWrappingParagraph_(html:string) {
+	private removeMarkdownItWrappingParagraph_(html:string) {
 		// <p></p>\n
 		if (html.length < 8) return html;
 		if (html.substr(0, 3) !== '<p>') return html;
@@ -294,7 +326,7 @@ export default class MdToHtml {
 		return html.substring(3, html.length - 5);
 	}
 
-	clearCache() {
+	public clearCache() {
 		this.cachedOutputs_ = {};
 	}
 
@@ -338,7 +370,7 @@ export default class MdToHtml {
 			css: {},
 			pluginAssets: {},
 			cache: this.contextCache_,
-			// options: ruleOptions,
+			userData: {},
 		};
 
 		const markdownIt = new MarkdownIt({
@@ -369,10 +401,6 @@ export default class MdToHtml {
 						}
 						this.cachedHighlightedCode_[cacheKey] = hlCode;
 					}
-
-					context.pluginAssets['highlight.js'] = [
-						{ name: options.codeTheme },
-					];
 
 					outputCodeHtml = hlCode;
 				} catch (error) {
@@ -417,19 +445,14 @@ export default class MdToHtml {
 
 		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;
-			const rule = allRules[key];
-			if (rule.plugin) {
-				const pluginOptions = {
-					context: context,
-					...ruleOptions,
-					...(ruleOptions.plugins[key] ? ruleOptions.plugins[key] : {}),
-				};
 
-				markdownIt.use(rule.plugin, pluginOptions);
-			} else {
-				const ruleInstall:Function = rule.install ? rule.install : (rule as any);
-				markdownIt.use(ruleInstall(context, { ...ruleOptions }));
-			}
+			const rule = allRules[key];
+
+			markdownIt.use(rule.plugin, {
+				context: context,
+				...ruleOptions,
+				...(ruleOptions.plugins[key] ? ruleOptions.plugins[key] : {}),
+			});
 		}
 
 		markdownIt.use(markdownItAnchor, { slugify: slugify });
@@ -440,20 +463,13 @@ export default class MdToHtml {
 			}
 		}
 
-		// const extraPlugins = eventManager.filterEmit('mdToHtmlPlugins', {});
-		// for (const key in extraPlugins) {
-		// 	markdownIt.use(extraPlugins[key].module, extraPlugins[key].options);
-		// }
-
 		setupLinkify(markdownIt);
 
 		const renderedBody = markdownIt.render(body, context);
 
-		const pluginAssets = this.allUnprocessedAssets(theme);
-
 		let cssStrings = noteStyle(options.theme);
 
-		let output = this.processPluginAssets(pluginAssets); // context.pluginAssets);
+		let output = { ...this.allProcessedAssets(theme, options.codeTheme) };
 		cssStrings = cssStrings.concat(output.cssStrings);
 
 		if (options.userCss) cssStrings.push(options.userCss);
@@ -485,7 +501,4 @@ export default class MdToHtml {
 		return output;
 	}
 
-	injectedJavaScript() {
-		return '';
-	}
 }

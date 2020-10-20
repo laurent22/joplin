@@ -42,10 +42,6 @@ export default class MarkupToHtml {
 		return this.renderers_[markupLanguage];
 	}
 
-	injectedJavaScript() {
-		return '';
-	}
-
 	stripMarkup(markupLanguage:MarkupLanguage, markup:string, options:any = null) {
 		if (!markup) return '';
 

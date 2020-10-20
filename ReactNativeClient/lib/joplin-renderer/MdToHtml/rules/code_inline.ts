@@ -1,11 +1,11 @@
-function installRule(markdownIt) {
+function plugin(markdownIt:any) {
 	const defaultRender =
 		markdownIt.renderer.rules.code_inline ||
-		function(tokens, idx, options, env, self) {
+		function(tokens:any, idx:any, options:any, _env:any, self:any) {
 			return self.renderToken(tokens, idx, options);
 		};
 
-	markdownIt.renderer.rules.code_inline = (tokens, idx, options, env, self) => {
+	markdownIt.renderer.rules.code_inline = (tokens:any[], idx:number, options:any, env:any, self:any) => {
 		const token = tokens[idx];
 		let tokenClass = token.attrGet('class');
 		if (!tokenClass) tokenClass = '';
@@ -15,8 +15,6 @@ function installRule(markdownIt) {
 	};
 }
 
-module.exports = function(context, ruleOptions) {
-	return function(md, mdOptions) {
-		installRule(md, mdOptions, ruleOptions);
-	};
+export default {
+	plugin,
 };
