@@ -2,15 +2,12 @@ import eventManager from 'lib/eventManager';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
 import BaseService from 'lib/services/BaseService';
 import shim from 'lib/shim';
-import BooleanExpression from './BooleanExpression';
 
 type LabelFunction = () => string;
-type IsEnabledFunction = (props:any) => boolean;
-type IsEnabledExpression = string;
 
 export interface CommandRuntime {
 	execute(props:any):Promise<any>
-	isEnabled?: IsEnabledFunction | IsEnabledExpression;
+	isEnabled?(props:any):boolean
 
 	// "state" type is "AppState" but in order not to introduce a
 	// dependency to the desktop app (so that the service can
@@ -200,23 +197,11 @@ export default class CommandService extends BaseService {
 		}, 10);
 	}
 
-	public booleanExpressionContextFromState(state:any) {
-		return {
-			selectedNoteCount: state.selectedNoteIds.length,
-			selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
-		};
-	}
-
-	isEnabled(commandName:string, props:any, booleanExpressionContext:any):boolean {
+	isEnabled(commandName:string, props:any):boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
-
-		if (typeof command.runtime.isEnabled === 'function') {
-			return command.runtime.isEnabled(props);
-		} else {
-			const exp = new BooleanExpression(command.runtime.isEnabled);
-			return exp.evaluate(booleanExpressionContext);
-		}
+		// if (!command.runtime.props) return false;
+		return command.runtime.isEnabled(props);
 	}
 
 	commandMapStateToProps(commandName:string, state:any):any {

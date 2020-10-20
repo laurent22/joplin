@@ -788,7 +788,7 @@ function useMenu(props:Props) {
 	useEffect(() => {
 		for (const commandName in props.menuItemProps) {
 			if (!props.menuItemProps[commandName]) continue;
-			menuItemSetEnabled(commandName, CommandService.instance().isEnabled(commandName, props.menuItemProps[commandName], null));
+			menuItemSetEnabled(commandName, CommandService.instance().isEnabled(commandName, props.menuItemProps[commandName]));
 		}
 
 		const layoutButtonSequenceOptions = Setting.enumOptions('layoutButtonSequence');

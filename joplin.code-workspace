@@ -360,8 +360,7 @@
 			"CliClient/tests/support/plugins/settings/**/node_modules/": true,
 			"CliClient/tests/support/plugins/selected_text/dist/*": true,
 			"CliClient/tests/support/plugins/selected_text/**/node_modules/": true,
-			"**/CliClient/build/": true,
-			"**/*.js": {"when": "$(basename).ts"},
+			"**/CliClient/build/": true
 		},
 		"spellright.language": [
 			"en"
