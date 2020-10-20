@@ -114,7 +114,7 @@
 					<a name="execute" class="tsd-anchor"></a>
 					<h3>execute</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">execute<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">execute<span class="tsd-signature-symbol">(</span>commandName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -130,7 +130,7 @@
 
 <span class="hljs-comment">// Create a new sub-notebook under the provided notebook</span>
 <span class="hljs-comment">// Note: internally, notebooks are called &quot;folders&quot;.</span>
-<span class="hljs-keyword">await</span> joplin.commands.execute(<span class="hljs-string">&#x27;newFolder&#x27;</span>, { parent_id: <span class="hljs-string">&quot;SOME_FOLDER_ID&quot;</span> });</code></pre>
+<span class="hljs-keyword">await</span> joplin.commands.execute(<span class="hljs-string">&#x27;newFolder&#x27;</span>, <span class="hljs-string">&quot;SOME_FOLDER_ID&quot;</span>);</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -138,7 +138,7 @@
 									<h5>commandName: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> props: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = null</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -202,6 +202,9 @@
             -->
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum">
+						<a href="../enums/contentscripttype.html" class="tsd-kind-icon">ContentScriptType</a>
+					</li>
 					<li class=" tsd-kind-enum">
 						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
 					</li>

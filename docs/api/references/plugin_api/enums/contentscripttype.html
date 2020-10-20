@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ExportContext | Joplin Plugin API Documentation</title>
+	<title>ContentScriptType | Joplin Plugin API Documentation</title>
 	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,69 +54,81 @@
         </li>
 -->
 				<li>
-					<a href="exportcontext.html">ExportContext</a>
+					<a href="contentscripttype.html">ContentScriptType</a>
 				</li>
 			</ul>
-			<h1><!-- Interface  -->ExportContext</h1>
+			<h1><!-- Enumeration  -->ContentScriptType</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<!--
-    <section class="tsd-panel tsd-hierarchy">
-        <h3>Hierarchy</h3>
-        <ul class="tsd-hierarchy">
-        <li>
-                <span class="target">ExportContext</span>
-
-        </li>
-</ul>
-
-    </section>
-    -->
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportcontext.html#destpath" class="tsd-kind-icon">dest<wbr>Path</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportcontext.html#options" class="tsd-kind-icon">options</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="exportcontext.html#userdata" class="tsd-kind-icon">user<wbr>Data</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="contentscripttype.html#codemirrorplugin" class="tsd-kind-icon">Code<wbr>Mirror<wbr>Plugin</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="contentscripttype.html#markdownitplugin" class="tsd-kind-icon">Markdown<wbr>ItPlugin</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="destpath" class="tsd-anchor"></a>
-					<h3>dest<wbr>Path</h3>
-					<div class="tsd-signature tsd-kind-icon">dest<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="codemirrorplugin" class="tsd-anchor"></a>
+					<h3>Code<wbr>Mirror<wbr>Plugin</h3>
+					<div class="tsd-signature tsd-kind-icon">Code<wbr>Mirror<wbr>Plugin<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;codeMirrorPlugin&quot;</span></div>
 					<aside class="tsd-sources">
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="options" class="tsd-anchor"></a>
-					<h3>options</h3>
-					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <a href="exportoptions.html" class="tsd-signature-type">ExportOptions</a></div>
-					<aside class="tsd-sources">
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="userdata" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> user<wbr>Data</h3>
-					<div class="tsd-signature tsd-kind-icon">user<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="markdownitplugin" class="tsd-anchor"></a>
+					<h3>Markdown<wbr>ItPlugin</h3>
+					<div class="tsd-signature tsd-kind-icon">Markdown<wbr>ItPlugin<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;markdownItPlugin&quot;</span></div>
 					<aside class="tsd-sources">
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>You can attach your own custom data using this propery - it will then be passed to each event handler, allowing you to keep state from one event to the next.</p>
+							<p>Registers a new Markdown-It plugin, which should follow this template:</p>
 						</div>
+						<pre><code class="language-javascript"><span class="hljs-comment">// The module should export an object as below:</span>
+
+<span class="hljs-built_in">module</span>.exports = {
+
+    <span class="hljs-comment">// The &quot;context&quot; variable is currently unused but could be used later on to provide</span>
+    <span class="hljs-comment">// access to your own plugin so that the content script and plugin can communicate.</span>
+    <span class="hljs-attr">default</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{
+        <span class="hljs-keyword">return</span> {
+
+            <span class="hljs-comment">// This is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information</span>
+            <span class="hljs-comment">// The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml.ts), which</span>
+            <span class="hljs-comment">// contains a number of options, mostly useful for Joplin&#x27;s internal code.</span>
+            <span class="hljs-attr">plugin</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">markdownIt, options</span>) </span>{
+                <span class="hljs-comment">// ...</span>
+            },
+
+            <span class="hljs-comment">// You may also specify additional assets such as JS or CSS that should be loaded in the rendered HTML document.</span>
+            <span class="hljs-comment">// Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to</span>
+            <span class="hljs-comment">// see how the data should be structured.</span>
+            <span class="hljs-attr">assets</span>: {},
+        }
+    }
+}</code></pre>
+						<p>To include a regular Markdown-It plugin, that doesn&#39;t make use of any Joplin-specific feature, you
+						would simply create a file such as this:</p>
+						<pre><code class="language-javascript"><span class="hljs-built_in">module</span>.exports = {
+    <span class="hljs-attr">default</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-attr">plugin</span>: <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;markdown-it-toc-done-right&#x27;</span>);
+        }
+    }
+}</code></pre>
 					</div>
 				</section>
 			</section>
@@ -133,23 +145,35 @@
             -->
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum">
+						<a href="contentscripttype.html" class="tsd-kind-icon">ContentScriptType</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="contentscripttype.html#codemirrorplugin" class="tsd-kind-icon">Code<wbr>Mirror<wbr>Plugin</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="contentscripttype.html#markdownitplugin" class="tsd-kind-icon">Markdown<wbr>ItPlugin</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-enum">
-						<a href="../enums/contentscripttype.html" class="tsd-kind-icon">ContentScriptType</a>
+						<a href="filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="../enums/filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
+						<a href="importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="../enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+						<a href="menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="../enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
+						<a href="settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="../enums/settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="../enums/toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
+						<a href="toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="../classes/joplin.html" class="tsd-kind-icon">joplin</a>
@@ -191,58 +215,43 @@
 						<a href="../classes/joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
+						<a href="../interfaces/buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="command.html" class="tsd-kind-icon">Command</a>
+						<a href="../interfaces/command.html" class="tsd-kind-icon">Command</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
+						<a href="../interfaces/createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
-					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="exportcontext.html" class="tsd-kind-icon">ExportContext</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="exportcontext.html#destpath" class="tsd-kind-icon">dest<wbr>Path</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="exportcontext.html#options" class="tsd-kind-icon">options</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="exportcontext.html#userdata" class="tsd-kind-icon">user<wbr>Data</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-interface">
-						<a href="exportmodule.html" class="tsd-kind-icon">ExportModule</a>
+						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+						<a href="../interfaces/exportcontext.html" class="tsd-kind-icon">ExportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="importcontext.html" class="tsd-kind-icon">ImportContext</a>
+						<a href="../interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="importmodule.html" class="tsd-kind-icon">ImportModule</a>
+						<a href="../interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="menuitem.html" class="tsd-kind-icon">MenuItem</a>
+						<a href="../interfaces/importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="script.html" class="tsd-kind-icon">Script</a>
+						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="settingitem.html" class="tsd-kind-icon">SettingItem</a>
+						<a href="../interfaces/menuitem.html" class="tsd-kind-icon">MenuItem</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="settingsection.html" class="tsd-kind-icon">SettingSection</a>
+						<a href="../interfaces/script.html" class="tsd-kind-icon">Script</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/settingitem.html" class="tsd-kind-icon">SettingItem</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>

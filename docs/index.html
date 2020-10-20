@@ -482,7 +482,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 </tr>
 <tr>
 <td>Arch Linux</td>
-<td>An Arch Linux package is available <a href="https://aur.archlinux.org/packages/joplin/">here</a>. To install it, use an AUR wrapper such as yay: <code>yay -S joplin</code>. Both the CLI tool (type <code>joplin</code>) and desktop app (type <code>joplin-desktop</code>) are packaged. You can also install a compiled version with the <a href="https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur">chaotic-aur</a> repository. For support, please go to the <a href="https://github.com/masterkorp/joplin-pkgbuild">GitHub repo</a>.</td>
+<td>An Arch Linux package is available <a href="https://aur.archlinux.org/packages/joplin/">here</a>. To install it, use an AUR wrapper such as yay: <code>yay -S joplin</code>. Both the CLI tool (type <code>joplin</code>) and desktop app (type <code>joplin-desktop</code>) are packaged. You can also install a compiled version with the <a href="https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur">chaotic-aur</a> repository. For support, please go to the <a href="https://github.com/masterkorp/joplin-pkgbuild">GitHub repo</a>. If you are interested in <a href="https://joplinapp.org/prereleases/">pre-release</a> you have <a href="https://aur.archlinux.org/packages/joplin-beta">joplin-beta</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -686,6 +686,7 @@ Details:
 </table>
 <h1>Searching<a name="searching" href="#searching" class="heading-anchor">🔗</a></h1>
 <p>Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both <a href="https://www.sqlite.org/fts3.html#simple_fts_queries">Simple FTS Queries</a> and <a href="https://www.sqlite.org/fts3.html#full_text_index_queries">Full-Text Index Queries</a> are supported. See below for the list of supported queries:</p>
+<h2>Supported queries<a name="supported-queries" href="#supported-queries" class="heading-anchor">🔗</a></h2>
 <table>
 <thead>
 <tr>
@@ -722,6 +723,7 @@ Details:
 </tr>
 </tbody>
 </table>
+<h2>Search filters<a name="search-filters" href="#search-filters" class="heading-anchor">🔗</a></h2>
 <p>You can also use search filters to further restrict the search.</p>
 <table>
 <thead>
@@ -791,6 +793,13 @@ Details:
 </table>
 <p>Note: In CliClient you have to escape the query using <code>--</code> when using negated filters.<br>
 Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
+<p>The filters are implicitely connected by and/or connective depending on the following rules;</p>
+<ul>
+<li>By default, all filters are connected by &quot;AND&quot;.</li>
+<li>To override this default behaviour, use the <code>any</code> filter, in which case the search terms will be connected by &quot;OR&quot; instead.</li>
+<li>There's an exception for the <code>notebook</code> filters which are connected by &quot;OR&quot;. The reason being that no note can be in multiple notebooks at once.</li>
+</ul>
+<h2>Search order<a name="search-order" href="#search-order" class="heading-anchor">🔗</a></h2>
 <p>Notes are sorted by &quot;relevance&quot;. Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matters how close to each other the terms are. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as many details as possible to replicate the issue.</p>
 <h1>Goto Anything<a name="goto-anything" href="#goto-anything" class="heading-anchor">🔗</a></h1>
 <p>In the desktop application, press <kbd>Ctrl+G</kbd> or <kbd>Cmd+G</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.</p>
