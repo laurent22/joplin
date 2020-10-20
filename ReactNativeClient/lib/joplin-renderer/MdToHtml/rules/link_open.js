@@ -71,9 +71,9 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			const onLongClick = `${ruleOptions.postMessageSyntax}("longclick:${resourceId}")`;
 
 			const touchStart = `t=setTimeout(()=>{t=null; ${onLongClick};}, ${longPressDelay});`;
-			const touchEnd = `if (!!t) {clearTimeout(t); t=null; ${onClick};}`;
-
-			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}'`;
+			const cancel = 'if (!!t) {clearTimeout(t); t=null;';
+			const touchEnd = `${cancel} ${onClick};}`;
+			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}' ontouchcancel='${cancel} ontouchmove="${cancel}'`;
 		} else {
 			js = `onclick='${js}'`;
 		}
