@@ -322,6 +322,9 @@ The currently supported template variables are:
 # Searching
 
 Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both [Simple FTS Queries](https://www.sqlite.org/fts3.html#simple_fts_queries) and [Full-Text Index Queries](https://www.sqlite.org/fts3.html#full_text_index_queries) are supported. See below for the list of supported queries:
+
+## Supported queries
+
 Search type | Description | Example
 ------------|-------------|---------
 Single word | Returns all the notes that contain this term. | For example, searching for `cat` will return all the notes that contain this exact word. Note: it will not return the notes that contain the substring - thus, for "cat", notes that contain "cataclysmic" or "prevaricate" will **not** be returned.
@@ -330,8 +333,10 @@ Phrase | Add double quotes to return the notes that contain exactly this phrase.
 Prefix | Add a wildcard to return all the notes that contain a term with a specified prefix. | `swim*` - will return all the notes that contain eg. "swim", but also "swimming", "swimsuit", etc. IMPORTANT: The wildcard **can only be at the end** - it will be ignored at the beginning of a word (eg. `*swim`) and will be treated as a literal asterisk in the middle of a word (eg. `ast*rix`)
 Switch to basic search | One drawback of Full Text Search is that it ignores most non-alphabetical characters. However in some cases you might want to search for this too. To do that, you can use basic search. You switch to this mode by prefixing your search with a slash `/`. This won't provide the benefits of FTS but it will allow searching exactly for what you need. Note that it can also be much slower, even extremely slow, depending on your query. | `/"- [ ]"` - will return all the notes that contain unchecked checkboxes.
 
+## Search filters
 
 You can also use search filters to further restrict the search.
+
 | Operator | Description | Example |
 | --- | --- | --- |
 |**-**|If placed before a text term, it excludes the notes that contain that term. You can also place it before a filter to negate it. |`-spam` searches for all notes without the word `spam`.<br>`office -trash` searches for all notes with the word`office` and without the word `trash`.|
@@ -348,6 +353,14 @@ You can also use search filters to further restrict the search.
 
 Note: In CliClient you have to escape the query using `--` when using negated filters.
 Eg. `:search -- "-tag:tag1"`.
+
+The filters are implicitely connected by and/or connective depending on the following rules;
+
+- By default, all filters are connected by "AND".
+- To override this default behaviour, use the `any` filter, in which case the search terms will be connected by "OR" instead.
+- There's an exception for the `notebook` filters which are connected by "OR". The reason being that no note can be in multiple notebooks at once.
+
+## Search order
 
 Notes are sorted by "relevance". Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matters how close to each other the terms are. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as many details as possible to replicate the issue.
 
