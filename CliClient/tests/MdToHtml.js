@@ -112,7 +112,6 @@ describe('MdToHtml', function() {
 			const mdToHtml = newTestMdToHtml({ pluginOptions: pluginOptions });
 
 			const assets = await mdToHtml.allAssets(themeStyle(1));
-			console.info('ASSETS', assets);
 			expect(assets.length).toBe(2);
 			expect(assets[1].mime).toBe('text/css');
 

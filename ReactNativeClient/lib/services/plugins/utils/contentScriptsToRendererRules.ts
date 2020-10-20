@@ -10,7 +10,7 @@ export default function contentScriptsToRendererRules(plugins:PluginStates):Extr
 			const contentScripts = plugin.contentScripts[scriptType];
 			for (const contentScript of contentScripts) {
 
-				const loadedModule = require(contentScript.path);
+				const loadedModule = require(contentScript.path).default;
 
 				output.push({
 					id: contentScript.id,

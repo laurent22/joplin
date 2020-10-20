@@ -1,4 +1,4 @@
-function installRule(markdownIt, mdOptions, ruleOptions, context) {
+function plugin(markdownIt, _options) {
 	const defaultRender = markdownIt.renderer.rules.fence || function(tokens, idx, options, env, self) {
 		return self.renderToken(tokens, idx, options, env, self);
 	};
@@ -10,13 +10,10 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 	};
 }
 
-module.exports = function(pluginContext) {
-	return 	{
-		install: function(context, ruleOptions) {
-			return function(md, mdOptions) {
-				installRule(md, mdOptions, ruleOptions, context);
-			};
-		},
-		assets: {},
-	}
+module.exports = {
+	default: function(_context) { 
+		return {
+			plugin: plugin,
+		}
+	},
 }

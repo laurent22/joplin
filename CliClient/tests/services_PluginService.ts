@@ -16,7 +16,6 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
-const testContentScriptDir = `${__dirname}/../tests/support/pluginContentScripts`;
 
 function newPluginService() {
 	const runner = new PluginRunner();
@@ -155,8 +154,8 @@ describe('services_PluginService', function() {
 	}));
 
 	it('should register a Markdown-it plugin', asyncTest(async () => {
-		const contentScriptPath = `${Setting.value('tempDir')}/markdownItPluginTest_${uuid.createNano()}.js`;
-		await shim.fsDriver().copy(`${testContentScriptDir}/markdownItPluginTest.js`, contentScriptPath);
+		const contentScriptPath = `${Setting.value('tempDir')}/markdownItTestPlugin${uuid.createNano()}.js`;
+		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.js`, contentScriptPath);
 
 		const service = newPluginService();
 
@@ -188,7 +187,7 @@ describe('services_PluginService', function() {
 		const contentScript = contentScripts[0];
 
 		const mdToHtml = new MdToHtml();
-		const module = require(contentScript.path);
+		const module = require(contentScript.path).default;
 		mdToHtml.loadExtraRendererRule(contentScript.id, module({}));
 
 		const result = await mdToHtml.render([

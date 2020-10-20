@@ -469,7 +469,7 @@ export default class MdToHtml {
 
 		let cssStrings = noteStyle(options.theme);
 
-		let output = { ...this.allProcessedAssets(theme, options.codeTheme) };
+		let output = { ...this.allProcessedAssets(options.theme, options.codeTheme) };
 		cssStrings = cssStrings.concat(output.cssStrings);
 
 		if (options.userCss) cssStrings.push(options.userCss);
