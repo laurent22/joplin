@@ -16,7 +16,7 @@
     "setupNewRelease": "node ./Tools/setupNewRelease",
     "linkChecker": "linkchecker https://joplinapp.org",
     "clean": "gulp clean",
-    "postinstall": "cd Tools && npm i && cd .. && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
+    "postinstall": "cd Tools && npm i && cd .. && npm run clean && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
   },
   "husky": {
     "hooks": {
