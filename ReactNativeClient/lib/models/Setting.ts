@@ -1318,6 +1318,11 @@ class Setting extends BaseModel {
 					if (currentValue !== s.value) {
 						const wasSet = await this.keychainService().setPassword(passwordName, s.value);
 						if (wasSet) continue;
+					} else {
+						// The value is already in the keychain - so nothing to do
+						// Make sure to `continue` here otherwise it will save the password
+						// in clear text in the database.
+						continue;
 					}
 				} catch (error) {
 					this.logger().error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);

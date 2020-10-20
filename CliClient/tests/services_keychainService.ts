@@ -79,6 +79,16 @@ describeIfCompatible('services_KeychainService', function() {
 
 		// However we should still get it via the Setting class, since it will use the keychain
 		expect(Setting.value('sync.5.password')).toBe('password');
+
+		// Now do it again - because there was a bug that would cause the second attempt to save to the db instead
+		Setting.setValue('sync.5.username', 'john');
+		await Setting.saveAll();
+
+		{
+			// Check that it's been removed from the database
+			const row = await db().selectOne('SELECT * FROM settings WHERE key = "sync.5.password"');
+			expect(row).toBe(undefined);
+		}
 	}));
 
 });
