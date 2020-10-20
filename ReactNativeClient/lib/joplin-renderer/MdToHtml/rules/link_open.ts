@@ -1,4 +1,4 @@
-import { RuleOptions } from "lib/joplin-renderer/MdToHtml";
+import { RuleOptions } from 'lib/joplin-renderer/MdToHtml';
 
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -62,11 +62,10 @@ function plugin(markdownIt:any, ruleOptions:RuleOptions) {
 		if (ruleOptions.enableLongPress && !!resourceId) {
 			const onClick = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)})`;
 			const onLongClick = `${ruleOptions.postMessageSyntax}("longclick:${resourceId}")`;
-
 			const touchStart = `t=setTimeout(()=>{t=null; ${onLongClick};}, ${ruleOptions.longPressDelay});`;
-			const touchEnd = `if (!!t) {clearTimeout(t); t=null; ${onClick};}`;
-
-			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}'`;
+			const cancel = 'if (!!t) {clearTimeout(t); t=null;';
+			const touchEnd = `${cancel} ${onClick};}`;
+			js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}' ontouchcancel='${cancel} ontouchmove="${cancel}'`;
 		} else {
 			js = `onclick='${js}'`;
 		}

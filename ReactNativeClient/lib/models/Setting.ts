@@ -274,6 +274,17 @@ class Setting extends BaseModel {
 				label: () => _('AWS S3 bucket'),
 				description: () => emptyDirWarning,
 			},
+			'sync.8.url': {
+				value: 'https://s3.amazonaws.com/',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings:any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+				},
+				public: true,
+				label: () => _('AWS S3 URL'),
+				secure: false,
+			},
 			'sync.8.username': {
 				value: '',
 				type: SettingItemType.String,
@@ -1307,6 +1318,11 @@ class Setting extends BaseModel {
 					if (currentValue !== s.value) {
 						const wasSet = await this.keychainService().setPassword(passwordName, s.value);
 						if (wasSet) continue;
+					} else {
+						// The value is already in the keychain - so nothing to do
+						// Make sure to `continue` here otherwise it will save the password
+						// in clear text in the database.
+						continue;
 					}
 				} catch (error) {
 					this.logger().error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);

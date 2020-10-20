@@ -299,7 +299,7 @@ describe('services_KeymapService', () => {
 				],
 				[
 					{ command: 'showLocalSearch', accelerator: 'Option+Cmd+S' },
-					{ command: 'print', accelerator: 'Cmd+G' /* Default of gotoAnything */ },
+					{ command: 'print', accelerator: 'Cmd+P' /* Default of gotoAnything */ },
 					{ command: 'focusElementNoteTitle', accelerator: 'Option+Shift+Cmd+J' },
 				],
 			];

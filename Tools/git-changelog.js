@@ -8,6 +8,16 @@ require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 
 const { execCommand, githubUsername } = require('./tool-utils.js');
 
+// From https://stackoverflow.com/a/6234804/561309
+function escapeHtml(unsafe) {
+	return unsafe
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;');
+}
+
 async function gitLog(sinceTag) {
 	let lines = await execCommand(`git log --pretty=format:"%H::::DIV::::%ae::::DIV::::%an::::DIV::::%s" ${sinceTag}..HEAD`);
 	lines = lines.split('\n');
@@ -245,7 +255,7 @@ function formatCommitMessage(msg, author, options) {
 		output = output.replace(/\((#[0-9]+)\)$/, '');
 	}
 
-	return output;
+	return escapeHtml(output);
 }
 
 function createChangeLog(logs, options) {

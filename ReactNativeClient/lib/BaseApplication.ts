@@ -546,7 +546,13 @@ export default class BaseApplication {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
 		}
 
-		if (action.type === 'NOTE_UPDATE_ONE' || action.type === 'NOTE_DELETE') {
+		if (action.type === 'NOTE_UPDATE_ONE') {
+			if (!action.changedFields.length || action.changedFields.includes('parent_id') || action.changedFields.includes('encryption_applied')) {
+				refreshFolders = true;
+			}
+		}
+
+		if (action.type === 'NOTE_DELETE') {
 			refreshFolders = true;
 		}
 

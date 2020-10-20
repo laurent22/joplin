@@ -1,4 +1,4 @@
-import { RuleOptions } from "lib/joplin-renderer/MdToHtml";
+import { RuleOptions } from 'lib/joplin-renderer/MdToHtml';
 
 // const Resource = require('lib/models/Resource.js');
 const utils = require('../../utils');
@@ -24,11 +24,10 @@ function plugin(markdownIt:any, ruleOptions:RuleOptions) {
 				const id = r['data-resource-id'];
 
 				const longPressHandler = `${ruleOptions.postMessageSyntax}('longclick:${id}')`;
-
 				const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${ruleOptions.longPressDelay});`;
-				const touchEnd = 'if (!!t) clearTimeout(t); t=null';
+				const cancel = 'if (!!t) clearTimeout(t); t=null';
 
-				js = ` ontouchstart="${touchStart}" ontouchend="${touchEnd}"`;
+				js = ` ontouchstart="${touchStart}" ontouchend="${cancel}" ontouchcancel="${cancel}" ontouchmove="${cancel}"`;
 			}
 
 			return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title }))}${js}/>`;

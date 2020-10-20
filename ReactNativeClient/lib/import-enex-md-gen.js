@@ -556,7 +556,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (isStrongTag(n)) {
 				section.lines.push('**');
 			} else if (isStrikeTag(n)) {
-				section.lines.push('(');
+				section.lines.push('<s>');
 			} else if (isInlineCodeTag(n)) {
 				section.lines.push('`');
 			} else if (n == 'q') {
@@ -739,7 +739,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (isStrongTag(n)) {
 				section.lines.push('**');
 			} else if (isStrikeTag(n)) {
-				section.lines.push(')');
+				section.lines.push('</s>');
 			} else if (isInlineCodeTag(n)) {
 				section.lines.push('`');
 			} else if (isEmTag(n)) {

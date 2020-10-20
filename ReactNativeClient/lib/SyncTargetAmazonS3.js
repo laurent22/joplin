@@ -41,6 +41,8 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			accessKeyId: Setting.value('sync.8.username'),
 			secretAccessKey: Setting.value('sync.8.password'),
 			s3UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
+			s3ForcePathStyle: true,
+			endpoint: Setting.value('sync.8.url'),
 		};
 	}
 
@@ -56,6 +58,8 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			accessKeyId: options.username(),
 			secretAccessKey: options.password(),
 			s3UseArnRegion: true,
+			s3ForcePathStyle: true,
+			endpoint: options.url(),
 		};
 
 		const api = new S3(apiOptions);

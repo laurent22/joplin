@@ -1,4 +1,3 @@
-import * as React from 'react';
 import app from '../app';
 import MainScreen from './MainScreen/MainScreen';
 import ConfigScreen from './ConfigScreen/ConfigScreen';
@@ -10,6 +9,7 @@ import { themeStyle } from 'lib/theme';
 import { Size } from './ResizableLayout/ResizableLayout';
 import MenuBar from './MenuBar';
 import { _ } from 'lib/locale';
+const React = require('react');
 
 const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
