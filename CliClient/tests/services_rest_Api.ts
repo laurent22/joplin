@@ -183,6 +183,59 @@ describe('services_rest_Api', function() {
 
 		expect(response.user_updated_time).toBe(updatedTime);
 		expect(response.user_created_time).toBe(createdTime);
+
+		const timeBefore = Date.now();
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			parent_id: f.id,
+		}));
+
+		const newNote = await Note.load(response.id);
+		expect(newNote.user_updated_time).toBeGreaterThanOrEqual(timeBefore);
+		expect(newNote.user_created_time).toBeGreaterThanOrEqual(timeBefore);
+	}));
+
+	it('should preserve user timestamps when updating notes', asyncTest(async () => {
+		const folder = await Folder.save({ title: 'mon carnet' });
+
+		const updatedTime = Date.now() - 1000;
+		const createdTime = Date.now() - 10000;
+
+		const response = await api.route('POST', 'notes', null, JSON.stringify({
+			parent_id: folder.id,
+		}));
+
+		const noteId = response.id;
+
+		{
+			// Check that if user timestamps are supplied, they are preserved by the API
+
+			await api.route('PUT', `notes/${noteId}`, null, JSON.stringify({
+				user_updated_time: updatedTime,
+				user_created_time: createdTime,
+				title: 'mod',
+			}));
+
+			const modNote = await Note.load(noteId);
+			expect(modNote.title).toBe('mod');
+			expect(modNote.user_updated_time).toBe(updatedTime);
+			expect(modNote.user_created_time).toBe(createdTime);
+		}
+
+		{
+			// Check if no user timestamps are supplied they are automatically updated.
+
+			const beforeTime = Date.now();
+
+			await api.route('PUT', `notes/${noteId}`, null, JSON.stringify({
+				title: 'mod2',
+			}));
+
+			const modNote = await Note.load(noteId);
+			expect(modNote.title).toBe('mod2');
+			expect(modNote.user_updated_time).toBeGreaterThanOrEqual(beforeTime);
+			expect(modNote.user_created_time).toBeGreaterThanOrEqual(createdTime);
+		}
 	}));
 
 	it('should create notes with supplied ID', asyncTest(async () => {
