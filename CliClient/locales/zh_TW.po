@@ -22,14 +22,14 @@ msgstr ""
 #: ElectronClient/gui/ConfigScreen.min.js:187
 #: ElectronClient/gui/ConfigScreen.min.js:756
 #: ElectronClient/gui/DialogButtonRow.min.js:30
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:21
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:22
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:174
-#: ElectronClient/gui/MenuBar.js:285 ElectronClient/bridge.js:96
-#: ElectronClient/bridge.js:106 ElectronClient/bridge.js:117
-#: ElectronClient/bridge.js:125
+#: ElectronClient/gui/MenuBar.js:332 ElectronClient/bridge.js:97
+#: ElectronClient/bridge.js:107 ElectronClient/bridge.js:118
+#: ElectronClient/bridge.js:126
 #: ReactNativeClient/lib/components/ModalDialog.js:67
 #: ReactNativeClient/lib/components/side-menu-content.js:150
-#: ReactNativeClient/lib/components/CameraView.js:182
+#: ReactNativeClient/lib/components/CameraView.js:160
 msgid "OK"
 msgstr "確定"
 
@@ -38,7 +38,7 @@ msgstr "確定"
 #: ElectronClient/gui/PromptDialog.min.js:242
 #: ElectronClient/gui/ConfigScreen.min.js:746
 #: ElectronClient/gui/SideBar/SideBar.js:191
-#: ElectronClient/gui/SideBar/SideBar.js:402
+#: ElectronClient/gui/SideBar/SideBar.js:412
 #: ElectronClient/gui/SideBar/SideBar.min.js:264
 #: ElectronClient/gui/SideBar/SideBar.min.js:630
 #: ElectronClient/gui/NoteList/NoteList.min.js:152
@@ -46,41 +46,40 @@ msgstr "確定"
 #: ElectronClient/gui/DialogButtonRow.min.js:38
 #: ElectronClient/gui/utils/NoteListUtils.js:161
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:462
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:51
-#: ElectronClient/bridge.js:106 ElectronClient/bridge.js:117
-#: ReactNativeClient/lib/components/select-date-time-dialog.js:70
-#: ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:52
+#: ElectronClient/bridge.js:107 ElectronClient/bridge.js:118
 #: ReactNativeClient/lib/components/ModalDialog.js:70
-#: ReactNativeClient/lib/components/screens/note.js:96
-#: ReactNativeClient/lib/components/screens/note.js:531
+#: ReactNativeClient/lib/components/screens/Note.js:98
+#: ReactNativeClient/lib/components/screens/Note.js:504
 #: ReactNativeClient/lib/components/screens/encryption-config.js:185
 #: ReactNativeClient/lib/components/side-menu-content.js:156
 #: ReactNativeClient/lib/components/side-menu-content.js:165
 #: ReactNativeClient/lib/components/side-menu-content.js:338
-#: ReactNativeClient/lib/components/CameraView.js:183
+#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:82
+#: ReactNativeClient/lib/components/CameraView.js:161
 #: ReactNativeClient/lib/shim-init-node.js:92
 msgid "Cancel"
 msgstr "取消"
 
 #: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:22
 #: ElectronClient/checkForUpdates.js:153
-#: ReactNativeClient/lib/versionInfo.js:23
-#: ReactNativeClient/lib/components/screens/note.js:529
+#: ReactNativeClient/lib/versionInfo.js:25
+#: ReactNativeClient/lib/components/screens/Note.js:502
 #: ReactNativeClient/lib/shim-init-node.js:92
 msgid "Yes"
 msgstr "是"
 
 #: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:23
 #: ElectronClient/checkForUpdates.js:153
-#: ReactNativeClient/lib/versionInfo.js:23
-#: ReactNativeClient/lib/components/screens/note.js:530
+#: ReactNativeClient/lib/versionInfo.js:25
+#: ReactNativeClient/lib/components/screens/Note.js:503
 #: ReactNativeClient/lib/shim-init-node.js:92
 msgid "No"
 msgstr "否"
 
 #: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:24
 #: ElectronClient/gui/ShareNoteDialog.js:175
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:114
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:113
 msgid "Close"
 msgstr "關閉"
 
@@ -121,18 +120,32 @@ msgstr "匯出到 \"%s\" 為 \"%s\" 格式。請稍候..."
 msgid "Could not export notes: %s"
 msgstr "無法匯出記事: %s"
 
+#: ElectronClient/plugins/GotoAnything.js:431
+#, fuzzy
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name. Or type : to search for "
+"commands."
+msgstr "鍵入記事標題來跳轉, 鍵入＃與一個標籤名稱, @ 與一個筆記本名稱。"
+
+#: ElectronClient/plugins/GotoAnything.js:456
+#: ElectronClient/plugins/GotoAnything.min.js:499
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:20
+msgid "Goto Anything..."
+msgstr "前往任意內容..."
+
+#: ElectronClient/plugins/GotoAnything.js:463
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
+msgid "Command palette"
+msgstr ""
+
 #: ElectronClient/plugins/GotoAnything.min.js:459
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr "鍵入記事標題來跳轉, 鍵入＃與一個標籤名稱, @ 與一個筆記本名稱。"
 
-#: ElectronClient/plugins/GotoAnything.min.js:499
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:20
-msgid "Goto Anything..."
-msgstr "前往任意內容..."
-
-#: ElectronClient/gui/NoteListControls/commands/focusSearch.js:15
+#: ElectronClient/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
 msgstr "在所有記事中搜尋"
 
@@ -155,8 +168,8 @@ msgid "Action"
 msgstr "動作"
 
 #: ElectronClient/gui/ResourceScreen.js:43
-#: ReactNativeClient/lib/path-utils.js:73
-#: ReactNativeClient/lib/path-utils.js:109
+#: ReactNativeClient/lib/path-utils.js:83
+#: ReactNativeClient/lib/path-utils.js:118
 #: ReactNativeClient/lib/models/BaseItem.js:722
 msgid "Untitled"
 msgstr "未命名"
@@ -167,7 +180,7 @@ msgstr "未命名"
 #: ElectronClient/gui/SideBar/SideBar.min.js:241
 #: ElectronClient/gui/utils/NoteListUtils.js:132
 #: ElectronClient/gui/utils/NoteListUtils.js:161
-#: ReactNativeClient/lib/components/screens/note.js:873
+#: ReactNativeClient/lib/components/screens/Note.js:828
 #: ReactNativeClient/lib/components/screen-header.js:356
 #: ReactNativeClient/lib/components/side-menu-content.js:146
 msgid "Delete"
@@ -309,23 +322,23 @@ msgid "Browse..."
 msgstr "瀏覽..."
 
 #: ElectronClient/gui/ConfigScreen.min.js:644
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:519
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:525
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:411
-#: ReactNativeClient/lib/components/screens/note.js:1113
+#: ReactNativeClient/lib/components/screens/Note.js:980
 msgid "Edit"
 msgstr "編輯"
 
 #: ElectronClient/gui/ConfigScreen.min.js:746
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
 #: ElectronClient/gui/Header/Header.min.js:303
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:29
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:30
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:462
-#: ReactNativeClient/lib/commands/historyBackward.js:16
+#: ReactNativeClient/lib/commands/historyBackward.js:17
 msgid "Back"
 msgstr "返回"
 
 #: ElectronClient/gui/ConfigScreen.min.js:763
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:26
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "套用"
 
@@ -402,34 +415,35 @@ msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "複製分享連結"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:575
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:581
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:53
+#: ReactNativeClient/lib/components/screens/Note.js:769
 msgid "Attach file"
 msgstr "附加檔案"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:584
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:590
 msgid "Code Block"
 msgstr "程式碼區塊"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:593
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:599
 msgid "Inline Code"
 msgstr "內嵌程式碼"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:608
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:614
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "插入日期時間"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1030
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1036
 msgid "Drop notes or files here"
 msgstr "將記事或檔案拖曳至此處"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1030
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1036
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:419
 msgid "Code View"
 msgstr "程式碼檢視"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1030
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1036
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -440,99 +454,99 @@ msgstr "請等待所有附件均被下載並解密。你還能在 %s 中編輯�
 msgid "Checkbox list"
 msgstr "核取方塊清單"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:165
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:161
 msgid "strong text"
 msgstr "重要文字"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:166
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:162
 msgid "emphasised text"
 msgstr "強調文字"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:168
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:164
 msgid "Insert Hyperlink"
 msgstr "插入超連結"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:201
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:203
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:204
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:197
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:199
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:200
 msgid "List item"
 msgstr "清單項目"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:256
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:252
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:82
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "剪下"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:263
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:89
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:259
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:90
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:13
-#: ElectronClient/gui/MenuBar.js:285
+#: ElectronClient/gui/MenuBar.js:332
 msgid "Copy"
 msgstr "複製"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:270
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:101
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:266
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:102
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "貼上"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:469
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:468
 msgid "Layout"
 msgstr "頁面佈局"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:469
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:468
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr "此記事沒有內容。按一下 \"%s\" 切換到編輯模式並編輯記事。"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:292
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:298
 msgid "to-do"
 msgstr "待辦事項"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:292
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:298
 msgid "note"
 msgstr "記事"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:292
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:298
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "建立新 %s..."
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:373
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:379
 msgid "The following attachments are being watched for changes:"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:376
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:382
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:381
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:387
 #, javascript-format
 msgid "In: %s"
 msgstr "在: %s"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:40
 msgid "Open..."
 msgstr "開啟..."
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:53
 msgid "Save as..."
 msgstr "另存為..."
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:66
 msgid "Reveal file in folder"
 msgstr "在资料夹中展示檔案"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:74
 msgid "Copy path to clipboard"
 msgstr "複製路徑到剪貼板"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:109
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:110
 msgid "Copy Link Address"
 msgstr "複製鏈接位址"
 
@@ -541,7 +555,7 @@ msgid "There was an error downloading this attachment:"
 msgstr "下載此附件時出現錯誤: "
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:75
-#: ReactNativeClient/lib/services/ResourceEditWatcher/index.js:165
+#: ReactNativeClient/lib/services/ResourceEditWatcher/index.js:172
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "此附件尚未被下載或是尚未解密完成"
 
@@ -551,15 +565,15 @@ msgstr "此附件尚未被下載或是尚未解密完成"
 msgid "Unsupported link or message: %s"
 msgstr "不支援的鏈接或訊息: %s"
 
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:15
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
 msgstr "記事標題"
 
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:16
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:16
-#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:16
-#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:16
-#: ElectronClient/gui/MenuBar.js:478
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:17
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:17
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:17
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:18
+#: ElectronClient/gui/MenuBar.js:524
 msgid "Focus"
 msgstr "焦點"
 
@@ -603,11 +617,11 @@ msgstr "標題"
 msgid "Horizontal Rule"
 msgstr "水平線"
 
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:15
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:16
 msgid "Note body"
 msgstr "內容主體"
 
-#: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:15
+#: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:16
 msgid "Search in current note"
 msgstr "在目前記事中搜尋"
 
@@ -680,128 +694,122 @@ msgstr "更多資訊"
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:437
 #: ElectronClient/gui/SearchBar/SearchBar.js:50
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:119
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:120
 msgid "Search..."
 msgstr "搜尋..."
 
-#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:17
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:18
 msgid "Move to notebook"
 msgstr "移動至記事本"
 
-#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:38
 msgid "Move to notebook:"
 msgstr "移動至記事本: "
 
-#: ElectronClient/gui/MainScreen/commands/setTags.js:16
-#: ElectronClient/gui/SideBar/SideBar.js:426
+#: ElectronClient/gui/MainScreen/commands/setTags.js:17
+#: ElectronClient/gui/SideBar/SideBar.js:448
 #: ElectronClient/gui/SideBar/SideBar.min.js:686
 #: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/note.js:846
+#: ReactNativeClient/lib/components/screens/Note.js:801
 #: ReactNativeClient/lib/components/side-menu-content.js:314
 msgid "Tags"
 msgstr "標籤"
 
-#: ElectronClient/gui/MainScreen/commands/setTags.js:43
+#: ElectronClient/gui/MainScreen/commands/setTags.js:45
 msgid "Add or remove tags:"
 msgstr "新增或移除標籤:"
 
-#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:15
-#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:26
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:16
 msgid "Toggle note list"
 msgstr "切換記事清單"
 
-#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:16
+#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:18
 #: ElectronClient/gui/NotePropertiesDialog.min.js:383
 msgid "Note properties"
 msgstr "記事本性質"
 
-#: ElectronClient/gui/MainScreen/commands/renameTag.js:17
-#: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
+#: ElectronClient/gui/MainScreen/commands/toggleSideBar.js:16
+msgid "Toggle sidebar"
+msgstr "顯示 / 隱藏側邊欄"
+
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:18
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:18
 #: ReactNativeClient/lib/components/side-menu-content.js:129
 msgid "Rename"
 msgstr "重新命名"
 
-#: ElectronClient/gui/MainScreen/commands/renameTag.js:26
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
 msgstr "重新命名標籤: "
 
-#: ElectronClient/gui/MainScreen/commands/newFolder.js:17
-#: ElectronClient/gui/MainScreen/commands/newFolder.js:51
+#: ElectronClient/gui/MainScreen/commands/newFolder.js:18
 msgid "New notebook"
 msgstr "新增記事本"
 
-#: ElectronClient/gui/MainScreen/commands/newFolder.js:25
+#: ElectronClient/gui/MainScreen/commands/newFolder.js:26
 msgid "Notebook title:"
 msgstr "記事本標題: "
 
-#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:15
+#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
 msgstr "分享記事..."
 
-#: ElectronClient/gui/MainScreen/commands/renameFolder.js:26
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:28
 msgid "Rename notebook:"
 msgstr "重新命名記事本: "
 
-#: ElectronClient/gui/MainScreen/commands/editAlarm.js:19
-#: ReactNativeClient/lib/components/screens/note.js:831
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:20
+#: ReactNativeClient/lib/components/screens/Note.js:787
+#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:84
 msgid "Set alarm"
 msgstr "設置提醒"
 
-#: ElectronClient/gui/MainScreen/commands/editAlarm.js:31
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:33
 msgid "Set alarm:"
 msgstr "設置提醒: "
 
-#: ElectronClient/gui/MainScreen/commands/newTodo.js:16
-#: ElectronClient/gui/MainScreen/commands/newTodo.js:28
-#: ReactNativeClient/lib/components/action-button.js:64
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:17
 #: ReactNativeClient/setUpQuickActions.js:15
 msgid "New to-do"
 msgstr "新增待辦事項"
 
-#: ElectronClient/gui/MainScreen/commands/exportPdf.js:19
-#: ElectronClient/gui/MainScreen/commands/exportPdf.js:30
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:20
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:32
 msgid "PDF File"
 msgstr "PDF 檔案"
 
-#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
+#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
 msgstr "切換編輯器佈局"
 
-#: ElectronClient/gui/MainScreen/commands/print.js:16
+#: ElectronClient/gui/MainScreen/commands/print.js:17
 msgid "Print"
 msgstr "列印"
 
-#: ElectronClient/gui/MainScreen/commands/print.js:25
+#: ElectronClient/gui/MainScreen/commands/print.js:26
 msgid "Only one note can be printed at a time."
 msgstr "一次只能列印一個記事。"
 
 #: ElectronClient/gui/MainScreen/commands/newNote.js:20
-#: ElectronClient/gui/MainScreen/commands/newNote.js:47
-#: ReactNativeClient/lib/components/action-button.js:73
 #: ReactNativeClient/setUpQuickActions.js:14
 msgid "New note"
 msgstr "新增記事"
 
-#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:15
-#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:26
-msgid "Toggle sidebar"
-msgstr "顯示 / 隱藏側邊欄"
-
-#: ElectronClient/gui/MainScreen/commands/toggleEditors.js:17
+#: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
 #, fuzzy
 msgid "Toggle editors"
 msgstr "切換編輯器佈局"
 
-#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:23
+#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:24
 msgid "Template file:"
 msgstr "範本檔案: "
 
-#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
+#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
 msgstr "統計..."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:96
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
 #: ReactNativeClient/lib/components/screens/encryption-config.js:125
 msgid "Save"
 msgstr "儲存"
@@ -887,10 +895,10 @@ msgid "Enabled"
 msgstr "已啟用"
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:443
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:109
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: CliClient/app/command-e2ee.js:108
 #: ReactNativeClient/lib/components/screens/encryption-config.js:280
-#: ReactNativeClient/lib/models/Setting.js:612
+#: ReactNativeClient/lib/models/Setting.js:624
 msgid "Disabled"
 msgstr "已停用"
 
@@ -915,7 +923,7 @@ msgid "URL"
 msgstr "網址"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:33
-#: ReactNativeClient/lib/models/Setting.js:1286
+#: ReactNativeClient/lib/models/Setting.js:1304
 msgid "Note History"
 msgstr "記事本歷史紀錄"
 
@@ -959,8 +967,8 @@ msgstr "是否從側邊欄中刪除此搜索？"
 #: ElectronClient/gui/SideBar/SideBar.js:228
 #: ElectronClient/gui/SideBar/SideBar.min.js:305
 #: ElectronClient/gui/utils/NoteListUtils.js:128
-#: ElectronClient/gui/MenuBar.js:387
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
+#: ElectronClient/gui/MenuBar.js:436
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:122
 msgid "Export"
 msgstr "匯出"
 
@@ -971,34 +979,34 @@ msgstr "匯出"
 msgid "All notes"
 msgstr "全部記事"
 
-#: ElectronClient/gui/SideBar/SideBar.js:402
+#: ElectronClient/gui/SideBar/SideBar.js:412
 #: ElectronClient/gui/SideBar/SideBar.min.js:630
 #: ReactNativeClient/lib/components/side-menu-content.js:338
-#: ReactNativeClient/lib/commands/synchronize.js:17
+#: ReactNativeClient/lib/commands/synchronize.js:18
 msgid "Synchronise"
 msgstr "進行同步"
 
-#: ElectronClient/gui/SideBar/SideBar.js:414
+#: ElectronClient/gui/SideBar/SideBar.js:436
 #: ElectronClient/gui/SideBar/SideBar.min.js:669
 #: ReactNativeClient/lib/components/side-menu-content.js:364
 msgid "Notebooks"
 msgstr "記事本"
 
-#: ElectronClient/gui/SideBar/SideBar.js:437
+#: ElectronClient/gui/SideBar/SideBar.js:459
 #: ElectronClient/gui/SideBar/SideBar.min.js:704
 #: ReactNativeClient/lib/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "正在解密項目: %d/%d 項"
 
-#: ElectronClient/gui/SideBar/SideBar.js:441
+#: ElectronClient/gui/SideBar/SideBar.js:463
 #: ElectronClient/gui/SideBar/SideBar.min.js:709
 #: ReactNativeClient/lib/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
 msgstr "擷取資源檔案: %d/%d"
 
-#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:15
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:16
 msgid "Sidebar"
 msgstr "側邊欄"
 
@@ -1091,7 +1099,7 @@ msgid "This note has no history"
 msgstr "此記事沒有歷史紀錄"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:177
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:51
 msgid "Restore"
 msgstr "還原"
 
@@ -1116,7 +1124,7 @@ msgstr "檢視 (&V)"
 
 #: ElectronClient/gui/NoteList/NoteList.min.js:151
 #: ElectronClient/gui/NoteList/NoteList.js:160
-#: ReactNativeClient/lib/models/Setting.js:388
+#: ReactNativeClient/lib/models/Setting.js:400
 msgid "Sort notes by"
 msgstr "記事排序依據"
 
@@ -1144,7 +1152,7 @@ msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "您當前沒有任何記事本。通過按一下 \"新增記事本\" 去建立。"
 
-#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:15
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:17
 msgid "Note list"
 msgstr "記事清單"
 
@@ -1171,7 +1179,7 @@ msgid "Switch to to-do type"
 msgstr "切換為待辦事項"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:99
-#: ReactNativeClient/lib/components/screens/note.js:860
+#: ReactNativeClient/lib/components/screens/Note.js:815
 msgid "Copy Markdown link"
 msgstr "複製 Markdown 連結"
 
@@ -1201,147 +1209,148 @@ msgstr "立即取得: "
 msgid "Usage"
 msgstr "使用量"
 
-#: ElectronClient/gui/MenuBar.js:102
+#: ElectronClient/gui/MenuBar.js:142
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "從 \"%s\" 匯入為 \"%s\" 格式。請稍候..."
 
-#: ElectronClient/gui/MenuBar.js:129
+#: ElectronClient/gui/MenuBar.js:176
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
+#: ElectronClient/app.js:342
 msgid "Quit"
 msgstr "結束"
 
-#: ElectronClient/gui/MenuBar.js:206 ElectronClient/gui/Root.js:106
+#: ElectronClient/gui/MenuBar.js:253 ElectronClient/gui/Root.js:106
 #: ElectronClient/gui/Root.min.js:106
 msgid "Synchronisation Status"
 msgstr "同步狀態"
 
-#: ElectronClient/gui/MenuBar.js:222
+#: ElectronClient/gui/MenuBar.js:269
 msgid "Create note from template"
 msgstr "從範本建立記事"
 
-#: ElectronClient/gui/MenuBar.js:227
+#: ElectronClient/gui/MenuBar.js:274
 msgid "Create to-do from template"
 msgstr "從範本建立待辦事項"
 
-#: ElectronClient/gui/MenuBar.js:232
+#: ElectronClient/gui/MenuBar.js:279
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:16
 msgid "Insert template"
 msgstr "插入範本"
 
-#: ElectronClient/gui/MenuBar.js:238
+#: ElectronClient/gui/MenuBar.js:285
 msgid "Open template directory"
 msgstr "開啟暫存目錄"
 
-#: ElectronClient/gui/MenuBar.js:243
+#: ElectronClient/gui/MenuBar.js:290
 msgid "Refresh templates"
 msgstr "重新載入範本"
 
-#: ElectronClient/gui/MenuBar.js:254 ElectronClient/gui/Root.js:104
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
+#: ElectronClient/gui/MenuBar.js:301 ElectronClient/gui/Root.js:104
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
 #: ElectronClient/gui/Root.min.js:104
 msgid "Options"
 msgstr "選項"
 
-#: ElectronClient/gui/MenuBar.js:266
+#: ElectronClient/gui/MenuBar.js:313
 msgid "Note attachments..."
 msgstr "記事附加檔案..."
 
-#: ElectronClient/gui/MenuBar.js:296 ElectronClient/gui/MenuBar.js:366
-#: ElectronClient/gui/MenuBar.js:659
+#: ElectronClient/gui/MenuBar.js:343 ElectronClient/gui/MenuBar.js:415
+#: ElectronClient/gui/MenuBar.js:717
 msgid "&File"
 msgstr "檔案 (&F)"
 
-#: ElectronClient/gui/MenuBar.js:302 ElectronClient/gui/MenuBar.js:561
+#: ElectronClient/gui/MenuBar.js:349 ElectronClient/gui/MenuBar.js:607
 msgid "About Joplin"
 msgstr "關於 Joplin"
 
-#: ElectronClient/gui/MenuBar.js:309
+#: ElectronClient/gui/MenuBar.js:356
 msgid "Preferences..."
 msgstr "偏好設定..."
 
-#: ElectronClient/gui/MenuBar.js:319 ElectronClient/gui/MenuBar.js:542
+#: ElectronClient/gui/MenuBar.js:366 ElectronClient/gui/MenuBar.js:588
 msgid "Check for updates..."
 msgstr "檢查更新..."
 
-#: ElectronClient/gui/MenuBar.js:332 ElectronClient/gui/MenuBar.js:379
+#: ElectronClient/gui/MenuBar.js:379 ElectronClient/gui/MenuBar.js:428
 msgid "Templates"
 msgstr "範本"
 
-#: ElectronClient/gui/MenuBar.js:339 ElectronClient/gui/MenuBar.js:384
+#: ElectronClient/gui/MenuBar.js:386 ElectronClient/gui/MenuBar.js:433
 #: ElectronClient/gui/Root.js:103
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:120
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: ElectronClient/gui/Root.min.js:103
 msgid "Import"
 msgstr "匯入"
 
-#: ElectronClient/gui/MenuBar.js:343
+#: ElectronClient/gui/MenuBar.js:390
 #, fuzzy
 msgid "Export all"
 msgstr "匯出"
 
-#: ElectronClient/gui/MenuBar.js:356
+#: ElectronClient/gui/MenuBar.js:404
 #, javascript-format
 msgid "Hide %s"
 msgstr "隱藏 %s"
 
-#: ElectronClient/gui/MenuBar.js:372
+#: ElectronClient/gui/MenuBar.js:421
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
 msgid "Close Window"
 msgstr "關閉視窗"
 
-#: ElectronClient/gui/MenuBar.js:415
+#: ElectronClient/gui/MenuBar.js:464
 msgid "&Edit"
 msgstr "編輯 (&E)"
 
-#: ElectronClient/gui/MenuBar.js:435
+#: ElectronClient/gui/MenuBar.js:484
 msgid "&View"
 msgstr "檢視 (&V)"
 
-#: ElectronClient/gui/MenuBar.js:441
+#: ElectronClient/gui/MenuBar.js:490
 msgid "Layout button sequence"
 msgstr "頁面佈局"
 
-#: ElectronClient/gui/MenuBar.js:483
+#: ElectronClient/gui/MenuBar.js:529
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:18
 msgid "Actual Size"
 msgstr "實際大小"
 
-#: ElectronClient/gui/MenuBar.js:494 ElectronClient/gui/MenuBar.js:500
+#: ElectronClient/gui/MenuBar.js:540 ElectronClient/gui/MenuBar.js:546
 msgid "Zoom In"
 msgstr "放大"
 
-#: ElectronClient/gui/MenuBar.js:507
+#: ElectronClient/gui/MenuBar.js:553
 msgid "Zoom Out"
 msgstr "縮小"
 
-#: ElectronClient/gui/MenuBar.js:516
+#: ElectronClient/gui/MenuBar.js:562
 msgid "&Note"
 msgstr "記事 (&N)"
 
-#: ElectronClient/gui/MenuBar.js:525
+#: ElectronClient/gui/MenuBar.js:571
 msgid "&Tools"
 msgstr "工具 (&T)"
 
-#: ElectronClient/gui/MenuBar.js:529
+#: ElectronClient/gui/MenuBar.js:575
 msgid "&Help"
 msgstr "說明 (&H)"
 
-#: ElectronClient/gui/MenuBar.js:532
+#: ElectronClient/gui/MenuBar.js:578
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:22
 msgid "Website and documentation"
 msgstr "官方網站及線上說明"
 
-#: ElectronClient/gui/MenuBar.js:536
+#: ElectronClient/gui/MenuBar.js:582
 msgid "Joplin Forum"
 msgstr "Joplin 討論區"
 
-#: ElectronClient/gui/MenuBar.js:539
+#: ElectronClient/gui/MenuBar.js:585
 #: ReactNativeClient/lib/components/screens/config.js:495
 msgid "Make a donation"
 msgstr "捐助"
 
-#: ElectronClient/gui/MenuBar.js:549
+#: ElectronClient/gui/MenuBar.js:595
 msgid "Toggle development tools"
 msgstr "切換開發工具"
 
@@ -1357,27 +1366,27 @@ msgstr "Dropbox 登入"
 msgid "Note attachments"
 msgstr "記事附件"
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:48
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:62
-#: ReactNativeClient/lib/services/KeymapService.js:142
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
+#: ReactNativeClient/lib/services/KeymapService.js:144
 #, fuzzy, javascript-format
 msgid "Error: %s"
 msgstr "錯誤"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:125
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
 #, fuzzy
 msgid "Keyboard Shortcut"
 msgstr "鍵盤模式"
@@ -1387,51 +1396,51 @@ msgstr "鍵盤模式"
 msgid "Hide Joplin"
 msgstr "關於 Joplin"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
 #, fuzzy
 msgid "Preferences"
 msgstr "偏好設定..."
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
 msgstr "單字"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
 msgstr "字元"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
 msgstr "不含空格的字元"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:80
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
 msgstr "行數"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
-#: ReactNativeClient/lib/models/Setting.js:373
-#: ReactNativeClient/lib/models/Setting.js:374
-#: ReactNativeClient/lib/models/Setting.js:375
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
+#: ReactNativeClient/lib/models/Setting.js:385
+#: ReactNativeClient/lib/models/Setting.js:386
+#: ReactNativeClient/lib/models/Setting.js:387
 msgid "Editor"
 msgstr "編輯器"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:100
-#: ReactNativeClient/lib/models/Setting.js:373
-#: ReactNativeClient/lib/models/Setting.js:374
-#: ReactNativeClient/lib/models/Setting.js:376
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
+#: ReactNativeClient/lib/models/Setting.js:385
+#: ReactNativeClient/lib/models/Setting.js:386
+#: ReactNativeClient/lib/models/Setting.js:388
 msgid "Viewer"
 msgstr "閱讀器"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:106
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
 msgid "Read time: %s min"
 msgstr ""
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:109
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:108
 msgid "Statistics"
 msgstr "統計"
 
-#: ElectronClient/bridge.js:177
+#: ElectronClient/bridge.js:178
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
@@ -1441,34 +1450,30 @@ msgstr ""
 msgid "Open %s"
 msgstr "開啟 %s"
 
-#: ElectronClient/app.js:342
-msgid "Exit"
-msgstr "離開"
-
-#: ElectronClient/commands/copyDevCommand.js:17
+#: ElectronClient/commands/copyDevCommand.js:18
 #, fuzzy
 msgid "Copy dev mode command to clipboard"
 msgstr "複製路徑到剪貼板"
 
-#: ElectronClient/commands/startExternalEditing.js:18
+#: ElectronClient/commands/startExternalEditing.js:20
 msgid "Edit in external editor"
 msgstr "使用外部編輯器編輯"
 
-#: ElectronClient/commands/startExternalEditing.js:29
+#: ElectronClient/commands/startExternalEditing.js:32
 #, javascript-format
 msgid "Error opening note in editor: %s"
 msgstr "在編輯器中開啟記事時出錯: %s"
 
-#: ElectronClient/commands/toggleExternalEditing.js:16
+#: ElectronClient/commands/toggleExternalEditing.js:18
 #, fuzzy
 msgid "Toggle external editing"
 msgstr "停止外部編輯"
 
-#: ElectronClient/commands/toggleExternalEditing.js:42
+#: ElectronClient/commands/toggleExternalEditing.js:37
 msgid "Stop"
 msgstr ""
 
-#: ElectronClient/commands/stopExternalEditing.js:16
+#: ElectronClient/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
 msgstr "停止外部編輯"
 
@@ -1813,7 +1818,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d 則記事與此模式匹配。要刪除它們？"
 
 #: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/note.js:466
+#: ReactNativeClient/lib/components/screens/Note.js:447
 msgid "Delete note?"
 msgstr "刪除記事？"
 
@@ -2119,11 +2124,11 @@ msgstr "OneDrive Dev (僅測試使用)"
 msgid "There is no data to export."
 msgstr "沒有資料可匯出。"
 
-#: ReactNativeClient/lib/services/interop/types.js:22
+#: ReactNativeClient/lib/services/interop/types.js:23
 msgid "File"
 msgstr "檔案"
 
-#: ReactNativeClient/lib/services/interop/types.js:22
+#: ReactNativeClient/lib/services/interop/types.js:23
 msgid "Directory"
 msgstr "目錄"
 
@@ -2134,7 +2139,7 @@ msgstr "Joplin 匯出檔"
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:49
 #: ReactNativeClient/lib/services/interop/InteropService.js:59
-#: ReactNativeClient/lib/models/Setting.js:1280
+#: ReactNativeClient/lib/models/Setting.js:1298
 msgid "Markdown"
 msgstr "Markdown"
 
@@ -2174,7 +2179,7 @@ msgstr "無法載入\"%s\" 模組以讀取格式 \"%s\" 並匯出 \"%s\""
 msgid "Please specify import format for %s"
 msgstr "請為 %s 指定匯入格式"
 
-#: ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js:40
+#: ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js:41
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "請指定將記事匯入到的筆記本。"
 
@@ -2182,34 +2187,34 @@ msgstr "請指定將記事匯入到的筆記本。"
 msgid "Restored Notes"
 msgstr "恢復的記事"
 
-#: ReactNativeClient/lib/services/KeymapService.js:236
+#: ReactNativeClient/lib/services/KeymapService.js:240
 msgid "command"
 msgstr ""
 
-#: ReactNativeClient/lib/services/KeymapService.js:236
-#: ReactNativeClient/lib/services/KeymapService.js:241
+#: ReactNativeClient/lib/services/KeymapService.js:240
+#: ReactNativeClient/lib/services/KeymapService.js:245
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr ""
 
-#: ReactNativeClient/lib/services/KeymapService.js:241
-#: ReactNativeClient/lib/services/KeymapService.js:248
+#: ReactNativeClient/lib/services/KeymapService.js:245
+#: ReactNativeClient/lib/services/KeymapService.js:252
 msgid "accelerator"
 msgstr ""
 
-#: ReactNativeClient/lib/services/KeymapService.js:248
+#: ReactNativeClient/lib/services/KeymapService.js:252
 #, fuzzy, javascript-format
 msgid "Invalid %s: %s."
 msgstr "無效的答案: %s"
 
-#: ReactNativeClient/lib/services/KeymapService.js:266
+#: ReactNativeClient/lib/services/KeymapService.js:270
 #, javascript-format
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
 
-#: ReactNativeClient/lib/services/KeymapService.js:291
+#: ReactNativeClient/lib/services/KeymapService.js:295
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
 msgstr ""
@@ -2320,7 +2325,7 @@ msgstr "將會發生的提醒事項"
 msgid "On %s: %s"
 msgstr "在 %s: %s"
 
-#: ReactNativeClient/lib/onedrive-api.js:363
+#: ReactNativeClient/lib/onedrive-api.js:366
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
@@ -2335,27 +2340,27 @@ msgstr "Nextcloud"
 msgid "Revision: %s (%s)"
 msgstr "修訂版: %s (%s)"
 
-#: ReactNativeClient/lib/versionInfo.js:18
+#: ReactNativeClient/lib/versionInfo.js:20
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: ReactNativeClient/lib/versionInfo.js:20
+#: ReactNativeClient/lib/versionInfo.js:22
 #, javascript-format
 msgid "Client ID: %s"
 msgstr "用戶端 ID: %s"
 
-#: ReactNativeClient/lib/versionInfo.js:21
+#: ReactNativeClient/lib/versionInfo.js:23
 #, javascript-format
 msgid "Sync Version: %s"
 msgstr "同步版本: %s"
 
-#: ReactNativeClient/lib/versionInfo.js:22
+#: ReactNativeClient/lib/versionInfo.js:24
 #, javascript-format
 msgid "Profile Version: %s"
 msgstr "設定檔版本: %s"
 
-#: ReactNativeClient/lib/versionInfo.js:23
+#: ReactNativeClient/lib/versionInfo.js:25
 #, javascript-format
 msgid "Keychain Supported: %s"
 msgstr "鑰匙圈支援: %s"
@@ -2458,22 +2463,6 @@ msgstr "檔案系統"
 #: ReactNativeClient/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"
 msgstr "WebDAV"
-
-#: ReactNativeClient/lib/components/select-date-time-dialog.js:65
-msgid "Clear alarm"
-msgstr "清除提醒"
-
-#: ReactNativeClient/lib/components/select-date-time-dialog.js:68
-msgid "Save alarm"
-msgstr "儲存提醒事項"
-
-#: ReactNativeClient/lib/components/select-date-time-dialog.js:86
-msgid "Select date"
-msgstr "選擇日期"
-
-#: ReactNativeClient/lib/components/select-date-time-dialog.js:88
-msgid "Confirm"
-msgstr "確認"
 
 #: ReactNativeClient/lib/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
@@ -2635,38 +2624,51 @@ msgstr "FTS 已啟用: %d"
 msgid "Configuration"
 msgstr "設置"
 
-#: ReactNativeClient/lib/components/screens/note.js:96
+#: ReactNativeClient/lib/components/screens/Note.js:98
 msgid "This note has been modified:"
 msgstr "此記事已被修改: "
 
-#: ReactNativeClient/lib/components/screens/note.js:96
+#: ReactNativeClient/lib/components/screens/Note.js:98
 msgid "Save changes"
 msgstr "儲存變更"
 
-#: ReactNativeClient/lib/components/screens/note.js:96
+#: ReactNativeClient/lib/components/screens/Note.js:98
 msgid "Discard changes"
 msgstr "放棄變更"
 
-#: ReactNativeClient/lib/components/screens/note.js:160
+#: ReactNativeClient/lib/components/screens/Note.js:150
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "沒有 ID 為 %s 的項目"
 
-#: ReactNativeClient/lib/components/screens/note.js:179
+#: ReactNativeClient/lib/components/screens/Note.js:168
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "此附件尚未被下載或是尚未解密完成。"
 
-#: ReactNativeClient/lib/components/screens/note.js:183
+#: ReactNativeClient/lib/components/screens/Note.js:173
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 移動應用程式暫時不支援此類型的連結: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:187
+#: ReactNativeClient/lib/components/screens/Note.js:178
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "不支援 \"%s\" 通訊協定"
 
-#: ReactNativeClient/lib/components/screens/note.js:528
+#: ReactNativeClient/lib/components/screens/Note.js:340
+msgid ""
+"In order to associate a geo-location with the note, the app needs your "
+"permission to access your location.\n"
+"\n"
+"You may turn off this option at any time in the Configuration screen."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:341
+#, fuzzy
+msgid "Permission needed"
+msgstr "允許使用相機"
+
+#: ReactNativeClient/lib/components/screens/Note.js:501
 #: ReactNativeClient/lib/shim-init-node.js:91
 #, javascript-format
 msgid ""
@@ -2676,72 +2678,69 @@ msgstr ""
 "您將要附加較大的圖片 (%dx%d pixels)。您要在附加之前將其尺寸縮小為 %d pixels "
 "嗎？"
 
-#: ReactNativeClient/lib/components/screens/note.js:623
+#: ReactNativeClient/lib/components/screens/Note.js:583
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "不支援的圖像類型: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:778
+#: ReactNativeClient/lib/components/screens/Note.js:722
 #: ReactNativeClient/lib/components/screens/encryption-config.js:120
 #, javascript-format
 msgid "Created: %s"
 msgstr "已建立: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:779
+#: ReactNativeClient/lib/components/screens/Note.js:723
 #, javascript-format
 msgid "Updated: %s"
 msgstr "已更新: %s"
 
-#: ReactNativeClient/lib/components/screens/note.js:783
+#: ReactNativeClient/lib/components/screens/Note.js:726
 msgid "View on map"
 msgstr "在地圖上顯示"
 
-#: ReactNativeClient/lib/components/screens/note.js:790
+#: ReactNativeClient/lib/components/screens/Note.js:733
 msgid "Go to source URL"
 msgstr "前往來源網址"
 
-#: ReactNativeClient/lib/components/screens/note.js:818
+#: ReactNativeClient/lib/components/screens/Note.js:762
 msgid "Attach..."
 msgstr "附加..."
 
-#: ReactNativeClient/lib/components/screens/note.js:820
-msgid "Choose an option"
-msgstr "選擇一個選項"
-
-#: ReactNativeClient/lib/components/screens/note.js:820
-msgid "Take photo"
-msgstr "拍攝相片"
-
-#: ReactNativeClient/lib/components/screens/note.js:820
+#: ReactNativeClient/lib/components/screens/Note.js:773
 msgid "Attach photo"
 msgstr "附加相片"
 
-#: ReactNativeClient/lib/components/screens/note.js:820
-msgid "Attach any file"
-msgstr "附加任何檔案"
+#: ReactNativeClient/lib/components/screens/Note.js:774
+msgid "Take photo"
+msgstr "拍攝相片"
 
-#: ReactNativeClient/lib/components/screens/note.js:839
+#: ReactNativeClient/lib/components/screens/Note.js:775
+msgid "Choose an option"
+msgstr "選擇一個選項"
+
+#: ReactNativeClient/lib/components/screens/Note.js:794
+#: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 msgid "Share"
 msgstr "分享"
 
-#: ReactNativeClient/lib/components/screens/note.js:853
+#: ReactNativeClient/lib/components/screens/Note.js:808
 msgid "Convert to note"
 msgstr "轉換為記事"
 
-#: ReactNativeClient/lib/components/screens/note.js:853
+#: ReactNativeClient/lib/components/screens/Note.js:808
 msgid "Convert to todo"
 msgstr "轉換為待辦事項"
 
-#: ReactNativeClient/lib/components/screens/note.js:867
+#: ReactNativeClient/lib/components/screens/Note.js:822
 msgid "Properties"
 msgstr "屬性"
 
-#: ReactNativeClient/lib/components/screens/note.js:1045
-#: ReactNativeClient/lib/components/screens/note.js:1103
+#: ReactNativeClient/lib/components/screens/Note.js:945
+#: ReactNativeClient/lib/components/screens/Note.js:975
 msgid "Add body"
 msgstr "新增內文"
 
-#: ReactNativeClient/lib/components/screens/note.js:1153
+#: ReactNativeClient/lib/components/screens/Note.js:1001
 msgid "Add title"
 msgstr "新增標題"
 
@@ -2847,6 +2846,14 @@ msgstr "無法重新命名已加密項目"
 msgid "New Notebook"
 msgstr "新增記事本"
 
+#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:78
+msgid "Clear alarm"
+msgstr "清除提醒"
+
+#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:80
+msgid "Save alarm"
+msgstr "儲存提醒事項"
+
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:33
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
@@ -2911,6 +2918,11 @@ msgstr ""
 "錯誤。 請檢查網址、使用者名稱、密碼等是否正確以及同步目標是否可以被存取。 錯"
 "誤回報訊息為: "
 
+#: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+#, fuzzy
+msgid "Open"
+msgstr "開啟..."
+
 #: ReactNativeClient/lib/components/note-list.js:97
 msgid "You currently have no notebooks."
 msgstr "您目前尚未擁有記事本。"
@@ -2923,11 +2935,11 @@ msgstr "新增一個記事本"
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "您當前沒有任何記事。通過按一下 (+) 鍵去新增一則記事。"
 
-#: ReactNativeClient/lib/components/CameraView.js:180
+#: ReactNativeClient/lib/components/CameraView.js:158
 msgid "Permission to use camera"
 msgstr "允許使用相機"
 
-#: ReactNativeClient/lib/components/CameraView.js:181
+#: ReactNativeClient/lib/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
 msgstr "必須獲得使用相機的權限。"
 
@@ -2954,7 +2966,7 @@ msgstr "無法移動記事本到此位置"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "筆記本無法命名為 \"%s\"，這標題已被保留。"
 
-#: ReactNativeClient/lib/models/Tag.js:184
+#: ReactNativeClient/lib/models/Tag.js:189
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "標籤 \"%s\" 已存在。 請選擇其他名稱。"
@@ -3017,21 +3029,21 @@ msgstr "無法複製此記事到 \"%s\" 記事本"
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "無法移動此記事到 \"%s\" 記事本"
 
-#: ReactNativeClient/lib/models/Setting.js:65
+#: ReactNativeClient/lib/models/Setting.js:66
 msgid "yes"
 msgstr "是"
 
-#: ReactNativeClient/lib/models/Setting.js:65
 #: ReactNativeClient/lib/models/Setting.js:66
+#: ReactNativeClient/lib/models/Setting.js:67
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr "(支援所見即所得: %s)"
 
-#: ReactNativeClient/lib/models/Setting.js:66
+#: ReactNativeClient/lib/models/Setting.js:67
 msgid "no"
 msgstr "否"
 
-#: ReactNativeClient/lib/models/Setting.js:68
+#: ReactNativeClient/lib/models/Setting.js:69
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -3041,43 +3053,43 @@ msgstr ""
 "注意：如果更改此位置，請確保在同步之前將所有內容複製到該位置，否則將刪除所有"
 "文件！ 有關更多詳細資訊，請閱讀FAQ: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:74
+#: ReactNativeClient/lib/models/Setting.js:75
 msgid "Light"
 msgstr "光亮"
 
-#: ReactNativeClient/lib/models/Setting.js:75
+#: ReactNativeClient/lib/models/Setting.js:76
 msgid "Dark"
 msgstr "暗黑"
 
-#: ReactNativeClient/lib/models/Setting.js:76
+#: ReactNativeClient/lib/models/Setting.js:77
 msgid "Dracula"
 msgstr "德古拉紫"
 
-#: ReactNativeClient/lib/models/Setting.js:77
+#: ReactNativeClient/lib/models/Setting.js:78
 msgid "Solarised Light"
 msgstr "日光白"
 
-#: ReactNativeClient/lib/models/Setting.js:78
+#: ReactNativeClient/lib/models/Setting.js:79
 msgid "Solarised Dark"
 msgstr "黃昏黑"
 
-#: ReactNativeClient/lib/models/Setting.js:79
+#: ReactNativeClient/lib/models/Setting.js:80
 msgid "Nord"
 msgstr "北歐藍"
 
-#: ReactNativeClient/lib/models/Setting.js:80
+#: ReactNativeClient/lib/models/Setting.js:81
 msgid "Aritim Dark"
 msgstr "暗黑 (Aritim)"
 
-#: ReactNativeClient/lib/models/Setting.js:81
+#: ReactNativeClient/lib/models/Setting.js:82
 msgid "OLED Dark"
 msgstr "纯黑 (OLED)"
 
-#: ReactNativeClient/lib/models/Setting.js:102
+#: ReactNativeClient/lib/models/Setting.js:103
 msgid "Synchronisation target"
 msgstr "同步目標"
 
-#: ReactNativeClient/lib/models/Setting.js:104
+#: ReactNativeClient/lib/models/Setting.js:105
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
@@ -3085,51 +3097,55 @@ msgstr ""
 "要同步的目標。每個同步目標可能有附加的參數，它們被命名為 `sync.NUM.NAME` (全"
 "部記錄如下)。"
 
-#: ReactNativeClient/lib/models/Setting.js:131
+#: ReactNativeClient/lib/models/Setting.js:132
 msgid "Directory to synchronise with (absolute path)"
 msgstr "要同步的目錄 (絕對路徑)"
 
-#: ReactNativeClient/lib/models/Setting.js:142
+#: ReactNativeClient/lib/models/Setting.js:143
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV 網址"
 
-#: ReactNativeClient/lib/models/Setting.js:153
+#: ReactNativeClient/lib/models/Setting.js:154
 msgid "Nextcloud username"
 msgstr "Nextcloud 用戶名稱"
 
-#: ReactNativeClient/lib/models/Setting.js:163
+#: ReactNativeClient/lib/models/Setting.js:164
 msgid "Nextcloud password"
 msgstr "Nextcloud 密碼"
 
-#: ReactNativeClient/lib/models/Setting.js:174
+#: ReactNativeClient/lib/models/Setting.js:175
 msgid "WebDAV URL"
 msgstr "WebDAV 網址"
 
-#: ReactNativeClient/lib/models/Setting.js:185
+#: ReactNativeClient/lib/models/Setting.js:186
 msgid "WebDAV username"
 msgstr "WebDAV 用戶名稱"
 
-#: ReactNativeClient/lib/models/Setting.js:195
+#: ReactNativeClient/lib/models/Setting.js:196
 msgid "WebDAV password"
 msgstr "WebDAV 密碼"
 
-#: ReactNativeClient/lib/models/Setting.js:214
+#: ReactNativeClient/lib/models/Setting.js:215
 msgid "AWS S3 bucket"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:225
+#: ReactNativeClient/lib/models/Setting.js:226
+msgid "AWS S3 URL"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:237
 msgid "AWS key"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:235
+#: ReactNativeClient/lib/models/Setting.js:247
 msgid "AWS secret"
 msgstr ""
 
-#: ReactNativeClient/lib/models/Setting.js:247
+#: ReactNativeClient/lib/models/Setting.js:259
 msgid "Attachment download behaviour"
 msgstr "附件下載動作"
 
-#: ReactNativeClient/lib/models/Setting.js:248
+#: ReactNativeClient/lib/models/Setting.js:260
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -3138,184 +3154,184 @@ msgstr ""
 "在\"手動\"模式下，僅會在當您點選附件時才下載附件。 而\"自動\"模式，則是打開記"
 "事時即會開始下載。若是\"總是\"模式，無論您是否打開記事，都會下載所有附件。"
 
-#: ReactNativeClient/lib/models/Setting.js:251
+#: ReactNativeClient/lib/models/Setting.js:263
 msgid "Always"
 msgstr "總是"
 
-#: ReactNativeClient/lib/models/Setting.js:252
+#: ReactNativeClient/lib/models/Setting.js:264
 msgid "Manual"
 msgstr "手動"
 
-#: ReactNativeClient/lib/models/Setting.js:253
+#: ReactNativeClient/lib/models/Setting.js:265
 msgid "Auto"
 msgstr "自動"
 
-#: ReactNativeClient/lib/models/Setting.js:268
+#: ReactNativeClient/lib/models/Setting.js:280
 msgid "Max concurrent connections"
 msgstr "最大同時連接數"
 
-#: ReactNativeClient/lib/models/Setting.js:280
+#: ReactNativeClient/lib/models/Setting.js:292
 msgid "Language"
 msgstr "語言"
 
-#: ReactNativeClient/lib/models/Setting.js:290
+#: ReactNativeClient/lib/models/Setting.js:302
 msgid "Date format"
 msgstr "日期格式"
 
-#: ReactNativeClient/lib/models/Setting.js:309
+#: ReactNativeClient/lib/models/Setting.js:321
 msgid "Time format"
 msgstr "時間格式"
 
-#: ReactNativeClient/lib/models/Setting.js:327
+#: ReactNativeClient/lib/models/Setting.js:339
 msgid "Theme"
 msgstr "界面主題"
 
-#: ReactNativeClient/lib/models/Setting.js:337
+#: ReactNativeClient/lib/models/Setting.js:349
 msgid "Automatically switch theme to match system theme"
 msgstr "自動切換主題以匹配系統主題"
 
-#: ReactNativeClient/lib/models/Setting.js:348
+#: ReactNativeClient/lib/models/Setting.js:360
 msgid "Preferred light theme"
 msgstr "首選亮色主題"
 
-#: ReactNativeClient/lib/models/Setting.js:361
+#: ReactNativeClient/lib/models/Setting.js:373
 msgid "Preferred dark theme"
 msgstr "首選暗色主題"
 
-#: ReactNativeClient/lib/models/Setting.js:365
+#: ReactNativeClient/lib/models/Setting.js:377
 msgid "Show note counts"
 msgstr "顯示記事數量"
 
-#: ReactNativeClient/lib/models/Setting.js:373
-#: ReactNativeClient/lib/models/Setting.js:375
-#: ReactNativeClient/lib/models/Setting.js:376
+#: ReactNativeClient/lib/models/Setting.js:385
+#: ReactNativeClient/lib/models/Setting.js:387
+#: ReactNativeClient/lib/models/Setting.js:388
 msgid "Split View"
 msgstr "分割顯示"
 
-#: ReactNativeClient/lib/models/Setting.js:373
+#: ReactNativeClient/lib/models/Setting.js:385
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:374
-#: ReactNativeClient/lib/models/Setting.js:375
-#: ReactNativeClient/lib/models/Setting.js:376
+#: ReactNativeClient/lib/models/Setting.js:386
+#: ReactNativeClient/lib/models/Setting.js:387
+#: ReactNativeClient/lib/models/Setting.js:388
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:379
+#: ReactNativeClient/lib/models/Setting.js:391
 msgid "Uncompleted to-dos on top"
 msgstr "最上方顯示未完成的待辦事項"
 
-#: ReactNativeClient/lib/models/Setting.js:380
+#: ReactNativeClient/lib/models/Setting.js:392
 msgid "Show completed to-dos"
 msgstr "顯示已完成的待辦事項"
 
-#: ReactNativeClient/lib/models/Setting.js:405
+#: ReactNativeClient/lib/models/Setting.js:417
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "自動配對大括號，括號，引號等。"
 
-#: ReactNativeClient/lib/models/Setting.js:407
-#: ReactNativeClient/lib/models/Setting.js:425
+#: ReactNativeClient/lib/models/Setting.js:419
+#: ReactNativeClient/lib/models/Setting.js:437
 msgid "Reverse sort order"
 msgstr "顛倒排序順序"
 
-#: ReactNativeClient/lib/models/Setting.js:414
+#: ReactNativeClient/lib/models/Setting.js:426
 msgid "Sort notebooks by"
 msgstr "排序記事方式"
 
-#: ReactNativeClient/lib/models/Setting.js:426
+#: ReactNativeClient/lib/models/Setting.js:438
 msgid "Save geo-location with notes"
 msgstr "在記事中保存地理位置資訊"
 
-#: ReactNativeClient/lib/models/Setting.js:443
+#: ReactNativeClient/lib/models/Setting.js:455
 msgid "When creating a new to-do:"
 msgstr "當新增待辦事項時: "
 
-#: ReactNativeClient/lib/models/Setting.js:446
-#: ReactNativeClient/lib/models/Setting.js:461
+#: ReactNativeClient/lib/models/Setting.js:458
+#: ReactNativeClient/lib/models/Setting.js:473
 msgid "Focus title"
 msgstr "游標置於標題"
 
-#: ReactNativeClient/lib/models/Setting.js:447
-#: ReactNativeClient/lib/models/Setting.js:462
+#: ReactNativeClient/lib/models/Setting.js:459
+#: ReactNativeClient/lib/models/Setting.js:474
 msgid "Focus body"
 msgstr "游標置於內文"
 
-#: ReactNativeClient/lib/models/Setting.js:458
+#: ReactNativeClient/lib/models/Setting.js:470
 msgid "When creating a new note:"
 msgstr "當新增記事時: "
 
-#: ReactNativeClient/lib/models/Setting.js:479
+#: ReactNativeClient/lib/models/Setting.js:491
 msgid "Enable soft breaks"
 msgstr "啟用軟中斷"
 
-#: ReactNativeClient/lib/models/Setting.js:480
+#: ReactNativeClient/lib/models/Setting.js:492
 msgid "Enable typographer support"
 msgstr "啟用 Typographer 支援"
 
-#: ReactNativeClient/lib/models/Setting.js:481
+#: ReactNativeClient/lib/models/Setting.js:493
 msgid "Enable math expressions"
 msgstr "啟用數學表達式"
 
-#: ReactNativeClient/lib/models/Setting.js:482
+#: ReactNativeClient/lib/models/Setting.js:494
 msgid "Enable Fountain syntax support"
 msgstr "啟用 Fountain 語法支援"
 
-#: ReactNativeClient/lib/models/Setting.js:483
+#: ReactNativeClient/lib/models/Setting.js:495
 msgid "Enable Mermaid diagrams support"
 msgstr "啟用 Mermaid 流程圖支援"
 
-#: ReactNativeClient/lib/models/Setting.js:484
+#: ReactNativeClient/lib/models/Setting.js:496
 msgid "Enable ==mark== syntax"
 msgstr "啟用 ==mark== 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:485
+#: ReactNativeClient/lib/models/Setting.js:497
 msgid "Enable footnotes"
 msgstr "啟用註腳"
 
-#: ReactNativeClient/lib/models/Setting.js:486
+#: ReactNativeClient/lib/models/Setting.js:498
 msgid "Enable table of contents extension"
 msgstr "啟用表格內容延伸模組"
 
-#: ReactNativeClient/lib/models/Setting.js:487
+#: ReactNativeClient/lib/models/Setting.js:499
 msgid "Enable ~sub~ syntax"
 msgstr "啟用 ~sub~ 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:488
+#: ReactNativeClient/lib/models/Setting.js:500
 msgid "Enable ^sup^ syntax"
 msgstr "啟用 ^sup^ 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:489
+#: ReactNativeClient/lib/models/Setting.js:501
 msgid "Enable deflist syntax"
 msgstr "啟用 deflist 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:490
+#: ReactNativeClient/lib/models/Setting.js:502
 msgid "Enable abbreviation syntax"
 msgstr "啟用縮寫語法"
 
-#: ReactNativeClient/lib/models/Setting.js:491
+#: ReactNativeClient/lib/models/Setting.js:503
 msgid "Enable markdown emoji"
 msgstr "啟用 Markdown 表情符號"
 
-#: ReactNativeClient/lib/models/Setting.js:492
+#: ReactNativeClient/lib/models/Setting.js:504
 msgid "Enable ++insert++ syntax"
 msgstr "啟用 ++insert++ 語法"
 
-#: ReactNativeClient/lib/models/Setting.js:493
+#: ReactNativeClient/lib/models/Setting.js:505
 msgid "Enable multimarkdown table extension"
 msgstr "啟用 MultiMarkdown 表格延伸模組"
 
-#: ReactNativeClient/lib/models/Setting.js:504
+#: ReactNativeClient/lib/models/Setting.js:516
 msgid "Show tray icon"
 msgstr "顯示系統匣圖示"
 
-#: ReactNativeClient/lib/models/Setting.js:506
+#: ReactNativeClient/lib/models/Setting.js:518
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意: 不是在全部桌面環境中都能發揮作用。"
 
-#: ReactNativeClient/lib/models/Setting.js:506
+#: ReactNativeClient/lib/models/Setting.js:518
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -3324,23 +3340,23 @@ msgstr ""
 "這將會允許 Joplin 在背景執行。建議啟用此設定，以便不斷同步您的記事，從而減少"
 "衝突次數。"
 
-#: ReactNativeClient/lib/models/Setting.js:509
+#: ReactNativeClient/lib/models/Setting.js:521
 msgid "Start application minimised in the tray icon"
 msgstr "啟動應用程式時最小化到任務欄"
 
-#: ReactNativeClient/lib/models/Setting.js:524
+#: ReactNativeClient/lib/models/Setting.js:536
 msgid "Editor font size"
 msgstr "編輯器字體大小"
 
-#: ReactNativeClient/lib/models/Setting.js:531
+#: ReactNativeClient/lib/models/Setting.js:543
 msgid "Editor font"
 msgstr "編輯器字型"
 
-#: ReactNativeClient/lib/models/Setting.js:555
+#: ReactNativeClient/lib/models/Setting.js:567
 msgid "Editor font family"
 msgstr "編輯器字型系列"
 
-#: ReactNativeClient/lib/models/Setting.js:556
+#: ReactNativeClient/lib/models/Setting.js:568
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
@@ -3349,50 +3365,50 @@ msgstr ""
 "必須是 *等距 (monospace)* 字型，否則程式將無法正常工作。如果字型不正確或沒有"
 "填寫，則預設為通用等距字型。"
 
-#: ReactNativeClient/lib/models/Setting.js:595
+#: ReactNativeClient/lib/models/Setting.js:607
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "自定義樣式表，適用於整個 Joplin 全域的應用程序風格"
 
-#: ReactNativeClient/lib/models/Setting.js:600
+#: ReactNativeClient/lib/models/Setting.js:612
 msgid "Automatically update the application"
 msgstr "自動更新應用程式"
 
-#: ReactNativeClient/lib/models/Setting.js:601
+#: ReactNativeClient/lib/models/Setting.js:613
 msgid "Get pre-releases when checking for updates"
 msgstr "獲取預發行更新"
 
-#: ReactNativeClient/lib/models/Setting.js:601
+#: ReactNativeClient/lib/models/Setting.js:613
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "有關更多詳細信息，請查閱預發行頁面: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:621
 msgid "Synchronisation interval"
 msgstr "同步時間間隔"
 
-#: ReactNativeClient/lib/models/Setting.js:613
-#: ReactNativeClient/lib/models/Setting.js:614
-#: ReactNativeClient/lib/models/Setting.js:615
+#: ReactNativeClient/lib/models/Setting.js:625
+#: ReactNativeClient/lib/models/Setting.js:626
+#: ReactNativeClient/lib/models/Setting.js:627
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d 分鐘"
 
-#: ReactNativeClient/lib/models/Setting.js:616
+#: ReactNativeClient/lib/models/Setting.js:628
 #, javascript-format
 msgid "%d hour"
 msgstr "%d 小時"
 
-#: ReactNativeClient/lib/models/Setting.js:617
-#: ReactNativeClient/lib/models/Setting.js:618
+#: ReactNativeClient/lib/models/Setting.js:629
+#: ReactNativeClient/lib/models/Setting.js:630
 #, javascript-format
 msgid "%d hours"
 msgstr "%d 小時"
 
-#: ReactNativeClient/lib/models/Setting.js:627
+#: ReactNativeClient/lib/models/Setting.js:639
 msgid "Text editor command"
 msgstr "文字編輯器命令"
 
-#: ReactNativeClient/lib/models/Setting.js:627
+#: ReactNativeClient/lib/models/Setting.js:639
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3400,67 +3416,67 @@ msgstr ""
 "用於開啟記事的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設"
 "的編輯器。"
 
-#: ReactNativeClient/lib/models/Setting.js:628
+#: ReactNativeClient/lib/models/Setting.js:640
 msgid "Page size for PDF export"
 msgstr "匯出 PDF 的頁面大小"
 
-#: ReactNativeClient/lib/models/Setting.js:630
+#: ReactNativeClient/lib/models/Setting.js:642
 msgid "A4"
 msgstr "A4"
 
-#: ReactNativeClient/lib/models/Setting.js:631
+#: ReactNativeClient/lib/models/Setting.js:643
 msgid "Letter"
 msgstr "信函 (Letter)"
 
-#: ReactNativeClient/lib/models/Setting.js:632
+#: ReactNativeClient/lib/models/Setting.js:644
 msgid "A3"
 msgstr "A3"
 
-#: ReactNativeClient/lib/models/Setting.js:633
+#: ReactNativeClient/lib/models/Setting.js:645
 msgid "A5"
 msgstr "A5"
 
-#: ReactNativeClient/lib/models/Setting.js:634
+#: ReactNativeClient/lib/models/Setting.js:646
 msgid "Tabloid"
 msgstr "文摘 (Tabloid)"
 
-#: ReactNativeClient/lib/models/Setting.js:635
+#: ReactNativeClient/lib/models/Setting.js:647
 msgid "Legal"
 msgstr "法律規格紙 (Legal)"
 
-#: ReactNativeClient/lib/models/Setting.js:638
+#: ReactNativeClient/lib/models/Setting.js:650
 msgid "Page orientation for PDF export"
 msgstr "匯出至 PDF 的頁面方向"
 
-#: ReactNativeClient/lib/models/Setting.js:640
+#: ReactNativeClient/lib/models/Setting.js:652
 msgid "Portrait"
 msgstr "豎直"
 
-#: ReactNativeClient/lib/models/Setting.js:641
+#: ReactNativeClient/lib/models/Setting.js:653
 msgid "Landscape"
 msgstr "橫向"
 
-#: ReactNativeClient/lib/models/Setting.js:651
+#: ReactNativeClient/lib/models/Setting.js:663
 msgid "Keyboard Mode"
 msgstr "鍵盤模式"
 
-#: ReactNativeClient/lib/models/Setting.js:654
+#: ReactNativeClient/lib/models/Setting.js:666
 msgid "Default"
 msgstr "預設"
 
-#: ReactNativeClient/lib/models/Setting.js:655
+#: ReactNativeClient/lib/models/Setting.js:667
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ReactNativeClient/lib/models/Setting.js:656
+#: ReactNativeClient/lib/models/Setting.js:668
 msgid "Vim"
 msgstr "Vim"
 
-#: ReactNativeClient/lib/models/Setting.js:670
+#: ReactNativeClient/lib/models/Setting.js:682
 msgid "Custom TLS certificates"
 msgstr "自訂 TLS 證書"
 
-#: ReactNativeClient/lib/models/Setting.js:671
+#: ReactNativeClient/lib/models/Setting.js:683
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -3471,15 +3487,15 @@ msgstr ""
 "cert_dir, /other/custom.pem。請注意，如果修改了 TLS 的設置，您必須先儲存變"
 "更，然後再按一下 \"檢測同步設置\"。"
 
-#: ReactNativeClient/lib/models/Setting.js:683
+#: ReactNativeClient/lib/models/Setting.js:695
 msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 證書錯誤"
 
-#: ReactNativeClient/lib/models/Setting.js:691
+#: ReactNativeClient/lib/models/Setting.js:703
 msgid "Fail-safe"
 msgstr "故障保護"
 
-#: ReactNativeClient/lib/models/Setting.js:692
+#: ReactNativeClient/lib/models/Setting.js:704
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -3487,36 +3503,36 @@ msgstr ""
 "故障保護 (Fail-safe): 當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本"
 "機資料"
 
-#: ReactNativeClient/lib/models/Setting.js:695
+#: ReactNativeClient/lib/models/Setting.js:707
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr "指定 API 伺服器使用的連接埠。 如果未設定，將使用預設值。"
 
-#: ReactNativeClient/lib/models/Setting.js:700
+#: ReactNativeClient/lib/models/Setting.js:712
 msgid "Enable note history"
 msgstr "啟用記事歷史紀錄"
 
-#: ReactNativeClient/lib/models/Setting.js:710
+#: ReactNativeClient/lib/models/Setting.js:722
 msgid "days"
 msgstr "天數"
 
-#: ReactNativeClient/lib/models/Setting.js:710
+#: ReactNativeClient/lib/models/Setting.js:722
 #, javascript-format
 msgid "%d days"
 msgstr "%d 天"
 
-#: ReactNativeClient/lib/models/Setting.js:712
+#: ReactNativeClient/lib/models/Setting.js:724
 msgid "Keep note history for"
 msgstr "保留記事歷史記錄"
 
-#: ReactNativeClient/lib/models/Setting.js:735
+#: ReactNativeClient/lib/models/Setting.js:747
 msgid "Notebook list growth factor"
 msgstr "記事本清單增長因數"
 
-#: ReactNativeClient/lib/models/Setting.js:736
 #: ReactNativeClient/lib/models/Setting.js:748
 #: ReactNativeClient/lib/models/Setting.js:760
+#: ReactNativeClient/lib/models/Setting.js:772
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3527,52 +3543,52 @@ msgstr ""
 "空間。因此因數為 2 的的一項是因數為 1 的一項的佔用空間的兩倍。重啟程式以查看"
 "變化。"
 
-#: ReactNativeClient/lib/models/Setting.js:747
+#: ReactNativeClient/lib/models/Setting.js:759
 msgid "Note list growth factor"
 msgstr "記事清單增長因數"
 
-#: ReactNativeClient/lib/models/Setting.js:759
+#: ReactNativeClient/lib/models/Setting.js:771
 msgid "Note area growth factor"
 msgstr "記事区域增長因數"
 
-#: ReactNativeClient/lib/models/Setting.js:1272
+#: ReactNativeClient/lib/models/Setting.js:1290
 msgid "General"
 msgstr "一般選項"
 
-#: ReactNativeClient/lib/models/Setting.js:1274
+#: ReactNativeClient/lib/models/Setting.js:1292
 msgid "Synchronisation"
 msgstr "顯示同步狀態"
 
-#: ReactNativeClient/lib/models/Setting.js:1276
+#: ReactNativeClient/lib/models/Setting.js:1294
 msgid "Appearance"
 msgstr "外觀"
 
-#: ReactNativeClient/lib/models/Setting.js:1278
+#: ReactNativeClient/lib/models/Setting.js:1296
 msgid "Note"
 msgstr "記事本"
 
-#: ReactNativeClient/lib/models/Setting.js:1282
+#: ReactNativeClient/lib/models/Setting.js:1300
 msgid "Plugins"
 msgstr "延伸模組"
 
-#: ReactNativeClient/lib/models/Setting.js:1284
+#: ReactNativeClient/lib/models/Setting.js:1302
 msgid "Application"
 msgstr "應用程式"
 
-#: ReactNativeClient/lib/models/Setting.js:1288
+#: ReactNativeClient/lib/models/Setting.js:1306
 msgid "Encryption"
 msgstr "加密"
 
-#: ReactNativeClient/lib/models/Setting.js:1290
+#: ReactNativeClient/lib/models/Setting.js:1308
 msgid "Web Clipper"
 msgstr "網頁剪輯"
 
-#: ReactNativeClient/lib/models/Setting.js:1292
+#: ReactNativeClient/lib/models/Setting.js:1310
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "鍵盤模式"
 
-#: ReactNativeClient/lib/models/Setting.js:1299
+#: ReactNativeClient/lib/models/Setting.js:1317
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -3588,7 +3604,7 @@ msgstr ""
 "器中打開使用了這些延伸模組的記事，就將會丟失延伸模組格式。下面已表明延伸模組"
 "與所見即所得 (WYSIWYG) 編輯器兼容與否。"
 
-#: ReactNativeClient/lib/models/Setting.js:1301
+#: ReactNativeClient/lib/models/Setting.js:1319
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "所有記事和設置均儲存於: %s"
@@ -3597,14 +3613,14 @@ msgstr "所有記事和設置均儲存於: %s"
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: ReactNativeClient/lib/BaseApplication.js:151
-#: ReactNativeClient/lib/BaseApplication.js:163
-#: ReactNativeClient/lib/BaseApplication.js:195
+#: ReactNativeClient/lib/BaseApplication.js:150
+#: ReactNativeClient/lib/BaseApplication.js:162
+#: ReactNativeClient/lib/BaseApplication.js:194
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用資訊: %s"
 
-#: ReactNativeClient/lib/BaseApplication.js:230
+#: ReactNativeClient/lib/BaseApplication.js:229
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "未知的標誌: %s"
@@ -3617,7 +3633,7 @@ msgstr "OneDrive"
 msgid "AWS S3"
 msgstr ""
 
-#: ReactNativeClient/lib/commands/historyForward.js:16
+#: ReactNativeClient/lib/commands/historyForward.js:17
 msgid "Forward"
 msgstr "向前"
 
@@ -3625,6 +3641,18 @@ msgstr "向前"
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "無法訪問 %s"
+
+#~ msgid "Exit"
+#~ msgstr "離開"
+
+#~ msgid "Select date"
+#~ msgstr "選擇日期"
+
+#~ msgid "Confirm"
+#~ msgstr "確認"
+
+#~ msgid "Attach any file"
+#~ msgstr "附加任何檔案"
 
 #~ msgid "New sub-notebook"
 #~ msgstr "新增子記事本"
