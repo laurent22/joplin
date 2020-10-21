@@ -133,7 +133,7 @@ a {
 .modal-message {
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-start;
 	color: grey;
 	font-size: 1.2em;
 	margin: 40px 20px;

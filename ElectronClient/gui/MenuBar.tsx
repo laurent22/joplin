@@ -158,12 +158,21 @@ function useMenu(props:Props) {
 
 		if (Array.isArray(path)) path = path[0];
 
-		CommandService.instance().execute('showModalMessage', _('Importing from "%s" as "%s" format. Please wait...', path, module.format));
+		const modalMessage =  _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
+
+		CommandService.instance().execute('showModalMessage', modalMessage);
 
 		const importOptions = {
 			path,
 			format: module.format,
 			outputFormat: module.outputFormat,
+			onProgress: (status:any) => {
+				const statusStrings:string[] = Object.keys(status).map((key:string) => {
+					return `${key}: ${status[key]}`;
+				});
+
+				CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
+			},
 			onError: console.warn,
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
 		};
