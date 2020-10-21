@@ -351,10 +351,10 @@ You can also use search filters to further restrict the search.
 |**resource:**|Filter by attachment MIME type|`resource:image/jpeg` to return notes with a jpeg attachment.<br>`-resource:application/pdf` to return notes without a pdf attachment.<br>`resource:image/*` to return notes with any images.|
 |**sourceurl:**|Filter by source URL|`sourceurl:https://www.google.com`<br>`sourceurl:*joplinapp.org` to perform a wildcard search.|
 
-Note: In CliClient you have to escape the query using `--` when using negated filters.
+Note: In the CLI client you have to escape the query using `--` when using negated filters.
 Eg. `:search -- "-tag:tag1"`.
 
-The filters are implicitely connected by and/or connective depending on the following rules;
+The filters are implicitly connected by and/or connectives depending on the following rules:
 
 - By default, all filters are connected by "AND".
 - To override this default behaviour, use the `any` filter, in which case the search terms will be connected by "OR" instead.
