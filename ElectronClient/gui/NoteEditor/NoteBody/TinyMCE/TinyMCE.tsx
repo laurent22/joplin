@@ -537,6 +537,13 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 			const toolbarPluginButtons = pluginCommandNames.length ? ` | ${pluginCommandNames.join(' ')}` : '';
 
+			const toolbar = [
+				'bold', 'italic', '|',
+				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
+				'bullist', 'numlist', 'joplinChecklist', '|',
+				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
+			];
+
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -555,7 +562,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				target_list: false,
 				table_resize_bars: false,
 				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
-				toolbar: `bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime${toolbarPluginButtons}`,
+				toolbar: toolbar.join(' '),
 				localization_function: _,
 				contextmenu: contextMenuItemNames.join(' '),
 				setup: (editor:any) => {

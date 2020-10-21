@@ -378,7 +378,7 @@ function themeStyle(themeId:number) {
 	// without the need to restart
 	const fontSizes:any = {
 		fontSize: Math.round(12 * zoomRatio),
-		toolbarIconSize: 16,
+		toolbarIconSize: 18,
 		editorFontSize: editorFontSize,
 		textAreaLineHeight: Math.round(globalStyle.textAreaLineHeight * editorFontSize / 12),
 	};
