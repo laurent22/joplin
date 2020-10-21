@@ -77,6 +77,7 @@ const globalCommands = [
 	require('./commands/stopExternalEditing'),
 	require('./commands/toggleExternalEditing'),
 	require('./commands/copyDevCommand'),
+	require('./commands/openProfileDirectory'),
 	require('lib/commands/synchronize'),
 	require('lib/commands/historyBackward'),
 	require('lib/commands/historyForward'),
