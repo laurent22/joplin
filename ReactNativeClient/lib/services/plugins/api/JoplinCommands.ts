@@ -12,9 +12,9 @@ import { Command } from './types';
  * It is also possible to execute internal Joplin's commands which, as of now, are not well documented.
  * You can find the list directly on GitHub though at the following locations:
  *
- * https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/MainScreen/commands
- * https://github.com/laurent22/joplin/tree/dev/ElectronClient/commands
- * https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.ts
+ * * [Main screen commands](https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/MainScreen/commands)
+ * * [Global commands](https://github.com/laurent22/joplin/tree/dev/ElectronClient/commands)
+ * * [Editor commands](https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.ts)
  *
  * To view what arguments are supported, you can open any of these files and look at the `execute()` command.
  */
