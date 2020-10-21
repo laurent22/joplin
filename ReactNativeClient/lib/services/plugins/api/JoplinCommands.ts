@@ -1,4 +1,4 @@
-import CommandService, { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
+import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
 import { Command } from './types';
 
 /**
@@ -62,7 +62,9 @@ export default class JoplinCommands {
 		if ('iconName' in command) declaration.iconName = command.iconName;
 
 		const runtime:CommandRuntime = {
-			execute: command.execute,
+			execute: (_context:CommandContext, ...args:any[]) => {
+				return command.execute(...args);
+			},
 		};
 
 		if ('enabledCondition' in command) runtime.enabledCondition = command.enabledCondition;

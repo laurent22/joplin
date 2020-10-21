@@ -21,7 +21,11 @@ export interface PluginMessage {
 	args?: any[],
 	result?: any,
 	error?: any,
+	mainWindowCallbackId?: string,
 }
+
+let callbackIndex = 1;
+const callbackPromises:any = {};
 
 function mapEventIdsToHandlers(pluginId:string, arg:any) {
 	if (Array.isArray(arg)) {
@@ -33,12 +37,21 @@ function mapEventIdsToHandlers(pluginId:string, arg:any) {
 		const eventId = arg;
 
 		return async (...args:any[]) => {
+			const callbackId = `cb_${pluginId}_${Date.now()}_${callbackIndex++}`;
+
+			const promise = new Promise((resolve, reject) => {
+				callbackPromises[callbackId] = { resolve, reject };
+			});
+
 			ipcRenderer.send('pluginMessage', {
+				callbackId: callbackId,
 				target: PluginMessageTarget.Plugin,
 				pluginId: pluginId,
 				eventId: eventId,
 				args: args,
 			});
+
+			return promise;
 		};
 	} else if (arg === null) {
 		return null;
@@ -95,26 +108,41 @@ export default class PluginRunner extends BasePluginRunner {
 			if (message.target !== PluginMessageTarget.MainWindow) return;
 			if (message.pluginId !== plugin.id) return;
 
-			const mappedArgs = mapEventIdsToHandlers(plugin.id, message.args);
-			const fullPath = `joplin.${message.path}`;
+			if (message.mainWindowCallbackId) {
+				const promise = callbackPromises[message.mainWindowCallbackId];
 
-			this.logger().debug(`PluginRunner: execute call: ${fullPath}: ${mappedArgs}`);
+				if (!promise) {
+					console.error('Got a callback without matching promise: ', message);
+					return;
+				}
 
-			let result:any = null;
-			let error:any = null;
-			try {
-				result = await executeSandboxCall(plugin.id, pluginApi, fullPath, mappedArgs, this.eventHandler);
-			} catch (e) {
-				error = e ? e : new Error('Unknown error');
+				if (message.error) {
+					promise.reject(message.error);
+				} else {
+					promise.resolve(message.result);
+				}
+			} else {
+				const mappedArgs = mapEventIdsToHandlers(plugin.id, message.args);
+				const fullPath = `joplin.${message.path}`;
+
+				this.logger().debug(`PluginRunner: execute call: ${fullPath}: ${mappedArgs}`);
+
+				let result:any = null;
+				let error:any = null;
+				try {
+					result = await executeSandboxCall(plugin.id, pluginApi, fullPath, mappedArgs, this.eventHandler);
+				} catch (e) {
+					error = e ? e : new Error('Unknown error');
+				}
+
+				ipcRenderer.send('pluginMessage', {
+					target: PluginMessageTarget.Plugin,
+					pluginId: plugin.id,
+					pluginCallbackId: message.callbackId,
+					result: result,
+					error: error,
+				});
 			}
-
-			ipcRenderer.send('pluginMessage', {
-				target: PluginMessageTarget.Plugin,
-				pluginId: plugin.id,
-				callbackId: message.callbackId,
-				result: result,
-				error: error,
-			});
 		});
 	}
 

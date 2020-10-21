@@ -53,7 +53,7 @@
 		return promise;
 	};
 
-	ipcRenderer.on('pluginMessage', (event, message) => {
+	ipcRenderer.on('pluginMessage', async (_event, message) => {
 		if (message.eventId) {
 			const eventHandler = eventHandlers_[message.eventId];
 
@@ -62,12 +62,28 @@
 				return;
 			}
 
-			eventHandler(...message.args);
+			let result = null;
+			let error = null;
+			try {
+				result = await eventHandler(...message.args);
+			} catch (e) {
+				error = e;
+			}
+
+			if (message.callbackId) {
+				ipcRenderer.send('pluginMessage', {
+					target: 'mainWindow',
+					pluginId: pluginId,
+					mainWindowCallbackId: message.callbackId,
+					result: result,
+					error: error,
+				});
+			}
 			return;
 		}
 
-		if (message.callbackId) {
-			const promise = callbackPromises[message.callbackId];
+		if (message.pluginCallbackId) {
+			const promise = callbackPromises[message.pluginCallbackId];
 			if (!promise) {
 				console.error('Got a callback without matching promise: ', message);
 				return;

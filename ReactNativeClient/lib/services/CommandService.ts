@@ -203,7 +203,7 @@ export default class CommandService extends BaseService {
 		delete command.runtime;
 	}
 
-	public async execute(commandName:string, ...args:any[]):Promise<any> {
+	public async execute(commandName:string, ...args:any[]):Promise<any | void> {
 		const command = this.commandByName(commandName);
 		this.logger().info('CommandService::execute:', commandName, args);
 		return command.runtime.execute({ state: this.store_.getState() }, ...args);
