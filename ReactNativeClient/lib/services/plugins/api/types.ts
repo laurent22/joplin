@@ -320,36 +320,30 @@ export type Path = string[];
 
 export enum ContentScriptType {
 	/**
-	 * Registers a new Markdown-It plugin, which should follow this template:
+	 * Registers a new Markdown-It plugin, which should follow the template below.
 	 *
 	 * ```javascript
-	 * // The module should export an object as below:
-	 *
 	 * module.exports = {
-	 *
-	 *     // The "context" variable is currently unused but could be used later on to provide
-	 *     // access to your own plugin so that the content script and plugin can communicate.
 	 *     default: function(context) {
 	 *         return {
-	 *
-	 *             // This is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information
-	 *             // The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml.ts), which
-	 *             // contains a number of options, mostly useful for Joplin's internal code.
 	 *             plugin: function(markdownIt, options) {
 	 *                 // ...
 	 *             },
-	 *
-	 *             // You may also specify additional assets such as JS or CSS that should be loaded in the rendered HTML document.
-	 *             // Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to
-	 *             // see how the data should be structured.
-	 *             assets: {},
+	 *             assets: {
+	 *                 // ...
+	 *             },
 	 *         }
 	 *     }
 	 * }
 	 * ```
 	 *
-	 * To include a regular Markdown-It plugin, that doesn't make use of any Joplin-specific feature, you
-	 * would simply create a file such as this:
+	 * - The `context` argument is currently unused but could be used later on to provide access to your own plugin so that the content script and plugin can communicate.
+	 *
+	 * - The **required** `plugin` key is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information. The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml.ts), which contains a number of options, mostly useful for Joplin's internal code.
+	 *
+	 * - Using the **optional** `assets` key you may specify assets such as JS or CSS that should be loaded in the rendered HTML document. Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to see how the data should be structured.
+	 *
+	 * To include a regular Markdown-It plugin, that doesn't make use of any Joplin-specific features, you would simply create a file such as this:
 	 *
 	 * ```javascript
 	 * module.exports = {
