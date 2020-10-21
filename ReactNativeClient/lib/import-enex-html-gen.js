@@ -1,5 +1,5 @@
 const stringToStream = require('string-to-stream');
-const cleanHtml = require('clean-html');
+// const cleanHtml = require('clean-html');
 const resourceUtils = require('lib/resourceUtils.js');
 const { isSelfClosingTag } = require('lib/htmlUtils');
 const Entities = require('html-entities').AllHtmlEntities;
@@ -161,14 +161,22 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 }
 
 const beautifyHtml = (html) => {
-	return new Promise((resolve) => {
-		try {
-			cleanHtml.clean(html, { wrap: 0 }, (...cleanedHtml) => resolve(cleanedHtml));
-		} catch (error) {
-			console.warn(`Could not clean HTML - the "unclean" version will be used: ${error.message}: ${html.trim().substr(0, 512).replace(/[\n\r]/g, ' ')}...`);
-			resolve([html]);
-		}
-	});
+	// The clean-html package doesn't appear to be robust enough to deal with the crazy HTML that Evernote can generate.
+	// In the best case scenario it will throw an error but in some cases it will go into an infinite loop, so
+	// for that reason we need to disable it.
+	//
+	// Fixed https://github.com/laurent22/joplin/issues/3958
+
+	return [html];
+
+	// return new Promise((resolve) => {
+	// 	try {
+	// 		cleanHtml.clean(html, { wrap: 0 }, (...cleanedHtml) => resolve(cleanedHtml));
+	// 	} catch (error) {
+	// 		console.warn(`Could not clean HTML - the "unclean" version will be used: ${error.message}: ${html.trim().substr(0, 512).replace(/[\n\r]/g, ' ')}...`);
+	// 		resolve([html]);
+	// 	}
+	// });
 };
 
 module.exports = { enexXmlToHtml };

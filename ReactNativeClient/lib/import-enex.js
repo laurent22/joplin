@@ -40,6 +40,16 @@ function extractRecognitionObjId(recognitionXml) {
 }
 
 async function decodeBase64File(sourceFilePath, destFilePath) {
+	// When something goes wrong with streams you can get an error "EBADF, Bad file descriptor"
+	// with no strack trace to tell where the error happened.
+
+	// Also note that this code is not great because there's a source and a destination stream
+	// and while one stream might end, the other might throw an error or vice-versa. However
+	// we can only throw one error from a promise. So before one stream
+	// could end with resolve(), then another stream would get an error and call reject(), which
+	// would be ignored. I don't think it's happening anymore, but something to keep in mind
+	// anyway.
+
 	return new Promise(function(resolve, reject) {
 		// Note: we manually handle closing the file so that we can
 		// force flusing it before close. This is needed because
@@ -55,13 +65,17 @@ async function decodeBase64File(sourceFilePath, destFilePath) {
 		});
 		sourceStream.pipe(new Base64Decode()).pipe(destStream);
 
-		sourceStream.on('end', () => {
+		// We wait for the destination stream "finish" event, not the source stream "end" event
+		// because even if the source has finished sending data, the destination might not have
+		// finished receiving it and writing it to disk.
+		destStream.on('finish', () => {
 			fs.fdatasyncSync(destFile);
 			fs.closeSync(destFile);
 			resolve();
 		});
 
 		sourceStream.on('error', (error) => reject(error));
+		destStream.on('error', (error) => reject(error));
 	});
 }
 
