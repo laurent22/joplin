@@ -149,9 +149,9 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 
 			const result = await dialog.showMessageBox(parentWindow_, {
 				type: 'info',
-				message: `${_('An update is available. Download it now?')}`,
+				message: `${_('An update is available, do you want to download it now?')}`,
 				detail: `${_('Your version: %s', packageInfo.version)}\n${_('New version: %s', newVersionString)}${releaseNotes}`,
-				buttons: [_('Download'), _('Cancel')].concat(truncateReleaseNotes ? [_('Open Full Release Notes')] : []),
+				buttons: [_('Download'), _('Cancel')].concat(truncateReleaseNotes ? [_('Full Release Notes')] : []),
 				cancelId: 1,
 			});
 
