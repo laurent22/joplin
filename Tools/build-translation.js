@@ -10,6 +10,7 @@ require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 const rootDir = `${__dirname}/..`;
 
 const { filename, fileExtension } = require(`${rootDir}/ReactNativeClient/lib/path-utils.js`);
+const markdownUtils = require(`${rootDir}/ReactNativeClient/lib/markdownUtils`).default;
 const fs = require('fs-extra');
 const gettextParser = require('gettext-parser');
 
@@ -200,6 +201,12 @@ function extractTranslator(regex, poContent) {
 	return translatorName;
 }
 
+function translatorNameToMarkdown(translatorName) {
+	const matches = translatorName.match(/^(.*?)\s*\((.*)\)$/);
+	if (!matches) return translatorName;
+	return `[${markdownUtils.escapeTitleText(matches[1])}](mailto:${markdownUtils.escapeLinkUrl(matches[2])})`;
+}
+
 async function translationStatus(isDefault, poFile) {
 	// "apt install translate-toolkit" to have pocount
 	let pocountPath = 'pocount';
@@ -228,6 +235,13 @@ async function translationStatus(isDefault, poFile) {
 	// encoding, so it changes on every update.
 	translatorName = translatorName.replace(/ </, ' (');
 	translatorName = translatorName.replace(/>/, ')');
+
+	// Some users have very long names and very long email addresses and in that case gettext
+	// records it over several lines, and here we only have the first line. So if we're having a broken
+	// email, add a closing ')' so that at least rendering works fine.
+	if (translatorName.indexOf('(') >= 0 && translatorName.indexOf(')') < 0) translatorName += ')';
+
+	translatorName = translatorNameToMarkdown(translatorName);
 
 	const isAlways100 = poFile.endsWith('en_US.po');
 
