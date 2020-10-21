@@ -374,7 +374,7 @@ function useMenu(props:Props) {
 			});
 
 			if (copyToClipboard === 0) {
-				clipboard.writeText(v.message);
+				clipboard.writeText(v.body);
 			}
 		}
 

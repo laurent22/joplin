@@ -10,10 +10,14 @@ export default function versionInfo(packageInfo:any) {
 	}
 	const copyrightText = 'Copyright © 2016-YYYY Laurent Cozic';
 	const now = new Date();
-	const message = [
+
+	const header = [
 		p.description,
 		'',
 		copyrightText.replace('YYYY', `${now.getFullYear()}`),
+	];
+
+	const body = [
 		_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
 		'',
 		_('Client ID: %s', Setting.value('clientId')),
@@ -21,12 +25,15 @@ export default function versionInfo(packageInfo:any) {
 		_('Profile Version: %s', reg.db().version()),
 		_('Keychain Supported: %s', Setting.value('keychain.supported') >= 1 ? _('Yes') : _('No')),
 	];
+
 	if (gitInfo) {
-		message.push(`\n${gitInfo}`);
+		body.push(`\n${gitInfo}`);
 		console.info(gitInfo);
 	}
 
 	return {
-		message: message.join('\n'),
+		header: header.join('\n'),
+		body: body.join('\n'),
+		message: header.concat(body).join('\n'),
 	};
 }
