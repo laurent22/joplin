@@ -138,8 +138,8 @@ function useMenu(props:Props) {
 	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
 
 	const onMenuItemClick = useCallback((commandName:string) => {
-		CommandService.instance().execute(commandName, props.menuItemProps[commandName]);
-	}, [props.menuItemProps]);
+		CommandService.instance().execute(commandName);
+	}, []);
 
 	const onImportModuleClick = useCallback(async (module:Module, moduleSource:string) => {
 		let path = null;

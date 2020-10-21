@@ -12,7 +12,9 @@ export const declaration:CommandDeclaration = {
 // synchronisation depending on the "syncStarted" parameter
 export const runtime = ():CommandRuntime => {
 	return {
-		execute: async (_context:CommandContext, syncStarted:boolean = false) => {
+		execute: async (context:CommandContext, syncStarted:boolean = null) => {
+			syncStarted = syncStarted === null ? context.state.syncStarted : syncStarted;
+
 			const action = syncStarted ? 'cancel' : 'start';
 
 			if (!(await reg.syncTarget().isAuthenticated())) {
