@@ -4,7 +4,7 @@ It is possible to get the apps to display or log more information that might hel
 
 ## Desktop application
 
-- Add a file named "flags.txt" in the config directory (should be `~/.config/joplin-desktop` or `c:\Users\YOUR_NAME\.config\joplin-desktop`) with the following content: `--open-dev-tools --debug --log-level debug`
+- Click on menu **Help &gt; Open Profile Directory** and add a file named "flags.txt" in your directory with the following content: `--open-dev-tools --debug --log-level debug`
 - Restart the application
 - The development tools should now be opened. Click the "Console" tab
 - Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.
@@ -12,12 +12,11 @@ It is possible to get the apps to display or log more information that might hel
 ## CLI application
 
 - Start the app with `joplin --debug --log-level debug`
-- Check the log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any)
+- Check log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any). The profile directory would be in `~/.config/joplin`.
 
 ## Mobile application
 
-- In the options, enable Advanced Option
-- Open the log in the top right hand corner menu and post a screenshot of any error/warning.
+- In the Configuration screen, press on the **Log button** and post a screenshot of any error/warning.
 
 # Creating a low-level bug report on Android
 

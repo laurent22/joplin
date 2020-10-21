@@ -116,6 +116,7 @@ const commandNames:string[] = [
 	'setTags',
 	'showNoteContentProperties',
 	'copyDevCommand',
+	'openProfileDirectory',
 ];
 
 function menuItemSetChecked(id:string, checked:boolean) {
@@ -658,6 +659,7 @@ function useMenu(props:Props) {
 					},
 				},
 
+				menuItemDic.openProfileDirectory,
 				menuItemDic.copyDevCommand,
 
 				{

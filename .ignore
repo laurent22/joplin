@@ -24,6 +24,7 @@ ElectronClient/app.js
 ElectronClient/bridge.js
 ElectronClient/commands/copyDevCommand.js
 ElectronClient/commands/focusElement.js
+ElectronClient/commands/openProfileDirectory.js
 ElectronClient/commands/startExternalEditing.js
 ElectronClient/commands/stopExternalEditing.js
 ElectronClient/commands/toggleExternalEditing.js
