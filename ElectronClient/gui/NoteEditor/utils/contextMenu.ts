@@ -117,7 +117,7 @@ export function menuItems():ContextMenuItems {
 			onAction: async (options:ContextMenuOptions) => {
 				clipboard.writeText(options.linkToCopy !== null ? options.linkToCopy : options.textToCopy);
 			},
-			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Link,
+			isActive: (itemType:ContextMenuItemType, options:ContextMenuOptions) => itemType === ContextMenuItemType.Link || !!options.linkToCopy,
 		},
 	};
 }

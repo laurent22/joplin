@@ -368,9 +368,12 @@
 				const selectedText = window.getSelection().toString();
 
 				if (selectedText) {
+					const linkToCopy = event.target && event.target.getAttribute('href') ? event.target.getAttribute('href') : null;
+
 					ipcProxySendToHost('contextMenu', {
 						type: 'text',
 						textToCopy: selectedText,
+						linkToCopy: linkToCopy,
 					});
 				} else if (event.target.getAttribute('href')) {
 					ipcProxySendToHost('contextMenu', {
