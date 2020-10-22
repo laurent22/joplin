@@ -2,12 +2,10 @@ import PluginRunner from '../app/services/plugins/PluginRunner';
 import PluginService from 'lib/services/plugins/PluginService';
 import { ContentScriptType } from 'lib/services/plugins/api/types';
 import MdToHtml from 'lib/joplin-renderer/MdToHtml';
-import Setting from 'lib/models/Setting';
 import shim from 'lib/shim';
-import uuid from 'lib/uuid';
 
 require('app-module-path').addPath(__dirname);
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow } = require('test-utils.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('test-utils.js');
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
 
@@ -157,12 +155,14 @@ describe('services_PluginService', function() {
 	}));
 
 	it('should register a Markdown-it plugin', asyncTest(async () => {
-		const contentScriptPath = `${Setting.value('tempDir')}/markdownItTestPlugin${uuid.createNano()}.js`;
+		const tempDir = await createTempDir();
+
+		const contentScriptPath = `${tempDir}/markdownItTestPlugin.js`;
 		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.js`, contentScriptPath);
 
 		const service = newPluginService();
 
-		const plugin = await service.loadPluginFromString('example', Setting.value('tempDir'), `
+		const plugin = await service.loadPluginFromString('example', tempDir, `
 			/* joplin-manifest:
 			{
 				"manifest_version": 1,
@@ -176,7 +176,7 @@ describe('services_PluginService', function() {
 			
 			joplin.plugins.register({
 				onStart: async function() {
-					await joplin.plugins.registerContentScript('markdownItPlugin', 'justtesting', '${contentScriptPath}');
+					await joplin.plugins.registerContentScript('markdownItPlugin', 'justtesting', './markdownItTestPlugin.js');
 				},
 			});
 		`);
@@ -201,7 +201,7 @@ describe('services_PluginService', function() {
 
 		expect(result.html.includes('JUST TESTING: something')).toBe(true);
 
-		await shim.fsDriver().remove(contentScriptPath);
+		await shim.fsDriver().remove(tempDir);
 	}));
 
 });

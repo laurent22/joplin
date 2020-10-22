@@ -80,9 +80,9 @@ EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
 const logDir = `${__dirname}/../tests/logs`;
-const tempDir = `${__dirname}/../tests/tmp`;
+const baseTempDir = `${__dirname}/../tests/tmp`;
 fs.mkdirpSync(logDir, 0o755);
-fs.mkdirpSync(tempDir, 0o755);
+fs.mkdirpSync(baseTempDir, 0o755);
 fs.mkdirpSync(`${__dirname}/data`);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
@@ -146,7 +146,7 @@ BaseItem.loadClass('Revision', Revision);
 
 Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
-Setting.setConstant('tempDir', tempDir);
+Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('env', 'dev');
 
 BaseService.logger_ = logger;
@@ -634,6 +634,12 @@ function tempFilePath(ext) {
 	return `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${ext}`;
 }
 
+async function createTempDir() {
+	const tempDirPath = `${baseTempDir}/${uuid.createNano()}`;
+	await fs.mkdirp(tempDirPath);
+	return tempDirPath;
+}
+
 function mockDate(year, month, day, tick) {
 	const fixedDate = new Date(2020, 0, 1);
 	jasmine.clock().install();
@@ -712,4 +718,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { synchronizerStart, syncTargetName, setSyncTargetName, syncDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, mockDate, restoreDate, TestApp };
+module.exports = { synchronizerStart, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, mockDate, restoreDate, TestApp };
