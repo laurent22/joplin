@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:20
 #: ElectronClient/checkForUpdates.js:139
@@ -122,7 +124,6 @@ msgid "Could not export notes: %s"
 msgstr "ノートをエクスポートできませんでした: %s"
 
 #: ElectronClient/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -130,7 +131,7 @@ msgid ""
 msgstr ""
 "題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、「#"
 "タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに"
-"移動できます。"
+"移動できます。あるいは「:」でコマンドを検索して実行できます。"
 
 #: ElectronClient/plugins/GotoAnything.js:456
 #: ElectronClient/plugins/GotoAnything.min.js:499
@@ -140,9 +141,8 @@ msgstr "Goto Anything..."
 
 #: ElectronClient/plugins/GotoAnything.js:463
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Command palette"
-msgstr "コマンド"
+msgstr "コマンドパレット"
 
 #: ElectronClient/plugins/GotoAnything.min.js:459
 msgid ""
@@ -818,9 +818,8 @@ msgid "New note"
 msgstr "新しいノート"
 
 #: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "エディターレイアウトの表示切り替え"
+msgstr "エディターの切り替え"
 
 #: ElectronClient/gui/MainScreen/commands/selectTemplate.js:24
 msgid "Template file:"
@@ -1414,9 +1413,9 @@ msgstr ""
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: ReactNativeClient/lib/services/KeymapService.js:144
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "エラー"
+msgstr "エラー: %s"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
@@ -1486,9 +1485,8 @@ msgid "Open %s"
 msgstr "%s を開く"
 
 #: ElectronClient/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "クリップボードにパスを保存"
+msgstr "開発モードコマンドをクリップボードにコピー"
 
 #: ElectronClient/commands/startExternalEditing.js:20
 msgid "Edit in external editor"
@@ -1500,13 +1498,13 @@ msgid "Error opening note in editor: %s"
 msgstr "次のエディターで開く際にエラー: %s"
 
 #: ElectronClient/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "外部エディターでの編集を終了"
+msgstr "外部エディターでの編集を開始・終了"
 
+# Intentionally chose the word "Finish" instead of "Stop". Hope this string won't be used in more generic contexts.
 #: ElectronClient/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "終了"
 
 #: ElectronClient/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -2229,7 +2227,7 @@ msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "\"%s\" モジュール （\"%s / %s\" フォーマット用） を読み込めません"
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:152
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "\"%s\" モジュール （\"%s / %s\" フォーマット用） を読み込めません"
 
@@ -2247,26 +2245,24 @@ msgid "Restored Notes"
 msgstr "復元されたノート"
 
 #: ReactNativeClient/lib/services/KeymapService.js:240
-#, fuzzy
 msgid "command"
 msgstr "コマンド"
 
 #: ReactNativeClient/lib/services/KeymapService.js:240
 #: ReactNativeClient/lib/services/KeymapService.js:245
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
-"キーマップアイテム %s は必須の \"command\" プロパティを持っていません。"
+msgstr "\"%s\" は必須の \"%s\" プロパティを持っていません。"
 
 #: ReactNativeClient/lib/services/KeymapService.js:245
 #: ReactNativeClient/lib/services/KeymapService.js:252
 msgid "accelerator"
-msgstr ""
+msgstr "ショートカットキー"
 
 #: ReactNativeClient/lib/services/KeymapService.js:252
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "無効な入力：%s"
+msgstr "無効な %s: %s"
 
 #: ReactNativeClient/lib/services/KeymapService.js:270
 #, javascript-format
@@ -2733,11 +2729,13 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"ノートに位置情報を保存するには、ユーザーの許可が必要です。\n"
+"\n"
+"位置情報を保存するかどうかは、設定画面でいつでも変更できます。"
 
 #: ReactNativeClient/lib/components/screens/Note.js:341
-#, fuzzy
 msgid "Permission needed"
-msgstr "カメラ使用の許可"
+msgstr "許可が必要"
 
 #: ReactNativeClient/lib/components/screens/Note.js:501
 #: ReactNativeClient/lib/shim-init-node.js:91
@@ -2998,9 +2996,8 @@ msgstr ""
 "を確認してください。次が報告されたエラーです:"
 
 #: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "開く..."
+msgstr "開く"
 
 #: ReactNativeClient/lib/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -3212,9 +3209,8 @@ msgid "AWS S3 bucket"
 msgstr "AWS S3 バケット"
 
 #: ReactNativeClient/lib/models/Setting.js:226
-#, fuzzy
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "AWS S3 URL"
 
 #: ReactNativeClient/lib/models/Setting.js:237
 msgid "AWS key"
