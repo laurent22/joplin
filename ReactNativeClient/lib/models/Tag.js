@@ -66,10 +66,23 @@ class Tag extends BaseItem {
 			note_id: noteId,
 		});
 
-		this.dispatch({
-			type: 'TAG_UPDATE_ONE',
-			item: await Tag.loadWithCount(tagId),
-		});
+		// While syncing or importing notes, the app might associate a tag ID with a note ID
+		// but the actual items might not have been downloaded yet, so
+		// check that we actually get some result before dispatching
+		// the action.
+		//
+		// Fixes: https://github.com/laurent22/joplin/issues/3958#issuecomment-714320526
+		//
+		// Also probably fixes the errors on GitHub about reducer
+		// items being undefined.
+		const tagWithCount = await Tag.loadWithCount(tagId);
+
+		if (tagWithCount) {
+			this.dispatch({
+				type: 'TAG_UPDATE_ONE',
+				item: tagWithCount,
+			});
+		}
 
 		return output;
 	}

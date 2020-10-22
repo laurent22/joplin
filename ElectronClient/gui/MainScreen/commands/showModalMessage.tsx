@@ -8,8 +8,9 @@ export const declaration:CommandDeclaration = {
 export const runtime = (comp:any):CommandRuntime => {
 	return {
 		execute: async (_context:CommandContext, message:string) => {
+			let brIndex = 1;
 			const lines = message.split('\n').map((line:string) => {
-				if (!line.trim()) return <br/>;
+				if (!line.trim()) return <br key={`${brIndex++}`}/>;
 				return <div key={line} className="text">{line}</div>;
 			});
 
