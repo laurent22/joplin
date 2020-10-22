@@ -138,6 +138,7 @@ ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useListIdent.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
+ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/utils/setupContextMenu.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 ElectronClient/gui/NoteEditor/NoteEditor.js
 ElectronClient/gui/NoteEditor/styles/index.js

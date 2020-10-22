@@ -4,7 +4,6 @@ import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } 
 import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
-import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
 import CommandService from 'lib/services/CommandService';
 import { ToolbarButtonInfo } from 'lib/services/commands/ToolbarButtonUtils';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
@@ -12,14 +11,13 @@ import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import { utils as pluginUtils } from 'lib/services/plugins/reducer';
 import { _, closestSupportedLocale } from 'lib/locale';
-import bridge from '../../../../services/bridge';
+import setupContextMenu from './utils/setupContextMenu';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const BaseItem = require('lib/models/BaseItem');
 const shim = require('lib/shim').default;
-const Resource = require('lib/models/Resource');
 const { themeStyle } = require('lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -37,23 +35,6 @@ function markupRenderOptions(override:any = null) {
 		replaceResourceInternalToExternalLinks: true,
 		...override,
 	};
-}
-
-// x and y are the absolute coordinates, as returned by the context-menu event
-// handler on the webContent. This function will return null if the point is
-// not within the TinyMCE editor.
-function contextMenuElement(editor:any, x:number, y:number) {
-	const iframe = document.getElementsByClassName('tox-edit-area__iframe')[0];
-	const iframeRect = iframe.getBoundingClientRect();
-
-	if (iframeRect.x < x && iframeRect.y < y && iframeRect.right > x && iframeRect.bottom > y) {
-		const relativeX = x - iframeRect.x;
-		const relativeY = y - iframeRect.y;
-
-		return editor.getDoc().elementFromPoint(relativeX, relativeY);
-	}
-
-	return null;
 }
 
 function findBlockSource(node:any) {
@@ -160,8 +141,6 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const props_onDrop = useRef(null);
 	props_onDrop.current = props.onDrop;
-
-	const contextMenuActionOptions = useRef<ContextMenuOptions>(null);
 
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
@@ -528,19 +507,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		loadedCssFiles_ = [];
 		loadedJsFiles_ = [];
 
-		function contextMenuItemNameWithNamespace(name:string) {
-			// For unknown reasons, TinyMCE converts all context menu names to
-			// lowercase when setting them in the init method, so we need to
-			// make them lowercase too, to make sure that the update() method
-			// addContextMenu is triggered.
-			return (`joplin${name}`).toLowerCase();
-		}
-
 		const loadEditor = async () => {
-			const contextMenuItems = menuItems();
-			const contextMenuItemNames = [];
-			for (const name in contextMenuItems) contextMenuItemNames.push(contextMenuItemNameWithNamespace(name));
-
 			const language = closestSupportedLocale(props.locale, true, supportedLocales);
 
 			const pluginCommandNames:string[] = [];
@@ -582,7 +549,6 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
-				// contextmenu: contextMenuItemNames.join(' '),
 				contextmenu: false,
 				browser_spellcheck: true,
 				setup: (editor:any) => {
@@ -700,57 +666,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 						});
 					}
 
-					bridge().window().webContents.on('context-menu', (_event:any, params:any) => {
-						const element = contextMenuElement(editor, params.x, params.y);
-						if (!element) return;
-
-						const Menu = bridge().Menu;
-						const MenuItem = bridge().MenuItem;
-
-						let itemType:ContextMenuItemType = ContextMenuItemType.None;
-						let resourceId = '';
-						let linkToCopy = null;
-
-						if (element.nodeName === 'IMG') {
-							itemType = ContextMenuItemType.Image;
-							resourceId = Resource.pathToId(element.src);
-						} else if (element.nodeName === 'A') {
-							resourceId = Resource.pathToId(element.href);
-							itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
-							linkToCopy = element.getAttribute('href') || '';
-						} else {
-							itemType = ContextMenuItemType.Text;
-						}
-
-						contextMenuActionOptions.current = {
-							itemType,
-							resourceId,
-							linkToCopy,
-							textToCopy: null,
-							htmlToCopy: editor.selection ? editor.selection.getContent() : '',
-							insertContent: (content:string) => {
-								editor.insertContent(content);
-							},
-							isReadOnly: false,
-						};
-
-						const menu = new Menu();
-
-						for (const itemName in contextMenuItems) {
-							const item = contextMenuItems[itemName];
-
-							if (!item.isActive(itemType, contextMenuActionOptions.current)) continue;
-
-							menu.append(new MenuItem({
-								label: item.label,
-								click: () => {
-									item.onAction(contextMenuActionOptions.current);
-								},
-							}));
-						}
-
-						menu.popup();
-					});
+					setupContextMenu(editor);
 
 					// TODO: remove event on unmount?
 					editor.on('DblClick', (event:any) => {
