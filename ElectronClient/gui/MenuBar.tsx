@@ -14,6 +14,7 @@ import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from 'lib/locale';
 import { MenuItem, MenuItemLocation } from 'lib/services/plugins/api/types';
 import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
+import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
 
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
@@ -84,6 +85,8 @@ interface Props {
 	showCompletedTodos: boolean,
 	pluginMenuItems: any[],
 	pluginMenus: any[],
+	['spellChecker.language']: string,
+	['editor.codeView']: boolean,
 }
 
 const commandNames:string[] = [
@@ -368,6 +371,8 @@ function useMenu(props:Props) {
 			toolsItems = toolsItems.concat(toolsItemsWindowsLinux);
 		}
 		toolsItems = toolsItems.concat(toolsItemsAll);
+
+		toolsItems.push(SpellCheckerService.instance().changeLanguageMenuItem(props['spellChecker.language'], !props['editor.codeView']));
 
 		function _checkForUpdates() {
 			bridge().checkForUpdates(false, bridge().window(), `${Setting.value('profileDir')}/log-autoupdater.txt`, { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
@@ -792,7 +797,7 @@ function useMenu(props:Props) {
 		} else {
 			setMenu(Menu.buildFromTemplate(template));
 		}
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime]);
+	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['editor.codeView']]);
 
 	useEffect(() => {
 		const whenClauseContext = CommandService.instance().currentWhenClauseContext();
@@ -887,6 +892,8 @@ const mapStateToProps = (state:AppState) => {
 		showCompletedTodos: state.settings.showCompletedTodos,
 		pluginMenuItems: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menuItem') }, 'menuBar.pluginMenuItems'),
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
+		['spellChecker.language']: state.settings['spellChecker.language'],
+		['editor.codeView']: state.settings['editor.codeView'],
 	};
 };
 

@@ -1,3 +1,4 @@
+import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
 import bridge from '../../../../../services/bridge';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextMenu';
 const Resource = require('lib/models/Resource');
@@ -75,6 +76,12 @@ export default function(editor:any) {
 					item.onAction(contextMenuActionOptions.current);
 				},
 			}));
+		}
+
+		const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
+
+		for (const item of spellCheckerMenuItems) {
+			menu.append(item);
 		}
 
 		menu.popup();

@@ -146,6 +146,7 @@ ElectronClient/services/plugins/PluginRunner.js
 ElectronClient/services/plugins/UserWebview.js
 ElectronClient/services/plugins/UserWebviewDialog.js
 ElectronClient/services/plugins/UserWebviewDialogButtonBar.js
+ElectronClient/services/spellChecker/SpellCheckerServiceDriver.js
 ReactNativeClient/lib/AsyncActionQueue.js
 ReactNativeClient/lib/BaseApplication.js
 ReactNativeClient/lib/checkPermissions.js
@@ -269,6 +270,8 @@ ReactNativeClient/lib/services/rest/errors.js
 ReactNativeClient/lib/services/searchengine/filterParser.js
 ReactNativeClient/lib/services/searchengine/queryBuilder.js
 ReactNativeClient/lib/services/SettingUtils.js
+ReactNativeClient/lib/services/spellChecker/SpellCheckerService.js
+ReactNativeClient/lib/services/spellChecker/SpellCheckerServiceDriverBase.js
 ReactNativeClient/lib/services/synchronizer/gui/useSyncTargetUpgrade.js
 ReactNativeClient/lib/services/synchronizer/LockHandler.js
 ReactNativeClient/lib/services/synchronizer/MigrationHandler.js

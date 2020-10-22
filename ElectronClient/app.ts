@@ -14,6 +14,8 @@ import Setting from 'lib/models/Setting';
 import actionApi from 'lib/services/rest/actionApi.desktop';
 import BaseApplication from 'lib/BaseApplication';
 import { _, setLocale } from 'lib/locale';
+import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
+import SpellCheckerServiceDriver from './services/spellChecker/SpellCheckerServiceDriver';
 
 require('app-module-path').addPath(__dirname);
 
@@ -679,6 +681,9 @@ class Application extends BaseApplication {
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
+
+		SpellCheckerService.instance().setDriver(new SpellCheckerServiceDriver());
+		SpellCheckerService.instance().setupDefaultLanguage();
 
 		// await populateDatabase(reg.db());
 
