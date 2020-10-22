@@ -45,6 +45,7 @@ export default class JoplinPlugins {
 				this.logger.error(`In plugin ${this.plugin.id}:`, newError);
 			}).then(() => {
 				this.logger.info(`Finished running onStart handler: ${this.plugin.id} (Took ${Date.now() - startTime}ms)`);
+				this.plugin.emit('started');
 			});
 		}
 	}

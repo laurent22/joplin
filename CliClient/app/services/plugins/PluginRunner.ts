@@ -54,15 +54,25 @@ export default class PluginRunner extends BasePluginRunner {
 		};
 	}
 
-	async run(plugin:Plugin, sandbox:Global) {
-		const vmSandbox = vm.createContext(this.newSandboxProxy(plugin.id, sandbox));
+	async run(plugin:Plugin, sandbox:Global):Promise<void> {
+		return new Promise((resolve:Function, reject:Function) => {
+			const onStarted = () => {
+				plugin.off('started', onStarted);
+				resolve();
+			};
 
-		try {
-			vm.runInContext(plugin.scriptText, vmSandbox);
-		} catch (error) {
-			this.logger().error(`In plugin ${plugin.id}:`, error);
-			return;
-		}
+			plugin.on('started', onStarted);
+
+			const vmSandbox = vm.createContext(this.newSandboxProxy(plugin.id, sandbox));
+
+			try {
+				vm.runInContext(plugin.scriptText, vmSandbox);
+			} catch (error) {
+				reject(error);
+				// this.logger().error(`In plugin ${plugin.id}:`, error);
+				// return;
+			}
+		});
 	}
 
 }

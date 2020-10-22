@@ -65,6 +65,9 @@ describe('services_PluginService', function() {
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
+
+		// If you have an error here, it might mean you need to run `npm i` from
+		// the "withExternalModules" folder. Not clear exactly why.
 		expect(allFolders[0].title).toBe('  foo');
 	}));
 

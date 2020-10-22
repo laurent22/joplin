@@ -4,6 +4,7 @@ import shim from 'lib/shim';
 import { ViewHandle } from './utils/createViewHandle';
 import { ContentScriptType } from './api/types';
 import Logger from 'lib/Logger';
+const EventEmitter = require('events');
 
 interface ViewControllers {
 	[key:string]: ViewController
@@ -29,6 +30,7 @@ export default class Plugin {
 	private viewControllers_:ViewControllers = {};
 	private contentScripts_:ContentScripts = {};
 	private dispatch_:Function;
+	private eventEmitter_:any;
 
 	constructor(id:string, baseDir:string, manifest:PluginManifest, scriptText:string, logger:Logger, dispatch:Function) {
 		this.id_ = id;
@@ -37,6 +39,7 @@ export default class Plugin {
 		this.scriptText_ = scriptText;
 		this.logger_ = logger;
 		this.dispatch_ = dispatch;
+		this.eventEmitter_ = new EventEmitter();
 	}
 
 	public get id():string {
@@ -59,10 +62,24 @@ export default class Plugin {
 		return this.baseDir_;
 	}
 
-	public registerContentScript(type:ContentScriptType, id:string, path:string) {
+	on(eventName:string, callback:Function) {
+		return this.eventEmitter_.on(eventName, callback);
+	}
+
+	off(eventName:string, callback:Function) {
+		return this.eventEmitter_.removeListener(eventName, callback);
+	}
+
+	emit(eventName:string, event:any = null) {
+		return this.eventEmitter_.emit(eventName, event);
+	}
+
+	public async registerContentScript(type:ContentScriptType, id:string, path:string) {
 		if (!this.contentScripts_[type]) this.contentScripts_[type] = [];
 
 		const absolutePath = shim.fsDriver().resolveRelativePathWithinDir(this.baseDir, path);
+
+		if (!(await shim.fsDriver().exists(absolutePath))) throw new Error(`Could not find content script at path ${absolutePath}`);
 
 		this.contentScripts_[type].push({ id, path: absolutePath });
 
