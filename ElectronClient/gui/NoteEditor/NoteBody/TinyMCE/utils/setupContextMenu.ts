@@ -7,8 +7,10 @@ const Resource = require('lib/models/Resource');
 // handler on the webContent. This function will return null if the point is
 // not within the TinyMCE editor.
 function contextMenuElement(editor:any, x:number, y:number) {
-	const iframe = document.getElementsByClassName('tox-edit-area__iframe')[0];
-	const iframeRect = iframe.getBoundingClientRect();
+	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
+	if (!iframes.length) return null;
+
+	const iframeRect = iframes[0].getBoundingClientRect();
 
 	if (iframeRect.x < x && iframeRect.y < y && iframeRect.right > x && iframeRect.bottom > y) {
 		const relativeX = x - iframeRect.x;
