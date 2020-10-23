@@ -15,7 +15,7 @@ import actionApi from 'lib/services/rest/actionApi.desktop';
 import BaseApplication from 'lib/BaseApplication';
 import { _, setLocale } from 'lib/locale';
 import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
-import SpellCheckerServiceDriver from './services/spellChecker/SpellCheckerServiceDriver';
+import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
 import bridge from './services/bridge';
 
 require('app-module-path').addPath(__dirname);
@@ -709,7 +709,7 @@ class Application extends BaseApplication {
 
 		this.setupContextMenu();
 
-		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriver());
+		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 
 		// await populateDatabase(reg.db());
 

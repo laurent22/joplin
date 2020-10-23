@@ -1,7 +1,9 @@
+// Provides spell checking feature via the native Electron built-in spell checker
+
 import SpellCheckerServiceDriverBase from 'lib/services/spellChecker/SpellCheckerServiceDriverBase';
 import bridge from '../bridge';
 
-export default class SpellCheckerServiceDriver extends SpellCheckerServiceDriverBase {
+export default class SpellCheckerServiceDriverNative extends SpellCheckerServiceDriverBase {
 
 	private session():any {
 		return bridge().window().webContents.session;
@@ -21,10 +23,6 @@ export default class SpellCheckerServiceDriver extends SpellCheckerServiceDriver
 	public get language():string {
 		const languages = this.session().getSpellCheckerLanguages();
 		return languages.length ? languages[0] : '';
-	}
-
-	public menuItems<T>(_misspelledWord:string, _dictionarySuggestions:string[]):T[] {
-		throw new Error('Not implemented');
 	}
 
 	public makeMenuItem(item:any):any {

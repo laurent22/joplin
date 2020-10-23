@@ -198,7 +198,7 @@ ElectronClient/services/plugins/PluginRunner.js
 ElectronClient/services/plugins/UserWebview.js
 ElectronClient/services/plugins/UserWebviewDialog.js
 ElectronClient/services/plugins/UserWebviewDialogButtonBar.js
-ElectronClient/services/spellChecker/SpellCheckerServiceDriver.js
+ElectronClient/services/spellChecker/SpellCheckerServiceDriverNative.js
 ReactNativeClient/lib/AsyncActionQueue.js
 ReactNativeClient/lib/BaseApplication.js
 ReactNativeClient/lib/checkPermissions.js
