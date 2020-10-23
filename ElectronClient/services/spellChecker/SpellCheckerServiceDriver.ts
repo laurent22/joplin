@@ -3,16 +3,20 @@ import bridge from '../bridge';
 
 export default class SpellCheckerServiceDriver extends SpellCheckerServiceDriverBase {
 
+	private session():any {
+		return bridge().window().webContents.session;
+	}
+
 	public get availableLanguages():string[] {
-		return bridge().window().webContents.session.availableSpellCheckerLanguages;
+		return this.session().availableSpellCheckerLanguages;
 	}
 
 	public setLanguage(v:string) {
-		bridge().window().webContents.session.setSpellCheckerLanguages([v]);
+		this.session().setSpellCheckerLanguages([v]);
 	}
 
 	public get language():string {
-		const languages = bridge().window().webContents.session.getSpellCheckerLanguages();
+		const languages = this.session().getSpellCheckerLanguages();
 		return languages.length ? languages[0] : '';
 	}
 
@@ -23,6 +27,12 @@ export default class SpellCheckerServiceDriver extends SpellCheckerServiceDriver
 	public makeMenuItem(item:any):any {
 		const MenuItem = bridge().MenuItem;
 		return new MenuItem(item);
+	}
+
+	public addWordToSpellCheckerDictionary(_language:string, word:string) {
+		// Actually on Electron all languages share the same dictionary, or
+		// perhaps it's added to the currently active language.
+		this.session().addWordToSpellCheckerDictionary(word);
 	}
 
 }

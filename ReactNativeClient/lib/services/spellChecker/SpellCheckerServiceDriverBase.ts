@@ -24,4 +24,8 @@ export default class SpellCheckerServiceDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	public addWordToSpellCheckerDictionary(_language:string, _word:string) {
+		throw new Error('Not implemented');
+	}
+
 }

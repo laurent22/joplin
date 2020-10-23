@@ -682,8 +682,7 @@ class Application extends BaseApplication {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
 
-		SpellCheckerService.instance().setDriver(new SpellCheckerServiceDriver());
-		SpellCheckerService.instance().setupDefaultLanguage();
+		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriver());
 
 		// await populateDatabase(reg.db());
 
