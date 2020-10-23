@@ -6,7 +6,7 @@
   "scripts": {
     "test": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --fail-fast=true --config=tests/support/jasmine.json",
     "test-ci": "gulp buildTests -L && node node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
-    "postinstall": "npm run build && patch-package --patch-dir ../patches/shared && patch-package --patch-dir ../patches/node",
+    "postinstall": "npm run build && patch-package --patch-dir ./patches",
     "build": "gulp build",
     "start": "gulp build -L && node 'build/main.js' --stack-trace-enabled --log-level debug --env dev"
   },
