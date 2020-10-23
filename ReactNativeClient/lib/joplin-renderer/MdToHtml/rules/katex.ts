@@ -1,4 +1,4 @@
-import { RuleOptions } from "lib/joplin-renderer/MdToHtml";
+import { RuleOptions } from 'lib/joplin-renderer/MdToHtml';
 
 let katex = require('katex');
 const md5 = require('md5');
@@ -43,14 +43,13 @@ function katexStyle() {
 // Test if potential opening or closing delimieter
 // Assumes that there is a "$" at state.src[pos]
 function isValidDelim(state:any, pos:number) {
-	let prevChar,
-		nextChar,
-		max = state.posMax,
-		can_open = true,
+	const max = state.posMax;
+
+	let can_open = true,
 		can_close = true;
 
-	prevChar = pos > 0 ? state.src.charCodeAt(pos - 1) : -1;
-	nextChar = pos + 1 <= max ? state.src.charCodeAt(pos + 1) : -1;
+	const prevChar = pos > 0 ? state.src.charCodeAt(pos - 1) : -1;
+	const nextChar = pos + 1 <= max ? state.src.charCodeAt(pos + 1) : -1;
 
 	// Check non-whitespace conditions for opening and closing, and
 	// check that closing delimeter isn't followed by a number
@@ -68,7 +67,7 @@ function isValidDelim(state:any, pos:number) {
 }
 
 function math_inline(state:any, silent:boolean) {
-	let start, match, token, res, pos;
+	let match, token, res, pos;
 
 	if (state.src[state.pos] !== '$') {
 		return false;
@@ -87,7 +86,7 @@ function math_inline(state:any, silent:boolean) {
 	// This loop will assume that the first leading backtick can not
 	// be the first character in state.src, which is known since
 	// we have found an opening delimieter already.
-	start = state.pos + 1;
+	const start = state.pos + 1;
 	match = start;
 	while ((match = state.src.indexOf('$', match)) !== -1) {
 		// Found potential $, look for escapes, pos will point to
@@ -148,7 +147,6 @@ function math_block(state:any, start:number, end:number, silent:boolean) {
 		next,
 		lastPos,
 		found = false,
-		token,
 		pos = state.bMarks[start] + state.tShift[start],
 		max = state.eMarks[start];
 
@@ -200,7 +198,7 @@ function math_block(state:any, start:number, end:number, silent:boolean) {
 
 	state.line = next + 1;
 
-	token = state.push('math_block', 'math', 0);
+	const token = state.push('math_block', 'math', 0);
 	token.block = true;
 	token.content = (firstLine && firstLine.trim() ? `${firstLine}\n` : '') + state.getLines(start + 1, next, state.tShift[start], true) + (lastLine && lastLine.trim() ? lastLine : '');
 	token.map = [start, state.line];
@@ -233,7 +231,7 @@ export default {
 		// https://github.com/laurent22/joplin/issues/1105
 		if (!options.context.userData.__katex) options.context.userData.__katex = { macros: {} };
 
-		const katexOptions:any = {}
+		const katexOptions:any = {};
 		katexOptions.macros = options.context.userData.__katex.macros;
 		katexOptions.trust = true;
 

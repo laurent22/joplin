@@ -363,4 +363,4 @@ export default function(theme:any) {
 	`;
 
 	return [css];
-};
+}
