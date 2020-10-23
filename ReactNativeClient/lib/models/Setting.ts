@@ -3,7 +3,7 @@ import { _, supportedLocalesToLanguages, defaultLocale } from 'lib/locale';
 const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');

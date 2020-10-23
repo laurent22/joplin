@@ -1,7 +1,7 @@
 import { resolve as nodeResolve } from 'path';
 
 const fs = require('fs-extra');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const FsDriverBase = require('lib/fs-driver-base');
 
 export default class FsDriverNode extends FsDriverBase {
@@ -195,13 +195,13 @@ export default class FsDriverNode extends FsDriverBase {
 	public resolve(path:string) {
 		return require('path').resolve(path);
 	}
-	
+
 	// Resolves the provided relative path to an absolute path within baseDir. The function
 	// also checks that the absolute path is within baseDir, to avoid security issues.
 	// It is expected that baseDir is a safe path (not user-provided).
 	public resolveRelativePathWithinDir(baseDir:string, relativePath:string) {
 		const resolvedPath = nodeResolve(baseDir, relativePath);
-		if (resolvedPath.indexOf(baseDir) !== 0) throw new Error('Resolved path for relative path "' + relativePath + '" is not within base directory "' + baseDir + '"');
+		if (resolvedPath.indexOf(baseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}"`);
 		return resolvedPath;
 	}
 

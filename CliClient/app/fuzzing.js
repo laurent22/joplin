@@ -1,6 +1,6 @@
 'use strict';
 
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const Logger = require('lib/Logger').default;
 const Resource = require('lib/models/Resource.js');
 const { dirname } = require('lib/path-utils');

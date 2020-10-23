@@ -1,7 +1,7 @@
 const React = require('react');
 const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const Datetime = require('react-datetime');
 const CreatableSelect = require('react-select/lib/Creatable').default;
 const Select = require('react-select').default;

@@ -8,7 +8,7 @@ const { fileExtension, basename } = require('lib/path-utils');
 const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
 const bridge = require('electron').remote.require('./bridge').default;
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { ErrorNotFound } = require('./rest/errors');
 
 class ExternalEditWatcher {

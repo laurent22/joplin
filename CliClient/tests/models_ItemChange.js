@@ -2,7 +2,7 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { asyncTest, fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const ResourceService = require('lib/services/ResourceService');

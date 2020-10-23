@@ -3,7 +3,7 @@ import eventManager from 'lib/eventManager';
 import { _ } from 'lib/locale';
 import { stateUtils } from 'lib/reducer';
 const Note = require('lib/models/Note');
-const { time } = require('lib/time-utils');
+const time = require('lib/time').default;
 
 export const declaration:CommandDeclaration = {
 	name: 'editAlarm',
