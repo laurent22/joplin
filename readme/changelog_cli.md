@@ -1,5 +1,21 @@
 # Joplin terminal app changelog
 
+## [cli-v1.3.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.3.1) - 2020-10-23T15:03:32Z
+
+- Improved: Added support for a custom S3 URL (#3921) (#3691 by [@aaron](https://github.com/aaron))
+- Improved: Allow setting note geolocation attributes via API (#3884)
+- Improved: Import &lt;strike&gt;,&lt;s&gt; tags (strikethrough) from Evernote (#3936 by Ian Slinger)
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Sort search results by average of multiple criteria, including &#039;Sort notes by&#039; field setting (#3777 by [@shawnaxsom](https://github.com/shawnaxsom))
+- Improved: Sort tags in a case-insensitive way
+- Improved: Updated installation script with BSD support (#3930 by Andros Fenollosa)
+- Fixed: Crash when trying to change app locale (#3847)
+- Fixed: Fix search filters when language is in Korean or with accents (#3947 by Naveen M V)
+- Fixed: Fixed freeze when importing ENEX as HTML, and fixed potential error when importing resources (#3958)
+- Fixed: Fixed setting issue that would cause a password to be saved in plain text in the database, even when the keychain is working
+- Fixed: Importing ENEX as HTML was importing as Markdown (#3923)
+- Fixed: Regression: Fix export of pluginAssets when exporting to html/pdf (#3927 by Caleb John)
+
 ## [cli-v1.2.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.3) - 2020-10-09T11:17:18Z
 
 - Improved: Improved handling of database migration failures
