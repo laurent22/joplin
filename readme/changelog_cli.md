@@ -1,6 +1,6 @@
 # Joplin terminal app changelog
 
-## [cli-v1.3.2](https://github.com/laurent22/joplin/releases/tag/cli-v1.3.2) - 2020-10-23T15:57:46Z
+## [cli-v1.3.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.3.3) - 2020-10-23T16:00:38Z
 
 - Improved: Added support for a custom S3 URL (#3921) (#3691 by [@aaron](https://github.com/aaron))
 - Improved: Allow setting note geolocation attributes via API (#3884)
