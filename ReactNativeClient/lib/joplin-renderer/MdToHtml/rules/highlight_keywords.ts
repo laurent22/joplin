@@ -1,6 +1,6 @@
 // This plugin is used only on mobile, to highlight search results.
 
-import { RuleOptions } from "lib/joplin-renderer/MdToHtml";
+import { RuleOptions } from 'lib/joplin-renderer/MdToHtml';
 
 const stringUtils = require('../../stringUtils.js');
 const md5 = require('md5');
@@ -67,4 +67,4 @@ function plugin(markdownIt:any, ruleOptions:RuleOptions) {
 
 export default {
 	plugin,
-}
+};
