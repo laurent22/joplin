@@ -51,7 +51,10 @@ shared.renderFolders = function(props, renderItem) {
 shared.renderTags = function(props, renderItem) {
 	const tags = props.tags.slice();
 	tags.sort((a, b) => {
-		return a.title < b.title ? -1 : +1;
+		// Note: while newly created tags are normalized and lowercase
+		// imported tags might be any case, so we need to do case-insensitive
+		// sort.
+		return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
 	});
 	const tagItems = [];
 	const order = [];
@@ -65,21 +68,6 @@ shared.renderTags = function(props, renderItem) {
 		order: order,
 	};
 };
-
-// shared.renderSearches = function(props, renderItem) {
-// 	let searches = props.searches.slice();
-// 	let searchItems = [];
-// 	const order = [];
-// 	for (let i = 0; i < searches.length; i++) {
-// 		const search = searches[i];
-// 		order.push(search.id);
-// 		searchItems.push(renderItem(search, props.selectedSearchId == search.id && props.notesParentType == 'Search'));
-// 	}
-// 	return {
-// 		items: searchItems,
-// 		order: order,
-// 	};
-// }
 
 shared.synchronize_press = async function(comp) {
 	const { reg } = require('lib/registry.js');
