@@ -72,11 +72,24 @@ function plugin(markdownIt:any, ruleOptions:RuleOptions) {
 
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
 
+		const attrHtml = [];
+		attrHtml.push('data-from-md');
+		if (resourceIdAttr) attrHtml.push(resourceIdAttr);
+		if (title) attrHtml.push(`title='${htmlentities(title)}'`);
+		if (mime) attrHtml.push(`type='${htmlentities(mime)}'`);
+
 		if (ruleOptions.plainResourceRendering || ruleOptions.linkRenderingType === 2) {
-			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${htmlentities(href)}' type='${htmlentities(mime)}'>`;
+			icon = '';
+			attrHtml.push(`href='${htmlentities(href)}'`);
+
+			// return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${htmlentities(href)}' type='${htmlentities(mime)}'>`;
 		} else {
-			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' ${js} type='${htmlentities(mime)}'>${icon}`;
+			attrHtml.push(`href='${hrefAttr}'`);
+			if (js) attrHtml.push(js);
+			// return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' ${js} type='${htmlentities(mime)}'>${icon}`;
 		}
+
+		return `<a ${attrHtml.join(' ')}>${icon}`;
 	};
 }
 
