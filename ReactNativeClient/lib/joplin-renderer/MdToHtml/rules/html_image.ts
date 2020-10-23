@@ -1,4 +1,4 @@
-import { RuleOptions } from "lib/joplin-renderer/MdToHtml";
+import { RuleOptions } from 'lib/joplin-renderer/MdToHtml';
 
 const htmlUtils = require('../../htmlUtils.js');
 const utils = require('../../utils');
@@ -47,4 +47,4 @@ function plugin(markdownIt:any, ruleOptions:RuleOptions) {
 	markdownIt.renderer.rules.html_inline = handleImageTags(htmlInlineDefaultRender);
 }
 
-export default { plugin }
+export default { plugin };

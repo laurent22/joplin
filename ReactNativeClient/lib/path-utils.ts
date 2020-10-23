@@ -17,7 +17,7 @@ export function basename(path:string) {
 
 export function filename(path:string, includeDir:boolean = false) {
 	if (!path) throw new Error('Path is empty');
-	let output = includeDir ? path : basename(path);
+	const output = includeDir ? path : basename(path);
 	if (output.indexOf('.') < 0) return output;
 
 	const splitted = output.split('.');
