@@ -98,14 +98,6 @@ export default class ElectronAppWrapper {
 		// Fix: https://github.com/electron-userland/electron-builder/issues/2269
 		if (shim.isLinux()) windowOptions.icon = path.join(__dirname, '..', 'build/icons/128x128.png');
 
-		require('electron-context-menu')({
-			shouldShowMenu: (_event:any, params:any) => {
-				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
-				// case we don't want to use the built-in context menu but a custom one.
-				return params.isEditable && params.inputFieldType !== 'none';
-			},
-		});
-
 		this.win_ = new BrowserWindow(windowOptions);
 
 		if (!screen.getDisplayMatching(this.win_.getBounds())) {
