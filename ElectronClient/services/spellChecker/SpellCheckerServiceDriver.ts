@@ -11,8 +11,11 @@ export default class SpellCheckerServiceDriver extends SpellCheckerServiceDriver
 		return this.session().availableSpellCheckerLanguages;
 	}
 
+	// Language can be set to '' to disable spell-checking
 	public setLanguage(v:string) {
-		this.session().setSpellCheckerLanguages([v]);
+		// If we pass an empty array, it disables spell checking
+		// https://github.com/electron/electron/issues/25228
+		this.session().setSpellCheckerLanguages(v ? [v] : []);
 	}
 
 	public get language():string {

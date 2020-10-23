@@ -85,8 +85,8 @@ interface Props {
 	showCompletedTodos: boolean,
 	pluginMenuItems: any[],
 	pluginMenus: any[],
+	['spellChecker.enabled']: boolean,
 	['spellChecker.language']: string,
-	['editor.codeView']: boolean,
 }
 
 const commandNames:string[] = [
@@ -372,7 +372,7 @@ function useMenu(props:Props) {
 		}
 		toolsItems = toolsItems.concat(toolsItemsAll);
 
-		toolsItems.push(SpellCheckerService.instance().changeLanguageMenuItem(props['spellChecker.language'], !props['editor.codeView']));
+		toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.language'], props['spellChecker.enabled']));
 
 		function _checkForUpdates() {
 			bridge().checkForUpdates(false, bridge().window(), `${Setting.value('profileDir')}/log-autoupdater.txt`, { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
@@ -797,7 +797,7 @@ function useMenu(props:Props) {
 		} else {
 			setMenu(Menu.buildFromTemplate(template));
 		}
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['editor.codeView']]);
+	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled']]);
 
 	useEffect(() => {
 		const whenClauseContext = CommandService.instance().currentWhenClauseContext();
@@ -893,7 +893,7 @@ const mapStateToProps = (state:AppState) => {
 		pluginMenuItems: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menuItem') }, 'menuBar.pluginMenuItems'),
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
 		['spellChecker.language']: state.settings['spellChecker.language'],
-		['editor.codeView']: state.settings['editor.codeView'],
+		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 	};
 };
 

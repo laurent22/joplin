@@ -830,6 +830,7 @@ class Setting extends BaseModel {
 			'camera.type': { value: 0, type: SettingItemType.Int, public: false, appTypes: ['mobile'] },
 			'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: ['mobile'] },
 
+			'spellChecker.enabled': { value: true, type: SettingItemType.Bool, public: false },
 			'spellChecker.language': { value: '', type: SettingItemType.String, public: false },
 
 			windowContentZoomFactor: {

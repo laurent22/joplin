@@ -18,7 +18,7 @@ export default class SpellCheckerService {
 	public async initialize(driver:SpellCheckerServiceDriverBase) {
 		this.driver_ = driver;
 		this.setupDefaultLanguage();
-		this.onLanguageChange(Setting.value('spellChecker.language'));
+		this.applyStateToDriver();
 	}
 
 	private get defaultLanguage():string {
@@ -36,17 +36,26 @@ export default class SpellCheckerService {
 		return this.driver_.availableLanguages;
 	}
 
-	private onLanguageChange(language:string) {
-		this.driver_.setLanguage(language);
+	private applyStateToDriver() {
+		this.driver_.setLanguage(this.enabled ? this.language : '');
 	}
 
 	public setLanguage(language:string) {
 		Setting.setValue('spellChecker.language', language);
-		this.onLanguageChange(language);
+		this.applyStateToDriver();
 	}
 
 	public get language():string {
 		return Setting.value('spellChecker.language');
+	}
+
+	public get enabled():boolean {
+		return Setting.value('spellChecker.enabled');
+	}
+
+	public toggleEnabled() {
+		Setting.toggle('spellChecker.enabled');
+		this.applyStateToDriver();
 	}
 
 	private makeMenuItem(item:any):any {
@@ -93,7 +102,7 @@ export default class SpellCheckerService {
 		return output;
 	}
 
-	public changeLanguageMenuItem(selectedLanguage:string, enabled:boolean) {
+	private changeLanguageMenuItems(selectedLanguage:string, enabled:boolean) {
 		const languageMenuItems = [];
 
 		for (const locale of this.driver_.availableLanguages) {
@@ -101,6 +110,7 @@ export default class SpellCheckerService {
 				label: countryDisplayName(locale),
 				type: 'radio',
 				checked: locale === selectedLanguage,
+				enabled: enabled,
 				click: () => {
 					this.setLanguage(locale);
 				},
@@ -111,10 +121,26 @@ export default class SpellCheckerService {
 			return a.label < b.label ? -1 : +1;
 		});
 
+		return languageMenuItems.map((item:any) => this.makeMenuItem(item));
+	}
+
+	public spellCheckerConfigMenuItem(selectedLanguage:string, useSpellChecker:boolean) {
 		return this.makeMenuItem({
-			label: _('Change spell checker language'),
-			enabled: enabled,
-			submenu: languageMenuItems.map((item:any) => this.makeMenuItem(item)),
+			label: _('Spell checker'),
+			submenu: [
+				this.makeMenuItem({
+					label: _('Use spell checker'),
+					type: 'checkbox',
+					checked: useSpellChecker,
+					click: () => {
+						this.toggleEnabled();
+					},
+				}),
+				this.makeMenuItem({
+					type: 'separator',
+				}),
+				...this.changeLanguageMenuItems(selectedLanguage, useSpellChecker),
+			],
 		});
 	}
 
