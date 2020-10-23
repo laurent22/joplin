@@ -200,8 +200,9 @@ export default class FsDriverNode extends FsDriverBase {
 	// also checks that the absolute path is within baseDir, to avoid security issues.
 	// It is expected that baseDir is a safe path (not user-provided).
 	public resolveRelativePathWithinDir(baseDir:string, relativePath:string) {
+		const resolvedBaseDir = nodeResolve(baseDir);
 		const resolvedPath = nodeResolve(baseDir, relativePath);
-		if (resolvedPath.indexOf(baseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}"`);
+		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
 		return resolvedPath;
 	}
 
