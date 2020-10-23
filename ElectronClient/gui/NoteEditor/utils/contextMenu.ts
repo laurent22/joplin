@@ -43,6 +43,14 @@ async function resourceInfo(options:ContextMenuOptions):Promise<any> {
 	return { resource, resourcePath };
 }
 
+function handleCopyToClipboard(options:ContextMenuOptions) {
+	if (options.textToCopy) {
+		clipboard.writeText(options.textToCopy);
+	} else if (options.htmlToCopy) {
+		clipboard.writeHTML(options.htmlToCopy);
+	}
+}
+
 export function menuItems():ContextMenuItems {
 	return {
 		open: {
@@ -88,7 +96,7 @@ export function menuItems():ContextMenuItems {
 		cut: {
 			label: _('Cut'),
 			onAction: async (options:ContextMenuOptions) => {
-				clipboard.writeText(options.textToCopy);
+				handleCopyToClipboard(options);
 				options.insertContent('');
 			},
 			isActive: (_itemType:ContextMenuItemType, options:ContextMenuOptions) => !options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy),
@@ -96,11 +104,7 @@ export function menuItems():ContextMenuItems {
 		copy: {
 			label: _('Copy'),
 			onAction: async (options:ContextMenuOptions) => {
-				if (options.textToCopy) {
-					clipboard.writeText(options.textToCopy);
-				} else if (options.htmlToCopy) {
-					clipboard.writeHTML(options.htmlToCopy);
-				}
+				handleCopyToClipboard(options);
 			},
 			isActive: (_itemType:ContextMenuItemType, options:ContextMenuOptions) => !!options.textToCopy || !!options.htmlToCopy,
 		},
