@@ -111,6 +111,17 @@ class Time {
 	sleep(seconds) {
 		return this.msleep(seconds * 1000);
 	}
+
+
+	goBackInTime(startDate, n, period) {
+		// period is a string (eg. "day", "week", "month", "year" ), n is an integer
+		return moment(startDate).startOf(period).subtract(n, period).format('x');
+	}
+
+	goForwardInTime(startDate, n, period) {
+		return moment(startDate).startOf(period).add(n, period).format('x');
+	}
+
 }
 
 const time = new Time();

@@ -8,6 +8,8 @@ const { fileExtension, basename } = require('lib/path-utils');
 const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
 const { bridge } = require('electron').remote.require('./bridge');
+const { time } = require('lib/time-utils.js');
+const { ErrorNotFound } = require('./rest/errors');
 
 class ExternalEditWatcher {
 	constructor() {
@@ -23,6 +25,28 @@ class ExternalEditWatcher {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new ExternalEditWatcher();
 		return this.instance_;
+	}
+
+	externalApi() {
+		const loadNote = async (noteId) => {
+			const note = await Note.load(noteId);
+			if (!note) throw new ErrorNotFound(`No such note: ${noteId}`);
+			return note;
+		};
+
+		return {
+			openAndWatch: async ({ noteId }) => {
+				const note = await loadNote(noteId);
+				return this.openAndWatch(note);
+			},
+			stopWatching: async ({ noteId }) => {
+				return this.stopWatching(noteId);
+			},
+			noteIsWatched: async ({ noteId }) => {
+				const note = await loadNote(noteId);
+				return this.noteIsWatched(note);
+			},
+		};
 	}
 
 	tempDir() {
@@ -51,7 +75,11 @@ class ExternalEditWatcher {
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
 			this.watcher_.on('all', async (event, path) => {
-				this.logger().debug(`ExternalEditWatcher: Event: ${event}: ${path}`);
+				// For now, to investigate the lost content issue when using an external editor,
+				// make all the debug statement to info() so that it goes to the log file.
+				// Those that were previous debug() statements are marked as "was_debug"
+
+				/* was_debug */ this.logger().info(`ExternalEditWatcher: Event: ${event}: ${path}`);
 
 				if (event === 'unlink') {
 					// File are unwatched in the stopWatching functions below. When we receive an unlink event
@@ -67,17 +95,42 @@ class ExternalEditWatcher {
 						const note = await Note.load(id);
 
 						if (!note) {
-							this.logger().warn(`Watched note has been deleted: ${id}`);
+							this.logger().warn(`ExternalEditWatcher: Watched note has been deleted: ${id}`);
 							this.stopWatching(id);
 							return;
 						}
 
-						const noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+						let noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+
+						// In some very rare cases, the "change" event is going to be emitted but the file will be empty.
+						// This is likely to be the editor that first clears the file, then writes the content to it, so if
+						// the file content is read very quickly after the change event, we'll get empty content.
+						// Usually, re-reading the content again will fix the issue and give back the file content.
+						// To replicate on Windows: associate Typora as external editor, and leave Ctrl+S pressed -
+						// it will keep on saving very fast and the bug should happen at some point.
+						// Below we re-read the file multiple times until we get the content, but in my tests it always
+						// work in the first try anyway. The loop is just for extra safety.
+						// https://github.com/laurent22/joplin/issues/1854
+						if (!noteContent) {
+							this.logger().warn(`ExternalEditWatcher: Watched note is empty - this is likely to be a bug and re-reading the note should fix it. Trying again... ${id}`);
+
+							for (let i = 0; i < 10; i++) {
+								noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+								if (noteContent) {
+									this.logger().info(`ExternalEditWatcher: Note is now readable: ${id}`);
+									break;
+								}
+								await time.msleep(100);
+							}
+
+							if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
+						}
+
 						const updatedNote = await Note.unserializeForEdit(noteContent);
 						updatedNote.id = id;
 						updatedNote.parent_id = note.parent_id;
 						await Note.save(updatedNote);
-						this.eventEmitter_.emit('noteChange', { id: updatedNote.id });
+						this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
 					}
 
 					this.skipNextChangeEvent_ = {};
@@ -120,7 +173,7 @@ class ExternalEditWatcher {
 		const output = [];
 		const watchedPaths = this.watcher_.getWatched();
 
-		for (let dirName in watchedPaths) {
+		for (const dirName in watchedPaths) {
 			if (!watchedPaths.hasOwnProperty(dirName)) continue;
 
 			for (let i = 0; i < watchedPaths[dirName].length; i++) {
@@ -139,7 +192,7 @@ class ExternalEditWatcher {
 
 		const watchedPaths = this.watcher_.getWatched();
 
-		for (let dirName in watchedPaths) {
+		for (const dirName in watchedPaths) {
 			if (!watchedPaths.hasOwnProperty(dirName)) continue;
 
 			for (let i = 0; i < watchedPaths[dirName].length; i++) {
@@ -186,7 +239,7 @@ class ExternalEditWatcher {
 
 			const wrapError = error => {
 				if (!error) return error;
-				let msg = error.message ? [error.message] : [];
+				const msg = error.message ? [error.message] : [];
 				msg.push(`Command was: "${path}" ${args.join(' ')}`);
 				error.message = msg.join('\n\n');
 				return error;
@@ -197,7 +250,7 @@ class ExternalEditWatcher {
 
 				const iid = setInterval(() => {
 					if (subProcess && subProcess.pid) {
-						this.logger().debug(`Started editor with PID ${subProcess.pid}`);
+						/* was_debug */ this.logger().info(`Started editor with PID ${subProcess.pid}`);
 						clearInterval(iid);
 						resolve();
 					}
@@ -273,7 +326,7 @@ class ExternalEditWatcher {
 			return;
 		}
 
-		this.logger().debug(`ExternalEditWatcher: Update note file: ${note.id}`);
+		/* was_debug */ this.logger().info(`ExternalEditWatcher: Update note file: ${note.id}`);
 
 		// When the note file is updated programmatically, we skip the next change event to
 		// avoid update loops. We only want to listen to file changes made by the user.

@@ -12,11 +12,11 @@ Joplin has three main columns:
 
 - **Sidebar** contains the list of your notebooks and tags, as well as the synchronisation status.
 - **Note List** contains the current list of notes - either the notes in the currently selected notebook, the notes in the currently selected tag, or search results.
-- **Note Editor** is the place where you write your notes in Markdown, with a viewer showing what the note will look like. You may also use an [external editor](https://joplinapp.org/#external-text-editor) to edit notes. For example, if you like WYSIWYG editors, you can use something like Typora as an external editor and it will display the note as well as any embedded images.
+- **Note Editor** is the place where you write your notes. There is a **WYSIWYG editor** and a **Markdown editor** - click on **Code View** to switch between both! You may also use an [external editor](https://joplinapp.org/#external-text-editor) to edit notes. For example you can use something like Typora as an external editor and it will display the note as well as any embedded images.
 
 ## Writing notes in Markdown
 
-Markdown is a lightweight markup language with plain text formatting syntax. Joplin supports a [Github-flavoured Markdown syntax](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions.
+Markdown is a lightweight markup language with plain text formatting syntax. Joplin supports a [Github-flavoured Markdown syntax](https://joplinapp.org/markdown/) with a few variations and additions.
 
 In general, while Markdown is a markup language, it is meant to be human readable, even without being rendered. This is a simple example (you can see how it looks in the viewer panel):
 

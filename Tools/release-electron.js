@@ -2,7 +2,7 @@ const { execCommand, githubRelease } = require('./tool-utils.js');
 const path = require('path');
 
 const rootDir = path.dirname(__dirname);
-const appDir = `${rootDir}/ElectronClient/app`;
+const appDir = `${rootDir}/ElectronClient`;
 
 async function main() {
 	const argv = require('yargs').argv;
@@ -28,6 +28,8 @@ async function main() {
 	const release = await githubRelease('joplin', tagName, releaseOptions);
 
 	console.info(`Created GitHub release: ${release.html_url}`);
+	console.info('GitHub release page: https://github.com/laurent22/joplin/releases');
+	console.info(`To create changelog: node Tools/git-changelog.js ${version}`);
 }
 
 main().catch((error) => {

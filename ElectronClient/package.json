@@ -1,0 +1,195 @@
+{
+  "name": "Joplin",
+  "version": "1.0.242",
+  "description": "Joplin for Desktop",
+  "main": "main.js",
+  "scripts": {
+    "dist": "node_modules/.bin/electron-builder",
+    "build": "patch-package --patch-dir ../patches && gulp build",
+    "postinstall": "npm run build && gulp electronRebuild",
+    "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git"
+  },
+  "author": "Laurent Cozic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/laurent22/joplin/issues"
+  },
+  "build": {
+    "appId": "net.cozic.joplin-desktop",
+    "npmRebuild": false,
+    "extraResources": [
+      "build/icons/*",
+      "build/images/*"
+    ],
+    "afterAllArtifactBuild": "./generateSha512.js",
+    "asar": true,
+    "asarUnpack": "./node_modules/node-notifier/vendor/**",
+    "win": {
+      "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
+      "icon": "../../Assets/ImageSources/Joplin.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "extraFiles": [
+        {
+          "from": "build-win/Joplin.VisualElementsManifest.xml",
+          "to": "."
+        }
+      ],
+      "extraResources": [
+        "build-win/icons/*"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "portable": {
+      "artifactName": "${productName}Portable.${ext}"
+    },
+    "mac": {
+      "icon": "../../Assets/macOs.icns"
+    },
+    "linux": {
+      "icon": "../Assets/LinuxIcons/256x256.png",
+      "category": "Office",
+      "desktop": {
+        "Icon": "joplin"
+      },
+      "target": "AppImage"
+    }
+  },
+  "homepage": "https://github.com/laurent22/joplin#readme",
+  "devDependencies": {
+    "@types/jasmine": "^3.5.11",
+    "ajv": "^6.5.0",
+    "app-builder-bin": "^1.9.11",
+    "babel-cli": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "electron": "^8.2.5",
+    "electron-builder": "22.3.2",
+    "electron-rebuild": "^1.10.1",
+    "glob": "^7.1.6",
+    "gulp": "^4.0.2",
+    "js-sha512": "^0.8.0",
+    "patch-package": "^6.2.2"
+  },
+  "optionalDependencies": {
+    "7zip-bin-linux": "^1.0.1",
+    "7zip-bin-mac": "^1.0.1",
+    "7zip-bin-win": "^2.1.1"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "app-module-path": "^2.2.0",
+    "async-mutex": "^0.1.3",
+    "aws-sdk": "^2.594.0",
+    "base-64": "^0.1.0",
+    "base64-stream": "^1.0.0",
+    "chokidar": "^3.0.0",
+    "clean-html": "^1.5.0",
+    "codemirror": "^5.56.0",
+    "color": "^3.1.2",
+    "compare-versions": "^3.2.1",
+    "countable": "^3.0.1",
+    "diacritics": "^1.3.0",
+    "diff-match-patch": "^1.0.4",
+    "electron-context-menu": "^0.15.0",
+    "electron-is-dev": "^0.3.0",
+    "electron-window-state": "^4.1.1",
+    "es6-promise-pool": "^2.5.0",
+    "file-uri-to-path": "^1.0.0",
+    "follow-redirects": "^1.5.0",
+    "font-awesome-filetypes": "^2.1.0",
+    "form-data": "^2.3.2",
+    "formatcoords": "^1.1.3",
+    "fs-extra": "^5.0.0",
+    "highlight.js": "^10.1.1",
+    "html-entities": "^1.2.1",
+    "html-minifier": "^4.0.0",
+    "htmlparser2": "^4.1.0",
+    "image-type": "^3.0.0",
+    "immer": "^7.0.5",
+    "joplin-turndown": "^4.0.29",
+    "joplin-turndown-plugin-gfm": "^1.0.12",
+    "json-stringify-safe": "^5.0.1",
+    "jssha": "^2.3.1",
+    "katex": "^0.12.0",
+    "keytar": "^5.4.0",
+    "levenshtein": "^1.0.5",
+    "lodash": "^4.17.19",
+    "mark.js": "^8.11.1",
+    "markdown-it": "^10.0.0",
+    "markdown-it-abbr": "^1.0.4",
+    "markdown-it-anchor": "^5.2.5",
+    "markdown-it-deflist": "^2.0.3",
+    "markdown-it-emoji": "^1.4.0",
+    "markdown-it-expand-tabs": "^1.0.13",
+    "markdown-it-footnote": "^3.0.2",
+    "markdown-it-ins": "^3.0.0",
+    "markdown-it-mark": "^3.0.0",
+    "markdown-it-multimd-table": "^4.0.1",
+    "markdown-it-sub": "^1.0.0",
+    "markdown-it-sup": "^1.0.0",
+    "markdown-it-toc-done-right": "^4.1.0",
+    "md5": "^2.2.1",
+    "md5-file": "^4.0.0",
+    "memory-cache": "^0.2.0",
+    "mermaid": "^8.4.6",
+    "moment": "^2.22.2",
+    "multiparty": "^4.2.1",
+    "mustache": "^3.0.1",
+    "node-fetch": "^1.7.3",
+    "node-notifier": "^6.0.0",
+    "pretty-bytes": "^5.3.0",
+    "promise": "^8.0.1",
+    "query-string": "^5.1.1",
+    "react": "^16.9.0",
+    "react-ace": "^6.1.4",
+    "react-datetime": "^2.14.0",
+    "react-dom": "^16.9.0",
+    "react-redux": "^5.0.7",
+    "react-select": "^2.4.3",
+    "react-tooltip": "^3.10.0",
+    "read-chunk": "^2.1.0",
+    "readability-node": "^0.1.0",
+    "redux": "^3.7.2",
+    "relative": "^3.0.2",
+    "reselect": "^4.0.0",
+    "sax": "^1.2.4",
+    "server-destroy": "^1.0.1",
+    "smalltalk": "^2.5.1",
+    "sprintf-js": "^1.1.1",
+    "sqlite3": "^4.1.1",
+    "string-padding": "^1.0.2",
+    "string-to-stream": "^1.1.1",
+    "syswide-cas": "^5.1.0",
+    "taboverride": "^4.0.3",
+    "tar": "^4.4.4",
+    "tcp-port-used": "^0.1.2",
+    "tinymce": "^5.2.0",
+    "uglifycss": "0.0.29",
+    "url-parse": "^1.4.3",
+    "uslug": "^1.0.4",
+    "uuid": "^3.2.1",
+    "valid-url": "^1.0.9",
+    "xml2js": "^0.4.19"
+  }
+}

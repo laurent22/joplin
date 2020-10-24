@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand, githubRelease, githubOauthToken, fileExists, readline } = require('./tool-utils.js');
+const { execCommand, execCommandWithPipes, githubRelease, githubOauthToken, fileExists } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -9,16 +9,16 @@ const rnDir = `${__dirname}/../ReactNativeClient`;
 const rootDir = path.dirname(__dirname);
 const releaseDir = `${rootDir}/_releases`;
 
-function wslToWinPath(wslPath) {
-	const s = wslPath.split('/');
-	if (s.length < 3) return s.join('\\');
-	s.splice(0, 1);
-	if (s[0] !== 'mnt' || s[1].length !== 1) return s.join('\\');
-	s.splice(0, 1);
-	s[0] = `${s[0].toUpperCase()}:`;
-	while (s.length && !s[s.length - 1]) s.pop();
-	return s.join('\\');
-}
+// function wslToWinPath(wslPath) {
+// 	const s = wslPath.split('/');
+// 	if (s.length < 3) return s.join('\\');
+// 	s.splice(0, 1);
+// 	if (s[0] !== 'mnt' || s[1].length !== 1) return s.join('\\');
+// 	s.splice(0, 1);
+// 	s[0] = `${s[0].toUpperCase()}:`;
+// 	while (s.length && !s[s.length - 1]) s.pop();
+// 	return s.join('\\');
+// }
 
 function increaseGradleVersionCode(content) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode) {
@@ -65,7 +65,7 @@ async function createRelease(name, tagName, version) {
 	console.info(`Creating release: ${suffix}`);
 
 	if (name === '32bit') {
-		let filename = `${rnDir}/android/app/build.gradle`;
+		const filename = `${rnDir}/android/app/build.gradle`;
 		let content = await fs.readFile(filename, 'utf8');
 		originalContents[filename] = content;
 		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
@@ -97,12 +97,21 @@ async function createRelease(name, tagName, version) {
 
 		// So we need to manually run the command from DOS, and then coming back here to finish the process once it's done.
 
-		console.info('Run this command from DOS:');
-		console.info('');
-		console.info(`cd "${wslToWinPath(rootDir)}\\ReactNativeClient\\android" && gradlew.bat ${apkBuildCmd}"`);
-		console.info('');
-		await readline('Press Enter when done:');
-		apkBuildCmd = ''; // Clear the command because we've already ran it
+		// console.info('Run this command from DOS:');
+		// console.info('');
+		// console.info(`cd "${wslToWinPath(rootDir)}\\ReactNativeClient\\android" && gradlew.bat ${apkBuildCmd}"`);
+		// console.info('');
+		// await readline('Press Enter when done:');
+		// apkBuildCmd = ''; // Clear the command because we've already ran it
+
+		// process.chdir(`${rnDir}/android`);
+		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}"`;
+		// restoreDir = rootDir;
+
+		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}"`;
+
+		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}`]);
+		apkBuildCmd = '';
 	} else {
 		process.chdir(`${rnDir}/android`);
 		apkBuildCmd = `./gradlew ${apkBuildCmd}`;
@@ -127,7 +136,7 @@ async function createRelease(name, tagName, version) {
 		await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
 	}
 
-	for (let filename in originalContents) {
+	for (const filename in originalContents) {
 		const content = originalContents[filename];
 		await fs.writeFile(filename, content);
 	}
@@ -140,6 +149,11 @@ async function createRelease(name, tagName, version) {
 }
 
 async function main() {
+	const argv = require('yargs').argv;
+
+	const isPreRelease = !!argv.prerelease;
+
+	if (isPreRelease) console.info('Creating pre-release');
 	console.info('Updating version numbers in build.gradle...');
 
 	const newContent = updateGradleConfig();
@@ -152,12 +166,14 @@ async function main() {
 		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
 	}
 
-	console.info('Updating Readme URL...');
+	if (!isPreRelease) {
+		console.info('Updating Readme URL...');
 
-	let readmeContent = await fs.readFile('README.md', 'utf8');
-	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, releaseFiles['main'].downloadUrl);
-	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, releaseFiles['32bit'].downloadUrl);
-	await fs.writeFile('README.md', readmeContent);
+		let readmeContent = await fs.readFile('README.md', 'utf8');
+		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, releaseFiles['main'].downloadUrl);
+		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, releaseFiles['32bit'].downloadUrl);
+		await fs.writeFile('README.md', readmeContent);
+	}
 
 	console.info(await execCommand('git pull'));
 	console.info(await execCommand('git add -A'));
@@ -168,8 +184,10 @@ async function main() {
 
 	console.info(`Creating GitHub release ${tagName}...`);
 
+	const releaseOptions = { isPreRelease: isPreRelease };
+
 	const oauthToken = await githubOauthToken();
-	const release = await githubRelease(projectName, tagName);
+	const release = await githubRelease(projectName, tagName, releaseOptions);
 	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 
 	for (const releaseFilename in releaseFiles) {

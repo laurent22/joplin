@@ -9,8 +9,6 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
 function setupStore() {
 	const store = KvStore.instance();
 	store.setDb(db());

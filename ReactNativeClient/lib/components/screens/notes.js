@@ -15,6 +15,7 @@ const { ActionButton } = require('lib/components/action-button.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { BackButtonService } = require('lib/services/back-button.js');
 
 class NotesScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -26,7 +27,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 		this.onAppStateChange_ = async () => {
 			// Force an update to the notes list when app state changes
-			let newProps = Object.assign({}, this.props);
+			const newProps = Object.assign({}, this.props);
 			newProps.notesSource = '';
 			await this.refreshNotes(newProps);
 		};
@@ -40,7 +41,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 				return (selected ? `${s} ` : '') + label;
 			};
 
-			for (let field in sortNoteOptions) {
+			for (const field in sortNoteOptions) {
 				if (!sortNoteOptions.hasOwnProperty(field)) continue;
 				buttons.push({
 					text: makeCheckboxText(Setting.value('notes.sortOrder.field') === field, 'bullet', sortNoteOptions[field]),
@@ -68,6 +69,14 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 			Setting.setValue(r.name, r.value);
 		};
+
+		this.backHandler = () => {
+			if (this.dialogbox && this.dialogbox.state && this.dialogbox.state.isVisible) {
+				this.dialogbox.close();
+				return true;
+			}
+			return false;
+		};
 	}
 
 	styles() {
@@ -78,7 +87,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			noteList: {
 				flex: 1,
 			},
@@ -91,10 +100,12 @@ class NotesScreenComponent extends BaseScreenComponent {
 	async componentDidMount() {
 		await this.refreshNotes();
 		AppState.addEventListener('change', this.onAppStateChange_);
+		BackButtonService.addHandler(this.backHandler);
 	}
 
 	async componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
+		BackButtonService.removeHandler(this.backHandler);
 	}
 
 	async componentDidUpdate(prevProps) {
@@ -106,7 +117,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	async refreshNotes(props = null) {
 		if (props === null) props = this.props;
 
-		let options = {
+		const options = {
 			order: props.notesOrder,
 			uncompletedTodosOnTop: props.uncompletedTodosOnTop,
 			showCompletedTodos: props.showCompletedTodos,
@@ -198,7 +209,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		const parent = this.parentItem();
 		const theme = themeStyle(this.props.theme);
 
-		let rootStyle = {
+		const rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
 		};
@@ -207,6 +218,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
 		}
 
+		const title = parent ? parent.title : null;
 		if (!parent) {
 			return (
 				<View style={rootStyle}>
@@ -215,7 +227,6 @@ class NotesScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		let title = parent ? parent.title : null;
 		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
 		const thisComp = this;
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>;

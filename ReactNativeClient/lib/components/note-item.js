@@ -27,10 +27,10 @@ class NoteItemComponent extends Component {
 		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			listItem: {
 				flexDirection: 'row',
-				//height: 40,
+				// height: 40,
 				borderBottomWidth: 1,
 				borderBottomColor: theme.dividerColor,
 				alignItems: 'flex-start',
@@ -38,7 +38,7 @@ class NoteItemComponent extends Component {
 				paddingRight: theme.marginRight,
 				paddingTop: theme.itemMarginTop,
 				paddingBottom: theme.itemMarginBottom,
-				//backgroundColor: theme.backgroundColor,
+				// backgroundColor: theme.backgroundColor,
 			},
 			listItemText: {
 				flex: 1,
@@ -110,7 +110,7 @@ class NoteItemComponent extends Component {
 		const theme = themeStyle(this.props.theme);
 
 		// IOS: display: none crashes the app
-		let checkboxStyle = !isTodo ? { display: 'none' } : { color: theme.color };
+		const checkboxStyle = !isTodo ? { display: 'none' } : { color: theme.color };
 
 		if (isTodo) {
 			checkboxStyle.paddingRight = 10;

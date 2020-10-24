@@ -1,20 +1,13 @@
 const React = require('react');
 
-const { StyleSheet, View, Text, Button, FlatList } = require('react-native');
+const { View, Text, Button, FlatList } = require('react-native');
 const Setting = require('lib/models/Setting.js');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { ReportService } = require('lib/services/report.js');
 const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { globalStyle, themeStyle } = require('lib/components/global-style.js');
-
-const styles = StyleSheet.create({
-	body: {
-		flex: 1,
-		margin: globalStyle.margin,
-	},
-});
+const { themeStyle } = require('lib/components/global-style.js');
 
 class StatusScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -33,16 +26,26 @@ class StatusScreenComponent extends BaseScreenComponent {
 	}
 
 	async resfreshScreen() {
-		let service = new ReportService();
-		let report = await service.status(Setting.value('sync.target'));
+		const service = new ReportService();
+		const report = await service.status(Setting.value('sync.target'));
 		this.setState({ report: report });
+	}
+
+	styles() {
+		const theme = themeStyle(this.props.theme);
+		return {
+			body: {
+				flex: 1,
+				margin: theme.margin,
+			},
+		};
 	}
 
 	render() {
 		const theme = themeStyle(this.props.theme);
 
 		const renderBody = report => {
-			let baseStyle = {
+			const baseStyle = {
 				paddingLeft: 6,
 				paddingRight: 6,
 				paddingTop: 2,
@@ -52,17 +55,20 @@ class StatusScreenComponent extends BaseScreenComponent {
 				fontSize: theme.fontSize,
 			};
 
-			let lines = [];
+			const lines = [];
 
 			for (let i = 0; i < report.length; i++) {
-				let section = report[i];
+				const section = report[i];
 
 				let style = Object.assign({}, baseStyle);
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
 				lines.push({ key: `section_${i}`, isSection: true, text: section.title });
+				if (section.canRetryAll) {
+					lines.push({ key: `retry_all_${i}`, text: '', retryAllHandler: section.retryAllHandler });
+				}
 
-				for (let n in section.body) {
+				for (const n in section.body) {
 					if (!section.body.hasOwnProperty(n)) continue;
 					style = Object.assign({}, baseStyle);
 					const item = section.body[n];
@@ -92,7 +98,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				<FlatList
 					data={lines}
 					renderItem={({ item }) => {
-						let style = Object.assign({}, baseStyle);
+						const style = Object.assign({}, baseStyle);
 
 						if (item.isSection === true) {
 							style.fontWeight = 'bold';
@@ -100,6 +106,12 @@ class StatusScreenComponent extends BaseScreenComponent {
 						}
 
 						style.flex = 1;
+
+						const retryAllButton = item.retryAllHandler ? (
+							<View style={{ flex: 0 }}>
+								<Button title={_('Retry All')} onPress={item.retryAllHandler} />
+							</View>
+						) : null;
 
 						const retryButton = item.retryHandler ? (
 							<View style={{ flex: 0 }}>
@@ -113,6 +125,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 							return (
 								<View style={{ flex: 1, flexDirection: 'row' }}>
 									<Text style={style}>{item.text}</Text>
+									{retryAllButton}
 									{retryButton}
 								</View>
 							);
@@ -122,12 +135,12 @@ class StatusScreenComponent extends BaseScreenComponent {
 			);
 		};
 
-		let body = renderBody(this.state.report);
+		const body = renderBody(this.state.report);
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Status')} />
-				<View style={styles.body}>{body}</View>
+				<View style={this.styles().body}>{body}</View>
 				<Button title={_('Refresh')} onPress={() => this.resfreshScreen()} />
 			</View>
 		);

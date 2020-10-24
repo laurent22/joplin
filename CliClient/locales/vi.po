@@ -1,0 +1,3707 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.3\n"
+
+#: CliClient/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"Sao chép những note trùng với <note> tới [notebook]. Nếu không có notebook "
+"nào được chỉ định, note sẽ được sao chép tới notebook hiện tại."
+
+#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
+#: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
+#: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
+#: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
+#: CliClient/app/command-attach.js:21 CliClient/app/command-export.js:36
+#: CliClient/app/command-export.js:40 CliClient/app/command-geoloc.js:20
+#: CliClient/app/command-search.js:27 CliClient/app/command-set.js:32
+#: CliClient/app/command-help.js:66 CliClient/app/command-todo.js:21
+#: CliClient/app/command-tag.js:33 CliClient/app/command-tag.js:36
+#: CliClient/app/command-tag.js:42 CliClient/app/command-tag.js:43
+#: CliClient/app/command-tag.js:81 CliClient/app/command-tag.js:87
+#: CliClient/app/command-done.js:20
+#: ReactNativeClient/lib/services/InteropService.js:218
+#: ReactNativeClient/lib/services/InteropService.js:239
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Không tìm thấy \"%s\"."
+
+#: CliClient/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Hiển thị notes trong notebook hiện tại. Sử dụng `ls /` để hiển thị danh mục "
+"các notebook."
+
+#: CliClient/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "Hiển thị duy nhất <số lượng> notes đầu tiên."
+
+#: CliClient/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr ""
+"Sắp xếp những mục theo <trường> (ví dụ, tiêu đề, thời điểm cập nhật, thời "
+"điểm tạo)."
+
+#: CliClient/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "Đảo ngược thứ tự sắp xếp."
+
+#: CliClient/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Chỉ hiển thị những mục theo phân loại đã được xác định. Có thể sử dụng `n` "
+"cho notes, `t` cho to-do, hoặc `nt` cho notes và to-dos (ví dụ `-tt` sẽ chỉ "
+"hiển thị to-dos, trong khi đó `-ttd` sẽ chỉ hiển thị notes và to-dos)."
+
+#: CliClient/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "\"text\" hoặc \"json\""
+
+#: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"Sử dụng định dạng danh mục dài. Định dạng là ID, NOTE_COUNT (cho notebook), "
+"DATE, TODO_CHECKED (cho to-dos), TITLE"
+
+#: CliClient/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "Hãy chọn một notebook trước."
+
+#: CliClient/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Imports dữ liệu vào Joplin."
+
+#: CliClient/app/command-import.js:25
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Định dạng từ nguồn: %s"
+
+#: CliClient/app/command-import.js:26
+msgid "Do not ask for confirmation."
+msgstr "Không cần xác nhận."
+
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "Định dạng từ nguồn: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Found: %d."
+msgstr "Tìm thấy: %d."
+
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Created: %d."
+msgstr "Đã tạo: %d."
+
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Đã cập nhật: %d."
+
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Đã bỏ qua: %d."
+
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Tài nguyên: %d."
+
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Đã gắn: %d."
+
+#: CliClient/app/command-import.js:65
+msgid "Importing notes..."
+msgstr "Đang import notes..."
+
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Những notes đã được import: %s"
+
+#: CliClient/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
+
+#: CliClient/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Dạng: %s."
+
+#: CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Những giá trị có thể sử dụng là: %s."
+
+#: CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Mặc định: %s"
+
+#: CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Từ khóa/giá trị có thể sử dụng:"
+
+#: CliClient/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Bắt đầu, dừng, hoặc kiểm tra server API. Để chỉ định port mà ứng dụng sẽ "
+"chạy, đặt giá trị cho biến cấu hình api.port. Những câu lệnh bao gồm (%s)."
+
+#: CliClient/app/command-server.js:37
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Server đang hoạt động trên port %d"
+
+#: CliClient/app/command-server.js:43
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Server đang khởi động trên port %d"
+
+#: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
+msgid "Server is not running."
+msgstr "Server chưa chạy."
+
+#: CliClient/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"Quản lý cấu hình E2EE. Câu lệnh bao gồm `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+
+#: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
+msgid "Enter master password:"
+msgstr "Điền mật khẩu master:"
+
+#: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
+#: CliClient/app/command-e2ee.js:79
+msgid "Operation cancelled"
+msgstr "Thi hành đã được hủy"
+
+#: CliClient/app/command-e2ee.js:47
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"Bắt đầu giải mã… Vui lòng chờ, quá trình có thể mất vài phút tùy vào số "
+"lượng cần giải mã."
+
+#: CliClient/app/command-e2ee.js:53
+#, fuzzy, javascript-format
+msgid "Decrypted items: %d"
+msgstr "Những mục đã được giải mã: %s / %s"
+
+#: CliClient/app/command-e2ee.js:54
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+
+#: CliClient/app/command-e2ee.js:68
+msgid "Completed decryption."
+msgstr "Giải mã đã hoàn thành."
+
+#: CliClient/app/command-e2ee.js:77
+#: ReactNativeClient/lib/components/screens/encryption-config.js:163
+msgid "Confirm password:"
+msgstr "Xác nhận mật khẩu:"
+
+#: CliClient/app/command-e2ee.js:83
+#: ReactNativeClient/lib/components/screens/encryption-config.js:140
+msgid "Passwords do not match!"
+msgstr "Mật khẩu không trùng!"
+
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+msgid "Enabled"
+msgstr "Đã bật"
+
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/models/Setting.js:607
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+msgid "Disabled"
+msgstr "Đã tắt"
+
+#: CliClient/app/command-e2ee.js:108
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Mã hóa là: %s"
+
+#: CliClient/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "Tạo một notebook mới."
+
+#: CliClient/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Di chuyển những notes trùng với <note> tới [notebook]."
+
+#: CliClient/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"Lấy hoặc thiết lập giá trị của tập tin cấu hình. Nếu [giá trị] không được "
+"cung cấp, [tên] sẽ được cung cấp. Nếu [tên] lẫn [giá trị] không được cung "
+"cấp, tập tin cấu hình hiện tại sẽ được hiển thị."
+
+#: CliClient/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "Biến chưa được đặt và biến ẩn của cấu hình cũng sẽ được hiển thị."
+
+#: CliClient/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: CliClient/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: CliClient/app/command-use.js:12
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Chuyển tới [notebook] - tất cả những hoạt động tiếp theo sẽ được hoàn thành "
+"ở trên notebook này."
+
+#: CliClient/app/command-sync.js:28
+msgid "Synchronises with remote storage."
+msgstr "Đồng bộ hóa với hệ thống lưu trữ từ xa."
+
+#: CliClient/app/command-sync.js:32
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+"Đồng bộ với mục tiêu được cung cấp (mặc định thoe giá trị của sync.target)"
+
+#: CliClient/app/command-sync.js:77 CliClient/app/command-sync.js:91
+#: ElectronClient/gui/OneDriveLoginScreen.min.js:40
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Quy trình xác nhận chưa hoàn thành (chưa nhận được mã xác nhận)."
+
+#: CliClient/app/command-sync.js:86
+#: ElectronClient/gui/DropboxLoginScreen.min.js:42
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Để cho phép Joplin đồng bộ với Dropbox, vui lòng làm theo những bước dưới "
+"đây:"
+
+#: CliClient/app/command-sync.js:87
+#: ElectronClient/gui/DropboxLoginScreen.min.js:47
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"Bước 1: Mở đường dẫn URL này trong trình duyệt web để ủy quyền ứng dụng:"
+
+#: CliClient/app/command-sync.js:89
+#: ElectronClient/gui/DropboxLoginScreen.min.js:57
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Bước 2: Điền mã được cung cấp bởi Dropbox:"
+
+#: CliClient/app/command-sync.js:101
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+"Chưa được ủy quyền với %s. Vui lòng cung cấp thông tin chưa được cung cấp."
+
+#: CliClient/app/command-sync.js:124
+msgid "Synchronisation is already in progress."
+msgstr "Quy trình đồng bộ đang diễn ra."
+
+#: CliClient/app/command-sync.js:129
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"Tập tin bị khóa hiện đang dừng hoạt động. Nếu không có quy trình đồng bộ nào "
+"đang hoạt đông, bạn có thể xóa file bị khóa tại \"%s\" và tiếp tục sử dung."
+
+#: CliClient/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Mục tiêu đồng bộ hóa: %s (%s)"
+
+#: CliClient/app/command-sync.js:177
+#, fuzzy
+msgid "Cannot initialise synchroniser."
+msgstr "Không thể khởi động đồng bộ hóa."
+
+#: CliClient/app/command-sync.js:179
+msgid "Starting synchronisation..."
+msgstr "Bắt đầu đồng bộ hóa..."
+
+#: CliClient/app/command-sync.js:202
+msgid "Downloading resources..."
+msgstr "Đang tải về tài nguyên..."
+
+#: CliClient/app/command-sync.js:226
+msgid "Cancelling... Please wait."
+msgstr "Đang hủy… Vui lòng chờ."
+
+#: CliClient/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Đổi tên <item> (note hoặc notebook) được lựa chọn thành <name>."
+
+#: CliClient/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Xóa notebook được lựa chọn."
+
+#: CliClient/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Xóa notebook mà không cần xác nhận."
+
+#: CliClient/app/command-rmbook.js:26
+#: ReactNativeClient/lib/components/screens/notes.js:154
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"Xóa notebook? Tất cả notes và sub-notebooks bên trong notebook này sẽ bị xóa."
+
+#: CliClient/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Tạo một to-do mới."
+
+#: CliClient/app/command-mktodo.js:16 CliClient/app/command-mknote.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Notes chỉ có thể được tạo ra bên trong một notebook."
+
+#: CliClient/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "Hiển thị note được lựa chọn."
+
+#: CliClient/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "Hiển thị toàn bộ thông tin của note."
+
+#: CliClient/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Chỉnh sửa note."
+
+#: CliClient/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Chưa có trình biên tập văn bản nào được lựa chon. Vui lòng lựa chọn trình "
+"biên tập văn bản sử dụng `config editor <editor-path>`"
+
+#: CliClient/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Không có notebook nào đang được sử dụng."
+
+#: CliClient/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Không có note: \"%s\". Tạo lập nó?"
+
+#: CliClient/app/app-gui.js:446
+msgid "To delete a tag, untag the associated notes."
+msgstr "Để xóa tag, hãy bỏ tags khỏi các notes đã được gắn."
+
+#: CliClient/app/app-gui.js:456
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Vui lòng chọn note hoặc notebook cần phải xóa."
+
+#: CliClient/app/app-gui.js:720
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Vui lòng nhấn Ctrl+D hoặc gõ \"exit\" để thoát khỏi ứng dụng"
+
+#: CliClient/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Xóa những notes trùng với <note-pattern>."
+
+#: CliClient/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Xóa notes mà không cần xác nhận."
+
+#: CliClient/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "Có %d notes trùng với chuỗi này. Xóa chúng?"
+
+#: CliClient/app/command-rmnote.js:27
+#: ReactNativeClient/lib/components/screens/note.js:461
+msgid "Delete note?"
+msgstr "Xóa note?"
+
+#: CliClient/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Đính kèm file được lựa chọn vào note."
+
+#: CliClient/app/command-version.js:11
+msgid "Displays version information"
+msgstr "Hiện thị thông tin phiên bản"
+
+#: CliClient/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: CliClient/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr "Đánh dấu to-do chưa hoàn thành."
+
+#: CliClient/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Export dữ liệu Joplin tới một đường dẫn được được xác định. Theo mặc định, "
+"ứng dụng sẽ export toàn bộ dữ liệu bao gồm notebooks, notes, tags, và tài "
+"nguyên."
+
+#: CliClient/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Định dạng của điểm đến: %s"
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Exports duy nhất note hiện tại."
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Export duy nhất notebook hiện tại."
+
+#: CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Tạo một note mới."
+
+#: CliClient/app/main.js:80
+msgid "Type `joplin help` for usage information."
+msgstr "Ấn `Joplin help` để hiển thị thông tin sử dụng."
+
+#: CliClient/app/main.js:82
+msgid "Fatal error:"
+msgstr "Lỗi nghiêm trọng:"
+
+#: CliClient/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Hiển thị đường dẫn định vị địa lý của note."
+
+#: CliClient/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Xin chào tới Joplin!\n"
+"\n"
+"Ấn `:help shortcuts` để xem danh mục bàn phím tắt, hoặc `:help` để xem thông "
+"tin sử dụng.\n"
+"\n"
+"Ví dụ, để tạo một notebook ấn `mb`; để tạo một note ấn `mn`."
+
+#: CliClient/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+"Một hoặc nhiều mục đã được mã hóa và bạn có thể cần cung cấp mật khẩu "
+"master. Để mở vui lòng ấn `e2ee decrypt`. Nếu bạn đã cung cấp mật khẩu, "
+"nhưng mục đã bị mã hóa đang được giải mã trong nền và sẽ có thể sử dụng sớm."
+
+#: CliClient/app/gui/NoteWidget.js:50
+#, fuzzy
+msgid "You may also type `status` for more information."
+msgstr "Không cần xác nhận."
+
+#: CliClient/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Tìm kiếm:"
+
+#: CliClient/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Tìm <pattern> trong tất cả các notes."
+
+#: CliClient/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Thay đổi đặc tính <name> của note hiện tại thành giá trị [value]. Những đặc "
+"tính có thể thay đổi là:\n"
+"\n"
+"%s"
+
+#: CliClient/app/cli-utils.js:108
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Thiếu đối số cho hàm: %s"
+
+#: CliClient/app/cli-utils.js:139 ReactNativeClient/lib/services/report.js:151
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: CliClient/app/cli-utils.js:143
+msgid "Your choice: "
+msgstr "Lựa chọn của bạn "
+
+#: CliClient/app/cli-utils.js:150
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Câu trả lời không hợp lệ: %s"
+
+#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+msgid "Y"
+msgstr ""
+
+#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+msgid "n"
+msgstr ""
+
+#: CliClient/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Không thể thay đổi những mục đã được mã hóa"
+
+#: CliClient/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "HIển thị thông tin sử dụng."
+
+#: CliClient/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+"Để có được thông tin về hướng dẫn tùy chỉnh phím tắt vui lòng truy cập %s"
+
+#: CliClient/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Phím tắt không thể sử dụng trong chế độ CLI."
+
+#: CliClient/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Gõ `help [command]` để tìm hiểu thông tin về lệnh đó; hoặc gõ `help all` để "
+"tìm hiểu thông tin hướng dẫn sử dụng."
+
+#: CliClient/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Những câu lệnh phụ hợp có thể là:"
+
+#: CliClient/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"Với bất kỳ câu lệnh, một note hoặc notebook có thể được dẫn tới bằng cách sử "
+"dụng tiêu đề hoặc ID, hoặc sử dụng cụm `$n` hoặc `$b`, theo thứ tự, dành cho "
+"note hoặc notebook đã được lựa chọn. `$c` có thể sử dụng để dẫn tới mục đang "
+"được lựa chọn."
+
+#: CliClient/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Để chuyển từ trang này sang trang khác, ấn Tab hoặc Shift+Tab."
+
+#: CliClient/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Sử dụng phím mũi tên và page up/down để di chuyển lên xuống trong một danh "
+"sách hoặc trang chữ (bao gồm cả console)."
+
+#: CliClient/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Để phóng to/thu nhỏ console, ấn \"tc\"."
+
+#: CliClient/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Để truy cập chế độ giao điện dòng lệnh, ấn \":\""
+
+#: CliClient/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Để thoát khỏi giao diện dòng lệnh, ấn phím ESCAPE"
+
+#: CliClient/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr "Để truy cập danh sách phím tắt và cấu hình, ấn `help keymap`"
+
+#: CliClient/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command> có thể là \"toggle\" hoặc là \"clear\". Sử dụng \"toggle\" để "
+"lưu chuyển giữa các to-do đã hoàn thành và chưa hoàn thành (nếu mục tiêu là "
+"một note bình thường, note sẽ được chuyển đổi thành to-do). Sử dụng \"clear"
+"\" dể chuyển đổi to-do trở lại một note bình thường."
+
+#: CliClient/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Thoát ứng dụng."
+
+#: CliClient/app/app.js:61
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"Nhiều hơn một mục được tìm thấy với \"%s\". Hãy truy vấn chính xác hơn nữa."
+
+#: CliClient/app/app.js:91
+msgid "No notebook selected."
+msgstr "Chưa có notebook nào được lựa chọn."
+
+#: CliClient/app/app.js:97
+msgid "No notebook has been specified."
+msgstr "Chưa có notebook nào được chỉ định."
+
+#: CliClient/app/app.js:136
+msgid "N"
+msgstr ""
+
+#: CliClient/app/app.js:136
+msgid "y"
+msgstr ""
+
+#: CliClient/app/app.js:169
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Hủy đồng bộ hóa đang chạy dưới nền… Vui lòng chờ."
+
+#: CliClient/app/app.js:254
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Không có lệnh: %s"
+
+#: CliClient/app/app.js:302
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Lệnh \"%s\" chỉ có thể sử dụng trong chế độ GUI"
+
+#: CliClient/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr "Hiển thị thông tin sơ lược của notes và notebooks."
+
+#: CliClient/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgstr ""
+
+#: CliClient/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command> có thể là \"add\", \"remove\", \"list\", hoặc \"notetags\" để "
+"gắn hoặc gõ bỏ [tag] khỏi [note], để liệt kê note được gắn với [tag], hoặc "
+"để liệt kê tag gắn với [note]. Câu lệnh `tag list` có thể sử dụng để liệt kê "
+"tất cả tags (sử dụng -l để liệt kê chi tiết)."
+
+#: CliClient/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Câu lệnh sai: \"%s\""
+
+#: CliClient/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Đánh dấu to-do đã hoàn thành."
+
+#: CliClient/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Note này không phải là to-do: \"%s\""
+
+#: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
+#: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
+#: ElectronClient/checkForUpdates.js:139
+#: ElectronClient/gui/DialogButtonRow.min.js:30
+#: ElectronClient/gui/PromptDialog.min.js:235
+#: ElectronClient/gui/ConfigScreen.min.js:185
+#: ElectronClient/gui/ConfigScreen.min.js:754 ElectronClient/app.js:618
+#: ReactNativeClient/lib/components/ModalDialog.js:67
+#: ReactNativeClient/lib/components/CameraView.js:182
+#: ReactNativeClient/lib/components/side-menu-content.js:150
+msgid "OK"
+msgstr "OK"
+
+#: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
+#: ElectronClient/gui/DialogButtonRow.min.js:38
+#: ElectronClient/gui/SideBar/SideBar.min.js:296
+#: ElectronClient/gui/SideBar/SideBar.min.js:660
+#: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
+#: ElectronClient/gui/NoteList.min.js:148
+#: ElectronClient/gui/utils/NoteListUtils.js:184
+#: ElectronClient/gui/PromptDialog.min.js:242
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/NoteList/NoteList.min.js:153
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: ReactNativeClient/lib/components/ModalDialog.js:70
+#: ReactNativeClient/lib/components/CameraView.js:183
+#: ReactNativeClient/lib/components/side-menu-content.js:156
+#: ReactNativeClient/lib/components/side-menu-content.js:165
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+#: ReactNativeClient/lib/components/screens/encryption-config.js:185
+#: ReactNativeClient/lib/components/screens/note.js:97
+#: ReactNativeClient/lib/components/screens/note.js:526
+msgid "Cancel"
+msgstr "Hủy"
+
+#: ElectronClient/plugins/GotoAnything.min.js:454
+#, fuzzy
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name."
+msgstr ""
+"Ấn tiêu đề note để đi tới note đó. Hoặc ấn # theo sau bởi tên của một tag, "
+"hoặc @ theo sau bởi tên của notebook."
+
+#: ElectronClient/plugins/GotoAnything.min.js:493
+msgid "Goto Anything..."
+msgstr "Đi tới bất kỳ điểm nào..."
+
+#: ElectronClient/InteropServiceHelper.js:147
+#, fuzzy, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Đang import từ \"%s\" dưới định dạng \"%s\". Vui lòng chờ..."
+
+#: ElectronClient/InteropServiceHelper.js:164
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
+#: ElectronClient/checkForUpdates.js:138
+msgid "Current version is up-to-date."
+msgstr "Phiên bản hiện tại đã được cập nhật mới nhất."
+
+#: ElectronClient/checkForUpdates.js:148
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (chưa xuất bản)"
+
+#: ElectronClient/checkForUpdates.js:152
+msgid "An update is available, do you want to download it now?"
+msgstr "Có bản cập nhật mới, bạn có muốn cập nhật không?"
+
+#: ElectronClient/checkForUpdates.js:152
+#, javascript-format
+msgid "Your version: %s"
+msgstr "Phiên bản hiện tại: %s"
+
+#: ElectronClient/checkForUpdates.js:152
+#, javascript-format
+msgid "New version: %s"
+msgstr "Phiên bản mới: %s"
+
+#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:608
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:524
+msgid "Yes"
+msgstr "Có"
+
+#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:608
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:525
+msgid "No"
+msgstr "Không"
+
+#: ElectronClient/checkForUpdates.js:153
+msgid "Full Release Notes"
+msgstr "Thông báo phiên bản mới"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "Note \"%s\" đã được hồi phục tại notebook \"%s\"."
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "Note này không có lịch sử"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:142
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:110
+#: ElectronClient/gui/NoteText.min.js:865
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Đường dẫn hoặc tin nhắn không được hỗ trợ: %s"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:177
+msgid "Restore"
+msgstr "Hồi phục"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:178
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Ấn \"%s\" để hồi phục note. Thao tác này sẽ sao chép notebook có tên \"%s\". "
+"Phiên bản hiện tại của note sẽ không bị mất đi hay thay đổi."
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:187
+#: ElectronClient/gui/NoteText.min.js:1671
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/Header.min.js:316
+#: ElectronClient/gui/Header/Header.min.js:302
+#: ReactNativeClient/lib/commands/historyBackward.js:16
+msgid "Back"
+msgstr "Quay lại"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:269
+#: ElectronClient/gui/SideBar.min.js:283
+msgid "Remove"
+msgstr "Xóa"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:272
+#: ElectronClient/gui/SideBar.min.js:286
+#: ReactNativeClient/lib/components/side-menu-content.js:148
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Có xóa notebook \"%s\" không?\n"
+"\n"
+"Tất cả notes và sub-notebooks trong notebook này sẽ bị xóa."
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:273
+#: ElectronClient/gui/SideBar.min.js:287
+#: ElectronClient/gui/utils/NoteListUtils.js:161
+#: ElectronClient/gui/utils/NoteListUtils.js:184
+#: ElectronClient/gui/ResourceScreen.js:46
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ReactNativeClient/lib/components/screen-header.js:356
+#: ReactNativeClient/lib/components/side-menu-content.js:146
+#: ReactNativeClient/lib/components/screens/note.js:868
+msgid "Delete"
+msgstr "Xóa"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:276
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" and its descendant tags from all notes?"
+msgstr "Gỡ bỏ tag \"%s\" khỏi tất cả các notes?"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:278
+#: ElectronClient/gui/SideBar.min.js:292
+msgid "Remove this search from the sidebar?"
+msgstr "Bỏ kết quả tìm kiếm từ thanh bên?"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:337
+#: ElectronClient/gui/SideBar.min.js:382
+#: ElectronClient/gui/utils/NoteListUtils.js:154 ElectronClient/app.js:677
+#: ElectronClient/app.js:727
+msgid "Export"
+msgstr "Export"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:660
+#: ElectronClient/gui/SideBar.min.js:724
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+msgid "Synchronise"
+msgstr "Đồng bộ hóa"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:694
+#: ElectronClient/gui/SideBar.min.js:757
+#: ReactNativeClient/lib/components/side-menu-content.js:360
+#: ReactNativeClient/lib/components/screens/notes.js:189
+msgid "All notes"
+msgstr "Tất cả các notes"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:699
+#: ElectronClient/gui/SideBar.min.js:762
+#: ReactNativeClient/lib/components/side-menu-content.js:364
+msgid "Notebooks"
+msgstr "Notebooks"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:716
+#: ElectronClient/gui/MainScreen/commands/setTags.js:17
+#: ElectronClient/gui/SideBar.min.js:779
+#: ElectronClient/gui/NoteText.min.js:1634
+#: ElectronClient/gui/NoteText.min.js:1810
+#: ReactNativeClient/lib/components/side-menu-content.js:314
+#: ReactNativeClient/lib/components/screens/tags.js:101
+#: ReactNativeClient/lib/components/screens/note.js:841
+msgid "Tags"
+msgstr "Thẻ gắn"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:735
+#: ElectronClient/gui/SideBar.min.js:797
+#: ReactNativeClient/lib/components/side-menu-content.js:325
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Số mục được giải mã: %d/%d"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:740
+#: ElectronClient/gui/SideBar.min.js:802
+#: ReactNativeClient/lib/components/side-menu-content.js:330
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Đang lấy tài nguyên: %d/%d"
+
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:15
+msgid "Sidebar"
+msgstr "Thanh bên"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:144
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:260
+#: ElectronClient/gui/NoteText.min.js:1547
+msgid "strong text"
+msgstr "strong text"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:145
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
+#, fuzzy
+msgid "emphasised text"
+msgstr "emphasized text"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
+#: ElectronClient/gui/NoteText.min.js:1616
+msgid "Insert Hyperlink"
+msgstr "Chèn hyperlink"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:180
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:182
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:298
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:300
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:301
+#: ElectronClient/gui/NoteText.min.js:1591
+#: ElectronClient/gui/NoteText.min.js:1595
+#: ElectronClient/gui/NoteText.min.js:1604
+msgid "List item"
+msgstr "Danh mục"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:236
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:354
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:15
+msgid "Cut"
+msgstr "Cắt"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:243
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:361
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:10
+#: ElectronClient/gui/NoteText.min.js:804 ElectronClient/app.js:618
+msgid "Copy"
+msgstr "Sao chép"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:250
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:368
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:20
+msgid "Paste"
+msgstr "Dán"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
+#: ElectronClient/gui/NoteText.min.js:1085
+msgid "Layout"
+msgstr "Dàn trang"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
+#: ElectronClient/gui/NoteText.min.js:1085
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Note này không chứa nội dung. Ấn \"%s\" để ẩn hiện trình chỉnh sửa văn bản "
+"và chỉnh sửa note."
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+#, fuzzy
+msgid "Checkbox list"
+msgstr "Ô dấu check"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:470
+#: ElectronClient/gui/ConfigScreen.min.js:642
+#: ReactNativeClient/lib/components/screens/note.js:1110
+msgid "Edit"
+msgstr "Chỉnh sửa"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:526
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:50
+#: ElectronClient/gui/NoteText.min.js:1627
+#: ElectronClient/gui/NoteText.min.js:1726
+msgid "Attach file"
+msgstr "Đính kèm"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:535
+msgid "Code Block"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
+msgid "Inline Code"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:559
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
+#: ElectronClient/gui/NoteText.min.js:1778
+msgid "Insert Date Time"
+msgstr "Chèn ngày tháng"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+msgid "Drop notes or files here"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:401
+#, fuzzy
+msgid "Code View"
+msgstr "Mã"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+#, javascript-format
+msgid ""
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
+#: ElectronClient/gui/NoteText.min.js:833
+msgid "There was an error downloading this attachment:"
+msgstr "Chương trình gặp phải lỗi khi tải về đính kèm:"
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
+#: ElectronClient/gui/NoteText.min.js:835
+#: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Đính kèm này chưa được tải về hoặc chưa được giải mã"
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
+#: ElectronClient/gui/NoteText.min.js:778
+msgid "Open..."
+msgstr "Mở..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
+#: ElectronClient/gui/NoteText.min.js:786
+msgid "Save as..."
+msgstr "Lưu lại thành..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
+msgid "Reveal file in folder"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
+#: ElectronClient/gui/NoteText.min.js:797
+msgid "Copy path to clipboard"
+msgstr "Sao chép đường dẫn tới clipboard"
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
+#: ElectronClient/gui/NoteText.min.js:811
+msgid "Copy Link Address"
+msgstr "Sao chép địa chỉ đường dẫn"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+msgid "to-do"
+msgstr "to-do"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+msgid "note"
+msgstr "note"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Tạo mới %s..."
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
+msgid "Select all"
+msgstr "Chọn tất cả"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:30
+#: ElectronClient/gui/NoteText.min.js:1690
+msgid "Bold"
+msgstr "In đậm"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:35
+#: ElectronClient/gui/NoteText.min.js:1698
+msgid "Italic"
+msgstr "In nghiêng"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:40
+#: ElectronClient/gui/NoteText.min.js:1710
+msgid "Hyperlink"
+msgstr "Hyperlink"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:45
+#: ElectronClient/gui/NoteText.min.js:1718
+msgid "Code"
+msgstr "Mã"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:55
+#: ElectronClient/gui/NoteText.min.js:1738
+msgid "Numbered List"
+msgstr "Danh mục thứ tự"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:60
+#: ElectronClient/gui/NoteText.min.js:1746
+msgid "Bulleted List"
+msgstr "Danh mục không thứ tự"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:65
+#: ElectronClient/gui/NoteText.min.js:1754
+msgid "Checkbox"
+msgstr "Ô dấu check"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:70
+#: ElectronClient/gui/NoteText.min.js:1762
+msgid "Heading"
+msgstr "Tiêu đề"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:75
+#: ElectronClient/gui/NoteText.min.js:1770
+msgid "Horizontal Rule"
+msgstr "Kẻ ngang"
+
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:15
+msgid "Note title"
+msgstr "Tiêu đề note"
+
+#: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:15
+msgid "Search in current note"
+msgstr "Tìm kiếm trong note hiện tại"
+
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:15
+msgid "Note body"
+msgstr "Thân note"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:26
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:21
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:163
+#: ElectronClient/gui/ResourceScreen.js:38
+msgid "ID"
+msgstr "ID"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:27
+msgid "Created"
+msgstr "Đã được tạo"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:28
+msgid "Updated"
+msgstr "Đã được cập nhật"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:29
+msgid "Completed"
+msgstr "Hoàn thành"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:30
+msgid "Location"
+msgstr "Vị trí"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:31
+msgid "URL"
+msgstr "URL"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:32
+#: ReactNativeClient/lib/models/Setting.js:1253
+msgid "Note History"
+msgstr "Lịch sử của note"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:33
+msgid "Markup"
+msgstr "Đánh dấu"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:305
+msgid "Previous versions of this note"
+msgstr "Phiên bản trước của note này"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:382
+#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:16
+#: ElectronClient/gui/NoteText.min.js:1834
+msgid "Note properties"
+msgstr "Đặc tính của note"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:295
+msgid "Some items cannot be synchronised."
+msgstr "Một số mục không thể đồng bộ hóa."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:300
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:312
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:336
+msgid "View them now"
+msgstr "Xem chúng bây giờ"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:307
+#, fuzzy
+msgid "Some items cannot be decrypted."
+msgstr "Một số mục không thể đồng bộ hóa."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:319
+msgid "One or more master keys need a password."
+msgstr "Một hoặc hơn một master keys cần mật khẩu."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:324
+msgid "Set the password"
+msgstr "Đặt mật khẩu"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:331
+#, fuzzy
+msgid "One of your master keys use an obsolete encryption method."
+msgstr "Một hoặc hơn một master keys cần mật khẩu."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:343
+msgid ""
+"The default encryption method has been changed, you should re-encrypt your "
+"data."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:348
+#, fuzzy
+msgid "More info"
+msgstr "Các thông tin khác"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:419
+msgid "Search..."
+msgstr "Tìm kiếm..."
+
+#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
+msgid "Statistics..."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:17
+#: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
+#: ReactNativeClient/lib/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Đổi tên"
+
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:26
+#: ElectronClient/gui/MainScreen.min.js:292
+msgid "Rename notebook:"
+msgstr "Đổi tên notebook:"
+
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:16
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:28
+#: ReactNativeClient/lib/components/action-button.js:64
+#: ReactNativeClient/setUpQuickActions.js:15
+msgid "New to-do"
+msgstr "To-do mới"
+
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:15
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:26
+msgid "Toggle note list"
+msgstr "Ẩn/hiện danh mục note"
+
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:15
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:26
+msgid "Toggle sidebar"
+msgstr "Ẩn/hiện thanh bên"
+
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:19
+#: ElectronClient/gui/NoteText.min.js:1642
+#: ElectronClient/gui/NoteText.min.js:1828
+#: ReactNativeClient/lib/components/screens/note.js:826
+msgid "Set alarm"
+msgstr "Đặt nhắc hẹn"
+
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:31
+#: ElectronClient/gui/MainScreen.min.js:417
+msgid "Set alarm:"
+msgstr "Đặt ghi nhớ:"
+
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:19
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:30
+#: ElectronClient/gui/MainScreen.min.js:549
+msgid "PDF File"
+msgstr "PDF File"
+
+#: ElectronClient/gui/MainScreen/commands/newNote.js:20
+#: ElectronClient/gui/MainScreen/commands/newNote.js:47
+#: ReactNativeClient/lib/components/action-button.js:73
+#: ReactNativeClient/setUpQuickActions.js:14
+msgid "New note"
+msgstr "Note mới"
+
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:17
+#, fuzzy
+msgid "Move to notebook"
+msgstr "Chuyển tới notebook..."
+
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
+#: ElectronClient/gui/MainScreen.min.js:272
+#, fuzzy
+msgid "Move to notebook:"
+msgstr "Chuyển tới notebook..."
+
+#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
+msgid "Toggle editor layout"
+msgstr "Ẩn/hiện trình chỉnh sửa văn bản"
+
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:26
+#: ElectronClient/gui/MainScreen.min.js:313
+msgid "Rename tag:"
+msgstr "Đổi tên tag:"
+
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:17
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:57
+msgid "New notebook"
+msgstr "Notebook mới"
+
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:25
+#: ElectronClient/gui/MainScreen.min.js:178
+msgid "Notebook title:"
+msgstr "Tiêu đề notebook:"
+
+#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:15
+msgid "Share note..."
+msgstr "Chia sẻ note..."
+
+#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:23
+#: ElectronClient/gui/MainScreen.min.js:448
+msgid "Template file:"
+msgstr "Tập tin mẫu:"
+
+#: ElectronClient/gui/MainScreen/commands/setTags.js:44
+#: ElectronClient/gui/MainScreen.min.js:221
+msgid "Add or remove tags:"
+msgstr "Gắn hoặc gỡ tags:"
+
+#: ElectronClient/gui/MainScreen/commands/print.js:16
+msgid "Print"
+msgstr "In"
+
+#: ElectronClient/gui/MainScreen/commands/print.js:25
+#: ElectronClient/gui/NoteText.min.js:1321
+msgid "Only one note can be printed at a time."
+msgstr "Chỉ một note có thể được tải về tại một thời điểm."
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:32
+#: ElectronClient/gui/NoteText.min.js:1656
+#, javascript-format
+msgid "In: %s"
+msgstr "Trong: %s"
+
+#: ElectronClient/gui/SideBar.min.js:290
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Gỡ bỏ tag \"%s\" khỏi tất cả các notes?"
+
+#: ElectronClient/gui/SideBar.min.js:304
+msgid "New sub-notebook"
+msgstr "Sub-notebook mới"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:39
+msgid "Token has been copied to the clipboard!"
+msgstr "Dữ liệu đã được sao chép tới clipboard!"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:69
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr "Dịch vụ web clipper đã được bật và tự động khởi động."
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:76
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr "Trạng thái: bắt đầu trên port %d"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:82
+#, javascript-format
+msgid "Status: %s"
+msgstr "Trạng thái: %s"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:88
+msgid "Disable Web Clipper Service"
+msgstr "Vô hiệu hóa dịch vụ Web Clipper"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:94
+msgid "The web clipper service is not enabled."
+msgstr "Dịch vụ web clipper chưa được bật."
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:99
+msgid "Enable Web Clipper Service"
+msgstr "Bật dịch vụ Web Clipper"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:122
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+"Joplin Web Clipper cho phép lưu lại các trang web và screenshots trên trình "
+"duyệt web tới Joplin."
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:127
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr "Để có thể sử dụng web clipper, bạn cần làm theo các bước sau:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:135
+msgid "Step 1: Enable the clipper service"
+msgstr "Bước 1: Bật dịch vụ clipper"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:140
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+"Dịch vụ này cho phép tiện ích mở rộng của trình duyệt web trao đổi với "
+"Joplin. Khi bật nó, tường lửa của bạn có thể hỏi bạn cho phép Joplin sử dụng "
+"một port nào đó."
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:154
+msgid "Step 2: Install the extension"
+msgstr "Bước 2: Cài đặt tiện ích mở rộng"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:159
+msgid "Download and install the relevant extension for your browser:"
+msgstr "Tải về và cài đặt tiện ích liên quan tới trình duyệt web của bạn:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:174
+msgid "Advanced options"
+msgstr "Chức năng nâng cao"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:179
+msgid "Authorisation token:"
+msgstr "Mã ủy quyền:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:189
+msgid "Copy token"
+msgstr "Sao chép mã"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:195
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
+"Mã ủy quyền này chỉ cần sử dụng để cho phép ứng dụng bên thứ ba truy cập "
+"Joplin."
+
+#: ElectronClient/gui/Root.min.js:89
+msgid "OneDrive Login"
+msgstr "Đăng nhập OneDrive"
+
+#: ElectronClient/gui/Root.min.js:90
+msgid "Dropbox Login"
+msgstr "Đăng nhập Dropbox"
+
+#: ElectronClient/gui/Root.min.js:91 ElectronClient/app.js:673
+#: ElectronClient/app.js:724
+msgid "Import"
+msgstr "Import"
+
+#: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:561
+msgid "Options"
+msgstr "Lựa chọn"
+
+#: ElectronClient/gui/Root.min.js:93
+#, fuzzy
+msgid "Note attachments"
+msgstr "Đính kèm"
+
+#: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:500
+msgid "Synchronisation Status"
+msgstr "Trạng thái đồng bộ hóa"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "Firefox Extension"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome Web Store"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr "Đặt mua ngay bây giờ:"
+
+#: ElectronClient/gui/ImportScreen.min.js:62
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+"Notebook \"%s\" sẽ được tạo mới và tập tin \"%s\" sẽ được import vào "
+"notebook đó"
+
+#: ElectronClient/gui/DropboxLoginScreen.min.js:67
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
+msgid "Submit"
+msgstr "Hoàn thành"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+msgid "Custom order"
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#, fuzzy
+msgid "View"
+msgstr "&Giao diện"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#: ReactNativeClient/lib/models/Setting.js:370
+msgid "Sort notes by"
+msgstr "Sắp xếp notes theo"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:148
+#: ElectronClient/gui/NoteList/NoteList.min.js:153
+#, fuzzy
+msgid "Do it now"
+msgstr "Đặt mua ngay bây giờ:"
+
+#: ElectronClient/gui/NoteList.min.js:452
+#: ElectronClient/gui/NoteList/NoteList.min.js:425
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "Không có notes ở đây. Tạo một note bang cách ấn \"Note mới\"."
+
+#: ElectronClient/gui/NoteList.min.js:452
+#: ElectronClient/gui/NoteList/NoteList.min.js:425
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Hiện tại chưa có notebook nào. Tạo một cái bang cách ấn \"Notebook mới\"."
+
+#: ElectronClient/gui/utils/NoteListUtils.js:37
+#: ReactNativeClient/lib/components/screen-header.js:362
+msgid "Duplicate"
+msgstr "Sao chép"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:42
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Sao chép"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:62
+msgid "Switch between note and to-do type"
+msgstr "Chuyển đổi giữa dạng note và to-do"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:91
+msgid "Switch to note type"
+msgstr "Chuyển tới dạng note"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:100
+msgid "Switch to to-do type"
+msgstr "Chuyển tới dạng to-do"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:110
+#: ReactNativeClient/lib/components/screens/note.js:855
+msgid "Copy Markdown link"
+msgstr "Sao chép markdown link"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:178
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Xóa note \"%s\"?"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:180
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Xóa số note này %d?"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:22
+msgid "Name"
+msgstr "Tên"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:23
+msgid "Icon"
+msgstr "Icon"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:272
+msgid "Notebook properties"
+msgstr "Đặc tính của Notebook"
+
+#: ElectronClient/gui/NoteText.min.js:781
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "File này không thể mở :%s"
+
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
+msgstr "emphasized text"
+
+#: ElectronClient/gui/NoteText.min.js:1792
+msgid "Click to stop external editing"
+msgstr "Ấn vào đây để ngừng sử dụng trình chỉnh sửa văn bản khác"
+
+#: ElectronClient/gui/NoteText.min.js:1793
+msgid "Watching..."
+msgstr "Đang theo dõi..."
+
+#: ElectronClient/gui/NoteText.min.js:1801
+#: ElectronClient/commands/startExternalEditing.js:18
+msgid "Edit in external editor"
+msgstr "Chỉnh sửa trên trình chỉnh sửa văn bản khác"
+
+#: ElectronClient/gui/NoteText.min.js:1852
+msgid "Content Properties"
+msgstr "Đặc tính của nội dung"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:95
+#: ReactNativeClient/lib/components/screens/encryption-config.js:125
+msgid "Save"
+msgstr "Lưu lại"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:144
+msgid "Master keys that need upgrading"
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:149
+msgid ""
+"The following master keys use an out-dated encryption algorithm and it is "
+"recommended to upgrade them. The upgraded master key will still be able to "
+"decrypt and encrypt your data as usual."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:168
+msgid "Upgrade"
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:181
+#, fuzzy
+msgid "Re-encrypt data"
+msgstr "Chọn ngày"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
+msgid ""
+"The default encryption method has been changed to a more secure one and it "
+"is recommended that you apply it to your data."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
+msgid ""
+"You may use the tool below to re-encrypt your data, for example if you know "
+"that some of your notes are encrypted with an obsolete encryption method."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:185
+#, javascript-format
+msgid ""
+"In order to do so, your entire data set will have to be encrypted and "
+"synchronised, so it is best to run it overnight.\n"
+"\n"
+"To start, please follow these instructions:\n"
+"\n"
+"1. Synchronise all your devices.\n"
+"2. Click \"%s\".\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your "
+"other devices, to avoid conflicts.\n"
+"4. Once sync is done on this device, sync all your other devices and let it "
+"run to completion.\n"
+"\n"
+"Important: you only need to run this ONCE on one device."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:432
+#: ReactNativeClient/lib/components/screens/encryption-config.js:279
+#: ReactNativeClient/lib/components/screens/status.js:142
+msgid "Status"
+msgstr "Trạng thái"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:437
+msgid "Encryption is:"
+msgstr "Mã hóa là:"
+
+#: ElectronClient/gui/StatusScreen.min.js:33
+msgid "Please select where the sync status should be exported to"
+msgstr "Vui lòng chọn điểm đến mà trạng thái đồng bộ sẽ được export tới"
+
+#: ElectronClient/gui/StatusScreen.min.js:71
+#: ReactNativeClient/lib/components/screens/status.js:112
+#, fuzzy
+msgid "Retry All"
+msgstr "Thử lại"
+
+#: ElectronClient/gui/StatusScreen.min.js:96
+#: ReactNativeClient/lib/components/screens/status.js:118
+msgid "Retry"
+msgstr "Thử lại"
+
+#: ElectronClient/gui/MainScreen.min.js:165
+msgid "Please create a notebook first."
+msgstr "Vui lòng tạo một notebook trước."
+
+#: ElectronClient/gui/MainScreen.min.js:171
+msgid "Please create a notebook first"
+msgstr "Vui lòng tạo một notebook trước"
+
+#: ElectronClient/gui/PromptDialog.min.js:249
+msgid "Clear"
+msgstr "Xóa"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
+msgid "Words"
+msgstr "Số từ"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
+msgid "Characters"
+msgstr "Số chữ"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
+msgid "Characters excluding spaces"
+msgstr "Số chữ ngoại trừ dấu cách"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
+msgid "Lines"
+msgstr "Số dòng"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+msgid "Editor"
+msgstr "Trình chỉnh sửa văn bản"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:358
+msgid "Viewer"
+msgstr "Viewer"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:107
+#, fuzzy
+msgid "Statistics"
+msgstr "Trạng thái"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:111
+#, javascript-format
+msgid "Read time: %s min"
+msgstr ""
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:112
+#: ElectronClient/gui/ShareNoteDialog.js:175
+msgid "Close"
+msgstr "Đóng"
+
+#: ElectronClient/gui/ConfigScreen.min.js:82
+msgid "This will open a new screen. Save your current changes?"
+msgstr "Cửa sổ mới sẽ được mở. Lưu lại những thay đổi gần nhất?"
+
+#: ElectronClient/gui/ConfigScreen.min.js:170
+#: ReactNativeClient/lib/components/screens/config.js:307
+msgid "Check synchronisation configuration"
+msgstr "Kiểm tra cài đặt đồng bộ hóa"
+
+#: ElectronClient/gui/ConfigScreen.min.js:179
+msgid "Unknown"
+msgstr "Không biết"
+
+#: ElectronClient/gui/ConfigScreen.min.js:183
+msgid "Checking..."
+msgstr "Đang kiểm tra..."
+
+#: ElectronClient/gui/ConfigScreen.min.js:187
+#: ReactNativeClient/lib/models/Resource.js:320
+msgid "Error"
+msgstr "Lỗi"
+
+#: ElectronClient/gui/ConfigScreen.min.js:198
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+"Ứng dụng Joplin Nextcloud chưa được cài đặt hoặc cài đặt sai. Vui lòng xem "
+"ghi chú lỗi bên dưới:"
+
+#: ElectronClient/gui/ConfigScreen.min.js:211
+msgid "Show Log"
+msgstr "Hiển thị nhật ký"
+
+#: ElectronClient/gui/ConfigScreen.min.js:224
+msgid "Joplin Nextcloud App status:"
+msgstr "Trạng thái ứng dụng Joplin Nextcloud:"
+
+#: ElectronClient/gui/ConfigScreen.min.js:238
+msgid "Check Status"
+msgstr "Đang kiểm tra trạng thái"
+
+#: ElectronClient/gui/ConfigScreen.min.js:245
+msgid "Help"
+msgstr "Trợ giúp"
+
+#: ElectronClient/gui/ConfigScreen.min.js:264
+msgid "Show Advanced Settings"
+msgstr "Hiển thị cài đặt nâng cao"
+
+#: ElectronClient/gui/ConfigScreen.min.js:521
+msgid "Browse..."
+msgstr "Xem thêm..."
+
+#: ElectronClient/gui/ConfigScreen.min.js:761
+msgid "Apply"
+msgstr "Áp dụng"
+
+#: ElectronClient/gui/Header.min.js:267
+#: ElectronClient/gui/Header/Header.min.js:253
+msgid "Usage"
+msgstr "Sử dụng"
+
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:15
+msgid "Note list"
+msgstr "Danh mục note"
+
+#: ElectronClient/gui/Header/commands/focusSearch.js:15
+msgid "Search in all the notes"
+msgstr "Tìm kiếm trong tất cả các notes"
+
+#: ElectronClient/gui/ResourceScreen.js:31
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: ElectronClient/gui/ResourceScreen.js:35
+msgid "Size"
+msgstr "Kích thước"
+
+#: ElectronClient/gui/ResourceScreen.js:39
+msgid "Action"
+msgstr "Hành động"
+
+#: ElectronClient/gui/ResourceScreen.js:42
+#: ReactNativeClient/lib/path-utils.js:65
+#: ReactNativeClient/lib/path-utils.js:101
+#: ReactNativeClient/lib/models/BaseItem.js:720
+msgid "Untitled"
+msgstr "Chưa có tên"
+
+#: ElectronClient/gui/ResourceScreen.js:93
+#, fuzzy, javascript-format
+msgid "Delete attachment \"%s\"?"
+msgstr "Xóa note \"%s\"?"
+
+#: ElectronClient/gui/ResourceScreen.js:139
+msgid ""
+"This is an advanced tool to show the attachments that are linked to your "
+"notes. Please be careful when deleting one of them as they cannot be "
+"restored afterwards."
+msgstr ""
+
+#: ElectronClient/gui/ResourceScreen.js:140
+msgid "Please wait..."
+msgstr "Vui lòng chờ..."
+
+#: ElectronClient/gui/ResourceScreen.js:142
+msgid "No resources!"
+msgstr "Không có tài nguyên!"
+
+#: ElectronClient/gui/ResourceScreen.js:144
+#, javascript-format
+msgid "Warning: not all resources shown for performance reasons (limit: %s)."
+msgstr ""
+"Lưu ý: không phải tất cả tài nguyên được hiển thị vì lí do năng suất (giới "
+"hạn: %s)."
+
+#: ElectronClient/gui/ShareNoteDialog.js:158
+msgid "Synchronising..."
+msgstr "Đang đồng bộ hóa..."
+
+#: ElectronClient/gui/ShareNoteDialog.js:160
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Đang tạo đường dẫn..."
+
+#: ElectronClient/gui/ShareNoteDialog.js:162
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "Đường dẫn đã được sao chép tới clipboard!"
+
+#: ElectronClient/gui/ShareNoteDialog.js:165
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+"Lưu ý: Khi note được chia sẻ, nó sẽ không còn được mã hóa trên server nữa."
+
+#: ElectronClient/gui/ShareNoteDialog.js:170
+msgid "Share Notes"
+msgstr "Chia sẻ note"
+
+#: ElectronClient/gui/ShareNoteDialog.js:172
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "Sao chép link chia sẻ"
+
+#: ElectronClient/commands/stopExternalEditing.js:16
+msgid "Stop external editing"
+msgstr "Dừng sử dụng trình chỉnh sửa văn bản khác"
+
+#: ElectronClient/commands/startExternalEditing.js:29
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Lỗi khi mở note trong trình chỉnh sửa: %s"
+
+#: ElectronClient/app.js:460
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "Đang import từ \"%s\" dưới định dạng \"%s\". Vui lòng chờ..."
+
+#: ElectronClient/app.js:522
+msgid "Create note from template"
+msgstr "Tạo note từ một mẫu có sẵn"
+
+#: ElectronClient/app.js:528
+msgid "Create to-do from template"
+msgstr "Tạo to-do từ một mẫu có sẵn"
+
+#: ElectronClient/app.js:534
+msgid "Insert template"
+msgstr "Chèn mẫu"
+
+#: ElectronClient/app.js:541
+msgid "Open template directory"
+msgstr "Mở thư mục có các mẫu"
+
+#: ElectronClient/app.js:548
+msgid "Refresh templates"
+msgstr "Làm mới mẫu"
+
+#: ElectronClient/app.js:574
+#, fuzzy
+msgid "Note attachments..."
+msgstr "Đính kèm"
+
+#: ElectronClient/app.js:596
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Duyệt lại: %s (%s)"
+
+#: ElectronClient/app.js:603
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: ElectronClient/app.js:605
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "Client ID: %s"
+
+#: ElectronClient/app.js:606
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "Phiên bản đồng bộ hóa: %s"
+
+#: ElectronClient/app.js:607
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "Phiên bản thông tin: %s"
+
+#: ElectronClient/app.js:608
+#, javascript-format
+msgid "Keychain Supported: %s"
+msgstr ""
+
+#: ElectronClient/app.js:630 ElectronClient/app.js:706
+msgid "&File"
+msgstr "&Tập tin"
+
+#: ElectronClient/app.js:636 ElectronClient/app.js:905
+msgid "About Joplin"
+msgstr "Về Joplin"
+
+#: ElectronClient/app.js:643
+msgid "Preferences..."
+msgstr "Ưu tiên..."
+
+#: ElectronClient/app.js:653 ElectronClient/app.js:887
+msgid "Check for updates..."
+msgstr "Đang kiểm tra cập nhật..."
+
+#: ElectronClient/app.js:666 ElectronClient/app.js:719
+msgid "Templates"
+msgstr "Mẫu"
+
+#: ElectronClient/app.js:692
+#, javascript-format
+msgid "Hide %s"
+msgstr "Ẩn %s"
+
+#: ElectronClient/app.js:699
+msgid "Quit"
+msgstr "Thoát"
+
+#: ElectronClient/app.js:712
+msgid "Close Window"
+msgstr "Đóng cửa sổ"
+
+#: ElectronClient/app.js:757
+msgid "&Edit"
+msgstr "&Chỉnh sửa"
+
+#: ElectronClient/app.js:776
+msgid "&View"
+msgstr "&Giao diện"
+
+#: ElectronClient/app.js:782
+msgid "Layout button sequence"
+msgstr "Tuần tự của nút hệ thống sắp xếp"
+
+#: ElectronClient/app.js:822
+msgid "Focus"
+msgstr "Đặt con trỏ tới"
+
+#: ElectronClient/app.js:828
+msgid "Actual Size"
+msgstr "Kích thước chuẩn"
+
+#: ElectronClient/app.js:839 ElectronClient/app.js:845
+msgid "Zoom In"
+msgstr "Phóng to"
+
+#: ElectronClient/app.js:852
+msgid "Zoom Out"
+msgstr "Thu nhỏ"
+
+#: ElectronClient/app.js:860
+#, fuzzy
+msgid "&Note"
+msgstr "Note"
+
+#: ElectronClient/app.js:870
+msgid "&Tools"
+msgstr "&Công cụ"
+
+#: ElectronClient/app.js:874
+msgid "&Help"
+msgstr "&Trợ giúp"
+
+#: ElectronClient/app.js:877
+msgid "Website and documentation"
+msgstr "Trang web và tài liệu"
+
+#: ElectronClient/app.js:881
+msgid "Joplin Forum"
+msgstr "Diễn đàn Joplin"
+
+#: ElectronClient/app.js:884
+#: ReactNativeClient/lib/components/screens/config.js:495
+msgid "Make a donation"
+msgstr "Quyên góp"
+
+#: ElectronClient/app.js:894
+msgid "Toggle development tools"
+msgstr "Ẩn/hiện công cụ phát triển"
+
+#: ElectronClient/app.js:1037
+#, javascript-format
+msgid "Open %s"
+msgstr "Mở %s"
+
+#: ElectronClient/app.js:1039
+msgid "Exit"
+msgstr "Thoát"
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:85
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr ""
+"Ứng dụng đã được ủy quyền - bây giờ bạn có thể đóng tab của trình duyệt."
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:87
+msgid "The application has been successfully authorised."
+msgstr "Ứng dụng đã được ủy quyền thành công."
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:115
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"Vui lòng mở URL này trong trình duyệt web của bạn để ủy quyền cho ứng dụng. "
+"Ứng dụng sẽ tạo một đường dẫn \"Apps/Joplin\" và sẽ chỉ đọc và ghi tập tin "
+"tại đường dẫn này. Ứng dụng sẽ không thể truy cập bất kỳ file nào ngoài "
+"đường dẫn này cũng như các dữ liệu cá nhân. Không có dữ liệu nào sẽ được "
+"chia sẻ với bên thứ ba."
+
+#: ReactNativeClient/lib/registry.js:156
+#, fuzzy
+msgid ""
+"Could not synchronise with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"Không thể đồng bộ hóa với OneDrive.\n"
+"\n"
+"Lỗi này thường gặp phải khi sử dụng OneDrive cho doanh nghiệp, và không được "
+"hỗ trợ.\n"
+"\n"
+"Vui lòng sử dụng tài khoản OneDrive phổ thông."
+
+#: ReactNativeClient/lib/logger.js:178
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Không tìm thấy log level: %s"
+
+#: ReactNativeClient/lib/logger.js:187
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "Không tìm thấy level ID: %s"
+
+#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
+msgstr ""
+
+#: ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: ReactNativeClient/lib/shim-init-node.js:90
+#: ReactNativeClient/lib/components/screens/note.js:523
+#, javascript-format
+msgid ""
+"You are about to attach a large image (%dx%d pixels). Would you like to "
+"resize it down to %d pixels before attaching it?"
+msgstr ""
+
+#: ReactNativeClient/lib/shim-init-node.js:156
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Không thể truy cập %s"
+
+#: ReactNativeClient/lib/models/Folder.js:28
+#: ReactNativeClient/lib/models/Note.js:25
+msgid "title"
+msgstr "tiêu đề"
+
+#: ReactNativeClient/lib/models/Folder.js:29
+#: ReactNativeClient/lib/models/Note.js:26
+msgid "updated date"
+msgstr "ngày cập nhật"
+
+#: ReactNativeClient/lib/models/Folder.js:89
+msgid "Conflicts"
+msgstr "Xung đột"
+
+#: ReactNativeClient/lib/models/Folder.js:374
+msgid "Cannot move notebook to this location"
+msgstr "Không thể di chuyển notebook tới vị trí này"
+
+#: ReactNativeClient/lib/models/Folder.js:426
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr "Notesbook không thể đặt tên \"%s\", tên này đã được dành riêng."
+
+#: ReactNativeClient/lib/models/Setting.js:39
+#, fuzzy
+msgid "yes"
+msgstr "Có"
+
+#: ReactNativeClient/lib/models/Setting.js:39
+#: ReactNativeClient/lib/models/Setting.js:40
+#, javascript-format
+msgid "(wysiwyg: %s)"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:40
+#, fuzzy
+msgid "no"
+msgstr "note"
+
+#: ReactNativeClient/lib/models/Setting.js:43
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Lưu ý: Nếu bạn thay đổi vị trí này, hay chắc chắn rang bạn đã sao chép tất "
+"cả nội dung của mình trước khi đồng bộ, nếu không tất cả các files sẽ bị "
+"xóa! Xem chi tiết tại FAQ: %s"
+
+#: ReactNativeClient/lib/models/Setting.js:51
+msgid "Light"
+msgstr "Light"
+
+#: ReactNativeClient/lib/models/Setting.js:52
+msgid "Dark"
+msgstr "Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:53
+msgid "Dracula"
+msgstr "Dracul"
+
+#: ReactNativeClient/lib/models/Setting.js:54
+msgid "Solarised Light"
+msgstr "Solarised Light"
+
+#: ReactNativeClient/lib/models/Setting.js:55
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:56
+msgid "Nord"
+msgstr "Nord"
+
+#: ReactNativeClient/lib/models/Setting.js:57
+msgid "Aritim Dark"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:58
+msgid "OLED Dark"
+msgstr "OLED Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:80
+msgid "Synchronisation target"
+msgstr "Điểm đến của quá trình đồng bộ"
+
+#: ReactNativeClient/lib/models/Setting.js:82
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Điểm đến của quá trình đông bộ. Mỗi điểm đến có thể có tham số tên `sync.NUM."
+"NAME` (xem bên dưới)."
+
+#: ReactNativeClient/lib/models/Setting.js:104
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Đường dẫn để đồng bộ tới (absolute path)"
+
+#: ReactNativeClient/lib/models/Setting.js:116
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+#: ReactNativeClient/lib/models/Setting.js:127
+msgid "Nextcloud username"
+msgstr "Tên sử dụng Nextcloud"
+
+#: ReactNativeClient/lib/models/Setting.js:137
+msgid "Nextcloud password"
+msgstr "Mật khẩu Nextcloud"
+
+#: ReactNativeClient/lib/models/Setting.js:149
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+#: ReactNativeClient/lib/models/Setting.js:160
+msgid "WebDAV username"
+msgstr "Tên sử dụng WebDAV"
+
+#: ReactNativeClient/lib/models/Setting.js:170
+msgid "WebDAV password"
+msgstr "Mật khẩu WebDAV"
+
+#: ReactNativeClient/lib/models/Setting.js:189
+msgid "AWS S3 bucket"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:200
+msgid "AWS key"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:210
+msgid "AWS secret"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:224
+msgid "Attachment download behaviour"
+msgstr "Hành vi tải về đính kèm"
+
+#: ReactNativeClient/lib/models/Setting.js:225
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"Trong chế độ \"Manual\", đính kèm được tải về chỉ khi bạn click vào chúng. "
+"Trong chế độ \"Auto\", chúng có thể được tải về khi bạn mở note. Trong chế "
+"độ \"Always\", tất cả đính kèm luôn được tải về bất kể bạn có mở note hay "
+"không."
+
+#: ReactNativeClient/lib/models/Setting.js:228
+msgid "Always"
+msgstr "Always"
+
+#: ReactNativeClient/lib/models/Setting.js:229
+msgid "Manual"
+msgstr "Manual"
+
+#: ReactNativeClient/lib/models/Setting.js:230
+msgid "Auto"
+msgstr "Auto"
+
+#: ReactNativeClient/lib/models/Setting.js:247
+msgid "Max concurrent connections"
+msgstr "Số lượng kết nối tối đa"
+
+#: ReactNativeClient/lib/models/Setting.js:256
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+#: ReactNativeClient/lib/models/Setting.js:266
+msgid "Date format"
+msgstr "Định dạng ngày"
+
+#: ReactNativeClient/lib/models/Setting.js:285
+msgid "Time format"
+msgstr "Định dạng thời gian"
+
+#: ReactNativeClient/lib/models/Setting.js:304
+msgid "Theme"
+msgstr "Thême"
+
+#: ReactNativeClient/lib/models/Setting.js:315
+msgid "Automatically switch theme to match system theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:327
+msgid "Preferred light theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:341
+msgid "Preferred dark theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:346
+msgid "Show note counts"
+msgstr "Hiển thị số lượng note"
+
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
+msgid "Split View"
+msgstr "Chia đôi màn hình"
+
+#: ReactNativeClient/lib/models/Setting.js:355
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: ReactNativeClient/lib/models/Setting.js:361
+msgid "Uncompleted to-dos on top"
+msgstr "HIển thị to-dos chưa hoàn thành lên đầu"
+
+#: ReactNativeClient/lib/models/Setting.js:362
+msgid "Show completed to-dos"
+msgstr "Hiển thị to-dos đã hoàn thành"
+
+#: ReactNativeClient/lib/models/Setting.js:387
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
+
+#: ReactNativeClient/lib/models/Setting.js:395
+msgid "Use CodeMirror as the code editor (WARNING: BETA)."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:397
+#: ReactNativeClient/lib/models/Setting.js:415
+msgid "Reverse sort order"
+msgstr "Đảo ngược thứ tự sắp xếp"
+
+#: ReactNativeClient/lib/models/Setting.js:404
+msgid "Sort notebooks by"
+msgstr "Sắp xếp notebooks theo"
+
+#: ReactNativeClient/lib/models/Setting.js:416
+msgid "Save geo-location with notes"
+msgstr "Lưu dữ liệu định vị của notes này"
+
+#: ReactNativeClient/lib/models/Setting.js:435
+msgid "When creating a new to-do:"
+msgstr "Khi tạo một to-do mới:"
+
+#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:453
+msgid "Focus title"
+msgstr "Đặt dấu trỏ tại tiêu đề"
+
+#: ReactNativeClient/lib/models/Setting.js:439
+#: ReactNativeClient/lib/models/Setting.js:454
+msgid "Focus body"
+msgstr "Đặt dấu trỏ tại phần thân"
+
+#: ReactNativeClient/lib/models/Setting.js:450
+msgid "When creating a new note:"
+msgstr "Khi tạo note mới:"
+
+#: ReactNativeClient/lib/models/Setting.js:464
+msgid "Enable soft breaks"
+msgstr "Bật tự động xuống trang"
+
+#: ReactNativeClient/lib/models/Setting.js:465
+msgid "Enable typographer support"
+msgstr "Bật hỗ trợ cá nhân làm thuật in máy"
+
+#: ReactNativeClient/lib/models/Setting.js:466
+msgid "Enable math expressions"
+msgstr "Bật hỗ trợ toán học"
+
+#: ReactNativeClient/lib/models/Setting.js:467
+msgid "Enable Fountain syntax support"
+msgstr "Bật hỗ trợ Fountain syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:468
+msgid "Enable Mermaid diagrams support"
+msgstr "Bật Mermaid diagrams support"
+
+#: ReactNativeClient/lib/models/Setting.js:470
+msgid "Enable ==mark== syntax"
+msgstr "Bật ==mark== syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:471
+msgid "Enable footnotes"
+msgstr "Bật footnotes"
+
+#: ReactNativeClient/lib/models/Setting.js:472
+msgid "Enable table of contents extension"
+msgstr "Bật ứng dụng mở rộng mục lục"
+
+#: ReactNativeClient/lib/models/Setting.js:473
+msgid "Enable ~sub~ syntax"
+msgstr "Bật ~sub~ syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:474
+msgid "Enable ^sup^ syntax"
+msgstr "Bật ^sup^ syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:475
+msgid "Enable deflist syntax"
+msgstr "Bật deflist syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:476
+msgid "Enable abbreviation syntax"
+msgstr "Bật abbreviation syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:477
+msgid "Enable markdown emoji"
+msgstr "Bật markdown emoji"
+
+#: ReactNativeClient/lib/models/Setting.js:478
+msgid "Enable ++insert++ syntax"
+msgstr "Bật ++insert++ syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:479
+msgid "Enable multimarkdown table extension"
+msgstr "Bật multimarkdown table extension"
+
+#: ReactNativeClient/lib/models/Setting.js:491
+msgid "Show tray icon"
+msgstr "Hiển thị biểu tượng ở tray"
+
+#: ReactNativeClient/lib/models/Setting.js:493
+msgid "Note: Does not work in all desktop environments."
+msgstr "Lưu ý: Không hoạt động trong tất cả môi trường desktop."
+
+#: ReactNativeClient/lib/models/Setting.js:493
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+"Điều này cho phép Joplin chạy trong nền. Khuyến cáo sử dụng chức năng này để "
+"notes có thể liên tục đồng bộ hóa, giảm thiểu số lần xung đột."
+
+#: ReactNativeClient/lib/models/Setting.js:497
+msgid "Start application minimised in the tray icon"
+msgstr ""
+"Chạy chương trình trong nền, hiển thị icon trong tray khi máy khởi động"
+
+#: ReactNativeClient/lib/models/Setting.js:516
+msgid "Editor font size"
+msgstr "Kích thước font của trình chỉnh sửa văn bản"
+
+#: ReactNativeClient/lib/models/Setting.js:524
+msgid "Editor font"
+msgstr "Font của trình chỉnh sửa văn bản"
+
+#: ReactNativeClient/lib/models/Setting.js:548
+msgid "Editor font family"
+msgstr "Font family của trình chỉnh sửa văn bản"
+
+#: ReactNativeClient/lib/models/Setting.js:550
+#, fuzzy
+msgid ""
+"This should be a *monospace* font or some elements will render incorrectly. "
+"If the font is incorrect or empty, it will default to a generic monospace "
+"font."
+msgstr ""
+"Đây phải là *monospace* font hoặc sẽ không hiển thị được. Nếu font không "
+"đúng hoặc không có, ứng dung sẽ mặc định sử dụng monospace cơ bản."
+
+#: ReactNativeClient/lib/models/Setting.js:589
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Tùy chọn stylesheet cho nhưng ứng dụng Joplin-wide"
+
+#: ReactNativeClient/lib/models/Setting.js:595
+msgid "Automatically update the application"
+msgstr "Tự động cập nhật ứng dụng"
+
+#: ReactNativeClient/lib/models/Setting.js:596
+msgid "Get pre-releases when checking for updates"
+msgstr "Cập nhật bản trước phát hành khi kiểm tra cập nhật"
+
+#: ReactNativeClient/lib/models/Setting.js:596
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr "Xem trang phát hành trước để có thêm thông tin chi tiết: %s"
+
+#: ReactNativeClient/lib/models/Setting.js:604
+msgid "Synchronisation interval"
+msgstr "Tần suất đồng bộ hóa"
+
+#: ReactNativeClient/lib/models/Setting.js:608
+#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:610
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d phút"
+
+#: ReactNativeClient/lib/models/Setting.js:611
+#, javascript-format
+msgid "%d hour"
+msgstr "%d giờ"
+
+#: ReactNativeClient/lib/models/Setting.js:612
+#: ReactNativeClient/lib/models/Setting.js:613
+#, javascript-format
+msgid "%d hours"
+msgstr "%d giờ"
+
+#: ReactNativeClient/lib/models/Setting.js:622
+msgid "Text editor command"
+msgstr "Câu lệnh trình duyệt chỉnh sửa văn bản"
+
+#: ReactNativeClient/lib/models/Setting.js:622
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Câu lệnh trình duyệt văn bản (có thể bao gồm đối số) được sử dụng để mở "
+"note. Nếu không được cung cấp, câu lệnh trình duyệt văn bản sẽ tự động tìm "
+"trình duyệt chỉnh sửa văn bản mặc định."
+
+#: ReactNativeClient/lib/models/Setting.js:623
+msgid "Page size for PDF export"
+msgstr "Kích thước của trang để export dạng PDF"
+
+#: ReactNativeClient/lib/models/Setting.js:625
+msgid "A4"
+msgstr "A4"
+
+#: ReactNativeClient/lib/models/Setting.js:626
+msgid "Letter"
+msgstr "Letter"
+
+#: ReactNativeClient/lib/models/Setting.js:627
+msgid "A3"
+msgstr "A3"
+
+#: ReactNativeClient/lib/models/Setting.js:628
+msgid "A5"
+msgstr "A5"
+
+#: ReactNativeClient/lib/models/Setting.js:629
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: ReactNativeClient/lib/models/Setting.js:630
+msgid "Legal"
+msgstr "Legal"
+
+#: ReactNativeClient/lib/models/Setting.js:633
+msgid "Page orientation for PDF export"
+msgstr "Định hướng trang để export PDF"
+
+#: ReactNativeClient/lib/models/Setting.js:635
+msgid "Portrait"
+msgstr "Portrait"
+
+#: ReactNativeClient/lib/models/Setting.js:636
+msgid "Landscape"
+msgstr "Landscape"
+
+#: ReactNativeClient/lib/models/Setting.js:647
+msgid "Keyboard Mode"
+msgstr "Ché độ bàn phím"
+
+#: ReactNativeClient/lib/models/Setting.js:650
+msgid "Default"
+msgstr "Mặc định"
+
+#: ReactNativeClient/lib/models/Setting.js:651
+msgid "Emacs"
+msgstr "Emacs"
+
+#: ReactNativeClient/lib/models/Setting.js:652
+msgid "Vim"
+msgstr "Vim"
+
+#: ReactNativeClient/lib/models/Setting.js:667
+msgid "Custom TLS certificates"
+msgstr "Tùy chỉnh TLS certicates"
+
+#: ReactNativeClient/lib/models/Setting.js:668
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+"Sử dụng list đường dẫn định dạng phân cách bằng dấu phẩy để tải các "
+"certificates, đường đường dẫn tới các certificates. Ví dụ: /my/cert_dir, /"
+"other/custom.pem. Lưu ý, nếu bnaj thay đổi cấu hình TLS, bnaj phải lưu những "
+"thay đổi đó trước khi ấn \"Kiểm tra cấu hình đồng bộ hóa\"."
+
+#: ReactNativeClient/lib/models/Setting.js:680
+msgid "Ignore TLS certificate errors"
+msgstr "Bỏ qua các lỗi TLS certificate"
+
+#: ReactNativeClient/lib/models/Setting.js:689
+msgid "Fail-safe"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:690
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+"Thiết kế an toàn: Không xóa dữ liệu cục bộ khi điểm đến đồng bộ hóa trống "
+"(thường là kết quả của bug hoặc cấu hình sai)"
+
+#: ReactNativeClient/lib/models/Setting.js:694
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Chỉ định port nên được sử dụng bởi server API. Nếu không được chỉ định, cấu "
+"hình mặc định sẽ được sử dụng."
+
+#: ReactNativeClient/lib/models/Setting.js:702
+msgid "Enable note history"
+msgstr "Bật lịch sử note"
+
+#: ReactNativeClient/lib/models/Setting.js:712
+msgid "days"
+msgstr "ngày"
+
+#: ReactNativeClient/lib/models/Setting.js:712
+#, javascript-format
+msgid "%d days"
+msgstr "%d ngày"
+
+#: ReactNativeClient/lib/models/Setting.js:714
+msgid "Keep note history for"
+msgstr "Lưu giữ lịch sử note để"
+
+#: ReactNativeClient/lib/models/Setting.js:741
+msgid "Notebook list growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:743
+#: ReactNativeClient/lib/models/Setting.js:756
+#: ReactNativeClient/lib/models/Setting.js:769
+msgid ""
+"The factor property sets how the item will grow or shrink to fit the "
+"available space in its container with respect to the other items. Thus an "
+"item with a factor of 2 will take twice as much space as an item with a "
+"factor of 1.Restart app to see changes."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:754
+msgid "Note list growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:767
+msgid "Note area growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:919
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Giá trị lựa chọn lỗi: \"%s\". Các giá trị có thể sử dụng là: %s."
+
+#: ReactNativeClient/lib/models/Setting.js:1247
+msgid "General"
+msgstr "Chung"
+
+#: ReactNativeClient/lib/models/Setting.js:1248
+msgid "Synchronisation"
+msgstr "Đồng bộ hóa"
+
+#: ReactNativeClient/lib/models/Setting.js:1249
+msgid "Appearance"
+msgstr "Bề ngoài"
+
+#: ReactNativeClient/lib/models/Setting.js:1250
+msgid "Note"
+msgstr "Note"
+
+#: ReactNativeClient/lib/models/Setting.js:1251
+msgid "Plugins"
+msgstr "Phần mềm mở rộng"
+
+#: ReactNativeClient/lib/models/Setting.js:1252
+msgid "Application"
+msgstr "Ứng dụng"
+
+#: ReactNativeClient/lib/models/Setting.js:1254
+msgid "Encryption"
+msgstr "Mã hóa"
+
+#: ReactNativeClient/lib/models/Setting.js:1255
+msgid "Web Clipper"
+msgstr "Web Clipper"
+
+#: ReactNativeClient/lib/models/Setting.js:1260
+msgid ""
+"These plugins enhance the Markdown renderer with additional features. Please "
+"note that, while these features might be useful, they are not standard "
+"Markdown and thus most of them will only work in Joplin. Additionally, some "
+"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
+"uses one of these plugins in that editor, you will lose the plugin "
+"formatting. It is indicated below which plugins are compatible or not with "
+"the WYSIWYG editor."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:1261
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Notes và cài đặt sẽ được lưu lại tại: %s"
+
+#: ReactNativeClient/lib/models/Resource.js:317
+msgid "Not downloaded"
+msgstr "Không thể tải"
+
+#: ReactNativeClient/lib/models/Resource.js:318
+msgid "Downloading"
+msgstr "Đang tải"
+
+#: ReactNativeClient/lib/models/Resource.js:319
+msgid "Downloaded"
+msgstr "Đã tải"
+
+#: ReactNativeClient/lib/models/Resource.js:371
+#, fuzzy, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "Đính kèm"
+
+#: ReactNativeClient/lib/models/Resource.js:372
+#, fuzzy, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr "Chương trình gặp phải lỗi khi tải về đính kèm:"
+
+#: ReactNativeClient/lib/models/Tag.js:384
+#, fuzzy
+msgid "Cannot move tag to this location."
+msgstr "Không thể di chuyển notebook tới vị trí này"
+
+#: ReactNativeClient/lib/models/Tag.js:429
+msgid "Tag name cannot start or end with a `/`."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Tag.js:431
+msgid "Tag name cannot contain `//`."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Tag.js:482
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "Tag \"%s\" đã được sử dụng. Vui lòng chọn tên khác."
+
+#: ReactNativeClient/lib/models/Note.js:27
+msgid "created date"
+msgstr "ngày tạo"
+
+#: ReactNativeClient/lib/models/Note.js:28
+msgid "custom order"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Note.js:92
+msgid "This note does not have geolocation information."
+msgstr "Note này không có thông tin vị trí."
+
+#: ReactNativeClient/lib/models/Note.js:466
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Không thể sao chép note tới notebook \"%s\""
+
+#: ReactNativeClient/lib/models/Note.js:477
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Không thể di chuyển note tới notebook \"%s\""
+
+#: ReactNativeClient/lib/models/BaseItem.js:719
+msgid "Encrypted"
+msgstr "Đã mã hóa"
+
+#: ReactNativeClient/lib/models/BaseItem.js:779
+msgid "Encrypted items cannot be modified"
+msgstr "Các mục đã mã hóa không thể chỉnh sửa"
+
+#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (dành cho testing)"
+
+#: ReactNativeClient/lib/BaseApplication.js:139
+#: ReactNativeClient/lib/BaseApplication.js:152
+#: ReactNativeClient/lib/BaseApplication.js:183
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Sử dụng: %s"
+
+#: ReactNativeClient/lib/BaseApplication.js:218
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Không tìm thấy flag này: %s"
+
+#: ReactNativeClient/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:65
+msgid "Clear alarm"
+msgstr "Bỏ báo động"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:68
+msgid "Save alarm"
+msgstr "Lưu báo động"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:86
+msgid "Select date"
+msgstr "Chọn ngày"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:88
+msgid "Confirm"
+msgstr "Xác nhận"
+
+#: ReactNativeClient/lib/components/CameraView.js:180
+msgid "Permission to use camera"
+msgstr "Quyền sử dụng camera"
+
+#: ReactNativeClient/lib/components/CameraView.js:181
+msgid "Your permission to use your camera is required."
+msgstr "Bạn cần phải có phép sử dụng camera."
+
+#: ReactNativeClient/lib/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "Xóa những note này?"
+
+#: ReactNativeClient/lib/components/screen-header.js:392
+msgid "Move to notebook..."
+msgstr "Chuyển tới notebook..."
+
+#: ReactNativeClient/lib/components/screen-header.js:433
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Di chuyển %d notes tới notebook \"%s\"?"
+
+#: ReactNativeClient/lib/components/screen-header.js:451
+msgid "Press to set the decryption password."
+msgstr "Ấn để đặt mật khẩu giải mã."
+
+#: ReactNativeClient/lib/components/screen-header.js:452
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr "Một số mục không thể đồng bộ hóa. Ấn để xem them chi tiết."
+
+#: ReactNativeClient/lib/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "Notebook: %s"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Notebooks đã được mã hóa không thể đổi tên"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:312
+msgid "New Notebook"
+msgstr "Notebook mới"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:316
+#: ReactNativeClient/lib/components/screens/config.js:549
+msgid "Configuration"
+msgstr "Cấu hình"
+
+#: ReactNativeClient/lib/components/note-list.js:97
+msgid "You currently have no notebooks."
+msgstr "Bạn hiện tai không có notebook nào."
+
+#: ReactNativeClient/lib/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "Tạo một notebook"
+
+#: ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "Hiện tại chưa có notes. Tạo một note bằng cách nút (+)"
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:46
+msgid "Checking... Please wait."
+msgstr "Đang kiểm tra… Vui lòng chờ"
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:48
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Thành công! Cấu hình mã hóa đã đúng."
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Lỗi. Vui lòng kiểm tra URL, tên sử dụng, mật khẩu, v.v... đã đúng và điểm "
+"đồng bộ hóa có thể truy cập được. Lỗi là:"
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "Ứng dụng đã được cho phép!"
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Không thể ủy quyền ứng dụng:\n"
+"\n"
+"%s\n"
+"\n"
+"Vui lòng thử lại."
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
+msgid "The master key has been upgraded successfully!"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Những mục đã được giải mã: %s / %s"
+
+#: ReactNativeClient/lib/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Không thể lưu lại notebook: %s"
+
+#: ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Chỉnh sửa notebook"
+
+#: ReactNativeClient/lib/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "Điền tiêu đề notebook"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+msgid "Login with OneDrive"
+msgstr "Đăng nhập với OneDrive"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
+#: ReactNativeClient/lib/components/screens/log.js:109
+#: ReactNativeClient/lib/components/screens/status.js:144
+msgid "Refresh"
+msgstr "Tải lại"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Tags mới:"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr "Điền tags mới hoặc chọn từ danh mục"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+msgid "Login with Dropbox"
+msgstr "Đăng nhập với Dropbox"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
+msgid "Enter code here"
+msgstr "Ấn mã vào đây"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Master Key %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:120
+#: ReactNativeClient/lib/components/screens/note.js:773
+#, javascript-format
+msgid "Created: %s"
+msgstr "Đã tạo lúc: %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:122
+#: ReactNativeClient/lib/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "Mật khẩu:"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "Không thể để trống mật khẩu"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:139
+msgid "Confirm password cannot be empty"
+msgstr "Xác nhận không thể để trống mật khẩu"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Tắt chức năng mã hóa có nghĩa là tất cả các notes và đính kèm của bạn sẽ "
+"được đồng bộ hóa lại và được đồng bộ với điểm đến trong trạng thái mã hóa. "
+"Đừng để mất mật khẩu, vì lí do bảo mật, mật khẩu là thứ duy nhất để mở khóa "
+"dữ liệu! Để bật chức năng mã hóa, vui lòng điền mật khẩu vào bên dưới."
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "Bật"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr "Không tìm thấy Master Keys"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Master keys của những IDs được sử dụng để mã hóa một số mục của bạn, nhưng "
+"ứng dụng hiện tại không thể truy cập được chúng. Những master keys này có "
+"thể sẽ được tải về trong quá trình đồng bộ hóa."
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Disable encryption"
+msgstr "Tắt chức năng mã hóa"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Enable encryption"
+msgstr "Bật chức năng mã hóa"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:264
+#: ReactNativeClient/lib/components/screens/config.js:316
+msgid "Encryption Config"
+msgstr "Cấu hình mã hóa"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"Để tìm hiểu thêm về End-To-End Encryption (E2EE) và những gợi ý về việc sử "
+"dụng E2EE vui lòng xem documentation:"
+
+#: ReactNativeClient/lib/components/screens/log.js:100
+#: ReactNativeClient/lib/components/screens/config.js:439
+msgid "Log"
+msgstr "Nhật ký"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "Hiển thị tất cả"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Errors only"
+msgstr "Chỉ hiển thị lỗi"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid "Warning"
+msgstr "Cảnh báo"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"Để sử dụng đồng bộ hóa tệp tin hệ thống, bạn cần cho phép ghi vào hệ thống "
+"lưu trữ bên ngoài."
+
+#: ReactNativeClient/lib/components/screens/config.js:436
+msgid "Tools"
+msgstr "Công cụ"
+
+#: ReactNativeClient/lib/components/screens/config.js:438
+msgid "Sync Status"
+msgstr "Trạng thái đồng bộ"
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Creating report..."
+msgstr "Tạo báo cáo..."
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Export Debug Report"
+msgstr "Export báo cáo debug"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fixing search index..."
+msgstr "Sửa index tìm kiếm..."
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fix search index"
+msgstr "Sửa index tìm kiếm"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"Sử dụng cái này để dựng lại index tìm kiếm nếu bạn gập vấn đề với công cụ "
+"tìm kiếm. Việc này có thể mất thời gian tùy thuộc vào số lượng notes."
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "Exporting profile..."
+msgstr "Export hồ sơ"
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "Export profile"
+msgstr "Export hồ sơ"
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr "Dành riêng cho mục đích debugging: export hồ sơ của bạn tới thẻ SD."
+
+#: ReactNativeClient/lib/components/screens/config.js:461
+msgid "More information"
+msgstr "Các thông tin khác"
+
+#: ReactNativeClient/lib/components/screens/config.js:471
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"Để hoạt động hoàn hảo, ứng dụng cần những quyền sau. Thay đổi tịa Apps > "
+"Joplin > Permisisons để trao quyền"
+
+#: ReactNativeClient/lib/components/screens/config.js:474
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- Lưu trữ: để cho phép đính kèm files tới notes và cho phép đồng bộ hóa tệp "
+"tin hệ thống."
+
+#: ReactNativeClient/lib/components/screens/config.js:477
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "- Camera: cho phép chụp ảnh và đính kèm vào note."
+
+#: ReactNativeClient/lib/components/screens/config.js:480
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- VỊ trí: cho phép đính thông tin vị trí vào note."
+
+#: ReactNativeClient/lib/components/screens/config.js:509
+msgid "Joplin website"
+msgstr "Website của Joplin"
+
+#: ReactNativeClient/lib/components/screens/config.js:537
+#, javascript-format
+msgid "Database v%s"
+msgstr "Database v%s"
+
+#: ReactNativeClient/lib/components/screens/config.js:543
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS đã bật: %d"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "This note has been modified:"
+msgstr "Note này đã được chỉnh sửa:"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "Save changes"
+msgstr "Lưu thay đổi"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "Discard changes"
+msgstr "Bỏ thay đổi"
+
+#: ReactNativeClient/lib/components/screens/note.js:161
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Không có mục nào có ID %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:180
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Đính kèm này chưa được tải về và giải mã."
+
+#: ReactNativeClient/lib/components/screens/note.js:184
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr "Ứng dụng di động Joplin hiện tại không hỗ trỡ link này: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:188
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "Links sử dụng protocol \"%s\" không được hỗ trợ"
+
+#: ReactNativeClient/lib/components/screens/note.js:618
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Không hỗ trợ định dạng ảnh này: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:774
+#, javascript-format
+msgid "Updated: %s"
+msgstr "Đã cập nhật lúc: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:778
+msgid "View on map"
+msgstr "Xem trên bản đồ"
+
+#: ReactNativeClient/lib/components/screens/note.js:785
+msgid "Go to source URL"
+msgstr "Đi tới URL nguồn"
+
+#: ReactNativeClient/lib/components/screens/note.js:813
+msgid "Attach..."
+msgstr "Đính kèm."
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Choose an option"
+msgstr "Chọn một lựa chọn"
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Take photo"
+msgstr "Chụp ảnh"
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Attach photo"
+msgstr "Đính kèmanhr"
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Attach any file"
+msgstr "Đính kèm bất kể tập tin nào"
+
+#: ReactNativeClient/lib/components/screens/note.js:834
+msgid "Share"
+msgstr "Chia sẻ"
+
+#: ReactNativeClient/lib/components/screens/note.js:848
+msgid "Convert to note"
+msgstr "Chuyển thành note"
+
+#: ReactNativeClient/lib/components/screens/note.js:848
+msgid "Convert to todo"
+msgstr "Chuyển thành todo"
+
+#: ReactNativeClient/lib/components/screens/note.js:862
+msgid "Properties"
+msgstr "Tính chất"
+
+#: ReactNativeClient/lib/components/screens/note.js:1042
+#: ReactNativeClient/lib/components/screens/note.js:1100
+msgid "Add body"
+msgstr "Điền phần thân"
+
+#: ReactNativeClient/lib/components/screens/note.js:1150
+msgid "Add title"
+msgstr "Điền tiêu đề"
+
+#: ReactNativeClient/lib/components/screens/search.js:163
+msgid "Search"
+msgstr "Tìm kiếm"
+
+#: ReactNativeClient/lib/onedrive-api.js:342
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Không thể tạo mới token: dữ liệu ủy quyền đã mất. Bắt đầu lại quá trình đồng "
+"bộ hóa có thể giải quyết vấn đề này."
+
+#: ReactNativeClient/lib/synchronizer.js:94
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Số mục được tạo trên máy: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:95
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Số mục được cập nhật trên máy: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:96
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Số mục không được tạo ở trên máy: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:97
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Số mục được cặp nhật không ở trên máy: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:98
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Số mục đã xóa ở trên máy: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:99
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Số mục đã xóa không ở trên máy: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:100
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Số mục đã được lấy: %d/%d."
+
+#: ReactNativeClient/lib/synchronizer.js:102
+msgid "Cancelling..."
+msgstr "Hủy..."
+
+#: ReactNativeClient/lib/synchronizer.js:103
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Đã hoàn thành: %s"
+
+#: ReactNativeClient/lib/synchronizer.js:104
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Lỗi gần nhất; %s"
+
+#: ReactNativeClient/lib/synchronizer.js:204
+msgid "Idle"
+msgstr "Không hoạt động"
+
+#: ReactNativeClient/lib/synchronizer.js:205
+msgid "In progress"
+msgstr "Đang hoạt động"
+
+#: ReactNativeClient/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+"Không thể kết nối tới ứng dụng Joplin Nextcloud. Vui lòng kiểm tra cài đặt "
+"Đồng bộ hóa trong phần cài đặt. Toàn bộ lỗi:\n"
+"\n"
+"%s"
+
+#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "Tập tin hệ thống"
+
+#: ReactNativeClient/lib/commands/historyForward.js:16
+msgid "Forward"
+msgstr ""
+
+#: ReactNativeClient/lib/commands/synchronize.js:17
+#, fuzzy
+msgid "Synchronize"
+msgstr "Đồng bộ hóa"
+
+#: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
+msgid "There is no data to export."
+msgstr "Không có dữ liệu để export."
+
+#: ReactNativeClient/lib/services/RevisionService.js:215
+msgid "Restored Notes"
+msgstr "Hồi phục Notes"
+
+#: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Vui lòng chỉ định notebook mà các notes sẽ được import tới."
+
+#: ReactNativeClient/lib/services/report.js:121
+msgid "Items that cannot be synchronised"
+msgstr "Những mục không thể đồng bộ"
+
+#: ReactNativeClient/lib/services/report.js:123
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Những mục này sẽ được duy trì trên thiết bị những sẽ không được tải lên điểm "
+"đồng bộ. Để tìm những mục này, tìm tiêu đề hoặc ID (được hiển thị trong "
+"ngoặc kép ở trên)."
+
+#: ReactNativeClient/lib/services/report.js:130
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) không thể tỉa lên: %s"
+
+#: ReactNativeClient/lib/services/report.js:132
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Mục \"%s\" không thể tải về: %s"
+
+#: ReactNativeClient/lib/services/report.js:142
+msgid "Items that cannot be decrypted"
+msgstr "Những mục không thể giả mã"
+
+#: ReactNativeClient/lib/services/report.js:144
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin đã nhiều lần giải mã thất bại những mục này, có thể bởi vì chúng bị "
+"hỏng hoặc quá nặng. Những mục này sẽ được duy trì ở trên thiết bị nhưng "
+"Joplin sẽ không giải mã chúng nữa."
+
+#: ReactNativeClient/lib/services/report.js:182
+msgid "Attachments"
+msgstr "Đính kèm"
+
+#: ReactNativeClient/lib/services/report.js:190
+msgid "Downloaded and decrypted"
+msgstr "Đã tải về và giải mã"
+
+#: ReactNativeClient/lib/services/report.js:190
+#: ReactNativeClient/lib/services/report.js:191
+#: ReactNativeClient/lib/services/report.js:194
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: ReactNativeClient/lib/services/report.js:191
+msgid "Downloaded and encrypted"
+msgstr "Đã tải về và đã mã hóa"
+
+#: ReactNativeClient/lib/services/report.js:204
+msgid "Attachments that could not be downloaded"
+msgstr "Không thể tải về được những đính kèm"
+
+#: ReactNativeClient/lib/services/report.js:209
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: ReactNativeClient/lib/services/report.js:222
+msgid "Sync status (synced items / total items)"
+msgstr "Trạng thái đồng bộ (số mục đã được đồng bộ/ tổng số mục)"
+
+#: ReactNativeClient/lib/services/report.js:226
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: ReactNativeClient/lib/services/report.js:229
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Tổng cộng: %d/%d"
+
+#: ReactNativeClient/lib/services/report.js:231
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Mâu thuẫn; %d"
+
+#: ReactNativeClient/lib/services/report.js:232
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Xóa: %d"
+
+#: ReactNativeClient/lib/services/report.js:236
+msgid "Folders"
+msgstr "Thư mục"
+
+#: ReactNativeClient/lib/services/report.js:244
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d notes"
+
+#: ReactNativeClient/lib/services/report.js:252
+msgid "Coming alarms"
+msgstr "Báo động sắp gần"
+
+#: ReactNativeClient/lib/services/report.js:257
+#, javascript-format
+msgid "On %s: %s"
+msgstr "On %s: %s"
+
+#: ReactNativeClient/lib/services/InteropService.js:29
+#: ReactNativeClient/lib/services/InteropService.js:68
+msgid "Joplin Export File"
+msgstr "Joplin Export File"
+
+#: ReactNativeClient/lib/services/InteropService.js:36
+#: ReactNativeClient/lib/services/InteropService.js:83
+msgid "Markdown"
+msgstr "Markdown"
+
+#: ReactNativeClient/lib/services/InteropService.js:41
+#: ReactNativeClient/lib/services/InteropService.js:73
+msgid "Joplin Export Directory"
+msgstr "Joplin Export Directory"
+
+#: ReactNativeClient/lib/services/InteropService.js:47
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote Export File (dạng Markdown)"
+
+#: ReactNativeClient/lib/services/InteropService.js:55
+msgid "Evernote Export File (as HTML)"
+msgstr "Evernote Export File (dạng HTML)"
+
+#: ReactNativeClient/lib/services/InteropService.js:78
+msgid "Json Export Directory"
+msgstr "Json Export Directory"
+
+#: ReactNativeClient/lib/services/InteropService.js:90
+msgid "HTML File"
+msgstr "HTML File"
+
+#: ReactNativeClient/lib/services/InteropService.js:95
+msgid "HTML Directory"
+msgstr "HTML Directory"
+
+#: ReactNativeClient/lib/services/InteropService.js:128
+msgid "File"
+msgstr "File"
+
+#: ReactNativeClient/lib/services/InteropService.js:128
+msgid "Directory"
+msgstr "Directory"
+
+#: ReactNativeClient/lib/services/InteropService.js:174
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
+msgstr "Không thể tải module \"%s\" dưới định dạng \"%s\""
+
+#: ReactNativeClient/lib/services/InteropService.js:232
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Vui lòng chỉ định định dạng import cho %s"
+
+#: ReactNativeClient/lib/services/InteropService.js:361
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"Mục hiện tại đang được mã hóa: %s \"%s\". Vui lòng chờ cho tất cả các mục "
+"được giải mã và thử lại."
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Gắn hoặc bỏ tags"
+
+#~ msgid "Link"
+#~ msgstr "Đường link"
+
+#~ msgid "Content properties"
+#~ msgstr "Đặc tính của nội dung"
+
+#, fuzzy
+#~ msgid "Split"
+#~ msgstr "Chia đôi màn hình"
+
+#~ msgid "Information"
+#~ msgstr "Thông tin"
+
+#~ msgid "Resources"
+#~ msgstr "Tài nguyên"
+
+#~ msgid ""
+#~ "Disabling encryption means *all* your notes and attachments are going to "
+#~ "be re-synchronised and sent unencrypted to the sync target. Do you wish "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Tắt chức năng mã hóa có nghĩa là tất cả các notes và đính kèm của bạn sẽ "
+#~ "được đồng bộ hóa lại và được đồng bộ với điểm đến trong trạng thái không "
+#~ "mã hóa. Bạn có muốn tiếp tục không?"
+
+#~ msgid "Master Keys"
+#~ msgstr "Master Keys"
+
+#~ msgid "Active"
+#~ msgstr "Đang hoạt động"
+
+#~ msgid "Source"
+#~ msgstr "Nguồn"
+
+#~ msgid "Password"
+#~ msgstr "Mật khẩu"
+
+#~ msgid "Password OK"
+#~ msgstr "Mật khẩu chấp nhận"
+
+#~ msgid ""
+#~ "Note: Only one master key is going to be used for encryption (the one "
+#~ "marked as \"active\"). Any of the keys might be used for decryption, "
+#~ "depending on how the notes or notebooks were originally encrypted."
+#~ msgstr ""
+#~ "Ghi chú: Chỉ một master keys sẽ được sử dụng để mã hóa (master key được "
+#~ "đánh dấu \"active\"). Tất cả các keys đều có thể sử dụng để mở mã, tùy "
+#~ "thuộc vào việc notes hoặc notebooks đã được mã hóa thế nào."

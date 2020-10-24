@@ -1,5 +1,6 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
+const ItemChange = require('lib/models/ItemChange.js');
 const NoteResource = require('lib/models/NoteResource.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const Setting = require('lib/models/Setting.js');
@@ -9,6 +10,7 @@ const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');
 const JoplinError = require('lib/JoplinError');
+const { _ } = require('lib/locale.js');
 
 class Resource extends BaseItem {
 	static tableName() {
@@ -34,8 +36,17 @@ class Resource extends BaseItem {
 		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
 	}
 
+	static errorFetchStatuses() {
+		return this.db().selectAll(`
+			SELECT title AS resource_title, resource_id, fetch_error
+			FROM resource_local_states
+			LEFT JOIN resources ON resources.id = resource_local_states.resource_id
+			WHERE fetch_status = ?
+		`, [Resource.FETCH_STATUS_ERROR]);
+	}
+
 	static needToBeFetched(resourceDownloadMode = null, limit = null) {
-		let sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
+		const sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
 		if (resourceDownloadMode !== 'always') {
 			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
 		}
@@ -48,11 +59,16 @@ class Resource extends BaseItem {
 		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
 	}
 
+	static resetErrorStatus(resourceId) {
+		return this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
+	}
+
 	static fsDriver() {
 		if (!Resource.fsDriver_) Resource.fsDriver_ = new FsDriverDummy();
 		return Resource.fsDriver_;
 	}
 
+	// DEPRECATED IN FAVOUR OF friendlySafeFilename()
 	static friendlyFilename(resource) {
 		let output = safeFilename(resource.title); // Make sure not to allow spaces or any special characters as it's not supported in HTTP headers
 		if (!output) output = resource.id;
@@ -77,6 +93,15 @@ class Resource extends BaseItem {
 		return resource.id + extension;
 	}
 
+	static friendlySafeFilename(resource) {
+		let ext = resource.file_extension;
+		if (!ext) ext = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		const safeExt = ext ? pathUtils.safeFileExtension(ext).toLowerCase() : '';
+		let title = resource.title ? resource.title : resource.id;
+		if (safeExt && pathUtils.fileExtension(title).toLowerCase() === safeExt) title = pathUtils.filename(title);
+		return pathUtils.friendlySafeFilename(title) + (safeExt ? `.${safeExt}` : '');
+	}
+
 	static relativePath(resource, encryptedBlob = false) {
 		return `${Setting.value('resourceDirName')}/${this.filename(resource, encryptedBlob)}`;
 	}
@@ -86,8 +111,21 @@ class Resource extends BaseItem {
 	}
 
 	static async isReady(resource) {
+		const r = await this.readyStatus(resource);
+		return r === 'ok';
+	}
+
+	static async readyStatus(resource) {
 		const ls = await this.localState(resource);
-		return resource && ls.fetch_status === Resource.FETCH_STATUS_DONE && !resource.encryption_blob_encrypted;
+		if (!resource) return 'notFound';
+		if (ls.fetch_status !== Resource.FETCH_STATUS_DONE) return 'notDownloaded';
+		if (resource.encryption_blob_encrypted) return 'encrypted';
+		return 'ok';
+	}
+
+	static async requireIsReady(resource) {
+		const readyStatus = await Resource.readyStatus(resource);
+		if (readyStatus !== 'ok') throw new Error(`Resource is not ready. Status: ${readyStatus}`);
 	}
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
@@ -166,14 +204,14 @@ class Resource extends BaseItem {
 	static markdownTag(resource) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
-		let lines = [];
+		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push('![');
-			lines.push(markdownUtils.escapeLinkText(tagAlt));
+			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
 		} else {
 			lines.push('[');
-			lines.push(markdownUtils.escapeLinkText(tagAlt));
+			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
 		}
 		return lines.join('');
@@ -204,7 +242,7 @@ class Resource extends BaseItem {
 		return url.substr(2);
 	}
 
-	static localState(resourceOrId) {
+	static async localState(resourceOrId) {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
@@ -248,11 +286,94 @@ class Resource extends BaseItem {
 		await this.db().exec('INSERT INTO resources_to_download (resource_id, updated_time, created_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM resources_to_download WHERE resource_id = ?)', [resourceId, t, t, resourceId]);
 	}
 
-	static async downloadedButEncryptedBlobCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)', [Resource.FETCH_STATUS_DONE]);
+	static async downloadedButEncryptedBlobCount(excludedIds = null) {
+		let excludedSql = '';
+		if (excludedIds && excludedIds.length) {
+			excludedSql = `AND resource_id NOT IN ("${excludedIds.join('","')}")`;
+		}
+
+		const r = await this.db().selectOne(`
+			SELECT count(*) as total
+			FROM resource_local_states
+			WHERE fetch_status = ?
+			AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)
+			${excludedSql}
+		`, [Resource.FETCH_STATUS_DONE]);
 
 		return r ? r.total : 0;
 	}
+
+	static async downloadStatusCounts(status) {
+		const r = await this.db().selectOne(`
+			SELECT count(*) as total
+			FROM resource_local_states
+			WHERE fetch_status = ?
+		`, [status]);
+
+		return r ? r.total : 0;
+	}
+
+	static fetchStatusToLabel(status) {
+		if (status === Resource.FETCH_STATUS_IDLE) return _('Not downloaded');
+		if (status === Resource.FETCH_STATUS_STARTED) return _('Downloading');
+		if (status === Resource.FETCH_STATUS_DONE) return _('Downloaded');
+		if (status === Resource.FETCH_STATUS_ERROR) return _('Error');
+		throw new Error(`Invalid status: ${status}`);
+	}
+
+	static async updateResourceBlobContent(resourceId, newBlobFilePath) {
+		const resource = await Resource.load(resourceId);
+		await this.requireIsReady(resource);
+
+		const fileStat = await this.fsDriver().stat(newBlobFilePath);
+		await this.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
+
+		return await Resource.save({
+			id: resource.id,
+			size: fileStat.size,
+		});
+	}
+
+	static async resourceBlobContent(resourceId, encoding = 'Buffer') {
+		const resource = await Resource.load(resourceId);
+		await this.requireIsReady(resource);
+		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
+	}
+
+	static async duplicateResource(resourceId) {
+		const resource = await Resource.load(resourceId);
+		const localState = await Resource.localState(resource);
+
+		let newResource = { ...resource };
+		delete newResource.id;
+		newResource = await Resource.save(newResource);
+
+		const newLocalState = { ...localState };
+		newLocalState.resource_id = newResource.id;
+		delete newLocalState.id;
+
+		await Resource.setLocalState(newResource, newLocalState);
+
+		const sourcePath = Resource.fullPath(resource);
+		if (await this.fsDriver().exists(sourcePath)) {
+			await this.fsDriver().copy(sourcePath, Resource.fullPath(newResource));
+		}
+
+		return newResource;
+	}
+
+	static async createConflictResourceNote(resource) {
+		const Note = this.getClass('Note');
+
+		const conflictResource = await Resource.duplicateResource(resource.id);
+
+		await Note.save({
+			title: _('Attachment conflict: "%s"', resource.title),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
+			is_conflict: 1,
+		}, { changeSource: ItemChange.SOURCE_SYNC });
+	}
+
 }
 
 Resource.IMAGE_MAX_DIMENSION = 1920;

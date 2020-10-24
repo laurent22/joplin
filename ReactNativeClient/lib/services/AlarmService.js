@@ -4,6 +4,8 @@ const Alarm = require('lib/models/Alarm.js');
 class AlarmService {
 	static setDriver(v) {
 		this.driver_ = v;
+
+		if (this.driver_.setService) this.driver_.setService(this);
 	}
 
 	static driver() {
