@@ -94,7 +94,7 @@ class Note extends BaseItem {
 	}
 
 	static geoLocationUrlFromLatLong(lat, long) {
-		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long);
+		return sprintf('https://www.openstreetmap.org/?mlat=%s&mlon=%s&zoom=20', lat, long);
 	}
 
 	static modelType() {
