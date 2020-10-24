@@ -9,12 +9,12 @@
 # Germán Martín <gmag11@gmail.com>, 2019.
 # Fernando Pindado <fpindado@gmail.com>, 2020.
 # Andros Fenollosa <andros@fenollosa.email>, 2020.
-#
+# Mario Campo <mario.campo@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Andros Fenollosa <andros@fenollosa.email>\n"
+"Last-Translator: Mario Campo <mario.campo@gmail.com>\n"
 "Language-Team: Spanish <lucas.vieites@gmail.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
@@ -279,13 +279,13 @@ msgstr "Las notas han sido importadas: %s"
 #: ElectronClient/gui/ConfigScreen.min.js:84
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:99
 msgid "This will open a new screen. Save your current changes?"
-msgstr "Esto abrirá una nueva pantalla. ¿Quieres salvar los cambios actuales?"
+msgstr "Esto abrirá una nueva pantalla. ¿Quieres guardar los cambios actuales?"
 
 #: ElectronClient/gui/ConfigScreen.min.js:172
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:162
 #: ReactNativeClient/lib/components/screens/config.js:307
 msgid "Check synchronisation configuration"
-msgstr "Comprobar sincronización"
+msgstr "Comprobar sincronización de la configuración"
 
 #: ElectronClient/gui/ConfigScreen.min.js:181
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:167
@@ -1050,7 +1050,7 @@ msgstr "Descifrando elementos: %d/%d"
 #: ReactNativeClient/lib/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Obteniendo refuersos: %d/%d"
+msgstr "Obteniendo recursos: %d/%d"
 
 #: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:16
 msgid "Sidebar"
