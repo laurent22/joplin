@@ -1,5 +1,7 @@
 const { filename, fileExtension } = require('lib/path-utils');
 const { time } = require('lib/time-utils.js');
+const Setting = require('lib/models/Setting');
+const md5 = require('md5');
 
 class FsDriverBase {
 	async isDirectory(path) {
@@ -21,20 +23,27 @@ class FsDriverBase {
 		return output;
 	}
 
-	async findUniqueFilename(name) {
+	async findUniqueFilename(name, reservedNames = null) {
+		if (reservedNames === null) {
+			reservedNames = [];
+		}
 		let counter = 1;
 
-		let nameNoExt = filename(name, true);
+		const nameNoExt = filename(name, true);
 		let extension = fileExtension(name);
 		if (extension) extension = `.${extension}`;
 		let nameToTry = nameNoExt + extension;
 		while (true) {
-			const exists = await this.exists(nameToTry);
+			// Check if the filename does not exist in the filesystem and is not reserved
+			const exists = await this.exists(nameToTry) || reservedNames.includes(nameToTry);
 			if (!exists) return nameToTry;
 			nameToTry = `${nameNoExt} (${counter})${extension}`;
 			counter++;
-			if (counter >= 1000) nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
-			if (counter >= 10000) throw new Error('Cannot find unique title');
+			if (counter >= 1000) {
+				nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
+				await time.msleep(10);
+			}
+			if (counter >= 1100) throw new Error('Cannot find unique filename');
 		}
 	}
 
@@ -59,6 +68,21 @@ class FsDriverBase {
 			if (Date.now() - startTime > timeout) return false;
 			await time.msleep(100);
 		}
+	}
+
+	// TODO: move out of here and make it part of joplin-renderer
+	// or assign to option using .bind(fsDriver())
+	async cacheCssToFile(cssStrings) {
+		const cssString = Array.isArray(cssStrings) ? cssStrings.join('\n') : cssStrings;
+		const cssFilePath = `${Setting.value('tempDir')}/${md5(escape(cssString))}.css`;
+		if (!(await this.exists(cssFilePath))) {
+			await this.writeFile(cssFilePath, cssString, 'utf8');
+		}
+
+		return {
+			path: cssFilePath,
+			mime: 'text/css',
+		};
 	}
 }
 

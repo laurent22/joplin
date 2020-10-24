@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
+/* eslint prefer-const: 0*/
 
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
 const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const SearchEngine = require('lib/services/SearchEngine');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const Note = require('lib/models/Note');
 const ItemChange = require('lib/models/ItemChange');
 const Setting = require('lib/models/Setting');
@@ -14,6 +15,39 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 let engine = null;
+
+
+const IDF = (N, n) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
+
+const frequency = (word, string) => {
+	const re = new RegExp(`\\b(${word})\\b`, 'g');
+	return (string.match(re) || []).length;
+};
+
+const calculateScore = (searchString, notes) => {
+	const K1 = 1.2;
+	const B = 0.75;
+
+	const freqTitle = notes.map(note => frequency(searchString, note.title));
+	const notesWithWord = freqTitle.filter(count => count !== 0).length;
+	const numTokens = notes.map(note => note.title.split(' ').length);
+	const avgTokens = Math.round(numTokens.reduce((a, b) => a + b, 0) / notes.length);
+
+	let titleBM25 = new Array(notes.length).fill(-1);
+	if (avgTokens != 0) {
+		for (let i = 0; i < notes.length; i++) {
+			titleBM25[i] = IDF(notes.length, notesWithWord) * ((freqTitle[i] * (K1 + 1)) / (freqTitle[i] + K1 * (1 - B + B * (numTokens[i] / avgTokens))));
+		}
+	}
+
+	const scores = [];
+	for (let i = 0; i < notes.length; i++) {
+		if (freqTitle[i]) scores.push(titleBM25[i]);
+	}
+
+	scores.sort().reverse();
+	return scores;
+};
 
 describe('services_SearchEngine', function() {
 
@@ -78,39 +112,118 @@ describe('services_SearchEngine', function() {
 	}));
 
 
-	it('should order search results by relevance (1)', asyncTest(async () => {
+	it('should order search results by relevance BM25', asyncTest(async () => {
+		// BM25 is based on term frequency - inverse document frequency
+		// The tf–idf value increases proportionally to the number of times a word appears in the document
+		// and is offset by the number of documents in the corpus that contain the word, which helps to adjust
+		// for the fact that some words appear more frequently in general.
+
+		// BM25 returns weight zero for search term which occurs in more than half the notes.
+		// So terms that are abundant in all notes to have zero relevance w.r.t BM25.
+
 		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
-		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
+		const n2 = await Note.save({ title: 'abcd efgh abcd abcd' }); // 1
 		const n3 = await Note.save({ title: 'abcd aaaaa bbbb eeee abcd' }); // 2
+		const n4 = await Note.save({ title: 'xyz xyz' });
+		const n5 = await Note.save({ title: 'xyz xyz xyz xyz' });
+		const n6 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
+		const n7 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
+		const n8 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz xyz xyz' });
 
 		await engine.syncTables();
-		const rows = await engine.search('abcd');
+		let rows = await engine.search('abcd');
 
 		expect(rows[0].id).toBe(n2.id);
 		expect(rows[1].id).toBe(n3.id);
 		expect(rows[2].id).toBe(n1.id);
+
+		rows = await engine.search('abcd efgh');
+		expect(rows[0].id).toBe(n1.id); // shorter note; also 'efgh' is more rare than 'abcd'.
+		expect(rows[1].id).toBe(n2.id);
 	}));
 
-	it('should order search results by relevance (2)', asyncTest(async () => {
-		// 1
-		const n1 = await Note.save({ title: 'abcd efgh', body: 'XX abcd XX efgh' });
-		// 4
-		const n2 = await Note.save({ title: 'abcd aaaaa bbbb eeee efgh' });
-		// 3
-		const n3 = await Note.save({ title: 'abcd aaaaa efgh' });
-		// 2
-		const n4 = await Note.save({ title: 'blablablabla blabla bla abcd X efgh' });
-		// 5
-		const n5 = await Note.save({ title: 'occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh' });
+	it('should correctly weigh notes using BM25', asyncTest(async () => {
+
+		const noteData = [
+			{
+				title: 'abc test2 test2',
+			},
+			{
+				title: 'foo foo',
+			},
+			{
+				title: 'dead beef',
+			},
+			{
+				title: 'test2 bar',
+			},
+			{
+				title: 'blah blah abc',
+			},
+		];
+
+		const n0 = await Note.save(noteData[0]);
+		const n1 = await Note.save(noteData[1]);
+		const n2 = await Note.save(noteData[2]);
+		const n3 = await Note.save(noteData[3]);
+		const n4 = await Note.save(noteData[4]);
 
 		await engine.syncTables();
-		const rows = await engine.search('abcd efgh');
 
-		expect(rows[0].id).toBe(n1.id);
-		expect(rows[1].id).toBe(n4.id);
-		expect(rows[2].id).toBe(n3.id);
-		expect(rows[3].id).toBe(n2.id);
-		expect(rows[4].id).toBe(n5.id);
+		let searchString = 'abc';
+		let scores = calculateScore(searchString, noteData);
+		let rows = await engine.search(searchString);
+
+		expect(rows[0].weight).toEqual(scores[0]);
+		expect(rows[1].weight).toEqual(scores[1]);
+
+		// console.log(rows);
+		// console.log(scores);
+
+		searchString = 'test2';
+		scores = calculateScore(searchString, noteData);
+		rows = await engine.search(searchString);
+
+		// console.log(rows);
+		// console.log(scores);
+
+		expect(rows[0].weight).toEqual(scores[0]);
+		expect(rows[1].weight).toEqual(scores[1]);
+
+		searchString = 'foo';
+		scores = calculateScore(searchString, noteData);
+		rows = await engine.search(searchString);
+
+		// console.log(rows);
+		// console.log(scores);
+
+		expect(rows[0].weight).toEqual(scores[0]);
+	}));
+
+	it('should tell where the results are found', asyncTest(async () => {
+		const notes = [
+			await Note.save({ title: 'abcd efgh', body: 'abcd' }),
+			await Note.save({ title: 'abcd' }),
+			await Note.save({ title: 'efgh', body: 'abcd' }),
+		];
+
+		await engine.syncTables();
+
+		const testCases = [
+			['abcd', ['title', 'body'], ['title'], ['body']],
+			['efgh', ['title'], [], ['title']],
+		];
+
+		for (const testCase of testCases) {
+			const rows = await engine.search(testCase[0]);
+
+			for (let i = 0; i < notes.length; i++) {
+				const row = rows.find(row => row.id === notes[i].id);
+				const actual = row ? row.fields.sort().join(',') : '';
+				const expected = testCase[i + 1].sort().join(',');
+				expect(expected).toBe(actual);
+			}
+		}
 	}));
 
 	it('should order search results by relevance (last updated first)', asyncTest(async () => {
@@ -230,22 +343,29 @@ describe('services_SearchEngine', function() {
 
 	it('should support queries with Chinese characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: '我是法国人' });
+		const n1 = await Note.save({ title: '我是法国人', body: '中文测试' });
 
 		await engine.syncTables();
 
 		expect((await engine.search('我')).length).toBe(1);
 		expect((await engine.search('法国人')).length).toBe(1);
+		expect((await engine.search('法国人*'))[0].fields.sort()).toEqual(['body', 'title']); // usually assume that keyword was matched in body
+		expect((await engine.search('测试')).length).toBe(1);
+		expect((await engine.search('测试'))[0].fields).toEqual(['body']);
+		expect((await engine.search('测试*'))[0].fields).toEqual(['body']);
 	}));
 
 	it('should support queries with Japanese characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: '私は日本語を話すことができません' });
+		const n1 = await Note.save({ title: '私は日本語を話すことができません', body: 'テスト' });
 
 		await engine.syncTables();
 
 		expect((await engine.search('日本')).length).toBe(1);
 		expect((await engine.search('できません')).length).toBe(1);
+		expect((await engine.search('できません*'))[0].fields.sort()).toEqual(['body', 'title']); // usually assume that keyword was matched in body
+		expect((await engine.search('テスト'))[0].fields.sort()).toEqual(['body']);
+
 	}));
 
 	it('should support queries with Korean characters', asyncTest(async () => {
@@ -258,6 +378,16 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('말')).length).toBe(1);
 	}));
 
+	it('should support queries with Thai characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'นี่คือคนไทย' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('นี่คือค')).length).toBe(1);
+		expect((await engine.search('ไทย')).length).toBe(1);
+	}));
+
 	it('should support field restricted queries with Chinese characters', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: '你好', body: '我是法国人' });
@@ -265,10 +395,15 @@ describe('services_SearchEngine', function() {
 		await engine.syncTables();
 
 		expect((await engine.search('title:你好*')).length).toBe(1);
+		expect((await engine.search('title:你好*'))[0].fields).toEqual(['title']);
+		expect((await engine.search('body:法国人')).length).toBe(1);
+		expect((await engine.search('body:法国人'))[0].fields).toEqual(['body']);
 		expect((await engine.search('body:你好')).length).toBe(0);
 		expect((await engine.search('title:你好 body:法国人')).length).toBe(1);
+		expect((await engine.search('title:你好 body:法国人'))[0].fields.sort()).toEqual(['body', 'title']);
 		expect((await engine.search('title:你好 body:bla')).length).toBe(0);
 		expect((await engine.search('title:你好 我是')).length).toBe(1);
+		expect((await engine.search('title:你好 我是'))[0].fields.sort()).toEqual(['body', 'title']);
 		expect((await engine.search('title:bla 我是')).length).toBe(0);
 
 		// For non-alpha char, only the first field is looked at, the following ones are ignored
@@ -307,7 +442,11 @@ describe('services_SearchEngine', function() {
 		let rows;
 
 		const testCases = [
-			['did-not-match', 'did-not-match'],
+			// "-" is considered a word delimiter so it is stripped off
+			// when indexing the notes. "did-not-match" is translated to
+			// three word "did", "not", "match"
+			['did-not-match', 'did not match'],
+			['did-not-match', '"did-not-match"'],
 			['does match', 'does match'],
 		];
 
@@ -321,8 +460,19 @@ describe('services_SearchEngine', function() {
 			rows = await engine.search(query);
 			expect(rows.length).toBe(1);
 
+
 			await Note.delete(n.id);
 		}
 	}));
 
+	it('should allow using basic search', asyncTest(async () => {
+		const n1 = await Note.save({ title: '- [ ] abcd' });
+		const n2 = await Note.save({ title: '[ ] abcd' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(0);
+		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(1);
+		expect((await engine.search('"[ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(2);
+	}));
 });

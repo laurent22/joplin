@@ -1,0 +1,8 @@
+{
+  "name": "joplin-webclipper",
+  "version": "1.0.0",
+  "description": "Joplin Web Clipper",
+  "main": "main.js",
+  "author": "Laurent Cozic",
+  "license": "MIT"
+}

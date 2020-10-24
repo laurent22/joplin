@@ -1,0 +1,402 @@
+<!doctype html>
+<html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/conflict.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/master/readme/conflict.md
+
+-->
+
+<head>
+	<title>What is a conflict? | Joplin</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
+	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+		font-size: .85em;
+	}
+	pre code {
+		border: none;
+	}
+	pre {
+		font-size: .85em;
+	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc > ul > li {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
+	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
+	.title-icon {
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
+	}
+	.sub-title {
+		font-weight: normal;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.header a h1 {
+		color: white;
+	}
+	.header a:hover {
+		text-decoration: none;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: 0.4em;
+		line-height: 1em;
+		text-decoration: none;
+		transition: opacity 0.3s;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container page-conflict">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
+			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
+		</ul>
+		<div class="nav-right">
+			<!--
+				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			-->
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
+<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2020</p>
+<ul>
+<li><a href="https://joplinapp.org/gsoc2020">Google Summer of Code 2020</a></li>
+<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1>What is a conflict?<a name="what-is-a-conflict" href="#what-is-a-conflict" class="heading-anchor">🔗</a></h1>
+<p>A conflict happens when one note or one attachment is modified in two different places, and then synchronised. In that case, it not possible to determine which version of the note or attachment you want to keep, and thus a conflict is generated.</p>
+<h1>What happens in case of a conflict?<a name="what-happens-in-case-of-a-conflict" href="#what-happens-in-case-of-a-conflict" class="heading-anchor">🔗</a></h1>
+<p>When Joplin detects a conflict, the local note is copied to the Conflict notebook so as to avoid any data loss. Then the remote note is downloaded. You can then inspect the notes in the Conflict notebook, compare it with your other version, and copy any change that might have been overwritten.</p>
+<h1>How to avoid conflicts?<a name="how-to-avoid-conflicts" href="#how-to-avoid-conflicts" class="heading-anchor">🔗</a></h1>
+<p>Conflicts are always annoying to deal with so it is best to avoid them as much as possible.</p>
+<p>For this, the best way is to synchronise as often as possible, so that you are always working with the latest versions of your notes.</p>
+<p>Joplin attempts to do this by uploading your latest changes within a few seconds. However, downloading changes is done at fixed intervals, every few minutes (as defined in the Config screen) and this is where conflicts may happen. It can also happen if one of your device did not have an internet connection for some times, and then synchronises. A bad internet connection can also hinder synchronisation because it will interrupt the process, which may have to restarted from the beginning to ensure consistency.</p>
+<p>So if you have not opened your application in a while, manually sync it and wait for it to complete, that way you are sure that whatever change you make will be on the latest version of the note.</p>
+
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/conflict.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
+<script>
+	function stickyHeader() { 
+		return; // Disabled
+
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<div class="footer">
+Copyright (c) 2016-2020 Laurent Cozic
+</div>
+</body>
+</html>

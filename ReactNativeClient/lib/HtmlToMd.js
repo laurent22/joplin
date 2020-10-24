@@ -8,6 +8,10 @@ class HtmlToMd {
 			headingStyle: 'atx',
 			anchorNames: options.anchorNames ? options.anchorNames.map(n => n.trim().toLowerCase()) : [],
 			codeBlockStyle: 'fenced',
+			preserveImageTagsWithSize: !!options.preserveImageTagsWithSize,
+			bulletListMarker: '-',
+			emDelimiter: '*',
+			strongDelimiter: '**',
 		});
 		turndown.use(turndownPluginGfm);
 		turndown.remove('script');

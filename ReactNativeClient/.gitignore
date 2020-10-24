@@ -40,6 +40,10 @@ yarn-error.log
 buck-out/
 \.buckd/
 *.keystore
+!debug.keystore
+
+# CocoaPods
+ios/Pods/
 
 # fastlane
 #
@@ -62,3 +66,5 @@ android/app/.classpath
 android/app/.project
 android/app/.settings/
 android/app/src/debug/res/
+
+pluginAssets/

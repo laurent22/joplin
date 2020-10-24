@@ -16,7 +16,7 @@ const gettextParser = require('gettext-parser');
 const cliDir = `${rootDir}/CliClient`;
 const cliLocalesDir = `${cliDir}/locales`;
 const rnDir = `${rootDir}/ReactNativeClient`;
-const electronDir = `${rootDir}/ElectronClient/app`;
+const electronDir = `${rootDir}/ElectronClient`;
 
 const { execCommand, isMac, insertContentIntoFile } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');
@@ -27,9 +27,9 @@ function parsePoFile(filePath) {
 }
 
 function serializeTranslation(translation) {
-	let output = {};
+	const output = {};
 	const translations = translation.translations[''];
-	for (let n in translations) {
+	for (const n in translations) {
 		if (!translations.hasOwnProperty(n)) continue;
 		if (n == '') continue;
 		const t = translations[n];
@@ -64,7 +64,7 @@ function executablePath(file) {
 	];
 
 	for (const path of potentialPaths) {
-		let pathFile = path + file;
+		const pathFile = path + file;
 		if (fs.existsSync(pathFile)) {
 			return pathFile;
 		}
@@ -79,26 +79,63 @@ async function removePoHeaderDate(filePath) {
 	await execCommand(`${sedPrefix} -e'/PO-Revision-Date:/d' "${filePath}"`);
 }
 
-async function createPotFile(potFilePath, sources) {
-	let baseArgs = [];
+async function createPotFile(potFilePath) {
+	const excludedDirs = [
+		'./.git/*',
+		'./.github/*',
+		'./Assets/*',
+		'./CliClient/build/*',
+		'./CliClient/locales-build/*',
+		'./CliClient/locales/*',
+		'./CliClient/node_modules/*',
+		'./CliClient/tests-build/*',
+		'./CliClient/tests/*',
+		'./Clipper/*',
+		'./docs/*',
+		'./ElectronClient/dist/*',
+		'./ElectronClient/gui/style/*',
+		'./ElectronClient/lib/*',
+		'./ElectronClient/node_modules/*',
+		'./ElectronClient/pluginAssets/*',
+		'./ElectronClient/tools/*',
+		'./ElectronClient/gui/note-viewer/pluginAssets/*',
+		'./ReactNativeClient/lib/joplin-renderer/assets/*',
+		'./Modules/*',
+		'./node_modules/*',
+		'./ReactNativeClient/lib/joplin-renderer/node_modules/*',
+		'./patches/*',
+		'./ReactNativeClient/android/*',
+		'./ReactNativeClient/ios/*',
+		'./ReactNativeClient/node_modules/*',
+		'./ReactNativeClient/pluginAssets/*',
+		'./ReactNativeClient/tools/*',
+		'./readme/*',
+		'./Tools/*',
+	];
+
+	const findCommand = `find . -iname '*.js' -not -path '${excludedDirs.join('\' -not -path \'')}'`;
+
+	process.chdir(`${__dirname}/..`);
+	const files = (await execCommand(findCommand)).split('\n');
+
+	const baseArgs = [];
 	baseArgs.push('--from-code=utf-8');
 	baseArgs.push(`--output="${potFilePath}"`);
 	baseArgs.push('--language=JavaScript');
 	baseArgs.push('--copyright-holder="Laurent Cozic"');
 	baseArgs.push('--package-name=Joplin-CLI');
 	baseArgs.push('--package-version=1.0.0');
-	baseArgs.push('--no-location');
+	// baseArgs.push('--no-location');
+	baseArgs.push('--keyword=_n:1,2');
 
-	for (let i = 0; i < sources.length; i++) {
-		let args = baseArgs.slice();
-		if (i > 0) args.push('--join-existing');
-		args.push(sources[i]);
-		let xgettextPath = 'xgettext';
-		if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
-		const result = await execCommand(`${xgettextPath} ${args.join(' ')}`);
-		if (result) console.error(result);
-		await removePoHeaderDate(potFilePath);
-	}
+	let args = baseArgs.slice();
+	args = args.concat(files);
+	let xgettextPath = 'xgettext';
+	if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
+	const cmd = `${xgettextPath} ${args.join(' ')}`;
+	const result = await execCommand(cmd);
+	if (result) console.error(result);
+	await removePoHeaderDate(potFilePath);
 }
 
 async function mergePotToPo(potFilePath, poFilePath) {
@@ -112,7 +149,7 @@ async function mergePotToPo(potFilePath, poFilePath) {
 }
 
 function buildIndex(locales, stats) {
-	let output = [];
+	const output = [];
 	output.push('var locales = {};');
 	output.push('var stats = {};');
 
@@ -127,6 +164,7 @@ function buildIndex(locales, stats) {
 		delete stat.locale;
 		delete stat.translatorName;
 		delete stat.languageName;
+		delete stat.untranslatedCount;
 		output.push(`stats['${locale}'] = ${JSON.stringify(stat)};`);
 	}
 
@@ -171,9 +209,12 @@ async function translationStatus(isDefault, poFile) {
 	const result = await execCommand(command);
 	const matches = result.match(/Translated:\s*?(\d+)\s*\((.+?)%\)/);
 	if (!matches || matches.length < 3) throw new Error(`Cannot extract status: ${command}:\n${result}`);
-
 	const percentDone = Number(matches[2]);
 	if (isNaN(percentDone)) throw new Error(`Cannot extract percent translated: ${command}:\n${result}`);
+
+	const untranslatedMatches = result.match(/Untranslated:\s*?(\d+)/);
+	if (!untranslatedMatches) throw new Error(`Cannot extract untranslated: ${command}:\n${result}`);
+	const untranslatedCount = Number(untranslatedMatches[1]);
 
 	let translatorName = '';
 	const content = await fs.readFile(poFile, 'utf-8');
@@ -188,14 +229,12 @@ async function translationStatus(isDefault, poFile) {
 	translatorName = translatorName.replace(/ </, ' (');
 	translatorName = translatorName.replace(/>/, ')');
 
-	let isAlways100 = false;
-	if (poFile.endsWith('en_US.po')) {
-		isAlways100 = true;
-	}
+	const isAlways100 = poFile.endsWith('en_US.po');
 
 	return {
 		percentDone: isDefault || isAlways100 ? 100 : percentDone,
 		translatorName: translatorName,
+		untranslatedCount: untranslatedCount,
 	};
 }
 
@@ -210,6 +249,7 @@ function flagImageUrl(locale) {
 	if (locale === 'nb_NO') return `${baseUrl}/country-4x3/no.png`;
 	if (locale === 'ro') return `${baseUrl}/country-4x3/ro.png`;
 	if (locale === 'fa') return `${baseUrl}/country-4x3/ir.png`;
+	if (locale === 'eo') return `${baseUrl}/esperanto.png`;
 	return `${baseUrl}/country-4x3/${countryCodeOnly(locale).toLowerCase()}.png`;
 }
 
@@ -218,7 +258,7 @@ function poFileUrl(locale) {
 }
 
 function translationStatusToMdTable(status) {
-	let output = [];
+	const output = [];
 	output.push(['&nbsp;', 'Language', 'Po File', 'Last translator', 'Percent done'].join('  |  '));
 	output.push(['---', '---', '---', '---', '---'].join('|'));
 	for (let i = 0; i < status.length; i++) {
@@ -239,32 +279,36 @@ async function updateReadmeWithStats(stats) {
 }
 
 async function main() {
-	let potFilePath = `${cliLocalesDir}/joplin.pot`;
-	let jsonLocalesDir = `${cliDir}/build/locales`;
+	const argv = require('yargs').argv;
+
+	const potFilePath = `${cliLocalesDir}/joplin.pot`;
+	const jsonLocalesDir = `${cliDir}/build/locales`;
 	const defaultLocale = 'en_GB';
 
-	await createPotFile(potFilePath, [
-		`${cliDir}/app/*.js`,
-		`${cliDir}/app/gui/*.js`,
-		`${electronDir}/*.js`,
-		`${electronDir}/gui/*.js`,
-		`${electronDir}/gui/utils/*.js`,
-		`${electronDir}/plugins/*.js`,
-		`${rnDir}/lib/*.js`,
-		`${rnDir}/lib/models/*.js`,
-		`${rnDir}/lib/services/*.js`,
-		`${rnDir}/lib/components/*.js`,
-		`${rnDir}/lib/components/shared/*.js`,
-		`${rnDir}/lib/components/screens/*.js`,
-	]);
+	const oldPotStatus = await translationStatus(false, potFilePath);
+
+	await createPotFile(potFilePath);
+
+	const newPotStatus = await translationStatus(false, potFilePath);
+
+	console.info(`Updated pot file. Total strings: ${oldPotStatus.untranslatedCount} => ${newPotStatus.untranslatedCount}`);
+
+	const deletedCount = oldPotStatus.untranslatedCount - newPotStatus.untranslatedCount;
+	if (deletedCount >= 10) {
+		if (argv['skip-missing-strings-check']) {
+			console.info(`${deletedCount} strings have been deleted, but proceeding anyway due to --skip-missing-strings-check flag`);
+		} else {
+			throw new Error(`${deletedCount} strings have been deleted - aborting as it could be a bug. To override, use the --skip-missing-strings-check flag.`);
+		}
+	}
 
 	await execCommand(`cp "${potFilePath}" ` + `"${cliLocalesDir}/${defaultLocale}.po"`);
 
 	fs.mkdirpSync(jsonLocalesDir, 0o755);
 
-	let stats = [];
+	const stats = [];
 
-	let locales = availableLocales(defaultLocale);
+	const locales = availableLocales(defaultLocale);
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
 
@@ -285,15 +329,20 @@ async function main() {
 
 	saveToFile(`${jsonLocalesDir}/index.js`, buildIndex(locales, stats));
 
-	const rnJsonLocaleDir = `${rnDir}/locales`;
-	await execCommand(`rsync -a "${jsonLocalesDir}/" "${rnJsonLocaleDir}"`);
+	const destDirs = [
+		`${rnDir}/locales`,
+		`${electronDir}/locales`,
+		`${cliDir}/locales-build`,
+	];
 
-	const electronJsonLocaleDir = `${electronDir}/locales`;
-	await execCommand(`rsync -a "${jsonLocalesDir}/" "${electronJsonLocaleDir}"`);
+	for (const destDir of destDirs) {
+		await execCommand(`rsync -a "${jsonLocalesDir}/" "${destDir}/"`);
+	}
 
 	await updateReadmeWithStats(stats);
 }
 
 main().catch((error) => {
 	console.error(error);
+	process.exit(1);
 });

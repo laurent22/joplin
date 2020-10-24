@@ -30,9 +30,14 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
+			screen: {
+				flex: 1,
+				backgroundColor: theme.backgroundColor,
+			},
 			container: {
 				padding: theme.margin,
+				backgroundColor: theme.backgroundColor,
 			},
 			stepText: Object.assign({}, theme.normalText, { marginBottom: theme.margin }),
 			urlText: Object.assign({}, theme.urlText, { marginBottom: theme.margin }),
@@ -58,7 +63,7 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 						</TouchableOpacity>
 					</View>
 					<Text style={this.styles().stepText}>{_('Step 2: Enter the code provided by Dropbox:')}</Text>
-					<TextInput placeholder={_('Enter code here')} placeholderTextColor={theme.colorFaded} selectionColor={theme.textSelectionColor} value={this.state.authCode} onChangeText={this.shared_.authCodeInput_change} style={theme.lineInput} />
+					<TextInput placeholder={_('Enter code here')} placeholderTextColor={theme.colorFaded} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} value={this.state.authCode} onChangeText={this.shared_.authCodeInput_change} style={theme.lineInput} />
 					<View style={{ height: 10 }}></View>
 					<Button disabled={this.state.checkingAuthToken} title={_('Submit')} onPress={this.shared_.submit_click}></Button>
 

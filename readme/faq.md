@@ -1,3 +1,17 @@
+# Installer gets stuck on Windows
+
+The installer may get stuck if the app was not uninstalled correctly. To fix the issue you will need to clean up the left-over entry from the Registry. To do so please follow these steps:
+
+- Press Win + R (Windows Key + R)
+- Type "regedit.exe"
+- Navigate to `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall`
+- In there, you will see one or more folders. Open them one by one to find the one for Joplin. One of the entries in there should be "DisplayName" with value "Joplin x.x.x".
+- Once found, delete that folder.
+
+Now try to install again and it should work.
+
+More info there: https://github.com/electron-userland/electron-builder/issues/4057
+
 # How can I edit my note in an external text editor?
 
 The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -> Text editor command.
@@ -7,21 +21,21 @@ Some example configurations are: (comments after #)
 Linux/Mac:
 
 ```bash
-subl -n       # Opens Sublime (subl) in a new window (-n)
-code -n       # Opens Visual Studio Code (code) in a new window (-n)
+subl -n -w      # Opens Sublime (subl) in a new window (-n) and waits for close (-w)
+code -n --wait  # Opens Visual Studio Code (code) in a new window (-n) and waits for close (--wait)
 gedit --new-window    # Opens gedit (Gnome Text Editor) in a new window
-xterm -e vim  # Opens a new terminal and opens vim. Can be replaced with an
-              # alternative terminal (gnome-terminal, terminator, etc.) 
-              # or terminal text-editor (emacs, nano, etc.)
+xterm -e vim    # Opens a new terminal and opens vim. Can be replaced with an
+                # alternative terminal (gnome-terminal, terminator, etc.) 
+                # or terminal text-editor (emacs, nano, etc.)
 open -a <application> # Mac only: opens a GUI application
 ```
 
 Windows:
 
 ```bash
-subl.exe -n   # Opens Sublime (subl) in a new window (-n)
-code.exe -n   # Opens Visual Studio Code in a new window (-n)
-notepad.exe   # Opens Notepad in a new window
+subl.exe -n -w      # Opens Sublime (subl) in a new window (-n) and waits for close (-w)
+code.exe -n --wait  # Opens Visual Studio Code in a new window (-n) and waits for close (--wait)
+notepad.exe         # Opens Notepad in a new window
 notepad++.exe --openSession   # Opens Notepad ++ in new window
 ```
 
@@ -92,6 +106,15 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 If you want to serve using https but can't or don't want to use SSL certificates signed by trusted certificate authorities (like "Let's Encrypt"), it's possible to generate a custom CA and sign your certificates with it. You can generate the CA and certificates using [openssl](https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309), but I like to use a tool called [mkcert](https://github.com/FiloSottile/mkcert) for it's simplicity. Finally, you have to add your CA certificate to Android settings so that Android can recognize the certificates you signed with your CA as valid ([link](https://support.google.com/nexus/answer/2844832?hl=en-GB)).
 
+# How do I restart Joplin on Windows (so that certain changes take effect)?
+
+If `Show tray icon` is enabled, closing the Joplin window does not quit the application. To restart the application properly, one of the following has to be done to quit Joplin:
+
+- click `File` in the menu and then click `Quit`
+- right-click on the Joplin tray icon and then click `Exit`
+
+Additionally the Windows Task Manager can be used to verify whether Joplin is still around.
+
 # Why is it named Joplin?
 
-The name comes from the composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), which I often listen to. His name is also easy to remember and type so it fell like a good choice. And, to quote a user on Hacker News, "though Scott Joplin's ragtime musical style has a lot in common with some very informal music, his own approach was more educated, sophisticated, and precise. Every note was in its place for a reason, and he was known to prefer his pieces to be performed exactly as written. So you could say that compared to the people who came before him, his notes were more organized".
+The name comes from the composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), which I often listen to. His name is also easy to remember and type so it felt like a good choice. And, to quote a user on Hacker News, "though Scott Joplin's ragtime musical style has a lot in common with some very informal music, his own approach was more educated, sophisticated, and precise. Every note was in its place for a reason, and he was known to prefer his pieces to be performed exactly as written. So you could say that compared to the people who came before him, his notes were more organized".

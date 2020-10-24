@@ -6,6 +6,7 @@ const URL = require('url-parse');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
 
+
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
 // implementations use the same namespaces. If not, extra processing can be done in `nameProcessor`, for
@@ -31,6 +32,7 @@ class WebDavApi {
 			options.headers = Object.assign({}, options.headers);
 			if (options.headers['Authorization']) options.headers['Authorization'] = '********';
 			delete options.method;
+			delete options.agent;
 			output.push(JSON.stringify(options));
 			return output.join(' ');
 		};
@@ -63,7 +65,7 @@ class WebDavApi {
 		try {
 			// Note: Non-ASCII passwords will throw an error about Latin1 characters - https://github.com/laurent22/joplin/issues/246
 			// Tried various things like the below, but it didn't work on React Native:
-			//return base64.encode(utf8.encode(this.options_.username() + ':' + this.options_.password()));
+			// return base64.encode(utf8.encode(this.options_.username() + ':' + this.options_.password()));
 			return base64.encode(`${this.options_.username()}:${this.options_.password()}`);
 		} catch (error) {
 			error.message = `Cannot encode username/password: ${error.message}`;
@@ -81,10 +83,10 @@ class WebDavApi {
 	}
 
 	async xmlToJson(xml) {
-		let davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
+		const davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
 		const nameProcessor = name => {
-			if (name.indexOf('xmlns:') !== 0) {
+			if (name.indexOf('xmlns') !== 0) {
 				// Check if the current name is within the DAV namespace. If it is, normalise it
 				// by moving it to the "d:" namespace, which is what all the functions are using.
 				const p = name.split(':');
@@ -93,15 +95,23 @@ class WebDavApi {
 					if (davNamespaces.indexOf(ns) >= 0) {
 						name = `d:${p[1]}`;
 					}
+				} else if (p.length === 1 && davNamespaces.indexOf('') >= 0) {
+					// Also handle the case where the namespace alias is empty.
+					// https://github.com/laurent22/joplin/issues/2002
+					name = `d:${name}`;
 				}
 			}
+
 			return name.toLowerCase();
 		};
 
 		const attrValueProcessor = (value, name) => {
+			// The namespace is ususally specified like so: xmlns:D="DAV:" ("D" being the alias used in the tag names)
+			// In some cases, the namespace can also be empty like so: "xmlns=DAV". In this case, the tags will have
+			// no namespace so instead of <d:prop> will have just <prop>. This is handled above in nameProcessor()
 			if (value.toLowerCase() === 'dav:') {
 				const p = name.split(':');
-				davNamespaces.push(p[p.length - 1]);
+				davNamespaces.push(p.length === 2 ? p[p.length - 1] : '');
 			}
 		};
 
@@ -187,6 +197,8 @@ class WebDavApi {
 		}
 
 		if (outputType === 'string') {
+			if (!output) throw new JoplinError(`String property not found: ${propName}: ${JSON.stringify(resource)}`, 'stringNotFound');
+
 			// If the XML has not attribute the value is directly a string
 			// If the XML node has attributes, the value is under "_".
 			// Eg for this XML, the string will be under {"_":"Thu, 01 Feb 2018 17:24:05 GMT"}:
@@ -235,12 +247,12 @@ class WebDavApi {
 	}
 
 	requestToCurl_(url, options) {
-		let output = [];
+		const output = [];
 		output.push('curl');
 		output.push('-v');
 		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
-			for (let n in options.headers) {
+			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
 				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
 			}
@@ -342,18 +354,21 @@ class WebDavApi {
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
 		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
+		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
-
 		const url = `${this.baseUrl()}/${path}`;
+
+		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
+
 
 		let response = null;
 
-		// console.info('WebDAV Call', method + ' ' + url, headers, options);
+		// console.info('WebDAV Call', `${method} ${url}`, headers, options);
 		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
@@ -422,7 +437,7 @@ class WebDavApi {
 		if (['MKCOL', 'DELETE', 'PUT', 'MOVE'].indexOf(method) >= 0) return null;
 
 		const output = await loadResponseJson();
-		this.handleNginxHack_(output, newError);
+		if (output) this.handleNginxHack_(output, newError);
 
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls

@@ -29,22 +29,20 @@ const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
-const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const RevisionService = require('lib/services/RevisionService');
+const ResourceService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
-const SearchEngine = require('lib/services/SearchEngine');
+const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
+const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
-
-SyncTargetRegistry.addClass(SyncTargetFilesystem);
-SyncTargetRegistry.addClass(SyncTargetOneDrive);
-SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
-SyncTargetRegistry.addClass(SyncTargetNextcloud);
-SyncTargetRegistry.addClass(SyncTargetWebDAV);
-SyncTargetRegistry.addClass(SyncTargetDropbox);
+const { toSystemSlashes } = require('lib/path-utils.js');
 
 class BaseApplication {
 	constructor() {
@@ -58,6 +56,39 @@ class BaseApplication {
 		this.currentFolder_ = null;
 
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
+	}
+
+	async destroy() {
+		if (this.scheduleAutoAddResourcesIID_) {
+			clearTimeout(this.scheduleAutoAddResourcesIID_);
+			this.scheduleAutoAddResourcesIID_ = null;
+		}
+		await ResourceFetcher.instance().destroy();
+		await SearchEngine.instance().destroy();
+		await DecryptionWorker.instance().destroy();
+		await FoldersScreenUtils.cancelTimers();
+		await BaseItem.revisionService_.cancelTimers();
+		await ResourceService.instance().cancelTimers();
+		await reg.cancelTimers();
+
+		this.eventEmitter_.removeAllListeners();
+		KvStore.instance_ = null;
+		BaseModel.setDb(null);
+		reg.setDb(null);
+
+		BaseItem.revisionService_ = null;
+		RevisionService.instance_ = null;
+		ResourceService.instance_ = null;
+		ResourceService.isRunningInBackground = false;
+		ResourceFetcher.instance_ = null;
+		EncryptionService.instance_ = null;
+		DecryptionWorker.instance_ = null;
+
+		this.logger_.info('Base application terminated...');
+		this.logger_ = null;
+		this.dbLogger_ = null;
+		this.eventEmitter_ = null;
+		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = null;
 	}
 
 	logger() {
@@ -96,13 +127,13 @@ class BaseApplication {
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
 	async handleStartFlags_(argv, setDefaults = true) {
-		let matched = {};
+		const matched = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
 
 		while (argv.length) {
-			let arg = argv[0];
-			let nextArg = argv.length >= 2 ? argv[1] : null;
+			const arg = argv[0];
+			const nextArg = argv.length >= 2 ? argv[1] : null;
 
 			if (arg == '--profile') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
@@ -131,7 +162,13 @@ class BaseApplication {
 			}
 
 			if (arg == '--open-dev-tools') {
-				Setting.setConstant('openDevTools', true);
+				Setting.setConstant('flagOpenDevTools', true);
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg == '--debug') {
+				// Currently only handled by ElectronAppWrapper (isDebugMode property)
 				argv.splice(0, 1);
 				continue;
 			}
@@ -165,6 +202,20 @@ class BaseApplication {
 
 			if (arg === '--enable-logging') {
 				// Electron-specific flag used for debugging - ignore it
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg.indexOf('--remote-debugging-port=') === 0) {
+				// Electron-specific flag used for debugging - ignore it. Electron expects this flag in '--x=y' form, a single string.
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg === '--no-sandbox') {
+				// Electron-specific flag for running the app without chrome-sandbox
+				// Allows users to use it as a workaround for the electron+AppImage issue
+				// https://github.com/laurent22/joplin/issues/2246
 				argv.splice(0, 1);
 				continue;
 			}
@@ -209,11 +260,14 @@ class BaseApplication {
 		} else if (parentType === 'Search') {
 			parentId = state.selectedSearchId;
 			parentType = BaseModel.TYPE_SEARCH;
+		} else if (parentType === 'SmartFilter') {
+			parentId = state.selectedSmartFilterId;
+			parentType = BaseModel.TYPE_SMART_FILTER;
 		}
 
 		this.logger().debug('Refreshing notes:', parentType, parentId);
 
-		let options = {
+		const options = {
 			order: stateUtils.notesOrder(state.settings),
 			uncompletedTodosOnTop: Setting.value('uncompletedTodosOnTop'),
 			showCompletedTodos: Setting.value('showCompletedTodos'),
@@ -235,6 +289,8 @@ class BaseApplication {
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
 				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
+				notes = await Note.previews(parentId, options);
 			}
 		}
 
@@ -286,20 +342,11 @@ class BaseApplication {
 	}
 
 	async decryptionWorker_resourceMetadataButNotBlobDecrypted() {
-		this.scheduleAutoAddResources();
-	}
-
-	scheduleAutoAddResources() {
-		if (this.scheduleAutoAddResourcesIID_) return;
-
-		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
-			this.scheduleAutoAddResourcesIID_ = null;
-			ResourceFetcher.instance().autoAddResources();
-		}, 1000);
+		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
 	reducerActionToString(action) {
-		let o = [action.type];
+		const o = [action.type];
 		if ('id' in action) o.push(action.id);
 		if ('noteId' in action) o.push(action.noteId);
 		if ('folderId' in action) o.push(action.folderId);
@@ -404,6 +451,11 @@ class BaseApplication {
 			refreshFolders = true;
 		}
 
+		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
@@ -413,6 +465,10 @@ class BaseApplication {
 				refreshNotesUseSelectedNoteId = true;
 				refreshNotesHash = action.hash;
 			}
+		}
+
+		if (this.hasGui() && (action.type == 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
+			refreshNotes = true;
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
@@ -427,6 +483,11 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'SMART_FILTER_SELECT') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
 			refreshNotes = true;
 		}
@@ -435,15 +496,32 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'NOTE_TAG_REMOVE') {
+			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
+				if (newState.notes.length === newState.selectedNoteIds.length) {
+					await this.refreshCurrentFolder();
+					refreshNotesUseSelectedNoteId = true;
+				}
+				refreshNotes = true;
+			}
+		}
+
 		if (refreshNotes) {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
 		}
 
-		if (action.type === 'NOTE_UPDATE_ONE') {
+		if (action.type === 'NOTE_UPDATE_ONE' || action.type === 'NOTE_DELETE') {
 			refreshFolders = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
+			refreshFolders = 'now';
+		}
+
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && (
+			action.key.indexOf('folders.sortOrder') === 0 ||
+			action.key == 'showNoteCounts' ||
+			action.key == 'showCompletedTodos')) {
 			refreshFolders = 'now';
 		}
 
@@ -451,7 +529,7 @@ class BaseApplication {
 			DecryptionWorker.instance().scheduleStart();
 		}
 
-		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
+		if (this.hasGui() && action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
 			ResourceFetcher.instance().autoAddResources();
 		}
 
@@ -468,7 +546,6 @@ class BaseApplication {
 				await FoldersScreenUtils.scheduleRefreshFolders();
 			}
 		}
-
 		return result;
 	}
 
@@ -490,6 +567,16 @@ class BaseApplication {
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
 	}
 
+	deinitRedux() {
+		this.store_ = null;
+		BaseModel.dispatch = function() {};
+		FoldersScreenUtils.dispatch = function() {};
+		reg.dispatch = function() {};
+		BaseSyncTarget.dispatch = function() {};
+		DecryptionWorker.instance().dispatch = function() {};
+		ResourceFetcher.instance().dispatch = function() {};
+	}
+
 	async readFlagsFromFile(flagPath) {
 		if (!fs.existsSync(flagPath)) return {};
 		let flagContent = fs.readFileSync(flagPath, 'utf8');
@@ -507,36 +594,21 @@ class BaseApplication {
 	}
 
 	determineProfileDir(initArgs) {
-		if (initArgs.profileDir) return initArgs.profileDir;
+		let output = '';
 
-		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
+		if (initArgs.profileDir) {
+			output = initArgs.profileDir;
+		} else if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) {
+			output = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
+		} else {
+			output = `${os.homedir()}/.config/${Setting.value('appName')}`;
+		}
 
-		return `${os.homedir()}/.config/${Setting.value('appName')}`;
-	}
-
-	async testing() {
-		const markdownUtils = require('lib/markdownUtils');
-		const ClipperServer = require('lib/ClipperServer');
-		const server = new ClipperServer();
-		const HtmlToMd = require('lib/HtmlToMd');
-		const service = new HtmlToMd();
-		const html = await shim.fsDriver().readFile('/mnt/d/test.html');
-		let markdown = service.parse(html, { baseUrl: 'https://duckduckgo.com/' });
-		console.info(markdown);
-		console.info('--------------------------------------------------');
-
-		const imageUrls = markdownUtils.extractImageUrls(markdown);
-		let result = await server.downloadImages_(imageUrls);
-		result = await server.createResourcesFromPaths_(result);
-		console.info(result);
-		markdown = server.replaceImageUrlsByResources_(markdown, result);
-		console.info('--------------------------------------------------');
-		console.info(markdown);
-		console.info('--------------------------------------------------');
+		return toSystemSlashes(output, 'linux');
 	}
 
 	async start(argv) {
-		let startFlags = await this.handleStartFlags_(argv);
+		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
 		let initArgs = startFlags.matched;
@@ -558,7 +630,21 @@ class BaseApplication {
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
 
-		await shim.fsDriver().remove(tempDir);
+		SyncTargetRegistry.addClass(SyncTargetFilesystem);
+		SyncTargetRegistry.addClass(SyncTargetOneDrive);
+		if (Setting.value('env') === 'dev') SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+		SyncTargetRegistry.addClass(SyncTargetNextcloud);
+		SyncTargetRegistry.addClass(SyncTargetWebDAV);
+		SyncTargetRegistry.addClass(SyncTargetDropbox);
+		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
+
+		try {
+			await shim.fsDriver().remove(tempDir);
+		} catch (error) {
+			// Can't do anything in this case, not even log, since the logger
+			// is not yet ready. But normally it's not an issue if the temp
+			// dir cannot be deleted.
+		}
 
 		await fs.mkdirp(profileDir, 0o755);
 		await fs.mkdirp(resourceDir, 0o755);
@@ -571,14 +657,20 @@ class BaseApplication {
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: `${profileDir}/log.txt` });
-		if (Setting.value('env') === 'dev') this.logger_.addTarget('console', { level: Logger.LEVEL_WARN });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
 		reg.dispatch = () => {};
 
+		BaseService.logger_ = this.logger_;
+
 		this.dbLogger_.addTarget('file', { path: `${profileDir}/log-database.txt` });
 		this.dbLogger_.setLevel(initArgs.logLevel);
+
+		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') {
+			// this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
+			this.dbLogger_.addTarget('console', { level: Logger.LEVEL_WARN });
+		}
 
 		if (Setting.value('env') === 'dev') {
 			this.dbLogger_.setLevel(Logger.LEVEL_INFO);
@@ -594,9 +686,11 @@ class BaseApplication {
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
 		reg.setDb(this.database_);
-		BaseModel.db_ = this.database_;
+		BaseModel.setDb(this.database_);
 
-		await Setting.load();
+		await loadKeychainServiceAndSettings(KeychainServiceDriver);
+
+		this.logger_.info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);
@@ -611,6 +705,15 @@ class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));
+		}
+
+		if (Setting.value('encryption.shouldReencrypt') < 0) {
+			// We suggest re-encryption if the user has at least one notebook
+			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
+			// which can be set by a maintenance script for example.
+			const folderCount = await Folder.count();
+			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
@@ -630,7 +733,6 @@ class BaseApplication {
 
 		KvStore.instance().setDb(reg.db());
 
-		BaseService.logger_ = this.logger_;
 		EncryptionService.instance().setLogger(this.logger_);
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		DecryptionWorker.instance().setLogger(this.logger_);
@@ -650,14 +752,13 @@ class BaseApplication {
 		SearchEngine.instance().setLogger(reg.logger());
 		SearchEngine.instance().scheduleSyncTables();
 
-		let currentFolderId = Setting.value('activeFolderId');
+		const currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
-
 		return argv;
 	}
 }

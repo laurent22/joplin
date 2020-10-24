@@ -10,8 +10,8 @@
     <rect width="1102" height="200" fill="url(#a)"/>
   </g>
   <g fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
-    <text x="60" y="148" textLength="435" fill="#000" opacity="0.25">become</text>
-    <text x="50" y="138" textLength="435">become</text>
+    <text x="60" y="148" textLength="435" fill="#000" opacity="0.25">Become</text>
+    <text x="50" y="138" textLength="435">Become</text>
     <text x="590" y="148" textLength="467" fill="#000" opacity="0.25">a patron</text>
     <text x="580" y="138" textLength="467">a patron</text>
   </g>

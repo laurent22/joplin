@@ -1,3 +1,5 @@
+const Setting = require('lib/models/Setting');
+
 class InteropService_Importer_Base {
 	setMetadata(md) {
 		this.metadata_ = md;
@@ -16,7 +18,7 @@ class InteropService_Importer_Base {
 
 	async temporaryDirectory_(createIt) {
 		const md5 = require('md5');
-		const tempDir = `${require('os').tmpdir()}/${md5(Math.random() + Date.now())}`;
+		const tempDir = `${Setting.value('tempDir')}/${md5(Math.random() + Date.now())}`;
 		if (createIt) await require('fs-extra').mkdirp(tempDir);
 		return tempDir;
 	}
