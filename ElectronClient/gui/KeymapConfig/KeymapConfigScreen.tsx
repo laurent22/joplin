@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import KeymapService, { KeymapItem } from '../../lib/services/KeymapService';
+import KeymapService, { KeymapItem } from 'lib/services/KeymapService';
 import { ShortcutRecorder } from './ShortcutRecorder';
 import getLabel from './utils/getLabel';
 import useKeymap from './utils/useKeymap';
@@ -106,7 +106,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	const renderError = (error: Error) => {
 		return (
-			<div style={styles.warning}>
+			<div style={{ ...styles.warning, position: 'absolute', top: 0 }}>
 				<p style={styles.text}>
 					<span>
 						{error.message}
