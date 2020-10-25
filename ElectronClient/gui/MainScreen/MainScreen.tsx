@@ -48,6 +48,7 @@ const commands = [
 	require('./commands/moveToFolder'),
 	require('./commands/newNote'),
 	require('./commands/newFolder'),
+	require('./commands/newSubFolder'),
 	require('./commands/newTodo'),
 	require('./commands/print'),
 	require('./commands/renameFolder'),

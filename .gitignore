@@ -99,6 +99,7 @@ ElectronClient/gui/MainScreen/commands/hideModalMessage.js
 ElectronClient/gui/MainScreen/commands/moveToFolder.js
 ElectronClient/gui/MainScreen/commands/newFolder.js
 ElectronClient/gui/MainScreen/commands/newNote.js
+ElectronClient/gui/MainScreen/commands/newSubFolder.js
 ElectronClient/gui/MainScreen/commands/newTodo.js
 ElectronClient/gui/MainScreen/commands/openFolder.js
 ElectronClient/gui/MainScreen/commands/openNote.js

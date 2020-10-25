@@ -46,6 +46,7 @@ const commands = [
 	require('./gui/MainScreen/commands/moveToFolder'),
 	require('./gui/MainScreen/commands/newNote'),
 	require('./gui/MainScreen/commands/newFolder'),
+	require('./gui/MainScreen/commands/newSubFolder'),
 	require('./gui/MainScreen/commands/newTodo'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
