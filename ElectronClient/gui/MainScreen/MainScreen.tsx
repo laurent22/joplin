@@ -63,6 +63,9 @@ const commands = [
 	require('./commands/toggleNoteList'),
 	require('./commands/toggleSideBar'),
 	require('./commands/toggleVisiblePanes'),
+	require('./commands/openNote'),
+	require('./commands/openFolder'),
+	require('./commands/openTag'),
 ];
 
 class MainScreenComponent extends React.Component<any, any> {
