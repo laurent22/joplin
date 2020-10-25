@@ -11,7 +11,10 @@
 	"exclude": [
 		"**/node_modules",
 		"ElectronClient/dist/**/*",
+		"ElectronClient/lib/**/*",
+		"CliClient/lib/**/*",
 		"CliClient/tests/support/**/*",
-		"CliClient/tests-build/support/**/*",
+		"CliClient/tests-build/**/*",
+		"CliClient/build/**/*",
 	],
 }

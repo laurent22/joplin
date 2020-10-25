@@ -204,6 +204,7 @@ ElectronClient/services/plugins/UserWebviewDialog.js
 ElectronClient/services/plugins/UserWebviewDialogButtonBar.js
 ReactNativeClient/lib/AsyncActionQueue.js
 ReactNativeClient/lib/BaseApplication.js
+ReactNativeClient/lib/BaseModel.js
 ReactNativeClient/lib/checkPermissions.js
 ReactNativeClient/lib/commands/historyBackward.js
 ReactNativeClient/lib/commands/historyForward.js
@@ -247,6 +248,9 @@ ReactNativeClient/lib/markdownUtils.js
 ReactNativeClient/lib/markupLanguageUtils.js
 ReactNativeClient/lib/models/Alarm.js
 ReactNativeClient/lib/models/Setting.js
+ReactNativeClient/lib/models/utils/modelFeed.js
+ReactNativeClient/lib/models/utils/paginationToSql.js
+ReactNativeClient/lib/models/utils/types.js
 ReactNativeClient/lib/ntpDate.js
 ReactNativeClient/lib/path-utils.js
 ReactNativeClient/lib/PoorManIntervals.js

@@ -2,6 +2,8 @@ import Setting from 'lib/models/Setting';
 import Logger from 'lib/Logger';
 import shim from 'lib/shim';
 import uuid from 'lib/uuid';
+import modelFeed from 'lib/models/utils/modelFeed';
+import { Pagination, PaginationOrderDir, PaginationOrder } from 'lib/models/utils/types';
 
 const { ltrimSlashes } = require('lib/path-utils');
 const { Database } = require('lib/database.js');
@@ -27,6 +29,51 @@ const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } = require('./errors');
 
+export enum RequestMethod {
+	GET = 'GET',
+	POST = 'post',
+	PUT = 'PUT',
+	DELETE = 'DELETE',
+}
+
+interface RequestFile {
+	path: string,
+}
+
+interface RequestQuery {
+	cursor?: string,
+	fields?: string[] | string,
+	token?: string,
+	nounce?: string,
+
+	// Search engine query
+	query?: string,
+	type?: number,
+
+	as_tree?: number,
+
+	// Pagination
+	limit?: number,
+	order_dir?: PaginationOrderDir,
+	order_by?: string,
+}
+
+interface Request {
+	method: RequestMethod,
+	path: string,
+	query: RequestQuery,
+	body: any,
+	bodyJson_: any,
+	bodyJson: any,
+	files: RequestFile[],
+	params: any[],
+	action?: any,
+}
+
+interface ResourceNameToMethodName {
+	[key:string]: Function,
+}
+
 export default class Api {
 
 	private token_:string | Function;
@@ -34,37 +81,50 @@ export default class Api {
 	private logger_:Logger;
 	private actionApi_:any;
 	private htmlToMdParser_:any;
+	private resourceNameToMethodName_:ResourceNameToMethodName = {};
 
-	constructor(token:string = null, actionApi:any = null) {
+	public constructor(token:string = null, actionApi:any = null) {
 		this.token_ = token;
 		this.logger_ = new Logger();
 		this.actionApi_ = actionApi;
+
+		this.resourceNameToMethodName_ = {
+			ping: this.action_ping.bind(this),
+			notes: this.action_notes.bind(this),
+			folders: this.action_folders.bind(this),
+			tags: this.action_tags.bind(this),
+			resources: this.action_resources.bind(this),
+			master_keys: this.action_master_keys.bind(this),
+			services: this.action_services.bind(this),
+			search: this.action_search.bind(this),
+		};
 	}
 
-	get token() {
+	public get token() {
 		return typeof this.token_ === 'function' ? this.token_() : this.token_;
 	}
 
-	parsePath(path:string) {
+	private parsePath(path:string) {
 		path = ltrimSlashes(path);
-		if (!path) return { callName: '', params: [] };
+		if (!path) return { fn: null, params: [] };
 
 		const pathParts = path.split('/');
 		const callSuffix = pathParts.splice(0, 1)[0];
-		const callName = `action_${callSuffix}`;
+		const fn = this.resourceNameToMethodName_[callSuffix];
+
 		return {
-			callName: callName,
+			fn: fn,
 			params: pathParts,
 		};
 	}
 
 	// Response can be any valid JSON object, so a string, and array or an object (key/value pairs).
-	async route(method:string, path:string, query:any = null, body:any = null, files:string[] = null):Promise<any> {
+	public async route(method:RequestMethod, path:string, query:RequestQuery = null, body:any = null, files:RequestFile[] = null):Promise<any> {
 		if (!files) files = [];
 		if (!query) query = {};
 
 		const parsedPath = this.parsePath(path);
-		if (!parsedPath.callName) throw new ErrorNotFound(); // Nothing at the root yet
+		if (!parsedPath.fn) throw new ErrorNotFound(); // Nothing at the root yet
 
 		if (query && query.nounce) {
 			const requestMd5 = md5(JSON.stringify([method, path, body, query, files.length]));
@@ -74,11 +134,24 @@ export default class Api {
 			this.knownNounces_[query.nounce] = requestMd5;
 		}
 
-		const request:any = {
-			method: method,
+		let id = null;
+		let link = null;
+		const params = parsedPath.params;
+
+		if (params.length >= 1) {
+			id = params[0];
+			params.splice(0, 1);
+			if (params.length >= 1) {
+				link = params[0];
+				params.splice(0, 1);
+			}
+		}
+
+		const request:Request = {
+			method,
 			path: ltrimSlashes(path),
 			query: query ? query : {},
-			body: body,
+			body,
 			bodyJson_: null,
 			bodyJson: function(disallowedProperties:string[] = null) {
 				if (!this.bodyJson_) this.bodyJson_ = JSON.parse(this.body);
@@ -94,49 +167,33 @@ export default class Api {
 
 				return this.bodyJson_;
 			},
-			files: files,
+			files,
+			params,
 		};
 
-		let id = null;
-		let link = null;
-		const params = parsedPath.params;
-
-		if (params.length >= 1) {
-			id = params[0];
-			params.splice(0, 1);
-			if (params.length >= 1) {
-				link = params[0];
-				params.splice(0, 1);
-			}
-		}
-
-		request.params = params;
-
-		if (!(this as any)[parsedPath.callName]) throw new ErrorNotFound();
-
 		try {
-			return await (this as any)[parsedPath.callName](request, id, link);
+			return await parsedPath.fn(request, id, link);
 		} catch (error) {
 			if (!error.httpCode) error.httpCode = 500;
 			throw error;
 		}
 	}
 
-	setLogger(l:Logger) {
+	public setLogger(l:Logger) {
 		this.logger_ = l;
 	}
 
-	logger() {
+	private logger() {
 		return this.logger_;
 	}
 
-	readonlyProperties(requestMethod:string) {
+	private readonlyProperties(requestMethod:string) {
 		const output = ['created_time', 'updated_time', 'encryption_blob_encrypted', 'encryption_applied', 'encryption_cipher_text'];
 		if (requestMethod !== 'POST') output.splice(0, 0, 'id');
 		return output;
 	}
 
-	fields_(request:any, defaultFields:string[]) {
+	private fields_(request:Request, defaultFields:string[]) {
 		const query = request.query;
 		if (!query || !query.fields) return defaultFields;
 		if (Array.isArray(query.fields)) return query.fields.slice();
@@ -147,7 +204,7 @@ export default class Api {
 		return fields.length ? fields : defaultFields;
 	}
 
-	checkToken_(request:any) {
+	private checkToken_(request:Request) {
 		// For now, whitelist some calls to allow the web clipper to work
 		// without an extra auth step
 		const whiteList = [['GET', 'ping'], ['GET', 'tags'], ['GET', 'folders'], ['POST', 'notes']];
@@ -161,7 +218,15 @@ export default class Api {
 		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}
 
-	async defaultAction_(modelType:number, request:any, id:string = null, link:string = null) {
+	private async paginatedResults(modelType:number, request:Request, whereSql:string = '') {
+		const ModelClass = BaseItem.getClassByItemType(modelType);
+		const fields = this.fields_(request, []);
+		const pagination = this.requestPaginationOptions(request);
+		const cursor = request.query.cursor;
+		return modelFeed(BaseModel.db(), ModelClass.tableName(), pagination, cursor, whereSql, fields);
+	}
+
+	private async defaultAction_(modelType:number, request:Request, id:string = null, link:string = null) {
 		this.checkToken_(request);
 
 		if (link) throw new ErrorNotFound(); // Default action doesn't support links at all for now
@@ -178,10 +243,19 @@ export default class Api {
 			if (id) {
 				return getOneModel();
 			} else {
-				const options:any = {};
-				const fields = this.fields_(request, []);
-				if (fields.length) options.fields = fields;
-				return await ModelClass.all(options);
+				return this.paginatedResults(modelType, request);
+				// const options:any = {};
+				// const fields = this.fields_(request, []);
+				// if (fields.length) options.fields = fields;
+
+				// const pagination = this.requestPaginationOptions(request);
+				// const cursor = request.query.cursor;
+
+				// if (pagination || cursor) {
+				// 	return modelFeed(BaseModel.db(), ModelClass.tableName(), pagination, cursor, options.fields);
+				// } else {
+				// 	return ModelClass.all(options);
+				// }
 			}
 		}
 
@@ -198,7 +272,7 @@ export default class Api {
 			return;
 		}
 
-		if (request.method === 'POST') {
+		if (request.method === RequestMethod.POST) {
 			const props = this.readonlyProperties('POST');
 			const idIdx = props.indexOf('id');
 			if (idIdx >= 0) props.splice(idIdx, 1);
@@ -210,7 +284,7 @@ export default class Api {
 		throw new ErrorMethodNotAllowed();
 	}
 
-	async action_ping(request:any) {
+	private async action_ping(request:Request) {
 		if (request.method === 'GET') {
 			return 'JoplinClipperServer';
 		}
@@ -218,7 +292,7 @@ export default class Api {
 		throw new ErrorMethodNotAllowed();
 	}
 
-	async action_search(request:any) {
+	private async action_search(request:Request) {
 		this.checkToken_(request);
 
 		if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
@@ -227,6 +301,8 @@ export default class Api {
 		if (!query) throw new ErrorBadRequest('Missing "query" parameter');
 
 		const queryType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
+
+		let results = [];
 
 		if (queryType !== BaseItem.TYPE_NOTE) {
 			const ModelClass = BaseItem.getClassByItemType(queryType);
@@ -237,23 +313,36 @@ export default class Api {
 			options.where = 'title LIKE ?';
 			options.whereParams = [sqlQueryPart];
 			options.caseInsensitive = true;
-			return await ModelClass.all(options);
+			results = await ModelClass.all(options);
 		} else {
-			return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+			results = await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
 		}
+
+		return {
+			rows: results,
+			// TODO: implement cursor support
+		};
 	}
 
-	async action_folders(request:any, id:string = null, link:string = null) {
+	private async action_folders(request:Request, id:string = null, link:string = null) {
+		// const pagination = this.requestPaginationOptions(request);
+
 		if (request.method === 'GET' && !id) {
-			const folders = await FoldersScreenUtils.allForDisplay({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
-			const output = await Folder.allAsTree(folders);
-			return output;
+			if (request.query.as_tree) {
+				const folders = await FoldersScreenUtils.allForDisplay({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
+				const output = await Folder.allAsTree(folders);
+				return output;
+			} else {
+				return this.defaultAction_(BaseModel.TYPE_FOLDER, request, id, link);
+			}
 		}
 
 		if (request.method === 'GET' && id) {
 			if (link && link === 'notes') {
-				const options = this.notePreviewsOptions_(request);
-				return Note.previews(id, options);
+				const folder = await Folder.load(id);
+				return this.paginatedResults(BaseModel.TYPE_NOTE, request, `parent_id = "${folder.id}"`);
+				// const options = this.notePreviewsOptions_(request);
+				// return Note.previews(id, options);
 			} else if (link) {
 				throw new ErrorNotFound();
 			}
@@ -262,12 +351,12 @@ export default class Api {
 		return this.defaultAction_(BaseModel.TYPE_FOLDER, request, id, link);
 	}
 
-	async action_tags(request:any, id:string = null, link:string = null) {
+	private async action_tags(request:Request, id:string = null, link:string = null) {
 		if (link === 'notes') {
 			const tag = await Tag.load(id);
 			if (!tag) throw new ErrorNotFound();
 
-			if (request.method === 'POST') {
+			if (request.method === RequestMethod.POST) {
 				const note = request.bodyJson();
 				if (!note || !note.id) throw new ErrorBadRequest('Missing note ID');
 				return await Tag.addNote(tag.id, note.id);
@@ -289,18 +378,18 @@ export default class Api {
 					if (!n) continue;
 					output.push(n);
 				}
-				return output;
+				return { rows: output }; // TODO: paginate
 			}
 		}
 
 		return this.defaultAction_(BaseModel.TYPE_TAG, request, id, link);
 	}
 
-	async action_master_keys(request:any, id:string = null, link:string = null) {
+	private async action_master_keys(request:Request, id:string = null, link:string = null) {
 		return this.defaultAction_(BaseModel.TYPE_MASTER_KEY, request, id, link);
 	}
 
-	async action_resources(request:any, id:string = null, link:string = null) {
+	private async action_resources(request:Request, id:string = null, link:string = null) {
 		// fieldName: "data"
 		// headers: Object
 		// originalFilename: "test.jpg"
@@ -326,7 +415,7 @@ export default class Api {
 			if (link) throw new ErrorNotFound();
 		}
 
-		if (request.method === 'POST') {
+		if (request.method === RequestMethod.POST) {
 			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
 			const filePath = request.files[0].path;
 			const defaultProps = request.bodyJson(this.readonlyProperties('POST'));
@@ -336,27 +425,52 @@ export default class Api {
 		return this.defaultAction_(BaseModel.TYPE_RESOURCE, request, id, link);
 	}
 
-	notePreviewsOptions_(request:any) {
+	private requestPaginationOrder(request:Request):PaginationOrder[] {
+		const orderBy:string = request.query.order_by ? request.query.order_by : 'updated_time';
+		const orderDir:PaginationOrderDir = request.query.order_dir ? request.query.order_dir : PaginationOrderDir.ASC;
+
+		return [{
+			by: orderBy,
+			dir: orderDir,
+			caseInsensitive: true,
+		}];
+	}
+
+	private requestPaginationOptions(request:Request):Pagination {
+		const limit = request.query.limit ? request.query.limit : 100;
+		if (limit < 0 || limit > 100) throw new ErrorBadRequest(`Limit out of bond: ${limit}`);
+		const order:PaginationOrder[] = this.requestPaginationOrder(request);
+
+		return {
+			limit,
+			order,
+		};
+	}
+
+	private notePreviewsOptions_(request:Request) {
 		const fields = this.fields_(request, []); // previews() already returns default fields
 		const options:any = {};
 		if (fields.length) options.fields = fields;
-		return options;
+		return {
+			...options,
+			...this.requestPaginationOptions(request),
+		};
 	}
 
-	defaultSaveOptions_(model:any, requestMethod:string) {
+	private defaultSaveOptions_(model:any, requestMethod:string) {
 		const options:any = { userSideValidation: true };
 		if (requestMethod === 'POST' && model.id) options.isNew = true;
 		return options;
 	}
 
-	defaultLoadOptions_(request:any) {
+	private defaultLoadOptions_(request:Request) {
 		const options:any = {};
 		const fields = this.fields_(request, []);
 		if (fields.length) options.fields = fields;
 		return options;
 	}
 
-	async execServiceActionFromRequest_(externalApi:any, request:any) {
+	private async execServiceActionFromRequest_(externalApi:any, request:Request) {
 		const action = externalApi[request.action];
 		if (!action) throw new ErrorNotFound(`Invalid action: ${request.action}`);
 		const args = Object.assign({}, request);
@@ -364,10 +478,10 @@ export default class Api {
 		return action(args);
 	}
 
-	async action_services(request:any, serviceName:string) {
+	private async action_services(request:Request, serviceName:string) {
 		this.checkToken_(request);
 
-		if (request.method !== 'POST') throw new ErrorMethodNotAllowed();
+		if (request.method !== RequestMethod.POST) throw new ErrorMethodNotAllowed();
 		if (!this.actionApi_) throw new ErrorNotFound('No action API has been setup!');
 		if (!this.actionApi_[serviceName]) throw new ErrorNotFound(`No such service: ${serviceName}`);
 
@@ -375,12 +489,15 @@ export default class Api {
 		return this.execServiceActionFromRequest_(externalApi, JSON.parse(request.body));
 	}
 
-	async action_notes(request:any, id:string = null, link:string = null) {
+	private async action_notes(request:Request, id:string = null, link:string = null) {
 		this.checkToken_(request);
 
 		if (request.method === 'GET') {
 			if (link && link === 'tags') {
-				return Tag.tagsByNoteId(id);
+				return {
+					rows: await Tag.tagsByNoteId(id),
+					// TODO: paginate
+				};
 			} else if (link && link === 'resources') {
 				const note = await Note.load(id);
 				if (!note) throw new ErrorNotFound();
@@ -390,7 +507,7 @@ export default class Api {
 				for (const resourceId of resourceIds) {
 					output.push(await Resource.load(resourceId, loadOptions));
 				}
-				return output;
+				return { rows: output }; // TODO: paginate
 			} else if (link) {
 				throw new ErrorNotFound();
 			}
@@ -399,11 +516,12 @@ export default class Api {
 			if (id) {
 				return await Note.preview(id, options);
 			} else {
-				return await Note.previews(null, options);
+				return this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
+				// return await Note.previews(null, options);
 			}
 		}
 
-		if (request.method === 'POST') {
+		if (request.method === RequestMethod.POST) {
 			const requestId = Date.now();
 			const requestNote = JSON.parse(request.body);
 
@@ -491,13 +609,13 @@ export default class Api {
 	// UTILIY FUNCTIONS
 	// ========================================================================================================================
 
-	htmlToMdParser() {
+	private htmlToMdParser() {
 		if (this.htmlToMdParser_) return this.htmlToMdParser_;
 		this.htmlToMdParser_ = new HtmlToMd();
 		return this.htmlToMdParser_;
 	}
 
-	async requestNoteToNote_(requestNote:any) {
+	private async requestNoteToNote_(requestNote:any) {
 		const output:any = {
 			title: requestNote.title ? requestNote.title : '',
 			body: requestNote.body ? requestNote.body : '',
@@ -578,7 +696,7 @@ export default class Api {
 	}
 
 	// Note must have been saved first
-	async attachImageFromDataUrl_(note:any, imageDataUrl:string, cropRect:any) {
+	private async attachImageFromDataUrl_(note:any, imageDataUrl:string, cropRect:any) {
 		const tempDir = Setting.value('tempDir');
 		const mime = mimeUtils.fromDataUrl(imageDataUrl);
 		let ext = mimeUtils.toFileExtension(mime) || '';
@@ -590,7 +708,7 @@ export default class Api {
 		return await shim.attachFileToNote(note, tempFilePath);
 	}
 
-	async tryToGuessImageExtFromMimeType_(response:any, imagePath:string) {
+	private async tryToGuessImageExtFromMimeType_(response:any, imagePath:string) {
 		const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
 		if (!mimeType) return imagePath;
 
@@ -602,7 +720,7 @@ export default class Api {
 		return newImagePath;
 	}
 
-	async buildNoteStyleSheet_(stylesheets:any[]) {
+	private async buildNoteStyleSheet_(stylesheets:any[]) {
 		if (!stylesheets) return [];
 
 		const output = [];
@@ -628,7 +746,7 @@ export default class Api {
 		return output;
 	}
 
-	async downloadImage_(url:string /* , allowFileProtocolImages */) {
+	private async downloadImage_(url:string /* , allowFileProtocolImages */) {
 		const tempDir = Setting.value('tempDir');
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
@@ -664,7 +782,7 @@ export default class Api {
 		}
 	}
 
-	async downloadImages_(urls:string[] /* , allowFileProtocolImages:boolean */) {
+	private async downloadImages_(urls:string[] /* , allowFileProtocolImages:boolean */) {
 		const PromisePool = require('es6-promise-pool');
 
 		const output:any = {};
@@ -689,7 +807,7 @@ export default class Api {
 		return output;
 	}
 
-	async createResourcesFromPaths_(urls:string[]) {
+	private async createResourcesFromPaths_(urls:string[]) {
 		for (const url in urls) {
 			if (!urls.hasOwnProperty(url)) continue;
 			const urlInfo:any = urls[url];
@@ -703,7 +821,7 @@ export default class Api {
 		return urls;
 	}
 
-	async removeTempFiles_(urls:string[]) {
+	private async removeTempFiles_(urls:string[]) {
 		for (const url in urls) {
 			if (!urls.hasOwnProperty(url)) continue;
 			const urlInfo:any = urls[url];
@@ -715,7 +833,7 @@ export default class Api {
 		}
 	}
 
-	replaceImageUrlsByResources_(markupLanguage:number, md:string, urls:any, imageSizes:any) {
+	private replaceImageUrlsByResources_(markupLanguage:number, md:string, urls:any, imageSizes:any) {
 		const imageSizesIndexes:any = {};
 
 		if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {

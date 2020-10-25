@@ -1,22 +1,69 @@
+import paginationToSql from "./models/utils/paginationToSql";
+
 const { Database } = require('lib/database.js');
 const uuid = require('lib/uuid').default;
 const { time } = require('lib/time-utils.js');
 const Mutex = require('async-mutex').Mutex;
 
+// New code should make use of this enum
+export enum ModelType {
+	note = 1,
+	folder = 2,
+	setting = 3,
+	resource = 4,
+	tag = 5,
+	note_tag = 6,
+	search = 7,
+	alarm = 8,
+	master_key = 9,
+	item_change = 10,
+	note_resource = 11,
+	resource_local_state = 12,
+	revision = 13,
+	migration = 14,
+	smart_filter = 15,
+	command = 16,
+}
+
 class BaseModel {
-	static modelType() {
+
+	public static typeEnum_:any[] = [
+		['TYPE_NOTE', ModelType.note],
+		['TYPE_FOLDER', ModelType.folder],
+		['TYPE_SETTING', ModelType.setting],
+		['TYPE_RESOURCE', ModelType.resource],
+		['TYPE_TAG', ModelType.tag],
+		['TYPE_NOTE_TAG', ModelType.note_tag],
+		['TYPE_SEARCH', ModelType.search],
+		['TYPE_ALARM', ModelType.alarm],
+		['TYPE_MASTER_KEY', ModelType.master_key],
+		['TYPE_ITEM_CHANGE', ModelType.item_change],
+		['TYPE_NOTE_RESOURCE', ModelType.note_resource],
+		['TYPE_RESOURCE_LOCAL_STATE', ModelType.resource_local_state],
+		['TYPE_REVISION', ModelType.revision],
+		['TYPE_MIGRATION', ModelType.migration],
+		['TYPE_SMART_FILTER', ModelType.smart_filter],
+		['TYPE_COMMAND', ModelType.command],
+	]
+
+	protected static dispatch:Function = function() {};
+	private static saveMutexes_:any = {};
+
+	private static db_:any;
+
+	static modelType():ModelType {
 		throw new Error('Must be overriden');
 	}
 
-	static tableName() {
+	static tableName():string {
 		throw new Error('Must be overriden');
 	}
 
-	static setDb(db) {
+	static setDb(db:any) {
 		this.db_ = db;
 	}
 
-	static addModelMd(model) {
+	static addModelMd(model:any):any {
 		if (!model) return model;
 
 		if (Array.isArray(model)) {
@@ -40,29 +87,29 @@ class BaseModel {
 		return false;
 	}
 
-	static byId(items, id) {
+	static byId(items:any[], id:string) {
 		for (let i = 0; i < items.length; i++) {
 			if (items[i].id == id) return items[i];
 		}
 		return null;
 	}
 
-	static defaultValues(fieldNames) {
-		const output = {};
+	static defaultValues(fieldNames:string[]) {
+		const output:any = {};
 		for (const n of fieldNames) {
 			output[n] = this.db().fieldDefaultValue(this.tableName(), n);
 		}
 		return output;
 	}
 
-	static modelIndexById(items, id) {
+	static modelIndexById(items:any[], id:string) {
 		for (let i = 0; i < items.length; i++) {
 			if (items[i].id == id) return i;
 		}
 		return -1;
 	}
 
-	static modelsByIds(items, ids) {
+	static modelsByIds(items:any[], ids:string[]) {
 		const output = [];
 		for (let i = 0; i < items.length; i++) {
 			if (ids.indexOf(items[i].id) >= 0) {
@@ -74,14 +121,14 @@ class BaseModel {
 
 	// Prefer the use of this function to compare IDs as it handles the case where
 	// one ID is null and the other is "", in which case they are actually considered to be the same.
-	static idsEqual(id1, id2) {
+	static idsEqual(id1:string, id2:string) {
 		if (!id1 && !id2) return true;
 		if (!id1 && !!id2) return false;
 		if (!!id1 && !id2) return false;
 		return id1 === id2;
 	}
 
-	static modelTypeToName(type) {
+	static modelTypeToName(type:number) {
 		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 			const e = BaseModel.typeEnum_[i];
 			if (e[1] === type) return e[0].substr(5).toLowerCase();
@@ -89,7 +136,7 @@ class BaseModel {
 		throw new Error(`Unknown model type: ${type}`);
 	}
 
-	static modelNameToType(name) {
+	static modelNameToType(name:string) {
 		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 			const e = BaseModel.typeEnum_[i];
 			const eName = e[0].substr(5).toLowerCase();
@@ -98,12 +145,12 @@ class BaseModel {
 		throw new Error(`Unknown model name: ${name}`);
 	}
 
-	static hasField(name) {
+	static hasField(name:string) {
 		const fields = this.fieldNames();
 		return fields.indexOf(name) >= 0;
 	}
 
-	static fieldNames(withPrefix = false) {
+	static fieldNames(withPrefix:boolean = false) {
 		const output = this.db().tableFieldNames(this.tableName());
 		if (!withPrefix) return output;
 
@@ -116,7 +163,7 @@ class BaseModel {
 		return temp;
 	}
 
-	static fieldType(name, defaultValue = null) {
+	static fieldType(name:string, defaultValue:any = null) {
 		const fields = this.fields();
 		for (let i = 0; i < fields.length; i++) {
 			if (fields[i].name == name) return fields[i].type;
@@ -129,8 +176,8 @@ class BaseModel {
 		return this.db().tableFields(this.tableName());
 	}
 
-	static removeUnknownFields(model) {
-		const newModel = {};
+	static removeUnknownFields(model:any) {
+		const newModel:any = {};
 		for (const n in model) {
 			if (!model.hasOwnProperty(n)) continue;
 			if (!this.hasField(n) && n !== 'type_') continue;
@@ -141,7 +188,7 @@ class BaseModel {
 
 	static new() {
 		const fields = this.fields();
-		const output = {};
+		const output:any = {};
 		for (let i = 0; i < fields.length; i++) {
 			const f = fields[i];
 			output[f.name] = f.default;
@@ -149,7 +196,7 @@ class BaseModel {
 		return output;
 	}
 
-	static modOptions(options) {
+	static modOptions(options:any) {
 		if (!options) {
 			options = {};
 		} else {
@@ -161,42 +208,42 @@ class BaseModel {
 		return options;
 	}
 
-	static count(options = null) {
+	static count(options:any = null) {
 		if (!options) options = {};
 		let sql = `SELECT count(*) as total FROM \`${this.tableName()}\``;
 		if (options.where) sql += ` WHERE ${options.where}`;
 		return this.db()
 			.selectOne(sql)
-			.then(r => {
+			.then((r:any) => {
 				return r ? r['total'] : 0;
 			});
 	}
 
-	static load(id, options = null) {
+	static load(id:string, options:any = null) {
 		return this.loadByField('id', id, options);
 	}
 
-	static shortId(id) {
+	static shortId(id:string) {
 		return id.substr(0, 5);
 	}
 
-	static loadByPartialId(partialId) {
+	static loadByPartialId(partialId:string) {
 		return this.modelSelectAll(`SELECT * FROM \`${this.tableName()}\` WHERE \`id\` LIKE ?`, [`${partialId}%`]);
 	}
 
-	static applySqlOptions(options, sql, params = null) {
+	static applySqlOptions(options:any, sql:string, params:any[] = null) {
 		if (!options) options = {};
 
 		if (options.order && options.order.length) {
-			const items = [];
-			for (let i = 0; i < options.order.length; i++) {
-				const o = options.order[i];
-				let item = `\`${o.by}\``;
-				if (options.caseInsensitive === true) item += ' COLLATE NOCASE';
-				if (o.dir) item += ` ${o.dir}`;
-				items.push(item);
-			}
-			sql += ` ORDER BY ${items.join(', ')}`;
+			// const items = [];
+			// for (let i = 0; i < options.order.length; i++) {
+			// 	const o = options.order[i];
+			// 	let item = `\`${o.by}\``;
+			// 	if (options.caseInsensitive === true) item += ' COLLATE NOCASE';
+			// 	if (o.dir) item += ` ${o.dir}`;
+			// 	items.push(item);
+			// }
+			sql += ` ORDER BY ${paginationToSql(options)}`;
 		}
 
 		if (options.limit) sql += ` LIMIT ${options.limit}`;
@@ -204,18 +251,18 @@ class BaseModel {
 		return { sql: sql, params: params };
 	}
 
-	static async allIds(options = null) {
+	static async allIds(options:any = null) {
 		const q = this.applySqlOptions(options, `SELECT id FROM \`${this.tableName()}\``);
 		const rows = await this.db().selectAll(q.sql, q.params);
-		return rows.map(r => r.id);
+		return rows.map((r:any) => r.id);
 	}
 
-	static async all(options = null) {
+	static async all(options:any = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
 		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
-		let params = [];
+		let params:any[] = [];
 		if (options.where) {
 			sql += ` WHERE ${options.where}`;
 			if (options.whereParams) params = params.concat(options.whereParams);
@@ -225,7 +272,7 @@ class BaseModel {
 		return this.modelSelectAll(q.sql, q.params);
 	}
 
-	static async byIds(ids, options = null) {
+	static async byIds(ids:string[], options:any = null) {
 		if (!ids.length) return [];
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
@@ -236,7 +283,7 @@ class BaseModel {
 		return this.modelSelectAll(q.sql);
 	}
 
-	static async search(options = null) {
+	static async search(options:any = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
@@ -258,25 +305,25 @@ class BaseModel {
 		return this.modelSelectAll(query.sql, query.params);
 	}
 
-	static modelSelectOne(sql, params = null) {
+	static modelSelectOne(sql:string, params:any[] = null) {
 		if (params === null) params = [];
 		return this.db()
 			.selectOne(sql, params)
-			.then(model => {
+			.then((model:any) => {
 				return this.filter(this.addModelMd(model));
 			});
 	}
 
-	static modelSelectAll(sql, params = null) {
+	static modelSelectAll(sql:string, params:any[] = null) {
 		if (params === null) params = [];
 		return this.db()
 			.selectAll(sql, params)
-			.then(models => {
+			.then((models:any[]) => {
 				return this.filterArray(this.addModelMd(models));
 			});
 	}
 
-	static loadByField(fieldName, fieldValue, options = null) {
+	static loadByField(fieldName:string, fieldValue:any, options:any = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -285,7 +332,7 @@ class BaseModel {
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
-	static loadByFields(fields, options = null) {
+	static loadByFields(fields:string[], options:any = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -300,12 +347,12 @@ class BaseModel {
 		return this.modelSelectOne(sql, params);
 	}
 
-	static loadByTitle(fieldValue) {
+	static loadByTitle(fieldValue:any) {
 		return this.modelSelectOne(`SELECT * FROM \`${this.tableName()}\` WHERE \`title\` = ?`, [fieldValue]);
 	}
 
-	static diffObjects(oldModel, newModel) {
-		const output = {};
+	static diffObjects(oldModel:any, newModel:any) {
+		const output:any = {};
 		const fields = this.diffObjectsFields(oldModel, newModel);
 		for (let i = 0; i < fields.length; i++) {
 			output[fields[i]] = newModel[fields[i]];
@@ -314,7 +361,7 @@ class BaseModel {
 		return output;
 	}
 
-	static diffObjectsFields(oldModel, newModel) {
+	static diffObjectsFields(oldModel:any, newModel:any) {
 		const output = [];
 		for (const n in newModel) {
 			if (!newModel.hasOwnProperty(n)) continue;
@@ -326,15 +373,15 @@ class BaseModel {
 		return output;
 	}
 
-	static modelsAreSame(oldModel, newModel) {
+	static modelsAreSame(oldModel:any, newModel:any) {
 		const diff = this.diffObjects(oldModel, newModel);
 		delete diff.type_;
 		return !Object.getOwnPropertyNames(diff).length;
 	}
 
-	static saveMutex(modelOrId) {
+	static saveMutex(modelOrId:any) {
 		const noLockMutex = {
-			acquire: function() {
+			acquire: function():any {
 				return null;
 			},
 		};
@@ -353,7 +400,7 @@ class BaseModel {
 		return mutex;
 	}
 
-	static releaseSaveMutex(modelOrId, release) {
+	static releaseSaveMutex(modelOrId:any, release:Function) {
 		if (!release) return;
 		if (!modelOrId) return release();
 
@@ -368,8 +415,8 @@ class BaseModel {
 		release();
 	}
 
-	static saveQuery(o, options) {
-		let temp = {};
+	static saveQuery(o:any, options:any) {
+		let temp:any = {};
 		const fieldNames = this.fieldNames();
 		for (let i = 0; i < fieldNames.length; i++) {
 			const n = fieldNames[i];
@@ -381,7 +428,7 @@ class BaseModel {
 		// be part of the final list of fields if autoTimestamp is on.
 		// id also will stay.
 		if (!options.isNew && options.fields) {
-			const filtered = {};
+			const filtered:any = {};
 			for (const k in temp) {
 				if (!temp.hasOwnProperty(k)) continue;
 				if (k !== 'id' && options.fields.indexOf(k) < 0) continue;
@@ -393,7 +440,7 @@ class BaseModel {
 		o = temp;
 
 		let modelId = temp.id;
-		let query = {};
+		let query:any = {};
 
 		const timeNow = time.unixMs();
 
@@ -445,7 +492,7 @@ class BaseModel {
 		return query;
 	}
 
-	static userSideValidation(o) {
+	static userSideValidation(o:any) {
 		if (o.id && !o.id.match(/^[a-f0-9]{32}$/)) {
 			throw new Error('Validation error: ID must a 32-characters lowercase hexadecimal string');
 		}
@@ -456,7 +503,7 @@ class BaseModel {
 		}
 	}
 
-	static async save(o, options = null) {
+	static async save(o:any, options:any = null) {
 		// When saving, there's a mutex per model ID. This is because the model returned from this function
 		// is basically its input `o` (instead of being read from the database, for performance reasons).
 		// This works well in general except if that model is saved simultaneously in two places. In that
@@ -526,7 +573,7 @@ class BaseModel {
 		return output;
 	}
 
-	static isNew(object, options) {
+	static isNew(object:any, options:any) {
 		if (options && 'isNew' in options) {
 			// options.isNew can be "auto" too
 			if (options.isNew === true) return true;
@@ -536,7 +583,7 @@ class BaseModel {
 		return !object.id;
 	}
 
-	static filterArray(models) {
+	static filterArray(models:any[]) {
 		const output = [];
 		for (let i = 0; i < models.length; i++) {
 			output.push(this.filter(models[i]));
@@ -544,7 +591,7 @@ class BaseModel {
 		return output;
 	}
 
-	static filter(model) {
+	static filter(model:any) {
 		if (!model) return model;
 
 		const output = Object.assign({}, model);
@@ -567,12 +614,12 @@ class BaseModel {
 		return output;
 	}
 
-	static delete(id) {
+	static delete(id:string) {
 		if (!id) throw new Error('Cannot delete object without an ID');
 		return this.db().exec(`DELETE FROM ${this.tableName()} WHERE id = ?`, [id]);
 	}
 
-	static batchDelete(ids, options = null) {
+	static batchDelete(ids:string[], options:any = null) {
 		if (!ids.length) return;
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';
@@ -590,32 +637,9 @@ class BaseModel {
 	}
 }
 
-BaseModel.typeEnum_ = [
-	['TYPE_NOTE', 1],
-	['TYPE_FOLDER', 2],
-	['TYPE_SETTING', 3],
-	['TYPE_RESOURCE', 4],
-	['TYPE_TAG', 5],
-	['TYPE_NOTE_TAG', 6],
-	['TYPE_SEARCH', 7],
-	['TYPE_ALARM', 8],
-	['TYPE_MASTER_KEY', 9],
-	['TYPE_ITEM_CHANGE', 10],
-	['TYPE_NOTE_RESOURCE', 11],
-	['TYPE_RESOURCE_LOCAL_STATE', 12],
-	['TYPE_REVISION', 13],
-	['TYPE_MIGRATION', 14],
-	['TYPE_SMART_FILTER', 15],
-	['TYPE_COMMAND', 16],
-];
-
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 	const e = BaseModel.typeEnum_[i];
-	BaseModel[e[0]] = e[1];
+	(BaseModel as any)[e[0]] = e[1];
 }
-
-BaseModel.db_ = null;
-BaseModel.dispatch = function() {};
-BaseModel.saveMutexes_ = {};
 
 module.exports = BaseModel;
