@@ -60,6 +60,7 @@ Tools/PortableAppsLauncher
 Modules/TinyMCE/IconPack/postinstall.js
 Modules/TinyMCE/langs/
 CliClient/build/
+plugin_types/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 CliClient/app/LinkSelector.js
