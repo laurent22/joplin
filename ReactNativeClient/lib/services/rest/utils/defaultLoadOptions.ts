@@ -1,4 +1,4 @@
-import { Request } from './Api';
+import { Request } from '../Api';
 import requestFields from './requestFields';
 
 export default function(request:Request, modelType:number) {

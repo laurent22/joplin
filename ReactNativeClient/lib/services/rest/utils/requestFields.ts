@@ -1,4 +1,4 @@
-import { Request } from './Api';
+import { Request } from '../Api';
 const BaseItem = require('lib/models/BaseItem');
 
 function defaultFieldsByModelType(modelType:number):string[] {

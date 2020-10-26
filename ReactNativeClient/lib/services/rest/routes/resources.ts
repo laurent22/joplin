@@ -1,11 +1,11 @@
 import BaseModel from 'lib/BaseModel';
 import shim from 'lib/shim';
 import { Request, RequestMethod } from '../Api';
-import defaultAction from '../defaultAction';
-import { ErrorBadRequest, ErrorNotFound } from '../errors';
-import readonlyProperties from '../readonlyProperties';
+import defaultAction from '../utils/defaultAction';
+import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
+import readonlyProperties from '../utils/readonlyProperties';
+import ApiResponse from '../ApiResponse';
 const Resource = require('lib/models/Resource');
-const ApiResponse = require('../ApiResponse');
 
 export default async function(request:Request, id:string = null, link:string = null) {
 	// fieldName: "data"

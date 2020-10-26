@@ -1,4 +1,4 @@
-import { Request, RequestMethod } from './Api';
+import { Request, RequestMethod } from '../Api';
 import defaultSaveOptions from './defaultSaveOptions';
 import { ErrorMethodNotAllowed, ErrorNotFound } from './errors';
 import paginatedResults from './paginatedResults';

@@ -1,5 +1,5 @@
 import { Pagination, PaginationOrder, PaginationOrderDir } from 'lib/models/utils/types';
-import { Request } from './Api';
+import { Request } from '../Api';
 import { ErrorBadRequest } from './errors';
 
 function requestPaginationOrder(request:Request):PaginationOrder[] {

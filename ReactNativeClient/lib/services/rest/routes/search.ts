@@ -1,8 +1,8 @@
 import BaseModel, { ModelType } from 'lib/BaseModel';
 import { Request } from '../Api';
-import defaultLoadOptions from '../defaultLoadOptions';
-import { ErrorBadRequest, ErrorMethodNotAllowed } from '../errors';
-import requestFields from '../requestFields';
+import defaultLoadOptions from '../utils/defaultLoadOptions';
+import { ErrorBadRequest, ErrorMethodNotAllowed } from '../utils/errors';
+import requestFields from '../utils/requestFields';
 const BaseItem = require('lib/models/BaseItem');
 const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
 

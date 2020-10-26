@@ -1,5 +1,5 @@
 import modelFeed from 'lib/models/utils/modelFeed';
-import { Request } from './Api';
+import { Request } from '../Api';
 import requestFields from './requestFields';
 import BaseModel from 'lib/BaseModel';
 import requestPaginationOptions from './requestPaginationOptions';

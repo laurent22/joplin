@@ -1,6 +1,6 @@
-import defaultAction from '../defaultAction';
+import defaultAction from '../utils/defaultAction';
 import BaseModel, { ModelType } from 'lib/BaseModel';
-import defaultLoadOptions from '../defaultLoadOptions';
+import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { Request, RequestMethod } from '../Api';
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');

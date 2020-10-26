@@ -1,11 +1,11 @@
 import Setting from 'lib/models/Setting';
 import shim from 'lib/shim';
 import uuid from 'lib/uuid';
-import readonlyProperties from '../readonlyProperties';
-import defaultSaveOptions from '../defaultSaveOptions';
-import defaultAction from '../defaultAction';
+import readonlyProperties from '../utils/readonlyProperties';
+import defaultSaveOptions from '../utils/defaultSaveOptions';
+import defaultAction from '../utils/defaultAction';
 import BaseModel, { ModelType } from 'lib/BaseModel';
-import defaultLoadOptions from '../defaultLoadOptions';
+import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { RequestMethod, Request } from '../Api';
 
 const { reg } = require('lib/registry.js');

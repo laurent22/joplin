@@ -1,9 +1,9 @@
 
 import { Request } from '../Api';
-import defaultAction from '../defaultAction';
-import paginatedResults from '../paginatedResults';
+import defaultAction from '../utils/defaultAction';
+import paginatedResults from '../utils/paginatedResults';
 import BaseModel from 'lib/BaseModel';
-import requestFields from '../requestFields';
+import requestFields from '../utils/requestFields';
 const Folder = require('lib/models/Folder');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { ErrorNotFound } = require('../errors');
