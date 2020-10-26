@@ -112,6 +112,51 @@ class Command extends BaseCommand {
 		lines.push('');
 		lines.push('\tcurl http://localhost:41184/tags?fields=id');
 		lines.push('');
+		lines.push('By default API results will contain the following fields: **id**, **parent_id**, **title**');
+
+		lines.push('# Pagination');
+		lines.push('');
+		lines.push('All API calls that return multiple results will be paginated. The actual results will be under the `items` key, and if there are more results, there will also be a `cursor` key, which allows you to fetch the next results. If the `cursor` key is not present, it means you have reached the end of the data set.');
+		lines.push('');
+		lines.push('You can specify how the results should be sorted using the `order_by` and `order_dir` query parameters, and you can specify the number of items to be returned using the `limit` parameter (the maximum being 100 items).');
+		lines.push('');
+		lines.push('The following call for example will initiate a request to fetch all the notes, 10 at a time, and sorted by "updated_time" ascending:');
+		lines.push('');
+		lines.push('\tcurl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10');
+		lines.push('');
+		lines.push('This will return a result like this');
+		lines.push('');
+		lines.push('\t{ "items": [ /* 10 notes */ ], "cursor": "somecursor" }');
+		lines.push('');
+		lines.push('Then you will resume fetching the results using this query:');
+		lines.push('');
+		lines.push('\tcurl http://localhost:41184/notes?cursor=somecursor');
+		lines.push('');
+		lines.push('Note that you only need to pass the cursor to the next request, as it will continue the fetching process using the same parameters you initially provided.');
+		lines.push('');
+		lines.push('Eventually you will get some results that do not contain a "cursor" paramater, at which point you will have retrieved all the results');
+		lines.push('');
+		lines.push('As an example the pseudo-code below could be used to fetch all the notes:');
+		lines.push('');
+		lines.push('```javascript');
+		lines.push(`
+async function fetchJson(url) {
+	return (await fetch(url)).json();
+}
+
+async function fetchAllNotes() {
+	let query = '';
+	const url = 'http://localhost:41184/notes';
+
+	do {
+		const response = await fetchJson(url + query);
+		console.info('Printing notes:');
+		console.info(response.items);
+		query = '?cursor' + response.cursor;
+	} while (response.cursor)
+}`);
+		lines.push('```');
+		lines.push('');
 
 		lines.push('# Error handling');
 		lines.push('');

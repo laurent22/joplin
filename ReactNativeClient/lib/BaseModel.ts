@@ -7,22 +7,22 @@ const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
 export enum ModelType {
-	note = 1,
-	folder = 2,
-	setting = 3,
-	resource = 4,
-	tag = 5,
-	note_tag = 6,
-	search = 7,
-	alarm = 8,
-	master_key = 9,
-	item_change = 10,
-	note_resource = 11,
-	resource_local_state = 12,
-	revision = 13,
-	migration = 14,
-	smart_filter = 15,
-	command = 16,
+	Note = 1,
+	Folder = 2,
+	Setting = 3,
+	Resource = 4,
+	Tag = 5,
+	NoteTag = 6,
+	Search = 7,
+	Alarm = 8,
+	MasterKey = 9,
+	ItemChange = 10,
+	NoteResource = 11,
+	ResourceLocalState = 12,
+	Revision = 13,
+	Migration = 14,
+	SmartFilter = 15,
+	Command = 16,
 }
 
 class BaseModel {
@@ -31,40 +31,40 @@ class BaseModel {
 	// mess and should be refactored properly.
 
 	public static typeEnum_:any[] = [
-		['TYPE_NOTE', ModelType.note],
-		['TYPE_FOLDER', ModelType.folder],
-		['TYPE_SETTING', ModelType.setting],
-		['TYPE_RESOURCE', ModelType.resource],
-		['TYPE_TAG', ModelType.tag],
-		['TYPE_NOTE_TAG', ModelType.note_tag],
-		['TYPE_SEARCH', ModelType.search],
-		['TYPE_ALARM', ModelType.alarm],
-		['TYPE_MASTER_KEY', ModelType.master_key],
-		['TYPE_ITEM_CHANGE', ModelType.item_change],
-		['TYPE_NOTE_RESOURCE', ModelType.note_resource],
-		['TYPE_RESOURCE_LOCAL_STATE', ModelType.resource_local_state],
-		['TYPE_REVISION', ModelType.revision],
-		['TYPE_MIGRATION', ModelType.migration],
-		['TYPE_SMART_FILTER', ModelType.smart_filter],
-		['TYPE_COMMAND', ModelType.command],
+		['TYPE_NOTE', ModelType.Note],
+		['TYPE_FOLDER', ModelType.Folder],
+		['TYPE_SETTING', ModelType.Setting],
+		['TYPE_RESOURCE', ModelType.Resource],
+		['TYPE_TAG', ModelType.Tag],
+		['TYPE_NOTE_TAG', ModelType.NoteTag],
+		['TYPE_SEARCH', ModelType.Search],
+		['TYPE_ALARM', ModelType.Alarm],
+		['TYPE_MASTER_KEY', ModelType.MasterKey],
+		['TYPE_ITEM_CHANGE', ModelType.ItemChange],
+		['TYPE_NOTE_RESOURCE', ModelType.NoteResource],
+		['TYPE_RESOURCE_LOCAL_STATE', ModelType.ResourceLocalState],
+		['TYPE_REVISION', ModelType.Revision],
+		['TYPE_MIGRATION', ModelType.Migration],
+		['TYPE_SMART_FILTER', ModelType.SmartFilter],
+		['TYPE_COMMAND', ModelType.Command],
 	]
 
-	public static TYPE_NOTE =  ModelType.note;
-	public static TYPE_FOLDER =  ModelType.folder;
-	public static TYPE_SETTING =  ModelType.setting;
-	public static TYPE_RESOURCE =  ModelType.resource;
-	public static TYPE_TAG =  ModelType.tag;
-	public static TYPE_NOTE_TAG =  ModelType.note_tag;
-	public static TYPE_SEARCH =  ModelType.search;
-	public static TYPE_ALARM =  ModelType.alarm;
-	public static TYPE_MASTER_KEY =  ModelType.master_key;
-	public static TYPE_ITEM_CHANGE =  ModelType.item_change;
-	public static TYPE_NOTE_RESOURCE =  ModelType.note_resource;
-	public static TYPE_RESOURCE_LOCAL_STATE =  ModelType.resource_local_state;
-	public static TYPE_REVISION =  ModelType.revision;
-	public static TYPE_MIGRATION =  ModelType.migration;
-	public static TYPE_SMART_FILTER =  ModelType.smart_filter;
-	public static TYPE_COMMAND =  ModelType.command;
+	public static TYPE_NOTE =  ModelType.Note;
+	public static TYPE_FOLDER =  ModelType.Folder;
+	public static TYPE_SETTING =  ModelType.Setting;
+	public static TYPE_RESOURCE =  ModelType.Resource;
+	public static TYPE_TAG =  ModelType.Tag;
+	public static TYPE_NOTE_TAG =  ModelType.NoteTag;
+	public static TYPE_SEARCH =  ModelType.Search;
+	public static TYPE_ALARM =  ModelType.Alarm;
+	public static TYPE_MASTER_KEY =  ModelType.MasterKey;
+	public static TYPE_ITEM_CHANGE =  ModelType.ItemChange;
+	public static TYPE_NOTE_RESOURCE =  ModelType.NoteResource;
+	public static TYPE_RESOURCE_LOCAL_STATE =  ModelType.ResourceLocalState;
+	public static TYPE_REVISION =  ModelType.Revision;
+	public static TYPE_MIGRATION =  ModelType.Migration;
+	public static TYPE_SMART_FILTER =  ModelType.SmartFilter;
+	public static TYPE_COMMAND =  ModelType.Command;
 
 	protected static dispatch:Function = function() {};
 	private static saveMutexes_:any = {};

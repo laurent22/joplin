@@ -3,6 +3,7 @@ import defaultSaveOptions from './defaultSaveOptions';
 import { ErrorMethodNotAllowed, ErrorNotFound } from './errors';
 import paginatedResults from './paginatedResults';
 import readonlyProperties from './readonlyProperties';
+import requestFields from './requestFields';
 const BaseItem = require('lib/models/BaseItem');
 
 export default async function(modelType:number, request:Request, id:string = null, link:string = null) {
@@ -10,15 +11,17 @@ export default async function(modelType:number, request:Request, id:string = nul
 
 	const ModelClass = BaseItem.getClassByItemType(modelType);
 
-	const getOneModel = async () => {
-		const model = await ModelClass.load(id);
+	const getOneModel = async (options:any = null) => {
+		const model = await ModelClass.load(id, options || {});
 		if (!model) throw new ErrorNotFound();
 		return model;
 	};
 
 	if (request.method === 'GET') {
 		if (id) {
-			return getOneModel();
+			return getOneModel({
+				fields: requestFields(request, modelType),
+			});
 		} else {
 			return paginatedResults(modelType, request);
 		}
@@ -26,9 +29,8 @@ export default async function(modelType:number, request:Request, id:string = nul
 
 	if (request.method === 'PUT' && id) {
 		const model = await getOneModel();
-		let newModel = Object.assign({}, model, request.bodyJson(readonlyProperties('PUT')));
-		newModel = await ModelClass.save(newModel, { userSideValidation: true });
-		return newModel;
+		const newModel = Object.assign({}, model, request.bodyJson(readonlyProperties('PUT')));
+		return ModelClass.save(newModel, { userSideValidation: true });
 	}
 
 	if (request.method === 'DELETE' && id) {
@@ -42,8 +44,7 @@ export default async function(modelType:number, request:Request, id:string = nul
 		const idIdx = props.indexOf('id');
 		if (idIdx >= 0) props.splice(idIdx, 1);
 		const model = request.bodyJson(props);
-		const result = await ModelClass.save(model, defaultSaveOptions('POST', model.id));
-		return result;
+		return ModelClass.save(model, defaultSaveOptions('POST', model.id));
 	}
 
 	throw new ErrorMethodNotAllowed();

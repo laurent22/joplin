@@ -1,11 +1,11 @@
-import modelFeed from 'lib/models/utils/modelFeed';
+import modelFeed, { ModelFeedPage } from 'lib/models/utils/modelFeed';
 import { Request } from '../Api';
 import requestFields from './requestFields';
 import BaseModel from 'lib/BaseModel';
 import requestPaginationOptions from './requestPaginationOptions';
 const BaseItem = require('lib/models/BaseItem');
 
-export default async function(modelType:number, request:Request, whereSql:string = '') {
+export default async function(modelType:number, request:Request, whereSql:string = ''):Promise<ModelFeedPage> {
 	const ModelClass = BaseItem.getClassByItemType(modelType);
 	const fields = requestFields(request, modelType);
 	const pagination = requestPaginationOptions(request);

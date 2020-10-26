@@ -29,11 +29,11 @@ export default async function(request:Request, id:string = null, link:string = n
 			const noteIds = await Tag.noteIds(tag.id);
 			const output = [];
 			for (let i = 0; i < noteIds.length; i++) {
-				const n = await Note.preview(noteIds[i], defaultLoadOptions(request, ModelType.note));
+				const n = await Note.preview(noteIds[i], defaultLoadOptions(request, ModelType.Note));
 				if (!n) continue;
 				output.push(n);
 			}
-			return { rows: output }; // TODO: paginate
+			return { items: output }; // TODO: paginate
 		}
 	}
 

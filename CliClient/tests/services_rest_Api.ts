@@ -49,7 +49,7 @@ describe('services_rest_Api', function() {
 	it('should get folders', asyncTest(async () => {
 		await Folder.save({ title: 'mon carnet' });
 		const response = await api.route(RequestMethod.GET, 'folders');
-		expect(response.rows.length).toBe(1);
+		expect(response.items.length).toBe(1);
 	}));
 
 	it('should update folders', asyncTest(async () => {
@@ -94,12 +94,12 @@ describe('services_rest_Api', function() {
 	it('should get the folder notes', asyncTest(async () => {
 		const f1 = await Folder.save({ title: 'mon carnet' });
 		const response2 = await api.route(RequestMethod.GET, `folders/${f1.id}/notes`);
-		expect(response2.rows.length).toBe(0);
+		expect(response2.items.length).toBe(0);
 
 		await Note.save({ title: 'un', parent_id: f1.id });
 		await Note.save({ title: 'deux', parent_id: f1.id });
 		const response = await api.route(RequestMethod.GET, `folders/${f1.id}/notes`);
-		expect(response.rows.length).toBe(2);
+		expect(response.items.length).toBe(2);
 	}));
 
 	it('should fail on invalid paths', asyncTest(async () => {
@@ -116,7 +116,7 @@ describe('services_rest_Api', function() {
 		const n3 = await Note.save({ title: 'trois', parent_id: f2.id });
 
 		response = await api.route(RequestMethod.GET, 'notes');
-		expect(response.rows.length).toBe(3);
+		expect(response.items.length).toBe(3);
 
 		response = await api.route(RequestMethod.GET, `notes/${n1.id}`);
 		expect(response.id).toBe(n1.id);
@@ -375,7 +375,7 @@ describe('services_rest_Api', function() {
 		expect(hasThrown).toBe(true);
 
 		const response = await api.route(RequestMethod.GET, 'notes', { token: 'mytoken' });
-		expect(response.rows.length).toBe(0);
+		expect(response.items.length).toBe(0);
 
 		hasThrown = await checkThrowAsync(async () => await api.route(RequestMethod.POST, 'notes', null, JSON.stringify({ title: 'testing' })));
 		expect(hasThrown).toBe(true);
@@ -413,15 +413,15 @@ describe('services_rest_Api', function() {
 		await Tag.addNote(tag.id, note2.id);
 
 		const response = await api.route(RequestMethod.GET, `tags/${tag.id}/notes`);
-		expect(response.rows.length).toBe(2);
-		expect('id' in response.rows[0]).toBe(true);
-		expect('title' in response.rows[0]).toBe(true);
+		expect(response.items.length).toBe(2);
+		expect('id' in response.items[0]).toBe(true);
+		expect('title' in response.items[0]).toBe(true);
 
 		const response2 = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`);
-		expect(response2.rows.length).toBe(1);
+		expect(response2.items.length).toBe(1);
 		await Tag.addNote(tag2.id, note1.id);
 		const response3 = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`);
-		expect(response3.rows.length).toBe(2);
+		expect(response3.items.length).toBe(2);
 	}));
 
 	it('should update tags when updating notes', asyncTest(async () => {
@@ -519,23 +519,23 @@ describe('services_rest_Api', function() {
 				order_by: 'updated_time',
 			});
 
-			expect(r1.rows.length).toBe(2);
-			expect(r1.rows[0].title).toBe('folder1');
-			expect(r1.rows[1].title).toBe('folder2');
+			expect(r1.items.length).toBe(2);
+			expect(r1.items[0].title).toBe('folder1');
+			expect(r1.items[1].title).toBe('folder2');
 
 			const r2 = await api.route(RequestMethod.GET, 'folders', {
 				cursor: r1.cursor,
 			});
 
-			expect(r2.rows.length).toBe(2);
-			expect(r2.rows[0].title).toBe('folder3');
-			expect(r2.rows[1].title).toBe('folder4');
+			expect(r2.items.length).toBe(2);
+			expect(r2.items[0].title).toBe('folder3');
+			expect(r2.items[1].title).toBe('folder4');
 
 			const r3 = await api.route(RequestMethod.GET, 'folders', {
 				cursor: r2.cursor,
 			});
 
-			expect(r3.rows.length).toBe(0);
+			expect(r3.items.length).toBe(0);
 			expect(r3.cursor).toBe(undefined);
 		}
 
@@ -547,17 +547,17 @@ describe('services_rest_Api', function() {
 				order_by: 'updated_time',
 			});
 
-			expect(r1.rows.length).toBe(3);
-			expect(r1.rows[0].title).toBe('folder1');
-			expect(r1.rows[1].title).toBe('folder2');
-			expect(r1.rows[2].title).toBe('folder3');
+			expect(r1.items.length).toBe(3);
+			expect(r1.items[0].title).toBe('folder1');
+			expect(r1.items[1].title).toBe('folder2');
+			expect(r1.items[2].title).toBe('folder3');
 
 			const r2 = await api.route(RequestMethod.GET, 'folders', {
 				cursor: r1.cursor,
 			});
 
-			expect(r2.rows.length).toBe(1);
-			expect(r2.rows[0].title).toBe('folder4');
+			expect(r2.items.length).toBe(1);
+			expect(r2.items[0].title).toBe('folder4');
 			expect(r2.cursor).toBe(undefined);
 		}
 	}));
@@ -575,17 +575,17 @@ describe('services_rest_Api', function() {
 			order_by: 'updated_time',
 		});
 
-		expect(r1.rows.length).toBe(2);
-		expect(r1.rows[0].title).toBe('folder1');
-		expect(['folder2', 'folder3'].includes(r1.rows[1].title)).toBe(true);
+		expect(r1.items.length).toBe(2);
+		expect(r1.items[0].title).toBe('folder1');
+		expect(['folder2', 'folder3'].includes(r1.items[1].title)).toBe(true);
 
 		const r2 = await api.route(RequestMethod.GET, 'folders', {
 			cursor: r1.cursor,
 		});
 
-		expect(r2.rows.length).toBe(2);
-		expect(r2.rows[0].title).toBe(r1.rows[1].title === 'folder2' ? 'folder3' : 'folder2');
-		expect(r2.rows[1].title).toBe('folder4');
+		expect(r2.items.length).toBe(2);
+		expect(r2.items[0].title).toBe(r1.items[1].title === 'folder2' ? 'folder3' : 'folder2');
+		expect(r2.items[1].title).toBe('folder4');
 	}));
 
 	it('should paginate folder notes', asyncTest(async () => {
@@ -600,16 +600,16 @@ describe('services_rest_Api', function() {
 			limit: 2,
 		});
 
-		expect(r1.rows.length).toBe(2);
-		expect(r1.rows[0].id).toBe(note1.id);
-		expect(r1.rows[1].id).toBe(note2.id);
+		expect(r1.items.length).toBe(2);
+		expect(r1.items[0].id).toBe(note1.id);
+		expect(r1.items[1].id).toBe(note2.id);
 
 		const r2 = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`, {
 			cursor: r1.cursor,
 		});
 
-		expect(r2.rows.length).toBe(1);
-		expect(r2.rows[0].id).toBe(note3.id);
+		expect(r2.items.length).toBe(1);
+		expect(r2.items[0].id).toBe(note3.id);
 	}));
 
 	it('should return default fields', asyncTest(async () => {
@@ -629,22 +629,22 @@ describe('services_rest_Api', function() {
 
 		{
 			const r = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`);
-			expect('id' in r.rows[0]).toBe(true);
-			expect('title' in r.rows[0]).toBe(true);
-			expect('parent_id' in r.rows[0]).toBe(true);
+			expect('id' in r.items[0]).toBe(true);
+			expect('title' in r.items[0]).toBe(true);
+			expect('parent_id' in r.items[0]).toBe(true);
 		}
 
 		{
 			const r = await api.route(RequestMethod.GET, 'notes');
-			expect('id' in r.rows[0]).toBe(true);
-			expect('title' in r.rows[0]).toBe(true);
-			expect('parent_id' in r.rows[0]).toBe(true);
+			expect('id' in r.items[0]).toBe(true);
+			expect('title' in r.items[0]).toBe(true);
+			expect('parent_id' in r.items[0]).toBe(true);
 		}
 
 		{
 			const r = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`);
-			expect('id' in r.rows[0]).toBe(true);
-			expect('title' in r.rows[0]).toBe(true);
+			expect('id' in r.items[0]).toBe(true);
+			expect('title' in r.items[0]).toBe(true);
 		}
 
 		{

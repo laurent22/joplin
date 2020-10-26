@@ -4,7 +4,7 @@ import uuid from 'lib/uuid';
 import readonlyProperties from '../utils/readonlyProperties';
 import defaultSaveOptions from '../utils/defaultSaveOptions';
 import defaultAction from '../utils/defaultAction';
-import BaseModel, { ModelType } from 'lib/BaseModel';
+import BaseModel from 'lib/BaseModel';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { RequestMethod, Request } from '../Api';
 
@@ -296,7 +296,7 @@ export default async function(request:Request, id:string = null, link:string = n
 	if (request.method === 'GET') {
 		if (link && link === 'tags') {
 			return {
-				rows: await Tag.tagsByNoteId(id),
+				items: await Tag.tagsByNoteId(id),
 				// TODO: paginate
 			};
 		} else if (link && link === 'resources') {
@@ -308,17 +308,12 @@ export default async function(request:Request, id:string = null, link:string = n
 			for (const resourceId of resourceIds) {
 				output.push(await Resource.load(resourceId, loadOptions));
 			}
-			return { rows: output }; // TODO: paginate
+			return { items: output }; // TODO: paginate
 		} else if (link) {
 			throw new ErrorNotFound();
 		}
 
-		const options = defaultLoadOptions(request, ModelType.note);
-		if (id) {
-			return await Note.preview(id, options);
-		} else {
-			return defaultAction(BaseModel.TYPE_NOTE, request, id, link);
-		}
+		return defaultAction(BaseModel.TYPE_NOTE, request, id, link);
 	}
 
 	if (request.method === RequestMethod.POST) {

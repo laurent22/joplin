@@ -8,8 +8,8 @@ interface Cursor {
 	fields: string[],
 }
 
-interface ModelFeedPage {
-	rows: any[],
+export interface ModelFeedPage {
+	items: any[],
 	cursor?: string,
 }
 
@@ -112,7 +112,7 @@ export default async function(db:any, tableName:string, pagination:Pagination, e
 
 	const newCursor = makeCursor(rows, pagination, fields);
 
-	const output:ModelFeedPage = { rows };
+	const output:ModelFeedPage = { items: rows };
 
 	if (newCursor) output.cursor = encodeCursor(newCursor);
 

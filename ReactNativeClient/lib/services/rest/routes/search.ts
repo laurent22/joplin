@@ -27,11 +27,11 @@ export default async function(request:Request) {
 		options.caseInsensitive = true;
 		results = await ModelClass.all(options);
 	} else {
-		results = await SearchEngineUtils.notesForQuery(query, defaultLoadOptions(request, ModelType.note));
+		results = await SearchEngineUtils.notesForQuery(query, defaultLoadOptions(request, ModelType.Note));
 	}
 
 	return {
-		rows: results,
+		items: results,
 		// TODO: implement cursor support
 	};
 }
