@@ -5,10 +5,11 @@ const { toTitleCase } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const markdownUtils = require('lib/markdownUtils').default;
 const { Database } = require('lib/database.js');
+const shim = require('lib/shim').default;
 
 class Command extends BaseCommand {
 	usage() {
-		return 'apidoc';
+		return 'apidoc <file>';
 	}
 
 	description() {
@@ -35,7 +36,7 @@ class Command extends BaseCommand {
 		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
-	async action() {
+	async action(args) {
 		const models = [
 			{
 				type: BaseModel.TYPE_NOTE,
@@ -359,7 +360,9 @@ async function fetchAllNotes() {
 			}
 		}
 
-		this.stdout(lines.join('\n'));
+		const outFilePath = args['file'];
+
+		await shim.fsDriver().writeFile(outFilePath, lines.join('\n'), 'utf8');
 	}
 }
 
