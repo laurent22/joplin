@@ -29,7 +29,6 @@ class ClipperServer {
 
 	setLogger(l) {
 		this.logger_ = l;
-		this.api_.setLogger(l);
 	}
 
 	logger() {

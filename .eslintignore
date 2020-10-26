@@ -334,8 +334,12 @@ ReactNativeClient/lib/services/rest/readonlyProperties.js
 ReactNativeClient/lib/services/rest/requestFields.js
 ReactNativeClient/lib/services/rest/requestPaginationOptions.js
 ReactNativeClient/lib/services/rest/routes/folders.js
+ReactNativeClient/lib/services/rest/routes/master_keys.js
 ReactNativeClient/lib/services/rest/routes/notes.js
+ReactNativeClient/lib/services/rest/routes/ping.js
 ReactNativeClient/lib/services/rest/routes/resources.js
+ReactNativeClient/lib/services/rest/routes/search.js
+ReactNativeClient/lib/services/rest/routes/tags.js
 ReactNativeClient/lib/services/searchengine/filterParser.js
 ReactNativeClient/lib/services/searchengine/queryBuilder.js
 ReactNativeClient/lib/services/SettingUtils.js
