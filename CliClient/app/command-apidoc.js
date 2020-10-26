@@ -1,6 +1,6 @@
 const { BaseCommand } = require('./base-command.js');
 const BaseItem = require('lib/models/BaseItem');
-const BaseModel = require('lib/BaseModel');
+const BaseModel = require('lib/BaseModel').default;
 const { toTitleCase } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const markdownUtils = require('lib/markdownUtils').default;

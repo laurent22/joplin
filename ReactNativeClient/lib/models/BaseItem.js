@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const { Database } = require('lib/database.js');
 const Setting = require('lib/models/Setting').default;
 const ItemChange = require('lib/models/ItemChange.js');

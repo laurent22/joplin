@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const Note = require('lib/models/Note.js');
 
 export interface Notification {

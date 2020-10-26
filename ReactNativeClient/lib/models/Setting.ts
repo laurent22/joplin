@@ -1,6 +1,6 @@
 import shim from 'lib/shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from 'lib/locale';
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const { Database } = require('lib/database.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { time } = require('lib/time-utils.js');

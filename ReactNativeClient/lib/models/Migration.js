@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 
 const migrationScripts = {
 	20: require('lib/migrations/20.js'),

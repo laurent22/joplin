@@ -1,5 +1,5 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-const BaseModel = require('lib/BaseModel');
+const BaseModel = require('lib/BaseModel').default;
 const uuid = require('lib/uuid').default;
 
 export const declaration:CommandDeclaration = {

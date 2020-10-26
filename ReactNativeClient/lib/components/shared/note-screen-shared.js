@@ -1,6 +1,6 @@
 const { reg } = require('lib/registry.js');
 const Folder = require('lib/models/Folder.js');
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher.js');

@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const { Database } = require('lib/database.js');
 
 class ResourceLocalState extends BaseModel {

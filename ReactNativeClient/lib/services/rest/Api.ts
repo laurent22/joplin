@@ -2,8 +2,13 @@ import Setting from 'lib/models/Setting';
 import Logger from 'lib/Logger';
 import shim from 'lib/shim';
 import uuid from 'lib/uuid';
-import modelFeed from 'lib/models/utils/modelFeed';
-import { Pagination, PaginationOrderDir, PaginationOrder } from 'lib/models/utils/types';
+import { PaginationOrderDir } from 'lib/models/utils/types';
+import readonlyProperties from './readonlyProperties';
+import paginatedResults from './paginatedResults';
+import defaultSaveOptions from './defaultSaveOptions';
+import requestFields from './requestFields';
+import requestPaginationOptions from './requestPaginationOptions';
+import BaseModel from 'lib/BaseModel';
 
 const { ltrimSlashes } = require('lib/path-utils');
 const { Database } = require('lib/database.js');
@@ -12,7 +17,6 @@ const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
-const BaseModel = require('lib/BaseModel');
 const htmlUtils = require('lib/htmlUtils');
 const markupLanguageUtils = require('lib/markupLanguageUtils').default;
 const mimeUtils = require('lib/mime-utils.js').mime;
@@ -48,7 +52,7 @@ interface RequestQuery {
 
 	// Search engine query
 	query?: string,
-	type?: number,
+	type?: string, // Model type as a string (eg. "note", "folder")
 
 	as_tree?: number,
 
@@ -58,7 +62,7 @@ interface RequestQuery {
 	order_by?: string,
 }
 
-interface Request {
+export interface Request {
 	method: RequestMethod,
 	path: string,
 	query: RequestQuery,
@@ -171,6 +175,8 @@ export default class Api {
 			params,
 		};
 
+		this.checkToken_(request);
+
 		try {
 			return await parsedPath.fn(request, id, link);
 		} catch (error) {
@@ -187,33 +193,6 @@ export default class Api {
 		return this.logger_;
 	}
 
-	private readonlyProperties(requestMethod:string) {
-		const output = ['created_time', 'updated_time', 'encryption_blob_encrypted', 'encryption_applied', 'encryption_cipher_text'];
-		if (requestMethod !== 'POST') output.splice(0, 0, 'id');
-		return output;
-	}
-
-	private defaultFieldsByModelType(modelType:number):string[] {
-		const ModelClass = BaseItem.getClassByItemType(modelType);
-		const possibleFields = ['id', 'parent_id', 'title'];
-		const output = [];
-		for (const f of possibleFields) {
-			if (ModelClass.hasField(f)) output.push(f);
-		}
-		return output;
-	}
-
-	private fields_(request:Request, modelType:number) {
-		const query = request.query;
-		if (!query || !query.fields) return this.defaultFieldsByModelType(modelType);
-		if (Array.isArray(query.fields)) return query.fields.slice();
-		const fields = query.fields
-			.split(',')
-			.map((f:string) => f.trim())
-			.filter((f:string) => !!f);
-		return fields.length ? fields : this.defaultFieldsByModelType(modelType);
-	}
-
 	private checkToken_(request:Request) {
 		// For now, whitelist some calls to allow the web clipper to work
 		// without an extra auth step
@@ -228,17 +207,7 @@ export default class Api {
 		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}
 
-	private async paginatedResults(modelType:number, request:Request, whereSql:string = '') {
-		const ModelClass = BaseItem.getClassByItemType(modelType);
-		const fields = this.fields_(request, modelType);
-		const pagination = this.requestPaginationOptions(request);
-		const cursor = request.query.cursor;
-		return modelFeed(BaseModel.db(), ModelClass.tableName(), pagination, cursor, whereSql, fields);
-	}
-
 	private async defaultAction_(modelType:number, request:Request, id:string = null, link:string = null) {
-		this.checkToken_(request);
-
 		if (link) throw new ErrorNotFound(); // Default action doesn't support links at all for now
 
 		const ModelClass = BaseItem.getClassByItemType(modelType);
@@ -253,25 +222,13 @@ export default class Api {
 			if (id) {
 				return getOneModel();
 			} else {
-				return this.paginatedResults(modelType, request);
-				// const options:any = {};
-				// const fields = this.fields_(request, []);
-				// if (fields.length) options.fields = fields;
-
-				// const pagination = this.requestPaginationOptions(request);
-				// const cursor = request.query.cursor;
-
-				// if (pagination || cursor) {
-				// 	return modelFeed(BaseModel.db(), ModelClass.tableName(), pagination, cursor, options.fields);
-				// } else {
-				// 	return ModelClass.all(options);
-				// }
+				return paginatedResults(modelType, request);
 			}
 		}
 
 		if (request.method === 'PUT' && id) {
 			const model = await getOneModel();
-			let newModel = Object.assign({}, model, request.bodyJson(this.readonlyProperties('PUT')));
+			let newModel = Object.assign({}, model, request.bodyJson(readonlyProperties('PUT')));
 			newModel = await ModelClass.save(newModel, { userSideValidation: true });
 			return newModel;
 		}
@@ -283,11 +240,11 @@ export default class Api {
 		}
 
 		if (request.method === RequestMethod.POST) {
-			const props = this.readonlyProperties('POST');
+			const props = readonlyProperties('POST');
 			const idIdx = props.indexOf('id');
 			if (idIdx >= 0) props.splice(idIdx, 1);
 			const model = request.bodyJson(props);
-			const result = await ModelClass.save(model, this.defaultSaveOptions_(model, 'POST'));
+			const result = await ModelClass.save(model, defaultSaveOptions('POST', model.id));
 			return result;
 		}
 
@@ -303,8 +260,6 @@ export default class Api {
 	}
 
 	private async action_search(request:Request) {
-		this.checkToken_(request);
-
 		if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
 
 		const query = request.query.query;
@@ -317,7 +272,7 @@ export default class Api {
 		if (modelType !== BaseItem.TYPE_NOTE) {
 			const ModelClass = BaseItem.getClassByItemType(modelType);
 			const options:any = {};
-			const fields = this.fields_(request, modelType);
+			const fields = requestFields(request, modelType);
 			if (fields.length) options.fields = fields;
 			const sqlQueryPart = query.replace(/\*/g, '%');
 			options.where = 'title LIKE ?';
@@ -339,7 +294,7 @@ export default class Api {
 
 		if (request.method === 'GET' && !id) {
 			if (request.query.as_tree) {
-				const folders = await FoldersScreenUtils.allForDisplay({ fields: this.fields_(request, BaseModel.TYPE_FOLDER) });
+				const folders = await FoldersScreenUtils.allForDisplay({ fields: requestFields(request, BaseModel.TYPE_FOLDER) });
 				const output = await Folder.allAsTree(folders);
 				return output;
 			} else {
@@ -350,7 +305,7 @@ export default class Api {
 		if (request.method === 'GET' && id) {
 			if (link && link === 'notes') {
 				const folder = await Folder.load(id);
-				return this.paginatedResults(BaseModel.TYPE_NOTE, request, `parent_id = "${folder.id}"`);
+				return paginatedResults(BaseModel.TYPE_NOTE, request, `parent_id = "${folder.id}"`);
 				// const options = this.notePreviewsOptions_(request);
 				// return Note.previews(id, options);
 			} else if (link) {
@@ -428,54 +383,26 @@ export default class Api {
 		if (request.method === RequestMethod.POST) {
 			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
 			const filePath = request.files[0].path;
-			const defaultProps = request.bodyJson(this.readonlyProperties('POST'));
+			const defaultProps = request.bodyJson(readonlyProperties('POST'));
 			return shim.createResourceFromPath(filePath, defaultProps, { userSideValidation: true });
 		}
 
 		return this.defaultAction_(BaseModel.TYPE_RESOURCE, request, id, link);
 	}
 
-	private requestPaginationOrder(request:Request):PaginationOrder[] {
-		const orderBy:string = request.query.order_by ? request.query.order_by : 'updated_time';
-		const orderDir:PaginationOrderDir = request.query.order_dir ? request.query.order_dir : PaginationOrderDir.ASC;
-
-		return [{
-			by: orderBy,
-			dir: orderDir,
-			caseInsensitive: true,
-		}];
-	}
-
-	private requestPaginationOptions(request:Request):Pagination {
-		const limit = request.query.limit ? request.query.limit : 100;
-		if (limit < 0 || limit > 100) throw new ErrorBadRequest(`Limit out of bond: ${limit}`);
-		const order:PaginationOrder[] = this.requestPaginationOrder(request);
-
-		return {
-			limit,
-			order,
-		};
-	}
-
 	private notePreviewsOptions_(request:Request) {
-		const fields = this.fields_(request, BaseModel.TYPE_NOTE); // previews() already returns default fields
+		const fields = requestFields(request, BaseModel.TYPE_NOTE); // previews() already returns default fields
 		const options:any = {};
 		if (fields.length) options.fields = fields;
 		return {
 			...options,
-			...this.requestPaginationOptions(request),
+			...requestPaginationOptions(request),
 		};
-	}
-
-	private defaultSaveOptions_(model:any, requestMethod:string) {
-		const options:any = { userSideValidation: true };
-		if (requestMethod === 'POST' && model.id) options.isNew = true;
-		return options;
 	}
 
 	private defaultLoadOptions_(request:Request, modelType:number) {
 		const options:any = {};
-		const fields = this.fields_(request, modelType);
+		const fields = requestFields(request, modelType);
 		if (fields.length) options.fields = fields;
 		return options;
 	}
@@ -489,8 +416,6 @@ export default class Api {
 	}
 
 	private async action_services(request:Request, serviceName:string) {
-		this.checkToken_(request);
-
 		if (request.method !== RequestMethod.POST) throw new ErrorMethodNotAllowed();
 		if (!this.actionApi_) throw new ErrorNotFound('No action API has been setup!');
 		if (!this.actionApi_[serviceName]) throw new ErrorNotFound(`No such service: ${serviceName}`);
@@ -500,8 +425,6 @@ export default class Api {
 	}
 
 	private async action_notes(request:Request, id:string = null, link:string = null) {
-		this.checkToken_(request);
-
 		if (request.method === 'GET') {
 			if (link && link === 'tags') {
 				return {
@@ -527,7 +450,6 @@ export default class Api {
 				return await Note.preview(id, options);
 			} else {
 				return this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
-				// return await Note.previews(null, options);
 			}
 		}
 
@@ -555,7 +477,7 @@ export default class Api {
 
 			this.logger().info(`Request (${requestId}): Saving note...`);
 
-			const saveOptions = this.defaultSaveOptions_(note, 'POST');
+			const saveOptions = defaultSaveOptions('POST', note.id);
 			saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
 			const timestamp = Date.now();
 			note.updated_time = timestamp;
@@ -585,14 +507,14 @@ export default class Api {
 			if (!note) throw new ErrorNotFound();
 
 			const saveOptions = {
-				...this.defaultSaveOptions_(note, 'PUT'),
+				...defaultSaveOptions('PUT', note.id),
 				autoTimestamp: false, // No auto-timestamp because user may have provided them
 				userSideValidation: true,
 			};
 
 			const timestamp = Date.now();
 
-			const newProps = request.bodyJson(this.readonlyProperties('PUT'));
+			const newProps = request.bodyJson(readonlyProperties('PUT'));
 			if (!('user_updated_time' in newProps)) newProps.user_updated_time = timestamp;
 
 			let newNote = {

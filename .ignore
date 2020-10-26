@@ -268,7 +268,13 @@ ReactNativeClient/lib/services/ResourceEditWatcher/index.js
 ReactNativeClient/lib/services/ResourceEditWatcher/reducer.js
 ReactNativeClient/lib/services/rest/actionApi.desktop.js
 ReactNativeClient/lib/services/rest/Api.js
+ReactNativeClient/lib/services/rest/defaultSaveOptions.js
 ReactNativeClient/lib/services/rest/errors.js
+ReactNativeClient/lib/services/rest/paginatedResults.js
+ReactNativeClient/lib/services/rest/readonlyProperties.js
+ReactNativeClient/lib/services/rest/requestFields.js
+ReactNativeClient/lib/services/rest/requestPaginationOptions.js
+ReactNativeClient/lib/services/rest/routes/folders.js
 ReactNativeClient/lib/services/searchengine/filterParser.js
 ReactNativeClient/lib/services/searchengine/queryBuilder.js
 ReactNativeClient/lib/services/SettingUtils.js

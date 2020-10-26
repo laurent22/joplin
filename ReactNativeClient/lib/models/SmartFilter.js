@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 
 class SmartFilter extends BaseModel {
 	static tableName() {

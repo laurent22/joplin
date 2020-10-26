@@ -4,7 +4,7 @@ import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
 import shim from 'lib/shim';
 import { _ } from 'lib/locale';
 const BaseItem = require('lib/models/BaseItem.js');
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');

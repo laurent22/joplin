@@ -7,7 +7,7 @@ const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const shim = require('lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {

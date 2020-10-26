@@ -7,7 +7,7 @@ import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from 'lib/locale';
 import { MenuItemLocation } from 'lib/services/plugins/api/types';
 
-const BaseModel = require('lib/BaseModel');
+const BaseModel = require('lib/BaseModel').default;
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;

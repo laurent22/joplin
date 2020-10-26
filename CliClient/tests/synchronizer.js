@@ -16,7 +16,7 @@ const Setting = require('lib/models/Setting').default;
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem.js');
 const Revision = require('lib/models/Revision.js');
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
 

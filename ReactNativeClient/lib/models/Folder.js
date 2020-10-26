@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const { time } = require('lib/time-utils.js');
 const Note = require('lib/models/Note.js');
 const { Database } = require('lib/database.js');

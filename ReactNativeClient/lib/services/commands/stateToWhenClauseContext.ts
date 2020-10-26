@@ -1,6 +1,6 @@
 import { stateUtils } from 'lib/reducer';
 
-const BaseModel = require('lib/BaseModel');
+const BaseModel = require('lib/BaseModel').default;
 const Folder = require('lib/models/Folder');
 const MarkupToHtml = require('lib/joplin-renderer/MarkupToHtml').default;
 

@@ -11,7 +11,7 @@ const NoteTag = require('lib/models/NoteTag.js');
 const ItemChange = require('lib/models/ItemChange.js');
 const Tag = require('lib/models/Tag.js');
 const Revision = require('lib/models/Revision.js');
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const RevisionService = require('lib/services/RevisionService.js');
 const shim = require('lib/shim').default;
 

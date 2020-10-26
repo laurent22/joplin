@@ -4,7 +4,7 @@ import contextMenu from './contextMenu';
 import ResourceEditWatcher from '../../../lib/services/ResourceEditWatcher/index';
 import { _ } from 'lib/locale';
 const BaseItem = require('lib/models/BaseItem');
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const Resource = require('lib/models/Resource.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const { urlDecode } = require('lib/string-utils');

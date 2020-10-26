@@ -1,4 +1,4 @@
-import paginationToSql from "./models/utils/paginationToSql";
+import paginationToSql from './models/utils/paginationToSql';
 
 const { Database } = require('lib/database.js');
 const uuid = require('lib/uuid').default;
@@ -27,6 +27,9 @@ export enum ModelType {
 
 class BaseModel {
 
+	// TODO: This ancient part of Joplin about model types is a bit of a
+	// mess and should be refactored properly.
+
 	public static typeEnum_:any[] = [
 		['TYPE_NOTE', ModelType.note],
 		['TYPE_FOLDER', ModelType.folder],
@@ -45,6 +48,23 @@ class BaseModel {
 		['TYPE_SMART_FILTER', ModelType.smart_filter],
 		['TYPE_COMMAND', ModelType.command],
 	]
+
+	public static TYPE_NOTE =  ModelType.note;
+	public static TYPE_FOLDER =  ModelType.folder;
+	public static TYPE_SETTING =  ModelType.setting;
+	public static TYPE_RESOURCE =  ModelType.resource;
+	public static TYPE_TAG =  ModelType.tag;
+	public static TYPE_NOTE_TAG =  ModelType.note_tag;
+	public static TYPE_SEARCH =  ModelType.search;
+	public static TYPE_ALARM =  ModelType.alarm;
+	public static TYPE_MASTER_KEY =  ModelType.master_key;
+	public static TYPE_ITEM_CHANGE =  ModelType.item_change;
+	public static TYPE_NOTE_RESOURCE =  ModelType.note_resource;
+	public static TYPE_RESOURCE_LOCAL_STATE =  ModelType.resource_local_state;
+	public static TYPE_REVISION =  ModelType.revision;
+	public static TYPE_MIGRATION =  ModelType.migration;
+	public static TYPE_SMART_FILTER =  ModelType.smart_filter;
+	public static TYPE_COMMAND =  ModelType.command;
 
 	protected static dispatch:Function = function() {};
 	private static saveMutexes_:any = {};
@@ -642,4 +662,4 @@ for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 	(BaseModel as any)[e[0]] = e[1];
 }
 
-module.exports = BaseModel;
+export default BaseModel;

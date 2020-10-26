@@ -5,7 +5,7 @@ require('app-module-path').addPath(__dirname);
 const fs = require('fs-extra');
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
 const InteropService_Exporter_Md = require('lib/services/interop/InteropService_Exporter_Md').default;
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const Folder = require('lib/models/Folder.js');
 const Resource = require('lib/models/Resource.js');
 const Note = require('lib/models/Note.js');
