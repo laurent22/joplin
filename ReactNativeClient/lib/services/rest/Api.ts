@@ -193,15 +193,25 @@ export default class Api {
 		return output;
 	}
 
-	private fields_(request:Request, defaultFields:string[]) {
+	private defaultFieldsByModelType(modelType:number):string[] {
+		const ModelClass = BaseItem.getClassByItemType(modelType);
+		const possibleFields = ['id', 'parent_id', 'title'];
+		const output = [];
+		for (const f of possibleFields) {
+			if (ModelClass.hasField(f)) output.push(f);
+		}
+		return output;
+	}
+
+	private fields_(request:Request, modelType:number) {
 		const query = request.query;
-		if (!query || !query.fields) return defaultFields;
+		if (!query || !query.fields) return this.defaultFieldsByModelType(modelType);
 		if (Array.isArray(query.fields)) return query.fields.slice();
 		const fields = query.fields
 			.split(',')
 			.map((f:string) => f.trim())
 			.filter((f:string) => !!f);
-		return fields.length ? fields : defaultFields;
+		return fields.length ? fields : this.defaultFieldsByModelType(modelType);
 	}
 
 	private checkToken_(request:Request) {
@@ -220,7 +230,7 @@ export default class Api {
 
 	private async paginatedResults(modelType:number, request:Request, whereSql:string = '') {
 		const ModelClass = BaseItem.getClassByItemType(modelType);
-		const fields = this.fields_(request, []);
+		const fields = this.fields_(request, modelType);
 		const pagination = this.requestPaginationOptions(request);
 		const cursor = request.query.cursor;
 		return modelFeed(BaseModel.db(), ModelClass.tableName(), pagination, cursor, whereSql, fields);
@@ -300,14 +310,14 @@ export default class Api {
 		const query = request.query.query;
 		if (!query) throw new ErrorBadRequest('Missing "query" parameter');
 
-		const queryType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
+		const modelType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
 
 		let results = [];
 
-		if (queryType !== BaseItem.TYPE_NOTE) {
-			const ModelClass = BaseItem.getClassByItemType(queryType);
+		if (modelType !== BaseItem.TYPE_NOTE) {
+			const ModelClass = BaseItem.getClassByItemType(modelType);
 			const options:any = {};
-			const fields = this.fields_(request, []);
+			const fields = this.fields_(request, modelType);
 			if (fields.length) options.fields = fields;
 			const sqlQueryPart = query.replace(/\*/g, '%');
 			options.where = 'title LIKE ?';
@@ -329,7 +339,7 @@ export default class Api {
 
 		if (request.method === 'GET' && !id) {
 			if (request.query.as_tree) {
-				const folders = await FoldersScreenUtils.allForDisplay({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
+				const folders = await FoldersScreenUtils.allForDisplay({ fields: this.fields_(request, BaseModel.TYPE_FOLDER) });
 				const output = await Folder.allAsTree(folders);
 				return output;
 			} else {
@@ -448,7 +458,7 @@ export default class Api {
 	}
 
 	private notePreviewsOptions_(request:Request) {
-		const fields = this.fields_(request, []); // previews() already returns default fields
+		const fields = this.fields_(request, BaseModel.TYPE_NOTE); // previews() already returns default fields
 		const options:any = {};
 		if (fields.length) options.fields = fields;
 		return {
@@ -463,9 +473,9 @@ export default class Api {
 		return options;
 	}
 
-	private defaultLoadOptions_(request:Request) {
+	private defaultLoadOptions_(request:Request, modelType:number) {
 		const options:any = {};
-		const fields = this.fields_(request, []);
+		const fields = this.fields_(request, modelType);
 		if (fields.length) options.fields = fields;
 		return options;
 	}
@@ -503,7 +513,7 @@ export default class Api {
 				if (!note) throw new ErrorNotFound();
 				const resourceIds = await Note.linkedResourceIds(note.body);
 				const output = [];
-				const loadOptions = this.defaultLoadOptions_(request);
+				const loadOptions = this.defaultLoadOptions_(request, BaseModel.TYPE_NOTE);
 				for (const resourceId of resourceIds) {
 					output.push(await Resource.load(resourceId, loadOptions));
 				}

@@ -42,8 +42,10 @@ function decodeCursor(cursor:string):Cursor {
 	return JSON.parse(base64.decode(cursor));
 }
 
+// Note: this method might return more fields than was requested as it will
+// also return fields that are necessary for pagination.
 export default async function(db:any, tableName:string, pagination:Pagination, encodedCursor:string, whereSql:string = '', fields:string[] = null):Promise<ModelFeedPage> {
-	if (!fields) fields = ['id'];
+	fields = fields ? fields.slice() : ['id'];
 	const cursor = decodeCursor(encodedCursor);
 
 	const where = whereSql ? [whereSql] : [];
@@ -82,6 +84,16 @@ export default async function(db:any, tableName:string, pagination:Pagination, e
 				}]),
 			};
 		}
+	}
+
+	// Certain fields are necessary for pagination, such as ID or
+	// updated_time, however they are not necessarily included in the
+	// selected fields. However in this case we need all the "order by"
+	// fields to be in the selected fields as they are later used in the
+	// above row-value clause.
+	const orderFields = pagination.order.map((o:PaginationOrder) => o.by);
+	for (const f of orderFields) {
+		if (!fields.includes(f)) fields.push(f);
 	}
 
 	const orderBySql = paginationToSql(pagination);

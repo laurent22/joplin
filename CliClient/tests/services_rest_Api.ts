@@ -9,10 +9,6 @@ const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const NoteTag = require('lib/models/NoteTag');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 async function msleep(ms:number) {
 	return new Promise((resolve) => {
 		shim.setTimeout(() => {
@@ -614,5 +610,47 @@ describe('services_rest_Api', function() {
 
 		expect(r2.rows.length).toBe(1);
 		expect(r2.rows[0].id).toBe(note3.id);
+	}));
+
+	it('should return default fields', asyncTest(async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder.id });
+		await Note.save({ title: 'note2', parent_id: folder.id });
+
+		const tag = await Tag.save({ title: 'tag' });
+		await Tag.addNote(tag.id, note1.id);
+
+		{
+			const r = await api.route(RequestMethod.GET, `folders/${folder.id}`);
+			expect('id' in r).toBe(true);
+			expect('title' in r).toBe(true);
+			expect('parent_id' in r).toBe(true);
+		}
+
+		{
+			const r = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`);
+			expect('id' in r.rows[0]).toBe(true);
+			expect('title' in r.rows[0]).toBe(true);
+			expect('parent_id' in r.rows[0]).toBe(true);
+		}
+
+		{
+			const r = await api.route(RequestMethod.GET, 'notes');
+			expect('id' in r.rows[0]).toBe(true);
+			expect('title' in r.rows[0]).toBe(true);
+			expect('parent_id' in r.rows[0]).toBe(true);
+		}
+
+		{
+			const r = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`);
+			expect('id' in r.rows[0]).toBe(true);
+			expect('title' in r.rows[0]).toBe(true);
+		}
+
+		{
+			const r = await api.route(RequestMethod.GET, `tags/${tag.id}`);
+			expect('id' in r).toBe(true);
+			expect('title' in r).toBe(true);
+		}
 	}));
 });
