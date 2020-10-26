@@ -1,7 +1,5 @@
 import Logger from 'lib/Logger';
-import shim from 'lib/shim';
 import { PaginationOrderDir } from 'lib/models/utils/types';
-import readonlyProperties from './readonlyProperties';
 import requestFields from './requestFields';
 import defaultAction from './defaultAction';
 import BaseModel, { ModelType } from 'lib/BaseModel';
@@ -9,14 +7,13 @@ import defaultLoadOptions from './defaultLoadOptions';
 
 import route_folders from './routes/folders';
 import route_notes from './routes/notes';
+import route_resources from './routes/resources';
 
 const { ltrimSlashes } = require('lib/path-utils');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const BaseItem = require('lib/models/BaseItem');
-const Resource = require('lib/models/Resource');
 const md5 = require('md5');
-const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
 const { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } = require('./errors');
 
@@ -84,7 +81,7 @@ export default class Api {
 			notes: route_notes,
 			folders: route_folders,
 			tags: this.action_tags.bind(this),
-			resources: this.action_resources.bind(this),
+			resources: route_resources,
 			master_keys: this.action_master_keys.bind(this),
 			services: this.action_services.bind(this),
 			search: this.action_search.bind(this),
@@ -268,42 +265,6 @@ export default class Api {
 
 	private async action_master_keys(request:Request, id:string = null, link:string = null) {
 		return defaultAction(BaseModel.TYPE_MASTER_KEY, request, id, link);
-	}
-
-	private async action_resources(request:Request, id:string = null, link:string = null) {
-		// fieldName: "data"
-		// headers: Object
-		// originalFilename: "test.jpg"
-		// path: "C:\Users\Laurent\AppData\Local\Temp\BW77wkpP23iIGUstd0kDuXXC.jpg"
-		// size: 164394
-
-		if (request.method === 'GET') {
-			if (link === 'file') {
-				const resource = await Resource.load(id);
-				if (!resource) throw new ErrorNotFound();
-
-				const filePath = Resource.fullPath(resource);
-				const buffer = await shim.fsDriver().readFile(filePath, 'Buffer');
-
-				const response = new ApiResponse();
-				response.type = 'attachment';
-				response.body = buffer;
-				response.contentType = resource.mime;
-				response.attachmentFilename = Resource.friendlyFilename(resource);
-				return response;
-			}
-
-			if (link) throw new ErrorNotFound();
-		}
-
-		if (request.method === RequestMethod.POST) {
-			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
-			const filePath = request.files[0].path;
-			const defaultProps = request.bodyJson(readonlyProperties('POST'));
-			return shim.createResourceFromPath(filePath, defaultProps, { userSideValidation: true });
-		}
-
-		return defaultAction(BaseModel.TYPE_RESOURCE, request, id, link);
 	}
 
 	private async execServiceActionFromRequest_(externalApi:any, request:Request) {
