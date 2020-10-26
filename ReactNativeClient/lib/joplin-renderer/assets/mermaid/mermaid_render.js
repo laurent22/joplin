@@ -12,7 +12,7 @@ function mermaidReady() {
 	//     <h1 id="mermaid">Mermaid</h1>
 	//
 	// And that's going to make the lib set the `mermaid` object to the H1 element.
-	// So below, we double-check that what we have really is an instance of the library. 
+	// So below, we double-check that what we have really is an instance of the library.
 	return typeof mermaid !== 'undefined' && mermaid !== null && typeof mermaid === 'object' && !!mermaid.init;
 }
 
