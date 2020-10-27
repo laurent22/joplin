@@ -16,6 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:20
 #: ElectronClient/checkForUpdates.js:139
@@ -122,15 +124,14 @@ msgid "Could not export notes: %s"
 msgstr "Não foi possível exportar notas: %s"
 
 #: ElectronClient/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
 "Digite um título de nota ou parte de seu conteúdo para ir direto para ela. "
-"Ou digite # seguido de um nome de etiqueta, ou @ seguido de um nome de "
-"caderno."
+"Ou digite # seguido de um nome de tag, ou @ seguido de um nome de caderno. "
+"Ou digite : para pesquisar os comandos."
 
 #: ElectronClient/plugins/GotoAnything.js:456
 #: ElectronClient/plugins/GotoAnything.min.js:499
@@ -141,7 +142,7 @@ msgstr "Ir para qualquer coisa..."
 #: ElectronClient/plugins/GotoAnything.js:463
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "Paleta de Comandos"
 
 #: ElectronClient/plugins/GotoAnything.min.js:459
 msgid ""
@@ -542,13 +543,15 @@ msgstr "Criando novo %s..."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:379
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "Os seguintes anexos estão sendo observados para alterações:"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:382
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
+"Os anexos não vão mais ser observador quando você mudar para uma nota "
+"diferente."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:387
 #, javascript-format
@@ -665,12 +668,14 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"O alvo da sincronização precisa passar por upgrade antes de o Joplin "
+"sincronizar. A operação pode levar alguns poucos minutos para completar e o "
+"aplicativo precisa ser reiniciado. Para proceder, por favor, clique no link."
 
 #: ElectronClient/gui/MainScreen/MainScreen.js:416
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "Chaves-mestras que necessitam de atualização"
+msgstr "Reiniciar e fazer upgrade"
 
 #: ElectronClient/gui/MainScreen/MainScreen.js:420
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:313
@@ -824,9 +829,8 @@ msgid "New note"
 msgstr "Nova nota"
 
 #: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Alternar layout do editor"
+msgstr "Alternar editores"
 
 #: ElectronClient/gui/MainScreen/commands/selectTemplate.js:24
 msgid "Template file:"
@@ -1328,9 +1332,8 @@ msgid "Import"
 msgstr "Importar"
 
 #: ElectronClient/gui/MenuBar.js:390
-#, fuzzy
 msgid "Export all"
-msgstr "Exportar"
+msgstr "Exportar todos"
 
 #: ElectronClient/gui/MenuBar.js:404
 #, javascript-format
@@ -1411,38 +1414,37 @@ msgstr "Anexos da nota"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Pressione o atalho"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Pressione o atalho e então digite ENTER. Ou, pressione BACKSPACE para limpar "
+"o atalho."
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: ReactNativeClient/lib/services/KeymapService.js:144
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Erro"
+msgstr "Erro: %s"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "Comando"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Modo do Teclado"
+msgstr "Atalho de Teclado"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Sobre o Joplin"
+msgstr "Esconder o Joplin"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "Preferências..."
+msgstr "Preferências"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
@@ -1487,6 +1489,8 @@ msgstr "Estatísticas"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"O app agora vai fechar. Por favor, execute-o de novo para completar o "
+"processo."
 
 #: ElectronClient/app.js:340
 #, javascript-format
@@ -1494,9 +1498,8 @@ msgid "Open %s"
 msgstr "Abrir %s"
 
 #: ElectronClient/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Copiar caminho para a área de transferência"
+msgstr "Copiar comando de modo dev para a área de transferência."
 
 #: ElectronClient/commands/startExternalEditing.js:20
 msgid "Edit in external editor"
@@ -1508,13 +1511,12 @@ msgid "Error opening note in editor: %s"
 msgstr "Erro ao abir a nota no editor: %s"
 
 #: ElectronClient/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "Encerrar edição externa"
+msgstr "Alternar edição externa"
 
 #: ElectronClient/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: ElectronClient/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1741,7 +1743,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Faça upgrade do alvo de sincronia para a versão mais atualizada."
 
 #: CliClient/app/command-sync.js:105
 #, javascript-format
@@ -2245,10 +2247,10 @@ msgstr ""
 "Não é possível carregar o módulo \"%s\" para o formato \"%s\" e saída \"%s\""
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:152
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
-"Não é possível carregar o módulo \"%s\" para o formato \"%s\" e saída \"%s\""
+"Não é possível carregar o módulo \"%s\" para o formato \"%s\" e alvo \"%s\""
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:187
 #, javascript-format
@@ -2266,23 +2268,23 @@ msgstr "Notas restauradas"
 
 #: ReactNativeClient/lib/services/KeymapService.js:240
 msgid "command"
-msgstr ""
+msgstr "comando"
 
 #: ReactNativeClient/lib/services/KeymapService.js:240
 #: ReactNativeClient/lib/services/KeymapService.js:245
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "\"%s\" está faltando a propriedade \"%s\" requerida."
 
 #: ReactNativeClient/lib/services/KeymapService.js:245
 #: ReactNativeClient/lib/services/KeymapService.js:252
 msgid "accelerator"
-msgstr ""
+msgstr "acelerador"
 
 #: ReactNativeClient/lib/services/KeymapService.js:252
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Resposta inválida: %s"
+msgstr "Inválido %s: %s."
 
 #: ReactNativeClient/lib/services/KeymapService.js:270
 #, javascript-format
@@ -2290,11 +2292,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"O acelerador \"%s\" é usado para os comandos \"%s\" e \"%s\". Isso pode "
+"levar a comportamentos inesperados."
 
 #: ReactNativeClient/lib/services/KeymapService.js:295
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "O acelerador \"%s\" não é válido."
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -2754,11 +2758,14 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Para associar a geo-localização com a nota, o app precisa de permissão para "
+"acessar sua localização.\n"
+"\n"
+"Você pode deligar essa opção a qualquer momento na tela de Configuração."
 
 #: ReactNativeClient/lib/components/screens/Note.js:341
-#, fuzzy
 msgid "Permission needed"
-msgstr "Permissão para utilizar a câmera"
+msgstr "Permissão necessária"
 
 #: ReactNativeClient/lib/components/screens/Note.js:501
 #: ReactNativeClient/lib/shim-init-node.js:91
@@ -2838,7 +2845,7 @@ msgstr "Adicionar título"
 
 #: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Upgrade do Alvo de Sincronização"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:119
 #, javascript-format
@@ -2929,6 +2936,8 @@ msgstr ""
 #: ReactNativeClient/lib/components/screen-header.js:453
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
+"O alvo de sincronização precisa de upgrade. Pressione este banner para "
+"executar."
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -3020,9 +3029,8 @@ msgstr ""
 "reportado foi:"
 
 #: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "Abrir..."
+msgstr "Abrir"
 
 #: ReactNativeClient/lib/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -3233,9 +3241,8 @@ msgid "AWS S3 bucket"
 msgstr "AWS S3 bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:226
-#, fuzzy
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "URL da AWS S3"
 
 #: ReactNativeClient/lib/models/Setting.js:237
 msgid "AWS key"
@@ -3698,9 +3705,8 @@ msgid "Web Clipper"
 msgstr "Web Clipper"
 
 #: ReactNativeClient/lib/models/Setting.js:1310
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Modo do Teclado"
+msgstr "Atalhos de Teclado"
 
 #: ReactNativeClient/lib/models/Setting.js:1317
 msgid ""
