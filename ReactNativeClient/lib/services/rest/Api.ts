@@ -14,7 +14,7 @@ const md5 = require('md5');
 
 export enum RequestMethod {
 	GET = 'GET',
-	POST = 'post',
+	POST = 'POST',
 	PUT = 'PUT',
 	DELETE = 'DELETE',
 }
