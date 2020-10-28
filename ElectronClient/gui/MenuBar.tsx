@@ -794,6 +794,15 @@ function useMenu(props:Props) {
 					label: _('&File'),
 					submenu: [quitMenuItem],
 				},
+				{
+					label: _('&Edit'),
+					submenu: [
+						menuItemDic.textCopy,
+						menuItemDic.textCut,
+						menuItemDic.textPaste,
+						menuItemDic.textSelectAll,
+					],
+				},
 			]));
 		} else {
 			setMenu(Menu.buildFromTemplate(template));
