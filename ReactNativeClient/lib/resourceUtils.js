@@ -47,7 +47,7 @@ const attributesToStr = (attributes) =>
 
 const attachmentElement = ({ src, attributes, id }) =>
 	[
-		`<a href='joplin://${id}' ${attributesToStr(attributes)}>`,
+		`<a href=':/${id}' ${attributesToStr(attributes)}>`,
 		`  ${attributes.alt || src}`,
 		'</a>',
 	].join('');
