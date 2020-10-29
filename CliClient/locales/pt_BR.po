@@ -141,7 +141,7 @@ msgstr "Ir para qualquer coisa..."
 #: ElectronClient/plugins/GotoAnything.js:463
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "Paleta de Comandos"
 
 #: ElectronClient/plugins/GotoAnything.min.js:459
 msgid ""
@@ -549,6 +549,8 @@ msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
+"Os anexos não serão mais observados quando você mudar para uma nota"
+"diferente."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:387
 #, javascript-format
@@ -665,6 +667,9 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"O alvo da sincroniação precisa ser atualizado antes que o Joplin possa sincronizar. A operação"
+"pode levar alguns minutos para completar e o app terá que ser reiniciado. Para"
+"proceder, por favor, clique neste link."
 
 #: ElectronClient/gui/MainScreen/MainScreen.js:416
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
@@ -1411,13 +1416,15 @@ msgstr "Anexos da nota"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Digite o atalho"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Digite o atalho e então aperte ENTER. Ou, pressione BARRA DE ESPAÇO para limpar o"
+"atalho"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: ReactNativeClient/lib/services/KeymapService.js:144
@@ -1427,7 +1434,7 @@ msgstr "Erro"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "Command"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
 #, fuzzy
@@ -1487,6 +1494,7 @@ msgstr "Estatísticas"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"O app irá fechar agora. Por favor, reabra-o para completar o processo."
 
 #: ElectronClient/app.js:340
 #, javascript-format
@@ -1514,7 +1522,7 @@ msgstr "Encerrar edição externa"
 
 #: ElectronClient/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: ElectronClient/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1741,7 +1749,7 @@ msgstr ""
 
 #: CliClient/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Atualizar o alvo de sincronização para a última versão."
 
 #: CliClient/app/command-sync.js:105
 #, javascript-format
