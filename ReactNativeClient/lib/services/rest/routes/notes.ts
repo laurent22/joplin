@@ -7,6 +7,7 @@ import defaultAction from '../utils/defaultAction';
 import BaseModel from 'lib/BaseModel';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { RequestMethod, Request } from '../Api';
+import markdownUtils from 'lib/markdownUtils';
 
 const { reg } = require('lib/registry.js');
 const { Database } = require('lib/database.js');
@@ -155,6 +156,9 @@ async function tryToGuessImageExtFromMimeType(response:any, imagePath:string) {
 
 async function downloadImage(url:string /* , allowFileProtocolImages */) {
 	const tempDir = Setting.value('tempDir');
+
+	// The URL we get to download have been extracted from the Markdown document
+	url = markdownUtils.unescapeLinkUrl(url);
 
 	const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
 

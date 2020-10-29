@@ -51,7 +51,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
 		{ accelerator: 'Ctrl+T', command: 'newTodo' },
 		{ accelerator: 'Ctrl+S', command: 'synchronize' },
-		{ accelerator: '', command: 'print' },
+		{ accelerator: null, command: 'print' },
 		{ accelerator: 'Ctrl+Q', command: 'quit' },
 		{ accelerator: 'Ctrl+Alt+I', command: 'insertTemplate' },
 		{ accelerator: 'Ctrl+C', command: 'textCopy' },
