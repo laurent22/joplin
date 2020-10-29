@@ -48,6 +48,7 @@ const commands = [
 	require('./commands/moveToFolder'),
 	require('./commands/newNote'),
 	require('./commands/newFolder'),
+	require('./commands/newSubFolder'),
 	require('./commands/newTodo'),
 	require('./commands/print'),
 	require('./commands/renameFolder'),
@@ -63,6 +64,9 @@ const commands = [
 	require('./commands/toggleNoteList'),
 	require('./commands/toggleSideBar'),
 	require('./commands/toggleVisiblePanes'),
+	require('./commands/openNote'),
+	require('./commands/openFolder'),
+	require('./commands/openTag'),
 ];
 
 class MainScreenComponent extends React.Component<any, any> {

@@ -8,6 +8,54 @@ const mhchemModule = require('./katex_mhchem.js');
 // to serialize them with json-stringify-safe
 const stringifySafe = require('json-stringify-safe');
 
+function stringifyKatexOptions(options:any) {
+	if (!options) return '';
+
+	const newOptions = { ...options };
+
+	// The Katex macro structure is extremely verbose and slow to cache,
+	// so we need bespoke code to serialize it.
+
+	// macros:
+	//     \hb: {tokens: Array(1), numArgs: 0}
+	//     \d: {tokens: Array(7), numArgs: 1}
+	//     \e:
+	//         tokens: Array(11)
+	//             0: Token {text: "}", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             1: Token {text: "1", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             2: Token {text: "#", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             3: Token {text: "{", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             4: Token {text: "^", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             5: Token {text: "}", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             6: Token {text: "e", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             7: Token {text: " ", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             8: Token {text: "m", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             9: Token {text: " ", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//             10: Token {text: "{", loc: SourceLocation, noexpand: undefined, treatAsRelax: undefined}
+	//         numArgs: 1
+	//     \dv: {tokens: Array(15), numArgs: 2}
+	//     \ddv: {tokens: Array(19), numArgs: 2}
+	//     \pdv: {tokens: Array(15), numArgs: 2}
+	//     \pddv: {tokens: Array(15), numArgs: 2}
+	//     \abs: {tokens: Array(10), numArgs: 1}
+	//     \inflim: {tokens: Array(10), numArgs: 0}
+	//     \infint: {tokens: Array(2), numArgs: 0}
+	//     \prob: {tokens: Array(12), numArgs: 1}
+	//     \expval: {tokens: Array(14), numArgs: 2}
+	//     \wf: {tokens: Array(6), numArgs: 0}
+
+	if (options.macros) {
+		const toSerialize:any = {};
+		for (const k of Object.keys(options.macros)) {
+			const macroText:string[] = options.macros[k].tokens.map((t:any) => t.text);
+			toSerialize[k] = `${macroText.join('')}_${options.macros[k].numArgs}`;
+		}
+		newOptions.macros = toSerialize;
+	}
+
+	return stringifySafe(newOptions);
+}
+
 katex = mhchemModule(katex);
 
 function katexStyle() {
@@ -209,13 +257,13 @@ function math_block(state:any, start:number, end:number, silent:boolean) {
 const cache_:any = {};
 
 function renderToStringWithCache(latex:string, katexOptions:any) {
-	const cacheKey = md5(escape(latex) + escape(stringifySafe(katexOptions)));
+	const cacheKey = md5(escape(latex) + escape(stringifyKatexOptions(katexOptions)));
 	if (cacheKey in cache_) {
 		return cache_[cacheKey];
 	} else {
-		const beforeMacros = stringifySafe(katexOptions.macros);
+		const beforeMacros = stringifyKatexOptions(katexOptions.macros);
 		const output = katex.renderToString(latex, katexOptions);
-		const afterMacros = stringifySafe(katexOptions.macros);
+		const afterMacros = stringifyKatexOptions(katexOptions.macros);
 
 		// Don't cache the formulas that add macros, otherwise
 		// they won't be added on second run.

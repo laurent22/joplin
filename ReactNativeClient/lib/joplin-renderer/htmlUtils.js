@@ -87,11 +87,16 @@ class HtmlUtils {
 			return tagStack[tagStack.length - 1];
 		};
 
-		// The BASE tag allows changing the base URL from which files are loaded, and
-		// that can break several plugins, such as Katex (which needs to load CSS
-		// files using a relative URL). For that reason it is disabled.
-		// More info: https://github.com/laurent22/joplin/issues/3021
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed'];
+		// The BASE tag allows changing the base URL from which files are
+		// loaded, and that can break several plugins, such as Katex (which
+		// needs to load CSS files using a relative URL). For that reason
+		// it is disabled. More info:
+		// https://github.com/laurent22/joplin/issues/3021
+		//
+		// "link" can be used to escape the parser and inject JavaScript.
+		// Adding "meta" too for the same reason as it shouldn't be used in
+		// notes anyway.
+		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed', 'link', 'meta'];
 
 		const parser = new htmlparser2.Parser({
 

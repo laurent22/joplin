@@ -148,10 +148,10 @@ class Bridge {
 					this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'found', port: state.port });
 
 					const folders = await this.folderTree();
-					this.dispatch({ type: 'FOLDERS_SET', folders: folders });
+					this.dispatch({ type: 'FOLDERS_SET', folders: folders.items ? folders.items : folders });
 
 					const tags = await this.clipperApiExec('GET', 'tags');
-					this.dispatch({ type: 'TAGS_SET', tags: tags });
+					this.dispatch({ type: 'TAGS_SET', tags: tags.items ? tags.items : tags });
 
 					bridge().restoreState();
 					return;
@@ -245,7 +245,7 @@ class Bridge {
 	}
 
 	async folderTree() {
-		return this.clipperApiExec('GET', 'folders');
+		return this.clipperApiExec('GET', 'folders', { as_tree: 1 });
 	}
 
 	async storageSet(keys) {
