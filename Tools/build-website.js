@@ -589,7 +589,7 @@ async function readmeFileTitle(sourcePath) {
 	const r = md.match(/(^|\n)# (.*)/);
 
 	if (!r) {
-		throw new Error('Could not determine title for Markdown file: ', sourcePath);
+		throw new Error(`Could not determine title for Markdown file: ${sourcePath}`);
 	} else {
 		return r[2];
 	}
