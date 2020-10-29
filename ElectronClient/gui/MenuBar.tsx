@@ -98,6 +98,7 @@ const commandNames:string[] = [
 	'newNote',
 	'newTodo',
 	'newFolder',
+	'newSubFolder',
 	'print',
 	'synchronize',
 	'textCopy',
@@ -304,6 +305,7 @@ function useMenu(props:Props) {
 		const newNoteItem = menuItemDic.newNote;
 		const newTodoItem = menuItemDic.newTodo;
 		const newFolderItem = menuItemDic.newFolder;
+		const newSubFolderItem = menuItemDic.newSubFolder;
 		const printItem = menuItemDic.print;
 
 		toolsItemsFirst.push(syncStatusItem, {
@@ -428,7 +430,9 @@ function useMenu(props:Props) {
 			},
 			shim.isMac() ? noItem : newNoteItem,
 			shim.isMac() ? noItem : newTodoItem,
-			shim.isMac() ? noItem : newFolderItem, {
+			shim.isMac() ? noItem : newFolderItem,
+			shim.isMac() ? noItem : newSubFolderItem,
+			{
 				type: 'separator',
 				visible: shim.isMac() ? false : true,
 			}, {
@@ -478,7 +482,9 @@ function useMenu(props:Props) {
 			submenu: [
 				newNoteItem,
 				newTodoItem,
-				newFolderItem, {
+				newFolderItem,
+				newSubFolderItem,
+				{
 					label: _('Close Window'),
 					platforms: ['darwin'],
 					accelerator: shim.isMac() && keymapService.getAccelerator('closeWindow'),
@@ -792,6 +798,15 @@ function useMenu(props:Props) {
 				{
 					label: _('&File'),
 					submenu: [quitMenuItem],
+				},
+				{
+					label: _('&Edit'),
+					submenu: [
+						menuItemDic.textCopy,
+						menuItemDic.textCut,
+						menuItemDic.textPaste,
+						menuItemDic.textSelectAll,
+					],
 				},
 			]));
 		} else {

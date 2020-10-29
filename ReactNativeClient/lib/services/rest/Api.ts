@@ -2,6 +2,7 @@ import Setting from 'lib/models/Setting';
 import Logger from 'lib/Logger';
 import shim from 'lib/shim';
 import uuid from 'lib/uuid';
+import markdownUtils from 'lib/markdownUtils';
 
 const { ltrimSlashes } = require('lib/path-utils');
 const { Database } = require('lib/database.js');
@@ -630,6 +631,9 @@ export default class Api {
 
 	async downloadImage_(url:string /* , allowFileProtocolImages */) {
 		const tempDir = Setting.value('tempDir');
+
+		// The URL we get to download have been extracted from the Markdown document
+		url = markdownUtils.unescapeLinkUrl(url);
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
 

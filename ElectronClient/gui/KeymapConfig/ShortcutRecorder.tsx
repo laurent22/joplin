@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, KeyboardEvent } from 'react';
 
-import KeymapService from '../../lib/services/KeymapService';
+import KeymapService from 'lib/services/KeymapService';
 import styles_ from './styles';
 
 import { _ } from 'lib/locale';
@@ -41,7 +41,7 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 		}
 	}, [accelerator]);
 
-	const handleKeydown = (event: KeyboardEvent<HTMLDivElement>) => {
+	const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
 		event.preventDefault();
 		const newAccelerator = keymapService.domToElectronAccelerator(event);
 
@@ -64,7 +64,7 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 			<input
 				value={accelerator}
 				placeholder={_('Press the shortcut')}
-				onKeyDown={handleKeydown}
+				onKeyDown={handleKeyDown}
 				style={styles.recorderInput}
 				title={_('Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.')}
 				readOnly

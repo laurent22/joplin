@@ -256,9 +256,11 @@ class BaseItem extends BaseModel {
 			propValue = JSON.stringify(propValue);
 		} else if (propValue === null || propValue === undefined) {
 			propValue = '';
+		} else {
+			propValue = `${propValue}`;
 		}
 
-		return propValue;
+		return propValue.replace(/\n/g, '\\n').replace(/\r/g, '\\r');
 	}
 
 	static unserialize_format(type, propName, propValue) {
@@ -279,7 +281,7 @@ class BaseItem extends BaseModel {
 			propValue = Database.formatValue(ItemClass.fieldType(propName), propValue);
 		}
 
-		return propValue;
+		return typeof propValue === 'string' ? propValue.replace(/\\n/g, '\n').replace(/\\r/g, '\r') : propValue;
 	}
 
 	static async serialize(item, shownKeys = null) {

@@ -1,5 +1,9 @@
 'use strict';
 
+if (process.argv && process.argv.indexOf('SKIP_PREFLIGHT_CHECK') >= 0) {
+	process.env.SKIP_PREFLIGHT_CHECK = 'true';
+}
+
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
