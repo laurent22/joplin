@@ -139,6 +139,16 @@ export default class SpellCheckerService {
 				this.makeMenuItem({
 					type: 'separator',
 				}),
+
+				// Can be removed once it does work
+				this.makeMenuItem({
+					label: '⚠ Spell checker doesn\'t work in Markdown editor ⚠',
+					enabled: false,
+				}),
+
+				this.makeMenuItem({
+					type: 'separator',
+				}),
 				...this.changeLanguageMenuItems(selectedLanguage, useSpellChecker),
 			],
 		});
