@@ -17,12 +17,13 @@ import { _ } from 'lib/locale';
 import bridge from '../../../../services/bridge';
 import markdownUtils from 'lib/markdownUtils';
 import shim from 'lib/shim';
+import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
 
 const Note = require('lib/models/Note.js');
-const { clipboard } = require('electron');
+// const { clipboard } = require('electron');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
+// const MenuItem = bridge().MenuItem;
 const { reg } = require('lib/registry.js');
 const dialogs = require('../../../dialogs');
 const { themeStyle } = require('lib/theme');
@@ -222,76 +223,78 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, []);
 
-	const editorCutText = useCallback(() => {
-		if (editorRef.current) {
-			const selections = editorRef.current.getSelections();
-			if (selections.length > 0) {
-				clipboard.writeText(selections[0]);
-				// Easy way to wipe out just the first selection
-				selections[0] = '';
-				editorRef.current.replaceSelections(selections);
-			}
-		}
-	}, []);
+	// const editorCutText = useCallback(() => {
+	// 	if (editorRef.current) {
+	// 		const selections = editorRef.current.getSelections();
+	// 		if (selections.length > 0) {
+	// 			clipboard.writeText(selections[0]);
+	// 			// Easy way to wipe out just the first selection
+	// 			selections[0] = '';
+	// 			editorRef.current.replaceSelections(selections);
+	// 		}
+	// 	}
+	// }, []);
 
-	const editorCopyText = useCallback(() => {
-		if (editorRef.current) {
-			const selections = editorRef.current.getSelections();
-			if (selections.length > 0) {
-				clipboard.writeText(selections[0]);
-			}
-		}
-	}, []);
+	// const editorCopyText = useCallback(() => {
+	// 	if (editorRef.current) {
+	// 		const selections = editorRef.current.getSelections();
+	// 		if (selections.length > 0) {
+	// 			clipboard.writeText(selections[0]);
+	// 		}
+	// 	}
+	// }, []);
 
-	const editorPasteText = useCallback(() => {
-		if (editorRef.current) {
-			editorRef.current.replaceSelection(clipboard.readText());
-		}
-	}, []);
+	// const editorPasteText = useCallback(() => {
+	// 	if (editorRef.current) {
+	// 		editorRef.current.replaceSelection(clipboard.readText());
+	// 	}
+	// }, []);
 
-	const onEditorContextMenu = useCallback(() => {
-		const menu = new Menu();
+	const onEditorContextMenu = () => {};
 
-		const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
-		const clipboardText = clipboard.readText();
+	// useCallback(() => {
+	// 	const menu = new Menu();
 
-		menu.append(
-			new MenuItem({
-				label: _('Cut'),
-				enabled: hasSelectedText,
-				click: async () => {
-					editorCutText();
-				},
-			})
-		);
+	// 	const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+	// 	const clipboardText = clipboard.readText();
 
-		menu.append(
-			new MenuItem({
-				label: _('Copy'),
-				enabled: hasSelectedText,
-				click: async () => {
-					editorCopyText();
-				},
-			})
-		);
+	// 	menu.append(
+	// 		new MenuItem({
+	// 			label: _('Cut'),
+	// 			enabled: hasSelectedText,
+	// 			click: async () => {
+	// 				editorCutText();
+	// 			},
+	// 		})
+	// 	);
 
-		menu.append(
-			new MenuItem({
-				label: _('Paste'),
-				enabled: true,
-				click: async () => {
-					if (clipboardText) {
-						editorPasteText();
-					} else {
-						// To handle pasting images
-						onEditorPaste();
-					}
-				},
-			})
-		);
+	// 	menu.append(
+	// 		new MenuItem({
+	// 			label: _('Copy'),
+	// 			enabled: hasSelectedText,
+	// 			click: async () => {
+	// 				editorCopyText();
+	// 			},
+	// 		})
+	// 	);
 
-		menu.popup(bridge().window());
-	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
+	// 	menu.append(
+	// 		new MenuItem({
+	// 			label: _('Paste'),
+	// 			enabled: true,
+	// 			click: async () => {
+	// 				if (clipboardText) {
+	// 					editorPasteText();
+	// 				} else {
+	// 					// To handle pasting images
+	// 					onEditorPaste();
+	// 				}
+	// 			},
+	// 		})
+	// 	);
+
+	// 	menu.popup(bridge().window());
+	// }, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
 
 	const loadScript = async (script:any) => {
 		return new Promise((resolve) => {
@@ -603,6 +606,40 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// it.
 		editorRef.current.refresh();
 	}, [rootSize, styles.editor, props.visiblePanes]);
+
+	// The code below adds support for spell checker when CodeMirror "inputStyle" is "contenteditable"
+	// however this mode is too buggy to be used in production. Perhaps it can be used if CodeMirror
+	// contenteditable mode is fixed in a future version.
+	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
+	useEffect(() => {
+		function pointerInsideEditor(x:number, y:number) {
+			const elements = document.getElementsByClassName('codeMirrorEditor');
+			if (!elements.length) return null;
+			console.info(elements[0]);
+			const rect = elements[0].getBoundingClientRect();
+			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
+		}
+
+		function onContextMenu(_event:any, params:any) {
+			if (!pointerInsideEditor(params.x, params.y)) return;
+
+			const menu = new Menu();
+
+			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
+
+			for (const item of spellCheckerMenuItems) {
+				menu.append(item);
+			}
+
+			menu.popup();
+		}
+
+		bridge().window().webContents.on('context-menu', onContextMenu);
+
+		return () => {
+			bridge().window().webContents.off('context-menu', onContextMenu);
+		};
+	}, []);
 
 	function renderEditor() {
 
