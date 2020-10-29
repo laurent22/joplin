@@ -15,71 +15,840 @@ msgstr ""
 "X-Poedit-SourceCharset: https://raw.githubusercontent.com/laurent22/joplin/"
 "master/CliClient/locales/joplin.pot\n"
 
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:20
+#: CliClient/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"Podvoji zabeležke ustrezajoče <note> v [notebook]. Če nobena beležnica ni "
+"specificirana, zabeležka je podvojena v trenutni beležnici."
+
+#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
+#: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
+#: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
+#: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
+#: CliClient/app/command-attach.js:21 CliClient/app/command-export.js:36
+#: CliClient/app/command-export.js:40 CliClient/app/command-geoloc.js:20
+#: CliClient/app/command-search.js:27 CliClient/app/command-set.js:32
+#: CliClient/app/command-help.js:66 CliClient/app/command-todo.js:21
+#: CliClient/app/command-tag.js:33 CliClient/app/command-tag.js:36
+#: CliClient/app/command-tag.js:42 CliClient/app/command-tag.js:43
+#: CliClient/app/command-tag.js:81 CliClient/app/command-tag.js:87
+#: CliClient/app/command-done.js:20
+#: ReactNativeClient/lib/services/interop/InteropService.js:182
+#: ReactNativeClient/lib/services/interop/InteropService.js:194
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Ni moč najti \"%s\"."
+
+#: CliClient/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Prikaže zabeležke v trenutni beležnici. Uporabite `ls /` za prikaz seznama "
+"beležnic."
+
+#: CliClient/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "Prikaže samo prvih <num> zabeležk."
+
+#: CliClient/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "Razvrsti predmete glede na<field>(title, updated_time, created_time)."
+
+#: CliClient/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "Obrne vrstni red."
+
+#: CliClient/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Prikaže samo predmete specifičnega tipa(tipov). Lahko je `n` za zabeležke, "
+"`t` za seznam opravil ali `nt` za zabeležke in za seznam opravil (to pomeni. "
+"`-tt` bi prikazal samo za narediti, med tem ko `-ttd` bi prikazal zabeležke "
+"in seznam opravil."
+
+#: CliClient/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "Ali \"text\" ali \"json\""
+
+#: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"V uporabi je format dolgi seznam in je formata ID, NOTE_COUNT (za "
+"beležnice), DATE, TODO_CHECKED (seznam opravil), TITLE"
+
+#: CliClient/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "Prosim najprej izberite beležnico."
+
+#: CliClient/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Uvozi podatke v Joplin."
+
+#: CliClient/app/command-import.js:25
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Format vira: %s"
+
+#: CliClient/app/command-import.js:26
+msgid "Do not ask for confirmation."
+msgstr "Ne sprašuj za potrditev."
+
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "Format vira: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:68
+#, javascript-format
+msgid "Found: %d."
+msgstr "Najdeno: %d."
+
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Created: %d."
+msgstr "Ustvarjeno: %d."
+
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Posodobljeno: %d."
+
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Preskočeno: %d."
+
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Viri: %d."
+
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Zaznamovano: %d."
+
+#: CliClient/app/command-import.js:65
+msgid "Importing notes..."
+msgstr "Uvažanje zabeležk..."
+
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:88
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Zabeležke so bile uvožene: %s"
+
+#: CliClient/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
+
+#: CliClient/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Vrsta: %s."
+
+#: CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Možne vrednosti: %s."
+
+#: CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Privzeto: %s"
+
+#: CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Možne tipke/vrednosti:"
+
+#: CliClient/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#: CliClient/app/command-server.js:38
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#: CliClient/app/command-server.js:44
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+#: CliClient/app/command-server.js:44 CliClient/app/command-server.js:47
+msgid "Server is not running."
+msgstr ""
+
+#: CliClient/app/command-e2ee.js:18
+#, fuzzy
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"Upravlja z E2EE nastavitvami. Ukazi so `enable`, `disable`, `decrypt`, "
+"`status` in `target-status`."
+
+#: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
+msgid "Enter master password:"
+msgstr "Vnesite glavno geslo:"
+
+#: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
+#: CliClient/app/command-e2ee.js:79
+msgid "Operation cancelled"
+msgstr "Operacija je preklicana"
+
+#: CliClient/app/command-e2ee.js:47
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"Dekripcija se začenja... Prosim počakajte. Vse skupaj lahko vzame nekaj "
+"minut, glede na količino materiala, ki jo je potrebno dekriptirati."
+
+#: CliClient/app/command-e2ee.js:53
+#, fuzzy, javascript-format
+msgid "Decrypted items: %d"
+msgstr "Preneseni predmeti: %d/%d."
+
+#: CliClient/app/command-e2ee.js:54
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+
+#: CliClient/app/command-e2ee.js:68
+msgid "Completed decryption."
+msgstr "Dekripcija končana."
+
+#: CliClient/app/command-e2ee.js:77
+#: ReactNativeClient/lib/components/screens/encryption-config.js:163
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Vnesite glavno geslo:"
+
+#: CliClient/app/command-e2ee.js:83
+#: ReactNativeClient/lib/components/screens/encryption-config.js:140
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Geslo ne more biti prazno"
+
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:443
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+msgid "Enabled"
+msgstr "Omogočeno"
+
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:110
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:443
+#: ReactNativeClient/lib/models/Setting.js:624
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+msgid "Disabled"
+msgstr "Onemogočeno"
+
+#: CliClient/app/command-e2ee.js:108
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Enkripcija je: %s"
+
+#: CliClient/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "Ustvari novo beležnico."
+
+#: CliClient/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Premakne ustrezno zabeležko, ki ustreza <note> v [notebook]."
+
+#: CliClient/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"Dobi ali nastavi configuracijsko vrednost. Če [value] ni dodeljena, bo "
+"prikazana vrednost od [name]. Če niti [name] ali [value] nista dodeljena, bo "
+"prikazana sedanja konfiguracija."
+
+#: CliClient/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "Prikaže tudi nenastavljene in skrite spremenljivke konfiguracije."
+
+#: CliClient/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: CliClient/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: CliClient/app/command-use.js:12
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Se premakne v [notebook] - vse nadaljnje operacije se bodo zgodile znotraj "
+"te beležnice."
+
+#: CliClient/app/command-sync.js:29
+msgid "Synchronises with remote storage."
+msgstr "Sinhronizira z oddaljenim dostopom."
+
+#: CliClient/app/command-sync.js:34
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr "Sinhroniziraj z danim ciljem(defaults to sync.target config value)"
+
+#: CliClient/app/command-sync.js:35
+msgid "Upgrade the sync target to the latest version."
+msgstr ""
+
+#: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
+#: ElectronClient/gui/OneDriveLoginScreen.min.js:40
+#: ElectronClient/gui/OneDriveLoginScreen.js:46
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Avtentikacija ni bila uspešna(autentikacijski token ni bil prejet)."
+
+#: CliClient/app/command-sync.js:90 ElectronClient/gui/DropboxLoginScreen.js:29
+#: ElectronClient/gui/DropboxLoginScreen.min.js:42
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+#: CliClient/app/command-sync.js:91 ElectronClient/gui/DropboxLoginScreen.js:30
+#: ElectronClient/gui/DropboxLoginScreen.min.js:47
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+
+#: CliClient/app/command-sync.js:93 ElectronClient/gui/DropboxLoginScreen.js:32
+#: ElectronClient/gui/DropboxLoginScreen.min.js:57
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr ""
+
+#: CliClient/app/command-sync.js:105
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "Avtentikacija z %s ni potekla. Prosim priskrbite manjkajoče podatke."
+
+#: CliClient/app/command-sync.js:128
+msgid "Synchronisation is already in progress."
+msgstr "Sinhronizacija je že v postopku."
+
+#: CliClient/app/command-sync.js:133
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"Zaklenjena datoteka je že v postopku. Če veste, da trenutno ne poteka "
+"sinhronizacija, lahko izbrišete zaklenjeno datoteko na \"%s\" in nadaljujete "
+"z operacijo."
+
+#: CliClient/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Mesto sinhronizacije: %s(%s)"
+
+#: CliClient/app/command-sync.js:177
+#, fuzzy
+msgid "Cannot initialise synchroniser."
+msgstr "Ni moč zagnati sinhronizatorja."
+
+#: CliClient/app/command-sync.js:207
+msgid "Starting synchronisation..."
+msgstr "Sinhronizacija se začenja."
+
+#: CliClient/app/command-sync.js:230
+msgid "Downloading resources..."
+msgstr ""
+
+#: CliClient/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Preimenuje dano <item> (zabeležka ali beležnica) v <name>."
+
+#: CliClient/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Izbriše dano beležnico."
+
+#: CliClient/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Izbriše beležnico brez potrebne potrditve."
+
+#: CliClient/app/command-rmbook.js:26
+#: ReactNativeClient/lib/components/screens/notes.js:154
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"Želite izbrisati beležnico? Vse zabeležke znotraj beležke bodo hkrati "
+"izbrisane."
+
+#: CliClient/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Ustvari nov seznam opravil."
+
+#: CliClient/app/command-mktodo.js:16 CliClient/app/command-mknote.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Zabeležke so lahko ustvarjene samo znotraj beležnice."
+
+#: CliClient/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "Prikaže dano zabeležko."
+
+#: CliClient/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "Prikaže vse informacije o zabeležki."
+
+#: CliClient/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Uredi zabeležko."
+
+#: CliClient/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Noben urejevalec teksta ni izbran. Prosim, nastavite ga z uporabo `config "
+"editor <editor-path>`"
+
+#: CliClient/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Ni aktivnih beležnic."
+
+#: CliClient/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Zabeležka ne obstaja: \"%s\". Bi jo radi ustvarili?"
+
+#: CliClient/app/app-gui.js:452
+msgid "To delete a tag, untag the associated notes."
+msgstr "Za izbris dane oznake, odoznačite zabeležke s to oznako."
+
+#: CliClient/app/app-gui.js:462
+msgid "Please select the note or notebook to be deleted first."
+msgstr ""
+"Prosim izberite zabeležko ali beležnico, ki jo želite najprej zbrisati."
+
+#: CliClient/app/app-gui.js:750
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Pritisnite Ctrl+D ali napišite \"exit\" za izhod iz aplikacije"
+
+#: CliClient/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Izbriše zabeležke, ki se ujemajo z <note-pattern>."
+
+#: CliClient/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Izbriše zabeležke brez potrebne predhodne potrditve."
+
+#: CliClient/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d zabeležk ustreza temu iskalnemu nizu. Jih želite zbrisati?"
+
+#: CliClient/app/command-rmnote.js:27
+#: ReactNativeClient/lib/components/screens/Note.js:447
+msgid "Delete note?"
+msgstr "Želite izbrisati zabeležko?"
+
+#: CliClient/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Pripni dano datoteko k zabeležki."
+
+#: CliClient/app/command-version.js:11
+msgid "Displays version information"
+msgstr "Prikaži informacije o verziji"
+
+#: CliClient/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: CliClient/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr "Označi seznam opravil kot neopravljen."
+
+#: CliClient/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Izvozi Joplin datoteke glede na dano pot. Privzeto bo izvozilo celotno bazo "
+"podatkov vključujoče beležnice, zabeležke, oznake in vire."
+
+#: CliClient/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Format destinacije: %s"
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Izvozi samo dano zabeležko."
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Izvozi samo dano beležnico."
+
+#: CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Ustvari novo zabeležko."
+
+#: CliClient/app/main.js:80
+msgid "Type `joplin help` for usage information."
+msgstr "Vtipkajte `joplin help` za informacije o uporabi."
+
+#: CliClient/app/main.js:82
+msgid "Fatal error:"
+msgstr "Usodna napaka:"
+
+#: CliClient/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Prikaže geolokacijski URL za zabeležk."
+
+#: CliClient/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Dobrodošli v Joplinu!\n"
+"\n"
+"Vtipkajte `:help shortcuts` za seznam bližnjic na tipkovnici ali vtipkajte "
+"samo`:help` za informacije o uporabi.\n"
+"\n"
+"Na primer, če želite ustvariti beležnico pritisnite `mb`; če želite "
+"ustvariti zabeležko pritisnite`mn`."
+
+#: CliClient/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+"Ena ali več predmetov je trenutno enkriptiranih in boste morda morali "
+"navesti glavno geslo. Če želite to narediti, vtipkajte `e2ee decrypt`. Če "
+"ste že vnesli geslo, so enkriptirani predmeti v stanju dekripcije v ozadju "
+"in bodo kmalu na voljo."
+
+#: CliClient/app/gui/NoteWidget.js:50
+#, fuzzy
+msgid "You may also type `status` for more information."
+msgstr "Ne sprašuj za potrditev."
+
+#: CliClient/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Išči:"
+
+#: CliClient/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Išči dani <pattern> v vseh zabeležkah."
+
+#: CliClient/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Nastavi lastnost <name> dane <note> v dano [value]. Možne lastnosti so:\n"
+"\n"
+"%s"
+
+#: CliClient/app/cli-utils.js:109
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Manjka zahtevani argument %s"
+
+#: CliClient/app/cli-utils.js:140 ReactNativeClient/lib/services/report.js:151
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: CliClient/app/cli-utils.js:144
+msgid "Your choice: "
+msgstr "Vaša izbira: "
+
+#: CliClient/app/cli-utils.js:151
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Neveljaven odgovor: %s"
+
+#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:137
+msgid "Y"
+msgstr "Y"
+
+#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:137
+msgid "n"
+msgstr "n"
+
+#: CliClient/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Ni mogoče spremeniti enkriptiranega predmeta"
+
+#: CliClient/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "Prikaže informacijo uporabe."
+
+#: CliClient/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr "Za več informacij na kako prilagoditi bližnjice prosim obiščite %s"
+
+#: CliClient/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Bližnjice niso na voljo v CLI načinu."
+
+#: CliClient/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Vtipkajte `help [command]` za več informacij o ukazu; ali vtipkajte `help "
+"all` za popoln prikaz informacij o uporabi."
+
+#: CliClient/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Možni ukazi si:"
+
+#: CliClient/app/command-help.js:77
+#, fuzzy
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"V kateremkoli ukazu se lahko na zabeležko ali beležnico nanašate ali z "
+"naslovom ali ID ali uporabo bližnjic `$n` ali `$b`, v tem vrstnem redu, za "
+"trenutno izbrano beležnico ali zabeležko. `$c` lahko uporabite, da se "
+"nanašate na trenutno izbran predmet."
+
+#: CliClient/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr ""
+"Če se želite premakniti iz enega sklopa v drugega, pritisnite Tab ali Shift"
+"+Tab."
+
+#: CliClient/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Uporabite puščice in page up/down tipke za listanje strani in "
+"besedila(vključno s to konzolo)."
+
+#: CliClient/app/command-help.js:81
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Če želite povečati/pomanjšati konzolo, pritisnite \"TC\"."
+
+#: CliClient/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Za vstop v način ukaznega poziva pritisnite\":\""
+
+#: CliClient/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Za izhod iz načina Ukazni poziv pritisnite ESCAPE"
+
+#: CliClient/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+"Za seznam bližnjic na tipkovnici in možnosti konfiguracije vtipkajte `help "
+"keymap`"
+
+#: CliClient/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command> ima lahko funkcije ali \"spremeni\" or \"počisti\". Uporabi "
+"\"spremeni\" da spremeniš dani seznam opravil iz opravljeno v neopravljeno "
+"ali obratno. (Če je tarča navadna zabeležka, bo ta pretvorjena v seznam "
+"opravil). Uporabi \"počisti\" za pretvoriti seznam opravil nazaj v običajno "
+"zabeležko."
+
+#: CliClient/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Izhod iz aplikacije."
+
+#: CliClient/app/app.js:62
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr "Več kot en predmet se ujema z \"%s\". Prosim zožite iskani niz besed."
+
+#: CliClient/app/app.js:92
+msgid "No notebook selected."
+msgstr "Nobena beležnica ni bila izbrana."
+
+#: CliClient/app/app.js:98
+msgid "No notebook has been specified."
+msgstr "Nobena beležnica ni bila izbrana."
+
+#: CliClient/app/app.js:137
+msgid "N"
+msgstr "N"
+
+#: CliClient/app/app.js:137
+msgid "y"
+msgstr "y"
+
+#: CliClient/app/app.js:170
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Sinhronizacija v ozadju se preklicuje... Prosim počakajte."
+
+#: CliClient/app/app.js:255
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Noben tak ukaz ni bil najden: %s"
+
+#: CliClient/app/app.js:303
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Ukaz \"%s\" je na voljo samo v GUI načinu"
+
+#: CliClient/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr "Prikaži povzetek o zabeležkah in beležnicah."
+
+#: CliClient/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgstr ""
+
+#: CliClient/app/command-tag.js:14
+#, fuzzy
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command> je lahko \"dodaj\", \"odstrani\" ali \"naštej\", da dodeliš "
+"ali odstraniš [tag] from [note] ali našteje zabeležke povezane z oznako "
+"[tag]. Ukaz `tag list` je lahko uporabljen da prikaže vse oznake."
+
+#: CliClient/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Neveljaven ukaz: \"%s\""
+
+#: CliClient/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Označi seznam opravil kot končan."
+
+#: CliClient/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Zabeležka ni formata seznam opravil: \"%s\""
+
+#: ElectronClient/bridge.js:97 ElectronClient/bridge.js:107
+#: ElectronClient/bridge.js:118 ElectronClient/bridge.js:126
 #: ElectronClient/checkForUpdates.js:139
+#: ElectronClient/gui/DialogButtonRow.min.js:30
+#: ElectronClient/gui/MenuBar.js:335
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:174
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:22
 #: ElectronClient/gui/PromptDialog.min.js:235
 #: ElectronClient/gui/ConfigScreen.min.js:187
 #: ElectronClient/gui/ConfigScreen.min.js:756
-#: ElectronClient/gui/DialogButtonRow.min.js:30
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:22
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:174
-#: ElectronClient/gui/MenuBar.js:332 ElectronClient/bridge.js:97
-#: ElectronClient/bridge.js:107 ElectronClient/bridge.js:118
-#: ElectronClient/bridge.js:126
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:20
 #: ReactNativeClient/lib/components/ModalDialog.js:67
-#: ReactNativeClient/lib/components/side-menu-content.js:150
 #: ReactNativeClient/lib/components/CameraView.js:160
+#: ReactNativeClient/lib/components/side-menu-content.js:150
 msgid "OK"
 msgstr "OK"
 
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:21
-#: ElectronClient/gui/ResourceScreen.js:95
-#: ElectronClient/gui/PromptDialog.min.js:242
-#: ElectronClient/gui/ConfigScreen.min.js:746
+#: ElectronClient/bridge.js:107 ElectronClient/bridge.js:118
+#: ElectronClient/checkForUpdates.js:154
+#: ElectronClient/gui/DialogButtonRow.min.js:38
+#: ElectronClient/gui/SideBar/SideBar.min.js:264
+#: ElectronClient/gui/SideBar/SideBar.min.js:639
 #: ElectronClient/gui/SideBar/SideBar.js:191
 #: ElectronClient/gui/SideBar/SideBar.js:412
-#: ElectronClient/gui/SideBar/SideBar.min.js:264
-#: ElectronClient/gui/SideBar/SideBar.min.js:630
-#: ElectronClient/gui/NoteList/NoteList.min.js:152
-#: ElectronClient/gui/NoteList/NoteList.js:161
-#: ElectronClient/gui/DialogButtonRow.min.js:38
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:52
+#: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
+#: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/utils/NoteListUtils.js:161
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:462
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:52
-#: ElectronClient/bridge.js:107 ElectronClient/bridge.js:118
+#: ElectronClient/gui/PromptDialog.min.js:242
+#: ElectronClient/gui/ConfigScreen.min.js:746
+#: ElectronClient/gui/NoteList/NoteList.js:161
+#: ElectronClient/gui/NoteList/NoteList.min.js:151
+#: ElectronClient/gui/ResourceScreen.js:95
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:21
+#: ReactNativeClient/lib/shim-init-node.js:129
 #: ReactNativeClient/lib/components/ModalDialog.js:70
-#: ReactNativeClient/lib/components/screens/Note.js:98
-#: ReactNativeClient/lib/components/screens/Note.js:504
-#: ReactNativeClient/lib/components/screens/encryption-config.js:185
+#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:82
+#: ReactNativeClient/lib/components/CameraView.js:161
 #: ReactNativeClient/lib/components/side-menu-content.js:156
 #: ReactNativeClient/lib/components/side-menu-content.js:165
 #: ReactNativeClient/lib/components/side-menu-content.js:338
-#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:82
-#: ReactNativeClient/lib/components/CameraView.js:161
-#: ReactNativeClient/lib/shim-init-node.js:92
+#: ReactNativeClient/lib/components/screens/encryption-config.js:185
+#: ReactNativeClient/lib/components/screens/Note.js:98
+#: ReactNativeClient/lib/components/screens/Note.js:504
 msgid "Cancel"
 msgstr "Prekliči"
 
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:22
-#: ElectronClient/checkForUpdates.js:153
-#: ReactNativeClient/lib/versionInfo.js:25
-#: ReactNativeClient/lib/components/screens/Note.js:502
-#: ReactNativeClient/lib/shim-init-node.js:92
-msgid "Yes"
-msgstr "Da"
+#: ElectronClient/bridge.js:178
+msgid ""
+"The app is now going to close. Please relaunch it to complete the process."
+msgstr ""
 
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:23
-#: ElectronClient/checkForUpdates.js:153
-#: ReactNativeClient/lib/versionInfo.js:25
-#: ReactNativeClient/lib/components/screens/Note.js:503
-#: ReactNativeClient/lib/shim-init-node.js:92
-msgid "No"
-msgstr "Ne"
+#: ElectronClient/plugins/GotoAnything.min.js:459
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name."
+msgstr ""
 
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:24
-#: ElectronClient/gui/ShareNoteDialog.js:175
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:113
-msgid "Close"
+#: ElectronClient/plugins/GotoAnything.min.js:499
+#: ElectronClient/plugins/GotoAnything.js:456
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:20
+msgid "Goto Anything..."
+msgstr ""
+
+#: ElectronClient/plugins/GotoAnything.js:431
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name. Or type : to search for "
+"commands."
+msgstr ""
+
+#: ElectronClient/plugins/GotoAnything.js:463
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
+msgid "Command palette"
+msgstr ""
+
+#: ElectronClient/InteropServiceHelper.js:153
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Izvažam v \"%s\" kot \"%s\" format. Prosim počakajte..."
+
+#: ElectronClient/InteropServiceHelper.js:170
+#, javascript-format
+msgid "Could not export notes: %s"
 msgstr ""
 
 #: ElectronClient/checkForUpdates.js:138
@@ -95,347 +864,277 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "Posodobitev je na voljo, jo želite prenesti sedaj?"
 
-#: ElectronClient/checkForUpdates.js:152
+#: ElectronClient/checkForUpdates.js:153
 #, javascript-format
 msgid "Your version: %s"
 msgstr ""
 
-#: ElectronClient/checkForUpdates.js:152
+#: ElectronClient/checkForUpdates.js:153
 #, javascript-format
 msgid "New version: %s"
 msgstr ""
 
-#: ElectronClient/checkForUpdates.js:153
+#: ElectronClient/checkForUpdates.js:154
+msgid "Download"
+msgstr ""
+
+#: ElectronClient/checkForUpdates.js:154
 msgid "Full Release Notes"
 msgstr ""
 
-#: ElectronClient/InteropServiceHelper.js:153
-#, javascript-format
-msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Izvažam v \"%s\" kot \"%s\" format. Prosim počakajte..."
-
-#: ElectronClient/InteropServiceHelper.js:170
-#, javascript-format
-msgid "Could not export notes: %s"
-msgstr ""
-
-#: ElectronClient/plugins/GotoAnything.js:431
-msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name. Or type : to search for "
-"commands."
-msgstr ""
-
-#: ElectronClient/plugins/GotoAnything.js:456
-#: ElectronClient/plugins/GotoAnything.min.js:499
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:20
-msgid "Goto Anything..."
-msgstr ""
-
-#: ElectronClient/plugins/GotoAnything.js:463
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-msgid "Command palette"
-msgstr ""
-
-#: ElectronClient/plugins/GotoAnything.min.js:459
-msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name."
-msgstr ""
-
-#: ElectronClient/gui/NoteListControls/commands/focusSearch.js:16
-msgid "Search in all the notes"
-msgstr "Išči znotraj vseh zabeležk"
-
-#: ElectronClient/gui/ResourceScreen.js:32
+#: ElectronClient/gui/SearchBar/SearchBar.js:50
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:120
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:437
 #, fuzzy
-msgid "Title"
-msgstr "Neimenovano"
+msgid "Search..."
+msgstr "Išči"
 
-#: ElectronClient/gui/ResourceScreen.js:36
-msgid "Size"
-msgstr ""
-
-#: ElectronClient/gui/ResourceScreen.js:39
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:164
-#: ElectronClient/gui/NotePropertiesDialog.min.js:27
-msgid "ID"
-msgstr "ID"
-
-#: ElectronClient/gui/ResourceScreen.js:40
-#, fuzzy
-msgid "Action"
-msgstr "Izhod iz aplikacije."
-
-#: ElectronClient/gui/ResourceScreen.js:43
-#: ReactNativeClient/lib/path-utils.js:83
-#: ReactNativeClient/lib/path-utils.js:118
-#: ReactNativeClient/lib/models/BaseItem.js:722
-msgid "Untitled"
-msgstr "Neimenovano"
-
-#: ElectronClient/gui/ResourceScreen.js:47
-#: ElectronClient/gui/ResourceScreen.js:95
-#: ElectronClient/gui/SideBar/SideBar.js:170
-#: ElectronClient/gui/SideBar/SideBar.min.js:241
-#: ElectronClient/gui/utils/NoteListUtils.js:132
-#: ElectronClient/gui/utils/NoteListUtils.js:161
-#: ReactNativeClient/lib/components/screens/Note.js:828
-#: ReactNativeClient/lib/components/screen-header.js:356
-#: ReactNativeClient/lib/components/side-menu-content.js:146
-msgid "Delete"
-msgstr "Izbriši"
-
-#: ElectronClient/gui/ResourceScreen.js:94
-#, fuzzy, javascript-format
-msgid "Delete attachment \"%s\"?"
-msgstr "Izbriši zabeležke?"
-
-#: ElectronClient/gui/ResourceScreen.js:140
-msgid ""
-"This is an advanced tool to show the attachments that are linked to your "
-"notes. Please be careful when deleting one of them as they cannot be "
-"restored afterwards."
-msgstr ""
-
-#: ElectronClient/gui/ResourceScreen.js:141
-#, fuzzy
-msgid "Please wait..."
-msgstr "V preklicu...Prosim počakajte."
-
-#: ElectronClient/gui/ResourceScreen.js:143
-msgid "No resources!"
-msgstr ""
-
-#: ElectronClient/gui/ResourceScreen.js:145
+#: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
-msgid "Warning: not all resources shown for performance reasons (limit: %s)."
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
 
-#: ElectronClient/gui/PromptDialog.min.js:249
-msgid "Clear"
-msgstr "Počisti"
+#: ElectronClient/gui/NoteRevisionViewer.min.js:100
+#, fuzzy
+msgid "This note has no history"
+msgstr "Ta zabeležka je bila spremenjena:"
 
-#: ElectronClient/gui/ImportScreen.min.js:61
+#: ElectronClient/gui/NoteRevisionViewer.min.js:142
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:112
+#: ElectronClient/gui/NoteText.min.js:865
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Nepodprta povezava ali sporočilo: %s"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:177
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:51
+msgid "Restore"
+msgstr ""
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
 msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
-"Nova beležnica \"%s\" bo ustvarjena in datoteka \"%s\" bo uvožena v njo"
-
-#: ElectronClient/gui/ImportScreen.min.js:68 CliClient/app/command-import.js:47
-#, javascript-format
-msgid "Found: %d."
-msgstr "Najdeno: %d."
-
-#: ElectronClient/gui/ImportScreen.min.js:69 CliClient/app/command-import.js:48
-#, javascript-format
-msgid "Created: %d."
-msgstr "Ustvarjeno: %d."
-
-#: ElectronClient/gui/ImportScreen.min.js:70 CliClient/app/command-import.js:49
-#, javascript-format
-msgid "Updated: %d."
-msgstr "Posodobljeno: %d."
-
-#: ElectronClient/gui/ImportScreen.min.js:71 CliClient/app/command-import.js:50
-#, javascript-format
-msgid "Skipped: %d."
-msgstr "Preskočeno: %d."
-
-#: ElectronClient/gui/ImportScreen.min.js:72 CliClient/app/command-import.js:51
-#, javascript-format
-msgid "Resources: %d."
-msgstr "Viri: %d."
-
-#: ElectronClient/gui/ImportScreen.min.js:73 CliClient/app/command-import.js:52
-#, javascript-format
-msgid "Tagged: %d."
-msgstr "Zaznamovano: %d."
-
-#: ElectronClient/gui/ImportScreen.min.js:88 CliClient/app/command-import.js:70
-#, javascript-format
-msgid "The notes have been imported: %s"
-msgstr "Zabeležke so bile uvožene: %s"
-
-#: ElectronClient/gui/ConfigScreen.min.js:84
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:99
-msgid "This will open a new screen. Save your current changes?"
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
-#: ElectronClient/gui/ConfigScreen.min.js:172
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:162
-#: ReactNativeClient/lib/components/screens/config.js:307
-msgid "Check synchronisation configuration"
-msgstr "Preveri nastavitve sinhronizacije"
-
-#: ElectronClient/gui/ConfigScreen.min.js:181
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:167
-#, fuzzy
-msgid "Unknown"
-msgstr "Nepoznana oznaka: %s"
-
-#: ElectronClient/gui/ConfigScreen.min.js:185
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:170
-#, fuzzy
-msgid "Checking..."
-msgstr "V preklicu..."
-
-#: ElectronClient/gui/ConfigScreen.min.js:189
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:176
-#: ReactNativeClient/lib/models/Resource.js:320
-#, fuzzy
-msgid "Error"
-msgstr "Samo napake"
-
-#: ElectronClient/gui/ConfigScreen.min.js:200
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:181
-msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
-msgstr ""
-
-#: ElectronClient/gui/ConfigScreen.min.js:213
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:185
-#, fuzzy
-msgid "Show Log"
-msgstr "Prikaži vse"
-
-#: ElectronClient/gui/ConfigScreen.min.js:226
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:191
-msgid "Joplin Nextcloud App status:"
-msgstr ""
-
-#: ElectronClient/gui/ConfigScreen.min.js:240
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:197
-#, fuzzy
-msgid "Check Status"
-msgstr "Status"
-
-#: ElectronClient/gui/ConfigScreen.min.js:247
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:201
-#, fuzzy
-msgid "Help"
-msgstr "Pomoč"
-
-#: ElectronClient/gui/ConfigScreen.min.js:266
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:212
-#, fuzzy
-msgid "Show Advanced Settings"
-msgstr "Pokaži napredne možnosti"
-
-#: ElectronClient/gui/ConfigScreen.min.js:523
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:370
-msgid "Browse..."
-msgstr ""
-
-#: ElectronClient/gui/ConfigScreen.min.js:644
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:525
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:411
-#: ReactNativeClient/lib/components/screens/Note.js:980
-msgid "Edit"
-msgstr "Uredi"
-
-#: ElectronClient/gui/ConfigScreen.min.js:746
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
-#: ElectronClient/gui/Header/Header.min.js:303
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:30
+#: ElectronClient/gui/NoteText.min.js:1671
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:462
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:30
+#: ElectronClient/gui/ConfigScreen.min.js:746
+#: ElectronClient/gui/Header.min.js:316
 #: ReactNativeClient/lib/commands/historyBackward.js:17
 msgid "Back"
 msgstr "Nazaj"
 
-#: ElectronClient/gui/ConfigScreen.min.js:763
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:27
-msgid "Apply"
+#: ElectronClient/gui/SideBar/SideBar.min.js:237
+#: ElectronClient/gui/SideBar/SideBar.js:166
+#: ElectronClient/gui/SideBar.min.js:283
+msgid "Remove"
 msgstr ""
 
-#: ElectronClient/gui/StatusScreen.min.js:33
+#: ElectronClient/gui/SideBar/SideBar.min.js:240
+#: ElectronClient/gui/SideBar/SideBar.js:169
+#: ElectronClient/gui/SideBar.min.js:286
+#: ReactNativeClient/lib/components/side-menu-content.js:148
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Želite izbrisati beležnico? Vse zabeležke znotraj beležke bodo hkrati "
+"izbrisane."
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:241
+#: ElectronClient/gui/SideBar/SideBar.js:170
+#: ElectronClient/gui/SideBar.min.js:287
+#: ElectronClient/gui/utils/NoteListUtils.js:132
+#: ElectronClient/gui/utils/NoteListUtils.js:161
+#: ElectronClient/gui/ResourceScreen.js:47
+#: ElectronClient/gui/ResourceScreen.js:95
+#: ReactNativeClient/lib/components/screen-header.js:356
+#: ReactNativeClient/lib/components/side-menu-content.js:146
+#: ReactNativeClient/lib/components/screens/Note.js:828
+msgid "Delete"
+msgstr "Izbriši"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:244
+#: ElectronClient/gui/SideBar/SideBar.js:174
+#: ElectronClient/gui/SideBar.min.js:290
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Odstranite to oznako iz vseh zabeležk?"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:246
+#: ElectronClient/gui/SideBar/SideBar.js:177
+#: ElectronClient/gui/SideBar.min.js:292
+msgid "Remove this search from the sidebar?"
+msgstr "Odstranite ta iskalni niz iz stranske vrstice?"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:305
+#: ElectronClient/gui/SideBar/SideBar.js:228
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:122
+#: ElectronClient/gui/SideBar.min.js:382 ElectronClient/gui/MenuBar.js:443
+#: ElectronClient/gui/utils/NoteListUtils.js:128
+msgid "Export"
+msgstr "Izvozi"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:639
+#: ElectronClient/gui/SideBar/SideBar.js:412
+#: ElectronClient/gui/SideBar.min.js:724
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+#: ReactNativeClient/lib/commands/synchronize.js:18
+msgid "Synchronise"
+msgstr "Sinhroniziraj"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:673
+#: ElectronClient/gui/SideBar/SideBar.js:283
+#: ElectronClient/gui/SideBar.min.js:757
+#: ReactNativeClient/lib/components/side-menu-content.js:360
+#: ReactNativeClient/lib/components/screens/notes.js:188
+#, fuzzy
+msgid "All notes"
+msgstr "zabeležka"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:678
+#: ElectronClient/gui/SideBar/SideBar.js:436
+#: ElectronClient/gui/SideBar.min.js:762
+#: ReactNativeClient/lib/components/side-menu-content.js:364
+msgid "Notebooks"
+msgstr "Beležnice"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:695
+#: ElectronClient/gui/SideBar/SideBar.js:448
+#: ElectronClient/gui/MainScreen/commands/setTags.js:17
+#: ElectronClient/gui/SideBar.min.js:779
+#: ElectronClient/gui/NoteText.min.js:1634
+#: ElectronClient/gui/NoteText.min.js:1810
+#: ReactNativeClient/lib/components/side-menu-content.js:314
+#: ReactNativeClient/lib/components/screens/tags.js:101
+#: ReactNativeClient/lib/components/screens/Note.js:801
+msgid "Tags"
+msgstr "Oznake"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:713
+#: ElectronClient/gui/SideBar/SideBar.js:459
+#: ElectronClient/gui/SideBar.min.js:797
+#: ReactNativeClient/lib/components/side-menu-content.js:325
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Preneseni predmeti: %d/%d"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:718
+#: ElectronClient/gui/SideBar/SideBar.js:463
+#: ElectronClient/gui/SideBar.min.js:802
+#: ReactNativeClient/lib/components/side-menu-content.js:330
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Viri: %d/%d"
+
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:16
+msgid "Sidebar"
+msgstr ""
+
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:17
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:17
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:17
+#: ElectronClient/gui/MenuBar.js:531
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:18
+#, fuzzy
+msgid "Focus"
+msgstr "Fokusiraj vsebino"
+
 #: ElectronClient/gui/StatusScreen/StatusScreen.js:26
+#: ElectronClient/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosim izberite, kam želite izvoziti sinhronizacijski status"
 
-#: ElectronClient/gui/StatusScreen.min.js:71
 #: ElectronClient/gui/StatusScreen/StatusScreen.js:61
+#: ElectronClient/gui/StatusScreen.min.js:71
 #: ReactNativeClient/lib/components/screens/status.js:112
 msgid "Retry All"
 msgstr ""
 
-#: ElectronClient/gui/StatusScreen.min.js:96
 #: ElectronClient/gui/StatusScreen/StatusScreen.js:78
+#: ElectronClient/gui/StatusScreen.min.js:96
 #: ReactNativeClient/lib/components/screens/status.js:118
 msgid "Retry"
 msgstr ""
 
-#: ElectronClient/gui/DropboxLoginScreen.js:29
-#: ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: CliClient/app/command-sync.js:90
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:161
+#: ElectronClient/gui/NoteText.min.js:1547
+msgid "strong text"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:162
+msgid "emphasised text"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:164
+#: ElectronClient/gui/NoteText.min.js:1616
+msgid "Insert Hyperlink"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:197
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:199
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:200
+#: ElectronClient/gui/NoteText.min.js:1591
+#: ElectronClient/gui/NoteText.min.js:1595
+#: ElectronClient/gui/NoteText.min.js:1604
+msgid "List item"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:252
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:90
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:18
+msgid "Cut"
+msgstr "Izreži"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:259
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:98
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:13
+#: ElectronClient/gui/MenuBar.js:335 ElectronClient/gui/NoteText.min.js:804
+msgid "Copy"
+msgstr "Kopiraj"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:266
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:105
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:23
+msgid "Paste"
+msgstr "Prilepi"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:468
+#: ElectronClient/gui/NoteText.min.js:1085
+msgid "Layout"
+msgstr "Izgled"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:468
+#: ElectronClient/gui/NoteText.min.js:1085
+#, javascript-format
 msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Ta zabeležka nima vsebine. Kliknite na \"%s\" da menjate med urejevalnikom "
+"in urejanje zabeležke."
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+msgid "Checkbox list"
 msgstr ""
 
-#: ElectronClient/gui/DropboxLoginScreen.js:30
-#: ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: CliClient/app/command-sync.js:91
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
-
-#: ElectronClient/gui/DropboxLoginScreen.js:32
-#: ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: CliClient/app/command-sync.js:93
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr ""
-
-#: ElectronClient/gui/DropboxLoginScreen.js:35
-#: ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
-msgid "Submit"
-msgstr ""
-
-#: ElectronClient/gui/ShareNoteDialog.js:158
-#, fuzzy
-msgid "Synchronising..."
-msgstr "Status sinhronizacije"
-
-#: ElectronClient/gui/ShareNoteDialog.js:160
-#, fuzzy
-msgid "Generating link..."
-msgid_plural "Generating links..."
-msgstr[0] "Ustvarjanje nove %s..."
-msgstr[1] "Ustvarjanje nove %s..."
-msgstr[2] "Ustvarjanje nove %s..."
-msgstr[3] "Ustvarjanje nove %s..."
-
-#: ElectronClient/gui/ShareNoteDialog.js:162
-msgid "Link has been copied to clipboard!"
-msgid_plural "Links have been copied to clipboard!"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-#: ElectronClient/gui/ShareNoteDialog.js:165
-msgid ""
-"Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
-
-#: ElectronClient/gui/ShareNoteDialog.js:170
-msgid "Share Notes"
-msgstr ""
-
-#: ElectronClient/gui/ShareNoteDialog.js:172
-msgid "Copy Shareable Link"
-msgid_plural "Copy Shareable Links"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:525
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:411
+#: ElectronClient/gui/ConfigScreen.min.js:644
+#: ReactNativeClient/lib/components/screens/Note.js:980
+msgid "Edit"
+msgstr "Uredi"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:581
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:53
+#: ElectronClient/gui/NoteText.min.js:1627
+#: ElectronClient/gui/NoteText.min.js:1726
 #: ReactNativeClient/lib/components/screens/Note.js:769
 msgid "Attach file"
 msgstr "Pripni datoteko"
@@ -450,6 +1149,7 @@ msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:614
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:83
+#: ElectronClient/gui/NoteText.min.js:1778
 msgid "Insert Date Time"
 msgstr ""
 
@@ -470,69 +1170,53 @@ msgid ""
 "switch to %s to edit the note."
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-msgid "Checkbox list"
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:72
+#: ElectronClient/gui/NoteText.min.js:833
+msgid "There was an error downloading this attachment:"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:161
-msgid "strong text"
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:75
+#: ElectronClient/gui/NoteText.min.js:835
+#: ReactNativeClient/lib/services/ResourceEditWatcher/index.js:185
+msgid "This attachment is not downloaded or not decrypted yet"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:162
-msgid "emphasised text"
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:48
+#: ElectronClient/gui/NoteText.min.js:778
+msgid "Open..."
+msgstr "Odpri..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:61
+#: ElectronClient/gui/NoteText.min.js:786
+msgid "Save as..."
+msgstr "Shrani kot..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:74
+msgid "Reveal file in folder"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:164
-msgid "Insert Hyperlink"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:197
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:199
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:200
-msgid "List item"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:252
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:82
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:18
-msgid "Cut"
-msgstr "Izreži"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:259
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:90
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:13
-#: ElectronClient/gui/MenuBar.js:332
-msgid "Copy"
-msgstr "Kopiraj"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:266
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:102
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:23
-msgid "Paste"
-msgstr "Prilepi"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:468
-msgid "Layout"
-msgstr "Izgled"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:468
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
+#: ElectronClient/gui/NoteText.min.js:797
+msgid "Copy path to clipboard"
 msgstr ""
-"Ta zabeležka nima vsebine. Kliknite na \"%s\" da menjate med urejevalnikom "
-"in urejanje zabeležke."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:113
+#: ElectronClient/gui/NoteText.min.js:811
+msgid "Copy Link Address"
+msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:298
+#: ElectronClient/gui/NoteText.min.js:2121
 msgid "to-do"
 msgstr "seznam opravil"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:298
+#: ElectronClient/gui/NoteText.min.js:2121
 msgid "note"
 msgstr "zabeležka"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:298
+#: ElectronClient/gui/NoteText.min.js:2121
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Ustvarjanje nove %s..."
@@ -548,58 +1232,10 @@ msgid ""
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:387
+#: ElectronClient/gui/NoteText.min.js:1656
 #, fuzzy, javascript-format
 msgid "In: %s"
 msgstr "%s: %s"
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:40
-msgid "Open..."
-msgstr "Odpri..."
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:53
-msgid "Save as..."
-msgstr "Shrani kot..."
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:66
-msgid "Reveal file in folder"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:74
-msgid "Copy path to clipboard"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:110
-msgid "Copy Link Address"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:72
-msgid "There was an error downloading this attachment:"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:75
-#: ReactNativeClient/lib/services/ResourceEditWatcher/index.js:172
-msgid "This attachment is not downloaded or not decrypted yet"
-msgstr ""
-
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:112
-#: ElectronClient/gui/NoteRevisionViewer.min.js:142
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Nepodprta povezava ali sporočilo: %s"
-
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:16
-#, fuzzy
-msgid "Note title"
-msgstr "Naslov beležnice:"
-
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:17
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:17
-#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:17
-#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:18
-#: ElectronClient/gui/MenuBar.js:524
-#, fuzzy
-msgid "Focus"
-msgstr "Fokusiraj vsebino"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:28
 #, fuzzy
@@ -607,321 +1243,71 @@ msgid "Select all"
 msgstr "Izberi datum"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:33
+#: ElectronClient/gui/NoteText.min.js:1690
 msgid "Bold"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:38
+#: ElectronClient/gui/NoteText.min.js:1698
 msgid "Italic"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:43
+#: ElectronClient/gui/NoteText.min.js:1710
 msgid "Hyperlink"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:48
+#: ElectronClient/gui/NoteText.min.js:1718
 msgid "Code"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:58
+#: ElectronClient/gui/NoteText.min.js:1738
 msgid "Numbered List"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:63
+#: ElectronClient/gui/NoteText.min.js:1746
 msgid "Bulleted List"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:68
+#: ElectronClient/gui/NoteText.min.js:1754
 msgid "Checkbox"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:73
+#: ElectronClient/gui/NoteText.min.js:1762
 msgid "Heading"
 msgstr ""
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:78
+#: ElectronClient/gui/NoteText.min.js:1770
 msgid "Horizontal Rule"
 msgstr ""
 
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:16
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 #, fuzzy
-msgid "Note body"
-msgstr "Beležnice"
+msgid "Note title"
+msgstr "Naslov beležnice:"
 
 #: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:16
 #, fuzzy
 msgid "Search in current note"
 msgstr "Išči znotraj vseh zabeležk"
 
-#: ElectronClient/gui/OneDriveLoginScreen.js:46
-#: ElectronClient/gui/OneDriveLoginScreen.min.js:40
-#: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "Avtentikacija ni bila uspešna(autentikacijski token ni bil prejet)."
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:414
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:301
-msgid ""
-"The sync target needs to be upgraded before Joplin can sync. The operation "
-"may take a few minutes to complete and the app needs to be restarted. To "
-"proceed please click on the link."
-msgstr ""
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:416
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:306
-msgid "Restart and upgrade"
-msgstr ""
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:420
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:313
-msgid "Some items cannot be synchronised."
-msgstr "Nekateri premeti ne morejo biti sinhronizirani."
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:422
-#: ElectronClient/gui/MainScreen/MainScreen.js:428
-#: ElectronClient/gui/MainScreen/MainScreen.js:440
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:318
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:330
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:354
-msgid "View them now"
-msgstr "Prikaži jih sedaj"
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:426
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:325
-msgid "Some items cannot be decrypted."
-msgstr "Nekateri predmeti ne morejo biti dekriptirani."
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:432
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:337
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:16
 #, fuzzy
-msgid "One or more master keys need a password."
-msgstr "Vnesite glavno geslo:"
+msgid "Note body"
+msgstr "Beležnice"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:434
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:342
-msgid "Set the password"
-msgstr "Nastavi geslo"
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:438
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:349
-#, fuzzy
-msgid "One of your master keys use an obsolete encryption method."
-msgstr "Vnesite glavno geslo:"
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:444
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:361
-msgid ""
-"The default encryption method has been changed, you should re-encrypt your "
-"data."
-msgstr ""
-
-#: ElectronClient/gui/MainScreen/MainScreen.js:446
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:366
-#, fuzzy
-msgid "More info"
-msgstr "Nastavitve"
-
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:437
-#: ElectronClient/gui/SearchBar/SearchBar.js:50
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:120
-#, fuzzy
-msgid "Search..."
-msgstr "Išči"
-
-#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:18
-#, fuzzy
-msgid "Move to notebook"
-msgstr "Premakni v beležnico..."
-
-#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:38
-#, fuzzy
-msgid "Move to notebook:"
-msgstr "Premakni v beležnico..."
-
-#: ElectronClient/gui/MainScreen/commands/setTags.js:17
-#: ElectronClient/gui/SideBar/SideBar.js:448
-#: ElectronClient/gui/SideBar/SideBar.min.js:686
-#: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/Note.js:801
-#: ReactNativeClient/lib/components/side-menu-content.js:314
-msgid "Tags"
-msgstr "Oznake"
-
-#: ElectronClient/gui/MainScreen/commands/setTags.js:45
-msgid "Add or remove tags:"
-msgstr "Dodaj ali odstrani oznako:"
-
-#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:16
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Omogoči enkripcijo"
-
-#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:18
-#: ElectronClient/gui/NotePropertiesDialog.min.js:383
-#, fuzzy
-msgid "Note properties"
-msgstr "Naslov beležnice:"
-
-#: ElectronClient/gui/MainScreen/commands/toggleSideBar.js:16
-msgid "Toggle sidebar"
-msgstr ""
-
-#: ElectronClient/gui/MainScreen/commands/renameTag.js:18
-#: ElectronClient/gui/MainScreen/commands/renameFolder.js:18
-#: ReactNativeClient/lib/components/side-menu-content.js:129
-msgid "Rename"
-msgstr "Preimenuj"
-
-#: ElectronClient/gui/MainScreen/commands/renameTag.js:30
-#, fuzzy
-msgid "Rename tag:"
-msgstr "Preimenuj"
-
-#: ElectronClient/gui/MainScreen/commands/newFolder.js:18
-msgid "New notebook"
-msgstr "Nova beležnica"
-
-#: ElectronClient/gui/MainScreen/commands/newFolder.js:26
-msgid "Notebook title:"
-msgstr "Naslov beležnice:"
-
-#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:16
-msgid "Share note..."
-msgstr ""
-
-#: ElectronClient/gui/MainScreen/commands/renameFolder.js:28
-msgid "Rename notebook:"
-msgstr "Preimenuj beležnico:"
-
-#: ElectronClient/gui/MainScreen/commands/editAlarm.js:20
-#: ReactNativeClient/lib/components/screens/Note.js:787
-#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:84
-msgid "Set alarm"
-msgstr "Nastavi alarm"
-
-#: ElectronClient/gui/MainScreen/commands/editAlarm.js:33
-msgid "Set alarm:"
-msgstr "Nastavi alarm:"
-
-#: ElectronClient/gui/MainScreen/commands/newTodo.js:17
-#: ReactNativeClient/setUpQuickActions.js:15
-msgid "New to-do"
-msgstr "Novi seznam opravil"
-
-#: ElectronClient/gui/MainScreen/commands/exportPdf.js:20
-#: ElectronClient/gui/MainScreen/commands/exportPdf.js:32
-msgid "PDF File"
-msgstr "PDF datoteka"
-
-#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:16
-msgid "Toggle editor layout"
-msgstr "Spremeni izgled urejevalnika"
-
-#: ElectronClient/gui/MainScreen/commands/print.js:17
-msgid "Print"
-msgstr "Natisni"
-
-#: ElectronClient/gui/MainScreen/commands/print.js:26
-msgid "Only one note can be printed at a time."
-msgstr ""
-
-#: ElectronClient/gui/MainScreen/commands/newNote.js:20
-#: ReactNativeClient/setUpQuickActions.js:14
-msgid "New note"
-msgstr "Nova zabeležka"
-
-#: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
-msgid "Toggle editors"
-msgstr "Spremeni izgled urejevalnika"
-
-#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:24
-msgid "Template file:"
-msgstr ""
-
-#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:18
-msgid "Statistics..."
-msgstr ""
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:96
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
-#: ReactNativeClient/lib/components/screens/encryption-config.js:125
-msgid "Save"
-msgstr "Shrani"
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:145
-msgid "Master keys that need upgrading"
-msgstr ""
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:150
-msgid ""
-"The following master keys use an out-dated encryption algorithm and it is "
-"recommended to upgrade them. The upgraded master key will still be able to "
-"decrypt and encrypt your data as usual."
-msgstr ""
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:169
-msgid "Upgrade"
-msgstr ""
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:182
-#, fuzzy
-msgid "Re-encrypt data"
-msgstr "Izberi datum"
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:184
-msgid ""
-"The default encryption method has been changed to a more secure one and it "
-"is recommended that you apply it to your data."
-msgstr ""
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:184
-msgid ""
-"You may use the tool below to re-encrypt your data, for example if you know "
-"that some of your notes are encrypted with an obsolete encryption method."
-msgstr ""
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:186
-#, javascript-format
-msgid ""
-"In order to do so, your entire data set will have to be encrypted and "
-"synchronised, so it is best to run it overnight.\n"
-"\n"
-"To start, please follow these instructions:\n"
-"\n"
-"1. Synchronise all your devices.\n"
-"2. Click \"%s\".\n"
-"3. Let it run to completion. While it runs, avoid changing any note on your "
-"other devices, to avoid conflicts.\n"
-"4. Once sync is done on this device, sync all your other devices and let it "
-"run to completion.\n"
-"\n"
-"Important: you only need to run this ONCE on one device."
-msgstr ""
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:433
-#: ReactNativeClient/lib/components/screens/status.js:142
-#: ReactNativeClient/lib/components/screens/encryption-config.js:279
-msgid "Status"
-msgstr "Status"
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:438
-msgid "Encryption is:"
-msgstr "Enkripcija je:"
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:443
-#: CliClient/app/command-e2ee.js:108
-#: ReactNativeClient/lib/components/screens/encryption-config.js:280
-msgid "Enabled"
-msgstr "Omogočeno"
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:443
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:110
-#: CliClient/app/command-e2ee.js:108
-#: ReactNativeClient/lib/components/screens/encryption-config.js:280
-#: ReactNativeClient/lib/models/Setting.js:624
-msgid "Disabled"
-msgstr "Onemogočeno"
+#: ElectronClient/gui/NotePropertiesDialog.min.js:27
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:21
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:164
+#: ElectronClient/gui/ResourceScreen.js:39
+msgid "ID"
+msgstr "ID"
 
 #: ElectronClient/gui/NotePropertiesDialog.min.js:28
 msgid "Created"
@@ -958,79 +1344,273 @@ msgstr ""
 msgid "Previous versions of this note"
 msgstr ""
 
-#: ElectronClient/gui/SideBar/SideBar.js:166
-#: ElectronClient/gui/SideBar/SideBar.min.js:237
-msgid "Remove"
-msgstr ""
-
-#: ElectronClient/gui/SideBar/SideBar.js:169
-#: ElectronClient/gui/SideBar/SideBar.min.js:240
-#: ReactNativeClient/lib/components/side-menu-content.js:148
-#, fuzzy, javascript-format
-msgid ""
-"Delete notebook \"%s\"?\n"
-"\n"
-"All notes and sub-notebooks within this notebook will also be deleted."
-msgstr ""
-"Želite izbrisati beležnico? Vse zabeležke znotraj beležke bodo hkrati "
-"izbrisane."
-
-#: ElectronClient/gui/SideBar/SideBar.js:174
-#: ElectronClient/gui/SideBar/SideBar.min.js:244
-#, fuzzy, javascript-format
-msgid "Remove tag \"%s\" from all notes?"
-msgstr "Odstranite to oznako iz vseh zabeležk?"
-
-#: ElectronClient/gui/SideBar/SideBar.js:177
-#: ElectronClient/gui/SideBar/SideBar.min.js:246
-msgid "Remove this search from the sidebar?"
-msgstr "Odstranite ta iskalni niz iz stranske vrstice?"
-
-#: ElectronClient/gui/SideBar/SideBar.js:228
-#: ElectronClient/gui/SideBar/SideBar.min.js:305
-#: ElectronClient/gui/utils/NoteListUtils.js:128
-#: ElectronClient/gui/MenuBar.js:436
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:122
-msgid "Export"
-msgstr "Izvozi"
-
-#: ElectronClient/gui/SideBar/SideBar.js:283
-#: ElectronClient/gui/SideBar/SideBar.min.js:664
-#: ReactNativeClient/lib/components/screens/notes.js:188
-#: ReactNativeClient/lib/components/side-menu-content.js:360
+#: ElectronClient/gui/NotePropertiesDialog.min.js:383
+#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:18
+#: ElectronClient/gui/NoteText.min.js:1834
 #, fuzzy
-msgid "All notes"
-msgstr "zabeležka"
+msgid "Note properties"
+msgstr "Naslov beležnice:"
 
-#: ElectronClient/gui/SideBar/SideBar.js:412
-#: ElectronClient/gui/SideBar/SideBar.min.js:630
-#: ReactNativeClient/lib/components/side-menu-content.js:338
-#: ReactNativeClient/lib/commands/synchronize.js:18
-msgid "Synchronise"
-msgstr "Sinhroniziraj"
-
-#: ElectronClient/gui/SideBar/SideBar.js:436
-#: ElectronClient/gui/SideBar/SideBar.min.js:669
-#: ReactNativeClient/lib/components/side-menu-content.js:364
-msgid "Notebooks"
-msgstr "Beležnice"
-
-#: ElectronClient/gui/SideBar/SideBar.js:459
-#: ElectronClient/gui/SideBar/SideBar.min.js:704
-#: ReactNativeClient/lib/components/side-menu-content.js:325
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
+#: ReactNativeClient/lib/services/KeymapService.js:144
 #, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Preneseni predmeti: %d/%d"
+msgid "Error: %s"
+msgstr "Samo napake"
 
-#: ElectronClient/gui/SideBar/SideBar.js:463
-#: ElectronClient/gui/SideBar/SideBar.min.js:709
-#: ReactNativeClient/lib/components/side-menu-content.js:330
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Viri: %d/%d"
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
+#: ElectronClient/gui/Root.min.js:91 ElectronClient/gui/MenuBar.js:391
+#: ElectronClient/gui/MenuBar.js:440 ElectronClient/gui/Root.js:103
+msgid "Import"
+msgstr "Uvozi"
 
-#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:16
-msgid "Sidebar"
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
+msgid "Command"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
+msgid "Keyboard Shortcut"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
+#: ElectronClient/gui/MenuBar.js:178 ElectronClient/app.js:347
+msgid "Quit"
+msgstr "Izhod"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:16
+#: ElectronClient/gui/MenuBar.js:282
+msgid "Insert template"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:18
+#: ElectronClient/gui/MenuBar.js:536
+msgid "Actual Size"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:22
+#: ElectronClient/gui/MenuBar.js:585
+msgid "Website and documentation"
+msgstr "Spletna stran in dokumentacija"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
+#, fuzzy
+msgid "Hide Joplin"
+msgstr "O Joplinu"
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
+#: ElectronClient/gui/MenuBar.js:428
+msgid "Close Window"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
+msgid "Preferences"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
+#: ElectronClient/gui/Root.min.js:92 ElectronClient/gui/MenuBar.js:304
+#: ElectronClient/gui/Root.js:104
+msgid "Options"
+msgstr "Možnosti"
+
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
+msgid "Press the shortcut"
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
+msgid ""
+"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
+"shortcut."
+msgstr ""
+
+#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:96
+#: ReactNativeClient/lib/components/screens/encryption-config.js:125
+msgid "Save"
+msgstr "Shrani"
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:418
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:301
+msgid ""
+"The sync target needs to be upgraded before Joplin can sync. The operation "
+"may take a few minutes to complete and the app needs to be restarted. To "
+"proceed please click on the link."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:420
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:306
+msgid "Restart and upgrade"
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:424
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:313
+msgid "Some items cannot be synchronised."
+msgstr "Nekateri premeti ne morejo biti sinhronizirani."
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:426
+#: ElectronClient/gui/MainScreen/MainScreen.js:432
+#: ElectronClient/gui/MainScreen/MainScreen.js:444
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:318
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:330
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:354
+msgid "View them now"
+msgstr "Prikaži jih sedaj"
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:430
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:325
+msgid "Some items cannot be decrypted."
+msgstr "Nekateri predmeti ne morejo biti dekriptirani."
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:436
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:337
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "Vnesite glavno geslo:"
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:438
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:342
+msgid "Set the password"
+msgstr "Nastavi geslo"
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:442
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:349
+#, fuzzy
+msgid "One of your master keys use an obsolete encryption method."
+msgstr "Vnesite glavno geslo:"
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:448
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:361
+msgid ""
+"The default encryption method has been changed, you should re-encrypt your "
+"data."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.js:450
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:366
+#, fuzzy
+msgid "More info"
+msgstr "Nastavitve"
+
+#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:18
+msgid "Statistics..."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:18
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:18
+#: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
+#: ReactNativeClient/lib/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Preimenuj"
+
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:28
+#: ElectronClient/gui/MainScreen.min.js:292
+msgid "Rename notebook:"
+msgstr "Preimenuj beležnico:"
+
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:17
+#: ReactNativeClient/setUpQuickActions.js:15
+msgid "New to-do"
+msgstr "Novi seznam opravil"
+
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:16
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Omogoči enkripcijo"
+
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:16
+msgid "Toggle sidebar"
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:20
+#: ElectronClient/gui/NoteText.min.js:1642
+#: ElectronClient/gui/NoteText.min.js:1828
+#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:84
+#: ReactNativeClient/lib/components/screens/Note.js:787
+msgid "Set alarm"
+msgstr "Nastavi alarm"
+
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:33
+#: ElectronClient/gui/MainScreen.min.js:417
+msgid "Set alarm:"
+msgstr "Nastavi alarm:"
+
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:20
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:32
+#: ElectronClient/gui/MainScreen.min.js:549
+msgid "PDF File"
+msgstr "PDF datoteka"
+
+#: ElectronClient/gui/MainScreen/commands/newNote.js:20
+#: ReactNativeClient/setUpQuickActions.js:14
+msgid "New note"
+msgstr "Nova zabeležka"
+
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:18
+#, fuzzy
+msgid "Move to notebook"
+msgstr "Premakni v beležnico..."
+
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:38
+#: ElectronClient/gui/MainScreen.min.js:272
+#, fuzzy
+msgid "Move to notebook:"
+msgstr "Premakni v beležnico..."
+
+#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:16
+msgid "Toggle editor layout"
+msgstr "Spremeni izgled urejevalnika"
+
+#: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
+#, fuzzy
+msgid "Toggle editors"
+msgstr "Spremeni izgled urejevalnika"
+
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:30
+#: ElectronClient/gui/MainScreen.min.js:313
+#, fuzzy
+msgid "Rename tag:"
+msgstr "Preimenuj"
+
+#: ElectronClient/gui/MainScreen/commands/newFolder.js:18
+msgid "New notebook"
+msgstr "Nova beležnica"
+
+#: ElectronClient/gui/MainScreen/commands/newFolder.js:26
+#: ElectronClient/gui/MainScreen.min.js:178
+msgid "Notebook title:"
+msgstr "Naslov beležnice:"
+
+#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:16
+msgid "Share note..."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/commands/newSubFolder.js:17
+#: ElectronClient/gui/SideBar.min.js:304
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Nova beležnica"
+
+#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:24
+#: ElectronClient/gui/MainScreen.min.js:448
+msgid "Template file:"
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/commands/setTags.js:45
+#: ElectronClient/gui/MainScreen.min.js:221
+msgid "Add or remove tags:"
+msgstr "Dodaj ali odstrani oznako:"
+
+#: ElectronClient/gui/MainScreen/commands/print.js:17
+msgid "Print"
+msgstr "Natisni"
+
+#: ElectronClient/gui/MainScreen/commands/print.js:26
+#: ElectronClient/gui/NoteText.min.js:1321
+msgid "Only one note can be printed at a time."
+msgstr ""
+
+#: ElectronClient/gui/DropboxLoginScreen.js:35
+#: ElectronClient/gui/DropboxLoginScreen.min.js:67
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
+msgid "Submit"
 msgstr ""
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:39
@@ -1111,77 +1691,205 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:75
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+#: ElectronClient/gui/Root.min.js:89 ElectronClient/gui/Root.js:101
+msgid "OneDrive Login"
+msgstr "Prijava OneDrive"
+
+#: ElectronClient/gui/Root.min.js:90 ElectronClient/gui/Root.js:102
+msgid "Dropbox Login"
 msgstr ""
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:100
+#: ElectronClient/gui/Root.min.js:93 ElectronClient/gui/Root.js:105
 #, fuzzy
-msgid "This note has no history"
-msgstr "Ta zabeležka je bila spremenjena:"
+msgid "Note attachments"
+msgstr "Pripni datoteko"
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:177
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:51
-msgid "Restore"
+#: ElectronClient/gui/Root.min.js:94 ElectronClient/gui/MenuBar.js:255
+#: ElectronClient/gui/Root.js:106
+msgid "Synchronisation Status"
+msgstr "Sinhronizacijski status"
+
+#: ElectronClient/gui/MenuBar.js:144
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "Uvažam v \"%s\" kot \"%s\" format. Prosim počakajte..."
+
+#: ElectronClient/gui/MenuBar.js:272
+msgid "Create note from template"
 msgstr ""
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:178
+#: ElectronClient/gui/MenuBar.js:277
+msgid "Create to-do from template"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:288
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin izvozno mesto"
+
+#: ElectronClient/gui/MenuBar.js:293
+msgid "Refresh templates"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:316
+#, fuzzy
+msgid "Note attachments..."
+msgstr "Pripni datoteko"
+
+#: ElectronClient/gui/MenuBar.js:346 ElectronClient/gui/MenuBar.js:420
+#: ElectronClient/gui/MenuBar.js:725
+#, fuzzy
+msgid "&File"
+msgstr "Datoteka"
+
+#: ElectronClient/gui/MenuBar.js:352 ElectronClient/gui/MenuBar.js:615
+msgid "About Joplin"
+msgstr "O Joplinu"
+
+#: ElectronClient/gui/MenuBar.js:359
+msgid "Preferences..."
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:369 ElectronClient/gui/MenuBar.js:595
+msgid "Check for updates..."
+msgstr "Preverjanje za posodobitvami..."
+
+#: ElectronClient/gui/MenuBar.js:384 ElectronClient/gui/MenuBar.js:435
+msgid "Templates"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:395
+#, fuzzy
+msgid "Export all"
+msgstr "Izvozi"
+
+#: ElectronClient/gui/MenuBar.js:409
+#, javascript-format
+msgid "Hide %s"
+msgstr "Skrij %s"
+
+#: ElectronClient/gui/MenuBar.js:471 ElectronClient/gui/MenuBar.js:729
+#, fuzzy
+msgid "&Edit"
+msgstr "Uredi"
+
+#: ElectronClient/gui/MenuBar.js:491
+#, fuzzy
+msgid "&View"
+msgstr "Pogled"
+
+#: ElectronClient/gui/MenuBar.js:497
+msgid "Layout button sequence"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:547 ElectronClient/gui/MenuBar.js:553
+msgid "Zoom In"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:560
+msgid "Zoom Out"
+msgstr ""
+
+#: ElectronClient/gui/MenuBar.js:569
+#, fuzzy
+msgid "&Note"
+msgstr "Beležnice"
+
+#: ElectronClient/gui/MenuBar.js:578
+#, fuzzy
+msgid "&Tools"
+msgstr "Orodja"
+
+#: ElectronClient/gui/MenuBar.js:582
+#, fuzzy
+msgid "&Help"
+msgstr "Pomoč"
+
+#: ElectronClient/gui/MenuBar.js:589
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin spletna stran"
+
+#: ElectronClient/gui/MenuBar.js:592
+#: ReactNativeClient/lib/components/screens/config.js:495
+msgid "Make a donation"
+msgstr "Doniraj"
+
+#: ElectronClient/gui/MenuBar.js:602
+#, fuzzy
+msgid "Toggle development tools"
+msgstr "Omogoči enkripcijo"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr ""
+
+#: ElectronClient/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr ""
+
+#: ElectronClient/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr ""
+
+#: ElectronClient/gui/ImportScreen.min.js:61
 #, javascript-format
 msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
+"Nova beležnica \"%s\" bo ustvarjena in datoteka \"%s\" bo uvožena v njo"
 
-#: ElectronClient/gui/NoteList/NoteList.min.js:151
+#: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.js:160
+#: ElectronClient/gui/NoteList/NoteList.min.js:150
 msgid "Custom order"
 msgstr ""
 
-#: ElectronClient/gui/NoteList/NoteList.min.js:151
+#: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.js:160
+#: ElectronClient/gui/NoteList/NoteList.min.js:150
 #, fuzzy
 msgid "View"
 msgstr "Pogled"
 
-#: ElectronClient/gui/NoteList/NoteList.min.js:151
+#: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.js:160
+#: ElectronClient/gui/NoteList/NoteList.min.js:150
 #: ReactNativeClient/lib/models/Setting.js:400
 msgid "Sort notes by"
 msgstr "Razporedi zabeležko po"
 
-#: ElectronClient/gui/NoteList/NoteList.min.js:151
+#: ElectronClient/gui/NoteList.min.js:147
 #: ElectronClient/gui/NoteList/NoteList.js:160
+#: ElectronClient/gui/NoteList/NoteList.min.js:150
 #, javascript-format
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
 
-#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#: ElectronClient/gui/NoteList.min.js:148
 #: ElectronClient/gui/NoteList/NoteList.js:161
+#: ElectronClient/gui/NoteList/NoteList.min.js:151
 msgid "Do it now"
 msgstr ""
 
-#: ElectronClient/gui/NoteList/NoteList.min.js:423
+#: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.js:412
+#: ElectronClient/gui/NoteList/NoteList.min.js:422
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "Trenutno ni tukaj nobene zabeležke. Ustvarite jo z klikom na \"Nova zabeležka"
 "\"."
 
-#: ElectronClient/gui/NoteList/NoteList.min.js:423
+#: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.js:412
+#: ElectronClient/gui/NoteList/NoteList.min.js:422
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
 "Trenutno ni tukaj nobene beležnice. Ustvarite jo z klikom na \"Nova beležnica"
 "\"."
-
-#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:17
-#, fuzzy
-msgid "Note list"
-msgstr "Beležnice"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:42
 #: ReactNativeClient/lib/components/screen-header.js:362
@@ -1224,223 +1932,195 @@ msgstr "Izbriši zabeležke?"
 msgid "Delete these %d notes?"
 msgstr "Izbriši te zabeležke?"
 
-#: ElectronClient/gui/ExtensionBadge.min.js:10
-msgid "Firefox Extension"
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:22
+msgid "Name"
 msgstr ""
 
-#: ElectronClient/gui/ExtensionBadge.min.js:17
-msgid "Chrome Web Store"
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:23
+msgid "Icon"
 msgstr ""
 
-#: ElectronClient/gui/ExtensionBadge.min.js:44
-msgid "Get it now:"
-msgstr ""
-
-#: ElectronClient/gui/Header/Header.min.js:254
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:272
 #, fuzzy
-msgid "Usage"
-msgstr "Uporaba: %s"
+msgid "Notebook properties"
+msgstr "Naslov beležnice:"
 
-#: ElectronClient/gui/MenuBar.js:142
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Uvažam v \"%s\" kot \"%s\" format. Prosim počakajte..."
+#: ElectronClient/gui/NoteText.min.js:781
+#, fuzzy, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Beležnica ne more biti shranjena: %s"
 
-#: ElectronClient/gui/MenuBar.js:176
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
-#: ElectronClient/app.js:342
-msgid "Quit"
-msgstr "Izhod"
-
-#: ElectronClient/gui/MenuBar.js:253 ElectronClient/gui/Root.js:106
-#: ElectronClient/gui/Root.min.js:106
-msgid "Synchronisation Status"
-msgstr "Sinhronizacijski status"
-
-#: ElectronClient/gui/MenuBar.js:269
-msgid "Create note from template"
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
 msgstr ""
 
-#: ElectronClient/gui/MenuBar.js:274
-msgid "Create to-do from template"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:279
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:16
-msgid "Insert template"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:285
+#: ElectronClient/gui/NoteText.min.js:1792
 #, fuzzy
-msgid "Open template directory"
-msgstr "Joplin izvozno mesto"
-
-#: ElectronClient/gui/MenuBar.js:290
-msgid "Refresh templates"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:301 ElectronClient/gui/Root.js:104
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
-#: ElectronClient/gui/Root.min.js:104
-msgid "Options"
-msgstr "Možnosti"
-
-#: ElectronClient/gui/MenuBar.js:313
-#, fuzzy
-msgid "Note attachments..."
-msgstr "Pripni datoteko"
-
-#: ElectronClient/gui/MenuBar.js:343 ElectronClient/gui/MenuBar.js:415
-#: ElectronClient/gui/MenuBar.js:717
-#, fuzzy
-msgid "&File"
-msgstr "Datoteka"
-
-#: ElectronClient/gui/MenuBar.js:349 ElectronClient/gui/MenuBar.js:607
-msgid "About Joplin"
-msgstr "O Joplinu"
-
-#: ElectronClient/gui/MenuBar.js:356
-msgid "Preferences..."
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:366 ElectronClient/gui/MenuBar.js:588
-msgid "Check for updates..."
-msgstr "Preverjanje za posodobitvami..."
-
-#: ElectronClient/gui/MenuBar.js:379 ElectronClient/gui/MenuBar.js:428
-msgid "Templates"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:386 ElectronClient/gui/MenuBar.js:433
-#: ElectronClient/gui/Root.js:103
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: ElectronClient/gui/Root.min.js:103
-msgid "Import"
-msgstr "Uvozi"
-
-#: ElectronClient/gui/MenuBar.js:390
-#, fuzzy
-msgid "Export all"
-msgstr "Izvozi"
-
-#: ElectronClient/gui/MenuBar.js:404
-#, javascript-format
-msgid "Hide %s"
-msgstr "Skrij %s"
-
-#: ElectronClient/gui/MenuBar.js:421
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
-msgid "Close Window"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:464
-#, fuzzy
-msgid "&Edit"
-msgstr "Uredi"
-
-#: ElectronClient/gui/MenuBar.js:484
-#, fuzzy
-msgid "&View"
-msgstr "Pogled"
-
-#: ElectronClient/gui/MenuBar.js:490
-msgid "Layout button sequence"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:529
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:18
-msgid "Actual Size"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:540 ElectronClient/gui/MenuBar.js:546
-msgid "Zoom In"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:553
-msgid "Zoom Out"
-msgstr ""
-
-#: ElectronClient/gui/MenuBar.js:562
-#, fuzzy
-msgid "&Note"
-msgstr "Beležnice"
-
-#: ElectronClient/gui/MenuBar.js:571
-#, fuzzy
-msgid "&Tools"
-msgstr "Orodja"
-
-#: ElectronClient/gui/MenuBar.js:575
-#, fuzzy
-msgid "&Help"
-msgstr "Pomoč"
-
-#: ElectronClient/gui/MenuBar.js:578
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:22
-msgid "Website and documentation"
-msgstr "Spletna stran in dokumentacija"
-
-#: ElectronClient/gui/MenuBar.js:582
-#, fuzzy
-msgid "Joplin Forum"
-msgstr "Joplin spletna stran"
-
-#: ElectronClient/gui/MenuBar.js:585
-#: ReactNativeClient/lib/components/screens/config.js:495
-msgid "Make a donation"
-msgstr "Doniraj"
-
-#: ElectronClient/gui/MenuBar.js:595
-#, fuzzy
-msgid "Toggle development tools"
+msgid "Click to stop external editing"
 msgstr "Omogoči enkripcijo"
 
-#: ElectronClient/gui/Root.js:101 ElectronClient/gui/Root.min.js:101
-msgid "OneDrive Login"
-msgstr "Prijava OneDrive"
-
-#: ElectronClient/gui/Root.js:102 ElectronClient/gui/Root.min.js:102
-msgid "Dropbox Login"
-msgstr ""
-
-#: ElectronClient/gui/Root.js:105 ElectronClient/gui/Root.min.js:105
+#: ElectronClient/gui/NoteText.min.js:1793
 #, fuzzy
-msgid "Note attachments"
-msgstr "Pripni datoteko"
+msgid "Watching..."
+msgstr "V preklicu..."
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
-msgid "Press the shortcut"
+#: ElectronClient/gui/NoteText.min.js:1801
+#: ElectronClient/commands/startExternalEditing.js:20
+msgid "Edit in external editor"
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
+#: ElectronClient/gui/NoteText.min.js:1852
+#, fuzzy
+msgid "Content Properties"
+msgstr "Naslov beležnice:"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:145
+msgid "Master keys that need upgrading"
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:150
 msgid ""
-"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
-"shortcut."
+"The following master keys use an out-dated encryption algorithm and it is "
+"recommended to upgrade them. The upgraded master key will still be able to "
+"decrypt and encrypt your data as usual."
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
-#: ReactNativeClient/lib/services/KeymapService.js:144
-#, fuzzy, javascript-format
-msgid "Error: %s"
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:169
+msgid "Upgrade"
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:182
+#, fuzzy
+msgid "Re-encrypt data"
+msgstr "Izberi datum"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:184
+msgid ""
+"The default encryption method has been changed to a more secure one and it "
+"is recommended that you apply it to your data."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:184
+msgid ""
+"You may use the tool below to re-encrypt your data, for example if you know "
+"that some of your notes are encrypted with an obsolete encryption method."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:186
+#, javascript-format
+msgid ""
+"In order to do so, your entire data set will have to be encrypted and "
+"synchronised, so it is best to run it overnight.\n"
+"\n"
+"To start, please follow these instructions:\n"
+"\n"
+"1. Synchronise all your devices.\n"
+"2. Click \"%s\".\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your "
+"other devices, to avoid conflicts.\n"
+"4. Once sync is done on this device, sync all your other devices and let it "
+"run to completion.\n"
+"\n"
+"Important: you only need to run this ONCE on one device."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:433
+#: ReactNativeClient/lib/components/screens/encryption-config.js:279
+#: ReactNativeClient/lib/components/screens/status.js:142
+msgid "Status"
+msgstr "Status"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:438
+msgid "Encryption is:"
+msgstr "Enkripcija je:"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:99
+#: ElectronClient/gui/ConfigScreen.min.js:84
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:162
+#: ElectronClient/gui/ConfigScreen.min.js:172
+#: ReactNativeClient/lib/components/screens/config.js:307
+msgid "Check synchronisation configuration"
+msgstr "Preveri nastavitve sinhronizacije"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:167
+#: ElectronClient/gui/ConfigScreen.min.js:181
+#, fuzzy
+msgid "Unknown"
+msgstr "Nepoznana oznaka: %s"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:170
+#: ElectronClient/gui/ConfigScreen.min.js:185
+#, fuzzy
+msgid "Checking..."
+msgstr "V preklicu..."
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:176
+#: ElectronClient/gui/ConfigScreen.min.js:189
+#: ReactNativeClient/lib/models/Resource.js:320
+#, fuzzy
+msgid "Error"
 msgstr "Samo napake"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
-msgid "Command"
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:181
+#: ElectronClient/gui/ConfigScreen.min.js:200
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
 msgstr ""
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
-msgid "Keyboard Shortcut"
-msgstr ""
-
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:185
+#: ElectronClient/gui/ConfigScreen.min.js:213
 #, fuzzy
-msgid "Hide Joplin"
-msgstr "O Joplinu"
+msgid "Show Log"
+msgstr "Prikaži vse"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
-msgid "Preferences"
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:191
+#: ElectronClient/gui/ConfigScreen.min.js:226
+msgid "Joplin Nextcloud App status:"
 msgstr ""
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:197
+#: ElectronClient/gui/ConfigScreen.min.js:240
+#, fuzzy
+msgid "Check Status"
+msgstr "Status"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:201
+#: ElectronClient/gui/ConfigScreen.min.js:247
+#, fuzzy
+msgid "Help"
+msgstr "Pomoč"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:212
+#: ElectronClient/gui/ConfigScreen.min.js:266
+#, fuzzy
+msgid "Show Advanced Settings"
+msgstr "Pokaži napredne možnosti"
+
+#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:370
+#: ElectronClient/gui/ConfigScreen.min.js:523
+msgid "Browse..."
+msgstr ""
+
+#: ElectronClient/gui/ConfigScreen/ButtonBar.js:27
+#: ElectronClient/gui/ConfigScreen.min.js:763
+msgid "Apply"
+msgstr ""
+
+#: ElectronClient/gui/MainScreen.min.js:165
+msgid "Please create a notebook first."
+msgstr "Najprej prosim ustvarite beležnico."
+
+#: ElectronClient/gui/MainScreen.min.js:171
+msgid "Please create a notebook first"
+msgstr "Najprej prosim ustvarite beležnico"
+
+#: ElectronClient/gui/PromptDialog.min.js:249
+msgid "Clear"
+msgstr "Počisti"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
@@ -1484,28 +2164,111 @@ msgstr ""
 msgid "Statistics"
 msgstr "Status"
 
-#: ElectronClient/bridge.js:178
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:113
+#: ElectronClient/gui/ShareNoteDialog.js:175
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:24
+msgid "Close"
+msgstr ""
+
+#: ElectronClient/gui/Header.min.js:267
+#, fuzzy
+msgid "Usage"
+msgstr "Uporaba: %s"
+
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:17
+#, fuzzy
+msgid "Note list"
+msgstr "Beležnice"
+
+#: ElectronClient/gui/NoteListControls/commands/focusSearch.js:16
+msgid "Search in all the notes"
+msgstr "Išči znotraj vseh zabeležk"
+
+#: ElectronClient/gui/ResourceScreen.js:32
+#, fuzzy
+msgid "Title"
+msgstr "Neimenovano"
+
+#: ElectronClient/gui/ResourceScreen.js:36
+msgid "Size"
+msgstr ""
+
+#: ElectronClient/gui/ResourceScreen.js:40
+#, fuzzy
+msgid "Action"
+msgstr "Izhod iz aplikacije."
+
+#: ElectronClient/gui/ResourceScreen.js:43
+#: ReactNativeClient/lib/path-utils.js:83
+#: ReactNativeClient/lib/path-utils.js:118
+#: ReactNativeClient/lib/models/BaseItem.js:724
+msgid "Untitled"
+msgstr "Neimenovano"
+
+#: ElectronClient/gui/ResourceScreen.js:94
+#, fuzzy, javascript-format
+msgid "Delete attachment \"%s\"?"
+msgstr "Izbriši zabeležke?"
+
+#: ElectronClient/gui/ResourceScreen.js:140
 msgid ""
-"The app is now going to close. Please relaunch it to complete the process."
+"This is an advanced tool to show the attachments that are linked to your "
+"notes. Please be careful when deleting one of them as they cannot be "
+"restored afterwards."
 msgstr ""
 
-#: ElectronClient/app.js:340
+#: ElectronClient/gui/ResourceScreen.js:141
+#, fuzzy
+msgid "Please wait..."
+msgstr "V preklicu...Prosim počakajte."
+
+#: ElectronClient/gui/ResourceScreen.js:143
+msgid "No resources!"
+msgstr ""
+
+#: ElectronClient/gui/ResourceScreen.js:145
 #, javascript-format
-msgid "Open %s"
-msgstr "Odpri %s"
-
-#: ElectronClient/commands/copyDevCommand.js:18
-msgid "Copy dev mode command to clipboard"
+msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
-#: ElectronClient/commands/startExternalEditing.js:20
-msgid "Edit in external editor"
+#: ElectronClient/gui/ShareNoteDialog.js:158
+#, fuzzy
+msgid "Synchronising..."
+msgstr "Status sinhronizacije"
+
+#: ElectronClient/gui/ShareNoteDialog.js:160
+#, fuzzy
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Ustvarjanje nove %s..."
+msgstr[1] "Ustvarjanje nove %s..."
+msgstr[2] "Ustvarjanje nove %s..."
+msgstr[3] "Ustvarjanje nove %s..."
+
+#: ElectronClient/gui/ShareNoteDialog.js:162
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: ElectronClient/gui/ShareNoteDialog.js:165
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
-#: ElectronClient/commands/startExternalEditing.js:32
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Napaka v odpiranju zabeležke v urejevalniku: %s"
+#: ElectronClient/gui/ShareNoteDialog.js:170
+msgid "Share Notes"
+msgstr ""
+
+#: ElectronClient/gui/ShareNoteDialog.js:172
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: ElectronClient/commands/toggleExternalEditing.js:18
 #, fuzzy
@@ -1516,949 +2279,42 @@ msgstr "Omogoči enkripcijo"
 msgid "Stop"
 msgstr ""
 
+#: ElectronClient/commands/copyDevCommand.js:18
+msgid "Copy dev mode command to clipboard"
+msgstr ""
+
 #: ElectronClient/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
 msgstr ""
 
-#: CliClient/app/command-tag.js:14
+#: ElectronClient/commands/startExternalEditing.js:32
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Napaka v odpiranju zabeležke v urejevalniku: %s"
+
+#: ElectronClient/commands/openProfileDirectory.js:18
 #, fuzzy
-msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
-msgstr ""
-"<tag-command> je lahko \"dodaj\", \"odstrani\" ali \"naštej\", da dodeliš "
-"ali odstraniš [tag] from [note] ali našteje zabeležke povezane z oznako "
-"[tag]. Ukaz `tag list` je lahko uporabljen da prikaže vse oznake."
-
-#: CliClient/app/command-tag.js:18 CliClient/app/command-ls.js:32
-msgid ""
-"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for to-dos), TITLE"
-msgstr ""
-"V uporabi je format dolgi seznam in je formata ID, NOTE_COUNT (za "
-"beležnice), DATE, TODO_CHECKED (seznam opravil), TITLE"
-
-#: CliClient/app/command-tag.js:33 CliClient/app/command-tag.js:36
-#: CliClient/app/command-tag.js:42 CliClient/app/command-tag.js:43
-#: CliClient/app/command-tag.js:81 CliClient/app/command-tag.js:87
-#: CliClient/app/command-export.js:36 CliClient/app/command-export.js:40
-#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
-#: CliClient/app/command-attach.js:21 CliClient/app/command-help.js:66
-#: CliClient/app/command-geoloc.js:20 CliClient/app/command-mv.js:22
-#: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
-#: CliClient/app/command-ren.js:23 CliClient/app/command-search.js:27
-#: CliClient/app/command-todo.js:21 CliClient/app/command-cat.js:25
-#: CliClient/app/command-done.js:20 CliClient/app/command-rmnote.js:25
-#: CliClient/app/command-set.js:32 CliClient/app/command-import.js:34
-#: CliClient/app/command-rmbook.js:25
-#: ReactNativeClient/lib/services/interop/InteropService.js:182
-#: ReactNativeClient/lib/services/interop/InteropService.js:194
-#, javascript-format
-msgid "Cannot find \"%s\"."
-msgstr "Ni moč najti \"%s\"."
-
-#: CliClient/app/command-tag.js:90
-#, javascript-format
-msgid "Invalid command: \"%s\""
-msgstr "Neveljaven ukaz: \"%s\""
-
-#: CliClient/app/command-version.js:11
-msgid "Displays version information"
-msgstr "Prikaži informacije o verziji"
-
-#: CliClient/app/command-version.js:16
-#, javascript-format
-msgid "%s %s (%s)"
-msgstr "%s %s (%s)"
-
-#: CliClient/app/command-export.js:13
-msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
-msgstr ""
-"Izvozi Joplin datoteke glede na dano pot. Privzeto bo izvozilo celotno bazo "
-"podatkov vključujoče beležnice, zabeležke, oznake in vire."
-
-#: CliClient/app/command-export.js:23
-#, javascript-format
-msgid "Destination format: %s"
-msgstr "Format destinacije: %s"
-
-#: CliClient/app/command-export.js:23
-msgid "Exports only the given note."
-msgstr "Izvozi samo dano zabeležko."
-
-#: CliClient/app/command-export.js:23
-msgid "Exports only the given notebook."
-msgstr "Izvozi samo dano beležnico."
-
-#: CliClient/app/command-cp.js:13
-msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
-msgstr ""
-"Podvoji zabeležke ustrezajoče <note> v [notebook]. Če nobena beležnica ni "
-"specificirana, zabeležka je podvojena v trenutni beležnici."
-
-#: CliClient/app/command-attach.js:13
-msgid "Attaches the given file to the note."
-msgstr "Pripni dano datoteko k zabeležki."
-
-#: CliClient/app/command-mktodo.js:12
-msgid "Creates a new to-do."
-msgstr "Ustvari nov seznam opravil."
-
-#: CliClient/app/command-mktodo.js:16 CliClient/app/command-mknote.js:16
-msgid "Notes can only be created within a notebook."
-msgstr "Zabeležke so lahko ustvarjene samo znotraj beležnice."
-
-#: CliClient/app/command-help.js:13
-msgid "Displays usage information."
-msgstr "Prikaže informacijo uporabe."
-
-#: CliClient/app/command-help.js:36
-#, javascript-format
-msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "Za več informacij na kako prilagoditi bližnjice prosim obiščite %s"
-
-#: CliClient/app/command-help.js:44
-msgid "Shortcuts are not available in CLI mode."
-msgstr "Bližnjice niso na voljo v CLI načinu."
-
-#: CliClient/app/command-help.js:71
-msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
-msgstr ""
-"Vtipkajte `help [command]` za več informacij o ukazu; ali vtipkajte `help "
-"all` za popoln prikaz informacij o uporabi."
-
-#: CliClient/app/command-help.js:73
-msgid "The possible commands are:"
-msgstr "Možni ukazi si:"
-
-#: CliClient/app/command-help.js:77
-#, fuzzy
-msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
-msgstr ""
-"V kateremkoli ukazu se lahko na zabeležko ali beležnico nanašate ali z "
-"naslovom ali ID ali uporabo bližnjic `$n` ali `$b`, v tem vrstnem redu, za "
-"trenutno izbrano beležnico ali zabeležko. `$c` lahko uporabite, da se "
-"nanašate na trenutno izbran predmet."
-
-#: CliClient/app/command-help.js:79
-msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr ""
-"Če se želite premakniti iz enega sklopa v drugega, pritisnite Tab ali Shift"
-"+Tab."
-
-#: CliClient/app/command-help.js:80
-msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
-msgstr ""
-"Uporabite puščice in page up/down tipke za listanje strani in "
-"besedila(vključno s to konzolo)."
-
-#: CliClient/app/command-help.js:81
-#, fuzzy
-msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Če želite povečati/pomanjšati konzolo, pritisnite \"TC\"."
-
-#: CliClient/app/command-help.js:82
-msgid "To enter command line mode, press \":\""
-msgstr "Za vstop v način ukaznega poziva pritisnite\":\""
-
-#: CliClient/app/command-help.js:83
-msgid "To exit command line mode, press ESCAPE"
-msgstr "Za izhod iz načina Ukazni poziv pritisnite ESCAPE"
-
-#: CliClient/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
-"Za seznam bližnjic na tipkovnici in možnosti konfiguracije vtipkajte `help "
-"keymap`"
-
-#: CliClient/app/command-geoloc.js:13
-msgid "Displays a geolocation URL for the note."
-msgstr "Prikaže geolokacijski URL za zabeležk."
-
-#: CliClient/app/command-mknote.js:12
-msgid "Creates a new note."
-msgstr "Ustvari novo zabeležko."
-
-#: CliClient/app/command-server.js:14
-#, javascript-format
-msgid ""
-"Start, stop or check the API server. To specify on which port it should run, "
-"set the api.port config variable. Commands are (%s)."
-msgstr ""
-
-#: CliClient/app/command-server.js:38
-#, javascript-format
-msgid "Server is already running on port %d"
-msgstr ""
-
-#: CliClient/app/command-server.js:44
-#, javascript-format
-msgid "Server is running on port %d"
-msgstr ""
-
-#: CliClient/app/command-server.js:44 CliClient/app/command-server.js:47
-msgid "Server is not running."
-msgstr ""
-
-#: CliClient/app/command-mv.js:14
-msgid "Moves the notes matching <note> to [notebook]."
-msgstr "Premakne ustrezno zabeležko, ki ustreza <note> v [notebook]."
-
-#: CliClient/app/command-use.js:12
-msgid ""
-"Switches to [notebook] - all further operations will happen within this "
-"notebook."
-msgstr ""
-"Se premakne v [notebook] - vse nadaljnje operacije se bodo zgodile znotraj "
-"te beležnice."
-
-#: CliClient/app/command-ren.js:14
-msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "Preimenuje dano <item> (zabeležka ali beležnica) v <name>."
-
-#: CliClient/app/command-sync.js:29
-msgid "Synchronises with remote storage."
-msgstr "Sinhronizira z oddaljenim dostopom."
-
-#: CliClient/app/command-sync.js:34
-msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "Sinhroniziraj z danim ciljem(defaults to sync.target config value)"
-
-#: CliClient/app/command-sync.js:35
-msgid "Upgrade the sync target to the latest version."
-msgstr ""
-
-#: CliClient/app/command-sync.js:105
-#, javascript-format
-msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "Avtentikacija z %s ni potekla. Prosim priskrbite manjkajoče podatke."
-
-#: CliClient/app/command-sync.js:128
-msgid "Synchronisation is already in progress."
-msgstr "Sinhronizacija je že v postopku."
-
-#: CliClient/app/command-sync.js:133
-#, javascript-format
-msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
-msgstr ""
-"Zaklenjena datoteka je že v postopku. Če veste, da trenutno ne poteka "
-"sinhronizacija, lahko izbrišete zaklenjeno datoteko na \"%s\" in nadaljujete "
-"z operacijo."
-
-#: CliClient/app/command-sync.js:175
-#, javascript-format
-msgid "Synchronisation target: %s (%s)"
-msgstr "Mesto sinhronizacije: %s(%s)"
-
-#: CliClient/app/command-sync.js:177
-#, fuzzy
-msgid "Cannot initialise synchroniser."
-msgstr "Ni moč zagnati sinhronizatorja."
-
-#: CliClient/app/command-sync.js:207
-msgid "Starting synchronisation..."
-msgstr "Sinhronizacija se začenja."
-
-#: CliClient/app/command-sync.js:230
-msgid "Downloading resources..."
-msgstr ""
-
-#: CliClient/app/command-exit.js:11
-msgid "Exits the application."
-msgstr "Izhod iz aplikacije."
-
-#: CliClient/app/main.js:80
-msgid "Type `joplin help` for usage information."
-msgstr "Vtipkajte `joplin help` za informacije o uporabi."
-
-#: CliClient/app/main.js:82
-msgid "Fatal error:"
-msgstr "Usodna napaka:"
-
-#: CliClient/app/command-search.js:13
-msgid "Searches for the given <pattern> in all the notes."
-msgstr "Išči dani <pattern> v vseh zabeležkah."
-
-#: CliClient/app/command-todo.js:14
-msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
-msgstr ""
-"<todo-command> ima lahko funkcije ali \"spremeni\" or \"počisti\". Uporabi "
-"\"spremeni\" da spremeniš dani seznam opravil iz opravljeno v neopravljeno "
-"ali obratno. (Če je tarča navadna zabeležka, bo ta pretvorjena v seznam "
-"opravil). Uporabi \"počisti\" za pretvoriti seznam opravil nazaj v običajno "
-"zabeležko."
-
-#: CliClient/app/command-cat.js:14
-msgid "Displays the given note."
-msgstr "Prikaže dano zabeležko."
-
-#: CliClient/app/command-cat.js:18
-msgid "Displays the complete information about note."
-msgstr "Prikaže vse informacije o zabeležki."
-
-#: CliClient/app/command-done.js:14
-msgid "Marks a to-do as done."
-msgstr "Označi seznam opravil kot končan."
-
-#: CliClient/app/command-done.js:21
-#, javascript-format
-msgid "Note is not a to-do: \"%s\""
-msgstr "Zabeležka ni formata seznam opravil: \"%s\""
-
-#: CliClient/app/command-ls.js:18
-msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
-msgstr ""
-"Prikaže zabeležke v trenutni beležnici. Uporabite `ls /` za prikaz seznama "
-"beležnic."
-
-#: CliClient/app/command-ls.js:27
-msgid "Displays only the first top <num> notes."
-msgstr "Prikaže samo prvih <num> zabeležk."
-
-#: CliClient/app/command-ls.js:28
-msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr "Razvrsti predmete glede na<field>(title, updated_time, created_time)."
-
-#: CliClient/app/command-ls.js:29
-msgid "Reverses the sorting order."
-msgstr "Obrne vrstni red."
-
-#: CliClient/app/command-ls.js:30
-msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
-msgstr ""
-"Prikaže samo predmete specifičnega tipa(tipov). Lahko je `n` za zabeležke, "
-"`t` za seznam opravil ali `nt` za zabeležke in za seznam opravil (to pomeni. "
-"`-tt` bi prikazal samo za narediti, med tem ko `-ttd` bi prikazal zabeležke "
-"in seznam opravil."
-
-#: CliClient/app/command-ls.js:31
-msgid "Either \"text\" or \"json\""
-msgstr "Ali \"text\" ali \"json\""
-
-#: CliClient/app/command-ls.js:63
-msgid "Please select a notebook first."
-msgstr "Prosim najprej izberite beležnico."
-
-#: CliClient/app/command-rmnote.js:13
-msgid "Deletes the notes matching <note-pattern>."
-msgstr "Izbriše zabeležke, ki se ujemajo z <note-pattern>."
-
-#: CliClient/app/command-rmnote.js:17
-msgid "Deletes the notes without asking for confirmation."
-msgstr "Izbriše zabeležke brez potrebne predhodne potrditve."
-
-#: CliClient/app/command-rmnote.js:27
-#, javascript-format
-msgid "%d notes match this pattern. Delete them?"
-msgstr "%d zabeležk ustreza temu iskalnemu nizu. Jih želite zbrisati?"
-
-#: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/Note.js:447
-msgid "Delete note?"
-msgstr "Želite izbrisati zabeležko?"
-
-#: CliClient/app/gui/NoteWidget.js:36
-msgid ""
-"Welcome to Joplin!\n"
-"\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
-"\n"
-"For example, to create a notebook press `mb`; to create a note press `mn`."
-msgstr ""
-"Dobrodošli v Joplinu!\n"
-"\n"
-"Vtipkajte `:help shortcuts` za seznam bližnjic na tipkovnici ali vtipkajte "
-"samo`:help` za informacije o uporabi.\n"
-"\n"
-"Na primer, če želite ustvariti beležnico pritisnite `mb`; če želite "
-"ustvariti zabeležko pritisnite`mn`."
-
-#: CliClient/app/gui/NoteWidget.js:48
-msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
-msgstr ""
-"Ena ali več predmetov je trenutno enkriptiranih in boste morda morali "
-"navesti glavno geslo. Če želite to narediti, vtipkajte `e2ee decrypt`. Če "
-"ste že vnesli geslo, so enkriptirani predmeti v stanju dekripcije v ozadju "
-"in bodo kmalu na voljo."
-
-#: CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
-msgid "You may also type `status` for more information."
-msgstr "Ne sprašuj za potrditev."
-
-#: CliClient/app/gui/FolderListWidget.js:31
-msgid "Search:"
-msgstr "Išči:"
-
-#: CliClient/app/app-gui.js:452
-msgid "To delete a tag, untag the associated notes."
-msgstr "Za izbris dane oznake, odoznačite zabeležke s to oznako."
-
-#: CliClient/app/app-gui.js:462
-msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-"Prosim izberite zabeležko ali beležnico, ki jo želite najprej zbrisati."
-
-#: CliClient/app/app-gui.js:750
-msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Pritisnite Ctrl+D ali napišite \"exit\" za izhod iz aplikacije"
-
-#: CliClient/app/command-e2ee.js:18
-#, fuzzy
-msgid ""
-"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
-msgstr ""
-"Upravlja z E2EE nastavitvami. Ukazi so `enable`, `disable`, `decrypt`, "
-"`status` in `target-status`."
-
-#: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
-msgid "Enter master password:"
-msgstr "Vnesite glavno geslo:"
-
-#: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
-#: CliClient/app/command-e2ee.js:79
-msgid "Operation cancelled"
-msgstr "Operacija je preklicana"
-
-#: CliClient/app/command-e2ee.js:47
-msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
-msgstr ""
-"Dekripcija se začenja... Prosim počakajte. Vse skupaj lahko vzame nekaj "
-"minut, glede na količino materiala, ki jo je potrebno dekriptirati."
-
-#: CliClient/app/command-e2ee.js:53
-#, fuzzy, javascript-format
-msgid "Decrypted items: %d"
-msgstr "Preneseni predmeti: %d/%d."
-
-#: CliClient/app/command-e2ee.js:54
-#, javascript-format
-msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr ""
-
-#: CliClient/app/command-e2ee.js:68
-msgid "Completed decryption."
-msgstr "Dekripcija končana."
-
-#: CliClient/app/command-e2ee.js:77
-#: ReactNativeClient/lib/components/screens/encryption-config.js:163
-#, fuzzy
-msgid "Confirm password:"
-msgstr "Vnesite glavno geslo:"
-
-#: CliClient/app/command-e2ee.js:83
-#: ReactNativeClient/lib/components/screens/encryption-config.js:140
-#, fuzzy
-msgid "Passwords do not match!"
-msgstr "Geslo ne more biti prazno"
-
-#: CliClient/app/command-e2ee.js:108
-#: ReactNativeClient/lib/components/screens/encryption-config.js:280
-#, javascript-format
-msgid "Encryption is: %s"
-msgstr "Enkripcija je: %s"
-
-#: CliClient/app/command-set.js:22
-#, javascript-format
-msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
-"\n"
-"%s"
-msgstr ""
-"Nastavi lastnost <name> dane <note> v dano [value]. Možne lastnosti so:\n"
-"\n"
-"%s"
-
-#: CliClient/app/command-import.js:14
-msgid "Imports data into Joplin."
-msgstr "Uvozi podatke v Joplin."
-
-#: CliClient/app/command-import.js:25
-#, javascript-format
-msgid "Source format: %s"
-msgstr "Format vira: %s"
-
-#: CliClient/app/command-import.js:26
-msgid "Do not ask for confirmation."
-msgstr "Ne sprašuj za potrditev."
-
-#: CliClient/app/command-import.js:27
-#, fuzzy, javascript-format
-msgid "Output format: %s"
-msgstr "Format vira: %s"
-
-#: CliClient/app/command-import.js:65
-msgid "Importing notes..."
-msgstr "Uvažanje zabeležk..."
-
-#: CliClient/app/command-rmbook.js:13
-msgid "Deletes the given notebook."
-msgstr "Izbriše dano beležnico."
-
-#: CliClient/app/command-rmbook.js:17
-msgid "Deletes the notebook without asking for confirmation."
-msgstr "Izbriše beležnico brez potrebne potrditve."
-
-#: CliClient/app/command-rmbook.js:26
-#: ReactNativeClient/lib/components/screens/notes.js:154
-#, fuzzy
-msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
-msgstr ""
-"Želite izbrisati beležnico? Vse zabeležke znotraj beležke bodo hkrati "
-"izbrisane."
-
-#: CliClient/app/command-status.js:13
-msgid "Displays summary about the notes and notebooks."
-msgstr "Prikaži povzetek o zabeležkah in beležnicah."
-
-#: CliClient/app/command-status.js:44
-msgid ""
-"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr ""
-
-#: CliClient/app/command-undone.js:12
-msgid "Marks a to-do as non-completed."
-msgstr "Označi seznam opravil kot neopravljen."
-
-#: CliClient/app/help-utils.js:56
-msgid "Enum"
-msgstr "Enum"
-
-#: CliClient/app/help-utils.js:56
-#, javascript-format
-msgid "Type: %s."
-msgstr "Vrsta: %s."
-
-#: CliClient/app/help-utils.js:57
-#, javascript-format
-msgid "Possible values: %s."
-msgstr "Možne vrednosti: %s."
-
-#: CliClient/app/help-utils.js:71
-#, javascript-format
-msgid "Default: %s"
-msgstr "Privzeto: %s"
-
-#: CliClient/app/help-utils.js:77
-msgid "Possible keys/values:"
-msgstr "Možne tipke/vrednosti:"
-
-#: CliClient/app/command-config.js:13
-msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
-msgstr ""
-"Dobi ali nastavi configuracijsko vrednost. Če [value] ni dodeljena, bo "
-"prikazana vrednost od [name]. Če niti [name] ali [value] nista dodeljena, bo "
-"prikazana sedanja konfiguracija."
-
-#: CliClient/app/command-config.js:18
-msgid "Also displays unset and hidden config variables."
-msgstr "Prikaže tudi nenastavljene in skrite spremenljivke konfiguracije."
-
-#: CliClient/app/command-config.js:79
-#, javascript-format
-msgid "%s = %s (%s)"
-msgstr "%s = %s (%s)"
-
-#: CliClient/app/command-config.js:81
-#, javascript-format
-msgid "%s = %s"
-msgstr "%s = %s"
-
-#: CliClient/app/app.js:62
-#, javascript-format
-msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "Več kot en predmet se ujema z \"%s\". Prosim zožite iskani niz besed."
-
-#: CliClient/app/app.js:92
-msgid "No notebook selected."
-msgstr "Nobena beležnica ni bila izbrana."
-
-#: CliClient/app/app.js:98
-msgid "No notebook has been specified."
-msgstr "Nobena beležnica ni bila izbrana."
-
-#: CliClient/app/app.js:137 CliClient/app/cli-utils.js:161
-msgid "Y"
-msgstr "Y"
-
-#: CliClient/app/app.js:137 CliClient/app/cli-utils.js:161
-msgid "n"
-msgstr "n"
-
-#: CliClient/app/app.js:137
-msgid "N"
-msgstr "N"
-
-#: CliClient/app/app.js:137
-msgid "y"
-msgstr "y"
-
-#: CliClient/app/app.js:170
-msgid "Cancelling background synchronisation... Please wait."
-msgstr "Sinhronizacija v ozadju se preklicuje... Prosim počakajte."
-
-#: CliClient/app/app.js:255
-#, javascript-format
-msgid "No such command: %s"
-msgstr "Noben tak ukaz ni bil najden: %s"
-
-#: CliClient/app/app.js:303
-#, javascript-format
-msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Ukaz \"%s\" je na voljo samo v GUI načinu"
-
-#: CliClient/app/command-mkbook.js:12
-msgid "Creates a new notebook."
-msgstr "Ustvari novo beležnico."
-
-#: CliClient/app/cli-utils.js:109
-#, javascript-format
-msgid "Missing required argument: %s"
-msgstr "Manjka zahtevani argument %s"
-
-#: CliClient/app/cli-utils.js:140 ReactNativeClient/lib/services/report.js:151
-#, javascript-format
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: CliClient/app/cli-utils.js:144
-msgid "Your choice: "
-msgstr "Vaša izbira: "
-
-#: CliClient/app/cli-utils.js:151
-#, javascript-format
-msgid "Invalid answer: %s"
-msgstr "Neveljaven odgovor: %s"
-
-#: CliClient/app/base-command.js:15
-msgid "Cannot change encrypted item"
-msgstr "Ni mogoče spremeniti enkriptiranega predmeta"
-
-#: CliClient/app/command-edit.js:17
-msgid "Edit note."
-msgstr "Uredi zabeležko."
-
-#: CliClient/app/command-edit.js:30
-msgid ""
-"No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr ""
-"Noben urejevalec teksta ni izbran. Prosim, nastavite ga z uporabo `config "
-"editor <editor-path>`"
-
-#: CliClient/app/command-edit.js:40
-msgid "No active notebook."
-msgstr "Ni aktivnih beležnic."
-
-#: CliClient/app/command-edit.js:46
-#, javascript-format
-msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Zabeležka ne obstaja: \"%s\". Bi jo radi ustvarili?"
-
-#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
-msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev (samo za testiranje)"
-
-#: ReactNativeClient/lib/services/interop/InteropService_Exporter_Jex.js:43
-msgid "There is no data to export."
-msgstr "Ni datotek za izvoz."
-
-#: ReactNativeClient/lib/services/interop/types.js:23
-msgid "File"
-msgstr "Datoteka"
-
-#: ReactNativeClient/lib/services/interop/types.js:23
-msgid "Directory"
-msgstr "Mesto datoteke"
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:48
-#: ReactNativeClient/lib/services/interop/InteropService.js:57
-msgid "Joplin Export File"
-msgstr "Joplin izvozna datoteka"
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:49
-#: ReactNativeClient/lib/services/interop/InteropService.js:59
-#: ReactNativeClient/lib/models/Setting.js:1298
-msgid "Markdown"
-msgstr "Sistem označevanja"
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:50
-#: ReactNativeClient/lib/services/interop/InteropService.js:58
-msgid "Joplin Export Directory"
+msgid "Open profile directory"
 msgstr "Joplin izvozno mesto"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:51
-#, fuzzy
-msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote izvozna datoteka"
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:52
-#, fuzzy
-msgid "Evernote Export File (as HTML)"
-msgstr "Evernote izvozna datoteka"
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:60
-#, fuzzy
-msgid "HTML File"
-msgstr "Datoteka"
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:61
-#, fuzzy
-msgid "HTML Directory"
-msgstr "Mesto datoteke"
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:127
-#, fuzzy, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Ne gre naložiti \"%s\" modula za format \"%s\""
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:152
-#, fuzzy, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "Ne gre naložiti \"%s\" modula za format \"%s\""
-
-#: ReactNativeClient/lib/services/interop/InteropService.js:187
+#: ElectronClient/app.js:345
 #, javascript-format
-msgid "Please specify import format for %s"
-msgstr "Prosim navedite format uvoza za %s"
+msgid "Open %s"
+msgstr "Odpri %s"
 
-#: ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js:41
-msgid "Please specify the notebook where the notes should be imported to."
-msgstr "Prosim navedite beležnico, kamor želite uvoziti zabeležke."
-
-#: ReactNativeClient/lib/services/RevisionService.js:221
-msgid "Restored Notes"
-msgstr ""
-
-#: ReactNativeClient/lib/services/KeymapService.js:240
-msgid "command"
-msgstr ""
-
-#: ReactNativeClient/lib/services/KeymapService.js:240
-#: ReactNativeClient/lib/services/KeymapService.js:245
-#, javascript-format
-msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
-
-#: ReactNativeClient/lib/services/KeymapService.js:245
-#: ReactNativeClient/lib/services/KeymapService.js:252
-msgid "accelerator"
-msgstr ""
-
-#: ReactNativeClient/lib/services/KeymapService.js:252
-#, fuzzy, javascript-format
-msgid "Invalid %s: %s."
-msgstr "Neveljaven odgovor: %s"
-
-#: ReactNativeClient/lib/services/KeymapService.js:270
-#, javascript-format
-msgid ""
-"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
-"unexpected behaviour."
-msgstr ""
-
-#: ReactNativeClient/lib/services/KeymapService.js:295
-#, javascript-format
-msgid "Accelerator \"%s\" is not valid."
-msgstr ""
-
-#: ReactNativeClient/lib/services/report.js:121
-msgid "Items that cannot be synchronised"
-msgstr "Predmeti ne morejo biti sinhronizirani"
-
-#: ReactNativeClient/lib/services/report.js:123
-msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
-msgstr ""
-"Ti predmeti bodo ostali na napravi, ampak ne bodo naloženi na "
-"sinhronizacijski cilj. Če želite najti te predmete, iščite po ali naslovu "
-"ali ID(je prikazan zgoraj v oklepajih)"
-
-#: ReactNativeClient/lib/services/report.js:130
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Beležnica ne more biti shranjena: %s"
-
-#: ReactNativeClient/lib/services/report.js:132
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Beležnica ne more biti shranjena: %s"
-
-#: ReactNativeClient/lib/services/report.js:142
-#, fuzzy
-msgid "Items that cannot be decrypted"
-msgstr "Predmeti ne morejo biti sinhronizirani"
-
-#: ReactNativeClient/lib/services/report.js:144
-msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
-msgstr ""
-
-#: ReactNativeClient/lib/services/report.js:182
-#, fuzzy
-msgid "Attachments"
-msgstr "Pripni datoteko"
-
-#: ReactNativeClient/lib/services/report.js:190
-msgid "Downloaded and decrypted"
-msgstr ""
-
-#: ReactNativeClient/lib/services/report.js:190
-#: ReactNativeClient/lib/services/report.js:191
-#: ReactNativeClient/lib/services/report.js:194
-#, fuzzy, javascript-format
-msgid "%s: %d"
-msgstr "%s: %s"
-
-#: ReactNativeClient/lib/services/report.js:191
-msgid "Downloaded and encrypted"
-msgstr ""
-
-#: ReactNativeClient/lib/services/report.js:204
-#, fuzzy
-msgid "Attachments that could not be downloaded"
-msgstr "Beležnica ne more biti shranjena: %s"
-
-#: ReactNativeClient/lib/services/report.js:209
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
-
-#: ReactNativeClient/lib/services/report.js:222
-msgid "Sync status (synced items / total items)"
-msgstr "Status sinhronizacije(sinhronizirani predmeti / vse datoteke)"
-
-#: ReactNativeClient/lib/services/report.js:226
-#, javascript-format
-msgid "%s: %d/%d"
-msgstr "%s: %d/%d"
-
-#: ReactNativeClient/lib/services/report.js:229
-#, javascript-format
-msgid "Total: %d/%d"
-msgstr "Skupno: %d/%d"
-
-#: ReactNativeClient/lib/services/report.js:231
-#, javascript-format
-msgid "Conflicted: %d"
-msgstr "V konfliktu: %d"
-
-#: ReactNativeClient/lib/services/report.js:232
-#, javascript-format
-msgid "To delete: %d"
-msgstr "Za izbris: %d"
-
-#: ReactNativeClient/lib/services/report.js:236
-msgid "Folders"
-msgstr "Datoteke"
-
-#: ReactNativeClient/lib/services/report.js:244
-#, javascript-format
-msgid "%s: %d notes"
-msgstr "%s: %d zabeležke"
-
-#: ReactNativeClient/lib/services/report.js:252
-msgid "Coming alarms"
-msgstr "Prihajajoči alarmi"
-
-#: ReactNativeClient/lib/services/report.js:257
-#, javascript-format
-msgid "On %s: %s"
-msgstr "Vključeno %s: %s"
-
-#: ReactNativeClient/lib/onedrive-api.js:366
-msgid ""
-"Cannot refresh token: authentication data is missing. Starting the "
-"synchronisation again may fix the problem."
-msgstr ""
-"Ne gre osvežiti tokena: manjkajo podatki o avtentikaciji. Ponovno zaženite "
-"sinhronizacijo, da morda popravite težavo."
-
-#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
-msgid "Nextcloud"
-msgstr "Nextcloud"
-
-#: ReactNativeClient/lib/versionInfo.js:10
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#: ReactNativeClient/lib/versionInfo.js:20
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
-
-#: ReactNativeClient/lib/versionInfo.js:22
-#, fuzzy, javascript-format
-msgid "Client ID: %s"
-msgstr "Dokončano: %s"
-
-#: ReactNativeClient/lib/versionInfo.js:23
-#, fuzzy, javascript-format
-msgid "Sync Version: %s"
-msgstr "Enkripcija je: %s"
-
-#: ReactNativeClient/lib/versionInfo.js:24
-#, fuzzy, javascript-format
-msgid "Profile Version: %s"
-msgstr "Možne vrednosti: %s."
-
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:22
+#: ReactNativeClient/lib/shim-init-node.js:129
+#: ReactNativeClient/lib/components/screens/Note.js:502
 #: ReactNativeClient/lib/versionInfo.js:25
-#, javascript-format
-msgid "Keychain Supported: %s"
-msgstr ""
+msgid "Yes"
+msgstr "Da"
 
-#: ReactNativeClient/lib/JoplinServerApi.js:71
-#, javascript-format
-msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
-"\n"
-"%s"
-msgstr ""
+#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:23
+#: ReactNativeClient/lib/shim-init-node.js:129
+#: ReactNativeClient/lib/components/screens/Note.js:503
+#: ReactNativeClient/lib/versionInfo.js:25
+msgid "No"
+msgstr "Ne"
 
 #: ReactNativeClient/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2483,561 +2339,26 @@ msgstr ""
 "datoteke zunaj mape niti nobene druge osebne mape. Noben podatek ne bo "
 "deljen s katerokoli tretjo osebo."
 
-#: ReactNativeClient/lib/Synchronizer.js:108
-#, javascript-format
-msgid "Created local items: %d."
-msgstr "Ustvarjeni lokalni predmeti: %d."
-
-#: ReactNativeClient/lib/Synchronizer.js:110
-#, javascript-format
-msgid "Updated local items: %d."
-msgstr "Posodobljeni lokalni predmeti: %d."
-
-#: ReactNativeClient/lib/Synchronizer.js:112
-#, javascript-format
-msgid "Created remote items: %d."
-msgstr "Ustvarjeni oddaljeni predmeti: %d."
-
-#: ReactNativeClient/lib/Synchronizer.js:114
-#, javascript-format
-msgid "Updated remote items: %d."
-msgstr "Posodobljeni oddaljeni predmeti: %d."
-
-#: ReactNativeClient/lib/Synchronizer.js:116
-#, javascript-format
-msgid "Deleted local items: %d."
-msgstr "Izbrisani lokalni predmeti: %d."
-
-#: ReactNativeClient/lib/Synchronizer.js:118
-#, javascript-format
-msgid "Deleted remote items: %d."
-msgstr "Izbrisani oddaljeni predmeti: %d."
-
-#: ReactNativeClient/lib/Synchronizer.js:120
-#, javascript-format
-msgid "Fetched items: %d/%d."
-msgstr "Preneseni predmeti: %d/%d."
-
-#: ReactNativeClient/lib/Synchronizer.js:122
-msgid "Cancelling..."
-msgstr "V preklicu..."
-
-#: ReactNativeClient/lib/Synchronizer.js:124
-#, javascript-format
-msgid "Completed: %s"
-msgstr "Dokončano: %s"
-
-#: ReactNativeClient/lib/Synchronizer.js:126
-#, javascript-format
-msgid "Last error: %s"
-msgstr "Zadnja napaka: %s"
-
-#: ReactNativeClient/lib/Synchronizer.js:233
-msgid "Idle"
-msgstr "V mirovanju"
-
-#: ReactNativeClient/lib/Synchronizer.js:235
-msgid "In progress"
-msgstr "V postopku"
-
-#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
-msgid "File system"
-msgstr "Sistem datotek"
-
-#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
-msgid "WebDAV"
-msgstr "WebDAV"
-
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:110
-msgid "Login with OneDrive"
-msgstr "Prijavi se z OneDrive"
-
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:121
-#: ReactNativeClient/lib/components/screens/log.js:109
-#: ReactNativeClient/lib/components/screens/status.js:144
-msgid "Refresh"
-msgstr "Osveži"
-
-#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
-msgid "New tags:"
+#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
 msgstr ""
 
-#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
-msgid "Type new tags or select from list"
+#: ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
 msgstr ""
 
-#: ReactNativeClient/lib/components/screens/log.js:100
-#: ReactNativeClient/lib/components/screens/config.js:439
-msgid "Log"
-msgstr "Dnevnik"
-
-#: ReactNativeClient/lib/components/screens/log.js:117
-msgid "Show all"
-msgstr "Prikaži vse"
-
-#: ReactNativeClient/lib/components/screens/log.js:117
-msgid "Errors only"
-msgstr "Samo napake"
-
-#: ReactNativeClient/lib/components/screens/search.js:160
-msgid "Search"
-msgstr "Išči"
-
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
-#, fuzzy
-msgid "Login with Dropbox"
-msgstr "Prijavi se z OneDrive"
-
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
-msgid "Enter code here"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/folder.js:87
-#, javascript-format
-msgid "The notebook could not be saved: %s"
-msgstr "Beležnica ne more biti shranjena: %s"
-
-#: ReactNativeClient/lib/components/screens/folder.js:109
-msgid "Edit notebook"
-msgstr "Uredi beležnico"
-
-#: ReactNativeClient/lib/components/screens/folder.js:110
-#, fuzzy
-msgid "Enter notebook title"
-msgstr "Naslov beležnice:"
-
-#: ReactNativeClient/lib/components/screens/config.js:50
-msgid "Warning"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:50
-msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:316
-#: ReactNativeClient/lib/components/screens/encryption-config.js:264
-msgid "Encryption Config"
-msgstr "Nastavite enkripcije"
-
-#: ReactNativeClient/lib/components/screens/config.js:436
-#, fuzzy
-msgid "Tools"
-msgstr "Orodja"
-
-#: ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
-msgid "Sync Status"
-msgstr "Status"
-
-#: ReactNativeClient/lib/components/screens/config.js:441
-#, fuzzy
-msgid "Creating report..."
-msgstr "Ustvarjanje nove %s..."
-
-#: ReactNativeClient/lib/components/screens/config.js:441
-msgid "Export Debug Report"
-msgstr "Izvozi poročilo o napakah"
-
-#: ReactNativeClient/lib/components/screens/config.js:443
-msgid "Fixing search index..."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:443
-msgid "Fix search index"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:443
-msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:446
-#, fuzzy
-msgid "Exporting profile..."
-msgstr "Uvažanje zabeležk..."
-
-#: ReactNativeClient/lib/components/screens/config.js:446
-#, fuzzy
-msgid "Export profile"
-msgstr "Joplin izvozna datoteka"
-
-#: ReactNativeClient/lib/components/screens/config.js:446
-msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:461
-#, fuzzy
-msgid "More information"
-msgstr "Nastavitve"
-
-#: ReactNativeClient/lib/components/screens/config.js:471
-msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:474
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:477
-msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:480
-msgid "- Location: to allow attaching geo-location information to a note."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:509
-msgid "Joplin website"
-msgstr "Joplin spletna stran"
-
-#: ReactNativeClient/lib/components/screens/config.js:537
-#, javascript-format
-msgid "Database v%s"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/config.js:543
-#, fuzzy, javascript-format
-msgid "FTS enabled: %d"
-msgstr "Za izbris: %d"
-
-#: ReactNativeClient/lib/components/screens/config.js:549
-#: ReactNativeClient/lib/components/side-menu-content.js:316
-msgid "Configuration"
-msgstr "Nastavitve"
-
-#: ReactNativeClient/lib/components/screens/Note.js:98
-msgid "This note has been modified:"
-msgstr "Ta zabeležka je bila spremenjena:"
-
-#: ReactNativeClient/lib/components/screens/Note.js:98
-msgid "Save changes"
-msgstr "Shrani spremembe"
-
-#: ReactNativeClient/lib/components/screens/Note.js:98
-msgid "Discard changes"
-msgstr "Opusti spremembe"
-
-#: ReactNativeClient/lib/components/screens/Note.js:150
-#, javascript-format
-msgid "No item with ID %s"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:168
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:173
-#, javascript-format
-msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:178
-#, javascript-format
-msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:340
-msgid ""
-"In order to associate a geo-location with the note, the app needs your "
-"permission to access your location.\n"
-"\n"
-"You may turn off this option at any time in the Configuration screen."
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:341
-msgid "Permission needed"
-msgstr ""
-
+#: ReactNativeClient/lib/shim-init-node.js:128
 #: ReactNativeClient/lib/components/screens/Note.js:501
-#: ReactNativeClient/lib/shim-init-node.js:91
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
 
-#: ReactNativeClient/lib/components/screens/Note.js:583
+#: ReactNativeClient/lib/shim-init-node.js:195
 #, javascript-format
-msgid "Unsupported image type: %s"
-msgstr "Nepodprt tip slike: %s"
-
-#: ReactNativeClient/lib/components/screens/Note.js:722
-#: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#, javascript-format
-msgid "Created: %s"
-msgstr "Ustvarjeno: %s"
-
-#: ReactNativeClient/lib/components/screens/Note.js:723
-#, fuzzy, javascript-format
-msgid "Updated: %s"
-msgstr "Posodobljeno: %d."
-
-#: ReactNativeClient/lib/components/screens/Note.js:726
-msgid "View on map"
-msgstr "Prikaži na zemljevidu"
-
-#: ReactNativeClient/lib/components/screens/Note.js:733
-msgid "Go to source URL"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:762
-#, fuzzy
-msgid "Attach..."
-msgstr "Išči"
-
-#: ReactNativeClient/lib/components/screens/Note.js:773
-msgid "Attach photo"
-msgstr "Pripni fotografijo"
-
-#: ReactNativeClient/lib/components/screens/Note.js:774
-#, fuzzy
-msgid "Take photo"
-msgstr "Pripni fotografijo"
-
-#: ReactNativeClient/lib/components/screens/Note.js:775
-#, fuzzy
-msgid "Choose an option"
-msgstr "Pokaži napredne možnosti"
-
-#: ReactNativeClient/lib/components/screens/Note.js:794
-#: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
-msgid "Share"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:808
-msgid "Convert to note"
-msgstr "Pretvori v zabeležko"
-
-#: ReactNativeClient/lib/components/screens/Note.js:808
-msgid "Convert to todo"
-msgstr "Pretvori v za narediti"
-
-#: ReactNativeClient/lib/components/screens/Note.js:822
-msgid "Properties"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:945
-#: ReactNativeClient/lib/components/screens/Note.js:975
-msgid "Add body"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/Note.js:1001
-#, fuzzy
-msgid "Add title"
-msgstr "Neimenovano"
-
-#: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
-msgid "Sync Target Upgrade"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:119
-#, javascript-format
-msgid "Master Key %s"
-msgstr "Glavno geslo %s"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:122
-#: ReactNativeClient/lib/components/screens/encryption-config.js:151
-msgid "Password:"
-msgstr "Geslo:"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:137
-msgid "Password cannot be empty"
-msgstr "Geslo ne more biti prazno"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:139
-#, fuzzy
-msgid "Confirm password cannot be empty"
-msgstr "Geslo ne more biti prazno"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:150
-msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
-msgstr ""
-"Omogočanje enkripcije pomeni, da bodo *vse* vaše zabeležke in priponke "
-"ponovno sinhronizirane in poslane enkriptirane do ciljne sinhronizacijske "
-"naprave. Obvezno si zapomnite geslo, saj bo zaradi varnostnih namenov to "
-"edini način, da dekriptirate vsebino beležnice. Da omogočite enkripcijo, "
-"vnesite geslo."
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:177
-msgid "Enable"
-msgstr "Omogoči"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:248
-msgid "Missing Master Keys"
-msgstr "Manjkajoča glavna gesla"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:249
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-"Glavna gesla s sledečimi ID so uporabljena za enkripcijo nekaterih vaših "
-"predmetov. Kakorkoli, aplikacija trenutno nima dostopa do njih. Verjetno je, "
-"da bodo sčasoma preneseni s sinhronizacijo."
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:258
-msgid "Disable encryption"
-msgstr "Onemogoči enkripcijo"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:258
-msgid "Enable encryption"
-msgstr "Omogoči enkripcijo"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:268
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
-msgstr ""
-
-#: ReactNativeClient/lib/components/screen-header.js:185
-msgid "Delete these notes?"
-msgstr "Izbriši te zabeležke?"
-
-#: ReactNativeClient/lib/components/screen-header.js:392
-msgid "Move to notebook..."
-msgstr "Premakni v beležnico..."
-
-#: ReactNativeClient/lib/components/screen-header.js:433
-#, javascript-format
-msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Premakni %d zabeležk v beležnico \"%s\"?"
-
-#: ReactNativeClient/lib/components/screen-header.js:451
-msgid "Press to set the decryption password."
-msgstr "Klikni za nastavitev dekripcijskega gesla."
-
-#: ReactNativeClient/lib/components/screen-header.js:452
-#, fuzzy
-msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Nekateri premeti ne morejo biti sinhronizirani."
-
-#: ReactNativeClient/lib/components/screen-header.js:453
-msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr ""
-
-#: ReactNativeClient/lib/components/side-menu-content.js:126
-#, fuzzy, javascript-format
-msgid "Notebook: %s"
-msgstr "Beležnice"
-
-#: ReactNativeClient/lib/components/side-menu-content.js:132
-#, fuzzy
-msgid "Encrypted notebooks cannot be renamed"
-msgstr "Enkriptirani predmeti ne morejo biti spremenjeni"
-
-#: ReactNativeClient/lib/components/side-menu-content.js:312
-#, fuzzy
-msgid "New Notebook"
-msgstr "Nova beležnica"
-
-#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:78
-#, fuzzy
-msgid "Clear alarm"
-msgstr "Nastavi alarm"
-
-#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:80
-#, fuzzy
-msgid "Save alarm"
-msgstr "Nastavi alarm"
-
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:33
-msgid ""
-"Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
-
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:39
-msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
-
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:49
-msgid ""
-"Please enter your password in the master key list below before upgrading the "
-"key."
-msgstr ""
-
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
-msgid "The master key has been upgraded successfully!"
-msgstr ""
-
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:60
-#, javascript-format
-msgid "Could not upgrade master key: %s"
-msgstr ""
-
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:116
-#, fuzzy, javascript-format
-msgid "Decrypted items: %s / %s"
-msgstr "Preneseni predmeti: %d/%d."
-
-#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
-#, fuzzy
-msgid "The application has been authorised!"
-msgstr "Aplikacija je bila uspešno avtorizirana."
-
-#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
-#, javascript-format
-msgid ""
-"Could not authorise application:\n"
-"\n"
-"%s\n"
-"\n"
-"Please try again."
-msgstr ""
-
-#: ReactNativeClient/lib/components/shared/config-shared.js:46
-#, fuzzy
-msgid "Checking... Please wait."
-msgstr "V preklicu...Prosim počakajte."
-
-#: ReactNativeClient/lib/components/shared/config-shared.js:48
-#, fuzzy
-msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "Preveri nastavitve sinhronizacije"
-
-#: ReactNativeClient/lib/components/shared/config-shared.js:50
-msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
-msgstr ""
-
-#: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
-msgid "Open"
-msgstr "Odpri..."
-
-#: ReactNativeClient/lib/components/note-list.js:97
-#, fuzzy
-msgid "You currently have no notebooks."
-msgstr "Ni aktivnih beležnic."
-
-#: ReactNativeClient/lib/components/note-list.js:101
-#, fuzzy
-msgid "Create a notebook"
-msgstr "Ustvari novo beležnico."
-
-#: ReactNativeClient/lib/components/note-list.js:105
-msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Trenutno ni zabeležk. Ustvarite jo s klikom na (+) gumb."
-
-#: ReactNativeClient/lib/components/CameraView.js:158
-msgid "Permission to use camera"
-msgstr ""
-
-#: ReactNativeClient/lib/components/CameraView.js:159
-msgid "Your permission to use your camera is required."
-msgstr ""
+msgid "Cannot access %s"
+msgstr "Ne gre dostopati %s"
 
 #: ReactNativeClient/lib/models/Folder.js:27
 #: ReactNativeClient/lib/models/Note.js:25
@@ -3064,67 +2385,6 @@ msgstr "Ni moč premakniti zabeležke v \"%s\" beležnico"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Beležnica ne more biti imenovana \"%s\", ker je to rezerviran naslov."
-
-#: ReactNativeClient/lib/models/Tag.js:189
-#, javascript-format
-msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
-
-#: ReactNativeClient/lib/models/Resource.js:317
-msgid "Not downloaded"
-msgstr ""
-
-#: ReactNativeClient/lib/models/Resource.js:318
-msgid "Downloading"
-msgstr ""
-
-#: ReactNativeClient/lib/models/Resource.js:319
-msgid "Downloaded"
-msgstr ""
-
-#: ReactNativeClient/lib/models/Resource.js:371
-#, fuzzy, javascript-format
-msgid "Attachment conflict: \"%s\""
-msgstr "Pripni datoteko"
-
-#: ReactNativeClient/lib/models/Resource.js:372
-#, javascript-format
-msgid ""
-"There was a [conflict](%s) on the attachment below.\n"
-"\n"
-"%s"
-msgstr ""
-
-#: ReactNativeClient/lib/models/BaseItem.js:721
-msgid "Encrypted"
-msgstr "Enkriptirano"
-
-#: ReactNativeClient/lib/models/BaseItem.js:781
-msgid "Encrypted items cannot be modified"
-msgstr "Enkriptirani predmeti ne morejo biti spremenjeni"
-
-#: ReactNativeClient/lib/models/Note.js:27
-#, fuzzy
-msgid "created date"
-msgstr "Ustvarjeno: %d."
-
-#: ReactNativeClient/lib/models/Note.js:28
-msgid "custom order"
-msgstr ""
-
-#: ReactNativeClient/lib/models/Note.js:92
-msgid "This note does not have geolocation information."
-msgstr "Ta zabeležke nima geografske lokacije."
-
-#: ReactNativeClient/lib/models/Note.js:469
-#, javascript-format
-msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Ni moč kopirati zabeležke v \"%s\" beležnico"
-
-#: ReactNativeClient/lib/models/Note.js:480
-#, javascript-format
-msgid "Cannot move note to \"%s\" notebook"
-msgstr "Ni moč premakniti zabeležke v \"%s\" beležnico"
 
 #: ReactNativeClient/lib/models/Setting.js:66
 #, fuzzy
@@ -3667,6 +2927,12 @@ msgstr ""
 msgid "Note"
 msgstr "Beležnice"
 
+#: ReactNativeClient/lib/models/Setting.js:1298
+#: ReactNativeClient/lib/services/interop/InteropService.js:49
+#: ReactNativeClient/lib/services/interop/InteropService.js:59
+msgid "Markdown"
+msgstr "Sistem označevanja"
+
 #: ReactNativeClient/lib/models/Setting.js:1300
 msgid "Plugins"
 msgstr ""
@@ -3705,9 +2971,70 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Zabeležke in nastavitve so shranjene v: %s"
 
-#: ReactNativeClient/lib/SyncTargetDropbox.js:25
-msgid "Dropbox"
+#: ReactNativeClient/lib/models/Resource.js:317
+msgid "Not downloaded"
 msgstr ""
+
+#: ReactNativeClient/lib/models/Resource.js:318
+msgid "Downloading"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Resource.js:319
+msgid "Downloaded"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Resource.js:371
+#, fuzzy, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "Pripni datoteko"
+
+#: ReactNativeClient/lib/models/Resource.js:372
+#, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Tag.js:202
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Note.js:27
+#, fuzzy
+msgid "created date"
+msgstr "Ustvarjeno: %d."
+
+#: ReactNativeClient/lib/models/Note.js:28
+msgid "custom order"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Note.js:92
+msgid "This note does not have geolocation information."
+msgstr "Ta zabeležke nima geografske lokacije."
+
+#: ReactNativeClient/lib/models/Note.js:469
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Ni moč kopirati zabeležke v \"%s\" beležnico"
+
+#: ReactNativeClient/lib/models/Note.js:480
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Ni moč premakniti zabeležke v \"%s\" beležnico"
+
+#: ReactNativeClient/lib/models/BaseItem.js:723
+msgid "Encrypted"
+msgstr "Enkriptirano"
+
+#: ReactNativeClient/lib/models/BaseItem.js:783
+msgid "Encrypted items cannot be modified"
+msgstr "Enkriptirani predmeti ne morejo biti spremenjeni"
+
+#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (samo za testiranje)"
 
 #: ReactNativeClient/lib/BaseApplication.js:150
 #: ReactNativeClient/lib/BaseApplication.js:162
@@ -3725,18 +3052,813 @@ msgstr "Nepoznana oznaka: %s"
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
-msgid "AWS S3"
+#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:78
+#, fuzzy
+msgid "Clear alarm"
+msgstr "Nastavi alarm"
+
+#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:80
+#, fuzzy
+msgid "Save alarm"
+msgstr "Nastavi alarm"
+
+#: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+#, fuzzy
+msgid "Open"
+msgstr "Odpri..."
+
+#: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
+#: ReactNativeClient/lib/components/screens/Note.js:794
+msgid "Share"
 msgstr ""
+
+#: ReactNativeClient/lib/components/CameraView.js:158
+msgid "Permission to use camera"
+msgstr ""
+
+#: ReactNativeClient/lib/components/CameraView.js:159
+msgid "Your permission to use your camera is required."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "Izbriši te zabeležke?"
+
+#: ReactNativeClient/lib/components/screen-header.js:392
+msgid "Move to notebook..."
+msgstr "Premakni v beležnico..."
+
+#: ReactNativeClient/lib/components/screen-header.js:433
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Premakni %d zabeležk v beležnico \"%s\"?"
+
+#: ReactNativeClient/lib/components/screen-header.js:451
+msgid "Press to set the decryption password."
+msgstr "Klikni za nastavitev dekripcijskega gesla."
+
+#: ReactNativeClient/lib/components/screen-header.js:452
+#, fuzzy
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr "Nekateri premeti ne morejo biti sinhronizirani."
+
+#: ReactNativeClient/lib/components/screen-header.js:453
+msgid "The sync target needs to be upgraded. Press this banner to proceed."
+msgstr ""
+
+#: ReactNativeClient/lib/components/side-menu-content.js:126
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Beležnice"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:132
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Enkriptirani predmeti ne morejo biti spremenjeni"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:312
+#, fuzzy
+msgid "New Notebook"
+msgstr "Nova beležnica"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:316
+#: ReactNativeClient/lib/components/screens/config.js:549
+msgid "Configuration"
+msgstr "Nastavitve"
+
+#: ReactNativeClient/lib/components/note-list.js:97
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Ni aktivnih beležnic."
+
+#: ReactNativeClient/lib/components/note-list.js:101
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Ustvari novo beležnico."
+
+#: ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "Trenutno ni zabeležk. Ustvarite jo s klikom na (+) gumb."
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:46
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "V preklicu...Prosim počakajte."
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:48
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Preveri nastavitve sinhronizacije"
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "Aplikacija je bila uspešno avtorizirana."
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:33
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:39
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:49
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
+msgid "The master key has been upgraded successfully!"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:60
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:116
+#, fuzzy, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Preneseni predmeti: %d/%d."
+
+#: ReactNativeClient/lib/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Beležnica ne more biti shranjena: %s"
+
+#: ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Uredi beležnico"
+
+#: ReactNativeClient/lib/components/screens/folder.js:110
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Naslov beležnice:"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:110
+msgid "Login with OneDrive"
+msgstr "Prijavi se z OneDrive"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:121
+#: ReactNativeClient/lib/components/screens/log.js:109
+#: ReactNativeClient/lib/components/screens/status.js:144
+msgid "Refresh"
+msgstr "Osveži"
+
+#: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
+msgid "Sync Target Upgrade"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+#, fuzzy
+msgid "Login with Dropbox"
+msgstr "Prijavi se z OneDrive"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
+msgid "Enter code here"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Glavno geslo %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:120
+#: ReactNativeClient/lib/components/screens/Note.js:722
+#, javascript-format
+msgid "Created: %s"
+msgstr "Ustvarjeno: %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:122
+#: ReactNativeClient/lib/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "Geslo:"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "Geslo ne more biti prazno"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:139
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Geslo ne more biti prazno"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Omogočanje enkripcije pomeni, da bodo *vse* vaše zabeležke in priponke "
+"ponovno sinhronizirane in poslane enkriptirane do ciljne sinhronizacijske "
+"naprave. Obvezno si zapomnite geslo, saj bo zaradi varnostnih namenov to "
+"edini način, da dekriptirate vsebino beležnice. Da omogočite enkripcijo, "
+"vnesite geslo."
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "Omogoči"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr "Manjkajoča glavna gesla"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Glavna gesla s sledečimi ID so uporabljena za enkripcijo nekaterih vaših "
+"predmetov. Kakorkoli, aplikacija trenutno nima dostopa do njih. Verjetno je, "
+"da bodo sčasoma preneseni s sinhronizacijo."
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Disable encryption"
+msgstr "Onemogoči enkripcijo"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Enable encryption"
+msgstr "Omogoči enkripcijo"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:264
+#: ReactNativeClient/lib/components/screens/config.js:316
+msgid "Encryption Config"
+msgstr "Nastavite enkripcije"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/log.js:100
+#: ReactNativeClient/lib/components/screens/config.js:439
+msgid "Log"
+msgstr "Dnevnik"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "Prikaži vse"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Errors only"
+msgstr "Samo napake"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid "Warning"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:436
+#, fuzzy
+msgid "Tools"
+msgstr "Orodja"
+
+#: ReactNativeClient/lib/components/screens/config.js:438
+#, fuzzy
+msgid "Sync Status"
+msgstr "Status"
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+#, fuzzy
+msgid "Creating report..."
+msgstr "Ustvarjanje nove %s..."
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Export Debug Report"
+msgstr "Izvozi poročilo o napakah"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fixing search index..."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fix search index"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+#, fuzzy
+msgid "Exporting profile..."
+msgstr "Uvažanje zabeležk..."
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+#, fuzzy
+msgid "Export profile"
+msgstr "Joplin izvozna datoteka"
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:461
+#, fuzzy
+msgid "More information"
+msgstr "Nastavitve"
+
+#: ReactNativeClient/lib/components/screens/config.js:471
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:474
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:477
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:480
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:509
+msgid "Joplin website"
+msgstr "Joplin spletna stran"
+
+#: ReactNativeClient/lib/components/screens/config.js:537
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:543
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Za izbris: %d"
+
+#: ReactNativeClient/lib/components/screens/Note.js:98
+msgid "This note has been modified:"
+msgstr "Ta zabeležka je bila spremenjena:"
+
+#: ReactNativeClient/lib/components/screens/Note.js:98
+msgid "Save changes"
+msgstr "Shrani spremembe"
+
+#: ReactNativeClient/lib/components/screens/Note.js:98
+msgid "Discard changes"
+msgstr "Opusti spremembe"
+
+#: ReactNativeClient/lib/components/screens/Note.js:150
+#, javascript-format
+msgid "No item with ID %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:168
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:173
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:178
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:340
+msgid ""
+"In order to associate a geo-location with the note, the app needs your "
+"permission to access your location.\n"
+"\n"
+"You may turn off this option at any time in the Configuration screen."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:341
+msgid "Permission needed"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:583
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Nepodprt tip slike: %s"
+
+#: ReactNativeClient/lib/components/screens/Note.js:723
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Posodobljeno: %d."
+
+#: ReactNativeClient/lib/components/screens/Note.js:726
+msgid "View on map"
+msgstr "Prikaži na zemljevidu"
+
+#: ReactNativeClient/lib/components/screens/Note.js:733
+msgid "Go to source URL"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:762
+#, fuzzy
+msgid "Attach..."
+msgstr "Išči"
+
+#: ReactNativeClient/lib/components/screens/Note.js:773
+msgid "Attach photo"
+msgstr "Pripni fotografijo"
+
+#: ReactNativeClient/lib/components/screens/Note.js:774
+#, fuzzy
+msgid "Take photo"
+msgstr "Pripni fotografijo"
+
+#: ReactNativeClient/lib/components/screens/Note.js:775
+#, fuzzy
+msgid "Choose an option"
+msgstr "Pokaži napredne možnosti"
+
+#: ReactNativeClient/lib/components/screens/Note.js:808
+msgid "Convert to note"
+msgstr "Pretvori v zabeležko"
+
+#: ReactNativeClient/lib/components/screens/Note.js:808
+msgid "Convert to todo"
+msgstr "Pretvori v za narediti"
+
+#: ReactNativeClient/lib/components/screens/Note.js:822
+msgid "Properties"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:945
+#: ReactNativeClient/lib/components/screens/Note.js:975
+msgid "Add body"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/Note.js:1001
+#, fuzzy
+msgid "Add title"
+msgstr "Neimenovano"
+
+#: ReactNativeClient/lib/components/screens/search.js:160
+msgid "Search"
+msgstr "Išči"
+
+#: ReactNativeClient/lib/onedrive-api.js:367
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Ne gre osvežiti tokena: manjkajo podatki o avtentikaciji. Ponovno zaženite "
+"sinhronizacijo, da morda popravite težavo."
+
+#: ReactNativeClient/lib/Synchronizer.js:108
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Ustvarjeni lokalni predmeti: %d."
+
+#: ReactNativeClient/lib/Synchronizer.js:110
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Posodobljeni lokalni predmeti: %d."
+
+#: ReactNativeClient/lib/Synchronizer.js:112
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Ustvarjeni oddaljeni predmeti: %d."
+
+#: ReactNativeClient/lib/Synchronizer.js:114
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Posodobljeni oddaljeni predmeti: %d."
+
+#: ReactNativeClient/lib/Synchronizer.js:116
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Izbrisani lokalni predmeti: %d."
+
+#: ReactNativeClient/lib/Synchronizer.js:118
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Izbrisani oddaljeni predmeti: %d."
+
+#: ReactNativeClient/lib/Synchronizer.js:120
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Preneseni predmeti: %d/%d."
+
+#: ReactNativeClient/lib/Synchronizer.js:122
+msgid "Cancelling..."
+msgstr "V preklicu..."
+
+#: ReactNativeClient/lib/Synchronizer.js:124
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Dokončano: %s"
+
+#: ReactNativeClient/lib/Synchronizer.js:126
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Zadnja napaka: %s"
+
+#: ReactNativeClient/lib/Synchronizer.js:233
+msgid "Idle"
+msgstr "V mirovanju"
+
+#: ReactNativeClient/lib/Synchronizer.js:235
+msgid "In progress"
+msgstr "V postopku"
+
+#: ReactNativeClient/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "Sistem datotek"
 
 #: ReactNativeClient/lib/commands/historyForward.js:17
 msgid "Forward"
 msgstr ""
 
-#: ReactNativeClient/lib/shim-init-node.js:158
+#: ReactNativeClient/lib/versionInfo.js:10
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
+#: ReactNativeClient/lib/versionInfo.js:20
 #, javascript-format
-msgid "Cannot access %s"
-msgstr "Ne gre dostopati %s"
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: ReactNativeClient/lib/versionInfo.js:22
+#, fuzzy, javascript-format
+msgid "Client ID: %s"
+msgstr "Dokončano: %s"
+
+#: ReactNativeClient/lib/versionInfo.js:23
+#, fuzzy, javascript-format
+msgid "Sync Version: %s"
+msgstr "Enkripcija je: %s"
+
+#: ReactNativeClient/lib/versionInfo.js:24
+#, fuzzy, javascript-format
+msgid "Profile Version: %s"
+msgstr "Možne vrednosti: %s."
+
+#: ReactNativeClient/lib/versionInfo.js:25
+#, javascript-format
+msgid "Keychain Supported: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/services/RevisionService.js:221
+msgid "Restored Notes"
+msgstr ""
+
+#: ReactNativeClient/lib/services/interop/InteropService_Exporter_Jex.js:43
+msgid "There is no data to export."
+msgstr "Ni datotek za izvoz."
+
+#: ReactNativeClient/lib/services/interop/types.js:23
+msgid "File"
+msgstr "Datoteka"
+
+#: ReactNativeClient/lib/services/interop/types.js:23
+msgid "Directory"
+msgstr "Mesto datoteke"
+
+#: ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js:41
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Prosim navedite beležnico, kamor želite uvoziti zabeležke."
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:48
+#: ReactNativeClient/lib/services/interop/InteropService.js:57
+msgid "Joplin Export File"
+msgstr "Joplin izvozna datoteka"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:50
+#: ReactNativeClient/lib/services/interop/InteropService.js:58
+msgid "Joplin Export Directory"
+msgstr "Joplin izvozno mesto"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:51
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote izvozna datoteka"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:52
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
+msgstr "Evernote izvozna datoteka"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:60
+#, fuzzy
+msgid "HTML File"
+msgstr "Datoteka"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:61
+#, fuzzy
+msgid "HTML Directory"
+msgstr "Mesto datoteke"
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:127
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
+msgstr "Ne gre naložiti \"%s\" modula za format \"%s\""
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:152
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
+msgstr "Ne gre naložiti \"%s\" modula za format \"%s\""
+
+#: ReactNativeClient/lib/services/interop/InteropService.js:187
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Prosim navedite format uvoza za %s"
+
+#: ReactNativeClient/lib/services/KeymapService.js:240
+msgid "command"
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:240
+#: ReactNativeClient/lib/services/KeymapService.js:245
+#, javascript-format
+msgid "\"%s\" is missing the required \"%s\" property."
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:245
+#: ReactNativeClient/lib/services/KeymapService.js:252
+msgid "accelerator"
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:252
+#, fuzzy, javascript-format
+msgid "Invalid %s: %s."
+msgstr "Neveljaven odgovor: %s"
+
+#: ReactNativeClient/lib/services/KeymapService.js:270
+#, javascript-format
+msgid ""
+"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
+"unexpected behaviour."
+msgstr ""
+
+#: ReactNativeClient/lib/services/KeymapService.js:295
+#, javascript-format
+msgid "Accelerator \"%s\" is not valid."
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:121
+msgid "Items that cannot be synchronised"
+msgstr "Predmeti ne morejo biti sinhronizirani"
+
+#: ReactNativeClient/lib/services/report.js:123
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Ti predmeti bodo ostali na napravi, ampak ne bodo naloženi na "
+"sinhronizacijski cilj. Če želite najti te predmete, iščite po ali naslovu "
+"ali ID(je prikazan zgoraj v oklepajih)"
+
+#: ReactNativeClient/lib/services/report.js:130
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Beležnica ne more biti shranjena: %s"
+
+#: ReactNativeClient/lib/services/report.js:132
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Beležnica ne more biti shranjena: %s"
+
+#: ReactNativeClient/lib/services/report.js:142
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Predmeti ne morejo biti sinhronizirani"
+
+#: ReactNativeClient/lib/services/report.js:144
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:182
+#, fuzzy
+msgid "Attachments"
+msgstr "Pripni datoteko"
+
+#: ReactNativeClient/lib/services/report.js:190
+msgid "Downloaded and decrypted"
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:190
+#: ReactNativeClient/lib/services/report.js:191
+#: ReactNativeClient/lib/services/report.js:194
+#, fuzzy, javascript-format
+msgid "%s: %d"
+msgstr "%s: %s"
+
+#: ReactNativeClient/lib/services/report.js:191
+msgid "Downloaded and encrypted"
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:204
+#, fuzzy
+msgid "Attachments that could not be downloaded"
+msgstr "Beležnica ne more biti shranjena: %s"
+
+#: ReactNativeClient/lib/services/report.js:209
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: ReactNativeClient/lib/services/report.js:222
+msgid "Sync status (synced items / total items)"
+msgstr "Status sinhronizacije(sinhronizirani predmeti / vse datoteke)"
+
+#: ReactNativeClient/lib/services/report.js:226
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: ReactNativeClient/lib/services/report.js:229
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Skupno: %d/%d"
+
+#: ReactNativeClient/lib/services/report.js:231
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "V konfliktu: %d"
+
+#: ReactNativeClient/lib/services/report.js:232
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Za izbris: %d"
+
+#: ReactNativeClient/lib/services/report.js:236
+msgid "Folders"
+msgstr "Datoteke"
+
+#: ReactNativeClient/lib/services/report.js:244
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d zabeležke"
+
+#: ReactNativeClient/lib/services/report.js:252
+msgid "Coming alarms"
+msgstr "Prihajajoči alarmi"
+
+#: ReactNativeClient/lib/services/report.js:257
+#, javascript-format
+msgid "On %s: %s"
+msgstr "Vključeno %s: %s"
 
 #~ msgid "Exit"
 #~ msgstr "Izhod"
@@ -3749,32 +3871,6 @@ msgstr "Ne gre dostopati %s"
 
 #~ msgid "Attach any file"
 #~ msgstr "Pripni katerokoli datoteko"
-
-#, fuzzy
-#~ msgid "New sub-notebook"
-#~ msgstr "Nova beležnica"
-
-#, fuzzy
-#~ msgid "Notebook properties"
-#~ msgstr "Naslov beležnice:"
-
-#, fuzzy
-#~ msgid "This file could not be opened: %s"
-#~ msgstr "Beležnica ne more biti shranjena: %s"
-
-#, fuzzy
-#~ msgid "Watching..."
-#~ msgstr "V preklicu..."
-
-#, fuzzy
-#~ msgid "Content Properties"
-#~ msgstr "Naslov beležnice:"
-
-#~ msgid "Please create a notebook first."
-#~ msgstr "Najprej prosim ustvarite beležnico."
-
-#~ msgid "Please create a notebook first"
-#~ msgstr "Najprej prosim ustvarite beležnico"
 
 #~ msgid "Unknown log level: %s"
 #~ msgstr "Nepoznana stopnja zapisovanja delovanja programa: %s"
