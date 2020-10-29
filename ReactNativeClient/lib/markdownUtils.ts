@@ -30,6 +30,13 @@ const markdownUtils = {
 		return url;
 	},
 
+	unescapeLinkUrl(url:string) {
+		url = url.replace(/%28/g, '(');
+		url = url.replace(/%29/g, ')');
+		url = url.replace(/%20/g, ' ');
+		return url;
+	},
+
 	prependBaseUrl(md:string, baseUrl:string) {
 		// eslint-disable-next-line no-useless-escape
 		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match:any, before:string, url:string, after:string) => {
@@ -37,6 +44,7 @@ const markdownUtils = {
 		});
 	},
 
+	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
 	extractImageUrls(md:string) {
 		const markdownIt = new MarkdownIt();
 		setupLinkify(markdownIt); // Necessary to support file:/// links
