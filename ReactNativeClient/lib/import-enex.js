@@ -474,13 +474,13 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				note.latitude = noteAttributes.latitude;
 				note.longitude = noteAttributes.longitude;
 				note.altitude = noteAttributes.altitude;
-				note.author = noteAttributes.author;
+				note.author = noteAttributes.author ? noteAttributes.author.trim() : '';
 				note.is_todo = noteAttributes['reminder-order'] !== '0' && !!noteAttributes['reminder-order'];
 				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], true);
 				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], true);
 				note.order = dateToTimestamp(noteAttributes['reminder-order'], true);
-				note.source = noteAttributes.source ? `evernote.${noteAttributes.source}` : 'evernote';
-				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'] : '';
+				note.source = noteAttributes.source ? `evernote.${noteAttributes.source.trim()}` : 'evernote';
+				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'].trim() : '';
 
 				noteAttributes = null;
 			} else if (n == 'resource') {
@@ -488,9 +488,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					id: noteResource.id,
 					dataFilePath: noteResource.dataFilePath,
 					dataEncoding: noteResource.dataEncoding,
-					mime: noteResource.mime,
-					title: noteResource.filename ? noteResource.filename : '',
-					filename: noteResource.filename ? noteResource.filename : '',
+					mime: noteResource.mime ? noteResource.mime.trim() : '',
+					title: noteResource.filename ? noteResource.filename.trim() : '',
+					filename: noteResource.filename ? noteResource.filename.trim() : '',
 				});
 
 				noteResource = null;

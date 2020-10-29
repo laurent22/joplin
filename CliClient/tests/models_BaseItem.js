@@ -104,4 +104,14 @@ describe('models_BaseItem', function() {
 
 		expect(noteAfter).toEqual(noteBefore);
 	}));
+
+	it('should serialize and unserialize properties that contain new lines', asyncTest(async () => {
+		const note = await Note.save({ title: 'note', source_url: '\nhttps://joplinapp.org/\n' });
+
+		const noteBefore = await Note.load(note.id);
+		const serialized = await Note.serialize(noteBefore);
+		const noteAfter = await Note.unserialize(serialized);
+
+		expect(noteAfter).toEqual(noteBefore);
+	}));
 });

@@ -13,6 +13,43 @@ const http = require('http');
 const https = require('https');
 const toRelative = require('relative');
 const timers = require('timers');
+const zlib = require('zlib');
+
+function fileExists(filePath) {
+	try {
+		return fs.statSync(filePath).isFile();
+	} catch (err) {
+		return false;
+	}
+}
+
+const gunzipFile = function(source, destination) {
+	if (!fileExists(source)) {
+		throw new Error(`No such file: ${source}`);
+	}
+
+	return new Promise((resolve, reject) => {
+		// prepare streams
+		const src = fs.createReadStream(source);
+		const dest = fs.createWriteStream(destination);
+
+		// extract the archive
+		src.pipe(zlib.createGunzip()).pipe(dest);
+
+		// callback on extract completion
+		dest.on('close', function() {
+			resolve();
+		});
+
+		src.on('error', () => {
+			reject();
+		});
+
+		dest.on('error', () => {
+			reject();
+		});
+	});
+};
 
 function shimInit() {
 	shim.fsDriver = () => {
@@ -365,9 +402,25 @@ function shimInit() {
 					const request = http.request(requestOptions, function(response) {
 						response.pipe(file);
 
+						const isGzipped = response.headers['content-encoding'] === 'gzip';
+
 						file.on('finish', function() {
-							file.close(() => {
-								resolve(makeResponse(response));
+							file.close(async () => {
+								if (isGzipped) {
+									const gzipFilePath = `${filePath}.gzip`;
+									await shim.fsDriver().move(filePath, gzipFilePath);
+
+									try {
+										await gunzipFile(gzipFilePath, filePath);
+										resolve(makeResponse(response));
+									} catch (error) {
+										cleanUpOnError(error);
+									}
+
+									shim.fsDriver().remove(gzipFilePath);
+								} else {
+									resolve(makeResponse(response));
+								}
 							});
 						});
 					});
