@@ -182,6 +182,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 								}
 							}
 						},
+						textMark: () => wrapSelectionWithStrings('==', '==', _('marked text')),
 						insertText: (value: any) => editorRef.current.insertAtCursor(value),
 						attachFile: async () => {
 							const cursor = editorRef.current.getCursor();
@@ -659,4 +660,3 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 }
 
 export default forwardRef(CodeMirror);
-
