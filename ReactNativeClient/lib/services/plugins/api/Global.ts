@@ -1,11 +1,7 @@
 import Plugin from '../Plugin';
 import Joplin from './Joplin';
 import Logger from 'lib/Logger';
-
-/**
- * @ignore
- */
-const builtinModules = require('builtin-modules');
+import shim from 'lib/shim';
 
 /**
  * @ignore
@@ -43,7 +39,7 @@ export default class Global {
 
 	private requireWhiteList():string[] {
 		if (!this.requireWhiteList_) {
-			this.requireWhiteList_ = builtinModules.slice();
+			this.requireWhiteList_ = shim.builtinModules().slice();
 			this.requireWhiteList_.push('fs-extra');
 		}
 		return this.requireWhiteList_;
@@ -55,7 +51,7 @@ export default class Global {
 
 	require(filePath:string):any {
 		if (!this.requireWhiteList().includes(filePath)) throw new Error(`Path not allowed: ${filePath}`);
-		return require(filePath);
+		return shim.require(filePath);
 	}
 
 	// To get webpack to work with Node module we need to set the parameter `target: "node"`, however

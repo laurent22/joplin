@@ -19,14 +19,21 @@ const md5 = require('md5');
 const HtmlToMd = require('lib/HtmlToMd');
 const urlUtils = require('lib/urlUtils.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
-const { netUtils } = require('lib/net-utils');
+// const { netUtils } = require('lib/net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
-const uri2path = require('file-uri-to-path');
+// const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } = require('./errors');
+
+function mimeTypeFromHeaders(headers:any) {
+	if (!headers || !headers['content-type']) return null;
+
+	const splitted = headers['content-type'].split(';');
+	return splitted[0].trim().toLowerCase();
+};
 
 export default class Api {
 
@@ -510,38 +517,40 @@ export default class Api {
 
 		if (requestNote.body_html) {
 			if (requestNote.convert_to === 'html') {
-				const style = await this.buildNoteStyleSheet_(requestNote.stylesheets);
-				const minify = require('html-minifier').minify;
+				// const style = await this.buildNoteStyleSheet_(requestNote.stylesheets);
+				// const minify = require('html-minifier').minify;
 
-				const minifyOptions = {
-					// Remove all spaces and, especially, newlines from tag attributes, as that would
-					// break the rendering.
-					customAttrCollapse: /.*/,
-					// Need to remove all whitespaces because whitespace at a beginning of a line
-					// means a code block in Markdown.
-					collapseWhitespace: true,
-					minifyCSS: true,
-					maxLineLength: 300,
-				};
+				// const minifyOptions = {
+				// 	// Remove all spaces and, especially, newlines from tag attributes, as that would
+				// 	// break the rendering.
+				// 	customAttrCollapse: /.*/,
+				// 	// Need to remove all whitespaces because whitespace at a beginning of a line
+				// 	// means a code block in Markdown.
+				// 	collapseWhitespace: true,
+				// 	minifyCSS: true,
+				// 	maxLineLength: 300,
+				// };
 
-				const uglifycss = require('uglifycss');
-				const styleString = uglifycss.processString(style.join('\n'), {
-					// Need to set a max length because Ace Editor takes forever
-					// to display notes with long lines.
-					maxLineLen: 200,
-				});
+				// // const uglifycss = require('uglifycss');
+				// // const styleString = uglifycss.processString(style.join('\n'), {
+				// // 	// Need to set a max length because Ace Editor takes forever
+				// // 	// to display notes with long lines.
+				// // 	maxLineLen: 200,
+				// // });
 
-				const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
-				let minifiedHtml = '';
-				try {
-					minifiedHtml = minify(requestNote.body_html, minifyOptions);
-				} catch (error) {
-					console.warn('Could not minify HTML - using non-minified HTML instead', error);
-					minifiedHtml = requestNote.body_html;
-				}
-				output.body = styleTag + minifiedHtml;
-				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
-				output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_HTML;
+				// const styleString = style.join('\n'); // TODO
+
+				// const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
+				// let minifiedHtml = '';
+				// try {
+				// 	minifiedHtml = minify(requestNote.body_html, minifyOptions);
+				// } catch (error) {
+				// 	console.warn('Could not minify HTML - using non-minified HTML instead', error);
+				// 	minifiedHtml = requestNote.body_html;
+				// }
+				// output.body = styleTag + minifiedHtml;
+				// output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
+				// output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_HTML;
 			} else {
 				// Convert to Markdown
 				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
@@ -592,7 +601,7 @@ export default class Api {
 	}
 
 	async tryToGuessImageExtFromMimeType_(response:any, imagePath:string) {
-		const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
+		const mimeType = mimeTypeFromHeaders(response.headers);
 		if (!mimeType) return imagePath;
 
 		const newExt = mimeUtils.toFileExtension(mimeType);
@@ -652,7 +661,7 @@ export default class Api {
 			} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
 				// Can't think of any reason to disallow this at this point
 				// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
-				const localPath = uri2path(url);
+				const localPath = url; // TODO: uri2path(url);
 				await shim.fsDriver().copy(localPath, imagePath);
 			} else {
 				const response = await shim.fetchBlob(url, { path: imagePath, maxRetry: 1 });

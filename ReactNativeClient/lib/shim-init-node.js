@@ -524,6 +524,14 @@ function shimInit() {
 		return timers.clearInterval(id);
 	};
 
+	shim.require = (filePath) => {
+		return require(filePath);
+	};
+
+	shim.builtinModules = () => {
+		return require('builtin-modules');
+	};
+
 }
 
 module.exports = { shimInit };

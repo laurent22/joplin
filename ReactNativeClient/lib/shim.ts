@@ -273,6 +273,15 @@ const shim = {
 	clearInterval: (_id:any) => {
 		throw new Error('Not implemented');
 	},
+
+	require: (_filePath:string):any => {
+		// NOOP by default
+		return {};
+	},
+
+	builtinModules: ():string[] => {
+		return [];
+	},
 };
 
 export default shim;

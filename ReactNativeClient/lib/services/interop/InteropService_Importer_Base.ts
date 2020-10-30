@@ -1,5 +1,6 @@
 /* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: 0 */
 
+import shim from 'lib/shim';
 import { ImportExportResult } from './types';
 
 const Setting = require('lib/models/Setting').default;
@@ -28,7 +29,7 @@ export default class InteropService_Importer_Base {
 	async temporaryDirectory_(createIt:boolean) {
 		const md5 = require('md5');
 		const tempDir = `${Setting.value('tempDir')}/${md5(Math.random() + Date.now())}`;
-		if (createIt) await require('fs-extra').mkdirp(tempDir);
+		if (createIt) await shim.fsDriver().mkdir(tempDir);
 		return tempDir;
 	}
 }
