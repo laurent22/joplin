@@ -44,7 +44,6 @@ const mapStateToProps = (state: AppState) => {
 		'-',
 		'textLink',
 		'textCode',
-		'textMark',
 		'attachFile',
 		'-',
 		'textBulletedList',

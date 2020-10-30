@@ -49,11 +49,6 @@ const declarations:CommandDeclaration[] = [
 		iconName: 'icon-code',
 	},
 	{
-		name: 'textMark',
-		label: () => _('Mark'),
-		iconName: 'fas fa-highlighter',
-	},
-	{
 		name: 'attachFile',
 		label: () => _('Attach file'),
 		iconName: 'icon-attachment',
