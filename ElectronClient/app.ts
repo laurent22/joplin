@@ -14,6 +14,7 @@ import Setting from 'lib/models/Setting';
 import actionApi from 'lib/services/rest/actionApi.desktop';
 import BaseApplication from 'lib/BaseApplication';
 import { _, setLocale } from 'lib/locale';
+import menuCommandNames from './gui/menuCommandNames';
 
 require('app-module-path').addPath(__dirname);
 
@@ -526,7 +527,9 @@ class Application extends BaseApplication {
 		}
 
 		const keymapService = KeymapService.instance();
-		keymapService.initialize(CommandService.instance().commandNames(true));
+		// We only add the commands that appear in the menu because only
+		// those can have a shortcut associated with them.
+		keymapService.initialize(menuCommandNames());
 
 		try {
 			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
@@ -534,9 +537,10 @@ class Application extends BaseApplication {
 			reg.logger().error(error);
 		}
 
-		// Since the settings need to be loaded before the store is created, it will never
-		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
-		// initialised. So we manually call dispatchUpdateAll() to force an update.
+		// Since the settings need to be loaded before the store is
+		// created, it will never receive the SETTING_UPDATE_ALL even,
+		// which mean state.settings will not be initialised. So we
+		// manually call dispatchUpdateAll() to force an update.
 		Setting.dispatchUpdateAll();
 
 		await FoldersScreenUtils.refreshFolders();
