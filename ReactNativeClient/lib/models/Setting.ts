@@ -3,7 +3,7 @@ import { _, supportedLocalesToLanguages, defaultLocale } from 'lib/locale';
 const BaseModel = require('lib/BaseModel').default;
 const { Database } = require('lib/database.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
@@ -565,11 +565,11 @@ class Setting extends BaseModel {
 			},
 
 			// Deprecated - use markdown.plugin.*
-			'markdown.softbreaks': { value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.softbreaks': { value: true, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
 			'markdown.typographer': { value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
 			// Deprecated
 
-			'markdown.plugin.softbreaks': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
+			'markdown.plugin.softbreaks': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
 			'markdown.plugin.typographer': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
 			'markdown.plugin.katex': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
 			'markdown.plugin.fountain': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
@@ -834,6 +834,9 @@ class Setting extends BaseModel {
 
 			'camera.type': { value: 0, type: SettingItemType.Int, public: false, appTypes: ['mobile'] },
 			'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: ['mobile'] },
+
+			'spellChecker.enabled': { value: true, type: SettingItemType.Bool, public: false },
+			'spellChecker.language': { value: '', type: SettingItemType.String, public: false },
 
 			windowContentZoomFactor: {
 				value: 100,

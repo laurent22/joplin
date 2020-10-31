@@ -2,7 +2,7 @@ import paginationToSql from './models/utils/paginationToSql';
 
 const { Database } = require('lib/database.js');
 const uuid = require('lib/uuid').default;
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum

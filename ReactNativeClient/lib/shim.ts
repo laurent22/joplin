@@ -120,7 +120,7 @@ const shim = {
 	},
 
 	fetchWithRetry: async function(fetchFn:Function, options:any = null) {
-		const { time } = require('lib/time-utils.js');
+		const time = require('lib/time').default;
 
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms

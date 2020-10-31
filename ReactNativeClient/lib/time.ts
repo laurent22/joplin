@@ -1,18 +1,17 @@
+import shim from 'lib/shim';
 const moment = require('moment');
-const shim = require('lib/shim').default;
 
 class Time {
-	constructor() {
-		this.dateFormat_ = 'DD/MM/YYYY';
-		this.timeFormat_ = 'HH:mm';
-		this.locale_ = 'en-us';
-	}
+
+	private dateFormat_:string = 'DD/MM/YYYY';
+	private timeFormat_:string = 'HH:mm';
+	private locale_:string = 'en-us';
 
 	locale() {
 		return this.locale_;
 	}
 
-	setLocale(v) {
+	setLocale(v:string) {
 		moment.locale(v);
 		this.locale_ = v;
 	}
@@ -21,7 +20,7 @@ class Time {
 		return this.dateFormat_;
 	}
 
-	setDateFormat(v) {
+	setDateFormat(v:string) {
 		this.dateFormat_ = v;
 	}
 
@@ -29,7 +28,7 @@ class Time {
 		return this.timeFormat_;
 	}
 
-	setTimeFormat(v) {
+	setTimeFormat(v:string) {
 		this.timeFormat_ = v;
 	}
 
@@ -37,7 +36,7 @@ class Time {
 		return this.timeFormat() ? this.timeFormat().includes('HH') : true;
 	}
 
-	formatDateToLocal(date, format = null) {
+	formatDateToLocal(date:Date, format:string = null) {
 		return this.formatMsToLocal(date.getTime(), format);
 	}
 
@@ -53,15 +52,15 @@ class Time {
 		return Date.now();
 	}
 
-	unixMsToObject(ms) {
+	unixMsToObject(ms:number) {
 		return new Date(ms);
 	}
 
-	unixMsToS(ms) {
+	unixMsToS(ms:number) {
 		return Math.floor(ms / 1000);
 	}
 
-	unixMsToIso(ms) {
+	unixMsToIso(ms:number) {
 		return (
 			`${moment
 				.unix(ms / 1000)
@@ -70,7 +69,7 @@ class Time {
 		);
 	}
 
-	unixMsToIsoSec(ms) {
+	unixMsToIsoSec(ms:number) {
 		return (
 			`${moment
 				.unix(ms / 1000)
@@ -79,20 +78,20 @@ class Time {
 		);
 	}
 
-	unixMsToLocalDateTime(ms) {
+	unixMsToLocalDateTime(ms:number) {
 		return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
 	}
 
-	unixMsToLocalHms(ms) {
+	unixMsToLocalHms(ms:number) {
 		return moment.unix(ms / 1000).format('HH:mm:ss');
 	}
 
-	formatMsToLocal(ms, format = null) {
+	formatMsToLocal(ms:number, format:string = null) {
 		if (format === null) format = this.dateTimeFormat();
 		return moment(ms).format(format);
 	}
 
-	formatLocalToMs(localDateTime, format = null) {
+	formatLocalToMs(localDateTime:any, format:string = null) {
 		if (format === null) format = this.dateTimeFormat();
 		const m = moment(localDateTime, format);
 		if (m.isValid()) return m.toDate().getTime();
@@ -100,7 +99,7 @@ class Time {
 	}
 
 	// Mostly used as a utility function for the DateTime Electron component
-	anythingToDateTime(o, defaultValue = null) {
+	anythingToDateTime(o:any, defaultValue:Date = null) {
 		if (o && o.toDate) return o.toDate();
 		if (!o) return defaultValue;
 		let m = moment(o, time.dateTimeFormat());
@@ -109,7 +108,7 @@ class Time {
 		return m.isValid() ? m.toDate() : defaultValue;
 	}
 
-	msleep(ms) {
+	msleep(ms:number) {
 		return new Promise((resolve) => {
 			shim.setTimeout(() => {
 				resolve();
@@ -117,17 +116,17 @@ class Time {
 		});
 	}
 
-	sleep(seconds) {
+	sleep(seconds:number) {
 		return this.msleep(seconds * 1000);
 	}
 
 
-	goBackInTime(startDate, n, period) {
+	goBackInTime(startDate:any, n:number, period:any) {
 		// period is a string (eg. "day", "week", "month", "year" ), n is an integer
 		return moment(startDate).startOf(period).subtract(n, period).format('x');
 	}
 
-	goForwardInTime(startDate, n, period) {
+	goForwardInTime(startDate:any, n:number, period:any) {
 		return moment(startDate).startOf(period).add(n, period).format('x');
 	}
 
@@ -135,4 +134,4 @@ class Time {
 
 const time = new Time();
 
-module.exports = { time };
+export default time;

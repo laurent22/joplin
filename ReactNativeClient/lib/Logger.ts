@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 
 export enum TargetType {

@@ -14,6 +14,7 @@ import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from 'lib/locale';
 import { MenuItem, MenuItemLocation } from 'lib/services/plugins/api/types';
 import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
+import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
 
 const { connect } = require('react-redux');
@@ -85,6 +86,8 @@ interface Props {
 	showCompletedTodos: boolean,
 	pluginMenuItems: any[],
 	pluginMenus: any[],
+	['spellChecker.enabled']: boolean,
+	['spellChecker.language']: string,
 }
 
 const commandNames:string[] = menuCommandNames();
@@ -343,6 +346,8 @@ function useMenu(props:Props) {
 			toolsItems = toolsItems.concat(toolsItemsWindowsLinux);
 		}
 		toolsItems = toolsItems.concat(toolsItemsAll);
+
+		toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.language'], props['spellChecker.enabled']));
 
 		function _checkForUpdates() {
 			bridge().checkForUpdates(false, bridge().window(), `${Setting.value('profileDir')}/log-autoupdater.txt`, { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
@@ -743,7 +748,7 @@ function useMenu(props:Props) {
 		} else {
 			setMenu(Menu.buildFromTemplate(template));
 		}
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime]);
+	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled']]);
 
 	useEffect(() => {
 		const whenClauseContext = CommandService.instance().currentWhenClauseContext();
@@ -838,6 +843,8 @@ const mapStateToProps = (state:AppState) => {
 		showCompletedTodos: state.settings.showCompletedTodos,
 		pluginMenuItems: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menuItem') }, 'menuBar.pluginMenuItems'),
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
+		['spellChecker.language']: state.settings['spellChecker.language'],
+		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 	};
 };
 

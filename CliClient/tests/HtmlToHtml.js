@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const os = require('os');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { filename } = require('lib/path-utils');
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');

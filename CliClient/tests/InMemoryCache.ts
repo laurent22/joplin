@@ -1,5 +1,5 @@
 import InMemoryCache from 'lib/InMemoryCache';
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 
 describe('InMemoryCache', function() {
 

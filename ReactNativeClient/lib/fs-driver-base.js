@@ -1,5 +1,5 @@
 const { filename, fileExtension } = require('lib/path-utils');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const Setting = require('lib/models/Setting').default;
 const md5 = require('md5');
 

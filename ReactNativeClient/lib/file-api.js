@@ -4,7 +4,7 @@ const shim = require('lib/shim').default;
 const BaseItem = require('lib/models/BaseItem.js');
 const JoplinError = require('lib/JoplinError');
 const ArrayUtils = require('lib/ArrayUtils');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 

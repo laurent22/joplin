@@ -27,7 +27,7 @@ const bridge = require('electron').remote.require('./bridge').default;
 const PluginManager = require('lib/services/PluginManager');
 const EncryptionService = require('lib/services/EncryptionService');
 const ipcRenderer = require('electron').ipcRenderer;
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const styled = require('styled-components').default;
 
 const StyledUserWebviewDialogContainer = styled.div`

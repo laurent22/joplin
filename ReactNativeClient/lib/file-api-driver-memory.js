@@ -1,4 +1,4 @@
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const fs = require('fs-extra');
 const { basicDelta } = require('lib/file-api');
 

@@ -5,7 +5,7 @@ const { View, Button, Text } = require('react-native');
 
 const PopupDialog = require('react-native-popup-dialog').default;
 const { DialogTitle, DialogButton } = require('react-native-popup-dialog');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const DateTimePickerModal = require('react-native-modal-datetime-picker').default;
 
 export default class SelectDateTimeDialog extends React.PureComponent<any, any> {

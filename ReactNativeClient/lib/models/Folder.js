@@ -1,5 +1,5 @@
 const BaseModel = require('lib/BaseModel').default;
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const Note = require('lib/models/Note.js');
 const { Database } = require('lib/database.js');
 const { _ } = require('lib/locale');

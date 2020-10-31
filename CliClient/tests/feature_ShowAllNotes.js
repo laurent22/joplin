@@ -5,7 +5,7 @@ const Setting = require('lib/models/Setting').default;
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids.js');
 
 //

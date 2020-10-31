@@ -3,7 +3,7 @@ const { app } = require('./app.js');
 const { _ } = require('lib/locale');
 const BaseModel = require('lib/BaseModel').default;
 const Note = require('lib/models/Note.js');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 
 class Command extends BaseCommand {
 	usage() {

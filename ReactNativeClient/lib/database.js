@@ -1,5 +1,5 @@
 const Logger = require('lib/Logger').default;
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const Mutex = require('async-mutex').Mutex;
 const shim = require('lib/shim').default;
 
