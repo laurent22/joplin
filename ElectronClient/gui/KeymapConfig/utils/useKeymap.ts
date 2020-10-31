@@ -1,10 +1,21 @@
 import { useState, useEffect } from 'react';
 import KeymapService, { KeymapItem } from 'lib/services/KeymapService';
+import getLabel from './getLabel';
 
 const keymapService = KeymapService.instance();
 
 // This custom hook provides a synchronized snapshot of the keymap residing at KeymapService
 // All the logic regarding altering and interacting with the keymap is isolated from the components
+
+function allKeymapItems() {
+	const output = keymapService.getKeymapItems().slice();
+
+	output.sort((a:KeymapItem, b:KeymapItem) => {
+		return getLabel(a.command).toLocaleLowerCase() < getLabel(b.command).toLocaleLowerCase() ? -1 : +1;
+	});
+
+	return output;
+}
 
 const useKeymap = (): [
 	KeymapItem[],
@@ -13,7 +24,7 @@ const useKeymap = (): [
 	(commandName: string, accelerator: string) => void,
 	(commandName: string) => void
 ] => {
-	const [keymapItems, setKeymapItems] = useState<KeymapItem[]>(() => keymapService.getKeymapItems());
+	const [keymapItems, setKeymapItems] = useState<KeymapItem[]>(() => allKeymapItems());
 	const [keymapError, setKeymapError] = useState<Error>(null);
 	const [mustSave, setMustSave] = useState(false);
 
@@ -42,7 +53,7 @@ const useKeymap = (): [
 
 	const overrideKeymapItems = (customKeymapItems: KeymapItem[]) => {
 		const oldKeymapItems = [...customKeymapItems];
-		keymapService.initialize(); // Start with a fresh keymap
+		keymapService.resetKeymap(); // Start with a fresh keymap
 
 		try {
 			// First, try to update the in-memory keymap of KeymapService

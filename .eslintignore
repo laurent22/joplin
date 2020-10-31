@@ -127,6 +127,7 @@ ElectronClient/gui/MainScreen/commands/toggleSideBar.js
 ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js
 ElectronClient/gui/MainScreen/MainScreen.js
 ElectronClient/gui/MenuBar.js
+ElectronClient/gui/menuCommandNames.js
 ElectronClient/gui/MultiNoteActions.js
 ElectronClient/gui/NoteContentPropertiesDialog.js
 ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js
