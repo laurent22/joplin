@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -315,8 +317,9 @@ msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "Synchroniseren naar opgegeven doel (standaard is dit sync.target)"
 
 #: CliClient/app/command-sync.js:35
+#, fuzzy
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Sync target updaten naar de nieuwste versie."
 
 #: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
@@ -818,6 +821,8 @@ msgstr "Annuleren"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"De applicatie zal nu afsluiten. Gelieve het weer op te starten om het proces "
+"te voltooien."
 
 #: ElectronClient/plugins/GotoAnything.min.js:459
 msgid ""
@@ -835,15 +840,14 @@ msgid "Goto Anything..."
 msgstr "Ga naar Alles..."
 
 #: ElectronClient/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
 "Typ de titel van een notitie of een deel van de inhoud om er naartoe te "
-"springen. Of typ # gevolgd door de naam van een label, of @ gevolgd door de "
-"naam van een notitieboek."
+"springen. Typ # gevolgd door de naam van een label, @ gevolgd door de naam "
+"van een notitieboek, of : om te zoeken op commando's."
 
 #: ElectronClient/plugins/GotoAnything.js:463
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
@@ -884,9 +888,8 @@ msgid "New version: %s"
 msgstr "Nieuwe versie: %s"
 
 #: ElectronClient/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "Gedownload"
+msgstr "Downloaden"
 
 #: ElectronClient/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -1235,13 +1238,15 @@ msgstr "Bezig met creëren van nieuw(e) %s..."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:379
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "De volgende bijlagen worden gecontroleerd op wijzigingen:"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:382
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
+"De bijlagen worden niet meer gecontroleerd wanneer je naar een andere "
+"notitie schakelt."
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:387
 #: ElectronClient/gui/NoteText.min.js:1656
@@ -1358,9 +1363,9 @@ msgstr "Eigenschappen van notitie"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: ReactNativeClient/lib/services/KeymapService.js:144
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Fout"
+msgstr "Fout: %s"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: ElectronClient/gui/Root.min.js:91 ElectronClient/gui/MenuBar.js:391
@@ -1370,12 +1375,11 @@ msgstr "Importeren"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "Commando"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Toetsenbordmodus"
+msgstr "Sneltoets"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
 #: ElectronClient/gui/MenuBar.js:178 ElectronClient/app.js:347
@@ -1398,9 +1402,8 @@ msgid "Website and documentation"
 msgstr "Website en documentatie"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Over Joplin"
+msgstr "Joplin verbergen"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
 #: ElectronClient/gui/MenuBar.js:428
@@ -1408,9 +1411,8 @@ msgid "Close Window"
 msgstr "Venster afsluiten"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "Voorkeuren..."
+msgstr "Voorkeuren"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
 #: ElectronClient/gui/Root.min.js:92 ElectronClient/gui/MenuBar.js:304
@@ -1420,13 +1422,15 @@ msgstr "Opties"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Druk op de sneltoetsen"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Druk op de sneltoetsen en dan op ENTER. Of, druk op backspace om de "
+"sneltoets te wissen."
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:96
@@ -1436,17 +1440,20 @@ msgstr "Opslaan"
 
 #: ElectronClient/gui/MainScreen/MainScreen.js:418
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:301
+#, fuzzy
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"De sync target moet worden geüpdatet voordat Joplin kan synchroniseren. Het "
+"kan een paar minuten duren en de app moet opnieuw opgestart worden. Om door "
+"te gaan, klik op de link."
 
 #: ElectronClient/gui/MainScreen/MainScreen.js:420
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:306
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "Hoofdsleutels die moeten worden bijgewerkt"
+msgstr "Opnieuw opstarten en bijwerken"
 
 #: ElectronClient/gui/MainScreen/MainScreen.js:424
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:313
@@ -2268,18 +2275,16 @@ msgstr[0] "Kopieer Deelbare Link"
 msgstr[1] "Kopieer Deelbare Links"
 
 #: ElectronClient/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "Klik om extern bewerken te stoppen"
+msgstr "Extern bewerken in- of uitschakelen"
 
 #: ElectronClient/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: ElectronClient/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Pad kopiëren naar klembord"
+msgstr "Ontwikkelaarsmodus commando kopiëren naar klembord"
 
 #: ElectronClient/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -2291,9 +2296,8 @@ msgid "Error opening note in editor: %s"
 msgstr "Fout bij openen van notitie in editor: %s"
 
 #: ElectronClient/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "Open sjabloon map"
+msgstr "Open profiel map"
 
 #: ElectronClient/app.js:345
 #, javascript-format
@@ -2339,7 +2343,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2483,19 +2487,19 @@ msgstr "WebDAV-wachtwoord"
 
 #: ReactNativeClient/lib/models/Setting.js:215
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:226
 msgid "AWS S3 URL"
-msgstr ""
+msgstr "AWS S3 URL"
 
 #: ReactNativeClient/lib/models/Setting.js:237
 msgid "AWS key"
-msgstr ""
+msgstr "AWS key"
 
 #: ReactNativeClient/lib/models/Setting.js:247
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS secret"
 
 #: ReactNativeClient/lib/models/Setting.js:259
 msgid "Attachment download behaviour"
@@ -2955,9 +2959,8 @@ msgid "Web Clipper"
 msgstr "Webclipper"
 
 #: ReactNativeClient/lib/models/Setting.js:1310
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Toetsenbordmodus"
+msgstr "Sneltoetsen"
 
 #: ReactNativeClient/lib/models/Setting.js:1317
 msgid ""
@@ -3074,9 +3077,8 @@ msgid "Save alarm"
 msgstr "Alarm opslaan"
 
 #: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "Openen..."
+msgstr "Openen"
 
 #: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 #: ReactNativeClient/lib/components/screens/Note.js:794
@@ -3114,8 +3116,9 @@ msgstr ""
 "Sommige items kunnen niet worden gesynchroniseerd. Klik voor meer informatie."
 
 #: ReactNativeClient/lib/components/screen-header.js:453
+#, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr ""
+msgstr "De sync target moet worden geüpdatet. Druk hier om door te gaan."
 
 #: ReactNativeClient/lib/components/side-menu-content.js:126
 #, javascript-format
@@ -3239,8 +3242,9 @@ msgid "Refresh"
 msgstr "Verversen"
 
 #: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
+#, fuzzy
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Sync target update"
 
 #: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -3484,11 +3488,14 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Om een geolocatie aan de notitie te koppelen, heeft de app uw toestemming "
+"nodig om toegang te krijgen tot uw locatie.\n"
+"\n"
+"U kunt deze optie op elk moment uitschakelen in het 'Configuratie'-scherm."
 
 #: ReactNativeClient/lib/components/screens/Note.js:341
-#, fuzzy
 msgid "Permission needed"
-msgstr "Toestemming om de camera te gebruiken"
+msgstr "Toestemming vereist"
 
 #: ReactNativeClient/lib/components/screens/Note.js:583
 #, javascript-format
@@ -3737,23 +3744,23 @@ msgstr "Geef een importformaat op voor %s"
 
 #: ReactNativeClient/lib/services/KeymapService.js:240
 msgid "command"
-msgstr ""
+msgstr "commando"
 
 #: ReactNativeClient/lib/services/KeymapService.js:240
 #: ReactNativeClient/lib/services/KeymapService.js:245
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "\"%s\" mist de vereiste \"%s\" eigenschap."
 
 #: ReactNativeClient/lib/services/KeymapService.js:245
 #: ReactNativeClient/lib/services/KeymapService.js:252
 msgid "accelerator"
-msgstr ""
+msgstr "versneller"
 
 #: ReactNativeClient/lib/services/KeymapService.js:252
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Ongeldig antwoord: %s"
+msgstr "Ongeldig %s: %s."
 
 #: ReactNativeClient/lib/services/KeymapService.js:270
 #, javascript-format
@@ -3761,11 +3768,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"Versneller \"%s\" wordt gebruikt voor \"%s\" en \"%s\" commando's. Dit kan "
+"tot onverwacht gedrag leiden."
 
 #: ReactNativeClient/lib/services/KeymapService.js:295
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "Versneller \"%s\" is niet geldig."
 
 #: ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"

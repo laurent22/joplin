@@ -557,7 +557,7 @@ GotoAnything.manifest = {
 	menuItems: [
 		{
 			name: 'main',
-			parent: 'tools',
+			parent: 'go',
 			label: _('Goto Anything...'),
 			accelerator: () => KeymapService.instance().getAccelerator('gotoAnything'),
 			screens: ['Main'],
