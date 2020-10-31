@@ -565,7 +565,7 @@ class Setting extends BaseModel {
 			},
 
 			// Deprecated - use markdown.plugin.*
-			'markdown.softbreaks': { value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.softbreaks': { value: true, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
 			'markdown.typographer': { value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
 			// Deprecated
 
