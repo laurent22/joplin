@@ -45,10 +45,12 @@ class Command extends BaseCommand {
 
 		const startDecryption = async () => {
 			this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
-
 			while (true) {
 				try {
 					const result = await DecryptionWorker.instance().start();
+
+					if (result.error) throw result.error;
+
 					const line = [];
 					line.push(_('Decrypted items: %d', result.decryptedItemCount));
 					if (result.skippedItemCount) line.push(_('Skipped items: %d (use --retry-failed-items to retry decrypting them)', result.skippedItemCount));

@@ -10,12 +10,13 @@ const { execCommand, githubUsername } = require('./tool-utils.js');
 
 // From https://stackoverflow.com/a/6234804/561309
 function escapeHtml(unsafe) {
+	// We only escape <> as this is enough for Markdown
 	return unsafe
-		.replace(/&/g, '&amp;')
+		// .replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#039;');
+		.replace(/>/g, '&gt;');
+	// .replace(/"/g, '&quot;')
+	// .replace(/'/g, '&#039;');
 }
 
 async function gitLog(sinceTag) {

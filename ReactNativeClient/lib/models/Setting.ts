@@ -508,11 +508,16 @@ class Setting extends BaseModel {
 			'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', public: true, label: () => _('Save geo-location with notes') },
 
+			// 2020-10-29: For now disable the beta editor due to
+			// underlying bugs in the TextInput component which we cannot
+			// fix. Also the editor crashes in Android and in some cases in
+			// iOS.
+			// https://discourse.joplinapp.org/t/anyone-using-the-beta-editor-on-ios/11658/9
 			'editor.beta': {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'note',
-				public: mobilePlatform === 'ios',
+				public: false, // mobilePlatform === 'ios',
 				appTypes: ['mobile'],
 				label: () => 'Opt-in to the editor beta',
 				description: () => 'This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.',
