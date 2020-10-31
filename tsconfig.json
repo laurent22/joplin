@@ -31,6 +31,6 @@
 		"**/node_modules",
 		"ElectronClient/dist/**/*",
 		"CliClient/tests/support/**/*",
-		"CliClient/tests-build/support/**/*",
+		"CliClient/tests-build/**/*",
 	],
 }

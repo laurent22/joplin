@@ -1,8 +1,8 @@
+import MdToHtml from 'lib/joplin-renderer/MdToHtml';
 const os = require('os');
 const { filename } = require('lib/path-utils');
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
 const shim = require('lib/shim').default;
-const MdToHtml = require('lib/joplin-renderer/MdToHtml').default;
 const { themeStyle } = require('lib/theme');
 
 function newTestMdToHtml(options:any = null) {
@@ -120,23 +120,54 @@ describe('MdToHtml', function() {
 	it('should return the rendered body only', asyncTest(async () => {
 		const mdToHtml = newTestMdToHtml();
 
-		// In this case, the HTML contains only the rendered markdown,
-		// with no wrapper and no style.
-		// The style is instead in the cssStrings property.
-		const result = await mdToHtml.render('just **testing**', null, { bodyOnly: true });
-		expect(result.cssStrings.length).toBeGreaterThan(0);
-		expect(result.html.trim()).toBe('just <strong>testing</strong>');
+		// In this case, the HTML contains only the rendered markdown, with
+		// no wrapper and no style. The style is instead in the cssStrings
+		// property.
+		{
+			const result = await mdToHtml.render('just **testing**', null, { bodyOnly: true });
+			expect(result.cssStrings.length).toBeGreaterThan(0);
+			expect(result.html.trim()).toBe('just <strong>testing</strong>');
+		}
+
+		// But it should not remove the wrapping <p> tags if there's more
+		// than one line
+		{
+			const result = await mdToHtml.render('one\n\ntwo', null, { bodyOnly: true });
+			expect(result.html.trim()).toBe('<p>one</p>\n<p>two</p>');
+		}
 	}));
 
 	it('should split HTML and CSS', asyncTest(async () => {
 		const mdToHtml = newTestMdToHtml();
 
-		// It is similar to the bodyOnly option, excepts that
-		// the rendered Markdown is wrapped in a DIV
+		// It is similar to the bodyOnly option, excepts that the rendered
+		// Markdown is wrapped in a DIV
 		const result = await mdToHtml.render('just **testing**', null, { splitted: true });
 		expect(result.cssStrings.length).toBeGreaterThan(0);
 		expect(result.html.trim()).toBe('<div id="rendered-md"><p>just <strong>testing</strong></p>\n</div>');
 	}));
 
+	it('should render links correctly', asyncTest(async () => {
+		const mdToHtml = newTestMdToHtml();
+
+		const testCases = [
+			// None of these should result in a link
+			['https://example.com', 'https://example.com'],
+			['file://C:\\AUTOEXEC.BAT', 'file://C:\\AUTOEXEC.BAT'],
+			['example.com', 'example.com'],
+			['oo.ps', 'oo.ps'],
+			['test@example.com', 'test@example.com'],
+
+			// Those should be converted to links
+			['<https://example.com>', '<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>https://example.com</a>'],
+			['[ok](https://example.com)', '<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>ok</a>'],
+		];
+
+		for (const testCase of testCases) {
+			const [input, expected] = testCase;
+			const actual = await mdToHtml.render(input, null, { bodyOnly: true, plainResourceRendering: true });
+			expect(actual.html).toBe(expected);
+		}
+	}));
 
 });

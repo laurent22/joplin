@@ -318,9 +318,14 @@ export default class MdToHtml {
 		return output;
 	}
 
+	// The string we are looking for is: <p></p>\n
 	private removeMarkdownItWrappingParagraph_(html:string) {
-		// <p></p>\n
 		if (html.length < 8) return html;
+
+		// If there are multiple <p> tags, we keep them because it's multiple lines
+		// and removing the first and last tag will result in invalid HTML.
+		if ((html.match(/<\/p>/g) || []).length > 1) return html;
+
 		if (html.substr(0, 3) !== '<p>') return html;
 		if (html.slice(-5) !== '</p>\n') return html;
 		return html.substring(3, html.length - 5);
@@ -376,7 +381,7 @@ export default class MdToHtml {
 		const markdownIt = new MarkdownIt({
 			breaks: !this.pluginEnabled('softbreaks'),
 			typographer: this.pluginEnabled('typographer'),
-			linkify: true,
+			// linkify: true,
 			html: true,
 			highlight: (str:string, lang:string) => {
 				let outputCodeHtml = '';
