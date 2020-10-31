@@ -5,7 +5,7 @@ import { _ } from 'lib/locale';
 
 const commandService = CommandService.instance();
 
-const getLabel = (commandName: string) => {
+const getLabel = (commandName: string):string => {
 	if (commandService.exists(commandName)) return commandService.label(commandName, true);
 
 	// Some commands are not registered in CommandService at the moment

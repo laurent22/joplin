@@ -144,8 +144,17 @@ export default class CommandService extends BaseService {
 		return output;
 	}
 
-	public commandNames() {
-		return Object.keys(this.commands_);
+	public commandNames(publicOnly:boolean = false) {
+		if (publicOnly) {
+			const output = [];
+			for (const name in this.commands_) {
+				if (!this.isPublic(name)) continue;
+				output.push(name);
+			}
+			return output;
+		} else {
+			return Object.keys(this.commands_);
+		}
 	}
 
 	public commandByName(name:string, options:CommandByNameOptions = null):Command {
@@ -228,6 +237,10 @@ export default class CommandService extends BaseService {
 
 	public currentWhenClauseContext() {
 		return stateToWhenClauseContext(this.store_.getState());
+	}
+
+	public isPublic(commandName:string) {
+		return !!this.label(commandName);
 	}
 
 	// When looping on commands and checking their enabled state, the whenClauseContext
