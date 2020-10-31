@@ -1,6 +1,6 @@
 const shim = require('lib/shim').default;
 const { stringify } = require('query-string');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const Logger = require('lib/Logger').default;
 const { _ } = require('lib/locale');
 const urlUtils = require('lib/urlUtils.js');

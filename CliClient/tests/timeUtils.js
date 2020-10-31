@@ -2,9 +2,9 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const timeUtils = require('../../ReactNativeClient/lib/time-utils');
+const timeUtils = require('../../ReactNativeClient/lib/time');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

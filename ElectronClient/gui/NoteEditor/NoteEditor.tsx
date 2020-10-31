@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
-// eslint-disable-next-line no-unused-vars
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
 import CodeMirror  from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
-import NoteToolbar from '../NoteToolbar/NoteToolbar';
 import { htmlToMarkdown, formNoteToNote } from './utils';
 import useSearchMarkers from './utils/useSearchMarkers';
 import useNoteSearchBar from './utils/useNoteSearchBar';
@@ -27,15 +25,15 @@ import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
 import { _ } from 'lib/locale';
 import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
 import TagList from '../TagList';
+import NoteTitleBar from './NoteTitle/NoteTitleBar';
+import markupLanguageUtils from 'lib/markupLanguageUtils';
+import usePrevious from 'lib/hooks/usePrevious';
+import Setting from 'lib/models/Setting';
 
 const { themeStyle } = require('lib/theme');
 const { substrWithEllipsis } = require('lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('lib/registry.js');
-const { time } = require('lib/time-utils.js');
-const markupLanguageUtils = require('lib/markupLanguageUtils').default;
-const usePrevious = require('lib/hooks/usePrevious').default;
-const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
@@ -44,10 +42,6 @@ const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 const commands = [
 	require('./commands/showRevisions'),
 ];
-
-const toolbarStyle = {
-	marginBottom: 0,
-};
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
@@ -244,20 +238,20 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const onTitleChange = useCallback((event: any) => onFieldChange('title', event.target.value), [onFieldChange]);
 
-	const onTitleKeydown = useCallback((event:any) => {
-		const keyCode = event.keyCode;
+	// const onTitleKeydown = useCallback((event:any) => {
+	// 	const keyCode = event.keyCode;
 
-		if (keyCode === 9) {
-			// TAB
-			event.preventDefault();
+	// 	if (keyCode === 9) {
+	// 		// TAB
+	// 		event.preventDefault();
 
-			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', 'noteList');
-			} else {
-				CommandService.instance().execute('focusElement', 'noteBody');
-			}
-		}
-	}, [props.dispatch]);
+	// 		if (event.shiftKey) {
+	// 			CommandService.instance().execute('focusElement', 'noteList');
+	// 		} else {
+	// 			CommandService.instance().execute('focusElement', 'noteBody');
+	// 		}
+	// 	}
+	// }, [props.dispatch]);
 
 	const onBodyWillChange = useCallback((event: any) => {
 		handleProvisionalFlag();
@@ -351,14 +345,6 @@ function NoteEditor(props: NoteEditorProps) {
 		return <div style={emptyDivStyle}></div>;
 	}
 
-	function renderNoteToolbar() {
-		return <NoteToolbar
-			themeId={props.themeId}
-			// note={formNote}
-			style={toolbarStyle}
-		/>;
-	}
-
 	function renderTagButton() {
 		return <ToolbarButton
 			themeId={props.themeId}
@@ -374,26 +360,6 @@ function NoteEditor(props: NoteEditorProps) {
 
 		return (
 			<div style={{ paddingLeft: 8, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>{tagList}{instructions}</div>
-		);
-	}
-
-	function renderTitleBar() {
-		const theme = themeStyle(props.themeId);
-		const titleBarDate = <span style={styles.titleDate}>{time.formatMsToLocal(formNote.user_updated_time)}</span>;
-		return (
-			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: theme.topRowHeight }}>
-				<input
-					type="text"
-					ref={titleInputRef}
-					placeholder={props.isProvisional ? _('Creating new %s...', formNote.is_todo ? _('to-do') : _('note')) : ''}
-					style={styles.titleInput}
-					onChange={onTitleChange}
-					onKeyDown={onTitleKeydown}
-					value={formNote.title}
-				/>
-				{titleBarDate}
-				{renderNoteToolbar()}
-			</div>
 		);
 	}
 
@@ -546,7 +512,15 @@ function NoteEditor(props: NoteEditorProps) {
 		<div style={styles.root} onDrop={onDrop}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				{renderResourceWatchingNotification()}
-				{renderTitleBar()}
+				<NoteTitleBar
+					titleInputRef={titleInputRef}
+					themeId={props.themeId}
+					isProvisional={props.isProvisional}
+					noteIsTodo={formNote.is_todo}
+					noteTitle={formNote.title}
+					noteUserUpdatedTime={formNote.user_updated_time}
+					onTitleChange={onTitleChange}
+				/>
 				{renderSearchInfo()}
 				<div style={{ display: 'flex', flex: 1 }}>
 					{editor}

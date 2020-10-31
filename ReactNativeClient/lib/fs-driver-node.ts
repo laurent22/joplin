@@ -1,7 +1,7 @@
 import { resolve as nodeResolve } from 'path';
 
 const fs = require('fs-extra');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const FsDriverBase = require('lib/fs-driver-base');
 
 export default class FsDriverNode extends FsDriverBase {

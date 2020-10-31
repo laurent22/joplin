@@ -1,6 +1,6 @@
 const yargParser = require('yargs-parser');
 const { _ } = require('lib/locale');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const stringPadding = require('string-padding');
 const Logger = require('lib/Logger').default;
 

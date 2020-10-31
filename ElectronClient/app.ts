@@ -14,6 +14,9 @@ import Setting from 'lib/models/Setting';
 import actionApi from 'lib/services/rest/actionApi.desktop';
 import BaseApplication from 'lib/BaseApplication';
 import { _, setLocale } from 'lib/locale';
+import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
+import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
+import bridge from './services/bridge';
 import menuCommandNames from './gui/menuCommandNames';
 
 require('app-module-path').addPath(__dirname);
@@ -29,7 +32,6 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
-const bridge = require('electron').remote.require('./bridge').default;
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('lib/services/PluginManager');
@@ -452,6 +454,31 @@ class Application extends BaseApplication {
 		document.head.appendChild(styleTag);
 	}
 
+	setupContextMenu() {
+		// The context menu must be setup in renderer process because that's where
+		// the spell checker service lives.
+		require('electron-context-menu')({
+			shouldShowMenu: (_event:any, params:any) => {
+				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
+				// case we don't want to use the built-in context menu but a custom one.
+				return params.isEditable && params.inputFieldType !== 'none';
+			},
+
+			menu: (actions:any, props:any) => {
+				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions);
+
+				const output = [
+					actions.cut(),
+					actions.copy(),
+					actions.paste(),
+					...spellCheckerMenuItems,
+				];
+
+				return output;
+			},
+		});
+	}
+
 	async loadCustomCss(filePath:string) {
 		let cssString = '';
 		if (await fs.pathExists(filePath)) {
@@ -688,6 +715,10 @@ class Application extends BaseApplication {
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
+
+		this.setupContextMenu();
+
+		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 
 		// await populateDatabase(reg.db());
 

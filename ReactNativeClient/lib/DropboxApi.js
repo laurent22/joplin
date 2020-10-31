@@ -1,7 +1,7 @@
 const Logger = require('lib/Logger').default;
 const shim = require('lib/shim').default;
 const JoplinError = require('lib/JoplinError');
-const { time } = require('lib/time-utils');
+const time = require('lib/time').default;
 const EventDispatcher = require('lib/EventDispatcher');
 
 class DropboxApi {

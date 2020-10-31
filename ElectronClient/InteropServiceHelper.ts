@@ -8,7 +8,7 @@ const bridge = require('electron').remote.require('./bridge').default;
 const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const { friendlySafeFilename } = require('lib/path-utils');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const md5 = require('md5');
 const url = require('url');
 

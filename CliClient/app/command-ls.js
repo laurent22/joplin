@@ -6,7 +6,7 @@ const Folder = require('lib/models/Folder.js');
 const Setting = require('lib/models/Setting').default;
 const Note = require('lib/models/Note.js');
 const { sprintf } = require('sprintf-js');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {

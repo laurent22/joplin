@@ -5,7 +5,7 @@ import { _ } from 'lib/locale';
 const { ItemList } = require('../ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { themeStyle } = require('lib/theme');
 const BaseModel = require('lib/BaseModel');
 const bridge = require('electron').remote.require('./bridge').default;

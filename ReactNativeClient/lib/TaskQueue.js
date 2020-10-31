@@ -1,4 +1,4 @@
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const Setting = require('lib/models/Setting').default;
 const Logger = require('lib/Logger').default;
 

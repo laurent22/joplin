@@ -1,7 +1,7 @@
 const React = require('react');
 const { _ } = require('lib/locale');
 const { themeStyle } = require('lib/theme');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Datetime = require('react-datetime');
 const Note = require('lib/models/Note');

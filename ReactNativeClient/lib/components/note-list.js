@@ -4,7 +4,7 @@ const { connect } = require('react-redux');
 const { FlatList, Text, StyleSheet, Button, View } = require('react-native');
 const { _ } = require('lib/locale');
 const { NoteItem } = require('lib/components/note-item.js');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { themeStyle } = require('lib/components/global-style.js');
 
 class NoteListComponent extends Component {

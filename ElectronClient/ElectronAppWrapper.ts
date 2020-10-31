@@ -86,6 +86,7 @@ export default class ElectronAppWrapper {
 			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
 			webPreferences: {
 				nodeIntegration: true,
+				spellcheck: true,
 			},
 			webviewTag: true,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting
@@ -96,14 +97,6 @@ export default class ElectronAppWrapper {
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098
 		// Fix: https://github.com/electron-userland/electron-builder/issues/2269
 		if (shim.isLinux()) windowOptions.icon = path.join(__dirname, '..', 'build/icons/128x128.png');
-
-		require('electron-context-menu')({
-			shouldShowMenu: (_event:any, params:any) => {
-				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
-				// case we don't want to use the built-in context menu but a custom one.
-				return params.isEditable && params.inputFieldType !== 'none';
-			},
-		});
 
 		this.win_ = new BrowserWindow(windowOptions);
 

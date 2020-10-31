@@ -149,8 +149,10 @@ ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useListIdent.js
 ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
+ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/utils/setupContextMenu.js
 ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 ElectronClient/gui/NoteEditor/NoteEditor.js
+ElectronClient/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 ElectronClient/gui/NoteEditor/styles/index.js
 ElectronClient/gui/NoteEditor/utils/contextMenu.js
 ElectronClient/gui/NoteEditor/utils/index.js
@@ -207,6 +209,7 @@ ElectronClient/services/plugins/PluginRunner.js
 ElectronClient/services/plugins/UserWebview.js
 ElectronClient/services/plugins/UserWebviewDialog.js
 ElectronClient/services/plugins/UserWebviewDialogButtonBar.js
+ElectronClient/services/spellChecker/SpellCheckerServiceDriverNative.js
 ReactNativeClient/lib/AsyncActionQueue.js
 ReactNativeClient/lib/BaseApplication.js
 ReactNativeClient/lib/checkPermissions.js
@@ -330,6 +333,8 @@ ReactNativeClient/lib/services/rest/errors.js
 ReactNativeClient/lib/services/searchengine/filterParser.js
 ReactNativeClient/lib/services/searchengine/queryBuilder.js
 ReactNativeClient/lib/services/SettingUtils.js
+ReactNativeClient/lib/services/spellChecker/SpellCheckerService.js
+ReactNativeClient/lib/services/spellChecker/SpellCheckerServiceDriverBase.js
 ReactNativeClient/lib/services/synchronizer/gui/useSyncTargetUpgrade.js
 ReactNativeClient/lib/services/synchronizer/LockHandler.js
 ReactNativeClient/lib/services/synchronizer/MigrationHandler.js
@@ -352,6 +357,7 @@ ReactNativeClient/lib/themes/oledDark.js
 ReactNativeClient/lib/themes/solarizedDark.js
 ReactNativeClient/lib/themes/solarizedLight.js
 ReactNativeClient/lib/themes/type.js
+ReactNativeClient/lib/time.js
 ReactNativeClient/lib/uuid.js
 ReactNativeClient/lib/versionInfo.js
 ReactNativeClient/PluginAssetsLoader.js

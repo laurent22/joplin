@@ -4,7 +4,7 @@ const { connect } = require('react-redux');
 const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
 const { Checkbox } = require('lib/components/checkbox.js');
 const Note = require('lib/models/Note.js');
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { themeStyle } = require('lib/components/global-style.js');
 
 class NoteItemComponent extends Component {

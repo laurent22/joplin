@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
 import editorCommandDeclarations from '../commands/editorCommandDeclarations';
 import CommandService, { CommandDeclaration,  CommandRuntime, CommandContext } from 'lib/services/CommandService';
-const { time } = require('lib/time-utils.js');
+const time = require('lib/time').default;
 const { reg } = require('lib/registry.js');
 
 const commandsWithDependencies = [
