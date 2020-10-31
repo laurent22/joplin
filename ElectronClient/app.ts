@@ -495,14 +495,6 @@ class Application extends BaseApplication {
 		const filename = Setting.custom_css_files.JOPLIN_APP;
 		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
 
-		const keymapService = KeymapService.instance();
-
-		try {
-			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
-		} catch (err) {
-			reg.logger().error(err.message);
-		}
-
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
 
@@ -531,6 +523,15 @@ class Application extends BaseApplication {
 
 		for (const declaration of editorCommandDeclarations) {
 			CommandService.instance().registerDeclaration(declaration);
+		}
+
+		const keymapService = KeymapService.instance();
+		keymapService.initialize(CommandService.instance().commandNames(true));
+
+		try {
+			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
+		} catch (error) {
+			reg.logger().error(error);
 		}
 
 		// Since the settings need to be loaded before the store is created, it will never

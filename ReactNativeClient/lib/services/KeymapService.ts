@@ -16,7 +16,6 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+N', command: 'newNote' },
 		{ accelerator: 'Cmd+T', command: 'newTodo' },
 		{ accelerator: 'Cmd+S', command: 'synchronize' },
-		{ accelerator: '', command: 'print' },
 		{ accelerator: 'Cmd+H', command: 'hideApp' },
 		{ accelerator: 'Cmd+Q', command: 'quit' },
 		{ accelerator: 'Cmd+,', command: 'config' },
@@ -51,7 +50,6 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
 		{ accelerator: 'Ctrl+T', command: 'newTodo' },
 		{ accelerator: 'Ctrl+S', command: 'synchronize' },
-		{ accelerator: null, command: 'print' },
 		{ accelerator: 'Ctrl+Q', command: 'quit' },
 		{ accelerator: 'Ctrl+Alt+I', command: 'insertTemplate' },
 		{ accelerator: 'Ctrl+C', command: 'textCopy' },
@@ -103,29 +101,42 @@ export default class KeymapService extends BaseService {
 		super();
 
 		this.lastSaveTime_ = Date.now();
-
-		// By default, initialize for the current platform
-		// Manual initialization allows testing for other platforms
-		this.initialize();
 	}
 
 	public get lastSaveTime():number {
 		return this.lastSaveTime_;
 	}
 
-	public initialize(platform: string = shim.platformName()) {
+	// `additionalDefaultCommandNames` will be added to the default keymap
+	// **except** if they are already in it. Basically this is a mechanism
+	// to add all the commands from the command service to the default
+	// keymap.
+	public initialize(additionalDefaultCommandNames:string[] = [], platform: string = shim.platformName()) {
 		this.platform = platform;
 
 		switch (platform) {
 		case 'darwin':
-			this.defaultKeymapItems = defaultKeymapItems.darwin;
+			this.defaultKeymapItems = defaultKeymapItems.darwin.slice();
 			this.modifiersRegExp = modifiersRegExp.darwin;
 			break;
 		default:
-			this.defaultKeymapItems = defaultKeymapItems.default;
+			this.defaultKeymapItems = defaultKeymapItems.default.slice();
 			this.modifiersRegExp = modifiersRegExp.default;
 		}
 
+		for (const name of additionalDefaultCommandNames) {
+			if (this.defaultKeymapItems.find((item:KeymapItem) => item.command === name)) continue;
+			this.defaultKeymapItems.push({
+				command: name,
+				accelerator: null,
+			});
+		}
+
+		this.resetKeymap();
+	}
+
+	// Reset keymap back to its default values
+	public resetKeymap() {
 		this.keymap = {};
 		for (let i = 0; i < this.defaultKeymapItems.length; i++) {
 			// Keep the original defaultKeymapItems array untouched
@@ -140,7 +151,9 @@ export default class KeymapService extends BaseService {
 		if (await shim.fsDriver().exists(customKeymapPath)) {
 			this.logger().info(`KeymapService: Loading keymap from file: ${customKeymapPath}`);
 
-			const customKeymapFile = await shim.fsDriver().readFile(customKeymapPath, 'utf-8');
+			const customKeymapFile = (await shim.fsDriver().readFile(customKeymapPath, 'utf-8')).trim();
+			if (!customKeymapFile) return;
+
 			// Custom keymaps are supposed to contain an array of keymap items
 			this.overrideKeymap(JSON.parse(customKeymapFile));
 		}
@@ -183,8 +196,8 @@ export default class KeymapService extends BaseService {
 
 		if (!commandName) throw new Error('Cannot register an accelerator without a command name');
 
-		const validatedAccelerator = this.convertToPlatform(accelerator);
-		this.validateAccelerator(validatedAccelerator);
+		const validatedAccelerator = accelerator ? this.convertToPlatform(accelerator) : null;
+		if (validatedAccelerator) this.validateAccelerator(validatedAccelerator);
 
 		this.keymap[commandName] = {
 			command: commandName,
@@ -264,7 +277,7 @@ export default class KeymapService extends BaseService {
 			// Throws whenever there are duplicate Accelerators used in the keymap
 			this.validateKeymap();
 		} catch (err) {
-			this.initialize(); // Discard all the changes if there are any issues
+			this.resetKeymap(); // Discard all the changes if there are any issues
 			throw err;
 		}
 	}
