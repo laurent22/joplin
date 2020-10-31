@@ -352,7 +352,10 @@ export default class KeymapService extends BaseService {
 
 	public domToElectronAccelerator(event: KeyboardEvent<HTMLDivElement>) {
 		const parts = [];
-		const { key, ctrlKey, metaKey, altKey, shiftKey } = event;
+
+		// We use the "keyCode" and not "key" because the modifier keys
+		// would change the "key" value. eg "Option+U" would give "º" as a key instead of "U"
+		const { keyCode, ctrlKey, metaKey, altKey, shiftKey } = event;
 
 		// First, the modifiers
 		if (ctrlKey) parts.push('Ctrl');
@@ -368,7 +371,7 @@ export default class KeymapService extends BaseService {
 		}
 
 		// Finally, the key
-		const electronKey = KeymapService.domToElectronKey(key);
+		const electronKey = KeymapService.domToElectronKey(String.fromCharCode(keyCode));
 		if (electronKey) parts.push(electronKey);
 
 		return parts.join('+');
