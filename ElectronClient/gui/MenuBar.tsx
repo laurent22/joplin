@@ -14,6 +14,7 @@ import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from 'lib/locale';
 import { MenuItem, MenuItemLocation } from 'lib/services/plugins/api/types';
 import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
+import menuCommandNames from './menuCommandNames';
 
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
@@ -86,41 +87,7 @@ interface Props {
 	pluginMenus: any[],
 }
 
-const commandNames:string[] = [
-	'focusElementSideBar',
-	'focusElementNoteList',
-	'focusElementNoteTitle',
-	'focusElementNoteBody',
-	'exportPdf',
-	'newNote',
-	'newTodo',
-	'newFolder',
-	'newSubFolder',
-	'print',
-	'synchronize',
-	'textCopy',
-	'textCut',
-	'textPaste',
-	'textSelectAll',
-	'textBold',
-	'textItalic',
-	'textLink',
-	'textCode',
-	'insertDateTime',
-	'attachFile',
-	'focusSearch',
-	'showLocalSearch',
-	'toggleSideBar',
-	'toggleNoteList',
-	'toggleVisiblePanes',
-	'toggleExternalEditing',
-	'setTags',
-	'showNoteContentProperties',
-	'copyDevCommand',
-	'openProfileDirectory',
-	'historyBackward',
-	'historyForward',
-];
+const commandNames:string[] = menuCommandNames();
 
 function menuItemSetChecked(id:string, checked:boolean) {
 	const menu = Menu.getApplicationMenu();
