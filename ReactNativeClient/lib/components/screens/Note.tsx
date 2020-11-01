@@ -211,7 +211,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		this.useBetaEditor = () => {
-			return Setting.value('editor.beta') && Platform.OS !== 'android';
+			// Disable for now
+			return false;
+			// return Setting.value('editor.beta') && Platform.OS !== 'android';
 		};
 
 		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);

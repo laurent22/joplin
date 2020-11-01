@@ -106,8 +106,9 @@ class DecryptionWorker {
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
 
 		if (this.state_ !== 'idle') {
-			this.logger().debug(`DecryptionWorker: cannot start because state is "${this.state_}"`);
-			return;
+			const msg = `DecryptionWorker: cannot start because state is "${this.state_}"`;
+			this.logger().debug(msg);
+			return { error: new Error(msg) };
 		}
 
 		// Note: the logic below is an optimisation to avoid going through the loop if no master key exists
@@ -115,7 +116,8 @@ class DecryptionWorker {
 		// "throw" and "dispatch" logic.
 		const loadedMasterKeyCount = await this.encryptionService().loadedMasterKeysCount();
 		if (!loadedMasterKeyCount) {
-			this.logger().info('DecryptionWorker: cannot start because no master key is currently loaded.');
+			const msg = 'DecryptionWorker: cannot start because no master key is currently loaded.';
+			this.logger().info(msg);
 			const ids = await MasterKey.allIds();
 
 			if (ids.length) {
@@ -130,7 +132,7 @@ class DecryptionWorker {
 					});
 				}
 			}
-			return;
+			return { error: new Error(msg) };
 		}
 
 		this.logger().info('DecryptionWorker: starting decryption...');
