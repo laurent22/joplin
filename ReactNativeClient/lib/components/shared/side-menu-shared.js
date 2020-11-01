@@ -1,5 +1,5 @@
 const Folder = require('lib/models/Folder');
-const BaseModel = require('lib/BaseModel');
+const BaseModel = require('lib/BaseModel').default;
 
 const shared = {};
 

@@ -4,7 +4,7 @@ const Logger = require('lib/Logger').default;
 const { randomClipperPort, startPort } = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api').default;
-const ApiResponse = require('lib/services/rest/ApiResponse');
+const ApiResponse = require('lib/services/rest/ApiResponse').default;
 const multiparty = require('multiparty');
 
 class ClipperServer {
@@ -29,7 +29,6 @@ class ClipperServer {
 
 	setLogger(l) {
 		this.logger_ = l;
-		this.api_.setLogger(l);
 	}
 
 	logger() {

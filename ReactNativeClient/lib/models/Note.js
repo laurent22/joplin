@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const { sprintf } = require('sprintf-js');
 const BaseItem = require('lib/models/BaseItem.js');
 const ItemChange = require('lib/models/ItemChange.js');

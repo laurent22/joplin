@@ -6,7 +6,7 @@ const { app } = require('./app.js');
 const { _ } = require('lib/locale');
 const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting').default;
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 
 class Command extends BaseCommand {
 	usage() {

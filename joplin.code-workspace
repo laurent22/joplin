@@ -370,6 +370,7 @@
 		"spellright.documentTypes": [
 			"markdown",
 			"latex"
-		]
+		],
+		"cSpell.enabled": false
 	},
 }

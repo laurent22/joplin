@@ -1,7 +1,7 @@
 const BaseApplication = require('lib/BaseApplication').default;
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const ResourceService = require('lib/services/ResourceService');
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const Folder = require('lib/models/Folder.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const Note = require('lib/models/Note.js');

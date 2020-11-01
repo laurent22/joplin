@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 
 class Search extends BaseModel {
 	static tableName() {

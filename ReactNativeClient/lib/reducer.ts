@@ -2,7 +2,7 @@ import produce, { Draft } from 'immer';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from 'lib/services/plugins/reducer';
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
-const BaseModel = require('lib/BaseModel');
+const BaseModel = require('lib/BaseModel').default;
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');

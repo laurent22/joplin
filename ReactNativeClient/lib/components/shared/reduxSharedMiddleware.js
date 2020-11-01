@@ -1,6 +1,6 @@
 const Setting = require('lib/models/Setting').default;
 const Tag = require('lib/models/Tag');
-const BaseModel = require('lib/BaseModel');
+const BaseModel = require('lib/BaseModel').default;
 const Note = require('lib/models/Note');
 const { reg } = require('lib/registry.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');

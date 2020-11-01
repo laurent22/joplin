@@ -1,4 +1,4 @@
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const Mutex = require('async-mutex').Mutex;
 const shim = require('lib/shim').default;
 

@@ -1,6 +1,6 @@
 require('app-module-path').addPath(__dirname);
 const { asyncTest, id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } = require('test-utils.js');
-const BaseModel = require('lib/BaseModel.js');
+const BaseModel = require('lib/BaseModel').default;
 const uuid = require('lib/uuid').default;
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
