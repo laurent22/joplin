@@ -867,9 +867,8 @@ msgid "New version: %s"
 msgstr "새 버전: %s"
 
 #: ElectronClient/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "다운로드됨"
+msgstr "다운로드"
 
 #: ElectronClient/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -2248,9 +2247,8 @@ msgid "Error opening note in editor: %s"
 msgstr "편집기에서 노트를 열 수 없는 오류가 발생하였습니다: %s"
 
 #: ElectronClient/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "템플릿 디렉터리 열기"
+msgstr "프로필 디렉터리 열기"
 
 #: ElectronClient/app.js:345
 #, javascript-format
