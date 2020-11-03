@@ -1,8 +1,8 @@
-import { utils, CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-import { _ } from 'lib/locale';
-const Setting = require('lib/models/Setting').default;
-const Note = require('lib/models/Note');
-const TemplateUtils = require('lib/TemplateUtils');
+import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const Note = require('@joplinapp/lib/models/Note');
+const TemplateUtils = require('@joplinapp/lib/TemplateUtils');
 
 export const declaration:CommandDeclaration = {
 	name: 'newNote',

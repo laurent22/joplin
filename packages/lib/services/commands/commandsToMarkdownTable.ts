@@ -1,4 +1,4 @@
-import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from 'lib/markdownUtils';
+import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../../markdownUtils';
 
 export default function commandsToMarkdownTable():string {
 	const headers:MarkdownTableHeader[] = [

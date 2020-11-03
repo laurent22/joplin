@@ -1,8 +1,8 @@
 const yargParser = require('yargs-parser');
-const { _ } = require('lib/locale');
-const time = require('lib/time').default;
+const { _ } = require('@joplinapp/lib/locale');
+const time = require('@joplinapp/lib/time').default;
 const stringPadding = require('string-padding');
-const Logger = require('lib/Logger').default;
+const Logger = require('@joplinapp/lib/Logger').default;
 
 const cliUtils = {};
 

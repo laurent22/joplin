@@ -69,11 +69,11 @@ async function main() {
 
 	const majorMinorVersion = argv._[0];
 
-	await updatePackageVersion(`${rootDir}/ElectronClient/package.json`, majorMinorVersion);
-	await updatePackageVersion(`${rootDir}/CliClient/package.json`, majorMinorVersion);
-	await updateGradleVersion(`${rootDir}/ReactNativeClient/android/app/build.gradle`, majorMinorVersion);
-	await updateCodeProjVersion(`${rootDir}/ReactNativeClient/ios/Joplin.xcodeproj/project.pbxproj`, iosVersionHack(majorMinorVersion));
-	await updateClipperManifestVersion(`${rootDir}/Clipper/manifest.json`, majorMinorVersion);
+	await updatePackageVersion(`${rootDir}/packages/app-desktop/package.json`, majorMinorVersion);
+	await updatePackageVersion(`${rootDir}/packages/app-cli/package.json`, majorMinorVersion);
+	await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);
+	await updateCodeProjVersion(`${rootDir}/packages/app-mobile/ios/Joplin.xcodeproj/project.pbxproj`, iosVersionHack(majorMinorVersion));
+	await updateClipperManifestVersion(`${rootDir}/packages/app-clipper/manifest.json`, majorMinorVersion);
 }
 
 main().catch((error) => {

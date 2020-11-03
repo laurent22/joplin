@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-const Note = require('lib/models/Note.js');
+const Note = require('@joplinapp/lib/models/Note.js');
 
 interface HookDependencies {
 	editorRef:any,

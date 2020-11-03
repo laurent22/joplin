@@ -5,20 +5,21 @@ import StatusScreen from './StatusScreen/StatusScreen';
 import OneDriveLoginScreen from './OneDriveLoginScreen';
 import DropboxLoginScreen from './DropboxLoginScreen';
 import ErrorBoundary from './ErrorBoundary';
-import { themeStyle } from 'lib/theme';
+import { themeStyle } from '@joplinapp/lib/theme';
 import { Size } from './ResizableLayout/ResizableLayout';
 import MenuBar from './MenuBar';
-import { _ } from 'lib/locale';
+import { _ } from '@joplinapp/lib/locale';
 const React = require('react');
 
 const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
-const Setting = require('lib/models/Setting').default;
-const shim = require('lib/shim').default;
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const shim = require('@joplinapp/lib/shim').default;
+shim.setReact(React);
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
-const WelcomeUtils = require('lib/WelcomeUtils');
+const WelcomeUtils = require('@joplinapp/lib/WelcomeUtils');
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('electron').remote.require('./bridge').default;
 

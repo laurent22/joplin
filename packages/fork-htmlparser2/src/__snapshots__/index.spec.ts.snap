@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Index createDomStream 1`] = `
+Array [
+  DataNode {
+    "data": "&amp;This is text",
+    "endIndex": null,
+    "next": DataNode {
+      "data": " and comments ",
+      "endIndex": null,
+      "next": <tags />,
+      "parent": null,
+      "prev": [Circular],
+      "startIndex": null,
+      "type": "comment",
+    },
+    "parent": null,
+    "prev": null,
+    "startIndex": null,
+    "type": "text",
+  },
+  DataNode {
+    "data": " and comments ",
+    "endIndex": null,
+    "next": <tags />,
+    "parent": null,
+    "prev": DataNode {
+      "data": "&amp;This is text",
+      "endIndex": null,
+      "next": [Circular],
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "text",
+    },
+    "startIndex": null,
+    "type": "comment",
+  },
+  <tags />,
+]
+`;
+
+exports[`Index parseDOM 1`] = `
+Array [
+  <a
+    foo=""
+  >
+    <b>
+      <c>
+        ProcessingInstruction {
+          "data": "?foo",
+          "endIndex": null,
+          "name": "?foo",
+          "next": DataNode {
+            "data": "Yay!",
+            "endIndex": null,
+            "next": null,
+            "parent": <c>
+              [Circular]
+              [Circular]
+            </c>,
+            "prev": [Circular],
+            "startIndex": null,
+            "type": "text",
+          },
+          "parent": <c>
+            [Circular]
+            DataNode {
+              "data": "Yay!",
+              "endIndex": null,
+              "next": null,
+              "parent": <c>
+                [Circular]
+                [Circular]
+              </c>,
+              "prev": [Circular],
+              "startIndex": null,
+              "type": "text",
+            }
+          </c>,
+          "prev": null,
+          "startIndex": null,
+          "type": "directive",
+        }
+        DataNode {
+          "data": "Yay!",
+          "endIndex": null,
+          "next": null,
+          "parent": <c>
+            ProcessingInstruction {
+              "data": "?foo",
+              "endIndex": null,
+              "name": "?foo",
+              "next": [Circular],
+              "parent": <c>
+                [Circular]
+                [Circular]
+              </c>,
+              "prev": null,
+              "startIndex": null,
+              "type": "directive",
+            }
+            [Circular]
+          </c>,
+          "prev": ProcessingInstruction {
+            "data": "?foo",
+            "endIndex": null,
+            "name": "?foo",
+            "next": [Circular],
+            "parent": <c>
+              [Circular]
+              [Circular]
+            </c>,
+            "prev": null,
+            "startIndex": null,
+            "type": "directive",
+          },
+          "startIndex": null,
+          "type": "text",
+        }
+      </c>
+    </b>
+  </a>,
+]
+`;

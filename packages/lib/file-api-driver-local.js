@@ -1,4 +1,4 @@
-const { basicDelta } = require('lib/file-api');
+const { basicDelta } = require('./file-api');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
 // What it means is that if, for example, client 1 changes a note at time t, and client 2 changes the same note within the same second,

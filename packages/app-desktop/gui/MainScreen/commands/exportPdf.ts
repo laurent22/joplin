@@ -1,8 +1,8 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-import shim from 'lib/shim';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+import shim from '@joplinapp/lib/shim';
 import InteropServiceHelper from '../../../InteropServiceHelper';
-import { _ } from 'lib/locale';
-const Note = require('lib/models/Note');
+import { _ } from '@joplinapp/lib/locale';
+const Note = require('@joplinapp/lib/models/Note');
 const bridge = require('electron').remote.require('./bridge').default;
 
 export const declaration:CommandDeclaration = {

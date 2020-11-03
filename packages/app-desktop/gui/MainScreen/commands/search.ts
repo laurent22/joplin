@@ -1,6 +1,6 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-const BaseModel = require('lib/BaseModel').default;
-const uuid = require('lib/uuid').default;
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const uuid = require('@joplinapp/lib/uuid').default;
 
 export const declaration:CommandDeclaration = {
 	name: 'search',

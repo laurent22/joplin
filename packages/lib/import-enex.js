@@ -1,19 +1,19 @@
-const uuid = require('lib/uuid').default;
+const uuid = require('./uuid').default;
 const moment = require('moment');
-const BaseModel = require('lib/BaseModel').default;
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const Resource = require('lib/models/Resource.js');
-const Setting = require('lib/models/Setting').default;
-const { MarkupToHtml } = require('lib/joplin-renderer');
+const BaseModel = require('./BaseModel').default;
+const Note = require('./models/Note.js');
+const Tag = require('./models/Tag.js');
+const Resource = require('./models/Resource.js');
+const Setting = require('./models/Setting').default;
+const { MarkupToHtml } = require('@joplinapp/renderer');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
-const time = require('lib/time').default;
+const time = require('./time').default;
 const Levenshtein = require('levenshtein');
 const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
 const md5File = require('md5-file');
-const shim = require('lib/shim').default;
+const shim = require('./shim').default;
 
 // const Promise = require('promise');
 const fs = require('fs-extra');
@@ -272,7 +272,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 		const options = {};
 		const strict = true;
-		const saxStream = require('sax').createStream(strict, options);
+		const saxStream = require('@joplinapp/fork-sax').createStream(strict, options);
 
 		const nodes = []; // LIFO list of nodes so that we know in which node we are in the onText event
 		let note = null;

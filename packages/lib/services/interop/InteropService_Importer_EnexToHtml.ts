@@ -1,12 +1,12 @@
 import { ImportExportResult } from './types';
 
-const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
-const Folder = require('lib/models/Folder.js');
-const { filename } = require('lib/path-utils');
+const InteropService_Importer_Base = require('./InteropService_Importer_Base').default;
+const Folder = require('../../models/Folder.js');
+const { filename } = require('../../path-utils');
 
 export default class InteropService_Importer_EnexToHtml extends InteropService_Importer_Base {
 	async exec(result:ImportExportResult) {
-		const { importEnex } = require('lib/import-enex');
+		const { importEnex } = require('../../import-enex');
 
 		let folder = this.options_.destinationFolder;
 

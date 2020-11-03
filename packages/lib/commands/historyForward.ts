@@ -1,5 +1,5 @@
 import { utils, CommandRuntime, CommandDeclaration } from '../services/CommandService';
-import { _ } from 'lib/locale';
+import { _ } from '../locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'historyForward',

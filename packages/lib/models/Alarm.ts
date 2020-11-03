@@ -1,5 +1,5 @@
-const BaseModel = require('lib/BaseModel').default;
-const Note = require('lib/models/Note.js');
+const BaseModel = require('../BaseModel').default;
+const Note = require('./Note.js');
 
 export interface Notification {
 	id: number,

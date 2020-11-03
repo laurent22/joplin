@@ -1,5 +1,5 @@
-const BaseService = require('lib/services/BaseService').default;
-const Migration = require('lib/models/Migration');
+const BaseService = require('./BaseService').default;
+const Migration = require('../models/Migration');
 
 class MigrationService extends BaseService {
 	constructor() {

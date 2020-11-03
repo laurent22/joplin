@@ -1,5 +1,5 @@
-import { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
-import { _ } from 'lib/locale';
+import { CommandDeclaration, CommandRuntime } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'toggleVisiblePanes',

@@ -1,11 +1,11 @@
-const BaseItem = require('lib/models/BaseItem');
-const BaseModel = require('lib/BaseModel').default;
-const MasterKey = require('lib/models/MasterKey');
-const Resource = require('lib/models/Resource');
-const ResourceService = require('lib/services/ResourceService');
-const Logger = require('lib/Logger').default;
+const BaseItem = require('../models/BaseItem');
+const BaseModel = require('../BaseModel').default;
+const MasterKey = require('../models/MasterKey');
+const Resource = require('../models/Resource');
+const ResourceService = require('./ResourceService');
+const Logger = require('../Logger').default;
 const EventEmitter = require('events');
-const shim = require('lib/shim').default;
+const shim = require('../shim').default;
 
 class DecryptionWorker {
 	constructor() {

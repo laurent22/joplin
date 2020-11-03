@@ -1,6 +1,6 @@
-const { filename, fileExtension } = require('lib/path-utils');
-const time = require('lib/time').default;
-const Setting = require('lib/models/Setting').default;
+const { filename, fileExtension } = require('./path-utils');
+const time = require('./time').default;
+const Setting = require('./models/Setting').default;
 const md5 = require('md5');
 
 class FsDriverBase {

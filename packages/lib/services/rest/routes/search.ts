@@ -1,10 +1,10 @@
-import BaseModel, { ModelType } from 'lib/BaseModel';
+import BaseModel, { ModelType } from '../../../BaseModel';
 import { Request } from '../Api';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { ErrorBadRequest, ErrorMethodNotAllowed } from '../utils/errors';
 import requestFields from '../utils/requestFields';
-const BaseItem = require('lib/models/BaseItem');
-const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
+const BaseItem = require('../../../models/BaseItem');
+const SearchEngineUtils = require('../../searchengine/SearchEngineUtils');
 
 export default async function(request:Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();

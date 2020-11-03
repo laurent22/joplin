@@ -1,6 +1,6 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-import { _ } from 'lib/locale';
-const Tag = require('lib/models/Tag');
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
+const Tag = require('@joplinapp/lib/models/Tag');
 
 export const declaration:CommandDeclaration = {
 	name: 'setTags',

@@ -1,7 +1,6 @@
-require('app-module-path').addPath(__dirname);
 
-const { asyncTest } = require('test-utils.js');
-const urlUtils = require('lib/urlUtils.js');
+const { asyncTest } = require('./test-utils.js');
+const urlUtils = require('@joplinapp/lib/urlUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

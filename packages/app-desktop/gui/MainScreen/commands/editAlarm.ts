@@ -1,9 +1,9 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-import eventManager from 'lib/eventManager';
-import { _ } from 'lib/locale';
-import { stateUtils } from 'lib/reducer';
-const Note = require('lib/models/Note');
-const time = require('lib/time').default;
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+import eventManager from '@joplinapp/lib/eventManager';
+import { _ } from '@joplinapp/lib/locale';
+import { stateUtils } from '@joplinapp/lib/reducer';
+const Note = require('@joplinapp/lib/models/Note');
+const time = require('@joplinapp/lib/time').default;
 
 export const declaration:CommandDeclaration = {
 	name: 'editAlarm',

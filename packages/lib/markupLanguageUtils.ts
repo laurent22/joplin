@@ -1,10 +1,10 @@
-import markdownUtils from 'lib/markdownUtils';
-import Setting from 'lib/models/Setting';
-import shim from 'lib/shim';
-import MarkupToHtml, { MarkupLanguage } from 'lib/joplin-renderer/MarkupToHtml';
+import markdownUtils from './markdownUtils';
+import Setting from './models/Setting';
+import shim from './shim';
+import MarkupToHtml, { MarkupLanguage } from '@joplinapp/renderer/MarkupToHtml';
 
-const htmlUtils = require('lib/htmlUtils');
-const Resource = require('lib/models/Resource');
+const htmlUtils = require('./htmlUtils');
+const Resource = require('./models/Resource');
 
 class MarkupLanguageUtils {
 	lib_(language:MarkupLanguage) {

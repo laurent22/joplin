@@ -1,9 +1,8 @@
 'use strict';
 
-require('app-module-path').addPath(__dirname);
 
-const { asyncTest,checkThrow } = require('test-utils.js');
-const eventManager = require('lib/eventManager').default;
+const { asyncTest,checkThrow } = require('./test-utils.js');
+const eventManager = require('@joplinapp/lib/eventManager').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

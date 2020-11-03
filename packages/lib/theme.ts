@@ -8,7 +8,7 @@ import theme_solarizedDark from './themes/solarizedDark';
 import theme_nord from './themes/nord';
 import theme_aritimDark from './themes/aritimDark';
 import theme_oledDark from './themes/oledDark';
-import Setting from 'lib/models/Setting';
+import Setting from './models/Setting';
 
 const Color = require('color');
 

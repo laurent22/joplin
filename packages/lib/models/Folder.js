@@ -1,10 +1,10 @@
-const BaseModel = require('lib/BaseModel').default;
-const time = require('lib/time').default;
-const Note = require('lib/models/Note.js');
-const { Database } = require('lib/database.js');
-const { _ } = require('lib/locale');
-const BaseItem = require('lib/models/BaseItem.js');
-const { substrWithEllipsis } = require('lib/string-utils.js');
+const BaseModel = require('../BaseModel').default;
+const time = require('../time').default;
+const Note = require('./Note.js');
+const { Database } = require('../database.js');
+const { _ } = require('../locale');
+const BaseItem = require('./BaseItem.js');
+const { substrWithEllipsis } = require('../string-utils.js');
 
 class Folder extends BaseItem {
 	static tableName() {

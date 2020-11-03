@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { AppState } from '../app';
-import CommandService, { SearchResult as CommandSearchResult } from 'lib/services/CommandService';
-import KeymapService from 'lib/services/KeymapService';
-import shim from 'lib/shim';
+import CommandService, { SearchResult as CommandSearchResult } from '@joplinapp/lib/services/CommandService';
+import KeymapService from '@joplinapp/lib/services/KeymapService';
+import shim from '@joplinapp/lib/shim';
 
 const { connect } = require('react-redux');
-const { _ } = require('lib/locale');
-const { themeStyle } = require('lib/theme');
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
-const BaseModel = require('lib/BaseModel').default;
-const Tag = require('lib/models/Tag');
-const Folder = require('lib/models/Folder');
-const Note = require('lib/models/Note');
+const { _ } = require('@joplinapp/lib/locale');
+const { themeStyle } = require('@joplinapp/lib/theme');
+const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const Tag = require('@joplinapp/lib/models/Tag');
+const Folder = require('@joplinapp/lib/models/Folder');
+const Note = require('@joplinapp/lib/models/Note');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
-const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('lib/string-utils.js');
-const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
-const markupLanguageUtils = require('lib/markupLanguageUtils').default;
+const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplinapp/lib/string-utils.js');
+const { mergeOverlappingIntervals } = require('@joplinapp/lib/ArrayUtils.js');
+const markupLanguageUtils = require('@joplinapp/lib/markupLanguageUtils').default;
 
 const PLUGIN_NAME = 'gotoAnything';
 

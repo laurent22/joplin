@@ -1,9 +1,8 @@
-import { KeyboardEvent } from 'react';
-import eventManager from 'lib/eventManager';
-import shim from 'lib/shim';
-import { _ } from 'lib/locale';
+import eventManager from '../eventManager';
+import shim from '../shim';
+import { _ } from '../locale';
 
-const BaseService = require('lib/services/BaseService').default;
+const BaseService = require('./BaseService').default;
 
 const keysRegExp = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen)$/;
 const modifiersRegExp = {
@@ -350,7 +349,7 @@ export default class KeymapService extends BaseService {
 		if (!isValid) throw new Error(_('Accelerator "%s" is not valid.', accelerator));
 	}
 
-	public domToElectronAccelerator(event: KeyboardEvent<HTMLDivElement>) {
+	public domToElectronAccelerator(event:any) {
 		const parts = [];
 
 		// We use the "keyCode" and not "key" because the modifier keys

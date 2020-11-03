@@ -11,7 +11,7 @@ async function getSourceCode(dest) {
 
 async function main() {
 	const rootDir = utils.rootDir();
-	const dest = `${rootDir}/ReactNativeClient/lib/sql-extensions`;
+	const dest = `${rootDir}/packages/app-mobile/lib/sql-extensions`;
 
 	try {
 		await fs.ensureDir(dest);

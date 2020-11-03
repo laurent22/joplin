@@ -1,7 +1,6 @@
-import Setting from 'lib/models/Setting';
+import Setting from '@joplinapp/lib/models/Setting';
 
-require('app-module-path').addPath(__dirname);
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

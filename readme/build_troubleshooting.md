@@ -42,7 +42,7 @@ So everything should be done from a Windows Command prompt or Windows PowerShell
 
 ## iOS
 
-If there is an error `/joplin/ReactNativeClient/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` run the following commands:
+If there is an error `/joplin/packages/app-mobile/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` run the following commands:
 
     cd ios
     pod deintegrate

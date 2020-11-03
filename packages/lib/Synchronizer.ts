@@ -1,24 +1,24 @@
 import Logger from './Logger';
-import LockHandler, { LockType } from 'lib/services/synchronizer/LockHandler';
-import Setting from 'lib/models/Setting';
-import shim from 'lib/shim';
-import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
-import eventManager from 'lib/eventManager';
-import { _ } from 'lib/locale';
+import LockHandler, { LockType } from './services/synchronizer/LockHandler';
+import Setting from './models/Setting';
+import shim from './shim';
+import MigrationHandler from './services/synchronizer/MigrationHandler';
+import eventManager from './eventManager';
+import { _ } from './locale';
 
-const BaseItem = require('lib/models/BaseItem.js');
-const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
-const Resource = require('lib/models/Resource.js');
-const ItemChange = require('lib/models/ItemChange.js');
-const ResourceLocalState = require('lib/models/ResourceLocalState.js');
-const MasterKey = require('lib/models/MasterKey.js');
-const BaseModel = require('lib/BaseModel').default;
+const BaseItem = require('./models/BaseItem.js');
+const Folder = require('./models/Folder.js');
+const Note = require('./models/Note.js');
+const Resource = require('./models/Resource.js');
+const ItemChange = require('./models/ItemChange.js');
+const ResourceLocalState = require('./models/ResourceLocalState.js');
+const MasterKey = require('./models/MasterKey.js');
+const BaseModel = require('./BaseModel').default;
 const { sprintf } = require('sprintf-js');
-const time = require('lib/time').default;
-const JoplinError = require('lib/JoplinError');
-const TaskQueue = require('lib/TaskQueue');
-const { Dirnames } = require('lib/services/synchronizer/utils/types');
+const time = require('./time').default;
+const JoplinError = require('./JoplinError');
+const TaskQueue = require('./TaskQueue');
+const { Dirnames } = require('./services/synchronizer/utils/types');
 
 interface RemoteItem {
 	id: string,

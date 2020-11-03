@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect, KeyboardEvent } from 'react';
 
-import KeymapService from 'lib/services/KeymapService';
+import KeymapService from '@joplinapp/lib/services/KeymapService';
 import styles_ from './styles';
 
-import { _ } from 'lib/locale';
+import { _ } from '@joplinapp/lib/locale';
 const keymapService = KeymapService.instance();
 
 export interface ShortcutRecorderProps {

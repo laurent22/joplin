@@ -1,12 +1,12 @@
 import * as React from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
-import { _ } from 'lib/locale';
+import { _ } from '@joplinapp/lib/locale';
 
 const { connect } = require('react-redux');
-const { themeStyle } = require('lib/theme');
+const { themeStyle } = require('@joplinapp/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const prettyBytes = require('pretty-bytes');
-const Resource = require('lib/models/Resource.js');
+const Resource = require('@joplinapp/lib/models/Resource.js');
 
 interface Style {
 	width: number
@@ -19,7 +19,7 @@ interface Props {
 	dispatch: Function,
 }
 
-interface Resource {
+interface InnerResource {
 	title: string
 	id: string
 	size: number
@@ -27,16 +27,16 @@ interface Resource {
 }
 
 interface State {
-	resources: Resource[] | undefined
+	resources: InnerResource[] | undefined
 	sorting: ActiveSorting
 	isLoading: boolean
 }
 
 interface ResourceTable {
-	resources: Resource[]
+	resources: InnerResource[]
 	sorting: ActiveSorting
-	onResourceClick: (resource: Resource) => any
-	onResourceDelete: (resource: Resource) => any
+	onResourceClick: (resource: InnerResource) => any
+	onResourceDelete: (resource: InnerResource) => any
 	onToggleSorting: (order: SortingOrder) => any
 	themeId: number
 	style: Style
@@ -50,7 +50,7 @@ interface ActiveSorting {
 	type: SortingType
 }
 
-const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
+const ResourceTableComp = (props: ResourceTable) => {
 	const theme = themeStyle(props.themeId);
 
 	const sortOrderEngagedMarker = (s: SortingOrder) => {
@@ -96,7 +96,7 @@ const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 				</tr>
 			</thead>
 			<tbody>
-				{props.resources.map((resource: Resource, index: number) =>
+				{props.resources.map((resource: InnerResource, index: number) =>
 					<tr key={index}>
 						<td style={titleCellStyle} className="titleCell">
 							<a
@@ -164,7 +164,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		this.reloadResources(this.state.sorting);
 	}
 
-	onResourceDelete(resource: Resource) {
+	onResourceDelete(resource: InnerResource) {
 		const ok = bridge().showConfirmMessageBox(_('Delete attachment "%s"?', resource.title), {
 			buttons: [_('Delete'), _('Cancel')],
 			defaultId: 1,
@@ -181,7 +181,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			});
 	}
 
-	openResource(resource: Resource) {
+	openResource(resource: InnerResource) {
 		const resourcePath = Resource.fullPath(resource);
 		const ok = bridge().openExternal(`file://${resourcePath}`);
 		if (!ok) {
@@ -236,7 +236,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 						{this.state.resources && this.state.resources.length === MAX_RESOURCES &&
 							<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', MAX_RESOURCES)}</div>
 						}
-						{this.state.resources && <ResourceTable
+						{this.state.resources && <ResourceTableComp
 							themeId={this.props.themeId}
 							style={style}
 							resources={this.state.resources}

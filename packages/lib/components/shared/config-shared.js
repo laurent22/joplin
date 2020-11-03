@@ -1,9 +1,9 @@
-const Setting = require('lib/models/Setting').default;
-const SyncTargetRegistry = require('lib/SyncTargetRegistry');
-const ObjectUtils = require('lib/ObjectUtils');
-const { _ } = require('lib/locale');
+const Setting = require('../../models/Setting').default;
+const SyncTargetRegistry = require('../../SyncTargetRegistry');
+const ObjectUtils = require('../../ObjectUtils');
+const { _ } = require('../../locale');
 const { createSelector } = require('reselect');
-const { reg } = require('lib/registry');
+const { reg } = require('../../registry');
 
 const shared = {};
 

@@ -1,4 +1,4 @@
-const shim = require('lib/shim').default;
+const shim = require('./shim').default;
 
 const netUtils = {};
 

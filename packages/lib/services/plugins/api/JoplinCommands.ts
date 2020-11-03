@@ -1,20 +1,20 @@
-import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
+import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from '../../CommandService';
 import { Command } from './types';
 
 /**
  * This class allows executing or registering new Joplin commands. Commands can be executed or associated with
  * {@link JoplinViewsToolbarButtons | toolbar buttons} or {@link JoplinViewsMenuItems | menu items}.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/register_command)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/register_command)
  *
  * ## Executing Joplin's internal commands
  *
  * It is also possible to execute internal Joplin's commands which, as of now, are not well documented.
  * You can find the list directly on GitHub though at the following locations:
  *
- * * [Main screen commands](https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/MainScreen/commands)
- * * [Global commands](https://github.com/laurent22/joplin/tree/dev/ElectronClient/commands)
- * * [Editor commands](https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.ts)
+ * * [Main screen commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/MainScreen/commands)
+ * * [Global commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/commands)
+ * * [Editor commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.ts)
  *
  * To view what arguments are supported, you can open any of these files and look at the `execute()` command.
  */

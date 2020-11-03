@@ -418,7 +418,7 @@ const scriptHtml = `
 </script>
 `;
 
-const rootDir = dirname(__dirname);
+const rootDir = dirname(dirname(__dirname));
 
 function markdownToHtml(md, templateParams) {
 	const MarkdownIt = require('markdown-it');
@@ -613,7 +613,7 @@ function makeHomePageMd() {
 
 async function main() {
 	await fs.remove(`${rootDir}/docs`);
-	await fs.copy(`${rootDir}/Modules/WebsiteAssets`, `${rootDir}/docs`);
+	await fs.copy(`${rootDir}/Assets/WebsiteAssets`, `${rootDir}/docs`);
 
 	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, { sourceMarkdownFile: 'README.md' });
 

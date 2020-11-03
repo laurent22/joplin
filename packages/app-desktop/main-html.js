@@ -1,8 +1,5 @@
 // This is the initialization for the Electron RENDERER process
 
-// Make it possible to require("/lib/...") without specifying full path
-require('app-module-path').addPath(__dirname);
-
 // Disable React message in console "Download the React DevTools for a better development experience"
 // https://stackoverflow.com/questions/42196819/disable-hide-download-the-react-devtools#42196820
 // eslint-disable-next-line no-undef
@@ -14,21 +11,22 @@ __REACT_DEVTOOLS_GLOBAL_HOOK__ = {
 };
 
 const app = require('./app').default;
-const Folder = require('lib/models/Folder.js');
-const Resource = require('lib/models/Resource.js');
-const BaseItem = require('lib/models/BaseItem.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const MasterKey = require('lib/models/MasterKey');
-const Setting = require('lib/models/Setting').default;
-const Revision = require('lib/models/Revision.js');
-const Logger = require('lib/Logger').default;
-const FsDriverNode = require('lib/fs-driver-node').default;
-const { shimInit } = require('lib/shim-init-node.js');
-const EncryptionService = require('lib/services/EncryptionService');
+const Folder = require('@joplinapp/lib/models/Folder.js');
+const Resource = require('@joplinapp/lib/models/Resource.js');
+const BaseItem = require('@joplinapp/lib/models/BaseItem.js');
+const Note = require('@joplinapp/lib/models/Note.js');
+const Tag = require('@joplinapp/lib/models/Tag.js');
+const NoteTag = require('@joplinapp/lib/models/NoteTag.js');
+const MasterKey = require('@joplinapp/lib/models/MasterKey');
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const Revision = require('@joplinapp/lib/models/Revision.js');
+const Logger = require('@joplinapp/lib/Logger').default;
+const FsDriverNode = require('@joplinapp/lib/fs-driver-node').default;
+const shim = require('@joplinapp/lib/shim').default;
+const { shimInit } = require('@joplinapp/lib/shim-init-node.js');
+const EncryptionService = require('@joplinapp/lib/services/EncryptionService');
 const bridge = require('electron').remote.require('./bridge').default;
-const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
+const { FileApiDriverLocal } = require('@joplinapp/lib/file-api-driver-local.js');
 
 if (bridge().env() === 'dev') {
 	const newConsole = function(oldConsole) {
@@ -80,7 +78,15 @@ Setting.setConstant('appType', 'desktop');
 console.info(`appId: ${Setting.value('appId')}`);
 console.info(`appType: ${Setting.value('appType')}`);
 
-shimInit();
+let keytar;
+try {
+	keytar = shim.platformSupportsKeyChain() ? require('keytar') : null;
+} catch (error) {
+	console.error('Cannot load keytar - keychain support will be disabled', error);
+	keytar = null;
+}
+
+shimInit(null, keytar);
 
 // Disable drag and drop of links inside application (which would
 // open it as if the whole app was a browser)

@@ -1,8 +1,8 @@
-const BaseModel = require('lib/BaseModel').default;
-const BaseItem = require('lib/models/BaseItem.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const Note = require('lib/models/Note.js');
-const { _ } = require('lib/locale');
+const BaseModel = require('../BaseModel').default;
+const BaseItem = require('./BaseItem.js');
+const NoteTag = require('./NoteTag.js');
+const Note = require('./Note.js');
+const { _ } = require('../locale');
 
 class Tag extends BaseItem {
 	static tableName() {

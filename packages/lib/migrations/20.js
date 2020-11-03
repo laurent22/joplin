@@ -1,8 +1,8 @@
-const Resource = require('lib/models/Resource');
-const Setting = require('lib/models/Setting').default;
-const shim = require('lib/shim').default;
-const { reg } = require('lib/registry.js');
-const { fileExtension } = require('lib/path-utils');
+const Resource = require('../models/Resource');
+const Setting = require('../models/Setting').default;
+const shim = require('../shim').default;
+const { reg } = require('../registry.js');
+const { fileExtension } = require('../path-utils');
 
 const script = {};
 

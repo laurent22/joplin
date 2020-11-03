@@ -1,11 +1,10 @@
-require('app-module-path').addPath(__dirname);
-const { asyncTest, id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } = require('test-utils.js');
-const BaseModel = require('lib/BaseModel').default;
-const uuid = require('lib/uuid').default;
-const Note = require('lib/models/Note.js');
-const Folder = require('lib/models/Folder.js');
+const { asyncTest, id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } = require('./test-utils.js');
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const uuid = require('@joplinapp/lib/uuid').default;
+const Note = require('@joplinapp/lib/models/Note.js');
+const Folder = require('@joplinapp/lib/models/Folder.js');
 
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids.js');
+const { ALL_NOTES_FILTER_ID } = require('@joplinapp/lib/reserved-ids.js');
 
 let testApp = null;
 

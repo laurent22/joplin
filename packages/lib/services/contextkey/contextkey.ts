@@ -22,7 +22,7 @@
 // import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
 // import { isMacintosh, isLinux, isWindows, isWeb } from 'vs/base/common/platform';
 
-import shim from 'lib/shim';
+import shim from '../../shim';
 
 const isMacintosh = shim.isMac();
 const isLinux = shim.isLinux();

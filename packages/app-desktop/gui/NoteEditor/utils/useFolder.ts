@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-const Folder = require('lib/models/Folder');
+const Folder = require('@joplinapp/lib/models/Folder');
 
 interface HookDependencies {
 	folderId: string,

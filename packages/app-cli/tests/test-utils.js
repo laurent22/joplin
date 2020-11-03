@@ -1,56 +1,57 @@
 /* eslint-disable require-atomic-updates */
 
 const fs = require('fs-extra');
-const { JoplinDatabase } = require('lib/joplin-database.js');
-const { DatabaseDriverNode } = require('lib/database-driver-node.js');
-const BaseApplication = require('lib/BaseApplication').default;
-const BaseModel = require('lib/BaseModel').default;
-const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
-const ItemChange = require('lib/models/ItemChange.js');
-const Resource = require('lib/models/Resource.js');
-const Tag = require('lib/models/Tag.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const Revision = require('lib/models/Revision.js');
-const Logger = require('lib/Logger').default;
-const Setting = require('lib/models/Setting').default;
-const MasterKey = require('lib/models/MasterKey');
-const BaseItem = require('lib/models/BaseItem.js');
-const { FileApi } = require('lib/file-api.js');
-const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
-const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
-const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
-const { FileApiDriverDropbox } = require('lib/file-api-driver-dropbox.js');
-const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
-const { FileApiDriverAmazonS3 } = require('lib/file-api-driver-amazon-s3.js');
-const BaseService = require('lib/services/BaseService').default;
-const FsDriverNode = require('lib/fs-driver-node').default;
-const time = require('lib/time').default;
-const { shimInit } = require('lib/shim-init-node.js');
-const shim = require('lib/shim').default;
-const uuid = require('lib/uuid').default;
-const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
-const SyncTargetMemory = require('lib/SyncTargetMemory.js');
-const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
-const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
-const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
-const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
-const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
-const EncryptionService = require('lib/services/EncryptionService.js');
-const DecryptionWorker = require('lib/services/DecryptionWorker.js');
-const ResourceService = require('lib/services/ResourceService.js');
-const RevisionService = require('lib/services/RevisionService.js');
-const ResourceFetcher = require('lib/services/ResourceFetcher.js');
-const KvStore = require('lib/services/KvStore.js');
-const WebDavApi = require('lib/WebDavApi');
-const DropboxApi = require('lib/DropboxApi');
-const { OneDriveApi } = require('lib/onedrive-api');
-const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
-const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
-const KeychainServiceDriverDummy = require('lib/services/keychain/KeychainServiceDriver.dummy').default;
+const { JoplinDatabase } = require('@joplinapp/lib/joplin-database.js');
+const { DatabaseDriverNode } = require('@joplinapp/lib/database-driver-node.js');
+const BaseApplication = require('@joplinapp/lib/BaseApplication').default;
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const Folder = require('@joplinapp/lib/models/Folder.js');
+const Note = require('@joplinapp/lib/models/Note.js');
+const ItemChange = require('@joplinapp/lib/models/ItemChange.js');
+const Resource = require('@joplinapp/lib/models/Resource.js');
+const Tag = require('@joplinapp/lib/models/Tag.js');
+const NoteTag = require('@joplinapp/lib/models/NoteTag.js');
+const Revision = require('@joplinapp/lib/models/Revision.js');
+const Logger = require('@joplinapp/lib/Logger').default;
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const MasterKey = require('@joplinapp/lib/models/MasterKey');
+const BaseItem = require('@joplinapp/lib/models/BaseItem.js');
+const { FileApi } = require('@joplinapp/lib/file-api.js');
+const { FileApiDriverMemory } = require('@joplinapp/lib/file-api-driver-memory.js');
+const { FileApiDriverLocal } = require('@joplinapp/lib/file-api-driver-local.js');
+const { FileApiDriverWebDav } = require('@joplinapp/lib/file-api-driver-webdav.js');
+const { FileApiDriverDropbox } = require('@joplinapp/lib/file-api-driver-dropbox.js');
+const { FileApiDriverOneDrive } = require('@joplinapp/lib/file-api-driver-onedrive.js');
+const { FileApiDriverAmazonS3 } = require('@joplinapp/lib/file-api-driver-amazon-s3.js');
+const BaseService = require('@joplinapp/lib/services/BaseService').default;
+const FsDriverNode = require('@joplinapp/lib/fs-driver-node').default;
+const time = require('@joplinapp/lib/time').default;
+const { shimInit } = require('@joplinapp/lib/shim-init-node.js');
+const shim = require('@joplinapp/lib/shim').default;
+const uuid = require('@joplinapp/lib/uuid').default;
+const SyncTargetRegistry = require('@joplinapp/lib/SyncTargetRegistry.js');
+const SyncTargetMemory = require('@joplinapp/lib/SyncTargetMemory.js');
+const SyncTargetFilesystem = require('@joplinapp/lib/SyncTargetFilesystem.js');
+const SyncTargetOneDrive = require('@joplinapp/lib/SyncTargetOneDrive.js');
+const SyncTargetNextcloud = require('@joplinapp/lib/SyncTargetNextcloud.js');
+const SyncTargetDropbox = require('@joplinapp/lib/SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('@joplinapp/lib/SyncTargetAmazonS3.js');
+const EncryptionService = require('@joplinapp/lib/services/EncryptionService.js');
+const DecryptionWorker = require('@joplinapp/lib/services/DecryptionWorker.js');
+const ResourceService = require('@joplinapp/lib/services/ResourceService.js');
+const RevisionService = require('@joplinapp/lib/services/RevisionService.js');
+const ResourceFetcher = require('@joplinapp/lib/services/ResourceFetcher.js');
+const KvStore = require('@joplinapp/lib/services/KvStore.js');
+const WebDavApi = require('@joplinapp/lib/WebDavApi');
+const DropboxApi = require('@joplinapp/lib/DropboxApi');
+const { OneDriveApi } = require('@joplinapp/lib/onedrive-api');
+const { loadKeychainServiceAndSettings } = require('@joplinapp/lib/services/SettingUtils');
+const KeychainServiceDriver = require('@joplinapp/lib/services/keychain/KeychainServiceDriver.node').default;
+const KeychainServiceDriverDummy = require('@joplinapp/lib/services/keychain/KeychainServiceDriver.dummy').default;
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
-const { Dirnames } = require('lib/services/synchronizer/utils/types');
+const { Dirnames } = require('@joplinapp/lib/services/synchronizer/utils/types');
+const sharp = require('sharp');
 
 const databases_ = [];
 let synchronizers_ = [];
@@ -69,7 +70,15 @@ let currentClient_ = 1;
 // https://stackoverflow.com/questions/9768444/possible-eventemitter-memory-leak-detected
 process.setMaxListeners(0);
 
-shimInit();
+let keytar;
+try {
+	keytar = shim.platformSupportsKeyChain() ? require('keytar') : null;
+} catch (error) {
+	console.error('Cannot load keytar - keychain support will be disabled', error);
+	keytar = null;
+}
+
+shimInit(sharp, keytar);
 
 shim.setIsTestingEnv(true);
 
@@ -420,7 +429,7 @@ async function initFileApi() {
 		// redirection URL in onedrive-auth.txt. Keep in mind that auth data
 		// only lasts 1h for OneDrive.
 		// https://login.live.com/oauth20_authorize.srf?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite,offline_access&response_type=token&redirect_uri=https://joplinapp.org
-		const { parameters, setEnvOverride } = require('lib/parameters.js');
+		const { parameters, setEnvOverride } = require('@joplinapp/lib/parameters.js');
 		Setting.setConstant('env', 'dev');
 		setEnvOverride('test');
 		const config = parameters().oneDriveTest;

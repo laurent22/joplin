@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import MigrationHandler from 'lib/services/synchronizer/MigrationHandler';
-const Setting = require('lib/models/Setting').default;
-const { reg } = require('lib/registry');
+import shim from '../../../shim';
+const { useEffect, useState } = shim.react();
+import MigrationHandler from '../MigrationHandler';
+const Setting = require('../../../models/Setting').default;
+const { reg } = require('../../../registry');
 
 export interface SyncTargetUpgradeResult {
 	done: boolean,
@@ -9,7 +10,7 @@ export interface SyncTargetUpgradeResult {
 }
 
 export default function useSyncTargetUpgrade():SyncTargetUpgradeResult {
-	const [upgradeResult, setUpgradeResult] = useState<SyncTargetUpgradeResult>({
+	const [upgradeResult, setUpgradeResult] = useState({
 		done: false,
 		error: null,
 	});

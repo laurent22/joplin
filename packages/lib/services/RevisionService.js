@@ -1,15 +1,15 @@
-const ItemChange = require('lib/models/ItemChange');
-const Note = require('lib/models/Note');
-const Folder = require('lib/models/Folder');
-const Setting = require('lib/models/Setting').default;
-const Revision = require('lib/models/Revision');
-const BaseModel = require('lib/BaseModel').default;
-const ItemChangeUtils = require('lib/services/ItemChangeUtils');
-const shim = require('lib/shim').default;
-const BaseService = require('lib/services/BaseService').default;
-const { _ } = require('lib/locale');
+const ItemChange = require('../models/ItemChange');
+const Note = require('../models/Note');
+const Folder = require('../models/Folder');
+const Setting = require('../models/Setting').default;
+const Revision = require('../models/Revision');
+const BaseModel = require('../BaseModel').default;
+const ItemChangeUtils = require('./ItemChangeUtils');
+const shim = require('../shim').default;
+const BaseService = require('./BaseService').default;
+const { _ } = require('../locale');
 const { sprintf } = require('sprintf-js');
-const { wrapError } = require('lib/errorUtils');
+const { wrapError } = require('../errorUtils');
 
 class RevisionService extends BaseService {
 	constructor() {

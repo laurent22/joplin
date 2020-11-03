@@ -1,7 +1,7 @@
-import CommandService from 'lib/services/CommandService';
-import shim from 'lib/shim';
+import CommandService from '@joplinapp/lib/services/CommandService';
+import shim from '@joplinapp/lib/shim';
 
-import { _ } from 'lib/locale';
+import { _ } from '@joplinapp/lib/locale';
 
 const commandService = CommandService.instance();
 

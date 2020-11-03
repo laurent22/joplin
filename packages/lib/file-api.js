@@ -1,10 +1,10 @@
-const { isHidden } = require('lib/path-utils');
-const Logger = require('lib/Logger').default;
-const shim = require('lib/shim').default;
-const BaseItem = require('lib/models/BaseItem.js');
-const JoplinError = require('lib/JoplinError');
-const ArrayUtils = require('lib/ArrayUtils');
-const time = require('lib/time').default;
+const { isHidden } = require('./path-utils');
+const Logger = require('./Logger').default;
+const shim = require('./shim').default;
+const BaseItem = require('./models/BaseItem.js');
+const JoplinError = require('./JoplinError');
+const ArrayUtils = require('./ArrayUtils');
+const time = require('./time').default;
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 

@@ -1,15 +1,15 @@
 import { ImportExportResult } from './types';
-import { _ } from 'lib/locale';
+import { _ } from '../../locale';
 
-const InteropService_Importer_Base = require('lib/services/interop/InteropService_Importer_Base').default;
-const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
-const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('lib/path-utils');
-const shim = require('lib/shim').default;
-const { extractImageUrls } = require('lib/markdownUtils').default;
-const { unique } = require('lib/ArrayUtils');
-const { pregQuote } = require('lib/string-utils-common');
-const { MarkupToHtml } = require('lib/joplin-renderer');
+const InteropService_Importer_Base = require('./InteropService_Importer_Base').default;
+const Folder = require('../../models/Folder.js');
+const Note = require('../../models/Note.js');
+const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('../../path-utils');
+const shim = require('../../shim').default;
+const { extractImageUrls } = require('../../markdownUtils').default;
+const { unique } = require('../../ArrayUtils');
+const { pregQuote } = require('../../string-utils-common');
+const { MarkupToHtml } = require('@joplinapp/renderer');
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result:ImportExportResult) {

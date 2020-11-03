@@ -1,4 +1,4 @@
-const time = require('lib/time').default;
+const time = require('../../time').default;
 
 interface Term {
 	name: string

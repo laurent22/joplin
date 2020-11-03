@@ -1,6 +1,6 @@
-const mdImporterService = require('lib/services/interop/InteropService_Importer_Md').default;
-const Note = require('lib/models/Note.js');
-const { setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
+const mdImporterService = require('@joplinapp/lib/services/interop/InteropService_Importer_Md').default;
+const Note = require('@joplinapp/lib/models/Note.js');
+const { setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
 
 const importer = new mdImporterService();
 

@@ -107,7 +107,7 @@ function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
 	});
 }
 
-function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:JSX.Element[], isLastChild:boolean):JSX.Element {
+function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:any[], isLastChild:boolean):any {
 	const style:any = {
 		display: item.visible !== false ? 'flex' : 'none',
 		flexDirection: item.direction,
@@ -161,7 +161,7 @@ function ResizableLayout(props:Props) {
 
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
-	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):JSX.Element {
+	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):any {
 
 		function onResizeStart() {
 			setResizedItem({

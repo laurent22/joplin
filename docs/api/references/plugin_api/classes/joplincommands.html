@@ -168,10 +168,10 @@
 								<pre><code class="language-typescript"><span class="hljs-comment">// Register a new commmand called &quot;testCommand1&quot;</span>
 
 <span class="hljs-keyword">await</span> joplin.commands.register({
-    name: <span class="hljs-string">&#x27;testCommand1&#x27;</span>,
-    label: <span class="hljs-string">&#x27;My Test Command 1&#x27;</span>,
-    iconName: <span class="hljs-string">&#x27;fas fa-music&#x27;</span>,
-    execute: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;testCommand1&#x27;</span>,
+    <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;My Test Command 1&#x27;</span>,
+    <span class="hljs-attr">iconName</span>: <span class="hljs-string">&#x27;fas fa-music&#x27;</span>,
+    <span class="hljs-attr">execute</span>: <span class="hljs-function">() =&gt;</span> {
         alert(<span class="hljs-string">&#x27;Testing plugin command 1&#x27;</span>);
     },
 });</code></pre>

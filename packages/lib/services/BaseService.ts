@@ -1,4 +1,4 @@
-import Logger from 'lib/Logger';
+import Logger from '../Logger';
 
 export default class BaseService {
 

@@ -1,19 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint prefer-const: 0*/
 
-require('app-module-path').addPath(__dirname);
 
-const time = require('lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('test-utils.js');
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
-const Note = require('lib/models/Note');
-const Folder = require('lib/models/Folder');
-const Tag = require('lib/models/Tag');
-const ItemChange = require('lib/models/ItemChange');
-const Setting = require('lib/models/Setting').default;
-const Resource = require('lib/models/Resource.js');
-const shim = require('lib/shim').default;
-const ResourceService = require('lib/services/ResourceService.js');
+const time = require('@joplinapp/lib/time').default;
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('./test-utils.js');
+const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');
+const Note = require('@joplinapp/lib/models/Note');
+const Folder = require('@joplinapp/lib/models/Folder');
+const Tag = require('@joplinapp/lib/models/Tag');
+const ItemChange = require('@joplinapp/lib/models/ItemChange');
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const Resource = require('@joplinapp/lib/models/Resource.js');
+const shim = require('@joplinapp/lib/shim').default;
+const ResourceService = require('@joplinapp/lib/services/ResourceService.js');
 
 
 process.on('unhandledRejection', (reason, p) => {

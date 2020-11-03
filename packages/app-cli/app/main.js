@@ -3,9 +3,6 @@
 // Use njstrace to find out what Node.js might be spending time on
 // var njstrace = require('njstrace').inject();
 
-// Make it possible to require("/lib/...") without specifying full path
-require('app-module-path').addPath(__dirname);
-
 const compareVersion = require('compare-version');
 const nodeVersion = process && process.versions && process.versions.node ? process.versions.node : '0.0.0';
 if (compareVersion(nodeVersion, '10.0.0') < 0) {
@@ -14,22 +11,24 @@ if (compareVersion(nodeVersion, '10.0.0') < 0) {
 }
 
 const { app } = require('./app.js');
-const Folder = require('lib/models/Folder.js');
-const Resource = require('lib/models/Resource.js');
-const BaseItem = require('lib/models/BaseItem.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const MasterKey = require('lib/models/MasterKey');
-const Setting = require('lib/models/Setting').default;
-const Revision = require('lib/models/Revision.js');
-const Logger = require('lib/Logger').default;
-const FsDriverNode = require('lib/fs-driver-node').default;
-const { shimInit } = require('lib/shim-init-node.js');
-const { _ } = require('lib/locale');
-const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
-const EncryptionService = require('lib/services/EncryptionService');
-const envFromArgs = require('lib/envFromArgs');
+const Folder = require('@joplinapp/lib/models/Folder.js');
+const Resource = require('@joplinapp/lib/models/Resource.js');
+const BaseItem = require('@joplinapp/lib/models/BaseItem.js');
+const Note = require('@joplinapp/lib/models/Note.js');
+const Tag = require('@joplinapp/lib/models/Tag.js');
+const NoteTag = require('@joplinapp/lib/models/NoteTag.js');
+const MasterKey = require('@joplinapp/lib/models/MasterKey');
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const Revision = require('@joplinapp/lib/models/Revision.js');
+const Logger = require('@joplinapp/lib/Logger').default;
+const FsDriverNode = require('@joplinapp/lib/fs-driver-node').default;
+const sharp = require('sharp');
+const { shimInit } = require('@joplinapp/lib/shim-init-node.js');
+const shim = require('@joplinapp/lib/shim').default;
+const { _ } = require('@joplinapp/lib/locale');
+const { FileApiDriverLocal } = require('@joplinapp/lib/file-api-driver-local.js');
+const EncryptionService = require('@joplinapp/lib/services/EncryptionService');
+const envFromArgs = require('@joplinapp/lib/envFromArgs');
 
 const env = envFromArgs(process.argv);
 
@@ -52,7 +51,15 @@ BaseItem.loadClass('Revision', Revision);
 Setting.setConstant('appId', `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-cli`);
 Setting.setConstant('appType', 'cli');
 
-shimInit();
+let keytar;
+try {
+	keytar = shim.platformSupportsKeyChain() ? require('keytar') : null;
+} catch (error) {
+	console.error('Cannot load keytar - keychain support will be disabled', error);
+	keytar = null;
+}
+
+shimInit(sharp, keytar);
 
 const application = app();
 

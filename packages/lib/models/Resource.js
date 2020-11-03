@@ -1,16 +1,16 @@
-const BaseModel = require('lib/BaseModel').default;
-const BaseItem = require('lib/models/BaseItem.js');
-const ItemChange = require('lib/models/ItemChange.js');
-const NoteResource = require('lib/models/NoteResource.js');
-const ResourceLocalState = require('lib/models/ResourceLocalState.js');
-const Setting = require('lib/models/Setting').default;
-const pathUtils = require('lib/path-utils');
-const { mime } = require('lib/mime-utils.js');
-const { filename, safeFilename } = require('lib/path-utils');
-const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
-const markdownUtils = require('lib/markdownUtils').default;
-const JoplinError = require('lib/JoplinError');
-const { _ } = require('lib/locale');
+const BaseModel = require('../BaseModel').default;
+const BaseItem = require('./BaseItem.js');
+const ItemChange = require('./ItemChange.js');
+const NoteResource = require('./NoteResource.js');
+const ResourceLocalState = require('./ResourceLocalState.js');
+const Setting = require('./Setting').default;
+const pathUtils = require('../path-utils');
+const { mime } = require('../mime-utils.js');
+const { filename, safeFilename } = require('../path-utils');
+const { FsDriverDummy } = require('../fs-driver-dummy.js');
+const markdownUtils = require('../markdownUtils').default;
+const JoplinError = require('../JoplinError');
+const { _ } = require('../locale');
 
 class Resource extends BaseItem {
 	static tableName() {

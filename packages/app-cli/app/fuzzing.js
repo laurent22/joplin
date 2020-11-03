@@ -1,10 +1,10 @@
 'use strict';
 
-const time = require('lib/time').default;
-const Logger = require('lib/Logger').default;
-const Resource = require('lib/models/Resource.js');
-const { dirname } = require('lib/path-utils');
-const FsDriverNode = require('lib/fs-driver-node').default;
+const time = require('@joplinapp/lib/time').default;
+const Logger = require('@joplinapp/lib/Logger').default;
+const Resource = require('@joplinapp/lib/models/Resource.js');
+const { dirname } = require('@joplinapp/lib/path-utils');
+const FsDriverNode = require('@joplinapp/lib/fs-driver-node').default;
 const lodash = require('lodash');
 const exec = require('child_process').exec;
 const fs = require('fs-extra');

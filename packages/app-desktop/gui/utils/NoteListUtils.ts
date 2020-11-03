@@ -1,18 +1,18 @@
-import { utils as pluginUtils, PluginStates } from 'lib/services/plugins/reducer';
-import CommandService from 'lib/services/CommandService';
-import eventManager from 'lib/eventManager';
-import InteropService from 'lib/services/interop/InteropService';
-import MenuUtils from 'lib/services/commands/MenuUtils';
+import { utils as pluginUtils, PluginStates } from '@joplinapp/lib/services/plugins/reducer';
+import CommandService from '@joplinapp/lib/services/CommandService';
+import eventManager from '@joplinapp/lib/eventManager';
+import InteropService from '@joplinapp/lib/services/interop/InteropService';
+import MenuUtils from '@joplinapp/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
-import { _ } from 'lib/locale';
-import { MenuItemLocation } from 'lib/services/plugins/api/types';
+import { _ } from '@joplinapp/lib/locale';
+import { MenuItemLocation } from '@joplinapp/lib/services/plugins/api/types';
 
-const BaseModel = require('lib/BaseModel').default;
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const Note = require('lib/models/Note');
-const { substrWithEllipsis } = require('lib/string-utils');
+const Note = require('@joplinapp/lib/models/Note');
+const { substrWithEllipsis } = require('@joplinapp/lib/string-utils');
 
 interface ContextMenuProps {
 	notes: any[],

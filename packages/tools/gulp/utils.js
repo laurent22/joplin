@@ -138,7 +138,7 @@ utils.copyFile = async function(src, dest) {
 };
 
 utils.rootDir = function() {
-	return utils.dirname(utils.dirname(__dirname));
+	return utils.dirname(utils.dirname(utils.dirname(__dirname)));
 };
 
 utils.registerGulpTasks = function(gulp, tasks) {

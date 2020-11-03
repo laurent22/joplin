@@ -1,6 +1,5 @@
-import { CommandRuntime, CommandDeclaration } from 'lib/services/CommandService';
-import { _ } from 'lib/locale';
-import { DesktopCommandContext } from 'ElectronClient/services/commands/types';
+import { CommandRuntime, CommandDeclaration } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'focusElementSideBar',
@@ -10,7 +9,7 @@ export const declaration:CommandDeclaration = {
 
 export const runtime = (comp:any):CommandRuntime => {
 	return {
-		execute: async (context:DesktopCommandContext) => {
+		execute: async (context:any) => {
 			const sideBarVisible = !!context.state.sidebarVisibility;
 
 			if (sideBarVisible) {

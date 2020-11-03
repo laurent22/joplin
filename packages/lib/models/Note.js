@@ -1,19 +1,19 @@
-const BaseModel = require('lib/BaseModel').default;
+const BaseModel = require('../BaseModel').default;
 const { sprintf } = require('sprintf-js');
-const BaseItem = require('lib/models/BaseItem.js');
-const ItemChange = require('lib/models/ItemChange.js');
-const Resource = require('lib/models/Resource.js');
-const Setting = require('lib/models/Setting').default;
-const shim = require('lib/shim').default;
-const { pregQuote } = require('lib/string-utils.js');
-const time = require('lib/time').default;
-const { _ } = require('lib/locale');
-const ArrayUtils = require('lib/ArrayUtils.js');
+const BaseItem = require('./BaseItem.js');
+const ItemChange = require('./ItemChange.js');
+const Resource = require('./Resource.js');
+const Setting = require('./Setting').default;
+const shim = require('../shim').default;
+const { pregQuote } = require('../string-utils.js');
+const time = require('../time').default;
+const { _ } = require('../locale');
+const ArrayUtils = require('../ArrayUtils.js');
 const lodash = require('lodash');
-const urlUtils = require('lib/urlUtils.js');
-const markdownUtils = require('lib/markdownUtils').default;
-const { MarkupToHtml } = require('lib/joplin-renderer');
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const urlUtils = require('../urlUtils.js');
+const markdownUtils = require('../markdownUtils').default;
+const { MarkupToHtml } = require('@joplinapp/renderer');
+const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
 
 class Note extends BaseItem {
 	static tableName() {

@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
 
-require('app-module-path').addPath(__dirname);
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestNotes, createNTestFolders, createNTestTags } = require('test-utils.js');
-const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const reducer = require('lib/reducer').default;
-const { defaultState, stateUtils, MAX_HISTORY } = require('lib/reducer');
+const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestNotes, createNTestFolders, createNTestTags } = require('./test-utils.js');
+const Folder = require('@joplinapp/lib/models/Folder.js');
+const Note = require('@joplinapp/lib/models/Note.js');
+const Tag = require('@joplinapp/lib/models/Tag.js');
+const reducer = require('@joplinapp/lib/reducer').default;
+const { defaultState, stateUtils, MAX_HISTORY } = require('@joplinapp/lib/reducer');
 
 function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
 	let state = defaultState;

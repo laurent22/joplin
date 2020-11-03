@@ -1,14 +1,14 @@
-const time = require('lib/time').default;
-const BaseItem = require('lib/models/BaseItem.js');
-const Alarm = require('lib/models/Alarm').default;
-const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
-const BaseModel = require('lib/BaseModel').default;
-const DecryptionWorker = require('lib/services/DecryptionWorker');
-const ResourceFetcher = require('lib/services/ResourceFetcher');
-const Resource = require('lib/models/Resource');
-const { _ } = require('lib/locale');
-const { toTitleCase } = require('lib/string-utils.js');
+const time = require('../time').default;
+const BaseItem = require('../models/BaseItem.js');
+const Alarm = require('../models/Alarm').default;
+const Folder = require('../models/Folder.js');
+const Note = require('../models/Note.js');
+const BaseModel = require('../BaseModel').default;
+const DecryptionWorker = require('./DecryptionWorker');
+const ResourceFetcher = require('./ResourceFetcher');
+const Resource = require('../models/Resource');
+const { _ } = require('../locale');
+const { toTitleCase } = require('../string-utils.js');
 
 class ReportService {
 	csvEscapeCell(cell) {

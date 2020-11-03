@@ -2,7 +2,13 @@
 
 # Building the applications
 
-Note that all the applications share the same library, which, for historical reasons, is in `ReactNativeClient/lib`. This library is copied to the relevant directories when building each app.
+- Is using Lerna to manage to mono-repo
+- Gulp for build steps on each package
+
+Usage of Lerna is mostly transparent as the needed commands have been moved to the root package.json and thus are invoked for example when running `npm install` or `npm run watch`. One exception is when installing a new package. In that case, instead of using `npm i -s ...` you will need to go to the root and use `lerna add package-to-add --scope=@joplinapp/package-name`. For example to add the package "leftpad" to the "@joplinapp/app-cli" package, you would write `lerna add leftpad --scope=@joplinapp/app-cli`.
+
+
+Note that all the applications share the same library, which, for historical reasons, is in `packages/app-mobile/lib`. This library is copied to the relevant directories when building each app.
 
 ## Required dependencies
 
@@ -23,14 +29,14 @@ Then you can test the various applications:
 
 ## Testing the desktop application
 
-	cd ElectronClient
+	cd packages/app-desktop
 	npm start
 
 You can also run it under WSL 2. To do so, [follow these instructions](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2) to setup your environment.
 
 ## Testing the Terminal application
 
-	cd CliClient
+	cd packages/app-cli
 	npm start
 
 ## Testing the Mobile application
@@ -39,7 +45,7 @@ First you need to setup React Native to build projects with native code. For thi
 
 Then:
 
-	cd ReactNativeClient
+	cd packages/app-mobile
 	npm run start-android
 	# Or: npm run start-ios
 
@@ -73,14 +79,14 @@ You can specify additional parameters when running the desktop or CLI applicatio
 
 Most of the application is written in JavaScript, however new classes and files should generally be written in [TypeScript](https://www.typescriptlang.org/). All TypeScript files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
 
-In the current setup, `tsc` is executed from the root of the project, and will compile everything in CliClient, ElectronClient, etc. This is more convenient to have just one place to compile everything, and it also means there's only one watch command to run. However, one drawback is that TypeScript doesn't find types defined in node_modules folders in sub-directories. For example, if you install `immer` in ElectronClient, then try to use the package, TypeScript will report that it cannot find this module. In theory using `typeRoots`, it should be possible to make it find the right modules but it doesn't seem to work in this case. Currently the workaround is to install any such package at the root of the project. By doing so, TypeScript will find the type definitions and compilation will work. It's not ideal since the module is installed at the root even though it's not used, but for now that will work.
+In the current setup, `tsc` is executed from the root of the project, and will compile everything in packages/app-cli, packages/app-desktop, etc. This is more convenient to have just one place to compile everything, and it also means there's only one watch command to run. However, one drawback is that TypeScript doesn't find types defined in node_modules folders in sub-directories. For example, if you install `immer` in packages/app-desktop, then try to use the package, TypeScript will report that it cannot find this module. In theory using `typeRoots`, it should be possible to make it find the right modules but it doesn't seem to work in this case. Currently the workaround is to install any such package at the root of the project. By doing so, TypeScript will find the type definitions and compilation will work. It's not ideal since the module is installed at the root even though it's not used, but for now that will work.
 
 ## Hot reload
 
 If you'd like to auto-reload the desktop app on changes rather than having to quit and restart it manually each time, you can use [watchman-make](https://facebook.github.io/watchman/docs/watchman-make.html):
 
 ```sh
-cd ElectronClient
+cd packages/app-desktop
 watchman-make -p '**/*.js' '**/*.jsx' --run "npm start"
 ```
 
@@ -92,7 +98,7 @@ It still requires you to quit the application each time you want it to rebuild, 
 
 # Updating Markdown renderer packages
 
-The Markdown renderer is located under ReactNativeClient/lib/joplin-renderer. Whenever updating one of its dependencies, such as Mermaid or Katex, please run `npm run buildAssets` to make sure all assets such as fonts or CSS files are deployed correctly.
+The Markdown renderer is located under packages/app-mobile/lib/joplin-renderer. Whenever updating one of its dependencies, such as Mermaid or Katex, please run `npm run buildAssets` to make sure all assets such as fonts or CSS files are deployed correctly.
 
 # Troubleshooting
 

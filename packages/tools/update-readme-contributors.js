@@ -1,5 +1,3 @@
-require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
-
 'use strict';
 
 const request = require('request');

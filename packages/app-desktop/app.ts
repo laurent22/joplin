@@ -1,45 +1,43 @@
-import ResourceEditWatcher from 'lib/services/ResourceEditWatcher/index';
-import CommandService from 'lib/services/CommandService';
-import KeymapService from 'lib/services/KeymapService';
-import PluginService from 'lib/services/plugins/PluginService';
-import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from 'lib/services/ResourceEditWatcher/reducer';
-import { defaultState, State } from 'lib/reducer';
+import ResourceEditWatcher from '@joplinapp/lib/services/ResourceEditWatcher/index';
+import CommandService from '@joplinapp/lib/services/CommandService';
+import KeymapService from '@joplinapp/lib/services/KeymapService';
+import PluginService from '@joplinapp/lib/services/plugins/PluginService';
+import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from '@joplinapp/lib/services/ResourceEditWatcher/reducer';
+import { defaultState, State } from '@joplinapp/lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
-import shim from 'lib/shim';
-import AlarmService from 'lib/services/AlarmService';
-import AlarmServiceDriverNode from 'lib/services/AlarmServiceDriverNode';
-import Logger, { TargetType } from 'lib/Logger';
-import Setting from 'lib/models/Setting';
-import actionApi from 'lib/services/rest/actionApi.desktop';
-import BaseApplication from 'lib/BaseApplication';
-import { _, setLocale } from 'lib/locale';
-import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
+import shim from '@joplinapp/lib/shim';
+import AlarmService from '@joplinapp/lib/services/AlarmService';
+import AlarmServiceDriverNode from '@joplinapp/lib/services/AlarmServiceDriverNode';
+import Logger, { TargetType } from '@joplinapp/lib/Logger';
+import Setting from '@joplinapp/lib/models/Setting';
+import actionApi from '@joplinapp/lib/services/rest/actionApi.desktop';
+import BaseApplication from '@joplinapp/lib/BaseApplication';
+import { _, setLocale } from '@joplinapp/lib/locale';
+import SpellCheckerService from '@joplinapp/lib/services/spellChecker/SpellCheckerService';
 import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
 import bridge from './services/bridge';
 import menuCommandNames from './gui/menuCommandNames';
 
-require('app-module-path').addPath(__dirname);
-
-const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
-const MasterKey = require('lib/models/MasterKey');
-const Folder = require('lib/models/Folder');
+const { FoldersScreenUtils } = require('@joplinapp/lib/folders-screen-utils.js');
+const MasterKey = require('@joplinapp/lib/models/MasterKey');
+const Folder = require('@joplinapp/lib/models/Folder');
 const fs = require('fs-extra');
-const Tag = require('lib/models/Tag.js');
-const { reg } = require('lib/registry.js');
+const Tag = require('@joplinapp/lib/models/Tag.js');
+const { reg } = require('@joplinapp/lib/registry.js');
 const packageInfo = require('./packageInfo.js');
-const DecryptionWorker = require('lib/services/DecryptionWorker');
-const ResourceService = require('lib/services/ResourceService');
-const ClipperServer = require('lib/ClipperServer');
-const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
+const DecryptionWorker = require('@joplinapp/lib/services/DecryptionWorker');
+const ResourceService = require('@joplinapp/lib/services/ResourceService');
+const ClipperServer = require('@joplinapp/lib/ClipperServer');
+const ExternalEditWatcher = require('@joplinapp/lib/services/ExternalEditWatcher');
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
-const PluginManager = require('lib/services/PluginManager');
-const RevisionService = require('lib/services/RevisionService');
-const MigrationService = require('lib/services/MigrationService');
-const TemplateUtils = require('lib/TemplateUtils');
-const CssUtils = require('lib/CssUtils');
-// const populateDatabase = require('lib/services/debug/populateDatabase').default;
+const PluginManager = require('@joplinapp/lib/services/PluginManager');
+const RevisionService = require('@joplinapp/lib/services/RevisionService');
+const MigrationService = require('@joplinapp/lib/services/MigrationService');
+const TemplateUtils = require('@joplinapp/lib/TemplateUtils');
+const CssUtils = require('@joplinapp/lib/CssUtils');
+// const populateDatabase = require('@joplinapp/lib/services/debug/populateDatabase').default;
 
 const commands = [
 	require('./gui/NoteListControls/commands/focusSearch'),
@@ -85,9 +83,9 @@ const globalCommands = [
 	require('./commands/toggleExternalEditing'),
 	require('./commands/copyDevCommand'),
 	require('./commands/openProfileDirectory'),
-	require('lib/commands/synchronize'),
-	require('lib/commands/historyBackward'),
-	require('lib/commands/historyForward'),
+	require('@joplinapp/lib/commands/synchronize'),
+	require('@joplinapp/lib/commands/historyBackward'),
+	require('@joplinapp/lib/commands/historyForward'),
 ];
 
 const editorCommandDeclarations = require('./gui/NoteEditor/commands/editorCommandDeclarations').default;

@@ -7,26 +7,40 @@ module.exports = {
 	fn: async function() {
 		const tsFiles = glob.sync(`${rootDir}{/**/*.ts,/**/*.tsx}`, {
 			ignore: [
-				'**/node_modules/**',
 				'**/.git/**',
-				'**/ElectronClient/lib/**',
-				'**/CliClient/build/**',
-				'**/CliClient/tests-build/**',
-				'**/ElectronClient/dist/**',
-				'**/Modules/TinyMCE/JoplinLists/**',
-				'**/Modules/TinyMCE/IconPack/**',
-				'**/CliClient/tests/support/plugins/**',
+				'**/api-cli/build/**',
+				'**/api-cli/tests-build/**',
+				'**/api-cli/tests/support/plugins/**',
+				'**/app-desktop/dist/**',
+				'**/app-desktop/lib/**',
+				'**/Assets/*',
+				'**/app-mobile/android/**',
+				'**/app-mobile/ios/**',
+				'**/node_modules/**',
 				'**/plugin_types/**',
-				'**/ReactNativeClient/android/**',
-				'**/ReactNativeClient/ios/**',
 			],
 		}).map(f => f.substr(rootDir.length + 1));
 
-		const ignoredFiles = tsFiles.map(f => {
+		const ignoredJsFiles = tsFiles.map(f => {
 			const s = f.split('.');
 			s.pop();
 			return `${s.join('.')}.js`;
 		});
+
+		const ignoredMapFiles = tsFiles.map(f => {
+			const s = f.split('.');
+			s.pop();
+			return `${s.join('.')}.js.map`;
+		});
+
+		const ignoredDefFiles = tsFiles.map(f => {
+			const s = f.split('.');
+			s.pop();
+			return `${s.join('.')}.d.ts`;
+		});
+
+		const ignoredFiles = ignoredJsFiles.concat(ignoredMapFiles).concat(ignoredDefFiles);
+		ignoredFiles.sort();
 
 		const regex = /(# AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD)[\s\S]*(# AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD)/;
 		const replacement = `$1\n${ignoredFiles.join('\n')}\n$2`;

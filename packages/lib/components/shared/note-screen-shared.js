@@ -1,11 +1,11 @@
-const { reg } = require('lib/registry.js');
-const Folder = require('lib/models/Folder.js');
-const BaseModel = require('lib/BaseModel').default;
-const Note = require('lib/models/Note.js');
-const Resource = require('lib/models/Resource.js');
-const ResourceFetcher = require('lib/services/ResourceFetcher.js');
-const DecryptionWorker = require('lib/services/DecryptionWorker.js');
-const Setting = require('lib/models/Setting').default;
+const { reg } = require('../../registry.js');
+const Folder = require('../../models/Folder.js');
+const BaseModel = require('../../BaseModel').default;
+const Note = require('../../models/Note.js');
+const Resource = require('../../models/Resource.js');
+const ResourceFetcher = require('../../services/ResourceFetcher.js');
+const DecryptionWorker = require('../../services/DecryptionWorker.js');
+const Setting = require('../../models/Setting').default;
 const Mutex = require('async-mutex').Mutex;
 
 const shared = {};

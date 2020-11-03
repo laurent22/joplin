@@ -1,5 +1,5 @@
-import ResourceEditWatcher from 'lib/services/ResourceEditWatcher/index';
-const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
+import ResourceEditWatcher from '../ResourceEditWatcher/index';
+const ExternalEditWatcher = require('../ExternalEditWatcher');
 
 export default {
 

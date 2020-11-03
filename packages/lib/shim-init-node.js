@@ -1,14 +1,14 @@
 const fs = require('fs-extra');
-const shim = require('lib/shim').default;
-const { GeolocationNode } = require('lib/geolocation-node.js');
-const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
-const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale');
-const FsDriverNode = require('lib/fs-driver-node').default;
-const mimeUtils = require('lib/mime-utils.js').mime;
-const Note = require('lib/models/Note.js');
-const Resource = require('lib/models/Resource.js');
+const shim = require('./shim').default;
+const { GeolocationNode } = require('./geolocation-node.js');
+const { FileApiDriverLocal } = require('./file-api-driver-local.js');
+const { setLocale, defaultLocale, closestSupportedLocale } = require('./locale');
+const FsDriverNode = require('./fs-driver-node').default;
+const mimeUtils = require('./mime-utils.js').mime;
+const Note = require('./models/Note.js');
+const Resource = require('./models/Resource.js');
 const urlValidator = require('valid-url');
-const { _ } = require('lib/locale');
+const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
 const toRelative = require('relative');
@@ -51,14 +51,16 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-function shimInit() {
+function shimInit(sharp = null, keytar = null) {
+	keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? keytar : null;
+
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');
 	};
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
-	shim.sjclModule = require('lib/vendor/sjcl.js');
+	shim.sjclModule = require('./vendor/sjcl.js');
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
@@ -151,8 +153,6 @@ function shimInit() {
 			await shim.writeImageToFile(image, mime, targetPath);
 		} else {
 			// For the CLI tool
-			const sharp = require('sharp');
-
 			const image = sharp(filePath);
 			const md = await image.metadata();
 
@@ -189,8 +189,8 @@ function shimInit() {
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
-		const uuid = require('lib/uuid').default;
-		const { basename, fileExtension, safeFileExtension } = require('lib/path-utils');
+		const uuid = require('./uuid').default;
+		const { basename, fileExtension, safeFileExtension } = require('./path-utils');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
@@ -250,8 +250,8 @@ function shimInit() {
 		}, options);
 
 		const { basename } = require('path');
-		const { escapeTitleText } = require('lib/markdownUtils').default;
-		const { toFileProtocolPath } = require('lib/path-utils');
+		const { escapeTitleText } = require('./markdownUtils').default;
+		const { toFileProtocolPath } = require('./path-utils');
 
 		let resource = null;
 		if (!options.createFileURL) {
@@ -524,6 +524,9 @@ function shimInit() {
 		return timers.clearInterval(id);
 	};
 
+	shim.keytar = () => {
+		return keytar;
+	};
 }
 
 module.exports = { shimInit };

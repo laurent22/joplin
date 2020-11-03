@@ -1,7 +1,7 @@
-import { CommandRuntime, CommandDeclaration } from '../lib/services/CommandService';
-import { _ } from 'lib/locale';
+import { CommandRuntime, CommandDeclaration } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
 import bridge from '../services/bridge';
-import Setting from 'lib/models/Setting';
+import Setting from '@joplinapp/lib/models/Setting';
 
 export const declaration:CommandDeclaration = {
 	name: 'openProfileDirectory',

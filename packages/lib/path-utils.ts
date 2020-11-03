@@ -1,6 +1,6 @@
 /* eslint no-useless-escape: 0*/
 
-const { _ } = require('lib/locale');
+const { _ } = require('./locale');
 
 export function dirname(path:string) {
 	if (!path) throw new Error('Path is empty');

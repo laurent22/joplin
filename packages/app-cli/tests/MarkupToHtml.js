@@ -1,7 +1,6 @@
-require('app-module-path').addPath(__dirname);
 
-const { asyncTest } = require('test-utils.js');
-const MarkupToHtml = require('lib/joplin-renderer/MarkupToHtml').default;
+const { asyncTest } = require('./test-utils.js');
+const MarkupToHtml = require('@joplinapp/renderer/MarkupToHtml').default;
 
 describe('MarkupToHtml', function() {
 

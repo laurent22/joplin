@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 
-require('app-module-path').addPath(__dirname);
 
-const { asyncTest } = require('test-utils.js');
-const StringUtils = require('lib/string-utils');
+const { asyncTest } = require('./test-utils.js');
+const StringUtils = require('@joplinapp/lib/string-utils');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

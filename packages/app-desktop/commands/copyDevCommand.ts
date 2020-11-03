@@ -1,5 +1,5 @@
-import { CommandRuntime, CommandDeclaration } from '../lib/services/CommandService';
-import { _ } from 'lib/locale';
+import { CommandRuntime, CommandDeclaration } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
 const app = require('electron').remote.app;
 const { clipboard } = require('electron');
 

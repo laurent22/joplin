@@ -1,11 +1,11 @@
 import * as React from 'react';
-import CommandService from 'lib/services/CommandService';
+import CommandService from '@joplinapp/lib/services/CommandService';
 import ToolbarBase from '../ToolbarBase';
-import { utils as pluginUtils } from 'lib/services/plugins/reducer';
-import ToolbarButtonUtils, { ToolbarButtonInfo } from 'lib/services/commands/ToolbarButtonUtils';
-import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
+import { utils as pluginUtils } from '@joplinapp/lib/services/plugins/reducer';
+import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplinapp/lib/services/commands/ToolbarButtonUtils';
+import stateToWhenClauseContext from '@joplinapp/lib/services/commands/stateToWhenClauseContext';
 const { connect } = require('react-redux');
-const { buildStyle } = require('lib/theme');
+const { buildStyle } = require('@joplinapp/lib/theme');
 
 interface NoteToolbarProps {
 	themeId: number,

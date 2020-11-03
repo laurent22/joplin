@@ -85,16 +85,16 @@
 					<p>For example:</p>
 					<pre><code class="language-typescript"><span class="hljs-comment">// Get a note ID, title and body</span>
 <span class="hljs-keyword">const</span> noteId = <span class="hljs-string">&#x27;some_note_id&#x27;</span>;
-<span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> joplin.data.get([<span class="hljs-string">&#x27;notes&#x27;</span>, noteId], { fields: [<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;title&#x27;</span>, <span class="hljs-string">&#x27;body&#x27;</span>] });
+<span class="hljs-keyword">const</span> note = <span class="hljs-keyword">await</span> joplin.data.get([<span class="hljs-string">&#x27;notes&#x27;</span>, noteId], { <span class="hljs-attr">fields</span>: [<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;title&#x27;</span>, <span class="hljs-string">&#x27;body&#x27;</span>] });
 
 <span class="hljs-comment">// Get all folders</span>
 <span class="hljs-keyword">const</span> folders = <span class="hljs-keyword">await</span> joplin.data.get([<span class="hljs-string">&#x27;folders&#x27;</span>]);
 
 <span class="hljs-comment">// Set the note body</span>
-<span class="hljs-keyword">await</span> joplin.data.put([<span class="hljs-string">&#x27;notes&#x27;</span>, noteId], <span class="hljs-literal">null</span>, { body: <span class="hljs-string">&quot;New note body&quot;</span> });
+<span class="hljs-keyword">await</span> joplin.data.put([<span class="hljs-string">&#x27;notes&#x27;</span>, noteId], <span class="hljs-literal">null</span>, { <span class="hljs-attr">body</span>: <span class="hljs-string">&quot;New note body&quot;</span> });
 
 <span class="hljs-comment">// Create a new note under one of the folders</span>
-<span class="hljs-keyword">await</span> joplin.data.post([<span class="hljs-string">&#x27;notes&#x27;</span>], <span class="hljs-literal">null</span>, { body: <span class="hljs-string">&quot;my new note&quot;</span>, title: <span class="hljs-string">&quot;some title&quot;</span>, parent_id: folders[<span class="hljs-number">0</span>].id });</code></pre>
+<span class="hljs-keyword">await</span> joplin.data.post([<span class="hljs-string">&#x27;notes&#x27;</span>], <span class="hljs-literal">null</span>, { <span class="hljs-attr">body</span>: <span class="hljs-string">&quot;my new note&quot;</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;some title&quot;</span>, <span class="hljs-attr">parent_id</span>: folders[<span class="hljs-number">0</span>].id });</code></pre>
 				</div>
 			</section>
 			<!--

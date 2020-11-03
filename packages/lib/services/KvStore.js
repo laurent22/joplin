@@ -1,4 +1,4 @@
-const BaseService = require('lib/services/BaseService').default;
+const BaseService = require('./BaseService').default;
 const Mutex = require('async-mutex').Mutex;
 
 class KvStore extends BaseService {

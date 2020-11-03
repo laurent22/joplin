@@ -1,18 +1,18 @@
 import { ModuleType, FileSystemItem, ImportModuleOutputFormat, Module, ImportOptions, ExportOptions, ImportExportResult, defaultImportExportModule } from './types';
 import InteropService_Importer_Custom from './InteropService_Importer_Custom';
 import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
-import shim from 'lib/shim';
-import { _ } from 'lib/locale';
-const BaseItem = require('lib/models/BaseItem.js');
-const BaseModel = require('lib/BaseModel').default;
-const Resource = require('lib/models/Resource.js');
-const Folder = require('lib/models/Folder.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const Note = require('lib/models/Note.js');
-const ArrayUtils = require('lib/ArrayUtils');
+import shim from '../../shim';
+import { _ } from '../../locale';
+const BaseItem = require('../../models/BaseItem.js');
+const BaseModel = require('../../BaseModel').default;
+const Resource = require('../../models/Resource.js');
+const Folder = require('../../models/Folder.js');
+const NoteTag = require('../../models/NoteTag.js');
+const Note = require('../../models/Note.js');
+const ArrayUtils = require('../../ArrayUtils');
 const { sprintf } = require('sprintf-js');
-const { fileExtension } = require('lib/path-utils');
-const { toTitleCase } = require('lib/string-utils');
+const { fileExtension } = require('../../path-utils');
+const { toTitleCase } = require('../../string-utils');
 const EventEmitter = require('events');
 
 export default class InteropService {
@@ -171,7 +171,7 @@ export default class InteropService {
 		} else {
 			className = `InteropService_Exporter_${toTitleCase(module.format)}`;
 		}
-		return `lib/services/interop/${className}`;
+		return `./${className}`;
 	}
 
 	private newModuleFromCustomFactory(module:Module) {

@@ -1,9 +1,7 @@
-require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
-
 const fs = require('fs-extra');
 const dirname = require('path').dirname;
-const { fileExtension, basename } = require('lib/path-utils');
-const markdownUtils = require('lib/markdownUtils').default;
+const { fileExtension, basename } = require('@joplinapp/lib/path-utils');
+const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
 
 const rootDir = dirname(__dirname);
 const welcomeDir = `${rootDir}/readme/welcome`;
@@ -143,7 +141,7 @@ async function main() {
 	const content = { notes: notes, folders: folders, tags: tags, timestamp: createdDate.getTime() };
 	const jsonContent = JSON.stringify(content, null, 4);
 	const jsContent = `module.exports = ${jsonContent}`;
-	fs.writeFileSync(`${rootDir}/ReactNativeClient/lib/welcomeAssets.js`, jsContent, { encoding: 'utf8' });
+	fs.writeFileSync(`${rootDir}/packages/app-mobile/lib/welcomeAssets.js`, jsContent, { encoding: 'utf8' });
 }
 
 main().catch((error) => {

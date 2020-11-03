@@ -1,13 +1,13 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Setting = require('lib/models/Setting').default;
-const EncryptionService = require('lib/services/EncryptionService');
-const { themeStyle } = require('lib/theme');
-const { _ } = require('lib/locale');
-const time = require('lib/time').default;
-const shim = require('lib/shim').default;
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const EncryptionService = require('@joplinapp/lib/services/EncryptionService');
+const { themeStyle } = require('@joplinapp/lib/theme');
+const { _ } = require('@joplinapp/lib/locale');
+const time = require('@joplinapp/lib/time').default;
+const shim = require('@joplinapp/lib/shim').default;
 const dialogs = require('./dialogs');
-const shared = require('lib/components/shared/encryption-config-shared.js');
+const shared = require('@joplinapp/lib/components/shared/encryption-config-shared.js');
 const bridge = require('electron').remote.require('./bridge').default;
 
 class EncryptionConfigScreenComponent extends React.Component {

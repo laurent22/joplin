@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const moment = require('moment');
 
 const rootDir = path.dirname(__dirname);
-const appDir = `${rootDir}/CliClient`;
+const appDir = `${rootDir}/packages/app-cli`;
 const changelogPath = `${rootDir}/readme/changelog_cli.md`;
 
 async function insertChangelog(tag, changelog) {
@@ -66,7 +66,7 @@ async function main() {
 
 	await execCommand('npm publish');
 
-	const changelog = await execCommand(`node ${rootDir}/Tools/git-changelog ${newTag}`);
+	const changelog = await execCommand(`node ${rootDir}/packages/tools/git-changelog ${newTag}`);
 
 	const newChangelog = await insertChangelog(newTag, changelog);
 

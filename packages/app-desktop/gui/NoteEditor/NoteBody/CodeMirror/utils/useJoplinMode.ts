@@ -1,6 +1,6 @@
 import 'codemirror/addon/mode/multiplex';
 import 'codemirror/mode/stex/stex';
-import Setting from 'lib/models/Setting';
+import Setting from '@joplinapp/lib/models/Setting';
 
 // Joplin markdown is a the same as markdown mode, but it has configured defaults
 // and support for katex math blocks

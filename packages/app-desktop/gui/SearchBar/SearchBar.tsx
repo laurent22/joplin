@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useCallback, useEffect } from 'react';
-import CommandService from 'lib/services/CommandService';
+import CommandService from '@joplinapp/lib/services/CommandService';
 import useSearch from './hooks/useSearch';
 import { Root, SearchInput, SearchButton, SearchButtonIcon } from './styles';
 
-import { _ } from 'lib/locale';
+import { _ } from '@joplinapp/lib/locale';
 const { connect } = require('react-redux');
 
 interface Props {

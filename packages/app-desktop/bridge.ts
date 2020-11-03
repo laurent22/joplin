@@ -1,8 +1,8 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
-import shim from 'lib/shim';
+import shim from '@joplinapp/lib/shim';
 
-import { _, setLocale } from 'lib/locale';
-const { dirname, toSystemSlashes } = require('lib/path-utils');
+import { _, setLocale } from '@joplinapp/lib/locale';
+const { dirname, toSystemSlashes } = require('@joplinapp/lib/path-utils');
 const { BrowserWindow, nativeTheme } = require('electron');
 
 interface LastSelectedPath {

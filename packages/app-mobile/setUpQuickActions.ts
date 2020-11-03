@@ -2,10 +2,10 @@
 // to disable buggy type-checking, maybe because this
 // class is undocumented.
 import * as QuickActions from 'react-native-quick-actions';
-import { _ } from 'lib/locale';
+import { _ } from '@joplinapp/lib/locale';
 const { DeviceEventEmitter } = require('react-native');
-const Note = require('lib/models/Note.js');
-const { reg } = require('lib/registry.js');
+const Note = require('@joplinapp/lib/models/Note.js');
+const { reg } = require('@joplinapp/lib/registry.js');
 
 type TData = {
 	type: string

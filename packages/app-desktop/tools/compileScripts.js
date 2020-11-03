@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const spawnSync	= require('child_process').spawnSync;
 
 const babelPath = `${__dirname}/../node_modules/.bin/babel${process.platform === 'win32' ? '.cmd' : ''}`;
-const basePath = `${__dirname}/../..`;
+const basePath = `${__dirname}/../../..`;
 
 function fileIsNewerThan(path1, path2) {
 	if (!fs.existsSync(path2)) return true;
@@ -47,10 +47,11 @@ module.exports = function() {
 	convertJsx(`${__dirname}/../gui/NoteList`);
 	convertJsx(`${__dirname}/../plugins`);
 
+	// TODO: should get from node_modules @joplinapp/lib
 	const libContent = [
-		fs.readFileSync(`${basePath}/ReactNativeClient/lib/string-utils-common.js`, 'utf8'),
-		fs.readFileSync(`${basePath}/ReactNativeClient/lib/markJsUtils.js`, 'utf8'),
-		fs.readFileSync(`${basePath}/ReactNativeClient/lib/renderers/webviewLib.js`, 'utf8'),
+		fs.readFileSync(`${basePath}/packages/lib/string-utils-common.js`, 'utf8'),
+		fs.readFileSync(`${basePath}/packages/lib/markJsUtils.js`, 'utf8'),
+		fs.readFileSync(`${basePath}/packages/lib/renderers/webviewLib.js`, 'utf8'),
 	];
 
 	fs.writeFileSync(`${__dirname}/../gui/note-viewer/lib.js`, libContent.join('\n'), 'utf8');

@@ -1,7 +1,7 @@
-import Setting from 'lib/models/Setting';
+import Setting from '../../models/Setting';
 import CommandService from '../CommandService';
 import SpellCheckerServiceDriverBase from './SpellCheckerServiceDriverBase';
-import { _, countryDisplayName } from 'lib/locale';
+import { _, countryDisplayName } from '../../locale';
 
 export default class SpellCheckerService {
 

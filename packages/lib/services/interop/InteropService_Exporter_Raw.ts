@@ -1,7 +1,7 @@
-const InteropService_Exporter_Base = require('lib/services/interop/InteropService_Exporter_Base').default;
-const BaseItem = require('lib/models/BaseItem.js');
-const { basename } = require('lib/path-utils');
-const shim = require('lib/shim').default;
+const InteropService_Exporter_Base = require('./InteropService_Exporter_Base').default;
+const BaseItem = require('../../models/BaseItem.js');
+const { basename } = require('../../path-utils');
+const shim = require('../../shim').default;
 
 export default class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
 	async init(destDir:string) {

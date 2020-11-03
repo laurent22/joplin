@@ -1,5 +1,5 @@
 import { PluginStates } from '../reducer';
-import { ExtraRendererRule } from 'lib/joplin-renderer/MdToHtml';
+import { ExtraRendererRule } from '@joplinapp/renderer/MdToHtml';
 import { ContentScriptType } from '../api/types';
 
 export default function contentScriptsToRendererRules(plugins:PluginStates):ExtraRendererRule[] {

@@ -1,11 +1,11 @@
-const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { _ } = require('lib/locale');
-const { OneDriveApi } = require('lib/onedrive-api.js');
-const Setting = require('lib/models/Setting').default;
-const { parameters } = require('lib/parameters.js');
-const { FileApi } = require('lib/file-api.js');
-const Synchronizer = require('lib/Synchronizer').default;
-const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
+const BaseSyncTarget = require('./BaseSyncTarget.js');
+const { _ } = require('./locale');
+const { OneDriveApi } = require('./onedrive-api.js');
+const Setting = require('./models/Setting').default;
+const { parameters } = require('./parameters.js');
+const { FileApi } = require('./file-api.js');
+const Synchronizer = require('./Synchronizer').default;
+const { FileApiDriverOneDrive } = require('./file-api-driver-onedrive.js');
 
 class SyncTargetOneDrive extends BaseSyncTarget {
 	static id() {

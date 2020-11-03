@@ -1,12 +1,12 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('lib/locale');
-const BaseModel = require('lib/BaseModel').default;
-const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting').default;
-const Note = require('lib/models/Note.js');
+const { _ } = require('@joplinapp/lib/locale');
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const Folder = require('@joplinapp/lib/models/Folder.js');
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const Note = require('@joplinapp/lib/models/Note.js');
 const { sprintf } = require('sprintf-js');
-const time = require('lib/time').default;
+const time = require('@joplinapp/lib/time').default;
 const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {

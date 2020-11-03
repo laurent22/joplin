@@ -9,7 +9,7 @@
     "test": "bedrock-auto -b phantomjs -d src/test/ts/",
     "test-manual": "bedrock -d src/test/ts/",
     "start": "grunt webpack",
-    "buildAndStart": "yarn build && cd .. && cd .. && cd .. && cd ElectronClient && npm start"
+    "buildAndStart": "yarn build && cd .. && cd .. && cd .. && cd packages/app-desktop && npm start"
   },
   "keywords": [],
   "author": "Tiny Technologies Inc.",

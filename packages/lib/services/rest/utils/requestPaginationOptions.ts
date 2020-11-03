@@ -1,4 +1,4 @@
-import { Pagination, PaginationOrder, PaginationOrderDir } from 'lib/models/utils/types';
+import { Pagination, PaginationOrder, PaginationOrderDir } from '../../../models/utils/types';
 import { Request } from '../Api';
 import { ErrorBadRequest } from './errors';
 

@@ -1,7 +1,7 @@
-import { CommandDeclaration, CommandRuntime, CommandContext } from 'lib/services/CommandService';
-import Setting from 'lib/models/Setting';
-import { stateUtils } from 'lib/reducer';
-import { _ } from 'lib/locale';
+import { CommandDeclaration, CommandRuntime, CommandContext } from '@joplinapp/lib/services/CommandService';
+import Setting from '@joplinapp/lib/models/Setting';
+import { stateUtils } from '@joplinapp/lib/reducer';
+import { _ } from '@joplinapp/lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'toggleEditors',

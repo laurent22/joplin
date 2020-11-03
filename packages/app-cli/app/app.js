@@ -1,20 +1,20 @@
-const BaseApplication = require('lib/BaseApplication').default;
-const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
-const ResourceService = require('lib/services/ResourceService');
-const BaseModel = require('lib/BaseModel').default;
-const Folder = require('lib/models/Folder.js');
-const BaseItem = require('lib/models/BaseItem.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const Setting = require('lib/models/Setting').default;
-const { reg } = require('lib/registry.js');
-const { fileExtension } = require('lib/path-utils');
-const { _ } = require('lib/locale');
+const BaseApplication = require('@joplinapp/lib/BaseApplication').default;
+const { FoldersScreenUtils } = require('@joplinapp/lib/folders-screen-utils.js');
+const ResourceService = require('@joplinapp/lib/services/ResourceService');
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const Folder = require('@joplinapp/lib/models/Folder.js');
+const BaseItem = require('@joplinapp/lib/models/BaseItem.js');
+const Note = require('@joplinapp/lib/models/Note.js');
+const Tag = require('@joplinapp/lib/models/Tag.js');
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const { reg } = require('@joplinapp/lib/registry.js');
+const { fileExtension } = require('@joplinapp/lib/path-utils');
+const { _ } = require('@joplinapp/lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
-const Cache = require('lib/Cache');
-const RevisionService = require('lib/services/RevisionService');
-const shim = require('lib/shim').default;
+const Cache = require('@joplinapp/lib/Cache');
+const RevisionService = require('@joplinapp/lib/services/RevisionService');
+const shim = require('@joplinapp/lib/shim').default;
 
 class Application extends BaseApplication {
 	constructor() {

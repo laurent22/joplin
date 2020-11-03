@@ -1,8 +1,8 @@
-const BaseModel = require('lib/BaseModel').default;
-const BaseItem = require('lib/models/BaseItem.js');
+const BaseModel = require('../BaseModel').default;
+const BaseItem = require('./BaseItem.js');
 const DiffMatchPatch = require('diff-match-patch');
-const ArrayUtils = require('lib/ArrayUtils.js');
-const JoplinError = require('lib/JoplinError');
+const ArrayUtils = require('../ArrayUtils.js');
+const JoplinError = require('../JoplinError');
 const { sprintf } = require('sprintf-js');
 
 const dmp = new DiffMatchPatch();

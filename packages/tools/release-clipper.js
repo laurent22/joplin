@@ -3,7 +3,7 @@ const { execCommand } = require('./tool-utils.js');
 const md5File = require('md5-file/promise');
 const glob = require('glob');
 
-const clipperDir   = `${__dirname}/../Clipper`;
+const clipperDir   = `${__dirname}/../packages/app-clipper`;
 const tmpSourceDirName = 'Clipper-source';
 
 async function copyDir(baseSourceDir, sourcePath, baseDestDir) {

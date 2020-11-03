@@ -1,7 +1,7 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-import { _ } from 'lib/locale';
-const Folder = require('lib/models/Folder');
-const Note = require('lib/models/Note');
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
+const Folder = require('@joplinapp/lib/models/Folder');
+const Note = require('@joplinapp/lib/models/Note');
 
 export const declaration:CommandDeclaration = {
 	name: 'moveToFolder',

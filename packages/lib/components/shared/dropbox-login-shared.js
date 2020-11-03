@@ -1,8 +1,8 @@
-const shim = require('lib/shim').default;
-const SyncTargetRegistry = require('lib/SyncTargetRegistry');
-const { reg } = require('lib/registry.js');
-const { _ } = require('lib/locale');
-const Setting = require('lib/models/Setting').default;
+const shim = require('../../shim').default;
+const SyncTargetRegistry = require('../../SyncTargetRegistry');
+const { reg } = require('../../registry.js');
+const { _ } = require('../../locale');
+const Setting = require('../../models/Setting').default;
 
 class Shared {
 	constructor(comp, showInfoMessageBox, showErrorMessageBox) {

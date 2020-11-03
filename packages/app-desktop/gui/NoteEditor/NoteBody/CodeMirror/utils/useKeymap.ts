@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import CommandService from 'lib/services/CommandService';
-import shim from 'lib/shim';
+import CommandService from '@joplinapp/lib/services/CommandService';
+import shim from '@joplinapp/lib/shim';
 
 export default function useKeymap(CodeMirror: any) {
 

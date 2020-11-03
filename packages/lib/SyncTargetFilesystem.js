@@ -1,9 +1,9 @@
-const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { _ } = require('lib/locale');
-const Setting = require('lib/models/Setting').default;
-const { FileApi } = require('lib/file-api.js');
-const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
-const Synchronizer = require('lib/Synchronizer').default;
+const BaseSyncTarget = require('./BaseSyncTarget.js');
+const { _ } = require('./locale');
+const Setting = require('./models/Setting').default;
+const { FileApi } = require('./file-api.js');
+const { FileApiDriverLocal } = require('./file-api-driver-local.js');
+const Synchronizer = require('./Synchronizer').default;
 
 class SyncTargetFilesystem extends BaseSyncTarget {
 	static id() {

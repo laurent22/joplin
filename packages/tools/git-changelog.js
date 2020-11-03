@@ -4,8 +4,6 @@
 
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
-require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
-
 const { execCommand, githubUsername } = require('./tool-utils.js');
 
 // From https://stackoverflow.com/a/6234804/561309

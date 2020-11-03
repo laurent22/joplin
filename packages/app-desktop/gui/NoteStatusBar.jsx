@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const time = require('lib/time').default;
-const { themeStyle } = require('lib/theme');
+const time = require('@joplinapp/lib/time').default;
+const { themeStyle } = require('@joplinapp/lib/theme');
 
 class NoteStatusBarComponent extends React.Component {
 	style() {

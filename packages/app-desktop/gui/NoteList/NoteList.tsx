@@ -1,20 +1,20 @@
 import { AppState } from '../../app';
-import eventManager from 'lib/eventManager';
+import eventManager from '@joplinapp/lib/eventManager';
 import NoteListUtils from '../utils/NoteListUtils';
-import { _ } from 'lib/locale';
+import { _ } from '@joplinapp/lib/locale';
 const { ItemList } = require('../ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
-const time = require('lib/time').default;
-const { themeStyle } = require('lib/theme');
-const BaseModel = require('lib/BaseModel').default;
+const time = require('@joplinapp/lib/time').default;
+const { themeStyle } = require('@joplinapp/lib/theme');
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
 const bridge = require('electron').remote.require('./bridge').default;
-const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting').default;
+const Note = require('@joplinapp/lib/models/Note');
+const Setting = require('@joplinapp/lib/models/Setting').default;
 const NoteListItem = require('../NoteListItem').default;
-const CommandService = require('lib/services/CommandService.js').default;
+const CommandService = require('@joplinapp/lib/services/CommandService.js').default;
 const styled = require('styled-components').default;
-const shim = require('lib/shim').default;
+const shim = require('@joplinapp/lib/shim').default;
 
 const commands = [
 	require('./commands/focusElementNoteList'),

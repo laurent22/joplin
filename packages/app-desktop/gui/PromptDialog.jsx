@@ -1,7 +1,7 @@
 const React = require('react');
-const { _ } = require('lib/locale');
-const { themeStyle } = require('lib/theme');
-const time = require('lib/time').default;
+const { _ } = require('@joplinapp/lib/locale');
+const { themeStyle } = require('@joplinapp/lib/theme');
+const time = require('@joplinapp/lib/time').default;
 const Datetime = require('react-datetime');
 const CreatableSelect = require('react-select/lib/Creatable').default;
 const Select = require('react-select').default;

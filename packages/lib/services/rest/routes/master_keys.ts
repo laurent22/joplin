@@ -1,4 +1,4 @@
-import BaseModel from 'lib/BaseModel';
+import BaseModel from '../../../BaseModel';
 import { Request } from '../Api';
 import defaultAction from '../utils/defaultAction';
 

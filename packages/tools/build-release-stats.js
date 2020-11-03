@@ -1,11 +1,9 @@
 /* eslint-disable require-atomic-updates */
 
-require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
-
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
-const { dirname } = require('lib/path-utils');
-const markdownUtils = require('lib/markdownUtils').default;
+const { dirname } = require('@joplinapp/lib/path-utils');
+const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
 
 const rootDir = dirname(__dirname);
 

@@ -1,8 +1,8 @@
 import { FormNote } from './types';
 
-const HtmlToMd = require('lib/HtmlToMd');
-const Note = require('lib/models/Note');
-const { MarkupToHtml } = require('lib/joplin-renderer');
+const HtmlToMd = require('@joplinapp/lib/HtmlToMd');
+const Note = require('@joplinapp/lib/models/Note');
+const { MarkupToHtml } = require('@joplinapp/renderer');
 
 export async function htmlToMarkdown(markupLanguage: number, html: string, originalCss:string): Promise<string> {
 	let newBody = '';

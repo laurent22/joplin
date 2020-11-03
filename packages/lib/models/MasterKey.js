@@ -1,5 +1,5 @@
-const BaseModel = require('lib/BaseModel').default;
-const BaseItem = require('lib/models/BaseItem.js');
+const BaseModel = require('../BaseModel').default;
+const BaseItem = require('./BaseItem.js');
 
 class MasterKey extends BaseItem {
 	static tableName() {

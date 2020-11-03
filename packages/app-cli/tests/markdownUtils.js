@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 
-require('app-module-path').addPath(__dirname);
 
-const { asyncTest } = require('test-utils.js');
-const markdownUtils = require('lib/markdownUtils').default;
+const { asyncTest } = require('./test-utils.js');
+const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

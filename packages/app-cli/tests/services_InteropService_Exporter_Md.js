@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 
-require('app-module-path').addPath(__dirname);
 
 const fs = require('fs-extra');
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
-const InteropService_Exporter_Md = require('lib/services/interop/InteropService_Exporter_Md').default;
-const BaseModel = require('lib/BaseModel').default;
-const Folder = require('lib/models/Folder.js');
-const Resource = require('lib/models/Resource.js');
-const Note = require('lib/models/Note.js');
-const shim = require('lib/shim').default;
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
+const InteropService_Exporter_Md = require('@joplinapp/lib/services/interop/InteropService_Exporter_Md').default;
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const Folder = require('@joplinapp/lib/models/Folder.js');
+const Resource = require('@joplinapp/lib/models/Resource.js');
+const Note = require('@joplinapp/lib/models/Note.js');
+const shim = require('@joplinapp/lib/shim').default;
 
 const exportDir = `${__dirname}/export`;
 

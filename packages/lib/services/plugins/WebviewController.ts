@@ -1,7 +1,7 @@
 import ViewController from './ViewController';
-import shim from 'lib/shim';
+import shim from '../../shim';
 import { ButtonId, ButtonSpec } from './api/types';
-const { toSystemSlashes } = require('lib/path-utils');
+const { toSystemSlashes } = require('../../path-utils');
 
 export enum ContainerType {
 	Panel = 'panel',

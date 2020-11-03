@@ -12,20 +12,20 @@ import { RenderedBody, defaultRenderedBody } from './utils/types';
 import NoteTextViewer  from '../../../NoteTextViewer';
 import Editor from './Editor';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
-import Setting from 'lib/models/Setting';
-import { _ } from 'lib/locale';
+import Setting from '@joplinapp/lib/models/Setting';
+import { _ } from '@joplinapp/lib/locale';
 import bridge from '../../../../services/bridge';
-import markdownUtils from 'lib/markdownUtils';
-import shim from 'lib/shim';
+import markdownUtils from '@joplinapp/lib/markdownUtils';
+import shim from '@joplinapp/lib/shim';
 
-const Note = require('lib/models/Note.js');
+const Note = require('@joplinapp/lib/models/Note.js');
 const { clipboard } = require('electron');
-const shared = require('lib/components/shared/note-screen-shared.js');
+const shared = require('@joplinapp/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const { reg } = require('lib/registry.js');
+const { reg } = require('@joplinapp/lib/registry.js');
 const dialogs = require('../../../dialogs');
-const { themeStyle } = require('lib/theme');
+const { themeStyle } = require('@joplinapp/lib/theme');
 
 function markupRenderOptions(override: any = null) {
 	return { ...override };

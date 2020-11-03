@@ -1,4 +1,4 @@
-import KeymapService from 'lib/services/KeymapService';
+import KeymapService from '../../KeymapService';
 import { MenuItem, MenuItemLocation } from './types';
 import MenuController from '../MenuController';
 import Plugin from '../Plugin';
@@ -7,7 +7,7 @@ import createViewHandle from '../utils/createViewHandle';
 /**
  * Allows creating menus.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/menu)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/menu)
  */
 export default class JoplinViewsMenus {
 

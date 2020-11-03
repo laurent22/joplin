@@ -1,7 +1,7 @@
 const React = require('react');
 const bridge = require('electron').remote.require('./bridge').default;
 const styleSelector = require('./style/ExtensionBadge');
-const { _ } = require('lib/locale');
+const { _ } = require('@joplinapp/lib/locale');
 
 function platformAssets(type) {
 	if (type === 'firefox') {

@@ -1,6 +1,6 @@
 const moment = require('moment');
-const time = require('lib/time').default;
-const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
+const time = require('./time').default;
+const { FsDriverDummy } = require('./fs-driver-dummy.js');
 
 export enum TargetType {
 	Database = 'database',

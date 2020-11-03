@@ -57,3 +57,7 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# Custom
+lib/csstojs/
+lib/rnInjectedJs/

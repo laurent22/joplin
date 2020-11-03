@@ -1,7 +1,7 @@
 const stringToStream = require('string-to-stream');
 // const cleanHtml = require('clean-html');
-const resourceUtils = require('lib/resourceUtils.js');
-const { isSelfClosingTag } = require('lib/htmlUtils');
+const resourceUtils = require('./resourceUtils.js');
+const { isSelfClosingTag } = require('./htmlUtils');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 
@@ -62,7 +62,7 @@ function enexXmlToHtml_(stream, resources) {
 	return new Promise((resolve) => {
 		const options = {};
 		const strict = false;
-		const saxStream = require('sax').createStream(strict, options);
+		const saxStream = require('@joplinapp/fork-sax').createStream(strict, options);
 
 		const section = {
 			type: 'text',

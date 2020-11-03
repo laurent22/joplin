@@ -1,9 +1,9 @@
 const { BaseCommand } = require('./base-command.js');
-const InteropService = require('lib/services/interop/InteropService').default;
-const BaseModel = require('lib/BaseModel').default;
+const InteropService = require('@joplinapp/lib/services/interop/InteropService').default;
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
 const { cliUtils } = require('./cli-utils.js');
 const { app } = require('./app.js');
-const { _ } = require('lib/locale');
+const { _ } = require('@joplinapp/lib/locale');
 
 class Command extends BaseCommand {
 	usage() {

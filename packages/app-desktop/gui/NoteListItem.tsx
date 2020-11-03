@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useRef, forwardRef, useImperativeHandle, useCallback } from 'react';
-const { themeStyle } = require('lib/theme');
+const { themeStyle } = require('@joplinapp/lib/theme');
 const Mark = require('mark.js/dist/mark.min.js');
-const markJsUtils = require('lib/markJsUtils');
-const Note = require('lib/models/Note');
-const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
+const markJsUtils = require('@joplinapp/lib/markJsUtils');
+const Note = require('@joplinapp/lib/models/Note');
+const { replaceRegexDiacritics, pregQuote } = require('@joplinapp/lib/string-utils');
 const styled = require('styled-components').default;
 
 const StyledRoot = styled.div`

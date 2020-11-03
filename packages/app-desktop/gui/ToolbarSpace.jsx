@@ -1,5 +1,5 @@
 const React = require('react');
-const { themeStyle } = require('lib/theme');
+const { themeStyle } = require('@joplinapp/lib/theme');
 
 class ToolbarSpace extends React.Component {
 	render() {

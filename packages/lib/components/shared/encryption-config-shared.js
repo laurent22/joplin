@@ -1,10 +1,10 @@
-const EncryptionService = require('lib/services/EncryptionService');
-const { _ } = require('lib/locale');
-const BaseItem = require('lib/models/BaseItem.js');
-const Setting = require('lib/models/Setting').default;
-const MasterKey = require('lib/models/MasterKey.js');
-const { reg } = require('lib/registry.js');
-const shim = require('lib/shim').default;
+const EncryptionService = require('../../services/EncryptionService');
+const { _ } = require('../../locale');
+const BaseItem = require('../../models/BaseItem.js');
+const Setting = require('../../models/Setting').default;
+const MasterKey = require('../../models/MasterKey.js');
+const { reg } = require('../../registry.js');
+const shim = require('../../shim').default;
 
 const shared = {};
 

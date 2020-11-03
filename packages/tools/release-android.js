@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
 
 const projectName = 'joplin-android';
-const rnDir = `${__dirname}/../ReactNativeClient`;
+const rnDir = `${__dirname}/../packages/app-mobile`;
 const rootDir = path.dirname(__dirname);
 const releaseDir = `${rootDir}/_releases`;
 
@@ -88,7 +88,7 @@ async function createRelease(name, tagName, version) {
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
 		// In recent versions (of Gradle? React Native?), running gradlew.bat from WSL throws the following error:
 
-		//     Error: Command failed: /mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\android && gradlew.bat assembleRelease -PbuildDir=build"
+		//     Error: Command failed: /mnt/c/Windows/System32/cmd.exe /c "cd packages\app-mobile\android && gradlew.bat assembleRelease -PbuildDir=build"
 
 		//     FAILURE: Build failed with an exception.
 
@@ -99,18 +99,18 @@ async function createRelease(name, tagName, version) {
 
 		// console.info('Run this command from DOS:');
 		// console.info('');
-		// console.info(`cd "${wslToWinPath(rootDir)}\\ReactNativeClient\\android" && gradlew.bat ${apkBuildCmd}"`);
+		// console.info(`cd "${wslToWinPath(rootDir)}\\packages\\app-mobile\\android" && gradlew.bat ${apkBuildCmd}"`);
 		// console.info('');
 		// await readline('Press Enter when done:');
 		// apkBuildCmd = ''; // Clear the command because we've already ran it
 
 		// process.chdir(`${rnDir}/android`);
-		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}"`;
+		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}"`;
 		// restoreDir = rootDir;
 
-		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}"`;
+		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}"`;
 
-		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}`]);
+		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}`]);
 		apkBuildCmd = '';
 	} else {
 		process.chdir(`${rnDir}/android`);
@@ -129,11 +129,11 @@ async function createRelease(name, tagName, version) {
 	await fs.mkdirp(releaseDir);
 
 	console.info(`Copying APK to ${apkFilePath}`);
-	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
+	await fs.copy('packages/app-mobile/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
 
 	if (name === 'main') {
 		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
-		await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
+		await fs.copy('packages/app-mobile/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (const filename in originalContents) {

@@ -1,13 +1,13 @@
-const ItemChange = require('lib/models/ItemChange');
-const NoteResource = require('lib/models/NoteResource');
-const Note = require('lib/models/Note');
-const Resource = require('lib/models/Resource');
-const BaseModel = require('lib/BaseModel').default;
-const BaseService = require('lib/services/BaseService').default;
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
-const Setting = require('lib/models/Setting').default;
-const shim = require('lib/shim').default;
-const ItemChangeUtils = require('lib/services/ItemChangeUtils');
+const ItemChange = require('../models/ItemChange');
+const NoteResource = require('../models/NoteResource');
+const Note = require('../models/Note');
+const Resource = require('../models/Resource');
+const BaseModel = require('../BaseModel').default;
+const BaseService = require('./BaseService').default;
+const SearchEngine = require('./searchengine/SearchEngine');
+const Setting = require('../models/Setting').default;
+const shim = require('../shim').default;
+const ItemChangeUtils = require('./ItemChangeUtils');
 const { sprintf } = require('sprintf-js');
 
 class ResourceService extends BaseService {

@@ -1,1 +1,0 @@
-Patches that apply to all apps, mobile, desktop and CLI.

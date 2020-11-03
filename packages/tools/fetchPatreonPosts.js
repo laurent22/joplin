@@ -1,20 +1,18 @@
 // Fetch Patreon posts to Markdown so that we have them in a more versatile format
 // and to add them to the "News" notifications later on.
 
-require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
-
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const { patreonOauthToken } = require('./tool-utils');
-const HtmlToMd = require('lib/HtmlToMd');
-const { dirname, filename, basename } = require('lib/path-utils');
-const markdownUtils = require('lib/markdownUtils').default;
-const mimeUtils = require('lib/mime-utils.js').mime;
-const { netUtils } = require('lib/net-utils');
-const shim = require('lib/shim').default;
+const HtmlToMd = require('@joplinapp/lib/HtmlToMd');
+const { dirname, filename, basename } = require('@joplinapp/lib/path-utils');
+const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
+const mimeUtils = require('@joplinapp/lib/mime-utils.js').mime;
+const { netUtils } = require('@joplinapp/lib/net-utils');
+const shim = require('@joplinapp/lib/shim').default;
 const moment = require('moment');
-const { pregQuote } = require('lib/string-utils');
-const { shimInit } = require('lib/shim-init-node.js');
+const { pregQuote } = require('@joplinapp/lib/string-utils');
+const { shimInit } = require('@joplinapp/lib/shim-init-node.js');
 
 shimInit();
 

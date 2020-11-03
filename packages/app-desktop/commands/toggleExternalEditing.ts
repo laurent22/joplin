@@ -1,6 +1,6 @@
-import CommandService, { CommandRuntime, CommandDeclaration } from 'lib/services/CommandService';
-import { _ } from 'lib/locale';
-import { stateUtils } from 'lib/reducer';
+import CommandService, { CommandRuntime, CommandDeclaration } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
+import { stateUtils } from '@joplinapp/lib/reducer';
 import { DesktopCommandContext } from '../services/commands/types';
 
 export const declaration:CommandDeclaration = {

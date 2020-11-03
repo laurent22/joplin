@@ -1,6 +1,6 @@
 import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
-import { _ } from 'lib/locale';
-const { reg } = require('lib/registry.js');
+import { _ } from '../locale';
+const { reg } = require('../registry.js');
 
 export const declaration:CommandDeclaration = {
 	name: 'synchronize',

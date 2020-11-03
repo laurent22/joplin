@@ -1,6 +1,6 @@
 const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
-const resourceUtils = require('lib/resourceUtils.js');
+const resourceUtils = require('./resourceUtils.js');
 
 const BLOCK_OPEN = '[[BLOCK_OPEN]]';
 const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
@@ -430,7 +430,7 @@ function enexXmlToMdArray(stream, resources) {
 
 		const options = {};
 		const strict = false;
-		const saxStream = require('sax').createStream(strict, options);
+		const saxStream = require('@joplinapp/fork-sax').createStream(strict, options);
 
 		let section = {
 			type: 'text',

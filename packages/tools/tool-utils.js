@@ -243,4 +243,35 @@ toolUtils.insertContentIntoFile = async function(filePath, markerOpen, markerClo
 	await fs.writeFile(filePath, content);
 };
 
+toolUtils.dirname = (path) => {
+	if (!path) throw new Error('Path is empty');
+	const s = path.split(/\/|\\/);
+	s.pop();
+	return s.join('/');
+};
+
+toolUtils.basename = (path) => {
+	if (!path) throw new Error('Path is empty');
+	const s = path.split(/\/|\\/);
+	return s[s.length - 1];
+};
+
+toolUtils.filename = (path, includeDir = false) => {
+	if (!path) throw new Error('Path is empty');
+	const output = includeDir ? path : toolUtils.basename(path);
+	if (output.indexOf('.') < 0) return output;
+
+	const splitted = output.split('.');
+	splitted.pop();
+	return splitted.join('.');
+};
+
+toolUtils.fileExtension = (path) => {
+	if (!path) throw new Error('Path is empty');
+
+	const output = path.split('.');
+	if (output.length <= 1) return '';
+	return output[output.length - 1];
+};
+
 module.exports = toolUtils;

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
 import editorCommandDeclarations from '../commands/editorCommandDeclarations';
-import CommandService, { CommandDeclaration,  CommandRuntime, CommandContext } from 'lib/services/CommandService';
-const time = require('lib/time').default;
-const { reg } = require('lib/registry.js');
+import CommandService, { CommandDeclaration,  CommandRuntime, CommandContext } from '@joplinapp/lib/services/CommandService';
+const time = require('@joplinapp/lib/time').default;
+const { reg } = require('@joplinapp/lib/registry.js');
 
 const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),

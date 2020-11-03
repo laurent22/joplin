@@ -1,6 +1,6 @@
-import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-import { _ } from 'lib/locale';
-const TemplateUtils = require('lib/TemplateUtils');
+import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
+const TemplateUtils = require('@joplinapp/lib/TemplateUtils');
 
 export const declaration:CommandDeclaration = {
 	name: 'selectTemplate',

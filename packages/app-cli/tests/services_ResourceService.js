@@ -1,23 +1,22 @@
 /* eslint-disable no-unused-vars */
 
-require('app-module-path').addPath(__dirname);
 
-const time = require('lib/time').default;
-const { asyncTest, resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const InteropService = require('lib/services/interop/InteropService').default;
-const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const Resource = require('lib/models/Resource.js');
-const ItemChange = require('lib/models/ItemChange.js');
-const NoteResource = require('lib/models/NoteResource.js');
-const ResourceService = require('lib/services/ResourceService.js');
+const time = require('@joplinapp/lib/time').default;
+const { asyncTest, resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const InteropService = require('@joplinapp/lib/services/interop/InteropService').default;
+const Folder = require('@joplinapp/lib/models/Folder.js');
+const Note = require('@joplinapp/lib/models/Note.js');
+const Tag = require('@joplinapp/lib/models/Tag.js');
+const NoteTag = require('@joplinapp/lib/models/NoteTag.js');
+const Resource = require('@joplinapp/lib/models/Resource.js');
+const ItemChange = require('@joplinapp/lib/models/ItemChange.js');
+const NoteResource = require('@joplinapp/lib/models/NoteResource.js');
+const ResourceService = require('@joplinapp/lib/services/ResourceService.js');
 const fs = require('fs-extra');
-const ArrayUtils = require('lib/ArrayUtils');
-const ObjectUtils = require('lib/ObjectUtils');
-const shim = require('lib/shim').default;
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
+const ArrayUtils = require('@joplinapp/lib/ArrayUtils');
+const ObjectUtils = require('@joplinapp/lib/ObjectUtils');
+const shim = require('@joplinapp/lib/shim').default;
+const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

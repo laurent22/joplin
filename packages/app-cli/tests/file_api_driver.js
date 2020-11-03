@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 
-require('app-module-path').addPath(__dirname);
 
-const uuid = require('lib/uuid').default;
-const time = require('lib/time').default;
-const { asyncTest, sleep, fileApi, fileContentEqual, checkThrowAsync } = require('test-utils.js');
-const shim = require('lib/shim').default;
+const uuid = require('@joplinapp/lib/uuid').default;
+const time = require('@joplinapp/lib/time').default;
+const { asyncTest, sleep, fileApi, fileContentEqual, checkThrowAsync } = require('./test-utils.js');
+const shim = require('@joplinapp/lib/shim').default;
 const fs = require('fs-extra');
-const Setting = require('lib/models/Setting').default;
+const Setting = require('@joplinapp/lib/models/Setting').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { _ } from 'lib/locale';
-import CommandService from 'lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
+import CommandService from '@joplinapp/lib/services/CommandService';
 import { ChangeEvent, useCallback } from 'react';
 import NoteToolbar from '../../NoteToolbar/NoteToolbar';
-import { buildStyle } from 'lib/theme';
-import time from 'lib/time';
+import { buildStyle } from '@joplinapp/lib/theme';
+import time from '@joplinapp/lib/time';
 
 interface Props {
 	themeId: number,

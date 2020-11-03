@@ -66,7 +66,7 @@
 					has started, it would show "setting saved". So basically the app, or one instance of it, has started while settings were being saved
 
 		2020-10-08: Changed back again to "singleTop" as it has worked so far. The multiple instance bug was "fixed" in a different way
-					See ReactNativeClient/root.js for more info about the bug.
+					See packages/app-mobile/root.js for more info about the bug.
 		-->
 
 		<activity

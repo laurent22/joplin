@@ -1,5 +1,5 @@
-const Folder = require('lib/models/Folder');
-const BaseModel = require('lib/BaseModel').default;
+const Folder = require('../../models/Folder');
+const BaseModel = require('../../BaseModel').default;
 
 const shared = {};
 
@@ -70,7 +70,7 @@ shared.renderTags = function(props, renderItem) {
 };
 
 shared.synchronize_press = async function(comp) {
-	const { reg } = require('lib/registry.js');
+	const { reg } = require('../../registry.js');
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';
 

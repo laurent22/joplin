@@ -1,12 +1,12 @@
 const fs = require('fs-extra');
 const { BaseCommand } = require('./base-command.js');
-const { splitCommandString } = require('lib/string-utils.js');
-const uuid = require('lib/uuid').default;
+const { splitCommandString } = require('@joplinapp/lib/string-utils.js');
+const uuid = require('@joplinapp/lib/uuid').default;
 const { app } = require('./app.js');
-const { _ } = require('lib/locale');
-const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting').default;
-const BaseModel = require('lib/BaseModel').default;
+const { _ } = require('@joplinapp/lib/locale');
+const Note = require('@joplinapp/lib/models/Note.js');
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
 
 class Command extends BaseCommand {
 	usage() {

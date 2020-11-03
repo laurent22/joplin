@@ -25,9 +25,9 @@ import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/meta';
 
-// import eventManager from 'lib/eventManager';
+// import eventManager from '@joplinapp/lib/eventManager';
 
-const { reg } = require('lib/registry.js');
+const { reg } = require('@joplinapp/lib/registry.js');
 
 // Based on http://pypl.github.io/PYPL.html
 const topLanguages = [

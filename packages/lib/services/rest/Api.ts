@@ -1,4 +1,4 @@
-import { PaginationOrderDir } from 'lib/models/utils/types';
+import { PaginationOrderDir } from '../../models/utils/types';
 import { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } from './utils/errors';
 
 import route_folders from './routes/folders';
@@ -9,7 +9,7 @@ import route_master_keys from './routes/master_keys';
 import route_search from './routes/search';
 import route_ping from './routes/ping';
 
-const { ltrimSlashes } = require('lib/path-utils');
+const { ltrimSlashes } = require('../../path-utils');
 const md5 = require('md5');
 
 export enum RequestMethod {

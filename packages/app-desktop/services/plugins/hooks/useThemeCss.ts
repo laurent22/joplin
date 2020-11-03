@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { themeStyle } from 'lib/theme';
-import shim from 'lib/shim';
-const Setting = require('lib/models/Setting').default;
-const { camelCaseToDash, formatCssSize } = require('lib/string-utils');
+import { themeStyle } from '@joplinapp/lib/theme';
+import shim from '@joplinapp/lib/shim';
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const { camelCaseToDash, formatCssSize } = require('@joplinapp/lib/string-utils');
 
 interface HookDependencies {
 	pluginId: string,

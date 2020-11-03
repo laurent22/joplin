@@ -2,7 +2,7 @@ const { execCommand, githubRelease } = require('./tool-utils.js');
 const path = require('path');
 
 const rootDir = path.dirname(__dirname);
-const appDir = `${rootDir}/ElectronClient`;
+const appDir = `${rootDir}/packages/app-desktop`;
 
 async function main() {
 	const argv = require('yargs').argv;

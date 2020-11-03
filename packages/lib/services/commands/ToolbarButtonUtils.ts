@@ -1,5 +1,5 @@
-import CommandService from 'lib/services/CommandService';
-import { stateUtils } from 'lib/reducer';
+import CommandService from '../CommandService';
+import { stateUtils } from '../../reducer';
 
 const separatorItem = { type: 'separator' };
 

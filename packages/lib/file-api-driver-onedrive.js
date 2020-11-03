@@ -1,6 +1,6 @@
 const moment = require('moment');
-const { dirname, basename } = require('lib/path-utils');
-const shim = require('lib/shim').default;
+const { dirname, basename } = require('./path-utils');
+const shim = require('./shim').default;
 
 class FileApiDriverOneDrive {
 	constructor(api) {

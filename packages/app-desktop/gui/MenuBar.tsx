@@ -1,30 +1,30 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { AppState } from '../app';
-import InteropService from 'lib/services/interop/InteropService';
-import { stateUtils } from 'lib/reducer';
-import CommandService from 'lib/services/CommandService';
-import MenuUtils from 'lib/services/commands/MenuUtils';
-import KeymapService from 'lib/services/KeymapService';
-import { PluginStates, utils as pluginUtils } from 'lib/services/plugins/reducer';
-import shim from 'lib/shim';
-import Setting from 'lib/models/Setting';
-import versionInfo from 'lib/versionInfo';
-import { Module } from 'lib/services/interop/types';
+import InteropService from '@joplinapp/lib/services/interop/InteropService';
+import { stateUtils } from '@joplinapp/lib/reducer';
+import CommandService from '@joplinapp/lib/services/CommandService';
+import MenuUtils from '@joplinapp/lib/services/commands/MenuUtils';
+import KeymapService from '@joplinapp/lib/services/KeymapService';
+import { PluginStates, utils as pluginUtils } from '@joplinapp/lib/services/plugins/reducer';
+import shim from '@joplinapp/lib/shim';
+import Setting from '@joplinapp/lib/models/Setting';
+import versionInfo from '@joplinapp/lib/versionInfo';
+import { Module } from '@joplinapp/lib/services/interop/types';
 import InteropServiceHelper from '../InteropServiceHelper';
-import { _ } from 'lib/locale';
-import { MenuItem, MenuItemLocation } from 'lib/services/plugins/api/types';
-import stateToWhenClauseContext from 'lib/services/commands/stateToWhenClauseContext';
-import SpellCheckerService from 'lib/services/spellChecker/SpellCheckerService';
+import { _ } from '@joplinapp/lib/locale';
+import { MenuItem, MenuItemLocation } from '@joplinapp/lib/services/plugins/api/types';
+import stateToWhenClauseContext from '@joplinapp/lib/services/commands/stateToWhenClauseContext';
+import SpellCheckerService from '@joplinapp/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
 
 const { connect } = require('react-redux');
-const { reg } = require('lib/registry.js');
+const { reg } = require('@joplinapp/lib/registry.js');
 const packageInfo = require('../packageInfo.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const { shell, clipboard } = require('electron');
 const Menu = bridge().Menu;
-const PluginManager = require('lib/services/PluginManager');
-const TemplateUtils = require('lib/TemplateUtils');
+const PluginManager = require('@joplinapp/lib/services/PluginManager');
+const TemplateUtils = require('@joplinapp/lib/TemplateUtils');
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -820,7 +820,7 @@ function useMenu(props:Props) {
 	return menu;
 }
 
-function MenuBar(props:Props):JSX.Element {
+function MenuBar(props:Props):any {
 	const menu = useMenu(props);
 	if (menu) Menu.setApplicationMenu(menu);
 	return null;

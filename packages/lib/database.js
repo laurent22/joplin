@@ -1,7 +1,7 @@
-const Logger = require('lib/Logger').default;
-const time = require('lib/time').default;
+const Logger = require('./Logger').default;
+const time = require('./time').default;
 const Mutex = require('async-mutex').Mutex;
-const shim = require('lib/shim').default;
+const shim = require('./shim').default;
 
 class Database {
 	constructor(driver) {

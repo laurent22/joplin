@@ -1,52 +1,52 @@
-import Setting from 'lib/models/Setting';
-import Logger, { TargetType } from 'lib/Logger';
-import shim from 'lib/shim';
-import BaseService from 'lib/services/BaseService';
-import reducer from 'lib/reducer';
-import KeychainServiceDriver from 'lib/services/keychain/KeychainServiceDriver.node';
-import { _, setLocale } from 'lib/locale';
+import Setting from './models/Setting';
+import Logger, { TargetType } from './Logger';
+import shim from './shim';
+import BaseService from './services/BaseService';
+import reducer from './reducer';
+import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
+import { _, setLocale } from './locale';
 
 const { createStore, applyMiddleware } = require('redux');
-const { defaultState, stateUtils } = require('lib/reducer');
-const { JoplinDatabase } = require('lib/joplin-database.js');
-const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
-const { DatabaseDriverNode } = require('lib/database-driver-node.js');
-const BaseModel = require('lib/BaseModel').default;
-const Folder = require('lib/models/Folder.js');
-const BaseItem = require('lib/models/BaseItem.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const { splitCommandString } = require('lib/string-utils.js');
-const { reg } = require('lib/registry.js');
-const time = require('lib/time').default;
-const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
+const { defaultState, stateUtils } = require('./reducer');
+const { JoplinDatabase } = require('./joplin-database.js');
+const { FoldersScreenUtils } = require('./folders-screen-utils.js');
+const { DatabaseDriverNode } = require('./database-driver-node.js');
+const BaseModel = require('./BaseModel').default;
+const Folder = require('./models/Folder.js');
+const BaseItem = require('./models/BaseItem.js');
+const Note = require('./models/Note.js');
+const Tag = require('./models/Tag.js');
+const { splitCommandString } = require('./string-utils.js');
+const { reg } = require('./registry.js');
+const time = require('./time').default;
+const BaseSyncTarget = require('./BaseSyncTarget.js');
+const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
 const os = require('os');
 const fs = require('fs-extra');
-const JoplinError = require('lib/JoplinError');
+const JoplinError = require('./JoplinError');
 const EventEmitter = require('events');
 const syswidecas = require('syswide-cas');
-const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
-const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
-const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
-const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
-const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
-const EncryptionService = require('lib/services/EncryptionService');
-const ResourceFetcher = require('lib/services/ResourceFetcher');
-const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
-const RevisionService = require('lib/services/RevisionService');
-const ResourceService = require('lib/services/RevisionService');
-const DecryptionWorker = require('lib/services/DecryptionWorker');
-const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
-const KvStore = require('lib/services/KvStore');
-const MigrationService = require('lib/services/MigrationService');
-const { toSystemSlashes } = require('lib/path-utils');
+const SyncTargetRegistry = require('./SyncTargetRegistry.js');
+const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
+const SyncTargetOneDrive = require('./SyncTargetOneDrive.js');
+const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
+const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
+const SyncTargetDropbox = require('./SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
+const EncryptionService = require('./services/EncryptionService');
+const ResourceFetcher = require('./services/ResourceFetcher');
+const SearchEngineUtils = require('./services/searchengine/SearchEngineUtils');
+const SearchEngine = require('./services/searchengine/SearchEngine');
+const RevisionService = require('./services/RevisionService');
+const ResourceService = require('./services/RevisionService');
+const DecryptionWorker = require('./services/DecryptionWorker');
+const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
+const KvStore = require('./services/KvStore');
+const MigrationService = require('./services/MigrationService');
+const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
-// const ntpClient = require('lib/vendor/ntp-client');
+// const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
 
 export default class BaseApplication {
@@ -731,21 +731,21 @@ export default class BaseApplication {
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
 
-		if (Setting.value('env') === 'dev') {
-			if (shim.isElectron()) {
-				this.database_.extensionToLoad = './lib/sql-extensions/spellfix';
-			}
-		} else {
-			if (shim.isElectron()) {
-				if (shim.isWindows()) {
-					const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('\\'));
-					this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
-				} else {
-					const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('/'));
-					this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
-				}
-			}
-		}
+		// if (Setting.value('env') === 'dev') {
+		// 	if (shim.isElectron()) {
+		// 		this.database_.extensionToLoad = './lib/sql-extensions/spellfix';
+		// 	}
+		// } else {
+		// 	if (shim.isElectron()) {
+		// 		if (shim.isWindows()) {
+		// 			const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('\\'));
+		// 			this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
+		// 		} else {
+		// 			const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('/'));
+		// 			this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
+		// 		}
+		// 	}
+		// }
 
 		await this.database_.open({ name: `${profileDir}/database.sqlite` });
 

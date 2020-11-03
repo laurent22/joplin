@@ -3,15 +3,15 @@ const utils = require('../utils');
 const rootDir = utils.rootDir();
 
 module.exports = {
-	src: `${rootDir}/ReactNativeClient/lib/**/*`,
+	src: `${rootDir}/packages/app-mobile/lib/**/*`,
 	fn: async function() {
 		const copyOptions = {
 			excluded: [
-				`${rootDir}/ReactNativeClient/lib/joplin-renderer/node_modules`,
+				`${rootDir}/packages/app-mobile/lib/joplin-renderer/node_modules`,
 			],
 		};
 
-		await utils.copyDir(`${rootDir}/ReactNativeClient/lib`, `${rootDir}/CliClient/build/lib`, copyOptions);
-		await utils.copyDir(`${rootDir}/ReactNativeClient/lib`, `${rootDir}/ElectronClient/lib`, copyOptions);
+		await utils.copyDir(`${rootDir}/packages/app-mobile/lib`, `${rootDir}/packages/app-cli/build/lib`, copyOptions);
+		await utils.copyDir(`${rootDir}/packages/app-mobile/lib`, `${rootDir}/packages/app-desktop/lib`, copyOptions);
 	},
 };

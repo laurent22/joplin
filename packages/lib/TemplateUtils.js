@@ -1,5 +1,5 @@
-const shim = require('lib/shim').default;
-const time = require('lib/time').default;
+const shim = require('./shim').default;
+const time = require('./time').default;
 const Mustache = require('mustache');
 
 const TemplateUtils = {};

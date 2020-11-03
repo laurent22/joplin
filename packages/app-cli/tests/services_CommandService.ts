@@ -1,8 +1,8 @@
-import MenuUtils from 'lib/services/commands/MenuUtils';
-import ToolbarButtonUtils from 'lib/services/commands/ToolbarButtonUtils';
-import CommandService, { CommandDeclaration, CommandRuntime } from 'lib/services/CommandService';
+import MenuUtils from '@joplinapp/lib/services/commands/MenuUtils';
+import ToolbarButtonUtils from '@joplinapp/lib/services/commands/ToolbarButtonUtils';
+import CommandService, { CommandDeclaration, CommandRuntime } from '@joplinapp/lib/services/CommandService';
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('test-utils.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
 interface TestCommand {
 	declaration: CommandDeclaration,

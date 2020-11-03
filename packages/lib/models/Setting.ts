@@ -1,13 +1,13 @@
-import shim from 'lib/shim';
-import { _, supportedLocalesToLanguages, defaultLocale } from 'lib/locale';
-const BaseModel = require('lib/BaseModel').default;
-const { Database } = require('lib/database.js');
-const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
-const time = require('lib/time').default;
+import shim from '../shim';
+import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
+const BaseModel = require('../BaseModel').default;
+const { Database } = require('../database.js');
+const SyncTargetRegistry = require('../SyncTargetRegistry.js');
+const time = require('../time').default;
 const { sprintf } = require('sprintf-js');
-const ObjectUtils = require('lib/ObjectUtils');
-const { toTitleCase } = require('lib/string-utils.js');
-const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils');
+const ObjectUtils = require('../ObjectUtils');
+const { toTitleCase } = require('../string-utils.js');
+const { rtrimSlashes, toSystemSlashes } = require('../path-utils');
 
 export enum SettingItemType {
 	Int = 1,
@@ -470,7 +470,7 @@ class Setting extends BaseModel {
 				appTypes: ['cli'],
 				label: () => _('Sort notes by'),
 				options: () => {
-					const Note = require('lib/models/Note');
+					const Note = require('./Note');
 					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order'];
 					const options:any = {};
 					for (let i = 0; i < noteSortFields.length; i++) {
@@ -496,7 +496,7 @@ class Setting extends BaseModel {
 				appTypes: ['cli'],
 				label: () => _('Sort notebooks by'),
 				options: () => {
-					const Folder = require('lib/models/Folder');
+					const Folder = require('./Folder');
 					const folderSortFields = ['title', 'last_note_user_updated_time'];
 					const options:any = {};
 					for (let i = 0; i < folderSortFields.length; i++) {

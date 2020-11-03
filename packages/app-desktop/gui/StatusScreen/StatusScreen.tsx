@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import ButtonBar from '../ConfigScreen/ButtonBar';
-import { _ } from 'lib/locale';
+import { _ } from '@joplinapp/lib/locale';
 
 const { connect } = require('react-redux');
-const Setting = require('lib/models/Setting').default;
+const Setting = require('@joplinapp/lib/models/Setting').default;
 const bridge = require('electron').remote.require('./bridge').default;
-const { themeStyle } = require('lib/theme');
-const { ReportService } = require('lib/services/report.js');
+const { themeStyle } = require('@joplinapp/lib/theme');
+const { ReportService } = require('@joplinapp/lib/services/report.js');
 const fs = require('fs-extra');
 
 interface Props {

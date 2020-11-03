@@ -125,7 +125,7 @@
 - Improved: Upgrade sqlite (#2248 by Devon Zuegel)
 - Improved: Extract note renderer to separate package (WIP) (#2206 by Laurent Cozic)
 - Improved: Better handling of resource download errors, and added resource info to sync status screen
-- Improved: Update CliClient node dependency to 10+ (#2177 by [@joeltaylor](https://github.com/joeltaylor))
+- Improved: Update Node dependency to 10+ (#2177 by [@joeltaylor](https://github.com/joeltaylor))
 - Improved: Allow exporting a note as HTML
 - Improved: Improved logging during sync to allow finding bugs more easily
 - Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) (#2091)

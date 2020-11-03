@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 		// },
 
 		shell: {
-			command: 'tsc',
+			command: 'tsc --project tsconfig.json',
 		},
 
 		rollup: {
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
 					// { src: ['changelog.txt'], dest: 'dist', expand: true },
 					{
 						src: ['dist/joplinLists.js'],
-						dest: '../../../ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js',
+						dest: '../../../packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js',
 					},
 				],
 			},

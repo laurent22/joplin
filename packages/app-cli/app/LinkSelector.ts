@@ -41,7 +41,8 @@ class LinkSelector {
 		const newLinkStore: LinkStoreEntry[] = [];
 		const lines: string[] = renderedText.split('\n');
 		for (let i = 0; i < lines.length; i++) {
-			const matches = [...lines[i].matchAll(this.linkRegex_)];
+			const r = (lines[i] as any).matchAll(this.linkRegex_);
+			const matches = [...r];
 			matches.forEach((_e, n) => {
 				newLinkStore.push(
 					{

@@ -1,13 +1,13 @@
 const React = require('react');
-const { _ } = require('lib/locale');
-const { themeStyle } = require('lib/theme');
-const time = require('lib/time').default;
+const { _ } = require('@joplinapp/lib/locale');
+const { themeStyle } = require('@joplinapp/lib/theme');
+const time = require('@joplinapp/lib/time').default;
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Datetime = require('react-datetime');
-const Note = require('lib/models/Note');
+const Note = require('@joplinapp/lib/models/Note');
 const formatcoords = require('formatcoords');
 const bridge = require('electron').remote.require('./bridge').default;
-const shim = require('lib/shim').default;
+const shim = require('@joplinapp/lib/shim').default;
 
 class NotePropertiesDialog extends React.Component {
 	constructor() {

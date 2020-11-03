@@ -1,4 +1,4 @@
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
+const SearchEngine = require('../services/searchengine/SearchEngine');
 
 const script = {};
 

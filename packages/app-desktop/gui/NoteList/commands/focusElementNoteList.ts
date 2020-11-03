@@ -1,6 +1,6 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from 'lib/services/CommandService';
-import { _ } from 'lib/locale';
-import { stateUtils } from 'lib/reducer';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+import { _ } from '@joplinapp/lib/locale';
+import { stateUtils } from '@joplinapp/lib/reducer';
 
 export const declaration:CommandDeclaration = {
 	name: 'focusElementNoteList',

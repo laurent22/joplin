@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 
-require('app-module-path').addPath(__dirname);
 
-const time = require('lib/time').default;
-const { asyncTest, fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const SearchEngine = require('lib/services/searchengine/SearchEngine');
-const ResourceService = require('lib/services/ResourceService');
-const ItemChangeUtils = require('lib/services/ItemChangeUtils');
-const Note = require('lib/models/Note');
-const Setting = require('lib/models/Setting').default;
-const ItemChange = require('lib/models/ItemChange');
+const time = require('@joplinapp/lib/time').default;
+const { asyncTest, fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');
+const ResourceService = require('@joplinapp/lib/services/ResourceService');
+const ItemChangeUtils = require('@joplinapp/lib/services/ItemChangeUtils');
+const Note = require('@joplinapp/lib/models/Note');
+const Setting = require('@joplinapp/lib/models/Setting').default;
+const ItemChange = require('@joplinapp/lib/models/ItemChange');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

@@ -1,9 +1,9 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('lib/locale');
-const Tag = require('lib/models/Tag.js');
-const BaseModel = require('lib/BaseModel').default;
-const time = require('lib/time').default;
+const { _ } = require('@joplinapp/lib/locale');
+const Tag = require('@joplinapp/lib/models/Tag.js');
+const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const time = require('@joplinapp/lib/time').default;
 
 class Command extends BaseCommand {
 	usage() {

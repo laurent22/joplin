@@ -1,5 +1,5 @@
 import { Request } from '../Api';
-const BaseItem = require('lib/models/BaseItem');
+const BaseItem = require('../../../models/BaseItem');
 
 function defaultFieldsByModelType(modelType:number):string[] {
 	const ModelClass = BaseItem.getClassByItemType(modelType);

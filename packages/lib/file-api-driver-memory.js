@@ -1,6 +1,6 @@
-const time = require('lib/time').default;
+const time = require('./time').default;
 const fs = require('fs-extra');
-const { basicDelta } = require('lib/file-api');
+const { basicDelta } = require('./file-api');
 
 class FileApiDriverMemory {
 	constructor() {

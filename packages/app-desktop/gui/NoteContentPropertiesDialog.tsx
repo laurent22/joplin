@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { _ } from 'lib/locale';
-const { themeStyle } = require('lib/theme');
+import { _ } from '@joplinapp/lib/locale';
+const { themeStyle } = require('@joplinapp/lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Countable = require('countable');
-const markupLanguageUtils = require('lib/markupLanguageUtils').default;
+const markupLanguageUtils = require('@joplinapp/lib/markupLanguageUtils').default;
 
 interface NoteContentPropertiesDialogProps {
 	themeId: number,
@@ -47,7 +47,7 @@ function formatReadTime(readTimeMinutes: number) {
 
 export default function NoteContentPropertiesDialog(props:NoteContentPropertiesDialogProps) {
 	const theme = themeStyle(props.themeId);
-	const tableBodyComps: JSX.Element[] = [];
+	const tableBodyComps: any[] = [];
 	// For the source Markdown
 	const [lines, setLines] = useState<number>(0);
 	const [words, setWords] = useState<number>(0);
