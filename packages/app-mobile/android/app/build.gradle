@@ -128,6 +128,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dexOptions {
+        // To fix "GC overhead limit exceeded"
+        // https://stackoverflow.com/q/32133013/561309
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
