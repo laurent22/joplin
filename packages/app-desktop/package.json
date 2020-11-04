@@ -64,7 +64,8 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "differentialPackage": false
     },
     "portable": {
       "artifactName": "${productName}Portable.${ext}"
@@ -79,6 +80,9 @@
         "Icon": "joplin"
       },
       "target": "AppImage"
+    },
+    "dmg": {
+      "writeUpdateInfo": false
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
