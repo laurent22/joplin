@@ -18,9 +18,9 @@ const tasks = {
 	electronRebuild: {
 		fn: require('./tools/electronRebuild.js'),
 	},
-	compileExtensions: {
-		fn: require('@joplinapp/tools/gulp/tasks/compileExtensions.js'),
-	},
+	// compileExtensions: {
+	// 	fn: require('@joplinapp/tools/gulp/tasks/compileExtensions.js'),
+	// },
 	// copyLib: require('@joplinapp/tools/gulp/tasks/copyLib'),
 	tsc: require('@joplinapp/tools/gulp/tasks/tsc'),
 	updateIgnoredTypeScriptBuild: require('@joplinapp/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
