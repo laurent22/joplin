@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const execa = require('execa');
 
 const utils = {};
 
@@ -12,6 +13,12 @@ utils.isWindows = () => {
 
 utils.isMac = () => {
 	return process && process.platform === 'darwin';
+};
+
+utils.execCommandVerbose = function(commandName, args = []) {
+	const promise = execa(commandName, args);
+	promise.stdout.pipe(process.stdout);
+	return promise;
 };
 
 utils.execCommand = function(command) {
