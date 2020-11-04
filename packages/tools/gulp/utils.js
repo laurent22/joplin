@@ -16,7 +16,7 @@ utils.isMac = () => {
 };
 
 utils.execCommandVerbose = function(commandName, args = []) {
-	console.info('> ' + commandName, args);
+	console.info('> ' + commandName, args && args.length ? args : '');
 	const promise = execa(commandName, args);
 	promise.stdout.pipe(process.stdout);
 	return promise;
