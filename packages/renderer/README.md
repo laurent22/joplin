@@ -53,6 +53,10 @@ function loadPluginAssets(assets) {
 
 ## Development
 
+# Updating a markdown-it plugin
+
+Whenever updating a Markdown-it plugin, such as Katex or Mermaid, make sure to run `npm run buildAssets`, which will compile the CSS and JS for use in the Joplin applications.
+
 ### Adding asset files
 
 A plugin (or rule) can have any number of assets, such as CSS or font files, associated with it. To add an asset to a plugin, follow these steps:
