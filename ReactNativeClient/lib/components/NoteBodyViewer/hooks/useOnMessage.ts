@@ -21,6 +21,8 @@ export default function useOnMessage(onCheckboxChange:Function, noteBody:string,
 			onJoplinLinkClick(msg);
 		} else if (msg.startsWith('error:')) {
 			console.error(`Webview injected script error: ${msg}`);
+		} else {
+			onJoplinLinkClick(msg);
 		}
 	}, [onCheckboxChange, noteBody, onMarkForDownload, onJoplinLinkClick, onResourceLongPress]);
 }
