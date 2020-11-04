@@ -21,7 +21,7 @@
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "clean": "lerna clean -y",
     "linkChecker": "linkchecker https://joplinapp.org",
-    "publishAll": "lerna version --no-git-tag-version && lerna publish from-package"
+    "publishAll": "git pull && lerna version --no-git-tag-version && gulp completePublishAll"
   },
   "devDependencies": {
     "@types/jasmine": "^3.6.0",
