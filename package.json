@@ -20,7 +20,8 @@
     "generatePluginTypes": "rm -rf ./plugin_types && node node_modules/typescript/bin/tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "clean": "lerna clean -y",
-    "linkChecker": "linkchecker https://joplinapp.org"
+    "linkChecker": "linkchecker https://joplinapp.org",
+    "publishAll": "lerna version --no-git-tag-version && lerna publish from-package"
   },
   "devDependencies": {
     "@types/jasmine": "^3.6.0",
