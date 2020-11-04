@@ -14,6 +14,7 @@ SILENT=false
 ALLOW_ROOT=false
 SHOW_CHANGELOG=false
 INCLUDE_PRE_RELEASE=false
+UNINSTALL=false
 
 print() {
     if [[ "${SILENT}" == false ]] ; then
@@ -42,7 +43,8 @@ showHelp() {
     print "\t" "--changelog" "\t" "Show the changelog after installation"
     print "\t" "--force" "\t" "Always download the latest version"
     print "\t" "--silent" "\t" "Don't print any output"
-    print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases" 
+    print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases"
+    print "\t" "--uninstall" "\t" "Uninstall joplin"
 
     if [[ ! -z $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
@@ -52,36 +54,67 @@ showHelp() {
 
 }
 
+getDesktop() {
+    if [ "$XDG_CURRENT_DESKTOP" = "" ]
+    then
+        DESKTOP=$(echo "${XDG_DATA_DIRS}" | sed 's/.*\(xfce\|kde\|gnome\).*/\1/')
+    else
+        DESKTOP=$XDG_CURRENT_DESKTOP
+    fi
+    DESKTOP=${DESKTOP,,}  # convert to lower case
+}
+
+uninstall() {
+    if [ ! -d ~/.joplin ]
+    then
+        print "${COLOR_BLUE}No Joplin installation detected. Nothing to do.${COLOR_RESET}"
+        exit 1
+    fi
+
+    print "${COLOR_YELLOW}Uninstalling Joplin${COLOR_RESET}"
+    rm -rf ~/.joplin && print "${COLOR_GREEN}Successfully removed joplin application. Cleaning up icon and desktop file.${COLOR_RESET}"
+    if [ -e ~/.local/share/icons/hicolor/512x512/apps/joplin.png ]
+    then
+        rm ~/.local/share/icons/hicolor/512x512/apps/joplin.png && print "${COLOR_GREEN}Successfully removed icon${COLOR_RESET}"
+    fi
+    getDesktop
+    if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.* ]]; then
+        if [ -e ~/.local/share/applications/appimagekit-joplin.desktop ]
+        then
+            rm ~/.local/share/applications/appimagekit-joplin.desktop && print "${COLOR_GREEN}Successfully removed desktop file${COLOR_RESET}"
+        else
+            print "${COLOR_BLUE}No desktop file found. Nothing to do.${COLOR_RESET}"
+        fi
+    else
+    print "${COLOR_YELLOW}Skipping removal of desktop file. Unrecognized desktop $DESKTOP.${COLOR_RESET}"
+    fi
+}
+
 #-----------------------------------------------------
 # PARSE ARGUMENTS
 #-----------------------------------------------------
 
 optspec=":h-:"
 while getopts "${optspec}" OPT; do
-  [ "${OPT}" = " " ] && continue
-  if [ "${OPT}" = "-" ]; then   # long option: reformulate OPT and OPTARG
-    OPT="${OPTARG%%=*}"       # extract long option name
-    OPTARG="${OPTARG#$OPT}"   # extract long option argument (may be empty)
-    OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
-  fi
-  case "${OPT}" in
-    h | help )     showHelp ;;
-    allow-root )   ALLOW_ROOT=true ;;
-    silent )       SILENT=true ;;
-    force )        FORCE=true ;;
-    changelog )    SHOW_CHANGELOG=true ;;
-    prerelease )   INCLUDE_PRE_RELEASE=true ;;
-    [^\?]* )       showHelp "Illegal option --${OPT}"; exit 2 ;;
-    \? )           showHelp "Illegal option -${OPTARG}"; exit 2 ;;
-  esac
+    [ "${OPT}" = " " ] && continue
+    if [ "${OPT}" = "-" ]; then   # long option: reformulate OPT and OPTARG
+      OPT="${OPTARG%%=*}"       # extract long option name
+      OPTARG="${OPTARG#$OPT}"   # extract long option argument (may be empty)
+      OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
+    fi
+    case "${OPT}" in
+      h | help )     showHelp ;;
+      allow-root )   ALLOW_ROOT=true ;;
+      silent )       SILENT=true ;;
+      force )        FORCE=true ;;
+      changelog )    SHOW_CHANGELOG=true ;;
+      prerelease )   INCLUDE_PRE_RELEASE=true ;;
+      uninstall )    UNINSTALL=true ;;
+      [^\?]* )       showHelp "Illegal option --${OPT}"; exit 2 ;;
+      \? )           showHelp "Illegal option -${OPTARG}"; exit 2 ;;
+    esac
 done
 shift $((OPTIND-1)) # remove parsed options and args from $@ list
-
-## Check and warn if running as root.
-if [[ $EUID = 0 ]] && [[ "${ALLOW_ROOT}" != true ]]; then
-    showHelp "It is not recommended (nor necessary) to run this script as root. To do so anyway, please use '--allow-root'"
-    exit 1
-fi
 
 #-----------------------------------------------------
 # START
@@ -89,18 +122,29 @@ fi
 showLogo
 
 #-----------------------------------------------------
+## Check and warn if running as root.
+if [[ $EUID = 0 ]] && [[ "${ALLOW_ROOT}" != true ]]; then
+    showHelp "It is not recommended (nor necessary) to run this script as root. To do so anyway, please use '--allow-root'"
+    exit 1
+fi
+
+if [[ "$UNINSTALL" == true ]]; then
+    uninstall
+    exit 1
+fi
+
 print "Checking architecture..."
 ## uname actually gives more information than needed, but it contains all architectures (hardware and software)
 ARCHITECTURE=$(uname -m -p -i || echo "NO CHECK")
 
 if [[ $ARCHITECTURE = "NO CHECK" ]] ; then
-  print "${COLOR_YELLOW}WARNING: Can't get system architecture, skipping check${COLOR_RESET}"
+    print "${COLOR_YELLOW}WARNING: Can't get system architecture, skipping check${COLOR_RESET}"
 elif [[ $ARCHITECTURE =~ .*aarch.*|.*arm.* ]] ; then
-  showHelp "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
-  exit 1
+    showHelp "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+    exit 1
 elif [[ $ARCHITECTURE =~ .*i386.*|.*i686.* ]] ; then
-  showHelp "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
-  exit 1
+    showHelp "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+    exit 1
 fi
 
 #-----------------------------------------------------
@@ -109,9 +153,9 @@ fi
 
 # Get the latest version to download
 if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | head -1)
+    RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | head -1)
 else
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+    RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
 fi
 
 # Check if it's in the latest version
@@ -152,14 +196,7 @@ mv ${TEMP_DIR}/joplin.png ~/.local/share/icons/hicolor/512x512/apps/joplin.png
 print "${COLOR_GREEN}OK${COLOR_RESET}"
 
 # Detect desktop environment
-if [ "$XDG_CURRENT_DESKTOP" = "" ]
-then
-  DESKTOP=$(echo "${XDG_DATA_DIRS}" | sed 's/.*\(xfce\|kde\|gnome\).*/\1/')
-else
-  DESKTOP=$XDG_CURRENT_DESKTOP
-fi
-DESKTOP=${DESKTOP,,}  # convert to lower case
-
+getDesktop
 #-----------------------------------------------------
 echo 'Create Desktop icon...'
 if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.* ]]
