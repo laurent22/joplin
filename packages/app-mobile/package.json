@@ -2,7 +2,7 @@
   "name": "@joplinapp/app-mobile",
   "description": "Joplin for Mobile",
   "license": "MIT",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "private": true,
   "scripts": {
     "start": "react-native start --reset-cache",
@@ -13,9 +13,9 @@
     "postinstall": "jetify && npm run build"
   },
   "dependencies": {
-    "@joplinapp/lib": "^1.0.8",
-    "@joplinapp/renderer": "^1.0.16",
-    "@joplinapp/tools": "^1.0.8",
+    "@joplinapp/lib": "^1.0.9",
+    "@joplinapp/renderer": "^1.0.17",
+    "@joplinapp/tools": "^1.0.9",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/geolocation": "^2.0.2",
