@@ -1,7 +1,7 @@
 {
   "name": "@joplinapp/app-clipper",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Joplin Web Clipper",
   "main": "main.js",
   "author": "Laurent Cozic",
