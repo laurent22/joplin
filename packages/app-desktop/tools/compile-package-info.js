@@ -14,9 +14,12 @@ module.exports = async function() {
 	}
 
 	const appId = packageInfo.build.appId;
+	const productName = packageInfo.build.productName;
 
 	delete packageInfo.build;
+
 	packageInfo.build = { appId: appId };
+	packageInfo.name = productName;
 
 	let branch;
 	let hash;
