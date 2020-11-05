@@ -12,9 +12,9 @@ const tasks = {
 	podInstall: {
 		fn: require('./tools/podInstall'),
 	},
-	clean: {
-		fn: require('./tools/clean'),
-	},
+	// clean: {
+	// 	fn: require('./tools/clean'),
+	// },
 	linkReact: {
 		fn: async () => {
 			// React is a dependency of both the lib and app-desktop

@@ -1,6 +1,6 @@
 import shim from '../../../shim';
-const { useEffect, useState } = shim.react();
 import MigrationHandler from '../MigrationHandler';
+const { useEffect, useState } = shim.react();
 const Setting = require('../../../models/Setting').default;
 const { reg } = require('../../../registry');
 

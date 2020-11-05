@@ -280,7 +280,7 @@ const shim = {
 	},
 
 	react: () => {
-		if (!react_) throw new Error('Trying to access React before it has been set!!!'); 
+		if (!react_) throw new Error('Trying to access React before it has been set!!!');
 		return react_;
 	},
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint prefer-const: 0*/
 
-// 
+//
 // const time = require('@joplinapp/lib/time').default;
 // const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('./test-utils.js');
 // const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');

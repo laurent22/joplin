@@ -19,8 +19,8 @@ module.exports = {
 				'**/plugin_types/**',
 			],
 		})
-		.filter(f => !f.endsWith('.d.ts'))
-		.map(f => f.substr(rootDir.length + 1));
+			.filter(f => !f.endsWith('.d.ts'))
+			.map(f => f.substr(rootDir.length + 1));
 
 		const ignoredJsFiles = tsFiles.map(f => {
 			const s = f.split('.');

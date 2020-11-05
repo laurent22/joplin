@@ -23,6 +23,11 @@
     "linkChecker": "linkchecker https://joplinapp.org",
     "publishAll": "git pull && lerna version --no-git-tag-version && gulp completePublishAll"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
     "@types/jasmine": "^3.6.0",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
