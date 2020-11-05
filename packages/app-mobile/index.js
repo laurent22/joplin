@@ -29,6 +29,8 @@ LogBox.ignoreLogs([
 	'Require cycle: node_modules\\rn-fetch-blob',
 	'Require cycle: node_modules/aws-sdk',
 	'Require cycle: node_modules\\aws-sdk',
+	'Require cycle: ../lib/node_modules/aws-sdk',
+	'Require cycle: ..\\lib\\node_modules\\aws-sdk',
 
 	// It's being updated over time and we don't need to see these warnings all the time
 	'Warning: componentWillReceiveProps has been renamed',

@@ -41,6 +41,8 @@ module.exports = {
             {
                 '@joplinapp/lib': path.resolve(__dirname, '../lib/'),
                 '@joplinapp/renderer': path.resolve(__dirname, '../renderer/'),
+                '@joplinapp/tools': path.resolve(__dirname, '../tools/'),
+                '@joplinapp/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
             },
             {
                 get: (target, name) =>
@@ -58,5 +60,7 @@ module.exports = {
     watchFolders: [
         path.resolve(__dirname, '../lib'),
         path.resolve(__dirname, '../renderer'),
+        path.resolve(__dirname, '../tools'),
+        path.resolve(__dirname, '../fork-htmlparser2'),
     ]
 };

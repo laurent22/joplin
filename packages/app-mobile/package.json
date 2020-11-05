@@ -10,6 +10,7 @@
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "preinstall": "node tools/unlinkReact.js",
+    "clean": "gulp clean",
     "postinstall": "jetify && npm run build"
   },
   "dependencies": {
@@ -22,9 +23,11 @@
     "@react-native-community/push-notification-ios": "^1.6.0",
     "@react-native-community/slider": "^3.0.3",
     "buffer": "^5.0.8",
+    "events": "^3.2.0",
     "jsc-android": "241213.1.0",
     "md5": "^2.2.1",
     "prop-types": "^15.6.0",
+    "punycode": "^2.1.1",
     "react": "16.13.1",
     "react-native": "0.63.3",
     "react-native-action-button": "^2.8.5",

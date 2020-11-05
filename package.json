@@ -19,7 +19,7 @@
     "buildWebsite": "npm run buildApiDoc && node ./packages/tools/build-website.js && npm run buildPluginDoc",
     "generatePluginTypes": "rm -rf ./plugin_types && node node_modules/typescript/bin/tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
-    "clean": "lerna clean -y",
+    "clean": "lerna clean -y && lerna run clean",
     "linkChecker": "linkchecker https://joplinapp.org",
     "publishAll": "git pull && lerna version --no-git-tag-version && gulp completePublishAll"
   },
