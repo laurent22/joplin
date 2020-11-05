@@ -317,6 +317,8 @@ export class Parser extends EventEmitter {
         } else if (!this._options.xmlMode && (name === "br" || name === "p")) {
             this.onopentagname(name);
             this._closeCurrentTag();
+        } else if (!this._stack.length && alwaysClose && this._cbs.onclosetag) {
+            this._cbs.onclosetag(name);
         }
     }
 
