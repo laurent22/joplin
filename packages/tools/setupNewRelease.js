@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const rootDir = path.dirname(__dirname);
+const rootDir = path.dirname(path.dirname(__dirname));
 
 async function updatePackageVersion(packageFilePath, majorMinorVersion) {
 	const contentText = await fs.readFile(packageFilePath, 'utf8');
