@@ -228,33 +228,33 @@ const operations = [
 
 	{
 		source: 5,
-		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon.ico',
+		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon.ico',
 	},
 	{
 		source: 2,
-		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon_16.png',
+		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_16.png',
 	},
 	{
 		source: 3,
-		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon_32.png',
+		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_32.png',
 		width: 32,
 		height: 32,
 	},
 	{
 		source: 4,
-		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon_75.png',
+		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_75.png',
 		width: 75,
 		height: 75,
 	},
 	{
 		source: 4,
-		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon_128.png',
+		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_128.png',
 		width: 128,
 		height: 128,
 	},
 	{
 		source: 4,
-		dest: 'Tools/PortableAppsLauncher/App/AppInfo/Launcher/splash.jpg',
+		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/Launcher/splash.jpg',
 		width: 144,
 		height: 144,
 	},

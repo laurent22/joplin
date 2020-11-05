@@ -45,8 +45,8 @@ QtClient/data/
 sparse_test.php
 sync_staging.sh
 TODO.md
-Tools/commit_hook.txt
-Tools/github_oauth_token.txt
+packages/tools/commit_hook.txt
+packages/tools/github_oauth_token.txt
 lerna-debug.log
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
