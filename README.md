@@ -404,7 +404,7 @@ Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/read
 
 # Contributing
 
-Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
+Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md
 
 # Localisation
 
