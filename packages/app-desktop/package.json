@@ -1,6 +1,6 @@
 {
   "name": "@joplinapp/app-desktop",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
