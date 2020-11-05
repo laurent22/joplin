@@ -74,7 +74,7 @@
       "icon": "../../Assets/macOs.icns"
     },
     "linux": {
-      "icon": "../Assets/LinuxIcons",
+      "icon": "../../Assets/LinuxIcons",
       "category": "Office",
       "desktop": {
         "Icon": "joplin"
