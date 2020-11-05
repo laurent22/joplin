@@ -4,7 +4,7 @@ const utils = require('./packages/tools/gulp/utils');
 const tasks = {
 	// copyLib: require('./packages/tools/gulp/tasks/copyLib'),
 	// tsc: require('./packages/tools/gulp/tasks/tsc'),
-	// updateIgnoredTypeScriptBuild: require('./packages/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
+	updateIgnoredTypeScriptBuild: require('./packages/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
 	// deleteBuildDirs: require('./packages/tools/gulp/tasks/deleteBuildDirs'),
 	completePublishAll: {
 		fn: async () => {

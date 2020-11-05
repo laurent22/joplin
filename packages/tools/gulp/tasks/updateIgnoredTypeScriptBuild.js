@@ -12,14 +12,15 @@ module.exports = {
 				'**/api-cli/tests-build/**',
 				'**/api-cli/tests/support/plugins/**',
 				'**/app-desktop/dist/**',
-				'**/app-desktop/lib/**',
 				'**/Assets/*',
 				'**/app-mobile/android/**',
 				'**/app-mobile/ios/**',
 				'**/node_modules/**',
 				'**/plugin_types/**',
 			],
-		}).map(f => f.substr(rootDir.length + 1));
+		})
+		.filter(f => !f.endsWith('.d.ts'))
+		.map(f => f.substr(rootDir.length + 1));
 
 		const ignoredJsFiles = tsFiles.map(f => {
 			const s = f.split('.');
