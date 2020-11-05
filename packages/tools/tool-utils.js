@@ -41,6 +41,36 @@ toolUtils.execCommandWithPipes = function(executable, args) {
 	});
 };
 
+toolUtils.credentialDir = async function() {
+	const username = require('os').userInfo().username;
+
+	const toTry = [
+		`c:/Users/${username}/joplin-credentials`,
+		`/mnt/c/Users/${username}/joplin-credentials`,
+		`/home/${username}/joplin-credentials`,
+		`/Users/${username}/joplin-credentials`,
+	];
+
+	for (const dirPath of toTry) {
+		if (await fs.exists(dirPath)) return dirPath;
+	}
+
+	throw new Error(`Could not find credential directory in any of these paths: ${JSON.stringify(toTry)}`);
+};
+
+toolUtils.credentialFile = async function(filename) {
+	const rootDir = await toolUtils.credentialDir();
+	const output = `${rootDir}/${filename}`;
+	if (!(await fs.exists(output))) throw new Error(`No such file: ${output}`);
+	return output;
+};
+
+toolUtils.readCredentialFile = async function(filename) {
+	const filePath = await toolUtils.credentialFile(filename);
+	const r = await fs.readFile(filePath);
+	return r.toString();
+};
+
 toolUtils.downloadFile = function(url, targetPath) {
 	const https = require('https');
 	const fs = require('fs');
@@ -163,15 +193,11 @@ toolUtils.githubUsername = async function(email, name) {
 };
 
 toolUtils.patreonOauthToken = async function() {
-	const fs = require('fs-extra');
-	const r = await fs.readFile(`${__dirname}/patreon_oauth_token.txt`);
-	return r.toString();
+	return toolUtils.readCredentialFile('patreon_oauth_token.txt');
 };
 
 toolUtils.githubOauthToken = async function() {
-	const fs = require('fs-extra');
-	const r = await fs.readFile(`${__dirname}/github_oauth_token.txt`);
-	return r.toString();
+	return toolUtils.readCredentialFile('github_oauth_token.txt');
 };
 
 toolUtils.githubRelease = async function(project, tagName, options = null) {
