@@ -32,7 +32,6 @@
         "./lib/WritableStream.js": false
     },
     "scripts": {
-        "test": "jest --coverage -u && npm run lint",
         "coverage": "cat coverage/lcov.info | coveralls",
         "lint": "eslint --ext=js,ts src",
         "format": "prettier --write '**/*.{ts,md,json}'",

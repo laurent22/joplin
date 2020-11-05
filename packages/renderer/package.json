@@ -9,7 +9,6 @@
     "access": "public"
   },
   "scripts": {
-    "test": "jasmine --config=tests/support/jasmine.json",
     "buildAssets": "node Tools/buildAssets.js",
     "prepublishOnly": "npm run buildAssets",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
