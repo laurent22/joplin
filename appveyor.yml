@@ -10,7 +10,6 @@ platform:
 
 install:
   - ps: Install-Product node 10 x64
-  - yarn
 
 build_script:
   - npm install
