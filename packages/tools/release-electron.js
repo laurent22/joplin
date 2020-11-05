@@ -1,7 +1,5 @@
-const { execCommand, githubRelease } = require('./tool-utils.js');
-const path = require('path');
+const { execCommand, githubRelease, rootDir } = require('./tool-utils.js');
 
-const rootDir = path.dirname(__dirname);
 const appDir = `${rootDir}/packages/app-desktop`;
 
 async function main() {

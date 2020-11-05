@@ -22,6 +22,7 @@
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "clean": "lerna clean -y && lerna run clean",
     "linkChecker": "linkchecker https://joplinapp.org",
+    "releaseDesktop": "node packages/tools/release-electron.js",
     "publishAll": "git pull && lerna version --no-git-tag-version && gulp completePublishAll"
   },
   "husky": {

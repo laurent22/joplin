@@ -58,6 +58,9 @@ toolUtils.credentialDir = async function() {
 	throw new Error(`Could not find credential directory in any of these paths: ${JSON.stringify(toTry)}`);
 };
 
+// Returns the project root dir
+toolUtils.rootDir = require('path').dirname(require('path').dirname(__dirname));
+
 toolUtils.credentialFile = async function(filename) {
 	const rootDir = await toolUtils.credentialDir();
 	const output = `${rootDir}/${filename}`;
