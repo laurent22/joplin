@@ -1,0 +1,205 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Feeds Atom (1.0) 1`] = `
+Object {
+  "author": "johndoe@example.com",
+  "description": "A subtitle.",
+  "id": "urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6",
+  "items": Array [
+    Object {
+      "description": "Some content.",
+      "id": "urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a",
+      "link": "http://example.org/2003/12/13/atom03",
+      "pubDate": 2003-12-13T18:30:02.000Z,
+      "title": "Atom-Powered Robots Run Amok",
+    },
+  ],
+  "link": "http://example.org/feed/",
+  "title": "Example Feed",
+  "type": "atom",
+  "updated": 2003-12-13T18:30:02.000Z,
+}
+`;
+
+exports[`Feeds Atom (1.0) 2`] = `
+Object {
+  "author": "johndoe@example.com",
+  "description": "A subtitle.",
+  "id": "urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6",
+  "items": Array [
+    Object {
+      "description": "Some content.",
+      "id": "urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a",
+      "link": "http://example.org/2003/12/13/atom03",
+      "pubDate": 2003-12-13T18:30:02.000Z,
+      "title": "Atom-Powered Robots Run Amok",
+    },
+  ],
+  "link": "http://example.org/feed/",
+  "title": "Example Feed",
+  "type": "atom",
+  "updated": 2003-12-13T18:30:02.000Z,
+}
+`;
+
+exports[`Feeds RDF test 1`] = `
+Object {
+  "id": "",
+  "items": Array [
+    Object {
+      "description": "Great test content<br>A link: <a href=\\"http://github.com\\">Github</a>",
+      "link": "http://somefakesite/path/to/something.html",
+      "title": "Fast HTML Parsing",
+    },
+    Object {
+      "description": "The early bird gets the worm",
+      "link": "http://somefakesite/path/to/something-else.html",
+      "title": "This space intentionally left blank",
+    },
+  ],
+  "link": "https://github.com/fb55/htmlparser2/",
+  "title": "A title to parse and remember",
+  "type": "rdf",
+}
+`;
+
+exports[`Feeds RDF test 2`] = `
+Object {
+  "id": "",
+  "items": Array [
+    Object {
+      "description": "Great test content<br>A link: <a href=\\"http://github.com\\">Github</a>",
+      "link": "http://somefakesite/path/to/something.html",
+      "title": "Fast HTML Parsing",
+    },
+    Object {
+      "description": "The early bird gets the worm",
+      "link": "http://somefakesite/path/to/something-else.html",
+      "title": "This space intentionally left blank",
+    },
+  ],
+  "link": "https://github.com/fb55/htmlparser2/",
+  "title": "A title to parse and remember",
+  "type": "rdf",
+}
+`;
+
+exports[`Feeds RSS (2.0) 1`] = `
+Object {
+  "author": "editor@example.com",
+  "description": "Liftoff to Space Exploration.",
+  "id": "",
+  "items": Array [
+    Object {
+      "description": "How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's &lt;a href=\\"http://howe.iki.rssi.ru/GCTC/gctc_e.htm\\"&gt;Star City&lt;/a&gt;.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/06/03.html#item573",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp",
+      "pubDate": 2003-06-03T09:39:21.000Z,
+      "title": "Star City",
+    },
+    Object {
+      "description": "Sky watchers in Europe, Asia, and parts of Alaska and Canada will experience a &lt;a href=\\"http://science.nasa.gov/headlines/y2003/30may_solareclipse.htm\\"&gt;partial eclipse of the Sun&lt;/a&gt; on Saturday, May 31st.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/30.html#item572",
+      "pubDate": 2003-05-30T11:06:42.000Z,
+    },
+    Object {
+      "description": "Before man travels to Mars, NASA hopes to design new engines that will let us fly through the Solar System more quickly.  The proposed VASIMR engine would do that.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/27.html#item571",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-VASIMR.asp",
+      "pubDate": 2003-05-27T08:37:32.000Z,
+      "title": "The Engine That Does More",
+    },
+    Object {
+      "description": "Compared to earlier spacecraft, the International Space Station has many luxuries, but laundry facilities are not one of them.  Instead, astronauts have other options.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/20.html#item570",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-laundry.asp",
+      "pubDate": 2003-05-20T08:56:02.000Z,
+      "title": "Astronauts' Dirty Laundry",
+    },
+  ],
+  "link": "http://liftoff.msfc.nasa.gov/",
+  "title": "Liftoff News",
+  "type": "rss",
+  "updated": 2003-06-10T09:41:01.000Z,
+}
+`;
+
+exports[`Feeds RSS (2.0) 2`] = `
+Object {
+  "author": "editor@example.com",
+  "description": "Liftoff to Space Exploration.",
+  "id": "",
+  "items": Array [
+    Object {
+      "description": "How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's &lt;a href=\\"http://howe.iki.rssi.ru/GCTC/gctc_e.htm\\"&gt;Star City&lt;/a&gt;.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/06/03.html#item573",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp",
+      "pubDate": 2003-06-03T09:39:21.000Z,
+      "title": "Star City",
+    },
+    Object {
+      "description": "Sky watchers in Europe, Asia, and parts of Alaska and Canada will experience a &lt;a href=\\"http://science.nasa.gov/headlines/y2003/30may_solareclipse.htm\\"&gt;partial eclipse of the Sun&lt;/a&gt; on Saturday, May 31st.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/30.html#item572",
+      "pubDate": 2003-05-30T11:06:42.000Z,
+    },
+    Object {
+      "description": "Before man travels to Mars, NASA hopes to design new engines that will let us fly through the Solar System more quickly.  The proposed VASIMR engine would do that.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/27.html#item571",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-VASIMR.asp",
+      "pubDate": 2003-05-27T08:37:32.000Z,
+      "title": "The Engine That Does More",
+    },
+    Object {
+      "description": "Compared to earlier spacecraft, the International Space Station has many luxuries, but laundry facilities are not one of them.  Instead, astronauts have other options.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/20.html#item570",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-laundry.asp",
+      "pubDate": 2003-05-20T08:56:02.000Z,
+      "title": "Astronauts' Dirty Laundry",
+    },
+  ],
+  "link": "http://liftoff.msfc.nasa.gov/",
+  "title": "Liftoff News",
+  "type": "rss",
+  "updated": 2003-06-10T09:41:01.000Z,
+}
+`;
+
+exports[`parseFeed (rssFeed) 1`] = `
+Object {
+  "author": "editor@example.com",
+  "description": "Liftoff to Space Exploration.",
+  "id": "",
+  "items": Array [
+    Object {
+      "description": "How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's &lt;a href=\\"http://howe.iki.rssi.ru/GCTC/gctc_e.htm\\"&gt;Star City&lt;/a&gt;.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/06/03.html#item573",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp",
+      "pubDate": 2003-06-03T09:39:21.000Z,
+      "title": "Star City",
+    },
+    Object {
+      "description": "Sky watchers in Europe, Asia, and parts of Alaska and Canada will experience a &lt;a href=\\"http://science.nasa.gov/headlines/y2003/30may_solareclipse.htm\\"&gt;partial eclipse of the Sun&lt;/a&gt; on Saturday, May 31st.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/30.html#item572",
+      "pubDate": 2003-05-30T11:06:42.000Z,
+    },
+    Object {
+      "description": "Before man travels to Mars, NASA hopes to design new engines that will let us fly through the Solar System more quickly.  The proposed VASIMR engine would do that.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/27.html#item571",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-VASIMR.asp",
+      "pubDate": 2003-05-27T08:37:32.000Z,
+      "title": "The Engine That Does More",
+    },
+    Object {
+      "description": "Compared to earlier spacecraft, the International Space Station has many luxuries, but laundry facilities are not one of them.  Instead, astronauts have other options.",
+      "id": "http://liftoff.msfc.nasa.gov/2003/05/20.html#item570",
+      "link": "http://liftoff.msfc.nasa.gov/news/2003/news-laundry.asp",
+      "pubDate": 2003-05-20T08:56:02.000Z,
+      "title": "Astronauts' Dirty Laundry",
+    },
+  ],
+  "link": "http://liftoff.msfc.nasa.gov/",
+  "title": "Liftoff News",
+  "type": "rss",
+  "updated": 2003-06-10T09:41:01.000Z,
+}
+`;

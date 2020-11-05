@@ -2,7 +2,7 @@
     "compilerOptions": {
 		"module": "commonjs",
 		"target": "es2015",
-		"lib": ["es2020.string", "dom", "dom.iterable"],
+		//"lib": ["es2015", "es2020.string", "dom", "dom.iterable"],
 		"alwaysStrict": true,
 		"forceConsistentCasingInFileNames": true,
 		"listEmittedFiles": false,
@@ -17,20 +17,13 @@
 		"jsx": "react",
 		"skipLibCheck": true,
 		"allowUmdGlobalAccess": true,
-		"baseUrl": ".",
-		"paths": {
-			"lib/*": ["./ReactNativeClient/lib/*"],
-		},
 	},
-    "include": [
-        "ReactNativeClient/**/*",
-        "ElectronClient/**/*",
-        "CliClient/**/*",
-	],
 	"exclude": [
 		"**/node_modules",
-		"ElectronClient/dist/**/*",
-		"CliClient/tests/support/**/*",
-		"CliClient/tests-build/support/**/*",
+		"packages/app-desktop/dist/**/*",
+		"packages/app-cli/tests/support/**/*",
+		"packages/app-cli/tests-build/**/*",
+		"packages/app-cli/build/**/*",
+		"Modules/**/*",
 	],
 }

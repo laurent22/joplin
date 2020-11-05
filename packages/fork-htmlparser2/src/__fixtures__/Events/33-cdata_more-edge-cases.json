@@ -1,0 +1,12 @@
+{
+    "name": "CDATA more edge-cases",
+    "options": {
+        "parser": { "recognizeCDATA": true }
+    },
+    "html": "<![CDATA[foo]bar]>baz]]>",
+    "expected": [
+        { "event": "cdatastart", "data": [] },
+        { "event": "text", "data": ["foo]bar]>baz"] },
+        { "event": "cdataend", "data": [] }
+    ]
+}

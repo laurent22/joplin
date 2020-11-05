@@ -334,6 +334,6 @@ joplin.plugins.register({
 
 And that's it! If you run this code you should now have a fully functional TOC. The full source code is available there:
 
-https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/toc/
+https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/toc/
 
 Various improvements can be made such as improving the styling, making the header collapsible, etc. but that tutorial should provide the basic building blocks to do so. You might also want to check the [plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html) for further information or head to the [development forum](https://discourse.joplinapp.org/c/development/6) for support.

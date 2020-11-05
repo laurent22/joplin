@@ -1,0 +1,109 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="net.cozic.joplin">
+
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+	<!-- RN-NOTIFICATION -->
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<!-- /RN-NOTIFICATION -->
+
+    <!-- Make these features optional to enable Chromebooks -->
+	<!-- https://github.com/laurent22/joplin/issues/37 -->
+	<uses-feature android:name="android.hardware.camera" android:required="false" />
+	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+	<application
+		android:name=".MainApplication"
+		android:label="@string/app_name"
+		android:icon="@mipmap/ic_launcher"
+		android:roundIcon="@mipmap/ic_launcher_round"
+		android:allowBackup="false"
+		android:networkSecurityConfig="@xml/network_security_config"
+		android:theme="@style/AppTheme">
+
+		<!-- RN-NOTIFICATION -->
+		<receiver
+			android:name="com.emekalites.react.alarm.notification.AlarmReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="ACTION_DISMISS" />
+				<action android:name="ACTION_SNOOZE" />
+			</intent-filter>
+		</receiver>
+
+		<receiver
+			android:name="com.emekalites.react.alarm.notification.AlarmDismissReceiver"
+			android:enabled="true"
+			android:exported="true" />
+			<receiver
+				android:name="com.emekalites.react.alarm.notification.AlarmBootReceiver"
+				android:directBootAware="true"
+				android:enabled="false"
+				android:exported="true">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.QUICKBOOT_POWERON" />
+				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+				<action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
+		<!-- /RN-NOTIFICATION -->
+
+		<!--
+		2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification
+					Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed.
+
+		2020-10-06: Changed back again to "singleInstance" and notifications still seem to work. Changing to singleInstance
+					to try to fix this bug: https://discourse.joplinapp.org/t/joplin-android-app-looses-nextcloud-sync-settings/10997/6
+					Users would lose their settings, and it's possibly due to multiple instances of the app running at the same time, perhaps
+					due to sharing with the app. When checking the log, it would show "saving settings", then the app startup message, and after the app
+					has started, it would show "setting saved". So basically the app, or one instance of it, has started while settings were being saved
+
+		2020-10-08: Changed back again to "singleTop" as it has worked so far. The multiple instance bug was "fixed" in a different way
+					See packages/app-mobile/root.js for more info about the bug.
+		-->
+
+		<activity
+			android:name=".MainActivity"
+			android:label="@string/app_name"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+			android:launchMode="singleTop"
+				android:windowSoftInputMode="adjustResize">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+		<!-- SHARE EXTENSION -->
+		<activity
+			android:noHistory="true"
+			android:name=".share.ShareActivity"
+			android:configChanges="orientation"
+			android:label="@string/app_name"
+			android:excludeFromRecents="true"
+			android:theme="@style/AppTheme">
+			<intent-filter>
+				<action android:name="android.intent.action.SEND" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="*/*" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SEND_MULTIPLE" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="*/*" />
+			</intent-filter>
+		</activity>
+		<!-- /SHARE EXTENSION -->
+
+    </application>
+
+</manifest>

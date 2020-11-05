@@ -1,41 +1,38 @@
 {
-  "name": "joplin",
-  "version": "1.0.0",
-  "description": "Joplin root package for linting",
+  "name": "root",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git"
+  },
+  "license": "MIT",
   "scripts": {
-    "linter": "./node_modules/.bin/eslint --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "linter-precommit": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "linter-ci": "./node_modules/.bin/eslint --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.dev.json",
-    "build": "gulp build",
+    "test": "lerna run test --stream",
+    "linter": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "linter-precommit": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "linter-ci": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "postinstall": "lerna bootstrap && npm run tsc",
+    "tsc": "lerna run tsc --stream --parallel",
+    "watch": "lerna run watch --stream --parallel",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
-    "copyLib": "gulp copyLib",
-    "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme 'Modules/PluginDocTheme/' --readme 'Modules/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/api/references/plugin_api ReactNativeClient/lib/services/plugins/api/",
-    "buildWebsite": "node Tools/build-website.js && npm run buildPluginDoc",
+    "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/api/references/plugin_api packages/lib/services/plugins/api/",
+    "buildApiDoc": "npm start --prefix=packages/app-cli -- apidoc ../../readme/api/references/rest_api.md",
+    "buildWebsite": "npm run buildApiDoc && node ./packages/tools/build-website.js && npm run buildPluginDoc",
     "generatePluginTypes": "rm -rf ./plugin_types && node node_modules/typescript/bin/tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
-    "setupNewRelease": "node ./Tools/setupNewRelease",
+    "setupNewRelease": "node ./packages/tools/setupNewRelease",
+    "clean": "lerna clean -y && lerna run clean",
     "linkChecker": "linkchecker https://joplinapp.org",
-    "clean": "gulp clean",
-    "postinstall": "cd Tools && npm i && cd .. && npm run clean && cd ReactNativeClient && npm i && cd .. && cd ElectronClient && npm i && cd .. && cd CliClient && npm i && cd .. && gulp build"
+    "publishAll": "git pull && lerna version --no-git-tag-version && gulp completePublishAll"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/laurent22/joplin.git"
-  },
-  "license": "MIT",
   "devDependencies": {
-    "@types/jasmine": "^3.5.11",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
-    "@types/react-native": "0.63.1",
-    "@types/react-redux": "^7.1.7",
-    "@typescript-eslint/eslint-plugin": "^2.10.0",
-    "@typescript-eslint/parser": "^2.10.0",
+    "@types/jasmine": "^3.6.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-react": "^7.18.0",
@@ -45,15 +42,9 @@
     "gulp": "^4.0.2",
     "husky": "^3.0.2",
     "jasmine": "^3.5.0",
+    "lerna": "^3.22.1",
     "lint-staged": "^9.2.1",
     "typedoc": "^0.17.8",
-    "typescript": "^3.9.6"
-  },
-  "dependencies": {
-    "follow-redirects": "^1.11.0",
-    "immer": "^7.0.5",
-    "joplin-turndown": "^4.0.30",
-    "joplin-turndown-plugin-gfm": "^1.0.12",
-    "relative": "^3.0.2"
+    "typescript": "^4.0.5"
   }
 }

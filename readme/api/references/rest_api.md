@@ -54,6 +54,50 @@ To get the IDs only of all the tags:
 
 	curl http://localhost:41184/tags?fields=id
 
+By default API results will contain the following fields: **id**, **parent_id**, **title**
+# Pagination
+
+All API calls that return multiple results will be paginated. The actual results will be under the `items` key, and if there are more results, there will also be a `cursor` key, which allows you to fetch the next results. If the `cursor` key is not present, it means you have reached the end of the data set.
+
+You can specify how the results should be sorted using the `order_by` and `order_dir` query parameters, and you can specify the number of items to be returned using the `limit` parameter (the maximum being 100 items).
+
+The following call for example will initiate a request to fetch all the notes, 10 at a time, and sorted by "updated_time" ascending:
+
+	curl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10
+
+This will return a result like this
+
+	{ "items": [ /* 10 notes */ ], "cursor": "somecursor" }
+
+Then you will resume fetching the results using this query:
+
+	curl http://localhost:41184/notes?cursor=somecursor
+
+Note that you only need to pass the cursor to the next request, as it will continue the fetching process using the same parameters you initially provided.
+
+Eventually you will get some results that do not contain a "cursor" paramater, at which point you will have retrieved all the results
+
+As an example the pseudo-code below could be used to fetch all the notes:
+
+```javascript
+
+async function fetchJson(url) {
+	return (await fetch(url)).json();
+}
+
+async function fetchAllNotes() {
+	let query = '';
+	const url = 'http://localhost:41184/notes';
+
+	do {
+		const response = await fetchJson(url + query);
+		console.info('Printing notes:');
+		console.info(response.items);
+		query = '?cursor' + response.cursor;
+	} while (response.cursor)
+}
+```
+
 # Error handling
 
 In case of an error, an HTTP status code >= 400 will be returned along with a JSON object that provides more info about the error. The JSON object is in the format `{ "error": "description of error" }`.
@@ -99,6 +143,7 @@ resource_local_state | 12
 revision | 13   
 migration | 14   
 smart_filter | 15   
+command | 16   
 
 # Notes
 

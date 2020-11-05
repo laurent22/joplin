@@ -61,21 +61,18 @@ script:
   - |
     # Install tools
     npm install
-    cd Tools
-    npm install
-    cd ..
 
     # Run test units.
     # Only do it for pull requests because Travis randomly fails to run them
     # and that would break the desktop release.
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-      cd CliClient
+      cd packages/app-cli
       npm run test-ci
       testResult=$?
       if [ $testResult -ne 0 ]; then
         exit $testResult
       fi
-      cd ..
+      cd ../..
     fi
 
     # Run linter for pull requests only - this is so that
@@ -93,7 +90,7 @@ script:
     # tool like poedit. Doing it for Linux only is sufficient.
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
       if [ "$TRAVIS_OS_NAME" != "osx" ]; then
-        node Tools/validate-translation.js
+        node packages/tools/validate-translation.js
         testResult=$?
         if [ $testResult -ne 0 ]; then
           exit $testResult
@@ -102,7 +99,7 @@ script:
     fi
 
     # Find out if we should run the build or not. Electron-builder gets stuck when
-    # builing PRs so we disable it in this case. The Linux build should provide
+    # building PRs so we disable it in this case. The Linux build should provide
     # enough info if the app builds or not.
     # https://github.com/electron-userland/electron-builder/issues/4263
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
@@ -112,5 +109,5 @@ script:
     fi
 
     # Prepare the Electron app and build it
-    cd ElectronClient
+    cd packages/app-desktop
     USE_HARD_LINKS=false npm run dist

@@ -1,8 +1,0 @@
-node_modules/
-packageInfo.js
-dist/
-lib/
-*.min.js
-.DS_Store
-gui/note-viewer/pluginAssets/
-pluginAssets/

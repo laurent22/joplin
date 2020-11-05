@@ -2,11 +2,24 @@
 
 # Building the applications
 
-Note that all the applications share the same library, which, for historical reasons, is in `ReactNativeClient/lib`. This library is copied to the relevant directories when building each app.
+The Joplin source code is hosted on a [monorepo](https://en.wikipedia.org/wiki/Monorepo) managed by Lerna. The usage of Lerna is mostly transparent as the needed commands have been moved to the root package.json and thus are invoked for example when running `npm install` or `npm run watch`. The main thing to know about Lerna is that it links the packages in the monorepo using `npm link`, so if you check the node_modules directory you will see links instead of actual directories for certain packages. This is something to keep in mind as these links can cause issues in some cases.
+
+The list of the main sub-packages is below:
+
+Package name | Description
+--- | ---
+app-cli | The CLI application
+app-clipper | The web clipper
+app-desktop | The desktop application
+app-mobile | The mobile application
+lib | The core library, shared by all applications. It deals with things like synchronisation, encryption, import/export, database and pretty much all the app business logic
+renderer | The Joplin Markdown and HTML renderer
+tools | Tools used to build the apps and other tasks
+
+There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
 
-- Install yarn - https://yarnpkg.com/lang/en/docs/install/
 - Install node 10+ - https://nodejs.org/en/
 - macOS, Linux: Install rsync - https://nodejs.org/en/
 - macOS: Install Cocoapods - `brew install cocoapods`
@@ -23,33 +36,32 @@ Then you can test the various applications:
 
 ## Testing the desktop application
 
-	cd ElectronClient
+	cd packages/app-desktop
 	npm start
 
 You can also run it under WSL 2. To do so, [follow these instructions](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2) to setup your environment.
 
 ## Testing the Terminal application
 
-	cd CliClient
+	cd packages/app-cli
 	npm start
 
 ## Testing the Mobile application
 
 First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "React Native CLI Quickstart" tab.
 
-Then:
+Then, for **Android**:
 
-	cd ReactNativeClient
-	npm run start-android
-	# Or: npm run start-ios
+	cd packages/app-mobile/android
+	./gradlew installDebug # or gradlew.bat installDebug on Windows
 
-To run the iOS application, it might be easier to open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
+On **iOS**, open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
-Normally the bundler should start automatically with the application. If it doesn't, run `npm start`.
+Normally the **bundler** should start automatically with the application. If it doesn't, run `npm start` from `packages/app-mobile`.
 
 ## Building the clipper
 
-	cd Clipper/popup
+	cd packages/app-clipper/popup
 	npm install
 	npm run watch # To watch for changes
 
@@ -57,30 +69,36 @@ To test the extension please refer to the relevant pages for each browser: [Fire
 
 ## Watching files
 
-To make changes to the application, you'll need to rebuild any TypeScript file you've changed, and rebuild the lib. The simplest way to do all this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
+To make changes to the application, you'll need to rebuild any TypeScript file you've changed. The simplest way to do this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
 
 	npm run watch
 
-Running `npm run build` would have the same effect, but without watching.
+Running `npm run tsc` would have the same effect, but without watching.
 
 ## Running an application with additional parameters
 
 You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `npm start` command, followed by your flags. For example:
 
-	npm start -- --profile ~/MyTestProfile
+	npm start -- --debug
+
+## Adding a new dependency
+
+Since Joplin uses Lerna, adding a new dependency should not be done using `npm i -s ...`. Instead you should use the `lerna add` command, which will take care of adding the package while handling the linked packages correctly. For example, to add the package "leftpad" to the "app-desktop" sub-package, you would run:
+
+	npx lerna add leftpad --scope=@joplinapp/app-desktop
+
+Note that you should most likely always specify a scope because otherwise it will add the package to all the sub-packages.
 
 ## TypeScript
 
-Most of the application is written in JavaScript, however new classes and files should generally be written in [TypeScript](https://www.typescriptlang.org/). All TypeScript files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
-
-In the current setup, `tsc` is executed from the root of the project, and will compile everything in CliClient, ElectronClient, etc. This is more convenient to have just one place to compile everything, and it also means there's only one watch command to run. However, one drawback is that TypeScript doesn't find types defined in node_modules folders in sub-directories. For example, if you install `immer` in ElectronClient, then try to use the package, TypeScript will report that it cannot find this module. In theory using `typeRoots`, it should be possible to make it find the right modules but it doesn't seem to work in this case. Currently the workaround is to install any such package at the root of the project. By doing so, TypeScript will find the type definitions and compilation will work. It's not ideal since the module is installed at the root even though it's not used, but for now that will work.
+The application was originally written JavaScript, however it has slowly been migrated to [TypeScript](https://www.typescriptlang.org/). New classes and files should be written in TypeScript. All compiled files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
 
 ## Hot reload
 
 If you'd like to auto-reload the desktop app on changes rather than having to quit and restart it manually each time, you can use [watchman-make](https://facebook.github.io/watchman/docs/watchman-make.html):
 
 ```sh
-cd ElectronClient
+cd packages/app-desktop
 watchman-make -p '**/*.js' '**/*.jsx' --run "npm start"
 ```
 
@@ -89,10 +107,6 @@ It still requires you to quit the application each time you want it to rebuild, 
 1. Edit and save files in your text editor.
 2. Switch to the Electron app and <kbd>cmd</kbd>+<kbd>Q</kbd> to quit it.
 3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"npm start"`, and hit enter).
-
-# Updating Markdown renderer packages
-
-The Markdown renderer is located under ReactNativeClient/lib/joplin-renderer. Whenever updating one of its dependencies, such as Mermaid or Katex, please run `npm run buildAssets` to make sure all assets such as fonts or CSS files are deployed correctly.
 
 # Troubleshooting
 
