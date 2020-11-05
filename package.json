@@ -7,7 +7,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "lerna run test --stream",
     "linter": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-precommit": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
