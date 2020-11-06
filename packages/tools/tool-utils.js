@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
+const { execSync } = require('child_process');
 
 const toolUtils = {};
 
@@ -39,6 +40,28 @@ toolUtils.execCommandWithPipes = function(executable, args) {
 			}
 		});
 	});
+};
+
+toolUtils.toSystemSlashes = function(path) {
+	const os = process.platform;
+	if (os === 'win32') return path.replace(/\//g, '\\');
+	return path.replace(/\\/g, '/');
+};
+
+toolUtils.deleteLink = async function(path) {
+	if (toolUtils.isWindows()) {
+		try {
+			execSync(`rmdir "${toolUtils.toSystemSlashes(path)}"`, { stdio: 'pipe' });
+		} catch (error) {
+			// console.info('Error: ' + error.message);
+		}
+	} else {
+		try {
+			fs.unlinkSync(toolUtils.toSystemSlashes(path));
+		} catch (error) {
+			// ignore
+		}
+	}
 };
 
 toolUtils.credentialDir = async function() {
