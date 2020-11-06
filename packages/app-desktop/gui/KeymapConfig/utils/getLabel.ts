@@ -30,9 +30,14 @@ const getLabel = (commandName: string):string => {
 		return _('Command palette');
 	case 'config':
 		return shim.isMac() ? _('Preferences') : _('Options');
-	default:
-		throw new Error(`Command: ${commandName} is unknown`);
 	}
+
+	// We don't throw an error if a command is not found because if for
+	// example a command is removed from one version to the next, or a
+	// command is renamed, we still want the keymap editor to work. So in
+	// that case, we simply display the command name and it is up to the
+	// user to fix the shortcut if needed.
+	return `${commandName} (${_('Invalid')})`;
 };
 
 export default getLabel;
