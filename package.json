@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "buildApiDoc": "npm start --prefix=packages/app-cli -- apidoc ../../readme/api/references/rest_api.md",
+    "buildDoc": "./packages/tools/build-all.sh",
     "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/api/references/plugin_api packages/lib/services/plugins/api/",
     "buildWebsite": "npm run buildApiDoc && node ./packages/tools/build-website.js && npm run buildPluginDoc",
     "clean": "lerna clean -y && lerna run clean",

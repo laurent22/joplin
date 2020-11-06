@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const { dirname } = require('@joplinapp/lib/path-utils');
 const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
 
-const rootDir = dirname(__dirname);
+const rootDir = dirname(dirname(__dirname));
 
 function endsWith(str, suffix) {
 	return str.indexOf(suffix, str.length - suffix.length) !== -1;

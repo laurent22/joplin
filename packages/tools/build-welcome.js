@@ -3,7 +3,7 @@ const dirname = require('path').dirname;
 const { fileExtension, basename } = require('@joplinapp/lib/path-utils');
 const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
 
-const rootDir = dirname(__dirname);
+const rootDir = dirname(dirname(__dirname));
 const welcomeDir = `${rootDir}/readme/welcome`;
 
 const createdDate = new Date('2018-06-22T12:00:00Z');
@@ -141,7 +141,7 @@ async function main() {
 	const content = { notes: notes, folders: folders, tags: tags, timestamp: createdDate.getTime() };
 	const jsonContent = JSON.stringify(content, null, 4);
 	const jsContent = `module.exports = ${jsonContent}`;
-	fs.writeFileSync(`${rootDir}/packages/app-mobile/lib/welcomeAssets.js`, jsContent, { encoding: 'utf8' });
+	fs.writeFileSync(`${rootDir}/packages/lib/welcomeAssets.js`, jsContent, { encoding: 'utf8' });
 }
 
 main().catch((error) => {
