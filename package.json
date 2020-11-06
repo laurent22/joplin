@@ -23,6 +23,7 @@
     "linkChecker": "linkchecker https://joplinapp.org",
     "releaseDesktop": "node packages/tools/release-electron.js",
     "releaseAndroid": "node packages/tools/release-android.js",
+    "releaseCli": "node packages/tools/release-cli.js",
     "publishAll": "git pull && lerna version --no-git-tag-version && gulp completePublishAll"
   },
   "husky": {
