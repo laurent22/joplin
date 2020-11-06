@@ -1,5 +1,14 @@
 # Joplin terminal app changelog
 
+## [cli-v1.4.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.3) - 2020-11-06T21:19:29Z
+
+IMPORTANT: If you use the web API, please note that there are a few breaking changes in this release. See here for more information: https://github.com/laurent22/joplin/pull/3983#issue-509624899
+
+- New: API: Adds ability to paginate data (#3983)
+- Fixed: Display proper error message when decryption worker cannot be started (#4000)
+- Fixed: Fixed OneDrive authentication
+- Fixed: Fixed sync issue when importing ENEX files that contain new line characters in the source URL attribute (#3955)
+
 ## [cli-v1.3.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.3.3) - 2020-10-23T16:00:38Z
 
 - Improved: Added support for a custom S3 URL (#3921) (#3691 by [@aaron](https://github.com/aaron))

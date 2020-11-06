@@ -10,15 +10,23 @@ const tasks = {
 	// updateIgnoredTypeScriptBuild: require('../Tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
 };
 
+async function makePackagePublic(filePath) {
+	const text = await fs.readFile(filePath, 'utf8');
+	const obj = JSON.parse(text);
+	delete obj.private;
+	await fs.writeFile(filePath, JSON.stringify(obj), 'utf8');
+}
+
 tasks.prepareBuild = {
 	fn: async () => {
 		const buildDir = `${__dirname}/build`;
 		await utils.copyDir(`${__dirname}/app`, buildDir, {
 			excluded: ['node_modules'],
 		});
-		// await utils.copyDir(`${__dirname}/locales-build`, `${buildDir}/locales`);
-		// await tasks.copyLib.fn();
+
 		await utils.copyFile(`${__dirname}/package.json`, `${buildDir}/package.json`);
+		await makePackagePublic(`${buildDir}/package.json`);
+
 		await utils.copyFile(`${__dirname}/package-lock.json`, `${buildDir}/package-lock.json`);
 		await utils.copyFile(`${__dirname}/gulpfile.js`, `${buildDir}/gulpfile.js`);
 

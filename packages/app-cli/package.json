@@ -1,5 +1,5 @@
 {
-  "name": "@joplinapp/app-cli",
+  "name": "joplin",
   "description": "Joplin CLI Client",
   "license": "MIT",
   "author": "Laurent Cozic",
@@ -7,7 +7,6 @@
   "scripts": {
     "test": "node node_modules/jasmine/bin/jasmine.js --fail-fast=true --config=tests/support/jasmine.json",
     "test-ci": "node node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
-    "postinstall": "npm run build",
     "build": "gulp build",
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
@@ -31,7 +30,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "1.4.0",
+  "version": "1.4.3",
   "bin": {
     "joplin": "./main.js"
   },
