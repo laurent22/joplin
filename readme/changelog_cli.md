@@ -1,6 +1,6 @@
 # Joplin terminal app changelog
 
-## [cli-v1.4.2](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.2) - 2020-11-06T20:59:45Z
+## [cli-v1.4.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.3) - 2020-11-06T21:19:29Z
 
 IMPORTANT: If you use the web API, please note that there are a few breaking changes in this release. See here for more information: https://github.com/laurent22/joplin/pull/3983#issue-509624899
 
