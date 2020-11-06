@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
+const execa = require('execa');
+const { execSync } = require('child_process');
 
 const toolUtils = {};
 
@@ -21,6 +23,30 @@ toolUtils.execCommand = function(command) {
 	});
 };
 
+function quotePath(path) {
+	if (!path) return '';
+	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
+	path = path.replace(/"/, '\\"');
+	return `"${path}"`;
+}
+
+function commandToString(commandName, args = []) {
+	const output = [quotePath(commandName)];
+
+	for (const arg of args) {
+		output.push(quotePath(arg));
+	}
+
+	return output.join(' ');
+}
+
+toolUtils.execCommandVerbose = function(commandName, args = []) {
+	console.info(`> ${commandToString(commandName, args)}`);
+	const promise = execa(commandName, args);
+	promise.stdout.pipe(process.stdout);
+	return promise;
+};
+
 toolUtils.execCommandWithPipes = function(executable, args) {
 	const spawn = require('child_process').spawn;
 
@@ -39,6 +65,28 @@ toolUtils.execCommandWithPipes = function(executable, args) {
 			}
 		});
 	});
+};
+
+toolUtils.toSystemSlashes = function(path) {
+	const os = process.platform;
+	if (os === 'win32') return path.replace(/\//g, '\\');
+	return path.replace(/\\/g, '/');
+};
+
+toolUtils.deleteLink = async function(path) {
+	if (toolUtils.isWindows()) {
+		try {
+			execSync(`rmdir "${toolUtils.toSystemSlashes(path)}"`, { stdio: 'pipe' });
+		} catch (error) {
+			// console.info('Error: ' + error.message);
+		}
+	} else {
+		try {
+			fs.unlinkSync(toolUtils.toSystemSlashes(path));
+		} catch (error) {
+			// ignore
+		}
+	}
 };
 
 toolUtils.credentialDir = async function() {

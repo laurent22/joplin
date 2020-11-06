@@ -16,7 +16,6 @@
   "dependencies": {
     "@joplinapp/lib": "^1.0.9",
     "@joplinapp/renderer": "^1.0.17",
-    "@joplinapp/tools": "^1.0.9",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/geolocation": "^2.0.2",
@@ -60,6 +59,7 @@
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
+    "@joplinapp/tools": "^1.0.9",
     "@babel/core": "^7.11.6",
     "@babel/runtime": "^7.11.2",
     "@types/node": "^14.14.6",
