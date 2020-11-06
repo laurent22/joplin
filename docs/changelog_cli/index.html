@@ -392,6 +392,14 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 
 	<div class="main">
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.4.3">cli-v1.4.3</a> - 2020-11-06T21:19:29Z<a name="cli-v1-4-3-https-github-com-laurent22-joplin-releases-tag-cli-v1-4-3-2020-11-06t21-19-29z" href="#cli-v1-4-3-https-github-com-laurent22-joplin-releases-tag-cli-v1-4-3-2020-11-06t21-19-29z" class="heading-anchor">🔗</a></h2>
+<p>IMPORTANT: If you use the web API, please note that there are a few breaking changes in this release. See here for more information: <a href="https://github.com/laurent22/joplin/pull/3983#issue-509624899">https://github.com/laurent22/joplin/pull/3983#issue-509624899</a></p>
+<ul>
+<li>New: API: Adds ability to paginate data (#3983)</li>
+<li>Fixed: Display proper error message when decryption worker cannot be started (#4000)</li>
+<li>Fixed: Fixed OneDrive authentication</li>
+<li>Fixed: Fixed sync issue when importing ENEX files that contain new line characters in the source URL attribute (#3955)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.3.3">cli-v1.3.3</a> - 2020-10-23T16:00:38Z<a name="cli-v1-3-3-https-github-com-laurent22-joplin-releases-tag-cli-v1-3-3-2020-10-23t16-00-38z" href="#cli-v1-3-3-https-github-com-laurent22-joplin-releases-tag-cli-v1-3-3-2020-10-23t16-00-38z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Added support for a custom S3 URL (#3921) (#3691 by <a href="https://github.com/aaron">@aaron</a>)</li>
@@ -517,7 +525,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 <li>Improved: Upgrade sqlite (#2248 by Devon Zuegel)</li>
 <li>Improved: Extract note renderer to separate package (WIP) (#2206 by Laurent Cozic)</li>
 <li>Improved: Better handling of resource download errors, and added resource info to sync status screen</li>
-<li>Improved: Update CliClient node dependency to 10+ (#2177 by <a href="https://github.com/joeltaylor">@joeltaylor</a>)</li>
+<li>Improved: Update Node dependency to 10+ (#2177 by <a href="https://github.com/joeltaylor">@joeltaylor</a>)</li>
 <li>Improved: Allow exporting a note as HTML</li>
 <li>Improved: Improved logging during sync to allow finding bugs more easily</li>
 <li>Fixed: Handle WebDAV servers that do not return a last modified date (fixes <a href="http://mail.ru">mail.ru</a>) (#2091)</li>

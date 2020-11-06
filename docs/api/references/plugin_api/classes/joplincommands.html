@@ -67,21 +67,25 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>This class allows executing or registering new Joplin commands. Commands can be executed or associated with
-						<a href="joplinviewstoolbarbuttons.html">toolbar buttons</a> or <a href="joplinviewsmenuitems.html">menu items</a>.</p>
+						<p>This class allows executing or registering new Joplin commands. Commands
+							can be executed or associated with
+							<a href="joplinviewstoolbarbuttons.html">toolbar buttons</a> or
+						<a href="joplinviewsmenuitems.html">menu items</a>.</p>
 					</div>
-					<p><a href="https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/register_command">View the demo plugin</a></p>
+					<p><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/register_command">View the demo plugin</a></p>
 					<a href="#executing-joplin39s-internal-commands" id="executing-joplin39s-internal-commands" style="color: inherit; text-decoration: none;">
 						<h2>Executing Joplin&#39;s internal commands</h2>
 					</a>
-					<p>It is also possible to execute internal Joplin&#39;s commands which, as of now, are not well documented.
-					You can find the list directly on GitHub though at the following locations:</p>
+					<p>It is also possible to execute internal Joplin&#39;s commands which, as of
+						now, are not well documented. You can find the list directly on GitHub
+					though at the following locations:</p>
 					<ul>
-						<li><a href="https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/MainScreen/commands">Main screen commands</a></li>
-						<li><a href="https://github.com/laurent22/joplin/tree/dev/ElectronClient/commands">Global commands</a></li>
-						<li><a href="https://github.com/laurent22/joplin/tree/dev/ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.ts">Editor commands</a></li>
+						<li><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/MainScreen/commands">Main screen commands</a></li>
+						<li><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/commands">Global commands</a></li>
+						<li><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.ts">Editor commands</a></li>
 					</ul>
-					<p>To view what arguments are supported, you can open any of these files and look at the <code>execute()</code> command.</p>
+					<p>To view what arguments are supported, you can open any of these files
+					and look at the <code>execute()</code> command.</p>
 				</div>
 			</section>
 			<!--
@@ -124,9 +128,14 @@
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p><span class="platform-desktop">desktop</span> Executes the given command.
-									The <code>props</code> are the arguments passed to the command, and they vary based on the command</p>
+									<p><span class="platform-desktop">desktop</span> Executes the given
+									command.</p>
 								</div>
+								<p>The command can take any number of arguments, and the supported
+									arguments will vary based on the command. For custom commands, this
+									is the <code>args</code> passed to the <code>execute()</code> function. For built-in
+									commands, you can find the supported arguments by checking the links
+								above.</p>
 								<pre><code class="language-typescript"><span class="hljs-comment">// Create a new note in the current notebook:</span>
 <span class="hljs-keyword">await</span> joplin.commands.execute(<span class="hljs-string">&#x27;newNote&#x27;</span>);
 

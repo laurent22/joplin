@@ -112,9 +112,9 @@
 						<ul>
 							<li><p>The <code>context</code> argument is currently unused but could be used later on to provide access to your own plugin so that the content script and plugin can communicate.</p>
 							</li>
-							<li><p>The <strong>required</strong> <code>plugin</code> key is the actual Markdown-It plugin - check the <a href="https://github.com/markdown-it/markdown-it">official doc</a> for more information. The <code>options</code> parameter is of type <a href="https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml.ts">RuleOptions</a>, which contains a number of options, mostly useful for Joplin&#39;s internal code.</p>
+							<li><p>The <strong>required</strong> <code>plugin</code> key is the actual Markdown-It plugin - check the <a href="https://github.com/markdown-it/markdown-it">official doc</a> for more information. The <code>options</code> parameter is of type <a href="https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml.ts">RuleOptions</a>, which contains a number of options, mostly useful for Joplin&#39;s internal code.</p>
 							</li>
-							<li><p>Using the <strong>optional</strong> <code>assets</code> key you may specify assets such as JS or CSS that should be loaded in the rendered HTML document. Check for example the Joplin <a href="https://github.com/laurent22/joplin/blob/dev/ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.ts">Mermaid plugin</a> to see how the data should be structured.</p>
+							<li><p>Using the <strong>optional</strong> <code>assets</code> key you may specify assets such as JS or CSS that should be loaded in the rendered HTML document. Check for example the Joplin <a href="https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml/rules/mermaid.ts">Mermaid plugin</a> to see how the data should be structured.</p>
 							</li>
 						</ul>
 						<p>To include a regular Markdown-It plugin, that doesn&#39;t make use of any Joplin-specific features, you would simply create a file such as this:</p>
