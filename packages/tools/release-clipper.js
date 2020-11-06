@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
-const { execCommand } = require('./tool-utils.js');
+const { execCommand, rootDir } = require('./tool-utils.js');
 const md5File = require('md5-file/promise');
 const glob = require('glob');
 
-const clipperDir   = `${__dirname}/../packages/app-clipper`;
+const clipperDir = `${rootDir}/packages/app-clipper`;
 const tmpSourceDirName = 'Clipper-source';
 
 async function copyDir(baseSourceDir, sourcePath, baseDestDir) {
