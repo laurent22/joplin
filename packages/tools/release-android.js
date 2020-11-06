@@ -84,7 +84,8 @@ async function createRelease(name, tagName, version) {
 	console.info(`Building APK file v${suffix}...`);
 
 	let restoreDir = null;
-	let apkBuildCmd = 'assembleRelease -PbuildDir=build';
+	let apkBuildCmd = '';
+	const apkBuildCmdArgs = ['assembleRelease', '-PbuildDir=build'];
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
 		// In recent versions (of Gradle? React Native?), running gradlew.bat from WSL throws the following error:
 
@@ -114,13 +115,12 @@ async function createRelease(name, tagName, version) {
 		apkBuildCmd = '';
 	} else {
 		process.chdir(`${rnDir}/android`);
-		apkBuildCmd = `./gradlew ${apkBuildCmd}`;
+		apkBuildCmd = './gradlew';
 		restoreDir = rootDir;
 	}
 
 	if (apkBuildCmd) {
-		console.info(apkBuildCmd);
-		await execCommandVerbose(apkBuildCmd);
+		await execCommandVerbose(apkBuildCmd, apkBuildCmdArgs);
 	}
 
 	if (restoreDir) process.chdir(restoreDir);
@@ -176,12 +176,12 @@ async function main() {
 		await fs.writeFile('README.md', readmeContent);
 	}
 
-	await execCommandVerbose('git pull');
-	await execCommandVerbose('git add -A');
-	await execCommandVerbose(`git commit -m "Android release v${version}"`);
-	await execCommandVerbose(`git tag ${tagName}`);
-	await execCommandVerbose('git push');
-	await execCommandVerbose('git push --tags');
+	await execCommandVerbose('git', ['pull']);
+	await execCommandVerbose('git', ['add', '-A']);
+	await execCommandVerbose('git', ['commit', '-m', `Android release v${version}`]);
+	await execCommandVerbose('git', ['tag', tagName]);
+	await execCommandVerbose('git', ['push']);
+	await execCommandVerbose('git', ['push', '--tags']);
 
 	console.info(`Creating GitHub release ${tagName}...`);
 
