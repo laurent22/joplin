@@ -23,8 +23,25 @@ toolUtils.execCommand = function(command) {
 	});
 };
 
+function quotePath(path) {
+	if (!path) return '';
+	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
+	path = path.replace(/"/, '\\"');
+	return `"${path}"`;
+}
+
+function commandToString(commandName, args = []) {
+	const output = [quotePath(commandName)];
+
+	for (const arg of args) {
+		output.push(quotePath(arg));
+	}
+
+	return output.join(' ');
+}
+
 toolUtils.execCommandVerbose = function(commandName, args = []) {
-	console.info(`> ${commandName}`, args && args.length ? args : '');
+	console.info(`> ${commandToString(commandName, args)}`);
 	const promise = execa(commandName, args);
 	promise.stdout.pipe(process.stdout);
 	return promise;
