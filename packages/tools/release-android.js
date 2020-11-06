@@ -5,9 +5,9 @@ const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
 
 const projectName = 'joplin-android';
-const rnDir = `${__dirname}/../packages/app-mobile`;
+const rnDir = `${__dirname}/../../packages/app-mobile`;
 const rootDir = path.dirname(__dirname);
-const releaseDir = `${rootDir}/_releases`;
+const releaseDir = `${rnDir}/dist`;
 
 // function wslToWinPath(wslPath) {
 // 	const s = wslPath.split('/');
