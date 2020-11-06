@@ -7,7 +7,6 @@
   "scripts": {
     "dist": "node_modules/.bin/electron-builder",
     "build": "gulp build",
-    "preinstall": "node tools/unlinkReact",
     "postinstall": "npm run build && gulp electronRebuild",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",

@@ -9,7 +9,6 @@
     "build": "gulp build",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
-    "preinstall": "node tools/unlinkReact.js",
     "clean": "node tools/clean.js",
     "postinstall": "jetify && npm run build"
   },
