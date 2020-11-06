@@ -12,6 +12,9 @@ const tasks = {
 	podInstall: {
 		fn: require('./tools/podInstall'),
 	},
+	prepareRelease: {
+		fn: require('./tools/prepareRelease'),
+	},
 	// clean: {
 	// 	fn: require('./tools/clean'),
 	// },
