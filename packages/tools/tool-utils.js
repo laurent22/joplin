@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
+const execa = require('execa');
 const { execSync } = require('child_process');
 
 const toolUtils = {};
@@ -20,6 +21,13 @@ toolUtils.execCommand = function(command) {
 			}
 		});
 	});
+};
+
+toolUtils.execCommandVerbose = function(commandName, args = []) {
+	console.info(`> ${commandName}`, args && args.length ? args : '');
+	const promise = execa(commandName, args);
+	promise.stdout.pipe(process.stdout);
+	return promise;
 };
 
 toolUtils.execCommandWithPipes = function(executable, args) {

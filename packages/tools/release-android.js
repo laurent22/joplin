@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand, execCommandWithPipes, githubRelease, githubOauthToken, fileExists } = require('./tool-utils.js');
+const { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -120,8 +120,7 @@ async function createRelease(name, tagName, version) {
 
 	if (apkBuildCmd) {
 		console.info(apkBuildCmd);
-		const output = await execCommand(apkBuildCmd);
-		console.info(output);
+		await execCommandVerbose(apkBuildCmd);
 	}
 
 	if (restoreDir) process.chdir(restoreDir);
@@ -129,11 +128,11 @@ async function createRelease(name, tagName, version) {
 	await fs.mkdirp(releaseDir);
 
 	console.info(`Copying APK to ${apkFilePath}`);
-	await fs.copy('packages/app-mobile/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
+	await fs.copy('app-mobile/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
 
 	if (name === 'main') {
 		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
-		await fs.copy('packages/app-mobile/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
+		await fs.copy('app-mobile/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (const filename in originalContents) {
@@ -177,12 +176,12 @@ async function main() {
 		await fs.writeFile('README.md', readmeContent);
 	}
 
-	console.info(await execCommand('git pull'));
-	console.info(await execCommand('git add -A'));
-	console.info(await execCommand(`git commit -m "Android release v${version}"`));
-	console.info(await execCommand(`git tag ${tagName}`));
-	console.info(await execCommand('git push'));
-	console.info(await execCommand('git push --tags'));
+	await execCommandVerbose('git pull');
+	await execCommandVerbose('git add -A');
+	await execCommandVerbose(`git commit -m "Android release v${version}"`);
+	await execCommandVerbose(`git tag ${tagName}`);
+	await execCommandVerbose('git push');
+	await execCommandVerbose('git push --tags');
 
 	console.info(`Creating GitHub release ${tagName}...`);
 
