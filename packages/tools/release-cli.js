@@ -61,7 +61,7 @@ async function main() {
 
 	process.chdir(`${appDir}/build`);
 
-	await execCommand('npm publish');
+	await execCommand('npm publish --access public');
 
 	const changelog = await execCommand(`node ${rootDir}/packages/tools/git-changelog ${newTag}`);
 
