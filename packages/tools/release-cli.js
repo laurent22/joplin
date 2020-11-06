@@ -1,9 +1,7 @@
-const { execCommand } = require('./tool-utils.js');
-const path = require('path');
+const { execCommand, rootDir } = require('./tool-utils.js');
 const fs = require('fs-extra');
 const moment = require('moment');
 
-const rootDir = path.dirname(__dirname);
 const appDir = `${rootDir}/packages/app-cli`;
 const changelogPath = `${rootDir}/readme/changelog_cli.md`;
 
@@ -59,8 +57,7 @@ async function main() {
 	await execCommand('git pull');
 	await execCommand('touch app/main.js');
 	await execCommand('npm run build');
-	// await execCommand('cp package.json build/');
-	await execCommand('cp ../README.md build/');
+	await execCommand('cp ../../README.md build/');
 
 	process.chdir(`${appDir}/build`);
 

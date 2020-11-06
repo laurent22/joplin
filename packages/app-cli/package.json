@@ -1,5 +1,5 @@
 {
-  "name": "@joplinapp/app-cli",
+  "name": "joplin",
   "description": "Joplin CLI Client",
   "license": "MIT",
   "author": "Laurent Cozic",
