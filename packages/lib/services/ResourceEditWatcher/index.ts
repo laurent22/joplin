@@ -78,6 +78,9 @@ export default class ResourceEditWatcher {
 			openAndWatch: async ({ resourceId }:any) => {
 				return this.openAndWatch(resourceId);
 			},
+			watch: async ({ resourceId }:any) => {
+				await this.watch(resourceId);
+			},
 			stopWatching: async ({ resourceId }:any) => {
 				return this.stopWatching(resourceId);
 			},
@@ -87,7 +90,7 @@ export default class ResourceEditWatcher {
 		};
 	}
 
-	private watch(fileToWatch:string) {
+	private watchFile(fileToWatch:string) {
 		if (!this.chokidar_) return;
 
 		const makeSaveAction = (resourceId:string, path:string) => {
@@ -194,7 +197,7 @@ export default class ResourceEditWatcher {
 		return this.watcher_;
 	}
 
-	public async openAndWatch(resourceId:string) {
+	private async watch(resourceId:string):Promise<WatchedItem> {
 		let watchedItem = this.watchedItemByResourceId(resourceId);
 
 		if (!watchedItem) {
@@ -224,7 +227,7 @@ export default class ResourceEditWatcher {
 			watchedItem.lastResourceUpdatedTime = resource.updated_time;
 			watchedItem.size = stat.size;
 
-			this.watch(editFilePath);
+			this.watchFile(editFilePath);
 
 			this.dispatch({
 				type: 'RESOURCE_EDIT_WATCHER_SET',
@@ -233,9 +236,14 @@ export default class ResourceEditWatcher {
 			});
 		}
 
-		bridge().openItem(watchedItem.path);
-
 		this.logger().info(`ResourceEditWatcher: Started watching ${watchedItem.path}`);
+
+		return watchedItem;
+	}
+
+	public async openAndWatch(resourceId:string) {
+		const watchedItem = await this.watch(resourceId);
+		bridge().openItem(watchedItem.path);
 	}
 
 	async stopWatching(resourceId:string) {
