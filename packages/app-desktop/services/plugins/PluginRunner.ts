@@ -101,7 +101,7 @@ export default class PluginRunner extends BasePluginRunner {
 		})}?pluginId=${encodeURIComponent(plugin.id)}&pluginScript=${encodeURIComponent(`file://${scriptPath}`)}`);
 
 		pluginWindow.webContents.once('dom-ready', () => {
-			pluginWindow.webContents.openDevTools();
+			pluginWindow.webContents.openDevTools({ mode: 'detach' });
 		});
 
 		ipcRenderer.on('pluginMessage', async (_event:any, message:PluginMessage) => {
