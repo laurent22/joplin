@@ -294,6 +294,11 @@ async function fetchAllNotes() {
 				lines.push('');
 				lines.push('Gets the actual file associated with this resource.');
 				lines.push('');
+
+				lines.push('## GET /resources/:id/notes');
+				lines.push('');
+				lines.push('Gets the notes (IDs) associated with a resource.');
+				lines.push('');
 			}
 
 			lines.push(`## POST /${tableName}`);
