@@ -794,6 +794,9 @@ packages/lib/markupLanguageUtils.js.map
 packages/lib/models/Alarm.d.ts
 packages/lib/models/Alarm.js
 packages/lib/models/Alarm.js.map
+packages/lib/models/NoteResource.d.ts
+packages/lib/models/NoteResource.js
+packages/lib/models/NoteResource.js.map
 packages/lib/models/Setting.d.ts
 packages/lib/models/Setting.js
 packages/lib/models/Setting.js.map

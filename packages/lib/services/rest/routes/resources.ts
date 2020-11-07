@@ -5,6 +5,7 @@ import defaultAction from '../utils/defaultAction';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import readonlyProperties from '../utils/readonlyProperties';
 import ApiResponse from '../ApiResponse';
+import NoteResource from '../../../models/NoteResource';
 const Resource = require('../../../models/Resource');
 
 export default async function(request:Request, id:string = null, link:string = null) {
@@ -28,6 +29,10 @@ export default async function(request:Request, id:string = null, link:string = n
 			response.contentType = resource.mime;
 			response.attachmentFilename = Resource.friendlyFilename(resource);
 			return response;
+		}
+
+		if (link === 'notes') {
+			return { items: await NoteResource.associatedNoteIds(id) };
 		}
 
 		if (link) throw new ErrorNotFound();

@@ -1,5 +1,5 @@
 const ItemChange = require('../models/ItemChange');
-const NoteResource = require('../models/NoteResource');
+const NoteResource = require('../models/NoteResource').default;
 const Note = require('../models/Note');
 const Resource = require('../models/Resource');
 const BaseModel = require('../BaseModel').default;

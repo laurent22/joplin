@@ -8,6 +8,7 @@ const Resource = require('@joplin/lib/models/Resource');
 const Note = require('@joplin/lib/models/Note');
 const Tag = require('@joplin/lib/models/Tag');
 const NoteTag = require('@joplin/lib/models/NoteTag');
+const ResourceService = require('@joplin/lib/services/ResourceService');
 
 async function msleep(ms:number) {
 	return new Promise((resolve) => {
@@ -652,5 +653,19 @@ describe('services_rest_Api', function() {
 			expect('id' in r).toBe(true);
 			expect('title' in r).toBe(true);
 		}
+	}));
+
+	it('should return the notes associated with a resource', asyncTest(async () => {
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
+		const resource = (await Resource.all())[0];
+
+		const resourceService = new ResourceService();
+		await resourceService.indexNoteResources();
+
+		const r = await api.route(RequestMethod.GET, `resources/${resource.id}/notes`);
+
+		expect(r.items.length).toBe(1);
+		expect(r.items[0]).toBe(note.id);
 	}));
 });
