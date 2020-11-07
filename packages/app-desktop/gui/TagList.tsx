@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { AppState } from '../app';
 
 const { connect } = require('react-redux');
-const { themeStyle } = require('@joplinapp/lib/theme');
+const { themeStyle } = require('@joplin/lib/theme');
 const TagItem = require('./TagItem.min.js');
 
 interface Props {

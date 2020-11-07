@@ -1,13 +1,13 @@
 import * as React from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
-import { _ } from '@joplinapp/lib/locale';
+import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
-const { reg } = require('@joplinapp/lib/registry.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const { reg } = require('@joplin/lib/registry.js');
+const Setting = require('@joplin/lib/models/Setting').default;
 const bridge = require('electron').remote.require('./bridge').default;
-const { themeStyle } = require('@joplinapp/lib/theme');
-const { OneDriveApiNodeUtils } = require('@joplinapp/lib/onedrive-api-node-utils.js');
+const { themeStyle } = require('@joplin/lib/theme');
+const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 
 interface Props {
 	themeId: string,

@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 const { setupDatabaseAndSynchronizer, switchClient, asyncTest, id, ids, sortedIds, at, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('./test-utils.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const Tag = require('@joplinapp/lib/models/Tag.js');
-const time = require('@joplinapp/lib/time').default;
-const { ALL_NOTES_FILTER_ID } = require('@joplinapp/lib/reserved-ids.js');
+const Setting = require('@joplin/lib/models/Setting').default;
+const Folder = require('@joplin/lib/models/Folder.js');
+const Note = require('@joplin/lib/models/Note.js');
+const Tag = require('@joplin/lib/models/Tag.js');
+const time = require('@joplin/lib/time').default;
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
 //
 // The integration tests are to test the integration of the core system, comprising the

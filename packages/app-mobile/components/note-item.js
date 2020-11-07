@@ -3,8 +3,8 @@ const Component = React.Component;
 const { connect } = require('react-redux');
 const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
 const { Checkbox } = require('./checkbox.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const time = require('@joplinapp/lib/time').default;
+const Note = require('@joplin/lib/models/Note.js');
+const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('./global-style.js');
 
 class NoteItemComponent extends Component {

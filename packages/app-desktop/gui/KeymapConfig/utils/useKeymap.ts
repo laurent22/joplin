@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import KeymapService, { KeymapItem } from '@joplinapp/lib/services/KeymapService';
+import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import getLabel from './getLabel';
 
 const keymapService = KeymapService.instance();

@@ -1,16 +1,16 @@
 const React = require('react');
 
 const { AppState, View, StyleSheet } = require('react-native');
-const { stateUtils } = require('@joplinapp/lib/reducer');
+const { stateUtils } = require('@joplin/lib/reducer');
 const { connect } = require('react-redux');
 const { NoteList } = require('../note-list.js');
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Tag = require('@joplinapp/lib/models/Tag.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const Folder = require('@joplin/lib/models/Folder.js');
+const Tag = require('@joplin/lib/models/Tag.js');
+const Note = require('@joplin/lib/models/Note.js');
+const Setting = require('@joplin/lib/models/Setting').default;
 const { themeStyle } = require('../global-style.js');
 const { ScreenHeader } = require('../screen-header.js');
-const { _ } = require('@joplinapp/lib/locale');
+const { _ } = require('@joplin/lib/locale');
 const { ActionButton } = require('../action-button.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;

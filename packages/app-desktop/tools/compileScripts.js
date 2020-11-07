@@ -47,7 +47,7 @@ module.exports = function() {
 	convertJsx(`${__dirname}/../gui/NoteList`);
 	convertJsx(`${__dirname}/../plugins`);
 
-	// TODO: should get from node_modules @joplinapp/lib
+	// TODO: should get from node_modules @joplin/lib
 	const libContent = [
 		fs.readFileSync(`${basePath}/packages/lib/string-utils-common.js`, 'utf8'),
 		fs.readFileSync(`${basePath}/packages/lib/markJsUtils.js`, 'utf8'),

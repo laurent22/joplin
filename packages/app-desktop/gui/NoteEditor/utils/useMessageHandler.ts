@@ -1,16 +1,16 @@
 import { useCallback } from 'react';
 import { FormNote } from './types';
 import contextMenu from './contextMenu';
-import ResourceEditWatcher from '@joplinapp/lib/services/ResourceEditWatcher/index';
-import { _ } from '@joplinapp/lib/locale';
-const BaseItem = require('@joplinapp/lib/models/BaseItem');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const Resource = require('@joplinapp/lib/models/Resource.js');
+import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
+import { _ } from '@joplin/lib/locale';
+const BaseItem = require('@joplin/lib/models/BaseItem');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const Resource = require('@joplin/lib/models/Resource.js');
 const bridge = require('electron').remote.require('./bridge').default;
-const { urlDecode } = require('@joplinapp/lib/string-utils');
-const urlUtils = require('@joplinapp/lib/urlUtils');
-const ResourceFetcher = require('@joplinapp/lib/services/ResourceFetcher.js');
-const { reg } = require('@joplinapp/lib/registry.js');
+const { urlDecode } = require('@joplin/lib/string-utils');
+const urlUtils = require('@joplin/lib/urlUtils');
+const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
+const { reg } = require('@joplin/lib/registry.js');
 
 export default function useMessageHandler(scrollWhenReady:any, setScrollWhenReady:Function, editorRef:any, setLocalSearchResultCount:Function, dispatch:Function, formNote:FormNote) {
 	return useCallback(async (event: any) => {

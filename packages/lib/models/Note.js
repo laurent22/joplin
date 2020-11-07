@@ -12,7 +12,7 @@ const ArrayUtils = require('../ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('../urlUtils.js');
 const markdownUtils = require('../markdownUtils').default;
-const { MarkupToHtml } = require('@joplinapp/renderer');
+const { MarkupToHtml } = require('@joplin/renderer');
 const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
 
 class Note extends BaseItem {

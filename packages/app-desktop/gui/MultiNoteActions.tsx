@@ -1,8 +1,8 @@
-import { PluginStates } from '@joplinapp/lib/services/plugins/reducer';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
 import NoteListUtils from './utils/NoteListUtils';
 
-const { buildStyle } = require('@joplinapp/lib/theme');
+const { buildStyle } = require('@joplin/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 
 interface MultiNoteActionsProps {

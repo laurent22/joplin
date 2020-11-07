@@ -1,8 +1,8 @@
 const { BaseCommand } = require('./base-command.js');
-const { _, setLocale } = require('@joplinapp/lib/locale');
+const { _, setLocale } = require('@joplin/lib/locale');
 const { app } = require('./app.js');
 const fs = require('fs-extra');
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 
 class Command extends BaseCommand {
 	usage() {

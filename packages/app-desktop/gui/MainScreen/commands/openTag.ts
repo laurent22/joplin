@@ -1,4 +1,4 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 
 export const declaration:CommandDeclaration = {
 	name: 'openTag',

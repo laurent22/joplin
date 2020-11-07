@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 
-const time = require('@joplinapp/lib/time').default;
+const time = require('@joplin/lib/time').default;
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
-const mimeUtils = require('@joplinapp/lib/mime-utils.js').mime;
+const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

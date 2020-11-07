@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel } from '../Button/Button';
-import CommandService from '@joplinapp/lib/services/CommandService';
+import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 const styled = require('styled-components').default;
 

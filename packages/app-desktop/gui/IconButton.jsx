@@ -1,5 +1,5 @@
 const React = require('react');
-const { themeStyle } = require('@joplinapp/lib/theme');
+const { themeStyle } = require('@joplin/lib/theme');
 
 class IconButton extends React.Component {
 	render() {

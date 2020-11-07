@@ -1,12 +1,12 @@
 import PluginRunner from '../app/services/plugins/PluginRunner';
-import PluginService from '@joplinapp/lib/services/plugins/PluginService';
-import { ContentScriptType } from '@joplinapp/lib/services/plugins/api/types';
-import MdToHtml from '@joplinapp/renderer/MdToHtml';
-import shim from '@joplinapp/lib/shim';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
+import MdToHtml from '@joplin/renderer/MdToHtml';
+import shim from '@joplin/lib/shim';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('./test-utils.js');
-const Note = require('@joplinapp/lib/models/Note');
-const Folder = require('@joplinapp/lib/models/Folder');
+const Note = require('@joplin/lib/models/Note');
+const Folder = require('@joplin/lib/models/Folder');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

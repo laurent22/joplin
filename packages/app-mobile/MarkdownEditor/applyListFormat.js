@@ -1,5 +1,5 @@
 import { replaceBetween } from './utils';
-const shim = require('@joplinapp/lib/shim').default;
+const shim = require('@joplin/lib/shim').default;
 
 export default ({ getState, item, setState }) => {
 	let { text } = getState();

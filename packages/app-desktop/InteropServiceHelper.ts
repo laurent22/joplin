@@ -1,14 +1,14 @@
-import InteropService from '@joplinapp/lib/services/interop/InteropService';
-import CommandService from '@joplinapp/lib/services/CommandService';
-import shim from '@joplinapp/lib/shim';
-import { ExportOptions, FileSystemItem, Module } from '@joplinapp/lib/services/interop/types';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import CommandService from '@joplin/lib/services/CommandService';
+import shim from '@joplin/lib/shim';
+import { ExportOptions, FileSystemItem, Module } from '@joplin/lib/services/interop/types';
 
-import { _ } from '@joplinapp/lib/locale';
+import { _ } from '@joplin/lib/locale';
 const bridge = require('electron').remote.require('./bridge').default;
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const Note = require('@joplinapp/lib/models/Note.js');
-const { friendlySafeFilename } = require('@joplinapp/lib/path-utils');
-const time = require('@joplinapp/lib/time').default;
+const Setting = require('@joplin/lib/models/Setting').default;
+const Note = require('@joplin/lib/models/Note.js');
+const { friendlySafeFilename } = require('@joplin/lib/path-utils');
+const time = require('@joplin/lib/time').default;
 const md5 = require('md5');
 const url = require('url');
 

@@ -1,4 +1,4 @@
-// import { EditorCommand } from '@joplinapp/lib/services/plugins/api/types';
+// import { EditorCommand } from '@joplin/lib/services/plugins/api/types';
 
 import bridge from '../bridge';
 

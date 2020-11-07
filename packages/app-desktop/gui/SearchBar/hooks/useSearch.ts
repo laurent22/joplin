@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import CommandService from '@joplinapp/lib/services/CommandService';
+import CommandService from '@joplin/lib/services/CommandService';
 const debounce = require('debounce');
 
 export default function useSearch(query:string) {

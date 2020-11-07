@@ -5,7 +5,7 @@ const Note = require('./models/Note.js');
 const Tag = require('./models/Tag.js');
 const Resource = require('./models/Resource.js');
 const Setting = require('./models/Setting').default;
-const { MarkupToHtml } = require('@joplinapp/renderer');
+const { MarkupToHtml } = require('@joplin/renderer');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const time = require('./time').default;
@@ -272,7 +272,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 		const options = {};
 		const strict = true;
-		const saxStream = require('@joplinapp/fork-sax').createStream(strict, options);
+		const saxStream = require('@joplin/fork-sax').createStream(strict, options);
 
 		const nodes = []; // LIFO list of nodes so that we know in which node we are in the onText event
 		let note = null;

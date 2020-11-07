@@ -1,11 +1,11 @@
 const { syncDir, asyncTest, fileApi, synchronizer, createSyncTargetSnapshot, loadEncryptionMasterKey, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../test-utils.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const Folder = require('@joplinapp/lib/models/Folder');
-const Note = require('@joplinapp/lib/models/Note');
-const Tag = require('@joplinapp/lib/models/Tag');
-const Resource = require('@joplinapp/lib/models/Resource');
-const markdownUtils = require('@joplinapp/lib/markdownUtils').default;;
-const shim = require('@joplinapp/lib/shim').default;
+const Setting = require('@joplin/lib/models/Setting').default;
+const Folder = require('@joplin/lib/models/Folder');
+const Note = require('@joplin/lib/models/Note');
+const Tag = require('@joplin/lib/models/Tag');
+const Resource = require('@joplin/lib/models/Resource');
+const markdownUtils = require('@joplin/lib/markdownUtils').default;;
+const shim = require('@joplin/lib/shim').default;
 const fs = require('fs-extra');
 
 const snapshotBaseDir = `${__dirname}/../../tests/support/syncTargetSnapshots`;

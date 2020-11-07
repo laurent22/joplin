@@ -1,7 +1,7 @@
 import markdownUtils from './markdownUtils';
 import Setting from './models/Setting';
 import shim from './shim';
-import MarkupToHtml, { MarkupLanguage } from '@joplinapp/renderer/MarkupToHtml';
+import MarkupToHtml, { MarkupLanguage } from '@joplin/renderer/MarkupToHtml';
 
 const htmlUtils = require('./htmlUtils');
 const Resource = require('./models/Resource');

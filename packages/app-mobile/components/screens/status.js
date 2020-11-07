@@ -1,11 +1,11 @@
 const React = require('react');
 
 const { View, Text, Button, FlatList } = require('react-native');
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
-const { ReportService } = require('@joplinapp/lib/services/report.js');
-const { _ } = require('@joplinapp/lib/locale');
+const { ReportService } = require('@joplin/lib/services/report.js');
+const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
 

@@ -2,15 +2,15 @@
 
 
 const os = require('os');
-const time = require('@joplinapp/lib/time').default;
-const { filename } = require('@joplinapp/lib/path-utils');
+const time = require('@joplin/lib/time').default;
+const { filename } = require('@joplin/lib/path-utils');
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const shim = require('@joplinapp/lib/shim').default;
-const HtmlToHtml = require('@joplinapp/renderer/HtmlToHtml');
-const { enexXmlToMd } = require('@joplinapp/lib/import-enex-md-gen.js');
+const Folder = require('@joplin/lib/models/Folder.js');
+const Note = require('@joplin/lib/models/Note.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const shim = require('@joplin/lib/shim').default;
+const HtmlToHtml = require('@joplin/renderer/HtmlToHtml');
+const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

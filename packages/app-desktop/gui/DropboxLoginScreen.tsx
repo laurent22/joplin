@@ -1,11 +1,11 @@
 import * as React from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
-import { _ } from '@joplinapp/lib/locale';
+import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 const bridge = require('electron').remote.require('./bridge').default;
-const { themeStyle } = require('@joplinapp/lib/theme');
-const Shared = require('@joplinapp/lib/components/shared/dropbox-login-shared');
+const { themeStyle } = require('@joplin/lib/theme');
+const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 
 interface Props {
 	themeId: string,

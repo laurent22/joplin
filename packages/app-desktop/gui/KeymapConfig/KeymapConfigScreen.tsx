@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import KeymapService, { KeymapItem } from '@joplinapp/lib/services/KeymapService';
+import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import { ShortcutRecorder } from './ShortcutRecorder';
 import getLabel from './utils/getLabel';
 import useKeymap from './utils/useKeymap';
 import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
-import { _ } from '@joplinapp/lib/locale';
+import { _ } from '@joplin/lib/locale';
 
 const bridge = require('electron').remote.require('./bridge').default;
-const shim = require('@joplinapp/lib/shim').default;
+const shim = require('@joplin/lib/shim').default;
 
 const keymapService = KeymapService.instance();
 

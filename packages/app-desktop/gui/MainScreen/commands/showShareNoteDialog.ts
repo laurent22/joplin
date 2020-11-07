@@ -1,5 +1,5 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
-import { _ } from '@joplinapp/lib/locale';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
+import { _ } from '@joplin/lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'showShareNoteDialog',

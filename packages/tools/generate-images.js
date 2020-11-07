@@ -2,7 +2,7 @@ const dirname = require('path').dirname;
 const sharp = require('sharp');
 const fs = require('fs-extra');
 const { execCommand } = require('./tool-utils.js');
-const { fileExtension } = require('@joplinapp/lib/path-utils');
+const { fileExtension } = require('@joplin/lib/path-utils');
 
 const sources = [
 	{

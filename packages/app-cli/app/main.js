@@ -11,24 +11,24 @@ if (compareVersion(nodeVersion, '10.0.0') < 0) {
 }
 
 const { app } = require('./app.js');
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Resource = require('@joplinapp/lib/models/Resource.js');
-const BaseItem = require('@joplinapp/lib/models/BaseItem.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const Tag = require('@joplinapp/lib/models/Tag.js');
-const NoteTag = require('@joplinapp/lib/models/NoteTag.js');
-const MasterKey = require('@joplinapp/lib/models/MasterKey');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const Revision = require('@joplinapp/lib/models/Revision.js');
-const Logger = require('@joplinapp/lib/Logger').default;
-const FsDriverNode = require('@joplinapp/lib/fs-driver-node').default;
+const Folder = require('@joplin/lib/models/Folder.js');
+const Resource = require('@joplin/lib/models/Resource.js');
+const BaseItem = require('@joplin/lib/models/BaseItem.js');
+const Note = require('@joplin/lib/models/Note.js');
+const Tag = require('@joplin/lib/models/Tag.js');
+const NoteTag = require('@joplin/lib/models/NoteTag.js');
+const MasterKey = require('@joplin/lib/models/MasterKey');
+const Setting = require('@joplin/lib/models/Setting').default;
+const Revision = require('@joplin/lib/models/Revision.js');
+const Logger = require('@joplin/lib/Logger').default;
+const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const sharp = require('sharp');
-const { shimInit } = require('@joplinapp/lib/shim-init-node.js');
-const shim = require('@joplinapp/lib/shim').default;
-const { _ } = require('@joplinapp/lib/locale');
-const { FileApiDriverLocal } = require('@joplinapp/lib/file-api-driver-local.js');
-const EncryptionService = require('@joplinapp/lib/services/EncryptionService');
-const envFromArgs = require('@joplinapp/lib/envFromArgs');
+const { shimInit } = require('@joplin/lib/shim-init-node.js');
+const shim = require('@joplin/lib/shim').default;
+const { _ } = require('@joplin/lib/locale');
+const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
+const EncryptionService = require('@joplin/lib/services/EncryptionService');
+const envFromArgs = require('@joplin/lib/envFromArgs');
 
 const env = envFromArgs(process.argv);
 

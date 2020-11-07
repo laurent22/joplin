@@ -1,6 +1,6 @@
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 const { Platform } = require('react-native');
-const { themeById } = require('@joplinapp/lib/theme');
+const { themeById } = require('@joplin/lib/theme');
 
 const baseStyle = {
 	appearance: 'light',

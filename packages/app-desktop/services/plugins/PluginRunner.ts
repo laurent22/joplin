@@ -1,11 +1,11 @@
-import Plugin from '@joplinapp/lib/services/plugins/Plugin';
-import BasePluginRunner from '@joplinapp/lib/services/plugins/BasePluginRunner';
-import executeSandboxCall from '@joplinapp/lib/services/plugins/utils/executeSandboxCall';
-import Global from '@joplinapp/lib/services/plugins/api/Global';
+import Plugin from '@joplin/lib/services/plugins/Plugin';
+import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
+import executeSandboxCall from '@joplin/lib/services/plugins/utils/executeSandboxCall';
+import Global from '@joplin/lib/services/plugins/api/Global';
 import bridge from '../bridge';
-import Setting from '@joplinapp/lib/models/Setting';
-import { EventHandlers } from '@joplinapp/lib/services/plugins/utils/mapEventHandlersToIds';
-import shim from '@joplinapp/lib/shim';
+import Setting from '@joplin/lib/models/Setting';
+import { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
+import shim from '@joplin/lib/shim';
 const ipcRenderer = require('electron').ipcRenderer;
 
 enum PluginMessageTarget {

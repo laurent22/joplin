@@ -1,12 +1,12 @@
 import * as React from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
-import { _ } from '@joplinapp/lib/locale';
+import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
-const { themeStyle } = require('@joplinapp/lib/theme');
+const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const prettyBytes = require('pretty-bytes');
-const Resource = require('@joplinapp/lib/models/Resource.js');
+const Resource = require('@joplin/lib/models/Resource.js');
 
 interface Style {
 	width: number

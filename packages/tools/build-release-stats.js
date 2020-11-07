@@ -2,8 +2,8 @@
 
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
-const { dirname } = require('@joplinapp/lib/path-utils');
-const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
+const { dirname } = require('@joplin/lib/path-utils');
+const markdownUtils = require('@joplin/lib/markdownUtils').default;
 
 const rootDir = dirname(dirname(__dirname));
 

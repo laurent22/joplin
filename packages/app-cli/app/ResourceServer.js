@@ -1,5 +1,5 @@
-const Logger = require('@joplinapp/lib/Logger').default;
-const { netUtils } = require('@joplinapp/lib/net-utils.js');
+const Logger = require('@joplin/lib/Logger').default;
+const { netUtils } = require('@joplin/lib/net-utils.js');
 
 const http = require('http');
 const urlParser = require('url');

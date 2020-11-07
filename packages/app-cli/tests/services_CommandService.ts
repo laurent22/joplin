@@ -1,6 +1,6 @@
-import MenuUtils from '@joplinapp/lib/services/commands/MenuUtils';
-import ToolbarButtonUtils from '@joplinapp/lib/services/commands/ToolbarButtonUtils';
-import CommandService, { CommandDeclaration, CommandRuntime } from '@joplinapp/lib/services/CommandService';
+import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
+import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
+import CommandService, { CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 

@@ -1,6 +1,6 @@
 import { NoteEditorProps } from '../utils/types';
 
-const { buildStyle } = require('@joplinapp/lib/theme');
+const { buildStyle } = require('@joplin/lib/theme');
 
 export default function styles(props: NoteEditorProps) {
 	return buildStyle(['NoteEditor'], props.themeId, (theme: any) => {

@@ -1,11 +1,11 @@
-# `@joplinapp/cli`
+# `@joplin/cli`
 
 > TODO: description
 
 ## Usage
 
 ```
-const cli = require('@joplinapp/cli');
+const cli = require('@joplin/cli');
 
 // TODO: DEMONSTRATE API
 ```

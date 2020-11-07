@@ -1,11 +1,11 @@
 const { BaseCommand } = require('./base-command.js');
-const BaseItem = require('@joplinapp/lib/models/BaseItem');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const { toTitleCase } = require('@joplinapp/lib/string-utils.js');
-const { reg } = require('@joplinapp/lib/registry.js');
-const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
-const { Database } = require('@joplinapp/lib/database.js');
-const shim = require('@joplinapp/lib/shim').default;
+const BaseItem = require('@joplin/lib/models/BaseItem');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const { toTitleCase } = require('@joplin/lib/string-utils.js');
+const { reg } = require('@joplin/lib/registry.js');
+const markdownUtils = require('@joplin/lib/markdownUtils').default;
+const { Database } = require('@joplin/lib/database.js');
+const shim = require('@joplin/lib/shim').default;
 
 class Command extends BaseCommand {
 	usage() {

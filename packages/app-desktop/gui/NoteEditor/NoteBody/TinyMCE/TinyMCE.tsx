@@ -4,21 +4,21 @@ import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } 
 import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
-import CommandService from '@joplinapp/lib/services/CommandService';
-import { ToolbarButtonInfo } from '@joplinapp/lib/services/commands/ToolbarButtonUtils';
+import CommandService from '@joplin/lib/services/CommandService';
+import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import ToggleEditorsButton, { Value as ToggleEditorsButtonValue } from '../../../ToggleEditorsButton/ToggleEditorsButton';
 import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
-import { utils as pluginUtils } from '@joplinapp/lib/services/plugins/reducer';
-import { _, closestSupportedLocale } from '@joplinapp/lib/locale';
+import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import setupContextMenu from './utils/setupContextMenu';
 
-const { MarkupToHtml } = require('@joplinapp/renderer');
+const { MarkupToHtml } = require('@joplin/renderer');
 const taboverride = require('taboverride');
-const { reg } = require('@joplinapp/lib/registry.js');
-const BaseItem = require('@joplinapp/lib/models/BaseItem');
-const shim = require('@joplinapp/lib/shim').default;
-const { themeStyle } = require('@joplinapp/lib/theme');
+const { reg } = require('@joplin/lib/registry.js');
+const BaseItem = require('@joplin/lib/models/BaseItem');
+const shim = require('@joplin/lib/shim').default;
+const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 

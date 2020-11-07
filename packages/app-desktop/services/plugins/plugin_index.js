@@ -1,6 +1,6 @@
 (function(globalObject) {
 	// TODO: Not sure if that will work once packaged in Electron
-	const sandboxProxy = require('../../node_modules/@joplinapp/lib/services/plugins/sandboxProxy.js').default;
+	const sandboxProxy = require('../../node_modules/@joplin/lib/services/plugins/sandboxProxy.js').default;
 	const ipcRenderer = require('electron').ipcRenderer;
 
 	const urlParams = new URLSearchParams(window.location.search);

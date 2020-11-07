@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FormNote, defaultFormNote, ResourceInfos } from './types';
 import { clearResourceCache, attachedResources } from './resourceHandling';
-import AsyncActionQueue from '@joplinapp/lib/AsyncActionQueue';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { handleResourceDownloadMode } from './resourceHandling';
-const { MarkupToHtml } = require('@joplinapp/renderer');
-const HtmlToHtml = require('@joplinapp/renderer/HtmlToHtml');
+const { MarkupToHtml } = require('@joplin/renderer');
+const HtmlToHtml = require('@joplin/renderer/HtmlToHtml');
 const usePrevious = require('../../hooks/usePrevious').default;
-const Note = require('@joplinapp/lib/models/Note');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const { reg } = require('@joplinapp/lib/registry.js');
-const ResourceFetcher = require('@joplinapp/lib/services/ResourceFetcher.js');
-const DecryptionWorker = require('@joplinapp/lib/services/DecryptionWorker.js');
-const ResourceEditWatcher = require('@joplinapp/lib/services/ResourceEditWatcher/index').default;
+const Note = require('@joplin/lib/models/Note');
+const Setting = require('@joplin/lib/models/Setting').default;
+const { reg } = require('@joplin/lib/registry.js');
+const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
+const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker.js');
+const ResourceEditWatcher = require('@joplin/lib/services/ResourceEditWatcher/index').default;
 
 export interface OnLoadEvent {
 	formNote: FormNote,

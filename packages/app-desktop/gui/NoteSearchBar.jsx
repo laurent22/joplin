@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { themeStyle } = require('@joplinapp/lib/theme');
-const { _ } = require('@joplinapp/lib/locale');
+const { themeStyle } = require('@joplin/lib/theme');
+const { _ } = require('@joplin/lib/locale');
 
 class NoteSearchBarComponent extends React.Component {
 	constructor() {

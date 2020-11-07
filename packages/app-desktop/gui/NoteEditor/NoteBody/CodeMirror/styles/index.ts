@@ -1,5 +1,5 @@
 import { NoteBodyEditorProps } from '../../../utils/types';
-const { buildStyle } = require('@joplinapp/lib/theme');
+const { buildStyle } = require('@joplin/lib/theme');
 
 export default function styles(props: NoteBodyEditorProps) {
 	return buildStyle('CodeMirror', props.themeId, (theme: any) => {

@@ -1,10 +1,10 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const { themeStyle } = require('@joplinapp/lib/theme');
-const { _ } = require('@joplinapp/lib/locale');
-const { filename, basename } = require('@joplinapp/lib/path-utils');
-const { importEnex } = require('@joplinapp/lib/import-enex');
+const Folder = require('@joplin/lib/models/Folder.js');
+const { themeStyle } = require('@joplin/lib/theme');
+const { _ } = require('@joplin/lib/locale');
+const { filename, basename } = require('@joplin/lib/path-utils');
+const { importEnex } = require('@joplin/lib/import-enex');
 
 class ImportScreenComponent extends React.Component {
 	UNSAFE_componentWillMount() {

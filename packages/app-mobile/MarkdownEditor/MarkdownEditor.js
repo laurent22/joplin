@@ -13,7 +13,7 @@ import {
 	Image,
 } from 'react-native';
 import { renderFormatButtons } from './renderButtons';
-import NoteBodyViewer from '@joplinapp/lib/components/NoteBodyViewer/NoteBodyViewer';
+import NoteBodyViewer from '@joplin/lib/components/NoteBodyViewer/NoteBodyViewer';
 
 const styles = StyleSheet.create({
 	buttonContainer: {

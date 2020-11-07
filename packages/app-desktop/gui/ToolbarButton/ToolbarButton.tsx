@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ToolbarButtonInfo } from '@joplinapp/lib/services/commands/ToolbarButtonUtils';
+import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { StyledRoot, StyledIconSpan, StyledIconI } from './styles';
 
 interface Props {

@@ -1,5 +1,5 @@
-import FsDriverNode from '@joplinapp/lib/fs-driver-node';
-import shim from '@joplinapp/lib/shim';
+import FsDriverNode from '@joplin/lib/fs-driver-node';
+import shim from '@joplin/lib/shim';
 const { expectThrow } = require('./test-utils.js');
 
 // On Windows, path.resolve is going to convert a path such as

@@ -1,15 +1,15 @@
-import InteropService from '@joplinapp/lib/services/interop/InteropService';
-import { CustomExportContext, CustomImportContext, Module, ModuleType } from '@joplinapp/lib/services/interop/types';
-import shim from '@joplinapp/lib/shim';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import { CustomExportContext, CustomImportContext, Module, ModuleType } from '@joplin/lib/services/interop/types';
+import shim from '@joplin/lib/shim';
 
 
 const { asyncTest, fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const Tag = require('@joplinapp/lib/models/Tag.js');
-const Resource = require('@joplinapp/lib/models/Resource.js');
+const Folder = require('@joplin/lib/models/Folder.js');
+const Note = require('@joplin/lib/models/Note.js');
+const Tag = require('@joplin/lib/models/Tag.js');
+const Resource = require('@joplin/lib/models/Resource.js');
 const fs = require('fs-extra');
-const ArrayUtils = require('@joplinapp/lib/ArrayUtils');
+const ArrayUtils = require('@joplin/lib/ArrayUtils');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

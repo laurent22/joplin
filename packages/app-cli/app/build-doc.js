@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
-const { fileExtension, dirname } = require('@joplinapp/lib/path-utils');
+const { fileExtension, dirname } = require('@joplin/lib/path-utils');
 const wrap_ = require('word-wrap');
-const { languageCode } = require('@joplinapp/lib/locale');
+const { languageCode } = require('@joplin/lib/locale');
 
 const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;

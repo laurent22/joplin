@@ -1,26 +1,26 @@
 import * as React from 'react';
 import { StyledRoot, StyledAddButton, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
-import CommandService from '@joplinapp/lib/services/CommandService';
-import InteropService from '@joplinapp/lib/services/interop/InteropService';
-import Synchronizer from '@joplinapp/lib/Synchronizer';
-import Setting from '@joplinapp/lib/models/Setting';
-import MenuUtils from '@joplinapp/lib/services/commands/MenuUtils';
+import CommandService from '@joplin/lib/services/CommandService';
+import InteropService from '@joplin/lib/services/interop/InteropService';
+import Synchronizer from '@joplin/lib/Synchronizer';
+import Setting from '@joplin/lib/models/Setting';
+import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
-import { _ } from '@joplinapp/lib/locale';
+import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
-const shared = require('@joplinapp/lib/components/shared/side-menu-shared.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const Tag = require('@joplinapp/lib/models/Tag.js');
-const { themeStyle } = require('@joplinapp/lib/theme');
+const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const Folder = require('@joplin/lib/models/Folder.js');
+const Note = require('@joplin/lib/models/Note.js');
+const Tag = require('@joplin/lib/models/Tag.js');
+const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const { substrWithEllipsis } = require('@joplinapp/lib/string-utils');
-const { ALL_NOTES_FILTER_ID } = require('@joplinapp/lib/reserved-ids');
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 interface Props {
 	themeId: number,

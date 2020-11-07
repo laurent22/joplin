@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
 
 
-const time = require('@joplinapp/lib/time').default;
+const time = require('@joplin/lib/time').default;
 const { asyncTest, fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
-const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');
-const ResourceService = require('@joplinapp/lib/services/ResourceService');
-const ItemChangeUtils = require('@joplinapp/lib/services/ItemChangeUtils');
-const Note = require('@joplinapp/lib/models/Note');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const ItemChange = require('@joplinapp/lib/models/ItemChange');
+const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
+const ResourceService = require('@joplin/lib/services/ResourceService');
+const ItemChangeUtils = require('@joplin/lib/services/ItemChangeUtils');
+const Note = require('@joplin/lib/models/Note');
+const Setting = require('@joplin/lib/models/Setting').default;
+const ItemChange = require('@joplin/lib/models/ItemChange');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

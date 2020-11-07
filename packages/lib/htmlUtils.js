@@ -1,7 +1,7 @@
 const urlUtils = require('./urlUtils.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
-const htmlparser2 = require('@joplinapp/fork-htmlparser2');
+const htmlparser2 = require('@joplin/fork-htmlparser2');
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309

@@ -430,7 +430,7 @@ function enexXmlToMdArray(stream, resources) {
 
 		const options = {};
 		const strict = false;
-		const saxStream = require('@joplinapp/fork-sax').createStream(strict, options);
+		const saxStream = require('@joplin/fork-sax').createStream(strict, options);
 
 		let section = {
 			type: 'text',

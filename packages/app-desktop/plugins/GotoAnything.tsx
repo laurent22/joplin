@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { AppState } from '../app';
-import CommandService, { SearchResult as CommandSearchResult } from '@joplinapp/lib/services/CommandService';
-import KeymapService from '@joplinapp/lib/services/KeymapService';
-import shim from '@joplinapp/lib/shim';
+import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
+import KeymapService from '@joplin/lib/services/KeymapService';
+import shim from '@joplin/lib/shim';
 
 const { connect } = require('react-redux');
-const { _ } = require('@joplinapp/lib/locale');
-const { themeStyle } = require('@joplinapp/lib/theme');
-const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const Tag = require('@joplinapp/lib/models/Tag');
-const Folder = require('@joplinapp/lib/models/Folder');
-const Note = require('@joplinapp/lib/models/Note');
+const { _ } = require('@joplin/lib/locale');
+const { themeStyle } = require('@joplin/lib/theme');
+const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const Tag = require('@joplin/lib/models/Tag');
+const Folder = require('@joplin/lib/models/Folder');
+const Note = require('@joplin/lib/models/Note');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
-const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplinapp/lib/string-utils.js');
-const { mergeOverlappingIntervals } = require('@joplinapp/lib/ArrayUtils.js');
-const markupLanguageUtils = require('@joplinapp/lib/markupLanguageUtils').default;
+const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
+const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
+const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 
 const PLUGIN_NAME = 'gotoAnything';
 

@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 const fs = require('fs-extra');
-const utils = require('@joplinapp/tools/gulp/utils');
+const utils = require('@joplin/tools/gulp/utils');
 const tasks = {
 	// compileExtensions: {
 	// 	fn: require('../Tools/gulp/tasks/compileExtensions.js'),

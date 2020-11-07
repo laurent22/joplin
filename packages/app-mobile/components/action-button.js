@@ -1,11 +1,11 @@
 const React = require('react');
 
 const { StyleSheet } = require('react-native');
-const Note = require('@joplinapp/lib/models/Note');
+const Note = require('@joplin/lib/models/Note');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');
-const { _ } = require('@joplinapp/lib/locale');
+const { _ } = require('@joplin/lib/locale');
 
 Icon.loadFont();
 

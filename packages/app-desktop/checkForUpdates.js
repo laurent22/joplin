@@ -1,9 +1,9 @@
 const { dialog } = require('electron');
-const shim = require('@joplinapp/lib/shim').default;
-const Logger = require('@joplinapp/lib/Logger').default;
-const { _ } = require('@joplinapp/lib/locale');
+const shim = require('@joplin/lib/shim').default;
+const Logger = require('@joplin/lib/Logger').default;
+const { _ } = require('@joplin/lib/locale');
 const fetch = require('node-fetch');
-const { fileExtension } = require('@joplinapp/lib/path-utils');
+const { fileExtension } = require('@joplin/lib/path-utils');
 const packageInfo = require('./packageInfo.js');
 const compareVersions = require('compare-versions');
 

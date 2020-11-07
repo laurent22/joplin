@@ -38,8 +38,8 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@joplinapp/lib": "^1.0.9",
-    "@joplinapp/renderer": "^1.0.17",
+    "@joplin/lib": "^1.0.9",
+    "@joplin/renderer": "^1.0.17",
     "aws-sdk": "^2.588.0",
     "chalk": "^4.1.0",
     "clean-html": "^1.5.0",
@@ -64,7 +64,7 @@
     "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
-    "@joplinapp/tools": "^1.0.9",
+    "@joplin/tools": "^1.0.9",
     "@types/jasmine": "^3.6.0",
     "@types/node": "^14.14.6",
     "gulp": "^4.0.2",

@@ -1,23 +1,23 @@
 /* eslint-disable no-unused-vars */
 
 
-const time = require('@joplinapp/lib/time').default;
+const time = require('@joplin/lib/time').default;
 const { setupDatabase, synchronizerStart, syncTargetName, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('./test-utils.js');
-const shim = require('@joplinapp/lib/shim').default;
+const shim = require('@joplin/lib/shim').default;
 const fs = require('fs-extra');
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const Resource = require('@joplinapp/lib/models/Resource.js');
-const ResourceFetcher = require('@joplinapp/lib/services/ResourceFetcher');
-const Tag = require('@joplinapp/lib/models/Tag.js');
-const { Database } = require('@joplinapp/lib/database.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const MasterKey = require('@joplinapp/lib/models/MasterKey');
-const BaseItem = require('@joplinapp/lib/models/BaseItem.js');
-const Revision = require('@joplinapp/lib/models/Revision.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const SyncTargetRegistry = require('@joplinapp/lib/SyncTargetRegistry.js');
-const WelcomeUtils = require('@joplinapp/lib/WelcomeUtils');
+const Folder = require('@joplin/lib/models/Folder.js');
+const Note = require('@joplin/lib/models/Note.js');
+const Resource = require('@joplin/lib/models/Resource.js');
+const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
+const Tag = require('@joplin/lib/models/Tag.js');
+const { Database } = require('@joplin/lib/database.js');
+const Setting = require('@joplin/lib/models/Setting').default;
+const MasterKey = require('@joplin/lib/models/MasterKey');
+const BaseItem = require('@joplin/lib/models/BaseItem.js');
+const Revision = require('@joplin/lib/models/Revision.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
+const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

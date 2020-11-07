@@ -3,8 +3,8 @@ const utils = require('./utils');
 // const noteStyle = require('./noteStyle').default;
 
 // TODO: fix
-// const Setting = require('@joplinapp/lib/models/Setting').default;
-// const { themeStyle } = require('@joplinapp/lib/theme');
+// const Setting = require('@joplin/lib/models/Setting').default;
+// const { themeStyle } = require('@joplin/lib/theme');
 const InMemoryCache = require('./InMemoryCache').default;
 const md5 = require('md5');
 

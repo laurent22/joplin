@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const utils = require('@joplinapp/tools/gulp/utils');
+const utils = require('@joplin/tools/gulp/utils');
 const fs = require('fs-extra');
 
 const tasks = {
@@ -19,11 +19,11 @@ const tasks = {
 		fn: require('./tools/electronRebuild.js'),
 	},
 	// compileExtensions: {
-	// 	fn: require('@joplinapp/tools/gulp/tasks/compileExtensions.js'),
+	// 	fn: require('@joplin/tools/gulp/tasks/compileExtensions.js'),
 	// },
-	// copyLib: require('@joplinapp/tools/gulp/tasks/copyLib'),
-	tsc: require('@joplinapp/tools/gulp/tasks/tsc'),
-	updateIgnoredTypeScriptBuild: require('@joplinapp/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
+	// copyLib: require('@joplin/tools/gulp/tasks/copyLib'),
+	tsc: require('@joplin/tools/gulp/tasks/tsc'),
+	updateIgnoredTypeScriptBuild: require('@joplin/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
 
 	linkReact: {
 		fn: async () => {

@@ -1,13 +1,13 @@
-import ResourceEditWatcher from '@joplinapp/lib/services/ResourceEditWatcher/index';
-import { _ } from '@joplinapp/lib/locale';
+import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
+import { _ } from '@joplin/lib/locale';
 
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const Resource = require('@joplinapp/lib/models/Resource.js');
+const Resource = require('@joplin/lib/models/Resource.js');
 const fs = require('fs-extra');
 const { clipboard } = require('electron');
-const { toSystemSlashes } = require('@joplinapp/lib/path-utils');
+const { toSystemSlashes } = require('@joplin/lib/path-utils');
 
 export enum ContextMenuItemType {
 	None = '',

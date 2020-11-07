@@ -1,6 +1,6 @@
 import { useRef, useMemo, useCallback } from 'react';
 
-import Setting from '@joplinapp/lib/models/Setting';
+import Setting from '@joplin/lib/models/Setting';
 import useSource from './hooks/useSource';
 import useOnMessage from './hooks/useOnMessage';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
@@ -10,7 +10,7 @@ const { View } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('../global-style.js');
 const BackButtonDialogBox = require('../BackButtonDialogBox').default;
-const { reg } = require('@joplinapp/lib/registry.js');
+const { reg } = require('@joplin/lib/registry.js');
 
 interface Props {
 	themeId: number,

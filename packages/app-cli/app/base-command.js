@@ -1,5 +1,5 @@
-const { _ } = require('@joplinapp/lib/locale');
-const { reg } = require('@joplinapp/lib/registry.js');
+const { _ } = require('@joplin/lib/locale');
+const { reg } = require('@joplin/lib/registry.js');
 
 class BaseCommand {
 	constructor() {

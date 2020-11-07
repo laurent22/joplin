@@ -1,9 +1,9 @@
-import MdToHtml from '@joplinapp/renderer/MdToHtml';
+import MdToHtml from '@joplin/renderer/MdToHtml';
 const os = require('os');
-const { filename } = require('@joplinapp/lib/path-utils');
+const { filename } = require('@joplin/lib/path-utils');
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
-const shim = require('@joplinapp/lib/shim').default;
-const { themeStyle } = require('@joplinapp/lib/theme');
+const shim = require('@joplin/lib/shim').default;
+const { themeStyle } = require('@joplin/lib/theme');
 
 function newTestMdToHtml(options:any = null) {
 	options = {

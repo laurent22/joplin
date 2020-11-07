@@ -1,5 +1,5 @@
-import InMemoryCache from '@joplinapp/lib/InMemoryCache';
-const time = require('@joplinapp/lib/time').default;
+import InMemoryCache from '@joplin/lib/InMemoryCache';
+const time = require('@joplin/lib/time').default;
 
 describe('InMemoryCache', function() {
 

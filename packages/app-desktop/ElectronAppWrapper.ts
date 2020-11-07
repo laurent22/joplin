@@ -1,11 +1,11 @@
-import Logger from '@joplinapp/lib/Logger';
+import Logger from '@joplin/lib/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
-import shim from '@joplinapp/lib/shim';
+import shim from '@joplin/lib/shim';
 
 const { BrowserWindow, Tray, screen } = require('electron');
 const url = require('url');
 const path = require('path');
-const { dirname } = require('@joplinapp/lib/path-utils');
+const { dirname } = require('@joplin/lib/path-utils');
 const fs = require('fs-extra');
 const { ipcMain } = require('electron');
 

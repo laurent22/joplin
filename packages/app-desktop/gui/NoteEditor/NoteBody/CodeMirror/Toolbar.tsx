@@ -1,12 +1,12 @@
 import * as React from 'react';
-import CommandService from '@joplinapp/lib/services/CommandService';
+import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarBase from '../../../ToolbarBase';
-import { utils as pluginUtils } from '@joplinapp/lib/services/plugins/reducer';
+import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../app';
-import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplinapp/lib/services/commands/ToolbarButtonUtils';
-import stateToWhenClauseContext from '@joplinapp/lib/services/commands/stateToWhenClauseContext';
-const { buildStyle } = require('@joplinapp/lib/theme');
+import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
+import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
+const { buildStyle } = require('@joplin/lib/theme');
 
 interface ToolbarProps {
 	themeId: number,

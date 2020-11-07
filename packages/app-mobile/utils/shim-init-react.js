@@ -1,24 +1,24 @@
-const shim = require('@joplinapp/lib/shim').default;
+const shim = require('@joplin/lib/shim').default;
 const { GeolocationReact } = require('./geolocation-react.js');
-const PoorManIntervals = require('@joplinapp/lib/PoorManIntervals').default;
+const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('./fs-driver-rn.js').FsDriverRN;
 const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
 const { Linking, Platform } = require('react-native');
-const mimeUtils = require('@joplinapp/lib/mime-utils.js').mime;
-const { basename, fileExtension } = require('@joplinapp/lib/path-utils');
-const uuid = require('@joplinapp/lib/uuid').default;
-const Resource = require('@joplinapp/lib/models/Resource');
+const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+const { basename, fileExtension } = require('@joplin/lib/path-utils');
+const uuid = require('@joplin/lib/uuid').default;
+const Resource = require('@joplin/lib/models/Resource');
 
 const injectedJs = {
-	webviewLib: require('@joplinapp/lib/rnInjectedJs/webviewLib'),
+	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
 };
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
-	shim.sjclModule = require('@joplinapp/lib/vendor/sjcl-rn.js');
+	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverRN();

@@ -1,14 +1,14 @@
 'use strict';
 
 const fs = require('fs-extra');
-const Logger = require('@joplinapp/lib/Logger').default;
-const { dirname } = require('@joplinapp/lib/path-utils');
-const { DatabaseDriverNode } = require('@joplinapp/lib/database-driver-node.js');
-const { JoplinDatabase } = require('@joplinapp/lib/joplin-database.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const Logger = require('@joplin/lib/Logger').default;
+const { dirname } = require('@joplin/lib/path-utils');
+const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
+const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const Folder = require('@joplin/lib/models/Folder.js');
+const Note = require('@joplin/lib/models/Note.js');
+const Setting = require('@joplin/lib/models/Setting').default;
 const { sprintf } = require('sprintf-js');
 const exec = require('child_process').exec;
 

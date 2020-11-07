@@ -1,4 +1,4 @@
-const { isListItem, isEmptyListItem, extractListToken, olLineNumber } = require('@joplinapp/lib/markdownUtils').default;
+const { isListItem, isEmptyListItem, extractListToken, olLineNumber } = require('@joplin/lib/markdownUtils').default;
 
 // Markdown list indentation.
 // If the current line starts with `markup.list` token,

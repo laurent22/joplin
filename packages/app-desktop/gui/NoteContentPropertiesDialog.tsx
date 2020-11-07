@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { _ } from '@joplinapp/lib/locale';
-const { themeStyle } = require('@joplinapp/lib/theme');
+import { _ } from '@joplin/lib/locale';
+const { themeStyle } = require('@joplin/lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Countable = require('countable');
-const markupLanguageUtils = require('@joplinapp/lib/markupLanguageUtils').default;
+const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 
 interface NoteContentPropertiesDialogProps {
 	themeId: number,

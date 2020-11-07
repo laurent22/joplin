@@ -2,7 +2,7 @@
 
 
 const { asyncTest } = require('./test-utils.js');
-const htmlUtils = require('@joplinapp/lib/htmlUtils.js');
+const htmlUtils = require('@joplin/lib/htmlUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

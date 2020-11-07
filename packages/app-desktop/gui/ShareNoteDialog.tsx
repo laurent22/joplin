@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import JoplinServerApi from '@joplinapp/lib/JoplinServerApi';
+import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 
-import { _, _n } from '@joplinapp/lib/locale';
-const { themeStyle, buildStyle } = require('@joplinapp/lib/theme');
+import { _, _n } from '@joplin/lib/locale';
+const { themeStyle, buildStyle } = require('@joplin/lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
-const Note = require('@joplinapp/lib/models/Note');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const BaseItem = require('@joplinapp/lib/models/BaseItem');
-const { reg } = require('@joplinapp/lib/registry.js');
+const Note = require('@joplin/lib/models/Note');
+const Setting = require('@joplin/lib/models/Setting').default;
+const BaseItem = require('@joplin/lib/models/BaseItem');
+const { reg } = require('@joplin/lib/registry.js');
 const { clipboard } = require('electron');
 
 interface ShareNoteDialogProps {

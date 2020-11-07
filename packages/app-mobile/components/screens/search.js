@@ -4,14 +4,14 @@ const { StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('r
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { _ } = require('@joplinapp/lib/locale');
-const Note = require('@joplinapp/lib/models/Note.js');
+const { _ } = require('@joplin/lib/locale');
+const Note = require('@joplin/lib/models/Note.js');
 const { NoteItem } = require('../note-item.js');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
-const SearchEngineUtils = require('@joplinapp/lib/services/searchengine/SearchEngineUtils');
-const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');
+const SearchEngineUtils = require('@joplin/lib/services/searchengine/SearchEngineUtils');
+const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
 
 Icon.loadFont();
 

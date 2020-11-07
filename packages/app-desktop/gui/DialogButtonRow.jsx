@@ -1,6 +1,6 @@
 const React = require('react');
-const { _ } = require('@joplinapp/lib/locale');
-const { themeStyle } = require('@joplinapp/lib/theme');
+const { _ } = require('@joplin/lib/locale');
+const { themeStyle } = require('@joplin/lib/theme');
 
 function DialogButtonRow(props) {
 	const theme = themeStyle(props.themeId);

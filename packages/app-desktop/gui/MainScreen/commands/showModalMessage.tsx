@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CommandDeclaration, CommandRuntime, CommandContext } from '@joplinapp/lib/services/CommandService';
+import { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 
 export const declaration:CommandDeclaration = {
 	name: 'showModalMessage',

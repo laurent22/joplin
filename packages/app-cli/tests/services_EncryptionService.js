@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
 
 
-const time = require('@joplinapp/lib/time').default;
+const time = require('@joplin/lib/time').default;
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Note = require('@joplinapp/lib/models/Note.js');
-const Tag = require('@joplinapp/lib/models/Tag.js');
-const { Database } = require('@joplinapp/lib/database.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const BaseItem = require('@joplinapp/lib/models/BaseItem.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const MasterKey = require('@joplinapp/lib/models/MasterKey');
-const SyncTargetRegistry = require('@joplinapp/lib/SyncTargetRegistry.js');
-const EncryptionService = require('@joplinapp/lib/services/EncryptionService.js');
+const Folder = require('@joplin/lib/models/Folder.js');
+const Note = require('@joplin/lib/models/Note.js');
+const Tag = require('@joplin/lib/models/Tag.js');
+const { Database } = require('@joplin/lib/database.js');
+const Setting = require('@joplin/lib/models/Setting').default;
+const BaseItem = require('@joplin/lib/models/BaseItem.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const MasterKey = require('@joplin/lib/models/MasterKey');
+const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
+const EncryptionService = require('@joplin/lib/services/EncryptionService.js');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

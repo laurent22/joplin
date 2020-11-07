@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from '@joplinapp/lib/services/synchronizer/gui/useSyncTargetUpgrade';
+import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from '@joplin/lib/services/synchronizer/gui/useSyncTargetUpgrade';
 
 const { render } = require('react-dom');
 const ipcRenderer = require('electron').ipcRenderer;
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 const bridge = require('electron').remote.require('./bridge').default;
 
 function useAppCloseHandler(upgradeResult:SyncTargetUpgradeResult) {

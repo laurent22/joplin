@@ -1,4 +1,4 @@
-const utils = require('@joplinapp/tools/gulp/utils');
+const utils = require('@joplin/tools/gulp/utils');
 const fs = require('fs-extra');
 const md5 = require('md5');
 
@@ -47,7 +47,7 @@ async function main() {
 	await fs.mkdirp(outputDir);
 
 	const encodedFiles = [];
-	const sourceAssetDir = `${rootDir}/node_modules/@joplinapp/renderer/assets`;
+	const sourceAssetDir = `${rootDir}/node_modules/@joplin/renderer/assets`;
 	const files = walk(sourceAssetDir);
 
 	for (const file of files) {

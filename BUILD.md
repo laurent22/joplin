@@ -85,7 +85,7 @@ You can specify additional parameters when running the desktop or CLI applicatio
 
 Since Joplin uses Lerna, adding a new dependency should not be done using `npm i -s ...`. Instead you should use the `lerna add` command, which will take care of adding the package while handling the linked packages correctly. For example, to add the package "leftpad" to the "app-desktop" sub-package, you would run:
 
-	npx lerna add leftpad --scope=@joplinapp/app-desktop
+	npx lerna add leftpad --scope=@joplin/app-desktop
 
 Note that you should most likely always specify a scope because otherwise it will add the package to all the sub-packages.
 

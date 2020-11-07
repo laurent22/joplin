@@ -1,11 +1,11 @@
-# `@joplinapp/app-desktop`
+# `@joplin/app-desktop`
 
 > TODO: description
 
 ## Usage
 
 ```
-const appDesktop = require('@joplinapp/app-desktop');
+const appDesktop = require('@joplin/app-desktop');
 
 // TODO: DEMONSTRATE API
 ```

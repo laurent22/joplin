@@ -1,7 +1,7 @@
-import SpellCheckerService from '@joplinapp/lib/services/spellChecker/SpellCheckerService';
+import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import bridge from '../../../../../services/bridge';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextMenu';
-const Resource = require('@joplinapp/lib/models/Resource');
+const Resource = require('@joplin/lib/models/Resource');
 
 // x and y are the absolute coordinates, as returned by the context-menu event
 // handler on the webContent. This function will return null if the point is

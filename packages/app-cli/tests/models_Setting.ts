@@ -1,4 +1,4 @@
-import Setting from '@joplinapp/lib/models/Setting';
+import Setting from '@joplin/lib/models/Setting';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 

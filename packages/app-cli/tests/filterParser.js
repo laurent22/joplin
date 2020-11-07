@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
-const filterParser = require('@joplinapp/lib/services/searchengine/filterParser.js').default;
-// import filterParser from '@joplinapp/lib/services/searchengine/filterParser.js';
+const filterParser = require('@joplin/lib/services/searchengine/filterParser.js').default;
+// import filterParser from '@joplin/lib/services/searchengine/filterParser.js';
 
 const makeTerm = (name, value, negated, quoted = false, wildcard = false) => {
 	if (name === 'text') { return { name, value, negated, quoted, wildcard }; }

@@ -1,13 +1,13 @@
-import { PaginationOrderDir } from '@joplinapp/lib/models/utils/types';
-import Api, { RequestMethod } from '@joplinapp/lib/services/rest/Api';
-import shim from '@joplinapp/lib/shim';
+import { PaginationOrderDir } from '@joplin/lib/models/utils/types';
+import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
+import shim from '@joplin/lib/shim';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplinapp/lib/models/Folder');
-const Resource = require('@joplinapp/lib/models/Resource');
-const Note = require('@joplinapp/lib/models/Note');
-const Tag = require('@joplinapp/lib/models/Tag');
-const NoteTag = require('@joplinapp/lib/models/NoteTag');
+const Folder = require('@joplin/lib/models/Folder');
+const Resource = require('@joplin/lib/models/Resource');
+const Note = require('@joplin/lib/models/Note');
+const Tag = require('@joplin/lib/models/Tag');
+const NoteTag = require('@joplin/lib/models/NoteTag');
 
 async function msleep(ms:number) {
 	return new Promise((resolve) => {

@@ -1,10 +1,10 @@
 import * as vm from 'vm';
-import Plugin from '@joplinapp/lib/services/plugins/Plugin';
-import sandboxProxy from '@joplinapp/lib/services/plugins/sandboxProxy';
-import BasePluginRunner from '@joplinapp/lib/services/plugins/BasePluginRunner';
-import executeSandboxCall from '@joplinapp/lib/services/plugins/utils/executeSandboxCall';
-import Global from '@joplinapp/lib/services/plugins/api/Global';
-import mapEventHandlersToIds, { EventHandlers } from '@joplinapp/lib/services/plugins/utils/mapEventHandlersToIds';
+import Plugin from '@joplin/lib/services/plugins/Plugin';
+import sandboxProxy from '@joplin/lib/services/plugins/sandboxProxy';
+import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
+import executeSandboxCall from '@joplin/lib/services/plugins/utils/executeSandboxCall';
+import Global from '@joplin/lib/services/plugins/api/Global';
+import mapEventHandlersToIds, { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 
 function createConsoleWrapper(pluginId:string) {
 	const wrapper:any = {};

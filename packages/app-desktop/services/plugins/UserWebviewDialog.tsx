@@ -1,6 +1,6 @@
-import { ButtonSpec } from '@joplinapp/lib/services/plugins/api/types';
-import PluginService from '@joplinapp/lib/services/plugins/PluginService';
-import WebviewController from '@joplinapp/lib/services/plugins/WebviewController';
+import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import WebviewController from '@joplin/lib/services/plugins/WebviewController';
 import * as React from 'react';
 import UserWebview, { Props as UserWebviewProps } from './UserWebview';
 import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';

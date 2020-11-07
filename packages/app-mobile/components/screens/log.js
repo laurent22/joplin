@@ -2,13 +2,13 @@ const React = require('react');
 
 const { FlatList, View, Text, Button, StyleSheet, Platform } = require('react-native');
 const { connect } = require('react-redux');
-const { reg } = require('@joplinapp/lib/registry.js');
+const { reg } = require('@joplin/lib/registry.js');
 const { ScreenHeader } = require('../screen-header.js');
-const time = require('@joplinapp/lib/time').default;
+const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('../global-style.js');
-const Logger = require('@joplinapp/lib/Logger').default;
+const Logger = require('@joplin/lib/Logger').default;
 const { BaseScreenComponent } = require('../base-screen.js');
-const { _ } = require('@joplinapp/lib/locale');
+const { _ } = require('@joplin/lib/locale');
 
 class LogScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {

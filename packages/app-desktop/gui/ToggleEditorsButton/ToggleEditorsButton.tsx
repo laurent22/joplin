@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles_ from './styles';
-import { ToolbarButtonInfo } from '@joplinapp/lib/services/commands/ToolbarButtonUtils';
+import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 
 export enum Value {
 	Markdown = 'markdown',

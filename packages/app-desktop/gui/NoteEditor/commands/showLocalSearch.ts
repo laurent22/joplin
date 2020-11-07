@@ -1,5 +1,5 @@
-import { CommandRuntime, CommandDeclaration } from '@joplinapp/lib/services/CommandService';
-import { _ } from '@joplinapp/lib/locale';
+import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
+import { _ } from '@joplin/lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'showLocalSearch',

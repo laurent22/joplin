@@ -1,8 +1,8 @@
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const Tag = require('@joplinapp/lib/models/Tag.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const Folder = require('@joplin/lib/models/Folder.js');
+const Tag = require('@joplin/lib/models/Tag.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
 const ListWidget = require('tkwidgets/ListWidget.js');
-const _ = require('@joplinapp/lib/locale')._;
+const _ = require('@joplin/lib/locale')._;
 
 class FolderListWidget extends ListWidget {
 	constructor() {

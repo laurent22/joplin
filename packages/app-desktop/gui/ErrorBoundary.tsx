@@ -1,5 +1,5 @@
 import * as React from 'react';
-import versionInfo from '@joplinapp/lib/versionInfo';
+import versionInfo from '@joplin/lib/versionInfo';
 const packageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
 

@@ -1,7 +1,7 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const { ReportService } = require('@joplinapp/lib/services/report.js');
+const Setting = require('@joplin/lib/models/Setting').default;
+const { ReportService } = require('@joplin/lib/services/report.js');
 const fs = require('fs-extra');
 
 class Command extends BaseCommand {

@@ -1,6 +1,6 @@
-import KeychainService from '@joplinapp/lib/services/keychain/KeychainService';
-import shim from '@joplinapp/lib/shim';
-import Setting from '@joplinapp/lib/models/Setting';
+import KeychainService from '@joplin/lib/services/keychain/KeychainService';
+import shim from '@joplin/lib/shim';
+import Setting from '@joplin/lib/models/Setting';
 
 const { db, asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
 

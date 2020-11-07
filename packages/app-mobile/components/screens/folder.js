@@ -2,13 +2,13 @@ const React = require('react');
 
 const { View, TextInput, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
-const Folder = require('@joplinapp/lib/models/Folder.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
+const Folder = require('@joplin/lib/models/Folder.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
 const { ScreenHeader } = require('../screen-header.js');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const { themeStyle } = require('../global-style.js');
-const { _ } = require('@joplinapp/lib/locale');
+const { _ } = require('@joplin/lib/locale');
 
 class FolderScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {

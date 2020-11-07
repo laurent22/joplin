@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 
-const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath } = require('@joplinapp/lib/path-utils');
+const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath } = require('@joplin/lib/path-utils');
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 
 process.on('unhandledRejection', (reason, p) => {

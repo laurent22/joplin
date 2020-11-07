@@ -1,6 +1,6 @@
 import * as React from 'react';
 const { connect } = require('react-redux');
-const { reg } = require('@joplinapp/lib/registry.js');
+const { reg } = require('@joplin/lib/registry.js');
 
 interface Props {
 	onDomReady: Function,

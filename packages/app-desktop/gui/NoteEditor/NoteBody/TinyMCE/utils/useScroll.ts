@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useRef } from 'react';
-import shim from '@joplinapp/lib/shim';
+import shim from '@joplin/lib/shim';
 
 interface HookDependencies {
 	editor:any,

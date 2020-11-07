@@ -1,5 +1,5 @@
-import { CommandDeclaration } from '@joplinapp/lib/services/CommandService';
-import { _ } from '@joplinapp/lib/locale';
+import { CommandDeclaration } from '@joplin/lib/services/CommandService';
+import { _ } from '@joplin/lib/locale';
 
 const declarations:CommandDeclaration[] = [
 	{

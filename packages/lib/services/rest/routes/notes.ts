@@ -25,7 +25,7 @@ const ArrayUtils = require('../../../ArrayUtils.js');
 const { netUtils } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
 const uri2path = require('file-uri-to-path');
-const { MarkupToHtml } = require('@joplinapp/renderer');
+const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../errors');
 
 let htmlToMdParser_:any = null;

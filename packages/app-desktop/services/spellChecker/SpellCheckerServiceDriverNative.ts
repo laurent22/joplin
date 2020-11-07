@@ -1,6 +1,6 @@
 // Provides spell checking feature via the native Electron built-in spell checker
 
-import SpellCheckerServiceDriverBase from '@joplinapp/lib/services/spellChecker/SpellCheckerServiceDriverBase';
+import SpellCheckerServiceDriverBase from '@joplin/lib/services/spellChecker/SpellCheckerServiceDriverBase';
 import bridge from '../bridge';
 
 export default class SpellCheckerServiceDriverNative extends SpellCheckerServiceDriverBase {

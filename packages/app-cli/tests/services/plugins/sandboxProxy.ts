@@ -1,4 +1,4 @@
-import sandboxProxy, { Target } from '@joplinapp/lib/services/plugins/sandboxProxy';
+import sandboxProxy, { Target } from '@joplin/lib/services/plugins/sandboxProxy';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('../../test-utils.js');
 

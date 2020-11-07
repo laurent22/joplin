@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Button, { ButtonLevel } from '../Button/Button';
-import { _ } from '@joplinapp/lib/locale';
+import { _ } from '@joplin/lib/locale';
 const styled = require('styled-components').default;
 
 interface Props {

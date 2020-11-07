@@ -9,7 +9,7 @@ const shim = require('../../shim').default;
 const { extractImageUrls } = require('../../markdownUtils').default;
 const { unique } = require('../../ArrayUtils');
 const { pregQuote } = require('../../string-utils-common');
-const { MarkupToHtml } = require('@joplinapp/renderer');
+const { MarkupToHtml } = require('@joplin/renderer');
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result:ImportExportResult) {

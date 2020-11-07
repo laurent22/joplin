@@ -2,17 +2,17 @@
 /* eslint prefer-const: 0*/
 
 
-const time = require('@joplinapp/lib/time').default;
+const time = require('@joplin/lib/time').default;
 const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('./test-utils.js');
-const SearchEngine = require('@joplinapp/lib/services/searchengine/SearchEngine');
-const Note = require('@joplinapp/lib/models/Note');
-const Folder = require('@joplinapp/lib/models/Folder');
-const Tag = require('@joplinapp/lib/models/Tag');
-const ItemChange = require('@joplinapp/lib/models/ItemChange');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const Resource = require('@joplinapp/lib/models/Resource.js');
-const shim = require('@joplinapp/lib/shim').default;
-const ResourceService = require('@joplinapp/lib/services/ResourceService.js');
+const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
+const Note = require('@joplin/lib/models/Note');
+const Folder = require('@joplin/lib/models/Folder');
+const Tag = require('@joplin/lib/models/Tag');
+const ItemChange = require('@joplin/lib/models/ItemChange');
+const Setting = require('@joplin/lib/models/Setting').default;
+const Resource = require('@joplin/lib/models/Resource.js');
+const shim = require('@joplin/lib/shim').default;
+const ResourceService = require('@joplin/lib/services/ResourceService.js');
 
 
 process.on('unhandledRejection', (reason, p) => {

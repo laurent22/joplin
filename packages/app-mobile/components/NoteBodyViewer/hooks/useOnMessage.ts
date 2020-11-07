@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-const shared = require('@joplinapp/lib/components/shared/note-screen-shared');
+const shared = require('@joplin/lib/components/shared/note-screen-shared');
 
 export default function useOnMessage(onCheckboxChange:Function, noteBody:string, onMarkForDownload:Function, onJoplinLinkClick:Function, onResourceLongPress:Function) {
 	return useCallback((event:any) => {

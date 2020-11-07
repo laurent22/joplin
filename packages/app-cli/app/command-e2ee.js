@@ -1,11 +1,11 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('@joplinapp/lib/locale');
-const EncryptionService = require('@joplinapp/lib/services/EncryptionService');
-const DecryptionWorker = require('@joplinapp/lib/services/DecryptionWorker');
-const BaseItem = require('@joplinapp/lib/models/BaseItem');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const shim = require('@joplinapp/lib/shim').default;
-const pathUtils = require('@joplinapp/lib/path-utils');
+const { _ } = require('@joplin/lib/locale');
+const EncryptionService = require('@joplin/lib/services/EncryptionService');
+const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
+const BaseItem = require('@joplin/lib/models/BaseItem');
+const Setting = require('@joplin/lib/models/Setting').default;
+const shim = require('@joplin/lib/shim').default;
+const pathUtils = require('@joplin/lib/path-utils');
 const imageType = require('image-type');
 const readChunk = require('read-chunk');
 

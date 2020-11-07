@@ -1,14 +1,14 @@
-import shim from '@joplinapp/lib/shim';
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const Note = require('@joplinapp/lib/models/Note.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const Resource = require('@joplinapp/lib/models/Resource.js');
+import shim from '@joplin/lib/shim';
+const Setting = require('@joplin/lib/models/Setting').default;
+const Note = require('@joplin/lib/models/Note.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const Resource = require('@joplin/lib/models/Resource.js');
 const bridge = require('electron').remote.require('./bridge').default;
-const ResourceFetcher = require('@joplinapp/lib/services/ResourceFetcher.js');
-const { reg } = require('@joplinapp/lib/registry.js');
-const joplinRendererUtils = require('@joplinapp/renderer').utils;
+const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
+const { reg } = require('@joplin/lib/registry.js');
+const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
-const mimeUtils = require('@joplinapp/lib/mime-utils.js').mime;
+const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const md5 = require('md5');
 
 export async function handleResourceDownloadMode(noteBody: string) {

@@ -1,10 +1,10 @@
 const { asyncTest, id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } = require('./test-utils.js');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const uuid = require('@joplinapp/lib/uuid').default;
-const Note = require('@joplinapp/lib/models/Note.js');
-const Folder = require('@joplinapp/lib/models/Folder.js');
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const uuid = require('@joplin/lib/uuid').default;
+const Note = require('@joplin/lib/models/Note.js');
+const Folder = require('@joplin/lib/models/Folder.js');
 
-const { ALL_NOTES_FILTER_ID } = require('@joplinapp/lib/reserved-ids.js');
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
 let testApp = null;
 

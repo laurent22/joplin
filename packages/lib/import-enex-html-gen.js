@@ -62,7 +62,7 @@ function enexXmlToHtml_(stream, resources) {
 	return new Promise((resolve) => {
 		const options = {};
 		const strict = false;
-		const saxStream = require('@joplinapp/fork-sax').createStream(strict, options);
+		const saxStream = require('@joplin/fork-sax').createStream(strict, options);
 
 		const section = {
 			type: 'text',

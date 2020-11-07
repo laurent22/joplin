@@ -1,4 +1,4 @@
-const Note = require('@joplinapp/lib/models/Note.js');
+const Note = require('@joplin/lib/models/Note.js');
 const TextWidget = require('tkwidgets/TextWidget.js');
 
 class NoteMetadataWidget extends TextWidget {

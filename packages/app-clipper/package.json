@@ -1,5 +1,5 @@
 {
-  "name": "@joplinapp/app-clipper",
+  "name": "@joplin/app-clipper",
   "private": true,
   "scripts": {
     "postinstall": "cd popup && npm install"

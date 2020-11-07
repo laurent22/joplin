@@ -1,14 +1,14 @@
 const React = require('react');
 
 const { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView } = require('react-native');
-const EncryptionService = require('@joplinapp/lib/services/EncryptionService');
+const EncryptionService = require('@joplin/lib/services/EncryptionService');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
-const { _ } = require('@joplinapp/lib/locale');
+const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
-const time = require('@joplinapp/lib/time').default;
-const shared = require('@joplinapp/lib/components/shared/encryption-config-shared.js');
+const time = require('@joplin/lib/time').default;
+const shared = require('@joplin/lib/components/shared/encryption-config-shared.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 

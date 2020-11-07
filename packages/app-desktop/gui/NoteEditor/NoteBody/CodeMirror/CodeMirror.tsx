@@ -12,20 +12,20 @@ import { RenderedBody, defaultRenderedBody } from './utils/types';
 import NoteTextViewer  from '../../../NoteTextViewer';
 import Editor from './Editor';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
-import Setting from '@joplinapp/lib/models/Setting';
-import { _ } from '@joplinapp/lib/locale';
+import Setting from '@joplin/lib/models/Setting';
+import { _ } from '@joplin/lib/locale';
 import bridge from '../../../../services/bridge';
-import markdownUtils from '@joplinapp/lib/markdownUtils';
-import shim from '@joplinapp/lib/shim';
+import markdownUtils from '@joplin/lib/markdownUtils';
+import shim from '@joplin/lib/shim';
 
-const Note = require('@joplinapp/lib/models/Note.js');
+const Note = require('@joplin/lib/models/Note.js');
 const { clipboard } = require('electron');
-const shared = require('@joplinapp/lib/components/shared/note-screen-shared.js');
+const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const { reg } = require('@joplinapp/lib/registry.js');
+const { reg } = require('@joplin/lib/registry.js');
 const dialogs = require('../../../dialogs');
-const { themeStyle } = require('@joplinapp/lib/theme');
+const { themeStyle } = require('@joplin/lib/theme');
 
 function markupRenderOptions(override: any = null) {
 	return { ...override };

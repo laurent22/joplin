@@ -39,10 +39,10 @@ module.exports = {
 			//        * module as they would be imported when the module is actually used.
 			//
 			{
-				'@joplinapp/lib': path.resolve(__dirname, '../lib/'),
-				'@joplinapp/renderer': path.resolve(__dirname, '../renderer/'),
-				'@joplinapp/tools': path.resolve(__dirname, '../tools/'),
-				'@joplinapp/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
+				'@joplin/lib': path.resolve(__dirname, '../lib/'),
+				'@joplin/renderer': path.resolve(__dirname, '../renderer/'),
+				'@joplin/tools': path.resolve(__dirname, '../tools/'),
+				'@joplin/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
 			},
 			{
 				get: (target, name) => {

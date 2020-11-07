@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const dirname = require('path').dirname;
-const { fileExtension, basename } = require('@joplinapp/lib/path-utils');
-const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
+const { fileExtension, basename } = require('@joplin/lib/path-utils');
+const markdownUtils = require('@joplin/lib/markdownUtils').default;
 
 const rootDir = dirname(dirname(__dirname));
 const welcomeDir = `${rootDir}/readme/welcome`;

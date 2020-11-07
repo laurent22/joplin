@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const request = require('request');
 
-const { fileExtension } = require('@joplinapp/lib/path-utils');
+const { fileExtension } = require('@joplin/lib/path-utils');
 const url = 'https://api.github.com/repos/laurent22/joplin/releases/latest';
 const readmePath = `${__dirname}/../../README.md`;
 

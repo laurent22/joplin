@@ -2,7 +2,7 @@
 
 
 const { asyncTest } = require('./test-utils.js');
-const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
+const markdownUtils = require('@joplin/lib/markdownUtils').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

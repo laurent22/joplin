@@ -1,5 +1,5 @@
 import { Props, Value } from '../ToggleEditorsButton';
-const { buildStyle } = require('@joplinapp/lib/theme');
+const { buildStyle } = require('@joplin/lib/theme');
 
 export default function styles(props:Props) {
 	return buildStyle(['ToggleEditorsButton', props.value], props.themeId, (theme: any) => {

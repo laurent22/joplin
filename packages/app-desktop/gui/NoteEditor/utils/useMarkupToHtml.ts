@@ -1,12 +1,12 @@
-import { PluginStates } from '@joplinapp/lib/services/plugins/reducer';
-import contentScriptsToRendererRules from '@joplinapp/lib/services/plugins/utils/contentScriptsToRendererRules';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import contentScriptsToRendererRules from '@joplin/lib/services/plugins/utils/contentScriptsToRendererRules';
 import { useCallback, useMemo } from 'react';
 import { ResourceInfos } from './types';
-import markupLanguageUtils from '@joplinapp/lib/markupLanguageUtils';
-import Setting from '@joplinapp/lib/models/Setting';
+import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
+import Setting from '@joplin/lib/models/Setting';
 
-const { themeStyle } = require('@joplinapp/lib/theme');
-const Note = require('@joplinapp/lib/models/Note');
+const { themeStyle } = require('@joplin/lib/theme');
+const Note = require('@joplin/lib/models/Note');
 
 interface HookDependencies {
 	themeId: number,

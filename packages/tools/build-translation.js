@@ -7,7 +7,7 @@
 
 const rootDir = `${__dirname}/../..`;
 
-const markdownUtils = require('@joplinapp/lib/markdownUtils').default;
+const markdownUtils = require('@joplin/lib/markdownUtils').default;
 const fs = require('fs-extra');
 const gettextParser = require('gettext-parser');
 
@@ -15,7 +15,7 @@ const localesDir = `${__dirname}/locales`;
 const libDir = `${rootDir}/packages/lib`;
 
 const { execCommand, isMac, insertContentIntoFile, filename, fileExtension } = require('./tool-utils.js');
-const { countryDisplayName, countryCodeOnly } = require('@joplinapp/lib/locale');
+const { countryDisplayName, countryCodeOnly } = require('@joplin/lib/locale');
 
 function parsePoFile(filePath) {
 	const content = fs.readFileSync(filePath);

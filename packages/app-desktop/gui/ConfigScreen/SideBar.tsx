@@ -1,6 +1,6 @@
 import * as React from 'react';
 const styled = require('styled-components').default;
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 
 interface Props {
 	selection: string,

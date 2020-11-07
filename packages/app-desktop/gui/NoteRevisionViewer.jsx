@@ -1,21 +1,21 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { themeStyle } = require('@joplinapp/lib/theme');
-const { _ } = require('@joplinapp/lib/locale');
+const { themeStyle } = require('@joplin/lib/theme');
+const { _ } = require('@joplin/lib/locale');
 const NoteTextViewer = require('./NoteTextViewer').default;
 const HelpButton = require('./HelpButton.min');
-const BaseModel = require('@joplinapp/lib/BaseModel').default;
-const Revision = require('@joplinapp/lib/models/Revision');
-const urlUtils = require('@joplinapp/lib/urlUtils');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const RevisionService = require('@joplinapp/lib/services/RevisionService');
-const shared = require('@joplinapp/lib/components/shared/note-screen-shared.js');
-const { MarkupToHtml } = require('@joplinapp/renderer');
-const time = require('@joplinapp/lib/time').default;
+const BaseModel = require('@joplin/lib/BaseModel').default;
+const Revision = require('@joplin/lib/models/Revision');
+const urlUtils = require('@joplin/lib/urlUtils');
+const Setting = require('@joplin/lib/models/Setting').default;
+const RevisionService = require('@joplin/lib/services/RevisionService');
+const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
+const { MarkupToHtml } = require('@joplin/renderer');
+const time = require('@joplin/lib/time').default;
 const ReactTooltip = require('react-tooltip');
-const { urlDecode, substrWithEllipsis } = require('@joplinapp/lib/string-utils');
+const { urlDecode, substrWithEllipsis } = require('@joplin/lib/string-utils');
 const bridge = require('electron').remote.require('./bridge').default;
-const markupLanguageUtils = require('@joplinapp/lib/markupLanguageUtils').default;
+const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 
 class NoteRevisionViewerComponent extends React.PureComponent {
 	constructor() {

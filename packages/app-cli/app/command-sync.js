@@ -1,17 +1,17 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('@joplinapp/lib/locale');
-const { OneDriveApiNodeUtils } = require('@joplinapp/lib/onedrive-api-node-utils.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const ResourceFetcher = require('@joplinapp/lib/services/ResourceFetcher');
-const Synchronizer = require('@joplinapp/lib/Synchronizer').default;
-const { reg } = require('@joplinapp/lib/registry.js');
+const { _ } = require('@joplin/lib/locale');
+const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
+const Setting = require('@joplin/lib/models/Setting').default;
+const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
+const Synchronizer = require('@joplin/lib/Synchronizer').default;
+const { reg } = require('@joplin/lib/registry.js');
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
-const SyncTargetRegistry = require('@joplinapp/lib/SyncTargetRegistry');
-const MigrationHandler = require('@joplinapp/lib/services/synchronizer/MigrationHandler').default;
+const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
+const MigrationHandler = require('@joplin/lib/services/synchronizer/MigrationHandler').default;
 
 class Command extends BaseCommand {
 	constructor() {

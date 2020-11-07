@@ -1,5 +1,5 @@
-import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from '@joplinapp/lib/services/CommandService';
-import { _ } from '@joplinapp/lib/locale';
+import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
+import { _ } from '@joplin/lib/locale';
 
 export const declaration:CommandDeclaration = {
 	name: 'newTodo',

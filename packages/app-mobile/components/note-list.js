@@ -2,9 +2,9 @@ const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
 const { FlatList, Text, StyleSheet, Button, View } = require('react-native');
-const { _ } = require('@joplinapp/lib/locale');
+const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
-const time = require('@joplinapp/lib/time').default;
+const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('./global-style.js');
 
 class NoteListComponent extends Component {

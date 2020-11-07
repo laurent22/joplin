@@ -1,7 +1,7 @@
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
 const MarkdownIt = require('markdown-it');
-const { setupLinkify } = require('@joplinapp/renderer');
+const { setupLinkify } = require('@joplin/renderer');
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;

@@ -3,9 +3,9 @@
 const electronApp = require('electron').app;
 const ElectronAppWrapper = require('./ElectronAppWrapper').default;
 const { initBridge } = require('./bridge');
-const Logger = require('@joplinapp/lib/Logger').default;
-const FsDriverNode = require('@joplinapp/lib/fs-driver-node').default;
-const envFromArgs = require('@joplinapp/lib/envFromArgs');
+const Logger = require('@joplin/lib/Logger').default;
+const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
+const envFromArgs = require('@joplin/lib/envFromArgs');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.error('Unhandled promise rejection', p, 'reason:', reason);

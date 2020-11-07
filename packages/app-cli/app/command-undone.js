@@ -1,5 +1,5 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('@joplinapp/lib/locale');
+const { _ } = require('@joplin/lib/locale');
 
 const CommandDone = require('./command-done.js');
 

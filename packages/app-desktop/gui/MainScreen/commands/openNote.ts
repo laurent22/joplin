@@ -1,6 +1,6 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplinapp/lib/services/CommandService';
-const Note = require('@joplinapp/lib/models/Note');
-const Folder = require('@joplinapp/lib/models/Folder');
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
+const Note = require('@joplin/lib/models/Note');
+const Folder = require('@joplin/lib/models/Folder');
 
 export const declaration:CommandDeclaration = {
 	name: 'openNote',

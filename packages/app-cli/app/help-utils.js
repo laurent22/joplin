@@ -1,6 +1,6 @@
-const { wrap } = require('@joplinapp/lib/string-utils.js');
-const Setting = require('@joplinapp/lib/models/Setting').default;
-const { _ } = require('@joplinapp/lib/locale');
+const { wrap } = require('@joplin/lib/string-utils.js');
+const Setting = require('@joplin/lib/models/Setting').default;
+const { _ } = require('@joplin/lib/locale');
 
 const MAX_WIDTH = 78;
 const INDENT = '    ';

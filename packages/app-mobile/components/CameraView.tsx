@@ -4,9 +4,9 @@ const Component = React.Component;
 const { connect } = require('react-redux');
 const { View, TouchableOpacity, Text, Dimensions } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { _ } = require('@joplinapp/lib/locale');
-const shim = require('@joplinapp/lib/shim').default;
-const Setting = require('@joplinapp/lib/models/Setting').default;
+const { _ } = require('@joplin/lib/locale');
+const shim = require('@joplin/lib/shim').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 
 Icon.loadFont();
 
