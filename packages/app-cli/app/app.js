@@ -1,6 +1,6 @@
 const BaseApplication = require('@joplin/lib/BaseApplication').default;
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
-const ResourceService = require('@joplin/lib/services/ResourceService');
+const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const Folder = require('@joplin/lib/models/Folder.js');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');

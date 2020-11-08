@@ -1,31 +1,24 @@
+import NoteResource from '../models/NoteResource';
+import BaseModel from '../BaseModel';
+import BaseService from './BaseService';
+import Setting from '../models/Setting';
+import shim from '../shim';
 const ItemChange = require('../models/ItemChange');
-const NoteResource = require('../models/NoteResource').default;
 const Note = require('../models/Note');
 const Resource = require('../models/Resource');
-const BaseModel = require('../BaseModel').default;
-const BaseService = require('./BaseService').default;
 const SearchEngine = require('./searchengine/SearchEngine');
-const Setting = require('../models/Setting').default;
-const shim = require('../shim').default;
 const ItemChangeUtils = require('./ItemChangeUtils');
 const { sprintf } = require('sprintf-js');
 
-class ResourceService extends BaseService {
-	constructor() {
-		super();
+export default class ResourceService extends BaseService {
 
-		this.maintenanceCalls_ = [];
-		this.maintenanceTimer1_ = null;
-		this.maintenanceTimer2_ = null;
-	}
+	private static isRunningInBackground_:boolean = false;
 
-	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new ResourceService();
-		return this.instance_;
-	}
+	private maintenanceCalls_:boolean[] = [];
+	private maintenanceTimer1_:any = null
+	private maintenanceTimer2_:any = null
 
-	async indexNoteResources() {
+	public async indexNoteResources() {
 		this.logger().info('ResourceService::indexNoteResources: Start');
 
 		await ItemChange.waitForAllSaved();
@@ -46,10 +39,10 @@ class ResourceService extends BaseService {
 
 			if (!changes.length) break;
 
-			const noteIds = changes.map(a => a.item_id);
+			const noteIds = changes.map((a:any) => a.item_id);
 			const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN ("${noteIds.join('","')}")`);
 
-			const noteById = noteId => {
+			const noteById = (noteId:string) => {
 				for (let i = 0; i < notes.length; i++) {
 					if (notes[i].id === noteId) return notes[i];
 				}
@@ -77,7 +70,7 @@ class ResourceService extends BaseService {
 							break;
 						}
 
-						await this.setAssociatedResources_(note);
+						await this.setAssociatedResources(note.id, note.body);
 					} else {
 						this.logger().warn(`ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ${change.item_id}`);
 					}
@@ -102,12 +95,12 @@ class ResourceService extends BaseService {
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}
 
-	async setAssociatedResources_(note) {
-		const resourceIds = await Note.linkedResourceIds(note.body);
-		await NoteResource.setAssociatedResources(note.id, resourceIds);
+	public async setAssociatedResources(noteId:string, noteBody:string) {
+		const resourceIds = await Note.linkedResourceIds(noteBody);
+		await NoteResource.setAssociatedResources(noteId, resourceIds);
 	}
 
-	async deleteOrphanResources(expiryDelay = null) {
+	public async deleteOrphanResources(expiryDelay:number = null) {
 		if (expiryDelay === null) expiryDelay = Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000;
 		const resourceIds = await NoteResource.orphanResources(expiryDelay);
 		this.logger().info('ResourceService::deleteOrphanResources:', resourceIds);
@@ -118,7 +111,7 @@ class ResourceService extends BaseService {
 				const note = await Note.load(results[0].id);
 				if (note) {
 					this.logger().info(sprintf('ResourceService::deleteOrphanResources: Skipping deletion of resource %s because it is still referenced in note %s. Re-indexing note content to fix the issue.', resourceId, note.id));
-					await this.setAssociatedResources_(note);
+					await this.setAssociatedResources(note.id, note.body);
 				}
 			} else {
 				await Resource.delete(resourceId);
@@ -126,7 +119,7 @@ class ResourceService extends BaseService {
 		}
 	}
 
-	static async autoSetFileSize(resourceId, filePath, waitTillExists = true) {
+	private static async autoSetFileSize(resourceId:string, filePath:string, waitTillExists:boolean = true) {
 		const itDoes = await shim.fsDriver().waitTillExists(filePath, waitTillExists ? 10000 : 0);
 		if (!itDoes) {
 			// this.logger().warn('Trying to set file size on non-existent resource:', resourceId, filePath);
@@ -136,7 +129,7 @@ class ResourceService extends BaseService {
 		await Resource.setFileSizeOnly(resourceId, fileStat.size);
 	}
 
-	static async autoSetFileSizes() {
+	public static async autoSetFileSizes() {
 		const resources = await Resource.needFileSizeSet();
 
 		for (const r of resources) {
@@ -144,7 +137,7 @@ class ResourceService extends BaseService {
 		}
 	}
 
-	async maintenance() {
+	public async maintenance() {
 		this.maintenanceCalls_.push(true);
 		try {
 			await this.indexNoteResources();
@@ -154,7 +147,7 @@ class ResourceService extends BaseService {
 		}
 	}
 
-	static runInBackground() {
+	public static runInBackground() {
 		if (this.isRunningInBackground_) return;
 
 		this.isRunningInBackground_ = true;
@@ -169,13 +162,13 @@ class ResourceService extends BaseService {
 		}, 1000 * 60 * 60 * 4);
 	}
 
-	async cancelTimers() {
+	public async cancelTimers() {
 		if (this.maintenanceTimer1_) {
-			shim.clearTimeout(this.maintenanceTimer1);
+			shim.clearTimeout(this.maintenanceTimer1_);
 			this.maintenanceTimer1_ = null;
 		}
 		if (this.maintenanceTimer2_) {
-			shim.clearInterval(this.maintenanceTimer2);
+			shim.clearInterval(this.maintenanceTimer2_);
 			this.maintenanceTimer2_ = null;
 		}
 
@@ -188,6 +181,13 @@ class ResourceService extends BaseService {
 			}, 100);
 		});
 	}
-}
 
-module.exports = ResourceService;
+	private static instance_:ResourceService = null;
+
+	public static instance() {
+		if (this.instance_) return this.instance_;
+		this.instance_ = new ResourceService();
+		return this.instance_;
+	}
+
+}

@@ -176,6 +176,9 @@ packages/app-cli/tests/services_InteropService.js.map
 packages/app-cli/tests/services_PluginService.d.ts
 packages/app-cli/tests/services_PluginService.js
 packages/app-cli/tests/services_PluginService.js.map
+packages/app-cli/tests/services_ResourceService.d.ts
+packages/app-cli/tests/services_ResourceService.js
+packages/app-cli/tests/services_ResourceService.js.map
 packages/app-cli/tests/services_keychainService.d.ts
 packages/app-cli/tests/services_keychainService.js
 packages/app-cli/tests/services_keychainService.js.map
@@ -890,6 +893,9 @@ packages/lib/services/ResourceEditWatcher/index.js.map
 packages/lib/services/ResourceEditWatcher/reducer.d.ts
 packages/lib/services/ResourceEditWatcher/reducer.js
 packages/lib/services/ResourceEditWatcher/reducer.js.map
+packages/lib/services/ResourceService.d.ts
+packages/lib/services/ResourceService.js
+packages/lib/services/ResourceService.js.map
 packages/lib/services/SettingUtils.d.ts
 packages/lib/services/SettingUtils.js
 packages/lib/services/SettingUtils.js.map

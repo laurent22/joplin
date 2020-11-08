@@ -12,7 +12,7 @@ const ItemChange = require('@joplin/lib/models/ItemChange');
 const Setting = require('@joplin/lib/models/Setting').default;
 const Resource = require('@joplin/lib/models/Resource.js');
 const shim = require('@joplin/lib/shim').default;
-const ResourceService = require('@joplin/lib/services/ResourceService.js');
+const ResourceService = require('@joplin/lib/services/ResourceService').default;
 
 
 process.on('unhandledRejection', (reason, p) => {

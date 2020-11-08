@@ -1,37 +1,13 @@
-/* eslint-disable no-unused-vars */
+import time from '@joplin/lib/time';
+import NoteResource from '@joplin/lib/models/NoteResource';
+import ResourceService from '@joplin/lib/services/ResourceService';
+import shim from '@joplin/lib/shim';
 
-
-const time = require('@joplin/lib/time').default;
-const { asyncTest, resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
-const InteropService = require('@joplin/lib/services/interop/InteropService').default;
+const { asyncTest, resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
-const Tag = require('@joplin/lib/models/Tag.js');
-const NoteTag = require('@joplin/lib/models/NoteTag.js');
 const Resource = require('@joplin/lib/models/Resource.js');
-const ItemChange = require('@joplin/lib/models/ItemChange.js');
-const NoteResource = require('@joplin/lib/models/NoteResource').default;
-const ResourceService = require('@joplin/lib/services/ResourceService.js');
-const fs = require('fs-extra');
-const ArrayUtils = require('@joplin/lib/ArrayUtils');
-const ObjectUtils = require('@joplin/lib/ObjectUtils');
-const shim = require('@joplin/lib/shim').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
-function exportDir() {
-	return `${__dirname}/export`;
-}
-
-function fieldsEqual(model1, model2, fieldNames) {
-	for (let i = 0; i < fieldNames.length; i++) {
-		const f = fieldNames[i];
-		expect(model1[f]).toBe(model2[f], `For key ${f}`);
-	}
-}
 
 describe('services_ResourceService', function() {
 
@@ -99,7 +75,7 @@ describe('services_ResourceService', function() {
 
 	it('should not delete a resource that has never been associated with any note, because it probably means the resource came via sync, and associated note has not arrived yet', asyncTest(async () => {
 		const service = new ResourceService();
-		const resource = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
 
 		await service.indexNoteResources();
 		await service.deleteOrphanResources(0);
@@ -130,9 +106,8 @@ describe('services_ResourceService', function() {
 		const service = new ResourceService();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		note1 = await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
-		const resource1 = (await Resource.all())[0];
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 
 		await service.indexNoteResources();
 
@@ -211,5 +186,31 @@ describe('services_ResourceService', function() {
 		const nr = (await NoteResource.all())[0];
 		expect(!!nr.is_associated).toBe(true); // And it should have fixed the situation by re-indexing the note content
 	}));
+
+	// it('should auto-delete resource even if the associated note was deleted immediately', asyncTest(async () => {
+	// 	// Previoulsy, when a resource was be attached to a note, then the
+	// 	// note was immediately deleted, the ResourceService would not have
+	// 	// time to quick in an index the resource/note relation. It means
+	// 	// that when doing the orphan resource deletion job, those
+	// 	// resources would permanently stay behing.
+	// 	// https://github.com/laurent22/joplin/issues/932
+
+	// 	const service = new ResourceService();
+
+	// 	let note = await Note.save({});
+	// 	note = await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
+	// 	const resource = (await Resource.all())[0];
+
+	// 	const noteIds = await NoteResource.associatedNoteIds(resource.id);
+
+	// 	expect(noteIds[0]).toBe(note.id);
+
+	// 	await Note.save({ id: note.id, body: '' });
+
+	// 	await resourceService().indexNoteResources();
+	// 	await service.deleteOrphanResources(0);
+
+	// 	expect((await Resource.all()).length).toBe(0);
+	// }));
 
 });

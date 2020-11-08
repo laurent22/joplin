@@ -8,7 +8,7 @@ const Resource = require('@joplin/lib/models/Resource');
 const Note = require('@joplin/lib/models/Note');
 const Tag = require('@joplin/lib/models/Tag');
 const NoteTag = require('@joplin/lib/models/NoteTag');
-const ResourceService = require('@joplin/lib/services/ResourceService');
+const ResourceService = require('@joplin/lib/services/ResourceService').default;
 
 async function msleep(ms:number) {
 	return new Promise((resolve) => {

@@ -4,7 +4,7 @@
 const time = require('@joplin/lib/time').default;
 const { asyncTest, fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
-const ResourceService = require('@joplin/lib/services/ResourceService');
+const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const ItemChangeUtils = require('@joplin/lib/services/ItemChangeUtils');
 const Note = require('@joplin/lib/models/Note');
 const Setting = require('@joplin/lib/models/Setting').default;

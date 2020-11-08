@@ -1,7 +1,7 @@
 const Resource = require('../models/Resource');
 const Setting = require('../models/Setting').default;
 const BaseService = require('./BaseService').default;
-const ResourceService = require('./ResourceService');
+const ResourceService = require('./ResourceService').default;
 const { Dirnames } = require('./synchronizer/utils/types');
 const Logger = require('../Logger').default;
 const EventEmitter = require('events');
