@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
-import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
+import { resourcesStatus } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -171,13 +171,11 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	};
 
 	const insertResourcesIntoContent = useCallback(async (filePaths:string[] = null, options:any = null) => {
-		const resourceMd = await commandAttachFileToBody('', filePaths, options);
+		const resourceMd = await props.attachNoteToBody('', filePaths, options);
 		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
 		editor.insertContent(result.html);
-		// editor.fire('joplinChange');
-		// dispatchDidUpdate(editor);
-	}, [props.markupToHtml, editor]);
+	}, [props.markupToHtml, props.attachNoteToBody, editor]);
 
 	const insertResourcesIntoContentRef = useRef(null);
 	insertResourcesIntoContentRef.current = insertResourcesIntoContent;
@@ -979,7 +977,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		}
 
 		async function onPaste(event:any) {
-			const resourceMds = await handlePasteEvent(event);
+			const resourceMds = await props.handlePasteEvent(event);
 			if (resourceMds.length) {
 				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
 				editor.insertContent(result.html);
@@ -1039,7 +1037,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				console.warn('Error removing events', error);
 			}
 		};
-	}, [props.onWillChange, props.onChange, props.contentMarkupLanguage, props.contentOriginalCss, editor]);
+	}, [props.onWillChange, props.onChange, props.contentMarkupLanguage, props.contentOriginalCss, editor, props.handlePasteEvent]);
 
 	// -----------------------------------------------------------------------------------------
 	// Destroy the editor when unmounting

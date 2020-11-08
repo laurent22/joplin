@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 
 // eslint-disable-next-line no-unused-vars
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
-import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize } from './utils';
 import Toolbar from './Toolbar';
@@ -129,7 +128,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						editorRef.current.insertAtCursor(cmd.value.markdownTags.join('\n'));
 					} else if (cmd.value.type === 'files') {
 						const pos = cursorPositionToTextOffset(editorRef.current.getCursor(), props.content);
-						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL, position: pos });
+						const newBody = await props.attachNoteToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL, position: pos });
 						editorRef.current.updateBody(newBody);
 					} else {
 						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
@@ -187,7 +186,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 							const cursor = editorRef.current.getCursor();
 							const pos = cursorPositionToTextOffset(cursor, props.content);
 
-							const newBody = await commandAttachFileToBody(props.content, null, { position: pos });
+							const newBody = await props.attachNoteToBody(props.content, null, { position: pos });
 							if (newBody) editorRef.current.updateBody(newBody);
 						},
 						textNumberedList: () => {
@@ -212,15 +211,15 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				return commandOutput;
 			},
 		};
-	}, [props.content, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+	}, [props.content, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody, props.attachNoteToBody]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
-		const resourceMds = await handlePasteEvent(event);
+		const resourceMds = await props.handlePasteEvent(event);
 		if (!resourceMds.length) return;
 		if (editorRef.current) {
 			editorRef.current.replaceSelection(resourceMds.join('\n'));
 		}
-	}, []);
+	}, [props.handlePasteEvent]);
 
 	const editorCutText = useCallback(() => {
 		if (editorRef.current) {

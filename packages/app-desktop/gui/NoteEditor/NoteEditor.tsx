@@ -29,7 +29,11 @@ import NoteTitleBar from './NoteTitle/NoteTitleBar';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
 
+const { clipboard } = require('electron');
+const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+const md5 = require('md5');
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
@@ -363,6 +367,70 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
+	const attachNoteToBody = useCallback(async (body:string, filePaths:string[] = null, options:any = null) => {
+		options = {
+			createFileURL: false,
+			position: 0,
+			...options,
+		};
+	
+		if (!filePaths) {
+			filePaths = bridge().showOpenDialog({
+				properties: ['openFile', 'createDirectory', 'multiSelections'],
+			});
+			if (!filePaths || !filePaths.length) return null;
+		}
+	
+		for (let i = 0; i < filePaths.length; i++) {
+			const filePath = filePaths[i];
+			try {
+				reg.logger().info(`Attaching ${filePath}`);
+				const newBody = await shim.attachFileToNoteBody(formNote.id, body, filePath, options.position, {
+					createFileURL: options.createFileURL,
+					resizeLargeImages: 'ask',
+				});
+	
+				if (!newBody) {
+					reg.logger().info('File attachment was cancelled');
+					return null;
+				}
+	
+				body = newBody;
+				reg.logger().info('File was attached.');
+			} catch (error) {
+				reg.logger().error(error);
+				bridge().showErrorMessageBox(error.message);
+			}
+		}
+	
+		return body;
+	}, [formNote.id]);
+
+	const handlePasteEvent = useCallback(async (event:any) => {
+		const output = [];
+		const formats = clipboard.availableFormats();
+		for (let i = 0; i < formats.length; i++) {
+			const format = formats[i].toLowerCase();
+			const formatType = format.split('/')[0];
+	
+			if (formatType === 'image') {
+				if (event) event.preventDefault();
+	
+				const image = clipboard.readImage();
+	
+				const fileExt = mimeUtils.toFileExtension(format);
+				const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
+	
+				await shim.writeImageToFile(image, format, filePath);
+				const md = await attachNoteToBody('', [filePath]);
+				await shim.fsDriver().remove(filePath);
+	
+				if (md) output.push(md);
+			}
+		}
+		return output;
+	}, [attachNoteToBody]);
+
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 
 	const editorProps:NoteBodyEditorProps = {
@@ -389,6 +457,8 @@ function NoteEditor(props: NoteEditorProps) {
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
 		locale: Setting.value('locale'),
+		attachNoteToBody: attachNoteToBody,
+		handlePasteEvent: handlePasteEvent,
 		onDrop: onDrop,
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,

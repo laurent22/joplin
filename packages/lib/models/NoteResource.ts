@@ -43,6 +43,13 @@ export default class NoteResource extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
+	static async addOrphanedResource(resourceId:string) {
+		await this.db().exec({
+			sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)',
+			params: ['', resourceId, 0, 0],
+		});
+	}
+
 	static async addOrphanedResources() {
 		const missingResources = await this.db().selectAll('SELECT id FROM resources WHERE id NOT IN (SELECT DISTINCT resource_id FROM note_resources)');
 		const queries = [];

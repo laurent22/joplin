@@ -60,6 +60,8 @@ export interface NoteBodyEditorProps {
 	resourceInfos: ResourceInfos,
 	locale: string,
 	onDrop: Function,
+	attachNoteToBody: Function,
+	handlePasteEvent: Function,
 	noteToolbarButtonInfos: ToolbarButtonInfo[],
 	plugins: PluginStates,
 }

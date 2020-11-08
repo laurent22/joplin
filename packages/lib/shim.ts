@@ -184,7 +184,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	attachFileToNoteBody: async (_body:string, _filePath:string, _position:number, _options:any):Promise<string> => {
+	attachFileToNoteBody: async (_noteId:string, _body:string, _filePath:string, _position:number, _options:any):Promise<string> => {
 		throw new Error('Not implemented');
 	},
 

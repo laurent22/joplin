@@ -7,6 +7,7 @@ const FsDriverNode = require('./fs-driver-node').default;
 const mimeUtils = require('./mime-utils.js').mime;
 const Note = require('./models/Note.js');
 const Resource = require('./models/Resource.js');
+const ResourceService = require('./services/ResourceService').default;
 const urlValidator = require('valid-url');
 const { _ } = require('./locale');
 const http = require('http');
@@ -244,7 +245,7 @@ function shimInit(sharp = null, keytar = null) {
 		return Resource.save(resource, saveOptions);
 	};
 
-	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
+	shim.attachFileToNoteBody = async function(noteId, noteBody, filePath, position = null, options = null) {
 		options = Object.assign({}, {
 			createFileURL: false,
 		}, options);
@@ -277,17 +278,22 @@ function shimInit(sharp = null, keytar = null) {
 
 		if (noteBody) newBody.push(noteBody.substr(position));
 
-		return newBody.join('\n\n');
+		const output = newBody.join('\n\n');
+
+		await ResourceService.instance().setAssociatedResources(noteId, output)
+
+		return output;
 	};
 
 	shim.attachFileToNote = async function(note, filePath, position = null, options = null) {
-		const newBody = await shim.attachFileToNoteBody(note.body, filePath, position, options);
+		const newBody = await shim.attachFileToNoteBody(note.id, note.body, filePath, position, options);
 		if (!newBody) return null;
 
 		const newNote = Object.assign({}, note, {
 			body: newBody,
 		});
-		return await Note.save(newNote);
+
+		return Note.save(newNote);
 	};
 
 	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
