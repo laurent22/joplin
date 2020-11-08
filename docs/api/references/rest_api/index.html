@@ -916,6 +916,8 @@ async function fetchAllNotes() {
 <p>Gets resource with ID :id</p>
 <h2>GET /resources/:id/file<a name="get-resources-id-file" href="#get-resources-id-file" class="heading-anchor">🔗</a></h2>
 <p>Gets the actual file associated with this resource.</p>
+<h2>GET /resources/:id/notes<a name="get-resources-id-notes" href="#get-resources-id-notes" class="heading-anchor">🔗</a></h2>
+<p>Gets the notes (IDs) associated with a resource.</p>
 <h2>POST /resources<a name="post-resources" href="#post-resources" class="heading-anchor">🔗</a></h2>
 <p>Creates a new resource</p>
 <p>Creating a new resource is special because you also need to upload the file. Unlike other API calls, this one must have the &quot;multipart/form-data&quot; Content-Type. The file data must be passed to the &quot;data&quot; form field, and the other properties to the &quot;props&quot; form field. An example of a valid call with cURL would be:</p>

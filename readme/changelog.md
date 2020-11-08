@@ -1,5 +1,21 @@
 # Joplin changelog
 
+## [v1.4.7](https://github.com/laurent22/joplin/releases/tag/v1.4.7) - 2020-11-07T18:23:29Z
+
+IMPORTANT: If you use the Clipper API, please note that there are a few breaking changes in this version. See this link for more information: https://github.com/laurent22/joplin/pull/3983
+
+* * * 
+
+- New: Api: Added ability to watch resource file
+- New: Api: Added way to get the notes associated with a resource
+- Improved: Plugins: Force plugin devtool dialog to be detached
+
+* * *
+
+- New: API: Adds ability to paginate data ([#3983](https://github.com/laurent22/joplin/issues/3983))
+- New: Adds spell checker support for Rich Text editor ([#3974](https://github.com/laurent22/joplin/issues/3974))
+- Improved: Change Markdown rendering to align with CommonMark spec ([#3839](https://github.com/laurent22/joplin/issues/3839))
+
 ## [v1.3.18](https://github.com/laurent22/joplin/releases/tag/v1.3.18) - 2020-11-06T12:07:02Z
 
 - Regression: Random crash when syncing due to undefined tags ([#4051](https://github.com/laurent22/joplin/issues/4051))

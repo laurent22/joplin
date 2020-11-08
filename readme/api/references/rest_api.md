@@ -309,6 +309,10 @@ Gets resource with ID :id
 
 Gets the actual file associated with this resource.
 
+## GET /resources/:id/notes
+
+Gets the notes (IDs) associated with a resource.
+
 ## POST /resources
 
 Creates a new resource
