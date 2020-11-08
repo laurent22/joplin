@@ -59,6 +59,7 @@ const commands = [
 	require('./gui/MainScreen/commands/showNoteContentProperties'),
 	require('./gui/MainScreen/commands/showNoteProperties'),
 	require('./gui/MainScreen/commands/showShareNoteDialog'),
+	require('./gui/MainScreen/commands/showSpellCheckerMenu'),
 	require('./gui/MainScreen/commands/toggleNoteList'),
 	require('./gui/MainScreen/commands/toggleSideBar'),
 	require('./gui/MainScreen/commands/toggleVisiblePanes'),
@@ -453,6 +454,8 @@ class Application extends BaseApplication {
 	}
 
 	setupContextMenu() {
+		const MenuItem = bridge().MenuItem;
+
 		// The context menu must be setup in renderer process because that's where
 		// the spell checker service lives.
 		require('electron-context-menu')({
@@ -463,7 +466,7 @@ class Application extends BaseApplication {
 			},
 
 			menu: (actions:any, props:any) => {
-				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions);
+				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item:any) => new MenuItem(item));
 
 				const output = [
 					actions.cut(),

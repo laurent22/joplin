@@ -21,6 +21,8 @@ export const StyledRoot = styled.a<RootProps>`
 	box-sizing: border-box;
 	color: ${(props:RootProps) => props.theme.color3};
 	font-size: ${(props:RootProps) => props.theme.toolbarIconSize * 0.8}px;
+	padding-left: 5px;
+	padding-right: 5px;
 
 	&:hover {
 		background-color: ${(props:RootProps) => props.disabled ? 'none' : props.theme.backgroundColorHover3};

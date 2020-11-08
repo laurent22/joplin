@@ -35,9 +35,6 @@ export default function(editor:any) {
 		const element = contextMenuElement(editor, params.x, params.y);
 		if (!element) return;
 
-		const Menu = bridge().Menu;
-		const MenuItem = bridge().MenuItem;
-
 		let itemType:ContextMenuItemType = ContextMenuItemType.None;
 		let resourceId = '';
 		let linkToCopy = null;
@@ -65,27 +62,28 @@ export default function(editor:any) {
 			isReadOnly: false,
 		};
 
-		const menu = new Menu();
+		const template = [];
 
 		for (const itemName in contextMenuItems) {
 			const item = contextMenuItems[itemName];
 
 			if (!item.isActive(itemType, contextMenuActionOptions.current)) continue;
 
-			menu.append(new MenuItem({
+			template.push({
 				label: item.label,
 				click: () => {
 					item.onAction(contextMenuActionOptions.current);
 				},
-			}));
+			});
 		}
 
 		const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
 
 		for (const item of spellCheckerMenuItems) {
-			menu.append(item);
+			template.push(item);
 		}
 
-		menu.popup();
+		const menu = bridge().Menu.buildFromTemplate(template);
+		menu.popup(bridge().window());
 	});
 }

@@ -5,6 +5,7 @@ import BaseService from './services/BaseService';
 import reducer from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
 import { _, setLocale } from './locale';
+import KvStore from './services/KvStore';
 
 const { createStore, applyMiddleware } = require('redux');
 const { defaultState, stateUtils } = require('./reducer');
@@ -41,7 +42,6 @@ const RevisionService = require('./services/RevisionService');
 const ResourceService = require('./services/RevisionService');
 const DecryptionWorker = require('./services/DecryptionWorker');
 const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
-const KvStore = require('./services/KvStore');
 const MigrationService = require('./services/MigrationService');
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
@@ -89,7 +89,7 @@ export default class BaseApplication {
 		await reg.cancelTimers();
 
 		this.eventEmitter_.removeAllListeners();
-		KvStore.instance_ = null;
+		KvStore.destroyInstance();
 		BaseModel.setDb(null);
 		reg.setDb(null);
 

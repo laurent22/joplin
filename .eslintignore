@@ -427,6 +427,9 @@ packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js.map
 packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.d.ts
 packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js
 packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js.map
+packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.d.ts
+packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js
+packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js.map
 packages/app-desktop/gui/MainScreen/commands/toggleEditors.d.ts
 packages/app-desktop/gui/MainScreen/commands/toggleEditors.js
 packages/app-desktop/gui/MainScreen/commands/toggleEditors.js.map
@@ -886,6 +889,9 @@ packages/lib/services/CommandService.js.map
 packages/lib/services/KeymapService.d.ts
 packages/lib/services/KeymapService.js
 packages/lib/services/KeymapService.js.map
+packages/lib/services/KvStore.d.ts
+packages/lib/services/KvStore.js
+packages/lib/services/KvStore.js.map
 packages/lib/services/ResourceEditWatcher/index.d.ts
 packages/lib/services/ResourceEditWatcher/index.js
 packages/lib/services/ResourceEditWatcher/index.js.map

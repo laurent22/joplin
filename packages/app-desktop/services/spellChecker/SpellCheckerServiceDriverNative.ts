@@ -25,11 +25,6 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		return languages.length ? languages[0] : '';
 	}
 
-	public makeMenuItem(item:any):any {
-		const MenuItem = bridge().MenuItem;
-		return new MenuItem(item);
-	}
-
 	public addWordToSpellCheckerDictionary(_language:string, word:string) {
 		// Actually on Electron all languages share the same dictionary, or
 		// perhaps it's added to the currently active language.

@@ -60,6 +60,7 @@ const commands = [
 	require('./commands/showNoteContentProperties'),
 	require('./commands/showNoteProperties'),
 	require('./commands/showShareNoteDialog'),
+	require('./commands/showSpellCheckerMenu'),
 	require('./commands/toggleEditors'),
 	require('./commands/toggleNoteList'),
 	require('./commands/toggleSideBar'),

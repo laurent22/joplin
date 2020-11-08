@@ -2,7 +2,7 @@ import shim from '@joplin/lib/shim';
 const { dirname } = require('@joplin/lib/path-utils');
 const Setting = require('@joplin/lib/models/Setting').default;
 const pluginAssets = require('./pluginAssets/index');
-const KvStore = require('@joplin/lib/services/KvStore.js');
+const KvStore = require('@joplin/lib/services/KvStore').default;
 
 export default class PluginAssetsLoader {
 
