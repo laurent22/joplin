@@ -99,11 +99,13 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
 			if (result.html) noteContent.push(result.html);
 
+			const libRootPath = dirname(dirname(__dirname));
+
 			// We need to export all the plugin assets too and refer them from the header
 			// The source path is a bit hard-coded but shouldn't change.
 			for (let i = 0; i < result.pluginAssets.length; i++) {
 				const asset = result.pluginAssets[i];
-				const filePath = `${dirname(dirname(dirname(__dirname)))}/gui/note-viewer/pluginAssets/${asset.name}`;
+				const filePath = `${libRootPath}/node_modules/@joplin/renderer/assets/${asset.name}`;
 				const destPath = `${dirname(noteFilePath)}/pluginAssets/${asset.name}`;
 				await shim.fsDriver().mkdir(dirname(destPath));
 				await shim.fsDriver().copy(filePath, destPath);
