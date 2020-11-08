@@ -38,6 +38,7 @@ const iconStyle = css<IconProps>`
 	font-size: ${(props:IconProps) => props.theme.toolbarIconSize}px;
 	color: ${(props:IconProps) => props.theme.color3};
 	margin-right: ${(props:IconProps) => props.title ? 5 : 0}px;
+	pointer-events: none; /* Need this to get button tooltip to work */
 `;
 
 export const StyledIconI = styled.i`${iconStyle}`;
