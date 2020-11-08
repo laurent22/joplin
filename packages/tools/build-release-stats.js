@@ -67,6 +67,7 @@ async function main() {
 			const release = releases[i];
 			if (!release.tag_name.match(/^v\d+\.\d+\.\d+$/)) continue;
 			if (release.draft) continue;
+			if (release.prerelease) continue;
 
 			let row = {};
 			row = Object.assign(row, downloadCounts(release));
