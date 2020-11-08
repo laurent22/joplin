@@ -90,6 +90,7 @@ async function createPotFile(potFilePath) {
 		'./packages/app-cli/tests-build/*',
 		'./packages/app-cli/tests/*',
 		'./packages/app-clipper/*',
+		'./packages/fork-*/*',
 		'./packages/app-desktop/dist/*',
 		'./packages/app-desktop/gui/note-viewer/pluginAssets/*',
 		'./packages/app-desktop/gui/style/*',
@@ -285,6 +286,20 @@ async function updateReadmeWithStats(stats) {
 	);
 }
 
+async function translationStrings(poFilePath) {
+	const r = await parsePoFile(poFilePath);
+	return Object.keys(r.translations['']);
+}
+
+function deletedStrings(oldStrings, newStrings) {
+	const output = [];
+	for (const s1 of oldStrings) {
+		if (newStrings.includes(s1)) continue;
+		output.push(s1);
+	}
+	return output;
+}
+
 async function main() {
 	const argv = require('yargs').argv;
 
@@ -292,20 +307,27 @@ async function main() {
 	const jsonLocalesDir = `${libDir}/locales`;
 	const defaultLocale = 'en_GB';
 
+	const oldStrings = await translationStrings(potFilePath);
 	const oldPotStatus = await translationStatus(false, potFilePath);
 
 	await createPotFile(potFilePath);
 
+	const newStrings = await translationStrings(potFilePath);
 	const newPotStatus = await translationStatus(false, potFilePath);
 
 	console.info(`Updated pot file. Total strings: ${oldPotStatus.untranslatedCount} => ${newPotStatus.untranslatedCount}`);
 
 	const deletedCount = oldPotStatus.untranslatedCount - newPotStatus.untranslatedCount;
-	if (deletedCount >= 10) {
+	if (deletedCount >= 5) {
 		if (argv['skip-missing-strings-check']) {
 			console.info(`${deletedCount} strings have been deleted, but proceeding anyway due to --skip-missing-strings-check flag`);
 		} else {
-			throw new Error(`${deletedCount} strings have been deleted - aborting as it could be a bug. To override, use the --skip-missing-strings-check flag.`);
+			const msg = [`${deletedCount} strings have been deleted - aborting as it could be a bug. To override, use the --skip-missing-strings-check flag.`];
+			msg.push('');
+			msg.push('Deleted strings:');
+			msg.push('');
+			msg.push(deletedStrings(oldStrings, newStrings).map(s => `"${s}"`).join('\n'));
+			throw new Error(msg.join('\n'));
 		}
 	}
 
