@@ -9,7 +9,7 @@ toolUtils.execCommand = function(command) {
 	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
-		exec(command, (error, stdout) => {
+		exec(command, (error, stdout, stderr) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
@@ -17,7 +17,7 @@ toolUtils.execCommand = function(command) {
 					reject(error);
 				}
 			} else {
-				resolve(stdout.trim());
+				resolve([stdout.trim(), stderr.trim()].join('\n'));
 			}
 		});
 	});
