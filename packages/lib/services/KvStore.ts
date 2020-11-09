@@ -92,8 +92,7 @@ export default class KvStore extends BaseService {
 
 		try {
 			const result = await this.db().selectOne('SELECT `value`, `type` FROM key_values WHERE `key` = ?', [key]);
-			const value = this.formatValue_(result.value, result.type) as ValueType.Int;
-			const newValue = result ? value + inc : inc;
+			const newValue = result ? (this.formatValue_(result.value, result.type) as ValueType.Int) + inc : inc;
 			await this.setValue(key, newValue);
 			release();
 			return newValue;

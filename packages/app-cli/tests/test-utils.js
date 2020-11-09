@@ -508,6 +508,7 @@ async function expectNotThrow(asyncFn) {
 	}
 
 	if (thrownError) {
+		console.error(thrownError);
 		expect(thrownError.message).toBe('', 'Expected function not to throw an error but it did');
 	} else {
 		expect(true).toBe(true);
