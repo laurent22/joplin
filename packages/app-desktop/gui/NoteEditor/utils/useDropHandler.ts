@@ -10,6 +10,7 @@ export default function useDropHandler(dependencies:HookDependencies) {
 
 	return useCallback(async (event:any) => {
 		const dt = event.dataTransfer;
+		dt.dropEffect = 'copy';
 		const createFileURL = event.altKey;
 
 		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
