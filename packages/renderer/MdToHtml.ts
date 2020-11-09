@@ -70,6 +70,7 @@ const inMemoryCache = new InMemoryCache(20);
 export interface ExtraRendererRule {
 	id: string,
 	module: any,
+	assetPath: string,
 }
 
 export interface Options {

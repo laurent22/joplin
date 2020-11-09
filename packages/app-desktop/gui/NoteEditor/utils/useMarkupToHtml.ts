@@ -1,5 +1,5 @@
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import contentScriptsToRendererRules from '@joplin/lib/services/plugins/utils/contentScriptsToRendererRules';
+import { contentScriptsToRendererRules } from '@joplin/lib/services/plugins/utils/loadContentScripts';
 import { useCallback, useMemo } from 'react';
 import { ResourceInfos } from './types';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';

@@ -1,13 +1,27 @@
 import { PluginStates } from '../reducer';
-import { ExtraRendererRule } from '@joplin/renderer/MdToHtml';
 import { ContentScriptType } from '../api/types';
+import { dirname } from '@joplin/renderer/pathUtils';
 
-export default function contentScriptsToRendererRules(plugins:PluginStates):ExtraRendererRule[] {
-	const output:ExtraRendererRule[] = [];
+export interface ExtraContentScript {
+	id: string,
+	module: any,
+	assetPath: string,
+}
+
+export function contentScriptsToRendererRules(plugins:PluginStates):ExtraContentScript[] {
+	return loadContentScripts(plugins, ContentScriptType.MarkdownItPlugin);
+}
+
+export function contentScriptsToCodeMirrorPlugin(plugins:PluginStates):ExtraContentScript[] {
+	return loadContentScripts(plugins, ContentScriptType.CodeMirrorPlugin);
+}
+
+function loadContentScripts(plugins:PluginStates, scriptType:ContentScriptType):ExtraContentScript[] {
+	const output:ExtraContentScript[] = [];
 
 	for (const pluginId in plugins) {
 		const plugin = plugins[pluginId];
-		const contentScripts = plugin.contentScripts[ContentScriptType.MarkdownItPlugin];
+		const contentScripts = plugin.contentScripts[scriptType];
 		if (!contentScripts) continue;
 
 		for (const contentScript of contentScripts) {
@@ -20,6 +34,7 @@ export default function contentScriptsToRendererRules(plugins:PluginStates):Extr
 			output.push({
 				id: contentScript.id,
 				module: loadedModule,
+				assetPath: dirname(contentScript.path),
 			});
 		}
 	}
