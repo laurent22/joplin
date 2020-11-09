@@ -1,37 +1,12 @@
 import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import produce from 'immer';
-import useWindowResizeEvent from './hooks/useWindowResizeEvent';
-import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './hooks/useLayoutItemSizes';
-import validateLayout from './validateLayout';
+import useWindowResizeEvent from './utils/useWindowResizeEvent';
+import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './utils/useLayoutItemSizes';
+import validateLayout from './utils/validateLayout';
+import { Size, LayoutItem, dragBarThickness } from './utils/types';
 const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
-
-export const dragBarThickness = 5;
-
-export enum LayoutItemDirection {
-	Row = 'row',
-	Column = 'column',
-}
-
-export interface Size {
-	width: number,
-	height: number,
-}
-
-export interface LayoutItem {
-	key: string,
-	width?: number,
-	height?: number,
-	minWidth?: number,
-	minHeight?: number,
-	children?: LayoutItem[]
-	direction?: LayoutItemDirection,
-	resizableRight?: boolean,
-	resizableBottom?: boolean,
-	visible?: boolean,
-	context?: any,
-}
 
 interface onResizeEvent {
 	layout: LayoutItem

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import ResizableLayout, { findItemByKey, LayoutItem, LayoutItemDirection, allDynamicSizes } from '../ResizableLayout/ResizableLayout';
+import ResizableLayout, { findItemByKey, allDynamicSizes } from '../ResizableLayout/ResizableLayout';
+import { LayoutItem, LayoutItemDirection } from '../ResizableLayout/utils/types';
 import NoteList from '../NoteList/NoteList';
 import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
