@@ -613,9 +613,6 @@ packages/app-desktop/gui/Root_UpgradeSyncTarget.js.map
 packages/app-desktop/gui/SearchBar/SearchBar.d.ts
 packages/app-desktop/gui/SearchBar/SearchBar.js
 packages/app-desktop/gui/SearchBar/SearchBar.js.map
-packages/app-desktop/gui/SearchBar/hooks/useSearch.d.ts
-packages/app-desktop/gui/SearchBar/hooks/useSearch.js
-packages/app-desktop/gui/SearchBar/hooks/useSearch.js.map
 packages/app-desktop/gui/SearchBar/styles/index.d.ts
 packages/app-desktop/gui/SearchBar/styles/index.js
 packages/app-desktop/gui/SearchBar/styles/index.js.map
@@ -931,6 +928,9 @@ packages/lib/services/commands/stateToWhenClauseContext.js.map
 packages/lib/services/contextkey/contextkey.d.ts
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/contextkey/contextkey.js.map
+packages/lib/services/database/types.d.ts
+packages/lib/services/database/types.js
+packages/lib/services/database/types.js.map
 packages/lib/services/debug/populateDatabase.d.ts
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/debug/populateDatabase.js.map
