@@ -593,6 +593,9 @@ packages/app-desktop/gui/ResizableLayout/hooks/useLayoutItemSizes.js.map
 packages/app-desktop/gui/ResizableLayout/hooks/useWindowResizeEvent.d.ts
 packages/app-desktop/gui/ResizableLayout/hooks/useWindowResizeEvent.js
 packages/app-desktop/gui/ResizableLayout/hooks/useWindowResizeEvent.js.map
+packages/app-desktop/gui/ResizableLayout/validateLayout.d.ts
+packages/app-desktop/gui/ResizableLayout/validateLayout.js
+packages/app-desktop/gui/ResizableLayout/validateLayout.js.map
 packages/app-desktop/gui/ResourceScreen.d.ts
 packages/app-desktop/gui/ResourceScreen.js
 packages/app-desktop/gui/ResourceScreen.js.map
@@ -698,6 +701,9 @@ packages/app-desktop/services/plugins/hooks/useViewIsReady.js.map
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.d.ts
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js.map
+packages/app-desktop/tests/gui/ResizableLayout/hooks/useLayoutItemSizes.d.ts
+packages/app-desktop/tests/gui/ResizableLayout/hooks/useLayoutItemSizes.js
+packages/app-desktop/tests/gui/ResizableLayout/hooks/useLayoutItemSizes.js.map
 packages/app-mobile/PluginAssetsLoader.d.ts
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/PluginAssetsLoader.js.map

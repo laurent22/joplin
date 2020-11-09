@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import produce from 'immer';
 import useWindowResizeEvent from './hooks/useWindowResizeEvent';
 import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './hooks/useLayoutItemSizes';
+import validateLayout from './validateLayout';
 const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
 
@@ -194,7 +195,20 @@ function ResizableLayout(props:Props) {
 				visible: isVisible,
 			});
 
-			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [comp], isLastChild);
+			// const size = { ...sizes[item.key] };
+
+			// if (!('width' in size)) size.width = '100%';
+			// if (!('height' in size)) size.height = '100%';
+
+			// const wrapper = (
+			// 	<div key={item.key} style={{border:'1px solid green', width: size.width, height: size.height}}>
+			// 		{comp}
+			// 	</div>
+			// );
+
+			const wrapper = comp;
+
+			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
 		} else {
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
@@ -205,6 +219,10 @@ function ResizableLayout(props:Props) {
 			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
 		}
 	}
+
+	useEffect(() => {
+		validateLayout(props.layout);
+	}, [props.layout]);
 
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout);

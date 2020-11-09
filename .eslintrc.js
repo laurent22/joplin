@@ -25,6 +25,9 @@ module.exports = {
 		'afterEach': 'readonly',
 		'jasmine': 'readonly',
 
+		// Jest variables
+		'test': 'readonly',
+
 		// React Native variables
 		'__DEV__': 'readonly',
 

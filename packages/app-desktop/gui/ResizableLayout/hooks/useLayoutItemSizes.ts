@@ -22,8 +22,8 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 		height: parentSize.height,
 	};
 
-	const noWidthChildren:LayoutItem[] = [];
-	const noHeightChildren:LayoutItem[] = [];
+	const noWidthChildren:any[] = [];
+	const noHeightChildren:any[] = [];
 
 	for (const child of item.children) {
 		let w = 'width' in child ? child.width : null;
@@ -33,27 +33,31 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 			h = 0;
 		}
 
-		if (item.resizableRight) w -= dragBarThickness;
-		if (item.resizableBottom) h -= dragBarThickness;
+		if (w !== null && item.resizableRight) w -= dragBarThickness;
+		if (h !== null && item.resizableBottom) h -= dragBarThickness;
 
 		sizes[child.key] = { width: w, height: h };
 		if (w !== null) remainingSize.width -= w;
 		if (h !== null) remainingSize.height -= h;
-		if (w === null) noWidthChildren.push(child);
-		if (h === null) noHeightChildren.push(child);
+		if (w === null) noWidthChildren.push({ item: child, parent: item });
+		if (h === null) noHeightChildren.push({ item: child, parent: item });
 	}
 
 	if (noWidthChildren.length) {
 		const w = item.direction === 'row' ? remainingSize.width / noWidthChildren.length : parentSize.width;
 		for (const child of noWidthChildren) {
-			sizes[child.key].width = w;
+			let finalWidth = w;
+			if (finalWidth !== null && child.parent.resizableRight) finalWidth -= dragBarThickness;
+			sizes[child.item.key].width = finalWidth;
 		}
 	}
 
 	if (noHeightChildren.length) {
 		const h = item.direction === 'column' ? remainingSize.height / noHeightChildren.length : parentSize.height;
 		for (const child of noHeightChildren) {
-			sizes[child.key].height = h;
+			let finalHeight = h;
+			if (finalHeight !== null && child.parent.resizableBottom) finalHeight -= dragBarThickness;
+			sizes[child.item.key].height = finalHeight;
 		}
 	}
 
