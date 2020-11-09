@@ -182,13 +182,17 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 								}
 							}
 						},
-						insertText: (value: any) => editorRef.current.insertAtCursor(value),
+						insertText: (value: any) => {
+							editorRef.current.insertAtCursor(value);
+							editorRef.current.focus();
+						},
 						attachFile: async () => {
 							const cursor = editorRef.current.getCursor();
 							const pos = cursorPositionToTextOffset(cursor, props.content);
 
 							const newBody = await commandAttachFileToBody(props.content, null, { position: pos });
 							if (newBody) editorRef.current.updateBody(newBody);
+							editorRef.current.focus();
 						},
 						textNumberedList: () => {
 							let bulletNumber = markdownUtils.olLineNumber(editorRef.current.getCurrentLine());
