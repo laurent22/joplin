@@ -672,6 +672,8 @@ class SearchEngine {
 	}
 
 	async search(searchString, options = null) {
+		if (!searchString) return [];
+
 		options = Object.assign({}, {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
 			fuzzy: Setting.value('db.fuzzySearchEnabled') === 1,

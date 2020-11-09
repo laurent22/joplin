@@ -7,6 +7,8 @@ const Resource = require('@joplin/lib/models/Resource');
 // handler on the webContent. This function will return null if the point is
 // not within the TinyMCE editor.
 function contextMenuElement(editor:any, x:number, y:number) {
+	if (!editor || !editor.getDoc()) return null;
+
 	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
 	if (!iframes.length) return null;
 
@@ -15,7 +17,6 @@ function contextMenuElement(editor:any, x:number, y:number) {
 	if (iframeRect.x < x && iframeRect.y < y && iframeRect.right > x && iframeRect.bottom > y) {
 		const relativeX = x - iframeRect.x;
 		const relativeY = y - iframeRect.y;
-
 		return editor.getDoc().elementFromPoint(relativeX, relativeY);
 	}
 

@@ -1019,12 +1019,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
 
 				if (!found) searches.push(action.search);
 
-				if (!action.search.query_pattern) {
-					draft.notesParentType = defaultNotesParentType(draft, 'Search');
-				} else {
-					draft.notesParentType = 'Search';
-				}
-
+				draft.notesParentType = 'Search';
 				draft.searches = searches;
 			}
 			break;
