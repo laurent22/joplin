@@ -897,7 +897,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
 
 		case 'TAG_SELECT':
 
-			if (draft.selectedTagId !== action.id) {
+			if (draft.selectedTagId !== action.id || draft.notesParentType !== 'Tag') {
 				draft.selectedTagId = action.id;
 				if (!action.id) {
 					draft.notesParentType = defaultNotesParentType(draft, 'Tag');
