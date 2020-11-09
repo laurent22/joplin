@@ -34,7 +34,7 @@ function contributorTable(contributors) {
 		const c = contributors[contributorIndex];
 		contributorIndex++;
 
-		const cell = `<img width="50" src="${c.avatar_url}"/></br>[${c.login}](${c.url})`;
+		const cell = `<img width="50" src="${c.avatar_url}"/></br>[${c.login}](${c.html_url})`;
 
 		row.push(cell);
 
