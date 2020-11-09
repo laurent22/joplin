@@ -2,7 +2,7 @@
 
 const request = require('request');
 
-const readmePath = `${__dirname}/../README.md`;
+const readmePath = `${__dirname}/../../README.md`;
 const { insertContentIntoFile } = require('./tool-utils.js');
 
 async function gitHubContributors(page) {
