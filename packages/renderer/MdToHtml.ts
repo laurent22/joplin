@@ -37,6 +37,7 @@ const rules: RendererRules = {
 	code_inline: require('./MdToHtml/rules/code_inline').default,
 	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	pdf: require('./MdToHtml/rules/pdf').default,
 };
 
 const setupLinkify = require('./MdToHtml/setupLinkify');
