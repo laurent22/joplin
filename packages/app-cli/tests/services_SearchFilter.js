@@ -16,7 +16,7 @@ const ResourceService = require('@joplin/lib/services/ResourceService').default;
 
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at services_SearchFilter: Promise', p, 'reason:', reason);
 });
 
 let engine = null;

@@ -15,7 +15,7 @@ const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const EncryptionService = require('@joplin/lib/services/EncryptionService.js');
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at services_EncryptionService: Promise', p, 'reason:', reason);
 });
 
 let service = null;

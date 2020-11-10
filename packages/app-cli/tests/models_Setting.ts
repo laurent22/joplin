@@ -3,7 +3,7 @@ import Setting from '@joplin/lib/models/Setting';
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at models_Setting: Promise', p, 'reason:', reason);
 });
 
 describe('models_Setting', function() {

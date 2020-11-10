@@ -413,6 +413,10 @@ export default class KeymapService extends BaseService {
 
 	private static instance_:KeymapService = null;
 
+	public static destroyInstance() {
+		this.instance_ = null;
+	}
+
 	public static instance():KeymapService {
 		if (this.instance_) return this.instance_;
 

@@ -12,7 +12,7 @@ const fs = require('fs-extra');
 const ArrayUtils = require('@joplin/lib/ArrayUtils');
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at services_InteropService: Promise', p, 'reason:', reason);
 });
 
 function exportDir() {

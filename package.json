@@ -27,6 +27,8 @@
     "releaseDesktop": "node packages/tools/release-electron.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "tsc": "lerna run tsc --stream --parallel",
+    "test": "lerna run test --stream",
+    "test-ci": "lerna run test-ci --stream",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "watch": "lerna run watch --stream --parallel"
   },

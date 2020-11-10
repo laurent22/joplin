@@ -287,7 +287,7 @@ function shimInit(sharp = null, keytar = null) {
 		const newNote = Object.assign({}, note, {
 			body: newBody,
 		});
-		return await Note.save(newNote);
+		return Note.save(newNote);
 	};
 
 	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
