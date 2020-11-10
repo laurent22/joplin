@@ -161,9 +161,6 @@ packages/app-cli/tests/fsDriver.js.map
 packages/app-cli/tests/models_Setting.d.ts
 packages/app-cli/tests/models_Setting.js
 packages/app-cli/tests/models_Setting.js.map
-packages/app-cli/tests/services/plugins/api/JoplinSetting.d.ts
-packages/app-cli/tests/services/plugins/api/JoplinSetting.js
-packages/app-cli/tests/services/plugins/api/JoplinSetting.js.map
 packages/app-cli/tests/services/plugins/sandboxProxy.d.ts
 packages/app-cli/tests/services/plugins/sandboxProxy.js
 packages/app-cli/tests/services/plugins/sandboxProxy.js.map

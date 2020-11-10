@@ -1,6 +1,7 @@
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import CommandService, { CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
+import KeymapService from '@joplin/lib/services/KeymapService';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
@@ -42,6 +43,9 @@ function registerCommand(service:CommandService, cmd:TestCommand) {
 describe('services_CommandService', function() {
 
 	beforeEach(async (done) => {
+		KeymapService.destroyInstance();
+		KeymapService.instance().initialize();
+
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		done();

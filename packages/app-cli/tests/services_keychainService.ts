@@ -4,9 +4,11 @@ import Setting from '@joplin/lib/models/Setting';
 
 const { db, asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
 
-function describeIfCompatible(name:string, fn:any) {
+function describeIfCompatible(name:string, fn:any, elseFn:any) {
 	if (['win32', 'darwin'].includes(shim.platformName())) {
 		return describe(name, fn);
+	} else {
+		elseFn();
 	}
 }
 
@@ -90,5 +92,11 @@ describeIfCompatible('services_KeychainService', function() {
 			expect(row).toBe(undefined);
 		}
 	}));
+
+}, () => {
+
+	it('will pass', () => {
+		expect(true).toBe(true);
+	});
 
 });

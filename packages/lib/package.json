@@ -65,7 +65,6 @@
     "sqlite3": "^4.1.1",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.0",
-    "syswide-cas": "^5.2.0",
     "tar": "^4.4.10",
     "tcp-port-used": "^0.1.2",
     "uglifycss": "0.0.29",

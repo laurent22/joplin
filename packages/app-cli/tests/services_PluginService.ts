@@ -9,7 +9,7 @@ const Note = require('@joplin/lib/models/Note');
 const Folder = require('@joplin/lib/models/Folder');
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at services_PluginService: Promise', p, 'reason:', reason);
 });
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;

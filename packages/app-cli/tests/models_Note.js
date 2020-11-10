@@ -11,7 +11,7 @@ const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
 const shim = require('@joplin/lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at models_Note: Promise', p, 'reason:', reason);
 });
 
 async function allItems() {

@@ -26,6 +26,15 @@ const createFolderForPagination = async (num:number, time:number) => {
 	}, { autoTimestamp: false });
 };
 
+const createNoteForPagination = async (num:number, time:number) => {
+	await Note.save({
+		title: `note${num}`,
+		body: `noteBody${num}`,
+		updated_time: time,
+		created_time: time,
+	}, { autoTimestamp: false });
+};
+
 let api:Api = null;
 
 describe('services_rest_Api', function() {
@@ -587,6 +596,33 @@ describe('services_rest_Api', function() {
 		expect(r2.items.length).toBe(2);
 		expect(r2.items[0].title).toBe(r1.items[1].title === 'folder2' ? 'folder3' : 'folder2');
 		expect(r2.items[1].title).toBe('folder4');
+	}));
+
+	it('should paginate results and keep the same fields for cursor queries', asyncTest(async () => {
+		await createNoteForPagination(1, 1001);
+		await createNoteForPagination(2, 1002);
+		await createNoteForPagination(3, 1003);
+
+		const r1 = await api.route(RequestMethod.GET, 'notes', {
+			fields: ['id', 'title', 'body'],
+			limit: 2,
+			order_dir: PaginationOrderDir.ASC,
+			order_by: 'updated_time',
+		});
+
+		expect(r1.items.length).toBe(2);
+		expect(r1.items[0].title).toBe('note1');
+		expect(r1.items[0].body).toBe('noteBody1');
+		expect(r1.items[1].title).toBe('note2');
+		expect(r1.items[1].body).toBe('noteBody2');
+
+		const r2 = await api.route(RequestMethod.GET, 'notes', {
+			cursor: r1.cursor,
+		});
+
+		expect(r2.items.length).toBe(1);
+		expect(r2.items[0].title).toBe('note3');
+		expect(r2.items[0].body).toBe('noteBody3');
 	}));
 
 	it('should paginate folder notes', asyncTest(async () => {

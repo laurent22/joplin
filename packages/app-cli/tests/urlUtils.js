@@ -3,7 +3,7 @@ const { asyncTest } = require('./test-utils.js');
 const urlUtils = require('@joplin/lib/urlUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at urlUtils: Promise', p, 'reason:', reason);
 });
 
 describe('urlUtils', function() {
