@@ -1,7 +1,7 @@
-import useLayoutItemSizes from '../../../../gui/ResizableLayout/utils/useLayoutItemSizes';
-import { LayoutItem, LayoutItemDirection } from '../../../../gui/ResizableLayout/utils/types';
+import useLayoutItemSizes from './useLayoutItemSizes';
+import { LayoutItem, LayoutItemDirection } from './types';
 import { renderHook } from '@testing-library/react-hooks';
-import validateLayout from '../../../../gui/ResizableLayout/utils/validateLayout';
+import validateLayout from './validateLayout';
 
 
 describe('useLayoutItemSizes', () => {

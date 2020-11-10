@@ -1,6 +1,6 @@
-import { LayoutItem, LayoutItemDirection } from '../../../../gui/ResizableLayout/utils/types';
-import validateLayout from '../../../../gui/ResizableLayout/utils/validateLayout';
-import { moveHorizontal } from '../../../../gui/ResizableLayout/utils/movements';
+import { LayoutItem, LayoutItemDirection } from './types';
+import validateLayout from './validateLayout';
+import { moveHorizontal } from './movements';
 
 
 describe('movements', () => {
