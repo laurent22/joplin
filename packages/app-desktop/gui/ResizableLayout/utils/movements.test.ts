@@ -1,6 +1,6 @@
 import { LayoutItem, LayoutItemDirection } from './types';
 import validateLayout from './validateLayout';
-import { moveHorizontal } from './movements';
+import { moveHorizontal, moveVertical } from './movements';
 
 
 describe('movements', () => {
@@ -43,7 +43,7 @@ describe('movements', () => {
 		expect(() => moveHorizontal(layout, 'col1', 1)).toThrow();
 	});
 
-	test('should move items out of their containers', () => {
+	test('moving horizontally: should move items out of their containers', () => {
 		let layout:LayoutItem = {
 			key: 'root',
 			width: 100,
@@ -88,6 +88,40 @@ describe('movements', () => {
 		expect(layout.children[1].children[0].key).toBe('row2');
 		expect(layout.children[1].children[1].key).toBe('row1');
 		expect(layout.children[2].key).toBe('col3');
+	});
+
+	test('should move items vertically', () => {
+		let layout:LayoutItem = {
+			key: 'root',
+			width: 100,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{
+					key: 'col1',
+				},
+				{
+					key: 'col2',
+					direction: LayoutItemDirection.Column,
+					children: [
+						{ key: 'row1' },
+						{ key: 'row2' },
+						{ key: 'row3' },
+					],
+				},
+				{
+					key: 'col3',
+				},
+			],
+		};
+
+		validateLayout(layout);
+
+		layout = moveVertical(layout, 'row3', -1);
+
+		expect(layout.children[1].children[0].key).toBe('row1');
+		expect(layout.children[1].children[1].key).toBe('row3');
+		expect(layout.children[1].children[2].key).toBe('row2');
 	});
 
 });

@@ -4,6 +4,11 @@ import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 import produce from 'immer';
 
+enum MovementDirection {
+	Horizontal = 1,
+	Vertical = 2,
+}
+
 function array_move(arr:any[], old_index:number, new_index:number) {
 	arr = arr.slice();
 	if (new_index >= arr.length) {
@@ -13,7 +18,7 @@ function array_move(arr:any[], old_index:number, new_index:number) {
 		}
 	}
 	arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-	return arr; // for testing
+	return arr;
 }
 
 function findItemIndex(siblings:LayoutItem[], key:string) {
@@ -22,7 +27,7 @@ function findItemIndex(siblings:LayoutItem[], key:string) {
 	});
 }
 
-export function moveHorizontal(layout:LayoutItem, key:string, inc:number):LayoutItem {
+function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, inc:number):LayoutItem {
 	const itemParents:Record<string, LayoutItem> = {};
 
 	return produce(layout, (draft:any) => {
@@ -33,7 +38,20 @@ export function moveHorizontal(layout:LayoutItem, key:string, inc:number):Layout
 
 			const itemIndex = findItemIndex(parent.children, key);
 
-			if (parent.direction === LayoutItemDirection.Row) {
+			// - "flow" means we are moving an item horizontally within a
+			//   row
+			// - "contrary" means we are moving an item horizontally within
+			//   a column. Sicen it can't move horizontally, it is moved
+			//   out of its container. And vice-versa for vertical
+			//   movements.
+			let moveType = null;
+
+			if (direction === MovementDirection.Horizontal && parent.direction === LayoutItemDirection.Row) moveType = 'flow';
+			if (direction === MovementDirection.Horizontal && parent.direction === LayoutItemDirection.Column) moveType = 'contrary';
+			if (direction === MovementDirection.Vertical && parent.direction === LayoutItemDirection.Column) moveType = 'flow';
+			if (direction === MovementDirection.Vertical && parent.direction === LayoutItemDirection.Row) moveType = 'contrary';
+
+			if (moveType === 'flow') {
 				const newIndex = itemIndex + inc;
 
 				if (newIndex >= parent.children.length || newIndex < 0) throw new Error(`Cannot move item "${key}" from position ${itemIndex} to ${newIndex}`);
@@ -45,7 +63,7 @@ export function moveHorizontal(layout:LayoutItem, key:string, inc:number):Layout
 				} else {
 					parent.children = array_move(parent.children, itemIndex, newIndex);
 				}
-			} else { // Column
+			} else {
 				parent.children.splice(itemIndex, 1);
 
 				const parentParent = itemParents[parent.key];
@@ -58,4 +76,12 @@ export function moveHorizontal(layout:LayoutItem, key:string, inc:number):Layout
 			return false;
 		});
 	});
+}
+
+export function moveHorizontal(layout:LayoutItem, key:string, inc:number):LayoutItem {
+	return moveItem(MovementDirection.Horizontal, layout, key, inc);
+}
+
+export function moveVertical(layout:LayoutItem, key:string, inc:number):LayoutItem {
+	return moveItem(MovementDirection.Vertical, layout, key, inc);
 }
