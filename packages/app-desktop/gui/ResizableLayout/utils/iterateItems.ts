@@ -1,16 +1,18 @@
 import { LayoutItem } from './types';
 
 export default function iterateItems(layout:LayoutItem, callback:Function) {
-	callback(layout, null);
+	const result = callback(layout, null);
+	if (result === false) return;
 
-	function recurseFind(item:LayoutItem, callback:Function) {
+	function recurseFind(item:LayoutItem, callback:Function):boolean {
 		if (item.children) {
 			for (const child of item.children) {
-				callback(child, item);
-				recurseFind(child, callback);
+				if (callback(child, item) === false) return false;
+				if (recurseFind(child, callback) === false) return false;
 			}
 		}
+		return true;
 	}
 
-	recurseFind(layout, callback);
+	if (recurseFind(layout, callback) === false) return;
 }

@@ -23,18 +23,39 @@ function findItemIndex(siblings:LayoutItem[], key:string) {
 }
 
 export function moveHorizontal(layout:LayoutItem, key:string, inc:number):LayoutItem {
+	const itemParents:Record<string, LayoutItem> = {};
+
 	return produce(layout, (draft:any) => {
 		iterateItems(draft, (item:LayoutItem, parent:LayoutItem) => {
-			if (item.key !== key || !parent) return;
+			itemParents[item.key] = parent;
+
+			if (item.key !== key || !parent) return true;
+
+			const itemIndex = findItemIndex(parent.children, key);
 
 			if (parent.direction === LayoutItemDirection.Row) {
-				const itemIndex = findItemIndex(parent.children, key);
 				const newIndex = itemIndex + inc;
 
 				if (newIndex >= parent.children.length || newIndex < 0) throw new Error(`Cannot move item "${key}" from position ${itemIndex} to ${newIndex}`);
 
-				parent.children = array_move(parent.children, itemIndex, newIndex);
+				if (parent.children[newIndex].children) {
+					const newParent = parent.children[newIndex];
+					parent.children.splice(itemIndex, 1);
+					newParent.children.push(item);
+				} else {
+					parent.children = array_move(parent.children, itemIndex, newIndex);
+				}
+			} else { // Column
+				parent.children.splice(itemIndex, 1);
+
+				const parentParent = itemParents[parent.key];
+				const parentIndex = findItemIndex(parentParent.children, parent.key);
+				const newItemIndex = parentIndex + inc;
+
+				parentParent.children.splice(newItemIndex, 0, item);
 			}
+
+			return false;
 		});
 	});
 }

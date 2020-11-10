@@ -43,7 +43,7 @@ describe('movements', () => {
 		expect(() => moveHorizontal(layout, 'col1', 1)).toThrow();
 	});
 
-	test('should move items horizontally (2)', () => {
+	test('should move items out of their containers', () => {
 		let layout:LayoutItem = {
 			key: 'root',
 			width: 100,
@@ -79,6 +79,15 @@ describe('movements', () => {
 		expect(layout.children[1].key).toBe('col2');
 		expect(layout.children[2].key).toBe('row1');
 		expect(layout.children[3].key).toBe('col3');
+		expect(layout.children[1].children.length).toBe(1);
+
+		layout = moveHorizontal(layout, 'row1', -1);
+
+		expect(layout.children[0].key).toBe('col1');
+		expect(layout.children[1].key).toBe('col2');
+		expect(layout.children[1].children[0].key).toBe('row2');
+		expect(layout.children[1].children[1].key).toBe('row1');
+		expect(layout.children[2].key).toBe('col3');
 	});
 
 });
