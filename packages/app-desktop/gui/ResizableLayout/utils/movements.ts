@@ -1,8 +1,13 @@
-/* eslint-disable import/prefer-default-export */
-
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 import produce from 'immer';
+
+export enum MoveDirection {
+	Up = 'up',
+	Down = 'down',
+	Left = 'left',
+	Right = 'right',
+}
 
 enum MovementDirection {
 	Horizontal = 1,
@@ -84,4 +89,12 @@ export function moveHorizontal(layout:LayoutItem, key:string, inc:number):Layout
 
 export function moveVertical(layout:LayoutItem, key:string, inc:number):LayoutItem {
 	return moveItem(MovementDirection.Vertical, layout, key, inc);
+}
+
+export function move(layout:LayoutItem, key:string, direction:MoveDirection):LayoutItem {
+	if (direction === MoveDirection.Up) return moveVertical(layout, key, -1);
+	if (direction === MoveDirection.Down) return moveVertical(layout, key, +1);
+	if (direction === MoveDirection.Left) return moveHorizontal(layout, key, -1);
+	if (direction === MoveDirection.Right) return moveHorizontal(layout, key, +1);
+	throw new Error('Unreachable');
 }

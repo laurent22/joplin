@@ -1,5 +1,7 @@
 import * as React from 'react';
 import ResizableLayout, { findItemByKey, allDynamicSizes } from '../ResizableLayout/ResizableLayout';
+import { MoveButtonClickEvent } from '../ResizableLayout/MoveButtons';
+import { move } from '../ResizableLayout/utils/movements';
 import { LayoutItem, LayoutItemDirection } from '../ResizableLayout/utils/types';
 import NoteList from '../NoteList/NoteList';
 import NoteEditor from '../NoteEditor/NoteEditor';
@@ -104,6 +106,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		this.userWebview_message = this.userWebview_message.bind(this);
 		this.resizableLayout_resize = this.resizableLayout_resize.bind(this);
 		this.resizableLayout_renderItem = this.resizableLayout_renderItem.bind(this);
+		this.resizableLayout_moveButtonClick = this.resizableLayout_moveButtonClick.bind(this);
 		this.window_resize = this.window_resize.bind(this);
 		this.rowHeight = this.rowHeight.bind(this);
 
@@ -566,6 +569,15 @@ class MainScreenComponent extends React.Component<any, any> {
 		Setting.setValue('ui.layout', allDynamicSizes(event.layout));
 	}
 
+	resizableLayout_moveButtonClick(event:MoveButtonClickEvent) {
+		this.setState((state:any) => {
+			console.info('AVANT', JSON.parse(JSON.stringify(state.layout)));
+			const newLayout = move(state.layout, event.itemKey, event.direction);
+			console.info('APRES', JSON.parse(JSON.stringify(newLayout)));
+			return { layout: newLayout };
+		});
+	}
+
 	resizableLayout_renderItem(key:string, event:any) {
 		const eventEmitter = event.eventEmitter;
 
@@ -673,6 +685,7 @@ class MainScreenComponent extends React.Component<any, any> {
 					height={styles.rowHeight}
 					layout={this.state.layout}
 					onResize={this.resizableLayout_resize}
+					onMoveButtonClick={this.resizableLayout_moveButtonClick}
 					renderItem={this.resizableLayout_renderItem}
 				/>
 				{pluginDialog}

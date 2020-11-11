@@ -589,6 +589,9 @@ packages/app-desktop/gui/NoteToolbar/NoteToolbar.js.map
 packages/app-desktop/gui/OneDriveLoginScreen.d.ts
 packages/app-desktop/gui/OneDriveLoginScreen.js
 packages/app-desktop/gui/OneDriveLoginScreen.js.map
+packages/app-desktop/gui/ResizableLayout/MoveButtons.d.ts
+packages/app-desktop/gui/ResizableLayout/MoveButtons.js
+packages/app-desktop/gui/ResizableLayout/MoveButtons.js.map
 packages/app-desktop/gui/ResizableLayout/ResizableLayout.d.ts
 packages/app-desktop/gui/ResizableLayout/ResizableLayout.js
 packages/app-desktop/gui/ResizableLayout/ResizableLayout.js.map

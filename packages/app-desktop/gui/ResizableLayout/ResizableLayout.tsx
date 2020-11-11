@@ -5,6 +5,7 @@ import useWindowResizeEvent from './utils/useWindowResizeEvent';
 import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './utils/useLayoutItemSizes';
 import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem, dragBarThickness } from './utils/types';
+import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
 
@@ -18,6 +19,7 @@ interface Props {
 	width?: number,
 	height?: number,
 	renderItem: Function,
+	onMoveButtonClick(event:MoveButtonClickEvent):void;
 }
 
 export function allDynamicSizes(layout:LayoutItem):any {
@@ -83,9 +85,14 @@ function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
 	});
 }
 
+function itemVisible(item:LayoutItem) {
+	if (item.children && !item.children.length) return false;
+	return item.visible !== false;
+}
+
 function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:any[], isLastChild:boolean):any {
 	const style:any = {
-		display: item.visible !== false ? 'flex' : 'none',
+		display: itemVisible(item) ? 'flex' : 'none',
 		flexDirection: item.direction,
 	};
 
@@ -170,25 +177,28 @@ function ResizableLayout(props:Props) {
 				visible: isVisible,
 			});
 
-			// const size = { ...sizes[item.key] };
+			const size = { ...sizes[item.key] };
 
 			// if (!('width' in size)) size.width = '100%';
 			// if (!('height' in size)) size.height = '100%';
 
-			// const wrapper = (
-			// 	<div key={item.key} style={{border:'1px solid green', width: size.width, height: size.height}}>
-			// 		{comp}
-			// 	</div>
-			// );
+			const wrapper = (
+				<div key={item.key} style={{ border: '1px solid green', position: 'relative', display: 'flex', width: size.width, height: size.height }}>
+					<div style={{ zIndex: 100, backgroundColor: 'rgba(0,0,0,0.5)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex' }}>
+						<MoveButtons itemKey={item.key} onClick={props.onMoveButtonClick}/>
+					</div>
+					{comp}
+				</div>
+			);
 
-			const wrapper = comp;
+			// TODO: When container has only one child, do as if the container didn't exist and the child was the container
 
 			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
 		} else {
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
 				const child = item.children[i];
-				childrenComponents.push(renderLayoutItem(child, sizes, isVisible && child.visible !== false, i === item.children.length - 1));
+				childrenComponents.push(renderLayoutItem(child, sizes, isVisible && itemVisible(child), i === item.children.length - 1));
 			}
 
 			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
@@ -202,7 +212,7 @@ function ResizableLayout(props:Props) {
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout);
 
-	return renderLayoutItem(props.layout, sizes, props.layout.visible !== false, true);
+	return renderLayoutItem(props.layout, sizes, itemVisible(props.layout), true);
 }
 
 export default ResizableLayout;
