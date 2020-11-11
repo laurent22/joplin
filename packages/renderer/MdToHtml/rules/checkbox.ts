@@ -119,6 +119,7 @@ function checkboxPlugin(markdownIt:any, options:RuleOptions) {
 		const tokens = state.tokens;
 		const Token = state.Token;
 
+		// Store the markdown source, and split it line by line.
 		const source = state.src.split('\n');
 
 		const checkboxPattern = /^\[([x|X| ])\] (.*)$/;
@@ -164,6 +165,9 @@ function checkboxPlugin(markdownIt:any, options:RuleOptions) {
 
 				const currentList = lists[lists.length - 1];
 
+				// Get the line of the source which the token corresponds to and check there is only one space between
+				// the hyphen and the bracket. This must be done because markdown-it ignores spaces
+				// between the start of a list and its content.
 				const tokenLineNumber = currentListItem.map[0];
 				const fullTokenString = source[tokenLineNumber];
 				if (!fullTokenString.startsWith(' [', fullTokenString.indexOf('-') + 1)) continue;
