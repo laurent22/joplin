@@ -5,7 +5,7 @@ import { moveHorizontal, moveVertical } from './movements';
 
 describe('movements', () => {
 
-	test('should move items horizontally', () => {
+	test('should move items horizontally to the right', () => {
 		let layout:LayoutItem = {
 			key: 'root',
 			width: 100,
@@ -30,20 +30,23 @@ describe('movements', () => {
 
 		layout = moveHorizontal(layout, 'col1', 1);
 
+		expect(layout.children[0].children[0].key).toBe('col2');
+		expect(layout.children[0].children[1].key).toBe('col1');
+		expect(layout.children[1].key).toBe('col3');
+
+		layout = moveHorizontal(layout, 'col1', 1);
+
 		expect(layout.children[0].key).toBe('col2');
 		expect(layout.children[1].key).toBe('col1');
 		expect(layout.children[2].key).toBe('col3');
 
 		layout = moveHorizontal(layout, 'col1', 1);
-
-		expect(layout.children[0].key).toBe('col2');
-		expect(layout.children[1].key).toBe('col3');
-		expect(layout.children[2].key).toBe('col1');
+		layout = moveHorizontal(layout, 'col1', 1);
 
 		expect(() => moveHorizontal(layout, 'col1', 1)).toThrow();
 	});
 
-	test('moving horizontally: should move items out of their containers', () => {
+	test('should move items horizontally to the left', () => {
 		let layout:LayoutItem = {
 			key: 'root',
 			width: 100,
@@ -52,42 +55,25 @@ describe('movements', () => {
 			children: [
 				{
 					key: 'col1',
-				},
-				{
-					key: 'col2',
 					direction: LayoutItemDirection.Column,
 					children: [
-						{
-							key: 'row1',
-						},
-						{
-							key: 'row2',
-						},
+						{ key: 'item1' },
+						{ key: 'item2' },
 					],
 				},
 				{
-					key: 'col3',
+					key: 'col2',
 				},
 			],
 		};
 
 		validateLayout(layout);
 
-		layout = moveHorizontal(layout, 'row1', 1);
+		layout = moveHorizontal(layout, 'item2', -1);
 
-		expect(layout.children[0].key).toBe('col1');
-		expect(layout.children[1].key).toBe('col2');
-		expect(layout.children[2].key).toBe('row1');
-		expect(layout.children[3].key).toBe('col3');
-		expect(layout.children[1].children.length).toBe(1);
-
-		layout = moveHorizontal(layout, 'row1', -1);
-
-		expect(layout.children[0].key).toBe('col1');
-		expect(layout.children[1].key).toBe('col2');
-		expect(layout.children[1].children[0].key).toBe('row2');
-		expect(layout.children[1].children[1].key).toBe('row1');
-		expect(layout.children[2].key).toBe('col3');
+		expect(layout.children[0].key).toBe('item2');
+		expect(layout.children[1].key).toBe('item1');
+		expect(layout.children[2].key).toBe('col2');
 	});
 
 	test('should move items vertically', () => {

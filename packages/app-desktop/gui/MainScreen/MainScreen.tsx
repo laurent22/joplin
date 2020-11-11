@@ -168,33 +168,33 @@ class MainScreenComponent extends React.Component<any, any> {
 			children: [
 				{
 					key: 'sideBar',
-					direction: LayoutItemDirection.Column,
-					resizableRight: true,
-					width: sizes.sideBarColumn.width,
+					// direction: LayoutItemDirection.Column,
+					// resizableRight: true,
+					// width: sizes.sideBarColumn.width,
 					visible: Setting.value('sidebarVisibility'),
-					minWidth: sideBarMinWidth,
+					// minWidth: sideBarMinWidth,
 				},
 				{
 					key: 'noteList',
-					direction: LayoutItemDirection.Column,
-					resizableRight: true,
-					width: sizes.noteListColumn.width,
+					// direction: LayoutItemDirection.Column,
+					// resizableRight: true,
+					// width: sizes.noteListColumn.width,
 					visible: Setting.value('noteListVisibility'),
-					minWidth: sideBarMinWidth,
+					// minWidth: sideBarMinWidth,
 				},
 				// TODO: Improve pluginColumn - make it add plugin views after note list
-				{
-					key: 'pluginColumn',
-					direction: LayoutItemDirection.Column,
-					resizableRight: true,
-					width: sizes.pluginColumn.width,
-					visible: !!pluginColumnChildren.length,
-					minWidth: sideBarMinWidth,
-					children: pluginColumnChildren,
-				},
+				// {
+				// 	key: 'pluginColumn',
+				// 	direction: LayoutItemDirection.Column,
+				// 	resizableRight: true,
+				// 	width: sizes.pluginColumn.width,
+				// 	visible: !!pluginColumnChildren.length,
+				// 	minWidth: sideBarMinWidth,
+				// 	children: pluginColumnChildren,
+				// },
 				{
 					key: 'editor',
-					direction: LayoutItemDirection.Column,
+					// direction: LayoutItemDirection.Column,
 				},
 			],
 		};
@@ -563,7 +563,7 @@ class MainScreenComponent extends React.Component<any, any> {
 
 		const components:any = {
 			sideBar: () => {
-				return <SideBar key={key} />;	
+				return <SideBar key={key} />;
 			},
 
 			noteList: () => {
@@ -574,7 +574,7 @@ class MainScreenComponent extends React.Component<any, any> {
 					focusedField={this.props.focusedField}
 					size={event.size}
 					themeId={this.props.themeId}
-				/>
+				/>;
 			},
 
 			editor: () => {
@@ -584,7 +584,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		};
 
 		if (components[key]) return components[key]();
-					
+
 		if (key.indexOf('plugin-view') === 0) {
 			const { control, plugin } = event.item.context;
 			return <UserWebview

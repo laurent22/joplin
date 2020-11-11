@@ -1,6 +1,7 @@
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 import produce from 'immer';
+import uuid from '@joplin/lib/uuid';
 
 export enum MoveDirection {
 	Up = 'up',
@@ -32,8 +33,24 @@ function findItemIndex(siblings:LayoutItem[], key:string) {
 	});
 }
 
+// function updateResizeRules(layout:LayoutItem):LayoutItem {
+// 	return produce(layout, (draft:any) => {
+// 		iterateItems(draft, (item:LayoutItem, parent:LayoutItem) => {
+
+// 		});
+// 	});
+// }
+
+// For all movements we make the assumption that there's a root container,
+// which is a row of multiple columns. Within each of these columns there
+// can be multiple rows (one item per row). Items cannot be more deeply
+// nested.
 function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, inc:number):LayoutItem {
 	const itemParents:Record<string, LayoutItem> = {};
+
+	const itemIsRoot = (item:LayoutItem) => {
+		return !itemParents[item.key];
+	};
 
 	return produce(layout, (draft:any) => {
 		iterateItems(draft, (item:LayoutItem, parent:LayoutItem) => {
@@ -61,19 +78,49 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 
 				if (newIndex >= parent.children.length || newIndex < 0) throw new Error(`Cannot move item "${key}" from position ${itemIndex} to ${newIndex}`);
 
+				// If the item next to it is a container (has children),
+				// move the item inside the container
 				if (parent.children[newIndex].children) {
+
 					const newParent = parent.children[newIndex];
 					parent.children.splice(itemIndex, 1);
 					newParent.children.push(item);
 				} else {
-					parent.children = array_move(parent.children, itemIndex, newIndex);
+					// If the item is a child of the root container, create
+					// a new column at `newIndex` and move the item that
+					// was there, as well as the current item, in this
+					// container.
+					if (itemIsRoot(parent)) {
+						const newParent:LayoutItem = {
+							key: `tempContainer-${uuid.createNano()}`,
+							direction: LayoutItemDirection.Column,
+							children: [
+								parent.children[newIndex],
+								item,
+							],
+						};
+
+						parent.children[newIndex] = newParent;
+						parent.children.splice(itemIndex, 1);
+					} else {
+						// Otherwise the default case is simply to move the
+						// item left/right
+						parent.children = array_move(parent.children, itemIndex, newIndex);
+					}
 				}
 			} else {
-				parent.children.splice(itemIndex, 1);
-
 				const parentParent = itemParents[parent.key];
 				const parentIndex = findItemIndex(parentParent.children, parent.key);
-				const newItemIndex = parentIndex + inc;
+
+				parent.children.splice(itemIndex, 1);
+
+				let newInc = inc;
+				if (parent.children.length <= 1) {
+					parentParent.children[parentIndex] = parent.children[0];
+					newInc = inc < 0 ? inc + 1 : inc;
+				}
+
+				const newItemIndex = parentIndex + newInc;
 
 				parentParent.children.splice(newItemIndex, 0, item);
 			}

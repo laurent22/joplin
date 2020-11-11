@@ -153,7 +153,7 @@ function ResizableLayout(props:Props) {
 				{comp}
 			</div>
 		);
-	}	
+	}
 
 	function renderLayoutItem(item:LayoutItem, parent:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):any {
 
@@ -188,11 +188,11 @@ function ResizableLayout(props:Props) {
 				visible: isVisible,
 			});
 
-			// const size = { ...sizes[item.key] };
+			const size = { ...sizes[item.key] };
 
-			// const wrapper = parent.children.length > 1 ? renderWrapper(comp, item, size) : comp;
+			const wrapper = parent.children.length > 1 ? renderWrapper(comp, item, size) : comp;
 
-			const wrapper = comp;
+			// const wrapper = comp;
 
 			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
 		} else {
