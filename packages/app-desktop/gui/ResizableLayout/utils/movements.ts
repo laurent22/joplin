@@ -33,13 +33,17 @@ function findItemIndex(siblings:LayoutItem[], key:string) {
 	});
 }
 
-// function updateResizeRules(layout:LayoutItem):LayoutItem {
-// 	return produce(layout, (draft:any) => {
-// 		iterateItems(draft, (item:LayoutItem, parent:LayoutItem) => {
-
-// 		});
-// 	});
-// }
+function updateResizeRules(layout:LayoutItem):LayoutItem {
+	return produce(layout, (draft:any) => {
+		iterateItems(draft, (itemIndex:number, item:LayoutItem, parent:LayoutItem) => {
+			if (!parent) return true;
+			const isLastChild = itemIndex === parent.children.length - 1;
+			item.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastChild;
+			item.resizableBottom = parent.direction === LayoutItemDirection.Column && !isLastChild;
+			return true;
+		});
+	});
+}
 
 // For all movements we make the assumption that there's a root container,
 // which is a row of multiple columns. Within each of these columns there
@@ -52,13 +56,11 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 		return !itemParents[item.key];
 	};
 
-	return produce(layout, (draft:any) => {
-		iterateItems(draft, (item:LayoutItem, parent:LayoutItem) => {
+	const updatedLayout = produce(layout, (draft:any) => {
+		iterateItems(draft, (itemIndex:number, item:LayoutItem, parent:LayoutItem) => {
 			itemParents[item.key] = parent;
 
 			if (item.key !== key || !parent) return true;
-
-			const itemIndex = findItemIndex(parent.children, key);
 
 			// - "flow" means we are moving an item horizontally within a
 			//   row
@@ -128,6 +130,8 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 			return false;
 		});
 	});
+
+	return updateResizeRules(updatedLayout);
 }
 
 export function moveHorizontal(layout:LayoutItem, key:string, inc:number):LayoutItem {
