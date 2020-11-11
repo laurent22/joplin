@@ -9,7 +9,7 @@ const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
 const bridge = require('electron').remote.require('./bridge').default;
 const time = require('../time').default;
-const { ErrorNotFound } = require('./rest/errors');
+const { ErrorNotFound } = require('./rest/utils/errors');
 
 class ExternalEditWatcher {
 	constructor() {

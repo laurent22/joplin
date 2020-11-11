@@ -433,19 +433,39 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </code></pre>
 <p>By default API results will contain the following fields: <strong>id</strong>, <strong>parent_id</strong>, <strong>title</strong></p>
 <h1>Pagination<a name="pagination" href="#pagination" class="heading-anchor">🔗</a></h1>
-<p>All API calls that return multiple results will be paginated. The actual results will be under the <code>items</code> key, and if there are more results, there will also be a <code>cursor</code> key, which allows you to fetch the next results. If the <code>cursor</code> key is not present, it means you have reached the end of the data set.</p>
+<p>All API calls that return multiple results will be paginated and will have the following structure:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Always present?</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>items</code></td>
+<td>Yes</td>
+<td>The array of items you have requested.</td>
+</tr>
+<tr>
+<td><code>has_more</code></td>
+<td>Yes</td>
+<td>If <code>true</code>, there are more items after this page. If <code>false</code>, it means you have reached the end of the data set.</td>
+</tr>
+</tbody>
+</table>
 <p>You can specify how the results should be sorted using the <code>order_by</code> and <code>order_dir</code> query parameters, and you can specify the number of items to be returned using the <code>limit</code> parameter (the maximum being 100 items).</p>
 <p>The following call for example will initiate a request to fetch all the notes, 10 at a time, and sorted by &quot;updated_time&quot; ascending:</p>
 <pre><code>curl http://localhost:41184/notes?order_by=updated_time&amp;order_dir=ASC&amp;limit=10
 </code></pre>
 <p>This will return a result like this</p>
-<pre><code>{ &quot;items&quot;: [ /* 10 notes */ ], &quot;cursor&quot;: &quot;somecursor&quot; }
+<pre><code>{ &quot;items&quot;: [ /* 10 notes */ ], &quot;has_more&quot;: true }
 </code></pre>
 <p>Then you will resume fetching the results using this query:</p>
-<pre><code>curl http://localhost:41184/notes?cursor=somecursor
+<pre><code>curl http://localhost:41184/notes?order_by=updated_time&amp;order_dir=ASC&amp;limit=10&amp;page=2
 </code></pre>
-<p>Note that you only need to pass the cursor to the next request, as it will continue the fetching process using the same parameters you initially provided.</p>
-<p>Eventually you will get some results that do not contain a &quot;cursor&quot; paramater, at which point you will have retrieved all the results</p>
+<p>Eventually you will get some results that do not contain an &quot;has_more&quot; paramater, at which point you will have retrieved all the results</p>
 <p>As an example the pseudo-code below could be used to fetch all the notes:</p>
 <pre><code class="language-javascript">
 async function fetchJson(url) {
@@ -453,15 +473,11 @@ async function fetchJson(url) {
 }
 
 async function fetchAllNotes() {
-	let query = '';
-	const url = 'http://localhost:41184/notes';
-
+	let pageNum = 1;
 	do {
-		const response = await fetchJson(url + query);
-		console.info('Printing notes:');
-		console.info(response.items);
-		query = '?cursor' + response.cursor;
-	} while (response.cursor)
+		const response = await fetchJson((http://localhost:41184/notes?page=' + pageNum++);
+		console.info('Printing notes:', response.items);
+	} while (response.has_more)
 }
 </code></pre>
 <h1>Error handling<a name="error-handling" href="#error-handling" class="heading-anchor">🔗</a></h1>

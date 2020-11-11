@@ -8,6 +8,7 @@ import BaseModel from '../../../BaseModel';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { RequestMethod, Request } from '../Api';
 import markdownUtils from '../../../markdownUtils';
+import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 
 const { reg } = require('../../../registry.js');
 const { Database } = require('../../../database.js');
@@ -26,7 +27,7 @@ const { netUtils } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
 const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('@joplin/renderer');
-const { ErrorNotFound } = require('../errors');
+const { ErrorNotFound } = require('../utils/errors');
 
 let htmlToMdParser_:any = null;
 
@@ -299,10 +300,7 @@ async function attachImageFromDataUrl(note:any, imageDataUrl:string, cropRect:an
 export default async function(request:Request, id:string = null, link:string = null) {
 	if (request.method === 'GET') {
 		if (link && link === 'tags') {
-			return {
-				items: await Tag.tagsByNoteId(id),
-				// TODO: paginate
-			};
+			return collectionToPaginatedResults(await Tag.tagsByNoteId(id), request);
 		} else if (link && link === 'resources') {
 			const note = await Note.load(id);
 			if (!note) throw new ErrorNotFound();
@@ -312,7 +310,7 @@ export default async function(request:Request, id:string = null, link:string = n
 			for (const resourceId of resourceIds) {
 				output.push(await Resource.load(resourceId, loadOptions));
 			}
-			return { items: output }; // TODO: paginate
+			return collectionToPaginatedResults(output, request);
 		} else if (link) {
 			throw new ErrorNotFound();
 		}

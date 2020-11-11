@@ -17,9 +17,7 @@ export default function(request:Request):Pagination {
 	const limit = request.query.limit ? request.query.limit : 100;
 	if (limit < 0 || limit > 100) throw new ErrorBadRequest(`Limit out of bond: ${limit}`);
 	const order:PaginationOrder[] = requestPaginationOrder(request);
+	const page:number = request.query.page || 1;
 
-	return {
-		limit,
-		order,
-	};
+	return { limit, order, page };
 }

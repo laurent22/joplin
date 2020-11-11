@@ -23,6 +23,8 @@ async function gitLog(sinceTag) {
 
 	const output = [];
 	for (const line of lines) {
+		if (!line.trim()) continue;
+
 		const splitted = line.split('::::DIV::::');
 		const commit = splitted[0];
 		const authorEmail = splitted[1];

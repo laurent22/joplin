@@ -6,7 +6,7 @@ import BaseModel from '../../../BaseModel';
 import requestFields from '../utils/requestFields';
 const Folder = require('../../../models/Folder');
 const { FoldersScreenUtils } = require('../../../folders-screen-utils.js');
-const { ErrorNotFound } = require('../errors');
+const { ErrorNotFound } = require('../utils/errors');
 
 export default async function(request:Request, id:string = null, link:string = null) {
 	if (request.method === 'GET' && !id) {
@@ -22,7 +22,7 @@ export default async function(request:Request, id:string = null, link:string = n
 	if (request.method === 'GET' && id) {
 		if (link && link === 'notes') {
 			const folder = await Folder.load(id);
-			return paginatedResults(BaseModel.TYPE_NOTE, request, `parent_id = "${folder.id}"`);
+			return paginatedResults(BaseModel.TYPE_NOTE, request, { sql: 'parent_id = ?', params: [folder.id] });
 		} else if (link) {
 			throw new ErrorNotFound();
 		}

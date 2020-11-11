@@ -57,7 +57,12 @@ To get the IDs only of all the tags:
 By default API results will contain the following fields: **id**, **parent_id**, **title**
 # Pagination
 
-All API calls that return multiple results will be paginated. The actual results will be under the `items` key, and if there are more results, there will also be a `cursor` key, which allows you to fetch the next results. If the `cursor` key is not present, it means you have reached the end of the data set.
+All API calls that return multiple results will be paginated and will have the following structure:
+
+Key | Always present? | Description
+--- | --- | ---
+`items` | Yes | The array of items you have requested.
+`has_more` | Yes | If `true`, there are more items after this page. If `false`, it means you have reached the end of the data set.
 
 You can specify how the results should be sorted using the `order_by` and `order_dir` query parameters, and you can specify the number of items to be returned using the `limit` parameter (the maximum being 100 items).
 
@@ -67,15 +72,13 @@ The following call for example will initiate a request to fetch all the notes, 1
 
 This will return a result like this
 
-	{ "items": [ /* 10 notes */ ], "cursor": "somecursor" }
+	{ "items": [ /* 10 notes */ ], "has_more": true }
 
 Then you will resume fetching the results using this query:
 
-	curl http://localhost:41184/notes?cursor=somecursor
+	curl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10&page=2
 
-Note that you only need to pass the cursor to the next request, as it will continue the fetching process using the same parameters you initially provided.
-
-Eventually you will get some results that do not contain a "cursor" paramater, at which point you will have retrieved all the results
+Eventually you will get some results that do not contain an "has_more" paramater, at which point you will have retrieved all the results
 
 As an example the pseudo-code below could be used to fetch all the notes:
 
@@ -86,15 +89,11 @@ async function fetchJson(url) {
 }
 
 async function fetchAllNotes() {
-	let query = '';
-	const url = 'http://localhost:41184/notes';
-
+	let pageNum = 1;
 	do {
-		const response = await fetchJson(url + query);
-		console.info('Printing notes:');
-		console.info(response.items);
-		query = '?cursor' + response.cursor;
-	} while (response.cursor)
+		const response = await fetchJson((http://localhost:41184/notes?page=' + pageNum++);
+		console.info('Printing notes:', response.items);
+	} while (response.has_more)
 }
 ```
 

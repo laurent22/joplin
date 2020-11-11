@@ -24,10 +24,10 @@ interface RequestFile {
 }
 
 interface RequestQuery {
-	cursor?: string,
 	fields?: string[] | string,
 	token?: string,
 	nounce?: string,
+	page?: number,
 
 	// Search engine query
 	query?: string,

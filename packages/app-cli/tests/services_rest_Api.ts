@@ -2,13 +2,14 @@ import { PaginationOrderDir } from '@joplin/lib/models/utils/types';
 import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
 import shim from '@joplin/lib/shim';
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
+const { asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder');
 const Resource = require('@joplin/lib/models/Resource');
 const Note = require('@joplin/lib/models/Note');
 const Tag = require('@joplin/lib/models/Tag');
 const NoteTag = require('@joplin/lib/models/NoteTag');
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
+const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
 
 async function msleep(ms:number) {
 	return new Promise((resolve) => {
@@ -362,22 +363,6 @@ describe('services_rest_Api', function() {
 		expect(response.body).toBe('**Bold text**');
 	}));
 
-	// it('should filter fields', asyncTest(async () => {
-	// 	let f = api.fields_({ query: { fields: 'one,two' } } as any, []);
-	// 	expect(f.length).toBe(2);
-	// 	expect(f[0]).toBe('one');
-	// 	expect(f[1]).toBe('two');
-
-	// 	f = api.fields_({ query: { fields: 'one  ,, two  ' } } as any, []);
-	// 	expect(f.length).toBe(2);
-	// 	expect(f[0]).toBe('one');
-	// 	expect(f[1]).toBe('two');
-
-	// 	f = api.fields_({ query: { fields: '  ' } } as any, ['def']);
-	// 	expect(f.length).toBe(1);
-	// 	expect(f[0]).toBe('def');
-	// }));
-
 	it('should handle tokens', asyncTest(async () => {
 		api = new Api('mytoken');
 
@@ -522,107 +507,115 @@ describe('services_rest_Api', function() {
 		await createFolderForPagination(4, 1004);
 
 		{
-			const r1 = await api.route(RequestMethod.GET, 'folders', {
+			const baseQuery = {
 				fields: ['id', 'title', 'updated_time'],
 				limit: 2,
 				order_dir: PaginationOrderDir.ASC,
 				order_by: 'updated_time',
-			});
+			};
 
+			const r1 = await api.route(RequestMethod.GET, 'folders', { ...baseQuery });
+
+			expect(r1.has_more).toBe(true);
 			expect(r1.items.length).toBe(2);
 			expect(r1.items[0].title).toBe('folder1');
 			expect(r1.items[1].title).toBe('folder2');
 
-			const r2 = await api.route(RequestMethod.GET, 'folders', {
-				cursor: r1.cursor,
-			});
+			const r2 = await api.route(RequestMethod.GET, 'folders', { ...baseQuery, page: 2 });
 
+			// The API currently doesn't check if there's effectively a
+			// page of data after the current one. If the number of
+			// returned items === limit, it sets `has_more` and the next
+			// result set will be empty
+			expect(r1.has_more).toBe(true);
 			expect(r2.items.length).toBe(2);
 			expect(r2.items[0].title).toBe('folder3');
 			expect(r2.items[1].title).toBe('folder4');
 
-			const r3 = await api.route(RequestMethod.GET, 'folders', {
-				cursor: r2.cursor,
-			});
+			const r3 = await api.route(RequestMethod.GET, 'folders', { ...baseQuery, page: 3 });
 
 			expect(r3.items.length).toBe(0);
-			expect(r3.cursor).toBe(undefined);
+			expect(r3.has_more).toBe(undefined);
 		}
 
 		{
-			const r1 = await api.route(RequestMethod.GET, 'folders', {
+			const baseQuery = {
 				fields: ['id', 'title', 'updated_time'],
 				limit: 3,
 				order_dir: PaginationOrderDir.ASC,
 				order_by: 'updated_time',
-			});
+			};
+
+			const r1 = await api.route(RequestMethod.GET, 'folders', { ...baseQuery });
 
 			expect(r1.items.length).toBe(3);
 			expect(r1.items[0].title).toBe('folder1');
 			expect(r1.items[1].title).toBe('folder2');
 			expect(r1.items[2].title).toBe('folder3');
 
-			const r2 = await api.route(RequestMethod.GET, 'folders', {
-				cursor: r1.cursor,
-			});
+			const r2 = await api.route(RequestMethod.GET, 'folders', { ...baseQuery, page: 2 });
 
 			expect(r2.items.length).toBe(1);
 			expect(r2.items[0].title).toBe('folder4');
-			expect(r2.cursor).toBe(undefined);
+			expect(r2.has_more).toBe(undefined);
 		}
 	}));
 
-	it('should paginate results and handle duplicate cursor field value', asyncTest(async () => {
+	it('should paginate results and handle duplicate field values', asyncTest(async () => {
+		// If, for example, ordering by updated_time, and two of the rows
+		// have the same updated_time, it should make sure that the sort
+		// order is stable and all results are correctly returned.
 		await createFolderForPagination(1, 1001);
 		await createFolderForPagination(2, 1002);
 		await createFolderForPagination(3, 1002);
 		await createFolderForPagination(4, 1003);
 
-		const r1 = await api.route(RequestMethod.GET, 'folders', {
+		const baseQuery = {
 			fields: ['id', 'title', 'updated_time'],
 			limit: 2,
 			order_dir: PaginationOrderDir.ASC,
 			order_by: 'updated_time',
-		});
+		};
+
+		const r1 = await api.route(RequestMethod.GET, 'folders', { ...baseQuery });
 
 		expect(r1.items.length).toBe(2);
 		expect(r1.items[0].title).toBe('folder1');
 		expect(['folder2', 'folder3'].includes(r1.items[1].title)).toBe(true);
 
-		const r2 = await api.route(RequestMethod.GET, 'folders', {
-			cursor: r1.cursor,
-		});
+		const r2 = await api.route(RequestMethod.GET, 'folders', { ...baseQuery, page: 2 });
 
 		expect(r2.items.length).toBe(2);
 		expect(r2.items[0].title).toBe(r1.items[1].title === 'folder2' ? 'folder3' : 'folder2');
 		expect(r2.items[1].title).toBe('folder4');
 	}));
 
-	it('should paginate results and keep the same fields for cursor queries', asyncTest(async () => {
+	it('should paginate results and return the requested fields only', asyncTest(async () => {
 		await createNoteForPagination(1, 1001);
 		await createNoteForPagination(2, 1002);
 		await createNoteForPagination(3, 1003);
 
-		const r1 = await api.route(RequestMethod.GET, 'notes', {
+		const baseQuery = {
 			fields: ['id', 'title', 'body'],
 			limit: 2,
 			order_dir: PaginationOrderDir.ASC,
 			order_by: 'updated_time',
-		});
+		};
 
+		const r1 = await api.route(RequestMethod.GET, 'notes', { ...baseQuery });
+
+		expect(Object.keys(r1.items[0]).sort().join(',')).toBe('body,id,title');
 		expect(r1.items.length).toBe(2);
 		expect(r1.items[0].title).toBe('note1');
 		expect(r1.items[0].body).toBe('noteBody1');
 		expect(r1.items[1].title).toBe('note2');
 		expect(r1.items[1].body).toBe('noteBody2');
 
-		const r2 = await api.route(RequestMethod.GET, 'notes', {
-			cursor: r1.cursor,
-		});
+		const r2 = await api.route(RequestMethod.GET, 'notes', { ...baseQuery, fields: ['id'], page: 2 });
 
+		expect(Object.keys(r2.items[0]).sort().join(',')).toBe('id');
 		expect(r2.items.length).toBe(1);
-		expect(r2.items[0].title).toBe('note3');
-		expect(r2.items[0].body).toBe('noteBody3');
+		expect(!!r2.items[0].id).toBe(true);
 	}));
 
 	it('should paginate folder notes', asyncTest(async () => {
@@ -642,7 +635,8 @@ describe('services_rest_Api', function() {
 		expect(r1.items[1].id).toBe(note2.id);
 
 		const r2 = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`, {
-			cursor: r1.cursor,
+			limit: 2,
+			page: 2,
 		});
 
 		expect(r2.items.length).toBe(1);
@@ -703,5 +697,32 @@ describe('services_rest_Api', function() {
 
 		expect(r.items.length).toBe(1);
 		expect(r.items[0]).toBe(note.id);
+	}));
+
+	it('should return search results', asyncTest(async () => {
+		SearchEngine.instance().setDb(db());
+
+		for (let i = 0; i < 10; i++) {
+			await Note.save({ title: 'a' });
+		}
+
+		await SearchEngine.instance().syncTables();
+
+		// Mostly testing pagination below
+
+		const r1 = await api.route(RequestMethod.GET, 'search', { query: 'a', limit: 4 });
+		expect(r1.items.length).toBe(4);
+		expect(r1.has_more).toBe(true);
+
+		const r2 = await api.route(RequestMethod.GET, 'search', { query: 'a', limit: 4, page: 2 });
+		expect(r2.items.length).toBe(4);
+		expect(r2.has_more).toBe(true);
+
+		const r3 = await api.route(RequestMethod.GET, 'search', { query: 'a', limit: 4, page: 3 });
+		expect(r3.items.length).toBe(2);
+		expect(!!r3.has_more).toBe(false);
+
+		await SearchEngine.instance().destroy();
+
 	}));
 });

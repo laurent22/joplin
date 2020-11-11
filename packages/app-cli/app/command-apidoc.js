@@ -117,7 +117,12 @@ class Command extends BaseCommand {
 
 		lines.push('# Pagination');
 		lines.push('');
-		lines.push('All API calls that return multiple results will be paginated. The actual results will be under the `items` key, and if there are more results, there will also be a `cursor` key, which allows you to fetch the next results. If the `cursor` key is not present, it means you have reached the end of the data set.');
+		lines.push('All API calls that return multiple results will be paginated and will have the following structure:');
+		lines.push('');
+		lines.push('Key | Always present? | Description');
+		lines.push('--- | --- | ---');
+		lines.push('`items` | Yes | The array of items you have requested.');
+		lines.push('`has_more` | Yes | If `true`, there are more items after this page. If `false`, it means you have reached the end of the data set.');
 		lines.push('');
 		lines.push('You can specify how the results should be sorted using the `order_by` and `order_dir` query parameters, and you can specify the number of items to be returned using the `limit` parameter (the maximum being 100 items).');
 		lines.push('');
@@ -127,15 +132,13 @@ class Command extends BaseCommand {
 		lines.push('');
 		lines.push('This will return a result like this');
 		lines.push('');
-		lines.push('\t{ "items": [ /* 10 notes */ ], "cursor": "somecursor" }');
+		lines.push('\t{ "items": [ /* 10 notes */ ], "has_more": true }');
 		lines.push('');
 		lines.push('Then you will resume fetching the results using this query:');
 		lines.push('');
-		lines.push('\tcurl http://localhost:41184/notes?cursor=somecursor');
+		lines.push('\tcurl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10&page=2');
 		lines.push('');
-		lines.push('Note that you only need to pass the cursor to the next request, as it will continue the fetching process using the same parameters you initially provided.');
-		lines.push('');
-		lines.push('Eventually you will get some results that do not contain a "cursor" paramater, at which point you will have retrieved all the results');
+		lines.push('Eventually you will get some results that do not contain an "has_more" paramater, at which point you will have retrieved all the results');
 		lines.push('');
 		lines.push('As an example the pseudo-code below could be used to fetch all the notes:');
 		lines.push('');
@@ -146,15 +149,11 @@ async function fetchJson(url) {
 }
 
 async function fetchAllNotes() {
-	let query = '';
-	const url = 'http://localhost:41184/notes';
-
+	let pageNum = 1;
 	do {
-		const response = await fetchJson(url + query);
-		console.info('Printing notes:');
-		console.info(response.items);
-		query = '?cursor' + response.cursor;
-	} while (response.cursor)
+		const response = await fetchJson((http://localhost:41184/notes?page=' + pageNum++);
+		console.info('Printing notes:', response.items);
+	} while (response.has_more)
 }`);
 		lines.push('```');
 		lines.push('');
