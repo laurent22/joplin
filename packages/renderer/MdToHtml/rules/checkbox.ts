@@ -119,6 +119,8 @@ function checkboxPlugin(markdownIt:any, options:RuleOptions) {
 		const tokens = state.tokens;
 		const Token = state.Token;
 
+		const source = state.src.split('\n');
+
 		const checkboxPattern = /^\[([x|X| ])\] (.*)$/;
 		let currentListItem = null;
 		let processedFirstInline = false;
@@ -161,6 +163,10 @@ function checkboxPlugin(markdownIt:any, options:RuleOptions) {
 				const label = matches.length >= 3 ? matches[2] : '';
 
 				const currentList = lists[lists.length - 1];
+
+				const tokenLineNumber = currentListItem.map[0];
+				const fullTokenString = source[tokenLineNumber];
+				if (!fullTokenString.startsWith(' [', fullTokenString.indexOf('-') + 1)) continue;
 
 				if (renderingType === 1) {
 					checkboxIndex_++;
