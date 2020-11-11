@@ -5,7 +5,7 @@
   "author": "Laurent Cozic",
   "private": true,
   "scripts": {
-    "test": "jest --config=jest.config.js --runInBand --bail --verbose --forceExit",
+    "test": "jest --config=jest.config.js --runInBand --bail --forceExit",
     "test-ci": "jest --config=jest.config.js --runInBand --forceExit",
     "build": "gulp build",
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",

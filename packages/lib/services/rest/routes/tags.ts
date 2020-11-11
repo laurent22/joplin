@@ -2,9 +2,10 @@ import defaultAction from '../utils/defaultAction';
 import BaseModel, { ModelType } from '../../../BaseModel';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { Request, RequestMethod } from '../Api';
+import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 const Note = require('../../../models/Note');
 const Tag = require('../../../models/Tag');
-const { ErrorBadRequest, ErrorNotFound } = require('../errors');
+const { ErrorBadRequest, ErrorNotFound } = require('../utils/errors');
 
 export default async function(request:Request, id:string = null, link:string = null) {
 	if (link === 'notes') {
@@ -33,7 +34,7 @@ export default async function(request:Request, id:string = null, link:string = n
 				if (!n) continue;
 				output.push(n);
 			}
-			return { items: output }; // TODO: paginate
+			return collectionToPaginatedResults(output, request);
 		}
 	}
 

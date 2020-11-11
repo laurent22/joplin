@@ -6,6 +6,7 @@ import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import readonlyProperties from '../utils/readonlyProperties';
 import ApiResponse from '../ApiResponse';
 import NoteResource from '../../../models/NoteResource';
+import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 const Resource = require('../../../models/Resource');
 
 export default async function(request:Request, id:string = null, link:string = null) {
@@ -32,7 +33,7 @@ export default async function(request:Request, id:string = null, link:string = n
 		}
 
 		if (link === 'notes') {
-			return { items: await NoteResource.associatedNoteIds(id) };
+			return collectionToPaginatedResults(await NoteResource.associatedNoteIds(id), request);
 		}
 
 		if (link) throw new ErrorNotFound();

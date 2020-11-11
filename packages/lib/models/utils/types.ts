@@ -12,4 +12,5 @@ export interface PaginationOrder {
 export interface Pagination {
 	limit: number,
 	order: PaginationOrder[],
+	page: number,
 }

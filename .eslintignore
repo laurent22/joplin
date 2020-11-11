@@ -853,9 +853,9 @@ packages/lib/models/NoteResource.js.map
 packages/lib/models/Setting.d.ts
 packages/lib/models/Setting.js
 packages/lib/models/Setting.js.map
-packages/lib/models/utils/modelFeed.d.ts
-packages/lib/models/utils/modelFeed.js
-packages/lib/models/utils/modelFeed.js.map
+packages/lib/models/utils/paginatedFeed.d.ts
+packages/lib/models/utils/paginatedFeed.js
+packages/lib/models/utils/paginatedFeed.js.map
 packages/lib/models/utils/paginationToSql.d.ts
 packages/lib/models/utils/paginationToSql.js
 packages/lib/models/utils/paginationToSql.js.map
@@ -1117,6 +1117,9 @@ packages/lib/services/rest/routes/search.js.map
 packages/lib/services/rest/routes/tags.d.ts
 packages/lib/services/rest/routes/tags.js
 packages/lib/services/rest/routes/tags.js.map
+packages/lib/services/rest/utils/collectionToPaginatedResults.d.ts
+packages/lib/services/rest/utils/collectionToPaginatedResults.js
+packages/lib/services/rest/utils/collectionToPaginatedResults.js.map
 packages/lib/services/rest/utils/defaultAction.d.ts
 packages/lib/services/rest/utils/defaultAction.js
 packages/lib/services/rest/utils/defaultAction.js.map
@@ -1141,6 +1144,9 @@ packages/lib/services/rest/utils/requestFields.js.map
 packages/lib/services/rest/utils/requestPaginationOptions.d.ts
 packages/lib/services/rest/utils/requestPaginationOptions.js
 packages/lib/services/rest/utils/requestPaginationOptions.js.map
+packages/lib/services/rest/utils/types.d.ts
+packages/lib/services/rest/utils/types.js
+packages/lib/services/rest/utils/types.js.map
 packages/lib/services/searchengine/filterParser.d.ts
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.js.map

@@ -3,6 +3,7 @@ import { Request } from '../Api';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { ErrorBadRequest, ErrorMethodNotAllowed } from '../utils/errors';
 import requestFields from '../utils/requestFields';
+import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 const BaseItem = require('../../../models/BaseItem');
 const SearchEngineUtils = require('../../searchengine/SearchEngineUtils');
 
@@ -30,8 +31,5 @@ export default async function(request:Request) {
 		results = await SearchEngineUtils.notesForQuery(query, defaultLoadOptions(request, ModelType.Note));
 	}
 
-	return {
-		items: results,
-		// TODO: implement cursor support
-	};
+	return collectionToPaginatedResults(results, request);
 }
