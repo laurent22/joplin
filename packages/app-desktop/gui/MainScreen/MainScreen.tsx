@@ -3,11 +3,9 @@ import ResizableLayout, { findItemByKey, allDynamicSizes } from '../ResizableLay
 import { MoveButtonClickEvent } from '../ResizableLayout/MoveButtons';
 import { move } from '../ResizableLayout/utils/movements';
 import { LayoutItem, LayoutItemDirection } from '../ResizableLayout/utils/types';
-import NoteList from '../NoteList/NoteList';
 import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
-import NoteListControls from '../NoteListControls/NoteListControls';
 import CommandService from '@joplin/lib/services/CommandService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
@@ -18,6 +16,7 @@ import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
+import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
@@ -115,7 +114,6 @@ class MainScreenComponent extends React.Component<any, any> {
 
 	buildLayout(plugins:any):LayoutItem {
 		const rootLayoutSize = this.rootLayoutSize();
-		const theme = themeStyle(this.props.themeId);
 		const sideBarMinWidth = 200;
 
 		const sizes = {
@@ -169,35 +167,22 @@ class MainScreenComponent extends React.Component<any, any> {
 			height: rootLayoutSize.height,
 			children: [
 				{
-					key: 'sideBarColumn',
+					key: 'sideBar',
 					direction: LayoutItemDirection.Column,
 					resizableRight: true,
 					width: sizes.sideBarColumn.width,
 					visible: Setting.value('sidebarVisibility'),
 					minWidth: sideBarMinWidth,
-					children: [
-						{
-							key: 'sideBar',
-						},
-					],
 				},
 				{
-					key: 'noteListColumn',
+					key: 'noteList',
 					direction: LayoutItemDirection.Column,
 					resizableRight: true,
 					width: sizes.noteListColumn.width,
 					visible: Setting.value('noteListVisibility'),
 					minWidth: sideBarMinWidth,
-					children: [
-						{
-							height: theme.topRowHeight,
-							key: 'noteListControls',
-						},
-						{
-							key: 'noteList',
-						},
-					],
 				},
+				// TODO: Improve pluginColumn - make it add plugin views after note list
 				{
 					key: 'pluginColumn',
 					direction: LayoutItemDirection.Column,
@@ -208,13 +193,8 @@ class MainScreenComponent extends React.Component<any, any> {
 					children: pluginColumnChildren,
 				},
 				{
-					key: 'editorColumn',
+					key: 'editor',
 					direction: LayoutItemDirection.Column,
-					children: [
-						{
-							key: 'editor',
-						},
-					],
 				},
 			],
 		};
@@ -278,11 +258,11 @@ class MainScreenComponent extends React.Component<any, any> {
 	componentDidUpdate(prevProps:any, prevState:any) {
 		if (this.props.noteListVisibility !== prevProps.noteListVisibility || this.props.sidebarVisibility !== prevProps.sidebarVisibility) {
 			this.setState({ layout: produce(this.state.layout, (draft:any) => {
-				const noteListColumn = findItemByKey(draft, 'noteListColumn');
-				noteListColumn.visible = this.props.noteListVisibility;
+				const noteList = findItemByKey(draft, 'noteList');
+				noteList.visible = this.props.noteListVisibility;
 
-				const sideBarColumn = findItemByKey(draft, 'sideBarColumn');
-				sideBarColumn.visible = this.props.sidebarVisibility;
+				const sideBar = findItemByKey(draft, 'sideBar');
+				sideBar.visible = this.props.sidebarVisibility;
 			}) });
 		}
 
@@ -581,16 +561,31 @@ class MainScreenComponent extends React.Component<any, any> {
 	resizableLayout_renderItem(key:string, event:any) {
 		const eventEmitter = event.eventEmitter;
 
-		if (key === 'sideBar') {
-			return <SideBar key={key} />;
-		} else if (key === 'noteList') {
-			return <NoteList key={key} resizableLayoutEventEmitter={eventEmitter} size={event.size} visible={event.visible}/>;
-		} else if (key === 'editor') {
-			const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
-			return <NoteEditor key={key} bodyEditor={bodyEditor} />;
-		} else if (key === 'noteListControls') {
-			return <NoteListControls key={key} showNewNoteButtons={this.props.focusedField !== 'globalSearch'} />;
-		} else if (key.indexOf('plugin-view') === 0) {
+		const components:any = {
+			sideBar: () => {
+				return <SideBar key={key} />;	
+			},
+
+			noteList: () => {
+				return <NoteListWrapper
+					key={key}
+					resizableLayoutEventEmitter={eventEmitter}
+					visible={event.visible}
+					focusedField={this.props.focusedField}
+					size={event.size}
+					themeId={this.props.themeId}
+				/>
+			},
+
+			editor: () => {
+				const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
+			},
+		};
+
+		if (components[key]) return components[key]();
+					
+		if (key.indexOf('plugin-view') === 0) {
 			const { control, plugin } = event.item.context;
 			return <UserWebview
 				key={control.id}

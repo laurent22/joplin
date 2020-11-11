@@ -572,6 +572,9 @@ packages/app-desktop/gui/NoteListControls/commands/focusSearch.js.map
 packages/app-desktop/gui/NoteListItem.d.ts
 packages/app-desktop/gui/NoteListItem.js
 packages/app-desktop/gui/NoteListItem.js.map
+packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.d.ts
+packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
+packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js.map
 packages/app-desktop/gui/NoteTextViewer.d.ts
 packages/app-desktop/gui/NoteTextViewer.js
 packages/app-desktop/gui/NoteTextViewer.js.map
@@ -1157,9 +1160,6 @@ packages/lib/services/rest/utils/requestFields.js.map
 packages/lib/services/rest/utils/requestPaginationOptions.d.ts
 packages/lib/services/rest/utils/requestPaginationOptions.js
 packages/lib/services/rest/utils/requestPaginationOptions.js.map
-packages/lib/services/rest/utils/types.d.ts
-packages/lib/services/rest/utils/types.js
-packages/lib/services/rest/utils/types.js.map
 packages/lib/services/searchengine/filterParser.d.ts
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.js.map

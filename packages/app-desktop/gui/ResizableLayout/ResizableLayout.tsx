@@ -144,7 +144,18 @@ function ResizableLayout(props:Props) {
 
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
-	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):any {
+	function renderWrapper(comp:any, item:LayoutItem, size:Size) {
+		return (
+			<div key={item.key} style={{ border: '1px solid green', position: 'relative', display: 'flex', width: size.width, height: size.height }}>
+				<div style={{ zIndex: 100, backgroundColor: 'rgba(0,0,0,0.5)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex' }}>
+					<MoveButtons itemKey={item.key} onClick={props.onMoveButtonClick}/>
+				</div>
+				{comp}
+			</div>
+		);
+	}	
+
+	function renderLayoutItem(item:LayoutItem, parent:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):any {
 
 		function onResizeStart() {
 			setResizedItem({
@@ -177,31 +188,29 @@ function ResizableLayout(props:Props) {
 				visible: isVisible,
 			});
 
-			const size = { ...sizes[item.key] };
+			// const size = { ...sizes[item.key] };
 
-			// if (!('width' in size)) size.width = '100%';
-			// if (!('height' in size)) size.height = '100%';
+			// const wrapper = parent.children.length > 1 ? renderWrapper(comp, item, size) : comp;
 
-			const wrapper = (
-				<div key={item.key} style={{ border: '1px solid green', position: 'relative', display: 'flex', width: size.width, height: size.height }}>
-					<div style={{ zIndex: 100, backgroundColor: 'rgba(0,0,0,0.5)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex' }}>
-						<MoveButtons itemKey={item.key} onClick={props.onMoveButtonClick}/>
-					</div>
-					{comp}
-				</div>
-			);
-
-			// TODO: When container has only one child, do as if the container didn't exist and the child was the container
+			const wrapper = comp;
 
 			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
 		} else {
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
 				const child = item.children[i];
-				childrenComponents.push(renderLayoutItem(child, sizes, isVisible && itemVisible(child), i === item.children.length - 1));
+				childrenComponents.push(renderLayoutItem(child, item, sizes, isVisible && itemVisible(child), i === item.children.length - 1));
 			}
 
-			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
+			const comp = renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
+			return comp;
+
+			// if (item.children.length <= 1) {
+			// 	const size = { ...sizes[item.key] };
+			// 	return renderWrapper(comp, item, size)
+			// } else {
+			// 	return comp;
+			// }
 		}
 	}
 
@@ -212,7 +221,7 @@ function ResizableLayout(props:Props) {
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout);
 
-	return renderLayoutItem(props.layout, sizes, itemVisible(props.layout), true);
+	return renderLayoutItem(props.layout, null, sizes, itemVisible(props.layout), true);
 }
 
 export default ResizableLayout;
