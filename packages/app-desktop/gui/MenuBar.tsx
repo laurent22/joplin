@@ -519,6 +519,8 @@ function useMenu(props:Props) {
 			view: {
 				label: _('&View'),
 				submenu: [
+					menuItemDic.toggleLayoutMoveMode,
+					separator(),
 					menuItemDic.toggleSideBar,
 					menuItemDic.toggleNoteList,
 					menuItemDic.toggleVisiblePanes,

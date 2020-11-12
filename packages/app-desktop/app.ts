@@ -67,6 +67,7 @@ const commands = [
 	require('./gui/MainScreen/commands/openNote'),
 	require('./gui/MainScreen/commands/openFolder'),
 	require('./gui/MainScreen/commands/openTag'),
+	require('./gui/MainScreen/commands/toggleLayoutMoveMode'),
 	require('./gui/NoteEditor/commands/focusElementNoteBody'),
 	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
 	require('./gui/NoteEditor/commands/showLocalSearch'),
@@ -113,6 +114,7 @@ export interface AppState extends State {
 	devToolsVisible: boolean,
 	visibleDialogs: any, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 	focusedField: string,
+	layoutMoveMode: boolean,
 
 	// Extra reducer keys go here
 	watchedResources: any,
@@ -135,6 +137,7 @@ const appDefaultState:AppState = {
 	devToolsVisible: false,
 	visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 	focusedField: null,
+	layoutMoveMode: false,
 	...resourceEditWatcherDefaultState,
 };
 
@@ -331,6 +334,14 @@ class Application extends BaseApplication {
 					newState = Object.assign({}, state);
 					newState.focusedField = null;
 				}
+				break;
+
+			case 'LAYOUT_MOVE_MODE_SET':
+
+				newState = {
+					...state,
+					layoutMoveMode: action.value,
+				};
 				break;
 
 			}

@@ -7,7 +7,7 @@ import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem } from './utils/types';
 import { canMove, MoveDirection } from './utils/movements';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
-import { StyledWrapperRoot, StyledMoveOverlay } from './utils/style';
+import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootWrapper, MoveModeRootMessage } from './utils/style';
 const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
 
@@ -22,6 +22,8 @@ interface Props {
 	height?: number,
 	renderItem: Function,
 	onMoveButtonClick(event:MoveButtonClickEvent):void;
+	moveMode: boolean,
+	moveModeMessage: string,
 }
 
 export function allDynamicSizes(layout:LayoutItem):any {
@@ -143,19 +145,23 @@ function ResizableLayout(props:Props) {
 
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
-	function renderWrapper(comp:any, item:LayoutItem, parent:LayoutItem | null, size:Size) {
+	function renderItemWrapper(comp:any, item:LayoutItem, parent:LayoutItem | null, size:Size, moveMode:boolean) {
+		const moveOverlay = moveMode ? (
+			<StyledMoveOverlay>
+				<MoveButtons
+					itemKey={item.key}
+					onClick={props.onMoveButtonClick}
+					canMoveLeft={canMove(MoveDirection.Left, item, parent)}
+					canMoveRight={canMove(MoveDirection.Right, item, parent)}
+					canMoveUp={canMove(MoveDirection.Up, item, parent)}
+					canMoveDown={canMove(MoveDirection.Down, item, parent)}
+				/>
+			</StyledMoveOverlay>
+		) : null;
+
 		return (
 			<StyledWrapperRoot key={item.key} size={size}>
-				<StyledMoveOverlay>
-					<MoveButtons
-						itemKey={item.key}
-						onClick={props.onMoveButtonClick}
-						canMoveLeft={canMove(MoveDirection.Left, item, parent)}
-						canMoveRight={canMove(MoveDirection.Right, item, parent)}
-						canMoveUp={canMove(MoveDirection.Up, item, parent)}
-						canMoveDown={canMove(MoveDirection.Down, item, parent)}
-					/>
-				</StyledMoveOverlay>
+				{moveOverlay}
 				{comp}
 			</StyledWrapperRoot>
 		);
@@ -170,7 +176,7 @@ function ResizableLayout(props:Props) {
 			});
 		}
 
-		function onResize(_event:any, _direction:any, _refToElement: HTMLDivElement, delta:any) {
+		function onResize(_event:any, _direction:any, _refToElement: any, delta:any) {
 			const newLayout = updateLayoutItem(props.layout, item.key, {
 				width: resizedItem.initialWidth + delta.width,
 				height: resizedItem.initialHeight + delta.height,
@@ -180,7 +186,7 @@ function ResizableLayout(props:Props) {
 			eventEmitter.current.emit('resize');
 		}
 
-		function onResizeStop(_event:any, _direction:any, _refToElement: HTMLDivElement, delta:any) {
+		function onResizeStop(_event:any, _direction:any, _refToElement: any, delta:any) {
 			onResize(_event, _direction, _refToElement, delta);
 			setResizedItem(null);
 		}
@@ -195,7 +201,7 @@ function ResizableLayout(props:Props) {
 				visible: isVisible,
 			});
 
-			const wrapper = parent.children.length > 1 ? renderWrapper(comp, item, parent, size) : comp;
+			const wrapper = renderItemWrapper(comp, item, parent, size, props.moveMode);
 
 			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
 		} else {
@@ -216,7 +222,22 @@ function ResizableLayout(props:Props) {
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout);
 
-	return renderLayoutItem(props.layout, null, sizes, itemVisible(props.layout), true);
+	function renderMoveModeBox(rootComp:any) {
+		return (
+			<MoveModeRootWrapper>
+				<MoveModeRootMessage>{props.moveModeMessage}</MoveModeRootMessage>
+				{rootComp}
+			</MoveModeRootWrapper>
+		);
+	}
+
+	const rootComp = renderLayoutItem(props.layout, null, sizes, itemVisible(props.layout), true);
+
+	if (props.moveMode) {
+		return renderMoveModeBox(rootComp);
+	} else {
+		return rootComp;
+	}
 }
 
 export default ResizableLayout;

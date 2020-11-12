@@ -18,6 +18,7 @@ import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
 import validateLayout from '../ResizableLayout/utils/validateLayout';
+import { AppState } from '../../app';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
@@ -32,6 +33,20 @@ const EncryptionService = require('@joplin/lib/services/EncryptionService');
 const ipcRenderer = require('electron').ipcRenderer;
 const time = require('@joplin/lib/time').default;
 const styled = require('styled-components').default;
+
+interface LayerModalState {
+	visible: boolean,
+	message: string,
+}
+
+interface State {
+	promptOptions: any,
+	modalLayer: LayerModalState,
+	notePropertiesDialogOptions: any,
+	noteContentPropertiesDialogOptions: any,
+	shareNoteDialogOptions: any,
+	layout: LayoutItem,
+}
 
 const StyledUserWebviewDialogContainer = styled.div`
 	display: flex;
@@ -68,12 +83,13 @@ const commands = [
 	require('./commands/toggleNoteList'),
 	require('./commands/toggleSideBar'),
 	require('./commands/toggleVisiblePanes'),
+	require('./commands/toggleLayoutMoveMode'),
 	require('./commands/openNote'),
 	require('./commands/openFolder'),
 	require('./commands/openTag'),
 ];
 
-class MainScreenComponent extends React.Component<any, any> {
+class MainScreenComponent extends React.Component<any, State> {
 
 	waitForNotesSavedIID_:any;
 	isPrinting_:boolean;
@@ -109,6 +125,7 @@ class MainScreenComponent extends React.Component<any, any> {
 		this.resizableLayout_moveButtonClick = this.resizableLayout_moveButtonClick.bind(this);
 		this.window_resize = this.window_resize.bind(this);
 		this.rowHeight = this.rowHeight.bind(this);
+		this.layoutModeListenerKeyDown = this.layoutModeListenerKeyDown.bind(this);
 
 		window.addEventListener('resize', this.window_resize);
 	}
@@ -304,14 +321,23 @@ class MainScreenComponent extends React.Component<any, any> {
 		}
 	}
 
+	layoutModeListenerKeyDown(event:any) {
+		if (event.key !== 'Escape') return;
+		if (!this.props.layoutMoveMode) return;
+		CommandService.instance().execute('toggleLayoutMoveMode');
+	}
+
 	componentDidMount() {
 		this.updateRootLayoutSize();
+
+		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
 	}
 
 	componentWillUnmount() {
 		this.unregisterCommands();
 
 		window.removeEventListener('resize', this.window_resize);
+		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
 	}
 
 	toggleSideBar() {
@@ -680,13 +706,15 @@ class MainScreenComponent extends React.Component<any, any> {
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
 				{messageComp}
+
 				<ResizableLayout
-					width={this.state.width}
 					height={styles.rowHeight}
 					layout={this.state.layout}
 					onResize={this.resizableLayout_resize}
 					onMoveButtonClick={this.resizableLayout_moveButtonClick}
 					renderItem={this.resizableLayout_renderItem}
+					moveMode={this.props.layoutMoveMode}
+					moveModeMessage={_('Use the arrows to move the layout items. Press "Escape" to exit.')}
 				/>
 				{pluginDialog}
 			</div>
@@ -694,7 +722,7 @@ class MainScreenComponent extends React.Component<any, any> {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state:AppState) => {
 	return {
 		themeId: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],
@@ -717,6 +745,7 @@ const mapStateToProps = (state:any) => {
 		editorNoteStatuses: state.editorNoteStatuses,
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
 		focusedField: state.focusedField,
+		layoutMoveMode: state.layoutMoveMode,
 	};
 };
 
