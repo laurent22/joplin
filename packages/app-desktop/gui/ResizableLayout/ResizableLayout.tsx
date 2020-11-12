@@ -15,27 +15,27 @@ const itemMinWidth = 20;
 const itemMinHeight = 20;
 
 interface onResizeEvent {
-	layout: LayoutItem
+	layout: LayoutItem;
 }
 
 interface Props {
-	layout: LayoutItem,
-	onResize(event:onResizeEvent):void;
-	width?: number,
-	height?: number,
-	renderItem: Function,
-	onMoveButtonClick(event:MoveButtonClickEvent):void;
-	moveMode: boolean,
-	moveModeMessage: string,
+	layout: LayoutItem;
+	onResize(event: onResizeEvent): void;
+	width?: number;
+	height?: number;
+	renderItem: Function;
+	onMoveButtonClick(event: MoveButtonClickEvent): void;
+	moveMode: boolean;
+	moveModeMessage: string;
 }
 
-export function allDynamicSizes(layout:LayoutItem):any {
-	const output:any = {};
+export function allDynamicSizes(layout: LayoutItem): any {
+	const output: any = {};
 
-	function recurseProcess(item:LayoutItem) {
+	function recurseProcess(item: LayoutItem) {
 		if (item.resizableBottom || item.resizableRight) {
 			if ('width' in item || 'height' in item) {
-				const size:any = {};
+				const size: any = {};
 				if ('width' in item) size.width = item.width;
 				if ('height' in item) size.height = item.height;
 				output[item.key] = size;
@@ -54,8 +54,8 @@ export function allDynamicSizes(layout:LayoutItem):any {
 	return output;
 }
 
-export function findItemByKey(layout:LayoutItem, key:string):LayoutItem {
-	function recurseFind(item:LayoutItem):LayoutItem {
+export function findItemByKey(layout: LayoutItem, key: string): LayoutItem {
+	function recurseFind(item: LayoutItem): LayoutItem {
 		if (item.key === key) return item;
 
 		if (item.children) {
@@ -72,9 +72,9 @@ export function findItemByKey(layout:LayoutItem, key:string):LayoutItem {
 	return output;
 }
 
-function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
-	return produce(layout, (draftState:LayoutItem) => {
-		function recurseFind(item:LayoutItem) {
+function updateLayoutItem(layout: LayoutItem, key: string, props: any) {
+	return produce(layout, (draftState: LayoutItem) => {
+		function recurseFind(item: LayoutItem) {
 			if (item.key === key) {
 				for (const n in props) {
 					(item as any)[n] = props[n];
@@ -92,19 +92,19 @@ function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
 	});
 }
 
-function itemVisible(item:LayoutItem, moveMode:boolean) {
+function itemVisible(item: LayoutItem, moveMode: boolean) {
 	if (moveMode) return true;
 	if (item.children && !item.children.length) return false;
 	return item.visible !== false;
 }
 
-function renderContainer(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:any[], isLastChild:boolean, moveMode:boolean):any {
-	const style:any = {
+function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean, moveMode: boolean): any {
+	const style: any = {
 		display: itemVisible(item, moveMode) ? 'flex' : 'none',
 		flexDirection: item.direction,
 	};
 
-	const size:Size = itemSize(item, parent, sizes, true);
+	const size: Size = itemSize(item, parent, sizes, true);
 
 	const className = `resizableLayoutItem rli-${item.key}`;
 	if (item.resizableRight || item.resizableBottom) {
@@ -144,12 +144,12 @@ function renderContainer(item:LayoutItem, parent:LayoutItem | null, sizes:Layout
 	}
 }
 
-function ResizableLayout(props:Props) {
+function ResizableLayout(props: Props) {
 	const eventEmitter = useRef(new EventEmitter());
 
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
-	function renderItemWrapper(comp:any, item:LayoutItem, parent:LayoutItem | null, size:Size, moveMode:boolean) {
+	function renderItemWrapper(comp: any, item: LayoutItem, parent: LayoutItem | null, size: Size, moveMode: boolean) {
 		const moveOverlay = moveMode ? (
 			<StyledMoveOverlay>
 				<MoveButtons
@@ -171,7 +171,7 @@ function ResizableLayout(props:Props) {
 		);
 	}
 
-	function renderLayoutItem(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):any {
+	function renderLayoutItem(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean): any {
 		function onResizeStart() {
 			setResizedItem({
 				key: item.key,
@@ -180,11 +180,11 @@ function ResizableLayout(props:Props) {
 			});
 		}
 
-		function onResize(_event:any, direction:string, _refToElement: any, delta:any) {
+		function onResize(_event: any, direction: string, _refToElement: any, delta: any) {
 			const newWidth = Math.max(itemMinWidth, resizedItem.initialWidth + delta.width);
 			const newHeight = Math.max(itemMinHeight, resizedItem.initialHeight + delta.height);
 
-			const newSize:any = {};
+			const newSize: any = {};
 
 			if (item.width) newSize.width = item.width;
 			if (item.height) newSize.height = item.height;
@@ -201,7 +201,7 @@ function ResizableLayout(props:Props) {
 			eventEmitter.current.emit('resize');
 		}
 
-		function onResizeStop(_event:any, _direction:any, _refToElement: any, delta:any) {
+		function onResizeStop(_event: any, _direction: any, _refToElement: any, delta: any) {
 			onResize(_event, _direction, _refToElement, delta);
 			setResizedItem(null);
 		}
@@ -237,7 +237,7 @@ function ResizableLayout(props:Props) {
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout, props.moveMode);
 
-	function renderMoveModeBox(rootComp:any) {
+	function renderMoveModeBox(rootComp: any) {
 		return (
 			<MoveModeRootWrapper>
 				<MoveModeRootMessage>{props.moveModeMessage}</MoveModeRootMessage>

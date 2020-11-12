@@ -14,20 +14,20 @@ enum PluginMessageTarget {
 }
 
 export interface PluginMessage {
-	target: PluginMessageTarget,
-	pluginId: string,
-	callbackId?: string,
-	path?: string,
-	args?: any[],
-	result?: any,
-	error?: any,
-	mainWindowCallbackId?: string,
+	target: PluginMessageTarget;
+	pluginId: string;
+	callbackId?: string;
+	path?: string;
+	args?: any[];
+	result?: any;
+	error?: any;
+	mainWindowCallbackId?: string;
 }
 
 let callbackIndex = 1;
-const callbackPromises:any = {};
+const callbackPromises: any = {};
 
-function mapEventIdsToHandlers(pluginId:string, arg:any) {
+function mapEventIdsToHandlers(pluginId: string, arg: any) {
 	if (Array.isArray(arg)) {
 		for (let i = 0; i < arg.length; i++) {
 			arg[i] = mapEventIdsToHandlers(pluginId, arg[i]);
@@ -36,7 +36,7 @@ function mapEventIdsToHandlers(pluginId:string, arg:any) {
 	} else if (typeof arg === 'string' && arg.indexOf('___plugin_event_') === 0) {
 		const eventId = arg;
 
-		return async (...args:any[]) => {
+		return async (...args: any[]) => {
 			const callbackId = `cb_${pluginId}_${Date.now()}_${callbackIndex++}`;
 
 			const promise = new Promise((resolve, reject) => {
@@ -68,7 +68,7 @@ function mapEventIdsToHandlers(pluginId:string, arg:any) {
 
 export default class PluginRunner extends BasePluginRunner {
 
-	protected eventHandlers_:EventHandlers = {};
+	protected eventHandlers_: EventHandlers = {};
 
 	constructor() {
 		super();
@@ -76,12 +76,12 @@ export default class PluginRunner extends BasePluginRunner {
 		this.eventHandler = this.eventHandler.bind(this);
 	}
 
-	private async eventHandler(eventHandlerId:string, args:any[]) {
+	private async eventHandler(eventHandlerId: string, args: any[]) {
 		const cb = this.eventHandlers_[eventHandlerId];
 		return cb(...args);
 	}
 
-	async run(plugin:Plugin, pluginApi:Global) {
+	async run(plugin: Plugin, pluginApi: Global) {
 		const scriptPath = `${Setting.value('tempDir')}/plugin_${plugin.id}.js`;
 		await shim.fsDriver().writeFile(scriptPath, plugin.scriptText, 'utf8');
 
@@ -104,7 +104,7 @@ export default class PluginRunner extends BasePluginRunner {
 			pluginWindow.webContents.openDevTools({ mode: 'detach' });
 		});
 
-		ipcRenderer.on('pluginMessage', async (_event:any, message:PluginMessage) => {
+		ipcRenderer.on('pluginMessage', async (_event: any, message: PluginMessage) => {
 			if (message.target !== PluginMessageTarget.MainWindow) return;
 			if (message.pluginId !== plugin.id) return;
 
@@ -127,8 +127,8 @@ export default class PluginRunner extends BasePluginRunner {
 
 				this.logger().debug(`PluginRunner: execute call: ${fullPath}: ${mappedArgs}`);
 
-				let result:any = null;
-				let error:any = null;
+				let result: any = null;
+				let error: any = null;
 				try {
 					result = await executeSandboxCall(plugin.id, pluginApi, fullPath, mappedArgs, this.eventHandler);
 				} catch (e) {

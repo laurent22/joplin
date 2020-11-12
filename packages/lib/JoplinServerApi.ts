@@ -6,32 +6,32 @@ const { rtrimSlashes } = require('./path-utils');
 const base64 = require('base-64');
 
 interface JoplinServerApiOptions {
-	username: Function,
-	password: Function,
-	baseUrl: Function,
+	username: Function;
+	password: Function;
+	baseUrl: Function;
 }
 
 export default class JoplinServerApi {
 
-	logger_:any;
-	options_:JoplinServerApiOptions;
-	kvStore_:any;
+	logger_: any;
+	options_: JoplinServerApiOptions;
+	kvStore_: any;
 
-	constructor(options:JoplinServerApiOptions) {
+	constructor(options: JoplinServerApiOptions) {
 		this.logger_ = new Logger();
 		this.options_ = options;
 		this.kvStore_ = null;
 	}
 
-	setLogger(l:any) {
+	setLogger(l: any) {
 		this.logger_ = l;
 	}
 
-	logger():any {
+	logger(): any {
 		return this.logger_;
 	}
 
-	setKvStore(v:any) {
+	setKvStore(v: any) {
 		this.kvStore_ = v;
 	}
 
@@ -40,7 +40,7 @@ export default class JoplinServerApi {
 		return this.kvStore_;
 	}
 
-	authToken():string {
+	authToken(): string {
 		if (!this.options_.username() || !this.options_.password()) return null;
 		try {
 			// Note: Non-ASCII passwords will throw an error about Latin1 characters - https://github.com/laurent22/joplin/issues/246
@@ -53,11 +53,11 @@ export default class JoplinServerApi {
 		}
 	}
 
-	baseUrl():string {
+	baseUrl(): string {
 		return rtrimSlashes(this.options_.baseUrl());
 	}
 
-	static baseUrlFromNextcloudWebDavUrl(webDavUrl:string) {
+	static baseUrlFromNextcloudWebDavUrl(webDavUrl: string) {
 		// http://nextcloud.local/remote.php/webdav/Joplin
 		// http://nextcloud.local/index.php/apps/joplin/api
 		const splitted = webDavUrl.split('/remote.php/webdav');
@@ -65,24 +65,24 @@ export default class JoplinServerApi {
 		return `${splitted[0]}/index.php/apps/joplin/api`;
 	}
 
-	syncTargetId(settings:any) {
+	syncTargetId(settings: any) {
 		const s = settings['sync.5.syncTargets'][settings['sync.5.path']];
 		if (!s) throw new Error(`Joplin Nextcloud app not configured for URL: ${this.baseUrl()}`);
 		return s.uuid;
 	}
 
-	static connectionErrorMessage(error:any) {
+	static connectionErrorMessage(error: any) {
 		const msg = error && error.message ? error.message : 'Unknown error';
 		return _('Could not connect to the Joplin Nextcloud app. Please check the configuration in the Synchronisation config screen. Full error was:\n\n%s', msg);
 	}
 
-	async setupSyncTarget(webDavUrl:string) {
+	async setupSyncTarget(webDavUrl: string) {
 		return this.exec('POST', 'sync_targets', {
 			webDavUrl: webDavUrl,
 		});
 	}
 
-	requestToCurl_(url:string, options:any) {
+	requestToCurl_(url: string, options: any) {
 		const output = [];
 		output.push('curl');
 		output.push('-v');
@@ -99,7 +99,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	async exec(method:string, path:string = '', body:any = null, headers:any = null, options:any = null):Promise<any> {
+	async exec(method: string, path: string = '', body: any = null, headers: any = null, options: any = null): Promise<any> {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 
@@ -111,7 +111,7 @@ export default class JoplinServerApi {
 
 		if (typeof body === 'object' && body !== null) body = JSON.stringify(body);
 
-		const fetchOptions:any = {};
+		const fetchOptions: any = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
@@ -129,7 +129,7 @@ export default class JoplinServerApi {
 
 		const responseText = await response.text();
 
-		const responseJson_:any = null;
+		const responseJson_: any = null;
 		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
@@ -140,7 +140,7 @@ export default class JoplinServerApi {
 			}
 		};
 
-		const newError = (message:string, code:number = 0) => {
+		const newError = (message: string, code: number = 0) => {
 			return new JoplinError(`${method} ${path}: ${message} (${code})`, code);
 		};
 

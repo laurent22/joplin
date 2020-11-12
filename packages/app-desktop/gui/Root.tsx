@@ -24,22 +24,22 @@ const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-
 const bridge = require('electron').remote.require('./bridge').default;
 
 interface Props {
-	themeId: number,
-	appState: string,
-	dispatch: Function,
-	size: Size,
-	zoomFactor: number,
+	themeId: number;
+	appState: string;
+	dispatch: Function;
+	size: Size;
+	zoomFactor: number;
 }
 
 const GlobalStyle = createGlobalStyle`
 	div, span, a {
-		/*color: ${(props:any) => props.theme.color};*/
-		/*font-size: ${(props:any) => props.theme.fontSize}px;*/
-		font-family: ${(props:any) => props.theme.fontFamily};
+		/*color: ${(props: any) => props.theme.color};*/
+		/*font-size: ${(props: any) => props.theme.fontSize}px;*/
+		font-family: ${(props: any) => props.theme.fontFamily};
 	}
 `;
 
-let wcsTimeoutId_:any = null;
+let wcsTimeoutId_: any = null;
 
 async function initialize() {
 	bridge().window().on('resize', function() {
@@ -128,7 +128,7 @@ class RootComponent extends React.Component<Props, any> {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return {
 		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,

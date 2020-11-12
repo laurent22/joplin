@@ -1,12 +1,12 @@
 import { LayoutItem } from './types';
 
-type ItemItemCallback = (itemIndex:number, layout:LayoutItem, parent:LayoutItem) => boolean;
+type ItemItemCallback = (itemIndex: number, layout: LayoutItem, parent: LayoutItem)=> boolean;
 
-export default function iterateItems(layout:LayoutItem, callback:ItemItemCallback) {
+export default function iterateItems(layout: LayoutItem, callback: ItemItemCallback) {
 	const result = callback(0, layout, null);
 	if (result === false) return;
 
-	function recurseFind(item:LayoutItem, callback:Function):boolean {
+	function recurseFind(item: LayoutItem, callback: Function): boolean {
 		if (item.children) {
 			for (let childIndex = 0; childIndex < item.children.length; childIndex++) {
 				const child = item.children[childIndex];

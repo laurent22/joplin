@@ -7,7 +7,7 @@ import { findItemByKey } from '../ResizableLayout';
 describe('movements', () => {
 
 	test('should move items horizontally to the right', () => {
-		let layout:LayoutItem = validateLayout({
+		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,
 			height: 100,
@@ -46,7 +46,7 @@ describe('movements', () => {
 	});
 
 	test('should move items horizontally to the left', () => {
-		let layout:LayoutItem = validateLayout({
+		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,
 			height: 100,
@@ -74,7 +74,7 @@ describe('movements', () => {
 	});
 
 	test('should move items vertically', () => {
-		let layout:LayoutItem = validateLayout({
+		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,
 			height: 100,
@@ -106,7 +106,7 @@ describe('movements', () => {
 	});
 
 	test('should tell if item can be moved', () => {
-		const layout:LayoutItem = validateLayout({
+		const layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 200,
 			height: 100,
@@ -149,7 +149,7 @@ describe('movements', () => {
 	});
 
 	test('Container with only one child should take the width of its parent', () => {
-		let layout:LayoutItem = validateLayout({
+		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,
 			height: 100,
@@ -172,7 +172,7 @@ describe('movements', () => {
 	});
 
 	test('Temp container should take the width of the child it replaces', () => {
-		let layout:LayoutItem = validateLayout({
+		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,
 			height: 100,
@@ -200,7 +200,7 @@ describe('movements', () => {
 	});
 
 	test('Last child should have flexible width if all siblings have fixed width', () => {
-		let layout:LayoutItem = validateLayout({
+		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,
 			height: 100,

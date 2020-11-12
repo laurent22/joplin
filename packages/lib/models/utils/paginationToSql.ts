@@ -1,7 +1,7 @@
 import { Pagination } from './types';
 
-export default function(pagination:Pagination):string {
-	const sql:string[] = [];
+export default function(pagination: Pagination): string {
+	const sql: string[] = [];
 
 	for (let i = 0; i < pagination.order.length; i++) {
 		const o = pagination.order[i];

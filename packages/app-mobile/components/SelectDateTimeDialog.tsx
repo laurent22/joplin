@@ -10,10 +10,10 @@ const DateTimePickerModal = require('react-native-modal-datetime-picker').defaul
 
 export default class SelectDateTimeDialog extends React.PureComponent<any, any> {
 
-	private dialog_:any = null;
-	private shown_:boolean = false;
+	private dialog_: any = null;
+	private shown_: boolean = false;
 
-	constructor(props:any) {
+	constructor(props: any) {
 		super(props);
 
 		this.state = {
@@ -28,7 +28,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.onSetDate = this.onSetDate.bind(this);
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps:any) {
+	UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.date != this.state.date) {
 			this.setState({ date: newProps.date });
 		}
@@ -38,7 +38,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		}
 	}
 
-	show(doShow:boolean = true) {
+	show(doShow: boolean = true) {
 		if (doShow) {
 			this.dialog_.show();
 		} else {
@@ -64,7 +64,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		if (this.props.onAccept) this.props.onAccept(null);
 	}
 
-	onPickerConfirm(selectedDate:Date) {
+	onPickerConfirm(selectedDate: Date) {
 		this.setState({ date: selectedDate, showPicker: false });
 	}
 
@@ -110,7 +110,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 
 		return (
 			<PopupDialog
-				ref={(dialog:any) => { this.dialog_ = dialog; }}
+				ref={(dialog: any) => { this.dialog_ = dialog; }}
 				dialogTitle={<DialogTitle title={_('Set alarm')} />}
 				actions={popupActions}
 				dismissOnTouchOutside={false}

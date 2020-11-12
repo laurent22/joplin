@@ -1,7 +1,7 @@
 import { Theme } from './type';
 import theme_light from './light';
 
-const theme:Theme = {
+const theme: Theme = {
 	...theme_light,
 
 	backgroundColor: '#fdf6e3',

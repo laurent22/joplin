@@ -1,9 +1,9 @@
 const time = require('../../time').default;
 
 interface Term {
-	name: string
-	value: string
-	negated: boolean
+	name: string;
+	value: string;
+	negated: boolean;
 }
 
 enum Relation {
@@ -13,12 +13,12 @@ enum Relation {
 
 enum Operation {
 	UNION = 'UNION',
-	INTERSECT = 'INTERSECT'
+	INTERSECT = 'INTERSECT',
 }
 
 enum Requirement {
 	EXCLUSION = 'EXCLUSION',
-	INCLUSION = 'INCLUSION'
+	INCLUSION = 'INCLUSION',
 }
 
 const notebookFilter = (terms: Term[], conditions: string[], params: string[], withs: string[]) => {
@@ -267,7 +267,7 @@ const locationFilter = (terms: Term[], conditons: string[], params: string[], re
 };
 
 const dateFilter = (terms: Term[], conditons: string[], params: string[], relation: Relation) => {
-	const getUnixMs = (date:string): string => {
+	const getUnixMs = (date: string): string => {
 		const yyyymmdd = /^[0-9]{8}$/;
 		const yyyymm = /^[0-9]{6}$/;
 		const yyyy = /^[0-9]{4}$/;
@@ -301,7 +301,7 @@ const sourceUrlFilter = (terms: Term[], conditons: string[], params: string[], r
 
 
 const textFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, fuzzy: Boolean) => {
-	const addExcludeTextConditions = (excludedTerms: Term[], conditions:string[], params: string[], relation: Relation) => {
+	const addExcludeTextConditions = (excludedTerms: Term[], conditions: string[], params: string[], relation: Relation) => {
 		const type = excludedTerms[0].name === 'text' ? '' : `.${excludedTerms[0].name}`;
 
 		if (relation === 'AND') {

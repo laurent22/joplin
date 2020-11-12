@@ -15,14 +15,14 @@ const Note = require('@joplin/lib/models/Note');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface ContextMenuProps {
-	notes: any[],
-	dispatch: Function,
-	watchedNoteFiles: string[],
-	plugins: PluginStates,
+	notes: any[];
+	dispatch: Function;
+	watchedNoteFiles: string[];
+	plugins: PluginStates;
 }
 
 export default class NoteListUtils {
-	static makeContextMenu(noteIds:string[], props:ContextMenuProps) {
+	static makeContextMenu(noteIds: string[], props: ContextMenuProps) {
 		const cmdService = CommandService.instance();
 
 		const menuUtils = new MenuUtils(cmdService);
@@ -86,7 +86,7 @@ export default class NoteListUtils {
 					})
 				);
 			} else {
-				const switchNoteType = async (noteIds:string[], type:string) => {
+				const switchNoteType = async (noteIds: string[], type: string) => {
 					for (let i = 0; i < noteIds.length; i++) {
 						const note = await Note.load(noteIds[i]);
 						const newNote = Note.changeNoteType(note, type);
@@ -189,7 +189,7 @@ export default class NoteListUtils {
 		return menu;
 	}
 
-	static async confirmDeleteNotes(noteIds:string[]) {
+	static async confirmDeleteNotes(noteIds: string[]) {
 		if (!noteIds.length) return;
 
 		let msg = '';

@@ -7,11 +7,11 @@ import { Size } from '../ResizableLayout/utils/types';
 import styled from 'styled-components';
 
 interface Props {
-	resizableLayoutEventEmitter: any,
-	size: Size,
-	visible: boolean,
-	focusedField: string,
-	themeId: number,
+	resizableLayoutEventEmitter: any;
+	size: Size;
+	visible: boolean;
+	focusedField: string;
+	themeId: number;
 }
 
 const StyledRoot = styled.div`
@@ -19,7 +19,7 @@ const StyledRoot = styled.div`
 	flex-direction: column;
 `;
 
-export default function NoteListWrapper(props:Props) {
+export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
 	const controlHeight = theme.topRowHeight;
 

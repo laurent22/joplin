@@ -5,15 +5,15 @@ const Note = require('@joplin/lib/models/Note');
 const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const bridge = require('electron').remote.require('./bridge').default;
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'startExternalEditing',
 	label: () => _('Edit in external editor'),
 	iconName: 'icon-share',
 };
 
-export const runtime = ():CommandRuntime => {
+export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, noteId:string = null) => {
+		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
 			try {

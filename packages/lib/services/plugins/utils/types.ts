@@ -3,10 +3,10 @@ export enum PluginPermission {
 }
 
 export interface PluginManifest {
-	manifest_version: number,
-	name: string,
-	version: string,
-	description?: string,
-	homepage_url?: string,
-	permissions?: PluginPermission[],
+	manifest_version: number;
+	name: string;
+	version: string;
+	description?: string;
+	homepage_url?: string;
+	permissions?: PluginPermission[];
 }

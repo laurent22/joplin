@@ -14,22 +14,22 @@ export default class JoplinViewsDialogs {
 
 	private store: any;
 	private plugin: Plugin;
-	private implementation_:any;
+	private implementation_: any;
 
-	constructor(implementation:any, plugin: Plugin, store: any) {
+	constructor(implementation: any, plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
 		this.implementation_ = implementation;
 	}
 
-	private controller(handle:ViewHandle):WebviewController {
+	private controller(handle: ViewHandle): WebviewController {
 		return this.plugin.viewController(handle) as WebviewController;
 	}
 
 	/**
 	 * Creates a new dialog
 	 */
-	async create():Promise<ViewHandle> {
+	async create(): Promise<ViewHandle> {
 		const handle = createViewHandle(this.plugin);
 		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir);
 		controller.containerType = ContainerType.Dialog;
@@ -40,28 +40,28 @@ export default class JoplinViewsDialogs {
 	/**
 	 * Displays a message box with OK/Cancel buttons. Returns the button index that was clicked - "0" for OK and "1" for "Cancel"
 	 */
-	async showMessageBox(message:string):Promise<number> {
+	async showMessageBox(message: string): Promise<number> {
 		return this.implementation_.showMessageBox(message);
 	}
 
 	/**
 	 * Sets the dialog HTML content
 	 */
-	async setHtml(handle:ViewHandle, html:string) {
+	async setHtml(handle: ViewHandle, html: string) {
 		return this.controller(handle).html = html;
 	}
 
 	/**
 	 * Sets the dialog buttons.
 	 */
-	async setButtons(handle:ViewHandle, buttons:ButtonSpec[]) {
+	async setButtons(handle: ViewHandle, buttons: ButtonSpec[]) {
 		return this.controller(handle).buttons = buttons;
 	}
 
 	/**
 	 * Opens the dialog
 	 */
-	async open(handle:ViewHandle):Promise<ButtonId> {
+	async open(handle: ViewHandle): Promise<ButtonId> {
 		return this.controller(handle).open();
 	}
 

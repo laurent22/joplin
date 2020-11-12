@@ -29,7 +29,7 @@ const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 
-let htmlToMdParser_:any = null;
+let htmlToMdParser_: any = null;
 
 function htmlToMdParser() {
 	if (htmlToMdParser_) return htmlToMdParser_;
@@ -37,8 +37,8 @@ function htmlToMdParser() {
 	return htmlToMdParser_;
 }
 
-async function requestNoteToNote(requestNote:any) {
-	const output:any = {
+async function requestNoteToNote(requestNote: any) {
+	const output: any = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
 	};
@@ -117,7 +117,7 @@ async function requestNoteToNote(requestNote:any) {
 	return output;
 }
 
-async function buildNoteStyleSheet(stylesheets:any[]) {
+async function buildNoteStyleSheet(stylesheets: any[]) {
 	if (!stylesheets) return [];
 
 	const output = [];
@@ -143,7 +143,7 @@ async function buildNoteStyleSheet(stylesheets:any[]) {
 	return output;
 }
 
-async function tryToGuessImageExtFromMimeType(response:any, imagePath:string) {
+async function tryToGuessImageExtFromMimeType(response: any, imagePath: string) {
 	const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
 	if (!mimeType) return imagePath;
 
@@ -155,7 +155,7 @@ async function tryToGuessImageExtFromMimeType(response:any, imagePath:string) {
 	return newImagePath;
 }
 
-async function downloadImage(url:string /* , allowFileProtocolImages */) {
+async function downloadImage(url: string /* , allowFileProtocolImages */) {
 	const tempDir = Setting.value('tempDir');
 
 	// The URL we get to download have been extracted from the Markdown document
@@ -194,12 +194,12 @@ async function downloadImage(url:string /* , allowFileProtocolImages */) {
 	}
 }
 
-async function downloadImages(urls:string[] /* , allowFileProtocolImages:boolean */) {
+async function downloadImages(urls: string[] /* , allowFileProtocolImages:boolean */) {
 	const PromisePool = require('es6-promise-pool');
 
-	const output:any = {};
+	const output: any = {};
 
-	const downloadOne = async (url:string) => {
+	const downloadOne = async (url: string) => {
 		const imagePath = await downloadImage(url); // , allowFileProtocolImages);
 		if (imagePath) output[url] = { path: imagePath, originalUrl: url };
 	};
@@ -219,10 +219,10 @@ async function downloadImages(urls:string[] /* , allowFileProtocolImages:boolean
 	return output;
 }
 
-async function createResourcesFromPaths(urls:string[]) {
+async function createResourcesFromPaths(urls: string[]) {
 	for (const url in urls) {
 		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo:any = urls[url];
+		const urlInfo: any = urls[url];
 		try {
 			const resource = await shim.createResourceFromPath(urlInfo.path);
 			urlInfo.resource = resource;
@@ -233,10 +233,10 @@ async function createResourcesFromPaths(urls:string[]) {
 	return urls;
 }
 
-async function removeTempFiles(urls:string[]) {
+async function removeTempFiles(urls: string[]) {
 	for (const url in urls) {
 		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo:any = urls[url];
+		const urlInfo: any = urls[url];
 		try {
 			await shim.fsDriver().remove(urlInfo.path);
 		} catch (error) {
@@ -245,18 +245,18 @@ async function removeTempFiles(urls:string[]) {
 	}
 }
 
-function replaceImageUrlsByResources(markupLanguage:number, md:string, urls:any, imageSizes:any) {
-	const imageSizesIndexes:any = {};
+function replaceImageUrlsByResources(markupLanguage: number, md: string, urls: any, imageSizes: any) {
+	const imageSizesIndexes: any = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
-		return htmlUtils.replaceImageUrls(md, (imageUrl:string) => {
-			const urlInfo:any = urls[imageUrl];
+		return htmlUtils.replaceImageUrls(md, (imageUrl: string) => {
+			const urlInfo: any = urls[imageUrl];
 			if (!urlInfo || !urlInfo.resource) return imageUrl;
 			return Resource.internalUrl(urlInfo.resource);
 		});
 	} else {
 		// eslint-disable-next-line no-useless-escape
-		return md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match:any, before:string, imageUrl:string, after:string) => {
+		return md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, imageUrl: string, after: string) => {
 			const urlInfo = urls[imageUrl];
 			if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
 			if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
@@ -285,19 +285,19 @@ function replaceImageUrlsByResources(markupLanguage:number, md:string, urls:any,
 }
 
 // Note must have been saved first
-async function attachImageFromDataUrl(note:any, imageDataUrl:string, cropRect:any) {
+async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect: any) {
 	const tempDir = Setting.value('tempDir');
 	const mime = mimeUtils.fromDataUrl(imageDataUrl);
 	let ext = mimeUtils.toFileExtension(mime) || '';
 	if (ext) ext = `.${ext}`;
 	const tempFilePath = `${tempDir}/${md5(`${Math.random()}_${Date.now()}`)}${ext}`;
-	const imageConvOptions:any = {};
+	const imageConvOptions: any = {};
 	if (cropRect) imageConvOptions.cropRect = cropRect;
 	await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
 	return await shim.attachFileToNote(note, tempFilePath);
 }
 
-export default async function(request:Request, id:string = null, link:string = null) {
+export default async function(request: Request, id: string = null, link: string = null) {
 	if (request.method === 'GET') {
 		if (link && link === 'tags') {
 			return collectionToPaginatedResults(await Tag.tagsByNoteId(id), request);
@@ -326,7 +326,7 @@ export default async function(request:Request, id:string = null, link:string = n
 
 		const imageSizes = requestNote.image_sizes ? requestNote.image_sizes : {};
 
-		let note:any = await requestNoteToNote(requestNote);
+		let note: any = await requestNoteToNote(requestNote);
 
 		const imageUrls = ArrayUtils.unique(markupLanguageUtils.extractImageUrls(note.markup_language, note.body));
 

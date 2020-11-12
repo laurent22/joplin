@@ -4,16 +4,16 @@ const BaseService = require('../BaseService').default;
 
 export default class KeychainService extends BaseService {
 
-	private driver:KeychainServiceDriverBase;
-	private static instance_:KeychainService;
-	private enabled_:boolean = true;
+	private driver: KeychainServiceDriverBase;
+	private static instance_: KeychainService;
+	private enabled_: boolean = true;
 
-	static instance():KeychainService {
+	static instance(): KeychainService {
 		if (!this.instance_) this.instance_ = new KeychainService();
 		return this.instance_;
 	}
 
-	public initialize(driver:KeychainServiceDriverBase) {
+	public initialize(driver: KeychainServiceDriverBase) {
 		if (!driver.appId || !driver.clientId) throw new Error('appId and clientId must be set on the KeychainServiceDriver');
 		this.driver = driver;
 	}
@@ -21,15 +21,15 @@ export default class KeychainService extends BaseService {
 	// This is to programatically disable the keychain service, regardless whether keychain
 	// is supported or not in the system (In other word, this might "enabled" but nothing
 	// will be saved to the keychain if there isn't one).
-	public get enabled():boolean {
+	public get enabled(): boolean {
 		return this.enabled_;
 	}
 
-	public set enabled(v:boolean) {
+	public set enabled(v: boolean) {
 		this.enabled_ = v;
 	}
 
-	public async setPassword(name:string, password:string):Promise<boolean> {
+	public async setPassword(name: string, password: string): Promise<boolean> {
 		if (!this.enabled) return false;
 
 		// Due to a bug in macOS, this may throw an exception "The user name or passphrase you entered is not correct."
@@ -38,13 +38,13 @@ export default class KeychainService extends BaseService {
 		return this.driver.setPassword(name, password);
 	}
 
-	public async password(name:string):Promise<string> {
+	public async password(name: string): Promise<string> {
 		if (!this.enabled) return null;
 
 		return this.driver.password(name);
 	}
 
-	public async deletePassword(name:string):Promise<void> {
+	public async deletePassword(name: string): Promise<void> {
 		if (!this.enabled) return;
 
 		await this.driver.deletePassword(name);

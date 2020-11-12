@@ -75,18 +75,18 @@ for (let i = 0; i < topLanguages.length; i++) {
 }
 
 export interface EditorProps {
-	value: string,
-	searchMarkers: any,
-	mode: string,
-	style: any,
-	codeMirrorTheme: any,
-	readOnly: boolean,
-	autoMatchBraces: boolean,
-	keyMap: string,
-	onChange: any,
-	onScroll: any,
-	onEditorContextMenu: any,
-	onEditorPaste: any,
+	value: string;
+	searchMarkers: any;
+	mode: string;
+	style: any;
+	codeMirrorTheme: any;
+	readOnly: boolean;
+	autoMatchBraces: boolean;
+	keyMap: string;
+	onChange: any;
+	onScroll: any;
+	onEditorContextMenu: any;
+	onEditorPaste: any;
 }
 
 function Editor(props: EditorProps, ref: any) {

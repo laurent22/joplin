@@ -19,7 +19,7 @@ export default class JoplinViewsMenus {
 		this.plugin = plugin;
 	}
 
-	private registerCommandAccelerators(menuItems:MenuItem[]) {
+	private registerCommandAccelerators(menuItems: MenuItem[]) {
 		for (const menuItem of menuItems) {
 			if (menuItem.accelerator) {
 				KeymapService.instance().registerCommandAccelerator(menuItem.commandName, menuItem.accelerator);
@@ -35,7 +35,7 @@ export default class JoplinViewsMenus {
 	 * Creates a new menu from the provided menu items and place it at the given location. As of now, it is only possible to place the
 	 * menu as a sub-menu of the application build-in menus.
 	 */
-	public async create(label:string, menuItems:MenuItem[], location:MenuItemLocation = MenuItemLocation.Tools) {
+	public async create(label: string, menuItems: MenuItem[], location: MenuItemLocation = MenuItemLocation.Tools) {
 		const handle = createViewHandle(this.plugin);
 		const controller = new MenuController(handle, this.plugin.id, this.store, label, menuItems, location);
 		this.plugin.addViewController(controller);

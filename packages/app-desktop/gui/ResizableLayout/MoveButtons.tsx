@@ -28,24 +28,24 @@ const ArrowButton = styled(Button)`
 
 export interface MoveButtonClickEvent {
 	direction: MoveDirection;
-	itemKey: string,
+	itemKey: string;
 }
 
 interface Props {
-	onClick(event:MoveButtonClickEvent):void;
-	itemKey: string,
-	canMoveLeft: boolean,
-	canMoveRight: boolean,
-	canMoveUp: boolean,
-	canMoveDown: boolean,
+	onClick(event: MoveButtonClickEvent): void;
+	itemKey: string;
+	canMoveLeft: boolean;
+	canMoveRight: boolean;
+	canMoveUp: boolean;
+	canMoveDown: boolean;
 }
 
-export default function MoveButtons(props:Props) {
-	const onButtonClick = useCallback((direction:MoveDirection) => {
+export default function MoveButtons(props: Props) {
+	const onButtonClick = useCallback((direction: MoveDirection) => {
 		props.onClick({ direction, itemKey: props.itemKey });
 	}, [props.onClick, props.itemKey]);
 
-	function canMove(dir:MoveDirection) {
+	function canMove(dir: MoveDirection) {
 		if (dir === MoveDirection.Up) return props.canMoveUp;
 		if (dir === MoveDirection.Down) return props.canMoveDown;
 		if (dir === MoveDirection.Left) return props.canMoveLeft;
@@ -53,7 +53,7 @@ export default function MoveButtons(props:Props) {
 		throw new Error('Unreachable');
 	}
 
-	function renderButton(dir:MoveDirection) {
+	function renderButton(dir: MoveDirection) {
 		return <ArrowButton
 			disabled={!canMove(dir)}
 			level={ButtonLevel.Primary}

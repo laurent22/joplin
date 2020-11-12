@@ -8,7 +8,7 @@ const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
-const additionalReducers:any[] = [];
+const additionalReducers: any[] = [];
 
 additionalReducers.push({
 	stateRootKey: pluginServiceStateRootKey,
@@ -17,78 +17,78 @@ additionalReducers.push({
 });
 
 interface StateLastSelectedNotesIds {
-	Folder: any,
-	Tag: any,
-	Search: any,
+	Folder: any;
+	Tag: any;
+	Search: any;
 }
 
 interface StateClipperServer {
-	startState: string,
-	port: number,
+	startState: string;
+	port: number;
 }
 
 interface StateDecryptionWorker {
-	state: string,
-	itemIndex: number,
-	itemCount: number,
-	decryptedItemCounts: any
-	decryptedItemCount: number,
-	skippedItemCount: number,
+	state: string;
+	itemIndex: number;
+	itemCount: number;
+	decryptedItemCounts: any;
+	decryptedItemCount: number;
+	skippedItemCount: number;
 }
 
 interface StateResourceFetcher {
-	toFetchCount: number,
+	toFetchCount: number;
 }
 
 export interface State {
-	notes: any[],
-	notesSource: string,
-	notesParentType: string,
-	folders: any[],
-	tags: any[],
-	masterKeys: any[],
-	notLoadedMasterKeys: any[],
-	searches: any[],
-	highlightedWords: string[],
-	selectedNoteIds: string[],
-	selectedNoteHash: string,
-	selectedFolderId: string,
-	selectedTagId: string,
-	selectedSearchId: string,
-	selectedItemType: string,
-	selectedSmartFilterId: string,
-	lastSelectedNotesIds: StateLastSelectedNotesIds,
-	showSideMenu: boolean,
-	screens: any
-	historyCanGoBack: boolean,
-	syncStarted: boolean,
-	syncReport: any
-	searchQuery: string,
-	settings: any
-	sharedData: any,
-	appState: string,
-	hasDisabledSyncItems: boolean,
-	hasDisabledEncryptionItems: boolean,
-	customCss: string,
-	templates: any[],
-	collapsedFolderIds: string[],
-	clipperServer: StateClipperServer,
-	decryptionWorker: StateDecryptionWorker,
-	selectedNoteTags: any[],
-	resourceFetcher: StateResourceFetcher,
-	backwardHistoryNotes: any[],
-	forwardHistoryNotes: any[],
-	pluginsLegacy: any
-	provisionalNoteIds: string[],
-	editorNoteStatuses: any
-	isInsertingNotes: boolean,
-	hasEncryptedItems: boolean,
+	notes: any[];
+	notesSource: string;
+	notesParentType: string;
+	folders: any[];
+	tags: any[];
+	masterKeys: any[];
+	notLoadedMasterKeys: any[];
+	searches: any[];
+	highlightedWords: string[];
+	selectedNoteIds: string[];
+	selectedNoteHash: string;
+	selectedFolderId: string;
+	selectedTagId: string;
+	selectedSearchId: string;
+	selectedItemType: string;
+	selectedSmartFilterId: string;
+	lastSelectedNotesIds: StateLastSelectedNotesIds;
+	showSideMenu: boolean;
+	screens: any;
+	historyCanGoBack: boolean;
+	syncStarted: boolean;
+	syncReport: any;
+	searchQuery: string;
+	settings: any;
+	sharedData: any;
+	appState: string;
+	hasDisabledSyncItems: boolean;
+	hasDisabledEncryptionItems: boolean;
+	customCss: string;
+	templates: any[];
+	collapsedFolderIds: string[];
+	clipperServer: StateClipperServer;
+	decryptionWorker: StateDecryptionWorker;
+	selectedNoteTags: any[];
+	resourceFetcher: StateResourceFetcher;
+	backwardHistoryNotes: any[];
+	forwardHistoryNotes: any[];
+	pluginsLegacy: any;
+	provisionalNoteIds: string[];
+	editorNoteStatuses: any;
+	isInsertingNotes: boolean;
+	hasEncryptedItems: boolean;
 
 	// Extra reducer keys go here:
-	pluginService: PluginServiceState,
+	pluginService: PluginServiceState;
 }
 
-export const defaultState:State = {
+export const defaultState: State = {
 	notes: [],
 	notesSource: '',
 	notesParentType: null,
@@ -161,11 +161,11 @@ for (const additionalReducer of additionalReducers) {
 
 export const MAX_HISTORY = 200;
 
-const derivedStateCache_:any = {};
+const derivedStateCache_: any = {};
 
 // Allows, for a given state, to return the same derived
 // objects, to prevent unecessary updates on calling components.
-const cacheEnabledOutput = (key:string, output:any) => {
+const cacheEnabledOutput = (key: string, output: any) => {
 	key = `${key}_${JSON.stringify(output)}`;
 	if (derivedStateCache_[key]) return derivedStateCache_[key];
 
@@ -175,7 +175,7 @@ const cacheEnabledOutput = (key:string, output:any) => {
 
 const createShallowArrayEqualSelector = createSelectorCreator(
 	defaultMemoize,
-	(prev:any[], next:any[]) => {
+	(prev: any[], next: any[]) => {
 		if (prev.length !== next.length) return false;
 		for (let i = 0; i < prev.length; i++) {
 			if (prev[i] !== next[i]) return false;
@@ -185,10 +185,10 @@ const createShallowArrayEqualSelector = createSelectorCreator(
 );
 
 const selectArrayShallow = createCachedSelector(
-	(state:any) => state.array,
-	(array:any[]) => array
+	(state: any) => state.array,
+	(array: any[]) => array
 )({
-	keySelector: (_state:any, cacheKey:any) => {
+	keySelector: (_state: any, cacheKey: any) => {
 		return cacheKey;
 	},
 	selectorCreator: createShallowArrayEqualSelector,
@@ -198,15 +198,15 @@ class StateUtils {
 
 	// Given an input array, this selector ensures that the same array is returned
 	// if its content hasn't changed.
-	public selectArrayShallow(props:any, cacheKey:any) {
+	public selectArrayShallow(props: any, cacheKey: any) {
 		return selectArrayShallow(props, cacheKey);
 	}
 
-	public oneNoteSelected(state:State):boolean {
+	public oneNoteSelected(state: State): boolean {
 		return state.selectedNoteIds.length === 1;
 	}
 
-	public notesOrder(stateSettings:any) {
+	public notesOrder(stateSettings: any) {
 		if (stateSettings['notes.sortOrder.field'] === 'order') {
 			return cacheEnabledOutput('notesOrder', [
 				{
@@ -228,7 +228,7 @@ class StateUtils {
 		}
 	}
 
-	public foldersOrder(stateSettings:any) {
+	public foldersOrder(stateSettings: any) {
 		return cacheEnabledOutput('foldersOrder', [
 			{
 				by: stateSettings['folders.sortOrder.field'],
@@ -237,14 +237,14 @@ class StateUtils {
 		]);
 	}
 
-	public hasNotesBeingSaved(state:State):boolean {
+	public hasNotesBeingSaved(state: State): boolean {
 		for (const id in state.editorNoteStatuses) {
 			if (state.editorNoteStatuses[id] === 'saving') return true;
 		}
 		return false;
 	}
 
-	public parentItem(state:State) {
+	public parentItem(state: State) {
 		const t = state.notesParentType;
 		let id = null;
 		if (t === 'Folder') id = state.selectedFolderId;
@@ -254,41 +254,41 @@ class StateUtils {
 		return { type: t, id: id };
 	}
 
-	public lastSelectedNoteIds(state:State):string[] {
+	public lastSelectedNoteIds(state: State): string[] {
 		const parent = this.parentItem(state);
 		if (!parent) return [];
 		const output = (state.lastSelectedNotesIds as any)[parent.type][parent.id];
 		return output ? output : [];
 	}
 
-	public selectedNote(state:State):any {
+	public selectedNote(state: State): any {
 		const noteId = this.selectedNoteId(state);
 		return noteId ? BaseModel.byId(state.notes, noteId) : null;
 	}
 
-	public selectedNoteId(state:State):any {
+	public selectedNoteId(state: State): any {
 		return state.selectedNoteIds.length ? state.selectedNoteIds[0] : null;
 	}
 
 }
 
-export const stateUtils:StateUtils = new StateUtils();
+export const stateUtils: StateUtils = new StateUtils();
 
-function arrayHasEncryptedItems(array:any[]) {
+function arrayHasEncryptedItems(array: any[]) {
 	for (let i = 0; i < array.length; i++) {
 		if (array[i].encryption_applied) return true;
 	}
 	return false;
 }
 
-function stateHasEncryptedItems(state:State) {
+function stateHasEncryptedItems(state: State) {
 	if (arrayHasEncryptedItems(state.notes)) return true;
 	if (arrayHasEncryptedItems(state.folders)) return true;
 	if (arrayHasEncryptedItems(state.tags)) return true;
 	return false;
 }
 
-function folderSetCollapsed(draft:Draft<State>, action:any) {
+function folderSetCollapsed(draft: Draft<State>, action: any) {
 	const collapsedFolderIds = draft.collapsedFolderIds.slice();
 	const idx = collapsedFolderIds.indexOf(action.id);
 
@@ -303,13 +303,13 @@ function folderSetCollapsed(draft:Draft<State>, action:any) {
 	draft.collapsedFolderIds = collapsedFolderIds;
 }
 
-function removeAdjacentDuplicates(items:any[]) {
-	return items.filter((item:any, idx:number) => (idx >= 1) ? items[idx - 1].id !== item.id : true);
+function removeAdjacentDuplicates(items: any[]) {
+	return items.filter((item: any, idx: number) => (idx >= 1) ? items[idx - 1].id !== item.id : true);
 }
 
 // When deleting a note, tag or folder
-function handleItemDelete(draft:Draft<State>, action:any) {
-	const map:any = {
+function handleItemDelete(draft: Draft<State>, action: any) {
+	const map: any = {
 		FOLDER_DELETE: ['folders', 'selectedFolderId', true],
 		NOTE_DELETE: ['notes', 'selectedNoteIds', false],
 		TAG_DELETE: ['tags', 'selectedTagId', true],
@@ -325,7 +325,7 @@ function handleItemDelete(draft:Draft<State>, action:any) {
 
 	const items = (draft as any)[listKey];
 	const newItems = [];
-	let newSelectedIndexes:number[] = [];
+	let newSelectedIndexes: number[] = [];
 
 	for (let i = 0; i < items.length; i++) {
 		const item = items[i];
@@ -376,7 +376,7 @@ function handleItemDelete(draft:Draft<State>, action:any) {
 	}
 }
 
-function updateOneItem(draft:Draft<State>, action:any, keyName:string = '') {
+function updateOneItem(draft: Draft<State>, action: any, keyName: string = '') {
 	let itemsKey = null;
 	if (keyName) { itemsKey = keyName; } else {
 		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
@@ -402,7 +402,7 @@ function updateOneItem(draft:Draft<State>, action:any, keyName:string = '') {
 	(draft as any)[itemsKey] = newItems;
 }
 
-function updateSelectedNotesFromExistingNotes(draft:Draft<State>) {
+function updateSelectedNotesFromExistingNotes(draft: Draft<State>) {
 	const newSelectedNoteIds = [];
 	for (const selectedNoteId of draft.selectedNoteIds) {
 		for (const n of draft.notes) {
@@ -415,7 +415,7 @@ function updateSelectedNotesFromExistingNotes(draft:Draft<State>) {
 	draft.selectedNoteIds = newSelectedNoteIds;
 }
 
-function defaultNotesParentType(draft:Draft<State>, exclusion:string) {
+function defaultNotesParentType(draft: Draft<State>, exclusion: string) {
 	let newNotesParentType = null;
 
 	if (exclusion !== 'SmartFilter' && draft.selectedSmartFilterId) {
@@ -431,7 +431,7 @@ function defaultNotesParentType(draft:Draft<State>, exclusion:string) {
 	return newNotesParentType;
 }
 
-function changeSelectedFolder(draft:Draft<State>, action:any, options:any = null) {
+function changeSelectedFolder(draft: Draft<State>, action: any, options: any = null) {
 	if (!options) options = {};
 	draft.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!draft.selectedFolderId) {
@@ -443,8 +443,8 @@ function changeSelectedFolder(draft:Draft<State>, action:any, options:any = null
 	if (options.clearSelectedNoteIds) draft.selectedNoteIds = [];
 }
 
-function recordLastSelectedNoteIds(draft:Draft<State>, noteIds:string[]) {
-	const newOnes:any = Object.assign({}, draft.lastSelectedNotesIds);
+function recordLastSelectedNoteIds(draft: Draft<State>, noteIds: string[]) {
+	const newOnes: any = Object.assign({}, draft.lastSelectedNotesIds);
 	const parent = stateUtils.parentItem(draft);
 	if (!parent) return;
 
@@ -454,7 +454,7 @@ function recordLastSelectedNoteIds(draft:Draft<State>, noteIds:string[]) {
 	draft.lastSelectedNotesIds = newOnes;
 }
 
-function changeSelectedNotes(draft:Draft<State>, action:any, options:any = null) {
+function changeSelectedNotes(draft: Draft<State>, action: any, options: any = null) {
 	if (!options) options = {};
 
 	let noteIds = [];
@@ -495,7 +495,7 @@ function changeSelectedNotes(draft:Draft<State>, action:any, options:any = null)
 	recordLastSelectedNoteIds(draft, draft.selectedNoteIds);
 }
 
-function removeItemFromArray(array:any[], property:any, value:any) {
+function removeItemFromArray(array: any[], property: any, value: any) {
 	for (let i = 0; i !== array.length; ++i) {
 		const currentItem = array[i];
 		if (currentItem[property] === value) {
@@ -507,8 +507,8 @@ function removeItemFromArray(array:any[], property:any, value:any) {
 	return array;
 }
 
-const getContextFromHistory = (ctx:any) => {
-	const result:any = {};
+const getContextFromHistory = (ctx: any) => {
+	const result: any = {};
 	result.notesParentType = ctx.notesParentType;
 	if (result.notesParentType === 'Folder') {
 		result.selectedFolderId = ctx.selectedFolderId;
@@ -523,7 +523,7 @@ const getContextFromHistory = (ctx:any) => {
 	return result;
 };
 
-function getNoteHistoryInfo(state:State) {
+function getNoteHistoryInfo(state: State) {
 	const selectedNoteIds = state.selectedNoteIds;
 	const notes = state.notes;
 	if (selectedNoteIds != null && selectedNoteIds.length > 0) {
@@ -544,7 +544,7 @@ function getNoteHistoryInfo(state:State) {
 	return null;
 }
 
-function handleHistory(draft:Draft<State>, action:any) {
+function handleHistory(draft: Draft<State>, action: any) {
 	const currentNote = getNoteHistoryInfo(draft);
 	switch (action.type) {
 	case 'HISTORY_BACKWARD': {
@@ -652,7 +652,7 @@ function handleHistory(draft:Draft<State>, action:any) {
 }
 
 
-const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
+const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 	// const reducer = (state:State = defaultState, action:any) => {
 	// if (!['SIDE_MENU_OPEN_PERCENT'].includes(action.type)) console.info('Action', action.type, action);
@@ -708,11 +708,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
 			break;
 
 		case 'NOTE_SELECT_ALL':
-			draft.selectedNoteIds = draft.notes.map((n:any) => n.id);
+			draft.selectedNoteIds = draft.notes.map((n: any) => n.id);
 			break;
 
 		case 'NOTE_SELECT_ALL_TOGGLE': {
-			const allSelected = draft.notes.every((n:any) => draft.selectedNoteIds.includes(n.id));
+			const allSelected = draft.notes.every((n: any) => draft.selectedNoteIds.includes(n.id));
 			if (allSelected) {
 				draft.selectedNoteIds = [];
 			} else {
@@ -774,7 +774,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action:any) => {
 				const isViewingAllNotes = (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 				const isViewingConflictFolder = draft.notesParentType === 'Folder' && draft.selectedFolderId === Folder.conflictFolderId();
 
-				const noteIsInFolder = function(note:any, folderId:string) {
+				const noteIsInFolder = function(note: any, folderId: string) {
 					if (note.is_conflict && isViewingConflictFolder) return true;
 					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
 					return false;

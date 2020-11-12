@@ -6,12 +6,12 @@ import executeSandboxCall from '@joplin/lib/services/plugins/utils/executeSandbo
 import Global from '@joplin/lib/services/plugins/api/Global';
 import mapEventHandlersToIds, { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 
-function createConsoleWrapper(pluginId:string) {
-	const wrapper:any = {};
+function createConsoleWrapper(pluginId: string) {
+	const wrapper: any = {};
 
 	for (const n in console) {
 		if (!console.hasOwnProperty(n)) continue;
-		wrapper[n] = (...args:any[]) => {
+		wrapper[n] = (...args: any[]) => {
 			const newArgs = args.slice();
 			newArgs.splice(0, 0, `Plugin "${pluginId}":`);
 			return (console as any)[n](...newArgs);
@@ -30,7 +30,7 @@ function createConsoleWrapper(pluginId:string) {
 
 export default class PluginRunner extends BasePluginRunner {
 
-	private eventHandlers_:EventHandlers = {};
+	private eventHandlers_: EventHandlers = {};
 
 	constructor() {
 		super();
@@ -38,13 +38,13 @@ export default class PluginRunner extends BasePluginRunner {
 		this.eventHandler = this.eventHandler.bind(this);
 	}
 
-	private async eventHandler(eventHandlerId:string, args:any[]) {
+	private async eventHandler(eventHandlerId: string, args: any[]) {
 		const cb = this.eventHandlers_[eventHandlerId];
 		return cb(...args);
 	}
 
-	private newSandboxProxy(pluginId:string, sandbox:Global) {
-		const target = async (path:string, args:any[]) => {
+	private newSandboxProxy(pluginId: string, sandbox: Global) {
+		const target = async (path: string, args: any[]) => {
 			return executeSandboxCall(pluginId, sandbox, `joplin.${path}`, mapEventHandlersToIds(args, this.eventHandlers_), this.eventHandler);
 		};
 
@@ -54,8 +54,8 @@ export default class PluginRunner extends BasePluginRunner {
 		};
 	}
 
-	async run(plugin:Plugin, sandbox:Global):Promise<void> {
-		return new Promise((resolve:Function, reject:Function) => {
+	async run(plugin: Plugin, sandbox: Global): Promise<void> {
+		return new Promise((resolve: Function, reject: Function) => {
 			const onStarted = () => {
 				plugin.off('started', onStarted);
 				resolve();

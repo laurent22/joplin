@@ -6,7 +6,7 @@ const Resource = require('@joplin/lib/models/Resource');
 // x and y are the absolute coordinates, as returned by the context-menu event
 // handler on the webContent. This function will return null if the point is
 // not within the TinyMCE editor.
-function contextMenuElement(editor:any, x:number, y:number) {
+function contextMenuElement(editor: any, x: number, y: number) {
 	if (!editor || !editor.getDoc()) return null;
 
 	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
@@ -24,19 +24,19 @@ function contextMenuElement(editor:any, x:number, y:number) {
 }
 
 interface ContextMenuActionOptions {
-	current: ContextMenuOptions,
+	current: ContextMenuOptions;
 }
 
-const contextMenuActionOptions:ContextMenuActionOptions = { current: null };
+const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
-export default function(editor:any) {
+export default function(editor: any) {
 	const contextMenuItems = menuItems();
 
-	bridge().window().webContents.on('context-menu', (_event:any, params:any) => {
+	bridge().window().webContents.on('context-menu', (_event: any, params: any) => {
 		const element = contextMenuElement(editor, params.x, params.y);
 		if (!element) return;
 
-		let itemType:ContextMenuItemType = ContextMenuItemType.None;
+		let itemType: ContextMenuItemType = ContextMenuItemType.None;
 		let resourceId = '';
 		let linkToCopy = null;
 
@@ -57,7 +57,7 @@ export default function(editor:any) {
 			linkToCopy,
 			textToCopy: null,
 			htmlToCopy: editor.selection ? editor.selection.getContent() : '',
-			insertContent: (content:string) => {
+			insertContent: (content: string) => {
 				editor.insertContent(content);
 			},
 			isReadOnly: false,

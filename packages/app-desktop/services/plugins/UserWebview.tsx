@@ -5,34 +5,34 @@ import useThemeCss from './hooks/useThemeCss';
 const styled = require('styled-components').default;
 
 export interface Props {
-	html:string,
-	scripts:string[],
-	onMessage:Function,
-	pluginId:string,
-	viewId:string,
-	themeId:number,
-	minWidth?: number,
-	minHeight?: number,
-	fitToContent?: boolean,
-	borderBottom?: boolean,
-	theme?:any,
+	html: string;
+	scripts: string[];
+	onMessage: Function;
+	pluginId: string;
+	viewId: string;
+	themeId: number;
+	minWidth?: number;
+	minHeight?: number;
+	fitToContent?: boolean;
+	borderBottom?: boolean;
+	theme?: any;
 }
 
 interface Size {
-	width: number,
-	height: number,
+	width: number;
+	height: number;
 }
 
 const StyledFrame = styled.iframe`
 	padding: 0;
 	margin: 0;
-	width: ${(props:any) => props.fitToContent ? `${props.width}px` : '100%'};
-	height: ${(props:any) => props.fitToContent ? `${props.height}px` : '100%'};
+	width: ${(props: any) => props.fitToContent ? `${props.width}px` : '100%'};
+	height: ${(props: any) => props.fitToContent ? `${props.height}px` : '100%'};
 	border: none;
-	border-bottom: ${(props:Props) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
+	border-bottom: ${(props: Props) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
 `;
 
-export default function UserWebview(props:Props) {
+export default function UserWebview(props: Props) {
 	const minWidth = props.minWidth ? props.minWidth : 200;
 	const minHeight = props.minHeight ? props.minHeight : 20;
 
@@ -46,7 +46,7 @@ export default function UserWebview(props:Props) {
 		return viewRef.current.contentWindow;
 	}
 
-	function postMessage(name:string, args:any = null) {
+	function postMessage(name: string, args: any = null) {
 		const win = frameWindow();
 		if (!win) return;
 		win.postMessage({ target: 'webview', name, args }, '*');
@@ -65,7 +65,7 @@ export default function UserWebview(props:Props) {
 
 		const newSize = { width: w, height: h };
 
-		setContentSize((current:Size) => {
+		setContentSize((current: Size) => {
 			if (current.width === newSize.width && current.height === newSize.height) return current;
 			return newSize;
 		});
@@ -99,7 +99,7 @@ export default function UserWebview(props:Props) {
 	}, [isReady, cssFilePath]);
 
 	useEffect(() => {
-		function onMessage(event:any) {
+		function onMessage(event: any) {
 			if (!event.data || event.data.target !== 'plugin') return;
 			props.onMessage({
 				pluginId: props.pluginId,

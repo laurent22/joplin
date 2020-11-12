@@ -4,21 +4,21 @@ export enum LayoutItemDirection {
 }
 
 export interface Size {
-	width: number,
-	height: number,
+	width: number;
+	height: number;
 }
 
 export interface LayoutItem {
-	key: string,
-	isRoot?:boolean,
-	width?: number,
-	height?: number,
-	minWidth?: number,
-	minHeight?: number,
-	children?: LayoutItem[]
-	direction?: LayoutItemDirection,
-	resizableRight?: boolean,
-	resizableBottom?: boolean,
-	visible?: boolean,
-	context?: any,
+	key: string;
+	isRoot?: boolean;
+	width?: number;
+	height?: number;
+	minWidth?: number;
+	minHeight?: number;
+	children?: LayoutItem[];
+	direction?: LayoutItemDirection;
+	resizableRight?: boolean;
+	resizableBottom?: boolean;
+	visible?: boolean;
+	context?: any;
 }

@@ -5,7 +5,7 @@ import requestPaginationOptions from './requestPaginationOptions';
 import paginatedFeed, { WhereQuery, ModelFeedPage } from '../../../models/utils/paginatedFeed';
 const BaseItem = require('../../../models/BaseItem');
 
-export default async function(modelType:number, request:Request, whereQuery:WhereQuery = null):Promise<ModelFeedPage> {
+export default async function(modelType: number, request: Request, whereQuery: WhereQuery = null): Promise<ModelFeedPage> {
 	const ModelClass = BaseItem.getClassByItemType(modelType);
 	const fields = requestFields(request, modelType);
 	const pagination = requestPaginationOptions(request);

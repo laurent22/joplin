@@ -1,12 +1,12 @@
 const { Platform, PermissionsAndroid } = require('react-native');
 
 type rationale = {
-	title: string,
-	message: string,
-	buttonPositive?: string,
-	buttonNegative?: string
-	buttonNeutral?: string
-}
+	title: string;
+	message: string;
+	buttonPositive?: string;
+	buttonNegative?: string;
+	buttonNeutral?: string;
+};
 
 export default async (permissions: string, rationale?: rationale) => {
 	if (Platform.OS !== 'android') return true;

@@ -22,7 +22,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
-function markupRenderOptions(override:any = null) {
+function markupRenderOptions(override: any = null) {
 	return {
 		plugins: {
 			checkbox: {
@@ -37,7 +37,7 @@ function markupRenderOptions(override:any = null) {
 	};
 }
 
-function findBlockSource(node:any) {
+function findBlockSource(node: any) {
 	const sources = node.getElementsByClassName('joplin-source');
 	if (!sources.length) throw new Error('No source for node');
 	const source = sources[0];
@@ -51,7 +51,7 @@ function findBlockSource(node:any) {
 	};
 }
 
-function newBlockSource(language:string = '', content:string = ''):any {
+function newBlockSource(language: string = '', content: string = ''): any {
 	const fence = language === 'katex' ? '$$' : '```';
 	const fenceLanguage = language === 'katex' ? '' : language;
 
@@ -64,7 +64,7 @@ function newBlockSource(language:string = '', content:string = ''):any {
 	};
 }
 
-function findEditableContainer(node:any):any {
+function findEditableContainer(node: any): any {
 	while (node) {
 		if (node.classList && node.classList.contains('joplin-editable')) return node;
 		node = node.parentNode;
@@ -72,7 +72,7 @@ function findEditableContainer(node:any):any {
 	return null;
 }
 
-function editableInnerHtml(html:string):string {
+function editableInnerHtml(html: string): string {
 	const temp = document.createElement('div');
 	temp.innerHTML = html;
 	const editable = temp.getElementsByClassName('joplin-editable');
@@ -80,14 +80,14 @@ function editableInnerHtml(html:string):string {
 	return editable[0].innerHTML;
 }
 
-function dialogTextArea_keyDown(event:any) {
+function dialogTextArea_keyDown(event: any) {
 	if (event.key === 'Tab') {
 		window.requestAnimationFrame(() => event.target.focus());
 	}
 }
 
 let markupToHtml_ = new MarkupToHtml();
-function stripMarkup(markupLanguage:number, markup:string, options:any = null) {
+function stripMarkup(markupLanguage: number, markup: string, options: any = null) {
 	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
 	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
 }
@@ -95,7 +95,7 @@ function stripMarkup(markupLanguage:number, markup:string, options:any = null) {
 // Allows pressing tab in a textarea to input an actual tab (instead of changing focus)
 // taboverride will take care of actually inserting the tab character, while the keydown
 // event listener will override the default behaviour, which is to focus the next field.
-function enableTextAreaTab(enable:boolean) {
+function enableTextAreaTab(enable: boolean) {
 	const textAreas = document.getElementsByClassName('tox-textarea');
 	for (const textArea of textAreas) {
 		taboverride.set(textArea, enable);
@@ -109,28 +109,28 @@ function enableTextAreaTab(enable:boolean) {
 }
 
 interface TinyMceCommand {
-	name: string,
-	value?: any,
-	ui?: boolean
+	name: string;
+	value?: any;
+	ui?: boolean;
 }
 
 interface JoplinCommandToTinyMceCommands {
-	[key:string]: TinyMceCommand,
+	[key: string]: TinyMceCommand;
 }
 
-const joplinCommandToTinyMceCommands:JoplinCommandToTinyMceCommands = {
+const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {
 	'textBold': { name: 'mceToggleFormat', value: 'bold' },
 	'textItalic': { name: 'mceToggleFormat', value: 'italic' },
 	'textLink': { name: 'mceLink' },
 	'search': { name: 'SearchReplace' },
 };
 
-let loadedCssFiles_:string[] = [];
-let loadedJsFiles_:string[] = [];
-let dispatchDidUpdateIID_:any = null;
-let changeId_:number = 1;
+let loadedCssFiles_: string[] = [];
+let loadedJsFiles_: string[] = [];
+let dispatchDidUpdateIID_: any = null;
+let changeId_: number = 1;
 
-const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
+const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const [editor, setEditor] = useState(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
@@ -162,7 +162,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	usePluginServiceRegistration(ref);
 
-	const dispatchDidUpdate = (editor:any) => {
+	const dispatchDidUpdate = (editor: any) => {
 		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);
 		dispatchDidUpdateIID_ = shim.setTimeout(() => {
 			dispatchDidUpdateIID_ = null;
@@ -170,7 +170,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		}, 10);
 	};
 
-	const insertResourcesIntoContent = useCallback(async (filePaths:string[] = null, options:any = null) => {
+	const insertResourcesIntoContent = useCallback(async (filePaths: string[] = null, options: any = null) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
 		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
@@ -182,7 +182,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const insertResourcesIntoContentRef = useRef(null);
 	insertResourcesIntoContentRef.current = insertResourcesIntoContent;
 
-	const onEditorContentClick = useCallback((event:any) => {
+	const onEditorContentClick = useCallback((event: any) => {
 		const nodeName = event.target ? event.target.nodeName : '';
 
 		if (nodeName === 'INPUT' && event.target.getAttribute('type') === 'checkbox') {
@@ -216,7 +216,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			resetScroll: () => {
 				if (editor) editor.getWin().scrollTo(0,0);
 			},
-			scrollTo: (options:ScrollOptions) => {
+			scrollTo: (options: ScrollOptions) => {
 				if (!editor) return;
 
 				if (options.type === ScrollOptionTypes.Hash) {
@@ -232,11 +232,11 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					throw new Error(`Unsupported scroll options: ${options.type}`);
 				}
 			},
-			supportsCommand: (name:string) => {
+			supportsCommand: (name: string) => {
 				// TODO: should also handle commands that are not in this map (insertText, focus, etc);
 				return !!joplinCommandToTinyMceCommands[name];
 			},
-			execCommand: async (cmd:EditorCommand) => {
+			execCommand: async (cmd: EditorCommand) => {
 				if (!editor) return false;
 
 				reg.logger().debug('TinyMce: execCommand', cmd);
@@ -263,14 +263,14 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 				if (commandProcessed) return true;
 
-				const additionalCommands:any = {
+				const additionalCommands: any = {
 					selectedText: () => {
 						return stripMarkup(MarkupToHtml.MARKUP_LANGUAGE_HTML, editor.selection.getContent());
 					},
 					selectedHtml: () => {
 						return editor.selection.getContent();
 					},
-					replaceSelection: (value:any) => {
+					replaceSelection: (value: any) => {
 						editor.selection.setContent(value);
 					},
 				};
@@ -284,7 +284,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					return false;
 				}
 
-				const tinyMceCmd:TinyMceCommand = { ...joplinCommandToTinyMceCommands[cmd.name] };
+				const tinyMceCmd: TinyMceCommand = { ...joplinCommandToTinyMceCommands[cmd.name] };
 				if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
 				if (!('value' in tinyMceCmd)) tinyMceCmd.value = null;
 
@@ -301,9 +301,9 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	// module would not load these extra files.
 	// -----------------------------------------------------------------------------------------
 
-	const loadScript = async (script:any) => {
+	const loadScript = async (script: any) => {
 		return new Promise((resolve) => {
-			let element:any = document.createElement('script');
+			let element: any = document.createElement('script');
 			if (script.src.indexOf('.css') >= 0) {
 				element = document.createElement('link');
 				element.rel = 'stylesheet';
@@ -332,7 +332,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		let cancelled = false;
 
 		async function loadScripts() {
-			const scriptsToLoad:any[] = [
+			const scriptsToLoad: any[] = [
 				{
 					src: 'node_modules/tinymce/tinymce.min.js',
 					id: 'tinyMceScript',
@@ -510,7 +510,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		const loadEditor = async () => {
 			const language = closestSupportedLocale(props.locale, true, supportedLocales);
 
-			const pluginCommandNames:string[] = [];
+			const pluginCommandNames: string[] = [];
 
 			const infos = pluginUtils.viewInfosByType(props.plugins, 'toolbarButton');
 
@@ -551,9 +551,9 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				localization_function: _,
 				contextmenu: false,
 				browser_spellcheck: true,
-				setup: (editor:any) => {
+				setup: (editor: any) => {
 
-					function openEditDialog(editable:any) {
+					function openEditDialog(editable: any) {
 						const source = editable ? findBlockSource(editable) : newBlockSource();
 
 						editor.windowManager.open({
@@ -563,7 +563,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 								codeTextArea: source.content,
 								languageInput: source.language,
 							},
-							onSubmit: async (dialogApi:any) => {
+							onSubmit: async (dialogApi: any) => {
 								const newSource = newBlockSource(dialogApi.getData().languageInput, dialogApi.getData().codeTextArea);
 								const md = `${newSource.openCharacters}${newSource.content.trim()}${newSource.closeCharacters}`;
 								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
@@ -638,7 +638,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 						onAction: function() {
 							editor.execCommand('mceToggleFormat', false, 'code', { class: 'inline-code' });
 						},
-						onSetup: function(api:any) {
+						onSetup: function(api: any) {
 							api.setActive(editor.formatter.match('code'));
 							const unbind = editor.formatter.formatChanged('code', api.setActive).unbind;
 
@@ -669,17 +669,17 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					setupContextMenu(editor);
 
 					// TODO: remove event on unmount?
-					editor.on('DblClick', (event:any) => {
+					editor.on('DblClick', (event: any) => {
 						const editable = findEditableContainer(event.target);
 						if (editable) openEditDialog(editable);
 					});
 
 					// This is triggered when an external file is dropped on the editor
-					editor.on('drop', (event:any) => {
+					editor.on('drop', (event: any) => {
 						props_onDrop.current(event);
 					});
 
-					editor.on('ObjectResized', function(event:any) {
+					editor.on('ObjectResized', function(event: any) {
 						if (event.target.nodeName === 'IMG') {
 							editor.fire('joplinChange');
 							dispatchDidUpdate(editor);
@@ -706,7 +706,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
-	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
+	const loadDocumentAssets = (editor: any, pluginAssets: any[]) => {
 		// Note: The way files are cached is not correct because it assumes there's only one version
 		// of each file. However, when the theme change, a new CSS file, specific to the theme, is
 		// created. That file should not be loaded on top of the previous one, but as a replacement.
@@ -720,7 +720,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 		const theme = themeStyle(props.themeId);
 
-		let docHead_:any = null;
+		let docHead_: any = null;
 
 		function docHead() {
 			if (docHead_) return docHead_;
@@ -733,15 +733,15 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
-				.filter((a:any) => a.mime === 'text/css')
-				.map((a:any) => a.path)
-		).filter((path:string) => !loadedCssFiles_.includes(path));
+				.filter((a: any) => a.mime === 'text/css')
+				.map((a: any) => a.path)
+		).filter((path: string) => !loadedCssFiles_.includes(path));
 
 		const jsFiles = [].concat(
 			pluginAssets
-				.filter((a:any) => a.mime === 'application/javascript')
-				.map((a:any) => a.path)
-		).filter((path:string) => !loadedJsFiles_.includes(path));
+				.filter((a: any) => a.mime === 'application/javascript')
+				.map((a: any) => a.path)
+		).filter((path: string) => !loadedJsFiles_.includes(path));
 
 		for (const cssFile of cssFiles) loadedCssFiles_.push(cssFile);
 		for (const jsFile of jsFiles) loadedJsFiles_.push(jsFile);
@@ -937,8 +937,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}, 1000);
 		}
 
-		function onExecCommand(event:any) {
-			const c:string = event.command;
+		function onExecCommand(event: any) {
+			const c: string = event.command;
 			if (!c) return;
 
 			// We need to dispatch onChange for these commands:
@@ -972,13 +972,13 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		// onChange even though nothing is changed. The alternative would be to
 		// check the content before and after, but this is too slow, so let's
 		// keep it this way for now.
-		function onKeyUp(event:any) {
+		function onKeyUp(event: any) {
 			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
 				onChangeHandler();
 			}
 		}
 
-		async function onPaste(event:any) {
+		async function onPaste(event: any) {
 			const resourceMds = await handlePasteEvent(event);
 			if (resourceMds.length) {
 				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
@@ -1000,7 +1000,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}
 		}
 
-		function onKeyDown(event:any) {
+		function onKeyDown(event: any) {
 			// Handle "paste as text". Note that when pressing CtrlOrCmd+Shift+V it's going
 			// to trigger the "keydown" event but not the "paste" event, so it's ok to process
 			// it here and we don't need to do anything special in onPaste
@@ -1053,7 +1053,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		};
 	}, []);
 
-	function renderExtraToolbarButton(key:string, info:ToolbarButtonInfo) {
+	function renderExtraToolbarButton(key: string, info: ToolbarButtonInfo) {
 		return <ToolbarButton
 			key={key}
 			themeId={props.themeId}

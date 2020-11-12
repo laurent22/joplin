@@ -1,10 +1,10 @@
 import usePrevious from './usePrevious';
 import { useEffect } from 'react';
 
-export default function useEffectDebugger(effectHook:any, dependencies:any, dependencyNames:any[] = []) {
+export default function useEffectDebugger(effectHook: any, dependencies: any, dependencyNames: any[] = []) {
 	const previousDeps = usePrevious(dependencies, []);
 
-	const changedDeps = dependencies.reduce((accum:any, dependency:any, index:any) => {
+	const changedDeps = dependencies.reduce((accum: any, dependency: any, index: any) => {
 		if (dependency !== previousDeps[index]) {
 			const keyName = dependencyNames[index] || index;
 			return {

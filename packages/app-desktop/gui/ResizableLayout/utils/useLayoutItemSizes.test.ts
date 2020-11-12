@@ -6,7 +6,7 @@ import validateLayout from './validateLayout';
 describe('useLayoutItemSizes', () => {
 
 	test('should validate the layout', () => {
-		const layout:LayoutItem = validateLayout({
+		const layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 200,
 			height: 100,
@@ -21,7 +21,7 @@ describe('useLayoutItemSizes', () => {
 	});
 
 	test('should give item sizes', () => {
-		const layout:LayoutItem = validateLayout({
+		const layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 200,
 			height: 100,
@@ -46,7 +46,7 @@ describe('useLayoutItemSizes', () => {
 	});
 
 	test('should leave room for the resizer controls', () => {
-		const layout:LayoutItem = validateLayout({
+		const layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 200,
 			height: 100,

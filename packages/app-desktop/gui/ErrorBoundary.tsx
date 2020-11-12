@@ -5,9 +5,9 @@ const ipcRenderer = require('electron').ipcRenderer;
 
 export default class ErrorBoundary extends React.Component {
 
-	state:any = { error: null, errorInfo: null };
+	state: any = { error: null, errorInfo: null };
 
-	componentDidCatch(error:any, errorInfo:any) {
+	componentDidCatch(error: any, errorInfo: any) {
 		this.setState({ error: error, errorInfo: errorInfo });
 	}
 

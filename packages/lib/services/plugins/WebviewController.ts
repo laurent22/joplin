@@ -9,7 +9,7 @@ export enum ContainerType {
 }
 
 export interface Options {
-	containerType: ContainerType,
+	containerType: ContainerType;
 }
 
 interface CloseResponse {
@@ -19,11 +19,11 @@ interface CloseResponse {
 
 export default class WebviewController extends ViewController {
 
-	private baseDir_:string;
-	private messageListener_:Function = null;
-	private closeResponse_:CloseResponse = null;
+	private baseDir_: string;
+	private messageListener_: Function = null;
+	private closeResponse_: CloseResponse = null;
 
-	constructor(id:string, pluginId:string, store:any, baseDir:string) {
+	constructor(id: string, pluginId: string, store: any, baseDir: string) {
 		super(id, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 
@@ -42,11 +42,11 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
-	public get type():string {
+	public get type(): string {
 		return 'webview';
 	}
 
-	private setStoreProp(name:string, value:any) {
+	private setStoreProp(name: string, value: any) {
 		this.store.dispatch({
 			type: 'PLUGIN_VIEW_PROP_SET',
 			pluginId: this.pluginId,
@@ -56,23 +56,23 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
-	public get html():string {
+	public get html(): string {
 		return this.storeView.html;
 	}
 
-	public set html(html:string) {
+	public set html(html: string) {
 		this.setStoreProp('html', html);
 	}
 
-	public get containerType():ContainerType {
+	public get containerType(): ContainerType {
 		return this.storeView.containerType;
 	}
 
-	public set containerType(containerType:ContainerType) {
+	public set containerType(containerType: ContainerType) {
 		this.setStoreProp('containerType', containerType);
 	}
 
-	public async addScript(path:string) {
+	public async addScript(path: string) {
 		const fullPath = toSystemSlashes(shim.fsDriver().resolve(`${this.baseDir_}/${path}`), 'linux');
 
 		if (fullPath.indexOf(this.baseDir_) !== 0) throw new Error(`Script appears to be outside of plugin base directory: ${fullPath} (Base dir: ${this.baseDir_})`);
@@ -86,12 +86,12 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
-	public emitMessage(event:any) {
+	public emitMessage(event: any) {
 		if (!this.messageListener_) return;
 		this.messageListener_(event.message);
 	}
 
-	public onMessage(callback:any) {
+	public onMessage(callback: any) {
 		this.messageListener_ = callback;
 	}
 
@@ -99,10 +99,10 @@ export default class WebviewController extends ViewController {
 	// Specific to dialogs
 	// ---------------------------------------------
 
-	public async open():Promise<ButtonId> {
+	public async open(): Promise<ButtonId> {
 		this.setStoreProp('opened', true);
 
-		return new Promise((resolve:Function, reject:Function) => {
+		return new Promise((resolve: Function, reject: Function) => {
 			this.closeResponse_ = { resolve, reject };
 		});
 	}
@@ -111,16 +111,16 @@ export default class WebviewController extends ViewController {
 		this.setStoreProp('opened', false);
 	}
 
-	public closeWithResponse(result:ButtonId) {
+	public closeWithResponse(result: ButtonId) {
 		this.close();
 		this.closeResponse_.resolve(result);
 	}
 
-	public get buttons():ButtonSpec[] {
+	public get buttons(): ButtonSpec[] {
 		return this.storeView.buttons;
 	}
 
-	public set buttons(buttons:ButtonSpec[]) {
+	public set buttons(buttons: ButtonSpec[]) {
 		this.setStoreProp('buttons', buttons);
 	}
 

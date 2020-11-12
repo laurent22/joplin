@@ -5,11 +5,11 @@ const Setting = require('@joplin/lib/models/Setting').default;
 const { camelCaseToDash, formatCssSize } = require('@joplin/lib/string-utils');
 
 interface HookDependencies {
-	pluginId: string,
-	themeId: number,
+	pluginId: string;
+	themeId: number;
 }
 
-function themeToCssVariables(theme:any) {
+function themeToCssVariables(theme: any) {
 	const lines = [];
 	lines.push(':root {');
 
@@ -30,7 +30,7 @@ function themeToCssVariables(theme:any) {
 	return lines.join('\n');
 }
 
-export default function useThemeCss(dep:HookDependencies) {
+export default function useThemeCss(dep: HookDependencies) {
 	const { pluginId, themeId } = dep;
 
 	const [cssFilePath, setCssFilePath] = useState('');

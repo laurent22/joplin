@@ -31,7 +31,7 @@ class CameraView extends Component {
 		this.onLayout = this.onLayout.bind(this);
 	}
 
-	onLayout(event:any) {
+	onLayout(event: any) {
 		this.setState({
 			screenWidth: event.nativeEvent.layout.width,
 			screenHeight: event.nativeEvent.layout.height,
@@ -83,7 +83,7 @@ class CameraView extends Component {
 		}
 	}
 
-	renderButton(onPress:Function, iconNameOrIcon:any, style:any) {
+	renderButton(onPress: Function, iconNameOrIcon: any, style: any) {
 		let icon = null;
 
 		if (typeof iconNameOrIcon === 'string') {
@@ -109,11 +109,11 @@ class CameraView extends Component {
 		);
 	}
 
-	fitRectIntoBounds(rect:any, bounds:any) {
+	fitRectIntoBounds(rect: any, bounds: any) {
 		const rectRatio = rect.width / rect.height;
 		const boundsRatio = bounds.width / bounds.height;
 
-		const newDimensions:any = {};
+		const newDimensions: any = {};
 
 		// Rect is more landscape than bounds - fit to width
 		if (rectRatio > boundsRatio) {
@@ -127,7 +127,7 @@ class CameraView extends Component {
 		return newDimensions;
 	}
 
-	cameraRect(ratio:string) {
+	cameraRect(ratio: string) {
 		// To keep the calculations simpler, it's assumed that the phone is in
 		// portrait orientation. Then at the end we swap the values if needed.
 		const splitted = ratio.split(':');
@@ -162,7 +162,7 @@ class CameraView extends Component {
 		const ratioButton = !displayRatios ? <View style={{ flex: 1 }}/> : this.renderButton(this.ratio_onPress, <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{Setting.value('camera.ratio')}</Text>, { flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 20 });
 
 		let cameraRatio = '4:3';
-		const cameraProps:any = {};
+		const cameraProps: any = {};
 
 		if (displayRatios) {
 			cameraProps.ratio = this.props.cameraRatio;
@@ -178,7 +178,7 @@ class CameraView extends Component {
 				<View style={{ position: 'absolute', backgroundColor: '#000000', width: '100%', height: '100%' }}/>
 				<RNCamera
 					style={Object.assign({ position: 'absolute' }, cameraRect)}
-					ref={(ref:any) => {
+					ref={(ref: any) => {
 						this.camera = ref;
 					}}
 					type={this.props.cameraType}
@@ -231,7 +231,7 @@ class CameraView extends Component {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return {
 		cameraRatio: state.settings['camera.ratio'],
 		cameraType: state.settings['camera.type'],

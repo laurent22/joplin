@@ -15,7 +15,7 @@ enum MovementDirection {
 	Vertical = 2,
 }
 
-function array_move(arr:any[], old_index:number, new_index:number) {
+function array_move(arr: any[], old_index: number, new_index: number) {
 	arr = arr.slice();
 	if (new_index >= arr.length) {
 		let k = new_index - arr.length + 1;
@@ -27,15 +27,15 @@ function array_move(arr:any[], old_index:number, new_index:number) {
 	return arr;
 }
 
-function findItemIndex(siblings:LayoutItem[], key:string) {
-	return siblings.findIndex((value:LayoutItem) => {
+function findItemIndex(siblings: LayoutItem[], key: string) {
+	return siblings.findIndex((value: LayoutItem) => {
 		return value.key === key;
 	});
 }
 
-export function updateResizeRules(layout:LayoutItem):LayoutItem {
-	return produce(layout, (draft:any) => {
-		iterateItems(draft, (itemIndex:number, item:LayoutItem, parent:LayoutItem) => {
+export function updateResizeRules(layout: LayoutItem): LayoutItem {
+	return produce(layout, (draft: any) => {
+		iterateItems(draft, (itemIndex: number, item: LayoutItem, parent: LayoutItem) => {
 			if (!parent) return true;
 			const isLastChild = itemIndex === parent.children.length - 1;
 			item.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastChild;
@@ -45,9 +45,9 @@ export function updateResizeRules(layout:LayoutItem):LayoutItem {
 	});
 }
 
-function updateItemSizes(layout:LayoutItem):LayoutItem {
-	return produce(layout, (draft:any) => {
-		iterateItems(draft, (itemIndex:number, item:LayoutItem, parent:LayoutItem) => {
+function updateItemSizes(layout: LayoutItem): LayoutItem {
+	return produce(layout, (draft: any) => {
+		iterateItems(draft, (itemIndex: number, item: LayoutItem, parent: LayoutItem) => {
 			if (!parent) return true;
 
 			// If a container has only one child, this child should not
@@ -90,12 +90,12 @@ function updateItemSizes(layout:LayoutItem):LayoutItem {
 	});
 }
 
-function isHorizontalMove(direction:MoveDirection) {
+function isHorizontalMove(direction: MoveDirection) {
 	return direction === MoveDirection.Left || direction === MoveDirection.Right;
 }
 
-function resetItemSizes(items:LayoutItem[]) {
-	return items.map((item:LayoutItem) => {
+function resetItemSizes(items: LayoutItem[]) {
+	return items.map((item: LayoutItem) => {
 		const newItem = { ...item };
 		delete newItem.width;
 		delete newItem.height;
@@ -103,7 +103,7 @@ function resetItemSizes(items:LayoutItem[]) {
 	});
 }
 
-export function canMove(direction:MoveDirection, item:LayoutItem, parent:LayoutItem) {
+export function canMove(direction: MoveDirection, item: LayoutItem, parent: LayoutItem) {
 	if (!parent) return false;
 
 	if (isHorizontalMove(direction)) {
@@ -129,15 +129,15 @@ export function canMove(direction:MoveDirection, item:LayoutItem, parent:LayoutI
 // which is a row of multiple columns. Within each of these columns there
 // can be multiple rows (one item per row). Items cannot be more deeply
 // nested.
-function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, inc:number):LayoutItem {
-	const itemParents:Record<string, LayoutItem> = {};
+function moveItem(direction: MovementDirection, layout: LayoutItem, key: string, inc: number): LayoutItem {
+	const itemParents: Record<string, LayoutItem> = {};
 
-	const itemIsRoot = (item:LayoutItem) => {
+	const itemIsRoot = (item: LayoutItem) => {
 		return !itemParents[item.key];
 	};
 
-	const updatedLayout = produce(layout, (draft:any) => {
-		iterateItems(draft, (itemIndex:number, item:LayoutItem, parent:LayoutItem) => {
+	const updatedLayout = produce(layout, (draft: any) => {
+		iterateItems(draft, (itemIndex: number, item: LayoutItem, parent: LayoutItem) => {
 			itemParents[item.key] = parent;
 
 			if (item.key !== key || !parent) return true;
@@ -177,14 +177,14 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 
 						// The new container takes the size of the item it
 						// replaces.
-						const newSize:any = {};
+						const newSize: any = {};
 						if (direction === MovementDirection.Horizontal) {
 							if ('width' in targetChild) newSize.width = targetChild.width;
 						} else {
 							if ('height' in targetChild) newSize.height = targetChild.height;
 						}
 
-						const newParent:LayoutItem = {
+						const newParent: LayoutItem = {
 							key: `tempContainer-${uuid.createNano()}`,
 							direction: LayoutItemDirection.Column,
 							children: [
@@ -229,15 +229,15 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 	return updateItemSizes(updateResizeRules(updatedLayout));
 }
 
-export function moveHorizontal(layout:LayoutItem, key:string, inc:number):LayoutItem {
+export function moveHorizontal(layout: LayoutItem, key: string, inc: number): LayoutItem {
 	return moveItem(MovementDirection.Horizontal, layout, key, inc);
 }
 
-export function moveVertical(layout:LayoutItem, key:string, inc:number):LayoutItem {
+export function moveVertical(layout: LayoutItem, key: string, inc: number): LayoutItem {
 	return moveItem(MovementDirection.Vertical, layout, key, inc);
 }
 
-export function move(layout:LayoutItem, key:string, direction:MoveDirection):LayoutItem {
+export function move(layout: LayoutItem, key: string, direction: MoveDirection): LayoutItem {
 	if (direction === MoveDirection.Up) return moveVertical(layout, key, -1);
 	if (direction === MoveDirection.Down) return moveVertical(layout, key, +1);
 	if (direction === MoveDirection.Left) return moveHorizontal(layout, key, -1);

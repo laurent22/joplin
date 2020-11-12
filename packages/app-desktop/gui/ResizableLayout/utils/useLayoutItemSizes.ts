@@ -4,12 +4,12 @@ import { LayoutItem, Size } from './types';
 const dragBarThickness = 5;
 
 export interface LayoutItemSizes {
-	[key:string]: Size,
+	[key: string]: Size;
 }
 
 // Container always take the full space while the items within it need to
 // accomodate for the resize handle.
-export function itemSize(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, isContainer:boolean):Size {
+export function itemSize(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isContainer: boolean): Size {
 	const parentResizableRight = !!parent && parent.resizableRight;
 	const parentResizableBottom = !!parent && parent.resizableBottom;
 
@@ -25,18 +25,18 @@ export function itemSize(item:LayoutItem, parent:LayoutItem | null, sizes:Layout
 // This calculate the size of each item within the layout. However
 // the final size, as rendered by the component is determined by
 // `itemSize()`, as it takes into account the resizer handle
-function calculateChildrenSizes(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, makeAllVisible:boolean):LayoutItemSizes {
+function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, makeAllVisible: boolean): LayoutItemSizes {
 	if (!item.children) return sizes;
 
 	const parentSize = itemSize(item, parent, sizes, true);
 
-	const remainingSize:Size = {
+	const remainingSize: Size = {
 		width: parentSize.width,
 		height: parentSize.height,
 	};
 
-	const noWidthChildren:any[] = [];
-	const noHeightChildren:any[] = [];
+	const noWidthChildren: any[] = [];
+	const noHeightChildren: any[] = [];
 
 	for (const child of item.children) {
 		let w = 'width' in child ? child.width : null;
@@ -77,9 +77,9 @@ function calculateChildrenSizes(item:LayoutItem, parent:LayoutItem | null, sizes
 	return sizes;
 }
 
-export default function useLayoutItemSizes(layout:LayoutItem, makeAllVisible:boolean = false) {
+export default function useLayoutItemSizes(layout: LayoutItem, makeAllVisible: boolean = false) {
 	return useMemo(() => {
-		let sizes:LayoutItemSizes = {};
+		let sizes: LayoutItemSizes = {};
 
 		if (!('width' in layout) || !('height' in layout)) throw new Error('width and height are required on layout root');
 

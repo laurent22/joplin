@@ -5,14 +5,14 @@ import { _ } from '@joplin/lib/locale';
 const Note = require('@joplin/lib/models/Note');
 const bridge = require('electron').remote.require('./bridge').default;
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'exportPdf',
 	label: () => `PDF - ${_('PDF File')}`,
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, noteIds:string[] = null) => {
+		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			try {
 				noteIds = noteIds || context.state.selectedNoteIds;
 

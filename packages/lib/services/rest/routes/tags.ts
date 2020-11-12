@@ -7,7 +7,7 @@ const Note = require('../../../models/Note');
 const Tag = require('../../../models/Tag');
 const { ErrorBadRequest, ErrorNotFound } = require('../utils/errors');
 
-export default async function(request:Request, id:string = null, link:string = null) {
+export default async function(request: Request, id: string = null, link: string = null) {
 	if (link === 'notes') {
 		const tag = await Tag.load(id);
 		if (!tag) throw new ErrorNotFound();

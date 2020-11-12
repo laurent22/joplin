@@ -4,7 +4,7 @@ import Setting from '@joplin/lib/models/Setting';
 
 const { db, asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
 
-function describeIfCompatible(name:string, fn:any, elseFn:any) {
+function describeIfCompatible(name: string, fn: any, elseFn: any) {
 	if (['win32', 'darwin'].includes(shim.platformName())) {
 		return describe(name, fn);
 	} else {
@@ -14,14 +14,14 @@ function describeIfCompatible(name:string, fn:any, elseFn:any) {
 
 describeIfCompatible('services_KeychainService', function() {
 
-	beforeEach(async (done:Function) => {
+	beforeEach(async (done: Function) => {
 		await setupDatabaseAndSynchronizer(1, { keychainEnabled: true });
 		await switchClient(1, { keychainEnabled: true });
 		await Setting.deleteKeychainPasswords();
 		done();
 	});
 
-	afterEach(async (done:Function) => {
+	afterEach(async (done: Function) => {
 		await Setting.deleteKeychainPasswords();
 		done();
 	});
