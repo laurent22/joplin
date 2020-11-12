@@ -4,7 +4,7 @@ import produce from 'immer';
 import useWindowResizeEvent from './utils/useWindowResizeEvent';
 import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './utils/useLayoutItemSizes';
 import validateLayout from './utils/validateLayout';
-import { Size, LayoutItem, dragBarThickness } from './utils/types';
+import { Size, LayoutItem } from './utils/types';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
@@ -96,7 +96,7 @@ function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:F
 		flexDirection: item.direction,
 	};
 
-	const size:Size = itemSize(item, sizes);
+	const size:Size = itemSize(item, sizes, true);
 
 	const className = `resizableLayoutItem rli-${item.key}`;
 	if (item.resizableRight || item.resizableBottom) {
@@ -110,9 +110,6 @@ function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:F
 			bottomLeft: false,
 			topLeft: false,
 		};
-
-		if (item.resizableRight) style.paddingRight = dragBarThickness;
-		if (item.resizableBottom) style.paddingBottom = dragBarThickness;
 
 		return (
 			<Resizable
@@ -181,18 +178,16 @@ function ResizableLayout(props:Props) {
 		}
 
 		if (!item.children) {
+			const size = itemSize(item, sizes, false);
+
 			const comp = props.renderItem(item.key, {
 				item: item,
 				eventEmitter: eventEmitter.current,
-				size: sizes[item.key],
+				size: size,
 				visible: isVisible,
 			});
 
-			const size = { ...sizes[item.key] };
-
 			const wrapper = parent.children.length > 1 ? renderWrapper(comp, item, size) : comp;
-
-			// const wrapper = comp;
 
 			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
 		} else {
@@ -202,15 +197,7 @@ function ResizableLayout(props:Props) {
 				childrenComponents.push(renderLayoutItem(child, item, sizes, isVisible && itemVisible(child), i === item.children.length - 1));
 			}
 
-			const comp = renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
-			return comp;
-
-			// if (item.children.length <= 1) {
-			// 	const size = { ...sizes[item.key] };
-			// 	return renderWrapper(comp, item, size)
-			// } else {
-			// 	return comp;
-			// }
+			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
 		}
 	}
 

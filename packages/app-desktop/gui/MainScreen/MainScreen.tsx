@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ResizableLayout, { findItemByKey, allDynamicSizes } from '../ResizableLayout/ResizableLayout';
 import { MoveButtonClickEvent } from '../ResizableLayout/MoveButtons';
-import { move } from '../ResizableLayout/utils/movements';
+import { move, updateResizeRules } from '../ResizableLayout/utils/movements';
 import { LayoutItem, LayoutItemDirection } from '../ResizableLayout/utils/types';
 import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
@@ -114,7 +114,7 @@ class MainScreenComponent extends React.Component<any, any> {
 
 	buildLayout(plugins:any):LayoutItem {
 		const rootLayoutSize = this.rootLayoutSize();
-		const sideBarMinWidth = 200;
+		// const sideBarMinWidth = 200;
 
 		const sizes = {
 			sideBarColumn: {
@@ -129,9 +129,9 @@ class MainScreenComponent extends React.Component<any, any> {
 			...Setting.value('ui.layout'),
 		};
 
-		for (const k in sizes) {
-			if (sizes[k].width < sideBarMinWidth) sizes[k].width = sideBarMinWidth;
-		}
+		// for (const k in sizes) {
+		// 	if (sizes[k].width < sideBarMinWidth) sizes[k].width = sideBarMinWidth;
+		// }
 
 		const pluginColumnChildren:LayoutItem[] = [];
 
@@ -160,7 +160,7 @@ class MainScreenComponent extends React.Component<any, any> {
 			});
 		}
 
-		return {
+		const output = updateResizeRules({
 			key: 'root',
 			direction: LayoutItemDirection.Row,
 			width: rootLayoutSize.width,
@@ -197,7 +197,11 @@ class MainScreenComponent extends React.Component<any, any> {
 					// direction: LayoutItemDirection.Column,
 				},
 			],
-		};
+		});
+
+		console.info('BUILD LAYOUT', output);
+
+		return output;
 	}
 
 	window_resize() {

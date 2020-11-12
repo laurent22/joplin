@@ -33,7 +33,7 @@ function findItemIndex(siblings:LayoutItem[], key:string) {
 	});
 }
 
-function updateResizeRules(layout:LayoutItem):LayoutItem {
+export function updateResizeRules(layout:LayoutItem):LayoutItem {
 	return produce(layout, (draft:any) => {
 		iterateItems(draft, (itemIndex:number, item:LayoutItem, parent:LayoutItem) => {
 			if (!parent) return true;

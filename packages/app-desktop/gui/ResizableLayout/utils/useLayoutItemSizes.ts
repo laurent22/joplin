@@ -5,17 +5,22 @@ export interface LayoutItemSizes {
 	[key:string]: Size,
 }
 
-export function itemSize(item:LayoutItem, sizes:LayoutItemSizes):Size {
+// Container always take the full space while the items within it need to
+// accomodate for the resize handle.
+export function itemSize(item:LayoutItem, sizes:LayoutItemSizes, isContainer:boolean):Size {
+	const rightGap = !isContainer && item.resizableRight ? dragBarThickness : 0;
+	const bottomGap = !isContainer && item.resizableBottom ? dragBarThickness : 0;
+
 	return {
-		width: 'width' in item ? item.width : sizes[item.key].width,
-		height: 'height' in item ? item.height : sizes[item.key].height,
+		width: ('width' in item ? item.width : sizes[item.key].width) - rightGap,
+		height: ('height' in item ? item.height : sizes[item.key].height) - bottomGap,
 	};
 }
 
 function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutItemSizes {
 	if (!item.children) return sizes;
 
-	const parentSize = itemSize(item, sizes);
+	const parentSize = itemSize(item, sizes, false);
 
 	const remainingSize:Size = {
 		width: parentSize.width,
@@ -33,9 +38,6 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 			h = 0;
 		}
 
-		if (w !== null && item.resizableRight) w -= dragBarThickness;
-		if (h !== null && item.resizableBottom) h -= dragBarThickness;
-
 		sizes[child.key] = { width: w, height: h };
 		if (w !== null) remainingSize.width -= w;
 		if (h !== null) remainingSize.height -= h;
@@ -44,7 +46,7 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 	}
 
 	if (noWidthChildren.length) {
-		const w = item.direction === 'row' ? remainingSize.width / noWidthChildren.length : parentSize.width;
+		const w = item.direction === 'row' ? Math.floor(remainingSize.width / noWidthChildren.length) : parentSize.width;
 		for (const child of noWidthChildren) {
 			let finalWidth = w;
 			if (finalWidth !== null && child.parent.resizableRight) finalWidth -= dragBarThickness;
@@ -53,7 +55,7 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 	}
 
 	if (noHeightChildren.length) {
-		const h = item.direction === 'column' ? remainingSize.height / noHeightChildren.length : parentSize.height;
+		const h = item.direction === 'column' ? Math.floor(remainingSize.height / noHeightChildren.length) : parentSize.height;
 		for (const child of noHeightChildren) {
 			let finalHeight = h;
 			if (finalHeight !== null && child.parent.resizableBottom) finalHeight -= dragBarThickness;

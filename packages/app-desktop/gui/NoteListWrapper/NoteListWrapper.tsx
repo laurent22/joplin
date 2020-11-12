@@ -1,7 +1,7 @@
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
-import {useMemo} from 'react';
-import NoteList from "../NoteList/NoteList";
+import { useMemo } from 'react';
+import NoteList from '../NoteList/NoteList';
 import NoteListControls from '../NoteListControls/NoteListControls';
 import { Size } from '../ResizableLayout/utils/types';
 import styled from 'styled-components';
@@ -27,13 +27,13 @@ export default function NoteListWrapper(props:Props) {
 		return {
 			width: props.size.width,
 			height: props.size.height - controlHeight,
-		}
+		};
 	}, [props.size, controlHeight]);
 
 	return (
 		<StyledRoot>
 			<NoteListControls showNewNoteButtons={props.focusedField !== 'globalSearch'} height={controlHeight} />
-			<NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>;
+			<NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 		</StyledRoot>
 	);
 }
