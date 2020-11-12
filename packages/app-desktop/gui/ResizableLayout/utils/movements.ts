@@ -45,6 +45,10 @@ export function updateResizeRules(layout:LayoutItem):LayoutItem {
 	});
 }
 
+function isHorizontalMove(direction:MoveDirection) {
+	return direction === MoveDirection.Left || direction === MoveDirection.Right;
+}
+
 function clearItemSizes(items:LayoutItem[]) {
 	return items.map((item:LayoutItem) => {
 		const newItem = { ...item };
@@ -52,6 +56,28 @@ function clearItemSizes(items:LayoutItem[]) {
 		delete newItem.height;
 		return newItem;
 	});
+}
+
+export function canMove(direction:MoveDirection, item:LayoutItem, parent:LayoutItem) {
+	if (!parent) return false;
+
+	if (isHorizontalMove(direction)) {
+		if (parent.isRoot) {
+			const idx = direction === MoveDirection.Left ? 0 : parent.children.length - 1;
+			return parent.children[idx] !== item;
+		} else if (parent.direction === LayoutItemDirection.Column) {
+			return true;
+		}
+	} else {
+		if (parent.isRoot) {
+			return false;
+		} else if (parent.direction === LayoutItemDirection.Column) {
+			const idx = direction === MoveDirection.Up ? 0 : parent.children.length - 1;
+			return parent.children[idx] !== item;
+		}
+	}
+
+	throw new Error('Unhandled case');
 }
 
 // For all movements we make the assumption that there's a root container,

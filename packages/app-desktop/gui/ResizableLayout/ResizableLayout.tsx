@@ -5,7 +5,9 @@ import useWindowResizeEvent from './utils/useWindowResizeEvent';
 import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './utils/useLayoutItemSizes';
 import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem } from './utils/types';
+import { canMove, MoveDirection } from './utils/movements';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
+import { StyledWrapperRoot, StyledMoveOverlay } from './utils/style';
 const { Resizable } = require('re-resizable');
 const EventEmitter = require('events');
 
@@ -141,19 +143,25 @@ function ResizableLayout(props:Props) {
 
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
-	function renderWrapper(comp:any, item:LayoutItem, size:Size) {
+	function renderWrapper(comp:any, item:LayoutItem, parent:LayoutItem | null, size:Size) {
 		return (
-			<div key={item.key} style={{ border: '1px solid green', position: 'relative', display: 'flex', width: size.width, height: size.height }}>
-				<div style={{ zIndex: 100, backgroundColor: 'rgba(0,0,0,0.5)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex' }}>
-					<MoveButtons itemKey={item.key} onClick={props.onMoveButtonClick}/>
-				</div>
+			<StyledWrapperRoot key={item.key} size={size}>
+				<StyledMoveOverlay>
+					<MoveButtons
+						itemKey={item.key}
+						onClick={props.onMoveButtonClick}
+						canMoveLeft={canMove(MoveDirection.Left, item, parent)}
+						canMoveRight={canMove(MoveDirection.Right, item, parent)}
+						canMoveUp={canMove(MoveDirection.Up, item, parent)}
+						canMoveDown={canMove(MoveDirection.Down, item, parent)}
+					/>
+				</StyledMoveOverlay>
 				{comp}
-			</div>
+			</StyledWrapperRoot>
 		);
 	}
 
-	function renderLayoutItem(item:LayoutItem, parent:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):any {
-
+	function renderLayoutItem(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):any {
 		function onResizeStart() {
 			setResizedItem({
 				key: item.key,
@@ -187,7 +195,7 @@ function ResizableLayout(props:Props) {
 				visible: isVisible,
 			});
 
-			const wrapper = parent.children.length > 1 ? renderWrapper(comp, item, size) : comp;
+			const wrapper = parent.children.length > 1 ? renderWrapper(comp, item, parent, size) : comp;
 
 			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
 		} else {

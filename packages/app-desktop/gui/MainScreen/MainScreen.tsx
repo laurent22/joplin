@@ -17,6 +17,7 @@ import { stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
+import validateLayout from '../ResizableLayout/utils/validateLayout';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
@@ -160,7 +161,7 @@ class MainScreenComponent extends React.Component<any, any> {
 			});
 		}
 
-		const output = updateResizeRules({
+		const output = validateLayout(updateResizeRules({
 			key: 'root',
 			direction: LayoutItemDirection.Row,
 			width: rootLayoutSize.width,
@@ -197,7 +198,7 @@ class MainScreenComponent extends React.Component<any, any> {
 					// direction: LayoutItemDirection.Column,
 				},
 			],
-		});
+		}));
 
 		console.info('BUILD LAYOUT', output);
 

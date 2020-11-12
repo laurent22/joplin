@@ -11,6 +11,10 @@ export interface MoveButtonClickEvent {
 interface Props {
 	onClick(event:MoveButtonClickEvent):void;
 	itemKey: string,
+	canMoveLeft: boolean,
+	canMoveRight: boolean,
+	canMoveUp: boolean,
+	canMoveDown: boolean,
 }
 
 export default function MoveButtons(props:Props) {
@@ -18,28 +22,25 @@ export default function MoveButtons(props:Props) {
 		props.onClick({ direction, itemKey: props.itemKey });
 	}, [props.onClick, props.itemKey]);
 
-	const onUp = useCallback(() => {
-		onButtonClick(MoveDirection.Up);
-	}, []);
+	function canMove(dir:MoveDirection) {
+		if (dir === MoveDirection.Up) return props.canMoveUp;
+		if (dir === MoveDirection.Down) return props.canMoveDown;
+		if (dir === MoveDirection.Left) return props.canMoveLeft;
+		if (dir === MoveDirection.Right) return props.canMoveRight;
+		throw new Error('Unreachable');
+	}
 
-	const onDown = useCallback(() => {
-		onButtonClick(MoveDirection.Down);
-	}, []);
-
-	const onLeft = useCallback(() => {
-		onButtonClick(MoveDirection.Left);
-	}, []);
-
-	const onRight = useCallback(() => {
-		onButtonClick(MoveDirection.Right);
-	}, []);
+	function renderButton(dir:MoveDirection) {
+		if (!canMove(dir)) return null;
+		return <Button level={ButtonLevel.Secondary} title={dir} onClick={() => onButtonClick(dir)}/>;
+	}
 
 	return (
 		<div>
-			<Button level={ButtonLevel.Secondary} title="Up" onClick={onUp}/>
-			<Button level={ButtonLevel.Secondary} title="Down" onClick={onDown}/>
-			<Button level={ButtonLevel.Secondary} title="Left" onClick={onLeft}/>
-			<Button level={ButtonLevel.Secondary} title="Right" onClick={onRight}/>
+			{renderButton(MoveDirection.Up)}
+			{renderButton(MoveDirection.Down)}
+			{renderButton(MoveDirection.Left)}
+			{renderButton(MoveDirection.Right)}
 		</div>
 	);
 }

@@ -10,6 +10,7 @@ export interface Size {
 
 export interface LayoutItem {
 	key: string,
+	isRoot?:boolean,
 	width?: number,
 	height?: number,
 	minWidth?: number,

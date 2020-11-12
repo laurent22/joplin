@@ -22,7 +22,7 @@ export function itemSize(item:LayoutItem, parent:LayoutItem | null, sizes:Layout
 	};
 }
 
-// This calculate the exact size of each item within the layout. However
+// This calculate the size of each item within the layout. However
 // the final size, as rendered by the component is determined by
 // `itemSize()`, as it takes into account the resizer handle
 function calculateChildrenSizes(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes):LayoutItemSizes {
