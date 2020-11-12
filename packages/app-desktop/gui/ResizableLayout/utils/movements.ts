@@ -45,6 +45,14 @@ export function updateResizeRules(layout:LayoutItem):LayoutItem {
 	});
 }
 
+function clearItemHeights(items:LayoutItem[]) {
+	return items.map((item:LayoutItem) => {
+		const newItem = { ...item };
+		delete newItem.height;
+		return newItem;
+	});
+}
+
 // For all movements we make the assumption that there's a root container,
 // which is a row of multiple columns. Within each of these columns there
 // can be multiple rows (one item per row). Items cannot be more deeply
@@ -83,10 +91,10 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 				// If the item next to it is a container (has children),
 				// move the item inside the container
 				if (parent.children[newIndex].children) {
-
 					const newParent = parent.children[newIndex];
 					parent.children.splice(itemIndex, 1);
 					newParent.children.push(item);
+					newParent.children = clearItemHeights(newParent.children);
 				} else {
 					// If the item is a child of the root container, create
 					// a new column at `newIndex` and move the item that
@@ -104,6 +112,8 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 
 						parent.children[newIndex] = newParent;
 						parent.children.splice(itemIndex, 1);
+
+						parent.children = clearItemHeights(parent.children);
 					} else {
 						// Otherwise the default case is simply to move the
 						// item left/right

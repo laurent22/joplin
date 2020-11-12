@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { LayoutItem, Size, dragBarThickness } from './types';
+import { LayoutItem, Size } from './types';
+
+const dragBarThickness = 5;
 
 export interface LayoutItemSizes {
 	[key:string]: Size,
@@ -48,8 +50,7 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 	if (noWidthChildren.length) {
 		const w = item.direction === 'row' ? Math.floor(remainingSize.width / noWidthChildren.length) : parentSize.width;
 		for (const child of noWidthChildren) {
-			let finalWidth = w;
-			if (finalWidth !== null && child.parent.resizableRight) finalWidth -= dragBarThickness;
+			const finalWidth = w;
 			sizes[child.item.key].width = finalWidth;
 		}
 	}
@@ -57,8 +58,7 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 	if (noHeightChildren.length) {
 		const h = item.direction === 'column' ? Math.floor(remainingSize.height / noHeightChildren.length) : parentSize.height;
 		for (const child of noHeightChildren) {
-			let finalHeight = h;
-			if (finalHeight !== null && child.parent.resizableBottom) finalHeight -= dragBarThickness;
+			const finalHeight = h;
 			sizes[child.item.key].height = finalHeight;
 		}
 	}

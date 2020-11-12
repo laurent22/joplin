@@ -1,5 +1,3 @@
-export const dragBarThickness = 5;
-
 export enum LayoutItemDirection {
 	Row = 'row',
 	Column = 'column',
