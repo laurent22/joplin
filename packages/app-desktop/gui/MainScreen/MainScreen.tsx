@@ -130,53 +130,48 @@ class MainScreenComponent extends React.Component<any, State> {
 		window.addEventListener('resize', this.window_resize);
 	}
 
-	buildLayout(plugins:any):LayoutItem {
+	buildLayout(_plugins:any):LayoutItem {
 		const rootLayoutSize = this.rootLayoutSize();
-		// const sideBarMinWidth = 200;
 
-		const sizes = {
-			sideBarColumn: {
-				width: 150,
-			},
-			noteListColumn: {
-				width: 150,
-			},
-			pluginColumn: {
-				width: 150,
-			},
-			...Setting.value('ui.layout'),
-		};
+		// const sizes = {
+		// 	sideBarColumn: {
+		// 		width: 150,
+		// 	},
+		// 	noteListColumn: {
+		// 		width: 150,
+		// 	},
+		// 	pluginColumn: {
+		// 		width: 150,
+		// 	},
+		// 	//...Setting.value('ui.layout'),
+		// };
 
-		// for (const k in sizes) {
-		// 	if (sizes[k].width < sideBarMinWidth) sizes[k].width = sideBarMinWidth;
+		// const pluginColumnChildren:LayoutItem[] = [];
+
+		// const infos = pluginUtils.viewInfosByType(plugins, 'webview');
+
+		// for (const info of infos) {
+		// 	if (info.view.containerType !== ContainerType.Panel) continue;
+
+		// 	// For now it's assumed all views go in the "pluginColumn" so they are
+		// 	// resizable vertically. But horizontally they stretch 100%
+		// 	const viewId = info.view.id;
+
+		// 	const size = {
+		// 		...(sizes[viewId] ? sizes[viewId] : null),
+		// 		width: '100%',
+		// 	};
+
+		// 	pluginColumnChildren.push({
+		// 		key: viewId,
+		// 		resizableBottom: true,
+		// 		context: {
+		// 			plugin: info.plugin,
+		// 			control: info.view,
+		// 		},
+		// 		...size,
+		// 	});
 		// }
-
-		const pluginColumnChildren:LayoutItem[] = [];
-
-		const infos = pluginUtils.viewInfosByType(plugins, 'webview');
-
-		for (const info of infos) {
-			if (info.view.containerType !== ContainerType.Panel) continue;
-
-			// For now it's assumed all views go in the "pluginColumn" so they are
-			// resizable vertically. But horizontally they stretch 100%
-			const viewId = info.view.id;
-
-			const size = {
-				...(sizes[viewId] ? sizes[viewId] : null),
-				width: '100%',
-			};
-
-			pluginColumnChildren.push({
-				key: viewId,
-				resizableBottom: true,
-				context: {
-					plugin: info.plugin,
-					control: info.view,
-				},
-				...size,
-			});
-		}
 
 		const output = validateLayout(updateResizeRules({
 			key: 'root',
@@ -186,19 +181,11 @@ class MainScreenComponent extends React.Component<any, State> {
 			children: [
 				{
 					key: 'sideBar',
-					// direction: LayoutItemDirection.Column,
-					// resizableRight: true,
-					// width: sizes.sideBarColumn.width,
 					visible: Setting.value('sidebarVisibility'),
-					// minWidth: sideBarMinWidth,
 				},
 				{
 					key: 'noteList',
-					// direction: LayoutItemDirection.Column,
-					// resizableRight: true,
-					// width: sizes.noteListColumn.width,
 					visible: Setting.value('noteListVisibility'),
-					// minWidth: sideBarMinWidth,
 				},
 				// TODO: Improve pluginColumn - make it add plugin views after note list
 				// {
@@ -212,7 +199,6 @@ class MainScreenComponent extends React.Component<any, State> {
 				// },
 				{
 					key: 'editor',
-					// direction: LayoutItemDirection.Column,
 				},
 			],
 		}));
@@ -587,6 +573,8 @@ class MainScreenComponent extends React.Component<any, State> {
 			console.info('AVANT', JSON.parse(JSON.stringify(state.layout)));
 			const newLayout = move(state.layout, event.itemKey, event.direction);
 			console.info('APRES', JSON.parse(JSON.stringify(newLayout)));
+
+			// console.info('SERIALIZE', JSON.parse(JSON.stringify(serializeLayoutForSave(newLayout))));
 			return { layout: newLayout };
 		});
 	}
