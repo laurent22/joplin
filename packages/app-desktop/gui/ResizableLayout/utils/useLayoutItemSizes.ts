@@ -9,9 +9,12 @@ export interface LayoutItemSizes {
 
 // Container always take the full space while the items within it need to
 // accomodate for the resize handle.
-export function itemSize(item:LayoutItem, sizes:LayoutItemSizes, isContainer:boolean):Size {
-	const rightGap = !isContainer && item.resizableRight ? dragBarThickness : 0;
-	const bottomGap = !isContainer && item.resizableBottom ? dragBarThickness : 0;
+export function itemSize(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, isContainer:boolean):Size {
+	const parentResizableRight = !!parent && parent.resizableRight;
+	const parentResizableBottom = !!parent && parent.resizableBottom;
+
+	const rightGap = !isContainer && (item.resizableRight || parentResizableRight) ? dragBarThickness : 0;
+	const bottomGap = !isContainer && (item.resizableBottom || parentResizableBottom) ? dragBarThickness : 0;
 
 	return {
 		width: ('width' in item ? item.width : sizes[item.key].width) - rightGap,
@@ -19,10 +22,13 @@ export function itemSize(item:LayoutItem, sizes:LayoutItemSizes, isContainer:boo
 	};
 }
 
-function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutItemSizes {
+// This calculate the exact size of each item within the layout. However
+// the final size, as rendered by the component is determined by
+// `itemSize()`, as it takes into account the resizer handle
+function calculateChildrenSizes(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes):LayoutItemSizes {
 	if (!item.children) return sizes;
 
-	const parentSize = itemSize(item, sizes, false);
+	const parentSize = itemSize(item, parent, sizes, true);
 
 	const remainingSize:Size = {
 		width: parentSize.width,
@@ -64,7 +70,7 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 	}
 
 	for (const child of item.children) {
-		const childrenSizes = calculateChildrenSizes(child, sizes);
+		const childrenSizes = calculateChildrenSizes(child, parent, sizes);
 		sizes = { ...sizes, ...childrenSizes };
 	}
 
@@ -82,7 +88,7 @@ export default function useLayoutItemSizes(layout:LayoutItem) {
 			height: layout.height,
 		};
 
-		sizes = calculateChildrenSizes(layout, sizes);
+		sizes = calculateChildrenSizes(layout, null, sizes);
 
 		return sizes;
 	}, [layout]);

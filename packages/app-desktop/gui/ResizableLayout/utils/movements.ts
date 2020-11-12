@@ -45,9 +45,10 @@ export function updateResizeRules(layout:LayoutItem):LayoutItem {
 	});
 }
 
-function clearItemHeights(items:LayoutItem[]) {
+function clearItemSizes(items:LayoutItem[]) {
 	return items.map((item:LayoutItem) => {
 		const newItem = { ...item };
+		delete newItem.width;
 		delete newItem.height;
 		return newItem;
 	});
@@ -94,7 +95,7 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 					const newParent = parent.children[newIndex];
 					parent.children.splice(itemIndex, 1);
 					newParent.children.push(item);
-					newParent.children = clearItemHeights(newParent.children);
+					newParent.children = clearItemSizes(newParent.children);
 				} else {
 					// If the item is a child of the root container, create
 					// a new column at `newIndex` and move the item that
@@ -113,7 +114,7 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 						parent.children[newIndex] = newParent;
 						parent.children.splice(itemIndex, 1);
 
-						parent.children = clearItemHeights(parent.children);
+						newParent.children = clearItemSizes(newParent.children);
 					} else {
 						// Otherwise the default case is simply to move the
 						// item left/right

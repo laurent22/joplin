@@ -90,13 +90,13 @@ function itemVisible(item:LayoutItem) {
 	return item.visible !== false;
 }
 
-function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:any[], isLastChild:boolean):any {
+function renderContainer(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:any[], isLastChild:boolean):any {
 	const style:any = {
 		display: itemVisible(item) ? 'flex' : 'none',
 		flexDirection: item.direction,
 	};
 
-	const size:Size = itemSize(item, sizes, true);
+	const size:Size = itemSize(item, parent, sizes, true);
 
 	const className = `resizableLayoutItem rli-${item.key}`;
 	if (item.resizableRight || item.resizableBottom) {
@@ -178,7 +178,7 @@ function ResizableLayout(props:Props) {
 		}
 
 		if (!item.children) {
-			const size = itemSize(item, sizes, false);
+			const size = itemSize(item, parent, sizes, false);
 
 			const comp = props.renderItem(item.key, {
 				item: item,
@@ -189,7 +189,7 @@ function ResizableLayout(props:Props) {
 
 			const wrapper = parent.children.length > 1 ? renderWrapper(comp, item, size) : comp;
 
-			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
+			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
 		} else {
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
@@ -197,7 +197,7 @@ function ResizableLayout(props:Props) {
 				childrenComponents.push(renderLayoutItem(child, item, sizes, isVisible && itemVisible(child), i === item.children.length - 1));
 			}
 
-			return renderContainer(item, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
+			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
 		}
 	}
 
