@@ -115,8 +115,6 @@ module.exports = {
 		'space-before-blocks': 'error',
 		'spaced-comment': ['error', 'always'],
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
-
-		'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 	},
 	'plugins': [
 		'react',
@@ -132,6 +130,17 @@ module.exports = {
 				// Warn only because it would make it difficult to convert JS classes to TypeScript, unless we
 				// make everything public which is not great. New code however should specify member accessibility.
 				'@typescript-eslint/explicit-member-accessibility': ['warn'],
+				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
+				'@typescript-eslint/comma-dangle': ['error', {
+					'arrays': 'always-multiline',
+					'objects': 'always-multiline',
+					'imports': 'always-multiline',
+					'exports': 'always-multiline',
+					'enums': 'always-multiline',
+					'generics': 'always-multiline',
+					'tuples': 'always-multiline',
+					'functions': 'never',
+				}],
 			},
 		},
 	],

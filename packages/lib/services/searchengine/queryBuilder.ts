@@ -13,12 +13,12 @@ enum Relation {
 
 enum Operation {
 	UNION = 'UNION',
-	INTERSECT = 'INTERSECT'
+	INTERSECT = 'INTERSECT',
 }
 
 enum Requirement {
 	EXCLUSION = 'EXCLUSION',
-	INCLUSION = 'INCLUSION'
+	INCLUSION = 'INCLUSION',
 }
 
 const notebookFilter = (terms: Term[], conditions: string[], params: string[], withs: string[]) => {

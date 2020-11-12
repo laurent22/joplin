@@ -22,7 +22,7 @@ const useKeymap = (): [
 	Error,
 	(keymapItems: KeymapItem[])=> void,
 	(commandName: string, accelerator: string)=> void,
-	(commandName: string)=> void
+	(commandName: string)=> void,
 ] => {
 	const [keymapItems, setKeymapItems] = useState<KeymapItem[]>(() => allKeymapItems());
 	const [keymapError, setKeymapError] = useState<Error>(null);
