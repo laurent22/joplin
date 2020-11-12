@@ -92,14 +92,15 @@ function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
 	});
 }
 
-function itemVisible(item:LayoutItem) {
+function itemVisible(item:LayoutItem, moveMode:boolean) {
+	if (moveMode) return true;
 	if (item.children && !item.children.length) return false;
 	return item.visible !== false;
 }
 
-function renderContainer(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:any[], isLastChild:boolean):any {
+function renderContainer(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:any[], isLastChild:boolean, moveMode:boolean):any {
 	const style:any = {
-		display: itemVisible(item) ? 'flex' : 'none',
+		display: itemVisible(item, moveMode) ? 'flex' : 'none',
 		flexDirection: item.direction,
 	};
 
@@ -217,15 +218,15 @@ function ResizableLayout(props:Props) {
 
 			const wrapper = renderItemWrapper(comp, item, parent, size, props.moveMode);
 
-			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild);
+			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild, props.moveMode);
 		} else {
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
 				const child = item.children[i];
-				childrenComponents.push(renderLayoutItem(child, item, sizes, isVisible && itemVisible(child), i === item.children.length - 1));
+				childrenComponents.push(renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === item.children.length - 1));
 			}
 
-			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild);
+			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild, props.moveMode);
 		}
 	}
 
@@ -234,7 +235,7 @@ function ResizableLayout(props:Props) {
 	}, [props.layout]);
 
 	useWindowResizeEvent(eventEmitter);
-	const sizes = useLayoutItemSizes(props.layout);
+	const sizes = useLayoutItemSizes(props.layout, props.moveMode);
 
 	function renderMoveModeBox(rootComp:any) {
 		return (
@@ -245,7 +246,7 @@ function ResizableLayout(props:Props) {
 		);
 	}
 
-	const rootComp = renderLayoutItem(props.layout, null, sizes, itemVisible(props.layout), true);
+	const rootComp = renderLayoutItem(props.layout, null, sizes, itemVisible(props.layout, props.moveMode), true);
 
 	if (props.moveMode) {
 		return renderMoveModeBox(rootComp);

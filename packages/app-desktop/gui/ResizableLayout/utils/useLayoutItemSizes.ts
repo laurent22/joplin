@@ -25,7 +25,7 @@ export function itemSize(item:LayoutItem, parent:LayoutItem | null, sizes:Layout
 // This calculate the size of each item within the layout. However
 // the final size, as rendered by the component is determined by
 // `itemSize()`, as it takes into account the resizer handle
-function calculateChildrenSizes(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes):LayoutItemSizes {
+function calculateChildrenSizes(item:LayoutItem, parent:LayoutItem | null, sizes:LayoutItemSizes, makeAllVisible:boolean):LayoutItemSizes {
 	if (!item.children) return sizes;
 
 	const parentSize = itemSize(item, parent, sizes, true);
@@ -41,7 +41,7 @@ function calculateChildrenSizes(item:LayoutItem, parent:LayoutItem | null, sizes
 	for (const child of item.children) {
 		let w = 'width' in child ? child.width : null;
 		let h = 'height' in child ? child.height : null;
-		if (child.visible === false) {
+		if (!makeAllVisible && child.visible === false) {
 			w = 0;
 			h = 0;
 		}
@@ -70,14 +70,14 @@ function calculateChildrenSizes(item:LayoutItem, parent:LayoutItem | null, sizes
 	}
 
 	for (const child of item.children) {
-		const childrenSizes = calculateChildrenSizes(child, parent, sizes);
+		const childrenSizes = calculateChildrenSizes(child, parent, sizes, makeAllVisible);
 		sizes = { ...sizes, ...childrenSizes };
 	}
 
 	return sizes;
 }
 
-export default function useLayoutItemSizes(layout:LayoutItem) {
+export default function useLayoutItemSizes(layout:LayoutItem, makeAllVisible:boolean = false) {
 	return useMemo(() => {
 		let sizes:LayoutItemSizes = {};
 
@@ -88,8 +88,8 @@ export default function useLayoutItemSizes(layout:LayoutItem) {
 			height: layout.height,
 		};
 
-		sizes = calculateChildrenSizes(layout, null, sizes);
+		sizes = calculateChildrenSizes(layout, null, sizes, makeAllVisible);
 
 		return sizes;
-	}, [layout]);
+	}, [layout, makeAllVisible]);
 }
