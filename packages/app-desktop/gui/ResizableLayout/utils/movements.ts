@@ -45,11 +45,56 @@ export function updateResizeRules(layout:LayoutItem):LayoutItem {
 	});
 }
 
+function updateItemSizes(layout:LayoutItem):LayoutItem {
+	return produce(layout, (draft:any) => {
+		iterateItems(draft, (itemIndex:number, item:LayoutItem, parent:LayoutItem) => {
+			if (!parent) return true;
+
+			// If a container has only one child, this child should not
+			// have a width and height, and simply fill up the container
+			if (parent.children.length === 1) {
+				delete item.width;
+				delete item.height;
+			}
+
+			// If all children of a container have a fixed width, the
+			// latest child should have a flexible width (i.e. no "width"
+			// property), so that it fills up the remaining space
+			if (itemIndex === parent.children.length - 1) {
+				let allChildrenAreSized = true;
+				for (const child of parent.children) {
+					if (parent.direction === LayoutItemDirection.Row) {
+						if (!child.width) {
+							allChildrenAreSized = false;
+							break;
+						}
+					} else {
+						if (!child.height) {
+							allChildrenAreSized = false;
+							break;
+						}
+					}
+				}
+
+				if (allChildrenAreSized) {
+					if (parent.direction === LayoutItemDirection.Row) {
+						delete item.width;
+					} else {
+						delete item.height;
+					}
+				}
+			}
+
+			return true;
+		});
+	});
+}
+
 function isHorizontalMove(direction:MoveDirection) {
 	return direction === MoveDirection.Left || direction === MoveDirection.Right;
 }
 
-function clearItemSizes(items:LayoutItem[]) {
+function resetItemSizes(items:LayoutItem[]) {
 	return items.map((item:LayoutItem) => {
 		const newItem = { ...item };
 		delete newItem.width;
@@ -121,26 +166,38 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 					const newParent = parent.children[newIndex];
 					parent.children.splice(itemIndex, 1);
 					newParent.children.push(item);
-					newParent.children = clearItemSizes(newParent.children);
+					newParent.children = resetItemSizes(newParent.children);
 				} else {
 					// If the item is a child of the root container, create
 					// a new column at `newIndex` and move the item that
 					// was there, as well as the current item, in this
 					// container.
 					if (itemIsRoot(parent)) {
+						const targetChild = parent.children[newIndex];
+
+						// The new container takes the size of the item it
+						// replaces.
+						const newSize:any = {};
+						if (direction === MovementDirection.Horizontal) {
+							if ('width' in targetChild) newSize.width = targetChild.width;
+						} else {
+							if ('height' in targetChild) newSize.height = targetChild.height;
+						}
+
 						const newParent:LayoutItem = {
 							key: `tempContainer-${uuid.createNano()}`,
 							direction: LayoutItemDirection.Column,
 							children: [
-								parent.children[newIndex],
+								targetChild,
 								item,
 							],
+							...newSize,
 						};
 
 						parent.children[newIndex] = newParent;
 						parent.children.splice(itemIndex, 1);
 
-						newParent.children = clearItemSizes(newParent.children);
+						newParent.children = resetItemSizes(newParent.children);
 					} else {
 						// Otherwise the default case is simply to move the
 						// item left/right
@@ -162,13 +219,14 @@ function moveItem(direction:MovementDirection, layout:LayoutItem, key:string, in
 				const newItemIndex = parentIndex + newInc;
 
 				parentParent.children.splice(newItemIndex, 0, item);
+				parentParent.children = resetItemSizes(parentParent.children);
 			}
 
 			return false;
 		});
 	});
 
-	return updateResizeRules(updatedLayout);
+	return updateItemSizes(updateResizeRules(updatedLayout));
 }
 
 export function moveHorizontal(layout:LayoutItem, key:string, inc:number):LayoutItem {

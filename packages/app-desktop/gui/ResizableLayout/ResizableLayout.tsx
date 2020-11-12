@@ -8,8 +8,11 @@ import { Size, LayoutItem } from './utils/types';
 import { canMove, MoveDirection } from './utils/movements';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootWrapper, MoveModeRootMessage } from './utils/style';
-const { Resizable } = require('re-resizable');
+import { Resizable } from 're-resizable';
 const EventEmitter = require('events');
+
+const itemMinWidth = 20;
+const itemMinHeight = 20;
 
 interface onResizeEvent {
 	layout: LayoutItem
@@ -121,12 +124,12 @@ function renderContainer(item:LayoutItem, parent:LayoutItem | null, sizes:Layout
 				className={className}
 				style={style}
 				size={size}
-				onResizeStart={onResizeStart}
-				onResize={onResize}
-				onResizeStop={onResizeStop}
+				onResizeStart={onResizeStart as any}
+				onResize={onResize as any}
+				onResizeStop={onResizeStop as any}
 				enable={enable}
-				minWidth={item.minWidth}
-				minHeight={item.minHeight}
+				minWidth={'minWidth' in item ? item.minWidth : itemMinWidth}
+				minHeight={'minHeight' in item ? item.minHeight : itemMinHeight}
 			>
 				{children}
 			</Resizable>
@@ -176,11 +179,22 @@ function ResizableLayout(props:Props) {
 			});
 		}
 
-		function onResize(_event:any, _direction:any, _refToElement: any, delta:any) {
-			const newLayout = updateLayoutItem(props.layout, item.key, {
-				width: resizedItem.initialWidth + delta.width,
-				height: resizedItem.initialHeight + delta.height,
-			});
+		function onResize(_event:any, direction:string, _refToElement: any, delta:any) {
+			const newWidth = Math.max(itemMinWidth, resizedItem.initialWidth + delta.width);
+			const newHeight = Math.max(itemMinHeight, resizedItem.initialHeight + delta.height);
+
+			const newSize:any = {};
+
+			if (item.width) newSize.width = item.width;
+			if (item.height) newSize.height = item.height;
+
+			if (direction === 'bottom') {
+				newSize.height = newHeight;
+			} else {
+				newSize.width = newWidth;
+			}
+
+			const newLayout = updateLayoutItem(props.layout, item.key, newSize);
 
 			props.onResize({ layout: newLayout });
 			eventEmitter.current.emit('resize');

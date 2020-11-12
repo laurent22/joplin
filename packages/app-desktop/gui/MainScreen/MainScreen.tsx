@@ -331,6 +331,8 @@ class MainScreenComponent extends React.Component<any, State> {
 		this.updateRootLayoutSize();
 
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
+
+		CommandService.instance().execute('toggleLayoutMoveMode');
 	}
 
 	componentWillUnmount() {
