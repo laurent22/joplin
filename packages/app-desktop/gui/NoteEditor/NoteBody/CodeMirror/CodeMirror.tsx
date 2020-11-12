@@ -78,7 +78,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}
 			editorRef.current.setSelections(newSelections);
 		}
-		editorRef.current.focus();
 	}, []);
 
 	const addListItem = useCallback((string1, defaultText = '') => {
@@ -90,7 +89,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			} else {
 				wrapSelectionWithStrings(string1, '', defaultText);
 			}
-			editorRef.current.focus();
 		}
 	}, [wrapSelectionWithStrings]);
 
@@ -182,17 +180,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 								}
 							}
 						},
-						insertText: (value: any) => {
-							editorRef.current.insertAtCursor(value);
-							editorRef.current.focus();
-						},
+						insertText: (value: any) => editorRef.current.insertAtCursor(value),
 						attachFile: async () => {
 							const cursor = editorRef.current.getCursor();
 							const pos = cursorPositionToTextOffset(cursor, props.content);
 
 							const newBody = await commandAttachFileToBody(props.content, null, { position: pos });
 							if (newBody) editorRef.current.updateBody(newBody);
-							editorRef.current.focus();
 						},
 						textNumberedList: () => {
 							let bulletNumber = markdownUtils.olLineNumber(editorRef.current.getCurrentLine());
