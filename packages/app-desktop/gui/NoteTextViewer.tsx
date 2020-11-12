@@ -3,9 +3,9 @@ const { connect } = require('react-redux');
 const { reg } = require('@joplin/lib/registry.js');
 
 interface Props {
-	onDomReady: Function,
-	onIpcMessage: Function,
-	viewerStyle: any,
+	onDomReady: Function;
+	onIpcMessage: Function;
+	viewerStyle: any;
 }
 
 class NoteTextViewerComponent extends React.Component<Props, any> {

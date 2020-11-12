@@ -10,25 +10,25 @@ type EnabledCondition = string;
 
 export interface CommandContext {
 	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
-	state: State,
-	dispatch: Function,
+	state: State;
+	dispatch: Function;
 }
 
 export interface CommandRuntime {
-	execute(context: CommandContext, ...args: any[]): Promise<any | void>
+	execute(context: CommandContext, ...args: any[]): Promise<any | void>;
 	enabledCondition?: EnabledCondition;
 	// Used for the (optional) toolbar button title
-	mapStateToTitle?(state: any): string,
+	mapStateToTitle?(state: any): string;
 }
 
 export interface CommandDeclaration {
-	name: string
+	name: string;
 
 	// Used for the menu item label, and toolbar button tooltip
-	label?: LabelFunction | string,
+	label?: LabelFunction | string;
 
 	// Command description - if none is provided, the label will be used as description
-	description?: string,
+	description?: string;
 
 	// This is a bit of a hack because some labels don't make much sense in isolation. For example,
 	// the commmand to focus the note list is called just "Note list". This makes sense within the menu
@@ -38,26 +38,26 @@ export interface CommandDeclaration {
 	//     label() => _('Note list'),
 	//     parentLabel() => _('Focus'),
 	// Which will be displayed as "Focus: Note list" in the keymap config screen.
-	parentLabel?: LabelFunction | string,
+	parentLabel?: LabelFunction | string;
 
 	// All free Font Awesome icons are available: https://fontawesome.com/icons?d=gallery&m=free
-	iconName?: string,
+	iconName?: string;
 
 	// Will be used by TinyMCE (which doesn't support Font Awesome icons).
 	// Defaults to the "preferences" icon (a cog) if not specified.
 	// https://www.tiny.cloud/docs/advanced/editor-icon-identifiers/
-	tinymceIconName?: string,
+	tinymceIconName?: string;
 
 	// Same as `role` key in Electron MenuItem:
 	// https://www.electronjs.org/docs/api/menu-item#new-menuitemoptions
 	// Note that due to a bug in Electron, menu items with a role cannot
 	// be disabled.
-	role?: string,
+	role?: string;
 }
 
 export interface Command {
-	declaration: CommandDeclaration,
-	runtime?: CommandRuntime,
+	declaration: CommandDeclaration;
+	runtime?: CommandRuntime;
 }
 
 interface Commands {
@@ -81,13 +81,13 @@ export const utils: Utils = {
 };
 
 interface CommandByNameOptions {
-	mustExist?: boolean,
-	runtimeMustBeRegistered?: boolean,
+	mustExist?: boolean;
+	runtimeMustBeRegistered?: boolean;
 }
 
 export interface SearchResult {
-	commandName: string,
-	title: string,
+	commandName: string;
+	title: string;
 }
 
 export default class CommandService extends BaseService {

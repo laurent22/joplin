@@ -9,16 +9,16 @@ const chokidar = require('chokidar');
 const bridge = require('electron').remote.require('./bridge').default;
 
 interface WatchedItem {
-	resourceId: string,
-	lastFileUpdatedTime: number,
-	lastResourceUpdatedTime: number,
-	path: string,
-	asyncSaveQueue: AsyncActionQueue,
-	size: number,
+	resourceId: string;
+	lastFileUpdatedTime: number;
+	lastResourceUpdatedTime: number;
+	path: string;
+	asyncSaveQueue: AsyncActionQueue;
+	size: number;
 }
 
 interface WatchedItems {
-	[key: string]: WatchedItem,
+	[key: string]: WatchedItem;
 }
 
 export default class ResourceEditWatcher {

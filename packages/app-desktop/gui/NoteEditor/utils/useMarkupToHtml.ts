@@ -9,14 +9,14 @@ const { themeStyle } = require('@joplin/lib/theme');
 const Note = require('@joplin/lib/models/Note');
 
 interface HookDependencies {
-	themeId: number,
-	customCss: string,
-	plugins: PluginStates,
+	themeId: number;
+	customCss: string;
+	plugins: PluginStates;
 }
 
 interface MarkupToHtmlOptions {
-	replaceResourceInternalToExternalLinks?: boolean,
-	resourceInfos?: ResourceInfos,
+	replaceResourceInternalToExternalLinks?: boolean;
+	resourceInfos?: ResourceInfos;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {

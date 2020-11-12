@@ -7,13 +7,13 @@ import { buildStyle } from '@joplin/lib/theme';
 import time from '@joplin/lib/time';
 
 interface Props {
-	themeId: number,
-	noteUserUpdatedTime: number,
-	noteTitle: string,
-	noteIsTodo: number,
-	isProvisional: boolean,
-	titleInputRef: any,
-	onTitleChange(event: ChangeEvent<HTMLInputElement>): void,
+	themeId: number;
+	noteUserUpdatedTime: number;
+	noteTitle: string;
+	noteIsTodo: number;
+	isProvisional: boolean;
+	titleInputRef: any;
+	onTitleChange(event: ChangeEvent<HTMLInputElement>): void;
 }
 
 function styles_(props: Props) {

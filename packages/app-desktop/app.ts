@@ -96,26 +96,26 @@ const pluginClasses = [
 ];
 
 interface AppStateRoute {
-	type: string,
-	routeName: string,
-	props: any,
+	type: string;
+	routeName: string;
+	props: any;
 }
 
 export interface AppState extends State {
-	route: AppStateRoute,
-	navHistory: any[],
-	noteVisiblePanes: string[],
-	sidebarVisibility: boolean,
-	noteListVisibility: boolean,
-	windowContentSize: any,
-	watchedNoteFiles: string[],
-	lastEditorScrollPercents: any,
-	devToolsVisible: boolean,
-	visibleDialogs: any, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
-	focusedField: string,
+	route: AppStateRoute;
+	navHistory: any[];
+	noteVisiblePanes: string[];
+	sidebarVisibility: boolean;
+	noteListVisibility: boolean;
+	windowContentSize: any;
+	watchedNoteFiles: string[];
+	lastEditorScrollPercents: any;
+	devToolsVisible: boolean;
+	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
+	focusedField: string;
 
 	// Extra reducer keys go here
-	watchedResources: any,
+	watchedResources: any;
 }
 
 const appDefaultState: AppState = {

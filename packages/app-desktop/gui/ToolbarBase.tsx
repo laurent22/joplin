@@ -6,9 +6,9 @@ const { themeStyle } = require('@joplin/lib/theme');
 const ToolbarSpace = require('./ToolbarSpace.min.js');
 
 interface Props {
-	themeId: number,
-	style: any,
-	items: any[],
+	themeId: number;
+	style: any;
+	items: any[];
 }
 
 class ToolbarBaseComponent extends React.Component<Props, any> {

@@ -6,22 +6,22 @@ const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
 
 interface RendererRule {
-	install(context: any, ruleOptions: any): any,
-	assets?(theme: any): any,
-	plugin?: any,
+	install(context: any, ruleOptions: any): any;
+	assets?(theme: any): any;
+	plugin?: any;
 }
 
 interface RendererRules {
-	[pluginName: string]: RendererRule,
+	[pluginName: string]: RendererRule;
 }
 
 interface RendererPlugin {
-	module: any,
-	options?: any,
+	module: any;
+	options?: any;
 }
 
 interface RendererPlugins {
-	[pluginName: string]: RendererPlugin,
+	[pluginName: string]: RendererPlugin;
 }
 
 // /!\/!\ Note: the order of rules is important!! /!\/!\
@@ -68,24 +68,24 @@ function slugify(s: string): string {
 const inMemoryCache = new InMemoryCache(20);
 
 export interface ExtraRendererRule {
-	id: string,
-	module: any,
+	id: string;
+	module: any;
 }
 
 export interface Options {
-	resourceBaseUrl?: string,
-	ResourceModel?: any,
-	pluginOptions?: any,
-	tempDir?: string,
-	fsDriver?: any,
-	extraRendererRules?: ExtraRendererRule[],
+	resourceBaseUrl?: string;
+	ResourceModel?: any;
+	pluginOptions?: any;
+	tempDir?: string;
+	fsDriver?: any;
+	extraRendererRules?: ExtraRendererRule[];
 }
 
 interface PluginAsset {
-	mime?: string,
-	inline?: boolean,
-	name?: string,
-	text?: string,
+	mime?: string;
+	inline?: boolean;
+	name?: string;
+	text?: string;
 }
 
 // Types are a bit of a mess when it comes to plugin assets. Something
@@ -96,55 +96,55 @@ interface PluginAssets {
 }
 
 interface PluginContext {
-	css: any
-	pluginAssets: any,
-	cache: any,
-	userData: any,
+	css: any;
+	pluginAssets: any;
+	cache: any;
+	userData: any;
 }
 
 interface RenderResultPluginAsset {
-	name: string,
-	path: string,
-	mime: string,
+	name: string;
+	path: string;
+	mime: string;
 }
 
 interface RenderResult {
-	html: string,
+	html: string;
 	pluginAssets: RenderResultPluginAsset[];
-	cssStrings: string[],
+	cssStrings: string[];
 }
 
 export interface RuleOptions {
-	context: PluginContext,
-	theme: any,
-	postMessageSyntax: string,
-	ResourceModel: any,
-	resourceBaseUrl: string,
-	resources: any, // resourceId: Resource
+	context: PluginContext;
+	theme: any;
+	postMessageSyntax: string;
+	ResourceModel: any;
+	resourceBaseUrl: string;
+	resources: any; // resourceId: Resource
 
 	// Used by checkboxes to specify how it should be rendered
-	checkboxRenderingType?: number,
+	checkboxRenderingType?: number;
 
 	// Used by the keyword highlighting plugin (mobile only)
-	highlightedKeywords?: any[],
+	highlightedKeywords?: any[];
 
 	// Use by resource-rendering logic to signify that it should be rendered
 	// as a plain HTML string without any attached JavaScript. Used for example
 	// when exporting to HTML.
-	plainResourceRendering?: boolean,
+	plainResourceRendering?: boolean;
 
 	// Use in mobile app to enable long-pressing an image or a linkg
 	// to display a context menu. Used in `image.ts` and `link_open.ts`
-	enableLongPress?: boolean,
+	enableLongPress?: boolean;
 
 	// Used in mobile app when enableLongPress = true. Tells for how long
 	// the resource should be pressed before the menu is shown.
-	longPressDelay?: number,
+	longPressDelay?: number;
 
 	// Use by `link_open` rule.
 	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
 	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
-	linkRenderingType?: number,
+	linkRenderingType?: number;
 }
 
 export default class MdToHtml {

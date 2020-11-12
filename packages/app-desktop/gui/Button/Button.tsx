@@ -10,16 +10,16 @@ export enum ButtonLevel {
 }
 
 interface Props {
-	title?: string,
-	iconName?: string,
-	level?: ButtonLevel,
-	className?: string,
-	onClick: Function,
-	color?: string,
-	iconAnimation?: string,
-	tooltip?: string,
-	disabled?: boolean,
-	style?: any,
+	title?: string;
+	iconName?: string;
+	level?: ButtonLevel;
+	className?: string;
+	onClick: Function;
+	color?: string;
+	iconAnimation?: string;
+	tooltip?: string;
+	disabled?: boolean;
+	style?: any;
 }
 
 const StyledTitle = styled.span`

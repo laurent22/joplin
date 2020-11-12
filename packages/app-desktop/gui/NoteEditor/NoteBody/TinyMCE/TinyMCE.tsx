@@ -109,13 +109,13 @@ function enableTextAreaTab(enable: boolean) {
 }
 
 interface TinyMceCommand {
-	name: string,
-	value?: any,
-	ui?: boolean
+	name: string;
+	value?: any;
+	ui?: boolean;
 }
 
 interface JoplinCommandToTinyMceCommands {
-	[key: string]: TinyMceCommand,
+	[key: string]: TinyMceCommand;
 }
 
 const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {

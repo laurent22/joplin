@@ -13,12 +13,12 @@ const md5 = require('md5');
 const url = require('url');
 
 interface ExportNoteOptions {
-	customCss?: string,
-	sourceNoteIds?: string[],
-	sourceFolderIds?: string[],
-	printBackground?: boolean,
-	pageSize?: string,
-	landscape?: boolean,
+	customCss?: string;
+	sourceNoteIds?: string[];
+	sourceFolderIds?: string[];
+	printBackground?: boolean;
+	pageSize?: string;
+	landscape?: boolean;
 }
 
 export default class InteropServiceHelper {

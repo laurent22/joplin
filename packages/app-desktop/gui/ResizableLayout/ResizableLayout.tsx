@@ -14,34 +14,34 @@ export enum LayoutItemDirection {
 }
 
 export interface Size {
-	width: number,
-	height: number,
+	width: number;
+	height: number;
 }
 
 export interface LayoutItem {
-	key: string,
-	width?: number,
-	height?: number,
-	minWidth?: number,
-	minHeight?: number,
-	children?: LayoutItem[]
-	direction?: LayoutItemDirection,
-	resizableRight?: boolean,
-	resizableBottom?: boolean,
-	visible?: boolean,
-	context?: any,
+	key: string;
+	width?: number;
+	height?: number;
+	minWidth?: number;
+	minHeight?: number;
+	children?: LayoutItem[];
+	direction?: LayoutItemDirection;
+	resizableRight?: boolean;
+	resizableBottom?: boolean;
+	visible?: boolean;
+	context?: any;
 }
 
 interface onResizeEvent {
-	layout: LayoutItem
+	layout: LayoutItem;
 }
 
 interface Props {
-	layout: LayoutItem,
+	layout: LayoutItem;
 	onResize(event: onResizeEvent): void;
-	width?: number,
-	height?: number,
-	renderItem: Function,
+	width?: number;
+	height?: number;
+	renderItem: Function;
 }
 
 export function allDynamicSizes(layout: LayoutItem): any {

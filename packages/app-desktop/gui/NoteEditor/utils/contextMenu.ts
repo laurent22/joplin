@@ -18,19 +18,19 @@ export enum ContextMenuItemType {
 }
 
 export interface ContextMenuOptions {
-	itemType: ContextMenuItemType,
-	resourceId: string,
-	linkToCopy: string,
-	textToCopy: string,
-	htmlToCopy: string,
-	insertContent: Function,
-	isReadOnly?: boolean,
+	itemType: ContextMenuItemType;
+	resourceId: string;
+	linkToCopy: string;
+	textToCopy: string;
+	htmlToCopy: string;
+	insertContent: Function;
+	isReadOnly?: boolean;
 }
 
 interface ContextMenuItem {
-	label: string,
-	onAction: Function,
-	isActive: Function,
+	label: string;
+	onAction: Function;
+	isActive: Function;
 }
 
 interface ContextMenuItems {

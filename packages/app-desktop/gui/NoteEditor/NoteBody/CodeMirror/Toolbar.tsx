@@ -9,8 +9,8 @@ import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenC
 const { buildStyle } = require('@joplin/lib/theme');
 
 interface ToolbarProps {
-	themeId: number,
-	toolbarButtonInfos: ToolbarButtonInfo[],
+	themeId: number;
+	toolbarButtonInfos: ToolbarButtonInfo[];
 }
 
 function styles_(props: ToolbarProps) {

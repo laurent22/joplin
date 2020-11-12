@@ -6,12 +6,12 @@ const { dirname, toSystemSlashes } = require('@joplin/lib/path-utils');
 const { BrowserWindow, nativeTheme } = require('electron');
 
 interface LastSelectedPath {
-	file: string,
-	directory: string,
+	file: string;
+	directory: string;
 }
 
 interface LastSelectedPaths {
-	[key: string]: LastSelectedPath,
+	[key: string]: LastSelectedPath;
 }
 
 export class Bridge {

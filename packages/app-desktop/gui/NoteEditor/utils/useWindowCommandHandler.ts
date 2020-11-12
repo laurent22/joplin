@@ -12,13 +12,13 @@ const commandsWithDependencies = [
 ];
 
 interface HookDependencies {
-	formNote: FormNote,
-	setShowLocalSearch: Function,
-	dispatch: Function,
-	noteSearchBarRef: any,
-	editorRef: any,
-	titleInputRef: any,
-	saveNoteAndWait: Function,
+	formNote: FormNote;
+	setShowLocalSearch: Function;
+	dispatch: Function;
+	noteSearchBarRef: any;
+	editorRef: any;
+	titleInputRef: any;
+	saveNoteAndWait: Function;
 }
 
 function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any): CommandRuntime {

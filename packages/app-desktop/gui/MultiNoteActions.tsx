@@ -6,12 +6,12 @@ const { buildStyle } = require('@joplin/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 
 interface MultiNoteActionsProps {
-	themeId: number,
-	selectedNoteIds: string[],
-	notes: any[],
-	dispatch: Function,
-	watchedNoteFiles: string[],
-	plugins: PluginStates,
+	themeId: number;
+	selectedNoteIds: string[];
+	notes: any[];
+	dispatch: Function;
+	watchedNoteFiles: string[];
+	plugins: PluginStates;
 }
 
 function styles_(props: MultiNoteActionsProps) {

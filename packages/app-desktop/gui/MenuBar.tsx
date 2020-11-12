@@ -72,22 +72,22 @@ function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemCl
 }
 
 interface Props {
-	dispatch: Function,
-	menuItemProps: any,
-	routeName: string,
-	selectedFolderId: string,
-	layoutButtonSequence: number,
-	['notes.sortOrder.field']: string,
-	['folders.sortOrder.field']: string,
-	['notes.sortOrder.reverse']: boolean,
-	['folders.sortOrder.reverse']: boolean,
-	showNoteCounts: boolean,
-	uncompletedTodosOnTop: boolean,
-	showCompletedTodos: boolean,
-	pluginMenuItems: any[],
-	pluginMenus: any[],
-	['spellChecker.enabled']: boolean,
-	['spellChecker.language']: string,
+	dispatch: Function;
+	menuItemProps: any;
+	routeName: string;
+	selectedFolderId: string;
+	layoutButtonSequence: number;
+	['notes.sortOrder.field']: string;
+	['folders.sortOrder.field']: string;
+	['notes.sortOrder.reverse']: boolean;
+	['folders.sortOrder.reverse']: boolean;
+	showNoteCounts: boolean;
+	uncompletedTodosOnTop: boolean;
+	showCompletedTodos: boolean;
+	pluginMenuItems: any[];
+	pluginMenus: any[];
+	['spellChecker.enabled']: boolean;
+	['spellChecker.language']: string;
 }
 
 const commandNames: string[] = menuCommandNames();

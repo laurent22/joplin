@@ -3,13 +3,13 @@ import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUt
 import { StyledRoot, StyledIconSpan, StyledIconI } from './styles';
 
 interface Props {
-	readonly themeId: number,
-	readonly toolbarButtonInfo?: ToolbarButtonInfo,
-	readonly title?: string,
-	readonly tooltip?: string,
-	readonly iconName?: string,
-	readonly disabled?: boolean,
-	readonly backgroundHover?: boolean,
+	readonly themeId: number;
+	readonly toolbarButtonInfo?: ToolbarButtonInfo;
+	readonly title?: string;
+	readonly tooltip?: string;
+	readonly iconName?: string;
+	readonly disabled?: boolean;
+	readonly backgroundHover?: boolean;
 }
 
 function isFontAwesomeIcon(iconName: string) {

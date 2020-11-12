@@ -1,22 +1,22 @@
 import { Draft } from 'immer';
 
 export interface ViewInfo {
-	view: any,
-	plugin: any,
+	view: any;
+	plugin: any;
 }
 
 interface PluginViewState {
-	id: string,
-	type: string,
+	id: string;
+	type: string;
 }
 
 interface PluginViewStates {
-	[key: string]: PluginViewState,
+	[key: string]: PluginViewState;
 }
 
 interface PluginContentScriptState {
-	id: string,
-	path: string,
+	id: string;
+	path: string;
 }
 
 interface PluginContentScriptStates {
@@ -24,9 +24,9 @@ interface PluginContentScriptStates {
 }
 
 interface PluginState {
-	id: string,
-	contentScripts: PluginContentScriptStates,
-	views: PluginViewStates,
+	id: string;
+	contentScripts: PluginContentScriptStates;
+	views: PluginViewStates;
 }
 
 export interface PluginStates {
@@ -34,7 +34,7 @@ export interface PluginStates {
 }
 
 export interface State {
-	plugins: PluginStates,
+	plugins: PluginStates;
 }
 
 export const stateRootKey = 'pluginService';

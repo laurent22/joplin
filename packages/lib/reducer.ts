@@ -17,75 +17,75 @@ additionalReducers.push({
 });
 
 interface StateLastSelectedNotesIds {
-	Folder: any,
-	Tag: any,
-	Search: any,
+	Folder: any;
+	Tag: any;
+	Search: any;
 }
 
 interface StateClipperServer {
-	startState: string,
-	port: number,
+	startState: string;
+	port: number;
 }
 
 interface StateDecryptionWorker {
-	state: string,
-	itemIndex: number,
-	itemCount: number,
-	decryptedItemCounts: any
-	decryptedItemCount: number,
-	skippedItemCount: number,
+	state: string;
+	itemIndex: number;
+	itemCount: number;
+	decryptedItemCounts: any;
+	decryptedItemCount: number;
+	skippedItemCount: number;
 }
 
 interface StateResourceFetcher {
-	toFetchCount: number,
+	toFetchCount: number;
 }
 
 export interface State {
-	notes: any[],
-	notesSource: string,
-	notesParentType: string,
-	folders: any[],
-	tags: any[],
-	masterKeys: any[],
-	notLoadedMasterKeys: any[],
-	searches: any[],
-	highlightedWords: string[],
-	selectedNoteIds: string[],
-	selectedNoteHash: string,
-	selectedFolderId: string,
-	selectedTagId: string,
-	selectedSearchId: string,
-	selectedItemType: string,
-	selectedSmartFilterId: string,
-	lastSelectedNotesIds: StateLastSelectedNotesIds,
-	showSideMenu: boolean,
-	screens: any
-	historyCanGoBack: boolean,
-	syncStarted: boolean,
-	syncReport: any
-	searchQuery: string,
-	settings: any
-	sharedData: any,
-	appState: string,
-	hasDisabledSyncItems: boolean,
-	hasDisabledEncryptionItems: boolean,
-	customCss: string,
-	templates: any[],
-	collapsedFolderIds: string[],
-	clipperServer: StateClipperServer,
-	decryptionWorker: StateDecryptionWorker,
-	selectedNoteTags: any[],
-	resourceFetcher: StateResourceFetcher,
-	backwardHistoryNotes: any[],
-	forwardHistoryNotes: any[],
-	pluginsLegacy: any
-	provisionalNoteIds: string[],
-	editorNoteStatuses: any
-	isInsertingNotes: boolean,
-	hasEncryptedItems: boolean,
+	notes: any[];
+	notesSource: string;
+	notesParentType: string;
+	folders: any[];
+	tags: any[];
+	masterKeys: any[];
+	notLoadedMasterKeys: any[];
+	searches: any[];
+	highlightedWords: string[];
+	selectedNoteIds: string[];
+	selectedNoteHash: string;
+	selectedFolderId: string;
+	selectedTagId: string;
+	selectedSearchId: string;
+	selectedItemType: string;
+	selectedSmartFilterId: string;
+	lastSelectedNotesIds: StateLastSelectedNotesIds;
+	showSideMenu: boolean;
+	screens: any;
+	historyCanGoBack: boolean;
+	syncStarted: boolean;
+	syncReport: any;
+	searchQuery: string;
+	settings: any;
+	sharedData: any;
+	appState: string;
+	hasDisabledSyncItems: boolean;
+	hasDisabledEncryptionItems: boolean;
+	customCss: string;
+	templates: any[];
+	collapsedFolderIds: string[];
+	clipperServer: StateClipperServer;
+	decryptionWorker: StateDecryptionWorker;
+	selectedNoteTags: any[];
+	resourceFetcher: StateResourceFetcher;
+	backwardHistoryNotes: any[];
+	forwardHistoryNotes: any[];
+	pluginsLegacy: any;
+	provisionalNoteIds: string[];
+	editorNoteStatuses: any;
+	isInsertingNotes: boolean;
+	hasEncryptedItems: boolean;
 
 	// Extra reducer keys go here:
-	pluginService: PluginServiceState,
+	pluginService: PluginServiceState;
 }
 
 export const defaultState: State = {

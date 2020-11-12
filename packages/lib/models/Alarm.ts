@@ -2,11 +2,11 @@ const BaseModel = require('../BaseModel').default;
 const Note = require('./Note.js');
 
 export interface Notification {
-	id: number,
-	noteId: string,
-	date: Date,
-	title: string,
-	body?: string,
+	id: number;
+	noteId: string;
+	date: Date;
+	title: string;
+	body?: string;
 }
 
 export default class Alarm extends BaseModel {

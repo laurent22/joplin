@@ -6,7 +6,7 @@ export interface Command {
 	/**
 	 * Name of command - must be globally unique
 	 */
-	name: string
+	name: string;
 
 	/**
 	 * Label to be displayed on menu items or keyboard shortcut editor for example.
@@ -14,17 +14,17 @@ export interface Command {
 	 * In that case the command will not appear in the shortcut editor or command panel, and logically
 	 * should not be used as a menu item.
 	 */
-	label?: string
+	label?: string;
 
 	/**
 	 * Icon to be used on toolbar buttons for example
 	 */
-	iconName?: string,
+	iconName?: string;
 
 	/**
 	 * Code to be ran when the command is executed. It may return a result.
 	 */
-	execute(...args: any[]): Promise<any | void>
+	execute(...args: any[]): Promise<any | void>;
 
 	/**
 	 * Defines whether the command should be enabled or disabled, which in turns affects
@@ -44,7 +44,7 @@ export interface Command {
 	 *
 	 * Note: Commands are enabled by default unless you use this property.
 	 */
-	enabledCondition?: string
+	enabledCondition?: string;
 }
 
 // =================================================================
@@ -72,29 +72,29 @@ export interface ExportModule {
 	/**
 	 * The format to be exported, eg "enex", "jex", "json", etc.
 	 */
-	format: string,
+	format: string;
 
 	/**
 	 * The description that will appear in the UI, for example in the menu item.
 	 */
-	description: string,
+	description: string;
 
 	/**
 	 * Whether the module will export a single file or multiple files in a directory. It affects the open dialog that will be presented to the user when using your exporter.
 	 */
-	target: FileSystemItem,
+	target: FileSystemItem;
 
 	/**
 	 * Only applies to single file exporters or importers
 	 * It tells whether the format can package multiple notes into one file.
 	 * For example JEX or ENEX can, but HTML cannot.
 	 */
-	isNoteArchive: boolean,
+	isNoteArchive: boolean;
 
 	/**
 	 * The extensions of the files exported by your module. For example, it is `["htm", "html"]` for the HTML module, and just `["jex"]` for the JEX module.
 	 */
-	fileExtensions?: string[],
+	fileExtensions?: string[];
 
 	/**
 	 * Called when the export process starts.
@@ -121,34 +121,34 @@ export interface ImportModule {
 	/**
 	 * The format to be exported, eg "enex", "jex", "json", etc.
 	 */
-	format: string,
+	format: string;
 
 	/**
 	 * The description that will appear in the UI, for example in the menu item.
 	 */
-	description: string,
+	description: string;
 
 	/**
 	 * Only applies to single file exporters or importers
 	 * It tells whether the format can package multiple notes into one file.
 	 * For example JEX or ENEX can, but HTML cannot.
 	 */
-	isNoteArchive: boolean,
+	isNoteArchive: boolean;
 
 	/**
 	 * The type of sources that are supported by the module. Tells whether the module can import files or directories or both.
 	 */
-	sources: FileSystemItem[],
+	sources: FileSystemItem[];
 
 	/**
 	 * Tells the file extensions of the exported files.
 	 */
-	fileExtensions?: string[],
+	fileExtensions?: string[];
 
 	/**
 	 * Tells the type of notes that will be generated, either HTML or Markdown (default).
 	 */
-	outputFormat?: ImportModuleOutputFormat,
+	outputFormat?: ImportModuleOutputFormat;
 
 	/**
 	 * Called when the import process starts. There is only one event handler within which you should import the complete data.
@@ -157,28 +157,28 @@ export interface ImportModule {
 }
 
 export interface ExportOptions {
-	format?: string,
-	path?: string,
-	sourceFolderIds?: string[],
-	sourceNoteIds?: string[],
-	modulePath?: string,
-	target?: FileSystemItem,
+	format?: string;
+	path?: string;
+	sourceFolderIds?: string[];
+	sourceNoteIds?: string[];
+	modulePath?: string;
+	target?: FileSystemItem;
 }
 
 export interface ExportContext {
-	destPath: string,
-	options: ExportOptions,
+	destPath: string;
+	options: ExportOptions;
 
 	/**
 	 * You can attach your own custom data using this propery - it will then be passed to each event handler, allowing you to keep state from one event to the next.
 	 */
-	userData?: any,
+	userData?: any;
 }
 
 export interface ImportContext {
-	sourcePath: string,
-	options: any,
-	warnings: string[],
+	sourcePath: string;
+	options: any;
+	warnings: string[];
 }
 
 // =================================================================
@@ -186,7 +186,7 @@ export interface ImportContext {
 // =================================================================
 
 export interface Script {
-	onStart?(event: any): Promise<void>,
+	onStart?(event: any): Promise<void>;
 }
 
 // =================================================================
@@ -194,7 +194,7 @@ export interface Script {
 // =================================================================
 
 export interface CreateMenuItemOptions {
-	accelerator: string,
+	accelerator: string;
 }
 
 export enum MenuItemLocation {
@@ -212,22 +212,22 @@ export interface MenuItem {
 	 * Command that should be associated with the menu item. All menu item should
 	 * have a command associated with them unless they are a sub-menu.
 	 */
-	commandName?: string,
+	commandName?: string;
 
 	/**
 	 * Accelerator associated with the menu item
 	 */
-	accelerator?: string,
+	accelerator?: string;
 
 	/**
 	 * Menu items that should appear below this menu item. Allows creating a menu tree.
 	 */
-	submenu?: MenuItem[],
+	submenu?: MenuItem[];
 
 	/**
 	 * Menu item label. If not specified, the command label will be used instead.
 	 */
-	label?: string,
+	label?: string;
 }
 
 // =================================================================
@@ -235,9 +235,9 @@ export interface MenuItem {
 // =================================================================
 
 export interface ButtonSpec {
-	id: ButtonId,
-	title?: string,
-	onClick?(): void,
+	id: ButtonId;
+	title?: string;
+	onClick?(): void;
 }
 
 export type ButtonId = string;
@@ -277,28 +277,28 @@ export enum SettingItemType {
 // Redefine a simplified interface to mask internal details
 // and to remove function calls as they would have to be async.
 export interface SettingItem {
-	value: any,
-	type: SettingItemType,
-	public: boolean,
-	label: string,
+	value: any;
+	type: SettingItemType;
+	public: boolean;
+	label: string;
 
-	description?: string,
-	isEnum?: boolean,
-	section?: string,
-	options?: any,
-	appTypes?: string[],
-	secure?: boolean,
-	advanced?: boolean,
-	minimum?: number,
-	maximum?: number,
-	step?: number,
+	description?: string;
+	isEnum?: boolean;
+	section?: string;
+	options?: any;
+	appTypes?: string[];
+	secure?: boolean;
+	advanced?: boolean;
+	minimum?: number;
+	maximum?: number;
+	step?: number;
 }
 
 export interface SettingSection {
-	label: string,
-	iconName?: string,
-	description?: string,
-	name?: string,
+	label: string;
+	iconName?: string;
+	description?: string;
+	name?: string;
 }
 
 // =================================================================

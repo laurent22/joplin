@@ -11,7 +11,7 @@ interface JoplinViewsDialogs {
 }
 
 interface JoplinViews {
-	dialogs: JoplinViewsDialogs
+	dialogs: JoplinViewsDialogs;
 }
 
 interface Joplin {
@@ -20,7 +20,7 @@ interface Joplin {
 }
 
 interface Components {
-	[key: string]: any,
+	[key: string]: any;
 }
 
 export default class PlatformImplementation {

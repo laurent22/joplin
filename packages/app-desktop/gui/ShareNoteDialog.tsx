@@ -12,9 +12,9 @@ const { reg } = require('@joplin/lib/registry.js');
 const { clipboard } = require('electron');
 
 interface ShareNoteDialogProps {
-	themeId: number,
-	noteIds: Array<string>,
-	onClose: Function,
+	themeId: number;
+	noteIds: Array<string>;
+	onClose: Function;
 }
 
 interface SharesMap {

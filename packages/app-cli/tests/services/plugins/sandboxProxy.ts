@@ -12,8 +12,8 @@ describe('services_plugins_sandboxProxy', function() {
 
 	it('should create a new sandbox proxy', asyncTest(async () => {
 		interface Result {
-			path: string,
-			args: any[],
+			path: string;
+			args: any[];
 		}
 
 		const results: Result[] = [];
@@ -35,8 +35,8 @@ describe('services_plugins_sandboxProxy', function() {
 
 	it('should allow importing a namespace', asyncTest(async () => {
 		interface Result {
-			path: string,
-			args: any[],
+			path: string;
+			args: any[];
 		}
 
 		const results: Result[] = [];

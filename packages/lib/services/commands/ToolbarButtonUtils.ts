@@ -4,20 +4,20 @@ import { stateUtils } from '../../reducer';
 const separatorItem = { type: 'separator' };
 
 export interface ToolbarButtonInfo {
-	name: string,
-	tooltip: string,
-	iconName: string,
-	enabled: boolean,
-	onClick(): void,
-	title: string,
+	name: string;
+	tooltip: string;
+	iconName: string;
+	enabled: boolean;
+	onClick(): void;
+	title: string;
 }
 
 interface ToolbarButtonCacheItem {
-	info: ToolbarButtonInfo,
+	info: ToolbarButtonInfo;
 }
 
 interface ToolbarButtonCache {
-	[key: string]: ToolbarButtonCacheItem,
+	[key: string]: ToolbarButtonCacheItem;
 }
 
 export default class ToolbarButtonUtils {

@@ -6,7 +6,7 @@ const notifier = require('node-notifier');
 const bridge = require('electron').remote.require('./bridge').default;
 
 interface Options {
-	appName: string,
+	appName: string;
 }
 
 export default class AlarmServiceDriverNode {

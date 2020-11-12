@@ -8,7 +8,7 @@ enum ValueType {
 
 export default class KvStore extends BaseService {
 
-	private incMutex_: any = null
+	private incMutex_: any = null;
 	private db_: any = null;
 
 	private static instance_: KvStore = null;

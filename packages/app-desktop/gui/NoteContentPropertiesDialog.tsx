@@ -7,10 +7,10 @@ const Countable = require('countable');
 const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 
 interface NoteContentPropertiesDialogProps {
-	themeId: number,
-	text: string,
-	markupLanguage: number,
-	onClose: Function,
+	themeId: number;
+	text: string;
+	markupLanguage: number;
+	onClose: Function;
 }
 
 interface TextPropertiesMap {

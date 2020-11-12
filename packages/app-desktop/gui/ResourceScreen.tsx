@@ -9,45 +9,45 @@ const prettyBytes = require('pretty-bytes');
 const Resource = require('@joplin/lib/models/Resource.js');
 
 interface Style {
-	width: number
-	height: number
+	width: number;
+	height: number;
 }
 
 interface Props {
 	themeId: number;
-	style: Style,
-	dispatch: Function,
+	style: Style;
+	dispatch: Function;
 }
 
 interface InnerResource {
-	title: string
-	id: string
-	size: number
-	file_extension: string
+	title: string;
+	id: string;
+	size: number;
+	file_extension: string;
 }
 
 interface State {
-	resources: InnerResource[] | undefined
-	sorting: ActiveSorting
-	isLoading: boolean
+	resources: InnerResource[] | undefined;
+	sorting: ActiveSorting;
+	isLoading: boolean;
 }
 
 interface ResourceTable {
-	resources: InnerResource[]
-	sorting: ActiveSorting
-	onResourceClick: (resource: InnerResource)=> any
-	onResourceDelete: (resource: InnerResource)=> any
-	onToggleSorting: (order: SortingOrder)=> any
-	themeId: number
-	style: Style
+	resources: InnerResource[];
+	sorting: ActiveSorting;
+	onResourceClick: (resource: InnerResource)=> any;
+	onResourceDelete: (resource: InnerResource)=> any;
+	onToggleSorting: (order: SortingOrder)=> any;
+	themeId: number;
+	style: Style;
 }
 
-type SortingOrder = 'size' | 'name'
-type SortingType = 'asc' | 'desc'
+type SortingOrder = 'size' | 'name';
+type SortingType = 'asc' | 'desc';
 
 interface ActiveSorting {
-	order: SortingOrder
-	type: SortingType
+	order: SortingOrder;
+	type: SortingType;
 }
 
 const ResourceTableComp = (props: ResourceTable) => {

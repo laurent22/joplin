@@ -19,54 +19,54 @@ export enum SettingItemType {
 }
 
 interface KeysOptions {
-	secureOnly?: boolean,
+	secureOnly?: boolean;
 }
 
 // This is the definition of a setting item
 export interface SettingItem {
-	value: any,
-	type: SettingItemType,
-	public: boolean,
+	value: any;
+	type: SettingItemType;
+	public: boolean;
 
-	subType?: string,
-	key?: string,
-	isEnum?: boolean,
-	section?: string,
-	label?(): string,
-	description?(appType: string): string,
-	options?(): any,
-	appTypes?: string[],
-	show?(settings: any): boolean,
-	filter?(value: any): any,
-	secure?: boolean,
-	advanced?: boolean,
-	minimum?: number,
-	maximum?: number,
-	step?: number,
-	onClick?(): void,
-	unitLabel?(value: any): string,
+	subType?: string;
+	key?: string;
+	isEnum?: boolean;
+	section?: string;
+	label?(): string;
+	description?(appType: string): string;
+	options?(): any;
+	appTypes?: string[];
+	show?(settings: any): boolean;
+	filter?(value: any): any;
+	secure?: boolean;
+	advanced?: boolean;
+	minimum?: number;
+	maximum?: number;
+	step?: number;
+	onClick?(): void;
+	unitLabel?(value: any): string;
 }
 
 interface SettingItems {
-	[key: string]: SettingItem,
+	[key: string]: SettingItem;
 }
 
 // This is where the actual setting values are stored.
 // They are saved to database at regular intervals.
 interface CacheItem {
-	key: string,
-	value: any,
+	key: string;
+	value: any;
 }
 
 export interface SettingSection {
-	label: string,
-	iconName?: string,
-	description?: string,
-	name?: string,
+	label: string;
+	iconName?: string;
+	description?: string;
+	name?: string;
 }
 
 interface SettingSections {
-	[key: string]: SettingSection,
+	[key: string]: SettingSection;
 }
 
 class Setting extends BaseModel {

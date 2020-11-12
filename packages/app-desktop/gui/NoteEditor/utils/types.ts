@@ -24,25 +24,25 @@ export interface NoteEditorProps {
 	selectedNoteTags: any[];
 	lastEditorScrollPercents: any;
 	selectedNoteHash: string;
-	searches: any[],
-	selectedSearchId: string,
-	customCss: string,
-	noteVisiblePanes: string[],
-	watchedResources: any,
-	highlightedWords: any[],
-	plugins: PluginStates,
-	toolbarButtonInfos: ToolbarButtonInfo[],
-	setTagsToolbarButtonInfo: ToolbarButtonInfo,
+	searches: any[];
+	selectedSearchId: string;
+	customCss: string;
+	noteVisiblePanes: string[];
+	watchedResources: any;
+	highlightedWords: any[];
+	plugins: PluginStates;
+	toolbarButtonInfos: ToolbarButtonInfo[];
+	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 }
 
 export interface NoteBodyEditorProps {
 	style: any;
-	ref: any,
+	ref: any;
 	themeId: number;
-	content: string,
-	contentKey: string,
-	contentMarkupLanguage: number,
-	contentOriginalCss: string,
+	content: string;
+	contentKey: string;
+	contentMarkupLanguage: number;
+	contentOriginalCss: string;
 	onChange(event: OnChangeEvent): void;
 	onWillChange(event: any): void;
 	onMessage(event: any): void;
@@ -53,29 +53,29 @@ export interface NoteBodyEditorProps {
 	disabled: boolean;
 	dispatch: Function;
 	noteToolbar: any;
-	setLocalSearchResultCount(count: number): void,
-	searchMarkers: any,
-	visiblePanes: string[],
-	keyboardMode: string,
-	resourceInfos: ResourceInfos,
-	locale: string,
-	onDrop: Function,
-	noteToolbarButtonInfos: ToolbarButtonInfo[],
-	plugins: PluginStates,
+	setLocalSearchResultCount(count: number): void;
+	searchMarkers: any;
+	visiblePanes: string[];
+	keyboardMode: string;
+	resourceInfos: ResourceInfos;
+	locale: string;
+	onDrop: Function;
+	noteToolbarButtonInfos: ToolbarButtonInfo[];
+	plugins: PluginStates;
 }
 
 export interface FormNote {
-	id: string,
-	title: string,
-	body: string,
-	parent_id: string,
-	is_todo: number,
-	bodyEditorContent?: any,
-	markup_language: number,
-	user_updated_time: number,
-	encryption_applied: number,
+	id: string;
+	title: string;
+	body: string;
+	parent_id: string;
+	is_todo: number;
+	bodyEditorContent?: any;
+	markup_language: number;
+	user_updated_time: number;
+	encryption_applied: number;
 
-	hasChanged: boolean,
+	hasChanged: boolean;
 
 	// Getting the content from the editor can be a slow process because that content
 	// might need to be serialized first. For that reason, the wrapped editor (eg TinyMCE)
@@ -93,10 +93,10 @@ export interface FormNote {
 	// types something then quickly switch a different note. In that case, bodyWillChangeId
 	// is set, thus we know we should save the note, even though we won't receive the
 	// onChange event.
-	bodyWillChangeId: number
-	bodyChangeId: number,
+	bodyWillChangeId: number;
+	bodyChangeId: number;
 
-	saveActionQueue: AsyncActionQueue,
+	saveActionQueue: AsyncActionQueue;
 
 	// Note with markup_language = HTML have a block of CSS at the start, which is used
 	// to preserve the style from the original (web-clipped) page. When sending the note
@@ -106,7 +106,7 @@ export interface FormNote {
 	// Since the CSS used by TinyMCE has been lost (since it's in a temp CSS file), we keep that
 	// original CSS here. It's used in formNoteToNote to rebuild the note body.
 	// We can keep it here because we know TinyMCE will not modify it anyway.
-	originalCss: string,
+	originalCss: string;
 }
 
 export function defaultFormNote(): FormNote {
@@ -128,12 +128,12 @@ export function defaultFormNote(): FormNote {
 }
 
 export interface ResourceInfo {
-	localState: any,
-	item: any,
+	localState: any;
+	item: any;
 }
 
 export interface ResourceInfos {
-	[index: string]: ResourceInfo,
+	[index: string]: ResourceInfo;
 }
 
 export enum ScrollOptionTypes {
@@ -143,8 +143,8 @@ export enum ScrollOptionTypes {
 }
 
 export interface ScrollOptions {
-	type: ScrollOptionTypes,
-	value: any,
+	type: ScrollOptionTypes;
+	value: any;
 }
 
 export interface OnChangeEvent {

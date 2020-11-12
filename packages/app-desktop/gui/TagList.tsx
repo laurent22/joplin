@@ -7,9 +7,9 @@ const { themeStyle } = require('@joplin/lib/theme');
 const TagItem = require('./TagItem.min.js');
 
 interface Props {
-	themeId: number,
-	style: any,
-	items: any[],
+	themeId: number;
+	style: any;
+	items: any[];
 }
 
 function TagList(props: Props) {

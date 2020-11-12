@@ -21,31 +21,31 @@ const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 const PLUGIN_NAME = 'gotoAnything';
 
 interface SearchResult {
-	id: string,
-	title: string,
-	parent_id: string,
-	fields: string[],
-	fragments?: string,
-	path?: string,
-	type?: number,
+	id: string;
+	title: string;
+	parent_id: string;
+	fields: string[];
+	fragments?: string;
+	path?: string;
+	type?: number;
 }
 
 interface Props {
-	themeId: number,
-	dispatch: Function,
-	folders: any[],
-	showCompletedTodos: boolean,
-	userData: any,
+	themeId: number;
+	dispatch: Function;
+	folders: any[];
+	showCompletedTodos: boolean;
+	userData: any;
 }
 
 interface State {
-	query: string,
-	results: SearchResult[],
-	selectedItemId: string,
-	keywords: string[],
-	listType: number,
-	showHelp: boolean,
-	resultsInBody: boolean,
+	query: string;
+	results: SearchResult[];
+	selectedItemId: string;
+	keywords: string[];
+	listType: number;
+	showHelp: boolean;
+	resultsInBody: boolean;
 }
 
 class GotoAnything {

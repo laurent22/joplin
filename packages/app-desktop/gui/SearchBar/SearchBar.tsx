@@ -13,10 +13,10 @@ const Note = require('@joplin/lib/models/Note');
 const debounce = require('debounce');
 
 interface Props {
-	inputRef?: any,
-	notesParentType: string,
-	dispatch?: Function,
-	selectedNoteId: string,
+	inputRef?: any;
+	notesParentType: string;
+	dispatch?: Function;
+	selectedNoteId: string;
 }
 
 function SearchBar(props: Props) {

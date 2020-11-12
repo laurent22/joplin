@@ -2,8 +2,8 @@ import { useEffect, useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
 interface HookDependencies {
-	editor: any,
-	onScroll: Function,
+	editor: any;
+	onScroll: Function;
 }
 
 export default function useScroll(dependencies: HookDependencies) {

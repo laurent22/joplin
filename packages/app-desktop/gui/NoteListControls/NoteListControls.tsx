@@ -7,7 +7,7 @@ import { runtime as focusSearchRuntime } from './commands/focusSearch';
 const styled = require('styled-components').default;
 
 interface Props {
-	showNewNoteButtons: boolean,
+	showNewNoteButtons: boolean;
 }
 
 const StyledRoot = styled.div`

@@ -21,9 +21,9 @@ const TaskQueue = require('./TaskQueue');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
 interface RemoteItem {
-	id: string,
-	path?: string,
-	type_?: number,
+	id: string;
+	path?: string;
+	type_?: number;
 }
 
 export default class Synchronizer {

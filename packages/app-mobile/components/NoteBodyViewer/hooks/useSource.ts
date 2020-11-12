@@ -6,13 +6,13 @@ const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 const { assetsToHeaders } = require('@joplin/renderer');
 
 interface Source {
-	uri: string,
-	baseUrl: string,
+	uri: string;
+	baseUrl: string;
 }
 
 interface UseSourceResult {
-	source: Source,
-	injectedJs: string[],
+	source: Source;
+	injectedJs: string[];
 }
 
 let markupToHtml_: any = null;

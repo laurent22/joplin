@@ -1,12 +1,12 @@
 import shim from './shim';
 
 export interface QueueItemAction {
-	(): void,
+	(): void;
 }
 
 export interface QueueItem {
-	action: QueueItemAction,
-	context: any,
+	action: QueueItemAction;
+	context: any;
 }
 
 export enum IntervalType {

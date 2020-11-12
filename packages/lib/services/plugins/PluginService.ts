@@ -8,7 +8,7 @@ const { filename, dirname } = require('../../path-utils');
 const uslug = require('uslug');
 
 interface Plugins {
-	[key: string]: Plugin
+	[key: string]: Plugin;
 }
 
 function makePluginId(source: string): string {

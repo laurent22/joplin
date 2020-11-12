@@ -24,11 +24,11 @@ const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-
 const bridge = require('electron').remote.require('./bridge').default;
 
 interface Props {
-	themeId: number,
-	appState: string,
-	dispatch: Function,
-	size: Size,
-	zoomFactor: number,
+	themeId: number;
+	appState: string;
+	dispatch: Function;
+	size: Size;
+	zoomFactor: number;
 }
 
 const GlobalStyle = createGlobalStyle`

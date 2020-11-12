@@ -23,24 +23,24 @@ const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 interface Props {
-	themeId: number,
-	dispatch: Function,
-	folders: any[],
-	collapsedFolderIds: string[],
-	notesParentType: string,
-	selectedFolderId: string,
-	selectedTagId: string,
-	selectedSmartFilterId: string,
-	decryptionWorker: any,
-	resourceFetcher: any,
-	syncReport: any,
-	tags: any[],
-	syncStarted: boolean,
+	themeId: number;
+	dispatch: Function;
+	folders: any[];
+	collapsedFolderIds: string[];
+	notesParentType: string;
+	selectedFolderId: string;
+	selectedTagId: string;
+	selectedSmartFilterId: string;
+	decryptionWorker: any;
+	resourceFetcher: any;
+	syncReport: any;
+	tags: any[];
+	syncStarted: boolean;
 }
 
 interface State {
-	tagHeaderIsExpanded: boolean,
-	folderHeaderIsExpanded: boolean,
+	tagHeaderIsExpanded: boolean;
+	folderHeaderIsExpanded: boolean;
 }
 
 const commands = [

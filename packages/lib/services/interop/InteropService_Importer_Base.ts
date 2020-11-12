@@ -7,7 +7,7 @@ const Setting = require('../../models/Setting').default;
 export default class InteropService_Importer_Base {
 	private metadata_: any = null;
 	protected sourcePath_: string = '';
-	protected options_: any = {}
+	protected options_: any = {};
 
 	setMetadata(md: any) {
 		this.metadata_ = md;

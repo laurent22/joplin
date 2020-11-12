@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 
 interface SearchMarkersOptions {
-	searchTimestamp: number,
-	selectedIndex: number,
-	separateWordSearch: boolean,
+	searchTimestamp: number;
+	selectedIndex: number;
+	separateWordSearch: boolean;
 }
 
 export interface SearchMarkers {
-	keywords: any[],
-	options: SearchMarkersOptions,
+	keywords: any[];
+	options: SearchMarkersOptions;
 }
 
 function defaultSearchMarkers(): SearchMarkers {

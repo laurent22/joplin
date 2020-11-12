@@ -8,7 +8,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 
 interface Props {
-	themeId: string,
+	themeId: string;
 }
 
 class DropboxLoginScreenComponent extends React.Component<any, any> {

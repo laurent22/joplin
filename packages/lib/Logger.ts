@@ -17,13 +17,13 @@ enum LogLevel {
 }
 
 interface Target {
-	type: TargetType,
-	level?: LogLevel,
-	database?: any,
-	console?: any,
-	prefix?: string,
-	path?: string,
-	source?: string,
+	type: TargetType;
+	level?: LogLevel;
+	database?: any;
+	console?: any;
+	prefix?: string;
+	path?: string;
+	source?: string;
 }
 
 class Logger {

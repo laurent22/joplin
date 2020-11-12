@@ -1,10 +1,10 @@
 
 interface Term {
-	name: string
-	value: string
-	negated: boolean
-	quoted?: boolean
-	wildcard?: boolean
+	name: string;
+	value: string;
+	negated: boolean;
+	quoted?: boolean;
+	wildcard?: boolean;
 }
 
 const makeTerm = (name: string, value: string): Term => {

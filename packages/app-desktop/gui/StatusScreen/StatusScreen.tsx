@@ -11,9 +11,9 @@ const { ReportService } = require('@joplin/lib/services/report.js');
 const fs = require('fs-extra');
 
 interface Props {
-	themeId: string,
-	style: any,
-	dispatch: Function,
+	themeId: string;
+	style: any;
+	dispatch: Function;
 }
 
 async function exportDebugReportClick() {

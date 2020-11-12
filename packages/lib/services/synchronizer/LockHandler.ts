@@ -12,15 +12,15 @@ export enum LockType {
 }
 
 export interface Lock {
-	type: LockType,
-	clientType: string,
-	clientId: string,
-	updatedTime?: number,
+	type: LockType;
+	clientType: string;
+	clientId: string;
+	updatedTime?: number;
 }
 
 interface RefreshTimer {
-	id: any,
-	inProgress: boolean
+	id: any;
+	inProgress: boolean;
 }
 
 interface RefreshTimers {
@@ -28,8 +28,8 @@ interface RefreshTimers {
 }
 
 export interface LockHandlerOptions {
-	autoRefreshInterval?: number,
-	lockTtl?: number,
+	autoRefreshInterval?: number;
+	lockTtl?: number;
 }
 
 export default class LockHandler {

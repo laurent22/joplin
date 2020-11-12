@@ -8,9 +8,9 @@ export enum Value {
 }
 
 export interface Props {
-	themeId: number,
-	value: Value,
-	toolbarButtonInfo: ToolbarButtonInfo,
+	themeId: number;
+	value: Value;
+	toolbarButtonInfo: ToolbarButtonInfo;
 }
 
 export default function ToggleEditorsButton(props: Props) {

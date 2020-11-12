@@ -8,13 +8,13 @@ const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
 const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/;
 
 export interface MarkdownTableHeader {
-	name: string,
-	label: string,
-	filter?: Function,
+	name: string;
+	label: string;
+	filter?: Function;
 }
 
 export interface MarkdownTableRow {
-	[key: string]: string,
+	[key: string]: string;
 }
 
 const markdownUtils = {

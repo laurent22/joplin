@@ -10,11 +10,11 @@ const fs = require('fs-extra');
 const { ipcMain } = require('electron');
 
 interface RendererProcessQuitReply {
-	canClose: boolean,
+	canClose: boolean;
 }
 
 interface PluginWindows {
-	[key: string]: any,
+	[key: string]: any;
 }
 
 export default class ElectronAppWrapper {

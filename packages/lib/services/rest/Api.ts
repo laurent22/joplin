@@ -20,37 +20,37 @@ export enum RequestMethod {
 }
 
 interface RequestFile {
-	path: string,
+	path: string;
 }
 
 interface RequestQuery {
-	fields?: string[] | string,
-	token?: string,
-	nounce?: string,
-	page?: number,
+	fields?: string[] | string;
+	token?: string;
+	nounce?: string;
+	page?: number;
 
 	// Search engine query
-	query?: string,
-	type?: string, // Model type as a string (eg. "note", "folder")
+	query?: string;
+	type?: string; // Model type as a string (eg. "note", "folder")
 
-	as_tree?: number,
+	as_tree?: number;
 
 	// Pagination
-	limit?: number,
-	order_dir?: PaginationOrderDir,
-	order_by?: string,
+	limit?: number;
+	order_dir?: PaginationOrderDir;
+	order_by?: string;
 }
 
 export interface Request {
-	method: RequestMethod,
-	path: string,
-	query: RequestQuery,
-	body: any,
-	bodyJson_: any,
-	bodyJson: any,
-	files: RequestFile[],
-	params: any[],
-	action?: any,
+	method: RequestMethod;
+	path: string;
+	query: RequestQuery;
+	body: any;
+	bodyJson_: any;
+	bodyJson: any;
+	files: RequestFile[];
+	params: any[];
+	action?: any;
 }
 
 type RouteFunction = (request: Request, id: string, link: string)=> Promise<any | void>;

@@ -5,22 +5,22 @@ import useThemeCss from './hooks/useThemeCss';
 const styled = require('styled-components').default;
 
 export interface Props {
-	html: string,
-	scripts: string[],
-	onMessage: Function,
-	pluginId: string,
-	viewId: string,
-	themeId: number,
-	minWidth?: number,
-	minHeight?: number,
-	fitToContent?: boolean,
-	borderBottom?: boolean,
-	theme?: any,
+	html: string;
+	scripts: string[];
+	onMessage: Function;
+	pluginId: string;
+	viewId: string;
+	themeId: number;
+	minWidth?: number;
+	minHeight?: number;
+	fitToContent?: boolean;
+	borderBottom?: boolean;
+	theme?: any;
 }
 
 interface Size {
-	width: number,
-	height: number,
+	width: number;
+	height: number;
 }
 
 const StyledFrame = styled.iframe`

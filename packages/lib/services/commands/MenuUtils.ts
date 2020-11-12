@@ -5,27 +5,27 @@ const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
 interface MenuItem {
-	id: string,
-	label: string,
-	click: Function,
-	role?: any,
-	accelerator?: string,
+	id: string;
+	label: string;
+	click: Function;
+	role?: any;
+	accelerator?: string;
 }
 
 interface MenuItems {
-	[key: string]: MenuItem,
+	[key: string]: MenuItem;
 }
 
 interface MenuItemProps {
-	[key: string]: any,
+	[key: string]: any;
 }
 
 interface MenuItemPropsCache {
-	[key: string]: any,
+	[key: string]: any;
 }
 
 interface MenuItemCache {
-	[key: string]: MenuItems,
+	[key: string]: MenuItems;
 }
 
 const createShallowObjectEqualSelector = createSelectorCreator(

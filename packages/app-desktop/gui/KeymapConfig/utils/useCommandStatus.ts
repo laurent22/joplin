@@ -4,7 +4,7 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 const keymapService = KeymapService.instance();
 
 interface CommandStatus {
-	[commandName: string]: boolean
+	[commandName: string]: boolean;
 }
 
 const useCommandStatus = (): [CommandStatus, (commandName: string)=> void, (commandName: string)=> void] => {

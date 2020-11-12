@@ -15,10 +15,10 @@ const Note = require('@joplin/lib/models/Note');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface ContextMenuProps {
-	notes: any[],
-	dispatch: Function,
-	watchedNoteFiles: string[],
-	plugins: PluginStates,
+	notes: any[];
+	dispatch: Function;
+	watchedNoteFiles: string[];
+	plugins: PluginStates;
 }
 
 export default class NoteListUtils {

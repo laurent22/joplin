@@ -3,9 +3,9 @@ const styled = require('styled-components').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 
 interface Props {
-	selection: string,
-	onSelectionChange: Function,
-	sections: any[],
+	selection: string;
+	onSelectionChange: Function;
+	sections: any[];
 }
 
 export const StyledRoot = styled.div`

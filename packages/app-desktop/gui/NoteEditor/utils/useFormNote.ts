@@ -14,17 +14,17 @@ const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker.js');
 const ResourceEditWatcher = require('@joplin/lib/services/ResourceEditWatcher/index').default;
 
 export interface OnLoadEvent {
-	formNote: FormNote,
+	formNote: FormNote;
 }
 
 interface HookDependencies {
-	syncStarted: boolean,
-	noteId: string,
-	isProvisional: boolean,
-	titleInputRef: any,
-	editorRef: any,
-	onBeforeLoad(event: OnLoadEvent): void,
-	onAfterLoad(event: OnLoadEvent): void,
+	syncStarted: boolean;
+	noteId: string;
+	isProvisional: boolean;
+	titleInputRef: any;
+	editorRef: any;
+	onBeforeLoad(event: OnLoadEvent): void;
+	onAfterLoad(event: OnLoadEvent): void;
 }
 
 function installResourceChangeHandler(onResourceChangeHandler: Function) {

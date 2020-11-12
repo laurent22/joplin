@@ -1,11 +1,11 @@
 const { sprintf } = require('sprintf-js');
 
 interface StringToStringMap {
-	[key: string]: string,
+	[key: string]: string;
 }
 
 interface CodeToCountryMap {
-	[key: string]: string[],
+	[key: string]: string[];
 }
 
 const codeToLanguageE_: StringToStringMap = {};
@@ -462,7 +462,7 @@ function supportedLocales(): string[] {
 }
 
 interface SupportedLocalesToLanguagesOptions {
-	includeStats?: boolean,
+	includeStats?: boolean;
 }
 
 function supportedLocalesToLanguages(options: SupportedLocalesToLanguagesOptions = null) {

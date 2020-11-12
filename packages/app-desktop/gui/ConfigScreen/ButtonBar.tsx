@@ -4,11 +4,11 @@ import { _ } from '@joplin/lib/locale';
 const styled = require('styled-components').default;
 
 interface Props {
-	backButtonTitle?: string,
-	hasChanges?: boolean,
-	onCancelClick: Function,
-	onSaveClick?: Function,
-	onApplyClick?: Function,
+	backButtonTitle?: string;
+	hasChanges?: boolean;
+	onCancelClick: Function;
+	onSaveClick?: Function;
+	onApplyClick?: Function;
 }
 
 export const StyledRoot = styled.div`

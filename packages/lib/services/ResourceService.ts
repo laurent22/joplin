@@ -15,8 +15,8 @@ export default class ResourceService extends BaseService {
 	private static isRunningInBackground_: boolean = false;
 
 	private maintenanceCalls_: boolean[] = [];
-	private maintenanceTimer1_: any = null
-	private maintenanceTimer2_: any = null
+	private maintenanceTimer1_: any = null;
+	private maintenanceTimer2_: any = null;
 
 	public async indexNoteResources() {
 		this.logger().info('ResourceService::indexNoteResources: Start');

@@ -10,7 +10,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 
 interface Props {
-	themeId: string,
+	themeId: string;
 }
 
 class OneDriveLoginScreenComponent extends React.Component<any, any> {

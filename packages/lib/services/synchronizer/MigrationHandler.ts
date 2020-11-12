@@ -18,7 +18,7 @@ const { sprintf } = require('sprintf-js');
 const JoplinError = require('../../JoplinError');
 
 interface SyncTargetInfo {
-	version: number,
+	version: number;
 }
 
 export default class MigrationHandler extends BaseService {

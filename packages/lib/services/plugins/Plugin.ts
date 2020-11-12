@@ -7,12 +7,12 @@ import Logger from '../../Logger';
 const EventEmitter = require('events');
 
 interface ViewControllers {
-	[key: string]: ViewController
+	[key: string]: ViewController;
 }
 
 export interface ContentScript {
-	id: string,
-	path: string,
+	id: string;
+	path: string;
 }
 
 interface ContentScripts {

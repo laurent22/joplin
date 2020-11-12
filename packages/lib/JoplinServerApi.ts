@@ -6,9 +6,9 @@ const { rtrimSlashes } = require('./path-utils');
 const base64 = require('base-64');
 
 interface JoplinServerApiOptions {
-	username: Function,
-	password: Function,
-	baseUrl: Function,
+	username: Function;
+	password: Function;
+	baseUrl: Function;
 }
 
 export default class JoplinServerApi {

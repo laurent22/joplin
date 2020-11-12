@@ -11,11 +11,11 @@ const time = require('./time').default;
 type IntervalId = number;
 
 interface Interval {
-	id: IntervalId,
-	callback: Function,
-	interval: number,
-	lastIntervalTime: number,
-	isTimeout: boolean,
+	id: IntervalId;
+	callback: Function;
+	interval: number;
+	lastIntervalTime: number;
+	isTimeout: boolean;
 }
 
 interface Intervals {

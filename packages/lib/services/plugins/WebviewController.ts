@@ -9,7 +9,7 @@ export enum ContainerType {
 }
 
 export interface Options {
-	containerType: ContainerType,
+	containerType: ContainerType;
 }
 
 interface CloseResponse {

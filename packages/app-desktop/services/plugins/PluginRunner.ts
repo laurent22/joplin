@@ -14,14 +14,14 @@ enum PluginMessageTarget {
 }
 
 export interface PluginMessage {
-	target: PluginMessageTarget,
-	pluginId: string,
-	callbackId?: string,
-	path?: string,
-	args?: any[],
-	result?: any,
-	error?: any,
-	mainWindowCallbackId?: string,
+	target: PluginMessageTarget;
+	pluginId: string;
+	callbackId?: string;
+	path?: string;
+	args?: any[];
+	result?: any;
+	error?: any;
+	mainWindowCallbackId?: string;
 }
 
 let callbackIndex = 1;

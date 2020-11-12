@@ -13,18 +13,18 @@ const BackButtonDialogBox = require('../BackButtonDialogBox').default;
 const { reg } = require('@joplin/lib/registry.js');
 
 interface Props {
-	themeId: number,
-	style: any,
-	noteBody: string,
-	noteMarkupLanguage: number,
-	highlightedKeywords: string[],
-	noteResources: any,
-	paddingBottom: number,
-	noteHash: string,
-	onJoplinLinkClick: Function,
-	onCheckboxChange?: Function,
-	onMarkForDownload?: Function,
-	onLoadEnd?: Function,
+	themeId: number;
+	style: any;
+	noteBody: string;
+	noteMarkupLanguage: number;
+	highlightedKeywords: string[];
+	noteResources: any;
+	paddingBottom: number;
+	noteHash: string;
+	onJoplinLinkClick: Function;
+	onCheckboxChange?: Function;
+	onMarkForDownload?: Function;
+	onLoadEnd?: Function;
 }
 
 export default function NoteBodyViewer(props: Props) {

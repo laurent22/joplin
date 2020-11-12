@@ -2,14 +2,14 @@ import paginationToSql from './paginationToSql';
 import { Pagination, PaginationOrder } from './types';
 
 export interface ModelFeedPage {
-	items: any[],
-	has_more?: boolean,
-	total?: number,
+	items: any[];
+	has_more?: boolean;
+	total?: number;
 }
 
 export interface WhereQuery {
-	sql: string,
-	params: any[],
+	sql: string;
+	params: any[];
 }
 
 // Note: this method might return more fields than was requested as it will

@@ -41,24 +41,24 @@ const StyledRoot = styled.div`
 `;
 
 interface NoteListItemProps {
-	themeId: number,
-	width: number,
-	height: number,
-	style: any,
-	dragItemIndex: number,
-	highlightedWords: string[],
-	index: number,
-	isProvisional: boolean,
-	isSelected: boolean,
-	isWatched: boolean
-	item: any,
-	itemCount: number,
-	onCheckboxClick: any,
-	onDragStart: any,
-	onNoteDragOver: any,
-	onNoteDrop: any,
-	onTitleClick: any,
-	onContextMenu(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void,
+	themeId: number;
+	width: number;
+	height: number;
+	style: any;
+	dragItemIndex: number;
+	highlightedWords: string[];
+	index: number;
+	isProvisional: boolean;
+	isSelected: boolean;
+	isWatched: boolean;
+	item: any;
+	itemCount: number;
+	onCheckboxClick: any;
+	onDragStart: any;
+	onNoteDragOver: any;
+	onNoteDrop: any;
+	onTitleClick: any;
+	onContextMenu(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void;
 }
 
 function NoteListItem(props: NoteListItemProps, ref: any) {

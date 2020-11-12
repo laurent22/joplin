@@ -6,8 +6,8 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
 interface TestCommand {
-	declaration: CommandDeclaration,
-	runtime: CommandRuntime,
+	declaration: CommandDeclaration;
+	runtime: CommandRuntime;
 }
 
 function newService(): CommandService {

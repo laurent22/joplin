@@ -24,7 +24,7 @@ function contextMenuElement(editor: any, x: number, y: number) {
 }
 
 interface ContextMenuActionOptions {
-	current: ContextMenuOptions,
+	current: ContextMenuOptions;
 }
 
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };

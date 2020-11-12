@@ -6,7 +6,7 @@ const styled = require('styled-components').default;
 const { space } = require('styled-system');
 
 interface Props {
-	buttons: ButtonSpec[],
+	buttons: ButtonSpec[];
 }
 
 const StyledRoot = styled.div`

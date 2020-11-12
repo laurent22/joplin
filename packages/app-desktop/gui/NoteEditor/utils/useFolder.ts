@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 const Folder = require('@joplin/lib/models/Folder');
 
 interface HookDependencies {
-	folderId: string,
+	folderId: string;
 }
 
 export default function(dependencies: HookDependencies) {

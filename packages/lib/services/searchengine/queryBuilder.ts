@@ -1,9 +1,9 @@
 const time = require('../../time').default;
 
 interface Term {
-	name: string
-	value: string
-	negated: boolean
+	name: string;
+	value: string;
+	negated: boolean;
 }
 
 enum Relation {

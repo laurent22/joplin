@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { LayoutItem, Size, dragBarThickness } from '../ResizableLayout';
 
 export interface LayoutItemSizes {
-	[key: string]: Size,
+	[key: string]: Size;
 }
 
 export function itemSize(item: LayoutItem, sizes: LayoutItemSizes): Size {

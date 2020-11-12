@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 const Note = require('@joplin/lib/models/Note.js');
 
 interface HookDependencies {
-	editorRef: any,
+	editorRef: any;
 }
 
 export default function useDropHandler(dependencies: HookDependencies) {

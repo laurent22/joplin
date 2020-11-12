@@ -2,11 +2,11 @@ import { useState, useCallback } from 'react';
 import { SearchMarkers } from './useSearchMarkers';
 
 interface LocalSearch {
-	query: string,
-	selectedIndex: number,
-	resultCount: number,
-	searching: boolean,
-	timestamp: number,
+	query: string;
+	selectedIndex: number;
+	resultCount: number;
+	searching: boolean;
+	timestamp: number;
 }
 
 function defaultLocalSearch(): LocalSearch {

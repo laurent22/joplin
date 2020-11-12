@@ -10,8 +10,8 @@
 // scale.
 
 interface Record {
-	value: any,
-	expiredTime: number,
+	value: any;
+	expiredTime: number;
 }
 
 interface Records {
@@ -19,7 +19,7 @@ interface Records {
 }
 
 interface ExpirableKeys {
-	[key: string]: boolean,
+	[key: string]: boolean;
 }
 
 export default class Cache {

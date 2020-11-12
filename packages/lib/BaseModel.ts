@@ -47,7 +47,7 @@ class BaseModel {
 		['TYPE_MIGRATION', ModelType.Migration],
 		['TYPE_SMART_FILTER', ModelType.SmartFilter],
 		['TYPE_COMMAND', ModelType.Command],
-	]
+	];
 
 	public static TYPE_NOTE =  ModelType.Note;
 	public static TYPE_FOLDER =  ModelType.Folder;

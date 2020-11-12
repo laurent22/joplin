@@ -5,8 +5,8 @@ const Setting = require('../../../models/Setting').default;
 const { reg } = require('../../../registry');
 
 export interface SyncTargetUpgradeResult {
-	done: boolean,
-	error: any,
+	done: boolean;
+	error: any;
 }
 
 export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {
