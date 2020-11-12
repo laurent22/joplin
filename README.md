@@ -318,6 +318,8 @@ The currently supported template variables are:
 | `{{time}}` | Current time formatted based on the settings format | 13:00 |
 | `{{datetime}}` | Current date and time formatted based on the settings format | 01/01/19 1:00 PM |
 | `{{#custom_datetime}}` | Current date and/or time formatted based on a supplied string (using [moment.js](https://momentjs.com/) formatting) | `{{#custom_datetime}}M d{{/custom_datetime}}` |
+| `{{bowm}}` | Date of the beginning of the week (when week starts on Monday) based on the settings format | |
+| `{{bows}}` | Date of the beginning of the week (when week starts on Sunday) based on the settings format | |
 
 # Searching
 
