@@ -8,9 +8,9 @@
 // So we modify the code below to allow highlight() to return an object that tells how to render
 // the code.
 
-function plugin(markdownIt:any) {
+function plugin(markdownIt: any) {
 	// @ts-ignore: Keep the function signature as-is despite unusued arguments
-	markdownIt.renderer.rules.fence = function(tokens:any[], idx:number, options:any, env:any, slf:any) {
+	markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, slf: any) {
 		let token = tokens[idx],
 			info = token.info ? markdownIt.utils.unescapeAll(token.info).trim() : '',
 			langName = '',

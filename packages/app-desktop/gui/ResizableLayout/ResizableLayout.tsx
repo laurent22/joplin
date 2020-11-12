@@ -38,19 +38,19 @@ interface onResizeEvent {
 
 interface Props {
 	layout: LayoutItem,
-	onResize(event:onResizeEvent):void;
+	onResize(event: onResizeEvent): void;
 	width?: number,
 	height?: number,
 	renderItem: Function,
 }
 
-export function allDynamicSizes(layout:LayoutItem):any {
-	const output:any = {};
+export function allDynamicSizes(layout: LayoutItem): any {
+	const output: any = {};
 
-	function recurseProcess(item:LayoutItem) {
+	function recurseProcess(item: LayoutItem) {
 		if (item.resizableBottom || item.resizableRight) {
 			if ('width' in item || 'height' in item) {
-				const size:any = {};
+				const size: any = {};
 				if ('width' in item) size.width = item.width;
 				if ('height' in item) size.height = item.height;
 				output[item.key] = size;
@@ -69,8 +69,8 @@ export function allDynamicSizes(layout:LayoutItem):any {
 	return output;
 }
 
-export function findItemByKey(layout:LayoutItem, key:string):LayoutItem {
-	function recurseFind(item:LayoutItem):LayoutItem {
+export function findItemByKey(layout: LayoutItem, key: string): LayoutItem {
+	function recurseFind(item: LayoutItem): LayoutItem {
 		if (item.key === key) return item;
 
 		if (item.children) {
@@ -87,9 +87,9 @@ export function findItemByKey(layout:LayoutItem, key:string):LayoutItem {
 	return output;
 }
 
-function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
-	return produce(layout, (draftState:LayoutItem) => {
-		function recurseFind(item:LayoutItem) {
+function updateLayoutItem(layout: LayoutItem, key: string, props: any) {
+	return produce(layout, (draftState: LayoutItem) => {
+		function recurseFind(item: LayoutItem) {
 			if (item.key === key) {
 				for (const n in props) {
 					(item as any)[n] = props[n];
@@ -107,13 +107,13 @@ function updateLayoutItem(layout:LayoutItem, key:string, props:any) {
 	});
 }
 
-function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:Function, onResize:Function, onResizeStop:Function, children:any[], isLastChild:boolean):any {
-	const style:any = {
+function renderContainer(item: LayoutItem, sizes: LayoutItemSizes, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean): any {
+	const style: any = {
 		display: item.visible !== false ? 'flex' : 'none',
 		flexDirection: item.direction,
 	};
 
-	const size:Size = itemSize(item, sizes);
+	const size: Size = itemSize(item, sizes);
 
 	const className = `resizableLayoutItem rli-${item.key}`;
 	if (item.resizableRight || item.resizableBottom) {
@@ -156,12 +156,12 @@ function renderContainer(item:LayoutItem, sizes:LayoutItemSizes, onResizeStart:F
 	}
 }
 
-function ResizableLayout(props:Props) {
+function ResizableLayout(props: Props) {
 	const eventEmitter = useRef(new EventEmitter());
 
 	const [resizedItem, setResizedItem] = useState<any>(null);
 
-	function renderLayoutItem(item:LayoutItem, sizes:LayoutItemSizes, isVisible:boolean, isLastChild:boolean):any {
+	function renderLayoutItem(item: LayoutItem, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean): any {
 
 		function onResizeStart() {
 			setResizedItem({
@@ -171,7 +171,7 @@ function ResizableLayout(props:Props) {
 			});
 		}
 
-		function onResize(_event:any, _direction:any, _refToElement: HTMLDivElement, delta:any) {
+		function onResize(_event: any, _direction: any, _refToElement: HTMLDivElement, delta: any) {
 			const newLayout = updateLayoutItem(props.layout, item.key, {
 				width: resizedItem.initialWidth + delta.width,
 				height: resizedItem.initialHeight + delta.height,
@@ -181,7 +181,7 @@ function ResizableLayout(props:Props) {
 			eventEmitter.current.emit('resize');
 		}
 
-		function onResizeStop(_event:any, _direction:any, _refToElement: HTMLDivElement, delta:any) {
+		function onResizeStop(_event: any, _direction: any, _refToElement: HTMLDivElement, delta: any) {
 			onResize(_event, _direction, _refToElement, delta);
 			setResizedItem(null);
 		}

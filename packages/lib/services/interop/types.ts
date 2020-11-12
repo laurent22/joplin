@@ -62,7 +62,7 @@ export interface Module {
 	fullLabel?: Function,
 
 	// Used only if `isCustom` is true
-	onExec?(context:any): Promise<void>;
+	onExec?(context: any): Promise<void>;
 
 	// ---------------------------------------
 	// Export-only properties
@@ -71,10 +71,10 @@ export interface Module {
 	target?: FileSystemItem,
 
 	// Used only if `isCustom` is true
-	onInit?(context:any): Promise<void>;
-	onProcessItem?(context:any, itemType:number, item:any):Promise<void>;
-	onProcessResource?(context:any, resource:any, filePath:string):Promise<void>;
-	onClose?(context:any):Promise<void>;
+	onInit?(context: any): Promise<void>;
+	onProcessItem?(context: any, itemType: number, item: any): Promise<void>;
+	onProcessResource?(context: any, resource: any, filePath: string): Promise<void>;
+	onClose?(context: any): Promise<void>;
 }
 
 export interface ImportOptions {
@@ -88,18 +88,18 @@ export interface ImportOptions {
 
 export interface ExportOptions {
 	format?: string,
-	path?:string,
+	path?: string,
 	sourceFolderIds?: string[],
 	sourceNoteIds?: string[],
-	modulePath?:string,
-	target?:FileSystemItem,
+	modulePath?: string,
+	target?: FileSystemItem,
 }
 
 export interface ImportExportResult {
 	warnings: string[],
 }
 
-function moduleFullLabel(moduleSource:FileSystemItem = null):string {
+function moduleFullLabel(moduleSource: FileSystemItem = null): string {
 	const label = [`${this.format.toUpperCase()} - ${this.description}`];
 	if (moduleSource && this.sources.length > 1) {
 		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
@@ -107,7 +107,7 @@ function moduleFullLabel(moduleSource:FileSystemItem = null):string {
 	return label.join(' ');
 }
 
-export function defaultImportExportModule(type:ModuleType):Module {
+export function defaultImportExportModule(type: ModuleType): Module {
 	return {
 		type: type,
 		format: '',

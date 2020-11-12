@@ -21,8 +21,8 @@ interface SharesMap {
 	[key: string]: any;
 }
 
-function styles_(props:ShareNoteDialogProps) {
-	return buildStyle('ShareNoteDialog', props.themeId, (theme:any) => {
+function styles_(props: ShareNoteDialogProps) {
+	return buildStyle('ShareNoteDialog', props.themeId, (theme: any) => {
 		return {
 			noteList: {
 				marginBottom: 10,
@@ -59,7 +59,7 @@ function styles_(props:ShareNoteDialogProps) {
 	});
 }
 
-export default function ShareNoteDialog(props:ShareNoteDialogProps) {
+export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 	console.info('Render ShareNoteDialog');
 
 	const [notes, setNotes] = useState<any[]>([]);
@@ -90,7 +90,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		props.onClose();
 	};
 
-	const copyLinksToClipboard = (shares:SharesMap) => {
+	const copyLinksToClipboard = (shares: SharesMap) => {
 		const links = [];
 		for (const n in shares) links.push(shares[n]._url);
 		clipboard.writeText(links.join('\n'));
@@ -154,7 +154,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		}
 	};
 
-	const removeNoteButton_click = (event:any) => {
+	const removeNoteButton_click = (event: any) => {
 		const newNotes = [];
 		for (let i = 0; i < notes.length; i++) {
 			const n = notes[i];
@@ -164,7 +164,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		setNotes(newNotes);
 	};
 
-	const renderNote = (note:any) => {
+	const renderNote = (note: any) => {
 		const removeButton = notes.length <= 1 ? null : (
 			<button onClick={() => removeNoteButton_click({ noteId: note.id })} style={styles.noteRemoveButton}>
 				<i style={styles.noteRemoveButtonIcon} className={'fa fa-times'}></i>
@@ -178,7 +178,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		);
 	};
 
-	const renderNoteList = (notes:any) => {
+	const renderNoteList = (notes: any) => {
 		const noteComps = [];
 		for (const noteId of Object.keys(notes)) {
 			noteComps.push(renderNote(notes[noteId]));
@@ -186,7 +186,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		return <div style={styles.noteList}>{noteComps}</div>;
 	};
 
-	const statusMessage = (sharesState:string):string => {
+	const statusMessage = (sharesState: string): string => {
 		if (sharesState === 'synchronizing') return _('Synchronising...');
 		if (sharesState === 'creating') return _n('Generating link...', 'Generating links...', noteCount);
 		if (sharesState === 'created') return _n('Link has been copied to clipboard!', 'Links have been copied to clipboard!', noteCount);

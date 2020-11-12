@@ -5,7 +5,7 @@ import shim from '../shim';
 import WhenClause from './WhenClause';
 import stateToWhenClauseContext from './commands/stateToWhenClauseContext';
 
-type LabelFunction = () => string;
+type LabelFunction = ()=> string;
 type EnabledCondition = string;
 
 export interface CommandContext {
@@ -15,10 +15,10 @@ export interface CommandContext {
 }
 
 export interface CommandRuntime {
-	execute(context:CommandContext, ...args:any[]):Promise<any | void>
+	execute(context: CommandContext, ...args: any[]): Promise<any | void>
 	enabledCondition?: EnabledCondition;
 	// Used for the (optional) toolbar button title
-	mapStateToTitle?(state:any):string,
+	mapStateToTitle?(state: any): string,
 }
 
 export interface CommandDeclaration {
@@ -38,7 +38,7 @@ export interface CommandDeclaration {
 	//     label() => _('Note list'),
 	//     parentLabel() => _('Focus'),
 	// Which will be displayed as "Focus: Note list" in the keymap config screen.
-	parentLabel?:LabelFunction | string,
+	parentLabel?: LabelFunction | string,
 
 	// All free Font Awesome icons are available: https://fontawesome.com/icons?d=gallery&m=free
 	iconName?: string,
@@ -61,19 +61,19 @@ export interface Command {
 }
 
 interface Commands {
-	[key:string]: Command;
+	[key: string]: Command;
 }
 
 interface ReduxStore {
-	dispatch(action:any):void;
-	getState():any;
+	dispatch(action: any): void;
+	getState(): any;
 }
 
 interface Utils {
 	store: ReduxStore;
 }
 
-export const utils:Utils = {
+export const utils: Utils = {
 	store: {
 		dispatch: () => {},
 		getState: () => {},
@@ -81,8 +81,8 @@ export const utils:Utils = {
 };
 
 interface CommandByNameOptions {
-	mustExist?:boolean,
-	runtimeMustBeRegistered?:boolean,
+	mustExist?: boolean,
+	runtimeMustBeRegistered?: boolean,
 }
 
 export interface SearchResult {
@@ -92,33 +92,33 @@ export interface SearchResult {
 
 export default class CommandService extends BaseService {
 
-	private static instance_:CommandService;
+	private static instance_: CommandService;
 
-	public static instance():CommandService {
+	public static instance(): CommandService {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new CommandService();
 		return this.instance_;
 	}
 
-	private commands_:Commands = {};
-	private store_:any;
-	private devMode_:boolean;
+	private commands_: Commands = {};
+	private store_: any;
+	private devMode_: boolean;
 
-	public initialize(store:any, devMode:boolean) {
+	public initialize(store: any, devMode: boolean) {
 		utils.store = store;
 		this.store_ = store;
 		this.devMode_ = devMode;
 	}
 
-	public on(eventName:string, callback:Function) {
+	public on(eventName: string, callback: Function) {
 		eventManager.on(eventName, callback);
 	}
 
-	public off(eventName:string, callback:Function) {
+	public off(eventName: string, callback: Function) {
 		eventManager.off(eventName, callback);
 	}
 
-	public searchCommands(query:string, returnAllWhenEmpty:boolean, excludeWithoutLabel:boolean = true):SearchResult[] {
+	public searchCommands(query: string, returnAllWhenEmpty: boolean, excludeWithoutLabel: boolean = true): SearchResult[] {
 		query = query.toLowerCase();
 
 		const output = [];
@@ -137,14 +137,14 @@ export default class CommandService extends BaseService {
 			}
 		}
 
-		output.sort((a:SearchResult, b:SearchResult) => {
+		output.sort((a: SearchResult, b: SearchResult) => {
 			return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
 		});
 
 		return output;
 	}
 
-	public commandNames(publicOnly:boolean = false) {
+	public commandNames(publicOnly: boolean = false) {
 		if (publicOnly) {
 			const output = [];
 			for (const name in this.commands_) {
@@ -157,7 +157,7 @@ export default class CommandService extends BaseService {
 		}
 	}
 
-	public commandByName(name:string, options:CommandByNameOptions = null):Command {
+	public commandByName(name: string, options: CommandByNameOptions = null): Command {
 		options = {
 			mustExist: true,
 			runtimeMustBeRegistered: false,
@@ -175,7 +175,7 @@ export default class CommandService extends BaseService {
 		return command;
 	}
 
-	public registerDeclaration(declaration:CommandDeclaration) {
+	public registerDeclaration(declaration: CommandDeclaration) {
 		declaration = { ...declaration };
 		if (!declaration.label) declaration.label = '';
 		if (!declaration.iconName) declaration.iconName = '';
@@ -185,7 +185,7 @@ export default class CommandService extends BaseService {
 		};
 	}
 
-	public registerRuntime(commandName:string, runtime:CommandRuntime) {
+	public registerRuntime(commandName: string, runtime: CommandRuntime) {
 		if (typeof commandName !== 'string') throw new Error(`Command name must be a string. Got: ${JSON.stringify(commandName)}`);
 
 		const command = this.commandByName(commandName);
@@ -195,41 +195,41 @@ export default class CommandService extends BaseService {
 		command.runtime = runtime;
 	}
 
-	public componentRegisterCommands(component:any, commands:any[]) {
+	public componentRegisterCommands(component: any, commands: any[]) {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(component));
 		}
 	}
 
-	public componentUnregisterCommands(commands:any[]) {
+	public componentUnregisterCommands(commands: any[]) {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
 		}
 	}
 
-	public unregisterRuntime(commandName:string) {
+	public unregisterRuntime(commandName: string) {
 		const command = this.commandByName(commandName, { mustExist: false });
 		if (!command || !command.runtime) return;
 		delete command.runtime;
 	}
 
-	private createContext():CommandContext {
+	private createContext(): CommandContext {
 		return {
 			state: this.store_.getState(),
-			dispatch: (action:any) => {
+			dispatch: (action: any) => {
 				this.store_.dispatch(action);
 			},
 		};
 	}
 
-	public async execute(commandName:string, ...args:any[]):Promise<any | void> {
+	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
 		const command = this.commandByName(commandName);
 		this.logger().info('CommandService::execute:', commandName, args);
 		if (!command.runtime) throw new Error(`Cannot execute a command without a runtime: ${commandName}`);
 		return command.runtime.execute(this.createContext(), ...args);
 	}
 
-	public scheduleExecute(commandName:string, args:any) {
+	public scheduleExecute(commandName: string, args: any) {
 		shim.setTimeout(() => {
 			this.execute(commandName, args);
 		}, 10);
@@ -239,14 +239,14 @@ export default class CommandService extends BaseService {
 		return stateToWhenClauseContext(this.store_.getState());
 	}
 
-	public isPublic(commandName:string) {
+	public isPublic(commandName: string) {
 		return !!this.label(commandName);
 	}
 
 	// When looping on commands and checking their enabled state, the whenClauseContext
 	// should be specified (created using currentWhenClauseContext) to avoid having
 	// to re-create it on each call.
-	public isEnabled(commandName:string, whenClauseContext:any = null):boolean {
+	public isEnabled(commandName: string, whenClauseContext: any = null): boolean {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return false;
 
@@ -259,7 +259,7 @@ export default class CommandService extends BaseService {
 	// The title is dynamic and derived from the state, which is why the state is passed
 	// as an argument. Title can be used for example to display the alarm date on the
 	// "set alarm" toolbar button.
-	public title(commandName:string, state:any = null):string {
+	public title(commandName: string, state: any = null): string {
 		const command = this.commandByName(commandName);
 		if (!command || !command.runtime) return null;
 
@@ -272,19 +272,19 @@ export default class CommandService extends BaseService {
 		}
 	}
 
-	public iconName(commandName:string, variant:string = null):string {
+	public iconName(commandName: string, variant: string = null): string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`No such command: ${commandName}`);
 		if (variant === 'tinymce') return command.declaration.tinymceIconName ? command.declaration.tinymceIconName : 'preferences';
 		return command.declaration.iconName;
 	}
 
-	public label(commandName:string, fullLabel:boolean = false):string {
+	public label(commandName: string, fullLabel: boolean = false): string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		const output = [];
 
-		const parentLabel = (d:CommandDeclaration):string => {
+		const parentLabel = (d: CommandDeclaration): string => {
 			if (!d.parentLabel) return '';
 			if (typeof d.parentLabel === 'function') return d.parentLabel();
 			return d.parentLabel as string;
@@ -295,13 +295,13 @@ export default class CommandService extends BaseService {
 		return output.join(': ');
 	}
 
-	public description(commandName:string):string {
+	public description(commandName: string): string {
 		const command = this.commandByName(commandName);
 		if (command.declaration.description) return command.declaration.description;
 		return this.label(commandName, true);
 	}
 
-	public exists(commandName:string):boolean {
+	public exists(commandName: string): boolean {
 		const command = this.commandByName(commandName, { mustExist: false });
 		return !!command;
 	}

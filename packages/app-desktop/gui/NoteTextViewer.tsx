@@ -10,12 +10,12 @@ interface Props {
 
 class NoteTextViewerComponent extends React.Component<Props, any> {
 
-	private initialized_:boolean = false;
-	private domReady_:boolean = false;
-	private webviewRef_:any;
-	private webviewListeners_:any = null;
+	private initialized_: boolean = false;
+	private domReady_: boolean = false;
+	private webviewRef_: any;
+	private webviewListeners_: any = null;
 
-	constructor(props:any) {
+	constructor(props: any) {
 		super(props);
 
 		this.webviewRef_ = React.createRef();
@@ -26,12 +26,12 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 		this.webview_message = this.webview_message.bind(this);
 	}
 
-	webview_domReady(event:any) {
+	webview_domReady(event: any) {
 		this.domReady_ = true;
 		if (this.props.onDomReady) this.props.onDomReady(event);
 	}
 
-	webview_ipcMessage(event:any) {
+	webview_ipcMessage(event: any) {
 		if (this.props.onIpcMessage) this.props.onIpcMessage(event);
 	}
 
@@ -39,7 +39,7 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 		this.webview_domReady({});
 	}
 
-	webview_message(event:any) {
+	webview_message(event: any) {
 		if (!event.data || event.data.target !== 'main') return;
 
 		const callName = event.data.name;
@@ -123,7 +123,7 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 	// Wrap WebView functions
 	// ----------------------------------------------------------------
 
-	send(channel:string, arg0:any = null, arg1:any = null) {
+	send(channel: string, arg0: any = null, arg1: any = null) {
 		const win = this.webviewRef_.current.contentWindow;
 
 		if (channel === 'setHtml') {
@@ -153,7 +153,7 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return {
 		themeId: state.settings.theme,
 	};

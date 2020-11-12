@@ -15,43 +15,43 @@ const MasterKey = require('@joplin/lib/models/MasterKey');
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 
-let lockHandler_:LockHandler = null;
-let migrationHandler_:MigrationHandler = null;
+let lockHandler_: LockHandler = null;
+let migrationHandler_: MigrationHandler = null;
 
-function lockHandler():LockHandler {
+function lockHandler(): LockHandler {
 	if (lockHandler_) return lockHandler_;
 	lockHandler_ = new LockHandler(fileApi());
 	return lockHandler_;
 }
 
-function migrationHandler(clientId:string = 'abcd'):MigrationHandler {
+function migrationHandler(clientId: string = 'abcd'): MigrationHandler {
 	if (migrationHandler_) return migrationHandler_;
 	migrationHandler_ = new MigrationHandler(fileApi(), lockHandler(), 'desktop', clientId);
 	return migrationHandler_;
 }
 
 interface MigrationTests {
-	[key:string]: Function;
+	[key: string]: Function;
 }
 
-const migrationTests:MigrationTests = {
+const migrationTests: MigrationTests = {
 	2: async function() {
 		const items = (await fileApi().list('', { includeHidden: true })).items;
-		expect(items.filter((i:any) => i.path === '.resource' && i.isDir).length).toBe(1);
-		expect(items.filter((i:any) => i.path === 'locks' && i.isDir).length).toBe(1);
-		expect(items.filter((i:any) => i.path === 'temp' && i.isDir).length).toBe(1);
-		expect(items.filter((i:any) => i.path === 'info.json' && !i.isDir).length).toBe(1);
+		expect(items.filter((i: any) => i.path === '.resource' && i.isDir).length).toBe(1);
+		expect(items.filter((i: any) => i.path === 'locks' && i.isDir).length).toBe(1);
+		expect(items.filter((i: any) => i.path === 'temp' && i.isDir).length).toBe(1);
+		expect(items.filter((i: any) => i.path === 'info.json' && !i.isDir).length).toBe(1);
 
 		const versionForOldClients = await fileApi().get('.sync/version.txt');
 		expect(versionForOldClients).toBe('2');
 	},
 };
 
-let previousSyncTargetName:string = '';
+let previousSyncTargetName: string = '';
 
 describe('synchronizer_MigrationHandler', function() {
 
-	beforeEach(async (done:Function) => {
+	beforeEach(async (done: Function) => {
 		// To test the migrations, we have to use the filesystem sync target
 		// because the sync target snapshots are plain files. Eventually
 		// it should be possible to copy a filesystem target to memory
@@ -65,7 +65,7 @@ describe('synchronizer_MigrationHandler', function() {
 		done();
 	});
 
-	afterEach(async (done:Function) => {
+	afterEach(async (done: Function) => {
 		setSyncTargetName(previousSyncTargetName);
 		done();
 	});
@@ -74,8 +74,8 @@ describe('synchronizer_MigrationHandler', function() {
 		// Check that basic folders "locks" and "temp" are created for new sync targets.
 		await migrationHandler().upgrade(1);
 		const result = await fileApi().list();
-		expect(result.items.filter((i:any) => i.path === Dirnames.Locks).length).toBe(1);
-		expect(result.items.filter((i:any) => i.path === Dirnames.Temp).length).toBe(1);
+		expect(result.items.filter((i: any) => i.path === Dirnames.Locks).length).toBe(1);
+		expect(result.items.filter((i: any) => i.path === Dirnames.Temp).length).toBe(1);
 	}), specTimeout);
 
 	it('should not allow syncing if the sync target is out-dated', asyncTest(async () => {

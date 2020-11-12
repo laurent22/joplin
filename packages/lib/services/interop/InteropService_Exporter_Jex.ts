@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const shim = require('../../shim').default;
 
 export default class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
-	async init(destPath:string) {
+	async init(destPath: string) {
 		if (await shim.fsDriver().isDirectory(destPath)) throw new Error(`Path is a directory: ${destPath}`);
 
 		this.tempDir_ = await this.temporaryDirectory_(false);
@@ -14,17 +14,17 @@ export default class InteropService_Exporter_Jex extends InteropService_Exporter
 		await this.rawExporter_.init(this.tempDir_);
 	}
 
-	async processItem(itemType:number, item:any) {
+	async processItem(itemType: number, item: any) {
 		return this.rawExporter_.processItem(itemType, item);
 	}
 
-	async processResource(resource:any, filePath:string) {
+	async processResource(resource: any, filePath: string) {
 		return this.rawExporter_.processResource(resource, filePath);
 	}
 
 	async close() {
 		const stats = await shim.fsDriver().readDirStats(this.tempDir_, { recursive: true });
-		const filePaths = stats.filter((a:any) => !a.isDirectory()).map((a:any) => a.path);
+		const filePaths = stats.filter((a: any) => !a.isDirectory()).map((a: any) => a.path);
 
 		if (!filePaths.length) throw new Error(_('There is no data to export.'));
 

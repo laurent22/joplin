@@ -2,11 +2,11 @@ import { useEffect, useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
 interface HookDependencies {
-	editor:any,
+	editor: any,
 	onScroll: Function,
 }
 
-export default function useScroll(dependencies:HookDependencies) {
+export default function useScroll(dependencies: HookDependencies) {
 	const { editor, onScroll } = dependencies;
 	const scrollTimeoutId_ = useRef(null);
 
@@ -37,7 +37,7 @@ export default function useScroll(dependencies:HookDependencies) {
 		return m <= 0 ? 0 : t / m;
 	}, [maxScrollTop, scrollTop]);
 
-	const scrollToPercent = useCallback((percent:number) => {
+	const scrollToPercent = useCallback((percent: number) => {
 		if (!editor) return;
 		editor.getWin().scrollTo(0, maxScrollTop() * percent);
 	}, [editor, maxScrollTop]);

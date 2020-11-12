@@ -51,21 +51,21 @@ const { setAutoFreeze } = require('immer');
 
 export default class BaseApplication {
 
-	private logger_:Logger;
-	private dbLogger_:Logger;
-	private eventEmitter_:any;
-	private scheduleAutoAddResourcesIID_:any = null;
-	private database_:any = null;
+	private logger_: Logger;
+	private dbLogger_: Logger;
+	private eventEmitter_: any;
+	private scheduleAutoAddResourcesIID_: any = null;
+	private database_: any = null;
 
-	protected showStackTraces_:boolean = false;
-	protected showPromptString_:boolean = false;
+	protected showStackTraces_: boolean = false;
+	protected showPromptString_: boolean = false;
 
 	// Note: this is basically a cache of state.selectedFolderId. It should *only*
 	// be derived from the state and not set directly since that would make the
 	// state and UI out of sync.
-	private currentFolder_:any = null;
+	private currentFolder_: any = null;
 
-	protected store_:any = null;
+	protected store_: any = null;
 
 	constructor() {
 		this.logger_ = new Logger();
@@ -129,7 +129,7 @@ export default class BaseApplication {
 		this.switchCurrentFolder(newFolder);
 	}
 
-	switchCurrentFolder(folder:any) {
+	switchCurrentFolder(folder: any) {
 		if (!this.hasGui()) {
 			this.currentFolder_ = Object.assign({}, folder);
 			Setting.setValue('activeFolderId', folder ? folder.id : '');
@@ -143,8 +143,8 @@ export default class BaseApplication {
 
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
-	async handleStartFlags_(argv:string[], setDefaults:boolean = true) {
-		const matched:any = {};
+	async handleStartFlags_(argv: string[], setDefaults: boolean = true) {
+		const matched: any = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
 
@@ -262,7 +262,7 @@ export default class BaseApplication {
 		};
 	}
 
-	on(eventName:string, callback:Function) {
+	on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
@@ -271,7 +271,7 @@ export default class BaseApplication {
 		process.exit(code);
 	}
 
-	async refreshNotes(state:any, useSelectedNoteId:boolean = false, noteHash:string = '') {
+	async refreshNotes(state: any, useSelectedNoteId: boolean = false, noteHash: string = '') {
 		let parentType = state.notesParentType;
 		let parentId = null;
 
@@ -367,7 +367,7 @@ export default class BaseApplication {
 		}
 	}
 
-	resourceFetcher_downloadComplete(event:any) {
+	resourceFetcher_downloadComplete(event: any) {
 		if (event.encrypted) {
 			DecryptionWorker.instance().scheduleStart();
 		}
@@ -377,7 +377,7 @@ export default class BaseApplication {
 		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
-	reducerActionToString(action:any) {
+	reducerActionToString(action: any) {
 		const o = [action.type];
 		if ('id' in action) o.push(action.id);
 		if ('noteId' in action) o.push(action.noteId);
@@ -398,15 +398,15 @@ export default class BaseApplication {
 	}
 
 	generalMiddlewareFn() {
-		const middleware = (store:any) => (next:any) => (action:any) => {
+		const middleware = (store: any) => (next: any) => (action: any) => {
 			return this.generalMiddleware(store, next, action);
 		};
 
 		return middleware;
 	}
 
-	async applySettingsSideEffects(action:any = null) {
-		const sideEffects:any = {
+	async applySettingsSideEffects(action: any = null) {
+		const sideEffects: any = {
 			'dateFormat': async () => {
 				time.setLocale(Setting.value('locale'));
 				time.setDateFormat(Setting.value('dateFormat'));
@@ -459,13 +459,13 @@ export default class BaseApplication {
 		}
 	}
 
-	async generalMiddleware(store:any, next:any, action:any) {
+	async generalMiddleware(store: any, next: any, action: any) {
 		// this.logger().debug('Reducer action', this.reducerActionToString(action));
 
 		const result = next(action);
 		const newState = store.getState();
 		let refreshNotes = false;
-		let refreshFolders:boolean | string = false;
+		let refreshFolders: boolean | string = false;
 		// let refreshTags = false;
 		let refreshNotesUseSelectedNoteId = false;
 		let refreshNotesHash = '';
@@ -591,11 +591,11 @@ export default class BaseApplication {
 		return result;
 	}
 
-	dispatch(action:any) {
+	dispatch(action: any) {
 		if (this.store()) return this.store().dispatch(action);
 	}
 
-	reducer(state:any = defaultState, action:any) {
+	reducer(state: any = defaultState, action: any) {
 		return reducer(state, action);
 	}
 
@@ -619,7 +619,7 @@ export default class BaseApplication {
 		ResourceFetcher.instance().dispatch = function() {};
 	}
 
-	async readFlagsFromFile(flagPath:string) {
+	async readFlagsFromFile(flagPath: string) {
 		if (!fs.existsSync(flagPath)) return {};
 		let flagContent = fs.readFileSync(flagPath, 'utf8');
 		if (!flagContent) return {};
@@ -635,7 +635,7 @@ export default class BaseApplication {
 		return flags.matched;
 	}
 
-	determineProfileDir(initArgs:any) {
+	determineProfileDir(initArgs: any) {
 		let output = '';
 
 		if (initArgs.profileDir) {
@@ -649,7 +649,7 @@ export default class BaseApplication {
 		return toSystemSlashes(output, 'linux');
 	}
 
-	async start(argv:string[]):Promise<any> {
+	async start(argv: string[]): Promise<any> {
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
@@ -805,7 +805,7 @@ export default class BaseApplication {
 		if (!Setting.value('api.token')) {
 			EncryptionService.instance()
 				.randomHexString(64)
-				.then((token:string) => {
+				.then((token: string) => {
 					Setting.setValue('api.token', token);
 				});
 		}

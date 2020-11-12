@@ -9,7 +9,7 @@ export interface SyncTargetUpgradeResult {
 	error: any,
 }
 
-export default function useSyncTargetUpgrade():SyncTargetUpgradeResult {
+export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {
 	const [upgradeResult, setUpgradeResult] = useState({
 		done: false,
 		error: null,

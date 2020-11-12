@@ -100,7 +100,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			resetScroll: () => {
 				resetScroll();
 			},
-			scrollTo: (options:ScrollOptions) => {
+			scrollTo: (options: ScrollOptions) => {
 				if (options.type === ScrollOptionTypes.Hash) {
 					if (!webviewRef.current) return;
 					webviewRef.current.wrappedInstance.send('scrollToHash', options.value as string);
@@ -156,7 +156,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						selectedHtml: () => {
 							return selectedText();
 						},
-						replaceSelection: (value:any) => {
+						replaceSelection: (value: any) => {
 							return editorRef.current.replaceSelection(value);
 						},
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
@@ -293,9 +293,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		menu.popup(bridge().window());
 	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
 
-	const loadScript = async (script:any) => {
+	const loadScript = async (script: any) => {
 		return new Promise((resolve) => {
-			let element:any = document.createElement('script');
+			let element: any = document.createElement('script');
 			if (script.src.indexOf('.css') >= 0) {
 				element = document.createElement('link');
 				element.rel = 'stylesheet';
@@ -324,7 +324,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		let cancelled = false;
 
 		async function loadScripts() {
-			const scriptsToLoad:{src: string, id:string, loaded: boolean}[] = [
+			const scriptsToLoad: {src: string, id: string, loaded: boolean}[] = [
 				{
 					src: 'node_modules/codemirror/addon/dialog/dialog.css',
 					id: 'codemirrorDialogStyle',

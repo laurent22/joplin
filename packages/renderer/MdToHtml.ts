@@ -6,13 +6,13 @@ const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
 
 interface RendererRule {
-	install(context:any, ruleOptions:any):any,
-	assets?(theme:any):any,
+	install(context: any, ruleOptions: any): any,
+	assets?(theme: any): any,
 	plugin?: any,
 }
 
 interface RendererRules {
-	[pluginName:string]: RendererRule,
+	[pluginName: string]: RendererRule,
 }
 
 interface RendererPlugin {
@@ -21,11 +21,11 @@ interface RendererPlugin {
 }
 
 interface RendererPlugins {
-	[pluginName:string]: RendererPlugin,
+	[pluginName: string]: RendererPlugin,
 }
 
 // /!\/!\ Note: the order of rules is important!! /!\/!\
-const rules:RendererRules = {
+const rules: RendererRules = {
 	fence: require('./MdToHtml/rules/fence').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 	image: require('./MdToHtml/rules/image').default,
@@ -45,7 +45,7 @@ const uslug = require('uslug');
 const markdownItAnchor = require('markdown-it-anchor');
 
 // The keys must match the corresponding entry in Setting.js
-const plugins:RendererPlugins = {
+const plugins: RendererPlugins = {
 	mark: { module: require('markdown-it-mark') },
 	footnote: { module: require('markdown-it-footnote') },
 	sub: { module: require('markdown-it-sub') },
@@ -60,7 +60,7 @@ const plugins:RendererPlugins = {
 };
 const defaultNoteStyle = require('./defaultNoteStyle');
 
-function slugify(s:string):string {
+function slugify(s: string): string {
 	return uslug(s);
 }
 
@@ -92,7 +92,7 @@ interface PluginAsset {
 // called "pluginAsset" in this class might refer to sublty different
 // types. The logic should be cleaned up before types are added.
 interface PluginAssets {
-	[pluginName:string]: PluginAsset[];
+	[pluginName: string]: PluginAsset[];
 }
 
 interface PluginContext {
@@ -149,21 +149,21 @@ export interface RuleOptions {
 
 export default class MdToHtml {
 
-	private resourceBaseUrl_:string;
-	private ResourceModel_:any;
-	private contextCache_:any;
-	private fsDriver_:any;
+	private resourceBaseUrl_: string;
+	private ResourceModel_: any;
+	private contextCache_: any;
+	private fsDriver_: any;
 
-	private cachedOutputs_:any = {};
-	private lastCodeHighlightCacheKey_:string = null;
-	private cachedHighlightedCode_:any = {};
+	private cachedOutputs_: any = {};
+	private lastCodeHighlightCacheKey_: string = null;
+	private cachedHighlightedCode_: any = {};
 
 	// Markdown-It plugin options (not Joplin plugin options)
-	private pluginOptions_:any = {};
-	private extraRendererRules_:RendererRules = {};
-	private allProcessedAssets_:any = {};
+	private pluginOptions_: any = {};
+	private extraRendererRules_: RendererRules = {};
+	private allProcessedAssets_: any = {};
 
-	public constructor(options:Options = null) {
+	public constructor(options: Options = null) {
 		if (!options) options = {};
 
 		// Must include last "/"
@@ -203,7 +203,7 @@ export default class MdToHtml {
 		return output;
 	}
 
-	private pluginOptions(name:string) {
+	private pluginOptions(name: string) {
 		let o = this.pluginOptions_[name] ? this.pluginOptions_[name] : {};
 		o = Object.assign({
 			enabled: true,
@@ -211,18 +211,18 @@ export default class MdToHtml {
 		return o;
 	}
 
-	private pluginEnabled(name:string) {
+	private pluginEnabled(name: string) {
 		return this.pluginOptions(name).enabled;
 	}
 
 	// `module` is a file that has already been `required()`
-	public loadExtraRendererRule(id:string, module:any) {
+	public loadExtraRendererRule(id: string, module: any) {
 		if (this.extraRendererRules_[id]) throw new Error(`A renderer rule with this ID has already been loaded: ${id}`);
 		this.extraRendererRules_[id] = module;
 	}
 
-	private processPluginAssets(pluginAssets:PluginAssets):RenderResult {
-		const files:RenderResultPluginAsset[] = [];
+	private processPluginAssets(pluginAssets: PluginAssets): RenderResult {
+		const files: RenderResultPluginAsset[] = [];
 		const cssStrings = [];
 		for (const pluginName in pluginAssets) {
 			for (const asset of pluginAssets[pluginName]) {
@@ -266,12 +266,12 @@ export default class MdToHtml {
 
 	// This return all the assets for all the plugins. Since it is called
 	// on each render, the result is cached.
-	private allProcessedAssets(theme:any, codeTheme:string) {
-		const cacheKey:string = theme.cacheKey + codeTheme;
+	private allProcessedAssets(theme: any, codeTheme: string) {
+		const cacheKey: string = theme.cacheKey + codeTheme;
 
 		if (this.allProcessedAssets_[cacheKey]) return this.allProcessedAssets_[cacheKey];
 
-		const assets:any = {};
+		const assets: any = {};
 		for (const key in rules) {
 			if (!this.pluginEnabled(key)) continue;
 			const rule = rules[key];
@@ -293,8 +293,8 @@ export default class MdToHtml {
 	}
 
 	// This is similar to allProcessedAssets() but used only by the Rich Text editor
-	public async allAssets(theme:any) {
-		const assets:any = {};
+	public async allAssets(theme: any) {
+		const assets: any = {};
 		for (const key in rules) {
 			if (!this.pluginEnabled(key)) continue;
 			const rule = rules[key];
@@ -310,7 +310,7 @@ export default class MdToHtml {
 		return output.pluginAssets;
 	}
 
-	private async outputAssetsToExternalAssets_(output:any) {
+	private async outputAssetsToExternalAssets_(output: any) {
 		for (const cssString of output.cssStrings) {
 			output.pluginAssets.push(await this.fsDriver().cacheCssToFile(cssString));
 		}
@@ -319,7 +319,7 @@ export default class MdToHtml {
 	}
 
 	// The string we are looking for is: <p></p>\n
-	private removeMarkdownItWrappingParagraph_(html:string) {
+	private removeMarkdownItWrappingParagraph_(html: string) {
 		if (html.length < 8) return html;
 
 		// If there are multiple <p> tags, we keep them because it's multiple lines
@@ -336,7 +336,7 @@ export default class MdToHtml {
 	}
 
 	// "theme" is the theme as returned by themeStyle()
-	public async render(body:string, theme:any = null, options:any = null):Promise<RenderResult> {
+	public async render(body: string, theme: any = null, options: any = null): Promise<RenderResult> {
 		options = Object.assign({}, {
 			// In bodyOnly mode, the rendered Markdown is returned without the wrapper DIV
 			bodyOnly: false,
@@ -371,7 +371,7 @@ export default class MdToHtml {
 			ResourceModel: this.ResourceModel_,
 		});
 
-		const context:PluginContext = {
+		const context: PluginContext = {
 			css: {},
 			pluginAssets: {},
 			cache: this.contextCache_,
@@ -383,7 +383,7 @@ export default class MdToHtml {
 			typographer: this.pluginEnabled('typographer'),
 			// linkify: true,
 			html: true,
-			highlight: (str:string, lang:string) => {
+			highlight: (str: string, lang: string) => {
 				let outputCodeHtml = '';
 
 				// The strings includes the last \n that is part of the fence,

@@ -8,7 +8,7 @@ export interface ToolbarButtonInfo {
 	tooltip: string,
 	iconName: string,
 	enabled: boolean,
-	onClick():void,
+	onClick(): void,
 	title: string,
 }
 
@@ -17,23 +17,23 @@ interface ToolbarButtonCacheItem {
 }
 
 interface ToolbarButtonCache {
-	[key:string]: ToolbarButtonCacheItem,
+	[key: string]: ToolbarButtonCacheItem,
 }
 
 export default class ToolbarButtonUtils {
 
-	private service_:CommandService;
-	private toolbarButtonCache_:ToolbarButtonCache = {};
+	private service_: CommandService;
+	private toolbarButtonCache_: ToolbarButtonCache = {};
 
-	constructor(service:CommandService) {
+	constructor(service: CommandService) {
 		this.service_ = service;
 	}
 
-	private get service():CommandService {
+	private get service(): CommandService {
 		return this.service_;
 	}
 
-	private commandToToolbarButton(commandName:string, whenClauseContext:any):ToolbarButtonInfo {
+	private commandToToolbarButton(commandName: string, whenClauseContext: any): ToolbarButtonInfo {
 		const newEnabled = this.service.isEnabled(commandName, whenClauseContext);
 		const newTitle = this.service.title(commandName);
 
@@ -68,8 +68,8 @@ export default class ToolbarButtonUtils {
 	// This method ensures that if the provided commandNames and state hasn't changed
 	// the output also won't change. Invididual toolbarButtonInfo also won't changed
 	// if the state they use hasn't changed. This is to avoid useless renders of the toolbars.
-	public commandsToToolbarButtons(commandNames:string[], whenClauseContext:any):ToolbarButtonInfo[] {
-		const output:ToolbarButtonInfo[] = [];
+	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any): ToolbarButtonInfo[] {
+		const output: ToolbarButtonInfo[] = [];
 
 		for (const commandName of commandNames) {
 			if (commandName === '-') {

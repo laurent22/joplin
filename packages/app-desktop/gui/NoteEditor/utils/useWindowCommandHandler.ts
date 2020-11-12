@@ -12,18 +12,18 @@ const commandsWithDependencies = [
 ];
 
 interface HookDependencies {
-	formNote:FormNote,
-	setShowLocalSearch:Function,
-	dispatch:Function,
-	noteSearchBarRef:any,
-	editorRef:any,
-	titleInputRef:any,
+	formNote: FormNote,
+	setShowLocalSearch: Function,
+	dispatch: Function,
+	noteSearchBarRef: any,
+	editorRef: any,
+	titleInputRef: any,
 	saveNoteAndWait: Function,
 }
 
-function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):CommandRuntime {
+function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any): CommandRuntime {
 	return {
-		execute: async (_context:CommandContext, ...args:any[]) => {
+		execute: async (_context: CommandContext, ...args: any[]) => {
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 				return;
@@ -50,7 +50,7 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 	};
 }
 
-export default function useWindowCommandHandler(dependencies:HookDependencies) {
+export default function useWindowCommandHandler(dependencies: HookDependencies) {
 	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef } = dependencies;
 
 	useEffect(() => {

@@ -4,7 +4,7 @@ const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('../..
 
 describe('services_plugins_sandboxProxy', function() {
 
-	beforeEach(async (done:Function) => {
+	beforeEach(async (done: Function) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		done();
@@ -16,9 +16,9 @@ describe('services_plugins_sandboxProxy', function() {
 			args: any[],
 		}
 
-		const results:Result[] = [];
+		const results: Result[] = [];
 
-		const target:Target = (path:string, args:any[]) => {
+		const target: Target = (path: string, args: any[]) => {
 			results.push({ path, args });
 		};
 
@@ -39,9 +39,9 @@ describe('services_plugins_sandboxProxy', function() {
 			args: any[],
 		}
 
-		const results:Result[] = [];
+		const results: Result[] = [];
 
-		const target:Target = (path:string, args:any[]) => {
+		const target: Target = (path: string, args: any[]) => {
 			results.push({ path, args });
 		};
 

@@ -14,46 +14,46 @@ export interface MarkdownTableHeader {
 }
 
 export interface MarkdownTableRow {
-	[key:string]: string,
+	[key: string]: string,
 }
 
 const markdownUtils = {
 	// Titles for markdown links only need escaping for [ and ]
-	escapeTitleText(text:string) {
+	escapeTitleText(text: string) {
 		return text.replace(/(\[|\])/g, '\\$1');
 	},
 
-	escapeLinkUrl(url:string) {
+	escapeLinkUrl(url: string) {
 		url = url.replace(/\(/g, '%28');
 		url = url.replace(/\)/g, '%29');
 		url = url.replace(/ /g, '%20');
 		return url;
 	},
 
-	unescapeLinkUrl(url:string) {
+	unescapeLinkUrl(url: string) {
 		url = url.replace(/%28/g, '(');
 		url = url.replace(/%29/g, ')');
 		url = url.replace(/%20/g, ' ');
 		return url;
 	},
 
-	prependBaseUrl(md:string, baseUrl:string) {
+	prependBaseUrl(md: string, baseUrl: string) {
 		// eslint-disable-next-line no-useless-escape
-		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match:any, before:string, url:string, after:string) => {
+		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractImageUrls(md:string) {
+	extractImageUrls(md: string) {
 		const markdownIt = new MarkdownIt();
 		setupLinkify(markdownIt); // Necessary to support file:/// links
 
 		const env = {};
 		const tokens = markdownIt.parse(md, env);
-		const output:string[] = [];
+		const output: string[] = [];
 
-		const searchUrls = (tokens:any[]) => {
+		const searchUrls = (tokens: any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 
@@ -80,25 +80,25 @@ const markdownUtils = {
 	// The match results has 5 items
 	// Full match array is
 	// [Full match, whitespace, list token, ol line number, whitespace following token]
-	olLineNumber(line:string) {
+	olLineNumber(line: string) {
 		const match = line.match(listRegex);
 		return match ? Number(match[3]) : 0;
 	},
 
-	extractListToken(line:string) {
+	extractListToken(line: string) {
 		const match = line.match(listRegex);
 		return match ? match[2] : '';
 	},
 
-	isListItem(line:string) {
+	isListItem(line: string) {
 		return listRegex.test(line);
 	},
 
-	isEmptyListItem(line:string) {
+	isEmptyListItem(line: string) {
 		return emptyListRegex.test(line);
 	},
 
-	createMarkdownTable(headers:MarkdownTableHeader[], rows:MarkdownTableRow[]):string {
+	createMarkdownTable(headers: MarkdownTableHeader[], rows: MarkdownTableRow[]): string {
 		const output = [];
 
 		const headersMd = [];
@@ -126,7 +126,7 @@ const markdownUtils = {
 		return output.join('\n');
 	},
 
-	titleFromBody(body:string) {
+	titleFromBody(body: string) {
 		if (!body) return '';
 		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
 		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;

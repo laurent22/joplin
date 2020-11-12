@@ -4,9 +4,9 @@
 
 import useEffectDebugger from './useEffectDebugger';
 
-export default function usePropsDebugger(props:any) {
-	const dependencies:any[] = [];
-	const dependencyNames:string[] = [];
+export default function usePropsDebugger(props: any) {
+	const dependencies: any[] = [];
+	const dependencyNames: string[] = [];
 
 	for (const k in props) {
 		dependencies.push(props[k]);

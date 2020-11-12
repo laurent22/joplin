@@ -4,13 +4,13 @@ const PushNotificationIOS  = require('@react-native-community/push-notification-
 
 export default class AlarmServiceDriver {
 
-	private hasPermission_:boolean = null;
-	private inAppNotificationHandler_:any = null;
-	private logger_:Logger;
+	private hasPermission_: boolean = null;
+	private inAppNotificationHandler_: any = null;
+	private logger_: Logger;
 
-	constructor(logger:Logger) {
+	constructor(logger: Logger) {
 		this.logger_ = logger;
-		PushNotificationIOS.addEventListener('localNotification', (instance:any) => {
+		PushNotificationIOS.addEventListener('localNotification', (instance: any) => {
 			if (!this.inAppNotificationHandler_) return;
 
 			if (!instance || !instance._data || !instance._data.id) {
@@ -31,17 +31,17 @@ export default class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
-	setInAppNotificationHandler(v:any) {
+	setInAppNotificationHandler(v: any) {
 		this.inAppNotificationHandler_ = v;
 	}
 
-	async hasPermissions(perm:any = null) {
+	async hasPermissions(perm: any = null) {
 		if (perm !== null) return perm.alert && perm.badge && perm.sound;
 
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
 		return new Promise((resolve) => {
-			PushNotificationIOS.checkPermissions(async (perm:any) => {
+			PushNotificationIOS.checkPermissions(async (perm: any) => {
 				const ok = await this.hasPermissions(perm);
 				this.hasPermission_ = ok;
 				resolve(ok);
@@ -50,7 +50,7 @@ export default class AlarmServiceDriver {
 	}
 
 	async requestPermissions() {
-		const options:any = {
+		const options: any = {
 			alert: 1,
 			badge: 1,
 			sound: 1,
@@ -60,18 +60,18 @@ export default class AlarmServiceDriver {
 		return this.hasPermissions(newPerm);
 	}
 
-	async clearNotification(id:number) {
+	async clearNotification(id: number) {
 		PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
 	}
 
-	async scheduleNotification(notification:Notification) {
+	async scheduleNotification(notification: Notification) {
 		if (!(await this.hasPermissions())) {
 			const ok = await this.requestPermissions();
 			if (!ok) return;
 		}
 
 		// ID must be a string and userInfo must be supplied otherwise cancel won't work
-		const iosNotification:any = {
+		const iosNotification: any = {
 			id: `${notification.id}`,
 			alertTitle: notification.title,
 			fireDate: notification.date.toISOString(),

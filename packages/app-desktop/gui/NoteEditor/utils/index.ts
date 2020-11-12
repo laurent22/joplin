@@ -4,7 +4,7 @@ const HtmlToMd = require('@joplin/lib/HtmlToMd');
 const Note = require('@joplin/lib/models/Note');
 const { MarkupToHtml } = require('@joplin/renderer');
 
-export async function htmlToMarkdown(markupLanguage: number, html: string, originalCss:string): Promise<string> {
+export async function htmlToMarkdown(markupLanguage: number, html: string, originalCss: string): Promise<string> {
 	let newBody = '';
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {

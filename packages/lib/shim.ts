@@ -1,5 +1,5 @@
 let isTestingEnv_ = false;
-let react_:any = null;
+let react_: any = null;
 
 const shim = {
 	isNode: () => {
@@ -67,14 +67,14 @@ const shim = {
 		return false;
 	},
 
-	isPortable: ():boolean => {
+	isPortable: (): boolean => {
 		return typeof process !== 'undefined' && typeof process.env === 'object' && !!process.env.PORTABLE_EXECUTABLE_DIR;
 	},
 
 	// Node requests can go wrong is so many different ways and with so
 	// many different error messages... This handler inspects the error
 	// and decides whether the request can safely be repeated or not.
-	fetchRequestCanBeRetried: (error:any) => {
+	fetchRequestCanBeRetried: (error: any) => {
 		if (!error) return false;
 
 		// Unfortunately the error 'Network request failed' doesn't have a type
@@ -114,13 +114,13 @@ const shim = {
 
 	fetchMaxRetry_: 5,
 
-	fetchMaxRetrySet: (v:number) => {
+	fetchMaxRetrySet: (v: number) => {
 		const previous = shim.fetchMaxRetry_;
 		shim.fetchMaxRetry_ = v;
 		return previous;
 	},
 
-	fetchWithRetry: async function(fetchFn:Function, options:any = null) {
+	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
 		const time = require('./time').default;
 
 		if (!options) options = {};
@@ -144,23 +144,23 @@ const shim = {
 		}
 	},
 
-	fetch: (_url:string, _options:any):any => {
+	fetch: (_url: string, _options: any): any => {
 		throw new Error('Not implemented');
 	},
 
-	createResourceFromPath: async (_filePath:string, _defaultProps:any = null, _options:any = null) => {
+	createResourceFromPath: async (_filePath: string, _defaultProps: any = null, _options: any = null) => {
 		throw new Error('Not implemented');
 	},
 
 	FormData: typeof FormData !== 'undefined' ? FormData : null,
 
-	fsDriver: ():any => {
+	fsDriver: (): any => {
 		throw new Error('Not implemented');
 	},
 
 	FileApiDriverLocal: null as any,
 
-	readLocalFileBase64: (_path:string) => {
+	readLocalFileBase64: (_path: string) => {
 		throw new Error('Not implemented');
 	},
 
@@ -170,29 +170,29 @@ const shim = {
 
 	sjclModule: null as any,
 
-	randomBytes: async (_count:number) => {
+	randomBytes: async (_count: number) => {
 		throw new Error('Not implemented');
 	},
 
-	stringByteLength: (_s:string) => {
+	stringByteLength: (_s: string) => {
 		throw new Error('Not implemented');
 	},
 
 	detectAndSetLocale: null as Function,
 
-	attachFileToNote: async (_note:any, _filePath:string) => {
+	attachFileToNote: async (_note: any, _filePath: string) => {
 		throw new Error('Not implemented');
 	},
 
-	attachFileToNoteBody: async (_body:string, _filePath:string, _position:number, _options:any):Promise<string> => {
+	attachFileToNoteBody: async (_body: string, _filePath: string, _position: number, _options: any): Promise<string> => {
 		throw new Error('Not implemented');
 	},
 
-	imageFromDataUrl: async (_imageDataUrl:string, _filePath:string, _options:any = null) => {
+	imageFromDataUrl: async (_imageDataUrl: string, _filePath: string, _options: any = null) => {
 		throw new Error('Not implemented');
 	},
 
-	fetchBlob: async function(_url:string, _options:any = null) {
+	fetchBlob: async function(_url: string, _options: any = null) {
 		throw new Error('Not implemented');
 	},
 
@@ -206,7 +206,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	openOrCreateFile: (_path:string, _defaultContents:any) => {
+	openOrCreateFile: (_path: string, _defaultContents: any) => {
 		throw new Error('Not implemented');
 	},
 
@@ -218,25 +218,25 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	injectedJs: (_name:string) => '',
+	injectedJs: (_name: string) => '',
 
 	isTestingEnv: () => {
 		return isTestingEnv_;
 	},
 
-	setIsTestingEnv: (v:boolean) => {
+	setIsTestingEnv: (v: boolean) => {
 		isTestingEnv_ = v;
 	},
 
-	pathRelativeToCwd: (_path:string) => {
+	pathRelativeToCwd: (_path: string) => {
 		throw new Error('Not implemented');
 	},
 
-	showMessageBox: (_message:string, _options:any = null) => {
+	showMessageBox: (_message: string, _options: any = null) => {
 		throw new Error('Not implemented');
 	},
 
-	writeImageToFile: (_image:any, _format:any, _filePath:string) => {
+	writeImageToFile: (_image: any, _format: any, _filePath: string) => {
 		throw new Error('Not implemented');
 	},
 
@@ -259,23 +259,23 @@ const shim = {
 	//
 	// Having the timers wrapped in that way would also make it easier to debug timing issue and
 	// find out what timers have been fired or not.
-	setTimeout: (_fn:Function, _interval:number) => {
+	setTimeout: (_fn: Function, _interval: number) => {
 		throw new Error('Not implemented');
 	},
 
-	setInterval: (_fn:Function, _interval:number) => {
+	setInterval: (_fn: Function, _interval: number) => {
 		throw new Error('Not implemented');
 	},
 
-	clearTimeout: (_id:any) => {
+	clearTimeout: (_id: any) => {
 		throw new Error('Not implemented');
 	},
 
-	clearInterval: (_id:any) => {
+	clearInterval: (_id: any) => {
 		throw new Error('Not implemented');
 	},
 
-	setReact: (react:any) => {
+	setReact: (react: any) => {
 		react_ = react;
 	},
 
@@ -305,7 +305,7 @@ const shim = {
 		return (shim.isWindows() || shim.isMac()) && !shim.isPortable();
 	},
 
-	keytar: ():any => {
+	keytar: (): any => {
 		throw new Error('Not implemented');
 	},
 };

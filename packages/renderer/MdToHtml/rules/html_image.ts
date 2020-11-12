@@ -3,38 +3,38 @@ import { RuleOptions } from '../../MdToHtml';
 const htmlUtils = require('../../htmlUtils.js');
 const utils = require('../../utils');
 
-function renderImageHtml(before:string, src:string, after:string, ruleOptions:RuleOptions) {
+function renderImageHtml(before: string, src: string, after: string, ruleOptions: RuleOptions) {
 	const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
 	if (typeof r === 'string') return r;
 	if (r) return `<img ${before} ${htmlUtils.attributesHtml(r)} ${after}/>`;
 	return `[Image: ${src}]`;
 }
 
-function plugin(markdownIt:any, ruleOptions:RuleOptions) {
+function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const Resource = ruleOptions.ResourceModel;
 
 	const htmlBlockDefaultRender =
 		markdownIt.renderer.rules.html_block ||
-		function(tokens:any[], idx:number, options:any, _env:any, self:any) {
+		function(tokens: any[], idx: number, options: any, _env: any, self: any) {
 			return self.renderToken(tokens, idx, options);
 		};
 
 	const htmlInlineDefaultRender =
 		markdownIt.renderer.rules.html_inline ||
-		function(tokens:any[], idx:number, options:any, _env:any, self:any) {
+		function(tokens: any[], idx: number, options: any, _env: any, self: any) {
 			return self.renderToken(tokens, idx, options);
 		};
 
 	const imageRegex = /<img(.*?)src=["'](.*?)["'](.*?)>/gi;
 
-	const handleImageTags = function(defaultRender:Function) {
-		return function(tokens:any[], idx:number, options:any, env:any, self:any) {
+	const handleImageTags = function(defaultRender: Function) {
+		return function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			const token = tokens[idx];
 			const content = token.content;
 
 			if (!content.match(imageRegex)) return defaultRender(tokens, idx, options, env, self);
 
-			return content.replace(imageRegex, (_v:any, before:string, src:string, after:string) => {
+			return content.replace(imageRegex, (_v: any, before: string, src: string, after: string) => {
 				if (!Resource.isResourceUrl(src)) return `<img${before}src="${src}"${after}>`;
 				return renderImageHtml(before, src, after, ruleOptions);
 			});

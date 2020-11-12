@@ -11,7 +11,7 @@ interface PluginViewState {
 }
 
 interface PluginViewStates {
-	[key:string]: PluginViewState,
+	[key: string]: PluginViewState,
 }
 
 interface PluginContentScriptState {
@@ -20,17 +20,17 @@ interface PluginContentScriptState {
 }
 
 interface PluginContentScriptStates {
-	[type:string]: PluginContentScriptState[];
+	[type: string]: PluginContentScriptState[];
 }
 
 interface PluginState {
-	id:string,
+	id: string,
 	contentScripts: PluginContentScriptStates,
-	views:PluginViewStates,
+	views: PluginViewStates,
 }
 
 export interface PluginStates {
-	[key:string]: PluginState;
+	[key: string]: PluginState;
 }
 
 export interface State {
@@ -39,7 +39,7 @@ export interface State {
 
 export const stateRootKey = 'pluginService';
 
-export const defaultState:State = {
+export const defaultState: State = {
 	plugins: {},
 };
 
@@ -47,8 +47,8 @@ export const utils = {
 
 	// It is best to use viewsByType instead as this method creates new objects
 	// which might trigger unecessary renders even when plugin and views haven't changed.
-	viewInfosByType: function(plugins:PluginStates, type:string):ViewInfo[] {
-		const output:ViewInfo[] = [];
+	viewInfosByType: function(plugins: PluginStates, type: string): ViewInfo[] {
+		const output: ViewInfo[] = [];
 
 		for (const pluginId in plugins) {
 			const plugin = plugins[pluginId];
@@ -66,8 +66,8 @@ export const utils = {
 		return output;
 	},
 
-	viewsByType: function(plugins:PluginStates, type:string):any[] {
-		const output:any[] = [];
+	viewsByType: function(plugins: PluginStates, type: string): any[] {
+		const output: any[] = [];
 
 		for (const pluginId in plugins) {
 			const plugin = plugins[pluginId];
@@ -82,16 +82,16 @@ export const utils = {
 		return output;
 	},
 
-	commandNamesFromViews: function(plugins:PluginStates, toolbarType:string):string[] {
+	commandNamesFromViews: function(plugins: PluginStates, toolbarType: string): string[] {
 		const infos = utils.viewInfosByType(plugins, 'toolbarButton');
 
 		return infos
-			.filter((info:ViewInfo) => info.view.location === toolbarType)
-			.map((info:ViewInfo) => info.view.commandName);
+			.filter((info: ViewInfo) => info.view.location === toolbarType)
+			.map((info: ViewInfo) => info.view.commandName);
 	},
 };
 
-const reducer = (draft: Draft<any>, action:any) => {
+const reducer = (draft: Draft<any>, action: any) => {
 	if (action.type.indexOf('PLUGIN_') !== 0) return;
 
 	// All actions should be scoped to a plugin, except when adding a new plugin

@@ -35,9 +35,9 @@ interface State {
 interface ResourceTable {
 	resources: InnerResource[]
 	sorting: ActiveSorting
-	onResourceClick: (resource: InnerResource) => any
-	onResourceDelete: (resource: InnerResource) => any
-	onToggleSorting: (order: SortingOrder) => any
+	onResourceClick: (resource: InnerResource)=> any
+	onResourceDelete: (resource: InnerResource)=> any
+	onToggleSorting: (order: SortingOrder)=> any
 	themeId: number
 	style: Style
 }
@@ -207,7 +207,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 
-		const rootStyle:any = {
+		const rootStyle: any = {
 			...style,
 			overflowY: 'scroll',
 			color: theme.color,

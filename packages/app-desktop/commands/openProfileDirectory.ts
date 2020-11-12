@@ -3,12 +3,12 @@ import { _ } from '@joplin/lib/locale';
 import bridge from '../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'openProfileDirectory',
 	label: () => _('Open profile directory'),
 };
 
-export const runtime = ():CommandRuntime => {
+export const runtime = (): CommandRuntime => {
 	return {
 		execute: async () => {
 			bridge().openItem(Setting.value('profileDir'));

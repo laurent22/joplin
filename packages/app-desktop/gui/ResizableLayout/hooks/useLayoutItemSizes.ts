@@ -2,28 +2,28 @@ import { useMemo } from 'react';
 import { LayoutItem, Size, dragBarThickness } from '../ResizableLayout';
 
 export interface LayoutItemSizes {
-	[key:string]: Size,
+	[key: string]: Size,
 }
 
-export function itemSize(item:LayoutItem, sizes:LayoutItemSizes):Size {
+export function itemSize(item: LayoutItem, sizes: LayoutItemSizes): Size {
 	return {
 		width: 'width' in item ? item.width : sizes[item.key].width,
 		height: 'height' in item ? item.height : sizes[item.key].height,
 	};
 }
 
-function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutItemSizes {
+function calculateChildrenSizes(item: LayoutItem, sizes: LayoutItemSizes): LayoutItemSizes {
 	if (!item.children) return sizes;
 
 	const parentSize = itemSize(item, sizes);
 
-	const remainingSize:Size = {
+	const remainingSize: Size = {
 		width: parentSize.width,
 		height: parentSize.height,
 	};
 
-	const noWidthChildren:LayoutItem[] = [];
-	const noHeightChildren:LayoutItem[] = [];
+	const noWidthChildren: LayoutItem[] = [];
+	const noHeightChildren: LayoutItem[] = [];
 
 	for (const child of item.children) {
 		let w = 'width' in child ? child.width : null;
@@ -65,9 +65,9 @@ function calculateChildrenSizes(item:LayoutItem, sizes:LayoutItemSizes):LayoutIt
 	return sizes;
 }
 
-export default function useLayoutItemSizes(layout:LayoutItem) {
+export default function useLayoutItemSizes(layout: LayoutItem) {
 	return useMemo(() => {
-		let sizes:LayoutItemSizes = {};
+		let sizes: LayoutItemSizes = {};
 
 		if (!('width' in layout) || !('height' in layout)) throw new Error('width and height are required on layout root');
 

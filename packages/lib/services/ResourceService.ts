@@ -12,11 +12,11 @@ const { sprintf } = require('sprintf-js');
 
 export default class ResourceService extends BaseService {
 
-	private static isRunningInBackground_:boolean = false;
+	private static isRunningInBackground_: boolean = false;
 
-	private maintenanceCalls_:boolean[] = [];
-	private maintenanceTimer1_:any = null
-	private maintenanceTimer2_:any = null
+	private maintenanceCalls_: boolean[] = [];
+	private maintenanceTimer1_: any = null
+	private maintenanceTimer2_: any = null
 
 	public async indexNoteResources() {
 		this.logger().info('ResourceService::indexNoteResources: Start');
@@ -39,10 +39,10 @@ export default class ResourceService extends BaseService {
 
 			if (!changes.length) break;
 
-			const noteIds = changes.map((a:any) => a.item_id);
+			const noteIds = changes.map((a: any) => a.item_id);
 			const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN ("${noteIds.join('","')}")`);
 
-			const noteById = (noteId:string) => {
+			const noteById = (noteId: string) => {
 				for (let i = 0; i < notes.length; i++) {
 					if (notes[i].id === noteId) return notes[i];
 				}
@@ -95,12 +95,12 @@ export default class ResourceService extends BaseService {
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}
 
-	public async setAssociatedResources(noteId:string, noteBody:string) {
+	public async setAssociatedResources(noteId: string, noteBody: string) {
 		const resourceIds = await Note.linkedResourceIds(noteBody);
 		await NoteResource.setAssociatedResources(noteId, resourceIds);
 	}
 
-	public async deleteOrphanResources(expiryDelay:number = null) {
+	public async deleteOrphanResources(expiryDelay: number = null) {
 		if (expiryDelay === null) expiryDelay = Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000;
 		const resourceIds = await NoteResource.orphanResources(expiryDelay);
 		this.logger().info('ResourceService::deleteOrphanResources:', resourceIds);
@@ -119,7 +119,7 @@ export default class ResourceService extends BaseService {
 		}
 	}
 
-	private static async autoSetFileSize(resourceId:string, filePath:string, waitTillExists:boolean = true) {
+	private static async autoSetFileSize(resourceId: string, filePath: string, waitTillExists: boolean = true) {
 		const itDoes = await shim.fsDriver().waitTillExists(filePath, waitTillExists ? 10000 : 0);
 		if (!itDoes) {
 			// this.logger().warn('Trying to set file size on non-existent resource:', resourceId, filePath);
@@ -182,7 +182,7 @@ export default class ResourceService extends BaseService {
 		});
 	}
 
-	private static instance_:ResourceService = null;
+	private static instance_: ResourceService = null;
 
 	public static instance() {
 		if (this.instance_) return this.instance_;

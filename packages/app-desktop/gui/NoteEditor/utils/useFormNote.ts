@@ -23,8 +23,8 @@ interface HookDependencies {
 	isProvisional: boolean,
 	titleInputRef: any,
 	editorRef: any,
-	onBeforeLoad(event:OnLoadEvent):void,
-	onAfterLoad(event:OnLoadEvent):void,
+	onBeforeLoad(event: OnLoadEvent): void,
+	onAfterLoad(event: OnLoadEvent): void,
 }
 
 function installResourceChangeHandler(onResourceChangeHandler: Function) {
@@ -41,7 +41,7 @@ function uninstallResourceChangeHandler(onResourceChangeHandler: Function) {
 	ResourceEditWatcher.instance().off('resourceChange', onResourceChangeHandler);
 }
 
-function resourceInfosChanged(a:ResourceInfos, b:ResourceInfos):boolean {
+function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 	if (Object.keys(a).length !== Object.keys(b).length) return true;
 
 	for (const id in a) {
@@ -57,7 +57,7 @@ function resourceInfosChanged(a:ResourceInfos, b:ResourceInfos):boolean {
 	return false;
 }
 
-export default function useFormNote(dependencies:HookDependencies) {
+export default function useFormNote(dependencies: HookDependencies) {
 	const { syncStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
@@ -186,7 +186,7 @@ export default function useFormNote(dependencies:HookDependencies) {
 		};
 	}, [noteId, isProvisional, formNote]);
 
-	const onResourceChange = useCallback(async function(event:any = null) {
+	const onResourceChange = useCallback(async function(event: any = null) {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
 		if (!event || resourceIds.indexOf(event.id) >= 0) {
 			clearResourceCache();
@@ -213,7 +213,7 @@ export default function useFormNote(dependencies:HookDependencies) {
 		async function runEffect() {
 			const r = await attachedResources(formNote.body);
 			if (cancelled) return;
-			setResourceInfos((previous:ResourceInfos) => {
+			setResourceInfos((previous: ResourceInfos) => {
 				return resourceInfosChanged(previous, r) ? r : previous;
 			});
 		}

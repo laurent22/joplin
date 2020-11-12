@@ -8,19 +8,19 @@ const { filename, dirname } = require('../../path-utils');
 const uslug = require('uslug');
 
 interface Plugins {
-	[key:string]: Plugin
+	[key: string]: Plugin
 }
 
-function makePluginId(source:string):string {
+function makePluginId(source: string): string {
 	// https://www.npmjs.com/package/slug#options
 	return uslug(source).substr(0,32);
 }
 
 export default class PluginService extends BaseService {
 
-	private static instance_:PluginService = null;
+	private static instance_: PluginService = null;
 
-	public static instance():PluginService {
+	public static instance(): PluginService {
 		if (!this.instance_) {
 			this.instance_ = new PluginService();
 		}
@@ -28,35 +28,35 @@ export default class PluginService extends BaseService {
 		return this.instance_;
 	}
 
-	private store_:any = null;
-	private platformImplementation_:any = null;
-	private plugins_:Plugins = {};
-	private runner_:BasePluginRunner = null;
+	private store_: any = null;
+	private platformImplementation_: any = null;
+	private plugins_: Plugins = {};
+	private runner_: BasePluginRunner = null;
 
-	initialize(platformImplementation:any, runner:BasePluginRunner, store:any) {
+	initialize(platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.store_ = store;
 		this.runner_ = runner;
 		this.platformImplementation_ = platformImplementation;
 	}
 
-	public get plugins():Plugins {
+	public get plugins(): Plugins {
 		return this.plugins_;
 	}
 
-	public pluginById(id:string):Plugin {
+	public pluginById(id: string): Plugin {
 		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 
 		return this.plugins_[id];
 	}
 
-	private async parsePluginJsBundle(jsBundleString:string) {
+	private async parsePluginJsBundle(jsBundleString: string) {
 		const scriptText = jsBundleString;
 		const lines = scriptText.split('\n');
-		const manifestText:string[] = [];
+		const manifestText: string[] = [];
 
 		const StateStarted = 1;
 		const StateInManifest = 2;
-		let state:number = StateStarted;
+		let state: number = StateStarted;
 
 		for (let line of lines) {
 			line = line.trim();
@@ -85,12 +85,12 @@ export default class PluginService extends BaseService {
 		};
 	}
 
-	public async loadPluginFromString(pluginId:string, baseDir:string, jsBundleString:string):Promise<Plugin> {
+	public async loadPluginFromString(pluginId: string, baseDir: string, jsBundleString: string): Promise<Plugin> {
 		const r = await this.parsePluginJsBundle(jsBundleString);
 		return this.loadPlugin(pluginId, baseDir, r.manifestText, r.scriptText);
 	}
 
-	private async loadPluginFromPath(path:string):Promise<Plugin> {
+	private async loadPluginFromPath(path: string): Promise<Plugin> {
 		const fsDriver = shim.fsDriver();
 
 		if (path.toLowerCase().endsWith('.js')) return this.loadPluginFromString(filename(path), dirname(path), await fsDriver.readFile(path));
@@ -109,7 +109,7 @@ export default class PluginService extends BaseService {
 		return this.loadPlugin(pluginId, distPath, manifestText, scriptText);
 	}
 
-	private async loadPlugin(pluginId:string, baseDir:string, manifestText:string, scriptText:string):Promise<Plugin> {
+	private async loadPlugin(pluginId: string, baseDir: string, manifestText: string, scriptText: string): Promise<Plugin> {
 		const manifest = manifestFromObject(JSON.parse(manifestText));
 
 		// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
@@ -117,7 +117,7 @@ export default class PluginService extends BaseService {
 		// such folders but to keep things sane we disallow it.
 		if (this.plugins_[pluginId]) throw new Error(`There is already a plugin with this ID: ${pluginId}`);
 
-		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger(), (action:any) => this.store_.dispatch(action));
+		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger(), (action: any) => this.store_.dispatch(action));
 
 		this.store_.dispatch({
 			type: 'PLUGIN_ADD',
@@ -131,15 +131,15 @@ export default class PluginService extends BaseService {
 		return plugin;
 	}
 
-	public async loadAndRunPlugins(pluginDirOrPaths:string | string[]) {
+	public async loadAndRunPlugins(pluginDirOrPaths: string | string[]) {
 		let pluginPaths = [];
 
 		if (Array.isArray(pluginDirOrPaths)) {
 			pluginPaths = pluginDirOrPaths;
 		} else {
 			pluginPaths = (await shim.fsDriver().readDirStats(pluginDirOrPaths))
-				.filter((stat:any) => (stat.isDirectory() || stat.path.toLowerCase().endsWith('.js')))
-				.map((stat:any) => `${pluginDirOrPaths}/${stat.path}`);
+				.filter((stat: any) => (stat.isDirectory() || stat.path.toLowerCase().endsWith('.js')))
+				.map((stat: any) => `${pluginDirOrPaths}/${stat.path}`);
 		}
 
 		for (const pluginPath of pluginPaths) {
@@ -157,7 +157,7 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	public async runPlugin(plugin:Plugin) {
+	public async runPlugin(plugin: Plugin) {
 		this.plugins_[plugin.id] = plugin;
 		const pluginApi = new Global(this.logger(), this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);

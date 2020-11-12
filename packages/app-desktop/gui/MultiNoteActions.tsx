@@ -14,8 +14,8 @@ interface MultiNoteActionsProps {
 	plugins: PluginStates,
 }
 
-function styles_(props:MultiNoteActionsProps) {
-	return buildStyle('MultiNoteActions', props.themeId, (theme:any) => {
+function styles_(props: MultiNoteActionsProps) {
+	return buildStyle('MultiNoteActions', props.themeId, (theme: any) => {
 		return {
 			root: {
 				display: 'inline-flex',
@@ -35,10 +35,10 @@ function styles_(props:MultiNoteActionsProps) {
 	});
 }
 
-export default function MultiNoteActions(props:MultiNoteActionsProps) {
+export default function MultiNoteActions(props: MultiNoteActionsProps) {
 	const styles = styles_(props);
 
-	const multiNotesButton_click = (item:any) => {
+	const multiNotesButton_click = (item: any) => {
 		if (item.submenu) {
 			item.submenu.popup(bridge().window());
 		} else {

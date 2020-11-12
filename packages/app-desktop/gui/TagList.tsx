@@ -12,7 +12,7 @@ interface Props {
 	items: any[],
 }
 
-function TagList(props:Props) {
+function TagList(props: Props) {
 	const style = useMemo(() => {
 		const theme = themeStyle(props.themeId);
 
@@ -30,7 +30,7 @@ function TagList(props:Props) {
 	const tags = useMemo(() => {
 		const output = props.items.slice();
 
-		output.sort((a:any, b:any) => {
+		output.sort((a: any, b: any) => {
 			return a.title < b.title ? -1 : +1;
 		});
 
@@ -56,7 +56,7 @@ function TagList(props:Props) {
 	);
 }
 
-const mapStateToProps = (state:AppState) => {
+const mapStateToProps = (state: AppState) => {
 	return { themeId: state.settings.theme };
 };
 

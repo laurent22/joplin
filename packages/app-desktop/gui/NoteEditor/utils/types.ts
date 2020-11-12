@@ -4,7 +4,7 @@ import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUt
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
 export interface ToolbarButtonInfos {
-	[key:string]: ToolbarButtonInfo;
+	[key: string]: ToolbarButtonInfo;
 }
 
 export interface NoteEditorProps {
@@ -109,7 +109,7 @@ export interface FormNote {
 	originalCss: string,
 }
 
-export function defaultFormNote():FormNote {
+export function defaultFormNote(): FormNote {
 	return {
 		id: '',
 		parent_id: '',
@@ -133,7 +133,7 @@ export interface ResourceInfo {
 }
 
 export interface ResourceInfos {
-	[index:string]: ResourceInfo,
+	[index: string]: ResourceInfo,
 }
 
 export enum ScrollOptionTypes {

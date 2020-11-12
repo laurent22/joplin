@@ -13,8 +13,8 @@ interface NoteToolbarProps {
 	toolbarButtonInfos: ToolbarButtonInfo[],
 }
 
-function styles_(props:NoteToolbarProps) {
-	return buildStyle('NoteToolbar', props.themeId, (theme:any) => {
+function styles_(props: NoteToolbarProps) {
+	return buildStyle('NoteToolbar', props.themeId, (theme: any) => {
 		return {
 			root: {
 				...props.style,
@@ -25,14 +25,14 @@ function styles_(props:NoteToolbarProps) {
 	});
 }
 
-function NoteToolbar(props:NoteToolbarProps) {
+function NoteToolbar(props: NoteToolbarProps) {
 	const styles = styles_(props);
 	return <ToolbarBase style={styles.root} items={props.toolbarButtonInfos} />;
 }
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	const whenClauseContext = stateToWhenClauseContext(state);
 
 	return {

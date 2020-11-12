@@ -79,7 +79,7 @@ describe('services_PluginService', function() {
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
-		expect(allFolders.map((f:any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
+		expect(allFolders.map((f: any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 
 	it('should load plugins from JS bundles', asyncTest(async () => {

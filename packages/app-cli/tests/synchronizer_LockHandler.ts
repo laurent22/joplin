@@ -3,7 +3,7 @@ import LockHandler, { LockType, LockHandlerOptions, Lock } from '@joplin/lib/ser
 
 const { isNetworkSyncTarget, asyncTest, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('./test-utils.js');
 
-process.on('unhandledRejection', (reason:any, p:any) => {
+process.on('unhandledRejection', (reason: any, p: any) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
@@ -14,13 +14,13 @@ process.on('unhandledRejection', (reason:any, p:any) => {
 // For that reason we add this multiplier for non-memory sync targets.
 const timeoutMultipler = isNetworkSyncTarget() ? 100 : 1;
 
-let lockHandler_:LockHandler = null;
+let lockHandler_: LockHandler = null;
 
-function newLockHandler(options:LockHandlerOptions = null):LockHandler {
+function newLockHandler(options: LockHandlerOptions = null): LockHandler {
 	return new LockHandler(fileApi(), options);
 }
 
-function lockHandler():LockHandler {
+function lockHandler(): LockHandler {
 	if (lockHandler_) return lockHandler_;
 	lockHandler_ = new LockHandler(fileApi());
 	return lockHandler_;
@@ -28,7 +28,7 @@ function lockHandler():LockHandler {
 
 describe('synchronizer_LockHandler', function() {
 
-	beforeEach(async (done:Function) => {
+	beforeEach(async (done: Function) => {
 		// logger.setLevel(Logger.LEVEL_WARN);
 		lockHandler_ = null;
 		await setupDatabaseAndSynchronizer(1);
@@ -96,8 +96,8 @@ describe('synchronizer_LockHandler', function() {
 		});
 
 		const lock = await handler.acquireLock(LockType.Sync, 'desktop', '111');
-		let autoLockError:any = null;
-		handler.startAutoLockRefresh(lock, (error:any) => {
+		let autoLockError: any = null;
+		handler.startAutoLockRefresh(lock, (error: any) => {
 			autoLockError = error;
 		});
 
@@ -144,8 +144,8 @@ describe('synchronizer_LockHandler', function() {
 		const lockHandler = newLockHandler();
 
 		{
-			const lock1:Lock = { type: LockType.Exclusive, clientId: '1', clientType: 'd' };
-			const lock2:Lock = { type: LockType.Exclusive, clientId: '2', clientType: 'd' };
+			const lock1: Lock = { type: LockType.Exclusive, clientId: '1', clientType: 'd' };
+			const lock2: Lock = { type: LockType.Exclusive, clientId: '2', clientType: 'd' };
 			await lockHandler.saveLock_(lock1);
 			await msleep(100);
 			await lockHandler.saveLock_(lock2);

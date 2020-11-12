@@ -27,10 +27,10 @@ interface Props {
 	onLoadEnd?: Function,
 }
 
-export default function NoteBodyViewer(props:Props) {
+export default function NoteBodyViewer(props: Props) {
 	const theme = themeStyle(props.themeId);
 
-	const webViewStyle:any = useMemo(() => {
+	const webViewStyle: any = useMemo(() => {
 		return { backgroundColor: theme.backgroundColor };
 	}, [theme.backgroundColor]);
 

@@ -34,16 +34,16 @@ interface ContextMenuItem {
 }
 
 interface ContextMenuItems {
-	[key:string]: ContextMenuItem;
+	[key: string]: ContextMenuItem;
 }
 
-async function resourceInfo(options:ContextMenuOptions):Promise<any> {
+async function resourceInfo(options: ContextMenuOptions): Promise<any> {
 	const resource = options.resourceId ? await Resource.load(options.resourceId) : null;
 	const resourcePath = resource ? Resource.fullPath(resource) : '';
 	return { resource, resourcePath };
 }
 
-function handleCopyToClipboard(options:ContextMenuOptions) {
+function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {
 		clipboard.writeText(options.textToCopy);
 	} else if (options.htmlToCopy) {
@@ -51,11 +51,11 @@ function handleCopyToClipboard(options:ContextMenuOptions) {
 	}
 }
 
-export function menuItems():ContextMenuItems {
+export function menuItems(): ContextMenuItems {
 	return {
 		open: {
 			label: _('Open...'),
-			onAction: async (options:ContextMenuOptions) => {
+			onAction: async (options: ContextMenuOptions) => {
 				try {
 					await ResourceEditWatcher.instance().openAndWatch(options.resourceId);
 				} catch (error) {
@@ -63,11 +63,11 @@ export function menuItems():ContextMenuItems {
 					bridge().showErrorMessageBox(error.message);
 				}
 			},
-			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
 		saveAs: {
 			label: _('Save as...'),
-			onAction: async (options:ContextMenuOptions) => {
+			onAction: async (options: ContextMenuOptions) => {
 				const { resourcePath, resource } = await resourceInfo(options);
 				const filePath = bridge().showSaveDialog({
 					defaultPath: resource.filename ? resource.filename : resource.title,
@@ -75,58 +75,58 @@ export function menuItems():ContextMenuItems {
 				if (!filePath) return;
 				await fs.copy(resourcePath, filePath);
 			},
-			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
 		revealInFolder: {
 			label: _('Reveal file in folder'),
-			onAction: async (options:ContextMenuOptions) => {
+			onAction: async (options: ContextMenuOptions) => {
 				const { resourcePath } = await resourceInfo(options);
 				bridge().showItemInFolder(resourcePath);
 			},
-			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),
-			onAction: async (options:ContextMenuOptions) => {
+			onAction: async (options: ContextMenuOptions) => {
 				const { resourcePath } = await resourceInfo(options);
 				clipboard.writeText(toSystemSlashes(resourcePath));
 			},
-			isActive: (itemType:ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
 		cut: {
 			label: _('Cut'),
-			onAction: async (options:ContextMenuOptions) => {
+			onAction: async (options: ContextMenuOptions) => {
 				handleCopyToClipboard(options);
 				options.insertContent('');
 			},
-			isActive: (_itemType:ContextMenuItemType, options:ContextMenuOptions) => !options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy),
+			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy),
 		},
 		copy: {
 			label: _('Copy'),
-			onAction: async (options:ContextMenuOptions) => {
+			onAction: async (options: ContextMenuOptions) => {
 				handleCopyToClipboard(options);
 			},
-			isActive: (_itemType:ContextMenuItemType, options:ContextMenuOptions) => !!options.textToCopy || !!options.htmlToCopy,
+			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !!options.textToCopy || !!options.htmlToCopy,
 		},
 		paste: {
 			label: _('Paste'),
-			onAction: async (options:ContextMenuOptions) => {
+			onAction: async (options: ContextMenuOptions) => {
 				const content = clipboard.readHTML() ? clipboard.readHTML() : clipboard.readText();
 				options.insertContent(content);
 			},
-			isActive: (_itemType:ContextMenuItemType, options:ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
+			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
 		},
 		copyLinkUrl: {
 			label: _('Copy Link Address'),
-			onAction: async (options:ContextMenuOptions) => {
+			onAction: async (options: ContextMenuOptions) => {
 				clipboard.writeText(options.linkToCopy !== null ? options.linkToCopy : options.textToCopy);
 			},
-			isActive: (itemType:ContextMenuItemType, options:ContextMenuOptions) => itemType === ContextMenuItemType.Link || !!options.linkToCopy,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === ContextMenuItemType.Link || !!options.linkToCopy,
 		},
 	};
 }
 
-export default async function contextMenu(options:ContextMenuOptions) {
+export default async function contextMenu(options: ContextMenuOptions) {
 	const menu = new Menu();
 
 	const items = menuItems();

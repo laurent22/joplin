@@ -19,7 +19,7 @@ interface MarkupToHtmlOptions {
 	resourceInfos?: ResourceInfos,
 }
 
-export default function useMarkupToHtml(deps:HookDependencies) {
+export default function useMarkupToHtml(deps: HookDependencies) {
 	const { themeId, customCss, plugins } = deps;
 
 	const markupToHtml = useMemo(() => {

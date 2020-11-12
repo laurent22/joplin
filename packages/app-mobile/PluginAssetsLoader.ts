@@ -6,8 +6,8 @@ const KvStore = require('@joplin/lib/services/KvStore').default;
 
 export default class PluginAssetsLoader {
 
-	static instance_:PluginAssetsLoader = null;
-	logger_:any = null;
+	static instance_: PluginAssetsLoader = null;
+	logger_: any = null;
 
 	static instance() {
 		if (PluginAssetsLoader.instance_) return PluginAssetsLoader.instance_;
@@ -15,7 +15,7 @@ export default class PluginAssetsLoader {
 		return PluginAssetsLoader.instance_;
 	}
 
-	setLogger(logger:any) {
+	setLogger(logger: any) {
 		this.logger_ = logger;
 	}
 

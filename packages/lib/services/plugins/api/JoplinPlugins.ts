@@ -10,7 +10,7 @@ export default class JoplinPlugins {
 	private logger: Logger;
 	private plugin: Plugin;
 
-	public constructor(logger:Logger, plugin:Plugin) {
+	public constructor(logger: Logger, plugin: Plugin) {
 		this.logger = logger;
 		this.plugin = plugin;
 	}
@@ -36,11 +36,11 @@ export default class JoplinPlugins {
 			// We don't use `await` when calling onStart because the plugin might be awaiting
 			// in that call too (for example, when opening a dialog on startup) so we don't
 			// want to get stuck here.
-			script.onStart({}).catch((error:any) => {
+			script.onStart({}).catch((error: any) => {
 				// For some reason, error thrown from the executed script do not have the type "Error"
 				// but are instead plain object. So recreate the Error object here so that it can
 				// be handled correctly by loggers, etc.
-				const newError:Error = new Error(error.message);
+				const newError: Error = new Error(error.message);
 				newError.stack = error.stack;
 				this.logger.error(`In plugin ${this.plugin.id}:`, newError);
 			}).then(() => {
@@ -63,7 +63,7 @@ export default class JoplinPlugins {
 	 * @param id A unique ID for the content script.
 	 * @param scriptPath Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set `scriptPath` to `"./content_script.js`.
 	 */
-	async registerContentScript(type:ContentScriptType, id:string, scriptPath:string) {
+	async registerContentScript(type: ContentScriptType, id: string, scriptPath: string) {
 		return this.plugin.registerContentScript(type, id, scriptPath);
 	}
 }

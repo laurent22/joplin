@@ -115,6 +115,8 @@ module.exports = {
 		'space-before-blocks': 'error',
 		'spaced-comment': ['error', 'always'],
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
+
+		'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 	},
 	'plugins': [
 		'react',

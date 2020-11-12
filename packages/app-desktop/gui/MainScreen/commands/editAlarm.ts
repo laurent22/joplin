@@ -5,15 +5,15 @@ import { stateUtils } from '@joplin/lib/reducer';
 const Note = require('@joplin/lib/models/Note');
 const time = require('@joplin/lib/time').default;
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'editAlarm',
 	label: () => _('Set alarm'),
 	iconName: 'icon-alarm',
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, noteId:string = null) => {
+		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
 			const note = await Note.load(noteId);
@@ -28,7 +28,7 @@ export const runtime = (comp:any):CommandRuntime => {
 					inputType: 'datetime',
 					buttons: ['ok', 'cancel', 'clear'],
 					value: note.todo_due ? new Date(note.todo_due) : defaultDate,
-					onClose: async (answer:any, buttonType:string) => {
+					onClose: async (answer: any, buttonType: string) => {
 						let newNote = null;
 
 						if (buttonType === 'clear') {
@@ -56,7 +56,7 @@ export const runtime = (comp:any):CommandRuntime => {
 
 		enabledCondition: 'oneNoteSelected && noteIsTodo && !noteTodoCompleted',
 
-		mapStateToTitle: (state:any) => {
+		mapStateToTitle: (state: any) => {
 			const note = stateUtils.selectedNote(state);
 			return note && note.todo_due ? time.formatMsToLocal(note.todo_due) : null;
 		},

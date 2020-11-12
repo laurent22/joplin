@@ -19,14 +19,14 @@ interface Props {
 	selectedNoteId: string,
 }
 
-function SearchBar(props:Props) {
+function SearchBar(props: Props) {
 	const [query, setQuery] = useState('');
 	const [searchStarted, setSearchStarted] = useState(false);
 	const iconName = !searchStarted ? CommandService.instance().iconName('search') : 'fa fa-times';
 	const searchId = useRef(uuid.create());
 
 	useEffect(() => {
-		function search(searchId:string, query:string, dispatch:Function) {
+		function search(searchId: string, query: string, dispatch: Function) {
 			dispatch({
 				type: 'SEARCH_UPDATE',
 				search: {
@@ -76,7 +76,7 @@ function SearchBar(props:Props) {
 		}
 	}, [props.selectedNoteId]);
 
-	function onChange(event:any) {
+	function onChange(event: any) {
 		setSearchStarted(true);
 		setQuery(event.currentTarget.value);
 	}
@@ -100,7 +100,7 @@ function SearchBar(props:Props) {
 		}, 300);
 	}
 
-	const onKeyDown = useCallback((event:any) => {
+	const onKeyDown = useCallback((event: any) => {
 		if (event.key === 'Escape') {
 			if (document.activeElement) (document.activeElement as any).blur();
 			onExitSearch();
@@ -136,7 +136,7 @@ function SearchBar(props:Props) {
 	);
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return {
 		notesParentType: state.notesParentType,
 		selectedNoteId: stateUtils.selectedNoteId(state),

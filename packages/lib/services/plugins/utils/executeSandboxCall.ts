@@ -1,8 +1,8 @@
 import Global from '../api/Global';
 
-type EventHandler = (callbackId:string, args:any[]) => void;
+type EventHandler = (callbackId: string, args: any[])=> void;
 
-function createEventHandlers(arg:any, eventHandler:EventHandler) {
+function createEventHandlers(arg: any, eventHandler: EventHandler) {
 	if (Array.isArray(arg)) {
 		for (let i = 0; i < arg.length; i++) {
 			arg[i] = createEventHandlers(arg[i], eventHandler);
@@ -10,7 +10,7 @@ function createEventHandlers(arg:any, eventHandler:EventHandler) {
 		return arg;
 	} else if (typeof arg === 'string' && arg.indexOf('___plugin_event_') === 0) {
 		const callbackId = arg;
-		return async (...args:any[]) => {
+		return async (...args: any[]) => {
 			const result = await eventHandler(callbackId, args);
 			return result;
 		};
@@ -25,11 +25,11 @@ function createEventHandlers(arg:any, eventHandler:EventHandler) {
 	return arg;
 }
 
-export default async function executeSandboxCall(pluginId:string, sandbox:Global, path:string, args:any[], eventHandler:EventHandler) {
+export default async function executeSandboxCall(pluginId: string, sandbox: Global, path: string, args: any[], eventHandler: EventHandler) {
 	const pathFragments = path.split('.');
 
-	let parent:any = null;
-	let fn:any = sandbox;
+	let parent: any = null;
+	let fn: any = sandbox;
 
 	if (!fn) throw new Error(`No sandbox for plugin ${pluginId}`); // Sanity check as normally cannot happen
 

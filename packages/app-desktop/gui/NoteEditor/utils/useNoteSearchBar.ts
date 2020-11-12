@@ -9,7 +9,7 @@ interface LocalSearch {
 	timestamp: number,
 }
 
-function defaultLocalSearch():LocalSearch {
+function defaultLocalSearch(): LocalSearch {
 	return {
 		query: '',
 		selectedIndex: 0,
@@ -23,8 +23,8 @@ export default function useNoteSearchBar() {
 	const [showLocalSearch, setShowLocalSearch] = useState(false);
 	const [localSearch, setLocalSearch] = useState<LocalSearch>(defaultLocalSearch());
 
-	const onChange = useCallback((query:string) => {
-		setLocalSearch((prev:LocalSearch) => {
+	const onChange = useCallback((query: string) => {
+		setLocalSearch((prev: LocalSearch) => {
 			return {
 				query: query,
 				selectedIndex: 0,
@@ -35,8 +35,8 @@ export default function useNoteSearchBar() {
 		});
 	}, []);
 
-	const noteSearchBarNextPrevious = useCallback((inc:number) => {
-		setLocalSearch((prev:LocalSearch) => {
+	const noteSearchBarNextPrevious = useCallback((inc: number) => {
+		setLocalSearch((prev: LocalSearch) => {
 			const ls = Object.assign({}, prev);
 			ls.selectedIndex += inc;
 			ls.timestamp = Date.now();
@@ -59,8 +59,8 @@ export default function useNoteSearchBar() {
 		setLocalSearch(defaultLocalSearch());
 	}, []);
 
-	const setResultCount = useCallback((count:number) => {
-		setLocalSearch((prev:LocalSearch) => {
+	const setResultCount = useCallback((count: number) => {
+		setLocalSearch((prev: LocalSearch) => {
 			if (prev.resultCount === count && !prev.searching) return prev;
 
 			return {
@@ -71,7 +71,7 @@ export default function useNoteSearchBar() {
 		});
 	}, []);
 
-	const searchMarkers = useCallback(():SearchMarkers => {
+	const searchMarkers = useCallback((): SearchMarkers => {
 		return {
 			options: {
 				selectedIndex: localSearch.selectedIndex,

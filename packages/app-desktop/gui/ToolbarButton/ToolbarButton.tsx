@@ -12,18 +12,18 @@ interface Props {
 	readonly backgroundHover?: boolean,
 }
 
-function isFontAwesomeIcon(iconName:string) {
+function isFontAwesomeIcon(iconName: string) {
 	const s = iconName.split(' ');
 	return s.length === 2 && ['fa', 'fas'].includes(s[0]);
 }
 
-function getProp(props:Props, name:string, defaultValue:any = null) {
+function getProp(props: Props, name: string, defaultValue: any = null) {
 	if (props.toolbarButtonInfo && (name in props.toolbarButtonInfo)) return (props.toolbarButtonInfo as any)[name];
 	if (!(name in props)) return defaultValue;
 	return (props as any)[name];
 }
 
-export default function ToolbarButton(props:Props) {
+export default function ToolbarButton(props: Props) {
 	const title = getProp(props, 'title', '');
 	const tooltip = getProp(props, 'tooltip', title);
 

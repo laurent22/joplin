@@ -353,7 +353,7 @@ export default class KeymapService extends BaseService {
 	private platform: string;
 	private customKeymapPath: string;
 	private defaultKeymapItems: KeymapItem[];
-	private lastSaveTime_:number;
+	private lastSaveTime_: number;
 
 	public constructor() {
 		super();
@@ -361,7 +361,7 @@ export default class KeymapService extends BaseService {
 		this.lastSaveTime_ = Date.now();
 	}
 
-	public get lastSaveTime():number {
+	public get lastSaveTime(): number {
 		return this.lastSaveTime_;
 	}
 
@@ -369,7 +369,7 @@ export default class KeymapService extends BaseService {
 	// **except** if they are already in it. Basically this is a mechanism
 	// to add all the commands from the command service to the default
 	// keymap.
-	public initialize(additionalDefaultCommandNames:string[] = [], platform: string = shim.platformName()) {
+	public initialize(additionalDefaultCommandNames: string[] = [], platform: string = shim.platformName()) {
 		this.platform = platform;
 
 		switch (platform) {
@@ -383,7 +383,7 @@ export default class KeymapService extends BaseService {
 		}
 
 		for (const name of additionalDefaultCommandNames) {
-			if (this.defaultKeymapItems.find((item:KeymapItem) => item.command === name)) continue;
+			if (this.defaultKeymapItems.find((item: KeymapItem) => item.command === name)) continue;
 			this.defaultKeymapItems.push({
 				command: name,
 				accelerator: null,
@@ -439,14 +439,14 @@ export default class KeymapService extends BaseService {
 		return !!this.keymap[command];
 	}
 
-	private convertToPlatform(accelerator:string) {
+	private convertToPlatform(accelerator: string) {
 		return accelerator
 			.replace(/CmdOrCtrl/g, this.platform === 'darwin' ? 'Cmd' : 'Ctrl')
 			.replace(/Option/g, this.platform === 'darwin' ? 'Option' : 'Alt')
 			.replace(/Alt/g, this.platform === 'darwin' ? 'Option' : 'Alt');
 	}
 
-	public registerCommandAccelerator(commandName:string, accelerator:string) {
+	public registerCommandAccelerator(commandName: string, accelerator: string) {
 		// If the command is already registered, we don't register it again and
 		// we don't update the accelerator. This is because it might have been
 		// modified by the user and we don't want the plugin to overwrite this.
@@ -502,7 +502,7 @@ export default class KeymapService extends BaseService {
 		});
 
 		for (const commandName in this.keymap) {
-			if (!this.defaultKeymapItems.find((item:KeymapItem) => item.command === commandName)) {
+			if (!this.defaultKeymapItems.find((item: KeymapItem) => item.command === commandName)) {
 				customkeymapItems.push(this.keymap[commandName]);
 			}
 		}
@@ -608,7 +608,7 @@ export default class KeymapService extends BaseService {
 		if (!isValid) throw new Error(_('Accelerator "%s" is not valid.', accelerator));
 	}
 
-	public domToElectronAccelerator(event:any) {
+	public domToElectronAccelerator(event: any) {
 		const parts = [];
 
 		// We use the "keyCode" and not "key" because the modifier keys
@@ -646,13 +646,13 @@ export default class KeymapService extends BaseService {
 		eventManager.off(eventName, callback);
 	}
 
-	private static instance_:KeymapService = null;
+	private static instance_: KeymapService = null;
 
 	public static destroyInstance() {
 		this.instance_ = null;
 	}
 
-	public static instance():KeymapService {
+	public static instance(): KeymapService {
 		if (this.instance_) return this.instance_;
 
 		this.instance_ = new KeymapService();

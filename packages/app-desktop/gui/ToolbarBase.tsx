@@ -16,7 +16,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 	render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const style:any = Object.assign({
+		const style: any = Object.assign({
 			display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
@@ -25,15 +25,15 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 			paddingRight: theme.mainPadding,
 		}, this.props.style);
 
-		const groupStyle:any = {
+		const groupStyle: any = {
 			display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
 		};
 
-		const leftItemComps:any[] = [];
-		const centerItemComps:any[] = [];
-		const rightItemComps:any[] = [];
+		const leftItemComps: any[] = [];
+		const centerItemComps: any[] = [];
+		const rightItemComps: any[] = [];
 
 		if (this.props.items) {
 			for (let i = 0; i < this.props.items.length; i++) {
@@ -84,7 +84,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return { themeId: state.settings.theme };
 };
 

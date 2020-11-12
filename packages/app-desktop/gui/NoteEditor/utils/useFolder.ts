@@ -5,7 +5,7 @@ interface HookDependencies {
 	folderId: string,
 }
 
-export default function(dependencies:HookDependencies) {
+export default function(dependencies: HookDependencies) {
 	const { folderId } = dependencies;
 	const [folder, setFolder] = useState(null);
 

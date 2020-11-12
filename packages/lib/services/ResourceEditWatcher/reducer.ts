@@ -4,7 +4,7 @@ export const defaultState = {
 	watchedResources: {},
 };
 
-const reducer = produce((draft: Draft<any>, action:any) => {
+const reducer = produce((draft: Draft<any>, action: any) => {
 	if (action.type.indexOf('RESOURCE_EDIT_WATCHER_') !== 0) return;
 
 	try {

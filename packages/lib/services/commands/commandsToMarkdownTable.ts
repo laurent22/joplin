@@ -1,7 +1,7 @@
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../../markdownUtils';
 
-export default function commandsToMarkdownTable():string {
-	const headers:MarkdownTableHeader[] = [
+export default function commandsToMarkdownTable(): string {
+	const headers: MarkdownTableHeader[] = [
 		{
 			name: 'commandName',
 			label: 'Name',
@@ -16,11 +16,11 @@ export default function commandsToMarkdownTable():string {
 		},
 	];
 
-	const rows:MarkdownTableRow[] = [];
+	const rows: MarkdownTableRow[] = [];
 
 	for (const commandName in this.commands_) {
 
-		const row:MarkdownTableRow = {
+		const row: MarkdownTableRow = {
 			commandName: commandName,
 			description: this.label(commandName),
 		};

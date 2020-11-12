@@ -7,7 +7,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const Setting = require('@joplin/lib/models/Setting').default;
 const bridge = require('electron').remote.require('./bridge').default;
 
-function useAppCloseHandler(upgradeResult:SyncTargetUpgradeResult) {
+function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 	useEffect(function() {
 		async function onAppClose() {
 			let canClose = true;
@@ -61,7 +61,7 @@ function useStyle() {
 	}, []);
 }
 
-function useRestartOnDone(upgradeResult:SyncTargetUpgradeResult) {
+function useRestartOnDone(upgradeResult: SyncTargetUpgradeResult) {
 	useEffect(function() {
 		if (upgradeResult.done && !upgradeResult.error) {
 			bridge().restart();

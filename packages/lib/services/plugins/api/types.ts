@@ -24,7 +24,7 @@ export interface Command {
 	/**
 	 * Code to be ran when the command is executed. It may return a result.
 	 */
-	execute(...args:any[]):Promise<any | void>
+	execute(...args: any[]): Promise<any | void>
 
 	/**
 	 * Defines whether the command should be enabled or disabled, which in turns affects
@@ -99,22 +99,22 @@ export interface ExportModule {
 	/**
 	 * Called when the export process starts.
 	 */
-	onInit(context:ExportContext): Promise<void>;
+	onInit(context: ExportContext): Promise<void>;
 
 	/**
 	 * Called when an item needs to be processed. An "item" can be any Joplin object, such as a note, a folder, a notebook, etc.
 	 */
-	onProcessItem(context:ExportContext, itemType:number, item:any):Promise<void>;
+	onProcessItem(context: ExportContext, itemType: number, item: any): Promise<void>;
 
 	/**
 	 * Called when a resource file needs to be exported.
 	 */
-	onProcessResource(context:ExportContext, resource:any, filePath:string):Promise<void>;
+	onProcessResource(context: ExportContext, resource: any, filePath: string): Promise<void>;
 
 	/**
 	 * Called when the export process is done.
 	 */
-	onClose(context:ExportContext):Promise<void>;
+	onClose(context: ExportContext): Promise<void>;
 }
 
 export interface ImportModule {
@@ -153,16 +153,16 @@ export interface ImportModule {
 	/**
 	 * Called when the import process starts. There is only one event handler within which you should import the complete data.
 	 */
-	onExec(context:ImportContext): Promise<void>;
+	onExec(context: ImportContext): Promise<void>;
 }
 
 export interface ExportOptions {
 	format?: string,
-	path?:string,
+	path?: string,
 	sourceFolderIds?: string[],
 	sourceNoteIds?: string[],
-	modulePath?:string,
-	target?:FileSystemItem,
+	modulePath?: string,
+	target?: FileSystemItem,
 }
 
 export interface ExportContext {
@@ -186,7 +186,7 @@ export interface ImportContext {
 // =================================================================
 
 export interface Script {
-	onStart?(event:any):Promise<void>,
+	onStart?(event: any): Promise<void>,
 }
 
 // =================================================================
@@ -237,7 +237,7 @@ export interface MenuItem {
 export interface ButtonSpec {
 	id: ButtonId,
 	title?: string,
-	onClick?():void,
+	onClick?(): void,
 }
 
 export type ButtonId = string;
@@ -280,13 +280,13 @@ export interface SettingItem {
 	value: any,
 	type: SettingItemType,
 	public: boolean,
-	label:string,
+	label: string,
 
-	description?:string,
+	description?: string,
 	isEnum?: boolean,
 	section?: string,
-	options?:any,
-	appTypes?:string[],
+	options?: any,
+	appTypes?: string[],
 	secure?: boolean,
 	advanced?: boolean,
 	minimum?: number,

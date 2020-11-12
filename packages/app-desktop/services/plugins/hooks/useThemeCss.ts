@@ -9,7 +9,7 @@ interface HookDependencies {
 	themeId: number,
 }
 
-function themeToCssVariables(theme:any) {
+function themeToCssVariables(theme: any) {
 	const lines = [];
 	lines.push(':root {');
 
@@ -30,7 +30,7 @@ function themeToCssVariables(theme:any) {
 	return lines.join('\n');
 }
 
-export default function useThemeCss(dep:HookDependencies) {
+export default function useThemeCss(dep: HookDependencies) {
 	const { pluginId, themeId } = dep;
 
 	const [cssFilePath, setCssFilePath] = useState('');

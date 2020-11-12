@@ -8,35 +8,35 @@ const { replaceRegexDiacritics, pregQuote } = require('@joplin/lib/string-utils'
 const styled = require('styled-components').default;
 
 const StyledRoot = styled.div`
-	width: ${(props:any) => props.width}px;
-	height: ${(props:any) => props.height}px;
-	opacity: ${(props:any) => props.isProvisional ? '0.5' : '1'};
+	width: ${(props: any) => props.width}px;
+	height: ${(props: any) => props.height}px;
+	opacity: ${(props: any) => props.isProvisional ? '0.5' : '1'};
 	max-width: 100%;
 	box-sizing: border-box;
 	display: flex;
 	align-items: stretch;
 	position: relative;
-	background-color: ${(props:any) => props.selected ? props.theme.selectedColor : 'none'};
+	background-color: ${(props: any) => props.selected ? props.theme.selectedColor : 'none'};
 
 	border-style: solid;
-	border-color: ${(props:any) => props.theme.color};
-	border-top-width: ${(props:any) => props.dragItemPosition === 'top' ? 2 : 0}px;
-	border-bottom-width: ${(props:any) => props.dragItemPosition === 'bottom' ? 2 : 0}px;
+	border-color: ${(props: any) => props.theme.color};
+	border-top-width: ${(props: any) => props.dragItemPosition === 'top' ? 2 : 0}px;
+	border-bottom-width: ${(props: any) => props.dragItemPosition === 'bottom' ? 2 : 0}px;
 	border-right: none;
 	border-left: none;
 
 	// https://stackoverflow.com/questions/50174448/css-how-to-add-white-space-before-elements-border
 	&::before {
 		content: '';
-		border-bottom: 1px solid ${(props:any) => props.theme.dividerColor};
-		width: ${(props:any) => props.width - 32}px;
+		border-bottom: 1px solid ${(props: any) => props.theme.dividerColor};
+		width: ${(props: any) => props.width - 32}px;
 		position: absolute;
 		bottom: 0;
 		left: 16px;
 	}
 
 	&:hover {
-		background-color: ${(props:any) => props.theme.backgroundColorHover3};
+		background-color: ${(props: any) => props.theme.backgroundColorHover3};
 	}
 `;
 
@@ -61,7 +61,7 @@ interface NoteListItemProps {
 	onContextMenu(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void,
 }
 
-function NoteListItem(props:NoteListItemProps, ref:any) {
+function NoteListItem(props: NoteListItemProps, ref: any) {
 	const item = props.item;
 	const theme = themeStyle(props.themeId);
 	const hPadding = 16;
