@@ -2,6 +2,7 @@ import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 import produce from 'immer';
 import uuid from '@joplin/lib/uuid';
+import validateLayout from './validateLayout';
 
 export enum MoveDirection {
 	Up = 'up',
@@ -30,63 +31,6 @@ function array_move(arr: any[], old_index: number, new_index: number) {
 function findItemIndex(siblings: LayoutItem[], key: string) {
 	return siblings.findIndex((value: LayoutItem) => {
 		return value.key === key;
-	});
-}
-
-export function updateResizeRules(layout: LayoutItem): LayoutItem {
-	return produce(layout, (draft: any) => {
-		iterateItems(draft, (itemIndex: number, item: LayoutItem, parent: LayoutItem) => {
-			if (!parent) return true;
-			const isLastChild = itemIndex === parent.children.length - 1;
-			item.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastChild;
-			item.resizableBottom = parent.direction === LayoutItemDirection.Column && !isLastChild;
-			return true;
-		});
-	});
-}
-
-function updateItemSizes(layout: LayoutItem): LayoutItem {
-	return produce(layout, (draft: any) => {
-		iterateItems(draft, (itemIndex: number, item: LayoutItem, parent: LayoutItem) => {
-			if (!parent) return true;
-
-			// If a container has only one child, this child should not
-			// have a width and height, and simply fill up the container
-			if (parent.children.length === 1) {
-				delete item.width;
-				delete item.height;
-			}
-
-			// If all children of a container have a fixed width, the
-			// latest child should have a flexible width (i.e. no "width"
-			// property), so that it fills up the remaining space
-			if (itemIndex === parent.children.length - 1) {
-				let allChildrenAreSized = true;
-				for (const child of parent.children) {
-					if (parent.direction === LayoutItemDirection.Row) {
-						if (!child.width) {
-							allChildrenAreSized = false;
-							break;
-						}
-					} else {
-						if (!child.height) {
-							allChildrenAreSized = false;
-							break;
-						}
-					}
-				}
-
-				if (allChildrenAreSized) {
-					if (parent.direction === LayoutItemDirection.Row) {
-						delete item.width;
-					} else {
-						delete item.height;
-					}
-				}
-			}
-
-			return true;
-		});
 	});
 }
 
@@ -226,7 +170,8 @@ function moveItem(direction: MovementDirection, layout: LayoutItem, key: string,
 		});
 	});
 
-	return updateItemSizes(updateResizeRules(updatedLayout));
+	// return updateItemSizes(updateResizeRules(updatedLayout));
+	return validateLayout(updatedLayout);
 }
 
 export function moveHorizontal(layout: LayoutItem, key: string, inc: number): LayoutItem {

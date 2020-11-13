@@ -1,8 +1,9 @@
-import { LayoutItem } from './types';
+import { LayoutItem, Size } from './types';
 import produce from 'immer';
 import iterateItems from './iterateItems';
+import validateLayout from './validateLayout';
 
-export default function(layout: LayoutItem): LayoutItem {
+export function saveLayout(layout: LayoutItem): any {
 	const keptProperties = [
 		'visible',
 		'width',
@@ -21,4 +22,19 @@ export default function(layout: LayoutItem): LayoutItem {
 			return true;
 		});
 	});
+}
+
+export function loadLayout(layout: any, defaultLayout: LayoutItem, rootSize: Size): LayoutItem {
+	let output: LayoutItem = null;
+
+	if (layout) {
+		output = { ...layout };
+	} else {
+		output = { ...defaultLayout };
+	}
+
+	output.width = rootSize.width;
+	output.height = rootSize.height;
+
+	return validateLayout(output);
 }

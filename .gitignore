@@ -593,6 +593,9 @@ packages/app-desktop/gui/ResizableLayout/MoveButtons.js.map
 packages/app-desktop/gui/ResizableLayout/ResizableLayout.d.ts
 packages/app-desktop/gui/ResizableLayout/ResizableLayout.js
 packages/app-desktop/gui/ResizableLayout/ResizableLayout.js.map
+packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.d.ts
+packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.js
+packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.js.map
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.js
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.js.map
@@ -602,9 +605,12 @@ packages/app-desktop/gui/ResizableLayout/utils/movements.js.map
 packages/app-desktop/gui/ResizableLayout/utils/movements.test.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/movements.test.js
 packages/app-desktop/gui/ResizableLayout/utils/movements.test.js.map
-packages/app-desktop/gui/ResizableLayout/utils/serializeLayoutForSave.d.ts
-packages/app-desktop/gui/ResizableLayout/utils/serializeLayoutForSave.js
-packages/app-desktop/gui/ResizableLayout/utils/serializeLayoutForSave.js.map
+packages/app-desktop/gui/ResizableLayout/utils/persist.d.ts
+packages/app-desktop/gui/ResizableLayout/utils/persist.js
+packages/app-desktop/gui/ResizableLayout/utils/persist.js.map
+packages/app-desktop/gui/ResizableLayout/utils/persist.test.d.ts
+packages/app-desktop/gui/ResizableLayout/utils/persist.test.js
+packages/app-desktop/gui/ResizableLayout/utils/persist.test.js.map
 packages/app-desktop/gui/ResizableLayout/utils/style.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/style.js
 packages/app-desktop/gui/ResizableLayout/utils/style.js.map

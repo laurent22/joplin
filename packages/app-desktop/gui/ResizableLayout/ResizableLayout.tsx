@@ -29,48 +29,30 @@ interface Props {
 	moveModeMessage: string;
 }
 
-export function allDynamicSizes(layout: LayoutItem): any {
-	const output: any = {};
+// export function allDynamicSizes(layout: LayoutItem): any {
+// 	const output: any = {};
 
-	function recurseProcess(item: LayoutItem) {
-		if (item.resizableBottom || item.resizableRight) {
-			if ('width' in item || 'height' in item) {
-				const size: any = {};
-				if ('width' in item) size.width = item.width;
-				if ('height' in item) size.height = item.height;
-				output[item.key] = size;
-			}
-		}
+// 	function recurseProcess(item: LayoutItem) {
+// 		if (item.resizableBottom || item.resizableRight) {
+// 			if ('width' in item || 'height' in item) {
+// 				const size: any = {};
+// 				if ('width' in item) size.width = item.width;
+// 				if ('height' in item) size.height = item.height;
+// 				output[item.key] = size;
+// 			}
+// 		}
 
-		if (item.children) {
-			for (const child of item.children) {
-				recurseProcess(child);
-			}
-		}
-	}
+// 		if (item.children) {
+// 			for (const child of item.children) {
+// 				recurseProcess(child);
+// 			}
+// 		}
+// 	}
 
-	recurseProcess(layout);
+// 	recurseProcess(layout);
 
-	return output;
-}
-
-export function findItemByKey(layout: LayoutItem, key: string): LayoutItem {
-	function recurseFind(item: LayoutItem): LayoutItem {
-		if (item.key === key) return item;
-
-		if (item.children) {
-			for (const child of item.children) {
-				const found = recurseFind(child);
-				if (found) return found;
-			}
-		}
-		return null;
-	}
-
-	const output = recurseFind(layout);
-	if (!output) throw new Error(`Invalid item key: ${key}`);
-	return output;
-}
+// 	return output;
+// }
 
 function updateLayoutItem(layout: LayoutItem, key: string, props: any) {
 	return produce(layout, (draftState: LayoutItem) => {

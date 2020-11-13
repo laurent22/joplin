@@ -1,8 +1,9 @@
 import * as React from 'react';
-import ResizableLayout, { findItemByKey, allDynamicSizes } from '../ResizableLayout/ResizableLayout';
+import ResizableLayout from '../ResizableLayout/ResizableLayout';
+import findItemByKey from '../ResizableLayout/utils/findItemByKey';
 import { MoveButtonClickEvent } from '../ResizableLayout/MoveButtons';
-import { move, updateResizeRules } from '../ResizableLayout/utils/movements';
-import { LayoutItem, LayoutItemDirection } from '../ResizableLayout/utils/types';
+import { move } from '../ResizableLayout/utils/movements';
+import { LayoutItem } from '../ResizableLayout/utils/types';
 import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
@@ -17,8 +18,8 @@ import { stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
-import validateLayout from '../ResizableLayout/utils/validateLayout';
 import { AppState } from '../../app';
+import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
 
 const produce = require('immer').default;
 const { connect } = require('react-redux');
@@ -173,39 +174,67 @@ class MainScreenComponent extends React.Component<any, State> {
 		// 	});
 		// }
 
-		const output = validateLayout(updateResizeRules({
+		const defaultLayout: LayoutItem = {
 			key: 'root',
-			direction: LayoutItemDirection.Row,
-			width: rootLayoutSize.width,
-			height: rootLayoutSize.height,
 			children: [
-				{
-					key: 'sideBar',
-					visible: Setting.value('sidebarVisibility'),
-				},
-				{
-					key: 'noteList',
-					visible: Setting.value('noteListVisibility'),
-				},
-				// TODO: Improve pluginColumn - make it add plugin views after note list
-				// {
-				// 	key: 'pluginColumn',
-				// 	direction: LayoutItemDirection.Column,
-				// 	resizableRight: true,
-				// 	width: sizes.pluginColumn.width,
-				// 	visible: !!pluginColumnChildren.length,
-				// 	minWidth: sideBarMinWidth,
-				// 	children: pluginColumnChildren,
-				// },
-				{
-					key: 'editor',
-				},
+				{ key: 'sideBar', width: 250 },
+				{ key: 'noteList', width: 250 },
+				{ key: 'editor' },
 			],
-		}));
+		};
 
-		console.info('BUILD LAYOUT', output);
+		const userLayout = Setting.value('ui.layout');
 
-		return output;
+		// TODO: If cannot be loaded, restore default layout
+		try {
+			const output = loadLayout(userLayout, defaultLayout, rootLayoutSize);
+
+			// These calls will throw if the item is not present
+			findItemByKey(output, 'sideBar');
+			findItemByKey(output, 'noteList');
+			findItemByKey(output, 'editor');
+
+			console.info('BUILD LAYOUT', output);
+
+			return output;
+		} catch (error) {
+			console.warn('Could not load layout - restoring default layout:', error);
+			console.warn('Layout was:', userLayout);
+			return loadLayout(null, defaultLayout, rootLayoutSize);
+		}
+
+
+		// const output = validateLayout({
+		// 	key: 'root',
+		// 	direction: LayoutItemDirection.Row,
+		// 	width: rootLayoutSize.width,
+		// 	height: rootLayoutSize.height,
+		// 	children: [
+		// 		{
+		// 			key: 'sideBar',
+		// 			visible: Setting.value('sidebarVisibility'),
+		// 		},
+		// 		{
+		// 			key: 'noteList',
+		// 			visible: Setting.value('noteListVisibility'),
+		// 		},
+		// 		// TODO: Improve pluginColumn - make it add plugin views after note list
+		// 		// {
+		// 		// 	key: 'pluginColumn',
+		// 		// 	direction: LayoutItemDirection.Column,
+		// 		// 	resizableRight: true,
+		// 		// 	width: sizes.pluginColumn.width,
+		// 		// 	visible: !!pluginColumnChildren.length,
+		// 		// 	minWidth: sideBarMinWidth,
+		// 		// 	children: pluginColumnChildren,
+		// 		// },
+		// 		{
+		// 			key: 'editor',
+		// 		},
+		// 	],
+		// });
+
+
 	}
 
 	window_resize() {
@@ -305,6 +334,12 @@ class MainScreenComponent extends React.Component<any, State> {
 				name: 'shareNote',
 			});
 		}
+
+		if (this.state.layout !== prevState.layout) {
+			const toSave = saveLayout(this.state.layout);
+			console.info('TO SAVE', JSON.stringify(toSave));
+			Setting.setValue('ui.layout', toSave);
+		}
 	}
 
 	layoutModeListenerKeyDown(event: any) {
@@ -318,7 +353,7 @@ class MainScreenComponent extends React.Component<any, State> {
 
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
 
-		CommandService.instance().execute('toggleLayoutMoveMode');
+		// CommandService.instance().execute('toggleLayoutMoveMode');
 	}
 
 	componentWillUnmount() {
@@ -565,7 +600,7 @@ class MainScreenComponent extends React.Component<any, State> {
 
 	resizableLayout_resize(event: any) {
 		this.setState({ layout: event.layout });
-		Setting.setValue('ui.layout', allDynamicSizes(event.layout));
+		// Setting.setValue('ui.layout', allDynamicSizes(event.layout));
 	}
 
 	resizableLayout_moveButtonClick(event: MoveButtonClickEvent) {
