@@ -119,7 +119,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 	if (action.type.indexOf('PLUGIN_') !== 0) return;
 
 	// All actions should be scoped to a plugin, except when adding a new plugin
-	if (!action.pluginId && action.type !== 'PLUGIN_ADD' && action.type.indexOf('PLUGIN_SERVICE_') !== 0) throw new Error(`action.pluginId is required. Action was: ${JSON.stringify(action)}`);
+	if (!action.pluginId && action.type !== 'PLUGIN_ADD') throw new Error(`action.pluginId is required. Action was: ${JSON.stringify(action)}`);
 
 	const draft = draftRoot.pluginService as State;
 

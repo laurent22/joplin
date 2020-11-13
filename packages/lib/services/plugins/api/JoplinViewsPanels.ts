@@ -1,6 +1,6 @@
 import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
-import WebviewController from '../WebviewController';
+import WebviewController, { ContainerType } from '../WebviewController';
 import { ViewHandle } from './types';
 
 /**
@@ -31,12 +31,12 @@ export default class JoplinViewsPanels {
 	 */
 	async create(id: string): Promise<ViewHandle> {
 		if (!id) {
-			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID. To fix it, change your call to `joplin.views.panels.create("my-unique-id")`');
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.panels.create("my-unique-id")`');
 			id = `${this.plugin.viewCount}`;
 		}
 
 		const handle = createViewHandle(this.plugin, id);
-		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir);
+		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir, ContainerType.Panel);
 		this.plugin.addViewController(controller);
 		return handle;
 	}

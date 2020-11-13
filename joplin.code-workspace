@@ -8,6 +8,7 @@
 		"files.exclude": {
 			"lerna-debug.log": true,
 			"_mydocs/mdtest/": true,
+			"./packages/lib/plugin_types": true,
 			"_releases/": true,
 			"_vieux/": true,
 			".gitignore": true,
