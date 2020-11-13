@@ -1136,9 +1136,6 @@ packages/lib/services/rest/utils/requestFields.js.map
 packages/lib/services/rest/utils/requestPaginationOptions.d.ts
 packages/lib/services/rest/utils/requestPaginationOptions.js
 packages/lib/services/rest/utils/requestPaginationOptions.js.map
-packages/lib/services/rest/utils/types.d.ts
-packages/lib/services/rest/utils/types.js
-packages/lib/services/rest/utils/types.js.map
 packages/lib/services/searchengine/filterParser.d.ts
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.js.map
