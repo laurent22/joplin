@@ -230,7 +230,16 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);
 
-	useWindowCommandHandler({ dispatch: props.dispatch, formNote, setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, saveNoteAndWait });
+	useWindowCommandHandler({
+		dispatch: props.dispatch,
+		formNote,
+		setShowLocalSearch,
+		noteSearchBarRef,
+		editorRef,
+		titleInputRef,
+		saveNoteAndWait,
+		setFormNote,
+	});
 
 	const onDrop = useDropHandler({ editorRef });
 

@@ -89,6 +89,9 @@ const declarations: CommandDeclaration[] = [
 	{
 		name: 'replaceSelection',
 	},
+	{
+		name: 'editorSetText',
+	},
 ];
 
 export default declarations;
