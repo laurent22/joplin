@@ -11,13 +11,13 @@ import ToolbarButton from '../../../../gui/ToolbarButton/ToolbarButton';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { _, closestSupportedLocale } from '@joplin/lib/locale';
-import setupContextMenu from './utils/setupContextMenu';
+import useContextMenu from './utils/useContextMenu';
+import shim from '@joplin/lib/shim';
 
 const { MarkupToHtml } = require('@joplin/renderer');
 const taboverride = require('taboverride');
 const { reg } = require('@joplin/lib/registry.js');
 const BaseItem = require('@joplin/lib/models/BaseItem');
-const shim = require('@joplin/lib/shim').default;
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -161,6 +161,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
 	usePluginServiceRegistration(ref);
+	useContextMenu(editor, props.plugins);
 
 	const dispatchDidUpdate = (editor: any) => {
 		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);
@@ -668,7 +669,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						});
 					}
 
-					setupContextMenu(editor);
+					// setupContextMenu(editor);
 
 					// TODO: remove event on unmount?
 					editor.on('DblClick', (event: any) => {

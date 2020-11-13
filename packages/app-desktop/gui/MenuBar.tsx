@@ -695,7 +695,7 @@ function useMenu(props: Props) {
 
 		for (const view of props.pluginMenuItems) {
 			const location: MenuItemLocation = view.location;
-			if (location === MenuItemLocation.Context) continue;
+			if ([MenuItemLocation.Context, MenuItemLocation.EditorContextMenu, MenuItemLocation.NoteListContextMenu].includes(location)) continue;
 
 			const itemParent = rootMenus[location];
 
@@ -707,7 +707,7 @@ function useMenu(props: Props) {
 		}
 
 		for (const view of props.pluginMenus) {
-			if (view.location === MenuItemLocation.Context) continue;
+			if ([MenuItemLocation.Context, MenuItemLocation.EditorContextMenu, MenuItemLocation.NoteListContextMenu].includes(view.location)) continue;
 			const itemParent = rootMenus[view.location];
 
 			if (!itemParent) {
