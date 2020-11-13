@@ -696,7 +696,18 @@ describe('services_rest_Api', function() {
 		const r = await api.route(RequestMethod.GET, `resources/${resource.id}/notes`);
 
 		expect(r.items.length).toBe(1);
-		expect(r.items[0]).toBe(note.id);
+		expect(r.items[0].id).toBe(note.id);
+	}));
+
+	it('should return the resources associated with a note', asyncTest(async () => {
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
+		const resource = (await Resource.all())[0];
+
+		const r = await api.route(RequestMethod.GET, `notes/${note.id}/resources`);
+
+		expect(r.items.length).toBe(1);
+		expect(r.items[0].id).toBe(resource.id);
 	}));
 
 	it('should return search results', asyncTest(async () => {

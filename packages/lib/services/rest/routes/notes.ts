@@ -306,7 +306,7 @@ export default async function(request: Request, id: string = null, link: string 
 			if (!note) throw new ErrorNotFound();
 			const resourceIds = await Note.linkedResourceIds(note.body);
 			const output = [];
-			const loadOptions = defaultLoadOptions(request, BaseModel.TYPE_NOTE);
+			const loadOptions = defaultLoadOptions(request, BaseModel.TYPE_RESOURCE);
 			for (const resourceId of resourceIds) {
 				output.push(await Resource.load(resourceId, loadOptions));
 			}

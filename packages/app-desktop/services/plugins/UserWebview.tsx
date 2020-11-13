@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 import useViewIsReady from './hooks/useViewIsReady';
 import useThemeCss from './hooks/useThemeCss';
 const styled = require('styled-components').default;
@@ -32,7 +32,29 @@ const StyledFrame = styled.iframe`
 	border-bottom: ${(props: Props) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
 `;
 
-export default function UserWebview(props: Props) {
+function serializeForm(form: any) {
+	const output: any = {};
+	const formData = new FormData(form);
+	for (const key of formData.keys()) {
+		output[key] = formData.get(key);
+	}
+	return output;
+}
+
+function serializeForms(document: any) {
+	const forms = document.getElementsByTagName('form');
+	const output: any = {};
+	let untitledIndex = 0;
+
+	for (const form of forms) {
+		const name = `${form.getAttribute('name')}` || (`form${untitledIndex++}`);
+		output[name] = serializeForm(form);
+	}
+
+	return output;
+}
+
+function UserWebview(props: Props, ref: any) {
 	const minWidth = props.minWidth ? props.minWidth : 200;
 	const minHeight = props.minHeight ? props.minHeight : 20;
 
@@ -40,6 +62,18 @@ export default function UserWebview(props: Props) {
 	const isReady = useViewIsReady(viewRef);
 	const cssFilePath = useThemeCss({ pluginId: props.pluginId, themeId: props.themeId });
 	const [contentSize, setContentSize] = useState<Size>({ width: minWidth, height: minHeight });
+
+	useImperativeHandle(ref, () => {
+		return {
+			formData: function() {
+				if (viewRef.current) {
+					return serializeForms(viewRef.current.contentWindow.document);
+				} else {
+					return null;
+				}
+			},
+		};
+	});
 
 	function frameWindow() {
 		if (!viewRef.current) return null;
@@ -143,3 +177,5 @@ export default function UserWebview(props: Props) {
 		borderBottom={props.borderBottom}
 	></StyledFrame>;
 }
+
+export default forwardRef(UserWebview);

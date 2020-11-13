@@ -272,6 +272,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					},
 					replaceSelection: (value: any) => {
 						editor.selection.setContent(value);
+						editor.fire('joplinChange');
+						dispatchDidUpdate(editor);
 					},
 				};
 
