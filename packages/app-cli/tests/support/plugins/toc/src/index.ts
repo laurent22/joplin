@@ -41,7 +41,7 @@ joplin.plugins.register({
 	onStart: async function() {
 		const panels = joplin.views.panels;
 
-		const view = await panels.create();
+		const view = await (panels as any).create();
 
 		await panels.setHtml(view, 'Loading...');
 		await panels.addScript(view, './webview.js');

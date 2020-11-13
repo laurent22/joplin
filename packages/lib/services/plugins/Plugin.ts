@@ -62,6 +62,10 @@ export default class Plugin {
 		return this.baseDir_;
 	}
 
+	public get viewCount(): number {
+		return Object.keys(this.viewControllers_).length;
+	}
+
 	on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
@@ -101,13 +105,17 @@ export default class Plugin {
 	}
 
 	public addViewController(v: ViewController) {
-		if (this.viewControllers_[v.handle]) throw new Error(`View already added: ${v.handle}`);
+		if (this.viewControllers_[v.handle]) throw new Error(`View already added or there is already a view with this ID: ${v.handle}`);
 		this.viewControllers_[v.handle] = v;
 	}
 
 	public viewController(handle: ViewHandle): ViewController {
 		if (!this.viewControllers_[handle]) throw new Error(`View not found: ${handle}`);
 		return this.viewControllers_[handle];
+	}
+
+	public deprecationNotice(goneInVersion: string, message: string) {
+		this.logger_.warn(`Plugin: ${this.id}: DEPRECATION NOTICE: ${message} The current feature will stop working in version ${goneInVersion}.`);
 	}
 
 }

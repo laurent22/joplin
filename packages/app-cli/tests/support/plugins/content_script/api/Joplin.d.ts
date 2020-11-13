@@ -7,7 +7,7 @@ import JoplinCommands from './JoplinCommands';
 import JoplinViews from './JoplinViews';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
-import Logger from 'lib/Logger';
+import Logger from '../../../Logger';
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
  */

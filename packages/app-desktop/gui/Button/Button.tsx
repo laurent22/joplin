@@ -14,7 +14,7 @@ interface Props {
 	iconName?: string;
 	level?: ButtonLevel;
 	className?: string;
-	onClick: Function;
+	onClick?: Function;
 	color?: string;
 	iconAnimation?: string;
 	tooltip?: string;
@@ -57,12 +57,14 @@ const StyledButtonPrimary = styled(StyledButtonBase)`
 	border: none;
 	background-color: ${(props: any) => props.theme.backgroundColor5};
 
-	&:hover {
-		background-color: ${(props: any) => props.theme.backgroundColorHover5};
-	}
+	${(props: any) => props.disabled} {
+		&:hover {
+			background-color: ${(props: any) => props.theme.backgroundColorHover5};
+		}
 
-	&:active {
-		background-color: ${(props: any) => props.theme.backgroundColorActive5};
+		&:active {
+			background-color: ${(props: any) => props.theme.backgroundColorActive5};
+		}
 	}
 
 	${StyledIcon} {
@@ -78,12 +80,14 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: any) => props.theme.borderColor4};
 	background-color: ${(props: any) => props.theme.backgroundColor4};
 
-	&:hover {
-		background-color: ${(props: any) => props.theme.backgroundColorHover4};
-	}
+	${(props: any) => props.disabled} {
+		&:hover {
+			background-color: ${(props: any) => props.theme.backgroundColorHover4};
+		}
 
-	&:active {
-		background-color: ${(props: any) => props.theme.backgroundColorActive4};
+		&:active {
+			background-color: ${(props: any) => props.theme.backgroundColorActive4};
+		}
 	}
 
 	${StyledIcon} {
