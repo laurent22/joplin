@@ -9,7 +9,7 @@ import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
 import CommandService from '@joplin/lib/services/CommandService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import SideBar from '../SideBar/SideBar';
 import UserWebview from '../../services/plugins/UserWebview';
 import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
@@ -20,24 +20,45 @@ import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
 import { AppState } from '../../app';
 import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
+import Setting from '@joplin/lib/models/Setting';
+import produce from 'immer';
+import shim from '@joplin/lib/shim';
+import bridge from '../../services/bridge';
+import time from '@joplin/lib/time';
+import styled from 'styled-components';
+import { themeStyle } from '@joplin/lib/theme';
 
-const produce = require('immer').default;
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const shim = require('@joplin/lib/shim').default;
-const { themeStyle } = require('@joplin/lib/theme.js');
-const bridge = require('electron').remote.require('./bridge').default;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const EncryptionService = require('@joplin/lib/services/EncryptionService');
 const ipcRenderer = require('electron').ipcRenderer;
-const time = require('@joplin/lib/time').default;
-const styled = require('styled-components').default;
 
 interface LayerModalState {
 	visible: boolean;
 	message: string;
+}
+
+interface Props {
+	plugins: PluginStates;
+	hasNotesBeingSaved: boolean;
+	dispatch: Function;
+	mainLayout: LayoutItem;
+	style: any;
+	layoutMoveMode: boolean;
+	editorNoteStatuses: any;
+	customCss: string;
+	shouldUpgradeSyncTarget: boolean;
+	hasDisabledSyncItems: boolean;
+	hasDisabledEncryptionItems: boolean;
+	showMissingMasterKeyMessage: boolean;
+	showNeedUpgradingMasterKeyMessage: boolean;
+	showShouldReencryptMessage: boolean;
+	focusedField: string;
+	themeId: number;
+	settingEditorCodeView: boolean;
+	pluginsLegacy: any;
 }
 
 interface State {
@@ -46,7 +67,6 @@ interface State {
 	notePropertiesDialogOptions: any;
 	noteContentPropertiesDialogOptions: any;
 	shareNoteDialogOptions: any;
-	layout: LayoutItem;
 }
 
 const StyledUserWebviewDialogContainer = styled.div`
@@ -90,15 +110,15 @@ const commands = [
 	require('./commands/openTag'),
 ];
 
-class MainScreenComponent extends React.Component<any, State> {
+class MainScreenComponent extends React.Component<Props, State> {
 
-	waitForNotesSavedIID_: any;
-	isPrinting_: boolean;
-	styleKey_: string;
-	styles_: any;
-	promptOnClose_: Function;
+	private waitForNotesSavedIID_: any;
+	private isPrinting_: boolean;
+	private styleKey_: string;
+	private styles_: any;
+	private promptOnClose_: Function;
 
-	constructor(props: any) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -110,8 +130,9 @@ class MainScreenComponent extends React.Component<any, State> {
 			notePropertiesDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
-			layout: this.buildLayout(props.plugins),
 		};
+
+		this.updateMainLayout(this.buildLayout(props.plugins));
 
 		this.registerCommands();
 
@@ -185,7 +206,6 @@ class MainScreenComponent extends React.Component<any, State> {
 
 		const userLayout = Setting.value('ui.layout');
 
-		// TODO: If cannot be loaded, restore default layout
 		try {
 			const output = loadLayout(userLayout, defaultLayout, rootLayoutSize);
 
@@ -202,39 +222,6 @@ class MainScreenComponent extends React.Component<any, State> {
 			console.warn('Layout was:', userLayout);
 			return loadLayout(null, defaultLayout, rootLayoutSize);
 		}
-
-
-		// const output = validateLayout({
-		// 	key: 'root',
-		// 	direction: LayoutItemDirection.Row,
-		// 	width: rootLayoutSize.width,
-		// 	height: rootLayoutSize.height,
-		// 	children: [
-		// 		{
-		// 			key: 'sideBar',
-		// 			visible: Setting.value('sidebarVisibility'),
-		// 		},
-		// 		{
-		// 			key: 'noteList',
-		// 			visible: Setting.value('noteListVisibility'),
-		// 		},
-		// 		// TODO: Improve pluginColumn - make it add plugin views after note list
-		// 		// {
-		// 		// 	key: 'pluginColumn',
-		// 		// 	direction: LayoutItemDirection.Column,
-		// 		// 	resizableRight: true,
-		// 		// 	width: sizes.pluginColumn.width,
-		// 		// 	visible: !!pluginColumnChildren.length,
-		// 		// 	minWidth: sideBarMinWidth,
-		// 		// 	children: pluginColumnChildren,
-		// 		// },
-		// 		{
-		// 			key: 'editor',
-		// 		},
-		// 	],
-		// });
-
-
 	}
 
 	window_resize() {
@@ -284,25 +271,22 @@ class MainScreenComponent extends React.Component<any, State> {
 		this.setState({ shareNoteDialogOptions: {} });
 	}
 
+	updateMainLayout(layout: LayoutItem) {
+		this.props.dispatch({
+			type: 'MAIN_LAYOUT_SET',
+			value: layout,
+		});
+	}
+
 	updateRootLayoutSize() {
-		this.setState({ layout: produce(this.state.layout, (draft: any) => {
+		this.updateMainLayout(produce(this.props.mainLayout, (draft: any) => {
 			const s = this.rootLayoutSize();
 			draft.width = s.width;
 			draft.height = s.height;
-		}) });
+		}));
 	}
 
-	componentDidUpdate(prevProps: any, prevState: any) {
-		if (this.props.noteListVisibility !== prevProps.noteListVisibility || this.props.sidebarVisibility !== prevProps.sidebarVisibility) {
-			this.setState({ layout: produce(this.state.layout, (draft: any) => {
-				const noteList = findItemByKey(draft, 'noteList');
-				noteList.visible = this.props.noteListVisibility;
-
-				const sideBar = findItemByKey(draft, 'sideBar');
-				sideBar.visible = this.props.sidebarVisibility;
-			}) });
-		}
-
+	componentDidUpdate(prevProps: Props, prevState: State) {
 		if (prevProps.style.width !== this.props.style.width ||
 			prevProps.style.height !== this.props.style.height ||
 			this.messageBoxVisible(prevProps) !== this.messageBoxVisible(this.props)
@@ -310,9 +294,11 @@ class MainScreenComponent extends React.Component<any, State> {
 			this.updateRootLayoutSize();
 		}
 
-		if (prevProps.plugins !== this.props.plugins) {
-			this.setState({ layout: this.buildLayout(this.props.plugins) });
-		}
+		// TODO:
+
+		// if (prevProps.plugins !== this.props.plugins) {
+		// 	this.setState({ layout: this.buildLayout(this.props.plugins) });
+		// }
 
 		if (this.state.notePropertiesDialogOptions !== prevState.notePropertiesDialogOptions) {
 			this.props.dispatch({
@@ -335,8 +321,8 @@ class MainScreenComponent extends React.Component<any, State> {
 			});
 		}
 
-		if (this.state.layout !== prevState.layout) {
-			const toSave = saveLayout(this.state.layout);
+		if (this.props.mainLayout !== prevProps.mainLayout) {
+			const toSave = saveLayout(this.props.mainLayout);
 			console.info('TO SAVE', JSON.stringify(toSave));
 			Setting.setValue('ui.layout', toSave);
 		}
@@ -349,11 +335,7 @@ class MainScreenComponent extends React.Component<any, State> {
 	}
 
 	componentDidMount() {
-		this.updateRootLayoutSize();
-
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
-
-		// CommandService.instance().execute('toggleLayoutMoveMode');
 	}
 
 	componentWillUnmount() {
@@ -361,18 +343,6 @@ class MainScreenComponent extends React.Component<any, State> {
 
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
-	}
-
-	toggleSideBar() {
-		this.props.dispatch({
-			type: 'SIDEBAR_VISIBILITY_TOGGLE',
-		});
-	}
-
-	toggleNoteList() {
-		this.props.dispatch({
-			type: 'NOTELIST_VISIBILITY_TOGGLE',
-		});
 	}
 
 	async waitForNoteToSaved(noteId: string) {
@@ -437,8 +407,8 @@ class MainScreenComponent extends React.Component<any, State> {
 		return 50;
 	}
 
-	styles(themeId: number, width: number, height: number, messageBoxVisible: boolean, isSidebarVisible: any, isNoteListVisible: any) {
-		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible].join('_');
+	styles(themeId: number, width: number, height: number, messageBoxVisible: boolean) {
+		const styleKey = [themeId, width, height, messageBoxVisible].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -599,19 +569,12 @@ class MainScreenComponent extends React.Component<any, State> {
 	}
 
 	resizableLayout_resize(event: any) {
-		this.setState({ layout: event.layout });
-		// Setting.setValue('ui.layout', allDynamicSizes(event.layout));
+		this.updateMainLayout(event.layout);
 	}
 
 	resizableLayout_moveButtonClick(event: MoveButtonClickEvent) {
-		this.setState((state: any) => {
-			console.info('AVANT', JSON.parse(JSON.stringify(state.layout)));
-			const newLayout = move(state.layout, event.itemKey, event.direction);
-			console.info('APRES', JSON.parse(JSON.stringify(newLayout)));
-
-			// console.info('SERIALIZE', JSON.parse(JSON.stringify(serializeLayoutForSave(newLayout))));
-			return { layout: newLayout };
-		});
+		const newLayout = move(this.props.mainLayout, event.itemKey, event.direction);
+		this.updateMainLayout(newLayout);
 	}
 
 	resizableLayout_renderItem(key: string, event: any) {
@@ -699,9 +662,7 @@ class MainScreenComponent extends React.Component<any, State> {
 			this.props.style
 		);
 		const promptOptions = this.state.promptOptions;
-		const sidebarVisibility = this.props.sidebarVisibility;
-		const noteListVisibility = this.props.noteListVisibility;
-		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility);
+		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible());
 
 		if (!this.promptOnClose_) {
 			this.promptOnClose_ = (answer: any, buttonType: any) => {
@@ -720,6 +681,18 @@ class MainScreenComponent extends React.Component<any, State> {
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 
+		const layoutComp = this.props.mainLayout ? (
+			<ResizableLayout
+				height={styles.rowHeight}
+				layout={this.props.mainLayout}
+				onResize={this.resizableLayout_resize}
+				onMoveButtonClick={this.resizableLayout_moveButtonClick}
+				renderItem={this.resizableLayout_renderItem}
+				moveMode={this.props.layoutMoveMode}
+				moveModeMessage={_('Use the arrows to move the layout items. Press "Escape" to exit.')}
+			/>
+		) : null;
+
 		return (
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
@@ -731,16 +704,7 @@ class MainScreenComponent extends React.Component<any, State> {
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
 				{messageComp}
-
-				<ResizableLayout
-					height={styles.rowHeight}
-					layout={this.state.layout}
-					onResize={this.resizableLayout_resize}
-					onMoveButtonClick={this.resizableLayout_moveButtonClick}
-					renderItem={this.resizableLayout_renderItem}
-					moveMode={this.props.layoutMoveMode}
-					moveModeMessage={_('Use the arrows to move the layout items. Press "Escape" to exit.')}
-				/>
+				{layoutComp}
 				{pluginDialog}
 			</div>
 		);
@@ -751,8 +715,6 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],
-		sidebarVisibility: state.sidebarVisibility,
-		noteListVisibility: state.noteListVisibility,
 		folders: state.folders,
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
@@ -771,6 +733,7 @@ const mapStateToProps = (state: AppState) => {
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
 		focusedField: state.focusedField,
 		layoutMoveMode: state.layoutMoveMode,
+		mainLayout: state.mainLayout,
 	};
 };
 

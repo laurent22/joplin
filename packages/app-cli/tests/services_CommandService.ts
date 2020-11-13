@@ -1,6 +1,7 @@
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import CommandService, { CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
+import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import KeymapService from '@joplin/lib/services/KeymapService';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
@@ -17,7 +18,7 @@ function newService(): CommandService {
 			return {};
 		},
 	};
-	service.initialize(mockStore, true);
+	service.initialize(mockStore, true, stateToWhenClauseContext);
 	return service;
 }
 

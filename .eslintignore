@@ -607,6 +607,9 @@ packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.js.map
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.js
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.js.map
+packages/app-desktop/gui/ResizableLayout/utils/layoutItemProp.d.ts
+packages/app-desktop/gui/ResizableLayout/utils/layoutItemProp.js
+packages/app-desktop/gui/ResizableLayout/utils/layoutItemProp.js.map
 packages/app-desktop/gui/ResizableLayout/utils/movements.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/movements.js
 packages/app-desktop/gui/ResizableLayout/utils/movements.js.map
@@ -619,6 +622,9 @@ packages/app-desktop/gui/ResizableLayout/utils/persist.js.map
 packages/app-desktop/gui/ResizableLayout/utils/persist.test.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/persist.test.js
 packages/app-desktop/gui/ResizableLayout/utils/persist.test.js.map
+packages/app-desktop/gui/ResizableLayout/utils/setLayoutItemProps.d.ts
+packages/app-desktop/gui/ResizableLayout/utils/setLayoutItemProps.js
+packages/app-desktop/gui/ResizableLayout/utils/setLayoutItemProps.js.map
 packages/app-desktop/gui/ResizableLayout/utils/style.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/style.js
 packages/app-desktop/gui/ResizableLayout/utils/style.js.map
@@ -715,6 +721,9 @@ packages/app-desktop/plugins/GotoAnything.js.map
 packages/app-desktop/services/bridge.d.ts
 packages/app-desktop/services/bridge.js
 packages/app-desktop/services/bridge.js.map
+packages/app-desktop/services/commands/stateToWhenClauseContext.d.ts
+packages/app-desktop/services/commands/stateToWhenClauseContext.js
+packages/app-desktop/services/commands/stateToWhenClauseContext.js.map
 packages/app-desktop/services/commands/types.d.ts
 packages/app-desktop/services/commands/types.js
 packages/app-desktop/services/commands/types.js.map

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
-import produce from 'immer';
 import useWindowResizeEvent from './utils/useWindowResizeEvent';
+import setLayoutItemProps from './utils/setLayoutItemProps';
 import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './utils/useLayoutItemSizes';
 import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem } from './utils/types';
@@ -27,51 +27,6 @@ interface Props {
 	onMoveButtonClick(event: MoveButtonClickEvent): void;
 	moveMode: boolean;
 	moveModeMessage: string;
-}
-
-// export function allDynamicSizes(layout: LayoutItem): any {
-// 	const output: any = {};
-
-// 	function recurseProcess(item: LayoutItem) {
-// 		if (item.resizableBottom || item.resizableRight) {
-// 			if ('width' in item || 'height' in item) {
-// 				const size: any = {};
-// 				if ('width' in item) size.width = item.width;
-// 				if ('height' in item) size.height = item.height;
-// 				output[item.key] = size;
-// 			}
-// 		}
-
-// 		if (item.children) {
-// 			for (const child of item.children) {
-// 				recurseProcess(child);
-// 			}
-// 		}
-// 	}
-
-// 	recurseProcess(layout);
-
-// 	return output;
-// }
-
-function updateLayoutItem(layout: LayoutItem, key: string, props: any) {
-	return produce(layout, (draftState: LayoutItem) => {
-		function recurseFind(item: LayoutItem) {
-			if (item.key === key) {
-				for (const n in props) {
-					(item as any)[n] = props[n];
-				}
-			} else {
-				if (item.children) {
-					for (const child of item.children) {
-						recurseFind(child);
-					}
-				}
-			}
-		}
-
-		recurseFind(draftState);
-	});
 }
 
 function itemVisible(item: LayoutItem, moveMode: boolean) {
@@ -177,7 +132,7 @@ function ResizableLayout(props: Props) {
 				newSize.width = newWidth;
 			}
 
-			const newLayout = updateLayoutItem(props.layout, item.key, newSize);
+			const newLayout = setLayoutItemProps(props.layout, item.key, newSize);
 
 			props.onResize({ layout: newLayout });
 			eventEmitter.current.emit('resize');

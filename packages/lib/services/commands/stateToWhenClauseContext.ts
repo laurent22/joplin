@@ -1,23 +1,14 @@
-import { stateUtils } from '../../reducer';
+import { State, stateUtils } from '../../reducer';
 
 const BaseModel = require('../../BaseModel').default;
 const Folder = require('../../models/Folder');
 const MarkupToHtml = require('@joplin/renderer/MarkupToHtml').default;
 
-export default function stateToWhenClauseContext(state: any) {
+export default function stateToWhenClauseContext(state: State) {
 	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
 	const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
 
 	return {
-		// UI elements
-		markdownEditorVisible: !!state.settings['editor.codeView'],
-		richTextEditorVisible: !state.settings['editor.codeView'],
-		markdownEditorPaneVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('editor'),
-		markdownViewerPaneVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('viewer'),
-		modalDialogVisible: !!Object.keys(state.visibleDialogs).length,
-		sideBarVisible: !!state.sidebarVisibility,
-		noteListHasNotes: !!state.notes.length,
-
 		// Application state
 		notesAreBeingSaved: stateUtils.hasNotesBeingSaved(state),
 		syncStarted: state.syncStarted,

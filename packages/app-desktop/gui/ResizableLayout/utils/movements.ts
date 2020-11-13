@@ -170,7 +170,6 @@ function moveItem(direction: MovementDirection, layout: LayoutItem, key: string,
 		});
 	});
 
-	// return updateItemSizes(updateResizeRules(updatedLayout));
 	return validateLayout(updatedLayout);
 }
 

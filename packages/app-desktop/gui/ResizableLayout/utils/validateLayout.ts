@@ -60,6 +60,31 @@ function updateDirection(_itemIndex: number, itemDraft: LayoutItem, parent: Layo
 	}
 }
 
+function itemShouldBeVisible(item: LayoutItem): boolean {
+	if (!item.children) return item.visible !== false;
+
+	let oneIsVisible = false;
+
+	for (const child of item.children) {
+		if (itemShouldBeVisible(child)) {
+			oneIsVisible = true;
+			break;
+		}
+	}
+
+	return oneIsVisible;
+}
+
+// If all children of a container are hidden, the container should be
+// hidden too. A container visiblity cannot be changed by the user.
+function updateContainerVisibility(_itemIndex: number, itemDraft: LayoutItem, _parent: LayoutItem) {
+	if (itemDraft.children) {
+		itemDraft.visible = itemShouldBeVisible(itemDraft);
+	} else {
+		itemDraft.visible = itemDraft.visible !== false;
+	}
+}
+
 export default function validateLayout(layout: LayoutItem): LayoutItem {
 	if (!layout) throw new Error('Layout is null');
 	if (!layout.children || !layout.children.length) throw new Error('Root does not have children');
@@ -71,6 +96,7 @@ export default function validateLayout(layout: LayoutItem): LayoutItem {
 			updateItemSize(itemIndex, itemDraft, parent);
 			updateResizeRules(itemIndex, itemDraft, parent);
 			updateDirection(itemIndex, itemDraft, parent);
+			updateContainerVisibility(itemIndex, itemDraft, parent);
 			return true;
 		});
 	});

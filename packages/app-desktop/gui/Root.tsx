@@ -67,16 +67,6 @@ async function initialize() {
 		type: 'NOTE_VISIBLE_PANES_SET',
 		panes: Setting.value('noteVisiblePanes'),
 	});
-
-	store.dispatch({
-		type: 'SIDEBAR_VISIBILITY_SET',
-		visibility: Setting.value('sidebarVisibility'),
-	});
-
-	store.dispatch({
-		type: 'NOTELIST_VISIBILITY_SET',
-		visibility: Setting.value('noteListVisibility'),
-	});
 }
 
 class RootComponent extends React.Component<Props, any> {

@@ -18,6 +18,9 @@ import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerS
 import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
 import bridge from './services/bridge';
 import menuCommandNames from './gui/menuCommandNames';
+import { LayoutItem } from './gui/ResizableLayout/utils/types';
+import stateToWhenClauseContext from './services/commands/stateToWhenClauseContext';
+import ResourceService from '@joplin/lib/services/ResourceService';
 
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 const MasterKey = require('@joplin/lib/models/MasterKey');
@@ -27,7 +30,6 @@ const Tag = require('@joplin/lib/models/Tag.js');
 const { reg } = require('@joplin/lib/registry.js');
 const packageInfo = require('./packageInfo.js');
 const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
-const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const ClipperServer = require('@joplin/lib/ClipperServer');
 const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const { webFrame } = require('electron');
@@ -106,8 +108,6 @@ export interface AppState extends State {
 	route: AppStateRoute;
 	navHistory: any[];
 	noteVisiblePanes: string[];
-	sidebarVisibility: boolean;
-	noteListVisibility: boolean;
 	windowContentSize: any;
 	watchedNoteFiles: string[];
 	lastEditorScrollPercents: any;
@@ -118,6 +118,7 @@ export interface AppState extends State {
 
 	// Extra reducer keys go here
 	watchedResources: any;
+	mainLayout: LayoutItem;
 }
 
 const appDefaultState: AppState = {
@@ -129,8 +130,6 @@ const appDefaultState: AppState = {
 	},
 	navHistory: [],
 	noteVisiblePanes: ['editor', 'viewer'],
-	sidebarVisibility: true,
-	noteListVisibility: true,
 	windowContentSize: bridge().windowContentSize(),
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
@@ -138,6 +137,7 @@ const appDefaultState: AppState = {
 	visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 	focusedField: null,
 	layoutMoveMode: false,
+	mainLayout: null,
 	...resourceEditWatcherDefaultState,
 };
 
@@ -237,25 +237,12 @@ class Application extends BaseApplication {
 				newState.noteVisiblePanes = action.panes;
 				break;
 
-			case 'SIDEBAR_VISIBILITY_TOGGLE':
+			case 'MAIN_LAYOUT_SET':
 
-				newState = Object.assign({}, state);
-				newState.sidebarVisibility = !state.sidebarVisibility;
-				break;
-
-			case 'SIDEBAR_VISIBILITY_SET':
-				newState = Object.assign({}, state);
-				newState.sidebarVisibility = action.visibility;
-				break;
-
-			case 'NOTELIST_VISIBILITY_TOGGLE':
-				newState = Object.assign({}, state);
-				newState.noteListVisibility = !state.noteListVisibility;
-				break;
-
-			case 'NOTELIST_VISIBILITY_SET':
-				newState = Object.assign({}, state);
-				newState.noteListVisibility = action.visibility;
+				newState = {
+					...state,
+					mainLayout: action.value,
+				};
 				break;
 
 			case 'NOTE_FILE_WATCHER_ADD':
@@ -393,14 +380,6 @@ class Application extends BaseApplication {
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
-		}
-
-		if (['SIDEBAR_VISIBILITY_TOGGLE', 'SIDEBAR_VISIBILITY_SET'].indexOf(action.type) >= 0) {
-			Setting.setValue('sidebarVisibility', newState.sidebarVisibility);
-		}
-
-		if (['NOTELIST_VISIBILITY_TOGGLE', 'NOTELIST_VISIBILITY_SET'].indexOf(action.type) >= 0) {
-			Setting.setValue('noteListVisibility', newState.noteListVisibility);
 		}
 
 		if (['NOTE_DEVTOOLS_TOGGLE', 'NOTE_DEVTOOLS_SET'].indexOf(action.type) >= 0) {
@@ -550,7 +529,7 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
-		CommandService.instance().initialize(this.store(), Setting.value('env') == 'dev');
+		CommandService.instance().initialize(this.store(), Setting.value('env') == 'dev', stateToWhenClauseContext);
 
 		for (const command of commands) {
 			CommandService.instance().registerDeclaration(command.declaration);
