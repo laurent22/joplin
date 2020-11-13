@@ -2,7 +2,7 @@ import { RuleOptions } from '../../MdToHtml';
 
 let checkboxIndex_ = -1;
 
-function pluginAssets(theme:any) {
+function pluginAssets(theme: any) {
 	return [
 		{
 			inline: true,
@@ -53,7 +53,7 @@ function pluginAssets(theme:any) {
 	];
 }
 
-function createPrefixTokens(Token:any, id:string, checked:boolean, label:string, postMessageSyntax:string, sourceToken:any):any[] {
+function createPrefixTokens(Token: any, id: string, checked: boolean, label: string, postMessageSyntax: string, sourceToken: any): any[] {
 	let token = null;
 	const tokens = [];
 
@@ -105,17 +105,17 @@ function createPrefixTokens(Token:any, id:string, checked:boolean, label:string,
 	return tokens;
 }
 
-function createSuffixTokens(Token:any):any[] {
+function createSuffixTokens(Token: any): any[] {
 	return [
 		new Token('label_close', 'label', -1),
 		new Token('checkbox_wrapper_close', 'div', -1),
 	];
 }
 
-function checkboxPlugin(markdownIt:any, options:RuleOptions) {
+function checkboxPlugin(markdownIt: any, options: RuleOptions) {
 	const renderingType = options.checkboxRenderingType || 1;
 
-	markdownIt.core.ruler.push('checkbox', (state:any) => {
+	markdownIt.core.ruler.push('checkbox', (state: any) => {
 		const tokens = state.tokens;
 		const Token = state.Token;
 

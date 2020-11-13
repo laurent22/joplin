@@ -3,23 +3,23 @@ import { _ } from '@joplin/lib/locale';
 const Folder = require('@joplin/lib/models/Folder');
 const bridge = require('electron').remote.require('./bridge').default;
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'newFolder',
 	label: () => _('New notebook'),
 	iconName: 'fa-book',
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (_context:CommandContext, parentId:string = null) => {
+		execute: async (_context: CommandContext, parentId: string = null) => {
 			comp.setState({
 				promptOptions: {
 					label: _('Notebook title:'),
-					onClose: async (answer:string) => {
+					onClose: async (answer: string) => {
 						if (answer) {
 							let folder = null;
 							try {
-								const toSave:any = { title: answer };
+								const toSave: any = { title: answer };
 								if (parentId) toSave.parent_id = parentId;
 								folder = await Folder.save(toSave, { userSideValidation: true });
 							} catch (error) {

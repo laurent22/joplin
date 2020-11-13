@@ -1,13 +1,13 @@
 
 // TODO: copied from string-utils
-function formatCssSize(v:any):string {
+function formatCssSize(v: any): string {
 	if (typeof v === 'string') {
 		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
 	}
 	return `${v}px`;
 }
 
-export default function(theme:any) {
+export default function(theme: any) {
 	theme = theme ? theme : {};
 
 	const fontFamily = '\'Avenir\', \'Arial\', sans-serif';

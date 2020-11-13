@@ -2,7 +2,7 @@ import { _ } from './locale';
 const Setting = require('./models/Setting').default;
 const { reg } = require('./registry.js');
 
-export default function versionInfo(packageInfo:any) {
+export default function versionInfo(packageInfo: any) {
 	const p = packageInfo;
 	let gitInfo = '';
 	if ('git' in p) {

@@ -96,29 +96,29 @@ const pluginClasses = [
 ];
 
 interface AppStateRoute {
-	type: string,
-	routeName: string,
-	props: any,
+	type: string;
+	routeName: string;
+	props: any;
 }
 
 export interface AppState extends State {
-	route: AppStateRoute,
-	navHistory: any[],
-	noteVisiblePanes: string[],
-	sidebarVisibility: boolean,
-	noteListVisibility: boolean,
-	windowContentSize: any,
-	watchedNoteFiles: string[],
-	lastEditorScrollPercents: any,
-	devToolsVisible: boolean,
-	visibleDialogs: any, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
-	focusedField: string,
+	route: AppStateRoute;
+	navHistory: any[];
+	noteVisiblePanes: string[];
+	sidebarVisibility: boolean;
+	noteListVisibility: boolean;
+	windowContentSize: any;
+	watchedNoteFiles: string[];
+	lastEditorScrollPercents: any;
+	devToolsVisible: boolean;
+	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
+	focusedField: string;
 
 	// Extra reducer keys go here
-	watchedResources: any,
+	watchedResources: any;
 }
 
-const appDefaultState:AppState = {
+const appDefaultState: AppState = {
 	...defaultState,
 	route: {
 		type: 'NAV_GO',
@@ -154,7 +154,7 @@ class Application extends BaseApplication {
 		return `${Setting.value('profileDir')}/log-autoupdater.txt`;
 	}
 
-	reducer(state:AppState = appDefaultState, action:any) {
+	reducer(state: AppState = appDefaultState, action: any) {
 		let newState = state;
 
 		try {
@@ -200,7 +200,7 @@ class Application extends BaseApplication {
 			case 'NOTE_VISIBLE_PANES_TOGGLE':
 
 				{
-					const getNextLayout = (currentLayout:any) => {
+					const getNextLayout = (currentLayout: any) => {
 						currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
 
 						let paneOptions;
@@ -345,7 +345,7 @@ class Application extends BaseApplication {
 		return newState;
 	}
 
-	toggleDevTools(visible:boolean) {
+	toggleDevTools(visible: boolean) {
 		if (visible) {
 			bridge().openDevTools();
 		} else {
@@ -353,7 +353,7 @@ class Application extends BaseApplication {
 		}
 	}
 
-	async generalMiddleware(store:any, next:any, action:any) {
+	async generalMiddleware(store: any, next: any, action: any) {
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
 			// The bridge runs within the main process, with its own instance of locale.js
@@ -459,14 +459,14 @@ class Application extends BaseApplication {
 		// The context menu must be setup in renderer process because that's where
 		// the spell checker service lives.
 		require('electron-context-menu')({
-			shouldShowMenu: (_event:any, params:any) => {
+			shouldShowMenu: (_event: any, params: any) => {
 				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
 				// case we don't want to use the built-in context menu but a custom one.
 				return params.isEditable && params.inputFieldType !== 'none';
 			},
 
-			menu: (actions:any, props:any) => {
-				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item:any) => new MenuItem(item));
+			menu: (actions: any, props: any) => {
+				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
 
 				const output = [
 					actions.cut(),
@@ -480,7 +480,7 @@ class Application extends BaseApplication {
 		});
 	}
 
-	async loadCustomCss(filePath:string) {
+	async loadCustomCss(filePath: string) {
 		let cssString = '';
 		if (await fs.pathExists(filePath)) {
 			try {
@@ -497,7 +497,7 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
-	async start(argv:string[]):Promise<any> {
+	async start(argv: string[]): Promise<any> {
 		const electronIsDev = require('electron-is-dev');
 
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
@@ -527,7 +527,7 @@ class Application extends BaseApplication {
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
 
-		reg.setShowErrorMessageBoxHandler((message:string) => { bridge().showErrorMessageBox(message); });
+		reg.setShowErrorMessageBoxHandler((message: string) => { bridge().showErrorMessageBox(message); });
 
 		if (Setting.value('flagOpenDevTools')) {
 			bridge().openDevTools();
@@ -672,7 +672,7 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action:any) => { this.store().dispatch(action); });
+		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); });
 
 		RevisionService.instance().runInBackground();
 
@@ -705,7 +705,7 @@ class Application extends BaseApplication {
 
 		try {
 			if (Setting.value('plugins.devPluginPaths')) {
-				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p:string) => p.trim());
+				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
 				await PluginService.instance().loadAndRunPlugins(paths);
 			}
 
@@ -732,7 +732,7 @@ class Application extends BaseApplication {
 
 }
 
-let application_:Application = null;
+let application_: Application = null;
 
 function app() {
 	if (!application_) application_ = new Application();

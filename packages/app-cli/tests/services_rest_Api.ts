@@ -11,7 +11,7 @@ const NoteTag = require('@joplin/lib/models/NoteTag');
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
 
-async function msleep(ms:number) {
+async function msleep(ms: number) {
 	return new Promise((resolve) => {
 		shim.setTimeout(() => {
 			resolve();
@@ -19,7 +19,7 @@ async function msleep(ms:number) {
 	});
 }
 
-const createFolderForPagination = async (num:number, time:number) => {
+const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
 		title: `folder${num}`,
 		updated_time: time,
@@ -27,7 +27,7 @@ const createFolderForPagination = async (num:number, time:number) => {
 	}, { autoTimestamp: false });
 };
 
-const createNoteForPagination = async (num:number, time:number) => {
+const createNoteForPagination = async (num: number, time: number) => {
 	await Note.save({
 		title: `note${num}`,
 		body: `noteBody${num}`,
@@ -36,7 +36,7 @@ const createNoteForPagination = async (num:number, time:number) => {
 	}, { autoTimestamp: false });
 };
 
-let api:Api = null;
+let api: Api = null;
 
 describe('services_rest_Api', function() {
 
@@ -158,7 +158,7 @@ describe('services_rest_Api', function() {
 	}));
 
 	it('should allow setting note properties', asyncTest(async () => {
-		let response:any = null;
+		let response: any = null;
 		const f = await Folder.save({ title: 'mon carnet' });
 
 		response = await api.route(RequestMethod.POST, 'notes', null, JSON.stringify({
@@ -696,7 +696,18 @@ describe('services_rest_Api', function() {
 		const r = await api.route(RequestMethod.GET, `resources/${resource.id}/notes`);
 
 		expect(r.items.length).toBe(1);
-		expect(r.items[0]).toBe(note.id);
+		expect(r.items[0].id).toBe(note.id);
+	}));
+
+	it('should return the resources associated with a note', asyncTest(async () => {
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
+		const resource = (await Resource.all())[0];
+
+		const r = await api.route(RequestMethod.GET, `notes/${note.id}/resources`);
+
+		expect(r.items.length).toBe(1);
+		expect(r.items[0].id).toBe(resource.id);
 	}));
 
 	it('should return search results', asyncTest(async () => {

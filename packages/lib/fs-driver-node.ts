@@ -6,19 +6,19 @@ const FsDriverBase = require('./fs-driver-base');
 
 export default class FsDriverNode extends FsDriverBase {
 
-	private fsErrorToJsError_(error:any, path:string = null) {
+	private fsErrorToJsError_(error: any, path: string = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
-		const output:any = new Error(msg);
+		const output: any = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
 	}
 
-	public appendFileSync(path:string, string:string) {
+	public appendFileSync(path: string, string: string) {
 		return fs.appendFileSync(path, string);
 	}
 
-	public async appendFile(path:string, string:string, encoding:string = 'base64') {
+	public async appendFile(path: string, string: string, encoding: string = 'base64') {
 		try {
 			return await fs.appendFile(path, string, { encoding: encoding });
 		} catch (error) {
@@ -26,7 +26,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async writeBinaryFile(path:string, content:any) {
+	public async writeBinaryFile(path: string, content: any) {
 		try {
 			// let buffer = new Buffer(content);
 			const buffer = Buffer.from(content);
@@ -36,7 +36,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async writeFile(path:string, string:string, encoding:string = 'base64') {
+	public async writeFile(path: string, string: string, encoding: string = 'base64') {
 		try {
 			if (encoding === 'buffer') {
 				return await fs.writeFile(path, string);
@@ -49,7 +49,7 @@ export default class FsDriverNode extends FsDriverBase {
 	}
 
 	// same as rm -rf
-	public async remove(path:string) {
+	public async remove(path: string) {
 		try {
 			const r = await fs.remove(path);
 			return r;
@@ -58,7 +58,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async move(source:string, dest:string) {
+	public async move(source: string, dest: string) {
 		let lastError = null;
 
 		for (let i = 0; i < 5; i++) {
@@ -80,11 +80,11 @@ export default class FsDriverNode extends FsDriverBase {
 		throw lastError;
 	}
 
-	public exists(path:string) {
+	public exists(path: string) {
 		return fs.pathExists(path);
 	}
 
-	public async mkdir(path:string) {
+	public async mkdir(path: string) {
 		// Note that mkdirp() does not throw an error if the directory
 		// could not be created. This would make the synchroniser to
 		// incorrectly try to sync with a non-existing dir:
@@ -94,7 +94,7 @@ export default class FsDriverNode extends FsDriverBase {
 		return r;
 	}
 
-	public async stat(path:string) {
+	public async stat(path: string) {
 		try {
 			const stat = await fs.stat(path);
 			return {
@@ -110,11 +110,11 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async setTimestamp(path:string, timestampDate:any) {
+	public async setTimestamp(path: string, timestampDate: any) {
 		return fs.utimes(path, timestampDate, timestampDate);
 	}
 
-	public async readDirStats(path:string, options:any = null) {
+	public async readDirStats(path: string, options: any = null) {
 		if (!options) options = {};
 		if (!('recursive' in options)) options.recursive = false;
 
@@ -138,7 +138,7 @@ export default class FsDriverNode extends FsDriverBase {
 		return output;
 	}
 
-	public async open(path:string, mode:any) {
+	public async open(path: string, mode: any) {
 		try {
 			return await fs.open(path, mode);
 		} catch (error) {
@@ -146,7 +146,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async close(handle:any) {
+	public async close(handle: any) {
 		try {
 			return await fs.close(handle);
 		} catch (error) {
@@ -154,7 +154,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async readFile(path:string, encoding:string = 'utf8') {
+	public async readFile(path: string, encoding: string = 'utf8') {
 		try {
 			if (encoding === 'Buffer') return await fs.readFile(path); // Returns the raw buffer
 			return await fs.readFile(path, encoding);
@@ -164,7 +164,7 @@ export default class FsDriverNode extends FsDriverBase {
 	}
 
 	// Always overwrite destination
-	public async copy(source:string, dest:string) {
+	public async copy(source: string, dest: string) {
 		try {
 			return await fs.copy(source, dest, { overwrite: true });
 		} catch (error) {
@@ -172,7 +172,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async unlink(path:string) {
+	public async unlink(path: string) {
 		try {
 			await fs.unlink(path);
 		} catch (error) {
@@ -181,7 +181,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async readFileChunk(handle:any, length:number, encoding:string = 'base64') {
+	public async readFileChunk(handle: any, length: number, encoding: string = 'base64') {
 		// let buffer = new Buffer(length);
 		let buffer = Buffer.alloc(length);
 		const result = await fs.read(handle, buffer, 0, length, null);
@@ -192,14 +192,14 @@ export default class FsDriverNode extends FsDriverBase {
 		throw new Error(`Unsupported encoding: ${encoding}`);
 	}
 
-	public resolve(path:string) {
+	public resolve(path: string) {
 		return require('path').resolve(path);
 	}
 
 	// Resolves the provided relative path to an absolute path within baseDir. The function
 	// also checks that the absolute path is within baseDir, to avoid security issues.
 	// It is expected that baseDir is a safe path (not user-provided).
-	public resolveRelativePathWithinDir(baseDir:string, relativePath:string) {
+	public resolveRelativePathWithinDir(baseDir: string, relativePath: string) {
 		const resolvedBaseDir = nodeResolve(baseDir);
 		const resolvedPath = nodeResolve(baseDir, relativePath);
 		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);

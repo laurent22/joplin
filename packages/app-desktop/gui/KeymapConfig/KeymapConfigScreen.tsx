@@ -15,7 +15,7 @@ const shim = require('@joplin/lib/shim').default;
 const keymapService = KeymapService.instance();
 
 export interface KeymapConfigScreenProps {
-	themeId: number
+	themeId: number;
 }
 
 export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
@@ -27,7 +27,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const [editing, enableEditing, disableEditing] = useCommandStatus();
 	const [hovering, enableHovering, disableHovering] = useCommandStatus();
 
-	const handleSave = (event: { commandName: string, accelerator: string }) => {
+	const handleSave = (event: { commandName: string; accelerator: string }) => {
 		const { commandName, accelerator } = event;
 		setAccelerator(commandName, accelerator);
 		disableEditing(commandName);

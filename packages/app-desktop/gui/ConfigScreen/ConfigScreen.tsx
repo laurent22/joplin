@@ -16,9 +16,9 @@ const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 class ConfigScreenComponent extends React.Component<any, any> {
 
-	rowStyle_:any = null;
+	rowStyle_: any = null;
 
-	constructor(props:any) {
+	constructor(props: any) {
 		super(props);
 
 		shared.init(this);
@@ -72,7 +72,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		}
 	}
 
-	sectionByName(name:string) {
+	sectionByName(name: string) {
 		const sections = shared.settingsSections({ device: 'desktop', settings: this.state.settings });
 		for (const section of sections) {
 			if (section.name === name) return section;
@@ -81,7 +81,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		throw new Error(`Invalid section name: ${name}`);
 	}
 
-	screenFromName(screenName:string) {
+	screenFromName(screenName: string) {
 		if (screenName === 'encryption') return <EncryptionConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
@@ -89,7 +89,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}
 
-	switchSection(name:string) {
+	switchSection(name: string) {
 		const section = this.sectionByName(name);
 		let screenName = '';
 		if (section.isScreen) {
@@ -104,11 +104,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ selectedSectionName: section.name, screenName: screenName });
 	}
 
-	sideBar_selectionChange(event:any) {
+	sideBar_selectionChange(event: any) {
 		this.switchSection(event.section.name);
 	}
 
-	keyValueToArray(kv:any) {
+	keyValueToArray(kv: any) {
 		const output = [];
 		for (const k in kv) {
 			if (!kv.hasOwnProperty(k)) continue;
@@ -121,7 +121,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return output;
 	}
 
-	renderSectionDescription(section:any) {
+	renderSectionDescription(section: any) {
 		const description = Setting.sectionDescription(section.name);
 		if (!description) return null;
 
@@ -133,10 +133,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	sectionToComponent(key:string, section:any, settings:any, selected:boolean) {
+	sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
-		const createSettingComponents = (advanced:boolean) => {
+		const createSettingComponents = (advanced: boolean) => {
 			const output = [];
 			for (let i = 0; i < section.metadatas.length; i++) {
 				const md = section.metadatas[i];
@@ -150,7 +150,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const settingComps = createSettingComponents(false);
 		const advancedSettingComps = createSettingComponents(true);
 
-		const sectionStyle:any = {
+		const sectionStyle: any = {
 			marginTop: 20,
 			marginBottom: 20,
 			maxWidth: 640,
@@ -261,10 +261,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	settingToComponent(key:string, value:any) {
+	settingToComponent(key: string, value: any) {
 		const theme = themeStyle(this.props.themeId);
 
-		const output:any = null;
+		const output: any = null;
 
 		const rowStyle = {
 			marginBottom: theme.mainPadding,
@@ -317,7 +317,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			paddingBottom: 4,
 		});
 
-		const updateSettingValue = (key:string, value:any) => {
+		const updateSettingValue = (key: string, value: any) => {
 			// console.info(key + ' = ' + value);
 			return shared.updateSettingValue(this, key, value);
 		};
@@ -359,7 +359,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					<select
 						value={value}
 						style={selectStyle}
-						onChange={(event:any) => {
+						onChange={(event: any) => {
 							updateSettingValue(key, event.target.value);
 						}}
 					>
@@ -404,7 +404,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
-			const inputStyle:any = Object.assign({}, textInputBaseStyle, {
+			const inputStyle: any = Object.assign({}, textInputBaseStyle, {
 				width: '50%',
 				minWidth: '20em',
 			});
@@ -413,13 +413,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (md.subType === 'file_path_and_args') {
 				inputStyle.marginBottom = subLabel.marginBottom;
 
-				const splitCmd = (cmdString:string) => {
+				const splitCmd = (cmdString: string) => {
 					const path = pathUtils.extractExecutablePath(cmdString);
 					const args = cmdString.substr(path.length + 1);
 					return [pathUtils.unquotePath(path), args];
 				};
 
-				const joinCmd = (cmdArray:string[]) => {
+				const joinCmd = (cmdArray: string[]) => {
 					if (!cmdArray[0] && !cmdArray[1]) return '';
 					let cmdString = pathUtils.quotePath(cmdArray[0]);
 					if (!cmdString) cmdString = '""';
@@ -427,13 +427,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					return cmdString;
 				};
 
-				const onPathChange = (event:any) => {
+				const onPathChange = (event: any) => {
 					const cmd = splitCmd(this.state.settings[key]);
 					cmd[0] = event.target.value;
 					updateSettingValue(key, joinCmd(cmd));
 				};
 
-				const onArgsChange = (event:any) => {
+				const onArgsChange = (event: any) => {
 					const cmd = splitCmd(this.state.settings[key]);
 					cmd[1] = event.target.value;
 					updateSettingValue(key, joinCmd(cmd));
@@ -462,7 +462,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 										<input
 											type={inputType}
 											style={Object.assign({}, inputStyle, { marginBottom: 0, marginRight: 5 })}
-											onChange={(event:any) => {
+											onChange={(event: any) => {
 												onPathChange(event);
 											}}
 											value={cmd[0]}
@@ -479,7 +479,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 									<input
 										type={inputType}
 										style={inputStyle}
-										onChange={(event:any) => {
+										onChange={(event: any) => {
 											onArgsChange(event);
 										}}
 										value={cmd[1]}
@@ -495,7 +495,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				);
 			} else {
-				const onTextChange = (event:any) => {
+				const onTextChange = (event: any) => {
 					updateSettingValue(key, event.target.value);
 				};
 
@@ -508,7 +508,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							type={inputType}
 							style={inputStyle}
 							value={this.state.settings[key]}
-							onChange={(event:any) => {
+							onChange={(event: any) => {
 								onTextChange(event);
 							}}
 						/>
@@ -519,14 +519,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				);
 			}
 		} else if (md.type === Setting.TYPE_INT) {
-			const onNumChange = (event:any) => {
+			const onNumChange = (event: any) => {
 				updateSettingValue(key, event.target.value);
 			};
 
 			const label = [md.label()];
 			if (md.unitLabel) label.push(`(${md.unitLabel()})`);
 
-			const inputStyle:any = Object.assign({}, textInputBaseStyle);
+			const inputStyle: any = Object.assign({}, textInputBaseStyle);
 
 			return (
 				<div key={key} style={rowStyle}>
@@ -537,7 +537,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						type="number"
 						style={inputStyle}
 						value={this.state.settings[key]}
-						onChange={(event:any) => {
+						onChange={(event: any) => {
 							onNumChange(event);
 						}}
 						min={md.minimum}
@@ -640,7 +640,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return {
 		themeId: state.settings.theme,
 		settings: state.settings,

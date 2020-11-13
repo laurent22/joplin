@@ -3,12 +3,12 @@ import { _ } from '@joplin/lib/locale';
 const app = require('electron').remote.app;
 const { clipboard } = require('electron');
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'copyDevCommand',
 	label: () => _('Copy dev mode command to clipboard'),
 };
 
-export const runtime = ():CommandRuntime => {
+export const runtime = (): CommandRuntime => {
 	return {
 		execute: async () => {
 			const appPath = app.getPath('exe');

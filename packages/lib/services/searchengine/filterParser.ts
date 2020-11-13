@@ -1,10 +1,10 @@
 
 interface Term {
-	name: string
-	value: string
-	negated: boolean
-	quoted?: boolean
-	wildcard?: boolean
+	name: string;
+	value: string;
+	negated: boolean;
+	quoted?: boolean;
+	wildcard?: boolean;
 }
 
 const makeTerm = (name: string, value: string): Term => {
@@ -14,7 +14,7 @@ const makeTerm = (name: string, value: string): Term => {
 
 const quoted = (s: string) => s.startsWith('"') && s.endsWith('"');
 
-const quote = (s : string) => {
+const quote = (s: string) => {
 	if (!quoted(s)) {
 		return `"${s}"`;
 	}
@@ -22,7 +22,7 @@ const quote = (s : string) => {
 };
 
 
-const getTerms = (query: string) : Term[] => {
+const getTerms = (query: string): Term[] => {
 	const terms: Term[] = [];
 	let inQuote = false;
 	let inTerm = false;

@@ -7,11 +7,11 @@ import bridge from '../bridge';
 // }
 
 interface JoplinViewsDialogs {
-	showMessageBox(message:string):Promise<number>;
+	showMessageBox(message: string): Promise<number>;
 }
 
 interface JoplinViews {
-	dialogs: JoplinViewsDialogs
+	dialogs: JoplinViewsDialogs;
 }
 
 interface Joplin {
@@ -20,16 +20,16 @@ interface Joplin {
 }
 
 interface Components {
-	[key:string]: any,
+	[key: string]: any;
 }
 
 export default class PlatformImplementation {
 
-	private static instance_:PlatformImplementation;
-	private joplin_:Joplin;
-	private components_:Components;
+	private static instance_: PlatformImplementation;
+	private joplin_: Joplin;
+	private components_: Components;
 
-	public static instance():PlatformImplementation {
+	public static instance(): PlatformImplementation {
 		if (!this.instance_) this.instance_ = new PlatformImplementation();
 		return this.instance_;
 	}
@@ -40,7 +40,7 @@ export default class PlatformImplementation {
 		this.joplin_ = {
 			views: {
 				dialogs: {
-					showMessageBox: async function(message:string) {
+					showMessageBox: async function(message: string) {
 						return bridge().showMessageBox(message);
 					},
 				},
@@ -48,15 +48,15 @@ export default class PlatformImplementation {
 		};
 	}
 
-	registerComponent(name:string, component:any) {
+	registerComponent(name: string, component: any) {
 		this.components_[name] = component;
 	}
 
-	unregisterComponent(name:string) {
+	unregisterComponent(name: string) {
 		delete this.components_[name];
 	}
 
-	public get joplin():Joplin {
+	public get joplin(): Joplin {
 		return this.joplin_;
 	}
 

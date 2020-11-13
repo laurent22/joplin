@@ -18,17 +18,17 @@ const { sprintf } = require('sprintf-js');
 const JoplinError = require('../../JoplinError');
 
 interface SyncTargetInfo {
-	version: number,
+	version: number;
 }
 
 export default class MigrationHandler extends BaseService {
 
-	private api_:any = null;
-	private lockHandler_:LockHandler = null;
-	private clientType_:string;
-	private clientId_:string;
+	private api_: any = null;
+	private lockHandler_: LockHandler = null;
+	private clientType_: string;
+	private clientId_: string;
 
-	constructor(api:any, lockHandler:LockHandler, clientType:string, clientId:string) {
+	constructor(api: any, lockHandler: LockHandler, clientType: string, clientId: string) {
 		super();
 		this.api_ = api;
 		this.lockHandler_ = lockHandler;
@@ -36,11 +36,11 @@ export default class MigrationHandler extends BaseService {
 		this.clientId_ = clientId;
 	}
 
-	public async fetchSyncTargetInfo():Promise<SyncTargetInfo> {
+	public async fetchSyncTargetInfo(): Promise<SyncTargetInfo> {
 		const syncTargetInfoText = await this.api_.get('info.json');
 
 		// Returns version 0 if the sync target is empty
-		let output:SyncTargetInfo = { version: 0 };
+		let output: SyncTargetInfo = { version: 0 };
 
 		if (syncTargetInfoText) {
 			output = JSON.parse(syncTargetInfoText);
@@ -53,11 +53,11 @@ export default class MigrationHandler extends BaseService {
 		return output;
 	}
 
-	private serializeSyncTargetInfo(info:SyncTargetInfo) {
+	private serializeSyncTargetInfo(info: SyncTargetInfo) {
 		return JSON.stringify(info);
 	}
 
-	async checkCanSync():Promise<SyncTargetInfo> {
+	async checkCanSync(): Promise<SyncTargetInfo> {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
 		const syncTargetInfo = await this.fetchSyncTargetInfo();
 
@@ -72,7 +72,7 @@ export default class MigrationHandler extends BaseService {
 		return syncTargetInfo;
 	}
 
-	async upgrade(targetVersion:number = 0) {
+	async upgrade(targetVersion: number = 0) {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
 		const syncTargetInfo = await this.fetchSyncTargetInfo();
 
@@ -100,7 +100,7 @@ export default class MigrationHandler extends BaseService {
 		this.logger().info('MigrationHandler: Acquiring exclusive lock');
 		const exclusiveLock = await this.lockHandler_.acquireLock(LockType.Exclusive, this.clientType_, this.clientId_, 1000 * 30);
 		let autoLockError = null;
-		this.lockHandler_.startAutoLockRefresh(exclusiveLock, (error:any) => {
+		this.lockHandler_.startAutoLockRefresh(exclusiveLock, (error: any) => {
 			autoLockError = error;
 		});
 

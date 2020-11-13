@@ -7,10 +7,10 @@ const Countable = require('countable');
 const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 
 interface NoteContentPropertiesDialogProps {
-	themeId: number,
-	text: string,
-	markupLanguage: number,
-	onClose: Function,
+	themeId: number;
+	text: string;
+	markupLanguage: number;
+	onClose: Function;
 }
 
 interface TextPropertiesMap {
@@ -21,15 +21,15 @@ interface KeyToLabelMap {
 	[key: string]: string;
 }
 
-let markupToHtml_:any = null;
+let markupToHtml_: any = null;
 function markupToHtml() {
 	if (markupToHtml_) return markupToHtml_;
 	markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 	return markupToHtml_;
 }
 
-function countElements(text:string, wordSetter:Function, characterSetter:Function, characterNoSpaceSetter:Function, lineSetter:Function) {
-	Countable.count(text, (counter:any) => {
+function countElements(text: string, wordSetter: Function, characterSetter: Function, characterNoSpaceSetter: Function, lineSetter: Function) {
+	Countable.count(text, (counter: any) => {
 		wordSetter(counter.words);
 		characterSetter(counter.all);
 		characterNoSpaceSetter(counter.characters);
@@ -45,7 +45,7 @@ function formatReadTime(readTimeMinutes: number) {
 	return Math.ceil(readTimeMinutes).toString();
 }
 
-export default function NoteContentPropertiesDialog(props:NoteContentPropertiesDialogProps) {
+export default function NoteContentPropertiesDialog(props: NoteContentPropertiesDialogProps) {
 	const theme = themeStyle(props.themeId);
 	const tableBodyComps: any[] = [];
 	// For the source Markdown

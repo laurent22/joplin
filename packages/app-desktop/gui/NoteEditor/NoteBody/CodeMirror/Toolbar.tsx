@@ -9,11 +9,11 @@ import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenC
 const { buildStyle } = require('@joplin/lib/theme');
 
 interface ToolbarProps {
-	themeId: number,
-	toolbarButtonInfos: ToolbarButtonInfo[],
+	themeId: number;
+	toolbarButtonInfos: ToolbarButtonInfo[];
 }
 
-function styles_(props:ToolbarProps) {
+function styles_(props: ToolbarProps) {
 	return buildStyle('CodeMirrorToolbar', props.themeId, () => {
 		return {
 			root: {
@@ -26,7 +26,7 @@ function styles_(props:ToolbarProps) {
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
-function Toolbar(props:ToolbarProps) {
+function Toolbar(props: ToolbarProps) {
 	const styles = styles_(props);
 	return <ToolbarBase style={styles.root} items={props.toolbarButtonInfos} />;
 }

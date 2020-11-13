@@ -1,10 +1,10 @@
 let eventHandlerIndex_ = 1;
 
 export interface EventHandlers {
-	[key:string]: Function;
+	[key: string]: Function;
 }
 
-export default function mapEventHandlersToIds(arg:any, eventHandlers:EventHandlers) {
+export default function mapEventHandlersToIds(arg: any, eventHandlers: EventHandlers) {
 	if (Array.isArray(arg)) {
 		for (let i = 0; i < arg.length; i++) {
 			arg[i] = mapEventHandlersToIds(arg[i], eventHandlers);

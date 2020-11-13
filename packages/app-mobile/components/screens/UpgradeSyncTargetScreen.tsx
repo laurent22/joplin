@@ -7,7 +7,7 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('../global-style.js');
 const { ScreenHeader } = require('../screen-header.js');
 
-function UpgradeSyncTargetScreen(props:any) {
+function UpgradeSyncTargetScreen(props: any) {
 	const upgradeResult = useSyncTargetUpgrade();
 
 	const theme = themeStyle(props.themeId);
@@ -65,7 +65,7 @@ function UpgradeSyncTargetScreen(props:any) {
 	);
 }
 
-export default connect((state:any) => {
+export default connect((state: any) => {
 	return {
 		themeId: state.settings.theme,
 	};

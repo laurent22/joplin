@@ -2,19 +2,19 @@ import paginationToSql from './paginationToSql';
 import { Pagination, PaginationOrder } from './types';
 
 export interface ModelFeedPage {
-	items: any[],
-	has_more?: boolean,
-	total?: number,
+	items: any[];
+	has_more?: boolean;
+	total?: number;
 }
 
 export interface WhereQuery {
-	sql: string,
-	params: any[],
+	sql: string;
+	params: any[];
 }
 
 // Note: this method might return more fields than was requested as it will
 // also return fields that are necessary for pagination.
-export default async function(db:any, tableName:string, pagination:Pagination, whereQuery:WhereQuery = null, fields:string[] = null):Promise<ModelFeedPage> {
+export default async function(db: any, tableName: string, pagination: Pagination, whereQuery: WhereQuery = null, fields: string[] = null): Promise<ModelFeedPage> {
 	fields = fields ? fields.slice() : ['id'];
 
 	const where = whereQuery ? [whereQuery.sql] : [];
@@ -25,7 +25,7 @@ export default async function(db:any, tableName:string, pagination:Pagination, w
 
 	const paginationOrder = pagination.order[0].dir;
 
-	if (!pagination.order.find((o:PaginationOrder) => o.by === 'id')) {
+	if (!pagination.order.find((o: PaginationOrder) => o.by === 'id')) {
 		pagination = {
 			...pagination,
 			order: pagination.order.concat([{
@@ -52,7 +52,7 @@ export default async function(db:any, tableName:string, pagination:Pagination, w
 
 	const rows = await db.selectAll(sql, sqlParams);
 
-	const output:ModelFeedPage = { items: rows };
+	const output: ModelFeedPage = { items: rows };
 
 	if (rows.length >= pagination.limit) output.has_more = true;
 

@@ -7,9 +7,11 @@ import readonlyProperties from '../utils/readonlyProperties';
 import ApiResponse from '../ApiResponse';
 import NoteResource from '../../../models/NoteResource';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
+import defaultLoadOptions from '../utils/defaultLoadOptions';
 const Resource = require('../../../models/Resource');
+const Note = require('../../../models/Note');
 
-export default async function(request:Request, id:string = null, link:string = null) {
+export default async function(request: Request, id: string = null, link: string = null) {
 	// fieldName: "data"
 	// headers: Object
 	// originalFilename: "test.jpg"
@@ -33,7 +35,13 @@ export default async function(request:Request, id:string = null, link:string = n
 		}
 
 		if (link === 'notes') {
-			return collectionToPaginatedResults(await NoteResource.associatedNoteIds(id), request);
+			const noteIds = await NoteResource.associatedNoteIds(id);
+			const loadOptions = defaultLoadOptions(request, BaseModel.TYPE_NOTE);
+			const notes = [];
+			for (const noteId of noteIds) {
+				notes.push(await Note.load(noteId, loadOptions));
+			}
+			return collectionToPaginatedResults(notes, request);
 		}
 
 		if (link) throw new ErrorNotFound();

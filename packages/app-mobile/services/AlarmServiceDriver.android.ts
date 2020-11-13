@@ -5,9 +5,9 @@ const ReactNativeAN = require('react-native-alarm-notification').default;
 
 export default class AlarmServiceDriver {
 
-	private logger_:Logger;
+	private logger_: Logger;
 
-	constructor(logger:Logger) {
+	constructor(logger: Logger) {
 		this.logger_ = logger;
 	}
 
@@ -19,7 +19,7 @@ export default class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
-	public async clearNotification(id:number) {
+	public async clearNotification(id: number) {
 		const alarm = await this.alarmByJoplinNotificationId(id);
 		if (!alarm) return;
 
@@ -29,14 +29,14 @@ export default class AlarmServiceDriver {
 	}
 
 	// Returns -1 if could not be found
-	private alarmJoplinAlarmId(alarm:any):number {
+	private alarmJoplinAlarmId(alarm: any): number {
 		if (!alarm.data) return -1;
 		const m = alarm.data.match(/joplinNotificationId==>(\d+)/);
 		return m ? Number(m[1]) : -1;
 	}
 
-	private async alarmByJoplinNotificationId(joplinNotificationId:number) {
-		const alarms:any[] = await ReactNativeAN.getScheduledAlarms();
+	private async alarmByJoplinNotificationId(joplinNotificationId: number) {
+		const alarms: any[] = await ReactNativeAN.getScheduledAlarms();
 		for (const alarm of alarms) {
 			const id = this.alarmJoplinAlarmId(alarm);
 			if (id === joplinNotificationId) return alarm;
@@ -46,7 +46,7 @@ export default class AlarmServiceDriver {
 		return null;
 	}
 
-	public async scheduleNotification(notification:Notification) {
+	public async scheduleNotification(notification: Notification) {
 		const alarmNotifData = {
 			title: notification.title,
 			message: notification.body ? notification.body : '-', // Required

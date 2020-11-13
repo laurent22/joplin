@@ -44,6 +44,8 @@ describe('services_PluginService', function() {
 		const service = newPluginService();
 		await service.loadAndRunPlugins([`${testPluginDir}/simple`]);
 
+		expect(() => service.pluginById('simple')).not.toThrowError();
+
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
 		expect(allFolders[0].title).toBe('my plugin folder');
@@ -52,6 +54,12 @@ describe('services_PluginService', function() {
 		expect(allNotes.length).toBe(1);
 		expect(allNotes[0].title).toBe('testing plugin!');
 		expect(allNotes[0].parent_id).toBe(allFolders[0].id);
+	}));
+
+	it('should load and run a simple plugin and handle trailing slash', asyncTest(async () => {
+		const service = newPluginService();
+		await service.loadAndRunPlugins([`${testPluginDir}/simple/`]);
+		expect(() => service.pluginById('simple')).not.toThrowError();
 	}));
 
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
@@ -79,7 +87,7 @@ describe('services_PluginService', function() {
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
-		expect(allFolders.map((f:any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
+		expect(allFolders.map((f: any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 
 	it('should load plugins from JS bundles', asyncTest(async () => {

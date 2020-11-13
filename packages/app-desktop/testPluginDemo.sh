@@ -3,5 +3,6 @@
 # This is a convenient way to build and test a plugin demo.
 # It could be used to develop plugins too.
 
-PLUGIN_PATH=/home/laurent/source/joplin/packages/app-cli/tests/support/plugins/content_script
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+PLUGIN_PATH="$SCRIPT_DIR/../app-cli/tests/support/plugins/dialog"
 npm i --prefix="$PLUGIN_PATH" && npm start -- --dev-plugins "$PLUGIN_PATH"

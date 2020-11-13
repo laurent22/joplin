@@ -9,8 +9,8 @@ const { dialogs } = require('../../../utils/dialogs.js');
 const Resource = require('@joplin/lib/models/Resource.js');
 const Share = require('react-native-share').default;
 
-export default function useOnResourceLongPress(onJoplinLinkClick:Function, dialogBoxRef:any) {
-	return useCallback(async (msg:string) => {
+export default function useOnResourceLongPress(onJoplinLinkClick: Function, dialogBoxRef: any) {
+	return useCallback(async (msg: string) => {
 		try {
 			const resourceId = msg.split(':')[1];
 			const resource = await Resource.load(resourceId);

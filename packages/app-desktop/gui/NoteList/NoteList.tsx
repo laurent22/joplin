@@ -23,8 +23,8 @@ const commands = [
 const StyledRoot = styled.div`
 	width: 100%;
 	height: 100%;
-	background-color: ${(props:any) => props.theme.backgroundColor3};
-	border-right: 1px solid ${(props:any) => props.theme.dividerColor};
+	background-color: ${(props: any) => props.theme.backgroundColor3};
+	border-right: 1px solid ${(props: any) => props.theme.dividerColor};
 `;
 
 class NoteListComponent extends React.Component {
@@ -104,7 +104,7 @@ class NoteListComponent extends React.Component {
 		return style;
 	}
 
-	itemContextMenu(event:any) {
+	itemContextMenu(event: any) {
 		const currentItemId = event.currentTarget.getAttribute('data-id');
 		if (!currentItemId) return;
 
@@ -143,11 +143,11 @@ class NoteListComponent extends React.Component {
 		document.removeEventListener('dragend', this.onGlobalDrop_);
 	}
 
-	dragTargetNoteIndex_(event:any) {
+	dragTargetNoteIndex_(event: any) {
 		return Math.abs(Math.round((event.clientY - this.itemListRef.current.offsetTop() + this.itemListRef.current.offsetScroll()) / this.itemHeight));
 	}
 
-	noteItem_noteDragOver(event:any) {
+	noteItem_noteDragOver(event: any) {
 		if (this.props.notesParentType !== 'Folder') return;
 
 		const dt = event.dataTransfer;
@@ -161,7 +161,7 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
-	async noteItem_noteDrop(event:any) {
+	async noteItem_noteDrop(event: any) {
 		if (this.props.notesParentType !== 'Folder') return;
 
 		if (this.props.noteSortOrder !== 'order') {
@@ -187,7 +187,7 @@ class NoteListComponent extends React.Component {
 	}
 
 
-	async noteItem_checkboxClick(event:any, item:any) {
+	async noteItem_checkboxClick(event: any, item: any) {
 		const checked = event.target.checked;
 		const newNote = {
 			id: item.id,
@@ -197,7 +197,7 @@ class NoteListComponent extends React.Component {
 		eventManager.emit('todoToggle', { noteId: item.id, note: newNote });
 	}
 
-	async noteItem_titleClick(event:any, item:any) {
+	async noteItem_titleClick(event: any, item: any) {
 		if (event.ctrlKey || event.metaKey) {
 			event.preventDefault();
 			this.props.dispatch({
@@ -218,7 +218,7 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
-	noteItem_dragStart(event:any) {
+	noteItem_dragStart(event: any) {
 		let noteIds = [];
 
 		// Here there is two cases:
@@ -238,7 +238,7 @@ class NoteListComponent extends React.Component {
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
 	}
 
-	renderItem(item:any, index:number) {
+	renderItem(item: any, index: number) {
 		const highlightedWords = () => {
 			if (this.props.notesParentType === 'Search') {
 				const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
@@ -276,12 +276,12 @@ class NoteListComponent extends React.Component {
 		/>;
 	}
 
-	itemAnchorRef(itemId:string) {
+	itemAnchorRef(itemId: string) {
 		if (this.itemAnchorRefs_[itemId] && this.itemAnchorRefs_[itemId].current) return this.itemAnchorRefs_[itemId].current;
 		return null;
 	}
 
-	componentDidUpdate(prevProps:any) {
+	componentDidUpdate(prevProps: any) {
 		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
 			const id = this.props.selectedNoteIds[0];
 			const doRefocus = this.props.notes.length < prevProps.notes.length;
@@ -303,7 +303,7 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
-	scrollNoteIndex_(keyCode:any, ctrlKey:any, metaKey:any, noteIndex:any) {
+	scrollNoteIndex_(keyCode: any, ctrlKey: any, metaKey: any, noteIndex: any) {
 
 		if (keyCode === 33) {
 			// Page Up
@@ -334,7 +334,7 @@ class NoteListComponent extends React.Component {
 		return noteIndex;
 	}
 
-	async onKeyDown(event:any) {
+	async onKeyDown(event: any) {
 		const keyCode = event.keyCode;
 		const noteIds = this.props.selectedNoteIds;
 
@@ -370,7 +370,7 @@ class NoteListComponent extends React.Component {
 			event.preventDefault();
 
 			const notes = BaseModel.modelsByIds(this.props.notes, noteIds);
-			const todos = notes.filter((n:any) => !!n.is_todo);
+			const todos = notes.filter((n: any) => !!n.is_todo);
 			if (!todos.length) return;
 
 			for (let i = 0; i < todos.length; i++) {
@@ -402,7 +402,7 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
-	focusNoteId_(noteId:string) {
+	focusNoteId_(noteId: string) {
 		// - We need to focus the item manually otherwise focus might be lost when the
 		//   list is scrolled and items within it are being rebuilt.
 		// - We need to use an interval because when leaving the arrow pressed, the rendering
@@ -465,7 +465,7 @@ class NoteListComponent extends React.Component {
 		return <div style={emptyDivStyle}>{this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
 	}
 
-	renderItemList(style:any) {
+	renderItemList(style: any) {
 		if (!this.props.notes.length) return null;
 
 		return (
@@ -494,7 +494,7 @@ class NoteListComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state:AppState) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		notes: state.notes,
 		folders: state.folders,

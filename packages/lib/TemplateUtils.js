@@ -11,6 +11,15 @@ Mustache.escape = text => {
 	return text;
 };
 
+function beginningOfWeek(index) {
+	// index: 0 for Sunday, 1 for Monday
+	const thisDate = new Date();
+	const day = thisDate.getDay(),
+		diff = day >= index ? day - index : 6 - day;
+
+	return new Date().setDate(thisDate.getDate() - diff);
+}
+
 TemplateUtils.render = function(input) {
 	// new template variables can be added here
 	// If there are too many, this should be moved to a new file
@@ -24,6 +33,8 @@ TemplateUtils.render = function(input) {
 				return render(time.formatMsToLocal(new Date().getTime(), text));
 			};
 		},
+		bowm: time.formatMsToLocal(beginningOfWeek(1), time.dateFormat()),
+		bows: time.formatMsToLocal(beginningOfWeek(0), time.dateFormat()),
 	};
 
 	return Mustache.render(input, view);

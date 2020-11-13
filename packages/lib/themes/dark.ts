@@ -1,7 +1,7 @@
 import { Theme, ThemeAppearance } from './type';
 
 // This is the default dark theme in Joplin
-const theme:Theme = {
+const theme: Theme = {
 	appearance: ThemeAppearance.Dark,
 
 	// Color scheme "1" is the basic one, like used to display the note

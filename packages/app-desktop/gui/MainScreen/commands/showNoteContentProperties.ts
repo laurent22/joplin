@@ -3,14 +3,14 @@ import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 const Note = require('@joplin/lib/models/Note');
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'showNoteContentProperties',
 	label: () => _('Statistics...'),
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, noteId:string = null) => {
+		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
 			const note = await Note.load(noteId);

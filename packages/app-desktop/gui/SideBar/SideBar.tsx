@@ -23,38 +23,38 @@ const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 interface Props {
-	themeId: number,
-	dispatch: Function,
-	folders: any[],
-	collapsedFolderIds: string[],
-	notesParentType: string,
-	selectedFolderId: string,
-	selectedTagId: string,
-	selectedSmartFilterId:string,
-	decryptionWorker: any,
-	resourceFetcher: any,
-	syncReport: any,
-	tags: any[],
-	syncStarted: boolean,
+	themeId: number;
+	dispatch: Function;
+	folders: any[];
+	collapsedFolderIds: string[];
+	notesParentType: string;
+	selectedFolderId: string;
+	selectedTagId: string;
+	selectedSmartFilterId: string;
+	decryptionWorker: any;
+	resourceFetcher: any;
+	syncReport: any;
+	tags: any[];
+	syncStarted: boolean;
 }
 
 interface State {
-	tagHeaderIsExpanded: boolean,
-	folderHeaderIsExpanded: boolean,
+	tagHeaderIsExpanded: boolean;
+	folderHeaderIsExpanded: boolean;
 }
 
 const commands = [
 	require('./commands/focusElementSideBar'),
 ];
 
-function ExpandIcon(props:any) {
+function ExpandIcon(props: any) {
 	const theme = themeStyle(props.themeId);
-	const style:any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
+	const style: any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
 	if (!props.isVisible) style.visibility = 'hidden';
 	return <i className={props.isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 }
 
-function ExpandLink(props:any) {
+function ExpandLink(props: any) {
 	return props.hasChildren ? (
 		<StyledExpandLink href="#" data-folder-id={props.folderId} onClick={props.onClick}>
 			<ExpandIcon themeId={props.themeId} isVisible={true} isExpanded={props.isExpanded}/>
@@ -64,7 +64,7 @@ function ExpandLink(props:any) {
 	);
 }
 
-function FolderItem(props:any) {
+function FolderItem(props: any) {
 	const { hasChildren, isExpanded, depth, selected, folderId, folderTitle, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_ } = props;
 
 	const noteCountComp = noteCount ? <StyledNoteCount>{noteCount}</StyledNoteCount> : null;
@@ -97,12 +97,12 @@ const menuUtils = new MenuUtils(CommandService.instance());
 
 class SideBarComponent extends React.Component<Props, State> {
 
-	private folderItemsOrder_:any[] = [];
-	private tagItemsOrder_:any[] = [];
-	private rootRef:any = null;
-	private anchorItemRefs:any = {};
+	private folderItemsOrder_: any[] = [];
+	private tagItemsOrder_: any[] = [];
+	private rootRef: any = null;
+	private anchorItemRefs: any = {};
 
-	constructor(props:any) {
+	constructor(props: any) {
 		super(props);
 
 		CommandService.instance().componentRegisterCommands(this, commands);
@@ -121,7 +121,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		this.itemContextMenu = this.itemContextMenu.bind(this);
 	}
 
-	onFolderDragStart_(event:any) {
+	onFolderDragStart_(event: any) {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		if (!folderId) return;
 
@@ -130,12 +130,12 @@ class SideBarComponent extends React.Component<Props, State> {
 		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
 	}
 
-	onFolderDragOver_(event:any) {
+	onFolderDragOver_(event: any) {
 		if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
 		if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
 	}
 
-	async onFolderDrop_(event:any) {
+	async onFolderDrop_(event: any) {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		const dt = event.dataTransfer;
 		if (!dt) return;
@@ -163,7 +163,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		}
 	}
 
-	async onTagDrop_(event:any) {
+	async onTagDrop_(event: any) {
 		const tagId = event.currentTarget.getAttribute('data-tag-id');
 		const dt = event.dataTransfer;
 		if (!dt) return;
@@ -178,7 +178,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		}
 	}
 
-	async onFolderToggleClick_(event:any) {
+	async onFolderToggleClick_(event: any) {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 
 		this.props.dispatch({
@@ -201,7 +201,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		menu.popup(bridge().window());
 	}
 
-	async itemContextMenu(event:any) {
+	async itemContextMenu(event: any) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
 
@@ -297,28 +297,28 @@ class SideBarComponent extends React.Component<Props, State> {
 		menu.popup(bridge().window());
 	}
 
-	folderItem_click(folderId:string) {
+	folderItem_click(folderId: string) {
 		this.props.dispatch({
 			type: 'FOLDER_SELECT',
 			id: folderId ? folderId : null,
 		});
 	}
 
-	tagItem_click(tag:any) {
+	tagItem_click(tag: any) {
 		this.props.dispatch({
 			type: 'TAG_SELECT',
 			id: tag ? tag.id : null,
 		});
 	}
 
-	anchorItemRef(type:string, id:string) {
+	anchorItemRef(type: string, id: string) {
 		if (!this.anchorItemRefs[type]) this.anchorItemRefs[type] = {};
 		if (this.anchorItemRefs[type][id]) return this.anchorItemRefs[type][id];
 		this.anchorItemRefs[type][id] = React.createRef();
 		return this.anchorItemRefs[type][id];
 	}
 
-	firstAnchorItemRef(type:string) {
+	firstAnchorItemRef(type: string) {
 		const refs = this.anchorItemRefs[type];
 		if (!refs) return null;
 
@@ -330,18 +330,18 @@ class SideBarComponent extends React.Component<Props, State> {
 		return refs[item.id];
 	}
 
-	renderNoteCount(count:number) {
+	renderNoteCount(count: number) {
 		return count ? <StyledNoteCount>{count}</StyledNoteCount> : null;
 	}
 
-	renderExpandIcon(isExpanded:boolean, isVisible:boolean = true) {
+	renderExpandIcon(isExpanded: boolean, isVisible: boolean = true) {
 		const theme = themeStyle(this.props.themeId);
-		const style:any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
+		const style: any = { width: 16, maxWidth: 16, opacity: 0.5, fontSize: Math.round(theme.toolbarIconSize * 0.8), display: 'flex', justifyContent: 'center' };
 		if (!isVisible) style.visibility = 'hidden';
 		return <i className={isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'} style={style}></i>;
 	}
 
-	renderAllNotesItem(selected:boolean) {
+	renderAllNotesItem(selected: boolean) {
 		return (
 			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0'} isSpecialItem={true}>
 				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
@@ -359,7 +359,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		);
 	}
 
-	renderFolderItem(folder:any, selected:boolean, hasChildren:boolean, depth:number) {
+	renderFolderItem(folder: any, selected: boolean, hasChildren: boolean, depth: number) {
 		const anchorRef = this.anchorItemRef('folder', folder.id);
 		const isExpanded = this.props.collapsedFolderIds.indexOf(folder.id) < 0;
 		let noteCount = folder.note_count;
@@ -393,7 +393,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		/>;
 	}
 
-	renderTag(tag:any, selected:boolean) {
+	renderTag(tag: any, selected: boolean) {
 		const anchorRef = this.anchorItemRef('tag', tag.id);
 		const noteCount = Setting.value('showNoteCounts') ? this.renderNoteCount(tag.note_count) : '';
 
@@ -418,11 +418,11 @@ class SideBarComponent extends React.Component<Props, State> {
 		);
 	}
 
-	makeDivider(key:string) {
+	makeDivider(key: string) {
 		return <div style={{ height: 2, backgroundColor: 'blue' }} key={key} />;
 	}
 
-	renderHeader(key:string, label:string, iconName:string, contextMenuHandler:Function = null, onPlusButtonClick:Function = null, extraProps:any = {}) {
+	renderHeader(key: string, label: string, iconName: string, contextMenuHandler: Function = null, onPlusButtonClick: Function = null, extraProps: any = {}) {
 		const headerClick = extraProps.onClick || null;
 		delete extraProps.onClick;
 		const ref = this.anchorItemRef('headers', key);
@@ -433,7 +433,7 @@ class SideBarComponent extends React.Component<Props, State> {
 					ref={ref}
 					{...extraProps}
 					onContextMenu={contextMenuHandler}
-					onClick={(event:any) => {
+					onClick={(event: any) => {
 						// if a custom click event is attached, trigger that.
 						if (headerClick) {
 							headerClick(key, event);
@@ -459,7 +459,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		return null;
 	}
 
-	onKeyDown(event:any) {
+	onKeyDown(event: any) {
 		const keyCode = event.keyCode;
 		const selectedItem = this.selectedItem();
 
@@ -532,10 +532,10 @@ class SideBarComponent extends React.Component<Props, State> {
 		}
 	}
 
-	onHeaderClick_(key:string) {
+	onHeaderClick_(key: string) {
 		const toggleKey = `${key}IsExpanded`;
 		const isExpanded = (this.state as any)[toggleKey];
-		const newState:any = { [toggleKey]: !isExpanded };
+		const newState: any = { [toggleKey]: !isExpanded };
 		this.setState(newState);
 		Setting.setValue(toggleKey, !isExpanded);
 	}
@@ -547,7 +547,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		});
 	}
 
-	renderSynchronizeButton(type:string) {
+	renderSynchronizeButton(type: string) {
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
 		const iconAnimation = type !== 'sync' ? 'icon-infinite-rotation 1s linear infinite' : '';
 
@@ -668,7 +668,7 @@ class SideBarComponent extends React.Component<Props, State> {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return {
 		folders: state.folders,
 		tags: state.tags,

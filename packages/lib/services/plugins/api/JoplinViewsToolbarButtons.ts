@@ -21,7 +21,7 @@ export default class JoplinViewsToolbarButtons {
 	/**
 	 * Creates a new toolbar button and associate it with the given command.
 	 */
-	async create(commandName:string, location:ToolbarButtonLocation) {
+	async create(commandName: string, location: ToolbarButtonLocation) {
 		const handle = createViewHandle(this.plugin);
 		const controller = new ToolbarButtonController(handle, this.plugin.id, this.store, commandName, location);
 		this.plugin.addViewController(controller);

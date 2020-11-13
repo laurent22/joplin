@@ -17,13 +17,13 @@ enum LogLevel {
 }
 
 interface Target {
-	type: TargetType,
-	level?: LogLevel,
-	database?: any,
-	console?: any,
-	prefix?: string,
-	path?: string,
-	source?: string,
+	type: TargetType;
+	level?: LogLevel;
+	database?: any;
+	console?: any;
+	prefix?: string;
+	path?: string;
+	source?: string;
 }
 
 class Logger {
@@ -35,18 +35,18 @@ class Logger {
 	public static LEVEL_INFO = LogLevel.Info;
 	public static LEVEL_DEBUG = LogLevel.Debug;
 
-	public static fsDriver_:any = null;
+	public static fsDriver_: any = null;
 
-	private targets_:Target[] = [];
-	private level_:LogLevel = LogLevel.Info;
-	private lastDbCleanup_:number = time.unixMs();
+	private targets_: Target[] = [];
+	private level_: LogLevel = LogLevel.Info;
+	private lastDbCleanup_: number = time.unixMs();
 
 	static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = new FsDriverDummy();
 		return Logger.fsDriver_;
 	}
 
-	setLevel(level:LogLevel) {
+	setLevel(level: LogLevel) {
 		this.level_ = level;
 	}
 
@@ -58,7 +58,7 @@ class Logger {
 		return this.targets_;
 	}
 
-	addTarget(type:TargetType, options:any = null) {
+	addTarget(type: TargetType, options: any = null) {
 		const target = { type: type };
 		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
@@ -68,7 +68,7 @@ class Logger {
 		this.targets_.push(target);
 	}
 
-	objectToString(object:any) {
+	objectToString(object: any) {
 		let output = '';
 
 		if (typeof object === 'object') {
@@ -89,7 +89,7 @@ class Logger {
 		return output;
 	}
 
-	objectsToString(...object:any[]) {
+	objectsToString(...object: any[]) {
 		const output = [];
 		for (let i = 0; i < object.length; i++) {
 			output.push(`"${this.objectToString(object[i])}"`);
@@ -111,7 +111,7 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	async lastEntries(limit:number = 100, options:any = null) {
+	async lastEntries(limit: number = 100, options: any = null) {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];
@@ -127,12 +127,12 @@ class Logger {
 		return [];
 	}
 
-	targetLevel(target:Target) {
+	targetLevel(target: Target) {
 		if ('level' in target) return target.level;
 		return this.level();
 	}
 
-	log(level:LogLevel, ...object:any[]) {
+	log(level: LogLevel, ...object: any[]) {
 		if (!this.targets_.length) return;
 
 		const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -187,20 +187,20 @@ class Logger {
 		}
 	}
 
-	error(...object:any[]) {
+	error(...object: any[]) {
 		return this.log(LogLevel.Error, ...object);
 	}
-	warn(...object:any[]) {
+	warn(...object: any[]) {
 		return this.log(LogLevel.Warn, ...object);
 	}
-	info(...object:any[]) {
+	info(...object: any[]) {
 		return this.log(LogLevel.Info, ...object);
 	}
-	debug(...object:any[]) {
+	debug(...object: any[]) {
 		return this.log(LogLevel.Debug, ...object);
 	}
 
-	static levelStringToId(s:string) {
+	static levelStringToId(s: string) {
 		if (s == 'none') return LogLevel.None;
 		if (s == 'error') return LogLevel.Error;
 		if (s == 'warn') return LogLevel.Warn;
@@ -209,7 +209,7 @@ class Logger {
 		throw new Error(`Unknown log level: ${s}`);
 	}
 
-	static levelIdToString(id:LogLevel) {
+	static levelIdToString(id: LogLevel) {
 		if (id == LogLevel.None) return 'none';
 		if (id == LogLevel.Error) return 'error';
 		if (id == LogLevel.Warn) return 'warn';

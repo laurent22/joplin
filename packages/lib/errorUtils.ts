@@ -3,9 +3,9 @@
 // This wraps an error message, allowing to set a prefix,
 // while preserving all the important properties
 // in particular the stack trace and original error message.
-export function wrapError(prefix:string, error:any) {
+export function wrapError(prefix: string, error: any) {
 	if (!error) throw new Error('Unknown error');
-	const newError:any = new Error([prefix, error.message || ''].join(': '));
+	const newError: any = new Error([prefix, error.message || ''].join(': '));
 
 	if ('name' in error) newError.name = error.name;
 	if ('fileName' in error) newError.fileName = error.fileName;

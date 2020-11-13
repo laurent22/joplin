@@ -43,7 +43,7 @@ export default class JoplinCommands {
 	 * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
 	 * ```
 	 */
-	async execute(commandName: string, ...args:any[]):Promise<any | void> {
+	async execute(commandName: string, ...args: any[]): Promise<any | void> {
 		return CommandService.instance().execute(commandName, ...args);
 	}
 
@@ -63,16 +63,16 @@ export default class JoplinCommands {
 	 * });
 	 * ```
 	 */
-	async register(command:Command) {
-		const declaration:CommandDeclaration = {
+	async register(command: Command) {
+		const declaration: CommandDeclaration = {
 			name: command.name,
 			label: command.label,
 		};
 
 		if ('iconName' in command) declaration.iconName = command.iconName;
 
-		const runtime:CommandRuntime = {
-			execute: (_context:CommandContext, ...args:any[]) => {
+		const runtime: CommandRuntime = {
+			execute: (_context: CommandContext, ...args: any[]) => {
 				return command.execute(...args);
 			},
 		};

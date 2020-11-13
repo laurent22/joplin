@@ -25,6 +25,7 @@ export default function styles(themeId: number) {
 			recorderInput: {
 				...theme.inputStyle,
 				minHeight: 29,
+				width: '200px',
 			},
 			label: {
 				...theme.textStyle,

@@ -10,14 +10,14 @@ export enum MarkupLanguage {
 
 export default class MarkupToHtml {
 
-	static MARKUP_LANGUAGE_MARKDOWN:number = MarkupLanguage.Markdown;
-	static MARKUP_LANGUAGE_HTML:number = MarkupLanguage.Html;
+	static MARKUP_LANGUAGE_MARKDOWN: number = MarkupLanguage.Markdown;
+	static MARKUP_LANGUAGE_HTML: number = MarkupLanguage.Html;
 
-	private renderers_:any = {};
-	private options_:any;
-	private rawMarkdownIt_:any;
+	private renderers_: any = {};
+	private options_: any;
+	private rawMarkdownIt_: any;
 
-	constructor(options:any) {
+	constructor(options: any) {
 		this.options_ = Object.assign({}, {
 			ResourceModel: {
 				isResourceUrl: () => false,
@@ -25,7 +25,7 @@ export default class MarkupToHtml {
 		}, options);
 	}
 
-	renderer(markupLanguage:MarkupLanguage) {
+	renderer(markupLanguage: MarkupLanguage) {
 		if (this.renderers_[markupLanguage]) return this.renderers_[markupLanguage];
 
 		let RendererClass = null;
@@ -42,7 +42,7 @@ export default class MarkupToHtml {
 		return this.renderers_[markupLanguage];
 	}
 
-	stripMarkup(markupLanguage:MarkupLanguage, markup:string, options:any = null) {
+	stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: any = null) {
 		if (!markup) return '';
 
 		options = Object.assign({}, {
@@ -70,16 +70,16 @@ export default class MarkupToHtml {
 		return output;
 	}
 
-	clearCache(markupLanguage:MarkupLanguage) {
+	clearCache(markupLanguage: MarkupLanguage) {
 		const r = this.renderer(markupLanguage);
 		if (r.clearCache) r.clearCache();
 	}
 
-	async render(markupLanguage:MarkupLanguage, markup:string, theme:any, options:any) {
+	async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any) {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
 
-	async allAssets(markupLanguage:MarkupLanguage, theme:any) {
+	async allAssets(markupLanguage: MarkupLanguage, theme: any) {
 		return this.renderer(markupLanguage).allAssets(theme);
 	}
 }

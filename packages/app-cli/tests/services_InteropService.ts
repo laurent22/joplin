@@ -19,7 +19,7 @@ function exportDir() {
 	return `${__dirname}/export`;
 }
 
-function fieldsEqual(model1:any, model2:any, fieldNames:string[]) {
+function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 	for (let i = 0; i < fieldNames.length; i++) {
 		const f = fieldNames[i];
 		expect(model1[f]).toBe(model2[f], `For key ${f}`);
@@ -86,7 +86,7 @@ describe('services_InteropService', function() {
 		await service.import({ path: filePath });
 
 		const allFolders = await Folder.all();
-		expect(allFolders.map((f:any) => f.title).sort().join(' - ')).toBe('folder - folder (1)');
+		expect(allFolders.map((f: any) => f.title).sort().join(' - ')).toBe('folder - folder (1)');
 	}));
 
 	it('should import folders, and only de-duplicate titles when needed', asyncTest(async () => {
@@ -447,14 +447,14 @@ describe('services_InteropService', function() {
 			sourcePath: '',
 		};
 
-		const module:Module = {
+		const module: Module = {
 			type: ModuleType.Importer,
 			description: 'Test Import Module',
 			format: 'testing',
 			fileExtensions: ['test'],
 			isCustom: true,
 
-			onExec: async (context:CustomImportContext) => {
+			onExec: async (context: CustomImportContext) => {
 				result.hasBeenExecuted = true;
 				result.sourcePath = context.sourcePath;
 			},
@@ -479,7 +479,7 @@ describe('services_InteropService', function() {
 
 		const filePath = `${exportDir()}/example.test`;
 
-		const result:any = {
+		const result: any = {
 			destPath: '',
 			itemTypes: [],
 			items: [],
@@ -488,28 +488,28 @@ describe('services_InteropService', function() {
 			closeCalled: false,
 		};
 
-		const module:Module = {
+		const module: Module = {
 			type: ModuleType.Exporter,
 			description: 'Test Export Module',
 			format: 'testing',
 			fileExtensions: ['test'],
 			isCustom: true,
 
-			onInit: async (context:CustomExportContext) => {
+			onInit: async (context: CustomExportContext) => {
 				result.destPath = context.destPath;
 			},
 
-			onProcessItem: async (_context:CustomExportContext, itemType:number, item:any) => {
+			onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
 				result.itemTypes.push(itemType);
 				result.items.push(item);
 			},
 
-			onProcessResource: async (_context:CustomExportContext, resource:any, filePath:string) => {
+			onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
 				result.resources.push(resource);
 				result.filePaths.push(filePath);
 			},
 
-			onClose: async (_context:CustomExportContext) => {
+			onClose: async (_context: CustomExportContext) => {
 				result.closeCalled = true;
 			},
 		};
@@ -524,7 +524,7 @@ describe('services_InteropService', function() {
 		expect(result.destPath).toBe(filePath);
 		expect(result.itemTypes.sort().join('_')).toBe('1_1_2_4');
 		expect(result.items.length).toBe(4);
-		expect(result.items.map((o:any) => o.title).sort().join('_')).toBe('folder1_note1_note2_photo.jpg');
+		expect(result.items.map((o: any) => o.title).sort().join('_')).toBe('folder1_note1_note2_photo.jpg');
 		expect(result.resources.length).toBe(1);
 		expect(result.resources[0].title).toBe('photo.jpg');
 		expect(result.filePaths.length).toBe(1);

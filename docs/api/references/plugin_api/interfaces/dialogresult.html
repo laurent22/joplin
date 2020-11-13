@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ImportModule | Joplin Plugin API Documentation</title>
+	<title>DialogResult | Joplin Plugin API Documentation</title>
 	<meta name="description" content="Documentation for Joplin Plugin API Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
         </li>
 -->
 				<li>
-					<a href="importmodule.html">ImportModule</a>
+					<a href="dialogresult.html">DialogResult</a>
 				</li>
 			</ul>
-			<h1><!-- Interface  -->ImportModule</h1>
+			<h1><!-- Interface  -->DialogResult</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
         <h3>Hierarchy</h3>
         <ul class="tsd-hierarchy">
         <li>
-                <span class="target">ImportModule</span>
+                <span class="target">DialogResult</span>
 
         </li>
 </ul>
@@ -83,18 +83,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="importmodule.html#description" class="tsd-kind-icon">description</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="importmodule.html#fileextensions" class="tsd-kind-icon">file<wbr>Extensions</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="importmodule.html#format" class="tsd-kind-icon">format</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="importmodule.html#isnotearchive" class="tsd-kind-icon">is<wbr>Note<wbr>Archive</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="importmodule.html#outputformat" class="tsd-kind-icon">output<wbr>Format</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="importmodule.html#sources" class="tsd-kind-icon">sources</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="importmodule.html#onexec" class="tsd-kind-icon">on<wbr>Exec</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="dialogresult.html#formdata" class="tsd-kind-icon">form<wbr>Data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="dialogresult.html#id" class="tsd-kind-icon">id</a></li>
 							</ul>
 						</section>
 					</div>
@@ -103,110 +93,18 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="description" class="tsd-anchor"></a>
-					<h3>description</h3>
-					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="formdata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> form<wbr>Data</h3>
+					<div class="tsd-signature tsd-kind-icon">form<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The description that will appear in the UI, for example in the menu item.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="fileextensions" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> file<wbr>Extensions</h3>
-					<div class="tsd-signature tsd-kind-icon">file<wbr>Extensions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="id" class="tsd-anchor"></a>
+					<h3>id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <a href="../globals.html#buttonid" class="tsd-signature-type">ButtonId</a></div>
 					<aside class="tsd-sources">
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Tells the file extensions of the exported files.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="format" class="tsd-anchor"></a>
-					<h3>format</h3>
-					<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The format to be exported, eg &quot;enex&quot;, &quot;jex&quot;, &quot;json&quot;, etc.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="isnotearchive" class="tsd-anchor"></a>
-					<h3>is<wbr>Note<wbr>Archive</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Note<wbr>Archive<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Only applies to single file exporters or importers
-								It tells whether the format can package multiple notes into one file.
-							For example JEX or ENEX can, but HTML cannot.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="outputformat" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> output<wbr>Format</h3>
-					<div class="tsd-signature tsd-kind-icon">output<wbr>Format<span class="tsd-signature-symbol">:</span> <a href="../enums/importmoduleoutputformat.html" class="tsd-signature-type">ImportModuleOutputFormat</a></div>
-					<aside class="tsd-sources">
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Tells the type of notes that will be generated, either HTML or Markdown (default).</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="sources" class="tsd-anchor"></a>
-					<h3>sources</h3>
-					<div class="tsd-signature tsd-kind-icon">sources<span class="tsd-signature-symbol">:</span> <a href="../enums/filesystemitem.html" class="tsd-signature-type">FileSystemItem</a><span class="tsd-signature-symbol">[]</span></div>
-					<aside class="tsd-sources">
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The type of sources that are supported by the module. Tells whether the module can import files or directories or both.</p>
-						</div>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="onexec" class="tsd-anchor"></a>
-					<h3>on<wbr>Exec</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Exec<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="importcontext.html" class="tsd-signature-type">ImportContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Called when the import process starts. There is only one event handler within which you should import the complete data.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>context: <a href="importcontext.html" class="tsd-signature-type">ImportContext</a></h5>
-								</li>
-							</ul>
-							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
-
-
--->
-						</li>
-					</ul>
 				</section>
 			</section>
 		</div>
@@ -288,9 +186,21 @@
 					<li class=" tsd-kind-interface">
 						<a href="createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
 					</li>
-					<li class=" tsd-kind-interface">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
 						<a href="dialogresult.html" class="tsd-kind-icon">DialogResult</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="dialogresult.html#formdata" class="tsd-kind-icon">form<wbr>Data</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="dialogresult.html#id" class="tsd-kind-icon">id</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
@@ -306,36 +216,9 @@
 					<li class=" tsd-kind-interface">
 						<a href="importcontext.html" class="tsd-kind-icon">ImportContext</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface">
+					<li class=" tsd-kind-interface">
 						<a href="importmodule.html" class="tsd-kind-icon">ImportModule</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="importmodule.html#description" class="tsd-kind-icon">description</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="importmodule.html#fileextensions" class="tsd-kind-icon">file<wbr>Extensions</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="importmodule.html#format" class="tsd-kind-icon">format</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="importmodule.html#isnotearchive" class="tsd-kind-icon">is<wbr>Note<wbr>Archive</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="importmodule.html#outputformat" class="tsd-kind-icon">output<wbr>Format</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="importmodule.html#sources" class="tsd-kind-icon">sources</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="importmodule.html#onexec" class="tsd-kind-icon">on<wbr>Exec</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="menuitem.html" class="tsd-kind-icon">MenuItem</a>
 					</li>

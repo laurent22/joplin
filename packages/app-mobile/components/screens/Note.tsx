@@ -44,10 +44,10 @@ const ShareExtension = require('../../utils/ShareExtension.js').default;
 const CameraView = require('../CameraView').default;
 const urlUtils = require('@joplin/lib/urlUtils');
 
-const emptyArray:any[] = [];
+const emptyArray: any[] = [];
 
 class NoteScreenComponent extends BaseScreenComponent {
-	static navigationOptions():any {
+	static navigationOptions(): any {
 		return { header: null };
 	}
 
@@ -155,7 +155,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.setState({ noteTagDialogShown: false });
 		};
 
-		this.onJoplinLinkClick_ = async (msg:string) => {
+		this.onJoplinLinkClick_ = async (msg: string) => {
 			try {
 				if (msg.indexOf('joplin://') === 0) {
 					const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
@@ -198,7 +198,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		};
 
-		this.refreshResource = async (resource:any, noteBody:string = null) => {
+		this.refreshResource = async (resource: any, noteBody: string = null) => {
 			if (noteBody === null && this.state.note && this.state.note.body) noteBody = this.state.note.body;
 			if (noteBody === null) return;
 
@@ -245,11 +245,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} });
 	}
 
-	async undoRedo(type:string) {
+	async undoRedo(type: string) {
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
-		this.setState((state:any) => {
+		this.setState((state: any) => {
 			const newNote = Object.assign({}, state.note);
 			newNote.body = undoState.body;
 			return {
@@ -276,7 +276,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.styles_ = {};
 
 		// TODO: Clean up these style names and nesting
-		const styles:any = {
+		const styles: any = {
 			screen: {
 				flex: 1,
 				backgroundColor: theme.backgroundColor,
@@ -361,7 +361,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return shared.isModified(this);
 	}
 
-	undoState(noteBody:string = null) {
+	undoState(noteBody: string = null) {
 		return {
 			body: noteBody === null ? this.state.note.body : noteBody,
 		};
@@ -407,11 +407,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.requestGeoLocationPermissions();
 	}
 
-	onMarkForDownload(event:any) {
+	onMarkForDownload(event: any) {
 		ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	componentDidUpdate(prevProps:any) {
+	componentDidUpdate(prevProps: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
@@ -442,13 +442,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
-	title_changeText(text:string) {
+	title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 		this.scheduleSave();
 	}
 
-	body_changeText(text:string) {
+	body_changeText(text: string) {
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -458,7 +458,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	body_selectionChange(event:any) {
+	body_selectionChange(event: any) {
 		this.selection = event.nativeEvent.selection;
 	}
 
@@ -468,7 +468,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 	}
 
-	saveActionQueue(noteId:string) {
+	saveActionQueue(noteId: string) {
 		if (!this.saveActionQueues_[noteId]) {
 			this.saveActionQueues_[noteId] = new AsyncActionQueue(500);
 		}
@@ -479,13 +479,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
-	async saveNoteButton_press(folderId:string = null) {
+	async saveNoteButton_press(folderId: string = null) {
 		await shared.saveNoteButton_press(this, folderId);
 
 		Keyboard.dismiss();
 	}
 
-	async saveOneProperty(name:string, value:any) {
+	async saveOneProperty(name: string, value: any) {
 		await shared.saveOneProperty(this, name, value);
 	}
 
@@ -521,32 +521,32 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async imageDimensions(uri:string) {
+	async imageDimensions(uri: string) {
 		return new Promise((resolve, reject) => {
 			Image.getSize(
 				uri,
-				(width:number, height:number) => {
+				(width: number, height: number) => {
 					resolve({ width: width, height: height });
 				},
-				(error:any) => {
+				(error: any) => {
 					reject(error);
 				}
 			);
 		});
 	}
 
-	showImagePicker(options:any) {
+	showImagePicker(options: any) {
 		return new Promise((resolve) => {
-			ImagePicker.launchImageLibrary(options, (response:any) => {
+			ImagePicker.launchImageLibrary(options, (response: any) => {
 				resolve(response);
 			});
 		});
 	}
 
-	async resizeImage(localFilePath:string, targetPath:string, mimeType:string) {
+	async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
-		const dimensions:any = await this.imageDimensions(localFilePath);
+		const dimensions: any = await this.imageDimensions(localFilePath);
 
 		reg.logger().info('Original dimensions ', dimensions);
 
@@ -592,7 +592,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return true;
 	}
 
-	async attachFile(pickerResponse:any, fileType:string) {
+	async attachFile(pickerResponse: any, fileType: string) {
 		if (!pickerResponse) {
 			// User has cancelled
 			return;
@@ -702,7 +702,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: true });
 	}
 
-	cameraView_onPhoto(data:any) {
+	cameraView_onPhoto(data: any) {
 		this.attachFile(
 			{
 				uri: data.uri,
@@ -752,7 +752,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ alarmDialogShown: true });
 	}
 
-	async onAlarmDialogAccept(date:Date) {
+	async onAlarmDialogAccept(date: Date) {
 		const newNote = Object.assign({}, this.state.note);
 		newNote.todo_due = date ? date.getTime() : 0;
 
@@ -928,11 +928,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	async todoCheckbox_change(checked:boolean) {
+	async todoCheckbox_change(checked: boolean) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
-	titleTextInput_contentSizeChange(event:any) {
+	titleTextInput_contentSizeChange(event: any) {
 		if (!this.enableMultilineTitle_) return;
 
 		const height = event.nativeEvent.contentSize.height;
@@ -966,7 +966,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// }
 	}
 
-	async folderPickerOptions_valueChanged(itemValue:any) {
+	async folderPickerOptions_valueChanged(itemValue: any) {
 		const note = this.state.note;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
@@ -1009,7 +1009,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 5);
 	}
 
-	onBodyViewerCheckboxChange(newBody:string) {
+	onBodyViewerCheckboxChange(newBody: string) {
 		this.saveOneProperty('body', newBody);
 	}
 
@@ -1203,7 +1203,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				<DialogBox
-					ref={(dialogbox:any) => {
+					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -1213,7 +1213,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const NoteScreen = connect((state:any) => {
+const NoteScreen = connect((state: any) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,

@@ -10,7 +10,7 @@ const keymapService = KeymapService.instance();
 function allKeymapItems() {
 	const output = keymapService.getKeymapItems().slice();
 
-	output.sort((a:KeymapItem, b:KeymapItem) => {
+	output.sort((a: KeymapItem, b: KeymapItem) => {
 		return getLabel(a.command).toLocaleLowerCase() < getLabel(b.command).toLocaleLowerCase() ? -1 : +1;
 	});
 
@@ -20,9 +20,9 @@ function allKeymapItems() {
 const useKeymap = (): [
 	KeymapItem[],
 	Error,
-	(keymapItems: KeymapItem[]) => void,
-	(commandName: string, accelerator: string) => void,
-	(commandName: string) => void
+	(keymapItems: KeymapItem[])=> void,
+	(commandName: string, accelerator: string)=> void,
+	(commandName: string)=> void,
 ] => {
 	const [keymapItems, setKeymapItems] = useState<KeymapItem[]>(() => allKeymapItems());
 	const [keymapError, setKeymapError] = useState<Error>(null);
