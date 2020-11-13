@@ -1,7 +1,7 @@
 import { Request } from '../Api';
 const BaseItem = require('../../../models/BaseItem');
 
-function defaultFieldsByModelType(modelType:number):string[] {
+function defaultFieldsByModelType(modelType: number): string[] {
 	const ModelClass = BaseItem.getClassByItemType(modelType);
 	const possibleFields = ['id', 'parent_id', 'title'];
 	const output = [];
@@ -11,13 +11,13 @@ function defaultFieldsByModelType(modelType:number):string[] {
 	return output;
 }
 
-export default function(request:Request, modelType:number) {
+export default function(request: Request, modelType: number) {
 	const query = request.query;
 	if (!query || !query.fields) return defaultFieldsByModelType(modelType);
 	if (Array.isArray(query.fields)) return query.fields.slice();
 	const fields = query.fields
 		.split(',')
-		.map((f:string) => f.trim())
-		.filter((f:string) => !!f);
+		.map((f: string) => f.trim())
+		.filter((f: string) => !!f);
 	return fields.length ? fields : defaultFieldsByModelType(modelType);
 }

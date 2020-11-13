@@ -20,53 +20,53 @@ export enum RequestMethod {
 }
 
 interface RequestFile {
-	path: string,
+	path: string;
 }
 
 interface RequestQuery {
-	fields?: string[] | string,
-	token?: string,
-	nounce?: string,
-	page?: number,
+	fields?: string[] | string;
+	token?: string;
+	nounce?: string;
+	page?: number;
 
 	// Search engine query
-	query?: string,
-	type?: string, // Model type as a string (eg. "note", "folder")
+	query?: string;
+	type?: string; // Model type as a string (eg. "note", "folder")
 
-	as_tree?: number,
+	as_tree?: number;
 
 	// Pagination
-	limit?: number,
-	order_dir?: PaginationOrderDir,
-	order_by?: string,
+	limit?: number;
+	order_dir?: PaginationOrderDir;
+	order_by?: string;
 }
 
 export interface Request {
-	method: RequestMethod,
-	path: string,
-	query: RequestQuery,
-	body: any,
-	bodyJson_: any,
-	bodyJson: any,
-	files: RequestFile[],
-	params: any[],
-	action?: any,
+	method: RequestMethod;
+	path: string;
+	query: RequestQuery;
+	body: any;
+	bodyJson_: any;
+	bodyJson: any;
+	files: RequestFile[];
+	params: any[];
+	action?: any;
 }
 
-type RouteFunction = (request:Request, id:string, link:string) => Promise<any | void>;
+type RouteFunction = (request: Request, id: string, link: string)=> Promise<any | void>;
 
 interface ResourceNameToRoute {
-	[key:string]: RouteFunction;
+	[key: string]: RouteFunction;
 }
 
 export default class Api {
 
-	private token_:string | Function;
-	private knownNounces_:any = {};
-	private actionApi_:any;
-	private resourceNameToRoute_:ResourceNameToRoute = {};
+	private token_: string | Function;
+	private knownNounces_: any = {};
+	private actionApi_: any;
+	private resourceNameToRoute_: ResourceNameToRoute = {};
 
-	public constructor(token:string = null, actionApi:any = null) {
+	public constructor(token: string = null, actionApi: any = null) {
 		this.token_ = token;
 		this.actionApi_ = actionApi;
 
@@ -86,7 +86,7 @@ export default class Api {
 		return typeof this.token_ === 'function' ? this.token_() : this.token_;
 	}
 
-	private parsePath(path:string) {
+	private parsePath(path: string) {
 		path = ltrimSlashes(path);
 		if (!path) return { fn: null, params: [] };
 
@@ -101,7 +101,7 @@ export default class Api {
 	}
 
 	// Response can be any valid JSON object, so a string, and array or an object (key/value pairs).
-	public async route(method:RequestMethod, path:string, query:RequestQuery = null, body:any = null, files:RequestFile[] = null):Promise<any> {
+	public async route(method: RequestMethod, path: string, query: RequestQuery = null, body: any = null, files: RequestFile[] = null): Promise<any> {
 		if (!files) files = [];
 		if (!query) query = {};
 
@@ -129,13 +129,13 @@ export default class Api {
 			}
 		}
 
-		const request:Request = {
+		const request: Request = {
 			method,
 			path: ltrimSlashes(path),
 			query: query ? query : {},
 			body,
 			bodyJson_: null,
-			bodyJson: function(disallowedProperties:string[] = null) {
+			bodyJson: function(disallowedProperties: string[] = null) {
 				if (!this.bodyJson_) this.bodyJson_ = JSON.parse(this.body);
 
 				if (disallowedProperties) {
@@ -163,7 +163,7 @@ export default class Api {
 		}
 	}
 
-	private checkToken_(request:Request) {
+	private checkToken_(request: Request) {
 		// For now, whitelist some calls to allow the web clipper to work
 		// without an extra auth step
 		const whiteList = [['GET', 'ping'], ['GET', 'tags'], ['GET', 'folders'], ['POST', 'notes']];
@@ -177,7 +177,7 @@ export default class Api {
 		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}
 
-	private async execServiceActionFromRequest_(externalApi:any, request:Request) {
+	private async execServiceActionFromRequest_(externalApi: any, request: Request) {
 		const action = externalApi[request.action];
 		if (!action) throw new ErrorNotFound(`Invalid action: ${request.action}`);
 		const args = Object.assign({}, request);
@@ -185,7 +185,7 @@ export default class Api {
 		return action(args);
 	}
 
-	private async action_services(request:Request, serviceName:string) {
+	private async action_services(request: Request, serviceName: string) {
 		if (request.method !== RequestMethod.POST) throw new ErrorMethodNotAllowed();
 		if (!this.actionApi_) throw new ErrorNotFound('No action API has been setup!');
 		if (!this.actionApi_[serviceName]) throw new ErrorNotFound(`No such service: ${serviceName}`);

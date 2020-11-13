@@ -14,12 +14,12 @@ export default class NoteResource extends BaseModel {
 		return BaseModel.TYPE_NOTE_RESOURCE;
 	}
 
-	static async associatedNoteIds(resourceId:string):Promise<string[]> {
+	static async associatedNoteIds(resourceId: string): Promise<string[]> {
 		const rows = await this.modelSelectAll('SELECT note_id FROM note_resources WHERE resource_id = ? AND is_associated = 1', [resourceId]);
-		return rows.map((r:any) => r.note_id);
+		return rows.map((r: any) => r.note_id);
 	}
 
-	static async setAssociatedResources(noteId:string, resourceIds:string[]) {
+	static async setAssociatedResources(noteId: string, resourceIds: string[]) {
 		const existingRows = await this.modelSelectAll('SELECT * FROM note_resources WHERE note_id = ?', [noteId]);
 
 		const notProcessedResourceIds = resourceIds.slice();
@@ -53,11 +53,11 @@ export default class NoteResource extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
-	static async remove(noteId:string) {
+	static async remove(noteId: string) {
 		await this.db().exec({ sql: 'UPDATE note_resources SET is_associated = 0 WHERE note_id = ?', params: [noteId] });
 	}
 
-	static async orphanResources(expiryDelay:number = null) {
+	static async orphanResources(expiryDelay: number = null) {
 		if (expiryDelay === null) expiryDelay = 1000 * 60 * 60 * 24 * 10;
 		const cutOffTime = Date.now() - expiryDelay;
 		const output = await this.modelSelectAll(
@@ -71,10 +71,10 @@ export default class NoteResource extends BaseModel {
 		`,
 			[cutOffTime]
 		);
-		return output.map((r:any) => r.resource_id);
+		return output.map((r: any) => r.resource_id);
 	}
 
-	static async deleteByResource(resourceId:string) {
+	static async deleteByResource(resourceId: string) {
 		await this.db().exec('DELETE FROM note_resources WHERE resource_id = ?', [resourceId]);
 	}
 }

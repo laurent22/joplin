@@ -9,7 +9,7 @@ import NoteResource from '../../../models/NoteResource';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 const Resource = require('../../../models/Resource');
 
-export default async function(request:Request, id:string = null, link:string = null) {
+export default async function(request: Request, id: string = null, link: string = null) {
 	// fieldName: "data"
 	// headers: Object
 	// originalFilename: "test.jpg"

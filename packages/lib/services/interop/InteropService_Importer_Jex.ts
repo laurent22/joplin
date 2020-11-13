@@ -6,7 +6,7 @@ const { filename } = require('../../path-utils');
 const fs = require('fs-extra');
 
 export default class InteropService_Importer_Jex extends InteropService_Importer_Base {
-	async exec(result:ImportExportResult) {
+	async exec(result: ImportExportResult) {
 		const tempDir = await this.temporaryDirectory_(true);
 
 		try {

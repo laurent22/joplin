@@ -8,13 +8,13 @@ import { _ } from '@joplin/lib/locale';
 const keymapService = KeymapService.instance();
 
 export interface ShortcutRecorderProps {
-	onSave: (event: { commandName: string, accelerator: string }) => void,
-	onReset: (event: { commandName: string }) => void,
-	onCancel: (event: { commandName: string }) => void,
-	onError: (event: { recorderError: Error }) => void,
-	initialAccelerator: string
-	commandName: string,
-	themeId: number
+	onSave: (event: { commandName: string; accelerator: string })=> void;
+	onReset: (event: { commandName: string })=> void;
+	onCancel: (event: { commandName: string })=> void;
+	onError: (event: { recorderError: Error })=> void;
+	initialAccelerator: string;
+	commandName: string;
+	themeId: number;
 }
 
 export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAccelerator, commandName, themeId }: ShortcutRecorderProps) => {

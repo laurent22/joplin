@@ -3,14 +3,14 @@ import { _ } from '@joplin/lib/locale';
 const Folder = require('@joplin/lib/models/Folder');
 const bridge = require('electron').remote.require('./bridge').default;
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'renameFolder',
 	label: () => _('Rename'),
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, folderId:string = null) => {
+		execute: async (context: CommandContext, folderId: string = null) => {
 			folderId = folderId || context.state.selectedFolderId;
 
 			const folder = await Folder.load(folderId);
@@ -20,7 +20,7 @@ export const runtime = (comp:any):CommandRuntime => {
 					promptOptions: {
 						label: _('Rename notebook:'),
 						value: folder.title,
-						onClose: async (answer:string) => {
+						onClose: async (answer: string) => {
 							if (answer !== null) {
 								try {
 									folder.title = answer;

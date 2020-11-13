@@ -10,28 +10,28 @@ const fs = require('fs-extra');
 const { ipcMain } = require('electron');
 
 interface RendererProcessQuitReply {
-	canClose: boolean,
+	canClose: boolean;
 }
 
 interface PluginWindows {
-	[key: string]: any,
+	[key: string]: any;
 }
 
 export default class ElectronAppWrapper {
 
-	private logger_:Logger = null;
-	private electronApp_:any;
-	private env_:string;
-	private isDebugMode_:boolean;
-	private profilePath_:string;
-	private win_:any = null;
-	private willQuitApp_:boolean = false;
-	private tray_:any = null;
-	private buildDir_:string = null;
-	private rendererProcessQuitReply_:RendererProcessQuitReply = null;
-	private pluginWindows_:PluginWindows = {};
+	private logger_: Logger = null;
+	private electronApp_: any;
+	private env_: string;
+	private isDebugMode_: boolean;
+	private profilePath_: string;
+	private win_: any = null;
+	private willQuitApp_: boolean = false;
+	private tray_: any = null;
+	private buildDir_: string = null;
+	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
+	private pluginWindows_: PluginWindows = {};
 
-	constructor(electronApp:any, env:string, profilePath:string, isDebugMode:boolean) {
+	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
@@ -42,7 +42,7 @@ export default class ElectronAppWrapper {
 		return this.electronApp_;
 	}
 
-	setLogger(v:Logger) {
+	setLogger(v: Logger) {
 		this.logger_ = v;
 	}
 
@@ -65,7 +65,7 @@ export default class ElectronAppWrapper {
 		const windowStateKeeper = require('electron-window-state');
 
 
-		const stateOptions:any = {
+		const stateOptions: any = {
 			defaultWidth: Math.round(0.8 * screen.getPrimaryDisplay().workArea.width),
 			defaultHeight: Math.round(0.8 * screen.getPrimaryDisplay().workArea.height),
 			file: `window-state-${this.env_}.json`,
@@ -76,7 +76,7 @@ export default class ElectronAppWrapper {
 		// Load the previous state with fallback to defaults
 		const windowState = windowStateKeeper(stateOptions);
 
-		const windowOptions:any = {
+		const windowOptions: any = {
 			x: windowState.x,
 			y: windowState.y,
 			width: windowState.width,
@@ -128,7 +128,7 @@ export default class ElectronAppWrapper {
 			}, 3000);
 		}
 
-		this.win_.on('close', (event:any) => {
+		this.win_.on('close', (event: any) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
 			// otherwise the window is simply hidden, and will be re-open once the app is "activated" (which happens when the
 			// user clicks on the icon in the task bar).
@@ -176,7 +176,7 @@ export default class ElectronAppWrapper {
 			}
 		});
 
-		ipcMain.on('asynchronous-message', (_event:any, message:string, args:any) => {
+		ipcMain.on('asynchronous-message', (_event: any, message: string, args: any) => {
 			if (message === 'appCloseReply') {
 				// We got the response from the renderer process:
 				// save the response and try quit again.
@@ -187,7 +187,7 @@ export default class ElectronAppWrapper {
 
 		// This handler receives IPC messages from a plugin or from the main window,
 		// and forwards it to the main window or the plugin window.
-		ipcMain.on('pluginMessage', (_event:any, message:PluginMessage) => {
+		ipcMain.on('pluginMessage', (_event: any, message: PluginMessage) => {
 			if (message.target === 'mainWindow') {
 				this.win_.webContents.send('pluginMessage', message);
 			}
@@ -216,7 +216,7 @@ export default class ElectronAppWrapper {
 		}
 	}
 
-	registerPluginWindow(pluginId:string, window:any) {
+	registerPluginWindow(pluginId: string, window: any) {
 		this.pluginWindows_[pluginId] = window;
 	}
 
@@ -278,7 +278,7 @@ export default class ElectronAppWrapper {
 	}
 
 	// Note: this must be called only after the "ready" event of the app has been dispatched
-	createTray(contextMenu:any) {
+	createTray(contextMenu: any) {
 		try {
 			this.tray_ = new Tray(`${this.buildDir()}/icons/${this.trayIconFilename_()}`);
 			this.tray_.setToolTip(this.electronApp_.name);

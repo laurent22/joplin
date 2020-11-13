@@ -2,41 +2,41 @@ import { ViewHandle } from './utils/createViewHandle';
 
 export default class ViewController {
 
-	private handle_:ViewHandle;
-	private pluginId_:string;
-	private store_:any;
+	private handle_: ViewHandle;
+	private pluginId_: string;
+	private store_: any;
 
-	constructor(handle:ViewHandle, pluginId:string, store:any) {
+	constructor(handle: ViewHandle, pluginId: string, store: any) {
 		this.handle_ = handle;
 		this.pluginId_ = pluginId;
 		this.store_ = store;
 	}
 
-	protected get storeView():any {
+	protected get storeView(): any {
 		return this.store_.pluginService.plugins[this.pluginId_].views[this.handle];
 	}
 
-	protected get store():any {
+	protected get store(): any {
 		return this.store_;
 	}
 
-	public get pluginId():string {
+	public get pluginId(): string {
 		return this.pluginId_;
 	}
 
-	public get key():string {
+	public get key(): string {
 		return this.handle_;
 	}
 
-	public get handle():ViewHandle {
+	public get handle(): ViewHandle {
 		return this.handle_;
 	}
 
-	public get type():string {
+	public get type(): string {
 		throw new Error('Must be overriden');
 	}
 
-	public emitMessage(event:any) {
+	public emitMessage(event: any) {
 		console.info('Calling ViewController.emitMessage - but not implemented', event);
 	}
 

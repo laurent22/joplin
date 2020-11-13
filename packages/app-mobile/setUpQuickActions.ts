@@ -8,8 +8,8 @@ const Note = require('@joplin/lib/models/Note.js');
 const { reg } = require('@joplin/lib/registry.js');
 
 type TData = {
-	type: string
-}
+	type: string;
+};
 
 export default (dispatch: Function, folderId: string) => {
 	const userInfo = { url: '' };

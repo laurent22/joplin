@@ -12,34 +12,34 @@ export enum LockType {
 }
 
 export interface Lock {
-	type: LockType,
-	clientType: string,
-	clientId: string,
-	updatedTime?: number,
+	type: LockType;
+	clientType: string;
+	clientId: string;
+	updatedTime?: number;
 }
 
 interface RefreshTimer {
-	id: any,
-	inProgress: boolean
+	id: any;
+	inProgress: boolean;
 }
 
 interface RefreshTimers {
-	[key:string]: RefreshTimer;
+	[key: string]: RefreshTimer;
 }
 
 export interface LockHandlerOptions {
-	autoRefreshInterval?: number,
-	lockTtl?: number,
+	autoRefreshInterval?: number;
+	lockTtl?: number;
 }
 
 export default class LockHandler {
 
-	private api_:any = null;
-	private refreshTimers_:RefreshTimers = {};
-	private autoRefreshInterval_:number = 1000 * 60;
-	private lockTtl_:number = 1000 * 60 * 3;
+	private api_: any = null;
+	private refreshTimers_: RefreshTimers = {};
+	private autoRefreshInterval_: number = 1000 * 60;
+	private lockTtl_: number = 1000 * 60 * 3;
 
-	constructor(api:any, options:LockHandlerOptions = null) {
+	constructor(api: any, options: LockHandlerOptions = null) {
 		if (!options) options = {};
 
 		this.api_ = api;
@@ -47,21 +47,21 @@ export default class LockHandler {
 		if ('autoRefreshInterval' in options) this.autoRefreshInterval_ = options.autoRefreshInterval;
 	}
 
-	public get lockTtl():number {
+	public get lockTtl(): number {
 		return this.lockTtl_;
 	}
 
 	// Should only be done for testing purposes since all clients should
 	// use the same lock max age.
-	public set lockTtl(v:number) {
+	public set lockTtl(v: number) {
 		this.lockTtl_ = v;
 	}
 
-	private lockFilename(lock:Lock) {
+	private lockFilename(lock: Lock) {
 		return `${[lock.type, lock.clientType, lock.clientId].join('_')}.json`;
 	}
 
-	private lockTypeFromFilename(name:string):LockType {
+	private lockTypeFromFilename(name: string): LockType {
 		const ext = fileExtension(name);
 		if (ext !== 'json') return LockType.None;
 		if (name.indexOf(LockType.Sync) === 0) return LockType.Sync;
@@ -69,11 +69,11 @@ export default class LockHandler {
 		return LockType.None;
 	}
 
-	private lockFilePath(lock:Lock) {
+	private lockFilePath(lock: Lock) {
 		return `${Dirnames.Locks}/${this.lockFilename(lock)}`;
 	}
 
-	private lockFileToObject(file:any):Lock {
+	private lockFileToObject(file: any): Lock {
 		const p = filename(file.path).split('_');
 
 		return {
@@ -84,7 +84,7 @@ export default class LockHandler {
 		};
 	}
 
-	async locks(lockType:LockType = null):Promise<Lock[]> {
+	async locks(lockType: LockType = null): Promise<Lock[]> {
 		const result = await this.api_.list(Dirnames.Locks);
 		if (result.hasMore) throw new Error('hasMore not handled'); // Shouldn't happen anyway
 
@@ -100,11 +100,11 @@ export default class LockHandler {
 		return output;
 	}
 
-	private lockIsActive(lock:Lock, currentDate:Date):boolean {
+	private lockIsActive(lock: Lock, currentDate: Date): boolean {
 		return currentDate.getTime() - lock.updatedTime < this.lockTtl;
 	}
 
-	async hasActiveLock(lockType:LockType, clientType:string = null, clientId:string = null) {
+	async hasActiveLock(lockType: LockType, clientType: string = null, clientId: string = null) {
 		const lock = await this.activeLock(lockType, clientType, clientId);
 		return !!lock;
 	}
@@ -112,15 +112,15 @@ export default class LockHandler {
 	// Finds if there's an active lock for this clientType and clientId and returns it.
 	// If clientType and clientId are not specified, returns the first active lock
 	// of that type instead.
-	async activeLock(lockType:LockType, clientType:string = null, clientId:string = null) {
+	async activeLock(lockType: LockType, clientType: string = null, clientId: string = null) {
 		const locks = await this.locks(lockType);
 		const currentDate = await this.api_.remoteDate();
 
 		if (lockType === LockType.Exclusive) {
 			const activeLocks = locks
 				.slice()
-				.filter((lock:Lock) => this.lockIsActive(lock, currentDate))
-				.sort((a:Lock, b:Lock) => {
+				.filter((lock: Lock) => this.lockIsActive(lock, currentDate))
+				.sort((a: Lock, b: Lock) => {
 					if (a.updatedTime === b.updatedTime) {
 						return a.clientId < b.clientId ? -1 : +1;
 					}
@@ -145,16 +145,16 @@ export default class LockHandler {
 		throw new Error(`Unsupported lock type: ${lockType}`);
 	}
 
-	private async saveLock(lock:Lock) {
+	private async saveLock(lock: Lock) {
 		await this.api_.put(this.lockFilePath(lock), JSON.stringify(lock));
 	}
 
 	// This is for testing only
-	public async saveLock_(lock:Lock) {
+	public async saveLock_(lock: Lock) {
 		return this.saveLock(lock);
 	}
 
-	private async acquireSyncLock(clientType:string, clientId:string):Promise<Lock> {
+	private async acquireSyncLock(clientType: string, clientId: string): Promise<Lock> {
 		try {
 			let isFirstPass = true;
 			while (true) {
@@ -194,11 +194,11 @@ export default class LockHandler {
 		}
 	}
 
-	private lockToClientString(lock:Lock):string {
+	private lockToClientString(lock: Lock): string {
 		return `(${lock.clientType} #${lock.clientId})`;
 	}
 
-	private async acquireExclusiveLock(clientType:string, clientId:string, timeoutMs:number = 0):Promise<Lock> {
+	private async acquireExclusiveLock(clientType: string, clientId: string, timeoutMs: number = 0): Promise<Lock> {
 		// The logic to acquire an exclusive lock, while avoiding race conditions is as follow:
 		//
 		// - Check if there is a lock file present
@@ -263,11 +263,11 @@ export default class LockHandler {
 		}
 	}
 
-	private autoLockRefreshHandle(lock:Lock) {
+	private autoLockRefreshHandle(lock: Lock) {
 		return [lock.type, lock.clientType, lock.clientId].join('_');
 	}
 
-	startAutoLockRefresh(lock:Lock, errorHandler:Function):string {
+	startAutoLockRefresh(lock: Lock, errorHandler: Function): string {
 		const handle = this.autoLockRefreshHandle(lock);
 		if (this.refreshTimers_[handle]) {
 			throw new Error(`There is already a timer refreshing this lock: ${handle}`);
@@ -323,7 +323,7 @@ export default class LockHandler {
 		return handle;
 	}
 
-	stopAutoLockRefresh(lock:Lock) {
+	stopAutoLockRefresh(lock: Lock) {
 		const handle = this.autoLockRefreshHandle(lock);
 		if (!this.refreshTimers_[handle]) {
 			// Should not throw an error because lock may have been cleared in startAutoLockRefresh
@@ -336,7 +336,7 @@ export default class LockHandler {
 		delete this.refreshTimers_[handle];
 	}
 
-	async acquireLock(lockType:LockType, clientType:string, clientId:string, timeoutMs:number = 0):Promise<Lock> {
+	async acquireLock(lockType: LockType, clientType: string, clientId: string, timeoutMs: number = 0): Promise<Lock> {
 		if (lockType === LockType.Sync) {
 			return this.acquireSyncLock(clientType, clientId);
 		} else if (lockType === LockType.Exclusive) {
@@ -346,7 +346,7 @@ export default class LockHandler {
 		}
 	}
 
-	async releaseLock(lockType:LockType, clientType:string, clientId:string) {
+	async releaseLock(lockType: LockType, clientType: string, clientId: string) {
 		await this.api_.delete(this.lockFilePath({
 			type: lockType,
 			clientType: clientType,

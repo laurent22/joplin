@@ -7,32 +7,32 @@ import Logger from '../../Logger';
 const EventEmitter = require('events');
 
 interface ViewControllers {
-	[key:string]: ViewController
+	[key: string]: ViewController;
 }
 
 export interface ContentScript {
-	id: string,
-	path: string,
+	id: string;
+	path: string;
 }
 
 interface ContentScripts {
-	[type:string]: ContentScript[];
+	[type: string]: ContentScript[];
 }
 
 export default class Plugin {
 
-	private id_:string;
-	private baseDir_:string;
-	private manifest_:PluginManifest;
-	private scriptText_:string;
-	private enabled_:boolean = true;
-	private logger_:Logger = null;
-	private viewControllers_:ViewControllers = {};
-	private contentScripts_:ContentScripts = {};
-	private dispatch_:Function;
-	private eventEmitter_:any;
+	private id_: string;
+	private baseDir_: string;
+	private manifest_: PluginManifest;
+	private scriptText_: string;
+	private enabled_: boolean = true;
+	private logger_: Logger = null;
+	private viewControllers_: ViewControllers = {};
+	private contentScripts_: ContentScripts = {};
+	private dispatch_: Function;
+	private eventEmitter_: any;
 
-	constructor(id:string, baseDir:string, manifest:PluginManifest, scriptText:string, logger:Logger, dispatch:Function) {
+	constructor(id: string, baseDir: string, manifest: PluginManifest, scriptText: string, logger: Logger, dispatch: Function) {
 		this.id_ = id;
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
@@ -42,39 +42,39 @@ export default class Plugin {
 		this.eventEmitter_ = new EventEmitter();
 	}
 
-	public get id():string {
+	public get id(): string {
 		return this.id_;
 	}
 
-	public get enabled():boolean {
+	public get enabled(): boolean {
 		return this.enabled_;
 	}
 
-	public get manifest():PluginManifest {
+	public get manifest(): PluginManifest {
 		return this.manifest_;
 	}
 
-	public get scriptText():string {
+	public get scriptText(): string {
 		return this.scriptText_;
 	}
 
-	public get baseDir():string {
+	public get baseDir(): string {
 		return this.baseDir_;
 	}
 
-	on(eventName:string, callback:Function) {
+	on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName:string, callback:Function) {
+	off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	emit(eventName:string, event:any = null) {
+	emit(eventName: string, event: any = null) {
 		return this.eventEmitter_.emit(eventName, event);
 	}
 
-	public async registerContentScript(type:ContentScriptType, id:string, path:string) {
+	public async registerContentScript(type: ContentScriptType, id: string, path: string) {
 		if (!this.contentScripts_[type]) this.contentScripts_[type] = [];
 
 		const absolutePath = shim.fsDriver().resolveRelativePathWithinDir(this.baseDir, path);
@@ -96,16 +96,16 @@ export default class Plugin {
 		});
 	}
 
-	public contentScriptsByType(type:ContentScriptType):ContentScript[] {
+	public contentScriptsByType(type: ContentScriptType): ContentScript[] {
 		return this.contentScripts_[type] ? this.contentScripts_[type] : [];
 	}
 
-	public addViewController(v:ViewController) {
+	public addViewController(v: ViewController) {
 		if (this.viewControllers_[v.handle]) throw new Error(`View already added: ${v.handle}`);
 		this.viewControllers_[v.handle] = v;
 	}
 
-	public viewController(handle:ViewHandle):ViewController {
+	public viewController(handle: ViewHandle): ViewController {
 		if (!this.viewControllers_[handle]) throw new Error(`View not found: ${handle}`);
 		return this.viewControllers_[handle];
 	}

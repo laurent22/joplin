@@ -40,14 +40,14 @@ import { Path } from './types';
 export default class JoplinData {
 
 	private api_: any = new Api();
-	private pathSegmentRegex_:RegExp;
+	private pathSegmentRegex_: RegExp;
 
 	private serializeApiBody(body: any) {
 		if (typeof body !== 'string') { return JSON.stringify(body); }
 		return body;
 	}
 
-	private pathToString(path:Path):string {
+	private pathToString(path: Path): string {
 		if (!this.pathSegmentRegex_) {
 			this.pathSegmentRegex_ = /^([a-z0-9]+)$/;
 		}

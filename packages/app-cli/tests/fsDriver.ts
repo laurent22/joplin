@@ -4,7 +4,7 @@ const { expectThrow } = require('./test-utils.js');
 
 // On Windows, path.resolve is going to convert a path such as
 // /tmp/file.txt to c:\tmp\file.txt
-function platformPath(path:string) {
+function platformPath(path: string) {
 	if (shim.isWindows()) {
 		return `c:${path.replace(/\//g, '\\')}`;
 	} else {

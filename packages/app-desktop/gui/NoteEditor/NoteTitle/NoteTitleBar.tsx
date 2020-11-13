@@ -7,13 +7,13 @@ import { buildStyle } from '@joplin/lib/theme';
 import time from '@joplin/lib/time';
 
 interface Props {
-	themeId: number,
-	noteUserUpdatedTime: number,
-	noteTitle: string,
-	noteIsTodo: number,
-	isProvisional: boolean,
-	titleInputRef: any,
-	onTitleChange(event: ChangeEvent<HTMLInputElement>):void,
+	themeId: number;
+	noteUserUpdatedTime: number;
+	noteTitle: string;
+	noteIsTodo: number;
+	isProvisional: boolean;
+	titleInputRef: any;
+	onTitleChange(event: ChangeEvent<HTMLInputElement>): void;
 }
 
 function styles_(props: Props) {
@@ -52,10 +52,10 @@ function styles_(props: Props) {
 	});
 }
 
-export default function NoteTitleBar(props:Props) {
+export default function NoteTitleBar(props: Props) {
 	const styles = styles_(props);
 
-	const onTitleKeydown = useCallback((event:any) => {
+	const onTitleKeydown = useCallback((event: any) => {
 		const keyCode = event.keyCode;
 
 		if (keyCode === 9) { // TAB

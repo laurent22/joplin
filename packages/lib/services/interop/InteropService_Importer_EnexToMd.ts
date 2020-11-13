@@ -5,7 +5,7 @@ const Folder = require('../../models/Folder.js');
 const { filename } = require('../../path-utils');
 
 export default class InteropService_Importer_EnexToMd extends InteropService_Importer_Base {
-	async exec(result:ImportExportResult) {
+	async exec(result: ImportExportResult) {
 		const { importEnex } = require('../../import-enex');
 
 		let folder = this.options_.destinationFolder;

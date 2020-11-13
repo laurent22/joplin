@@ -4,15 +4,15 @@ import { ExportOptions, Module } from './types';
 
 export default class InteropService_Exporter_Custom extends InteropService_Exporter_Base {
 
-	private customContext_:ExportContext;
-	private module_:Module = null;
+	private customContext_: ExportContext;
+	private module_: Module = null;
 
-	constructor(module:Module) {
+	constructor(module: Module) {
 		super();
 		this.module_ = module;
 	}
 
-	async init(destPath:string, options:ExportOptions) {
+	async init(destPath: string, options: ExportOptions) {
 		this.customContext_ = {
 			destPath: destPath,
 			options: options,
@@ -21,11 +21,11 @@ export default class InteropService_Exporter_Custom extends InteropService_Expor
 		return this.module_.onInit(this.customContext_);
 	}
 
-	async processItem(itemType:number, item:any) {
+	async processItem(itemType: number, item: any) {
 		return this.module_.onProcessItem(this.customContext_, itemType, item);
 	}
 
-	async processResource(resource:any, filePath:string) {
+	async processResource(resource: any, filePath: string) {
 		return this.module_.onProcessResource(this.customContext_, resource, filePath);
 	}
 

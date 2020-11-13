@@ -12,7 +12,7 @@ const { pregQuote } = require('../../string-utils-common');
 const { MarkupToHtml } = require('@joplin/renderer');
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
-	async exec(result:ImportExportResult) {
+	async exec(result: ImportExportResult) {
 		let parentFolderId = null;
 
 		const sourcePath = rtrimSlashes(this.sourcePath_);
@@ -41,7 +41,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		return result;
 	}
 
-	async importDirectory(dirPath:string, parentFolderId:string) {
+	async importDirectory(dirPath: string, parentFolderId: string) {
 		console.info(`Import: ${dirPath}`);
 
 		const supportedFileExtension = this.metadata().fileExtensions;
@@ -63,10 +63,10 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	 * Parse text for links, attempt to find local file, if found create Joplin resource
 	 * and update link accordingly.
 	 */
-	async importLocalImages(filePath:string, md:string) {
+	async importLocalImages(filePath: string, md: string) {
 		let updated = md;
 		const imageLinks = unique(extractImageUrls(md));
-		await Promise.all(imageLinks.map(async (encodedLink:string) => {
+		await Promise.all(imageLinks.map(async (encodedLink: string) => {
 			const link = decodeURI(encodedLink);
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
 			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
@@ -83,7 +83,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		return updated;
 	}
 
-	async importFile(filePath:string, parentFolderId:string) {
+	async importFile(filePath: string, parentFolderId: string) {
 		const stat = await shim.fsDriver().stat(filePath);
 		if (!stat) throw new Error(`Cannot read ${filePath}`);
 		const title = filename(filePath);

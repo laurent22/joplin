@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function useViewIsReady(viewRef:any) {
+export default function useViewIsReady(viewRef: any) {
 	// Just checking if the iframe is ready is not sufficient because its content
 	// might not be ready (for example, IPC listeners might not be initialised).
 	// So we also listen to a custom "ready" message coming from the webview content
@@ -13,7 +13,7 @@ export default function useViewIsReady(viewRef:any) {
 			setIFrameReady(true);
 		}
 
-		function onMessage(event:any) {
+		function onMessage(event: any) {
 			const data = event.data;
 
 			if (!data || data.target !== 'UserWebview') return;

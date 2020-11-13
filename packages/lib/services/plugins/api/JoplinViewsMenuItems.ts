@@ -22,7 +22,7 @@ export default class JoplinViewsMenuItems {
 	/**
 	 * Creates a new menu item and associate it with the given command. You can specify under which menu the item should appear using the `location` parameter.
 	 */
-	async create(commandName:string, location:MenuItemLocation = MenuItemLocation.Tools, options:CreateMenuItemOptions = null) {
+	async create(commandName: string, location: MenuItemLocation = MenuItemLocation.Tools, options: CreateMenuItemOptions = null) {
 		const handle = createViewHandle(this.plugin);
 		const controller = new MenuItemController(handle, this.plugin.id, this.store, commandName, location);
 		this.plugin.addViewController(controller);

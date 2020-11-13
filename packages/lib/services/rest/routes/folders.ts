@@ -8,7 +8,7 @@ const Folder = require('../../../models/Folder');
 const { FoldersScreenUtils } = require('../../../folders-screen-utils.js');
 const { ErrorNotFound } = require('../utils/errors');
 
-export default async function(request:Request, id:string = null, link:string = null) {
+export default async function(request: Request, id: string = null, link: string = null) {
 	if (request.method === 'GET' && !id) {
 		if (request.query.as_tree) {
 			const folders = await FoldersScreenUtils.allForDisplay({ fields: requestFields(request, BaseModel.TYPE_FOLDER) });

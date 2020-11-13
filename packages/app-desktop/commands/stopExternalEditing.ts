@@ -3,15 +3,15 @@ import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'stopExternalEditing',
 	label: () => _('Stop external editing'),
 	iconName: 'fa-stop',
 };
 
-export const runtime = ():CommandRuntime => {
+export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, noteId:string = null) => {
+		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 			ExternalEditWatcher.instance().stopWatching(noteId);
 		},

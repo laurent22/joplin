@@ -6,7 +6,7 @@ const styled = require('styled-components').default;
 const { space } = require('styled-system');
 
 interface Props {
-	buttons: ButtonSpec[],
+	buttons: ButtonSpec[];
 }
 
 const StyledRoot = styled.div`
@@ -14,15 +14,15 @@ const StyledRoot = styled.div`
 	width: 100%;
 	box-sizing: border-box;
 	justify-content: flex-end;
-	padding-top: ${(props:any) => props.theme.mainPadding}px;
+	padding-top: ${(props: any) => props.theme.mainPadding}px;
 `;
 
 const StyledButton = styled(Button)`${space}`;
 
-function buttonTitle(b:ButtonSpec) {
+function buttonTitle(b: ButtonSpec) {
 	if (b.title) return b.title;
 
-	const defaultTitles:any = {
+	const defaultTitles: any = {
 		'ok': _('OK'),
 		'cancel': _('Cancel'),
 		'yes': _('Yes'),
@@ -33,7 +33,7 @@ function buttonTitle(b:ButtonSpec) {
 	return defaultTitles[b.id] ? defaultTitles[b.id] : b.id;
 }
 
-export default function UserWebviewDialogButtonBar(props:Props) {
+export default function UserWebviewDialogButtonBar(props: Props) {
 	function renderButtons() {
 		const output = [];
 		for (let i = 0; i < props.buttons.length; i++) {

@@ -10,26 +10,26 @@
 // scale.
 
 interface Record {
-	value: any,
-	expiredTime: number,
+	value: any;
+	expiredTime: number;
 }
 
 interface Records {
-	[key:string]: Record;
+	[key: string]: Record;
 }
 
 interface ExpirableKeys {
-	[key:string]: boolean,
+	[key: string]: boolean;
 }
 
 export default class Cache {
 
-	private maxRecords_:number;
-	private records_:Records = {};
-	private expirableKeys_:ExpirableKeys = {};
-	private recordKeyHistory_:string[] = [];
+	private maxRecords_: number;
+	private records_: Records = {};
+	private expirableKeys_: ExpirableKeys = {};
+	private recordKeyHistory_: string[] = [];
 
-	constructor(maxRecords:number = 50) {
+	constructor(maxRecords: number = 50) {
 		this.maxRecords_ = maxRecords;
 	}
 
@@ -55,14 +55,14 @@ export default class Cache {
 		}
 	}
 
-	public value(key:string, defaultValue:any = undefined):any {
+	public value(key: string, defaultValue: any = undefined): any {
 		this.checkExpiredRecords();
 		if (key in this.records_) return this.records_[key].value;
 
 		return defaultValue;
 	}
 
-	public setValue(key:string, value:any, ttl:number = 0) {
+	public setValue(key: string, value: any, ttl: number = 0) {
 		this.checkExpiredRecords();
 
 		this.records_[key] = {

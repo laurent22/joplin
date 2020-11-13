@@ -1,12 +1,12 @@
 import shim from './shim';
 
 export interface QueueItemAction {
-	(): void,
+	(): void;
 }
 
 export interface QueueItem {
-	action: QueueItemAction,
-	context: any,
+	action: QueueItemAction;
+	context: any;
 }
 
 export enum IntervalType {
@@ -20,19 +20,19 @@ export enum IntervalType {
 // Each queue should be associated with a specific entity (a note, resource, etc.)
 export default class AsyncActionQueue {
 
-	queue_:QueueItem[] = [];
-	interval_:number;
-	intervalType_:number;
-	scheduleProcessingIID_:any = null;
+	queue_: QueueItem[] = [];
+	interval_: number;
+	intervalType_: number;
+	scheduleProcessingIID_: any = null;
 	processing_ = false;
 	needProcessing_ = false;
 
-	constructor(interval:number = 100, intervalType:IntervalType = IntervalType.Debounce) {
+	constructor(interval: number = 100, intervalType: IntervalType = IntervalType.Debounce) {
 		this.interval_ = interval;
 		this.intervalType_ = intervalType;
 	}
 
-	push(action:QueueItemAction, context:any = null) {
+	push(action: QueueItemAction, context: any = null) {
 		this.queue_.push({
 			action: action,
 			context: context,
@@ -40,11 +40,11 @@ export default class AsyncActionQueue {
 		this.scheduleProcessing();
 	}
 
-	get queue():QueueItem[] {
+	get queue(): QueueItem[] {
 		return this.queue_;
 	}
 
-	private scheduleProcessing(interval:number = null) {
+	private scheduleProcessing(interval: number = null) {
 		if (interval === null) interval = this.interval_;
 
 		if (this.scheduleProcessingIID_) {

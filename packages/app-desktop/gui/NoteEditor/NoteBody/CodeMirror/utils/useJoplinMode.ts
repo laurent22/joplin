@@ -34,7 +34,7 @@ export default function useJoplinMode(CodeMirror: any) {
 		}
 
 		return {
-			startState: function(): { outer: any, openCharacter: string, inner: any } {
+			startState: function(): { outer: any; openCharacter: string; inner: any } {
 				return {
 					outer: CodeMirror.startState(markdownMode),
 					openCharacter: '',

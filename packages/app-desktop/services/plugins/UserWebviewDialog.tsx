@@ -26,8 +26,8 @@ const StyledRoot = styled.div`
 const Dialog = styled.div`
 	display: flex;
 	flex-direction: column;
-	background-color: ${(props:any) => props.theme.backgroundColor};
-	padding: ${(props:any) => `${props.theme.mainPadding}px`};
+	background-color: ${(props: any) => props.theme.backgroundColor};
+	padding: ${(props: any) => `${props.theme.mainPadding}px`};
 	border-radius: 4px;
 	box-shadow: 0 6px 10px #00000077;
 `;
@@ -37,7 +37,7 @@ const UserWebViewWrapper = styled.div`
 	flex: 1;
 `;
 
-function defaultButtons():ButtonSpec[] {
+function defaultButtons(): ButtonSpec[] {
 	return [
 		{
 			id: 'ok',
@@ -48,12 +48,12 @@ function defaultButtons():ButtonSpec[] {
 	];
 }
 
-export default function UserWebviewDialog(props:Props) {
-	function viewController():WebviewController {
+export default function UserWebviewDialog(props: Props) {
+	function viewController(): WebviewController {
 		return PluginService.instance().pluginById(props.pluginId).viewController(props.viewId) as WebviewController;
 	}
 
-	const buttons:ButtonSpec[] = (props.buttons ? props.buttons : defaultButtons()).map((b:ButtonSpec) => {
+	const buttons: ButtonSpec[] = (props.buttons ? props.buttons : defaultButtons()).map((b: ButtonSpec) => {
 		return {
 			...b,
 			onClick: () => {

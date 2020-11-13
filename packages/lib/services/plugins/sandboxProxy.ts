@@ -1,8 +1,8 @@
-export type Target = (name:string, args:any[]) => any;
+export type Target = (name: string, args: any[])=> any;
 
-const handler:any = {};
+const handler: any = {};
 
-handler.get = function(target:Target, prop:string) {
+handler.get = function(target: Target, prop: string) {
 	let t = target as any;
 
 	// There's probably a cleaner way to do this but not sure how. The idea is to keep
@@ -19,7 +19,7 @@ handler.get = function(target:Target, prop:string) {
 	// and attach a custom "__joplinNamespace" property to it.
 	if (!t.__joplinNamespace) {
 		const originalTarget = t;
-		const newTarget:any = (name:string, args:any[]) => {
+		const newTarget: any = (name: string, args: any[]) => {
 			return originalTarget(name, args);
 		};
 		newTarget.__joplinNamespace = [prop];
@@ -31,12 +31,12 @@ handler.get = function(target:Target, prop:string) {
 	return new Proxy(t, handler);
 };
 
-handler.apply = function(target:Target, _thisArg:any, argumentsList:any[]) {
+handler.apply = function(target: Target, _thisArg: any, argumentsList: any[]) {
 	const path = (target as any).__joplinNamespace.join('.');
 	(target as any).__joplinNamespace.pop();
 	return target(path, argumentsList);
 };
 
-export default function sandboxProxy(target:Target):any {
+export default function sandboxProxy(target: Target): any {
 	return new Proxy(target, handler);
 }

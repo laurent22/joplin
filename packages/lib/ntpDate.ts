@@ -13,9 +13,9 @@ const server = {
 	port: 123,
 };
 
-async function networkTime():Promise<Date> {
-	return new Promise(function(resolve:Function, reject:Function) {
-		ntpClient.getNetworkTime(server.domain, server.port, function(error:any, date:Date) {
+async function networkTime(): Promise<Date> {
+	return new Promise(function(resolve: Function, reject: Function) {
+		ntpClient.getNetworkTime(server.domain, server.port, function(error: any, date: Date) {
 			if (error) {
 				reject(error);
 				return;
@@ -30,11 +30,11 @@ function shouldSyncTime() {
 	return !nextSyncTime || Date.now() > nextSyncTime;
 }
 
-export function setLogger(v:any) {
+export function setLogger(v: any) {
 	logger = v;
 }
 
-export default async function():Promise<Date> {
+export default async function(): Promise<Date> {
 	if (shouldSyncTime()) {
 		const release = await fetchingTimeMutex.acquire();
 

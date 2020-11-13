@@ -23,7 +23,7 @@ export default class Joplin {
 	private interop_: JoplinInterop = null;
 	private settings_: JoplinSettings = null;
 
-	constructor(logger:Logger, implementation:any, plugin: Plugin, store: any) {
+	constructor(logger: Logger, implementation: any, plugin: Plugin, store: any) {
 		this.data_ = new JoplinData();
 		this.plugins_ = new JoplinPlugins(logger, plugin);
 		this.workspace_ = new JoplinWorkspace(implementation.workspace, store);
