@@ -261,6 +261,11 @@ export interface EditorCommand {
 	value?: any;
 }
 
+export interface DialogResult {
+	id: ButtonId;
+	formData?: any;
+}
+
 // =================================================================
 // Settings types
 // =================================================================
