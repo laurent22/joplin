@@ -14,5 +14,5 @@ export default class JoplinViewsMenus {
      * Creates a new menu from the provided menu items and place it at the given location. As of now, it is only possible to place the
      * menu as a sub-menu of the application build-in menus.
      */
-    create(label: string, menuItems: MenuItem[], location?: MenuItemLocation): Promise<void>;
+    create(id: string, label: string, menuItems: MenuItem[], location?: MenuItemLocation): Promise<void>;
 }

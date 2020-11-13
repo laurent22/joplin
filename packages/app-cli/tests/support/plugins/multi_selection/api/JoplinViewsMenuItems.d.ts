@@ -12,5 +12,5 @@ export default class JoplinViewsMenuItems {
     /**
      * Creates a new menu item and associate it with the given command. You can specify under which menu the item should appear using the `location` parameter.
      */
-    create(commandName: string, location?: MenuItemLocation, options?: CreateMenuItemOptions): Promise<void>;
+    create(id: string, commandName: string, location?: MenuItemLocation, options?: CreateMenuItemOptions): Promise<void>;
 }

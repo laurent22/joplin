@@ -5,7 +5,7 @@ import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../app';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
-import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
+import stateToWhenClauseContext from '../../../../services/commands/stateToWhenClauseContext';
 const { buildStyle } = require('@joplin/lib/theme');
 
 interface ToolbarProps {

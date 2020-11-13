@@ -17,7 +17,7 @@ export default class JoplinViewsDialogs {
     /**
      * Creates a new dialog
      */
-    create(): Promise<ViewHandle>;
+    create(id: string): Promise<ViewHandle>;
     /**
      * Displays a message box with OK/Cancel buttons. Returns the button index that was clicked - "0" for OK and "1" for "Cancel"
      */

@@ -82,6 +82,30 @@ export const utils = {
 		return output;
 	},
 
+	viewInfoByViewId: function(plugins: PluginStates, viewId: string): ViewInfo {
+		for (const pluginId in plugins) {
+			const plugin = plugins[pluginId];
+			if (plugin.views[viewId]) {
+				return {
+					plugin: plugin,
+					view: plugin.views[viewId],
+				};
+			}
+		}
+		return null;
+	},
+
+	allViewIds: function(plugins: PluginStates): string[] {
+		const output = [];
+		for (const pluginId in plugins) {
+			const plugin = plugins[pluginId];
+			for (const viewId in plugin.views) {
+				output.push(viewId);
+			}
+		}
+		return output;
+	},
+
 	commandNamesFromViews: function(plugins: PluginStates, toolbarType: string): string[] {
 		const infos = utils.viewInfosByType(plugins, 'toolbarButton');
 
@@ -91,42 +115,44 @@ export const utils = {
 	},
 };
 
-const reducer = (draft: Draft<any>, action: any) => {
+const reducer = (draftRoot: Draft<any>, action: any) => {
 	if (action.type.indexOf('PLUGIN_') !== 0) return;
 
 	// All actions should be scoped to a plugin, except when adding a new plugin
 	if (!action.pluginId && action.type !== 'PLUGIN_ADD') throw new Error(`action.pluginId is required. Action was: ${JSON.stringify(action)}`);
+
+	const draft = draftRoot.pluginService as State;
 
 	try {
 		switch (action.type) {
 
 		case 'PLUGIN_ADD':
 
-			if (draft.pluginService.plugins[action.plugin.id]) throw new Error(`Plugin is already loaded: ${JSON.stringify(action)}`);
-			draft.pluginService.plugins[action.plugin.id] = action.plugin;
+			if (draft.plugins[action.plugin.id]) throw new Error(`Plugin is already loaded: ${JSON.stringify(action)}`);
+			draft.plugins[action.plugin.id] = action.plugin;
 			break;
 
 		case 'PLUGIN_VIEW_ADD':
 
-			draft.pluginService.plugins[action.pluginId].views[action.view.id] = { ...action.view };
+			draft.plugins[action.pluginId].views[action.view.id] = { ...action.view };
 			break;
 
 		case 'PLUGIN_VIEW_PROP_SET':
 
-			draft.pluginService.plugins[action.pluginId].views[action.id][action.name] = action.value;
+			(draft.plugins[action.pluginId].views[action.id] as any)[action.name] = action.value;
 			break;
 
 		case 'PLUGIN_VIEW_PROP_PUSH':
 
-			draft.pluginService.plugins[action.pluginId].views[action.id][action.name].push(action.value);
+			(draft.plugins[action.pluginId].views[action.id] as any)[action.name].push(action.value);
 			break;
 
 		case 'PLUGIN_CONTENT_SCRIPTS_ADD': {
 
 			const type = action.contentScript.type;
-			if (!draft.pluginService.plugins[action.pluginId].contentScripts[type]) draft.pluginService.plugins[action.pluginId].contentScripts[type] = [];
+			if (!draft.plugins[action.pluginId].contentScripts[type]) draft.plugins[action.pluginId].contentScripts[type] = [];
 
-			draft.pluginService.plugins[action.pluginId].contentScripts[type].push({
+			draft.plugins[action.pluginId].contentScripts[type].push({
 				id: action.contentScript.id,
 				path: action.contentScript.path,
 			});
