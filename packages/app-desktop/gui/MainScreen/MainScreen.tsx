@@ -27,6 +27,9 @@ import bridge from '../../services/bridge';
 import time from '@joplin/lib/time';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
+import validateLayout from '../ResizableLayout/utils/validateLayout';
+import iterateItems from '../ResizableLayout/utils/iterateItems';
+import removeItem from '../ResizableLayout/utils/removeItem';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -42,6 +45,7 @@ interface LayerModalState {
 
 interface Props {
 	plugins: PluginStates;
+	pluginsLoaded: boolean;
 	hasNotesBeingSaved: boolean;
 	dispatch: Function;
 	mainLayout: LayoutItem;
@@ -79,6 +83,15 @@ const StyledUserWebviewDialogContainer = styled.div`
 	z-index: 1000;
 	box-sizing: border-box;
 `;
+
+const defaultLayout: LayoutItem = {
+	key: 'root',
+	children: [
+		{ key: 'sideBar', width: 250 },
+		{ key: 'noteList', width: 250 },
+		{ key: 'editor' },
+	],
+};
 
 const commands = [
 	require('./commands/editAlarm'),
@@ -152,76 +165,64 @@ class MainScreenComponent extends React.Component<Props, State> {
 		window.addEventListener('resize', this.window_resize);
 	}
 
-	buildLayout(_plugins: any): LayoutItem {
+	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {
+		const infos = pluginUtils.viewInfosByType(plugins, 'webview');
+
+		let newLayout = produce(layout, (draftLayout: LayoutItem) => {
+			for (const info of infos) {
+				if (info.view.containerType !== ContainerType.Panel) continue;
+
+				const viewId = info.view.id;
+				const existingItem = findItemByKey(draftLayout, viewId);
+
+				if (!existingItem) {
+					draftLayout.children.push({
+						key: viewId,
+						context: {
+							pluginId: info.plugin.id,
+						},
+					});
+				}
+			}
+		});
+
+		// Remove layout items that belong to plugins that are no longer
+		// active.
+		const pluginIds = Object.keys(plugins);
+		const itemsToRemove: string[] = [];
+		iterateItems(newLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
+			if (item.context && item.context.pluginId && !pluginIds.includes(item.context.pluginId)) {
+				itemsToRemove.push(item.key);
+			}
+			return true;
+		});
+
+		for (const itemKey of itemsToRemove) {
+			newLayout = removeItem(newLayout, itemKey);
+		}
+
+		return newLayout !== layout ? validateLayout(newLayout) : layout;
+	}
+
+	private buildLayout(plugins: PluginStates): LayoutItem {
 		const rootLayoutSize = this.rootLayoutSize();
 
-		// const sizes = {
-		// 	sideBarColumn: {
-		// 		width: 150,
-		// 	},
-		// 	noteListColumn: {
-		// 		width: 150,
-		// 	},
-		// 	pluginColumn: {
-		// 		width: 150,
-		// 	},
-		// 	//...Setting.value('ui.layout'),
-		// };
-
-		// const pluginColumnChildren:LayoutItem[] = [];
-
-		// const infos = pluginUtils.viewInfosByType(plugins, 'webview');
-
-		// for (const info of infos) {
-		// 	if (info.view.containerType !== ContainerType.Panel) continue;
-
-		// 	// For now it's assumed all views go in the "pluginColumn" so they are
-		// 	// resizable vertically. But horizontally they stretch 100%
-		// 	const viewId = info.view.id;
-
-		// 	const size = {
-		// 		...(sizes[viewId] ? sizes[viewId] : null),
-		// 		width: '100%',
-		// 	};
-
-		// 	pluginColumnChildren.push({
-		// 		key: viewId,
-		// 		resizableBottom: true,
-		// 		context: {
-		// 			plugin: info.plugin,
-		// 			control: info.view,
-		// 		},
-		// 		...size,
-		// 	});
-		// }
-
-		const defaultLayout: LayoutItem = {
-			key: 'root',
-			children: [
-				{ key: 'sideBar', width: 250 },
-				{ key: 'noteList', width: 250 },
-				{ key: 'editor' },
-			],
-		};
-
 		const userLayout = Setting.value('ui.layout');
+		let output = null;
 
 		try {
-			const output = loadLayout(userLayout, defaultLayout, rootLayoutSize);
+			output = loadLayout(userLayout, defaultLayout, rootLayoutSize);
 
-			// These calls will throw if the item is not present
-			findItemByKey(output, 'sideBar');
-			findItemByKey(output, 'noteList');
-			findItemByKey(output, 'editor');
-
-			console.info('BUILD LAYOUT', output);
-
-			return output;
+			if (!findItemByKey(output, 'sideBar') || !findItemByKey(output, 'noteList') || !findItemByKey(output, 'editor')) {
+				throw new Error('"sideBar", "noteList" and "editor" must be present in the layout');
+			}
 		} catch (error) {
 			console.warn('Could not load layout - restoring default layout:', error);
 			console.warn('Layout was:', userLayout);
-			return loadLayout(null, defaultLayout, rootLayoutSize);
+			output = loadLayout(null, defaultLayout, rootLayoutSize);
 		}
+
+		return this.updateLayoutPluginViews(output, plugins);
 	}
 
 	window_resize() {
@@ -294,11 +295,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 			this.updateRootLayoutSize();
 		}
 
-		// TODO:
-
-		// if (prevProps.plugins !== this.props.plugins) {
-		// 	this.setState({ layout: this.buildLayout(this.props.plugins) });
-		// }
+		if (prevProps.plugins !== this.props.plugins) {
+			this.updateMainLayout(this.updateLayoutPluginViews(this.props.mainLayout, this.props.plugins));
+			// this.setState({ layout: this.buildLayout(this.props.plugins) });
+		}
 
 		if (this.state.notePropertiesDialogOptions !== prevState.notePropertiesDialogOptions) {
 			this.props.dispatch({
@@ -323,7 +323,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		if (this.props.mainLayout !== prevProps.mainLayout) {
 			const toSave = saveLayout(this.props.mainLayout);
-			console.info('TO SAVE', JSON.stringify(toSave));
 			Setting.setValue('ui.layout', toSave);
 		}
 	}
@@ -605,13 +604,21 @@ class MainScreenComponent extends React.Component<Props, State> {
 		if (components[key]) return components[key]();
 
 		if (key.indexOf('plugin-view') === 0) {
-			const { control, plugin } = event.item.context;
+			const viewInfo = pluginUtils.viewInfoByViewId(this.props.plugins, event.item.key);
+
+			if (!viewInfo) {
+				console.warn(`Could not find plugin associated with view: ${event.item.key}`);
+				return null;
+			}
+
+			const { view, plugin } = viewInfo;
+
 			return <UserWebview
-				key={control.id}
-				viewId={control.id}
+				key={view.id}
+				viewId={view.id}
 				themeId={this.props.themeId}
-				html={control.html}
-				scripts={control.scripts}
+				html={view.html}
+				scripts={view.scripts}
 				pluginId={plugin.id}
 				onMessage={this.userWebview_message}
 				borderBottom={true}

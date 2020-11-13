@@ -22,3 +22,5 @@ export interface LayoutItem {
 	visible?: boolean;
 	context?: any;
 }
+
+export const tempContainerPrefix = 'tempContainer-';

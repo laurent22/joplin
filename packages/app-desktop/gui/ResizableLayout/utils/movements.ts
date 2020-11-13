@@ -1,5 +1,5 @@
 import iterateItems from './iterateItems';
-import { LayoutItem, LayoutItemDirection } from './types';
+import { LayoutItem, LayoutItemDirection, tempContainerPrefix } from './types';
 import produce from 'immer';
 import uuid from '@joplin/lib/uuid';
 import validateLayout from './validateLayout';
@@ -129,7 +129,7 @@ function moveItem(direction: MovementDirection, layout: LayoutItem, key: string,
 						}
 
 						const newParent: LayoutItem = {
-							key: `tempContainer-${uuid.createNano()}`,
+							key: `${tempContainerPrefix}${uuid.createNano()}`,
 							direction: LayoutItemDirection.Column,
 							children: [
 								targetChild,

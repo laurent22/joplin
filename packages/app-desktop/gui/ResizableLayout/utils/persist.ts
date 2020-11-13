@@ -4,12 +4,13 @@ import iterateItems from './iterateItems';
 import validateLayout from './validateLayout';
 
 export function saveLayout(layout: LayoutItem): any {
-	const keptProperties = [
+	const propertyWhiteList = [
 		'visible',
 		'width',
 		'height',
 		'children',
 		'key',
+		'context',
 	];
 
 	return produce(layout, (draft: any) => {
@@ -17,7 +18,7 @@ export function saveLayout(layout: LayoutItem): any {
 		delete draft.height;
 		iterateItems(draft, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
 			for (const k of Object.keys(item)) {
-				if (!keptProperties.includes(k)) delete (item as any)[k];
+				if (!propertyWhiteList.includes(k)) delete (item as any)[k];
 			}
 			return true;
 		});

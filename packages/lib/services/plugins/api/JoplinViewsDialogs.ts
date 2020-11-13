@@ -29,8 +29,13 @@ export default class JoplinViewsDialogs {
 	/**
 	 * Creates a new dialog
 	 */
-	async create(): Promise<ViewHandle> {
-		const handle = createViewHandle(this.plugin);
+	async create(id: string): Promise<ViewHandle> {
+		if (!id) {
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID. To fix it, change your call to `joplin.views.dialogs.create("my-unique-id")`');
+			id = `${this.plugin.viewCount}`;
+		}
+
+		const handle = createViewHandle(this.plugin, id);
 		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir);
 		controller.containerType = ContainerType.Dialog;
 		this.plugin.addViewController(controller);

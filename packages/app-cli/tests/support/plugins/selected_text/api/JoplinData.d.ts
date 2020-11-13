@@ -6,7 +6,7 @@ import { Path } from './types';
  *
  * This is also what you would use to search notes, via the `search` endpoint.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins/simple)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/simple)
  *
  * In general you would use the methods in this class as if you were using a REST API. There are four methods that map to GET, POST, PUT and DELETE calls.
  * And each method takes these parameters:

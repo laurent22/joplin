@@ -487,6 +487,37 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
+	private async initPluginService() {
+		const pluginLogger = new Logger();
+		pluginLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-plugins.txt` });
+		pluginLogger.addTarget(TargetType.Console, { prefix: 'Plugin Service:' });
+		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
+
+		const pluginRunner = new PluginRunner();
+		PluginService.instance().setLogger(pluginLogger);
+		PluginService.instance().initialize(PlatformImplementation.instance(), pluginRunner, this.store());
+
+		try {
+			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
+		} catch (error) {
+			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
+		}
+
+		try {
+			if (Setting.value('plugins.devPluginPaths')) {
+				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
+				await PluginService.instance().loadAndRunPlugins(paths);
+			}
+
+			// Also load dev plugins that have passed via command line arguments
+			if (Setting.value('startupDevPlugins')) {
+				await PluginService.instance().loadAndRunPlugins(Setting.value('startupDevPlugins'));
+			}
+		} catch (error) {
+			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
+		}
+	}
+
 	async start(argv: string[]): Promise<any> {
 		const electronIsDev = require('electron-is-dev');
 
@@ -678,34 +709,7 @@ class Application extends BaseApplication {
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 
-		const pluginLogger = new Logger();
-		pluginLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-plugins.txt` });
-		pluginLogger.addTarget(TargetType.Console, { prefix: 'Plugin Service:' });
-		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
-
-		const pluginRunner = new PluginRunner();
-		PluginService.instance().setLogger(pluginLogger);
-		PluginService.instance().initialize(PlatformImplementation.instance(), pluginRunner, this.store());
-
-		try {
-			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
-		} catch (error) {
-			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
-		}
-
-		try {
-			if (Setting.value('plugins.devPluginPaths')) {
-				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
-				await PluginService.instance().loadAndRunPlugins(paths);
-			}
-
-			// Also load dev plugins that have passed via command line arguments
-			if (Setting.value('startupDevPlugins')) {
-				await PluginService.instance().loadAndRunPlugins(Setting.value('startupDevPlugins'));
-			}
-		} catch (error) {
-			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
-		}
+		await this.initPluginService();
 
 		this.setupContextMenu();
 

@@ -1,6 +1,6 @@
 import { LayoutItem } from './types';
 
-type ItemItemCallback = (itemIndex: number, layout: LayoutItem, parent: LayoutItem)=> boolean;
+type ItemItemCallback = (itemIndex: number, item: LayoutItem, parent: LayoutItem)=> boolean;
 
 export default function iterateItems(layout: LayoutItem, callback: ItemItemCallback) {
 	const result = callback(0, layout, null);

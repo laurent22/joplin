@@ -604,6 +604,9 @@ packages/app-desktop/gui/ResizableLayout/ResizableLayout.js.map
 packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.js
 packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.js.map
+packages/app-desktop/gui/ResizableLayout/utils/isTempContainer.d.ts
+packages/app-desktop/gui/ResizableLayout/utils/isTempContainer.js
+packages/app-desktop/gui/ResizableLayout/utils/isTempContainer.js.map
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.js
 packages/app-desktop/gui/ResizableLayout/utils/iterateItems.js.map
@@ -622,6 +625,9 @@ packages/app-desktop/gui/ResizableLayout/utils/persist.js.map
 packages/app-desktop/gui/ResizableLayout/utils/persist.test.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/persist.test.js
 packages/app-desktop/gui/ResizableLayout/utils/persist.test.js.map
+packages/app-desktop/gui/ResizableLayout/utils/removeItem.d.ts
+packages/app-desktop/gui/ResizableLayout/utils/removeItem.js
+packages/app-desktop/gui/ResizableLayout/utils/removeItem.js.map
 packages/app-desktop/gui/ResizableLayout/utils/setLayoutItemProps.d.ts
 packages/app-desktop/gui/ResizableLayout/utils/setLayoutItemProps.js
 packages/app-desktop/gui/ResizableLayout/utils/setLayoutItemProps.js.map
