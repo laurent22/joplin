@@ -23,7 +23,7 @@ export default class WebviewController extends ViewController {
 	private messageListener_: Function = null;
 	private closeResponse_: CloseResponse = null;
 
-	constructor(id: string, pluginId: string, store: any, baseDir: string) {
+	constructor(id: string, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
 		super(id, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 
@@ -33,7 +33,7 @@ export default class WebviewController extends ViewController {
 			view: {
 				id: this.handle,
 				type: this.type,
-				containerType: ContainerType.Panel,
+				containerType: containerType,
 				html: '',
 				scripts: [],
 				opened: false,
@@ -66,10 +66,6 @@ export default class WebviewController extends ViewController {
 
 	public get containerType(): ContainerType {
 		return this.storeView.containerType;
-	}
-
-	public set containerType(containerType: ContainerType) {
-		this.setStoreProp('containerType', containerType);
 	}
 
 	public async addScript(path: string) {

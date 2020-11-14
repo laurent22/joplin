@@ -117,14 +117,14 @@ class Command extends BaseCommand {
 
 		lines.push('# Pagination');
 		lines.push('');
-		lines.push('All API calls that return multiple results will be paginated and will have the following structure:');
+		lines.push('All API calls that return multiple results will be paginated and will return the following structure:');
 		lines.push('');
 		lines.push('Key | Always present? | Description');
 		lines.push('--- | --- | ---');
 		lines.push('`items` | Yes | The array of items you have requested.');
 		lines.push('`has_more` | Yes | If `true`, there are more items after this page. If `false`, it means you have reached the end of the data set.');
 		lines.push('');
-		lines.push('You can specify how the results should be sorted using the `order_by` and `order_dir` query parameters, and you can specify the number of items to be returned using the `limit` parameter (the maximum being 100 items).');
+		lines.push('You can specify how the results should be sorted using the `order_by` and `order_dir` query parameters, and which page to retrieve using the `page` parameter (starts at and defaults to 1). You can specify the number of items to be returned using the `limit` parameter (the maximum being 100 items).');
 		lines.push('');
 		lines.push('The following call for example will initiate a request to fetch all the notes, 10 at a time, and sorted by "updated_time" ascending:');
 		lines.push('');

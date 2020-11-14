@@ -22,8 +22,16 @@ export default class JoplinViewsMenuItems {
 	/**
 	 * Creates a new menu item and associate it with the given command. You can specify under which menu the item should appear using the `location` parameter.
 	 */
-	async create(commandName: string, location: MenuItemLocation = MenuItemLocation.Tools, options: CreateMenuItemOptions = null) {
-		const handle = createViewHandle(this.plugin);
+	async create(id: string, commandName: string, location: MenuItemLocation = MenuItemLocation.Tools, options: CreateMenuItemOptions = null) {
+		if (typeof location !== 'string') {
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.menuItem.create("my-unique-id", ...)`');
+			options = location as any;
+			location = commandName as any || MenuItemLocation.Tools;
+			commandName = id as any;
+			id = `${this.plugin.viewCount}`;
+		}
+
+		const handle = createViewHandle(this.plugin, id);
 		const controller = new MenuItemController(handle, this.plugin.id, this.store, commandName, location);
 		this.plugin.addViewController(controller);
 

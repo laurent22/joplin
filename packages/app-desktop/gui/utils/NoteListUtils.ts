@@ -179,7 +179,7 @@ export default class NoteListUtils {
 
 		for (const info of pluginViewInfos) {
 			const location = info.view.location;
-			if (location !== MenuItemLocation.Context) continue;
+			if (location !== MenuItemLocation.Context && location !== MenuItemLocation.NoteListContextMenu) continue;
 
 			menu.append(
 				new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName))

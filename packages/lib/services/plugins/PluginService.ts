@@ -50,6 +50,10 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
+	public allPluginIds(): string[] {
+		return Object.keys(this.plugins_);
+	}
+
 	private async parsePluginJsBundle(jsBundleString: string) {
 		const scriptText = jsBundleString;
 		const lines = scriptText.split('\n');
@@ -169,5 +173,18 @@ export default class PluginService extends BaseService {
 		const pluginApi = new Global(this.logger(), this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);
 	}
+
+	// public async handleDisabledPlugins() {
+	// 	const enabledPlugins = this.allPluginIds();
+	// 	const v = await this.kvStore_.value<string>('pluginService.lastEnabledPlugins');
+	// 	const lastEnabledPlugins = v ? JSON.parse(v) : [];
+
+	// 	const disabledPlugins = [];
+	// 	for (const id of lastEnabledPlugins) {
+	// 		if (!enabledPlugins.includes(id)) disabledPlugins.push(id);
+	// 	}
+
+	// 	await this.kvStore_.setValue('pluginService.lastEnabledPlugins', JSON.stringify(enabledPlugins));
+	// }
 
 }
