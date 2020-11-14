@@ -121,7 +121,16 @@ export default class PluginService extends BaseService {
 	private async loadPlugin(pluginId: string, baseDir: string, manifestText: string, scriptText: string): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
-		const manifest = manifestFromObject(JSON.parse(manifestText));
+		const manifestObj = JSON.parse(manifestText);
+
+		let showAppMinVersionNotice = false;
+
+		if (!manifestObj.app_min_version) {
+			manifestObj.app_min_version = '1.4';
+			showAppMinVersionNotice = true;
+		}
+
+		const manifest = manifestFromObject(manifestObj);
 
 		// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
 		// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
@@ -138,6 +147,10 @@ export default class PluginService extends BaseService {
 				contentScripts: {},
 			},
 		});
+
+		if (showAppMinVersionNotice) {
+			plugin.deprecationNotice('1.5', 'The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support. It was automatically set to "1.4", but please update your manifest.json file.');
+		}
 
 		return plugin;
 	}

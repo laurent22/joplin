@@ -22,6 +22,8 @@ export default function manifestFromObject(o: any): PluginManifest {
 		manifest_version: getNumber('manifest_version', true),
 		name: getString('name', true),
 		version: getString('version', true),
+		app_min_version: getString('app_min_version', true),
+
 		description: getString('description', false),
 		homepage_url: getString('homepage_url', false),
 		permissions: permissions,
