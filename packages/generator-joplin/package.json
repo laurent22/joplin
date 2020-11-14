@@ -1,0 +1,28 @@
+{
+  "name": "generator-joplin",
+  "version": "1.0.17",
+  "description": "Scaffolds out a new Joplin plugin",
+  "homepage": "https://joplinapp.org",
+  "author": {
+    "name": "Laurent Cozic",
+    "url": "https://joplinapp.org"
+  },
+  "files": [
+    "generators"
+  ],
+  "main": "generators/index.js",
+  "keywords": [
+    "joplin",
+    "yeoman-generator"
+  ],
+  "engines": {
+    "npm": ">= 4.0.0"
+  },
+  "dependencies": {
+    "yeoman-generator": "^2.0.1",
+    "chalk": "^2.1.0",
+    "yosay": "^2.0.1"
+  },
+  "repository": "https://github.com/laurent22/generator-joplin",
+  "license": "MIT"
+}
