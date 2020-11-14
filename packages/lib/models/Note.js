@@ -306,8 +306,8 @@ class Note extends BaseItem {
 	}
 
 	static async previews(parentId, options = null) {
-		// Note: ordering logic must be duplicated in sortNotes(), which
-		// is used to sort already loaded notes.
+		// Note: ordering logic must be duplicated in sortNotes(), which is used
+		// to sort already loaded notes.
 
 		if (!options) options = {};
 		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
@@ -317,7 +317,13 @@ class Note extends BaseItem {
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
-		if (parentId == BaseItem.getClass('Folder').conflictFolderId()) {
+		const Folder = BaseItem.getClass('Folder');
+
+		// Conflicts are always displayed regardless of options, since otherwise
+		// it's confusing to have conflicts but with an empty conflict folder.
+		if (parentId === Folder.conflictFolderId()) options.showCompletedTodos = true;
+
+		if (parentId == Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
