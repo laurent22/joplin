@@ -12,6 +12,7 @@ const ArrayUtils = require('../ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('../urlUtils.js');
 const markdownUtils = require('../markdownUtils').default;
+const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
 
@@ -149,7 +150,14 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = options.useAbsolutePaths ? `${`file://${Resource.fullPath(resource)}` + '?t='}${resource.updated_time}` : Resource.relativePath(resource);
+
+			const isImage = isImageMimeType(resource.mime);
+
+			// We add a timestamp parameter for images, so that when they
+			// change, the preview is updated inside the note. This is not
+			// needed for other resources since they are simple links.
+			const timestampParam = isImage ? `?t=${resource.updated_time}` : '';
+			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}${timestampParam}` : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
