@@ -1,4 +1,4 @@
-import { MenuItemLocation } from '../../plugin_types/services/plugins/api/types';
+import { MenuItemLocation } from '../plugins/api/types';
 import CommandService from '../CommandService';
 import KeymapService from '../KeymapService';
 import { PluginStates, utils as pluginUtils } from '../plugins/reducer';
