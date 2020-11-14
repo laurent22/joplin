@@ -158,6 +158,12 @@ packages/app-cli/tests/MdToHtml.js.map
 packages/app-cli/tests/fsDriver.d.ts
 packages/app-cli/tests/fsDriver.js
 packages/app-cli/tests/fsDriver.js.map
+packages/app-cli/tests/models_Folder.d.ts
+packages/app-cli/tests/models_Folder.js
+packages/app-cli/tests/models_Folder.js.map
+packages/app-cli/tests/models_Note.d.ts
+packages/app-cli/tests/models_Note.js
+packages/app-cli/tests/models_Note.js.map
 packages/app-cli/tests/models_Setting.d.ts
 packages/app-cli/tests/models_Setting.js
 packages/app-cli/tests/models_Setting.js.map

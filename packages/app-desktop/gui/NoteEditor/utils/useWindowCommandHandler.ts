@@ -40,7 +40,7 @@ function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, s
 					type: ScrollOptionTypes.Hash,
 					value: args[0],
 				});
-			} else if (declaration.name === 'editorSetText') {
+			} else if (declaration.name === 'editor.setText') {
 				setFormNote((prev: FormNote) => {
 					return { ...prev, body: args[0] };
 				});

@@ -1,3 +1,5 @@
+import { ResourceEntity } from './services/database/types';
+
 let isTestingEnv_ = false;
 let react_: any = null;
 
@@ -148,7 +150,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	createResourceFromPath: async (_filePath: string, _defaultProps: any = null, _options: any = null) => {
+	createResourceFromPath: async (_filePath: string, _defaultProps: any = null, _options: any = null): Promise<ResourceEntity> => {
 		throw new Error('Not implemented');
 	},
 

@@ -1,14 +1,10 @@
-/* eslint-disable no-unused-vars */
-
-
-const time = require('@joplin/lib/time').default;
-const { sortedIds, createNTestNotes, asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+import Setting from '@joplin/lib/models/Setting';
+import BaseModel from '@joplin/lib/BaseModel';
+import shim from '@joplin/lib/shim';
+const { sortedIds, createNTestNotes, asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
 const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
-const shim = require('@joplin/lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at models_Note: Promise', p, 'reason:', reason);
@@ -108,9 +104,7 @@ describe('models_Note', function() {
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
 
-			const input = t[0];
-			const expectedTitle = t[1];
-			const expectedBody = t[1];
+			const input: any = t[0];
 
 			const note1 = await Note.save(input);
 			const serialized = await Note.serialize(note1);
@@ -222,6 +216,7 @@ describe('models_Note', function() {
 		const resourceDir = Setting.value('resourceDir');
 		const r1 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
 		const r2 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		const r3 = await shim.createResourceFromPath(`${__dirname}/../tests/support/welcome.pdf`);
 		const note1 = await Note.save({ title: 'note1' });
 		const t1 = r1.updated_time;
 		const t2 = r2.updated_time;
@@ -256,6 +251,11 @@ describe('models_Note', function() {
 				true,
 				`![](:/${r1.id}) ![](:/${r1.id}) ![](:/${r2.id})`,
 				`![](file://${resourceDir}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDir}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDir}/${r2.id}.jpg?t=${t2})`,
+			],
+			[
+				true,
+				`![](:/${r3.id})`,
+				`![](file://${resourceDir}/${r3.id}.pdf)`,
 			],
 		];
 

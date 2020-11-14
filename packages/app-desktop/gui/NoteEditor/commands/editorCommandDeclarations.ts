@@ -90,7 +90,7 @@ const declarations: CommandDeclaration[] = [
 		name: 'replaceSelection',
 	},
 	{
-		name: 'editorSetText',
+		name: 'editor.setText',
 	},
 ];
 

@@ -1,12 +1,7 @@
-/* eslint-disable no-unused-vars */
-
-
-const time = require('@joplin/lib/time').default;
-const { createNTestNotes, asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+import { FolderEntity } from '@joplin/lib/services/database/types';
+const { createNTestNotes, asyncTest, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const shim = require('@joplin/lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at models_Folder: Promise', p, 'reason:', reason);
@@ -74,7 +69,7 @@ describe('models_Folder', function() {
 		expect(folders[1].id).toBe(f3.id);
 		expect(folders[2].id).toBe(f1.id);
 
-		const n2 = await Note.save({ title: 'note1', parent_id: f1.id });
+		await Note.save({ title: 'note1', parent_id: f1.id });
 
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
 		expect(folders[0].id).toBe(f1.id);
@@ -108,7 +103,7 @@ describe('models_Folder', function() {
 		expect(folders[1].id).toBe(f3.id);
 		expect(folders[2].id).toBe(f2.id);
 
-		const n2 = await Note.save({ title: 'note2', parent_id: f2.id });
+		await Note.save({ title: 'note2', parent_id: f2.id });
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
 
 		expect(folders[0].id).toBe(f2.id);
@@ -123,7 +118,7 @@ describe('models_Folder', function() {
 		expect(folders[2].id).toBe(f2.id);
 
 		const f4 = await Folder.save({ title: 'folder4', parent_id: f1.id }); await sleep(0.1);
-		const n3 = await Note.save({ title: 'note3', parent_id: f4.id });
+		await Note.save({ title: 'note3', parent_id: f4.id });
 
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
 		expect(folders.length).toBe(4);
@@ -139,21 +134,33 @@ describe('models_Folder', function() {
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
 		const f4 = await Folder.save({ title: 'folder4' });
 
-		const n1 = await Note.save({ title: 'note1', parent_id: f3.id });
-		const n2 = await Note.save({ title: 'note1', parent_id: f3.id });
-		const n3 = await Note.save({ title: 'note1', parent_id: f1.id });
+		await Note.save({ title: 'note1', parent_id: f3.id });
+		await Note.save({ title: 'note1', parent_id: f3.id });
+		await Note.save({ title: 'note1', parent_id: f1.id });
+		await Note.save({ title: 'conflicted', parent_id: f1.id, is_conflict: 1 });
 
-		const folders = await Folder.all();
-		await Folder.addNoteCounts(folders);
+		{
+			const folders = await Folder.all({ includeConflictFolder: false });
+			await Folder.addNoteCounts(folders);
+			const foldersById: any = {};
+			folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
-		const foldersById = {};
-		folders.forEach((f) => { foldersById[f.id] = f; });
+			expect(folders.length).toBe(4);
+			expect(foldersById[f1.id].note_count).toBe(3);
+			expect(foldersById[f2.id].note_count).toBe(2);
+			expect(foldersById[f3.id].note_count).toBe(2);
+			expect(foldersById[f4.id].note_count).toBe(0);
+		}
 
-		expect(folders.length).toBe(4);
-		expect(foldersById[f1.id].note_count).toBe(3);
-		expect(foldersById[f2.id].note_count).toBe(2);
-		expect(foldersById[f3.id].note_count).toBe(2);
-		expect(foldersById[f4.id].note_count).toBe(0);
+		{
+			const folders = await Folder.all({ includeConflictFolder: true });
+			await Folder.addNoteCounts(folders);
+			const foldersById: any = {};
+			folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
+
+			expect(folders.length).toBe(5);
+			expect(foldersById[Folder.conflictFolderId()].note_count).toBe(1);
+		}
 	}));
 
 	it('should not count completed to-dos', asyncTest(async () => {
@@ -163,18 +170,18 @@ describe('models_Folder', function() {
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
 		const f4 = await Folder.save({ title: 'folder4' });
 
-		const n1 = await Note.save({ title: 'note1', parent_id: f3.id });
-		const n2 = await Note.save({ title: 'note2', parent_id: f3.id });
-		const n3 = await Note.save({ title: 'note3', parent_id: f1.id });
-		const n4 = await Note.save({ title: 'note4', parent_id: f3.id, is_todo: true, todo_completed: 0 });
-		const n5 = await Note.save({ title: 'note5', parent_id: f3.id, is_todo: true, todo_completed: 999 });
-		const n6 = await Note.save({ title: 'note6', parent_id: f3.id, is_todo: true, todo_completed: 999 });
+		await Note.save({ title: 'note1', parent_id: f3.id });
+		await Note.save({ title: 'note2', parent_id: f3.id });
+		await Note.save({ title: 'note3', parent_id: f1.id });
+		await Note.save({ title: 'note4', parent_id: f3.id, is_todo: true, todo_completed: 0 });
+		await Note.save({ title: 'note5', parent_id: f3.id, is_todo: true, todo_completed: 999 });
+		await Note.save({ title: 'note6', parent_id: f3.id, is_todo: true, todo_completed: 999 });
 
 		const folders = await Folder.all();
 		await Folder.addNoteCounts(folders, false);
 
-		const foldersById = {};
-		folders.forEach((f) => { foldersById[f.id] = f; });
+		const foldersById: any = {};
+		folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
 		expect(folders.length).toBe(4);
 		expect(foldersById[f1.id].note_count).toBe(4);
