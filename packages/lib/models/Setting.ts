@@ -661,9 +661,6 @@ class Setting extends BaseModel {
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, public: false, appTypes: ['desktop'] },
 
-			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: SettingItemType.Int, public: false, appTypes: ['desktop'] },
-			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: SettingItemType.Int, public: false, appTypes: ['desktop'] },
-
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
 			// serve as a customizable Setting. But because the Setting page is auto-
@@ -728,8 +725,6 @@ class Setting extends BaseModel {
 				},
 			},
 			noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, public: false, appTypes: ['desktop'] },
-			sidebarVisibility: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
-			noteListVisibility: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
 			tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
 			folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
 			editor: { value: '', type: SettingItemType.String, subType: 'file_path_and_args', public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },

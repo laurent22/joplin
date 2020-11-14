@@ -69,6 +69,15 @@
 					<div class="lead">
 						<p>This is the main entry point to the Joplin API. You can access various services using the provided accessors.</p>
 					</div>
+					<p><strong>This is a beta API</strong></p>
+					<p>Please note that the plugin API is relatively new and should be considered Beta state. Besides possible bugs, what it means is that there might be necessary breaking changes from one version to the next. Whenever such change is needed, best effort will be done to:</p>
+					<ul>
+						<li>Maintain backward compatibility;</li>
+						<li>When possible, deprecate features instead of removing them;</li>
+						<li>Document breaking changes in the changelog;</li>
+					</ul>
+					<p>So if you are developing a plugin, please keep an eye on the changelog as everything will be in there with information about how to update your code. There won&#39;t be any major API rewrite or architecture changes, but possibly small tweaks like function signature change, type change, etc.</p>
+					<p>Eventually, the plugin API will be versioned to make this process smoother.</p>
 				</div>
 			</section>
 			<!--
@@ -343,6 +352,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/dialogresult.html" class="tsd-kind-icon">DialogResult</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>

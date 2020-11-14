@@ -204,7 +204,10 @@ export enum MenuItemLocation {
 	Note = 'note',
 	Tools = 'tools',
 	Help = 'help',
+	// Deprecated - do not use - same as NoteListContext
 	Context = 'context',
+	NoteListContextMenu = 'noteListContextMenu',
+	EditorContextMenu = 'editorContextMenu',
 }
 
 export interface MenuItem {
@@ -259,6 +262,11 @@ export type ViewHandle = string;
 export interface EditorCommand {
 	name: string;
 	value?: any;
+}
+
+export interface DialogResult {
+	id: ButtonId;
+	formData?: any;
 }
 
 // =================================================================

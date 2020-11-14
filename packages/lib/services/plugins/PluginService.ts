@@ -4,6 +4,7 @@ import Global from './api/Global';
 import BasePluginRunner from './BasePluginRunner';
 import BaseService  from '../BaseService';
 import shim from '../../shim';
+import { rtrimSlashes } from '../../path-utils';
 const { filename, dirname } = require('../../path-utils');
 const uslug = require('uslug');
 
@@ -49,6 +50,10 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
+	public allPluginIds(): string[] {
+		return Object.keys(this.plugins_);
+	}
+
 	private async parsePluginJsBundle(jsBundleString: string) {
 		const scriptText = jsBundleString;
 		const lines = scriptText.split('\n');
@@ -86,11 +91,15 @@ export default class PluginService extends BaseService {
 	}
 
 	public async loadPluginFromString(pluginId: string, baseDir: string, jsBundleString: string): Promise<Plugin> {
+		baseDir = rtrimSlashes(baseDir);
+
 		const r = await this.parsePluginJsBundle(jsBundleString);
 		return this.loadPlugin(pluginId, baseDir, r.manifestText, r.scriptText);
 	}
 
 	private async loadPluginFromPath(path: string): Promise<Plugin> {
+		path = rtrimSlashes(path);
+
 		const fsDriver = shim.fsDriver();
 
 		if (path.toLowerCase().endsWith('.js')) return this.loadPluginFromString(filename(path), dirname(path), await fsDriver.readFile(path));
@@ -110,6 +119,8 @@ export default class PluginService extends BaseService {
 	}
 
 	private async loadPlugin(pluginId: string, baseDir: string, manifestText: string, scriptText: string): Promise<Plugin> {
+		baseDir = rtrimSlashes(baseDir);
+
 		const manifest = manifestFromObject(JSON.parse(manifestText));
 
 		// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
@@ -162,5 +173,18 @@ export default class PluginService extends BaseService {
 		const pluginApi = new Global(this.logger(), this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);
 	}
+
+	// public async handleDisabledPlugins() {
+	// 	const enabledPlugins = this.allPluginIds();
+	// 	const v = await this.kvStore_.value<string>('pluginService.lastEnabledPlugins');
+	// 	const lastEnabledPlugins = v ? JSON.parse(v) : [];
+
+	// 	const disabledPlugins = [];
+	// 	for (const id of lastEnabledPlugins) {
+	// 		if (!enabledPlugins.includes(id)) disabledPlugins.push(id);
+	// 	}
+
+	// 	await this.kvStore_.setValue('pluginService.lastEnabledPlugins', JSON.stringify(enabledPlugins));
+	// }
 
 }

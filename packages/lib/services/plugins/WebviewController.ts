@@ -1,6 +1,6 @@
 import ViewController from './ViewController';
 import shim from '../../shim';
-import { ButtonId, ButtonSpec } from './api/types';
+import { ButtonSpec, DialogResult } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
 
 export enum ContainerType {
@@ -23,7 +23,7 @@ export default class WebviewController extends ViewController {
 	private messageListener_: Function = null;
 	private closeResponse_: CloseResponse = null;
 
-	constructor(id: string, pluginId: string, store: any, baseDir: string) {
+	constructor(id: string, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
 		super(id, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 
@@ -33,7 +33,7 @@ export default class WebviewController extends ViewController {
 			view: {
 				id: this.handle,
 				type: this.type,
-				containerType: ContainerType.Panel,
+				containerType: containerType,
 				html: '',
 				scripts: [],
 				opened: false,
@@ -68,10 +68,6 @@ export default class WebviewController extends ViewController {
 		return this.storeView.containerType;
 	}
 
-	public set containerType(containerType: ContainerType) {
-		this.setStoreProp('containerType', containerType);
-	}
-
 	public async addScript(path: string) {
 		const fullPath = toSystemSlashes(shim.fsDriver().resolve(`${this.baseDir_}/${path}`), 'linux');
 
@@ -99,7 +95,7 @@ export default class WebviewController extends ViewController {
 	// Specific to dialogs
 	// ---------------------------------------------
 
-	public async open(): Promise<ButtonId> {
+	public async open(): Promise<DialogResult> {
 		this.setStoreProp('opened', true);
 
 		return new Promise((resolve: Function, reject: Function) => {
@@ -111,7 +107,7 @@ export default class WebviewController extends ViewController {
 		this.setStoreProp('opened', false);
 	}
 
-	public closeWithResponse(result: ButtonId) {
+	public closeWithResponse(result: DialogResult) {
 		this.close();
 		this.closeResponse_.resolve(result);
 	}

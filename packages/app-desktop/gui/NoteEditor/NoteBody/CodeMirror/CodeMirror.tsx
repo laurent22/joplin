@@ -17,6 +17,11 @@ import { _ } from '@joplin/lib/locale';
 import bridge from '../../../../services/bridge';
 import markdownUtils from '@joplin/lib/markdownUtils';
 import shim from '@joplin/lib/shim';
+import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
+import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
+import CommandService from '@joplin/lib/services/CommandService';
+import { themeStyle } from '@joplin/lib/theme';
+import { ThemeAppearance } from '@joplin/lib/themes/type';
 
 const Note = require('@joplin/lib/models/Note.js');
 const { clipboard } = require('electron');
@@ -25,7 +30,8 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { reg } = require('@joplin/lib/registry.js');
 const dialogs = require('../../../dialogs');
-const { themeStyle } = require('@joplin/lib/theme');
+
+const menuUtils = new MenuUtils(CommandService.instance());
 
 function markupRenderOptions(override: any = null) {
 	return { ...override };
@@ -290,8 +296,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			})
 		);
 
+		menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
+			menu.append(new MenuItem(item));
+		});
+
 		menu.popup(bridge().window());
-	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste]);
+	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste, props.plugins]);
 
 	const loadScript = async (script: any) => {
 		return new Promise((resolve) => {
@@ -369,6 +379,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	useEffect(() => {
 		const theme = themeStyle(props.themeId);
+
+		// Selection in dark mode is hard to see so make it brighter.
+		// https://discourse.joplinapp.org/t/dragging-in-dark-theme/12433/4?u=laurent
+		const selectionColorCss = theme.appearance === ThemeAppearance.Dark ?
+			`.CodeMirror-selected {
+				background: #6b6b6b !important;
+			}` : '';
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
@@ -456,6 +473,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			.cm-s-solarized.cm-s-dark span.cm-comment {
 				color: #8ba1a7 !important;
 			}
+
+			${selectionColorCss}
 		`));
 
 		return () => {
@@ -643,11 +662,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	return (
 		<div style={styles.root} ref={rootRef}>
 			<div style={styles.rowToolbar}>
-				<Toolbar
-					themeId={props.themeId}
-					// dispatch={props.dispatch}
-					// plugins={props.plugins}
-				/>
+				<Toolbar themeId={props.themeId} />
 				{props.noteToolbar}
 			</div>
 			<div style={styles.rowEditorViewer}>

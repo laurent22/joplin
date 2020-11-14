@@ -13,9 +13,9 @@ import { Module } from '@joplin/lib/services/interop/types';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
+import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 
 const { connect } = require('react-redux');
 const { reg } = require('@joplin/lib/registry.js');
@@ -519,6 +519,8 @@ function useMenu(props: Props) {
 			view: {
 				label: _('&View'),
 				submenu: [
+					menuItemDic.toggleLayoutMoveMode,
+					separator(),
 					menuItemDic.toggleSideBar,
 					menuItemDic.toggleNoteList,
 					menuItemDic.toggleVisiblePanes,
@@ -695,7 +697,7 @@ function useMenu(props: Props) {
 
 		for (const view of props.pluginMenuItems) {
 			const location: MenuItemLocation = view.location;
-			if (location === MenuItemLocation.Context) continue;
+			if ([MenuItemLocation.Context, MenuItemLocation.EditorContextMenu, MenuItemLocation.NoteListContextMenu].includes(location)) continue;
 
 			const itemParent = rootMenus[location];
 
@@ -707,7 +709,7 @@ function useMenu(props: Props) {
 		}
 
 		for (const view of props.pluginMenus) {
-			if (view.location === MenuItemLocation.Context) continue;
+			if ([MenuItemLocation.Context, MenuItemLocation.EditorContextMenu, MenuItemLocation.NoteListContextMenu].includes(view.location)) continue;
 			const itemParent = rootMenus[view.location];
 
 			if (!itemParent) {

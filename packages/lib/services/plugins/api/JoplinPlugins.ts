@@ -42,7 +42,7 @@ export default class JoplinPlugins {
 				// be handled correctly by loggers, etc.
 				const newError: Error = new Error(error.message);
 				newError.stack = error.stack;
-				this.logger.error(`In plugin ${this.plugin.id}:`, newError);
+				this.logger.error(`Uncaught exception in plugin "${this.plugin.id}":`, newError);
 			}).then(() => {
 				this.logger.info(`Finished running onStart handler: ${this.plugin.id} (Took ${Date.now() - startTime}ms)`);
 				this.plugin.emit('started');

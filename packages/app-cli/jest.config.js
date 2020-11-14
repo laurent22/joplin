@@ -9,7 +9,8 @@ module.exports = {
 	],
 	testPathIgnorePatterns: [
 		'/node_modules/',
-		'tests/support/',
+		'/tests\\/support/',
+		'/build/',
 		'test-utils.js',
 		'file_api_driver.js',
 	],

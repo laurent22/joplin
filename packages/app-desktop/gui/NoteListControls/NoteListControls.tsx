@@ -8,10 +8,11 @@ const styled = require('styled-components').default;
 
 interface Props {
 	showNewNoteButtons: boolean;
+	height: number;
 }
 
 const StyledRoot = styled.div`
-	width: 100%;
+	height: ${(props: any) => props.height}px;
 	display: flex;
 	flex-direction: row;
 	padding: ${(props: any) => props.theme.mainPadding}px;
@@ -68,7 +69,7 @@ export default function NoteListControls(props: Props) {
 	}
 
 	return (
-		<StyledRoot>
+		<StyledRoot height={props.height}>
 			<SearchBar inputRef={searchBarRef}/>
 			{renderNewNoteButtons()}
 		</StyledRoot>
