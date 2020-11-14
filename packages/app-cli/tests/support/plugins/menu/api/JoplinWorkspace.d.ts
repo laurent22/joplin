@@ -2,7 +2,7 @@
  * The workspace service provides access to all the parts of Joplin that are being worked on - i.e. the currently selected notes or notebooks as well
  * as various related events, such as when a new note is selected, or when the note content changes.
  *
- * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/CliClient/tests/support/plugins)
+ * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins)
  */
 export default class JoplinWorkspace {
     private store;

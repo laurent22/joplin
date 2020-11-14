@@ -1,6 +1,6 @@
 import Plugin from '../Plugin';
 import Joplin from './Joplin';
-import Logger from 'lib/Logger';
+import Logger from '../../../Logger';
 /**
  * @ignore
  */

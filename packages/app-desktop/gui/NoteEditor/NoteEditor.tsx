@@ -23,12 +23,12 @@ import eventManager from '@joplin/lib/eventManager';
 import { AppState } from '../../app';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _ } from '@joplin/lib/locale';
-import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import TagList from '../TagList';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
+import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
@@ -230,7 +230,16 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);
 
-	useWindowCommandHandler({ dispatch: props.dispatch, formNote, setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, saveNoteAndWait });
+	useWindowCommandHandler({
+		dispatch: props.dispatch,
+		formNote,
+		setShowLocalSearch,
+		noteSearchBarRef,
+		editorRef,
+		titleInputRef,
+		saveNoteAndWait,
+		setFormNote,
+	});
 
 	const onDrop = useDropHandler({ editorRef });
 
