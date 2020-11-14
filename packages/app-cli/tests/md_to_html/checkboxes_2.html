@@ -1,0 +1,22 @@
+<ul>
+<li class="md-checkbox joplin-checkbox"><div class="checkbox-wrapper"><input type="checkbox" id="md-checkbox-4" onclick="
+		try {
+			if (this.checked) {
+				this.setAttribute('checked', 'checked');
+			} else {
+				this.removeAttribute('checked');
+			}
+
+			postMessage('checkboxclick:unchecked:0');
+			const label = document.getElementById(&quot;cb-label-md-checkbox-4&quot;);
+			label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
+			label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
+		} catch (error) {
+			console.warn('Checkbox unchecked:0 error', error);
+		}
+		return true;
+	"><label id="cb-label-md-checkbox-4" for="md-checkbox-4" class="checkbox-label-unchecked">This is a checkbox.</label></div></li>
+<li>[ ] This is not a valid checkbox.</li>
+<li>[ ] Nor this.</li>
+<li>[ ] Nor this.</li>
+</ul>

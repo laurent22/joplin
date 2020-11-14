@@ -1,0 +1,4 @@
+- [ ] This is a checkbox.
+-  [ ] This is not a valid checkbox.
+-   [ ] Nor this.
+-    [ ] Nor this.

@@ -1,0 +1,4 @@
+- [ ] The order of checkboxes tests matters.
+- [X] This is a checked checkbox.
+	- [ ] This is a nested checkbox.
+	- [X] They can be checked too. 
