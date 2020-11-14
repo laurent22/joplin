@@ -1,5 +1,7 @@
+import { MenuItemLocation } from '../../plugin_types/services/plugins/api/types';
 import CommandService from '../CommandService';
 import KeymapService from '../KeymapService';
+import { PluginStates, utils as pluginUtils } from '../plugins/reducer';
 import propsHaveChanged from './propsHaveChanged';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
@@ -125,6 +127,20 @@ export default class MenuUtils {
 		}
 
 		return selectObjectByCommands({ array: output }, commandNames);
+	}
+
+	public pluginContextMenuItems(plugins: PluginStates, location: MenuItemLocation): MenuItem[] {
+		const output: MenuItem[] = [];
+		const pluginViewInfos = pluginUtils.viewInfosByType(plugins, 'menuItem');
+
+		for (const info of pluginViewInfos) {
+			if (info.view.location !== location) continue;
+			output.push(this.commandToStatefulMenuItem(info.view.commandName));
+		}
+
+		if (output.length) output.splice(0, 0, { type: 'separator' } as any);
+
+		return output;
 	}
 
 }
