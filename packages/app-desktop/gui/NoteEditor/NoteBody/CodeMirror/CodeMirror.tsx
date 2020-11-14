@@ -21,6 +21,7 @@ import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import { themeStyle } from '@joplin/lib/theme';
+import { ThemeAppearance } from '@joplin/lib/themes/type';
 
 const Note = require('@joplin/lib/models/Note.js');
 const { clipboard } = require('electron');
@@ -379,6 +380,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	useEffect(() => {
 		const theme = themeStyle(props.themeId);
 
+		// Selection in dark mode is hard to see so make it brighter.
+		// https://discourse.joplinapp.org/t/dragging-in-dark-theme/12433/4?u=laurent
+		const selectionColorCss = theme.appearance === ThemeAppearance.Dark ?
+			`.CodeMirror-selected {
+				background: #6b6b6b !important;
+			}` : '';
+
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
 		document.head.appendChild(element);
@@ -465,6 +473,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			.cm-s-solarized.cm-s-dark span.cm-comment {
 				color: #8ba1a7 !important;
 			}
+
+			${selectionColorCss}
 		`));
 
 		return () => {
