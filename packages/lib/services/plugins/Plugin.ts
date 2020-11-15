@@ -50,6 +50,10 @@ export default class Plugin {
 		return this.enabled_;
 	}
 
+	public set enabled(v: boolean) {
+		this.enabled_ = v;
+	}
+
 	public get manifest(): PluginManifest {
 		return this.manifest_;
 	}
