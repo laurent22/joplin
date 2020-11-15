@@ -16,9 +16,9 @@ module.exports = {
 	},
 	resolve: {
 		alias: {
-			api: path.resolve(__dirname, 'api')
+			api: path.resolve(__dirname, 'api'),
 		},
-		extensions: [ '.tsx', '.ts', '.js' ],
+		extensions: ['.tsx', '.ts', '.js'],
 	},
 	output: {
 		filename: 'index.js',
@@ -28,7 +28,7 @@ module.exports = {
 		new CopyPlugin({
 			patterns: [
 				{
-					from: "**/*",
+					from: '**/*',
 					context: path.resolve(__dirname, 'src'),
 					to: path.resolve(__dirname, 'dist'),
 					globOptions: {
