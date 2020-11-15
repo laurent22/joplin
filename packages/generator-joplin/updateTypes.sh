@@ -25,5 +25,5 @@ npm link
 "$CLI_DIR/tests/support/plugins/updatePlugins.sh"
 
 git add -A
-git c -m "Updated types"
+git c -m "Plugins: Updated types"
 git push
