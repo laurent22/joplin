@@ -17,6 +17,7 @@ interface Props {
 const StyledRoot = styled.div`
 	display: flex;
 	flex-direction: column;
+	overflow: hidden;
 `;
 
 export default function NoteListWrapper(props: Props) {
