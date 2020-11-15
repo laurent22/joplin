@@ -5,6 +5,7 @@ import BasePluginRunner from './BasePluginRunner';
 import BaseService  from '../BaseService';
 import shim from '../../shim';
 import { rtrimSlashes } from '../../path-utils';
+const compareVersions = require('compare-versions');
 const { filename, dirname } = require('../../path-utils');
 const uslug = require('uslug');
 
@@ -29,12 +30,14 @@ export default class PluginService extends BaseService {
 		return this.instance_;
 	}
 
+	private appVersion_: string;
 	private store_: any = null;
 	private platformImplementation_: any = null;
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 
-	initialize(platformImplementation: any, runner: BasePluginRunner, store: any) {
+	initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
+		this.appVersion_ = appVersion;
 		this.store_ = store;
 		this.runner_ = runner;
 		this.platformImplementation_ = platformImplementation;
@@ -50,9 +53,9 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
-	public allPluginIds(): string[] {
-		return Object.keys(this.plugins_);
-	}
+	// public allPluginIds(): string[] {
+	// 	return Object.keys(this.plugins_);
+	// }
 
 	private async parsePluginJsBundle(jsBundleString: string) {
 		const scriptText = jsBundleString;
@@ -121,7 +124,16 @@ export default class PluginService extends BaseService {
 	private async loadPlugin(pluginId: string, baseDir: string, manifestText: string, scriptText: string): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
-		const manifest = manifestFromObject(JSON.parse(manifestText));
+		const manifestObj = JSON.parse(manifestText);
+
+		let showAppMinVersionNotice = false;
+
+		if (!manifestObj.app_min_version) {
+			manifestObj.app_min_version = '1.4';
+			showAppMinVersionNotice = true;
+		}
+
+		const manifest = manifestFromObject(manifestObj);
 
 		// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
 		// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
@@ -130,14 +142,23 @@ export default class PluginService extends BaseService {
 
 		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger(), (action: any) => this.store_.dispatch(action));
 
-		this.store_.dispatch({
-			type: 'PLUGIN_ADD',
-			plugin: {
-				id: pluginId,
-				views: {},
-				contentScripts: {},
-			},
-		});
+		if (compareVersions(this.appVersion_, manifest.app_min_version) < 0) {
+			this.logger().info(`PluginService: Plugin "${pluginId}" was disabled because it requires a newer version of Joplin.`, manifest);
+			plugin.enabled = false;
+		} else {
+			this.store_.dispatch({
+				type: 'PLUGIN_ADD',
+				plugin: {
+					id: pluginId,
+					views: {},
+					contentScripts: {},
+				},
+			});
+		}
+
+		if (showAppMinVersionNotice) {
+			plugin.deprecationNotice('1.5', 'The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support. It was automatically set to "1.4", but please update your manifest.json file.');
+		}
 
 		return plugin;
 	}

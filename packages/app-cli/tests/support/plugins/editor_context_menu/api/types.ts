@@ -204,8 +204,8 @@ export enum MenuItemLocation {
 	Note = 'note',
 	Tools = 'tools',
 	Help = 'help',
-	/*
-	 * Deprecated - do not use - same as NoteListContext
+	/**
+	 * @deprecated Do not use - same as NoteListContextMenu
 	 */
 	Context = 'context',
 	NoteListContextMenu = 'noteListContextMenu',

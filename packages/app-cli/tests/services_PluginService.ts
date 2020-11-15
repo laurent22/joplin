@@ -14,10 +14,11 @@ process.on('unhandledRejection', (reason, p) => {
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
 
-function newPluginService() {
+function newPluginService(appVersion: string = '1.4') {
 	const runner = new PluginRunner();
 	const service = new PluginService();
 	service.initialize(
+		appVersion,
 		{
 			joplin: {
 				workspace: {},
@@ -97,6 +98,7 @@ describe('services_PluginService', function() {
 			/* joplin-manifest:
 			{
 				"manifest_version": 1,
+				"app_min_version": "1.4",
 				"name": "JS Bundle test",
 				"description": "JS Bundle Test plugin",
 				"version": "1.0.0",
@@ -173,6 +175,7 @@ describe('services_PluginService', function() {
 			/* joplin-manifest:
 			{
 				"manifest_version": 1,
+				"app_min_version": "1.4",
 				"name": "JS Bundle test",
 				"description": "JS Bundle Test plugin",
 				"version": "1.0.0",
@@ -209,6 +212,37 @@ describe('services_PluginService', function() {
 		expect(result.html.includes('JUST TESTING: something')).toBe(true);
 
 		await shim.fsDriver().remove(tempDir);
+	}));
+
+	it('should enable and disable plugins depending on what app version they support', asyncTest(async () => {
+		const pluginScript = `
+			/* joplin-manifest:
+			{
+				"manifest_version": 1,
+				"app_min_version": "1.4",
+				"name": "JS Bundle test",
+				"version": "1.0.0"
+			}
+			*/
+			
+			joplin.plugins.register({
+				onStart: async function() { },
+			});
+		`;
+
+		const testCases = [
+			['1.4', true],
+			['1.5', true],
+			['2.0', true],
+			['1.3', false],
+			['0.9', false],
+		];
+
+		for (const testCase of testCases) {
+			const [appVersion, expected] = testCase;
+			const plugin = await newPluginService(appVersion as string).loadPluginFromString('example', '', pluginScript);
+			expect(plugin.enabled).toBe(expected as boolean);
+		}
 	}));
 
 });

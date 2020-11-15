@@ -356,6 +356,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md
 <li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
 <li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
 <li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+<li><a href="https://joplinapp.org/api/references/plugin_manifest/">Plugin manifest</a></li>
 <li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
 <li><a href="https://joplinapp.org/api/references/rest_api/">Data API documentation</a></li>
 </ul>
@@ -433,7 +434,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </code></pre>
 <p>By default API results will contain the following fields: <strong>id</strong>, <strong>parent_id</strong>, <strong>title</strong></p>
 <h1>Pagination<a name="pagination" href="#pagination" class="heading-anchor">🔗</a></h1>
-<p>All API calls that return multiple results will be paginated and will have the following structure:</p>
+<p>All API calls that return multiple results will be paginated and will return the following structure:</p>
 <table>
 <thead>
 <tr>
@@ -455,7 +456,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 </tbody>
 </table>
-<p>You can specify how the results should be sorted using the <code>order_by</code> and <code>order_dir</code> query parameters, and you can specify the number of items to be returned using the <code>limit</code> parameter (the maximum being 100 items).</p>
+<p>You can specify how the results should be sorted using the <code>order_by</code> and <code>order_dir</code> query parameters, and which page to retrieve using the <code>page</code> parameter (starts at and defaults to 1). You can specify the number of items to be returned using the <code>limit</code> parameter (the maximum being 100 items).</p>
 <p>The following call for example will initiate a request to fetch all the notes, 10 at a time, and sorted by &quot;updated_time&quot; ascending:</p>
 <pre><code>curl http://localhost:41184/notes?order_by=updated_time&amp;order_dir=ASC&amp;limit=10
 </code></pre>

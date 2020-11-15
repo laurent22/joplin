@@ -50,6 +50,10 @@ export default class Plugin {
 		return this.enabled_;
 	}
 
+	public set enabled(v: boolean) {
+		this.enabled_ = v;
+	}
+
 	public get manifest(): PluginManifest {
 		return this.manifest_;
 	}
@@ -115,7 +119,7 @@ export default class Plugin {
 	}
 
 	public deprecationNotice(goneInVersion: string, message: string) {
-		this.logger_.warn(`Plugin: ${this.id}: DEPRECATION NOTICE: ${message} The current feature will stop working in version ${goneInVersion}.`);
+		this.logger_.warn(`Plugin: ${this.id}: DEPRECATION NOTICE: ${message} This will stop working in version ${goneInVersion}.`);
 	}
 
 }

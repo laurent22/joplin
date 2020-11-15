@@ -1,5 +1,6 @@
 {
 	"manifest_version": 1,
+	"app_min_version": "1.4",
 	"name": "Register Command Test",
 	"description": "To test registering commands",
 	"version": "1.0.0",

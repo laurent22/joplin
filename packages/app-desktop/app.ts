@@ -495,7 +495,7 @@ class Application extends BaseApplication {
 
 		const pluginRunner = new PluginRunner();
 		PluginService.instance().setLogger(pluginLogger);
-		PluginService.instance().initialize(PlatformImplementation.instance(), pluginRunner, this.store());
+		PluginService.instance().initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
 
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
