@@ -85,14 +85,19 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/dev/readme/debugging.md)
 	- [FAQ](https://github.com/laurent22/joplin/blob/dev/readme/faq.md)
 
-- Joplin API
+- Joplin API - Get Started
 
 	- [Joplin API Overview](https://github.com/laurent22/joplin/blob/dev/readme/api/overview.md)
 	- [Plugin development](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md)
 	- [Plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md)
-	- [Plugin manifest](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest.md)
+	
+
+- Joplin API - References
+
 	- [Plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html)
-	- [Data API documentation](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
+	- [Data API](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
+	- [Plugin manifest](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest.md)
+	- [Plugin loading rules](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_loading_rules.md)
 
 - Development
 
