@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../../global-style.js');
@@ -23,6 +23,14 @@ function markupToHtml() {
 	return markupToHtml_;
 }
 
+function usePrevious(value: any, initialValue: any = null): any {
+	const ref = useRef(initialValue);
+	useEffect(() => {
+		ref.current = value;
+	});
+	return ref.current;
+}
+
 export default function useSource(noteBody: string, noteMarkupLanguage: number, themeId: number, highlightedKeywords: string[], noteResources: any, paddingBottom: number, noteHash: string): UseSourceResult {
 	const [source, setSource] = useState<Source>(undefined);
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
@@ -37,7 +45,32 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 		};
 	}, [themeId, paddingBottom]);
 
+	// To address https://github.com/laurent22/joplin/issues/433
+	//
+	// If a checkbox in a note is ticked, the body changes, which normally
+	// would trigger a re-render of this component, which has the
+	// unfortunate side effect of making the view scroll back to the top.
+	// This re-rendering however is uncessary since the component is
+	// already visually updated via JS. So here, if the note has not
+	// changed, we prevent the component from updating. This fixes the
+	// above issue. A drawback of this is if the note is updated via sync,
+	// this change will not be displayed immediately.
+	//
+	// IMPORTANT: KEEP noteBody AS THE FIRST dependency in the array as the
+	// below logic rely on this.
+	const effectDependencies = [noteBody, resourceLoadedTime, noteMarkupLanguage, themeId, rendererTheme, highlightedKeywords, noteResources, noteHash, isFirstRender];
+	const previousDeps = usePrevious(effectDependencies, []);
+	const changedDeps = effectDependencies.reduce((accum: any, dependency: any, index: any) => {
+		if (dependency !== previousDeps[index]) {
+			return { ...accum, [index]: true };
+		}
+		return accum;
+	}, {});
+	const onlyNoteBodyHasChanged = Object.keys(changedDeps).length === 1 && changedDeps[0];
+
 	useEffect(() => {
+		if (onlyNoteBodyHasChanged) return () => {};
+
 		let cancelled = false;
 
 		async function renderNote() {
@@ -160,7 +193,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 		return () => {
 			cancelled = true;
 		};
-	}, [resourceLoadedTime, noteBody, noteMarkupLanguage, themeId, rendererTheme, highlightedKeywords, noteResources, noteHash, isFirstRender]);
+	}, effectDependencies);
 
 	return { source, injectedJs };
 }
