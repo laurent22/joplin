@@ -142,6 +142,8 @@ function Editor(props: EditorProps, ref: any) {
 			const coords = cm.coordsChar({ left: event.x, top: event.y });
 			cm.setCursor(coords);
 		}
+
+		event.dataTransfer.dropEffect = 'copy';
 	}, []);
 
 	useEffect(() => {
