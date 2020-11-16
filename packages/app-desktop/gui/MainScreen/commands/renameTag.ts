@@ -3,14 +3,14 @@ import { _ } from '@joplin/lib/locale';
 const Tag = require('@joplin/lib/models/Tag');
 const bridge = require('electron').remote.require('./bridge').default;
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'renameTag',
 	label: () => _('Rename'),
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, tagId:string = null) => {
+		execute: async (context: CommandContext, tagId: string = null) => {
 			tagId = tagId || context.state.selectedTagId;
 			if (!tagId) return;
 
@@ -20,7 +20,7 @@ export const runtime = (comp:any):CommandRuntime => {
 					promptOptions: {
 						label: _('Rename tag:'),
 						value: tag.title,
-						onClose: async (answer:string) => {
+						onClose: async (answer: string) => {
 							if (answer !== null) {
 								try {
 									tag.title = answer;

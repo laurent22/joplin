@@ -2,15 +2,15 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 const bridge = require('electron').remote.require('./bridge').default;
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'print',
 	label: () => _('Print'),
 	iconName: 'fa-file',
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, noteIds:string[] = null) => {
+		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			noteIds = noteIds || context.state.selectedNoteIds;
 
 			try {

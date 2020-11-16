@@ -12,7 +12,7 @@ const urlUtils = require('@joplin/lib/urlUtils');
 const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
 const { reg } = require('@joplin/lib/registry.js');
 
-export default function useMessageHandler(scrollWhenReady:any, setScrollWhenReady:Function, editorRef:any, setLocalSearchResultCount:Function, dispatch:Function, formNote:FormNote) {
+export default function useMessageHandler(scrollWhenReady: any, setScrollWhenReady: Function, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote) {
 	return useCallback(async (event: any) => {
 		const msg = event.channel ? event.channel : '';
 		const args = event.args;

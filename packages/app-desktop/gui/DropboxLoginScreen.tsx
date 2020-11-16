@@ -8,17 +8,17 @@ const { themeStyle } = require('@joplin/lib/theme');
 const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 
 interface Props {
-	themeId: string,
+	themeId: string;
 }
 
 class DropboxLoginScreenComponent extends React.Component<any, any> {
 
-	shared_:any;
+	shared_: any;
 
-	constructor(props:Props) {
+	constructor(props: Props) {
 		super(props);
 
-		this.shared_ = new Shared(this, (msg:string) => bridge().showInfoMessageBox(msg), (msg:string) => bridge().showErrorMessageBox(msg));
+		this.shared_ = new Shared(this, (msg: string) => bridge().showInfoMessageBox(msg), (msg: string) => bridge().showErrorMessageBox(msg));
 	}
 
 	UNSAFE_componentWillMount() {
@@ -61,7 +61,7 @@ class DropboxLoginScreenComponent extends React.Component<any, any> {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return {
 		themeId: state.settings.theme,
 	};

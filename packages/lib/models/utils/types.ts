@@ -4,12 +4,13 @@ export enum PaginationOrderDir {
 }
 
 export interface PaginationOrder {
-	by: string,
-	dir: PaginationOrderDir,
-	caseInsensitive: boolean,
+	by: string;
+	dir: PaginationOrderDir;
+	caseInsensitive: boolean;
 }
 
 export interface Pagination {
-	limit: number,
-	order: PaginationOrder[],
+	limit: number;
+	order: PaginationOrder[];
+	page: number;
 }

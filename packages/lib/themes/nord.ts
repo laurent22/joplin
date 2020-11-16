@@ -47,7 +47,7 @@ const nord = ['#2e3440', '#3b4252', '#434c5e', '#4c566a', '#d8dee9', '#e5e9f0', 
 // Used for numbers.
 // 2e3440 === rbga(46, 52, 64, 1)
 
-const theme:Theme = {
+const theme: Theme = {
 	...theme_dark,
 
 	backgroundColor: nord[0],

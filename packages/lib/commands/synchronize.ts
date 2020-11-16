@@ -2,7 +2,7 @@ import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '../se
 import { _ } from '../locale';
 const { reg } = require('../registry.js');
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'synchronize',
 	label: () => _('Synchronise'),
 	iconName: 'fa-sync-alt',
@@ -10,9 +10,9 @@ export const declaration:CommandDeclaration = {
 
 // Note that this command actually acts as a toggle - it starts or cancels
 // synchronisation depending on the "syncStarted" parameter
-export const runtime = ():CommandRuntime => {
+export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, syncStarted:boolean = null) => {
+		execute: async (context: CommandContext, syncStarted: boolean = null) => {
 			syncStarted = syncStarted === null ? context.state.syncStarted : syncStarted;
 
 			const action = syncStarted ? 'cancel' : 'start';

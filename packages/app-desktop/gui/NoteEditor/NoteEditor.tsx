@@ -23,12 +23,12 @@ import eventManager from '@joplin/lib/eventManager';
 import { AppState } from '../../app';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _ } from '@joplin/lib/locale';
-import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import TagList from '../TagList';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
+import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
@@ -55,7 +55,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
 
-	const formNote_beforeLoad = useCallback(async (event:OnLoadEvent) => {
+	const formNote_beforeLoad = useCallback(async (event: OnLoadEvent) => {
 		await saveNoteIfWillChange(event.formNote);
 		setShowRevisions(false);
 	}, []);
@@ -106,7 +106,7 @@ function NoteEditor(props: NoteEditorProps) {
 			return async function() {
 				const note = await formNoteToNote(formNote);
 				reg.logger().debug('Saving note...', note);
-				const savedNote:any = await Note.save(note);
+				const savedNote: any = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
 					return { ...prev, user_updated_time: savedNote.user_updated_time };
@@ -230,7 +230,16 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);
 
-	useWindowCommandHandler({ dispatch: props.dispatch, formNote, setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, saveNoteAndWait });
+	useWindowCommandHandler({
+		dispatch: props.dispatch,
+		formNote,
+		setShowLocalSearch,
+		noteSearchBarRef,
+		editorRef,
+		titleInputRef,
+		saveNoteAndWait,
+		setFormNote,
+	});
 
 	const onDrop = useDropHandler({ editorRef });
 
@@ -334,7 +343,7 @@ function NoteEditor(props: NoteEditorProps) {
 		});
 	}, [props.dispatch, formNote]);
 
-	function renderNoNotes(rootStyle:any) {
+	function renderNoNotes(rootStyle: any) {
 		const emptyDivStyle = Object.assign(
 			{
 				backgroundColor: 'black',
@@ -365,7 +374,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 
-	const editorProps:NoteBodyEditorProps = {
+	const editorProps: NoteBodyEditorProps = {
 		ref: editorRef,
 		contentKey: formNote.id,
 		style: styles.tinyMCE,
@@ -417,7 +426,7 @@ function NoteEditor(props: NoteEditorProps) {
 	if (showRevisions) {
 		const theme = themeStyle(props.themeId);
 
-		const revStyle:any = {
+		const revStyle: any = {
 			// ...props.style,
 			display: 'inline-flex',
 			padding: theme.margin,

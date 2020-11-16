@@ -2,10 +2,10 @@ const events = require('events');
 
 class EventManager {
 
-	private emitter_:any;
-	private appStatePrevious_:any;
-	private appStateWatchedProps_:string[];
-	private appStateListeners_:any;
+	private emitter_: any;
+	private appStatePrevious_: any;
+	private appStateWatchedProps_: string[];
+	private appStateListeners_: any;
 
 	constructor() {
 		this.reset();
@@ -19,31 +19,31 @@ class EventManager {
 		this.appStateListeners_ = {};
 	}
 
-	on(eventName:string, callback:Function) {
+	on(eventName: string, callback: Function) {
 		return this.emitter_.on(eventName, callback);
 	}
 
-	emit(eventName:string, object:any = null) {
+	emit(eventName: string, object: any = null) {
 		return this.emitter_.emit(eventName, object);
 	}
 
-	removeListener(eventName:string, callback:Function) {
+	removeListener(eventName: string, callback: Function) {
 		return this.emitter_.removeListener(eventName, callback);
 	}
 
-	off(eventName:string, callback:Function) {
+	off(eventName: string, callback: Function) {
 		return this.removeListener(eventName, callback);
 	}
 
-	filterOn(filterName:string, callback:Function) {
+	filterOn(filterName: string, callback: Function) {
 		return this.emitter_.on(`filter:${filterName}`, callback);
 	}
 
-	filterOff(filterName:string, callback:Function) {
+	filterOff(filterName: string, callback: Function) {
 		return this.removeListener(`filter:${filterName}`, callback);
 	}
 
-	filterEmit(filterName:string, object:any) {
+	filterEmit(filterName: string, object: any) {
 		// We freeze the object we pass to the listeners so that they
 		// don't modify it directly. Instead they must return a
 		// modified copy (or the input itself).
@@ -64,7 +64,7 @@ class EventManager {
 		return output;
 	}
 
-	appStateOn(propName:string, callback:Function) {
+	appStateOn(propName: string, callback: Function) {
 		if (!this.appStateListeners_[propName]) {
 			this.appStateListeners_[propName] = [];
 			this.appStateWatchedProps_.push(propName);
@@ -73,7 +73,7 @@ class EventManager {
 		this.appStateListeners_[propName].push(callback);
 	}
 
-	appStateOff(propName:string, callback:Function) {
+	appStateOff(propName: string, callback: Function) {
 		if (!this.appStateListeners_[propName]) {
 			throw new Error('EventManager: Trying to unregister a state prop watch for a non-watched prop (1)');
 		}
@@ -84,7 +84,7 @@ class EventManager {
 		this.appStateListeners_[propName].splice(idx, 1);
 	}
 
-	stateValue_(state:any, propName:string) {
+	stateValue_(state: any, propName: string) {
 		const parts = propName.split('.');
 		let s = state;
 		for (const p of parts) {
@@ -97,7 +97,7 @@ class EventManager {
 	// This function works by keeping a copy of the watched props and, whenever this function
 	// is called, comparing the previous and new values and emitting events if they have changed.
 	// The appStateEmit function should be called from a middleware.
-	appStateEmit(state:any) {
+	appStateEmit(state: any) {
 		if (!this.appStateWatchedProps_.length) return;
 
 		for (const propName of this.appStateWatchedProps_) {

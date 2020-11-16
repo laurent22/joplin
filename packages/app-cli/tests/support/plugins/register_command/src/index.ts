@@ -31,14 +31,14 @@ joplin.plugins.register({
 		});
 
 		// Add the first command to the note toolbar
-		await joplin.views.toolbarButtons.create('testCommand1', ToolbarButtonLocation.NoteToolbar);
+		await joplin.views.toolbarButtons.create('myButton1', 'testCommand1', ToolbarButtonLocation.NoteToolbar);
 
 		// Add the second command to the editor toolbar
-		await joplin.views.toolbarButtons.create('testCommand2', ToolbarButtonLocation.EditorToolbar);
+		await joplin.views.toolbarButtons.create('myButton2', 'testCommand2', ToolbarButtonLocation.EditorToolbar);
 
 		// Also add the commands to the menu
-		await joplin.views.menuItems.create('testCommand1', MenuItemLocation.Tools, { accelerator: 'CmdOrCtrl+Alt+Shift+B' });
-		await joplin.views.menuItems.create('testCommand2', MenuItemLocation.Tools);
+		await joplin.views.menuItems.create('myMenuItem1', 'testCommand1', MenuItemLocation.Tools, { accelerator: 'CmdOrCtrl+Alt+Shift+B' });
+		await joplin.views.menuItems.create('myMenuItem2', 'testCommand2', MenuItemLocation.Tools);
 
 		console.info('Running command with arguments...');
 		const result = await joplin.commands.execute('commandWithResult', 'abcd', 123);

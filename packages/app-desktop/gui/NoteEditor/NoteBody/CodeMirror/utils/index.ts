@@ -85,7 +85,7 @@ export function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Func
 }
 
 
-export function useRootSize(dependencies:any) {
+export function useRootSize(dependencies: any) {
 	const { rootRef } = dependencies;
 
 	const [rootSize, setRootSize] = useState({ width: 0, height: 0 });

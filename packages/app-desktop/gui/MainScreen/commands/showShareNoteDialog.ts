@@ -1,14 +1,14 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'showShareNoteDialog',
 	label: () => _('Share note...'),
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (context:CommandContext, noteIds:string[] = null) => {
+		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			noteIds = noteIds || context.state.selectedNoteIds;
 
 			comp.setState({

@@ -2,8 +2,8 @@ import { PluginStates } from '../reducer';
 import { ExtraRendererRule } from '@joplin/renderer/MdToHtml';
 import { ContentScriptType } from '../api/types';
 
-export default function contentScriptsToRendererRules(plugins:PluginStates):ExtraRendererRule[] {
-	const output:ExtraRendererRule[] = [];
+export default function contentScriptsToRendererRules(plugins: PluginStates): ExtraRendererRule[] {
+	const output: ExtraRendererRule[] = [];
 
 	for (const pluginId in plugins) {
 		const plugin = plugins[pluginId];

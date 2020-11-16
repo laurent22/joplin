@@ -356,6 +356,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manife
 <li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
 <li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
 <li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+<li><a href="https://joplinapp.org/api/references/plugin_manifest/">Plugin manifest</a></li>
 <li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
 <li><a href="https://joplinapp.org/api/references/rest_api/">Data API documentation</a></li>
 </ul>
@@ -393,19 +394,60 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manife
 	<div class="main">
 <h1>Plugin Manifest<a name="plugin-manifest" href="#plugin-manifest" class="heading-anchor">🔗</a></h1>
 <p>The manifest file is a JSON file that describes various properties of the plugin. If you use the Yeoman generator, it should be automatically generated based on the answers you've provided. The supported properties are:</p>
-<ul>
-<li><code>manifest_version</code>: For now should always be &quot;1&quot;</li>
-<li><code>name</code>: Name of the plugin</li>
-<li><code>description</code>: Additional information about the plugin</li>
-<li><code>version</code>: Version number such as &quot;1.0.0&quot;</li>
-<li><code>homepage_url</code>: Homepage URL of the plugin (can also be, for example, a link to a GitHub repository)</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Required?</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>manifest_version</code></td>
+<td><strong>Yes</strong></td>
+<td>For now should always be &quot;1&quot;.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><strong>Yes</strong></td>
+<td>Name of the plugin. Should be a user-friendly string, as it will be displayed in the UI.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td><strong>Yes</strong></td>
+<td>Version number such as &quot;1.0.0&quot;.</td>
+</tr>
+<tr>
+<td><code>app_min_version</code></td>
+<td><strong>Yes</strong></td>
+<td>Minimum version of Joplin that the plugin is compatible with. In general it should be whatever version you are using to develop the plugin.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>No</td>
+<td>Detailed description of the plugin.</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td>No</td>
+<td>Plugin author name.</td>
+</tr>
+<tr>
+<td><code>homepage_url</code></td>
+<td>No</td>
+<td>Homepage URL of the plugin. It can also be, for example, a link to a GitHub repository.</td>
+</tr>
+</tbody>
+</table>
 <p>Here's a complete example:</p>
 <pre><code class="language-json">{
     &quot;manifest_version&quot;: 1,
     &quot;name&quot;: &quot;Joplin Simple Plugin&quot;,
-    &quot;version&quot;: &quot;1.0.0&quot;,
     &quot;description&quot;: &quot;To test loading and running a plugin&quot;,
+    &quot;version&quot;: &quot;1.0.0&quot;,
+    &quot;author&quot;: &quot;John Smith&quot;,
+    &quot;app_min_version&quot;: &quot;1.4&quot;,
     &quot;homepage_url&quot;: &quot;https://joplinapp.org&quot;
 }
 </code></pre>

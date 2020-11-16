@@ -14,6 +14,11 @@ process.on('unhandledRejection', (reason, p) => {
 
 const api = null;
 
+// Adding empty test for Jest
+it('will pass', () => {
+	expect(true).toBe(true);
+});
+
 // NOTE: These tests work with S3 and memory driver, but not
 // with other targets like file system or Nextcloud.
 // All this is tested in an indirect way in tests/synchronizer

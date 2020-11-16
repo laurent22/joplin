@@ -1,12 +1,12 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'showLocalSearch',
 	label: () => _('Search in current note'),
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async () => {
 			if (comp.editorRef.current && comp.editorRef.current.supportsCommand('search')) {

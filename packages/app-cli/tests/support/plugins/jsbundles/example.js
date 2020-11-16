@@ -1,6 +1,7 @@
 /* joplin-manifest:
 {
 	"manifest_version": 1,
+	"app_min_version": "1.4",
 	"name": "JS Bundle test",
 	"description": "JS Bundle Test plugin",
 	"version": "1.0.0",

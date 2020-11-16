@@ -3,7 +3,7 @@ import ViewController from './ViewController';
 
 export default class MenuController extends ViewController {
 
-	constructor(id:string, pluginId:string, store:any, label:string, menuItems: MenuItem[], location:MenuItemLocation) {
+	constructor(id: string, pluginId: string, store: any, label: string, menuItems: MenuItem[], location: MenuItemLocation) {
 		super(id, pluginId, store);
 
 		this.store.dispatch({
@@ -19,7 +19,7 @@ export default class MenuController extends ViewController {
 		});
 	}
 
-	public get type():string {
+	public get type(): string {
 		return 'menu';
 	}
 

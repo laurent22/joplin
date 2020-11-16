@@ -4,6 +4,6 @@ import { Bridge } from '../bridge';
 
 const remoteBridge = require('electron').remote.require('./bridge').default;
 
-export default function bridge():Bridge {
+export default function bridge(): Bridge {
 	return remoteBridge();
 }

@@ -1,31 +1,33 @@
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import CommandService, { CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
+import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
+import KeymapService from '@joplin/lib/services/KeymapService';
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
 interface TestCommand {
-	declaration: CommandDeclaration,
-	runtime: CommandRuntime,
+	declaration: CommandDeclaration;
+	runtime: CommandRuntime;
 }
 
-function newService():CommandService {
+function newService(): CommandService {
 	const service = new CommandService();
 	const mockStore = {
 		getState: () => {
 			return {};
 		},
 	};
-	service.initialize(mockStore, true);
+	service.initialize(mockStore, true, stateToWhenClauseContext);
 	return service;
 }
 
-function createCommand(name:string, options:any):TestCommand {
-	const declaration:CommandDeclaration = {
+function createCommand(name: string, options: any): TestCommand {
+	const declaration: CommandDeclaration = {
 		name: name,
 	};
 
-	const runtime:CommandRuntime = {
+	const runtime: CommandRuntime = {
 		execute: options.execute,
 	};
 
@@ -34,7 +36,7 @@ function createCommand(name:string, options:any):TestCommand {
 	return { declaration, runtime };
 }
 
-function registerCommand(service:CommandService, cmd:TestCommand) {
+function registerCommand(service: CommandService, cmd: TestCommand) {
 	service.registerDeclaration(cmd.declaration);
 	service.registerRuntime(cmd.declaration.name, cmd.runtime);
 }
@@ -42,6 +44,9 @@ function registerCommand(service:CommandService, cmd:TestCommand) {
 describe('services_CommandService', function() {
 
 	beforeEach(async (done) => {
+		KeymapService.destroyInstance();
+		KeymapService.instance().initialize();
+
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		done();
@@ -51,7 +56,7 @@ describe('services_CommandService', function() {
 		const service = newService();
 		const toolbarButtonUtils = new ToolbarButtonUtils(service);
 
-		const executedCommands:string[] = [];
+		const executedCommands: string[] = [];
 
 		registerCommand(service, createCommand('test1', {
 			execute: () => {
@@ -168,9 +173,9 @@ describe('services_CommandService', function() {
 			execute: () => {},
 		}));
 
-		const clickedCommands:string[] = [];
+		const clickedCommands: string[] = [];
 
-		const onClick = (commandName:string) => {
+		const onClick = (commandName: string) => {
 			clickedCommands.push(commandName);
 		};
 
@@ -230,7 +235,7 @@ describe('services_CommandService', function() {
 		let propValue = null;
 
 		registerCommand(service, createCommand('test1', {
-			execute: (_context:any, greeting:string) => {
+			execute: (_context: any, greeting: string) => {
 				propValue = greeting;
 			},
 		}));

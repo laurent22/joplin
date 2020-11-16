@@ -5,7 +5,7 @@ const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./tes
 const shim = require('@joplin/lib/shim').default;
 const { themeStyle } = require('@joplin/lib/theme');
 
-function newTestMdToHtml(options:any = null) {
+function newTestMdToHtml(options: any = null) {
 	options = {
 		ResourceModel: {
 			isResourceUrl: () => false,
@@ -19,7 +19,7 @@ function newTestMdToHtml(options:any = null) {
 
 describe('MdToHtml', function() {
 
-	beforeEach(async (done:Function) => {
+	beforeEach(async (done: Function) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		done();
@@ -39,7 +39,7 @@ describe('MdToHtml', function() {
 
 			// if (mdFilename !== 'sanitize_9.md') continue;
 
-			const mdToHtmlOptions:any = {
+			const mdToHtmlOptions: any = {
 				bodyOnly: true,
 			};
 
@@ -83,7 +83,7 @@ describe('MdToHtml', function() {
 	}));
 
 	it('should return enabled plugin assets', asyncTest(async () => {
-		const pluginOptions:any = {};
+		const pluginOptions: any = {};
 		const pluginNames = MdToHtml.pluginNames();
 
 		for (const n of pluginNames) pluginOptions[n] = { enabled: false };

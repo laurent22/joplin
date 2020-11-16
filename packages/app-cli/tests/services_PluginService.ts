@@ -9,15 +9,16 @@ const Note = require('@joplin/lib/models/Note');
 const Folder = require('@joplin/lib/models/Folder');
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at services_PluginService: Promise', p, 'reason:', reason);
 });
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
 
-function newPluginService() {
+function newPluginService(appVersion: string = '1.4') {
 	const runner = new PluginRunner();
 	const service = new PluginService();
 	service.initialize(
+		appVersion,
 		{
 			joplin: {
 				workspace: {},
@@ -44,6 +45,8 @@ describe('services_PluginService', function() {
 		const service = newPluginService();
 		await service.loadAndRunPlugins([`${testPluginDir}/simple`]);
 
+		expect(() => service.pluginById('simple')).not.toThrowError();
+
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
 		expect(allFolders[0].title).toBe('my plugin folder');
@@ -52,6 +55,12 @@ describe('services_PluginService', function() {
 		expect(allNotes.length).toBe(1);
 		expect(allNotes[0].title).toBe('testing plugin!');
 		expect(allNotes[0].parent_id).toBe(allFolders[0].id);
+	}));
+
+	it('should load and run a simple plugin and handle trailing slash', asyncTest(async () => {
+		const service = newPluginService();
+		await service.loadAndRunPlugins([`${testPluginDir}/simple/`]);
+		expect(() => service.pluginById('simple')).not.toThrowError();
 	}));
 
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
@@ -79,7 +88,7 @@ describe('services_PluginService', function() {
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
-		expect(allFolders.map((f:any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
+		expect(allFolders.map((f: any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 
 	it('should load plugins from JS bundles', asyncTest(async () => {
@@ -89,6 +98,7 @@ describe('services_PluginService', function() {
 			/* joplin-manifest:
 			{
 				"manifest_version": 1,
+				"app_min_version": "1.4",
 				"name": "JS Bundle test",
 				"description": "JS Bundle Test plugin",
 				"version": "1.0.0",
@@ -165,6 +175,7 @@ describe('services_PluginService', function() {
 			/* joplin-manifest:
 			{
 				"manifest_version": 1,
+				"app_min_version": "1.4",
 				"name": "JS Bundle test",
 				"description": "JS Bundle Test plugin",
 				"version": "1.0.0",
@@ -201,6 +212,37 @@ describe('services_PluginService', function() {
 		expect(result.html.includes('JUST TESTING: something')).toBe(true);
 
 		await shim.fsDriver().remove(tempDir);
+	}));
+
+	it('should enable and disable plugins depending on what app version they support', asyncTest(async () => {
+		const pluginScript = `
+			/* joplin-manifest:
+			{
+				"manifest_version": 1,
+				"app_min_version": "1.4",
+				"name": "JS Bundle test",
+				"version": "1.0.0"
+			}
+			*/
+			
+			joplin.plugins.register({
+				onStart: async function() { },
+			});
+		`;
+
+		const testCases = [
+			['1.4', true],
+			['1.5', true],
+			['2.0', true],
+			['1.3', false],
+			['0.9', false],
+		];
+
+		for (const testCase of testCases) {
+			const [appVersion, expected] = testCase;
+			const plugin = await newPluginService(appVersion as string).loadPluginFromString('example', '', pluginScript);
+			expect(plugin.enabled).toBe(expected as boolean);
+		}
 	}));
 
 });

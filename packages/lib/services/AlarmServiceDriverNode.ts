@@ -6,22 +6,22 @@ const notifier = require('node-notifier');
 const bridge = require('electron').remote.require('./bridge').default;
 
 interface Options {
-	appName: string,
+	appName: string;
 }
 
 export default class AlarmServiceDriverNode {
 
-	private appName_:string;
-	private notifications_:any = {};
-	private service_:any = null;
+	private appName_: string;
+	private notifications_: any = {};
+	private service_: any = null;
 
-	constructor(options:Options) {
+	constructor(options: Options) {
 		// Note: appName is required to get the notification to work. It must be the same as the appId defined in package.json
 		// https://github.com/mikaelbr/node-notifier/issues/144#issuecomment-319324058
 		this.appName_ = options.appName;
 	}
 
-	setService(s:any) {
+	setService(s: any) {
 		this.service_ = s;
 	}
 
@@ -33,17 +33,17 @@ export default class AlarmServiceDriverNode {
 		return false;
 	}
 
-	notificationIsSet(id:number) {
+	notificationIsSet(id: number) {
 		return id in this.notifications_;
 	}
 
-	async clearNotification(id:number) {
+	async clearNotification(id: number) {
 		if (!this.notificationIsSet(id)) return;
 		shim.clearTimeout(this.notifications_[id].timeoutId);
 		delete this.notifications_[id];
 	}
 
-	async scheduleNotification(notification:Notification) {
+	async scheduleNotification(notification: Notification) {
 		const now = Date.now();
 		const interval = notification.date.getTime() - now;
 		if (interval < 0) return;
@@ -76,7 +76,7 @@ export default class AlarmServiceDriverNode {
 			}, maxInterval);
 		} else {
 			timeoutId = shim.setTimeout(() => {
-				const o:any = {
+				const o: any = {
 					appID: this.appName_,
 					title: notification.title,
 					icon: `${bridge().electronApp().buildDir()}/icons/512x512.png`,
@@ -90,7 +90,7 @@ export default class AlarmServiceDriverNode {
 
 				this.logger().info('AlarmServiceDriverNode::scheduleNotification: Triggering notification:', o);
 
-				notifier.notify(o, (error:any, response:any) => {
+				notifier.notify(o, (error: any, response: any) => {
 					this.logger().info('AlarmServiceDriverNode::scheduleNotification: node-notifier response:', error, response);
 				});
 

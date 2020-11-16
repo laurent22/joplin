@@ -513,6 +513,8 @@
 						url: pageLocationOrigin() + location.pathname + location.search,
 						parent_id: command.parent_id,
 						tags: command.tags,
+						windowInnerWidth: window.innerWidth,
+						windowInnerHeight: window.innerHeight,
 					};
 
 					browser_.runtime.sendMessage({

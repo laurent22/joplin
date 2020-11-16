@@ -14,11 +14,11 @@ export default class BackButtonDialogBox extends DialogBox {
 		};
 	}
 
-	componentDidMount() {
-		BackButtonService.addHandler(this.backHandler_);
-	}
-
-	componentWillUnmount() {
-		BackButtonService.removeHandler(this.backHandler_);
+	async componentDidUpdate() {
+		if (this.state.isVisible) {
+			BackButtonService.addHandler(this.backHandler_);
+		} else {
+			BackButtonService.removeHandler(this.backHandler_);
+		}
 	}
 }

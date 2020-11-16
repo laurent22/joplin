@@ -6,20 +6,20 @@ const { dirname, toSystemSlashes } = require('@joplin/lib/path-utils');
 const { BrowserWindow, nativeTheme } = require('electron');
 
 interface LastSelectedPath {
-	file: string,
-	directory: string,
+	file: string;
+	directory: string;
 }
 
 interface LastSelectedPaths {
-	[key:string]: LastSelectedPath,
+	[key: string]: LastSelectedPath;
 }
 
 export class Bridge {
 
-	private electronWrapper_:ElectronAppWrapper;
-	private lastSelectedPaths_:LastSelectedPaths;
+	private electronWrapper_: ElectronAppWrapper;
+	private lastSelectedPaths_: LastSelectedPaths;
 
-	constructor(electronWrapper:ElectronAppWrapper) {
+	constructor(electronWrapper: ElectronAppWrapper) {
 		this.electronWrapper_ = electronWrapper;
 		this.lastSelectedPaths_ = {
 			file: null,
@@ -43,11 +43,11 @@ export class Bridge {
 		return this.electronWrapper_.window();
 	}
 
-	showItemInFolder(fullPath:string) {
+	showItemInFolder(fullPath: string) {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
-	newBrowserWindow(options:any) {
+	newBrowserWindow(options: any) {
 		return new BrowserWindow(options);
 	}
 
@@ -63,7 +63,7 @@ export class Bridge {
 		return { width: s[0], height: s[1] };
 	}
 
-	windowSetSize(width:number, height:number) {
+	windowSetSize(width: number, height: number) {
 		if (!this.window()) return;
 		return this.window().setSize(width, height);
 	}
@@ -76,7 +76,7 @@ export class Bridge {
 		return this.window().webContents.closeDevTools();
 	}
 
-	showSaveDialog(options:any) {
+	showSaveDialog(options: any) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
@@ -87,7 +87,7 @@ export class Bridge {
 		return filePath;
 	}
 
-	showOpenDialog(options:any) {
+	showOpenDialog(options: any) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		let fileType = 'file';
@@ -102,13 +102,13 @@ export class Bridge {
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
-	showMessageBox_(window:any, options:any):number {
+	showMessageBox_(window: any, options: any): number {
 		const { dialog } = require('electron');
 		if (!window) window = this.window();
 		return dialog.showMessageBoxSync(window, options);
 	}
 
-	showErrorMessageBox(message:string) {
+	showErrorMessageBox(message: string) {
 		return this.showMessageBox_(this.window(), {
 			type: 'error',
 			message: message,
@@ -116,7 +116,7 @@ export class Bridge {
 		});
 	}
 
-	showConfirmMessageBox(message:string, options:any = null) {
+	showConfirmMessageBox(message: string, options: any = null) {
 		if (options === null) options = {};
 
 		const result = this.showMessageBox_(this.window(), Object.assign({}, {
@@ -130,7 +130,7 @@ export class Bridge {
 	}
 
 	/* returns the index of the clicked button */
-	showMessageBox(message:string, options:any = null) {
+	showMessageBox(message: string, options: any = null) {
 		if (options === null) options = {};
 
 		const result = this.showMessageBox_(this.window(), Object.assign({}, {
@@ -142,7 +142,7 @@ export class Bridge {
 		return result;
 	}
 
-	showInfoMessageBox(message:string, options:any = {}) {
+	showInfoMessageBox(message: string, options: any = {}) {
 		const result = this.showMessageBox_(this.window(), Object.assign({}, {
 			type: 'info',
 			message: message,
@@ -151,7 +151,7 @@ export class Bridge {
 		return result === 0;
 	}
 
-	setLocale(locale:string) {
+	setLocale(locale: string) {
 		setLocale(locale);
 	}
 
@@ -163,15 +163,15 @@ export class Bridge {
 		return require('electron').MenuItem;
 	}
 
-	openExternal(url:string) {
+	openExternal(url: string) {
 		return require('electron').shell.openExternal(url);
 	}
 
-	openItem(fullPath:string) {
+	openItem(fullPath: string) {
 		return require('electron').shell.openItem(fullPath);
 	}
 
-	checkForUpdates(inBackground:boolean, window:any, logFilePath:string, options:any) {
+	checkForUpdates(inBackground: boolean, window: any, logFilePath: string, options: any) {
 		const { checkForUpdates } = require('./checkForUpdates.js');
 		checkForUpdates(inBackground, window, logFilePath, options);
 	}
@@ -188,7 +188,7 @@ export class Bridge {
 		return nativeTheme.shouldUseDarkColors;
 	}
 
-	addEventListener(name:string, fn:Function) {
+	addEventListener(name: string, fn: Function) {
 		if (name === 'nativeThemeUpdated') {
 			nativeTheme.on('updated', fn);
 		} else {
@@ -218,9 +218,9 @@ export class Bridge {
 
 }
 
-let bridge_:Bridge = null;
+let bridge_: Bridge = null;
 
-export function initBridge(wrapper:ElectronAppWrapper) {
+export function initBridge(wrapper: ElectronAppWrapper) {
 	if (bridge_) throw new Error('Bridge already initialized');
 	bridge_ = new Bridge(wrapper);
 	return bridge_;

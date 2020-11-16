@@ -11,7 +11,7 @@ const BaseModel = require('@joplin/lib/BaseModel').default;
 const shim = require('@joplin/lib/shim').default;
 
 process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	console.log('Unhandled Rejection at models_BaseItem: Promise', p, 'reason:', reason);
 });
 
 async function allItems() {

@@ -21,37 +21,37 @@ const TaskQueue = require('./TaskQueue');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
 interface RemoteItem {
-	id: string,
-	path?: string,
-	type_?: number,
+	id: string;
+	path?: string;
+	type_?: number;
 }
 
 export default class Synchronizer {
 
-	private db_:any;
-	private api_:any;
-	private appType_:string;
-	private logger_:Logger = new Logger();
-	private state_:string = 'idle';
-	private cancelling_:boolean = false;
-	private maxResourceSize_:number = null;
-	private downloadQueue_:any = null;
-	private clientId_:string;
-	private lockHandler_:LockHandler;
-	private migrationHandler_:MigrationHandler;
-	private encryptionService_:any = null;
-	private syncTargetIsLocked_:boolean = false;
+	private db_: any;
+	private api_: any;
+	private appType_: string;
+	private logger_: Logger = new Logger();
+	private state_: string = 'idle';
+	private cancelling_: boolean = false;
+	private maxResourceSize_: number = null;
+	private downloadQueue_: any = null;
+	private clientId_: string;
+	private lockHandler_: LockHandler;
+	private migrationHandler_: MigrationHandler;
+	private encryptionService_: any = null;
+	private syncTargetIsLocked_: boolean = false;
 
 	// Debug flags are used to test certain hard-to-test conditions
 	// such as cancelling in the middle of a loop.
-	public testingHooks_:string[] = [];
+	public testingHooks_: string[] = [];
 
-	private onProgress_:Function;
-	private progressReport_:any = {};
+	private onProgress_: Function;
+	private progressReport_: any = {};
 
-	public dispatch:Function;
+	public dispatch: Function;
 
-	constructor(db:any, api:any, appType:string) {
+	constructor(db: any, api: any, appType: string) {
 		this.db_ = db;
 		this.api_ = api;
 		this.appType_ = appType;
@@ -79,7 +79,7 @@ export default class Synchronizer {
 		return this.clientId_;
 	}
 
-	setLogger(l:Logger) {
+	setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
@@ -104,7 +104,7 @@ export default class Synchronizer {
 		return this.appType_ === 'mobile' ? 100 * 1000 * 1000 : Infinity;
 	}
 
-	setEncryptionService(v:any) {
+	setEncryptionService(v: any) {
 		this.encryptionService_ = v;
 	}
 
@@ -121,7 +121,7 @@ export default class Synchronizer {
 		}
 	}
 
-	static reportToLines(report:any) {
+	static reportToLines(report: any) {
 		const lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
 		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
@@ -137,7 +137,7 @@ export default class Synchronizer {
 		return lines;
 	}
 
-	logSyncOperation(action:any, local:any = null, remote:RemoteItem = null, message:string = null, actionCount:number = 1) {
+	logSyncOperation(action: any, local: any = null, remote: RemoteItem = null, message: string = null, actionCount: number = 1) {
 		const line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
@@ -169,13 +169,13 @@ export default class Synchronizer {
 		// Make sure we only send a **copy** of the report since it
 		// is mutated within this class. Should probably use a lib
 		// for this but for now this simple fix will do.
-		const reportCopy:any = {};
+		const reportCopy: any = {};
 		for (const n in this.progressReport_) reportCopy[n] = this.progressReport_[n];
 		if (reportCopy.errors) reportCopy.errors = this.progressReport_.errors.slice();
 		this.dispatch({ type: 'SYNC_REPORT_UPDATE', report: reportCopy });
 	}
 
-	async logSyncSummary(report:any) {
+	async logSyncSummary(report: any) {
 		this.logger().info('Operations completed: ');
 		for (const n in report) {
 			if (!report.hasOwnProperty(n)) continue;
@@ -237,13 +237,13 @@ export default class Synchronizer {
 		}
 	}
 
-	static stateToLabel(state:string) {
+	static stateToLabel(state: string) {
 		if (state === 'idle') return _('Idle');
 		if (state === 'in_progress') return _('In progress');
 		return state;
 	}
 
-	isFullSync(steps:string[]) {
+	isFullSync(steps: string[]) {
 		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
 	}
 
@@ -257,7 +257,7 @@ export default class Synchronizer {
 		return '';
 	}
 
-	async apiCall(fnName:string, ...args:any[]) {
+	async apiCall(fnName: string, ...args: any[]) {
 		if (this.syncTargetIsLocked_) throw new JoplinError('Sync target is locked - aborting API call', 'lockError');
 
 		try {
@@ -281,11 +281,11 @@ export default class Synchronizer {
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
-	async start(options:any = null) {
+	async start(options: any = null) {
 		if (!options) options = {};
 
 		if (this.state() != 'idle') {
-			const error:any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
+			const error: any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
 			error.code = 'alreadyStarted';
 			throw error;
 		}
@@ -318,12 +318,12 @@ export default class Synchronizer {
 
 		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... [${synchronizationId}]`);
 
-		const handleCannotSyncItem = async (ItemClass:any, syncTargetId:any, item:any, cannotSyncReason:string, itemLocation:any = null) => {
+		const handleCannotSyncItem = async (ItemClass: any, syncTargetId: any, item: any, cannotSyncReason: string, itemLocation: any = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
 			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
 
-		const resourceRemotePath = (resourceId:string) => {
+		const resourceRemotePath = (resourceId: string) => {
 			return `${Dirnames.Resources}/${resourceId}`;
 		};
 
@@ -351,7 +351,7 @@ export default class Synchronizer {
 
 			syncLock = await this.lockHandler().acquireLock(LockType.Sync, this.appType_, this.clientId_);
 
-			this.lockHandler().startAutoLockRefresh(syncLock, (error:any) => {
+			this.lockHandler().startAutoLockRefresh(syncLock, (error: any) => {
 				this.logger().warn('Could not refresh lock - cancelling sync. Error was:', error);
 				this.syncTargetIsLocked_ = true;
 				this.cancel();
@@ -365,9 +365,9 @@ export default class Synchronizer {
 			// ========================================================================
 
 			if (syncSteps.indexOf('update_remote') >= 0) {
-				const donePaths:string[] = [];
+				const donePaths: string[] = [];
 
-				const completeItemProcessing = (path:string) => {
+				const completeItemProcessing = (path: string) => {
 					donePaths.push(path);
 				};
 
@@ -393,13 +393,13 @@ export default class Synchronizer {
 						//   (by setting an updated_time less than current time).
 						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
 
-						const remote:RemoteItem = await this.apiCall('stat', path);
+						const remote: RemoteItem = await this.apiCall('stat', path);
 						let action = null;
 
 						let reason = '';
 						let remoteContent = null;
 
-						const getConflictType = (conflictedItem:any) => {
+						const getConflictType = (conflictedItem: any) => {
 							if (conflictedItem.type_ === BaseModel.TYPE_NOTE) return 'noteConflict';
 							if (conflictedItem.type_ === BaseModel.TYPE_RESOURCE) return 'resourceConflict';
 							return 'itemConflict';
@@ -652,7 +652,7 @@ export default class Synchronizer {
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
-					const listResult:any = await this.apiCall('delta', '', {
+					const listResult: any = await this.apiCall('delta', '', {
 						context: context,
 
 						// allItemIdsHandler() provides a way for drivers that don't have a delta API to
@@ -760,7 +760,7 @@ export default class Synchronizer {
 							if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 							if (!content.user_created_time) content.user_created_time = content.created_time;
 
-							const options:any = {
+							const options: any = {
 								autoTimestamp: false,
 								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
 								changeSource: ItemChange.SOURCE_SYNC,

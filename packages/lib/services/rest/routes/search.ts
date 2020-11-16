@@ -3,10 +3,11 @@ import { Request } from '../Api';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { ErrorBadRequest, ErrorMethodNotAllowed } from '../utils/errors';
 import requestFields from '../utils/requestFields';
+import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 const BaseItem = require('../../../models/BaseItem');
 const SearchEngineUtils = require('../../searchengine/SearchEngineUtils');
 
-export default async function(request:Request) {
+export default async function(request: Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
 
 	const query = request.query.query;
@@ -18,7 +19,7 @@ export default async function(request:Request) {
 
 	if (modelType !== BaseItem.TYPE_NOTE) {
 		const ModelClass = BaseItem.getClassByItemType(modelType);
-		const options:any = {};
+		const options: any = {};
 		const fields = requestFields(request, modelType);
 		if (fields.length) options.fields = fields;
 		const sqlQueryPart = query.replace(/\*/g, '%');
@@ -30,8 +31,5 @@ export default async function(request:Request) {
 		results = await SearchEngineUtils.notesForQuery(query, defaultLoadOptions(request, ModelType.Note));
 	}
 
-	return {
-		items: results,
-		// TODO: implement cursor support
-	};
+	return collectionToPaginatedResults(results, request);
 }

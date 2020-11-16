@@ -1,8 +1,8 @@
 import { NoteBodyEditorProps } from '../../../utils/types';
 const { buildStyle } = require('@joplin/lib/theme');
 
-export default function styles(props:NoteBodyEditorProps) {
-	return buildStyle(['TinyMCE', props.style.width, props.style.height], props.themeId, (theme:any) => {
+export default function styles(props: NoteBodyEditorProps) {
+	return buildStyle(['TinyMCE', props.style.width, props.style.height], props.themeId, (theme: any) => {
 		const extraToolbarContainer = {
 			backgroundColor: theme.backgroundColor3,
 			display: 'flex',
