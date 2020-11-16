@@ -3,20 +3,20 @@ import { ContentScriptType } from '../api/types';
 import { dirname } from '@joplin/renderer/pathUtils';
 
 export interface ExtraContentScript {
-	id: string,
-	module: any,
-	assetPath: string,
+	id: string;
+	module: any;
+	assetPath: string;
 }
 
-export function contentScriptsToRendererRules(plugins:PluginStates): ExtraContentScript[] {
+export function contentScriptsToRendererRules(plugins: PluginStates): ExtraContentScript[] {
 	return loadContentScripts(plugins, ContentScriptType.MarkdownItPlugin);
 }
 
-export function contentScriptsToCodeMirrorPlugin(plugins:PluginStates): ExtraContentScript[] {
+export function contentScriptsToCodeMirrorPlugin(plugins: PluginStates): ExtraContentScript[] {
 	return loadContentScripts(plugins, ContentScriptType.CodeMirrorPlugin);
 }
 
-function loadContentScripts(plugins:PluginStates, scriptType:ContentScriptType):ExtraContentScript[] {
+function loadContentScripts(plugins: PluginStates, scriptType: ContentScriptType): ExtraContentScript[] {
 	const output: ExtraContentScript[] = [];
 
 	for (const pluginId in plugins) {
@@ -29,7 +29,7 @@ function loadContentScripts(plugins:PluginStates, scriptType:ContentScriptType):
 			if (!module.default || typeof module.default !== 'function') throw new Error(`Content script must export a function under the "default" key: Plugin: ${pluginId}: Script: ${contentScript.id}`);
 
 			const loadedModule = module.default({});
-			if (!loadedModule.plugin && !loadedModule.addons && !loadedModule.codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of "addons" or define a codemirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
+			if (!loadedModule.plugin && !loadedModule.codeMirrorAssets && !loadedModule.codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of CodeMirror assets or define a CodeMirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
 
 			output.push({
 				id: contentScript.id,

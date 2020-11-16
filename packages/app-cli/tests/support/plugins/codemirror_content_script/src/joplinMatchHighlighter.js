@@ -17,9 +17,12 @@ module.exports = {
 		return {
 			// A plugin needs to either include a plugin here OR have enable an addon
 			plugin: plugin,
-			// Addons are included with codemirror and extend the functionality in standard ways
-			// The list is available at https://codemirror.net/doc/manual.html#addons
-			addons: ['search/match-highlighter'],
+			// Some assets are included with codemirror and extend the functionality in standard ways
+			// via plugins (called addons) which you can find here: https://codemirror.net/doc/manual.html#addons
+			// and are available under the addon/ director
+			// or by adding keymaps under the keymap/ directory
+			// or additional modes available under the mode/ directory
+			codeMirrorAssets: ['addon/search/match-highlighter'],
 			// Often addons for codemirror need to be enabled using an option,
 			// There is also certain codemirror functionality that can be enabled/disabled using
 			// simple options

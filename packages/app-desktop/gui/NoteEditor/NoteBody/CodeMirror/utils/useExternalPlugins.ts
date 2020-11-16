@@ -19,12 +19,12 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 			try {
 				const mod = contentScript.module;
 
-				if (mod.addons) {
-					for (const addon of mod.addons) {
+				if (mod.codeMirrorAssets) {
+					for (const asset of mod.codeMirrorAssets) {
 						try {
-							require(`codemirror/addon/${addon}`);
+							require(`codemirror/${asset}`);
 						} catch (error) {
-							error.message = `Codemirror addon, ${addon}, does not exist. Only valid codemirror plugins are supported, https://codemirror.net/doc/manual.html#addons`;
+							error.message = `${asset} is not a valid CodeMirror asset, keymap or mode. You can find a list of valid assets here: https://codemirror.net/doc/manual.html#addons`;
 							throw error;
 						}
 					}
