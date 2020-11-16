@@ -1,49 +1,57 @@
-const Logger = require('../Logger').default;
+import Logger from '../Logger';
+import Setting from '../models/Setting';
+import shim from '../shim';
+import { fileExtension, basename, toSystemSlashes } from '../path-utils';
+import time from '../time';
+import { NoteEntity } from './database/types';
+
 const Note = require('../models/Note');
-const Setting = require('../models/Setting').default;
-const shim = require('../shim').default;
 const EventEmitter = require('events');
 const { splitCommandString } = require('../string-utils');
-const { fileExtension, basename } = require('../path-utils');
 const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
-const bridge = require('electron').remote.require('./bridge').default;
-const time = require('../time').default;
 const { ErrorNotFound } = require('./rest/utils/errors');
 
-class ExternalEditWatcher {
-	constructor() {
-		this.logger_ = new Logger();
-		this.dispatch = () => {};
-		this.watcher_ = null;
-		this.eventEmitter_ = new EventEmitter();
-		this.skipNextChangeEvent_ = {};
-		this.chokidar_ = chokidar;
-	}
+export default class ExternalEditWatcher {
 
-	static instance() {
+	private dispatch: Function;
+	private bridge_: Function;
+	private logger_: Logger = new Logger();
+	private watcher_: any = null;
+	private eventEmitter_: any = new EventEmitter();
+	private skipNextChangeEvent_: any = {};
+	private chokidar_: any = chokidar;
+
+	private static instance_: ExternalEditWatcher;
+
+	public static instance() {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new ExternalEditWatcher();
 		return this.instance_;
 	}
 
-	externalApi() {
-		const loadNote = async (noteId) => {
+	public initialize(bridge: Function, dispatch: Function) {
+		this.bridge_ = bridge;
+		this.dispatch = dispatch;
+	}
+
+	public externalApi() {
+		const loadNote = async (noteId: string) => {
 			const note = await Note.load(noteId);
 			if (!note) throw new ErrorNotFound(`No such note: ${noteId}`);
 			return note;
 		};
 
 		return {
-			openAndWatch: async ({ noteId }) => {
-				const note = await loadNote(noteId);
+			openAndWatch: async (args: any) => {
+				const note = await loadNote(args.noteId);
 				return this.openAndWatch(note);
 			},
-			stopWatching: async ({ noteId }) => {
-				return this.stopWatching(noteId);
+			stopWatching: async (args: any) => {
+				return this.stopWatching(args.noteId);
 			},
-			noteIsWatched: async ({ noteId }) => {
-				const note = await loadNote(noteId);
+			noteIsWatched: async (args: any) => {
+				const note = await loadNote(args.noteId);
 				return this.noteIsWatched(note);
 			},
 		};
@@ -53,15 +61,15 @@ class ExternalEditWatcher {
 		return Setting.value('profileDir');
 	}
 
-	on(eventName, callback) {
+	on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName, callback) {
+	off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	setLogger(l) {
+	setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
@@ -69,12 +77,12 @@ class ExternalEditWatcher {
 		return this.logger_;
 	}
 
-	watch(fileToWatch) {
+	watch(fileToWatch: string) {
 		if (!this.chokidar_) return;
 
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
-			this.watcher_.on('all', async (event, path) => {
+			this.watcher_.on('all', async (event: string, path: string) => {
 				// For now, to investigate the lost content issue when using an external editor,
 				// make all the debug statement to info() so that it goes to the log file.
 				// Those that were previous debug() statements are marked as "was_debug"
@@ -140,7 +148,8 @@ class ExternalEditWatcher {
 			});
 			// Hack to support external watcher on some linux applications (gedit, gvim, etc)
 			// taken from https://github.com/paulmillr/chokidar/issues/591
-			this.watcher_.on('raw', async (event, path, { watchedPath }) => {
+			this.watcher_.on('raw', async (event: string, _path: string, options: any) => {
+				const watchedPath: string = options.watchedPath;
 				/* was_debug */ this.logger().info(`ExternalEditWatcher: Raw event: ${event}: ${watchedPath}`);
 				if (event === 'rename') {
 					this.watcher_.unwatch(watchedPath);
@@ -154,12 +163,12 @@ class ExternalEditWatcher {
 		return this.watcher_;
 	}
 
-	noteIdToFilePath_(noteId) {
+	noteIdToFilePath_(noteId: string) {
 		return `${this.tempDir()}/edit-${noteId}.md`;
 	}
 
-	noteFilePathToId_(path) {
-		let id = path.split('/');
+	noteFilePathToId_(path: string) {
+		let id: any = toSystemSlashes(path, 'linux').split('/');
 		if (!id.length) throw new Error(`Invalid path: ${path}`);
 		id = id[id.length - 1];
 		id = id.split('.');
@@ -186,7 +195,7 @@ class ExternalEditWatcher {
 		return output;
 	}
 
-	noteIsWatched(note) {
+	noteIsWatched(note: NoteEntity) {
 		if (!this.watcher_) return false;
 
 		const noteFilename = basename(this.noteIdToFilePath_(note.id));
@@ -219,7 +228,7 @@ class ExternalEditWatcher {
 		};
 	}
 
-	async spawnCommand(path, args, options) {
+	async spawnCommand(path: string, args: string[], options: any) {
 		return new Promise((resolve, reject) => {
 			// App bundles need to be opened using the `open` command.
 			// Additional args can be specified after --args, and the
@@ -238,7 +247,7 @@ class ExternalEditWatcher {
 				path = 'open';
 			}
 
-			const wrapError = error => {
+			const wrapError = (error: any) => {
 				if (!error) return error;
 				const msg = error.message ? [error.message] : [];
 				msg.push(`Command was: "${path}" ${args.join(' ')}`);
@@ -257,7 +266,7 @@ class ExternalEditWatcher {
 					}
 				}, 100);
 
-				subProcess.on('error', error => {
+				subProcess.on('error', (error: any) => {
 					shim.clearInterval(iid);
 					reject(wrapError(error));
 				});
@@ -267,18 +276,19 @@ class ExternalEditWatcher {
 		});
 	}
 
-	async openAndWatch(note) {
+	async openAndWatch(note: NoteEntity) {
 		if (!note || !note.id) {
 			this.logger().warn('ExternalEditWatcher: Cannot open note: ', note);
 			return;
 		}
 
 		const filePath = await this.writeNoteToFile_(note);
+		if (!filePath) return;
 		this.watch(filePath);
 
 		const cmd = this.textEditorCommand();
 		if (!cmd) {
-			bridge().openExternal(`file://${filePath}`);
+			this.bridge_().openExternal(`file://${filePath}`);
 		} else {
 			cmd.args.push(filePath);
 			await this.spawnCommand(cmd.path, cmd.args, { detached: true });
@@ -292,7 +302,7 @@ class ExternalEditWatcher {
 		this.logger().info(`ExternalEditWatcher: Started watching ${filePath}`);
 	}
 
-	async stopWatching(noteId) {
+	async stopWatching(noteId: string) {
 		if (!noteId) return;
 
 		const filePath = this.noteIdToFilePath_(noteId);
@@ -319,7 +329,7 @@ class ExternalEditWatcher {
 		});
 	}
 
-	async updateNoteFile(note) {
+	async updateNoteFile(note: NoteEntity) {
 		if (!this.noteIsWatched(note)) return;
 
 		if (!note || !note.id) {
@@ -336,10 +346,10 @@ class ExternalEditWatcher {
 		this.writeNoteToFile_(note);
 	}
 
-	async writeNoteToFile_(note) {
+	async writeNoteToFile_(note: NoteEntity) {
 		if (!note || !note.id) {
 			this.logger().warn('ExternalEditWatcher: Cannot update note file: ', note);
-			return;
+			return null;
 		}
 
 		const filePath = this.noteIdToFilePath_(note.id);
@@ -348,5 +358,3 @@ class ExternalEditWatcher {
 		return filePath;
 	}
 }
-
-module.exports = ExternalEditWatcher;

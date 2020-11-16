@@ -964,6 +964,9 @@ packages/lib/services/BaseService.js.map
 packages/lib/services/CommandService.d.ts
 packages/lib/services/CommandService.js
 packages/lib/services/CommandService.js.map
+packages/lib/services/ExternalEditWatcher.d.ts
+packages/lib/services/ExternalEditWatcher.js
+packages/lib/services/ExternalEditWatcher.js.map
 packages/lib/services/KeymapService.d.ts
 packages/lib/services/KeymapService.js
 packages/lib/services/KeymapService.js.map

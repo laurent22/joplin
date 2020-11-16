@@ -21,6 +21,7 @@ import menuCommandNames from './gui/menuCommandNames';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import stateToWhenClauseContext from './services/commands/stateToWhenClauseContext';
 import ResourceService from '@joplin/lib/services/ResourceService';
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 const MasterKey = require('@joplin/lib/models/MasterKey');
@@ -31,7 +32,6 @@ const { reg } = require('@joplin/lib/registry.js');
 const packageInfo = require('./packageInfo.js');
 const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
 const ClipperServer = require('@joplin/lib/ClipperServer');
-const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
@@ -691,7 +691,7 @@ class Application extends BaseApplication {
 		}
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());
-		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
+		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
 		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); });
 

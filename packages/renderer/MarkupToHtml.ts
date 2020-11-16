@@ -1,4 +1,4 @@
-const MdToHtml = require('./MdToHtml').default;
+import MdToHtml from './MdToHtml';
 const HtmlToHtml = require('./HtmlToHtml');
 const htmlUtils = require('./htmlUtils');
 const MarkdownIt = require('markdown-it');

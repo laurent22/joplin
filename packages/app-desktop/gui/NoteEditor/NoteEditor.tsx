@@ -29,6 +29,7 @@ import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
@@ -36,7 +37,6 @@ const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('@joplin/lib/registry.js');
 const Note = require('@joplin/lib/models/Note.js');
 const bridge = require('electron').remote.require('./bridge').default;
-const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
 const commands = [
