@@ -83,11 +83,7 @@ export default class ExternalEditWatcher {
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
 			this.watcher_.on('all', async (event: string, path: string) => {
-				// For now, to investigate the lost content issue when using an external editor,
-				// make all the debug statement to info() so that it goes to the log file.
-				// Those that were previous debug() statements are marked as "was_debug"
-
-				/* was_debug */ this.logger().info(`ExternalEditWatcher: Event: ${event}: ${path}`);
+				this.logger().debug(`ExternalEditWatcher: Event: ${event}: ${path}`);
 
 				if (event === 'unlink') {
 					// File are unwatched in the stopWatching functions below. When we receive an unlink event
@@ -150,7 +146,7 @@ export default class ExternalEditWatcher {
 			// taken from https://github.com/paulmillr/chokidar/issues/591
 			this.watcher_.on('raw', async (event: string, _path: string, options: any) => {
 				const watchedPath: string = options.watchedPath;
-				/* was_debug */ this.logger().info(`ExternalEditWatcher: Raw event: ${event}: ${watchedPath}`);
+				this.logger().debug(`ExternalEditWatcher: Raw event: ${event}: ${watchedPath}`);
 				if (event === 'rename') {
 					this.watcher_.unwatch(watchedPath);
 					this.watcher_.add(watchedPath);
@@ -260,7 +256,7 @@ export default class ExternalEditWatcher {
 
 				const iid = shim.setInterval(() => {
 					if (subProcess && subProcess.pid) {
-						/* was_debug */ this.logger().info(`Started editor with PID ${subProcess.pid}`);
+						this.logger().debug(`Started editor with PID ${subProcess.pid}`);
 						shim.clearInterval(iid);
 						resolve();
 					}
@@ -337,7 +333,7 @@ export default class ExternalEditWatcher {
 			return;
 		}
 
-		/* was_debug */ this.logger().info(`ExternalEditWatcher: Update note file: ${note.id}`);
+		this.logger().debug(`ExternalEditWatcher: Update note file: ${note.id}`);
 
 		// When the note file is updated programmatically, we skip the next change event to
 		// avoid update loops. We only want to listen to file changes made by the user.
