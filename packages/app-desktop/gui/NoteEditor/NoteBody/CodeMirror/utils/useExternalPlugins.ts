@@ -19,8 +19,8 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 			try {
 				const mod = contentScript.module;
 
-				if (mod.codeMirrorAssets) {
-					for (const asset of mod.codeMirrorAssets) {
+				if (mod.codeMirrorResources) {
+					for (const asset of mod.codeMirrorResources) {
 						try {
 							require(`codemirror/${asset}`);
 						} catch (error) {
@@ -66,7 +66,6 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 				}
 			} catch (error) {
 				reg.logger().error(error.toString());
-				continue;
 			}
 		}
 		setOptions(newOptions);
