@@ -140,7 +140,10 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}, [prevSyncStarted, syncStarted, formNote]);
 
 	useEffect(() => {
-		if (!noteId) return () => {};
+		if (!noteId) {
+			if (formNote.id) setFormNote(defaultFormNote());
+			return () => {};
+		}
 
 		if (formNote.id === noteId) return () => {};
 
