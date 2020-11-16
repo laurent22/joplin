@@ -9,7 +9,10 @@ export default function useViewIsReady(viewRef: any) {
 	const [iframeContentReady, setIFrameContentReady] = useState(false);
 
 	useEffect(() => {
+		console.debug('useViewIsReady ============== Setup Listeners');
+
 		function onIFrameReady() {
+			console.debug('useViewIsReady: onIFrameReady');
 			setIFrameReady(true);
 		}
 
@@ -18,12 +21,16 @@ export default function useViewIsReady(viewRef: any) {
 
 			if (!data || data.target !== 'UserWebview') return;
 
+			console.debug('useViewIsReady: message', data);
+
 			if (data.message === 'ready') {
 				setIFrameContentReady(true);
 			}
 		}
 
 		const iframeDocument = viewRef.current.contentWindow.document;
+
+		console.debug('useViewIsReady readyState', iframeDocument.readyState);
 
 		if (iframeDocument.readyState === 'complete') {
 			onIFrameReady();

@@ -57,6 +57,13 @@ const webviewApi = {
 		const ipc = {
 			setHtml: (args) => {
 				contentElement.innerHTML = args.html;
+
+				console.debug('UserWebView frame: setting html to', args.html);
+
+				window.requestAnimationFrame(() => {
+					console.debug('UserWebView frame: setting html callback', args.hash);
+					window.postMessage({ target: 'UserWebview', message: 'htmlIsSet', hash: args.hash }, '*');
+				});
 			},
 
 			setScript: (args) => {
@@ -102,8 +109,14 @@ const webviewApi = {
 			}
 		}));
 
-		// Send a message to the containing component to notify
-		// it that the view content is fully ready.
-		window.postMessage({ target: 'UserWebview', message: 'ready' }, '*');
+		// Send a message to the containing component to notify it that the
+		// view content is fully ready.
+		//
+		// Need to send it with a delay to make sure all listeners are
+		// ready when the message is sent.
+		window.requestAnimationFrame(() => {
+			console.debug('UserWebView frame: calling isReady');
+			window.postMessage({ target: 'UserWebview', message: 'ready' }, '*');
+		});
 	});
 })();

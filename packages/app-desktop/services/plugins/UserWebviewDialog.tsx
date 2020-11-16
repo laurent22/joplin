@@ -1,8 +1,8 @@
+import * as React from 'react';
+import { useRef, useCallback } from 'react';
 import { ButtonSpec, DialogResult } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import WebviewController from '@joplin/lib/services/plugins/WebviewController';
-import * as React from 'react';
-import { useRef } from 'react';
 import UserWebview, { Props as UserWebviewProps } from './UserWebview';
 import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';
 const styled = require('styled-components').default;
@@ -49,6 +49,18 @@ function defaultButtons(): ButtonSpec[] {
 	];
 }
 
+function findSubmitButton(buttons: ButtonSpec[]): ButtonSpec | null {
+	return buttons.find((b: ButtonSpec) => {
+		return ['ok', 'yes', 'confirm', 'submit'].includes(b.id);
+	});
+}
+
+function findDismissButton(buttons: ButtonSpec[]): ButtonSpec | null {
+	return buttons.find((b: ButtonSpec) => {
+		return ['cancel', 'no', 'reject'].includes(b.id);
+	});
+}
+
 export default function UserWebviewDialog(props: Props) {
 	const webviewRef = useRef(null);
 
@@ -68,6 +80,20 @@ export default function UserWebviewDialog(props: Props) {
 		};
 	});
 
+	const onSubmit = useCallback(() => {
+		const submitButton = findSubmitButton(buttons);
+		if (submitButton) {
+			submitButton.onClick();
+		}
+	}, [buttons]);
+
+	const onDismiss = useCallback(() => {
+		const dismissButton = findDismissButton(buttons);
+		if (dismissButton) {
+			dismissButton.onClick();
+		}
+	}, [buttons]);
+
 	return (
 		<StyledRoot>
 			<Dialog>
@@ -82,6 +108,8 @@ export default function UserWebviewDialog(props: Props) {
 						themeId={props.themeId}
 						borderBottom={false}
 						fitToContent={true}
+						onSubmit={onSubmit}
+						onDismiss={onDismiss}
 					/>
 				</UserWebViewWrapper>
 				<UserWebviewDialogButtonBar buttons={buttons}/>
