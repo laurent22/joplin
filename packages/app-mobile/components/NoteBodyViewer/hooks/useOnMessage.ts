@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 const shared = require('@joplin/lib/components/shared/note-screen-shared');
 
-export default function useOnMessage(onCheckboxChange:Function, noteBody:string, onMarkForDownload:Function, onJoplinLinkClick:Function, onResourceLongPress:Function) {
-	return useCallback((event:any) => {
+export default function useOnMessage(onCheckboxChange: Function, noteBody: string, onMarkForDownload: Function, onJoplinLinkClick: Function, onResourceLongPress: Function) {
+	return useCallback((event: any) => {
 		// Since RN 58 (or 59) messages are now escaped twice???
 		const msg = unescape(unescape(event.nativeEvent.data));
 

@@ -3,10 +3,10 @@ import { RuleOptions } from '../../MdToHtml';
 const utils = require('../../utils');
 const htmlUtils = require('../../htmlUtils.js');
 
-function plugin(markdownIt:any, ruleOptions:RuleOptions) {
+function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.image;
 
-	markdownIt.renderer.rules.image = (tokens:any[], idx:number, options:any, env:any, self:any) => {
+	markdownIt.renderer.rules.image = (tokens: any[], idx: number, options: any, env: any, self: any) => {
 		const Resource = ruleOptions.ResourceModel;
 
 		const token = tokens[idx];

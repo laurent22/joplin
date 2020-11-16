@@ -68,8 +68,9 @@
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
 						<p>Allows creating and managing dialogs. A dialog is modal window that contains a webview and a row of buttons. You can update the update the webview using the <code>setHtml</code> method.
-							Dialogs are hidden by default and you need to call <code>open()</code> to open them. Once the user clicks on a button, the <code>open</code> call will return and provide the button ID that was
-						clicked on. There is currently no &quot;close&quot; method since the dialog should be thought as a modal one and thus can only be closed by clicking on one of the buttons.</p>
+							Dialogs are hidden by default and you need to call <code>open()</code> to open them. Once the user clicks on a button, the <code>open</code> call will return an object indicating what button was clicked
+							on. If your HTML content included one or more form, a <code>formData</code> object will also be included with the key/value for each form.
+						There is currently no &quot;close&quot; method since the dialog should be thought as a modal one and thus can only be closed by clicking on one of the buttons.</p>
 					</div>
 					<p><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/dialog">View the demo plugin</a></p>
 				</div>
@@ -113,7 +114,7 @@
 					<a name="create" class="tsd-anchor"></a>
 					<h3>create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -124,6 +125,12 @@
 									<p>Creates a new dialog</p>
 								</div>
 							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
 							<!-- JOPLINCHANGE
     <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">&gt;</span></h4>
 
@@ -136,7 +143,7 @@
 					<a name="open" class="tsd-anchor"></a>
 					<h3>open</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">open<span class="tsd-signature-symbol">(</span>handle<span class="tsd-signature-symbol">: </span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#buttonid" class="tsd-signature-type">ButtonId</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">open<span class="tsd-signature-symbol">(</span>handle<span class="tsd-signature-symbol">: </span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dialogresult.html" class="tsd-signature-type">DialogResult</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -154,7 +161,7 @@
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
-    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#buttonid" class="tsd-signature-type">ButtonId</a><span class="tsd-signature-symbol">&gt;</span></h4>
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dialogresult.html" class="tsd-signature-type">DialogResult</a><span class="tsd-signature-symbol">&gt;</span></h4>
 
 
 -->
@@ -357,6 +364,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/dialogresult.html" class="tsd-kind-icon">DialogResult</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>

@@ -2,7 +2,7 @@ import joplin from 'api';
 
 joplin.plugins.register({
 	onStart: async function() {
-		await joplin.views.menus.create('My Menu', [
+		await joplin.views.menus.create('myMenu', 'My Menu', [
 			{
 				commandName: "newNote",
 			},

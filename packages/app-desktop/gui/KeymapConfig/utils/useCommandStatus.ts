@@ -4,10 +4,10 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 const keymapService = KeymapService.instance();
 
 interface CommandStatus {
-	[commandName: string]: boolean
+	[commandName: string]: boolean;
 }
 
-const useCommandStatus = (): [CommandStatus, (commandName: string) => void, (commandName: string) => void] => {
+const useCommandStatus = (): [CommandStatus, (commandName: string)=> void, (commandName: string)=> void] => {
 	const [status, setStatus] = useState<CommandStatus>(() =>
 		keymapService.getCommandNames().reduce((accumulator: CommandStatus, command: string) => {
 			accumulator[command] = false;

@@ -1,14 +1,14 @@
 import { Props, Value } from '../ToggleEditorsButton';
 const { buildStyle } = require('@joplin/lib/theme');
 
-export default function styles(props:Props) {
+export default function styles(props: Props) {
 	return buildStyle(['ToggleEditorsButton', props.value], props.themeId, (theme: any) => {
 		const iconSize = 15;
 		const mdIconWidth = iconSize * 1.25;
 		const buttonHeight = theme.toolbarHeight - 7;
 		const mdIconPadding = Math.round((buttonHeight - iconSize) / 2) + 3;
 
-		const innerButton:any = {
+		const innerButton: any = {
 			borderStyle: 'solid',
 			borderColor: theme.color3,
 			borderWidth: 1,
@@ -19,7 +19,7 @@ export default function styles(props:Props) {
 			justifyContent: 'center',
 		};
 
-		const output:any = {
+		const output: any = {
 			button: {
 				border: 'none',
 				padding: 0,

@@ -7,15 +7,17 @@ import { runtime as focusSearchRuntime } from './commands/focusSearch';
 const styled = require('styled-components').default;
 
 interface Props {
-	showNewNoteButtons: boolean,
+	showNewNoteButtons: boolean;
+	height: number;
 }
 
 const StyledRoot = styled.div`
-	width: 100%;
+	box-sizing: border-box;
+	height: ${(props: any) => props.height}px;
 	display: flex;
 	flex-direction: row;
-	padding: ${(props:any) => props.theme.mainPadding}px;
-	background-color: ${(props:any) => props.theme.backgroundColor3};
+	padding: ${(props: any) => props.theme.mainPadding}px;
+	background-color: ${(props: any) => props.theme.backgroundColor3};
 `;
 
 const StyledButton = styled(Button)`
@@ -27,7 +29,7 @@ const ButtonContainer = styled.div`
 	flex-direction: row;
 `;
 
-export default function NoteListControls(props:Props) {
+export default function NoteListControls(props: Props) {
 	const searchBarRef = useRef(null);
 
 	useEffect(function() {
@@ -68,7 +70,7 @@ export default function NoteListControls(props:Props) {
 	}
 
 	return (
-		<StyledRoot>
+		<StyledRoot height={props.height}>
 			<SearchBar inputRef={searchBarRef}/>
 			{renderNewNoteButtons()}
 		</StyledRoot>

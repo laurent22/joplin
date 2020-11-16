@@ -1,20 +1,20 @@
 
 interface Term {
-	name: string
-	value: string
-	negated: boolean
-	quoted?: boolean
-	wildcard?: boolean
+	name: string;
+	value: string;
+	negated: boolean;
+	quoted?: boolean;
+	wildcard?: boolean;
 }
 
 const makeTerm = (name: string, value: string): Term => {
-	if (name.startsWith('-')) { return { name: name.slice(1), value: value, negated: true }; }
-	return { name: name, value: value, negated: false };
+	if (name.startsWith('-')) { return { name: name.slice(1).toLowerCase(), value: value, negated: true }; }
+	return { name: name.toLowerCase(), value: value, negated: false };
 };
 
 const quoted = (s: string) => s.startsWith('"') && s.endsWith('"');
 
-const quote = (s : string) => {
+const quote = (s: string) => {
 	if (!quoted(s)) {
 		return `"${s}"`;
 	}
@@ -22,7 +22,7 @@ const quote = (s : string) => {
 };
 
 
-const getTerms = (query: string) : Term[] => {
+const getTerms = (query: string): Term[] => {
 	const terms: Term[] = [];
 	let inQuote = false;
 	let inTerm = false;

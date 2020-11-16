@@ -127,7 +127,7 @@ setSyncTargetName('memory');
 // setSyncTargetName('onedrive');
 // setSyncTargetName('amazon_s3');
 
-console.info(`Testing with sync target: ${syncTargetName_}`);
+// console.info(`Testing with sync target: ${syncTargetName_}`);
 
 const syncDir = `${__dirname}/../tests/sync`;
 
@@ -188,6 +188,10 @@ function msleep(ms) {
 
 function currentClientId() {
 	return currentClient_;
+}
+
+async function afterEachCleanUp() {
+	await ItemChange.waitForAllSaved();
 }
 
 async function switchClient(id, options = null) {
@@ -508,6 +512,7 @@ async function expectNotThrow(asyncFn) {
 	}
 
 	if (thrownError) {
+		console.error(thrownError);
 		expect(thrownError.message).toBe('', 'Expected function not to throw an error but it did');
 	} else {
 		expect(true).toBe(true);
@@ -541,8 +546,10 @@ function asyncTest(callback) {
 			if (error.constructor && error.constructor.name === 'ExpectationFailed') {
 				// OK - will be reported by Jasmine
 			} else {
-				console.error(error);
-				expect(0).toBe(1, 'Test has thrown an exception - see above error');
+				// Better to rethrow exception as stack trace is more useful in this case
+				throw error;
+				// console.error(error);
+				// expect(0).toBe(1, 'Test has thrown an exception - see above error');
 			}
 		} finally {
 			done();
@@ -727,4 +734,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { synchronizerStart, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, mockDate, restoreDate, TestApp };
+module.exports = { synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, mockDate, restoreDate, TestApp };

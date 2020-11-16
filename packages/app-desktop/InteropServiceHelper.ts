@@ -13,20 +13,20 @@ const md5 = require('md5');
 const url = require('url');
 
 interface ExportNoteOptions {
-	customCss?: string,
-	sourceNoteIds?: string[],
-	sourceFolderIds?: string[],
-	printBackground?: boolean,
-	pageSize?: string,
-	landscape?: boolean,
+	customCss?: string;
+	sourceNoteIds?: string[];
+	sourceFolderIds?: string[];
+	printBackground?: boolean;
+	pageSize?: string;
+	landscape?: boolean;
 }
 
 export default class InteropServiceHelper {
 
-	private static async exportNoteToHtmlFile(noteId:string, exportOptions:ExportNoteOptions) {
+	private static async exportNoteToHtmlFile(noteId: string, exportOptions: ExportNoteOptions) {
 		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
 
-		const fullExportOptions:ExportOptions = Object.assign({}, {
+		const fullExportOptions: ExportOptions = Object.assign({}, {
 			path: tempFile,
 			format: 'html',
 			target: FileSystemItem.File,
@@ -41,9 +41,9 @@ export default class InteropServiceHelper {
 		return tempFile;
 	}
 
-	private static async exportNoteTo_(target:string, noteId:string, options:ExportNoteOptions = {}) {
-		let win:any = null;
-		let htmlFile:string = null;
+	private static async exportNoteTo_(target: string, noteId: string, options: ExportNoteOptions = {}) {
+		let win: any = null;
+		let htmlFile: string = null;
 
 		const cleanup = () => {
 			if (win) win.destroy();
@@ -87,7 +87,7 @@ export default class InteropServiceHelper {
 							// Maybe can be fixed by doing everything from main process?
 							// i.e. creating a function `print()` that takes the `htmlFile` variable as input.
 
-							win.webContents.print(options, (success:boolean, reason:string) => {
+							win.webContents.print(options, (success: boolean, reason: string) => {
 								// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
 								// It calls the callback right away with "false" even if the document hasn't be print yet.
 
@@ -112,15 +112,15 @@ export default class InteropServiceHelper {
 		}
 	}
 
-	public static async exportNoteToPdf(noteId:string, options:ExportNoteOptions = {}) {
+	public static async exportNoteToPdf(noteId: string, options: ExportNoteOptions = {}) {
 		return this.exportNoteTo_('pdf', noteId, options);
 	}
 
-	public static async printNote(noteId:string, options:ExportNoteOptions = {}) {
+	public static async printNote(noteId: string, options: ExportNoteOptions = {}) {
 		return this.exportNoteTo_('printer', noteId, options);
 	}
 
-	public static async defaultFilename(noteId:string, fileExtension:string) {
+	public static async defaultFilename(noteId: string, fileExtension: string) {
 		// Default filename is just the date
 		const date = time.formatMsToLocal(new Date().getTime(), time.dateFormat());
 		let filename = friendlySafeFilename(`${date}`, 100);
@@ -134,7 +134,7 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
-	public static async export(_dispatch:Function, module:Module, options:ExportNoteOptions = null) {
+	public static async export(_dispatch: Function, module: Module, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
 		let path = null;
@@ -157,7 +157,7 @@ export default class InteropServiceHelper {
 
 		CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
-		const exportOptions:ExportOptions = {};
+		const exportOptions: ExportOptions = {};
 		exportOptions.path = path;
 		exportOptions.format = module.format;
 		exportOptions.modulePath = module.path;

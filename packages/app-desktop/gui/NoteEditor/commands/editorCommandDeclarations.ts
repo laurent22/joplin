@@ -1,7 +1,7 @@
 import { CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 
-const declarations:CommandDeclaration[] = [
+const declarations: CommandDeclaration[] = [
 	{
 		name: 'insertText',
 	},
@@ -88,6 +88,9 @@ const declarations:CommandDeclaration[] = [
 	},
 	{
 		name: 'replaceSelection',
+	},
+	{
+		name: 'editor.setText',
 	},
 ];
 

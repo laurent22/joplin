@@ -102,7 +102,7 @@ const pluginAssets = function() {
 	];
 };
 
-function renderFountainScript(markdownIt:any, content:string) {
+function renderFountainScript(markdownIt: any, content: string) {
 	const result = fountain.parse(content);
 
 	return `
@@ -118,12 +118,12 @@ function renderFountainScript(markdownIt:any, content:string) {
 	`;
 }
 
-function plugin(markdownIt:any) {
-	const defaultRender = markdownIt.renderer.rules.fence || function(tokens:any[], idx:number, options:any, _env:any, self:any) {
+function plugin(markdownIt: any) {
+	const defaultRender = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, _env: any, self: any) {
 		return self.renderToken(tokens, idx, options);
 	};
 
-	markdownIt.renderer.rules.fence = function(tokens:any[], idx:number, options:any, env:any, self:any) {
+	markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 		const token = tokens[idx];
 		if (token.info !== 'fountain') return defaultRender(tokens, idx, options, env, self);
 		return renderFountainScript(markdownIt, token.content);

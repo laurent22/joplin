@@ -33,7 +33,9 @@
     "yargs": "^16.0.3"
   },
   "devDependencies": {
+    "@rmp135/sql-ts": "^1.6.0",
     "@types/node": "^14.14.6",
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "sqlite3": "^5.0.0"
   }
 }

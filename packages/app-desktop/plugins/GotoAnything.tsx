@@ -21,40 +21,40 @@ const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 const PLUGIN_NAME = 'gotoAnything';
 
 interface SearchResult {
-	id: string,
-	title: string,
-	parent_id: string,
-	fields: string[],
-	fragments?: string,
-	path?: string,
-	type?: number,
+	id: string;
+	title: string;
+	parent_id: string;
+	fields: string[];
+	fragments?: string;
+	path?: string;
+	type?: number;
 }
 
 interface Props {
-	themeId: number,
-	dispatch: Function,
-	folders: any[],
-	showCompletedTodos: boolean,
-	userData: any,
+	themeId: number;
+	dispatch: Function;
+	folders: any[];
+	showCompletedTodos: boolean;
+	userData: any;
 }
 
 interface State {
-	query: string,
-	results: SearchResult[],
-	selectedItemId: string,
-	keywords: string[],
-	listType: number,
-	showHelp: boolean,
-	resultsInBody: boolean,
+	query: string;
+	results: SearchResult[];
+	selectedItemId: string;
+	keywords: string[];
+	listType: number;
+	showHelp: boolean;
+	resultsInBody: boolean;
 }
 
 class GotoAnything {
 
-	public dispatch:Function;
-	public static Dialog:any;
-	public static manifest:any;
+	public dispatch: Function;
+	public static Dialog: any;
+	public static manifest: any;
 
-	onTrigger(event:any) {
+	onTrigger(event: any) {
 		this.dispatch({
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
@@ -67,14 +67,14 @@ class GotoAnything {
 
 class Dialog extends React.PureComponent<Props, State> {
 
-	private fuzzy_:boolean;
-	private styles_:any;
-	private inputRef:any;
-	private itemListRef:any;
-	private listUpdateIID_:any;
-	private markupToHtml_:any;
+	private fuzzy_: boolean;
+	private styles_: any;
+	private inputRef: any;
+	private itemListRef: any;
+	private listUpdateIID_: any;
+	private markupToHtml_: any;
 
-	constructor(props:Props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.fuzzy_ = false;
@@ -189,7 +189,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	onKeyDown(event:any) {
+	onKeyDown(event: any) {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -199,7 +199,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	modalLayer_onClick(event:any) {
+	modalLayer_onClick(event: any) {
 		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -213,7 +213,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
-	input_onChange(event:any) {
+	input_onChange(event: any) {
 		this.setState({ query: event.target.value });
 
 		this.scheduleListUpdate();
@@ -228,7 +228,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}, 100);
 	}
 
-	makeSearchQuery(query:string) {
+	makeSearchQuery(query: string) {
 		const output = [];
 		const splitted = query.split(' ');
 
@@ -241,7 +241,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		return output.join(' ');
 	}
 
-	async keywords(searchQuery:string) {
+	async keywords(searchQuery: string) {
 		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, this.fuzzy_);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
@@ -258,7 +258,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		if (!this.state.query) {
 			this.setState({ results: [], keywords: [] });
 		} else {
-			let results:SearchResult[] = [];
+			let results: SearchResult[] = [];
 			let listType = null;
 			let searchQuery = '';
 			let keywords = null;
@@ -270,7 +270,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 				const commandResults = CommandService.instance().searchCommands(query, true);
 
-				results = commandResults.map((result:CommandSearchResult) => {
+				results = commandResults.map((result: CommandSearchResult) => {
 					return {
 						id: result.commandName,
 						title: result.title,
@@ -298,7 +298,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				searchQuery = this.makeSearchQuery(this.state.query);
 				results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
 
-				resultsInBody = !!results.find((row:any) => row.fields.includes('body'));
+				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 
 				if (!resultsInBody || this.state.query.length <= 1) {
 					for (let i = 0; i < results.length; i++) {
@@ -309,7 +309,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				} else {
 					const limit = 20;
 					const searchKeywords = await this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map((result:any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
 					// Can't make any sense of this code so...
 					// @ts-ignore
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
@@ -342,7 +342,7 @@ class Dialog extends React.PureComponent<Props, State> {
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
 								const mergedIndices = mergeOverlappingIntervals(indices, 3);
-								fragments = mergedIndices.map((f:any) => body.slice(f[0], f[1])).join(' ... ');
+								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 
@@ -355,7 +355,7 @@ class Dialog extends React.PureComponent<Props, State> {
 					}
 
 					if (!this.props.showCompletedTodos) {
-						results = results.filter((row:any) => !row.is_todo || !row.todo_completed);
+						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
 					}
 				}
 			}
@@ -373,7 +373,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	async gotoItem(item:any) {
+	async gotoItem(item: any) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -418,7 +418,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	listItem_onClick(event:any) {
+	listItem_onClick(event: any) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
@@ -430,7 +430,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	renderItem(item:SearchResult) {
+	renderItem(item: SearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
@@ -453,7 +453,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		);
 	}
 
-	selectedItemIndex(results:any[] = undefined, itemId:string = undefined) {
+	selectedItemIndex(results: any[] = undefined, itemId: string = undefined) {
 		if (typeof results === 'undefined') results = this.state.results;
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
 		for (let i = 0; i < results.length; i++) {
@@ -469,7 +469,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		return this.state.results[index];
 	}
 
-	input_onKeyDown(event:any) {
+	input_onKeyDown(event: any) {
 		const keyCode = event.keyCode;
 
 		if (this.state.results.length > 0 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP
@@ -540,7 +540,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 }
 
-const mapStateToProps = (state:AppState) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		folders: state.folders,
 		themeId: state.settings.theme,

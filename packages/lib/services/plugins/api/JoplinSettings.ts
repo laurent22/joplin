@@ -12,7 +12,7 @@ import { SettingItem, SettingSection } from './types';
  * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/settings)
  */
 export default class JoplinSettings {
-	private plugin_:Plugin = null;
+	private plugin_: Plugin = null;
 
 	constructor(plugin: Plugin) {
 		this.plugin_ = plugin;
@@ -20,7 +20,7 @@ export default class JoplinSettings {
 
 	// Ensures that the plugin settings and sections are within their own namespace, to prevent them from
 	// overwriting other plugin settings or the default settings.
-	private namespacedKey(key:string):string {
+	private namespacedKey(key: string): string {
 		return `plugin-${this.plugin_.id}.${key}`;
 	}
 
@@ -30,14 +30,14 @@ export default class JoplinSettings {
 	 * The setting value however will be preserved from one launch to the next so there is no risk that it will be lost even if for some
 	 * reason the plugin fails to start at some point.
 	 */
-	async registerSetting(key:string, settingItem:SettingItem) {
-		const internalSettingItem:InternalSettingItem = {
+	async registerSetting(key: string, settingItem: SettingItem) {
+		const internalSettingItem: InternalSettingItem = {
 			key: key,
 			value: settingItem.value,
 			type: settingItem.type,
 			public: settingItem.public,
 			label: () => settingItem.label,
-			description: (_appType:string) => settingItem.description,
+			description: (_appType: string) => settingItem.description,
 		};
 
 		if ('isEnum' in settingItem) internalSettingItem.isEnum = settingItem.isEnum;
@@ -56,21 +56,21 @@ export default class JoplinSettings {
 	/**
 	 * Registers a new setting section. Like for registerSetting, it is dynamic and needs to be done every time the plugin starts.
 	 */
-	async registerSection(name:string, section:SettingSection) {
+	async registerSection(name: string, section: SettingSection) {
 		return Setting.registerSection(this.namespacedKey(name), section);
 	}
 
 	/**
 	 * Gets a setting value (only applies to setting you registered from your plugin)
 	 */
-	async value(key:string):Promise<any> {
+	async value(key: string): Promise<any> {
 		return Setting.value(this.namespacedKey(key));
 	}
 
 	/**
 	 * Sets a setting value (only applies to setting you registered from your plugin)
 	 */
-	async setValue(key:string, value:any) {
+	async setValue(key: string, value: any) {
 		return Setting.setValue(this.namespacedKey(key), value);
 	}
 
@@ -81,7 +81,7 @@ export default class JoplinSettings {
 	 *
 	 * https://github.com/laurent22/joplin/blob/3539a452a359162c461d2849829d2d42973eab50/packages/app-mobile/lib/models/Setting.ts#L142
 	 */
-	async globalValue(key:string):Promise<any> {
+	async globalValue(key: string): Promise<any> {
 		return Setting.value(key);
 	}
 }

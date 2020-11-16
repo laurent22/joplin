@@ -51,6 +51,13 @@ async function updateClipperManifestVersion(manifestPath, majorMinorVersion) {
 	await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 4));
 }
 
+async function updatePluginGeneratorTemplateVersion(manifestPath, majorMinorVersion) {
+	const manifestText = await fs.readFile(manifestPath, 'utf8');
+	const manifest = JSON.parse(manifestText);
+	manifest.app_min_version = majorMinorVersion;
+	await fs.writeFile(manifestPath, JSON.stringify(manifest, null, '\t'));
+}
+
 // Need this hack to transform 1.x.x into 10.x.x due to some mistake
 // on one of the release and the App Store won't allow decreasing
 // the major version number.
@@ -74,6 +81,7 @@ async function main() {
 	await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);
 	await updateCodeProjVersion(`${rootDir}/packages/app-mobile/ios/Joplin.xcodeproj/project.pbxproj`, iosVersionHack(majorMinorVersion));
 	await updateClipperManifestVersion(`${rootDir}/packages/app-clipper/manifest.json`, majorMinorVersion);
+	await updatePluginGeneratorTemplateVersion(`${rootDir}/packages/generator-joplin/generators/app/templates/src/manifest.json`, majorMinorVersion);
 }
 
 main().catch((error) => {

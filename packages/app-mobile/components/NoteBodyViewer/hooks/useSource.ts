@@ -6,16 +6,16 @@ const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
 const { assetsToHeaders } = require('@joplin/renderer');
 
 interface Source {
-	uri: string,
-	baseUrl: string,
+	uri: string;
+	baseUrl: string;
 }
 
 interface UseSourceResult {
-	source: Source,
-	injectedJs: string[],
+	source: Source;
+	injectedJs: string[];
 }
 
-let markupToHtml_:any = null;
+let markupToHtml_: any = null;
 
 function markupToHtml() {
 	if (markupToHtml_) return markupToHtml_;
@@ -23,7 +23,7 @@ function markupToHtml() {
 	return markupToHtml_;
 }
 
-export default function useSource(noteBody:string, noteMarkupLanguage:number, themeId:number, highlightedKeywords:string[], noteResources:any, paddingBottom:number, noteHash:string):UseSourceResult {
+export default function useSource(noteBody: string, noteMarkupLanguage: number, themeId: number, highlightedKeywords: string[], noteResources: any, paddingBottom: number, noteHash: string): UseSourceResult {
 	const [source, setSource] = useState<Source>(undefined);
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);

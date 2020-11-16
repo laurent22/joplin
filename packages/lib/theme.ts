@@ -12,7 +12,7 @@ import Setting from './models/Setting';
 
 const Color = require('color');
 
-const themes:any = {
+const themes: any = {
 	[Setting.THEME_LIGHT]: theme_light,
 	[Setting.THEME_DARK]: theme_dark,
 	[Setting.THEME_DRACULA]: theme_dracula,
@@ -23,7 +23,7 @@ const themes:any = {
 	[Setting.THEME_OLED_DARK]: theme_oledDark,
 };
 
-function themeById(themeId:string) {
+function themeById(themeId: string) {
 	if (!themes[themeId]) throw new Error(`Invalid theme ID: ${themeId}`);
 	const output = Object.assign({}, themes[themeId]);
 
@@ -44,7 +44,7 @@ function themeById(themeId:string) {
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
-const globalStyle:any = {
+const globalStyle: any = {
 	fontFamily: 'Roboto',// 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
@@ -112,7 +112,7 @@ globalStyle.buttonStyle = {
 	borderRadius: 4,
 };
 
-function addMissingProperties(theme:Theme) {
+function addMissingProperties(theme: Theme) {
 	// if (!('backgroundColor3' in theme)) theme.backgroundColor3 = theme.backgroundColor;
 	// if (!('color3' in theme)) theme.color3 = theme.color;
 	// if (!('selectionBackgroundColor3' in theme)) {
@@ -136,7 +136,7 @@ function addMissingProperties(theme:Theme) {
 	return theme;
 }
 
-function addExtraStyles(style:any) {
+function addExtraStyles(style: any) {
 	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
 	style.iconColor = Color(style.color).alpha(0.8);
 
@@ -362,9 +362,9 @@ function addExtraStyles(style:any) {
 	return style;
 }
 
-const themeCache_:any = {};
+const themeCache_: any = {};
 
-function themeStyle(themeId:number) {
+function themeStyle(themeId: number) {
 	if (!themeId) throw new Error('Theme must be specified');
 
 	const zoomRatio = 1; // Setting.value('style.zoom') / 100;
@@ -376,7 +376,7 @@ function themeStyle(themeId:number) {
 	// Font size are not theme specific, but they must be referenced
 	// and computed here to allow them to respond to settings changes
 	// without the need to restart
-	const fontSizes:any = {
+	const fontSizes: any = {
 		fontSize: Math.round(12 * zoomRatio),
 		toolbarIconSize: 18,
 		editorFontSize: editorFontSize,
@@ -385,7 +385,7 @@ function themeStyle(themeId:number) {
 
 	fontSizes.noteViewerFontSize = Math.round(fontSizes.fontSize * 1.25);
 
-	let output:any = {};
+	let output: any = {};
 	output.zoomRatio = zoomRatio;
 
 	// All theme are based on the light style, and just override the
@@ -399,7 +399,7 @@ function themeStyle(themeId:number) {
 	return themeCache_[cacheKey];
 }
 
-const cachedStyles_:any = {
+const cachedStyles_: any = {
 	themeId: null,
 	styles: {},
 };
@@ -407,7 +407,7 @@ const cachedStyles_:any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
-function buildStyle(cacheKey:any, themeId:number, callback:Function) {
+function buildStyle(cacheKey: any, themeId: number, callback: Function) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 
 	// We clear the cache whenever switching themes

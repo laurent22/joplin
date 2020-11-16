@@ -4,11 +4,11 @@ const md5 = require('md5');
 const htmlUtils = require('../../htmlUtils');
 
 export default {
-	plugin: function(markdownIt:any, ruleOptions:RuleOptions) {
-		markdownIt.core.ruler.push('sanitize_html', (state:any) => {
+	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {
+		markdownIt.core.ruler.push('sanitize_html', (state: any) => {
 			const tokens = state.tokens;
 
-			const walkHtmlTokens = (tokens:any[]) => {
+			const walkHtmlTokens = (tokens: any[]) => {
 				if (!tokens || !tokens.length) return;
 
 				for (const token of tokens) {

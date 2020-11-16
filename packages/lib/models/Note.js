@@ -12,6 +12,7 @@ const ArrayUtils = require('../ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('../urlUtils.js');
 const markdownUtils = require('../markdownUtils').default;
+const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
 
@@ -149,7 +150,14 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = options.useAbsolutePaths ? `${`file://${Resource.fullPath(resource)}` + '?t='}${resource.updated_time}` : Resource.relativePath(resource);
+
+			const isImage = isImageMimeType(resource.mime);
+
+			// We add a timestamp parameter for images, so that when they
+			// change, the preview is updated inside the note. This is not
+			// needed for other resources since they are simple links.
+			const timestampParam = isImage ? `?t=${resource.updated_time}` : '';
+			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}${timestampParam}` : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
@@ -298,8 +306,8 @@ class Note extends BaseItem {
 	}
 
 	static async previews(parentId, options = null) {
-		// Note: ordering logic must be duplicated in sortNotes(), which
-		// is used to sort already loaded notes.
+		// Note: ordering logic must be duplicated in sortNotes(), which is used
+		// to sort already loaded notes.
 
 		if (!options) options = {};
 		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
@@ -309,7 +317,13 @@ class Note extends BaseItem {
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
-		if (parentId == BaseItem.getClass('Folder').conflictFolderId()) {
+		const Folder = BaseItem.getClass('Folder');
+
+		// Conflicts are always displayed regardless of options, since otherwise
+		// it's confusing to have conflicts but with an empty conflict folder.
+		if (parentId === Folder.conflictFolderId()) options.showCompletedTodos = true;
+
+		if (parentId == Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');

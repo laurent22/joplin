@@ -10,11 +10,11 @@ const { themeStyle } = require('@joplin/lib/theme');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 
 interface Props {
-	themeId: string,
+	themeId: string;
 }
 
 class OneDriveLoginScreenComponent extends React.Component<any, any> {
-	constructor(props:Props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -23,8 +23,8 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 	}
 
 	async componentDidMount() {
-		const log = (s:any) => {
-			this.setState((state:any) => {
+		const log = (s: any) => {
+			this.setState((state: any) => {
 				const authLog = state.authLog.slice();
 				authLog.push({ key: (Date.now() + Math.random()).toString(), text: s });
 				return { authLog: authLog };
@@ -35,7 +35,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 		const syncTarget = reg.syncTarget(syncTargetId);
 		const oneDriveApiUtils = new OneDriveApiNodeUtils(syncTarget.api());
 		const auth = await oneDriveApiUtils.oauthDance({
-			log: (s:any) => log(s),
+			log: (s: any) => log(s),
 		});
 
 		Setting.setValue(`sync.${syncTargetId}.auth`, auth ? JSON.stringify(auth) : null);
@@ -81,7 +81,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 	}
 }
 
-const mapStateToProps = (state:any) => {
+const mapStateToProps = (state: any) => {
 	return {
 		themeId: state.settings.theme,
 	};

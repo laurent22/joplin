@@ -1,5 +1,6 @@
 {
 	"manifest_version": 1,
+	"app_min_version": "1.4",
 	"name": "Setting Demo",
 	"description": "Demo to register new settings",
 	"version": "1.0.0",

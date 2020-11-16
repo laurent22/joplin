@@ -5,7 +5,7 @@ import { RuleOptions } from '../../MdToHtml';
 const stringUtils = require('../../stringUtils.js');
 const md5 = require('md5');
 
-function createHighlightedTokens(Token:any, splitted:string[]) {
+function createHighlightedTokens(Token: any, splitted: string[]) {
 	let token;
 	const output = [];
 
@@ -35,10 +35,10 @@ function createHighlightedTokens(Token:any, splitted:string[]) {
 }
 
 // function installRule(markdownIt, mdOptions, ruleOptions) {
-function plugin(markdownIt:any, ruleOptions:RuleOptions) {
+function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const divider = md5(Date.now().toString() + Math.random().toString());
 
-	markdownIt.core.ruler.push('highlight_keywords', (state:any) => {
+	markdownIt.core.ruler.push('highlight_keywords', (state: any) => {
 		const keywords = ruleOptions.highlightedKeywords;
 		if (!keywords || !keywords.length) return;
 

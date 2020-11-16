@@ -17,7 +17,7 @@ export default class JoplinWorkspace {
 	private store: any;
 	// private implementation_:any;
 
-	constructor(_implementation:any, store: any) {
+	constructor(_implementation: any, store: any) {
 		this.store = store;
 		// this.implementation_ = implementation;
 	}
@@ -39,21 +39,21 @@ export default class JoplinWorkspace {
 	/**
 	 * Called when an alarm associated with a to-do is triggered.
 	 */
-	async onNoteAlarmTrigger(callback:Function) {
+	async onNoteAlarmTrigger(callback: Function) {
 		eventManager.on('noteAlarmTrigger', callback);
 	}
 
 	/**
 	 * Called when the synchronisation process has finished.
 	 */
-	async onSyncComplete(callback:Function) {
+	async onSyncComplete(callback: Function) {
 		eventManager.on('syncComplete', callback);
 	}
 
 	/**
 	 * Gets the currently selected note
 	 */
-	async selectedNote():Promise<any> {
+	async selectedNote(): Promise<any> {
 		const noteIds = this.store.getState().selectedNoteIds;
 		if (noteIds.length !== 1) { return null; }
 		return Note.load(noteIds[0]);
@@ -62,7 +62,7 @@ export default class JoplinWorkspace {
 	/**
 	 * Gets the IDs of the selected notes (can be zero, one, or many). Use the data API to retrieve information about these notes.
 	 */
-	async selectedNoteIds():Promise<string[]> {
+	async selectedNoteIds(): Promise<string[]> {
 		return this.store.getState().selectedNoteIds.slice();
 	}
 }

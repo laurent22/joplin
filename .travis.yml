@@ -66,13 +66,11 @@ script:
     # Only do it for pull requests because Travis randomly fails to run them
     # and that would break the desktop release.
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-      cd packages/app-cli
       npm run test-ci
       testResult=$?
       if [ $testResult -ne 0 ]; then
         exit $testResult
       fi
-      cd ../..
     fi
 
     # Run linter for pull requests only - this is so that

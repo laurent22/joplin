@@ -2,7 +2,7 @@
 
 const request = require('request');
 
-const readmePath = `${__dirname}/../README.md`;
+const readmePath = `${__dirname}/../../README.md`;
 const { insertContentIntoFile } = require('./tool-utils.js');
 
 async function gitHubContributors(page) {
@@ -34,7 +34,7 @@ function contributorTable(contributors) {
 		const c = contributors[contributorIndex];
 		contributorIndex++;
 
-		const cell = `<img width="50" src="${c.avatar_url}"/></br>[${c.login}](${c.url})`;
+		const cell = `<img width="50" src="${c.avatar_url}"/></br>[${c.login}](${c.html_url})`;
 
 		row.push(cell);
 

@@ -64,7 +64,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 | :---: | :---: | :---: |
 | <img width="50" src="https://avatars0.githubusercontent.com/u/6979755?s=96&v=4"/></br>[Devon Zuegel](https://github.com/devonzuegel) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[小西　孝宗](https://github.com/konishi-t) | <img width="50" src="https://avatars2.githubusercontent.com/u/215668?s=96&v=4"/></br>[Alexander van der Berg](https://github.com/avanderberg)
 | <img width="50" src="https://avatars0.githubusercontent.com/u/1168659?s=96&v=4"/></br>[Nicholas Head](https://github.com/nicholashead) | <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[Frank Bloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[Thomas Broussard](https://github.com/thomasbroussard)
-| <img width="50" src="https://avatars2.githubusercontent.com/u/1307332?s=96&v=4"/></br>[Brandon Johnson](https://github.com/dbrandonjohnson) |   |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/1307332?s=96&v=4"/></br>[Brandon Johnson](https://github.com/dbrandonjohnson) | <img width="50" src="https://avatars1.githubusercontent.com/u/3061769?s=96&v=4"/></br>[@cnagy](https://github.com/c-nagy) |
 
 <!-- TOC -->
 # Table of contents
@@ -85,13 +85,19 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/dev/readme/debugging.md)
 	- [FAQ](https://github.com/laurent22/joplin/blob/dev/readme/faq.md)
 
-- Joplin API
+- Joplin API - Get Started
 
 	- [Joplin API Overview](https://github.com/laurent22/joplin/blob/dev/readme/api/overview.md)
 	- [Plugin development](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md)
 	- [Plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md)
+	
+
+- Joplin API - References
+
 	- [Plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html)
-	- [Data API documentation](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
+	- [Data API](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md)
+	- [Plugin manifest](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest.md)
+	- [Plugin loading rules](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_loading_rules.md)
 
 - Development
 
@@ -318,6 +324,8 @@ The currently supported template variables are:
 | `{{time}}` | Current time formatted based on the settings format | 13:00 |
 | `{{datetime}}` | Current date and time formatted based on the settings format | 01/01/19 1:00 PM |
 | `{{#custom_datetime}}` | Current date and/or time formatted based on a supplied string (using [moment.js](https://momentjs.com/) formatting) | `{{#custom_datetime}}M d{{/custom_datetime}}` |
+| `{{bowm}}` | Date of the beginning of the week (when week starts on Monday) based on the settings format | |
+| `{{bows}}` | Date of the beginning of the week (when week starts on Sunday) based on the settings format | |
 
 # Searching
 

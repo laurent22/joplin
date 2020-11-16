@@ -14,13 +14,13 @@ const { fileExtension } = require('../../path-utils');
 const uuid = require('../../uuid').default;
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
-	async exec(result:ImportExportResult) {
-		const itemIdMap:any = {};
-		const createdResources:any = {};
+	async exec(result: ImportExportResult) {
+		const itemIdMap: any = {};
+		const createdResources: any = {};
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
-		const replaceLinkedItemIds = async (noteBody:string) => {
+		const replaceLinkedItemIds = async (noteBody: string) => {
 			let output = noteBody;
 			const itemIds = Note.linkedItemIds(noteBody);
 
@@ -35,7 +35,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 
-		const folderExists = function(stats:any[], folderId:string) {
+		const folderExists = function(stats: any[], folderId: string) {
 			folderId = folderId.toLowerCase();
 			for (let i = 0; i < stats.length; i++) {
 				const stat = stats[i];
@@ -45,7 +45,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 			return false;
 		};
 
-		let defaultFolder_:any = null;
+		let defaultFolder_: any = null;
 		const defaultFolder = async () => {
 			if (defaultFolder_) return defaultFolder_;
 			const folderTitle = await Folder.findUniqueItemTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported', '');
@@ -54,7 +54,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 			return defaultFolder_;
 		};
 
-		const setFolderToImportTo = async (itemParentId:string) => {
+		const setFolderToImportTo = async (itemParentId: string) => {
 			// Logic is a bit complex here:
 			// - If a destination folder was specified, move the note to it.
 			// - Otherwise, if the associated folder exists, use this.

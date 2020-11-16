@@ -6,8 +6,8 @@ const utils = require('../../utils');
 const urlUtils = require('../../urlUtils.js');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
-function plugin(markdownIt:any, ruleOptions:RuleOptions) {
-	markdownIt.renderer.rules.link_open = function(tokens:any[], idx:number) {
+function plugin(markdownIt: any, ruleOptions: RuleOptions) {
+	markdownIt.renderer.rules.link_open = function(tokens: any[], idx: number) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);

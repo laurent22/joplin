@@ -1,17 +1,17 @@
 import { useMemo } from 'react';
 
 interface SearchMarkersOptions {
-	searchTimestamp: number,
-	selectedIndex: number,
-	separateWordSearch: boolean,
+	searchTimestamp: number;
+	selectedIndex: number;
+	separateWordSearch: boolean;
 }
 
 export interface SearchMarkers {
-	keywords: any[],
-	options: SearchMarkersOptions,
+	keywords: any[];
+	options: SearchMarkersOptions;
 }
 
-function defaultSearchMarkers():SearchMarkers {
+function defaultSearchMarkers(): SearchMarkers {
 	return {
 		keywords: [],
 		options: {
@@ -23,8 +23,8 @@ function defaultSearchMarkers():SearchMarkers {
 }
 
 
-export default function useSearchMarkers(showLocalSearch:boolean, localSearchMarkerOptions:Function, searches:any[], selectedSearchId:string, highlightedWords: any[] = []) {
-	return useMemo(():SearchMarkers => {
+export default function useSearchMarkers(showLocalSearch: boolean, localSearchMarkerOptions: Function, searches: any[], selectedSearchId: string, highlightedWords: any[] = []) {
+	return useMemo((): SearchMarkers => {
 		if (showLocalSearch) return localSearchMarkerOptions();
 
 		const output = defaultSearchMarkers();

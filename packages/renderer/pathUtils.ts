@@ -1,17 +1,17 @@
-export function dirname(path:string) {
+export function dirname(path: string) {
 	if (!path) throw new Error('Path is empty');
 	const s = path.split(/\/|\\/);
 	s.pop();
 	return s.join('/');
 }
 
-export function basename(path:string) {
+export function basename(path: string) {
 	if (!path) throw new Error('Path is empty');
 	const s = path.split(/\/|\\/);
 	return s[s.length - 1];
 }
 
-export function filename(path:string, includeDir:boolean = false):string {
+export function filename(path: string, includeDir: boolean = false): string {
 	if (!path) throw new Error('Path is empty');
 	const output = includeDir ? path : basename(path);
 	if (output.indexOf('.') < 0) return output;
@@ -21,7 +21,7 @@ export function filename(path:string, includeDir:boolean = false):string {
 	return splitted.join('.');
 }
 
-export function fileExtension(path:string) {
+export function fileExtension(path: string) {
 	if (!path) throw new Error('Path is empty');
 
 	const output = path.split('.');

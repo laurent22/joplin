@@ -49,7 +49,7 @@ module.exports = {
 		await Promise.all([
 			utils.replaceFileText(`${rootDir}/.gitignore`, regex, replacement),
 			utils.replaceFileText(`${rootDir}/.eslintignore`, regex, replacement),
-			utils.replaceFileText(`${rootDir}/.ignore`, regex, replacement),
+			// utils.replaceFileText(`${rootDir}/.ignore`, regex, replacement),
 		]);
 	},
 };

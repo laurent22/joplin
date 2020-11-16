@@ -8,16 +8,16 @@ export interface ExtraContentScript {
 	assetPath: string,
 }
 
-export function contentScriptsToRendererRules(plugins:PluginStates):ExtraContentScript[] {
+export function contentScriptsToRendererRules(plugins:PluginStates): ExtraContentScript[] {
 	return loadContentScripts(plugins, ContentScriptType.MarkdownItPlugin);
 }
 
-export function contentScriptsToCodeMirrorPlugin(plugins:PluginStates):ExtraContentScript[] {
+export function contentScriptsToCodeMirrorPlugin(plugins:PluginStates): ExtraContentScript[] {
 	return loadContentScripts(plugins, ContentScriptType.CodeMirrorPlugin);
 }
 
 function loadContentScripts(plugins:PluginStates, scriptType:ContentScriptType):ExtraContentScript[] {
-	const output:ExtraContentScript[] = [];
+	const output: ExtraContentScript[] = [];
 
 	for (const pluginId in plugins) {
 		const plugin = plugins[pluginId];

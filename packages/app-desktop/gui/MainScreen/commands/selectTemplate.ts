@@ -2,20 +2,20 @@ import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } fr
 import { _ } from '@joplin/lib/locale';
 const TemplateUtils = require('@joplin/lib/TemplateUtils');
 
-export const declaration:CommandDeclaration = {
+export const declaration: CommandDeclaration = {
 	name: 'selectTemplate',
 };
 
-export const runtime = (comp:any):CommandRuntime => {
+export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async (_context:CommandContext, noteType:string) => {
+		execute: async (_context: CommandContext, noteType: string) => {
 			comp.setState({
 				promptOptions: {
 					label: _('Template file:'),
 					inputType: 'dropdown',
 					value: comp.props.templates[0], // Need to start with some value
 					autocomplete: comp.props.templates,
-					onClose: async (answer:any) => {
+					onClose: async (answer: any) => {
 						if (answer) {
 							if (noteType === 'note' || noteType === 'todo') {
 								CommandService.instance().execute('newNote', answer.value, noteType === 'todo');

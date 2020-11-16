@@ -8,7 +8,7 @@ const mhchemModule = require('./katex_mhchem.js');
 // to serialize them with json-stringify-safe
 const stringifySafe = require('json-stringify-safe');
 
-function stringifyKatexOptions(options:any) {
+function stringifyKatexOptions(options: any) {
 	if (!options) return '';
 
 	const newOptions = { ...options };
@@ -45,9 +45,9 @@ function stringifyKatexOptions(options:any) {
 	//     \wf: {tokens: Array(6), numArgs: 0}
 
 	if (options.macros) {
-		const toSerialize:any = {};
+		const toSerialize: any = {};
 		for (const k of Object.keys(options.macros)) {
-			const macroText:string[] = options.macros[k].tokens.map((t:any) => t.text);
+			const macroText: string[] = options.macros[k].tokens.map((t: any) => t.text);
 			toSerialize[k] = `${macroText.join('')}_${options.macros[k].numArgs}`;
 		}
 		newOptions.macros = toSerialize;
@@ -90,7 +90,7 @@ function katexStyle() {
 
 // Test if potential opening or closing delimieter
 // Assumes that there is a "$" at state.src[pos]
-function isValidDelim(state:any, pos:number) {
+function isValidDelim(state: any, pos: number) {
 	const max = state.posMax;
 
 	let can_open = true,
@@ -114,7 +114,7 @@ function isValidDelim(state:any, pos:number) {
 	};
 }
 
-function math_inline(state:any, silent:boolean) {
+function math_inline(state: any, silent: boolean) {
 	let match, token, res, pos;
 
 	if (state.src[state.pos] !== '$') {
@@ -189,7 +189,7 @@ function math_inline(state:any, silent:boolean) {
 	return true;
 }
 
-function math_block(state:any, start:number, end:number, silent:boolean) {
+function math_block(state: any, start: number, end: number, silent: boolean) {
 	let firstLine,
 		lastLine,
 		next,
@@ -254,9 +254,9 @@ function math_block(state:any, start:number, end:number, silent:boolean) {
 	return true;
 }
 
-const cache_:any = {};
+const cache_: any = {};
 
-function renderToStringWithCache(latex:string, katexOptions:any) {
+function renderToStringWithCache(latex: string, katexOptions: any) {
 	const cacheKey = md5(escape(latex) + escape(stringifyKatexOptions(katexOptions)));
 	if (cacheKey in cache_) {
 		return cache_[cacheKey];
@@ -273,18 +273,18 @@ function renderToStringWithCache(latex:string, katexOptions:any) {
 }
 
 export default {
-	plugin: function(markdownIt:any, options:RuleOptions) {
+	plugin: function(markdownIt: any, options: RuleOptions) {
 		// Keep macros that persist across Katex blocks to allow defining a macro
 		// in one block and re-using it later in other blocks.
 		// https://github.com/laurent22/joplin/issues/1105
 		if (!options.context.userData.__katex) options.context.userData.__katex = { macros: {} };
 
-		const katexOptions:any = {};
+		const katexOptions: any = {};
 		katexOptions.macros = options.context.userData.__katex.macros;
 		katexOptions.trust = true;
 
 		// set KaTeX as the renderer for markdown-it-simplemath
-		const katexInline = function(latex:string) {
+		const katexInline = function(latex: string) {
 			katexOptions.displayMode = false;
 			try {
 				return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${markdownIt.utils.escapeHtml(latex)}</span>${renderToStringWithCache(latex, katexOptions)}</span>`;
@@ -294,11 +294,11 @@ export default {
 			}
 		};
 
-		const inlineRenderer = function(tokens:any[], idx:number) {
+		const inlineRenderer = function(tokens: any[], idx: number) {
 			return katexInline(tokens[idx].content);
 		};
 
-		const katexBlock = function(latex:string) {
+		const katexBlock = function(latex: string) {
 			katexOptions.displayMode = true;
 			try {
 				return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${renderToStringWithCache(latex, katexOptions)}</div>`;
@@ -308,7 +308,7 @@ export default {
 			}
 		};
 
-		const blockRenderer = function(tokens:any[], idx:number) {
+		const blockRenderer = function(tokens: any[], idx: number) {
 			return `${katexBlock(tokens[idx].content)}\n`;
 		};
 

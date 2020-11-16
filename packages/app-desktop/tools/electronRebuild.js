@@ -25,7 +25,9 @@ const isWindows = () => {
 async function main() {
 	// electron-rebuild --arch ia32 && electron-rebuild --arch x64
 
-	// console.warn('ELECTRON REBUILD IS DISABLED!!!!!!!!!!!!!!!!!!!!!!!!');
+	// console.warn('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+	// console.warn('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ELECTRON REBUILD IS DISABLED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+	// console.warn('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	// return;
 
 	let exePath = `${__dirname}/../node_modules/.bin/electron-rebuild`;
@@ -34,12 +36,8 @@ async function main() {
 	process.chdir(`${__dirname}/..`);
 
 	if (isWindows()) {
-		// const promises = [
-		// 	execCommand([`"${exePath}"`, '--arch ia32'].join(' ')),
-		// 	execCommand([`"${exePath}"`, '--arch x64'].join(' ')),
-		// ];
-
-		// await Promise.all(promises);
+		// Cannot run this in parallel, or the 64-bit version might end up
+		// with 32-bit files and vice-versa
 		console.info(await execCommand([`"${exePath}"`, '--arch ia32'].join(' ')));
 		console.info(await execCommand([`"${exePath}"`, '--arch x64'].join(' ')));
 	} else {

@@ -6,12 +6,12 @@ import readonlyProperties from './readonlyProperties';
 import requestFields from './requestFields';
 const BaseItem = require('../../../models/BaseItem');
 
-export default async function(modelType:number, request:Request, id:string = null, link:string = null) {
+export default async function(modelType: number, request: Request, id: string = null, link: string = null) {
 	if (link) throw new ErrorNotFound(); // Default action doesn't support links at all for now
 
 	const ModelClass = BaseItem.getClassByItemType(modelType);
 
-	const getOneModel = async (options:any = null) => {
+	const getOneModel = async (options: any = null) => {
 		const model = await ModelClass.load(id, options || {});
 		if (!model) throw new ErrorNotFound();
 		return model;

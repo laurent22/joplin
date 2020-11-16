@@ -12,18 +12,19 @@ const commandsWithDependencies = [
 ];
 
 interface HookDependencies {
-	formNote:FormNote,
-	setShowLocalSearch:Function,
-	dispatch:Function,
-	noteSearchBarRef:any,
-	editorRef:any,
-	titleInputRef:any,
-	saveNoteAndWait: Function,
+	formNote: FormNote;
+	setShowLocalSearch: Function;
+	dispatch: Function;
+	noteSearchBarRef: any;
+	editorRef: any;
+	titleInputRef: any;
+	saveNoteAndWait: Function;
+	setFormNote: Function;
 }
 
-function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):CommandRuntime {
+function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, setFormNote: Function): CommandRuntime {
 	return {
-		execute: async (_context:CommandContext, ...args:any[]) => {
+		execute: async (_context: CommandContext, ...args: any[]) => {
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 				return;
@@ -39,6 +40,10 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 					type: ScrollOptionTypes.Hash,
 					value: args[0],
 				});
+			} else if (declaration.name === 'editor.setText') {
+				setFormNote((prev: FormNote) => {
+					return { ...prev, body: args[0] };
+				});
 			} else {
 				return editorRef.current.execCommand({
 					name: declaration.name,
@@ -50,12 +55,12 @@ function editorCommandRuntime(declaration:CommandDeclaration, editorRef:any):Com
 	};
 }
 
-export default function useWindowCommandHandler(dependencies:HookDependencies) {
-	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef } = dependencies;
+export default function useWindowCommandHandler(dependencies: HookDependencies) {
+	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, setFormNote } = dependencies;
 
 	useEffect(() => {
 		for (const declaration of editorCommandDeclarations) {
-			CommandService.instance().registerRuntime(declaration.name, editorCommandRuntime(declaration, editorRef));
+			CommandService.instance().registerRuntime(declaration.name, editorCommandRuntime(declaration, editorRef, setFormNote));
 		}
 
 		const dependencies = {

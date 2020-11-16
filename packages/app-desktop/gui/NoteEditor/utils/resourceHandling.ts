@@ -52,7 +52,7 @@ export async function attachedResources(noteBody: string): Promise<any> {
 	return output;
 }
 
-export async function commandAttachFileToBody(body:string, filePaths:string[] = null, options:any = null) {
+export async function commandAttachFileToBody(body: string, filePaths: string[] = null, options: any = null) {
 	options = {
 		createFileURL: false,
 		position: 0,
@@ -101,7 +101,7 @@ export function resourcesStatus(resourceInfos: any) {
 	return joplinRendererUtils.resourceStatusName(lowestIndex);
 }
 
-export async function handlePasteEvent(event:any) {
+export async function handlePasteEvent(event: any) {
 	const output = [];
 	const formats = clipboard.availableFormats();
 	for (let i = 0; i < formats.length; i++) {
