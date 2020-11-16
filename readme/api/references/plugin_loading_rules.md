@@ -1,3 +1,5 @@
+# Plugin Loading Rules
+
 When loading plugins from the profile `plugins` directory, Joplin will look at the following locations:
 
 - `plugins/PLUGIN_ID.js`
