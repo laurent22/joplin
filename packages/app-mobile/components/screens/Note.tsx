@@ -1126,6 +1126,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// 			placeholderTextColor={theme.colorFaded}
 			// 		/>
 			// 	);
+
+			bodyComponent = (
+				<TextInput
+					autoCapitalize="sentences"
+					style={this.styles().bodyTextInput}
+					ref="noteBodyTextField"
+					multiline={true}
+					value={note.body}
+					onChangeText={(text: string) => this.body_changeText(text)}
+					onSelectionChange={this.body_selectionChange}
+					blurOnSubmit={false}
+					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
+					placeholder={_('Add body')}
+					placeholderTextColor={theme.colorFaded}
+				/>
+			);
 		}
 
 		const renderActionButton = () => {
