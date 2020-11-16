@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { contentScriptsToCodeMirrorPlugin } from '@joplin/lib/services/plugins/utils/loadContentScripts';
-import { resolve, extname } from 'path';
+import { extname } from 'path';
+import shim from '@joplin/lib/shim';
+import uuid from '@joplin/lib/uuid';
 
+const { reg } = require('@joplin/lib/registry.js');
 
 export default function useExternalPlugins(CodeMirror: any, plugins: PluginStates) {
 
@@ -13,53 +16,72 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 		const contentScripts = contentScriptsToCodeMirrorPlugin(plugins);
 
 		for (const contentScript of contentScripts) {
-			const mod = contentScript.module;
-			for (const addon of mod.addons) {
-				require(`codemirror/addon/${addon}`);
-			}
-			if (mod.codeMirrorOptions) {
-				newOptions = Object.assign({}, newOptions, mod.codeMirrorOptions);
-			}
-			if (mod.assets) {
-				const cssStrings = [];
+			try {
+				const mod = contentScript.module;
 
-				for (const asset of mod.assets()) {
-					let mime = asset.mime;
-
-					if (!mime && asset.inline) throw new Error('Mime type is required for inline assets');
-
-					if (!mime && asset.name) {
-						const ext = extname(asset.name).toLowerCase();
-						if (ext === '.css') mime = 'text/css';
-					}
-
-					if (mime !== 'text/css') throw new Error('Only css assets are supported for CodeMirror plugins');
-
-					if (asset.inline) {
-						cssStrings.push(asset.text);
-					} else {
-						addScript(resolve(contentScript.assetPath, asset.name), mod.id);
+				if (mod.addons) {
+					for (const addon of mod.addons) {
+						try {
+							require(`codemirror/addon/${addon}`);
+						} catch (error) {
+							error.message = `Codemirror addon, ${addon}, does not exist. Only valid codemirror plugins are supported, https://codemirror.net/doc/manual.html#addons`;
+							throw error;
+						}
 					}
 				}
 
-				addInlineCss(cssStrings, mod.id);
-			}
+				if (mod.codeMirrorOptions) {
+					newOptions = Object.assign({}, newOptions, mod.codeMirrorOptions);
+				}
 
-			mod.plugin(CodeMirror);
+				if (mod.assets) {
+					const cssStrings = [];
+
+					for (const asset of mod.assets()) {
+						let mime = asset.mime;
+
+						if (!mime && asset.inline) throw new Error('Mime type is required for inline assets');
+
+						if (!mime && asset.name) {
+							const ext = extname(asset.name).toLowerCase();
+							if (ext === '.css') mime = 'text/css';
+						}
+
+						if (mime !== 'text/css') throw new Error('Only css assets are supported for CodeMirror plugins');
+
+						if (asset.inline) {
+							cssStrings.push(asset.text);
+						} else {
+							addScript(shim.fsDriver().resolveRelativePathWithinDir(contentScript.assetPath, asset.name), contentScript.id);
+						}
+					}
+
+					if (cssStrings.length > 0) {
+						addInlineCss(cssStrings, contentScript.id);
+					}
+				}
+
+				if (mod.plugin) {
+					mod.plugin(CodeMirror);
+				}
+			} catch (error) {
+				reg.logger().error(error.toString());
+				continue;
+			}
 		}
 		setOptions(newOptions);
 	}, [plugins]);
 
 	function addInlineCss(cssStrings: string[], id: string) {
 		const element = document.createElement('style');
-		element.setAttribute('id', `${id}-inline`);
+		element.setAttribute('id', `content-script-${id}-inline-${uuid.createNano()}`);
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(cssStrings.join('\n')));
 	}
 
 	function addScript(path: string, id: string) {
 		const element = document.createElement('link');
-		element.setAttribute('id', `${id}-link`);
+		element.setAttribute('id', `content-script-${id}-link-${uuid.createNano()}`);
 		element.setAttribute('rel', 'stylesheet');
 		element.setAttribute('href', path);
 		document.head.appendChild(element);

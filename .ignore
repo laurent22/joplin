@@ -140,6 +140,15 @@ packages/app-cli/tests/services_keychainService.js.map
 packages/app-cli/tests/services_rest_Api.d.ts
 packages/app-cli/tests/services_rest_Api.js
 packages/app-cli/tests/services_rest_Api.js.map
+packages/app-cli/tests/support/plugins/codemirror_content_script/api/index.d.ts
+packages/app-cli/tests/support/plugins/codemirror_content_script/api/index.js
+packages/app-cli/tests/support/plugins/codemirror_content_script/api/index.js.map
+packages/app-cli/tests/support/plugins/codemirror_content_script/api/types.d.ts
+packages/app-cli/tests/support/plugins/codemirror_content_script/api/types.js
+packages/app-cli/tests/support/plugins/codemirror_content_script/api/types.js.map
+packages/app-cli/tests/support/plugins/codemirror_content_script/src/index.d.ts
+packages/app-cli/tests/support/plugins/codemirror_content_script/src/index.js
+packages/app-cli/tests/support/plugins/codemirror_content_script/src/index.js.map
 packages/app-cli/tests/support/plugins/content_script/api/index.d.ts
 packages/app-cli/tests/support/plugins/content_script/api/index.js
 packages/app-cli/tests/support/plugins/content_script/api/index.js.map
