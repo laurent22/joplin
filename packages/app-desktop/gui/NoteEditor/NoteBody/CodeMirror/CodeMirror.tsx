@@ -138,7 +138,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					} else {
 						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
 					}
-				} else if (cmd.name === 'focus') {
+				} else if (cmd.name === 'editor.focus') {
 					editorRef.current.focus();
 				} else {
 					commandProcessed = false;

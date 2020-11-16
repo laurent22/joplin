@@ -157,7 +157,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 				if (Setting.value(focusSettingName) === 'title') {
 					if (titleInputRef.current) titleInputRef.current.focus();
 				} else {
-					if (editorRef.current) editorRef.current.execCommand({ name: 'focus' });
+					if (editorRef.current) editorRef.current.execCommand({ name: 'editor.focus' });
 				}
 			});
 		}

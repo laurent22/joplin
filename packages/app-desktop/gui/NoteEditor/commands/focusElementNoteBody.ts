@@ -10,7 +10,7 @@ export const declaration: CommandDeclaration = {
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async () => {
-			comp.editorRef.current.execCommand({ name: 'focus' });
+			comp.editorRef.current.execCommand({ name: 'editor.focus' });
 		},
 		enabledCondition: 'oneNoteSelected',
 	};

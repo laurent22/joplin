@@ -247,7 +247,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if (cmd.name === 'insertText') {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, cmd.value, { bodyOnly: true });
 					editor.insertContent(result.html);
-				} else if (cmd.name === 'focus') {
+				} else if (cmd.name === 'editor.focus') {
 					editor.focus();
 				} else if (cmd.name === 'dropItems') {
 					if (cmd.value.type === 'notes') {
