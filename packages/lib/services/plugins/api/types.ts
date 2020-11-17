@@ -161,7 +161,7 @@ export interface ExportOptions {
 	path?: string;
 	sourceFolderIds?: string[];
 	sourceNoteIds?: string[];
-	modulePath?: string;
+	// modulePath?: string;
 	target?: FileSystemItem;
 }
 

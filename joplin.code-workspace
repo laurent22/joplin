@@ -310,6 +310,7 @@
 			"packages/app-mobile/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js": true,
 			"packages/app-mobile/lib/rnInjectedJs/": true,
 			"packages/app-mobile/lib/sql-extensions/spellfix.so": true,
+			"packages/generator-joplin/generators/app/templates/api/": true,
 			"packages/app-mobile/node_modules/": true,
 			"phpunit.xml": true,
 			"Server/db*.sqlite/": true,

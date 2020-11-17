@@ -38,7 +38,7 @@ export interface Module {
 	format: string;
 	fileExtensions: string[];
 	description: string;
-	path?: string;
+	// path?: string;
 
 	// Only applies to single file exporters or importers
 	// It tells whether the format can package multiple notes into one file.
@@ -80,7 +80,7 @@ export interface Module {
 export interface ImportOptions {
 	path?: string;
 	format?: string;
-	modulePath?: string;
+	// modulePath?: string;
 	destinationFolderId?: string;
 	destinationFolder?: any;
 	outputFormat?: ImportModuleOutputFormat;
@@ -91,7 +91,7 @@ export interface ExportOptions {
 	path?: string;
 	sourceFolderIds?: string[];
 	sourceNoteIds?: string[];
-	modulePath?: string;
+	// modulePath?: string;
 	target?: FileSystemItem;
 	includeConflicts?: boolean;
 }

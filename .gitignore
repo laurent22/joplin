@@ -317,6 +317,12 @@ packages/app-desktop/bridge.js.map
 packages/app-desktop/commands/copyDevCommand.d.ts
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/copyDevCommand.js.map
+packages/app-desktop/commands/exportFolders.d.ts
+packages/app-desktop/commands/exportFolders.js
+packages/app-desktop/commands/exportFolders.js.map
+packages/app-desktop/commands/exportNotes.d.ts
+packages/app-desktop/commands/exportNotes.js
+packages/app-desktop/commands/exportNotes.js.map
 packages/app-desktop/commands/focusElement.d.ts
 packages/app-desktop/commands/focusElement.js
 packages/app-desktop/commands/focusElement.js.map
