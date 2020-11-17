@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef } from 'react';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
 import * as CodeMirror from 'codemirror';
 
@@ -18,6 +19,7 @@ import useLineSorting from './utils/useLineSorting';
 import useEditorSearch from './utils/useEditorSearch';
 import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
+import useExternalPlugins from './utils/useExternalPlugins';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -75,18 +77,19 @@ for (let i = 0; i < topLanguages.length; i++) {
 }
 
 export interface EditorProps {
-	value: string;
-	searchMarkers: any;
-	mode: string;
-	style: any;
-	codeMirrorTheme: any;
-	readOnly: boolean;
-	autoMatchBraces: boolean;
-	keyMap: string;
-	onChange: any;
-	onScroll: any;
-	onEditorContextMenu: any;
-	onEditorPaste: any;
+	value: string,
+	searchMarkers: any,
+	mode: string,
+	style: any,
+	codeMirrorTheme: any,
+	readOnly: boolean,
+	autoMatchBraces: boolean,
+	keyMap: string,
+	plugins: PluginStates,
+	onChange: any,
+	onScroll: any,
+	onEditorContextMenu: any,
+	onEditorPaste: any,
 }
 
 function Editor(props: EditorProps, ref: any) {
@@ -102,6 +105,7 @@ function Editor(props: EditorProps, ref: any) {
 	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
 	useKeymap(CodeMirror);
+	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
 
 	useImperativeHandle(ref, () => {
 		return editor;
@@ -237,6 +241,14 @@ function Editor(props: EditorProps, ref: any) {
 			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
 	}, [props.keyMap]);
+
+	useEffect(() => {
+		if (editor) {
+			for (const option in pluginOptions) {
+				editor.setOption(option, pluginOptions[option]);
+			}
+		}
+	}, [pluginOptions, editor]);
 
 	return <div style={props.style} ref={editorParent} />;
 }

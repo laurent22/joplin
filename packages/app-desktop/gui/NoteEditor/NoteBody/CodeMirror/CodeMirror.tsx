@@ -637,6 +637,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={Setting.value('editor.autoMatchingBraces')}
 					keyMap={props.keyboardMode}
+					plugins={props.plugins}
 					onChange={codeMirror_change}
 					onScroll={editor_scroll}
 					onEditorContextMenu={onEditorContextMenu}
