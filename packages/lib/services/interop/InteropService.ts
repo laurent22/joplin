@@ -321,6 +321,8 @@ export default class InteropService {
 		// Recursively get all the folders that have valid parents
 		const folderIds = await Folder.childrenIds('', true);
 
+		if (options.includeConflicts) folderIds.push(Folder.conflictFolderId());
+
 		let fullSourceFolderIds = sourceFolderIds.slice();
 		for (let i = 0; i < sourceFolderIds.length; i++) {
 			const id = sourceFolderIds[i];
@@ -335,7 +337,7 @@ export default class InteropService {
 
 			if (!sourceNoteIds.length) await queueExportItem(BaseModel.TYPE_FOLDER, folderId);
 
-			const noteIds = await Folder.noteIds(folderId);
+			const noteIds = await Folder.noteIds(folderId, { includeConflicts: !!options.includeConflicts });
 
 			for (let noteIndex = 0; noteIndex < noteIds.length; noteIndex++) {
 				const noteId = noteIds[noteIndex];

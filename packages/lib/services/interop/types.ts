@@ -93,6 +93,7 @@ export interface ExportOptions {
 	sourceNoteIds?: string[];
 	modulePath?: string;
 	target?: FileSystemItem;
+	includeConflicts?: boolean;
 }
 
 export interface ImportExportResult {

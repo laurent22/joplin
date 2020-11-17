@@ -19,6 +19,12 @@ function exportDir() {
 	return `${__dirname}/export`;
 }
 
+async function recreateExportDir() {
+	const dir = exportDir();
+	await fs.remove(dir);
+	await fs.mkdirp(dir);
+}
+
 function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 	for (let i = 0; i < fieldNames.length; i++) {
 		const f = fieldNames[i];
@@ -31,10 +37,7 @@ describe('services_InteropService', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-
-		const dir = exportDir();
-		await fs.remove(dir);
-		await fs.mkdirp(dir);
+		await recreateExportDir();
 		done();
 	});
 
@@ -410,6 +413,36 @@ describe('services_InteropService', function() {
 			path: exportDir(),
 			format: 'md',
 			sourceFolderIds: [folder1.id],
+		});
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
+	}));
+
+	it('should export conflict notes', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'testexportfolder' });
+		await Note.save({ title: 'textexportnote1', parent_id: folder1.id, is_conflict: 1 });
+		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
+
+		const service = InteropService.instance();
+
+		await service.export({
+			path: exportDir(),
+			format: 'md',
+			sourceFolderIds: [folder1.id],
+			includeConflicts: false,
+		});
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(false);
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
+
+		await recreateExportDir();
+
+		await service.export({
+			path: exportDir(),
+			format: 'md',
+			sourceFolderIds: [folder1.id],
+			includeConflicts: true,
 		});
 
 		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(true);
