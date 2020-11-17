@@ -20,6 +20,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 
 	const manifest: PluginManifest = {
 		manifest_version: getNumber('manifest_version', true),
+		id: getString('id', true),
 		name: getString('name', true),
 		version: getString('version', true),
 		app_min_version: getString('app_min_version', true),

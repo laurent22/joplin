@@ -11,8 +11,13 @@ module.exports = class extends Generator {
 		const prompts = [
 			{
 				type: 'input',
+				name: 'pluginId',
+				message: 'Plugin ID [Must be a globally unique ID such as "com.example.MyPlugin" or a UUID]',
+			},
+			{
+				type: 'input',
 				name: 'pluginName',
-				message: 'Plugin name:',
+				message: 'Plugin name [User-friendly string which will be displayed in UI]',
 			},
 			{
 				type: 'input',

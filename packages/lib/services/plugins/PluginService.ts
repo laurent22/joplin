@@ -5,9 +5,11 @@ import BasePluginRunner from './BasePluginRunner';
 import BaseService  from '../BaseService';
 import shim from '../../shim';
 import { rtrimSlashes } from '../../path-utils';
+import Setting from '../../models/Setting';
 const compareVersions = require('compare-versions');
 const { filename, dirname } = require('../../path-utils');
 const uslug = require('uslug');
+const md5File = require('md5-file/promise');
 
 interface Plugins {
 	[key: string]: Plugin;
@@ -93,11 +95,55 @@ export default class PluginService extends BaseService {
 		};
 	}
 
-	public async loadPluginFromString(pluginId: string, baseDir: string, jsBundleString: string): Promise<Plugin> {
+	public async loadPluginFromJsBundle(baseDir: string, jsBundleString: string, pluginIdIfNotSpecified: string): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const r = await this.parsePluginJsBundle(jsBundleString);
-		return this.loadPlugin(pluginId, baseDir, r.manifestText, r.scriptText);
+		return this.loadPlugin(baseDir, r.manifestText, r.scriptText, pluginIdIfNotSpecified);
+	}
+
+	public async loadPluginFromPackage(baseDir: string, path: string): Promise<Plugin> {
+		baseDir = rtrimSlashes(baseDir);
+
+		const fname = filename(path);
+		const hash = await md5File(path);
+
+		const unpackDir = `${Setting.value('tempDir')}/${fname}`;
+		const manifestFilePath = `${unpackDir}/manifest.json`;
+
+		let manifest: any = await this.loadManifestToObject(manifestFilePath);
+
+		if (!manifest || manifest._package_hash !== hash) {
+			await shim.fsDriver().remove(unpackDir);
+			await shim.fsDriver().mkdir(unpackDir);
+
+			await require('tar').extract({
+				strict: true,
+				portable: true,
+				file: path,
+				cwd: unpackDir,
+			});
+
+			manifest = await this.loadManifestToObject(manifestFilePath);
+			if (!manifest) throw new Error(`Missing manifest file at: ${manifestFilePath}`);
+
+			manifest._package_hash = hash;
+
+			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest), 'utf8');
+		}
+
+		return this.loadPluginFromPath(unpackDir);
+	}
+
+	// Loads the manifest as a simple object with no validation. Used only
+	// when unpacking a package.
+	private async loadManifestToObject(path: string): Promise<any> {
+		try {
+			const manifestText = await shim.fsDriver().readFile(path, 'utf8');
+			return JSON.parse(manifestText);
+		} catch (error) {
+			return null;
+		}
 	}
 
 	private async loadPluginFromPath(path: string): Promise<Plugin> {
@@ -105,35 +151,45 @@ export default class PluginService extends BaseService {
 
 		const fsDriver = shim.fsDriver();
 
-		if (path.toLowerCase().endsWith('.js')) return this.loadPluginFromString(filename(path), dirname(path), await fsDriver.readFile(path));
+		if (path.toLowerCase().endsWith('.js')) {
+			return this.loadPluginFromJsBundle(dirname(path), await fsDriver.readFile(path), filename(path));
+		} else if (path.toLowerCase().endsWith('.jpl')) {
+			return this.loadPluginFromPackage(dirname(path), path);
+		} else {
+			let distPath = path;
+			if (!(await fsDriver.exists(`${distPath}/manifest.json`))) {
+				distPath = `${path}/dist`;
+			}
 
-		let distPath = path;
-		if (!(await fsDriver.exists(`${distPath}/manifest.json`))) {
-			distPath = `${path}/dist`;
+			this.logger().info(`PluginService: Loading plugin from ${path}`);
+
+			const scriptText = await fsDriver.readFile(`${distPath}/index.js`);
+			const manifestText = await fsDriver.readFile(`${distPath}/manifest.json`);
+			const pluginId = makePluginId(filename(path));
+
+			return this.loadPlugin(distPath, manifestText, scriptText, pluginId);
 		}
-
-		this.logger().info(`PluginService: Loading plugin from ${path}`);
-
-		const scriptText = await fsDriver.readFile(`${distPath}/index.js`);
-		const manifestText = await fsDriver.readFile(`${distPath}/manifest.json`);
-		const pluginId = makePluginId(filename(path));
-
-		return this.loadPlugin(pluginId, distPath, manifestText, scriptText);
 	}
 
-	private async loadPlugin(pluginId: string, baseDir: string, manifestText: string, scriptText: string): Promise<Plugin> {
+	private async loadPlugin(baseDir: string, manifestText: string, scriptText: string, pluginIdIfNotSpecified: string): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const manifestObj = JSON.parse(manifestText);
 
-		let showAppMinVersionNotice = false;
+		const deprecationNotices = [];
 
 		if (!manifestObj.app_min_version) {
 			manifestObj.app_min_version = '1.4';
-			showAppMinVersionNotice = true;
+			deprecationNotices.push('The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support. It was automatically set to "1.4", but please update your manifest.json file.');
+		}
+
+		if (!manifestObj.id) {
+			manifestObj.id = pluginIdIfNotSpecified;
+			deprecationNotices.push(`The manifest must contain an "id" key, which should be a globally unique ID for your plugin, such as "com.example.MyPlugin" or a UUID. It was automatically set to "${manifestObj.id}", but please update your manifest.json file.`);
 		}
 
 		const manifest = manifestFromObject(manifestObj);
+		const pluginId = manifest.id;
 
 		// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
 		// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
@@ -156,8 +212,8 @@ export default class PluginService extends BaseService {
 			});
 		}
 
-		if (showAppMinVersionNotice) {
-			plugin.deprecationNotice('1.5', 'The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support. It was automatically set to "1.4", but please update your manifest.json file.');
+		for (const msg of deprecationNotices) {
+			plugin.deprecationNotice('1.5', msg);
 		}
 
 		return plugin;

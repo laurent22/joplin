@@ -4,6 +4,7 @@ export enum PluginPermission {
 
 export interface PluginManifest {
 	manifest_version: number;
+	id: string;
 	name: string;
 	version: string;
 	app_min_version: string;
@@ -11,4 +12,7 @@ export interface PluginManifest {
 	description?: string;
 	homepage_url?: string;
 	permissions?: PluginPermission[];
+
+	// Private keys
+	_package_hash?: string;
 }

@@ -94,7 +94,7 @@ describe('services_PluginService', function() {
 	it('should load plugins from JS bundles', asyncTest(async () => {
 		const service = newPluginService();
 
-		const plugin = await service.loadPluginFromString('example', '/tmp', `
+		const plugin = await service.loadPluginFromJsBundle('example', '/tmp', `
 			/* joplin-manifest:
 			{
 				"manifest_version": 1,
@@ -130,6 +130,13 @@ describe('services_PluginService', function() {
 		expect((await Folder.all()).length).toBe(1);
 	}));
 
+	it('should load plugins from JPL archive', asyncTest(async () => {
+		const service = newPluginService();
+		await service.loadAndRunPlugins([`${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`]);
+		expect(!!service.pluginById('org.joplinapp.FirstJplPlugin')).toBe(true);
+		expect((await Folder.all()).length).toBe(1);
+	}));
+
 	it('should validate JS bundles', asyncTest(async () => {
 		const invalidJsBundles = [
 			`
@@ -159,7 +166,7 @@ describe('services_PluginService', function() {
 		const service = newPluginService();
 
 		for (const jsBundle of invalidJsBundles) {
-			await expectThrow(async () => await service.loadPluginFromString('example', '/tmp', jsBundle));
+			await expectThrow(async () => await service.loadPluginFromJsBundle('example', '/tmp', jsBundle));
 		}
 	}));
 
@@ -171,7 +178,7 @@ describe('services_PluginService', function() {
 
 		const service = newPluginService();
 
-		const plugin = await service.loadPluginFromString('example', tempDir, `
+		const plugin = await service.loadPluginFromJsBundle('example', tempDir, `
 			/* joplin-manifest:
 			{
 				"manifest_version": 1,
@@ -240,7 +247,7 @@ describe('services_PluginService', function() {
 
 		for (const testCase of testCases) {
 			const [appVersion, expected] = testCase;
-			const plugin = await newPluginService(appVersion as string).loadPluginFromString('example', '', pluginScript);
+			const plugin = await newPluginService(appVersion as string).loadPluginFromJsBundle('example', '', pluginScript);
 			expect(plugin.enabled).toBe(expected as boolean);
 		}
 	}));
