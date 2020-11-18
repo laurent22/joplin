@@ -25,10 +25,10 @@ export default function(props:Props) {
 				},
 			}}
 			trackStyle={{
-				opacity: props.value ? 1 : 0.5,
+				opacity: props.value ? 1 : 0.3,
 			}}
 			thumbStyle={{
-				opacity: props.value ? 1 : 0.8,
+				opacity: props.value ? 1 : 0.5,
 			}}
 			inactiveLabel=""
 			activeLabel=""

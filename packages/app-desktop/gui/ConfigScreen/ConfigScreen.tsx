@@ -23,8 +23,7 @@ const settingKeyToControl:any = {
 class ConfigScreenComponent extends React.Component<any, any> {
 
 	rowStyle_: any = null;
-	needRestart_:boolean = false;
-
+	
 	constructor(props: any) {
 		super(props);
 
@@ -34,6 +33,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			selectedSectionName: 'general',
 			screenName: '',
 			changedSettingKeys: [],
+			needRestart: false,
 		};
 
 		this.rowStyle_ = {
@@ -350,9 +350,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const updateSettingValue = (key: string, value: any) => {
 			const md = Setting.settingMetadata(key);
 			if (md.needRestart) {
-				this.needRestart_ = true;
+				this.setState({ needRestart: true });
 			}
-			return shared.updateSettingValue(this, key, value);
+			shared.updateSettingValue(this, key, value);
+
+			if (md.autoSave) {
+				shared.scheduleSaveSettings(this);
+			}
 		};
 
 		const md = Setting.settingMetadata(key);
@@ -615,9 +619,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return output;
 	}
 
+	private restartMessage() {
+		return _('The application must be restarted for these changes to take effect.');
+	}
+
 	private async checkNeedRestart() {
-		if (this.needRestart_) {
-			const doItNow = await bridge().showConfirmMessageBox(_('The application must be restarted for the changes to take effect.'), {
+		if (this.state.needRestart) {
+			const doItNow = await bridge().showConfirmMessageBox(this.restartMessage(), {
 				buttons: [_('Do it now'), _('Later')],
 			});
 
@@ -683,6 +691,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const sections = shared.settingsSections({ device: 'desktop', settings });
 
+		const needRestartComp:any = this.state.needRestart ? (
+			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>
+				{this.restartMessage()}
+			</div>
+		 ) : null;
+
 		return (
 			<div style={{ display: 'flex', flexDirection: 'row' }}>
 				<SideBar
@@ -692,6 +706,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				/>
 				<div style={style}>
 					{screenComp}
+					{needRestartComp}
 					<div style={containerStyle}>{settingComps}</div>
 					<ButtonBar
 						hasChanges={hasChanges}

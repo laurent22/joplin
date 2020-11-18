@@ -4,10 +4,9 @@ import Global from './api/Global';
 import BasePluginRunner from './BasePluginRunner';
 import BaseService  from '../BaseService';
 import shim from '../../shim';
-import { rtrimSlashes } from '../../path-utils';
+import { filename, dirname, rtrimSlashes, basename } from '../../path-utils';
 import Setting from '../../models/Setting';
 const compareVersions = require('compare-versions');
-const { filename, dirname } = require('../../path-utils');
 const uslug = require('uslug');
 const md5File = require('md5-file/promise');
 
@@ -27,6 +26,14 @@ export interface Plugins {
 
 export interface PluginSetting {
 	enabled: boolean,
+	deleted: boolean,
+}
+
+export function defaultPluginSetting():PluginSetting {
+	return {
+		enabled: true,
+		deleted: false,
+	}
 }
 
 export interface PluginSettings {
@@ -74,7 +81,16 @@ export default class PluginService extends BaseService {
 	}
 
 	public unserializePluginSettings(settings:any):PluginSettings {
-		return settings ? settings as PluginSettings : {};
+		const output = { ...settings };
+
+		for (let pluginId in output) {
+			output[pluginId] = {
+				...defaultPluginSetting(),
+				...output[pluginId],
+			}
+		}
+
+		return output;
 	}
 
 	public serializePluginSettings(settings:PluginSettings):any {
@@ -168,7 +184,7 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	private async loadPluginFromPath(path: string): Promise<Plugin> {
+	public async loadPluginFromPath(path: string): Promise<Plugin> {
 		path = rtrimSlashes(path);
 
 		const fsDriver = shim.fsDriver();
@@ -213,25 +229,20 @@ export default class PluginService extends BaseService {
 		const manifest = manifestFromObject(manifestObj);
 		const pluginId = manifest.id;
 
-		// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
-		// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
-		// such folders but to keep things sane we disallow it.
-		if (this.plugins_[pluginId]) throw new Error(`There is already a plugin with this ID: ${pluginId}`);
-
 		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger(), (action: any) => this.store_.dispatch(action));
 
-		if (compareVersions(this.appVersion_, manifest.app_min_version) < 0) {
-			throw new Error(`PluginService: Plugin "${pluginId}" was disabled because it requires Joplin version ${manifest.app_min_version} and current version is ${this.appVersion_}.`);
-		} else {
-			this.store_.dispatch({
-				type: 'PLUGIN_ADD',
-				plugin: {
-					id: pluginId,
-					views: {},
-					contentScripts: {},
-				},
-			});
-		}
+		// if (compareVersions(this.appVersion_, manifest.app_min_version) < 0) {
+		// 	throw new Error(`PluginService: Plugin "${pluginId}" was disabled because it requires Joplin version ${manifest.app_min_version} and current version is ${this.appVersion_}.`);
+		// } else {
+		// 	this.store_.dispatch({
+		// 		type: 'PLUGIN_ADD',
+		// 		plugin: {
+		// 			id: pluginId,
+		// 			views: {},
+		// 			contentScripts: {},
+		// 		},
+		// 	});
+		// }
 
 		for (const msg of deprecationNotices) {
 			plugin.deprecationNotice('1.5', msg);
@@ -270,6 +281,11 @@ export default class PluginService extends BaseService {
 			try {
 				const plugin = await this.loadPluginFromPath(pluginPath);
 
+				// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
+				// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
+				// such folders but to keep things sane we disallow it.
+				// if (this.plugins_[pluginId]) throw new JoplinError(`There is already a plugin with this ID: ${pluginId}`, 'alreadyLoaded');
+
 				this.plugins_[plugin.id] = plugin;
 
 				if (!this.pluginEnabled(settings, plugin.id)) {
@@ -288,21 +304,71 @@ export default class PluginService extends BaseService {
 	}
 
 	public async runPlugin(plugin: Plugin) {
+		if (compareVersions(this.appVersion_, plugin.manifest.app_min_version) < 0) {
+			throw new Error(`PluginService: Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
+		} else {
+			this.store_.dispatch({
+				type: 'PLUGIN_ADD',
+				plugin: {
+					id: plugin.id,
+					views: {},
+					contentScripts: {},
+				},
+			});
+		}
+
 		const pluginApi = new Global(this.logger(), this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);
 	}
 
-	// public async handleDisabledPlugins() {
-	// 	const enabledPlugins = this.allPluginIds();
-	// 	const v = await this.kvStore_.value<string>('pluginService.lastEnabledPlugins');
-	// 	const lastEnabledPlugins = v ? JSON.parse(v) : [];
+	public async installPlugin(jplPath:string):Promise<Plugin> {
+		this.logger().info(`PluginService: Installing plugin: "${jplPath}"`);
 
-	// 	const disabledPlugins = [];
-	// 	for (const id of lastEnabledPlugins) {
-	// 		if (!enabledPlugins.includes(id)) disabledPlugins.push(id);
-	// 	}
+		const destPath = Setting.value('pluginDir') + '/' + basename(jplPath);
+		await shim.fsDriver().copy(jplPath, destPath);
+		const plugin = await this.loadPluginFromPath(destPath);
+		this.plugins_[plugin.id] = plugin;
+		return plugin;
+	}
 
-	// 	await this.kvStore_.setValue('pluginService.lastEnabledPlugins', JSON.stringify(enabledPlugins));
-	// }
+	private async pluginPath(pluginId:string) {
+		const stats = await shim.fsDriver().readDirStats(Setting.value('pluginDir'), { recursive: false });
+		
+		for (const stat of stats) {
+			if (filename(stat.path) === pluginId) {
+				return Setting.value('pluginDir') + '/' + stat.path;
+			}
+		}
+
+		return null;
+	}
+
+	public async uninstallPlugin(pluginId:string) {
+		this.logger().info(`PluginService: Uninstalling plugin: "${pluginId}"`);
+
+		const path = await this.pluginPath(pluginId);
+		if (!path) {
+			// Plugin might have already been deleted
+			this.logger().error('PluginService: Could not find plugin path to uninstall - nothing will be done: ' + pluginId);
+		} else {
+			await shim.fsDriver().remove(path);
+		}		
+
+		delete this.plugins_[pluginId];
+	}
+
+	public async uninstallPlugins(settings:PluginSettings):Promise<PluginSettings> {
+		let newSettings = settings;
+
+		for (const pluginId in settings) {
+			if (settings[pluginId].deleted) {
+				await this.uninstallPlugin(pluginId);
+				newSettings = {...settings};
+				delete newSettings[pluginId];
+			}
+		}
+
+		return newSettings;
+	}
 
 }

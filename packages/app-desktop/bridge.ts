@@ -87,7 +87,7 @@ export class Bridge {
 		return filePath;
 	}
 
-	showOpenDialog(options: any) {
+	showOpenDialog(options: any = null) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		let fileType = 'file';

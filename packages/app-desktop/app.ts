@@ -503,6 +503,13 @@ class Application extends BaseApplication {
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 
+		// Users can add and remove plugins from the config screen at any
+		// time, however we only effectively uninstall the plugin the next
+		// time the app is started. What plugin should be uninstalled is
+		// stored in the settings.
+		const newSettings = await service.uninstallPlugins(pluginSettings);
+		Setting.setValue('plugins.states', newSettings);
+
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);

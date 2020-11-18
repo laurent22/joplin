@@ -43,7 +43,7 @@ describe('services_PluginService', function() {
 
 	it('should load and run a simple plugin', asyncTest(async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins([`${testPluginDir}/simple`]);
+		await service.loadAndRunPlugins([`${testPluginDir}/simple`], {});
 
 		expect(() => service.pluginById('org.joplinapp.plugins.Simple')).not.toThrowError();
 
@@ -59,13 +59,13 @@ describe('services_PluginService', function() {
 
 	it('should load and run a simple plugin and handle trailing slash', asyncTest(async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins([`${testPluginDir}/simple/`]);
+		await service.loadAndRunPlugins([`${testPluginDir}/simple/`], {});
 		expect(() => service.pluginById('org.joplinapp.plugins.Simple')).not.toThrowError();
 	}));
 
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins([`${testPluginDir}/withExternalModules`]);
+		await service.loadAndRunPlugins([`${testPluginDir}/withExternalModules`], {});
 		expect(() => service.pluginById('org.joplinapp.plugins.ExternalModuleDemo')).not.toThrowError();
 
 		const allFolders = await Folder.all();
@@ -78,7 +78,7 @@ describe('services_PluginService', function() {
 
 	it('should load multiple plugins from a directory', asyncTest(async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins(`${testPluginDir}/multi_plugins`);
+		await service.loadAndRunPlugins(`${testPluginDir}/multi_plugins`, {});
 
 		const plugin1 = service.pluginById('org.joplinapp.plugins.MultiPluginDemo1');
 		const plugin2 = service.pluginById('org.joplinapp.plugins.MultiPluginDemo2');
@@ -125,14 +125,14 @@ describe('services_PluginService', function() {
 
 	it('should load plugins from JS bundle files', asyncTest(async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins(`${testPluginDir}/jsbundles`);
+		await service.loadAndRunPlugins(`${testPluginDir}/jsbundles`, {});
 		expect(!!service.pluginById('org.joplinapp.plugins.JsBundleDemo')).toBe(true);
 		expect((await Folder.all()).length).toBe(1);
 	}));
 
 	it('should load plugins from JPL archive', asyncTest(async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins([`${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`]);
+		await service.loadAndRunPlugins([`${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`], {});
 		expect(!!service.pluginById('org.joplinapp.FirstJplPlugin')).toBe(true);
 		expect((await Folder.all()).length).toBe(1);
 	}));

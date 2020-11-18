@@ -1,18 +1,29 @@
 import * as React from 'react';
-import PluginService, { Plugins, PluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import {useMemo} from 'react';
+import { useCallback, useMemo} from 'react';
+import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import {_} from '@joplin/lib/locale';
 import styled from 'styled-components';
 import ToggleButton from '../../lib/ToggleButton/ToggleButton';
+import Button, { ButtonLevel } from '../../Button/Button';
+import bridge from '../../../services/bridge';
+import produce from 'immer';
 
 const Root = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
+
+const TableRoot = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 `;
 
+const InstallButton = styled(Button)`
+	margin-bottom: 10px;
+`;
+
 const CellRoot = styled.div`
 	display: flex;
-	opacity: ${props => props.enabled ? 1.0 : 0.7 };
 	background-color: ${props => props.theme.backgroundColor};
 	flex-direction: column;
 	align-items: flex-start;
@@ -32,8 +43,15 @@ const CellTop = styled.div`
 	margin-bottom: 10px;
 `
 
-const CellBottom = styled.div`
-	display: flex;	
+const CellContent = styled.div`
+	display: flex;
+	margin-bottom: 10px;
+	flex: 1;
+`
+
+const CellFooter = styled.div`
+	display: flex;
+	flex-direction: row;
 `
 
 const StyledName = styled.div`
@@ -61,6 +79,7 @@ interface CellProps {
 	item:PluginItem;
 	themeId: number;
 	onToggle: Function;
+	onDelete: Function;
 }
 
 interface PluginItem {
@@ -68,6 +87,7 @@ interface PluginItem {
 	name: string;
 	description: string;
 	enabled: boolean;
+	deleted: boolean;
 }
 
 function Cell(props:CellProps) {
@@ -76,12 +96,16 @@ function Cell(props:CellProps) {
 	return (
 		<CellRoot enabled={item.enabled}>
 			<CellTop>
-				<StyledName mb={'5px'}>{item.name}</StyledName>
-				<ToggleButton themeId={props.themeId} value={item.enabled} onToggle={props.onToggle}/>
+				<StyledName mb={'5px'}>{item.name} {item.deleted ? '(Deleted)' : ''}</StyledName>
+				<ToggleButton themeId={props.themeId} value={item.enabled} onToggle={() => props.onToggle({ item: props.item })}/>
 			</CellTop>
-			<CellBottom>
+			<CellContent>
 				<StyledDescription>{item.description}</StyledDescription>
-			</CellBottom>
+			</CellContent>
+			<CellFooter>
+				<Button level={ButtonLevel.Secondary} onClick={() => props.onDelete({ item: props.item })} title={_('Delete')}/>
+				<div style={{ display: 'flex', flex: 1}}/>
+			</CellFooter>
 		</CellRoot>
 	);
 }
@@ -93,15 +117,17 @@ function usePluginItems(plugins:Plugins, settings:PluginSettings):PluginItem[] {
 		for (const pluginId in plugins) {
 			const plugin = plugins[pluginId];
 
-			const setting:PluginSetting = settings[pluginId] ? settings[pluginId] : {
-				enabled: true,
-			};
+			const setting:PluginSetting = {
+				...defaultPluginSetting(),
+				...settings[pluginId],
+			}
 
 			output.push({
 				id: pluginId,
 				name: plugin.manifest.name,
 				description: plugin.manifest.description,
 				enabled: setting.enabled,
+				deleted: setting.deleted,
 			});
 		}
 
@@ -114,30 +140,67 @@ function usePluginItems(plugins:Plugins, settings:PluginSettings):PluginItem[] {
 }
 
 export default function(props:Props) {
-	const plugins = PluginService.instance().plugins;
+	const pluginService = PluginService.instance();
+
+	const plugins = pluginService.plugins;
 
 	const pluginSettings = useMemo(() => {
-		return PluginService.instance().unserializePluginSettings(props.value);
+		return pluginService.unserializePluginSettings(props.value);
 	}, [props.value]);
+
+	const onDelete = useCallback(async (event:any) => {
+		const item:PluginItem = event.item;
+		const confirm = await bridge().showConfirmMessageBox(_('Delete plugin "%s"?', item.name));
+		if (!confirm) return;
+
+		const newSettings = produce(pluginSettings, (draft:PluginSettings) => {
+			if (!draft[item.id]) draft[item.id] = defaultPluginSetting();
+			draft[item.id].deleted = true;
+		});
+
+		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+	}, [pluginSettings, props.onChange]);
+
+	const onToggle = useCallback((event:any) => {
+		const item:PluginItem = event.item;
+
+		const newSettings = produce(pluginSettings, (draft:PluginSettings) => {
+			if (!draft[item.id]) draft[item.id] = defaultPluginSetting();
+			draft[item.id].enabled = !draft[item.id].enabled;
+		});
+		
+		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+	}, [pluginSettings, props.onChange]);
+
+	const onInstall = useCallback(async () => {
+		const result = bridge().showOpenDialog({
+			filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
+		});
+
+		const filePath = result && result.length ? result[0] : null;
+		if (!filePath) return;
+
+		const plugin = await pluginService.installPlugin(filePath);
+
+		const newSettings = produce(pluginSettings, (draft:PluginSettings) => {
+			draft[plugin.manifest.id] = defaultPluginSetting();
+		});
+		
+		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+	}, [pluginSettings, props.onChange]);
 
 	function renderCells(items:PluginItem[]) {
 		const output = [];
 
 		for (const item of items) {
+			if (item.deleted) continue;
+
 			output.push(<Cell
 				key={item.id}
 				item={item}
 				themeId={props.themeId}
-				onToggle={() => {
-					const newSettings = { ...pluginSettings }
-
-					newSettings[item.id] = {
-						...newSettings[item.id],
-						enabled: newSettings[item.id] ? !newSettings[item.id].enabled : false,
-					}
-					
-					props.onChange({ value: PluginService.instance().serializePluginSettings(newSettings) });
-				}}
+				onDelete={onDelete}
+				onToggle={onToggle}
 			/>);
 		}
 
@@ -148,7 +211,13 @@ export default function(props:Props) {
 
 	return (
 		<Root>
-			{renderCells(pluginItems)}
+			<div style={{display:'flex', flexDirection:'row'}}>
+				<InstallButton level={ButtonLevel.Primary} onClick={onInstall} title={_('Install plugin')}/>
+				<div style={{ display: 'flex', flex:1}}/>
+			</div>
+			<TableRoot>
+				{renderCells(pluginItems)}
+			</TableRoot>
 		</Root>
 	);
 }
