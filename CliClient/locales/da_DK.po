@@ -3693,7 +3693,7 @@ msgstr "Web-clipper"
 
 #: ReactNativeClient/lib/models/Setting.js:1310
 msgid "Keyboard Shortcuts"
-msgstr "Tastaturgenveje "
+msgstr "Tastaturgenveje"
 
 #: ReactNativeClient/lib/models/Setting.js:1317
 msgid ""
