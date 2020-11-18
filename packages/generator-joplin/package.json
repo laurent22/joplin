@@ -1,6 +1,6 @@
 {
   "name": "generator-joplin",
-  "version": "1.4.0",
+  "version": "1.4.4",
   "description": "Scaffolds out a new Joplin plugin",
   "homepage": "https://joplinapp.org",
   "author": {
