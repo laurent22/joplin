@@ -203,6 +203,18 @@ async function saveGitHubUsernameCache(cache) {
 	await fs.writeFile(path, JSON.stringify(cache));
 }
 
+toolUtils.gitPullTry = async function() {
+	try {
+		await toolUtils.execCommand('git pull');
+	} catch (error) {
+		if (error.message.includes('no tracking information for the current branch')) {
+			console.info('Skipping git pull because no tracking information on current branch');
+		} else {
+			throw error;
+		}
+	}
+};
+
 toolUtils.githubUsername = async function(email, name) {
 	const cache = await loadGitHubUsernameCache();
 	const cacheKey = `${email}:${name}`;

@@ -1,4 +1,4 @@
-const { execCommandVerbose, rootDir } = require('./tool-utils.js');
+const { execCommandVerbose, rootDir, gitPullTry } = require('./tool-utils.js');
 
 const genDir = `${rootDir}/packages/generator-joplin`;
 
@@ -7,7 +7,7 @@ async function main() {
 
 	console.info(`Running from: ${process.cwd()}`);
 
-	console.info(await execCommandVerbose('git', ['pull']));
+	await gitPullTry();
 
 	const version = (await execCommandVerbose('npm', ['version', 'patch'])).trim();
 	const tagName = `plugin-generator-${version}`;
@@ -15,6 +15,7 @@ async function main() {
 	console.info(`New version number: ${version}`);
 
 	console.info(await execCommandVerbose('npm', ['publish']));
+	await gitPullTry();
 	console.info(await execCommandVerbose('git', ['add', '-A']));
 	console.info(await execCommandVerbose('git', ['commit', '-m', `Plugin Generator release ${version}`]));
 	console.info(await execCommandVerbose('git', ['tag', tagName]));
