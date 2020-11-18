@@ -45,6 +45,7 @@ export interface SettingItem {
 	step?: number;
 	onClick?(): void;
 	unitLabel?(value: any): string;
+	needRestart?: boolean;
 }
 
 interface SettingItems {
@@ -552,6 +553,16 @@ class Setting extends BaseModel {
 						body: _('Focus body'),
 					};
 				},
+			},
+
+			'plugins.states': {
+				value: '',
+				type: SettingItemType.Object,
+				section: 'plugins',
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Plugins'),
+				needRestart: true,
 			},
 
 			'plugins.devPluginPaths': {

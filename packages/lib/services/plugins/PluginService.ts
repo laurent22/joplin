@@ -11,8 +11,26 @@ const { filename, dirname } = require('../../path-utils');
 const uslug = require('uslug');
 const md5File = require('md5-file/promise');
 
-interface Plugins {
+// Plugin data is split into two:
+//
+// - First there's the service `plugins` property, which contains the
+//   plugin static data, as loaded from the plugin file or directory. For
+//   example, the plugin ID, the manifest, the script files, etc.
+//
+// - Secondly, there's the `PluginSettings` data, which is dynamic and is
+//   used for example to enable or disable a plugin. Its state is saved to
+//   the user's settings.
+
+export interface Plugins {
 	[key: string]: Plugin;
+}
+
+export interface PluginSetting {
+	enabled: boolean,
+}
+
+export interface PluginSettings {
+	[pluginId:string]: PluginSetting;
 }
 
 function makePluginId(source: string): string {
@@ -55,9 +73,13 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
-	// public allPluginIds(): string[] {
-	// 	return Object.keys(this.plugins_);
-	// }
+	public unserializePluginSettings(settings:any):PluginSettings {
+		return settings ? settings as PluginSettings : {};
+	}
+
+	public serializePluginSettings(settings:PluginSettings):any {
+		return JSON.stringify(settings);
+	}
 
 	private async parsePluginJsBundle(jsBundleString: string) {
 		const scriptText = jsBundleString;
@@ -199,8 +221,7 @@ export default class PluginService extends BaseService {
 		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger(), (action: any) => this.store_.dispatch(action));
 
 		if (compareVersions(this.appVersion_, manifest.app_min_version) < 0) {
-			this.logger().info(`PluginService: Plugin "${pluginId}" was disabled because it requires a newer version of Joplin.`, manifest);
-			plugin.enabled = false;
+			throw new Error(`PluginService: Plugin "${pluginId}" was disabled because it requires Joplin version ${manifest.app_min_version} and current version is ${this.appVersion_}.`);
 		} else {
 			this.store_.dispatch({
 				type: 'PLUGIN_ADD',
@@ -219,14 +240,24 @@ export default class PluginService extends BaseService {
 		return plugin;
 	}
 
-	public async loadAndRunPlugins(pluginDirOrPaths: string | string[]) {
+	private pluginEnabled(settings:PluginSettings, pluginId:string):boolean {
+		if (!settings[pluginId]) return true;
+		return settings[pluginId].enabled !== false;
+	}
+
+	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings:PluginSettings, devMode:boolean = false) {
 		let pluginPaths = [];
 
 		if (Array.isArray(pluginDirOrPaths)) {
 			pluginPaths = pluginDirOrPaths;
 		} else {
 			pluginPaths = (await shim.fsDriver().readDirStats(pluginDirOrPaths))
-				.filter((stat: any) => (stat.isDirectory() || stat.path.toLowerCase().endsWith('.js')))
+				.filter((stat: any) => {
+					if (stat.isDirectory()) return true;
+					if (stat.path.toLowerCase().endsWith('.js')) return true;
+					if (stat.path.toLowerCase().endsWith('.jpl')) return true;
+					return false;
+				})
 				.map((stat: any) => `${pluginDirOrPaths}/${stat.path}`);
 		}
 
@@ -238,6 +269,17 @@ export default class PluginService extends BaseService {
 
 			try {
 				const plugin = await this.loadPluginFromPath(pluginPath);
+
+				this.plugins_[plugin.id] = plugin;
+
+				if (!this.pluginEnabled(settings, plugin.id)) {
+					this.logger().info(`PluginService: Not running disabled plugin: "${plugin.id}"`);
+					this.plugins_[plugin.id] = plugin;
+					continue;
+				}
+
+				plugin.devMode = devMode;
+
 				await this.runPlugin(plugin);
 			} catch (error) {
 				this.logger().error(`PluginService: Could not load plugin: ${pluginPath}`, error);
@@ -246,7 +288,6 @@ export default class PluginService extends BaseService {
 	}
 
 	public async runPlugin(plugin: Plugin) {
-		this.plugins_[plugin.id] = plugin;
 		const pluginApi = new Global(this.logger(), this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);
 	}

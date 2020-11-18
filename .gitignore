@@ -233,6 +233,15 @@ packages/app-cli/tests/support/plugins/events/api/types.js.map
 packages/app-cli/tests/support/plugins/events/src/index.d.ts
 packages/app-cli/tests/support/plugins/events/src/index.js
 packages/app-cli/tests/support/plugins/events/src/index.js.map
+packages/app-cli/tests/support/plugins/jpl_test/api/index.d.ts
+packages/app-cli/tests/support/plugins/jpl_test/api/index.js
+packages/app-cli/tests/support/plugins/jpl_test/api/index.js.map
+packages/app-cli/tests/support/plugins/jpl_test/api/types.d.ts
+packages/app-cli/tests/support/plugins/jpl_test/api/types.js
+packages/app-cli/tests/support/plugins/jpl_test/api/types.js.map
+packages/app-cli/tests/support/plugins/jpl_test/src/index.d.ts
+packages/app-cli/tests/support/plugins/jpl_test/src/index.js
+packages/app-cli/tests/support/plugins/jpl_test/src/index.js.map
 packages/app-cli/tests/support/plugins/json_export/api/index.d.ts
 packages/app-cli/tests/support/plugins/json_export/api/index.js
 packages/app-cli/tests/support/plugins/json_export/api/index.js.map
@@ -359,6 +368,9 @@ packages/app-desktop/gui/ConfigScreen/ConfigScreen.js.map
 packages/app-desktop/gui/ConfigScreen/SideBar.d.ts
 packages/app-desktop/gui/ConfigScreen/SideBar.js
 packages/app-desktop/gui/ConfigScreen/SideBar.js.map
+packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.d.ts
+packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js
+packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js.map
 packages/app-desktop/gui/DropboxLoginScreen.d.ts
 packages/app-desktop/gui/DropboxLoginScreen.js
 packages/app-desktop/gui/DropboxLoginScreen.js.map
@@ -722,6 +734,9 @@ packages/app-desktop/gui/ToolbarButton/ToolbarButton.js.map
 packages/app-desktop/gui/ToolbarButton/styles/index.d.ts
 packages/app-desktop/gui/ToolbarButton/styles/index.js
 packages/app-desktop/gui/ToolbarButton/styles/index.js.map
+packages/app-desktop/gui/dialogs.d.ts
+packages/app-desktop/gui/dialogs.js
+packages/app-desktop/gui/dialogs.js.map
 packages/app-desktop/gui/hooks/useEffectDebugger.d.ts
 packages/app-desktop/gui/hooks/useEffectDebugger.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js.map
@@ -734,6 +749,9 @@ packages/app-desktop/gui/hooks/usePrevious.js.map
 packages/app-desktop/gui/hooks/usePropsDebugger.d.ts
 packages/app-desktop/gui/hooks/usePropsDebugger.js
 packages/app-desktop/gui/hooks/usePropsDebugger.js.map
+packages/app-desktop/gui/lib/ToggleButton/ToggleButton.d.ts
+packages/app-desktop/gui/lib/ToggleButton/ToggleButton.js
+packages/app-desktop/gui/lib/ToggleButton/ToggleButton.js.map
 packages/app-desktop/gui/menuCommandNames.d.ts
 packages/app-desktop/gui/menuCommandNames.js
 packages/app-desktop/gui/menuCommandNames.js.map

@@ -25,12 +25,12 @@ export default class Plugin {
 	private baseDir_: string;
 	private manifest_: PluginManifest;
 	private scriptText_: string;
-	private enabled_: boolean = true;
 	private logger_: Logger = null;
 	private viewControllers_: ViewControllers = {};
 	private contentScripts_: ContentScripts = {};
 	private dispatch_: Function;
 	private eventEmitter_: any;
+	private devMode_:boolean = false;
 
 	constructor(id: string, baseDir: string, manifest: PluginManifest, scriptText: string, logger: Logger, dispatch: Function) {
 		this.id_ = id;
@@ -46,12 +46,12 @@ export default class Plugin {
 		return this.id_;
 	}
 
-	public get enabled(): boolean {
-		return this.enabled_;
+	public get devMode(): boolean {
+		return this.devMode_;
 	}
 
-	public set enabled(v: boolean) {
-		this.enabled_ = v;
+	public set devMode(v: boolean) {
+		this.devMode_ = v;
 	}
 
 	public get manifest(): PluginManifest {

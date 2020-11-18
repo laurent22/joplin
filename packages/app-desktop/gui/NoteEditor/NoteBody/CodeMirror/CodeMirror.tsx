@@ -22,6 +22,7 @@ import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import { themeStyle } from '@joplin/lib/theme';
 import { ThemeAppearance } from '@joplin/lib/themes/type';
+import dialogs from '../../../dialogs';
 
 const Note = require('@joplin/lib/models/Note.js');
 const { clipboard } = require('electron');
@@ -29,7 +30,6 @@ const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { reg } = require('@joplin/lib/registry.js');
-const dialogs = require('../../../dialogs');
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
