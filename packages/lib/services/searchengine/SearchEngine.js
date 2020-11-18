@@ -636,7 +636,7 @@ class SearchEngine {
 		for (const key of parsedQuery.keys) {
 			if (parsedQuery.terms[key].length === 0) continue;
 
-			const term = parsedQuery.terms[key][0].value;
+			const term = parsedQuery.terms[key].map(x => x.value).join(' ');
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
