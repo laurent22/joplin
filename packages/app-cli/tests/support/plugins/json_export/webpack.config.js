@@ -1,5 +1,42 @@
 const path = require('path');
+const fs = require('fs-extra');
 const CopyPlugin = require('copy-webpack-plugin');
+const WebpackOnBuildPlugin = require('on-build-webpack');
+const tar = require('tar');
+const glob = require('glob');
+
+function readManifest(manifestPath) {
+	const content = fs.readFileSync(manifestPath, 'utf8');
+	const output = JSON.parse(content);
+	if (!output.id) throw new Error(`Manifest plugin ID is not set in ${manifestPath}`);
+	return output;
+}
+
+function createPluginArchive(sourceDir, destPath) {
+	const distFiles = glob.sync(`${sourceDir}/**/*`)
+		.map(f => f.substr(sourceDir.length + 1));
+
+	fs.removeSync(destPath);
+
+	tar.create(
+		{
+			strict: true,
+			portable: true,
+			file: destPath,
+			cwd: sourceDir,
+			sync: true,
+		},
+		distFiles
+	);
+
+	console.info(`Plugin archive has been created in ${destPath}`);
+}
+
+const distDir = path.resolve(__dirname, 'dist');
+const srcDir = path.resolve(__dirname, 'src');
+const manifestPath = `${srcDir}/manifest.json`;
+const manifest = readManifest(manifestPath);
+const archiveFilePath = path.resolve(__dirname, `${manifest.id}.jpl`);
 
 module.exports = {
 	mode: 'production',
@@ -22,7 +59,7 @@ module.exports = {
 	},
 	output: {
 		filename: 'index.js',
-		path: path.resolve(__dirname, 'dist'),
+		path: distDir,
 	},
 	plugins: [
 		new CopyPlugin({
@@ -39,6 +76,9 @@ module.exports = {
 					},
 				},
 			],
+		}),
+		new WebpackOnBuildPlugin(function() {
+			createPluginArchive(distDir, archiveFilePath);
 		}),
 	],
 };

@@ -5,8 +5,44 @@ const chalk = require('chalk');
 const yosay = require('yosay');
 
 module.exports = class extends Generator {
-	prompting() {
+
+	constructor(args, opts) {
+		super(args, opts);
+
+		this.option('silent');
+		this.option('update');
+
+		if (this.options.update) {
+			// When updating, overwrite files without prompting
+			this.conflicter.force = true;
+		}
+	}
+
+
+
+	async prompting() {
 		this.log(yosay(`Welcome to the fine ${chalk.red('generator-joplin')} generator!`));
+
+		if (this.options.update && !this.options.silent) {
+			const answers = await this.prompt([
+				{
+					type: 'confirm',
+					name: 'proceed',
+					message: [
+						'Updating will overwrite all the generator files **except for the',
+						'src/ directory**. So if you have made any changes outside of src/',
+						'make sure your code is under version control so that you can inspect',
+						'the diff and re-apply your changes if needed. Do you want to proceed?',
+					].join('\n'),
+				},
+			]);
+
+			if (!answers.proceed) {
+				this.log('');
+				this.log('Operation was cancelled and no changes was made');
+				process.exit(0);
+			}
+		}
 
 		const prompts = [
 			{
@@ -36,9 +72,17 @@ module.exports = class extends Generator {
 			},
 		];
 
-		return this.prompt(prompts).then(props => {
+		if (this.options.update) {
+			const props = {};
+			for (const prompt of prompts) {
+				props[prompt.name] = '';
+			}
 			this.props = props;
-		});
+		} else {
+			return this.prompt(prompts).then(props => {
+				this.props = props;
+			});
+		}
 	}
 
 	writing() {
@@ -53,12 +97,20 @@ module.exports = class extends Generator {
 			'README.md',
 			'tsconfig.json',
 			'webpack.config.js',
+		];
+
+		const noUpdateFiles = [
 			'src/index.ts',
 			'src/manifest.json',
 		];
 
-		for (const file of files) {
+		const allFiles = files.concat(noUpdateFiles);
+
+		for (const file of allFiles) {
+			if (this.options.update && noUpdateFiles.includes(file)) continue;
+
 			const destFile = file.replace(/_TEMPLATE/, '');
+
 			this.fs.copyTpl(
 				this.templatePath(file),
 				this.destinationPath(destFile),

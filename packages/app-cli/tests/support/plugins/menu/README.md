@@ -12,3 +12,11 @@ The plugin is built using webpack, which create the compiled code in `/dist`. Th
 ## Building the plugin
 
 To build the plugin, simply run `npm run dist`.
+
+## Updating the plugin framework
+
+To update the plugin framework, run `yo joplin --update`
+
+Keep in mind that doing so will overwrite all the framework-related files **outside of the "src/" directory** (your source code will not be touched). So if you have modified any of the framework-related files, such as package.json or .gitignore, make sure your code is under version control so that you can check the diff and re-apply your changes.
+
+For that reason, it's generally best not to change any of the framework files or to do so in a way that minimises the number of changes. For example, if you want to modify the Webpack config, create a new separate JavaScript file and include it in webpack.config.js. That way, when you update, you only have to restore the line that include your file.

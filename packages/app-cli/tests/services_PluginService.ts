@@ -45,7 +45,7 @@ describe('services_PluginService', function() {
 		const service = newPluginService();
 		await service.loadAndRunPlugins([`${testPluginDir}/simple`]);
 
-		expect(() => service.pluginById('simple')).not.toThrowError();
+		expect(() => service.pluginById('org.joplinapp.plugins.Simple')).not.toThrowError();
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
@@ -60,14 +60,13 @@ describe('services_PluginService', function() {
 	it('should load and run a simple plugin and handle trailing slash', asyncTest(async () => {
 		const service = newPluginService();
 		await service.loadAndRunPlugins([`${testPluginDir}/simple/`]);
-		expect(() => service.pluginById('simple')).not.toThrowError();
+		expect(() => service.pluginById('org.joplinapp.plugins.Simple')).not.toThrowError();
 	}));
 
 	it('should load and run a plugin that uses external packages', asyncTest(async () => {
 		const service = newPluginService();
 		await service.loadAndRunPlugins([`${testPluginDir}/withExternalModules`]);
-		const plugin = service.pluginById('withexternalmodules');
-		expect(plugin.id).toBe('withexternalmodules');
+		expect(() => service.pluginById('org.joplinapp.plugins.ExternalModuleDemo')).not.toThrowError();
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(1);
@@ -81,8 +80,8 @@ describe('services_PluginService', function() {
 		const service = newPluginService();
 		await service.loadAndRunPlugins(`${testPluginDir}/multi_plugins`);
 
-		const plugin1 = service.pluginById('simple1');
-		const plugin2 = service.pluginById('simple2');
+		const plugin1 = service.pluginById('org.joplinapp.plugins.MultiPluginDemo1');
+		const plugin2 = service.pluginById('org.joplinapp.plugins.MultiPluginDemo2');
 		expect(!!plugin1).toBe(true);
 		expect(!!plugin2).toBe(true);
 
@@ -94,9 +93,10 @@ describe('services_PluginService', function() {
 	it('should load plugins from JS bundles', asyncTest(async () => {
 		const service = newPluginService();
 
-		const plugin = await service.loadPluginFromJsBundle('example', '/tmp', `
+		const plugin = await service.loadPluginFromJsBundle('/tmp', `
 			/* joplin-manifest:
 			{
+				"id": "org.joplinapp.plugins.JsBundleTest",
 				"manifest_version": 1,
 				"app_min_version": "1.4",
 				"name": "JS Bundle test",
@@ -126,7 +126,7 @@ describe('services_PluginService', function() {
 	it('should load plugins from JS bundle files', asyncTest(async () => {
 		const service = newPluginService();
 		await service.loadAndRunPlugins(`${testPluginDir}/jsbundles`);
-		expect(!!service.pluginById('example')).toBe(true);
+		expect(!!service.pluginById('org.joplinapp.plugins.JsBundleDemo')).toBe(true);
 		expect((await Folder.all()).length).toBe(1);
 	}));
 
@@ -166,7 +166,7 @@ describe('services_PluginService', function() {
 		const service = newPluginService();
 
 		for (const jsBundle of invalidJsBundles) {
-			await expectThrow(async () => await service.loadPluginFromJsBundle('example', '/tmp', jsBundle));
+			await expectThrow(async () => await service.loadPluginFromJsBundle('/tmp', jsBundle));
 		}
 	}));
 
@@ -178,9 +178,10 @@ describe('services_PluginService', function() {
 
 		const service = newPluginService();
 
-		const plugin = await service.loadPluginFromJsBundle('example', tempDir, `
+		const plugin = await service.loadPluginFromJsBundle(tempDir, `
 			/* joplin-manifest:
 			{
+				"id": "org.joplinapp.plugin.MarkdownItPluginTest",
 				"manifest_version": 1,
 				"app_min_version": "1.4",
 				"name": "JS Bundle test",
@@ -225,6 +226,7 @@ describe('services_PluginService', function() {
 		const pluginScript = `
 			/* joplin-manifest:
 			{
+				"id": "org.joplinapp.plugins.PluginTest",
 				"manifest_version": 1,
 				"app_min_version": "1.4",
 				"name": "JS Bundle test",
@@ -247,7 +249,7 @@ describe('services_PluginService', function() {
 
 		for (const testCase of testCases) {
 			const [appVersion, expected] = testCase;
-			const plugin = await newPluginService(appVersion as string).loadPluginFromJsBundle('example', '', pluginScript);
+			const plugin = await newPluginService(appVersion as string).loadPluginFromJsBundle('', pluginScript);
 			expect(plugin.enabled).toBe(expected as boolean);
 		}
 	}));
