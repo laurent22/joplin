@@ -14,13 +14,13 @@ async function main() {
 
 	console.info(`New version number: ${version}`);
 
-	console.info(await execCommandVerbose('npm', ['publish']));
+	await execCommandVerbose('npm', ['publish']);
 	await gitPullTry();
-	console.info(await execCommandVerbose('git', ['add', '-A']));
-	console.info(await execCommandVerbose('git', ['commit', '-m', `Plugin Generator release ${version}`]));
-	console.info(await execCommandVerbose('git', ['tag', tagName]));
-	console.info(await execCommandVerbose('git', ['push']));
-	console.info(await execCommandVerbose('git', ['push', '--tags']));
+	await execCommandVerbose('git', ['add', '-A']);
+	await execCommandVerbose('git', ['commit', '-m', `Plugin Generator release ${version}`]);
+	await execCommandVerbose('git', ['tag', tagName]);
+	await execCommandVerbose('git', ['push']);
+	await execCommandVerbose('git', ['push', '--tags']);
 }
 
 main().catch((error) => {
