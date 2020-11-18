@@ -7,8 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Mustafa Al-Dailemi <dailemi@hotmail."
-"com>Language-Team:\n"
+"Last-Translator: Mustafa Al-Dailemi <dailemi@hotmail.com>Language-Team:\n"
 "Language-Team: \n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
@@ -304,6 +303,8 @@ msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
+"Joplin Nextcloud App'en er enten ikke installeret ellers er den konfigureret "
+"forkert. Venligst se den fulde fejl besked neden for:"
 
 #: ElectronClient/gui/ConfigScreen.min.js:213
 #: ElectronClient/gui/ConfigScreen/ConfigScreen.js:185
@@ -885,12 +886,17 @@ msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"Standard krypterings metode er blevet ændret til en mere sikker metode og "
+"det er anbefalet at du anvender den på dine data."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"Du kan bruge værktøjet under til at genkryptere dine data, for eksempel hvis "
+"du ved at nogle af dine noter er krypteret med en forældet krypterings "
+"metode."
 
 #: ElectronClient/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1414,7 +1420,7 @@ msgstr "Vedhæft fil"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Klik genvejen"
 
 #: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
@@ -2050,6 +2056,7 @@ msgstr "Viser opsummering om noter og notesbøger."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"For at prøve at dekryptere dem igen. Kør `e2ee decrypt --retry-failed-items`"
 
 #: CliClient/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
@@ -3224,11 +3231,11 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:226
 msgid "AWS S3 URL"
-msgstr ""
+msgstr "AWS S3 URL"
 
 #: ReactNativeClient/lib/models/Setting.js:237
 msgid "AWS key"
-msgstr ""
+msgstr "AWS nøgle"
 
 #: ReactNativeClient/lib/models/Setting.js:247
 msgid "AWS secret"
@@ -3286,11 +3293,11 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:360
 msgid "Preferred light theme"
-msgstr ""
+msgstr "Foretrukket lyst tema"
 
 #: ReactNativeClient/lib/models/Setting.js:373
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "Foretrukket mørkt tema"
 
 #: ReactNativeClient/lib/models/Setting.js:377
 #, fuzzy
@@ -3313,7 +3320,7 @@ msgstr "%s / %s / %s"
 #: ReactNativeClient/lib/models/Setting.js:388
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 #: ReactNativeClient/lib/models/Setting.js:391
 msgid "Uncompleted to-dos on top"
@@ -3686,7 +3693,7 @@ msgstr "Web-clipper"
 
 #: ReactNativeClient/lib/models/Setting.js:1310
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "Tastaturgenveje "
 
 #: ReactNativeClient/lib/models/Setting.js:1317
 msgid ""
