@@ -1440,7 +1440,7 @@ msgstr ""
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
 msgid "Keyboard Shortcut"
-msgstr ""
+msgstr "Tastaturgenvej"
 
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
 #, fuzzy
