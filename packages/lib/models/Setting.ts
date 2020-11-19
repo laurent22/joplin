@@ -602,7 +602,7 @@ class Setting extends BaseModel {
 				},
 			},
 
-			startMinimized: { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon testing...') },
+			startMinimized: { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
 
 			collapsedFolderIds: { value: [], type: SettingItemType.Array, public: false },
 
