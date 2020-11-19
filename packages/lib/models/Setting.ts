@@ -33,7 +33,7 @@ export interface SettingItem {
 	isEnum?: boolean;
 	section?: string;
 	label?(): string;
-	description?(appType: string): string;
+	description?: Function;
 	options?(): any;
 	appTypes?: string[];
 	show?(settings: any): boolean;
@@ -44,7 +44,9 @@ export interface SettingItem {
 	maximum?: number;
 	step?: number;
 	onClick?(): void;
-	unitLabel?(value: any): string;
+	unitLabel?: Function;
+	needRestart?: boolean;
+	autoSave?: boolean;
 }
 
 interface SettingItems {
@@ -554,6 +556,17 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'plugins.states': {
+				value: '',
+				type: SettingItemType.Object,
+				section: 'plugins',
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Plugins'),
+				needRestart: true,
+				autoSave: true,
+			},
+
 			'plugins.devPluginPaths': {
 				value: '',
 				type: SettingItemType.String,
@@ -816,7 +829,7 @@ class Setting extends BaseModel {
 				minimum: 1,
 				maximum: 365 * 2,
 				step: 1,
-				unitLabel: (value = null) => {
+				unitLabel: (value: number = null) => {
 					return value === null ? _('days') : _('%d days', value);
 				},
 				label: () => _('Keep note history for'),

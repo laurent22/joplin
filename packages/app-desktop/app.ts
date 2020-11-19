@@ -495,12 +495,25 @@ class Application extends BaseApplication {
 		pluginLogger.addTarget(TargetType.Console, { prefix: 'Plugin Service:' });
 		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
 
+		const service = PluginService.instance();
+
 		const pluginRunner = new PluginRunner();
-		PluginService.instance().setLogger(pluginLogger);
-		PluginService.instance().initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
+		service.setLogger(pluginLogger);
+		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
+
+		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+
+		// Users can add and remove plugins from the config screen at any
+		// time, however we only effectively uninstall the plugin the next
+		// time the app is started. What plugin should be uninstalled is
+		// stored in the settings.
+		const newSettings = await service.uninstallPlugins(pluginSettings);
+		Setting.setValue('plugins.states', newSettings);
 
 		try {
-			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
+			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
+				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
+			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
 		}
@@ -508,12 +521,12 @@ class Application extends BaseApplication {
 		try {
 			if (Setting.value('plugins.devPluginPaths')) {
 				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
-				await PluginService.instance().loadAndRunPlugins(paths);
+				await service.loadAndRunPlugins(paths, pluginSettings, true);
 			}
 
 			// Also load dev plugins that have passed via command line arguments
 			if (Setting.value('startupDevPlugins')) {
-				await PluginService.instance().loadAndRunPlugins(Setting.value('startupDevPlugins'));
+				await service.loadAndRunPlugins(Setting.value('startupDevPlugins'), pluginSettings, true);
 			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
@@ -722,6 +735,14 @@ class Application extends BaseApplication {
 		// setTimeout(() => {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));
 		// }, 2000);
+
+		// this.dispatch({
+		// 	type: 'NAV_GO',
+		// 	routeName: 'Config',
+		// 	props: {
+		// 		defaultSection: 'plugins',
+		// 	},
+		// });
 
 		return null;
 	}
