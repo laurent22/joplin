@@ -89,7 +89,6 @@
   "devDependencies": {
     "@joplin/tools": "^1.0.9",
     "@testing-library/react-hooks": "^3.4.2",
-    "@types/jasmine": "^3.5.11",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "@types/react": "16.9.55",
@@ -144,6 +143,7 @@
     "react-dom": "16.9.0",
     "react-redux": "^5.0.7",
     "react-select": "^2.4.3",
+    "react-toggle-button": "^2.2.0",
     "react-tooltip": "^3.10.0",
     "redux": "^3.7.2",
     "reselect": "^4.0.0",

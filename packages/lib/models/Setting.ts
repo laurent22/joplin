@@ -33,7 +33,7 @@ export interface SettingItem {
 	isEnum?: boolean;
 	section?: string;
 	label?(): string;
-	description?(appType: string): string;
+	description?: Function;
 	options?(): any;
 	appTypes?: string[];
 	show?(settings: any): boolean;
@@ -44,7 +44,9 @@ export interface SettingItem {
 	maximum?: number;
 	step?: number;
 	onClick?(): void;
-	unitLabel?(value: any): string;
+	unitLabel?: Function;
+	needRestart?: boolean;
+	autoSave?: boolean;
 }
 
 interface SettingItems {
@@ -554,6 +556,17 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'plugins.states': {
+				value: '',
+				type: SettingItemType.Object,
+				section: 'plugins',
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Plugins'),
+				needRestart: true,
+				autoSave: true,
+			},
+
 			'plugins.devPluginPaths': {
 				value: '',
 				type: SettingItemType.String,
@@ -702,7 +715,7 @@ class Setting extends BaseModel {
 				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
 			},
 
-			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, public: false },
 			'sync.interval': {
@@ -826,7 +839,7 @@ class Setting extends BaseModel {
 				minimum: 1,
 				maximum: 365 * 2,
 				step: 1,
-				unitLabel: (value = null) => {
+				unitLabel: (value: number = null) => {
 					return value === null ? _('days') : _('%d days', value);
 				},
 				label: () => _('Keep note history for'),
