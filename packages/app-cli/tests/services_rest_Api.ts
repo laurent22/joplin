@@ -538,7 +538,7 @@ describe('services_rest_Api', function() {
 			const r3 = await api.route(RequestMethod.GET, 'folders', { ...baseQuery, page: 3 });
 
 			expect(r3.items.length).toBe(0);
-			expect(r3.has_more).toBe(undefined);
+			expect(r3.has_more).toBe(false);
 		}
 
 		{
@@ -560,7 +560,7 @@ describe('services_rest_Api', function() {
 
 			expect(r2.items.length).toBe(1);
 			expect(r2.items[0].title).toBe('folder4');
-			expect(r2.has_more).toBe(undefined);
+			expect(r2.has_more).toBe(false);
 		}
 	}));
 
