@@ -26,8 +26,8 @@ With plugins you can directly modify Joplin by adding new features to the applic
 - Create a module to export or import data into Joplin
 - Define new settings and setting sections, and get/set them from the plugin
 - Create a new Markdown plugin to render custom markup.
-- Create an editor plugin to modify low-level the behaviour of the Markdown editor (CodeMirror)
+- Create an editor plugin to modify, at a low-level, the behaviour of the Markdown editor (CodeMirror)
 
 To get started with the plugin API, check the [Get Started](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md) page or have a look at the [TOC tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md).
 
-Once you are familiar with the API, you can have a look at the [plugin API reference](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md) for a detailed documentation about each supported feature.
+Once you are familiar with the API, you can have a look at the [plugin API reference](https://joplinapp.org/api/references/plugin_api/classes/joplin.html) for a detailed documentation about each supported feature.
