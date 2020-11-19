@@ -170,8 +170,8 @@ export class Bridge {
 		return require('electron').shell.openExternal(url);
 	}
 
-	openItem(fullPath: string) {
-		return require('electron').shell.openItem(fullPath);
+	async openItem(fullPath: string) {
+		return require('electron').shell.openPath(fullPath);
 	}
 
 	checkForUpdates(inBackground: boolean, window: any, logFilePath: string, options: any) {

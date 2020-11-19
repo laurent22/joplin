@@ -16,12 +16,12 @@ import { MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/typ
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
+import bridge from '../services/bridge';
 
 const { connect } = require('react-redux');
 const { reg } = require('@joplin/lib/registry.js');
 const packageInfo = require('../packageInfo.js');
-const bridge = require('electron').remote.require('./bridge').default;
-const { shell, clipboard } = require('electron');
+const { clipboard } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const TemplateUtils = require('@joplin/lib/TemplateUtils');
@@ -300,7 +300,7 @@ function useMenu(props: Props) {
 		}, {
 			label: _('Open template directory'),
 			click: () => {
-				shell.openItem(Setting.value('templateDir'));
+				bridge().openItem(Setting.value('templateDir'));
 			},
 		}, {
 			label: _('Refresh templates'),
