@@ -91,7 +91,7 @@ Note that you should most likely always specify a scope because otherwise it wil
 
 ## TypeScript
 
-The application was originally written JavaScript, however it has slowly been migrated to [TypeScript](https://www.typescriptlang.org/). New classes and files should be written in TypeScript. All compiled files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
+The application was originally written in JavaScript, however it has slowly been migrated to [TypeScript](https://www.typescriptlang.org/). New classes and files should be written in TypeScript. All compiled files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
 
 ## Hot reload
 
