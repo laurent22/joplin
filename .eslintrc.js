@@ -15,7 +15,8 @@ module.exports = {
 		'Atomics': 'readonly',
 		'SharedArrayBuffer': 'readonly',
 
-		// Jasmine variables
+		// Jest variables
+		'test': 'readonly',
 		'expect': 'readonly',
 		'describe': 'readonly',
 		'it': 'readonly',
@@ -23,10 +24,6 @@ module.exports = {
 		'afterAll': 'readonly',
 		'beforeEach': 'readonly',
 		'afterEach': 'readonly',
-		'jasmine': 'readonly',
-
-		// Jest variables
-		'test': 'readonly',
 
 		// React Native variables
 		'__DEV__': 'readonly',

@@ -23,12 +23,6 @@ let engine = null;
 
 const ids = (array) => array.map(a => a.id);
 
-// For pretty printing.
-// See https://stackoverflow.com/questions/23676459/karma-jasmine-pretty-printing-object-comparison/26324116
-// jasmine.pp = function(obj) {
-// 	return JSON.stringify(obj, undefined, 2);
-//   };
-
 describe('services_SearchFilter', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);

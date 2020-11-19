@@ -131,9 +131,11 @@ setSyncTargetName('memory');
 
 const syncDir = `${__dirname}/../tests/sync`;
 
-let defaultJasmineTimeout = 90 * 1000;
-if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
-if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
+// TODO: Should probably update this for Jest?
+
+// let defaultJasmineTimeout = 90 * 1000;
+// if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
+// if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
 
 const dbLogger = new Logger();
 dbLogger.addTarget('console');
@@ -544,7 +546,7 @@ function asyncTest(callback) {
 			await callback();
 		} catch (error) {
 			if (error.constructor && error.constructor.name === 'ExpectationFailed') {
-				// OK - will be reported by Jasmine
+				// OK - will be reported by Jest
 			} else {
 				// Better to rethrow exception as stack trace is more useful in this case
 				throw error;
@@ -656,15 +658,17 @@ async function createTempDir() {
 	return tempDirPath;
 }
 
-function mockDate(year, month, day, tick) {
-	const fixedDate = new Date(2020, 0, 1);
-	jasmine.clock().install();
-	jasmine.clock().mockDate(fixedDate);
-}
+// TODO: Update for Jest
 
-function restoreDate() {
-	jasmine.clock().uninstall();
-}
+// function mockDate(year, month, day, tick) {
+// 	const fixedDate = new Date(2020, 0, 1);
+// 	jasmine.clock().install();
+// 	jasmine.clock().mockDate(fixedDate);
+// }
+
+// function restoreDate() {
+// 	jasmine.clock().uninstall();
+// }
 
 // Application for feature integration testing
 class TestApp extends BaseApplication {
@@ -734,4 +738,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, mockDate, restoreDate, TestApp };
+module.exports = { synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

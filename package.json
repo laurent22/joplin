@@ -39,7 +39,6 @@
     }
   },
   "devDependencies": {
-    "@types/jasmine": "^3.6.0",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
     "eslint": "^7.6.0",
@@ -50,7 +49,6 @@
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "husky": "^3.0.2",
-    "jasmine": "^3.5.0",
     "lerna": "^3.22.1",
     "lint-staged": "^9.2.1",
     "typedoc": "^0.17.8",
