@@ -409,9 +409,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				padding-bottom: 400px !important;
 			}
 
-			// Add a fixed right padding to account for the appearance (and disappearance) 
-			// of the sidebar
 			.CodeMirror-sizer {
+				/* Add a fixed right padding to account for the appearance (and disappearance) */
+				/* of the sidebar */
 				padding-right: 10px !important;
 			}
 
