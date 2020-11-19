@@ -7,6 +7,12 @@
   },
   "license": "MIT",
   "scripts": {
+    "addPackageCli": "lerna add --scope joplin",
+    "addPackageCliD": "lerna add --scope joplin -D",
+    "addPackageDesktop": "lerna add --scope @joplin/app-desktop",
+    "addPackageDesktopD": "lerna add --scope @joplin/app-desktop -D",
+    "addPackageMobile": "lerna add --scope @joplin/app-mobile",
+    "addPackageMobileD": "lerna add --scope @joplin/app-mobile -D",
     "buildApiDoc": "npm start --prefix=packages/app-cli -- apidoc ../../readme/api/references/rest_api.md",
     "buildDoc": "./packages/tools/build-all.sh",
     "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/api/references/plugin_api packages/lib/services/plugins/api/",
@@ -26,11 +32,11 @@
     "releaseDesktop": "node packages/tools/release-electron.js",
     "releasePluginGenerator": "node packages/tools/release-plugin-generator.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
-    "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
-    "tsc": "lerna run tsc --stream --parallel",
-    "test": "lerna run test --stream",
     "test-ci": "lerna run test-ci --stream",
+    "test": "lerna run test --stream",
+    "tsc": "lerna run tsc --stream --parallel",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
+    "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "lerna run watch --stream --parallel"
   },
   "husky": {

@@ -28,7 +28,7 @@ async function recreateExportDir() {
 function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 	for (let i = 0; i < fieldNames.length; i++) {
 		const f = fieldNames[i];
-		expect(model1[f]).toBe(model2[f], `For key ${f}`);
+		expect(model1[f]).toBe(model2[f]);
 	}
 }
 
