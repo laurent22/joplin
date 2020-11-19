@@ -75,6 +75,12 @@ export default function useCursorUtils(CodeMirror: any) {
 		// Batches the insert operations, if this wasn't done the inserts
 		// could potentially overwrite one another
 		this.operation(() => {
+
+			let num = 0;
+			if (string1.match(/^\d/)) {
+				num = Number(string1.substr(0,string1.length - 2));
+			}
+
 			for (let i = 0; i < selectedStrings.length; i++) {
 				const selected = selectedStrings[i];
 
@@ -87,7 +93,12 @@ export default function useCursorUtils(CodeMirror: any) {
 					// Only add the list token if it's not already there
 					// if it is, remove it
 					if (!line.startsWith(string1)) {
-						lines[j] = string1 + line;
+						if (num != 0) {
+							lines[j] = `${num.toString()}. ${line}`;
+							num++;
+						} else {
+							lines[j] = string1 + line;
+						}
 					} else {
 						lines[j] = line.substr(string1.length, line.length - string1.length);
 					}
