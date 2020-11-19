@@ -24,6 +24,7 @@
     "releaseCli": "node packages/tools/release-cli.js",
     "releaseClipper": "node packages/tools/release-clipper.js",
     "releaseDesktop": "node packages/tools/release-electron.js",
+    "releasePluginGenerator": "node packages/tools/release-plugin-generator.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "tsc": "lerna run tsc --stream --parallel",

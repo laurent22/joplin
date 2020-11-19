@@ -1,24 +1,19 @@
 #!/bin/bash
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-TEMP_DIR="$SCRIPT_DIR/_temp"
 
-rm -rf "$TEMP_DIR"
-mkdir -p "$TEMP_DIR"
-cd "$TEMP_DIR"
+cd "$SCRIPT_DIR/jpl_test/" && yo joplin --update --skip-install --silent
+sed -i /*.jpl/d .gitignore
 
-yo joplin
-
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/dialog/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/events/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/json_export/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/menu/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/multi_selection/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/register_command/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/selected_text/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/editor_context_menu/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/settings/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/toc/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/withExternalModules/" 
-rsync -a --delete --exclude "src/" --exclude "package.json" --exclude "package-lock.json" --exclude "node_modules/" --exclude "dist/" "$TEMP_DIR/" "$SCRIPT_DIR/content_script/" 
-
-rm -rf "$TEMP_DIR"
+cd "$SCRIPT_DIR/codemirror_content_script/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/content_script/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/dialog/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/editor_context_menu/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/events/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/json_export/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/menu/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/multi_selection/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/register_command/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/selected_text/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/settings/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/toc/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/withExternalModules/" && yo joplin --update --skip-install --silent

@@ -35,6 +35,7 @@ module.exports = {
 		'/build/',
 		'test-utils.js',
 		'file_api_driver.js',
+		'/tests\\/tmp/',
 	],
 
 	// To avoid this warning:

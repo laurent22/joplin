@@ -1,5 +1,5 @@
 {
-  "name": "org.joplinapp.FirstJplPlugin",
+  "name": "joplin_plugin",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -7,7 +7,6 @@
     "postinstall": "npm run dist"
   },
   "keywords": [],
-  "author": "",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^14.0.14",

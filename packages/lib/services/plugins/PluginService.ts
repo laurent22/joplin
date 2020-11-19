@@ -95,7 +95,7 @@ export default class PluginService extends BaseService {
 		};
 	}
 
-	public async loadPluginFromJsBundle(baseDir: string, jsBundleString: string, pluginIdIfNotSpecified: string): Promise<Plugin> {
+	public async loadPluginFromJsBundle(baseDir: string, jsBundleString: string, pluginIdIfNotSpecified: string = ''): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const r = await this.parsePluginJsBundle(jsBundleString);
