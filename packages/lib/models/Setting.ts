@@ -598,11 +598,11 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Show tray icon'),
 				description: () => {
-					return platform === 'linux' ? _('Note: Does not work in linux.') : _('This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.');
+					return platform === 'linux' ? _('Note: Does not work in all desktop environments.') : _('This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.');
 				},
 			},
 
-			startMinimized: { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
+			startMinimized: { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon testing...') },
 
 			collapsedFolderIds: { value: [], type: SettingItemType.Array, public: false },
 
