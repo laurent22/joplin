@@ -490,15 +490,9 @@ class Application extends BaseApplication {
 	}
 
 	private async initPluginService() {
-		const pluginLogger = new Logger();
-		pluginLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-plugins.txt` });
-		pluginLogger.addTarget(TargetType.Console, { prefix: 'Plugin Service:' });
-		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
-
 		const service = PluginService.instance();
 
 		const pluginRunner = new PluginRunner();
-		service.setLogger(pluginLogger);
 		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));

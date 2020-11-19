@@ -6,6 +6,7 @@ const shim = require('./shim').default;
 class Database {
 	constructor(driver) {
 		this.debugMode_ = false;
+		this.sqlQueryLogEnabled_ = false;
 		this.driver_ = driver;
 		this.logger_ = new Logger();
 		this.logExcludedQueryTypes_ = [];
@@ -238,6 +239,8 @@ class Database {
 	}
 
 	logQuery(sql, params = null) {
+		if (!this.sqlQueryLogEnabled_) return;
+
 		if (this.logExcludedQueryTypes_.length) {
 			const temp = sql.toLowerCase();
 			for (let i = 0; i < this.logExcludedQueryTypes_.length; i++) {

@@ -6,9 +6,12 @@ import BaseService  from '../BaseService';
 import shim from '../../shim';
 import { filename, dirname, rtrimSlashes, basename } from '../../path-utils';
 import Setting from '../../models/Setting';
+import Logger from '../../Logger';
 const compareVersions = require('compare-versions');
 const uslug = require('uslug');
 const md5File = require('md5-file/promise');
+
+const logger = Logger.create('PluginService');
 
 // Plugin data is split into two:
 //
@@ -213,7 +216,7 @@ export default class PluginService extends BaseService {
 				distPath = `${path}/dist`;
 			}
 
-			this.logger().info(`PluginService: Loading plugin from ${path}`);
+			logger.info(`Loading plugin from ${path}`);
 
 			const scriptText = await fsDriver.readFile(`${distPath}/index.js`);
 			const manifestText = await fsDriver.readFile(`${distPath}/manifest.json`);
@@ -242,7 +245,7 @@ export default class PluginService extends BaseService {
 
 		const manifest = manifestFromObject(manifestObj);
 
-		const plugin = new Plugin(baseDir, manifest, scriptText, this.logger(), (action: any) => this.store_.dispatch(action));
+		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action));
 
 		for (const msg of deprecationNotices) {
 			plugin.deprecationNotice('1.5', msg);
@@ -274,7 +277,7 @@ export default class PluginService extends BaseService {
 
 		for (const pluginPath of pluginPaths) {
 			if (pluginPath.indexOf('_') === 0) {
-				this.logger().info(`PluginService: Plugin name starts with "_" and has not been loaded: ${pluginPath}`);
+				logger.info(`Plugin name starts with "_" and has not been loaded: ${pluginPath}`);
 				continue;
 			}
 
@@ -289,7 +292,7 @@ export default class PluginService extends BaseService {
 				this.setPluginAt(plugin.id, plugin);
 
 				if (!this.pluginEnabled(settings, plugin.id)) {
-					this.logger().info(`PluginService: Not running disabled plugin: "${plugin.id}"`);
+					logger.info(`Not running disabled plugin: "${plugin.id}"`);
 					continue;
 				}
 
@@ -297,14 +300,14 @@ export default class PluginService extends BaseService {
 
 				await this.runPlugin(plugin);
 			} catch (error) {
-				this.logger().error(`PluginService: Could not load plugin: ${pluginPath}`, error);
+				logger.error(`Could not load plugin: ${pluginPath}`, error);
 			}
 		}
 	}
 
 	public async runPlugin(plugin: Plugin) {
 		if (compareVersions(this.appVersion_, plugin.manifest.app_min_version) < 0) {
-			throw new Error(`PluginService: Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
+			throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
 		} else {
 			this.store_.dispatch({
 				type: 'PLUGIN_ADD',
@@ -316,12 +319,12 @@ export default class PluginService extends BaseService {
 			});
 		}
 
-		const pluginApi = new Global(this.logger(), this.platformImplementation_, plugin, this.store_);
+		const pluginApi = new Global(this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);
 	}
 
 	public async installPlugin(jplPath: string): Promise<Plugin> {
-		this.logger().info(`PluginService: Installing plugin: "${jplPath}"`);
+		logger.info(`Installing plugin: "${jplPath}"`);
 
 		const destPath = `${Setting.value('pluginDir')}/${basename(jplPath)}`;
 		await shim.fsDriver().copy(jplPath, destPath);
@@ -343,12 +346,12 @@ export default class PluginService extends BaseService {
 	}
 
 	public async uninstallPlugin(pluginId: string) {
-		this.logger().info(`PluginService: Uninstalling plugin: "${pluginId}"`);
+		logger.info(`Uninstalling plugin: "${pluginId}"`);
 
 		const path = await this.pluginPath(pluginId);
 		if (!path) {
 			// Plugin might have already been deleted
-			this.logger().error(`PluginService: Could not find plugin path to uninstall - nothing will be done: ${pluginId}`);
+			logger.error(`Could not find plugin path to uninstall - nothing will be done: ${pluginId}`);
 		} else {
 			await shim.fsDriver().remove(path);
 		}

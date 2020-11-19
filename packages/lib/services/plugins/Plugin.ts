@@ -6,6 +6,8 @@ import { ContentScriptType } from './api/types';
 import Logger from '../../Logger';
 const EventEmitter = require('events');
 
+const logger = Logger.create('Plugin');
+
 interface ViewControllers {
 	[key: string]: ViewController;
 }
@@ -24,18 +26,16 @@ export default class Plugin {
 	private baseDir_: string;
 	private manifest_: PluginManifest;
 	private scriptText_: string;
-	private logger_: Logger = null;
 	private viewControllers_: ViewControllers = {};
 	private contentScripts_: ContentScripts = {};
 	private dispatch_: Function;
 	private eventEmitter_: any;
 	private devMode_: boolean = false;
 
-	constructor(baseDir: string, manifest: PluginManifest, scriptText: string, logger: Logger, dispatch: Function) {
+	constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
-		this.logger_ = logger;
 		this.dispatch_ = dispatch;
 		this.eventEmitter_ = new EventEmitter();
 	}
@@ -89,7 +89,7 @@ export default class Plugin {
 
 		this.contentScripts_[type].push({ id, path: absolutePath });
 
-		this.logger_.debug(`Plugin: ${this.id}: Registered content script: ${type}: ${id}: ${absolutePath}`);
+		logger.debug(`"${this.id}": Registered content script: ${type}: ${id}: ${absolutePath}`);
 
 		this.dispatch_({
 			type: 'PLUGIN_CONTENT_SCRIPTS_ADD',
@@ -117,7 +117,7 @@ export default class Plugin {
 	}
 
 	public deprecationNotice(goneInVersion: string, message: string) {
-		this.logger_.warn(`Plugin: ${this.id}: DEPRECATION NOTICE: ${message} This will stop working in version ${goneInVersion}.`);
+		logger.warn(`"${this.id}": DEPRECATION NOTICE: ${message} This will stop working in version ${goneInVersion}.`);
 	}
 
 }

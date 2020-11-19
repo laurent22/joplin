@@ -2,16 +2,16 @@ import Plugin from '../Plugin';
 import Logger from '../../../Logger';
 import { ContentScriptType, Script } from './types';
 
+const logger = Logger.create('joplin.plugins');
+
 /**
  * This class provides access to plugin-related features.
  */
 export default class JoplinPlugins {
 
-	private logger: Logger;
 	private plugin: Plugin;
 
-	public constructor(logger: Logger, plugin: Plugin) {
-		this.logger = logger;
+	public constructor(plugin: Plugin) {
 		this.plugin = plugin;
 	}
 
@@ -31,7 +31,7 @@ export default class JoplinPlugins {
 		if (script.onStart) {
 			const startTime = Date.now();
 
-			this.logger.info(`Starting plugin: ${this.plugin.id}`);
+			logger.info(`Starting plugin: ${this.plugin.id}`);
 
 			// We don't use `await` when calling onStart because the plugin might be awaiting
 			// in that call too (for example, when opening a dialog on startup) so we don't
@@ -42,9 +42,9 @@ export default class JoplinPlugins {
 				// be handled correctly by loggers, etc.
 				const newError: Error = new Error(error.message);
 				newError.stack = error.stack;
-				this.logger.error(`Uncaught exception in plugin "${this.plugin.id}":`, newError);
+				logger.error(`Uncaught exception in plugin "${this.plugin.id}":`, newError);
 			}).then(() => {
-				this.logger.info(`Finished running onStart handler: ${this.plugin.id} (Took ${Date.now() - startTime}ms)`);
+				logger.info(`Finished running onStart handler: ${this.plugin.id} (Took ${Date.now() - startTime}ms)`);
 				this.plugin.emit('started');
 			});
 		}

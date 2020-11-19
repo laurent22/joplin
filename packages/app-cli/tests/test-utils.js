@@ -147,6 +147,8 @@ logger.addTarget('console');
 logger.addTarget('file', { path: `${logDir}/log.txt` });
 logger.setLevel(Logger.LEVEL_WARN); // Set to DEBUG to display sync process in console
 
+Logger.initializeGlobalLogger(logger);
+
 BaseItem.loadClass('Note', Note);
 BaseItem.loadClass('Folder', Folder);
 BaseItem.loadClass('Resource', Resource);

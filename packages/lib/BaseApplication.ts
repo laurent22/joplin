@@ -46,13 +46,13 @@ const MigrationService = require('./services/MigrationService');
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
+const appLogger = Logger.create('App');
+
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
 
 export default class BaseApplication {
 
-	private logger_: Logger;
-	private dbLogger_: Logger;
 	private eventEmitter_: any;
 	private scheduleAutoAddResourcesIID_: any = null;
 	private database_: any = null;
@@ -68,10 +68,7 @@ export default class BaseApplication {
 	protected store_: any = null;
 
 	constructor() {
-		this.logger_ = new Logger();
-		this.dbLogger_ = new Logger();
 		this.eventEmitter_ = new EventEmitter();
-
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
 	}
 
@@ -101,15 +98,13 @@ export default class BaseApplication {
 		EncryptionService.instance_ = null;
 		DecryptionWorker.instance_ = null;
 
-		this.logger_.info('Base application terminated...');
-		this.logger_ = null;
-		this.dbLogger_ = null;
+		appLogger.info('Base application terminated...');
 		this.eventEmitter_ = null;
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = null;
 	}
 
 	logger() {
-		return this.logger_;
+		return appLogger;
 	}
 
 	public store() {
@@ -289,7 +284,7 @@ export default class BaseApplication {
 			parentType = BaseModel.TYPE_SMART_FILTER;
 		}
 
-		this.logger().debug('Refreshing notes:', parentType, parentId);
+		appLogger.debug('Refreshing notes:', parentType, parentId);
 
 		const options = {
 			order: stateUtils.notesOrder(state.settings),
@@ -460,7 +455,7 @@ export default class BaseApplication {
 	}
 
 	async generalMiddleware(store: any, next: any, action: any) {
-		// this.logger().debug('Reducer action', this.reducerActionToString(action));
+		// appLogger.debug('Reducer action', this.reducerActionToString(action));
 
 		const result = next(action);
 		const newState = store.getState();
@@ -701,35 +696,30 @@ export default class BaseApplication {
 		const extraFlags = await this.readFlagsFromFile(`${profileDir}/flags.txt`);
 		initArgs = Object.assign(initArgs, extraFlags);
 
-		this.logger_.addTarget(TargetType.File, { path: `${profileDir}/log.txt` });
-		if (Setting.value('env') === 'dev' && !shim.isTestingEnv()) {
-			// this.logger_.addTarget(TargetType.Console, { level: Logger.LEVEL_DEBUG });
-		}
-		this.logger_.setLevel(initArgs.logLevel);
 
-		reg.setLogger(this.logger_);
+
+
+		const globalLogger = new Logger();
+		globalLogger.addTarget(TargetType.File, { path: `${profileDir}/log.txt` });
+		if (Setting.value('appType') === 'desktop') {
+			globalLogger.addTarget(TargetType.Console);
+		}
+		globalLogger.setLevel(initArgs.logLevel);
+		Logger.initializeGlobalLogger(globalLogger);
+
+
+
+		reg.setLogger(Logger.create(''));
 		reg.dispatch = () => {};
 
-		BaseService.logger_ = this.logger_;
-		// require('lib/ntpDate').setLogger(reg.logger());
+		BaseService.logger_ = globalLogger;
 
-		this.dbLogger_.addTarget(TargetType.File, { path: `${profileDir}/log-database.txt` });
-		this.dbLogger_.setLevel(initArgs.logLevel);
 
-		if (Setting.value('appType') === 'desktop') {
-			this.logger_.addTarget(TargetType.Console, { level: Logger.LEVEL_WARN });
-			this.dbLogger_.addTarget(TargetType.Console, { level: Logger.LEVEL_WARN });
-		}
-
-		if (Setting.value('env') === 'dev') {
-			this.dbLogger_.setLevel(Logger.LEVEL_INFO);
-		}
-
-		this.logger_.info(`Profile directory: ${profileDir}`);
+		appLogger.info(`Profile directory: ${profileDir}`);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
-		this.database_.setLogger(this.dbLogger_);
+		this.database_.setLogger(globalLogger);
 
 		// if (Setting.value('env') === 'dev') {
 		// 	if (shim.isElectron()) {
@@ -756,7 +746,7 @@ export default class BaseApplication {
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriver);
 
-		this.logger_.info(`Client ID: ${Setting.value('clientId')}`);
+		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);
@@ -817,9 +807,9 @@ export default class BaseApplication {
 
 		KvStore.instance().setDb(reg.db());
 
-		EncryptionService.instance().setLogger(this.logger_);
+		EncryptionService.instance().setLogger(globalLogger);
 		BaseItem.encryptionService_ = EncryptionService.instance();
-		DecryptionWorker.instance().setLogger(this.logger_);
+		DecryptionWorker.instance().setLogger(globalLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
@@ -828,7 +818,7 @@ export default class BaseApplication {
 		ResourceFetcher.instance().setFileApi(() => {
 			return reg.syncTarget().fileApi();
 		});
-		ResourceFetcher.instance().setLogger(this.logger_);
+		ResourceFetcher.instance().setLogger(globalLogger);
 		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
 		ResourceFetcher.instance().start();
 
