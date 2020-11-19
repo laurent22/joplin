@@ -542,7 +542,11 @@ export default class BaseApplication {
 		}
 
 		if (action.type === 'NOTE_UPDATE_ONE') {
-			if (!action.changedFields.length || action.changedFields.includes('parent_id') || action.changedFields.includes('encryption_applied')) {
+			if (!action.changedFields.length ||
+				action.changedFields.includes('parent_id') ||
+				action.changedFields.includes('encryption_applied') ||
+				action.changedFields.includes('is_conflict')
+			) {
 				refreshFolders = true;
 			}
 		}
