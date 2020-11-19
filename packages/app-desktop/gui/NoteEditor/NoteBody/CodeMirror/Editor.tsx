@@ -27,6 +27,8 @@ import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
 
 import 'codemirror/mode/meta';
 
+import Setting from '@joplin/lib/models/Setting';
+
 // import eventManager from '@joplin/lib/eventManager';
 
 const { reg } = require('@joplin/lib/registry.js');
@@ -88,7 +90,6 @@ export interface EditorProps {
 	plugins: PluginStates;
 	onChange: any;
 	onScroll: any;
-	onEditorContextMenu: any;
 	onEditorPaste: any;
 }
 
@@ -121,13 +122,6 @@ function Editor(props: EditorProps, ref: any) {
 	const editor_scroll = useCallback((_cm: any) => {
 		props.onScroll();
 	}, [props.onScroll]);
-
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	const editor_mousedown = useCallback((_cm: any, event: any) => {
-		if (event && event.button === 2) {
-			props.onEditorContextMenu();
-		}
-	}, [props.onEditorContextMenu]);
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 	const editor_paste = useCallback((_cm: any, _event: any) => {
@@ -163,7 +157,7 @@ function Editor(props: EditorProps, ref: any) {
 			mode: props.mode,
 			readOnly: props.readOnly,
 			autoCloseBrackets: props.autoMatchBraces,
-			inputStyle: 'textarea', // contenteditable loses cursor position on focus change, use textarea instead
+			inputStyle: Setting.value('editor.spellcheckBeta') ? 'contenteditable' : 'textarea',
 			lineWrapping: true,
 			lineNumbers: false,
 			indentWithTabs: true,
@@ -177,7 +171,6 @@ function Editor(props: EditorProps, ref: any) {
 		setEditor(cm);
 		cm.on('change', editor_change);
 		cm.on('scroll', editor_scroll);
-		cm.on('mousedown', editor_mousedown);
 		cm.on('paste', editor_paste);
 		cm.on('drop', editor_drop);
 		cm.on('dragover', editor_drag);
@@ -191,7 +184,6 @@ function Editor(props: EditorProps, ref: any) {
 			// Clean up codemirror
 			cm.off('change', editor_change);
 			cm.off('scroll', editor_scroll);
-			cm.off('mousedown', editor_mousedown);
 			cm.off('paste', editor_paste);
 			cm.off('drop', editor_drop);
 			cm.off('dragover', editor_drag);
@@ -250,7 +242,7 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, [pluginOptions, editor]);
 
-	return <div style={props.style} ref={editorParent} />;
+	return <div className='codeMirrorEditor' style={props.style} ref={editorParent} />;
 }
 
 export default forwardRef(Editor);

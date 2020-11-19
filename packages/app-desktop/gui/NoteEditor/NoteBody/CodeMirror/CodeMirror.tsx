@@ -22,6 +22,7 @@ import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import { themeStyle } from '@joplin/lib/theme';
 import { ThemeAppearance } from '@joplin/lib/themes/type';
+import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import dialogs from '../../../dialogs';
 
 const Note = require('@joplin/lib/models/Note.js');
@@ -254,54 +255,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			editorRef.current.replaceSelection(clipboard.readText());
 		}
 	}, []);
-
-	const onEditorContextMenu = useCallback(() => {
-		const menu = new Menu();
-
-		const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
-		const clipboardText = clipboard.readText();
-
-		menu.append(
-			new MenuItem({
-				label: _('Cut'),
-				enabled: hasSelectedText,
-				click: async () => {
-					editorCutText();
-				},
-			})
-		);
-
-		menu.append(
-			new MenuItem({
-				label: _('Copy'),
-				enabled: hasSelectedText,
-				click: async () => {
-					editorCopyText();
-				},
-			})
-		);
-
-		menu.append(
-			new MenuItem({
-				label: _('Paste'),
-				enabled: true,
-				click: async () => {
-					if (clipboardText) {
-						editorPasteText();
-					} else {
-						// To handle pasting images
-						onEditorPaste();
-					}
-				},
-			})
-		);
-
-		menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
-			menu.append(new MenuItem(item));
-		});
-
-		menu.popup(bridge().window());
-	}, [props.content, editorCutText, editorPasteText, editorCopyText, onEditorPaste, props.plugins]);
 
 	const loadScript = async (script: any) => {
 		return new Promise((resolve) => {
@@ -629,6 +582,91 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		editorRef.current.refresh();
 	}, [rootSize, styles.editor, props.visiblePanes]);
 
+	// The below code adds support for spellchecking when it is enabled
+	// It might be buggy, refer to the below issue
+	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
+	useEffect(() => {
+		function pointerInsideEditor(x: number, y: number) {
+			const elements = document.getElementsByClassName('codeMirrorEditor');
+			if (!elements.length) return null;
+			const rect = elements[0].getBoundingClientRect();
+			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
+		}
+
+		function onContextMenu(_event: any, params: any) {
+			if (!pointerInsideEditor(params.x, params.y)) return;
+
+			const menu = new Menu();
+
+			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+			const clipboardText = clipboard.readText();
+
+			menu.append(
+				new MenuItem({
+					label: _('Cut'),
+					enabled: hasSelectedText,
+					click: async () => {
+						editorCutText();
+					},
+				})
+			);
+
+			menu.append(
+				new MenuItem({
+					label: _('Copy'),
+					enabled: hasSelectedText,
+					click: async () => {
+						editorCopyText();
+					},
+				})
+			);
+
+			menu.append(
+				new MenuItem({
+					label: _('Paste'),
+					enabled: true,
+					click: async () => {
+						if (clipboardText) {
+							editorPasteText();
+						} else {
+							// To handle pasting images
+							onEditorPaste();
+						}
+					},
+				})
+			);
+
+			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
+
+			for (const item of spellCheckerMenuItems) {
+				menu.append(new MenuItem(item));
+			}
+
+			// Typically CodeMirror handles all interactions itself (highlighting etc.)
+			// But in the case of clicking a mispelled word, we need electron to handle the click
+			// The result is that CodeMirror doesn't know what's been selected and doesn't
+			// move the cursor into the correct location.
+			// and when the user selects a new spelling it will be inserted in the wrong location
+			// So in this situation, we use must manually align the internal codemirror selection
+			// to the contextmenu selection
+			if (editorRef.current && spellCheckerMenuItems.length > 0) {
+				editorRef.current.alignSelection(params);
+			}
+
+			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
+				menu.append(new MenuItem(item));
+			});
+
+			menu.popup();
+		}
+
+		bridge().window().webContents.on('context-menu', onContextMenu);
+
+		return () => {
+			bridge().window().webContents.off('context-menu', onContextMenu);
+		};
+	}, []);
+
 	function renderEditor() {
 
 		return (
@@ -646,7 +684,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					plugins={props.plugins}
 					onChange={codeMirror_change}
 					onScroll={editor_scroll}
-					onEditorContextMenu={onEditorContextMenu}
 					onEditorPaste={onEditorPaste}
 				/>
 			</div>
