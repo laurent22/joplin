@@ -3,7 +3,9 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
+import Setting from '@joplin/lib/models/Setting';
 
+const fs = require('fs-extra');
 const { asyncTest, expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('./test-utils.js');
 const Note = require('@joplin/lib/models/Note');
 const Folder = require('@joplin/lib/models/Folder');
@@ -258,6 +260,25 @@ describe('services_PluginService', function() {
 				await expectThrow(() => service.runPlugin(plugin));
 			}
 		}
+	}));
+
+	it('should install a plugin', asyncTest(async () => {
+		const service = newPluginService();
+		const pluginPath = `${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`;
+		await service.installPlugin(pluginPath);
+		const installedPluginPath = `${Setting.value('pluginDir')}/org.joplinapp.FirstJplPlugin.jpl`;
+		expect(await fs.existsSync(installedPluginPath)).toBe(true);
+	}));
+
+	it('should rename the plugin archive to the right name', asyncTest(async () => {
+		const tempDir = await createTempDir();
+		const service = newPluginService();
+		const pluginPath = `${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`;
+		const tempPath = `${tempDir}/something.jpl`;
+		await shim.fsDriver().copy(pluginPath, tempPath);
+		const installedPluginPath = `${Setting.value('pluginDir')}/org.joplinapp.FirstJplPlugin.jpl`;
+		await service.installPlugin(tempPath);
+		expect(await fs.existsSync(installedPluginPath)).toBe(true);
 	}));
 
 });

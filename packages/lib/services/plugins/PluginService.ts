@@ -4,7 +4,7 @@ import Global from './api/Global';
 import BasePluginRunner from './BasePluginRunner';
 import BaseService  from '../BaseService';
 import shim from '../../shim';
-import { filename, dirname, rtrimSlashes, basename } from '../../path-utils';
+import { filename, dirname, rtrimSlashes } from '../../path-utils';
 import Setting from '../../models/Setting';
 import Logger from '../../Logger';
 const compareVersions = require('compare-versions');
@@ -251,6 +251,11 @@ export default class PluginService extends BaseService {
 			plugin.deprecationNotice('1.5', msg);
 		}
 
+		// Sanity check, although at that point the plugin ID should have
+		// been set, either automatically, or because it was defined in the
+		// manifest.
+		if (!plugin.id) throw new Error('Could not load plugin: ID is not set');
+
 		return plugin;
 	}
 
@@ -326,8 +331,15 @@ export default class PluginService extends BaseService {
 	public async installPlugin(jplPath: string): Promise<Plugin> {
 		logger.info(`Installing plugin: "${jplPath}"`);
 
-		const destPath = `${Setting.value('pluginDir')}/${basename(jplPath)}`;
+		// Before moving the plugin to the profile directory, we load it
+		// from where it is now to check that it is valid and to retrieve
+		// the plugin ID.
+		const preloadedPlugin = await this.loadPluginFromPath(jplPath);
+
+		const destPath = `${Setting.value('pluginDir')}/${preloadedPlugin.id}.jpl`;
 		await shim.fsDriver().copy(jplPath, destPath);
+
+		// Now load it from the profile directory
 		const plugin = await this.loadPluginFromPath(destPath);
 		if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
 		return plugin;

@@ -216,6 +216,7 @@ async function switchClient(id, options = null) {
 	await Setting.reset();
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
+	Setting.setConstant('pluginDir', pluginDir(id));
 
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
@@ -294,6 +295,11 @@ function resourceDir(id = null) {
 	return `${__dirname}/data/${resourceDirName(id)}`;
 }
 
+function pluginDir(id = null) {
+	if (id === null) id = currentClient_;
+	return `${__dirname}/data/plugins-${id}`;
+}
+
 async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	if (id === null) id = currentClient_;
 
@@ -306,6 +312,9 @@ async function setupDatabaseAndSynchronizer(id = null, options = null) {
 
 	await fs.remove(resourceDir(id));
 	await fs.mkdirp(resourceDir(id), 0o755);
+
+	await fs.remove(pluginDir(id));
+	await fs.mkdirp(pluginDir(id), 0o755);
 
 	if (!synchronizers_[id]) {
 		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
@@ -727,7 +736,7 @@ class TestApp extends BaseApplication {
 	}
 
 	async profileDir() {
-		return await Setting.value('profileDir');
+		return Setting.value('profileDir');
 	}
 
 	async destroy() {
