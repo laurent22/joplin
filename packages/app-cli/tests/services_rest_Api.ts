@@ -27,10 +27,13 @@ const createFolderForPagination = async (num: number, time: number) => {
 	}, { autoTimestamp: false });
 };
 
-const createNoteForPagination = async (num: number, time: number) => {
+const createNoteForPagination = async (numOrTitle: number | string, time: number) => {
+	const title = typeof numOrTitle === 'string' ? numOrTitle : `note${numOrTitle}`;
+	const body = typeof numOrTitle === 'string' ? `Note body ${numOrTitle}` : `noteBody${numOrTitle}`;
+
 	await Note.save({
-		title: `note${num}`,
-		body: `noteBody${num}`,
+		title: title,
+		body: body,
 		updated_time: time,
 		created_time: time,
 	}, { autoTimestamp: false });
@@ -641,6 +644,58 @@ describe('services_rest_Api', function() {
 
 		expect(r2.items.length).toBe(1);
 		expect(r2.items[0].id).toBe(note3.id);
+	}));
+
+	it('should sort search paginated results', asyncTest(async () => {
+		SearchEngine.instance().setDb(db());
+
+		await createNoteForPagination('note c', 1000);
+		await createNoteForPagination('note e', 1001);
+		await createNoteForPagination('note b', 1002);
+		await createNoteForPagination('note a', 1003);
+		await createNoteForPagination('note d', 1004);
+
+		await SearchEngine.instance().syncTables();
+
+		{
+			const baseQuery = {
+				query: 'note',
+				fields: ['id', 'title', 'updated_time'],
+				limit: 3,
+				order_dir: PaginationOrderDir.ASC,
+				order_by: 'updated_time',
+			};
+
+			const r1 = await api.route(RequestMethod.GET, 'search', baseQuery);
+			expect(r1.items[0].updated_time).toBe(1000);
+			expect(r1.items[1].updated_time).toBe(1001);
+			expect(r1.items[2].updated_time).toBe(1002);
+
+			const r2 = await api.route(RequestMethod.GET, 'search', { ...baseQuery, page: 2 });
+			expect(r2.items[0].updated_time).toBe(1003);
+			expect(r2.items[1].updated_time).toBe(1004);
+		}
+
+		{
+			const baseQuery = {
+				query: 'note',
+				fields: ['id', 'title', 'updated_time'],
+				limit: 2,
+				order_dir: PaginationOrderDir.DESC,
+				order_by: 'title',
+			};
+
+			const r1 = await api.route(RequestMethod.GET, 'search', baseQuery);
+			expect(r1.items[0].title).toBe('note e');
+			expect(r1.items[1].title).toBe('note d');
+
+			const r2 = await api.route(RequestMethod.GET, 'search', { ...baseQuery, page: 2 });
+			expect(r2.items[0].title).toBe('note c');
+			expect(r2.items[1].title).toBe('note b');
+
+			const r3 = await api.route(RequestMethod.GET, 'search', { ...baseQuery, page: 3 });
+			expect(r3.items[0].title).toBe('note a');
+		}
 	}));
 
 	it('should return default fields', asyncTest(async () => {

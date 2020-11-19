@@ -1,0 +1,10 @@
+{
+	"manifest_version": 1,
+	"id": "org.joplinapp.FirstJplPlugin",
+	"app_min_version": "1.4",
+	"version": "1.0.0",
+	"name": "Testing JPL plugin",
+	"description": "",
+	"author": "",
+	"homepage_url": ""
+}

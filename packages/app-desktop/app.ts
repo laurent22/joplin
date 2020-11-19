@@ -42,15 +42,17 @@ const CssUtils = require('@joplin/lib/CssUtils');
 // const populateDatabase = require('@joplin/lib/services/debug/populateDatabase').default;
 
 const commands = [
-	require('./gui/NoteListControls/commands/focusSearch'),
 	require('./gui/MainScreen/commands/editAlarm'),
 	require('./gui/MainScreen/commands/exportPdf'),
 	require('./gui/MainScreen/commands/hideModalMessage'),
 	require('./gui/MainScreen/commands/moveToFolder'),
-	require('./gui/MainScreen/commands/newNote'),
 	require('./gui/MainScreen/commands/newFolder'),
+	require('./gui/MainScreen/commands/newNote'),
 	require('./gui/MainScreen/commands/newSubFolder'),
 	require('./gui/MainScreen/commands/newTodo'),
+	require('./gui/MainScreen/commands/openFolder'),
+	require('./gui/MainScreen/commands/openNote'),
+	require('./gui/MainScreen/commands/openTag'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
 	require('./gui/MainScreen/commands/renameTag'),
@@ -62,34 +64,34 @@ const commands = [
 	require('./gui/MainScreen/commands/showNoteProperties'),
 	require('./gui/MainScreen/commands/showShareNoteDialog'),
 	require('./gui/MainScreen/commands/showSpellCheckerMenu'),
+	require('./gui/MainScreen/commands/toggleEditors'),
+	require('./gui/MainScreen/commands/toggleLayoutMoveMode'),
 	require('./gui/MainScreen/commands/toggleNoteList'),
 	require('./gui/MainScreen/commands/toggleSideBar'),
 	require('./gui/MainScreen/commands/toggleVisiblePanes'),
-	require('./gui/MainScreen/commands/toggleEditors'),
-	require('./gui/MainScreen/commands/openNote'),
-	require('./gui/MainScreen/commands/openFolder'),
-	require('./gui/MainScreen/commands/openTag'),
-	require('./gui/MainScreen/commands/toggleLayoutMoveMode'),
 	require('./gui/NoteEditor/commands/focusElementNoteBody'),
 	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
 	require('./gui/NoteEditor/commands/showLocalSearch'),
 	require('./gui/NoteEditor/commands/showRevisions'),
 	require('./gui/NoteList/commands/focusElementNoteList'),
+	require('./gui/NoteListControls/commands/focusSearch'),
 	require('./gui/SideBar/commands/focusElementSideBar'),
 ];
 
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
 const globalCommands = [
+	require('./commands/copyDevCommand'),
+	require('./commands/exportFolders'),
+	require('./commands/exportNotes'),
 	require('./commands/focusElement'),
+	require('./commands/openProfileDirectory'),
 	require('./commands/startExternalEditing'),
 	require('./commands/stopExternalEditing'),
 	require('./commands/toggleExternalEditing'),
-	require('./commands/copyDevCommand'),
-	require('./commands/openProfileDirectory'),
-	require('@joplin/lib/commands/synchronize'),
 	require('@joplin/lib/commands/historyBackward'),
 	require('@joplin/lib/commands/historyForward'),
+	require('@joplin/lib/commands/synchronize'),
 ];
 
 const editorCommandDeclarations = require('./gui/NoteEditor/commands/editorCommandDeclarations').default;

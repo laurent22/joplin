@@ -19,6 +19,7 @@ interface ExportNoteOptions {
 	printBackground?: boolean;
 	pageSize?: string;
 	landscape?: boolean;
+	includeConflicts?: boolean;
 }
 
 export default class InteropServiceHelper {
@@ -160,8 +161,9 @@ export default class InteropServiceHelper {
 		const exportOptions: ExportOptions = {};
 		exportOptions.path = path;
 		exportOptions.format = module.format;
-		exportOptions.modulePath = module.path;
+		// exportOptions.modulePath = module.path;
 		exportOptions.target = module.target;
+		exportOptions.includeConflicts = !!options.includeConflicts;
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;
 		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
 

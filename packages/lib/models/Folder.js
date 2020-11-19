@@ -31,9 +31,18 @@ class Folder extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	static noteIds(parentId) {
+	static noteIds(parentId, options = null) {
+		options = Object.assign({}, {
+			includeConflicts: false,
+		}, options);
+
+		const where = ['parent_id = ?'];
+		if (!options.includeConflicts) {
+			where.push('is_conflict = 0');
+		}
+
 		return this.db()
-			.selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId])
+			.selectAll(`SELECT id FROM notes WHERE ${where.join(' AND ')}`, [parentId])
 			.then(rows => {
 				const output = [];
 				for (let i = 0; i < rows.length; i++) {

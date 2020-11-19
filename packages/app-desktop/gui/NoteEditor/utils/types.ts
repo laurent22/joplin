@@ -13,6 +13,7 @@ export interface NoteEditorProps {
 	themeId: number;
 	dispatch: Function;
 	selectedNoteIds: string[];
+	selectedFolderId: string;
 	notes: any[];
 	watchedNoteFiles: string[];
 	isProvisional: boolean;
