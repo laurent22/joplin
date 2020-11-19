@@ -13,6 +13,7 @@
 			"_vieux/": true,
 			".gitignore": true,
 			".eslintignore": true,
+			"**/*.jpl": true,
 			"./packages/app-cli/**/*.*~": true,
 			"./packages/app-cli/**/*.mo": true,
 			"./packages/app-cli/**/build/": true,

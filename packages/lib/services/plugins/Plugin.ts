@@ -21,7 +21,6 @@ interface ContentScripts {
 
 export default class Plugin {
 
-	private id_: string;
 	private baseDir_: string;
 	private manifest_: PluginManifest;
 	private scriptText_: string;
@@ -30,10 +29,9 @@ export default class Plugin {
 	private contentScripts_: ContentScripts = {};
 	private dispatch_: Function;
 	private eventEmitter_: any;
-	private devMode_:boolean = false;
+	private devMode_: boolean = false;
 
-	constructor(id: string, baseDir: string, manifest: PluginManifest, scriptText: string, logger: Logger, dispatch: Function) {
-		this.id_ = id;
+	constructor(baseDir: string, manifest: PluginManifest, scriptText: string, logger: Logger, dispatch: Function) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
@@ -43,7 +41,7 @@ export default class Plugin {
 	}
 
 	public get id(): string {
-		return this.id_;
+		return this.manifest.id;
 	}
 
 	public get devMode(): boolean {

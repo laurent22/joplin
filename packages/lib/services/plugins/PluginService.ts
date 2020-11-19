@@ -25,19 +25,19 @@ export interface Plugins {
 }
 
 export interface PluginSetting {
-	enabled: boolean,
-	deleted: boolean,
+	enabled: boolean;
+	deleted: boolean;
 }
 
-export function defaultPluginSetting():PluginSetting {
+export function defaultPluginSetting(): PluginSetting {
 	return {
 		enabled: true,
 		deleted: false,
-	}
+	};
 }
 
 export interface PluginSettings {
-	[pluginId:string]: PluginSetting;
+	[pluginId: string]: PluginSetting;
 }
 
 function makePluginId(source: string): string {
@@ -74,26 +74,40 @@ export default class PluginService extends BaseService {
 		return this.plugins_;
 	}
 
+	private setPluginAt(pluginId: string, plugin: Plugin) {
+		this.plugins_ = {
+			...this.plugins_,
+			[pluginId]: plugin,
+		};
+	}
+
+	private deletePluginAt(pluginId: string) {
+		if (!this.plugins_[pluginId]) return;
+
+		this.plugins_ = { ...this.plugins_ };
+		delete this.plugins_[pluginId];
+	}
+
 	public pluginById(id: string): Plugin {
 		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 
 		return this.plugins_[id];
 	}
 
-	public unserializePluginSettings(settings:any):PluginSettings {
+	public unserializePluginSettings(settings: any): PluginSettings {
 		const output = { ...settings };
 
-		for (let pluginId in output) {
+		for (const pluginId in output) {
 			output[pluginId] = {
 				...defaultPluginSetting(),
 				...output[pluginId],
-			}
+			};
 		}
 
 		return output;
 	}
 
-	public serializePluginSettings(settings:PluginSettings):any {
+	public serializePluginSettings(settings: PluginSettings): any {
 		return JSON.stringify(settings);
 	}
 
@@ -227,22 +241,8 @@ export default class PluginService extends BaseService {
 		}
 
 		const manifest = manifestFromObject(manifestObj);
-		const pluginId = manifest.id;
 
-		const plugin = new Plugin(pluginId, baseDir, manifest, scriptText, this.logger(), (action: any) => this.store_.dispatch(action));
-
-		// if (compareVersions(this.appVersion_, manifest.app_min_version) < 0) {
-		// 	throw new Error(`PluginService: Plugin "${pluginId}" was disabled because it requires Joplin version ${manifest.app_min_version} and current version is ${this.appVersion_}.`);
-		// } else {
-		// 	this.store_.dispatch({
-		// 		type: 'PLUGIN_ADD',
-		// 		plugin: {
-		// 			id: pluginId,
-		// 			views: {},
-		// 			contentScripts: {},
-		// 		},
-		// 	});
-		// }
+		const plugin = new Plugin(baseDir, manifest, scriptText, this.logger(), (action: any) => this.store_.dispatch(action));
 
 		for (const msg of deprecationNotices) {
 			plugin.deprecationNotice('1.5', msg);
@@ -251,12 +251,12 @@ export default class PluginService extends BaseService {
 		return plugin;
 	}
 
-	private pluginEnabled(settings:PluginSettings, pluginId:string):boolean {
+	private pluginEnabled(settings: PluginSettings, pluginId: string): boolean {
 		if (!settings[pluginId]) return true;
 		return settings[pluginId].enabled !== false;
 	}
 
-	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings:PluginSettings, devMode:boolean = false) {
+	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings: PluginSettings, devMode: boolean = false) {
 		let pluginPaths = [];
 
 		if (Array.isArray(pluginDirOrPaths)) {
@@ -284,13 +284,12 @@ export default class PluginService extends BaseService {
 				// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
 				// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
 				// such folders but to keep things sane we disallow it.
-				// if (this.plugins_[pluginId]) throw new JoplinError(`There is already a plugin with this ID: ${pluginId}`, 'alreadyLoaded');
+				if (this.plugins_[plugin.id]) throw new Error(`There is already a plugin with this ID: ${plugin.id}`);
 
-				this.plugins_[plugin.id] = plugin;
+				this.setPluginAt(plugin.id, plugin);
 
 				if (!this.pluginEnabled(settings, plugin.id)) {
 					this.logger().info(`PluginService: Not running disabled plugin: "${plugin.id}"`);
-					this.plugins_[plugin.id] = plugin;
 					continue;
 				}
 
@@ -321,49 +320,49 @@ export default class PluginService extends BaseService {
 		return this.runner_.run(plugin, pluginApi);
 	}
 
-	public async installPlugin(jplPath:string):Promise<Plugin> {
+	public async installPlugin(jplPath: string): Promise<Plugin> {
 		this.logger().info(`PluginService: Installing plugin: "${jplPath}"`);
 
-		const destPath = Setting.value('pluginDir') + '/' + basename(jplPath);
+		const destPath = `${Setting.value('pluginDir')}/${basename(jplPath)}`;
 		await shim.fsDriver().copy(jplPath, destPath);
 		const plugin = await this.loadPluginFromPath(destPath);
-		this.plugins_[plugin.id] = plugin;
+		if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
 		return plugin;
 	}
 
-	private async pluginPath(pluginId:string) {
+	private async pluginPath(pluginId: string) {
 		const stats = await shim.fsDriver().readDirStats(Setting.value('pluginDir'), { recursive: false });
-		
+
 		for (const stat of stats) {
 			if (filename(stat.path) === pluginId) {
-				return Setting.value('pluginDir') + '/' + stat.path;
+				return `${Setting.value('pluginDir')}/${stat.path}`;
 			}
 		}
 
 		return null;
 	}
 
-	public async uninstallPlugin(pluginId:string) {
+	public async uninstallPlugin(pluginId: string) {
 		this.logger().info(`PluginService: Uninstalling plugin: "${pluginId}"`);
 
 		const path = await this.pluginPath(pluginId);
 		if (!path) {
 			// Plugin might have already been deleted
-			this.logger().error('PluginService: Could not find plugin path to uninstall - nothing will be done: ' + pluginId);
+			this.logger().error(`PluginService: Could not find plugin path to uninstall - nothing will be done: ${pluginId}`);
 		} else {
 			await shim.fsDriver().remove(path);
-		}		
+		}
 
-		delete this.plugins_[pluginId];
+		this.deletePluginAt(pluginId);
 	}
 
-	public async uninstallPlugins(settings:PluginSettings):Promise<PluginSettings> {
+	public async uninstallPlugins(settings: PluginSettings): Promise<PluginSettings> {
 		let newSettings = settings;
 
 		for (const pluginId in settings) {
 			if (settings[pluginId].deleted) {
 				await this.uninstallPlugin(pluginId);
-				newSettings = {...settings};
+				newSettings = { ...settings };
 				delete newSettings[pluginId];
 			}
 		}

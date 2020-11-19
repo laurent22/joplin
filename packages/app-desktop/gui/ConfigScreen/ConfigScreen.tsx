@@ -16,14 +16,14 @@ const { EncryptionConfigScreen } = require('../EncryptionConfigScreen.min');
 const { ClipperConfigScreen } = require('../ClipperConfigScreen.min');
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
-const settingKeyToControl:any = {
+const settingKeyToControl: any = {
 	'plugins.states': control_PluginsStates,
-}
+};
 
 class ConfigScreenComponent extends React.Component<any, any> {
 
 	rowStyle_: any = null;
-	
+
 	constructor(props: any) {
 		super(props);
 
@@ -270,7 +270,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	private labelStyle(themeId:number) {
+	private labelStyle(themeId: number) {
 		const theme = themeStyle(themeId);
 		return Object.assign({}, theme.textStyle, {
 			display: 'block',
@@ -281,7 +281,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		});
 	}
 
-	private descriptionStyle(themeId:number) {
+	private descriptionStyle(themeId: number) {
 		const theme = themeStyle(themeId);
 		return Object.assign({}, theme.textStyle, {
 			color: theme.colorFaded,
@@ -291,7 +291,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		});
 	}
 
-	private renderLabel(themeId:number, label:string) {
+	private renderLabel(themeId: number, label: string) {
 		const labelStyle = this.labelStyle(themeId);
 		return (
 			<div style={labelStyle}>
@@ -300,7 +300,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	private renderDescription(themeId:number, description:string) {
+	private renderDescription(themeId: number, description: string) {
 		return description ? <div style={this.descriptionStyle(themeId)}>{description}</div> : null;
 	}
 
@@ -374,7 +374,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						metadata={md}
 						value={value}
 						themeId={this.props.themeId}
-						onChange={(event:any) => {
+						onChange={(event: any) => {
 							updateSettingValue(key, event.value);
 						}}
 					/>
@@ -623,16 +623,18 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return _('The application must be restarted for these changes to take effect.');
 	}
 
+	private async restartApp() {
+		await Setting.saveAll();
+		bridge().restart();
+	}
+
 	private async checkNeedRestart() {
 		if (this.state.needRestart) {
 			const doItNow = await bridge().showConfirmMessageBox(this.restartMessage(), {
 				buttons: [_('Do it now'), _('Later')],
 			});
 
-			if (doItNow) {
-				await Setting.saveAll();
-				bridge().restart();
-			}
+			if (doItNow) await this.restartApp();
 		}
 	}
 
@@ -691,11 +693,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const sections = shared.settingsSections({ device: 'desktop', settings });
 
-		const needRestartComp:any = this.state.needRestart ? (
+		const needRestartComp: any = this.state.needRestart ? (
 			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>
 				{this.restartMessage()}
+				<a style={{ ...theme.urlStyle, marginLeft: 10 }} href="#" onClick={() => { this.restartApp(); }}>{_('Restart now')}</a>
 			</div>
-		 ) : null;
+		) : null;
 
 		return (
 			<div style={{ display: 'flex', flexDirection: 'row' }}>

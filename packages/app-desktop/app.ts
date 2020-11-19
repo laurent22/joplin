@@ -736,6 +736,14 @@ class Application extends BaseApplication {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));
 		// }, 2000);
 
+		// this.dispatch({
+		// 	type: 'NAV_GO',
+		// 	routeName: 'Config',
+		// 	props: {
+		// 		defaultSection: 'plugins',
+		// 	},
+		// });
+
 		return null;
 	}
 

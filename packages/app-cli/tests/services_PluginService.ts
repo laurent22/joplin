@@ -4,7 +4,7 @@ import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('./test-utils.js');
+const { asyncTest, expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('./test-utils.js');
 const Note = require('@joplin/lib/models/Note');
 const Folder = require('@joplin/lib/models/Folder');
 
@@ -248,9 +248,15 @@ describe('services_PluginService', function() {
 		];
 
 		for (const testCase of testCases) {
-			const [appVersion, expected] = testCase;
-			const plugin = await newPluginService(appVersion as string).loadPluginFromJsBundle('', pluginScript);
-			expect(plugin.enabled).toBe(expected as boolean);
+			const [appVersion, hasNoError] = testCase;
+			const service = newPluginService(appVersion as string);
+			const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+
+			if (hasNoError) {
+				await expectNotThrow(() => service.runPlugin(plugin));
+			} else {
+				await expectThrow(() => service.runPlugin(plugin));
+			}
 		}
 	}));
 
