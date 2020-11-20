@@ -141,7 +141,13 @@ class FileApiDriverOneDrive {
 			response = await this.api_.exec('PUT', path, null, null, options);
 		} else {
 			options.headers = { 'Content-Type': 'text/plain' };
-			response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, content, options);
+
+			const byteSize = new Blob([content]).size;
+			path = byteSize <  4 * 1024 * 1024 ? `${this.makePath_(path)}:/content` : `${this.makePath_(path)}:/createUploadSession`;
+
+			console.log(`byteSize: ${byteSize}`);
+
+			response = await this.api_.exec('PUT', path, null, content, options);
 		}
 
 		return response;

@@ -208,6 +208,88 @@ class OneDriveApi {
 		}
 	}
 
+
+
+	async uploadNoteChunk(url,content, startByte,options) {
+
+		const blob = new Blob([content]);
+		console.log(`byteSize of Blob: ${blob.size}`);
+		let buffer = await blob.arrayBuffer();
+		console.log(`byteSize of buffer after arrayBufferMethod: ${Buffer.byteLength(buffer)}`);
+		console.log(`contentLength: ${options.contentLength}, startByte: ${startByte}`);
+
+		buffer = buffer.slice(startByte, startByte + options.contentLength);
+		console.log(`byteSize of buffer after slice: ${Buffer.byteLength(buffer)}`);
+		options.body = buffer;
+		const response = await fetch(url, options);
+		return response;
+		// const Buffer = require('buffer').Buffer;
+		// let buffer = Buffer.from(content, 'utf8');
+		// console.log(Buffer.byteLength(buffer));
+		// buffer = buffer.slice(startByte, options.contentLength);
+		// console.log(Buffer.byteLength(buffer));
+		// // evtl. muss das hier noch das Encoding zu base64 geändert werden
+		// options.body = buffer;
+		// const response = await fetch(url, options);
+		// return response;
+		//
+	}
+
+	async uploadBigNote(url, options) {
+		const response = await shim.fetch(url, {
+			method: 'POST',
+			headers: {
+				'Authorization': options.headers.Authorization,
+				'Content-Type': 'application/json',
+			},
+		});
+		if (!response.ok) {
+			return response;
+		} else {
+			const uploadUrl = (await response.json()).uploadUrl;
+
+			const chunkSize = 7.5 * 1024 * 1024;
+			const byteSize = new Blob([options.body]).size;
+			const numberOfChunks = Math.ceil(byteSize / chunkSize);
+			console.log(`byteSize: ${byteSize}`);
+			console.log(`uploadUrl: ${uploadUrl}`);
+
+			try {
+				for (let i = 0; i < numberOfChunks; i++) {
+					const startByte = i * chunkSize;
+					let endByte = null;
+					let contentLength = null;
+					if (i === numberOfChunks - 1) {
+						// Last fragment. It is not ensured that the last fragment is a multiple of 327,680 bytes as recommanded in the api doc. The reasons is that the docs are out of day for this purpose: https://github.com/OneDrive/onedrive-api-docs/issues/1200#issuecomment-597281253
+						endByte = byteSize - 1;
+						contentLength = byteSize - ((numberOfChunks - 1) * chunkSize);
+					} else {
+						endByte = (i + 1) * chunkSize - 1;
+						contentLength = chunkSize;
+					}
+					this.logger().debug(`${options.path}: Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(byteSize / 1048576).toFixed(2)} Mbit ...`);
+					const headers = {
+						'Content-Length': contentLength,
+						'Content-Range': `bytes ${startByte}-${endByte}/${byteSize}`,
+						'Content-Type': 'application/octet-stream; charset=utf-8',
+					};
+
+					const response = await this.uploadNoteChunk(uploadUrl, options.body, startByte, { contentLength: contentLength, method: 'PUT', headers: headers });
+					if (!response.ok) {
+						return response;
+					}
+
+				}
+				return { ok: true };
+			} catch (error) {
+				this.logger().error('Got unhandled error:', error ? error.code : '', error ? error.message : '', error);
+				throw error;
+			}
+
+		}
+	}
+
+
 	async exec(method, path, query = null, data = null, options = null) {
 		if (!path) throw new Error('Path is required');
 
@@ -253,7 +335,12 @@ class OneDriveApi {
 				if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 					response = path.includes('/createUploadSession') ? await this.uploadBigFile(url, options) : await shim.uploadBlob(url, options);
 				} else if (options.target == 'string') {
-					response = await shim.fetch(url, options);
+					if (path.includes('/createUploadSession') &&  (method == 'POST' || method == 'PUT')) {
+						response = await this.uploadBigNote(url, options);
+					} else {
+						response = await shim.fetch(url, options);
+					}
+
 				} else {
 					// file
 					response = await shim.fetchBlob(url, options);
