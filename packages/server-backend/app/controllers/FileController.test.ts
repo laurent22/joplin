@@ -1,4 +1,4 @@
-import { asyncTest, clearDatabase, supportDir, createUserAndSession, createUser, checkThrowAsync } from '../utils/testUtils';
+import { asyncTest, clearDatabase, testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../utils/testUtils';
 import FileController from '../controllers/FileController';
 import FileModel from '../models/FileModel';
 import * as fs from 'fs-extra';
@@ -11,7 +11,7 @@ async function makeTestFile(id: number = 1, ext: string = 'jpg', parentId: strin
 
 	const file: File = {
 		name: id > 1 ? `${basename}-${id}.${ext}` : `${basename}.${ext}`,
-		content: await fs.readFile(`${supportDir}/${basename}.${ext}`),
+		content: await fs.readFile(`${testAssetDir}/${basename}.${ext}`),
 		// mime_type: `image/${ext}`,
 		parent_id: parentId,
 	};
@@ -21,7 +21,7 @@ async function makeTestFile(id: number = 1, ext: string = 'jpg', parentId: strin
 
 async function makeTestContent(ext: string = 'jpg') {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';
-	return await fs.readFile(`${supportDir}/${basename}.${ext}`);
+	return await fs.readFile(`${testAssetDir}/${basename}.${ext}`);
 }
 
 async function makeTestDirectory(name: string = 'Docs'): Promise<File> {
@@ -62,15 +62,15 @@ async function saveTestDir(sessionId: string, path: string): Promise<File> {
 describe('FileController', function() {
 
 	beforeAll(async () => {
-		await initDb('FileController');
+		await beforeAllDb('FileController');
 	});
 
 	afterAll(async () => {
-		await destroyDb();
+		await afterAllDb();
 	});
 
 	beforeEach(async () => {
-		await clearDatabase();
+		await beforeEachDb();
 	});
 
 	it('should create a file', asyncTest(async function() {

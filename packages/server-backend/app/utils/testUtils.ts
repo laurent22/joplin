@@ -1,4 +1,4 @@
-import db, { User, Session } from '../db';
+import db, { User, Session, initDb, destroyDb } from '../db';
 import UserModel from '../models/UserModel';
 import SessionController from '../controllers/SessionController';
 import cache from './cache';
@@ -28,6 +28,18 @@ export const asyncTest = function(callback: Function) {
 	};
 };
 
+export async function beforeAllDb(unitName:string) {
+	await initDb(unitName, true);
+}
+
+export async function afterAllDb() {
+	await destroyDb();
+}
+
+export async function beforeEachDb() {
+	await clearDatabase();
+}
+
 export const clearDatabase = async function(): Promise<void> {
 	await db()('sessions').truncate();
 	await db()('users').truncate();
@@ -37,7 +49,7 @@ export const clearDatabase = async function(): Promise<void> {
 	await cache.clearAll();
 };
 
-export const supportDir = `${packageRootDir}/tests/support`;
+export const testAssetDir = `${packageRootDir}/assets/tests`;
 
 interface UserAndSession {
 	user: User;

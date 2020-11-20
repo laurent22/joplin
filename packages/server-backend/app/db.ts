@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import fs from 'fs-extra';
+import * as fs from 'fs-extra';
 
 const packageRootDir = __dirname + '/../..'
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -12,13 +12,17 @@ export function dbConfig() {
 	return dbConfig_;
 }
 
-export async function initDb(name:string = null) {
+export async function initDb(name:string = null, fromScratch:boolean = false) {
 	name = name || nodeEnv;
+
+	const dbFilePath = `${packageRootDir}/db-${name}.sqlite`;
+
+	if (fromScratch) await fs.remove(dbFilePath);
 
 	dbConfig_ = {
 		client: 'sqlite3',
 		connection: {
-			filename: `${packageRootDir}/db-${name}.sqlite`,
+			filename: dbFilePath,
 		},
 		useNullAsDefault: true,
 		// Allow propery stack traces in case of an error, however
@@ -36,7 +40,7 @@ export async function destroyDb() {
 	await db().destroy();
 
 	const dbFilePath = dbConfig_?.connection?.filename;
-	
+
 	dbConfig_ = null;
 	db_ = null;
 

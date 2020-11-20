@@ -1,16 +1,23 @@
-import { asyncTest, clearDatabase, createUserAndSession, checkThrowAsync } from '../testUtils';
-import UserController from '../../app/controllers/UserController';
-import { File, User } from '../../app/db';
-import UserModel from '../../app/models/UserModel';
-import FileModel from '../../app/models/FileModel';
-import PermissionModel from '../../app/models/PermissionModel';
-import { ErrorForbidden, ErrorUnprocessableEntity } from '../../app/utils/errors';
+import { asyncTest, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../utils/testUtils';
+import UserController from './UserController';
+import { File, User } from '../db';
+import UserModel from '../models/UserModel';
+import FileModel from '../models/FileModel';
+import PermissionModel from '../models/PermissionModel';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 
 describe('UserController', function() {
 
-	beforeEach(async (done) => {
-		await clearDatabase();
-		done();
+	beforeAll(async () => {
+		await beforeAllDb('UserController');
+	});
+
+	afterAll(async () => {
+		await afterAllDb();
+	});
+
+	beforeEach(async () => {
+		await beforeEachDb();
 	});
 
 	it('should create a new user along with his root file', asyncTest(async function() {

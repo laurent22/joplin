@@ -1,6 +1,6 @@
-import { asyncTest } from '../testUtils';
-import { parseSubPath, splitItemPath } from '../../app/utils/routeUtils';
-import { ItemAddressingType } from '../../app/db';
+import { asyncTest } from './testUtils';
+import { parseSubPath, splitItemPath } from './routeUtils';
+import { ItemAddressingType } from '../db';
 
 describe('routeUtils', function() {
 

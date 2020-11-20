@@ -1,12 +1,19 @@
-import { asyncTest, clearDatabase, createUser, checkThrowAsync } from '../testUtils';
-import SessionController from '../../app/controllers/SessionController';
-import { ErrorForbidden } from '../../app/utils/errors';
+import { asyncTest, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../utils/testUtils';
+import SessionController from './SessionController';
+import { ErrorForbidden } from '../utils/errors';
 
 describe('SessionController', function() {
 
-	beforeEach(async (done) => {
-		await clearDatabase();
-		done();
+	beforeAll(async () => {
+		await beforeAllDb('SessionController');
+	});
+
+	afterAll(async () => {
+		await afterAllDb();
+	});
+
+	beforeEach(async () => {
+		await beforeEachDb();
 	});
 
 	it('should authenticate a user and give back a session', asyncTest(async function() {
