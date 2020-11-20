@@ -46,7 +46,7 @@ export default abstract class BaseModel {
 
 	get db(): Knex<any, any[]> {
 		if (transactionHandler.activeTransaction) return transactionHandler.activeTransaction;
-		return db;
+		return db();
 	}
 
 	get defaultFields(): string[] {

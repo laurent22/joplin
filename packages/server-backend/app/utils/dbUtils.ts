@@ -11,18 +11,13 @@ import * as Knex from 'knex';
 // Set logEnabled_ to `true` to see what happens with nested transactions.
 class TransactionHandler {
 
-	db_: Knex<any, any[]> = null;
 	transactionStack_: number[] = [];
 	activeTransaction_: Knex.Transaction = null;
 	transactionIndex_: number = 0;
 	logEnabled_: boolean = false;
 
-	constructor() {
-		this.db_ = db;
-	}
-
 	get db(): Knex<any, any[]> {
-		return this.db_;
+		return db();
 	}
 
 	log(s: string): void {

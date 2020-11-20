@@ -1,9 +1,13 @@
-import db, { User, Session } from '../app/db';
-import UserModel from '../app/models/UserModel';
-import SessionController from '../app/controllers/SessionController';
-import cache from '../app/utils/cache';
+import db, { User, Session } from '../db';
+import UserModel from '../models/UserModel';
+import SessionController from '../controllers/SessionController';
+import cache from './cache';
 
-//require('source-map-support').install();
+// Takes into account the fact that this file will be inside the /dist
+// directory when it runs.
+const packageRootDir = __dirname + '/../../..';
+
+// require('source-map-support').install();
 
 // Wrap an async test in a try/catch block so that done() is always called
 // and display a proper error message instead of "unhandled promise error"
@@ -33,7 +37,7 @@ export const clearDatabase = async function(): Promise<void> {
 	await cache.clearAll();
 };
 
-export const supportDir = `${__dirname}/../../tests/support`;
+export const supportDir = `${packageRootDir}/tests/support`;
 
 interface UserAndSession {
 	user: User;

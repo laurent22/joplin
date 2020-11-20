@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
-const { FsDriverNode } = require('lib/fs-driver-node');
-const { Logger } = require('lib/logger');
+const { FsDriverNode } = require('@joplin/lib/fs-driver-node');
+const { Logger } = require('@joplin/lib/logger');
 
 const logDir = `${__dirname}/../../../logs`;
 fs.mkdirpSync(logDir);

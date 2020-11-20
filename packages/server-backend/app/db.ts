@@ -1,25 +1,61 @@
 import * as Knex from 'knex';
+import fs from 'fs-extra';
 
+const packageRootDir = __dirname + '/../..'
 const nodeEnv = process.env.NODE_ENV || 'development';
 
-const dbConfig_ = {
-	client: 'sqlite3',
-	connection: {
-		filename: `${__dirname}/../../db-${nodeEnv}.sqlite`,
-	},
-	useNullAsDefault: true,
-	// Allow propery stack traces in case of an error, however
-	// it has a small performance overhead so only enable in testing and dev
-	asyncStackTraces: nodeEnv == 'development' || nodeEnv === 'testing',
-	// debug: nodeEnv == 'development' || nodeEnv === 'testing',
-};
-
-const knex: Knex = require('knex')(dbConfig_);
-
-export default knex;
+let dbConfig_:any = null;
+let db_:Knex = null;
 
 export function dbConfig() {
+	if (!dbConfig_) throw new Error('DB config is not set');
 	return dbConfig_;
+}
+
+export async function initDb(name:string = null) {
+	name = name || nodeEnv;
+
+	dbConfig_ = {
+		client: 'sqlite3',
+		connection: {
+			filename: `${packageRootDir}/db-${name}.sqlite`,
+		},
+		useNullAsDefault: true,
+		// Allow propery stack traces in case of an error, however
+		// it has a small performance overhead so only enable in testing and dev
+		asyncStackTraces: nodeEnv == 'development' || nodeEnv === 'testing',
+		// debug: nodeEnv == 'development' || nodeEnv === 'testing',
+	}
+
+	db_ = require('knex')(dbConfig_);
+
+	await migrate(db_);
+}
+
+export async function destroyDb() {
+	await db().destroy();
+
+	const dbFilePath = dbConfig_?.connection?.filename;
+	
+	dbConfig_ = null;
+	db_ = null;
+
+	if (dbFilePath) await fs.remove(dbFilePath);
+}
+
+export default function db():Knex {
+	if (!db_) throw new Error('Trying to access DB before it has been initialized')
+	return db_;
+}
+
+export async function migrate(db:Knex) {
+	const config = {
+		directory: `${packageRootDir}/dist/migrations`,
+		// Disable transactions because the models might open one too
+		disableTransactions: true,
+	};
+	
+	await db.migrate.latest(config);
 }
 
 export enum ItemAddressingType {

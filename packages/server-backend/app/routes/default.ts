@@ -4,7 +4,7 @@ import { ErrorMethodNotAllowed, ErrorNotFound, ErrorForbidden } from '../utils/e
 import { dirname, normalize } from 'path';
 import { pathExists } from 'fs-extra';
 import * as fs from 'fs-extra';
-const { mime } = require('lib/mime-utils.js');
+const { mime } = require('@joplin/lib/mime-utils.js');
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
 

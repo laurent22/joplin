@@ -1,6 +1,6 @@
 import { ItemAddressingType } from '../db';
 
-const { ltrimSlashes, rtrimSlashes } = require('lib/path-utils');
+const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
 function dirname(path: string): string {
 	if (!path) throw new Error('Path is empty');

@@ -5,7 +5,7 @@ import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadReques
 import uuidgen from '../utils/uuidgen';
 import { splitItemPath, filePathInfo } from '../utils/routeUtils';
 
-const mimeUtils = require('lib/mime-utils.js').mime;
+const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 

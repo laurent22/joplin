@@ -1,7 +1,6 @@
 import db, { dbConfig } from '../app/db';
 
-require('app-module-path').addPath(`${__dirname}/..`);
-require('source-map-support').install();
+//require('source-map-support').install();
 
 const config = {
 	directory: `${__dirname}/../migrations`,
@@ -12,7 +11,7 @@ const config = {
 console.info(`Using database: ${dbConfig().connection.filename}`);
 console.info(`Running migrations in: ${config.directory}`);
 
-db.migrate.latest(config).then((event: any) => {
+db().migrate.latest(config).then((event: any) => {
 	const log: string[] = event[1];
 
 	if (!log.length) {
@@ -21,7 +20,7 @@ db.migrate.latest(config).then((event: any) => {
 		console.info(`Ran migrations: ${log.join(', ')}`);
 	}
 
-	db.destroy();
+	db().destroy();
 }).catch(error => {
 	console.error(error);
 	process.exit(1);
