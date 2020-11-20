@@ -133,22 +133,18 @@ class FileApiDriverOneDrive {
 		if (!options) options = {};
 
 		let response = null;
+		// We need to check the file size as files > 4 MBs are uploaded in a different way than files < 4 MB (see https://docs.microsoft.com/de-de/onedrive/developer/rest-api/concepts/upload?view=odsp-graph-online)
+		let byteSize = null;
 
 		if (options.source == 'file') {
-			// We need to check the file size as files > 4 MBs are uploaded in a different way than files < 4 MB (see https://docs.microsoft.com/de-de/onedrive/developer/rest-api/concepts/upload?view=odsp-graph-online)
-			const fileSize = (await shim.fsDriver().stat(options.path)).size;
-			path = fileSize < 4 * 1024 * 1024 ? `${this.makePath_(path)}:/content` : `${this.makePath_(path)}:/createUploadSession`;
-			response = await this.api_.exec('PUT', path, null, null, options);
+			byteSize = (await shim.fsDriver().stat(options.path)).size;
 		} else {
 			options.headers = { 'Content-Type': 'text/plain' };
-
-			const byteSize = new Blob([content]).size;
-			path = byteSize <  4 * 1024 * 1024 ? `${this.makePath_(path)}:/content` : `${this.makePath_(path)}:/createUploadSession`;
-
-			console.log(`byteSize: ${byteSize}`);
-
-			response = await this.api_.exec('PUT', path, null, content, options);
+			byteSize = new Blob([content]).size;
 		}
+
+		path = byteSize < 4 * 1024 * 1024 ? `${this.makePath_(path)}:/content` : `${this.makePath_(path)}:/createUploadSession`;
+		response = await this.api_.exec('PUT', path, null, content, options);
 
 		return response;
 	}
