@@ -144,7 +144,8 @@ class OneDriveApi {
 		if (!options.headers) throw new Error('uploadChunk: header is missing');
 
 		if (content) {
-			options.body = (await new Blob([content]).arrayBuffer()).slice(options.startByte, options.startByte + options.contentLength);
+			const arrBuff = await new Blob([content]).arrayBuffer();
+			options.body = Buffer.from(arrBuff, options.startByte, options.contentLength);
 		} else {
 			const chunk = await shim.fsDriver().readFileChunk(handle, options.contentLength);
 			const Buffer = require('buffer').Buffer;
@@ -155,16 +156,7 @@ class OneDriveApi {
 		delete options.contentLength;
 		delete options.startByte;
 
-		let response = null;
-		if (content && shim.isNode) {
-			// couldn't get it working with shim.fetch on desktop but works without problem with the native fetch.
-			// Always received `ECONNRESET` Error. Tried to disable compress option and increased timeout
-			// but didn't help.
-			response = await fetch(url,options);
-		} else {
-			response = await shim.fetch(url,options);
-		}
-
+		const response = await shim.fetch(url,options);
 		return response;
 	}
 
@@ -206,7 +198,7 @@ class OneDriveApi {
 						endByte = (i + 1) * chunkSize - 1;
 						contentLength = chunkSize;
 					}
-					this.logger().debug(`${options.path}: Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(byteSize / 1048576).toFixed(2)} Mbit ...`);
+					this.logger().debug(`Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(byteSize / 1048576).toFixed(2)} Mbit ...`);
 					const headers = {
 						'Content-Length': contentLength,
 						'Content-Range': `bytes ${startByte}-${endByte}/${byteSize}`,
