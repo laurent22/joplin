@@ -212,28 +212,15 @@ class OneDriveApi {
 
 	async uploadNoteChunk(url,content, startByte,options) {
 
-		const blob = new Blob([content]);
-		console.log(`byteSize of Blob: ${blob.size}`);
-		let buffer = await blob.arrayBuffer();
-		console.log(`byteSize of buffer after arrayBufferMethod: ${Buffer.byteLength(buffer)}`);
-		console.log(`contentLength: ${options.contentLength}, startByte: ${startByte}`);
-
-		buffer = buffer.slice(startByte, startByte + options.contentLength);
-		console.log(`byteSize of buffer after slice: ${Buffer.byteLength(buffer)}`);
-		options.body = buffer;
-		const response = await fetch(url, options);
-		return response;
-		// const Buffer = require('buffer').Buffer;
-		// let buffer = Buffer.from(content, 'utf8');
-		// console.log(Buffer.byteLength(buffer));
-		// buffer = buffer.slice(startByte, options.contentLength);
-		// console.log(Buffer.byteLength(buffer));
-		// // evtl. muss das hier noch das Encoding zu base64 geändert werden
-		// options.body = buffer;
-		// const response = await fetch(url, options);
-		// return response;
-		//
+		try {
+			options.body = (await new Blob([content]).arrayBuffer()).slice(startByte, startByte + options.contentLength);
+			const response = await fetch(url, options);
+			return response;
+		} catch (error) {
+			throw new Error(`Couldn't upload Note Chunk. Error code: ${error.code}, Error message: ${error.message}`);
+		}
 	}
+
 
 	async uploadBigNote(url, options) {
 		const response = await shim.fetch(url, {
