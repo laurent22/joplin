@@ -136,7 +136,7 @@ class OneDriveApi {
 		}
 	}
 
-	async uploadChunk(url, handle, options) {
+	async uploadChunk(url, handle, content, options) {
 		options = Object.assign({}, options);
 		if (!options.method) { options.method = 'POST'; }
 		if (!options.headers) { options.headers = {}; }
@@ -153,7 +153,25 @@ class OneDriveApi {
 		return response;
 	}
 
+
+	async uploadNoteChunk(url,handle, content, options) {
+		options = Object.assign({}, options);
+
+		try {
+			options.body = (await new Blob([content]).arrayBuffer()).slice(options.startByte, options.startByte + options.contentLength);
+			delete options.contentLength;
+			delete options.startByte;
+			const response = await fetch(url, options);
+			return response;
+		} catch (error) {
+			throw new Error(`Couldn't upload Note Chunk. Error code: ${error.code}, Error message: ${error.message}`);
+		}
+	}
+
+
+
 	async uploadBigFile(url, options) {
+		options.body = null;
 		const response = await shim.fetch(url, {
 			method: 'POST',
 			headers: {
@@ -192,7 +210,7 @@ class OneDriveApi {
 						'Content-Type': 'application/octet-stream; charset=utf-8',
 					};
 
-					const response = await this.uploadChunk(uploadUrl, handle, { contentLength: contentLength, method: 'PUT', headers: headers });
+					const response = await this.uploadChunk(uploadUrl, handle, options.body,{ contentLength: contentLength, method: 'PUT', headers: headers });
 
 					if (!response.ok) {
 						return response;
@@ -210,17 +228,6 @@ class OneDriveApi {
 
 
 
-	async uploadNoteChunk(url,content, startByte,options) {
-
-		try {
-			options.body = (await new Blob([content]).arrayBuffer()).slice(startByte, startByte + options.contentLength);
-			const response = await fetch(url, options);
-			return response;
-		} catch (error) {
-			throw new Error(`Couldn't upload Note Chunk. Error code: ${error.code}, Error message: ${error.message}`);
-		}
-	}
-
 
 	async uploadBigNote(url, options) {
 		const response = await shim.fetch(url, {
@@ -236,7 +243,16 @@ class OneDriveApi {
 			const uploadUrl = (await response.json()).uploadUrl;
 
 			const chunkSize = 7.5 * 1024 * 1024;
-			const byteSize = new Blob([options.body]).size;
+
+			let byteSize = null;
+			let handle = null;
+			if (options.body) {
+				byteSize = new Blob([options.body]).size;
+			} else {
+				byteSize = (await shim.fsDriver().stat(options.path)).size;
+				handle = await shim.fsDriver().open(options.path, 'r');
+			}
+
 			const numberOfChunks = Math.ceil(byteSize / chunkSize);
 			console.log(`byteSize: ${byteSize}`);
 			console.log(`uploadUrl: ${uploadUrl}`);
@@ -261,7 +277,7 @@ class OneDriveApi {
 						'Content-Type': 'application/octet-stream; charset=utf-8',
 					};
 
-					const response = await this.uploadNoteChunk(uploadUrl, options.body, startByte, { contentLength: contentLength, method: 'PUT', headers: headers });
+					const response = await this.uploadNoteChunk(uploadUrl, handle, options.body, { startByte: startByte, contentLength: contentLength, method: 'PUT', headers: headers });
 					if (!response.ok) {
 						return response;
 					}
