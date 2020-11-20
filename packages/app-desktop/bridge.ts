@@ -87,7 +87,7 @@ export class Bridge {
 		return filePath;
 	}
 
-	showOpenDialog(options: any) {
+	showOpenDialog(options: any = null) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		let fileType = 'file';
@@ -117,13 +117,16 @@ export class Bridge {
 	}
 
 	showConfirmMessageBox(message: string, options: any = null) {
-		if (options === null) options = {};
+		options = {
+			buttons: [_('OK'), _('Cancel')],
+			...options,
+		};
 
 		const result = this.showMessageBox_(this.window(), Object.assign({}, {
 			type: 'question',
 			message: message,
 			cancelId: 1,
-			buttons: [_('OK'), _('Cancel')],
+			buttons: options.buttons,
 		}, options));
 
 		return result === 0;
@@ -167,8 +170,8 @@ export class Bridge {
 		return require('electron').shell.openExternal(url);
 	}
 
-	openItem(fullPath: string) {
-		return require('electron').shell.openItem(fullPath);
+	async openItem(fullPath: string) {
+		return require('electron').shell.openPath(fullPath);
 	}
 
 	checkForUpdates(inBackground: boolean, window: any, logFilePath: string, options: any) {

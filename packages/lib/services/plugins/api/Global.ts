@@ -1,6 +1,5 @@
 import Plugin from '../Plugin';
 import Joplin from './Joplin';
-import Logger from '../../../Logger';
 
 /**
  * @ignore
@@ -16,8 +15,8 @@ export default class Global {
 	private requireWhiteList_: string[] = null;
 	// private consoleWrapper_:any = null;
 
-	constructor(logger: Logger, implementation: any, plugin: Plugin, store: any) {
-		this.joplin_ = new Joplin(logger, implementation.joplin, plugin, store);
+	constructor(implementation: any, plugin: Plugin, store: any) {
+		this.joplin_ = new Joplin(implementation.joplin, plugin, store);
 		// this.consoleWrapper_ = this.createConsoleWrapper(plugin.id);
 	}
 

@@ -37,7 +37,7 @@ joplin.plugins.register({
 			},
 		});
 
-		await joplin.views.toolbarButtons.create('incValue', ToolbarButtonLocation.NoteToolbar);
-		await joplin.views.toolbarButtons.create('checkValue', ToolbarButtonLocation.NoteToolbar);
+		await joplin.views.toolbarButtons.create('incValueButton', 'incValue', ToolbarButtonLocation.NoteToolbar);
+		await joplin.views.toolbarButtons.create('checkValueButton', 'checkValue', ToolbarButtonLocation.NoteToolbar);
 	},
 });

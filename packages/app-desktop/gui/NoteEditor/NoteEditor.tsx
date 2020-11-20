@@ -29,14 +29,15 @@ import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('@joplin/lib/registry.js');
 const Note = require('@joplin/lib/models/Note.js');
+const Folder = require('@joplin/lib/models/Folder.js');
 const bridge = require('electron').remote.require('./bridge').default;
-const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
 const commands = [
@@ -449,6 +450,7 @@ function NoteEditor(props: NoteEditorProps) {
 			dispatch={props.dispatch}
 			watchedNoteFiles={props.watchedNoteFiles}
 			plugins={props.plugins}
+			inConflictFolder={props.selectedFolderId === Folder.conflictFolderId()}
 		/>;
 	}
 
@@ -560,6 +562,7 @@ const mapStateToProps = (state: AppState) => {
 		notes: state.notes,
 		folders: state.folders,
 		selectedNoteIds: state.selectedNoteIds,
+		selectedFolderId: state.selectedFolderId,
 		isProvisional: state.provisionalNoteIds.includes(noteId),
 		editorNoteStatuses: state.editorNoteStatuses,
 		syncStarted: state.syncStarted,

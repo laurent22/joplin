@@ -26,6 +26,13 @@ interface Target {
 	source?: string;
 }
 
+interface LoggerWrapper {
+	debug: Function;
+	info: Function;
+	warn: Function;
+	error: Function;
+}
+
 class Logger {
 
 	// For backward compatibility
@@ -36,6 +43,7 @@ class Logger {
 	public static LEVEL_DEBUG = LogLevel.Debug;
 
 	public static fsDriver_: any = null;
+	private static globalLogger_: Logger = null;
 
 	private targets_: Target[] = [];
 	private level_: LogLevel = LogLevel.Info;
@@ -44,6 +52,24 @@ class Logger {
 	static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = new FsDriverDummy();
 		return Logger.fsDriver_;
+	}
+
+	public static initializeGlobalLogger(logger: Logger) {
+		this.globalLogger_ = logger;
+	}
+
+	private static get globalLogger(): Logger {
+		if (!this.globalLogger_) throw new Error('Global logger has not been initialized!!');
+		return this.globalLogger_;
+	}
+
+	static create(prefix: string): LoggerWrapper {
+		return {
+			debug: (...object: any[]) => this.globalLogger.log(LogLevel.Debug, prefix, ...object),
+			info: (...object: any[]) => this.globalLogger.log(LogLevel.Info, prefix, ...object),
+			warn: (...object: any[]) => this.globalLogger.log(LogLevel.Warn, prefix, ...object),
+			error: (...object: any[]) => this.globalLogger.log(LogLevel.Error, prefix, ...object),
+		};
 	}
 
 	setLevel(level: LogLevel) {
@@ -132,14 +158,12 @@ class Logger {
 		return this.level();
 	}
 
-	log(level: LogLevel, ...object: any[]) {
+	public log(level: LogLevel, prefix: string, ...object: any[]) {
 		if (!this.targets_.length) return;
-
-		const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
-		const line = `${timestamp}: `;
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
+			const targetPrefix = prefix ? prefix : target.prefix;
 
 			if (this.targetLevel(target) < level) continue;
 
@@ -149,26 +173,30 @@ class Logger {
 				if (level == LogLevel.Warn) fn = 'warn';
 				if (level == LogLevel.Info) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
-				let items = [moment().format('HH:mm:ss')];
-				if (target.prefix) {
-					items.push(target.prefix);
-				}
-				items = items.concat(...object);
+				const prefixItems = [moment().format('HH:mm:ss')];
+				if (targetPrefix) prefixItems.push(targetPrefix);
+				const items = [`${prefixItems.join(': ')}:`].concat(...object);
 				consoleObj[fn](...items);
 			} else if (target.type == 'file') {
-				const serializedObject = this.objectsToString(...object);
+				const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
+				const line = [timestamp];
+				if (targetPrefix) line.push(targetPrefix);
+				line.push(this.objectsToString(...object));
 				try {
-					Logger.fsDriver().appendFileSync(target.path, `${line + serializedObject}\n`);
+					// TODO: Should log async
+					Logger.fsDriver().appendFileSync(target.path, `${line.join(': ')}\n`);
 				} catch (error) {
 					console.error('Cannot write to log file:', error);
 				}
 			} else if (target.type == 'database') {
-				const msg = this.objectsToString(...object);
+				const msg = [];
+				if (targetPrefix) msg.push(targetPrefix);
+				msg.push(this.objectsToString(...object));
 
 				const queries = [
 					{
 						sql: 'INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)',
-						params: [target.source, level, msg, time.unixMs()],
+						params: [target.source, level, msg.join(': '), time.unixMs()],
 					},
 				];
 
@@ -188,16 +216,16 @@ class Logger {
 	}
 
 	error(...object: any[]) {
-		return this.log(LogLevel.Error, ...object);
+		return this.log(LogLevel.Error, null, ...object);
 	}
 	warn(...object: any[]) {
-		return this.log(LogLevel.Warn, ...object);
+		return this.log(LogLevel.Warn, null, ...object);
 	}
 	info(...object: any[]) {
-		return this.log(LogLevel.Info, ...object);
+		return this.log(LogLevel.Info, null, ...object);
 	}
 	debug(...object: any[]) {
-		return this.log(LogLevel.Debug, ...object);
+		return this.log(LogLevel.Debug, null, ...object);
 	}
 
 	static levelStringToId(s: string) {

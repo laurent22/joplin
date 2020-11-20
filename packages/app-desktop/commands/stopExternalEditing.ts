@@ -1,7 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
-const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 
 export const declaration: CommandDeclaration = {
 	name: 'stopExternalEditing',

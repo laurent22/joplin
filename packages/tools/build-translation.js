@@ -2,8 +2,10 @@
 
 // Dependencies:
 //
-// sudo apt install gettext
-// sudo apt install translate-toolkit
+// sudo apt install gettext sudo apt install translate-toolkit
+//
+// gettext v21+ is required as versions before that have bugs when parsing
+// JavaScript template strings which means we would lose translations.
 
 const rootDir = `${__dirname}/../..`;
 

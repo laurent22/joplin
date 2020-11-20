@@ -70,6 +70,7 @@ const inMemoryCache = new InMemoryCache(20);
 export interface ExtraRendererRule {
 	id: string;
 	module: any;
+	assetPath: string;
 }
 
 export interface Options {
@@ -136,10 +137,6 @@ export interface RuleOptions {
 	// Use in mobile app to enable long-pressing an image or a linkg
 	// to display a context menu. Used in `image.ts` and `link_open.ts`
 	enableLongPress?: boolean;
-
-	// Used in mobile app when enableLongPress = true. Tells for how long
-	// the resource should be pressed before the menu is shown.
-	longPressDelay?: number;
 
 	// Use by `link_open` rule.
 	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)

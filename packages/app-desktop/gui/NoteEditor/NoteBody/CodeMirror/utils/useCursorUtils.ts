@@ -100,5 +100,33 @@ export default function useCursorUtils(CodeMirror: any) {
 		});
 	});
 
+	// params are the oncontextmenu params
+	CodeMirror.defineExtension('alignSelection', function(params: any) {
+		// The below is a HACK that uses the selectionText from electron and the coordinates of
+		// the click to determine what the codemirror selection should be
+		const alignStrings = (s1: string, s2: string) => {
+			for (let i = 0; i < s1.length; i++) {
+				if (s1.substr(i, s2.length) === s2) { return i; }
+			}
+			return -1;
+		};
+
+		const selectionText = params.selectionText;
+		const coords = this.coordsChar({ left: params.x, top: params.y });
+		const { anchor, head } = this.findWordAt(coords);
+		const selectedWord = this.getRange(anchor, head);
+
+		if (selectionText.length > selectedWord.length) {
+			const offset = alignStrings(selectionText, selectedWord);
+			anchor.ch -= offset;
+			head.ch = anchor.ch + selectionText.length;
+		} else if (selectionText.length < selectedWord.length) {
+			const offset = alignStrings(selectedWord, selectionText);
+			anchor.ch += offset;
+			head.ch = anchor.ch + selectionText.length;
+		}
+
+		this.setSelection(anchor, head);
+	});
 
 }

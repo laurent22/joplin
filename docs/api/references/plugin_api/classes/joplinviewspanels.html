@@ -67,8 +67,11 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Allows creating and managing view panels. View panels currently are displayed at the right of the sidebar and allows displaying any HTML content (within a webview) and update it in real-time. For example
-						it could be used to display a table of content for the active note, or display various metadata or graph.</p>
+						<p>Allows creating and managing view panels. View panels currently are
+							displayed at the right of the sidebar and allows displaying any HTML
+							content (within a webview) and update it in real-time. For example it
+							could be used to display a table of content for the active note, or
+						display various metadata or graph.</p>
 					</div>
 					<p><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/toc">View the demo plugin</a></p>
 				</div>
@@ -143,7 +146,7 @@
 					<a name="create" class="tsd-anchor"></a>
 					<h3>create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -154,6 +157,12 @@
 									<p>Creates a new panel</p>
 								</div>
 							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
 							<!-- JOPLINCHANGE
     <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a><span class="tsd-signature-symbol">&gt;</span></h4>
 
