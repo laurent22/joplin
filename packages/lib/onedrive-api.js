@@ -145,7 +145,6 @@ class OneDriveApi {
 
 		if (content) {
 			options.body = (await new Blob([content]).arrayBuffer()).slice(options.startByte, options.startByte + options.contentLength);
-
 		} else {
 			const chunk = await shim.fsDriver().readFileChunk(handle, options.contentLength);
 			const Buffer = require('buffer').Buffer;
