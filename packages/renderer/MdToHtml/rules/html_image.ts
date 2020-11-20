@@ -1,7 +1,6 @@
 import { RuleOptions } from '../../MdToHtml';
-
-const htmlUtils = require('../../htmlUtils.js');
-const utils = require('../../utils');
+import htmlUtils from '../../htmlUtils';
+import utils from '../../utils';
 
 function renderImageHtml(before: string, src: string, after: string, ruleOptions: RuleOptions) {
 	const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
