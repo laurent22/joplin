@@ -1,0 +1,10 @@
+node_modules/
+packageInfo.js
+dist/
+*.min.js
+.DS_Store
+gui/note-viewer/pluginAssets/
+pluginAssets/
+gui/note-viewer/fonts/
+gui/note-viewer/lib.js
+gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js

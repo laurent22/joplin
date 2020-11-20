@@ -1,0 +1,23 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+# Note: it was 13.4 to get @react-native-community/datetimepicker to work
+# but it's probably not necessary actually. Just needed to upgrade XCode.
+platform :ios, '10.0'
+
+target 'Joplin' do
+  config = use_native_modules!
+
+  use_react_native!(:path => config["reactNativePath"])
+  
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable these next few lines.
+  use_flipper!
+  post_install do |installer|
+    flipper_post_install(installer)
+  end
+end

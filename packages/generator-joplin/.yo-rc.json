@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Laurent Cozic",
+      "authorEmail": "laurent@cozic.net",
+      "authorUrl": ""
+    }
+  }
+}

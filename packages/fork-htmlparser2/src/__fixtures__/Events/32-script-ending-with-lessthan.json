@@ -1,0 +1,26 @@
+{
+    "name": "Scripts ending with <",
+    "options": {
+        "handler": {},
+        "parser": {}
+    },
+    "html": "<script><</script>",
+    "expected": [
+        {
+            "event": "opentagname",
+            "data": ["script"]
+        },
+        {
+            "event": "opentag",
+            "data": ["script", {}]
+        },
+        {
+            "event": "text",
+            "data": ["<"]
+        },
+        {
+            "event": "closetag",
+            "data": ["script"]
+        }
+    ]
+}

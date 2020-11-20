@@ -1,0 +1,52 @@
+{
+  "name": "@joplin/server-backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run compile && node dist/app/app.js",
+    "start-prod": "npm run compile && node dist/app/app.js",
+    "generate-types": "rm -f db-buildTypes.sqlite && NODE_ENV=buildTypes npm run db-migrate && NODE_ENV=buildTypes node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
+    "compile": "gulp",
+    "db-migrate": "npm run compile && node dist/tools/db-migrate.js",
+    "postinstall": "npm run compile && npm run generate-types",
+    "test-old": "rm -f db-testing.sqlite && NODE_ENV=testing npm run compile && NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jest",
+    "test-test": "rm -f db-testing.sqlite && npx tsc && NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jest --forceExit",
+    "test": "npx jest --forceExit",
+    "test-fast": "rm -f db-testing.sqlite &&  NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json",
+    "watch-ts": "tsc --project ./ --outDir dist/ --watch",
+    "watch-assets": "npx gulp watch-assets",
+    "watch": "npx tsc --watch --project tsconfig.json"
+  },
+  "dependencies": {
+    "@joplin/lib": "^1.0.9",
+    "bcryptjs": "^2.4.3",
+    "fs-extra": "^8.1.0",
+    "knex": "^0.19.4",
+    "koa": "^2.8.1",
+    "koa-body": "^4.1.1",
+    "koa-if": "^1.0.2",
+    "moment": "^2.24.0",
+    "mustache": "^3.1.0",
+    "nanoid": "^2.1.1",
+    "query-string": "^6.8.3",
+    "raw-body": "^2.4.1",
+    "sqlite3": "^4.1.0",
+    "yargs": "^14.0.0"
+  },
+  "devDependencies": {
+    "@rmp135/sql-ts": "git+https://github.com/laurent22/sql-ts.git",
+    "@types/co-body": "0.0.3",
+    "@types/fs-extra": "^8.0.0",
+    "@types/jest": "^26.0.15",
+    "@types/koa": "^2.0.49",
+    "@types/mustache": "^0.8.32",
+    "@types/yargs": "^13.0.2",
+    "gulp": "^4.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^5.0.1",
+    "gulp-watch": "^5.0.1",
+    "jest": "^26.6.3",
+    "source-map-support": "^0.5.13",
+    "typescript": "^4.1.2"
+  }
+}

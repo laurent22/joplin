@@ -1,0 +1,26 @@
+node_modules/
+app/src
+tests-build/
+tests/src
+config.json
+app/lib
+tests/fuzzing/client0
+tests/fuzzing/client1
+tests/fuzzing/client2
+tests/fuzzing/sync
+tests/fuzzing.*
+tests/fuzzing -*
+tests/logs/*
+tests/cli-integration/
+tests/tmp/
+*.mo
+*.*~
+tests/sync
+out.txt
+linkToLocal.sh
+yarn-error.log
+tests/support/dropbox-auth.txt
+tests/support/nextcloud-auth.json
+tests/support/onedrive-auth.txt
+build/
+patches/

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script src="UserWebviewIndex.js"></script>
+	<style>
+		html {
+			overflow: hidden;
+		}
+
+		body {
+			box-sizing: border-box;
+			padding: 0;
+			margin: 0;
+			background-color: var(--joplin-background-color);
+			color: var(--joplin-color);
+			font-size: var(--joplin-font-size);
+			font-family: var(--joplin-font-family);
+		}
+
+		/* We need "display: flex" in order to accurately get the content size */
+		/* including margin and padding of children */
+		#joplin-plugin-content {
+			display: flex;
+			flex-direction: column;
+		}
+	</style>
+</head>
+
+<body>
+</body>
+</html>

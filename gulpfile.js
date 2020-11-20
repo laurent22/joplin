@@ -1,28 +1,26 @@
 const gulp = require('gulp');
-const ts = require('gulp-typescript');
-const tsProject = ts.createProject('tsconfig.json');
-const serverRootDir = rtrimSlashes(__dirname);
-const sourcemaps = require('gulp-sourcemaps');
-const header = require('gulp-header');
+const utils = require('./packages/tools/gulp/utils');
 
-function rtrimSlashes(path) {
-	return path.replace(/[/\\]+$/, '');
-}
+const tasks = {
+	// copyLib: require('./packages/tools/gulp/tasks/copyLib'),
+	// tsc: require('./packages/tools/gulp/tasks/tsc'),
+	updateIgnoredTypeScriptBuild: require('./packages/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
+	// deleteBuildDirs: require('./packages/tools/gulp/tasks/deleteBuildDirs'),
+	completePublishAll: {
+		fn: async () => {
+			await utils.execCommandVerbose('git pull');
+			await utils.execCommandVerbose('git add -A');
+			await utils.execCommandVerbose('git commit -m "Releasing sub-packages"');
+			await utils.execCommandVerbose('lerna publish from-package -y');
+			await utils.execCommandVerbose('git push');
+		},
+	},
+};
 
-function buildTypeScripts() {
-	return gulp.src([
-		'ReactNativeClient/lib/*.ts',
-	])
-		.pipe(sourcemaps.init())
-		.pipe(tsProject()).js
-		.pipe(sourcemaps.write())
-		.pipe(header('/* eslint-disable */\n'))
-		.pipe(gulp.dest((src) => {
-			const baseDir = rtrimSlashes(src.dirname.substr(serverRootDir.length + 1));
-			return baseDir;
-		}));
-}
+utils.registerGulpTasks(gulp, tasks);
 
-gulp.task('default', async function() {
-	return buildTypeScripts();
-});
+// gulp.task('build', gulp.series('copyLib', 'tsc', 'updateIgnoredTypeScriptBuild'));
+
+// // The clean task removes build directories and copy back the library. This is useful
+// // when switching from one branch to another.
+// gulp.task('clean', gulp.series('deleteBuildDirs', 'copyLib'));

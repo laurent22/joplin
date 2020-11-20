@@ -1,0 +1,261 @@
+{
+    "name": "SVG",
+    "file": "Svg.html",
+    "expected": [
+        {
+            "event": "processinginstruction",
+            "data": ["!doctype", "!doctype html"]
+        },
+        {
+            "event": "text",
+            "data": ["\n"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["html"]
+        },
+        {
+            "event": "opentag",
+            "data": ["html", {}]
+        },
+        {
+            "event": "text",
+            "data": ["\n"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["head"]
+        },
+        {
+            "event": "opentag",
+            "data": ["head", {}]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["title"]
+        },
+        {
+            "event": "opentag",
+            "data": ["title", {}]
+        },
+        {
+            "event": "text",
+            "data": ["SVG test"]
+        },
+        {
+            "event": "closetag",
+            "data": ["title"]
+        },
+        {
+            "event": "text",
+            "data": ["\n"]
+        },
+        {
+            "event": "closetag",
+            "data": ["head"]
+        },
+        {
+            "event": "text",
+            "data": ["\n"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["body"]
+        },
+        {
+            "event": "opentag",
+            "data": ["body", {}]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["svg"]
+        },
+        {
+            "event": "attribute",
+            "data": ["version", "1.1"]
+        },
+        {
+            "event": "attribute",
+            "data": ["xmlns", "http://www.w3.org/2000/svg"]
+        },
+        {
+            "event": "attribute",
+            "data": ["xmlns:xlink", "http://www.w3.org/1999/xlink"]
+        },
+        {
+            "event": "opentag",
+            "data": [
+                "svg",
+                {
+                    "version": "1.1",
+                    "xmlns": "http://www.w3.org/2000/svg",
+                    "xmlns:xlink": "http://www.w3.org/1999/xlink"
+                }
+            ]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["title"]
+        },
+        {
+            "event": "opentag",
+            "data": ["title", {}]
+        },
+        {
+            "event": "text",
+            "data": ["Test"]
+        },
+        {
+            "event": "closetag",
+            "data": ["title"]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["animate"]
+        },
+        {
+            "event": "opentag",
+            "data": ["animate", {}]
+        },
+        {
+            "event": "closetag",
+            "data": ["animate"]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["polygon"]
+        },
+        {
+            "event": "opentag",
+            "data": ["polygon", {}]
+        },
+        {
+            "event": "closetag",
+            "data": ["polygon"]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["g"]
+        },
+        {
+            "event": "opentag",
+            "data": ["g", {}]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["path"]
+        },
+        {
+            "event": "opentag",
+            "data": ["path", {}]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t\t\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["title"]
+        },
+        {
+            "event": "opentag",
+            "data": ["title", {}]
+        },
+        {
+            "event": "text",
+            "data": ["x"]
+        },
+        {
+            "event": "closetag",
+            "data": ["title"]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t\t\t"]
+        },
+        {
+            "event": "opentagname",
+            "data": ["animate"]
+        },
+        {
+            "event": "opentag",
+            "data": ["animate", {}]
+        },
+        {
+            "event": "closetag",
+            "data": ["animate"]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t\t"]
+        },
+        {
+            "event": "closetag",
+            "data": ["path"]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t\t"]
+        },
+        {
+            "event": "closetag",
+            "data": ["g"]
+        },
+        {
+            "event": "text",
+            "data": ["\n\t"]
+        },
+        {
+            "event": "closetag",
+            "data": ["svg"]
+        },
+        {
+            "event": "text",
+            "data": ["\n"]
+        },
+        {
+            "event": "closetag",
+            "data": ["body"]
+        },
+        {
+            "event": "text",
+            "data": ["\n"]
+        },
+        {
+            "event": "closetag",
+            "data": ["html"]
+        },
+        {
+            "event": "text",
+            "data": ["\n"]
+        }
+    ]
+}

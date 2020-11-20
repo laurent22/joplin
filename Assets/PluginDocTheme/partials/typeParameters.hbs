@@ -1,0 +1,14 @@
+<ul class="tsd-type-parameters">
+    {{#each typeParameters}}
+        <li>
+            <h4>{{#compact}}
+                {{name}}
+                {{#if type}}
+                    <span class="tsd-signature-symbol">:&nbsp;</span>
+                    {{#with type}}{{> type}}{{/with}}
+                {{/if}}
+            {{/compact}}</h4>
+            {{> comment}}
+        </li>
+    {{/each}}
+</ul>

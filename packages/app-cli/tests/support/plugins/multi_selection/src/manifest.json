@@ -1,0 +1,10 @@
+{
+	"id": "org.joplinapp.plugins.MultiSelection",
+	"manifest_version": 1,
+	"app_min_version": "1.4",
+	"name": "Multi Note Selection Demo",
+	"description": "Demonstrate how to get the selected notes and process them",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

@@ -1,0 +1,9 @@
+{
+	"id": "org.joplinapp.plugins.JsonExportDemo",
+	"manifest_version": 1,
+	"app_min_version": "1.4",
+	"name": "Json Export Test",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

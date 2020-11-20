@@ -1,0 +1,83 @@
+<ul class="tsd-parameters">
+    {{#if signatures}}
+        <li class="tsd-parameter-signature">
+            <ul class="tsd-signatures {{cssClasses}}">
+                {{#each signatures}}
+                    <li class="tsd-signature tsd-kind-icon">{{#compact}}
+                        {{> member.signature.title hideName=true }}
+                    {{/compact}}</li>
+                {{/each}}
+            </ul>
+
+            <ul class="tsd-descriptions">
+                {{#each signatures}}
+                    <li class="tsd-description">{{> member.signature.body hideSources=true }}</li>
+                {{/each}}
+            </ul>
+        </li>
+    {{/if}}
+    {{#if indexSignature}}
+        <li class="tsd-parameter-index-signature">
+            <h5>{{#compact}}
+                <span class="tsd-signature-symbol">[</span>
+                {{#each indexSignature.parameters}}
+                    {{#if flags.isRest}}<span class="tsd-signature-symbol">...</span>{{/if}}{{name}}:&nbsp;{{#with type}}{{>type}}{{/with}}
+                {{/each}}
+                <span class="tsd-signature-symbol">]:&nbsp;</span>
+                {{#with indexSignature.type}}{{>type}}{{/with}}
+            {{/compact}}</h5>
+
+            {{#with indexSignature}}
+                {{> comment}}
+            {{/with}}
+
+            {{#if indexSignature.type.declaration}}
+                {{#with indexSignature.type.declaration}}
+                    {{> parameter}}
+                {{/with}}
+            {{/if}}
+        </li>
+    {{/if}}
+    {{#each children}}
+        <li class="tsd-parameter">
+            {{#if signatures}}
+                <h5>{{#compact}}
+                    {{#if flags.isRest}}<span class="tsd-signature-symbol">...</span>{{/if}}
+                    {{{wbr name}}}
+                    <span class="tsd-signature-symbol">
+                        {{#if isOptional}}?{{/if}}
+                        :&nbsp;
+                    </span>
+                    function
+                {{/compact}}</h5>
+
+                {{> member.signatures}}
+            {{else}}
+                <h5>{{#compact}}
+                    {{#each flags}}
+                        <span class="tsd-flag ts-flag{{this}}">{{this}}</span>&nbsp;
+                    {{/each}}
+                    {{#if flags.isRest}}<span class="tsd-signature-symbol">...</span>{{/if}}
+                    {{{wbr name}}}
+                    <span class="tsd-signature-symbol">
+                        {{#if flags.isOptional}}?{{/if}}
+                        :&nbsp;
+                    </span>
+                    {{#with type}}{{>type}}{{/with}}
+                {{/compact}}</h5>
+
+                {{> comment}}
+
+                {{#if children}}
+                    {{> parameter}}
+                {{/if}}
+
+                {{#if type.declaration}}
+                    {{#with type.declaration}}
+                        {{> parameter}}
+                    {{/with}}
+                {{/if}}
+            {{/if}}
+        </li>
+    {{/each}}
+</ul>

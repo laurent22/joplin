@@ -1,0 +1,10 @@
+{
+	"id": "org.joplinapp.plugins.ContentScriptDemo",
+	"manifest_version": 1,
+	"app_min_version": "1.4",
+	"name": "Content Script Test",
+	"description": "",
+	"version": "1.0.0",
+	"author": "",
+	"homepage_url": ""
+}

@@ -1,5 +1,167 @@
 # Joplin terminal app changelog
 
+## [cli-v1.4.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.3) - 2020-11-06T21:19:29Z
+
+IMPORTANT: If you use the web API, please note that there are a few breaking changes in this release. See here for more information: https://github.com/laurent22/joplin/pull/3983#issue-509624899
+
+- New: API: Adds ability to paginate data (#3983)
+- Fixed: Display proper error message when decryption worker cannot be started (#4000)
+- Fixed: Fixed OneDrive authentication
+- Fixed: Fixed sync issue when importing ENEX files that contain new line characters in the source URL attribute (#3955)
+
+## [cli-v1.3.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.3.3) - 2020-10-23T16:00:38Z
+
+- Improved: Added support for a custom S3 URL (#3921) (#3691 by [@aaron](https://github.com/aaron))
+- Improved: Allow setting note geolocation attributes via API (#3884)
+- Improved: Import &lt;strike&gt;,&lt;s&gt; tags (strikethrough) from Evernote (#3936 by Ian Slinger)
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Sort search results by average of multiple criteria, including &#039;Sort notes by&#039; field setting (#3777 by [@shawnaxsom](https://github.com/shawnaxsom))
+- Improved: Sort tags in a case-insensitive way
+- Improved: Updated installation script with BSD support (#3930 by Andros Fenollosa)
+- Fixed: Crash when trying to change app locale (#3847)
+- Fixed: Fix search filters when language is in Korean or with accents (#3947 by Naveen M V)
+- Fixed: Fixed freeze when importing ENEX as HTML, and fixed potential error when importing resources (#3958)
+- Fixed: Fixed setting issue that would cause a password to be saved in plain text in the database, even when the keychain is working
+- Fixed: Importing ENEX as HTML was importing as Markdown (#3923)
+- Fixed: Regression: Fix export of pluginAssets when exporting to html/pdf (#3927 by Caleb John)
+
+## [cli-v1.2.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.3) - 2020-10-09T11:17:18Z
+
+- Improved: Improved handling of database migration failures
+
+## [cli-v1.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.2) - 2020-09-29T11:33:53Z
+
+- Fixed: Fixed crash due to missing spellfix extension
+- Fixed: Fixed link generation when exporting to PDF or HTML (#3780)
+- Fixed: Improved handling of special characters when exporting to Markdown (#3760)
+
+## [cli-v1.2.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.2.1) - 2020-09-23T11:15:12Z
+
+- Fixed: Fixed crash due to missing spellfix extension
+- Fixed: Fixed link generation when exporting to PDF or HTML (#3780)
+- Fixed: Improved handling of special characters when exporting to Markdown (#3760)
+
+## [cli-v1.1.8](https://github.com/laurent22/joplin/releases/tag/cli-v1.1.8) - 2020-09-21T12:02:29Z
+
+- Improved: Do not prevent export when one item is still encrypted
+- Improved: Fix keytar library being loaded up in FreeBSD. (#3712) (#3711 by Jose Esteve)
+- Fixed: Fixed note export when there are folders with non-existing parents. Also fixed long path issue on Windows. (#3689)
+- Fixed: Increased file extension limit to 20 to prevent issue when using external editors (#3696)
+
+## [cli-v1.0.168](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.168) - 2020-09-14T08:47:08Z
+
+- Improved: Implemented reliable way to sync device and server clocks
+
+## [cli-v1.0.167](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.167) - 2020-09-04T17:15:49Z
+
+- New: Add mechanism to lock and upgrade sync targets (#3524)
+- Improved: Add search filters (#3213) (#1877 by Naveen M V)
+- Improved: Add support for OneDrive for Business (#3433) (#1266 by [@jonath92](https://github.com/jonath92))
+- Improved: Added link navigation shortcuts (#3275) (#3217 by j-krl)
+- Improved: When searching, weight notes using Okapi BM25 score (#3454 by Naveen M V)
+- Fixed: Fixed sync fetching issue (#3599) (#3591 by [@alexchee](https://github.com/alexchee))
+
+## [cli-v1.0.166](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.166) - 2020-08-02T14:03:26Z
+
+- New: Add support for AWS S3 synchronisation (Beta) (#2815 by [@alexchee](https://github.com/alexchee))
+- Fixed: Desktop-only scripts were incorrectly being loaded in CLI server tool (#3548)
+- Fixed: Fix filename when exporting notebook as Markdown (#3473)
+- Fixed: Fixed attachments being out of order when importing Enex file
+
+## [cli-v1.0.165](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.165) - 2020-07-10T18:51:42Z
+
+- New: Translation: Add bahasa indonesia (id_ID.po) (#3246 by [@ffadilaputra](https://github.com/ffadilaputra))
+- Improved: Allow importing ENEX files as HTML
+- Improved: Disable support for HTML export for now as it does not work
+- Improved: Upload attachments > 4 MB when using OneDrive (#3195) (#173 by [@TheOnlyTrueJonathanHeard](https://github.com/TheOnlyTrueJonathanHeard))
+- Fixed: Fixed import of checkboxes in ENEX files (#3402)
+- Fixed: Fixed various bugs related to the import of ENEX files as HTML
+- Fixed: Only de-duplicate imported notebook titles when needed (#2331)
+- Fixed: Prevent desktop.ini file from breaking sync lock (#3381)
+- Fixed: Prevent notebook to be the parent of itself (#3334)
+- Fixed: Sync would fail in some cases due to a database error (#3234)
+
+## [cli-v1.0.164](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.164) - 2020-05-13T15:30:22Z
+
+- New: Added support for basic search
+- Improved: Improve automatic title generation (#2955) (#2915 by anirudh murali)
+- Improved: Improve handling of encrypted items
+- Improved: Made layout configurable (#3069 by [@jyuvaraj03](https://github.com/jyuvaraj03))
+- Improved: Start resource fetcher service when a note has been decrypted
+- Fixed: Better handling of missing table field bug on Linux (#3088)
+- Fixed: Fix format of geolocation data (#2673 by [@mic704b](https://github.com/mic704b))
+
+## [cli-v1.0.163](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.163) - 2020-04-10T18:31:50Z
+
+- Improved: Update ko.po (#2986 by [@xmlangel](https://github.com/xmlangel))
+- Improved: Update it_IT.po (#2978 by [@abonte](https://github.com/abonte))
+- Improved: Update nb_NO.po (#2973 by Mats Estensen)
+- Improved: Update zh_CN.po (#2971 by [@troilus](https://github.com/troilus))
+- Fixed: Add support for retrying decryption after it has failed multiple times (#2981)
+- Fixed: When modifying a conflicted note, it would disappear from the view (#2709)
+- Fixed: Prevent decryption loop when a resource cannot be decrypted (#2257)
+
+## [cli-v1.0.162](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.162) - 2020-04-01T17:16:14Z
+
+- New: Compatibility with new master key and sync target encryption
+
+## [cli-v1.0.161](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.161) - 2020-03-07T01:20:04Z
+
+- New: Add more context to encryption errors
+- Improved: Changed default encryption method to CCM
+- Improved: Change geolocation service to freegeoip.app to improve privacy (#2503 by Helmut K. C. Tessarek)
+- Fixed: Handle invalid UTF-8 data when encrypting (#2591)
+- Fixed: Fixed issue when a notebook does not have a parent (#2536)
+- Fixed: Better handling of rare error in WebDAV server (#2485)
+- Fixed: Fix importing of very large attachments (150MB+) from Evernote ENEX files
+
+## [cli-v1.0.154](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.154) - 2020-02-07T23:22:24Z
+
+- New: Added new date format YYYY.MM.DD (#2318 by XSAkos)
+- Improved: Reset time fields when duplicating a note (#2428 by [@tekdel](https://github.com/tekdel))
+- Improved: More info for "unknown profile version" error message (#2361 by [@mic704b](https://github.com/mic704b))
+- Improved: Handle Thai language in search (#2387) (#2279 by Kirtan Purohit)
+- Fixed: Fix escaping of title when generating a markdown link (#2456) (#2085 by Helmut K. C. Tessarek)
+- Fixed: Fix console messages being displayed in GUI (#2457 by Helmut K. C. Tessarek)
+
+## [cli-v1.0.153](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.153) - 2020-01-24T23:16:32Z
+
+- New: Added new, more secure encryption methods, so that they can be switched to at a later time
+- New: Add --export, --import, and --import-file flags to joplin config (#2179 by Marcus Hill)
+- New: Added more logging for resource fetching to try to debug issue
+- New: Add warning message when user tries to upload a file 10MB or larger (#2102) (#2097 by Marcus Hill)
+- Improved: Replace note links with relative paths in MD Exporter (#2161 by Vaidotas Simkus)
+- Improved: Upgrade sqlite (#2248 by Devon Zuegel)
+- Improved: Extract note renderer to separate package (WIP) (#2206 by Laurent Cozic)
+- Improved: Better handling of resource download errors, and added resource info to sync status screen
+- Improved: Update Node dependency to 10+ (#2177 by [@joeltaylor](https://github.com/joeltaylor))
+- Improved: Allow exporting a note as HTML
+- Improved: Improved logging during sync to allow finding bugs more easily
+- Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) (#2091)
+- Fixed: Restaured translations that had been accidentally deleted (#2126)
+- Fixed: Prevent synch from happening if target dir could not be created, in local sync (#2117)
+- Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (#2088)
+
+## [cli-v1.0.150](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.150) - 2019-11-11T19:19:03Z
+
+- New: Add command to list all tags for a note (#2003) (#1974)
+- New: Added concept of sync version and client ID to allow upgrading sync targets
+- Improved: Set user-agent header to Joplin/1.0 (#2064) (#2042)
+- Improved: Update sharp tp v0.23.2 (for node 13 compatibility) (#2063)
+- Improved: Handle special shortcuts such as Ctrl+H
+- Improved: Handle WebDAV server with empty XML namespaces (#2002)
+- Improved: Allow apps to work with read-only profile
+- Improved: Support italic in span tags (#1966)
+- Improved: Allow setting user timestamps with "set" command
+- Improved: Allow a sync client to lock a sync target, so that migration operations can be performed on it
+- Improved: Give correct mime type to more file types
+- Improved: Use profile temp dir when exporting files (#1932)
+- Improved: Confirm encryption password (#1937)
+- Fixed: Handle paths with spaces for text editor (#2039)
+- Fixed: Apply default style to notes in HTML format (#1960)
+- Fixed: Fixed translation of "Synchronisation Status" (#1906)
+- Fixed: App would crash if trying to index a note that has not been decrypted yet (#1938)
+
 ## [cli-v1.0.149](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.149) - 2019-09-27T21:18:57Z
 
 - New: Add support to Termux by returning a default when platform name cannot be determined (#1905)

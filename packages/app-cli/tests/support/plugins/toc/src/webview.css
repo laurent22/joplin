@@ -1,0 +1,11 @@
+.container {
+	background-color: var(--joplin-background-color);
+	color: var(--joplin-color);
+	font-size: var(--joplin-font-size);
+	font-family: var(--joplin-font-family);
+}
+
+.toc-item a {
+	color: var(--joplin-color);
+	text-decoration: none;
+}
