@@ -1,18 +1,18 @@
 import * as Knex from 'knex';
 import * as fs from 'fs-extra';
 
-const packageRootDir = __dirname + '/../..'
+const packageRootDir = `${__dirname}/../..`;
 const nodeEnv = process.env.NODE_ENV || 'development';
 
-let dbConfig_:any = null;
-let db_:Knex = null;
+let dbConfig_: any = null;
+let db_: Knex = null;
 
 export function dbConfig() {
 	if (!dbConfig_) throw new Error('DB config is not set');
 	return dbConfig_;
 }
 
-export async function initDb(name:string = null, fromScratch:boolean = false) {
+export async function initDb(name: string = null, fromScratch: boolean = false) {
 	name = name || nodeEnv;
 
 	const dbFilePath = `${packageRootDir}/db-${name}.sqlite`;
@@ -29,7 +29,7 @@ export async function initDb(name:string = null, fromScratch:boolean = false) {
 		// it has a small performance overhead so only enable in testing and dev
 		asyncStackTraces: nodeEnv == 'development' || nodeEnv === 'testing',
 		// debug: nodeEnv == 'development' || nodeEnv === 'testing',
-	}
+	};
 
 	db_ = require('knex')(dbConfig_);
 
@@ -47,18 +47,18 @@ export async function destroyDb() {
 	if (dbFilePath) await fs.remove(dbFilePath);
 }
 
-export default function db():Knex {
-	if (!db_) throw new Error('Trying to access DB before it has been initialized')
+export default function db(): Knex {
+	if (!db_) throw new Error('Trying to access DB before it has been initialized');
 	return db_;
 }
 
-export async function migrate(db:Knex) {
+export async function migrate(db: Knex) {
 	const config = {
 		directory: `${packageRootDir}/dist/migrations`,
 		// Disable transactions because the models might open one too
 		disableTransactions: true,
 	};
-	
+
 	await db.migrate.latest(config);
 }
 

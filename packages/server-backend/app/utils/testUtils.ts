@@ -5,7 +5,7 @@ import cache from './cache';
 
 // Takes into account the fact that this file will be inside the /dist
 // directory when it runs.
-const packageRootDir = __dirname + '/../../..';
+const packageRootDir = `${__dirname}/../../..`;
 
 // require('source-map-support').install();
 
@@ -28,7 +28,7 @@ export const asyncTest = function(callback: Function) {
 	};
 };
 
-export async function beforeAllDb(unitName:string) {
+export async function beforeAllDb(unitName: string) {
 	await initDb(unitName, true);
 }
 

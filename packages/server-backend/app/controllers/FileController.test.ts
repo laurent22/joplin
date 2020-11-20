@@ -1,8 +1,8 @@
-import { asyncTest, clearDatabase, testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../utils/testUtils';
+import { asyncTest, testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../utils/testUtils';
 import FileController from '../controllers/FileController';
 import FileModel from '../models/FileModel';
 import * as fs from 'fs-extra';
-import { destroyDb, File, initDb } from '../db';
+import { File } from '../db';
 import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { filePathInfo } from '../utils/routeUtils';
 

@@ -9,7 +9,7 @@ import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
 import config from './config';
 
-//require('source-map-support').install();
+// require('source-map-support').install();
 
 config.baseUrl = `http://localhost:${config.port}`;
 

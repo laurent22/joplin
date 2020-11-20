@@ -1,6 +1,6 @@
 import db, { dbConfig } from '../app/db';
 
-//require('source-map-support').install();
+// require('source-map-support').install();
 
 const config = {
 	directory: `${__dirname}/../migrations`,
