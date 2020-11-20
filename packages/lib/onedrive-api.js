@@ -170,6 +170,7 @@ class OneDriveApi {
 		return response;
 	}
 
+
 	async uploadBigFile(url, options) {
 		const response = await shim.fetch(url, {
 			method: 'POST',
@@ -224,8 +225,11 @@ class OneDriveApi {
 				}
 				return { ok: true };
 			} catch (error) {
-				this.logger().error('Got unhandled error:', error ? error.code : '', error ? error.message : '', error);
+				const type = (handle) ? 'Resource' : 'Note Content';
+				this.logger().error(`Couldn't upload ${type} > 4 Mb. Got unhandled error:`, error ? error.code : '', error ? error.message : '', error);
 				throw error;
+			} finally {
+				if (handle) await shim.fsDriver().close(handle);
 			}
 
 		}
@@ -274,15 +278,12 @@ class OneDriveApi {
 
 			let response = null;
 			try {
-				if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
-					response = path.includes('/createUploadSession') ? await this.uploadBigFile(url, options) : await shim.uploadBlob(url, options);
+				if (path.includes('/createUploadSession')) {
+					response = await this.uploadBigFile(url, options);
+				} else if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+					response =  await shim.uploadBlob(url, options);
 				} else if (options.target == 'string') {
-					if (path.includes('/createUploadSession') &&  (method == 'POST' || method == 'PUT')) {
-						response = await this.uploadBigFile(url, options);
-					} else {
-						response = await shim.fetch(url, options);
-					}
-
+					response = await shim.fetch(url, options);
 				} else {
 					// file
 					response = await shim.fetchBlob(url, options);
