@@ -1,0 +1,22 @@
+<form class="form-signin" method="post">
+	<input type="hidden" name="client_id" value="{{client.id}}">
+	<input type="hidden" name="response_type" value="{{response_type}}">
+	<p><strong>{{client.name}}</strong> would like access to its own folder inside your Joplin Server.</p>
+	<p>To allow this application, please sign in:</p>
+	<label for="email" class="sr-only">Email address</label>
+	<input type="email" name="email" id="email" class="form-control" placeholder="Email address" required autofocus>
+	<label for="password" class="sr-only">Password</label>
+	<input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+	<div class="checkbox mb-3">
+		<label>
+			<input type="checkbox" value="remember-me"> Remember me
+		</label>
+	</div>
+	{{#error}}
+	<div class="alert alert-danger" role="alert">
+		{{error.message}}
+	</div>
+	{{/error}}
+	<button class="btn btn-primary" type="submit">Cancel</button>
+	<button class="btn btn-primary" type="submit">Allow</button>
+</form>
