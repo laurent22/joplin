@@ -1351,6 +1351,9 @@ packages/lib/uuid.js.map
 packages/lib/versionInfo.d.ts
 packages/lib/versionInfo.js
 packages/lib/versionInfo.js.map
+packages/renderer/HtmlToHtml.d.ts
+packages/renderer/HtmlToHtml.js
+packages/renderer/HtmlToHtml.js.map
 packages/renderer/InMemoryCache.d.ts
 packages/renderer/InMemoryCache.js
 packages/renderer/InMemoryCache.js.map
@@ -1360,6 +1363,12 @@ packages/renderer/MarkupToHtml.js.map
 packages/renderer/MdToHtml.d.ts
 packages/renderer/MdToHtml.js
 packages/renderer/MdToHtml.js.map
+packages/renderer/MdToHtml/linkReplacement.d.ts
+packages/renderer/MdToHtml/linkReplacement.js
+packages/renderer/MdToHtml/linkReplacement.js.map
+packages/renderer/MdToHtml/linkReplacement.test.d.ts
+packages/renderer/MdToHtml/linkReplacement.test.js
+packages/renderer/MdToHtml/linkReplacement.test.js.map
 packages/renderer/MdToHtml/rules/checkbox.d.ts
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/checkbox.js.map
@@ -1393,6 +1402,9 @@ packages/renderer/MdToHtml/rules/mermaid.js.map
 packages/renderer/MdToHtml/rules/sanitize_html.d.ts
 packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/sanitize_html.js.map
+packages/renderer/htmlUtils.d.ts
+packages/renderer/htmlUtils.js
+packages/renderer/htmlUtils.js.map
 packages/renderer/index.d.ts
 packages/renderer/index.js
 packages/renderer/index.js.map
@@ -1402,4 +1414,7 @@ packages/renderer/noteStyle.js.map
 packages/renderer/pathUtils.d.ts
 packages/renderer/pathUtils.js
 packages/renderer/pathUtils.js.map
+packages/renderer/utils.d.ts
+packages/renderer/utils.js
+packages/renderer/utils.js.map
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

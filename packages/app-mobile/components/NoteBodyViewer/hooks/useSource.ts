@@ -87,7 +87,6 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				codeTheme: theme.codeThemeCss,
 				postMessageSyntax: 'window.joplinPostMessage_',
 				enableLongPress: shim.mobilePlatform() === 'android', // On iOS, there's already a built-on open/share menu
-				longPressDelay: 500, // TODO use system value
 			};
 
 			// Whenever a resource state changes, for example when it goes from "not downloaded" to "downloaded", the "noteResources"
