@@ -141,33 +141,34 @@ class OneDriveApi {
 		if (!options.method) { options.method = 'POST'; }
 		if (!options.headers) { options.headers = {}; }
 
-		if (!options.contentLength) throw new Error(' uploadChunk: contentLength is missing');
+		if (!options.contentLength) throw new Error('uploadChunk: contentLength is missing');
+		if (!options.headers) throw new Error('uploadChunk: header is missing');
 
-		const chunk = await shim.fsDriver().readFileChunk(handle, options.contentLength);
-		const Buffer = require('buffer').Buffer;
-		const buffer = Buffer.from(chunk, 'base64');
+		if (content) {
+			options.body = (await new Blob([content]).arrayBuffer()).slice(options.startByte, options.startByte + options.contentLength);
+
+		} else {
+			const chunk = await shim.fsDriver().readFileChunk(handle, options.contentLength);
+			const Buffer = require('buffer').Buffer;
+			const buffer = Buffer.from(chunk, 'base64');
+			options.body = buffer;
+		}
+
 		delete options.contentLength;
-		options.body = buffer;
+		delete options.startByte;
 
-		const response = await shim.fetch(url, options);
+		let response = null;
+		if (content && shim.isNode) {
+			// couldn't get it working with shim.fetch on desktop but works without problem with the native fetch.
+			// Always received `ECONNRESET` Error. Tried to disable compress option and increased timeout
+			// but didn't help.
+			response = await fetch(url,options);
+		} else {
+			response = await shim.fetch(url,options);
+		}
+
 		return response;
 	}
-
-
-	async uploadNoteChunk(url,handle, content, options) {
-		options = Object.assign({}, options);
-
-		try {
-			options.body = (await new Blob([content]).arrayBuffer()).slice(options.startByte, options.startByte + options.contentLength);
-			delete options.contentLength;
-			delete options.startByte;
-			const response = await fetch(url, options);
-			return response;
-		} catch (error) {
-			throw new Error(`Couldn't upload Note Chunk. Error code: ${error.code}, Error message: ${error.message}`);
-		}
-	}
-
 
 
 	async uploadBigFile(url, options) {
@@ -274,10 +275,11 @@ class OneDriveApi {
 					const headers = {
 						'Content-Length': contentLength,
 						'Content-Range': `bytes ${startByte}-${endByte}/${byteSize}`,
-						'Content-Type': 'application/octet-stream; charset=utf-8',
+						// 'Content-Type': 'application/octet-stream; charset=utf-8',
+						'Content-Type': 'text/plain',
 					};
 
-					const response = await this.uploadNoteChunk(uploadUrl, handle, options.body, { startByte: startByte, contentLength: contentLength, method: 'PUT', headers: headers });
+					const response = await this.uploadChunk(uploadUrl, handle, options.body, { startByte: startByte, contentLength: contentLength, method: 'PUT', headers: headers });
 					if (!response.ok) {
 						return response;
 					}
