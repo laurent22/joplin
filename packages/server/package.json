@@ -1,5 +1,5 @@
 {
-  "name": "@joplin/server-backend",
+  "name": "@joplin/server",
   "version": "0.0.0",
   "private": true,
   "scripts": {
