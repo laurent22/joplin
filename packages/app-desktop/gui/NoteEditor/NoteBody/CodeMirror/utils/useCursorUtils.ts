@@ -1,3 +1,5 @@
+import markdownUtils from '@joplin/lib/markdownUtils';
+
 // Helper functions that use the cursor
 export default function useCursorUtils(CodeMirror: any) {
 
@@ -75,14 +77,10 @@ export default function useCursorUtils(CodeMirror: any) {
 		// Batches the insert operations, if this wasn't done the inserts
 		// could potentially overwrite one another
 		this.operation(() => {
-
-			let num = 0;
-			if (string1.match(/^\d/)) {
-				num = Number(string1.substr(0,string1.length - 2));
-			}
-
 			for (let i = 0; i < selectedStrings.length; i++) {
 				const selected = selectedStrings[i];
+
+				let num = markdownUtils.olLineNumber(string1);
 
 				const lines = selected.split(/\r?\n/);
 				//  Save the newline character to restore it later
@@ -93,7 +91,7 @@ export default function useCursorUtils(CodeMirror: any) {
 					// Only add the list token if it's not already there
 					// if it is, remove it
 					if (!line.startsWith(string1)) {
-						if (num != 0) {
+						if (num) {
 							lines[j] = `${num.toString()}. ${line}`;
 							num++;
 						} else {
