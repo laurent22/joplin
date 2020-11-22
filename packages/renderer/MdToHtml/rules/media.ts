@@ -1,10 +1,12 @@
+import { RuleOptions } from '../../MdToHtml';
+
 const utils = require('../../utils');
 const urlUtils = require('../../urlUtils.js');
 
-function installRule(markdownIt:any, _mdOptions:any, ruleOptions:any, _context:any) {
+function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.link_open;
 
-	markdownIt.renderer.rules.link_open = function(tokens:any, idx:any) {
+	markdownIt.renderer.rules.link_open = function(tokens: any, idx: any) {
 		const token = tokens[idx];
 		const href = utils.getAttr(token.attrs, 'href');
 
@@ -29,7 +31,7 @@ function installRule(markdownIt:any, _mdOptions:any, ruleOptions:any, _context:a
 		}
 
 		const mime = resource.mime ? resource.mime.toLowerCase() : '';
-		if (mime === 'application/pdf') {
+		if (isSupportedType(mime)) {
 			return `<object data="${filename}" style="min-height:100vh;width:100%" type="${mime}"></object> ${defaultRender(tokens, idx)}`;
 		} else {
 			return defaultRender(tokens, idx);
@@ -37,10 +39,8 @@ function installRule(markdownIt:any, _mdOptions:any, ruleOptions:any, _context:a
 	};
 }
 
-export default {
-	install: function(context:any, ruleOptions:any) {
-		return function(md:any, mdOptions:any) {
-			installRule(md, mdOptions, ruleOptions, context);
-		};
-	},
-};
+function isSupportedType(mime: string): boolean {
+	return mime === 'application/pdf';
+}
+
+export default { plugin };
