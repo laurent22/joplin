@@ -147,27 +147,27 @@ describe('MdToHtml', function() {
 		expect(result.html.trim()).toBe('<div id="rendered-md"><p>just <strong>testing</strong></p>\n</div>');
 	}));
 
-	it('should render links correctly', asyncTest(async () => {
-		const mdToHtml = newTestMdToHtml();
+	// it('should render links correctly', asyncTest(async () => {
+	// 	const mdToHtml = newTestMdToHtml();
 
-		const testCases = [
-			// None of these should result in a link
-			['https://example.com', 'https://example.com'],
-			['file://C:\\AUTOEXEC.BAT', 'file://C:\\AUTOEXEC.BAT'],
-			['example.com', 'example.com'],
-			['oo.ps', 'oo.ps'],
-			['test@example.com', 'test@example.com'],
+	// 	const testCases = [
+	// 		// None of these should result in a link
+	// 		['https://example.com', 'https://example.com'],
+	// 		['file://C:\\AUTOEXEC.BAT', 'file://C:\\AUTOEXEC.BAT'],
+	// 		['example.com', 'example.com'],
+	// 		['oo.ps', 'oo.ps'],
+	// 		['test@example.com', 'test@example.com'],
 
-			// Those should be converted to links
-			['<https://example.com>', '<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>https://example.com</a>'],
-			['[ok](https://example.com)', '<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>ok</a>'],
-		];
+	// 		// Those should be converted to links
+	// 		['<https://example.com>', '<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>https://example.com</a>'],
+	// 		['[ok](https://example.com)', '<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>ok</a>'],
+	// 	];
 
-		for (const testCase of testCases) {
-			const [input, expected] = testCase;
-			const actual = await mdToHtml.render(input, null, { bodyOnly: true, plainResourceRendering: true });
-			expect(actual.html).toBe(expected);
-		}
-	}));
+	// 	for (const testCase of testCases) {
+	// 		const [input, expected] = testCase;
+	// 		const actual = await mdToHtml.render(input, null, { bodyOnly: true, plainResourceRendering: true });
+	// 		expect(actual.html).toBe(expected);
+	// 	}
+	// }));
 
 });

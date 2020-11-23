@@ -3,15 +3,16 @@ import { FormNote, defaultFormNote, ResourceInfos } from './types';
 import { clearResourceCache, attachedResources } from './resourceHandling';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { handleResourceDownloadMode } from './resourceHandling';
+import HtmlToHtml from '@joplin/renderer/HtmlToHtml';
+import Setting from '@joplin/lib/models/Setting';
+import usePrevious from '../../hooks/usePrevious';
+import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
+
 const { MarkupToHtml } = require('@joplin/renderer');
-const HtmlToHtml = require('@joplin/renderer/HtmlToHtml');
-const usePrevious = require('../../hooks/usePrevious').default;
 const Note = require('@joplin/lib/models/Note');
-const Setting = require('@joplin/lib/models/Setting').default;
 const { reg } = require('@joplin/lib/registry.js');
 const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
 const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker.js');
-const ResourceEditWatcher = require('@joplin/lib/services/ResourceEditWatcher/index').default;
 
 export interface OnLoadEvent {
 	formNote: FormNote;

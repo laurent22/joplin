@@ -1,6 +1,6 @@
 import MdToHtml from './MdToHtml';
-const HtmlToHtml = require('./HtmlToHtml');
-const htmlUtils = require('./htmlUtils');
+import HtmlToHtml from './HtmlToHtml';
+import htmlUtils from './htmlUtils';
 const MarkdownIt = require('markdown-it');
 
 export enum MarkupLanguage {

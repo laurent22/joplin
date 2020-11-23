@@ -1,13 +1,12 @@
 {
-  "name": "org.joplinapp.FirstJplPlugin",
+  "name": "joplin_plugin",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "dist": "webpack",
     "postinstall": "npm run dist"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": {},
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^14.0.14",

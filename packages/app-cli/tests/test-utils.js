@@ -131,9 +131,11 @@ setSyncTargetName('memory');
 
 const syncDir = `${__dirname}/../tests/sync`;
 
-let defaultJasmineTimeout = 90 * 1000;
-if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
-if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
+// TODO: Should probably update this for Jest?
+
+// let defaultJasmineTimeout = 90 * 1000;
+// if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
+// if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
 
 const dbLogger = new Logger();
 dbLogger.addTarget('console');
@@ -144,6 +146,8 @@ const logger = new Logger();
 logger.addTarget('console');
 logger.addTarget('file', { path: `${logDir}/log.txt` });
 logger.setLevel(Logger.LEVEL_WARN); // Set to DEBUG to display sync process in console
+
+Logger.initializeGlobalLogger(logger);
 
 BaseItem.loadClass('Note', Note);
 BaseItem.loadClass('Folder', Folder);
@@ -212,6 +216,7 @@ async function switchClient(id, options = null) {
 	await Setting.reset();
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
+	Setting.setConstant('pluginDir', pluginDir(id));
 
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
@@ -290,6 +295,11 @@ function resourceDir(id = null) {
 	return `${__dirname}/data/${resourceDirName(id)}`;
 }
 
+function pluginDir(id = null) {
+	if (id === null) id = currentClient_;
+	return `${__dirname}/data/plugins-${id}`;
+}
+
 async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	if (id === null) id = currentClient_;
 
@@ -302,6 +312,9 @@ async function setupDatabaseAndSynchronizer(id = null, options = null) {
 
 	await fs.remove(resourceDir(id));
 	await fs.mkdirp(resourceDir(id), 0o755);
+
+	await fs.remove(pluginDir(id));
+	await fs.mkdirp(pluginDir(id), 0o755);
 
 	if (!synchronizers_[id]) {
 		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
@@ -544,7 +557,7 @@ function asyncTest(callback) {
 			await callback();
 		} catch (error) {
 			if (error.constructor && error.constructor.name === 'ExpectationFailed') {
-				// OK - will be reported by Jasmine
+				// OK - will be reported by Jest
 			} else {
 				// Better to rethrow exception as stack trace is more useful in this case
 				throw error;
@@ -656,15 +669,17 @@ async function createTempDir() {
 	return tempDirPath;
 }
 
-function mockDate(year, month, day, tick) {
-	const fixedDate = new Date(2020, 0, 1);
-	jasmine.clock().install();
-	jasmine.clock().mockDate(fixedDate);
-}
+// TODO: Update for Jest
 
-function restoreDate() {
-	jasmine.clock().uninstall();
-}
+// function mockDate(year, month, day, tick) {
+// 	const fixedDate = new Date(2020, 0, 1);
+// 	jasmine.clock().install();
+// 	jasmine.clock().mockDate(fixedDate);
+// }
+
+// function restoreDate() {
+// 	jasmine.clock().uninstall();
+// }
 
 // Application for feature integration testing
 class TestApp extends BaseApplication {
@@ -721,7 +736,7 @@ class TestApp extends BaseApplication {
 	}
 
 	async profileDir() {
-		return await Setting.value('profileDir');
+		return Setting.value('profileDir');
 	}
 
 	async destroy() {
@@ -734,4 +749,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, mockDate, restoreDate, TestApp };
+module.exports = { synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

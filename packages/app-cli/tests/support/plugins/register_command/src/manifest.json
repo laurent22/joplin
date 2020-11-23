@@ -1,4 +1,5 @@
 {
+	"id": "org.joplinapp.plugins.RegisterCommandDemo",
 	"manifest_version": 1,
 	"app_min_version": "1.4",
 	"name": "Register Command Test",
