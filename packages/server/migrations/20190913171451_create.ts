@@ -8,16 +8,16 @@ export async function up(knex: Knex): Promise<any> {
 		table.text('email', 'mediumtext').unique().notNullable();
 		table.text('password', 'mediumtext').notNullable();
 		table.integer('is_admin').defaultTo(0).notNullable();
-		table.integer('updated_time').notNullable();
-		table.integer('created_time').notNullable();
+		table.bigInteger('updated_time').notNullable();
+		table.bigInteger('created_time').notNullable();
 	});
 
 	await knex.schema.createTable('sessions', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('user_id', 32).notNullable();
 		table.string('auth_code', 32).defaultTo('').notNullable();
-		table.integer('updated_time').notNullable();
-		table.integer('created_time').notNullable();
+		table.bigInteger('updated_time').notNullable();
+		table.bigInteger('created_time').notNullable();
 	});
 
 	await knex.schema.createTable('permissions', function(table: Knex.CreateTableBuilder) {
@@ -27,8 +27,8 @@ export async function up(knex: Knex): Promise<any> {
 		table.string('item_id', 32).notNullable();
 		table.integer('can_read').defaultTo(0).notNullable();
 		table.integer('can_write').defaultTo(0).notNullable();
-		table.integer('updated_time').notNullable();
-		table.integer('created_time').notNullable();
+		table.bigInteger('updated_time').notNullable();
+		table.bigInteger('created_time').notNullable();
 	});
 
 	await knex.schema.alterTable('permissions', function(table: Knex.CreateTableBuilder) {
@@ -45,8 +45,8 @@ export async function up(knex: Knex): Promise<any> {
 		table.integer('is_directory').defaultTo(0).notNullable();
 		table.integer('is_root').defaultTo(0).notNullable();
 		table.string('parent_id', 32).defaultTo('').notNullable();
-		table.integer('updated_time').notNullable();
-		table.integer('created_time').notNullable();
+		table.bigInteger('updated_time').notNullable();
+		table.bigInteger('created_time').notNullable();
 	});
 
 	await knex.schema.alterTable('files', function(table: Knex.CreateTableBuilder) {
@@ -57,8 +57,8 @@ export async function up(knex: Knex): Promise<any> {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('name', 32).notNullable();
 		table.string('secret', 32).notNullable();
-		table.integer('updated_time').notNullable();
-		table.integer('created_time').notNullable();
+		table.bigInteger('updated_time').notNullable();
+		table.bigInteger('created_time').notNullable();
 	});
 
 	const userModel = new UserModel();

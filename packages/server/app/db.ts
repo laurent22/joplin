@@ -1,13 +1,29 @@
 import * as Knex from 'knex';
 import * as fs from 'fs-extra';
+import { createDb } from '../tools/dbTools';
 
 const packageRootDir = `${__dirname}/../..`;
 const nodeEnv = process.env.NODE_ENV || 'development';
 
-let dbConfig_: any = null;
+export interface DbConfigConnection {
+	host?:string
+	port?:number;
+	user?:string;
+	database?:string
+	filename?:string;
+}
+
+export interface DbConfig {
+	client: string;
+	connection: DbConfigConnection;
+	useNullAsDefault: boolean;
+	asyncStackTraces: boolean;
+}
+
+let dbConfig_: DbConfig = null;
 let db_: Knex = null;
 
-export function dbConfig() {
+export function dbConfig():DbConfig {
 	if (!dbConfig_) throw new Error('DB config is not set');
 	return dbConfig_;
 }
@@ -17,13 +33,27 @@ export async function initDb(name: string = null, fromScratch: boolean = false) 
 
 	const dbFilePath = `${packageRootDir}/db-${name}.sqlite`;
 
-	if (fromScratch) await fs.remove(dbFilePath);
+	const client = 'pg';
 
-	dbConfig_ = {
+	const sqlConfig = {
 		client: 'sqlite3',
 		connection: {
 			filename: dbFilePath,
 		},
+	}
+	
+	const postgresConfig = {
+		client: 'pg',
+		connection: {
+			host : '127.0.0.1',
+			port: 5432,
+			user : 'laurent',
+			database : 'joplin'
+		},
+	};
+
+	dbConfig_ = {
+		...postgresConfig,
 		useNullAsDefault: true,
 		// Allow propery stack traces in case of an error, however
 		// it has a small performance overhead so only enable in testing and dev
@@ -31,9 +61,21 @@ export async function initDb(name: string = null, fromScratch: boolean = false) 
 		// debug: nodeEnv == 'development' || nodeEnv === 'testing',
 	};
 
+	if (fromScratch) {
+		if (client === 'sqlite3') {
+			await fs.remove(dbFilePath);
+		} else {
+			await createDb(dbConfig_);
+		}
+	}
+
 	db_ = require('knex')(dbConfig_);
 
 	await migrate(db_);
+}
+
+export async function disconnectDb() {
+	await db().destroy();
 }
 
 export async function destroyDb() {

@@ -1,13 +1,13 @@
 import * as fs from 'fs-extra';
-const { FsDriverNode } = require('@joplin/lib/fs-driver-node');
-const { Logger } = require('@joplin/lib/logger');
+import FsDriverNode from '@joplin/lib/fs-driver-node';
+import Logger, { TargetType } from '@joplin/lib/logger';
 
 const logDir = `${__dirname}/../../../logs`;
 fs.mkdirpSync(logDir);
 
 Logger.fsDriver_ = new FsDriverNode();
 const logger = new Logger();
-logger.addTarget('file', { path: `${logDir}/app.txt` });
-logger.addTarget('console');
+logger.addTarget(TargetType.File, { path: `${logDir}/app.txt` });
+logger.addTarget(TargetType.Console);
 
 export default logger;

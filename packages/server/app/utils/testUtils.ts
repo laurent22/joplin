@@ -2,6 +2,7 @@ import db, { User, Session, initDb, destroyDb } from '../db';
 import UserModel from '../models/UserModel';
 import SessionController from '../controllers/SessionController';
 import cache from './cache';
+import { createDb } from '../../tools/dbTools';
 
 // Takes into account the fact that this file will be inside the /dist
 // directory when it runs.

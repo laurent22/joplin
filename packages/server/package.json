@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node dist/app/app.js",
     "start-prod": "node dist/app/app.js",
+    "migrate-db": "",
     "generate-types": "rm -f db-buildTypes.sqlite && NODE_ENV=buildTypes npm run db-migrate && NODE_ENV=buildTypes node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
     "tsc": "tsc --project tsconfig.json",
     "test": "npx jest --forceExit",
@@ -21,12 +22,14 @@
     "moment": "^2.24.0",
     "mustache": "^3.1.0",
     "nanoid": "^2.1.1",
+    "pg": "^8.5.1",
     "query-string": "^6.8.3",
     "raw-body": "^2.4.1",
     "sqlite3": "^4.1.0",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
+    "@joplin/tools": "^1.0.9",
     "@rmp135/sql-ts": "git+https://github.com/laurent22/sql-ts.git",
     "@types/co-body": "0.0.3",
     "@types/fs-extra": "^8.0.0",

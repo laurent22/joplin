@@ -8,6 +8,7 @@ import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
 import config from './config';
+import { disconnectDb, initDb } from './db';
 
 // require('source-map-support').install();
 
@@ -64,11 +65,24 @@ app.use(async (ctx: Koa.Context) => {
 	}
 });
 
-const pidFile = argv.pidfile as string;
-if (pidFile) {
-	appLogger.info(`Writing PID to ${pidFile}...`);
-	fs.removeSync(pidFile as string);
-	fs.writeFileSync(pidFile, `${process.pid}`);
+async function main() {
+	const pidFile = argv.pidfile as string;
+
+	if (pidFile) {
+		appLogger.info(`Writing PID to ${pidFile}...`);
+		fs.removeSync(pidFile as string);
+		fs.writeFileSync(pidFile, `${process.pid}`);
+	}
+	
+	if (argv.migrateDb) {
+		await initDb();
+		await disconnectDb();
+	} else {
+		app.listen(config.port);
+	}
 }
 
-app.listen(config.port);
+main().catch((error:any) => {
+	console.error(error);
+	process.exit(1);
+});
