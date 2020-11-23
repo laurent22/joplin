@@ -16,6 +16,13 @@ function createPluginArchive(sourceDir, destPath) {
 	const distFiles = glob.sync(`${sourceDir}/**/*`)
 		.map(f => f.substr(sourceDir.length + 1));
 
+	if (!distFiles.length) {
+		// Usually means there's an error, which is going to be printed by
+		// webpack
+		console.info('Plugin archive was not created because the "dist" directory is empty');
+		return;
+	}
+
 	fs.removeSync(destPath);
 
 	tar.create(
@@ -37,6 +44,8 @@ const srcDir = path.resolve(__dirname, 'src');
 const manifestPath = `${srcDir}/manifest.json`;
 const manifest = readManifest(manifestPath);
 const archiveFilePath = path.resolve(__dirname, `${manifest.id}.jpl`);
+
+fs.removeSync(distDir);
 
 module.exports = {
 	mode: 'production',
