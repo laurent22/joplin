@@ -8,14 +8,13 @@ import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
 import config from './config';
-import { disconnectDb, initDb } from './db';
+import { connectDb, connectGlobalDb, disconnectDb } from './db';
+import dbConfig from './db.config.prod';
+import { createDb, dropDb, migrateDb } from '../tools/dbTools';
 
 // require('source-map-support').install();
 
 config.baseUrl = `http://localhost:${config.port}`;
-
-appLogger.info(`Starting server on port ${config.port} and PID ${process.pid}...`);
-appLogger.info(`Base URL: ${config.baseUrl}`);
 
 const app = new Koa();
 
@@ -73,16 +72,25 @@ async function main() {
 		fs.removeSync(pidFile as string);
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
-	
+
 	if (argv.migrateDb) {
-		await initDb();
-		await disconnectDb();
+		const db = await connectDb(dbConfig);
+		await migrateDb(db);
+		await disconnectDb(db);
+	} else if (argv.dropDb) {
+		await dropDb(dbConfig);
+	} else if (argv.createDb) {
+		await createDb(dbConfig);
 	} else {
+		appLogger.info(`Starting server on port ${config.port} and PID ${process.pid}...`);
+		appLogger.info(`Base URL: ${config.baseUrl}`);
+
+		await connectGlobalDb(dbConfig);
 		app.listen(config.port);
 	}
 }
 
-main().catch((error:any) => {
+main().catch((error: any) => {
 	console.error(error);
 	process.exit(1);
 });

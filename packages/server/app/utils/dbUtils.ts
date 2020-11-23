@@ -11,25 +11,25 @@ import * as Knex from 'knex';
 // Set logEnabled_ to `true` to see what happens with nested transactions.
 class TransactionHandler {
 
-	transactionStack_: number[] = [];
-	activeTransaction_: Knex.Transaction = null;
-	transactionIndex_: number = 0;
-	logEnabled_: boolean = false;
+	private transactionStack_: number[] = [];
+	private activeTransaction_: Knex.Transaction = null;
+	private transactionIndex_: number = 0;
+	private logEnabled_: boolean = false;
 
-	get db(): Knex<any, any[]> {
+	private get db(): Knex<any, any[]> {
 		return db();
 	}
 
-	log(s: string): void {
+	private log(s: string): void {
 		if (!this.logEnabled_) return;
 		console.info(`TransactionHandler: ${s}`);
 	}
 
-	get activeTransaction(): Knex.Transaction {
+	public get activeTransaction(): Knex.Transaction {
 		return this.activeTransaction_;
 	}
 
-	async start(): Promise<number> {
+	public async start(): Promise<number> {
 		const txIndex = ++this.transactionIndex_;
 		this.log(`Starting transaction: ${txIndex}`);
 
@@ -51,22 +51,22 @@ class TransactionHandler {
 		return !this.transactionStack_.length;
 	}
 
-	async commit(txIndex: number): Promise<void> {
+	public async commit(txIndex: number): Promise<void> {
 		this.log(`Commit transaction: ${txIndex}`);
 		const isLastTransaction = this.finishTransaction(txIndex);
 		if (isLastTransaction) {
 			this.log(`Is last transaction - doing commit: ${txIndex}`);
-			this.activeTransaction_.commit();
+			await this.activeTransaction_.commit();
 			this.activeTransaction_ = null;
 		}
 	}
 
-	async rollback(txIndex: number): Promise<void> {
+	public async rollback(txIndex: number): Promise<void> {
 		this.log(`Rollback transaction: ${txIndex}`);
 		this.finishTransaction(txIndex);
 		if (this.activeTransaction_) {
 			this.log(`Transaction is active - doing rollback: ${txIndex}`);
-			this.activeTransaction_.rollback();
+			await this.activeTransaction_.rollback();
 			this.activeTransaction_ = null;
 		}
 	}

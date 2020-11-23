@@ -1,8 +1,9 @@
-import db, { User, Session, initDb, destroyDb } from '../db';
+import db, { User, Session, connectGlobalDb, DbConfig, disconnectGlobalDb } from '../db';
 import UserModel from '../models/UserModel';
 import SessionController from '../controllers/SessionController';
 import cache from './cache';
 import { createDb } from '../../tools/dbTools';
+import dbConfig from '../db.config.tests';
 
 // Takes into account the fact that this file will be inside the /dist
 // directory when it runs.
@@ -30,15 +31,19 @@ export const asyncTest = function(callback: Function) {
 };
 
 export async function beforeAllDb(unitName: string) {
-	await initDb(unitName, true);
+	const tempConfig: DbConfig = JSON.parse(JSON.stringify(dbConfig));
+	tempConfig.connection.database = `joplintests_${unitName}`;
+	await createDb(tempConfig, { dropIfExists: true });
+	await connectGlobalDb(tempConfig);
 }
 
 export async function afterAllDb() {
-	await destroyDb();
+	await disconnectGlobalDb();
 }
 
 export async function beforeEachDb() {
 	await clearDatabase();
+
 }
 
 export const clearDatabase = async function(): Promise<void> {

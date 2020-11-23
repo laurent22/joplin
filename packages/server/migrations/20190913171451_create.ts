@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
-import UserModel from '../app/models/UserModel';
-import ApiClientModel from '../app/models/ApiClientModel';
+import uuidgen from '../app/utils/uuidgen';
+import { hashPassword } from '../app/utils/auth';
 
 export async function up(knex: Knex): Promise<any> {
 	await knex.schema.createTable('users', function(table: Knex.CreateTableBuilder) {
@@ -61,23 +61,36 @@ export async function up(knex: Knex): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	const userModel = new UserModel();
+	const now = Date.now();
+	const adminId = uuidgen();
+	const rootFileId = uuidgen();
 
-	// We skip validation because at this point there's no user in the system so
-	// there can't be an owner for that first user.
-	await userModel.save({
+	await knex('users').insert({
+		id: adminId,
 		email: 'admin@localhost',
-		password: 'admin',
+		password: hashPassword('admin'),
 		is_admin: 1,
-	}, { skipValidation: true });
+		updated_time: now,
+		created_time: now,
+	});
 
-	const apiClientModel = new ApiClientModel();
+	await knex('files').insert({
+		id: rootFileId,
+		owner_id: adminId,
+		name: rootFileId,
+		is_directory: 1,
+		is_root: 1,
+		updated_time: now,
+		created_time: now,
+	});
 
-	await apiClientModel.save({
+	await knex('api_clients').insert({
 		id: 'lVis00WF590ZVlRYiXVRWv',
 		name: 'Joplin',
 		secret: 'sdrNUPtKNdY5Z5tF4bthqu',
-	}, { isNew: true });
+		updated_time: now,
+		created_time: now,
+	});
 }
 
 export async function down(knex: Knex): Promise<any> {

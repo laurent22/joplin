@@ -20,7 +20,7 @@ describe('UserController', function() {
 		await beforeEachDb();
 	});
 
-	it('should create a new user along with his root file', asyncTest(async function() {
+	it('should create a new user along with his root file', async function() {
 		const { session } = await createUserAndSession(1, true);
 
 		const controller = new UserController();
@@ -44,9 +44,9 @@ describe('UserController', function() {
 
 		expect(!!rootFile).toBe(true);
 		expect(!!rootFile.id).toBe(true);
-	}));
+	});
 
-	it('should not create anything, neither user, root file nor permissions, if user creation fail', asyncTest(async function() {
+	it('should not create anything, neither user, root file nor permissions, if user creation fail', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const controller = new UserController();
@@ -59,6 +59,9 @@ describe('UserController', function() {
 		const beforeFileCount = (await fileModel.all()).length;
 		const beforeUserCount = (await userModel.all()).length;
 		const beforePermissionCount = (await permissionModel.all()).length;
+
+		expect(beforeFileCount).toBe(2);
+		expect(beforeUserCount).toBe(2);
 
 		let hasThrown = false;
 		try {
@@ -76,7 +79,7 @@ describe('UserController', function() {
 		expect(beforeFileCount).toBe(afterFileCount);
 		expect(beforeUserCount).toBe(afterUserCount);
 		expect(beforePermissionCount).toBe(afterPermissionCount);
-	}));
+	});
 
 	it('should change user properties', asyncTest(async function() {
 		const { user, session } = await createUserAndSession(1, true);

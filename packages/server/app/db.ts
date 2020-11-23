@@ -1,107 +1,50 @@
 import * as Knex from 'knex';
-import * as fs from 'fs-extra';
-import { createDb } from '../tools/dbTools';
-
-const packageRootDir = `${__dirname}/../..`;
-const nodeEnv = process.env.NODE_ENV || 'development';
 
 export interface DbConfigConnection {
-	host?:string
-	port?:number;
-	user?:string;
-	database?:string
-	filename?:string;
+	host?: string;
+	port?: number;
+	user?: string;
+	database?: string;
+	filename?: string;
 }
 
 export interface DbConfig {
 	client: string;
 	connection: DbConfigConnection;
-	useNullAsDefault: boolean;
-	asyncStackTraces: boolean;
+	useNullAsDefault?: boolean;
+	asyncStackTraces?: boolean;
 }
 
 let dbConfig_: DbConfig = null;
 let db_: Knex = null;
 
-export function dbConfig():DbConfig {
+export function dbConfig(): DbConfig {
 	if (!dbConfig_) throw new Error('DB config is not set');
 	return dbConfig_;
 }
 
-export async function initDb(name: string = null, fromScratch: boolean = false) {
-	name = name || nodeEnv;
-
-	const dbFilePath = `${packageRootDir}/db-${name}.sqlite`;
-
-	const client = 'pg';
-
-	const sqlConfig = {
-		client: 'sqlite3',
-		connection: {
-			filename: dbFilePath,
-		},
-	}
-	
-	const postgresConfig = {
-		client: 'pg',
-		connection: {
-			host : '127.0.0.1',
-			port: 5432,
-			user : 'laurent',
-			database : 'joplin'
-		},
-	};
-
-	dbConfig_ = {
-		...postgresConfig,
-		useNullAsDefault: true,
-		// Allow propery stack traces in case of an error, however
-		// it has a small performance overhead so only enable in testing and dev
-		asyncStackTraces: nodeEnv == 'development' || nodeEnv === 'testing',
-		// debug: nodeEnv == 'development' || nodeEnv === 'testing',
-	};
-
-	if (fromScratch) {
-		if (client === 'sqlite3') {
-			await fs.remove(dbFilePath);
-		} else {
-			await createDb(dbConfig_);
-		}
-	}
-
-	db_ = require('knex')(dbConfig_);
-
-	await migrate(db_);
+export async function connectDb(dbConfig: DbConfig) {
+	return require('knex')(dbConfig);
 }
 
-export async function disconnectDb() {
-	await db().destroy();
+export async function connectGlobalDb(dbConfig: DbConfig) {
+	dbConfig_ = JSON.parse(JSON.stringify(dbConfig));
+	db_ = await connectDb(dbConfig_);
 }
 
-export async function destroyDb() {
-	await db().destroy();
-
-	const dbFilePath = dbConfig_?.connection?.filename;
-
-	dbConfig_ = null;
+export async function disconnectGlobalDb() {
+	await disconnectDb(db());
 	db_ = null;
+	dbConfig_ = null;
+}
 
-	if (dbFilePath) await fs.remove(dbFilePath);
+export async function disconnectDb(db: Knex) {
+	await db.destroy();
 }
 
 export default function db(): Knex {
 	if (!db_) throw new Error('Trying to access DB before it has been initialized');
 	return db_;
-}
-
-export async function migrate(db: Knex) {
-	const config = {
-		directory: `${packageRootDir}/dist/migrations`,
-		// Disable transactions because the models might open one too
-		disableTransactions: true,
-	};
-
-	await db.migrate.latest(config);
 }
 
 export enum ItemAddressingType {
