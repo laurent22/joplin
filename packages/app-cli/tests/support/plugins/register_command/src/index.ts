@@ -21,6 +21,20 @@ joplin.plugins.register({
 			},
 		});
 
+		await joplin.commands.register({
+			name: 'contextMenuCommandExample',
+			label: 'My Context Menu command',
+			execute: async (noteIds:string[]) => {
+				const notes = [];
+				for (const noteId of noteIds) {
+					notes.push(await joplin.data.get(['notes', noteId]));
+				}
+
+				const noteTitles = notes.map((note:any) => note.title);
+				alert('The following notes will be processed:\n\n' + noteTitles.join(', '));
+			},
+		});
+
 		// Commands that return a result and take argument can only be used
 		// programmatically, so it's not necessary to set a label and icon.
 		await joplin.commands.register({
@@ -39,6 +53,8 @@ joplin.plugins.register({
 		// Also add the commands to the menu
 		await joplin.views.menuItems.create('myMenuItem1', 'testCommand1', MenuItemLocation.Tools, { accelerator: 'CmdOrCtrl+Alt+Shift+B' });
 		await joplin.views.menuItems.create('myMenuItem2', 'testCommand2', MenuItemLocation.Tools);
+
+		await joplin.views.menuItems.create('contextMenuItem1', 'contextMenuCommandExample', MenuItemLocation.NoteListContextMenu);
 
 		console.info('Running command with arguments...');
 		const result = await joplin.commands.execute('commandWithResult', 'abcd', 123);

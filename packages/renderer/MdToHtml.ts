@@ -138,10 +138,6 @@ export interface RuleOptions {
 	// to display a context menu. Used in `image.ts` and `link_open.ts`
 	enableLongPress?: boolean;
 
-	// Used in mobile app when enableLongPress = true. Tells for how long
-	// the resource should be pressed before the menu is shown.
-	longPressDelay?: number;
-
 	// Use by `link_open` rule.
 	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
 	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.

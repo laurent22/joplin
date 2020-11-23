@@ -6,6 +6,8 @@ const htmlparser2 = require('@joplin/fork-htmlparser2');
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
+const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+
 const selfClosingElements = [
 	'area',
 	'base',
@@ -30,7 +32,7 @@ const selfClosingElements = [
 
 class HtmlUtils {
 
-	attributesHtml(attr) {
+	attributesHtml(attr: any) {
 		const output = [];
 
 		for (const n in attr) {
@@ -41,10 +43,10 @@ class HtmlUtils {
 		return output.join(' ');
 	}
 
-	processImageTags(html, callback) {
+	processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 
-		return html.replace(imageRegex, (v, before, src, after) => {
+		return html.replace(imageRegex, (_v, before, src, after) => {
 			const action = callback({ src: src });
 
 			if (!action) return `<img${before}src="${src}"${after}>`;
@@ -66,15 +68,40 @@ class HtmlUtils {
 		});
 	}
 
-	isSelfClosingTag(tagName) {
+	processAnchorTags(html: string, callback: Function) {
+		if (!html) return '';
+
+		return html.replace(anchorRegex, (_v, before, href, after) => {
+			const action = callback({ href: href });
+
+			if (!action) return `<a${before}href="${href}"${after}>`;
+
+			if (action.type === 'replaceElement') {
+				return action.html;
+			}
+
+			if (action.type === 'replaceSource') {
+				return `<img${before}href="${action.href}"${after}>`;
+			}
+
+			if (action.type === 'setAttributes') {
+				const attrHtml = this.attributesHtml(action.attrs);
+				return `<img${before}${attrHtml}${after}>`;
+			}
+
+			throw new Error(`Invalid action: ${action.type}`);
+		});
+	}
+
+	isSelfClosingTag(tagName: string) {
 		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
 	// TODO: copied from @joplin/lib
-	stripHtml(html) {
-		const output = [];
+	stripHtml(html: string) {
+		const output: string[] = [];
 
-		const tagStack = [];
+		const tagStack: string[] = [];
 
 		const currentTag = () => {
 			if (!tagStack.length) return '';
@@ -85,16 +112,16 @@ class HtmlUtils {
 
 		const parser = new htmlparser2.Parser({
 
-			onopentag: (name) => {
+			onopentag: (name: string) => {
 				tagStack.push(name.toLowerCase());
 			},
 
-			ontext: (decodedText) => {
+			ontext: (decodedText: string) => {
 				if (disallowedTags.includes(currentTag())) return;
 				output.push(decodedText);
 			},
 
-			onclosetag: (name) => {
+			onclosetag: (name: string) => {
 				if (currentTag() === name.toLowerCase()) tagStack.pop();
 			},
 
@@ -106,16 +133,16 @@ class HtmlUtils {
 		return output.join('').replace(/\s+/g, ' ');
 	}
 
-	sanitizeHtml(html, options = null) {
+	sanitizeHtml(html: string, options: any = null) {
 		options = Object.assign({}, {
 			// If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
 			addNoMdConvClass: false,
 		}, options);
 
-		const output = [];
+		const output: string[] = [];
 
-		const tagStack = [];
+		const tagStack: string[] = [];
 
 		const currentTag = () => {
 			if (!tagStack.length) return '';
@@ -135,7 +162,7 @@ class HtmlUtils {
 
 		const parser = new htmlparser2.Parser({
 
-			onopentag: (name, attrs) => {
+			onopentag: (name: string, attrs: any) => {
 				tagStack.push(name.toLowerCase());
 
 				if (disallowedTags.includes(currentTag())) return;
@@ -171,7 +198,7 @@ class HtmlUtils {
 				output.push(`<${name}${attrHtml}${closingSign}`);
 			},
 
-			ontext: (decodedText) => {
+			ontext: (decodedText: string) => {
 				if (disallowedTags.includes(currentTag())) return;
 
 				if (currentTag() === 'style') {
@@ -184,7 +211,7 @@ class HtmlUtils {
 				}
 			},
 
-			onclosetag: (name) => {
+			onclosetag: (name: string) => {
 				const current = currentTag();
 
 				if (current === name.toLowerCase()) tagStack.pop();
@@ -206,6 +233,4 @@ class HtmlUtils {
 
 }
 
-const htmlUtils = new HtmlUtils();
-
-module.exports = htmlUtils;
+export default new HtmlUtils();
