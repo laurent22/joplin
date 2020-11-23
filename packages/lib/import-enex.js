@@ -18,7 +18,7 @@ const shim = require('./shim').default;
 // const Promise = require('promise');
 const fs = require('fs-extra');
 
-function dateToTimestamp(s, zeroIfInvalid = false) {
+function dateToTimestamp(s, defaultValue = null) {
 	// Most dates seem to be in this format
 	let m = moment(s, 'YYYYMMDDTHHmmssZ');
 
@@ -27,7 +27,7 @@ function dateToTimestamp(s, zeroIfInvalid = false) {
 	if (!m.isValid()) m = moment(s, 'YYYYMMDDThmmss AZ');
 
 	if (!m.isValid()) {
-		if (zeroIfInvalid) return 0;
+		if (defaultValue !== null) return defaultValue;
 		throw new Error(`Invalid date: ${s}`);
 	}
 
@@ -258,6 +258,20 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
 	if (!('onError' in importOptions)) importOptions.onError = function() {};
 
+	const handleSaxStreamEvent = (fn) => {
+		return function(...args) {
+			try {
+				fn(...args);
+			} catch (error) {
+				if (importOptions.onError) {
+					importOptions.onError(error);
+				} else {
+					console.error(error);
+				}
+			}
+		};
+	};
+
 	return new Promise((resolve, reject) => {
 		const progressState = {
 			loaded: 0,
@@ -337,9 +351,15 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					note.parent_id = parentFolderId;
 					note.body = body;
 
-					// Notes in enex files always have a created timestamp but not always an
-					// updated timestamp (it the note has never been modified). For sync
-					// we require an updated_time property, so set it to create_time in that case
+					// If the created timestamp was invalid, it would be
+					// set to zero, so set it to the current date here
+					if (!note.created_time) note.created_time = Date.now();
+
+					// Notes in enex files always have a created timestamp
+					// but not always an updated timestamp (it the note has
+					// never been modified). For sync we require an
+					// updated_time property, so set it to create_time in
+					// that case
 					if (!note.updated_time) note.updated_time = note.created_time;
 
 					const result = await saveNoteToStorage(note, importOptions);
@@ -368,7 +388,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			importOptions.onError(error);
 		});
 
-		saxStream.on('text', function(text) {
+		saxStream.on('text', handleSaxStreamEvent(function(text) {
 			const n = currentNodeName();
 
 			if (noteAttributes) {
@@ -395,9 +415,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				if (n == 'title') {
 					note.title = text;
 				} else if (n == 'created') {
-					note.created_time = dateToTimestamp(text);
+					note.created_time = dateToTimestamp(text, 0);
 				} else if (n == 'updated') {
-					note.updated_time = dateToTimestamp(text);
+					note.updated_time = dateToTimestamp(text, 0);
 				} else if (n == 'tag') {
 					note.tags.push(text);
 				} else if (n == 'note') {
@@ -408,9 +428,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					console.warn(`Unsupported note tag: ${n}`);
 				}
 			}
-		});
+		}));
 
-		saxStream.on('opentag', function(node) {
+		saxStream.on('opentag', handleSaxStreamEvent(function(node) {
 			const n = node.name.toLowerCase();
 			nodes.push(node);
 
@@ -428,9 +448,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			} else if (n == 'resource') {
 				noteResource = {};
 			}
-		});
+		}));
 
-		saxStream.on('cdata', function(data) {
+		saxStream.on('cdata', handleSaxStreamEvent(function(data) {
 			const n = currentNodeName();
 
 			if (noteResourceRecognition) {
@@ -444,9 +464,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					}
 				}
 			}
-		});
+		}));
 
-		saxStream.on('closetag', async function(n) {
+		saxStream.on('closetag', handleSaxStreamEvent(function(n) {
 			nodes.pop();
 
 			if (n == 'note') {
@@ -476,9 +496,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				note.altitude = noteAttributes.altitude;
 				note.author = noteAttributes.author ? noteAttributes.author.trim() : '';
 				note.is_todo = noteAttributes['reminder-order'] !== '0' && !!noteAttributes['reminder-order'];
-				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], true);
-				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], true);
-				note.order = dateToTimestamp(noteAttributes['reminder-order'], true);
+				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], 0);
+				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], 0);
+				note.order = dateToTimestamp(noteAttributes['reminder-order'], 0);
 				note.source = noteAttributes.source ? `evernote.${noteAttributes.source.trim()}` : 'evernote';
 				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'].trim() : '';
 
@@ -495,9 +515,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 				noteResource = null;
 			}
-		});
+		}));
 
-		saxStream.on('end', function() {
+		saxStream.on('end', handleSaxStreamEvent(function() {
 			// Wait till there is no more notes to process.
 			const iid = shim.setInterval(() => {
 				processNotes().then(allDone => {
@@ -507,7 +527,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					}
 				});
 			}, 500);
-		});
+		}));
 
 		stream.pipe(saxStream);
 	});
