@@ -409,10 +409,16 @@ export default class MdToHtml {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
 
-				return {
-					wrapCode: false,
-					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,
-				};
+				const html = `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`;
+
+				if (rules.fence) {
+					return {
+						wrapCode: false,
+						html: html,
+					};
+				} else {
+					return html;
+				}
 			},
 		});
 
