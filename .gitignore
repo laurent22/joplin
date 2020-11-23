@@ -143,12 +143,9 @@ packages/app-cli/app/LinkSelector.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
-packages/app-cli/build/LinkSelector.d.ts
-packages/app-cli/build/LinkSelector.js
-packages/app-cli/build/LinkSelector.js.map
-packages/app-cli/build/services/plugins/PluginRunner.d.ts
-packages/app-cli/build/services/plugins/PluginRunner.js
-packages/app-cli/build/services/plugins/PluginRunner.js.map
+packages/app-cli/tests/EnexToMd.d.ts
+packages/app-cli/tests/EnexToMd.js
+packages/app-cli/tests/EnexToMd.js.map
 packages/app-cli/tests/InMemoryCache.d.ts
 packages/app-cli/tests/InMemoryCache.js
 packages/app-cli/tests/InMemoryCache.js.map
