@@ -143,6 +143,9 @@ packages/app-cli/app/LinkSelector.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
+packages/app-cli/tests/EnexToMd.d.ts
+packages/app-cli/tests/EnexToMd.js
+packages/app-cli/tests/EnexToMd.js.map
 packages/app-cli/tests/InMemoryCache.d.ts
 packages/app-cli/tests/InMemoryCache.js
 packages/app-cli/tests/InMemoryCache.js.map
@@ -1433,6 +1436,12 @@ packages/server/app/controllers/UserController.js.map
 packages/server/app/controllers/UserController.test.d.ts
 packages/server/app/controllers/UserController.test.js
 packages/server/app/controllers/UserController.test.js.map
+packages/server/app/db.config.prod.d.ts
+packages/server/app/db.config.prod.js
+packages/server/app/db.config.prod.js.map
+packages/server/app/db.config.tests.d.ts
+packages/server/app/db.config.tests.js
+packages/server/app/db.config.tests.js.map
 packages/server/app/db.d.ts
 packages/server/app/db.js
 packages/server/app/db.js.map
@@ -1520,6 +1529,9 @@ packages/server/migrations/20190913171451_create.js.map
 packages/server/tools/db-migrate.d.ts
 packages/server/tools/db-migrate.js
 packages/server/tools/db-migrate.js.map
+packages/server/tools/dbTools.d.ts
+packages/server/tools/dbTools.js
+packages/server/tools/dbTools.js.map
 packages/server/tools/generate-types.d.ts
 packages/server/tools/generate-types.js
 packages/server/tools/generate-types.js.map

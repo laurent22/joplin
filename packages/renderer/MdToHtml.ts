@@ -378,7 +378,7 @@ export default class MdToHtml {
 		const markdownIt = new MarkdownIt({
 			breaks: !this.pluginEnabled('softbreaks'),
 			typographer: this.pluginEnabled('typographer'),
-			// linkify: true,
+			linkify: true,
 			html: true,
 			highlight: (str: string, lang: string) => {
 				let outputCodeHtml = '';
@@ -409,10 +409,16 @@ export default class MdToHtml {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
 
-				return {
-					wrapCode: false,
-					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,
-				};
+				const html = `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`;
+
+				if (rules.fence) {
+					return {
+						wrapCode: false,
+						html: html,
+					};
+				} else {
+					return html;
+				}
 			},
 		});
 
