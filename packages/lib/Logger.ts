@@ -26,7 +26,7 @@ interface Target {
 	source?: string;
 }
 
-interface LoggerWrapper {
+export interface LoggerWrapper {
 	debug: Function;
 	info: Function;
 	warn: Function;
