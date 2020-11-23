@@ -105,12 +105,30 @@ describe('models_BaseItem', function() {
 	}));
 
 	it('should serialize and unserialize properties that contain new lines', asyncTest(async () => {
-		const note = await Note.save({ title: 'note', source_url: '\nhttps://joplinapp.org/\n' });
+		const sourceUrl = `
+https://joplinapp.org/ \\n
+`;
+
+		const note = await Note.save({ title: 'note', source_url: sourceUrl });
 
 		const noteBefore = await Note.load(note.id);
 		const serialized = await Note.serialize(noteBefore);
 		const noteAfter = await Note.unserialize(serialized);
 
 		expect(noteAfter).toEqual(noteBefore);
+	}));
+
+	it('should not serialize the note title and body', asyncTest(async () => {
+		const note = await Note.save({ title: 'my note', body: `one line
+two line
+three line \\n no escape` });
+
+		const noteBefore = await Note.load(note.id);
+		const serialized = await Note.serialize(noteBefore);
+		expect(serialized.indexOf(`my note
+
+one line
+two line
+three line \\n no escape`)).toBe(0);
 	}));
 });
