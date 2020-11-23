@@ -1,9 +1,10 @@
 import * as Knex from 'knex';
-import uuidgen from '../app/utils/uuidgen';
-import { hashPassword } from '../app/utils/auth';
+import UserModel from '../app/models/UserModel';
+import ApiClientModel from '../app/models/ApiClientModel';
+import db from '../app/db';
 
-export async function up(knex: Knex): Promise<any> {
-	await knex.schema.createTable('users', function(table: Knex.CreateTableBuilder) {
+export async function up(): Promise<any> {
+	await db().schema.createTable('users', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.text('email', 'mediumtext').unique().notNullable();
 		table.text('password', 'mediumtext').notNullable();
@@ -12,7 +13,7 @@ export async function up(knex: Knex): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	await knex.schema.createTable('sessions', function(table: Knex.CreateTableBuilder) {
+	await db().schema.createTable('sessions', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('user_id', 32).notNullable();
 		table.string('auth_code', 32).defaultTo('').notNullable();
@@ -20,7 +21,7 @@ export async function up(knex: Knex): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	await knex.schema.createTable('permissions', function(table: Knex.CreateTableBuilder) {
+	await db().schema.createTable('permissions', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('user_id', 32).notNullable();
 		table.integer('item_type').notNullable();
@@ -31,11 +32,11 @@ export async function up(knex: Knex): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	await knex.schema.alterTable('permissions', function(table: Knex.CreateTableBuilder) {
+	await db().schema.alterTable('permissions', function(table: Knex.CreateTableBuilder) {
 		table.unique(['user_id', 'item_type', 'item_id']);
 	});
 
-	await knex.schema.createTable('files', function(table: Knex.CreateTableBuilder) {
+	await db().schema.createTable('files', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('owner_id', 32).notNullable();
 		table.text('name').notNullable();
@@ -49,11 +50,11 @@ export async function up(knex: Knex): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	await knex.schema.alterTable('files', function(table: Knex.CreateTableBuilder) {
+	await db().schema.alterTable('files', function(table: Knex.CreateTableBuilder) {
 		table.unique(['parent_id', 'name']);
 	});
 
-	await knex.schema.createTable('api_clients', function(table: Knex.CreateTableBuilder) {
+	await db().schema.createTable('api_clients', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('name', 32).notNullable();
 		table.string('secret', 32).notNullable();
@@ -61,43 +62,29 @@ export async function up(knex: Knex): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	const now = Date.now();
-	const adminId = uuidgen();
-	const rootFileId = uuidgen();
+	const userModel = new UserModel();
 
-	await knex('users').insert({
-		id: adminId,
+	// We skip validation because at this point there's no user in the system so
+	// there can't be an owner for that first user.
+	await userModel.save({
 		email: 'admin@localhost',
-		password: hashPassword('admin'),
+		password: 'admin',
 		is_admin: 1,
-		updated_time: now,
-		created_time: now,
-	});
+	}, { skipValidation: true });
 
-	await knex('files').insert({
-		id: rootFileId,
-		owner_id: adminId,
-		name: rootFileId,
-		is_directory: 1,
-		is_root: 1,
-		updated_time: now,
-		created_time: now,
-	});
+	const apiClientModel = new ApiClientModel();
 
-	await knex('api_clients').insert({
+	await apiClientModel.save({
 		id: 'lVis00WF590ZVlRYiXVRWv',
 		name: 'Joplin',
 		secret: 'sdrNUPtKNdY5Z5tF4bthqu',
-		updated_time: now,
-		created_time: now,
-	});
+	}, { isNew: true });
 }
 
-export async function down(knex: Knex): Promise<any> {
-	await knex.schema.dropTable('users');
-	await knex.schema.dropTable('sessions');
-	await knex.schema.dropTable('permissions');
-	await knex.schema.dropTable('files');
-	await knex.schema.dropTable('api_clients');
+export async function down(): Promise<any> {
+	await db().schema.dropTable('users');
+	await db().schema.dropTable('sessions');
+	await db().schema.dropTable('permissions');
+	await db().schema.dropTable('files');
+	await db().schema.dropTable('api_clients');
 }
-

@@ -8,9 +8,9 @@ import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
 import config from './config';
-import { connectDb, connectGlobalDb, disconnectDb } from './db';
+import { connectGlobalDb, disconnectGlobalDb, migrateGlobalDb } from './db';
 import dbConfig from './db.config.prod';
-import { createDb, dropDb, migrateDb } from '../tools/dbTools';
+import { createDb, dropDb } from '../tools/dbTools';
 
 // require('source-map-support').install();
 
@@ -74,17 +74,16 @@ async function main() {
 	}
 
 	if (argv.migrateDb) {
-		const db = await connectDb(dbConfig);
-		await migrateDb(db);
-		await disconnectDb(db);
+		await connectGlobalDb(dbConfig);
+		await migrateGlobalDb();
+		await disconnectGlobalDb();
 	} else if (argv.dropDb) {
-		await dropDb(dbConfig);
+		await dropDb(dbConfig, { ignoreIfNotExists: true });
 	} else if (argv.createDb) {
 		await createDb(dbConfig);
 	} else {
 		appLogger.info(`Starting server on port ${config.port} and PID ${process.pid}...`);
 		appLogger.info(`Base URL: ${config.baseUrl}`);
-
 		await connectGlobalDb(dbConfig);
 		app.listen(config.port);
 	}

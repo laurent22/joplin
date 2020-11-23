@@ -1,10 +1,9 @@
-import db, { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient } from '../db';
+import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient } from '../db';
 import * as Knex from 'knex';
 import { transactionHandler } from '../utils/dbUtils';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import cache from '../utils/cache';
-// import ApiClientModel from './ApiClientModel';
 
 export interface ModelOptions {
 	userId?: string;
@@ -29,11 +28,22 @@ export default abstract class BaseModel {
 
 	private options_: ModelOptions = null;
 	private defaultFields_: string[] = [];
+	private static db_: Knex<any, any[]> = null;
 
 	constructor(options: ModelOptions = null) {
 		this.options_ = Object.assign({}, options);
 
 		if ('userId' in this.options && !this.options.userId) throw new Error('If userId is set, it cannot be null');
+	}
+
+	public static setDb(db: Knex<any, any[]>) {
+		this.db_ = db;
+		transactionHandler.setDb(db);
+	}
+
+	public static get db(): Knex<any, any[]> {
+		if (!this.db_) throw new Error('DB has not been set');
+		return this.db_;
 	}
 
 	get options(): ModelOptions {
@@ -46,7 +56,7 @@ export default abstract class BaseModel {
 
 	get db(): Knex<any, any[]> {
 		if (transactionHandler.activeTransaction) return transactionHandler.activeTransaction;
-		return db();
+		return BaseModel.db;
 	}
 
 	get defaultFields(): string[] {

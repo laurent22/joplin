@@ -1,6 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-
-import db from '../db';
 import * as Knex from 'knex';
 
 // This transaction handler allows abstracting away the complexity of managing nested transactions
@@ -15,9 +13,14 @@ class TransactionHandler {
 	private activeTransaction_: Knex.Transaction = null;
 	private transactionIndex_: number = 0;
 	private logEnabled_: boolean = false;
+	private db_: Knex = null;
 
 	private get db(): Knex<any, any[]> {
-		return db();
+		return this.db_;
+	}
+
+	public setDb(db: Knex) {
+		this.db_ = db;
 	}
 
 	private log(s: string): void {

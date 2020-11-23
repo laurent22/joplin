@@ -1,4 +1,7 @@
 import * as Knex from 'knex';
+import BaseModel from './models/BaseModel';
+
+const packageRootDir = `${__dirname}/../..`;
 
 export interface DbConfigConnection {
 	host?: string;
@@ -23,23 +26,25 @@ export function dbConfig(): DbConfig {
 	return dbConfig_;
 }
 
-export async function connectDb(dbConfig: DbConfig) {
-	return require('knex')(dbConfig);
-}
-
 export async function connectGlobalDb(dbConfig: DbConfig) {
 	dbConfig_ = JSON.parse(JSON.stringify(dbConfig));
-	db_ = await connectDb(dbConfig_);
+	db_ = require('knex')(dbConfig);
+	BaseModel.setDb(db_);
 }
 
 export async function disconnectGlobalDb() {
-	await disconnectDb(db());
+	BaseModel.setDb(null);
+	await db().destroy();
 	db_ = null;
 	dbConfig_ = null;
 }
 
-export async function disconnectDb(db: Knex) {
-	await db.destroy();
+export async function migrateGlobalDb() {
+	await db().migrate.latest({
+		directory: `${packageRootDir}/dist/migrations`,
+		// Disable transactions because the models might open one too
+		disableTransactions: true,
+	});
 }
 
 export default function db(): Knex {
