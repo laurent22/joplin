@@ -72,7 +72,7 @@ async function curl(method: string, path: string, query: object = null, body: an
 		}
 	}
 
-	curlCmd.push(`http://localhost:3222/${path}${query ? `?${stringify(query)}` : ''}`);
+	curlCmd.push(`http://localhost:22300/${path}${query ? `?${stringify(query)}` : ''}`);
 
 	console.info(`Running: ${curlCmd.join(' ')}`);
 
@@ -86,8 +86,8 @@ const spawn = require('child_process').spawn;
 let serverProcess: any = null;
 
 async function main() {
-	const serverRoot = `${__dirname}/../..`;
-	const tempDir = `${serverRoot}/tests/temp`;
+	const serverRoot = `${__dirname}/../../../..`;
+	const tempDir = `${serverRoot}/temp`;
 	process.chdir(serverRoot);
 	await fs.remove(tempDir);
 	await fs.mkdirp(tempDir);
@@ -95,10 +95,10 @@ async function main() {
 
 	fs.removeSync(`${serverRoot}/db-testing.sqlite`);
 
-	const compileCommmand = 'npm run compile';
-	const migrateCommand = 'NODE_ENV=testing npm run db-migrate';
+	// const compileCommmand = 'npm run compile';
+	const migrateCommand = 'NODE_ENV=testing node dist/app/app.js --migrate-db';
 
-	await execCommand(compileCommmand);
+	// await execCommand(compileCommmand);
 	await execCommand(migrateCommand);
 
 	const serverCommandParams = ['dist/app/app.js', '--pidfile', pidFilePath];
@@ -109,6 +109,17 @@ async function main() {
 		env: Object.assign({}, process.env, { NODE_ENV: 'testing' }),
 	});
 
+	const cleanUp = () => {
+		console.info(`To run this server again: ${migrateCommand} && node ${serverCommandParams.join(' ')}`);
+		serverProcess.kill();
+	}
+
+	process.on('SIGINT', function() {
+		console.info('Received SIGINT signal - killing server');
+		cleanUp();
+		process.exit();
+	});
+	
 	let response: any = null;
 
 	console.info('Waiting for server to be ready...');
@@ -119,6 +130,7 @@ async function main() {
 			console.info(`Got ping response: ${JSON.stringify(response)}`);
 			break;
 		} catch (error) {
+			console.error('error', error);
 			await sleep(0.5);
 		}
 	}
@@ -133,7 +145,7 @@ async function main() {
 	// PUT api/files/:fileId/content
 
 	response = await curl('PUT', 'api/files/root:/photo.jpg:/content', null, null, { 'X-API-AUTH': session.id }, null, {
-		uploadFile: `${serverRoot}/tests/support/photo.jpg`,
+		uploadFile: `${serverRoot}/assets/tests/photo.jpg`,
 	});
 	console.info('Response:', response);
 
@@ -146,13 +158,11 @@ async function main() {
 
 	response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, {
 		verbose: true,
-		output: `${serverRoot}/tests/temp/photo-downloaded.jpg`,
+		output: `${serverRoot}/assets/tests/photo-downloaded.jpg`,
 	});
 	console.info(response);
 
-	console.info(`To run this server again: ${compileCommmand} && ${migrateCommand} && node ${serverCommandParams.join(' ')}`);
-
-	serverProcess.kill();
+	cleanUp();
 }
 
 main().catch(error => {

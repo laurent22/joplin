@@ -8,7 +8,7 @@ import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
 import config from './config';
-import dbConfig from './db.config.prod';
+import createDbConfig from './db.config.prod';
 import { createDb, dropDb } from '../tools/dbTools';
 import { connectDb, disconnectDb, migrateDb } from './db';
 import modelFactory from './models/factory';
@@ -69,6 +69,8 @@ app.use(async (ctx: Koa.Context) => {
 
 async function main() {
 	const pidFile = argv.pidfile as string;
+
+	const dbConfig = createDbConfig('dev', 'sqlite3');
 
 	if (pidFile) {
 		appLogger.info(`Writing PID to ${pidFile}...`);

@@ -39,7 +39,9 @@ const route: Route = {
 			}
 
 			if (ctx.method === 'PUT') {
+				console.info('A');
 				const body = await getRawBody(ctx.req);
+				console.info('B');
 				return fileController.putFileContent(sessionIdFromHeaders(ctx.headers), path.id, body);
 			}
 
