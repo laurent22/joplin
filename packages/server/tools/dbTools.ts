@@ -1,4 +1,4 @@
-import { connectGlobalDb, DbConfig, disconnectGlobalDb, migrateGlobalDb } from '../app/db';
+import { connectDb, DbConfig, disconnectDb, migrateDb } from '../app/db';
 import * as fs from 'fs-extra';
 
 const { execCommand } = require('@joplin/tools/tool-utils');
@@ -41,9 +41,9 @@ export async function createDb(config: DbConfig, options: CreateDbOptions = null
 		}
 	}
 
-	await connectGlobalDb(config);
-	await migrateGlobalDb();
-	await disconnectGlobalDb();
+	const db = await connectDb(config);
+	await migrateDb(db);
+	await disconnectDb(db);
 }
 
 export async function dropDb(config: DbConfig, options: DropDbOptions = null) {

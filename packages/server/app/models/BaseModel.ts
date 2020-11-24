@@ -3,6 +3,7 @@ import { transactionHandler } from '../utils/dbUtils';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import cache from '../utils/cache';
+import modelFactory, { Models } from './factory';
 
 export interface ModelOptions {
 	userId?: string;
@@ -27,22 +28,19 @@ export default abstract class BaseModel {
 
 	private options_: ModelOptions = null;
 	private defaultFields_: string[] = [];
-	private static db_: DbConnection = null;
+	private db_: DbConnection;
 
-	constructor(options: ModelOptions = null) {
+	constructor(db: DbConnection, options: ModelOptions = null) {
+		this.db_ = db;
 		this.options_ = Object.assign({}, options);
+
+		transactionHandler.setDb(db);
 
 		if ('userId' in this.options && !this.options.userId) throw new Error('If userId is set, it cannot be null');
 	}
 
-	public static setDb(db: DbConnection) {
-		this.db_ = db;
-		transactionHandler.setDb(db);
-	}
-
-	public static get db(): DbConnection {
-		if (!this.db_) throw new Error('DB has not been set');
-		return this.db_;
+	protected get models(): Models {
+		return modelFactory(this.db);
 	}
 
 	get options(): ModelOptions {
@@ -55,7 +53,7 @@ export default abstract class BaseModel {
 
 	get db(): DbConnection {
 		if (transactionHandler.activeTransaction) return transactionHandler.activeTransaction;
-		return BaseModel.db;
+		return this.db_;
 	}
 
 	get defaultFields(): string[] {

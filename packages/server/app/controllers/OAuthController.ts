@@ -1,15 +1,13 @@
 import BaseController from './BaseController';
 import mustacheService from '../services/MustacheService';
 import { ErrorNotFound } from '../utils/errors';
-import ApiClientModel from '../models/ApiClientModel';
-import SessionController from './SessionController';
-import SessionModel from '../models/SessionModel';
 import uuidgen from '../utils/uuidgen';
+import controllers from './factory';
 
 export default class OAuthController extends BaseController {
 
 	async getAuthorize(query: any): Promise<string> {
-		const clientModel = new ApiClientModel();
+		const clientModel = this.models.apiClient();
 		const client = await clientModel.load(query.client_id);
 		if (!client) throw new ErrorNotFound(`client_id missing or invalid client ID: ${query.client_id}`);
 
@@ -22,9 +20,9 @@ export default class OAuthController extends BaseController {
 	}
 
 	async postAuthorize(query: any): Promise<string> {
-		const clientModel = new ApiClientModel();
-		const sessionModel = new SessionModel();
-		const sessionController = new SessionController();
+		const clientModel = this.models.apiClient();
+		const sessionModel = this.models.session();
+		const sessionController = controllers(this.models).session();
 
 		let client = null;
 

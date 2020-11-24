@@ -337,6 +337,7 @@
 			"web/env.php": true,
 			"**/*.js": {"when": "$(basename).ts"},
 			"**/*?.js": { "when": "$(basename).tsx"},
-		}
+		},
+		"cSpell.enabled": true
 	}
 }

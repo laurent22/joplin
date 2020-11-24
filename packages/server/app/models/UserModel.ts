@@ -1,6 +1,5 @@
 import BaseModel, { SaveOptions, ValidateOptions } from './BaseModel';
 import { User } from '../db';
-import FileModel from './FileModel';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
 
@@ -84,7 +83,7 @@ export default class UserModel extends BaseModel {
 		const txIndex = await this.startTransaction();
 
 		try {
-			const fileModel = new FileModel({ userId: this.userId });
+			const fileModel = this.models.file({ userId: this.userId });
 			const rootFile = await fileModel.userRootFile();
 			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
 			await super.delete(id);
@@ -109,7 +108,7 @@ export default class UserModel extends BaseModel {
 			newUser = await super.save(newUser, options);
 
 			if (isNew) {
-				const fileModel = new FileModel({ userId: newUser.id });
+				const fileModel = this.models.file({ userId: newUser.id });
 				await fileModel.createRootFile();
 			}
 		} catch (error) {

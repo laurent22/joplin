@@ -1,16 +1,15 @@
-import * as Koa from 'koa';
 import * as parse from 'co-body';
-import SessionController from '../../controllers/SessionController';
 import { SubPath, Route } from '../../utils/routeUtils';
 import { ErrorNotFound } from '../../utils/errors';
+import { AppContext } from '../../utils/types';
 
 const route: Route = {
 
-	exec: async function(path: SubPath, ctx: Koa.Context) {
+	exec: async function(path: SubPath, ctx: AppContext) {
 		if (!path.link) {
 			if (ctx.method === 'POST') {
 				const user = await parse.json(ctx);
-				const sessionController = new SessionController();
+				const sessionController = ctx.controllers.session();
 				const session = await sessionController.authenticate(user.email, user.password);
 				return { id: session.id };
 			}

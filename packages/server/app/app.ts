@@ -8,9 +8,12 @@ import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
 import config from './config';
-import { connectGlobalDb, disconnectGlobalDb, migrateGlobalDb } from './db';
 import dbConfig from './db.config.prod';
 import { createDb, dropDb } from '../tools/dbTools';
+import { connectDb, disconnectDb, migrateDb } from './db';
+import modelFactory from './models/factory';
+import controllerFactory from './controllers/factory';
+import { AppContext } from './utils/types';
 
 // require('source-map-support').install();
 
@@ -74,9 +77,9 @@ async function main() {
 	}
 
 	if (argv.migrateDb) {
-		await connectGlobalDb(dbConfig);
-		await migrateGlobalDb();
-		await disconnectGlobalDb();
+		const db = await connectDb(dbConfig);
+		await migrateDb(db);
+		await disconnectDb(db);
 	} else if (argv.dropDb) {
 		await dropDb(dbConfig, { ignoreIfNotExists: true });
 	} else if (argv.createDb) {
@@ -84,7 +87,12 @@ async function main() {
 	} else {
 		appLogger.info(`Starting server on port ${config.port} and PID ${process.pid}...`);
 		appLogger.info(`Base URL: ${config.baseUrl}`);
-		await connectGlobalDb(dbConfig);
+
+		const appContext = app.context as AppContext;
+		appContext.db = await connectDb(dbConfig);
+		appContext.models = modelFactory(appContext.db);
+		appContext.controllers = controllerFactory(appContext.models);
+
 		app.listen(config.port);
 	}
 }

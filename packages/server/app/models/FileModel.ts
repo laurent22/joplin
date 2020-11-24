@@ -1,5 +1,4 @@
 import BaseModel, { ValidateOptions, SaveOptions, DeleteOptions } from './BaseModel';
-import PermissionModel from './PermissionModel';
 import { File, ItemType, databaseSchema } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
@@ -194,7 +193,7 @@ export default class FileModel extends BaseModel {
 		const existingRootFile = await this.userRootFile();
 		if (existingRootFile) throw new Error(`User ${this.userId} has already a root file`);
 
-		const fileModel = new FileModel({ userId: this.userId });
+		const fileModel = this.models.file({ userId: this.userId });
 
 		const id = uuidgen();
 
@@ -209,7 +208,7 @@ export default class FileModel extends BaseModel {
 	private async checkCanReadPermissions(file: File): Promise<void> {
 		if (!file) throw new ErrorNotFound();
 		if (file.owner_id === this.userId) return;
-		const permissionModel = new PermissionModel();
+		const permissionModel = this.models.permission();
 		const canRead: boolean = await permissionModel.canRead(file.id, this.userId);
 		if (!canRead) throw new ErrorForbidden();
 	}
@@ -217,7 +216,7 @@ export default class FileModel extends BaseModel {
 	private async checkCanWritePermission(file: File): Promise<void> {
 		if (!file) throw new ErrorNotFound();
 		if (file.owner_id === this.userId) return;
-		const permissionModel = new PermissionModel();
+		const permissionModel = this.models.permission();
 		const canWrite: boolean = await permissionModel.canWrite(file.id, this.userId);
 		if (!canWrite) throw new ErrorForbidden();
 	}
@@ -324,7 +323,7 @@ export default class FileModel extends BaseModel {
 		const txIndex = await this.startTransaction();
 
 		try {
-			const permissionModel = new PermissionModel();
+			const permissionModel = this.models.permission();
 			await permissionModel.deleteByFileId(id);
 
 			if (file.is_directory) {

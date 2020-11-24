@@ -1,9 +1,5 @@
-import { asyncTest, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../utils/testUtils';
-import UserController from './UserController';
+import { models, controllers, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../utils/testUtils';
 import { File, User } from '../db';
-import UserModel from '../models/UserModel';
-import FileModel from '../models/FileModel';
-import PermissionModel from '../models/PermissionModel';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 
 describe('UserController', function() {
@@ -23,7 +19,7 @@ describe('UserController', function() {
 	it('should create a new user along with his root file', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		const controller = new UserController();
+		const controller = controllers().user();
 
 		const newUser = await controller.postUser(session.id, { email: 'test@example.com', password: '123456' });
 
@@ -33,13 +29,13 @@ describe('UserController', function() {
 		expect(!!newUser.email).toBe(true);
 		expect(!newUser.password).toBe(true);
 
-		const userModel = new UserModel({ userId: newUser.id });
+		const userModel = models().user({ userId: newUser.id });
 		const userFromModel: User = await userModel.load(newUser.id);
 
 		expect(!!userFromModel.password).toBe(true);
 		expect(userFromModel.password === '123456').toBe(false); // Password has been hashed
 
-		const fileModel = new FileModel({ userId: newUser.id });
+		const fileModel = models().file({ userId: newUser.id });
 		const rootFile: File = await fileModel.userRootFile();
 
 		expect(!!rootFile).toBe(true);
@@ -49,10 +45,10 @@ describe('UserController', function() {
 	it('should not create anything, neither user, root file nor permissions, if user creation fail', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const controller = new UserController();
-		const fileModel = new FileModel({ userId: user.id });
-		const permissionModel = new PermissionModel();
-		const userModel = new UserModel({ userId: user.id });
+		const controller = controllers().user();
+		const fileModel = models().file({ userId: user.id });
+		const permissionModel = models().permission();
+		const userModel = models().user({ userId: user.id });
 
 		await controller.postUser(session.id, { email: 'test@example.com', password: '123456' });
 
@@ -81,11 +77,11 @@ describe('UserController', function() {
 		expect(beforePermissionCount).toBe(afterPermissionCount);
 	});
 
-	it('should change user properties', asyncTest(async function() {
+	it('should change user properties', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const controller = new UserController();
-		const userModel = new UserModel({ userId: user.id });
+		const controller = controllers().user();
+		const userModel = models().user({ userId: user.id });
 
 		await controller.patchUser(session.id, { id: user.id, email: 'test2@example.com' });
 		let modUser: User = await userModel.load(user.id);
@@ -96,25 +92,25 @@ describe('UserController', function() {
 		modUser = await userModel.load(user.id);
 		expect(!!modUser.password).toBe(true);
 		expect(modUser.password === previousPassword).toBe(false);
-	}));
+	});
 
-	it('should get a user', asyncTest(async function() {
+	it('should get a user', async function() {
 		const { user, session } = await createUserAndSession();
 
-		const controller = new UserController();
+		const controller = controllers().user();
 		const gotUser = await controller.getUser(session.id, user.id);
 
 		expect(gotUser.id).toBe(user.id);
 		expect(gotUser.email).toBe(user.email);
-	}));
+	});
 
-	it('should validate user objects', asyncTest(async function() {
+	it('should validate user objects', async function() {
 		const { user: admin, session: adminSession } = await createUserAndSession(1, true);
 		const { user: user1, session: userSession1 } = await createUserAndSession(2, false);
 		const { user: user2 } = await createUserAndSession(3, false);
 
 		let error = null;
-		const controller = new UserController();
+		const controller = controllers().user();
 
 		// Non-admin user can't create a user
 		error = await checkThrowAsync(async () => await controller.postUser(userSession1.id, { email: 'newone@example.com', password: '1234546' }));
@@ -159,15 +155,15 @@ describe('UserController', function() {
 		// check that the email is valid
 		error = await checkThrowAsync(async () => await controller.patchUser(userSession1.id, { id: user1.id, email: 'ohno' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
-	}));
+	});
 
-	it('should delete a user', asyncTest(async function() {
+	it('should delete a user', async function() {
 		const { user: admin, session: adminSession } = await createUserAndSession(1, true);
 		const { user: user1, session: session1 } = await createUserAndSession(2, false);
 		const { user: user2, session: session2 } = await createUserAndSession(3, false);
 
-		const controller = new UserController();
-		const userModel = new UserModel({ userId: admin.id });
+		const controller = controllers().user();
+		const userModel = models().user({ userId: admin.id });
 
 		const allUsers: File[] = await userModel.all();
 		const beforeCount: number = allUsers.length;
@@ -182,11 +178,11 @@ describe('UserController', function() {
 		expect((await userModel.all()).length).toBe(beforeCount - 1);
 
 		// Can delete own user
-		const fileModel = new FileModel({ userId: user2.id });
+		const fileModel = models().file({ userId: user2.id });
 		expect(!!(await fileModel.userRootFile())).toBe(true);
 		await controller.deleteUser(session2.id, user2.id);
 		expect((await userModel.all()).length).toBe(beforeCount - 2);
 		expect(!!(await fileModel.userRootFile())).toBe(false);
-	}));
+	});
 
 });

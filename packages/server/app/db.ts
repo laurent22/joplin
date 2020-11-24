@@ -1,5 +1,4 @@
 import * as Knex from 'knex';
-import BaseModel from './models/BaseModel';
 
 const packageRootDir = `${__dirname}/../..`;
 
@@ -20,38 +19,20 @@ export interface DbConfig {
 	asyncStackTraces?: boolean;
 }
 
-let dbConfig_: DbConfig = null;
-let db_: Knex = null;
-
-export function dbConfig(): DbConfig {
-	if (!dbConfig_) throw new Error('DB config is not set');
-	return dbConfig_;
+export async function connectDb(dbConfig: DbConfig) {
+	return require('knex')(dbConfig);
 }
 
-export async function connectGlobalDb(dbConfig: DbConfig) {
-	dbConfig_ = JSON.parse(JSON.stringify(dbConfig));
-	db_ = require('knex')(dbConfig);
-	BaseModel.setDb(db_);
+export async function disconnectDb(db: DbConnection) {
+	await db.destroy();
 }
 
-export async function disconnectGlobalDb() {
-	BaseModel.setDb(null);
-	await db().destroy();
-	db_ = null;
-	dbConfig_ = null;
-}
-
-export async function migrateGlobalDb() {
-	await db().migrate.latest({
+export async function migrateDb(db: DbConnection) {
+	await db.migrate.latest({
 		directory: `${packageRootDir}/dist/migrations`,
 		// Disable transactions because the models might open one too
 		disableTransactions: true,
 	});
-}
-
-export default function db(): DbConnection {
-	if (!db_) throw new Error('Trying to access DB before it has been initialized');
-	return db_;
 }
 
 export enum ItemAddressingType {

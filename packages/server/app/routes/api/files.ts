@@ -1,15 +1,14 @@
-import * as Koa from 'koa';
 import { ErrorNotFound, ErrorMethodNotAllowed } from '../../utils/errors';
 import { File } from '../../db';
-import FileController from '../../controllers/FileController';
 import { sessionIdFromHeaders } from '../../utils/requestUtils';
 import { SubPath, Route, ApiResponseType, ApiResponse } from '../../utils/routeUtils';
 import * as getRawBody from 'raw-body';
+import { AppContext } from '../../utils/types';
 
 const route: Route = {
 
-	exec: async function(path: SubPath, ctx: Koa.Context) {
-		const fileController = new FileController();
+	exec: async function(path: SubPath, ctx: AppContext) {
+		const fileController = ctx.controllers.file();
 
 		// console.info(ctx.method + ' ' + path.id + (path.link ? '/' + path.link : ''));
 

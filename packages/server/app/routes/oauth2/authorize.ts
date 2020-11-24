@@ -1,13 +1,12 @@
-import * as Koa from 'koa';
 import { ErrorMethodNotAllowed } from '../../utils/errors';
 import { SubPath, Route } from '../../utils/routeUtils';
-import OAuthController from '../../controllers/OAuthController';
+import { AppContext } from '../../utils/types';
 
 const route: Route = {
 
-	exec: async function(_: SubPath, ctx: Koa.Context) {
+	exec: async function(_: SubPath, ctx: AppContext) {
 
-		const controller = new OAuthController();
+		const controller = ctx.controllers.oauth();
 
 		if (ctx.method === 'GET') {
 			return controller.getAuthorize(ctx.request.query);

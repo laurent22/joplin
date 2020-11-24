@@ -1,6 +1,5 @@
 import BaseModel from './BaseModel';
 import { Permission, ItemType, User } from '../db';
-import UserModel from './UserModel';
 
 enum ReadOrWriteKeys {
 	CanRead = 'can_read',
@@ -31,7 +30,7 @@ export default class PermissionModel extends BaseModel {
 			if (p[method]) return true;
 		}
 
-		const userModel = new UserModel({ userId: userId });
+		const userModel = this.models.user({ userId: userId });
 		const user: User = await userModel.load(userId);
 		if (user.is_admin) return true;
 
