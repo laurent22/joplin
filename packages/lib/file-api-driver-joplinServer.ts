@@ -146,7 +146,9 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	async put(path: string, content: any, options: any = null) {
-		return this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, content, null, options);
+		return this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, content, {
+			'Content-Type': 'application/octet-stream',
+		}, options);
 	}
 
 	async delete(path: string) {

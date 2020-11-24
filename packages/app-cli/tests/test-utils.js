@@ -23,6 +23,7 @@ const { FileApiDriverWebDav } = require('@joplin/lib/file-api-driver-webdav.js')
 const { FileApiDriverDropbox } = require('@joplin/lib/file-api-driver-dropbox.js');
 const { FileApiDriverOneDrive } = require('@joplin/lib/file-api-driver-onedrive.js');
 const { FileApiDriverAmazonS3 } = require('@joplin/lib/file-api-driver-amazon-s3.js');
+const FileApiDriverJoplinServer = require('@joplin/lib/file-api-driver-joplinServer').default;
 const BaseService = require('@joplin/lib/services/BaseService').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const time = require('@joplin/lib/time').default;
@@ -36,6 +37,7 @@ const SyncTargetOneDrive = require('@joplin/lib/SyncTargetOneDrive.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
+const SyncTargetJoplinServer = require('@joplin/lib/SyncTargetJoplinServer').default;
 const EncryptionService = require('@joplin/lib/services/EncryptionService.js');
 const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker.js');
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
@@ -44,6 +46,7 @@ const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
 const KvStore = require('@joplin/lib/services/KvStore').default;
 const WebDavApi = require('@joplin/lib/WebDavApi');
 const DropboxApi = require('@joplin/lib/DropboxApi');
+const JoplinServerApi = require('@joplin/lib/JoplinServerApi2').default;
 const { OneDriveApi } = require('@joplin/lib/onedrive-api');
 const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
 const KeychainServiceDriver = require('@joplin/lib/services/keychain/KeychainServiceDriver.node').default;
@@ -100,6 +103,7 @@ SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
+SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 
 let syncTargetName_ = '';
 let syncTargetId_ = null;
@@ -121,11 +125,12 @@ function setSyncTargetName(name) {
 	return previousName;
 }
 
-setSyncTargetName('memory');
+// setSyncTargetName('memory');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
 // setSyncTargetName('onedrive');
 // setSyncTargetName('amazon_s3');
+setSyncTargetName('joplinServer');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
@@ -334,6 +339,7 @@ async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	resourceFetchers_[id] = new ResourceFetcher(() => { return synchronizers_[id].api(); });
 	kvStores_[id] = new KvStore();
 
+	await fileApi().initialize();
 	await fileApi().clearRoot();
 }
 
@@ -463,6 +469,13 @@ async function initFileApi() {
 		if (!amazonS3Creds || !amazonS3Creds.accessKeyId) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "accessKeyId": "", "secretAccessKey": "", "bucket": "mybucket"}`);
 		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
 		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('joplinServer')) {
+		const api = new JoplinServerApi({
+			baseUrl: () => 'http://localhost:22300',
+			username: () => 'admin@localhost',
+			password: () => 'admin',
+		});
+		fileApi = new FileApi('root:/Apps/Joplin', new FileApiDriverJoplinServer(api));
 	}
 
 	fileApi.setLogger(logger);
