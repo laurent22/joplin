@@ -181,7 +181,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	uploadBlob: () => {
+	uploadBlob: (_url: string, _options: any) => {
 		throw new Error('Not implemented');
 	},
 

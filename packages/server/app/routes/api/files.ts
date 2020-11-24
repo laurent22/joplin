@@ -30,7 +30,7 @@ const route: Route = {
 	exec: async function(path: SubPath, ctx: AppContext) {
 		const fileController = ctx.controllers.file();
 
-		console.info(`${ctx.method} ${path.id}${path.link ? `/${path.link}` : ''}`);
+		// console.info(`${ctx.method} ${path.id}${path.link ? `/${path.link}` : ''}`);
 
 		if (!path.link) {
 			if (ctx.method === 'GET') {

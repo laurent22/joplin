@@ -1,21 +1,40 @@
-const { Logger } = require('lib/logger.js');
+// import Logger from './Logger';
+import shim from './shim';
 const { rtrimSlashes } = require('lib/path-utils.js');
-const { shim } = require('lib/shim');
 const JoplinError = require('lib/JoplinError');
 
-class JoplinServerApi {
+// const logger = Logger.create('JoplinServerApi');
 
-	constructor(options) {
-		this.logger_ = new Logger();
+interface Options {
+	baseUrl(): string;
+	username(): string;
+	password(): string;
+}
+
+enum ExecOptionsResponseFormat {
+	Json = 'json',
+	Text = 'text',
+}
+
+enum ExecOptionsTarget {
+	String = 'string',
+	File = 'file',
+}
+
+interface ExecOptions {
+	responseFormat?: ExecOptionsResponseFormat;
+	target?: ExecOptionsTarget;
+	path?: string;
+	source?: string;
+}
+
+export default class JoplinServerApi {
+
+	private options_: Options;
+	private session_: any;
+
+	constructor(options: Options) {
 		this.options_ = options;
-	}
-
-	setLogger(l) {
-		this.logger_ = l;
-	}
-
-	logger() {
-		return this.logger_;
 	}
 
 	baseUrl() {
@@ -39,13 +58,13 @@ class JoplinServerApi {
 		return session ? session.id : '';
 	}
 
-	requestToCurl_(url, options) {
-		let output = [];
+	requestToCurl_(url: string, options: any) {
+		const output = [];
 		output.push('curl');
 		output.push('-v');
 		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
-			for (let n in options.headers) {
+			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
 				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
 			}
@@ -56,11 +75,11 @@ class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	async exec(method, path = '', body = null, headers = null, options = null) {
+	async exec(method: string, path: string = '', body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
-		if (!options.responseFormat) options.responseFormat = 'json';
-		if (!options.target) options.target = 'string';
+		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;
+		if (!options.target) options.target = ExecOptionsTarget.String;
 
 		let sessionId = '';
 		if (path !== 'api/sessions' && !sessionId) {
@@ -69,7 +88,7 @@ class JoplinServerApi {
 
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
 
-		const fetchOptions = {};
+		const fetchOptions: any = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
@@ -87,7 +106,7 @@ class JoplinServerApi {
 
 		const url = `${this.baseUrl()}/${path}`;
 
-		let response = null;
+		let response: any = null;
 
 		// console.info('Joplin API Call', `${method} ${url}`, headers, options);
 		// console.info(this.requestToCurl_(url, fetchOptions));
@@ -111,14 +130,14 @@ class JoplinServerApi {
 		// console.info('Joplin API Response', responseText);
 
 		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
-		const newError = (message, code = 0) => {
+		const newError = (message: string, code: number = 0) => {
 			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 			const shortResponseText = (`${responseText}`).substr(0, 1024);
 			return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
 		};
 
-		let responseJson_ = null;
+		let responseJson_: any = null;
 		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
@@ -150,5 +169,3 @@ class JoplinServerApi {
 		return output;
 	}
 }
-
-module.exports = JoplinServerApi;

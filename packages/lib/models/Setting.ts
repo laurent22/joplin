@@ -309,6 +309,39 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
+			'sync.9.path': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+				},
+				public: true,
+				label: () => _('Joplin Server URL'),
+				description: () => emptyDirWarning,
+			},
+			'sync.9.username': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+				},
+				public: true,
+				label: () => _('Joplin Server username'),
+			},
+			'sync.9.password': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+				},
+				public: true,
+				label: () => _('Joplin Server password'),
+				secure: true,
+			},
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {

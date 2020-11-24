@@ -1,7 +1,9 @@
+import JoplinServerApi from './JoplinServerApi2';
+
 const { basicDelta } = require('lib/file-api');
 const { dirname, basename } = require('lib/path-utils');
 
-function removeTrailingColon(path) {
+function removeTrailingColon(path: string) {
 	if (!path || !path.length) return '';
 	if (path[path.length - 1] === ':') return path.substr(0, path.length - 1);
 	return path;
@@ -12,13 +14,15 @@ function removeTrailingColon(path) {
 // when doing the API call.
 // Only supported special dir at the moment is "root"
 
-class FileApiDriverJoplinServer {
+export default class FileApiDriverJoplinServer {
 
-	constructor(api) {
+	private api_: JoplinServerApi;
+
+	constructor(api: JoplinServerApi) {
 		this.api_ = api;
 	}
 
-	async initialize(basePath) {
+	async initialize(basePath: string) {
 		const pieces = removeTrailingColon(basePath).split('/');
 		if (!pieces.length) return;
 
@@ -43,7 +47,7 @@ class FileApiDriverJoplinServer {
 		return 3;
 	}
 
-	metadataToStat_(md, path) {
+	metadataToStat_(md: any, path: string) {
 		const output = {
 			path: path,
 			updated_time: md.updated_time,
@@ -56,7 +60,7 @@ class FileApiDriverJoplinServer {
 		return output;
 	}
 
-	metadataToStats_(mds) {
+	metadataToStats_(mds: any[]) {
 		const output = [];
 		for (let i = 0; i < mds.length; i++) {
 			output.push(this.metadataToStat_(mds[i], mds[i].name));
@@ -64,23 +68,23 @@ class FileApiDriverJoplinServer {
 		return output;
 	}
 
-	apiFilePath_(p) {
+	apiFilePath_(p: string) {
 		if (p !== 'root') p += ':';
 		return `api/files/${p}`;
 	}
 
-	async stat(path) {
+	async stat(path: string) {
 		try {
 			const response = await this.api().exec('GET', this.apiFilePath_(path));
-			return this.metadataToStat_(response);
+			return this.metadataToStat_(response, path);
 		} catch (error) {
 			if (error.code === 404) return null;
 			throw error;
 		}
 	}
 
-	async delta(path, options) {
-		const getDirStats = async (path) => {
+	async delta(path: string, options: any) {
+		const getDirStats = async (path: string) => {
 			const result = await this.list(path);
 			return result.items;
 		};
@@ -88,17 +92,17 @@ class FileApiDriverJoplinServer {
 		return basicDelta(path, getDirStats, options);
 	}
 
-	async list(path) {
+	async list(path: string) {
 		const results = await this.api().exec('GET', `${this.apiFilePath_(path)}/children`);
 
 		return {
 			items: this.metadataToStats_(results),
 			hasMore: false, // TODO
 			context: null,
-		};
+		} as any;
 	}
 
-	async get(path, options) {
+	async get(path: string, options: any) {
 		if (!options) options = {};
 		if (!options.responseFormat) options.responseFormat = 'text';
 		try {
@@ -110,7 +114,7 @@ class FileApiDriverJoplinServer {
 		}
 	}
 
-	parentPath_(path) {
+	parentPath_(path: string) {
 		let output = dirname(path);
 
 		// This is the root or a special folder
@@ -121,11 +125,11 @@ class FileApiDriverJoplinServer {
 		return output;
 	}
 
-	basename_(path) {
+	basename_(path: string) {
 		return basename(path);
 	}
 
-	async mkdir(path) {
+	async mkdir(path: string) {
 		const parentPath = this.parentPath_(path);
 		const filename = this.basename_(path);
 
@@ -141,11 +145,11 @@ class FileApiDriverJoplinServer {
 		}
 	}
 
-	async put(path, content, options = null) {
+	async put(path: string, content: any, options: any = null) {
 		return this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, content, null, options);
 	}
 
-	async delete(path) {
+	async delete(path: string) {
 		return this.api().exec('DELETE', this.apiFilePath_(path));
 	}
 
@@ -153,10 +157,8 @@ class FileApiDriverJoplinServer {
 		throw new Error('Not supported');
 	}
 
-	async clearRoot(path) {
+	async clearRoot(path: string) {
 		await this.delete(path);
 		await this.mkdir(path);
 	}
 }
-
-module.exports = { FileApiDriverJoplinServer };
