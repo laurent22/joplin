@@ -1,7 +1,7 @@
 import JoplinServerApi from './JoplinServerApi2';
 
-const { basicDelta } = require('lib/file-api');
-const { dirname, basename } = require('lib/path-utils');
+const { basicDelta } = require('./file-api');
+const { dirname, basename } = require('./path-utils');
 
 function removeTrailingColon(path: string) {
 	if (!path || !path.length) return '';

@@ -1,7 +1,7 @@
 // import Logger from './Logger';
 import shim from './shim';
-const { rtrimSlashes } = require('lib/path-utils.js');
-const JoplinError = require('lib/JoplinError');
+const { rtrimSlashes } = require('./path-utils.js');
+const JoplinError = require('./JoplinError');
 
 // const logger = Logger.create('JoplinServerApi');
 

@@ -4,14 +4,14 @@ import Synchronizer from './Synchronizer';
 import { _ } from './locale.js';
 import JoplinServerApi from './JoplinServerApi2';
 
-const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { FileApi } = require('lib/file-api.js');
+const BaseSyncTarget = require('./BaseSyncTarget.js');
+const { FileApi } = require('./file-api.js');
 
 interface FileApiOptions {
 	path(): string;
 	username(): string;
 	password(): string;
-	directory?(): string;
+	directory(): string;
 }
 
 export default class SyncTargetJoplinServer extends BaseSyncTarget {

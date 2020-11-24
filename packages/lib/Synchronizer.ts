@@ -331,6 +331,7 @@ export default class Synchronizer {
 		let syncLock = null;
 
 		try {
+			await this.api().initialize();
 			this.api().setTempDirName(Dirnames.Temp);
 
 			try {
