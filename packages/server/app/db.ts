@@ -3,6 +3,8 @@ import BaseModel from './models/BaseModel';
 
 const packageRootDir = `${__dirname}/../..`;
 
+export type DbConnection = Knex;
+
 export interface DbConfigConnection {
 	host?: string;
 	port?: number;
@@ -47,7 +49,7 @@ export async function migrateGlobalDb() {
 	});
 }
 
-export default function db(): Knex {
+export default function db(): DbConnection {
 	if (!db_) throw new Error('Trying to access DB before it has been initialized');
 	return db_;
 }

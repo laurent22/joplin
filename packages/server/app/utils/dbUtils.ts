@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import * as Knex from 'knex';
+import { DbConnection } from '../db';
 
 // This transaction handler allows abstracting away the complexity of managing nested transactions
 // within models.
@@ -15,11 +16,11 @@ class TransactionHandler {
 	private logEnabled_: boolean = false;
 	private db_: Knex = null;
 
-	private get db(): Knex<any, any[]> {
+	private get db(): DbConnection {
 		return this.db_;
 	}
 
-	public setDb(db: Knex) {
+	public setDb(db: DbConnection) {
 		this.db_ = db;
 	}
 

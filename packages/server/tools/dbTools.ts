@@ -1,4 +1,5 @@
 import { connectGlobalDb, DbConfig, disconnectGlobalDb, migrateGlobalDb } from '../app/db';
+import * as fs from 'fs-extra';
 
 const { execCommand } = require('@joplin/tools/tool-utils');
 
@@ -16,19 +17,29 @@ export async function createDb(config: DbConfig, options: CreateDbOptions = null
 		...options,
 	};
 
-	const cmd: string[] = [
-		'createdb',
-		'--host', config.connection.host,
-		'--port', config.connection.port.toString(),
-		'--username', config.connection.user,
-		config.connection.database,
-	];
+	if (config.client === 'pg') {
+		const cmd: string[] = [
+			'createdb',
+			'--host', config.connection.host,
+			'--port', config.connection.port.toString(),
+			'--username', config.connection.user,
+			config.connection.database,
+		];
 
-	if (options.dropIfExists) {
-		await dropDb(config, { ignoreIfNotExists: true });
+		if (options.dropIfExists) {
+			await dropDb(config, { ignoreIfNotExists: true });
+		}
+
+		await execCommand(cmd.join(' '));
+	} else if (config.client === 'sqlite3') {
+		if (await fs.pathExists(config.connection.filename)) {
+			if (options.dropIfExists) {
+				await fs.remove(config.connection.filename);
+			} else {
+				throw new Error(`Database already exists: ${config.connection.filename}`);
+			}
+		}
 	}
-
-	await execCommand(cmd.join(' '));
 
 	await connectGlobalDb(config);
 	await migrateGlobalDb();
@@ -41,18 +52,22 @@ export async function dropDb(config: DbConfig, options: DropDbOptions = null) {
 		...options,
 	};
 
-	const cmd: string[] = [
-		'dropdb',
-		'--host', config.connection.host,
-		'--port', config.connection.port.toString(),
-		'--username', config.connection.user,
-		config.connection.database,
-	];
+	if (config.client === 'pg') {
+		const cmd: string[] = [
+			'dropdb',
+			'--host', config.connection.host,
+			'--port', config.connection.port.toString(),
+			'--username', config.connection.user,
+			config.connection.database,
+		];
 
-	try {
-		await execCommand(cmd.join(' '));
-	} catch (error) {
-		if (options.ignoreIfNotExists && error.message.includes('does not exist')) return;
-		throw error;
+		try {
+			await execCommand(cmd.join(' '));
+		} catch (error) {
+			if (options.ignoreIfNotExists && error.message.includes('does not exist')) return;
+			throw error;
+		}
+	} else if (config.client === 'sqlite3') {
+		await fs.remove(config.connection.filename);
 	}
 }
