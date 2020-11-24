@@ -5,3 +5,4 @@ db-*.sqlite
 *.pid
 logs/
 tests/temp/
+temp/

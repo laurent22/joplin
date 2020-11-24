@@ -2,15 +2,35 @@ import { ErrorNotFound, ErrorMethodNotAllowed } from '../../utils/errors';
 import { File } from '../../db';
 import { sessionIdFromHeaders } from '../../utils/requestUtils';
 import { SubPath, Route, ApiResponseType, ApiResponse } from '../../utils/routeUtils';
-import * as getRawBody from 'raw-body';
 import { AppContext } from '../../utils/types';
+import * as fs from 'fs-extra';
+const formidable = require('formidable');
+
+interface FormParseResult {
+	fields: any;
+	files: any;
+}
+
+async function formParse(req: any): Promise<FormParseResult> {
+	return new Promise((resolve: Function, reject: Function) => {
+		const form = formidable({ multiples: true });
+		form.parse(req, (error: any, fields: any, files: any) => {
+			if (error) {
+				reject(error);
+				return;
+			}
+
+			resolve({ fields, files });
+		});
+	});
+}
 
 const route: Route = {
 
 	exec: async function(path: SubPath, ctx: AppContext) {
 		const fileController = ctx.controllers.file();
 
-		// console.info(ctx.method + ' ' + path.id + (path.link ? '/' + path.link : ''));
+		console.info(`${ctx.method} ${path.id}${path.link ? `/${path.link}` : ''}`);
 
 		if (!path.link) {
 			if (ctx.method === 'GET') {
@@ -39,10 +59,9 @@ const route: Route = {
 			}
 
 			if (ctx.method === 'PUT') {
-				console.info('A');
-				const body = await getRawBody(ctx.req);
-				console.info('B');
-				return fileController.putFileContent(sessionIdFromHeaders(ctx.headers), path.id, body);
+				const result = await formParse(ctx.req);
+				const buffer = await fs.readFile(result.files.file.path);
+				return fileController.putFileContent(sessionIdFromHeaders(ctx.headers), path.id, buffer);
 			}
 
 			throw new ErrorMethodNotAllowed();

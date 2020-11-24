@@ -4,7 +4,6 @@ import { ErrorNotFound } from '../utils/errors';
 
 export default class FileController extends BaseController {
 
-
 	// Note: this is only used in tests. To create files with no content
 	// or directories, use postChild()
 	async postFile_(sessionId: string, file: File): Promise<File> {

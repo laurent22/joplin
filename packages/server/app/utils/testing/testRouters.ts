@@ -59,11 +59,12 @@ async function curl(method: string, path: string, query: object = null, body: an
 	if (options.uploadFile) {
 		curlCmd.push('--data-binary');
 		curlCmd.push(`@${options.uploadFile}`);
+		headers['Content-Type'] = 'application/octet-stream';
 	}
 
 	if (!headers && body) headers = {};
 
-	if (body) headers['Content-Type'] = 'application/json';
+	if (body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
 
 	if (headers) {
 		for (const k in headers) {
@@ -79,6 +80,11 @@ async function curl(method: string, path: string, query: object = null, body: an
 	const result = await execCommand(curlCmd.join(' '), !!options.verbose);
 	if (options.verbose) return result;
 	return result ? JSON.parse(result) : null;
+}
+
+function extractCurlResponse(rawResult: string) {
+	const splitted = rawResult.split('\n');
+	return splitted.filter((line: string) => line.indexOf('<') === 0).join('\n');
 }
 
 const spawn = require('child_process').spawn;
@@ -112,14 +118,14 @@ async function main() {
 	const cleanUp = () => {
 		console.info(`To run this server again: ${migrateCommand} && node ${serverCommandParams.join(' ')}`);
 		serverProcess.kill();
-	}
+	};
 
 	process.on('SIGINT', function() {
 		console.info('Received SIGINT signal - killing server');
 		cleanUp();
 		process.exit();
 	});
-	
+
 	let response: any = null;
 
 	console.info('Waiting for server to be ready...');
@@ -130,7 +136,7 @@ async function main() {
 			console.info(`Got ping response: ${JSON.stringify(response)}`);
 			break;
 		} catch (error) {
-			console.error('error', error);
+			// console.error('error', error);
 			await sleep(0.5);
 		}
 	}
@@ -158,9 +164,9 @@ async function main() {
 
 	response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, {
 		verbose: true,
-		output: `${serverRoot}/assets/tests/photo-downloaded.jpg`,
+		output: `${tempDir}/photo-downloaded.jpg`,
 	});
-	console.info(response);
+	console.info(extractCurlResponse(response));
 
 	cleanUp();
 }

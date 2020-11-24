@@ -14,6 +14,7 @@
   "dependencies": {
     "@joplin/lib": "^1.0.9",
     "bcryptjs": "^2.4.3",
+    "formidable": "^1.2.2",
     "fs-extra": "^8.1.0",
     "knex": "^0.19.4",
     "koa": "^2.8.1",
@@ -24,7 +25,6 @@
     "nanoid": "^2.1.1",
     "pg": "^8.5.1",
     "query-string": "^6.8.3",
-    "raw-body": "^2.4.1",
     "sqlite3": "^4.1.0",
     "yargs": "^14.0.0"
   },
