@@ -1,5 +1,5 @@
 import Setting from './models/Setting';
-import Logger, { TargetType } from './Logger';
+import Logger, { TargetType, LoggerWrapper } from './Logger';
 import shim from './shim';
 import BaseService from './services/BaseService';
 import reducer from './reducer';
@@ -46,7 +46,7 @@ const MigrationService = require('./services/MigrationService');
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
-const appLogger = Logger.create('App');
+const appLogger: LoggerWrapper = Logger.create('App');
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
@@ -103,7 +103,7 @@ export default class BaseApplication {
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = null;
 	}
 
-	logger() {
+	logger(): LoggerWrapper {
 		return appLogger;
 	}
 
