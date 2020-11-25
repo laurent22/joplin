@@ -2,37 +2,31 @@
 
 FROM node:12
 
-RUN useradd -ms /bin/bash joplin
-USER joplin
+ARG user=joplin
 
-# RUN groupadd -r joplin && useradd -r -g joplin joplin
-# USER joplin
+RUN useradd --create-home --shell /bin/bash $user
+USER $user
 
 ENV NODE_ENV development
 
-WORKDIR /home/joplin
+WORKDIR /home/$user
 
-COPY package.json .
+COPY --chown=$user:$user package.json .
 
 # We copy only the packages that we need for the server
-COPY packages/lib ./packages/lib
-COPY packages/server ./packages/server
-COPY lerna.json .
-COPY tsconfig.json .
+COPY --chown=$user:$user packages/lib ./packages/lib
+COPY --chown=$user:$user packages/server ./packages/server
+COPY --chown=$user:$user packages/fork-sax ./packages/fork-sax
+COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
+COPY --chown=$user:$user packages/renderer ./packages/renderer
+COPY --chown=$user:$user packages/tools ./packages/tools
+COPY --chown=$user:$user lerna.json .
+COPY --chown=$user:$user tsconfig.json .
+
+RUN ls -la /home/$user
 
 RUN npm install
 
+EXPOSE 22300
+
 CMD [ "npm", "--prefix", "packages/server", "start" ]
-
-
-# COPY package.json .
-
-# RUN npm install
-
-# ADD . /var/www/joplin
-
-# RUN npm run tsc
-
-# CMD [ "npm", "start" ]
-
-# EXPOSE 22300
