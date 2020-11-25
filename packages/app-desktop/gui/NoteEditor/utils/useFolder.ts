@@ -18,7 +18,7 @@ export default function(dependencies: HookDependencies) {
 			setFolder(f);
 		}
 
-		loadFolder();
+		void loadFolder();
 
 		return function() {
 			cancelled = true;

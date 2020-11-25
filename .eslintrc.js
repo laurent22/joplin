@@ -126,6 +126,10 @@ module.exports = {
 		{
 			// enable the rule specifically for TypeScript files
 			'files': ['*.ts', '*.tsx'],
+			'parserOptions': {
+				// Required for @typescript-eslint/no-floating-promises
+				'project': './tsconfig.eslint.json',
+			},
 			'rules': {
 				// Warn only because it would make it difficult to convert JS classes to TypeScript, unless we
 				// make everything public which is not great. New code however should specify member accessibility.
@@ -152,6 +156,7 @@ module.exports = {
 						'requireLast': false,
 					},
 				}],
+				'@typescript-eslint/no-floating-promises': ['error'],
 			},
 		},
 	],

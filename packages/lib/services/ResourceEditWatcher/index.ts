@@ -157,7 +157,7 @@ export default class ResourceEditWatcher {
 
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
-			this.watcher_.on('all', async (event: any, path: string) => {
+			this.watcher_.on('all', (event: any, path: string) => {
 				path = toSystemSlashes(path, 'linux');
 
 				this.logger().info(`ResourceEditWatcher: Event: ${event}: ${path}`);
@@ -170,7 +170,7 @@ export default class ResourceEditWatcher {
 					// See: https://github.com/laurent22/joplin/issues/710#issuecomment-420997167
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
-					handleChangeEvent(path);
+					void handleChangeEvent(path);
 				} else if (event === 'error') {
 					this.logger().error('ResourceEditWatcher: error');
 				}
@@ -185,14 +185,14 @@ export default class ResourceEditWatcher {
 			// https://github.com/laurent22/joplin/issues/3407
 			//
 			// @ts-ignore Leave unused path variable
-			this.watcher_.on('raw', async (event: string, path: string, options: any) => {
+			this.watcher_.on('raw', (event: string, path: string, options: any) => {
 				const watchedPath = toSystemSlashes(options.watchedPath, 'linux');
 
 				this.logger().debug(`ResourceEditWatcher: Raw event: ${event}: ${watchedPath}`);
 				if (event === 'rename') {
 					this.watcher_.unwatch(watchedPath);
 					this.watcher_.add(watchedPath);
-					handleChangeEvent(watchedPath);
+					void handleChangeEvent(watchedPath);
 				}
 			});
 		} else {

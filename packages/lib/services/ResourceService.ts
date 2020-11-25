@@ -154,11 +154,11 @@ export default class ResourceService extends BaseService {
 		const service = this.instance();
 
 		service.maintenanceTimer1_ = shim.setTimeout(() => {
-			service.maintenance();
+			void service.maintenance();
 		}, 1000 * 30);
 
 		service.maintenanceTimer2_ = shim.setInterval(() => {
-			service.maintenance();
+			void service.maintenance();
 		}, 1000 * 60 * 60 * 4);
 	}
 

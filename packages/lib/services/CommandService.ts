@@ -232,7 +232,7 @@ export default class CommandService extends BaseService {
 
 	public scheduleExecute(commandName: string, args: any) {
 		shim.setTimeout(() => {
-			this.execute(commandName, args);
+			void this.execute(commandName, args);
 		}, 10);
 	}
 

@@ -37,13 +37,13 @@ export default class AlarmServiceDriverNode {
 		return id in this.notifications_;
 	}
 
-	async clearNotification(id: number) {
+	clearNotification(id: number) {
 		if (!this.notificationIsSet(id)) return;
 		shim.clearTimeout(this.notifications_[id].timeoutId);
 		delete this.notifications_[id];
 	}
 
-	async scheduleNotification(notification: Notification) {
+	scheduleNotification(notification: Notification) {
 		const now = Date.now();
 		const interval = notification.date.getTime() - now;
 		if (interval < 0) return;

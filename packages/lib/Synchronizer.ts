@@ -354,7 +354,7 @@ export default class Synchronizer {
 			this.lockHandler().startAutoLockRefresh(syncLock, (error: any) => {
 				this.logger().warn('Could not refresh lock - cancelling sync. Error was:', error);
 				this.syncTargetIsLocked_ = true;
-				this.cancel();
+				void this.cancel();
 			});
 
 			// ========================================================================

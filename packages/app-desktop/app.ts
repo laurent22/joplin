@@ -424,7 +424,7 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().name), click: () => { app.window().show(); } },
 				{ type: 'separator' },
-				{ label: _('Quit'), click: () => { app.quit(); } },
+				{ label: _('Quit'), click: () => { void app.quit(); } },
 			]);
 			app.createTray(contextMenu);
 		}
@@ -664,7 +664,7 @@ class Application extends BaseApplication {
 		this.updateTray();
 
 		shim.setTimeout(() => {
-			AlarmService.garbageCollect();
+			void AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
 
 		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
@@ -676,12 +676,12 @@ class Application extends BaseApplication {
 		ResourceService.runInBackground();
 
 		if (Setting.value('env') === 'dev') {
-			AlarmService.updateAllNotifications();
+			void AlarmService.updateAllNotifications();
 		} else {
 			reg.scheduleSync(1000).then(() => {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.
-				AlarmService.updateAllNotifications();
+				void AlarmService.updateAllNotifications();
 
 				DecryptionWorker.instance().scheduleStart();
 			});

@@ -52,8 +52,8 @@ export default class ToolbarButtonUtils {
 			tooltip: this.service.label(commandName),
 			iconName: command.declaration.iconName,
 			enabled: newEnabled,
-			onClick: async () => {
-				this.service.execute(commandName);
+			onClick: () => {
+				void this.service.execute(commandName);
 			},
 			title: newTitle,
 		};
