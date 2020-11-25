@@ -208,13 +208,6 @@ export enum MenuItemLocation {
 	 * @deprecated Do not use - same as NoteListContextMenu
 	 */
 	Context = 'context',
-
-	/**
-	 * The context menu that appears when right-clicking on the note
-	 * list, or when multiple notes are selected. Any command triggered from
-	 * this location will receive a `noteIds` array with the list of notes that
-	 * were right-clicked or selected.
-	 */
 	NoteListContextMenu = 'noteListContextMenu',
 	EditorContextMenu = 'editorContextMenu',
 }
