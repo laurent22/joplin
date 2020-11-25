@@ -2,7 +2,7 @@ import sqlts from '@rmp135/sql-ts';
 
 require('source-map-support').install();
 
-const dbFilePath: string = `${__dirname}/../../app/db.ts`;
+const dbFilePath: string = `${__dirname}/../db.ts`;
 
 const config = {
 	'dialect': 'sqlite3',
@@ -12,7 +12,7 @@ const config = {
 	'useNullAsDefault': true,
 	'excludedTables': ['knex_migrations', 'knex_migrations_lock', 'android_metadata'],
 	'interfaceNameFormat': 'PascalCaseSingular',
-	'filename': './app/db',
+	'filename': './db',
 	'fileReplaceWithinMarker': '// AUTO-GENERATED-TYPES',
 	'extends': {
 		'main.sessions': 'WithDates, WithUuid',

@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
-import { DbConnection } from '../app/db';
-import models from '../app/models/factory';
+import { DbConnection } from '../db';
+import models from '../models/factory';
 
 export async function up(db: DbConnection): Promise<any> {
 	await db.schema.createTable('users', function(table: Knex.CreateTableBuilder) {

@@ -1,4 +1,4 @@
-import { connectDb, DbConfig, disconnectDb, migrateDb } from '../app/db';
+import { connectDb, DbConfig, disconnectDb, migrateDb } from '../db';
 import * as fs from 'fs-extra';
 
 const { execCommand } = require('@joplin/tools/tool-utils');

@@ -9,7 +9,7 @@ import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
 import config from './config';
 import createDbConfig from './db.config.prod';
-import { createDb, dropDb } from '../tools/dbTools';
+import { createDb, dropDb } from './tools/dbTools';
 import { connectDb, disconnectDb, migrateDb } from './db';
 import modelFactory from './models/factory';
 import controllerFactory from './controllers/factory';
@@ -89,6 +89,7 @@ async function main() {
 	} else {
 		appLogger.info(`Starting server on port ${config.port} and PID ${process.pid}...`);
 		appLogger.info(`Base URL: ${config.baseUrl}`);
+		appLogger.info(`DB Config: ${JSON.stringify(dbConfig)}`);
 
 		const appContext = app.context as AppContext;
 		appContext.db = await connectDb(dbConfig);

@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 
-const packageRootDir = `${__dirname}/../..`;
+const migratioDir = `${__dirname}/migrations`;
 
 export type DbConnection = Knex;
 
@@ -29,7 +29,7 @@ export async function disconnectDb(db: DbConnection) {
 
 export async function migrateDb(db: DbConnection) {
 	await db.migrate.latest({
-		directory: `${packageRootDir}/dist/migrations`,
+		directory: migratioDir,
 		// Disable transactions because the models might open one too
 		disableTransactions: true,
 	});

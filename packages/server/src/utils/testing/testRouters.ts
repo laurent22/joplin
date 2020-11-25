@@ -91,8 +91,13 @@ const spawn = require('child_process').spawn;
 
 let serverProcess: any = null;
 
+function checkAndPrintResult(prefix: string, result: any) {
+	if (typeof result === 'object' && result && result.error) throw new Error(`${prefix}: ${JSON.stringify(result)}`);
+	console.info(prefix, result);
+}
+
 async function main() {
-	const serverRoot = `${__dirname}/../../../..`;
+	const serverRoot = `${__dirname}/../../..`;
 	const tempDir = `${serverRoot}/temp`;
 	process.chdir(serverRoot);
 	await fs.remove(tempDir);
@@ -101,13 +106,10 @@ async function main() {
 
 	fs.removeSync(`${serverRoot}/db-testing.sqlite`);
 
-	// const compileCommmand = 'npm run compile';
-	const migrateCommand = 'NODE_ENV=testing node dist/app/app.js --migrate-db';
-
-	// await execCommand(compileCommmand);
+	const migrateCommand = 'NODE_ENV=testing node dist/app.js --migrate-db';
 	await execCommand(migrateCommand);
 
-	const serverCommandParams = ['dist/app/app.js', '--pidfile', pidFilePath];
+	const serverCommandParams = ['dist/app.js', '--pidfile', pidFilePath];
 
 	serverProcess = spawn('node', serverCommandParams, {
 		detached: true,
@@ -126,49 +128,51 @@ async function main() {
 		process.exit();
 	});
 
-	let response: any = null;
+	try {
+		let response: any = null;
 
-	console.info('Waiting for server to be ready...');
+		console.info('Waiting for server to be ready...');
 
-	while (true) {
-		try {
-			response = await curl('GET', 'api/ping');
-			console.info(`Got ping response: ${JSON.stringify(response)}`);
-			break;
-		} catch (error) {
-			// console.error('error', error);
-			await sleep(0.5);
+		while (true) {
+			try {
+				response = await curl('GET', 'api/ping');
+				console.info(`Got ping response: ${JSON.stringify(response)}`);
+				break;
+			} catch (error) {
+				// console.error('error', error);
+				await sleep(0.5);
+			}
 		}
+
+		console.info('Server is ready');
+
+		// POST api/sessions
+
+		const session = await curl('POST', 'api/sessions', null, { email: 'admin@localhost', password: 'admin' });
+		checkAndPrintResult('Session: ', session);
+
+		// PUT api/files/:fileId/content
+
+		response = await curl('PUT', 'api/files/root:/photo.jpg:/content', null, null, { 'X-API-AUTH': session.id }, null, {
+			uploadFile: `${serverRoot}/assets/tests/photo.jpg`,
+		});
+		checkAndPrintResult('Response:', response);
+
+		// GET api/files/:fileId
+
+		const file = await curl('GET', `api/files/${response.id}`, null, null, { 'X-API-AUTH': session.id });
+		checkAndPrintResult('Response:', file);
+
+		// GET api/files/:fileId/content
+
+		response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, {
+			verbose: true,
+			output: `${tempDir}/photo-downloaded.jpg`,
+		});
+		console.info(extractCurlResponse(response));
+	} finally {
+		cleanUp();
 	}
-
-	console.info('Server is ready');
-
-	// POST api/sessions
-
-	const session = await curl('POST', 'api/sessions', null, { email: 'admin@localhost', password: 'admin' });
-	console.info('Session: ', session);
-
-	// PUT api/files/:fileId/content
-
-	response = await curl('PUT', 'api/files/root:/photo.jpg:/content', null, null, { 'X-API-AUTH': session.id }, null, {
-		uploadFile: `${serverRoot}/assets/tests/photo.jpg`,
-	});
-	console.info('Response:', response);
-
-	// GET api/files/:fileId
-
-	const file = await curl('GET', `api/files/${response.id}`, null, null, { 'X-API-AUTH': session.id });
-	console.info('Response:', file);
-
-	// GET api/files/:fileId/content
-
-	response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, {
-		verbose: true,
-		output: `${tempDir}/photo-downloaded.jpg`,
-	});
-	console.info(extractCurlResponse(response));
-
-	cleanUp();
 }
 
 main().catch(error => {

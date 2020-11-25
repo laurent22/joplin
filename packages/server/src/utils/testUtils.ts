@@ -1,13 +1,13 @@
 import { User, Session, DbConnection, connectDb, disconnectDb } from '../db';
 import cache from './cache';
-import { createDb } from '../../tools/dbTools';
+import { createDb } from '../tools/dbTools';
 import createDbConfig from '../db.config.tests';
 import modelFactory from '../models/factory';
 import controllerFactory from '../controllers/factory';
 
 // Takes into account the fact that this file will be inside the /dist
 // directory when it runs.
-const packageRootDir = `${__dirname}/../../..`;
+const packageRootDir = `${__dirname}/../..`;
 
 let db_: DbConnection = null;
 

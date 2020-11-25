@@ -1,7 +1,7 @@
 import { DbConfig } from './db';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
-const packageRootDir = `${__dirname}/../..`;
+const packageRootDir = `${__dirname}/..`;
 
 export default function(name: string, client: string = 'pg'): DbConfig {
 	if (client === 'sqlite3') {

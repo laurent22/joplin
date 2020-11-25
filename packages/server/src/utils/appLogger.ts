@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import Logger, { TargetType } from '@joplin/lib/Logger';
 
-const logDir = `${__dirname}/../../../logs`;
+const logDir = `${__dirname}/../../logs`;
 fs.mkdirpSync(logDir);
 
 Logger.fsDriver_ = new FsDriverNode();
