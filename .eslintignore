@@ -6,6 +6,7 @@ _releases/
 **/node_modules/
 Assets/
 docs/
+packages/server/dist/
 highlight.pack.js
 Modules/TinyMCE/IconPack/postinstall.js
 Modules/TinyMCE/JoplinLists/

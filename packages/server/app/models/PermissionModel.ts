@@ -49,7 +49,7 @@ export default class PermissionModel extends BaseModel {
 		const permissions = await this.filePermissions(fileId);
 		if (!permissions.length) return;
 		const ids = permissions.map(m => m.id);
-		super.delete(ids);
+		await super.delete(ids);
 	}
 
 }

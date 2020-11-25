@@ -163,7 +163,9 @@ export default abstract class BaseModel {
 		if (!ids.length) throw new Error('no id provided');
 
 		const query = this.db(this.tableName).where({ id: ids[0] });
-		for (let i = 1; i < ids.length; i++) query.orWhere({ id: ids[i] });
+		for (let i = 1; i < ids.length; i++) {
+			await query.orWhere({ id: ids[i] });
+		}
 
 		await cache.delete(ids);
 
