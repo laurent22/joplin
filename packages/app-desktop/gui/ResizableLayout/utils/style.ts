@@ -1,11 +1,17 @@
 import { ThemeAppearance } from '@joplin/lib/themes/type';
 import styled from 'styled-components';
 
-export const StyledWrapperRoot = styled.div`
+// Need to use `attrs` otherwise styled-components creates many instances of the
+// style when the component is resized.
+// https://github.com/styled-components/styled-components/issues/1212
+export const StyledWrapperRoot = styled.div.attrs((props: any) => ({
+	style: {
+		width: props.size.width,
+		height: props.size.height,
+	},
+}))`
 	position: relative;
 	display: flex;
-	width: ${props => props.size.width}px;
-	height: ${props => props.size.height}px;
 `;
 
 export const StyledMoveOverlay = styled.div`

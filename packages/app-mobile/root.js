@@ -399,6 +399,8 @@ async function initialize(dispatch) {
 		mainLogger.setLevel(Logger.LEVEL_DEBUG);
 	}
 
+	Logger.initializeGlobalLogger(mainLogger);
+
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message) => { alert(message); });
 

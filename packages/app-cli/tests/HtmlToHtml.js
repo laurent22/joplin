@@ -9,7 +9,7 @@ const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const shim = require('@joplin/lib/shim').default;
-const HtmlToHtml = require('@joplin/renderer/HtmlToHtml');
+const HtmlToHtml = require('@joplin/renderer/HtmlToHtml').default;
 const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 
 process.on('unhandledRejection', (reason, p) => {

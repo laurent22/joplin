@@ -12,6 +12,7 @@ interface Props {
 }
 
 const StyledRoot = styled.div`
+	box-sizing: border-box;
 	height: ${(props: any) => props.height}px;
 	display: flex;
 	flex-direction: row;

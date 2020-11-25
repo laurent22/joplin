@@ -1,20 +1,20 @@
 const smalltalk = require('smalltalk');
 
 class Dialogs {
-	async alert(message, title = '') {
+	async alert(message: string, title = '') {
 		await smalltalk.alert(title, message);
 	}
 
-	async confirm(message, title = '') {
+	async confirm(message: string, title = '', options: any = {}) {
 		try {
-			await smalltalk.confirm(title, message);
+			await smalltalk.confirm(title, message, options);
 			return true;
 		} catch (error) {
 			return false;
 		}
 	}
 
-	async prompt(message, title = '', defaultValue = '', options = null) {
+	async prompt(message: string, title = '', defaultValue = '', options: any = null) {
 		if (options === null) options = {};
 
 		try {
@@ -28,4 +28,4 @@ class Dialogs {
 
 const dialogs = new Dialogs();
 
-module.exports = dialogs;
+export default dialogs;

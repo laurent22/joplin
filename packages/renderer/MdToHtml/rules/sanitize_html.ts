@@ -1,7 +1,7 @@
 import { RuleOptions } from '../../MdToHtml';
+import htmlUtils from '../../htmlUtils';
 
 const md5 = require('md5');
-const htmlUtils = require('../../htmlUtils');
 
 export default {
 	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {

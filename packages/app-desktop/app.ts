@@ -21,6 +21,7 @@ import menuCommandNames from './gui/menuCommandNames';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import stateToWhenClauseContext from './services/commands/stateToWhenClauseContext';
 import ResourceService from '@joplin/lib/services/ResourceService';
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 const MasterKey = require('@joplin/lib/models/MasterKey');
@@ -31,7 +32,6 @@ const { reg } = require('@joplin/lib/registry.js');
 const packageInfo = require('./packageInfo.js');
 const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
 const ClipperServer = require('@joplin/lib/ClipperServer');
-const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
@@ -42,15 +42,17 @@ const CssUtils = require('@joplin/lib/CssUtils');
 // const populateDatabase = require('@joplin/lib/services/debug/populateDatabase').default;
 
 const commands = [
-	require('./gui/NoteListControls/commands/focusSearch'),
 	require('./gui/MainScreen/commands/editAlarm'),
 	require('./gui/MainScreen/commands/exportPdf'),
 	require('./gui/MainScreen/commands/hideModalMessage'),
 	require('./gui/MainScreen/commands/moveToFolder'),
-	require('./gui/MainScreen/commands/newNote'),
 	require('./gui/MainScreen/commands/newFolder'),
+	require('./gui/MainScreen/commands/newNote'),
 	require('./gui/MainScreen/commands/newSubFolder'),
 	require('./gui/MainScreen/commands/newTodo'),
+	require('./gui/MainScreen/commands/openFolder'),
+	require('./gui/MainScreen/commands/openNote'),
+	require('./gui/MainScreen/commands/openTag'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
 	require('./gui/MainScreen/commands/renameTag'),
@@ -62,34 +64,34 @@ const commands = [
 	require('./gui/MainScreen/commands/showNoteProperties'),
 	require('./gui/MainScreen/commands/showShareNoteDialog'),
 	require('./gui/MainScreen/commands/showSpellCheckerMenu'),
+	require('./gui/MainScreen/commands/toggleEditors'),
+	require('./gui/MainScreen/commands/toggleLayoutMoveMode'),
 	require('./gui/MainScreen/commands/toggleNoteList'),
 	require('./gui/MainScreen/commands/toggleSideBar'),
 	require('./gui/MainScreen/commands/toggleVisiblePanes'),
-	require('./gui/MainScreen/commands/toggleEditors'),
-	require('./gui/MainScreen/commands/openNote'),
-	require('./gui/MainScreen/commands/openFolder'),
-	require('./gui/MainScreen/commands/openTag'),
-	require('./gui/MainScreen/commands/toggleLayoutMoveMode'),
 	require('./gui/NoteEditor/commands/focusElementNoteBody'),
 	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
 	require('./gui/NoteEditor/commands/showLocalSearch'),
 	require('./gui/NoteEditor/commands/showRevisions'),
 	require('./gui/NoteList/commands/focusElementNoteList'),
+	require('./gui/NoteListControls/commands/focusSearch'),
 	require('./gui/SideBar/commands/focusElementSideBar'),
 ];
 
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
 const globalCommands = [
+	require('./commands/copyDevCommand'),
+	require('./commands/exportFolders'),
+	require('./commands/exportNotes'),
 	require('./commands/focusElement'),
+	require('./commands/openProfileDirectory'),
 	require('./commands/startExternalEditing'),
 	require('./commands/stopExternalEditing'),
 	require('./commands/toggleExternalEditing'),
-	require('./commands/copyDevCommand'),
-	require('./commands/openProfileDirectory'),
-	require('@joplin/lib/commands/synchronize'),
 	require('@joplin/lib/commands/historyBackward'),
 	require('@joplin/lib/commands/historyForward'),
+	require('@joplin/lib/commands/synchronize'),
 ];
 
 const editorCommandDeclarations = require('./gui/NoteEditor/commands/editorCommandDeclarations').default;
@@ -488,17 +490,24 @@ class Application extends BaseApplication {
 	}
 
 	private async initPluginService() {
-		const pluginLogger = new Logger();
-		pluginLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-plugins.txt` });
-		pluginLogger.addTarget(TargetType.Console, { prefix: 'Plugin Service:' });
-		pluginLogger.setLevel(Setting.value('env') == 'dev' ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO);
+		const service = PluginService.instance();
 
 		const pluginRunner = new PluginRunner();
-		PluginService.instance().setLogger(pluginLogger);
-		PluginService.instance().initialize(PlatformImplementation.instance(), pluginRunner, this.store());
+		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
+
+		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+
+		// Users can add and remove plugins from the config screen at any
+		// time, however we only effectively uninstall the plugin the next
+		// time the app is started. What plugin should be uninstalled is
+		// stored in the settings.
+		const newSettings = await service.uninstallPlugins(pluginSettings);
+		Setting.setValue('plugins.states', newSettings);
 
 		try {
-			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'));
+			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
+				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
+			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
 		}
@@ -506,12 +515,12 @@ class Application extends BaseApplication {
 		try {
 			if (Setting.value('plugins.devPluginPaths')) {
 				const paths = Setting.value('plugins.devPluginPaths').split(',').map((p: string) => p.trim());
-				await PluginService.instance().loadAndRunPlugins(paths);
+				await service.loadAndRunPlugins(paths, pluginSettings, true);
 			}
 
 			// Also load dev plugins that have passed via command line arguments
 			if (Setting.value('startupDevPlugins')) {
-				await PluginService.instance().loadAndRunPlugins(Setting.value('startupDevPlugins'));
+				await service.loadAndRunPlugins(Setting.value('startupDevPlugins'), pluginSettings, true);
 			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
@@ -691,7 +700,7 @@ class Application extends BaseApplication {
 		}
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());
-		ExternalEditWatcher.instance().dispatch = this.store().dispatch;
+		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
 		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); });
 
@@ -720,6 +729,14 @@ class Application extends BaseApplication {
 		// setTimeout(() => {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));
 		// }, 2000);
+
+		// this.dispatch({
+		// 	type: 'NAV_GO',
+		// 	routeName: 'Config',
+		// 	props: {
+		// 		defaultSection: 'plugins',
+		// 	},
+		// });
 
 		return null;
 	}

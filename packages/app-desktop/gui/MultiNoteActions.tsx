@@ -12,6 +12,7 @@ interface MultiNoteActionsProps {
 	dispatch: Function;
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
+	inConflictFolder: boolean;
 }
 
 function styles_(props: MultiNoteActionsProps) {
@@ -51,6 +52,7 @@ export default function MultiNoteActions(props: MultiNoteActionsProps) {
 		dispatch: props.dispatch,
 		watchedNoteFiles: props.watchedNoteFiles,
 		plugins: props.plugins,
+		inConflictFolder: props.inConflictFolder,
 	});
 
 	const itemComps = [];

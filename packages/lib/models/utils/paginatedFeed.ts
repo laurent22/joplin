@@ -3,7 +3,7 @@ import { Pagination, PaginationOrder } from './types';
 
 export interface ModelFeedPage {
 	items: any[];
-	has_more?: boolean;
+	has_more: boolean;
 	total?: number;
 }
 
@@ -52,9 +52,8 @@ export default async function(db: any, tableName: string, pagination: Pagination
 
 	const rows = await db.selectAll(sql, sqlParams);
 
-	const output: ModelFeedPage = { items: rows };
-
-	if (rows.length >= pagination.limit) output.has_more = true;
-
-	return output;
+	return {
+		items: rows,
+		has_more: rows.length >= pagination.limit,
+	};
 }

@@ -2,19 +2,21 @@ import { AppState } from '../../app';
 import eventManager from '@joplin/lib/eventManager';
 import NoteListUtils from '../utils/NoteListUtils';
 import { _ } from '@joplin/lib/locale';
-const { ItemList } = require('../ItemList.min.js');
+import time from '@joplin/lib/time';
+import BaseModel from '@joplin/lib/BaseModel';
+import bridge from '../../services/bridge';
+import Setting from '@joplin/lib/models/Setting';
+import NoteListItem from '../NoteListItem';
+import CommandService from '@joplin/lib/services/CommandService.js';
+import shim from '@joplin/lib/shim';
+import styled from 'styled-components';
+import { themeStyle } from '@joplin/lib/theme';
 const React = require('react');
+
+const { ItemList } = require('../ItemList.min.js');
 const { connect } = require('react-redux');
-const time = require('@joplin/lib/time').default;
-const { themeStyle } = require('@joplin/lib/theme');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const bridge = require('electron').remote.require('./bridge').default;
 const Note = require('@joplin/lib/models/Note');
-const Setting = require('@joplin/lib/models/Setting').default;
-const NoteListItem = require('../NoteListItem').default;
-const CommandService = require('@joplin/lib/services/CommandService.js').default;
-const styled = require('styled-components').default;
-const shim = require('@joplin/lib/shim').default;
+const Folder = require('@joplin/lib/models/Folder');
 
 const commands = [
 	require('./commands/focusElementNoteList'),
@@ -122,6 +124,7 @@ class NoteListComponent extends React.Component {
 			dispatch: this.props.dispatch,
 			watchedNoteFiles: this.props.watchedNoteFiles,
 			plugins: this.props.plugins,
+			inConflictFolder: this.props.selectedFolderId === Folder.conflictFolderId(),
 		});
 
 		menu.popup(bridge().window());

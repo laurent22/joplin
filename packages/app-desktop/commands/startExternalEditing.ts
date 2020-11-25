@@ -1,8 +1,8 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 const Note = require('@joplin/lib/models/Note');
-const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const bridge = require('electron').remote.require('./bridge').default;
 
 export const declaration: CommandDeclaration = {

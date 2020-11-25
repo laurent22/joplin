@@ -41,14 +41,14 @@ export default function styles(props: Props) {
 			leftIcon: {
 				fontSize: iconSize,
 				position: 'relative',
-				top: 2,
+				top: 1,
 				color: theme.color3,
 			},
 			rightIcon: {
 				fontSize: iconSize - 1,
 				borderLeft: 'none',
 				position: 'relative',
-				top: 2,
+				top: 1,
 				color: theme.color3,
 			},
 		};

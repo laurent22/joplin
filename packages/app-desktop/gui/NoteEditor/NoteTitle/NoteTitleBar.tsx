@@ -5,6 +5,29 @@ import { ChangeEvent, useCallback } from 'react';
 import NoteToolbar from '../../NoteToolbar/NoteToolbar';
 import { buildStyle } from '@joplin/lib/theme';
 import time from '@joplin/lib/time';
+import styled from 'styled-components';
+
+const StyledRoot = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	@media (max-width: 800px) {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+`;
+
+const InfoGroup = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	@media (max-width: 800px) {
+		border-top: 1px solid ${props => props.theme.dividerColor};
+		width: 100%;
+	}
+`;
 
 interface Props {
 	themeId: number;
@@ -19,14 +42,11 @@ interface Props {
 function styles_(props: Props) {
 	return buildStyle(['NoteEditorTitleBar'], props.themeId, (theme: any) => {
 		return {
-			root: {
-				display: 'flex', flexDirection: 'row', alignItems: 'center', height: theme.topRowHeight,
-			},
 			titleInput: {
 				flex: 1,
 				display: 'inline-block',
 				paddingTop: 5,
-				minHeight: 35,
+				minHeight: 38,
 				boxSizing: 'border-box',
 				fontWeight: 'bold',
 				paddingBottom: 5,
@@ -42,8 +62,8 @@ function styles_(props: Props) {
 			titleDate: {
 				...theme.textStyle,
 				color: theme.colorFaded,
-				paddingLeft: 10,
-				paddingRight: 10,
+				paddingLeft: 8,
+				whiteSpace: 'nowrap',
 			},
 			toolbarStyle: {
 				marginBottom: 0,
@@ -81,7 +101,7 @@ export default function NoteTitleBar(props: Props) {
 	}
 
 	return (
-		<div style={styles.root}>
+		<StyledRoot>
 			<input
 				type="text"
 				ref={props.titleInputRef}
@@ -91,8 +111,10 @@ export default function NoteTitleBar(props: Props) {
 				onKeyDown={onTitleKeydown}
 				value={props.noteTitle}
 			/>
-			{renderTitleBarDate()}
-			{renderNoteToolbar()}
-		</div>
+			<InfoGroup>
+				{renderTitleBarDate()}
+				{renderNoteToolbar()}
+			</InfoGroup>
+		</StyledRoot>
 	);
 }

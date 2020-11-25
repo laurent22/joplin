@@ -275,6 +275,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						editor.selection.setContent(value);
 						editor.fire('joplinChange');
 						dispatchDidUpdate(editor);
+
+						// It doesn't make sense but it seems calling setContent
+						// doesn't create an undo step so we need to call it
+						// manually.
+						// https://github.com/tinymce/tinymce/issues/3745
+						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
 				};
 

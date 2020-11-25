@@ -1,7 +1,6 @@
 import { RuleOptions } from '../../MdToHtml';
-
-const utils = require('../../utils');
-const htmlUtils = require('../../htmlUtils.js');
+import htmlUtils from '../../htmlUtils';
+import utils from '../../utils';
 
 function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.image;
@@ -23,7 +22,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 				const id = r['data-resource-id'];
 
 				const longPressHandler = `${ruleOptions.postMessageSyntax}('longclick:${id}')`;
-				const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${ruleOptions.longPressDelay});`;
+				const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${utils.longPressDelay});`;
 				const cancel = 'if (!!t) clearTimeout(t); t=null';
 
 				js = ` ontouchstart="${touchStart}" ontouchend="${cancel}" ontouchcancel="${cancel}" ontouchmove="${cancel}"`;

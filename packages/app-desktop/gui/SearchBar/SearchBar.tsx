@@ -128,6 +128,7 @@ function SearchBar(props: Props) {
 				onFocus={onFocus}
 				onBlur={onBlur}
 				onKeyDown={onKeyDown}
+				spellCheck={false}
 			/>
 			<SearchButton onClick={onSearchButtonClick}>
 				<SearchButtonIcon className={iconName}/>

@@ -57,14 +57,14 @@ To get the IDs only of all the tags:
 By default API results will contain the following fields: **id**, **parent_id**, **title**
 # Pagination
 
-All API calls that return multiple results will be paginated and will have the following structure:
+All API calls that return multiple results will be paginated and will return the following structure:
 
 Key | Always present? | Description
 --- | --- | ---
 `items` | Yes | The array of items you have requested.
 `has_more` | Yes | If `true`, there are more items after this page. If `false`, it means you have reached the end of the data set.
 
-You can specify how the results should be sorted using the `order_by` and `order_dir` query parameters, and you can specify the number of items to be returned using the `limit` parameter (the maximum being 100 items).
+You can specify how the results should be sorted using the `order_by` and `order_dir` query parameters, and which page to retrieve using the `page` parameter (starts at and defaults to 1). You can specify the number of items to be returned using the `limit` parameter (the maximum being 100 items).
 
 The following call for example will initiate a request to fetch all the notes, 10 at a time, and sorted by "updated_time" ascending:
 
