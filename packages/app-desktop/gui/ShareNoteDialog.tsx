@@ -79,7 +79,7 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 			setNotes(result);
 		}
 
-		fetchNotes();
+		void fetchNotes();
 	}, [props.noteIds]);
 
 	const appApi = async () => {

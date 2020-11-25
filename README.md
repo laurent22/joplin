@@ -402,13 +402,14 @@ Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/read
 
 # Community
 
-- For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplinapp.org/). It is possible to login with your GitHub account.
-- Also see here for information about [the latest releases and general news](https://discourse.joplinapp.org/c/news).
-- For bug reports go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues). Please follow the template accordingly.
-- Feature requests must not be opened on GitHub unless they have been discussed and accepted on the forum.
-- The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
-- You can also follow us on <a rel="me" href="https://mastodon.social/@joplinapp">the Mastodon feed</a> or [the Twitter feed](https://twitter.com/joplinapp).
-- You can join the live community on [the JoplinApp discord server](https://discordapp.com/invite/d2HMPwE) to get help with Joplin or to discuss anything Joplin related.
+Name | Description
+--- | ---
+[Support Forum](https://discourse.joplinapp.org/) | This is the main place for general discussion about Joplin, user support, software development questions, and to discuss new features. Also where the latest beta versions are released and discussed.
+[Sub-reddit](https://www.reddit.com/r/joplinapp/) | Also a good place to get help
+[Discord server](https://discordapp.com/invite/d2HMPwE) | Our chat server
+[Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
+[Mastodon feed](https://mastodon.social/@joplinapp) | Follow us on Mastodon
+[Twitter feed](https://twitter.com/joplinapp) | Follow us on Twitter
 
 # Contributing
 

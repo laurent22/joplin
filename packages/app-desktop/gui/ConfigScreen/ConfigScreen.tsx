@@ -696,7 +696,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const needRestartComp: any = this.state.needRestart ? (
 			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>
 				{this.restartMessage()}
-				<a style={{ ...theme.urlStyle, marginLeft: 10 }} href="#" onClick={() => { this.restartApp(); }}>{_('Restart now')}</a>
+				<a style={{ ...theme.urlStyle, marginLeft: 10 }} href="#" onClick={() => { void this.restartApp(); }}>{_('Restart now')}</a>
 			</div>
 		) : null;
 

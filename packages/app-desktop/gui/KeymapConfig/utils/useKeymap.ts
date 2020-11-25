@@ -86,7 +86,7 @@ const useKeymap = (): [
 			}
 		}
 
-		saveKeymap();
+		void saveKeymap();
 	}, [keymapItems, mustSave]);
 
 	return [keymapItems, keymapError, overrideKeymapItems, setAccelerator, resetAccelerator];

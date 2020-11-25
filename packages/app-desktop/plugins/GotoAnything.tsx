@@ -381,7 +381,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
-			CommandService.instance().execute(item.id);
+			void CommandService.instance().execute(item.id);
 			return;
 		}
 
@@ -423,7 +423,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 
-		this.gotoItem({
+		void this.gotoItem({
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
@@ -496,7 +496,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			const item = this.selectedItem();
 			if (!item) return;
 
-			this.gotoItem(item);
+			void this.gotoItem(item);
 		}
 	}
 
