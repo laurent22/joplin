@@ -1,0 +1,38 @@
+# https://versatile.nl/blog/deploying-lerna-web-apps-with-docker
+
+FROM node:12
+
+RUN useradd -ms /bin/bash joplin
+USER joplin
+
+# RUN groupadd -r joplin && useradd -r -g joplin joplin
+# USER joplin
+
+ENV NODE_ENV development
+
+WORKDIR /home/joplin
+
+COPY package.json .
+
+# We copy only the packages that we need for the server
+COPY packages/lib ./packages/lib
+COPY packages/server ./packages/server
+COPY lerna.json .
+COPY tsconfig.json .
+
+RUN npm install
+
+CMD [ "npm", "--prefix", "packages/server", "start" ]
+
+
+# COPY package.json .
+
+# RUN npm install
+
+# ADD . /var/www/joplin
+
+# RUN npm run tsc
+
+# CMD [ "npm", "start" ]
+
+# EXPOSE 22300
