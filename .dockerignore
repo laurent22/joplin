@@ -1,1 +1,9 @@
-packages/**/node_modules
+**/node_modules
+Assets/
+.git/
+_releases/
+packages/app-desktop
+packages/app-cli
+packages/app-mobile
+packages/app-clipper
+packages/generator-joplin
