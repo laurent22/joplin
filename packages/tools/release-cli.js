@@ -63,13 +63,13 @@ async function main() {
 
 	await execCommand('npm publish');
 
-	const changelog = await execCommand(`node ${rootDir}/packages/tools/git-changelog ${newTag}`);
+	const changelog = (await execCommand(`node ${rootDir}/packages/tools/git-changelog ${newTag}`)).trim();
 
 	const newChangelog = await insertChangelog(newTag, changelog);
 
 	await fs.writeFile(changelogPath, newChangelog);
 
-	const defaultEditor = await execCommand('echo $EDITOR');
+	const defaultEditor = (await execCommand('echo $EDITOR')).trim();
 
 	const finalCmds = [
 		'git pull',
