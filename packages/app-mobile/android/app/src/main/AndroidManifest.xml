@@ -25,6 +25,12 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:allowBackup="false"
 		android:networkSecurityConfig="@xml/network_security_config"
+		<!--
+			Android 10 introduced new "scoped storage" mechanism.
+			Apps targeting Android 10 (sdk 29) can no longer freely access arbitrary paths on the shared storage.
+			For now this flag allows to opt out of this restriction.
+			See https://developer.android.com/training/data-storage/use-cases#opt-out-scoped-storage
+		-->
 		android:requestLegacyExternalStorage="true"
 		android:theme="@style/AppTheme">
 
