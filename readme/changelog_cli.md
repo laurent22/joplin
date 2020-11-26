@@ -1,5 +1,13 @@
 # Joplin terminal app changelog
 
+## [cli-v1.4.7](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.7) - 2020-11-26T12:15:28Z
+
+- Improved: Allow exporting conflict notes (#4095)
+- Improved: Allow lowercase filters when doing search
+- Improved: Refresh sidebar and notes when moving note outside of conflict folder
+- Fixed: Fix handling of new line escaping when using external edit
+- Fixed: Fixed importing certain ENEX files that contain invalid dates
+
 ## [cli-v1.4.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.3) - 2020-11-06T21:19:29Z
 
 IMPORTANT: If you use the web API, please note that there are a few breaking changes in this release. See here for more information: https://github.com/laurent22/joplin/pull/3983#issue-509624899
