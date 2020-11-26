@@ -170,10 +170,10 @@ async function main() {
 	if (!isPreRelease) {
 		console.info('Updating Readme URL...');
 
-		let readmeContent = await fs.readFile('README.md', 'utf8');
+		let readmeContent = await fs.readFile(`${rootDir}/README.md`, 'utf8');
 		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, releaseFiles['main'].downloadUrl);
 		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, releaseFiles['32bit'].downloadUrl);
-		await fs.writeFile('README.md', readmeContent);
+		await fs.writeFile(`${rootDir}/README.md`, readmeContent);
 	}
 
 	await execCommandVerbose('git', ['pull']);
