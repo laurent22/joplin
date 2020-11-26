@@ -58,10 +58,10 @@ const webviewApi = {
 			setHtml: (args) => {
 				contentElement.innerHTML = args.html;
 
-				console.debug('UserWebView frame: setting html to', args.html);
+				// console.debug('UserWebviewIndex: setting html to', args.html);
 
 				window.requestAnimationFrame(() => {
-					console.debug('UserWebView frame: setting html callback', args.hash);
+					console.debug('UserWebviewIndex: setting html callback', args.hash);
 					window.postMessage({ target: 'UserWebview', message: 'htmlIsSet', hash: args.hash }, '*');
 				});
 			},
@@ -105,6 +105,7 @@ const webviewApi = {
 			if (!ipc[callName]) {
 				console.warn('Missing IPC function:', event.data);
 			} else {
+				console.debug('UserWebviewIndex: Got message', callName, args);
 				ipc[callName](args);
 			}
 		}));
@@ -115,7 +116,7 @@ const webviewApi = {
 		// Need to send it with a delay to make sure all listeners are
 		// ready when the message is sent.
 		window.requestAnimationFrame(() => {
-			console.debug('UserWebView frame: calling isReady');
+			console.debug('UserWebViewIndex: calling isReady');
 			window.postMessage({ target: 'UserWebview', message: 'ready' }, '*');
 		});
 	});
