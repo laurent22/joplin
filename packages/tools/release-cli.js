@@ -50,7 +50,7 @@ async function insertChangelog(tag, changelog) {
 async function main() {
 	process.chdir(appDir);
 
-	const newVersion = await execCommand('npm version patch');
+	const newVersion = (await execCommand('npm version patch')).trim();
 	console.info(`Building ${newVersion}...`);
 	const newTag = `cli-${newVersion}`;
 
