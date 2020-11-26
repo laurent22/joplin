@@ -29,14 +29,15 @@ const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('lib/SyncTargetAmazonS3.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
-const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const RevisionService = require('lib/services/RevisionService');
 const ResourceService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
-const SearchEngine = require('lib/services/SearchEngine');
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
 const KvStore = require('lib/services/KvStore');
@@ -162,6 +163,12 @@ class BaseApplication {
 
 			if (arg == '--open-dev-tools') {
 				Setting.setConstant('flagOpenDevTools', true);
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg == '--debug') {
+				// Currently only handled by ElectronAppWrapper (isDebugMode property)
 				argv.splice(0, 1);
 				continue;
 			}
@@ -629,8 +636,15 @@ class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetNextcloud);
 		SyncTargetRegistry.addClass(SyncTargetWebDAV);
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
+		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
-		await shim.fsDriver().remove(tempDir);
+		try {
+			await shim.fsDriver().remove(tempDir);
+		} catch (error) {
+			// Can't do anything in this case, not even log, since the logger
+			// is not yet ready. But normally it's not an issue if the temp
+			// dir cannot be deleted.
+		}
 
 		await fs.mkdirp(profileDir, 0o755);
 		await fs.mkdirp(resourceDir, 0o755);
@@ -654,7 +668,7 @@ class BaseApplication {
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') {
-			this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
+			// this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
 			this.dbLogger_.addTarget('console', { level: Logger.LEVEL_WARN });
 		}
 

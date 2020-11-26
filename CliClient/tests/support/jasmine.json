@@ -4,6 +4,6 @@
     "*.js",
     "!test-utils.js"
   ],
-  "stopSpecOnExpectationFailure": true,
+  "stopSpecOnExpectationFailure": false,
   "random": true
 }

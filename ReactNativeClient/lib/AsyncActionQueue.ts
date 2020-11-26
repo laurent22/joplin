@@ -7,6 +7,11 @@ export interface QueueItem {
 	context: any,
 }
 
+export enum IntervalType {
+	Debounce = 1,
+	Fixed = 2,
+}
+
 // The AsyncActionQueue can be used to debounce asynchronous actions, to make sure
 // they run in the right order, and also to ensure that if multiple actions are emitted
 // only the last one is executed. This is particularly useful to save data in the background.
@@ -15,12 +20,14 @@ export default class AsyncActionQueue {
 
 	queue_:QueueItem[] = [];
 	interval_:number;
+	intervalType_:number;
 	scheduleProcessingIID_:any = null;
 	processing_ = false;
 	needProcessing_ = false;
 
-	constructor(interval:number = 100) {
+	constructor(interval:number = 100, intervalType:IntervalType = IntervalType.Debounce) {
 		this.interval_ = interval;
+		this.intervalType_ = intervalType;
 	}
 
 	push(action:QueueItemAction, context:any = null) {
@@ -39,6 +46,7 @@ export default class AsyncActionQueue {
 		if (interval === null) interval = this.interval_;
 
 		if (this.scheduleProcessingIID_) {
+			if (this.intervalType_ === IntervalType.Fixed) return;
 			clearTimeout(this.scheduleProcessingIID_);
 		}
 
@@ -65,6 +73,16 @@ export default class AsyncActionQueue {
 		}
 
 		this.processing_ = false;
+	}
+
+	async reset() {
+		if (this.scheduleProcessingIID_) {
+			clearTimeout(this.scheduleProcessingIID_);
+			this.scheduleProcessingIID_ = null;
+		}
+
+		this.queue_ = [];
+		return this.waitForAllDone();
 	}
 
 	// Currently waitForAllDone() already finishes all the actions

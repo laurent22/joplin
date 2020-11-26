@@ -13,10 +13,6 @@ class BaseSyncTarget {
 		return false;
 	}
 
-	static resourceDirName() {
-		return '.resource';
-	}
-
 	option(name, defaultValue = null) {
 		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;
 	}

@@ -2,6 +2,7 @@
     "compilerOptions": {
 		"module": "commonjs",
 		"target": "es2015",
+		"lib": ["es2020.string", "dom", "dom.iterable"],
 		"alwaysStrict": true,
 		"forceConsistentCasingInFileNames": true,
 		"listEmittedFiles": false,
@@ -14,9 +15,11 @@
 		"strictFunctionTypes": true,
 		"sourceMap": true,
 		"jsx": "react",
-		// This is needed because otherwise we get errors in node_modules for React
-		// but ideally it should be made to work.
 		"skipLibCheck": true,
+		"baseUrl": ".",
+		"paths": {
+			"lib/*": ["./ReactNativeClient/lib/*"],
+		},
 	},
     "include": [
         "ReactNativeClient/**/*",

@@ -1,5 +1,6 @@
 const { _, setLocale } = require('lib/locale.js');
-const { dirname } = require('lib/path-utils.js');
+const { shim } = require('lib/shim');
+const { dirname, toSystemSlashes } = require('lib/path-utils.js');
 const { BrowserWindow, nativeTheme } = require('electron');
 
 class Bridge {
@@ -30,7 +31,7 @@ class Bridge {
 	}
 
 	showItemInFolder(fullPath) {
-		return require('electron').shell.showItemInFolder(fullPath);
+		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
 	newBrowserWindow(options) {
@@ -180,6 +181,26 @@ class Bridge {
 		} else {
 			throw new Error(`Unsupported event: ${name}`);
 		}
+	}
+
+	restart() {
+		// Note that in this case we are not sending the "appClose" event
+		// to notify services and component that the app is about to close
+		// but for the current use-case it's not really needed.
+		const { app } = require('electron');
+
+		if (shim.isPortable()) {
+			const options = {
+				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
+			};
+			app.relaunch(options);
+		} else if (shim.isLinux()) {
+			this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
+		} else {
+			app.relaunch();
+		}
+
+		app.exit();
 	}
 
 }

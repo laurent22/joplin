@@ -94,7 +94,7 @@ class Note extends BaseItem {
 	}
 
 	static geoLocationUrlFromLatLong(lat, long) {
-		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long);
+		return sprintf('https://www.openstreetmap.org/?mlat=%s&mlon=%s&zoom=20', lat, long);
 	}
 
 	static modelType() {
@@ -140,7 +140,7 @@ class Note extends BaseItem {
 			useAbsolutePaths: false,
 		}, options);
 
-		this.logger().info('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
+		this.logger().debug('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
 
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
@@ -153,7 +153,7 @@ class Note extends BaseItem {
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
-		this.logger().info('replaceResourceInternalToExternalLinks result', body);
+		this.logger().debug('replaceResourceInternalToExternalLinks result', body);
 
 		return body;
 	}
@@ -171,7 +171,7 @@ class Note extends BaseItem {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
-		this.logger().info('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
+		this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
 
 		for (const basePath of pathsToTry) {
 			const reStrings = [
@@ -187,9 +187,12 @@ class Note extends BaseItem {
 					return `:/${id}`;
 				});
 			}
+
+			// Handles joplin://af0edffa4a60496bba1b0ba06b8fb39a
+			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
 
-		this.logger().info('replaceResourceExternalToInternalLinks result', body);
+		this.logger().debug('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
 	}
@@ -265,7 +268,7 @@ class Note extends BaseItem {
 			includeTimestamps: true,
 		}, options);
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'encryption_applied'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -278,9 +281,7 @@ class Note extends BaseItem {
 
 	static previewFieldsSql(fields = null) {
 		if (fields === null) fields = this.previewFields();
-		return this.db()
-			.escapeFields(fields)
-			.join(',');
+		return this.db().escapeFields(fields).join(',');
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {

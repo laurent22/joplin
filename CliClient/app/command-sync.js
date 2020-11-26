@@ -11,6 +11,7 @@ const md5 = require('md5');
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
+const MigrationHandler = require('lib/services/synchronizer/MigrationHandler').default;
 
 class Command extends BaseCommand {
 	constructor() {
@@ -29,7 +30,10 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		return [['--target <target>', _('Sync to provided target (defaults to sync.target config value)')]];
+		return [
+			['--target <target>', _('Sync to provided target (defaults to sync.target config value)')],
+			['--upgrade', _('Upgrade the sync target to the latest version.')],
+		];
 	}
 
 	static lockFile(filePath) {
@@ -148,12 +152,8 @@ class Command extends BaseCommand {
 			const syncTarget = reg.syncTarget(this.syncTargetId_);
 
 			if (!(await syncTarget.isAuthenticated())) {
-				app()
-					.gui()
-					.showConsole();
-				app()
-					.gui()
-					.maximizeConsole();
+				app().gui().showConsole();
+				app().gui().maximizeConsole();
 
 				const authDone = await this.doAuth();
 				if (!authDone) return cleanUp();
@@ -174,7 +174,35 @@ class Command extends BaseCommand {
 
 			this.stdout(_('Synchronisation target: %s (%s)', Setting.enumOptionLabel('sync.target', this.syncTargetId_), this.syncTargetId_));
 
-			if (!sync) throw new Error(_('Cannot initialize synchroniser.'));
+			if (!sync) throw new Error(_('Cannot initialise synchroniser.'));
+
+			if (args.options.upgrade) {
+				let migrationError = null;
+
+				try {
+					const migrationHandler = new MigrationHandler(
+						sync.api(),
+						sync.lockHandler(),
+						Setting.value('appType'),
+						Setting.value('clientId')
+					);
+
+					migrationHandler.setLogger(cliUtils.stdoutLogger(this.stdout.bind(this)));
+
+					await migrationHandler.upgrade();
+				} catch (error) {
+					migrationError = error;
+				}
+
+				if (!migrationError) {
+					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_IDLE);
+					await Setting.saveAll();
+				}
+
+				if (migrationError) throw migrationError;
+
+				return cleanUp();
+			}
 
 			this.stdout(_('Starting synchronisation...'));
 
@@ -208,6 +236,12 @@ class Command extends BaseCommand {
 		} catch (error) {
 			cleanUp();
 			throw error;
+		}
+
+		if (Setting.value('sync.upgradeState') > Setting.SYNC_UPGRADE_STATE_IDLE) {
+			this.stdout(`/!\\ ${_('Sync target must be upgraded! Run `%s` to proceed.', 'sync --upgrade')}`);
+			app().gui().showConsole();
+			app().gui().maximizeConsole();
 		}
 
 		cleanUp();

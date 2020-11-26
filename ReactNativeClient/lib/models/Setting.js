@@ -86,6 +86,12 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'sync.upgradeState': {
+				value: Setting.SYNC_UPGRADE_STATE_IDLE,
+				type: Setting.TYPE_INT,
+				public: false,
+			},
+
 			'sync.2.path': {
 				value: '',
 				type: Setting.TYPE_STRING,
@@ -171,16 +177,45 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
-			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.8.path': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				section: 'sync',
+				show: settings => {
+					try {
+						return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					} catch (error) {
+						return false;
+					}
+				},
+				filter: value => {
+					return value ? rtrimSlashes(value) : '';
+				},
+				public: true,
+				label: () => _('AWS S3 bucket'),
+				description: () => emptyDirWarning,
+			},
+			'sync.8.username': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				section: 'sync',
+				show: settings => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+				},
+				public: true,
+				label: () => _('AWS key'),
+			},
+			'sync.8.password': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				section: 'sync',
+				show: settings => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+				},
+				public: true,
+				label: () => _('AWS secret'),
+				secure: true,
+			},
 
 			'sync.5.syncTargets': { value: {}, type: Setting.TYPE_OBJECT, public: false },
 
@@ -202,6 +237,18 @@ class Setting extends BaseModel {
 					};
 				},
 			},
+
+			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.8.context': { value: '', type: Setting.TYPE_STRING, public: false },
 
 			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
@@ -1282,6 +1329,10 @@ Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
 Setting.SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
 Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be re-encrypted, and user has been notified
 
+Setting.SYNC_UPGRADE_STATE_IDLE = 0; // Doesn't need to be upgraded
+Setting.SYNC_UPGRADE_STATE_SHOULD_DO = 1; // Should be upgraded, but waiting for user to confirm
+Setting.SYNC_UPGRADE_STATE_MUST_DO = 2; // Must be upgraded - on next restart, the upgrade will start
+
 Setting.custom_css_files = {
 	JOPLIN_APP: 'userchrome.css',
 	RENDERED_MARKDOWN: 'userstyle.css',
@@ -1302,7 +1353,7 @@ Setting.constants_ = {
 	templateDir: '',
 	tempDir: '',
 	flagOpenDevTools: false,
-	syncVersion: 1,
+	syncVersion: 2,
 };
 
 Setting.autoSaveEnabled = true;

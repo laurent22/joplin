@@ -274,7 +274,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				if (!commandProcessed) {
 					const commands: any = {
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
-						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasized text')),
+						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
@@ -357,20 +357,24 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 		}, 10);
 	}, [props.content, editor, aceEditor_change]);
 
+	function clipboardText() {
+		return clipboard.readText() ? clipboard.readText() : clipboard.readHTML();
+	}
+
 	const editorCopyText = useCallback(() => {
 		const text = selectedText(selectionRange(editor), props.content);
 		clipboard.writeText(text);
 	}, [props.content, editor]);
 
 	const editorPasteText = useCallback(() => {
-		wrapSelectionWithStrings(clipboard.readText(), '', '', '');
+		wrapSelectionWithStrings(clipboardText(), '', '', '');
 	}, [wrapSelectionWithStrings]);
 
 	const onEditorContextMenu = useCallback(() => {
 		const menu = new Menu();
 
 		const hasSelectedText = !!selectedText(selectionRange(editor), props.content);
-		const clipboardText = clipboard.readText();
+		const currentClipboardText = clipboardText();
 
 		menu.append(
 			new MenuItem({
@@ -379,7 +383,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCutText();
 				},
-			}),
+			})
 		);
 
 		menu.append(
@@ -389,7 +393,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				click: async () => {
 					editorCopyText();
 				},
-			}),
+			})
 		);
 
 		menu.append(
@@ -397,14 +401,14 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				label: _('Paste'),
 				enabled: true,
 				click: async () => {
-					if (clipboardText) {
+					if (currentClipboardText) {
 						editorPasteText();
 					} else {
 						// To handle pasting images
 						onEditorPaste();
 					}
 				},
-			}),
+			})
 		);
 
 		menu.popup(bridge().window());
@@ -464,12 +468,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			document.querySelector('#note-editor').removeEventListener('contextmenu', onEditorContextMenu);
 		};
 	}, [editor, onEditorPaste, onEditorContextMenu]);
-
-	useEffect(() => {
-		// We disable dragging ot text because it's not really supported, and
-		// can lead to data loss: https://github.com/laurent22/joplin/issues/3302
-		if (editor) editor.setOption('dragEnabled', false);
-	}, [editor]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);

@@ -86,6 +86,9 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 	#toc ul {
 		margin-bottom: 10px;
 	}
+	#toc > ul > li {
+		margin-bottom: 10px;
+	}
 	#toc {
 		padding-bottom: 1em;
 	}
@@ -316,10 +319,17 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 <li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
 <li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
-<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
 <li><a href="https://joplinapp.org/api/">API documentation</a></li>
 <li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
+<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 </ul>
 </li>
 <li>
@@ -341,6 +351,35 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 </ul>
 </div>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.167">cli-v1.0.167</a> - 2020-09-04T17:15:49Z<a name="cli-v1-0-167-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-167-2020-09-04t17-15-49z" href="#cli-v1-0-167-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-167-2020-09-04t17-15-49z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add mechanism to lock and upgrade sync targets (#3524)</li>
+<li>Improved: Add search filters (#3213) (#1877 by Naveen M V)</li>
+<li>Improved: Add support for OneDrive for Business (#3433) (#1266 by <a href="https://github.com/jonath92">@jonath92</a>)</li>
+<li>Improved: Added link navigation shortcuts (#3275) (#3217 by j-krl)</li>
+<li>Improved: When searching, weight notes using Okapi BM25 score (#3454 by Naveen M V)</li>
+<li>Fixed: Fixed sync fetching issue (#3599) (#3591 by <a href="https://github.com/alexchee">@alexchee</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.166">cli-v1.0.166</a> - 2020-08-02T14:03:26Z<a name="cli-v1-0-166-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-166-2020-08-02t14-03-26z" href="#cli-v1-0-166-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-166-2020-08-02t14-03-26z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add support for AWS S3 synchronisation (Beta) (#2815 by <a href="https://github.com/alexchee">@alexchee</a>)</li>
+<li>Fixed: Desktop-only scripts were incorrectly being loaded in CLI server tool (#3548)</li>
+<li>Fixed: Fix filename when exporting notebook as Markdown (#3473)</li>
+<li>Fixed: Fixed attachments being out of order when importing Enex file</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.165">cli-v1.0.165</a> - 2020-07-10T18:51:42Z<a name="cli-v1-0-165-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-165-2020-07-10t18-51-42z" href="#cli-v1-0-165-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-165-2020-07-10t18-51-42z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Translation: Add bahasa indonesia (id_ID.po) (#3246 by <a href="https://github.com/ffadilaputra">@ffadilaputra</a>)</li>
+<li>Improved: Allow importing ENEX files as HTML</li>
+<li>Improved: Disable support for HTML export for now as it does not work</li>
+<li>Improved: Upload attachments &gt; 4 MB when using OneDrive (#3195) (#173 by <a href="https://github.com/TheOnlyTrueJonathanHeard">@TheOnlyTrueJonathanHeard</a>)</li>
+<li>Fixed: Fixed import of checkboxes in ENEX files (#3402)</li>
+<li>Fixed: Fixed various bugs related to the import of ENEX files as HTML</li>
+<li>Fixed: Only de-duplicate imported notebook titles when needed (#2331)</li>
+<li>Fixed: Prevent desktop.ini file from breaking sync lock (#3381)</li>
+<li>Fixed: Prevent notebook to be the parent of itself (#3334)</li>
+<li>Fixed: Sync would fail in some cases due to a database error (#3234)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.164">cli-v1.0.164</a> - 2020-05-13T15:30:22Z<a name="cli-v1-0-164-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-164-2020-05-13t15-30-22z" href="#cli-v1-0-164-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-164-2020-05-13t15-30-22z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Added support for basic search</li>

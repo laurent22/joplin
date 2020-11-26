@@ -1,3 +1,6 @@
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = new Entities().encode;
+
 function pregQuote(str, delimiter = '') {
 	return (`${str}`).replace(new RegExp(`[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\${delimiter || ''}-]`, 'g'), '\\$&');
 }
@@ -53,16 +56,25 @@ function replaceRegexDiacritics(regexString) {
 // keywords can either be a list of strings, or a list of objects with the format:
 // { value: 'actualkeyword', type: 'regex/string' }
 // The function surrounds the keywords wherever they are, even within other words.
-function surroundKeywords(keywords, text, prefix, suffix) {
+function surroundKeywords(keywords, text, prefix, suffix, options = null) {
+	options = Object.assign({}, {
+		escapeHtml: false,
+	}, options);
+
 	if (!keywords.length) return text;
+
+	function escapeHtml(s) {
+		if (!options.escapeHtml) return s;
+		return htmlentities(s);
+	}
 
 	let regexString = keywords
 		.map(k => {
 			if (k.type === 'regex') {
-				return replaceRegexDiacritics(k.valueRegex);
+				return escapeHtml(replaceRegexDiacritics(k.valueRegex));
 			} else {
 				const value = typeof k === 'string' ? k : k.value;
-				return replaceRegexDiacritics(pregQuote(value));
+				return escapeHtml(replaceRegexDiacritics(pregQuote(value)));
 			}
 		})
 		.join('|');

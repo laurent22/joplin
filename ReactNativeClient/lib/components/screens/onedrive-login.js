@@ -9,6 +9,7 @@ const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const parseUri = require('lib/parseUri');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -19,6 +20,16 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 		super();
 		this.state = { webviewUrl: '' };
 		this.authCode_ = null;
+	}
+
+	styles() {
+		const theme = themeStyle(this.props.theme);
+		return {
+			screen: {
+				flex: 1,
+				backgroundColor: theme.backgroundColor,
+			},
+		};
 	}
 
 	UNSAFE_componentWillMount() {
@@ -116,8 +127,10 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const OneDriveLoginScreen = connect(() => {
-	return {};
+const OneDriveLoginScreen = connect((state) => {
+	return {
+		theme: state.settings.theme,
+	};
 })(OneDriveLoginScreenComponent);
 
 module.exports = { OneDriveLoginScreen };

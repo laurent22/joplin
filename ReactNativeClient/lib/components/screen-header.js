@@ -12,7 +12,8 @@ const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
-const dialogs = require('lib/components/dialogs.js').default;
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 Icon.loadFont();
 
@@ -61,8 +62,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 			iconButton: {
 				flex: 1,
 				backgroundColor: theme.backgroundColor2,
-				paddingLeft: 15,
-				paddingRight: 15,
+				paddingLeft: 10,
+				paddingRight: 10,
 				paddingTop: PADDING_V,
 				paddingBottom: PADDING_V,
 			},
@@ -181,7 +182,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	async deleteButton_press() {
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
-		const ok = await dialogs.confirm(_('Delete these notes?'));
+		const ok = await dialogs.confirm(this.props.parentComponent, _('Delete these notes?'));
 		if (!ok) return;
 
 		const noteIds = this.props.selectedNoteIds;
@@ -247,6 +248,36 @@ class ScreenHeaderComponent extends React.PureComponent {
 				</TouchableOpacity>
 			);
 		}
+
+		const renderTopButton = (options) => {
+			if (!options.visible) return null;
+
+			const icon = <Icon name={options.iconName} style={this.styles().topIcon} />;
+			const viewStyle = options.disabled ? this.styles().iconButtonDisabled : this.styles().iconButton;
+
+			return (
+				<TouchableOpacity onPress={options.onPress} style={{ padding: 0 }} disabled={!!options.disabled}>
+					<View style={viewStyle}>{icon}</View>
+				</TouchableOpacity>
+			);
+		};
+
+		const renderUndoButton = () => {
+			return renderTopButton({
+				iconName: 'md-undo',
+				onPress: this.props.onUndoButtonPress,
+				visible: this.props.showUndoButton,
+				disabled: this.props.undoButtonDisabled,
+			});
+		};
+
+		const renderRedoButton = () => {
+			return renderTopButton({
+				iconName: 'md-redo',
+				onPress: this.props.onRedoButtonPress,
+				visible: this.props.showRedoButton,
+			});
+		};
 
 		function selectAllButton(styles, onPress) {
 			return (
@@ -399,7 +430,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 							const folder = await Folder.load(folderId);
 
-							const ok = noteIds.length > 1 ? await dialogs.confirm(_('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
+							const ok = noteIds.length > 1 ? await dialogs.confirm(this.props.parentComponent, _('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
 							if (!ok) return;
 
 							this.props.dispatch({ type: 'NOTE_SELECTION_END' });
@@ -419,6 +450,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		if (this.props.showMissingMasterKeyMessage) warningComps.push(this.renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
 		if (this.props.hasDisabledSyncItems) warningComps.push(this.renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
+		if (this.props.shouldUpgradeSyncTarget && this.props.showShouldUpgradeSyncTargetMessage !== false) warningComps.push(this.renderWarningBox('UpgradeSyncTarget', _('The sync target needs to be upgraded. Press this banner to proceed.')));
 
 		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
 		const showSelectAllButton = this.props.noteSelectionEnabled;
@@ -462,6 +494,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					{sideMenuComp}
 					{backButtonComp}
+					{renderUndoButton(this.styles())}
+					{renderRedoButton(this.styles())}
 					{saveButton(
 						this.styles(),
 						() => {
@@ -479,6 +513,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 					{menuComp}
 				</View>
 				{warningComps}
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}
@@ -498,6 +537,7 @@ const ScreenHeader = connect(state => {
 		selectedNoteIds: state.selectedNoteIds,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 	};
 })(ScreenHeaderComponent);
 

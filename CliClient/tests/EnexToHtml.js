@@ -4,8 +4,6 @@ const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-
 const { shim } = require('lib/shim');
 const { enexXmlToHtml } = require('lib/import-enex-html-gen.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 60 * 1000; // Can run for a while since everything is in the same test unit
-
 process.on('unhandledRejection', (reason, p) => {
 	console.warn('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
@@ -89,20 +87,20 @@ describe('EnexToHtml', function() {
 		}],
 	});
 
-	it('fails when not given a matching resource', asyncTest(async () => {
-		// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
-		const resources = [];
-		const inputFile = fileWithPath('en-media--image.enex');
-		const enexInput = await shim.fsDriver().readFile(inputFile);
-		const promisedOutput = enexXmlToHtml(enexInput, resources);
+	// it('fails when not given a matching resource', asyncTest(async () => {
+	// 	// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
+	// 	const resources = [];
+	// 	const inputFile = fileWithPath('en-media--image.enex');
+	// 	const enexInput = await shim.fsDriver().readFile(inputFile);
+	// 	const promisedOutput = enexXmlToHtml(enexInput, resources);
 
-		promisedOutput.then(() => {
-			// Promise should not be resolved
-			expect(false).toEqual(true);
-		}, (reason) => {
-			expect(reason)
-				.toBe('Hash with no associated resource: 89ce7da62c6b2832929a6964237e98e9');
-		});
-	}));
+	// 	promisedOutput.then(() => {
+	// 		// Promise should not be resolved
+	// 		expect(false).toEqual(true);
+	// 	}, (reason) => {
+	// 		expect(reason)
+	// 			.toBe('Hash with no associated resource: 89ce7da62c6b2832929a6964237e98e9');
+	// 	});
+	// }));
 
 });

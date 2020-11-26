@@ -11,7 +11,7 @@ const Setting = require('lib/models/Setting');
 const { reg } = require('lib/registry.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
-const ResourceEditWatcher = require('lib/services/ResourceEditWatcher.js').default;
+const ResourceEditWatcher = require('lib/services/ResourceEditWatcher/index').default;
 
 export interface OnLoadEvent {
 	formNote: FormNote,

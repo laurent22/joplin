@@ -18,10 +18,10 @@
     "base-64": "^0.1.0",
     "font-awesome-filetypes": "^2.1.0",
     "fs-extra": "^8.1.0",
-    "highlight.js": "^9.17.1",
+    "highlight.js": "10.1.1",
     "html-entities": "^1.2.1",
     "json-stringify-safe": "^5.0.1",
-    "katex": "^0.11.1",
+    "katex": "^0.12.0",
     "markdown-it": "^10.0.0",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-anchor": "^5.2.5",
@@ -36,8 +36,8 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
-    "mermaid": "^8.4.6",
     "memory-cache": "^0.2.0",
+    "mermaid": "^8.4.6",
     "uslug": "^1.0.4"
   }
 }

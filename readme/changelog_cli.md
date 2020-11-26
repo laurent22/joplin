@@ -1,5 +1,34 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.167](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.167) - 2020-09-04T17:15:49Z
+
+- New: Add mechanism to lock and upgrade sync targets (#3524)
+- Improved: Add search filters (#3213) (#1877 by Naveen M V)
+- Improved: Add support for OneDrive for Business (#3433) (#1266 by [@jonath92](https://github.com/jonath92))
+- Improved: Added link navigation shortcuts (#3275) (#3217 by j-krl)
+- Improved: When searching, weight notes using Okapi BM25 score (#3454 by Naveen M V)
+- Fixed: Fixed sync fetching issue (#3599) (#3591 by [@alexchee](https://github.com/alexchee))
+
+## [cli-v1.0.166](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.166) - 2020-08-02T14:03:26Z
+
+- New: Add support for AWS S3 synchronisation (Beta) (#2815 by [@alexchee](https://github.com/alexchee))
+- Fixed: Desktop-only scripts were incorrectly being loaded in CLI server tool (#3548)
+- Fixed: Fix filename when exporting notebook as Markdown (#3473)
+- Fixed: Fixed attachments being out of order when importing Enex file
+
+## [cli-v1.0.165](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.165) - 2020-07-10T18:51:42Z
+
+- New: Translation: Add bahasa indonesia (id_ID.po) (#3246 by [@ffadilaputra](https://github.com/ffadilaputra))
+- Improved: Allow importing ENEX files as HTML
+- Improved: Disable support for HTML export for now as it does not work
+- Improved: Upload attachments > 4 MB when using OneDrive (#3195) (#173 by [@TheOnlyTrueJonathanHeard](https://github.com/TheOnlyTrueJonathanHeard))
+- Fixed: Fixed import of checkboxes in ENEX files (#3402)
+- Fixed: Fixed various bugs related to the import of ENEX files as HTML
+- Fixed: Only de-duplicate imported notebook titles when needed (#2331)
+- Fixed: Prevent desktop.ini file from breaking sync lock (#3381)
+- Fixed: Prevent notebook to be the parent of itself (#3334)
+- Fixed: Sync would fail in some cases due to a database error (#3234)
+
 ## [cli-v1.0.164](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.164) - 2020-05-13T15:30:22Z
 
 - New: Added support for basic search

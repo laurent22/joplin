@@ -86,6 +86,9 @@ https://github.com/laurent22/joplin/blob/master/README.md
 	#toc ul {
 		margin-bottom: 10px;
 	}
+	#toc > ul > li {
+		margin-bottom: 10px;
+	}
 	#toc {
 		padding-bottom: 1em;
 	}
@@ -316,10 +319,17 @@ https://github.com/laurent22/joplin/blob/master/README.md
 <li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
 <li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
-<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
 <li><a href="https://joplinapp.org/api/">API documentation</a></li>
 <li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
+<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 </ul>
 </li>
 <li>
@@ -361,18 +371,18 @@ https://github.com/laurent22/joplin/blob/master/README.md
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.216/Joplin-Setup-1.0.216.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
-<td>Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.216/JoplinPortable.exe'>Portable version</a><br><br>The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.241/Joplin-Setup-1.0.241.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
+<td>Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.241/JoplinPortable.exe'>Portable version</a><br><br>The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.216/Joplin-1.0.216.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.241/Joplin-1.0.241.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
 <td>You can also use Homebrew (unsupported): <code>brew cask install joplin</code></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.216/Joplin-1.0.216.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
-<td>An Arch Linux package (unsupported) <a href="#terminal-application">is also available</a>.<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> <code>wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash</code></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.241/Joplin-1.0.241.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
+<td>An Arch Linux package (unsupported) <a href="#terminal-application">is also available</a>.<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, and Mint; the desktop environments supported are GNOME, KDE, Xfce, MATE, LXQT, LXDE, Unity, Cinnamon, Deepin and Pantheon), the recommended way is to use this script as it will handle the desktop icon too:<br><br> <code>wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash</code></td>
 </tr>
 </tbody>
 </table>
@@ -389,7 +399,7 @@ https://github.com/laurent22/joplin/blob/master/README.md
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a></td>
-<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.329/joplin-v1.0.329.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.329/joplin-v1.0.329-32bit.apk">32-bit</a></td>
+<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.340/joplin-v1.0.340.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.340/joplin-v1.0.340-32bit.apk">32-bit</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -456,8 +466,8 @@ https://github.com/laurent22/joplin/blob/master/README.md
 </tr>
 <tr>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/1168659?s=96&v=4"/></br><a href="https://github.com/nicholashead">Nicholas Head</a></td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br><a href="https://github.com/fbloise">Frank Bloise</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br><a href="https://github.com/thomasbroussard">Thomas Broussard</a></td>
 </tr>
 </tbody>
 </table>
@@ -543,7 +553,6 @@ https://github.com/laurent22/joplin/blob/master/README.md
 <li><a href="https://www.seafile.com/">Seafile</a></li>
 <li><a href="https://www.transip.nl/stack/">Stack</a></li>
 <li><a href="https://www.schimera.com/products/webdav-nav-server/">WebDAV Nav</a>, a macOS server.</li>
-<li><a href="https://disk.yandex.ru/download?src=Yandex.Sidebar#pc">Yandex Disk</a></li>
 <li><a href="https://www.zimbra.com/">Zimbra</a></li>
 </ul>
 <h2>OneDrive synchronisation<a name="onedrive-synchronisation" href="#onedrive-synchronisation" class="heading-anchor">🔗</a></h2>
@@ -561,9 +570,8 @@ https://github.com/laurent22/joplin/blob/master/README.md
 <p>Joplin notes can be opened and edited using an external editor of your choice. It can be a simple text editor like Notepad++ or Sublime Text or an actual Markdown editor like Typora. In that case, images will also be displayed within the editor. To open the note in an external editor, click on the icon in the toolbar or press Ctrl+E (or Cmd+E). Your default text editor will be used to open the note. If needed, you can also specify the editor directly in the General Options, under &quot;Text editor command&quot;.</p>
 <h1>Attachments<a name="attachments" href="#attachments" class="heading-anchor">🔗</a></h1>
 <p>Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the attachment. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
-<p>In the <strong>desktop application</strong>, files can be attached either by clicking the &quot;Attach file&quot; icon in the editor or via drag and drop. If you prefer to create a link to a local file instead, hold the ALT key while performing the drag and drop operation.<br>
-If the OS-clipboard contains an image you can directly paste it in the editor via Ctrl+V.</p>
-<p>Resources that are not attached to any note will be automatically deleted after 10 days (see <a href="https://github.com/laurent22/joplin/issues/154#issuecomment-356582366">rationale</a>).</p>
+<p>In the <strong>desktop application</strong>, files can be attached either by clicking the &quot;Attach file&quot; icon in the editor or via drag and drop. If you prefer to create a link to a local file instead, hold the ALT key while performing the drag and drop operation. You can also copy and paste images directly in the editor via Ctrl+V.</p>
+<p>Resources that are not attached to any note will be automatically deleted in accordance to the <a href="#note-history">Note History</a> settings.</p>
 <p><strong>Important:</strong> Resources larger than 10 MB are not currently supported on mobile. They will crash the application when synchronising so it is recommended not to attach such resources at the moment. The issue is being looked at.</p>
 <h2>Downloading attachments<a name="downloading-attachments" href="#downloading-attachments" class="heading-anchor">🔗</a></h2>
 <p>The way the attachments are downloaded during synchronisation can be customised in the Configuration screen, under &quot;Attachment download behaviour&quot;. The default option (&quot;Always&quot;) is to download all the attachments, all the time, so that the data is available even when the device is offline. There is also the option to download the attachments manually (option &quot;Manual&quot;), by clicking on it, or automatically (Option &quot;Auto&quot;), in which case the attachments are downloaded only when a note is opened. These options should help saving disk space and network bandwidth, especially on mobile.</p>
@@ -662,17 +670,81 @@ Details:
 <td><code>swim*</code> - will return all the notes that contain eg. &quot;swim&quot;, but also &quot;swimming&quot;, &quot;swimsuit&quot;, etc. IMPORTANT: The wildcard <strong>can only be at the end</strong> - it will be ignored at the beginning of a word (eg. <code>*swim</code>) and will be treated as a literal asterisk in the middle of a word (eg. <code>ast*rix</code>)</td>
 </tr>
 <tr>
-<td>Field restricted</td>
-<td>Add either <code>title:</code> or <code>body:</code> before a note to restrict your search to just the title, or just the body.</td>
-<td><code>title:shopping</code>, <code>body:egg</code></td>
-</tr>
-<tr>
 <td>Switch to basic search</td>
 <td>One drawback of Full Text Search is that it ignores most non-alphabetical characters. However in some cases you might want to search for this too. To do that, you can use basic search. You switch to this mode by prefixing your search with a slash <code>/</code>. This won't provide the benefits of FTS but it will allow searching exactly for what you need. Note that it can also be much slower, even extremely slow, depending on your query.</td>
 <td><code>/&quot;- [ ]&quot;</code> - will return all the notes that contain unchecked checkboxes.</td>
 </tr>
 </tbody>
 </table>
+<p>You can also use search filters to further restrict the search.</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>-</strong></td>
+<td>If placed before a text term, it excludes the notes that contain that term. You can also place it before a filter to negate it.</td>
+<td><code>-spam</code> searches for all notes without the word <code>spam</code>.<br><code>office -trash</code> searches for all notes with the word<code>office</code> and without the word <code>trash</code>.</td>
+</tr>
+<tr>
+<td><strong>any:</strong></td>
+<td>Return notes that satisfy any/all of the required conditions. <code>any:0</code> is the default, which means all conditions must be satisfied.</td>
+<td><code>any:1 cat dog</code> will return notes that have the word <code>cat</code> or <code>dog</code>.<br><code>any:0 cat dog</code> will return notes with both the words <code>cat</code> and <code>dog</code>.</td>
+</tr>
+<tr>
+<td><strong>title:</strong> <br> <strong>body:</strong></td>
+<td>Restrict your search to just the title or the body field.</td>
+<td><code>title:&quot;hello world&quot;</code> searches for notes whose title contains <code>hello</code> and <code>world</code>.<br><code>title:hello -body:world</code> searches for notes whose title contains <code>hello</code> and body does not contain <code>world</code>.</td>
+</tr>
+<tr>
+<td><strong>tag:</strong></td>
+<td>Restrict the search to the notes with the specified tags.</td>
+<td><code>tag:office</code> searches for all notes having tag office.<br><code>tag:office tag:important</code> searches for all notes having both office and important tags.<br><code>tag:office -tag:spam</code> searches for notes having tag <code>office</code> which do not have tag <code>spam</code>.<br><code>any:1 tag:office tag:spam</code> searches for notes having tag <code>office</code> or tag <code>spam</code>.<br><code>tag:be*ful</code> does a search with wildcards.<br><code>tag:*</code> returns all notes with tags.<br><code>-tag:*</code> returns all notes without tags.</td>
+</tr>
+<tr>
+<td><strong>notebook:</strong></td>
+<td>Restrict the search to the specified notebook(s). It cannot be negated.</td>
+<td><code>notebook:books</code> limits the search scope within <code>books</code> and all its subnotebooks.<br><code>notebook:wheel*time</code> does a wildcard search.</td>
+</tr>
+<tr>
+<td><strong>created:</strong> <br> <strong>updated:</strong></td>
+<td>Searches for notes created/updated on dates specified using YYYYMMDD format. You can also search relative to the current day, week, month, or year.</td>
+<td><code>created:20201218</code> will return notes created on or after December 18, 2020.<br><code>-updated:20201218</code> will return notes updated before December 18, 2020.<br><code>created:20200118 -created:20201215</code> will return notes created between January 18, 2020, and before December 15, 2020.<br><code>created:202001 -created:202003</code> will return notes created on or after January and before March 2020.<br><code>updated:1997 -updated:2020</code> will return all notes updated between the years 1997 and 2019.<br><code>created:day-2</code> searches for all notes created in the past two days.<br><code>updated:year-0</code> searches all notes updated in the current year.</td>
+</tr>
+<tr>
+<td><strong>type:</strong></td>
+<td>Restrict the search to either notes or todos.</td>
+<td><code>type:note</code> to return all notes<br><code>type:todo</code> to return all todos</td>
+</tr>
+<tr>
+<td><strong>iscompleted:</strong></td>
+<td>Restrict the search to either completed or uncompleted todos.</td>
+<td><code>iscompleted:1</code> to return all completed todos<br><code>iscompleted:0</code> to return all uncompleted todos</td>
+</tr>
+<tr>
+<td><strong>latitude:</strong> <br> <strong>longitude:</strong> <br> <strong>altitude:</strong></td>
+<td>Filter by location</td>
+<td><code>latitude:40 -latitude:50</code> to return notes with latitude &gt;= 40 and &lt; 50</td>
+</tr>
+<tr>
+<td><strong>resource:</strong></td>
+<td>Filter by attachment MIME type</td>
+<td><code>resource:image/jpeg</code> to return notes with a jpeg attachment.<br><code>-resource:application/pdf</code> to return notes without a pdf attachment.<br><code>resource:image/*</code> to return notes with any images.</td>
+</tr>
+<tr>
+<td><strong>sourceurl:</strong></td>
+<td>Filter by source URL</td>
+<td><code>sourceurl:https://www.google.com</code><br><code>sourceurl:*joplinapp.org</code> to perform a wildcard search.</td>
+</tr>
+</tbody>
+</table>
+<p>Note: In CliClient you have to escape the query using <code>--</code> when using negated filters.<br>
+Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <p>Notes are sorted by &quot;relevance&quot;. Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matters how close to each other the terms are. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as many details as possible to replicate the issue.</p>
 <h1>Goto Anything<a name="goto-anything" href="#goto-anything" class="heading-anchor">🔗</a></h1>
 <p>In the desktop application, press <kbd>Ctrl+G</kbd> or <kbd>Cmd+G</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.</p>
@@ -752,70 +824,70 @@ Details:
 <td>Arabic</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po">ar</a></td>
 <td>أحمد باشا إبراهيم (<a href="mailto:fi_ahmed_bacha@esi.dz">fi_ahmed_bacha@esi.dz</a>)</td>
-<td>85%</td>
+<td>82%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/basque_country.png" alt=""></td>
 <td>Basque</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po">eu</a></td>
 <td>juan.abasolo@ehu.eus</td>
-<td>36%</td>
+<td>35%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ba.png" alt=""></td>
 <td>Bosnian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/bs_BA.po">bs_BA</a></td>
 <td>Derviš T. (<a href="mailto:dervis.t@pm.me">dervis.t@pm.me</a>)</td>
-<td>79%</td>
+<td>85%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/bg.png" alt=""></td>
 <td>Bulgarian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/bg_BG.po">bg_BG</a></td>
 <td></td>
-<td>71%</td>
+<td>68%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/catalonia.png" alt=""></td>
 <td>Catalan</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po">ca</a></td>
 <td>jmontane, 2019</td>
-<td>56%</td>
+<td>54%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
 <td>Hrvoje Mandić (<a href="mailto:trbuhom@net.hr">trbuhom@net.hr</a>)</td>
-<td>30%</td>
+<td>28%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cz.png" alt=""></td>
 <td>Czech</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po">cs_CZ</a></td>
 <td>Lukas Helebrandt (<a href="mailto:lukas@aiya.cz">lukas@aiya.cz</a>)</td>
-<td>88%</td>
+<td>84%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/dk.png" alt=""></td>
 <td>Dansk</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po">da_DK</a></td>
 <td>Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.</td>
-<td>79%</td>
+<td>76%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
 <td>Eike (<a href="mailto:ei-ke@users.noreply.github.com">ei-ke@users.noreply.github.com</a>)</td>
-<td>96%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ee.png" alt=""></td>
 <td>Eesti Keel</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/et_EE.po">et_EE</a></td>
 <td></td>
-<td>70%</td>
+<td>68%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gb.png" alt=""></td>
@@ -836,182 +908,182 @@ Details:
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
 <td>Fernando Pindado (<a href="mailto:fpindado@gmail.com">fpindado@gmail.com</a>)</td>
-<td>95%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/esperanto.png" alt=""></td>
 <td>Esperanto</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eo.po">eo</a></td>
 <td>Marton Paulo</td>
-<td>40%</td>
+<td>39%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fr.png" alt=""></td>
 <td>Français</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po">fr_FR</a></td>
 <td>Laurent Cozic</td>
-<td>100%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/galicia.png" alt=""></td>
 <td>Galician</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po">gl_ES</a></td>
 <td>Marcos Lans (<a href="mailto:marcoslansgarza@gmail.com">marcoslansgarza@gmail.com</a>)</td>
-<td>46%</td>
+<td>44%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/id.png" alt=""></td>
 <td>Indonesian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/id_ID.po">id_ID</a></td>
 <td>Fathy AR (<a href="mailto:16875937+fathyar@users.noreply.github.com">16875937+fathyar@users.noreply.github.com</a>)</td>
-<td>98%</td>
+<td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/it.png" alt=""></td>
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td>StarFang208</td>
-<td>95%</td>
+<td>93%</td>
+</tr>
+<tr>
+<td><img src="https://joplinapp.org/images/flags/country-4x3/nl.png" alt=""></td>
+<td>Nederlands</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po">nl_NL</a></td>
+<td>MetBril (<a href="mailto:metbril@users.noreply.github.com">metbril@users.noreply.github.com</a>)</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/be.png" alt=""></td>
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>36%</td>
-</tr>
-<tr>
-<td><img src="https://joplinapp.org/images/flags/country-4x3/nl.png" alt=""></td>
-<td>Nederlands</td>
-<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po">nl_NL</a></td>
-<td>TheoDutch (<a href="mailto:theo1@mailfence.com">theo1@mailfence.com</a>)</td>
-<td>90%</td>
+<td>35%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/no.png" alt=""></td>
 <td>Norwegian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po">nb_NO</a></td>
 <td>Mats Estensen (<a href="mailto:code@mxe.no">code@mxe.no</a>)</td>
-<td>93%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ir.png" alt=""></td>
 <td>Persian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fa.po">fa</a></td>
 <td>Mehrad Mahmoudian (<a href="mailto:mehrad@mahmoudian.me">mehrad@mahmoudian.me</a>)</td>
-<td>35%</td>
+<td>34%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pl.png" alt=""></td>
 <td>Polski</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pl_PL.po">pl_PL</a></td>
 <td></td>
-<td>89%</td>
+<td>87%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pt.png" alt=""></td>
 <td>Português</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_PT.po">pt_PT</a></td>
 <td>Diogo Caveiro</td>
-<td>94%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
 <td>Renato Nunes Bastos (<a href="mailto:rnbastos@gmail.com">rnbastos@gmail.com</a>)</td>
-<td>95%</td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ro.png" alt=""></td>
 <td>Română</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po">ro</a></td>
 <td></td>
-<td>36%</td>
+<td>35%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/si.png" alt=""></td>
 <td>Slovenian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po">sl_SI</a></td>
 <td></td>
-<td>45%</td>
+<td>44%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/se.png" alt=""></td>
 <td>Svenska</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po">sv</a></td>
 <td>Jonatan Nyberg (<a href="mailto:jonatan@autistici.org">jonatan@autistici.org</a>)</td>
-<td>75%</td>
+<td>73%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/th.png" alt=""></td>
 <td>Thai</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/th_TH.po">th_TH</a></td>
 <td></td>
-<td>56%</td>
+<td>54%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/.png" alt=""></td>
 <td>Tiếng Việt</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/vi.po">vi</a></td>
 <td></td>
-<td>91%</td>
+<td>88%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tr.png" alt=""></td>
 <td>Türkçe</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po">tr_TR</a></td>
 <td>Arda Kılıçdağı (<a href="mailto:arda@kilicdagi.com">arda@kilicdagi.com</a>)</td>
-<td>95%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gr.png" alt=""></td>
 <td>Ελληνικά</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/el_GR.po">el_GR</a></td>
 <td>Harris Arvanitis (<a href="mailto:xaris@tuta.io">xaris@tuta.io</a>)</td>
-<td>95%</td>
+<td>93%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
 <td>Sergey Segeda (<a href="mailto:thesermanarm@gmail.com">thesermanarm@gmail.com</a>)</td>
-<td>93%</td>
+<td>90%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/rs.png" alt=""></td>
 <td>српски језик</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sr_RS.po">sr_RS</a></td>
 <td></td>
-<td>76%</td>
+<td>74%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
-<td><a href="mailto:paventyang@gmail.com">paventyang@gmail.com</a></td>
-<td>93%</td>
+<td>yaozeye (<a href="mailto:yaozeye@outlook.com">yaozeye@outlook.com</a>)</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tw.png" alt=""></td>
 <td>中文 (繁體)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po">zh_TW</a></td>
-<td>Ethan Chen (<a href="mailto:ethan42411@gmail.com">ethan42411@gmail.com</a>)</td>
-<td>94%</td>
+<td>Yaoze Ye (<a href="mailto:yaozeye@yahoo.co.jp">yaozeye@yahoo.co.jp</a>)</td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/jp.png" alt=""></td>
 <td>日本語</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po">ja_JP</a></td>
 <td>genneko (<a href="mailto:genneko217@gmail.com">genneko217@gmail.com</a>)</td>
-<td>98%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/kr.png" alt=""></td>
 <td>한국어</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po">ko</a></td>
 <td></td>
-<td>92%</td>
+<td>89%</td>
 </tr>
 </tbody>
 </table>
@@ -1357,7 +1429,7 @@ Details:
 <!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->
 <h1>Known bugs<a name="known-bugs" href="#known-bugs" class="heading-anchor">🔗</a></h1>
 <ul>
-<li>Resources larger than 10 MB are not currently supported on mobile. They will crash the application so it is recommended not to attach such resources at the moment. The issue is being looked at.</li>
+<li>Resources larger than 10 MB are not currently supported on mobile as they can crash the application.</li>
 <li>Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.</li>
 </ul>
 <h1>License<a name="license" href="#license" class="heading-anchor">🔗</a></h1>

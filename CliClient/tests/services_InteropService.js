@@ -15,8 +15,6 @@ const ArrayUtils = require('lib/ArrayUtils');
 const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
@@ -77,6 +75,45 @@ describe('services_InteropService', function() {
 		fieldNames = ArrayUtils.removeElement(fieldNames, 'title');
 
 		fieldsEqual(folder3, folder1, fieldNames);
+	}));
+
+	it('should import folders and de-duplicate titles when needed', asyncTest(async () => {
+		const service = new InteropService();
+		const folder1 = await Folder.save({ title: 'folder' });
+		const folder2 = await Folder.save({ title: 'folder' });
+		const filePath = `${exportDir()}/test.jex`;
+		await service.export({ path: filePath });
+
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
+
+		await service.import({ path: filePath });
+
+		const allFolders = await Folder.all();
+		expect(allFolders.map(f => f.title).sort().join(' - ')).toBe('folder - folder (1)');
+	}));
+
+	it('should import folders, and only de-duplicate titles when needed', asyncTest(async () => {
+		const service = new InteropService();
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const sub1 = await Folder.save({ title: 'Sub', parent_id: folder1.id });
+		const sub2 = await Folder.save({ title: 'Sub', parent_id: folder2.id });
+		const filePath = `${exportDir()}/test.jex`;
+		await service.export({ path: filePath });
+
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
+
+		await service.import({ path: filePath });
+
+		const importedFolder1 = await Folder.loadByTitle('folder1');
+		const importedFolder2 = await Folder.loadByTitle('folder2');
+		const importedSub1 = await Folder.load((await Folder.childrenIds(importedFolder1.id))[0]);
+		const importedSub2 = await Folder.load((await Folder.childrenIds(importedFolder2.id))[0]);
+
+		expect(importedSub1.title).toBe('Sub');
+		expect(importedSub2.title).toBe('Sub');
 	}));
 
 	it('should export and import folders and notes', asyncTest(async () => {
@@ -386,6 +423,23 @@ describe('services_InteropService', function() {
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled (1).md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/salut, ça roule _.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/ジョプリン/ジョプリン.md`)).toBe(true);
+	}));
+
+	it('should export a notebook as MD', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'testexportfolder' });
+		await Note.save({ title: 'textexportnote1', parent_id: folder1.id });
+		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
+
+		const service = new InteropService();
+
+		await service.export({
+			path: exportDir(),
+			format: 'md',
+			sourceFolderIds: [folder1.id],
+		});
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
 	}));
 
 });

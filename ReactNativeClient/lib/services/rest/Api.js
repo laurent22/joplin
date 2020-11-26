@@ -19,49 +19,19 @@ const ArrayUtils = require('lib/ArrayUtils.js');
 const { netUtils } = require('lib/net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
-const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { uuid } = require('lib/uuid');
-
-class ApiError extends Error {
-	constructor(message, httpCode = 400) {
-		super(message);
-		this.httpCode_ = httpCode;
-	}
-
-	get httpCode() {
-		return this.httpCode_;
-	}
-}
-
-class ErrorMethodNotAllowed extends ApiError {
-	constructor(message = 'Method Not Allowed') {
-		super(message, 405);
-	}
-}
-class ErrorNotFound extends ApiError {
-	constructor(message = 'Not Found') {
-		super(message, 404);
-	}
-}
-class ErrorForbidden extends ApiError {
-	constructor(message = 'Forbidden') {
-		super(message, 403);
-	}
-}
-class ErrorBadRequest extends ApiError {
-	constructor(message = 'Bad Request') {
-		super(message, 400);
-	}
-}
+const { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } = require('./errors');
 
 class Api {
-	constructor(token = null) {
+	constructor(token = null, actionApi = null) {
 		this.token_ = token;
 		this.knownNounces_ = {};
 		this.logger_ = new Logger();
+		this.actionApi_ = actionApi;
 	}
 
 	get token() {
@@ -351,7 +321,7 @@ class Api {
 			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
 			const filePath = request.files[0].path;
 			const defaultProps = request.bodyJson(this.readonlyProperties('POST'));
-			return shim.createResourceFromPath(filePath, defaultProps);
+			return shim.createResourceFromPath(filePath, defaultProps, { userSideValidation: true });
 		}
 
 		return this.defaultAction_(BaseModel.TYPE_RESOURCE, request, id, link);
@@ -375,6 +345,25 @@ class Api {
 		const fields = this.fields_(request, []);
 		if (fields.length) options.fields = fields;
 		return options;
+	}
+
+	async execServiceActionFromRequest_(externalApi, request) {
+		const action = externalApi[request.action];
+		if (!action) throw new ErrorNotFound(`Invalid action: ${request.action}`);
+		const args = Object.assign({}, request);
+		delete args.action;
+		return action(args);
+	}
+
+	async action_services(request, serviceName) {
+		this.checkToken_(request);
+
+		if (request.method !== 'POST') throw new ErrorMethodNotAllowed();
+		if (!this.actionApi_) throw new ErrorNotFound('No action API has been setup!');
+		if (!this.actionApi_[serviceName]) throw new ErrorNotFound(`No such service: ${serviceName}`);
+
+		const externalApi = this.actionApi_[serviceName]();
+		return this.execServiceActionFromRequest_(externalApi, JSON.parse(request.body));
 	}
 
 	async action_notes(request, id = null, link = null) {

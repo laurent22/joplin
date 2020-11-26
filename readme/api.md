@@ -123,7 +123,7 @@ todo_completed | int | Tells whether todo is completed or not. This is a timesta
 source | text |    
 source_application | text |    
 application_data | text |    
-order | int |    
+order | numeric |    
 user_created_time | int | When the note was created. It may differ from created_time as it can be manually set by the user.
 user_updated_time | int | When the note was last updated. It may differ from updated_time as it can be manually set by the user.
 encryption_cipher_text | text |    
@@ -173,7 +173,7 @@ Examples:
 
 ### Creating a note with a specific ID
 
-When a new note is created, it is automatically assigned a new unique ID so **normally you do not need to set the ID**. However, if for some reason you want to set it, you can supply it as the `id` property. It needs to be a 32 characters long hexadecimal string. **Make sure it is unique**, for example by generating it using whatever GUID function is available in your programming language.
+When a new note is created, it is automatically assigned a new unique ID so **normally you do not need to set the ID**. However, if for some reason you want to set it, you can supply it as the `id` property. It needs to be a **32 characters long string** in hexadecimal. **Make sure it is unique**, for example by generating it using whatever GUID function is available in your programming language.
 
       curl --data '{ "id": "00a87474082744c1a8515da6aa5792d2", "title": "My note with custom ID"}' http://127.0.0.1:41184/notes
 
@@ -296,6 +296,7 @@ user_updated_time | int | When the tag was last updated. It may differ from upda
 encryption_cipher_text | text |    
 encryption_applied | int |    
 is_shared | int |    
+parent_id | text |    
 
 ## GET /tags
 

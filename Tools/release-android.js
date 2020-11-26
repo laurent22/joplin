@@ -58,9 +58,9 @@ function gradleVersionName(content) {
 	return matches[1];
 }
 
-async function createRelease(name, tagName, version, rcSuffix) {
+async function createRelease(name, tagName, version) {
 	const originalContents = {};
-	const suffix = version + rcSuffix + (name === 'main' ? '' : `-${name}`);
+	const suffix = version + (name === 'main' ? '' : `-${name}`);
 
 	console.info(`Creating release: ${suffix}`);
 
@@ -151,22 +151,22 @@ async function createRelease(name, tagName, version, rcSuffix) {
 async function main() {
 	const argv = require('yargs').argv;
 
-	const rcSuffix = argv.rc ? `-${argv.rc}` : '';
+	const isPreRelease = !!argv.prerelease;
 
-	if (rcSuffix) console.info(`Creating release candidate ${argv.rc}`);
+	if (isPreRelease) console.info('Creating pre-release');
 	console.info('Updating version numbers in build.gradle...');
 
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
-	const tagName = `android-v${version}${rcSuffix}`;
+	const tagName = `android-v${version}`;
 	const releaseNames = ['main', '32bit'];
 	const releaseFiles = {};
 
 	for (const releaseName of releaseNames) {
-		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version, rcSuffix);
+		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
 	}
 
-	if (!rcSuffix) {
+	if (!isPreRelease) {
 		console.info('Updating Readme URL...');
 
 		let readmeContent = await fs.readFile('README.md', 'utf8');
@@ -177,15 +177,17 @@ async function main() {
 
 	console.info(await execCommand('git pull'));
 	console.info(await execCommand('git add -A'));
-	console.info(await execCommand(`git commit -m "Android release v${version}${rcSuffix}"`));
+	console.info(await execCommand(`git commit -m "Android release v${version}"`));
 	console.info(await execCommand(`git tag ${tagName}`));
 	console.info(await execCommand('git push'));
 	console.info(await execCommand('git push --tags'));
 
 	console.info(`Creating GitHub release ${tagName}...`);
 
+	const releaseOptions = { isPreRelease: isPreRelease };
+
 	const oauthToken = await githubOauthToken();
-	const release = await githubRelease(projectName, tagName);
+	const release = await githubRelease(projectName, tagName, releaseOptions);
 	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 
 	for (const releaseFilename in releaseFiles) {

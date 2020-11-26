@@ -48,7 +48,7 @@ function filterLogs(logs, platform) {
 	const revertedLogs = [];
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	let updatedTranslations = false;
+	// let updatedTranslations = false;
 
 	for (const log of logs) {
 
@@ -82,7 +82,7 @@ function filterLogs(logs, platform) {
 		// don't know country and language codes. So we catch all these and
 		// bundle them all up in a single "Updated translations" at the end.
 		if (log.message.match(/Translation: Update .*?\.po/)) {
-			updatedTranslations = true;
+			// updatedTranslations = true;
 			addIt = false;
 		}
 
@@ -248,7 +248,9 @@ function capitalizeFirstLetter(string) {
 
 function decreaseTagVersion(tag) {
 	const s = tag.split('.');
-	let num = Number(s.pop());
+	const lastToken = s.pop();
+	const s2 = lastToken.split('-');
+	let num = Number(s2[0]);
 	num--;
 	if (num < 0) throw new Error(`Cannot decrease tag version: ${tag}`);
 	s.push(`${num}`);
