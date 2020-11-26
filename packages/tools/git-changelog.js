@@ -23,6 +23,8 @@ async function gitLog(sinceTag) {
 
 	const output = [];
 	for (const line of lines) {
+		if (!line.trim()) continue;
+
 		const splitted = line.split('::::DIV::::');
 		const commit = splitted[0];
 		const authorEmail = splitted[1];
@@ -45,7 +47,7 @@ async function gitLog(sinceTag) {
 
 async function gitTags() {
 	const lines = await execCommand('git tag --sort=committerdate');
-	return lines.split('\n').map(l => l.trim());
+	return lines.split('\n').map(l => l.trim()).filter(l => !!l);
 }
 
 function platformFromTag(tagName) {
@@ -54,7 +56,8 @@ function platformFromTag(tagName) {
 	if (tagName.indexOf('ios') >= 0) return 'ios';
 	if (tagName.indexOf('clipper') === 0) return 'clipper';
 	if (tagName.indexOf('cli') === 0) return 'cli';
-	throw new Error(`Could not determine platform from tag: ${tagName}`);
+	if (tagName.indexOf('plugin-generator') === 0) return 'plugin-generator';
+	throw new Error(`Could not determine platform from tag: "${tagName}"`);
 }
 
 // function tagPrefixFromPlatform(platform) {
