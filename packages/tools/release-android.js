@@ -117,11 +117,11 @@ async function createRelease(name, tagName, version) {
 	await fs.mkdirp(releaseDir);
 
 	console.info(`Copying APK to ${apkFilePath}`);
-	await fs.copy('app-mobile/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
+	await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, apkFilePath);
 
 	if (name === 'main') {
 		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
-		await fs.copy('app-mobile/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
+		await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (const filename in originalContents) {
