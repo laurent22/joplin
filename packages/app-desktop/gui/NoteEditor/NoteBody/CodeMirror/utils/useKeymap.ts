@@ -103,9 +103,9 @@ export default function useKeymap(CodeMirror: any, pluginKeys: CodeMirrorKey[]) 
 			{ label: _('Indent less'), command: 'editor.codemirror.indentLess', default: 'Ctrl+[', macos: 'Cmd+[' },
 			{ label: _('Indent more'), command: 'editor.codemirror.indentMore', default: 'Ctrl+]', macos: 'Cmd+]' },
 			{ label: _('Toggle comment'), command: 'editor.codemirror.toggleComment', default: 'Ctrl+/', macos: 'Cmd+/' },
-			{ label: _('Sort selected lines'), command: 'editor.codemirror.sortSelectedLines', default: 'Ctrl+Alt+S', macos: 'Cmd+Opt+S' },
-			{ label: _('Swap line up'), command: 'editor.codemirror.swapLineUp', default: 'Alt+Up', macos: 'Opt+Up' },
-			{ label: _('Swap line down'), command: 'editor.codemirror.swapLineDown', default: 'Alt+Down', macos: 'Opt+Down' },
+			{ label: _('Sort selected lines'), command: 'editor.codemirror.sortSelectedLines', default: 'Ctrl+Alt+S', macos: 'Cmd+Alt+S' },
+			{ label: _('Swap line up'), command: 'editor.codemirror.swapLineUp', default: 'Alt+Up', macos: 'Alt+Up' },
+			{ label: _('Swap line down'), command: 'editor.codemirror.swapLineDown', default: 'Alt+Down', macos: 'Alt+Down' },
 		].concat(pluginKeys);
 
 		CodeMirror.keyMap.default = { 'fallthrough': 'basic' };
