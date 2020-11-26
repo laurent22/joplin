@@ -1,6 +1,6 @@
 # Joplin terminal app changelog
 
-## [cli-v1.4.7](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.7) - 2020-11-26T12:15:28Z
+## [cli-v1.4.9](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.9) - 2020-11-26T15:00:37Z
 
 - Improved: Allow exporting conflict notes (#4095)
 - Improved: Allow lowercase filters when doing search
