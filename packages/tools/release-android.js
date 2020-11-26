@@ -5,20 +5,9 @@ const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
 
 const projectName = 'joplin-android';
-const rnDir = `${__dirname}/../../packages/app-mobile`;
-const rootDir = path.dirname(__dirname);
+const rootDir = path.dirname(path.dirname(__dirname));
+const rnDir = `${rootDir}/packages/app-mobile`;
 const releaseDir = `${rnDir}/dist`;
-
-// function wslToWinPath(wslPath) {
-// 	const s = wslPath.split('/');
-// 	if (s.length < 3) return s.join('\\');
-// 	s.splice(0, 1);
-// 	if (s[0] !== 'mnt' || s[1].length !== 1) return s.join('\\');
-// 	s.splice(0, 1);
-// 	s[0] = `${s[0].toUpperCase()}:`;
-// 	while (s.length && !s[s.length - 1]) s.pop();
-// 	return s.join('\\');
-// }
 
 function increaseGradleVersionCode(content) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode) {
