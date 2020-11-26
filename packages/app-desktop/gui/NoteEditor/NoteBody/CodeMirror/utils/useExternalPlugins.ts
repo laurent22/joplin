@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { contentScriptsToCodeMirrorPlugin } from '@joplin/lib/services/plugins/utils/loadContentScripts';
 import { extname } from 'path';
+import { CodeMirrorKey } from './types';
 import shim from '@joplin/lib/shim';
 import uuid from '@joplin/lib/uuid';
 
@@ -10,8 +11,10 @@ const { reg } = require('@joplin/lib/registry.js');
 export default function useExternalPlugins(CodeMirror: any, plugins: PluginStates) {
 
 	const [options, setOptions] = useState({});
+	const [keys, setKeys] = useState([]);
 	useEffect(() => {
 		let newOptions = {};
+		let newKeys: CodeMirrorKey[] = [];
 
 		const contentScripts = contentScriptsToCodeMirrorPlugin(plugins);
 
@@ -32,6 +35,10 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 
 				if (mod.codeMirrorOptions) {
 					newOptions = Object.assign({}, newOptions, mod.codeMirrorOptions);
+				}
+
+				if (mod.codeMirrorKeys) {
+					newKeys = newKeys.concat(mod.codeMirrorKeys);
 				}
 
 				if (mod.assets) {
@@ -69,6 +76,7 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 			}
 		}
 		setOptions(newOptions);
+		setKeys(newKeys);
 	}, [plugins]);
 
 	function addInlineCss(cssStrings: string[], id: string) {
@@ -86,5 +94,5 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 		document.head.appendChild(element);
 	}
 
-	return options;
+	return { pluginOptions: options, pluginKeys: keys };
 }
