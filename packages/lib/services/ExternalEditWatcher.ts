@@ -81,7 +81,10 @@ export default class ExternalEditWatcher {
 		if (!this.chokidar_) return;
 
 		if (!this.watcher_) {
-			this.watcher_ = this.chokidar_.watch(fileToWatch);
+			this.watcher_ = this.chokidar_.watch(fileToWatch, {
+				useFsEvents: false,
+			});
+
 			this.watcher_.on('all', async (event: string, path: string) => {
 				this.logger().debug(`ExternalEditWatcher: Event: ${event}: ${path}`);
 

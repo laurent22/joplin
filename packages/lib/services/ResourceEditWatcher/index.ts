@@ -156,9 +156,14 @@ export default class ResourceEditWatcher {
 		};
 
 		if (!this.watcher_) {
-			this.watcher_ = this.chokidar_.watch(fileToWatch);
+			this.watcher_ = this.chokidar_.watch(fileToWatch, {
+				// Need to turn off fs-events because when it's on Chokidar
+				// keeps emitting "modified" events (on "raw" handler), several
+				// times per seconds, even when nothing is changed.
+				useFsEvents: false,
+			});
 			this.watcher_.on('all', async (event: any, path: string) => {
-				path = toSystemSlashes(path, 'linux');
+				path = path ? toSystemSlashes(path, 'linux') : '';
 
 				this.logger().info(`ResourceEditWatcher: Event: ${event}: ${path}`);
 
@@ -186,7 +191,7 @@ export default class ResourceEditWatcher {
 			//
 			// @ts-ignore Leave unused path variable
 			this.watcher_.on('raw', async (event: string, path: string, options: any) => {
-				const watchedPath = toSystemSlashes(options.watchedPath, 'linux');
+				const watchedPath = options.watchedPath ? toSystemSlashes(options.watchedPath, 'linux') : '';
 
 				this.logger().debug(`ResourceEditWatcher: Raw event: ${event}: ${watchedPath}`);
 				if (event === 'rename') {
