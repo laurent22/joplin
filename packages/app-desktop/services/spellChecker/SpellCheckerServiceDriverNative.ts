@@ -2,6 +2,10 @@
 
 import SpellCheckerServiceDriverBase from '@joplin/lib/services/spellChecker/SpellCheckerServiceDriverBase';
 import bridge from '../bridge';
+import { languageCodeOnly, localesFromLanguageCode } from '@joplin/lib/locale';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('SpellCheckerServiceDriverNative');
 
 export default class SpellCheckerServiceDriverNative extends SpellCheckerServiceDriverBase {
 
@@ -17,7 +21,30 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 	public setLanguage(v: string) {
 		// If we pass an empty array, it disables spell checking
 		// https://github.com/electron/electron/issues/25228
-		this.session().setSpellCheckerLanguages(v ? [v] : []);
+		if (!v) {
+			this.session().setSpellCheckerLanguages('');
+			return;
+		}
+
+		// The below function will throw an error if the provided language is
+		// not supported, so we provide fallbacks.
+		// https://github.com/laurent22/joplin/issues/4146
+		const languagesToTry = [
+			v,
+			languageCodeOnly(v),
+		].concat(localesFromLanguageCode(languageCodeOnly(v), this.availableLanguages));
+
+		for (const toTry of languagesToTry) {
+			try {
+				this.session().setSpellCheckerLanguages([toTry]);
+				return;
+			} catch (error) {
+				logger.warn(`Failed to set language to "${toTry}". Will try the next one in this list: ${JSON.stringify(languagesToTry)}`);
+				logger.warn('Error was:', error);
+			}
+		}
+
+		logger.error(`Could not set language to: ${v}`);
 	}
 
 	public get language(): string {
