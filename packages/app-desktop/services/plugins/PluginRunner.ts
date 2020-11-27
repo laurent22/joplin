@@ -6,7 +6,10 @@ import bridge from '../bridge';
 import Setting from '@joplin/lib/models/Setting';
 import { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 import shim from '@joplin/lib/shim';
+import Logger from '@joplin/lib/Logger';
 const ipcRenderer = require('electron').ipcRenderer;
+
+const logger = Logger.create('PluginRunner');
 
 enum PluginMessageTarget {
 	MainWindow = 'mainWindow',
@@ -127,7 +130,9 @@ export default class PluginRunner extends BasePluginRunner {
 				const mappedArgs = mapEventIdsToHandlers(plugin.id, message.args);
 				const fullPath = `joplin.${message.path}`;
 
-				this.logger().debug(`PluginRunner: execute call: ${fullPath}: ${mappedArgs}`);
+				// Don't log complete HTML code, which can be long, for setHtml calls
+				const debugMappedArgs = fullPath.includes('setHtml') ? '<hidden>' : mappedArgs;
+				logger.debug(`Got message (3): ${fullPath}: ${debugMappedArgs}`);
 
 				let result: any = null;
 				let error: any = null;
