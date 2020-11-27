@@ -22,7 +22,7 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		// If we pass an empty array, it disables spell checking
 		// https://github.com/electron/electron/issues/25228
 		if (!v) {
-			this.session().setSpellCheckerLanguages('');
+			this.session().setSpellCheckerLanguages([]);
 			return;
 		}
 
