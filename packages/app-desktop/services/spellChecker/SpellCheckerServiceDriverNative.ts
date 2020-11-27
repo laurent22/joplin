@@ -37,6 +37,7 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		for (const toTry of languagesToTry) {
 			try {
 				this.session().setSpellCheckerLanguages([toTry]);
+				logger.info(`Set effective language from "${v}" to "${toTry}"`);
 				return;
 			} catch (error) {
 				logger.warn(`Failed to set language to "${toTry}". Will try the next one in this list: ${JSON.stringify(languagesToTry)}`);
