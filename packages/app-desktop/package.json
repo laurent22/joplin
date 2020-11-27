@@ -73,7 +73,9 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "target": "dmg"
+      "target": "dmg",
+      "hardenedRuntime": true,
+      "entitlements": "./build-mac/entitlements.mac.inherit.plist"
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
