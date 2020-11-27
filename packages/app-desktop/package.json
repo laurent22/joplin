@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "1.4.13",
+  "version": "1.4.15",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -32,7 +32,7 @@
       "build/images/*"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
-    "asar": true,
+    "asar": false,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
       "rfc3161TimeStampServer": "http://timestamp.comodoca.com/rfc3161",
@@ -72,7 +72,8 @@
       "artifactName": "${productName}Portable.${ext}"
     },
     "mac": {
-      "icon": "../../Assets/macOs.icns"
+      "icon": "../../Assets/macOs.icns",
+      "target": "dmg"
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
