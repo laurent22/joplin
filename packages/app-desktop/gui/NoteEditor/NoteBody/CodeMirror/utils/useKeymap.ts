@@ -5,7 +5,7 @@ import shim from '@joplin/lib/shim';
 export default function useKeymap(CodeMirror: any) {
 
 	function save() {
-		CommandService.instance().execute('synchronize');
+		void CommandService.instance().execute('synchronize');
 	}
 
 	function setupEmacs() {

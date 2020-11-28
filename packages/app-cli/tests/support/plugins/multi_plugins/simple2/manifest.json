@@ -1,4 +1,5 @@
 {
+    "id": "org.joplinapp.plugins.MultiPluginDemo2",
     "manifest_version": 1,
 	"app_min_version": "1.4",
     "name": "Joplin Simple Plugin",

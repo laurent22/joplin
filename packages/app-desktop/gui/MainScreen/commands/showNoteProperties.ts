@@ -18,7 +18,7 @@ export const runtime = (comp: any): CommandRuntime => {
 					noteId: noteId,
 					visible: true,
 					onRevisionLinkClick: () => {
-						CommandService.instance().execute('showRevisions');
+						void CommandService.instance().execute('showRevisions');
 					},
 				},
 			});

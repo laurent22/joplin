@@ -40,6 +40,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 				const o = this.props.items[i];
 				let key = o.iconName ? o.iconName : '';
 				key += o.title ? o.title : '';
+				key += o.name ? o.name : '';
 				const itemType = !('type' in o) ? 'button' : o.type;
 
 				if (!key) key = `${o.type}_${i}`;

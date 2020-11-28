@@ -82,9 +82,9 @@ export default function NoteTitleBar(props: Props) {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', 'noteList');
+				void CommandService.instance().execute('focusElement', 'noteList');
 			} else {
-				CommandService.instance().execute('focusElement', 'noteBody');
+				void CommandService.instance().execute('focusElement', 'noteBody');
 			}
 		}
 	}, []);

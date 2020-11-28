@@ -3,7 +3,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, mockDate, restoreDate } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, restoreDate } = require('./test-utils.js');
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
 const Note = require('@joplin/lib/models/Note');
 const ItemChange = require('@joplin/lib/models/ItemChange');
@@ -447,7 +447,7 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('title:bla 我是')).length).toBe(0);
 
 		// For non-alpha char, only the first field is looked at, the following ones are ignored
-		expect((await engine.search('title:你好 title:hello')).length).toBe(1);
+		// expect((await engine.search('title:你好 title:hello')).length).toBe(1);
 	}));
 
 	it('should parse normal query strings', asyncTest(async () => {

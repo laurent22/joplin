@@ -19,6 +19,7 @@ interface ExportNoteOptions {
 	printBackground?: boolean;
 	pageSize?: string;
 	landscape?: boolean;
+	includeConflicts?: boolean;
 }
 
 export default class InteropServiceHelper {
@@ -155,13 +156,14 @@ export default class InteropServiceHelper {
 
 		if (Array.isArray(path)) path = path[0];
 
-		CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
+		void CommandService.instance().execute('showModalMessage', _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
 		const exportOptions: ExportOptions = {};
 		exportOptions.path = path;
 		exportOptions.format = module.format;
-		exportOptions.modulePath = module.path;
+		// exportOptions.modulePath = module.path;
 		exportOptions.target = module.target;
+		exportOptions.includeConflicts = !!options.includeConflicts;
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;
 		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
 
@@ -175,7 +177,7 @@ export default class InteropServiceHelper {
 			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
 		}
 
-		CommandService.instance().execute('hideModalMessage');
+		void CommandService.instance().execute('hideModalMessage');
 	}
 
 }

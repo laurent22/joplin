@@ -371,7 +371,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			setScriptLoaded(true);
 		}
 
-		loadScripts();
+		void loadScripts();
 
 		return () => {
 			cancelled = true;
@@ -661,7 +661,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						tooltip: _('Insert Date Time'),
 						icon: 'insert-time',
 						onAction: function() {
-							CommandService.instance().execute('insertDateTime');
+							void CommandService.instance().execute('insertDateTime');
 						},
 					});
 
@@ -670,7 +670,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 							tooltip: CommandService.instance().label(pluginCommandName),
 							icon: CommandService.instance().iconName(pluginCommandName, 'tinymce'),
 							onAction: function() {
-								CommandService.instance().execute(pluginCommandName);
+								void CommandService.instance().execute(pluginCommandName);
 							},
 						});
 					}
@@ -708,7 +708,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			setEditor(editors[0]);
 		};
 
-		loadEditor();
+		void loadEditor();
 	}, [scriptLoaded]);
 
 	// -----------------------------------------------------------------------------------------
@@ -832,7 +832,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			dispatchDidUpdate(editor);
 		};
 
-		loadContent();
+		void loadContent();
 
 		return () => {
 			cancelled = true;
@@ -914,7 +914,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// the note.
 	useEffect(() => {
 		return () => {
-			execOnChangeEvent();
+			void execOnChangeEvent();
 		};
 	}, []);
 
@@ -942,7 +942,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			onChangeHandlerTimeoutRef.current = shim.setTimeout(async () => {
 				onChangeHandlerTimeoutRef.current = null;
-				execOnChangeEvent();
+				void execOnChangeEvent();
 			}, 1000);
 		}
 

@@ -27,7 +27,7 @@ joplin.plugins.register({
 		const result2 = await dialogs.open(handle2);
 		alert('Got result: ' + JSON.stringify(result2));
 
-		const handle3 = await dialogs.create();
+		const handle3 = await dialogs.create('myDialog3');
 		await dialogs.setHtml(handle3, `
 		<p>Testing dialog with form elements</p>
 		<form name="user">

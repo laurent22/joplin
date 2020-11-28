@@ -87,6 +87,7 @@ export default class ElectronAppWrapper {
 			webPreferences: {
 				nodeIntegration: true,
 				spellcheck: true,
+				enableRemoteModule: true,
 			},
 			webviewTag: true,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting

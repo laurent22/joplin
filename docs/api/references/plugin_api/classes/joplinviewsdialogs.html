@@ -67,12 +67,33 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Allows creating and managing dialogs. A dialog is modal window that contains a webview and a row of buttons. You can update the update the webview using the <code>setHtml</code> method.
-							Dialogs are hidden by default and you need to call <code>open()</code> to open them. Once the user clicks on a button, the <code>open</code> call will return an object indicating what button was clicked
-							on. If your HTML content included one or more form, a <code>formData</code> object will also be included with the key/value for each form.
-						There is currently no &quot;close&quot; method since the dialog should be thought as a modal one and thus can only be closed by clicking on one of the buttons.</p>
+						<p>Allows creating and managing dialogs. A dialog is modal window that
+							contains a webview and a row of buttons. You can update the update the
+							webview using the <code>setHtml</code> method. Dialogs are hidden by default and
+							you need to call <code>open()</code> to open them. Once the user clicks on a
+							button, the <code>open</code> call will return an object indicating what button was
+						clicked on.</p>
 					</div>
-					<p><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/dialog">View the demo plugin</a></p>
+					<a href="#retrieving-form-values" id="retrieving-form-values" style="color: inherit; text-decoration: none;">
+						<h2>Retrieving form values</h2>
+					</a>
+					<p>If your HTML content included one or more forms, a <code>formData</code> object
+					will also be included with the key/value for each form.</p>
+					<a href="#special-button-ids" id="special-button-ids" style="color: inherit; text-decoration: none;">
+						<h2>Special button IDs</h2>
+					</a>
+					<p>The following buttons IDs have a special meaning:</p>
+					<ul>
+						<li><code>ok</code>, <code>yes</code>, <code>submit</code>, <code>confirm</code>: They are considered &quot;submit&quot; buttons</li>
+						<li><code>cancel</code>, <code>no</code>, <code>reject</code>: They are considered &quot;dismiss&quot; buttons</li>
+					</ul>
+					<p>This information is used by the application to determine what action
+						should be done when the user presses &quot;Enter&quot; or &quot;Escape&quot; within the
+						dialog. If they press &quot;Enter&quot;, the first &quot;submit&quot; button will be
+						automatically clicked. If they press &quot;Escape&quot; the first &quot;dismiss&quot; button
+					will be automatically clicked.</p>
+					<p><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/dialog">View the demo
+					plugin</a></p>
 				</div>
 			</section>
 			<!--

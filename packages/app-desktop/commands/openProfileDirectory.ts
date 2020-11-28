@@ -11,7 +11,7 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async () => {
-			bridge().openItem(Setting.value('profileDir'));
+			void bridge().openItem(Setting.value('profileDir'));
 		},
 	};
 };

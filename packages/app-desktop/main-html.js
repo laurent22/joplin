@@ -27,6 +27,7 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const EncryptionService = require('@joplin/lib/services/EncryptionService');
 const bridge = require('electron').remote.require('./bridge').default;
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
+const React = require('react');
 
 if (bridge().env() === 'dev') {
 	const newConsole = function(oldConsole) {
@@ -86,7 +87,7 @@ try {
 	keytar = null;
 }
 
-shimInit(null, keytar);
+shimInit(null, keytar, React);
 
 // Disable drag and drop of links inside application (which would
 // open it as if the whole app was a browser)

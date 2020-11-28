@@ -70,6 +70,7 @@ const inMemoryCache = new InMemoryCache(20);
 export interface ExtraRendererRule {
 	id: string;
 	module: any;
+	assetPath: string;
 }
 
 export interface Options {
@@ -136,10 +137,6 @@ export interface RuleOptions {
 	// Use in mobile app to enable long-pressing an image or a linkg
 	// to display a context menu. Used in `image.ts` and `link_open.ts`
 	enableLongPress?: boolean;
-
-	// Used in mobile app when enableLongPress = true. Tells for how long
-	// the resource should be pressed before the menu is shown.
-	longPressDelay?: number;
 
 	// Use by `link_open` rule.
 	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
@@ -381,7 +378,7 @@ export default class MdToHtml {
 		const markdownIt = new MarkdownIt({
 			breaks: !this.pluginEnabled('softbreaks'),
 			typographer: this.pluginEnabled('typographer'),
-			// linkify: true,
+			linkify: true,
 			html: true,
 			highlight: (str: string, lang: string) => {
 				let outputCodeHtml = '';
@@ -412,10 +409,16 @@ export default class MdToHtml {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
 
-				return {
-					wrapCode: false,
-					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,
-				};
+				const html = `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`;
+
+				if (rules.fence) {
+					return {
+						wrapCode: false,
+						html: html,
+					};
+				} else {
+					return html;
+				}
 			},
 		});
 

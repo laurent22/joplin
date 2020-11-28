@@ -53,7 +53,7 @@ export default class ToolbarButtonUtils {
 			iconName: command.declaration.iconName,
 			enabled: newEnabled,
 			onClick: async () => {
-				this.service.execute(commandName);
+				void this.service.execute(commandName);
 				if (command.declaration.focusAfterPress) {
 					this.service.execute('editor.focus');
 				}

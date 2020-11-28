@@ -426,7 +426,7 @@ class Application extends BaseApplication {
 
 			const AppGui = require('./app-gui.js');
 			this.gui_ = new AppGui(this, this.store(), keymap);
-			this.gui_.setLogger(this.logger_);
+			this.gui_.setLogger(this.logger());
 			await this.gui_.start();
 
 			// Since the settings need to be loaded before the store is created, it will never

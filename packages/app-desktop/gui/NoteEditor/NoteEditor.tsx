@@ -29,14 +29,15 @@ import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('@joplin/lib/registry.js');
 const Note = require('@joplin/lib/models/Note.js');
+const Folder = require('@joplin/lib/models/Folder.js');
 const bridge = require('electron').remote.require('./bridge').default;
-const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
 const commands = [
@@ -112,7 +113,7 @@ function NoteEditor(props: NoteEditorProps) {
 					return { ...prev, user_updated_time: savedNote.user_updated_time };
 				});
 
-				ExternalEditWatcher.instance().updateNoteFile(savedNote);
+				void ExternalEditWatcher.instance().updateNoteFile(savedNote);
 
 				props.dispatch({
 					type: 'EDITOR_NOTE_STATUS_REMOVE',
@@ -140,7 +141,7 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	async function saveNoteAndWait(formNote: FormNote) {
-		saveNoteIfWillChange(formNote);
+		await saveNoteIfWillChange(formNote);
 		return formNote.saveActionQueue.waitForAllDone();
 	}
 
@@ -183,7 +184,7 @@ function NoteEditor(props: NoteEditorProps) {
 			value: props.selectedNoteHash ? props.selectedNoteHash : props.lastEditorScrollPercents[props.noteId] || 0,
 		});
 
-		ResourceEditWatcher.instance().stopWatchingAll();
+		void ResourceEditWatcher.instance().stopWatchingAll();
 	}, [formNote.id, previousNoteId]);
 
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
@@ -364,7 +365,7 @@ function NoteEditor(props: NoteEditorProps) {
 	function renderTagBar() {
 		const theme = themeStyle(props.themeId);
 		const noteIds = [formNote.id];
-		const instructions = <span onClick={() => { CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
+		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
 		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 
 		return (
@@ -449,6 +450,7 @@ function NoteEditor(props: NoteEditorProps) {
 			dispatch={props.dispatch}
 			watchedNoteFiles={props.watchedNoteFiles}
 			plugins={props.plugins}
+			inConflictFolder={props.selectedFolderId === Folder.conflictFolderId()}
 		/>;
 	}
 
@@ -560,6 +562,7 @@ const mapStateToProps = (state: AppState) => {
 		notes: state.notes,
 		folders: state.folders,
 		selectedNoteIds: state.selectedNoteIds,
+		selectedFolderId: state.selectedFolderId,
 		isProvisional: state.provisionalNoteIds.includes(noteId),
 		editorNoteStatuses: state.editorNoteStatuses,
 		syncStarted: state.syncStarted,

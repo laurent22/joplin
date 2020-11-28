@@ -78,6 +78,7 @@ async function main() {
 
 	await updatePackageVersion(`${rootDir}/packages/app-desktop/package.json`, majorMinorVersion);
 	await updatePackageVersion(`${rootDir}/packages/app-cli/package.json`, majorMinorVersion);
+	await updatePackageVersion(`${rootDir}/packages/generator-joplin/package.json`, majorMinorVersion);
 	await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);
 	await updateCodeProjVersion(`${rootDir}/packages/app-mobile/ios/Joplin.xcodeproj/project.pbxproj`, iosVersionHack(majorMinorVersion));
 	await updateClipperManifestVersion(`${rootDir}/packages/app-clipper/manifest.json`, majorMinorVersion);

@@ -51,11 +51,11 @@ export interface CommandDeclaration {
 	// https://www.electronjs.org/docs/api/menu-item#new-menuitemoptions
 	// Note that due to a bug in Electron, menu items with a role cannot
 	// be disabled.
-	role?: string,
+	role?: string;
 
 	// Some toolbar commands will interact with the editor and might
 	// want to return focus back to the active editor.
-	focusAfterPress?: boolean,
+	focusAfterPress?: boolean;
 }
 
 export interface Command {
@@ -236,7 +236,7 @@ export default class CommandService extends BaseService {
 
 	public scheduleExecute(commandName: string, args: any) {
 		shim.setTimeout(() => {
-			this.execute(commandName, args);
+			void this.execute(commandName, args);
 		}, 10);
 	}
 

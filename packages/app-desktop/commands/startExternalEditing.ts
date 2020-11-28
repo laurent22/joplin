@@ -1,8 +1,8 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
+import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 const Note = require('@joplin/lib/models/Note');
-const ExternalEditWatcher = require('@joplin/lib/services/ExternalEditWatcher');
 const bridge = require('electron').remote.require('./bridge').default;
 
 export const declaration: CommandDeclaration = {
@@ -18,7 +18,7 @@ export const runtime = (): CommandRuntime => {
 
 			try {
 				const note = await Note.load(noteId);
-				ExternalEditWatcher.instance().openAndWatch(note);
+				void ExternalEditWatcher.instance().openAndWatch(note);
 			} catch (error) {
 				bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
 			}

@@ -19,6 +19,7 @@ interface ContextMenuProps {
 	dispatch: Function;
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
+	inConflictFolder: boolean;
 }
 
 export default class NoteListUtils {
@@ -149,7 +150,10 @@ export default class NoteListUtils {
 					new MenuItem({
 						label: module.fullLabel(),
 						click: async () => {
-							await InteropServiceHelper.export(props.dispatch.bind(this), module, { sourceNoteIds: noteIds });
+							await InteropServiceHelper.export(props.dispatch.bind(this), module, {
+								sourceNoteIds: noteIds,
+								includeConflicts: props.inConflictFolder,
+							});
 						},
 					})
 				);
@@ -182,7 +186,7 @@ export default class NoteListUtils {
 			if (location !== MenuItemLocation.Context && location !== MenuItemLocation.NoteListContextMenu) continue;
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName))
+				new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
 			);
 		}
 

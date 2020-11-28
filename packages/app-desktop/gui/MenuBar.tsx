@@ -16,12 +16,12 @@ import { MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/typ
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
+import bridge from '../services/bridge';
 
 const { connect } = require('react-redux');
 const { reg } = require('@joplin/lib/registry.js');
 const packageInfo = require('../packageInfo.js');
-const bridge = require('electron').remote.require('./bridge').default;
-const { shell, clipboard } = require('electron');
+const { clipboard } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const TemplateUtils = require('@joplin/lib/TemplateUtils');
@@ -112,7 +112,7 @@ function useMenu(props: Props) {
 	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
 
 	const onMenuItemClick = useCallback((commandName: string) => {
-		CommandService.instance().execute(commandName);
+		void CommandService.instance().execute(commandName);
 	}, []);
 
 	const onImportModuleClick = useCallback(async (module: Module, moduleSource: string) => {
@@ -134,7 +134,7 @@ function useMenu(props: Props) {
 
 		const modalMessage =  _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
 
-		CommandService.instance().execute('showModalMessage', modalMessage);
+		void CommandService.instance().execute('showModalMessage', modalMessage);
 
 		const importOptions = {
 			path,
@@ -145,7 +145,7 @@ function useMenu(props: Props) {
 					return `${key}: ${status[key]}`;
 				});
 
-				CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
+				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 			},
 			onError: console.warn,
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
@@ -159,7 +159,7 @@ function useMenu(props: Props) {
 			bridge().showErrorMessageBox(error.message);
 		}
 
-		CommandService.instance().execute('hideModalMessage');
+		void CommandService.instance().execute('hideModalMessage');
 	}, [props.selectedFolderId]);
 
 	const onMenuItemClickRef = useRef(null);
@@ -177,7 +177,7 @@ function useMenu(props: Props) {
 		const quitMenuItem = {
 			label: _('Quit'),
 			accelerator: keymapService.getAccelerator('quit'),
-			click: () => { bridge().electronApp().quit(); },
+			click: () => { void bridge().electronApp().quit(); },
 		};
 
 		const sortNoteFolderItems = (type: string) => {
@@ -284,23 +284,23 @@ function useMenu(props: Props) {
 		templateItems.push({
 			label: _('Create note from template'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate', 'note');
+				void CommandService.instance().execute('selectTemplate', 'note');
 			},
 		}, {
 			label: _('Create to-do from template'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate', 'todo');
+				void CommandService.instance().execute('selectTemplate', 'todo');
 			},
 		}, {
 			label: _('Insert template'),
 			accelerator: keymapService.getAccelerator('insertTemplate'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate');
+				void CommandService.instance().execute('selectTemplate');
 			},
 		}, {
 			label: _('Open template directory'),
 			click: () => {
-				shell.openItem(Setting.value('templateDir'));
+				void bridge().openItem(Setting.value('templateDir'));
 			},
 		}, {
 			label: _('Refresh templates'),

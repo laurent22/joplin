@@ -216,21 +216,15 @@ export default class InteropService {
 	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
 	 */
 	newModuleFromPath_(type: ModuleType, options: any) {
-		let modulePath = options && options.modulePath ? options.modulePath : '';
-
-		if (!modulePath) {
-			const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
-			if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
-			modulePath = this.modulePath(moduleMetadata);
-		}
-
 		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
+		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
 
 		let output = null;
 
 		if (moduleMetadata.isCustom) {
 			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
+			const modulePath = this.modulePath(moduleMetadata);
 			const ModuleClass = require(modulePath).default;
 			output = new ModuleClass();
 		}
@@ -238,6 +232,29 @@ export default class InteropService {
 		output.setMetadata({ options, ...moduleMetadata });
 
 		return output;
+
+		// let modulePath = options && options.modulePath ? options.modulePath : '';
+
+		// if (!modulePath) {
+		// 	const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
+		// 	if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
+		// 	modulePath = this.modulePath(moduleMetadata);
+		// }
+
+		// const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
+
+		// let output = null;
+
+		// if (moduleMetadata.isCustom) {
+		// 	output = this.newModuleFromCustomFactory(moduleMetadata);
+		// } else {
+		// 	const ModuleClass = require(modulePath).default;
+		// 	output = new ModuleClass();
+		// }
+
+		// output.setMetadata({ options, ...moduleMetadata });
+
+		// return output;
 	}
 
 	moduleByFileExtension_(type: ModuleType, ext: string) {
@@ -280,15 +297,17 @@ export default class InteropService {
 
 		let result: ImportExportResult = { warnings: [] };
 
-		let importer = null;
-
+		// let importer = null;
+		//
 		// Not certain the "modulePath" property still has any use at this point. Modules should be looked up
 		// based on their format and outputFormat.
-		if (options.modulePath) {
-			importer = this.newModuleFromPath_(ModuleType.Importer, options);
-		} else {
-			importer = this.newModuleByFormat_(ModuleType.Importer, options.format, options.outputFormat);
-		}
+		// if (options.modulePath) {
+		// 	importer = this.newModuleFromPath_(ModuleType.Importer, options);
+		// } else {
+		//	importer = this.newModuleByFormat_(ModuleType.Importer, options.format, options.outputFormat);
+		// }
+
+		const importer = this.newModuleByFormat_(ModuleType.Importer, options.format, options.outputFormat);
 
 		await importer.init(options.path, options);
 		result = await importer.exec(result);
@@ -321,6 +340,8 @@ export default class InteropService {
 		// Recursively get all the folders that have valid parents
 		const folderIds = await Folder.childrenIds('', true);
 
+		if (options.includeConflicts) folderIds.push(Folder.conflictFolderId());
+
 		let fullSourceFolderIds = sourceFolderIds.slice();
 		for (let i = 0; i < sourceFolderIds.length; i++) {
 			const id = sourceFolderIds[i];
@@ -335,7 +356,7 @@ export default class InteropService {
 
 			if (!sourceNoteIds.length) await queueExportItem(BaseModel.TYPE_FOLDER, folderId);
 
-			const noteIds = await Folder.noteIds(folderId);
+			const noteIds = await Folder.noteIds(folderId, { includeConflicts: !!options.includeConflicts });
 
 			for (let noteIndex = 0; noteIndex < noteIds.length; noteIndex++) {
 				const noteId = noteIds[noteIndex];

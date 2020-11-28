@@ -2,25 +2,27 @@ const utils = require('../utils');
 const glob = require('glob');
 const rootDir = utils.rootDir();
 
+console.info(rootDir);
+
 module.exports = {
 	src: '',
 	fn: async function() {
-		const tsFiles = glob.sync(`${rootDir}{/**/*.ts,/**/*.tsx}`, {
+		const tsFiles = glob.sync('{**/*.ts,**/*.tsx}', {
+			cwd: rootDir,
 			ignore: [
 				'**/.git/**',
-				'**/api-cli/build/**',
-				'**/api-cli/tests-build/**',
-				'**/api-cli/tests/support/plugins/**',
-				'**/app-desktop/dist/**',
-				'**/Assets/*',
-				'**/app-mobile/android/**',
-				'**/app-mobile/ios/**',
 				'**/node_modules/**',
-				'**/plugin_types/**',
+				'Assets/**/*',
+				'packages/api-cli/tests/support/plugins/**/*',
+				'packages/api-desktop/dist/**/*',
+				'packages/app-cli/build/**/*',
+				'packages/app-cli/tests-build/**/*',
+				'packages/app-desktop/dist/**/*',
+				'packages/app-mobile/android/**/*',
+				'packages/app-mobile/ios/**/*',
+				'packages/lib/plugin_types/**/*',
 			],
-		})
-			.filter(f => !f.endsWith('.d.ts'))
-			.map(f => f.substr(rootDir.length + 1));
+		}).filter(f => !f.endsWith('.d.ts'));
 
 		const ignoredJsFiles = tsFiles.map(f => {
 			const s = f.split('.');

@@ -262,14 +262,14 @@ describe('models_Note', function() {
 		for (const testCase of testCases) {
 			const [useAbsolutePaths, input, expected] = testCase;
 			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input, { useAbsolutePaths });
-			expect(internalToExternal).toBe(expected, 'replaceResourceInternalToExternalLinks failed');
+			expect(internalToExternal).toBe(expected);
 
 			const externalToInternal = await Note.replaceResourceExternalToInternalLinks(internalToExternal, { useAbsolutePaths });
-			expect(externalToInternal).toBe(input, 'replaceResourceExternalToInternalLinks failed');
+			expect(externalToInternal).toBe(input);
 		}
 
 		const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
-		expect(result).toBe(`[](:/${note1.id})`, 'replaceResourceExternalToInternalLinks failed (note link)');
+		expect(result).toBe(`[](:/${note1.id})`);
 	}));
 
 });
