@@ -52,10 +52,6 @@ export interface CommandDeclaration {
 	// Note that due to a bug in Electron, menu items with a role cannot
 	// be disabled.
 	role?: string;
-
-	// Some toolbar commands will interact with the editor and might
-	// want to return focus back to the active editor.
-	focusAfterPress?: boolean;
 }
 
 export interface Command {

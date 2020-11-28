@@ -33,6 +33,24 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
+	// Editor commands will focus the editor after they're executed
+	private isEditorCommand(commandName: string) {
+		return (commandName.indexOf('editor.') === 0 ||
+				// These commands are grandfathered in, but in the future
+				// all editor commands should start with "editor."
+				commandName === 'textBold' ||
+				commandName === 'textItalic' ||
+				commandName === 'textCode' ||
+				commandName === 'attachFile' ||
+				commandName === 'textNumberedList' ||
+				commandName === 'textBulletedList' ||
+				commandName === 'textCheckbox' ||
+				commandName === 'textHeading' ||
+				commandName === 'textHorizontalRule' ||
+				commandName === 'insertDateTime'
+		);
+	}
+
 	private commandToToolbarButton(commandName: string, whenClauseContext: any): ToolbarButtonInfo {
 		const newEnabled = this.service.isEnabled(commandName, whenClauseContext);
 		const newTitle = this.service.title(commandName);
@@ -54,8 +72,8 @@ export default class ToolbarButtonUtils {
 			enabled: newEnabled,
 			onClick: async () => {
 				void this.service.execute(commandName);
-				if (command.declaration.focusAfterPress) {
-					this.service.execute('editor.focus');
+				if (this.isEditorCommand(commandName)) {
+					void this.service.execute('editor.focus');
 				}
 			},
 			title: newTitle,

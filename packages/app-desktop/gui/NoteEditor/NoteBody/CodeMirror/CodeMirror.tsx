@@ -168,6 +168,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
+							editorRef.current.focus();
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
 						},
 						textCode: () => {
