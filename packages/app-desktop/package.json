@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "1.4.16",
+  "version": "1.4.17",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -32,7 +32,7 @@
       "build/images/*"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
-    "asar": false,
+    "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
       "rfc3161TimeStampServer": "http://timestamp.comodoca.com/rfc3161",
@@ -137,7 +137,7 @@
     "md5": "^2.2.1",
     "moment": "^2.22.2",
     "node-fetch": "^1.7.3",
-    "node-notifier": "^6.0.0",
+    "node-notifier": "^8.0.0",
     "pretty-bytes": "^5.3.0",
     "re-resizable": "^6.5.4",
     "react": "16.13.1",
