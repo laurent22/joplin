@@ -13,4 +13,5 @@ export interface Pagination {
 	limit: number;
 	order: PaginationOrder[];
 	page: number;
+	caseInsensitive?: boolean;
 }

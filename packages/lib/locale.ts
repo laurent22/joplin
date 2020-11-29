@@ -572,6 +572,12 @@ function languageCode() {
 	return languageCodeOnly(currentLocale_);
 }
 
+function localesFromLanguageCode(languageCode: string, locales: string[]): string[] {
+	return locales.filter((l: string) => {
+		return languageCodeOnly(l) === languageCode;
+	});
+}
+
 function _(s: string, ...args: any[]) {
 	const strings = localeStrings(currentLocale_);
 	let result = strings[s];
@@ -588,4 +594,4 @@ function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	return _(singular, ...args);
 }
 
-export { _, _n, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+export { _, _n, supportedLocales, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

@@ -39,7 +39,7 @@ export default function(frameWindow: any, isReady: boolean, postMessage: Functio
 
 		if (!isReady) return;
 
-		console.info('useHtmlLoader: setHtml', htmlHash, html);
+		console.info('useHtmlLoader: setHtml', htmlHash);
 
 		postMessage('setHtml', {
 			hash: htmlHash,
