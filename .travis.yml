@@ -15,7 +15,7 @@ branches:
 matrix:
   include:
     - os: osx
-      osx_image: xcode9.0
+      osx_image: xcode12
       language: node_js
       node_js: "12"
       cache:
