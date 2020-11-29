@@ -53,6 +53,13 @@ const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('@joplin/lib/services/synchronizer/utils/types');
 const sharp = require('sharp');
 
+// Each suite has its own separate data and temp directory so that multiple
+// suites can be run at the same time. suiteName is what is used to
+// differentiate between suite and it is currently set to a random string
+// (Ideally it would be something like the filename currently being executed by
+// Jest, to make debugging easier, but it's not clear how to get this info).
+const suiteName_ = uuid.createNano();
+
 const databases_ = [];
 let synchronizers_ = [];
 const synchronizerContexts_ = {};
@@ -89,10 +96,11 @@ EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
 const logDir = `${__dirname}/../tests/logs`;
-const baseTempDir = `${__dirname}/../tests/tmp`;
+const baseTempDir = `${__dirname}/../tests/tmp/${suiteName_}`;
+const dataDir = `${__dirname}/data/${suiteName_}`;
 fs.mkdirpSync(logDir, 0o755);
 fs.mkdirpSync(baseTempDir, 0o755);
-fs.mkdirpSync(`${__dirname}/data`);
+fs.mkdirpSync(dataDir);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -139,12 +147,12 @@ const syncDir = `${__dirname}/../tests/sync`;
 
 const dbLogger = new Logger();
 dbLogger.addTarget('console');
-dbLogger.addTarget('file', { path: `${logDir}/log.txt` });
+// dbLogger.addTarget('file', { path: `${logDir}/log.txt` });
 dbLogger.setLevel(Logger.LEVEL_WARN);
 
 const logger = new Logger();
 logger.addTarget('console');
-logger.addTarget('file', { path: `${logDir}/log.txt` });
+// logger.addTarget('file', { path: `${logDir}/log.txt` });
 logger.setLevel(Logger.LEVEL_WARN); // Set to DEBUG to display sync process in console
 
 Logger.initializeGlobalLogger(logger);
@@ -269,7 +277,7 @@ async function setupDatabase(id = null, options = null) {
 		return;
 	}
 
-	const filePath = `${__dirname}/data/test-${id}.sqlite`;
+	const filePath = `${dataDir}/test-${id}.sqlite`;
 
 	try {
 		await fs.unlink(filePath);
@@ -292,15 +300,15 @@ function resourceDirName(id = null) {
 
 function resourceDir(id = null) {
 	if (id === null) id = currentClient_;
-	return `${__dirname}/data/${resourceDirName(id)}`;
+	return `${dataDir}/${resourceDirName(id)}`;
 }
 
 function pluginDir(id = null) {
 	if (id === null) id = currentClient_;
-	return `${__dirname}/data/plugins-${id}`;
+	return `${dataDir}/plugins-${id}`;
 }
 
-async function setupDatabaseAndSynchronizer(id = null, options = null) {
+async function setupDatabaseAndSynchronizer(id, options = null) {
 	if (id === null) id = currentClient_;
 
 	BaseService.logger_ = logger;
