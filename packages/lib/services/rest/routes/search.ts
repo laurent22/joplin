@@ -28,6 +28,7 @@ export default async function(request: Request) {
 		options.caseInsensitive = true;
 		results = await ModelClass.all(options);
 	} else {
+		console.info('routes/search: options:', defaultLoadOptions(request, ModelType.Note));
 		results = await SearchEngineUtils.notesForQuery(query, defaultLoadOptions(request, ModelType.Note));
 	}
 
