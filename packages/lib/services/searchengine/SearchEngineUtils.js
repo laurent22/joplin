@@ -11,12 +11,8 @@ class SearchEngineUtils {
 			searchType = SearchEngine.SEARCH_TYPE_BASIC;
 		}
 
-		console.info('SearchEngineUtils: search type', searchType);
-
 		const results = await SearchEngine.instance().search(query, { searchType });
 		const noteIds = results.map(n => n.id);
-
-		console.info('SearchEngineUtils: results', results);
 
 		// We need at least the note ID to be able to sort them below so if not
 		// present in field list, add it.L Also remember it was auto-added so that
@@ -34,11 +30,7 @@ class SearchEngineUtils {
 			conditions: [`id IN ("${noteIds.join('","')}")`],
 		}, options);
 
-		console.info('SearchEngineUtils: previewOptions', previewOptions);
-
 		const notes = await Note.previews(null, previewOptions);
-
-		console.info('SearchEngineUtils: notes', notes);
 
 		// By default, the notes will be returned in reverse order
 		// or maybe random order so sort them here in the correct order
@@ -50,7 +42,6 @@ class SearchEngineUtils {
 			if (idWasAutoAdded) delete sortedNotes[idx].id;
 		}
 
-		console.info('SearchEngineUtils: sortedNotes', sortedNotes);
 
 		// Note that when the search engine index is somehow corrupted, it might contain
 		// references to notes that don't exist. Not clear how it can happen, but anyway
