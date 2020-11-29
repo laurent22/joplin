@@ -32,5 +32,9 @@ export default async function(request: Request) {
 		results = await SearchEngineUtils.notesForQuery(query, defaultLoadOptions(request, ModelType.Note));
 	}
 
-	return collectionToPaginatedResults(results, request);
+	console.info('BEFORE RESULTS', results);
+
+	const output = collectionToPaginatedResults(results, request);
+	console.info('FINAL RESULTS', output);
+	return output;
 }
