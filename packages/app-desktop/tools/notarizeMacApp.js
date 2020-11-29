@@ -1,15 +1,14 @@
-// See: https://medium.com/@TwitterArchiveEraser/notarize-electron-apps-7a5f988406db
-
 const fs = require('fs');
 const path = require('path');
 const electron_notarize = require('electron-notarize');
 
 module.exports = async function(params) {
-	// Only notarize the app on Mac OS only.
-	if (process.platform !== 'darwin') {
+	if (process.platform !== 'darwin') return;
+
+	if (!process.env.APPLE_ID || !process.env.APPLE_ID_PASSWORD) {
+		console.warn('Environment variables APPLE_ID and APPLE_ID_PASSWORD not found - notarization will NOT be done.');
 		return;
 	}
-	console.log('afterSign hook triggered', params);
 
 	// Same appId in electron-builder.
 	const appId = 'net.cozic.joplin-desktop';
@@ -21,18 +20,26 @@ module.exports = async function(params) {
 
 	console.log(`Notarizing ${appId} found at ${appPath}`);
 
-	try {
-		await electron_notarize.notarize({
-			appBundleId: appId,
-			appPath: appPath,
-			// Apple Developer email address
-			appleId: process.env.APPLE_ID,
-			// App-specific password: https://support.apple.com/en-us/HT204397
-			appleIdPassword: process.env.APPLE_ID_PASSWORD,
-		});
-	} catch (error) {
-		console.error(error);
-	}
+	await electron_notarize.notarize({
+		appBundleId: appId,
+		appPath: appPath,
+
+		// Apple Developer email address
+		appleId: process.env.APPLE_ID,
+
+		// App-specific password: https://support.apple.com/en-us/HT204397
+		appleIdPassword: process.env.APPLE_ID_PASSWORD,
+
+		// When Apple ID is attached to multiple providers (eg if the
+		// account has been used to build multiple apps for different
+		// companies), in that case the provider "Team Short Name" (also
+		// known as "ProviderShortname") must be provided.
+		//
+		// Use this to get it:
+		//
+		// xcrun altool --list-providers -u APPLE_ID -p APPLE_ID_PASSWORD
+		ascProvider: process.env.APPLE_ASC_PROVIDER,
+	});
 
 	console.log(`Done notarizing ${appId}`);
 };
