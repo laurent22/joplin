@@ -27,6 +27,7 @@
     "appId": "net.cozic.joplin-desktop",
     "productName": "Joplin",
     "npmRebuild": false,
+    "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
       "build/icons/*",
       "build/images/*"
@@ -73,7 +74,9 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "target": "dmg"
+      "target": "dmg",
+      "hardenedRuntime": true,
+      "entitlements": "./build-mac/entitlements.mac.inherit.plist"
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
@@ -101,6 +104,7 @@
     "babel-preset-react": "^6.24.1",
     "electron": "^10.1.6",
     "electron-builder": "22.9.1",
+    "electron-notarize": "^1.0.0",
     "electron-rebuild": "^2.3.2",
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
