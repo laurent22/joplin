@@ -38,6 +38,12 @@ export default class ToolbarButtonUtils {
 		return (commandName.indexOf('editor.') === 0 ||
 				// These commands are grandfathered in, but in the future
 				// all editor commands should start with "editor."
+				// WARNING: Some commands such as textLink are not defined here
+				// because they are more complex and handle focus manually
+				commandName === 'textCopy' ||
+				commandName === 'textCut' ||
+				commandName === 'textPaste' ||
+				commandName === 'textSelectAll' ||
 				commandName === 'textBold' ||
 				commandName === 'textItalic' ||
 				commandName === 'textCode' ||
