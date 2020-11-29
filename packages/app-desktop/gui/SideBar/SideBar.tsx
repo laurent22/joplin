@@ -441,6 +441,7 @@ class SideBarComponent extends React.Component<Props, State> {
 						this.onHeaderClick_(key);
 					}}
 				>
+					<StyledHeaderIcon className={extraProps.isExpanded ? 'fas fa-caret-down' : 'fas fa-caret-right'}/>
 					<StyledHeaderIcon className={iconName}/>
 					<StyledHeaderLabel>{label}</StyledHeaderLabel>
 				</StyledHeader>
@@ -587,12 +588,14 @@ class SideBarComponent extends React.Component<Props, State> {
 		const theme = themeStyle(this.props.themeId);
 
 		const items = [];
+		const isNotebookExpanded = this.state.folderHeaderIsExpanded;
 
 		items.push(
 			this.renderHeader('folderHeader', _('Notebooks'), 'icon-notebooks', this.header_contextMenu, this.onAddFolderButtonClick, {
 				onDrop: this.onFolderDrop_,
 				['data-folder-id']: '',
 				toggleblock: 1,
+				isExpanded: isNotebookExpanded,
 			})
 		);
 
@@ -608,9 +611,12 @@ class SideBarComponent extends React.Component<Props, State> {
 			);
 		}
 
+
+		const isTagExpanded = this.state.tagHeaderIsExpanded;
 		items.push(
 			this.renderHeader('tagHeader', _('Tags'), 'icon-tags', null, null, {
 				toggleblock: 1,
+				isExpanded: isTagExpanded,
 			})
 		);
 
