@@ -7,13 +7,8 @@ module.exports = async function(params) {
 
 	console.info('Checking if notarization should be done...');
 
-	if (process.env.TRAVIS_PULL_REQUEST) {
-		console.info('Detected Travis pull request build - skipping notarization');
-		return;
-	}
-
-	if (!!process.env.TRAVIS && !process.env.TRAVIS_TAG) {
-		console.info('Detected Travis environment but no tag - skipping notarization');
+	if (!process.env.TRAVIS || !process.env.TRAVIS_TAG) {
+		console.info(`Either not running in CI or not processing a tag - skipping notarization. process.env.TRAVIS = ${process.env.TRAVIS}; process.env.TRAVIS_TAG = ${process.env.TRAVIS}`);
 		return;
 	}
 
