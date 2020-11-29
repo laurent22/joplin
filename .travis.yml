@@ -20,9 +20,9 @@ matrix:
       node_js: "12"
       cache:
         npm: false
-      env:
-        - ELECTRON_CACHE=$HOME/.cache/electron
-        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+      # env:
+      #   - ELECTRON_CACHE=$HOME/.cache/electron
+      #   - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
     - os: linux
       sudo: required
@@ -31,9 +31,9 @@ matrix:
       node_js: "12"
       cache:
         npm: false
-      env:
-        - ELECTRON_CACHE=$HOME/.cache/electron
-        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+      # env:
+      #   - ELECTRON_CACHE=$HOME/.cache/electron
+      #   - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
 # cache:
 #   directories:
