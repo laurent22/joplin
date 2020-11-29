@@ -511,4 +511,14 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(1);
 		expect((await engine.search('"[ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(2);
 	}));
+
+	it('should not mistake cyrillic "l" for latin "n"', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'latin n', body: 'n' });
+		const n2 = await Note.save({ title: 'cyrillic l', body: 'л' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('n')).length).toBe(1);
+		expect((await engine.search('л')).length).toBe(1);
+	}));
 });
