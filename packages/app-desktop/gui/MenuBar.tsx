@@ -112,7 +112,7 @@ function useMenu(props: Props) {
 	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
 
 	const onMenuItemClick = useCallback((commandName: string) => {
-		CommandService.instance().execute(commandName);
+		void CommandService.instance().execute(commandName);
 	}, []);
 
 	const onImportModuleClick = useCallback(async (module: Module, moduleSource: string) => {
@@ -134,7 +134,7 @@ function useMenu(props: Props) {
 
 		const modalMessage =  _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
 
-		CommandService.instance().execute('showModalMessage', modalMessage);
+		void CommandService.instance().execute('showModalMessage', modalMessage);
 
 		const importOptions = {
 			path,
@@ -145,7 +145,7 @@ function useMenu(props: Props) {
 					return `${key}: ${status[key]}`;
 				});
 
-				CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
+				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 			},
 			onError: console.warn,
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
@@ -159,7 +159,7 @@ function useMenu(props: Props) {
 			bridge().showErrorMessageBox(error.message);
 		}
 
-		CommandService.instance().execute('hideModalMessage');
+		void CommandService.instance().execute('hideModalMessage');
 	}, [props.selectedFolderId]);
 
 	const onMenuItemClickRef = useRef(null);
@@ -177,7 +177,7 @@ function useMenu(props: Props) {
 		const quitMenuItem = {
 			label: _('Quit'),
 			accelerator: keymapService.getAccelerator('quit'),
-			click: () => { bridge().electronApp().quit(); },
+			click: () => { void bridge().electronApp().quit(); },
 		};
 
 		const sortNoteFolderItems = (type: string) => {
@@ -284,23 +284,23 @@ function useMenu(props: Props) {
 		templateItems.push({
 			label: _('Create note from template'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate', 'note');
+				void CommandService.instance().execute('selectTemplate', 'note');
 			},
 		}, {
 			label: _('Create to-do from template'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate', 'todo');
+				void CommandService.instance().execute('selectTemplate', 'todo');
 			},
 		}, {
 			label: _('Insert template'),
 			accelerator: keymapService.getAccelerator('insertTemplate'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate');
+				void CommandService.instance().execute('selectTemplate');
 			},
 		}, {
 			label: _('Open template directory'),
 			click: () => {
-				bridge().openItem(Setting.value('templateDir'));
+				void bridge().openItem(Setting.value('templateDir'));
 			},
 		}, {
 			label: _('Refresh templates'),

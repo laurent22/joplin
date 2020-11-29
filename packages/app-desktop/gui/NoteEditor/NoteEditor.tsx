@@ -113,7 +113,7 @@ function NoteEditor(props: NoteEditorProps) {
 					return { ...prev, user_updated_time: savedNote.user_updated_time };
 				});
 
-				ExternalEditWatcher.instance().updateNoteFile(savedNote);
+				void ExternalEditWatcher.instance().updateNoteFile(savedNote);
 
 				props.dispatch({
 					type: 'EDITOR_NOTE_STATUS_REMOVE',
@@ -141,7 +141,7 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	async function saveNoteAndWait(formNote: FormNote) {
-		saveNoteIfWillChange(formNote);
+		await saveNoteIfWillChange(formNote);
 		return formNote.saveActionQueue.waitForAllDone();
 	}
 
@@ -184,7 +184,7 @@ function NoteEditor(props: NoteEditorProps) {
 			value: props.selectedNoteHash ? props.selectedNoteHash : props.lastEditorScrollPercents[props.noteId] || 0,
 		});
 
-		ResourceEditWatcher.instance().stopWatchingAll();
+		void ResourceEditWatcher.instance().stopWatchingAll();
 	}, [formNote.id, previousNoteId]);
 
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
@@ -365,7 +365,7 @@ function NoteEditor(props: NoteEditorProps) {
 	function renderTagBar() {
 		const theme = themeStyle(props.themeId);
 		const noteIds = [formNote.id];
-		const instructions = <span onClick={() => { CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
+		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
 		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 
 		return (

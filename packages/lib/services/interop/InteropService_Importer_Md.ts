@@ -27,7 +27,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				parentFolderId = this.options_.destinationFolder.id;
 			}
 
-			this.importDirectory(sourcePath, parentFolderId);
+			await this.importDirectory(sourcePath, parentFolderId);
 		} else {
 			if (!this.options_.destinationFolder) throw new Error(_('Please specify the notebook where the notes should be imported to.'));
 			parentFolderId = this.options_.destinationFolder.id;
@@ -52,9 +52,9 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			if (stat.isDirectory()) {
 				const folderTitle = await Folder.findUniqueItemTitle(basename(stat.path));
 				const folder = await Folder.save({ title: folderTitle, parent_id: parentFolderId });
-				this.importDirectory(`${dirPath}/${basename(stat.path)}`, folder.id);
+				await this.importDirectory(`${dirPath}/${basename(stat.path)}`, folder.id);
 			} else if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
-				this.importFile(`${dirPath}/${stat.path}`, parentFolderId);
+				await this.importFile(`${dirPath}/${stat.path}`, parentFolderId);
 			}
 		}
 	}

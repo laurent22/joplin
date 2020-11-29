@@ -186,7 +186,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 			setSource(undefined);
 			setInjectedJs([]);
 		} else {
-			renderNote();
+			void renderNote();
 		}
 
 		return () => {

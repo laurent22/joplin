@@ -13,7 +13,7 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
-			ExternalEditWatcher.instance().stopWatching(noteId);
+			void ExternalEditWatcher.instance().stopWatching(noteId);
 		},
 		enabledCondition: 'oneNoteSelected',
 	};

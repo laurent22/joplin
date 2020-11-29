@@ -103,7 +103,7 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
-	public async close() {
+	public close() {
 		this.setStoreProp('opened', false);
 	}
 

@@ -133,7 +133,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			await initNoteState(n);
 		};
 
-		loadNote();
+		void loadNote();
 
 		return () => {
 			cancelled = true;
@@ -183,7 +183,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			handleAutoFocus(!!n.is_todo);
 		}
 
-		loadNote();
+		void loadNote();
 
 		return () => {
 			cancelled = true;
@@ -207,7 +207,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 	useEffect(() => {
 		if (previousNoteId !== formNote.id) {
-			onResourceChange();
+			void onResourceChange();
 		}
 	}, [previousNoteId, formNote.id, onResourceChange]);
 
@@ -222,7 +222,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			});
 		}
 
-		runEffect();
+		void runEffect();
 
 		return () => {
 			cancelled = true;

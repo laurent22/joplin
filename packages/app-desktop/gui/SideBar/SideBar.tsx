@@ -510,9 +510,9 @@ class SideBarComponent extends React.Component<Props, State> {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', 'noteBody');
+				void CommandService.instance().execute('focusElement', 'noteBody');
 			} else {
-				CommandService.instance().execute('focusElement', 'noteList');
+				void CommandService.instance().execute('focusElement', 'noteList');
 			}
 		}
 
@@ -559,14 +559,14 @@ class SideBarComponent extends React.Component<Props, State> {
 				iconAnimation={iconAnimation}
 				title={label}
 				onClick={() => {
-					CommandService.instance().execute('synchronize', type !== 'sync');
+					void CommandService.instance().execute('synchronize', type !== 'sync');
 				}}
 			/>
 		);
 	}
 
 	onAddFolderButtonClick() {
-		CommandService.instance().execute('newFolder');
+		void CommandService.instance().execute('newFolder');
 	}
 
 	// componentDidUpdate(prevProps:any, prevState:any) {
