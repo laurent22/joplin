@@ -18,6 +18,8 @@ matrix:
       osx_image: xcode9.0
       language: node_js
       node_js: "12"
+      cache:
+        npm: false
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
@@ -27,6 +29,8 @@ matrix:
       dist: trusty
       language: node_js
       node_js: "12"
+      cache:
+        npm: false
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
