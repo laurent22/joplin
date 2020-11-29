@@ -446,6 +446,12 @@ class Setting extends BaseModel {
 				options: () => themeOptions(),
 			},
 
+			notificationPermission: {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+			},
+
 			showNoteCounts: { value: true, type: SettingItemType.Bool, public: false, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 
 			layoutButtonSequence: {
