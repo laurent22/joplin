@@ -36,6 +36,7 @@ const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('@joplin/lib/registry.js');
 const Note = require('@joplin/lib/models/Note.js');
+const Tag = require('@joplin/lib/models/Tag.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const bridge = require('electron').remote.require('./bridge').default;
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
@@ -50,6 +51,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions>(null);
+	const [tagList, setTagList] = useState<any>([]);
 
 	const editorRef = useRef<any>();
 	const titleInputRef = useRef<any>();
@@ -63,7 +65,16 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const formNote_afterLoad = useCallback(async () => {
 		setTitleHasBeenManuallyChanged(false);
-	}, []);
+
+		// dynamically load the tag by current id
+		await Tag.tagsByNoteId(props.selectedNoteIds)
+			.then((result: any) => {
+				const tagList = React.createElement(TagList, { items: result });
+				// console.log(tagList)
+				setTagList(tagList);
+			});
+
+	}, [props.selectedNoteIds]);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
@@ -366,8 +377,6 @@ function NoteEditor(props: NoteEditorProps) {
 		const theme = themeStyle(props.themeId);
 		const noteIds = [formNote.id];
 		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
-		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
-
 		return (
 			<div style={{ paddingLeft: 8, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>{tagList}{instructions}</div>
 		);
