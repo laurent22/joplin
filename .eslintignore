@@ -46,6 +46,7 @@ packages/app-mobile/ios
 packages/app-mobile/locales
 packages/app-mobile/node_modules
 packages/app-mobile/pluginAssets/
+packages/app-mobile/lib/rnInjectedJs/
 packages/lib/assets/
 packages/lib/rnInjectedJs/
 packages/lib/vendor/

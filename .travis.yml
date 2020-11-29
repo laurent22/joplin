@@ -17,19 +17,28 @@ matrix:
     - os: osx
       osx_image: xcode9.0
       language: node_js
-      node_js: "10"
-      env:
-        - ELECTRON_CACHE=$HOME/.cache/electron
-        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+      node_js: "12"
+      cache:
+        npm: false
+      # Cache was disabled because when changing from node_js 10 to node_js 12
+      # it was still using build files from Node 10 when building SQLite which
+      # was making it fail. Might be ok to re-enable later on, although it doesn't
+      # make build that much faster.
+      #
+      # env:
+      #   - ELECTRON_CACHE=$HOME/.cache/electron
+      #   - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
     - os: linux
       sudo: required
       dist: trusty
       language: node_js
-      node_js: "10"
-      env:
-        - ELECTRON_CACHE=$HOME/.cache/electron
-        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+      node_js: "12"
+      cache:
+        npm: false
+      # env:
+      #   - ELECTRON_CACHE=$HOME/.cache/electron
+      #   - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
 # cache:
 #   directories:
