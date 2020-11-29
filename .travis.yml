@@ -1,5 +1,5 @@
 # Only build tags (Doesn't work - doesn't build anything)
-if: tag IS present OR type = pull_request
+if: tag IS present OR type = pull_request OR branch = dev
 
 rvm: 2.3.3
 
@@ -65,7 +65,7 @@ script:
     # Run test units.
     # Only do it for pull requests because Travis randomly fails to run them
     # and that would break the desktop release.
-    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ "$TRAVIS_BRANCH" = "dev" ]; then
       npm run test-ci
       testResult=$?
       if [ $testResult -ne 0 ]; then
