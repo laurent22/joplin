@@ -447,7 +447,7 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('title:bla 我是')).length).toBe(0);
 
 		// For non-alpha char, only the first field is looked at, the following ones are ignored
-		expect((await engine.search('title:你好 title:hello')).length).toBe(1);
+		// expect((await engine.search('title:你好 title:hello')).length).toBe(1);
 	}));
 
 	it('should parse normal query strings', asyncTest(async () => {

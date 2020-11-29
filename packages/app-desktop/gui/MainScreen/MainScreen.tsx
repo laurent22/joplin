@@ -30,6 +30,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import validateLayout from '../ResizableLayout/utils/validateLayout';
 import iterateItems from '../ResizableLayout/utils/iterateItems';
 import removeItem from '../ResizableLayout/utils/removeItem';
+import Logger from '@joplin/lib/Logger';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -37,6 +38,8 @@ const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const EncryptionService = require('@joplin/lib/services/EncryptionService');
 const ipcRenderer = require('electron').ipcRenderer;
+
+const logger = Logger.create('MainScreen');
 
 interface LayerModalState {
 	visible: boolean;
@@ -564,6 +567,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	userWebview_message(event: any) {
+		logger.debug('Got message (WebView => Plugin) (2)', event);
 		PluginService.instance().pluginById(event.pluginId).viewController(event.viewId).emitMessage(event);
 	}
 

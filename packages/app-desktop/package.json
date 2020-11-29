@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "1.4.12",
+  "version": "1.4.18",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -12,7 +12,7 @@
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools",
     "test": "jest",
-    "test-ci": "test"
+    "test-ci": "npm run test"
   },
   "repository": {
     "type": "git",
@@ -72,7 +72,8 @@
       "artifactName": "${productName}Portable.${ext}"
     },
     "mac": {
-      "icon": "../../Assets/macOs.icns"
+      "icon": "../../Assets/macOs.icns",
+      "target": "dmg"
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
@@ -136,7 +137,7 @@
     "md5": "^2.2.1",
     "moment": "^2.22.2",
     "node-fetch": "^1.7.3",
-    "node-notifier": "^6.0.0",
+    "node-notifier": "^8.0.0",
     "pretty-bytes": "^5.3.0",
     "re-resizable": "^6.5.4",
     "react": "16.13.1",

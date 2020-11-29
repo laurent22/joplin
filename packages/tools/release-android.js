@@ -5,20 +5,9 @@ const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
 
 const projectName = 'joplin-android';
-const rnDir = `${__dirname}/../../packages/app-mobile`;
-const rootDir = path.dirname(__dirname);
+const rootDir = path.dirname(path.dirname(__dirname));
+const rnDir = `${rootDir}/packages/app-mobile`;
 const releaseDir = `${rnDir}/dist`;
-
-// function wslToWinPath(wslPath) {
-// 	const s = wslPath.split('/');
-// 	if (s.length < 3) return s.join('\\');
-// 	s.splice(0, 1);
-// 	if (s[0] !== 'mnt' || s[1].length !== 1) return s.join('\\');
-// 	s.splice(0, 1);
-// 	s[0] = `${s[0].toUpperCase()}:`;
-// 	while (s.length && !s[s.length - 1]) s.pop();
-// 	return s.join('\\');
-// }
 
 function increaseGradleVersionCode(content) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode) {
@@ -128,11 +117,11 @@ async function createRelease(name, tagName, version) {
 	await fs.mkdirp(releaseDir);
 
 	console.info(`Copying APK to ${apkFilePath}`);
-	await fs.copy('app-mobile/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
+	await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, apkFilePath);
 
 	if (name === 'main') {
 		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
-		await fs.copy('app-mobile/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
+		await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (const filename in originalContents) {
@@ -170,10 +159,10 @@ async function main() {
 	if (!isPreRelease) {
 		console.info('Updating Readme URL...');
 
-		let readmeContent = await fs.readFile('README.md', 'utf8');
+		let readmeContent = await fs.readFile(`${rootDir}/README.md`, 'utf8');
 		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, releaseFiles['main'].downloadUrl);
 		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, releaseFiles['32bit'].downloadUrl);
-		await fs.writeFile('README.md', readmeContent);
+		await fs.writeFile(`${rootDir}/README.md`, readmeContent);
 	}
 
 	await execCommandVerbose('git', ['pull']);

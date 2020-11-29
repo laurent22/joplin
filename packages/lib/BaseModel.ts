@@ -255,14 +255,6 @@ class BaseModel {
 		if (!options) options = {};
 
 		if (options.order && options.order.length) {
-			// const items = [];
-			// for (let i = 0; i < options.order.length; i++) {
-			// 	const o = options.order[i];
-			// 	let item = `\`${o.by}\``;
-			// 	if (options.caseInsensitive === true) item += ' COLLATE NOCASE';
-			// 	if (o.dir) item += ` ${o.dir}`;
-			// 	items.push(item);
-			// }
 			sql += ` ORDER BY ${paginationToSql(options)}`;
 		}
 
