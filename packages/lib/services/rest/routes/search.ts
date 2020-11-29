@@ -10,6 +10,8 @@ const SearchEngineUtils = require('../../searchengine/SearchEngineUtils');
 export default async function(request: Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
 
+	console.info('REQUEST', request);
+
 	const query = request.query.query;
 	if (!query) throw new ErrorBadRequest('Missing "query" parameter');
 
