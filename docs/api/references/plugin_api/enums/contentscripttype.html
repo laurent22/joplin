@@ -86,6 +86,41 @@
 					<div class="tsd-signature tsd-kind-icon">Code<wbr>Mirror<wbr>Plugin<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;codeMirrorPlugin&quot;</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Registers a new CodeMirror plugin, which should follow the template below.</p>
+						</div>
+						<pre><code class="language-javascript"><span class="hljs-built_in">module</span>.exports = {
+    <span class="hljs-attr">default</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-attr">plugin</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">CodeMirror</span>) </span>{
+                <span class="hljs-comment">// ...</span>
+            },
+            <span class="hljs-attr">codeMirrorResources</span>: [],
+            <span class="hljs-attr">codeMirrorOptions</span>: {
+                                    <span class="hljs-comment">// ...</span>
+                         },
+            <span class="hljs-attr">assets</span>: {
+                <span class="hljs-comment">// ...</span>
+            },
+        }
+    }
+}</code></pre>
+						<ul>
+							<li><p>The <code>context</code> argument is currently unused but could be used later on to provide access to your own plugin so that the content script and plugin can communicate.</p>
+							</li>
+							<li><p>The <code>plugin</code> key is your CodeMirror plugin. This is where you can register new commands with CodeMirror or interact with the CodeMirror instance as needed.</p>
+							</li>
+							<li><p>The <code>codeMirrorResources</code> key is an array of CodeMirror resources that will be loaded and attached to the CodeMirror module. These are made up of addons, keymaps, and modes. For example, for a plugin that want&#39;s to enable clojure highlighting in code blocks. <code>codeMirrorResources</code> would be set to <code>[&#39;mode/clojure/clojure&#39;]</code>.</p>
+							</li>
+							<li><p>The <code>codeMirrorOptions</code> key contains all the <a href="https://codemirror.net/doc/manual.html#config">CodeMirror</a> options that will be set or changed by this plugin. New options can alse be declared via <a href="https://codemirror.net/doc/manual.html#defineOption"><code>CodeMirror.defineOption</code></a>, and then have their value set here. For example, a plugin that enables line numbers would set <code>codeMirrorOptions</code> to <code>{&#39;lineNumbers&#39;: true}</code>.</p>
+							</li>
+							<li><p>Using the <strong>optional</strong> <code>assets</code> key you may specify <strong>only</strong> CSS assets that should be loaded in the rendered HTML document. Check for example the Joplin <a href="https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml/rules/mermaid.ts">Mermaid plugin</a> to see how the data should be structured.</p>
+							</li>
+						</ul>
+						<p>One of the <code>plugin</code>, <code>codeMirrorResources</code>, or <code>codeMirrorOptions</code> keys must be provided for the plugin to be valid. Having multiple or all provided is also okay.</p>
+						<p>See the <a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script">demo plugin</a> for an example of all these keys being used in one plugin.</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
 					<a name="markdownitplugin" class="tsd-anchor"></a>
