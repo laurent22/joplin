@@ -962,7 +962,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem'];
 
-			if (changeCommands.includes(c) || c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
+			if (
+				changeCommands.includes(c) ||
+				c.indexOf('Insert') === 0 ||
+				c.indexOf('mceToggle') === 0 ||
+				c.indexOf('mceInsert') === 0 ||
+				c.indexOf('mceTable') === 0
+			) {
 				onChangeHandler();
 			}
 		}
