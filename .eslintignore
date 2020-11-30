@@ -1106,6 +1106,9 @@ packages/lib/services/plugins/api/JoplinViewsToolbarButtons.js.map
 packages/lib/services/plugins/api/JoplinWorkspace.d.ts
 packages/lib/services/plugins/api/JoplinWorkspace.js
 packages/lib/services/plugins/api/JoplinWorkspace.js.map
+packages/lib/services/plugins/api/JoplinWorkspace.test.d.ts
+packages/lib/services/plugins/api/JoplinWorkspace.test.js
+packages/lib/services/plugins/api/JoplinWorkspace.test.js.map
 packages/lib/services/plugins/api/types.d.ts
 packages/lib/services/plugins/api/types.js
 packages/lib/services/plugins/api/types.js.map
@@ -1124,6 +1127,9 @@ packages/lib/services/plugins/utils/executeSandboxCall.js.map
 packages/lib/services/plugins/utils/loadContentScripts.d.ts
 packages/lib/services/plugins/utils/loadContentScripts.js
 packages/lib/services/plugins/utils/loadContentScripts.js.map
+packages/lib/services/plugins/utils/makeListener.d.ts
+packages/lib/services/plugins/utils/makeListener.js
+packages/lib/services/plugins/utils/makeListener.js.map
 packages/lib/services/plugins/utils/manifestFromObject.d.ts
 packages/lib/services/plugins/utils/manifestFromObject.js
 packages/lib/services/plugins/utils/manifestFromObject.js.map

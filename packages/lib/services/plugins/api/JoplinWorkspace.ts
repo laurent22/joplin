@@ -1,9 +1,25 @@
+import { ModelType } from '../../../BaseModel';
 import eventManager from '../../../eventManager';
+import makeListener from '../utils/makeListener';
+import { Disposable } from './types';
 
 /**
  * @ignore
  */
 const Note = require('../../../models/Note');
+
+enum ItemChangeEventType {
+	Create = 1,
+	Update = 2,
+	Delete = 3,
+}
+
+interface ItemChangeEvent {
+	id: string;
+	event: ItemChangeEventType;
+}
+
+type ItemChangeHandler = (event:ItemChangeEvent) => void;
 
 /**
  * The workspace service provides access to all the parts of Joplin that are being worked on - i.e. the currently selected notes or notebooks as well
@@ -31,9 +47,24 @@ export default class JoplinWorkspace {
 
 	/**
 	 * Called when the content of a note changes.
+	 * @deprecated Use `onNoteChange()` instead, which is reliably triggered whenever the note content, or any note property changes.
 	 */
 	async onNoteContentChange(callback: Function) {
 		eventManager.on('noteContentChange', callback);
+	}
+
+	/**
+	 * Called when the content of a note changes.
+	 */
+	async onNoteChange(handler:ItemChangeHandler):Promise<Disposable> {
+		return makeListener(eventManager, 'itemName', (event:any) => {
+			if (event.itemType !== ModelType.Note) return;
+			
+			handler({
+				id: event.itemId,
+				event: event.eventType,
+			});
+		});
 	}
 
 	/**

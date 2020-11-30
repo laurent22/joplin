@@ -1,8 +1,8 @@
 {
   "name": "@joplin/lib",
   "version": "1.0.9",
-  "description": "> TODO: description",
-  "author": "Laurent Cozic <laurent@cozic.net>",
+  "description": "Joplin Core library",
+  "author": "Laurent Cozic",
   "homepage": "",
   "license": "ISC",
   "publishConfig": {
@@ -11,9 +11,13 @@
   "scripts": {
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
-    "generatePluginTypes": "rm -rf ./plugin_types && node node_modules/typescript/bin/tsc --declaration --declarationDir ./plugin_types --project tsconfig.json"
+    "generatePluginTypes": "rm -rf ./plugin_types && node node_modules/typescript/bin/tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
+    "test": "jest",
+    "test-ci": "npm run test"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.15",
+    "jest": "^26.6.3",
     "@types/node": "^14.14.6",
     "typescript": "^4.0.5"
   },

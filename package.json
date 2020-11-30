@@ -37,7 +37,8 @@
     "tsc": "lerna run tsc --stream --parallel",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
-    "watch": "lerna run watch --stream --parallel"
+    "watch": "lerna run watch --stream --parallel",
+    "i": "lerna add --no-bootstrap --scope"
   },
   "husky": {
     "hooks": {
