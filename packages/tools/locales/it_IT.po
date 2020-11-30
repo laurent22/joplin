@@ -2929,7 +2929,7 @@ msgstr "Sincronizzazione"
 
 #: ReactNativeClient/lib/models/Setting.js:1294
 msgid "Appearance"
-msgstr "Apparenza"
+msgstr "Aspetto"
 
 #: ReactNativeClient/lib/models/Setting.js:1296
 msgid "Note"
