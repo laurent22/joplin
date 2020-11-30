@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -856,7 +858,6 @@ msgid "Goto Anything..."
 msgstr "Gehe zu ..."
 
 #: ElectronClient/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -864,7 +865,7 @@ msgid ""
 msgstr ""
 "Gib den Titel einer Notiz oder einen Teil seines Inhalts ein, um dorthin zu "
 "springen. Oder gib # gefolgt von einem Schlagwort oder @ gefolgt vom Namen "
-"eines Notizbuchs ein."
+"eines Notizbuchs ein. Oder gib : für eine Suche nach Kommandos ein."
 
 #: ElectronClient/plugins/GotoAnything.js:463
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
@@ -1199,7 +1200,7 @@ msgstr "Code-Ansicht"
 
 # Depending on the word that is used in %s, the preposition is either 'auf' or 'zu'.
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1036
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -1387,9 +1388,9 @@ msgstr "Notiz-Eigenschaften"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: ReactNativeClient/lib/services/KeymapService.js:144
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Fehler"
+msgstr "Fehler: %s"
 
 #: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: ElectronClient/gui/Root.min.js:91 ElectronClient/gui/MenuBar.js:391
@@ -1594,7 +1595,6 @@ msgid "Toggle editor layout"
 msgstr "Editor-Layout umschalten"
 
 #: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
 msgstr "Editor-Layout umschalten"
 
@@ -2304,9 +2304,8 @@ msgstr[0] "Teilbaren Link kopieren"
 msgstr[1] "Teilbare Links kopieren"
 
 #: ElectronClient/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "Externe Bearbeitung stoppen"
+msgstr "Externe Bearbeitung ein/ausschalten"
 
 #: ElectronClient/commands/toggleExternalEditing.js:37
 msgid "Stop"
@@ -2525,9 +2524,8 @@ msgid "AWS S3 bucket"
 msgstr "Amazon S3-Bucket"
 
 #: ReactNativeClient/lib/models/Setting.js:226
-#, fuzzy
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "AWS S3 URL"
 
 #: ReactNativeClient/lib/models/Setting.js:237
 msgid "AWS key"
@@ -3552,11 +3550,14 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Um den Standort zu der Notiz zuzuordnen, benötigt die Anwendung die "
+"Berechtigung zum Zugriff auf die Ortungsdaten.\n"
+"\n"
+"Diese Option kann jederzeit im Konfigurationsbildschirm deaktiviert werden."
 
 #: ReactNativeClient/lib/components/screens/Note.js:341
-#, fuzzy
 msgid "Permission needed"
-msgstr "Berechtigung zur Verwendung der Kamera"
+msgstr "Berechtigung benötigt"
 
 #: ReactNativeClient/lib/components/screens/Note.js:583
 #, javascript-format
@@ -3797,7 +3798,7 @@ msgstr ""
 "werden"
 
 #: ReactNativeClient/lib/services/interop/InteropService.js:152
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
 "Das Modul „%s“ für das Format „%s“ und die Ausgabe „%s“ kann nicht geladen "
@@ -3809,7 +3810,6 @@ msgid "Please specify import format for %s"
 msgstr "Bitte das Exportformat für %s angeben"
 
 #: ReactNativeClient/lib/services/KeymapService.js:240
-#, fuzzy
 msgid "command"
 msgstr "Befehl"
 
