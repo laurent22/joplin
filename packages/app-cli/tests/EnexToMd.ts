@@ -4,7 +4,7 @@ import shim from '@joplin/lib/shim';
 const fs = require('fs-extra');
 const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
-const { setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, expectNotThrow } = require('./test-utils.js');
 const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 const { importEnex } = require('@joplin/lib/import-enex');
 const Note = require('@joplin/lib/models/Note');
@@ -94,6 +94,23 @@ describe('EnexToMd', function() {
 		const note: NoteEntity = (await Note.all())[0];
 		expect(note.created_time).toBe(1521822724000); // 20180323T163204Z
 		expect(note.updated_time).toBe(1521822724000); // Because this date was invalid, it is set to the created time instead
+	});
+
+	it('should handle empty resources', async () => {
+		const filePath = `${enexSampleBaseDir}/empty_resource.enex`;
+		await expectNotThrow(() => importEnex('', filePath));
+		const all = await Resource.all();
+		expect(all.length).toBe(1);
+		expect(all[0].size).toBe(0);
+	});
+
+	it('should handle empty note content', async () => {
+		const filePath = `${enexSampleBaseDir}/empty_content.enex`;
+		await expectNotThrow(() => importEnex('', filePath));
+		const all = await Note.all();
+		expect(all.length).toBe(1);
+		expect(all[0].title).toBe('China and the case for stimulus.');
+		expect(all[0].body).toBe('');
 	});
 
 });
