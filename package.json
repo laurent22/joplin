@@ -59,8 +59,5 @@
     "lint-staged": "^9.2.1",
     "typedoc": "^0.17.8",
     "typescript": "^4.0.5"
-  },
-  "dependencies": {
-    "node-gyp": "^7.1.2"
   }
 }
