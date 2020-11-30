@@ -179,7 +179,7 @@ class Note extends BaseItem {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
-		this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
+		this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry);
 
 		for (const basePath of pathsToTry) {
 			const reStrings = [
@@ -200,7 +200,7 @@ class Note extends BaseItem {
 			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
 
-		this.logger().debug('replaceResourceExternalToInternalLinks result', body);
+		// this.logger().debug('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
 	}
