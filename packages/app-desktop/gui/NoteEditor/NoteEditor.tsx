@@ -51,7 +51,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions>(null);
-	const [tagList, setTagList] = useState<any>([]);
+	const [tags, setTags] = useState<any>([]);
 
 	const editorRef = useRef<any>();
 	const titleInputRef = useRef<any>();
@@ -65,16 +65,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const formNote_afterLoad = useCallback(async () => {
 		setTitleHasBeenManuallyChanged(false);
-
-		// dynamically load the tag by current id
-		await Tag.tagsByNoteId(props.selectedNoteIds)
-			.then((result: any) => {
-				const tagList = React.createElement(TagList, { items: result });
-				// console.log(tagList)
-				setTagList(tagList);
-			});
-
-	}, [props.selectedNoteIds]);
+	}, []);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
@@ -374,9 +365,18 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderTagBar() {
+		// dynamically load the tag by current id
+		Tag.tagsByNoteId(props.selectedNoteIds).then(
+			(result: any) => {
+				if (JSON.stringify(tags) !== JSON.stringify(result)) {
+					setTags(result);
+				}
+			});
+
 		const theme = themeStyle(props.themeId);
 		const noteIds = [formNote.id];
 		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
+		const tagList = React.createElement(TagList, { items: tags });
 		return (
 			<div style={{ paddingLeft: 8, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>{tagList}{instructions}</div>
 		);
