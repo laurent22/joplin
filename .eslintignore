@@ -74,6 +74,12 @@ packages/app-cli/tests/InMemoryCache.js.map
 packages/app-cli/tests/MdToHtml.d.ts
 packages/app-cli/tests/MdToHtml.js
 packages/app-cli/tests/MdToHtml.js.map
+packages/app-cli/tests/Synchronizer.basics.d.ts
+packages/app-cli/tests/Synchronizer.basics.js
+packages/app-cli/tests/Synchronizer.basics.js.map
+packages/app-cli/tests/Synchronizer.conflicts.d.ts
+packages/app-cli/tests/Synchronizer.conflicts.js
+packages/app-cli/tests/Synchronizer.conflicts.js.map
 packages/app-cli/tests/Synchronizer.d.ts
 packages/app-cli/tests/Synchronizer.js
 packages/app-cli/tests/Synchronizer.js.map
@@ -245,6 +251,9 @@ packages/app-cli/tests/synchronizer_LockHandler.js.map
 packages/app-cli/tests/synchronizer_MigrationHandler.d.ts
 packages/app-cli/tests/synchronizer_MigrationHandler.js
 packages/app-cli/tests/synchronizer_MigrationHandler.js.map
+packages/app-cli/tests/test-utils-synchronizer.d.ts
+packages/app-cli/tests/test-utils-synchronizer.js
+packages/app-cli/tests/test-utils-synchronizer.js.map
 packages/app-desktop/ElectronAppWrapper.d.ts
 packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/ElectronAppWrapper.js.map
