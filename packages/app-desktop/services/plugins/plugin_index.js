@@ -3,6 +3,15 @@
 	const sandboxProxy = require('../../node_modules/@joplin/lib/services/plugins/sandboxProxy.js').default;
 	const ipcRenderer = require('electron').ipcRenderer;
 
+	const ipcRendererSend = (message, args) => {
+		try {
+			return ipcRenderer.send(message, args);
+		} catch (error) {
+			console.error('Could not send IPC message:', message, ': ', args, error);
+			throw error;
+		}
+	};
+
 	const urlParams = new URLSearchParams(window.location.search);
 	const pluginId = urlParams.get('pluginId');
 
@@ -42,7 +51,7 @@
 			callbackPromises[callbackId] = { resolve, reject };
 		});
 
-		ipcRenderer.send('pluginMessage', {
+		ipcRendererSend('pluginMessage', {
 			target: 'mainWindow',
 			pluginId: pluginId,
 			callbackId: callbackId,
@@ -71,7 +80,7 @@
 			}
 
 			if (message.callbackId) {
-				ipcRenderer.send('pluginMessage', {
+				ipcRendererSend('pluginMessage', {
 					target: 'mainWindow',
 					pluginId: pluginId,
 					mainWindowCallbackId: message.callbackId,

@@ -190,7 +190,7 @@ export interface Script {
 }
 
 export interface Disposable {
-	dispose():void;
+	// dispose():void;
 }
 
 // =================================================================
