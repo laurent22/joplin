@@ -52,6 +52,13 @@ let previousSyncTargetName: string = '';
 describe('synchronizer_MigrationHandler', function() {
 
 	beforeEach(async (done: Function) => {
+		// Note that, for undocumented reasons, the timeout argument passed
+		// to `test()` (or `it()`) is ignored if it is higher than the
+		// global Jest timeout. So we need to set it globally.
+		//
+		// https://github.com/facebook/jest/issues/5055#issuecomment-513585906
+		jest.setTimeout(specTimeout)
+
 		// To test the migrations, we have to use the filesystem sync target
 		// because the sync target snapshots are plain files. Eventually
 		// it should be possible to copy a filesystem target to memory
