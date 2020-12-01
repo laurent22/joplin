@@ -4,17 +4,13 @@
 const os = require('os');
 const time = require('@joplin/lib/time').default;
 const { filename } = require('@joplin/lib/path-utils');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const shim = require('@joplin/lib/shim').default;
 const HtmlToMd = require('@joplin/lib/HtmlToMd');
 const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('HtmlToMd', function() {
 
@@ -24,7 +20,7 @@ describe('HtmlToMd', function() {
 		done();
 	});
 
-	it('should convert from Html to Markdown', asyncTest(async () => {
+	it('should convert from Html to Markdown', (async () => {
 		const basePath = `${__dirname}/html_to_md`;
 		const files = await shim.fsDriver().readDirStats(basePath);
 		const htmlToMd = new HtmlToMd();

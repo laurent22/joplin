@@ -3,17 +3,13 @@ import { CustomExportContext, CustomImportContext, Module, ModuleType } from '@j
 import shim from '@joplin/lib/shim';
 
 
-const { asyncTest, fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const Tag = require('@joplin/lib/models/Tag.js');
 const Resource = require('@joplin/lib/models/Resource.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('@joplin/lib/ArrayUtils');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at services_InteropService: Promise', p, 'reason:', reason);
-});
 
 function exportDir() {
 	return `${__dirname}/export`;
@@ -41,7 +37,7 @@ describe('services_InteropService', function() {
 		done();
 	});
 
-	it('should export and import folders', asyncTest(async () => {
+	it('should export and import folders', (async () => {
 		const service = InteropService.instance();
 		let folder1 = await Folder.save({ title: 'folder1' });
 		folder1 = await Folder.load(folder1.id);
@@ -76,7 +72,7 @@ describe('services_InteropService', function() {
 		fieldsEqual(folder3, folder1, fieldNames);
 	}));
 
-	it('should import folders and de-duplicate titles when needed', asyncTest(async () => {
+	it('should import folders and de-duplicate titles when needed', (async () => {
 		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder' });
 		const folder2 = await Folder.save({ title: 'folder' });
@@ -92,7 +88,7 @@ describe('services_InteropService', function() {
 		expect(allFolders.map((f: any) => f.title).sort().join(' - ')).toBe('folder - folder (1)');
 	}));
 
-	it('should import folders, and only de-duplicate titles when needed', asyncTest(async () => {
+	it('should import folders, and only de-duplicate titles when needed', (async () => {
 		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
@@ -115,7 +111,7 @@ describe('services_InteropService', function() {
 		expect(importedSub2.title).toBe('Sub');
 	}));
 
-	it('should export and import folders and notes', asyncTest(async () => {
+	it('should export and import folders and notes', (async () => {
 		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -154,7 +150,7 @@ describe('services_InteropService', function() {
 		fieldsEqual(note2, note3, fieldNames);
 	}));
 
-	it('should export and import notes to specific folder', asyncTest(async () => {
+	it('should export and import notes to specific folder', (async () => {
 		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -173,7 +169,7 @@ describe('services_InteropService', function() {
 		expect(await checkThrowAsync(async () => await service.import({ path: filePath, destinationFolderId: 'oops' }))).toBe(true);
 	}));
 
-	it('should export and import tags', asyncTest(async () => {
+	it('should export and import tags', (async () => {
 		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -213,7 +209,7 @@ describe('services_InteropService', function() {
 		expect(noteIds.length).toBe(2);
 	}));
 
-	it('should export and import resources', asyncTest(async () => {
+	it('should export and import resources', (async () => {
 		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -249,7 +245,7 @@ describe('services_InteropService', function() {
 		expect(fileContentEqual(resourcePath1, resourcePath2)).toBe(true);
 	}));
 
-	it('should export and import single notes', asyncTest(async () => {
+	it('should export and import single notes', (async () => {
 		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -269,7 +265,7 @@ describe('services_InteropService', function() {
 		expect(folder2.title).toBe('test');
 	}));
 
-	it('should export and import single folders', asyncTest(async () => {
+	it('should export and import single folders', (async () => {
 		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -289,7 +285,7 @@ describe('services_InteropService', function() {
 		expect(folder2.title).toBe('folder1');
 	}));
 
-	it('should export and import folder and its sub-folders', asyncTest(async () => {
+	it('should export and import folder and its sub-folders', (async () => {
 
 		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
@@ -324,7 +320,7 @@ describe('services_InteropService', function() {
 		expect(note1_2.parent_id).toBe(folder4_2.id);
 	}));
 
-	it('should export and import links to notes', asyncTest(async () => {
+	it('should export and import links to notes', (async () => {
 		const service = InteropService.instance();
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -348,7 +344,7 @@ describe('services_InteropService', function() {
 		expect(note2_2.body.indexOf(note1_2.id) >= 0).toBe(true);
 	}));
 
-	it('should export selected notes in md format', asyncTest(async () => {
+	it('should export selected notes in md format', (async () => {
 		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note11 = await Note.save({ title: 'title note11', parent_id: folder1.id });
@@ -377,7 +373,7 @@ describe('services_InteropService', function() {
 		expect(await shim.fsDriver().exists(`${outDir}/folder3`)).toBe(false);
 	}));
 
-	it('should export MD with unicode filenames', asyncTest(async () => {
+	it('should export MD with unicode filenames', (async () => {
 		const service = InteropService.instance();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'ジョプリン' });
@@ -402,7 +398,7 @@ describe('services_InteropService', function() {
 		expect(await shim.fsDriver().exists(`${outDir}/ジョプリン/ジョプリン.md`)).toBe(true);
 	}));
 
-	it('should export a notebook as MD', asyncTest(async () => {
+	it('should export a notebook as MD', (async () => {
 		const folder1 = await Folder.save({ title: 'testexportfolder' });
 		await Note.save({ title: 'textexportnote1', parent_id: folder1.id });
 		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
@@ -419,7 +415,7 @@ describe('services_InteropService', function() {
 		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
 	}));
 
-	it('should export conflict notes', asyncTest(async () => {
+	it('should export conflict notes', (async () => {
 		const folder1 = await Folder.save({ title: 'testexportfolder' });
 		await Note.save({ title: 'textexportnote1', parent_id: folder1.id, is_conflict: 1 });
 		await Note.save({ title: 'textexportnote2', parent_id: folder1.id });
@@ -449,7 +445,7 @@ describe('services_InteropService', function() {
 		expect(await shim.fsDriver().exists(`${exportDir()}/testexportfolder/textexportnote2.md`)).toBe(true);
 	}));
 
-	it('should not try to export folders with a non-existing parent', asyncTest(async () => {
+	it('should not try to export folders with a non-existing parent', (async () => {
 		// Handles and edge case where user has a folder but this folder with a parent
 		// that doesn't exist. Can happen for example in this case:
 		//
@@ -471,7 +467,7 @@ describe('services_InteropService', function() {
 		expect(result.warnings.length).toBe(0);
 	}));
 
-	it('should allow registering new import modules', asyncTest(async () => {
+	it('should allow registering new import modules', (async () => {
 		const testImportFilePath = `${exportDir()}/testImport${Math.random()}.test`;
 		await shim.fsDriver().writeFile(testImportFilePath, 'test', 'utf8');
 
@@ -504,7 +500,7 @@ describe('services_InteropService', function() {
 		expect(result.sourcePath).toBe(testImportFilePath);
 	}));
 
-	it('should allow registering new export modules', asyncTest(async () => {
+	it('should allow registering new export modules', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		await Note.save({ title: 'note2', parent_id: folder1.id });

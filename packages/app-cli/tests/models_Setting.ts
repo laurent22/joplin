@@ -1,10 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at models_Setting: Promise', p, 'reason:', reason);
-});
+const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
 describe('models_Setting', function() {
 
@@ -14,7 +10,7 @@ describe('models_Setting', function() {
 		done();
 	});
 
-	it('should return only sub-values', asyncTest(async () => {
+	it('should return only sub-values', (async () => {
 		const settings = {
 			'sync.5.path': 'http://example.com',
 			'sync.5.username': 'testing',
@@ -29,7 +25,7 @@ describe('models_Setting', function() {
 		expect('username' in output).toBe(false);
 	}));
 
-	it('should allow registering new settings dynamically', asyncTest(async () => {
+	it('should allow registering new settings dynamically', (async () => {
 		await expectThrow(async () => Setting.setValue('myCustom', '123'));
 
 		await Setting.registerSetting('myCustom', {
@@ -43,7 +39,7 @@ describe('models_Setting', function() {
 		expect(Setting.value('myCustom')).toBe('123');
 	}));
 
-	it('should not clear old custom settings', asyncTest(async () => {
+	it('should not clear old custom settings', (async () => {
 		// In general the following should work:
 		//
 		// - Plugin register a new setting
@@ -85,7 +81,7 @@ describe('models_Setting', function() {
 		expect(Setting.value('myCustom')).toBe('123');
 	}));
 
-	it('should return values with correct type for custom settings', asyncTest(async () => {
+	it('should return values with correct type for custom settings', (async () => {
 		await Setting.registerSetting('myCustom', {
 			public: true,
 			value: 123,
@@ -108,7 +104,7 @@ describe('models_Setting', function() {
 		expect(Setting.value('myCustom')).toBe(456);
 	}));
 
-	it('should validate registered keys', asyncTest(async () => {
+	it('should validate registered keys', (async () => {
 		const md = {
 			public: true,
 			value: 'default',
@@ -124,7 +120,7 @@ describe('models_Setting', function() {
 		await expectNotThrow(async () => await Setting.registerSetting('so-ARE-dashes_123', md));
 	}));
 
-	it('should register new sections', asyncTest(async () => {
+	it('should register new sections', (async () => {
 		await Setting.registerSection('mySection', {
 			label: 'My section',
 		});

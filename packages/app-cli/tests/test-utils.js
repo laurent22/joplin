@@ -139,7 +139,7 @@ setSyncTargetName('memory');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
-const syncDir = `${__dirname}/../tests/sync`;
+const syncDir = `${__dirname}/../tests/sync/${suiteName_}`;
 
 // TODO: Should probably update this for Jest?
 
@@ -559,27 +559,6 @@ function fileContentEqual(path1, path2) {
 	return content1 === content2;
 }
 
-// Wrap an async test in a try/catch block so that done() is always called
-// and display a proper error message instead of "unhandled promise error"
-function asyncTest(callback) {
-	return async function(done) {
-		try {
-			await callback();
-		} catch (error) {
-			if (error.constructor && error.constructor.name === 'ExpectationFailed') {
-				// OK - will be reported by Jest
-			} else {
-				// Better to rethrow exception as stack trace is more useful in this case
-				throw error;
-				// console.error(error);
-				// expect(0).toBe(1, 'Test has thrown an exception - see above error');
-			}
-		} finally {
-			done();
-		}
-	};
-}
-
 async function allSyncTargetItemsEncrypted() {
 	const list = await fileApi().list('', { includeDirs: false });
 	const files = list.items;
@@ -792,4 +771,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

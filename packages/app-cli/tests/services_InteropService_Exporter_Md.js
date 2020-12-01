@@ -2,7 +2,7 @@
 
 
 const fs = require('fs-extra');
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
 const InteropService_Exporter_Md = require('@joplin/lib/services/interop/InteropService_Exporter_Md').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const Folder = require('@joplin/lib/models/Folder.js');
@@ -11,10 +11,6 @@ const Note = require('@joplin/lib/models/Note.js');
 const shim = require('@joplin/lib/shim').default;
 
 const exportDir = `${__dirname}/export`;
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('services_InteropService_Exporter_Md', function() {
 
@@ -27,14 +23,14 @@ describe('services_InteropService_Exporter_Md', function() {
 		done();
 	});
 
-	it('should create resources directory', asyncTest(async () => {
+	it('should create resources directory', (async () => {
 		const service = new InteropService_Exporter_Md();
 		await service.init(exportDir);
 
 		expect(await shim.fsDriver().exists(`${exportDir}/_resources/`)).toBe(true);
 	}));
 
-	it('should create note paths and add them to context', asyncTest(async () => {
+	it('should create note paths and add them to context', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 
@@ -76,7 +72,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(exporter.context().notePaths[note3.id]).toBe('folder2/note3.md');
 	}));
 
-	it('should handle duplicate note names', asyncTest(async () => {
+	it('should handle duplicate note names', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 
@@ -103,7 +99,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(exporter.context().notePaths[note1_2.id]).toBe('folder1/note1 (1).md');
 	}));
 
-	it('should not override existing files', asyncTest(async () => {
+	it('should not override existing files', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 
@@ -130,7 +126,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(exporter.context().notePaths[note1.id]).toBe('folder1/note1 (1).md');
 	}));
 
-	it('should save resource files in _resource directory', asyncTest(async () => {
+	it('should save resource files in _resource directory', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 
@@ -167,7 +163,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(await shim.fsDriver().exists(`${exportDir}/_resources/${Resource.filename(resource2)}`)).toBe(true, 'Resource file should be copied to _resources directory.');
 	}));
 
-	it('should create folders in fs', asyncTest(async () => {
+	it('should create folders in fs', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 
@@ -198,7 +194,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(await shim.fsDriver().exists(`${exportDir}/folder1/folder3`)).toBe(true, 'Folder should be created in filesystem.');
 	}));
 
-	it('should save notes in fs', asyncTest(async () => {
+	it('should save notes in fs', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 
@@ -235,7 +231,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(await shim.fsDriver().exists(`${exportDir}/${exporter.context().notePaths[note3.id]}`)).toBe(true, 'File should be saved in filesystem.');
 	}));
 
-	it('should replace resource ids with relative paths', asyncTest(async () => {
+	it('should replace resource ids with relative paths', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 
@@ -280,7 +276,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(note2_body).toContain('](../../_resources/resource2.jpg)', 'Resource id should be replaced with a relative path.');
 	}));
 
-	it('should replace note ids with relative paths', asyncTest(async () => {
+	it('should replace note ids with relative paths', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 
@@ -332,7 +328,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(note3_body).toContain('](../folder1/folder2/note2.md)', 'Resource id should be replaced with a relative path.');
 	}));
 
-	it('should url encode relative note links', asyncTest(async () => {
+	it('should url encode relative note links', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
 

@@ -3,7 +3,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('./test-utils.js');
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
 const Note = require('@joplin/lib/models/Note');
 const Folder = require('@joplin/lib/models/Folder');
@@ -14,10 +14,6 @@ const Resource = require('@joplin/lib/models/Resource.js');
 const shim = require('@joplin/lib/shim').default;
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at services_SearchFilter: Promise', p, 'reason:', reason);
-});
 
 let engine = null;
 
@@ -35,7 +31,7 @@ describe('services_SearchFilter', function() {
 	});
 
 
-	it('should return note matching title', asyncTest(async () => {
+	it('should return note matching title', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'body 1' });
 		const n2 = await Note.save({ title: 'efgh', body: 'body 2' });
@@ -47,7 +43,7 @@ describe('services_SearchFilter', function() {
 		expect(rows[0].id).toBe(n1.id);
 	}));
 
-	it('should return note matching negated title', asyncTest(async () => {
+	it('should return note matching negated title', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'body 1' });
 		const n2 = await Note.save({ title: 'efgh', body: 'body 2' });
@@ -59,7 +55,7 @@ describe('services_SearchFilter', function() {
 		expect(rows[0].id).toBe(n2.id);
 	}));
 
-	it('should return note matching body', asyncTest(async () => {
+	it('should return note matching body', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'body1' });
 		const n2 = await Note.save({ title: 'efgh', body: 'body2' });
@@ -71,7 +67,7 @@ describe('services_SearchFilter', function() {
 		expect(rows[0].id).toBe(n1.id);
 	}));
 
-	it('should return note matching negated body', asyncTest(async () => {
+	it('should return note matching negated body', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'body1' });
 		const n2 = await Note.save({ title: 'efgh', body: 'body2' });
@@ -83,7 +79,7 @@ describe('services_SearchFilter', function() {
 		expect(rows[0].id).toBe(n2.id);
 	}));
 
-	it('should return note matching title containing multiple words', asyncTest(async () => {
+	it('should return note matching title containing multiple words', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd xyz', body: 'body1' });
 		const n2 = await Note.save({ title: 'efgh ijk', body: 'body2' });
@@ -95,7 +91,7 @@ describe('services_SearchFilter', function() {
 		expect(rows[0].id).toBe(n1.id);
 	}));
 
-	it('should return note matching body containing multiple words', asyncTest(async () => {
+	it('should return note matching body containing multiple words', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
 		const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
@@ -107,7 +103,7 @@ describe('services_SearchFilter', function() {
 		expect(rows[0].id).toBe(n2.id);
 	}));
 
-	it('should return note matching title AND body', asyncTest(async () => {
+	it('should return note matching title AND body', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
 		const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
@@ -121,7 +117,7 @@ describe('services_SearchFilter', function() {
 		expect(rows.length).toBe(0);
 	}));
 
-	it('should return note matching title OR body', asyncTest(async () => {
+	it('should return note matching title OR body', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
 		const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
@@ -136,7 +132,7 @@ describe('services_SearchFilter', function() {
 		expect(rows.length).toBe(0);
 	}));
 
-	it('should return notes matching text', asyncTest(async () => {
+	it('should return notes matching text', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'dead bar' });
 		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
@@ -162,7 +158,7 @@ describe('services_SearchFilter', function() {
 		expect(rows.length).toBe(0);
 	}));
 
-	it('should return notes matching any negated text', asyncTest(async () => {
+	it('should return notes matching any negated text', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abc', body: 'def' });
 		const n2 = await Note.save({ title: 'def', body: 'ghi' });
@@ -176,7 +172,7 @@ describe('services_SearchFilter', function() {
 		expect(rows.map(r=>r.id)).toContain(n3.id);
 	}));
 
-	it('should return notes matching any negated title', asyncTest(async () => {
+	it('should return notes matching any negated title', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abc', body: 'def' });
 		const n2 = await Note.save({ title: 'def', body: 'ghi' });
@@ -190,7 +186,7 @@ describe('services_SearchFilter', function() {
 		expect(rows.map(r=>r.id)).toContain(n3.id);
 	}));
 
-	it('should return notes matching any negated body', asyncTest(async () => {
+	it('should return notes matching any negated body', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abc', body: 'def' });
 		const n2 = await Note.save({ title: 'def', body: 'ghi' });
@@ -204,7 +200,7 @@ describe('services_SearchFilter', function() {
 		expect(rows.map(r=>r.id)).toContain(n3.id);
 	}));
 
-	it('should support phrase search', asyncTest(async () => {
+	it('should support phrase search', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
 		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
@@ -215,7 +211,7 @@ describe('services_SearchFilter', function() {
 		expect(rows[0].id).toBe(n1.id);
 	}));
 
-	it('should support prefix search', asyncTest(async () => {
+	it('should support prefix search', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
 		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
@@ -227,7 +223,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n2.id);
 	}));
 
-	it('should support filtering by tags', asyncTest(async () => {
+	it('should support filtering by tags', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'But I would', body: 'walk 500 miles' });
 		const n2 = await Note.save({ title: 'And I would', body: 'walk 500 more' });
@@ -253,7 +249,7 @@ describe('services_SearchFilter', function() {
 	}));
 
 
-	it('should support filtering by tags', asyncTest(async () => {
+	it('should support filtering by tags', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'peace talks', body: 'battle ground' });
 		const n2 = await Note.save({ title: 'mouse', body: 'mister' });
@@ -303,7 +299,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by notebook', asyncTest(async () => {
+	it('should support filtering by notebook', (async () => {
 		let rows;
 		const folder0 = await Folder.save({ title: 'notebook0' });
 		const folder1 = await Folder.save({ title: 'notebook1' });
@@ -318,7 +314,7 @@ describe('services_SearchFilter', function() {
 
 	}));
 
-	it('should support filtering by nested notebook', asyncTest(async () => {
+	it('should support filtering by nested notebook', (async () => {
 		let rows;
 		const folder0 = await Folder.save({ title: 'notebook0' });
 		const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
@@ -334,7 +330,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows).sort()).toEqual(ids(notes0.concat(notes00)).sort());
 	}));
 
-	it('should support filtering by multiple notebooks', asyncTest(async () => {
+	it('should support filtering by multiple notebooks', (async () => {
 		let rows;
 		const folder0 = await Folder.save({ title: 'notebook0' });
 		const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
@@ -352,7 +348,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows).sort()).toEqual(ids(notes0).concat(ids(notes00).concat(ids(notes1))).sort());
 	}));
 
-	it('should support filtering by created date', asyncTest(async () => {
+	it('should support filtering by created date', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this on', body: 'May 20 2020', user_created_time: Date.parse('2020-05-20') });
 		const n2 = await Note.save({ title: 'I made this on', body: 'May 19 2020', user_created_time: Date.parse('2020-05-19') });
@@ -375,7 +371,7 @@ describe('services_SearchFilter', function() {
 
 	}));
 
-	it('should support filtering by between two dates', asyncTest(async () => {
+	it('should support filtering by between two dates', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'January 01 2020', body: 'January 01 2020', user_created_time: Date.parse('2020-01-01') });
 		const n2 = await Note.save({ title: 'February 15 2020', body: 'February 15 2020', user_created_time: Date.parse('2020-02-15') });
@@ -399,7 +395,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n4.id);
 	}));
 
-	it('should support filtering by created with smart value: day', asyncTest(async () => {
+	it('should support filtering by created with smart value: day', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'today', user_created_time: parseInt(time.goBackInTime(Date.now(), 0, 'day'), 10) });
 		const n2 = await Note.save({ title: 'I made this', body: 'yesterday', user_created_time: parseInt(time.goBackInTime(Date.now(), 1, 'day'), 10) });
@@ -423,7 +419,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by created with smart value: week', asyncTest(async () => {
+	it('should support filtering by created with smart value: week', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this week', user_created_time: parseInt(time.goBackInTime(Date.now(), 0, 'week'), 10) });
 		const n2 = await Note.save({ title: 'I made this', body: 'the week before', user_created_time: parseInt(time.goBackInTime(Date.now(), 1, 'week'), 10) });
@@ -447,7 +443,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by created with smart value: month', asyncTest(async () => {
+	it('should support filtering by created with smart value: month', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this month', user_created_time: parseInt(time.goBackInTime(Date.now(), 0, 'month'), 10) });
 		const n2 = await Note.save({ title: 'I made this', body: 'the month before', user_created_time: parseInt(time.goBackInTime(Date.now(), 1, 'month'), 10) });
@@ -471,7 +467,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by created with smart value: year', asyncTest(async () => {
+	it('should support filtering by created with smart value: year', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this year', user_created_time: parseInt(time.goBackInTime(Date.now(), 0, 'year'), 10) });
 		const n2 = await Note.save({ title: 'I made this', body: 'the year before', user_created_time: parseInt(time.goBackInTime(Date.now(), 1, 'year'), 10) });
@@ -495,7 +491,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by updated date', asyncTest(async () => {
+	it('should support filtering by updated date', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I updated this on', body: 'May 20 2020', updated_time: Date.parse('2020-05-20'), user_updated_time: Date.parse('2020-05-20') }, { autoTimestamp: false });
 		const n2 = await Note.save({ title: 'I updated this on', body: 'May 19 2020', updated_time: Date.parse('2020-05-19'), user_updated_time: Date.parse('2020-05-19') }, { autoTimestamp: false });
@@ -512,7 +508,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n2.id);
 	}));
 
-	it('should support filtering by updated with smart value: day', asyncTest(async () => {
+	it('should support filtering by updated with smart value: day', (async () => {
 		let rows;
 		const today = parseInt(time.goBackInTime(Date.now(), 0, 'day'), 10);
 		const yesterday = parseInt(time.goBackInTime(Date.now(), 1, 'day'), 10);
@@ -544,7 +540,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by type todo', asyncTest(async () => {
+	it('should support filtering by type todo', (async () => {
 		let rows;
 		const t1 = await Note.save({ title: 'This is a ', body: 'todo', is_todo: 1 });
 		const t2 = await Note.save({ title: 'This is another', body: 'todo but completed', is_todo: 1, todo_completed: 1590085027710 });
@@ -571,7 +567,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(t1.id);
 	}));
 
-	it('should support filtering by type note', asyncTest(async () => {
+	it('should support filtering by type note', (async () => {
 		let rows;
 		const t1 = await Note.save({ title: 'This is a ', body: 'todo', is_todo: 1 });
 		const t2 = await Note.save({ title: 'This is another', body: 'todo but completed', is_todo: 1, todo_completed: 1590085027710 });
@@ -584,7 +580,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(t3.id);
 	}));
 
-	it('should support filtering by latitude, longitude, altitude', asyncTest(async () => {
+	it('should support filtering by latitude, longitude, altitude', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this week', latitude: 12.97, longitude: 88.88, altitude: 69.96  });
 		const n2 = await Note.save({ title: 'I made this', body: 'the week before', latitude: 42.11, longitude: 77.77, altitude: 42.00  });
@@ -631,7 +627,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
-	it('should support filtering by resource MIME type', asyncTest(async () => {
+	it('should support filtering by resource MIME type', (async () => {
 		let rows;
 		const service = new ResourceService();
 		// console.log(testImagePath)
@@ -674,7 +670,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n4.id);
 	}));
 
-	it('should ignore dashes in a word', asyncTest(async () => {
+	it('should ignore dashes in a word', (async () => {
 		const n0 = await Note.save({ title: 'doesnotwork' });
 		const n1 = await Note.save({ title: 'does not work' });
 		const n2 = await Note.save({ title: 'does-not-work' });
@@ -712,7 +708,7 @@ describe('services_SearchFilter', function() {
 
 	}));
 
-	it('should support filtering by sourceurl', asyncTest(async () => {
+	it('should support filtering by sourceurl', (async () => {
 		const n0 = await Note.save({ title: 'n0', source_url: 'https://discourse.joplinapp.org' });
 		const n1 = await Note.save({ title: 'n1', source_url: 'https://google.com' });
 		const n2 = await Note.save({ title: 'n2', source_url: 'https://reddit.com' });

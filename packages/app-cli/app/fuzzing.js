@@ -22,10 +22,6 @@ const logger = new Logger();
 logger.addTarget('console');
 logger.setLevel(Logger.LEVEL_DEBUG);
 
-process.on('unhandledRejection', (reason, p) => {
-	console.error('Unhandled promise rejection', p, 'reason:', reason);
-});
-
 function createClient(id) {
 	return {
 		id: id,

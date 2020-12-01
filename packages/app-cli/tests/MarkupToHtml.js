@@ -1,10 +1,9 @@
 
-const { asyncTest } = require('./test-utils.js');
 const MarkupToHtml = require('@joplin/renderer/MarkupToHtml').default;
 
 describe('MarkupToHtml', function() {
 
-	it('should strip markup', asyncTest(async () => {
+	it('should strip markup', (async () => {
 		const service = new MarkupToHtml();
 
 		const testCases = {

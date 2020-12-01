@@ -1,18 +1,9 @@
 
-const { asyncTest } = require('./test-utils.js');
 const urlUtils = require('@joplin/lib/urlUtils.js');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at urlUtils: Promise', p, 'reason:', reason);
-});
 
 describe('urlUtils', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
-
-	it('should prepend a base URL', asyncTest(async (done) => {
+	it('should prepend a base URL', (async () => {
 		expect(urlUtils.prependBaseUrl('testing.html', 'http://example.com')).toBe('http://example.com/testing.html');
 		expect(urlUtils.prependBaseUrl('testing.html', 'http://example.com/')).toBe('http://example.com/testing.html');
 		expect(urlUtils.prependBaseUrl('/jmp/?id=123&u=http://something.com/test', 'http://example.com/')).toBe('http://example.com/jmp/?id=123&u=http://something.com/test');
@@ -31,7 +22,7 @@ describe('urlUtils', function() {
 		expect(urlUtils.prependBaseUrl('#local-anchor', 'http://example.com')).toBe('#local-anchor');
 	}));
 
-	it('should detect resource URLs', asyncTest(async (done) => {
+	it('should detect resource URLs', (async () => {
 		const testCases = [
 			[':/1234abcd1234abcd1234abcd1234abcd', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '' }],
 			[':/1234abcd1234abcd1234abcd1234abcd "some text"', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '' }],
@@ -61,7 +52,7 @@ describe('urlUtils', function() {
 		}
 	}));
 
-	it('should extract resource URLs', asyncTest(async (done) => {
+	it('should extract resource URLs', (async () => {
 		const testCases = [
 			['Bla [](:/11111111111111111111111111111111) bla [](:/22222222222222222222222222222222) bla', ['11111111111111111111111111111111', '22222222222222222222222222222222']],
 			['Bla [](:/11111111111111111111111111111111 "Some title") bla [](:/22222222222222222222222222222222 "something else") bla', ['11111111111111111111111111111111', '22222222222222222222222222222222']],

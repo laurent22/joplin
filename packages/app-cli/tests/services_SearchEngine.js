@@ -3,15 +3,11 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, restoreDate } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, restoreDate } = require('./test-utils.js');
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
 const Note = require('@joplin/lib/models/Note');
 const ItemChange = require('@joplin/lib/models/ItemChange');
 const Setting = require('@joplin/lib/models/Setting').default;
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 let engine = null;
 
@@ -76,7 +72,7 @@ describe('services_SearchEngine', function() {
 		done();
 	});
 
-	it('should keep the content and FTS table in sync', asyncTest(async () => {
+	it('should keep the content and FTS table in sync', (async () => {
 		let rows, n1, n2, n3;
 
 		n1 = await Note.save({ title: 'a' });
@@ -111,7 +107,7 @@ describe('services_SearchEngine', function() {
 		expect(rows.length).toBe(1);
 	}));
 
-	it('should, after initial indexing, save the last change ID', asyncTest(async () => {
+	it('should, after initial indexing, save the last change ID', (async () => {
 		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
 		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
 
@@ -127,7 +123,7 @@ describe('services_SearchEngine', function() {
 	}));
 
 
-	it('should order search results by relevance BM25', asyncTest(async () => {
+	it('should order search results by relevance BM25', (async () => {
 		// BM25 is based on term frequency - inverse document frequency
 		// The tf–idf value increases proportionally to the number of times a word appears in the document
 		// and is offset by the number of documents in the corpus that contain the word, which helps to adjust
@@ -160,7 +156,7 @@ describe('services_SearchEngine', function() {
 	// TODO: Need to update and replace jasmine.mockDate() calls with Jest
 	// equivalent
 
-	// it('should correctly weigh notes using BM25 and user_updated_time', asyncTest(async () => {
+	// it('should correctly weigh notes using BM25 and user_updated_time', (async () => {
 	// 	await mockDate(2020, 9, 30, 50);
 	// 	const noteData = [
 	// 		{
@@ -240,7 +236,7 @@ describe('services_SearchEngine', function() {
 	// 	await restoreDate();
 	// }));
 
-	it('should tell where the results are found', asyncTest(async () => {
+	it('should tell where the results are found', (async () => {
 		const notes = [
 			await Note.save({ title: 'abcd efgh', body: 'abcd' }),
 			await Note.save({ title: 'abcd' }),
@@ -266,7 +262,7 @@ describe('services_SearchEngine', function() {
 		}
 	}));
 
-	it('should order search results by relevance (last updated first)', asyncTest(async () => {
+	it('should order search results by relevance (last updated first)', (async () => {
 		let rows;
 
 		const n1 = await Note.save({ title: 'abcd' });
@@ -292,7 +288,7 @@ describe('services_SearchEngine', function() {
 		expect(rows[2].id).toBe(n2.id);
 	}));
 
-	it('should order search results by relevance (completed to-dos last)', asyncTest(async () => {
+	it('should order search results by relevance (completed to-dos last)', (async () => {
 		let rows;
 
 		const n1 = await Note.save({ title: 'abcd', is_todo: 1 });
@@ -318,7 +314,7 @@ describe('services_SearchEngine', function() {
 		expect(rows[2].id).toBe(n3.id);
 	}));
 
-	it('should supports various query types', asyncTest(async () => {
+	it('should supports various query types', (async () => {
 		let rows;
 
 		const n1 = await Note.save({ title: 'abcd efgh ijkl', body: 'aaaa bbbb' });
@@ -369,7 +365,7 @@ describe('services_SearchEngine', function() {
 		expect(rows.length).toBe(1);
 	}));
 
-	it('should support queries with or without accents', asyncTest(async () => {
+	it('should support queries with or without accents', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'père noël' });
 
@@ -381,7 +377,7 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('noë*')).length).toBe(1);
 	}));
 
-	it('should support queries with Chinese characters', asyncTest(async () => {
+	it('should support queries with Chinese characters', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: '我是法国人', body: '中文测试' });
 
@@ -395,7 +391,7 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('测试*'))[0].fields).toEqual(['body']);
 	}));
 
-	it('should support queries with Japanese characters', asyncTest(async () => {
+	it('should support queries with Japanese characters', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: '私は日本語を話すことができません', body: 'テスト' });
 
@@ -408,7 +404,7 @@ describe('services_SearchEngine', function() {
 
 	}));
 
-	it('should support queries with Korean characters', asyncTest(async () => {
+	it('should support queries with Korean characters', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: '이것은 한국말이다' });
 
@@ -418,7 +414,7 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('말')).length).toBe(1);
 	}));
 
-	it('should support queries with Thai characters', asyncTest(async () => {
+	it('should support queries with Thai characters', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'นี่คือคนไทย' });
 
@@ -428,7 +424,7 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('ไทย')).length).toBe(1);
 	}));
 
-	it('should support field restricted queries with Chinese characters', asyncTest(async () => {
+	it('should support field restricted queries with Chinese characters', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: '你好', body: '我是法国人' });
 
@@ -450,7 +446,7 @@ describe('services_SearchEngine', function() {
 		// expect((await engine.search('title:你好 title:hello')).length).toBe(1);
 	}));
 
-	it('should parse normal query strings', asyncTest(async () => {
+	it('should parse normal query strings', (async () => {
 		let rows;
 
 		const testCases = [
@@ -478,7 +474,7 @@ describe('services_SearchEngine', function() {
 		}
 	}));
 
-	it('should handle queries with special characters', asyncTest(async () => {
+	it('should handle queries with special characters', (async () => {
 		let rows;
 
 		const testCases = [
@@ -505,7 +501,7 @@ describe('services_SearchEngine', function() {
 		}
 	}));
 
-	it('should allow using basic search', asyncTest(async () => {
+	it('should allow using basic search', (async () => {
 		const n1 = await Note.save({ title: '- [ ] abcd' });
 		const n2 = await Note.save({ title: '[ ] abcd' });
 
