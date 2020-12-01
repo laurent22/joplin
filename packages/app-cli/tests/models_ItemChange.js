@@ -2,7 +2,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const ItemChangeUtils = require('@joplin/lib/services/ItemChangeUtils');
@@ -26,7 +26,7 @@ describe('models_ItemChange', function() {
 		done();
 	});
 
-	it('should delete old changes that have been processed', asyncTest(async () => {
+	it('should delete old changes that have been processed', (async () => {
 		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
 
 		await ItemChange.waitForAllSaved();

@@ -2,7 +2,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { sortedIds, createNTestNotes, asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { sortedIds, createNTestNotes, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const Setting = require('@joplin/lib/models/Setting').default;
@@ -27,7 +27,7 @@ describe('models_Note_CustomSortOrder', function() {
 		done();
 	});
 
-	it('should set the order property when saving a note', asyncTest(async () => {
+	it('should set the order property when saving a note', (async () => {
 		const now = Date.now();
 		const n1 = await Note.save({ title: 'testing' });
 		expect(n1.order).toBeGreaterThanOrEqual(now);
@@ -36,7 +36,7 @@ describe('models_Note_CustomSortOrder', function() {
 		expect(n2.order).toBe(0);
 	}));
 
-	it('should insert notes at the specified position (order 0)', asyncTest(async () => {
+	it('should insert notes at the specified position (order 0)', (async () => {
 		// Notes always had an "order" property, but for a long time it wasn't used, and
 		// set to 0. For custom sorting to work though, it needs to be set to some number
 		// (which normally is the creation timestamp). So if the user tries to move notes
@@ -90,7 +90,7 @@ describe('models_Note_CustomSortOrder', function() {
 		expect(sortedNotes[4].id).toBe(notes1[0].id);
 	}));
 
-	it('should insert notes at the specified position (targets with same orders)', asyncTest(async () => {
+	it('should insert notes at the specified position (targets with same orders)', (async () => {
 		// If the target notes all have the same order, inserting a note should work
 		// anyway, because the order of the other notes will be updated as needed.
 
@@ -115,7 +115,7 @@ describe('models_Note_CustomSortOrder', function() {
 		expect(sortedNotes[3].id).toBe(notes[1].id);
 	}));
 
-	it('should insert notes at the specified position (insert at end)', asyncTest(async () => {
+	it('should insert notes at the specified position (insert at end)', (async () => {
 		const folder1 = await Folder.save({});
 
 		const notes = [];
@@ -138,7 +138,7 @@ describe('models_Note_CustomSortOrder', function() {
 		expect(sortedNotes[3].id).toBe(notes[1].id);
 	}));
 
-	it('should insert notes at the specified position (insert at beginning)', asyncTest(async () => {
+	it('should insert notes at the specified position (insert at beginning)', (async () => {
 		const folder1 = await Folder.save({});
 
 		const notes = [];
@@ -161,7 +161,7 @@ describe('models_Note_CustomSortOrder', function() {
 		expect(sortedNotes[3].id).toBe(notes[0].id);
 	}));
 
-	it('should insert notes even if sources are not adjacent', asyncTest(async () => {
+	it('should insert notes even if sources are not adjacent', (async () => {
 		const folder1 = await Folder.save({});
 
 		const notes = [];

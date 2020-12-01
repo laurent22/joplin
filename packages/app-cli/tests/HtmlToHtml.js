@@ -4,7 +4,7 @@
 const os = require('os');
 const time = require('@joplin/lib/time').default;
 const { filename } = require('@joplin/lib/path-utils');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const BaseModel = require('@joplin/lib/BaseModel').default;
@@ -24,7 +24,7 @@ describe('HtmlToHtml', function() {
 		done();
 	});
 
-	it('should convert from Html to Html', asyncTest(async () => {
+	it('should convert from Html to Html', (async () => {
 		const basePath = `${__dirname}/html_to_html`;
 		const files = await shim.fsDriver().readDirStats(basePath);
 		const htmlToHtml = new HtmlToHtml();

@@ -2,7 +2,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { setupDatabase, synchronizerStart, syncTargetName, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('./test-utils.js');
+const { setupDatabase, synchronizerStart, syncTargetName, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync } = require('./test-utils.js');
 const shim = require('@joplin/lib/shim').default;
 const fs = require('fs-extra');
 const Folder = require('@joplin/lib/models/Folder.js');
@@ -97,7 +97,7 @@ describe('synchronizer', function() {
 		insideBeforeEach = false;
 	});
 
-	it('should create remote items', asyncTest(async () => {
+	it('should create remote items', (async () => {
 		const folder = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'un', parent_id: folder.id });
 
@@ -108,7 +108,7 @@ describe('synchronizer', function() {
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
-	it('should update remote items', asyncTest(async () => {
+	it('should update remote items', (async () => {
 		const folder = await Folder.save({ title: 'folder1' });
 		const note = await Note.save({ title: 'un', parent_id: folder.id });
 		await synchronizerStart();
@@ -121,7 +121,7 @@ describe('synchronizer', function() {
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
-	it('should create local items', asyncTest(async () => {
+	it('should create local items', (async () => {
 		const folder = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'un', parent_id: folder.id });
 		await synchronizerStart();
@@ -135,7 +135,7 @@ describe('synchronizer', function() {
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
-	it('should update local items', asyncTest(async () => {
+	it('should update local items', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
@@ -162,7 +162,7 @@ describe('synchronizer', function() {
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
-	it('should resolve note conflicts', asyncTest(async () => {
+	it('should resolve note conflicts', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
@@ -203,7 +203,7 @@ describe('synchronizer', function() {
 		}
 	}));
 
-	it('should resolve folders conflicts', asyncTest(async () => {
+	it('should resolve folders conflicts', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
@@ -236,7 +236,7 @@ describe('synchronizer', function() {
 		expect(folder1_final.title).toBe(folder1_modRemote.title);
 	}));
 
-	it('should delete remote notes', asyncTest(async () => {
+	it('should delete remote notes', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
@@ -259,7 +259,7 @@ describe('synchronizer', function() {
 		expect(deletedItems.length).toBe(0);
 	}));
 
-	it('should not created deleted_items entries for items deleted via sync', asyncTest(async () => {
+	it('should not created deleted_items entries for items deleted via sync', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
@@ -277,7 +277,7 @@ describe('synchronizer', function() {
 		expect(deletedItems.length).toBe(0);
 	}));
 
-	it('should delete local notes', asyncTest(async () => {
+	it('should delete local notes', (async () => {
 		// For these tests we pass the context around for each user. This is to make sure that the "deletedItemsProcessed"
 		// property of the basicDelta() function is cleared properly at the end of a sync operation. If it is not cleared
 		// it means items will no longer be deleted locally via sync.
@@ -304,7 +304,7 @@ describe('synchronizer', function() {
 		await synchronizerStart();
 	}));
 
-	it('should delete remote folder', asyncTest(async () => {
+	it('should delete remote folder', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
 		await synchronizerStart();
@@ -323,7 +323,7 @@ describe('synchronizer', function() {
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
-	it('should delete local folder', asyncTest(async () => {
+	it('should delete local folder', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
 		await synchronizerStart();
@@ -341,7 +341,7 @@ describe('synchronizer', function() {
 		await localNotesFoldersSameAsRemote(items, expect);
 	}));
 
-	it('should resolve conflict if remote folder has been deleted, but note has been added to folder locally', asyncTest(async () => {
+	it('should resolve conflict if remote folder has been deleted, but note has been added to folder locally', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizerStart();
 
@@ -361,7 +361,7 @@ describe('synchronizer', function() {
 		expect(items[0].is_conflict).toBe(1);
 	}));
 
-	it('should resolve conflict if note has been deleted remotely and locally', asyncTest(async () => {
+	it('should resolve conflict if note has been deleted remotely and locally', (async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', parent_id: folder.title });
 		await synchronizerStart();
@@ -384,7 +384,7 @@ describe('synchronizer', function() {
 		await localNotesFoldersSameAsRemote(items, expect);
 	}));
 
-	it('should cross delete all folders', asyncTest(async () => {
+	it('should cross delete all folders', (async () => {
 		// If client1 and 2 have two folders, client 1 deletes item 1 and client
 		// 2 deletes item 2, they should both end up with no items after sync.
 
@@ -416,7 +416,7 @@ describe('synchronizer', function() {
 		expect(items1.length).toBe(items2.length);
 	}));
 
-	it('should handle conflict when remote note is deleted then local note is modified', asyncTest(async () => {
+	it('should handle conflict when remote note is deleted then local note is modified', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
@@ -448,7 +448,7 @@ describe('synchronizer', function() {
 		expect(unconflictedNotes.length).toBe(0);
 	}));
 
-	it('should handle conflict when remote folder is deleted then local folder is renamed', asyncTest(async () => {
+	it('should handle conflict when remote folder is deleted then local folder is renamed', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
@@ -478,7 +478,7 @@ describe('synchronizer', function() {
 		expect(items.length).toBe(1);
 	}));
 
-	it('should allow duplicate folder titles', asyncTest(async () => {
+	it('should allow duplicate folder titles', (async () => {
 		const localF1 = await Folder.save({ title: 'folder' });
 
 		await switchClient(2);
@@ -561,15 +561,15 @@ describe('synchronizer', function() {
 		expect(remoteNoteIds[0]).toBe(noteIds[0]);
 	}
 
-	it('should sync tags', asyncTest(async () => {
+	it('should sync tags', (async () => {
 		await shoudSyncTagTest(false);
 	}));
 
-	it('should sync encrypted tags', asyncTest(async () => {
+	it('should sync encrypted tags', (async () => {
 		await shoudSyncTagTest(true);
 	}));
 
-	it('should not sync notes with conflicts', asyncTest(async () => {
+	it('should not sync notes with conflicts', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
 		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id, is_conflict: 1 });
 		await synchronizerStart();
@@ -583,7 +583,7 @@ describe('synchronizer', function() {
 		expect(folders.length).toBe(1);
 	}));
 
-	it('should not try to delete on remote conflicted notes that have been deleted', asyncTest(async () => {
+	it('should not try to delete on remote conflicted notes that have been deleted', (async () => {
 		const f1 = await Folder.save({ title: 'folder' });
 		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
 		await synchronizerStart();
@@ -657,15 +657,15 @@ describe('synchronizer', function() {
 		}
 	}
 
-	it('should not consider it is a conflict if neither the title nor body of the note have changed', asyncTest(async () => {
+	it('should not consider it is a conflict if neither the title nor body of the note have changed', (async () => {
 		await ignorableNoteConflictTest(false);
 	}));
 
-	it('should always handle conflict if local or remote are encrypted', asyncTest(async () => {
+	it('should always handle conflict if local or remote are encrypted', (async () => {
 		await ignorableNoteConflictTest(true);
 	}));
 
-	it('items should be downloaded again when user cancels in the middle of delta operation', asyncTest(async () => {
+	it('items should be downloaded again when user cancels in the middle of delta operation', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
 		await synchronizerStart();
@@ -683,7 +683,7 @@ describe('synchronizer', function() {
 		expect(notes.length).toBe(1);
 	}));
 
-	it('should skip items that cannot be synced', asyncTest(async () => {
+	it('should skip items that cannot be synced', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
 		const noteId = note1.id;
@@ -709,7 +709,7 @@ describe('synchronizer', function() {
 		expect(disabledItems.length).toBe(1);
 	}));
 
-	it('notes and folders should get encrypted when encryption is enabled', asyncTest(async () => {
+	it('notes and folders should get encrypted when encryption is enabled', (async () => {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -751,7 +751,7 @@ describe('synchronizer', function() {
 		expect(!folder1_2.encryption_cipher_text).toBe(true);
 	}));
 
-	it('should enable encryption automatically when downloading new master key (and none was previously available)',asyncTest(async () => {
+	it('should enable encryption automatically when downloading new master key (and none was previously available)',(async () => {
 		// Enable encryption on client 1 and sync an item
 		Setting.setValue('encryption.enabled', true);
 		await loadEncryptionMasterKey();
@@ -809,7 +809,7 @@ describe('synchronizer', function() {
 		expect(folder1.title).toBe('change test'); // Got title from client 2
 	}));
 
-	it('should encrypt existing notes too when enabling E2EE', asyncTest(async () => {
+	it('should encrypt existing notes too when enabling E2EE', (async () => {
 		// First create a folder, without encryption enabled, and sync it
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizerStart();
@@ -836,7 +836,7 @@ describe('synchronizer', function() {
 		expect(content.indexOf('folder1') < 0).toBe(true);
 	}));
 
-	it('should sync resources', asyncTest(async () => {
+	it('should sync resources', (async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -869,7 +869,7 @@ describe('synchronizer', function() {
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
 	}));
 
-	it('should handle resource download errors', asyncTest(async () => {
+	it('should handle resource download errors', (async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -898,7 +898,7 @@ describe('synchronizer', function() {
 		expect(ls.fetch_error).toBe('did not work');
 	}));
 
-	it('should set the resource file size if it is missing', asyncTest(async () => {
+	it('should set the resource file size if it is missing', (async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -921,7 +921,7 @@ describe('synchronizer', function() {
 		expect(r1.size).toBe(2720);
 	}));
 
-	it('should delete resources', asyncTest(async () => {
+	it('should delete resources', (async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -954,7 +954,7 @@ describe('synchronizer', function() {
 		expect(await shim.fsDriver().exists(resourcePath1)).toBe(false);
 	}));
 
-	it('should encryt resources', asyncTest(async () => {
+	it('should encryt resources', (async () => {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
 
@@ -982,7 +982,7 @@ describe('synchronizer', function() {
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
 	}));
 
-	it('should sync resource blob changes', asyncTest(async () => {
+	it('should sync resource blob changes', (async () => {
 		const tempFile = tempFilePath('txt');
 		await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -1016,7 +1016,7 @@ describe('synchronizer', function() {
 		expect(await Resource.resourceBlobContent(resource1_1.id, 'utf8')).toBe('1234 MOD');
 	}));
 
-	it('should handle resource conflicts', asyncTest(async () => {
+	it('should handle resource conflicts', (async () => {
 		{
 			const tempFile = tempFilePath('txt');
 			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
@@ -1076,7 +1076,7 @@ describe('synchronizer', function() {
 		}
 	}));
 
-	it('should handle resource conflicts if a resource is changed locally but deleted remotely', asyncTest(async () => {
+	it('should handle resource conflicts if a resource is changed locally but deleted remotely', (async () => {
 		{
 			const tempFile = tempFilePath('txt');
 			await shim.fsDriver().writeFile(tempFile, '1234', 'utf8');
@@ -1121,7 +1121,7 @@ describe('synchronizer', function() {
 		}
 	}));
 
-	it('should upload decrypted items to sync target after encryption disabled', asyncTest(async () => {
+	it('should upload decrypted items to sync target after encryption disabled', (async () => {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
 
@@ -1138,7 +1138,7 @@ describe('synchronizer', function() {
 		expect(allEncrypted).toBe(false);
 	}));
 
-	it('should not upload any item if encryption was enabled, and items have not been decrypted, and then encryption disabled', asyncTest(async () => {
+	it('should not upload any item if encryption was enabled, and items have not been decrypted, and then encryption disabled', (async () => {
 		// For some reason I can't explain, this test is sometimes executed before beforeEach is finished
 		// which means it's going to fail in unexpected way. So the loop below wait for beforeEach to be done.
 		while (insideBeforeEach) await time.msleep(100);
@@ -1175,7 +1175,7 @@ describe('synchronizer', function() {
 		expect(allEncrypted).toBe(false);
 	}));
 
-	it('should set the resource file size after decryption', asyncTest(async () => {
+	it('should set the resource file size after decryption', (async () => {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
 
@@ -1202,7 +1202,7 @@ describe('synchronizer', function() {
 		expect(resource1_2.size).toBe(2720);
 	}));
 
-	it('should encrypt remote resources after encryption has been enabled', asyncTest(async () => {
+	it('should encrypt remote resources after encryption has been enabled', (async () => {
 		while (insideBeforeEach) await time.msleep(100);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -1221,7 +1221,7 @@ describe('synchronizer', function() {
 		expect(await allSyncTargetItemsEncrypted()).toBe(true);
 	}));
 
-	it('should upload encrypted resource, but it should not mark the blob as encrypted locally', asyncTest(async () => {
+	it('should upload encrypted resource, but it should not mark the blob as encrypted locally', (async () => {
 		while (insideBeforeEach) await time.msleep(100);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -1236,7 +1236,7 @@ describe('synchronizer', function() {
 		expect(resource1.encryption_blob_encrypted).toBe(0);
 	}));
 
-	it('should create remote items with UTF-8 content', asyncTest(async () => {
+	it('should create remote items with UTF-8 content', (async () => {
 		const folder = await Folder.save({ title: 'Fahrräder' });
 		await Note.save({ title: 'Fahrräder', body: 'Fahrräder', parent_id: folder.id });
 		const all = await allNotesFolders();
@@ -1246,7 +1246,7 @@ describe('synchronizer', function() {
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
-	it('should update remote items but not pull remote changes', asyncTest(async () => {
+	it('should update remote items but not pull remote changes', (async () => {
 		const folder = await Folder.save({ title: 'folder1' });
 		const note = await Note.save({ title: 'un', parent_id: folder.id });
 		await synchronizerStart();
@@ -1271,7 +1271,7 @@ describe('synchronizer', function() {
 		expect(note2.title).toBe('un UPDATE');
 	}));
 
-	it('should create a new Welcome notebook on each client', asyncTest(async () => {
+	it('should create a new Welcome notebook on each client', (async () => {
 		// Create the Welcome items on two separate clients
 
 		await WelcomeUtils.createWelcomeItems();
@@ -1308,7 +1308,7 @@ describe('synchronizer', function() {
 		expect(f1_1.title).toBe('Welcome MOD');
 	}));
 
-	it('should not save revisions when updating a note via sync', asyncTest(async () => {
+	it('should not save revisions when updating a note via sync', (async () => {
 		// When a note is updated, a revision of the original is created.
 		// Here, on client 1, the note is updated for the first time, however since it is
 		// via sync, we don't create a revision - that revision has already been created on client
@@ -1334,7 +1334,7 @@ describe('synchronizer', function() {
 		expect(allRevs2[0].id).toBe(allRevs1[0].id);
 	}));
 
-	it('should not save revisions when deleting a note via sync', asyncTest(async () => {
+	it('should not save revisions when deleting a note via sync', (async () => {
 		const n1 = await Note.save({ title: 'testing' });
 		await synchronizerStart();
 
@@ -1361,7 +1361,7 @@ describe('synchronizer', function() {
 		expect(notes.length).toBe(0);
 	}));
 
-	it('should not save revisions when an item_change has been generated as a result of a sync', asyncTest(async () => {
+	it('should not save revisions when an item_change has been generated as a result of a sync', (async () => {
 		// When a note is modified an item_change object is going to be created. This
 		// is used for example to tell the search engine, when note should be indexed. It is
 		// also used by the revision service to tell what note should get a new revision.
@@ -1399,7 +1399,7 @@ describe('synchronizer', function() {
 		}
 	}));
 
-	it('should handle case when new rev is created on client, then older rev arrives later via sync', asyncTest(async () => {
+	it('should handle case when new rev is created on client, then older rev arrives later via sync', (async () => {
 		// - C1 creates note 1
 		// - C1 modifies note 1 - REV1 created
 		// - C1 sync
@@ -1440,7 +1440,7 @@ describe('synchronizer', function() {
 		expect((await revisionService().revisionNote(revisions, 1)).title).toBe('note REV2');
 	}));
 
-	it('should not download resources over the limit', asyncTest(async () => {
+	it('should not download resources over the limit', (async () => {
 		const note1 = await Note.save({ title: 'note' });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
@@ -1458,7 +1458,7 @@ describe('synchronizer', function() {
 		expect(syncItems[1].sync_disabled).toBe(1);
 	}));
 
-	it('should not upload a resource if it has not been fetched yet', asyncTest(async () => {
+	it('should not upload a resource if it has not been fetched yet', (async () => {
 		// In some rare cases, the synchronizer might try to upload a resource even though it
 		// doesn't have the resource file. It can happen in this situation:
 		// - C1 create resource
@@ -1485,7 +1485,7 @@ describe('synchronizer', function() {
 		expect((await remoteResources()).length).toBe(1);
 	}));
 
-	it('should decrypt the resource metadata, but not try to decrypt the file, if it is not present', asyncTest(async () => {
+	it('should decrypt the resource metadata, but not try to decrypt the file, if it is not present', (async () => {
 		const note1 = await Note.save({ title: 'note' });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
@@ -1519,7 +1519,7 @@ describe('synchronizer', function() {
 		expect(!!resource.encryption_blob_encrypted).toBe(false);
 	}));
 
-	it('should not create revisions when item is modified as a result of decryption', asyncTest(async () => {
+	it('should not create revisions when item is modified as a result of decryption', (async () => {
 		// Handle this scenario:
 		// - C1 creates note
 		// - C1 never changes it
@@ -1555,7 +1555,7 @@ describe('synchronizer', function() {
 		expect((await Revision.all()).length).toBe(0);
 	}));
 
-	it('should stop trying to decrypt item after a few attempts', asyncTest(async () => {
+	it('should stop trying to decrypt item after a few attempts', (async () => {
 		let hasThrown;
 
 		const note = await Note.save({ title: 'ma note' });
@@ -1615,7 +1615,7 @@ describe('synchronizer', function() {
 		expect((await decryptionWorker().decryptionDisabledItems()).length).toBe(0);
 	}));
 
-	it('should not wipe out user data when syncing with an empty target', asyncTest(async () => {
+	it('should not wipe out user data when syncing with an empty target', (async () => {
 		// Only these targets support the wipeOutFailSafe flag (in other words, the targets that use basicDelta)
 		if (!['nextcloud', 'memory', 'filesystem', 'amazon_s3'].includes(syncTargetName())) return;
 
@@ -1642,7 +1642,7 @@ describe('synchronizer', function() {
 		expect((await Note.all()).length).toBe(11);
 	}));
 
-	it('should not encrypt notes that are shared', asyncTest(async () => {
+	it('should not encrypt notes that are shared', (async () => {
 		Setting.setValue('encryption.enabled', true);
 		await loadEncryptionMasterKey();
 

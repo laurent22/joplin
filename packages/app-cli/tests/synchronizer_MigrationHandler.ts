@@ -8,7 +8,7 @@ import { Dirnames } from '@joplin/lib/services/synchronizer/utils/types';
 // gulp buildTests -L && node tests-build/support/createSyncTargetSnapshot.js normal && node tests-build/support/createSyncTargetSnapshot.js e2ee
 
 
-const { asyncTest, setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
+const { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 const { deploySyncTargetSnapshot, testData, checkTestData } = require('./support/syncTargetUtils');
 const Setting = require('@joplin/lib/models/Setting').default;
 const MasterKey = require('@joplin/lib/models/MasterKey');
@@ -70,7 +70,7 @@ describe('synchronizer_MigrationHandler', function() {
 		done();
 	});
 
-	it('should init a new sync target', asyncTest(async () => {
+	it('should init a new sync target', (async () => {
 		// Check that basic folders "locks" and "temp" are created for new sync targets.
 		await migrationHandler().upgrade(1);
 		const result = await fileApi().list();
@@ -78,13 +78,13 @@ describe('synchronizer_MigrationHandler', function() {
 		expect(result.items.filter((i: any) => i.path === Dirnames.Temp).length).toBe(1);
 	}), specTimeout);
 
-	it('should not allow syncing if the sync target is out-dated', asyncTest(async () => {
+	it('should not allow syncing if the sync target is out-dated', (async () => {
 		await synchronizer().start();
 		await fileApi().put('info.json', `{"version":${Setting.value('syncVersion') - 1}}`);
 		await expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedSyncTarget');
 	}), specTimeout);
 
-	it('should not allow syncing if the client is out-dated', asyncTest(async () => {
+	it('should not allow syncing if the client is out-dated', (async () => {
 		await synchronizer().start();
 		await fileApi().put('info.json', `{"version":${Setting.value('syncVersion') + 1}}`);
 		await expectThrow(async () => await migrationHandler().checkCanSync(), 'outdatedClient');
@@ -93,7 +93,7 @@ describe('synchronizer_MigrationHandler', function() {
 	for (const migrationVersionString in migrationTests) {
 		const migrationVersion = Number(migrationVersionString);
 
-		it(`should migrate (${migrationVersion})`, asyncTest(async () => {
+		it(`should migrate (${migrationVersion})`, (async () => {
 			await deploySyncTargetSnapshot('normal', migrationVersion - 1);
 
 			const info = await migrationHandler().fetchSyncTargetInfo();
@@ -120,7 +120,7 @@ describe('synchronizer_MigrationHandler', function() {
 			await expectNotThrow(async () => await checkTestData(testData));
 		}), specTimeout);
 
-		it(`should migrate (E2EE) (${migrationVersion})`, asyncTest(async () => {
+		it(`should migrate (E2EE) (${migrationVersion})`, (async () => {
 			// First create some test data that will be used to validate
 			// that the migration didn't alter any data.
 			await deploySyncTargetSnapshot('e2ee', migrationVersion - 1);

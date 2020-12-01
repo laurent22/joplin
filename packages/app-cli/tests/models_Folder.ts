@@ -1,5 +1,5 @@
 import { FolderEntity } from '@joplin/lib/services/database/types';
-const { createNTestNotes, asyncTest, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync } = require('./test-utils.js');
+const { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 
@@ -21,7 +21,7 @@ describe('models_Folder', function() {
 		done();
 	});
 
-	it('should tell if a notebook can be nested under another one', asyncTest(async () => {
+	it('should tell if a notebook can be nested under another one', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
@@ -37,7 +37,7 @@ describe('models_Folder', function() {
 		expect(await Folder.canNestUnder(f2.id, '')).toBe(true);
 	}));
 
-	it('should recursively delete notes and sub-notebooks', asyncTest(async () => {
+	it('should recursively delete notes and sub-notebooks', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
@@ -55,7 +55,7 @@ describe('models_Folder', function() {
 		expect(all.length).toBe(0);
 	}));
 
-	it('should sort by last modified, based on content', asyncTest(async () => {
+	it('should sort by last modified, based on content', (async () => {
 		let folders;
 
 		const f1 = await Folder.save({ title: 'folder1' }); await sleep(0.1);
@@ -89,7 +89,7 @@ describe('models_Folder', function() {
 		expect(folders[2].id).toBe(f2.id);
 	}));
 
-	it('should sort by last modified, based on content (sub-folders too)', asyncTest(async () => {
+	it('should sort by last modified, based on content (sub-folders too)', (async () => {
 		let folders;
 
 		const f1 = await Folder.save({ title: 'folder1' }); await sleep(0.1);
@@ -128,7 +128,7 @@ describe('models_Folder', function() {
 		expect(folders[3].id).toBe(f2.id);
 	}));
 
-	it('should add node counts', asyncTest(async () => {
+	it('should add node counts', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
@@ -163,7 +163,7 @@ describe('models_Folder', function() {
 		}
 	}));
 
-	it('should not count completed to-dos', asyncTest(async () => {
+	it('should not count completed to-dos', (async () => {
 
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
@@ -190,7 +190,7 @@ describe('models_Folder', function() {
 		expect(foldersById[f4.id].note_count).toBe(0);
 	}));
 
-	it('should recursively find folder path', asyncTest(async () => {
+	it('should recursively find folder path', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
@@ -204,7 +204,7 @@ describe('models_Folder', function() {
 		expect(folderPath[2].id).toBe(f3.id);
 	}));
 
-	it('should sort folders alphabetically', asyncTest(async () => {
+	it('should sort folders alphabetically', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f1.id });
@@ -224,7 +224,7 @@ describe('models_Folder', function() {
 		expect(sortedFolderTree[2].id).toBe(f6.id);
 	}));
 
-	it('should not allow setting a notebook parent as itself', asyncTest(async () => {
+	it('should not allow setting a notebook parent as itself', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const hasThrown = await checkThrowAsync(() => Folder.save({ id: f1.id, parent_id: f1.id }, { userSideValidation: true }));
 		expect(hasThrown).toBe(true);

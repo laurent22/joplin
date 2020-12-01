@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 
-
-const { asyncTest } = require('./test-utils.js');
 const markdownUtils = require('@joplin/lib/markdownUtils').default;
 
 process.on('unhandledRejection', (reason, p) => {
@@ -14,7 +12,7 @@ describe('markdownUtils', function() {
 		done();
 	});
 
-	it('should prepend a base URL', asyncTest(async () => {
+	it('should prepend a base URL', (async () => {
 		const baseUrl = 'https://test.com/site';
 
 		const testCases = [
@@ -32,7 +30,7 @@ describe('markdownUtils', function() {
 		}
 	}));
 
-	it('should extract image URLs', asyncTest(async () => {
+	it('should extract image URLs', (async () => {
 		const testCases = [
 			['![something](http://test.com/img.png)', ['http://test.com/img.png']],
 			['![something](http://test.com/img.png) ![something2](http://test.com/img2.png)', ['http://test.com/img.png', 'http://test.com/img2.png']],
@@ -50,7 +48,7 @@ describe('markdownUtils', function() {
 		}
 	}));
 
-	it('escape a markdown link', asyncTest(async () => {
+	it('escape a markdown link', (async () => {
 
 		const testCases = [
 			['file:///Users/who put spaces in their username??/.config/joplin', 'file:///Users/who%20put%20spaces%20in%20their%20username??/.config/joplin'],
@@ -65,7 +63,7 @@ describe('markdownUtils', function() {
 		}
 	}));
 
-	it('escape a markdown link (title)', asyncTest(async () => {
+	it('escape a markdown link (title)', (async () => {
 
 		const testCases = [
 			['Helmut K. C. Tessarek', 'Helmut K. C. Tessarek'],
@@ -80,7 +78,7 @@ describe('markdownUtils', function() {
 		}
 	}));
 
-	it('replace markdown link with description', asyncTest(async () => {
+	it('replace markdown link with description', (async () => {
 
 		const testCases = [
 			['Test case [one](link)', 'Test case one'],

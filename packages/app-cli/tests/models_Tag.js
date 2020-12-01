@@ -2,7 +2,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const NoteTag = require('@joplin/lib/models/NoteTag.js');
@@ -22,7 +22,7 @@ describe('models_Tag', function() {
 		done();
 	});
 
-	it('should add tags by title', asyncTest(async () => {
+	it('should add tags by title', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
@@ -32,7 +32,7 @@ describe('models_Tag', function() {
 		expect(noteTags.length).toBe(2);
 	}));
 
-	it('should not allow renaming tag to existing tag names', asyncTest(async () => {
+	it('should not allow renaming tag to existing tag names', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
@@ -44,7 +44,7 @@ describe('models_Tag', function() {
 		expect(hasThrown).toBe(true);
 	}));
 
-	it('should not return tags without notes', asyncTest(async () => {
+	it('should not return tags without notes', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
@@ -58,7 +58,7 @@ describe('models_Tag', function() {
 		expect(tags.length).toBe(0);
 	}));
 
-	it('should return tags with note counts', asyncTest(async () => {
+	it('should return tags with note counts', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
@@ -81,7 +81,7 @@ describe('models_Tag', function() {
 		expect(tags.length).toBe(0);
 	}));
 
-	it('should load individual tags with note count', asyncTest(async () => {
+	it('should load individual tags with note count', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
@@ -96,7 +96,7 @@ describe('models_Tag', function() {
 		expect(tagWithCount.note_count).toBe(2);
 	}));
 
-	it('should get common tags for set of notes', asyncTest(async () => {
+	it('should get common tags for set of notes', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const taga = await Tag.save({ title: 'mytaga' });
 		const tagb = await Tag.save({ title: 'mytagb' });

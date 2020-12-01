@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 
-
-const { asyncTest } = require('./test-utils.js');
 const htmlUtils = require('@joplin/lib/htmlUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -14,7 +12,7 @@ describe('htmlUtils', function() {
 		done();
 	});
 
-	it('should extract image URLs', asyncTest(async () => {
+	it('should extract image URLs', (async () => {
 		const testCases = [
 			['<img src="http://test.com/img.png"/>', ['http://test.com/img.png']],
 			['<img src="http://test.com/img.png"/> <img src="http://test.com/img2.png"/>', ['http://test.com/img.png', 'http://test.com/img2.png']],
@@ -32,7 +30,7 @@ describe('htmlUtils', function() {
 		}
 	}));
 
-	it('should replace image URLs', asyncTest(async () => {
+	it('should replace image URLs', (async () => {
 		const testCases = [
 			['<img src="http://test.com/img.png"/>', ['http://other.com/img2.png'], '<img src="http://other.com/img2.png"/>'],
 			['<img src="http://test.com/img.png"/> <img src="http://test.com/img2.png"/>', ['http://other.com/img2.png', 'http://other.com/img3.png'], '<img src="http://other.com/img2.png"/> <img src="http://other.com/img3.png"/>'],
@@ -55,7 +53,7 @@ describe('htmlUtils', function() {
 		}
 	}));
 
-	it('should encode attributes', asyncTest(async () => {
+	it('should encode attributes', (async () => {
 		const testCases = [
 			[{ a: 'one', b: 'two' }, 'a="one" b="two"'],
 			[{ a: 'one&two' }, 'a="one&amp;two"'],
@@ -68,7 +66,7 @@ describe('htmlUtils', function() {
 		}
 	}));
 
-	it('should prepend a base URL', asyncTest(async () => {
+	it('should prepend a base URL', (async () => {
 		const testCases = [
 			[
 				'<a href="a.html">Something</a>',

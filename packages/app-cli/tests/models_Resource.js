@@ -2,7 +2,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const Resource = require('@joplin/lib/models/Resource.js');
@@ -23,7 +23,7 @@ describe('models_Resource', function() {
 		done();
 	});
 
-	it('should have a "done" fetch_status when created locally', asyncTest(async () => {
+	it('should have a "done" fetch_status when created locally', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, testImagePath);
@@ -32,7 +32,7 @@ describe('models_Resource', function() {
 		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
 	}));
 
-	it('should have a default local state', asyncTest(async () => {
+	it('should have a default local state', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, testImagePath);
@@ -43,7 +43,7 @@ describe('models_Resource', function() {
 		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
 	}));
 
-	it('should save and delete local state', asyncTest(async () => {
+	it('should save and delete local state', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, testImagePath);
@@ -59,7 +59,7 @@ describe('models_Resource', function() {
 		expect(!ls.id).toBe(true);
 	}));
 
-	it('should resize the resource if the image is below the required dimensions', asyncTest(async () => {
+	it('should resize the resource if the image is below the required dimensions', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		const previousMax = Resource.IMAGE_MAX_DIMENSION;
@@ -74,7 +74,7 @@ describe('models_Resource', function() {
 		expect(newStat.size < originalStat.size).toBe(true);
 	}));
 
-	it('should not resize the resource if the image is below the required dimensions', asyncTest(async () => {
+	it('should not resize the resource if the image is below the required dimensions', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, testImagePath);
