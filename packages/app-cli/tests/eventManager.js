@@ -4,10 +4,6 @@
 const { checkThrow } = require('./test-utils.js');
 const eventManager = require('@joplin/lib/eventManager').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('eventManager', function() {
 
 	beforeEach(async (done) => {

@@ -5,10 +5,6 @@ const time = require('@joplin/lib/time').default;
 const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('mimeUils', function() {
 
 	beforeEach(async (done) => {

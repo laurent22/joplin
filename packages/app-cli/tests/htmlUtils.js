@@ -2,10 +2,6 @@
 
 const htmlUtils = require('@joplin/lib/htmlUtils.js');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('htmlUtils', function() {
 
 	beforeEach(async (done) => {

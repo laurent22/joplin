@@ -4,10 +4,6 @@
 const { fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const TaskQueue = require('@joplin/lib/TaskQueue.js');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('TaskQueue', function() {
 
 	beforeEach(async (done) => {

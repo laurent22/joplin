@@ -15,10 +15,6 @@ const shim = require('@joplin/lib/shim').default;
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at services_SearchFilter: Promise', p, 'reason:', reason);
-});
-
 let engine = null;
 
 const ids = (array) => array.map(a => a.id);

@@ -1,10 +1,6 @@
 
 const urlUtils = require('@joplin/lib/urlUtils.js');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at urlUtils: Promise', p, 'reason:', reason);
-});
-
 describe('urlUtils', function() {
 
 	it('should prepend a base URL', (async () => {

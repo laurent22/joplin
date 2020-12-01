@@ -4,10 +4,6 @@
 const { fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const KvStore = require('@joplin/lib/services/KvStore').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 function setupStore() {
 	const store = KvStore.instance();
 	store.setDb(db());

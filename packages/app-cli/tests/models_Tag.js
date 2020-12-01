@@ -10,10 +10,6 @@ const Tag = require('@joplin/lib/models/Tag.js');
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const shim = require('@joplin/lib/shim').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at models_Tag: Promise', p, 'reason:', reason);
-});
-
 describe('models_Tag', function() {
 
 	beforeEach(async (done) => {

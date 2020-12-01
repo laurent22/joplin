@@ -10,10 +10,6 @@ const BaseModel = require('@joplin/lib/BaseModel').default;
 const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
 const shim = require('@joplin/lib/shim').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('database', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);

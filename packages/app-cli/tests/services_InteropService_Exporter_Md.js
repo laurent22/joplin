@@ -12,10 +12,6 @@ const shim = require('@joplin/lib/shim').default;
 
 const exportDir = `${__dirname}/export`;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('services_InteropService_Exporter_Md', function() {
 
 	beforeEach(async (done) => {

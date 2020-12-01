@@ -9,10 +9,6 @@ const Note = require('@joplin/lib/models/Note');
 const ItemChange = require('@joplin/lib/models/ItemChange');
 const Setting = require('@joplin/lib/models/Setting').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 let engine = null;
 
 

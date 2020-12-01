@@ -139,7 +139,7 @@ setSyncTargetName('memory');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
-const syncDir = `${__dirname}/../tests/sync`;
+const syncDir = `${__dirname}/../tests/sync/${suiteName_}`;
 
 // TODO: Should probably update this for Jest?
 

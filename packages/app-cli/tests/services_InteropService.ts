@@ -11,10 +11,6 @@ const Resource = require('@joplin/lib/models/Resource.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('@joplin/lib/ArrayUtils');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at services_InteropService: Promise', p, 'reason:', reason);
-});
-
 function exportDir() {
 	return `${__dirname}/export`;
 }

@@ -8,10 +8,6 @@ const shim = require('@joplin/lib/shim').default;
 const fs = require('fs-extra');
 const Setting = require('@joplin/lib/models/Setting').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 const api = null;
 
 // Adding empty test for Jest

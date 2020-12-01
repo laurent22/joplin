@@ -2,10 +2,6 @@
 
 const markdownUtils = require('@joplin/lib/markdownUtils').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at markdownUtils: Promise', p, 'reason:', reason);
-});
-
 describe('markdownUtils', function() {
 
 	beforeEach(async (done) => {

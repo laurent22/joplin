@@ -3,10 +3,6 @@ import LockHandler, { LockType, LockHandlerOptions, Lock } from '@joplin/lib/ser
 
 const { isNetworkSyncTarget, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('./test-utils.js');
 
-process.on('unhandledRejection', (reason: any, p: any) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 // For tests with memory of file system we can use low intervals to make the tests faster.
 // However if we use such low values with network sync targets, some calls might randomly fail with
 // ECONNRESET and similar errors (Dropbox or OneDrive migth also throttle). Also we can't use a

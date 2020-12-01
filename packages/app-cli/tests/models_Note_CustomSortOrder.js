@@ -10,10 +10,6 @@ const BaseModel = require('@joplin/lib/BaseModel').default;
 const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
 const shim = require('@joplin/lib/shim').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at models_Note_CustomSortOrder: Promise', p, 'reason:', reason);
-});
-
 async function allItems() {
 	const folders = await Folder.all();
 	const notes = await Note.all();

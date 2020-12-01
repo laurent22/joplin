@@ -65,6 +65,9 @@ packages/app-cli/tests/InMemoryCache.js.map
 packages/app-cli/tests/MdToHtml.d.ts
 packages/app-cli/tests/MdToHtml.js
 packages/app-cli/tests/MdToHtml.js.map
+packages/app-cli/tests/Synchronizer.d.ts
+packages/app-cli/tests/Synchronizer.js
+packages/app-cli/tests/Synchronizer.js.map
 packages/app-cli/tests/fsDriver.d.ts
 packages/app-cli/tests/fsDriver.js
 packages/app-cli/tests/fsDriver.js.map

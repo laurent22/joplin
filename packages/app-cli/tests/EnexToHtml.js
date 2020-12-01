@@ -4,10 +4,6 @@ const shim = require('@joplin/lib/shim').default;
 const { enexXmlToHtml } = require('@joplin/lib/import-enex-html-gen.js');
 const cleanHtml = require('clean-html');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.warn('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 const fileWithPath = (filename) =>
 	`${__dirname}/enex_to_html/${filename}`;
 

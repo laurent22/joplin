@@ -12,10 +12,6 @@ const shim = require('@joplin/lib/shim').default;
 const HtmlToMd = require('@joplin/lib/HtmlToMd');
 const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('HtmlToMd', function() {
 
 	beforeEach(async (done) => {

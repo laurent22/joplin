@@ -5,10 +5,6 @@ const time = require('@joplin/lib/time').default;
 const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const timeUtils = require('@joplin/lib/time');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('timeUtils', function() {
 
 	beforeEach(async (done) => {

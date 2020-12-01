@@ -14,10 +14,6 @@ const BaseModel = require('@joplin/lib/BaseModel').default;
 const RevisionService = require('@joplin/lib/services/RevisionService.js');
 const shim = require('@joplin/lib/shim').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at services_Revision: Promise', p, 'reason:', reason);
-});
-
 describe('services_Revision', function() {
 
 	beforeEach(async (done) => {

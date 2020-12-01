@@ -2,10 +2,6 @@
 
 const StringUtils = require('@joplin/lib/string-utils');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
-
 describe('StringUtils', function() {
 
 	beforeEach(async (done) => {

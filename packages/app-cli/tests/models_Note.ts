@@ -6,10 +6,6 @@ const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at models_Note: Promise', p, 'reason:', reason);
-});
-
 async function allItems() {
 	const folders = await Folder.all();
 	const notes = await Note.all();
