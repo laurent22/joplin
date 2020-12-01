@@ -7,19 +7,13 @@ const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');
 
-let insideBeforeEach = false;
-
 describe('Synchronizer.conflicts', function() {
 
 	beforeEach(async (done) => {
-		insideBeforeEach = true;
-
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 		done();
-
-		insideBeforeEach = false;
 	});
 
 	it('should resolve note conflicts', (async () => {

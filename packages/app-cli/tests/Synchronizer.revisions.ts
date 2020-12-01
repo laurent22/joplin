@@ -1,92 +1,18 @@
-import time from '@joplin/lib/time';
-import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import BaseModel from '@joplin/lib/BaseModel';
-import { NoteEntity } from '@joplin/lib/services/database/types';
-import { allNotesFolders, remoteNotesAndFolders, remoteNotesFoldersResources, remoteResources, localNotesFoldersSameAsRemote } from './test-utils-synchronizer';
 
-const { synchronizerStart, syncTargetName, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, synchronizer, fileApi, sleep, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
+const { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } = require('./test-utils.js');
 const Note = require('@joplin/lib/models/Note.js');
-const Resource = require('@joplin/lib/models/Resource.js');
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
-const Tag = require('@joplin/lib/models/Tag.js');
-const MasterKey = require('@joplin/lib/models/MasterKey');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
 const Revision = require('@joplin/lib/models/Revision.js');
-const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 
-let insideBeforeEach = false;
-
-describe('synchronizer', function() {
+describe('Synchronizer.revisions', function() {
 
 	beforeEach(async (done) => {
-		insideBeforeEach = true;
-
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 		done();
-
-		insideBeforeEach = false;
 	});
-
-	async function shoudSyncTagTest(withEncryption: boolean) {
-		let masterKey = null;
-		if (withEncryption) {
-			Setting.setValue('encryption.enabled', true);
-			masterKey = await loadEncryptionMasterKey();
-		}
-
-		await Folder.save({ title: 'folder' });
-		const n1 = await Note.save({ title: 'mynote' });
-		const n2 = await Note.save({ title: 'mynote2' });
-		const tag = await Tag.save({ title: 'mytag' });
-		await synchronizerStart();
-
-		await switchClient(2);
-
-		await synchronizerStart();
-		if (withEncryption) {
-			const masterKey_2 = await MasterKey.load(masterKey.id);
-			await encryptionService().loadMasterKey_(masterKey_2, '123456', true);
-			const t = await Tag.load(tag.id);
-			await Tag.decrypt(t);
-		}
-		const remoteTag = await Tag.loadByTitle(tag.title);
-		expect(!!remoteTag).toBe(true);
-		expect(remoteTag.id).toBe(tag.id);
-		await Tag.addNote(remoteTag.id, n1.id);
-		await Tag.addNote(remoteTag.id, n2.id);
-		let noteIds = await Tag.noteIds(tag.id);
-		expect(noteIds.length).toBe(2);
-		await synchronizerStart();
-
-		await switchClient(1);
-
-		await synchronizerStart();
-		let remoteNoteIds = await Tag.noteIds(tag.id);
-		expect(remoteNoteIds.length).toBe(2);
-		await Tag.removeNote(tag.id, n1.id);
-		remoteNoteIds = await Tag.noteIds(tag.id);
-		expect(remoteNoteIds.length).toBe(1);
-		await synchronizerStart();
-
-		await switchClient(2);
-
-		await synchronizerStart();
-		noteIds = await Tag.noteIds(tag.id);
-		expect(noteIds.length).toBe(1);
-		expect(remoteNoteIds[0]).toBe(noteIds[0]);
-	}
-
-	it('should sync tags', (async () => {
-		await shoudSyncTagTest(false);
-	}));
-
-	it('should sync encrypted tags', (async () => {
-		await shoudSyncTagTest(true);
-	}));
 
 	it('should not save revisions when updating a note via sync', (async () => {
 		// When a note is updated, a revision of the original is created.

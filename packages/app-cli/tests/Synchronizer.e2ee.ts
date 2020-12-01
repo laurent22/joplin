@@ -1,24 +1,18 @@
 import time from '@joplin/lib/time';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
-import BaseModel from '@joplin/lib/BaseModel';
-import { NoteEntity } from '@joplin/lib/services/database/types';
-import { allNotesFolders, remoteNotesAndFolders, remoteNotesFoldersResources, remoteResources, localNotesFoldersSameAsRemote } from './test-utils-synchronizer';
 
-const { synchronizerStart, syncTargetName, allSyncTargetItemsEncrypted, tempFilePath, resourceFetcher, kvStore, revisionService, setupDatabaseAndSynchronizer, synchronizer, fileApi, sleep, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync } = require('./test-utils.js');
+const { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const Resource = require('@joplin/lib/models/Resource.js');
 const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
-const Tag = require('@joplin/lib/models/Tag.js');
 const MasterKey = require('@joplin/lib/models/MasterKey');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');
-const Revision = require('@joplin/lib/models/Revision.js');
-const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 
 let insideBeforeEach = false;
 
-describe('synchronizer', function() {
+describe('Synchronizer.e2ee', function() {
 
 	beforeEach(async (done) => {
 		insideBeforeEach = true;

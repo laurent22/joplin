@@ -7,19 +7,13 @@ const Note = require('@joplin/lib/models/Note.js');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 
-let insideBeforeEach = false;
-
 describe('Synchronizer.basics', function() {
 
 	beforeEach(async (done) => {
-		insideBeforeEach = true;
-
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 		done();
-
-		insideBeforeEach = false;
 	});
 
 	it('should create remote items', (async () => {
