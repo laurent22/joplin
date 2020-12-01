@@ -72,8 +72,14 @@ packages/app-cli/tests/Synchronizer.conflicts.d.ts
 packages/app-cli/tests/Synchronizer.conflicts.js
 packages/app-cli/tests/Synchronizer.conflicts.js.map
 packages/app-cli/tests/Synchronizer.d.ts
+packages/app-cli/tests/Synchronizer.e2ee.d.ts
+packages/app-cli/tests/Synchronizer.e2ee.js
+packages/app-cli/tests/Synchronizer.e2ee.js.map
 packages/app-cli/tests/Synchronizer.js
 packages/app-cli/tests/Synchronizer.js.map
+packages/app-cli/tests/Synchronizer.resources.d.ts
+packages/app-cli/tests/Synchronizer.resources.js
+packages/app-cli/tests/Synchronizer.resources.js.map
 packages/app-cli/tests/fsDriver.d.ts
 packages/app-cli/tests/fsDriver.js
 packages/app-cli/tests/fsDriver.js.map

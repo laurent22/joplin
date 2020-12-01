@@ -1,9 +1,11 @@
+import Setting from '@joplin/lib/models/Setting';
 import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from './test-utils-synchronizer';
 
-const { synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId } = require('./test-utils.js');
+const { syncTargetName, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');
+const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 
 let insideBeforeEach = false;
 
@@ -264,6 +266,139 @@ describe('Synchronizer.basics', function() {
 
 		disabledItems = await BaseItem.syncDisabledItems(syncTargetId());
 		expect(disabledItems.length).toBe(1);
+	}));
+
+	it('should allow duplicate folder titles', (async () => {
+		await Folder.save({ title: 'folder' });
+
+		await switchClient(2);
+
+		let remoteF2 = await Folder.save({ title: 'folder' });
+		await synchronizerStart();
+
+		await switchClient(1);
+
+		await sleep(0.1);
+
+		await synchronizerStart();
+
+		const localF2 = await Folder.load(remoteF2.id);
+
+		expect(localF2.title == remoteF2.title).toBe(true);
+
+		// Then that folder that has been renamed locally should be set in such a way
+		// that synchronizing it applies the title change remotely, and that new title
+		// should be retrieved by client 2.
+
+		await synchronizerStart();
+
+		await switchClient(2);
+		await sleep(0.1);
+
+		await synchronizerStart();
+
+		remoteF2 = await Folder.load(remoteF2.id);
+
+		expect(remoteF2.title == localF2.title).toBe(true);
+	}));
+
+	it('should create remote items with UTF-8 content', (async () => {
+		const folder = await Folder.save({ title: 'Fahrräder' });
+		await Note.save({ title: 'Fahrräder', body: 'Fahrräder', parent_id: folder.id });
+		const all = await allNotesFolders();
+
+		await synchronizerStart();
+
+		await localNotesFoldersSameAsRemote(all, expect);
+	}));
+
+	it('should update remote items but not pull remote changes', (async () => {
+		const folder = await Folder.save({ title: 'folder1' });
+		const note = await Note.save({ title: 'un', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+		await Note.save({ title: 'deux', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(1);
+
+		await Note.save({ title: 'un UPDATE', id: note.id });
+		await synchronizerStart(null, { syncSteps: ['update_remote'] });
+		const all = await allNotesFolders();
+		expect(all.length).toBe(2);
+
+		await switchClient(2);
+
+		await synchronizerStart();
+		const note2 = await Note.load(note.id);
+		expect(note2.title).toBe('un UPDATE');
+	}));
+
+	it('should create a new Welcome notebook on each client', (async () => {
+		// Create the Welcome items on two separate clients
+
+		await WelcomeUtils.createWelcomeItems();
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await WelcomeUtils.createWelcomeItems();
+		const beforeFolderCount = (await Folder.all()).length;
+		const beforeNoteCount = (await Note.all()).length;
+		expect(beforeFolderCount === 1).toBe(true);
+		expect(beforeNoteCount > 1).toBe(true);
+
+		await synchronizerStart();
+
+		const afterFolderCount = (await Folder.all()).length;
+		const afterNoteCount = (await Note.all()).length;
+
+		expect(afterFolderCount).toBe(beforeFolderCount * 2);
+		expect(afterNoteCount).toBe(beforeNoteCount * 2);
+
+		// Changes to the Welcome items should be synced to all clients
+
+		const f1 = (await Folder.all())[0];
+		await Folder.save({ id: f1.id, title: 'Welcome MOD' });
+
+		await synchronizerStart();
+
+		await switchClient(1);
+
+		await synchronizerStart();
+
+		const f1_1 = await Folder.load(f1.id);
+		expect(f1_1.title).toBe('Welcome MOD');
+	}));
+
+	it('should not wipe out user data when syncing with an empty target', (async () => {
+		// Only these targets support the wipeOutFailSafe flag (in other words, the targets that use basicDelta)
+		if (!['nextcloud', 'memory', 'filesystem', 'amazon_s3'].includes(syncTargetName())) return;
+
+		for (let i = 0; i < 10; i++) await Note.save({ title: 'note' });
+
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await synchronizerStart();
+		await fileApi().clearRoot(); // oops
+		await synchronizerStart();
+		expect((await Note.all()).length).toBe(10); // but since the fail-safe if on, the notes have not been deleted
+
+		Setting.setValue('sync.wipeOutFailSafe', false); // Now switch it off
+		await synchronizerStart();
+		expect((await Note.all()).length).toBe(0); // Since the fail-safe was off, the data has been cleared
+
+		// Handle case where the sync target has been wiped out, then the user creates one note and sync.
+
+		for (let i = 0; i < 10; i++) await Note.save({ title: 'note' });
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await synchronizerStart();
+		await fileApi().clearRoot();
+		await Note.save({ title: 'ma note encore' });
+		await synchronizerStart();
+		expect((await Note.all()).length).toBe(11);
 	}));
 
 });
