@@ -50,6 +50,8 @@ const KeychainServiceDriver = require('@joplin/lib/services/keychain/KeychainSer
 const KeychainServiceDriverDummy = require('@joplin/lib/services/keychain/KeychainServiceDriver.dummy').default;
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
+const PluginRunner = require('../app/services/plugins/PluginRunner').default;
+const PluginService = require('@joplin/lib/services/plugins/PluginService').default;
 const { Dirnames } = require('@joplin/lib/services/synchronizer/utils/types');
 const sharp = require('sharp');
 
@@ -677,6 +679,39 @@ async function createTempDir() {
 	return tempDirPath;
 }
 
+function newPluginService(appVersion = '1.4') {
+	const runner = new PluginRunner();
+	const service = new PluginService();
+	service.initialize(
+		appVersion,
+		{
+			joplin: {},
+		},
+		runner,
+		{
+			dispatch: () => {},
+			getState: () => {},
+		}
+	);
+	return service;
+}
+
+function newPluginScript(script) {
+	return `
+		/* joplin-manifest:
+		{
+			"id": "org.joplinapp.plugins.PluginTest",
+			"manifest_version": 1,
+			"app_min_version": "1.4",
+			"name": "JS Bundle test",
+			"version": "1.0.0"
+		}
+		*/
+		
+		${script}
+	`;
+}
+
 // TODO: Update for Jest
 
 // function mockDate(year, month, day, tick) {
@@ -757,4 +792,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

@@ -5,6 +5,7 @@ import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import executeSandboxCall from '@joplin/lib/services/plugins/utils/executeSandboxCall';
 import Global from '@joplin/lib/services/plugins/api/Global';
 import mapEventHandlersToIds, { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
+import uuid from '@joplin/lib/uuid';
 
 function createConsoleWrapper(pluginId: string) {
 	const wrapper: any = {};
@@ -31,6 +32,7 @@ function createConsoleWrapper(pluginId: string) {
 export default class PluginRunner extends BasePluginRunner {
 
 	private eventHandlers_: EventHandlers = {};
+	private activeSandboxCalls_: any = {};
 
 	constructor() {
 		super();
@@ -45,7 +47,13 @@ export default class PluginRunner extends BasePluginRunner {
 
 	private newSandboxProxy(pluginId: string, sandbox: Global) {
 		const target = async (path: string, args: any[]) => {
-			return executeSandboxCall(pluginId, sandbox, `joplin.${path}`, mapEventHandlersToIds(args, this.eventHandlers_), this.eventHandler);
+			const callId = `${pluginId}::${path}::${uuid.createNano()}`;
+			this.activeSandboxCalls_[callId] = true;
+			const promise = executeSandboxCall(pluginId, sandbox, `joplin.${path}`, mapEventHandlersToIds(args, this.eventHandlers_), this.eventHandler);
+			promise.finally(() => {
+				delete this.activeSandboxCalls_[callId];
+			});
+			return promise;
 		};
 
 		return {
@@ -69,9 +77,24 @@ export default class PluginRunner extends BasePluginRunner {
 				vm.runInContext(plugin.scriptText, vmSandbox);
 			} catch (error) {
 				reject(error);
-				// this.logger().error(`In plugin ${plugin.id}:`, error);
-				// return;
 			}
+		});
+	}
+
+	public async waitForSandboxCalls(): Promise<void> {
+		const startTime = Date.now();
+		return new Promise((resolve: Function, reject: Function) => {
+			const iid = setInterval(() => {
+				if (!Object.keys(this.activeSandboxCalls_).length) {
+					clearInterval(iid);
+					resolve();
+				}
+
+				if (Date.now() - startTime > 4000) {
+					clearInterval(iid);
+					reject(new Error(`Timeout while waiting for sandbox calls to complete: ${JSON.stringify(this.activeSandboxCalls_)}`));
+				}
+			}, 10);
 		});
 	}
 

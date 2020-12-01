@@ -22,9 +22,7 @@ function newPluginService(appVersion: string = '1.4') {
 	service.initialize(
 		appVersion,
 		{
-			joplin: {
-				workspace: {},
-			},
+			joplin: {},
 		},
 		runner,
 		{

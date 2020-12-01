@@ -1,6 +1,7 @@
 const BaseModel = require('../BaseModel').default;
 const Mutex = require('async-mutex').Mutex;
 const shim = require('../shim').default;
+const eventManager = require('../eventManager').default;
 
 class ItemChange extends BaseModel {
 	static tableName() {
@@ -22,10 +23,25 @@ class ItemChange extends BaseModel {
 		const release = await ItemChange.addChangeMutex_.acquire();
 
 		try {
-			await this.db().transactionExecBatch([{ sql: 'DELETE FROM item_changes WHERE item_id = ?', params: [itemId] }, { sql: 'INSERT INTO item_changes (item_type, item_id, type, source, created_time, before_change_item) VALUES (?, ?, ?, ?, ?, ?)', params: [itemType, itemId, type, changeSource, Date.now(), beforeChangeItemJson] }]);
+			await this.db().transactionExecBatch([
+				{
+					sql: 'DELETE FROM item_changes WHERE item_id = ?',
+					params: [itemId],
+				},
+				{
+					sql: 'INSERT INTO item_changes (item_type, item_id, type, source, created_time, before_change_item) VALUES (?, ?, ?, ?, ?, ?)',
+					params: [itemType, itemId, type, changeSource, Date.now(), beforeChangeItemJson],
+				},
+			]);
 		} finally {
 			release();
 			ItemChange.saveCalls_.pop();
+
+			eventManager.emit('itemChange', {
+				itemType: itemType,
+				itemId: itemId,
+				eventType: type,
+			});
 		}
 	}
 
@@ -62,6 +78,6 @@ ItemChange.TYPE_DELETE = 3;
 
 ItemChange.SOURCE_UNSPECIFIED = 1;
 ItemChange.SOURCE_SYNC = 2;
-ItemChange.SOURCE_DECRYPTION = 2;
+ItemChange.SOURCE_DECRYPTION = 2; // CAREFUL - SAME ID AS SOURCE_SYNC!
 
 module.exports = ItemChange;

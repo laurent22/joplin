@@ -86,6 +86,9 @@ packages/app-cli/tests/models_Note.js.map
 packages/app-cli/tests/models_Setting.d.ts
 packages/app-cli/tests/models_Setting.js
 packages/app-cli/tests/models_Setting.js.map
+packages/app-cli/tests/services/plugins/api/JoplinWorkspace.d.ts
+packages/app-cli/tests/services/plugins/api/JoplinWorkspace.js
+packages/app-cli/tests/services/plugins/api/JoplinWorkspace.js.map
 packages/app-cli/tests/services/plugins/sandboxProxy.d.ts
 packages/app-cli/tests/services/plugins/sandboxProxy.js
 packages/app-cli/tests/services/plugins/sandboxProxy.js.map
@@ -1124,6 +1127,9 @@ packages/lib/services/plugins/utils/executeSandboxCall.js.map
 packages/lib/services/plugins/utils/loadContentScripts.d.ts
 packages/lib/services/plugins/utils/loadContentScripts.js
 packages/lib/services/plugins/utils/loadContentScripts.js.map
+packages/lib/services/plugins/utils/makeListener.d.ts
+packages/lib/services/plugins/utils/makeListener.js
+packages/lib/services/plugins/utils/makeListener.js.map
 packages/lib/services/plugins/utils/manifestFromObject.d.ts
 packages/lib/services/plugins/utils/manifestFromObject.js
 packages/lib/services/plugins/utils/manifestFromObject.js.map
