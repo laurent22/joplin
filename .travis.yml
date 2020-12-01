@@ -68,6 +68,12 @@ before_install:
 
 script:
   - |
+    # Prints some env variables
+    echo "TRAVIS_OS_NAME=$TRAVIS_OS_NAME"
+    echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
+    echo "TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
+    echo "TRAVIS_TAG=$TRAVIS_TAG"
+
     # Install tools
     npm install
 
@@ -116,5 +122,17 @@ script:
     fi
 
     # Prepare the Electron app and build it
+    #
+    # If the current tag is a desktop release tag (starts with "v", such as
+    # "v1.4.7"), we build and publish to github
+    #
+    # Otherwise we only build but don't publish to GitHub. It helps finding
+    # out any issue in pull requests and dev branch.
+    
     cd packages/app-desktop
-    USE_HARD_LINKS=false npm run dist
+
+    if [[ $TRAVIS_TAG = v* ]]; then
+      USE_HARD_LINKS=false npm run dist
+    else
+      USE_HARD_LINKS=false npm run dist -- --publish=never
+    fi
