@@ -1,6 +1,6 @@
 import { LayoutItem, LayoutItemDirection } from './types';
 import validateLayout from './validateLayout';
-import { canMove, MoveDirection, moveHorizontal, moveVertical } from './movements';
+import { canMove, ItemSide, MoveDirection, moveHorizontal, moveItemNear, moveVertical } from './movements';
 import findItemByKey from './findItemByKey';
 
 describe('movements', () => {
@@ -223,6 +223,39 @@ describe('movements', () => {
 
 		expect(layout.children[0].width).toBe(20);
 		expect(layout.children[1].width).toBe(undefined);
+	});
+
+	test('should move an item near another one', () => {
+		let layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{
+					key: 'col1',
+					resizableRight: true,
+					direction: LayoutItemDirection.Column,
+					children: [
+						{ key: 'item1' },
+						{ key: 'item2' },
+					],
+				},
+				{
+					key: 'col2',
+				},
+			],
+		});
+
+		// If parent is a ROW and putting item on top of sibling - first move to
+		// the left, then move right so that item goes inside new container
+
+		layout = moveItemNear(layout, 'item1', 'col2', ItemSide.Top);
+
+		console.info(layout);
+
+		// expect(layout.children[0].width).toBe(20);
+		// expect(layout.children[1].width).toBe(undefined);
 	});
 
 });

@@ -3,6 +3,20 @@ import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ViewHandle } from './types';
 
+interface InitialPosition {
+	nextTo: string,
+}
+
+// initialPosition: {
+// 	nextTo: 'editor',
+// 	side: '',top, right, bottom , left
+// 	size: 100,
+// }
+
+interface CreateOptions {
+	initialPosition: InitialPosition,
+}
+
 /**
  * Allows creating and managing view panels. View panels currently are
  * displayed at the right of the sidebar and allows displaying any HTML
@@ -29,7 +43,7 @@ export default class JoplinViewsPanels {
 	/**
 	 * Creates a new panel
 	 */
-	async create(id: string): Promise<ViewHandle> {
+	async create(id: string, options:CreateOptions = null): Promise<ViewHandle> {
 		if (!id) {
 			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.panels.create("my-unique-id")`');
 			id = `${this.plugin.viewCount}`;

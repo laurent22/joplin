@@ -3,10 +3,19 @@ import { LayoutItem, LayoutItemDirection, tempContainerPrefix } from './types';
 import produce from 'immer';
 import uuid from '@joplin/lib/uuid';
 import validateLayout from './validateLayout';
+import findItemByKey from './findItemByKey';
+import removeItem from './removeItem';
 
 export enum MoveDirection {
 	Up = 'up',
 	Down = 'down',
+	Left = 'left',
+	Right = 'right',
+}
+
+export enum ItemSide {
+	Top = 'top',
+	Bottom = 'bottom',
 	Left = 'left',
 	Right = 'right',
 }
@@ -187,4 +196,43 @@ export function move(layout: LayoutItem, key: string, direction: MoveDirection):
 	if (direction === MoveDirection.Left) return moveHorizontal(layout, key, -1);
 	if (direction === MoveDirection.Right) return moveHorizontal(layout, key, +1);
 	throw new Error('Unreachable');
+}
+
+export function moveItemNear(layout:LayoutItem, itemKey:string, nearItemKey:string, side: ItemSide): LayoutItem {
+	const itemToInsert = findItemByKey(layout, itemKey);
+	const layoutWithoutItem = removeItem(layout, itemKey);
+
+	let moveDirection:MoveDirection = null;
+
+	const sideToDirectionMap = {
+		[ItemSide.Top]: MoveDirection.Up,
+		[ItemSide.Bottom]: MoveDirection.Down,
+		[ItemSide.Left]: MoveDirection.Left,
+		[ItemSide.Right]: MoveDirection.Right,
+	};
+
+	const layoutWithInsertedItem = produce(layoutWithoutItem, (draft: any) => {
+		iterateItems(draft, (itemIndex: number, item: LayoutItem, parent: LayoutItem) => {
+			if (item.key !== nearItemKey) return true;
+			parent.children.splice(itemIndex, 0, itemToInsert);
+
+			if (
+				parent.direction === LayoutItemDirection.Column && side === ItemSide.Top ||
+				parent.direction === LayoutItemDirection.Row && side === ItemSide.Left
+			) {
+				// Nothing to do - already in position
+			} else {
+				moveDirection = sideToDirectionMap[side];
+			}
+
+			return false;
+		});
+	});
+
+	console.info(JSON.stringify(layoutWithInsertedItem, null, 4));
+
+	console.info('MOVE', moveDirection);
+
+	const updatedLayout = moveDirection ? move(layoutWithInsertedItem, itemKey, moveDirection) : layoutWithInsertedItem;
+	return validateLayout(updatedLayout);
 }
