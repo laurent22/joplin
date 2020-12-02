@@ -4,13 +4,12 @@ services:
     app:
       build:
         context: .
-        dockerfile: Dockerfile.server
+        dockerfile: Dockerfile.server-dev
       ports:
         - "22300:22300"
-      image: app
-      container_name: app
-      # volumes:
-      #   - ./packages/server:/usr/share/nginx/html:ro
+      volumes:
+        - ./packages/server/:/var/www/joplin/packages/server/
+        - /var/www/joplin/packages/server/node_modules/
     # db:
     #     build:
     #         context: .

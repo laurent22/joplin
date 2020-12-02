@@ -11,7 +11,8 @@ ENV NODE_ENV development
 
 WORKDIR /home/$user
 
-COPY --chown=$user:$user package*.json .
+COPY --chown=$user:$user package.json .
+COPY --chown=$user:$user package-lock.json .
 
 # We copy only the packages that we need for the server
 # Note that node_modules is excluded using .dockerignore
