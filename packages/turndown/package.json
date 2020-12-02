@@ -1,0 +1,50 @@
+{
+  "name": "@joplin/turndown",
+  "description": "A library that converts HTML to Markdown",
+  "version": "4.0.30",
+  "author": "Dom Christie",
+  "main": "lib/turndown.cjs.js",
+  "module": "lib/turndown.es.js",
+  "jsnext:main": "lib/turndown.es.js",
+  "browser": {
+    "jsdom": false
+  },
+  "dependencies": {
+    "css": "^2.2.4",
+    "html-entities": "^1.2.1",
+    "jsdom": "^15.2.1"
+  },
+  "devDependencies": {
+    "browserify": "^14.5.0",
+    "rollup": "^0.50.0",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "standard": "^10.0.3",
+    "turndown-attendant": "0.0.3"
+  },
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "keywords": [
+    "converter",
+    "html",
+    "markdown"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laurent22/joplin-turndown.git"
+  },
+  "scripts": {
+    "build-all": "npm run build-cjs && npm run build-es && npm run build-umd && npm run build-iife",
+    "build": "rollup -c config/rollup.config.cjs.js",
+    "build-cjs": "rollup -c config/rollup.config.cjs.js && rollup -c config/rollup.config.browser.cjs.js",
+    "build-es": "rollup -c config/rollup.config.es.js && rollup -c config/rollup.config.browser.es.js",
+    "build-umd": "rollup -c config/rollup.config.umd.js && rollup -c config/rollup.config.browser.umd.js",
+    "build-iife": "rollup -c config/rollup.config.iife.js",
+    "build-test": "browserify test/turndown-test.js --outfile test/turndown-test.browser.js",
+    "postinstall": "npm run build"
+  }
+}

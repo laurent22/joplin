@@ -10,6 +10,8 @@ highlight.pack.js
 Modules/TinyMCE/IconPack/postinstall.js
 Modules/TinyMCE/JoplinLists/
 Modules/TinyMCE/langs/
+packages/turndown/
+packages/turndown-plugin-gfm/
 node_modules/
 packages/lib/lib/lib.js
 packages/lib/locales/index.js
