@@ -1,17 +1,18 @@
-interface Config {
-	port: number;
-	baseUrl: string;
-	viewDir: string;
-	layoutDir: string;
+import { Config } from './utils/types';
+
+let baseConfig_: Config = null;
+
+export function initConfig(baseConfig: Config) {
+	baseConfig_ = baseConfig;
 }
 
-const viewDir = `${__dirname}/views`;
+function config() {
+	if (!baseConfig_) throw new Error('Config has not been initialized!');
+	return baseConfig_;
+}
 
-const config: Config = {
-	port: 22300,
-	baseUrl: '',
-	viewDir: viewDir,
-	layoutDir: `${viewDir}/layouts`,
-};
+export function baseUrl() {
+	return `http://localhost:${config().port}`;
+}
 
 export default config;

@@ -8,3 +8,19 @@ export interface AppContext extends Koa.Context {
 	models: Models;
 	controllers: Controllers;
 }
+
+export interface DatabaseConfig {
+	client: string;
+	name: string;
+	host?: string;
+	port?: number;
+	user?: string;
+	asyncStackTraces?: boolean;
+}
+
+export interface Config {
+	port: number;
+	viewDir: string;
+	layoutDir: string;
+	database: DatabaseConfig;
+}

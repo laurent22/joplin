@@ -1,12 +1,14 @@
 import { User, Session, DbConnection, connectDb, disconnectDb } from '../db';
 import cache from './cache';
 import { createDb } from '../tools/dbTools';
-import createDbConfig from '../db.config.tests';
 import modelFactory from '../models/factory';
 import controllerFactory from '../controllers/factory';
+import baseConfig from '../config-tests';
+import { Config } from './types';
+import { initConfig } from '../config';
 
-// Takes into account the fact that this file will be inside the /dist
-// directory when it runs.
+// Takes into account the fact that this file will be inside the /dist directory
+// when it runs.
 const packageRootDir = `${__dirname}/../..`;
 
 let db_: DbConnection = null;
@@ -14,9 +16,17 @@ let db_: DbConnection = null;
 // require('source-map-support').install();
 
 export async function beforeAllDb(unitName: string) {
-	const dbConfig = createDbConfig(unitName, 'sqlite3');
-	await createDb(dbConfig, { dropIfExists: true });
-	db_ = await connectDb(dbConfig);
+	const config: Config = {
+		...baseConfig,
+		database: {
+			...baseConfig.database,
+			name: unitName,
+		},
+	};
+
+	initConfig(config);
+	await createDb(config.database, { dropIfExists: true });
+	db_ = await connectDb(config.database);
 }
 
 export async function afterAllDb() {

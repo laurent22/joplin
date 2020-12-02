@@ -7,8 +7,9 @@ import { argv } from 'yargs';
 import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
-import config from './config';
-import createDbConfig from './db.config.prod';
+import config, { initConfig, baseUrl } from './config';
+import configDev from './config-dev';
+import configProd from './config-prod';
 import { createDb, dropDb } from './tools/dbTools';
 import { connectDb, disconnectDb, migrateDb } from './db';
 import modelFactory from './models/factory';
@@ -16,8 +17,6 @@ import controllerFactory from './controllers/factory';
 import { AppContext } from './utils/types';
 
 // require('source-map-support').install();
-
-config.baseUrl = `http://localhost:${config.port}`;
 
 const app = new Koa();
 
@@ -68,9 +67,15 @@ app.use(async (ctx: Koa.Context) => {
 });
 
 async function main() {
-	const pidFile = argv.pidfile as string;
+	const env: string = argv.env as string || 'prod';
 
-	const dbConfig = createDbConfig('dev', 'sqlite3');
+	if (env === 'prod') {
+		initConfig(configProd);
+	} else {
+		initConfig(configDev);
+	}
+
+	const pidFile = argv.pidfile as string;
 
 	if (pidFile) {
 		appLogger.info(`Writing PID to ${pidFile}...`);
@@ -79,24 +84,25 @@ async function main() {
 	}
 
 	if (argv.migrateDb) {
-		const db = await connectDb(dbConfig);
+		const db = await connectDb(config().database);
 		await migrateDb(db);
 		await disconnectDb(db);
 	} else if (argv.dropDb) {
-		await dropDb(dbConfig, { ignoreIfNotExists: true });
+		await dropDb(config().database, { ignoreIfNotExists: true });
 	} else if (argv.createDb) {
-		await createDb(dbConfig);
+		await createDb(config().database);
 	} else {
-		appLogger.info(`Starting server on port ${config.port} and PID ${process.pid}...`);
-		appLogger.info(`Base URL: ${config.baseUrl}`);
-		appLogger.info(`DB Config: ${JSON.stringify(dbConfig)}`);
+		appLogger.info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
+		appLogger.info(`Base URL: ${baseUrl()}`);
+		appLogger.info(`DB Config: ${JSON.stringify(config().database)}`);
+		appLogger.info(`Call this for testing: \`curl ${baseUrl()}/api/ping\``);
 
 		const appContext = app.context as AppContext;
-		appContext.db = await connectDb(dbConfig);
+		appContext.db = await connectDb(config().database);
 		appContext.models = modelFactory(appContext.db);
 		appContext.controllers = controllerFactory(appContext.models);
 
-		app.listen(config.port);
+		app.listen(config().port);
 	}
 }
 

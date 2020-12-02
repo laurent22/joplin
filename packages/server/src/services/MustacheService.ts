@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 import * as fs from 'fs-extra';
-import config from '../config';
+import config, { baseUrl } from '../config';
 
 export interface RenderOptions {
 	partials?: any;
@@ -11,12 +11,12 @@ export interface RenderOptions {
 class MustacheService {
 
 	private get defaultLayoutPath(): string {
-		return `${config.layoutDir}/default.mustache`;
+		return `${config().layoutDir}/default.mustache`;
 	}
 
 	private get defaultLayoutOptions(): any {
 		return {
-			baseUrl: config.baseUrl,
+			baseUrl: baseUrl(),
 		};
 	}
 
@@ -27,7 +27,7 @@ class MustacheService {
 	private resolvesFilePaths(type: string, paths: string[]): string[] {
 		const output: string[] = [];
 		for (const path of paths) {
-			output.push(`${config.baseUrl}/${type}/${path}.${type}`);
+			output.push(`${baseUrl()}/${type}/${path}.${type}`);
 		}
 		return output;
 	}
@@ -37,7 +37,7 @@ class MustacheService {
 		const cssFiles = this.resolvesFilePaths('css', options && options.cssFiles ? options.cssFiles : []);
 		const jsFiles = this.resolvesFilePaths('js', options && options.jsFiles ? options.jsFiles : []);
 
-		const filePath = `${config.viewDir}/${path}.mustache`;
+		const filePath = `${config().viewDir}/${path}.mustache`;
 		const contentHtml = Mustache.render(await this.loadTemplateContent(filePath), view, partials);
 
 		const layoutView: any = Object.assign({}, this.defaultLayoutOptions, {

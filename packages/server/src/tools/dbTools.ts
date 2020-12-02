@@ -1,5 +1,6 @@
-import { connectDb, DbConfig, disconnectDb, migrateDb } from '../db';
+import { connectDb, disconnectDb, migrateDb, sqliteFilePath } from '../db';
 import * as fs from 'fs-extra';
+import { DatabaseConfig } from '../utils/types';
 
 const { execCommand } = require('@joplin/tools/tool-utils');
 
@@ -11,7 +12,7 @@ export interface DropDbOptions {
 	ignoreIfNotExists: boolean;
 }
 
-export async function createDb(config: DbConfig, options: CreateDbOptions = null) {
+export async function createDb(config: DatabaseConfig, options: CreateDbOptions = null) {
 	options = {
 		dropIfExists: false,
 		...options,
@@ -20,10 +21,10 @@ export async function createDb(config: DbConfig, options: CreateDbOptions = null
 	if (config.client === 'pg') {
 		const cmd: string[] = [
 			'createdb',
-			'--host', config.connection.host,
-			'--port', config.connection.port.toString(),
-			'--username', config.connection.user,
-			config.connection.database,
+			'--host', config.host,
+			'--port', config.port.toString(),
+			'--username', config.user,
+			config.name,
 		];
 
 		if (options.dropIfExists) {
@@ -32,11 +33,13 @@ export async function createDb(config: DbConfig, options: CreateDbOptions = null
 
 		await execCommand(cmd.join(' '));
 	} else if (config.client === 'sqlite3') {
-		if (await fs.pathExists(config.connection.filename)) {
+		const filePath = sqliteFilePath(config);
+
+		if (await fs.pathExists(filePath)) {
 			if (options.dropIfExists) {
-				await fs.remove(config.connection.filename);
+				await fs.remove(filePath);
 			} else {
-				throw new Error(`Database already exists: ${config.connection.filename}`);
+				throw new Error(`Database already exists: ${filePath}`);
 			}
 		}
 	}
@@ -46,7 +49,7 @@ export async function createDb(config: DbConfig, options: CreateDbOptions = null
 	await disconnectDb(db);
 }
 
-export async function dropDb(config: DbConfig, options: DropDbOptions = null) {
+export async function dropDb(config: DatabaseConfig, options: DropDbOptions = null) {
 	options = {
 		ignoreIfNotExists: false,
 		...options,
@@ -55,10 +58,10 @@ export async function dropDb(config: DbConfig, options: DropDbOptions = null) {
 	if (config.client === 'pg') {
 		const cmd: string[] = [
 			'dropdb',
-			'--host', config.connection.host,
-			'--port', config.connection.port.toString(),
-			'--username', config.connection.user,
-			config.connection.database,
+			'--host', config.host,
+			'--port', config.port.toString(),
+			'--username', config.user,
+			config.name,
 		];
 
 		try {
@@ -68,6 +71,6 @@ export async function dropDb(config: DbConfig, options: DropDbOptions = null) {
 			throw error;
 		}
 	} else if (config.client === 'sqlite3') {
-		await fs.remove(config.connection.filename);
+		await fs.remove(sqliteFilePath(config));
 	}
 }

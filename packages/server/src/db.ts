@@ -1,6 +1,9 @@
 import * as Knex from 'knex';
+import { DatabaseConfig } from './utils/types';
+import * as pathUtils from 'path';
 
-const migratioDir = `${__dirname}/migrations`;
+const migrationDir = `${__dirname}/migrations`;
+const sqliteDbDir = pathUtils.dirname(__dirname);
 
 export type DbConnection = Knex;
 
@@ -12,15 +15,39 @@ export interface DbConfigConnection {
 	filename?: string;
 }
 
-export interface DbConfig {
+export interface KnexDatabaseConfig {
 	client: string;
 	connection: DbConfigConnection;
 	useNullAsDefault?: boolean;
 	asyncStackTraces?: boolean;
 }
 
-export async function connectDb(dbConfig: DbConfig) {
-	return require('knex')(dbConfig);
+export function sqliteFilePath(dbConfig: DatabaseConfig): string {
+	return `${sqliteDbDir}/db-${dbConfig.name}.sqlite`;
+}
+
+export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
+	const connection: DbConfigConnection = {};
+
+	if (dbConfig.client === 'sqlite3') {
+		connection.filename = sqliteFilePath(dbConfig);
+	} else {
+		connection.database = dbConfig.name;
+		connection.host = dbConfig.host;
+		connection.port = dbConfig.port;
+		connection.user = dbConfig.user;
+	}
+
+	return {
+		client: dbConfig.client,
+		useNullAsDefault: dbConfig.client === 'sqlite3',
+		asyncStackTraces: dbConfig.asyncStackTraces,
+		connection,
+	};
+}
+
+export async function connectDb(dbConfig: DatabaseConfig) {
+	return require('knex')(makeKnexConfig(dbConfig));
 }
 
 export async function disconnectDb(db: DbConnection) {
@@ -29,7 +56,7 @@ export async function disconnectDb(db: DbConnection) {
 
 export async function migrateDb(db: DbConnection) {
 	await db.migrate.latest({
-		directory: migratioDir,
+		directory: migrationDir,
 		// Disable transactions because the models might open one too
 		disableTransactions: true,
 	});
