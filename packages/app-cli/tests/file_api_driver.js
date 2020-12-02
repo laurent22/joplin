@@ -3,14 +3,10 @@
 
 const uuid = require('@joplin/lib/uuid').default;
 const time = require('@joplin/lib/time').default;
-const { asyncTest, sleep, fileApi, fileContentEqual, checkThrowAsync } = require('./test-utils.js');
+const { sleep, fileApi, fileContentEqual, checkThrowAsync } = require('./test-utils.js');
 const shim = require('@joplin/lib/shim').default;
 const fs = require('fs-extra');
 const Setting = require('@joplin/lib/models/Setting').default;
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 const api = null;
 
@@ -42,7 +38,7 @@ it('will pass', () => {
 // 	});
 
 // 	describe('list', function() {
-// 		it('should return items with relative path', asyncTest(async () => {
+// 		it('should return items with relative path', (async () => {
 // 			await api.mkdir('.subfolder');
 // 			await api.put('1', 'something on root 1');
 // 			await api.put('.subfolder/1', 'something subfolder 1');
@@ -57,7 +53,7 @@ it('will pass', () => {
 // 			expect(items[0].updated_time).toMatch(/^\d+$/); // make sure it's using epoch timestamp
 // 		}));
 
-// 		it('should default to only files on root directory', asyncTest(async () => {
+// 		it('should default to only files on root directory', (async () => {
 // 			await api.mkdir('.subfolder');
 // 			await api.put('.subfolder/1', 'something subfolder 1');
 // 			await api.put('file1', 'something 1');
@@ -70,12 +66,12 @@ it('will pass', () => {
 // 	}); // list
 
 // 	describe('delete', function() {
-// 		it('should not error if file does not exist', asyncTest(async () => {
+// 		it('should not error if file does not exist', (async () => {
 // 			const hasThrown = await checkThrowAsync(async () => await api.delete('nonexistant_file'));
 // 			expect(hasThrown).toBe(false);
 // 		}));
 
-// 		it('should delete specific file given full path', asyncTest(async () => {
+// 		it('should delete specific file given full path', (async () => {
 // 			await api.mkdir('deleteDir');
 // 			await api.put('deleteDir/1', 'something 1');
 // 			await api.put('deleteDir/2', 'something 2');
@@ -90,19 +86,19 @@ it('will pass', () => {
 // 	}); // delete
 
 // 	describe('get', function() {
-// 		it('should return null if object does not exist', asyncTest(async () => {
+// 		it('should return null if object does not exist', (async () => {
 // 			const response = await api.get('nonexistant_file');
 // 			expect(response).toBe(null);
 // 		}));
 
-// 		it('should return UTF-8 encoded string by default', asyncTest(async () => {
+// 		it('should return UTF-8 encoded string by default', (async () => {
 // 			await api.put('testnote.md', 'something 2');
 
 // 			const response = await api.get('testnote.md');
 // 			expect(response).toBe('something 2');
 // 		}));
 
-// 		it('should return a Response object and writes file to options.path, if options.target is "file"', asyncTest(async () => {
+// 		it('should return a Response object and writes file to options.path, if options.target is "file"', (async () => {
 // 			const localFilePath = `${Setting.value('tempDir')}/${uuid.create()}.md`;
 // 			await api.put('testnote.md', 'something 2');
 // 			sleep(0.2);
@@ -116,7 +112,7 @@ it('will pass', () => {
 // 	}); // get
 
 // 	describe('put', function() {
-// 		it('should create file to remote path and content', asyncTest(async () => {
+// 		it('should create file to remote path and content', (async () => {
 // 			await api.put('putTest.md', 'I am your content');
 // 			sleep(0.2);
 
@@ -124,7 +120,7 @@ it('will pass', () => {
 // 			expect(response).toBe('I am your content');
 // 		}));
 
-// 		it('should upload file in options.path to remote path, if options.source is "file"', asyncTest(async () => {
+// 		it('should upload file in options.path to remote path, if options.source is "file"', (async () => {
 // 			const localFilePath = `${Setting.value('tempDir')}/${uuid.create()}.md`;
 // 			fs.writeFileSync(localFilePath, 'I am the local file.');
 

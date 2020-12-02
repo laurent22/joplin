@@ -1,12 +1,8 @@
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
 const shim = require('@joplin/lib/shim').default;
 const { enexXmlToHtml } = require('@joplin/lib/import-enex-html-gen.js');
 const cleanHtml = require('clean-html');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.warn('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 const fileWithPath = (filename) =>
 	`${__dirname}/enex_to_html/${filename}`;
@@ -49,7 +45,7 @@ const compareOutputToExpected = (options) => {
 	const outputFile = fileWithPath(`${options.testName}.html`);
 	const testTitle = `should convert from Enex to Html: ${options.testName}`;
 
-	it(testTitle, asyncTest(async () => {
+	it(testTitle, (async () => {
 		const enexInput = await shim.fsDriver().readFile(inputFile);
 		const expectedOutput = await shim.fsDriver().readFile(outputFile);
 		const actualOutput = await beautifyHtml(await enexXmlToHtml(enexInput, options.resources));
@@ -101,7 +97,7 @@ describe('EnexToHtml', function() {
 		}],
 	});
 
-	// it('fails when not given a matching resource', asyncTest(async () => {
+	// it('fails when not given a matching resource', (async () => {
 	// 	// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
 	// 	const resources = [];
 	// 	const inputFile = fileWithPath('en-media--image.enex');

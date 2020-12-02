@@ -8,4 +8,8 @@ export default abstract class BasePluginRunner extends BaseService {
 		throw new Error(`Not implemented: ${plugin} / ${sandbox}`);
 	}
 
+	public async waitForSandboxCalls(): Promise<void> {
+		throw new Error('Not implemented: waitForSandboxCalls');
+	}
+
 }

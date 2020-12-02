@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('./test-utils.js');
 const Setting = require('@joplin/lib/models/Setting').default;
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
@@ -23,7 +23,7 @@ describe('integration_TagList', function() {
 	});
 
 	// the tag list should be cleared if the next note has no tags
-	it('should clear tag list when a note is deleted', asyncTest(async () => {
+	it('should clear tag list when a note is deleted', (async () => {
 		// setup and select the note
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
@@ -54,7 +54,7 @@ describe('integration_TagList', function() {
 	}));
 
 	// the tag list should be updated if the next note has tags
-	it('should update tag list when a note is deleted', asyncTest(async () => {
+	it('should update tag list when a note is deleted', (async () => {
 		// set up and select the note
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);

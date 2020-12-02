@@ -385,4 +385,8 @@ export default class PluginService extends BaseService {
 		return newSettings;
 	}
 
+	public async destroy() {
+		await this.runner_.waitForSandboxCalls();
+	}
+
 }

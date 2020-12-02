@@ -13,7 +13,7 @@ function readManifest(manifestPath) {
 }
 
 function createPluginArchive(sourceDir, destPath) {
-	const distFiles = glob.sync(`${sourceDir}/**/*`)
+	const distFiles = glob.sync(`${sourceDir}/**/*`, { nodir: true })
 		.map(f => f.substr(sourceDir.length + 1));
 
 	if (!distFiles.length) {

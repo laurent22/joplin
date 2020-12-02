@@ -247,7 +247,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if (cmd.name === 'insertText') {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, cmd.value, { bodyOnly: true });
 					editor.insertContent(result.html);
-				} else if (cmd.name === 'focus') {
+				} else if (cmd.name === 'editor.focus') {
 					editor.focus();
 				} else if (cmd.name === 'dropItems') {
 					if (cmd.value.type === 'notes') {
@@ -962,7 +962,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem'];
 
-			if (changeCommands.includes(c) || c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
+			if (
+				changeCommands.includes(c) ||
+				c.indexOf('Insert') === 0 ||
+				c.indexOf('mceToggle') === 0 ||
+				c.indexOf('mceInsert') === 0 ||
+				c.indexOf('mceTable') === 0
+			) {
 				onChangeHandler();
 			}
 		}

@@ -2,17 +2,13 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');
 const Resource = require('@joplin/lib/models/Resource.js');
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const shim = require('@joplin/lib/shim').default;
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at models_BaseItem: Promise', p, 'reason:', reason);
-});
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -30,7 +26,7 @@ describe('models_BaseItem', function() {
 
 	// This is to handle the case where a property is removed from a BaseItem table - in that case files in
 	// the sync target will still have the old property but we don't need it locally.
-	it('should ignore properties that are present in sync file but not in database when serialising', asyncTest(async () => {
+	it('should ignore properties that are present in sync file but not in database when serialising', (async () => {
 		const folder = await Folder.save({ title: 'folder1' });
 
 		let serialized = await Folder.serialize(folder);
@@ -41,7 +37,7 @@ describe('models_BaseItem', function() {
 		expect('ignore_me' in unserialized).toBe(false);
 	}));
 
-	it('should not modify title when unserializing', asyncTest(async () => {
+	it('should not modify title when unserializing', (async () => {
 		const folder1 = await Folder.save({ title: '' });
 		const folder2 = await Folder.save({ title: 'folder1' });
 
@@ -56,7 +52,7 @@ describe('models_BaseItem', function() {
 		expect(unserialized2.title).toBe(folder2.title);
 	}));
 
-	it('should correctly unserialize note timestamps', asyncTest(async () => {
+	it('should correctly unserialize note timestamps', (async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', parent_id: folder.id });
 
@@ -69,7 +65,7 @@ describe('models_BaseItem', function() {
 		expect(unserialized.user_updated_time).toEqual(note.user_updated_time);
 	}));
 
-	it('should serialize geolocation fields', asyncTest(async () => {
+	it('should serialize geolocation fields', (async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		let note = await Note.save({ title: 'note', parent_id: folder.id });
 		note = await Note.load(note.id);
@@ -92,7 +88,7 @@ describe('models_BaseItem', function() {
 		expect(unserialized.altitude).toEqual(note.altitude);
 	}));
 
-	it('should serialize and unserialize notes', asyncTest(async () => {
+	it('should serialize and unserialize notes', (async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', parent_id: folder.id });
 		await Note.updateGeolocation(note.id);
@@ -104,7 +100,7 @@ describe('models_BaseItem', function() {
 		expect(noteAfter).toEqual(noteBefore);
 	}));
 
-	it('should serialize and unserialize properties that contain new lines', asyncTest(async () => {
+	it('should serialize and unserialize properties that contain new lines', (async () => {
 		const sourceUrl = `
 https://joplinapp.org/ \\n
 `;
@@ -118,7 +114,7 @@ https://joplinapp.org/ \\n
 		expect(noteAfter).toEqual(noteBefore);
 	}));
 
-	it('should not serialize the note title and body', asyncTest(async () => {
+	it('should not serialize the note title and body', (async () => {
 		const note = await Note.save({ title: 'my note', body: `one line
 two line
 three line \\n no escape` });

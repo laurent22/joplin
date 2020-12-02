@@ -12,10 +12,6 @@ const Setting = require('@joplin/lib/models/Setting').default;
 const { sprintf } = require('sprintf-js');
 const exec = require('child_process').exec;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.error('Unhandled promise rejection', p, 'reason:', reason);
-});
-
 const baseDir = `${dirname(__dirname)}/tests/cli-integration`;
 const joplinAppPath = `${__dirname}/main.js`;
 

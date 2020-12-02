@@ -1,5 +1,99 @@
 # Joplin changelog
 
+## [v1.4.18](https://github.com/laurent22/joplin/releases/tag/v1.4.18) - 2020-11-28T12:21:41Z
+
+- Fixed: Fixed notifications on macOS
+- Fixed: Re-enabled ASAR packing to improve startup time
+
+## [v1.4.16](https://github.com/laurent22/joplin/releases/tag/v1.4.16) - 2020-11-27T19:40:16Z
+
+- Fixed: Fix sorting by title in a case insensitive way
+- Fixed: Fixed spell checker crash when no language is selected
+
+## [v1.4.15](https://github.com/laurent22/joplin/releases/tag/v1.4.15) - 2020-11-27T13:25:43Z
+
+- Fixed: Notifications on macOS
+- Fixed: Fixed potential crash when watching note files or resources
+- Fixed: Prevents crash when invalid spell checker language is selected, and provide fallback for invalid language codes ([#4146](https://github.com/laurent22/joplin/issues/4146))
+- Plugins: Fixed webview postMessage call
+
+## [v1.4.12](https://github.com/laurent22/joplin/releases/tag/v1.4.12) - 2020-11-23T18:58:07Z
+
+**Breaking Changes:**
+
+- If you use the Clipper API, please note that there are a few breaking changes in this version. See this link for more information: https://github.com/laurent22/joplin/pull/3983
+- Plugins: `joplin.views.dialogs.open()` now returns an object instead of the button ID that was clicked. So for example instead of getting just `"ok"`, you will get `{ "id": "ok" }`. This is to allow adding form data to that object.
+
+**Deprecated:**
+
+The following features are deprecated. It will still work for now but please update your code:
+
+- Plugins: All `create()` functions under `joplin.views` now take a `viewId` as a first parameter.
+- Plugins: `MenuItemLocation.Context` is deprecated and is now an alias for `MenuItemLocation.NoteListContextMenu`
+- Plugins: The `app_min_version` manifest property is now required. If not provided it will assume v14.
+- Plugins: The `id` manifest property is now required. If not set, it will be the plugin filename or directory.
+
+Plugin doc has been updated with some info about the [development process](https://joplinapp.org/api/references/plugin_api/classes/joplin.html).
+
+- New: Add {{bowm}} and {{bows}} - Beginning Of Week (Monday/Sunday) ([#4023](https://github.com/laurent22/joplin/issues/4023) by Helmut K. C. Tessarek)
+- New: Add config screen to add, remove or enable, disable plugins
+- New: Add option to toggle spellchecking for the markdown editor ([#4109](https://github.com/laurent22/joplin/issues/4109) by [@CalebJohn](https://github.com/CalebJohn))
+- New: Added toolbar button to switch spell checker language
+- New: Adds spell checker support for Rich Text editor ([#3974](https://github.com/laurent22/joplin/issues/3974))
+- New: Allow customising application layout
+- New: Api: Added ability to watch resource file
+- New: Api: Added way to get the notes associated with a resource
+- New: API: Adds ability to paginate data ([#3983](https://github.com/laurent22/joplin/issues/3983))
+- New: Plugins: Add command "editorSetText" for desktop app
+- New: Plugins: Add support for editor context menu
+- New: Plugins: Add support for external CodeMirror plugins ([#4015](https://github.com/laurent22/joplin/issues/4015) by [@CalebJohn](https://github.com/CalebJohn))
+- New: Plugins: Add support for JPL archive format
+- New: Plugins: Added command to export folders and notes
+- New: Plugins: Added support app_min_version property and made it required
+- Fixed: Api: Fix note and resource association end points
+- Fixed: Display note count for conflict folder, and display notes even if they are completed to-dos ([#3997](https://github.com/laurent22/joplin/issues/3997))
+- Fixed: Fix crash due to React when trying to upgrade sync target ([#4098](https://github.com/laurent22/joplin/issues/4098))
+- Fixed: Fix drag and drop behaviour to "copy" instead of "move" ([#4031](https://github.com/laurent22/joplin/issues/4031) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fix handling of certain keys in shortcut editor ([#4022](https://github.com/laurent22/joplin/issues/4022) by Helmut K. C. Tessarek)
+- Fixed: Fix handling of new line escaping when using external edit
+- Fixed: Fix size of search bar area when notebook is empty
+- Fixed: Fixed importing certain ENEX files that contain invalid dates
+- Fixed: Fixed inconsistent note list state when using search ([#3904](https://github.com/laurent22/joplin/issues/3904))
+- Fixed: Fixed issue when a newly created note would be automatically moved to the wrong folder on save ([#4038](https://github.com/laurent22/joplin/issues/4038))
+- Fixed: Fixed issue with note being saved after word has been replaced by spell checker
+- Fixed: Fixed links imported from ENEX as HTML ([#4119](https://github.com/laurent22/joplin/issues/4119))
+- Fixed: Fixed Markdown rendering when code highlighting is disabled
+- Fixed: Fixed note list overflow when resized very small
+- Fixed: Fixed text editor button tooltips
+- Fixed: Plugins: Fix crash when path includes trailing slash
+- Fixed: Plugins: Fixed issue with dialog being empty in some cases
+- Fixed: Plugins: Fixed issue with toolbar button key not being unique
+- Fixed: Prevent log from filling up when certain external editors trigger many watch events ([#4011](https://github.com/laurent22/joplin/issues/4011))
+- Fixed: Regression: Fix application name
+- Fixed: Regression: Fix exporting to HTML and PDF
+- Fixed: Regression: Fixed external edit file watching
+- Fixed: Resource links could not be opened from Rich Text editor on Linux ([#4073](https://github.com/laurent22/joplin/issues/4073))
+- Fixed: Tags could not be selected in some cases ([#3876](https://github.com/laurent22/joplin/issues/3876))
+- Improved: Allow exporting conflict notes ([#4095](https://github.com/laurent22/joplin/issues/4095))
+- Improved: Allow lowercase filters when doing search
+- Improved: Api: Always include 'has_more' field for paginated data
+- Improved: Api: Make sure pagination sort options are respected for search and other requests
+- Improved: Attempt to fix Outlook drag and drop on Markdown editor ([#4093](https://github.com/laurent22/joplin/issues/4093) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Change Markdown rendering to align with CommonMark spec ([#3839](https://github.com/laurent22/joplin/issues/3839))
+- Improved: Disable spell checker on config and search input fields
+- Improved: Disabled the auto update option in linux ([#4102](https://github.com/laurent22/joplin/issues/4102)) ([#4096](https://github.com/laurent22/joplin/issues/4096) by Anshuman Pandey)
+- Improved: Make Markdown editor selection more visible in Dark mode
+- Improved: Optimized resizing window
+- Improved: Plugins: Allow retrieving form values from dialogs
+- Improved: Plugins: Force plugin devtool dialog to be detached
+- Improved: Plugins: Make sure "replaceSelection" command can be undone in Rich Text editor
+- Improved: Plugins: Provides selected notes when triggering a command from the note list context menu
+- Improved: Plugins: Rename command "editorSetText" to "editor.setText"
+- Improved: Prevent lines from shifting in Markdown Editor when Scrollbar appears ([#4110](https://github.com/laurent22/joplin/issues/4110) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Put title bar and toolbar button over two lines when window size is below 800px
+- Improved: Refresh sidebar and notes when moving note outside of conflict folder
+- Improved: Upgrade to Electron 10
+
 ## [v1.3.18](https://github.com/laurent22/joplin/releases/tag/v1.3.18) - 2020-11-06T12:07:02Z
 
 - Regression: Random crash when syncing due to undefined tags ([#4051](https://github.com/laurent22/joplin/issues/4051))

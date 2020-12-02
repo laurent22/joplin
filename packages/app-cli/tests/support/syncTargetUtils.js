@@ -1,4 +1,4 @@
-const { syncDir, asyncTest, fileApi, synchronizer, createSyncTargetSnapshot, loadEncryptionMasterKey, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../test-utils.js');
+const { syncDir, fileApi, synchronizer, createSyncTargetSnapshot, loadEncryptionMasterKey, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../test-utils.js');
 const Setting = require('@joplin/lib/models/Setting').default;
 const Folder = require('@joplin/lib/models/Folder');
 const Note = require('@joplin/lib/models/Note');

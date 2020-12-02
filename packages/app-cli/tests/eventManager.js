@@ -1,12 +1,8 @@
 'use strict';
 
 
-const { asyncTest,checkThrow } = require('./test-utils.js');
+const { checkThrow } = require('./test-utils.js');
 const eventManager = require('@joplin/lib/eventManager').default;
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('eventManager', function() {
 
@@ -20,7 +16,7 @@ describe('eventManager', function() {
 		done();
 	});
 
-	it('should watch state props', asyncTest(async () => {
+	it('should watch state props', (async () => {
 		let localStateName = '';
 		let callCount = 0;
 
@@ -51,7 +47,7 @@ describe('eventManager', function() {
 		expect(callCount).toBe(2);
 	}));
 
-	it('should unwatch state props', asyncTest(async () => {
+	it('should unwatch state props', (async () => {
 		let localStateName = '';
 
 		function nameWatch(event) {
@@ -69,7 +65,7 @@ describe('eventManager', function() {
 		expect(localStateName).toBe('');
 	}));
 
-	it('should watch nested props', asyncTest(async () => {
+	it('should watch nested props', (async () => {
 		let localStateName = '';
 
 		function nameWatch(event) {
@@ -94,7 +90,7 @@ describe('eventManager', function() {
 		expect(localStateName).toBe('paul');
 	}));
 
-	it('should not be possible to modify state props', asyncTest(async () => {
+	it('should not be possible to modify state props', (async () => {
 		let localUser = {};
 
 		function userWatch(event) {

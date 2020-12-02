@@ -92,6 +92,9 @@ const declarations: CommandDeclaration[] = [
 	{
 		name: 'editor.setText',
 	},
+	{
+		name: 'editor.focus',
+	},
 ];
 
 export default declarations;

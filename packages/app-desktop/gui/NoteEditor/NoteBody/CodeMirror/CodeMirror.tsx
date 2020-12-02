@@ -85,7 +85,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}
 			editorRef.current.setSelections(newSelections);
 		}
-		editorRef.current.focus();
 	}, []);
 
 	const addListItem = useCallback((string1, defaultText = '') => {
@@ -97,7 +96,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			} else {
 				wrapSelectionWithStrings(string1, '', defaultText);
 			}
-			editorRef.current.focus();
 		}
 	}, [wrapSelectionWithStrings]);
 
@@ -141,7 +139,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					} else {
 						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
 					}
-				} else if (cmd.name === 'focus') {
+				} else if (cmd.name === 'editor.focus') {
 					editorRef.current.focus();
 				} else {
 					commandProcessed = false;
@@ -170,6 +168,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
+							editorRef.current.focus();
 							if (url) wrapSelectionWithStrings('[', `](${url})`);
 						},
 						textCode: () => {

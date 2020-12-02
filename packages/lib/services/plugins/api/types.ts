@@ -189,6 +189,10 @@ export interface Script {
 	onStart?(event: any): Promise<void>;
 }
 
+export interface Disposable {
+	// dispose():void;
+}
+
 // =================================================================
 // Menu types
 // =================================================================

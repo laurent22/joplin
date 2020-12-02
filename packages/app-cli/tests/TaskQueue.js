@@ -1,12 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 
-const { asyncTest, fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const TaskQueue = require('@joplin/lib/TaskQueue.js');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('TaskQueue', function() {
 
@@ -16,7 +12,7 @@ describe('TaskQueue', function() {
 		done();
 	});
 
-	it('should queue and execute tasks', asyncTest(async () => {
+	it('should queue and execute tasks', (async () => {
 		const queue = new TaskQueue();
 
 		queue.push(1, async () => { await sleep(0.5); return 'a'; });
@@ -37,7 +33,7 @@ describe('TaskQueue', function() {
 		expect(results[2].result).toBe('c');
 	}));
 
-	it('should handle errors', asyncTest(async () => {
+	it('should handle errors', (async () => {
 		const queue = new TaskQueue();
 
 		queue.push(1, async () => { await sleep(0.5); return 'a'; });
