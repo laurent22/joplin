@@ -1,12 +1,15 @@
 version: '3'
 
 services:
-    # app:
-    #     build:
-    #         context: .
-    #         dockerfile: Dockerfile.server
-    #     ports:
-    #         - "22300:22300"
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile.server
+        ports:
+            - "22300:22300"
+        volumes:
+            - ./packages/server:/home/joplin/packages/server
+            - /home/joplin/packages/server/node_modules/
     db:
         build:
             context: .

@@ -6,7 +6,7 @@ export function initConfig(baseConfig: Config) {
 	baseConfig_ = baseConfig;
 }
 
-function config() {
+function config(): Config {
 	if (!baseConfig_) throw new Error('Config has not been initialized!');
 	return baseConfig_;
 }

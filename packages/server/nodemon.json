@@ -1,4 +1,4 @@
 {
   "verbose": true,
-  "ignore": ["dist/*"]
+  "watch": ["dist/"]
 }

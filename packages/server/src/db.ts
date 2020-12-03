@@ -1,6 +1,10 @@
 import * as Knex from 'knex';
 import { DatabaseConfig } from './utils/types';
 import * as pathUtils from 'path';
+import time from '@joplin/lib/time';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('db');
 
 const migrationDir = `${__dirname}/migrations`;
 const sqliteDbDir = pathUtils.dirname(__dirname);
@@ -13,6 +17,7 @@ export interface DbConfigConnection {
 	user?: string;
 	database?: string;
 	filename?: string;
+	password?: string;
 }
 
 export interface KnexDatabaseConfig {
@@ -36,6 +41,7 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 		connection.host = dbConfig.host;
 		connection.port = dbConfig.port;
 		connection.user = dbConfig.user;
+		connection.password = dbConfig.password;
 	}
 
 	return {
@@ -46,7 +52,19 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	};
 }
 
-export async function connectDb(dbConfig: DatabaseConfig) {
+export async function waitForConnection(dbConfig: DatabaseConfig): Promise<DbConnection> {
+	while (true) {
+		try {
+			const connection = await connectDb(dbConfig);
+			return connection;
+		} catch (error) {
+			logger.info('Could not connect. Will try again.', error.message);
+		}
+		await time.msleep(1000);
+	}
+}
+
+export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
 	return require('knex')(makeKnexConfig(dbConfig));
 }
 

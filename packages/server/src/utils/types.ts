@@ -15,12 +15,15 @@ export interface DatabaseConfig {
 	host?: string;
 	port?: number;
 	user?: string;
+	password?: string;
 	asyncStackTraces?: boolean;
 }
 
 export interface Config {
 	port: number;
+	rootDir: string;
 	viewDir: string;
 	layoutDir: string;
+	logDir: string;
 	database: DatabaseConfig;
 }

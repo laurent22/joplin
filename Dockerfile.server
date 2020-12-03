@@ -2,6 +2,9 @@
 
 FROM node:12
 
+RUN apt-get update
+RUN apt-get --yes install vim curl wget git tig
+
 ARG user=joplin
 
 RUN useradd --create-home --shell /bin/bash $user
@@ -10,6 +13,8 @@ USER $user
 ENV NODE_ENV development
 
 WORKDIR /home/$user
+
+RUN mkdir /home/$user/logs
 
 # To take advantage of the Docker cache, we first copy all the package.json
 # and package-lock.json files, as they rarely change? and then bootstrap

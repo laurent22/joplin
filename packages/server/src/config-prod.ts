@@ -1,12 +1,19 @@
 import { Config } from './utils/types';
 import configBase from './config-base';
 
+const rootDir = '/home/joplin/';
+
 const config: Config = {
 	...configBase,
+	rootDir: rootDir,
+	logDir: `${rootDir}/logs`,
 	database: {
-		name: 'dev',
-		client: 'sqlite3',
-		asyncStackTraces: true,
+		client: 'pg',
+		name: 'joplin',
+		user: 'joplin',
+		host: 'db',
+		port: 5432,
+		password: 'joplin',
 	},
 };
 

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "nodemon --config nodemon.json dist/app.js",
     "start-prod": "node dist/app.js",
     "migrate-db": "",
     "generate-types": "rm -f db-buildTypes.sqlite && NODE_ENV=buildTypes npm run db-migrate && NODE_ENV=buildTypes node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
@@ -23,6 +23,7 @@
     "moment": "^2.24.0",
     "mustache": "^3.1.0",
     "nanoid": "^2.1.1",
+    "nodemon": "^2.0.6",
     "pg": "^8.5.1",
     "query-string": "^6.8.3",
     "sqlite3": "^4.1.0",

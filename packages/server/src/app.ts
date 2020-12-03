@@ -5,18 +5,24 @@ import * as fs from 'fs-extra';
 import * as koaBody from 'koa-body';
 import { argv } from 'yargs';
 import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
-import appLogger from './utils/appLogger';
+import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import koaIf from './utils/koaIf';
 import config, { initConfig, baseUrl } from './config';
 import configDev from './config-dev';
 import configProd from './config-prod';
 import { createDb, dropDb } from './tools/dbTools';
-import { connectDb, disconnectDb, migrateDb } from './db';
+import { connectDb, disconnectDb, migrateDb, waitForConnection } from './db';
 import modelFactory from './models/factory';
 import controllerFactory from './controllers/factory';
 import { AppContext } from './utils/types';
+import FsDriverNode from '@joplin/lib/fs-driver-node';
 
-// require('source-map-support').install();
+let appLogger_: LoggerWrapper = null;
+
+function appLogger(): LoggerWrapper {
+	if (!appLogger_) appLogger_ = Logger.create('App');
+	return appLogger_;
+}
 
 const app = new Koa();
 
@@ -24,7 +30,7 @@ const koaBodyMiddleware = koaBody({
 	multipart: true,
 	includeUnparsed: true,
 	onError: (err: Error, ctx: Koa.Context) => {
-		appLogger.error(`koaBodyMiddleware: ${ctx.method} ${ctx.path} Error: ${err.message}`);
+		appLogger().error(`koaBodyMiddleware: ${ctx.method} ${ctx.path} Error: ${err.message}`);
 	},
 });
 
@@ -35,7 +41,7 @@ app.use(koaIf(koaBodyMiddleware, (ctx: Koa.Context) => {
 }));
 
 app.use(async (ctx: Koa.Context) => {
-	appLogger.info(`${ctx.request.method} ${ctx.path}`);
+	appLogger().info(`${ctx.request.method} ${ctx.path}`);
 
 	const match = findMatchingRoute(ctx.path, routes);
 
@@ -53,7 +59,7 @@ app.use(async (ctx: Koa.Context) => {
 			throw new ErrorNotFound();
 		}
 	} catch (error) {
-		appLogger.error(error);
+		appLogger().error(error);
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
 		if (match.route.responseFormat === 'html') {
@@ -75,10 +81,17 @@ async function main() {
 		initConfig(configDev);
 	}
 
+	await fs.mkdirp(config().logDir);
+	Logger.fsDriver_ = new FsDriverNode();
+	const globalLogger = new Logger();
+	globalLogger.addTarget(TargetType.File, { path: `${config().logDir}/app.txt` });
+	globalLogger.addTarget(TargetType.Console);
+	Logger.initializeGlobalLogger(globalLogger);
+
 	const pidFile = argv.pidfile as string;
 
 	if (pidFile) {
-		appLogger.info(`Writing PID to ${pidFile}...`);
+		appLogger().info(`Writing PID to ${pidFile}...`);
 		fs.removeSync(pidFile as string);
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
@@ -92,15 +105,20 @@ async function main() {
 	} else if (argv.createDb) {
 		await createDb(config().database);
 	} else {
-		appLogger.info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
-		appLogger.info(`Base URL: ${baseUrl()}`);
-		appLogger.info(`DB Config: ${JSON.stringify(config().database)}`);
-		appLogger.info(`Call this for testing: \`curl ${baseUrl()}/api/ping\``);
+		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
+		appLogger().info(`Base URL: ${baseUrl()}`);
+		appLogger().info(`DB Config: ${JSON.stringify(config().database)}`);
 
 		const appContext = app.context as AppContext;
-		appContext.db = await connectDb(config().database);
+		appContext.db = await waitForConnection(config().database);
+		appLogger().info('Connected to database!');
+
+		await migrateDb(appContext.db);
+
 		appContext.models = modelFactory(appContext.db);
 		appContext.controllers = controllerFactory(appContext.models);
+
+		appLogger().info(`Call this for testing: \`curl ${baseUrl()}/api/ping\``);
 
 		app.listen(config().port);
 	}

@@ -109,7 +109,7 @@ class Time {
 	}
 
 	msleep(ms: number) {
-		return new Promise((resolve) => {
+		return new Promise((resolve: Function) => {
 			shim.setTimeout(() => {
 				resolve();
 			}, ms);
