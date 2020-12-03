@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --config nodemon.json dist/app.js",
-    "start-prod": "node dist/app.js",
+    "start-dev": "nodemon --config nodemon.json dist/app.js",
+    "start": "node dist/app.js",
     "migrate-db": "",
     "generate-types": "rm -f db-buildTypes.sqlite && NODE_ENV=buildTypes npm run db-migrate && NODE_ENV=buildTypes node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
     "tsc": "tsc --project tsconfig.json",
