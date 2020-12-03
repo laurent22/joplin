@@ -7,9 +7,9 @@ services:
         dockerfile: Dockerfile.server-dev
       ports:
         - "22300:22300"
-      volumes:
-        - ./packages/server/:/var/www/joplin/packages/server/
-        - /var/www/joplin/packages/server/node_modules/
+      # volumes:
+      #   - ./packages/server/:/var/www/joplin/packages/server/
+      #   - /var/www/joplin/packages/server/node_modules/
     # db:
     #     build:
     #         context: .

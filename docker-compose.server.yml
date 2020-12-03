@@ -1,24 +1,19 @@
 version: '3'
 
 services:
-    app:
-      build:
-        context: .
-        dockerfile: Dockerfile.server
-      ports:
-        - "22300:22300"
-      image: app
-      container_name: app
-      # volumes:
-      #   - ./packages/server:/usr/share/nginx/html:ro
-    # db:
+    # app:
     #     build:
     #         context: .
-    #         dockerfile: Dockerfile.db
+    #         dockerfile: Dockerfile.server
     #     ports:
-    #         - "5432:5432"
-    #     environment:
-    #         # TODO: get password from env file
-    #         - POSTGRES_PASSWORD=joplin
-    #         - POSTGRES_USER=joplin
-    #         - POSTGRES_DB=joplin
+    #         - "22300:22300"
+    db:
+        build:
+            context: .
+            dockerfile: Dockerfile.db
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_PASSWORD=joplin
+            - POSTGRES_USER=joplin
+            - POSTGRES_DB=joplin
