@@ -1,8 +1,8 @@
-import { testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, models, controllers } from '../utils/testUtils';
+import { testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, models, controllers } from '../../utils/testUtils';
 import * as fs from 'fs-extra';
-import { File } from '../db';
-import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
-import { filePathInfo } from '../utils/routeUtils';
+import { File } from '../../db';
+import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
+import { filePathInfo } from '../../utils/routeUtils';
 
 async function makeTestFile(id: number = 1, ext: string = 'jpg', parentId: string = ''): Promise<File> {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';

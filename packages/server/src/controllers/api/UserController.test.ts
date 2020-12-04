@@ -1,6 +1,6 @@
-import { models, controllers, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../utils/testUtils';
-import { File, User } from '../db';
-import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
+import { models, controllers, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../../utils/testUtils';
+import { File, User } from '../../db';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 
 describe('UserController', function() {
 

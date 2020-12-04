@@ -1,8 +1,8 @@
-import { Session, User } from '../db';
-import { checkPassword } from '../utils/auth';
-import { ErrorForbidden } from '../utils/errors';
-import uuidgen from '../utils/uuidgen';
-import BaseController from './BaseController';
+import { Session, User } from '../../db';
+import { checkPassword } from '../../utils/auth';
+import { ErrorForbidden } from '../../utils/errors';
+import uuidgen from '../../utils/uuidgen';
+import BaseController from '../BaseController';
 
 export default class SessionController extends BaseController {
 

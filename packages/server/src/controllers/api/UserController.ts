@@ -1,5 +1,5 @@
-import { User } from '../db';
-import BaseController from './BaseController';
+import { User } from '../../db';
+import BaseController from '../BaseController';
 
 export default class UserController extends BaseController {
 

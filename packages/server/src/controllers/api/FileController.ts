@@ -1,6 +1,6 @@
-import { File } from '../db';
-import BaseController from './BaseController';
-import { ErrorNotFound } from '../utils/errors';
+import { File } from '../../db';
+import BaseController from '../BaseController';
+import { ErrorNotFound } from '../../utils/errors';
 
 export default class FileController extends BaseController {
 

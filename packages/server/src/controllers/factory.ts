@@ -1,8 +1,8 @@
 import { Models } from '../models/factory';
-import FileController from './FileController';
-import OAuthController from './OAuthController';
-import SessionController from './SessionController';
-import UserController from './UserController';
+import FileController from './api/FileController';
+import OAuthController from './api/OAuthController';
+import SessionController from './api/SessionController';
+import UserController from './api/UserController';
 
 export class Controllers {
 
