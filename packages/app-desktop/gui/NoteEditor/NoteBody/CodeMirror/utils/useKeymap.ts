@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import CommandService, { CommandDeclaration } from '@joplin/lib/services/CommandService';
+import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
-import { CodeMirrorKey } from './types';
+import { EditorCommand } from '../../../utils/types';
 import shim from '@joplin/lib/shim';
-import { _ } from '@joplin/lib/locale';
+const { reg } = require('@joplin/lib/registry.js');
 
-export default function useKeymap(CodeMirror: any, pluginKeys: CodeMirrorKey[]) {
+export default function useKeymap(CodeMirror: any) {
 
 	function save() {
 		CommandService.instance().execute('synchronize');
@@ -26,6 +26,24 @@ export default function useKeymap(CodeMirror: any, pluginKeys: CodeMirrorKey[]) 
 		CodeMirror.Vim.mapCommand('o', 'action', 'insertListElement', { after: true }, { context: 'normal', isEdit: true, interlaceInsertRepeat: true });
 	}
 
+	function isEditorCommand(command: string) {
+		return command.startsWith('editor.');
+	}
+
+	// Converts a command of the form editor.command to just command
+	function editorCommandToCodeMirror(command: String) {
+		return command.slice(7); // 7 is the length of editor.
+	}
+
+	// CodeMirror and Electron register accelerators slightly different
+	// CodeMirror requires a - between keys while Electron want's a +
+	// CodeMirror doesn't recognize Opt (it uses Alt instead)
+	// This function uses simple regex to translate the Electron
+	// accelerator to a CodeMirror accelerator
+	function normalizeAccelerator(accelerator: String) {
+		return accelerator.replace(/\+/g, '-').replace('Opt', 'Alt');
+	}
+
 	// Because there is sometimes a clash between these keybindings and the Joplin window ones
 	// (This specifically can happen with the Ctrl-B and Ctrl-I keybindings when
 	// codemirror is in contenteditable mode)
@@ -35,12 +53,13 @@ export default function useKeymap(CodeMirror: any, pluginKeys: CodeMirrorKey[]) 
 		if (!key.command || !key.accelerator) return;
 
 		let command = '';
-		if (key.command.indexOf('editor.codemirror') == 0) {
-			command = key.command.slice(18); // 18 is the length of editor.codemirror.
+		if (isEditorCommand(key.command)) {
+			command = editorCommandToCodeMirror(key.command);
 		} else {
 			// We need to register Joplin commands with codemirror
 			command = `joplin${key.command}`;
 			// Not all commands are registered with the command service
+			// (for example, the Quit command)
 			// This check will ensure that codemirror only takesover the commands that are
 			// see gui/KeymapConfig/getLabel.ts for more information
 			const commandNames = CommandService.instance().commandNames();
@@ -51,15 +70,32 @@ export default function useKeymap(CodeMirror: any, pluginKeys: CodeMirrorKey[]) 
 			}
 		}
 
-		CodeMirror.keyMap.default[key.accelerator.replace(/\+/g, '-')] = command;
+		// CodeMirror and Electron have slightly different formats for defining accelerators
+		const acc = normalizeAccelerator(key.accelerator);
+
+		CodeMirror.keyMap.default[acc] = command;
 	}
 
 	// Called on initialization, and whenever the keymap changes
-	function registerEntireKeymap() {
+	function registerKeymap() {
 		const keymapItems = KeymapService.instance().getKeymapItems();
 		// Register all commands with the codemirror editor
 		keymapItems.forEach((key) => { registerJoplinCommand(key); });
 	}
+
+	CodeMirror.defineExtension('supportsCommand', function(cmd: EditorCommand) {
+		return isEditorCommand(cmd.name) && editorCommandToCodeMirror(cmd.name) in CodeMirror.commands;
+	});
+
+	// Used when an editor command is executed using the CommandService.instance().execute
+	// function (rather than being initiated by a keypress in the editor)
+	CodeMirror.defineExtension('execCommandFromJoplin', function(cmd: EditorCommand) {
+		if (cmd.value) {
+			reg.logger().warn('CodeMirror commands cannot accept a value:', cmd);
+		}
+
+		return this.execCommand(editorCommandToCodeMirror(cmd.name));
+	});
 
 	useEffect(() => {
 		// This enables the special modes (emacs and vim) to initiate sync by the save action
@@ -84,49 +120,41 @@ export default function useKeymap(CodeMirror: any, pluginKeys: CodeMirrorKey[]) 
 			'Esc': 'singleSelection',
 		};
 
-		const defaultKeymap: CodeMirrorKey[] = [
-			// Windows/linux
-			{ label: _('Delete line'), command: 'editor.codemirror.deleteLine', default: 'Ctrl+D', macos: 'Cmd+D' },
-			{ label: _('Undo'), command: 'editor.codemirror.undo', default: 'Ctrl+Z', macos: 'Cmd+Z' },
-			{ label: _('Redo'), command: 'editor.codemirror.redo', default: 'Shift+Ctrl+Z', macos: 'Shift+Cmd+Z' },
-			{ label: _('Redo'), command: 'editor.codemirror.redo', default: 'Ctrl+Y', macos: 'Cmd+Y' },
-			{ label: _('Go to beginning of note'), command: 'editor.codemirror.goDocStart', default: 'Ctrl+Home', macos: 'Cmd+Home' },
-			{ label: _('Go to end of note'), command: 'editor.codemirror.goDocEnd', default: 'Ctrl+End', macos: 'Cmd+Up' },
-			{ label: _('Go up a line'), command: 'editor.codemirror.goLineUp', default: 'Ctrl+Up', macos: 'Cmd+End' },
-			{ label: _('Go down a line'), command: 'editor.codemirror.goLineDown', default: 'Ctrl+Down', macos: 'Cmd+Down' },
-			{ label: _('Go group left'), command: 'editor.codemirror.goGroupLeft', default: 'Ctrl+Left', macos: 'Cmd+Left' },
-			{ label: _('Go group right'), command: 'editor.codemirror.goGroupRight', default: 'Ctrl+Right', macos: 'Cmd+Right' },
-			{ label: _('Go to line start'), command: 'editor.codemirror.goLineStart', default: 'Alt+Left', macos: 'Alt+Left' },
-			{ label: _('Go to line end'), command: 'editor.codemirror.goLineEnd', default: 'Alt+Right', macos: 'Alt+Right' },
-			{ label: _('Delete group before'), command: 'editor.codemirror.delGroupBefore', default: 'Ctrl+Backspace', macos: 'Alt+Backspace' },
-			{ label: _('Delete group after'), command: 'editor.codemirror.delGroupAfter', default: 'Ctrl+Delete', macos: 'Alt+Delete' },
-			{ label: _('Indent less'), command: 'editor.codemirror.indentLess', default: 'Ctrl+[', macos: 'Cmd+[' },
-			{ label: _('Indent more'), command: 'editor.codemirror.indentMore', default: 'Ctrl+]', macos: 'Cmd+]' },
-			{ label: _('Toggle comment'), command: 'editor.codemirror.toggleComment', default: 'Ctrl+/', macos: 'Cmd+/' },
-			{ label: _('Sort selected lines'), command: 'editor.codemirror.sortSelectedLines', default: 'Ctrl+Alt+S', macos: 'Cmd+Alt+S' },
-			{ label: _('Swap line up'), command: 'editor.codemirror.swapLineUp', default: 'Alt+Up', macos: 'Alt+Up' },
-			{ label: _('Swap line down'), command: 'editor.codemirror.swapLineDown', default: 'Alt+Down', macos: 'Alt+Down' },
-		].concat(pluginKeys);
+		// Some keybindings are added here and not to the global registry because users
+		// often expect multiple keys to bind to the same command for example, redo is mapped to
+		// both Ctrl+Shift+Z AND Ctrl+Y
+		// Doing this mapping here will make those commands available but will allow users to
+		// override them using the KeymapService
+		CodeMirror.keyMap.default = {
+			// Windows / Linux
+			'Ctrl-Z': 'undo',
+			'Shift-Ctrl-Z': 'redo',
+			'Ctrl-Y': 'redo',
+			'Ctrl-Up': 'goLineUp',
+			'Ctrl-Down': 'goLineDown',
 
-		CodeMirror.keyMap.default = { 'fallthrough': 'basic' };
+			'fallthrough': 'basic',
+		};
+		if (shim.isMac()) {
+			CodeMirror.keyMap.default = {
+				// MacOS
+				'Shift-Cmd-Z': 'redo',
+				'Cmd-Y': 'redo',
+				'Cmd-End': 'goDocEnd',
+				'Cmd-Down': 'goDocEnd',
+				'Cmd-Home': 'goDocStart',
+				'Cmd-Up': 'goDocStart',
 
-		const keymapService = KeymapService.instance();
-		const commandNames = keymapService.getCommandNames();
-
-		for (let i = 0; i < defaultKeymap.length; i++) {
-			const key = defaultKeymap[i];
-
-			const dec: CommandDeclaration = { name: key.command, label: key.label };
-			CommandService.instance().registerDeclaration(dec);
-
-			const accelerator = shim.isMac() ? key.macos : key.default;
-			if (!commandNames.includes(key.command)) { keymapService.registerCommandAccelerator(key.command, accelerator); }
+				'fallthrough': 'basic',
+			};
 		}
 
-		registerEntireKeymap();
-		keymapService.on('keymapChange', registerEntireKeymap);
+		const keymapService = KeymapService.instance();
+
+		registerKeymap();
+		keymapService.on('keymapChange', registerKeymap);
 
 		setupEmacs();
 		setupVim();
-	}, [pluginKeys]);
+	}, []);
 }

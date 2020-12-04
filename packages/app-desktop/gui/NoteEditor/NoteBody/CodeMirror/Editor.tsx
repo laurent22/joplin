@@ -105,9 +105,8 @@ function Editor(props: EditorProps, ref: any) {
 	useLineSorting(CodeMirror);
 	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
-	const { pluginOptions, pluginKeys }: any = useExternalPlugins(CodeMirror, props.plugins);
-	// Keymap must come AFETR plugins because it can use custom keybindings from the user
-	useKeymap(CodeMirror, pluginKeys);
+	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
+	useKeymap(CodeMirror);
 
 	useImperativeHandle(ref, () => {
 		return editor;

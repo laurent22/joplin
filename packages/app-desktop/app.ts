@@ -18,6 +18,7 @@ import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerS
 import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
 import bridge from './services/bridge';
 import menuCommandNames from './gui/menuCommandNames';
+import editorCommandNames from './gui/editorCommandNames';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import stateToWhenClauseContext from './services/commands/stateToWhenClauseContext';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -585,9 +586,9 @@ class Application extends BaseApplication {
 		}
 
 		const keymapService = KeymapService.instance();
-		// We only add the commands that appear in the menu because only
+		// We only add the commands that appear in the menu and the editor because only
 		// those can have a shortcut associated with them.
-		keymapService.initialize(menuCommandNames());
+		keymapService.initialize(menuCommandNames().concat(editorCommandNames()));
 
 		try {
 			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
