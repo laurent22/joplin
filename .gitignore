@@ -1463,9 +1463,6 @@ packages/server/src/tools/dbTools.js.map
 packages/server/src/tools/generate-types.d.ts
 packages/server/src/tools/generate-types.js
 packages/server/src/tools/generate-types.js.map
-packages/server/src/utils/appLogger.d.ts
-packages/server/src/utils/appLogger.js
-packages/server/src/utils/appLogger.js.map
 packages/server/src/utils/auth.d.ts
 packages/server/src/utils/auth.js
 packages/server/src/utils/auth.js.map
