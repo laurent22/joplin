@@ -3,9 +3,18 @@ import configBase from './config-base';
 
 const config: Config = {
 	...configBase,
+	// database: {
+	// 	name: 'dev',
+	// 	client: 'sqlite3',
+	// 	asyncStackTraces: true,
+	// },
 	database: {
-		name: 'dev',
-		client: 'sqlite3',
+		client: 'pg',
+		name: 'joplin',
+		user: 'joplin',
+		host: 'localhost',
+		port: 5432,
+		password: 'joplin',
 		asyncStackTraces: true,
 	},
 };

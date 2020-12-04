@@ -17,6 +17,9 @@ import controllerFactory from './controllers/factory';
 import { AppContext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 
+const { shimInit } = require('@joplin/lib/shim-init-node.js');
+shimInit();
+
 let appLogger_: LoggerWrapper = null;
 
 function appLogger(): LoggerWrapper {
@@ -106,17 +109,22 @@ async function main() {
 		await createDb(config().database);
 	} else {
 		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
-		appLogger().info(`Base URL: ${baseUrl()}`);
-		appLogger().info(`DB Config: ${JSON.stringify(config().database)}`);
+		appLogger().info('Base URL:', baseUrl());
+		appLogger().info('DB Config:', config().database);
 
 		const appContext = app.context as AppContext;
-		appContext.db = await waitForConnection(config().database);
-		appLogger().info('Connected to database!');
+		const connectionCheck = await waitForConnection(config().database);
 
-		await migrateDb(appContext.db);
+		const connectionCheckLogInfo = { ...connectionCheck };
+		delete connectionCheckLogInfo.connection;
 
+		appLogger().info('Connection check:', connectionCheckLogInfo);
+		appContext.db = connectionCheck.connection;//
 		appContext.models = modelFactory(appContext.db);
 		appContext.controllers = controllerFactory(appContext.models);
+
+		appLogger().info('Migrating database...');
+		await migrateDb(appContext.db);
 
 		appLogger().info(`Call this for testing: \`curl ${baseUrl()}/api/ping\``);
 

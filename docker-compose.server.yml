@@ -7,15 +7,15 @@ services:
             dockerfile: Dockerfile.server
         ports:
             - "22300:22300"
-        volumes:
-            # Mount the server directory so that it's possible to edit file
-            # while the container is running. However don't mount the
-            # node_modules directory which will be specific to the Docker
-            # image (eg native modules will be built for Ubuntu, while the
-            # container might be running in Windows)
-            # https://stackoverflow.com/a/37898591/561309
-            - ./packages/server:/home/joplin/packages/server
-            - /home/joplin/packages/server/node_modules/
+        # volumes:
+        #     # Mount the server directory so that it's possible to edit file
+        #     # while the container is running. However don't mount the
+        #     # node_modules directory which will be specific to the Docker
+        #     # image (eg native modules will be built for Ubuntu, while the
+        #     # container might be running in Windows)
+        #     # https://stackoverflow.com/a/37898591/561309
+        #     - ./packages/server:/home/joplin/packages/server
+        #     - /home/joplin/packages/server/node_modules/
     db:
         build:
             context: .

@@ -27,6 +27,13 @@ export interface KnexDatabaseConfig {
 	asyncStackTraces?: boolean;
 }
 
+export interface ConnectionCheckResult {
+	isCreated: boolean;
+	error: any;
+	latestMigration: any;
+	connection: DbConnection;
+}
+
 export function sqliteFilePath(dbConfig: DatabaseConfig): string {
 	return `${sqliteDbDir}/db-${dbConfig.name}.sqlite`;
 }
@@ -52,14 +59,27 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	};
 }
 
-export async function waitForConnection(dbConfig: DatabaseConfig): Promise<DbConnection> {
+export async function waitForConnection(dbConfig: DatabaseConfig): Promise<ConnectionCheckResult> {
+	const timeout = 30000;
+	const startTime = Date.now();
+	let lastError = { message: '' };
+
 	while (true) {
 		try {
 			const connection = await connectDb(dbConfig);
-			return connection;
+			const check = await connectionCheck(connection);
+			if (check.error) throw check.error;
+			return check;
 		} catch (error) {
 			logger.info('Could not connect. Will try again.', error.message);
+			lastError = error;
 		}
+
+		if (Date.now() - startTime > timeout) {
+			logger.error('Timeout trying to connect to database:', lastError);
+			throw new Error(`Timeout trying to connect to database. Last error was: ${lastError.message}`);
+		}
+
 		await time.msleep(1000);
 	}
 }
@@ -78,6 +98,45 @@ export async function migrateDb(db: DbConnection) {
 		// Disable transactions because the models might open one too
 		disableTransactions: true,
 	});
+}
+
+export async function latestMigration(db: DbConnection): Promise<any> {
+	try {
+		const result = await db('knex_migrations').select('name').orderBy('id', 'asc').first();
+		return result;
+	} catch (error) {
+		// If the database has never been initialized, we return null, so
+		// for this we need to check the error code, which will be
+		// different depending on the DBMS.
+		if (error) {
+			// Postgres error: 42P01: undefined_table
+			if (error.code === '42P01') return null;
+
+			// Sqlite3 error
+			if (error.message && error.message.includes('no such table: knex_migrations')) return null;
+		}
+
+		throw error;
+	}
+}
+
+export async function connectionCheck(db: DbConnection): Promise<ConnectionCheckResult> {
+	try {
+		const result = await latestMigration(db);
+		return {
+			latestMigration: result,
+			isCreated: !!result,
+			error: null,
+			connection: db,
+		};
+	} catch (error) {
+		return {
+			latestMigration: null,
+			isCreated: false,
+			error: error,
+			connection: null,
+		};
+	}
 }
 
 export enum ItemAddressingType {
