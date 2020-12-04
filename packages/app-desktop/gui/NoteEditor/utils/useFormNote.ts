@@ -133,7 +133,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			await initNoteState(n);
 		};
 
-		loadNote();
+		void loadNote();
 
 		return () => {
 			cancelled = true;
@@ -161,7 +161,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 				if (Setting.value(focusSettingName) === 'title') {
 					if (titleInputRef.current) titleInputRef.current.focus();
 				} else {
-					if (editorRef.current) editorRef.current.execCommand({ name: 'focus' });
+					if (editorRef.current) editorRef.current.execCommand({ name: 'editor.focus' });
 				}
 			});
 		}
@@ -183,7 +183,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			handleAutoFocus(!!n.is_todo);
 		}
 
-		loadNote();
+		void loadNote();
 
 		return () => {
 			cancelled = true;
@@ -207,7 +207,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 	useEffect(() => {
 		if (previousNoteId !== formNote.id) {
-			onResourceChange();
+			void onResourceChange();
 		}
 	}, [previousNoteId, formNote.id, onResourceChange]);
 
@@ -222,7 +222,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			});
 		}
 
-		runEffect();
+		void runEffect();
 
 		return () => {
 			cancelled = true;

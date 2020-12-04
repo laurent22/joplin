@@ -150,8 +150,16 @@ class Bridge {
 					const folders = await this.folderTree();
 					this.dispatch({ type: 'FOLDERS_SET', folders: folders.items ? folders.items : folders });
 
-					const tags = await this.clipperApiExec('GET', 'tags');
-					this.dispatch({ type: 'TAGS_SET', tags: tags.items ? tags.items : tags });
+					let tags = [];
+					for (let page = 1; page < 10000; page++) {
+						const result = await this.clipperApiExec('GET', 'tags', { page: page, order_by: 'title', order_dir: 'ASC' });
+						const resultTags = result.items ? result.items : result;
+						const hasMore = ('has_more' in result) && result.has_more;
+						tags = tags.concat(resultTags);
+						if (!hasMore) break;
+					}
+
+					this.dispatch({ type: 'TAGS_SET', tags: tags });
 
 					bridge().restoreState();
 					return;

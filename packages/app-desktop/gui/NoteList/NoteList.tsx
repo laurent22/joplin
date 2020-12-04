@@ -389,9 +389,9 @@ class NoteListComponent extends React.Component {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', 'sideBar');
+				void CommandService.instance().execute('focusElement', 'sideBar');
 			} else {
-				CommandService.instance().execute('focusElement', 'noteTitle');
+				void CommandService.instance().execute('focusElement', 'noteTitle');
 			}
 		}
 

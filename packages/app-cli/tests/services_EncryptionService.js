@@ -2,7 +2,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const Tag = require('@joplin/lib/models/Tag.js');
@@ -13,10 +13,6 @@ const BaseModel = require('@joplin/lib/BaseModel').default;
 const MasterKey = require('@joplin/lib/models/MasterKey');
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const EncryptionService = require('@joplin/lib/services/EncryptionService.js');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at services_EncryptionService: Promise', p, 'reason:', reason);
-});
 
 let service = null;
 
@@ -31,7 +27,7 @@ describe('services_EncryptionService', function() {
 		done();
 	});
 
-	it('should encode and decode header', asyncTest(async () => {
+	it('should encode and decode header', (async () => {
 		const header = {
 			encryptionMethod: EncryptionService.METHOD_SJCL,
 			masterKeyId: '01234568abcdefgh01234568abcdefgh',
@@ -44,7 +40,7 @@ describe('services_EncryptionService', function() {
 		expect(objectsEqual(header, decodedHeader)).toBe(true);
 	}));
 
-	it('should generate and decrypt a master key', asyncTest(async () => {
+	it('should generate and decrypt a master key', (async () => {
 		const masterKey = await service.generateMasterKey('123456');
 		expect(!!masterKey.content).toBe(true);
 
@@ -61,7 +57,7 @@ describe('services_EncryptionService', function() {
 		expect(decryptedMasterKey.length).toBe(512);
 	}));
 
-	it('should upgrade a master key', asyncTest(async () => {
+	it('should upgrade a master key', (async () => {
 		// Create an old style master key
 		let masterKey = await service.generateMasterKey('123456', {
 			encryptionMethod: EncryptionService.METHOD_SJCL_2,
@@ -90,7 +86,7 @@ describe('services_EncryptionService', function() {
 		expect(plainTextFromOld).toBe(plainTextFromNew);
 	}));
 
-	it('should not upgrade master key if invalid password', asyncTest(async () => {
+	it('should not upgrade master key if invalid password', (async () => {
 		const masterKey = await service.generateMasterKey('123456', {
 			encryptionMethod: EncryptionService.METHOD_SJCL_2,
 		});
@@ -98,7 +94,7 @@ describe('services_EncryptionService', function() {
 		const hasThrown = await checkThrowAsync(async () => await service.upgradeMasterKey(masterKey, '777'));
 	}));
 
-	it('should require a checksum only for old master keys', asyncTest(async () => {
+	it('should require a checksum only for old master keys', (async () => {
 		const masterKey = await service.generateMasterKey('123456', {
 			encryptionMethod: EncryptionService.METHOD_SJCL_2,
 		});
@@ -107,7 +103,7 @@ describe('services_EncryptionService', function() {
 		expect(!!masterKey.content).toBe(true);
 	}));
 
-	it('should not require a checksum for new master keys', asyncTest(async () => {
+	it('should not require a checksum for new master keys', (async () => {
 		const masterKey = await service.generateMasterKey('123456', {
 			encryptionMethod: EncryptionService.METHOD_SJCL_4,
 		});
@@ -119,7 +115,7 @@ describe('services_EncryptionService', function() {
 		expect(decryptedMasterKey.length).toBe(512);
 	}));
 
-	it('should throw an error if master key decryption fails', asyncTest(async () => {
+	it('should throw an error if master key decryption fails', (async () => {
 		const masterKey = await service.generateMasterKey('123456', {
 			encryptionMethod: EncryptionService.METHOD_SJCL_4,
 		});
@@ -129,7 +125,7 @@ describe('services_EncryptionService', function() {
 		expect(hasThrown).toBe(true);
 	}));
 
-	it('should return the master keys that need an upgrade', asyncTest(async () => {
+	it('should return the master keys that need an upgrade', (async () => {
 		const masterKey1 = await MasterKey.save(await service.generateMasterKey('123456', {
 			encryptionMethod: EncryptionService.METHOD_SJCL_2,
 		}));
@@ -146,7 +142,7 @@ describe('services_EncryptionService', function() {
 		expect(needUpgrade.map(k => k.id).sort()).toEqual([masterKey1.id, masterKey2.id].sort());
 	}));
 
-	it('should encrypt and decrypt with a master key', asyncTest(async () => {
+	it('should encrypt and decrypt with a master key', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
@@ -168,7 +164,7 @@ describe('services_EncryptionService', function() {
 		expect(plainText2 === veryLongSecret).toBe(true);
 	}));
 
-	it('should decrypt various encryption methods', asyncTest(async () => {
+	it('should decrypt various encryption methods', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey_(masterKey, '123456', true);
@@ -194,7 +190,7 @@ describe('services_EncryptionService', function() {
 		}
 	}));
 
-	it('should fail to decrypt if master key not present', asyncTest(async () => {
+	it('should fail to decrypt if master key not present', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
@@ -210,7 +206,7 @@ describe('services_EncryptionService', function() {
 	}));
 
 
-	it('should fail to decrypt if data tampered with', asyncTest(async () => {
+	it('should fail to decrypt if data tampered with', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
@@ -224,7 +220,7 @@ describe('services_EncryptionService', function() {
 		expect(hasThrown).toBe(true);
 	}));
 
-	it('should encrypt and decrypt notes and folders', asyncTest(async () => {
+	it('should encrypt and decrypt notes and folders', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey_(masterKey, '123456', true);
@@ -255,7 +251,7 @@ describe('services_EncryptionService', function() {
 		expect(decryptedNote.parent_id).toBe(note.parent_id);
 	}));
 
-	it('should encrypt and decrypt files', asyncTest(async () => {
+	it('should encrypt and decrypt files', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey_(masterKey, '123456', true);
@@ -271,7 +267,7 @@ describe('services_EncryptionService', function() {
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	}));
 
-	it('should encrypt invalid UTF-8 data', asyncTest(async () => {
+	it('should encrypt invalid UTF-8 data', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 

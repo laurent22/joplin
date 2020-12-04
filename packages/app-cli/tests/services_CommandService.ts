@@ -4,7 +4,7 @@ import CommandService, { CommandDeclaration, CommandRuntime } from '@joplin/lib/
 import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import KeymapService from '@joplin/lib/services/KeymapService';
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
 interface TestCommand {
 	declaration: CommandDeclaration;
@@ -52,7 +52,7 @@ describe('services_CommandService', function() {
 		done();
 	});
 
-	it('should create toolbar button infos from commands', asyncTest(async () => {
+	it('should create toolbar button infos from commands', (async () => {
 		const service = newService();
 		const toolbarButtonUtils = new ToolbarButtonUtils(service);
 
@@ -80,7 +80,7 @@ describe('services_CommandService', function() {
 		expect(toolbarInfos[1].enabled).toBe(true);
 	}));
 
-	it('should enable and disable toolbar buttons depending on state', asyncTest(async () => {
+	it('should enable and disable toolbar buttons depending on state', (async () => {
 		const service = newService();
 		const toolbarButtonUtils = new ToolbarButtonUtils(service);
 
@@ -103,7 +103,7 @@ describe('services_CommandService', function() {
 		expect(toolbarInfos[1].enabled).toBe(true);
 	}));
 
-	it('should enable commands by default', asyncTest(async () => {
+	it('should enable commands by default', (async () => {
 		const service = newService();
 
 		registerCommand(service, createCommand('test1', {
@@ -113,7 +113,7 @@ describe('services_CommandService', function() {
 		expect(service.isEnabled('test1', {})).toBe(true);
 	}));
 
-	it('should return the same toolbarButtons array if nothing has changed', asyncTest(async () => {
+	it('should return the same toolbarButtons array if nothing has changed', (async () => {
 		const service = newService();
 		const toolbarButtonUtils = new ToolbarButtonUtils(service);
 
@@ -161,7 +161,7 @@ describe('services_CommandService', function() {
 		}
 	}));
 
-	it('should create menu items from commands', asyncTest(async () => {
+	it('should create menu items from commands', (async () => {
 		const service = newService();
 		const utils = new MenuUtils(service);
 
@@ -190,7 +190,7 @@ describe('services_CommandService', function() {
 		expect(utils.commandsToMenuItems(['test1', 'test2'], onClick)).toBe(utils.commandsToMenuItems(['test1', 'test2'], onClick));
 	}));
 
-	it('should give menu item props from state', asyncTest(async () => {
+	it('should give menu item props from state', (async () => {
 		const service = newService();
 		const utils = new MenuUtils(service);
 
@@ -228,7 +228,7 @@ describe('services_CommandService', function() {
 			.toBe(utils.commandsToMenuItemProps(['test1', 'test2'], { cond1: true, cond2: true }));
 	}));
 
-	it('should create stateful menu items', asyncTest(async () => {
+	it('should create stateful menu items', (async () => {
 		const service = newService();
 		const utils = new MenuUtils(service);
 
@@ -246,7 +246,7 @@ describe('services_CommandService', function() {
 		expect(propValue).toBe('hello');
 	}));
 
-	it('should throw an error for invalid when clause keys in dev mode', asyncTest(async () => {
+	it('should throw an error for invalid when clause keys in dev mode', (async () => {
 		const service = newService();
 
 		registerCommand(service, createCommand('test1', {

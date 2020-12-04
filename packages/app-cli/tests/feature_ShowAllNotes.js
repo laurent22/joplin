@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest, id, ids, sortedIds, at, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, id, ids, sortedIds, at, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('./test-utils.js');
 const Setting = require('@joplin/lib/models/Setting').default;
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
@@ -36,7 +36,7 @@ describe('integration_ShowAllNotes', function() {
 		done();
 	});
 
-	it('should show all notes', asyncTest(async () => {
+	it('should show all notes', (async () => {
 		// setup
 		const folders = await createNTestFolders(3);
 		Folder.moveToFolder(id(folders[2]), id(folders[1])); // subfolder
@@ -57,7 +57,7 @@ describe('integration_ShowAllNotes', function() {
 		expect(sortedIds(state.notes)).toEqual(sortedIds(notes0.concat(notes1).concat(notes2)));
 	}));
 
-	it('should show retain note selection when going from a folder to all-notes', asyncTest(async () => {
+	it('should show retain note selection when going from a folder to all-notes', (async () => {
 		// setup
 		const folders = await createNTestFolders(2);
 		const notes0 = await createNTestNotes(3, folders[0]);
@@ -88,7 +88,7 @@ describe('integration_ShowAllNotes', function() {
 		expect(state.selectedNoteIds).toEqual(ids([notes1[1]]));
 	}));
 
-	it('should support note duplication', asyncTest(async () => {
+	it('should support note duplication', (async () => {
 		// setup
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
@@ -125,7 +125,7 @@ describe('integration_ShowAllNotes', function() {
 		expect(sortedIds(state.notes)).toEqual(sortedIds([note1, note2, newNote1, newNote2]));
 	}));
 
-	it('should support changing the note parent', asyncTest(async () => {
+	it('should support changing the note parent', (async () => {
 		// setup
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });

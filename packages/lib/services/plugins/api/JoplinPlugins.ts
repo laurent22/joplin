@@ -36,7 +36,7 @@ export default class JoplinPlugins {
 			// We don't use `await` when calling onStart because the plugin might be awaiting
 			// in that call too (for example, when opening a dialog on startup) so we don't
 			// want to get stuck here.
-			script.onStart({}).catch((error: any) => {
+			void script.onStart({}).catch((error: any) => {
 				// For some reason, error thrown from the executed script do not have the type "Error"
 				// but are instead plain object. So recreate the Error object here so that it can
 				// be handled correctly by loggers, etc.

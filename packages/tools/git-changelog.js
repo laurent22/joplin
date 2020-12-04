@@ -47,7 +47,7 @@ async function gitLog(sinceTag) {
 
 async function gitTags() {
 	const lines = await execCommand('git tag --sort=committerdate');
-	return lines.split('\n').map(l => l.trim());
+	return lines.split('\n').map(l => l.trim()).filter(l => !!l);
 }
 
 function platformFromTag(tagName) {
@@ -57,7 +57,7 @@ function platformFromTag(tagName) {
 	if (tagName.indexOf('clipper') === 0) return 'clipper';
 	if (tagName.indexOf('cli') === 0) return 'cli';
 	if (tagName.indexOf('plugin-generator') === 0) return 'plugin-generator';
-	throw new Error(`Could not determine platform from tag: ${tagName}`);
+	throw new Error(`Could not determine platform from tag: "${tagName}"`);
 }
 
 // function tagPrefixFromPlatform(platform) {
@@ -99,7 +99,7 @@ function filterLogs(logs, platform) {
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
 		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
-		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0)) addIt = true;
+		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0 || prefix.indexOf('macos') >= 0)) addIt = true;
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 

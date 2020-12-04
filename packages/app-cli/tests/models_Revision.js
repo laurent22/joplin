@@ -2,7 +2,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const NoteTag = require('@joplin/lib/models/NoteTag.js');
@@ -10,10 +10,6 @@ const Tag = require('@joplin/lib/models/Tag.js');
 const Revision = require('@joplin/lib/models/Revision.js');
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const shim = require('@joplin/lib/shim').default;
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('models_Revision', function() {
 
@@ -23,7 +19,7 @@ describe('models_Revision', function() {
 		done();
 	});
 
-	it('should create patches of text and apply it', asyncTest(async () => {
+	it('should create patches of text and apply it', (async () => {
 		const note1 = await Note.save({ body: 'my note\nsecond line' });
 
 		const patch = Revision.createTextPatch(note1.body, 'my new note\nsecond line');
@@ -32,7 +28,7 @@ describe('models_Revision', function() {
 		expect(merged).toBe('my new note\nsecond line');
 	}));
 
-	it('should create patches of objects and apply it', asyncTest(async () => {
+	it('should create patches of objects and apply it', (async () => {
 		const oldObject = {
 			one: '123',
 			two: '456',
@@ -50,7 +46,7 @@ describe('models_Revision', function() {
 		expect(JSON.stringify(merged)).toBe(JSON.stringify(newObject));
 	}));
 
-	it('should move target revision to the top', asyncTest(async () => {
+	it('should move target revision to the top', (async () => {
 		const revs = [
 			{ id: '123' },
 			{ id: '456' },
@@ -69,7 +65,7 @@ describe('models_Revision', function() {
 		expect(newRevs[2].id).toBe('789');
 	}));
 
-	it('should create patch stats', asyncTest(async () => {
+	it('should create patch stats', (async () => {
 		const tests = [
 			{
 				patch: `@@ -625,16 +625,48 @@

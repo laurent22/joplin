@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('./test-utils.js');
 const Setting = require('@joplin/lib/models/Setting').default;
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
@@ -23,7 +23,7 @@ describe('integration_NoteList', function() {
 	});
 
 	// Reference: https://github.com/laurent22/joplin/issues/2709
-	it('should leave a conflict note in the conflict folder when it modified', asyncTest(async () => {
+	it('should leave a conflict note in the conflict folder when it modified', (async () => {
 		const folder = await Folder.save({ title: 'test' });
 		const note = await Note.save({ title: 'note 1', parent_id: folder.id, is_conflict: 1 });
 		await testApp.wait();

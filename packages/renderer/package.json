@@ -14,7 +14,7 @@
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "test": "jest",
-    "test-ci": "test"
+    "test-ci": "npm run test"
   },
   "author": "",
   "license": "MIT",

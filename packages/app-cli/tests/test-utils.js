@@ -50,8 +50,17 @@ const KeychainServiceDriver = require('@joplin/lib/services/keychain/KeychainSer
 const KeychainServiceDriverDummy = require('@joplin/lib/services/keychain/KeychainServiceDriver.dummy').default;
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
+const PluginRunner = require('../app/services/plugins/PluginRunner').default;
+const PluginService = require('@joplin/lib/services/plugins/PluginService').default;
 const { Dirnames } = require('@joplin/lib/services/synchronizer/utils/types');
 const sharp = require('sharp');
+
+// Each suite has its own separate data and temp directory so that multiple
+// suites can be run at the same time. suiteName is what is used to
+// differentiate between suite and it is currently set to a random string
+// (Ideally it would be something like the filename currently being executed by
+// Jest, to make debugging easier, but it's not clear how to get this info).
+const suiteName_ = uuid.createNano();
 
 const databases_ = [];
 let synchronizers_ = [];
@@ -89,10 +98,11 @@ EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
 const logDir = `${__dirname}/../tests/logs`;
-const baseTempDir = `${__dirname}/../tests/tmp`;
+const baseTempDir = `${__dirname}/../tests/tmp/${suiteName_}`;
+const dataDir = `${__dirname}/data/${suiteName_}`;
 fs.mkdirpSync(logDir, 0o755);
 fs.mkdirpSync(baseTempDir, 0o755);
-fs.mkdirpSync(`${__dirname}/data`);
+fs.mkdirpSync(dataDir);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -129,7 +139,7 @@ setSyncTargetName('memory');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
-const syncDir = `${__dirname}/../tests/sync`;
+const syncDir = `${__dirname}/../tests/sync/${suiteName_}`;
 
 // TODO: Should probably update this for Jest?
 
@@ -139,12 +149,12 @@ const syncDir = `${__dirname}/../tests/sync`;
 
 const dbLogger = new Logger();
 dbLogger.addTarget('console');
-dbLogger.addTarget('file', { path: `${logDir}/log.txt` });
+// dbLogger.addTarget('file', { path: `${logDir}/log.txt` });
 dbLogger.setLevel(Logger.LEVEL_WARN);
 
 const logger = new Logger();
 logger.addTarget('console');
-logger.addTarget('file', { path: `${logDir}/log.txt` });
+// logger.addTarget('file', { path: `${logDir}/log.txt` });
 logger.setLevel(Logger.LEVEL_WARN); // Set to DEBUG to display sync process in console
 
 Logger.initializeGlobalLogger(logger);
@@ -269,7 +279,7 @@ async function setupDatabase(id = null, options = null) {
 		return;
 	}
 
-	const filePath = `${__dirname}/data/test-${id}.sqlite`;
+	const filePath = `${dataDir}/test-${id}.sqlite`;
 
 	try {
 		await fs.unlink(filePath);
@@ -292,15 +302,15 @@ function resourceDirName(id = null) {
 
 function resourceDir(id = null) {
 	if (id === null) id = currentClient_;
-	return `${__dirname}/data/${resourceDirName(id)}`;
+	return `${dataDir}/${resourceDirName(id)}`;
 }
 
 function pluginDir(id = null) {
 	if (id === null) id = currentClient_;
-	return `${__dirname}/data/plugins-${id}`;
+	return `${dataDir}/plugins-${id}`;
 }
 
-async function setupDatabaseAndSynchronizer(id = null, options = null) {
+async function setupDatabaseAndSynchronizer(id, options = null) {
 	if (id === null) id = currentClient_;
 
 	BaseService.logger_ = logger;
@@ -549,27 +559,6 @@ function fileContentEqual(path1, path2) {
 	return content1 === content2;
 }
 
-// Wrap an async test in a try/catch block so that done() is always called
-// and display a proper error message instead of "unhandled promise error"
-function asyncTest(callback) {
-	return async function(done) {
-		try {
-			await callback();
-		} catch (error) {
-			if (error.constructor && error.constructor.name === 'ExpectationFailed') {
-				// OK - will be reported by Jest
-			} else {
-				// Better to rethrow exception as stack trace is more useful in this case
-				throw error;
-				// console.error(error);
-				// expect(0).toBe(1, 'Test has thrown an exception - see above error');
-			}
-		} finally {
-			done();
-		}
-	};
-}
-
 async function allSyncTargetItemsEncrypted() {
 	const list = await fileApi().list('', { includeDirs: false });
 	const files = list.items;
@@ -669,6 +658,39 @@ async function createTempDir() {
 	return tempDirPath;
 }
 
+function newPluginService(appVersion = '1.4') {
+	const runner = new PluginRunner();
+	const service = new PluginService();
+	service.initialize(
+		appVersion,
+		{
+			joplin: {},
+		},
+		runner,
+		{
+			dispatch: () => {},
+			getState: () => {},
+		}
+	);
+	return service;
+}
+
+function newPluginScript(script) {
+	return `
+		/* joplin-manifest:
+		{
+			"id": "org.joplinapp.plugins.PluginTest",
+			"manifest_version": 1,
+			"app_min_version": "1.4",
+			"name": "JS Bundle test",
+			"version": "1.0.0"
+		}
+		*/
+		
+		${script}
+	`;
+}
+
 // TODO: Update for Jest
 
 // function mockDate(year, month, day, tick) {
@@ -749,4 +771,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

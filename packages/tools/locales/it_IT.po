@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: CliClient/app/command-cp.js:13
 msgid ""
@@ -842,7 +844,6 @@ msgid "Goto Anything..."
 msgstr "Vai a..."
 
 #: ElectronClient/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -850,13 +851,12 @@ msgid ""
 msgstr ""
 "Scrivi il titolo di una nota o parte del suo contenuto per aprirla. Oppure "
 "digita # seguito dal nome di un'etichetta, oppure @ seguito dal nome di un "
-"taccuino."
+"taccuino. O scrivi : per cercare un comando."
 
 #: ElectronClient/plugins/GotoAnything.js:463
 #: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Command palette"
-msgstr "Comando"
+msgstr "Comandi"
 
 #: ElectronClient/InteropServiceHelper.js:153
 #, javascript-format
@@ -891,10 +891,10 @@ msgstr "La tua versione: %s"
 msgid "New version: %s"
 msgstr "Nuova versione: %s"
 
+# Tradotto semplicemente con "Scarica" dato che è il testo del tasto per scaricare la nuova versione
 #: ElectronClient/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "Scaricato"
+msgstr "Scarica"
 
 #: ElectronClient/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -1103,7 +1103,7 @@ msgstr "Inserire collegamento ipertestuale"
 #: ElectronClient/gui/NoteText.min.js:1595
 #: ElectronClient/gui/NoteText.min.js:1604
 msgid "List item"
-msgstr "Lista Elemento"
+msgstr "Elemento della lista"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:252
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:90
@@ -2292,7 +2292,6 @@ msgid "Error opening note in editor: %s"
 msgstr "Errore durante l'apertura della nota nell'editor: %s"
 
 #: ElectronClient/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
 msgstr "Apri cartella modelli"
 
@@ -2488,9 +2487,8 @@ msgid "AWS S3 bucket"
 msgstr "Bucket AWS S3"
 
 #: ReactNativeClient/lib/models/Setting.js:226
-#, fuzzy
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "URL AWS S3"
 
 #: ReactNativeClient/lib/models/Setting.js:237
 msgid "AWS key"
@@ -2931,7 +2929,7 @@ msgstr "Sincronizzazione"
 
 #: ReactNativeClient/lib/models/Setting.js:1294
 msgid "Appearance"
-msgstr "Apparenza"
+msgstr "Aspetto"
 
 #: ReactNativeClient/lib/models/Setting.js:1296
 msgid "Note"
@@ -3078,9 +3076,8 @@ msgid "Save alarm"
 msgstr "Salva Allarme"
 
 #: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "Apri..."
+msgstr "Apri"
 
 #: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 #: ReactNativeClient/lib/components/screens/Note.js:794
@@ -3135,7 +3132,7 @@ msgstr "I Taccuini crittografati non possono essere rinominati"
 
 #: ReactNativeClient/lib/components/side-menu-content.js:312
 msgid "New Notebook"
-msgstr "Nuovo Taccuino"
+msgstr "Nuovo taccuino"
 
 #: ReactNativeClient/lib/components/side-menu-content.js:316
 #: ReactNativeClient/lib/components/screens/config.js:549
@@ -3497,11 +3494,14 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Per associare una geolocalizzazione alla nota, l'applicazione ha bisogno del "
+"permesso per accedere alla posizione.\n"
+"\n"
+"Puoi cambiare questa impostazione nel menu Configurazione."
 
 #: ReactNativeClient/lib/components/screens/Note.js:341
-#, fuzzy
 msgid "Permission needed"
-msgstr "Permesso per usare la fotocamera"
+msgstr "Permesso richiesto"
 
 #: ReactNativeClient/lib/components/screens/Note.js:583
 #, javascript-format
@@ -3617,7 +3617,7 @@ msgstr "Completata: %s"
 #: ReactNativeClient/lib/Synchronizer.js:126
 #, javascript-format
 msgid "Last error: %s"
-msgstr "Ultimo Errore: %s"
+msgstr "Ultimo errore: %s"
 
 #: ReactNativeClient/lib/Synchronizer.js:233
 msgid "Idle"

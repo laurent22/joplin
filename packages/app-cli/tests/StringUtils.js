@@ -1,12 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-
-const { asyncTest } = require('./test-utils.js');
 const StringUtils = require('@joplin/lib/string-utils');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('StringUtils', function() {
 
@@ -14,7 +8,7 @@ describe('StringUtils', function() {
 		done();
 	});
 
-	it('should surround keywords with strings', asyncTest(async () => {
+	it('should surround keywords with strings', (async () => {
 		const testCases = [
 			[[], 'test', 'a', 'b', 'test'],
 			[['test'], 'test', 'a', 'b', 'atestb'],
@@ -40,7 +34,7 @@ describe('StringUtils', function() {
 		}
 	}));
 
-	it('should find the next whitespace character', asyncTest(async () => {
+	it('should find the next whitespace character', (async () => {
 		const testCases = [
 			['', [[0, 0]]],
 			['Joplin', [[0, 6], [3, 6], [6, 6]]],
