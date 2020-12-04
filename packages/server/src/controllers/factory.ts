@@ -3,12 +3,13 @@ import FileController from './api/FileController';
 import OAuthController from './api/OAuthController';
 import SessionController from './api/SessionController';
 import UserController from './api/UserController';
+import IndexLoginController from './index/LoginController';
 
 export class Controllers {
 
 	private models_: Models;
 
-	constructor(models: Models) {
+	public constructor(models: Models) {
 		this.models_ = models;
 	}
 
@@ -26,6 +27,10 @@ export class Controllers {
 
 	public user() {
 		return new UserController(this.models_);
+	}
+
+	public indexLogin() {
+		return new IndexLoginController(this.models_);
 	}
 
 }

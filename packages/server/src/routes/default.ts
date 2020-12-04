@@ -1,5 +1,5 @@
 import * as Koa from 'koa';
-import { SubPath, Route, ApiResponse, ApiResponseType } from '../utils/routeUtils';
+import { SubPath, Route, Response, ResponseType } from '../utils/routeUtils';
 import { ErrorMethodNotAllowed, ErrorNotFound, ErrorForbidden } from '../utils/errors';
 import { dirname, normalize } from 'path';
 import { pathExists } from 'fs-extra';
@@ -8,7 +8,19 @@ const { mime } = require('@joplin/lib/mime-utils.js');
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
 
+interface PathToFileMap {
+	[path: string]: string;
+}
+
+// Most static assets should be in /public, but for those that are not, for
+// example if they are in node_modules, use the map below
+const pathToFileMap: PathToFileMap = {
+	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
+};
+
 async function findLocalFile(path: string): Promise<string> {
+	if (path in pathToFileMap) return pathToFileMap[path];
+
 	let localPath = normalize(path);
 	if (localPath.indexOf('..') >= 0) throw new ErrorNotFound(`Cannot resolve path: ${path}`);
 	localPath = `${publicDir}/${localPath}`;
@@ -36,7 +48,7 @@ const route: Route = {
 			koaResponse.body = fileContent;
 			koaResponse.set('Content-Type', mimeType);
 			koaResponse.set('Content-Length', fileContent.length.toString());
-			return new ApiResponse(ApiResponseType.KoaResponse, koaResponse);
+			return new Response(ResponseType.KoaResponse, koaResponse);
 		}
 
 		throw new ErrorMethodNotAllowed();

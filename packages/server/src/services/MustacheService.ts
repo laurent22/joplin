@@ -8,6 +8,20 @@ export interface RenderOptions {
 	jsFiles?: string[];
 }
 
+export interface View {
+	name: string;
+	path: string;
+	content?: any;
+	partials?: any;
+	cssFiles?: string[];
+	jsFiles?: string[];
+}
+
+export function isView(o: any): boolean {
+	if (typeof o !== 'object' || !o) return false;
+	return 'path' in o && 'name' in o;
+}
+
 class MustacheService {
 
 	private get defaultLayoutPath(): string {
@@ -32,13 +46,40 @@ class MustacheService {
 		return output;
 	}
 
-	async render(path: string, view: any, options: RenderOptions = null): Promise<string> {
+	public async renderView(view: View): Promise<string> {
+		const partials = view.partials ? view.partials : {};
+		const cssFiles = this.resolvesFilePaths('css', view.cssFiles || []);
+		const jsFiles = this.resolvesFilePaths('js', view.jsFiles || []);
+
+		const filePath = `${config().viewDir}/${view.path}.mustache`;
+		const contentHtml = Mustache.render(
+			await this.loadTemplateContent(filePath),
+			{
+				...view.content,
+				global: this.defaultLayoutOptions,
+			},
+			partials
+		);
+
+		const layoutView: any = Object.assign({}, this.defaultLayoutOptions, {
+			pageName: view.name,
+			contentHtml: contentHtml,
+			cssFiles: cssFiles,
+			jsFiles: jsFiles,
+		});
+
+		return Mustache.render(await this.loadTemplateContent(this.defaultLayoutPath), layoutView);
+
+		// return this.render(view.path, view.content || {}, view.options);
+	}
+
+	public async render(path: string, view: any, options: RenderOptions = null): Promise<string> {
 		const partials = options && options.partials ? options.partials : {};
 		const cssFiles = this.resolvesFilePaths('css', options && options.cssFiles ? options.cssFiles : []);
 		const jsFiles = this.resolvesFilePaths('js', options && options.jsFiles ? options.jsFiles : []);
 
 		const filePath = `${config().viewDir}/${path}.mustache`;
-		const contentHtml = Mustache.render(await this.loadTemplateContent(filePath), view, partials);
+		const contentHtml = Mustache.render(await this.loadTemplateContent(filePath), { ...view, global: this.defaultLayoutOptions }, partials);
 
 		const layoutView: any = Object.assign({}, this.defaultLayoutOptions, {
 			contentHtml: contentHtml,

@@ -2,7 +2,7 @@ import { Config } from './utils/types';
 import * as pathUtils from 'path';
 
 const rootDir = pathUtils.dirname(__dirname);
-const viewDir = `${__dirname}/views`;
+const viewDir = `${pathUtils.dirname(__dirname)}/src/views`;
 
 const config: Config = {
 	port: 22300,

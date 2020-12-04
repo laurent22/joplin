@@ -20,7 +20,7 @@ const route: Route = {
 	},
 
 	needsBodyMiddleware: true,
-	responseFormat: 'html',
+	// responseFormat: 'html',
 
 };
 

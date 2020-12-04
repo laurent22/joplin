@@ -4,7 +4,7 @@ import { ErrorNotFound } from './utils/errors';
 import * as fs from 'fs-extra';
 import * as koaBody from 'koa-body';
 import { argv } from 'yargs';
-import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
+import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat } from './utils/routeUtils';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import koaIf from './utils/koaIf';
 import config, { initConfig, baseUrl } from './config';
@@ -16,6 +16,7 @@ import modelFactory from './models/factory';
 import controllerFactory from './controllers/factory';
 import { AppContext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
+import mustacheService, { isView, View } from './services/MustacheService';
 
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit();
@@ -52,8 +53,11 @@ app.use(async (ctx: Koa.Context) => {
 		if (match) {
 			const responseObject = await match.route.exec(match.subPath, ctx);
 
-			if (responseObject instanceof ApiResponse) {
+			if (responseObject instanceof Response) {
 				ctx.response = responseObject.response;
+			} else if (isView(responseObject)) {
+				ctx.response.status = 200;
+				ctx.response.body = await mustacheService.renderView(responseObject);
 			} else {
 				ctx.response.status = 200;
 				ctx.response.body = responseObject;
@@ -65,12 +69,23 @@ app.use(async (ctx: Koa.Context) => {
 		appLogger().error(error);
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
-		if (match.route.responseFormat === 'html') {
+		const responseFormat = routeResponseFormat(match);
+
+		if (responseFormat === RouteResponseFormat.Html) {
 			ctx.response.set('Content-Type', 'text/html');
-			ctx.response.body = `<html>Error! ${error.message}</html>`;
-		} else {
+			const view: View = {
+				name: 'error',
+				path: 'index/error',
+				content: {
+					error,
+				},
+			};
+			ctx.response.body = await mustacheService.renderView(view);
+		} else { // JSON
 			ctx.response.set('Content-Type', 'application/json');
-			ctx.response.body = { error: error.message };
+			const r: any = { error: error.message };
+			// if (error.stack) r.stack = error.stack;
+			ctx.response.body = r;
 		}
 	}
 });

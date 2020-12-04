@@ -1,7 +1,7 @@
 import { ErrorNotFound, ErrorMethodNotAllowed } from '../../utils/errors';
 import { File } from '../../db';
-import { sessionIdFromHeaders } from '../../utils/requestUtils';
-import { SubPath, Route, ApiResponseType, ApiResponse } from '../../utils/routeUtils';
+import { headerSessionId } from '../../utils/requestUtils';
+import { SubPath, Route, ResponseType, Response } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 const formidable = require('formidable');
@@ -34,15 +34,15 @@ const route: Route = {
 
 		if (!path.link) {
 			if (ctx.method === 'GET') {
-				return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.id);
+				return fileController.getFile(headerSessionId(ctx.headers), path.id);
 			}
 
 			if (ctx.method === 'PATCH') {
-				return fileController.patchFile(sessionIdFromHeaders(ctx.headers), path.id, ctx.request.body);
+				return fileController.patchFile(headerSessionId(ctx.headers), path.id, ctx.request.body);
 			}
 
 			if (ctx.method === 'DELETE') {
-				return fileController.deleteFile(sessionIdFromHeaders(ctx.headers), path.id);
+				return fileController.deleteFile(headerSessionId(ctx.headers), path.id);
 			}
 
 			throw new ErrorMethodNotAllowed();
@@ -51,17 +51,17 @@ const route: Route = {
 		if (path.link === 'content') {
 			if (ctx.method === 'GET') {
 				const koaResponse = ctx.response;
-				const file: File = await fileController.getFileContent(sessionIdFromHeaders(ctx.headers), path.id);
+				const file: File = await fileController.getFileContent(headerSessionId(ctx.headers), path.id);
 				koaResponse.body = file.content;
 				koaResponse.set('Content-Type', file.mime_type);
 				koaResponse.set('Content-Length', file.size.toString());
-				return new ApiResponse(ApiResponseType.KoaResponse, koaResponse);
+				return new Response(ResponseType.KoaResponse, koaResponse);
 			}
 
 			if (ctx.method === 'PUT') {
 				const result = await formParse(ctx.req);
 				const buffer = await fs.readFile(result.files.file.path);
-				return fileController.putFileContent(sessionIdFromHeaders(ctx.headers), path.id, buffer);
+				return fileController.putFileContent(headerSessionId(ctx.headers), path.id, buffer);
 			}
 
 			throw new ErrorMethodNotAllowed();
@@ -69,11 +69,11 @@ const route: Route = {
 
 		if (path.link === 'children') {
 			if (ctx.method === 'GET') {
-				return fileController.getChildren(sessionIdFromHeaders(ctx.headers), path.id);
+				return fileController.getChildren(headerSessionId(ctx.headers), path.id);
 			}
 
 			if (ctx.method === 'POST') {
-				return fileController.postChild(sessionIdFromHeaders(ctx.headers), path.id, ctx.request.body);
+				return fileController.postChild(headerSessionId(ctx.headers), path.id, ctx.request.body);
 			}
 
 			throw new ErrorMethodNotAllowed();

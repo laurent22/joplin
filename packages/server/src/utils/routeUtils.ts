@@ -1,4 +1,5 @@
 import { ItemAddressingType } from '../db';
+import { AppContext } from './types';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -15,10 +16,15 @@ function basename(path: string): string {
 	return s[s.length - 1];
 }
 
+export enum RouteResponseFormat {
+	Html = 'html',
+	Json = 'json',
+}
+
 export interface Route {
 	exec: Function;
 	needsBodyMiddleware?: boolean;
-	responseFormat?: string;
+	responseFormat?: RouteResponseFormat;
 }
 
 export interface Routes {
@@ -38,16 +44,16 @@ export interface MatchedRoute {
 	subPath: SubPath;
 }
 
-export enum ApiResponseType {
+export enum ResponseType {
 	KoaResponse,
 	Object,
 }
 
-export class ApiResponse {
-	type: ApiResponseType;
-	response: any;
+export class Response {
+	public type: ResponseType;
+	public response: any;
 
-	constructor(type: ApiResponseType, response: any) {
+	public constructor(type: ResponseType, response: any) {
 		this.type = type;
 		this.response = response;
 	}
@@ -62,6 +68,12 @@ function removeTrailingColon(path: string): string {
 export interface PathInfo {
 	basename: string;
 	dirname: string;
+}
+
+export function redirect(ctx: AppContext, url: string): Response {
+	ctx.redirect(url);
+	ctx.response.status = 302;
+	return new Response(ResponseType.KoaResponse, ctx.response);
 }
 
 export function filePathInfo(path: string): PathInfo {
@@ -130,6 +142,11 @@ export function parseSubPath(p: string): SubPath {
 	}
 
 	return output;
+}
+
+export function routeResponseFormat(match: MatchedRoute): RouteResponseFormat {
+	if (match.route.responseFormat) return match.route.responseFormat;
+	return match.basePath.indexOf('api/') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
 export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {
