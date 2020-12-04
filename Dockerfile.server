@@ -29,6 +29,12 @@ RUN mkdir /home/$user/logs
 
 COPY --chown=$user:$user package*.json ./
 
+# Install the root scripts but don't run postinstall (which would bootstrap
+# and build TypeScript files, but we don't have the TypeScript files at
+# this point)
+
+RUN npm install --ignore-scripts
+
 COPY --chown=$user:$user packages/fork-sax/package*.json ./packages/fork-sax/
 COPY --chown=$user:$user packages/lib/package*.json ./packages/lib/
 COPY --chown=$user:$user packages/renderer/package*.json ./packages/renderer/
@@ -45,12 +51,6 @@ COPY --chown=$user:$user packages/turndown-plugin-gfm ./packages/turndown-plugin
 COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
 
 RUN ls -la /home/$user
-
-# Install the root scripts but don't run postinstall (which would bootstrap
-# and build TypeScript files, but we don't have the TypeScript files at
-# this point)
-
-RUN npm install --ignore-scripts
 
 # Then bootstrap only, without compiling the TypeScript files
 
