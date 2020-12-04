@@ -113,6 +113,8 @@ async function main() {
 		appLogger().info('DB Config:', config().database);
 
 		const appContext = app.context as AppContext;
+
+		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);
 
 		const connectionCheckLogInfo = { ...connectionCheck };
