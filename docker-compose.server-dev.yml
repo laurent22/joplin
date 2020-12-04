@@ -1,3 +1,6 @@
+# For development, the easiest might be to only start the Postgres container and
+# run the app directly with `npm start`. Or use sqlite3.
+
 version: '3'
 
 services:
