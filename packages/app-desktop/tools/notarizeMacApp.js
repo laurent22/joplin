@@ -2,6 +2,24 @@ const fs = require('fs');
 const path = require('path');
 const electron_notarize = require('electron-notarize');
 
+function execCommand(command) {
+	const exec = require('child_process').exec;
+
+	return new Promise((resolve, reject) => {
+		exec(command, (error, stdout, stderr) => {
+			if (error) {
+				if (error.signal == 'SIGTERM') {
+					resolve('Process was killed');
+				} else {
+					reject(new Error([stdout.trim(), stderr.trim()].join('\n')));
+				}
+			} else {
+				resolve([stdout.trim(), stderr.trim()].join('\n'));
+			}
+		});
+	});
+}
+
 module.exports = async function(params) {
 	if (process.platform !== 'darwin') return;
 
@@ -47,6 +65,12 @@ module.exports = async function(params) {
 		// xcrun altool --list-providers -u APPLE_ID -p APPLE_ID_PASSWORD
 		ascProvider: process.env.APPLE_ASC_PROVIDER,
 	});
+
+	console.log('Staple notarization ticket to the app...');
+
+	const staplerCmd = `xcrun stapler staple "${appPath}"`;
+	console.log(`> ${staplerCmd}`);
+	console.log(await execCommand(staplerCmd));
 
 	console.log(`Done notarizing ${appId}`);
 };
