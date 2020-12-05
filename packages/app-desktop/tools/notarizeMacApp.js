@@ -66,8 +66,13 @@ module.exports = async function(params) {
 		ascProvider: process.env.APPLE_ASC_PROVIDER,
 	});
 
+	// It appears that electron-notarize doesn't staple the app, but without
+	// this we were still getting the malware warning when launching the app.
+	// Stapling the app means attaching the notarization ticket to it, so that
+	// if the user is offline, macOS can still check if the app was notarized.
+	// So it seems to be more or less optional, but at least in our case it
+	// wasn't.
 	console.log('Staple notarization ticket to the app...');
-
 	const staplerCmd = `xcrun stapler staple "${appPath}"`;
 	console.log(`> ${staplerCmd}`);
 	console.log(await execCommand(staplerCmd));
