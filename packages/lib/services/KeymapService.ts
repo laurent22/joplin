@@ -317,7 +317,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+[', command: 'editor.indentLess' },
 		{ accelerator: 'Cmd+]', command: 'editor.indentMore' },
 		{ accelerator: 'Cmd+/', command: 'editor.toggleComment' },
-		{ accelerator: 'Option+Cmd+S', command: 'editor.sortSelectedLines' },
+		{ accelerator: 'Option+Cmd+A', command: 'editor.sortSelectedLines' },
 		{ accelerator: 'Option+Up', command: 'editor.swapLineUp' },
 		{ accelerator: 'Option+Down', command: 'editor.swapLineDown' },
 	],
