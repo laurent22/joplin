@@ -961,6 +961,9 @@ packages/lib/services/ExternalEditWatcher.js.map
 packages/lib/services/KeymapService.d.ts
 packages/lib/services/KeymapService.js
 packages/lib/services/KeymapService.js.map
+packages/lib/services/KeymapService_keycodeToElectronMap.d.ts
+packages/lib/services/KeymapService_keycodeToElectronMap.js
+packages/lib/services/KeymapService_keycodeToElectronMap.js.map
 packages/lib/services/KeymapService_keysRegExp.d.ts
 packages/lib/services/KeymapService_keysRegExp.js
 packages/lib/services/KeymapService_keysRegExp.js.map
