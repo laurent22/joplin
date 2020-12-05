@@ -5,9 +5,10 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "dist": "node_modules/.bin/electron-builder",
+    "dist": "npm run electronRebuild && node_modules/.bin/electron-builder",
     "build": "gulp build",
-    "postinstall": "npm run build && gulp electronRebuild",
+    "postinstall": "npm run build",
+    "electronRebuild": "gulp electronRebuild",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools",
