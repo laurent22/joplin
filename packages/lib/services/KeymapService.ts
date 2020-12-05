@@ -1,10 +1,10 @@
 import eventManager from '../eventManager';
 import shim from '../shim';
 import { _ } from '../locale';
+import keysRegExp from './KeymapService_keysRegExp';
 
 const BaseService = require('./BaseService').default;
 
-const keysRegExp = /^([0-9A-Z)!@#$%^&*(:+<_>?~{|}";=,\-./`[\\\]']|F1*[1-9]|F10|F2[0-4]|Plus|Space|Tab|Backspace|Delete|Insert|Return|Enter|Up|Down|Left|Right|Home|End|PageUp|PageDown|Escape|Esc|VolumeUp|VolumeDown|VolumeMute|MediaNextTrack|MediaPreviousTrack|MediaStop|MediaPlayPause|PrintScreen|Numlock|Scrolllock|Capslock|num([0-9]|dec|add|sub|mult|div))$/;
 const modifiersRegExp = {
 	darwin: /^(Ctrl|Option|Shift|Cmd)$/,
 	default: /^(Ctrl|Alt|AltGr|Shift|Super)$/,
