@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
@@ -3290,9 +3290,8 @@ msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 
 #: packages/app-cli/app/command-sync.js:260
-#, fuzzy
 msgid "Cancelling... Please wait."
-msgstr "Cancelling background synchronization... Please wait."
+msgstr ""
 
 #: packages/app-cli/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
