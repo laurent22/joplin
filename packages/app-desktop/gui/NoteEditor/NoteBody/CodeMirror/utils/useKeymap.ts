@@ -65,7 +65,7 @@ export default function useKeymap(CodeMirror: any) {
 			const commandNames = CommandService.instance().commandNames();
 			if (commandNames.includes(key.command)) {
 				CodeMirror.commands[command] = () => {
-					CommandService.instance().execute(key.command);
+					void CommandService.instance().execute(key.command);
 				};
 			}
 		}
