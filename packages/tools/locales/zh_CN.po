@@ -14,6 +14,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -584,9 +586,8 @@ msgid "Options"
 msgstr "选项"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "无效的%s：%s。"
+msgstr "无效"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -655,7 +656,7 @@ msgstr "更多信息"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:527
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
+msgstr "使用箭头移动布局项。按“Escape”退出。"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -724,7 +725,7 @@ msgstr "切换编辑器"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "更改应用布局"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -741,7 +742,7 @@ msgstr "笔记本标题："
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "拼写检查器"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -957,7 +958,7 @@ msgstr "缩小"
 
 #: packages/app-desktop/gui/MenuBar.js:533
 msgid "&Go"
-msgstr ""
+msgstr "跳转 (&G)"
 
 #: packages/app-desktop/gui/MenuBar.js:545
 msgid "&Note"
@@ -1151,13 +1152,12 @@ msgstr ""
 "重要: 在一台设备上只需要运行一次。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "加密"
+msgstr "重新加密"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "忽略"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1325,7 +1325,7 @@ msgstr "浏览..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "必须重新启动应用程序才能使这些更改生效。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1334,25 +1334,24 @@ msgstr "现在完成"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 msgid "Later"
-msgstr ""
+msgstr "稍后"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
-msgstr "立即获取："
+msgstr "立即重启"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "应用"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "是否删除笔记“%s”？"
+msgstr "删除插件“%s”吗？"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "安装插件"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -2317,9 +2316,8 @@ msgstr ""
 "会默认设置为通用的等宽字体。"
 
 #: packages/lib/models/Setting.js:609
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "适用于 Joplin 全域应用样式的自定义样式表"
+msgstr "适用于已渲染 Markdown 的自定义样式表"
 
 #: packages/lib/models/Setting.js:625
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -3074,20 +3072,19 @@ msgstr "位于 %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "没有建议"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "添加到字典"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "使用拼写检查器"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "语言"
+msgstr "更改语言"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3336,9 +3333,9 @@ msgid "Downloading resources..."
 msgstr "下载资源中..."
 
 #: packages/app-cli/app/command-sync.js:242
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr "需要升级同步目标。点按此横幅以继续。"
+msgstr "需要升级同步目标！运行 `%s` 以继续。"
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
