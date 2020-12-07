@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -70,7 +72,7 @@ msgid ""
 msgstr ""
 "노트 제목이나 내용의 일부를 입력하여 바로 이동하세요. 혹은 #으로 시작하는 태"
 "그 이름이나 @로 시작하는 노트북 이름을 입력하거나, :을 입력하여 명령을 검색하"
-"세요.\""
+"세요."
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -80,7 +82,7 @@ msgstr "가고자 하는 곳으로 이동..."
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr "명령 팔레트"
+msgstr "명령 팔레트를"
 
 #: packages/app-desktop/InteropServiceHelper.js:153
 #, javascript-format
@@ -590,9 +592,8 @@ msgid "Options"
 msgstr "옵션"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "유효하지 않은 %s: %s."
+msgstr "유효하지 않은"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -665,6 +666,7 @@ msgstr "더 많은 정보"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:527
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"레이아웃 항목을 옮기려면 화살표를 사용하세요. \"ESC\"키를 눌러 종료합니다."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -733,7 +735,7 @@ msgstr "편집기 배치 형태 전환"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "애플리케이션 레이아웃 변경"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -750,7 +752,7 @@ msgstr "노트북 제목:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "맞춤법 검사기"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -970,7 +972,7 @@ msgstr "축소"
 
 #: packages/app-desktop/gui/MenuBar.js:533
 msgid "&Go"
-msgstr ""
+msgstr "이동(&G)"
 
 #: packages/app-desktop/gui/MenuBar.js:545
 msgid "&Note"
@@ -1167,13 +1169,12 @@ msgstr ""
 "중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "암호화"
+msgstr "다시 암호화"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "무시하기"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1346,7 +1347,7 @@ msgstr "훑어보기..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "변경 사항이 적용되려면 애플리케이션이 반드시 재시작되어야 합니다."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1355,25 +1356,24 @@ msgstr "지금하기"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 msgid "Later"
-msgstr ""
+msgstr "나중에"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
-msgstr "설치하기:"
+msgstr "지금 재시작하"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "적용"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "\"%s\" 노트를 삭제할까요?"
+msgstr "\"%s\" 플러그인을 삭제할까요?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "플러그인 설치하기"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -2350,9 +2350,8 @@ msgstr ""
 "올바르지 않을 경우, 일반 c고정폭 글꼴을 기본값으로 사용합니다."
 
 #: packages/lib/models/Setting.js:609
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Joplin 앱에 전역적으로 적용되는 사용자 정의 스타일시트"
+msgstr "렌더된 마크다운에 적용할 사용자 정의 스타일시트"
 
 #: packages/lib/models/Setting.js:625
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -3123,20 +3122,19 @@ msgstr "%s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "제안 없음"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "사전에 추가"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "맞춤법 검사기 사용"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "언어"
+msgstr "언어 전"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3390,9 +3388,9 @@ msgid "Downloading resources..."
 msgstr "리소스 다운로드 중..."
 
 #: packages/app-cli/app/command-sync.js:242
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr "동기화 대상의 업그레이드가 필요합니다. 처리를 위해 이 배너를 누르세요."
+msgstr "동기화 대상의 업그레이드가 필요합니다! 처리를 위해 `%s` 누르세요."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
