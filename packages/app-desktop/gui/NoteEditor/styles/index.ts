@@ -55,7 +55,7 @@ export default function styles(props: NoteEditorProps) {
 				padding: 10,
 				marginLeft: 5,
 				marginBottom: 10,
-				color: theme.colorWarn,
+
 				backgroundColor: theme.warningBackgroundColor,
 			},
 			resourceWatchBannerLine: {
