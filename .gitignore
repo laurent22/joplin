@@ -257,6 +257,9 @@ packages/app-cli/tests/synchronizer_MigrationHandler.js.map
 packages/app-cli/tests/test-utils-synchronizer.d.ts
 packages/app-cli/tests/test-utils-synchronizer.js
 packages/app-cli/tests/test-utils-synchronizer.js.map
+packages/app-cli/tests/test-utils.d.ts
+packages/app-cli/tests/test-utils.js
+packages/app-cli/tests/test-utils.js.map
 packages/app-desktop/ElectronAppWrapper.d.ts
 packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/ElectronAppWrapper.js.map
