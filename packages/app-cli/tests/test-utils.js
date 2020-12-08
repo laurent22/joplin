@@ -41,6 +41,7 @@ const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker.js');
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const RevisionService = require('@joplin/lib/services/RevisionService.js');
 const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
+const KeymapService = require('@joplin/lib/services/KeymapService').default;
 const KvStore = require('@joplin/lib/services/KvStore').default;
 const WebDavApi = require('@joplin/lib/WebDavApi');
 const DropboxApi = require('@joplin/lib/DropboxApi');
@@ -141,11 +142,12 @@ setSyncTargetName('memory');
 
 const syncDir = `${__dirname}/../tests/sync/${suiteName_}`;
 
-// TODO: Should probably update this for Jest?
-
-// let defaultJasmineTimeout = 90 * 1000;
-// if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
-// if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
+// 90 seconds now that the tests are running in parallel and have been
+// split into smaller suites might not be necessary but for now leave it
+// anyway.
+let defaultJestTimeout = 90 * 1000;
+if (isNetworkSyncTarget_) defaultJestTimeout = 60 * 1000 * 10;
+jest.setTimeout(defaultJestTimeout);
 
 const dbLogger = new Logger();
 dbLogger.addTarget('console');
@@ -206,6 +208,7 @@ function currentClientId() {
 
 async function afterEachCleanUp() {
 	await ItemChange.waitForAllSaved();
+	KeymapService.destroyInstance();
 }
 
 async function switchClient(id, options = null) {
