@@ -16,815 +16,55 @@ msgstr ""
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: CliClient/app/command-cp.js:13
-msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
-msgstr ""
-"<note>に一致するノートを[notebook]に複製します。[notebook]が指定されていない"
-"場合は、現在のノートブックに複製を行います。"
-
-#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
-#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
-#: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
-#: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
-#: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
-#: CliClient/app/command-attach.js:21 CliClient/app/command-export.js:36
-#: CliClient/app/command-export.js:40 CliClient/app/command-geoloc.js:20
-#: CliClient/app/command-search.js:27 CliClient/app/command-set.js:32
-#: CliClient/app/command-help.js:66 CliClient/app/command-todo.js:21
-#: CliClient/app/command-tag.js:33 CliClient/app/command-tag.js:36
-#: CliClient/app/command-tag.js:42 CliClient/app/command-tag.js:43
-#: CliClient/app/command-tag.js:81 CliClient/app/command-tag.js:87
-#: CliClient/app/command-done.js:20
-#: ReactNativeClient/lib/services/interop/InteropService.js:182
-#: ReactNativeClient/lib/services/interop/InteropService.js:194
-#, javascript-format
-msgid "Cannot find \"%s\"."
-msgstr "\"%s\"は見つかりませんでした。"
-
-#: CliClient/app/command-ls.js:18
-msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
-msgstr ""
-"現在のノートブック中のノートを表示します。ノートブックのリストを表示するに"
-"は、`ls /`と入力してください。"
-
-#: CliClient/app/command-ls.js:27
-msgid "Displays only the first top <num> notes."
-msgstr "上位 <num>件のノートを表示します。"
-
-#: CliClient/app/command-ls.js:28
-msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr "アイテムを<field>で並び替え (例： title, updated_time, created_time)."
-
-#: CliClient/app/command-ls.js:29
-msgid "Reverses the sorting order."
-msgstr "逆順に並び替えます。"
-
-#: CliClient/app/command-ls.js:30
-msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
-msgstr ""
-"選択した種類の項目のみ表示します。`n`でノートを、`t`でToDoを、`nt`でその両方"
-"を指定できます。 (例： `-tt` ではToDoのみを表示し、`-ttd`ではノートとToDoを表"
-"示します。)"
-
-#: CliClient/app/command-ls.js:31
-msgid "Either \"text\" or \"json\""
-msgstr "\"text\"または\"json\""
-
-#: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
-msgid ""
-"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for to-dos), TITLE"
-msgstr ""
-"長い形式のリストフォーマットを使用します。フォーマットは：ID, NOTE_COUNT "
-"(ノートブックのみ), DATE, TODO_CHECKED (ToDoのみ), TITLE"
-
-#: CliClient/app/command-ls.js:63
-msgid "Please select a notebook first."
-msgstr "まずはノートブックを選択して下さい。"
-
-#: CliClient/app/command-import.js:14
-msgid "Imports data into Joplin."
-msgstr "Joplinにデータをインポートします。"
-
-#: CliClient/app/command-import.js:25
-#, javascript-format
-msgid "Source format: %s"
-msgstr "ソースフォーマット: %s"
-
-#: CliClient/app/command-import.js:26
-msgid "Do not ask for confirmation."
-msgstr "確認を行ないません。"
-
-#: CliClient/app/command-import.js:27
-#, javascript-format
-msgid "Output format: %s"
-msgstr "出力フォーマット: %s"
-
-#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:68
-#, javascript-format
-msgid "Found: %d."
-msgstr "総数: %d."
-
-#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:69
-#, javascript-format
-msgid "Created: %d."
-msgstr "新規作成: %d."
-
-#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:70
-#, javascript-format
-msgid "Updated: %d."
-msgstr "アップデート: %d."
-
-#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:71
-#, javascript-format
-msgid "Skipped: %d."
-msgstr "スキップ: %d."
-
-#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:72
-#, javascript-format
-msgid "Resources: %d."
-msgstr "リソース: %d."
-
-#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:73
-#, javascript-format
-msgid "Tagged: %d."
-msgstr "タグ付き: %d."
-
-#: CliClient/app/command-import.js:65
-msgid "Importing notes..."
-msgstr "ノートのインポート中..."
-
-#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:88
-#, javascript-format
-msgid "The notes have been imported: %s"
-msgstr "ノートはインポートされました：%s"
-
-#: CliClient/app/help-utils.js:56
-msgid "Enum"
-msgstr "列挙"
-
-#: CliClient/app/help-utils.js:56
-#, javascript-format
-msgid "Type: %s."
-msgstr "種類: %s."
-
-#: CliClient/app/help-utils.js:57
-#, javascript-format
-msgid "Possible values: %s."
-msgstr "取り得る値: %s."
-
-#: CliClient/app/help-utils.js:71
-#, javascript-format
-msgid "Default: %s"
-msgstr "既定値: %s"
-
-#: CliClient/app/help-utils.js:77
-msgid "Possible keys/values:"
-msgstr "取り得るキー/値:"
-
-#: CliClient/app/command-server.js:14
-#, javascript-format
-msgid ""
-"Start, stop or check the API server. To specify on which port it should run, "
-"set the api.port config variable. Commands are (%s)."
-msgstr ""
-"APIサーバーの起動、停止、状況確認を行います。APIサーバーが使用するポートは "
-"api.port で変更できます。コマンドは (%s)。"
-
-#: CliClient/app/command-server.js:38
-#, javascript-format
-msgid "Server is already running on port %d"
-msgstr "サーバーはすでにポート %d で実行中です。"
-
-#: CliClient/app/command-server.js:44
-#, javascript-format
-msgid "Server is running on port %d"
-msgstr "サーバーはポート %d で実行中です。"
-
-#: CliClient/app/command-server.js:44 CliClient/app/command-server.js:47
-msgid "Server is not running."
-msgstr "サーバーは実行されていません。"
-
-#: CliClient/app/command-e2ee.js:18
-msgid ""
-"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
-msgstr ""
-"エンドツーエンド暗号化(E2EE)の設定コマンドです。<command>には `enable`, "
-"`disable`, `decrypt`, `status`, `target-status` があります。"
-
-#: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
-msgid "Enter master password:"
-msgstr "マスターパスワードを入力してください:"
-
-#: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
-#: CliClient/app/command-e2ee.js:79
-msgid "Operation cancelled"
-msgstr "操作をキャンセルしました"
-
-#: CliClient/app/command-e2ee.js:47
-msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
-msgstr ""
-"復号を開始しました... どのぐらいの数を復号するかによりますが、数分かかります"
-"のでお待ちください。"
-
-#: CliClient/app/command-e2ee.js:53
-#, javascript-format
-msgid "Decrypted items: %d"
-msgstr "復号済み（非暗号化）アイテム: %d"
-
-#: CliClient/app/command-e2ee.js:54
-#, javascript-format
-msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr ""
-"スキップされたアイテム: %d (再度復号化を試みるには--retry-failed-itemsオプ"
-"ションを使用してください)"
-
-#: CliClient/app/command-e2ee.js:68
-msgid "Completed decryption."
-msgstr "復号が完了しました。"
-
-#: CliClient/app/command-e2ee.js:77
-#: ReactNativeClient/lib/components/screens/encryption-config.js:163
-msgid "Confirm password:"
-msgstr "パスワード(確認用):"
-
-#: CliClient/app/command-e2ee.js:83
-#: ReactNativeClient/lib/components/screens/encryption-config.js:140
-msgid "Passwords do not match!"
-msgstr "パスワードが一致しません!"
-
-#: CliClient/app/command-e2ee.js:108
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:443
-#: ReactNativeClient/lib/components/screens/encryption-config.js:280
-msgid "Enabled"
-msgstr "有効"
-
-#: CliClient/app/command-e2ee.js:108
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:110
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:443
-#: ReactNativeClient/lib/models/Setting.js:624
-#: ReactNativeClient/lib/components/screens/encryption-config.js:280
-msgid "Disabled"
-msgstr "無効"
-
-#: CliClient/app/command-e2ee.js:108
-#: ReactNativeClient/lib/components/screens/encryption-config.js:280
-#, javascript-format
-msgid "Encryption is: %s"
-msgstr "暗号化: %s"
-
-#: CliClient/app/command-mkbook.js:12
-msgid "Creates a new notebook."
-msgstr "あたらしいノートブックを作成します。"
-
-#: CliClient/app/command-mv.js:14
-msgid "Moves the notes matching <note> to [notebook]."
-msgstr "<note>に一致するアイテムを、[notebook]に移動します。"
-
-#: CliClient/app/command-config.js:13
-msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
-msgstr ""
-"設定を行います。[value]がない場合は、[name]で示された設定項目の値を表示しま"
-"す。両方とも指定されていない場合は、現在の設定のリストを表示します。"
-
-#: CliClient/app/command-config.js:18
-msgid "Also displays unset and hidden config variables."
-msgstr "未設定または非表示の設定項目も表示します。"
-
-#: CliClient/app/command-config.js:79
-#, javascript-format
-msgid "%s = %s (%s)"
-msgstr "%s = %s (%s)"
-
-#: CliClient/app/command-config.js:81
-#, javascript-format
-msgid "%s = %s"
-msgstr "%s = %s"
-
-#: CliClient/app/command-use.js:12
-msgid ""
-"Switches to [notebook] - all further operations will happen within this "
-"notebook."
-msgstr ""
-"ノートブック [notebook]に切り替え - これ以降の作業は、指定のノートブック内で"
-"行われます。"
-
-#: CliClient/app/command-sync.js:29
-msgid "Synchronises with remote storage."
-msgstr "リモート保存領域と同期します。"
-
-#: CliClient/app/command-sync.js:34
-msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "指定のターゲットと同期します。(標準： sync.targetの設定値)"
-
-#: CliClient/app/command-sync.js:35
-msgid "Upgrade the sync target to the latest version."
-msgstr "同期先を最新バージョンにアップグレード。"
-
-#: CliClient/app/command-sync.js:81 CliClient/app/command-sync.js:95
-#: ElectronClient/gui/OneDriveLoginScreen.min.js:40
-#: ElectronClient/gui/OneDriveLoginScreen.js:46
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "認証は完了していません(認証トークンが得られませんでした)"
-
-#: CliClient/app/command-sync.js:90 ElectronClient/gui/DropboxLoginScreen.js:29
-#: ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "DropboxでJoplinを同期する場合は、次のステップを実行してください:"
-
-#: CliClient/app/command-sync.js:91 ElectronClient/gui/DropboxLoginScreen.js:30
-#: ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "ステップ1: アプリケーションを認証するためにこのURLをブラウザーで開く:"
-
-#: CliClient/app/command-sync.js:93 ElectronClient/gui/DropboxLoginScreen.js:32
-#: ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "ステップ2: Dropboxによって提供されたコードを入力する:"
-
-#: CliClient/app/command-sync.js:105
-#, javascript-format
-msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "%s では認証できません。他の資格証明書を使用してください。"
-
-#: CliClient/app/command-sync.js:128
-msgid "Synchronisation is already in progress."
-msgstr "同期はすでに実行中です。"
-
-#: CliClient/app/command-sync.js:133
-#, javascript-format
-msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
-msgstr ""
-"ロックファイルがすでに保持されています。同期作業が行われていない場合は、\"%s"
-"\"にあるロックファイルを削除して、作業を再度行ってください。"
-
-#: CliClient/app/command-sync.js:175
-#, javascript-format
-msgid "Synchronisation target: %s (%s)"
-msgstr "同期先: %s (%s)"
-
-#: CliClient/app/command-sync.js:177
-msgid "Cannot initialise synchroniser."
-msgstr "同期プロセスを初期化できませんでした。"
-
-#: CliClient/app/command-sync.js:207
-msgid "Starting synchronisation..."
-msgstr "同期を開始中..."
-
-#: CliClient/app/command-sync.js:230
-msgid "Downloading resources..."
-msgstr "リソースをダウンロード中..."
-
-#: CliClient/app/command-ren.js:14
-msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "<item> (ノートまたはノートブック)の名前を、<name>に変更します。"
-
-#: CliClient/app/command-rmbook.js:13
-msgid "Deletes the given notebook."
-msgstr "指定されたノートブックを削除します。"
-
-#: CliClient/app/command-rmbook.js:17
-msgid "Deletes the notebook without asking for confirmation."
-msgstr "ノートブックを確認なしで削除します。"
-
-#: CliClient/app/command-rmbook.js:26
-#: ReactNativeClient/lib/components/screens/notes.js:154
-msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
-msgstr ""
-"ノートブックを削除しますか？　このノートブックにあるノートとサブノートはすべ"
-"て消えてしまいます。"
-
-#: CliClient/app/command-mktodo.js:12
-msgid "Creates a new to-do."
-msgstr "新しいToDoを作成します。"
-
-#: CliClient/app/command-mktodo.js:16 CliClient/app/command-mknote.js:16
-msgid "Notes can only be created within a notebook."
-msgstr "ノートは、ノートブック内のみに作ることができます。"
-
-#: CliClient/app/command-cat.js:14
-msgid "Displays the given note."
-msgstr "選択したノートを表示します。"
-
-#: CliClient/app/command-cat.js:18
-msgid "Displays the complete information about note."
-msgstr "ノートに関するすべての情報を表示します。"
-
-#: CliClient/app/command-edit.js:17
-msgid "Edit note."
-msgstr "ノートを編集する。"
-
-#: CliClient/app/command-edit.js:30
-msgid ""
-"No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr ""
-"テキストエディターが定義されていません。`config editor <editor-path>`で設定を"
-"行ってください"
-
-#: CliClient/app/command-edit.js:40
-msgid "No active notebook."
-msgstr "有効なノートブックがありません。"
-
-#: CliClient/app/command-edit.js:46
-#, javascript-format
-msgid "Note does not exist: \"%s\". Create it?"
-msgstr "\"%s\"というノートはありません。作成しますか？"
-
-#: CliClient/app/app-gui.js:452
-msgid "To delete a tag, untag the associated notes."
-msgstr "タグを削除するには、関連するノートからタグを外してください。"
-
-#: CliClient/app/app-gui.js:462
-msgid "Please select the note or notebook to be deleted first."
-msgstr "まず削除するノートかノートブックを選択してください。"
-
-#: CliClient/app/app-gui.js:750
-msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
-
-#: CliClient/app/command-rmnote.js:13
-msgid "Deletes the notes matching <note-pattern>."
-msgstr "<note-pattern>に一致するノートを削除する。"
-
-#: CliClient/app/command-rmnote.js:17
-msgid "Deletes the notes without asking for confirmation."
-msgstr "ノートを確認なしで削除します。"
-
-#: CliClient/app/command-rmnote.js:27
-#, javascript-format
-msgid "%d notes match this pattern. Delete them?"
-msgstr "%d 個のノートが一致しました。削除しますか？"
-
-#: CliClient/app/command-rmnote.js:27
-#: ReactNativeClient/lib/components/screens/Note.js:447
-msgid "Delete note?"
-msgstr "ノートを削除しますか？"
-
-#: CliClient/app/command-attach.js:13
-msgid "Attaches the given file to the note."
-msgstr "選択したファイルをノートに添付します。"
-
-#: CliClient/app/command-version.js:11
-msgid "Displays version information"
-msgstr "バージョン情報の表示"
-
-#: CliClient/app/command-version.js:16
-#, javascript-format
-msgid "%s %s (%s)"
-msgstr "%s %s (%s)"
-
-#: CliClient/app/command-undone.js:12
-msgid "Marks a to-do as non-completed."
-msgstr "ToDoを未完としてマークします。"
-
-#: CliClient/app/command-export.js:13
-msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
-msgstr ""
-"Joplinのデータを選択されたパスにエクスポートします。既定ではノートブック・"
-"ノート・タグ・添付データを含むすべてのデータベースを出力します。"
-
-#: CliClient/app/command-export.js:23
-#, javascript-format
-msgid "Destination format: %s"
-msgstr "場所の形式: %s"
-
-#: CliClient/app/command-export.js:23
-msgid "Exports only the given note."
-msgstr "選択されたノートのみを出力する。"
-
-#: CliClient/app/command-export.js:23
-msgid "Exports only the given notebook."
-msgstr "選択されたノートブックのみを出力する。"
-
-#: CliClient/app/command-mknote.js:12
-msgid "Creates a new note."
-msgstr "あたらしいノートを作成します。"
-
-#: CliClient/app/main.js:80
-msgid "Type `joplin help` for usage information."
-msgstr "`joplin help`を実行して使い方を表示します。"
-
-#: CliClient/app/main.js:82
-msgid "Fatal error:"
-msgstr "致命的なエラー:"
-
-#: CliClient/app/command-geoloc.js:13
-msgid "Displays a geolocation URL for the note."
-msgstr "ノートの位置情報URLを表示する。"
-
-#: CliClient/app/gui/NoteWidget.js:36
-msgid ""
-"Welcome to Joplin!\n"
-"\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
-"\n"
-"For example, to create a notebook press `mb`; to create a note press `mn`."
-msgstr ""
-"Joplinへようこそ！\n"
-"\n"
-"`:help shortcuts`と入力することで、キーボードショートカットのリストを見ること"
-"ができます。また、`:help`で使い方を確認できます。\n"
-"\n"
-"例えば、ノートブックの作成は`mb`で、ノートの作成は`mn`で行うことができます。"
-
-#: CliClient/app/gui/NoteWidget.js:48
-msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
-msgstr ""
-"現在一つ以上のアイテムが暗号化されており、マスターパスワードを提供する必要が"
-"あります。その場合は`e2ee decrypt`を入力してください。もしパスワードを提供し"
-"てある場合は、暗号化したアイテムは復号中で、間もなく使用できるようになるで"
-"しょう。"
-
-#: CliClient/app/gui/NoteWidget.js:50
-msgid "You may also type `status` for more information."
-msgstr "`status`でさらに情報を確認できます。"
-
-#: CliClient/app/gui/FolderListWidget.js:31
-msgid "Search:"
-msgstr "検索:"
-
-#: CliClient/app/command-search.js:13
-msgid "Searches for the given <pattern> in all the notes."
-msgstr "指定された<pattern>をすべてのノートから検索する。"
-
-#: CliClient/app/command-set.js:22
-#, javascript-format
-msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
-"\n"
-"%s"
-msgstr ""
-"<note>のプロパティ<name> を、指示された[value]に設定します。有効なプロパティ"
-"は：\n"
-"\n"
-"%s"
-
-#: CliClient/app/cli-utils.js:109
-#, javascript-format
-msgid "Missing required argument: %s"
-msgstr "引数が足りません：%s"
-
-#: CliClient/app/cli-utils.js:140 ReactNativeClient/lib/services/report.js:151
-#, javascript-format
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: CliClient/app/cli-utils.js:144
-msgid "Your choice: "
-msgstr "選択： "
-
-#: CliClient/app/cli-utils.js:151
-#, javascript-format
-msgid "Invalid answer: %s"
-msgstr "無効な入力：%s"
-
-#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:137
-msgid "Y"
-msgstr "Y"
-
-#: CliClient/app/cli-utils.js:161 CliClient/app/app.js:137
-msgid "n"
-msgstr "n"
-
-#: CliClient/app/base-command.js:15
-msgid "Cannot change encrypted item"
-msgstr "暗号化したアイテムは変更できません"
-
-#: CliClient/app/command-help.js:13
-msgid "Displays usage information."
-msgstr "使い方を表示する。"
-
-#: CliClient/app/command-help.js:36
-#, javascript-format
-msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "ショートカットのカスタマイズ方法は %s をご覧ください"
-
-#: CliClient/app/command-help.js:44
-msgid "Shortcuts are not available in CLI mode."
-msgstr "CLIモードではショートカットは使用できません。"
-
-#: CliClient/app/command-help.js:71
-msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
-msgstr ""
-"コマンドのさらなる情報は、`help [command]`で見ることができます；または、"
-"`help all`ですべての使用方法の情報を表示できます。"
-
-#: CliClient/app/command-help.js:73
-msgid "The possible commands are:"
-msgstr "有効なコマンドは："
-
-#: CliClient/app/command-help.js:77
-msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
-msgstr ""
-"すべてのコマンドで、ノートまたはノートブックは、題名またはID、または選択中の"
-"物はそれぞれショートカット`$n`または`$b`で指定できます。`$c`で選択中のアイテ"
-"ムを参照できます。"
-
-#: CliClient/app/command-help.js:79
-msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "ペイン間を移動するには、TabかShift+Tabを押してください。"
-
-#: CliClient/app/command-help.js:80
-msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
-msgstr "リストや入力エリアの移動には矢印キーまたはPage Up/Downを使用します。"
-
-#: CliClient/app/command-help.js:81
-msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "コンソールの最大化・最小化には\"tc\"と入力してください。"
-
-#: CliClient/app/command-help.js:82
-msgid "To enter command line mode, press \":\""
-msgstr "コマンドラインモードに入るには、\":\"を入力してください"
-
-#: CliClient/app/command-help.js:83
-msgid "To exit command line mode, press ESCAPE"
-msgstr "コマンドラインモードを終了するには、ESCキーを押してください"
-
-#: CliClient/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
-"キーボードショートカットと設定オプションを表示するには、`help shortcuts`と入"
-"力してください"
-
-#: CliClient/app/command-todo.js:14
-msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
-msgstr ""
-"<todo-command>は、\"toggle\"または\"clear\"を指定できます。\"toggle\"を指定す"
-"ると、指定したToDoの完了済み/未完を反転できます。指定したノートが通常のノート"
-"であれば、ToDoに変換されます。\"clear\"を指定すると、ToDoを通常のノートに変換"
-"できます。"
-
-#: CliClient/app/command-exit.js:11
-msgid "Exits the application."
-msgstr "アプリケーションの終了。"
-
-#: CliClient/app/app.js:62
-#, javascript-format
-msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
-
-#: CliClient/app/app.js:92
-msgid "No notebook selected."
-msgstr "ノートブックが選択されていません。"
-
-#: CliClient/app/app.js:98
-msgid "No notebook has been specified."
-msgstr "ノートブックが選択されていません。"
-
-#: CliClient/app/app.js:137
-msgid "N"
-msgstr "N"
-
-#: CliClient/app/app.js:137
-msgid "y"
-msgstr "y"
-
-#: CliClient/app/app.js:170
-msgid "Cancelling background synchronisation... Please wait."
-msgstr "バックグラウンド同期を中止中… しばらくお待ちください。"
-
-#: CliClient/app/app.js:255
-#, javascript-format
-msgid "No such command: %s"
-msgstr "コマンドが違います：%s"
-
-#: CliClient/app/app.js:303
-#, javascript-format
-msgid "The command \"%s\" is only available in GUI mode"
-msgstr "コマンド \"%s\"は、GUIのみで有効です"
-
-#: CliClient/app/command-status.js:13
-msgid "Displays summary about the notes and notebooks."
-msgstr "ノートとノートブックのサマリを表示します。"
-
-#: CliClient/app/command-status.js:44
-msgid ""
-"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr ""
-"これらのアイテムの復号化を再試行するには、`e2ee decrypt --retry-failed-items`"
-"を実行してください。"
-
-#: CliClient/app/command-tag.js:14
-msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
-msgstr ""
-"<tag-command> は\"add\", \"remove\", \"list\", \"notetags\"のいずれかで、それ"
-"ぞれ、[note]に[tag]を追加、[note]から[tag]を削除、[tag]のついたノートを一覧表"
-"示 (-lオプションでより多くの情報を表示)、[note]についているタグを一覧表示しま"
-"す。単に`tag list`とした場合はすべてのタグを一覧表示します。"
-
-#: CliClient/app/command-tag.js:90
-#, javascript-format
-msgid "Invalid command: \"%s\""
-msgstr "無効な命令: \"%s\""
-
-#: CliClient/app/command-done.js:14
-msgid "Marks a to-do as done."
-msgstr "ToDoを完了としてマークします。"
-
-#: CliClient/app/command-done.js:21
-#, javascript-format
-msgid "Note is not a to-do: \"%s\""
-msgstr "ノートはToDoリストではありません：\"%s\""
-
-#: ElectronClient/bridge.js:97 ElectronClient/bridge.js:107
-#: ElectronClient/bridge.js:118 ElectronClient/bridge.js:126
-#: ElectronClient/checkForUpdates.js:139
-#: ElectronClient/gui/DialogButtonRow.min.js:30
-#: ElectronClient/gui/MenuBar.js:335
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:174
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:22
-#: ElectronClient/gui/PromptDialog.min.js:235
-#: ElectronClient/gui/ConfigScreen.min.js:187
-#: ElectronClient/gui/ConfigScreen.min.js:756
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:20
-#: ReactNativeClient/lib/components/ModalDialog.js:67
-#: ReactNativeClient/lib/components/CameraView.js:160
-#: ReactNativeClient/lib/components/side-menu-content.js:150
+#: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
+#: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
+#: packages/app-desktop/checkForUpdates.js:139
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
+#: packages/app-desktop/gui/MenuBar.js:309
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:181
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
+#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
+#: packages/app-mobile/components/ModalDialog.js:67
+#: packages/app-mobile/components/CameraView.js:160
+#: packages/app-mobile/components/side-menu-content.js:150
+#: packages/app-mobile/components/screens/config.js:148
 msgid "OK"
 msgstr "OK"
 
-#: ElectronClient/bridge.js:107 ElectronClient/bridge.js:118
-#: ElectronClient/checkForUpdates.js:154
-#: ElectronClient/gui/DialogButtonRow.min.js:38
-#: ElectronClient/gui/SideBar/SideBar.min.js:264
-#: ElectronClient/gui/SideBar/SideBar.min.js:639
-#: ElectronClient/gui/SideBar/SideBar.js:191
-#: ElectronClient/gui/SideBar/SideBar.js:412
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:52
-#: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
-#: ElectronClient/gui/NoteList.min.js:148
-#: ElectronClient/gui/utils/NoteListUtils.js:161
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:462
-#: ElectronClient/gui/PromptDialog.min.js:242
-#: ElectronClient/gui/ConfigScreen.min.js:746
-#: ElectronClient/gui/NoteList/NoteList.js:161
-#: ElectronClient/gui/NoteList/NoteList.min.js:151
-#: ElectronClient/gui/ResourceScreen.js:95
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:21
-#: ReactNativeClient/lib/shim-init-node.js:129
-#: ReactNativeClient/lib/components/ModalDialog.js:70
-#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:82
-#: ReactNativeClient/lib/components/CameraView.js:161
-#: ReactNativeClient/lib/components/side-menu-content.js:156
-#: ReactNativeClient/lib/components/side-menu-content.js:165
-#: ReactNativeClient/lib/components/side-menu-content.js:338
-#: ReactNativeClient/lib/components/screens/encryption-config.js:185
-#: ReactNativeClient/lib/components/screens/Note.js:98
-#: ReactNativeClient/lib/components/screens/Note.js:504
+#: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
+#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
+#: packages/app-desktop/gui/SideBar/SideBar.js:191
+#: packages/app-desktop/gui/SideBar/SideBar.js:412
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
+#: packages/app-desktop/gui/utils/NoteListUtils.js:164
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:528
+#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/app-desktop/gui/ResourceScreen.js:95
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
+#: packages/app-mobile/components/ModalDialog.js:70
+#: packages/app-mobile/components/SelectDateTimeDialog.js:82
+#: packages/app-mobile/components/CameraView.js:161
+#: packages/app-mobile/components/side-menu-content.js:156
+#: packages/app-mobile/components/side-menu-content.js:165
+#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/app-mobile/components/screens/encryption-config.js:185
+#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:506
+#: packages/lib/shim-init-node.js:137
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ElectronClient/bridge.js:178
+#: packages/app-desktop/bridge.js:188
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 "まもなくアプリケーションは終了します。もう一度起動して処理を完了させてくださ"
 "い。"
 
-#: ElectronClient/plugins/GotoAnything.min.js:459
-msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name."
-msgstr ""
-"題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、「#"
-"タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに"
-"移動できます。"
-
-#: ElectronClient/plugins/GotoAnything.min.js:499
-#: ElectronClient/plugins/GotoAnything.js:456
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:20
-msgid "Goto Anything..."
-msgstr "Goto Anything..."
-
-#: ElectronClient/plugins/GotoAnything.js:431
+#: packages/app-desktop/plugins/GotoAnything.js:431
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -834,82 +74,86 @@ msgstr ""
 "タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに"
 "移動できます。あるいは「:」でコマンドを検索して実行できます。"
 
-#: ElectronClient/plugins/GotoAnything.js:463
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:28
+#: packages/app-desktop/plugins/GotoAnything.js:456
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
+msgid "Goto Anything..."
+msgstr "Goto Anything..."
+
+#: packages/app-desktop/plugins/GotoAnything.js:463
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
 msgstr "コマンドパレット"
 
-#: ElectronClient/InteropServiceHelper.js:153
+#: packages/app-desktop/InteropServiceHelper.js:153
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
 
-#: ElectronClient/InteropServiceHelper.js:170
+#: packages/app-desktop/InteropServiceHelper.js:171
 #, javascript-format
 msgid "Could not export notes: %s"
 msgstr "ノートをエクスポートできませんでした: %s"
 
-#: ElectronClient/checkForUpdates.js:138
+#: packages/app-desktop/checkForUpdates.js:138
 msgid "Current version is up-to-date."
 msgstr "現在のバージョンは最新版です。"
 
-#: ElectronClient/checkForUpdates.js:148
+#: packages/app-desktop/checkForUpdates.js:148
 #, javascript-format
 msgid "%s (pre-release)"
 msgstr "%s (プレリリース)"
 
-#: ElectronClient/checkForUpdates.js:152
+#: packages/app-desktop/checkForUpdates.js:152
 msgid "An update is available, do you want to download it now?"
 msgstr "アップデートがあります。すぐにダウンロードしますか？"
 
-#: ElectronClient/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:153
 #, javascript-format
 msgid "Your version: %s"
 msgstr "あなたのバージョン: %s"
 
-#: ElectronClient/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:153
 #, javascript-format
 msgid "New version: %s"
 msgstr "新バージョン: %s"
 
-#: ElectronClient/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:154
 #, fuzzy
 msgid "Download"
 msgstr "ダウンロード済み"
 
-#: ElectronClient/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
 msgstr "リリースノート（完全版）"
 
-#: ElectronClient/gui/SearchBar/SearchBar.js:50
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:120
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:437
+#: packages/app-desktop/gui/SearchBar/SearchBar.js:113
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
+#: packages/app-desktop/gui/NoteSearchBar.min.js:167
 msgid "Search..."
 msgstr "検索..."
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:75
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "ノート \"%s\" のノートブック \"%s\"への復元は成功しました。"
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:100
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
 msgstr "このノートに履歴はありません"
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:142
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:112
-#: ElectronClient/gui/NoteText.min.js:865
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:112
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "次のリンクまたはメッセージはサポートしていません: %s"
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:177
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:51
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
 msgid "Restore"
 msgstr "復元"
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:178
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -918,26 +162,19 @@ msgstr ""
 "\"%s\"をクリックすると復元を行います。復元されるノートは\"%s\"というノート"
 "ブックにコピーされます。現在のバージョンのノートの置換や変更は行われません。"
 
-#: ElectronClient/gui/NoteRevisionViewer.min.js:187
-#: ElectronClient/gui/NoteText.min.js:1671
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:462
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:30
-#: ElectronClient/gui/ConfigScreen.min.js:746
-#: ElectronClient/gui/Header.min.js:316
-#: ReactNativeClient/lib/commands/historyBackward.js:17
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:528
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
+#: packages/lib/commands/historyBackward.js:17
 msgid "Back"
 msgstr "戻る"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:237
-#: ElectronClient/gui/SideBar/SideBar.js:166
-#: ElectronClient/gui/SideBar.min.js:283
+#: packages/app-desktop/gui/SideBar/SideBar.js:166
 msgid "Remove"
 msgstr "削除"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:240
-#: ElectronClient/gui/SideBar/SideBar.js:169
-#: ElectronClient/gui/SideBar.min.js:286
-#: ReactNativeClient/lib/components/side-menu-content.js:148
+#: packages/app-desktop/gui/SideBar/SideBar.js:169
+#: packages/app-mobile/components/side-menu-content.js:148
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -948,169 +185,119 @@ msgstr ""
 "\n"
 "このノートブックにあるノートとサブノートはすべて消えてしまいます。"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:241
-#: ElectronClient/gui/SideBar/SideBar.js:170
-#: ElectronClient/gui/SideBar.min.js:287
-#: ElectronClient/gui/utils/NoteListUtils.js:132
-#: ElectronClient/gui/utils/NoteListUtils.js:161
-#: ElectronClient/gui/ResourceScreen.js:47
-#: ElectronClient/gui/ResourceScreen.js:95
-#: ReactNativeClient/lib/components/screen-header.js:356
-#: ReactNativeClient/lib/components/side-menu-content.js:146
-#: ReactNativeClient/lib/components/screens/Note.js:828
+#: packages/app-desktop/gui/SideBar/SideBar.js:170
+#: packages/app-desktop/gui/utils/NoteListUtils.js:135
+#: packages/app-desktop/gui/utils/NoteListUtils.js:164
+#: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:95
+#: packages/app-desktop/gui/ResourceScreen.js:47
+#: packages/app-desktop/gui/ResourceScreen.js:95
+#: packages/app-mobile/components/side-menu-content.js:146
+#: packages/app-mobile/components/screens/Note.js:830
 msgid "Delete"
 msgstr "削除"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:244
-#: ElectronClient/gui/SideBar/SideBar.js:174
-#: ElectronClient/gui/SideBar.min.js:290
+#: packages/app-desktop/gui/SideBar/SideBar.js:174
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "すべてのノートからタグ \"%s\" を削除しますか？"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:246
-#: ElectronClient/gui/SideBar/SideBar.js:177
-#: ElectronClient/gui/SideBar.min.js:292
+#: packages/app-desktop/gui/SideBar/SideBar.js:177
 msgid "Remove this search from the sidebar?"
 msgstr "サイドバーからこの検索を削除しますか？"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:305
-#: ElectronClient/gui/SideBar/SideBar.js:228
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:122
-#: ElectronClient/gui/SideBar.min.js:382 ElectronClient/gui/MenuBar.js:443
-#: ElectronClient/gui/utils/NoteListUtils.js:128
+#: packages/app-desktop/gui/SideBar/SideBar.js:228
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
+#: packages/app-desktop/gui/MenuBar.js:415
+#: packages/app-desktop/gui/utils/NoteListUtils.js:131
 msgid "Export"
 msgstr "エクスポート"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:639
-#: ElectronClient/gui/SideBar/SideBar.js:412
-#: ElectronClient/gui/SideBar.min.js:724
-#: ReactNativeClient/lib/components/side-menu-content.js:338
-#: ReactNativeClient/lib/commands/synchronize.js:18
-msgid "Synchronise"
-msgstr "同期"
-
-#: ElectronClient/gui/SideBar/SideBar.min.js:673
-#: ElectronClient/gui/SideBar/SideBar.js:283
-#: ElectronClient/gui/SideBar.min.js:757
-#: ReactNativeClient/lib/components/side-menu-content.js:360
-#: ReactNativeClient/lib/components/screens/notes.js:188
+#: packages/app-desktop/gui/SideBar/SideBar.js:283
+#: packages/app-mobile/components/side-menu-content.js:360
+#: packages/app-mobile/components/screens/notes.js:188
 msgid "All notes"
 msgstr "すべてのノート"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:678
-#: ElectronClient/gui/SideBar/SideBar.js:436
-#: ElectronClient/gui/SideBar.min.js:762
-#: ReactNativeClient/lib/components/side-menu-content.js:364
+#: packages/app-desktop/gui/SideBar/SideBar.js:412
+#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/lib/commands/synchronize.js:18
+msgid "Synchronise"
+msgstr "同期"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:436
+#: packages/app-mobile/components/side-menu-content.js:364
 msgid "Notebooks"
 msgstr "ノートブック"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:695
-#: ElectronClient/gui/SideBar/SideBar.js:448
-#: ElectronClient/gui/MainScreen/commands/setTags.js:17
-#: ElectronClient/gui/SideBar.min.js:779
-#: ElectronClient/gui/NoteText.min.js:1634
-#: ElectronClient/gui/NoteText.min.js:1810
-#: ReactNativeClient/lib/components/side-menu-content.js:314
-#: ReactNativeClient/lib/components/screens/tags.js:101
-#: ReactNativeClient/lib/components/screens/Note.js:801
+#: packages/app-desktop/gui/SideBar/SideBar.js:448
+#: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
+#: packages/app-mobile/components/side-menu-content.js:314
+#: packages/app-mobile/components/screens/tags.js:101
+#: packages/app-mobile/components/screens/Note.js:803
 msgid "Tags"
 msgstr "タグ"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:713
-#: ElectronClient/gui/SideBar/SideBar.js:459
-#: ElectronClient/gui/SideBar.min.js:797
-#: ReactNativeClient/lib/components/side-menu-content.js:325
+#: packages/app-desktop/gui/SideBar/SideBar.js:459
+#: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "復号中のアイテム: %d/%d"
 
-#: ElectronClient/gui/SideBar/SideBar.min.js:718
-#: ElectronClient/gui/SideBar/SideBar.js:463
-#: ElectronClient/gui/SideBar.min.js:802
-#: ReactNativeClient/lib/components/side-menu-content.js:330
+#: packages/app-desktop/gui/SideBar/SideBar.js:463
+#: packages/app-mobile/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
 msgstr "取得中のリソース: %d/%d"
 
-#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:16
+#: packages/app-desktop/gui/SideBar/commands/focusElementSideBar.js:17
 msgid "Sidebar"
 msgstr "サイドバー"
 
-#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:17
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:17
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:17
-#: ElectronClient/gui/MenuBar.js:531
-#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:18
+#: packages/app-desktop/gui/SideBar/commands/focusElementSideBar.js:18
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
+#: packages/app-desktop/gui/MenuBar.js:539
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
 msgid "Focus"
 msgstr "フォーカス"
 
-#: ElectronClient/gui/StatusScreen/StatusScreen.js:26
-#: ElectronClient/gui/StatusScreen.min.js:33
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
-#: ElectronClient/gui/StatusScreen/StatusScreen.js:61
-#: ElectronClient/gui/StatusScreen.min.js:71
-#: ReactNativeClient/lib/components/screens/status.js:112
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
+#: packages/app-mobile/components/screens/status.js:112
 msgid "Retry All"
 msgstr "すべて再試行"
 
-#: ElectronClient/gui/StatusScreen/StatusScreen.js:78
-#: ElectronClient/gui/StatusScreen.min.js:96
-#: ReactNativeClient/lib/components/screens/status.js:118
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
+#: packages/app-mobile/components/screens/status.js:118
 msgid "Retry"
 msgstr "再実行"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:161
-#: ElectronClient/gui/NoteText.min.js:1547
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:165
 msgid "strong text"
 msgstr "文字を太字に"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:162
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:166
 msgid "emphasised text"
 msgstr "強調したいテキスト"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:164
-#: ElectronClient/gui/NoteText.min.js:1616
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:168
 msgid "Insert Hyperlink"
 msgstr "ハイパーリンクの挿入"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:197
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:199
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:200
-#: ElectronClient/gui/NoteText.min.js:1591
-#: ElectronClient/gui/NoteText.min.js:1595
-#: ElectronClient/gui/NoteText.min.js:1604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:202
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:204
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:205
 msgid "List item"
 msgstr "リストアイテム"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:252
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:90
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:18
-msgid "Cut"
-msgstr "切り取り"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:259
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:98
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:13
-#: ElectronClient/gui/MenuBar.js:335 ElectronClient/gui/NoteText.min.js:804
-msgid "Copy"
-msgstr "コピー"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:266
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:105
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:23
-msgid "Paste"
-msgstr "貼り付け"
-
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:468
-#: ElectronClient/gui/NoteText.min.js:1085
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:454
 msgid "Layout"
 msgstr "レイアウト"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:468
-#: ElectronClient/gui/NoteText.min.js:1085
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:454
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -1119,49 +306,63 @@ msgstr ""
 "このノートには中身がありません。 \"%s\" をクリックしてエディターを表示し、"
 "ノートを編集してください。"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:564
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:90
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
+msgid "Cut"
+msgstr "切り取り"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:571
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:98
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
+#: packages/app-desktop/gui/MenuBar.js:309
+msgid "Copy"
+msgstr "コピー"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:578
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
+msgid "Paste"
+msgstr "貼り付け"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
 msgid "Checkbox list"
 msgstr "チェックボックスリスト"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:525
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:411
-#: ElectronClient/gui/ConfigScreen.min.js:644
-#: ReactNativeClient/lib/components/screens/Note.js:980
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:521
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
+#: packages/app-mobile/components/screens/Note.js:1013
 msgid "Edit"
 msgstr "編集"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:581
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:53
-#: ElectronClient/gui/NoteText.min.js:1627
-#: ElectronClient/gui/NoteText.min.js:1726
-#: ReactNativeClient/lib/components/screens/Note.js:769
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:577
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
+#: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "ファイルを添付する"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:590
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 msgid "Code Block"
 msgstr "コードブロック"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:599
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
 msgid "Inline Code"
 msgstr "インラインコード"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:614
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:83
-#: ElectronClient/gui/NoteText.min.js:1778
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "日付の入力"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1036
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:996
 msgid "Drop notes or files here"
 msgstr "ノートやファイルをここにドロップします"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1036
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:419
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:996
 msgid "Code View"
 msgstr "コードビュー"
 
-#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1036
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:996
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -1170,244 +371,238 @@ msgstr ""
 "すべての添付ファイルのダウンロードと復号が終わるまでお待ちください。%sに切り"
 "替えてノートを編集することはできます。"
 
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:72
-#: ElectronClient/gui/NoteText.min.js:833
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:72
 msgid "There was an error downloading this attachment:"
 msgstr "この添付ファイルをダウンロードするときにエラーが発生しました:"
 
-#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:75
-#: ElectronClient/gui/NoteText.min.js:835
-#: ReactNativeClient/lib/services/ResourceEditWatcher/index.js:185
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:75
+#: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:48
-#: ElectronClient/gui/NoteText.min.js:778
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:48
 msgid "Open..."
 msgstr "開く..."
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:61
-#: ElectronClient/gui/NoteText.min.js:786
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:61
 msgid "Save as..."
 msgstr "名前を付けて保存..."
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
 msgid "Reveal file in folder"
 msgstr "ファイルのあるフォルダーを開く"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:82
-#: ElectronClient/gui/NoteText.min.js:797
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
 msgid "Copy path to clipboard"
 msgstr "クリップボードにパスを保存"
 
-#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:113
-#: ElectronClient/gui/NoteText.min.js:811
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:113
 msgid "Copy Link Address"
 msgstr "リンクアドレスをコピー"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:298
-#: ElectronClient/gui/NoteText.min.js:2121
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:78
 msgid "to-do"
 msgstr "to-do"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:298
-#: ElectronClient/gui/NoteText.min.js:2121
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:78
 msgid "note"
 msgstr "ノート"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:298
-#: ElectronClient/gui/NoteText.min.js:2121
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:78
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "新しい %s を作成中..."
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:379
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:370
 msgid "The following attachments are being watched for changes:"
 msgstr "下記の添付ファイルが変更されたかどうかを監視中です。"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:382
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:373
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr "添付ファイルの監視は他のノートに移動すると終了します。"
 
-#: ElectronClient/gui/NoteEditor/NoteEditor.js:387
-#: ElectronClient/gui/NoteText.min.js:1656
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:378
 #, javascript-format
 msgid "In: %s"
 msgstr "内: %s"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:28
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:28
 msgid "Select all"
 msgstr "すべて選択"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:33
-#: ElectronClient/gui/NoteText.min.js:1690
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:33
 msgid "Bold"
 msgstr "太字"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:38
-#: ElectronClient/gui/NoteText.min.js:1698
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:38
 msgid "Italic"
 msgstr "斜体"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:43
-#: ElectronClient/gui/NoteText.min.js:1710
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:43
 msgid "Hyperlink"
 msgstr "ハイパーリンク"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:48
-#: ElectronClient/gui/NoteText.min.js:1718
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:48
 msgid "Code"
 msgstr "コード"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:58
-#: ElectronClient/gui/NoteText.min.js:1738
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
 msgid "Numbered List"
 msgstr "番号つきリスト"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:63
-#: ElectronClient/gui/NoteText.min.js:1746
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
 msgid "Bulleted List"
 msgstr "箇条書きリスト"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:68
-#: ElectronClient/gui/NoteText.min.js:1754
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:68
 msgid "Checkbox"
 msgstr "チェックボックス"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:73
-#: ElectronClient/gui/NoteText.min.js:1762
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:73
 msgid "Heading"
 msgstr "見出し"
 
-#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:78
-#: ElectronClient/gui/NoteText.min.js:1770
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:78
 msgid "Horizontal Rule"
 msgstr "横線"
 
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:16
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
 msgstr "ノートの題名"
 
-#: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:16
+#: packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js:16
 msgid "Search in current note"
 msgstr "現在のノートを検索"
 
-#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:16
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:16
 msgid "Note body"
 msgstr "ノートの本文"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:27
-#: ElectronClient/gui/FolderPropertiesDialog.min.js:21
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:164
-#: ElectronClient/gui/ResourceScreen.js:39
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:27
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
+#: packages/app-desktop/gui/ResourceScreen.js:39
 msgid "ID"
 msgstr "ID"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:28
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:319
 msgid "Created"
 msgstr "作成日時"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:29
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
 msgid "Updated"
 msgstr "アップデート日時"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:30
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 msgid "Completed"
 msgstr "完了"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:31
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 msgid "Location"
 msgstr "場所"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:32
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 msgid "URL"
 msgstr "URL"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:33
-#: ReactNativeClient/lib/models/Setting.js:1304
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
+#: packages/lib/models/Setting.js:1331
 msgid "Note History"
 msgstr "ノートの履歴"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:34
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 msgid "Markup"
 msgstr "マークアップ"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:306
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:306
 msgid "Previous versions of this note"
 msgstr "このノートの以前のバージョン"
 
-#: ElectronClient/gui/NotePropertiesDialog.min.js:383
-#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:18
-#: ElectronClient/gui/NoteText.min.js:1834
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:383
+#: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
 msgid "Note properties"
 msgstr "ノートのプロパティ"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:63
-#: ReactNativeClient/lib/services/KeymapService.js:144
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
+#: packages/lib/services/KeymapService.js:415
 #, javascript-format
 msgid "Error: %s"
 msgstr "エラー: %s"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: ElectronClient/gui/Root.min.js:91 ElectronClient/gui/MenuBar.js:391
-#: ElectronClient/gui/MenuBar.js:440 ElectronClient/gui/Root.js:103
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/lib/models/Setting.js:642 packages/app-cli/app/command-e2ee.js:110
+msgid "Disabled"
+msgstr "無効"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
+#: packages/app-desktop/gui/MenuBar.js:365
+#: packages/app-desktop/gui/MenuBar.js:412 packages/app-desktop/gui/Root.js:99
 msgid "Import"
 msgstr "インポート"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:126
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
 msgstr "コマンド"
 
-#: ElectronClient/gui/KeymapConfig/KeymapConfigScreen.js:127
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
 msgid "Keyboard Shortcut"
 msgstr "ショートカットキー"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:14
-#: ElectronClient/gui/MenuBar.js:178 ElectronClient/app.js:347
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
+#: packages/app-desktop/gui/MenuBar.js:148 packages/app-desktop/app.js:338
 msgid "Quit"
 msgstr "終了"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:16
-#: ElectronClient/gui/MenuBar.js:282
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
+#: packages/app-desktop/gui/MenuBar.js:252
 msgid "Insert template"
 msgstr "テンプレートを挿入"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:18
-#: ElectronClient/gui/MenuBar.js:536
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
+#: packages/app-desktop/gui/MenuBar.js:500
 msgid "Actual Size"
 msgstr "100%%表示"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:22
-#: ElectronClient/gui/MenuBar.js:585
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
+#: packages/app-desktop/gui/MenuBar.js:561
 msgid "Website and documentation"
 msgstr "Webサイトとドキュメント"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:24
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
 msgid "Hide Joplin"
 msgstr "Joplinを隠す"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:26
-#: ElectronClient/gui/MenuBar.js:428
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
+#: packages/app-desktop/gui/MenuBar.js:400
 msgid "Close Window"
 msgstr "ウィンドウを閉じる"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
 msgid "Preferences"
 msgstr "環境設定"
 
-#: ElectronClient/gui/KeymapConfig/utils/getLabel.js:30
-#: ElectronClient/gui/Root.min.js:92 ElectronClient/gui/MenuBar.js:304
-#: ElectronClient/gui/Root.js:104
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
+#: packages/app-desktop/gui/MenuBar.js:276 packages/app-desktop/gui/Root.js:100
 msgid "Options"
 msgstr "オプション"
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
+#, fuzzy
+msgid "Invalid"
+msgstr "無効な %s: %s"
+
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
 msgstr "ショートカットキーを押してください"
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:49
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
@@ -1415,14 +610,13 @@ msgstr ""
 "ショートカットキーに続けてENTERを押すことで設定します。ショートカットを削除す"
 "るにはBACKSPACEを押してください。"
 
-#: ElectronClient/gui/KeymapConfig/ShortcutRecorder.js:50
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:96
-#: ReactNativeClient/lib/components/screens/encryption-config.js:125
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
+#: packages/app-mobile/components/screens/encryption-config.js:125
 msgid "Save"
 msgstr "保存"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:418
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:301
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:402
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -1432,47 +626,37 @@ msgstr ""
 "かかるかもしれません。またアプリケーションの再起動が必要です。アップグレード"
 "するにはリンクをクリックしてください。"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:420
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:306
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:404
 msgid "Restart and upgrade"
 msgstr "再起動してアップグレード"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:424
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:313
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:408
 msgid "Some items cannot be synchronised."
 msgstr "いくつかの項目は同期されませんでした。"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:426
-#: ElectronClient/gui/MainScreen/MainScreen.js:432
-#: ElectronClient/gui/MainScreen/MainScreen.js:444
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:318
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:330
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:354
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:410
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:416
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:428
 msgid "View them now"
 msgstr "今すぐ表示"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:430
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:325
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:414
 msgid "Some items cannot be decrypted."
 msgstr "いくつかの項目は復号されませんでした。"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:436
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:337
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:420
 msgid "One or more master keys need a password."
 msgstr "パスワードに1つ以上のマスターキーが必要です"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:438
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:342
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:422
 msgid "Set the password"
 msgstr "パスワードの設定"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:442
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:349
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:426
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "古い暗号化方式を使っているマスターキーがあります。"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:448
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:361
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:432
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -1480,160 +664,180 @@ msgstr ""
 "デフォルトの暗号化方式が変更されています。既存データを暗号化しなおすことをお"
 "すすめします。"
 
-#: ElectronClient/gui/MainScreen/MainScreen.js:450
-#: ElectronClient/gui/MainScreen/MainScreen.min.js:366
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:434
 msgid "More info"
 msgstr "詳細情報"
 
-#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:18
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:527
+msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
 msgstr "統計..."
 
-#: ElectronClient/gui/MainScreen/commands/renameFolder.js:18
-#: ElectronClient/gui/MainScreen/commands/renameTag.js:18
-#: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
-#: ReactNativeClient/lib/components/side-menu-content.js:129
+#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:18
+#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:18
+#: packages/app-mobile/components/side-menu-content.js:129
 msgid "Rename"
 msgstr "名前の変更"
 
-#: ElectronClient/gui/MainScreen/commands/renameFolder.js:28
-#: ElectronClient/gui/MainScreen.min.js:292
+#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
 msgid "Rename notebook:"
 msgstr "ノートブックの名前を変更："
 
-#: ElectronClient/gui/MainScreen/commands/newTodo.js:17
-#: ReactNativeClient/setUpQuickActions.js:15
+#: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
+#: packages/app-mobile/components/action-button.js:77
+#: packages/app-mobile/setUpQuickActions.js:15
 msgid "New to-do"
 msgstr "新しいToDo"
 
-#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:16
+#: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
 msgid "Toggle note list"
 msgstr "ノート一覧の表示切り替え"
 
-#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:16
+#: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
 msgid "Toggle sidebar"
 msgstr "サイドバーの表示切り替え"
 
-#: ElectronClient/gui/MainScreen/commands/editAlarm.js:20
-#: ElectronClient/gui/NoteText.min.js:1642
-#: ElectronClient/gui/NoteText.min.js:1828
-#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:84
-#: ReactNativeClient/lib/components/screens/Note.js:787
+#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
+#: packages/app-mobile/components/SelectDateTimeDialog.js:84
+#: packages/app-mobile/components/screens/Note.js:789
 msgid "Set alarm"
 msgstr "アラームをセット"
 
-#: ElectronClient/gui/MainScreen/commands/editAlarm.js:33
-#: ElectronClient/gui/MainScreen.min.js:417
+#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
 msgid "Set alarm:"
 msgstr "アラームをセット："
 
-#: ElectronClient/gui/MainScreen/commands/exportPdf.js:20
-#: ElectronClient/gui/MainScreen/commands/exportPdf.js:32
-#: ElectronClient/gui/MainScreen.min.js:549
+#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
+#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
 msgid "PDF File"
 msgstr "PDF ファイル"
 
-#: ElectronClient/gui/MainScreen/commands/newNote.js:20
-#: ReactNativeClient/setUpQuickActions.js:14
+#: packages/app-desktop/gui/MainScreen/commands/newNote.js:20
+#: packages/app-mobile/components/action-button.js:86
+#: packages/app-mobile/setUpQuickActions.js:14
 msgid "New note"
 msgstr "新しいノート"
 
-#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:18
+#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
 msgid "Move to notebook"
 msgstr "ノートブックへ移動"
 
-#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:38
-#: ElectronClient/gui/MainScreen.min.js:272
+#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
 msgid "Move to notebook:"
 msgstr "ノートブックへ移動:"
 
-#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:16
+#: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
 msgstr "エディターレイアウトの表示切り替え"
 
-#: ElectronClient/gui/MainScreen/commands/toggleEditors.js:18
+#: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
 msgid "Toggle editors"
 msgstr "エディターの切り替え"
 
-#: ElectronClient/gui/MainScreen/commands/renameTag.js:30
-#: ElectronClient/gui/MainScreen.min.js:313
+#: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
+#, fuzzy
+msgid "Change application layout"
+msgstr "アプリケーションを終了する"
+
+#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
 msgstr "タグの変更:"
 
-#: ElectronClient/gui/MainScreen/commands/newFolder.js:18
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
 msgid "New notebook"
 msgstr "新しいノートブック"
 
-#: ElectronClient/gui/MainScreen/commands/newFolder.js:26
-#: ElectronClient/gui/MainScreen.min.js:178
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
 msgid "Notebook title:"
 msgstr "ノートブックの題名："
 
-#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:16
+#: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
+#: packages/lib/services/spellChecker/SpellCheckerService.js:180
+msgid "Spell checker"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
 msgstr "ノートを共有..."
 
-#: ElectronClient/gui/MainScreen/commands/newSubFolder.js:17
-#: ElectronClient/gui/SideBar.min.js:304
+#: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
 msgid "New sub-notebook"
 msgstr "新しいサブノートブック"
 
-#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:24
-#: ElectronClient/gui/MainScreen.min.js:448
+#: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
 msgid "Template file:"
 msgstr "テンプレートファイル："
 
-#: ElectronClient/gui/MainScreen/commands/setTags.js:45
-#: ElectronClient/gui/MainScreen.min.js:221
+#: packages/app-desktop/gui/MainScreen/commands/setTags.js:45
 msgid "Add or remove tags:"
 msgstr "タグの追加・削除："
 
-#: ElectronClient/gui/MainScreen/commands/print.js:17
+#: packages/app-desktop/gui/MainScreen/commands/print.js:17
 msgid "Print"
 msgstr "印刷"
 
-#: ElectronClient/gui/MainScreen/commands/print.js:26
-#: ElectronClient/gui/NoteText.min.js:1321
+#: packages/app-desktop/gui/MainScreen/commands/print.js:26
 msgid "Only one note can be printed at a time."
 msgstr "一度に印刷できるノートは1つだけです。"
 
-#: ElectronClient/gui/DropboxLoginScreen.js:35
-#: ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
+#: packages/app-desktop/gui/DropboxLoginScreen.js:29
+#: packages/app-mobile/components/screens/dropbox-login.js:58
+#: packages/app-cli/app/command-sync.js:90
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr "DropboxでJoplinを同期する場合は、次のステップを実行してください:"
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:30
+#: packages/app-mobile/components/screens/dropbox-login.js:59
+#: packages/app-cli/app/command-sync.js:91
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "ステップ1: アプリケーションを認証するためにこのURLをブラウザーで開く:"
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:32
+#: packages/app-mobile/components/screens/dropbox-login.js:65
+#: packages/app-cli/app/command-sync.js:93
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "ステップ2: Dropboxによって提供されたコードを入力する:"
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:35
+#: packages/app-mobile/components/screens/dropbox-login.js:68
 msgid "Submit"
 msgstr "入力"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:39
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
 msgstr "トークンをクリップボードにコピーしました！"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:71
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:71
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Webクリッパーサービスは有効で、自動起動します。"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:78
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:78
 #, javascript-format
 msgid "Status: Started on port %d"
 msgstr "状態: ポート %d で起動中"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:84
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #, javascript-format
 msgid "Status: %s"
 msgstr "状態: %s"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:90
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:90
 msgid "Disable Web Clipper Service"
 msgstr "Webクリッパーサービスを無効にする"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:96
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:96
 msgid "The web clipper service is not enabled."
 msgstr "Webクリッパーサービスは有効になっていません。"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:101
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:101
 msgid "Enable Web Clipper Service"
 msgstr "Webクリッパーサービスを有効にする"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:124
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:124
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
@@ -1641,15 +845,15 @@ msgstr ""
 "Joplin WebクリッパーはブラウザーからWebページとスクリーンショットをJoplinへ保"
 "存します。"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:129
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:129
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Webクリッパーを使用するためには、次のことを行う必要があります:"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:137
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 msgid "Step 1: Enable the clipper service"
 msgstr "ステップ1: クリッパーサービスを有効にする"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:142
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
@@ -1659,27 +863,27 @@ msgstr ""
 "ビスを有効化する際には、Joplinが特定のポートで接続を待ち受けることについて、"
 "お使いのファイアーウォールから許可を求められる場合があります。"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:156
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:156
 msgid "Step 2: Install the extension"
 msgstr "ステップ2: 拡張機能のインストール"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:161
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:161
 msgid "Download and install the relevant extension for your browser:"
 msgstr "ご使用のブラウザーに対応する拡張機能をインストールします:"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:176
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:176
 msgid "Advanced options"
 msgstr "詳細な設定"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:181
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:181
 msgid "Authorisation token:"
 msgstr "認証トークン:"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:191
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:191
 msgid "Copy token"
 msgstr "トークンのコピー"
 
-#: ElectronClient/gui/ClipperConfigScreen.min.js:197
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:197
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
@@ -1687,137 +891,134 @@ msgstr ""
 "この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可"
 "するときにだけ使用します。"
 
-#: ElectronClient/gui/Root.min.js:89 ElectronClient/gui/Root.js:101
-msgid "OneDrive Login"
-msgstr "OneDriveログイン"
-
-#: ElectronClient/gui/Root.min.js:90 ElectronClient/gui/Root.js:102
-msgid "Dropbox Login"
-msgstr "Dropboxログイン"
-
-#: ElectronClient/gui/Root.min.js:93 ElectronClient/gui/Root.js:105
-msgid "Note attachments"
-msgstr "添付ファイル一覧"
-
-#: ElectronClient/gui/Root.min.js:94 ElectronClient/gui/MenuBar.js:255
-#: ElectronClient/gui/Root.js:106
-msgid "Synchronisation Status"
-msgstr "同期状況"
-
-#: ElectronClient/gui/MenuBar.js:144
+#: packages/app-desktop/gui/MenuBar.js:114
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
 
-#: ElectronClient/gui/MenuBar.js:272
+#: packages/app-desktop/gui/MenuBar.js:223 packages/app-desktop/gui/Root.js:102
+msgid "Synchronisation Status"
+msgstr "同期状況"
+
+#: packages/app-desktop/gui/MenuBar.js:242
 msgid "Create note from template"
 msgstr "テンプレートからノートを作成"
 
-#: ElectronClient/gui/MenuBar.js:277
+#: packages/app-desktop/gui/MenuBar.js:247
 msgid "Create to-do from template"
 msgstr "テンプレートからto-doを作成"
 
-#: ElectronClient/gui/MenuBar.js:288
+#: packages/app-desktop/gui/MenuBar.js:258
 msgid "Open template directory"
 msgstr "テンプレートディレクトリを開く"
 
-#: ElectronClient/gui/MenuBar.js:293
+#: packages/app-desktop/gui/MenuBar.js:263
 msgid "Refresh templates"
 msgstr "テンプレートの更新"
 
-#: ElectronClient/gui/MenuBar.js:316
+#: packages/app-desktop/gui/MenuBar.js:289
 msgid "Note attachments..."
 msgstr "添付ファイル一覧..."
 
-#: ElectronClient/gui/MenuBar.js:346 ElectronClient/gui/MenuBar.js:420
-#: ElectronClient/gui/MenuBar.js:725
+#: packages/app-desktop/gui/MenuBar.js:320
+#: packages/app-desktop/gui/MenuBar.js:392
+#: packages/app-desktop/gui/MenuBar.js:671
 msgid "&File"
 msgstr "ファイル(&F)"
 
-#: ElectronClient/gui/MenuBar.js:352 ElectronClient/gui/MenuBar.js:615
+#: packages/app-desktop/gui/MenuBar.js:326
+#: packages/app-desktop/gui/MenuBar.js:593
 msgid "About Joplin"
 msgstr "Joplinについて"
 
-#: ElectronClient/gui/MenuBar.js:359
+#: packages/app-desktop/gui/MenuBar.js:333
 msgid "Preferences..."
 msgstr "環境設定"
 
-#: ElectronClient/gui/MenuBar.js:369 ElectronClient/gui/MenuBar.js:595
+#: packages/app-desktop/gui/MenuBar.js:343
+#: packages/app-desktop/gui/MenuBar.js:571
 msgid "Check for updates..."
 msgstr "アップデートのチェック..."
 
-#: ElectronClient/gui/MenuBar.js:384 ElectronClient/gui/MenuBar.js:435
+#: packages/app-desktop/gui/MenuBar.js:358
+#: packages/app-desktop/gui/MenuBar.js:407
 msgid "Templates"
 msgstr "テンプレート"
 
-#: ElectronClient/gui/MenuBar.js:395
+#: packages/app-desktop/gui/MenuBar.js:369
 msgid "Export all"
 msgstr "すべてをエクスポート"
 
-#: ElectronClient/gui/MenuBar.js:409
+#: packages/app-desktop/gui/MenuBar.js:381
 #, javascript-format
 msgid "Hide %s"
 msgstr "%s を隠す"
 
-#: ElectronClient/gui/MenuBar.js:471 ElectronClient/gui/MenuBar.js:729
+#: packages/app-desktop/gui/MenuBar.js:438
+#: packages/app-desktop/gui/MenuBar.js:675
 msgid "&Edit"
 msgstr "編集(&E)"
 
-#: ElectronClient/gui/MenuBar.js:491
+#: packages/app-desktop/gui/MenuBar.js:458
 msgid "&View"
 msgstr "表示(&V)"
 
-#: ElectronClient/gui/MenuBar.js:497
+#: packages/app-desktop/gui/MenuBar.js:466
 msgid "Layout button sequence"
 msgstr "レイアウトボタンによる切り替え順"
 
-#: ElectronClient/gui/MenuBar.js:547 ElectronClient/gui/MenuBar.js:553
+#: packages/app-desktop/gui/MenuBar.js:511
+#: packages/app-desktop/gui/MenuBar.js:517
 msgid "Zoom In"
 msgstr "ズームイン"
 
-#: ElectronClient/gui/MenuBar.js:560
+#: packages/app-desktop/gui/MenuBar.js:524
 msgid "Zoom Out"
 msgstr "ズームアウト"
 
-#: ElectronClient/gui/MenuBar.js:569
+#: packages/app-desktop/gui/MenuBar.js:533
+msgid "&Go"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.js:545
 msgid "&Note"
 msgstr "ノート(&N)"
 
-#: ElectronClient/gui/MenuBar.js:578
+#: packages/app-desktop/gui/MenuBar.js:554
 msgid "&Tools"
 msgstr "ツール(&T)"
 
-#: ElectronClient/gui/MenuBar.js:582
+#: packages/app-desktop/gui/MenuBar.js:558
 msgid "&Help"
 msgstr "ヘルプ(&H)"
 
-#: ElectronClient/gui/MenuBar.js:589
+#: packages/app-desktop/gui/MenuBar.js:565
 msgid "Joplin Forum"
 msgstr "Joplinフォーラム"
 
-#: ElectronClient/gui/MenuBar.js:592
-#: ReactNativeClient/lib/components/screens/config.js:495
+#: packages/app-desktop/gui/MenuBar.js:568
+#: packages/app-mobile/components/screens/config.js:495
 msgid "Make a donation"
 msgstr "寄付する"
 
-#: ElectronClient/gui/MenuBar.js:602
+#: packages/app-desktop/gui/MenuBar.js:580
 msgid "Toggle development tools"
 msgstr "開発者ツールのオンオフを切り替える"
 
-#: ElectronClient/gui/ExtensionBadge.min.js:10
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
 msgstr "Firefox 拡張機能"
 
-#: ElectronClient/gui/ExtensionBadge.min.js:17
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
 msgstr "Chrome ウェブストア"
 
-#: ElectronClient/gui/ExtensionBadge.min.js:44
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
 msgstr "今すぐ取得:"
 
-#: ElectronClient/gui/ImportScreen.min.js:61
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -1825,135 +1026,96 @@ msgstr ""
 "\"%s\" という名前の新しいノートブックが作成され、ファイル \"%s\" がインポート"
 "されます"
 
-#: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/NoteList/NoteList.js:160
-#: ElectronClient/gui/NoteList/NoteList.min.js:150
-msgid "Custom order"
-msgstr "任意順"
-
-#: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/NoteList/NoteList.js:160
-#: ElectronClient/gui/NoteList/NoteList.min.js:150
-msgid "View"
-msgstr "表示"
-
-#: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/NoteList/NoteList.js:160
-#: ElectronClient/gui/NoteList/NoteList.min.js:150
-#: ReactNativeClient/lib/models/Setting.js:400
-msgid "Sort notes by"
-msgstr "ノートのソート方法"
-
-#: ElectronClient/gui/NoteList.min.js:147
-#: ElectronClient/gui/NoteList/NoteList.js:160
-#: ElectronClient/gui/NoteList/NoteList.min.js:150
+#: packages/app-desktop/gui/ImportScreen.min.js:68
+#: packages/app-cli/app/command-import.js:47
 #, javascript-format
-msgid ""
-"To manually sort the notes, the sort order must be changed to \"%s\" in the "
-"menu \"%s\" > \"%s\""
-msgstr ""
-"ドラッグ＆ドロップでノートを任意の順に並び替えるには、ソート順を \"%s\" に切"
-"り替えてください (メニューバーの \"%s\" > \"%s\" から選択)。"
+msgid "Found: %d."
+msgstr "総数: %d."
 
-#: ElectronClient/gui/NoteList.min.js:148
-#: ElectronClient/gui/NoteList/NoteList.js:161
-#: ElectronClient/gui/NoteList/NoteList.min.js:151
-msgid "Do it now"
-msgstr "今すぐ実行"
+#: packages/app-desktop/gui/ImportScreen.min.js:69
+#: packages/app-cli/app/command-import.js:48
+#, javascript-format
+msgid "Created: %d."
+msgstr "新規作成: %d."
 
-#: ElectronClient/gui/NoteList.min.js:452
-#: ElectronClient/gui/NoteList/NoteList.js:412
-#: ElectronClient/gui/NoteList/NoteList.min.js:422
-msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "ノートがありません。新しいノートを作成して下さい。"
+#: packages/app-desktop/gui/ImportScreen.min.js:70
+#: packages/app-cli/app/command-import.js:49
+#, javascript-format
+msgid "Updated: %d."
+msgstr "アップデート: %d."
 
-#: ElectronClient/gui/NoteList.min.js:452
-#: ElectronClient/gui/NoteList/NoteList.js:412
-#: ElectronClient/gui/NoteList/NoteList.min.js:422
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "ノートブックがありません。新しいノートブックを作成してください。"
+#: packages/app-desktop/gui/ImportScreen.min.js:71
+#: packages/app-cli/app/command-import.js:50
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "スキップ: %d."
 
-#: ElectronClient/gui/utils/NoteListUtils.js:42
-#: ReactNativeClient/lib/components/screen-header.js:362
+#: packages/app-desktop/gui/ImportScreen.min.js:72
+#: packages/app-cli/app/command-import.js:51
+#, javascript-format
+msgid "Resources: %d."
+msgstr "リソース: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:73
+#: packages/app-cli/app/command-import.js:52
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "タグ付き: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:88
+#: packages/app-cli/app/command-import.js:70
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "ノートはインポートされました：%s"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
 msgstr "複製"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:47
+#: packages/app-desktop/gui/utils/NoteListUtils.js:47
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - コピー"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:58
+#: packages/app-desktop/gui/utils/NoteListUtils.js:58
 msgid "Switch between note and to-do type"
 msgstr "ノートとToDoを切り替え"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:86
+#: packages/app-desktop/gui/utils/NoteListUtils.js:86
 msgid "Switch to note type"
 msgstr "ノートに切り替え"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:92
+#: packages/app-desktop/gui/utils/NoteListUtils.js:92
 msgid "Switch to to-do type"
 msgstr "ToDoに切り替え"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:99
-#: ReactNativeClient/lib/components/screens/Note.js:815
+#: packages/app-desktop/gui/utils/NoteListUtils.js:99
+#: packages/app-mobile/components/screens/Note.js:817
 msgid "Copy Markdown link"
 msgstr "Markdownのリンクをコピー"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:155
+#: packages/app-desktop/gui/utils/NoteListUtils.js:158
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "ノート \"%s\" を削除しますか？"
 
-#: ElectronClient/gui/utils/NoteListUtils.js:158
+#: packages/app-desktop/gui/utils/NoteListUtils.js:161
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "ノート \"%d\" を削除しますか？"
 
-#: ElectronClient/gui/FolderPropertiesDialog.min.js:22
-msgid "Name"
-msgstr "名前"
+#: packages/app-desktop/gui/OneDriveLoginScreen.js:46
+#: packages/app-cli/app/command-sync.js:81
+#: packages/app-cli/app/command-sync.js:95
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "認証は完了していません(認証トークンが得られませんでした)"
 
-#: ElectronClient/gui/FolderPropertiesDialog.min.js:23
-msgid "Icon"
-msgstr "アイコン"
-
-#: ElectronClient/gui/FolderPropertiesDialog.min.js:272
-msgid "Notebook properties"
-msgstr "ノートブックのプロパティ"
-
-#: ElectronClient/gui/NoteText.min.js:781
-#, javascript-format
-msgid "This file could not be opened: %s"
-msgstr "次のファイルは開くことができません：%s"
-
-#: ElectronClient/gui/NoteText.min.js:1551
-msgid "emphasized text"
-msgstr "文字の強調"
-
-#: ElectronClient/gui/NoteText.min.js:1792
-msgid "Click to stop external editing"
-msgstr "クリックすると外部エディターでの編集を終了します"
-
-#: ElectronClient/gui/NoteText.min.js:1793
-msgid "Watching..."
-msgstr "確認中..."
-
-#: ElectronClient/gui/NoteText.min.js:1801
-#: ElectronClient/commands/startExternalEditing.js:20
-msgid "Edit in external editor"
-msgstr "外部エディターで編集"
-
-#: ElectronClient/gui/NoteText.min.js:1852
-msgid "Content Properties"
-msgstr "ノート内容のプロパティ"
-
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:145
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
 msgstr "アップグレードが必要なマスターキー"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:150
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:150
 msgid ""
 "The following master keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded master key will still be able to "
@@ -1963,15 +1125,15 @@ msgstr ""
 "ドをおすすめします。マスターキーをアップグレードしても既存データはこれまでど"
 "おり復号化/暗号化が可能です。"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:169
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
 msgstr "アップグレード"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:182
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:182
 msgid "Re-encrypt data"
 msgstr "データを再暗号化する"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:184
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
@@ -1979,7 +1141,7 @@ msgstr ""
 "デフォルトの暗号化方式がより安全なものに変更されました。既存データにも新方式"
 "を適用することをおすすめします。"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:184
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
@@ -1988,7 +1150,7 @@ msgstr ""
 "されたノートがあるとわかっているような場合に新しいアルゴリズムで暗号化しなお"
 "すことが可能です。"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:186
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
@@ -2018,45 +1180,154 @@ msgstr ""
 "\n"
 "重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:433
-#: ReactNativeClient/lib/components/screens/encryption-config.js:279
-#: ReactNativeClient/lib/components/screens/status.js:142
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
+#, fuzzy
+msgid "Re-encryption"
+msgstr "暗号化"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
+msgid "Ignore"
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
+#: packages/app-mobile/components/screens/encryption-config.js:215
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+"暗号化を無効にするとは、*すべて*のノートや添付ファイルを再同期し、同期ター"
+"ゲットに暗号化を解除した状態で送ることを意味します。本当に継続しますか？"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
+#: packages/app-mobile/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗"
+"号化した状態で送ることを意味します。パスワードはなくさないようにしてくださ"
+"い。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためで"
+"す！ 暗号化を有効にするには、下にパスワードを入力してください。"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-mobile/components/screens/encryption-config.js:258
+msgid "Disable encryption"
+msgstr "暗号化を無効にする"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-mobile/components/screens/encryption-config.js:258
+msgid "Enable encryption"
+msgstr "暗号化を有効にする"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
+msgid "Master Keys"
+msgstr "マスターキー"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
+msgid "Active"
+msgstr "アクティブ"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:314
+msgid "Source"
+msgstr "ソース"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
+msgid "Password"
+msgstr "パスワード"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:334
+msgid "Password OK"
+msgstr "パスワード OK"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"注意：暗号化に使用されるのはその時点で\"アクティブ\"なマスターキーのみです。"
+"なお、復号時には対象のノートやノートブックを暗号化するときに使ったキーが使用"
+"されます。"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
+#: packages/app-mobile/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr "マスターキーがありません"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
+#: packages/app-mobile/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"これらのIDを持つマスターキーはアイテムを暗号化するのに使われていますが、現在"
+"このキーで暗号化されたアイテムにはアクセスできません。おそらくこれらのアイテ"
+"ムはまだ同期（ダウンロード）されていないものと考えられます。"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
+#: packages/app-mobile/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"エンドツーエンド暗号化(E2EE)に関する詳細な情報と有効化の手順については、次の"
+"ドキュメントをご覧ください:"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
+#: packages/app-mobile/components/screens/encryption-config.js:279
+#: packages/app-mobile/components/screens/status.js:142
 msgid "Status"
 msgstr "状態"
 
-#: ElectronClient/gui/EncryptionConfigScreen.min.js:438
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
 msgid "Encryption is:"
 msgstr "暗号化の状態:"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:99
-#: ElectronClient/gui/ConfigScreen.min.js:84
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/app-cli/app/command-e2ee.js:110
+msgid "Enabled"
+msgstr "有効"
+
+#: packages/app-desktop/gui/Root.js:97
+msgid "OneDrive Login"
+msgstr "OneDriveログイン"
+
+#: packages/app-desktop/gui/Root.js:98
+msgid "Dropbox Login"
+msgstr "Dropboxログイン"
+
+#: packages/app-desktop/gui/Root.js:101
+msgid "Note attachments"
+msgstr "添付ファイル一覧"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:106
 msgid "This will open a new screen. Save your current changes?"
 msgstr "新しい画面を開きます。変更を保存しますか?"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:162
-#: ElectronClient/gui/ConfigScreen.min.js:172
-#: ReactNativeClient/lib/components/screens/config.js:307
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:169
+#: packages/app-mobile/components/screens/config.js:307
 msgid "Check synchronisation configuration"
 msgstr "同期の設定を確認する"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:167
-#: ElectronClient/gui/ConfigScreen.min.js:181
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:174
 msgid "Unknown"
 msgstr "不明"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:170
-#: ElectronClient/gui/ConfigScreen.min.js:185
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:177
 msgid "Checking..."
 msgstr "チェック中..."
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:176
-#: ElectronClient/gui/ConfigScreen.min.js:189
-#: ReactNativeClient/lib/models/Resource.js:320
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:183
+#: packages/lib/models/Resource.js:320
 msgid "Error"
 msgstr "エラー"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:181
-#: ElectronClient/gui/ConfigScreen.min.js:200
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:188
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
@@ -2064,135 +1335,170 @@ msgstr ""
 "Joplin Nextcloudアプリがインストールされていないか正しく設定されていません。"
 "完全なエラーメッセージは次のとおりです:"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:185
-#: ElectronClient/gui/ConfigScreen.min.js:213
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:192
 msgid "Show Log"
 msgstr "ログを表示"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:191
-#: ElectronClient/gui/ConfigScreen.min.js:226
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:198
 msgid "Joplin Nextcloud App status:"
 msgstr "Joplin Nextcloudアプリの状態:"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:197
-#: ElectronClient/gui/ConfigScreen.min.js:240
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:204
 msgid "Check Status"
 msgstr "状態を確認"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:201
-#: ElectronClient/gui/ConfigScreen.min.js:247
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:208
 msgid "Help"
 msgstr "ヘルプ"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:212
-#: ElectronClient/gui/ConfigScreen.min.js:266
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:219
 msgid "Show Advanced Settings"
 msgstr "詳細設定を表示"
 
-#: ElectronClient/gui/ConfigScreen/ConfigScreen.js:370
-#: ElectronClient/gui/ConfigScreen.min.js:523
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Browse..."
 msgstr "参照..."
 
-#: ElectronClient/gui/ConfigScreen/ButtonBar.js:27
-#: ElectronClient/gui/ConfigScreen.min.js:763
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
+msgid "The application must be restarted for these changes to take effect."
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
+msgid "Do it now"
+msgstr "今すぐ実行"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
+msgid "Later"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
+#, fuzzy
+msgid "Restart now"
+msgstr "今すぐ取得:"
+
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "適用"
 
-#: ElectronClient/gui/MainScreen.min.js:165
-msgid "Please create a notebook first."
-msgstr "まずはノートブックを作成して下さい。"
+#: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
+#, fuzzy, javascript-format
+msgid "Delete plugin \"%s\"?"
+msgstr "ノート \"%s\" を削除しますか？"
 
-#: ElectronClient/gui/MainScreen.min.js:171
-msgid "Please create a notebook first"
-msgstr "まず最初にノートブックを作成して下さい"
+#: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
+msgid "Install plugin"
+msgstr ""
 
-#: ElectronClient/gui/PromptDialog.min.js:249
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
 msgstr "クリア"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
 msgstr "単語数"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
 msgstr "文字数"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
 msgstr "文字数(空白を除く)"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
 msgstr "行数"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
-#: ReactNativeClient/lib/models/Setting.js:385
-#: ReactNativeClient/lib/models/Setting.js:386
-#: ReactNativeClient/lib/models/Setting.js:387
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
+#: packages/lib/models/Setting.js:390 packages/lib/models/Setting.js:391
+#: packages/lib/models/Setting.js:392
 msgid "Editor"
 msgstr "エディター"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
-#: ReactNativeClient/lib/models/Setting.js:385
-#: ReactNativeClient/lib/models/Setting.js:386
-#: ReactNativeClient/lib/models/Setting.js:388
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
+#: packages/lib/models/Setting.js:390 packages/lib/models/Setting.js:391
+#: packages/lib/models/Setting.js:393
 msgid "Viewer"
 msgstr "ビューアー"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:105
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
 msgid "Read time: %s min"
 msgstr "読むのに必要な時間: %s 分"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:108
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
 msgid "Statistics"
 msgstr "統計"
 
-#: ElectronClient/gui/NoteContentPropertiesDialog.js:113
-#: ElectronClient/gui/ShareNoteDialog.js:175
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:24
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
+#: packages/app-desktop/gui/ShareNoteDialog.js:175
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "閉じる"
 
-#: ElectronClient/gui/Header.min.js:267
-msgid "Usage"
-msgstr "使い方"
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+msgid "Custom order"
+msgstr "任意順"
 
-#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:17
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+msgid "View"
+msgstr "表示"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/lib/models/Setting.js:405
+msgid "Sort notes by"
+msgstr "ノートのソート方法"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+"ドラッグ＆ドロップでノートを任意の順に並び替えるには、ソート順を \"%s\" に切"
+"り替えてください (メニューバーの \"%s\" > \"%s\" から選択)。"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:414
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "ノートがありません。新しいノートを作成して下さい。"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:414
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr "ノートブックがありません。新しいノートブックを作成してください。"
+
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
 msgid "Note list"
 msgstr "ノート一覧"
 
-#: ElectronClient/gui/NoteListControls/commands/focusSearch.js:16
+#: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
 
-#: ElectronClient/gui/ResourceScreen.js:32
+#: packages/app-desktop/gui/ResourceScreen.js:32
 msgid "Title"
 msgstr "題名"
 
-#: ElectronClient/gui/ResourceScreen.js:36
+#: packages/app-desktop/gui/ResourceScreen.js:36
 msgid "Size"
 msgstr "サイズ"
 
-#: ElectronClient/gui/ResourceScreen.js:40
+#: packages/app-desktop/gui/ResourceScreen.js:40
 msgid "Action"
 msgstr "操作"
 
-#: ElectronClient/gui/ResourceScreen.js:43
-#: ReactNativeClient/lib/path-utils.js:83
-#: ReactNativeClient/lib/path-utils.js:118
-#: ReactNativeClient/lib/models/BaseItem.js:724
+#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:737
 msgid "Untitled"
 msgstr "名称未設定"
 
-#: ElectronClient/gui/ResourceScreen.js:94
+#: packages/app-desktop/gui/ResourceScreen.js:94
 #, javascript-format
 msgid "Delete attachment \"%s\"?"
 msgstr "添付ファイル \"%s\" を削除しますか？"
 
-#: ElectronClient/gui/ResourceScreen.js:140
+#: packages/app-desktop/gui/ResourceScreen.js:140
 msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
 "notes. Please be careful when deleting one of them as they cannot be "
@@ -2201,104 +1507,485 @@ msgstr ""
 "ここではノートに添付されているファイルの一覧を見ることができます。添付ファイ"
 "ルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
 
-#: ElectronClient/gui/ResourceScreen.js:141
+#: packages/app-desktop/gui/ResourceScreen.js:141
 msgid "Please wait..."
 msgstr "お待ちください..."
 
-#: ElectronClient/gui/ResourceScreen.js:143
+#: packages/app-desktop/gui/ResourceScreen.js:143
 msgid "No resources!"
 msgstr "リソースがありません!"
 
-#: ElectronClient/gui/ResourceScreen.js:145
+#: packages/app-desktop/gui/ResourceScreen.js:145
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 
-#: ElectronClient/gui/ShareNoteDialog.js:158
+#: packages/app-desktop/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
 msgstr "同期中..."
 
-#: ElectronClient/gui/ShareNoteDialog.js:160
+#: packages/app-desktop/gui/ShareNoteDialog.js:160
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "リンクを生成中..."
 
-#: ElectronClient/gui/ShareNoteDialog.js:162
+#: packages/app-desktop/gui/ShareNoteDialog.js:162
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "リンクをクリップボードにコピーしました！"
 
-#: ElectronClient/gui/ShareNoteDialog.js:165
+#: packages/app-desktop/gui/ShareNoteDialog.js:165
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 "注意: ノートを共有すると、該当ノートはサーバー上で暗号化されなくなります。"
 
-#: ElectronClient/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid "Share Notes"
 msgstr "ノートを共有"
 
-#: ElectronClient/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:172
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "共有可能なリンクをコピー"
 
-#: ElectronClient/commands/toggleExternalEditing.js:18
+#: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
 msgstr "外部エディターでの編集を開始・終了"
 
 # Intentionally chose the word "Finish" instead of "Stop". Hope this string won't be used in more generic contexts.
-#: ElectronClient/commands/toggleExternalEditing.js:37
+#: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
 msgstr "終了"
 
-#: ElectronClient/commands/copyDevCommand.js:18
+#: packages/app-desktop/commands/copyDevCommand.js:18
 msgid "Copy dev mode command to clipboard"
 msgstr "開発モードコマンドをクリップボードにコピー"
 
-#: ElectronClient/commands/stopExternalEditing.js:18
+#: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
 msgstr "外部エディターでの編集を終了"
 
-#: ElectronClient/commands/startExternalEditing.js:32
+#: packages/app-desktop/commands/startExternalEditing.js:20
+msgid "Edit in external editor"
+msgstr "外部エディターで編集"
+
+#: packages/app-desktop/commands/startExternalEditing.js:32
+#: packages/app-cli/app/command-edit.js:82
 #, javascript-format
 msgid "Error opening note in editor: %s"
 msgstr "次のエディターで開く際にエラー: %s"
 
-#: ElectronClient/commands/openProfileDirectory.js:18
+#: packages/app-desktop/commands/openProfileDirectory.js:18
 #, fuzzy
 msgid "Open profile directory"
 msgstr "テンプレートディレクトリを開く"
 
-#: ElectronClient/app.js:345
+#: packages/app-desktop/app.js:336
 #, javascript-format
 msgid "Open %s"
 msgstr "%s を開く"
 
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:22
-#: ReactNativeClient/lib/shim-init-node.js:129
-#: ReactNativeClient/lib/components/screens/Note.js:502
-#: ReactNativeClient/lib/versionInfo.js:25
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
+#: packages/app-mobile/components/screens/Note.js:504
+#: packages/lib/shim-init-node.js:137 packages/lib/versionInfo.js:25
 msgid "Yes"
 msgstr "Yes"
 
-#: ElectronClient/services/plugins/UserWebviewDialogButtonBar.js:23
-#: ReactNativeClient/lib/shim-init-node.js:129
-#: ReactNativeClient/lib/components/screens/Note.js:503
-#: ReactNativeClient/lib/versionInfo.js:25
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
+#: packages/app-mobile/components/screens/Note.js:505
+#: packages/lib/shim-init-node.js:137 packages/lib/versionInfo.js:25
 msgid "No"
 msgstr "No"
 
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:86
+#: packages/app-mobile/components/SelectDateTimeDialog.js:78
+msgid "Clear alarm"
+msgstr "アラームをクリア"
+
+#: packages/app-mobile/components/SelectDateTimeDialog.js:80
+msgid "Save alarm"
+msgstr "アラームの保存"
+
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+msgid "Open"
+msgstr "開く"
+
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
+#: packages/app-mobile/components/screens/Note.js:796
+msgid "Share"
+msgstr "共有"
+
+#: packages/app-mobile/components/CameraView.js:158
+msgid "Permission to use camera"
+msgstr "カメラ使用の許可"
+
+#: packages/app-mobile/components/CameraView.js:159
+msgid "Your permission to use your camera is required."
+msgstr "カメラを使用するには権限が必要です。"
+
+#: packages/app-mobile/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "ノートを削除しますか？"
+
+#: packages/app-mobile/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "ノートブック: %s"
+
+#: packages/app-mobile/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "暗号化したアイテムはリネームできません"
+
+#: packages/app-mobile/components/side-menu-content.js:312
+msgid "New Notebook"
+msgstr "新しいノートブック"
+
+#: packages/app-mobile/components/side-menu-content.js:316
+msgid "Configuration"
+msgstr "設定"
+
+#: packages/app-mobile/components/note-list.js:97
+msgid "You currently have no notebooks."
+msgstr "ノートブックがありません。"
+
+#: packages/app-mobile/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "ノートブックを作成します。"
+
+#: packages/app-mobile/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "ノートがありません。(+)ボタンを押して新しいノートを作成してください。"
+
+#: packages/app-mobile/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "ノートブックは保存できませんでした：%s"
+
+#: packages/app-mobile/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "ノートブックの編集"
+
+#: packages/app-mobile/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "ノートブックの題名を入力"
+
+#: packages/app-mobile/components/screens/onedrive-login.js:110
+msgid "Login with OneDrive"
+msgstr "OneDriveログイン"
+
+#: packages/app-mobile/components/screens/onedrive-login.js:121
+#: packages/app-mobile/components/screens/status.js:144
+msgid "Refresh"
+msgstr "更新"
+
+#: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
+msgid "Sync Target Upgrade"
+msgstr "同期先のアップグレード"
+
+#: packages/app-mobile/components/screens/notes.js:154
+#: packages/app-cli/app/command-rmbook.js:26
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"ノートブックを削除しますか？　このノートブックにあるノートとサブノートはすべ"
+"て消えてしまいます。"
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "新しいタグ:"
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr "新しいタグを入力するか、リストから選択してください"
+
+#: packages/app-mobile/components/screens/dropbox-login.js:55
+msgid "Login with Dropbox"
+msgstr "Dropboxでログイン"
+
+#: packages/app-mobile/components/screens/dropbox-login.js:66
+msgid "Enter code here"
+msgstr "コードをここに入力"
+
+#: packages/app-mobile/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "マスターキー %s"
+
+#: packages/app-mobile/components/screens/encryption-config.js:120
+#: packages/app-mobile/components/screens/Note.js:724
+#, javascript-format
+msgid "Created: %s"
+msgstr "作成しました：%s"
+
+#: packages/app-mobile/components/screens/encryption-config.js:122
+#: packages/app-mobile/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "パスワード:"
+
+#: packages/app-mobile/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "パスワードは空にできません"
+
+#: packages/app-mobile/components/screens/encryption-config.js:139
+msgid "Confirm password cannot be empty"
+msgstr "パスワード(確認用)は空にできません"
+
+#: packages/app-mobile/components/screens/encryption-config.js:140
+#: packages/app-cli/app/command-e2ee.js:85
+msgid "Passwords do not match!"
+msgstr "パスワードが一致しません!"
+
+#: packages/app-mobile/components/screens/encryption-config.js:163
+#: packages/app-cli/app/command-e2ee.js:79
+msgid "Confirm password:"
+msgstr "パスワード(確認用):"
+
+#: packages/app-mobile/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "有効"
+
+#: packages/app-mobile/components/screens/encryption-config.js:264
+#: packages/app-mobile/components/screens/config.js:316
+msgid "Encryption Config"
+msgstr "暗号化の設定"
+
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/app-cli/app/command-e2ee.js:110
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "暗号化: %s"
+
+#: packages/app-mobile/components/screens/config.js:50
+msgid "Warning"
+msgstr "警告"
+
+#: packages/app-mobile/components/screens/config.js:50
+#: packages/app-mobile/components/screens/config.js:147
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
+
+#: packages/app-mobile/components/screens/config.js:146
+msgid "Information"
+msgstr "情報"
+
+#: packages/app-mobile/components/screens/config.js:436
+msgid "Tools"
+msgstr "ツール"
+
+#: packages/app-mobile/components/screens/config.js:438
+msgid "Sync Status"
+msgstr "同期の状態"
+
+#: packages/app-mobile/components/screens/config.js:439
+msgid "Log"
+msgstr "ログ"
+
+#: packages/app-mobile/components/screens/config.js:441
+msgid "Creating report..."
+msgstr "レポート を作成中..."
+
+#: packages/app-mobile/components/screens/config.js:441
+msgid "Export Debug Report"
+msgstr "デバッグレポートの出力"
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid "Fixing search index..."
+msgstr "検索インデックスの修正中..."
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid "Fix search index"
+msgstr "検索インデックスの修正"
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"検索に問題がある場合は、これを利用して検索インデックスの再構築を行います。"
+"ノートの数に依存して、時間がかかる場合があります。"
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "Exporting profile..."
+msgstr "プロファイルのエクスポート中..."
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "Export profile"
+msgstr "プロファイルをエクスポート"
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr "デバッグ専用: プロファイルを外部SDカードにエクスポートします。"
+
+#: packages/app-mobile/components/screens/config.js:461
+msgid "More information"
+msgstr "詳細情報"
+
+#: packages/app-mobile/components/screens/config.js:471
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"正しく動作するには、次の権限が必要です。スマートフォンのアプリ情報 > Joplin "
+"> 権限 で有効にしてください"
+
+#: packages/app-mobile/components/screens/config.js:474
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- ストレージ: ノートにファイルを添付するのとファイルシステムの同期に必要で"
+"す。"
+
+#: packages/app-mobile/components/screens/config.js:477
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "- カメラ: 撮った写真をノートに添付するのに必要です。"
+
+#: packages/app-mobile/components/screens/config.js:480
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- 位置情報: ノートに位置情報を添付するのに必要です。"
+
+#: packages/app-mobile/components/screens/config.js:509
+msgid "Joplin website"
+msgstr "JoplinのWebサイト"
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "This note has been modified:"
+msgstr "ノートは変更されています："
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "Save changes"
+msgstr "変更を保存"
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "Discard changes"
+msgstr "変更を破棄"
+
+#: packages/app-mobile/components/screens/Note.js:150
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "ID %s のアイテムはありません"
+
+#: packages/app-mobile/components/screens/Note.js:168
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません。"
+
+#: packages/app-mobile/components/screens/Note.js:173
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポートしていません: %s"
+
+#: packages/app-mobile/components/screens/Note.js:178
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "プロトコル \"%s\" でのリンクはサポートされていません"
+
+#: packages/app-mobile/components/screens/Note.js:342
+msgid ""
+"In order to associate a geo-location with the note, the app needs your "
+"permission to access your location.\n"
+"\n"
+"You may turn off this option at any time in the Configuration screen."
+msgstr ""
+"ノートに位置情報を保存するには、ユーザーの許可が必要です。\n"
+"\n"
+"位置情報を保存するかどうかは、設定画面でいつでも変更できます。"
+
+#: packages/app-mobile/components/screens/Note.js:343
+msgid "Permission needed"
+msgstr "許可が必要"
+
+#: packages/app-mobile/components/screens/Note.js:449
+#: packages/app-cli/app/command-rmnote.js:27
+msgid "Delete note?"
+msgstr "ノートを削除しますか？"
+
+#: packages/app-mobile/components/screens/Note.js:503
+#: packages/lib/shim-init-node.js:136
+#, javascript-format
+msgid ""
+"You are about to attach a large image (%dx%d pixels). Would you like to "
+"resize it down to %d pixels before attaching it?"
+msgstr ""
+"大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小"
+"してから添付しますか？"
+
+#: packages/app-mobile/components/screens/Note.js:585
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "サポートされていない画像の形式: %s"
+
+#: packages/app-mobile/components/screens/Note.js:725
+#, javascript-format
+msgid "Updated: %s"
+msgstr "アップデート: %s"
+
+#: packages/app-mobile/components/screens/Note.js:728
+msgid "View on map"
+msgstr "地図上に表示"
+
+#: packages/app-mobile/components/screens/Note.js:735
+msgid "Go to source URL"
+msgstr "ソースURLに行く"
+
+#: packages/app-mobile/components/screens/Note.js:764
+msgid "Attach..."
+msgstr "添付..."
+
+#: packages/app-mobile/components/screens/Note.js:775
+msgid "Attach photo"
+msgstr "写真を添付"
+
+#: packages/app-mobile/components/screens/Note.js:776
+msgid "Take photo"
+msgstr "写真を撮影する"
+
+#: packages/app-mobile/components/screens/Note.js:777
+msgid "Choose an option"
+msgstr "オプションを選択"
+
+#: packages/app-mobile/components/screens/Note.js:810
+msgid "Convert to note"
+msgstr "ノートに変換"
+
+#: packages/app-mobile/components/screens/Note.js:810
+msgid "Convert to todo"
+msgstr "ToDoに変換"
+
+#: packages/app-mobile/components/screens/Note.js:824
+msgid "Properties"
+msgstr "プロパティ"
+
+#: packages/app-mobile/components/screens/Note.js:1008
+msgid "Add body"
+msgstr "本文を追加"
+
+#: packages/app-mobile/components/screens/Note.js:1034
+msgid "Add title"
+msgstr "題名を追加"
+
+#: packages/app-mobile/components/screens/search.js:160
+msgid "Search"
+msgstr "検索"
+
+#: packages/lib/onedrive-api-node-utils.js:46
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr "使用候補のポートはすべて利用中です - 問題を %s に報告してください"
+
+#: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "アプリケーションは認証されました - ブラウザを閉じてもかまいません。"
 
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:88
+#: packages/lib/onedrive-api-node-utils.js:88
 msgid "The application has been successfully authorised."
 msgstr "アプリケーションは問題なく認証されました。"
 
-#: ReactNativeClient/lib/onedrive-api-node-utils.js:116
+#: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
 "Please open the following URL in your browser to authenticate the "
 "application. The application will create a directory in \"Apps/Joplin\" and "
@@ -2311,69 +1998,56 @@ msgstr ""
 "きします。あなたの個人的なファイルや、ディレクトリ外のファイルにはアクセスし"
 "ません。第三者にデータが共有されることもありません。"
 
-#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
+#: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
 msgstr "AWS S3"
 
-#: ReactNativeClient/lib/SyncTargetDropbox.js:25
+#: packages/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: ReactNativeClient/lib/shim-init-node.js:128
-#: ReactNativeClient/lib/components/screens/Note.js:501
-#, javascript-format
-msgid ""
-"You are about to attach a large image (%dx%d pixels). Would you like to "
-"resize it down to %d pixels before attaching it?"
-msgstr ""
-"大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小"
-"してから添付しますか？"
-
-#: ReactNativeClient/lib/shim-init-node.js:195
+#: packages/lib/shim-init-node.js:201
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "%sにアクセスできません"
 
-#: ReactNativeClient/lib/models/Folder.js:27
-#: ReactNativeClient/lib/models/Note.js:25
+#: packages/lib/models/Folder.js:27 packages/lib/models/Note.js:26
 msgid "title"
 msgstr "題名"
 
-#: ReactNativeClient/lib/models/Folder.js:28
-#: ReactNativeClient/lib/models/Note.js:26
+#: packages/lib/models/Folder.js:28 packages/lib/models/Note.js:27
 msgid "updated date"
 msgstr "アップデート日"
 
-#: ReactNativeClient/lib/models/Folder.js:88
+#: packages/lib/models/Folder.js:97
 msgid "Conflicts"
 msgstr "衝突"
 
-#: ReactNativeClient/lib/models/Folder.js:388
+#: packages/lib/models/Folder.js:406
 msgid "Cannot move notebook to this location"
 msgstr "ノートをノートブック \"%s\" に移動できません"
 
-#: ReactNativeClient/lib/models/Folder.js:440
+#: packages/lib/models/Folder.js:458
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "\"%s\" というノートブックの名称はシステムで使用するために予約済みです。名称の"
 "変更はできません。"
 
-#: ReactNativeClient/lib/models/Setting.js:66
+#: packages/lib/models/Setting.js:66
 msgid "yes"
 msgstr "はい"
 
-#: ReactNativeClient/lib/models/Setting.js:66
-#: ReactNativeClient/lib/models/Setting.js:67
+#: packages/lib/models/Setting.js:66 packages/lib/models/Setting.js:67
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr "(WYSIWYG対応: %s)"
 
-#: ReactNativeClient/lib/models/Setting.js:67
+#: packages/lib/models/Setting.js:67
 msgid "no"
 msgstr "いいえ"
 
-#: ReactNativeClient/lib/models/Setting.js:69
+#: packages/lib/models/Setting.js:69
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2384,43 +2058,43 @@ msgstr ""
 "ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
 "次のFAQをご覧ください: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:75
+#: packages/lib/models/Setting.js:75
 msgid "Light"
 msgstr "明るい"
 
-#: ReactNativeClient/lib/models/Setting.js:76
+#: packages/lib/models/Setting.js:76
 msgid "Dark"
 msgstr "暗い"
 
-#: ReactNativeClient/lib/models/Setting.js:77
+#: packages/lib/models/Setting.js:77
 msgid "Dracula"
 msgstr "Dracula"
 
-#: ReactNativeClient/lib/models/Setting.js:78
+#: packages/lib/models/Setting.js:78
 msgid "Solarised Light"
 msgstr "Solarised (明)"
 
-#: ReactNativeClient/lib/models/Setting.js:79
+#: packages/lib/models/Setting.js:79
 msgid "Solarised Dark"
 msgstr "Solarised (暗)"
 
-#: ReactNativeClient/lib/models/Setting.js:80
+#: packages/lib/models/Setting.js:80
 msgid "Nord"
 msgstr "Nord"
 
-#: ReactNativeClient/lib/models/Setting.js:81
+#: packages/lib/models/Setting.js:81
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
-#: ReactNativeClient/lib/models/Setting.js:82
+#: packages/lib/models/Setting.js:82
 msgid "OLED Dark"
 msgstr "ダークモード"
 
-#: ReactNativeClient/lib/models/Setting.js:103
+#: packages/lib/models/Setting.js:103
 msgid "Synchronisation target"
 msgstr "同期先"
 
-#: ReactNativeClient/lib/models/Setting.js:105
+#: packages/lib/models/Setting.js:105
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
@@ -2428,55 +2102,55 @@ msgstr ""
 "同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
 "持つことができるでしょう（すべてのドキュメントは下にあります）。"
 
-#: ReactNativeClient/lib/models/Setting.js:132
+#: packages/lib/models/Setting.js:132
 msgid "Directory to synchronise with (absolute path)"
 msgstr "同期先のディレクトリ(絶対パス)"
 
-#: ReactNativeClient/lib/models/Setting.js:143
+#: packages/lib/models/Setting.js:143
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: ReactNativeClient/lib/models/Setting.js:154
+#: packages/lib/models/Setting.js:154
 msgid "Nextcloud username"
 msgstr "Nextcloud ユーザー名"
 
-#: ReactNativeClient/lib/models/Setting.js:164
+#: packages/lib/models/Setting.js:164
 msgid "Nextcloud password"
 msgstr "Nextcloud パスワード"
 
-#: ReactNativeClient/lib/models/Setting.js:175
+#: packages/lib/models/Setting.js:175
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: ReactNativeClient/lib/models/Setting.js:186
+#: packages/lib/models/Setting.js:186
 msgid "WebDAV username"
 msgstr "WebDAV ユーザー名"
 
-#: ReactNativeClient/lib/models/Setting.js:196
+#: packages/lib/models/Setting.js:196
 msgid "WebDAV password"
 msgstr "WevDAV パスワード"
 
-#: ReactNativeClient/lib/models/Setting.js:215
+#: packages/lib/models/Setting.js:215
 msgid "AWS S3 bucket"
 msgstr "AWS S3 バケット"
 
-#: ReactNativeClient/lib/models/Setting.js:226
+#: packages/lib/models/Setting.js:226
 msgid "AWS S3 URL"
 msgstr "AWS S3 URL"
 
-#: ReactNativeClient/lib/models/Setting.js:237
+#: packages/lib/models/Setting.js:237
 msgid "AWS key"
 msgstr "AWS アクセスキーID"
 
-#: ReactNativeClient/lib/models/Setting.js:247
+#: packages/lib/models/Setting.js:247
 msgid "AWS secret"
 msgstr "AWS シークレットアクセスキー"
 
-#: ReactNativeClient/lib/models/Setting.js:259
+#: packages/lib/models/Setting.js:259
 msgid "Attachment download behaviour"
 msgstr "添付ファイルのダウンロードの動作"
 
-#: ReactNativeClient/lib/models/Setting.js:260
+#: packages/lib/models/Setting.js:260
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2486,184 +2160,183 @@ msgstr ""
 "動\"はノートを開いたときにダウンロードをします。\"いつも\"はノートを開いてい"
 "るか閉じているかにかかわらずダウンロードをします。"
 
-#: ReactNativeClient/lib/models/Setting.js:263
+#: packages/lib/models/Setting.js:263
 msgid "Always"
 msgstr "いつも"
 
-#: ReactNativeClient/lib/models/Setting.js:264
+#: packages/lib/models/Setting.js:264
 msgid "Manual"
 msgstr "手動"
 
-#: ReactNativeClient/lib/models/Setting.js:265
+#: packages/lib/models/Setting.js:265
 msgid "Auto"
 msgstr "自動"
 
-#: ReactNativeClient/lib/models/Setting.js:280
+#: packages/lib/models/Setting.js:280
 msgid "Max concurrent connections"
 msgstr "最大同時接続数"
 
-#: ReactNativeClient/lib/models/Setting.js:292
+#: packages/lib/models/Setting.js:292
 msgid "Language"
 msgstr "言語"
 
-#: ReactNativeClient/lib/models/Setting.js:302
+#: packages/lib/models/Setting.js:302
 msgid "Date format"
 msgstr "日付の形式"
 
-#: ReactNativeClient/lib/models/Setting.js:321
+#: packages/lib/models/Setting.js:321
 msgid "Time format"
 msgstr "時刻の形式"
 
-#: ReactNativeClient/lib/models/Setting.js:339
+#: packages/lib/models/Setting.js:339
 msgid "Theme"
 msgstr "テーマ"
 
-#: ReactNativeClient/lib/models/Setting.js:349
+#: packages/lib/models/Setting.js:349
 msgid "Automatically switch theme to match system theme"
 msgstr "システムのテーマにあわせて自動設定"
 
-#: ReactNativeClient/lib/models/Setting.js:360
+#: packages/lib/models/Setting.js:360
 msgid "Preferred light theme"
 msgstr "優先ライトテーマ"
 
-#: ReactNativeClient/lib/models/Setting.js:373
+#: packages/lib/models/Setting.js:373
 msgid "Preferred dark theme"
 msgstr "優先ダークテーマ"
 
-#: ReactNativeClient/lib/models/Setting.js:377
+#: packages/lib/models/Setting.js:382
 msgid "Show note counts"
 msgstr "ノートの数を表示"
 
-#: ReactNativeClient/lib/models/Setting.js:385
-#: ReactNativeClient/lib/models/Setting.js:387
-#: ReactNativeClient/lib/models/Setting.js:388
+#: packages/lib/models/Setting.js:390 packages/lib/models/Setting.js:392
+#: packages/lib/models/Setting.js:393
 msgid "Split View"
 msgstr "分割ビュー"
 
-#: ReactNativeClient/lib/models/Setting.js:385
+#: packages/lib/models/Setting.js:390
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:386
-#: ReactNativeClient/lib/models/Setting.js:387
-#: ReactNativeClient/lib/models/Setting.js:388
+#: packages/lib/models/Setting.js:391 packages/lib/models/Setting.js:392
+#: packages/lib/models/Setting.js:393
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: ReactNativeClient/lib/models/Setting.js:391
+#: packages/lib/models/Setting.js:396
 msgid "Uncompleted to-dos on top"
 msgstr "未完のToDoをリストの上部に表示"
 
-#: ReactNativeClient/lib/models/Setting.js:392
+#: packages/lib/models/Setting.js:397
 msgid "Show completed to-dos"
 msgstr "完了したToDoを表示"
 
-#: ReactNativeClient/lib/models/Setting.js:417
+#: packages/lib/models/Setting.js:422
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する"
 
-#: ReactNativeClient/lib/models/Setting.js:419
-#: ReactNativeClient/lib/models/Setting.js:437
+#: packages/lib/models/Setting.js:424 packages/lib/models/Setting.js:442
 msgid "Reverse sort order"
 msgstr "逆順に並び替え"
 
-#: ReactNativeClient/lib/models/Setting.js:426
+#: packages/lib/models/Setting.js:431
 msgid "Sort notebooks by"
 msgstr "ノートブックのソート方法"
 
-#: ReactNativeClient/lib/models/Setting.js:438
+#: packages/lib/models/Setting.js:443
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
 
-#: ReactNativeClient/lib/models/Setting.js:455
+#: packages/lib/models/Setting.js:465
 msgid "When creating a new to-do:"
 msgstr "新しいToDoを作成した場合:"
 
-#: ReactNativeClient/lib/models/Setting.js:458
-#: ReactNativeClient/lib/models/Setting.js:473
+#: packages/lib/models/Setting.js:468 packages/lib/models/Setting.js:483
 msgid "Focus title"
 msgstr "題名にフォーカス"
 
-#: ReactNativeClient/lib/models/Setting.js:459
-#: ReactNativeClient/lib/models/Setting.js:474
+#: packages/lib/models/Setting.js:469 packages/lib/models/Setting.js:484
 msgid "Focus body"
 msgstr "本文にフォーカス"
 
-#: ReactNativeClient/lib/models/Setting.js:470
+#: packages/lib/models/Setting.js:480
 msgid "When creating a new note:"
 msgstr "新しいノートを作成した際:"
 
-#: ReactNativeClient/lib/models/Setting.js:491
+#: packages/lib/models/Setting.js:494 packages/lib/models/Setting.js:1327
+msgid "Plugins"
+msgstr "プラグイン"
+
+#: packages/lib/models/Setting.js:511
 msgid "Enable soft breaks"
 msgstr "ソフトブレークを有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:492
+#: packages/lib/models/Setting.js:512
 msgid "Enable typographer support"
 msgstr "Typographer（記号文字）を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:493
+#: packages/lib/models/Setting.js:513
 msgid "Enable math expressions"
 msgstr "数式表現を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:494
+#: packages/lib/models/Setting.js:514
 msgid "Enable Fountain syntax support"
 msgstr "Fountain構文を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:495
+#: packages/lib/models/Setting.js:515
 msgid "Enable Mermaid diagrams support"
 msgstr "Mermaid（作図機能）を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:496
+#: packages/lib/models/Setting.js:516
 msgid "Enable ==mark== syntax"
 msgstr "==ハイライト==構文を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:497
+#: packages/lib/models/Setting.js:517
 msgid "Enable footnotes"
 msgstr "脚注を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:498
+#: packages/lib/models/Setting.js:518
 msgid "Enable table of contents extension"
 msgstr "目次拡張を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:499
+#: packages/lib/models/Setting.js:519
 msgid "Enable ~sub~ syntax"
 msgstr "~下付きテキスト~構文を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:500
+#: packages/lib/models/Setting.js:520
 msgid "Enable ^sup^ syntax"
 msgstr "^上付きテキスト^構文を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:501
+#: packages/lib/models/Setting.js:521
 msgid "Enable deflist syntax"
 msgstr "定義リスト構文を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:502
+#: packages/lib/models/Setting.js:522
 msgid "Enable abbreviation syntax"
 msgstr "略語構文を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:503
+#: packages/lib/models/Setting.js:523
 msgid "Enable markdown emoji"
 msgstr "マークダウン絵文字を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:504
+#: packages/lib/models/Setting.js:524
 msgid "Enable ++insert++ syntax"
 msgstr "++追加++構文を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:505
+#: packages/lib/models/Setting.js:525
 msgid "Enable multimarkdown table extension"
 msgstr "MultiMarkdownのテーブル拡張を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:516
+#: packages/lib/models/Setting.js:536
 msgid "Show tray icon"
 msgstr "トレイアイコンの表示"
 
-#: ReactNativeClient/lib/models/Setting.js:518
+#: packages/lib/models/Setting.js:538
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意: すべてのデスクトップ環境で動作するわけではありません。"
 
-#: ReactNativeClient/lib/models/Setting.js:518
+#: packages/lib/models/Setting.js:538
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2672,23 +2345,23 @@ msgstr ""
 "有効にすると、Joplinがバックグラウンドで動作するようになります。ノートを定期"
 "的に同期し、衝突を減らすために強くおすすめする設定です。"
 
-#: ReactNativeClient/lib/models/Setting.js:521
+#: packages/lib/models/Setting.js:541
 msgid "Start application minimised in the tray icon"
 msgstr "アプリケーションをトレイアイコンで最小化して起動"
 
-#: ReactNativeClient/lib/models/Setting.js:536
+#: packages/lib/models/Setting.js:556
 msgid "Editor font size"
 msgstr "エディターのフォントサイズ"
 
-#: ReactNativeClient/lib/models/Setting.js:543
+#: packages/lib/models/Setting.js:563
 msgid "Editor font"
 msgstr "エディターのフォント"
 
-#: ReactNativeClient/lib/models/Setting.js:567
+#: packages/lib/models/Setting.js:587
 msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
 
-#: ReactNativeClient/lib/models/Setting.js:568
+#: packages/lib/models/Setting.js:588
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
@@ -2698,50 +2371,53 @@ msgstr ""
 "い場合があります。指定したフォントが誤っているか空の場合は、一般的な等幅フォ"
 "ントが使用されます。"
 
-#: ReactNativeClient/lib/models/Setting.js:607
+#: packages/lib/models/Setting.js:609
+#, fuzzy
+msgid "Custom stylesheet for rendered Markdown"
+msgstr "カスタムスタイルシート (アプリ全般の外観調整用)"
+
+#: packages/lib/models/Setting.js:625
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "カスタムスタイルシート (アプリ全般の外観調整用)"
 
-#: ReactNativeClient/lib/models/Setting.js:612
+#: packages/lib/models/Setting.js:630
 msgid "Automatically update the application"
 msgstr "アプリケーションを自動的にアップデート"
 
-#: ReactNativeClient/lib/models/Setting.js:613
+#: packages/lib/models/Setting.js:631
 msgid "Get pre-releases when checking for updates"
 msgstr "更新をチェックする時、開発版を取得する"
 
-#: ReactNativeClient/lib/models/Setting.js:613
+#: packages/lib/models/Setting.js:631
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "詳細についてはプレリリースページを参照してください: %s"
 
-#: ReactNativeClient/lib/models/Setting.js:621
+#: packages/lib/models/Setting.js:639
 msgid "Synchronisation interval"
 msgstr "同期間隔"
 
-#: ReactNativeClient/lib/models/Setting.js:625
-#: ReactNativeClient/lib/models/Setting.js:626
-#: ReactNativeClient/lib/models/Setting.js:627
+#: packages/lib/models/Setting.js:643 packages/lib/models/Setting.js:644
+#: packages/lib/models/Setting.js:645
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d 分"
 
-#: ReactNativeClient/lib/models/Setting.js:628
+#: packages/lib/models/Setting.js:646
 #, javascript-format
 msgid "%d hour"
 msgstr "%d 時間"
 
-#: ReactNativeClient/lib/models/Setting.js:629
-#: ReactNativeClient/lib/models/Setting.js:630
+#: packages/lib/models/Setting.js:647 packages/lib/models/Setting.js:648
 #, javascript-format
 msgid "%d hours"
 msgstr "%d 時間"
 
-#: ReactNativeClient/lib/models/Setting.js:639
+#: packages/lib/models/Setting.js:655
 msgid "Text editor command"
 msgstr "テキストエディターのコマンド"
 
-#: ReactNativeClient/lib/models/Setting.js:639
+#: packages/lib/models/Setting.js:655
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2749,67 +2425,67 @@ msgstr ""
 "このエディターコマンド（と引数）はノートを開く際に使用されます。空欄の場合は"
 "既定のエディターを自動的に検出します。"
 
-#: ReactNativeClient/lib/models/Setting.js:640
+#: packages/lib/models/Setting.js:656
 msgid "Page size for PDF export"
 msgstr "エクスポートするPDFのページサイズ"
 
-#: ReactNativeClient/lib/models/Setting.js:642
+#: packages/lib/models/Setting.js:658
 msgid "A4"
 msgstr "A4"
 
-#: ReactNativeClient/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:659
 msgid "Letter"
 msgstr "Letter"
 
-#: ReactNativeClient/lib/models/Setting.js:644
+#: packages/lib/models/Setting.js:660
 msgid "A3"
 msgstr "A3"
 
-#: ReactNativeClient/lib/models/Setting.js:645
+#: packages/lib/models/Setting.js:661
 msgid "A5"
 msgstr "A5"
 
-#: ReactNativeClient/lib/models/Setting.js:646
+#: packages/lib/models/Setting.js:662
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: ReactNativeClient/lib/models/Setting.js:647
+#: packages/lib/models/Setting.js:663
 msgid "Legal"
 msgstr "Legal"
 
-#: ReactNativeClient/lib/models/Setting.js:650
+#: packages/lib/models/Setting.js:666
 msgid "Page orientation for PDF export"
 msgstr "PDFページの向き"
 
-#: ReactNativeClient/lib/models/Setting.js:652
+#: packages/lib/models/Setting.js:668
 msgid "Portrait"
 msgstr "縦"
 
-#: ReactNativeClient/lib/models/Setting.js:653
+#: packages/lib/models/Setting.js:669
 msgid "Landscape"
 msgstr "横"
 
-#: ReactNativeClient/lib/models/Setting.js:663
+#: packages/lib/models/Setting.js:679
 msgid "Keyboard Mode"
 msgstr "キーバインド"
 
-#: ReactNativeClient/lib/models/Setting.js:666
+#: packages/lib/models/Setting.js:682
 msgid "Default"
 msgstr "標準"
 
-#: ReactNativeClient/lib/models/Setting.js:667
+#: packages/lib/models/Setting.js:683
 msgid "Emacs"
 msgstr "Emacs"
 
-#: ReactNativeClient/lib/models/Setting.js:668
+#: packages/lib/models/Setting.js:684
 msgid "Vim"
 msgstr "Vim"
 
-#: ReactNativeClient/lib/models/Setting.js:682
+#: packages/lib/models/Setting.js:707
 msgid "Custom TLS certificates"
 msgstr "TLS証明書のカスタマイズ"
 
-#: ReactNativeClient/lib/models/Setting.js:683
+#: packages/lib/models/Setting.js:708
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2821,15 +2497,15 @@ msgstr ""
 "注意点として、TLSの設定を変更する場合は\"同期の設定を確認\"をクリックする前に"
 "保存する必要があります。"
 
-#: ReactNativeClient/lib/models/Setting.js:695
+#: packages/lib/models/Setting.js:720
 msgid "Ignore TLS certificate errors"
 msgstr "TLS証明書のエラーを無視"
 
-#: ReactNativeClient/lib/models/Setting.js:703
+#: packages/lib/models/Setting.js:728
 msgid "Fail-safe"
 msgstr "フェイルセーフ"
 
-#: ReactNativeClient/lib/models/Setting.js:704
+#: packages/lib/models/Setting.js:729
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2837,7 +2513,7 @@ msgstr ""
 "フェイルセーフ: 同期先が空の場合、設定ミスやバグによる可能性を考慮して、ロー"
 "カルデータを消去しないようにする"
 
-#: ReactNativeClient/lib/models/Setting.js:707
+#: packages/lib/models/Setting.js:732
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2845,30 +2521,29 @@ msgstr ""
 "APIサーバーが使用するポートを指定してください。未設定時はデフォルトのポートが"
 "使用されます。"
 
-#: ReactNativeClient/lib/models/Setting.js:712
+#: packages/lib/models/Setting.js:737
 msgid "Enable note history"
 msgstr "ノートの履歴を有効にする"
 
-#: ReactNativeClient/lib/models/Setting.js:722
+#: packages/lib/models/Setting.js:747
 msgid "days"
 msgstr "日"
 
-#: ReactNativeClient/lib/models/Setting.js:722
+#: packages/lib/models/Setting.js:747
 #, javascript-format
 msgid "%d days"
 msgstr "%d 日"
 
-#: ReactNativeClient/lib/models/Setting.js:724
+#: packages/lib/models/Setting.js:749
 msgid "Keep note history for"
 msgstr "ノート履歴の保存期間"
 
-#: ReactNativeClient/lib/models/Setting.js:747
+#: packages/lib/models/Setting.js:774
 msgid "Notebook list growth factor"
 msgstr "ノートブック一覧のストレッチ係数"
 
-#: ReactNativeClient/lib/models/Setting.js:748
-#: ReactNativeClient/lib/models/Setting.js:760
-#: ReactNativeClient/lib/models/Setting.js:772
+#: packages/lib/models/Setting.js:775 packages/lib/models/Setting.js:787
+#: packages/lib/models/Setting.js:799
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2879,57 +2554,58 @@ msgstr ""
 "えば、係数が2の表示項目は、係数が1の項目の2倍の大きさで表示されます。係数の変"
 "更はアプリケーションの再起動後に反映されます。"
 
-#: ReactNativeClient/lib/models/Setting.js:759
+#: packages/lib/models/Setting.js:786
 msgid "Note list growth factor"
 msgstr "ノート一覧のストレッチ係数"
 
-#: ReactNativeClient/lib/models/Setting.js:771
+#: packages/lib/models/Setting.js:798
 msgid "Note area growth factor"
 msgstr "ノートエリアのストレッチ係数"
 
-#: ReactNativeClient/lib/models/Setting.js:1290
+#: packages/lib/models/Setting.js:969
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
+
+#: packages/lib/models/Setting.js:1317
 msgid "General"
 msgstr "全般"
 
-#: ReactNativeClient/lib/models/Setting.js:1292
+#: packages/lib/models/Setting.js:1319
 msgid "Synchronisation"
 msgstr "同期"
 
-#: ReactNativeClient/lib/models/Setting.js:1294
+#: packages/lib/models/Setting.js:1321
 msgid "Appearance"
 msgstr "スタイル"
 
-#: ReactNativeClient/lib/models/Setting.js:1296
+#: packages/lib/models/Setting.js:1323
 msgid "Note"
 msgstr "ノート"
 
-#: ReactNativeClient/lib/models/Setting.js:1298
-#: ReactNativeClient/lib/services/interop/InteropService.js:49
-#: ReactNativeClient/lib/services/interop/InteropService.js:59
+#: packages/lib/models/Setting.js:1325
+#: packages/lib/services/interop/InteropService.js:49
+#: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: ReactNativeClient/lib/models/Setting.js:1300
-msgid "Plugins"
-msgstr "プラグイン"
-
-#: ReactNativeClient/lib/models/Setting.js:1302
+#: packages/lib/models/Setting.js:1329
 msgid "Application"
 msgstr "アプリケーション"
 
-#: ReactNativeClient/lib/models/Setting.js:1306
+#: packages/lib/models/Setting.js:1333
 msgid "Encryption"
 msgstr "暗号化"
 
-#: ReactNativeClient/lib/models/Setting.js:1308
+#: packages/lib/models/Setting.js:1335
 msgid "Web Clipper"
 msgstr "Webクリッパー"
 
-#: ReactNativeClient/lib/models/Setting.js:1310
+#: packages/lib/models/Setting.js:1337
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: ReactNativeClient/lib/models/Setting.js:1317
+#: packages/lib/models/Setting.js:1344
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2946,29 +2622,29 @@ msgstr ""
 "失われてしまいます。どのプラグインがWYSIWYGに対応しているかは下記の一覧でご確"
 "認ください。"
 
-#: ReactNativeClient/lib/models/Setting.js:1319
+#: packages/lib/models/Setting.js:1346
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は次の場所に保存されます: %s"
 
-#: ReactNativeClient/lib/models/Resource.js:317
+#: packages/lib/models/Resource.js:317
 msgid "Not downloaded"
 msgstr "未ダウンロード"
 
-#: ReactNativeClient/lib/models/Resource.js:318
+#: packages/lib/models/Resource.js:318
 msgid "Downloading"
 msgstr "ダウンロード中"
 
-#: ReactNativeClient/lib/models/Resource.js:319
+#: packages/lib/models/Resource.js:319
 msgid "Downloaded"
 msgstr "ダウンロード済み"
 
-#: ReactNativeClient/lib/models/Resource.js:371
+#: packages/lib/models/Resource.js:371
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "添付ファイルの衝突: \"%s\""
 
-#: ReactNativeClient/lib/models/Resource.js:372
+#: packages/lib/models/Resource.js:372
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -2979,152 +2655,69 @@ msgstr ""
 "\n"
 "%s"
 
-#: ReactNativeClient/lib/models/Tag.js:202
+#: packages/lib/models/Tag.js:202
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "タグ \"%s\" はすでにあります。ほかの名前を選択してください。"
 
-#: ReactNativeClient/lib/models/Note.js:27
+#: packages/lib/models/Note.js:28
 msgid "created date"
 msgstr "作成日"
 
-#: ReactNativeClient/lib/models/Note.js:28
+#: packages/lib/models/Note.js:29
 msgid "custom order"
 msgstr "任意順"
 
-#: ReactNativeClient/lib/models/Note.js:92
+#: packages/lib/models/Note.js:93
 msgid "This note does not have geolocation information."
 msgstr "このノートには位置情報がありません。"
 
-#: ReactNativeClient/lib/models/Note.js:469
+#: packages/lib/models/Note.js:483
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" にコピーできません"
 
-#: ReactNativeClient/lib/models/Note.js:480
+#: packages/lib/models/Note.js:494
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" に移動できません"
 
-#: ReactNativeClient/lib/models/BaseItem.js:723
+#: packages/lib/models/BaseItem.js:736
 msgid "Encrypted"
 msgstr "暗号化済"
 
-#: ReactNativeClient/lib/models/BaseItem.js:783
+#: packages/lib/models/BaseItem.js:796
 msgid "Encrypted items cannot be modified"
 msgstr "暗号化したアイテムは修正できません"
 
-#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+#: packages/lib/SyncTargetOneDriveDev.js:15
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (テスト用途のみ)"
 
-#: ReactNativeClient/lib/BaseApplication.js:150
-#: ReactNativeClient/lib/BaseApplication.js:162
-#: ReactNativeClient/lib/BaseApplication.js:194
+#: packages/lib/BaseApplication.js:147 packages/lib/BaseApplication.js:159
+#: packages/lib/BaseApplication.js:191
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用方法: %s"
 
-#: ReactNativeClient/lib/BaseApplication.js:229
+#: packages/lib/BaseApplication.js:226
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "不明なフラグ: %s"
 
-#: ReactNativeClient/lib/SyncTargetOneDrive.js:25
+#: packages/lib/SyncTargetOneDrive.js:25
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:78
-msgid "Clear alarm"
-msgstr "アラームをクリア"
-
-#: ReactNativeClient/lib/components/SelectDateTimeDialog.js:80
-msgid "Save alarm"
-msgstr "アラームの保存"
-
-#: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-msgid "Open"
-msgstr "開く"
-
-#: ReactNativeClient/lib/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
-#: ReactNativeClient/lib/components/screens/Note.js:794
-msgid "Share"
-msgstr "共有"
-
-#: ReactNativeClient/lib/components/CameraView.js:158
-msgid "Permission to use camera"
-msgstr "カメラ使用の許可"
-
-#: ReactNativeClient/lib/components/CameraView.js:159
-msgid "Your permission to use your camera is required."
-msgstr "カメラを使用するには権限が必要です。"
-
-#: ReactNativeClient/lib/components/screen-header.js:185
-msgid "Delete these notes?"
-msgstr "ノートを削除しますか？"
-
-#: ReactNativeClient/lib/components/screen-header.js:392
-msgid "Move to notebook..."
-msgstr "ノートブックへ移動..."
-
-#: ReactNativeClient/lib/components/screen-header.js:433
-#, javascript-format
-msgid "Move %d notes to notebook \"%s\"?"
-msgstr "%d個のノートを\"%s\"に移動しますか？"
-
-#: ReactNativeClient/lib/components/screen-header.js:451
-msgid "Press to set the decryption password."
-msgstr "復号するパスワードを入力してください。"
-
-#: ReactNativeClient/lib/components/screen-header.js:452
-msgid "Some items cannot be synchronised. Press for more info."
-msgstr "いくつかの項目は同期されませんでした。詳細はクリック。"
-
-#: ReactNativeClient/lib/components/screen-header.js:453
-msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr ""
-"同期先をアップグレードする必要があります。アップグレードするにはバナーをク"
-"リックしてください。"
-
-#: ReactNativeClient/lib/components/side-menu-content.js:126
-#, javascript-format
-msgid "Notebook: %s"
-msgstr "ノートブック: %s"
-
-#: ReactNativeClient/lib/components/side-menu-content.js:132
-msgid "Encrypted notebooks cannot be renamed"
-msgstr "暗号化したアイテムはリネームできません"
-
-#: ReactNativeClient/lib/components/side-menu-content.js:312
-msgid "New Notebook"
-msgstr "新しいノートブック"
-
-#: ReactNativeClient/lib/components/side-menu-content.js:316
-#: ReactNativeClient/lib/components/screens/config.js:549
-msgid "Configuration"
-msgstr "設定"
-
-#: ReactNativeClient/lib/components/note-list.js:97
-msgid "You currently have no notebooks."
-msgstr "ノートブックがありません。"
-
-#: ReactNativeClient/lib/components/note-list.js:101
-msgid "Create a notebook"
-msgstr "ノートブックを作成します。"
-
-#: ReactNativeClient/lib/components/note-list.js:105
-msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "ノートがありません。(+)ボタンを押して新しいノートを作成してください。"
-
-#: ReactNativeClient/lib/components/shared/config-shared.js:46
+#: packages/lib/components/shared/config-shared.js:46
 msgid "Checking... Please wait."
 msgstr "確認中...お待ちください。"
 
-#: ReactNativeClient/lib/components/shared/config-shared.js:48
+#: packages/lib/components/shared/config-shared.js:48
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "成功です！ 同期の設定は正しいようです。"
 
-#: ReactNativeClient/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:50
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -3132,11 +2725,11 @@ msgstr ""
 "エラーです。URL、ユーザー名、パスワードなどを修正し、同期先にアクセスできるか"
 "を確認してください。次が報告されたエラーです:"
 
-#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+#: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
 msgstr "アプリケーションは問題なく認証されました！"
 
-#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#: packages/lib/components/shared/dropbox-login-shared.js:43
 #, javascript-format
 msgid ""
 "Could not authorise application:\n"
@@ -3151,16 +2744,16 @@ msgstr ""
 "\n"
 "やり直してください。"
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:33
+#: packages/lib/components/shared/encryption-config-shared.js:33
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr "データベース全体を暗号化しなおしてもよろしいですか。"
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:39
+#: packages/lib/components/shared/encryption-config-shared.js:39
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "既存データを暗号化しなおし、再同期します。"
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:49
+#: packages/lib/components/shared/encryption-config-shared.js:49
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
@@ -3168,354 +2761,21 @@ msgstr ""
 "下記マスターキーをアップグレードするには、マスターキーのパスワードを入力して"
 "ください。"
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
+#: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
 msgstr "マスターキーのアップグレードに成功しました!"
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:60
+#: packages/lib/components/shared/encryption-config-shared.js:60
 #, javascript-format
 msgid "Could not upgrade master key: %s"
 msgstr "マスターキーをアップグレードできませんでした: %s"
 
-#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:116
+#: packages/lib/components/shared/encryption-config-shared.js:116
 #, javascript-format
 msgid "Decrypted items: %s / %s"
 msgstr "復号済み（非暗号化）アイテム: %s/%s"
 
-#: ReactNativeClient/lib/components/screens/folder.js:87
-#, javascript-format
-msgid "The notebook could not be saved: %s"
-msgstr "ノートブックは保存できませんでした：%s"
-
-#: ReactNativeClient/lib/components/screens/folder.js:109
-msgid "Edit notebook"
-msgstr "ノートブックの編集"
-
-#: ReactNativeClient/lib/components/screens/folder.js:110
-msgid "Enter notebook title"
-msgstr "ノートブックの題名を入力"
-
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:110
-msgid "Login with OneDrive"
-msgstr "OneDriveログイン"
-
-#: ReactNativeClient/lib/components/screens/onedrive-login.js:121
-#: ReactNativeClient/lib/components/screens/log.js:109
-#: ReactNativeClient/lib/components/screens/status.js:144
-msgid "Refresh"
-msgstr "更新"
-
-#: ReactNativeClient/lib/components/screens/UpgradeSyncTargetScreen.js:42
-msgid "Sync Target Upgrade"
-msgstr "同期先のアップグレード"
-
-#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
-msgid "New tags:"
-msgstr "新しいタグ:"
-
-#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
-msgid "Type new tags or select from list"
-msgstr "新しいタグを入力するか、リストから選択してください"
-
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
-msgid "Login with Dropbox"
-msgstr "Dropboxでログイン"
-
-#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
-msgid "Enter code here"
-msgstr "コードをここに入力"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:119
-#, javascript-format
-msgid "Master Key %s"
-msgstr "マスターキー %s"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: ReactNativeClient/lib/components/screens/Note.js:722
-#, javascript-format
-msgid "Created: %s"
-msgstr "作成しました：%s"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:122
-#: ReactNativeClient/lib/components/screens/encryption-config.js:151
-msgid "Password:"
-msgstr "パスワード:"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:137
-msgid "Password cannot be empty"
-msgstr "パスワードは空にできません"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:139
-msgid "Confirm password cannot be empty"
-msgstr "パスワード(確認用)は空にできません"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:150
-msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
-msgstr ""
-"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗"
-"号化した状態で送ることを意味します。パスワードはなくさないようにしてくださ"
-"い。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためで"
-"す！ 暗号化を有効にするには、下にパスワードを入力してください。"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:177
-msgid "Enable"
-msgstr "有効"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:248
-msgid "Missing Master Keys"
-msgstr "マスターキーがありません"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:249
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-"これらのIDを持つマスターキーはアイテムを暗号化するのに使われていますが、現在"
-"このキーで暗号化されたアイテムにはアクセスできません。おそらくこれらのアイテ"
-"ムはまだ同期（ダウンロード）されていないものと考えられます。"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:258
-msgid "Disable encryption"
-msgstr "暗号化を無効にする"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:258
-msgid "Enable encryption"
-msgstr "暗号化を有効にする"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:264
-#: ReactNativeClient/lib/components/screens/config.js:316
-msgid "Encryption Config"
-msgstr "暗号化の設定"
-
-#: ReactNativeClient/lib/components/screens/encryption-config.js:268
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
-msgstr ""
-"エンドツーエンド暗号化(E2EE)に関する詳細な情報と有効化の手順については、次の"
-"ドキュメントをご覧ください:"
-
-#: ReactNativeClient/lib/components/screens/log.js:100
-#: ReactNativeClient/lib/components/screens/config.js:439
-msgid "Log"
-msgstr "ログ"
-
-#: ReactNativeClient/lib/components/screens/log.js:117
-msgid "Show all"
-msgstr "すべて表示"
-
-#: ReactNativeClient/lib/components/screens/log.js:117
-msgid "Errors only"
-msgstr "エラーのみ"
-
-#: ReactNativeClient/lib/components/screens/config.js:50
-msgid "Warning"
-msgstr "警告"
-
-#: ReactNativeClient/lib/components/screens/config.js:50
-msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
-msgstr ""
-"ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
-
-#: ReactNativeClient/lib/components/screens/config.js:436
-msgid "Tools"
-msgstr "ツール"
-
-#: ReactNativeClient/lib/components/screens/config.js:438
-msgid "Sync Status"
-msgstr "同期の状態"
-
-#: ReactNativeClient/lib/components/screens/config.js:441
-msgid "Creating report..."
-msgstr "レポート を作成中..."
-
-#: ReactNativeClient/lib/components/screens/config.js:441
-msgid "Export Debug Report"
-msgstr "デバッグレポートの出力"
-
-#: ReactNativeClient/lib/components/screens/config.js:443
-msgid "Fixing search index..."
-msgstr "検索インデックスの修正中..."
-
-#: ReactNativeClient/lib/components/screens/config.js:443
-msgid "Fix search index"
-msgstr "検索インデックスの修正"
-
-#: ReactNativeClient/lib/components/screens/config.js:443
-msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
-msgstr ""
-"検索に問題がある場合は、これを利用して検索インデックスの再構築を行います。"
-"ノートの数に依存して、時間がかかる場合があります。"
-
-#: ReactNativeClient/lib/components/screens/config.js:446
-msgid "Exporting profile..."
-msgstr "プロファイルのエクスポート中..."
-
-#: ReactNativeClient/lib/components/screens/config.js:446
-msgid "Export profile"
-msgstr "プロファイルをエクスポート"
-
-#: ReactNativeClient/lib/components/screens/config.js:446
-msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr "デバッグ専用: プロファイルを外部SDカードにエクスポートします。"
-
-#: ReactNativeClient/lib/components/screens/config.js:461
-msgid "More information"
-msgstr "詳細情報"
-
-#: ReactNativeClient/lib/components/screens/config.js:471
-msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-"正しく動作するには、次の権限が必要です。スマートフォンのアプリ情報 > Joplin "
-"> 権限 で有効にしてください"
-
-#: ReactNativeClient/lib/components/screens/config.js:474
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
-msgstr ""
-"- ストレージ: ノートにファイルを添付するのとファイルシステムの同期に必要で"
-"す。"
-
-#: ReactNativeClient/lib/components/screens/config.js:477
-msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- カメラ: 撮った写真をノートに添付するのに必要です。"
-
-#: ReactNativeClient/lib/components/screens/config.js:480
-msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- 位置情報: ノートに位置情報を添付するのに必要です。"
-
-#: ReactNativeClient/lib/components/screens/config.js:509
-msgid "Joplin website"
-msgstr "JoplinのWebサイト"
-
-#: ReactNativeClient/lib/components/screens/config.js:537
-#, javascript-format
-msgid "Database v%s"
-msgstr "データベース v%s"
-
-#: ReactNativeClient/lib/components/screens/config.js:543
-#, javascript-format
-msgid "FTS enabled: %d"
-msgstr "FTS有効:  %d"
-
-#: ReactNativeClient/lib/components/screens/Note.js:98
-msgid "This note has been modified:"
-msgstr "ノートは変更されています："
-
-#: ReactNativeClient/lib/components/screens/Note.js:98
-msgid "Save changes"
-msgstr "変更を保存"
-
-#: ReactNativeClient/lib/components/screens/Note.js:98
-msgid "Discard changes"
-msgstr "変更を破棄"
-
-#: ReactNativeClient/lib/components/screens/Note.js:150
-#, javascript-format
-msgid "No item with ID %s"
-msgstr "ID %s のアイテムはありません"
-
-#: ReactNativeClient/lib/components/screens/Note.js:168
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません。"
-
-#: ReactNativeClient/lib/components/screens/Note.js:173
-#, javascript-format
-msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポートしていません: %s"
-
-#: ReactNativeClient/lib/components/screens/Note.js:178
-#, javascript-format
-msgid "Links with protocol \"%s\" are not supported"
-msgstr "プロトコル \"%s\" でのリンクはサポートされていません"
-
-#: ReactNativeClient/lib/components/screens/Note.js:340
-msgid ""
-"In order to associate a geo-location with the note, the app needs your "
-"permission to access your location.\n"
-"\n"
-"You may turn off this option at any time in the Configuration screen."
-msgstr ""
-"ノートに位置情報を保存するには、ユーザーの許可が必要です。\n"
-"\n"
-"位置情報を保存するかどうかは、設定画面でいつでも変更できます。"
-
-#: ReactNativeClient/lib/components/screens/Note.js:341
-msgid "Permission needed"
-msgstr "許可が必要"
-
-#: ReactNativeClient/lib/components/screens/Note.js:583
-#, javascript-format
-msgid "Unsupported image type: %s"
-msgstr "サポートされていない画像の形式: %s"
-
-#: ReactNativeClient/lib/components/screens/Note.js:723
-#, javascript-format
-msgid "Updated: %s"
-msgstr "アップデート: %s"
-
-#: ReactNativeClient/lib/components/screens/Note.js:726
-msgid "View on map"
-msgstr "地図上に表示"
-
-#: ReactNativeClient/lib/components/screens/Note.js:733
-msgid "Go to source URL"
-msgstr "ソースURLに行く"
-
-#: ReactNativeClient/lib/components/screens/Note.js:762
-msgid "Attach..."
-msgstr "添付..."
-
-#: ReactNativeClient/lib/components/screens/Note.js:773
-msgid "Attach photo"
-msgstr "写真を添付"
-
-#: ReactNativeClient/lib/components/screens/Note.js:774
-msgid "Take photo"
-msgstr "写真を撮影する"
-
-#: ReactNativeClient/lib/components/screens/Note.js:775
-msgid "Choose an option"
-msgstr "オプションを選択"
-
-#: ReactNativeClient/lib/components/screens/Note.js:808
-msgid "Convert to note"
-msgstr "ノートに変換"
-
-#: ReactNativeClient/lib/components/screens/Note.js:808
-msgid "Convert to todo"
-msgstr "ToDoに変換"
-
-#: ReactNativeClient/lib/components/screens/Note.js:822
-msgid "Properties"
-msgstr "プロパティ"
-
-#: ReactNativeClient/lib/components/screens/Note.js:945
-#: ReactNativeClient/lib/components/screens/Note.js:975
-msgid "Add body"
-msgstr "本文を追加"
-
-#: ReactNativeClient/lib/components/screens/Note.js:1001
-msgid "Add title"
-msgstr "題名を追加"
-
-#: ReactNativeClient/lib/components/screens/search.js:160
-msgid "Search"
-msgstr "検索"
-
-#: ReactNativeClient/lib/onedrive-api.js:367
+#: packages/lib/onedrive-api.js:367
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
@@ -3523,64 +2783,71 @@ msgstr ""
 "トークンの更新ができませんでした。認証データがありません。同期を再度行うこと"
 "で解決することがあります。"
 
-#: ReactNativeClient/lib/Synchronizer.js:108
+#: packages/lib/Synchronizer.js:108
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "ローカルアイテムの作成: %d."
 
-#: ReactNativeClient/lib/Synchronizer.js:110
+#: packages/lib/Synchronizer.js:110
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "ローカルアイテムの更新: %d."
 
-#: ReactNativeClient/lib/Synchronizer.js:112
+#: packages/lib/Synchronizer.js:112
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "リモートアイテムの作成: %d."
 
-#: ReactNativeClient/lib/Synchronizer.js:114
+#: packages/lib/Synchronizer.js:114
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "リモートアイテムの更新: %d."
 
-#: ReactNativeClient/lib/Synchronizer.js:116
+#: packages/lib/Synchronizer.js:116
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "ローカルアイテムの削除: %d."
 
-#: ReactNativeClient/lib/Synchronizer.js:118
+#: packages/lib/Synchronizer.js:118
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "リモートアイテムの削除: %d."
 
-#: ReactNativeClient/lib/Synchronizer.js:120
+#: packages/lib/Synchronizer.js:120
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "取得したアイテム: %d/%d."
 
-#: ReactNativeClient/lib/Synchronizer.js:122
+#: packages/lib/Synchronizer.js:122
 msgid "Cancelling..."
 msgstr "中止中..."
 
-#: ReactNativeClient/lib/Synchronizer.js:124
+#: packages/lib/Synchronizer.js:124
 #, javascript-format
 msgid "Completed: %s"
 msgstr "完了: %s"
 
-#: ReactNativeClient/lib/Synchronizer.js:126
+#: packages/lib/Synchronizer.js:126
 #, javascript-format
 msgid "Last error: %s"
 msgstr "最新のエラー: %s"
 
-#: ReactNativeClient/lib/Synchronizer.js:233
+#: packages/lib/Synchronizer.js:233
 msgid "Idle"
 msgstr "待機中"
 
-#: ReactNativeClient/lib/Synchronizer.js:235
+#: packages/lib/Synchronizer.js:235
 msgid "In progress"
 msgstr "実行中"
 
-#: ReactNativeClient/lib/JoplinServerApi.js:71
+#: packages/lib/Synchronizer.js:818
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+"不明なアイテムタイプをダウンロードしました - 最新のJoplinにアップデートしてく"
+"ださい"
+
+#: packages/lib/JoplinServerApi.js:71
 #, javascript-format
 msgid ""
 "Could not connect to the Joplin Nextcloud app. Please check the "
@@ -3593,134 +2860,163 @@ msgstr ""
 "\n"
 "%s"
 
-#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
+#: packages/lib/SyncTargetNextcloud.js:26
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
+#: packages/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
+#: packages/lib/SyncTargetFilesystem.js:18
 msgid "File system"
 msgstr "ファイルシステム"
 
-#: ReactNativeClient/lib/commands/historyForward.js:17
+#: packages/lib/commands/historyForward.js:17
 msgid "Forward"
 msgstr "進む"
 
-#: ReactNativeClient/lib/versionInfo.js:10
+#: packages/lib/versionInfo.js:10
 #, javascript-format
 msgid "Revision: %s (%s)"
 msgstr "リビジョン: %s (%s)"
 
-#: ReactNativeClient/lib/versionInfo.js:20
+#: packages/lib/versionInfo.js:20
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: ReactNativeClient/lib/versionInfo.js:22
+#: packages/lib/versionInfo.js:22
 #, javascript-format
 msgid "Client ID: %s"
 msgstr "クライアントID: %s"
 
-#: ReactNativeClient/lib/versionInfo.js:23
+#: packages/lib/versionInfo.js:23
 #, javascript-format
 msgid "Sync Version: %s"
 msgstr "同期バージョン: %s"
 
-#: ReactNativeClient/lib/versionInfo.js:24
+#: packages/lib/versionInfo.js:24
 #, javascript-format
 msgid "Profile Version: %s"
 msgstr "プロファイルバージョン: %s"
 
-#: ReactNativeClient/lib/versionInfo.js:25
+#: packages/lib/versionInfo.js:25
 #, javascript-format
 msgid "Keychain Supported: %s"
 msgstr "キーチェーンのサポート: %s"
 
-#: ReactNativeClient/lib/services/RevisionService.js:221
+#: packages/lib/services/RevisionService.js:221
 msgid "Restored Notes"
 msgstr "復元されたノート"
 
-#: ReactNativeClient/lib/services/interop/InteropService_Exporter_Jex.js:43
+#: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
 msgid "There is no data to export."
 msgstr "エクスポートするデータがありません。"
 
-#: ReactNativeClient/lib/services/interop/types.js:23
+#: packages/lib/services/interop/types.js:23
 msgid "File"
 msgstr "ファイル"
 
-#: ReactNativeClient/lib/services/interop/types.js:23
+#: packages/lib/services/interop/types.js:23
 msgid "Directory"
 msgstr "ディレクトリ"
 
-#: ReactNativeClient/lib/services/interop/InteropService_Importer_Md.js:41
+#: packages/lib/services/interop/InteropService_Importer_Md.js:41
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "ノートをどのノートブックにインポートするのか指定してください。"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:48
-#: ReactNativeClient/lib/services/interop/InteropService.js:57
+#: packages/lib/services/interop/InteropService.js:48
+#: packages/lib/services/interop/InteropService.js:57
 msgid "Joplin Export File"
 msgstr "Joplin エクスポートファイル"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:50
-#: ReactNativeClient/lib/services/interop/InteropService.js:58
+#: packages/lib/services/interop/InteropService.js:50
+#: packages/lib/services/interop/InteropService.js:58
 msgid "Joplin Export Directory"
 msgstr "Joplin エクスポートディレクトリ"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:51
+#: packages/lib/services/interop/InteropService.js:51
 msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote エクスポートファイル (Markdownとしてインポート)"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:52
+#: packages/lib/services/interop/InteropService.js:52
 msgid "Evernote Export File (as HTML)"
 msgstr "Evernote エクスポートファイル (HTMLとしてインポート)"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:60
+#: packages/lib/services/interop/InteropService.js:60
 msgid "HTML File"
 msgstr "HTMLファイル"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:61
+#: packages/lib/services/interop/InteropService.js:61
 msgid "HTML Directory"
 msgstr "HTMLディレクトリ"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:127
+#: packages/lib/services/interop/InteropService.js:127
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "\"%s\" モジュール （\"%s / %s\" フォーマット用） を読み込めません"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:152
+#: packages/lib/services/interop/InteropService.js:150
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "\"%s\" モジュール （\"%s / %s\" フォーマット用） を読み込めません"
 
-#: ReactNativeClient/lib/services/interop/InteropService.js:187
+#: packages/lib/services/interop/InteropService.js:194
+#: packages/lib/services/interop/InteropService.js:206
+#: packages/app-cli/app/command-cp.js:24 packages/app-cli/app/command-cp.js:27
+#: packages/app-cli/app/command-import.js:34
+#: packages/app-cli/app/command-mv.js:22 packages/app-cli/app/command-mv.js:25
+#: packages/app-cli/app/command-use.js:21
+#: packages/app-cli/app/command-ren.js:23
+#: packages/app-cli/app/command-rmbook.js:25
+#: packages/app-cli/app/command-cat.js:25
+#: packages/app-cli/app/command-rmnote.js:25
+#: packages/app-cli/app/command-attach.js:21
+#: packages/app-cli/app/command-export.js:36
+#: packages/app-cli/app/command-export.js:40
+#: packages/app-cli/app/command-geoloc.js:20
+#: packages/app-cli/app/command-search.js:27
+#: packages/app-cli/app/command-set.js:32
+#: packages/app-cli/app/command-help.js:66
+#: packages/app-cli/app/command-todo.js:21
+#: packages/app-cli/app/command-tag.js:33
+#: packages/app-cli/app/command-tag.js:36
+#: packages/app-cli/app/command-tag.js:42
+#: packages/app-cli/app/command-tag.js:43
+#: packages/app-cli/app/command-tag.js:81
+#: packages/app-cli/app/command-tag.js:87
+#: packages/app-cli/app/command-done.js:20
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "\"%s\"は見つかりませんでした。"
+
+#: packages/lib/services/interop/InteropService.js:199
 #, javascript-format
 msgid "Please specify import format for %s"
 msgstr "%s 用のインポートフォーマットを指定してくださあい"
 
-#: ReactNativeClient/lib/services/KeymapService.js:240
+#: packages/lib/services/KeymapService.js:512
 msgid "command"
 msgstr "コマンド"
 
-#: ReactNativeClient/lib/services/KeymapService.js:240
-#: ReactNativeClient/lib/services/KeymapService.js:245
+#: packages/lib/services/KeymapService.js:512
+#: packages/lib/services/KeymapService.js:517
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "\"%s\" は必須の \"%s\" プロパティを持っていません。"
 
-#: ReactNativeClient/lib/services/KeymapService.js:245
-#: ReactNativeClient/lib/services/KeymapService.js:252
+#: packages/lib/services/KeymapService.js:517
+#: packages/lib/services/KeymapService.js:524
 msgid "accelerator"
 msgstr "ショートカットキー"
 
-#: ReactNativeClient/lib/services/KeymapService.js:252
+#: packages/lib/services/KeymapService.js:524
 #, javascript-format
 msgid "Invalid %s: %s."
 msgstr "無効な %s: %s"
 
-#: ReactNativeClient/lib/services/KeymapService.js:270
+#: packages/lib/services/KeymapService.js:542
 #, javascript-format
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
@@ -3729,16 +3025,16 @@ msgstr ""
 "ショートカットキー \"%s\" は \"%s\" コマンドと \"%s\" コマンドで使われていま"
 "す。これにより予想外の動作が起こる可能性があります。"
 
-#: ReactNativeClient/lib/services/KeymapService.js:295
+#: packages/lib/services/KeymapService.js:567
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
 msgstr "ショートカットキー \"%s\" は無効です。"
 
-#: ReactNativeClient/lib/services/report.js:121
+#: packages/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
 msgstr "同期ができなかったアイテム"
 
-#: ReactNativeClient/lib/services/report.js:123
+#: packages/lib/services/report.js:123
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -3748,21 +3044,21 @@ msgstr ""
 "のようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索"
 "してください。"
 
-#: ReactNativeClient/lib/services/report.js:130
+#: packages/lib/services/report.js:130
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s)はアップロードできませんでした：%s"
 
-#: ReactNativeClient/lib/services/report.js:132
+#: packages/lib/services/report.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
 
-#: ReactNativeClient/lib/services/report.js:142
+#: packages/lib/services/report.js:142
 msgid "Items that cannot be decrypted"
 msgstr "復号ができなかったアイテム"
 
-#: ReactNativeClient/lib/services/report.js:144
+#: packages/lib/services/report.js:144
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
@@ -3772,75 +3068,798 @@ msgstr ""
 "回失敗しました。これらのアイテムはデバイス上に残りますが、Joplinはこれらの復"
 "号化は行いません。"
 
-#: ReactNativeClient/lib/services/report.js:182
+#: packages/lib/services/report.js:151 packages/app-cli/app/cli-utils.js:140
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: packages/lib/services/report.js:182
 msgid "Attachments"
 msgstr "添付ファイル"
 
-#: ReactNativeClient/lib/services/report.js:190
+#: packages/lib/services/report.js:190
 msgid "Downloaded and decrypted"
 msgstr "ダウンロード済み（復号済み）"
 
-#: ReactNativeClient/lib/services/report.js:190
-#: ReactNativeClient/lib/services/report.js:191
-#: ReactNativeClient/lib/services/report.js:194
+#: packages/lib/services/report.js:190 packages/lib/services/report.js:191
+#: packages/lib/services/report.js:194
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: ReactNativeClient/lib/services/report.js:191
+#: packages/lib/services/report.js:191
 msgid "Downloaded and encrypted"
 msgstr "ダウンロード済み（未復号）"
 
-#: ReactNativeClient/lib/services/report.js:204
+#: packages/lib/services/report.js:204
 msgid "Attachments that could not be downloaded"
 msgstr "ダウンロードできなかった添付ファイル"
 
-#: ReactNativeClient/lib/services/report.js:209
+#: packages/lib/services/report.js:209
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: ReactNativeClient/lib/services/report.js:222
+#: packages/lib/services/report.js:222
 msgid "Sync status (synced items / total items)"
 msgstr "同期状況 (同期済/総数)"
 
-#: ReactNativeClient/lib/services/report.js:226
+#: packages/lib/services/report.js:226
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: ReactNativeClient/lib/services/report.js:229
+#: packages/lib/services/report.js:229
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "総数: %d/%d"
 
-#: ReactNativeClient/lib/services/report.js:231
+#: packages/lib/services/report.js:231
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "衝突: %d"
 
-#: ReactNativeClient/lib/services/report.js:232
+#: packages/lib/services/report.js:232
 #, javascript-format
 msgid "To delete: %d"
 msgstr "削除予定: %d"
 
-#: ReactNativeClient/lib/services/report.js:236
+#: packages/lib/services/report.js:236
 msgid "Folders"
 msgstr "フォルダー"
 
-#: ReactNativeClient/lib/services/report.js:244
+#: packages/lib/services/report.js:244
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d ノート"
 
-#: ReactNativeClient/lib/services/report.js:252
+#: packages/lib/services/report.js:252
 msgid "Coming alarms"
 msgstr "直近のアラーム"
 
-#: ReactNativeClient/lib/services/report.js:257
+#: packages/lib/services/report.js:257
 #, javascript-format
 msgid "On %s: %s"
 msgstr "日時 %s: %s"
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:107
+msgid "No suggestions"
+msgstr ""
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:114
+msgid "Add to dictionary"
+msgstr ""
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:153
+msgid "Use spell checker"
+msgstr ""
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:173
+#, fuzzy
+msgid "Change language"
+msgstr "言語"
+
+#: packages/app-cli/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"<note>に一致するノートを[notebook]に複製します。[notebook]が指定されていない"
+"場合は、現在のノートブックに複製を行います。"
+
+#: packages/app-cli/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"現在のノートブック中のノートを表示します。ノートブックのリストを表示するに"
+"は、`ls /`と入力してください。"
+
+#: packages/app-cli/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "上位 <num>件のノートを表示します。"
+
+#: packages/app-cli/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "アイテムを<field>で並び替え (例： title, updated_time, created_time)."
+
+#: packages/app-cli/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "逆順に並び替えます。"
+
+#: packages/app-cli/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"選択した種類の項目のみ表示します。`n`でノートを、`t`でToDoを、`nt`でその両方"
+"を指定できます。 (例： `-tt` ではToDoのみを表示し、`-ttd`ではノートとToDoを表"
+"示します。)"
+
+#: packages/app-cli/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "\"text\"または\"json\""
+
+#: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"長い形式のリストフォーマットを使用します。フォーマットは：ID, NOTE_COUNT "
+"(ノートブックのみ), DATE, TODO_CHECKED (ToDoのみ), TITLE"
+
+#: packages/app-cli/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "まずはノートブックを選択して下さい。"
+
+#: packages/app-cli/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Joplinにデータをインポートします。"
+
+#: packages/app-cli/app/command-import.js:25
+#, javascript-format
+msgid "Source format: %s"
+msgstr "ソースフォーマット: %s"
+
+#: packages/app-cli/app/command-import.js:26
+msgid "Do not ask for confirmation."
+msgstr "確認を行ないません。"
+
+#: packages/app-cli/app/command-import.js:27
+#, javascript-format
+msgid "Output format: %s"
+msgstr "出力フォーマット: %s"
+
+#: packages/app-cli/app/command-import.js:65
+msgid "Importing notes..."
+msgstr "ノートのインポート中..."
+
+#: packages/app-cli/app/help-utils.js:56
+msgid "Enum"
+msgstr "列挙"
+
+#: packages/app-cli/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "種類: %s."
+
+#: packages/app-cli/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "取り得る値: %s."
+
+#: packages/app-cli/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "既定値: %s"
+
+#: packages/app-cli/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "取り得るキー/値:"
+
+#: packages/app-cli/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"APIサーバーの起動、停止、状況確認を行います。APIサーバーが使用するポートは "
+"api.port で変更できます。コマンドは (%s)。"
+
+#: packages/app-cli/app/command-server.js:38
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "サーバーはすでにポート %d で実行中です。"
+
+#: packages/app-cli/app/command-server.js:44
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "サーバーはポート %d で実行中です。"
+
+#: packages/app-cli/app/command-server.js:44
+#: packages/app-cli/app/command-server.js:47
+msgid "Server is not running."
+msgstr "サーバーは実行されていません。"
+
+#: packages/app-cli/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"エンドツーエンド暗号化(E2EE)の設定コマンドです。<command>には `enable`, "
+"`disable`, `decrypt`, `status`, `target-status` があります。"
+
+#: packages/app-cli/app/command-e2ee.js:36
+#: packages/app-cli/app/command-e2ee.js:74
+msgid "Enter master password:"
+msgstr "マスターパスワードを入力してください:"
+
+#: packages/app-cli/app/command-e2ee.js:38
+#: packages/app-cli/app/command-e2ee.js:76
+#: packages/app-cli/app/command-e2ee.js:81
+msgid "Operation cancelled"
+msgstr "操作をキャンセルしました"
+
+#: packages/app-cli/app/command-e2ee.js:47
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"復号を開始しました... どのぐらいの数を復号するかによりますが、数分かかります"
+"のでお待ちください。"
+
+#: packages/app-cli/app/command-e2ee.js:55
+#, javascript-format
+msgid "Decrypted items: %d"
+msgstr "復号済み（非暗号化）アイテム: %d"
+
+#: packages/app-cli/app/command-e2ee.js:56
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+"スキップされたアイテム: %d (再度復号化を試みるには--retry-failed-itemsオプ"
+"ションを使用してください)"
+
+#: packages/app-cli/app/command-e2ee.js:70
+msgid "Completed decryption."
+msgstr "復号が完了しました。"
+
+#: packages/app-cli/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "あたらしいノートブックを作成します。"
+
+#: packages/app-cli/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "<note>に一致するアイテムを、[notebook]に移動します。"
+
+#: packages/app-cli/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"設定を行います。[value]がない場合は、[name]で示された設定項目の値を表示しま"
+"す。両方とも指定されていない場合は、現在の設定のリストを表示します。"
+
+#: packages/app-cli/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "未設定または非表示の設定項目も表示します。"
+
+#: packages/app-cli/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: packages/app-cli/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: packages/app-cli/app/command-use.js:12
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"ノートブック [notebook]に切り替え - これ以降の作業は、指定のノートブック内で"
+"行われます。"
+
+#: packages/app-cli/app/command-sync.js:29
+msgid "Synchronises with remote storage."
+msgstr "リモート保存領域と同期します。"
+
+#: packages/app-cli/app/command-sync.js:34
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr "指定のターゲットと同期します。(標準： sync.targetの設定値)"
+
+#: packages/app-cli/app/command-sync.js:35
+msgid "Upgrade the sync target to the latest version."
+msgstr "同期先を最新バージョンにアップグレード。"
+
+#: packages/app-cli/app/command-sync.js:105
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "%s では認証できません。他の資格証明書を使用してください。"
+
+#: packages/app-cli/app/command-sync.js:128
+msgid "Synchronisation is already in progress."
+msgstr "同期はすでに実行中です。"
+
+#: packages/app-cli/app/command-sync.js:133
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"ロックファイルがすでに保持されています。同期作業が行われていない場合は、\"%s"
+"\"にあるロックファイルを削除して、作業を再度行ってください。"
+
+#: packages/app-cli/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "同期先: %s (%s)"
+
+#: packages/app-cli/app/command-sync.js:177
+msgid "Cannot initialise synchroniser."
+msgstr "同期プロセスを初期化できませんでした。"
+
+#: packages/app-cli/app/command-sync.js:207
+msgid "Starting synchronisation..."
+msgstr "同期を開始中..."
+
+#: packages/app-cli/app/command-sync.js:230
+msgid "Downloading resources..."
+msgstr "リソースをダウンロード中..."
+
+#: packages/app-cli/app/command-sync.js:242
+#, fuzzy, javascript-format
+msgid "Sync target must be upgraded! Run `%s` to proceed."
+msgstr ""
+"同期先をアップグレードする必要があります。アップグレードするにはバナーをク"
+"リックしてください。"
+
+#: packages/app-cli/app/command-sync.js:260
+msgid "Cancelling... Please wait."
+msgstr "中止中...お待ちください。"
+
+#: packages/app-cli/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "<item> (ノートまたはノートブック)の名前を、<name>に変更します。"
+
+#: packages/app-cli/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "指定されたノートブックを削除します。"
+
+#: packages/app-cli/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "ノートブックを確認なしで削除します。"
+
+#: packages/app-cli/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "新しいToDoを作成します。"
+
+#: packages/app-cli/app/command-mktodo.js:16
+#: packages/app-cli/app/command-mknote.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "ノートは、ノートブック内のみに作ることができます。"
+
+#: packages/app-cli/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "選択したノートを表示します。"
+
+#: packages/app-cli/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "ノートに関するすべての情報を表示します。"
+
+#: packages/app-cli/app/command-edit.js:17
+msgid "Edit note."
+msgstr "ノートを編集する。"
+
+#: packages/app-cli/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"テキストエディターが定義されていません。`config editor <editor-path>`で設定を"
+"行ってください"
+
+#: packages/app-cli/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "有効なノートブックがありません。"
+
+#: packages/app-cli/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "\"%s\"というノートはありません。作成しますか？"
+
+#: packages/app-cli/app/command-edit.js:75
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+"ノートの編集を開始します。エディターを閉じると元の画面に戻ることができます。"
+
+#: packages/app-cli/app/command-edit.js:97
+msgid "Note has been saved."
+msgstr "ノートは保存されました。"
+
+#: packages/app-cli/app/app-gui.js:452
+msgid "To delete a tag, untag the associated notes."
+msgstr "タグを削除するには、関連するノートからタグを外してください。"
+
+#: packages/app-cli/app/app-gui.js:462
+msgid "Please select the note or notebook to be deleted first."
+msgstr "まず削除するノートかノートブックを選択してください。"
+
+#: packages/app-cli/app/app-gui.js:750
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
+
+#: packages/app-cli/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "<note-pattern>に一致するノートを削除する。"
+
+#: packages/app-cli/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "ノートを確認なしで削除します。"
+
+#: packages/app-cli/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d 個のノートが一致しました。削除しますか？"
+
+#: packages/app-cli/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "選択したファイルをノートに添付します。"
+
+#: packages/app-cli/app/command-version.js:11
+msgid "Displays version information"
+msgstr "バージョン情報の表示"
+
+#: packages/app-cli/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: packages/app-cli/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr "ToDoを未完としてマークします。"
+
+#: packages/app-cli/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Joplinのデータを選択されたパスにエクスポートします。既定ではノートブック・"
+"ノート・タグ・添付データを含むすべてのデータベースを出力します。"
+
+#: packages/app-cli/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "場所の形式: %s"
+
+#: packages/app-cli/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "選択されたノートのみを出力する。"
+
+#: packages/app-cli/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "選択されたノートブックのみを出力する。"
+
+#: packages/app-cli/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "あたらしいノートを作成します。"
+
+#: packages/app-cli/app/main.js:87
+msgid "Type `joplin help` for usage information."
+msgstr "`joplin help`を実行して使い方を表示します。"
+
+#: packages/app-cli/app/main.js:89
+msgid "Fatal error:"
+msgstr "致命的なエラー:"
+
+#: packages/app-cli/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "ノートの位置情報URLを表示する。"
+
+#: packages/app-cli/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Joplinへようこそ！\n"
+"\n"
+"`:help shortcuts`と入力することで、キーボードショートカットのリストを見ること"
+"ができます。また、`:help`で使い方を確認できます。\n"
+"\n"
+"例えば、ノートブックの作成は`mb`で、ノートの作成は`mn`で行うことができます。"
+
+#: packages/app-cli/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+"現在一つ以上のアイテムが暗号化されており、マスターパスワードを提供する必要が"
+"あります。その場合は`e2ee decrypt`を入力してください。もしパスワードを提供し"
+"てある場合は、暗号化したアイテムは復号中で、間もなく使用できるようになるで"
+"しょう。"
+
+#: packages/app-cli/app/gui/NoteWidget.js:50
+msgid "You may also type `status` for more information."
+msgstr "`status`でさらに情報を確認できます。"
+
+#: packages/app-cli/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "検索:"
+
+#: packages/app-cli/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "指定された<pattern>をすべてのノートから検索する。"
+
+#: packages/app-cli/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"<note>のプロパティ<name> を、指示された[value]に設定します。有効なプロパティ"
+"は：\n"
+"\n"
+"%s"
+
+#: packages/app-cli/app/cli-utils.js:109
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "引数が足りません：%s"
+
+#: packages/app-cli/app/cli-utils.js:144
+msgid "Your choice: "
+msgstr "選択： "
+
+#: packages/app-cli/app/cli-utils.js:151
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "無効な入力：%s"
+
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+msgid "Y"
+msgstr "Y"
+
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+msgid "n"
+msgstr "n"
+
+#: packages/app-cli/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "暗号化したアイテムは変更できません"
+
+#: packages/app-cli/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "使い方を表示する。"
+
+#: packages/app-cli/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr "ショートカットのカスタマイズ方法は %s をご覧ください"
+
+#: packages/app-cli/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "CLIモードではショートカットは使用できません。"
+
+#: packages/app-cli/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"コマンドのさらなる情報は、`help [command]`で見ることができます；または、"
+"`help all`ですべての使用方法の情報を表示できます。"
+
+#: packages/app-cli/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "有効なコマンドは："
+
+#: packages/app-cli/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"すべてのコマンドで、ノートまたはノートブックは、題名またはID、または選択中の"
+"物はそれぞれショートカット`$n`または`$b`で指定できます。`$c`で選択中のアイテ"
+"ムを参照できます。"
+
+#: packages/app-cli/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "ペイン間を移動するには、TabかShift+Tabを押してください。"
+
+#: packages/app-cli/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr "リストや入力エリアの移動には矢印キーまたはPage Up/Downを使用します。"
+
+#: packages/app-cli/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "コンソールの最大化・最小化には\"tc\"と入力してください。"
+
+#: packages/app-cli/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "コマンドラインモードに入るには、\":\"を入力してください"
+
+#: packages/app-cli/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "コマンドラインモードを終了するには、ESCキーを押してください"
+
+#: packages/app-cli/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+"キーボードショートカットと設定オプションを表示するには、`help shortcuts`と入"
+"力してください"
+
+#: packages/app-cli/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command>は、\"toggle\"または\"clear\"を指定できます。\"toggle\"を指定す"
+"ると、指定したToDoの完了済み/未完を反転できます。指定したノートが通常のノート"
+"であれば、ToDoに変換されます。\"clear\"を指定すると、ToDoを通常のノートに変換"
+"できます。"
+
+#: packages/app-cli/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "アプリケーションの終了。"
+
+#: packages/app-cli/app/app.js:62
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
+
+#: packages/app-cli/app/app.js:92
+msgid "No notebook selected."
+msgstr "ノートブックが選択されていません。"
+
+#: packages/app-cli/app/app.js:98
+msgid "No notebook has been specified."
+msgstr "ノートブックが選択されていません。"
+
+#: packages/app-cli/app/app.js:137
+msgid "N"
+msgstr "N"
+
+#: packages/app-cli/app/app.js:137
+msgid "y"
+msgstr "y"
+
+#: packages/app-cli/app/app.js:170
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "バックグラウンド同期を中止中… しばらくお待ちください。"
+
+#: packages/app-cli/app/app.js:255
+#, javascript-format
+msgid "No such command: %s"
+msgstr "コマンドが違います：%s"
+
+#: packages/app-cli/app/app.js:303
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "コマンド \"%s\"は、GUIのみで有効です"
+
+#: packages/app-cli/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr "ノートとノートブックのサマリを表示します。"
+
+#: packages/app-cli/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgstr ""
+"これらのアイテムの復号化を再試行するには、`e2ee decrypt --retry-failed-items`"
+"を実行してください。"
+
+#: packages/app-cli/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command> は\"add\", \"remove\", \"list\", \"notetags\"のいずれかで、それ"
+"ぞれ、[note]に[tag]を追加、[note]から[tag]を削除、[tag]のついたノートを一覧表"
+"示 (-lオプションでより多くの情報を表示)、[note]についているタグを一覧表示しま"
+"す。単に`tag list`とした場合はすべてのタグを一覧表示します。"
+
+#: packages/app-cli/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "無効な命令: \"%s\""
+
+#: packages/app-cli/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "ToDoを完了としてマークします。"
+
+#: packages/app-cli/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "ノートはToDoリストではありません：\"%s\""
+
+#~ msgid ""
+#~ "Type a note title or part of its content to jump to it. Or type # "
+#~ "followed by a tag name, or @ followed by a notebook name."
+#~ msgstr ""
+#~ "題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、"
+#~ "「#タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノート"
+#~ "ブックに移動できます。"
+
+#~ msgid "Name"
+#~ msgstr "名前"
+
+#~ msgid "Icon"
+#~ msgstr "アイコン"
+
+#~ msgid "Notebook properties"
+#~ msgstr "ノートブックのプロパティ"
+
+#, javascript-format
+#~ msgid "This file could not be opened: %s"
+#~ msgstr "次のファイルは開くことができません：%s"
+
+#~ msgid "emphasized text"
+#~ msgstr "文字の強調"
+
+#~ msgid "Click to stop external editing"
+#~ msgstr "クリックすると外部エディターでの編集を終了します"
+
+#~ msgid "Watching..."
+#~ msgstr "確認中..."
+
+#~ msgid "Content Properties"
+#~ msgstr "ノート内容のプロパティ"
+
+#~ msgid "Please create a notebook first."
+#~ msgstr "まずはノートブックを作成して下さい。"
+
+#~ msgid "Please create a notebook first"
+#~ msgstr "まず最初にノートブックを作成して下さい"
+
+#~ msgid "Usage"
+#~ msgstr "使い方"
+
+#~ msgid "Move to notebook..."
+#~ msgstr "ノートブックへ移動..."
+
+#, javascript-format
+#~ msgid "Move %d notes to notebook \"%s\"?"
+#~ msgstr "%d個のノートを\"%s\"に移動しますか？"
+
+#~ msgid "Press to set the decryption password."
+#~ msgstr "復号するパスワードを入力してください。"
+
+#~ msgid "Some items cannot be synchronised. Press for more info."
+#~ msgstr "いくつかの項目は同期されませんでした。詳細はクリック。"
+
+#~ msgid "Show all"
+#~ msgstr "すべて表示"
+
+#~ msgid "Errors only"
+#~ msgstr "エラーのみ"
+
+#, javascript-format
+#~ msgid "Database v%s"
+#~ msgstr "データベース v%s"
+
+#, javascript-format
+#~ msgid "FTS enabled: %d"
+#~ msgstr "FTS有効:  %d"
 
 #~ msgid "Exit"
 #~ msgstr "終了"
@@ -3862,9 +3881,6 @@ msgstr "日時 %s: %s"
 
 #~ msgid "Unknown level ID: %s"
 #~ msgstr "不明なレベルID: %s"
-
-#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
-#~ msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
 
 #~ msgid "Synchronize"
 #~ msgstr "同期"
@@ -3896,9 +3912,6 @@ msgstr "日時 %s: %s"
 #~ msgstr ""
 #~ "このアイテムは現在暗号化されています: %s \"%s\" すべてのアイテムの復号が終"
 #~ "わるまで待ち、もう一度実行してください。"
-
-#~ msgid "Cancelling... Please wait."
-#~ msgstr "中止中...お待ちください。"
 
 #~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
 #~ msgstr "すべてのノートからタグ \"%s\" とその子タグを削除しますか？"
@@ -3945,43 +3958,8 @@ msgstr "日時 %s: %s"
 #~ msgid "Split"
 #~ msgstr "分割ビュー"
 
-#~ msgid "Information"
-#~ msgstr "情報"
-
 #~ msgid "Resources"
 #~ msgstr "リソース一覧"
-
-#~ msgid ""
-#~ "Disabling encryption means *all* your notes and attachments are going to "
-#~ "be re-synchronised and sent unencrypted to the sync target. Do you wish "
-#~ "to continue?"
-#~ msgstr ""
-#~ "暗号化を無効にするとは、*すべて*のノートや添付ファイルを再同期し、同期ター"
-#~ "ゲットに暗号化を解除した状態で送ることを意味します。本当に継続しますか？"
-
-#~ msgid "Master Keys"
-#~ msgstr "マスターキー"
-
-#~ msgid "Active"
-#~ msgstr "アクティブ"
-
-#~ msgid "Source"
-#~ msgstr "ソース"
-
-#~ msgid "Password"
-#~ msgstr "パスワード"
-
-#~ msgid "Password OK"
-#~ msgstr "パスワード OK"
-
-#~ msgid ""
-#~ "Note: Only one master key is going to be used for encryption (the one "
-#~ "marked as \"active\"). Any of the keys might be used for decryption, "
-#~ "depending on how the notes or notebooks were originally encrypted."
-#~ msgstr ""
-#~ "注意：暗号化に使用されるのはその時点で\"アクティブ\"なマスターキーのみで"
-#~ "す。なお、復号時には対象のノートやノートブックを暗号化するときに使ったキー"
-#~ "が使用されます。"
 
 #, fuzzy
 #~ msgid "marked text"
@@ -4000,9 +3978,6 @@ msgstr "日時 %s: %s"
 #~ msgid "Reads in settings from <file>. <file> must contain valid JSON."
 #~ msgstr "<file> からJSON形式の設定を読み込みます。"
 
-#~ msgid "All potential ports are in use - please report the issue at %s"
-#~ msgstr "使用候補のポートはすべて利用中です - 問題を %s に報告してください"
-
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "同期作業はすでに実行中です。状態: %s"
 
@@ -4015,14 +3990,6 @@ msgstr "日時 %s: %s"
 #, fuzzy
 #~ msgid "Missing required argument: note"
 #~ msgstr "引数が足りません：%s"
-
-#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
-#~ msgstr ""
-#~ "ノートの編集を開始します。エディターを閉じると元の画面に戻ることができま"
-#~ "す。"
-
-#~ msgid "Note has been saved."
-#~ msgstr "ノートは保存されました。"
 
 #~ msgid "Synchronisation status"
 #~ msgstr "同期状況"
@@ -4038,12 +4005,6 @@ msgstr "日時 %s: %s"
 
 #~ msgid "Clipper Options"
 #~ msgstr "Clipperのオプション"
-
-#~ msgid ""
-#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
-#~ msgstr ""
-#~ "不明なアイテムタイプをダウンロードしました - 最新のJoplinにアップデートし"
-#~ "てください"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"
@@ -4128,9 +4089,6 @@ msgstr "日時 %s: %s"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "現在のコマンドをキャンセル"
-
-#~ msgid "Exit the application."
-#~ msgstr "アプリケーションを終了する"
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "ToDoを完了/未完に設定"
