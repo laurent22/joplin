@@ -402,7 +402,7 @@ export default class MdToHtml {
 		const markdownIt = new MarkdownIt({
 			breaks: !this.pluginEnabled('softbreaks'),
 			typographer: this.pluginEnabled('typographer'),
-			linkify: true,
+			linkify: this.pluginEnabled('linkify'),
 			html: true,
 			highlight: (str: string, lang: string) => {
 				let outputCodeHtml = '';
@@ -495,7 +495,7 @@ export default class MdToHtml {
 			}
 		}
 
-		setupLinkify(markdownIt);
+		if (this.pluginEnabled('linkify')) setupLinkify(markdownIt);
 
 		const renderedBody = markdownIt.render(body, context);
 
