@@ -100,7 +100,11 @@ FileApiDriverLocal.fsDriver_ = fsDriver;
 
 const logDir = `${__dirname}/../tests/logs`;
 const baseTempDir = `${__dirname}/../tests/tmp/${suiteName_}`;
-const dataDir = `${__dirname}/data/${suiteName_}`;
+
+// We add a space in the data directory path as that will help uncover
+// various space-in-path issues.
+const dataDir = `${__dirname}/test data/${suiteName_}`;
+
 fs.mkdirpSync(logDir, 0o755);
 fs.mkdirpSync(baseTempDir, 0o755);
 fs.mkdirpSync(dataDir);
@@ -300,6 +304,11 @@ async function setupDatabase(id: number = null, options: any = null) {
 
 	BaseModel.setDb(databases_[id]);
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+}
+
+function exportDir(id: number = null) {
+	if (id === null) id = currentClient_;
+	return `${dataDir}/export`;
 }
 
 function resourceDirName(id: number = null) {
@@ -783,4 +792,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

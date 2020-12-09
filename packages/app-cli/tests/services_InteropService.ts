@@ -2,18 +2,13 @@ import InteropService from '@joplin/lib/services/interop/InteropService';
 import { CustomExportContext, CustomImportContext, Module, ModuleType } from '@joplin/lib/services/interop/types';
 import shim from '@joplin/lib/shim';
 
-
-const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const Tag = require('@joplin/lib/models/Tag.js');
 const Resource = require('@joplin/lib/models/Resource.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('@joplin/lib/ArrayUtils');
-
-function exportDir() {
-	return `${__dirname}/export`;
-}
 
 async function recreateExportDir() {
 	const dir = exportDir();

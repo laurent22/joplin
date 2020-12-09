@@ -899,6 +899,9 @@ packages/lib/errorUtils.js.map
 packages/lib/eventManager.d.ts
 packages/lib/eventManager.js
 packages/lib/eventManager.js.map
+packages/lib/fs-driver-base.d.ts
+packages/lib/fs-driver-base.js
+packages/lib/fs-driver-base.js.map
 packages/lib/fs-driver-node.d.ts
 packages/lib/fs-driver-node.js
 packages/lib/fs-driver-node.js.map
