@@ -3,12 +3,12 @@ import linkReplacement from './linkReplacement';
 describe('linkReplacement', () => {
 
 	test('should handle non-resource links', () => {
-		const r = linkReplacement('https://example.com/test');
+		const r = linkReplacement('https://example.com/test').html;
 		expect(r).toBe('<a data-from-md href=\'https://example.com/test\' onclick=\'postMessage("https://example.com/test", { resourceId: "" }); return false;\'>');
 	});
 
 	test('should handle non-resource links - simple rendering', () => {
-		const r = linkReplacement('https://example.com/test', { linkRenderingType: 2 });
+		const r = linkReplacement('https://example.com/test', { linkRenderingType: 2 }).html;
 		expect(r).toBe('<a data-from-md href=\'https://example.com/test\'>');
 	});
 
@@ -25,7 +25,7 @@ describe('linkReplacement', () => {
 					},
 				},
 			},
-		});
+		}).html;
 
 		expect(r).toBe(`<a data-from-md data-resource-id='${resourceId}' href='#' onclick='postMessage("joplin://${resourceId}", { resourceId: "${resourceId}" }); return false;'><span class="resource-icon fa-joplin"></span>`);
 	});
@@ -43,7 +43,7 @@ describe('linkReplacement', () => {
 					},
 				},
 			},
-		});
+		}).html;
 
 		// Since the icon is embedded as SVG, we only check for the prefix
 		const expectedPrefix = `<a class="not-loaded-resource resource-status-notDownloaded" data-resource-id="${resourceId}"><img src="data:image/svg+xml;utf8`;

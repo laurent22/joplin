@@ -32,6 +32,7 @@ const rules: RendererRules = {
 	checkbox: require('./MdToHtml/rules/checkbox').default,
 	katex: require('./MdToHtml/rules/katex').default,
 	link_open: require('./MdToHtml/rules/link_open').default,
+	link_close: require('./MdToHtml/rules/link_close').default,
 	html_image: require('./MdToHtml/rules/html_image').default,
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords').default,
 	code_inline: require('./MdToHtml/rules/code_inline').default,
@@ -96,11 +97,19 @@ interface PluginAssets {
 	[pluginName: string]: PluginAsset[];
 }
 
+export interface Link {
+	href: string;
+	resource: any;
+	resourceReady: boolean;
+	resourceFullPath: string;
+}
+
 interface PluginContext {
 	css: any;
 	pluginAssets: any;
 	cache: any;
 	userData: any;
+	currentLinks: Link[];
 }
 
 interface RenderResultPluginAsset {
@@ -201,10 +210,16 @@ export default class MdToHtml {
 	}
 
 	private pluginOptions(name: string) {
+		// Currently link_close is only used to append the media player to
+		// the resource links so we use the mediaPlayers plugin options for
+		// it.
+		if (name === 'link_close') name = 'mediaPlayers';
+
 		let o = this.pluginOptions_[name] ? this.pluginOptions_[name] : {};
 		o = Object.assign({
 			enabled: true,
 		}, o);
+
 		return o;
 	}
 
@@ -373,6 +388,7 @@ export default class MdToHtml {
 			pluginAssets: {},
 			cache: this.contextCache_,
 			userData: {},
+			currentLinks: [],
 		};
 
 		const markdownIt = new MarkdownIt({

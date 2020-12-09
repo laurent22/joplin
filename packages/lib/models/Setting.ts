@@ -596,6 +596,7 @@ class Setting extends BaseModel {
 			'markdown.plugin.fountain': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
 			'markdown.plugin.mermaid': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
 
+			'markdown.plugin.mediaPlayers': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable media players')}${wysiwygNo}` },
 			'markdown.plugin.mark': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
 			'markdown.plugin.footnote': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
 			'markdown.plugin.toc': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
