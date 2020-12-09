@@ -71,6 +71,7 @@
 								<li class="tsd-kind-enum"><a href="enums/contentscripttype.html" class="tsd-kind-icon">Content<wbr>Script<wbr>Type</a></li>
 								<li class="tsd-kind-enum"><a href="enums/filesystemitem.html" class="tsd-kind-icon">File<wbr>System<wbr>Item</a></li>
 								<li class="tsd-kind-enum"><a href="enums/importmoduleoutputformat.html" class="tsd-kind-icon">Import<wbr>Module<wbr>Output<wbr>Format</a></li>
+								<li class="tsd-kind-enum"><a href="enums/itemchangeeventtype.html" class="tsd-kind-icon">Item<wbr>Change<wbr>Event<wbr>Type</a></li>
 								<li class="tsd-kind-enum"><a href="enums/menuitemlocation.html" class="tsd-kind-icon">Menu<wbr>Item<wbr>Location</a></li>
 								<li class="tsd-kind-enum"><a href="enums/settingitemtype.html" class="tsd-kind-icon">Setting<wbr>Item<wbr>Type</a></li>
 								<li class="tsd-kind-enum"><a href="enums/toolbarbuttonlocation.html" class="tsd-kind-icon">Toolbar<wbr>Button<wbr>Location</a></li>
@@ -101,23 +102,28 @@
 								<li class="tsd-kind-interface"><a href="interfaces/command.html" class="tsd-kind-icon">Command</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/createmenuitemoptions.html" class="tsd-kind-icon">Create<wbr>Menu<wbr>Item<wbr>Options</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/dialogresult.html" class="tsd-kind-icon">Dialog<wbr>Result</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/disposable.html" class="tsd-kind-icon">Disposable</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/editorcommand.html" class="tsd-kind-icon">Editor<wbr>Command</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/exportcontext.html" class="tsd-kind-icon">Export<wbr>Context</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/exportmodule.html" class="tsd-kind-icon">Export<wbr>Module</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/exportoptions.html" class="tsd-kind-icon">Export<wbr>Options</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/importcontext.html" class="tsd-kind-icon">Import<wbr>Context</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/importmodule.html" class="tsd-kind-icon">Import<wbr>Module</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/itemchangeevent.html" class="tsd-kind-icon">Item<wbr>Change<wbr>Event</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/menuitem.html" class="tsd-kind-icon">Menu<wbr>Item</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/script.html" class="tsd-kind-icon">Script</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/settingitem.html" class="tsd-kind-icon">Setting<wbr>Item</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/settingsection.html" class="tsd-kind-icon">Setting<wbr>Section</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/syncstartevent.html" class="tsd-kind-icon">Sync<wbr>Start<wbr>Event</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias"><a href="globals.html#buttonid" class="tsd-kind-icon">Button<wbr>Id</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#itemchangehandler" class="tsd-kind-icon">Item<wbr>Change<wbr>Handler</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#path" class="tsd-kind-icon">Path</a></li>
+								<li class="tsd-kind-type-alias"><a href="globals.html#syncstarthandler" class="tsd-kind-icon">Sync<wbr>Start<wbr>Handler</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#viewhandle" class="tsd-kind-icon">View<wbr>Handle</a></li>
 							</ul>
 						</section>
@@ -140,6 +146,38 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="itemchangehandler" class="tsd-anchor"></a>
+					<h3>Item<wbr>Change<wbr>Handler</h3>
+					<div class="tsd-signature tsd-kind-icon">Item<wbr>Change<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><a href="interfaces/itemchangeevent.html" class="tsd-signature-type">ItemChangeEvent</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><a href="interfaces/itemchangeevent.html" class="tsd-signature-type">ItemChangeEvent</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>event: <a href="interfaces/itemchangeevent.html" class="tsd-signature-type">ItemChangeEvent</a></h5>
+											</li>
+										</ul>
+										<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+
+
+-->
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="path" class="tsd-anchor"></a>
 					<h3>Path</h3>
 					<div class="tsd-signature tsd-kind-icon">Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
@@ -152,6 +190,38 @@
 						<p>[0]: Resource name (eg. &quot;notes&quot;, &quot;folders&quot;, &quot;tags&quot;, etc.)
 							[1]: (Optional) Resource ID.
 						[2]: (Optional) Resource link.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="syncstarthandler" class="tsd-anchor"></a>
+					<h3>Sync<wbr>Start<wbr>Handler</h3>
+					<div class="tsd-signature tsd-kind-icon">Sync<wbr>Start<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><a href="interfaces/syncstartevent.html" class="tsd-signature-type">SyncStartEvent</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><a href="interfaces/syncstartevent.html" class="tsd-signature-type">SyncStartEvent</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>event: <a href="interfaces/syncstartevent.html" class="tsd-signature-type">SyncStartEvent</a></h5>
+											</li>
+										</ul>
+										<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+
+
+-->
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
@@ -193,6 +263,9 @@
 					</li>
 					<li class=" tsd-kind-enum">
 						<a href="enums/importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/itemchangeeventtype.html" class="tsd-kind-icon">ItemChangeEventType</a>
 					</li>
 					<li class=" tsd-kind-enum">
 						<a href="enums/menuitemlocation.html" class="tsd-kind-icon">MenuItemLocation</a>
@@ -255,6 +328,9 @@
 						<a href="interfaces/dialogresult.html" class="tsd-kind-icon">DialogResult</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/disposable.html" class="tsd-kind-icon">Disposable</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -273,6 +349,9 @@
 						<a href="interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/itemchangeevent.html" class="tsd-kind-icon">ItemChangeEvent</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/menuitem.html" class="tsd-kind-icon">MenuItem</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -284,11 +363,20 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
 					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/syncstartevent.html" class="tsd-kind-icon">SyncStartEvent</a>
+					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#itemchangehandler" class="tsd-kind-icon">ItemChangeHandler</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#path" class="tsd-kind-icon">Path</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#syncstarthandler" class="tsd-kind-icon">SyncStartHandler</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>
