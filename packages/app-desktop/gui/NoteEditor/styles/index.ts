@@ -33,8 +33,15 @@ export default function styles(props: NoteEditorProps) {
 				fontFamily: theme.fontFamily,
 				padding: 10,
 				fontSize: theme.fontSize,
+				lineHeight: '1.6em',
 				marginTop: 5,
 				marginBottom: 5,
+			},
+			warningBannerLink: {
+				color: theme.color,
+				fontFamily: theme.fontFamily,
+				fontSize: theme.fontSize,
+				fontWeight: 'bold',
 			},
 			tinyMCE: {
 				width: '100%',

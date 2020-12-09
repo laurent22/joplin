@@ -350,6 +350,8 @@ class Setting extends BaseModel {
 			// to the last folder that was selected.
 			activeFolderId: { value: '', type: SettingItemType.String, public: false },
 
+			richTextBannerDismissed: { value: false, type: SettingItemType.Bool, public: false },
+
 			firstStart: { value: true, type: SettingItemType.Bool, public: false },
 			locale: {
 				value: defaultLocale(),
