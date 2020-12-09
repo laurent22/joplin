@@ -15,14 +15,6 @@ interface UseSourceResult {
 	injectedJs: string[];
 }
 
-let markupToHtml_: any = null;
-
-function markupToHtml() {
-	if (markupToHtml_) return markupToHtml_;
-	markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
-	return markupToHtml_;
-}
-
 function usePrevious(value: any, initialValue: any = null): any {
 	const ref = useRef(initialValue);
 	useEffect(() => {
@@ -45,6 +37,10 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 		};
 	}, [themeId, paddingBottom]);
 
+	const markupToHtml = useMemo(() => {
+		return markupLanguageUtils.newMarkupToHtml();
+	}, [isFirstRender]);
+
 	// To address https://github.com/laurent22/joplin/issues/433
 	//
 	// If a checkbox in a note is ticked, the body changes, which normally
@@ -58,7 +54,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 	//
 	// IMPORTANT: KEEP noteBody AS THE FIRST dependency in the array as the
 	// below logic rely on this.
-	const effectDependencies = [noteBody, resourceLoadedTime, noteMarkupLanguage, themeId, rendererTheme, highlightedKeywords, noteResources, noteHash, isFirstRender];
+	const effectDependencies = [noteBody, resourceLoadedTime, noteMarkupLanguage, themeId, rendererTheme, highlightedKeywords, noteResources, noteHash, isFirstRender, markupToHtml];
 	const previousDeps = usePrevious(effectDependencies, []);
 	const changedDeps = effectDependencies.reduce((accum: any, dependency: any, index: any) => {
 		if (dependency !== previousDeps[index]) {
@@ -94,9 +90,9 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 			// it doesn't contain info about the resource download state. Because of that, if we were to use the markupToHtml() cache
 			// it wouldn't re-render at all. We don't need this cache in any way because this hook is only triggered when we know
 			// something has changed.
-			markupToHtml().clearCache(noteMarkupLanguage);
+			markupToHtml.clearCache(noteMarkupLanguage);
 
-			const result = await markupToHtml().render(
+			const result = await markupToHtml.render(
 				noteMarkupLanguage,
 				bodyToRender,
 				rendererTheme,

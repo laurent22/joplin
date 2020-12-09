@@ -151,6 +151,10 @@ export interface RuleOptions {
 	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
 	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
 	linkRenderingType?: number;
+
+	audioPlayerEnabled: boolean;
+	videoPlayerEnabled: boolean;
+	pdfViewerEnabled: boolean;
 }
 
 export default class MdToHtml {
@@ -363,6 +367,10 @@ export default class MdToHtml {
 			codeTheme: 'atom-one-light.css',
 			theme: Object.assign({}, defaultNoteStyle, theme),
 			plugins: {},
+
+			audioPlayerEnabled: this.pluginEnabled('audioPlayer'),
+			videoPlayerEnabled: this.pluginEnabled('videoPlayer'),
+			pdfViewerEnabled: this.pluginEnabled('pdfViewer'),
 		}, options);
 
 		// The "codeHighlightCacheKey" option indicates what set of cached object should be

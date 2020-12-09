@@ -2,7 +2,7 @@
 // the link.
 
 import { RuleOptions } from '../../MdToHtml';
-import renderMedia from '../renderMedia';
+import renderMedia, { Options as RenderMediaOptions } from '../renderMedia';
 
 function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.link_close || function(tokens: any, idx: any, options: any, _env: any, self: any) {
@@ -15,7 +15,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 
 		if (!link || ruleOptions.linkRenderingType === 2 || ruleOptions.plainResourceRendering) return defaultOutput;
 
-		return [defaultOutput, renderMedia(link)].join('');
+		return [defaultOutput, renderMedia(link, ruleOptions as RenderMediaOptions)].join('');
 	};
 }
 
