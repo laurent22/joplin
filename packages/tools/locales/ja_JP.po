@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -119,9 +121,8 @@ msgid "New version: %s"
 msgstr "新バージョン: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "ダウンロード済み"
+msgstr "ダウンロード"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -594,9 +595,8 @@ msgid "Options"
 msgstr "オプション"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "無効な %s: %s"
+msgstr "無効"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -671,6 +671,7 @@ msgstr "詳細情報"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:527
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"矢印を使ってレイアウトアイテムを移動してください。\"Esc\" で終了します。"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -738,9 +739,8 @@ msgid "Toggle editors"
 msgstr "エディターの切り替え"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
-#, fuzzy
 msgid "Change application layout"
-msgstr "アプリケーションを終了する"
+msgstr "画面レイアウトをカスタマイズ"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -757,7 +757,7 @@ msgstr "ノートブックの題名："
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "スペルチェッカー"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -979,7 +979,7 @@ msgstr "ズームアウト"
 
 #: packages/app-desktop/gui/MenuBar.js:533
 msgid "&Go"
-msgstr ""
+msgstr "移動(&G)"
 
 #: packages/app-desktop/gui/MenuBar.js:545
 msgid "&Note"
@@ -1181,13 +1181,12 @@ msgstr ""
 "重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "暗号化"
+msgstr "再暗号化"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "無視"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1361,7 +1360,7 @@ msgstr "参照..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "変更を反映するにはアプリケーションを再起動する必要があります。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1370,25 +1369,24 @@ msgstr "今すぐ実行"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 msgid "Later"
-msgstr ""
+msgstr "あとで"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
-msgstr "今すぐ取得:"
+msgstr "今すぐ再起動"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "適用"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "ノート \"%s\" を削除しますか？"
+msgstr "プラグイン \"%s\" を削除しますか？"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "プラグインのインストール"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1577,9 +1575,8 @@ msgid "Error opening note in editor: %s"
 msgstr "次のエディターで開く際にエラー: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "テンプレートディレクトリを開く"
+msgstr "プロファイルディレクトリを開く"
 
 #: packages/app-desktop/app.js:336
 #, javascript-format
@@ -2372,9 +2369,8 @@ msgstr ""
 "ントが使用されます。"
 
 #: packages/lib/models/Setting.js:609
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "カスタムスタイルシート (アプリ全般の外観調整用)"
+msgstr "カスタムスタイルシート (Markdownビューアー)"
 
 #: packages/lib/models/Setting.js:625
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -3144,20 +3140,19 @@ msgstr "日時 %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "修正候補なし"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "辞書に追加"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "スペルチェッカーを使う"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "言語"
+msgstr "言語の切り替え"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3413,11 +3408,10 @@ msgid "Downloading resources..."
 msgstr "リソースをダウンロード中..."
 
 #: packages/app-cli/app/command-sync.js:242
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
-"同期先をアップグレードする必要があります。アップグレードするにはバナーをク"
-"リックしてください。"
+"同期先のアップグレードが必要です。続行するには `%s` を実行してください。"
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
