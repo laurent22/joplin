@@ -227,6 +227,9 @@ rules.inlineLink = {
 
   replacement: function (content, node, options) {
     var href = filterLinkHref(node.getAttribute('href'))
+
+    console.info('RRRRRRRR', href);
+
     if (!href) {
       return getNamedAnchorFromLink(node, options) + filterLinkContent(content)
     } else {
