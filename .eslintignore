@@ -1330,6 +1330,9 @@ packages/renderer/MdToHtml/linkReplacement.js.map
 packages/renderer/MdToHtml/linkReplacement.test.d.ts
 packages/renderer/MdToHtml/linkReplacement.test.js
 packages/renderer/MdToHtml/linkReplacement.test.js.map
+packages/renderer/MdToHtml/renderMedia.d.ts
+packages/renderer/MdToHtml/renderMedia.js
+packages/renderer/MdToHtml/renderMedia.js.map
 packages/renderer/MdToHtml/rules/checkbox.d.ts
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/checkbox.js.map
@@ -1354,6 +1357,9 @@ packages/renderer/MdToHtml/rules/image.js.map
 packages/renderer/MdToHtml/rules/katex.d.ts
 packages/renderer/MdToHtml/rules/katex.js
 packages/renderer/MdToHtml/rules/katex.js.map
+packages/renderer/MdToHtml/rules/link_close.d.ts
+packages/renderer/MdToHtml/rules/link_close.js
+packages/renderer/MdToHtml/rules/link_close.js.map
 packages/renderer/MdToHtml/rules/link_open.d.ts
 packages/renderer/MdToHtml/rules/link_open.js
 packages/renderer/MdToHtml/rules/link_open.js.map

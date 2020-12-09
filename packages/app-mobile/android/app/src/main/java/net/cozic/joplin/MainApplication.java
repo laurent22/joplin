@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import net.cozic.joplin.share.SharePackage;
+import android.webkit.WebView;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -68,6 +69,15 @@ public class MainApplication extends Application implements ReactApplication {
     
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+
+    // To allow debugging the webview using the Chrome developer tools.
+    // Open chrome://inspect/#devices to view the device and connect to it
+    // IMPORTANT: USB debugging must be enabled on the device for it to work.
+    // https://github.com/react-native-webview/react-native-webview/blob/master/docs/Debugging.md
+
+    if (BuildConfig.DEBUG) {
+      WebView.setWebContentsDebuggingEnabled(true);
+    }
   }
 
   /**

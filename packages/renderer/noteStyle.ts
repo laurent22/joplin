@@ -333,6 +333,15 @@ export default function(theme: any) {
 			pointer-events: none;
 		}
 
+		.media-player {
+			width: 100%;
+			margin-top: 10px;
+		}
+
+		.media-player.media-pdf {
+			min-height: 100vh;
+		}
+
 		/* Clear the CODE style if the element is within a joplin-editable block */
 		.mce-content-body .joplin-editable code {
 			border: none;
