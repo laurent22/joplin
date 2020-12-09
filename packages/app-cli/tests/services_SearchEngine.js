@@ -518,7 +518,10 @@ describe('services_SearchEngine', function() {
 
 		await engine.syncTables();
 
+		expect((await engine.search('n')).length).toBe(1);
 		expect((await engine.search('n'))[0].id).toBe(n1.id);
+
+		expect((await engine.search('л')).length).toBe(1);
 		expect((await engine.search('л'))[0].id).toBe(n2.id);
 	}));
 });
