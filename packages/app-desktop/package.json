@@ -5,7 +5,7 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "dist": "npm run electronRebuild && node_modules/.bin/electron-builder",
+    "dist": "npm run electronRebuild && npx electron-builder",
     "build": "gulp build",
     "postinstall": "npm run build",
     "electronRebuild": "gulp electronRebuild",
