@@ -682,9 +682,6 @@ packages/app-desktop/gui/ToolbarButton/styles/index.js.map
 packages/app-desktop/gui/dialogs.d.ts
 packages/app-desktop/gui/dialogs.js
 packages/app-desktop/gui/dialogs.js.map
-packages/app-desktop/gui/editorCommandNames.d.ts
-packages/app-desktop/gui/editorCommandNames.js
-packages/app-desktop/gui/editorCommandNames.js.map
 packages/app-desktop/gui/hooks/useEffectDebugger.d.ts
 packages/app-desktop/gui/hooks/useEffectDebugger.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js.map

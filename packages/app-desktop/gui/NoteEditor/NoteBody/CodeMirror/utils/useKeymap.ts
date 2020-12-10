@@ -37,11 +37,11 @@ export default function useKeymap(CodeMirror: any) {
 
 	// CodeMirror and Electron register accelerators slightly different
 	// CodeMirror requires a - between keys while Electron want's a +
-	// CodeMirror doesn't recognize Opt (it uses Alt instead)
+	// CodeMirror doesn't recognize Option (it uses Alt instead)
 	// This function uses simple regex to translate the Electron
 	// accelerator to a CodeMirror accelerator
 	function normalizeAccelerator(accelerator: String) {
-		return accelerator.replace(/\+/g, '-').replace('Opt', 'Alt');
+		return accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
 	}
 
 	// Because there is sometimes a clash between these keybindings and the Joplin window ones
@@ -131,7 +131,15 @@ export default function useKeymap(CodeMirror: any) {
 			'Shift-Ctrl-Z': 'redo',
 			'Ctrl-Y': 'redo',
 			'Ctrl-Up': 'goLineUp',
-			'Ctrl-Down': 'goLineDown',
+			'Ctrl-Down': 'go,ineDown',
+			'Ctrl+Home': 'goDocStart',
+			'Ctrl+End': 'goDocEnd',
+			'Ctrl+Left': 'goGroupLeft',
+			'Ctrl+Right': 'goGroupRight',
+			'Alt+Left': 'goLineStart',
+			'Alt+Right': 'goLineEnd',
+			'Ctrl+Backspace': 'delGroupBefore',
+			'Ctrl+Delete': 'delGroupAfter',
 
 			'fallthrough': 'basic',
 		};
@@ -144,6 +152,15 @@ export default function useKeymap(CodeMirror: any) {
 				'Cmd-Down': 'goDocEnd',
 				'Cmd-Home': 'goDocStart',
 				'Cmd-Up': 'goDocStart',
+				'Ctrl-D': 'delCharAfter',
+				'Cmd+Home': 'goDocStart',
+				'Cmd+End': 'goDocEnd',
+				'Cmd+Left': 'goGroupLeft',
+				'Cmd+Right': 'goGroupRight',
+				'Ctrl+A': 'goLineStart',
+				'Ctrl+E': 'goLineEnd',
+				'Alt+Backspace': 'delGroupBefore',
+				'Alt+Delete': 'delGroupAfter',
 
 				'fallthrough': 'basic',
 			};
