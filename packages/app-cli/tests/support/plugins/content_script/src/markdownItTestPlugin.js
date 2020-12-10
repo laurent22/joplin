@@ -6,7 +6,7 @@ function plugin(markdownIt, _options) {
 	markdownIt.renderer.rules.fence = function(tokens, idx, options, env, self) {
 		const token = tokens[idx];
 		if (token.info !== 'justtesting') return defaultRender(tokens, idx, options, env, self);
-		return `JUST TESTING: ${token.content}`;
+		return `<div class="just-testing">JUST TESTING: ${token.content}</div>`;
 	};
 }
 
@@ -14,6 +14,11 @@ module.exports = {
 	default: function(_context) { 
 		return {
 			plugin: plugin,
+			assets: function() {
+				return [
+					{ name: 'markdownItTestPlugin.css' }
+				];
+			},
 		}
 	},
 }

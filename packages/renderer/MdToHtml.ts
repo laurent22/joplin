@@ -9,6 +9,7 @@ interface RendererRule {
 	install(context: any, ruleOptions: any): any;
 	assets?(theme: any): any;
 	plugin?: any;
+	assetPath?: string;
 }
 
 interface RendererRules {
@@ -197,7 +198,7 @@ export default class MdToHtml {
 
 		if (options.extraRendererRules) {
 			for (const rule of options.extraRendererRules) {
-				this.loadExtraRendererRule(rule.id, rule.module);
+				this.loadExtraRendererRule(rule.id, rule.assetPath, rule.module);
 			}
 		}
 	}
@@ -232,15 +233,28 @@ export default class MdToHtml {
 	}
 
 	// `module` is a file that has already been `required()`
-	public loadExtraRendererRule(id: string, module: any) {
+	public loadExtraRendererRule(id: string, assetPath: string, module: any) {
 		if (this.extraRendererRules_[id]) throw new Error(`A renderer rule with this ID has already been loaded: ${id}`);
-		this.extraRendererRules_[id] = module;
+		this.extraRendererRules_[id] = {
+			...module,
+			assetPath,
+		};
+	}
+
+	private ruleByKey(key: string): RendererRule {
+		if (rules[key]) return rules[key];
+		if (this.extraRendererRules_[key]) return this.extraRendererRules_[key];
+		if (key === 'highlight.js') return null;
+		throw new Error(`No such rule: ${key}`);
 	}
 
 	private processPluginAssets(pluginAssets: PluginAssets): RenderResult {
 		const files: RenderResultPluginAsset[] = [];
 		const cssStrings = [];
 		for (const pluginName in pluginAssets) {
+
+			const rule = this.ruleByKey(pluginName);
+
 			for (const asset of pluginAssets[pluginName]) {
 				let mime = asset.mime;
 
@@ -263,10 +277,18 @@ export default class MdToHtml {
 						throw new Error(`Unsupported inline mime type: ${mime}`);
 					}
 				} else {
+					// TODO: we should resolve the path using
+					// resolveRelativePathWithinDir() for increased
+					// security, but the shim is not accessible from the
+					// renderer, and React Native doesn't have this
+					// function, so for now use the provided path as-is.
+
 					const name = `${pluginName}/${asset.name}`;
+					const assetPath = rule?.assetPath ? `${rule.assetPath}/${asset.name}` : `pluginAssets/${name}`;
+
 					files.push(Object.assign({}, asset, {
 						name: name,
-						path: `pluginAssets/${name}`,
+						path: assetPath,
 						mime: mime,
 					}));
 				}
@@ -282,7 +304,7 @@ export default class MdToHtml {
 
 	// This return all the assets for all the plugins. Since it is called
 	// on each render, the result is cached.
-	private allProcessedAssets(theme: any, codeTheme: string) {
+	private allProcessedAssets(rules: RendererRules, theme: any, codeTheme: string) {
 		const cacheKey: string = theme.cacheKey + codeTheme;
 
 		if (this.allProcessedAssets_[cacheKey]) return this.allProcessedAssets_[cacheKey];
@@ -501,7 +523,7 @@ export default class MdToHtml {
 
 		let cssStrings = noteStyle(options.theme);
 
-		let output = { ...this.allProcessedAssets(options.theme, options.codeTheme) };
+		let output = { ...this.allProcessedAssets(allRules, options.theme, options.codeTheme) };
 		cssStrings = cssStrings.concat(output.cssStrings);
 
 		if (options.userCss) cssStrings.push(options.userCss);
