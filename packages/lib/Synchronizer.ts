@@ -121,6 +121,10 @@ export default class Synchronizer {
 		}
 	}
 
+	private static reportHasErrors(report: any): boolean {
+		return !!report && !!report.errors && !!report.errors.length;
+	}
+
 	static reportToLines(report: any) {
 		const lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
@@ -132,7 +136,7 @@ export default class Synchronizer {
 		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
 		if (report.completedTime) lines.push(_('Completed: %s', time.formatMsToLocal(report.completedTime)));
-		if (report.errors && report.errors.length) lines.push(_('Last error: %s', report.errors[report.errors.length - 1].toString().substr(0, 500)));
+		if (this.reportHasErrors(report)) lines.push(_('Last error: %s', report.errors[report.errors.length - 1].toString().substr(0, 500)));
 
 		return lines;
 	}
@@ -193,7 +197,7 @@ export default class Synchronizer {
 		this.logger().info(`Total notes: ${noteCount}`);
 		this.logger().info(`Total resources: ${resourceCount}`);
 
-		if (report.errors && report.errors.length) {
+		if (Synchronizer.reportHasErrors(report)) {
 			this.logger().warn('There was some errors:');
 			for (let i = 0; i < report.errors.length; i++) {
 				const e = report.errors[i];
@@ -315,6 +319,7 @@ export default class Synchronizer {
 		const outputContext = Object.assign({}, lastContext);
 
 		this.dispatch({ type: 'SYNC_STARTED' });
+		eventManager.emit('syncStart');
 
 		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... [${synchronizationId}]`);
 
@@ -899,11 +904,14 @@ export default class Synchronizer {
 
 		await this.logSyncSummary(this.progressReport_);
 
+		eventManager.emit('syncComplete', {
+			withErrors: Synchronizer.reportHasErrors(this.progressReport_),
+		});
+
 		this.onProgress_ = function() {};
 		this.progressReport_ = {};
 
 		this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
-		eventManager.emit('syncComplete');
 
 		this.state_ = 'idle';
 

@@ -59,6 +59,9 @@ packages/app-cli/app/services/plugins/PluginRunner.js.map
 packages/app-cli/tests/EnexToMd.d.ts
 packages/app-cli/tests/EnexToMd.js
 packages/app-cli/tests/EnexToMd.js.map
+packages/app-cli/tests/HtmlToMd.d.ts
+packages/app-cli/tests/HtmlToMd.js
+packages/app-cli/tests/HtmlToMd.js.map
 packages/app-cli/tests/InMemoryCache.d.ts
 packages/app-cli/tests/InMemoryCache.js
 packages/app-cli/tests/InMemoryCache.js.map
@@ -95,6 +98,9 @@ packages/app-cli/tests/models_Note.js.map
 packages/app-cli/tests/models_Setting.d.ts
 packages/app-cli/tests/models_Setting.js
 packages/app-cli/tests/models_Setting.js.map
+packages/app-cli/tests/services/plugins/api/JoplinViewMenuItem.d.ts
+packages/app-cli/tests/services/plugins/api/JoplinViewMenuItem.js
+packages/app-cli/tests/services/plugins/api/JoplinViewMenuItem.js.map
 packages/app-cli/tests/services/plugins/api/JoplinWorkspace.d.ts
 packages/app-cli/tests/services/plugins/api/JoplinWorkspace.js
 packages/app-cli/tests/services/plugins/api/JoplinWorkspace.js.map
@@ -254,6 +260,9 @@ packages/app-cli/tests/synchronizer_MigrationHandler.js.map
 packages/app-cli/tests/test-utils-synchronizer.d.ts
 packages/app-cli/tests/test-utils-synchronizer.js
 packages/app-cli/tests/test-utils-synchronizer.js.map
+packages/app-cli/tests/test-utils.d.ts
+packages/app-cli/tests/test-utils.js
+packages/app-cli/tests/test-utils.js.map
 packages/app-desktop/ElectronAppWrapper.d.ts
 packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/ElectronAppWrapper.js.map
@@ -893,6 +902,9 @@ packages/lib/errorUtils.js.map
 packages/lib/eventManager.d.ts
 packages/lib/eventManager.js
 packages/lib/eventManager.js.map
+packages/lib/fs-driver-base.d.ts
+packages/lib/fs-driver-base.js
+packages/lib/fs-driver-base.js.map
 packages/lib/fs-driver-node.d.ts
 packages/lib/fs-driver-node.js
 packages/lib/fs-driver-node.js.map
@@ -950,6 +962,12 @@ packages/lib/services/ExternalEditWatcher.js.map
 packages/lib/services/KeymapService.d.ts
 packages/lib/services/KeymapService.js
 packages/lib/services/KeymapService.js.map
+packages/lib/services/KeymapService_keycodeToElectronMap.d.ts
+packages/lib/services/KeymapService_keycodeToElectronMap.js
+packages/lib/services/KeymapService_keycodeToElectronMap.js.map
+packages/lib/services/KeymapService_keysRegExp.d.ts
+packages/lib/services/KeymapService_keysRegExp.js
+packages/lib/services/KeymapService_keysRegExp.js.map
 packages/lib/services/KvStore.d.ts
 packages/lib/services/KvStore.js
 packages/lib/services/KvStore.js.map
@@ -1301,6 +1319,9 @@ packages/renderer/MdToHtml/linkReplacement.js.map
 packages/renderer/MdToHtml/linkReplacement.test.d.ts
 packages/renderer/MdToHtml/linkReplacement.test.js
 packages/renderer/MdToHtml/linkReplacement.test.js.map
+packages/renderer/MdToHtml/renderMedia.d.ts
+packages/renderer/MdToHtml/renderMedia.js
+packages/renderer/MdToHtml/renderMedia.js.map
 packages/renderer/MdToHtml/rules/checkbox.d.ts
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/checkbox.js.map
@@ -1325,6 +1346,9 @@ packages/renderer/MdToHtml/rules/image.js.map
 packages/renderer/MdToHtml/rules/katex.d.ts
 packages/renderer/MdToHtml/rules/katex.js
 packages/renderer/MdToHtml/rules/katex.js.map
+packages/renderer/MdToHtml/rules/link_close.d.ts
+packages/renderer/MdToHtml/rules/link_close.js
+packages/renderer/MdToHtml/rules/link_close.js.map
 packages/renderer/MdToHtml/rules/link_open.d.ts
 packages/renderer/MdToHtml/rules/link_open.js
 packages/renderer/MdToHtml/rules/link_open.js.map

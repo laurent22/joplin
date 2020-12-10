@@ -1,8 +1,8 @@
 import { resolve as nodeResolve } from 'path';
+import FsDriverBase, { Stat } from './fs-driver-base';
+import time from './time';
 
 const fs = require('fs-extra');
-const time = require('./time').default;
-const FsDriverBase = require('./fs-driver-base');
 
 export default class FsDriverNode extends FsDriverBase {
 
@@ -125,7 +125,7 @@ export default class FsDriverNode extends FsDriverBase {
 			throw this.fsErrorToJsError_(error);
 		}
 
-		let output = [];
+		let output: Stat[] = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
 			const stat = await this.stat(`${path}/${item}`);

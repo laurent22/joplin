@@ -1,24 +1,15 @@
-/* eslint-disable no-unused-vars */
-
-
+import shim from '@joplin/lib/shim';
 const os = require('os');
-const time = require('@joplin/lib/time').default;
 const { filename } = require('@joplin/lib/path-utils');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const shim = require('@joplin/lib/shim').default;
 const HtmlToMd = require('@joplin/lib/HtmlToMd');
-const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 
 describe('HtmlToMd', function() {
 
-	beforeEach(async (done) => {
-		await setupDatabaseAndSynchronizer(1);
-		await switchClient(1);
-		done();
-	});
+	// beforeEach(async (done) => {
+	// 	await setupDatabaseAndSynchronizer(1);
+	// 	await switchClient(1);
+	// 	done();
+	// });
 
 	it('should convert from Html to Markdown', (async () => {
 		const basePath = `${__dirname}/html_to_md`;
@@ -32,11 +23,11 @@ describe('HtmlToMd', function() {
 			const htmlPath = `${basePath}/${htmlFilename}`;
 			const mdPath = `${basePath}/${filename(htmlFilename)}.md`;
 
-			// if (htmlFilename !== 'code_3.html') continue;
+			// if (htmlFilename !== 'anchor_same_title_and_url.html') continue;
 
 			// if (htmlFilename.indexOf('image_preserve_size') !== 0) continue;
 
-			const htmlToMdOptions = {};
+			const htmlToMdOptions: any = {};
 
 			if (htmlFilename === 'anchor_local.html') {
 				// Normally the list of anchor names in the document are retrieved from the HTML code
@@ -66,14 +57,13 @@ describe('HtmlToMd', function() {
 				result.push('');
 				result.push(`Error converting file: ${htmlFilename}`);
 				result.push('--------------------------------- Got:');
-				result.push(actualMd.split('\n').map(l => `"${l}"`).join('\n'));
+				result.push(actualMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
 				result.push('--------------------------------- Expected:');
-				result.push(expectedMd.split('\n').map(l => `"${l}"`).join('\n'));
+				result.push(expectedMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
 				result.push('--------------------------------------------');
 				result.push('');
 
 				console.info(result.join('\n'));
-
 
 				// console.info('');
 				// console.info(`Error converting file: ${htmlFilename}`);

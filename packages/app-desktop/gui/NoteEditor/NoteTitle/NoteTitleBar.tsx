@@ -57,6 +57,7 @@ function styles_(props: Props) {
 				fontSize: Math.round(theme.textStyle.fontSize * 1.5),
 				backgroundColor: theme.backgroundColor,
 				border: 'none',
+				width: '100%',
 			},
 
 			titleDate: {

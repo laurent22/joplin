@@ -135,11 +135,11 @@ export default class HtmlToHtml {
 					enableLongPress: options.enableLongPress,
 				});
 
-				if (!r) return null;
+				if (!r.html) return null;
 
 				return {
 					type: 'replaceElement',
-					html: r,
+					html: r.html,
 				};
 			});
 		}

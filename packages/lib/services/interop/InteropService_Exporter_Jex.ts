@@ -1,11 +1,17 @@
 import { _ } from '../../locale';
-const InteropService_Exporter_Base = require('./InteropService_Exporter_Base').default;
-const InteropService_Exporter_Raw = require('./InteropService_Exporter_Raw').default;
+import InteropService_Exporter_Base from './InteropService_Exporter_Base';
+import InteropService_Exporter_Raw from './InteropService_Exporter_Raw';
+import shim from '../../shim';
+
 const fs = require('fs-extra');
-const shim = require('../../shim').default;
 
 export default class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
-	async init(destPath: string) {
+
+	private tempDir_: string;
+	private destPath_: string;
+	private rawExporter_: InteropService_Exporter_Raw;
+
+	public async init(destPath: string) {
 		if (await shim.fsDriver().isDirectory(destPath)) throw new Error(`Path is a directory: ${destPath}`);
 
 		this.tempDir_ = await this.temporaryDirectory_(false);
@@ -14,15 +20,15 @@ export default class InteropService_Exporter_Jex extends InteropService_Exporter
 		await this.rawExporter_.init(this.tempDir_);
 	}
 
-	async processItem(itemType: number, item: any) {
+	public async processItem(itemType: number, item: any) {
 		return this.rawExporter_.processItem(itemType, item);
 	}
 
-	async processResource(resource: any, filePath: string) {
+	public async processResource(resource: any, filePath: string) {
 		return this.rawExporter_.processResource(resource, filePath);
 	}
 
-	async close() {
+	public async close() {
 		const stats = await shim.fsDriver().readDirStats(this.tempDir_, { recursive: true });
 		const filePaths = stats.filter((a: any) => !a.isDirectory()).map((a: any) => a.path);
 

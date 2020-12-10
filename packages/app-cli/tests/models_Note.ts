@@ -1,6 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
 import BaseModel from '@joplin/lib/BaseModel';
 import shim from '@joplin/lib/shim';
+import markdownUtils from '@joplin/lib/markdownUtils';
 const { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
@@ -217,6 +218,8 @@ describe('models_Note', function() {
 		const t1 = r1.updated_time;
 		const t2 = r2.updated_time;
 
+		const resourceDirE = markdownUtils.escapeLinkUrl(resourceDir);
+
 		const testCases = [
 			[
 				false,
@@ -241,17 +244,17 @@ describe('models_Note', function() {
 			[
 				true,
 				`![](:/${r1.id})`,
-				`![](file://${resourceDir}/${r1.id}.jpg?t=${t1})`,
+				`![](file://${resourceDirE}/${r1.id}.jpg?t=${t1})`,
 			],
 			[
 				true,
 				`![](:/${r1.id}) ![](:/${r1.id}) ![](:/${r2.id})`,
-				`![](file://${resourceDir}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDir}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDir}/${r2.id}.jpg?t=${t2})`,
+				`![](file://${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDirE}/${r2.id}.jpg?t=${t2})`,
 			],
 			[
 				true,
 				`![](:/${r3.id})`,
-				`![](file://${resourceDir}/${r3.id}.pdf)`,
+				`![](file://${resourceDirE}/${r3.id}.pdf)`,
 			],
 		];
 

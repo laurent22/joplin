@@ -283,10 +283,6 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote);
 
-	const introductionPostLinkClick = useCallback(() => {
-		bridge().openExternal('https://www.patreon.com/posts/34246624');
-	}, []);
-
 	const externalEditWatcher_noteChange = useCallback((event) => {
 		if (event.id === formNote.id) {
 			const newFormNote = {
@@ -414,9 +410,19 @@ function NoteEditor(props: NoteEditorProps) {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}
 
-	const wysiwygBanner = props.bodyEditor !== 'TinyMCE' ? null : (
-		<div style={{ ...styles.warningBanner }}>
-			This is an experimental Rich Text editor for evaluation only. Please do not use with important notes as you may lose some data! See the <a style={styles.urlColor} onClick={introductionPostLinkClick} href="#">introduction post</a> for more information. To switch to the Markdown Editor please press the "Toggle editors" in the top right-hand corner.
+	const onRichTextReadMoreLinkClick = useCallback(() => {
+		bridge().openExternal('https://joplinapp.org/rich_text_editor');
+	}, []);
+
+	const onRichTextDismissLinkClick = useCallback(() => {
+		Setting.setValue('richTextBannerDismissed', true);
+	}, []);
+
+	const wysiwygBanner = props.bodyEditor !== 'TinyMCE' || props.richTextBannerDismissed ? null : (
+		<div style={styles.warningBanner}>
+			{_('This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.')}
+			&nbsp;&nbsp;<a onClick={onRichTextReadMoreLinkClick} style={styles.warningBannerLink} href="#">[ {_('Read more about it')} ]</a>
+			&nbsp;&nbsp;<a onClick={onRichTextDismissLinkClick} style={styles.warningBannerLink} href="#">[ {_('Dismiss')} ]</a>
 		</div>
 	);
 
@@ -567,6 +573,7 @@ const mapStateToProps = (state: AppState) => {
 		editorNoteStatuses: state.editorNoteStatuses,
 		syncStarted: state.syncStarted,
 		themeId: state.settings.theme,
+		richTextBannerDismissed: state.settings.richTextBannerDismissed,
 		watchedNoteFiles: state.watchedNoteFiles,
 		notesParentType: state.notesParentType,
 		selectedNoteTags: state.selectedNoteTags,
