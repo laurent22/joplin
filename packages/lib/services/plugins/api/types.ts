@@ -353,9 +353,9 @@ export enum ContentScriptType {
 	 *
 	 * - The `context` argument is currently unused but could be used later on to provide access to your own plugin so that the content script and plugin can communicate.
 	 *
-	 * - The **required** `plugin` key is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information. The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml.ts), which contains a number of options, mostly useful for Joplin's internal code.
+	 * - The **required** `plugin` key is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information. The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml.ts), which contains a number of options, mostly useful for Joplin's internal code.
 	 *
-	 * - Using the **optional** `assets` key you may specify assets such as JS or CSS that should be loaded in the rendered HTML document. Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to see how the data should be structured.
+	 * - Using the **optional** `assets` key you may specify assets such as JS or CSS that should be loaded in the rendered HTML document. Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts) to see how the data should be structured.
 	 *
 	 * To include a regular Markdown-It plugin, that doesn't make use of any Joplin-specific features, you would simply create a file such as this:
 	 *
@@ -400,7 +400,7 @@ export enum ContentScriptType {
 	 *
 	 * - The `codeMirrorOptions` key contains all the [CodeMirror](https://codemirror.net/doc/manual.html#config) options that will be set or changed by this plugin. New options can alse be declared via [`CodeMirror.defineOption`](https://codemirror.net/doc/manual.html#defineOption), and then have their value set here. For example, a plugin that enables line numbers would set `codeMirrorOptions` to `{'lineNumbers': true}`.
 	 *
-	 * - Using the **optional** `assets` key you may specify **only** CSS assets that should be loaded in the rendered HTML document. Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to see how the data should be structured.
+	 * - Using the **optional** `assets` key you may specify **only** CSS assets that should be loaded in the rendered HTML document. Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts) to see how the data should be structured.
 	 *
 	 * One of the `plugin`, `codeMirrorResources`, or `codeMirrorOptions` keys must be provided for the plugin to be valid. Having multiple or all provided is also okay.
 	 *
