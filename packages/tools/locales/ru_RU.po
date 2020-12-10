@@ -13,9 +13,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -62,16 +64,17 @@ msgstr "Отмена"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"Приложение будет закрыто. Пожалуйста, перезапустите его чтобы завершить "
+"установку."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
 "Введите название заметки, чтобы перейти к ней, либо введите #имя_метки или "
-"@имя_блокнота."
+"@имя_блокнота, либо введите : для поиска команд."
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -81,7 +84,7 @@ msgstr "Перейти к чему-либо…"
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "Палитра команд"
 
 #: packages/app-desktop/InteropServiceHelper.js:153
 #, javascript-format
@@ -117,9 +120,8 @@ msgid "New version: %s"
 msgstr "Новая версия: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "Загружено"
+msgstr "Загрузить"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -279,9 +281,8 @@ msgid "strong text"
 msgstr "полужирный текст"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:166
-#, fuzzy
 msgid "emphasised text"
-msgstr "выделенный текст"
+msgstr "курсивный текст"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:168
 msgid "Insert Hyperlink"
@@ -415,13 +416,13 @@ msgstr "Создание новой %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:370
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "Отслеживаются изменения следующих вложений:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:373
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr ""
+msgstr "Изменения не будут отслеживаться при переключении на другую заметку."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:378
 #, javascript-format
@@ -530,9 +531,9 @@ msgstr "Свойства заметки"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: packages/lib/services/KeymapService.js:415
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Ошибка"
+msgstr "Ошибка: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -549,12 +550,11 @@ msgstr "Импорт"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "Команда"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Режим работы клавиатуры"
+msgstr "Сочетание клавиш"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
 #: packages/app-desktop/gui/MenuBar.js:148 packages/app-desktop/app.js:338
@@ -577,9 +577,8 @@ msgid "Website and documentation"
 msgstr "Сайт и документация"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "О Joplin"
+msgstr "Скрыть Joplin"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
 #: packages/app-desktop/gui/MenuBar.js:400
@@ -587,9 +586,8 @@ msgid "Close Window"
 msgstr "Закрыть окно"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "Настройки…"
+msgstr "Настройки"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
 #: packages/app-desktop/gui/MenuBar.js:276 packages/app-desktop/gui/Root.js:100
@@ -597,19 +595,20 @@ msgid "Options"
 msgstr "Настройки"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Неверный ответ: %s"
+msgstr "Недопустимо"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Нажмите нужное сочетание клавиш"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Нажмите нужное сочетание клавиш и затем нажмите Enter. Для очистки сочетания "
+"клавиш нажмите Backspace."
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -623,11 +622,13 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"Нужно обновить версию базы данных перед синхронизацией. Эта операция может "
+"потребовать несколько минут для завершения и приложение нужно будет "
+"перезапустить. Чтобы продолжить нажмите на ссылку."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:404
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "Мастер-ключи, которые нуждаются в обновлении"
+msgstr "Перезапустить и обновить"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:408
 msgid "Some items cannot be synchronised."
@@ -670,6 +671,8 @@ msgstr "Дополнительная информация"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:527
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"Используйте стрелки чтобы переместить элементы программы. Нажмите Esc для "
+"выхода."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -733,13 +736,12 @@ msgid "Toggle editor layout"
 msgstr "Переключить вид редактора"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Переключить вид редактора"
+msgstr "Переключить редактор"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "Изменить расположение элементов"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -756,7 +758,7 @@ msgstr "Название блокнота:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Проверка орфографии"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -948,7 +950,6 @@ msgid "Templates"
 msgstr "Шаблоны"
 
 #: packages/app-desktop/gui/MenuBar.js:369
-#, fuzzy
 msgid "Export all"
 msgstr "Экспорт"
 
@@ -981,7 +982,7 @@ msgstr "Отдалить"
 
 #: packages/app-desktop/gui/MenuBar.js:533
 msgid "&Go"
-msgstr ""
+msgstr "Переход"
 
 #: packages/app-desktop/gui/MenuBar.js:545
 msgid "&Note"
@@ -1025,7 +1026,7 @@ msgstr "Загрузить сейчас:"
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
-"Будет создан новый блокнот \"%s\" и в него будет импортирован файл \"%s\""
+"Будет создан новый блокнот \"%s\" и файл \"%s\" будет импортирован в него"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-cli/app/command-import.js:47
@@ -1189,7 +1190,7 @@ msgstr "Шифрование"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "Игнорировать"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1366,7 +1367,7 @@ msgstr "Обзор..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "Необходимо перезапустить приложение, чтобы применились изменения."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1375,25 +1376,24 @@ msgstr "Загрузить сейчас"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 msgid "Later"
-msgstr ""
+msgstr "Позже"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
-msgstr "Загрузить сейчас:"
+msgstr "Перезагрузить сейчас"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "Применить"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Удалить заметку \"%s\"?"
+msgstr "Удалить плагин \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "Установить плагин"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1518,7 +1518,6 @@ msgid "Please wait..."
 msgstr "Пожалуйста, подождите…"
 
 #: packages/app-desktop/gui/ResourceScreen.js:143
-#, fuzzy
 msgid "No resources!"
 msgstr "Нет данных!"
 
@@ -1572,12 +1571,11 @@ msgstr "Выйти из внешнего редактора"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "Остановить"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Скопировать путь в буфер обмена"
+msgstr "Скопировать команду режима разработчика в буфер обмена"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1594,9 +1592,8 @@ msgid "Error opening note in editor: %s"
 msgstr "Ошибка при открытии заметки в редакторе: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "Открыть папку с шаблонами"
+msgstr "Открыть директорию с настройками"
 
 #: packages/app-desktop/app.js:336
 #, javascript-format
@@ -1624,9 +1621,8 @@ msgid "Save alarm"
 msgstr "Сохранить напоминание"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "Открыть..."
+msgstr "Открыть"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 #: packages/app-mobile/components/screens/Note.js:796
@@ -1698,7 +1694,7 @@ msgstr "Обновить"
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Обновление цели синхронизации"
 
 #: packages/app-mobile/components/screens/notes.js:154
 #: packages/app-cli/app/command-rmbook.js:26
@@ -1915,11 +1911,14 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Для возможности сохранения информации в заметке о географическом "
+"местоположении приложению необходим доступ к вашему местоположению.\n"
+"\n"
+"Вы можете выключить эту опцию в любое время в Конфигурации."
 
 #: packages/app-mobile/components/screens/Note.js:343
-#, fuzzy
 msgid "Permission needed"
-msgstr "Разрешение на использование камеры"
+msgstr "Необходимы разрешения"
 
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
@@ -2159,9 +2158,8 @@ msgid "AWS S3 bucket"
 msgstr "AWS S3 bucket"
 
 #: packages/lib/models/Setting.js:226
-#, fuzzy
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "AWS S3 URL"
 
 #: packages/lib/models/Setting.js:237
 msgid "AWS key"
@@ -2399,9 +2397,8 @@ msgstr ""
 "умолчанию."
 
 #: packages/lib/models/Setting.js:609
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Пользовательская таблица стилей для приложения"
+msgstr "Пользовательская таблица стилей для отображаемых заметок"
 
 #: packages/lib/models/Setting.js:625
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2634,9 +2631,8 @@ msgid "Web Clipper"
 msgstr "Настройки веб-клиппера"
 
 #: packages/lib/models/Setting.js:1337
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Режим работы клавиатуры"
+msgstr "Сочетания клавиш"
 
 #: packages/lib/models/Setting.js:1344
 msgid ""
@@ -2988,14 +2984,15 @@ msgid "HTML Directory"
 msgstr "HTML каталог"
 
 #: packages/lib/services/interop/InteropService.js:127
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Не удалось загрузить модуль \"%s\" для формата \"%s\""
+msgstr ""
+"Не удалось загрузить модуль \"%s\" для форматирования \"%s\" и вывода \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "Не удалось загрузить модуль \"%s\" для формата \"%s\""
+msgstr "Не удалось загрузить модуль \"%s\" для формата \"%s\" и цели \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3033,23 +3030,23 @@ msgstr "Пожалуйста, укажите формат импорта для 
 
 #: packages/lib/services/KeymapService.js:512
 msgid "command"
-msgstr ""
+msgstr "команда"
 
 #: packages/lib/services/KeymapService.js:512
 #: packages/lib/services/KeymapService.js:517
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "В \"%s\" отсутствует необходимое свойство \"%s\"."
 
 #: packages/lib/services/KeymapService.js:517
 #: packages/lib/services/KeymapService.js:524
 msgid "accelerator"
-msgstr ""
+msgstr "сочетание клавиш"
 
 #: packages/lib/services/KeymapService.js:524
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Неверный ответ: %s"
+msgstr "Недопустимое \"%s\": %s."
 
 #: packages/lib/services/KeymapService.js:542
 #, javascript-format
@@ -3057,11 +3054,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"Сочетание клавиш \"%s\" используется для команд \"%s\" и \"%s\". Это может "
+"привести к неожиданному поведению."
 
 #: packages/lib/services/KeymapService.js:567
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "Сочетание клавиш \"%s\" недопустимо."
 
 #: packages/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -3177,20 +3176,19 @@ msgstr "В %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Нет вариантов"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Добавить в словарь"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Использовать проверку орфографии"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Язык"
+msgstr "Изменить язык"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3412,7 +3410,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Обновить цель синхронизации до последней версии."
 
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
@@ -3442,7 +3440,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Цель синхронизации: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Не удалось инициализировать модуль синхронизации."
 
@@ -3458,6 +3455,7 @@ msgstr "Загрузка ресурсов..."
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
+"Цель синхронизации необходимо обновить! Выполните \"%s\" чтобы продолжить."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
@@ -3532,7 +3530,7 @@ msgstr "Пожалуйста, сначала выберите заметку и�
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Для выхода из приложения нажмите Ctrl+D или введите \"exit\""
+msgstr "Нажмите Ctrl+D или введите \"exit\" для выхода из приложения"
 
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -3854,7 +3852,6 @@ msgstr "Заметка не является задачей: \"%s\""
 #~ msgid "Notebook properties"
 #~ msgstr "Свойства блокнота"
 
-#, javascript-format
 #~ msgid "This file could not be opened: %s"
 #~ msgstr "Этот файл не может быть открыт: %s"
 
@@ -3882,7 +3879,6 @@ msgstr "Заметка не является задачей: \"%s\""
 #~ msgid "Move to notebook..."
 #~ msgstr "Переместить в блокнот..."
 
-#, javascript-format
 #~ msgid "Move %d notes to notebook \"%s\"?"
 #~ msgstr "Переместить %d заметок в блокнот \"%s\"?"
 
@@ -3900,11 +3896,9 @@ msgstr "Заметка не является задачей: \"%s\""
 #~ msgid "Errors only"
 #~ msgstr "Только ошибки"
 
-#, javascript-format
 #~ msgid "Database v%s"
 #~ msgstr "База данных v%s"
 
-#, javascript-format
 #~ msgid "FTS enabled: %d"
 #~ msgstr "FTS включен: %d"
 
