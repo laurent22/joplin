@@ -12,7 +12,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 		const isResourceUrl = ruleOptions.resources && !!resourceHrefInfo;
 		const title = utils.getAttr(token.attrs, 'title', isResourceUrl ? '' : href);
 
-		return linkReplacement(href, {
+		const replacement = linkReplacement(href, {
 			title,
 			resources: ruleOptions.resources,
 			ResourceModel: ruleOptions.ResourceModel,
@@ -21,6 +21,15 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 			postMessageSyntax: ruleOptions.postMessageSyntax,
 			enableLongPress: ruleOptions.enableLongPress,
 		});
+
+		ruleOptions.context.currentLinks.push({
+			href: href,
+			resource: replacement.resource,
+			resourceReady: replacement.resourceReady,
+			resourceFullPath: replacement.resourceFullPath,
+		});
+
+		return replacement.html;
 	};
 }
 

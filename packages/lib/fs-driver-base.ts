@@ -1,15 +1,48 @@
-const { filename, fileExtension } = require('./path-utils');
-const time = require('./time').default;
-const Setting = require('./models/Setting').default;
+import time from './time';
+import Setting from './models/Setting';
+import { filename, fileExtension } from './path-utils';
 const md5 = require('md5');
 
-class FsDriverBase {
-	async isDirectory(path) {
+export interface Stat {
+	birthtime: number;
+	mtime: number;
+	isDirectory(): boolean;
+	path: string;
+	size: number;
+}
+
+export interface ReadDirStatsOptions {
+	recursive: boolean;
+}
+
+export default class FsDriverBase {
+
+	public async stat(_path: string): Promise<Stat> {
+		throw new Error('Not implemented');
+	}
+
+	public async readDirStats(_path: string, _options: ReadDirStatsOptions = null): Promise<Stat[]> {
+		throw new Error('Not implemented');
+	}
+
+	public async exists(_path: string): Promise<boolean> {
+		throw new Error('Not implemented');
+	}
+
+	public async remove(_path: string): Promise<void> {
+		throw new Error('Not implemented');
+	}
+
+	public async isDirectory(path: string) {
 		const stat = await this.stat(path);
 		return !stat ? false : stat.isDirectory();
 	}
 
-	async readDirStatsHandleRecursion_(basePath, stat, output, options) {
+	public async writeFile(_path: string, _content: string, _encoding: string = 'base64'): Promise<void> {
+		throw new Error('Not implemented');
+	}
+
+	protected async readDirStatsHandleRecursion_(basePath: string, stat: Stat, output: Stat[], options: ReadDirStatsOptions): Promise<Stat[]> {
 		if (options.recursive && stat.isDirectory()) {
 			const subPath = `${basePath}/${stat.path}`;
 			const subStats = await this.readDirStats(subPath, options);
@@ -23,7 +56,7 @@ class FsDriverBase {
 		return output;
 	}
 
-	async findUniqueFilename(name, reservedNames = null) {
+	public async findUniqueFilename(name: string, reservedNames: string[] = null): Promise<string> {
 		if (reservedNames === null) {
 			reservedNames = [];
 		}
@@ -47,7 +80,7 @@ class FsDriverBase {
 		}
 	}
 
-	async removeAllThatStartWith(dirPath, filenameStart) {
+	public async removeAllThatStartWith(dirPath: string, filenameStart: string) {
 		if (!filenameStart || !dirPath) throw new Error('dirPath and filenameStart cannot be empty');
 
 		const stats = await this.readDirStats(dirPath);
@@ -59,7 +92,7 @@ class FsDriverBase {
 		}
 	}
 
-	async waitTillExists(path, timeout = 10000) {
+	public async waitTillExists(path: string, timeout: number = 10000) {
 		const startTime = Date.now();
 
 		while (true) {
@@ -72,7 +105,7 @@ class FsDriverBase {
 
 	// TODO: move out of here and make it part of joplin-renderer
 	// or assign to option using .bind(fsDriver())
-	async cacheCssToFile(cssStrings) {
+	public async cacheCssToFile(cssStrings: string[]) {
 		const cssString = Array.isArray(cssStrings) ? cssStrings.join('\n') : cssStrings;
 		const cssFilePath = `${Setting.value('tempDir')}/${md5(escape(cssString))}.css`;
 		if (!(await this.exists(cssFilePath))) {
@@ -84,6 +117,5 @@ class FsDriverBase {
 			mime: 'text/css',
 		};
 	}
-}
 
-module.exports = FsDriverBase;
+}

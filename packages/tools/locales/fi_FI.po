@@ -1,0 +1,3925 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fi_FI\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.4.1\n"
+
+#: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
+#: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
+#: packages/app-desktop/checkForUpdates.js:139
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
+#: packages/app-desktop/gui/MenuBar.js:309
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:181
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
+#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
+#: packages/app-mobile/components/ModalDialog.js:67
+#: packages/app-mobile/components/CameraView.js:160
+#: packages/app-mobile/components/side-menu-content.js:150
+#: packages/app-mobile/components/screens/config.js:148
+msgid "OK"
+msgstr "OK"
+
+#: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
+#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
+#: packages/app-desktop/gui/SideBar/SideBar.js:191
+#: packages/app-desktop/gui/SideBar/SideBar.js:412
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
+#: packages/app-desktop/gui/utils/NoteListUtils.js:164
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:528
+#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/app-desktop/gui/ResourceScreen.js:95
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
+#: packages/app-mobile/components/ModalDialog.js:70
+#: packages/app-mobile/components/SelectDateTimeDialog.js:82
+#: packages/app-mobile/components/CameraView.js:161
+#: packages/app-mobile/components/side-menu-content.js:156
+#: packages/app-mobile/components/side-menu-content.js:165
+#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/app-mobile/components/screens/encryption-config.js:185
+#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:506
+#: packages/lib/shim-init-node.js:137
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: packages/app-desktop/bridge.js:188
+msgid ""
+"The app is now going to close. Please relaunch it to complete the process."
+msgstr ""
+"Sovellus suljetaan nyt. Käynnistä se uudelleen prosessin loppuun saamiseksi."
+
+#: packages/app-desktop/plugins/GotoAnything.js:431
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name. Or type : to search for "
+"commands."
+msgstr ""
+"Kirjoita muistiinpanon otsikko, jos haluat siirtyä siihen. Voit myös "
+"kirjoittaa # ja sen jälkeen tunnisteen nimen tai @ ja sen jälkeen "
+"muistikirjan nimen. Voit myös etsiä komentoja kirjoittamalla : ."
+
+#: packages/app-desktop/plugins/GotoAnything.js:456
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
+msgid "Goto Anything..."
+msgstr "Siirry mihin tahansa..."
+
+#: packages/app-desktop/plugins/GotoAnything.js:463
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
+msgid "Command palette"
+msgstr "Komentovalikoima"
+
+#: packages/app-desktop/InteropServiceHelper.js:153
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Viedään tiedostoon \"%s\" muodossa \"%s\". Odota..."
+
+#: packages/app-desktop/InteropServiceHelper.js:171
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr "Muistiinpanoja ei voitu viedä: %s"
+
+#: packages/app-desktop/checkForUpdates.js:138
+msgid "Current version is up-to-date."
+msgstr "Nykyinen versio on ajan tasalla."
+
+#: packages/app-desktop/checkForUpdates.js:148
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (ennakkojulkaisu)"
+
+#: packages/app-desktop/checkForUpdates.js:152
+msgid "An update is available, do you want to download it now?"
+msgstr "Päivitys on saatavilla. Haluatko ladata sen nyt?"
+
+#: packages/app-desktop/checkForUpdates.js:153
+#, javascript-format
+msgid "Your version: %s"
+msgstr "Sinun versiosi: %s"
+
+#: packages/app-desktop/checkForUpdates.js:153
+#, javascript-format
+msgid "New version: %s"
+msgstr "Uusi versio: %s"
+
+#: packages/app-desktop/checkForUpdates.js:154
+msgid "Download"
+msgstr "Lataa"
+
+#: packages/app-desktop/checkForUpdates.js:154
+msgid "Full Release Notes"
+msgstr "Täydelliset julkaisutiedot"
+
+#: packages/app-desktop/gui/SearchBar/SearchBar.js:113
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
+#: packages/app-desktop/gui/NoteSearchBar.min.js:167
+msgid "Search..."
+msgstr "Etsi..."
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "Muistiinpano \"%s\" on palautettu muistikirjaan \"%s\"."
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "Tällä muistiinpanolla ei ole historiaa"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:112
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Linkkiä tai viestiä ei tueta: %s"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
+msgid "Restore"
+msgstr "Palauttaa"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Napsauta \"%s\" palauttaaksesi muistiinpanon. Se kopioidaan muistikirjaan "
+"nimeltä \"%s\". Huomautuksen nykyistä versiota ei korvata tai muuteta."
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:528
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
+#: packages/lib/commands/historyBackward.js:17
+msgid "Back"
+msgstr "Takaisin"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:166
+msgid "Remove"
+msgstr "Poista"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:169
+#: packages/app-mobile/components/side-menu-content.js:148
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Poista muistikirja \"%s\"?\n"
+"\n"
+"Myös kaikki tämän muistikirjan muistiinpanot ja alimuistikirjat poistetaan."
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:170
+#: packages/app-desktop/gui/utils/NoteListUtils.js:135
+#: packages/app-desktop/gui/utils/NoteListUtils.js:164
+#: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:95
+#: packages/app-desktop/gui/ResourceScreen.js:47
+#: packages/app-desktop/gui/ResourceScreen.js:95
+#: packages/app-mobile/components/side-menu-content.js:146
+#: packages/app-mobile/components/screens/Note.js:830
+msgid "Delete"
+msgstr "Poista"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:174
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Poistetaanko tunniste \"%s\" kaikista muistiinpanoista?"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:177
+msgid "Remove this search from the sidebar?"
+msgstr "Poistetaanko tämä haku sivupalkista?"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:228
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
+#: packages/app-desktop/gui/MenuBar.js:415
+#: packages/app-desktop/gui/utils/NoteListUtils.js:131
+msgid "Export"
+msgstr "Vie"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:283
+#: packages/app-mobile/components/side-menu-content.js:360
+#: packages/app-mobile/components/screens/notes.js:188
+msgid "All notes"
+msgstr "Kaikki muistiinpanot"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:412
+#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/lib/commands/synchronize.js:18
+msgid "Synchronise"
+msgstr "Synkronoida"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:436
+#: packages/app-mobile/components/side-menu-content.js:364
+msgid "Notebooks"
+msgstr "Muistikirjat"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:448
+#: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
+#: packages/app-mobile/components/side-menu-content.js:314
+#: packages/app-mobile/components/screens/tags.js:101
+#: packages/app-mobile/components/screens/Note.js:803
+msgid "Tags"
+msgstr "Tunnisteet"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:459
+#: packages/app-mobile/components/side-menu-content.js:325
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Kohteiden salauksen purkaminen: %d/%d"
+
+#: packages/app-desktop/gui/SideBar/SideBar.js:463
+#: packages/app-mobile/components/side-menu-content.js:330
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Haetaan resursseja: %d/%d"
+
+#: packages/app-desktop/gui/SideBar/commands/focusElementSideBar.js:17
+msgid "Sidebar"
+msgstr "Sivupalkki"
+
+#: packages/app-desktop/gui/SideBar/commands/focusElementSideBar.js:18
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
+#: packages/app-desktop/gui/MenuBar.js:539
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
+msgid "Focus"
+msgstr "Keskittää"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
+msgid "Please select where the sync status should be exported to"
+msgstr "Valitse, mihin synkronoinnin tila viedään"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
+#: packages/app-mobile/components/screens/status.js:112
+msgid "Retry All"
+msgstr "Yritä uudelleen kaikkia"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
+#: packages/app-mobile/components/screens/status.js:118
+msgid "Retry"
+msgstr "Yritä uudelleen"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:165
+msgid "strong text"
+msgstr "vahva teksti"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:166
+msgid "emphasised text"
+msgstr "korostettu teksti"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:168
+msgid "Insert Hyperlink"
+msgstr "Lisää hyperlinkki"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:202
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:204
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:205
+msgid "List item"
+msgstr "Luettelon kohde"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:454
+msgid "Layout"
+msgstr "Ulkoasu"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:454
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Tällä muistiinpanolla ei ole sisältöä. Napsauta \"%s\" vaihtaaksesi editoria "
+"ja muokataksesi muistiinpanoa."
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:564
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:90
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
+msgid "Cut"
+msgstr "Leikkaa"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:571
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:98
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
+#: packages/app-desktop/gui/MenuBar.js:309
+msgid "Copy"
+msgstr "Kopioi"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:578
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
+msgid "Paste"
+msgstr "Liitä"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+msgid "Checkbox list"
+msgstr "Valintaruutujen luettelo"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:521
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
+#: packages/app-mobile/components/screens/Note.js:1013
+msgid "Edit"
+msgstr "Muokkaa"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:577
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
+#: packages/app-mobile/components/screens/Note.js:771
+msgid "Attach file"
+msgstr "Liitä tiedosto"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
+msgid "Code Block"
+msgstr "Koodilohko"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
+msgid "Inline Code"
+msgstr "Inline-koodi"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
+msgid "Insert Date Time"
+msgstr "Lisää Päivämäärä Aika"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:996
+msgid "Drop notes or files here"
+msgstr "Pudota muistiinpanot tai tiedostot tähän"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:996
+msgid "Code View"
+msgstr "Koodinäkymä"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:996
+#, javascript-format
+msgid ""
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
+msgstr ""
+"Odota, että kaikki liitteet ladataan ja puretaan. Voit myös vaihtaa kohtaan "
+"%s muokkaamaan muistiinpanoa."
+
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:72
+msgid "There was an error downloading this attachment:"
+msgstr "Tämän liitteen lataamisessa tapahtui virhe:"
+
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:75
+#: packages/lib/services/ResourceEditWatcher/index.js:196
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Tätä liitettä ei ole vielä ladattu tai sitä ei ole vielä purettu"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:48
+msgid "Open..."
+msgstr "Avaa..."
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:61
+msgid "Save as..."
+msgstr "Tallenna nimellä..."
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
+msgid "Reveal file in folder"
+msgstr "Osoita kansion tiedosto"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
+msgid "Copy path to clipboard"
+msgstr "Kopioi polku leikepöydälle"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:113
+msgid "Copy Link Address"
+msgstr "Kopioi linkin osoite"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:78
+msgid "to-do"
+msgstr "tehtävä"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:78
+msgid "note"
+msgstr "merkintä"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:78
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Luodaan uusi %s..."
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:370
+msgid "The following attachments are being watched for changes:"
+msgstr "Seuraavia liitteitä tarkkaillaan muutosten vuoksi:"
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:373
+msgid ""
+"The attachments will no longer be watched when you switch to a different "
+"note."
+msgstr "Liitteitä ei enää katsota, kun vaihdat toiseen muistiinpanoon."
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:378
+#, javascript-format
+msgid "In: %s"
+msgstr "Sisään: %s"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:28
+msgid "Select all"
+msgstr "Valitse kaikki"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:33
+msgid "Bold"
+msgstr "Lihavoitu"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:38
+msgid "Italic"
+msgstr "Kursiivi"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:43
+msgid "Hyperlink"
+msgstr "Hyperlinkki"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:48
+msgid "Code"
+msgstr "Koodi"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
+msgid "Numbered List"
+msgstr "Numeroitu luettelo"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
+msgid "Bulleted List"
+msgstr "Luettelomerkitty luettelo"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:68
+msgid "Checkbox"
+msgstr "Valintaruutu"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:73
+msgid "Heading"
+msgstr "Otsikko"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:78
+msgid "Horizontal Rule"
+msgstr "Vaakaviiva"
+
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
+msgid "Note title"
+msgstr "Muistiinpanon otsikko"
+
+#: packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js:16
+msgid "Search in current note"
+msgstr "Etsi nykyisestä muistiinpanosta"
+
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:16
+msgid "Note body"
+msgstr "Muistiinpanon kappale"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:27
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
+#: packages/app-desktop/gui/ResourceScreen.js:39
+msgid "ID"
+msgstr "ID"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:319
+msgid "Created"
+msgstr "Luotu"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
+msgid "Updated"
+msgstr "Päivitetty"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
+msgid "Completed"
+msgstr "Valmis"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
+msgid "Location"
+msgstr "Sijainti"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
+msgid "URL"
+msgstr "URL"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
+#: packages/lib/models/Setting.js:1331
+msgid "Note History"
+msgstr "Muistiinpano historia"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
+msgid "Markup"
+msgstr "Merkintä"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:306
+msgid "Previous versions of this note"
+msgstr "Tämän muistiinpanon aiemmat versiot"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:383
+#: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
+msgid "Note properties"
+msgstr "Muistiinpanon ominaisuudet"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
+#: packages/lib/services/KeymapService.js:415
+#, javascript-format
+msgid "Error: %s"
+msgstr "Virhe: %s"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/lib/models/Setting.js:642 packages/app-cli/app/command-e2ee.js:110
+msgid "Disabled"
+msgstr "Poistettu käytöstä"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
+#: packages/app-desktop/gui/MenuBar.js:365
+#: packages/app-desktop/gui/MenuBar.js:412 packages/app-desktop/gui/Root.js:99
+msgid "Import"
+msgstr "Tuo"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
+msgid "Command"
+msgstr "Komento"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
+msgid "Keyboard Shortcut"
+msgstr "Pikanäppäin"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
+#: packages/app-desktop/gui/MenuBar.js:148 packages/app-desktop/app.js:338
+msgid "Quit"
+msgstr "Lopeta"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
+#: packages/app-desktop/gui/MenuBar.js:252
+msgid "Insert template"
+msgstr "Lisää malli"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
+#: packages/app-desktop/gui/MenuBar.js:500
+msgid "Actual Size"
+msgstr "Todellinen koko"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
+#: packages/app-desktop/gui/MenuBar.js:561
+msgid "Website and documentation"
+msgstr "Verkkosivusto ja asiakirjat"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
+msgid "Hide Joplin"
+msgstr "Piilota Joplin"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
+#: packages/app-desktop/gui/MenuBar.js:400
+msgid "Close Window"
+msgstr "Sulje ikkuna"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
+#: packages/app-desktop/gui/MenuBar.js:276 packages/app-desktop/gui/Root.js:100
+msgid "Options"
+msgstr "Vaihtoehdot"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
+#, fuzzy
+msgid "Invalid"
+msgstr "Virheellinen vastaus %s: %s."
+
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
+msgid "Press the shortcut"
+msgstr "Paina pikakuvaketta"
+
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
+msgid ""
+"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
+"shortcut."
+msgstr ""
+"Paina pikakuvaketta ja paina sitten ENTER-näppäintä. Voit myös tyhjentää "
+"pikakuvakkeen painamalla VÄLILYÖNTI-näppäintä."
+
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
+#: packages/app-mobile/components/screens/encryption-config.js:125
+msgid "Save"
+msgstr "Tallenna"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:402
+msgid ""
+"The sync target needs to be upgraded before Joplin can sync. The operation "
+"may take a few minutes to complete and the app needs to be restarted. To "
+"proceed please click on the link."
+msgstr ""
+"Synkronointikohde on päivitettävä, ennen kuin Joplin voidaan synkronoida. "
+"Toiminnon suorittamiseen voi mennä muutama minuutti, ja sovellus on "
+"käynnistettävä uudelleen. Jatka napsauttamalla linkkiä."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:404
+msgid "Restart and upgrade"
+msgstr "Käynnistä uudelleen ja päivitä"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:408
+msgid "Some items cannot be synchronised."
+msgstr "Joitakin kohteita ei voida synkronoida."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:410
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:416
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:428
+msgid "View them now"
+msgstr "Näytä ne nyt"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:414
+msgid "Some items cannot be decrypted."
+msgstr "Joidenkin kohteiden salausta ei voida purkaa."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:420
+msgid "One or more master keys need a password."
+msgstr "Vähintään yksi pääavain tarvitsee salasanan."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:422
+msgid "Set the password"
+msgstr "Aseta salasana"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:426
+msgid "One of your master keys use an obsolete encryption method."
+msgstr "Yksi pääavaimista käyttää vanhentunutta salaustapaa."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:432
+msgid ""
+"The default encryption method has been changed, you should re-encrypt your "
+"data."
+msgstr ""
+"Oletussalausmenetelmää on muutettu, sinun on salattava tiedot uudelleen."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:434
+msgid "More info"
+msgstr "Lisätietoja"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:527
+msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
+msgid "Statistics..."
+msgstr "Tilastot ..."
+
+#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:18
+#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:18
+#: packages/app-mobile/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Nimeä uudelleen"
+
+#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
+msgid "Rename notebook:"
+msgstr "Nimeä muistikirja uudelleen:"
+
+#: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
+#: packages/app-mobile/components/action-button.js:77
+#: packages/app-mobile/setUpQuickActions.js:15
+msgid "New to-do"
+msgstr "Uusi tehtävä"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
+msgid "Toggle note list"
+msgstr "Muistiinpanoluettelon vaihtaminen"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
+msgid "Toggle sidebar"
+msgstr "Näytä sivupalkki"
+
+#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
+#: packages/app-mobile/components/SelectDateTimeDialog.js:84
+#: packages/app-mobile/components/screens/Note.js:789
+msgid "Set alarm"
+msgstr "Aseta hälytys"
+
+#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
+msgid "Set alarm:"
+msgstr "Aseta hälytys:"
+
+#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
+#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
+msgid "PDF File"
+msgstr "PDF-tiedosto"
+
+#: packages/app-desktop/gui/MainScreen/commands/newNote.js:20
+#: packages/app-mobile/components/action-button.js:86
+#: packages/app-mobile/setUpQuickActions.js:14
+msgid "New note"
+msgstr "Uusi muistiinpano"
+
+#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
+msgid "Move to notebook"
+msgstr "Siirry muistikirjaan"
+
+#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
+msgid "Move to notebook:"
+msgstr "Siirrä muistikirjaan:"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
+msgid "Toggle editor layout"
+msgstr "Vaihda editorin asettelua"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
+msgid "Toggle editors"
+msgstr "Vaihda editoria"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
+msgid "Change application layout"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
+msgid "Rename tag:"
+msgstr "Nimeä tunniste uudelleen:"
+
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
+msgid "New notebook"
+msgstr "Uusi muistikirja"
+
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
+msgid "Notebook title:"
+msgstr "Muistikirjan otsikko:"
+
+#: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
+#: packages/lib/services/spellChecker/SpellCheckerService.js:180
+msgid "Spell checker"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
+msgid "Share note..."
+msgstr "Muistiinpanon jakaminen..."
+
+#: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
+msgid "New sub-notebook"
+msgstr "Uusi alimuistikirja"
+
+#: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
+msgid "Template file:"
+msgstr "Mallitiedosto:"
+
+#: packages/app-desktop/gui/MainScreen/commands/setTags.js:45
+msgid "Add or remove tags:"
+msgstr "Lisää tai poista tunnisteita:"
+
+#: packages/app-desktop/gui/MainScreen/commands/print.js:17
+msgid "Print"
+msgstr "Tulosta"
+
+#: packages/app-desktop/gui/MainScreen/commands/print.js:26
+msgid "Only one note can be printed at a time."
+msgstr "Vain yksi muistiinpano voidaan tulostaa kerrallaan."
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:29
+#: packages/app-mobile/components/screens/dropbox-login.js:58
+#: packages/app-cli/app/command-sync.js:90
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Jos haluat, että Joplin voi synkronoida Dropboxin kanssa, toimi seuraavasti:"
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:30
+#: packages/app-mobile/components/screens/dropbox-login.js:59
+#: packages/app-cli/app/command-sync.js:91
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "Vaihe 1: Avaa tämä URL-osoite selaimessa valtuuttaaksesi sovelluksen:"
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:32
+#: packages/app-mobile/components/screens/dropbox-login.js:65
+#: packages/app-cli/app/command-sync.js:93
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Vaihe 2: Kirjoita Dropboxin tarjoama koodi:"
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:35
+#: packages/app-mobile/components/screens/dropbox-login.js:68
+msgid "Submit"
+msgstr "Lähetä"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:39
+msgid "Token has been copied to the clipboard!"
+msgstr "Tunnus on kopioitu leikepöydälle!"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:71
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr ""
+"Web Clipper työkalu on käytössä ja asetettu käynnistymään automaattisesti."
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:78
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr "Tila: Aloitettu portissa %d"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
+#, javascript-format
+msgid "Status: %s"
+msgstr "Tila: %s"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:90
+msgid "Disable Web Clipper Service"
+msgstr "Poista käytöstä Web Clipper työkalu"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:96
+msgid "The web clipper service is not enabled."
+msgstr "Web Clipper työkalu ei ole käytössä."
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:101
+msgid "Enable Web Clipper Service"
+msgstr "Ota käyttöön Web Clipper työkalu"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:124
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+"Joplin Web Clipper mahdollistaa verkkosivujen ja kuvakaappausten "
+"tallentamisen selaimesta Jopliniin."
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:129
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr "Jotta voit käyttää Web Clipperiä, sinun on tehtävä seuraavat toimet:"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
+msgid "Step 1: Enable the clipper service"
+msgstr "Vaihe 1: Ota Web Clipper työkalu käyttöön"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+"Tämän palvelun avulla selainlaajennus voi olla yhteydessä Jopliniin. Kun se "
+"otetaan käyttöön, palomuuri voi pyytää sinua antamaan Joplinille luvan "
+"kuunnella tiettyä porttia."
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:156
+msgid "Step 2: Install the extension"
+msgstr "Vaihe 2: Asenna laajennus"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:161
+msgid "Download and install the relevant extension for your browser:"
+msgstr "Lataa ja asenna laajennus selaimeesi:"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:176
+msgid "Advanced options"
+msgstr "Lisäasetukset"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:181
+msgid "Authorisation token:"
+msgstr "Valtuutuksen tunnus:"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:191
+msgid "Copy token"
+msgstr "Kopioi tunnus"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:197
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
+"Tätä valtuutustunnusta tarvitaan vain, jotta kolmannen osapuolen sovellukset "
+"voivat käyttää Joplinia."
+
+#: packages/app-desktop/gui/MenuBar.js:114
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "Tuodaan kohteesta \"%s\" as \"%s\" muodossa. Odota..."
+
+#: packages/app-desktop/gui/MenuBar.js:223 packages/app-desktop/gui/Root.js:102
+msgid "Synchronisation Status"
+msgstr "Synkronoinnin tila"
+
+#: packages/app-desktop/gui/MenuBar.js:242
+msgid "Create note from template"
+msgstr "Luo muistiinpano mallista"
+
+#: packages/app-desktop/gui/MenuBar.js:247
+msgid "Create to-do from template"
+msgstr "Luo tehtävä mallista"
+
+#: packages/app-desktop/gui/MenuBar.js:258
+msgid "Open template directory"
+msgstr "Avaa mallihakemisto"
+
+#: packages/app-desktop/gui/MenuBar.js:263
+msgid "Refresh templates"
+msgstr "Päivitä mallit"
+
+#: packages/app-desktop/gui/MenuBar.js:289
+msgid "Note attachments..."
+msgstr "Muistiinpanon liitteet..."
+
+#: packages/app-desktop/gui/MenuBar.js:320
+#: packages/app-desktop/gui/MenuBar.js:392
+#: packages/app-desktop/gui/MenuBar.js:671
+msgid "&File"
+msgstr "&Tiedosto"
+
+#: packages/app-desktop/gui/MenuBar.js:326
+#: packages/app-desktop/gui/MenuBar.js:593
+msgid "About Joplin"
+msgstr "Joplinista"
+
+#: packages/app-desktop/gui/MenuBar.js:333
+msgid "Preferences..."
+msgstr "Asetukset..."
+
+#: packages/app-desktop/gui/MenuBar.js:343
+#: packages/app-desktop/gui/MenuBar.js:571
+msgid "Check for updates..."
+msgstr "Tarkista päivitykset..."
+
+#: packages/app-desktop/gui/MenuBar.js:358
+#: packages/app-desktop/gui/MenuBar.js:407
+msgid "Templates"
+msgstr "Mallit"
+
+#: packages/app-desktop/gui/MenuBar.js:369
+msgid "Export all"
+msgstr "Vie kaikki"
+
+#: packages/app-desktop/gui/MenuBar.js:381
+#, javascript-format
+msgid "Hide %s"
+msgstr "Piilota %s"
+
+#: packages/app-desktop/gui/MenuBar.js:438
+#: packages/app-desktop/gui/MenuBar.js:675
+msgid "&Edit"
+msgstr "&Muokkaa"
+
+#: packages/app-desktop/gui/MenuBar.js:458
+msgid "&View"
+msgstr "&Näytä"
+
+#: packages/app-desktop/gui/MenuBar.js:466
+msgid "Layout button sequence"
+msgstr "Asettele painike järjestys"
+
+#: packages/app-desktop/gui/MenuBar.js:511
+#: packages/app-desktop/gui/MenuBar.js:517
+msgid "Zoom In"
+msgstr "Lähennä"
+
+#: packages/app-desktop/gui/MenuBar.js:524
+msgid "Zoom Out"
+msgstr "Loitonna"
+
+#: packages/app-desktop/gui/MenuBar.js:533
+msgid "&Go"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.js:545
+msgid "&Note"
+msgstr "&Muistiinpano"
+
+#: packages/app-desktop/gui/MenuBar.js:554
+msgid "&Tools"
+msgstr "&Työkalut"
+
+#: packages/app-desktop/gui/MenuBar.js:558
+msgid "&Help"
+msgstr "&Apua"
+
+#: packages/app-desktop/gui/MenuBar.js:565
+msgid "Joplin Forum"
+msgstr "Joplin Foorumi"
+
+#: packages/app-desktop/gui/MenuBar.js:568
+#: packages/app-mobile/components/screens/config.js:495
+msgid "Make a donation"
+msgstr "Tee lahjoitus"
+
+#: packages/app-desktop/gui/MenuBar.js:580
+msgid "Toggle development tools"
+msgstr "Vaihda kehitystyökalut"
+
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "Firefox laajennus"
+
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome Web Store"
+
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr "Hae se nyt:"
+
+#: packages/app-desktop/gui/ImportScreen.min.js:61
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr "Uusi muistikirja \"%s\" luodaan ja tiedosto \"%s\" tuodaan siihen"
+
+#: packages/app-desktop/gui/ImportScreen.min.js:68
+#: packages/app-cli/app/command-import.js:47
+#, javascript-format
+msgid "Found: %d."
+msgstr "Löytyi: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:69
+#: packages/app-cli/app/command-import.js:48
+#, javascript-format
+msgid "Created: %d."
+msgstr "Luotu: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:70
+#: packages/app-cli/app/command-import.js:49
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Päivitetty: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:71
+#: packages/app-cli/app/command-import.js:50
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Ohitetaan: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:72
+#: packages/app-cli/app/command-import.js:51
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Resursseja: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:73
+#: packages/app-cli/app/command-import.js:52
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Merkityt: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:88
+#: packages/app-cli/app/command-import.js:70
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Muistiinpanot on tuotu: %s"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:42
+msgid "Duplicate"
+msgstr "Duplikaatti, toinen samanlainen"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:47
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Kopio"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:58
+msgid "Switch between note and to-do type"
+msgstr "Vaihda muistiinpanon ja tehtävätyypin välillä"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:86
+msgid "Switch to note type"
+msgstr "Vaihda muistiinpanotyyppiin"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:92
+msgid "Switch to to-do type"
+msgstr "Siirry tehtävätyyppiin"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:99
+#: packages/app-mobile/components/screens/Note.js:817
+msgid "Copy Markdown link"
+msgstr "Kopioi Merkinnän linkki"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:158
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Poista muistiinpano \"%s\"?"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:161
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Poistetaanko nämä %d muistiinpanot?"
+
+#: packages/app-desktop/gui/OneDriveLoginScreen.js:46
+#: packages/app-cli/app/command-sync.js:81
+#: packages/app-cli/app/command-sync.js:95
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Todennusta ei suoritettu loppuun (todennustunnusta ei saatu)."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
+msgid "Master keys that need upgrading"
+msgstr "Pääavaimet, jotka on päivitettävä"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:150
+msgid ""
+"The following master keys use an out-dated encryption algorithm and it is "
+"recommended to upgrade them. The upgraded master key will still be able to "
+"decrypt and encrypt your data as usual."
+msgstr ""
+"Seuraavat pääavaimet käyttävät vanhentunutta salausalgoritmia, ja ne on "
+"suositeltavaa päivittää. Päivitetty pääavain pystyy edelleen purkamaan ja "
+"salaamaan tietosi tavalliseen tapaan."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
+msgid "Upgrade"
+msgstr "Päivitä"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:182
+msgid "Re-encrypt data"
+msgstr "Salaa tiedot uudelleen"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
+msgid ""
+"The default encryption method has been changed to a more secure one and it "
+"is recommended that you apply it to your data."
+msgstr ""
+"Oletussalausmenetelmä on muutettu turvallisemmaksi, ja on suositeltavaa, "
+"että käytät sitä tietoihin."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
+msgid ""
+"You may use the tool below to re-encrypt your data, for example if you know "
+"that some of your notes are encrypted with an obsolete encryption method."
+msgstr ""
+"Voit käyttää alla olevaa työkalua tietojen salaamiseen uudelleen, "
+"esimerkiksi jos tiedät, että osa muistiinpanoistasi on salattu "
+"vanhentuneella salausmenetelmällä."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
+#, javascript-format
+msgid ""
+"In order to do so, your entire data set will have to be encrypted and "
+"synchronised, so it is best to run it overnight.\n"
+"\n"
+"To start, please follow these instructions:\n"
+"\n"
+"1. Synchronise all your devices.\n"
+"2. Click \"%s\".\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your "
+"other devices, to avoid conflicts.\n"
+"4. Once sync is done on this device, sync all your other devices and let it "
+"run to completion.\n"
+"\n"
+"Important: you only need to run this ONCE on one device."
+msgstr ""
+"Tätä varten koko tietojoukko on salattava ja synkronoitava, joten se on "
+"parasta suorittaa yön yli.\n"
+"\n"
+"Aloita noudattamalla seuraavia ohjeita:\n"
+"\n"
+"1. Synkronoi kaikki laitteesi.\n"
+"2. Napsauta \"%s\".\n"
+"3. Anna sen ajaa loppuun. Kun se suoritetaan, vältä muiden laitteiden "
+"muistiinpanojen vaihtamista ristiriitojen välttämiseksi.\n"
+"4. Kun synkronointi on tehty tällä laitteella, synkronoi kaikki muut "
+"laitteesi ja anna sen suorittaa loppuun.\n"
+"\n"
+"Tärkeää: sinun tarvitsee suorittaa tämä kerran vain yhdellä laitteella."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
+#, fuzzy
+msgid "Re-encryption"
+msgstr "Salaus"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
+msgid "Ignore"
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
+#: packages/app-mobile/components/screens/encryption-config.js:215
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+"Salaus poistetaan käytöstä *kaikista* muistiinpanosi ja liitteesi "
+"synkronoidaan uudelleen ja lähetetään salaamattomina synkronointikohteeseen. "
+"Haluatko jatkaa?"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
+#: packages/app-mobile/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Salaus otetaan käyttöön *kaikissa* muistiinpanosi ja liitteesi synkronoidaan "
+"uudelleen ja lähetetään salattuina synkronointikohteeseen. Älä unohda "
+"salasanaa, koska turvallisuussyistä tämä on *ainoa* tapa salauksen "
+"purkamiseen! Ota salaus käyttöön antamalla salasanasi alla."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-mobile/components/screens/encryption-config.js:258
+msgid "Disable encryption"
+msgstr "Poista salaus käytöstä"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-mobile/components/screens/encryption-config.js:258
+msgid "Enable encryption"
+msgstr "Ota salaus käyttöön"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
+msgid "Master Keys"
+msgstr "Pääavaimet"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
+msgid "Active"
+msgstr "Aktiivinen"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:314
+msgid "Source"
+msgstr "Lähde"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
+msgid "Password"
+msgstr "Salasana"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:334
+msgid "Password OK"
+msgstr "Salasana OK"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"Huomaa: Vain yhtä pääavainta käytetään salaukseen (se, joka on merkitty "
+"\"aktiiviseksi\"). Mitä tahansa avainta voidaan käyttää salauksen "
+"purkamiseen sen mukaan, miten muistiinpanot tai muistikirjat alun perin "
+"salattiin."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
+#: packages/app-mobile/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr "Puuttuvat pääavaimet"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
+#: packages/app-mobile/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Näillä tunnuksilla varustettuja pääavaimia käytetään joidenkin kohteiden "
+"salaamiseen, mutta sovelluksella ei tällä hetkellä ole pääsyä niihin. On "
+"todennäköistä, että ne lopulta ladataan synkronoinnin avulla."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
+#: packages/app-mobile/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"Lisätietoja E2EE (End-To-End Encryption) -salauksesta ja sen käyttöönottoon "
+"liittyvistä ohjeista saat seuraavista ohjeista:"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
+#: packages/app-mobile/components/screens/encryption-config.js:279
+#: packages/app-mobile/components/screens/status.js:142
+msgid "Status"
+msgstr "Tila"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
+msgid "Encryption is:"
+msgstr "Salaus on:"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/app-cli/app/command-e2ee.js:110
+msgid "Enabled"
+msgstr "Käytössä"
+
+#: packages/app-desktop/gui/Root.js:97
+msgid "OneDrive Login"
+msgstr "OneDrive kirjautuminen"
+
+#: packages/app-desktop/gui/Root.js:98
+msgid "Dropbox Login"
+msgstr "Dropbox kirjautuminen"
+
+#: packages/app-desktop/gui/Root.js:101
+msgid "Note attachments"
+msgstr "Muistiinpanon liitteet"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:106
+msgid "This will open a new screen. Save your current changes?"
+msgstr "Tämä avaa uuden ikkunan. Tallennetaanko nykyiset muutokset?"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:169
+#: packages/app-mobile/components/screens/config.js:307
+msgid "Check synchronisation configuration"
+msgstr "Tarkista synkronointiasetukset"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:174
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:177
+msgid "Checking..."
+msgstr "Tarkistetaan..."
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:183
+#: packages/lib/models/Resource.js:320
+msgid "Error"
+msgstr "Virhe"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:188
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+"Joplin Nextcloud -sovellusta ei ole joko asennettu tai se on määritetty "
+"väärin. Katso koko virhesanoma:"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:192
+msgid "Show Log"
+msgstr "Näytä loki"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:198
+msgid "Joplin Nextcloud App status:"
+msgstr "Joplin Nextcloud sovelluksen tila:"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:204
+msgid "Check Status"
+msgstr "Tarkista tila"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:208
+msgid "Help"
+msgstr "Apua"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:219
+msgid "Show Advanced Settings"
+msgstr "Näytä lisäasetukset"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
+msgid "Browse..."
+msgstr "Selaa..."
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
+msgid "The application must be restarted for these changes to take effect."
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
+msgid "Do it now"
+msgstr "Hae se nyt"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
+msgid "Later"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
+#, fuzzy
+msgid "Restart now"
+msgstr "Hae se nyt:"
+
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
+msgid "Apply"
+msgstr "Käytä"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
+#, fuzzy, javascript-format
+msgid "Delete plugin \"%s\"?"
+msgstr "Poista muistiinpano \"%s\"?"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
+msgid "Install plugin"
+msgstr ""
+
+#: packages/app-desktop/gui/PromptDialog.min.js:249
+msgid "Clear"
+msgstr "Tyhjennä"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:76
+msgid "Words"
+msgstr "Sanat"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:77
+msgid "Characters"
+msgstr "Merkit"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:78
+msgid "Characters excluding spaces"
+msgstr "Merkit välilyöntejä lukuun ottamatta"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:79
+msgid "Lines"
+msgstr "Rivit"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
+#: packages/lib/models/Setting.js:390 packages/lib/models/Setting.js:391
+#: packages/lib/models/Setting.js:392
+msgid "Editor"
+msgstr "Editoija"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
+#: packages/lib/models/Setting.js:390 packages/lib/models/Setting.js:391
+#: packages/lib/models/Setting.js:393
+msgid "Viewer"
+msgstr "Katselija"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
+#, javascript-format
+msgid "Read time: %s min"
+msgstr "Lukuaika: %s min"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
+msgid "Statistics"
+msgstr "Tilastot"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
+#: packages/app-desktop/gui/ShareNoteDialog.js:175
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
+msgid "Close"
+msgstr "Sulkea"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+msgid "Custom order"
+msgstr "Mukautettu järjestys"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+msgid "View"
+msgstr "Näytä"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/lib/models/Setting.js:405
+msgid "Sort notes by"
+msgstr "Lajittele muistiinpanot"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+"Jos haluat lajitella muistiinpanot manuaalisesti, lajittelujärjestys on "
+"muutettava \"%s\" valikossa \"%s\" > \"%s\""
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:414
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "Ei muistiinpanoja. Luo uusi napsauttamalla \"Uusi muistiinpano\"."
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:414
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Tällä hetkellä ei ole muistikirjaa. Luo uusi napsauttamalla \"Uusi "
+"muistikirja\"."
+
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
+msgid "Note list"
+msgstr "Muistiinpanot"
+
+#: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
+msgid "Search in all the notes"
+msgstr "Etsi kaikista muistiinpanoista"
+
+#: packages/app-desktop/gui/ResourceScreen.js:32
+msgid "Title"
+msgstr "Otsikko"
+
+#: packages/app-desktop/gui/ResourceScreen.js:36
+msgid "Size"
+msgstr "Koko"
+
+#: packages/app-desktop/gui/ResourceScreen.js:40
+msgid "Action"
+msgstr "Toiminta"
+
+#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:737
+msgid "Untitled"
+msgstr "Nimetön"
+
+#: packages/app-desktop/gui/ResourceScreen.js:94
+#, javascript-format
+msgid "Delete attachment \"%s\"?"
+msgstr "Poista muistiinpano \"%s\"?"
+
+#: packages/app-desktop/gui/ResourceScreen.js:140
+msgid ""
+"This is an advanced tool to show the attachments that are linked to your "
+"notes. Please be careful when deleting one of them as they cannot be "
+"restored afterwards."
+msgstr ""
+"Tämä on kehittynyt työkalu muistiinpanoihin linkitettyjen liitteiden "
+"näyttämiseen. Ole varovainen, kun poistat yhden niistä, koska niitä ei voi "
+"palauttaa jälkeenpäin."
+
+#: packages/app-desktop/gui/ResourceScreen.js:141
+msgid "Please wait..."
+msgstr "Odota..."
+
+#: packages/app-desktop/gui/ResourceScreen.js:143
+msgid "No resources!"
+msgstr "Ei resursseja!"
+
+#: packages/app-desktop/gui/ResourceScreen.js:145
+#, javascript-format
+msgid "Warning: not all resources shown for performance reasons (limit: %s)."
+msgstr ""
+"Varoitus: kaikkia resursseja ei näytetä suorituskyvyn vuoksi (raja: %s)."
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:158
+msgid "Synchronising..."
+msgstr "Synkronoidaan..."
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:160
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Luodaan linkki..."
+msgstr[1] "Luodaan linkkejä..."
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:162
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "Linkki on kopioitu leikepöydälle!"
+msgstr[1] "Linkit on kopioitu leikepöydälle!"
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:165
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+"Huomautus: Kun muistiinpano on jaettu, sitä ei enää salata palvelimella."
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
+msgid "Share Notes"
+msgstr "Jaa muistiinpanoja"
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:172
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "Kopioi jaettava linkki"
+msgstr[1] "Kopioi jaettavat linkit"
+
+#: packages/app-desktop/commands/toggleExternalEditing.js:18
+msgid "Toggle external editing"
+msgstr "Vaihda ulkoiseen muokkaukseen"
+
+#: packages/app-desktop/commands/toggleExternalEditing.js:37
+msgid "Stop"
+msgstr "Seis"
+
+#: packages/app-desktop/commands/copyDevCommand.js:18
+msgid "Copy dev mode command to clipboard"
+msgstr "Kopioi kehitystila komento leikepöydälle"
+
+#: packages/app-desktop/commands/stopExternalEditing.js:18
+msgid "Stop external editing"
+msgstr "Lopeta ulkoinen muokkaus"
+
+#: packages/app-desktop/commands/startExternalEditing.js:20
+msgid "Edit in external editor"
+msgstr "Muokkaa ulkoisessa editorissa"
+
+#: packages/app-desktop/commands/startExternalEditing.js:32
+#: packages/app-cli/app/command-edit.js:82
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Virhe avattaessa muistiinpanoa editorissa: %s"
+
+#: packages/app-desktop/commands/openProfileDirectory.js:18
+msgid "Open profile directory"
+msgstr "Avaa profiilihakemisto"
+
+#: packages/app-desktop/app.js:336
+#, javascript-format
+msgid "Open %s"
+msgstr "Avaa %s"
+
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
+#: packages/app-mobile/components/screens/Note.js:504
+#: packages/lib/shim-init-node.js:137 packages/lib/versionInfo.js:25
+msgid "Yes"
+msgstr "Kyllä"
+
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
+#: packages/app-mobile/components/screens/Note.js:505
+#: packages/lib/shim-init-node.js:137 packages/lib/versionInfo.js:25
+msgid "No"
+msgstr "Ei"
+
+#: packages/app-mobile/components/SelectDateTimeDialog.js:78
+msgid "Clear alarm"
+msgstr "Tyhjennä hälytys"
+
+#: packages/app-mobile/components/SelectDateTimeDialog.js:80
+msgid "Save alarm"
+msgstr "Tallenna hälytys"
+
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+msgid "Open"
+msgstr "Avaa"
+
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
+#: packages/app-mobile/components/screens/Note.js:796
+msgid "Share"
+msgstr "Jaa"
+
+#: packages/app-mobile/components/CameraView.js:158
+msgid "Permission to use camera"
+msgstr "Lupa käyttää kameraa"
+
+#: packages/app-mobile/components/CameraView.js:159
+msgid "Your permission to use your camera is required."
+msgstr "Tarvitset luvan käyttää kameraa."
+
+#: packages/app-mobile/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "Poistetaanko nämä muistiinpanot?"
+
+#: packages/app-mobile/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "Muistikirja: %s"
+
+#: packages/app-mobile/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Salattuja muistikirjoja ei voi nimetä uudelleen"
+
+#: packages/app-mobile/components/side-menu-content.js:312
+msgid "New Notebook"
+msgstr "Uusi muistikirja"
+
+#: packages/app-mobile/components/side-menu-content.js:316
+msgid "Configuration"
+msgstr "Konfigurointi"
+
+#: packages/app-mobile/components/note-list.js:97
+msgid "You currently have no notebooks."
+msgstr "Sinulla ei ole muistikirjoja."
+
+#: packages/app-mobile/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "Luo muistikirja"
+
+#: packages/app-mobile/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+"Tällä hetkellä ei ole muistiinpanoja. Luo sellainen napsauttamalla (+) -"
+"painiketta."
+
+#: packages/app-mobile/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Muistikirjaa ei voitu tallentaa: %s"
+
+#: packages/app-mobile/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Muokkaa muistikirjaa"
+
+#: packages/app-mobile/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "Anna muistikirjan otsikko"
+
+#: packages/app-mobile/components/screens/onedrive-login.js:110
+msgid "Login with OneDrive"
+msgstr "Kirjaudu sisään OneDrive"
+
+#: packages/app-mobile/components/screens/onedrive-login.js:121
+#: packages/app-mobile/components/screens/status.js:144
+msgid "Refresh"
+msgstr "Päivitä"
+
+#: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
+msgid "Sync Target Upgrade"
+msgstr "Synkronoi kohteen päivitys"
+
+#: packages/app-mobile/components/screens/notes.js:154
+#: packages/app-cli/app/command-rmbook.js:26
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"Poistetaanko muistikirja? Kaikki tämän muistikirjan muistiinpanot ja "
+"alimuistikirjat poistetaan myös."
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Uudet tunnisteet:"
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr "Kirjoita uudet tunnisteet tai valitse luettelosta"
+
+#: packages/app-mobile/components/screens/dropbox-login.js:55
+msgid "Login with Dropbox"
+msgstr "Kirjaudu sisään Dropbox"
+
+#: packages/app-mobile/components/screens/dropbox-login.js:66
+msgid "Enter code here"
+msgstr "Syötä koodi tähän"
+
+#: packages/app-mobile/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Pääavain %s"
+
+#: packages/app-mobile/components/screens/encryption-config.js:120
+#: packages/app-mobile/components/screens/Note.js:724
+#, javascript-format
+msgid "Created: %s"
+msgstr "Luotu: %s"
+
+#: packages/app-mobile/components/screens/encryption-config.js:122
+#: packages/app-mobile/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "Salasana:"
+
+#: packages/app-mobile/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "Salasana ei voi olla tyhjä"
+
+#: packages/app-mobile/components/screens/encryption-config.js:139
+msgid "Confirm password cannot be empty"
+msgstr "Vahvista salasana ei voi olla tyhjä"
+
+#: packages/app-mobile/components/screens/encryption-config.js:140
+#: packages/app-cli/app/command-e2ee.js:85
+msgid "Passwords do not match!"
+msgstr "Salasana ei täsmää!"
+
+#: packages/app-mobile/components/screens/encryption-config.js:163
+#: packages/app-cli/app/command-e2ee.js:79
+msgid "Confirm password:"
+msgstr "Vahvista salasana:"
+
+#: packages/app-mobile/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "Ota käyttöön"
+
+#: packages/app-mobile/components/screens/encryption-config.js:264
+#: packages/app-mobile/components/screens/config.js:316
+msgid "Encryption Config"
+msgstr "Salauksen määritys"
+
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/app-cli/app/command-e2ee.js:110
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Salaus on: %s"
+
+#: packages/app-mobile/components/screens/config.js:50
+msgid "Warning"
+msgstr "Varoitus"
+
+#: packages/app-mobile/components/screens/config.js:50
+#: packages/app-mobile/components/screens/config.js:147
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"Tiedostojärjestelmän synkronoinnin käyttäminen edellyttää oikeutta "
+"kirjoittaa ulkoiseen tallennustilaan."
+
+#: packages/app-mobile/components/screens/config.js:146
+msgid "Information"
+msgstr "Tiedot"
+
+#: packages/app-mobile/components/screens/config.js:436
+msgid "Tools"
+msgstr "Työkalut"
+
+#: packages/app-mobile/components/screens/config.js:438
+msgid "Sync Status"
+msgstr "Synkronoinnin tila"
+
+#: packages/app-mobile/components/screens/config.js:439
+msgid "Log"
+msgstr "Loki"
+
+#: packages/app-mobile/components/screens/config.js:441
+msgid "Creating report..."
+msgstr "Luodaan raporttia..."
+
+#: packages/app-mobile/components/screens/config.js:441
+msgid "Export Debug Report"
+msgstr "Vie virheenkorjausraportti"
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid "Fixing search index..."
+msgstr "Korjataan hakuindeksiä..."
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid "Fix search index"
+msgstr "Hakuindeksin korjaaminen"
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"Tämän avulla voit muodostaa hakuindeksin uudelleen, jos haussa on ongelma. "
+"Se voi kestää kauan muistiinpanojen määrästä riippuen."
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "Exporting profile..."
+msgstr "Viedään profiili..."
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "Export profile"
+msgstr "Vie profiili"
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr "Vain virheenkorjausta varten: vie profiilisi ulkoiselle SD-kortille."
+
+#: packages/app-mobile/components/screens/config.js:461
+msgid "More information"
+msgstr "Lisätietoja"
+
+#: packages/app-mobile/components/screens/config.js:471
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"Toimiakseen oikein sovellus tarvitsee seuraavat käyttöoikeudet. Ota ne "
+"käyttöön puhelimesi asetuksissa, valitsemalla Sovellukset> Joplin> "
+"Käyttöoikeudet"
+
+#: packages/app-mobile/components/screens/config.js:474
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- Tallennustila: sallia tiedostojen liittäminen muistiinpanoihin ja ottaa "
+"tiedostojärjestelmän synkronointi käyttöön."
+
+#: packages/app-mobile/components/screens/config.js:477
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "- Kamera: sallii kuvan ottamisen ja liittämisen muistiinpanoon."
+
+#: packages/app-mobile/components/screens/config.js:480
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- Sijainti: sallii paikkatietojen liittämisen muistiinpanoon."
+
+#: packages/app-mobile/components/screens/config.js:509
+msgid "Joplin website"
+msgstr "Joplin verkkosivusto"
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "This note has been modified:"
+msgstr "Tätä muistiinpanoa on muutettu:"
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "Save changes"
+msgstr "Tallenna muutokset"
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "Discard changes"
+msgstr "Hylkää muutokset"
+
+#: packages/app-mobile/components/screens/Note.js:150
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Ei kohdetta tunnuksella %s"
+
+#: packages/app-mobile/components/screens/Note.js:168
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Tätä liitettä ei ole vielä ladattu tai sitä ei ole vielä purettu."
+
+#: packages/app-mobile/components/screens/Note.js:173
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+"Joplin mobiilisovellus ei tällä hetkellä tue tämän tyyppistä linkkiä: %s"
+
+#: packages/app-mobile/components/screens/Note.js:178
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "Linkkejä protokollaan \"%s\" ei tueta"
+
+#: packages/app-mobile/components/screens/Note.js:342
+msgid ""
+"In order to associate a geo-location with the note, the app needs your "
+"permission to access your location.\n"
+"\n"
+"You may turn off this option at any time in the Configuration screen."
+msgstr ""
+"Jotta voit liittää maantieteellisen sijainnin muistiinpanoon, sovellus "
+"tarvitsee luvan käyttää sijaintiasi.\n"
+"\n"
+"Voit poistaa tämän asetuksen käytöstä milloin tahansa Määritys näytössä."
+
+#: packages/app-mobile/components/screens/Note.js:343
+msgid "Permission needed"
+msgstr "Tarvittava lupa"
+
+#: packages/app-mobile/components/screens/Note.js:449
+#: packages/app-cli/app/command-rmnote.js:27
+msgid "Delete note?"
+msgstr "Poistetaanko merkintä?"
+
+#: packages/app-mobile/components/screens/Note.js:503
+#: packages/lib/shim-init-node.js:136
+#, javascript-format
+msgid ""
+"You are about to attach a large image (%dx%d pixels). Would you like to "
+"resize it down to %d pixels before attaching it?"
+msgstr ""
+"Olet liittämässä suurta kuvaa (%dx%d pikseliä). Haluatko muuttaa sen koon %d "
+"pikseliä ennen sen liittämistä?"
+
+#: packages/app-mobile/components/screens/Note.js:585
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Kuvan tiedostotyyppiä ei tueta: %s"
+
+#: packages/app-mobile/components/screens/Note.js:725
+#, javascript-format
+msgid "Updated: %s"
+msgstr "Päivitetty: %s"
+
+#: packages/app-mobile/components/screens/Note.js:728
+msgid "View on map"
+msgstr "Näytä kartalla"
+
+#: packages/app-mobile/components/screens/Note.js:735
+msgid "Go to source URL"
+msgstr "Siirry lähteen URL-osoitteeseen"
+
+#: packages/app-mobile/components/screens/Note.js:764
+msgid "Attach..."
+msgstr "Liittää..."
+
+#: packages/app-mobile/components/screens/Note.js:775
+msgid "Attach photo"
+msgstr "Liitä valokuva"
+
+#: packages/app-mobile/components/screens/Note.js:776
+msgid "Take photo"
+msgstr "Ota valokuva"
+
+#: packages/app-mobile/components/screens/Note.js:777
+msgid "Choose an option"
+msgstr "Valitse vaihtoehto"
+
+#: packages/app-mobile/components/screens/Note.js:810
+msgid "Convert to note"
+msgstr "Muunna muistiinpanoksi"
+
+#: packages/app-mobile/components/screens/Note.js:810
+msgid "Convert to todo"
+msgstr "Muunna tehtäväksi"
+
+#: packages/app-mobile/components/screens/Note.js:824
+msgid "Properties"
+msgstr "Ominaisuudet"
+
+#: packages/app-mobile/components/screens/Note.js:1008
+msgid "Add body"
+msgstr "Lisää runko"
+
+#: packages/app-mobile/components/screens/Note.js:1034
+msgid "Add title"
+msgstr "Lisää otsikko"
+
+#: packages/app-mobile/components/screens/search.js:160
+msgid "Search"
+msgstr "Etsi"
+
+#: packages/lib/onedrive-api-node-utils.js:46
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
+#: packages/lib/onedrive-api-node-utils.js:86
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr "Sovellus on hyväksytty - voit nyt sulkea tämän välilehden."
+
+#: packages/lib/onedrive-api-node-utils.js:88
+msgid "The application has been successfully authorised."
+msgstr "Sovelluksen käyttö on hyväksytty onnistuneesti."
+
+#: packages/lib/onedrive-api-node-utils.js:116
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"Todenna sovellus avaamalla selaimessasi seuraava URL-osoite. Sovellus luo "
+"hakemiston \"Sovellukset / Joplin\" ja lukee ja kirjoittaa vain tiedostoja "
+"tähän hakemistoon. Sillä ei ole pääsyä tämän hakemiston ulkopuolisiin "
+"tiedostoihin eikä muihin henkilötietoihin. Tietoja ei jaeta kolmannen "
+"osapuolen kanssa."
+
+#: packages/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
+msgstr "AWS S3"
+
+#: packages/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: packages/lib/shim-init-node.js:201
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Ei voi käyttää %s"
+
+#: packages/lib/models/Folder.js:27 packages/lib/models/Note.js:26
+msgid "title"
+msgstr "otsikko"
+
+#: packages/lib/models/Folder.js:28 packages/lib/models/Note.js:27
+msgid "updated date"
+msgstr "päivitetty päivämäärä"
+
+#: packages/lib/models/Folder.js:97
+msgid "Conflicts"
+msgstr "Ristiriitoja"
+
+#: packages/lib/models/Folder.js:406
+msgid "Cannot move notebook to this location"
+msgstr "Muistikirjaa ei voi siirtää tähän sijaintiin"
+
+#: packages/lib/models/Folder.js:458
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr "Muistikirjoja ei voi nimetä \"%s\", joka on varattu otsikko."
+
+#: packages/lib/models/Setting.js:66
+msgid "yes"
+msgstr "kyllä"
+
+#: packages/lib/models/Setting.js:66 packages/lib/models/Setting.js:67
+#, javascript-format
+msgid "(wysiwyg: %s)"
+msgstr "(wysiwyg: %s)"
+
+#: packages/lib/models/Setting.js:67
+msgid "no"
+msgstr "ei"
+
+#: packages/lib/models/Setting.js:69
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Huomio: Jos muutat tätä sijaintia, varmista, että kopioit kaiken sisältösi "
+"siihen ennen synkronointia, muuten kaikki tiedostot poistetaan! Lisätietoja "
+"on usein kysytyissä kysymyksissä: %s"
+
+#: packages/lib/models/Setting.js:75
+msgid "Light"
+msgstr "Vaalea"
+
+#: packages/lib/models/Setting.js:76
+msgid "Dark"
+msgstr "Tumma"
+
+#: packages/lib/models/Setting.js:77
+msgid "Dracula"
+msgstr "Dracula"
+
+#: packages/lib/models/Setting.js:78
+msgid "Solarised Light"
+msgstr "Solarised Light"
+
+#: packages/lib/models/Setting.js:79
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: packages/lib/models/Setting.js:80
+msgid "Nord"
+msgstr "Nord"
+
+#: packages/lib/models/Setting.js:81
+msgid "Aritim Dark"
+msgstr "Aritim Dark"
+
+#: packages/lib/models/Setting.js:82
+msgid "OLED Dark"
+msgstr "OLED Dark"
+
+#: packages/lib/models/Setting.js:103
+msgid "Synchronisation target"
+msgstr "Synkronointikohde"
+
+#: packages/lib/models/Setting.js:105
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Kohde, johon synkronoidaan. Jokaisella synkronointikohteella voi olla muita "
+"parametreja, joiden nimi on `sync.NUM.NAME` (kaikki dokumentoitu jäljempänä)."
+
+#: packages/lib/models/Setting.js:132
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Kansio, jonka kanssa synkronoidaan (absoluuttinen polku)"
+
+#: packages/lib/models/Setting.js:143
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV osoite (URL)"
+
+#: packages/lib/models/Setting.js:154
+msgid "Nextcloud username"
+msgstr "Nextcloud käyttäjänimi"
+
+#: packages/lib/models/Setting.js:164
+msgid "Nextcloud password"
+msgstr "Nextcloud salasana"
+
+#: packages/lib/models/Setting.js:175
+msgid "WebDAV URL"
+msgstr "WebDAV osoite (URL)"
+
+#: packages/lib/models/Setting.js:186
+msgid "WebDAV username"
+msgstr "WebDAV käyttäjänimi"
+
+#: packages/lib/models/Setting.js:196
+msgid "WebDAV password"
+msgstr "WebDAV salasana"
+
+#: packages/lib/models/Setting.js:215
+msgid "AWS S3 bucket"
+msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.js:226
+msgid "AWS S3 URL"
+msgstr "AWS S3 osoite (URL)"
+
+#: packages/lib/models/Setting.js:237
+msgid "AWS key"
+msgstr "AWS key"
+
+#: packages/lib/models/Setting.js:247
+msgid "AWS secret"
+msgstr "AWS secret"
+
+#: packages/lib/models/Setting.js:259
+msgid "Attachment download behaviour"
+msgstr "Liitteen latauskäyttäytyminen"
+
+#: packages/lib/models/Setting.js:260
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"Manuaalisessa tilassa liitteet ladataan vain, kun napsautat niitä. \"Auto\" -"
+"kohdassa ne ladataan, kun avaat muistiinpanon. \"Aina\" -kohdassa kaikki "
+"liitteet ladataan riippumatta siitä, avaatko muistiinpanon vai et."
+
+#: packages/lib/models/Setting.js:263
+msgid "Always"
+msgstr "Aina"
+
+#: packages/lib/models/Setting.js:264
+msgid "Manual"
+msgstr "Manuaalinen"
+
+#: packages/lib/models/Setting.js:265
+msgid "Auto"
+msgstr "Automaattinen"
+
+#: packages/lib/models/Setting.js:280
+msgid "Max concurrent connections"
+msgstr "Samanaikaiset yhteydet enintään"
+
+#: packages/lib/models/Setting.js:292
+msgid "Language"
+msgstr "Kieli"
+
+#: packages/lib/models/Setting.js:302
+msgid "Date format"
+msgstr "Päivämäärän muoto"
+
+#: packages/lib/models/Setting.js:321
+msgid "Time format"
+msgstr "Ajan muoto"
+
+#: packages/lib/models/Setting.js:339
+msgid "Theme"
+msgstr "Teema"
+
+#: packages/lib/models/Setting.js:349
+msgid "Automatically switch theme to match system theme"
+msgstr "Vaihda teema automaattisesti vastaamaan järjestelmän teemaa"
+
+#: packages/lib/models/Setting.js:360
+msgid "Preferred light theme"
+msgstr "Ensisijainen vaalea teema"
+
+#: packages/lib/models/Setting.js:373
+msgid "Preferred dark theme"
+msgstr "Ensisijainen tumma teema"
+
+#: packages/lib/models/Setting.js:382
+msgid "Show note counts"
+msgstr "Näytä muistiinpanojen määrä"
+
+#: packages/lib/models/Setting.js:390 packages/lib/models/Setting.js:392
+#: packages/lib/models/Setting.js:393
+msgid "Split View"
+msgstr "Jaettu näkymä"
+
+#: packages/lib/models/Setting.js:390
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: packages/lib/models/Setting.js:391 packages/lib/models/Setting.js:392
+#: packages/lib/models/Setting.js:393
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: packages/lib/models/Setting.js:396
+msgid "Uncompleted to-dos on top"
+msgstr "Keskeneräiset tehtävät ylhäällä"
+
+#: packages/lib/models/Setting.js:397
+msgid "Show completed to-dos"
+msgstr "Näytä valmiit tehtävät"
+
+#: packages/lib/models/Setting.js:422
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "Yhdistä sulut, sulkeet, lainaukset jne."
+
+#: packages/lib/models/Setting.js:424 packages/lib/models/Setting.js:442
+msgid "Reverse sort order"
+msgstr "Käänteinen lajittelujärjestys"
+
+#: packages/lib/models/Setting.js:431
+msgid "Sort notebooks by"
+msgstr "Muistikirjojen lajitteleminen"
+
+#: packages/lib/models/Setting.js:443
+msgid "Save geo-location with notes"
+msgstr "Tallenna maantieteellinen sijainti muistiinpanojen avulla"
+
+#: packages/lib/models/Setting.js:465
+msgid "When creating a new to-do:"
+msgstr "Kun luot uuden tehtävän:"
+
+#: packages/lib/models/Setting.js:468 packages/lib/models/Setting.js:483
+msgid "Focus title"
+msgstr "Tarkennuksen otsikko"
+
+#: packages/lib/models/Setting.js:469 packages/lib/models/Setting.js:484
+msgid "Focus body"
+msgstr "Tarkennuksen runko"
+
+#: packages/lib/models/Setting.js:480
+msgid "When creating a new note:"
+msgstr "Kun luot uutta muistiinpanoa:"
+
+#: packages/lib/models/Setting.js:494 packages/lib/models/Setting.js:1327
+msgid "Plugins"
+msgstr "Laajennukset"
+
+#: packages/lib/models/Setting.js:511
+msgid "Enable soft breaks"
+msgstr "Ota pehmeät tauot käyttöön"
+
+#: packages/lib/models/Setting.js:512
+msgid "Enable typographer support"
+msgstr "Ota typografiatuki käyttöön"
+
+#: packages/lib/models/Setting.js:513
+msgid "Enable math expressions"
+msgstr "Ota matemaattiset lausekkeet käyttöön"
+
+#: packages/lib/models/Setting.js:514
+msgid "Enable Fountain syntax support"
+msgstr "Ota Fountain syntaksin tuki käyttöön"
+
+#: packages/lib/models/Setting.js:515
+msgid "Enable Mermaid diagrams support"
+msgstr "Ota Mermaid kaavioiden tuki käyttöön"
+
+#: packages/lib/models/Setting.js:516
+msgid "Enable ==mark== syntax"
+msgstr "Ota käyttöön ==mark== syntax"
+
+#: packages/lib/models/Setting.js:517
+msgid "Enable footnotes"
+msgstr "Ota alaviitteet käyttöön"
+
+#: packages/lib/models/Setting.js:518
+msgid "Enable table of contents extension"
+msgstr "Ota sisällysluettelon laajennus käyttöön"
+
+#: packages/lib/models/Setting.js:519
+msgid "Enable ~sub~ syntax"
+msgstr "Ota käyttöön ~sub~ syntax"
+
+#: packages/lib/models/Setting.js:520
+msgid "Enable ^sup^ syntax"
+msgstr "Ota käyttöön ^sup^ syntax"
+
+#: packages/lib/models/Setting.js:521
+msgid "Enable deflist syntax"
+msgstr "Ota deflist syntaksi käyttöön"
+
+#: packages/lib/models/Setting.js:522
+msgid "Enable abbreviation syntax"
+msgstr "Ota lyhenteen syntaksi käyttöön"
+
+#: packages/lib/models/Setting.js:523
+msgid "Enable markdown emoji"
+msgstr "Ota merkinnän hymiö käyttöön"
+
+#: packages/lib/models/Setting.js:524
+msgid "Enable ++insert++ syntax"
+msgstr "Ota käyttöön ++insert++ syntax"
+
+#: packages/lib/models/Setting.js:525
+msgid "Enable multimarkdown table extension"
+msgstr "Ota multimarkdown taulukon laajennus käyttöön"
+
+#: packages/lib/models/Setting.js:536
+msgid "Show tray icon"
+msgstr "Näytä kuvake tehtäväpalkissa"
+
+#: packages/lib/models/Setting.js:538
+msgid "Note: Does not work in all desktop environments."
+msgstr "Huomautus: Ei toimi kaikissa työpöytäympäristöissä."
+
+#: packages/lib/models/Setting.js:538
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+"Antaa Joplinille mahdollisuuden toimia taustalla. On suositeltavaa ottaa "
+"tämä asetus käyttöön, jotta muistiinpanoja synkronoidaan jatkuvasti, näin "
+"vähennetään ristiriitojen määrää."
+
+#: packages/lib/models/Setting.js:541
+msgid "Start application minimised in the tray icon"
+msgstr "Käynnistys sovellus pienennetään tehtäväpalkkiin"
+
+#: packages/lib/models/Setting.js:556
+msgid "Editor font size"
+msgstr "Editorin fonttikoko"
+
+#: packages/lib/models/Setting.js:563
+msgid "Editor font"
+msgstr "Editorin fontti"
+
+#: packages/lib/models/Setting.js:587
+msgid "Editor font family"
+msgstr "Editorin fonttiperhe"
+
+#: packages/lib/models/Setting.js:588
+msgid ""
+"This should be a *monospace* font or some elements will render incorrectly. "
+"If the font is incorrect or empty, it will default to a generic monospace "
+"font."
+msgstr ""
+"Tämän on oltava *monospace* fontti, muuten se ei toimi oikein. Jos kirjasin "
+"on väärä tai tyhjä, se on oletusarvoisesti yleinen monospace fontti."
+
+#: packages/lib/models/Setting.js:609
+#, fuzzy
+msgid "Custom stylesheet for rendered Markdown"
+msgstr "Mukautettu tyylitaulukko Joplinin sovellustyyleille"
+
+#: packages/lib/models/Setting.js:625
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Mukautettu tyylitaulukko Joplinin sovellustyyleille"
+
+#: packages/lib/models/Setting.js:630
+msgid "Automatically update the application"
+msgstr "Päivitä sovellus automaattisesti"
+
+#: packages/lib/models/Setting.js:631
+msgid "Get pre-releases when checking for updates"
+msgstr "Hanki ennakkojulkaisuja, kun etsit päivityksiä"
+
+#: packages/lib/models/Setting.js:631
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr "Lisätietoja on ennakkojulkaisusivulla: %s"
+
+#: packages/lib/models/Setting.js:639
+msgid "Synchronisation interval"
+msgstr "Synkronoinnin aikaväli"
+
+#: packages/lib/models/Setting.js:643 packages/lib/models/Setting.js:644
+#: packages/lib/models/Setting.js:645
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d minuuttia"
+
+#: packages/lib/models/Setting.js:646
+#, javascript-format
+msgid "%d hour"
+msgstr "%d tunti"
+
+#: packages/lib/models/Setting.js:647 packages/lib/models/Setting.js:648
+#, javascript-format
+msgid "%d hours"
+msgstr "%d tuntia"
+
+#: packages/lib/models/Setting.js:655
+msgid "Text editor command"
+msgstr "Tekstieditorin komento"
+
+#: packages/lib/models/Setting.js:655
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Editorikomento (voi sisältää argumentteja), jota käytetään muistiinpanon "
+"avaamiseen. Jos mitään ei ole annettu, se yrittää tunnistaa oletuseditorin "
+"automaattisesti."
+
+#: packages/lib/models/Setting.js:656
+msgid "Page size for PDF export"
+msgstr "PDF-viennin sivukoko"
+
+#: packages/lib/models/Setting.js:658
+msgid "A4"
+msgstr "A4"
+
+#: packages/lib/models/Setting.js:659
+msgid "Letter"
+msgstr "Letter"
+
+#: packages/lib/models/Setting.js:660
+msgid "A3"
+msgstr "A3"
+
+#: packages/lib/models/Setting.js:661
+msgid "A5"
+msgstr "A5"
+
+#: packages/lib/models/Setting.js:662
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: packages/lib/models/Setting.js:663
+msgid "Legal"
+msgstr "Legal"
+
+#: packages/lib/models/Setting.js:666
+msgid "Page orientation for PDF export"
+msgstr "Sivun suunta PDF-vientiä varten"
+
+#: packages/lib/models/Setting.js:668
+msgid "Portrait"
+msgstr "Pysty"
+
+#: packages/lib/models/Setting.js:669
+msgid "Landscape"
+msgstr "Vaaka"
+
+#: packages/lib/models/Setting.js:679
+msgid "Keyboard Mode"
+msgstr "Näppäimistötila"
+
+#: packages/lib/models/Setting.js:682
+msgid "Default"
+msgstr "Oletus"
+
+#: packages/lib/models/Setting.js:683
+msgid "Emacs"
+msgstr "Emacs"
+
+#: packages/lib/models/Setting.js:684
+msgid "Vim"
+msgstr "Vim"
+
+#: packages/lib/models/Setting.js:707
+msgid "Custom TLS certificates"
+msgstr "Mukautetut TLS-varmenteet"
+
+#: packages/lib/models/Setting.js:708
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+"Pilkuilla erotettu luettelo hakemistoiden poluista, joilta varmenteet "
+"ladataan, tai polku yksittäisiin varmennetiedostoihin. Esimerkiksi: /my/"
+"cert_dir, /other/custom.pem. Huomaa, että jos teet muutoksia TLS-asetuksiin, "
+"sinun on tallennettava muutokset ennen kuin napsautat \"Tarkista "
+"synkronointiasetukset\"."
+
+#: packages/lib/models/Setting.js:720
+msgid "Ignore TLS certificate errors"
+msgstr "Ohita TLS-varmenteen virheet"
+
+#: packages/lib/models/Setting.js:728
+msgid "Fail-safe"
+msgstr "Vikaturvallinen"
+
+#: packages/lib/models/Setting.js:729
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+"Vikasietoinen: Älä pyyhi paikallisia tietoja, kun synkronointikohde on tyhjä "
+"(usein virheellisen määritysvirheen tai virheen seurauksena)"
+
+#: packages/lib/models/Setting.js:732
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Määritä portti, jota API-palvelimen on käytettävä. Jos sitä ei ole "
+"määritetty, käytetään oletusarvoa."
+
+#: packages/lib/models/Setting.js:737
+msgid "Enable note history"
+msgstr "Muistiinpanohistorian ottaminen käyttöön"
+
+#: packages/lib/models/Setting.js:747
+msgid "days"
+msgstr "päivää"
+
+#: packages/lib/models/Setting.js:747
+#, javascript-format
+msgid "%d days"
+msgstr "%d päivää"
+
+#: packages/lib/models/Setting.js:749
+msgid "Keep note history for"
+msgstr "Säilytä muistiinpanohistoria"
+
+#: packages/lib/models/Setting.js:774
+msgid "Notebook list growth factor"
+msgstr "Muistikirjaluettelon kasvutekijä"
+
+#: packages/lib/models/Setting.js:775 packages/lib/models/Setting.js:787
+#: packages/lib/models/Setting.js:799
+msgid ""
+"The factor property sets how the item will grow or shrink to fit the "
+"available space in its container with respect to the other items. Thus an "
+"item with a factor of 2 will take twice as much space as an item with a "
+"factor of 1.Restart app to see changes."
+msgstr ""
+"Kerroin-ominaisuus määrittää, miten kohde kasvaa tai kutistuu niin, että se "
+"sopii säiliössä olevaan tilaan suhteessa muihin kohteisiin. Näin ollen "
+"kohde, jonka kerroin on 2, vie kaksi kertaa enemmän tilaa kuin kohde, jonka "
+"kerroin on 1.Restart-sovellus muutosten näkemistä varten."
+
+#: packages/lib/models/Setting.js:786
+msgid "Note list growth factor"
+msgstr "Huomautus luettelon kasvutekijä"
+
+#: packages/lib/models/Setting.js:798
+msgid "Note area growth factor"
+msgstr "Huomautus alueen kasvutekijä"
+
+#: packages/lib/models/Setting.js:969
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Virheellinen asetusarvo: \"%s\". Mahdolliset arvot ovat: %s."
+
+#: packages/lib/models/Setting.js:1317
+msgid "General"
+msgstr "Yleiset"
+
+#: packages/lib/models/Setting.js:1319
+msgid "Synchronisation"
+msgstr "Synkronointi"
+
+#: packages/lib/models/Setting.js:1321
+msgid "Appearance"
+msgstr "Ulkonäkö"
+
+#: packages/lib/models/Setting.js:1323
+msgid "Note"
+msgstr "Huomautus"
+
+#: packages/lib/models/Setting.js:1325
+#: packages/lib/services/interop/InteropService.js:49
+#: packages/lib/services/interop/InteropService.js:59
+msgid "Markdown"
+msgstr "Markdown"
+
+#: packages/lib/models/Setting.js:1329
+msgid "Application"
+msgstr "Sovellus"
+
+#: packages/lib/models/Setting.js:1333
+msgid "Encryption"
+msgstr "Salaus"
+
+#: packages/lib/models/Setting.js:1335
+msgid "Web Clipper"
+msgstr "Web Clipper"
+
+#: packages/lib/models/Setting.js:1337
+msgid "Keyboard Shortcuts"
+msgstr "Pikanäppäimet"
+
+#: packages/lib/models/Setting.js:1344
+msgid ""
+"These plugins enhance the Markdown renderer with additional features. Please "
+"note that, while these features might be useful, they are not standard "
+"Markdown and thus most of them will only work in Joplin. Additionally, some "
+"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
+"uses one of these plugins in that editor, you will lose the plugin "
+"formatting. It is indicated below which plugins are compatible or not with "
+"the WYSIWYG editor."
+msgstr ""
+"Nämä laajennukset parantavat Markdown renderöijää lisäominaisuuksilla. "
+"Huomaa, että vaikka nämä ominaisuudet voivat olla hyödyllisiä, ne eivät ole "
+"tavallisia markdown ja siksi suurin osa niistä toimii vain Joplinissa. "
+"Lisäksi jotkut niistä ovat *yhteensopimattomia* WYSIWYG editorin kanssa. Jos "
+"avaat viestin, joka käyttää jotakin näistä laajennuksia editorissa, menetät "
+"laajennuksen muotoilun. Alla on ilmoitettu, mitkä laajennukset ovat "
+"yhteensopivia tai eivät ole yhteensopivia WYSIWYG editorin kanssa."
+
+#: packages/lib/models/Setting.js:1346
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Muistiinpanot ja asetukset tallennetaan: %s"
+
+#: packages/lib/models/Resource.js:317
+msgid "Not downloaded"
+msgstr "Ei ladattu"
+
+#: packages/lib/models/Resource.js:318
+msgid "Downloading"
+msgstr "Ladataan"
+
+#: packages/lib/models/Resource.js:319
+msgid "Downloaded"
+msgstr "Ladattu"
+
+#: packages/lib/models/Resource.js:371
+#, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "Liitteen ristiriita: \"%s\""
+
+#: packages/lib/models/Resource.js:372
+#, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr ""
+"Alla olevassa liitteessä oli [ristiriita](%s).\n"
+"\n"
+"%s"
+
+#: packages/lib/models/Tag.js:202
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "Tunniste \"%s\" on jo olemassa. Valitse toinen nimi."
+
+#: packages/lib/models/Note.js:28
+msgid "created date"
+msgstr "luotu päivämäärä"
+
+#: packages/lib/models/Note.js:29
+msgid "custom order"
+msgstr "mukautettu järjestys"
+
+#: packages/lib/models/Note.js:93
+msgid "This note does not have geolocation information."
+msgstr "Tässä muistiinpanossa ei ole sijaintitietoja."
+
+#: packages/lib/models/Note.js:483
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Muistiinpanoa ei voi kopioida \"%s\" muistikirjaan"
+
+#: packages/lib/models/Note.js:494
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Muistiinpanoa ei voi siirtää\"%s\" muistikirjaan"
+
+#: packages/lib/models/BaseItem.js:736
+msgid "Encrypted"
+msgstr "Salattu"
+
+#: packages/lib/models/BaseItem.js:796
+msgid "Encrypted items cannot be modified"
+msgstr "Salattuja kohteita ei voi muokata"
+
+#: packages/lib/SyncTargetOneDriveDev.js:15
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (Vain testausta varten)"
+
+#: packages/lib/BaseApplication.js:147 packages/lib/BaseApplication.js:159
+#: packages/lib/BaseApplication.js:191
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Käyttö: %s"
+
+#: packages/lib/BaseApplication.js:226
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Tuntematon merkintä: %s"
+
+#: packages/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: packages/lib/components/shared/config-shared.js:46
+msgid "Checking... Please wait."
+msgstr "Tarkistetaan... Odota hetki."
+
+#: packages/lib/components/shared/config-shared.js:48
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Suoritettu! Synkronoinnin määritys näyttää olevan oikea."
+
+#: packages/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Virhe. Tarkista URL-osoite, käyttäjänimi, salasana jne. ovat oikeita ja "
+"synkronointikohde on käytettävissä. Raportoitu virhe oli:"
+
+#: packages/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "Sovellukset on saanut luvan!"
+
+#: packages/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Sovelluksen valtuuttaminen epäonnistui:\n"
+"\n"
+"%s\n"
+"\n"
+"Yritä uudelleen."
+
+#: packages/lib/components/shared/encryption-config-shared.js:33
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr "Varmista, että haluat salata koko tietokannan uudelleen."
+
+#: packages/lib/components/shared/encryption-config-shared.js:39
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr "Tietosi salataan ja synkronoidaan uudelleen."
+
+#: packages/lib/components/shared/encryption-config-shared.js:49
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+"Kirjoita salasana alla olevaan pääavainluetteloon ennen avaimen "
+"päivittämistä."
+
+#: packages/lib/components/shared/encryption-config-shared.js:58
+msgid "The master key has been upgraded successfully!"
+msgstr "Pääavain on päivitetty onnistuneesti!"
+
+#: packages/lib/components/shared/encryption-config-shared.js:60
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr "Pääavainta ei voitu päivittää: %s"
+
+#: packages/lib/components/shared/encryption-config-shared.js:116
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Purettuja kohteita: %s / %s"
+
+#: packages/lib/onedrive-api.js:367
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Tunnusta ei voi päivittää: todennustiedot puuttuvat. Synkronoinnin "
+"aloittaminen uudelleen saattaa korjata ongelman."
+
+#: packages/lib/Synchronizer.js:108
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Luodut paikalliset kohteet: %d."
+
+#: packages/lib/Synchronizer.js:110
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Päivitetyt paikalliset kohteet: %d."
+
+#: packages/lib/Synchronizer.js:112
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Luodut etäkohteet: %d."
+
+#: packages/lib/Synchronizer.js:114
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Päivitetyt etäkohteet: %d."
+
+#: packages/lib/Synchronizer.js:116
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Poistetut paikalliset kohteet: %d."
+
+#: packages/lib/Synchronizer.js:118
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Poistetut etäkohteet: %d."
+
+#: packages/lib/Synchronizer.js:120
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Noudetut kohteet: %d/%d."
+
+#: packages/lib/Synchronizer.js:122
+msgid "Cancelling..."
+msgstr "Peruutetaan..."
+
+#: packages/lib/Synchronizer.js:124
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Valmis: %s"
+
+#: packages/lib/Synchronizer.js:126
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Viimeinen virhe: %s"
+
+#: packages/lib/Synchronizer.js:233
+msgid "Idle"
+msgstr "Käyttämättömänä"
+
+#: packages/lib/Synchronizer.js:235
+msgid "In progress"
+msgstr "Käynnissä"
+
+#: packages/lib/Synchronizer.js:818
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
+#: packages/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+"Yhteyden muodostaminen Joplinin Nextcloud -sovellukseen epäonnistui. "
+"Tarkista kokoonpano Synkronointiasetukset-näytössä. Koko virhe oli:\n"
+"\n"
+"%s"
+
+#: packages/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: packages/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: packages/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "Tiedostojärjestelmä"
+
+#: packages/lib/commands/historyForward.js:17
+msgid "Forward"
+msgstr "Eteenpäin"
+
+#: packages/lib/versionInfo.js:10
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Versio: %s (%s)"
+
+#: packages/lib/versionInfo.js:20
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: packages/lib/versionInfo.js:22
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "Asiakkaan tunnus: %s"
+
+#: packages/lib/versionInfo.js:23
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "Synkronoi versio: %s"
+
+#: packages/lib/versionInfo.js:24
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "Profiilin versio: %s"
+
+#: packages/lib/versionInfo.js:25
+#, javascript-format
+msgid "Keychain Supported: %s"
+msgstr "Avainnippu tuettu: %s"
+
+#: packages/lib/services/RevisionService.js:221
+msgid "Restored Notes"
+msgstr "Palautetut muistiinpanot"
+
+#: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
+msgid "There is no data to export."
+msgstr "Vietäviä tietoja ei ole."
+
+#: packages/lib/services/interop/types.js:23
+msgid "File"
+msgstr "Tiedosto"
+
+#: packages/lib/services/interop/types.js:23
+msgid "Directory"
+msgstr "Hakemisto"
+
+#: packages/lib/services/interop/InteropService_Importer_Md.js:41
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Määritä muistikirja, johon muistiinpanot tuodaan."
+
+#: packages/lib/services/interop/InteropService.js:48
+#: packages/lib/services/interop/InteropService.js:57
+msgid "Joplin Export File"
+msgstr "Joplin Vie tiedosto"
+
+#: packages/lib/services/interop/InteropService.js:50
+#: packages/lib/services/interop/InteropService.js:58
+msgid "Joplin Export Directory"
+msgstr "Joplin Vie hakemisto"
+
+#: packages/lib/services/interop/InteropService.js:51
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote Vie tiedosto (kuten Markdown)"
+
+#: packages/lib/services/interop/InteropService.js:52
+msgid "Evernote Export File (as HTML)"
+msgstr "Evernote Vie tiedosto (kuten HTML)"
+
+#: packages/lib/services/interop/InteropService.js:60
+msgid "HTML File"
+msgstr "HTML Tiedosto"
+
+#: packages/lib/services/interop/InteropService.js:61
+msgid "HTML Directory"
+msgstr "HTML Hakemisto"
+
+#: packages/lib/services/interop/InteropService.js:127
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
+msgstr "Ei voi ladata \"%s\" moduuli muotoa varten \"%s\" ja ulostulo \"%s\""
+
+#: packages/lib/services/interop/InteropService.js:150
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
+msgstr "Ei voi ladata \"%s\" moduuli muotoa varten \"%s\" ja kohde \"%s\""
+
+#: packages/lib/services/interop/InteropService.js:194
+#: packages/lib/services/interop/InteropService.js:206
+#: packages/app-cli/app/command-cp.js:24 packages/app-cli/app/command-cp.js:27
+#: packages/app-cli/app/command-import.js:34
+#: packages/app-cli/app/command-mv.js:22 packages/app-cli/app/command-mv.js:25
+#: packages/app-cli/app/command-use.js:21
+#: packages/app-cli/app/command-ren.js:23
+#: packages/app-cli/app/command-rmbook.js:25
+#: packages/app-cli/app/command-cat.js:25
+#: packages/app-cli/app/command-rmnote.js:25
+#: packages/app-cli/app/command-attach.js:21
+#: packages/app-cli/app/command-export.js:36
+#: packages/app-cli/app/command-export.js:40
+#: packages/app-cli/app/command-geoloc.js:20
+#: packages/app-cli/app/command-search.js:27
+#: packages/app-cli/app/command-set.js:32
+#: packages/app-cli/app/command-help.js:66
+#: packages/app-cli/app/command-todo.js:21
+#: packages/app-cli/app/command-tag.js:33
+#: packages/app-cli/app/command-tag.js:36
+#: packages/app-cli/app/command-tag.js:42
+#: packages/app-cli/app/command-tag.js:43
+#: packages/app-cli/app/command-tag.js:81
+#: packages/app-cli/app/command-tag.js:87
+#: packages/app-cli/app/command-done.js:20
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Ei löydy \"%s\"."
+
+#: packages/lib/services/interop/InteropService.js:199
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Määritä tuontimuoto kohteelle %s"
+
+#: packages/lib/services/KeymapService.js:512
+msgid "command"
+msgstr "komento"
+
+#: packages/lib/services/KeymapService.js:512
+#: packages/lib/services/KeymapService.js:517
+#, javascript-format
+msgid "\"%s\" is missing the required \"%s\" property."
+msgstr "Ominaisuudesta %s puuttuu pakollinen ominaisuus %s."
+
+#: packages/lib/services/KeymapService.js:517
+#: packages/lib/services/KeymapService.js:524
+msgid "accelerator"
+msgstr "pikatoiminto"
+
+#: packages/lib/services/KeymapService.js:524
+#, javascript-format
+msgid "Invalid %s: %s."
+msgstr "Virheellinen vastaus %s: %s."
+
+#: packages/lib/services/KeymapService.js:542
+#, javascript-format
+msgid ""
+"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
+"unexpected behaviour."
+msgstr ""
+"Pikatoimintoa %s käytetään komennoissa %s ja %s. Tämä voi johtaa "
+"odottamattomaan käytökseen."
+
+#: packages/lib/services/KeymapService.js:567
+#, javascript-format
+msgid "Accelerator \"%s\" is not valid."
+msgstr "Pikatoiminto \"%s\" ei kelpaa."
+
+#: packages/lib/services/report.js:121
+msgid "Items that cannot be synchronised"
+msgstr "Kohteet, joita ei voi synkronoida"
+
+#: packages/lib/services/report.js:123
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Nämä kohteet pysyvät laitteessa, mutta niitä ei ladata "
+"synkronointikohteeseen. Löytääksesi nämä kohteet, etsi joko otsikko tai "
+"tunnus (joka näkyy edellä olevissa hakasulkeissa)."
+
+#: packages/lib/services/report.js:130
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) ei voitu ladata: %s"
+
+#: packages/lib/services/report.js:132
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Kohdetta \"%s\" ei voitu ladata: %s"
+
+#: packages/lib/services/report.js:142
+msgid "Items that cannot be decrypted"
+msgstr "Kohteet, joita ei voi purkaa"
+
+#: packages/lib/services/report.js:144
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin ei onnistunut purkamaan näitä kohteita useita kertoja, mahdollisesti "
+"siksi, että ne ovat vioittuneet tai liian suuria. Nämä kohteet pysyvät "
+"laitteessa, mutta Joplin ei enää yritä purkaa niiden salausta."
+
+#: packages/lib/services/report.js:151 packages/app-cli/app/cli-utils.js:140
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: packages/lib/services/report.js:182
+msgid "Attachments"
+msgstr "Liitteet"
+
+#: packages/lib/services/report.js:190
+msgid "Downloaded and decrypted"
+msgstr "Ladattu ja purettu"
+
+#: packages/lib/services/report.js:190 packages/lib/services/report.js:191
+#: packages/lib/services/report.js:194
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: packages/lib/services/report.js:191
+msgid "Downloaded and encrypted"
+msgstr "Ladattu ja salattu"
+
+#: packages/lib/services/report.js:204
+msgid "Attachments that could not be downloaded"
+msgstr "Liitteet, joita ei voitu ladata"
+
+#: packages/lib/services/report.js:209
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: packages/lib/services/report.js:222
+msgid "Sync status (synced items / total items)"
+msgstr "Synkronoinnin tila (synkronoidut kohteet / kohteet yhteensä)"
+
+#: packages/lib/services/report.js:226
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: packages/lib/services/report.js:229
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Yhteensä: %d/%d"
+
+#: packages/lib/services/report.js:231
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Ristiriitainen: %d"
+
+#: packages/lib/services/report.js:232
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Poistettu: %d"
+
+#: packages/lib/services/report.js:236
+msgid "Folders"
+msgstr "Kansiot"
+
+#: packages/lib/services/report.js:244
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d muistiinpanoja"
+
+#: packages/lib/services/report.js:252
+msgid "Coming alarms"
+msgstr "Tulevat hälytykset"
+
+#: packages/lib/services/report.js:257
+#, javascript-format
+msgid "On %s: %s"
+msgstr "Päällä %s: %s"
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:107
+msgid "No suggestions"
+msgstr ""
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:114
+msgid "Add to dictionary"
+msgstr ""
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:153
+msgid "Use spell checker"
+msgstr ""
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:173
+#, fuzzy
+msgid "Change language"
+msgstr "Kieli"
+
+#: packages/app-cli/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"Kopioi muistiinpanot, jotka vastaavat <note> arvoon [notebook]. Jos mitään "
+"muistikirjaa ei ole määritetty, muistiinpano kopioidaan nykyiseen "
+"muistikirjaan."
+
+#: packages/app-cli/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Näyttää nykyisen muistikirjan muistiinpanot. Käytä `ls /` näyttääksesi "
+"luettelon muistikirjoista."
+
+#: packages/app-cli/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "Näyttää vain ensimmäiset <num> muistiinpanot."
+
+#: packages/app-cli/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr ""
+"Lajittelee kohteen <field> mukaan (esim. Otsikko, päivitetty aika, luotu "
+"aika)."
+
+#: packages/app-cli/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "Kääntää lajittelujärjestyksen."
+
+#: packages/app-cli/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Näyttää vain tietyn tyyppiset kohteet. Voi olla `n` muistiinpanoja, `t` "
+"tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. `-tt` näyttäisi vain "
+"tehtävät, kun taas `-ttd` näyttää muistiinpanoja ja tehtäviä."
+
+#: packages/app-cli/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "Joko \"text\" tai \"json\""
+
+#: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"Käytä pitkää luettelomuotoa. Muoto on ID, NOTE_COUNT (muistikirjalle), DATE, "
+"TODO_CHECKED (tehtäville), TITLE"
+
+#: packages/app-cli/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "Valitse ensin muistikirja."
+
+#: packages/app-cli/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Tuo tiedot Jopliniin."
+
+#: packages/app-cli/app/command-import.js:25
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Lähdemuoto: %s"
+
+#: packages/app-cli/app/command-import.js:26
+msgid "Do not ask for confirmation."
+msgstr "Älä kysy vahvistusta."
+
+#: packages/app-cli/app/command-import.js:27
+#, javascript-format
+msgid "Output format: %s"
+msgstr "Esitysmuoto: %s"
+
+#: packages/app-cli/app/command-import.js:65
+msgid "Importing notes..."
+msgstr "Muistiinpanojen tuominen..."
+
+#: packages/app-cli/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
+
+#: packages/app-cli/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Tyyppi: %s."
+
+#: packages/app-cli/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Mahdolliset arvot: %s."
+
+#: packages/app-cli/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Oletus: %s"
+
+#: packages/app-cli/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Mahdolliset avaimet/arvot:"
+
+#: packages/app-cli/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Käynnistä, pysäytä tai tarkista API-palvelin. Määritä api.port-"
+"asetusmuuttuja määrittääksesi, missä portissa sen pitäisi toimia. Komennot "
+"ovat (% s)."
+
+#: packages/app-cli/app/command-server.js:38
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Palvelin on jo käynnissä portissa %d"
+
+#: packages/app-cli/app/command-server.js:44
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Palvelin on käynnissä portissa %d"
+
+#: packages/app-cli/app/command-server.js:44
+#: packages/app-cli/app/command-server.js:47
+msgid "Server is not running."
+msgstr "Palvelin ei ole käynnissä."
+
+#: packages/app-cli/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"Hallitsee E2EE-määrityksiä. Komennot ovat `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` ja `target-status`."
+
+#: packages/app-cli/app/command-e2ee.js:36
+#: packages/app-cli/app/command-e2ee.js:74
+msgid "Enter master password:"
+msgstr "Syötä pääsalasana:"
+
+#: packages/app-cli/app/command-e2ee.js:38
+#: packages/app-cli/app/command-e2ee.js:76
+#: packages/app-cli/app/command-e2ee.js:81
+msgid "Operation cancelled"
+msgstr "Toiminto peruutettu"
+
+#: packages/app-cli/app/command-e2ee.js:47
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"Aloitetaan salauksen purkua... Odota, koska se voi kestää useita minuutteja "
+"riippuen siitä, kuinka paljon on purettavaa."
+
+#: packages/app-cli/app/command-e2ee.js:55
+#, javascript-format
+msgid "Decrypted items: %d"
+msgstr "Purettuja kohteita: %d"
+
+#: packages/app-cli/app/command-e2ee.js:56
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+"Ohitetut kohteet: %d (käytä --retry-failed-items niiden salauksen "
+"purkamiseksi uudelleen)"
+
+#: packages/app-cli/app/command-e2ee.js:70
+msgid "Completed decryption."
+msgstr "Salaus on valmis."
+
+#: packages/app-cli/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "Luo uuden muistikirjan."
+
+#: packages/app-cli/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Siirtää <note> vastaavat muistiinpanot kohtaan [notebook]."
+
+#: packages/app-cli/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"Hakee tai määrittää määritysarvon. Jos [value] ei anneta, se näyttää arvon "
+"[name]. Jos [name] tai [value] ei ole annettu, se luettelee nykyisen "
+"kokoonpanon."
+
+#: packages/app-cli/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "Näyttää myös merkitsemättömät ja piilotetut konfigurointimuuttujat."
+
+#: packages/app-cli/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: packages/app-cli/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: packages/app-cli/app/command-use.js:12
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Vaihtaa tilaan [notebook] - kaikki muut toiminnot tapahtuvat tässä "
+"muistikirjassa."
+
+#: packages/app-cli/app/command-sync.js:29
+msgid "Synchronises with remote storage."
+msgstr "Synkronoi etätallennustilan."
+
+#: packages/app-cli/app/command-sync.js:34
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+"Synkronoi annettuun kohteeseen (oletusarvo on sync.target config value)"
+
+#: packages/app-cli/app/command-sync.js:35
+msgid "Upgrade the sync target to the latest version."
+msgstr "Päivitä synkronointikohde uusimpaan versioon."
+
+#: packages/app-cli/app/command-sync.js:105
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "Ei todennettu %s. Anna puuttuvat tunnistetiedot."
+
+#: packages/app-cli/app/command-sync.js:128
+msgid "Synchronisation is already in progress."
+msgstr "Synkronointi on jo käynnissä."
+
+#: packages/app-cli/app/command-sync.js:133
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"Lukitustiedosto on jo pidossa. Jos tiedät, että synkronointia ei tapahdu, "
+"voit poistaa lukitustiedoston kohdasta \"%s\" ja jatkaa toimintaa."
+
+#: packages/app-cli/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Synkronoinnin kohde: %s (%s)"
+
+#: packages/app-cli/app/command-sync.js:177
+msgid "Cannot initialise synchroniser."
+msgstr "Synkronoinnin alustaminen ei onnistu."
+
+#: packages/app-cli/app/command-sync.js:207
+msgid "Starting synchronisation..."
+msgstr "Aloitetaan synkronointi..."
+
+#: packages/app-cli/app/command-sync.js:230
+msgid "Downloading resources..."
+msgstr "Ladataan resursseja..."
+
+#: packages/app-cli/app/command-sync.js:242
+#, fuzzy, javascript-format
+msgid "Sync target must be upgraded! Run `%s` to proceed."
+msgstr "Synkronointitavoite on päivitettävä. Jatka painamalla tätä banneria."
+
+#: packages/app-cli/app/command-sync.js:260
+msgid "Cancelling... Please wait."
+msgstr "Peruutetaan ... Odota hetki."
+
+#: packages/app-cli/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Nimeää annetun <item> (muistiinpano tai muistikirja) nimeksi <name>."
+
+#: packages/app-cli/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Poistaa annetun muistikirjan."
+
+#: packages/app-cli/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Poistaa muistikirjan kysymättä vahvistusta."
+
+#: packages/app-cli/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Luo uuden tehtävän."
+
+#: packages/app-cli/app/command-mktodo.js:16
+#: packages/app-cli/app/command-mknote.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Muistiinpanoja voi luoda vain muistikirjaan."
+
+#: packages/app-cli/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "Näyttää annetun huomautuksen."
+
+#: packages/app-cli/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "Näyttää muistiinpanon täydelliset tiedot."
+
+#: packages/app-cli/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Muokkaa muistiinpanoa."
+
+#: packages/app-cli/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Tekstieditoria ei ole määritetty. Aseta se käyttäen `config editor <editor-"
+"path>`"
+
+#: packages/app-cli/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Ei aktiivista muistikirjaa."
+
+#: packages/app-cli/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Huomautusta ei ole: \"%s\". Luodaanko se?"
+
+#: packages/app-cli/app/command-edit.js:75
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+
+#: packages/app-cli/app/command-edit.js:97
+#, fuzzy
+msgid "Note has been saved."
+msgstr "Muistikirjaa ei ole luokiteltu."
+
+#: packages/app-cli/app/app-gui.js:452
+msgid "To delete a tag, untag the associated notes."
+msgstr "Tunnisteen poistaminen, poista merkinnät muistiinpanoista."
+
+#: packages/app-cli/app/app-gui.js:462
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Valitse ensin poistettava muistiinpano tai muistikirja."
+
+#: packages/app-cli/app/app-gui.js:750
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Paina Ctrl+D tai kirjoita \"exit\" poistuaksesi sovelluksesta"
+
+#: packages/app-cli/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Poistaa <note-pattern> vastaavat muistiinpanot."
+
+#: packages/app-cli/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Poistaa muistiinpanot kysymättä vahvistusta."
+
+#: packages/app-cli/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d muistiinpanot vastaavat tätä mallia. Poistetaanko ne?"
+
+#: packages/app-cli/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Liittää annetun tiedoston muistiinpanoon."
+
+#: packages/app-cli/app/command-version.js:11
+msgid "Displays version information"
+msgstr "Näyttää versiotiedot"
+
+#: packages/app-cli/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: packages/app-cli/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr "Merkitsee tehtävän keskeneräiseksi."
+
+#: packages/app-cli/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Vie Joplinin tiedot annettuun polkuun. Oletuksena se vie koko tietokannan, "
+"joka sisältää muistikirjat, muistiinpanot, tunnisteet ja resurssit."
+
+#: packages/app-cli/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Kohteen muoto: %s"
+
+#: packages/app-cli/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Vie vain annetun huomautuksen."
+
+#: packages/app-cli/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Vie vain annetun muistikirjan."
+
+#: packages/app-cli/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Luo uuden muistiinpanon."
+
+#: packages/app-cli/app/main.js:87
+msgid "Type `joplin help` for usage information."
+msgstr "Valitse `joplin help` saadaksesi käytöstä lisätietoja."
+
+#: packages/app-cli/app/main.js:89
+msgid "Fatal error:"
+msgstr "Vakava virhe:"
+
+#: packages/app-cli/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Näyttää muistiinpanon paikkatiedon URL:n."
+
+#: packages/app-cli/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Tervetuloa Jopliniin!\n"
+"\n"
+"Valitse `:help shortcuts` pikanäppäinten luetteloa varten, tai `:help` "
+"saadaksesi käytöstä lisätietoja."
+
+#: packages/app-cli/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+"Yksi tai useampi kohde on tällä hetkellä salattu, sinun on ehkä annettava "
+"pääsalasana. Voit tehdä niin kirjoittamalla `e2ee decrypt`. Jos olet jo "
+"antanut salasanan, salatut kohteet puretaan taustalla ja ne ovat pian "
+"saatavilla."
+
+#: packages/app-cli/app/gui/NoteWidget.js:50
+msgid "You may also type `status` for more information."
+msgstr "Voit myös kirjoittaa `status` saadaksesi lisätietoja."
+
+#: packages/app-cli/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Etsi:"
+
+#: packages/app-cli/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Etsii annettua <pattern> kaikista muistiinpanoista."
+
+#: packages/app-cli/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+
+#: packages/app-cli/app/cli-utils.js:109
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Vaadittu argumentti puuttuu: %s"
+
+#: packages/app-cli/app/cli-utils.js:144
+msgid "Your choice: "
+msgstr "Sinun valintasi: "
+
+#: packages/app-cli/app/cli-utils.js:151
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Virheellinen vastaus: %s"
+
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+msgid "Y"
+msgstr "K"
+
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+msgid "n"
+msgstr "e"
+
+#: packages/app-cli/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Salattua kohdetta ei voi muuttaa"
+
+#: packages/app-cli/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "Näyttää käyttötiedot."
+
+#: packages/app-cli/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr "Lisätietoja pikavalintojen mukauttamisesta on osoitteessa %s"
+
+#: packages/app-cli/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Pikavalinnat eivät ole käytettävissä CLI tilassa."
+
+#: packages/app-cli/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Kirjoita `help [command]` saadaksesi lisätietoja komennosta; tai kirjoita "
+"`help all` saadaksesi täydelliset käyttötiedot."
+
+#: packages/app-cli/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Mahdolliset komennot ovat:"
+
+#: packages/app-cli/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"Missä tahansa komennossa muistiinpanoon tai muistikirjaan voidaan viitata "
+"otsikon tai tunnuksen avulla tai käyttämällä pikakuvakkeita `$n` tai `$b` "
+"vastaavasti valitulle muistilappulle tai muistikirjalle. `$c` voidaan "
+"käyttää viittaamaan valittuun kohtaan."
+
+#: packages/app-cli/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Voit siirtyä ruudusta toiseen painamalla Tab tai Shift + Tab."
+
+#: packages/app-cli/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Käytä nuolia ja page up/down vierittämällä luetteloita ja tekstialueita "
+"(mukaan lukien tämä konsoli)."
+
+#: packages/app-cli/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Maksimoidaksesi / minimoidaksesi konsolin, paina \"tc\"."
+
+#: packages/app-cli/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Siirry komentorivitilaan painamalla \":\""
+
+#: packages/app-cli/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Poistu komentorivitilasta painamalla ESCAPE"
+
+#: packages/app-cli/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+"Saat luettelon pikanäppäimistä ja config vaihtoehtoja, kirjoita `help keymap`"
+
+#: packages/app-cli/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command> voidaan joko \"toggle\" tai \"clear\". Käytä \"toggle\" "
+"vaihtaa annettua tehtävättä valmistuneen ja keskeneräisen tilan välillä (Jos "
+"kohde on säännöllinen huomautus, se muunnetaan tehtäväksi). Käytä \"clear\" "
+"voit muuntaa tehtäväkokeen takaisin tavalliseksi. muistiinpanoksi.."
+
+#: packages/app-cli/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Sulkee sovelluksen."
+
+#: packages/app-cli/app/app.js:62
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr "Useampi kuin yksi kohta vastaa \"%s\". Tarkenna kyselyäsi."
+
+#: packages/app-cli/app/app.js:92
+msgid "No notebook selected."
+msgstr "Muistikirjaa ei ole valittu."
+
+#: packages/app-cli/app/app.js:98
+msgid "No notebook has been specified."
+msgstr "Muistikirjaa ei ole luokiteltu."
+
+#: packages/app-cli/app/app.js:137
+msgid "N"
+msgstr "E"
+
+#: packages/app-cli/app/app.js:137
+msgid "y"
+msgstr "k"
+
+#: packages/app-cli/app/app.js:170
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Peruutetaan taustasynkronointi... Odota."
+
+#: packages/app-cli/app/app.js:255
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Ei tällaista komentoa: %s"
+
+#: packages/app-cli/app/app.js:303
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Komento \"%s\" on käytettävissä vain graafisessa tilassa"
+
+#: packages/app-cli/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr "Näyttää yhteenvedon muistiinpanoista ja muistikirjoista."
+
+#: packages/app-cli/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgstr ""
+"Yritä uudelleen purkaa nämä kohteet. Suorita `e2ee decrypt --retry-failed-"
+"items`"
+
+#: packages/app-cli/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command> voidaan \"add\", \"remove\", \"list\", tai \"notetags\" "
+"määrittää tai poistaa [tag] kohteesta [note], luetteloinnin "
+"muistiinpanoista, jotka liittyvät [tag], tai luetteloida tunnisteita, jotka "
+"liittyvät [note]. Komento `tag list` voidaan käyttää kaikkien tunnisteiden "
+"luetteloinnissa (Käytä -l pitkälle vaihtoehdolle)."
+
+#: packages/app-cli/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Virheellinen komento: \"%s\""
+
+#: packages/app-cli/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Merkitsee tehtävän valmiiksi."
+
+#: packages/app-cli/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Huomautus ei ole tehtävä: \"%s\""
+
+#~ msgid ""
+#~ "Type a note title or part of its content to jump to it. Or type # "
+#~ "followed by a tag name, or @ followed by a notebook name."
+#~ msgstr ""
+#~ "Siirry muistiinpanon otsikkoon tai sen sisältöön kirjoittamalla osa sen "
+#~ "sisällöstä. Voit myös kirjoittaa # ja sen jälkeen tunnisteen nimen tai @ "
+#~ "ja sen jälkeen muistikirjan nimen."
+
+#~ msgid "Name"
+#~ msgstr "Nimi"
+
+#~ msgid "Icon"
+#~ msgstr "Kuvake"
+
+#~ msgid "Notebook properties"
+#~ msgstr "Muistikirjan ominaisuudet"
+
+#, javascript-format
+#~ msgid "This file could not be opened: %s"
+#~ msgstr "Tätä tiedostoa ei voitu avata: %s"
+
+#~ msgid "emphasized text"
+#~ msgstr "korostettu teksti"
+
+#~ msgid "Click to stop external editing"
+#~ msgstr "Lopeta ulkoinen muokkaus klikkaamalla tätä"
+
+#~ msgid "Watching..."
+#~ msgstr "Katsomassa..."
+
+#~ msgid "Content Properties"
+#~ msgstr "Sisällön ominaisuudet"
+
+#~ msgid "Please create a notebook first."
+#~ msgstr "Luo ensin muistikirja."
+
+#~ msgid "Please create a notebook first"
+#~ msgstr "Luo ensin muistikirja"
+
+#~ msgid "Usage"
+#~ msgstr "Käyttö"
+
+#~ msgid "Move to notebook..."
+#~ msgstr "Siirry muistikirjaan..."
+
+#, javascript-format
+#~ msgid "Move %d notes to notebook \"%s\"?"
+#~ msgstr "Siirrä %d muistiinpanot muistikirjaan \"%s\"?"
+
+#~ msgid "Press to set the decryption password."
+#~ msgstr "Aseta salauksen purkuun salasana painamalla tätä."
+
+#~ msgid "Some items cannot be synchronised. Press for more info."
+#~ msgstr ""
+#~ "Joitakin kohteita ei voida synkronoida. Paina saadaksesi lisätietoja."
+
+#~ msgid "Show all"
+#~ msgstr "Näytä kaikki"
+
+#~ msgid "Errors only"
+#~ msgstr "Vain virheet"
+
+#, javascript-format
+#~ msgid "Database v%s"
+#~ msgstr "Tietokanta v%s"
+
+#, javascript-format
+#~ msgid "FTS enabled: %d"
+#~ msgstr "Koko tekstin haku (FTS) Käytössä: %d"
+
+#~ msgid "Link"
+#~ msgstr "Linkki"
+
+#~ msgid "Exit"
+#~ msgstr "Poistu"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Lisää tai poista tunnisteita"
+
+#, javascript-format
+#~ msgid "Unknown log level: %s"
+#~ msgstr "Tuntematon kirjaus taso: %s"
+
+#, javascript-format
+#~ msgid "Unknown level ID: %s"
+#~ msgstr "Tuntematon tason tunnus: %s"
+
+#~ msgid ""
+#~ "Could not synchronize with OneDrive.\n"
+#~ "\n"
+#~ "This error often happens when using OneDrive for Business, which "
+#~ "unfortunately cannot be supported.\n"
+#~ "\n"
+#~ "Please consider using a regular OneDrive account."
+#~ msgstr ""
+#~ "Synkronointi OneDrive:en ei onnistunut.\n"
+#~ "\n"
+#~ "Tämä virhe tapahtuu usein käytettäessä OneDrive for Business -ohjelmaa, "
+#~ "jota ei valitettavasti voida tukea.\n"
+#~ "\n"
+#~ "Harkitse tavallisen OneDrive-tilin käyttöä."
+
+#~ msgid "Json Export Directory"
+#~ msgstr "Json Vie hakemisto"
+
+#, javascript-format
+#~ msgid ""
+#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
+#~ "be decrypted and try again."
+#~ msgstr ""
+#~ "Tämä kohde on tällä hetkellä salattu: %s \"%s\". Odota, että kaikkien "
+#~ "kohteiden salaus puretaan, ja yritä uudelleen."
+
+#~ msgid "Confirm"
+#~ msgstr "Vahvista"
+
+#~ msgid "Attach any file"
+#~ msgstr "Liitä mikä tahansa tiedosto"
