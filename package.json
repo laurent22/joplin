@@ -28,7 +28,7 @@
     "bootstrap": "lerna bootstrap --no-ci",
     "bootstrapIgnoreScripts": "lerna bootstrap --ignore-scripts --no-ci",
     "postinstall": "npm run bootstrap && npm run build",
-    "build": "lerna run build && npm run tscs",
+    "build": "lerna run build && npm run tsc",
     "publishAll": "git pull && lerna version --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
