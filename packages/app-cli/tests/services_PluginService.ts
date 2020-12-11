@@ -170,7 +170,9 @@ describe('services_PluginService', function() {
 		const tempDir = await createTempDir();
 
 		const contentScriptPath = `${tempDir}/markdownItTestPlugin.js`;
+		const contentScriptCssPath = `${tempDir}/markdownItTestPlugin.css`;
 		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.js`, contentScriptPath);
+		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.css`, contentScriptCssPath);
 
 		const service = newPluginService();
 
@@ -205,7 +207,7 @@ describe('services_PluginService', function() {
 
 		const mdToHtml = new MdToHtml();
 		const module = require(contentScript.path).default;
-		mdToHtml.loadExtraRendererRule(contentScript.id, module({}));
+		mdToHtml.loadExtraRendererRule(contentScript.id, tempDir, module({}));
 
 		const result = await mdToHtml.render([
 			'```justtesting',
@@ -213,6 +215,11 @@ describe('services_PluginService', function() {
 			'```',
 		].join('\n'));
 
+		const asset = result.pluginAssets.find(a => a.name === 'justtesting/markdownItTestPlugin.css');
+		const assetContent: string = await shim.fsDriver().readFile(asset.path, 'utf8');
+
+		expect(assetContent.includes('.just-testing')).toBe(true);
+		expect(assetContent.includes('background-color: red;')).toBe(true);
 		expect(result.html.includes('JUST TESTING: something')).toBe(true);
 
 		await shim.fsDriver().remove(tempDir);

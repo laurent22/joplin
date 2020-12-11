@@ -23,7 +23,7 @@ export default class KvStore extends BaseService {
 		this.instance_ = null;
 	}
 
-	private constructor() {
+	public constructor() {
 		super();
 		this.incMutex_ = new Mutex();
 	}

@@ -26,4 +26,10 @@ module.exports = function(markdownIt) {
 
 		return BAD_PROTO_RE.test(str) ? (GOOD_DATA_RE.test(str) ? true : false) : true;
 	};
+
+	markdownIt.linkify.set({
+		'fuzzyLink': false,
+		'fuzzyIP': false,
+		'fuzzyEmail': false,
+	});
 };

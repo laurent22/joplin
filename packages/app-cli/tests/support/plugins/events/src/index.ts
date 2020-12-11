@@ -7,8 +7,13 @@ joplin.plugins.register({
 			console.info('Alarm was triggered for note: ', note);
 		});
 
-		joplin.workspace.onSyncComplete(async () => {
+		joplin.workspace.onSyncStart(async (event:any) => {
+			console.info('Sync has started...');
+		});
+
+		joplin.workspace.onSyncComplete(async (event:any) => {
 			console.info('Sync has completed');
+			console.info('With errors:', event.withErrors);
 		});
 	},
 });

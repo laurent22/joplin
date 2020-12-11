@@ -19,7 +19,14 @@ interface ItemChangeEvent {
 	event: ItemChangeEventType;
 }
 
+interface SyncStartEvent {
+	// Tells whether there were errors during sync or not. The log will
+	// have the complete information about any error.
+	withErrors: boolean;
+}
+
 type ItemChangeHandler = (event: ItemChangeEvent)=> void;
+type SyncStartHandler = (event: SyncStartEvent)=> void;
 
 /**
  * The workspace service provides access to all the parts of Joplin that
@@ -80,8 +87,15 @@ export default class JoplinWorkspace {
 	/**
 	 * Called when an alarm associated with a to-do is triggered.
 	 */
-	public async onNoteAlarmTrigger(callback: Function): Promise<Disposable> {
-		return makeListener(eventManager, 'noteAlarmTrigger', callback);
+	public async onNoteAlarmTrigger(handler: Function): Promise<Disposable> {
+		return makeListener(eventManager, 'noteAlarmTrigger', handler);
+	}
+
+	/**
+	 * Called when the synchronisation process is starting.
+	 */
+	public async onSyncStart(handler: SyncStartHandler): Promise<Disposable> {
+		return makeListener(eventManager, 'syncStart', handler);
 	}
 
 	/**

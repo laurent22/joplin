@@ -1,5 +1,11 @@
 # Joplin changelog
 
+## [v1.4.19](https://github.com/laurent22/joplin/releases/tag/v1.4.19) - 2020-12-01T11:11:16Z
+
+- Improved: Disable soft-break by default in Markdown rendering
+
+Although soft-break is part of the CommonMark spec, it requires a special editor that can wrap text at a certain limit. That doesn't make much sense in Joplin, where the editor can have various sizes, from desktop to mobile, and where the tools to wrap text are not present.
+
 ## [v1.4.18](https://github.com/laurent22/joplin/releases/tag/v1.4.18) - 2020-11-28T12:21:41Z
 
 - Fixed: Fixed notifications on macOS
