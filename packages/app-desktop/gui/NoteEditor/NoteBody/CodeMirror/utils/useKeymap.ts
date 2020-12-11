@@ -30,9 +30,9 @@ export default function useKeymap(CodeMirror: any) {
 		CodeMirror.keyMap.basic = {
 			'Left': 'goCharLeft',
 			'Right': 'goCharRight',
-			'Up': 'goLineUp',
-			'Down': 'goLineDown',
-			'End': 'goLineRight',
+			'Up': 'goLineUpSmart',
+			'Down': 'goLineDownSmart',
+			'End': 'goLineRightSmart',
 			'Home': 'goLineLeftSmart',
 			'PageUp': 'goPageUp',
 			'PageDown': 'goPageDown',
@@ -69,7 +69,7 @@ export default function useKeymap(CodeMirror: any) {
 				'Cmd-/': 'toggleComment',
 				'Cmd-Opt-S': 'sortSelectedLines',
 				'Opt-Up': 'swapLineUp',
-				'Opt-Down': 'swapLineDown',
+				'Opt-Down': 'swapLineDownSmart',
 
 				'fallthrough': 'basic',
 			};
@@ -83,7 +83,7 @@ export default function useKeymap(CodeMirror: any) {
 				'Ctrl-Y': 'redo',
 				'Ctrl-Home': 'goDocStart',
 				'Ctrl-End': 'goDocEnd',
-				'Ctrl-Up': 'goLineUp',
+				'Ctrl-Up': 'goLineUpSmart',
 				'Ctrl-Down': 'goLineDown',
 				'Ctrl-Left': 'goGroupLeft',
 				'Ctrl-Right': 'goGroupRight',

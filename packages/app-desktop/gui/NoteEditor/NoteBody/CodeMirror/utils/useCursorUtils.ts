@@ -138,4 +138,87 @@ export default function useCursorUtils(CodeMirror: any) {
 		this.setSelection(anchor, head);
 	});
 
+	//
+	//  START of HACK to support contenteditable
+	//
+
+	// This is a HACK to enforce proper cursor positioning when using
+	// codemirror in contenteditable mode
+	// The problem is that chrome collapses trailing whitespace (for wrapped lines)
+	// so when codemirror places the cursor after the trailing whitespace, chrome will
+	// register that as being the start of the following line.
+	//
+	// An alternative fix for this would be to disable codemirror handling of Left/Right and Home/End
+	// but that breaks multicursor support in codemirror.
+	CodeMirror.defineExtension('isAfterTrailingWhitespace', function() {
+		const { line, ch } = this.getCursor('head');
+		const beforeCursor = this.charCoords({ line: line, ch: ch - 1 });
+		const afterCursor = this.charCoords({ line: line, ch: ch  });
+
+		const currentLine = this.getLine(line);
+
+		return beforeCursor.top < afterCursor.top && !!currentLine[ch - 1].match(/\s/);
+	});
+
+	CodeMirror.commands.goLineRightSmart = function(cm: any) {
+		// Only apply the manual cursor adjustments for contenteditable mode
+		if (cm.options.inputStyle !== 'contenteditable') {
+			cm.execCommand('goLineRight');
+			return;
+		}
+
+		// This detects the condition where the cursor is visibly placed at the beginning of
+		// the current line, but codemirror treats it like it was on the end of the
+		// previous line.
+		// The fix is to step forward twice, then re-initiate goLineRight
+		if (cm.isAfterTrailingWhitespace()) {
+			cm.execCommand('goColumnRight');
+			cm.execCommand('goColumnRight');
+			cm.execCommand('goLineRightSmart');
+			return;
+		}
+
+		cm.execCommand('goLineRight');
+
+		// This detects the situation where the cursor moves to the end of a wrapped line
+		// and is placed after a whitespace character.
+		// In this situation we step the curso back once to put it on the correct line.
+		if (cm.isAfterTrailingWhitespace()) {
+			cm.execCommand('goCharLeft');
+		}
+	};
+
+	CodeMirror.commands.goLineUpSmart = function(cm: any) {
+		if (cm.options.inputStyle !== 'contenteditable') {
+			cm.execCommand('goLineUp');
+			return;
+		}
+
+		// In this situation the codemirror editor thinks it's a line above where it is.
+		if (cm.isAfterTrailingWhitespace()) {
+			cm.execCommand('goCharLeft');
+			cm.execCommand('goLineLeft');
+		} else {
+			cm.execCommand('goLineUp');
+		}
+	};
+
+	CodeMirror.commands.goLineDownSmart = function(cm: any) {
+		if (cm.options.inputStyle !== 'contenteditable') {
+			cm.execCommand('goLineDown');
+			return;
+		}
+
+		// In this situation the codemirror editor thinks it's a line above where it is.
+		if (cm.isAfterTrailingWhitespace()) {
+			cm.execCommand('goLineRightSmart');
+			cm.execCommand('goCharRight');
+		} else {
+			cm.execCommand('goLineDown');
+		}
+	};
+
+	//
+	//  END of HACK to support contenteditable
+	//
 }
