@@ -1,0 +1,19 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand logo-container">
+		<img class="logo" src="{{{baseUrl}}}/images/Logo.png"/>
+	</div>
+	<div class="navbar-menu">
+		<div class="navbar-start">
+			<a class="navbar-item">Home</a>
+			<a class="navbar-item">Documentation</a>
+		</div>
+		<div class="navbar-end">
+			<div class="navbar-item">{{owner.email}}</div>
+			<div class="navbar-item">
+				<form method="post" action="{{{baseUrl}}}/logout">
+					<button class="button is-primary">Logout</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</nav>

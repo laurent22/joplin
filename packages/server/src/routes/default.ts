@@ -16,6 +16,7 @@ interface PathToFileMap {
 // example if they are in node_modules, use the map below
 const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
+	'css/bulma-prefers-dark.min.css': 'node_modules/bulma-prefers-dark/css/bulma-prefers-dark.min.css',
 };
 
 async function findLocalFile(path: string): Promise<string> {

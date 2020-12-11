@@ -7,9 +7,10 @@ const route: Route = {
 
 	exec: async function(_path: SubPath, ctx: AppContext) {
 		const sessionId = contextSessionId(ctx);
+		const homeController = ctx.controllers.indexHome();
 
 		if (ctx.method === 'GET') {
-			return `HOME ${sessionId}`;
+			return homeController.getIndex(sessionId);
 		}
 
 		throw new ErrorMethodNotAllowed();

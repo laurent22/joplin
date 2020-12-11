@@ -1,17 +1,14 @@
 import BaseController from '../BaseController';
 import { View } from '../../services/MustacheService';
+import defaultView from '../../utils/defaultView';
 
 export default class LoginController extends BaseController {
 
 	public async getIndex(error: any = null): Promise<View> {
-		return {
-			name: 'login',
-			path: 'index/login',
-			content: {
-				error,
-			},
-			cssFiles: ['index/login'],
-		};
+		const view = defaultView('login');
+		view.content.error = error;
+		view.partials = [];
+		return view;
 	}
 
 }

@@ -1,9 +1,10 @@
 import { Models } from '../models/factory';
 import FileController from './api/FileController';
-import OAuthController from './api/OAuthController';
+// import OAuthController from './api/OAuthController';
 import SessionController from './api/SessionController';
 import UserController from './api/UserController';
 import IndexLoginController from './index/LoginController';
+import IndexHomeController from './index/HomeController';
 
 export class Controllers {
 
@@ -17,9 +18,9 @@ export class Controllers {
 		return new FileController(this.models_);
 	}
 
-	public oauth() {
-		return new OAuthController(this.models_);
-	}
+	// public oauth() {
+	// 	return new OAuthController(this.models_);
+	// }
 
 	public session() {
 		return new SessionController(this.models_);
@@ -31,6 +32,10 @@ export class Controllers {
 
 	public indexLogin() {
 		return new IndexLoginController(this.models_);
+	}
+
+	public indexHome() {
+		return new IndexHomeController(this.models_);
 	}
 
 }
