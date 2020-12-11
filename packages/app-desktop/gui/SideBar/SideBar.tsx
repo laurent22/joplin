@@ -8,6 +8,8 @@ import Setting from '@joplin/lib/models/Setting';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
+import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
@@ -36,6 +38,7 @@ interface Props {
 	syncReport: any;
 	tags: any[];
 	syncStarted: boolean;
+	plugins: PluginStates;
 }
 
 interface State {
@@ -292,6 +295,17 @@ class SideBarComponent extends React.Component<Props, State> {
 			menu.append(new MenuItem(
 				menuUtils.commandToStatefulMenuItem('renameTag', itemId)
 			));
+		}
+
+		const pluginViews = pluginUtils.viewsByType(this.props.plugins, 'menuItem');
+
+		for (const view of pluginViews) {
+			const location = view.location;
+			if (location !== MenuItemLocation.SideBarContextMenu) continue;
+
+			menu.append(
+				new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemType, itemId))
+			);
 		}
 
 		menu.popup(bridge().window());
@@ -685,6 +699,7 @@ const mapStateToProps = (state: any) => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
+		plugins: state.plugins,
 	};
 };
 

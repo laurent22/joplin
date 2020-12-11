@@ -208,12 +208,15 @@ export enum MenuItemLocation {
 	Note = 'note',
 	Tools = 'tools',
 	Help = 'help',
+	
 	/**
 	 * @deprecated Do not use - same as NoteListContextMenu
 	 */
 	Context = 'context',
+
 	NoteListContextMenu = 'noteListContextMenu',
 	EditorContextMenu = 'editorContextMenu',
+	SideBarContextMenu = 'sideBarContextMenu',
 }
 
 export interface MenuItem {

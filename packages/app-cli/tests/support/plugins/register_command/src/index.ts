@@ -35,6 +35,14 @@ joplin.plugins.register({
 			},
 		});
 
+		await joplin.commands.register({
+			name: 'sideBarContextMenuExample',
+			label: 'Menu item from plugin',
+			execute: async (itemType:number, itemId:string) => {
+				console.info('Click on item: ' JSON.stringify({ itemType, itemId }));
+			},
+		});
+
 		// Commands that return a result and take argument can only be used
 		// programmatically, so it's not necessary to set a label and icon.
 		await joplin.commands.register({
@@ -55,6 +63,8 @@ joplin.plugins.register({
 		await joplin.views.menuItems.create('myMenuItem2', 'testCommand2', MenuItemLocation.Tools);
 
 		await joplin.views.menuItems.create('contextMenuItem1', 'contextMenuCommandExample', MenuItemLocation.NoteListContextMenu);
+
+		//await joplin.views.menuItems.create('sideBarMenuItem1', 'sideBarContextMenuExample', MenuItemLocation);
 
 		console.info('Running command with arguments...');
 		const result = await joplin.commands.execute('commandWithResult', 'abcd', 123);
