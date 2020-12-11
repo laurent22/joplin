@@ -27,7 +27,7 @@ export default class JoplinPlugins {
 	 * });
 	 * ```
 	 */
-	async register(script: Script) {
+	public async register(script: Script) {
 		if (script.onStart) {
 			const startTime = Date.now();
 
@@ -70,7 +70,7 @@ export default class JoplinPlugins {
 	 * @param id A unique ID for the content script.
 	 * @param scriptPath Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set `scriptPath` to `"./content_script.js`.
 	 */
-	async registerContentScript(type: ContentScriptType, id: string, scriptPath: string) {
+	public async registerContentScript(type: ContentScriptType, id: string, scriptPath: string) {
 		return this.plugin.registerContentScript(type, id, scriptPath);
 	}
 }
