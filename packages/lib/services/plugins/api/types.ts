@@ -208,12 +208,49 @@ export enum MenuItemLocation {
 	Note = 'note',
 	Tools = 'tools',
 	Help = 'help',
+
 	/**
 	 * @deprecated Do not use - same as NoteListContextMenu
 	 */
 	Context = 'context',
+
+	// If adding an item here, don't forget to update isContextMenuItemLocation()
+
+	/**
+	 * When a command is called from the note list context menu, the
+	 * command will receive the following arguments:
+	 *
+	 * - `noteIds:string[]`: IDs of the notes that were right-clicked on.
+	 */
 	NoteListContextMenu = 'noteListContextMenu',
+
 	EditorContextMenu = 'editorContextMenu',
+
+	/**
+	 * When a command is called from a folder context menu, the
+	 * command will receive the following arguments:
+	 *
+	 * - `folderId:string`: ID of the folder that was right-clicked on
+	 */
+	FolderContextMenu = 'folderContextMenu',
+
+	/**
+	 * When a command is called from a tag context menu, the
+	 * command will receive the following arguments:
+	 *
+	 * - `tagId:string`: ID of the tag that was right-clicked on
+	 */
+	TagContextMenu = 'tagContextMenu',
+}
+
+export function isContextMenuItemLocation(location: MenuItemLocation): boolean {
+	return [
+		MenuItemLocation.Context,
+		MenuItemLocation.NoteListContextMenu,
+		MenuItemLocation.EditorContextMenu,
+		MenuItemLocation.FolderContextMenu,
+		MenuItemLocation.TagContextMenu,
+	].includes(location);
 }
 
 export interface MenuItem {

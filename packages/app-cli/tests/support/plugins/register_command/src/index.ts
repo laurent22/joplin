@@ -35,6 +35,22 @@ joplin.plugins.register({
 			},
 		});
 
+		await joplin.commands.register({
+			name: 'folderContextMenuExample',
+			label: 'Folder menu item from plugin',
+			execute: async (folderId:string) => {
+				console.info('Click on folder: ' + folderId);
+			},
+		});
+
+		await joplin.commands.register({
+			name: 'tagContextMenuExample',
+			label: 'Tag menu item from plugin',
+			execute: async (tagId:string) => {
+				console.info('Click on tag: ' + tagId);
+			},
+		});
+
 		// Commands that return a result and take argument can only be used
 		// programmatically, so it's not necessary to set a label and icon.
 		await joplin.commands.register({
@@ -55,6 +71,9 @@ joplin.plugins.register({
 		await joplin.views.menuItems.create('myMenuItem2', 'testCommand2', MenuItemLocation.Tools);
 
 		await joplin.views.menuItems.create('contextMenuItem1', 'contextMenuCommandExample', MenuItemLocation.NoteListContextMenu);
+
+		await joplin.views.menuItems.create('folderMenuItem1', 'folderContextMenuExample', MenuItemLocation.FolderContextMenu);
+		await joplin.views.menuItems.create('tagMenuItem1', 'tagContextMenuExample', MenuItemLocation.TagContextMenu);
 
 		console.info('Running command with arguments...');
 		const result = await joplin.commands.execute('commandWithResult', 'abcd', 123);
