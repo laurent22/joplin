@@ -219,7 +219,7 @@ describe('services_PluginService', function() {
 		const assetContent: string = await shim.fsDriver().readFile(asset.path, 'utf8');
 
 		expect(assetContent.includes('.just-testing')).toBe(true);
-		expect(assetContent.includes('background-color: red;')).toBe(true);
+		expect(assetContent.includes('background-color: rgb(202, 255, 255)')).toBe(true);
 		expect(result.html.includes('JUST TESTING: something')).toBe(true);
 
 		await shim.fsDriver().remove(tempDir);

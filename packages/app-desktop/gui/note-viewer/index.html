@@ -49,8 +49,22 @@
 	<script src="./lib.js"></script>
 
 	<script>
+	// This is function used internally to send message from the webview to
+	// the host.
 	const ipcProxySendToHost = (methodName, arg) => {
 		window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
+	}
+
+	// This function is reserved for plugin, currently only to allow
+	// executing a command, but more features could be added to the object
+	// later on.
+	const webviewApi = {
+		executeCommand: function (commandName, ...args) {
+			return ipcProxySendToHost('contentScriptExecuteCommand', {
+				name: commandName,
+				args: args,	
+			});
+		}
 	}
 
 	let pluginAssetsAdded_ = {};

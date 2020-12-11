@@ -12,7 +12,7 @@ import versionInfo from '@joplin/lib/versionInfo';
 import { Module } from '@joplin/lib/services/interop/types';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
-import { MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
+import { isContextMenuItemLocation, MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
@@ -697,7 +697,7 @@ function useMenu(props: Props) {
 
 		for (const view of props.pluginMenuItems) {
 			const location: MenuItemLocation = view.location;
-			if ([MenuItemLocation.Context, MenuItemLocation.EditorContextMenu, MenuItemLocation.NoteListContextMenu].includes(location)) continue;
+			if (isContextMenuItemLocation(location)) continue;
 
 			const itemParent = rootMenus[location];
 
@@ -709,7 +709,7 @@ function useMenu(props: Props) {
 		}
 
 		for (const view of props.pluginMenus) {
-			if ([MenuItemLocation.Context, MenuItemLocation.EditorContextMenu, MenuItemLocation.NoteListContextMenu].includes(view.location)) continue;
+			if (isContextMenuItemLocation(view.location)) continue;
 			const itemParent = rootMenus[view.location];
 
 			if (!itemParent) {
