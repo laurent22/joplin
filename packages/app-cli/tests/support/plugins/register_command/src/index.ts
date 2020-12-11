@@ -39,7 +39,7 @@ joplin.plugins.register({
 			name: 'sideBarContextMenuExample',
 			label: 'Menu item from plugin',
 			execute: async (itemType:number, itemId:string) => {
-				console.info('Click on item: ' JSON.stringify({ itemType, itemId }));
+				console.info('Click on item: ' + JSON.stringify({ itemType, itemId }));
 			},
 		});
 
@@ -64,7 +64,7 @@ joplin.plugins.register({
 
 		await joplin.views.menuItems.create('contextMenuItem1', 'contextMenuCommandExample', MenuItemLocation.NoteListContextMenu);
 
-		//await joplin.views.menuItems.create('sideBarMenuItem1', 'sideBarContextMenuExample', MenuItemLocation);
+		await joplin.views.menuItems.create('sideBarMenuItem1', 'sideBarContextMenuExample', MenuItemLocation.SideBarContextMenu);
 
 		console.info('Running command with arguments...');
 		const result = await joplin.commands.execute('commandWithResult', 'abcd', 123);

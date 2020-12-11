@@ -10,6 +10,8 @@ import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
+import { AppState } from '../../app';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
@@ -104,6 +106,7 @@ class SideBarComponent extends React.Component<Props, State> {
 	private tagItemsOrder_: any[] = [];
 	private rootRef: any = null;
 	private anchorItemRefs: any = {};
+	private pluginsRef:any;
 
 	constructor(props: any) {
 		super(props);
@@ -114,6 +117,14 @@ class SideBarComponent extends React.Component<Props, State> {
 			tagHeaderIsExpanded: Setting.value('tagHeaderIsExpanded'),
 			folderHeaderIsExpanded: Setting.value('folderHeaderIsExpanded'),
 		};
+
+		// This whole component is a bit of a mess and rather than passing
+		// a plugins prop around, not knowing how it's going to affect
+		// re-rendering, we just keep a ref to it. Currently that's enough
+		// as plugins are only accessed from context menus. However if want
+		// to do more complex things with plugins in the sidebar, it will
+		// probably have to be refactored using React Hooks first.
+		this.pluginsRef = React.createRef();
 
 		this.onFolderToggleClick_ = this.onFolderToggleClick_.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
@@ -297,15 +308,18 @@ class SideBarComponent extends React.Component<Props, State> {
 			));
 		}
 
-		const pluginViews = pluginUtils.viewsByType(this.props.plugins, 'menuItem');
+		const pluginViews = pluginUtils.viewsByType(this.pluginsRef.current, 'menuItem');
 
 		for (const view of pluginViews) {
 			const location = view.location;
-			if (location !== MenuItemLocation.SideBarContextMenu) continue;
 
-			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemType, itemId))
-			);
+			if (itemType === ModelType.Tag && location === MenuItemLocation.TagContextMenu ||
+				itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu
+			) {
+				menu.append(
+					new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemId))
+				);
+			}
 		}
 
 		menu.popup(bridge().window());
@@ -598,6 +612,8 @@ class SideBarComponent extends React.Component<Props, State> {
 	// }
 
 	render() {
+		this.pluginsRef.current = this.props.plugins;
+
 		const theme = themeStyle(this.props.themeId);
 
 		const items = [];
@@ -682,7 +698,7 @@ class SideBarComponent extends React.Component<Props, State> {
 	}
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		folders: state.folders,
 		tags: state.tags,
@@ -699,7 +715,7 @@ const mapStateToProps = (state: any) => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
-		plugins: state.plugins,
+		plugins: state.pluginService.plugins,
 	};
 };
 
