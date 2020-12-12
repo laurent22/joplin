@@ -1,12 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 
-const { asyncTest, fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const KvStore = require('@joplin/lib/services/KvStore').default;
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 function setupStore() {
 	const store = KvStore.instance();
@@ -22,7 +18,7 @@ describe('services_KvStore', function() {
 		done();
 	});
 
-	it('should set and get values', asyncTest(async () => {
+	it('should set and get values', (async () => {
 		const store = setupStore();
 		await store.setValue('a', 123);
 		expect(await store.value('a')).toBe(123);
@@ -41,7 +37,7 @@ describe('services_KvStore', function() {
 		expect(await store.value('b')).toBe(789);
 	}));
 
-	it('should set and get values with the right type', asyncTest(async () => {
+	it('should set and get values with the right type', (async () => {
 		const store = setupStore();
 		await store.setValue('string', 'something');
 		await store.setValue('int', 123);
@@ -49,7 +45,7 @@ describe('services_KvStore', function() {
 		expect(await store.value('int')).toBe(123);
 	}));
 
-	it('should increment values', asyncTest(async () => {
+	it('should increment values', (async () => {
 		const store = setupStore();
 		await store.setValue('int', 1);
 		const newValue = await store.incValue('int');
@@ -61,12 +57,12 @@ describe('services_KvStore', function() {
 		expect(await store.countKeys()).toBe(2);
 	}));
 
-	it('should handle non-existent values', asyncTest(async () => {
+	it('should handle non-existent values', (async () => {
 		const store = setupStore();
 		expect(await store.value('nope')).toBe(null);
 	}));
 
-	it('should delete values', asyncTest(async () => {
+	it('should delete values', (async () => {
 		const store = setupStore();
 		await store.setValue('int', 1);
 		expect(await store.countKeys()).toBe(1);
@@ -76,7 +72,7 @@ describe('services_KvStore', function() {
 		await store.deleteValue('int'); // That should not throw
 	}));
 
-	it('should increment in an atomic way', asyncTest(async () => {
+	it('should increment in an atomic way', (async () => {
 		const store = setupStore();
 		await store.setValue('int', 0);
 
@@ -90,7 +86,7 @@ describe('services_KvStore', function() {
 		expect(await store.value('int')).toBe(20);
 	}));
 
-	it('should search by prefix', asyncTest(async () => {
+	it('should search by prefix', (async () => {
 		const store = setupStore();
 		await store.setValue('testing:1', 1);
 		await store.setValue('testing:2', 2);

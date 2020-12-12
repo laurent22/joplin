@@ -1,14 +1,11 @@
 import Setting from '@joplin/lib/models/Setting';
 import BaseModel from '@joplin/lib/BaseModel';
 import shim from '@joplin/lib/shim';
-const { sortedIds, createNTestNotes, asyncTest, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
+import markdownUtils from '@joplin/lib/markdownUtils';
+const { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at models_Note: Promise', p, 'reason:', reason);
-});
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -23,7 +20,7 @@ describe('models_Note', function() {
 		done();
 	});
 
-	it('should find resource and note IDs', asyncTest(async () => {
+	it('should find resource and note IDs', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'ma deuxième note', body: `Lien vers première note : ${Note.markdownTag(note1)}`, parent_id: folder1.id });
@@ -47,7 +44,7 @@ describe('models_Note', function() {
 		expect(items.length).toBe(4);
 	}));
 
-	it('should find linked items', asyncTest(async () => {
+	it('should find linked items', (async () => {
 		const testCases = [
 			['[](:/06894e83b8f84d3d8cbe0f1587f9e226)', ['06894e83b8f84d3d8cbe0f1587f9e226']],
 			['[](:/06894e83b8f84d3d8cbe0f1587f9e226) [](:/06894e83b8f84d3d8cbe0f1587f9e226)', ['06894e83b8f84d3d8cbe0f1587f9e226']],
@@ -69,7 +66,7 @@ describe('models_Note', function() {
 		}
 	}));
 
-	it('should change the type of notes', asyncTest(async () => {
+	it('should change the type of notes', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
@@ -90,7 +87,7 @@ describe('models_Note', function() {
 		expect(!!changedNote.is_todo).toBe(false);
 	}));
 
-	it('should serialize and unserialize without modifying data', asyncTest(async () => {
+	it('should serialize and unserialize without modifying data', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const testCases = [
 			[{ title: '', body: 'Body and no title\nSecond line\nThird Line', parent_id: folder1.id },
@@ -115,7 +112,7 @@ describe('models_Note', function() {
 		}
 	}));
 
-	it('should reset fields for a duplicate', asyncTest(async () => {
+	it('should reset fields for a duplicate', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
 
@@ -128,7 +125,7 @@ describe('models_Note', function() {
 		expect(duplicatedNote.user_updated_time !== note1.user_updated_time).toBe(true);
 	}));
 
-	it('should delete a set of notes', asyncTest(async () => {
+	it('should delete a set of notes', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const noOfNotes = 20;
 		await createNTestNotes(noOfNotes, folder1);
@@ -141,7 +138,7 @@ describe('models_Note', function() {
 		expect(all[0].id).toBe(folder1.id);
 	}));
 
-	it('should delete only the selected notes', asyncTest(async () => {
+	it('should delete only the selected notes', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 
@@ -171,7 +168,7 @@ describe('models_Note', function() {
 		expect(intersection.length).toBe(0);
 	}));
 
-	it('should delete nothing', asyncTest(async () => {
+	it('should delete nothing', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
@@ -190,7 +187,7 @@ describe('models_Note', function() {
 		expect(sortedIds(afterDelete)).toEqual(sortedIds(beforeDelete));
 	}));
 
-	it('should not move to conflict folder', asyncTest(async () => {
+	it('should not move to conflict folder', (async () => {
 		const folder1 = await Folder.save({ title: 'Folder' });
 		const folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
 		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
@@ -202,7 +199,7 @@ describe('models_Note', function() {
 		expect(note.parent_id).toEqual(folder1.id);
 	}));
 
-	it('should not copy to conflict folder', asyncTest(async () => {
+	it('should not copy to conflict folder', (async () => {
 		const folder1 = await Folder.save({ title: 'Folder' });
 		const folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
 		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
@@ -211,7 +208,7 @@ describe('models_Note', function() {
 		expect(hasThrown).toBe(true);
 	}));
 
-	it('should convert resource paths from internal to external paths', asyncTest(async () => {
+	it('should convert resource paths from internal to external paths', (async () => {
 		const resourceDirName = Setting.value('resourceDirName');
 		const resourceDir = Setting.value('resourceDir');
 		const r1 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
@@ -220,6 +217,8 @@ describe('models_Note', function() {
 		const note1 = await Note.save({ title: 'note1' });
 		const t1 = r1.updated_time;
 		const t2 = r2.updated_time;
+
+		const resourceDirE = markdownUtils.escapeLinkUrl(resourceDir);
 
 		const testCases = [
 			[
@@ -245,17 +244,17 @@ describe('models_Note', function() {
 			[
 				true,
 				`![](:/${r1.id})`,
-				`![](file://${resourceDir}/${r1.id}.jpg?t=${t1})`,
+				`![](file://${resourceDirE}/${r1.id}.jpg?t=${t1})`,
 			],
 			[
 				true,
 				`![](:/${r1.id}) ![](:/${r1.id}) ![](:/${r2.id})`,
-				`![](file://${resourceDir}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDir}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDir}/${r2.id}.jpg?t=${t2})`,
+				`![](file://${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDirE}/${r2.id}.jpg?t=${t2})`,
 			],
 			[
 				true,
 				`![](:/${r3.id})`,
-				`![](file://${resourceDir}/${r3.id}.pdf)`,
+				`![](file://${resourceDirE}/${r3.id}.pdf)`,
 			],
 		];
 

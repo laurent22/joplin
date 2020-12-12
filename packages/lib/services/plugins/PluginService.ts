@@ -281,7 +281,7 @@ export default class PluginService extends BaseService {
 		}
 
 		for (const pluginPath of pluginPaths) {
-			if (pluginPath.indexOf('_') === 0) {
+			if (filename(pluginPath).indexOf('_') === 0) {
 				logger.info(`Plugin name starts with "_" and has not been loaded: ${pluginPath}`);
 				continue;
 			}
@@ -383,6 +383,10 @@ export default class PluginService extends BaseService {
 		}
 
 		return newSettings;
+	}
+
+	public async destroy() {
+		await this.runner_.waitForSandboxCalls();
 	}
 
 }

@@ -2,7 +2,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Setting = require('@joplin/lib/models/Setting').default;
 const Note = require('@joplin/lib/models/Note.js');
@@ -14,10 +14,6 @@ const BaseModel = require('@joplin/lib/BaseModel').default;
 const RevisionService = require('@joplin/lib/services/RevisionService.js');
 const shim = require('@joplin/lib/shim').default;
 
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at services_Revision: Promise', p, 'reason:', reason);
-});
-
 describe('services_Revision', function() {
 
 	beforeEach(async (done) => {
@@ -27,7 +23,7 @@ describe('services_Revision', function() {
 		done();
 	});
 
-	it('should create diff and rebuild notes', asyncTest(async () => {
+	it('should create diff and rebuild notes', (async () => {
 		const service = new RevisionService();
 
 		const n1_v1 = await Note.save({ title: '', author: 'testing' });
@@ -58,7 +54,7 @@ describe('services_Revision', function() {
 		expect(revisions2.length).toBe(0);
 	}));
 
-	it('should delete old revisions (1 note, 2 rev)', asyncTest(async () => {
+	it('should delete old revisions (1 note, 2 rev)', (async () => {
 		const service = new RevisionService();
 
 		const n1_v0 = await Note.save({ title: '' });
@@ -81,7 +77,7 @@ describe('services_Revision', function() {
 		expect(rev1.title).toBe('hello welcome');
 	}));
 
-	it('should delete old revisions (1 note, 3 rev)', asyncTest(async () => {
+	it('should delete old revisions (1 note, 3 rev)', (async () => {
 		const service = new RevisionService();
 
 		const n1_v0 = await Note.save({ title: '' });
@@ -122,7 +118,7 @@ describe('services_Revision', function() {
 		}
 	}));
 
-	it('should delete old revisions (2 notes, 2 rev)', asyncTest(async () => {
+	it('should delete old revisions (2 notes, 2 rev)', (async () => {
 		const service = new RevisionService();
 
 		const n1_v0 = await Note.save({ title: '' });
@@ -157,7 +153,7 @@ describe('services_Revision', function() {
 		}
 	}));
 
-	it('should handle conflicts', asyncTest(async () => {
+	it('should handle conflicts', (async () => {
 		const service = new RevisionService();
 
 		// A conflict happens in this case:
@@ -193,7 +189,7 @@ describe('services_Revision', function() {
 		expect(revNote3.title).toBe('hello John');
 	}));
 
-	it('should create a revision for notes that are older than a given interval', asyncTest(async () => {
+	it('should create a revision for notes that are older than a given interval', (async () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
@@ -229,7 +225,7 @@ describe('services_Revision', function() {
 		}
 	}));
 
-	it('should create a revision for notes that get deleted (recyle bin)', asyncTest(async () => {
+	it('should create a revision for notes that get deleted (recyle bin)', (async () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
@@ -243,7 +239,7 @@ describe('services_Revision', function() {
 		expect(rev1.title).toBe('hello');
 	}));
 
-	it('should not create a revision for notes that get deleted if there is already a revision', asyncTest(async () => {
+	it('should not create a revision for notes that get deleted if there is already a revision', (async () => {
 		const n1 = await Note.save({ title: 'hello' });
 		await revisionService().collectRevisions();
 		const noteId = n1.id;
@@ -261,7 +257,7 @@ describe('services_Revision', function() {
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
 	}));
 
-	it('should not create a revision for new note the first time they are saved', asyncTest(async () => {
+	it('should not create a revision for new note the first time they are saved', (async () => {
 		const n1 = await Note.save({ title: 'hello' });
 
 		{
@@ -277,7 +273,7 @@ describe('services_Revision', function() {
 		}
 	}));
 
-	it('should abort collecting revisions when one of them is encrypted', asyncTest(async () => {
+	it('should abort collecting revisions when one of them is encrypted', (async () => {
 		const n1 = await Note.save({ title: 'hello' }); // CHANGE 1
 		await revisionService().collectRevisions();
 		await Note.save({ id: n1.id, title: 'hello Ringo' }); // CHANGE 2
@@ -311,7 +307,7 @@ describe('services_Revision', function() {
 		expect(Setting.value('revisionService.lastProcessedChangeId')).toBe(4);
 	}));
 
-	it('should not delete old revisions if one of them is still encrypted (1)', asyncTest(async () => {
+	it('should not delete old revisions if one of them is still encrypted (1)', (async () => {
 		// Test case 1: Two revisions and the first one is encrypted.
 		// Calling deleteOldRevisions() with low TTL, which means all revisions
 		// should be deleted, but they won't be due to the encrypted one.
@@ -338,7 +334,7 @@ describe('services_Revision', function() {
 		expect((await Revision.all()).length).toBe(0);
 	}));
 
-	it('should not delete old revisions if one of them is still encrypted (2)', asyncTest(async () => {
+	it('should not delete old revisions if one of them is still encrypted (2)', (async () => {
 		// Test case 2: Two revisions and the first one is encrypted.
 		// Calling deleteOldRevisions() with higher TTL, which means the oldest
 		// revision should be deleted, but it won't be due to the encrypted one.
@@ -362,7 +358,7 @@ describe('services_Revision', function() {
 		expect((await Revision.all()).length).toBe(2);
 	}));
 
-	it('should not delete old revisions if one of them is still encrypted (3)', asyncTest(async () => {
+	it('should not delete old revisions if one of them is still encrypted (3)', (async () => {
 		// Test case 2: Two revisions and the second one is encrypted.
 		// Calling deleteOldRevisions() with higher TTL, which means the oldest
 		// revision should be deleted, but it won't be due to the encrypted one.
@@ -392,7 +388,7 @@ describe('services_Revision', function() {
 		expect((await Revision.all()).length).toBe(1);
 	}));
 
-	it('should not create a revision if the note has not changed', asyncTest(async () => {
+	it('should not create a revision if the note has not changed', (async () => {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
@@ -403,7 +399,7 @@ describe('services_Revision', function() {
 		expect((await Revision.all()).length).toBe(1);
 	}));
 
-	it('should preserve user update time', asyncTest(async () => {
+	it('should preserve user update time', (async () => {
 		// user_updated_time is kind of tricky and can be changed automatically in various
 		// places so make sure it is saved correctly with the revision
 
@@ -423,7 +419,7 @@ describe('services_Revision', function() {
 		expect(revNote.user_updated_time).toBe(userUpdatedTime);
 	}));
 
-	it('should not create a revision if there is already a recent one', asyncTest(async () => {
+	it('should not create a revision if there is already a recent one', (async () => {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1

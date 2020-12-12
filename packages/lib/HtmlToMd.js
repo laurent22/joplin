@@ -1,9 +1,9 @@
-const TurndownService = require('joplin-turndown');
+const TurndownService = require('@joplin/turndown');
+const turndownPluginGfm = require('@joplin/turndown-plugin-gfm').gfm;
 const markdownUtils = require('./markdownUtils').default;
 
 class HtmlToMd {
 	parse(html, options = {}) {
-		const turndownPluginGfm = require('joplin-turndown-plugin-gfm').gfm;
 		const turndown = new TurndownService({
 			headingStyle: 'atx',
 			anchorNames: options.anchorNames ? options.anchorNames.map(n => n.trim().toLowerCase()) : [],
@@ -12,6 +12,7 @@ class HtmlToMd {
 			bulletListMarker: '-',
 			emDelimiter: '*',
 			strongDelimiter: '**',
+			br: '',
 		});
 		turndown.use(turndownPluginGfm);
 		turndown.remove('script');

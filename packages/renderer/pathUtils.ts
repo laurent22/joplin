@@ -28,3 +28,7 @@ export function fileExtension(path: string) {
 	if (output.length <= 1) return '';
 	return output[output.length - 1];
 }
+
+export function toForwardSlashes(path: string) {
+	return path.replace(/\\/g, '/');
+}

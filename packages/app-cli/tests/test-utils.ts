@@ -1,10 +1,24 @@
 /* eslint-disable require-atomic-updates */
+import BaseApplication from '@joplin/lib/BaseApplication';
+import BaseModel from '@joplin/lib/BaseModel';
+import Logger, { TargetType, LoggerWrapper } from '@joplin/lib/Logger';
+import Setting from '@joplin/lib/models/Setting';
+import BaseService from '@joplin/lib/services/BaseService';
+import FsDriverNode from '@joplin/lib/fs-driver-node';
+import time from '@joplin/lib/time';
+import shim from '@joplin/lib/shim';
+import uuid from '@joplin/lib/uuid';
+import ResourceService from '@joplin/lib/services/ResourceService';
+import KeymapService from '@joplin/lib/services/KeymapService';
+import KvStore from '@joplin/lib/services/KvStore';
+import KeychainServiceDriver from '@joplin/lib/services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainServiceDriver.dummy';
+import PluginRunner from '../app/services/plugins/PluginRunner';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
-const BaseApplication = require('@joplin/lib/BaseApplication').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const ItemChange = require('@joplin/lib/models/ItemChange.js');
@@ -12,8 +26,6 @@ const Resource = require('@joplin/lib/models/Resource.js');
 const Tag = require('@joplin/lib/models/Tag.js');
 const NoteTag = require('@joplin/lib/models/NoteTag.js');
 const Revision = require('@joplin/lib/models/Revision.js');
-const Logger = require('@joplin/lib/Logger').default;
-const Setting = require('@joplin/lib/models/Setting').default;
 const MasterKey = require('@joplin/lib/models/MasterKey');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');
 const { FileApi } = require('@joplin/lib/file-api.js');
@@ -23,12 +35,7 @@ const { FileApiDriverWebDav } = require('@joplin/lib/file-api-driver-webdav.js')
 const { FileApiDriverDropbox } = require('@joplin/lib/file-api-driver-dropbox.js');
 const { FileApiDriverOneDrive } = require('@joplin/lib/file-api-driver-onedrive.js');
 const { FileApiDriverAmazonS3 } = require('@joplin/lib/file-api-driver-amazon-s3.js');
-const BaseService = require('@joplin/lib/services/BaseService').default;
-const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
-const time = require('@joplin/lib/time').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const shim = require('@joplin/lib/shim').default;
-const uuid = require('@joplin/lib/uuid').default;
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const SyncTargetMemory = require('@joplin/lib/SyncTargetMemory.js');
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
@@ -38,31 +45,34 @@ const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 const EncryptionService = require('@joplin/lib/services/EncryptionService.js');
 const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker.js');
-const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const RevisionService = require('@joplin/lib/services/RevisionService.js');
 const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
-const KvStore = require('@joplin/lib/services/KvStore').default;
 const WebDavApi = require('@joplin/lib/WebDavApi');
 const DropboxApi = require('@joplin/lib/DropboxApi');
 const { OneDriveApi } = require('@joplin/lib/onedrive-api');
 const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
-const KeychainServiceDriver = require('@joplin/lib/services/keychain/KeychainServiceDriver.node').default;
-const KeychainServiceDriverDummy = require('@joplin/lib/services/keychain/KeychainServiceDriver.dummy').default;
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('@joplin/lib/services/synchronizer/utils/types');
 const sharp = require('sharp');
 
-const databases_ = [];
-let synchronizers_ = [];
-const synchronizerContexts_ = {};
-const fileApis_ = {};
-const encryptionServices_ = [];
-const revisionServices_ = [];
-const decryptionWorkers_ = [];
-const resourceServices_ = [];
-const resourceFetchers_ = [];
-const kvStores_ = [];
+// Each suite has its own separate data and temp directory so that multiple
+// suites can be run at the same time. suiteName is what is used to
+// differentiate between suite and it is currently set to a random string
+// (Ideally it would be something like the filename currently being executed by
+// Jest, to make debugging easier, but it's not clear how to get this info).
+const suiteName_ = uuid.createNano();
+
+const databases_: any[] = [];
+let synchronizers_: any[] = [];
+const synchronizerContexts_: any = {};
+const fileApis_: any = {};
+const encryptionServices_: any[] = [];
+const revisionServices_: any[] = [];
+const decryptionWorkers_: any[] = [];
+const resourceServices_: any[] = [];
+const resourceFetchers_: any[] = [];
+const kvStores_: KvStore[] = [];
 let currentClient_ = 1;
 
 // The line `process.on('unhandledRejection'...` in all the test files is going to
@@ -89,10 +99,15 @@ EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
 const logDir = `${__dirname}/../tests/logs`;
-const baseTempDir = `${__dirname}/../tests/tmp`;
+const baseTempDir = `${__dirname}/../tests/tmp/${suiteName_}`;
+
+// We add a space in the data directory path as that will help uncover
+// various space-in-path issues.
+const dataDir = `${__dirname}/test data/${suiteName_}`;
+
 fs.mkdirpSync(logDir, 0o755);
 fs.mkdirpSync(baseTempDir, 0o755);
-fs.mkdirpSync(`${__dirname}/data`);
+fs.mkdirpSync(dataDir);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -102,7 +117,7 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 
 let syncTargetName_ = '';
-let syncTargetId_ = null;
+let syncTargetId_: number = null;
 let sleepTime = 0;
 let isNetworkSyncTarget_ = false;
 
@@ -110,7 +125,7 @@ function syncTargetName() {
 	return syncTargetName_;
 }
 
-function setSyncTargetName(name) {
+function setSyncTargetName(name: string) {
 	if (name === syncTargetName_) return syncTargetName_;
 	const previousName = syncTargetName_;
 	syncTargetName_ = name;
@@ -129,22 +144,21 @@ setSyncTargetName('memory');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
-const syncDir = `${__dirname}/../tests/sync`;
+const syncDir = `${__dirname}/../tests/sync/${suiteName_}`;
 
-// TODO: Should probably update this for Jest?
-
-// let defaultJasmineTimeout = 90 * 1000;
-// if (isNetworkSyncTarget_) defaultJasmineTimeout = 60 * 1000 * 10;
-// if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = defaultJasmineTimeout;
+// 90 seconds now that the tests are running in parallel and have been
+// split into smaller suites might not be necessary but for now leave it
+// anyway.
+let defaultJestTimeout = 90 * 1000;
+if (isNetworkSyncTarget_) defaultJestTimeout = 60 * 1000 * 10;
+jest.setTimeout(defaultJestTimeout);
 
 const dbLogger = new Logger();
-dbLogger.addTarget('console');
-dbLogger.addTarget('file', { path: `${logDir}/log.txt` });
+dbLogger.addTarget(TargetType.Console);
 dbLogger.setLevel(Logger.LEVEL_WARN);
 
 const logger = new Logger();
-logger.addTarget('console');
-logger.addTarget('file', { path: `${logDir}/log.txt` });
+logger.addTarget(TargetType.Console);
 logger.setLevel(Logger.LEVEL_WARN); // Set to DEBUG to display sync process in console
 
 Logger.initializeGlobalLogger(logger);
@@ -174,16 +188,16 @@ function isNetworkSyncTarget() {
 	return isNetworkSyncTarget_;
 }
 
-function sleep(n) {
-	return new Promise((resolve, reject) => {
+function sleep(n: number) {
+	return new Promise((resolve) => {
 		shim.setTimeout(() => {
 			resolve();
 		}, Math.round(n * 1000));
 	});
 }
 
-function msleep(ms) {
-	return new Promise((resolve, reject) => {
+function msleep(ms: number) {
+	return new Promise((resolve) => {
 		shim.setTimeout(() => {
 			resolve();
 		}, ms);
@@ -196,9 +210,10 @@ function currentClientId() {
 
 async function afterEachCleanUp() {
 	await ItemChange.waitForAllSaved();
+	KeymapService.destroyInstance();
 }
 
-async function switchClient(id, options = null) {
+async function switchClient(id: number, options: any = null) {
 	options = Object.assign({}, { keychainEnabled: false }, options);
 
 	if (!databases_[id]) throw new Error(`Call setupDatabaseAndSynchronizer(${id}) first!!`);
@@ -223,7 +238,7 @@ async function switchClient(id, options = null) {
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
 }
 
-async function clearDatabase(id = null) {
+async function clearDatabase(id: number = null) {
 	if (id === null) id = currentClient_;
 	if (!databases_[id]) return;
 
@@ -254,13 +269,19 @@ async function clearDatabase(id = null) {
 	await databases_[id].transactionExecBatch(queries);
 }
 
-async function setupDatabase(id = null, options = null) {
+async function setupDatabase(id: number = null, options: any = null) {
 	options = Object.assign({}, { keychainEnabled: false }, options);
 
 	if (id === null) id = currentClient_;
 
 	Setting.cancelScheduleSave();
-	Setting.cache_ = null;
+
+	// Note that this was changed from `Setting.cache_ = []` to `await
+	// Setting.reset()` during the TypeScript conversion. Normally this is
+	// more correct but something to keep in mind anyway in case there are
+	// some strange async issue related to settings when the tests are
+	// running.
+	await Setting.reset();
 
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
@@ -269,7 +290,7 @@ async function setupDatabase(id = null, options = null) {
 		return;
 	}
 
-	const filePath = `${__dirname}/data/test-${id}.sqlite`;
+	const filePath = `${dataDir}/test-${id}.sqlite`;
 
 	try {
 		await fs.unlink(filePath);
@@ -285,22 +306,27 @@ async function setupDatabase(id = null, options = null) {
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 }
 
-function resourceDirName(id = null) {
+function exportDir(id: number = null) {
+	if (id === null) id = currentClient_;
+	return `${dataDir}/export`;
+}
+
+function resourceDirName(id: number = null) {
 	if (id === null) id = currentClient_;
 	return `resources-${id}`;
 }
 
-function resourceDir(id = null) {
+function resourceDir(id: number = null) {
 	if (id === null) id = currentClient_;
-	return `${__dirname}/data/${resourceDirName(id)}`;
+	return `${dataDir}/${resourceDirName(id)}`;
 }
 
-function pluginDir(id = null) {
+function pluginDir(id: number = null) {
 	if (id === null) id = currentClient_;
-	return `${__dirname}/data/plugins-${id}`;
+	return `${dataDir}/plugins-${id}`;
 }
 
-async function setupDatabaseAndSynchronizer(id = null, options = null) {
+async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	if (id === null) id = currentClient_;
 
 	BaseService.logger_ = logger;
@@ -337,12 +363,12 @@ async function setupDatabaseAndSynchronizer(id = null, options = null) {
 	await fileApi().clearRoot();
 }
 
-function db(id = null) {
+function db(id: number = null) {
 	if (id === null) id = currentClient_;
 	return databases_[id];
 }
 
-function synchronizer(id = null) {
+function synchronizer(id: number = null) {
 	if (id === null) id = currentClient_;
 	return synchronizers_[id];
 }
@@ -350,7 +376,7 @@ function synchronizer(id = null) {
 // This is like calling synchronizer.start() but it handles the
 // complexity of passing around the sync context depending on
 // the client.
-async function synchronizerStart(id = null, extraOptions = null) {
+async function synchronizerStart(id: number = null, extraOptions: any = null) {
 	if (id === null) id = currentClient_;
 	const context = synchronizerContexts_[id];
 	const options = Object.assign({}, extraOptions);
@@ -360,41 +386,41 @@ async function synchronizerStart(id = null, extraOptions = null) {
 	return newContext;
 }
 
-function encryptionService(id = null) {
+function encryptionService(id: number = null) {
 	if (id === null) id = currentClient_;
 	return encryptionServices_[id];
 }
 
-function kvStore(id = null) {
+function kvStore(id: number = null) {
 	if (id === null) id = currentClient_;
 	const o = kvStores_[id];
 	o.setDb(db(id));
 	return o;
 }
 
-function revisionService(id = null) {
+function revisionService(id: number = null) {
 	if (id === null) id = currentClient_;
 	return revisionServices_[id];
 }
 
-function decryptionWorker(id = null) {
+function decryptionWorker(id: number = null) {
 	if (id === null) id = currentClient_;
 	const o = decryptionWorkers_[id];
 	o.setKvStore(kvStore(id));
 	return o;
 }
 
-function resourceService(id = null) {
+function resourceService(id: number = null) {
 	if (id === null) id = currentClient_;
 	return resourceServices_[id];
 }
 
-function resourceFetcher(id = null) {
+function resourceFetcher(id: number = null) {
 	if (id === null) id = currentClient_;
 	return resourceFetchers_[id];
 }
 
-async function loadEncryptionMasterKey(id = null, useExisting = false) {
+async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 	const service = encryptionService(id);
 
 	let masterKey = null;
@@ -477,7 +503,7 @@ function fileApi() {
 	return fileApis_[syncTargetId_];
 }
 
-function objectsEqual(o1, o2) {
+function objectsEqual(o1: any, o2: any) {
 	if (Object.getOwnPropertyNames(o1).length !== Object.getOwnPropertyNames(o2).length) return false;
 	for (const n in o1) {
 		if (!o1.hasOwnProperty(n)) continue;
@@ -486,7 +512,7 @@ function objectsEqual(o1, o2) {
 	return true;
 }
 
-async function checkThrowAsync(asyncFn) {
+async function checkThrowAsync(asyncFn: Function) {
 	let hasThrown = false;
 	try {
 		await asyncFn();
@@ -496,7 +522,7 @@ async function checkThrowAsync(asyncFn) {
 	return hasThrown;
 }
 
-async function expectThrow(asyncFn, errorCode = undefined) {
+async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -507,7 +533,7 @@ async function expectThrow(asyncFn, errorCode = undefined) {
 	}
 
 	if (!hasThrown) {
-		expect('not throw').toBe('throw', 'Expected function to throw an error but did not');
+		expect('not throw').toBe('throw');
 	} else if (thrownError.code !== errorCode) {
 		console.error(thrownError);
 		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);
@@ -516,7 +542,7 @@ async function expectThrow(asyncFn, errorCode = undefined) {
 	}
 }
 
-async function expectNotThrow(asyncFn) {
+async function expectNotThrow(asyncFn: Function) {
 	let thrownError = null;
 	try {
 		await asyncFn();
@@ -526,13 +552,13 @@ async function expectNotThrow(asyncFn) {
 
 	if (thrownError) {
 		console.error(thrownError);
-		expect(thrownError.message).toBe('', 'Expected function not to throw an error but it did');
+		expect(thrownError.message).toBe('');
 	} else {
 		expect(true).toBe(true);
 	}
 }
 
-function checkThrow(fn) {
+function checkThrow(fn: Function) {
 	let hasThrown = false;
 	try {
 		fn();
@@ -542,32 +568,11 @@ function checkThrow(fn) {
 	return hasThrown;
 }
 
-function fileContentEqual(path1, path2) {
+function fileContentEqual(path1: string, path2: string) {
 	const fs = require('fs-extra');
 	const content1 = fs.readFileSync(path1, 'base64');
 	const content2 = fs.readFileSync(path2, 'base64');
 	return content1 === content2;
-}
-
-// Wrap an async test in a try/catch block so that done() is always called
-// and display a proper error message instead of "unhandled promise error"
-function asyncTest(callback) {
-	return async function(done) {
-		try {
-			await callback();
-		} catch (error) {
-			if (error.constructor && error.constructor.name === 'ExpectationFailed') {
-				// OK - will be reported by Jest
-			} else {
-				// Better to rethrow exception as stack trace is more useful in this case
-				throw error;
-				// console.error(error);
-				// expect(0).toBe(1, 'Test has thrown an exception - see above error');
-			}
-		} finally {
-			done();
-		}
-	};
 }
 
 async function allSyncTargetItemsEncrypted() {
@@ -602,19 +607,19 @@ async function allSyncTargetItemsEncrypted() {
 	return totalCount === encryptedCount;
 }
 
-function id(a) {
+function id(a: any) {
 	return a.id;
 }
 
-function ids(a) {
+function ids(a: any[]) {
 	return a.map(n => n.id);
 }
 
-function sortedIds(a) {
+function sortedIds(a: any[]) {
 	return ids(a).sort();
 }
 
-function at(a, indexes) {
+function at(a: any[], indexes: any[]) {
 	const out = [];
 	for (let i = 0; i < indexes.length; i++) {
 		out.push(a[indexes[i]]);
@@ -622,7 +627,7 @@ function at(a, indexes) {
 	return out;
 }
 
-async function createNTestFolders(n) {
+async function createNTestFolders(n: number) {
 	const folders = [];
 	for (let i = 0; i < n; i++) {
 		const folder = await Folder.save({ title: 'folder' });
@@ -632,7 +637,7 @@ async function createNTestFolders(n) {
 	return folders;
 }
 
-async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
+async function createNTestNotes(n: number, folder: any, tagIds: string[] = null, title: string = 'note') {
 	const notes = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;
@@ -649,7 +654,7 @@ async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
 	return notes;
 }
 
-async function createNTestTags(n) {
+async function createNTestTags(n: number) {
 	const tags = [];
 	for (let i = 0; i < n; i++) {
 		const tag = await Tag.save({ title: 'tag' });
@@ -659,7 +664,7 @@ async function createNTestTags(n) {
 	return tags;
 }
 
-function tempFilePath(ext) {
+function tempFilePath(ext: string) {
 	return `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${ext}`;
 }
 
@@ -667,6 +672,39 @@ async function createTempDir() {
 	const tempDirPath = `${baseTempDir}/${uuid.createNano()}`;
 	await fs.mkdirp(tempDirPath);
 	return tempDirPath;
+}
+
+function newPluginService(appVersion = '1.4') {
+	const runner = new PluginRunner();
+	const service = new PluginService();
+	service.initialize(
+		appVersion,
+		{
+			joplin: {},
+		},
+		runner,
+		{
+			dispatch: () => {},
+			getState: () => {},
+		}
+	);
+	return service;
+}
+
+function newPluginScript(script: string) {
+	return `
+		/* joplin-manifest:
+		{
+			"id": "org.joplinapp.plugins.PluginTest",
+			"manifest_version": 1,
+			"app_min_version": "1.4",
+			"name": "JS Bundle test",
+			"version": "1.0.0"
+		}
+		*/
+		
+		${script}
+	`;
 }
 
 // TODO: Update for Jest
@@ -683,6 +721,11 @@ async function createTempDir() {
 
 // Application for feature integration testing
 class TestApp extends BaseApplication {
+
+	private hasGui_: boolean;
+	private middlewareCalls_: any[];
+	private logger_: LoggerWrapper;
+
 	constructor(hasGui = true) {
 		super();
 		this.hasGui_ = hasGui;
@@ -694,7 +737,7 @@ class TestApp extends BaseApplication {
 		return this.hasGui_;
 	}
 
-	async start(argv) {
+	async start(argv: any[]) {
 		this.logger_.info('Test app starting...');
 
 		if (!argv.includes('--profile')) {
@@ -715,7 +758,7 @@ class TestApp extends BaseApplication {
 		this.logger_.info('Test app started...');
 	}
 
-	async generalMiddleware(store, next, action) {
+	async generalMiddleware(store: any, next: any, action: any) {
 		this.middlewareCalls_.push(true);
 		try {
 			await super.generalMiddleware(store, next, action);
@@ -749,4 +792,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

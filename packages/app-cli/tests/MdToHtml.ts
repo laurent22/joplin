@@ -1,7 +1,7 @@
 import MdToHtml from '@joplin/renderer/MdToHtml';
 const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
 const shim = require('@joplin/lib/shim').default;
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -25,7 +25,7 @@ describe('MdToHtml', function() {
 		done();
 	});
 
-	it('should convert from Markdown to Html', asyncTest(async () => {
+	it('should convert from Markdown to Html', (async () => {
 		const basePath = `${__dirname}/md_to_html`;
 		const files = await shim.fsDriver().readDirStats(basePath);
 		const mdToHtml = newTestMdToHtml();
@@ -82,7 +82,7 @@ describe('MdToHtml', function() {
 		}
 	}));
 
-	it('should return enabled plugin assets', asyncTest(async () => {
+	it('should return enabled plugin assets', (async () => {
 		const pluginOptions: any = {};
 		const pluginNames = MdToHtml.pluginNames();
 
@@ -107,7 +107,7 @@ describe('MdToHtml', function() {
 		}
 	}));
 
-	it('should wrapped the rendered Markdown', asyncTest(async () => {
+	it('should wrapped the rendered Markdown', (async () => {
 		const mdToHtml = newTestMdToHtml();
 
 		// In this case, the HTML contains both the style and
@@ -117,7 +117,7 @@ describe('MdToHtml', function() {
 		expect(result.html.indexOf('rendered-md') >= 0).toBe(true);
 	}));
 
-	it('should return the rendered body only', asyncTest(async () => {
+	it('should return the rendered body only', (async () => {
 		const mdToHtml = newTestMdToHtml();
 
 		// In this case, the HTML contains only the rendered markdown, with
@@ -137,7 +137,7 @@ describe('MdToHtml', function() {
 		}
 	}));
 
-	it('should split HTML and CSS', asyncTest(async () => {
+	it('should split HTML and CSS', (async () => {
 		const mdToHtml = newTestMdToHtml();
 
 		// It is similar to the bodyOnly option, excepts that the rendered
@@ -147,7 +147,7 @@ describe('MdToHtml', function() {
 		expect(result.html.trim()).toBe('<div id="rendered-md"><p>just <strong>testing</strong></p>\n</div>');
 	}));
 
-	// it('should render links correctly', asyncTest(async () => {
+	// it('should render links correctly', (async () => {
 	// 	const mdToHtml = newTestMdToHtml();
 
 	// 	const testCases = [

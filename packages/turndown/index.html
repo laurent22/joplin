@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Turndown Demo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+<style>
+  .cf:before,
+  .cf:after {
+      content: " ";
+      display: table;
+  }
+
+  .cf:after {
+      clear: both;
+  }
+
+  .cf {
+      *zoom: 1;
+  }
+
+  * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #ccc;
+    margin: 0 auto;
+    font-size: 14px;
+    font-family: sans-serif;
+    line-height: 1.4;
+    color: #333;
+  }
+
+  header {
+    padding: 1em;
+    overflow: hidden;
+    background-color: #fff;
+  }
+
+  footer {
+    text-align: center;
+    color: #666;
+    text-shadow: 0 1px 0 #ddd;
+  }
+
+  a,
+  a:visited {
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  h1 {
+    float: left;
+    margin: 0;
+    font-size: 1em;
+  }
+
+  h2 {
+    color: #fff;
+    margin-bottom: 0;
+  }
+
+  .col,
+  .form-group {
+    padding: 0 10px;
+  }
+
+  .form-group {
+    float: left;
+  }
+
+  textarea {
+    width: 100%;
+    height: 600px;
+    margin: 0;
+    padding: .5em;
+    overflow: auto;
+    border: none;
+    background-color: #fff;
+    font-family: courier, monospace;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  #input {
+    background: #333;
+    color: #fff;
+  }
+
+  .toolbar {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #e6e6e6;
+  }
+
+  select {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 16px;
+    }
+
+    .col {
+      float: left;
+      width: 50%;
+      padding: 0 15px;
+    }
+
+    .row {
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+</style>
+<script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+</head>
+<body>
+<header>
+  <h1>turndown</h1>
+  <a style="float: right" href="https://github.com/domchristie/turndown">Source on GitHub</a>
+</header>
+<div class="row cf">
+  <div class="col">
+    <h2>HTML</h2>
+    <textarea cols="100" rows=10 id="input"><h1>Turndown Demo</h1>
+
+<p>This demonstrates <a href="https://github.com/domchristie/turndown">turndown</a> – an HTML to Markdown converter in JavaScript.</p>
+
+<h2>Usage</h2>
+
+<pre><code class="language-js">var turndownService = new TurndownService()
+console.log(
+  turndownService.turndown('&amp;lt;h1&amp;gt;Hello world&amp;lt;/h1&amp;gt;')
+)</code></pre>
+
+<hr />
+
+<p>It aims to be <a href="http://commonmark.org/">CommonMark</a>
+ compliant, and includes options to style the output. These options include:</p>
+
+<ul>
+  <li>headingStyle (setext or atx)</li>
+  <li>horizontalRule (*, -, or _)</li>
+  <li>bullet (*, -, or +)</li>
+  <li>codeBlockStyle (indented or fenced)</li>
+  <li>fence (` or ~)</li>
+  <li>emDelimiter (_ or *)</li>
+  <li>strongDelimiter (** or __)</li>
+  <li>linkStyle (inlined or referenced)</li>
+  <li>linkReferenceStyle (full, collapsed, or shortcut)</li>
+</ul></textarea>
+  </div>
+  <div class="col">
+    <h2>Markdown</h2>
+    <textarea readonly cols="100" rows=10 id="output"></textarea>
+  </div>
+</div>
+
+<div class="row cf">
+  <form method="get" action="/turndown" id="options">
+    <div class="form-group">
+      <label for="headingStyle">Heading style</label>
+      <select name="headingStyle" id="headingStyle">
+        <option value="setext">setext</option>
+        <option value="atx">atx</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="hr">Horizontal rule</label>
+      <select name="hr" id="hr">
+        <option value="* * *">* * *</option>
+        <option value="- - -">- - -</option>
+        <option value="_ _ _">_ _ _</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="bulletListMarker">Bullet</label>
+      <select name="bulletListMarker" id="bulletListMarker">
+        <option value="*">*</option>
+        <option value="-">-</option>
+        <option value="+">+</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="codeBlockStyle">Code block style</label>
+      <select name="codeBlockStyle" id="codeBlockStyle">
+        <option value="indented">indented</option>
+        <option value="fenced">fenced</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="fence">Fence</label>
+      <select name="fence" id="fence">
+        <option value="```">```</option>
+        <option value="~~~">~~~</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="emDelimiter">Em delimiter</label>
+      <select name="emDelimiter" id="emDelimiter">
+        <option value="_">_</option>
+        <option value="*">*</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="strongDelimiter">Strong delimiter</label>
+      <select name="strongDelimiter" id="strongDelimiter">
+        <option value="**">**</option>
+        <option value="__">__</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="linkStyle">Link style</label>
+      <select name="linkStyle" id="linkStyle">
+        <option value="inlined">inlined</option>
+        <option value="referenced">referenced</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="linkReferenceStyle">Link reference style</label>
+      <select name="linkReferenceStyle" id="linkReferenceStyle">
+        <option value="full">full</option>
+        <option value="collapsed">collapsed</option>
+        <option value="shortcut">shortcut</option>
+      </select>
+    </div>
+  </form>
+</div>
+
+<footer><p>turndown is copyright © 2017 <a href="http://www.domchristie.co.uk/">Dom Christie</a> and is released under the MIT license</p></footer>
+<script>
+  ;(function () {
+    var input = document.getElementById('input')
+    var output = document.getElementById('output')
+    var optionsForm = document.getElementById('options')
+    var turndownService = new window.TurndownService(options())
+
+    input.addEventListener('input', update)
+
+    optionsForm.addEventListener('change', function () {
+      turndownService = new window.TurndownService(options())
+      update()
+    })
+
+    update()
+
+    function update () {
+      output.value = turndownService.turndown(input.value)
+    }
+
+    function options () {
+      var opts = {}
+      var inputs = optionsForm.getElementsByTagName('select')
+      for (var i = 0; i < inputs.length; i++) {
+        var input = inputs[i]
+        opts[input.name] = input.value
+      }
+      return opts
+    }
+  })()
+</script>
+</body>
+</html>

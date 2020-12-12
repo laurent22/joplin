@@ -24,6 +24,7 @@ module.exports = {
 		'afterAll': 'readonly',
 		'beforeEach': 'readonly',
 		'afterEach': 'readonly',
+		'jest': 'readonly',
 
 		// React Native variables
 		'__DEV__': 'readonly',

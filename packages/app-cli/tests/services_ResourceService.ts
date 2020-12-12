@@ -3,7 +3,7 @@ import NoteResource from '@joplin/lib/models/NoteResource';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import shim from '@joplin/lib/shim';
 
-const { asyncTest, resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('./test-utils.js');
+const { resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const Resource = require('@joplin/lib/models/Resource.js');
@@ -18,7 +18,7 @@ describe('services_ResourceService', function() {
 		done();
 	});
 
-	it('should delete orphaned resources', asyncTest(async () => {
+	it('should delete orphaned resources', (async () => {
 		const service = new ResourceService();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -49,7 +49,7 @@ describe('services_ResourceService', function() {
 		expect(!(await NoteResource.all()).length).toBe(true);
 	}));
 
-	it('should not delete resource if still associated with at least one note', asyncTest(async () => {
+	it('should not delete resource if still associated with at least one note', (async () => {
 		const service = new ResourceService();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -73,7 +73,7 @@ describe('services_ResourceService', function() {
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
 	}));
 
-	it('should not delete a resource that has never been associated with any note, because it probably means the resource came via sync, and associated note has not arrived yet', asyncTest(async () => {
+	it('should not delete a resource that has never been associated with any note, because it probably means the resource came via sync, and associated note has not arrived yet', (async () => {
 		const service = new ResourceService();
 		await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
 
@@ -83,7 +83,7 @@ describe('services_ResourceService', function() {
 		expect((await Resource.all()).length).toBe(1);
 	}));
 
-	it('should not delete resource if it is used in an IMG tag', asyncTest(async () => {
+	it('should not delete resource if it is used in an IMG tag', (async () => {
 		const service = new ResourceService();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -102,7 +102,7 @@ describe('services_ResourceService', function() {
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
 	}));
 
-	it('should not process twice the same change', asyncTest(async () => {
+	it('should not process twice the same change', (async () => {
 		const service = new ResourceService();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -122,7 +122,7 @@ describe('services_ResourceService', function() {
 		expect(before.last_seen_time).toBe(after.last_seen_time);
 	}));
 
-	it('should not delete resources that are associated with an encrypted note', asyncTest(async () => {
+	it('should not delete resources that are associated with an encrypted note', (async () => {
 		// https://github.com/laurent22/joplin/issues/1433
 		//
 		// Client 1 and client 2 have E2EE setup.
@@ -168,7 +168,7 @@ describe('services_ResourceService', function() {
 		expect((await Resource.all()).length).toBe(2);
 	}));
 
-	it('should double-check if the resource is still linked before deleting it', asyncTest(async () => {
+	it('should double-check if the resource is still linked before deleting it', (async () => {
 		SearchEngine.instance().setDb(db()); // /!\ Note that we use the global search engine here, which we shouldn't but will work for now
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -187,7 +187,7 @@ describe('services_ResourceService', function() {
 		expect(!!nr.is_associated).toBe(true); // And it should have fixed the situation by re-indexing the note content
 	}));
 
-	// it('should auto-delete resource even if the associated note was deleted immediately', asyncTest(async () => {
+	// it('should auto-delete resource even if the associated note was deleted immediately', (async () => {
 	// 	// Previoulsy, when a resource was be attached to a note, then the
 	// 	// note was immediately deleted, the ResourceService would not have
 	// 	// time to quick in an index the resource/note relation. It means

@@ -52,7 +52,7 @@ tasks.prepareTestBuild = {
 
 		// await utils.copyDir(`${rootDir}/packages/app-mobile/lib`, `${testBuildDir}/lib`, {
 		// 	excluded: [
-		// 		`${rootDir}/packages/app-mobile/lib/joplin-renderer/node_modules`,
+		// 		`${rootDir}/packages/renderer/node_modules`,
 		// 	],
 		// });
 		// await utils.copyDir(`${rootDir}/packages/app-mobile/locales`, `${testBuildDir}/locales`);

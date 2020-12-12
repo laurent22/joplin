@@ -1,4 +1,4 @@
-const { asyncTest, id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } = require('./test-utils.js');
+const { id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } = require('./test-utils.js');
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const uuid = require('@joplin/lib/uuid').default;
 const Note = require('@joplin/lib/models/Note.js');
@@ -35,7 +35,7 @@ describe('feature_NoteHistory', function() {
 		done();
 	});
 
-	it('should save history when navigating through notes', asyncTest(async () => {
+	it('should save history when navigating through notes', (async () => {
 		// setup
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
@@ -87,7 +87,7 @@ describe('feature_NoteHistory', function() {
 	}));
 
 
-	it('should save history when navigating through notebooks', asyncTest(async () => {
+	it('should save history when navigating through notebooks', (async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
 		const notes0 = await createNTestNotes(5, folders[0]);
@@ -127,7 +127,7 @@ describe('feature_NoteHistory', function() {
 	}));
 
 
-	it('should save history when searching for a note', asyncTest(async () => {
+	it('should save history when searching for a note', (async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
 		const notes0 = await createNTestNotes(5, folders[0]);
@@ -169,7 +169,7 @@ describe('feature_NoteHistory', function() {
 		expect(ids(state.forwardHistoryNotes)).toEqual([]);
 	}));
 
-	it('should ensure no adjacent duplicates', asyncTest(async () => {
+	it('should ensure no adjacent duplicates', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes0 = await createNTestNotes(3, folders[0]);
 		await testApp.wait();
@@ -207,7 +207,7 @@ describe('feature_NoteHistory', function() {
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 	}));
 
-	it('should ensure history is not corrupted when notes get deleted.', asyncTest(async () => {
+	it('should ensure history is not corrupted when notes get deleted.', (async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
 		const notes0 = await createNTestNotes(5, folders[0]);
@@ -237,7 +237,7 @@ describe('feature_NoteHistory', function() {
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 	}));
 
-	it('should ensure history is not corrupted when notes get created.', asyncTest(async () => {
+	it('should ensure history is not corrupted when notes get created.', (async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
 		const notes0 = await createNTestNotes(5, folders[0]);
@@ -298,7 +298,7 @@ describe('feature_NoteHistory', function() {
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 	}));
 
-	it('should ensure history works when traversing all notes', asyncTest(async () => {
+	it('should ensure history works when traversing all notes', (async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
 		const notes0 = await createNTestNotes(5, folders[0]);
@@ -356,7 +356,7 @@ describe('feature_NoteHistory', function() {
 		expect(state.selectedNoteIds).toEqual([notes0[4].id]);
 	}));
 
-	it('should ensure history works when traversing through conflict notes', asyncTest(async () => {
+	it('should ensure history works when traversing through conflict notes', (async () => {
 		const folders = await createNTestFolders(1);
 		await testApp.wait();
 		const notes0 = await createNTestNotes(5, folders[0]);

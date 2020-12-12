@@ -171,7 +171,7 @@ class Note extends BaseItem {
 			useAbsolutePaths: false,
 		}, options);
 
-		const pathsToTry = [];
+		let pathsToTry = [];
 		if (options.useAbsolutePaths) {
 			pathsToTry.push(`file://${Setting.value('resourceDir')}`);
 			pathsToTry.push(`file://${shim.pathRelativeToCwd(Setting.value('resourceDir'))}`);
@@ -179,7 +179,22 @@ class Note extends BaseItem {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
-		this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
+		// We support both the escaped and unescaped versions because both
+		// of those paths are valid:
+		//
+		// [](file://C:/I like spaces in paths/abcdefg.jpg)
+		// [](file://C:/I%20like%20spaces%20in%20paths/abcdefg.jpg)
+		//
+		// https://discourse.joplinapp.org/t/12986/4
+		const temp = [];
+		for (const p of pathsToTry) {
+			temp.push(p);
+			temp.push(markdownUtils.escapeLinkUrl(p));
+		}
+
+		pathsToTry = temp;
+
+		this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry);
 
 		for (const basePath of pathsToTry) {
 			const reStrings = [
@@ -200,7 +215,7 @@ class Note extends BaseItem {
 			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
 
-		this.logger().debug('replaceResourceExternalToInternalLinks result', body);
+		// this.logger().debug('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
 	}

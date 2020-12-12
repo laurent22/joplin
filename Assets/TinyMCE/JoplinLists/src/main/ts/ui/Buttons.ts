@@ -48,7 +48,7 @@ const listState = function (editor: Editor, listName, options:any = {}) {
       // dependent on how the checkbox is styled, so if the style is changed, this might need
       // to be updated too.
       // For the styling, see:
-      // packages/app-mobile/lib/joplin-renderer/MdToHtml/rules/checkbox.ts
+      // packages/renderer/MdToHtml/rules/checkbox.ts
       //
       // The previous solution was to use "pointer-event: none", which mostly work, however
       // it means that links are no longer clickable when they are within the checkbox label.

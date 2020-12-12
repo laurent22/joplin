@@ -7,7 +7,7 @@ module.exports = {
 	fn: async function() {
 		const copyOptions = {
 			excluded: [
-				`${rootDir}/packages/app-mobile/lib/joplin-renderer/node_modules`,
+				`${rootDir}/packages/renderer/node_modules`,
 			],
 		};
 

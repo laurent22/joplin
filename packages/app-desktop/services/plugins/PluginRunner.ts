@@ -11,6 +11,17 @@ const ipcRenderer = require('electron').ipcRenderer;
 
 const logger = Logger.create('PluginRunner');
 
+// Electron error messages are useless so wrap the renderer call and print
+// additional information when an error occurs.
+function ipcRendererSend(message: string, args: any) {
+	try {
+		return ipcRenderer.send(message, args);
+	} catch (error) {
+		logger.error('Could not send IPC message:', message, ': ', args, error);
+		throw error;
+	}
+}
+
 enum PluginMessageTarget {
 	MainWindow = 'mainWindow',
 	Plugin = 'plugin',
@@ -46,7 +57,7 @@ function mapEventIdsToHandlers(pluginId: string, arg: any) {
 				callbackPromises[callbackId] = { resolve, reject };
 			});
 
-			ipcRenderer.send('pluginMessage', {
+			ipcRendererSend('pluginMessage', {
 				callbackId: callbackId,
 				target: PluginMessageTarget.Plugin,
 				pluginId: pluginId,
@@ -132,7 +143,7 @@ export default class PluginRunner extends BasePluginRunner {
 
 				// Don't log complete HTML code, which can be long, for setHtml calls
 				const debugMappedArgs = fullPath.includes('setHtml') ? '<hidden>' : mappedArgs;
-				logger.debug(`Got message (3): ${fullPath}: ${debugMappedArgs}`);
+				logger.debug(`Got message (3): ${fullPath}`, debugMappedArgs);
 
 				let result: any = null;
 				let error: any = null;
@@ -142,7 +153,7 @@ export default class PluginRunner extends BasePluginRunner {
 					error = e ? e : new Error('Unknown error');
 				}
 
-				ipcRenderer.send('pluginMessage', {
+				ipcRendererSend('pluginMessage', {
 					target: PluginMessageTarget.Plugin,
 					pluginId: plugin.id,
 					pluginCallbackId: message.callbackId,

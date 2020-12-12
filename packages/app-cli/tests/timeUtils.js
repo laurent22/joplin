@@ -2,12 +2,8 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const timeUtils = require('@joplin/lib/time');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('timeUtils', function() {
 
@@ -15,7 +11,7 @@ describe('timeUtils', function() {
 		done();
 	});
 
-	it('should go back in time', asyncTest(async () => {
+	it('should go back in time', (async () => {
 		let startDate = new Date('3 Aug 2020');
 		let endDate = new Date('2 Aug 2020');
 
@@ -40,7 +36,7 @@ describe('timeUtils', function() {
 		expect(time.goBackInTime(startDate, 23, 'year')).toBe(endDate.getTime().toString());
 	}));
 
-	it('should go forward in time', asyncTest(async () => {
+	it('should go forward in time', (async () => {
 		let startDate = new Date('2 Aug 2020');
 		let endDate = new Date('3 Aug 2020');
 

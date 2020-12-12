@@ -37,7 +37,7 @@ export default class JoplinSettings {
      *
      * The list of available settings is not documented yet, but can be found by looking at the source code:
      *
-     * https://github.com/laurent22/joplin/blob/3539a452a359162c461d2849829d2d42973eab50/packages/app-mobile/lib/models/Setting.ts#L142
+     * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Setting.ts#L142
      */
     globalValue(key: string): Promise<any>;
 }

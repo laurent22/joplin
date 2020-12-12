@@ -5,9 +5,9 @@
   "author": "Laurent Cozic",
   "private": true,
   "scripts": {
-    "test": "jest --config=jest.config.js --runInBand --bail --forceExit",
-    "test-one": "jest --verbose=false --config=jest.config.js --runInBand --bail --forceExit",
-    "test-ci": "jest --config=jest.config.js --runInBand --forceExit",
+    "test": "jest --config=jest.config.js --bail --forceExit",
+    "test-one": "jest --verbose=false --config=jest.config.js --bail --forceExit",
+    "test-ci": "jest --config=jest.config.js --forceExit",
     "build": "gulp build",
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
@@ -31,7 +31,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "1.4.9",
+  "version": "1.5.0",
   "bin": {
     "joplin": "./main.js"
   },
