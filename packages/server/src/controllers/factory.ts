@@ -5,6 +5,7 @@ import SessionController from './api/SessionController';
 import UserController from './api/UserController';
 import IndexLoginController from './index/LoginController';
 import IndexHomeController from './index/HomeController';
+import IndexProfileController from './index/ProfileController';
 
 export class Controllers {
 
@@ -36,6 +37,10 @@ export class Controllers {
 
 	public indexHome() {
 		return new IndexHomeController(this.models_);
+	}
+
+	public indexProfile() {
+		return new IndexProfileController(this.models_, this.user());
 	}
 
 }

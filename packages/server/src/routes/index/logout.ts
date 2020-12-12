@@ -7,6 +7,7 @@ const route: Route = {
 
 	exec: async function(_path: SubPath, ctx: AppContext) {
 		if (ctx.method === 'POST') {
+			// TODO: also delete the session from the database
 			ctx.cookies.set('sessionId', '');
 			return redirect(ctx, `${baseUrl()}/login`);
 		}

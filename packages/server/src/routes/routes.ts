@@ -7,6 +7,7 @@ import apiFiles from './api/files';
 import indexLoginRoute from './index/login';
 import indexLogoutRoute from './index/logout';
 import indexHomeRoute from './index/home';
+import indexProfileRoute from './index/profile';
 import defaultRoute from './default';
 
 const routes: Routes = {
@@ -17,6 +18,7 @@ const routes: Routes = {
 	'login': indexLoginRoute,
 	'logout': indexLogoutRoute,
 	'home': indexHomeRoute,
+	'profile': indexProfileRoute,
 	'': defaultRoute,
 };
 

@@ -1,8 +1,6 @@
 <section class="section login-box">
 	<div class="container">
-		{{#error}}
-			<div class="notification is-danger">{{error.message}}</div>
-		{{/error}}
+		{{> errorBanner}}
 		<form action="{{{global.baseUrl}}}/login" method="POST">
 			<div class="field">
 				<label class="label">Email</label>

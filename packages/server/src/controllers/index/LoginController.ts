@@ -7,7 +7,7 @@ export default class LoginController extends BaseController {
 	public async getIndex(error: any = null): Promise<View> {
 		const view = defaultView('login');
 		view.content.error = error;
-		view.partials = [];
+		view.partials = ['errorBanner'];
 		return view;
 	}
 
