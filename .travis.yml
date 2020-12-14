@@ -88,16 +88,6 @@ script:
       fi
     fi
 
-    # Run Joplin API test units
-    cd Server
-    npm install
-    npm run test
-    testResult=$?
-    if [ $testResult -ne 0 ]; then
-      exit $testResult
-    fi
-    cd ..
-
     # Run linter for pull requests only - this is so that
     # bypassing eslint is allowed for urgent fixes.
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
