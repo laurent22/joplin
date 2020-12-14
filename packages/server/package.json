@@ -8,7 +8,8 @@
     "migrate-db": "",
     "generate-types": "rm -f db-buildTypes.sqlite && NODE_ENV=buildTypes npm run db-migrate && NODE_ENV=buildTypes node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
     "tsc": "tsc --project tsconfig.json",
-    "test": "npx jest",
+    "test": "jest",
+    "test-ci": "npm run test",
     "watch": "tsc --watch --project tsconfig.json"
   },
   "dependencies": {

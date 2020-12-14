@@ -1505,6 +1505,9 @@ packages/server/src/routes/index/logout.js.map
 packages/server/src/routes/index/profile.d.ts
 packages/server/src/routes/index/profile.js
 packages/server/src/routes/index/profile.js.map
+packages/server/src/routes/index/user.d.ts
+packages/server/src/routes/index/user.js
+packages/server/src/routes/index/user.js.map
 packages/server/src/routes/index/users.d.ts
 packages/server/src/routes/index/users.js
 packages/server/src/routes/index/users.js.map
