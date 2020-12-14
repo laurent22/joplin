@@ -6,6 +6,9 @@
   "main": "lib/turndown.cjs.js",
   "module": "lib/turndown.es.js",
   "jsnext:main": "lib/turndown.es.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "browser": {
     "jsdom": false
   },
@@ -47,5 +50,5 @@
     "build-test": "browserify test/turndown-test.js --outfile test/turndown-test.browser.js",
     "postinstall": "npm run build"
   },
-  "gitHead": "0b5bb68201ca99289cf2620531ba28d14f31d832"
+  "gitHead": "80c0089d2c52aff608b2bea74389de5a7f12f2e2"
 }
