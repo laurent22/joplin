@@ -1,11 +1,14 @@
 {
   "name": "@joplin/turndown",
   "description": "A library that converts HTML to Markdown",
-  "version": "4.0.30",
+  "version": "4.0.35",
   "author": "Dom Christie",
   "main": "lib/turndown.cjs.js",
   "module": "lib/turndown.es.js",
   "jsnext:main": "lib/turndown.es.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "browser": {
     "jsdom": false
   },
@@ -45,6 +48,7 @@
     "build-umd": "rollup -c config/rollup.config.umd.js && rollup -c config/rollup.config.browser.umd.js",
     "build-iife": "rollup -c config/rollup.config.iife.js",
     "build-test": "browserify test/turndown-test.js --outfile test/turndown-test.browser.js",
-    "postinstall": "npm run build"
-  }
+    "prepare": "npm run build"
+  },
+  "gitHead": "80c0089d2c52aff608b2bea74389de5a7f12f2e2"
 }
