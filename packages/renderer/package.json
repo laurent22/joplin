@@ -10,7 +10,6 @@
   },
   "scripts": {
     "buildAssets": "node Tools/buildAssets.js",
-    "prepublishOnly": "npm run buildAssets",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "test": "jest",
