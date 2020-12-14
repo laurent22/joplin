@@ -33,7 +33,7 @@ async function makeTestDirectory(name: string = 'Docs'): Promise<File> {
 }
 
 async function saveTestFile(sessionId: string, path: string): Promise<File> {
-	const fileController = controllers().file();
+	const fileController = controllers().apiFile();
 
 	return fileController.putFileContent(
 		sessionId,
@@ -43,7 +43,7 @@ async function saveTestFile(sessionId: string, path: string): Promise<File> {
 }
 
 async function saveTestDir(sessionId: string, path: string): Promise<File> {
-	const fileController = controllers().file();
+	const fileController = controllers().apiFile();
 
 	const parsed = filePathInfo(path);
 
@@ -74,7 +74,7 @@ describe('FileController', function() {
 	it('should create a file', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		const fileContent = await makeTestContent();
 
 		const newFile = await fileController.putFileContent(
@@ -104,7 +104,7 @@ describe('FileController', function() {
 	it('should create sub-directories', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 
 		const newDir = await fileController.postFile_(session.id, {
 			is_directory: 1,
@@ -128,7 +128,7 @@ describe('FileController', function() {
 	it('should create files in sub-directory', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 
 		await fileController.postFile_(session.id, {
 			is_directory: 1,
@@ -149,7 +149,7 @@ describe('FileController', function() {
 	it('should not create a file with an invalid path', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		const fileContent = await makeTestContent();
 
 		const error = await checkThrowAsync(async () => fileController.putFileContent(
@@ -169,7 +169,7 @@ describe('FileController', function() {
 		let file2: File = await makeTestFile(2);
 		let file3: File = await makeTestFile(3);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		file1 = await fileController.postFile_(session1.id, file1);
 		file2 = await fileController.postFile_(session1.id, file2);
 		file3 = await fileController.postFile_(session2.id, file3);
@@ -198,7 +198,7 @@ describe('FileController', function() {
 
 		const file: File = await makeTestFile();
 		file.parent_id = rootFile2.id;
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 
 		const hasThrown = await checkThrowAsync(async () => fileController.postFile_(session.id, file));
 		expect(!!hasThrown).toBe(true);
@@ -211,7 +211,7 @@ describe('FileController', function() {
 
 		let file: File = await makeTestFile();
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		file = await fileController.postFile_(session.id, file);
 
 		// Can't have file with empty name
@@ -233,7 +233,7 @@ describe('FileController', function() {
 		let file1: File = await makeTestFile(1);
 		const file2: File = await makeTestFile(1);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		file1 = await fileController.postFile_(session.id, file1);
 
 		expect(!!file1.id).toBe(true);
@@ -254,7 +254,7 @@ describe('FileController', function() {
 		let file2: File = await makeTestFile(2);
 		let dir: File = await makeTestDirectory();
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		file = await fileController.postFile_(session1.id, file);
 		file2 = await fileController.postFile_(session1.id, file2);
 		dir = await fileController.postFile_(session1.id, dir);
@@ -281,7 +281,7 @@ describe('FileController', function() {
 	it('should delete a file', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		const fileModel = models().file({ userId: user.id });
 
 		const file1: File = await makeTestFile(1);
@@ -300,7 +300,7 @@ describe('FileController', function() {
 	it('should create and delete directories', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 
 		const dir1: File = await fileController.postChild(session.id, 'root', { name: 'dir1', is_directory: 1 });
 		const dir2: File = await fileController.postChild(session.id, 'root:/dir1', { name: 'dir2', is_directory: 1 });
@@ -328,7 +328,7 @@ describe('FileController', function() {
 	it('should not change the parent when updating a file', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		const fileModel = models().file({ userId: user.id });
 
 		const dir1: File = await fileController.postChild(session.id, 'root', { name: 'dir1', is_directory: 1 });
@@ -344,7 +344,7 @@ describe('FileController', function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 
 		const file1: File = await makeTestFile(1);
 		let file2: File = await makeTestFile(2);
@@ -363,7 +363,7 @@ describe('FileController', function() {
 		let file: File = await makeTestFile();
 
 		const fileModel = models().file({ userId: user.id });
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		file = await fileController.postFile_(session.id, file);
 
 		await fileController.patchFile(adminSession.id, file.id, { name: 'modified.jpg' });
@@ -380,7 +380,7 @@ describe('FileController', function() {
 		const file: File = await makeTestFile(1);
 		const file2: File = await makeTestFile(2, 'png');
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		const newFile = await fileController.postFile_(session.id, file);
 		await fileController.putFileContent(session.id, newFile.id, file2.content);
 
@@ -403,7 +403,7 @@ describe('FileController', function() {
 			'invalid\\invalid',
 		];
 
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 
 		for (const filename of filenames) {
 			const error = await checkThrowAsync(async () => fileController.putFileContent(session.id, `root:/${filename}`, null));
@@ -425,7 +425,7 @@ describe('FileController', function() {
 
 	it('should not be possible to delete the root directory', async function() {
 		const { session } = await createUserAndSession(1, true);
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 
 		const error = await checkThrowAsync(async () => fileController.deleteFile(session.id, 'root'));
 		expect(error instanceof ErrorForbidden).toBe(true);
@@ -433,7 +433,7 @@ describe('FileController', function() {
 
 	it('should support root:/: format, which means root', async function() {
 		const { session, user } = await createUserAndSession(1, true);
-		const fileController = controllers().file();
+		const fileController = controllers().apiFile();
 		const fileModel = models().file({ userId: user.id });
 
 		const root = await fileController.getFile(session.id, 'root:/:');

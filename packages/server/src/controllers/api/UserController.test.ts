@@ -19,7 +19,7 @@ describe('UserController', function() {
 	it('should create a new user along with his root file', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		const controller = controllers().user();
+		const controller = controllers().apiUser();
 
 		const newUser = await controller.postUser(session.id, { email: 'test@example.com', password: '123456' });
 
@@ -45,7 +45,7 @@ describe('UserController', function() {
 	it('should not create anything, neither user, root file nor permissions, if user creation fail', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const controller = controllers().user();
+		const controller = controllers().apiUser();
 		const fileModel = models().file({ userId: user.id });
 		const permissionModel = models().permission();
 		const userModel = models().user({ userId: user.id });
@@ -80,7 +80,7 @@ describe('UserController', function() {
 	it('should change user properties', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const controller = controllers().user();
+		const controller = controllers().apiUser();
 		const userModel = models().user({ userId: user.id });
 
 		await controller.patchUser(session.id, { id: user.id, email: 'test2@example.com' });
@@ -97,7 +97,7 @@ describe('UserController', function() {
 	it('should get a user', async function() {
 		const { user, session } = await createUserAndSession();
 
-		const controller = controllers().user();
+		const controller = controllers().apiUser();
 		const gotUser = await controller.getUser(session.id, user.id);
 
 		expect(gotUser.id).toBe(user.id);
@@ -110,7 +110,7 @@ describe('UserController', function() {
 		const { user: user2 } = await createUserAndSession(3, false);
 
 		let error = null;
-		const controller = controllers().user();
+		const controller = controllers().apiUser();
 
 		// Non-admin user can't create a user
 		error = await checkThrowAsync(async () => await controller.postUser(userSession1.id, { email: 'newone@example.com', password: '1234546' }));
@@ -162,7 +162,7 @@ describe('UserController', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(2, false);
 		const { user: user2, session: session2 } = await createUserAndSession(3, false);
 
-		const controller = controllers().user();
+		const controller = controllers().apiUser();
 		const userModel = models().user({ userId: admin.id });
 
 		const allUsers: File[] = await userModel.all();
@@ -176,6 +176,10 @@ describe('UserController', function() {
 		// Admin can delete any user
 		await controller.deleteUser(adminSession.id, user1.id);
 		expect((await userModel.all()).length).toBe(beforeCount - 1);
+		const allFiles = await models().file().all() as File[];
+		expect(allFiles.length).toBe(2);
+		expect(!!allFiles.find(f => f.owner_id === admin.id)).toBe(true);
+		expect(!!allFiles.find(f => f.owner_id === user2.id)).toBe(true);
 
 		// Can delete own user
 		const fileModel = models().file({ userId: user2.id });

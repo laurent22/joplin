@@ -67,7 +67,7 @@ export function controllers() {
 }
 
 export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false): Promise<UserAndSession> {
-	const sessionController = controllers().session();
+	const sessionController = controllers().apiSession();
 
 	const email: string = `user${index}@localhost`;
 	const user = await models().user().save({ email: email, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });

@@ -1,3 +1,4 @@
+// Allows displaying error stack traces with TypeScript file paths
 import * as Koa from 'koa';
 import routes from './routes/routes';
 import { ErrorNotFound } from './utils/errors';
@@ -17,6 +18,8 @@ import controllerFactory from './controllers/factory';
 import { AppContext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import mustacheService, { isView, View } from './services/MustacheService';
+
+require('source-map-support').install();
 
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit();

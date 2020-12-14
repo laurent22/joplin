@@ -51,8 +51,6 @@ class MustacheService {
 		const cssFiles = this.resolvesFilePaths('css', view.cssFiles || []);
 		const jsFiles = this.resolvesFilePaths('js', view.jsFiles || []);
 
-		console.info('VVVVVVVV', view);
-
 		const partialContents: any = {};
 		for (const partialName of partials) {
 			const filePath = `${config().viewDir}/partials/${partialName}.mustache`;

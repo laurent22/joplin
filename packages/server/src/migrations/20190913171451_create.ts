@@ -7,6 +7,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.string('id', 32).unique().primary().notNullable();
 		table.text('email', 'mediumtext').unique().notNullable();
 		table.text('password', 'mediumtext').notNullable();
+		table.text('full_name', 'mediumtext').defaultTo('').notNullable();
 		table.integer('is_admin').defaultTo(0).notNullable();
 		table.bigInteger('updated_time').notNullable();
 		table.bigInteger('created_time').notNullable();

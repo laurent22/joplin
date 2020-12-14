@@ -175,6 +175,7 @@ interface DatabaseTables {
 export interface User extends WithDates, WithUuid {
 	email?: string;
 	password?: string;
+	full_name?: string;
 	is_admin?: number;
 }
 
@@ -212,6 +213,7 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'string' },
 		email: { type: 'string' },
 		password: { type: 'string' },
+		full_name: { type: 'string' },
 		is_admin: { type: 'number' },
 		updated_time: { type: 'number' },
 		created_time: { type: 'number' },

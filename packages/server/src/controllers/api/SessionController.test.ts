@@ -17,7 +17,7 @@ describe('SessionController', function() {
 
 	it('should authenticate a user and give back a session', async function() {
 		const user = await createUser(1);
-		const controller = controllers().session();
+		const controller = controllers().apiSession();
 		const session = await controller.authenticate(user.email, '123456');
 		expect(!!session).toBe(true);
 		expect(!!session.id).toBe(true);
@@ -26,7 +26,7 @@ describe('SessionController', function() {
 
 	it('should not give a session for invalid login', async function() {
 		const user = await createUser(1);
-		const controller = controllers().session();
+		const controller = controllers().apiSession();
 
 		let error = await checkThrowAsync(async () => controller.authenticate(user.email, 'wrong'));
 		expect(error instanceof ErrorForbidden).toBe(true);

@@ -21,6 +21,7 @@ export default class UserModel extends BaseModel {
 		if ('email' in object) user.email = object.email;
 		if ('password' in object) user.password = object.password;
 		if ('is_admin' in object) user.is_admin = object.is_admin;
+		if ('full_name' in object) user.full_name = object.full_name;
 
 		return user;
 	}
@@ -83,7 +84,7 @@ export default class UserModel extends BaseModel {
 		const txIndex = await this.startTransaction();
 
 		try {
-			const fileModel = this.models.file({ userId: this.userId });
+			const fileModel = this.models.file({ userId: id });
 			const rootFile = await fileModel.userRootFile();
 			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
 			await super.delete(id);

@@ -1,7 +1,7 @@
 import { SubPath, Route, redirect } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import { contextSessionId, formParse } from '../../utils/requestUtils';
-import { ErrorBadRequest, ErrorMethodNotAllowed } from '../../utils/errors';
+import { ErrorMethodNotAllowed, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User } from '../../db';
 import { baseUrl } from '../../config';
 
@@ -15,7 +15,7 @@ const route: Route = {
 		}
 
 		if (ctx.method === 'POST') {
-			let user:User = {};
+			let user: User = {};
 
 			try {
 				const body = await formParse(ctx.req);
@@ -23,10 +23,11 @@ const route: Route = {
 				user = {
 					id: body.fields.id,
 					email: body.fields.email,
+					full_name: body.fields.full_name,
 				};
 
 				if (body.fields.password) {
-					if (body.fields.password !== body.fields.password2) throw new ErrorBadRequest('Passwords do not match');
+					if (body.fields.password !== body.fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
 				}
 
 				await ctx.controllers.indexProfile().patchIndex(sessionId, user);

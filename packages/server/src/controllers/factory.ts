@@ -6,6 +6,7 @@ import UserController from './api/UserController';
 import IndexLoginController from './index/LoginController';
 import IndexHomeController from './index/HomeController';
 import IndexProfileController from './index/ProfileController';
+import IndexUserController from './index/UserController';
 
 export class Controllers {
 
@@ -15,7 +16,7 @@ export class Controllers {
 		this.models_ = models;
 	}
 
-	public file() {
+	public apiFile() {
 		return new FileController(this.models_);
 	}
 
@@ -23,11 +24,11 @@ export class Controllers {
 	// 	return new OAuthController(this.models_);
 	// }
 
-	public session() {
+	public apiSession() {
 		return new SessionController(this.models_);
 	}
 
-	public user() {
+	public apiUser() {
 		return new UserController(this.models_);
 	}
 
@@ -40,7 +41,11 @@ export class Controllers {
 	}
 
 	public indexProfile() {
-		return new IndexProfileController(this.models_, this.user());
+		return new IndexProfileController(this.models_, this.apiUser());
+	}
+
+	public indexUser() {
+		return new IndexUserController(this.models_);
 	}
 
 }

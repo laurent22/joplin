@@ -140,12 +140,12 @@ function setSyncTargetName(name: string) {
 	return previousName;
 }
 
-// setSyncTargetName('memory');
+setSyncTargetName('memory');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
 // setSyncTargetName('onedrive');
 // setSyncTargetName('amazon_s3');
-setSyncTargetName('joplinServer');
+// setSyncTargetName('joplinServer');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 

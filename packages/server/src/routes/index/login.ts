@@ -16,7 +16,7 @@ const route: Route = {
 		if (ctx.method === 'POST') {
 			try {
 				const body = await formParse(ctx.req);
-				const session = await ctx.controllers.session().authenticate(body.fields.email, body.fields.password);
+				const session = await ctx.controllers.apiSession().authenticate(body.fields.email, body.fields.password);
 
 				ctx.cookies.set('sessionId', session.id);
 				return redirect(ctx, `${baseUrl()}/home`);

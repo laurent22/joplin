@@ -8,6 +8,8 @@ import indexLoginRoute from './index/login';
 import indexLogoutRoute from './index/logout';
 import indexHomeRoute from './index/home';
 import indexProfileRoute from './index/profile';
+import indexUsersRoute from './index/users';
+import indexUserRoute from './index/user';
 import defaultRoute from './default';
 
 const routes: Routes = {
@@ -15,10 +17,14 @@ const routes: Routes = {
 	'api/sessions': apiSessions,
 	'api/files': apiFiles,
 	// 'oauth2/authorize': oauth2Authorize,
+
 	'login': indexLoginRoute,
 	'logout': indexLogoutRoute,
 	'home': indexHomeRoute,
 	'profile': indexProfileRoute,
+	'users': indexUsersRoute,
+	'user': indexUserRoute,
+
 	'': defaultRoute,
 };
 

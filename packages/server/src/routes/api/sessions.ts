@@ -9,7 +9,7 @@ const route: Route = {
 		if (!path.link) {
 			if (ctx.method === 'POST') {
 				const user = await parse.json(ctx);
-				const sessionController = ctx.controllers.session();
+				const sessionController = ctx.controllers.apiSession();
 				const session = await sessionController.authenticate(user.email, user.password);
 				return { id: session.id };
 			}
