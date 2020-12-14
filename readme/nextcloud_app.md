@@ -1,5 +1,13 @@
 # Joplin Web API for Nextcloud
 
+* * *
+
+**IMPORTANT: THIS APPLICATION IS DEPRECATED AND WILL NO LONGER BE SUPPORTED FROM JOPLIN v16**
+
+It is deprecated in favour of [Joplin Server](https://discourse.joplinapp.org/t/joplin-web-api-for-nextcloud/4491/72?u=laurent), so if you are relying on it please do not upgrade to Joplin v16 till you are ready to migrate to Joplin Server or some other alternative.
+
+* * *
+
 **This is a beta feature, not yet completed. More info coming soon!**
 
 The app can be downloaded from there: https://apps.nextcloud.com/apps/joplin
