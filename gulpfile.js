@@ -9,10 +9,10 @@ const tasks = {
 	completePublishAll: {
 		fn: async () => {
 			// await utils.execCommandVerbose('git pull');
-			await utils.execCommand('git add -A');
-			await utils.execCommand('git commit -m "Releasing sub-packages"');
-			await utils.execCommand('lerna publish from-package -y');
-			await utils.execCommand('git push');
+			await utils.execCommandVerbose('git', ['add', '-A']);
+			await utils.execCommandVerbose('git', ['commit', '-m', 'Releasing sub-packages']);
+			await utils.execCommandVerbose('lerna', ['publish', 'from-package', '-y']);
+			await utils.execCommandVerbose('git', ['push']);
 		},
 	},
 };
