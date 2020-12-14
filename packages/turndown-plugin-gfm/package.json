@@ -1,6 +1,7 @@
 {
   "name": "@joplin/turndown-plugin-gfm",
   "description": "Turndown plugin to add GitHub Flavored Markdown extensions.",
+  "publishConfig": {"access": "public"},
   "version": "1.0.14",
   "author": "Dom Christie",
   "main": "lib/turndown-plugin-gfm.cjs.js",
@@ -39,5 +40,6 @@
     "build-iife": "rollup -c config/rollup.config.iife.js",
     "build-test": "browserify test/turndown-plugin-gfm-test.js --outfile test/turndown-plugin-gfm-test.browser.js",
     "postinstall": "npm run build"
-  }
+  },
+  "gitHead": "0b5bb68201ca99289cf2620531ba28d14f31d832"
 }
