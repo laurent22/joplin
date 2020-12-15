@@ -140,12 +140,12 @@ function setSyncTargetName(name: string) {
 	return previousName;
 }
 
-setSyncTargetName('memory');
+// setSyncTargetName('memory');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
 // setSyncTargetName('onedrive');
 // setSyncTargetName('amazon_s3');
-// setSyncTargetName('joplinServer');
+setSyncTargetName('joplinServer');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
@@ -196,7 +196,7 @@ function isNetworkSyncTarget() {
 function sleep(n: number) {
 	return new Promise((resolve) => {
 		shim.setTimeout(() => {
-			resolve();
+			resolve(null);
 		}, Math.round(n * 1000));
 	});
 }
@@ -204,7 +204,7 @@ function sleep(n: number) {
 function msleep(ms: number) {
 	return new Promise((resolve) => {
 		shim.setTimeout(() => {
-			resolve();
+			resolve(null);
 		}, ms);
 	});
 }
@@ -216,6 +216,16 @@ function currentClientId() {
 async function afterEachCleanUp() {
 	await ItemChange.waitForAllSaved();
 	KeymapService.destroyInstance();
+}
+
+async function afterAllCleanUp() {
+	if (fileApi()) {
+		try {
+			await fileApi().clearRoot();
+		} catch (error) {
+			console.warn('Could not clear sync target root:', error);
+		}
+	}
 }
 
 async function switchClient(id: number, options: any = null) {
@@ -350,7 +360,7 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	if (!synchronizers_[id]) {
 		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
 		const syncTarget = new SyncTargetClass(db(id));
-		await initFileApi();
+		await initFileApi(suiteName_);
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
@@ -445,7 +455,7 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 	return masterKey;
 }
 
-async function initFileApi() {
+async function initFileApi(suiteName:string) {
 	if (fileApis_[syncTargetId_]) return;
 
 	let fileApi = null;
@@ -501,7 +511,7 @@ async function initFileApi() {
 			username: () => 'admin@localhost',
 			password: () => 'admin',
 		});
-		fileApi = new FileApi('root:/Apps/Joplin', new FileApiDriverJoplinServer(api));
+		fileApi = new FileApi('root:/Apps/Joplin-' + suiteName, new FileApiDriverJoplinServer(api));
 	}
 
 	fileApi.setLogger(logger);
@@ -785,7 +795,7 @@ class TestApp extends BaseApplication {
 			const iid = shim.setInterval(() => {
 				if (!this.middlewareCalls_.length) {
 					clearInterval(iid);
-					resolve();
+					resolve(null);
 				}
 			}, 100);
 		});
@@ -805,4 +815,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { afterAllCleanUp, exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
