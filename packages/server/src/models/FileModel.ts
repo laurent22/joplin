@@ -3,10 +3,15 @@ import { File, ItemType, databaseSchema } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import { splitItemPath, filePathInfo } from '../utils/routeUtils';
+import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 const nodeEnv = process.env.NODE_ENV || 'development';
+
+export interface PaginatedFiles extends PaginatedResults {
+	items: File[];
+}
 
 export interface EntityFromItemIdOptions {
 	mustExist?: boolean;
@@ -267,7 +272,7 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	async save(object: File, options: SaveOptions = {}): Promise<File> {
+	public async save(object: File, options: SaveOptions = {}): Promise<File> {
 		const isNew = await this.isNew(object, options);
 
 		const txIndex = await this.startTransaction();
@@ -300,10 +305,10 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	async childrens(id: string): Promise<string[]> {
+	public async childrens(id: string, pagination: Pagination): Promise<PaginatedFiles> {
 		const parent = await this.load(id);
 		await this.checkCanReadPermissions(parent);
-		return this.db(this.tableName).select(...this.defaultFields).where('parent_id', id);
+		return paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('parent_id', id), pagination);
 	}
 
 	private async childrenIds(id: string): Promise<string[]> {
@@ -311,7 +316,7 @@ export default class FileModel extends BaseModel {
 		return output.map(r => r.id);
 	}
 
-	async delete(id: string, options: DeleteOptions = {}): Promise<void> {
+	public async delete(id: string, options: DeleteOptions = {}): Promise<void> {
 		const file: File = await this.load(id);
 		if (!file) return;
 		await this.checkCanWritePermission(file);

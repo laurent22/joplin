@@ -106,10 +106,13 @@ async function main() {
 
 	fs.removeSync(`${serverRoot}/db-testing.sqlite`);
 
-	const migrateCommand = 'NODE_ENV=testing node dist/app.js --migrate-db';
+	const migrateCommand = 'NODE_ENV=testing node dist/app.js --migrate-db --env dev';
 	await execCommand(migrateCommand);
 
-	const serverCommandParams = ['dist/app.js', '--pidfile', pidFilePath];
+	const serverCommandParams = ['dist/app.js',
+		'--pidfile', pidFilePath,
+		'--env', 'dev',
+	];
 
 	serverProcess = spawn('node', serverCommandParams, {
 		detached: true,
@@ -170,6 +173,11 @@ async function main() {
 			output: `${tempDir}/photo-downloaded.jpg`,
 		});
 		console.info(extractCurlResponse(response));
+
+		// GET api/files/root/children
+
+		const files = await curl('GET', 'api/files/root/children', null, null, { 'X-API-AUTH': session.id });
+		checkAndPrintResult('Response:', files);
 	} finally {
 		cleanUp();
 	}

@@ -3,6 +3,8 @@ import * as fs from 'fs-extra';
 import { File } from '../../db';
 import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
 import { filePathInfo } from '../../utils/routeUtils';
+import { defaultPagination, Pagination, PaginationOrderDir } from '../../models/utils/pagination';
+import { msleep } from '../../utils/time';
 
 async function makeTestFile(id: number = 1, ext: string = 'jpg', parentId: string = ''): Promise<File> {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';
@@ -162,7 +164,7 @@ describe('FileController', function() {
 	});
 
 	it('should get files', async function() {
-		const { session: session1 } = await createUserAndSession(1);
+		const { session: session1, user: user1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
 		let file1: File = await makeTestFile(1);
@@ -184,7 +186,9 @@ describe('FileController', function() {
 		file1 = await fileController.getFile(session1.id, file1.id);
 		expect(file1.id).toBe(fileId1);
 
-		const allFiles = await fileController.getAll(session1.id);
+		const fileModel = models().file({ userId: user1.id });
+		const paginatedResults = await fileController.getChildren(session1.id, await fileModel.userRootFileId(), defaultPagination());
+		const allFiles = paginatedResults.items;
 		expect(allFiles.length).toBe(2);
 		expect(JSON.stringify(allFiles.map(f => f.id).sort())).toBe(JSON.stringify([fileId1, fileId2].sort()));
 	});
@@ -438,6 +442,46 @@ describe('FileController', function() {
 
 		const root = await fileController.getFile(session.id, 'root:/:');
 		expect(root.id).toBe(await fileModel.userRootFileId());
+	});
+
+	it('should paginate results', async function() {
+		const { session: session1, user: user1 } = await createUserAndSession(1);
+
+		let file1: File = await makeTestFile(1);
+		let file2: File = await makeTestFile(2);
+		let file3: File = await makeTestFile(3);
+
+		const fileController = controllers().apiFile();
+		file1 = await fileController.postFile_(session1.id, file1);
+		await msleep(1);
+		file2 = await fileController.postFile_(session1.id, file2);
+		await msleep(1);
+		file3 = await fileController.postFile_(session1.id, file3);
+
+		const fileModel = models().file({ userId: user1.id });
+		const rootId = await fileModel.userRootFileId();
+
+		const pagination: Pagination = {
+			limit: 2,
+			order: [
+				{
+					by: 'updated_time',
+					dir: PaginationOrderDir.ASC,
+				},
+			],
+			page: 1,
+		};
+
+		const page1 = await fileController.getChildren(session1.id, rootId, pagination);
+		expect(page1.items.length).toBe(2);
+		expect(page1.has_more).toBe(true);
+		expect(page1.items[0].id).toBe(file1.id);
+		expect(page1.items[1].id).toBe(file2.id);
+
+		const page2 = await fileController.getChildren(session1.id, rootId, { ...pagination, page: 2 });
+		expect(page2.items.length).toBe(1);
+		expect(page2.has_more).toBe(false);
+		expect(page2.items[0].id).toBe(file3.id);
 	});
 
 });

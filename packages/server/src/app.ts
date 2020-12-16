@@ -5,7 +5,7 @@ import { ErrorNotFound } from './utils/errors';
 import * as fs from 'fs-extra';
 import * as koaBody from 'koa-body';
 import { argv } from 'yargs';
-import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat } from './utils/routeUtils';
+import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat, MatchedRoute } from './utils/routeUtils';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import koaIf from './utils/koaIf';
 import config, { initConfig, baseUrl } from './config';
@@ -20,6 +20,8 @@ import FsDriverNode from '@joplin/lib/fs-driver-node';
 import mustacheService, { isView, View } from './services/MustacheService';
 
 require('source-map-support').install();
+
+const env: string = argv.env as string || 'prod';
 
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit();
@@ -42,17 +44,24 @@ const koaBodyMiddleware = koaBody({
 });
 
 app.use(koaIf(koaBodyMiddleware, (ctx: Koa.Context) => {
-	const match = findMatchingRoute(ctx.path, routes);
-	if (!match) return false;
-	return match.route.needsBodyMiddleware === true;
+	try {
+		const match = findMatchingRoute(ctx.path, routes);
+		if (!match) return false;
+		return match.route.needsBodyMiddleware === true;
+	} catch (error) {
+		// Error will be handled below
+		return false;
+	}
 }));
 
 app.use(async (ctx: Koa.Context) => {
 	appLogger().info(`${ctx.request.method} ${ctx.path}`);
 
-	const match = findMatchingRoute(ctx.path, routes);
+	const match: MatchedRoute = null;
 
 	try {
+		const match = findMatchingRoute(ctx.path, routes);
+
 		if (match) {
 			const responseObject = await match.route.exec(match.subPath, ctx);
 
@@ -87,15 +96,13 @@ app.use(async (ctx: Koa.Context) => {
 		} else { // JSON
 			ctx.response.set('Content-Type', 'application/json');
 			const r: any = { error: error.message };
-			// if (error.stack) r.stack = error.stack;
+			if (env == 'dev' && error.stack) r.stack = error.stack;
 			ctx.response.body = r;
 		}
 	}
 });
 
 async function main() {
-	const env: string = argv.env as string || 'prod';
-
 	if (env === 'prod') {
 		initConfig(configProd);
 	} else {

@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import * as Knex from 'knex';
 import { DbConnection } from '../db';
 

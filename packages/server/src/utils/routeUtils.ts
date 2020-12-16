@@ -1,4 +1,5 @@
 import { ItemAddressingType } from '../db';
+import { ErrorBadRequest } from './errors';
 import { AppContext } from './types';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
@@ -130,7 +131,7 @@ export function parseSubPath(p: string): SubPath {
 		const colonIndex2 = p.indexOf(':', colonIndex1 + 1);
 
 		if (colonIndex2 < 0) {
-			throw new Error(`Invalid path format: ${p}`);
+			throw new ErrorBadRequest(`Invalid path format: ${p}`);
 		} else {
 			output.id = p.substr(0, colonIndex2 + 1);
 			output.link = ltrimSlashes(p.substr(colonIndex2 + 1));
@@ -145,8 +146,10 @@ export function parseSubPath(p: string): SubPath {
 }
 
 export function routeResponseFormat(match: MatchedRoute): RouteResponseFormat {
+	if (!match) return RouteResponseFormat.Json;
 	if (match.route.responseFormat) return match.route.responseFormat;
-	return match.basePath.indexOf('api/') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
+	const s = match.basePath ? match.basePath : match.subPath.raw;
+	return s.indexOf('api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
 export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {

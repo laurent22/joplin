@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import { SubPath, Route, Response, ResponseType } from '../utils/routeUtils';
-import { ErrorMethodNotAllowed, ErrorNotFound, ErrorForbidden } from '../utils/errors';
+import { ErrorNotFound, ErrorForbidden } from '../utils/errors';
 import { dirname, normalize } from 'path';
 import { pathExists } from 'fs-extra';
 import * as fs from 'fs-extra';
@@ -52,7 +52,7 @@ const route: Route = {
 			return new Response(ResponseType.KoaResponse, koaResponse);
 		}
 
-		throw new ErrorMethodNotAllowed();
+		throw new ErrorNotFound();
 	},
 
 };

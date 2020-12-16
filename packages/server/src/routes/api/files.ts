@@ -4,6 +4,7 @@ import { headerSessionId } from '../../utils/requestUtils';
 import { SubPath, Route, ResponseType, Response } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
+import { requestPagination } from '../../models/utils/pagination';
 const formidable = require('formidable');
 
 interface FormParseResult {
@@ -69,7 +70,7 @@ const route: Route = {
 
 		if (path.link === 'children') {
 			if (ctx.method === 'GET') {
-				return fileController.getChildren(headerSessionId(ctx.headers), path.id);
+				return fileController.getChildren(headerSessionId(ctx.headers), path.id, requestPagination(ctx.query));
 			}
 
 			if (ctx.method === 'POST') {

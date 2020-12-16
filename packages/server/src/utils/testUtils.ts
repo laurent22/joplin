@@ -91,3 +91,39 @@ export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	}
 	return null;
 }
+
+export async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
+	let hasThrown = false;
+	let thrownError = null;
+	try {
+		await asyncFn();
+	} catch (error) {
+		hasThrown = true;
+		thrownError = error;
+	}
+
+	if (!hasThrown) {
+		expect('not throw').toBe('throw');
+	} else if (thrownError.code !== errorCode) {
+		console.error(thrownError);
+		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);
+	} else {
+		expect(true).toBe(true);
+	}
+}
+
+export async function expectNotThrow(asyncFn: Function) {
+	let thrownError = null;
+	try {
+		await asyncFn();
+	} catch (error) {
+		thrownError = error;
+	}
+
+	if (thrownError) {
+		console.error(thrownError);
+		expect(thrownError.message).toBe('');
+	} else {
+		expect(true).toBe(true);
+	}
+}

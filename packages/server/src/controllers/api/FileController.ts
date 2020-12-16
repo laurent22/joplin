@@ -1,6 +1,8 @@
 import { File } from '../../db';
 import BaseController from '../BaseController';
 import { ErrorNotFound } from '../../utils/errors';
+import { Pagination } from '../../models/utils/pagination';
+import { PaginatedFiles } from '../../models/FileModel';
 
 export default class FileController extends BaseController {
 
@@ -32,12 +34,6 @@ export default class FileController extends BaseController {
 		return file;
 	}
 
-	public async getAll(sessionId: string, parentId: string = ''): Promise<File[]> {
-		const user = await this.initSession(sessionId);
-		const fileModel = this.models.file({ userId: user.id });
-		return fileModel.allByParent(parentId);
-	}
-
 	public async patchFile(sessionId: string, fileId: string, file: File): Promise<void> {
 		const user = await this.initSession(sessionId);
 		const fileModel = this.models.file({ userId: user.id });
@@ -57,11 +53,11 @@ export default class FileController extends BaseController {
 		return fileModel.toApiOutput(await fileModel.save(file, { validationRules: { mustBeFile: true } }));
 	}
 
-	public async getChildren(sessionId: string, fileId: string): Promise<File[]> {
+	public async getChildren(sessionId: string, fileId: string, pagination: Pagination): Promise<PaginatedFiles> {
 		const user = await this.initSession(sessionId);
 		const fileModel = this.models.file({ userId: user.id });
 		const parent: File = await fileModel.entityFromItemId(fileId);
-		return fileModel.toApiOutput(await fileModel.childrens(parent.id));
+		return fileModel.toApiOutput(await fileModel.childrens(parent.id, pagination));
 	}
 
 	public async postChild(sessionId: string, fileId: string, child: File): Promise<File> {
