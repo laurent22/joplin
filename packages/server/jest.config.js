@@ -9,4 +9,6 @@ module.exports = {
 	],
 
 	testEnvironment: 'node',
+
+	slowTestThreshold: 20,
 };
