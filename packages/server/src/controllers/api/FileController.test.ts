@@ -73,7 +73,7 @@ describe('FileController', function() {
 		await beforeEachDb();
 	});
 
-	it('should create a file', async function() {
+	test('should create a file', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const fileController = controllers().apiFile();
@@ -103,7 +103,7 @@ describe('FileController', function() {
 		expect(newFileReloadHex).toBe(newFileHex);
 	});
 
-	it('should create sub-directories', async function() {
+	test('should create sub-directories', async function() {
 		const { session } = await createUserAndSession(1, true);
 
 		const fileController = controllers().apiFile();
@@ -127,7 +127,7 @@ describe('FileController', function() {
 		expect(newDirReload2.name).toBe(newDir2.name);
 	});
 
-	it('should create files in sub-directory', async function() {
+	test('should create files in sub-directory', async function() {
 		const { session } = await createUserAndSession(1, true);
 
 		const fileController = controllers().apiFile();
@@ -148,7 +148,7 @@ describe('FileController', function() {
 		expect(newFileReload.name).toBe('photo.jpg');
 	});
 
-	it('should not create a file with an invalid path', async function() {
+	test('should not create a file with an invalid path', async function() {
 		const { session } = await createUserAndSession(1, true);
 
 		const fileController = controllers().apiFile();
@@ -163,7 +163,7 @@ describe('FileController', function() {
 		expect(error instanceof ErrorNotFound).toBe(true);
 	});
 
-	it('should get files', async function() {
+	test('should get files', async function() {
 		const { session: session1, user: user1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -193,7 +193,7 @@ describe('FileController', function() {
 		expect(JSON.stringify(allFiles.map(f => f.id).sort())).toBe(JSON.stringify([fileId1, fileId2].sort()));
 	});
 
-	it('should not let create a file in a directory not owned by user', async function() {
+	test('should not let create a file in a directory not owned by user', async function() {
 		const { session } = await createUserAndSession(1);
 
 		const user2 = await createUser(2);
@@ -208,7 +208,7 @@ describe('FileController', function() {
 		expect(!!hasThrown).toBe(true);
 	});
 
-	it('should update file properties', async function() {
+	test('should update file properties', async function() {
 		const { session, user } = await createUserAndSession(1, true);
 
 		const fileModel = models().file({ userId: user.id });
@@ -231,7 +231,7 @@ describe('FileController', function() {
 		expect(file.mime_type).toBe('image/png');
 	});
 
-	it('should not allow duplicate filenames', async function() {
+	test('should not allow duplicate filenames', async function() {
 		const { session } = await createUserAndSession(1, true);
 
 		let file1: File = await makeTestFile(1);
@@ -247,7 +247,7 @@ describe('FileController', function() {
 		expect(!!hasThrown).toBe(true);
 	});
 
-	it('should change the file parent', async function() {
+	test('should change the file parent', async function() {
 		const { session: session1, user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 		let hasThrown: any = null;
@@ -282,7 +282,7 @@ describe('FileController', function() {
 		expect(file.parent_id).toBe(dir.id);
 	});
 
-	it('should delete a file', async function() {
+	test('should delete a file', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const fileController = controllers().apiFile();
@@ -301,7 +301,7 @@ describe('FileController', function() {
 		expect(allFiles.length).toBe(beforeCount - 1);
 	});
 
-	it('should create and delete directories', async function() {
+	test('should create and delete directories', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const fileController = controllers().apiFile();
@@ -329,7 +329,7 @@ describe('FileController', function() {
 		expect(!(await fileModel.load(file2.id))).toBe(true);
 	});
 
-	it('should not change the parent when updating a file', async function() {
+	test('should not change the parent when updating a file', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const fileController = controllers().apiFile();
@@ -344,7 +344,7 @@ describe('FileController', function() {
 		expect(fileReloaded1.parent_id).toBe(dir1.id);
 	});
 
-	it('should not delete someone else file', async function() {
+	test('should not delete someone else file', async function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -360,7 +360,7 @@ describe('FileController', function() {
 		expect(error instanceof ErrorForbidden).toBe(true);
 	});
 
-	it('should let admin change or delete files', async function() {
+	test('should let admin change or delete files', async function() {
 		const { session: adminSession } = await createUserAndSession(1, true);
 		const { session, user } = await createUserAndSession(2);
 
@@ -378,7 +378,7 @@ describe('FileController', function() {
 		expect(!(await fileModel.load(file.id))).toBe(true);
 	});
 
-	it('should update a file content', async function() {
+	test('should update a file content', async function() {
 		const { session } = await createUserAndSession(1, true);
 
 		const file: File = await makeTestFile(1);
@@ -398,7 +398,7 @@ describe('FileController', function() {
 		expect(newFile.size).toBe(file.content.byteLength);
 	});
 
-	it('should not allow reserved characters', async function() {
+	test('should not allow reserved characters', async function() {
 		const { session } = await createUserAndSession(1, true);
 
 		const filenames = [
@@ -415,7 +415,7 @@ describe('FileController', function() {
 		}
 	});
 
-	it('should not allow a directory with the same name', async function() {
+	test('should not allow a directory with the same name', async function() {
 		const { session } = await createUserAndSession(1, true);
 
 		await saveTestDir(session.id, 'root:/somedir:');
@@ -427,7 +427,7 @@ describe('FileController', function() {
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 	});
 
-	it('should not be possible to delete the root directory', async function() {
+	test('should not be possible to delete the root directory', async function() {
 		const { session } = await createUserAndSession(1, true);
 		const fileController = controllers().apiFile();
 
@@ -435,7 +435,7 @@ describe('FileController', function() {
 		expect(error instanceof ErrorForbidden).toBe(true);
 	});
 
-	it('should support root:/: format, which means root', async function() {
+	test('should support root:/: format, which means root', async function() {
 		const { session, user } = await createUserAndSession(1, true);
 		const fileController = controllers().apiFile();
 		const fileModel = models().file({ userId: user.id });
@@ -444,7 +444,7 @@ describe('FileController', function() {
 		expect(root.id).toBe(await fileModel.userRootFileId());
 	});
 
-	it('should paginate results', async function() {
+	test('should paginate results', async function() {
 		const { session: session1, user: user1 } = await createUserAndSession(1);
 
 		let file1: File = await makeTestFile(1);
@@ -472,16 +472,19 @@ describe('FileController', function() {
 			page: 1,
 		};
 
-		const page1 = await fileController.getChildren(session1.id, rootId, pagination);
-		expect(page1.items.length).toBe(2);
-		expect(page1.has_more).toBe(true);
-		expect(page1.items[0].id).toBe(file1.id);
-		expect(page1.items[1].id).toBe(file2.id);
+		for (const method of ['page', 'cursor']) {
+			const page1 = await fileController.getChildren(session1.id, rootId, pagination);
+			expect(page1.items.length).toBe(2);
+			expect(page1.has_more).toBe(true);
+			expect(page1.items[0].id).toBe(file1.id);
+			expect(page1.items[1].id).toBe(file2.id);
 
-		const page2 = await fileController.getChildren(session1.id, rootId, { ...pagination, page: 2 });
-		expect(page2.items.length).toBe(1);
-		expect(page2.has_more).toBe(false);
-		expect(page2.items[0].id).toBe(file3.id);
+			const p = method === 'page' ? { ...pagination, page: 2 } : { cursor: page1.cursor };
+			const page2 = await fileController.getChildren(session1.id, rootId, p);
+			expect(page2.items.length).toBe(1);
+			expect(page2.has_more).toBe(false);
+			expect(page2.items[0].id).toBe(file3.id);
+		}
 	});
 
 });

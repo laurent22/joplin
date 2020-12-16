@@ -96,9 +96,10 @@ export default class FileApiDriverJoplinServer {
 		const results = await this.api().exec('GET', `${this.apiFilePath_(path)}/children`);
 
 		return {
-			items: this.metadataToStats_(results),
-			hasMore: false, // TODO
+			items: this.metadataToStats_(results.items),
+			hasMore: results.has_more,
 			context: null,
+			// NExtlink
 		} as any;
 	}
 
