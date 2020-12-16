@@ -55,6 +55,7 @@ const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('@joplin/lib/services/synchronizer/utils/types');
 const sharp = require('sharp');
+const { credentialFile } = require('@joplin/tools/tool-utils');
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -469,15 +470,27 @@ async function initFileApi() {
 		fileApi = new FileApi('', new FileApiDriverDropbox(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('onedrive')) {
 		// To get a token, open the URL below, then copy the *complete*
-		// redirection URL in onedrive-auth.txt. Keep in mind that auth data
-		// only lasts 1h for OneDrive.
+		// redirection URL in onedrive-auth.txt. Keep in mind that auth
+		// data only lasts 1h for OneDrive.
+		//
 		// https://login.live.com/oauth20_authorize.srf?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite,offline_access&response_type=token&redirect_uri=https://joplinapp.org
+		//
+		// Also for now OneDrive tests cannot be run in parallel because
+		// for that each suite would need its own sub-directory within the
+		// OneDrive app directory, and it's not clear how to get that
+		// working.
+
+		if (!process.argv.includes('--runInBand')) {
+			throw new Error('OneDrive tests must be run sequentially, with the --runInBand arg. eg `npm test -- --runInBand`');
+
+		}
+
 		const { parameters, setEnvOverride } = require('@joplin/lib/parameters.js');
 		Setting.setConstant('env', 'dev');
 		setEnvOverride('test');
 		const config = parameters().oneDriveTest;
 		const api = new OneDriveApi(config.id, config.secret, false);
-		const authData = fs.readFileSync(`${__dirname}/support/onedrive-auth.txt`, 'utf8');
+		const authData = fs.readFileSync(await credentialFile('onedrive-auth.txt'), 'utf8');
 		const urlInfo = require('url-parse')(authData, true);
 		const auth = require('querystring').parse(urlInfo.hash.substr(1));
 		api.setAuth(auth);
