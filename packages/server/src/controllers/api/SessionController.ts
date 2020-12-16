@@ -6,7 +6,7 @@ import BaseController from '../BaseController';
 
 export default class SessionController extends BaseController {
 
-	async authenticate(email: string, password: string): Promise<Session> {
+	public async authenticate(email: string, password: string): Promise<Session> {
 		const userModel = this.models.user();
 		const user: User = await userModel.loadByEmail(email);
 		if (!user) throw new ErrorForbidden('Invalid username or password');
