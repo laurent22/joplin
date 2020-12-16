@@ -191,7 +191,7 @@ function isNetworkSyncTarget() {
 function sleep(n: number) {
 	return new Promise((resolve) => {
 		shim.setTimeout(() => {
-			resolve();
+			resolve(null);
 		}, Math.round(n * 1000));
 	});
 }
@@ -199,7 +199,7 @@ function sleep(n: number) {
 function msleep(ms: number) {
 	return new Promise((resolve) => {
 		shim.setTimeout(() => {
-			resolve();
+			resolve(null);
 		}, ms);
 	});
 }
@@ -481,6 +481,10 @@ async function initFileApi() {
 		const urlInfo = require('url-parse')(authData, true);
 		const auth = require('querystring').parse(urlInfo.hash.substr(1));
 		api.setAuth(auth);
+
+		const accountProperties = await api.execAccountPropertiesRequest();
+		api.setAccountProperties(accountProperties);
+
 		const appDir = await api.appDirectory();
 		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
@@ -772,7 +776,7 @@ class TestApp extends BaseApplication {
 			const iid = shim.setInterval(() => {
 				if (!this.middlewareCalls_.length) {
 					clearInterval(iid);
-					resolve();
+					resolve(null);
 				}
 			}, 100);
 		});
