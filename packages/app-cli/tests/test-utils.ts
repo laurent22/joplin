@@ -135,17 +135,17 @@ function setSyncTargetName(name: string) {
 	syncTargetName_ = name;
 	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
 	sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
-	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3'].includes(syncTargetName_);
+	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer'].includes(syncTargetName_);
 	synchronizers_ = [];
 	return previousName;
 }
 
-// setSyncTargetName('memory');
+setSyncTargetName('memory');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
 // setSyncTargetName('onedrive');
 // setSyncTargetName('amazon_s3');
-setSyncTargetName('joplinServer');
+// setSyncTargetName('joplinServer');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
@@ -455,7 +455,7 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 	return masterKey;
 }
 
-async function initFileApi(suiteName:string) {
+async function initFileApi(suiteName: string) {
 	if (fileApis_[syncTargetId_]) return;
 
 	let fileApi = null;
@@ -511,7 +511,7 @@ async function initFileApi(suiteName:string) {
 			username: () => 'admin@localhost',
 			password: () => 'admin',
 		});
-		fileApi = new FileApi('root:/Apps/Joplin-' + suiteName, new FileApiDriverJoplinServer(api));
+		fileApi = new FileApi(`root:/Apps/Joplin-${suiteName}`, new FileApiDriverJoplinServer(api));
 	}
 
 	fileApi.setLogger(logger);

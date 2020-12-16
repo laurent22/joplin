@@ -8,13 +8,17 @@ import { DbConnection } from '../db';
 // simply won't do anything. The last active transaction commits the results. If a rollback
 // happens, the following calls to rollback will be a no-op.
 // Set logEnabled_ to `true` to see what happens with nested transactions.
-class TransactionHandler {
+export default class TransactionHandler {
 
 	private transactionStack_: number[] = [];
 	private activeTransaction_: Knex.Transaction = null;
 	private transactionIndex_: number = 0;
 	private logEnabled_: boolean = false;
 	private db_: Knex = null;
+
+	public constructor(db: DbConnection) {
+		this.db_ = db;
+	}
 
 	private get db(): DbConnection {
 		return this.db_;
@@ -76,5 +80,3 @@ class TransactionHandler {
 	}
 
 }
-
-export const transactionHandler = new TransactionHandler();

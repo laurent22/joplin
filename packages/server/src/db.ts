@@ -4,6 +4,16 @@ import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
 import Logger from '@joplin/lib/Logger';
 
+// Make sure bigInteger values are numbers and not strings
+//
+// https://github.com/brianc/node-pg-types
+//
+// In our case, all bigInteger are timestamps, which JavaScript can handle
+// fine as numbers.
+require('pg').types.setTypeParser(20, function(val: any) {
+	return parseInt(val, 10);
+});
+
 const logger = Logger.create('db');
 
 const migrationDir = `${__dirname}/migrations`;

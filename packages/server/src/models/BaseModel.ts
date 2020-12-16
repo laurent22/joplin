@@ -1,5 +1,5 @@
 import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient, DbConnection } from '../db';
-import { transactionHandler } from '../utils/dbUtils';
+import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import cache from '../utils/cache';
@@ -29,12 +29,13 @@ export default abstract class BaseModel {
 	private options_: ModelOptions = null;
 	private defaultFields_: string[] = [];
 	private db_: DbConnection;
+	private transactionHandler_: TransactionHandler;
 
 	constructor(db: DbConnection, options: ModelOptions = null) {
 		this.db_ = db;
 		this.options_ = Object.assign({}, options);
 
-		transactionHandler.setDb(db);
+		this.transactionHandler_ = new TransactionHandler(db);
 
 		if ('userId' in this.options && !this.options.userId) throw new Error('If userId is set, it cannot be null');
 	}
@@ -52,7 +53,7 @@ export default abstract class BaseModel {
 	}
 
 	get db(): DbConnection {
-		if (transactionHandler.activeTransaction) return transactionHandler.activeTransaction;
+		if (this.transactionHandler_.activeTransaction) return this.transactionHandler_.activeTransaction;
 		return this.db_;
 	}
 
@@ -72,15 +73,15 @@ export default abstract class BaseModel {
 	}
 
 	async startTransaction(): Promise<number> {
-		return transactionHandler.start();
+		return this.transactionHandler_.start();
 	}
 
 	async commitTransaction(txIndex: number): Promise<void> {
-		return transactionHandler.commit(txIndex);
+		return this.transactionHandler_.commit(txIndex);
 	}
 
 	async rollbackTransaction(txIndex: number): Promise<void> {
-		return transactionHandler.rollback(txIndex);
+		return this.transactionHandler_.rollback(txIndex);
 	}
 
 	async all(): Promise<File[] | User[] | Session[] | Permission[]> {
