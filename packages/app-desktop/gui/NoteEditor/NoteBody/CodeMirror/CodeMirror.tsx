@@ -278,7 +278,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			// To handle pasting images
 			void onEditorPaste();
 		}
-	}, []);
+	}, [editorPasteText, onEditorPaste]);
 
 	const loadScript = async (script: any) => {
 		return new Promise((resolve) => {
