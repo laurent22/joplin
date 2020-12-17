@@ -45,7 +45,7 @@ export default class JoplinServerApi {
 		// TODO: handle invalid session
 		if (this.session_) return this.session_;
 
-		this.session_ = await this.exec('POST', 'api/sessions', {
+		this.session_ = await this.exec('POST', 'api/sessions', null, {
 			email: this.options_.username(),
 			password: this.options_.password(),
 		});
@@ -75,7 +75,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	async exec(method: string, path: string = '', body: any = null, headers: any = null, options: ExecOptions = null) {
+	async exec(method: string, path: string = '', query: any = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;

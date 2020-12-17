@@ -149,6 +149,8 @@ export async function connectionCheck(db: DbConnection): Promise<ConnectionCheck
 	}
 }
 
+export type Uuid = string;
+
 export enum ItemAddressingType {
 	Id = 1,
 	Path,
@@ -157,6 +159,12 @@ export enum ItemAddressingType {
 export enum ItemType {
     File = 1,
     User,
+}
+
+export enum ChangeType {
+	Create = 1,
+	Update = 2,
+	Delete = 3,
 }
 
 export interface WithDates {
@@ -190,27 +198,34 @@ export interface User extends WithDates, WithUuid {
 }
 
 export interface Session extends WithDates, WithUuid {
-	user_id?: string;
+	user_id?: Uuid;
 	auth_code?: string;
 }
 
 export interface Permission extends WithDates, WithUuid {
-	user_id?: string;
+	user_id?: Uuid;
 	item_type?: ItemType;
-	item_id?: string;
+	item_id?: Uuid;
 	can_read?: number;
 	can_write?: number;
 }
 
 export interface File extends WithDates, WithUuid {
-	owner_id?: string;
+	owner_id?: Uuid;
 	name?: string;
 	content?: Buffer;
 	mime_type?: string;
 	size?: number;
 	is_directory?: number;
 	is_root?: number;
-	parent_id?: string;
+	parent_id?: Uuid;
+}
+
+export interface Change extends WithDates, WithUuid {
+	owner_id?: Uuid;
+	item_type?: ItemType;
+	item_id?: Uuid;
+	type?: ChangeType;
 }
 
 export interface ApiClient extends WithDates, WithUuid {
@@ -225,15 +240,15 @@ export const databaseSchema: DatabaseTables = {
 		password: { type: 'string' },
 		full_name: { type: 'string' },
 		is_admin: { type: 'number' },
-		updated_time: { type: 'number' },
-		created_time: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 	sessions: {
 		id: { type: 'string' },
 		user_id: { type: 'string' },
 		auth_code: { type: 'string' },
-		updated_time: { type: 'number' },
-		created_time: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 	permissions: {
 		id: { type: 'string' },
@@ -242,8 +257,8 @@ export const databaseSchema: DatabaseTables = {
 		item_id: { type: 'string' },
 		can_read: { type: 'number' },
 		can_write: { type: 'number' },
-		updated_time: { type: 'number' },
-		created_time: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 	files: {
 		id: { type: 'string' },
@@ -255,15 +270,24 @@ export const databaseSchema: DatabaseTables = {
 		is_directory: { type: 'number' },
 		is_root: { type: 'number' },
 		parent_id: { type: 'string' },
-		updated_time: { type: 'number' },
-		created_time: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	changes: {
+		id: { type: 'string' },
+		owner_id: { type: 'string' },
+		item_type: { type: 'number' },
+		item_id: { type: 'string' },
+		type: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 	api_clients: {
 		id: { type: 'string' },
 		name: { type: 'string' },
 		secret: { type: 'string' },
-		updated_time: { type: 'number' },
-		created_time: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

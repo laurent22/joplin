@@ -92,14 +92,23 @@ export default class FileApiDriverJoplinServer {
 		return basicDelta(path, getDirStats, options);
 	}
 
-	async list(path: string) {
-		const results = await this.api().exec('GET', `${this.apiFilePath_(path)}/children`);
+	async list(path: string, options: any = null) {
+		options = {
+			context: null,
+			...options,
+		};
+
+		const query = options.context.cursor ? { cursor: options.context.cursor } : null;
+
+		const results = await this.api().exec('GET', `${this.apiFilePath_(path)}/children`, query);
+
+		const newContext: any = {};
+		if (results.cursor) newContext.cursor = results.cursor;
 
 		return {
 			items: this.metadataToStats_(results.items),
 			hasMore: results.has_more,
-			context: null,
-			// NExtlink
+			context: newContext,
 		} as any;
 	}
 
@@ -107,7 +116,7 @@ export default class FileApiDriverJoplinServer {
 		if (!options) options = {};
 		if (!options.responseFormat) options.responseFormat = 'text';
 		try {
-			const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/content`, null, null, options);
+			const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/content`, null, null, null, options);
 			return response;
 		} catch (error) {
 			if (error.code !== 404) throw error;
@@ -135,7 +144,7 @@ export default class FileApiDriverJoplinServer {
 		const filename = this.basename_(path);
 
 		try {
-			const response = await this.api().exec('POST', `${this.apiFilePath_(parentPath)}/children`, {
+			const response = await this.api().exec('POST', `${this.apiFilePath_(parentPath)}/children`, null, {
 				name: filename,
 				is_directory: 1,
 			});
@@ -147,7 +156,7 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	async put(path: string, content: any, options: any = null) {
-		return this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, content, {
+		return this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, null, content, {
 			'Content-Type': 'application/octet-stream',
 		}, options);
 	}

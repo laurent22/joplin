@@ -11,13 +11,24 @@ import koaIf from './utils/koaIf';
 import config, { initConfig, baseUrl } from './config';
 import configDev from './config-dev';
 import configProd from './config-prod';
+import configBuildTypes from './config-buildTypes';
 import { createDb, dropDb } from './tools/dbTools';
 import { connectDb, disconnectDb, migrateDb, waitForConnection } from './db';
 import modelFactory from './models/factory';
 import controllerFactory from './controllers/factory';
-import { AppContext } from './utils/types';
+import { AppContext, Config } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import mustacheService, { isView, View } from './services/MustacheService';
+
+interface Configs {
+	[name: string]: Config;
+}
+
+const configs: Configs = {
+	dev: configDev,
+	prod: configProd,
+	buildTypes: configBuildTypes,
+};
 
 require('source-map-support').install();
 
@@ -103,11 +114,10 @@ app.use(async (ctx: Koa.Context) => {
 });
 
 async function main() {
-	if (env === 'prod') {
-		initConfig(configProd);
-	} else {
-		initConfig(configDev);
-	}
+	const configObject: Config = configs[env];
+	if (!configObject) throw new Error(`Invalid env: ${env}`);
+
+	initConfig(configObject);
 
 	await fs.mkdirp(config().logDir);
 	Logger.fsDriver_ = new FsDriverNode();

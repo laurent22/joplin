@@ -1,6 +1,8 @@
 import * as Knex from 'knex';
 import { DbConnection } from '../db';
-import models from '../models/factory';
+// import models from '../models/factory';
+import { hashPassword } from '../utils/auth';
+import uuidgen from '../utils/uuidgen';
 
 export async function up(db: DbConnection): Promise<any> {
 	await db.schema.createTable('users', function(table: Knex.CreateTableBuilder) {
@@ -54,6 +56,16 @@ export async function up(db: DbConnection): Promise<any> {
 		table.unique(['parent_id', 'name']);
 	});
 
+	await db.schema.createTable('changes', function(table: Knex.CreateTableBuilder) {
+		table.string('id', 32).unique().primary().notNullable();
+		table.string('owner_id', 32).notNullable();
+		table.integer('item_type').notNullable();
+		table.string('item_id', 32).notNullable();
+		table.integer('type').notNullable();
+		table.bigInteger('updated_time').notNullable();
+		table.bigInteger('created_time').notNullable();
+	});
+
 	await db.schema.createTable('api_clients', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('name', 32).notNullable();
@@ -62,19 +74,38 @@ export async function up(db: DbConnection): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	// We skip validation because at this point there's no user in the system so
-	// there can't be an owner for that first user.
-	await models(db).user().save({
-		email: 'admin@localhost',
-		password: 'admin',
-		is_admin: 1,
-	}, { skipValidation: true });
+	const adminId = uuidgen();
+	const adminRootFileId = uuidgen();
+	const now = Date.now();
 
-	await models(db).apiClient().save({
-		id: 'lVis00WF590ZVlRYiXVRWv',
+	await db('users').insert({
+		id: adminId,
+		email: 'admin@localhost',
+		password: hashPassword('admin'),
+		full_name: 'Admin',
+		is_admin: 1,
+		updated_time: now,
+		created_time: now,
+	});
+
+	await db('files').insert({
+		id: adminRootFileId,
+		owner_id: adminId,
+		name: adminRootFileId,
+		size: 0,
+		is_directory: 1,
+		is_root: 1,
+		updated_time: now,
+		created_time: now,
+	});
+
+	await db('api_clients').insert({
+		id: uuidgen(),
 		name: 'Joplin',
 		secret: 'sdrNUPtKNdY5Z5tF4bthqu',
-	}, { isNew: true });
+		updated_time: now,
+		created_time: now,
+	});
 }
 
 export async function down(db: DbConnection): Promise<any> {
@@ -83,4 +114,5 @@ export async function down(db: DbConnection): Promise<any> {
 	await db.schema.dropTable('permissions');
 	await db.schema.dropTable('files');
 	await db.schema.dropTable('api_clients');
+	await db.schema.dropTable('changes');
 }

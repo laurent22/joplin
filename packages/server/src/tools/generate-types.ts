@@ -2,24 +2,32 @@ import sqlts from '@rmp135/sql-ts';
 
 require('source-map-support').install();
 
-const dbFilePath: string = `${__dirname}/../db.ts`;
+const dbFilePath: string = `${__dirname}/../../src/db.ts`;
+
+const fileReplaceWithinMarker = '// AUTO-GENERATED-TYPES';
 
 const config = {
-	'dialect': 'sqlite3',
+	'client': 'sqlite3',
 	'connection': {
 		'filename': './db-buildTypes.sqlite',
 	},
 	'useNullAsDefault': true,
-	'excludedTables': ['knex_migrations', 'knex_migrations_lock', 'android_metadata'],
-	'interfaceNameFormat': 'PascalCaseSingular',
+	'excludedTables': [
+		'main.knex_migrations',
+		'main.knex_migrations_lock',
+		'android_metadata',
+	],
+	'interfaceNameFormat': '${table}',
+	'singularTableNames': true,
+	'tableNameCasing': 'pascal' as any,
 	'filename': './db',
-	'fileReplaceWithinMarker': '// AUTO-GENERATED-TYPES',
 	'extends': {
 		'main.sessions': 'WithDates, WithUuid',
 		'main.users': 'WithDates, WithUuid',
 		'main.permissions': 'WithDates, WithUuid',
 		'main.files': 'WithDates, WithUuid',
 		'main.api_clients': 'WithDates, WithUuid',
+		'main.changes': 'WithDates, WithUuid',
 	},
 };
 
@@ -44,19 +52,21 @@ function insertContentIntoFile(filePath: string, markerOpen: string, markerClose
 function createTypeString(table: any) {
 	const colStrings = [];
 	for (const col of table.columns) {
-		const name = col.propertyName;
+		const name = col.propertyName as string;
 		let type = col.propertyType;
 
-		if (table.extends.indexOf('WithDates') >= 0) {
+		if (table.extends && table.extends.indexOf('WithDates') >= 0) {
 			if (['created_time', 'updated_time'].includes(name)) continue;
 		}
 
-		if (table.extends.indexOf('WithUuid') >= 0) {
+		if (table.extends && table.extends.indexOf('WithUuid') >= 0) {
 			if (['id'].includes(name)) continue;
 		}
 
 		if (name === 'item_type') type = 'ItemType';
 		if (table.name === 'files' && name === 'content') type = 'Buffer';
+		if (table.name === 'changes' && name === 'type') type = 'ChangeType';
+		if (name === 'id' || name.endsWith('_id') && type === 'string') type = 'Uuid';
 
 		colStrings.push(`\t${name}?: ${type}`);
 	}
@@ -108,7 +118,7 @@ async function main() {
 	content += '\n\n';
 	content += `export const databaseSchema:DatabaseTables = {\n${tableStrings.join('\n')}\n};`;
 
-	insertContentIntoFile(dbFilePath, config.fileReplaceWithinMarker, config.fileReplaceWithinMarker, content);
+	insertContentIntoFile(dbFilePath, fileReplaceWithinMarker, fileReplaceWithinMarker, content);
 }
 
 main().catch(error => {

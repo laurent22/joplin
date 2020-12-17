@@ -5,8 +5,7 @@
   "scripts": {
     "start-dev": "nodemon --config nodemon.json dist/app.js --env dev",
     "start": "node dist/app.js",
-    "migrate-db": "",
-    "generate-types": "rm -f db-buildTypes.sqlite && NODE_ENV=buildTypes npm run db-migrate && NODE_ENV=buildTypes node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
+    "generate-types": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
     "tsc": "tsc --project tsconfig.json",
     "test": "jest",
     "test-ci": "npm run test",
@@ -34,7 +33,7 @@
   },
   "devDependencies": {
     "@joplin/tools": "^1.0.9",
-    "@rmp135/sql-ts": "git+https://github.com/laurent22/sql-ts.git",
+    "@rmp135/sql-ts": "^1.7.0",
     "@types/co-body": "0.0.3",
     "@types/fs-extra": "^8.0.0",
     "@types/jest": "^26.0.15",
