@@ -485,8 +485,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    --format <format>      Destination format: jex (Joplin Export File), raw 
 	                           (Joplin Export Directory), json (Json Export 
-	                           Directory), md (Markdown), html (HTML File), html 
-	                           (HTML Directory)
+	                           Directory), md (Markdown)
 	    --note <note>          Exports only the given note.
 	    --notebook <notebook>  Exports only the given notebook.
 
