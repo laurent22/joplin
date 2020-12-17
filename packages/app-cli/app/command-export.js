@@ -25,11 +25,12 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		const exportOptions = {};
+		const validFormats = ['jex', 'raw', 'json', 'md'];
 		exportOptions.path = args.path;
 
 		exportOptions.format = args.options.format ? args.options.format : 'jex';
 
-		if (exportOptions.format === 'html') throw new Error('HTML export is not supported. Please use the desktop application.');
+		if (!validFormats.includes(exportOptions.format)) throw new Error(_('%s export format is not supported in the cli app.', exportOptions.format));
 
 		if (args.options.note) {
 			const notes = await app().loadItems(BaseModel.TYPE_NOTE, args.options.note, { parent: app().currentFolder() });
