@@ -25,6 +25,14 @@ export default class FileModel extends BaseModel {
 		return 'files';
 	}
 
+	protected get trackChanges():boolean {
+		return true;
+	}
+
+	protected get itemType():ItemType {
+		return ItemType.File;
+	}
+
 	async userRootFile(): Promise<File> {
 		const file: File = await this.db<File>(this.tableName).select(...this.defaultFields).from(this.tableName).where({
 			'owner_id': this.userId,
@@ -207,7 +215,10 @@ export default class FileModel extends BaseModel {
 			is_directory: 1,
 			is_root: 1,
 			name: id, // Name must be unique so we set it to the ID
-		}, { isNew: true });
+		}, {
+			isNew: true,
+			trackChanges: false, // Root file always exist and never changes so we don't want any change event being generated
+		});
 	}
 
 	private async checkCanReadPermissions(file: File): Promise<void> {

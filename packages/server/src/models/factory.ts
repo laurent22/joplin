@@ -61,6 +61,7 @@ import FileModel from './FileModel';
 import UserModel from './UserModel';
 import PermissionModel from './PermissionModel';
 import SessionModel from './SessionModel';
+import ChangeModel from './ChangeModel';
 
 export class Models {
 
@@ -88,6 +89,10 @@ export class Models {
 
 	public session(options: ModelOptions = null) {
 		return new SessionModel(this.db_, options);
+	}
+
+	public change(options: ModelOptions = null) {
+		return new ChangeModel(this.db_, options);
 	}
 }
 

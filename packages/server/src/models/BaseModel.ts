@@ -1,8 +1,12 @@
-import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient, DbConnection } from '../db';
+import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient, DbConnection, Change, ItemType, ChangeType } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import modelFactory, { Models } from './factory';
+import ChangeModel from './ChangeModel';
+
+export type AnyItemType = File | User | Session | Permission | ApiClient | Change;
+export type AnyItemTypes = File[] | User[] | Session[] | Permission[] | ApiClient[] | Change[];
 
 export interface ModelOptions {
 	userId?: string;
@@ -12,6 +16,7 @@ export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
 	validationRules?: any;
+	trackChanges?: boolean,
 }
 
 export interface DeleteOptions {
@@ -67,8 +72,29 @@ export default abstract class BaseModel {
 		throw new Error('Not implemented');
 	}
 
+	protected get itemType():ItemType {
+		throw new Error('Not implemented');
+	}
+
+	protected get trackChanges():boolean {
+		return false;
+	}
+
 	protected hasDateProperties(): boolean {
 		return true;
+	}
+
+	protected async withTransaction(fn:Function) {
+		const txIndex = await this.transactionHandler_.start();
+
+		try {
+			await fn();
+		} catch (error) {
+			await this.transactionHandler_.rollback(txIndex);
+			throw error;
+		}
+
+		await this.transactionHandler_.commit(txIndex);
 	}
 
 	protected async startTransaction(): Promise<number> {
@@ -83,11 +109,11 @@ export default abstract class BaseModel {
 		return this.transactionHandler_.rollback(txIndex);
 	}
 
-	public async all(): Promise<File[] | User[] | Session[] | Permission[]> {
+	public async all(): Promise<AnyItemTypes> {
 		return this.db(this.tableName).select(...this.defaultFields);
 	}
 
-	public async fromApiInput(object: File | User | Session | Permission | ApiClient): Promise<File | User | Session | Permission | ApiClient> {
+	public async fromApiInput(object: AnyItemType): Promise<AnyItemType> {
 		return object;
 	}
 
@@ -95,18 +121,18 @@ export default abstract class BaseModel {
 		return { ...object };
 	}
 
-	protected async validate(object: File | User | Session | Permission | ApiClient, options: ValidateOptions = {}): Promise<File | User | Session | Permission | ApiClient> {
+	protected async validate(object: AnyItemType, options: ValidateOptions = {}): Promise<AnyItemType> {
 		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;
 	}
 
-	protected async isNew(object: File | User | Session | Permission | ApiClient, options: SaveOptions): Promise<boolean> {
+	protected async isNew(object: AnyItemType, options: SaveOptions): Promise<boolean> {
 		if (options.isNew === false) return false;
 		if (options.isNew === true) return true;
 		return !(object as WithUuid).id;
 	}
 
-	public async save(object: File | User | Session | Permission | ApiClient, options: SaveOptions = {}): Promise<File | User | Session | Permission | ApiClient> {
+	public async save(object: AnyItemType, options: SaveOptions = {}): Promise<AnyItemType> {
 		if (!object) throw new Error('Object cannot be empty');
 
 		const toSave = Object.assign({}, object);
@@ -127,23 +153,34 @@ export default abstract class BaseModel {
 
 		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} });
 
-		if (isNew) {
-			await this.db(this.tableName).insert(toSave);
-		} else {
-			const objectId: string = (toSave as WithUuid).id;
-			if (!objectId) throw new Error('Missing "id" property');
-			delete (toSave as WithUuid).id;
-			const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId });
-			toSave.id = objectId;
-
-			// Sanity check:
-			if (updatedCount !== 1) throw new ErrorBadRequest(`one row should have been updated, but ${updatedCount} row(s) were updated`);
+		const changeModel = ():ChangeModel => {
+			return this.models.change({ userId: this.userId });
 		}
+
+		const trackChanges = this.trackChanges && options.trackChanges !== false;
+
+		await this.withTransaction(async () => {
+			if (isNew) {
+				await this.db(this.tableName).insert(toSave);
+				if (trackChanges) await changeModel().add(this.itemType, (toSave as WithUuid).id, ChangeType.Create);
+			} else {
+				const objectId: string = (toSave as WithUuid).id;
+				if (!objectId) throw new Error('Missing "id" property');
+				delete (toSave as WithUuid).id;
+				const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId });
+				toSave.id = objectId;
+
+				if (trackChanges) await changeModel().add(this.itemType, objectId, ChangeType.Update);
+
+				// Sanity check:
+				if (updatedCount !== 1) throw new ErrorBadRequest(`one row should have been updated, but ${updatedCount} row(s) were updated`);
+			}
+		});
 
 		return toSave;
 	}
 
-	public async load(id: string): Promise<File | User | Session | Permission | ApiClient> {
+	public async load(id: string): Promise<AnyItemType> {
 		if (!id) throw new Error('id cannot be empty');
 
 		return this.db(this.tableName).select(this.defaultFields).where({ id: id }).first();

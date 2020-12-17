@@ -1,4 +1,4 @@
-import { DbConnection } from '../db';
+import { DbConnection, ItemType } from '../db';
 import BaseModel, { ModelOptions } from './BaseModel';
 
 export default class ApiClientModel extends BaseModel {

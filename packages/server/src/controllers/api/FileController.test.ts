@@ -1,6 +1,6 @@
 import { testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, models, controllers } from '../../utils/testUtils';
 import * as fs from 'fs-extra';
-import { File } from '../../db';
+import { ChangeType, File, ItemType } from '../../db';
 import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
 import { filePathInfo } from '../../utils/routeUtils';
 import { defaultPagination, Pagination, PaginationOrderDir } from '../../models/utils/pagination';
@@ -484,6 +484,43 @@ describe('FileController', function() {
 			expect(page2.items.length).toBe(1);
 			expect(page2.has_more).toBe(false);
 			expect(page2.items[0].id).toBe(file3.id);
+		}
+	});
+
+	test('should track file changes', async function() {
+		const { session: session1, user: user1 } = await createUserAndSession(1);
+		const { session: session2, user: user2 } = await createUserAndSession(2);
+
+		let file1: File = await makeTestFile(1);
+		let file2: File = await makeTestFile(2);
+
+		const fileController = controllers().apiFile();
+		file1 = await fileController.postFile_(session1.id, file1);
+		file2 = await fileController.postFile_(session2.id, file2);
+		await fileController.putFileContent(session1.id, file1.id, Buffer.alloc(16));
+		
+		const changeModel = models().change();
+
+		{
+			const changes = (await changeModel.byOwnerId(user1.id, defaultPagination())).items;
+			expect(changes.length).toBe(2);
+			expect(changes[0].item_id).toBe(file1.id);
+			expect(changes[1].item_id).toBe(file1.id);
+			expect(changes[0].owner_id).toBe(user1.id);
+			expect(changes[1].owner_id).toBe(user1.id);
+			expect(changes[0].item_type).toBe(ItemType.File);
+			expect(changes[1].item_type).toBe(ItemType.File);
+			expect(changes[0].type).toBe(ChangeType.Create);
+			expect(changes[1].type).toBe(ChangeType.Update);
+		}
+
+		{
+			const changes = (await changeModel.byOwnerId(user2.id, defaultPagination())).items;
+			expect(changes.length).toBe(1);
+			expect(changes[0].item_id).toBe(file2.id);
+			expect(changes[0].owner_id).toBe(user2.id);
+			expect(changes[0].item_type).toBe(ItemType.File);
+			expect(changes[0].type).toBe(ChangeType.Create);
 		}
 	});
 
