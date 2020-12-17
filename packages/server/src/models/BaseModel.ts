@@ -30,7 +30,7 @@ export default abstract class BaseModel {
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
 
-	constructor(db: DbConnection, options: ModelOptions = null) {
+	public constructor(db: DbConnection, options: ModelOptions = null) {
 		this.db_ = db;
 		this.options_ = Object.assign({}, options);
 
@@ -43,70 +43,70 @@ export default abstract class BaseModel {
 		return modelFactory(this.db);
 	}
 
-	get options(): ModelOptions {
+	protected get options(): ModelOptions {
 		return this.options_;
 	}
 
-	get userId(): string {
+	protected get userId(): string {
 		return this.options.userId;
 	}
 
-	get db(): DbConnection {
+	protected get db(): DbConnection {
 		if (this.transactionHandler_.activeTransaction) return this.transactionHandler_.activeTransaction;
 		return this.db_;
 	}
 
-	get defaultFields(): string[] {
+	protected get defaultFields(): string[] {
 		if (!this.defaultFields_.length) {
 			this.defaultFields_ = Object.keys(databaseSchema[this.tableName]);
 		}
 		return this.defaultFields_.slice();
 	}
 
-	get tableName(): string {
+	protected get tableName(): string {
 		throw new Error('Not implemented');
 	}
 
-	hasDateProperties(): boolean {
+	protected hasDateProperties(): boolean {
 		return true;
 	}
 
-	async startTransaction(): Promise<number> {
+	protected async startTransaction(): Promise<number> {
 		return this.transactionHandler_.start();
 	}
 
-	async commitTransaction(txIndex: number): Promise<void> {
+	protected async commitTransaction(txIndex: number): Promise<void> {
 		return this.transactionHandler_.commit(txIndex);
 	}
 
-	async rollbackTransaction(txIndex: number): Promise<void> {
+	protected async rollbackTransaction(txIndex: number): Promise<void> {
 		return this.transactionHandler_.rollback(txIndex);
 	}
 
-	async all(): Promise<File[] | User[] | Session[] | Permission[]> {
+	public async all(): Promise<File[] | User[] | Session[] | Permission[]> {
 		return this.db(this.tableName).select(...this.defaultFields);
 	}
 
-	async fromApiInput(object: File | User | Session | Permission | ApiClient): Promise<File | User | Session | Permission | ApiClient> {
+	public async fromApiInput(object: File | User | Session | Permission | ApiClient): Promise<File | User | Session | Permission | ApiClient> {
 		return object;
 	}
 
-	toApiOutput(object: any): any {
+	public toApiOutput(object: any): any {
 		return { ...object };
 	}
 
-	async validate(object: File | User | Session | Permission | ApiClient, options: ValidateOptions = {}): Promise<File | User | Session | Permission | ApiClient> {
+	protected async validate(object: File | User | Session | Permission | ApiClient, options: ValidateOptions = {}): Promise<File | User | Session | Permission | ApiClient> {
 		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;
 	}
 
-	async isNew(object: File | User | Session | Permission | ApiClient, options: SaveOptions): Promise<boolean> {
+	protected async isNew(object: File | User | Session | Permission | ApiClient, options: SaveOptions): Promise<boolean> {
 		if (options.isNew === false) return false;
 		if (options.isNew === true) return true;
 		return !(object as WithUuid).id;
 	}
 
-	async save(object: File | User | Session | Permission | ApiClient, options: SaveOptions = {}): Promise<File | User | Session | Permission | ApiClient> {
+	public async save(object: File | User | Session | Permission | ApiClient, options: SaveOptions = {}): Promise<File | User | Session | Permission | ApiClient> {
 		if (!object) throw new Error('Object cannot be empty');
 
 		const toSave = Object.assign({}, object);
@@ -143,13 +143,13 @@ export default abstract class BaseModel {
 		return toSave;
 	}
 
-	async load(id: string): Promise<File | User | Session | Permission | ApiClient> {
+	public async load(id: string): Promise<File | User | Session | Permission | ApiClient> {
 		if (!id) throw new Error('id cannot be empty');
 
 		return this.db(this.tableName).select(this.defaultFields).where({ id: id }).first();
 	}
 
-	async delete(id: string | string[]): Promise<void> {
+	public async delete(id: string | string[]): Promise<void> {
 		if (!id) throw new Error('id cannot be empty');
 
 		const ids = typeof id === 'string' ? [id] : id;
