@@ -113,4 +113,18 @@ describe('EnexToMd', function() {
 		expect(all[0].body).toBe('');
 	});
 
+	it('should handle invalid mime types', async () => {
+		// This is to handle the case where a resource has an invalid mime type,
+		// but that type can be determined from the filename. For example, in
+		// this thread, the ENEX file contains a "file.zip" file with a mime
+		// type "application/octet-stream", which can later cause problems to
+		// open the file.
+		// https://discourse.joplinapp.org/t/importing-a-note-with-a-zip-file/12123?u=laurent
+		const filePath = `${enexSampleBaseDir}/WithInvalidMime.enex`;
+		await importEnex('', filePath);
+		const all = await Resource.all();
+		expect(all.length).toBe(1);
+		expect(all[0].mime).toBe('application/zip');
+	});
+
 });

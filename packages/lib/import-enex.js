@@ -14,6 +14,7 @@ const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
 const md5File = require('md5-file');
 const shim = require('./shim').default;
+const { mime } = require('./mime-utils');
 
 // const Promise = require('promise');
 const fs = require('fs-extra');
@@ -514,11 +515,27 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 				noteAttributes = null;
 			} else if (n == 'resource') {
+				let mimeType = noteResource.mime ? noteResource.mime.trim() : '';
+
+				// Evernote sometimes gives an invalid or generic
+				// "application/octet-stream" mime type for files that could
+				// have a valid mime type, based on the extension. So in
+				// general, we trust the filename more than the provided mime
+				// type.
+				// https://discourse.joplinapp.org/t/importing-a-note-with-a-zip-file/12123
+				if (noteResource.filename) {
+					const mimeTypeFromFile = mime.fromFilename(noteResource.filename);
+					if (mimeTypeFromFile && mimeTypeFromFile !== mimeType) {
+						importOptions.onError(new Error(`Invalid mime type "${mimeType}" for resource "${noteResource.filename}". Using "${mimeTypeFromFile}" instead.`));
+						mimeType = mimeTypeFromFile;
+					}
+				}
+
 				note.resources.push({
 					id: noteResource.id,
 					dataFilePath: noteResource.dataFilePath,
 					dataEncoding: noteResource.dataEncoding,
-					mime: noteResource.mime ? noteResource.mime.trim() : '',
+					mime: mimeType,
 					title: noteResource.filename ? noteResource.filename.trim() : '',
 					filename: noteResource.filename ? noteResource.filename.trim() : '',
 					hasData: noteResource.hasData,
