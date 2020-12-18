@@ -19,21 +19,21 @@ export interface EntityFromItemIdOptions {
 
 export default class FileModel extends BaseModel {
 
-	readonly reservedCharacters = ['/', '\\', '*', '<', '>', '?', ':', '|', '#', '%'];
+	private readonly reservedCharacters = ['/', '\\', '*', '<', '>', '?', ':', '|', '#', '%'];
 
-	get tableName(): string {
+	protected get tableName(): string {
 		return 'files';
 	}
 
-	protected get trackChanges():boolean {
+	protected get trackChanges(): boolean {
 		return true;
 	}
 
-	protected get itemType():ItemType {
+	protected get itemType(): ItemType {
 		return ItemType.File;
 	}
 
-	async userRootFile(): Promise<File> {
+	public async userRootFile(): Promise<File> {
 		const file: File = await this.db<File>(this.tableName).select(...this.defaultFields).from(this.tableName).where({
 			'owner_id': this.userId,
 			'is_root': 1,
@@ -42,29 +42,29 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	async userRootFileId(): Promise<string> {
+	public async userRootFileId(): Promise<string> {
 		const r = await this.userRootFile();
 		return r ? r.id : '';
 	}
 
-	async fileOwnerId(fileId: string): Promise<string> {
-		const r = await this.db('permissions').select('permissions.user_id').where({
-			'item_type': ItemType.File,
-			'item_id': fileId,
-			'is_owner': 1,
-		}).first();
+	// async fileOwnerId(fileId: string): Promise<string> {
+	// 	const r = await this.db('permissions').select('permissions.user_id').where({
+	// 		'item_type': ItemType.File,
+	// 		'item_id': fileId,
+	// 		'is_owner': 1,
+	// 	}).first();
 
-		if (!r) return null;
+	// 	if (!r) return null;
 
-		return r.user_id;
-	}
+	// 	return r.user_id;
+	// }
 
-	async specialDirId(dirname: string): Promise<string> {
+	private async specialDirId(dirname: string): Promise<string> {
 		if (dirname === 'root') return this.userRootFileId();
 		return null; // Not a special dir
 	}
 
-	async entityFromItemId(idOrPath: string, options: EntityFromItemIdOptions = {}): Promise<File> {
+	public async entityFromItemId(idOrPath: string, options: EntityFromItemIdOptions = {}): Promise<File> {
 		options = { mustExist: true, ...options };
 
 		const specialDirId = await this.specialDirId(idOrPath);
@@ -108,23 +108,23 @@ export default class FileModel extends BaseModel {
 		}
 	}
 
-	get defaultFields(): string[] {
+	protected get defaultFields(): string[] {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
 	}
 
-	async allByParent(parentId: string): Promise<File[]> {
-		if (!parentId) parentId = await this.userRootFileId();
-		return this.db(this.tableName).select(...this.defaultFields).where({ parent_id: parentId });
-	}
+	// async allByParent(parentId: string): Promise<File[]> {
+	// 	if (!parentId) parentId = await this.userRootFileId();
+	// 	return this.db(this.tableName).select(...this.defaultFields).where({ parent_id: parentId });
+	// }
 
-	async fileByName(parentId: string, name: string): Promise<File> {
+	private async fileByName(parentId: string, name: string): Promise<File> {
 		return this.db<File>(this.tableName).select(...this.defaultFields).where({
 			parent_id: parentId,
 			name: name,
 		}).first();
 	}
 
-	async validate(object: File, options: ValidateOptions = {}): Promise<File> {
+	protected async validate(object: File, options: ValidateOptions = {}): Promise<File> {
 		const file: File = object;
 
 		const mustBeFile = options.rules.mustBeFile === true;
@@ -180,7 +180,7 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	async fromApiInput(object: File): Promise<File> {
+	public fromApiInput(object: File): File {
 		const file: File = {};
 
 		if ('id' in object) file.id = object.id;
@@ -192,7 +192,7 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	toApiOutput(object: any): any {
+	public toApiOutput(object: any): any {
 		if (Array.isArray(object)) {
 			return object.map(f => this.toApiOutput(f));
 		} else {
@@ -202,7 +202,7 @@ export default class FileModel extends BaseModel {
 		}
 	}
 
-	async createRootFile(): Promise<File> {
+	public async createRootFile(): Promise<File> {
 		const existingRootFile = await this.userRootFile();
 		if (existingRootFile) throw new Error(`User ${this.userId} has already a root file`);
 
@@ -269,14 +269,14 @@ export default class FileModel extends BaseModel {
 		return output;
 	}
 
-	async loadWithContent(id: string): Promise<any> {
+	public async loadWithContent(id: string): Promise<any> {
 		const file: File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
 		if (!file) return null;
 		await this.checkCanReadPermissions(file);
 		return file;
 	}
 
-	async load(id: string): Promise<File> {
+	public async load(id: string): Promise<File> {
 		const file: File = await super.load(id);
 		if (!file) return null;
 		await this.checkCanReadPermissions(file);

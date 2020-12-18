@@ -8,11 +8,11 @@ enum ReadOrWriteKeys {
 
 export default class PermissionModel extends BaseModel {
 
-	get tableName(): string {
+	protected get tableName(): string {
 		return 'permissions';
 	}
 
-	async filePermissions(fileId: string, userId: string = null): Promise<Array<Permission>> {
+	private async filePermissions(fileId: string, userId: string = null): Promise<Array<Permission>> {
 		const p: Permission = {
 			item_type: ItemType.File,
 			item_id: fileId,
@@ -37,15 +37,15 @@ export default class PermissionModel extends BaseModel {
 		return false;
 	}
 
-	async canRead(fileId: string, userId: string): Promise<boolean> {
+	public async canRead(fileId: string, userId: string): Promise<boolean> {
 		return this.canReadOrWrite(fileId, userId, ReadOrWriteKeys.CanRead);
 	}
 
-	async canWrite(fileId: string, userId: string): Promise<boolean> {
+	public async canWrite(fileId: string, userId: string): Promise<boolean> {
 		return this.canReadOrWrite(fileId, userId, ReadOrWriteKeys.CanWrite);
 	}
 
-	async deleteByFileId(fileId: string): Promise<void> {
+	public async deleteByFileId(fileId: string): Promise<void> {
 		const permissions = await this.filePermissions(fileId);
 		if (!permissions.length) return;
 		const ids = permissions.map(m => m.id);

@@ -11,7 +11,7 @@ export default class FileController extends BaseController {
 	public async postFile_(sessionId: string, file: File): Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = this.models.file({ userId: user.id });
-		let newFile = await fileModel.fromApiInput(file);
+		let newFile = fileModel.fromApiInput(file);
 		newFile = await fileModel.save(file);
 		return fileModel.toApiOutput(newFile);
 	}
@@ -34,13 +34,13 @@ export default class FileController extends BaseController {
 		return file;
 	}
 
-	public async patchFile(sessionId: string, fileId: string, file: File): Promise<void> {
+	public async patchFile(sessionId: string, fileId: string, file: File): Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = this.models.file({ userId: user.id });
 		const existingFile: File = await fileModel.entityFromItemId(fileId);
-		const newFile = await fileModel.fromApiInput(file);
+		const newFile = fileModel.fromApiInput(file);
 		newFile.id = existingFile.id;
-		await fileModel.toApiOutput(await fileModel.save(newFile));
+		return fileModel.toApiOutput(await fileModel.save(newFile));
 	}
 
 	public async putFileContent(sessionId: string, fileId: string, content: Buffer): Promise<any> {
@@ -64,7 +64,7 @@ export default class FileController extends BaseController {
 		const user = await this.initSession(sessionId);
 		const fileModel = this.models.file({ userId: user.id });
 		const parent: File = await fileModel.entityFromItemId(fileId);
-		child = await fileModel.fromApiInput(child);
+		child = fileModel.fromApiInput(child);
 		child.parent_id = parent.id;
 		return fileModel.toApiOutput(await fileModel.save(child));
 	}

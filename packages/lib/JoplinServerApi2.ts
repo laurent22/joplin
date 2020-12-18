@@ -75,7 +75,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	async exec(method: string, path: string = '', query: any = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	async exec(method: string, path: string = '', _query: any = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;

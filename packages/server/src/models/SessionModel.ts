@@ -3,11 +3,11 @@ import { User, Session } from '../db';
 
 export default class SessionModel extends BaseModel {
 
-	get tableName(): string {
+	protected get tableName(): string {
 		return 'sessions';
 	}
 
-	async sessionUser(sessionId: string): Promise<User> {
+	public async sessionUser(sessionId: string): Promise<User> {
 		const session: Session = await this.load(sessionId);
 		if (!session) return null;
 		const userModel = this.models.user({ userId: session.user_id });

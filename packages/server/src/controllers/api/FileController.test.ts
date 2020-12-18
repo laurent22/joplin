@@ -1,6 +1,6 @@
 import { testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, models, controllers } from '../../utils/testUtils';
 import * as fs from 'fs-extra';
-import { ChangeType, File, ItemType } from '../../db';
+import { File } from '../../db';
 import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
 import { filePathInfo } from '../../utils/routeUtils';
 import { defaultPagination, Pagination, PaginationOrderDir } from '../../models/utils/pagination';
@@ -498,7 +498,7 @@ describe('FileController', function() {
 	// 	file1 = await fileController.postFile_(session1.id, file1);
 	// 	file2 = await fileController.postFile_(session2.id, file2);
 	// 	await fileController.putFileContent(session1.id, file1.id, Buffer.alloc(16));
-		
+
 	// 	const changeModel = models().change();
 
 	// 	{

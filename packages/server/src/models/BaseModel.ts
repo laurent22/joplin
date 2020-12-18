@@ -16,7 +16,7 @@ export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
 	validationRules?: any;
-	trackChanges?: boolean,
+	trackChanges?: boolean;
 }
 
 export interface DeleteOptions {
@@ -72,15 +72,15 @@ export default abstract class BaseModel {
 		throw new Error('Not implemented');
 	}
 
-	protected get itemType():ItemType {
+	protected get itemType(): ItemType {
 		throw new Error('Not implemented');
 	}
 
-	protected get trackChanges():boolean {
+	protected get trackChanges(): boolean {
 		return false;
 	}
 
-	protected hasUuid():boolean {
+	protected hasUuid(): boolean {
 		return true;
 	}
 
@@ -88,7 +88,7 @@ export default abstract class BaseModel {
 		return true;
 	}
 
-	protected async withTransaction(fn:Function) {
+	protected async withTransaction(fn: Function) {
 		const txIndex = await this.transactionHandler_.start();
 
 		try {
@@ -117,7 +117,7 @@ export default abstract class BaseModel {
 		return this.db(this.tableName).select(...this.defaultFields);
 	}
 
-	public async fromApiInput(object: AnyItemType): Promise<AnyItemType> {
+	public fromApiInput(object: AnyItemType): AnyItemType {
 		return object;
 	}
 
@@ -157,9 +157,9 @@ export default abstract class BaseModel {
 
 		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} });
 
-		const changeModel = ():ChangeModel => {
+		const changeModel = (): ChangeModel => {
 			return this.models.change({ userId: this.userId });
-		}
+		};
 
 		const trackChanges = this.trackChanges && options.trackChanges !== false;
 
@@ -202,9 +202,9 @@ export default abstract class BaseModel {
 			await query.orWhere({ id: ids[i] });
 		}
 
-		const changeModel = ():ChangeModel => {
+		const changeModel = (): ChangeModel => {
 			return this.models.change({ userId: this.userId });
-		}
+		};
 
 		const trackChanges = this.trackChanges;
 

@@ -5,16 +5,16 @@ import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
 
 export default class UserModel extends BaseModel {
 
-	get tableName(): string {
+	public get tableName(): string {
 		return 'users';
 	}
 
-	async loadByEmail(email: string): Promise<User> {
+	public async loadByEmail(email: string): Promise<User> {
 		const user: User = { email: email };
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
-	async fromApiInput(object: User): Promise<User> {
+	public fromApiInput(object: User): User {
 		const user: User = {};
 
 		if ('id' in object) user.id = object.id;
@@ -26,13 +26,13 @@ export default class UserModel extends BaseModel {
 		return user;
 	}
 
-	toApiOutput(object: User): User {
+	public toApiOutput(object: User): User {
 		const output: User = { ...object };
 		delete output.password;
 		return output;
 	}
 
-	async validate(object: User, options: ValidateOptions = {}): Promise<User> {
+	protected async validate(object: User, options: ValidateOptions = {}): Promise<User> {
 		const user: User = await super.validate(object, options);
 
 		const owner: User = await this.load(this.userId);
@@ -64,7 +64,7 @@ export default class UserModel extends BaseModel {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	async checkIsOwnerOrAdmin(userId: string): Promise<void> {
+	private async checkIsOwnerOrAdmin(userId: string): Promise<void> {
 		if (!this.userId) throw new ErrorForbidden('no user is active');
 
 		if (userId === this.userId) return;
@@ -73,12 +73,12 @@ export default class UserModel extends BaseModel {
 		if (!owner.is_admin) throw new ErrorForbidden();
 	}
 
-	async load(id: string): Promise<User> {
+	public async load(id: string): Promise<User> {
 		await this.checkIsOwnerOrAdmin(id);
 		return super.load(id);
 	}
 
-	async delete(id: string): Promise<void> {
+	public async delete(id: string): Promise<void> {
 		await this.checkIsOwnerOrAdmin(id);
 
 		const txIndex = await this.startTransaction();
@@ -96,7 +96,7 @@ export default class UserModel extends BaseModel {
 		await this.commitTransaction(txIndex);
 	}
 
-	async save(object: User, options: SaveOptions = {}): Promise<User> {
+	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const txIndex = await this.startTransaction();
 
 		const isNew = await this.isNew(object, options);
