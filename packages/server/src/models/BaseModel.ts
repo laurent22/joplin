@@ -80,6 +80,10 @@ export default abstract class BaseModel {
 		return false;
 	}
 
+	protected hasUuid():boolean {
+		return true;
+	}
+
 	protected hasDateProperties(): boolean {
 		return true;
 	}
@@ -198,8 +202,20 @@ export default abstract class BaseModel {
 			await query.orWhere({ id: ids[i] });
 		}
 
-		const deletedCount = await query.del();
-		if (deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
+		const changeModel = ():ChangeModel => {
+			return this.models.change({ userId: this.userId });
+		}
+
+		const trackChanges = this.trackChanges;
+
+		await this.withTransaction(async () => {
+			const deletedCount = await query.del();
+			if (deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
+
+			if (trackChanges) {
+				for (const id of ids) await changeModel().add(this.itemType, id, ChangeType.Delete);
+			}
+		});
 	}
 
 }

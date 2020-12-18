@@ -57,7 +57,8 @@ export async function up(db: DbConnection): Promise<any> {
 	});
 
 	await db.schema.createTable('changes', function(table: Knex.CreateTableBuilder) {
-		table.string('id', 32).unique().primary().notNullable();
+		table.increments('counter').unique().primary().notNullable();
+		table.string('id', 32).unique().notNullable();
 		table.string('owner_id', 32).notNullable();
 		table.integer('item_type').notNullable();
 		table.string('item_id', 32).notNullable();

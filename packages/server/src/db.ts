@@ -191,49 +191,50 @@ interface DatabaseTables {
 // AUTO-GENERATED-TYPES
 // Auto-generated using `npm run generate-types`
 export interface User extends WithDates, WithUuid {
-	email?: string;
-	password?: string;
-	full_name?: string;
-	is_admin?: number;
+	email?: string
+	password?: string
+	full_name?: string
+	is_admin?: number
 }
 
 export interface Session extends WithDates, WithUuid {
-	user_id?: Uuid;
-	auth_code?: string;
+	user_id?: Uuid
+	auth_code?: string
 }
 
 export interface Permission extends WithDates, WithUuid {
-	user_id?: Uuid;
-	item_type?: ItemType;
-	item_id?: Uuid;
-	can_read?: number;
-	can_write?: number;
+	user_id?: Uuid
+	item_type?: ItemType
+	item_id?: Uuid
+	can_read?: number
+	can_write?: number
 }
 
 export interface File extends WithDates, WithUuid {
-	owner_id?: Uuid;
-	name?: string;
-	content?: Buffer;
-	mime_type?: string;
-	size?: number;
-	is_directory?: number;
-	is_root?: number;
-	parent_id?: Uuid;
+	owner_id?: Uuid
+	name?: string
+	content?: Buffer
+	mime_type?: string
+	size?: number
+	is_directory?: number
+	is_root?: number
+	parent_id?: Uuid
 }
 
 export interface Change extends WithDates, WithUuid {
-	owner_id?: Uuid;
-	item_type?: ItemType;
-	item_id?: Uuid;
-	type?: ChangeType;
+	counter?: number
+	owner_id?: Uuid
+	item_type?: ItemType
+	item_id?: Uuid
+	type?: ChangeType
 }
 
 export interface ApiClient extends WithDates, WithUuid {
-	name?: string;
-	secret?: string;
+	name?: string
+	secret?: string
 }
 
-export const databaseSchema: DatabaseTables = {
+export const databaseSchema:DatabaseTables = {
 	users: {
 		id: { type: 'string' },
 		email: { type: 'string' },
@@ -274,6 +275,7 @@ export const databaseSchema: DatabaseTables = {
 		created_time: { type: 'string' },
 	},
 	changes: {
+		counter: { type: 'number' },
 		id: { type: 'string' },
 		owner_id: { type: 'string' },
 		item_type: { type: 'number' },

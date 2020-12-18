@@ -43,6 +43,7 @@ export const clearDatabase = async function(): Promise<void> {
 	await db_('users').truncate();
 	await db_('permissions').truncate();
 	await db_('files').truncate();
+	await db_('changes').truncate();
 
 	await cache.clearAll();
 };

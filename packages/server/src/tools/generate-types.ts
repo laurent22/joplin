@@ -66,7 +66,7 @@ function createTypeString(table: any) {
 		if (name === 'item_type') type = 'ItemType';
 		if (table.name === 'files' && name === 'content') type = 'Buffer';
 		if (table.name === 'changes' && name === 'type') type = 'ChangeType';
-		if (name === 'id' || name.endsWith('_id') && type === 'string') type = 'Uuid';
+		if ((name === 'id' || name.endsWith('_id') || name === 'uuid') && type === 'string') type = 'Uuid';
 
 		colStrings.push(`\t${name}?: ${type}`);
 	}

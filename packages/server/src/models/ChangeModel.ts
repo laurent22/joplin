@@ -12,6 +12,10 @@ export default class ChangeModel extends BaseModel {
 		return 'changes';
 	}
 
+	protected hasUuid():boolean {
+		return false;
+	}
+
 	public async add(itemType:ItemType, itemId:Uuid, changeType:ChangeType):Promise<Change> {
 		const change:Change = {
 			item_type: itemType,
@@ -23,7 +27,7 @@ export default class ChangeModel extends BaseModel {
 		return this.save(change);
 	}
 
-	public async byOwnerId(ownerId:string, pagination: Pagination): Promise<PaginatedChanges> { {
+	public async byOwnerId(ownerId:string, pagination: Pagination): Promise<PaginatedChanges> {
 		// For changes, we always sort by updated_time ASC as anything else
 		// would not make sense.
 		pagination = {
@@ -37,5 +41,9 @@ export default class ChangeModel extends BaseModel {
 		const query = this.db(this.tableName).select(...this.defaultFields).where('owner_id', ownerId);
 		return paginateDbQuery(query, pagination);
 	}
+
+	// private async compressChanges(changes:Change[]):Promise<Change[]> {
+
+	// }
 
 }
