@@ -154,7 +154,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const allAssets = useCallback(async (markupLanguage: number): Promise<any[]> => {
 		const theme = themeStyle(props.themeId);
 
-		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
+		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
 

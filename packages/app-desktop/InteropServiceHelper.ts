@@ -4,6 +4,7 @@ import shim from '@joplin/lib/shim';
 import { ExportOptions, FileSystemItem, Module } from '@joplin/lib/services/interop/types';
 
 import { _ } from '@joplin/lib/locale';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 const bridge = require('electron').remote.require('./bridge').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const Note = require('@joplin/lib/models/Note.js');
@@ -20,6 +21,7 @@ interface ExportNoteOptions {
 	pageSize?: string;
 	landscape?: boolean;
 	includeConflicts?: boolean;
+	plugins?: PluginStates;
 }
 
 export default class InteropServiceHelper {
@@ -54,6 +56,7 @@ export default class InteropServiceHelper {
 		try {
 			const exportOptions = {
 				customCss: options.customCss ? options.customCss : '',
+				plugins: options.plugins,
 			};
 
 			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
@@ -162,6 +165,7 @@ export default class InteropServiceHelper {
 		exportOptions.path = path;
 		exportOptions.format = module.format;
 		// exportOptions.modulePath = module.path;
+		if (options.plugins) exportOptions.plugins = options.plugins;
 		exportOptions.target = module.target;
 		exportOptions.includeConflicts = !!options.includeConflicts;
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;

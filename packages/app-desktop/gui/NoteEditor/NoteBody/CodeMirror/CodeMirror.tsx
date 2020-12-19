@@ -164,6 +164,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						replaceSelection: (value: any) => {
 							return editorRef.current.replaceSelection(value);
 						},
+						textCopy: () => {
+							editorCopyText();
+						},
+						textCut: () => {
+							editorCutText();
+						},
+						textPaste: () => {
+							editorPaste();
+						},
+						textSelectAll: () => {
+							return editorRef.current.execCommand('selectAll');
+						},
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
 						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasised text')),
 						textLink: async () => {
@@ -210,6 +222,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 					if (commands[cmd.name]) {
 						commandOutput = commands[cmd.name](cmd.value);
+					} else if (editorRef.current.supportsCommand(cmd)) {
+						commandOutput = editorRef.current.execCommandFromJoplinCommand(cmd);
 					} else {
 						reg.logger().warn('CodeMirror: unsupported Joplin command: ', cmd);
 					}
@@ -254,6 +268,17 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			editorRef.current.replaceSelection(clipboard.readText());
 		}
 	}, []);
+
+	const editorPaste = useCallback(() => {
+		const clipboardText = clipboard.readText();
+
+		if (clipboardText) {
+			editorPasteText();
+		} else {
+			// To handle pasting images
+			void onEditorPaste();
+		}
+	}, [editorPasteText, onEditorPaste]);
 
 	const loadScript = async (script: any) => {
 		return new Promise((resolve) => {
@@ -598,7 +623,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			const menu = new Menu();
 
 			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
-			const clipboardText = clipboard.readText();
 
 			menu.append(
 				new MenuItem({
@@ -625,12 +649,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					label: _('Paste'),
 					enabled: true,
 					click: async () => {
-						if (clipboardText) {
-							editorPasteText();
-						} else {
-							// To handle pasting images
-							void onEditorPaste();
-						}
+						editorPaste();
 					},
 				})
 			);
