@@ -44,14 +44,18 @@ describe('EnexToMd', function() {
 			}
 
 			if (actualMd !== expectedMd) {
-				console.info('');
-				console.info(`Error converting file: ${htmlFilename}`);
-				console.info('--------------------------------- Got:');
-				console.info(actualMd.split('\n'));
-				console.info('--------------------------------- Expected:');
-				console.info(expectedMd.split('\n'));
-				console.info('--------------------------------------------');
-				console.info('');
+				const result = [];
+
+				result.push('');
+				result.push(`Error converting file: ${htmlFilename}`);
+				result.push('--------------------------------- Got:');
+				result.push(actualMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
+				result.push('--------------------------------- Expected:');
+				result.push(expectedMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
+				result.push('--------------------------------------------');
+				result.push('');
+
+				console.info(result.join('\n'));
 
 				expect(false).toBe(true);
 				// return;
@@ -111,6 +115,20 @@ describe('EnexToMd', function() {
 		expect(all.length).toBe(1);
 		expect(all[0].title).toBe('China and the case for stimulus.');
 		expect(all[0].body).toBe('');
+	});
+
+	it('should handle invalid mime types', async () => {
+		// This is to handle the case where a resource has an invalid mime type,
+		// but that type can be determined from the filename. For example, in
+		// this thread, the ENEX file contains a "file.zip" file with a mime
+		// type "application/octet-stream", which can later cause problems to
+		// open the file.
+		// https://discourse.joplinapp.org/t/importing-a-note-with-a-zip-file/12123?u=laurent
+		const filePath = `${enexSampleBaseDir}/WithInvalidMime.enex`;
+		await importEnex('', filePath);
+		const all = await Resource.all();
+		expect(all.length).toBe(1);
+		expect(all[0].mime).toBe('application/zip');
 	});
 
 });

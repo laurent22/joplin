@@ -152,7 +152,7 @@ describe('services_KeymapService', () => {
 				{ command: 'newNote', accelerator: 'Ctrl+Alt+Shift+N' },
 				{ command: 'synchronize', accelerator: 'F15' },
 				{ command: 'textBold', accelerator: 'Shift+F5' },
-				{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
+				{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+L' },
 				{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 				{ command: 'print', accelerator: null /* Disabled */ },
 				{ command: 'focusElementNoteTitle', accelerator: 'Ctrl+Alt+Shift+T' },
@@ -174,7 +174,7 @@ describe('services_KeymapService', () => {
 				{ command: 'newNote', accelerator: 'Ctrl+Alt+Shift+N' },
 				{ command: 'synchronize', accelerator: null /* Disabled */ },
 				{ command: 'textBold', accelerator: 'Shift+F5' },
-				{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
+				{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+L' },
 				{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 				{ command: 'print', accelerator: 'Alt+P' },
 				{ command: 'focusElementNoteTitle', accelerator: 'Ctrl+Alt+Shift+T' },
@@ -222,7 +222,7 @@ describe('services_KeymapService', () => {
 				{ command: 'newNote', accelerator: 'Ctrl+Alt+Shift+N' },
 				{ command: 'synchronize', accelerator: 'Ctrl+F11' },
 				{ command: 'textBold', accelerator: 'Shift+F5' },
-				{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
+				{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+L' },
 				{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 				{ command: 'print', accelerator: 'Alt+P' },
 				{ command: 'help', accelerator: null /* Disabled */ },
@@ -243,7 +243,7 @@ describe('services_KeymapService', () => {
 			const customKeymaps = [
 				[
 					{ commmmmand: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
+					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+L' },
 					{ command: 'print', accelerator: 'Alt+P' },
 				],
 				[
@@ -252,13 +252,13 @@ describe('services_KeymapService', () => {
 					{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 				],
 				[
-					{ command: 'showLocalSearch', accel: 'Ctrl+Alt+S' },
+					{ command: 'showLocalSearch', accel: 'Ctrl+Alt+L' },
 					{ command: 'print', accelerator: 'Alt+P' },
 					{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 				],
 				[
 					{ command: 'print' },
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
+					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+L' },
 					{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 				],
 			];
@@ -311,12 +311,12 @@ describe('services_KeymapService', () => {
 
 			const customKeymaps_Linux = [
 				[
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' /* Duplicate */ },
+					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+L' /* Duplicate */ },
 					{ command: 'print', accelerator: 'Alt+P' },
-					{ command: 'gotoAnything', accelerator: 'Ctrl+Alt+S' /* Duplicate */ },
+					{ command: 'gotoAnything', accelerator: 'Ctrl+Alt+L' /* Duplicate */ },
 				],
 				[
-					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+S' },
+					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+L' },
 					{ command: 'print', accelerator: 'Ctrl+P' /* Default of gotoAnything */ },
 					{ command: 'focusElementNoteTitle', accelerator: 'Ctrl+Alt+Shift+J' },
 				],

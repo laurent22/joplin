@@ -68,15 +68,15 @@ export default class Plugin {
 		return Object.keys(this.viewControllers_).length;
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	emit(eventName: string, event: any = null) {
+	public emit(eventName: string, event: any = null) {
 		return this.eventEmitter_.emit(eventName, event);
 	}
 
