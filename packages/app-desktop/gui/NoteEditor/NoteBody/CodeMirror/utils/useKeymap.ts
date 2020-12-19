@@ -133,7 +133,7 @@ export default function useKeymap(CodeMirror: any) {
 			'Ctrl-Up': 'goLineUpSmart',
 			'Ctrl-Down': 'goLineDownSmart',
 			'Ctrl-Home': 'goDocStart',
-			'Ctrl-End': 'goDocEndSmart',
+			'Ctrl-End': 'goDocEnd',
 			'Ctrl-Left': 'goGroupLeft',
 			'Ctrl-Right': 'goGroupRight',
 			'Alt-Left': 'goLineStart',
