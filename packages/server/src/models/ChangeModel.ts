@@ -45,7 +45,7 @@ export default class ChangeModel extends BaseModel {
 		// be possible to do both in one query.
 		// https://stackoverflow.com/questions/65348794
 		const query = this.db(this.tableName)
-			.select(...this.defaultFields)
+			.select(...this.defaultFields) // TODO: limit what's returned
 			.where('owner_id', ownerId)
 			.orderBy('counter', 'asc')
 			.limit(pagination.limit);
