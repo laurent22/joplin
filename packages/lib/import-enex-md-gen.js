@@ -377,6 +377,12 @@ function attributeToLowerCase(node) {
 	return output;
 }
 
+function isInvisibleBlock(attributes) {
+	const style = attributes.style;
+	if (!style) return false;
+	return !!style.match(/display:[\s\S]*none/);
+}
+
 function isSpanWithStyle(attributes) {
 	if (attributes != undefined) {
 		if ('style' in attributes) {
@@ -389,6 +395,8 @@ function isSpanWithStyle(attributes) {
 
 function isSpanStyleBold(attributes) {
 	const style = attributes.style;
+	if (!style) return false;
+
 	if (style.includes('font-weight: bold;')) {
 		return true;
 	} else if (style.search(/font-family:.*,Bold.*;/) != -1) {
@@ -424,6 +432,7 @@ function enexXmlToMdArray(stream, resources) {
 			lists: [],
 			anchorAttributes: [],
 			spanAttributes: [],
+			tags: [],
 		};
 
 		const options = {};
@@ -474,6 +483,12 @@ function enexXmlToMdArray(stream, resources) {
 		saxStream.on('opentag', function(node) {
 			const nodeAttributes = attributeToLowerCase(node);
 			const n = node.name.toLowerCase();
+			const isVisible = !isInvisibleBlock(nodeAttributes);
+
+			state.tags.push({
+				name: n,
+				visible: isVisible,
+			});
 
 			const currentList = state.lists && state.lists.length ? state.lists[state.lists.length - 1] : null;
 
@@ -488,6 +503,14 @@ function enexXmlToMdArray(stream, resources) {
 
 			if (n == 'en-note') {
 				// Start of note
+			} else if (isInvisibleBlock(nodeAttributes)) {
+				const newSection = {
+					type: 'hidden',
+					lines: [],
+					parent: section,
+				};
+				section.lines.push(newSection);
+				section = newSection;
 			} else if (isBlockTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 			} else if (n == 'table') {
@@ -719,8 +742,12 @@ function enexXmlToMdArray(stream, resources) {
 		saxStream.on('closetag', function(n) {
 			n = n ? n.toLowerCase() : n;
 
+			const poppedTag = state.tags.pop();
+
 			if (n == 'en-note') {
 				// End of note
+			} else if (!poppedTag.visible) {
+				if (section && section.parent) section = section.parent;
 			} else if (isNewLineOnlyEndTag(n)) {
 				section.lines.push(BLOCK_CLOSE);
 			} else if (n == 'td' || n == 'th') {
@@ -1109,6 +1136,14 @@ async function enexXmlToMd(xmlString, resources, options = {}) {
 			mdLines = mdLines.concat(tableLines);
 		} else if (typeof line === 'object' && line.type === 'code') {
 			mdLines = mdLines.concat(line.lines);
+		} else if (typeof line === 'object' && line.type === 'hidden') {
+			// ENEX notes sometimes have hidden tags. We could strip off these
+			// sections but in the spirit of preserving all data we wrap them in
+			// a hidden tag too.
+			let hiddenLines = ['<div style="display: none;">'];
+			hiddenLines = hiddenLines.concat(line.lines);
+			hiddenLines.push('</div>');
+			mdLines = mdLines.concat(hiddenLines);
 		} else if (typeof line === 'object') {
 			console.warn('Unhandled object type:', line);
 			mdLines = mdLines.concat(line.lines);
