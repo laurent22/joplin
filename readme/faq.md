@@ -14,6 +14,12 @@ Now try to install again and it should work.
 
 More info there: https://github.com/electron-userland/electron-builder/issues/4057
 
+## How can I pass arguments to the Linux installation script?
+
+You can pass [arguments](https://github.com/laurent22/joplin/blob/dev/Joplin_install_and_update.sh#L37) to the installation script by using this command.
+
+`wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh \| bash -s -- --argument1 --argument2`
+
 ## How can I edit my note in an external text editor?
 
 The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -> Text editor command.
