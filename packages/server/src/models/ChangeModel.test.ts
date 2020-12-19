@@ -1,8 +1,8 @@
 import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models } from '../utils/testUtils';
-import { defaultPagination } from '../models/utils/pagination';
 import { ChangeType, File, ItemType } from '../db';
 import FileModel from './FileModel';
-// import { msleep } from '../utils/time';
+import { msleep } from '../utils/time';
+import { ChangePagination } from './ChangeModel';
 
 async function makeTestFile(fileModel: FileModel): Promise<File> {
 	return fileModel.save({
@@ -32,7 +32,7 @@ describe('ChangeModel', function() {
 
 		const file1 = await makeTestFile(fileModel);
 		{
-			const changes = (await changeModel.byOwnerId(user.id, defaultPagination())).items;
+			const changes = (await changeModel.byOwnerId(user.id, { limit: 20 })).items;
 			expect(changes.length).toBe(1);
 			expect(changes[0].item_type).toBe(ItemType.File);
 			expect(changes[0].item_id).toBe(file1.id);
@@ -40,30 +40,53 @@ describe('ChangeModel', function() {
 		}
 	});
 
-	// test('should track changes - create, then update', async function() {
-	// 	const { user } = await createUserAndSession(1, true);
-	// 	const fileModel = models().file({ userId: user.id });
-	// 	const changeModel = models().change({ userId: user.id });
+	test('should track changes - create, then update', async function() {
+		const { user } = await createUserAndSession(1, true);
+		const fileModel = models().file({ userId: user.id });
+		const changeModel = models().change({ userId: user.id });
 
-	// 	let i = 1;
-	// 	await msleep(5); const file1 = await makeTestFile(fileModel);
-	// 	await msleep(5); await fileModel.save({ id: file1.id, name: 'test_mod' + i++ });
-	// 	await msleep(5); await fileModel.save({ id: file1.id, name: 'test_mod' + i++ });
-	// 	await msleep(5); const file2 = await makeTestFile(fileModel);
-	// 	await msleep(5); await fileModel.save({ id: file2.id, name: 'test_mod' + i++ });
-	// 	await msleep(5); await fileModel.save({ id: file2.id, name: 'test_mod' + i++ });
-	// 	await msleep(5); await fileModel.save({ id: file2.id, name: 'test_mod' + i++ });
-	// 	await msleep(5); await fileModel.delete(file1.id);
-	// 	await msleep(5); const file3 = await makeTestFile(fileModel);
+		let i = 1;
+		await msleep(1); const file1 = await makeTestFile(fileModel); // CREATE 1
+		await msleep(1); await fileModel.save({ id: file1.id, name: `test_mod${i++}` }); // UPDATE 1
+		await msleep(1); await fileModel.save({ id: file1.id, name: `test_mod${i++}` }); // UPDATE 1
+		await msleep(1); const file2 = await makeTestFile(fileModel); // CREATE 2
+		await msleep(1); await fileModel.save({ id: file2.id, name: `test_mod${i++}` }); // UPDATE 2
+		await msleep(1); await fileModel.delete(file1.id); // DELETE 1
+		await msleep(1); await fileModel.save({ id: file2.id, name: `test_mod${i++}` }); // UPDATE 2
+		await msleep(1); const file3 = await makeTestFile(fileModel); // CREATE 3
 
+		{
+			const changes = (await changeModel.byOwnerId(user.id, { limit: 20 })).items;
+			expect(changes.length).toBe(2);
+			expect(changes[0].item_id).toBe(file2.id);
+			expect(changes[0].type).toBe(ChangeType.Create);
+			expect(changes[1].item_id).toBe(file3.id);
+			expect(changes[1].type).toBe(ChangeType.Create);
+		}
 
-	// 	// {
-	// 	// 	const changes = (await changeModel.byOwnerId(user.id, defaultPagination())).items;
-	// 	// 	expect(changes.length).toBe(1);
-	// 	// 	expect(changes[0].item_type).toBe(ItemType.File);
-	// 	// 	expect(changes[0].item_id).toBe(file1.id);
-	// 	// 	expect(changes[0].type).toBe(ChangeType.Create);
-	// 	// }
-	// });
+		{
+			const pagination: ChangePagination = { limit: 5 };
+
+			const page1 = (await changeModel.byOwnerId(user.id, pagination));
+			let changes = page1.items;
+			expect(changes.length).toBe(2);
+			expect(page1.has_more).toBe(true);
+			expect(changes[0].item_id).toBe(file1.id);
+			expect(changes[0].type).toBe(ChangeType.Create);
+			expect(changes[1].item_id).toBe(file2.id);
+			expect(changes[1].type).toBe(ChangeType.Create);
+
+			const page2 = (await changeModel.byOwnerId(user.id, { ...pagination, cursor: page1.cursor }));
+			changes = page2.items;
+			expect(changes.length).toBe(3);
+			expect(page2.has_more).toBe(false);
+			expect(changes[0].item_id).toBe(file1.id);
+			expect(changes[0].type).toBe(ChangeType.Delete);
+			expect(changes[1].item_id).toBe(file2.id);
+			expect(changes[1].type).toBe(ChangeType.Update);
+			expect(changes[2].item_id).toBe(file3.id);
+			expect(changes[2].type).toBe(ChangeType.Create);
+		}
+	});
 
 });
