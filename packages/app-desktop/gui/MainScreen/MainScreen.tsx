@@ -373,6 +373,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					pageSize: Setting.value('export.pdfPageSize'),
 					landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
 					customCss: this.props.customCss,
+					plugins: this.props.plugins,
 				});
 				await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
 			} catch (error) {
