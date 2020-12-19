@@ -88,6 +88,7 @@ interface Props {
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
 	['spellChecker.language']: string;
+	plugins: PluginStates;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -233,7 +234,11 @@ function useMenu(props: Props) {
 					exportItems.push({
 						label: module.fullLabel(),
 						click: async () => {
-							await InteropServiceHelper.export((action: any) => props.dispatch(action), module);
+							await InteropServiceHelper.export(
+								(action: any) => props.dispatch(action),
+								module,
+								{ plugins: props.plugins }
+							);
 						},
 					});
 				}
@@ -471,7 +476,7 @@ function useMenu(props: Props) {
 					label: _('Import'),
 					submenu: importItems,
 				}, {
-					label: _('Export'),
+					label: _('Export all'),
 					submenu: exportItems,
 				}, {
 					type: 'separator',
@@ -750,7 +755,7 @@ function useMenu(props: Props) {
 		} else {
 			setMenu(Menu.buildFromTemplate(template));
 		}
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled']]);
+	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins]);
 
 	useEffect(() => {
 		const whenClauseContext = CommandService.instance().currentWhenClauseContext();
@@ -847,6 +852,7 @@ const mapStateToProps = (state: AppState) => {
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
 		['spellChecker.language']: state.settings['spellChecker.language'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
+		plugins: state.pluginService.plugins,
 	};
 };
 

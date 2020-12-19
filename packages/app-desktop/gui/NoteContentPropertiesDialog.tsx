@@ -24,7 +24,7 @@ interface KeyToLabelMap {
 let markupToHtml_: any = null;
 function markupToHtml() {
 	if (markupToHtml_) return markupToHtml_;
-	markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
+	markupToHtml_ = markupLanguageUtils.newMarkupToHtml({});
 	return markupToHtml_;
 }
 
