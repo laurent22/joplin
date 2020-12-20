@@ -4,12 +4,11 @@
 function plugin(CodeMirror) {
 	// This is a dummy command that is registered with codemirror. 
 	// Once created here it can be called by any other codemirror command
-	// using cm.execCommand(stringName) or by binding the command to a key in the keymap
+	// using cm.execCommand(stringName) or register a joplin command called 'editor.printSomething'
+	// through the joplin.commands api
 	CodeMirror.commands.printSomething = function(cm) {
 		console.log("Something");
 	}
-	// Here we manually bind the keys using the codemirror keymap
-	CodeMirror.keyMap.basic["Ctrl-U"] = "printSomething"
 }
 
 module.exports = {

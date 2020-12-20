@@ -533,6 +533,10 @@ function shimInit(sharp = null, keytar = null, React = null) {
 	shim.keytar = () => {
 		return keytar;
 	};
+
+	shim.requireDynamic = (path) => {
+		return require(path);
+	};
 }
 
 module.exports = { shimInit };

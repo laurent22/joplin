@@ -105,8 +105,8 @@ function Editor(props: EditorProps, ref: any) {
 	useLineSorting(CodeMirror);
 	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
-	useKeymap(CodeMirror);
 	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
+	useKeymap(CodeMirror);
 
 	useImperativeHandle(ref, () => {
 		return editor;

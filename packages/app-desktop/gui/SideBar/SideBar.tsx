@@ -288,7 +288,7 @@ class SideBarComponent extends React.Component<Props, State> {
 					new MenuItem({
 						label: module.fullLabel(),
 						click: async () => {
-							await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
+							await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId], plugins: this.pluginsRef.current });
 						},
 					})
 				);

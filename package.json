@@ -26,7 +26,7 @@
     "linter-precommit": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "postinstall": "lerna bootstrap --no-ci && npm run tsc",
-    "publishAll": "git pull && lerna version --no-git-tag-version && gulp completePublishAll",
+    "publishAll": "git pull && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
     "releaseClipper": "node packages/tools/release-clipper.js",
