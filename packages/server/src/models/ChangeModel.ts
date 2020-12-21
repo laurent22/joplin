@@ -87,7 +87,8 @@ export default class ChangeModel extends BaseModel {
 
 	private async loadChangeItems(changes: Change[]): Promise<ChangeWithItem[]> {
 		const itemIds = changes.map(c => c.item_id);
-		const items: File[] = await this.db('files').select('*').whereIn('id', itemIds);
+		const fileModel = this.models.file({ userId: this.userId });
+		const items: File[] = await fileModel.loadByIds(itemIds);
 
 		const output: ChangeWithItem[] = [];
 

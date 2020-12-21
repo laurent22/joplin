@@ -1,7 +1,7 @@
 import { testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, models, controllers } from '../../utils/testUtils';
 import * as fs from 'fs-extra';
 import { File } from '../../db';
-import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
+import { ErrorConflict, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
 import { filePathInfo } from '../../utils/routeUtils';
 import { defaultPagination, Pagination, PaginationOrderDir } from '../../models/utils/pagination';
 import { msleep } from '../../utils/time';
@@ -424,7 +424,7 @@ describe('FileController', function() {
 
 		await saveTestFile(session.id, 'root:/somefile.md:');
 		error = await checkThrowAsync(async () => saveTestDir(session.id, 'root:/somefile.md:'));
-		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+		expect(error instanceof ErrorConflict).toBe(true);
 	});
 
 	test('should not be possible to delete the root directory', async function() {

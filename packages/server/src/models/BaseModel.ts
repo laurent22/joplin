@@ -184,6 +184,11 @@ export default abstract class BaseModel {
 		return toSave;
 	}
 
+	public async loadByIds(ids: string[]): Promise<AnyItemType[]> {
+		if (!ids.length) return [];
+		return this.db(this.tableName).select(this.defaultFields).whereIn('id', ids);
+	}
+
 	public async load(id: string): Promise<AnyItemType> {
 		if (!id) throw new Error('id cannot be empty');
 

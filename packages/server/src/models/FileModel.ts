@@ -221,20 +221,31 @@ export default class FileModel extends BaseModel {
 		});
 	}
 
-	private async checkCanReadPermissions(file: File): Promise<void> {
-		if (!file) throw new ErrorNotFound();
-		if (file.owner_id === this.userId) return;
+	private async checkCanReadOrWritePermissions(methodName: 'canRead' | 'canWrite', file: File | File[]): Promise<void> {
+		const files = Array.isArray(file) ? file : [file];
+
+		if (!files.length || !files[0]) throw new ErrorNotFound();
+
+		const fileIds = files.map(f => f.id);
+
 		const permissionModel = this.models.permission();
-		const canRead: boolean = await permissionModel.canRead(file.id, this.userId);
-		if (!canRead) throw new ErrorForbidden();
+		const permissionGrantedMap = await permissionModel[methodName](fileIds, this.userId);
+
+		for (const file of files) {
+			if (file.owner_id === this.userId) permissionGrantedMap[file.id] = true;
+		}
+
+		for (const fileId in permissionGrantedMap) {
+			if (!permissionGrantedMap[fileId]) throw new ErrorForbidden(`No read access to: ${fileId}`);
+		}
+	}
+
+	private async checkCanReadPermissions(file: File | File[]): Promise<void> {
+		await this.checkCanReadOrWritePermissions('canRead', file);
 	}
 
 	private async checkCanWritePermission(file: File): Promise<void> {
-		if (!file) throw new ErrorNotFound();
-		if (file.owner_id === this.userId) return;
-		const permissionModel = this.models.permission();
-		const canWrite: boolean = await permissionModel.canWrite(file.id, this.userId);
-		if (!canWrite) throw new ErrorForbidden();
+		await this.checkCanReadOrWritePermissions('canWrite', file);
 	}
 
 	private includesReservedCharacter(path: string): boolean {
@@ -274,6 +285,13 @@ export default class FileModel extends BaseModel {
 		if (!file) return null;
 		await this.checkCanReadPermissions(file);
 		return file;
+	}
+
+	public async loadByIds(ids: string[]): Promise<File[]> {
+		const files: File[] = await super.loadByIds(ids);
+		if (!files.length) return [];
+		await this.checkCanReadPermissions(files);
+		return files;
 	}
 
 	public async load(id: string): Promise<File> {

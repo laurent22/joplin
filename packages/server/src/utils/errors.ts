@@ -4,7 +4,7 @@
 class ApiError extends Error {
 	public httpCode: number;
 	public code: string;
-	public constructor(message: string, httpCode: number = 400, code: string = null) {
+	public constructor(message: string, httpCode: number = 400, code: string = undefined) {
 		super(message);
 		this.httpCode = httpCode;
 		this.code = code;
