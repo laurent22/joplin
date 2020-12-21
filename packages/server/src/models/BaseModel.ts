@@ -3,7 +3,6 @@ import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import modelFactory, { Models } from './factory';
-import ChangeModel from './ChangeModel';
 
 export type AnyItemType = File | User | Session | Permission | ApiClient | Change;
 export type AnyItemTypes = File[] | User[] | Session[] | Permission[] | ApiClient[] | Change[];
@@ -88,6 +87,10 @@ export default abstract class BaseModel {
 		return true;
 	}
 
+	protected get hasParentId(): boolean {
+		return false;
+	}
+
 	protected async withTransaction(fn: Function) {
 		const txIndex = await this.transactionHandler_.start();
 
@@ -136,6 +139,28 @@ export default abstract class BaseModel {
 		return !(object as WithUuid).id;
 	}
 
+	private async handleChangeTracking(options: SaveOptions, item: AnyItemType, changeType: ChangeType): Promise<void> {
+		const trackChanges = this.trackChanges && options.trackChanges !== false;
+		if (!trackChanges) return;
+
+		let parentId = null;
+		if (this.hasParentId) {
+			if (!('parent_id' in item)) {
+				const temp: any = await this.db(this.tableName).select(['parent_id']).where('id', '=', item.id).first();
+				parentId = temp.parent_id;
+			} else {
+				parentId = item.parent_id;
+			}
+		}
+
+		// Sanity check - shouldn't happen
+		// Parent ID can be an empty string for root folders, but it shouldn't be null or undefined
+		if (this.hasParentId && !parentId && parentId !== '') throw new Error(`Could not find parent ID for item: ${item.id}`);
+
+		const changeModel = this.models.change({ userId: this.userId });
+		await changeModel.add(this.itemType, parentId, (item as WithUuid).id, changeType);
+	}
+
 	public async save(object: AnyItemType, options: SaveOptions = {}): Promise<AnyItemType> {
 		if (!object) throw new Error('Object cannot be empty');
 
@@ -157,16 +182,10 @@ export default abstract class BaseModel {
 
 		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} });
 
-		const changeModel = (): ChangeModel => {
-			return this.models.change({ userId: this.userId });
-		};
-
-		const trackChanges = this.trackChanges && options.trackChanges !== false;
-
 		await this.withTransaction(async () => {
 			if (isNew) {
 				await this.db(this.tableName).insert(toSave);
-				if (trackChanges) await changeModel().add(this.itemType, (toSave as WithUuid).id, ChangeType.Create);
+				await this.handleChangeTracking(options, toSave, ChangeType.Create);
 			} else {
 				const objectId: string = (toSave as WithUuid).id;
 				if (!objectId) throw new Error('Missing "id" property');
@@ -174,7 +193,7 @@ export default abstract class BaseModel {
 				const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId });
 				toSave.id = objectId;
 
-				if (trackChanges) await changeModel().add(this.itemType, objectId, ChangeType.Update);
+				await this.handleChangeTracking(options, toSave, ChangeType.Update);
 
 				// Sanity check:
 				if (updatedCount !== 1) throw new ErrorBadRequest(`one row should have been updated, but ${updatedCount} row(s) were updated`);
@@ -207,18 +226,19 @@ export default abstract class BaseModel {
 			await query.orWhere({ id: ids[i] });
 		}
 
-		const changeModel = (): ChangeModel => {
-			return this.models.change({ userId: this.userId });
-		};
-
 		const trackChanges = this.trackChanges;
+
+		let itemsWithParentIds: AnyItemType[] = null;
+		if (trackChanges) {
+			itemsWithParentIds = await this.db(this.tableName).select(['id', 'parent_id']).whereIn('id', ids);
+		}
 
 		await this.withTransaction(async () => {
 			const deletedCount = await query.del();
 			if (deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
 
 			if (trackChanges) {
-				for (const id of ids) await changeModel().add(this.itemType, id, ChangeType.Delete);
+				for (const item of itemsWithParentIds) await this.handleChangeTracking({}, item, ChangeType.Delete);
 			}
 		});
 	}

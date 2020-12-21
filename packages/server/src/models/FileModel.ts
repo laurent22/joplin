@@ -33,6 +33,10 @@ export default class FileModel extends BaseModel {
 		return ItemType.File;
 	}
 
+	protected get hasParentId(): boolean {
+		return true;
+	}
+
 	public async userRootFile(): Promise<File> {
 		const file: File = await this.db<File>(this.tableName).select(...this.defaultFields).from(this.tableName).where({
 			'owner_id': this.userId,

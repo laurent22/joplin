@@ -1,5 +1,5 @@
 import { Change, ChangeType, File, ItemType, Uuid } from '../db';
-import { ErrorResyncRequired } from '../utils/errors';
+import { ErrorResyncRequired, ErrorUnprocessableEntity } from '../utils/errors';
 import BaseModel from './BaseModel';
 import { PaginatedResults } from './utils/pagination';
 
@@ -27,9 +27,10 @@ export default class ChangeModel extends BaseModel {
 		return false;
 	}
 
-	public async add(itemType: ItemType, itemId: Uuid, changeType: ChangeType): Promise<Change> {
+	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, changeType: ChangeType): Promise<Change> {
 		const change: Change = {
 			item_type: itemType,
+			parent_id: parentId || '',
 			item_id: itemId,
 			type: changeType,
 			owner_id: this.userId,
@@ -38,10 +39,58 @@ export default class ChangeModel extends BaseModel {
 		return this.save(change);
 	}
 
-	// Ideally we should watch changes in a particular directory, however doing
-	// so means we need to recursively get all the changes, also while making
-	// sure permissions are right. So for now, we just get all the changes for a
-	// particular user.
+	// Note: doesn't currently support checking for changes recursively but this
+	// is not needed for Joplin synchronisation.
+	public async byDirectoryId(dirId: string, pagination: ChangePagination = null): Promise<PaginatedChanges> {
+		pagination = {
+			limit: 100,
+			cursor: '',
+			...pagination,
+		};
+
+		let changeAtCursor: Change = null;
+
+		if (pagination.cursor) {
+			changeAtCursor = await this.load(pagination.cursor);
+			if (!changeAtCursor) throw new ErrorResyncRequired();
+		}
+
+		// Load the directory object to check that it exists and that we have
+		// the right permissions (loading will check permissions)
+		const fileModel = this.models.file({ userId: this.userId });
+		const directory = await fileModel.load(dirId);
+		if (!directory.is_directory) throw new ErrorUnprocessableEntity(`Item with id "${dirId}" is not a directory.`);
+
+		// Rather than query the changes, then use JS to compress them, it might
+		// be possible to do both in one query.
+		// https://stackoverflow.com/questions/65348794
+		const query = this.db(this.tableName)
+			.select([
+				'counter',
+				'id',
+				'item_id',
+				'type',
+			])
+			.where('parent_id', dirId)
+			.orderBy('counter', 'asc')
+			.limit(pagination.limit);
+
+		if (changeAtCursor) {
+			void query.where('counter', '>', changeAtCursor.counter);
+		}
+
+		const changes: Change[] = await query;
+		const compressedChanges = this.compressChanges(changes);
+		const changeWithItems = await this.loadChangeItems(compressedChanges);
+
+		return {
+			items: changeWithItems,
+			cursor: changes.length ? changes[changes.length - 1].id : '',
+			has_more: changes.length >= pagination.limit,
+		};
+	}
+
+	// Probably not needed anymore
 	public async byOwnerId(ownerId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
 		pagination = {
 			limit: 100,

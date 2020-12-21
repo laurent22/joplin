@@ -68,7 +68,7 @@ function createTypeString(table: any) {
 		if (table.name === 'changes' && name === 'type') type = 'ChangeType';
 		if ((name === 'id' || name.endsWith('_id') || name === 'uuid') && type === 'string') type = 'Uuid';
 
-		colStrings.push(`\t${name}?: ${type}`);
+		colStrings.push(`\t${name}?: ${type};`);
 	}
 
 	const header = ['export interface'];
@@ -116,7 +116,7 @@ async function main() {
 
 	let content = `// Auto-generated using \`npm run generate-types\`\n${typeStrings.join('\n\n')}`;
 	content += '\n\n';
-	content += `export const databaseSchema:DatabaseTables = {\n${tableStrings.join('\n')}\n};`;
+	content += `export const databaseSchema: DatabaseTables = {\n${tableStrings.join('\n')}\n};`;
 
 	insertContentIntoFile(dbFilePath, fileReplaceWithinMarker, fileReplaceWithinMarker, content);
 }

@@ -31,8 +31,10 @@ describe('ChangeModel', function() {
 		const changeModel = models().change({ userId: user.id });
 
 		const file1 = await makeTestFile(fileModel);
+		const dirId = await fileModel.userRootFileId();
+
 		{
-			const changes = (await changeModel.byOwnerId(user.id, { limit: 20 })).items;
+			const changes = (await changeModel.byDirectoryId(dirId, { limit: 20 })).items;
 			expect(changes.length).toBe(1);
 			expect(changes[0].item.id).toBe(file1.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
@@ -54,8 +56,10 @@ describe('ChangeModel', function() {
 		await msleep(1); await fileModel.save({ id: file2.id, name: `test_mod${i++}` }); // UPDATE 2
 		await msleep(1); const file3 = await makeTestFile(fileModel); // CREATE 3
 
+		const dirId = await fileModel.userRootFileId();
+
 		{
-			const changes = (await changeModel.byOwnerId(user.id, { limit: 20 })).items;
+			const changes = (await changeModel.byDirectoryId(dirId, { limit: 20 })).items;
 			expect(changes.length).toBe(2);
 			expect(changes[0].item.id).toBe(file2.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
@@ -69,14 +73,14 @@ describe('ChangeModel', function() {
 			// In this page, the "create" change for file1 will not appear
 			// because this file has been deleted. The "delete" change will
 			// however appear in the second page.
-			const page1 = (await changeModel.byOwnerId(user.id, pagination));
+			const page1 = (await changeModel.byDirectoryId(dirId, pagination));
 			let changes = page1.items;
 			expect(changes.length).toBe(1);
 			expect(page1.has_more).toBe(true);
 			expect(changes[0].item.id).toBe(file2.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
 
-			const page2 = (await changeModel.byOwnerId(user.id, { ...pagination, cursor: page1.cursor }));
+			const page2 = (await changeModel.byDirectoryId(dirId, { ...pagination, cursor: page1.cursor }));
 			changes = page2.items;
 			expect(changes.length).toBe(3);
 			expect(page2.has_more).toBe(false);
@@ -94,11 +98,22 @@ describe('ChangeModel', function() {
 		const fileModel = models().file({ userId: user.id });
 		const changeModel = models().change({ userId: user.id });
 
+		const dirId = await fileModel.userRootFileId();
+
 		let i = 1;
 		await msleep(1); const file1 = await makeTestFile(fileModel); // CREATE 1
 		await msleep(1); await fileModel.save({ id: file1.id, name: `test_mod${i++}` }); // UPDATE 1
 
-		await expectThrow(async () => changeModel.byOwnerId(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
+		await expectThrow(async () => changeModel.byDirectoryId(dirId, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
+	});
+
+	test('should throw an error if trying to do get changes for a file', async function() {
+		const { user } = await createUserAndSession(1, true);
+		const fileModel = models().file({ userId: user.id });
+		const changeModel = models().change({ userId: user.id });
+		const file1 = await makeTestFile(fileModel);
+
+		await expectThrow(async () => changeModel.byDirectoryId(file1.id));
 	});
 
 });

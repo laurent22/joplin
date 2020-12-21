@@ -61,6 +61,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.string('id', 32).unique().notNullable();
 		table.string('owner_id', 32).notNullable();
 		table.integer('item_type').notNullable();
+		table.string('parent_id', 32).defaultTo('').notNullable();
 		table.string('item_id', 32).notNullable();
 		table.integer('type').notNullable();
 		table.bigInteger('updated_time').notNullable();
