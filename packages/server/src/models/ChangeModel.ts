@@ -1,10 +1,15 @@
-import { Change, ChangeType, ItemType, Uuid } from '../db';
+import { Change, ChangeType, File, ItemType, Uuid } from '../db';
 import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel from './BaseModel';
 import { PaginatedResults } from './utils/pagination';
 
+export interface ChangeWithItem {
+	item: File;
+	type: ChangeType;
+}
+
 export interface PaginatedChanges extends PaginatedResults {
-	items: Change[];
+	items: ChangeWithItem[];
 }
 
 export interface ChangePagination {
@@ -33,8 +38,10 @@ export default class ChangeModel extends BaseModel {
 		return this.save(change);
 	}
 
-	// changes by directory
-
+	// Ideally we should watch changes in a particular directory, however doing
+	// so means we need to recursively get all the changes, also while making
+	// sure permissions are right. So for now, we just get all the changes for a
+	// particular user.
 	public async byOwnerId(ownerId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
 		pagination = {
 			limit: 100,
@@ -67,14 +74,97 @@ export default class ChangeModel extends BaseModel {
 			void query.where('counter', '>', changeAtCursor.counter);
 		}
 
-		const items: Change[] = await query;
+		const changes: Change[] = await query;
+		const compressedChanges = this.compressChanges(changes);
+		const changeWithItems = await this.loadChangeItems(compressedChanges);
 
 		return {
-			items: this.compressChanges(items),
-			cursor: items.length ? items[items.length - 1].id : '',
-			has_more: items.length >= pagination.limit,
+			items: changeWithItems,
+			cursor: changes.length ? changes[changes.length - 1].id : '',
+			has_more: changes.length >= pagination.limit,
 		};
 	}
+
+	private async loadChangeItems(changes: Change[]): Promise<ChangeWithItem[]> {
+		const itemIds = changes.map(c => c.item_id);
+		const items: File[] = await this.db('files').select('*').whereIn('id', itemIds);
+
+		const output: ChangeWithItem[] = [];
+
+		for (const change of changes) {
+			let item = items.find(f => f.id === change.item_id);
+
+			// If the item associated with this change has been deleted, we have
+			// two cases:
+			// - If it's a "delete" change, add it to the list.
+			// - If it's anything else, skip it. The "delete" change will be
+			//   sent on one of the next pages.
+
+			if (!item) {
+				if (change.type === ChangeType.Delete) {
+					item = { id: change.item_id };
+				} else {
+					continue;
+				}
+			}
+
+			output.push({
+				type: change.type,
+				item: item,
+			});
+		}
+
+		return output;
+	}
+
+	// public async byParentId(parentId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
+	// 	pagination = {
+	// 		limit: 100,
+	// 		cursor: '',
+	// 		...pagination,
+	// 	};
+
+	// 	// Try to load the parent directory, which would throw an exception if
+	// 	// the user doesn't have access to it.
+	// 	const fileModel = await this.models.file({ userId: this.userId });
+	// 	const directory = await fileModel.load(parentId);
+
+	// 	// TODO: test
+	// 	if (!directory.is_directory) throw new ErrorUnprocessableEntity('Item with id "' + parentId + '" is not a directory.');
+
+	// 	let changeAtCursor: Change = null;
+
+	// 	if (pagination.cursor) {
+	// 		changeAtCursor = await this.load(pagination.cursor);
+	// 		if (!changeAtCursor) throw new ErrorResyncRequired();
+	// 	}
+
+	// 	// Rather than query the changes, then use JS to compress them, it might
+	// 	// be possible to do both in one query.
+	// 	// https://stackoverflow.com/questions/65348794
+	// 	const query = this.db(this.tableName)
+	// 		.select([
+	// 			'counter',
+	// 			'id',
+	// 			'item_id',
+	// 			'type',
+	// 		])
+	// 		.where('parent_id', parentId)
+	// 		.orderBy('counter', 'asc')
+	// 		.limit(pagination.limit);
+
+	// 	if (changeAtCursor) {
+	// 		void query.where('counter', '>', changeAtCursor.counter);
+	// 	}
+
+	// 	const items: Change[] = await query;
+
+	// 	return {
+	// 		items: this.compressChanges(items),
+	// 		cursor: items.length ? items[items.length - 1].id : '',
+	// 		has_more: items.length >= pagination.limit,
+	// 	};
+	// }
 
 	private compressChanges(changes: Change[]): Change[] {
 		const itemChanges: Record<Uuid, Change> = {};

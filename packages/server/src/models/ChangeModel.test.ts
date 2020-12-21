@@ -34,7 +34,7 @@ describe('ChangeModel', function() {
 		{
 			const changes = (await changeModel.byOwnerId(user.id, { limit: 20 })).items;
 			expect(changes.length).toBe(1);
-			expect(changes[0].item_id).toBe(file1.id);
+			expect(changes[0].item.id).toBe(file1.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
 		}
 	});
@@ -57,33 +57,34 @@ describe('ChangeModel', function() {
 		{
 			const changes = (await changeModel.byOwnerId(user.id, { limit: 20 })).items;
 			expect(changes.length).toBe(2);
-			expect(changes[0].item_id).toBe(file2.id);
+			expect(changes[0].item.id).toBe(file2.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
-			expect(changes[1].item_id).toBe(file3.id);
+			expect(changes[1].item.id).toBe(file3.id);
 			expect(changes[1].type).toBe(ChangeType.Create);
 		}
 
 		{
 			const pagination: ChangePagination = { limit: 5 };
 
+			// In this page, the "create" change for file1 will not appear
+			// because this file has been deleted. The "delete" change will
+			// however appear in the second page.
 			const page1 = (await changeModel.byOwnerId(user.id, pagination));
 			let changes = page1.items;
-			expect(changes.length).toBe(2);
+			expect(changes.length).toBe(1);
 			expect(page1.has_more).toBe(true);
-			expect(changes[0].item_id).toBe(file1.id);
+			expect(changes[0].item.id).toBe(file2.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
-			expect(changes[1].item_id).toBe(file2.id);
-			expect(changes[1].type).toBe(ChangeType.Create);
 
 			const page2 = (await changeModel.byOwnerId(user.id, { ...pagination, cursor: page1.cursor }));
 			changes = page2.items;
 			expect(changes.length).toBe(3);
 			expect(page2.has_more).toBe(false);
-			expect(changes[0].item_id).toBe(file1.id);
+			expect(changes[0].item.id).toBe(file1.id);
 			expect(changes[0].type).toBe(ChangeType.Delete);
-			expect(changes[1].item_id).toBe(file2.id);
+			expect(changes[1].item.id).toBe(file2.id);
 			expect(changes[1].type).toBe(ChangeType.Update);
-			expect(changes[2].item_id).toBe(file3.id);
+			expect(changes[2].item.id).toBe(file3.id);
 			expect(changes[2].type).toBe(ChangeType.Create);
 		}
 	});
@@ -99,6 +100,5 @@ describe('ChangeModel', function() {
 
 		await expectThrow(async () => changeModel.byOwnerId(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
 	});
-
 
 });
