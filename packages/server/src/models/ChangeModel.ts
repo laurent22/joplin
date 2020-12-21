@@ -17,6 +17,13 @@ export interface ChangePagination {
 	cursor?: string;
 }
 
+export function defaultChangePagination(): ChangePagination {
+	return {
+		limit: 100,
+		cursor: '',
+	};
+}
+
 export default class ChangeModel extends BaseModel {
 
 	public get tableName(): string {
@@ -43,8 +50,7 @@ export default class ChangeModel extends BaseModel {
 	// is not needed for Joplin synchronisation.
 	public async byDirectoryId(dirId: string, pagination: ChangePagination = null): Promise<PaginatedChanges> {
 		pagination = {
-			limit: 100,
-			cursor: '',
+			...defaultChangePagination(),
 			...pagination,
 		};
 
@@ -85,7 +91,9 @@ export default class ChangeModel extends BaseModel {
 
 		return {
 			items: changeWithItems,
-			cursor: changes.length ? changes[changes.length - 1].id : '',
+			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
+			// If there's no change, we return the previous cursor.
+			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
 			has_more: changes.length >= pagination.limit,
 		};
 	}

@@ -3,6 +3,7 @@ import BaseController from '../BaseController';
 import { ErrorNotFound } from '../../utils/errors';
 import { Pagination } from '../../models/utils/pagination';
 import { PaginatedFiles } from '../../models/FileModel';
+import { ChangePagination, PaginatedChanges } from '../../models/ChangeModel';
 
 export default class FileController extends BaseController {
 
@@ -83,6 +84,12 @@ export default class FileController extends BaseController {
 				throw error;
 			}
 		}
+	}
+
+	public async getDelta(sessionId: string, dirId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
+		const user = await this.initSession(sessionId);
+		const changeModel = this.models.change({ userId: user.id });
+		return changeModel.byDirectoryId(dirId, pagination);
 	}
 
 }

@@ -1,5 +1,6 @@
 import { ErrorBadRequest } from '../../utils/errors';
 import { decodeBase64, encodeBase64 } from '../../utils/base64';
+import { ChangePagination, defaultChangePagination } from '../ChangeModel';
 import Knex = require('knex');
 
 export enum PaginationOrderDir {
@@ -92,6 +93,15 @@ export function requestPagination(query: any): Pagination {
 	const page: number = 'page' in query ? query.page : 1;
 
 	return validatePagination({ limit, order, page });
+}
+
+export function requestChangePagination(query: any): ChangePagination {
+	if (!query) return defaultChangePagination();
+
+	const output: ChangePagination = {};
+	if ('limit' in query) output.limit = query.limit;
+	if ('cursor' in query) output.cursor = query.cursor;
+	return output;
 }
 
 export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination): Promise<PaginatedResults> {

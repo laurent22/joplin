@@ -4,7 +4,7 @@ import { headerSessionId } from '../../utils/requestUtils';
 import { SubPath, Route, ResponseType, Response } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { requestPagination } from '../../models/utils/pagination';
+import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
 const formidable = require('formidable');
 
 interface FormParseResult {
@@ -63,6 +63,18 @@ const route: Route = {
 				const result = await formParse(ctx.req);
 				const buffer = await fs.readFile(result.files.file.path);
 				return fileController.putFileContent(headerSessionId(ctx.headers), path.id, buffer);
+			}
+
+			throw new ErrorMethodNotAllowed();
+		}
+
+		if (path.link === 'delta') {
+			if (ctx.method === 'GET') {
+				return fileController.getDelta(
+					headerSessionId(ctx.headers),
+					path.id,
+					requestChangePagination(ctx.query)
+				);
 			}
 
 			throw new ErrorMethodNotAllowed();

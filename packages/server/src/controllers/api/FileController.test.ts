@@ -1,6 +1,6 @@
 import { testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, models, controllers } from '../../utils/testUtils';
 import * as fs from 'fs-extra';
-import { File } from '../../db';
+import { ChangeType, File } from '../../db';
 import { ErrorConflict, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
 import { filePathInfo } from '../../utils/routeUtils';
 import { defaultPagination, Pagination, PaginationOrderDir } from '../../models/utils/pagination';
@@ -487,41 +487,34 @@ describe('FileController', function() {
 		}
 	});
 
-	// test('should track file changes', async function() {
-	// 	const { session: session1, user: user1 } = await createUserAndSession(1);
-	// 	const { session: session2, user: user2 } = await createUserAndSession(2);
+	test('should track file changes', async function() {
+		// We only do a basic check because most of the tests for this are in
+		// ChangeModel.test.ts
 
-	// 	let file1: File = await makeTestFile(1);
-	// 	let file2: File = await makeTestFile(2);
+		const { session: session1 } = await createUserAndSession(1);
 
-	// 	const fileController = controllers().apiFile();
-	// 	file1 = await fileController.postFile_(session1.id, file1);
-	// 	file2 = await fileController.postFile_(session2.id, file2);
-	// 	await fileController.putFileContent(session1.id, file1.id, Buffer.alloc(16));
+		let file1: File = await makeTestFile(1);
+		let file2: File = await makeTestFile(2);
 
-	// 	const changeModel = models().change();
+		const fileController = controllers().apiFile();
+		file1 = await fileController.postFile_(session1.id, file1);
+		await msleep(1); file2 = await fileController.postFile_(session1.id, file2);
 
-	// 	{
-	// 		const changes = (await changeModel.byOwnerId(user1.id, defaultPagination())).items;
-	// 		expect(changes.length).toBe(2);
-	// 		expect(changes[0].item_id).toBe(file1.id);
-	// 		expect(changes[1].item_id).toBe(file1.id);
-	// 		expect(changes[0].owner_id).toBe(user1.id);
-	// 		expect(changes[1].owner_id).toBe(user1.id);
-	// 		expect(changes[0].item_type).toBe(ItemType.File);
-	// 		expect(changes[1].item_type).toBe(ItemType.File);
-	// 		expect(changes[0].type).toBe(ChangeType.Create);
-	// 		expect(changes[1].type).toBe(ChangeType.Update);
-	// 	}
+		const page1 = await fileController.getDelta(session1.id, file1.parent_id, { limit: 1 });
+		expect(page1.has_more).toBe(true);
+		expect(page1.items.length).toBe(1);
+		expect(page1.items[0].type).toBe(ChangeType.Create);
+		expect(page1.items[0].item.id).toBe(file1.id);
 
-	// 	{
-	// 		const changes = (await changeModel.byOwnerId(user2.id, defaultPagination())).items;
-	// 		expect(changes.length).toBe(1);
-	// 		expect(changes[0].item_id).toBe(file2.id);
-	// 		expect(changes[0].owner_id).toBe(user2.id);
-	// 		expect(changes[0].item_type).toBe(ItemType.File);
-	// 		expect(changes[0].type).toBe(ChangeType.Create);
-	// 	}
-	// });
+		const page2 = await fileController.getDelta(session1.id, file1.parent_id, { cursor: page1.cursor, limit: 1 });
+		expect(page2.has_more).toBe(true);
+		expect(page2.items.length).toBe(1);
+		expect(page2.items[0].type).toBe(ChangeType.Create);
+		expect(page2.items[0].item.id).toBe(file2.id);
+
+		const page3 = await fileController.getDelta(session1.id, file1.parent_id, { cursor: page2.cursor, limit: 1 });
+		expect(page3.has_more).toBe(false);
+		expect(page3.items.length).toBe(0);
+	});
 
 });
