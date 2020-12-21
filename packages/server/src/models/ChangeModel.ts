@@ -1,4 +1,5 @@
 import { Change, ChangeType, ItemType, Uuid } from '../db';
+import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel from './BaseModel';
 import { PaginatedResults } from './utils/pagination';
 
@@ -32,6 +33,8 @@ export default class ChangeModel extends BaseModel {
 		return this.save(change);
 	}
 
+	// changes by directory
+
 	public async byOwnerId(ownerId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
 		pagination = {
 			limit: 100,
@@ -39,19 +42,29 @@ export default class ChangeModel extends BaseModel {
 			...pagination,
 		};
 
-		const cursorChange: Change = pagination.cursor ? await this.load(pagination.cursor) : null;
+		let changeAtCursor: Change = null;
+
+		if (pagination.cursor) {
+			changeAtCursor = await this.load(pagination.cursor);
+			if (!changeAtCursor) throw new ErrorResyncRequired();
+		}
 
 		// Rather than query the changes, then use JS to compress them, it might
 		// be possible to do both in one query.
 		// https://stackoverflow.com/questions/65348794
 		const query = this.db(this.tableName)
-			.select(...this.defaultFields) // TODO: limit what's returned
+			.select([
+				'counter',
+				'id',
+				'item_id',
+				'type',
+			])
 			.where('owner_id', ownerId)
 			.orderBy('counter', 'asc')
 			.limit(pagination.limit);
 
-		if (cursorChange) {
-			void query.where('counter', '>', cursorChange.counter);
+		if (changeAtCursor) {
+			void query.where('counter', '>', changeAtCursor.counter);
 		}
 
 		const items: Change[] = await query;

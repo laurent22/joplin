@@ -1,5 +1,5 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models } from '../utils/testUtils';
-import { ChangeType, File, ItemType } from '../db';
+import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, expectThrow } from '../utils/testUtils';
+import { ChangeType, File } from '../db';
 import FileModel from './FileModel';
 import { msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
@@ -34,7 +34,6 @@ describe('ChangeModel', function() {
 		{
 			const changes = (await changeModel.byOwnerId(user.id, { limit: 20 })).items;
 			expect(changes.length).toBe(1);
-			expect(changes[0].item_type).toBe(ItemType.File);
 			expect(changes[0].item_id).toBe(file1.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
 		}
@@ -88,5 +87,18 @@ describe('ChangeModel', function() {
 			expect(changes[2].type).toBe(ChangeType.Create);
 		}
 	});
+
+	test('should throw an error if cursor is invalid', async function() {
+		const { user } = await createUserAndSession(1, true);
+		const fileModel = models().file({ userId: user.id });
+		const changeModel = models().change({ userId: user.id });
+
+		let i = 1;
+		await msleep(1); const file1 = await makeTestFile(fileModel); // CREATE 1
+		await msleep(1); await fileModel.save({ id: file1.id, name: `test_mod${i++}` }); // UPDATE 1
+
+		await expectThrow(async () => changeModel.byOwnerId(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
+	});
+
 
 });

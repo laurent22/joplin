@@ -93,7 +93,7 @@ export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	return null;
 }
 
-export async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
+export async function expectThrow(asyncFn: Function, errorCode: any = undefined): Promise<any> {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -111,6 +111,8 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	} else {
 		expect(true).toBe(true);
 	}
+
+	return thrownError;
 }
 
 export async function expectNotThrow(asyncFn: Function) {

@@ -108,6 +108,7 @@ app.use(async (ctx: Koa.Context) => {
 			ctx.response.set('Content-Type', 'application/json');
 			const r: any = { error: error.message };
 			if (env == 'dev' && error.stack) r.stack = error.stack;
+			if (error.code) r.code = error.code;
 			ctx.response.body = r;
 		}
 	}
