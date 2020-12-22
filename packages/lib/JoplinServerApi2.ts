@@ -1,9 +1,7 @@
-// import Logger from './Logger';
 import shim from './shim';
 const { rtrimSlashes } = require('./path-utils.js');
 const JoplinError = require('./JoplinError');
-
-// const logger = Logger.create('JoplinServerApi');
+const { stringify } = require('query-string');
 
 interface Options {
 	baseUrl(): string;
@@ -33,15 +31,15 @@ export default class JoplinServerApi {
 	private options_: Options;
 	private session_: any;
 
-	constructor(options: Options) {
+	public constructor(options: Options) {
 		this.options_ = options;
 	}
 
-	baseUrl() {
+	private baseUrl() {
 		return rtrimSlashes(this.options_.baseUrl());
 	}
 
-	async session() {
+	private async session() {
 		// TODO: handle invalid session
 		if (this.session_) return this.session_;
 
@@ -53,29 +51,29 @@ export default class JoplinServerApi {
 		return this.session_;
 	}
 
-	async sessionId() {
+	private async sessionId() {
 		const session = await this.session();
 		return session ? session.id : '';
 	}
 
-	requestToCurl_(url: string, options: any) {
-		const output = [];
-		output.push('curl');
-		output.push('-v');
-		if (options.method) output.push(`-X ${options.method}`);
-		if (options.headers) {
-			for (const n in options.headers) {
-				if (!options.headers.hasOwnProperty(n)) continue;
-				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
-			}
-		}
-		if (options.body) output.push(`${'--data ' + '\''}${JSON.stringify(options.body)}'`);
-		output.push(url);
+	// private requestToCurl_(url: string, options: any) {
+	// 	const output = [];
+	// 	output.push('curl');
+	// 	output.push('-v');
+	// 	if (options.method) output.push(`-X ${options.method}`);
+	// 	if (options.headers) {
+	// 		for (const n in options.headers) {
+	// 			if (!options.headers.hasOwnProperty(n)) continue;
+	// 			output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
+	// 		}
+	// 	}
+	// 	if (options.body) output.push(`${'--data ' + '\''}${JSON.stringify(options.body)}'`);
+	// 	output.push(url);
 
-		return output.join(' ');
-	}
+	// 	return output.join(' ');
+	// }
 
-	async exec(method: string, path: string = '', _query: any = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	public async exec(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;
@@ -104,7 +102,12 @@ export default class JoplinServerApi {
 			fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(fetchOptions.body)}`;
 		}
 
-		const url = `${this.baseUrl()}/${path}`;
+		let url = `${this.baseUrl()}/${path}`;
+
+		if (query) {
+			url += url.indexOf('?') < 0 ? '?' : '&';
+			url += stringify(query);
+		}
 
 		let response: any = null;
 

@@ -20,6 +20,7 @@
     "buildTranslationsNoTsc": "node packages/tools/build-translation.js",
     "buildWebsite": "npm run buildApiDoc && node ./packages/tools/build-website.js && npm run buildPluginDoc",
     "clean": "lerna clean -y && lerna run clean",
+    "circularDependencyCheck": "npx madge --warning --circular --extensions js ./",
     "generateDatabaseTypes": "node packages/tools/generate-database-types",
     "linkChecker": "linkchecker https://joplinapp.org",
     "linter-ci": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",

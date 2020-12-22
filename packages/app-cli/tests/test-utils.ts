@@ -498,7 +498,6 @@ async function initFileApi(suiteName: string) {
 
 		if (!process.argv.includes('--runInBand')) {
 			throw new Error('OneDrive tests must be run sequentially, with the --runInBand arg. eg `npm test -- --runInBand`');
-
 		}
 
 		const { parameters, setEnvOverride } = require('@joplin/lib/parameters.js');
@@ -523,6 +522,9 @@ async function initFileApi(suiteName: string) {
 		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
 		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('joplinServer')) {
+		// Note that to test the API in parallel mode, you need to use Postgres
+		// as database, as the SQLite database is not reliable when being
+		// read/write from multiple processes at the same time.
 		const api = new JoplinServerApi({
 			baseUrl: () => 'http://localhost:22300',
 			username: () => 'admin@localhost',
@@ -766,18 +768,18 @@ class TestApp extends BaseApplication {
 	private middlewareCalls_: any[];
 	private logger_: LoggerWrapper;
 
-	constructor(hasGui = true) {
+	public constructor(hasGui = true) {
 		super();
 		this.hasGui_ = hasGui;
 		this.middlewareCalls_ = [];
 		this.logger_ = super.logger();
 	}
 
-	hasGui() {
+	public hasGui() {
 		return this.hasGui_;
 	}
 
-	async start(argv: any[]) {
+	public async start(argv: any[]) {
 		this.logger_.info('Test app starting...');
 
 		if (!argv.includes('--profile')) {
@@ -798,7 +800,7 @@ class TestApp extends BaseApplication {
 		this.logger_.info('Test app started...');
 	}
 
-	async generalMiddleware(store: any, next: any, action: any) {
+	public async generalMiddleware(store: any, next: any, action: any) {
 		this.middlewareCalls_.push(true);
 		try {
 			await super.generalMiddleware(store, next, action);
@@ -807,7 +809,7 @@ class TestApp extends BaseApplication {
 		}
 	}
 
-	async wait() {
+	public async wait() {
 		return new Promise((resolve) => {
 			const iid = shim.setInterval(() => {
 				if (!this.middlewareCalls_.length) {
@@ -818,11 +820,11 @@ class TestApp extends BaseApplication {
 		});
 	}
 
-	async profileDir() {
+	public async profileDir() {
 		return Setting.value('profileDir');
 	}
 
-	async destroy() {
+	public async destroy() {
 		this.logger_.info('Test app stopping...');
 		await this.wait();
 		await ItemChange.waitForAllSaved();

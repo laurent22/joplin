@@ -2,7 +2,7 @@ import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, A
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
-import modelFactory, { Models } from './factory';
+import { Models } from './factory';
 
 export type AnyItemType = File | User | Session | Permission | ApiClient | Change;
 export type AnyItemTypes = File[] | User[] | Session[] | Permission[] | ApiClient[] | Change[];
@@ -33,9 +33,11 @@ export default abstract class BaseModel {
 	private defaultFields_: string[] = [];
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
+	private models_: Models;
 
-	public constructor(db: DbConnection, options: ModelOptions = null) {
+	public constructor(db: DbConnection, models: Models, options: ModelOptions = null) {
 		this.db_ = db;
+		this.models_ = models;
 		this.options_ = Object.assign({}, options);
 
 		this.transactionHandler_ = new TransactionHandler(db);
@@ -44,7 +46,7 @@ export default abstract class BaseModel {
 	}
 
 	protected get models(): Models {
-		return modelFactory(this.db);
+		return this.models_;
 	}
 
 	protected get options(): ModelOptions {
@@ -158,7 +160,7 @@ export default abstract class BaseModel {
 		if (this.hasParentId && !parentId && parentId !== '') throw new Error(`Could not find parent ID for item: ${item.id}`);
 
 		const changeModel = this.models.change({ userId: this.userId });
-		await changeModel.add(this.itemType, parentId, (item as WithUuid).id, changeType);
+		await changeModel.add(this.itemType, parentId, (item as WithUuid).id, (item as any).name || '', changeType);
 	}
 
 	public async save(object: AnyItemType, options: SaveOptions = {}): Promise<AnyItemType> {
@@ -230,7 +232,7 @@ export default abstract class BaseModel {
 
 		let itemsWithParentIds: AnyItemType[] = null;
 		if (trackChanges) {
-			itemsWithParentIds = await this.db(this.tableName).select(['id', 'parent_id']).whereIn('id', ids);
+			itemsWithParentIds = await this.db(this.tableName).select(['id', 'parent_id', 'name']).whereIn('id', ids);
 		}
 
 		await this.withTransaction(async () => {

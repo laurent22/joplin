@@ -227,6 +227,7 @@ export interface Change extends WithDates, WithUuid {
 	item_type?: ItemType;
 	parent_id?: Uuid;
 	item_id?: Uuid;
+	item_name?: string;
 	type?: ChangeType;
 }
 
@@ -282,6 +283,7 @@ export const databaseSchema: DatabaseTables = {
 		item_type: { type: 'number' },
 		parent_id: { type: 'string' },
 		item_id: { type: 'string' },
+		item_name: { type: 'string' },
 		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },

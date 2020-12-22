@@ -72,27 +72,27 @@ export class Models {
 	}
 
 	public file(options: ModelOptions = null) {
-		return new FileModel(this.db_, options);
+		return new FileModel(this.db_, this, options);
 	}
 
 	public user(options: ModelOptions = null) {
-		return new UserModel(this.db_, options);
+		return new UserModel(this.db_, this, options);
 	}
 
 	public apiClient(options: ModelOptions = null) {
-		return new ApiClientModel(this.db_, options);
+		return new ApiClientModel(this.db_, this, options);
 	}
 
 	public permission(options: ModelOptions = null) {
-		return new PermissionModel(this.db_, options);
+		return new PermissionModel(this.db_, this, options);
 	}
 
 	public session(options: ModelOptions = null) {
-		return new SessionModel(this.db_, options);
+		return new SessionModel(this.db_, this, options);
 	}
 
 	public change(options: ModelOptions = null) {
-		return new ChangeModel(this.db_, options);
+		return new ChangeModel(this.db_, this, options);
 	}
 }
 

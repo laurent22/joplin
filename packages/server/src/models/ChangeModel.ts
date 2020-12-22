@@ -34,11 +34,12 @@ export default class ChangeModel extends BaseModel {
 		return false;
 	}
 
-	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, changeType: ChangeType): Promise<Change> {
+	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType): Promise<Change> {
 		const change: Change = {
 			item_type: itemType,
 			parent_id: parentId || '',
 			item_id: itemId,
+			item_name: itemName,
 			type: changeType,
 			owner_id: this.userId,
 		};
@@ -75,6 +76,7 @@ export default class ChangeModel extends BaseModel {
 				'counter',
 				'id',
 				'item_id',
+				'item_name',
 				'type',
 			])
 			.where('parent_id', dirId)
@@ -99,48 +101,48 @@ export default class ChangeModel extends BaseModel {
 	}
 
 	// Probably not needed anymore
-	public async byOwnerId(ownerId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
-		pagination = {
-			limit: 100,
-			cursor: '',
-			...pagination,
-		};
+	// public async byOwnerId(ownerId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
+	// 	pagination = {
+	// 		limit: 100,
+	// 		cursor: '',
+	// 		...pagination,
+	// 	};
 
-		let changeAtCursor: Change = null;
+	// 	let changeAtCursor: Change = null;
 
-		if (pagination.cursor) {
-			changeAtCursor = await this.load(pagination.cursor);
-			if (!changeAtCursor) throw new ErrorResyncRequired();
-		}
+	// 	if (pagination.cursor) {
+	// 		changeAtCursor = await this.load(pagination.cursor);
+	// 		if (!changeAtCursor) throw new ErrorResyncRequired();
+	// 	}
 
-		// Rather than query the changes, then use JS to compress them, it might
-		// be possible to do both in one query.
-		// https://stackoverflow.com/questions/65348794
-		const query = this.db(this.tableName)
-			.select([
-				'counter',
-				'id',
-				'item_id',
-				'type',
-			])
-			.where('owner_id', ownerId)
-			.orderBy('counter', 'asc')
-			.limit(pagination.limit);
+	// 	// Rather than query the changes, then use JS to compress them, it might
+	// 	// be possible to do both in one query.
+	// 	// https://stackoverflow.com/questions/65348794
+	// 	const query = this.db(this.tableName)
+	// 		.select([
+	// 			'counter',
+	// 			'id',
+	// 			'item_id',
+	// 			'type',
+	// 		])
+	// 		.where('owner_id', ownerId)
+	// 		.orderBy('counter', 'asc')
+	// 		.limit(pagination.limit);
 
-		if (changeAtCursor) {
-			void query.where('counter', '>', changeAtCursor.counter);
-		}
+	// 	if (changeAtCursor) {
+	// 		void query.where('counter', '>', changeAtCursor.counter);
+	// 	}
 
-		const changes: Change[] = await query;
-		const compressedChanges = this.compressChanges(changes);
-		const changeWithItems = await this.loadChangeItems(compressedChanges);
+	// 	const changes: Change[] = await query;
+	// 	const compressedChanges = this.compressChanges(changes);
+	// 	const changeWithItems = await this.loadChangeItems(compressedChanges);
 
-		return {
-			items: changeWithItems,
-			cursor: changes.length ? changes[changes.length - 1].id : '',
-			has_more: changes.length >= pagination.limit,
-		};
-	}
+	// 	return {
+	// 		items: changeWithItems,
+	// 		cursor: changes.length ? changes[changes.length - 1].id : '',
+	// 		has_more: changes.length >= pagination.limit,
+	// 	};
+	// }
 
 	private async loadChangeItems(changes: Change[]): Promise<ChangeWithItem[]> {
 		const itemIds = changes.map(c => c.item_id);
@@ -160,7 +162,10 @@ export default class ChangeModel extends BaseModel {
 
 			if (!item) {
 				if (change.type === ChangeType.Delete) {
-					item = { id: change.item_id };
+					item = {
+						id: change.item_id,
+						name: change.item_name,
+					};
 				} else {
 					continue;
 				}

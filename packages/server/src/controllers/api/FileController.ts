@@ -88,8 +88,10 @@ export default class FileController extends BaseController {
 
 	public async getDelta(sessionId: string, dirId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
 		const user = await this.initSession(sessionId);
+		const fileModel = this.models.file({ userId: user.id });
+		const dir: File = await fileModel.entityFromItemId(dirId, { mustExist: true });
 		const changeModel = this.models.change({ userId: user.id });
-		return changeModel.byDirectoryId(dirId, pagination);
+		return changeModel.byDirectoryId(dir.id, pagination);
 	}
 
 }
