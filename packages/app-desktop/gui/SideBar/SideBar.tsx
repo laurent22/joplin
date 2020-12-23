@@ -619,6 +619,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		const items = [];
 		const isNotebookExpanded = this.state.folderHeaderIsExpanded;
+		const paddingSize = 12;
 
 		items.push(
 			this.renderHeader('folderHeader', _('Notebooks'), 'icon-notebooks', this.header_contextMenu, this.onAddFolderButtonClick, {
@@ -635,7 +636,7 @@ class SideBarComponent extends React.Component<Props, State> {
 			const folderItems = [this.renderAllNotesItem(allNotesSelected)].concat(result.items);
 			this.folderItemsOrder_ = result.order;
 			items.push(
-				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 }}>
+				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10, paddingLeft: paddingSize }}>
 					{folderItems}
 				</div>
 			);
@@ -656,7 +657,7 @@ class SideBarComponent extends React.Component<Props, State> {
 			this.tagItemsOrder_ = result.order;
 
 			items.push(
-				<div className="tags" key="tag_items" style={{ display: this.state.tagHeaderIsExpanded ? 'block' : 'none' }}>
+				<div className="tags" key="tag_items" style={{ display: this.state.tagHeaderIsExpanded ? 'block' : 'none', paddingLeft: paddingSize }}>
 					{tagItems}
 				</div>
 			);
