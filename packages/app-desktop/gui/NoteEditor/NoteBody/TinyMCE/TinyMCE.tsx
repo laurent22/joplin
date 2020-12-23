@@ -19,7 +19,7 @@ const taboverride = require('taboverride');
 const { reg } = require('@joplin/lib/registry.js');
 const BaseItem = require('@joplin/lib/models/BaseItem');
 const { themeStyle } = require('@joplin/lib/theme');
-const { clipboard } = require('electron');
+// const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
 function markupRenderOptions(override: any = null) {
@@ -1015,14 +1015,19 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
-		function onKeyDown(event: any) {
+		function onKeyDown(_event: any) {
+			// It seems "paste as text" is now handled automatically by
+			// either Chrome, Electron and/or TinyMCE so the code below
+			// should not longer be necessary. Also fixes
+			// https://github.com/laurent22/joplin/issues/4243
+
 			// Handle "paste as text". Note that when pressing CtrlOrCmd+Shift+V it's going
 			// to trigger the "keydown" event but not the "paste" event, so it's ok to process
 			// it here and we don't need to do anything special in onPaste
-			if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
-				const pastedText = clipboard.readText();
-				if (pastedText) editor.insertContent(pastedText);
-			}
+			// if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
+			// 	const pastedText = clipboard.readText();
+			// 	if (pastedText) editor.insertContent(pastedText);
+			// }
 		}
 
 		editor.on('keyup', onKeyUp);
