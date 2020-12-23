@@ -137,6 +137,8 @@ function useMenu(props: Props) {
 
 		void CommandService.instance().execute('showModalMessage', modalMessage);
 
+		const errors: any[] = [];
+
 		const importOptions = {
 			path,
 			format: module.format,
@@ -148,7 +150,10 @@ function useMenu(props: Props) {
 
 				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 			},
-			onError: console.warn,
+			onError: (error: any) => {
+				errors.push(error);
+				console.warn(error);
+			},
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
 		};
 
@@ -158,6 +163,11 @@ function useMenu(props: Props) {
 			console.info('Import result: ', result);
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
+		}
+
+		if (errors.length) {
+			bridge().showErrorMessageBox('There was some errors importing the notes. Please check the console for more details.');
+			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
 		}
 
 		void CommandService.instance().execute('hideModalMessage');

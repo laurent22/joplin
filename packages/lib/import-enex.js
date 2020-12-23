@@ -6,6 +6,7 @@ const Tag = require('./models/Tag.js');
 const Resource = require('./models/Resource.js');
 const Setting = require('./models/Setting').default;
 const { MarkupToHtml } = require('@joplin/renderer');
+const { wrapError } = require('./errorUtils');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const time = require('./time').default;
@@ -324,13 +325,13 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		async function processNotes() {
 			if (processingNotes) return false;
 
-			try {
-				processingNotes = true;
-				stream.pause();
+			processingNotes = true;
+			stream.pause();
 
-				while (notes.length) {
-					const note = notes.shift();
+			while (notes.length) {
+				const note = notes.shift();
 
+				try {
 					for (let i = 0; i < note.resources.length; i++) {
 						let resource = note.resources[i];
 
@@ -384,9 +385,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					progressState.resourcesCreated += result.resourcesCreated;
 					progressState.notesTagged += result.notesTagged;
 					importOptions.onProgress(progressState);
+				} catch (error) {
+					const newError = wrapError(`Error on note "${note.title}"`, error);
+					importOptions.onError(newError);
 				}
-			} catch (error) {
-				console.error(error);
 			}
 
 			stream.resume();
