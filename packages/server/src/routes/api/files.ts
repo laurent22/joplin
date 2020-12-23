@@ -1,30 +1,10 @@
-import { ErrorNotFound, ErrorMethodNotAllowed } from '../../utils/errors';
+import { ErrorNotFound, ErrorMethodNotAllowed, ErrorBadRequest } from '../../utils/errors';
 import { File } from '../../db';
-import { headerSessionId } from '../../utils/requestUtils';
+import { bodyFields, formParse, headerSessionId } from '../../utils/requestUtils';
 import { SubPath, Route, ResponseType, Response } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
-const formidable = require('formidable');
-
-interface FormParseResult {
-	fields: any;
-	files: any;
-}
-
-async function formParse(req: any): Promise<FormParseResult> {
-	return new Promise((resolve: Function, reject: Function) => {
-		const form = formidable({ multiples: true });
-		form.parse(req, (error: any, fields: any, files: any) => {
-			if (error) {
-				reject(error);
-				return;
-			}
-
-			resolve({ fields, files });
-		});
-	});
-}
 
 const route: Route = {
 
@@ -39,7 +19,7 @@ const route: Route = {
 			}
 
 			if (ctx.method === 'PATCH') {
-				return fileController.patchFile(headerSessionId(ctx.headers), path.id, ctx.request.body);
+				return fileController.patchFile(headerSessionId(ctx.headers), path.id, await bodyFields(ctx.req));
 			}
 
 			if (ctx.method === 'DELETE') {
@@ -61,6 +41,7 @@ const route: Route = {
 
 			if (ctx.method === 'PUT') {
 				const result = await formParse(ctx.req);
+				if (!result?.files?.file) throw new ErrorBadRequest('File data is missing');
 				const buffer = await fs.readFile(result.files.file.path);
 				return fileController.putFileContent(headerSessionId(ctx.headers), path.id, buffer);
 			}
@@ -86,7 +67,7 @@ const route: Route = {
 			}
 
 			if (ctx.method === 'POST') {
-				return fileController.postChild(headerSessionId(ctx.headers), path.id, ctx.request.body);
+				return fileController.postChild(headerSessionId(ctx.headers), path.id, await bodyFields(ctx.req));
 			}
 
 			throw new ErrorMethodNotAllowed();

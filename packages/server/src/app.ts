@@ -3,11 +3,11 @@ import * as Koa from 'koa';
 import routes from './routes/routes';
 import { ErrorNotFound } from './utils/errors';
 import * as fs from 'fs-extra';
-import * as koaBody from 'koa-body';
+// import * as koaBody from 'koa-body';
 import { argv } from 'yargs';
 import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat, MatchedRoute } from './utils/routeUtils';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import koaIf from './utils/koaIf';
+// import koaIf from './utils/koaIf';
 import config, { initConfig, baseUrl } from './config';
 import configDev from './config-dev';
 import configProd from './config-prod';
@@ -46,24 +46,24 @@ function appLogger(): LoggerWrapper {
 
 const app = new Koa();
 
-const koaBodyMiddleware = koaBody({
-	multipart: true,
-	includeUnparsed: true,
-	onError: (err: Error, ctx: Koa.Context) => {
-		appLogger().error(`koaBodyMiddleware: ${ctx.method} ${ctx.path} Error: ${err.message}`);
-	},
-});
+// const koaBodyMiddleware = koaBody({
+// 	multipart: true,
+// 	includeUnparsed: true,
+// 	onError: (err: Error, ctx: Koa.Context) => {
+// 		appLogger().error(`koaBodyMiddleware: ${ctx.method} ${ctx.path} Error: ${err.message}`);
+// 	},
+// });
 
-app.use(koaIf(koaBodyMiddleware, (ctx: Koa.Context) => {
-	try {
-		const match = findMatchingRoute(ctx.path, routes);
-		if (!match) return false;
-		return match.route.needsBodyMiddleware === true;
-	} catch (error) {
-		// Error will be handled below
-		return false;
-	}
-}));
+// app.use(koaIf(koaBodyMiddleware, (ctx: Koa.Context) => {
+// 	try {
+// 		const match = findMatchingRoute(ctx.path, routes);
+// 		if (!match) return false;
+// 		return match.route.needsBodyMiddleware === true;
+// 	} catch (error) {
+// 		// Error will be handled below
+// 		return false;
+// 	}
+// }));
 
 app.use(async (ctx: Koa.Context) => {
 	appLogger().info(`${ctx.request.method} ${ctx.path}`);

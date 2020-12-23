@@ -17,6 +17,10 @@ services:
         #     - ./packages/server:/home/joplin/packages/server
         #     - /home/joplin/packages/server/node_modules/
     db:
+        # By default, the Postgres image saves the data to a Docker volume,
+        # so it persists whenever the server is restarted using
+        # `docker-compose up`. Note that it would however be deleted when
+        # running `docker-compose down`.
         build:
             context: .
             dockerfile: Dockerfile.db

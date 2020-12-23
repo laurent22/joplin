@@ -3,8 +3,10 @@ import { AppContext } from './types';
 
 const formidable = require('formidable');
 
+export type BodyFields = Record<string, any>;
+
 interface FormParseResult {
-	fields: any;
+	fields: BodyFields;
 	files: any;
 }
 
@@ -21,6 +23,11 @@ export async function formParse(req: any): Promise<FormParseResult> {
 			resolve({ fields, files });
 		});
 	});
+}
+
+export async function bodyFields(req: any): Promise<BodyFields> {
+	const form = await formParse(req);
+	return form.fields;
 }
 
 export function headerSessionId(headers: any): string {

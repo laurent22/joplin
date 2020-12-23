@@ -39,7 +39,7 @@ async function curl(method: string, path: string, query: object = null, body: an
 	if (options.verbose) curlCmd.push('-v');
 	if (options.output) curlCmd.push(`--output "${options.output}"`);
 
-	if ((['PUT', 'DELETE'].indexOf(method) >= 0) || (method == 'POST' && !formFields && !body)) {
+	if ((['PUT', 'DELETE', 'PATCH'].indexOf(method) >= 0) || (method == 'POST' && !formFields && !body)) {
 		curlCmd.push('-X');
 		curlCmd.push(method);
 	}
@@ -178,6 +178,11 @@ async function main() {
 
 		const files = await curl('GET', 'api/files/root/children', null, null, { 'X-API-AUTH': session.id });
 		checkAndPrintResult('Response:', files);
+
+		// PATCH api/files/:fileId - change name
+
+		response = await curl('PATCH', 'api/files/root:/photo.jpg:', null, { name: 'newname.jpg' }, { 'X-API-AUTH': session.id });
+		checkAndPrintResult('Response:', response);
 	} finally {
 		cleanUp();
 	}
