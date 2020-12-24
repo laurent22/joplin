@@ -282,7 +282,7 @@ const operations = [
 ];
 
 async function main() {
-	const rootDir = dirname(__dirname);
+	const rootDir = dirname(dirname(__dirname));
 	const sourceImageDir = `${rootDir}/Assets/ImageSources`;
 
 	for (const operation of operations) {
