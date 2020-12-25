@@ -412,6 +412,16 @@ function isSpanStyleItalic(attributes) {
 	return (style.toLowerCase().includes('font-style:italic;'));
 }
 
+function displaySaxWarning(context, message) {
+	const line = [];
+	const parser = context ? context._parser : null;
+	if (parser) {
+		line.push(`Line ${parser.line}:${parser.column}`);
+	}
+	line.push(message);
+	console.warn(line.join(': '));
+}
+
 function enexXmlToMdArray(stream, resources) {
 	const remainingResources = resources.slice();
 
@@ -501,18 +511,15 @@ function enexXmlToMdArray(stream, resources) {
 				currentList.startedText = true;
 			}
 
+			// Note that the order of if/else blocks is important. In
+			// particular table-related blocks should always be on top and
+			// take priority over, in particular, hidden blocks. This is so
+			// that a block that is both table-related and hidden is simply
+			// handled as table-related. This is to ensure that the table
+			// structure is valid.
+
 			if (n == 'en-note') {
 				// Start of note
-			} else if (isInvisibleBlock(nodeAttributes)) {
-				const newSection = {
-					type: 'hidden',
-					lines: [],
-					parent: section,
-				};
-				section.lines.push(newSection);
-				section = newSection;
-			} else if (isBlockTag(n)) {
-				section.lines.push(BLOCK_OPEN);
 			} else if (n == 'table') {
 				const newSection = {
 					type: 'table',
@@ -524,9 +531,20 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'tbody' || n == 'thead') {
 				// Ignore it
 			} else if (n == 'tr') {
+				// Note: Even if we encounter tags in the wrong place, we
+				// create the sections anyway so that the data is imported.
+				// Invalid HTML like would most likely be from clipped
+				// pages which would look like a mess in Evernote. So it
+				// will look like a mess in Joplin too but at least the
+				// data will be there.
+				//
+				// Also if we simply skip the section, it will cause an
+				// error in drawTable() later on.
+				//
+				// https://discourse.joplinapp.org/t/not-all-notes-imported-from-evernote/13056/12?u=laurent
 				if (section.type != 'table') {
-					console.warn('Found a <tr> tag outside of a table');
-					return;
+					displaySaxWarning(this, 'Found a <tr> tag outside of a table');
+					// return;
 				}
 
 				const newSection = {
@@ -540,8 +558,8 @@ function enexXmlToMdArray(stream, resources) {
 				section = newSection;
 			} else if (n == 'td' || n == 'th') {
 				if (section.type != 'tr') {
-					console.warn('Found a <td> tag outside of a <tr>');
-					return;
+					displaySaxWarning(this, 'Found a <td> tag outside of a <tr>');
+					// return;
 				}
 
 				if (n == 'th') section.isHeader = true;
@@ -554,14 +572,24 @@ function enexXmlToMdArray(stream, resources) {
 
 				section.lines.push(newSection);
 				section = newSection;
+			} else if (isInvisibleBlock(nodeAttributes)) {
+				const newSection = {
+					type: 'hidden',
+					lines: [],
+					parent: section,
+				};
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (isBlockTag(n)) {
+				section.lines.push(BLOCK_OPEN);
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 				state.lists.push({ tag: n, counter: 1, startedText: false });
 			} else if (n == 'li') {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
-					console.warn('Found <li> tag without being inside a list');
-					return;
+					displaySaxWarning(this, 'Found <li> tag without being inside a list');
+					// return;
 				}
 
 				const container = state.lists[state.lists.length - 1];
@@ -1005,7 +1033,8 @@ function drawTable(table) {
 						currentCells = currentCells.concat(drawTable(c));
 					} else {
 						// This is plain text
-						currentCells.push(c);
+						// currentCells.push(c);
+						currentCells = currentCells.concat(renderLine(c));
 					}
 				}
 
@@ -1121,37 +1150,46 @@ function postProcessMarkdown(lines) {
 	return lines;
 }
 
+// A "line" can be some Markdown text, or it can be a section, like a table,
+// etc. so this function returns an array of strings.
+function renderLine(line) {
+	if (typeof line === 'object' && line.type === 'table') {
+		// A table
+		const table = line;
+		return drawTable(table);
+	} else if (typeof line === 'object' && line.type === 'code') {
+		return line.lines;
+	} else if (typeof line === 'object' && line.type === 'hidden') {
+		// ENEX notes sometimes have hidden tags. We could strip off these
+		// sections but in the spirit of preserving all data we wrap them in
+		// a hidden tag too.
+		let hiddenLines = ['<div style="display: none;">'];
+		hiddenLines = hiddenLines.concat(renderLines(line.lines));
+		hiddenLines.push('</div>');
+		return hiddenLines;
+	} else if (typeof line === 'object') {
+		console.warn('Unhandled object type:', line);
+		return line.lines;
+	} else {
+		// an actual line
+		return [line];
+	}
+}
+
+function renderLines(lines) {
+	let mdLines = [];
+	for (let i = 0; i < lines.length; i++) {
+		const renderedLines = renderLine(lines[i]);
+		mdLines = mdLines.concat(renderedLines);
+	}
+	return mdLines;
+}
+
 async function enexXmlToMd(xmlString, resources, options = {}) {
 	const stream = stringToStream(xmlString);
 	const result = await enexXmlToMdArray(stream, resources, options);
 
-	let mdLines = [];
-
-	for (let i = 0; i < result.content.lines.length; i++) {
-		const line = result.content.lines[i];
-		if (typeof line === 'object' && line.type === 'table') {
-			// A table
-			const table = line;
-			const tableLines = drawTable(table);
-			mdLines = mdLines.concat(tableLines);
-		} else if (typeof line === 'object' && line.type === 'code') {
-			mdLines = mdLines.concat(line.lines);
-		} else if (typeof line === 'object' && line.type === 'hidden') {
-			// ENEX notes sometimes have hidden tags. We could strip off these
-			// sections but in the spirit of preserving all data we wrap them in
-			// a hidden tag too.
-			let hiddenLines = ['<div style="display: none;">'];
-			hiddenLines = hiddenLines.concat(line.lines);
-			hiddenLines.push('</div>');
-			mdLines = mdLines.concat(hiddenLines);
-		} else if (typeof line === 'object') {
-			console.warn('Unhandled object type:', line);
-			mdLines = mdLines.concat(line.lines);
-		} else {
-			// an actual line
-			mdLines.push(line);
-		}
-	}
+	let mdLines = renderLines(result.content.lines);
 
 	let firstAttachment = true;
 	for (let i = 0; i < result.resources.length; i++) {
