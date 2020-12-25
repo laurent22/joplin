@@ -422,6 +422,27 @@ function displaySaxWarning(context, message) {
 	console.warn(line.join(': '));
 }
 
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+function removeSectionParent(section) {
+	if (typeof section === 'string') return section;
+
+	section = { ...section };
+	delete section.parent;
+
+	section.lines = section.lines.slice();
+
+	for (let i = 0; i < section.lines.length; i++) {
+		section.lines[i] = removeSectionParent(section.lines[i]);
+	}
+
+	return section;
+}
+
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+function printSection(section) {
+	console.info(JSON.stringify(removeSectionParent(section), null, 4));
+}
+
 function enexXmlToMdArray(stream, resources) {
 	const remainingResources = resources.slice();
 
@@ -566,6 +587,20 @@ function enexXmlToMdArray(stream, resources) {
 
 				const newSection = {
 					type: 'td',
+					lines: [],
+					parent: section,
+				};
+
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (n == 'caption') {
+				if (section.type != 'table') {
+					displaySaxWarning(this, 'Found a <caption> tag outside of a <table>');
+					// return;
+				}
+
+				const newSection = {
+					type: 'caption',
 					lines: [],
 					parent: section,
 				};
@@ -780,7 +815,7 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push(BLOCK_CLOSE);
 			} else if (n == 'td' || n == 'th') {
 				if (section && section.parent) section = section.parent;
-			} else if (n == 'tr') {
+			} else if (n == 'tr' || n == 'caption') {
 				if (section && section.parent) section = section.parent;
 			} else if (n == 'table') {
 				if (section && section.parent) section = section.parent;
@@ -978,6 +1013,10 @@ function tableHasSubTables(table) {
 
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
+
+			// We are inside a CAPTION, not a TD
+			if (typeof td === 'string') continue;
+
 			for (let i = 0; i < td.lines.length; i++) {
 				if (typeof td.lines[i] === 'object') return true;
 			}
@@ -1003,8 +1042,15 @@ function drawTable(table) {
 	let lines = [];
 	lines.push(BLOCK_OPEN);
 	let headerDone = false;
+	let caption = null;
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
 		const tr = table.lines[trIndex];
+
+		if (tr.type === 'caption') {
+			caption = tr;
+			continue;
+		}
+
 		const isHeader = tr.isHeader;
 		const line = [];
 		const headerLine = [];
@@ -1027,7 +1073,7 @@ function drawTable(table) {
 				// In here, recursively render the tables
 				for (let i = 0; i < td.lines.length; i++) {
 					const c = td.lines[i];
-					if (typeof c === 'object' && ['table', 'td', 'tr', 'th'].indexOf(c.type) >= 0) {
+					if (typeof c === 'object' && ['table', 'td', 'tr', 'th', 'caption'].indexOf(c.type) >= 0) {
 						// This is a table
 						renderCurrentCells();
 						currentCells = currentCells.concat(drawTable(c));
@@ -1094,6 +1140,11 @@ function drawTable(table) {
 	}
 
 	lines.push(BLOCK_CLOSE);
+
+	if (caption) {
+		const captionLines = renderLines(caption.lines);
+		lines = lines.concat(captionLines);
+	}
 
 	return flatRender ? lines : lines.join(`<<<<:D>>>>${NEWLINE}<<<<:D>>>>`).split('<<<<:D>>>>');
 }
