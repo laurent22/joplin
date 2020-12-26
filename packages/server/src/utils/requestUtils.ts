@@ -1,4 +1,4 @@
-import { ErrorForbidden } from './errors';
+import { ErrorBadRequest, ErrorForbidden } from './errors';
 import { AppContext } from './types';
 
 const formidable = require('formidable');
@@ -26,6 +26,10 @@ export async function formParse(req: any): Promise<FormParseResult> {
 }
 
 export async function bodyFields(req: any): Promise<BodyFields> {
+	if (req.headers['content-type'] !== 'application/json') {
+		throw new ErrorBadRequest(`Unsupported Content-Type: "${req.headers['content-type']}". Expected: "application/json"`);
+	}
+
 	const form = await formParse(req);
 	return form.fields;
 }

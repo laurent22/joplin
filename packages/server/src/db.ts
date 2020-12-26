@@ -110,6 +110,36 @@ export async function migrateDb(db: DbConnection) {
 	});
 }
 
+function allTableNames(): string[] {
+	const tableNames = Object.keys(databaseSchema);
+	tableNames.push('knex_migrations');
+	tableNames.push('knex_migrations_lock');
+	return tableNames;
+}
+
+export async function dropTables(db: DbConnection): Promise<void> {
+	for (const tableName of allTableNames()) {
+		try {
+			await db.schema.dropTable(tableName);
+		} catch (error) {
+			if (isNoSuchTableError(error)) continue;
+			throw error;
+		}
+	}
+}
+
+function isNoSuchTableError(error: any): boolean {
+	if (error) {
+		// Postgres error: 42P01: undefined_table
+		if (error.code === '42P01') return true;
+
+		// Sqlite3 error
+		if (error.message && error.message.includes('no such table: knex_migrations')) return true;
+	}
+
+	return false;
+}
+
 export async function latestMigration(db: DbConnection): Promise<any> {
 	try {
 		const result = await db('knex_migrations').select('name').orderBy('id', 'asc').first();
@@ -118,13 +148,8 @@ export async function latestMigration(db: DbConnection): Promise<any> {
 		// If the database has never been initialized, we return null, so
 		// for this we need to check the error code, which will be
 		// different depending on the DBMS.
-		if (error) {
-			// Postgres error: 42P01: undefined_table
-			if (error.code === '42P01') return null;
 
-			// Sqlite3 error
-			if (error.message && error.message.includes('no such table: knex_migrations')) return null;
-		}
+		if (isNoSuchTableError(error)) return null;
 
 		throw error;
 	}

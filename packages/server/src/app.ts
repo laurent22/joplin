@@ -13,7 +13,7 @@ import configDev from './config-dev';
 import configProd from './config-prod';
 import configBuildTypes from './config-buildTypes';
 import { createDb, dropDb } from './tools/dbTools';
-import { connectDb, disconnectDb, migrateDb, waitForConnection } from './db';
+import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection } from './db';
 import modelFactory from './models/factory';
 import controllerFactory from './controllers/factory';
 import { AppContext, Config } from './utils/types';
@@ -141,6 +141,10 @@ async function main() {
 		await disconnectDb(db);
 	} else if (argv.dropDb) {
 		await dropDb(config().database, { ignoreIfNotExists: true });
+	} else if (argv.dropTables) {
+		const db = await connectDb(config().database);
+		await dropTables(db);
+		await disconnectDb(db);
 	} else if (argv.createDb) {
 		await createDb(config().database);
 	} else {

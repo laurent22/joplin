@@ -1,5 +1,4 @@
 import { User, Session, DbConnection, connectDb, disconnectDb } from '../db';
-import cache from './cache';
 import { createDb } from '../tools/dbTools';
 import modelFactory from '../models/factory';
 import controllerFactory from '../controllers/factory';
@@ -44,8 +43,6 @@ export const clearDatabase = async function(): Promise<void> {
 	await db_('permissions').truncate();
 	await db_('files').truncate();
 	await db_('changes').truncate();
-
-	await cache.clearAll();
 };
 
 export const testAssetDir = `${packageRootDir}/assets/tests`;

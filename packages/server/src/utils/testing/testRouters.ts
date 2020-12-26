@@ -106,10 +106,15 @@ async function main() {
 
 	fs.removeSync(`${serverRoot}/db-testing.sqlite`);
 
-	const migrateCommand = 'NODE_ENV=testing node dist/app.js --migrate-db --env dev';
+	// const migrateCommand = 'NODE_ENV=testing node dist/app.js --migrate-db --env dev';
+	const clearCommand = 'node dist/app.js --env dev --drop-tables';
+	const migrateCommand = 'node dist/app.js --env dev --migrate-db';
+
+	await execCommand(clearCommand);
 	await execCommand(migrateCommand);
 
-	const serverCommandParams = ['dist/app.js',
+	const serverCommandParams = [
+		'dist/app.js',
 		'--pidfile', pidFilePath,
 		'--env', 'dev',
 	];
@@ -117,11 +122,11 @@ async function main() {
 	serverProcess = spawn('node', serverCommandParams, {
 		detached: true,
 		stdio: 'inherit',
-		env: Object.assign({}, process.env, { NODE_ENV: 'testing' }),
+		// env: Object.assign({}, process.env, { NODE_ENV: 'testing' }),
 	});
 
 	const cleanUp = () => {
-		console.info(`To run this server again: ${migrateCommand} && node ${serverCommandParams.join(' ')}`);
+		console.info(`To run this server again: ${clearCommand} ${migrateCommand} && node ${serverCommandParams.join(' ')}`);
 		serverProcess.kill();
 	};
 
