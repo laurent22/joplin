@@ -325,6 +325,16 @@ const shim = {
 	keytar: (): any => {
 		throw new Error('Not implemented');
 	},
+
+	// In general all imports should be static, but for cases where dynamic
+	// require is needed, we should use the shim so that the code can build in
+	// React Native. In React Native that code path will throw an error, but at
+	// least it will build.
+	// https://stackoverflow.com/questions/55581073
+	requireDynamic: (_path: string): any => {
+		throw new Error('Not implemented');
+	},
+
 };
 
 export default shim;

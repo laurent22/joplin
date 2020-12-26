@@ -176,10 +176,10 @@ export default class SpellCheckerService {
 			},
 
 			// Can be removed once it does work
-			{
-				label: '⚠ Spell checker doesn\'t work in Markdown editor ⚠',
-				enabled: false,
-			},
+			// {
+			// 	label: '⚠ Spell checker doesn\'t work in Markdown editor ⚠',
+			// 	enabled: false,
+			// },
 
 			{
 				type: 'separator',

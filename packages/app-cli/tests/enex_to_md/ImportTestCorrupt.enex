@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export2.dtd">
+<en-export export-date="20201223T164244Z" application="Evernote/Windows" version="6.x">
+<note><title>Note 1</title><content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+
+<en-note><div>Plain note</div></en-note>]]></content><created>20201223T163948Z</created><updated>20201223T163953Z</updated><note-attributes><author>laurent22777@gmail.com</author><source>desktop.win</source><source-application>evernote.win32</source-application></note-attributes></note><note><title>Note 2</title><content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+
+<en-note><div><div><br/></div><table style="border-collapse: collapse; min-width: 100%;"><colgroup><col style="width: 130px;"/><col style="width: 130px;"/><col style="width: 130px;"/></colgroup><tbody><tr<td style="width: 130px; padding: 8px; border: 1px solid;"><div>test</div></td><td style="width: 130px; padding: 8px; border: 1px solid;"><div>test</div></td><td style="width: 130px; padding: 8px; border: 1px solid;"><div><br/></div></td></tr><tr><td style="width: 130px; padding: 8px; border: 1px solid;"><div>bl</div></td><td style="width: 130px; padding: 8px; border: 1px solid;"><div>bla</div></td><td style="width: 130px; padding: 8px; border: 1px solid;"><div>bla</div></td></tr></tbody></table><div><br/></div></div><div><br/></div></en-note>]]></content><created>20201223T164010Z</created><updated>20201223T164023Z</updated><note-attributes><author>laurent22777@gmail.com</author><source>desktop.win</source><source-application>evernote.win32</source-application></note-attributes></note><note><title>plain note 2</title><content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+
+<en-note><div><br/></div></en-note>]]></content><created>20201223T164236Z</created><note-attributes><author>laurent22777@gmail.com</author><source>desktop.win</source><source-application>evernote.win32</source-application></note-attributes></note></en-export>

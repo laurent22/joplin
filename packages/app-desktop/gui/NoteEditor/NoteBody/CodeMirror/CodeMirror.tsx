@@ -24,6 +24,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { ThemeAppearance } from '@joplin/lib/themes/type';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import dialogs from '../../../dialogs';
+import convertToScreenCoordinates from '../../../utils/convertToScreenCoordinates';
 
 const Note = require('@joplin/lib/models/Note.js');
 const { clipboard } = require('electron');
@@ -223,7 +224,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (commands[cmd.name]) {
 						commandOutput = commands[cmd.name](cmd.value);
 					} else if (editorRef.current.supportsCommand(cmd)) {
-						commandOutput = editorRef.current.execCommandFromJoplinCommand(cmd);
+						commandOutput = editorRef.current.execCommandFromJoplin(cmd);
 					} else {
 						reg.logger().warn('CodeMirror: unsupported Joplin command: ', cmd);
 					}
@@ -613,7 +614,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		function pointerInsideEditor(x: number, y: number) {
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 			if (!elements.length) return null;
-			const rect = elements[0].getBoundingClientRect();
+			const rect = convertToScreenCoordinates(elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 

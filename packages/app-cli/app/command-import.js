@@ -55,7 +55,7 @@ class Command extends BaseCommand {
 		};
 
 		importOptions.onError = error => {
-			const s = error.trace ? error.trace : error.toString();
+			const s = error.stack ? error.stack : error.toString();
 			this.stdout(s);
 		};
 

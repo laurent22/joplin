@@ -282,7 +282,7 @@ const operations = [
 ];
 
 async function main() {
-	const rootDir = dirname(__dirname);
+	const rootDir = dirname(dirname(__dirname));
 	const sourceImageDir = `${rootDir}/Assets/ImageSources`;
 
 	for (const operation of operations) {
@@ -333,6 +333,8 @@ async function main() {
 		const icnsSource = `${rootDir}/Assets/macOs.iconset`;
 		console.info(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
 		await execCommand(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
+	} else {
+		console.info('If the macOS icon has been updated, this script should be run on macOS too');
 	}
 }
 

@@ -412,6 +412,37 @@ function isSpanStyleItalic(attributes) {
 	return (style.toLowerCase().includes('font-style:italic;'));
 }
 
+function displaySaxWarning(context, message) {
+	const line = [];
+	const parser = context ? context._parser : null;
+	if (parser) {
+		line.push(`Line ${parser.line}:${parser.column}`);
+	}
+	line.push(message);
+	console.warn(line.join(': '));
+}
+
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+function removeSectionParent(section) {
+	if (typeof section === 'string') return section;
+
+	section = { ...section };
+	delete section.parent;
+
+	section.lines = section.lines.slice();
+
+	for (let i = 0; i < section.lines.length; i++) {
+		section.lines[i] = removeSectionParent(section.lines[i]);
+	}
+
+	return section;
+}
+
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+function printSection(section) {
+	console.info(JSON.stringify(removeSectionParent(section), null, 4));
+}
+
 function enexXmlToMdArray(stream, resources) {
 	const remainingResources = resources.slice();
 
@@ -501,18 +532,15 @@ function enexXmlToMdArray(stream, resources) {
 				currentList.startedText = true;
 			}
 
+			// Note that the order of if/else blocks is important. In
+			// particular table-related blocks should always be on top and
+			// take priority over, in particular, hidden blocks. This is so
+			// that a block that is both table-related and hidden is simply
+			// handled as table-related. This is to ensure that the table
+			// structure is valid.
+
 			if (n == 'en-note') {
 				// Start of note
-			} else if (isInvisibleBlock(nodeAttributes)) {
-				const newSection = {
-					type: 'hidden',
-					lines: [],
-					parent: section,
-				};
-				section.lines.push(newSection);
-				section = newSection;
-			} else if (isBlockTag(n)) {
-				section.lines.push(BLOCK_OPEN);
 			} else if (n == 'table') {
 				const newSection = {
 					type: 'table',
@@ -524,9 +552,20 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'tbody' || n == 'thead') {
 				// Ignore it
 			} else if (n == 'tr') {
+				// Note: Even if we encounter tags in the wrong place, we
+				// create the sections anyway so that the data is imported.
+				// Invalid HTML like would most likely be from clipped
+				// pages which would look like a mess in Evernote. So it
+				// will look like a mess in Joplin too but at least the
+				// data will be there.
+				//
+				// Also if we simply skip the section, it will cause an
+				// error in drawTable() later on.
+				//
+				// https://discourse.joplinapp.org/t/not-all-notes-imported-from-evernote/13056/12?u=laurent
 				if (section.type != 'table') {
-					console.warn('Found a <tr> tag outside of a table');
-					return;
+					displaySaxWarning(this, 'Found a <tr> tag outside of a table');
+					// return;
 				}
 
 				const newSection = {
@@ -540,8 +579,8 @@ function enexXmlToMdArray(stream, resources) {
 				section = newSection;
 			} else if (n == 'td' || n == 'th') {
 				if (section.type != 'tr') {
-					console.warn('Found a <td> tag outside of a <tr>');
-					return;
+					displaySaxWarning(this, 'Found a <td> tag outside of a <tr>');
+					// return;
 				}
 
 				if (n == 'th') section.isHeader = true;
@@ -554,14 +593,38 @@ function enexXmlToMdArray(stream, resources) {
 
 				section.lines.push(newSection);
 				section = newSection;
+			} else if (n == 'caption') {
+				if (section.type != 'table') {
+					displaySaxWarning(this, 'Found a <caption> tag outside of a <table>');
+					// return;
+				}
+
+				const newSection = {
+					type: 'caption',
+					lines: [],
+					parent: section,
+				};
+
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (isInvisibleBlock(nodeAttributes)) {
+				const newSection = {
+					type: 'hidden',
+					lines: [],
+					parent: section,
+				};
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (isBlockTag(n)) {
+				section.lines.push(BLOCK_OPEN);
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 				state.lists.push({ tag: n, counter: 1, startedText: false });
 			} else if (n == 'li') {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
-					console.warn('Found <li> tag without being inside a list');
-					return;
+					displaySaxWarning(this, 'Found <li> tag without being inside a list');
+					// return;
 				}
 
 				const container = state.lists[state.lists.length - 1];
@@ -752,7 +815,7 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push(BLOCK_CLOSE);
 			} else if (n == 'td' || n == 'th') {
 				if (section && section.parent) section = section.parent;
-			} else if (n == 'tr') {
+			} else if (n == 'tr' || n == 'caption') {
 				if (section && section.parent) section = section.parent;
 			} else if (n == 'table') {
 				if (section && section.parent) section = section.parent;
@@ -950,6 +1013,10 @@ function tableHasSubTables(table) {
 
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
+
+			// We are inside a CAPTION, not a TD
+			if (typeof td === 'string') continue;
+
 			for (let i = 0; i < td.lines.length; i++) {
 				if (typeof td.lines[i] === 'object') return true;
 			}
@@ -975,8 +1042,15 @@ function drawTable(table) {
 	let lines = [];
 	lines.push(BLOCK_OPEN);
 	let headerDone = false;
+	let caption = null;
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
 		const tr = table.lines[trIndex];
+
+		if (tr.type === 'caption') {
+			caption = tr;
+			continue;
+		}
+
 		const isHeader = tr.isHeader;
 		const line = [];
 		const headerLine = [];
@@ -999,13 +1073,14 @@ function drawTable(table) {
 				// In here, recursively render the tables
 				for (let i = 0; i < td.lines.length; i++) {
 					const c = td.lines[i];
-					if (typeof c === 'object' && ['table', 'td', 'tr', 'th'].indexOf(c.type) >= 0) {
+					if (typeof c === 'object' && ['table', 'td', 'tr', 'th', 'caption'].indexOf(c.type) >= 0) {
 						// This is a table
 						renderCurrentCells();
 						currentCells = currentCells.concat(drawTable(c));
 					} else {
 						// This is plain text
-						currentCells.push(c);
+						// currentCells.push(c);
+						currentCells = currentCells.concat(renderLine(c));
 					}
 				}
 
@@ -1066,6 +1141,11 @@ function drawTable(table) {
 
 	lines.push(BLOCK_CLOSE);
 
+	if (caption) {
+		const captionLines = renderLines(caption.lines);
+		lines = lines.concat(captionLines);
+	}
+
 	return flatRender ? lines : lines.join(`<<<<:D>>>>${NEWLINE}<<<<:D>>>>`).split('<<<<:D>>>>');
 }
 
@@ -1121,37 +1201,46 @@ function postProcessMarkdown(lines) {
 	return lines;
 }
 
+// A "line" can be some Markdown text, or it can be a section, like a table,
+// etc. so this function returns an array of strings.
+function renderLine(line) {
+	if (typeof line === 'object' && line.type === 'table') {
+		// A table
+		const table = line;
+		return drawTable(table);
+	} else if (typeof line === 'object' && line.type === 'code') {
+		return line.lines;
+	} else if (typeof line === 'object' && line.type === 'hidden') {
+		// ENEX notes sometimes have hidden tags. We could strip off these
+		// sections but in the spirit of preserving all data we wrap them in
+		// a hidden tag too.
+		let hiddenLines = ['<div style="display: none;">'];
+		hiddenLines = hiddenLines.concat(renderLines(line.lines));
+		hiddenLines.push('</div>');
+		return hiddenLines;
+	} else if (typeof line === 'object') {
+		console.warn('Unhandled object type:', line);
+		return line.lines;
+	} else {
+		// an actual line
+		return [line];
+	}
+}
+
+function renderLines(lines) {
+	let mdLines = [];
+	for (let i = 0; i < lines.length; i++) {
+		const renderedLines = renderLine(lines[i]);
+		mdLines = mdLines.concat(renderedLines);
+	}
+	return mdLines;
+}
+
 async function enexXmlToMd(xmlString, resources, options = {}) {
 	const stream = stringToStream(xmlString);
 	const result = await enexXmlToMdArray(stream, resources, options);
 
-	let mdLines = [];
-
-	for (let i = 0; i < result.content.lines.length; i++) {
-		const line = result.content.lines[i];
-		if (typeof line === 'object' && line.type === 'table') {
-			// A table
-			const table = line;
-			const tableLines = drawTable(table);
-			mdLines = mdLines.concat(tableLines);
-		} else if (typeof line === 'object' && line.type === 'code') {
-			mdLines = mdLines.concat(line.lines);
-		} else if (typeof line === 'object' && line.type === 'hidden') {
-			// ENEX notes sometimes have hidden tags. We could strip off these
-			// sections but in the spirit of preserving all data we wrap them in
-			// a hidden tag too.
-			let hiddenLines = ['<div style="display: none;">'];
-			hiddenLines = hiddenLines.concat(line.lines);
-			hiddenLines.push('</div>');
-			mdLines = mdLines.concat(hiddenLines);
-		} else if (typeof line === 'object') {
-			console.warn('Unhandled object type:', line);
-			mdLines = mdLines.concat(line.lines);
-		} else {
-			// an actual line
-			mdLines.push(line);
-		}
-	}
+	let mdLines = renderLines(result.content.lines);
 
 	let firstAttachment = true;
 	for (let i = 0; i < result.resources.length; i++) {
