@@ -1,5 +1,21 @@
 # Joplin terminal app changelog
 
+## [cli-v1.5.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.5.1) - 2020-12-26T00:46:31Z
+
+- New: Add table captions when importing ENEX files
+- Improved: Allow exporting conflict notes (#4095)
+- Improved: Allow lowercase filters when doing search
+- Improved: Improved error handling when importing ENEX files
+- Improved: Partially reverts #3975 (link rendering)
+- Fixed: Fix sorting by title in a case insensitive way
+- Fixed: Fixed basic search when executing a query in Chinese (#4034 by Naveen M V)
+- Fixed: Fixed importing ENEX files that contain empty resources
+- Fixed: Fixed importing ENEX files that contain resources with invalid mime type
+- Fixed: Fixed importing certain ENEX files that contain invalid dates
+- Fixed: Fixed importing certain code blocks from ENEX
+- Fixed: Fixed issue when searching for text that contains diacritic (#4152) (#4025 by Roman Musin)
+- Fixed: Fixed issues when importing hidden tables within hidden sections in Enex files
+
 ## [cli-v1.4.9](https://github.com/laurent22/joplin/releases/tag/cli-v1.4.9) - 2020-11-26T15:00:37Z
 
 - Improved: Allow exporting conflict notes (#4095)
