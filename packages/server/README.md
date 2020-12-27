@@ -12,6 +12,7 @@ First copy `.env-sample` to `.env` and edit the values in there:
 ```shell
 git clone https://github.com/laurent22/joplin
 cd joplin
+git checkout server
 npm i
 docker-compose --file docker-compose.server.yml up
 ```
