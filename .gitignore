@@ -48,6 +48,7 @@ TODO.md
 packages/tools/commit_hook.txt
 packages/tools/github_oauth_token.txt
 lerna-debug.log
+.env
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.d.ts

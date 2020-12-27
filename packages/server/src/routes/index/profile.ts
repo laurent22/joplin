@@ -4,6 +4,7 @@ import { contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorMethodNotAllowed, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User } from '../../db';
 import { baseUrl } from '../../config';
+import { hashPassword } from '../../utils/auth';
 
 const route: Route = {
 
@@ -28,6 +29,7 @@ const route: Route = {
 
 				if (body.fields.password) {
 					if (body.fields.password !== body.fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
+					user.password = hashPassword(body.fields.password);
 				}
 
 				await ctx.controllers.indexProfile().patchIndex(sessionId, user);

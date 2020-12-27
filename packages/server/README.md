@@ -13,11 +13,13 @@ First copy `.env-sample` to `.env` and edit the values in there:
 git clone https://github.com/laurent22/joplin
 cd joplin
 git checkout server
-npm i
-docker-compose --file docker-compose.server.yml up
+npm install
+docker-compose --file docker-compose.server.yml up --detach
 ```
 
 This will start the server, which will listen on port **22300** on **localhost**.
+
+Due to the restart policy defined in the docker-compose file, the server will be restart automatically whenever the host reboots.
 
 ## Setup reverse proxy
 
