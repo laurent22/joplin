@@ -14,21 +14,21 @@ async function main() {
 	const version = (await execCommand('npm version patch')).trim();
 	const tagName = `plugin-generator-${version}`;
 
+	console.info(`New version number: ${version}`);
+
 	await setPackagePrivateField(packageFilePath, false);
-
 	try {
-		console.info(`New version number: ${version}`);
-
 		await execCommandVerbose('npm', ['publish']);
-		await gitPullTry();
-		await execCommandVerbose('git', ['add', '-A']);
-		await execCommandVerbose('git', ['commit', '-m', `Plugin Generator release ${version}`]);
-		await execCommandVerbose('git', ['tag', tagName]);
-		await execCommandVerbose('git', ['push']);
-		await execCommandVerbose('git', ['push', '--tags']);
 	} finally {
 		await setPackagePrivateField(packageFilePath, true);
 	}
+
+	await gitPullTry();
+	await execCommandVerbose('git', ['add', '-A']);
+	await execCommandVerbose('git', ['commit', '-m', `Plugin Generator release ${version}`]);
+	await execCommandVerbose('git', ['tag', tagName]);
+	await execCommandVerbose('git', ['push']);
+	await execCommandVerbose('git', ['push', '--tags']);
 }
 
 main().catch((error) => {

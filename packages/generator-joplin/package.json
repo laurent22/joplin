@@ -24,5 +24,6 @@
     "yosay": "^2.0.1"
   },
   "repository": "https://github.com/laurent22/generator-joplin",
-  "license": "MIT"
+  "license": "MIT",
+  "private": true
 }
