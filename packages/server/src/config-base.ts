@@ -4,8 +4,10 @@ import * as pathUtils from 'path';
 const rootDir = pathUtils.dirname(__dirname);
 const viewDir = `${pathUtils.dirname(__dirname)}/src/views`;
 
+const envPort = Number(process.env.JOPLIN_PORT);
+
 const config: Config = {
-	port: 22300,
+	port: (envPort && !isNaN(envPort)) ? envPort : 22300,
 	viewDir: viewDir,
 	rootDir: rootDir,
 	layoutDir: `${viewDir}/layouts`,

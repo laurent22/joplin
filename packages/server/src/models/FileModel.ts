@@ -51,18 +51,6 @@ export default class FileModel extends BaseModel {
 		return r ? r.id : '';
 	}
 
-	// async fileOwnerId(fileId: string): Promise<string> {
-	// 	const r = await this.db('permissions').select('permissions.user_id').where({
-	// 		'item_type': ItemType.File,
-	// 		'item_id': fileId,
-	// 		'is_owner': 1,
-	// 	}).first();
-
-	// 	if (!r) return null;
-
-	// 	return r.user_id;
-	// }
-
 	private async specialDirId(dirname: string): Promise<string> {
 		if (dirname === 'root') return this.userRootFileId();
 		return null; // Not a special dir
@@ -115,11 +103,6 @@ export default class FileModel extends BaseModel {
 	protected get defaultFields(): string[] {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
 	}
-
-	// async allByParent(parentId: string): Promise<File[]> {
-	// 	if (!parentId) parentId = await this.userRootFileId();
-	// 	return this.db(this.tableName).select(...this.defaultFields).where({ parent_id: parentId });
-	// }
 
 	private async fileByName(parentId: string, name: string): Promise<File> {
 		return this.db<File>(this.tableName).select(...this.defaultFields).where({
@@ -210,11 +193,9 @@ export default class FileModel extends BaseModel {
 		const existingRootFile = await this.userRootFile();
 		if (existingRootFile) throw new Error(`User ${this.userId} has already a root file`);
 
-		const fileModel = this.models.file({ userId: this.userId });
-
 		const id = uuidgen();
 
-		return fileModel.save({
+		return this.save({
 			id: id,
 			is_directory: 1,
 			is_root: 1,
@@ -232,7 +213,7 @@ export default class FileModel extends BaseModel {
 
 		const fileIds = files.map(f => f.id);
 
-		const permissionModel = this.models.permission();
+		const permissionModel = this.models().permission();
 		const permissionGrantedMap = await permissionModel[methodName](fileIds, this.userId);
 
 		for (const file of files) {
@@ -308,34 +289,23 @@ export default class FileModel extends BaseModel {
 	public async save(object: File, options: SaveOptions = {}): Promise<File> {
 		const isNew = await this.isNew(object, options);
 
-		const txIndex = await this.startTransaction();
+		const file: File = { ... object };
 
-		let file: File = { ... object };
+		if ('content' in file) file.size = file.content ? file.content.byteLength : 0;
 
-		try {
-			if ('content' in file) file.size = file.content ? file.content.byteLength : 0;
+		if (isNew) {
+			if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
 
-			if (isNew) {
-				if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
+			// Even if there's no content, set the mime type based on the extension
+			if (!file.is_directory) file.mime_type = mimeUtils.fromFilename(file.name);
 
-				// Even if there's no content, set the mime type based on the extension
-				if (!file.is_directory) file.mime_type = mimeUtils.fromFilename(file.name);
+			// Make sure it's not NULL, which is not allowed
+			if (!file.mime_type) file.mime_type = '';
 
-				// Make sure it's not NULL, which is not allowed
-				if (!file.mime_type) file.mime_type = '';
-
-				file.owner_id = this.userId;
-			}
-
-			file = await super.save(file, options);
-		} catch (error) {
-			await this.rollbackTransaction(txIndex);
-			throw error;
+			file.owner_id = this.userId;
 		}
 
-		await this.commitTransaction(txIndex);
-
-		return file;
+		return super.save(file, options);
 	}
 
 	public async childrens(id: string, pagination: Pagination): Promise<PaginatedFiles> {
@@ -358,11 +328,8 @@ export default class FileModel extends BaseModel {
 
 		if (id === await this.userRootFileId() && !canDeleteRoot) throw new ErrorForbidden('the root directory may not be deleted');
 
-		const txIndex = await this.startTransaction();
-
-		try {
-			const permissionModel = this.models.permission();
-			await permissionModel.deleteByFileId(id);
+		await this.withTransaction(async () => {
+			await this.models().permission().deleteByFileId(id);
 
 			if (file.is_directory) {
 				const childrenIds = await this.childrenIds(file.id);
@@ -372,12 +339,7 @@ export default class FileModel extends BaseModel {
 			}
 
 			await super.delete(id);
-		} catch (error) {
-			await this.rollbackTransaction(txIndex);
-			throw error;
-		}
-
-		await this.commitTransaction(txIndex);
+		});
 	}
 
 }

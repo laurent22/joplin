@@ -33,11 +33,11 @@ export default abstract class BaseModel {
 	private defaultFields_: string[] = [];
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
-	private models_: Models;
+	private modelFactory_: Function;
 
-	public constructor(db: DbConnection, models: Models, options: ModelOptions = null) {
+	public constructor(db: DbConnection, modelFactory: Function, options: ModelOptions = null) {
 		this.db_ = db;
-		this.models_ = models;
+		this.modelFactory_ = modelFactory;
 		this.options_ = Object.assign({}, options);
 
 		this.transactionHandler_ = new TransactionHandler(db);
@@ -45,8 +45,11 @@ export default abstract class BaseModel {
 		if ('userId' in this.options && !this.options.userId) throw new Error('If userId is set, it cannot be null');
 	}
 
-	protected get models(): Models {
-		return this.models_;
+	// When a model create an instance of another model, the active
+	// connection is passed to it. That connection can be the regular db
+	// connection, or the active transaction.
+	protected models(db: DbConnection = null): Models {
+		return this.modelFactory_(db || this.db);
 	}
 
 	protected get options(): ModelOptions {
@@ -93,7 +96,7 @@ export default abstract class BaseModel {
 		return false;
 	}
 
-	protected async withTransaction(fn: Function) {
+	protected async withTransaction(fn: Function): Promise<void> {
 		const txIndex = await this.transactionHandler_.start();
 
 		try {
@@ -104,18 +107,6 @@ export default abstract class BaseModel {
 		}
 
 		await this.transactionHandler_.commit(txIndex);
-	}
-
-	protected async startTransaction(): Promise<number> {
-		return this.transactionHandler_.start();
-	}
-
-	protected async commitTransaction(txIndex: number): Promise<void> {
-		return this.transactionHandler_.commit(txIndex);
-	}
-
-	protected async rollbackTransaction(txIndex: number): Promise<void> {
-		return this.transactionHandler_.rollback(txIndex);
 	}
 
 	public async all(): Promise<AnyItemTypes> {
@@ -159,7 +150,7 @@ export default abstract class BaseModel {
 		// Parent ID can be an empty string for root folders, but it shouldn't be null or undefined
 		if (this.hasParentId && !parentId && parentId !== '') throw new Error(`Could not find parent ID for item: ${item.id}`);
 
-		const changeModel = this.models.change({ userId: this.userId });
+		const changeModel = this.models().change({ userId: this.userId });
 		await changeModel.add(this.itemType, parentId, (item as WithUuid).id, (item as any).name || '', changeType);
 	}
 

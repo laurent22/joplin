@@ -81,43 +81,29 @@ export default class UserModel extends BaseModel {
 	public async delete(id: string): Promise<void> {
 		await this.checkIsOwnerOrAdmin(id);
 
-		const txIndex = await this.startTransaction();
-
-		try {
-			const fileModel = this.models.file({ userId: id });
+		await this.withTransaction(async () => {
+			const fileModel = this.models().file({ userId: id });
 			const rootFile = await fileModel.userRootFile();
 			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
 			await super.delete(id);
-		} catch (error) {
-			await this.rollbackTransaction(txIndex);
-			throw error;
-		}
-
-		await this.commitTransaction(txIndex);
+		});
 	}
 
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
-		const txIndex = await this.startTransaction();
-
 		const isNew = await this.isNew(object, options);
 
 		let newUser = { ...object };
 
 		if (isNew && newUser.password) newUser.password = auth.hashPassword(newUser.password);
 
-		try {
+		await this.withTransaction(async () => {
 			newUser = await super.save(newUser, options);
 
 			if (isNew) {
-				const fileModel = this.models.file({ userId: newUser.id });
+				const fileModel = this.models().file({ userId: newUser.id });
 				await fileModel.createRootFile();
 			}
-		} catch (error) {
-			await this.rollbackTransaction(txIndex);
-			throw error;
-		}
-
-		await this.commitTransaction(txIndex);
+		});
 
 		return newUser;
 	}

@@ -46,6 +46,10 @@ const route: Route = {
 				return fileController.putFileContent(headerSessionId(ctx.headers), path.id, buffer);
 			}
 
+			if (ctx.method === 'DELETE') {
+				return fileController.deleteFileContent(headerSessionId(ctx.headers), path.id);
+			}
+
 			throw new ErrorMethodNotAllowed();
 		}
 

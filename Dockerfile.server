@@ -66,6 +66,6 @@ COPY --chown=$user:$user packages/server ./packages/server
 
 RUN npm run build
 
-EXPOSE 22300
+EXPOSE ${JOPLIN_PORT}
 
 CMD [ "npm", "--prefix", "packages/server", "start" ]

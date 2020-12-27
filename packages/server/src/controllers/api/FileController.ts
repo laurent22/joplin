@@ -54,6 +54,10 @@ export default class FileController extends BaseController {
 		return fileModel.toApiOutput(await fileModel.save(file, { validationRules: { mustBeFile: true } }));
 	}
 
+	public async deleteFileContent(sessionId: string, fileId: string): Promise<any> {
+		await this.putFileContent(sessionId, fileId, null);
+	}
+
 	public async getChildren(sessionId: string, fileId: string, pagination: Pagination): Promise<PaginatedFiles> {
 		const user = await this.initSession(sessionId);
 		const fileModel = this.models.file({ userId: user.id });

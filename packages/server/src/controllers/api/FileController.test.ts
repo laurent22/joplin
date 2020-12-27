@@ -398,6 +398,21 @@ describe('FileController', function() {
 		expect(newFile.size).toBe(file.content.byteLength);
 	});
 
+	test('should delete a file content', async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		const file: File = await makeTestFile(1);
+
+		const fileController = controllers().apiFile();
+		const newFile = await fileController.postFile_(session.id, file);
+		await fileController.putFileContent(session.id, newFile.id, file.content);
+
+		await fileController.deleteFileContent(session.id, newFile.id);
+
+		const modFile = await fileController.getFile(session.id, newFile.id);
+		expect(modFile.size).toBe(0);
+	});
+
 	test('should not allow reserved characters', async function() {
 		const { session } = await createUserAndSession(1, true);
 

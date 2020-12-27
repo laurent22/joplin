@@ -2,11 +2,14 @@ version: '3'
 
 services:
     app:
+        environment:
+            - JOPLIN_BASE_URL=${JOPLIN_BASE_URL}
+            - JOPLIN_PORT=${JOPLIN_PORT}
         build:
             context: .
             dockerfile: Dockerfile.server
         ports:
-            - "22300:22300"
+            - "${JOPLIN_PORT}:${JOPLIN_PORT}"
         # volumes:
         #     # Mount the server directory so that it's possible to edit file
         #     # while the container is running. However don't mount the

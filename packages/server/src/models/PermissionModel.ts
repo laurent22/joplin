@@ -51,7 +51,7 @@ export default class PermissionModel extends BaseModel {
 		if (!userId) throw new Error('No user specified');
 
 		const permissionMap = await this.filesPermissions(fileIds, userId);
-		const userModel = this.models.user({ userId: userId });
+		const userModel = this.models().user({ userId: userId });
 		const user: User = await userModel.load(userId);
 
 		for (const fileId in permissionMap) {

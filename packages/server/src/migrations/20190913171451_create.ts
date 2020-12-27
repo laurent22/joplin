@@ -1,6 +1,5 @@
 import * as Knex from 'knex';
 import { DbConnection } from '../db';
-// import models from '../models/factory';
 import { hashPassword } from '../utils/auth';
 import uuidgen from '../utils/uuidgen';
 
@@ -13,6 +12,10 @@ export async function up(db: DbConnection): Promise<any> {
 		table.integer('is_admin').defaultTo(0).notNullable();
 		table.bigInteger('updated_time').notNullable();
 		table.bigInteger('created_time').notNullable();
+	});
+
+	await db.schema.alterTable('users', function(table: Knex.CreateTableBuilder) {
+		table.index(['email']);
 	});
 
 	await db.schema.createTable('sessions', function(table: Knex.CreateTableBuilder) {
@@ -36,6 +39,8 @@ export async function up(db: DbConnection): Promise<any> {
 
 	await db.schema.alterTable('permissions', function(table: Knex.CreateTableBuilder) {
 		table.unique(['user_id', 'item_type', 'item_id']);
+		table.index(['item_id']);
+		table.index(['item_type', 'item_id']);
 	});
 
 	await db.schema.createTable('files', function(table: Knex.CreateTableBuilder) {
@@ -54,9 +59,13 @@ export async function up(db: DbConnection): Promise<any> {
 
 	await db.schema.alterTable('files', function(table: Knex.CreateTableBuilder) {
 		table.unique(['parent_id', 'name']);
+		table.index(['parent_id']);
 	});
 
 	await db.schema.createTable('changes', function(table: Knex.CreateTableBuilder) {
+		// Note that in this table, the counter is the primary key, since
+		// we want it to be automatically incremented. There's also a
+		// column ID to publicly identify a change.
 		table.increments('counter').unique().primary().notNullable();
 		table.string('id', 32).unique().notNullable();
 		table.string('owner_id', 32).notNullable();
@@ -67,6 +76,11 @@ export async function up(db: DbConnection): Promise<any> {
 		table.integer('type').notNullable();
 		table.bigInteger('updated_time').notNullable();
 		table.bigInteger('created_time').notNullable();
+	});
+
+	await db.schema.alterTable('changes', function(table: Knex.CreateTableBuilder) {
+		table.index(['id']);
+		table.index(['parent_id']);
 	});
 
 	await db.schema.createTable('api_clients', function(table: Knex.CreateTableBuilder) {

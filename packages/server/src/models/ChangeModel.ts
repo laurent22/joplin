@@ -64,7 +64,7 @@ export default class ChangeModel extends BaseModel {
 
 		// Load the directory object to check that it exists and that we have
 		// the right permissions (loading will check permissions)
-		const fileModel = this.models.file({ userId: this.userId });
+		const fileModel = this.models().file({ userId: this.userId });
 		const directory = await fileModel.load(dirId);
 		if (!directory.is_directory) throw new ErrorUnprocessableEntity(`Item with id "${dirId}" is not a directory.`);
 
@@ -100,53 +100,9 @@ export default class ChangeModel extends BaseModel {
 		};
 	}
 
-	// Probably not needed anymore
-	// public async byOwnerId(ownerId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
-	// 	pagination = {
-	// 		limit: 100,
-	// 		cursor: '',
-	// 		...pagination,
-	// 	};
-
-	// 	let changeAtCursor: Change = null;
-
-	// 	if (pagination.cursor) {
-	// 		changeAtCursor = await this.load(pagination.cursor);
-	// 		if (!changeAtCursor) throw new ErrorResyncRequired();
-	// 	}
-
-	// 	// Rather than query the changes, then use JS to compress them, it might
-	// 	// be possible to do both in one query.
-	// 	// https://stackoverflow.com/questions/65348794
-	// 	const query = this.db(this.tableName)
-	// 		.select([
-	// 			'counter',
-	// 			'id',
-	// 			'item_id',
-	// 			'type',
-	// 		])
-	// 		.where('owner_id', ownerId)
-	// 		.orderBy('counter', 'asc')
-	// 		.limit(pagination.limit);
-
-	// 	if (changeAtCursor) {
-	// 		void query.where('counter', '>', changeAtCursor.counter);
-	// 	}
-
-	// 	const changes: Change[] = await query;
-	// 	const compressedChanges = this.compressChanges(changes);
-	// 	const changeWithItems = await this.loadChangeItems(compressedChanges);
-
-	// 	return {
-	// 		items: changeWithItems,
-	// 		cursor: changes.length ? changes[changes.length - 1].id : '',
-	// 		has_more: changes.length >= pagination.limit,
-	// 	};
-	// }
-
 	private async loadChangeItems(changes: Change[]): Promise<ChangeWithItem[]> {
 		const itemIds = changes.map(c => c.item_id);
-		const fileModel = this.models.file({ userId: this.userId });
+		const fileModel = this.models().file({ userId: this.userId });
 		const items: File[] = await fileModel.loadByIds(itemIds);
 
 		const output: ChangeWithItem[] = [];
@@ -179,55 +135,6 @@ export default class ChangeModel extends BaseModel {
 
 		return output;
 	}
-
-	// public async byParentId(parentId: string, pagination: ChangePagination): Promise<PaginatedChanges> {
-	// 	pagination = {
-	// 		limit: 100,
-	// 		cursor: '',
-	// 		...pagination,
-	// 	};
-
-	// 	// Try to load the parent directory, which would throw an exception if
-	// 	// the user doesn't have access to it.
-	// 	const fileModel = await this.models.file({ userId: this.userId });
-	// 	const directory = await fileModel.load(parentId);
-
-	// 	// TODO: test
-	// 	if (!directory.is_directory) throw new ErrorUnprocessableEntity('Item with id "' + parentId + '" is not a directory.');
-
-	// 	let changeAtCursor: Change = null;
-
-	// 	if (pagination.cursor) {
-	// 		changeAtCursor = await this.load(pagination.cursor);
-	// 		if (!changeAtCursor) throw new ErrorResyncRequired();
-	// 	}
-
-	// 	// Rather than query the changes, then use JS to compress them, it might
-	// 	// be possible to do both in one query.
-	// 	// https://stackoverflow.com/questions/65348794
-	// 	const query = this.db(this.tableName)
-	// 		.select([
-	// 			'counter',
-	// 			'id',
-	// 			'item_id',
-	// 			'type',
-	// 		])
-	// 		.where('parent_id', parentId)
-	// 		.orderBy('counter', 'asc')
-	// 		.limit(pagination.limit);
-
-	// 	if (changeAtCursor) {
-	// 		void query.where('counter', '>', changeAtCursor.counter);
-	// 	}
-
-	// 	const items: Change[] = await query;
-
-	// 	return {
-	// 		items: this.compressChanges(items),
-	// 		cursor: items.length ? items[items.length - 1].id : '',
-	// 		has_more: items.length >= pagination.limit,
-	// 	};
-	// }
 
 	private compressChanges(changes: Change[]): Change[] {
 		const itemChanges: Record<Uuid, Change> = {};
