@@ -208,7 +208,7 @@ export enum MenuItemLocation {
 	Note = 'note',
 	Tools = 'tools',
 	Help = 'help',
-	
+
 	/**
 	 * @deprecated Do not use - same as NoteListContextMenu
 	 */
@@ -223,7 +223,7 @@ export enum MenuItemLocation {
 	 * - `noteIds:string[]`: IDs of the notes that were right-clicked on.
 	 */
 	NoteListContextMenu = 'noteListContextMenu',
-	
+
 	EditorContextMenu = 'editorContextMenu',
 
 	/**
@@ -243,7 +243,7 @@ export enum MenuItemLocation {
 	TagContextMenu = 'tagContextMenu',
 }
 
-export function isContextMenuItemLocation(location:MenuItemLocation):boolean {
+export function isContextMenuItemLocation(location: MenuItemLocation): boolean {
 	return [
 		MenuItemLocation.Context,
 		MenuItemLocation.NoteListContextMenu,
