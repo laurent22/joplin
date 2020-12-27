@@ -89,6 +89,17 @@ toolUtils.deleteLink = async function(path) {
 	}
 };
 
+toolUtils.setPackagePrivateField = async function(filePath, value) {
+	const text = await fs.readFile(filePath, 'utf8');
+	const obj = JSON.parse(text);
+	if (!value) {
+		delete obj.private;
+	} else {
+		obj.private = true;
+	}
+	await fs.writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
+};
+
 toolUtils.credentialDir = async function() {
 	const username = require('os').userInfo().username;
 

@@ -1,9 +1,11 @@
-const { execCommand, execCommandVerbose, rootDir, gitPullTry } = require('./tool-utils.js');
+const { execCommand, execCommandVerbose, rootDir, gitPullTry, setPackagePrivateField } = require('./tool-utils.js');
 
 const genDir = `${rootDir}/packages/generator-joplin`;
 
 async function main() {
 	process.chdir(genDir);
+
+	const packageFilePath = `${genDir}/package.json`;
 
 	console.info(`Running from: ${process.cwd()}`);
 
@@ -12,15 +14,21 @@ async function main() {
 	const version = (await execCommand('npm version patch')).trim();
 	const tagName = `plugin-generator-${version}`;
 
-	console.info(`New version number: ${version}`);
+	await setPackagePrivateField(packageFilePath, false);
 
-	await execCommandVerbose('npm', ['publish']);
-	await gitPullTry();
-	await execCommandVerbose('git', ['add', '-A']);
-	await execCommandVerbose('git', ['commit', '-m', `Plugin Generator release ${version}`]);
-	await execCommandVerbose('git', ['tag', tagName]);
-	await execCommandVerbose('git', ['push']);
-	await execCommandVerbose('git', ['push', '--tags']);
+	try {
+		console.info(`New version number: ${version}`);
+
+		await execCommandVerbose('npm', ['publish']);
+		await gitPullTry();
+		await execCommandVerbose('git', ['add', '-A']);
+		await execCommandVerbose('git', ['commit', '-m', `Plugin Generator release ${version}`]);
+		await execCommandVerbose('git', ['tag', tagName]);
+		await execCommandVerbose('git', ['push']);
+		await execCommandVerbose('git', ['push', '--tags']);
+	} finally {
+		await setPackagePrivateField(packageFilePath, true);
+	}
 }
 
 main().catch((error) => {
