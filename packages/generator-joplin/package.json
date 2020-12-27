@@ -1,6 +1,6 @@
 {
   "name": "generator-joplin",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Scaffolds out a new Joplin plugin",
   "homepage": "https://joplinapp.org",
   "author": {
@@ -24,6 +24,5 @@
     "yosay": "^2.0.1"
   },
   "repository": "https://github.com/laurent22/generator-joplin",
-  "license": "MIT",
-  "private": true
+  "license": "MIT"
 }
