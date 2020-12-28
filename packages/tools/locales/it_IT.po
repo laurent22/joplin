@@ -63,7 +63,8 @@ msgstr "Annulla"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
-"Ora l'applicazione si chiuderà. Premi rilancia per completare il processo."
+"Ora l'applicazione si chiuderà. Per favore rilancia per completare il "
+"processo."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
 msgid ""
@@ -78,7 +79,7 @@ msgstr ""
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
-msgstr "Vai a..."
+msgstr "Goto..."
 
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
@@ -88,12 +89,12 @@ msgstr "Comandi"
 #: packages/app-desktop/InteropServiceHelper.js:153
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Esportazione da \"%s\" come formato \"%s\". Si prega di attendere..."
+msgstr "Esportazione da \"%s\" in formato \"%s\". Si prega di attendere..."
 
 #: packages/app-desktop/InteropServiceHelper.js:171
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr "Non è possibile esportare le note: %s"
+msgstr "Impossibile esportare le note: %s"
 
 #: packages/app-desktop/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -146,7 +147,7 @@ msgstr "Questa nota non ha cronologia"
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:112
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "Link o Messaggio non supportato: %s"
+msgstr "Link o messaggio non supportato: %s"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
@@ -236,13 +237,13 @@ msgstr "Taccuini"
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/screens/Note.js:803
 msgid "Tags"
-msgstr "Tag"
+msgstr "Etichette"
 
 #: packages/app-desktop/gui/SideBar/SideBar.js:459
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Decrittografia Elementi: %d/%d"
+msgstr "Decrittografia elementi: %d/%d"
 
 #: packages/app-desktop/gui/SideBar/SideBar.js:463
 #: packages/app-mobile/components/side-menu-content.js:330
@@ -341,7 +342,7 @@ msgstr "Modifica"
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
-msgstr "Allega File"
+msgstr "Allega file"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 msgid "Code Block"
@@ -375,7 +376,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:72
 msgid "There was an error downloading this attachment:"
-msgstr "Errore nel scaricare questo allegato:"
+msgstr "Errore nello scaricamento di questo allegato:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:75
 #: packages/lib/services/ResourceEditWatcher/index.js:196
@@ -454,11 +455,11 @@ msgstr "Codice"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
 msgid "Numbered List"
-msgstr "Elenco Numerato"
+msgstr "Elenco numerato"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
 msgid "Bulleted List"
-msgstr "Elenco Puntato"
+msgstr "Elenco puntato"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:68
 msgid "Checkbox"
@@ -675,7 +676,7 @@ msgstr "Maggiori informazioni"
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Utilizza le frecce per muovere gli elementi del layout. Premi \"Esc\" per "
-"uscire"
+"uscire."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -689,7 +690,7 @@ msgstr "Rinomina"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
 msgid "Rename notebook:"
-msgstr "Rinomina il Taccuino:"
+msgstr "Rinomina il taccuino:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
 #: packages/app-mobile/components/action-button.js:77
@@ -728,11 +729,11 @@ msgstr "Nuova nota"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
 msgid "Move to notebook"
-msgstr "Sposta sul Taccuino"
+msgstr "Sposta sul taccuino"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
 msgid "Move to notebook:"
-msgstr "Sposta sul Taccuino:"
+msgstr "Sposta sul taccuino:"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
@@ -748,7 +749,7 @@ msgstr "Modifica il layout dell'applicazione"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
-msgstr "Rinomina Tag:"
+msgstr "Rinomina etichetta:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
 msgid "New notebook"
@@ -756,7 +757,7 @@ msgstr "Nuovo taccuino"
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
 msgid "Notebook title:"
-msgstr "Titolo del Taccuino:"
+msgstr "Titolo del taccuino:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -2202,7 +2203,7 @@ msgstr "Massimo numero di connessioni concorrenti"
 
 #: packages/lib/models/Setting.js:292
 msgid "Language"
-msgstr "Linguaggio"
+msgstr "Lingua"
 
 #: packages/lib/models/Setting.js:302
 msgid "Date format"
