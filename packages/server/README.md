@@ -12,14 +12,13 @@ First copy `.env-sample` to `.env` and edit the values in there:
 ```shell
 git clone https://github.com/laurent22/joplin
 cd joplin
-git checkout server
 npm install
 docker-compose --file docker-compose.server.yml up --detach
 ```
 
 This will start the server, which will listen on port **22300** on **localhost**.
 
-Due to the restart policy defined in the docker-compose file, the server will be restart automatically whenever the host reboots.
+Due to the restart policy defined in the docker-compose file, the server will be restarted automatically whenever the host reboots.
 
 ## Setup reverse proxy
 
@@ -40,6 +39,14 @@ While the admin user can be used for synchronisation, it is recommended to creat
 
 Once this is done, you can use the email and password you specified to sync this user account with your Joplin clients.
 
+## Checking the logs
+
+Checking the log can be done the standard Docker way:
+
+```shell
+docker-compose --file docker-compose.server.yml logs
+```
+
 # Set up for development
 
 ## Setting up the database
@@ -48,11 +55,11 @@ Once this is done, you can use the email and password you specified to sync this
 
 The server supports SQLite for development and test units. To use it, open `src/config-dev.ts` and uncomment the sqlite3 config.
 
-### Postgres
+### PostgreSQL
 
-It's best to use Postgres as this is what is used in production, however it requires Docker.
+It's best to use PostgreSQL as this is what is used in production, however it requires Docker.
 
-To use it, from the monorepo root, run `docker-compose --file docker-compose.server-dev.yml up`, which will start the Postgres database.
+To use it, from the monorepo root, run `docker-compose --file docker-compose.server-dev.yml up`, which will start the PostgreSQL database.
 
 ## Starting the server
 
