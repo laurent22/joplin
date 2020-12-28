@@ -157,7 +157,7 @@ class OneDriveApi {
 		delete options.contentLength;
 		delete options.startByte;
 
-		const response = await shim.fetch(url, options);
+		const response = await shim.fetch(url,options);
 		return response;
 	}
 
@@ -269,7 +269,7 @@ class OneDriveApi {
 				if (path.includes('/createUploadSession')) {
 					response = await this.uploadBigFile(url, options);
 				} else if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
-					response = await shim.uploadBlob(url, options);
+					response =  await shim.uploadBlob(url, options);
 				} else if (options.target == 'string') {
 					response = await shim.fetch(url, options);
 				} else {
@@ -351,7 +351,7 @@ class OneDriveApi {
 	async execAccountPropertiesRequest() {
 
 		try {
-			const response = await this.exec('GET', 'https://graph.microsoft.com/v1.0/me/drive');
+			const response = await this.exec('GET','https://graph.microsoft.com/v1.0/me/drive');
 			const data = await response.json();
 			const accountProperties = { accountType: data.driveType, driveId: data.id };
 			return accountProperties;

@@ -141,7 +141,6 @@ class FileApiDriverOneDrive {
 			byteSize = (await shim.fsDriver().stat(options.path)).size;
 		} else {
 			options.headers = { 'Content-Type': 'text/plain' };
-			// byteSize = new Blob([content]).size;
 			byteSize = Buffer.byteLength(content);
 		}
 
