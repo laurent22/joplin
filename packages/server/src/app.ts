@@ -71,11 +71,11 @@ app.use(async (ctx: Koa.Context) => {
 		}
 	} catch (error) {
 		if (error.httpCode >= 400 && error.httpCode < 500) {
-			appLogger().error(error.httpCode + ': ' + `${ctx.request.method} ${ctx.path}` + ' : ' + error.message);
+			appLogger().error(`${error.httpCode}: ` + `${ctx.request.method} ${ctx.path}` + ` : ${error.message}`);
 		} else {
 			appLogger().error(error);
 		}
-		
+
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
 		const responseFormat = routeResponseFormat(match, ctx.path);
@@ -111,8 +111,8 @@ async function main() {
 	const globalLogger = new Logger();
 	// globalLogger.addTarget(TargetType.File, { path: `${config().logDir}/app.txt` });
 	globalLogger.addTarget(TargetType.Console, {
-		format: '%(date_time)s: [%(level)s] %(prefix)s: %(message)s',	
-		formatInfo: '%(date_time)s: %(prefix)s: %(message)s',	
+		format: '%(date_time)s: [%(level)s] %(prefix)s: %(message)s',
+		formatInfo: '%(date_time)s: %(prefix)s: %(message)s',
 	});
 	Logger.initializeGlobalLogger(globalLogger);
 

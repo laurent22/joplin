@@ -145,7 +145,7 @@ export function parseSubPath(p: string): SubPath {
 	return output;
 }
 
-export function routeResponseFormat(match: MatchedRoute, rawPath:string): RouteResponseFormat {
+export function routeResponseFormat(match: MatchedRoute, rawPath: string): RouteResponseFormat {
 	if (match && match.route.responseFormat) return match.route.responseFormat;
 
 	let path = rawPath;

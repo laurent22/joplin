@@ -180,7 +180,7 @@ class Logger {
 				if (level == LogLevel.Warn) fn = 'warn';
 				if (level == LogLevel.Info) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
-				let items:any[] = [];
+				let items: any[] = [];
 
 				if (target.format) {
 					const format = level === LogLevel.Info && target.formatInfo ? target.formatInfo : target.format;
