@@ -1,10 +1,11 @@
-import { User, Session, DbConnection, connectDb, disconnectDb } from '../db';
+import { User, Session, DbConnection, connectDb, disconnectDb, File } from '../db';
 import { createDb } from '../tools/dbTools';
 import modelFactory from '../models/factory';
 import controllerFactory from '../controllers/factory';
 import baseConfig from '../config-tests';
 import { Config } from './types';
 import { initConfig } from '../config';
+import FileModel from '../models/FileModel';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -80,6 +81,20 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 export const createUser = async function(index: number = 1, isAdmin: boolean = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
+
+export async function createFileTree(fileModel: FileModel, parentId: string, tree: any): Promise<void> {
+	for (const name in tree) {
+		const children: any = tree[name];
+		const isDir = children !== null;
+		const newFile: File = await fileModel.save({
+			parent_id: parentId,
+			name: name,
+			is_directory: isDir ? 1 : 0,
+		});
+
+		if (isDir && Object.keys(children).length) await createFileTree(fileModel, newFile.id, children);
+	}
+}
 
 export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	try {

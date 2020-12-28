@@ -56,6 +56,17 @@ export default class FileModel extends BaseModel {
 		return null; // Not a special dir
 	}
 
+	public async itemFullPath(item: File): Promise<string> {
+		const segments: string[] = [];
+		while (item) {
+			if (item.is_root) break;
+			segments.splice(0, 0, item.name);
+			item = item.parent_id ? await this.load(item.parent_id) : null;
+		}
+
+		return segments.length ? (`root:/${segments.join('/')}:`) : 'root';
+	}
+
 	public async entityFromItemId(idOrPath: string, options: EntityFromItemIdOptions = {}): Promise<File> {
 		options = { mustExist: true, ...options };
 
@@ -263,6 +274,19 @@ export default class FileModel extends BaseModel {
 		if (!output.length && mustExist) throw new ErrorBadRequest(`path without a base directory: ${path}`);
 
 		return output;
+	}
+
+	// Mostly makes sense for testing/debugging because the filename would
+	// have to globally unique, which is not a requirement.
+	public async loadByName(name: string): Promise<File> {
+		const file: File = await this.db(this.tableName)
+			.select(this.defaultFields)
+			.where({ name: name })
+			.andWhere({ owner_id: this.userId })
+			.first();
+		if (!file) throw new ErrorNotFound(`No such file: ${name}`);
+		await this.checkCanReadPermissions(file);
+		return file;
 	}
 
 	public async loadWithContent(id: string): Promise<any> {

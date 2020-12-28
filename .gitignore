@@ -1434,6 +1434,9 @@ packages/server/src/controllers/api/UserController.test.js.map
 packages/server/src/controllers/factory.d.ts
 packages/server/src/controllers/factory.js
 packages/server/src/controllers/factory.js.map
+packages/server/src/controllers/index/FileController.d.ts
+packages/server/src/controllers/index/FileController.js
+packages/server/src/controllers/index/FileController.js.map
 packages/server/src/controllers/index/HomeController.d.ts
 packages/server/src/controllers/index/HomeController.js
 packages/server/src/controllers/index/HomeController.js.map
@@ -1500,6 +1503,9 @@ packages/server/src/routes/api/sessions.js.map
 packages/server/src/routes/default.d.ts
 packages/server/src/routes/default.js
 packages/server/src/routes/default.js.map
+packages/server/src/routes/index/files.d.ts
+packages/server/src/routes/index/files.js
+packages/server/src/routes/index/files.js.map
 packages/server/src/routes/index/home.d.ts
 packages/server/src/routes/index/home.js
 packages/server/src/routes/index/home.js.map

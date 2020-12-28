@@ -7,6 +7,7 @@ import IndexLoginController from './index/LoginController';
 import IndexHomeController from './index/HomeController';
 import IndexProfileController from './index/ProfileController';
 import IndexUserController from './index/UserController';
+import IndexFileController from './index/FileController';
 
 export class Controllers {
 
@@ -46,6 +47,10 @@ export class Controllers {
 
 	public indexUser() {
 		return new IndexUserController(this.models_);
+	}
+
+	public indexFiles() {
+		return new IndexFileController(this.models_);
 	}
 
 }

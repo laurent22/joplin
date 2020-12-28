@@ -58,10 +58,10 @@ export default class FileController extends BaseController {
 		await this.putFileContent(sessionId, fileId, null);
 	}
 
-	public async getChildren(sessionId: string, fileId: string, pagination: Pagination): Promise<PaginatedFiles> {
+	public async getChildren(sessionId: string, dirId: string, pagination: Pagination): Promise<PaginatedFiles> {
 		const user = await this.initSession(sessionId);
 		const fileModel = this.models.file({ userId: user.id });
-		const parent: File = await fileModel.entityFromItemId(fileId);
+		const parent: File = await fileModel.entityFromItemId(dirId);
 		return fileModel.toApiOutput(await fileModel.childrens(parent.id, pagination));
 	}
 
