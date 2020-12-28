@@ -81,9 +81,8 @@ msgstr "Gehe zu ..."
 
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Command palette"
-msgstr "Befehl"
+msgstr "Befehlspalette"
 
 #: packages/app-desktop/InteropServiceHelper.js:153
 #, javascript-format
@@ -120,9 +119,8 @@ msgid "New version: %s"
 msgstr "Neue Version: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "Heruntergeladen"
+msgstr "Herunterladen"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -603,9 +601,8 @@ msgid "Options"
 msgstr "Optionen"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Ungültige Antwort: %s"
+msgstr "Ungültig"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -680,7 +677,7 @@ msgstr "Weitere Information"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:527
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
+msgstr "Verwenden Sie die Pfeile, um die Layoutelemente zu verschieben. Drücken Sie zum Beenden „Escape“."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -748,9 +745,8 @@ msgid "Toggle editors"
 msgstr "Editor-Layout umschalten"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
-#, fuzzy
 msgid "Change application layout"
-msgstr "Das Programm verlassen."
+msgstr "Anwendungslayout ändern"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -767,7 +763,7 @@ msgstr "Notizbuch-Titel:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Rechtschreibprüfung"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -993,7 +989,7 @@ msgstr "Herauszoomen"
 
 #: packages/app-desktop/gui/MenuBar.js:533
 msgid "&Go"
-msgstr ""
+msgstr "&Gehe zu"
 
 #: packages/app-desktop/gui/MenuBar.js:545
 msgid "&Note"
@@ -1200,13 +1196,12 @@ msgstr ""
 "Wichtig: Du musst diese Prozedur nur EINMAL auf einem Gerät starten."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "Verschlüsselung"
+msgstr "Neuverschlüsselung"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "ignorieren"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1386,7 +1381,7 @@ msgstr "Durchsuchen ..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "Die Anwendung muss neu gestartet werden, damit diese Änderungen wirksam werden."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1395,10 +1390,9 @@ msgstr "Mach es jetzt"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 msgid "Later"
-msgstr ""
+msgstr "Später"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
 msgstr "Hole es jetzt:"
 
@@ -1407,13 +1401,13 @@ msgid "Apply"
 msgstr "Anwenden"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Notiz „%s“ löschen?"
+msgstr "Plugin „%s“ löschen?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "Plugin installieren"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -2138,7 +2132,7 @@ msgstr "Aritim dunkel"
 
 #: packages/lib/models/Setting.js:82
 msgid "OLED Dark"
-msgstr "OLED Dark"
+msgstr "OLED dunkel"
 
 #: packages/lib/models/Setting.js:103
 msgid "Synchronisation target"
@@ -3074,7 +3068,7 @@ msgstr "Kann „%s“ nicht finden."
 #: packages/lib/services/interop/InteropService.js:199
 #, javascript-format
 msgid "Please specify import format for %s"
-msgstr "Bitte das Exportformat für %s angeben"
+msgstr "Bitte das Importformat für %s angeben"
 
 #: packages/lib/services/KeymapService.js:512
 msgid "command"
@@ -3085,12 +3079,12 @@ msgstr "Befehl"
 #, fuzzy, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr ""
-"Dem Tastenzuordnungselement %s fehlt die erforderliche Eigenschaft „command“."
+"Dem Tastenzuordnungselement %s fehlt die erforderliche Eigenschaft %s."
 
 #: packages/lib/services/KeymapService.js:517
 #: packages/lib/services/KeymapService.js:524
 msgid "accelerator"
-msgstr ""
+msgstr "Beschleuniger"
 
 #: packages/lib/services/KeymapService.js:524
 #, fuzzy, javascript-format
@@ -3226,20 +3220,19 @@ msgstr "Auf %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Keine Vorschläge"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Zum Wörterbuch hinzufügen"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Rechtschreibprüfung verwenden"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Sprache"
+msgstr "Sprache ändern"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -4080,9 +4073,8 @@ msgstr "Notiz ist keine Aufgabe: „%s“"
 #~ msgid "Resources"
 #~ msgstr "Anhänge"
 
-#, fuzzy
 #~ msgid "marked text"
-#~ msgstr "hervorgehobener Text"
+#~ msgstr "markierter Text"
 
 #~ msgid "Global zoom percentage"
 #~ msgstr "Zoomstufe der Benutzeroberfläche"
@@ -4096,9 +4088,8 @@ msgstr "Notiz ist keine Aufgabe: „%s“"
 #~ msgid "Confirm password"
 #~ msgstr "Passwort bestätigen"
 
-#, fuzzy
 #~ msgid "Missing required argument: note"
-#~ msgstr "Fehlendes erforderliches Argument: %s"
+#~ msgstr "Fehlendes erforderliches Argument: note"
 
 #~ msgid "Synchronisation status"
 #~ msgstr "Status der Synchronisation"
@@ -4115,9 +4106,8 @@ msgstr "Notiz ist keine Aufgabe: „%s“"
 #~ msgid "Clipper Options"
 #~ msgstr "Clipper-Einstellungen"
 
-#, fuzzy
 #~ msgid "Permission to write to external storage"
-#~ msgstr "Berechtigung zur Verwendung der Kamera"
+#~ msgstr "Berechtigung zum Schreiben auf den externen Speicher"
 
 #~ msgid "Cancel synchronisation"
 #~ msgstr "Synchronisation abbrechen"
