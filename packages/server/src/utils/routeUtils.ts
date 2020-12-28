@@ -145,11 +145,13 @@ export function parseSubPath(p: string): SubPath {
 	return output;
 }
 
-export function routeResponseFormat(match: MatchedRoute): RouteResponseFormat {
-	if (!match) return RouteResponseFormat.Json;
-	if (match.route.responseFormat) return match.route.responseFormat;
-	const s = match.basePath ? match.basePath : match.subPath.raw;
-	return s.indexOf('api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
+export function routeResponseFormat(match: MatchedRoute, rawPath:string): RouteResponseFormat {
+	if (match && match.route.responseFormat) return match.route.responseFormat;
+
+	let path = rawPath;
+	if (match) path = match.basePath ? match.basePath : match.subPath.raw;
+
+	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
 export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {

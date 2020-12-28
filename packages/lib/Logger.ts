@@ -1,6 +1,7 @@
 const moment = require('moment');
 const time = require('./time').default;
 const { FsDriverDummy } = require('./fs-driver-dummy.js');
+const { sprintf } = require('sprintf-js');
 
 export enum TargetType {
 	Database = 'database',
@@ -24,6 +25,12 @@ interface Target {
 	prefix?: string;
 	path?: string;
 	source?: string;
+
+	// Default message format
+	format?: string;
+
+	// If specified, will use this as format if it's an info message
+	formatInfo?: string;
 }
 
 export interface LoggerWrapper {
@@ -173,9 +180,25 @@ class Logger {
 				if (level == LogLevel.Warn) fn = 'warn';
 				if (level == LogLevel.Info) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
-				const prefixItems = [moment().format('HH:mm:ss')];
-				if (targetPrefix) prefixItems.push(targetPrefix);
-				const items = [`${prefixItems.join(': ')}:`].concat(...object);
+				let items:any[] = [];
+
+				if (target.format) {
+					const format = level === LogLevel.Info && target.formatInfo ? target.formatInfo : target.format;
+
+					const s = sprintf(format, {
+						date_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+						level: Logger.levelIdToString(level),
+						prefix: targetPrefix || '',
+						message: '',
+					});
+
+					items = [s.trim()].concat(...object);
+				} else {
+					const prefixItems = [moment().format('HH:mm:ss')];
+					if (targetPrefix) prefixItems.push(targetPrefix);
+					items = [`${prefixItems.join(': ')}:`].concat(...object);
+				}
+
 				consoleObj[fn](...items);
 			} else if (target.type == 'file') {
 				const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');

@@ -38,7 +38,9 @@ shimInit();
 let appLogger_: LoggerWrapper = null;
 
 function appLogger(): LoggerWrapper {
-	if (!appLogger_) appLogger_ = Logger.create('App');
+	if (!appLogger_) {
+		appLogger_ = Logger.create('App');
+	}
 	return appLogger_;
 }
 
@@ -68,10 +70,15 @@ app.use(async (ctx: Koa.Context) => {
 			throw new ErrorNotFound();
 		}
 	} catch (error) {
-		appLogger().error(error);
+		if (error.httpCode >= 400 && error.httpCode < 500) {
+			appLogger().error(error.httpCode + ': ' + `${ctx.request.method} ${ctx.path}` + ' : ' + error.message);
+		} else {
+			appLogger().error(error);
+		}
+		
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
-		const responseFormat = routeResponseFormat(match);
+		const responseFormat = routeResponseFormat(match, ctx.path);
 
 		if (responseFormat === RouteResponseFormat.Html) {
 			ctx.response.set('Content-Type', 'text/html');
@@ -86,7 +93,7 @@ app.use(async (ctx: Koa.Context) => {
 		} else { // JSON
 			ctx.response.set('Content-Type', 'application/json');
 			const r: any = { error: error.message };
-			if (env == 'dev' && error.stack) r.stack = error.stack;
+			if (env === 'dev' && error.stack) r.stack = error.stack;
 			if (error.code) r.code = error.code;
 			ctx.response.body = r;
 		}
@@ -102,8 +109,11 @@ async function main() {
 	await fs.mkdirp(config().logDir);
 	Logger.fsDriver_ = new FsDriverNode();
 	const globalLogger = new Logger();
-	globalLogger.addTarget(TargetType.File, { path: `${config().logDir}/app.txt` });
-	globalLogger.addTarget(TargetType.Console);
+	// globalLogger.addTarget(TargetType.File, { path: `${config().logDir}/app.txt` });
+	globalLogger.addTarget(TargetType.Console, {
+		format: '%(date_time)s: [%(level)s] %(prefix)s: %(message)s',	
+		formatInfo: '%(date_time)s: %(prefix)s: %(message)s',	
+	});
 	Logger.initializeGlobalLogger(globalLogger);
 
 	const pidFile = argv.pidfile as string;
