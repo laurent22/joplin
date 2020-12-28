@@ -1,0 +1,48 @@
+{{> errorBanner}}
+<form id="user_form" action="{{{postUrl}}}" method="POST">
+	<input type="hidden" name="id" value="{{user.id}}"/>
+	<input type="hidden" name="is_new" value="{{isNew}}"/>
+	<div class="field">
+		<label class="label">Full name</label>
+		<div class="control">
+			<input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+		</div>
+	</div>
+	<div class="field">
+		<label class="label">Email</label>
+		<div class="control">
+			<input class="input" type="email" name="email" value="{{user.email}}"/>
+		</div>
+	</div>
+	<div class="field">
+		<label class="label">Password</label>
+		<div class="control">
+			<input class="input" type="password" name="password" autocomplete="new-password"/>
+		</div>
+	</div>
+	<div class="field">
+		<label class="label">Repeat password</label>
+		<div class="control">
+			<input class="input" type="password" name="password2" autocomplete="new-password"/>
+		</div>
+	</div>
+	<div class="control">
+		<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
+		{{^isNew}}
+			{{^user.is_admin}}
+				<input type="submit" name="delete_button" class="button is-danger" value="Delete" />
+			{{/user.is_admin}}
+		{{/isNew}}
+	</div>
+</form>
+
+<script>
+	onDocumentReady(function() {
+		document.getElementById("user_form").addEventListener('submit', function(event) {
+			if (event.submitter.getAttribute('name') === 'delete_button') {
+				const ok = confirm('Delete this user?');
+				if (!ok) event.preventDefault();
+			}
+		});
+	});
+</script>

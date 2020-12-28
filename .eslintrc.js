@@ -1,4 +1,5 @@
 module.exports = {
+	'root': true,
 	'env': {
 		'browser': true,
 		'es6': true,
@@ -33,6 +34,9 @@ module.exports = {
 		'browserSupportsPromises_': true,
 		'chrome': 'readonly',
 		'browser': 'readonly',
+
+		// Server admin UI global variables
+		'onDocumentReady': 'readonly',
 
 		'tinymce': 'readonly',
 	},

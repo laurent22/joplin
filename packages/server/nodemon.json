@@ -1,0 +1,4 @@
+{
+  "verbose": true,
+  "watch": ["dist/"]
+}

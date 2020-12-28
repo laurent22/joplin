@@ -1,7 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
 import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from './test-utils-synchronizer';
 
-const { syncTargetName, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('./test-utils.js');
+const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');
@@ -14,6 +14,10 @@ describe('Synchronizer.basics', function() {
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 		done();
+	});
+
+	afterAll(async () => {
+		await afterAllCleanUp();
 	});
 
 	it('should create remote items', (async () => {
@@ -123,10 +127,6 @@ describe('Synchronizer.basics', function() {
 	}));
 
 	it('should delete local notes', (async () => {
-		// For these tests we pass the context around for each user. This is to make sure that the "deletedItemsProcessed"
-		// property of the basicDelta() function is cleared properly at the end of a sync operation. If it is not cleared
-		// it means items will no longer be deleted locally via sync.
-
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'deux', parent_id: folder1.id });

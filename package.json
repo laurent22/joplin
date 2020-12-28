@@ -20,12 +20,16 @@
     "buildTranslationsNoTsc": "node packages/tools/build-translation.js",
     "buildWebsite": "npm run buildApiDoc && node ./packages/tools/build-website.js && npm run buildPluginDoc",
     "clean": "lerna clean -y && lerna run clean",
+    "circularDependencyCheck": "npx madge --warning --circular --extensions js ./",
     "generateDatabaseTypes": "node packages/tools/generate-database-types",
     "linkChecker": "linkchecker https://joplinapp.org",
     "linter-ci": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-precommit": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "./node_modules/.bin/eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "postinstall": "lerna bootstrap --no-ci && npm run tsc",
+    "bootstrap": "lerna bootstrap --no-ci",
+    "bootstrapIgnoreScripts": "lerna bootstrap --ignore-scripts --no-ci",
+    "postinstall": "npm run bootstrap --no-ci && npm run build",
+    "build": "lerna run build && npm run tsc",
     "publishAll": "git pull && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
@@ -39,7 +43,8 @@
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "lerna run watch --stream --parallel",
-    "i": "lerna add --no-bootstrap --scope"
+    "i": "lerna add --no-bootstrap --scope",
+    "server-start-dev": "docker-compose --file docker-compose.server-dev.yml up"
   },
   "husky": {
     "hooks": {

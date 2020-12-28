@@ -1,0 +1,8 @@
+{{#error}}
+	<div class="notification is-danger">
+		<strong>{{error.message}}</strong>
+		{{#error.stack}}
+			<pre>{{.}}</pre>
+		{{/error.stack}}
+	</div>
+{{/error}}

@@ -1,0 +1,31 @@
+{{> errorBanner}}
+<form action="{{{global.baseUrl}}}/profile" method="POST">
+	<input type="hidden" name="id" value="{{user.id}}"/>
+	<div class="field">
+		<label class="label">Full name</label>
+		<div class="control">
+			<input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+		</div>
+	</div>
+	<div class="field">
+		<label class="label">Email</label>
+		<div class="control">
+			<input class="input" type="email" name="email" value="{{user.email}}"/>
+		</div>
+	</div>
+	<div class="field">
+		<label class="label">Password</label>
+		<div class="control">
+			<input class="input" type="password" name="password" autocomplete="new-password"/>
+		</div>
+	</div>
+	<div class="field">
+		<label class="label">Repeat password</label>
+		<div class="control">
+			<input class="input" type="password" name="password2" autocomplete="new-password"/>
+		</div>
+	</div>
+	<div class="control">
+		<button class="button is-primary">Update profile</button>
+	</div>
+</form>

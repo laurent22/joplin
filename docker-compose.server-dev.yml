@@ -1,0 +1,28 @@
+# For development, the easiest might be to only start the Postgres container and
+# run the app directly with `npm start`. Or use sqlite3.
+
+version: '3'
+
+services:
+    # app:
+    #   build:
+    #     context: .
+    #     dockerfile: Dockerfile.server-dev
+    #   ports:
+    #     - "22300:22300"
+    #   # volumes:
+    #   #   - ./packages/server/:/var/www/joplin/packages/server/
+    #   #   - /var/www/joplin/packages/server/node_modules/
+    db:
+        build:
+            context: .
+            dockerfile: Dockerfile.db
+        ports:
+            - "5432:5432"
+        environment:
+            # TODO: Considering the database is only exposed to the
+            # application, and not to the outside world, is there a need to
+            # pick a secure password?
+            - POSTGRES_PASSWORD=joplin
+            - POSTGRES_USER=joplin
+            - POSTGRES_DB=joplin

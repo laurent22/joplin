@@ -1,5 +1,6 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
+import { ltrimSlashes } from '../path-utils';
 const BaseModel = require('../BaseModel').default;
 const { Database } = require('../database.js');
 const SyncTargetRegistry = require('../SyncTargetRegistry.js');
@@ -309,6 +310,52 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
+			'sync.9.path': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+				},
+				public: true,
+				label: () => _('Joplin Server URL'),
+				description: () => emptyDirWarning,
+			},
+			'sync.9.directory': {
+				value: 'Apps/Joplin',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+				},
+				filter: value => {
+					return value ? ltrimSlashes(rtrimSlashes(value)) : '';
+				},
+				public: true,
+				label: () => _('Joplin Server Directory'),
+			},
+			'sync.9.username': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+				},
+				public: true,
+				label: () => _('Joplin Server username'),
+			},
+			'sync.9.password': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+				},
+				public: true,
+				label: () => _('Joplin Server password'),
+				secure: true,
+			},
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
@@ -333,6 +380,7 @@ class Setting extends BaseModel {
 			'sync.3.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.4.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.7.auth': { value: '', type: SettingItemType.String, public: false },
+			'sync.9.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.1.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.2.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.3.context': { value: '', type: SettingItemType.String, public: false },
@@ -341,6 +389,7 @@ class Setting extends BaseModel {
 			'sync.6.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.7.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.8.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.9.context': { value: '', type: SettingItemType.String, public: false },
 
 			'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 

@@ -1,0 +1,22 @@
+<section class="section login-box">
+	<div class="container">
+		{{> errorBanner}}
+		<form action="{{{global.baseUrl}}}/login" method="POST">
+			<div class="field">
+				<label class="label">Email</label>
+				<div class="control">
+					<input class="input" type="email" name="email"/>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Password</label>
+				<div class="control">
+					<input class="input" type="password" name="password"/>
+				</div>
+			</div>
+			<div class="control">
+				<button class="button is-primary">Login</button>
+			</div>
+		</form>
+	</div>
+</section>

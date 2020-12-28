@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+    app:
+        environment:
+            - JOPLIN_BASE_URL=${JOPLIN_BASE_URL}
+            - JOPLIN_PORT=${JOPLIN_PORT}
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: Dockerfile.server
+        ports:
+            - "${JOPLIN_PORT}:${JOPLIN_PORT}"
+        # volumes:
+        #     # Mount the server directory so that it's possible to edit file
+        #     # while the container is running. However don't mount the
+        #     # node_modules directory which will be specific to the Docker
+        #     # image (eg native modules will be built for Ubuntu, while the
+        #     # container might be running in Windows)
+        #     # https://stackoverflow.com/a/37898591/561309
+        #     - ./packages/server:/home/joplin/packages/server
+        #     - /home/joplin/packages/server/node_modules/
+    db:
+        restart: unless-stopped
+        # By default, the Postgres image saves the data to a Docker volume,
+        # so it persists whenever the server is restarted using
+        # `docker-compose up`. Note that it would however be deleted when
+        # running `docker-compose down`.
+        build:
+            context: .
+            dockerfile: Dockerfile.db
+        ports:
+            - "5432:5432"
+        environment:
+            # TODO: Considering the database is only exposed to the
+            # application, and not to the outside world, is there a need to
+            # pick a secure password?
+            - POSTGRES_PASSWORD=joplin
+            - POSTGRES_USER=joplin
+            - POSTGRES_DB=joplin

@@ -1,0 +1,24 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th>Full name</th>
+			<th>Email</th>
+			<th>Is admin?</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#users}}
+			<tr>
+				<td>{{full_name}}</td>
+				<td>{{email}}</td>
+				<td>{{is_admin}}</td>
+				<td><a href="{{{global.baseUrl}}}/users/{{id}}" class="button is-primary is-small">Edit</a></td>
+			</tr>
+		{{/users}}
+	</tbody>
+</table>
+
+<div class="block">
+	<a class="button is-primary" href="{{{global.baseUrl}}}/users/new">Add user</a>
+</div>

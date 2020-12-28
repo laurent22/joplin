@@ -1,0 +1,22 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand logo-container">
+		<a class="navbar-item" href="{{{global.baseUrl}}}/home">
+			<img class="logo" src="{{{global.baseUrl}}}/images/Logo.png"/>
+		</a>
+	</div>
+	<div class="navbar-menu is-active">
+		<div class="navbar-start">
+			<a class="navbar-item" href="{{{global.baseUrl}}}/home">Home</a>
+			<a class="navbar-item" href="{{{global.baseUrl}}}/users">Users</a>
+		</div>
+		<div class="navbar-end">
+			<div class="navbar-item">{{owner.email}}</div>
+			<a class="navbar-item" href="{{{global.baseUrl}}}/profile">Profile</a>
+			<div class="navbar-item">
+				<form method="post" action="{{{global.baseUrl}}}/logout">
+					<button class="button is-primary">Logout</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</nav>

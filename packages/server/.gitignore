@@ -1,0 +1,9 @@
+node_modules/
+dist
+db.sqlite
+db-*.sqlite
+*.sqlite-journal
+*.pid
+logs/
+tests/temp/
+temp/

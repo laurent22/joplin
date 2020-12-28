@@ -1,0 +1,27 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 100%;
+}
+
+input.form-control {
+	margin-bottom: 0.5rem;
+}
+
+.navbar {
+	padding: 1rem 3rem;
+}
+
+.navbar .logo-container {
+	align-items: center;
+}
+
+.navbar .logo {
+	height: 50px;
+}
+
+.main {
+	padding: 0 3rem;
+}
