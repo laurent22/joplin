@@ -624,7 +624,7 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
 					displaySaxWarning(this, 'Found <li> tag without being inside a list');
-					// return;
+					return;
 				}
 
 				const container = state.lists[state.lists.length - 1];
