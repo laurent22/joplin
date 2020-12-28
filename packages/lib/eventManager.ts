@@ -1,6 +1,6 @@
 const events = require('events');
 
-class EventManager {
+export class EventManager {
 
 	private emitter_: any;
 	private appStatePrevious_: any;

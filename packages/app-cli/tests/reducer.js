@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestNotes, createNTestFolders, createNTestTags } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const Note = require('@joplin/lib/models/Note.js');
 const Tag = require('@joplin/lib/models/Tag.js');
@@ -101,7 +101,7 @@ describe('reducer', function() {
 	});
 
 	// tests for NOTE_DELETE
-	it('should delete selected note', asyncTest(async () => {
+	it('should delete selected note', (async () => {
 		// create 1 folder
 		const folders = await createNTestFolders(1);
 		// create 5 notes
@@ -122,7 +122,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete selected note at top', asyncTest(async () => {
+	it('should delete selected note at top', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [1]);
@@ -136,7 +136,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete last remaining note', asyncTest(async () => {
+	it('should delete last remaining note', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(1, folders[0]);
 		let state = initTestState(folders, 0, notes, [0]);
@@ -150,7 +150,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete selected note at bottom', asyncTest(async () => {
+	it('should delete selected note at bottom', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [4]);
@@ -164,7 +164,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete note when a note below is selected', asyncTest(async () => {
+	it('should delete note when a note below is selected', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [3]);
@@ -178,7 +178,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete note when a note above is selected', asyncTest(async () => {
+	it('should delete note when a note above is selected', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [1]);
@@ -192,7 +192,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete selected notes', asyncTest(async () => {
+	it('should delete selected notes', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [1,2]);
@@ -207,7 +207,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete note when a notes below it are selected', asyncTest(async () => {
+	it('should delete note when a notes below it are selected', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [3,4]);
@@ -221,7 +221,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete note when a notes above it are selected', asyncTest(async () => {
+	it('should delete note when a notes above it are selected', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [1,2]);
@@ -235,7 +235,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete notes at end', asyncTest(async () => {
+	it('should delete notes at end', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [3,4]);
@@ -250,7 +250,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should delete notes when non-contiguous selection', asyncTest(async () => {
+	it('should delete notes when non-contiguous selection', (async () => {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 0, notes, [0,2,4]);
@@ -267,7 +267,7 @@ describe('reducer', function() {
 	}));
 
 	// tests for FOLDER_DELETE
-	it('should delete selected notebook', asyncTest(async () => {
+	it('should delete selected notebook', (async () => {
 		const folders = await createNTestFolders(5);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 2, notes, [2]);
@@ -281,7 +281,7 @@ describe('reducer', function() {
 		expect(state.selectedFolderId).toEqual(expected.selectedIds[0]);
 	}));
 
-	it('should delete notebook when a book above is selected', asyncTest(async () => {
+	it('should delete notebook when a book above is selected', (async () => {
 		const folders = await createNTestFolders(5);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 1, notes, [2]);
@@ -295,7 +295,7 @@ describe('reducer', function() {
 		expect(state.selectedFolderId).toEqual(expected.selectedIds[0]);
 	}));
 
-	it('should delete notebook when a book below is selected', asyncTest(async () => {
+	it('should delete notebook when a book below is selected', (async () => {
 		const folders = await createNTestFolders(5);
 		const notes = await createNTestNotes(5, folders[0]);
 		let state = initTestState(folders, 4, notes, [2]);
@@ -310,7 +310,7 @@ describe('reducer', function() {
 	}));
 
 	// tests for TAG_DELETE
-	it('should delete selected tag', asyncTest(async () => {
+	it('should delete selected tag', (async () => {
 		const tags = await createNTestTags(5);
 		let state = initTestState(null, null, null, null, tags, [2]);
 
@@ -323,7 +323,7 @@ describe('reducer', function() {
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
 
-	it('should delete tag when a tag above is selected', asyncTest(async () => {
+	it('should delete tag when a tag above is selected', (async () => {
 		const tags = await createNTestTags(5);
 		let state = initTestState(null, null, null, null, tags, [2]);
 
@@ -336,7 +336,7 @@ describe('reducer', function() {
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
 
-	it('should delete tag when a tag below is selected', asyncTest(async () => {
+	it('should delete tag when a tag below is selected', (async () => {
 		const tags = await createNTestTags(5);
 		let state = initTestState(null, null, null, null, tags, [2]);
 
@@ -349,7 +349,7 @@ describe('reducer', function() {
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
 
-	it('should select all notes', asyncTest(async () => {
+	it('should select all notes', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
 		for (let i = 0; i < folders.length; i++) {
@@ -372,7 +372,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
-	it('should remove deleted note from history', asyncTest(async () => {
+	it('should remove deleted note from history', (async () => {
 
 		// create 1 folder
 		const folders = await createNTestFolders(1);
@@ -399,7 +399,7 @@ describe('reducer', function() {
 		expect(getIds(state.backwardHistoryNotes)).not.toContain(notes[2].id);
 	}));
 
-	it('should remove all notes of a deleted notebook from history', asyncTest(async () => {
+	it('should remove all notes of a deleted notebook from history', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
 		for (let i = 0; i < folders.length; i++) {
@@ -421,7 +421,7 @@ describe('reducer', function() {
 		expect(getIds(state.backwardHistoryNotes)).toEqual([]);
 	}));
 
-	it('should maintain history correctly when going backward and forward', asyncTest(async () => {
+	it('should maintain history correctly when going backward and forward', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
 		for (let i = 0; i < folders.length; i++) {
@@ -454,7 +454,7 @@ describe('reducer', function() {
 		expect(getIds(state.forwardHistoryNotes)).toEqual([]);
 	}));
 
-	it('should remember the last seen note of a notebook', asyncTest(async () => {
+	it('should remember the last seen note of a notebook', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
 		for (let i = 0; i < folders.length; i++) {
@@ -483,7 +483,7 @@ describe('reducer', function() {
 
 	}));
 
-	it('should ensure that history is free of adjacent duplicates', asyncTest(async () => {
+	it('should ensure that history is free of adjacent duplicates', (async () => {
 		// create 1 folder
 		const folders = await createNTestFolders(1);
 		// create 5 notes
@@ -552,7 +552,7 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds).toEqual([notes[3].id]);
 	}));
 
-	it('should ensure history max limit is maintained', asyncTest(async () => {
+	it('should ensure history max limit is maintained', (async () => {
 		const folders = await createNTestFolders(1);
 		// create 5 notes
 		const notes = await createNTestNotes(5, folders[0]);

@@ -153,6 +153,7 @@ export default class NoteListUtils {
 							await InteropServiceHelper.export(props.dispatch.bind(this), module, {
 								sourceNoteIds: noteIds,
 								includeConflicts: props.inConflictFolder,
+								plugins: props.plugins,
 							});
 						},
 					})
@@ -186,7 +187,7 @@ export default class NoteListUtils {
 			if (location !== MenuItemLocation.Context && location !== MenuItemLocation.NoteListContextMenu) continue;
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName))
+				new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
 			);
 		}
 

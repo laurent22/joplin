@@ -92,6 +92,15 @@ shared.updateSettingValue = function(comp, key, value) {
 	});
 };
 
+shared.scheduleSaveSettings = function(comp) {
+	if (shared.scheduleSaveSettingsIID) clearTimeout(shared.scheduleSaveSettingsIID);
+
+	shared.scheduleSaveSettingsIID = setTimeout(() => {
+		shared.scheduleSaveSettingsIID = null;
+		shared.saveSettings(comp);
+	}, 100);
+};
+
 shared.saveSettings = function(comp) {
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;

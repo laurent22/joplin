@@ -116,7 +116,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 
 		const theme = themeStyle(this.props.themeId);
 
-		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
+		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
 

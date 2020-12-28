@@ -6,6 +6,8 @@ import { ContentScriptType } from './api/types';
 import Logger from '../../Logger';
 const EventEmitter = require('events');
 
+const logger = Logger.create('Plugin');
+
 interface ViewControllers {
 	[key: string]: ViewController;
 }
@@ -21,37 +23,33 @@ interface ContentScripts {
 
 export default class Plugin {
 
-	private id_: string;
 	private baseDir_: string;
 	private manifest_: PluginManifest;
 	private scriptText_: string;
-	private enabled_: boolean = true;
-	private logger_: Logger = null;
 	private viewControllers_: ViewControllers = {};
 	private contentScripts_: ContentScripts = {};
 	private dispatch_: Function;
 	private eventEmitter_: any;
+	private devMode_: boolean = false;
 
-	constructor(id: string, baseDir: string, manifest: PluginManifest, scriptText: string, logger: Logger, dispatch: Function) {
-		this.id_ = id;
+	constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
-		this.logger_ = logger;
 		this.dispatch_ = dispatch;
 		this.eventEmitter_ = new EventEmitter();
 	}
 
 	public get id(): string {
-		return this.id_;
+		return this.manifest.id;
 	}
 
-	public get enabled(): boolean {
-		return this.enabled_;
+	public get devMode(): boolean {
+		return this.devMode_;
 	}
 
-	public set enabled(v: boolean) {
-		this.enabled_ = v;
+	public set devMode(v: boolean) {
+		this.devMode_ = v;
 	}
 
 	public get manifest(): PluginManifest {
@@ -70,15 +68,15 @@ export default class Plugin {
 		return Object.keys(this.viewControllers_).length;
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	emit(eventName: string, event: any = null) {
+	public emit(eventName: string, event: any = null) {
 		return this.eventEmitter_.emit(eventName, event);
 	}
 
@@ -91,7 +89,7 @@ export default class Plugin {
 
 		this.contentScripts_[type].push({ id, path: absolutePath });
 
-		this.logger_.debug(`Plugin: ${this.id}: Registered content script: ${type}: ${id}: ${absolutePath}`);
+		logger.debug(`"${this.id}": Registered content script: ${type}: ${id}: ${absolutePath}`);
 
 		this.dispatch_({
 			type: 'PLUGIN_CONTENT_SCRIPTS_ADD',
@@ -119,7 +117,7 @@ export default class Plugin {
 	}
 
 	public deprecationNotice(goneInVersion: string, message: string) {
-		this.logger_.warn(`Plugin: ${this.id}: DEPRECATION NOTICE: ${message} This will stop working in version ${goneInVersion}.`);
+		logger.warn(`"${this.id}": DEPRECATION NOTICE: ${message} This will stop working in version ${goneInVersion}.`);
 	}
 
 }

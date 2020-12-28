@@ -1,6 +1,7 @@
 import AsyncActionQueue from '../../AsyncActionQueue';
 import shim from '../../shim';
 import { _ } from '../../locale';
+import { toSystemSlashes } from '../../path-utils';
 const Logger = require('../../Logger').default;
 const Setting = require('../../models/Setting').default;
 const Resource = require('../../models/Resource');
@@ -155,8 +156,15 @@ export default class ResourceEditWatcher {
 		};
 
 		if (!this.watcher_) {
-			this.watcher_ = this.chokidar_.watch(fileToWatch);
-			this.watcher_.on('all', async (event: any, path: string) => {
+			this.watcher_ = this.chokidar_.watch(fileToWatch, {
+				// Need to turn off fs-events because when it's on Chokidar
+				// keeps emitting "modified" events (on "raw" handler), several
+				// times per seconds, even when nothing is changed.
+				useFsEvents: false,
+			});
+			this.watcher_.on('all', (event: any, path: string) => {
+				path = path ? toSystemSlashes(path, 'linux') : '';
+
 				this.logger().info(`ResourceEditWatcher: Event: ${event}: ${path}`);
 
 				if (event === 'unlink') {
@@ -167,7 +175,7 @@ export default class ResourceEditWatcher {
 					// See: https://github.com/laurent22/joplin/issues/710#issuecomment-420997167
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
-					handleChangeEvent(path);
+					void handleChangeEvent(path);
 				} else if (event === 'error') {
 					this.logger().error('ResourceEditWatcher: error');
 				}
@@ -182,12 +190,14 @@ export default class ResourceEditWatcher {
 			// https://github.com/laurent22/joplin/issues/3407
 			//
 			// @ts-ignore Leave unused path variable
-			this.watcher_.on('raw', async (event: string, path: string, options: any) => {
-				this.logger().debug(`ResourceEditWatcher: Raw event: ${event}: ${options.watchedPath}`);
+			this.watcher_.on('raw', (event: string, path: string, options: any) => {
+				const watchedPath = options.watchedPath ? toSystemSlashes(options.watchedPath, 'linux') : '';
+
+				this.logger().debug(`ResourceEditWatcher: Raw event: ${event}: ${watchedPath}`);
 				if (event === 'rename') {
-					this.watcher_.unwatch(options.watchedPath);
-					this.watcher_.add(options.watchedPath);
-					handleChangeEvent(options.watchedPath);
+					this.watcher_.unwatch(watchedPath);
+					this.watcher_.add(watchedPath);
+					void handleChangeEvent(watchedPath);
 				}
 			});
 		} else {
@@ -218,7 +228,7 @@ export default class ResourceEditWatcher {
 			if (!(await Resource.isReady(resource))) throw new Error(_('This attachment is not downloaded or not decrypted yet'));
 			const sourceFilePath = Resource.fullPath(resource);
 			const tempDir = await this.tempDir();
-			const editFilePath = await shim.fsDriver().findUniqueFilename(`${tempDir}/${Resource.friendlySafeFilename(resource)}`);
+			const editFilePath = toSystemSlashes(await shim.fsDriver().findUniqueFilename(`${tempDir}/${Resource.friendlySafeFilename(resource)}`), 'linux');
 			await shim.fsDriver().copy(sourceFilePath, editFilePath);
 			const stat = await shim.fsDriver().stat(editFilePath);
 

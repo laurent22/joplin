@@ -787,8 +787,14 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				for (let i = 0; i < newNotes.length; i++) {
 					const n = newNotes[i];
 					if (n.id == modNote.id) {
-						// Note is still in the same folder
-						if (isViewingAllNotes || noteIsInFolder(modNote, n.parent_id)) {
+						if (n.is_conflict && !modNote.is_conflict) {
+							// Note was a conflict but was moved outside of
+							// the conflict folder
+							newNotes.splice(i, 1);
+							noteFolderHasChanged = true;
+							movedNotePreviousIndex = i;
+						} else if (isViewingAllNotes || noteIsInFolder(modNote, n.parent_id)) {
+							// Note is still in the same folder
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
 							newNotes[i] = Object.assign({}, newNotes[i]);

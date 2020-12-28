@@ -1,6 +1,6 @@
 import sandboxProxy, { Target } from '@joplin/lib/services/plugins/sandboxProxy';
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('../../test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient } = require('../../test-utils.js');
 
 describe('services_plugins_sandboxProxy', function() {
 
@@ -10,7 +10,7 @@ describe('services_plugins_sandboxProxy', function() {
 		done();
 	});
 
-	it('should create a new sandbox proxy', asyncTest(async () => {
+	it('should create a new sandbox proxy', (async () => {
 		interface Result {
 			path: string;
 			args: any[];
@@ -33,7 +33,7 @@ describe('services_plugins_sandboxProxy', function() {
 		expect(results[1].args.join('_')).toBe('');
 	}));
 
-	it('should allow importing a namespace', asyncTest(async () => {
+	it('should allow importing a namespace', (async () => {
 		interface Result {
 			path: string;
 			args: any[];

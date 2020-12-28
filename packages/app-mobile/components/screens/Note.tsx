@@ -259,11 +259,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	screenHeader_undoButtonPress() {
-		this.undoRedo('undo');
+		void this.undoRedo('undo');
 	}
 
 	screenHeader_redoButtonPress() {
-		this.undoRedo('redo');
+		void this.undoRedo('redo');
 	}
 
 	styles() {
@@ -404,7 +404,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// Although it is async, we don't wait for the answer so that if permission
 		// has already been granted, it doesn't slow down opening the note. If it hasn't
 		// been granted, the popup will open anyway.
-		this.requestGeoLocationPermissions();
+		void this.requestGeoLocationPermissions();
 	}
 
 	onMarkForDownload(event: any) {
@@ -703,7 +703,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	cameraView_onPhoto(data: any) {
-		this.attachFile(
+		void this.attachFile(
 			{
 				uri: data.uri,
 				didCancel: false,
@@ -810,14 +810,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		output.push({
 			title: _('View on map'),
 			onPress: () => {
-				this.showOnMap_onPress();
+				void this.showOnMap_onPress();
 			},
 		});
 		if (note.source_url) {
 			output.push({
 				title: _('Go to source URL'),
 				onPress: () => {
-					this.showSource_onPress();
+					void this.showSource_onPress();
 				},
 			});
 		}
@@ -866,8 +866,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
-					if (buttonId === 'attachFile') this.attachFile_onPress();
-					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
+					if (buttonId === 'attachFile') void this.attachFile_onPress();
+					if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
 				},
 			});
 		}
@@ -884,7 +884,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		output.push({
 			title: _('Share'),
 			onPress: () => {
-				this.share_onPress();
+				void this.share_onPress();
 			},
 		});
 		if (isSaved) {
@@ -918,7 +918,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		output.push({
 			title: _('Delete'),
 			onPress: () => {
-				this.deleteNote_onPress();
+				void this.deleteNote_onPress();
 			},
 		});
 
@@ -1010,7 +1010,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	onBodyViewerCheckboxChange(newBody: string) {
-		this.saveOneProperty('body', newBody);
+		void this.saveOneProperty('body', newBody);
 	}
 
 	render() {

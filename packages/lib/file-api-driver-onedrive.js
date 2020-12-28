@@ -40,7 +40,7 @@ class FileApiDriverOneDrive {
 			output.isDeleted = true;
 		} else {
 			// output.created_time = moment(odItem.fileSystemInfo.createdDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
-			output.updated_time = moment(odItem.fileSystemInfo.lastModifiedDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
+			output.updated_time = Number(moment(odItem.fileSystemInfo.lastModifiedDateTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x'));
 		}
 
 		return output;

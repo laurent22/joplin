@@ -6,7 +6,7 @@
     "dist": "webpack",
     "postinstall": "npm run dist"
   },
-  "keywords": [],
+  "keywords": {},
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^14.0.14",

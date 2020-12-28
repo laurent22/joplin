@@ -40,7 +40,7 @@ export interface Command {
 	 * Or | \|\| | "noteIsTodo \|\| noteTodoCompleted"
 	 * And | && | "oneNoteSelected && !inConflictFolder"
 	 *
-	 * Currently the supported context variables aren't documented, but you can [find the list here](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/services/commands/stateToWhenClauseContext.ts).
+	 * Currently the supported context variables aren't documented, but you can [find the list here](https://github.com/laurent22/joplin/blob/dev/packages/lib/services/commands/stateToWhenClauseContext.ts).
 	 *
 	 * Note: Commands are enabled by default unless you use this property.
 	 */
@@ -189,6 +189,10 @@ export interface Script {
 	onStart?(event: any): Promise<void>;
 }
 
+export interface Disposable {
+	// dispose():void;
+}
+
 // =================================================================
 // Menu types
 // =================================================================
@@ -204,12 +208,49 @@ export enum MenuItemLocation {
 	Note = 'note',
 	Tools = 'tools',
 	Help = 'help',
+
 	/**
 	 * @deprecated Do not use - same as NoteListContextMenu
 	 */
 	Context = 'context',
+
+	// If adding an item here, don't forget to update isContextMenuItemLocation()
+
+	/**
+	 * When a command is called from the note list context menu, the
+	 * command will receive the following arguments:
+	 *
+	 * - `noteIds:string[]`: IDs of the notes that were right-clicked on.
+	 */
 	NoteListContextMenu = 'noteListContextMenu',
+
 	EditorContextMenu = 'editorContextMenu',
+
+	/**
+	 * When a command is called from a folder context menu, the
+	 * command will receive the following arguments:
+	 *
+	 * - `folderId:string`: ID of the folder that was right-clicked on
+	 */
+	FolderContextMenu = 'folderContextMenu',
+
+	/**
+	 * When a command is called from a tag context menu, the
+	 * command will receive the following arguments:
+	 *
+	 * - `tagId:string`: ID of the tag that was right-clicked on
+	 */
+	TagContextMenu = 'tagContextMenu',
+}
+
+export function isContextMenuItemLocation(location: MenuItemLocation): boolean {
+	return [
+		MenuItemLocation.Context,
+		MenuItemLocation.NoteListContextMenu,
+		MenuItemLocation.EditorContextMenu,
+		MenuItemLocation.FolderContextMenu,
+		MenuItemLocation.TagContextMenu,
+	].includes(location);
 }
 
 export interface MenuItem {
@@ -318,9 +359,9 @@ export interface SettingSection {
 /**
  * An array of at least one element and at most three elements.
  *
- * [0]: Resource name (eg. "notes", "folders", "tags", etc.)
- * [1]: (Optional) Resource ID.
- * [2]: (Optional) Resource link.
+ * - **[0]**: Resource name (eg. "notes", "folders", "tags", etc.)
+ * - **[1]**: (Optional) Resource ID.
+ * - **[2]**: (Optional) Resource link.
  */
 export type Path = string[];
 
@@ -330,7 +371,8 @@ export type Path = string[];
 
 export enum ContentScriptType {
 	/**
-	 * Registers a new Markdown-It plugin, which should follow the template below.
+	 * Registers a new Markdown-It plugin, which should follow the template
+	 * below.
 	 *
 	 * ```javascript
 	 * module.exports = {
@@ -346,14 +388,49 @@ export enum ContentScriptType {
 	 *     }
 	 * }
 	 * ```
+	 * See [the
+	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
+	 * for a simple Markdown-it plugin example.
 	 *
-	 * - The `context` argument is currently unused but could be used later on to provide access to your own plugin so that the content script and plugin can communicate.
+	 * ## Exported members
 	 *
-	 * - The **required** `plugin` key is the actual Markdown-It plugin - check the [official doc](https://github.com/markdown-it/markdown-it) for more information. The `options` parameter is of type [RuleOptions](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml.ts), which contains a number of options, mostly useful for Joplin's internal code.
+	 * - The `context` argument is currently unused but could be used later
+	 *   on to provide access to your own plugin so that the content script
+	 *   and plugin can communicate.
 	 *
-	 * - Using the **optional** `assets` key you may specify assets such as JS or CSS that should be loaded in the rendered HTML document. Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to see how the data should be structured.
+	 * - The **required** `plugin` key is the actual Markdown-It plugin -
+	 *   check the [official
+	 *   doc](https://github.com/markdown-it/markdown-it) for more
+	 *   information. The `options` parameter is of type
+	 *   [RuleOptions](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml.ts),
+	 *   which contains a number of options, mostly useful for Joplin's
+	 *   internal code.
 	 *
-	 * To include a regular Markdown-It plugin, that doesn't make use of any Joplin-specific features, you would simply create a file such as this:
+	 * - Using the **optional** `assets` key you may specify assets such as
+	 *   JS or CSS that should be loaded in the rendered HTML document.
+	 *   Check for example the Joplin [Mermaid
+	 *   plugin](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts)
+	 *   to see how the data should be structured.
+	 *
+	 * ## Passing messages from the content script to your plugin
+	 *
+	 * The application provides the following function to allow executing
+	 * commands from the rendered HTML code:
+	 *
+	 * `webviewApi.executeCommand(commandName, ...args)`
+	 *
+	 * So you can use this mechanism to pass messages from the note viewer
+	 * to your own plugin. To do so you would define a command, using
+	 * `joplin.commands.register`, then you would call this command using
+	 * the `webviewApi` object. See again [the
+	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
+	 * to see how this can be done.
+	 *
+	 * ## Registering an existing Markdown-it plugin
+	 *
+	 * To include a regular Markdown-It plugin, that doesn't make use of
+	 * any Joplin-specific features, you would simply create a file such as
+	 * this:
 	 *
 	 * ```javascript
 	 * module.exports = {
@@ -367,7 +444,8 @@ export enum ContentScriptType {
 	 */
 	MarkdownItPlugin = 'markdownItPlugin',
 	/**
-	 * Registers a new CodeMirror plugin, which should follow the template below.
+	 * Registers a new CodeMirror plugin, which should follow the template
+	 * below.
 	 *
 	 * ```javascript
 	 * module.exports = {
@@ -378,8 +456,8 @@ export enum ContentScriptType {
 	 *             },
 	 *             codeMirrorResources: [],
 	 *             codeMirrorOptions: {
-	 *									// ...
-	 *						 },
+	 *                                  // ...
+	 *                       },
 	 *             assets: {
 	 *                 // ...
 	 *             },
@@ -388,19 +466,42 @@ export enum ContentScriptType {
 	 * }
 	 * ```
 	 *
-	 * - The `context` argument is currently unused but could be used later on to provide access to your own plugin so that the content script and plugin can communicate.
+	 * - The `context` argument is currently unused but could be used later
+	 *   on to provide access to your own plugin so that the content script
+	 *   and plugin can communicate.
 	 *
-	 * - The `plugin` key is your CodeMirror plugin. This is where you can register new commands with CodeMirror or interact with the CodeMirror instance as needed.
+	 * - The `plugin` key is your CodeMirror plugin. This is where you can
+	 *   register new commands with CodeMirror or interact with the
+	 *   CodeMirror instance as needed.
 	 *
-	 * - The `codeMirrorResources` key is an array of CodeMirror resources that will be loaded and attached to the CodeMirror module. These are made up of addons, keymaps, and modes. For example, for a plugin that want's to enable clojure highlighting in code blocks. `codeMirrorResources` would be set to `['mode/clojure/clojure']`.
+	 * - The `codeMirrorResources` key is an array of CodeMirror resources
+	 *   that will be loaded and attached to the CodeMirror module. These
+	 *   are made up of addons, keymaps, and modes. For example, for a
+	 *   plugin that want's to enable clojure highlighting in code blocks.
+	 *   `codeMirrorResources` would be set to `['mode/clojure/clojure']`.
 	 *
-	 * - The `codeMirrorOptions` key contains all the [CodeMirror](https://codemirror.net/doc/manual.html#config) options that will be set or changed by this plugin. New options can alse be declared via [`CodeMirror.defineOption`](https://codemirror.net/doc/manual.html#defineOption), and then have their value set here. For example, a plugin that enables line numbers would set `codeMirrorOptions` to `{'lineNumbers': true}`.
+	 * - The `codeMirrorOptions` key contains all the
+	 *   [CodeMirror](https://codemirror.net/doc/manual.html#config)
+	 *   options that will be set or changed by this plugin. New options
+	 *   can alse be declared via
+	 *   [`CodeMirror.defineOption`](https://codemirror.net/doc/manual.html#defineOption),
+	 *   and then have their value set here. For example, a plugin that
+	 *   enables line numbers would set `codeMirrorOptions` to
+	 *   `{'lineNumbers': true}`.
 	 *
-	 * - Using the **optional** `assets` key you may specify **only** CSS assets that should be loaded in the rendered HTML document. Check for example the Joplin [Mermaid plugin](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/lib/joplin-renderer/MdToHtml/rules/mermaid.ts) to see how the data should be structured.
+	 * - Using the **optional** `assets` key you may specify **only** CSS
+	 *   assets that should be loaded in the rendered HTML document. Check
+	 *   for example the Joplin [Mermaid
+	 *   plugin](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts)
+	 *   to see how the data should be structured.
 	 *
-	 * One of the `plugin`, `codeMirrorResources`, or `codeMirrorOptions` keys must be provided for the plugin to be valid. Having multiple or all provided is also okay.
+	 * One of the `plugin`, `codeMirrorResources`, or `codeMirrorOptions`
+	 * keys must be provided for the plugin to be valid. Having multiple or
+	 * all provided is also okay.
 	 *
-	 * See the [demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script) for an example of all these keys being used in one plugin.
+	 * See the [demo
+	 * plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
+	 * for an example of all these keys being used in one plugin.
 	 */
 	CodeMirrorPlugin = 'codeMirrorPlugin',
 }

@@ -1,6 +1,7 @@
 import { PluginStates } from '../reducer';
 import { ContentScriptType } from '../api/types';
 import { dirname } from '@joplin/renderer/pathUtils';
+import shim from '../../../shim';
 
 export interface ExtraContentScript {
 	id: string;
@@ -17,6 +18,8 @@ export function contentScriptsToCodeMirrorPlugin(plugins: PluginStates): ExtraCo
 }
 
 function loadContentScripts(plugins: PluginStates, scriptType: ContentScriptType): ExtraContentScript[] {
+	if (!plugins) return null;
+
 	const output: ExtraContentScript[] = [];
 
 	for (const pluginId in plugins) {
@@ -25,7 +28,7 @@ function loadContentScripts(plugins: PluginStates, scriptType: ContentScriptType
 		if (!contentScripts) continue;
 
 		for (const contentScript of contentScripts) {
-			const module = require(contentScript.path);
+			const module = shim.requireDynamic(contentScript.path);
 			if (!module.default || typeof module.default !== 'function') throw new Error(`Content script must export a function under the "default" key: Plugin: ${pluginId}: Script: ${contentScript.id}`);
 
 			const loadedModule = module.default({});

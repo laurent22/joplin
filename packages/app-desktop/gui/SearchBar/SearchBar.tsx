@@ -103,17 +103,17 @@ function SearchBar(props: Props) {
 	const onKeyDown = useCallback((event: any) => {
 		if (event.key === 'Escape') {
 			if (document.activeElement) (document.activeElement as any).blur();
-			onExitSearch();
+			void onExitSearch();
 		}
 	}, [onExitSearch]);
 
 	const onSearchButtonClick = useCallback(() => {
-		onExitSearch();
+		void onExitSearch();
 	}, [onExitSearch]);
 
 	useEffect(() => {
 		if (props.notesParentType !== 'Search') {
-			onExitSearch(false);
+			void onExitSearch(false);
 		}
 	}, [props.notesParentType, onExitSearch]);
 

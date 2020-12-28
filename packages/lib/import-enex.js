@@ -6,6 +6,7 @@ const Tag = require('./models/Tag.js');
 const Resource = require('./models/Resource.js');
 const Setting = require('./models/Setting').default;
 const { MarkupToHtml } = require('@joplin/renderer');
+const { wrapError } = require('./errorUtils');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const time = require('./time').default;
@@ -14,11 +15,12 @@ const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
 const md5File = require('md5-file');
 const shim = require('./shim').default;
+const { mime } = require('./mime-utils');
 
 // const Promise = require('promise');
 const fs = require('fs-extra');
 
-function dateToTimestamp(s, zeroIfInvalid = false) {
+function dateToTimestamp(s, defaultValue = null) {
 	// Most dates seem to be in this format
 	let m = moment(s, 'YYYYMMDDTHHmmssZ');
 
@@ -27,7 +29,7 @@ function dateToTimestamp(s, zeroIfInvalid = false) {
 	if (!m.isValid()) m = moment(s, 'YYYYMMDDThmmss AZ');
 
 	if (!m.isValid()) {
-		if (zeroIfInvalid) return 0;
+		if (defaultValue !== null) return defaultValue;
 		throw new Error(`Invalid date: ${s}`);
 	}
 
@@ -138,28 +140,36 @@ async function fuzzyMatch(note) {
 // At this point we have the resource has it's been parsed from the XML, but additional
 // processing needs to be done to get the final resource file, its size, MD5, etc.
 async function processNoteResource(resource) {
-	if (resource.dataEncoding == 'base64') {
-		const decodedFilePath = `${resource.dataFilePath}.decoded`;
-		await decodeBase64File(resource.dataFilePath, decodedFilePath);
-		resource.dataFilePath = decodedFilePath;
-	} else if (resource.dataEncoding) {
-		throw new Error(`Cannot decode resource with encoding: ${resource.dataEncoding}`);
-	}
+	if (!resource.hasData) {
+		// Some resources have no data, go figure, so we need a special case for this.
+		resource.id = md5(Date.now() + Math.random());
+		resource.size = 0;
+		resource.dataFilePath = `${Setting.value('tempDir')}/${resource.id}.empty`;
+		await fs.writeFile(resource.dataFilePath, '');
+	} else {
+		if (resource.dataEncoding == 'base64') {
+			const decodedFilePath = `${resource.dataFilePath}.decoded`;
+			await decodeBase64File(resource.dataFilePath, decodedFilePath);
+			resource.dataFilePath = decodedFilePath;
+		} else if (resource.dataEncoding) {
+			throw new Error(`Cannot decode resource with encoding: ${resource.dataEncoding}`);
+		}
 
-	const stats = fs.statSync(resource.dataFilePath);
-	resource.size = stats.size;
+		const stats = fs.statSync(resource.dataFilePath);
+		resource.size = stats.size;
 
-	if (!resource.id) {
-		// If no resource ID is present, the resource ID is actually the MD5 of the data.
-		// This ID will match the "hash" attribute of the corresponding <en-media> tag.
-		// resourceId = md5(decodedData);
-		resource.id = await md5FileAsync(resource.dataFilePath);
-	}
+		if (!resource.id) {
+			// If no resource ID is present, the resource ID is actually the MD5 of the data.
+			// This ID will match the "hash" attribute of the corresponding <en-media> tag.
+			// resourceId = md5(decodedData);
+			resource.id = await md5FileAsync(resource.dataFilePath);
+		}
 
-	if (!resource.id || !resource.size) {
-		const debugTemp = Object.assign({}, resource);
-		debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
-		throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
+		if (!resource.id || !resource.size) {
+			const debugTemp = Object.assign({}, resource);
+			debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
+			throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
+		}
 	}
 
 	return resource;
@@ -173,6 +183,7 @@ async function saveNoteResources(note) {
 		const toSave = Object.assign({}, resource);
 		delete toSave.dataFilePath;
 		delete toSave.dataEncoding;
+		delete toSave.hasData;
 
 		// The same resource sometimes appear twice in the same enex (exact same ID and file).
 		// In that case, just skip it - it means two different notes might be linked to the
@@ -258,6 +269,20 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
 	if (!('onError' in importOptions)) importOptions.onError = function() {};
 
+	const handleSaxStreamEvent = (fn) => {
+		return function(...args) {
+			try {
+				fn(...args);
+			} catch (error) {
+				if (importOptions.onError) {
+					importOptions.onError(error);
+				} else {
+					console.error(error);
+				}
+			}
+		};
+	};
+
 	return new Promise((resolve, reject) => {
 		const progressState = {
 			loaded: 0,
@@ -300,13 +325,13 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		async function processNotes() {
 			if (processingNotes) return false;
 
-			try {
-				processingNotes = true;
-				stream.pause();
+			processingNotes = true;
+			stream.pause();
 
-				while (notes.length) {
-					const note = notes.shift();
+			while (notes.length) {
+				const note = notes.shift();
 
+				try {
 					for (let i = 0; i < note.resources.length; i++) {
 						let resource = note.resources[i];
 
@@ -337,9 +362,15 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					note.parent_id = parentFolderId;
 					note.body = body;
 
-					// Notes in enex files always have a created timestamp but not always an
-					// updated timestamp (it the note has never been modified). For sync
-					// we require an updated_time property, so set it to create_time in that case
+					// If the created timestamp was invalid, it would be
+					// set to zero, so set it to the current date here
+					if (!note.created_time) note.created_time = Date.now();
+
+					// Notes in enex files always have a created timestamp
+					// but not always an updated timestamp (it the note has
+					// never been modified). For sync we require an
+					// updated_time property, so set it to create_time in
+					// that case
 					if (!note.updated_time) note.updated_time = note.created_time;
 
 					const result = await saveNoteToStorage(note, importOptions);
@@ -354,9 +385,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					progressState.resourcesCreated += result.resourcesCreated;
 					progressState.notesTagged += result.notesTagged;
 					importOptions.onProgress(progressState);
+				} catch (error) {
+					const newError = wrapError(`Error on note "${note.title}"`, error);
+					importOptions.onError(newError);
 				}
-			} catch (error) {
-				console.error(error);
 			}
 
 			stream.resume();
@@ -368,7 +400,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			importOptions.onError(error);
 		});
 
-		saxStream.on('text', function(text) {
+		saxStream.on('text', handleSaxStreamEvent(function(text) {
 			const n = currentNodeName();
 
 			if (noteAttributes) {
@@ -386,6 +418,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 						noteResource.dataFilePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.base64`;
 					}
 
+					noteResource.hasData = true;
+
 					fs.appendFileSync(noteResource.dataFilePath, text);
 				} else {
 					if (!(n in noteResource)) noteResource[n] = '';
@@ -395,9 +429,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				if (n == 'title') {
 					note.title = text;
 				} else if (n == 'created') {
-					note.created_time = dateToTimestamp(text);
+					note.created_time = dateToTimestamp(text, 0);
 				} else if (n == 'updated') {
-					note.updated_time = dateToTimestamp(text);
+					note.updated_time = dateToTimestamp(text, 0);
 				} else if (n == 'tag') {
 					note.tags.push(text);
 				} else if (n == 'note') {
@@ -408,9 +442,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					console.warn(`Unsupported note tag: ${n}`);
 				}
 			}
-		});
+		}));
 
-		saxStream.on('opentag', function(node) {
+		saxStream.on('opentag', handleSaxStreamEvent(function(node) {
 			const n = node.name.toLowerCase();
 			nodes.push(node);
 
@@ -418,6 +452,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				note = {
 					resources: [],
 					tags: [],
+					bodyXml: '',
 				};
 			} else if (n == 'resource-attributes') {
 				noteResourceAttributes = {};
@@ -426,27 +461,25 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			} else if (n == 'note-attributes') {
 				noteAttributes = {};
 			} else if (n == 'resource') {
-				noteResource = {};
+				noteResource = {
+					hasData: false,
+				};
 			}
-		});
+		}));
 
-		saxStream.on('cdata', function(data) {
+		saxStream.on('cdata', handleSaxStreamEvent(function(data) {
 			const n = currentNodeName();
 
 			if (noteResourceRecognition) {
 				noteResourceRecognition.objID = extractRecognitionObjId(data);
 			} else if (note) {
 				if (n == 'content') {
-					if ('bodyXml' in note) {
-						note.bodyXml += data;
-					} else {
-						note.bodyXml = data;
-					}
+					note.bodyXml += data;
 				}
 			}
-		});
+		}));
 
-		saxStream.on('closetag', async function(n) {
+		saxStream.on('closetag', handleSaxStreamEvent(function(n) {
 			nodes.pop();
 
 			if (n == 'note') {
@@ -476,28 +509,45 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				note.altitude = noteAttributes.altitude;
 				note.author = noteAttributes.author ? noteAttributes.author.trim() : '';
 				note.is_todo = noteAttributes['reminder-order'] !== '0' && !!noteAttributes['reminder-order'];
-				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], true);
-				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], true);
-				note.order = dateToTimestamp(noteAttributes['reminder-order'], true);
+				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], 0);
+				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], 0);
+				note.order = dateToTimestamp(noteAttributes['reminder-order'], 0);
 				note.source = noteAttributes.source ? `evernote.${noteAttributes.source.trim()}` : 'evernote';
 				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'].trim() : '';
 
 				noteAttributes = null;
 			} else if (n == 'resource') {
+				let mimeType = noteResource.mime ? noteResource.mime.trim() : '';
+
+				// Evernote sometimes gives an invalid or generic
+				// "application/octet-stream" mime type for files that could
+				// have a valid mime type, based on the extension. So in
+				// general, we trust the filename more than the provided mime
+				// type.
+				// https://discourse.joplinapp.org/t/importing-a-note-with-a-zip-file/12123
+				if (noteResource.filename) {
+					const mimeTypeFromFile = mime.fromFilename(noteResource.filename);
+					if (mimeTypeFromFile && mimeTypeFromFile !== mimeType) {
+						importOptions.onError(new Error(`Invalid mime type "${mimeType}" for resource "${noteResource.filename}". Using "${mimeTypeFromFile}" instead.`));
+						mimeType = mimeTypeFromFile;
+					}
+				}
+
 				note.resources.push({
 					id: noteResource.id,
 					dataFilePath: noteResource.dataFilePath,
 					dataEncoding: noteResource.dataEncoding,
-					mime: noteResource.mime ? noteResource.mime.trim() : '',
+					mime: mimeType,
 					title: noteResource.filename ? noteResource.filename.trim() : '',
 					filename: noteResource.filename ? noteResource.filename.trim() : '',
+					hasData: noteResource.hasData,
 				});
 
 				noteResource = null;
 			}
-		});
+		}));
 
-		saxStream.on('end', function() {
+		saxStream.on('end', handleSaxStreamEvent(function() {
 			// Wait till there is no more notes to process.
 			const iid = shim.setInterval(() => {
 				processNotes().then(allDone => {
@@ -507,7 +557,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					}
 				});
 			}, 500);
-		});
+		}));
 
 		stream.pipe(saxStream);
 	});

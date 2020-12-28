@@ -49,7 +49,7 @@ export default function useThemeCss(dep: HookDependencies) {
 			setCssFilePath(filePath);
 		}
 
-		createThemeStyleSheet();
+		void createThemeStyleSheet();
 
 		return () => {
 			cancelled = true;

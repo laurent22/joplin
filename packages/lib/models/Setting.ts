@@ -33,7 +33,7 @@ export interface SettingItem {
 	isEnum?: boolean;
 	section?: string;
 	label?(): string;
-	description?(appType: string): string;
+	description?: Function;
 	options?(): any;
 	appTypes?: string[];
 	show?(settings: any): boolean;
@@ -44,7 +44,9 @@ export interface SettingItem {
 	maximum?: number;
 	step?: number;
 	onClick?(): void;
-	unitLabel?(value: any): string;
+	unitLabel?: Function;
+	needRestart?: boolean;
+	autoSave?: boolean;
 }
 
 interface SettingItems {
@@ -348,6 +350,8 @@ class Setting extends BaseModel {
 			// to the last folder that was selected.
 			activeFolderId: { value: '', type: SettingItemType.String, public: false },
 
+			richTextBannerDismissed: { value: false, type: SettingItemType.Bool, public: false },
+
 			firstStart: { value: true, type: SettingItemType.Bool, public: false },
 			locale: {
 				value: defaultLocale(),
@@ -442,6 +446,12 @@ class Setting extends BaseModel {
 				label: () => _('Preferred dark theme'),
 				section: 'appearance',
 				options: () => themeOptions(),
+			},
+
+			notificationPermission: {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
 			},
 
 			showNoteCounts: { value: true, type: SettingItemType.Bool, public: false, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
@@ -554,6 +564,17 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'plugins.states': {
+				value: '',
+				type: SettingItemType.Object,
+				section: 'plugins',
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Plugins'),
+				needRestart: true,
+				autoSave: true,
+			},
+
 			'plugins.devPluginPaths': {
 				value: '',
 				type: SettingItemType.String,
@@ -565,16 +586,21 @@ class Setting extends BaseModel {
 			},
 
 			// Deprecated - use markdown.plugin.*
-			'markdown.softbreaks': { value: true, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.softbreaks': { value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
 			'markdown.typographer': { value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
 			// Deprecated
 
-			'markdown.plugin.softbreaks': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
+			'markdown.plugin.softbreaks': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
 			'markdown.plugin.typographer': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
+			'markdown.plugin.linkify': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Linkify')}${wysiwygYes}` },
+
 			'markdown.plugin.katex': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
 			'markdown.plugin.fountain': { value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
 			'markdown.plugin.mermaid': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
 
+			'markdown.plugin.audioPlayer': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable audio player')}${wysiwygNo}` },
+			'markdown.plugin.videoPlayer': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable video player')}${wysiwygNo}` },
+			'markdown.plugin.pdfViewer': { value: !mobilePlatform, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['desktop'], label: () => `${_('Enable PDF viewer')}${wysiwygNo}` },
 			'markdown.plugin.mark': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
 			'markdown.plugin.footnote': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
 			'markdown.plugin.toc': { value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
@@ -702,7 +728,7 @@ class Setting extends BaseModel {
 				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
 			},
 
-			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, public: false },
 			'sync.interval': {
@@ -762,6 +788,15 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'editor.spellcheckBeta': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => 'Enable spell checking in Markdown editor? (WARNING BETA feature)',
+				description: () => 'Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)',
+			},
+
 			'net.customCertificates': {
 				value: '',
 				type: SettingItemType.String,
@@ -816,7 +851,7 @@ class Setting extends BaseModel {
 				minimum: 1,
 				maximum: 365 * 2,
 				step: 1,
-				unitLabel: (value = null) => {
+				unitLabel: (value: number = null) => {
 					return value === null ? _('days') : _('%d days', value);
 				},
 				label: () => _('Keep note history for'),

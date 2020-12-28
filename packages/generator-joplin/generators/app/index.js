@@ -4,6 +4,29 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 
+function mergePackageKey(parentKey, source, dest) {
+	const output = Object.assign({}, dest);
+
+	for (const k in source) {
+		if (!(k in output)) {
+			// If the key doesn't exist in the destination, add it
+			output[k] = source[k];
+		} else if (parentKey === 'devDependencies') {
+			// If we are dealing with the dependencies, overwrite with the
+			// version from source.
+			output[k] = source[k];
+		} else if (typeof source[k] === 'object' && !Array.isArray(k) && source[k] !== null) {
+			// If it's an object, recursively process it
+			output[k] = mergePackageKey(k, source[k], output[k]);
+		} else {
+			// Otherwise, the default is to preserve the destination key
+			output[k] = dest[k];
+		}
+	}
+
+	return output;
+}
+
 module.exports = class extends Generator {
 
 	constructor(args, opts) {
@@ -17,8 +40,6 @@ module.exports = class extends Generator {
 			this.conflicter.force = true;
 		}
 	}
-
-
 
 	async prompting() {
 		this.log(yosay(`Welcome to the fine ${chalk.red('generator-joplin')} generator!`));
@@ -110,12 +131,28 @@ module.exports = class extends Generator {
 			if (this.options.update && noUpdateFiles.includes(file)) continue;
 
 			const destFile = file.replace(/_TEMPLATE/, '');
+			const destFilePath = this.destinationPath(destFile);
 
-			this.fs.copyTpl(
-				this.templatePath(file),
-				this.destinationPath(destFile),
-				this.props
-			);
+			if (this.options.update && destFile === 'package.json' && this.fs.exists(destFilePath)) {
+				const destContent = this.fs.readJSON(destFilePath);
+
+				this.fs.copy(
+					this.templatePath(file),
+					destFilePath, {
+						process: (sourceBuffer) => {
+							const sourceContent = JSON.parse(sourceBuffer.toString());
+							const newContent = mergePackageKey(null, sourceContent, destContent);
+							return JSON.stringify(newContent, null, 2);
+						},
+					}
+				);
+			} else {
+				this.fs.copyTpl(
+					this.templatePath(file),
+					destFilePath,
+					this.props
+				);
+			}
 		}
 
 		this.fs.copy(

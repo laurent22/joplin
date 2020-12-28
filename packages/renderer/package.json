@@ -1,8 +1,8 @@
 {
   "name": "@joplin/renderer",
-  "version": "1.0.17",
+  "version": "1.0.23",
   "description": "The Joplin note renderer, used the mobile and desktop application",
-  "repository": "https://github.com/laurent22/joplin/tree/dev/packages/app-mobile/lib/joplin-renderer",
+  "repository": "https://github.com/laurent22/joplin/tree/dev/packages/renderer",
   "main": "index.js",
   "types": "index.d.ts",
   "publishConfig": {
@@ -10,19 +10,21 @@
   },
   "scripts": {
     "buildAssets": "node Tools/buildAssets.js",
-    "prepublishOnly": "npm run buildAssets",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json"
+    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
+    "test": "jest",
+    "test-ci": "npm run test"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
-    "jasmine": "^3.5.0",
+    "jest": "^26.6.3",
     "typescript": "^4.0.5"
   },
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.8",
+    "@joplin/fork-htmlparser2": "^4.1.14",
     "font-awesome-filetypes": "^2.1.0",
     "fs-extra": "^8.1.0",
     "highlight.js": "^10.2.1",
@@ -43,7 +45,8 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
-    "mermaid": "^8.8.1",
+    "mermaid": "^8.8.4",
     "uslug": "git+https://github.com/laurent22/uslug.git#emoji-support"
-  }
+  },
+  "gitHead": "80c0089d2c52aff608b2bea74389de5a7f12f2e2"
 }

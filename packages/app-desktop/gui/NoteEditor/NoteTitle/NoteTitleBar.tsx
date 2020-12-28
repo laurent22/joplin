@@ -57,6 +57,7 @@ function styles_(props: Props) {
 				fontSize: Math.round(theme.textStyle.fontSize * 1.5),
 				backgroundColor: theme.backgroundColor,
 				border: 'none',
+				width: '100%',
 			},
 
 			titleDate: {
@@ -82,9 +83,9 @@ export default function NoteTitleBar(props: Props) {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', 'noteList');
+				void CommandService.instance().execute('focusElement', 'noteList');
 			} else {
-				CommandService.instance().execute('focusElement', 'noteBody');
+				void CommandService.instance().execute('focusElement', 'noteBody');
 			}
 		}
 	}, []);

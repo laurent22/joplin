@@ -2,8 +2,10 @@
 
 // Dependencies:
 //
-// sudo apt install gettext
-// sudo apt install translate-toolkit
+// sudo apt install gettext sudo apt install translate-toolkit
+//
+// gettext v21+ is required as versions before that have bugs when parsing
+// JavaScript template strings which means we would lose translations.
 
 const rootDir = `${__dirname}/../..`;
 
@@ -128,7 +130,7 @@ async function createPotFile(potFilePath) {
 	if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
 	const cmd = `${xgettextPath} ${args.join(' ')}`;
 	const result = await execCommand(cmd);
-	if (result) console.error(result);
+	if (result && result.trim()) console.error(result.trim());
 	await removePoHeaderDate(potFilePath);
 }
 
@@ -138,7 +140,7 @@ async function mergePotToPo(potFilePath, poFilePath) {
 
 	const command = `${msgmergePath} -U "${poFilePath}" "${potFilePath}"`;
 	const result = await execCommand(command);
-	if (result) console.error(result);
+	if (result && result.trim()) console.info(result.trim());
 	await removePoHeaderDate(poFilePath);
 }
 

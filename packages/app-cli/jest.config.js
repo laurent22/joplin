@@ -30,12 +30,13 @@ module.exports = {
 	],
 
 	testPathIgnorePatterns: [
-		'/node_modules/',
-		'/tests\\/support/',
-		'/build/',
-		'test-utils.js',
-		'file_api_driver.js',
-		'/tests\\/tmp/',
+		'<rootDir>/node_modules/',
+		'<rootDir>/tests/support/',
+		'<rootDir>/build/',
+		'<rootDir>/tests/test-utils.js',
+		'<rootDir>/tests/test-utils-synchronizer.js',
+		'<rootDir>/tests/file_api_driver.js',
+		'<rootDir>/tests/tmp/',
 	],
 
 	// To avoid this warning:
@@ -52,5 +53,6 @@ module.exports = {
 	],
 
 	testEnvironment: 'node',
-	setupFilesAfterEnv: ['./jest.setup.js'],
+	setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
+	slowTestThreshold: 20,
 };

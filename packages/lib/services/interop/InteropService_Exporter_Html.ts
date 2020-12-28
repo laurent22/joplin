@@ -28,7 +28,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		this.resourceDir_ = this.destDir_ ? `${this.destDir_}/_resources` : null;
 
 		await shim.fsDriver().mkdir(this.destDir_);
-		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml(options.plugins);
 		this.resources_ = [];
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}

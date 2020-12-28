@@ -2,12 +2,8 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
 const ArrayUtils = require('@joplin/lib/ArrayUtils');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('ArrayUtils', function() {
 
@@ -15,7 +11,7 @@ describe('ArrayUtils', function() {
 		done();
 	});
 
-	it('should remove array elements', asyncTest(async () => {
+	it('should remove array elements', (async () => {
 		let a = ['un', 'deux', 'trois'];
 		a = ArrayUtils.removeElement(a, 'deux');
 
@@ -28,7 +24,7 @@ describe('ArrayUtils', function() {
 		expect(a.length).toBe(3);
 	}));
 
-	it('should find items using binary search', asyncTest(async () => {
+	it('should find items using binary search', (async () => {
 		let items = ['aaa', 'ccc', 'bbb'];
 		expect(ArrayUtils.binarySearch(items, 'bbb')).toBe(-1); // Array not sorted!
 		items.sort();
@@ -41,14 +37,14 @@ describe('ArrayUtils', function() {
 		expect(ArrayUtils.binarySearch(items, 'aaa')).toBe(-1);
 	}));
 
-	it('should compare arrays', asyncTest(async () => {
+	it('should compare arrays', (async () => {
 		expect(ArrayUtils.contentEquals([], [])).toBe(true);
 		expect(ArrayUtils.contentEquals(['a'], ['a'])).toBe(true);
 		expect(ArrayUtils.contentEquals(['b', 'a'], ['a', 'b'])).toBe(true);
 		expect(ArrayUtils.contentEquals(['b'], ['a', 'b'])).toBe(false);
 	}));
 
-	it('should merge overlapping intervals', asyncTest(async () => {
+	it('should merge overlapping intervals', (async () => {
 		const testCases = [
 			[
 				[],

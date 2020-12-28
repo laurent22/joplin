@@ -12,16 +12,16 @@ import versionInfo from '@joplin/lib/versionInfo';
 import { Module } from '@joplin/lib/services/interop/types';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
-import { MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
+import { isContextMenuItemLocation, MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
+import bridge from '../services/bridge';
 
 const { connect } = require('react-redux');
 const { reg } = require('@joplin/lib/registry.js');
 const packageInfo = require('../packageInfo.js');
-const bridge = require('electron').remote.require('./bridge').default;
-const { shell, clipboard } = require('electron');
+const { clipboard } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const TemplateUtils = require('@joplin/lib/TemplateUtils');
@@ -88,6 +88,7 @@ interface Props {
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
 	['spellChecker.language']: string;
+	plugins: PluginStates;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -112,7 +113,7 @@ function useMenu(props: Props) {
 	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
 
 	const onMenuItemClick = useCallback((commandName: string) => {
-		CommandService.instance().execute(commandName);
+		void CommandService.instance().execute(commandName);
 	}, []);
 
 	const onImportModuleClick = useCallback(async (module: Module, moduleSource: string) => {
@@ -134,7 +135,9 @@ function useMenu(props: Props) {
 
 		const modalMessage =  _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
 
-		CommandService.instance().execute('showModalMessage', modalMessage);
+		void CommandService.instance().execute('showModalMessage', modalMessage);
+
+		const errors: any[] = [];
 
 		const importOptions = {
 			path,
@@ -145,9 +148,12 @@ function useMenu(props: Props) {
 					return `${key}: ${status[key]}`;
 				});
 
-				CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
+				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 			},
-			onError: console.warn,
+			onError: (error: any) => {
+				errors.push(error);
+				console.warn(error);
+			},
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
 		};
 
@@ -159,7 +165,12 @@ function useMenu(props: Props) {
 			bridge().showErrorMessageBox(error.message);
 		}
 
-		CommandService.instance().execute('hideModalMessage');
+		if (errors.length) {
+			bridge().showErrorMessageBox('There was some errors importing the notes. Please check the console for more details.');
+			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
+		}
+
+		void CommandService.instance().execute('hideModalMessage');
 	}, [props.selectedFolderId]);
 
 	const onMenuItemClickRef = useRef(null);
@@ -177,7 +188,7 @@ function useMenu(props: Props) {
 		const quitMenuItem = {
 			label: _('Quit'),
 			accelerator: keymapService.getAccelerator('quit'),
-			click: () => { bridge().electronApp().quit(); },
+			click: () => { void bridge().electronApp().quit(); },
 		};
 
 		const sortNoteFolderItems = (type: string) => {
@@ -233,7 +244,11 @@ function useMenu(props: Props) {
 					exportItems.push({
 						label: module.fullLabel(),
 						click: async () => {
-							await InteropServiceHelper.export((action: any) => props.dispatch(action), module);
+							await InteropServiceHelper.export(
+								(action: any) => props.dispatch(action),
+								module,
+								{ plugins: props.plugins }
+							);
 						},
 					});
 				}
@@ -284,23 +299,23 @@ function useMenu(props: Props) {
 		templateItems.push({
 			label: _('Create note from template'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate', 'note');
+				void CommandService.instance().execute('selectTemplate', 'note');
 			},
 		}, {
 			label: _('Create to-do from template'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate', 'todo');
+				void CommandService.instance().execute('selectTemplate', 'todo');
 			},
 		}, {
 			label: _('Insert template'),
 			accelerator: keymapService.getAccelerator('insertTemplate'),
 			click: () => {
-				CommandService.instance().execute('selectTemplate');
+				void CommandService.instance().execute('selectTemplate');
 			},
 		}, {
 			label: _('Open template directory'),
 			click: () => {
-				shell.openItem(Setting.value('templateDir'));
+				void bridge().openItem(Setting.value('templateDir'));
 			},
 		}, {
 			label: _('Refresh templates'),
@@ -471,7 +486,7 @@ function useMenu(props: Props) {
 					label: _('Import'),
 					submenu: importItems,
 				}, {
-					label: _('Export'),
+					label: _('Export all'),
 					submenu: exportItems,
 				}, {
 					type: 'separator',
@@ -504,6 +519,9 @@ function useMenu(props: Props) {
 					menuItemDic.textPaste,
 					menuItemDic.textSelectAll,
 					separator(),
+					menuItemDic['editor.undo'],
+					menuItemDic['editor.redo'],
+					separator(),
 					menuItemDic.textBold,
 					menuItemDic.textItalic,
 					menuItemDic.textLink,
@@ -511,6 +529,14 @@ function useMenu(props: Props) {
 					separator(),
 					menuItemDic.insertDateTime,
 					menuItemDic.attachFile,
+					separator(),
+					menuItemDic['editor.deleteLine'],
+					menuItemDic['editor.toggleComment'],
+					menuItemDic['editor.sortSelectedLines'],
+					menuItemDic['editor.indentLess'],
+					menuItemDic['editor.indentMore'],
+					menuItemDic['editor.swapLineDown'],
+					menuItemDic['editor.swapLineUp'],
 					separator(),
 					menuItemDic.focusSearch,
 					menuItemDic.showLocalSearch,
@@ -697,7 +723,7 @@ function useMenu(props: Props) {
 
 		for (const view of props.pluginMenuItems) {
 			const location: MenuItemLocation = view.location;
-			if ([MenuItemLocation.Context, MenuItemLocation.EditorContextMenu, MenuItemLocation.NoteListContextMenu].includes(location)) continue;
+			if (isContextMenuItemLocation(location)) continue;
 
 			const itemParent = rootMenus[location];
 
@@ -709,7 +735,7 @@ function useMenu(props: Props) {
 		}
 
 		for (const view of props.pluginMenus) {
-			if ([MenuItemLocation.Context, MenuItemLocation.EditorContextMenu, MenuItemLocation.NoteListContextMenu].includes(view.location)) continue;
+			if (isContextMenuItemLocation(view.location)) continue;
 			const itemParent = rootMenus[view.location];
 
 			if (!itemParent) {
@@ -750,7 +776,7 @@ function useMenu(props: Props) {
 		} else {
 			setMenu(Menu.buildFromTemplate(template));
 		}
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled']]);
+	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins]);
 
 	useEffect(() => {
 		const whenClauseContext = CommandService.instance().currentWhenClauseContext();
@@ -847,6 +873,7 @@ const mapStateToProps = (state: AppState) => {
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
 		['spellChecker.language']: state.settings['spellChecker.language'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
+		plugins: state.pluginService.plugins,
 	};
 };
 

@@ -1,11 +1,7 @@
 import LockHandler, { LockType, LockHandlerOptions, Lock } from '@joplin/lib/services/synchronizer/LockHandler';
 
 
-const { isNetworkSyncTarget, asyncTest, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('./test-utils.js');
-
-process.on('unhandledRejection', (reason: any, p: any) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
+const { isNetworkSyncTarget, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('./test-utils.js');
 
 // For tests with memory of file system we can use low intervals to make the tests faster.
 // However if we use such low values with network sync targets, some calls might randomly fail with
@@ -39,7 +35,7 @@ describe('synchronizer_LockHandler', function() {
 		done();
 	});
 
-	it('should acquire and release a sync lock', asyncTest(async () => {
+	it('should acquire and release a sync lock', (async () => {
 		await lockHandler().acquireLock(LockType.Sync, 'mobile', '123456');
 		const locks = await lockHandler().locks(LockType.Sync);
 		expect(locks.length).toBe(1);
@@ -51,7 +47,7 @@ describe('synchronizer_LockHandler', function() {
 		expect((await lockHandler().locks(LockType.Sync)).length).toBe(0);
 	}));
 
-	it('should not use files that are not locks', asyncTest(async () => {
+	it('should not use files that are not locks', (async () => {
 		await fileApi().put('locks/desktop.ini', 'a');
 		await fileApi().put('locks/exclusive.json', 'a');
 		await fileApi().put('locks/garbage.json', 'a');
@@ -61,7 +57,7 @@ describe('synchronizer_LockHandler', function() {
 		expect(locks.length).toBe(1);
 	}));
 
-	it('should allow multiple sync locks', asyncTest(async () => {
+	it('should allow multiple sync locks', (async () => {
 		await lockHandler().acquireLock(LockType.Sync, 'mobile', '111');
 
 		await switchClient(2);
@@ -78,7 +74,7 @@ describe('synchronizer_LockHandler', function() {
 		}
 	}));
 
-	it('should auto-refresh a lock', asyncTest(async () => {
+	it('should auto-refresh a lock', (async () => {
 		const handler = newLockHandler({ autoRefreshInterval: 100 * timeoutMultipler });
 		const lock = await handler.acquireLock(LockType.Sync, 'desktop', '111');
 		const lockBefore = await handler.activeLock(LockType.Sync, 'desktop', '111');
@@ -89,7 +85,7 @@ describe('synchronizer_LockHandler', function() {
 		handler.stopAutoLockRefresh(lock);
 	}));
 
-	it('should call the error handler when lock has expired while being auto-refreshed', asyncTest(async () => {
+	it('should call the error handler when lock has expired while being auto-refreshed', (async () => {
 		const handler = newLockHandler({
 			lockTtl: 50 * timeoutMultipler,
 			autoRefreshInterval: 200 * timeoutMultipler,
@@ -108,7 +104,7 @@ describe('synchronizer_LockHandler', function() {
 		handler.stopAutoLockRefresh(lock);
 	}));
 
-	it('should not allow sync locks if there is an exclusive lock', asyncTest(async () => {
+	it('should not allow sync locks if there is an exclusive lock', (async () => {
 		await lockHandler().acquireLock(LockType.Exclusive, 'desktop', '111');
 
 		await expectThrow(async () => {
@@ -116,7 +112,7 @@ describe('synchronizer_LockHandler', function() {
 		}, 'hasExclusiveLock');
 	}));
 
-	it('should not allow exclusive lock if there are sync locks', asyncTest(async () => {
+	it('should not allow exclusive lock if there are sync locks', (async () => {
 		const lockHandler = newLockHandler({ lockTtl: 1000 * 60 * 60 });
 
 		await lockHandler.acquireLock(LockType.Sync, 'mobile', '111');
@@ -127,7 +123,7 @@ describe('synchronizer_LockHandler', function() {
 		}, 'hasSyncLock');
 	}));
 
-	it('should allow exclusive lock if the sync locks have expired', asyncTest(async () => {
+	it('should allow exclusive lock if the sync locks have expired', (async () => {
 		const lockHandler = newLockHandler({ lockTtl: 500 * timeoutMultipler });
 
 		await lockHandler.acquireLock(LockType.Sync, 'mobile', '111');
@@ -140,7 +136,7 @@ describe('synchronizer_LockHandler', function() {
 		});
 	}));
 
-	it('should decide what is the active exclusive lock', asyncTest(async () => {
+	it('should decide what is the active exclusive lock', (async () => {
 		const lockHandler = newLockHandler();
 
 		{
@@ -155,7 +151,7 @@ describe('synchronizer_LockHandler', function() {
 		}
 	}));
 
-	// it('should not have race conditions', asyncTest(async () => {
+	// it('should not have race conditions', (async () => {
 	// 	const lockHandler = newLockHandler();
 
 	// 	const clients = [];

@@ -66,7 +66,7 @@ export default class SpellCheckerService {
 	public setLanguage(language: string) {
 		Setting.setValue('spellChecker.language', language);
 		this.applyStateToDriver();
-		this.addLatestSelectedLanguage(language);
+		void this.addLatestSelectedLanguage(language);
 	}
 
 	public get language(): string {
@@ -98,7 +98,7 @@ export default class SpellCheckerService {
 				output.push({
 					label: suggestion,
 					click: () => {
-						CommandService.instance().execute('replaceSelection', suggestion);
+						void CommandService.instance().execute('replaceSelection', suggestion);
 					},
 				});
 			}
@@ -115,7 +115,7 @@ export default class SpellCheckerService {
 		output.push({
 			label: _('Add to dictionary'),
 			click: () => {
-				this.addToDictionary(this.language, misspelledWord);
+				void this.addToDictionary(this.language, misspelledWord);
 			},
 		});
 
@@ -176,10 +176,10 @@ export default class SpellCheckerService {
 			},
 
 			// Can be removed once it does work
-			{
-				label: '⚠ Spell checker doesn\'t work in Markdown editor ⚠',
-				enabled: false,
-			},
+			// {
+			// 	label: '⚠ Spell checker doesn\'t work in Markdown editor ⚠',
+			// 	enabled: false,
+			// },
 
 			{
 				type: 'separator',

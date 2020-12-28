@@ -54,7 +54,7 @@ export default class AsyncActionQueue {
 
 		this.scheduleProcessingIID_ = shim.setTimeout(() => {
 			this.scheduleProcessingIID_ = null;
-			this.processQueue();
+			void this.processQueue();
 		}, interval);
 	}
 

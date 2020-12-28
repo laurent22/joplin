@@ -9,6 +9,7 @@ interface RendererRule {
 	install(context: any, ruleOptions: any): any;
 	assets?(theme: any): any;
 	plugin?: any;
+	assetPath?: string;
 }
 
 interface RendererRules {
@@ -32,6 +33,7 @@ const rules: RendererRules = {
 	checkbox: require('./MdToHtml/rules/checkbox').default,
 	katex: require('./MdToHtml/rules/katex').default,
 	link_open: require('./MdToHtml/rules/link_open').default,
+	link_close: require('./MdToHtml/rules/link_close').default,
 	html_image: require('./MdToHtml/rules/html_image').default,
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords').default,
 	code_inline: require('./MdToHtml/rules/code_inline').default,
@@ -68,9 +70,9 @@ function slugify(s: string): string {
 const inMemoryCache = new InMemoryCache(20);
 
 export interface ExtraRendererRule {
-	id: string,
-	module: any,
-	assetPath: string,
+	id: string;
+	module: any;
+	assetPath: string;
 }
 
 export interface Options {
@@ -96,11 +98,19 @@ interface PluginAssets {
 	[pluginName: string]: PluginAsset[];
 }
 
+export interface Link {
+	href: string;
+	resource: any;
+	resourceReady: boolean;
+	resourceFullPath: string;
+}
+
 interface PluginContext {
 	css: any;
 	pluginAssets: any;
 	cache: any;
 	userData: any;
+	currentLinks: Link[];
 }
 
 interface RenderResultPluginAsset {
@@ -138,14 +148,14 @@ export interface RuleOptions {
 	// to display a context menu. Used in `image.ts` and `link_open.ts`
 	enableLongPress?: boolean;
 
-	// Used in mobile app when enableLongPress = true. Tells for how long
-	// the resource should be pressed before the menu is shown.
-	longPressDelay?: number;
-
 	// Use by `link_open` rule.
 	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
 	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
 	linkRenderingType?: number;
+
+	audioPlayerEnabled: boolean;
+	videoPlayerEnabled: boolean;
+	pdfViewerEnabled: boolean;
 }
 
 export default class MdToHtml {
@@ -188,7 +198,7 @@ export default class MdToHtml {
 
 		if (options.extraRendererRules) {
 			for (const rule of options.extraRendererRules) {
-				this.loadExtraRendererRule(rule.id, rule.module);
+				this.loadExtraRendererRule(rule.id, rule.assetPath, rule.module);
 			}
 		}
 	}
@@ -205,10 +215,16 @@ export default class MdToHtml {
 	}
 
 	private pluginOptions(name: string) {
+		// Currently link_close is only used to append the media player to
+		// the resource links so we use the mediaPlayers plugin options for
+		// it.
+		if (name === 'link_close') name = 'mediaPlayers';
+
 		let o = this.pluginOptions_[name] ? this.pluginOptions_[name] : {};
 		o = Object.assign({
 			enabled: true,
 		}, o);
+
 		return o;
 	}
 
@@ -217,15 +233,28 @@ export default class MdToHtml {
 	}
 
 	// `module` is a file that has already been `required()`
-	public loadExtraRendererRule(id: string, module: any) {
+	public loadExtraRendererRule(id: string, assetPath: string, module: any) {
 		if (this.extraRendererRules_[id]) throw new Error(`A renderer rule with this ID has already been loaded: ${id}`);
-		this.extraRendererRules_[id] = module;
+		this.extraRendererRules_[id] = {
+			...module,
+			assetPath,
+		};
+	}
+
+	private ruleByKey(key: string): RendererRule {
+		if (rules[key]) return rules[key];
+		if (this.extraRendererRules_[key]) return this.extraRendererRules_[key];
+		if (key === 'highlight.js') return null;
+		throw new Error(`No such rule: ${key}`);
 	}
 
 	private processPluginAssets(pluginAssets: PluginAssets): RenderResult {
 		const files: RenderResultPluginAsset[] = [];
 		const cssStrings = [];
 		for (const pluginName in pluginAssets) {
+
+			const rule = this.ruleByKey(pluginName);
+
 			for (const asset of pluginAssets[pluginName]) {
 				let mime = asset.mime;
 
@@ -248,10 +277,18 @@ export default class MdToHtml {
 						throw new Error(`Unsupported inline mime type: ${mime}`);
 					}
 				} else {
+					// TODO: we should resolve the path using
+					// resolveRelativePathWithinDir() for increased
+					// security, but the shim is not accessible from the
+					// renderer, and React Native doesn't have this
+					// function, so for now use the provided path as-is.
+
 					const name = `${pluginName}/${asset.name}`;
+					const assetPath = rule?.assetPath ? `${rule.assetPath}/${asset.name}` : `pluginAssets/${name}`;
+
 					files.push(Object.assign({}, asset, {
 						name: name,
-						path: `pluginAssets/${name}`,
+						path: assetPath,
 						mime: mime,
 					}));
 				}
@@ -267,7 +304,7 @@ export default class MdToHtml {
 
 	// This return all the assets for all the plugins. Since it is called
 	// on each render, the result is cached.
-	private allProcessedAssets(theme: any, codeTheme: string) {
+	private allProcessedAssets(rules: RendererRules, theme: any, codeTheme: string) {
 		const cacheKey: string = theme.cacheKey + codeTheme;
 
 		if (this.allProcessedAssets_[cacheKey]) return this.allProcessedAssets_[cacheKey];
@@ -352,6 +389,10 @@ export default class MdToHtml {
 			codeTheme: 'atom-one-light.css',
 			theme: Object.assign({}, defaultNoteStyle, theme),
 			plugins: {},
+
+			audioPlayerEnabled: this.pluginEnabled('audioPlayer'),
+			videoPlayerEnabled: this.pluginEnabled('videoPlayer'),
+			pdfViewerEnabled: this.pluginEnabled('pdfViewer'),
 		}, options);
 
 		// The "codeHighlightCacheKey" option indicates what set of cached object should be
@@ -377,12 +418,13 @@ export default class MdToHtml {
 			pluginAssets: {},
 			cache: this.contextCache_,
 			userData: {},
+			currentLinks: [],
 		};
 
 		const markdownIt = new MarkdownIt({
 			breaks: !this.pluginEnabled('softbreaks'),
 			typographer: this.pluginEnabled('typographer'),
-			// linkify: true,
+			linkify: this.pluginEnabled('linkify'),
 			html: true,
 			highlight: (str: string, lang: string) => {
 				let outputCodeHtml = '';
@@ -413,10 +455,16 @@ export default class MdToHtml {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
 
-				return {
-					wrapCode: false,
-					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,
-				};
+				const html = `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`;
+
+				if (rules.fence) {
+					return {
+						wrapCode: false,
+						html: html,
+					};
+				} else {
+					return html;
+				}
 			},
 		});
 
@@ -469,13 +517,13 @@ export default class MdToHtml {
 			}
 		}
 
-		setupLinkify(markdownIt);
+		if (this.pluginEnabled('linkify')) setupLinkify(markdownIt);
 
 		const renderedBody = markdownIt.render(body, context);
 
 		let cssStrings = noteStyle(options.theme);
 
-		let output = { ...this.allProcessedAssets(options.theme, options.codeTheme) };
+		let output = { ...this.allProcessedAssets(allRules, options.theme, options.codeTheme) };
 		cssStrings = cssStrings.concat(output.cssStrings);
 
 		if (options.userCss) cssStrings.push(options.userCss);

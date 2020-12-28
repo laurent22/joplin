@@ -81,7 +81,10 @@ export default class ExternalEditWatcher {
 		if (!this.chokidar_) return;
 
 		if (!this.watcher_) {
-			this.watcher_ = this.chokidar_.watch(fileToWatch);
+			this.watcher_ = this.chokidar_.watch(fileToWatch, {
+				useFsEvents: false,
+			});
+
 			this.watcher_.on('all', async (event: string, path: string) => {
 				this.logger().debug(`ExternalEditWatcher: Event: ${event}: ${path}`);
 
@@ -100,7 +103,7 @@ export default class ExternalEditWatcher {
 
 						if (!note) {
 							this.logger().warn(`ExternalEditWatcher: Watched note has been deleted: ${id}`);
-							this.stopWatching(id);
+							void this.stopWatching(id);
 							return;
 						}
 
@@ -339,7 +342,7 @@ export default class ExternalEditWatcher {
 		// avoid update loops. We only want to listen to file changes made by the user.
 		this.skipNextChangeEvent_[note.id] = true;
 
-		this.writeNoteToFile_(note);
+		await this.writeNoteToFile_(note);
 	}
 
 	async writeNoteToFile_(note: NoteEntity) {

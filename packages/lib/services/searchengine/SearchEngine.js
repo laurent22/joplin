@@ -4,8 +4,7 @@ const Setting = require('../../models/Setting').default;
 const Note = require('../../models/Note.js');
 const BaseModel = require('../../BaseModel').default;
 const ItemChangeUtils = require('../ItemChangeUtils');
-const { pregQuote, scriptType } = require('../../string-utils.js');
-const removeDiacritics = require('diacritics').remove;
+const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 const { sprintf } = require('sprintf-js');
 const filterParser = require('./filterParser').default;
 const queryBuilder = require('./queryBuilder').default;
@@ -636,7 +635,7 @@ class SearchEngine {
 		for (const key of parsedQuery.keys) {
 			if (parsedQuery.terms[key].length === 0) continue;
 
-			const term = parsedQuery.terms[key][0].value;
+			const term = parsedQuery.terms[key].map(x => x.value).join(' ');
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;

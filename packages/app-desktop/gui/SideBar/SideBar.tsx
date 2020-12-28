@@ -8,6 +8,10 @@ import Setting from '@joplin/lib/models/Setting';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
+import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
+import { AppState } from '../../app';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
@@ -36,6 +40,7 @@ interface Props {
 	syncReport: any;
 	tags: any[];
 	syncStarted: boolean;
+	plugins: PluginStates;
 }
 
 interface State {
@@ -101,6 +106,7 @@ class SideBarComponent extends React.Component<Props, State> {
 	private tagItemsOrder_: any[] = [];
 	private rootRef: any = null;
 	private anchorItemRefs: any = {};
+	private pluginsRef: any;
 
 	constructor(props: any) {
 		super(props);
@@ -111,6 +117,14 @@ class SideBarComponent extends React.Component<Props, State> {
 			tagHeaderIsExpanded: Setting.value('tagHeaderIsExpanded'),
 			folderHeaderIsExpanded: Setting.value('folderHeaderIsExpanded'),
 		};
+
+		// This whole component is a bit of a mess and rather than passing
+		// a plugins prop around, not knowing how it's going to affect
+		// re-rendering, we just keep a ref to it. Currently that's enough
+		// as plugins are only accessed from context menus. However if want
+		// to do more complex things with plugins in the sidebar, it will
+		// probably have to be refactored using React Hooks first.
+		this.pluginsRef = React.createRef();
 
 		this.onFolderToggleClick_ = this.onFolderToggleClick_.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
@@ -274,7 +288,7 @@ class SideBarComponent extends React.Component<Props, State> {
 					new MenuItem({
 						label: module.fullLabel(),
 						click: async () => {
-							await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
+							await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId], plugins: this.pluginsRef.current });
 						},
 					})
 				);
@@ -292,6 +306,20 @@ class SideBarComponent extends React.Component<Props, State> {
 			menu.append(new MenuItem(
 				menuUtils.commandToStatefulMenuItem('renameTag', itemId)
 			));
+		}
+
+		const pluginViews = pluginUtils.viewsByType(this.pluginsRef.current, 'menuItem');
+
+		for (const view of pluginViews) {
+			const location = view.location;
+
+			if (itemType === ModelType.Tag && location === MenuItemLocation.TagContextMenu ||
+				itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu
+			) {
+				menu.append(
+					new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemId))
+				);
+			}
 		}
 
 		menu.popup(bridge().window());
@@ -510,9 +538,9 @@ class SideBarComponent extends React.Component<Props, State> {
 			event.preventDefault();
 
 			if (event.shiftKey) {
-				CommandService.instance().execute('focusElement', 'noteBody');
+				void CommandService.instance().execute('focusElement', 'noteBody');
 			} else {
-				CommandService.instance().execute('focusElement', 'noteList');
+				void CommandService.instance().execute('focusElement', 'noteList');
 			}
 		}
 
@@ -559,14 +587,14 @@ class SideBarComponent extends React.Component<Props, State> {
 				iconAnimation={iconAnimation}
 				title={label}
 				onClick={() => {
-					CommandService.instance().execute('synchronize', type !== 'sync');
+					void CommandService.instance().execute('synchronize', type !== 'sync');
 				}}
 			/>
 		);
 	}
 
 	onAddFolderButtonClick() {
-		CommandService.instance().execute('newFolder');
+		void CommandService.instance().execute('newFolder');
 	}
 
 	// componentDidUpdate(prevProps:any, prevState:any) {
@@ -584,6 +612,8 @@ class SideBarComponent extends React.Component<Props, State> {
 	// }
 
 	render() {
+		this.pluginsRef.current = this.props.plugins;
+
 		const theme = themeStyle(this.props.themeId);
 
 		const items = [];
@@ -668,7 +698,7 @@ class SideBarComponent extends React.Component<Props, State> {
 	}
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		folders: state.folders,
 		tags: state.tags,
@@ -685,6 +715,7 @@ const mapStateToProps = (state: any) => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
+		plugins: state.pluginService.plugins,
 	};
 };
 

@@ -272,6 +272,11 @@ function renderToStringWithCache(latex: string, katexOptions: any) {
 	}
 }
 
+function renderKatexError(latex: string, error: any): string {
+	console.error('Katex error for:', latex, error);
+	return `<div class="inline-code">${error.message}</div>`;
+}
+
 export default {
 	plugin: function(markdownIt: any, options: RuleOptions) {
 		// Keep macros that persist across Katex blocks to allow defining a macro
@@ -286,12 +291,13 @@ export default {
 		// set KaTeX as the renderer for markdown-it-simplemath
 		const katexInline = function(latex: string) {
 			katexOptions.displayMode = false;
+			let outputHtml: string = '';
 			try {
-				return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${markdownIt.utils.escapeHtml(latex)}</span>${renderToStringWithCache(latex, katexOptions)}</span>`;
+				outputHtml = renderToStringWithCache(latex, katexOptions);
 			} catch (error) {
-				console.error('Katex error for:', latex, error);
-				return latex;
+				outputHtml = renderKatexError(latex, error);
 			}
+			return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${markdownIt.utils.escapeHtml(latex)}</span>${outputHtml}</span>`;
 		};
 
 		const inlineRenderer = function(tokens: any[], idx: number) {
@@ -300,12 +306,13 @@ export default {
 
 		const katexBlock = function(latex: string) {
 			katexOptions.displayMode = true;
+			let outputHtml: string = '';
 			try {
-				return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${renderToStringWithCache(latex, katexOptions)}</div>`;
+				outputHtml = renderToStringWithCache(latex, katexOptions);
 			} catch (error) {
-				console.error('Katex error for:', latex, error);
-				return latex;
+				outputHtml = renderKatexError(latex, error);
 			}
+			return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${outputHtml}</div>`;
 		};
 
 		const blockRenderer = function(tokens: any[], idx: number) {

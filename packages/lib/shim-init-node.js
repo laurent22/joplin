@@ -51,7 +51,7 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-function shimInit(sharp = null, keytar = null) {
+function shimInit(sharp = null, keytar = null, React = null) {
 	keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? keytar : null;
 
 	shim.fsDriver = () => {
@@ -66,6 +66,12 @@ function shimInit(sharp = null, keytar = null) {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
 		return shim.fsDriver_;
 	};
+
+	if (React) {
+		shim.react = () => {
+			return React;
+		};
+	}
 
 	shim.randomBytes = async count => {
 		const buffer = require('crypto').randomBytes(count);
@@ -526,6 +532,10 @@ function shimInit(sharp = null, keytar = null) {
 
 	shim.keytar = () => {
 		return keytar;
+	};
+
+	shim.requireDynamic = (path) => {
+		return require(path);
 	};
 }
 

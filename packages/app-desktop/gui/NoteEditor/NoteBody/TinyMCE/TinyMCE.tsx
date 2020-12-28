@@ -19,7 +19,7 @@ const taboverride = require('taboverride');
 const { reg } = require('@joplin/lib/registry.js');
 const BaseItem = require('@joplin/lib/models/BaseItem');
 const { themeStyle } = require('@joplin/lib/theme');
-const { clipboard } = require('electron');
+// const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
 function markupRenderOptions(override: any = null) {
@@ -247,7 +247,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if (cmd.name === 'insertText') {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, cmd.value, { bodyOnly: true });
 					editor.insertContent(result.html);
-				} else if (cmd.name === 'focus') {
+				} else if (cmd.name === 'editor.focus') {
 					editor.focus();
 				} else if (cmd.name === 'dropItems') {
 					if (cmd.value.type === 'notes') {
@@ -371,7 +371,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			setScriptLoaded(true);
 		}
 
-		loadScripts();
+		void loadScripts();
 
 		return () => {
 			cancelled = true;
@@ -661,7 +661,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						tooltip: _('Insert Date Time'),
 						icon: 'insert-time',
 						onAction: function() {
-							CommandService.instance().execute('insertDateTime');
+							void CommandService.instance().execute('insertDateTime');
 						},
 					});
 
@@ -670,7 +670,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 							tooltip: CommandService.instance().label(pluginCommandName),
 							icon: CommandService.instance().iconName(pluginCommandName, 'tinymce'),
 							onAction: function() {
-								CommandService.instance().execute(pluginCommandName);
+								void CommandService.instance().execute(pluginCommandName);
 							},
 						});
 					}
@@ -708,7 +708,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			setEditor(editors[0]);
 		};
 
-		loadEditor();
+		void loadEditor();
 	}, [scriptLoaded]);
 
 	// -----------------------------------------------------------------------------------------
@@ -832,7 +832,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			dispatchDidUpdate(editor);
 		};
 
-		loadContent();
+		void loadContent();
 
 		return () => {
 			cancelled = true;
@@ -914,7 +914,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// the note.
 	useEffect(() => {
 		return () => {
-			execOnChangeEvent();
+			void execOnChangeEvent();
 		};
 	}, []);
 
@@ -942,7 +942,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			onChangeHandlerTimeoutRef.current = shim.setTimeout(async () => {
 				onChangeHandlerTimeoutRef.current = null;
-				execOnChangeEvent();
+				void execOnChangeEvent();
 			}, 1000);
 		}
 
@@ -962,7 +962,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem'];
 
-			if (changeCommands.includes(c) || c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
+			if (
+				changeCommands.includes(c) ||
+				c.indexOf('Insert') === 0 ||
+				c.indexOf('mceToggle') === 0 ||
+				c.indexOf('mceInsert') === 0 ||
+				c.indexOf('mceTable') === 0
+			) {
 				onChangeHandler();
 			}
 		}
@@ -1009,14 +1015,19 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
-		function onKeyDown(event: any) {
+		function onKeyDown(_event: any) {
+			// It seems "paste as text" is now handled automatically by
+			// either Chrome, Electron and/or TinyMCE so the code below
+			// should not longer be necessary. Also fixes
+			// https://github.com/laurent22/joplin/issues/4243
+
 			// Handle "paste as text". Note that when pressing CtrlOrCmd+Shift+V it's going
 			// to trigger the "keydown" event but not the "paste" event, so it's ok to process
 			// it here and we don't need to do anything special in onPaste
-			if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
-				const pastedText = clipboard.readText();
-				if (pastedText) editor.insertContent(pastedText);
-			}
+			// if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
+			// 	const pastedText = clipboard.readText();
+			// 	if (pastedText) editor.insertContent(pastedText);
+			// }
 		}
 
 		editor.on('keyup', onKeyUp);

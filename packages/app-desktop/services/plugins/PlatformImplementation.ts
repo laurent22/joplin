@@ -1,10 +1,4 @@
-// import { EditorCommand } from '@joplin/lib/services/plugins/api/types';
-
 import bridge from '../bridge';
-
-// interface JoplinWorkspace {
-// 	execEditorCommand(command:EditorCommand):Promise<string>
-// }
 
 interface JoplinViewsDialogs {
 	showMessageBox(message: string): Promise<number>;
@@ -15,7 +9,6 @@ interface JoplinViews {
 }
 
 interface Joplin {
-	// workspace: JoplinWorkspace;
 	views: JoplinViews;
 }
 

@@ -1,6 +1,21 @@
 import { ResourceEntity } from './services/database/types';
 
 let isTestingEnv_ = false;
+
+// We need to ensure that there's only one instance of React being used by
+// all the packages. In particular, the lib might need React to define
+// generic hooks, but it shouldn't have React in its dependencies as that
+// would cause the following error:
+//
+// https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react
+//
+// So instead, the **applications** include React as a dependency, then
+// pass it to any other packages using the shim. Essentially, only one
+// package should require React, and in our case that should be one of the
+// applications (app-desktop, app-mobile, etc.) since we are sure they
+// won't be dependency to other packages (unlike the lib which can be
+// included anywhere).
+
 let react_: any = null;
 
 const shim = {
@@ -310,6 +325,16 @@ const shim = {
 	keytar: (): any => {
 		throw new Error('Not implemented');
 	},
+
+	// In general all imports should be static, but for cases where dynamic
+	// require is needed, we should use the shim so that the code can build in
+	// React Native. In React Native that code path will throw an error, but at
+	// least it will build.
+	// https://stackoverflow.com/questions/55581073
+	requireDynamic: (_path: string): any => {
+		throw new Error('Not implemented');
+	},
+
 };
 
 export default shim;

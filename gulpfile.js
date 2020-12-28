@@ -8,11 +8,11 @@ const tasks = {
 	// deleteBuildDirs: require('./packages/tools/gulp/tasks/deleteBuildDirs'),
 	completePublishAll: {
 		fn: async () => {
-			await utils.execCommandVerbose('git pull');
-			await utils.execCommandVerbose('git add -A');
-			await utils.execCommandVerbose('git commit -m "Releasing sub-packages"');
-			await utils.execCommandVerbose('lerna publish from-package -y');
-			await utils.execCommandVerbose('git push');
+			// await utils.execCommandVerbose('git pull');
+			await utils.execCommandVerbose('git', ['add', '-A']);
+			await utils.execCommandVerbose('git', ['commit', '-m', 'Releasing sub-packages']);
+			await utils.execCommandVerbose('lerna', ['publish', 'from-package', '-y']);
+			await utils.execCommandVerbose('git', ['push']);
 		},
 	},
 };

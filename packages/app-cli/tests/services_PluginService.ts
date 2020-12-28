@@ -3,14 +3,12 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
+import Setting from '@joplin/lib/models/Setting';
 
-const { asyncTest, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('./test-utils.js');
+const fs = require('fs-extra');
+const { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('./test-utils.js');
 const Note = require('@joplin/lib/models/Note');
 const Folder = require('@joplin/lib/models/Folder');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at services_PluginService: Promise', p, 'reason:', reason);
-});
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
 
@@ -20,9 +18,7 @@ function newPluginService(appVersion: string = '1.4') {
 	service.initialize(
 		appVersion,
 		{
-			joplin: {
-				workspace: {},
-			},
+			joplin: {},
 		},
 		runner,
 		{
@@ -41,9 +37,9 @@ describe('services_PluginService', function() {
 		done();
 	});
 
-	it('should load and run a simple plugin', asyncTest(async () => {
+	it('should load and run a simple plugin', (async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins([`${testPluginDir}/simple`]);
+		await service.loadAndRunPlugins([`${testPluginDir}/simple`], {});
 
 		expect(() => service.pluginById('org.joplinapp.plugins.Simple')).not.toThrowError();
 
@@ -57,15 +53,15 @@ describe('services_PluginService', function() {
 		expect(allNotes[0].parent_id).toBe(allFolders[0].id);
 	}));
 
-	it('should load and run a simple plugin and handle trailing slash', asyncTest(async () => {
+	it('should load and run a simple plugin and handle trailing slash', (async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins([`${testPluginDir}/simple/`]);
+		await service.loadAndRunPlugins([`${testPluginDir}/simple/`], {});
 		expect(() => service.pluginById('org.joplinapp.plugins.Simple')).not.toThrowError();
 	}));
 
-	it('should load and run a plugin that uses external packages', asyncTest(async () => {
+	it('should load and run a plugin that uses external packages', (async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins([`${testPluginDir}/withExternalModules`]);
+		await service.loadAndRunPlugins([`${testPluginDir}/withExternalModules`], {});
 		expect(() => service.pluginById('org.joplinapp.plugins.ExternalModuleDemo')).not.toThrowError();
 
 		const allFolders = await Folder.all();
@@ -76,9 +72,9 @@ describe('services_PluginService', function() {
 		expect(allFolders[0].title).toBe('  foo');
 	}));
 
-	it('should load multiple plugins from a directory', asyncTest(async () => {
+	it('should load multiple plugins from a directory', (async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins(`${testPluginDir}/multi_plugins`);
+		await service.loadAndRunPlugins(`${testPluginDir}/multi_plugins`, {});
 
 		const plugin1 = service.pluginById('org.joplinapp.plugins.MultiPluginDemo1');
 		const plugin2 = service.pluginById('org.joplinapp.plugins.MultiPluginDemo2');
@@ -90,7 +86,7 @@ describe('services_PluginService', function() {
 		expect(allFolders.map((f: any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 
-	it('should load plugins from JS bundles', asyncTest(async () => {
+	it('should load plugins from JS bundles', (async () => {
 		const service = newPluginService();
 
 		const plugin = await service.loadPluginFromJsBundle('/tmp', `
@@ -123,21 +119,21 @@ describe('services_PluginService', function() {
 		expect(allFolders.length).toBe(1);
 	}));
 
-	it('should load plugins from JS bundle files', asyncTest(async () => {
+	it('should load plugins from JS bundle files', (async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins(`${testPluginDir}/jsbundles`);
+		await service.loadAndRunPlugins(`${testPluginDir}/jsbundles`, {});
 		expect(!!service.pluginById('org.joplinapp.plugins.JsBundleDemo')).toBe(true);
 		expect((await Folder.all()).length).toBe(1);
 	}));
 
-	it('should load plugins from JPL archive', asyncTest(async () => {
+	it('should load plugins from JPL archive', (async () => {
 		const service = newPluginService();
-		await service.loadAndRunPlugins([`${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`]);
+		await service.loadAndRunPlugins([`${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`], {});
 		expect(!!service.pluginById('org.joplinapp.FirstJplPlugin')).toBe(true);
 		expect((await Folder.all()).length).toBe(1);
 	}));
 
-	it('should validate JS bundles', asyncTest(async () => {
+	it('should validate JS bundles', (async () => {
 		const invalidJsBundles = [
 			`
 				/* joplin-manifest:
@@ -170,11 +166,13 @@ describe('services_PluginService', function() {
 		}
 	}));
 
-	it('should register a Markdown-it plugin', asyncTest(async () => {
+	it('should register a Markdown-it plugin', (async () => {
 		const tempDir = await createTempDir();
 
 		const contentScriptPath = `${tempDir}/markdownItTestPlugin.js`;
+		const contentScriptCssPath = `${tempDir}/markdownItTestPlugin.css`;
 		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.js`, contentScriptPath);
+		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.css`, contentScriptCssPath);
 
 		const service = newPluginService();
 
@@ -209,7 +207,7 @@ describe('services_PluginService', function() {
 
 		const mdToHtml = new MdToHtml();
 		const module = require(contentScript.path).default;
-		mdToHtml.loadExtraRendererRule(contentScript.id, module({}));
+		mdToHtml.loadExtraRendererRule(contentScript.id, tempDir, module({}));
 
 		const result = await mdToHtml.render([
 			'```justtesting',
@@ -217,12 +215,17 @@ describe('services_PluginService', function() {
 			'```',
 		].join('\n'));
 
+		const asset = result.pluginAssets.find(a => a.name === 'justtesting/markdownItTestPlugin.css');
+		const assetContent: string = await shim.fsDriver().readFile(asset.path, 'utf8');
+
+		expect(assetContent.includes('.just-testing')).toBe(true);
+		expect(assetContent.includes('background-color: rgb(202, 255, 255)')).toBe(true);
 		expect(result.html.includes('JUST TESTING: something')).toBe(true);
 
 		await shim.fsDriver().remove(tempDir);
 	}));
 
-	it('should enable and disable plugins depending on what app version they support', asyncTest(async () => {
+	it('should enable and disable plugins depending on what app version they support', (async () => {
 		const pluginScript = `
 			/* joplin-manifest:
 			{
@@ -248,10 +251,35 @@ describe('services_PluginService', function() {
 		];
 
 		for (const testCase of testCases) {
-			const [appVersion, expected] = testCase;
-			const plugin = await newPluginService(appVersion as string).loadPluginFromJsBundle('', pluginScript);
-			expect(plugin.enabled).toBe(expected as boolean);
+			const [appVersion, hasNoError] = testCase;
+			const service = newPluginService(appVersion as string);
+			const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+
+			if (hasNoError) {
+				await expectNotThrow(() => service.runPlugin(plugin));
+			} else {
+				await expectThrow(() => service.runPlugin(plugin));
+			}
 		}
+	}));
+
+	it('should install a plugin', (async () => {
+		const service = newPluginService();
+		const pluginPath = `${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`;
+		await service.installPlugin(pluginPath);
+		const installedPluginPath = `${Setting.value('pluginDir')}/org.joplinapp.FirstJplPlugin.jpl`;
+		expect(await fs.existsSync(installedPluginPath)).toBe(true);
+	}));
+
+	it('should rename the plugin archive to the right name', (async () => {
+		const tempDir = await createTempDir();
+		const service = newPluginService();
+		const pluginPath = `${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`;
+		const tempPath = `${tempDir}/something.jpl`;
+		await shim.fsDriver().copy(pluginPath, tempPath);
+		const installedPluginPath = `${Setting.value('pluginDir')}/org.joplinapp.FirstJplPlugin.jpl`;
+		await service.installPlugin(tempPath);
+		expect(await fs.existsSync(installedPluginPath)).toBe(true);
 	}));
 
 });

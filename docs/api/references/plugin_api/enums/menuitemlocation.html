@@ -75,9 +75,11 @@
 								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#edit" class="tsd-kind-icon">Edit</a></li>
 								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#editorcontextmenu" class="tsd-kind-icon">Editor<wbr>Context<wbr>Menu</a></li>
 								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#file" class="tsd-kind-icon">File</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#foldercontextmenu" class="tsd-kind-icon">Folder<wbr>Context<wbr>Menu</a></li>
 								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#help" class="tsd-kind-icon">Help</a></li>
 								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#note" class="tsd-kind-icon">Note</a></li>
 								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#notelistcontextmenu" class="tsd-kind-icon">Note<wbr>List<wbr>Context<wbr>Menu</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#tagcontextmenu" class="tsd-kind-icon">Tag<wbr>Context<wbr>Menu</a></li>
 								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#tools" class="tsd-kind-icon">Tools</a></li>
 								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="menuitemlocation.html#view" class="tsd-kind-icon">View</a></li>
 							</ul>
@@ -123,6 +125,22 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="foldercontextmenu" class="tsd-anchor"></a>
+					<h3>Folder<wbr>Context<wbr>Menu</h3>
+					<div class="tsd-signature tsd-kind-icon">Folder<wbr>Context<wbr>Menu<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;folderContextMenu&quot;</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>When a command is called from a folder context menu, the
+							command will receive the following arguments:</p>
+						</div>
+						<ul>
+							<li><code>folderId:string</code>: ID of the folder that was right-clicked on</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
 					<a name="help" class="tsd-anchor"></a>
 					<h3>Help</h3>
 					<div class="tsd-signature tsd-kind-icon">Help<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;help&quot;</span></div>
@@ -142,6 +160,31 @@
 					<div class="tsd-signature tsd-kind-icon">Note<wbr>List<wbr>Context<wbr>Menu<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;noteListContextMenu&quot;</span></div>
 					<aside class="tsd-sources">
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>When a command is called from the note list context menu, the
+							command will receive the following arguments:</p>
+						</div>
+						<ul>
+							<li><code>noteIds:string[]</code>: IDs of the notes that were right-clicked on.</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="tagcontextmenu" class="tsd-anchor"></a>
+					<h3>Tag<wbr>Context<wbr>Menu</h3>
+					<div class="tsd-signature tsd-kind-icon">Tag<wbr>Context<wbr>Menu<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;tagContextMenu&quot;</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>When a command is called from a tag context menu, the
+							command will receive the following arguments:</p>
+						</div>
+						<ul>
+							<li><code>tagId:string</code>: ID of the tag that was right-clicked on</li>
+						</ul>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
 					<a name="tools" class="tsd-anchor"></a>
@@ -171,15 +214,6 @@
             -->
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum">
-						<a href="contentscripttype.html" class="tsd-kind-icon">ContentScriptType</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="filesystemitem.html" class="tsd-kind-icon">FileSystemItem</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="importmoduleoutputformat.html" class="tsd-kind-icon">ImportModuleOutputFormat</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-enum">
@@ -198,6 +232,9 @@
 								<a href="menuitemlocation.html#file" class="tsd-kind-icon">File</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="menuitemlocation.html#foldercontextmenu" class="tsd-kind-icon">Folder<wbr>Context<wbr>Menu</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
 								<a href="menuitemlocation.html#help" class="tsd-kind-icon">Help</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
@@ -205,6 +242,9 @@
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
 								<a href="menuitemlocation.html#notelistcontextmenu" class="tsd-kind-icon">Note<wbr>List<wbr>Context<wbr>Menu</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="menuitemlocation.html#tagcontextmenu" class="tsd-kind-icon">Tag<wbr>Context<wbr>Menu</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
 								<a href="menuitemlocation.html#tools" class="tsd-kind-icon">Tools</a>
@@ -216,102 +256,6 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-enum">
-						<a href="settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplin.html" class="tsd-kind-icon">joplin</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplincommands.html" class="tsd-kind-icon">joplin.commands</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplindata.html" class="tsd-kind-icon">joplin.data</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplininterop.html" class="tsd-kind-icon">joplin.interop</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinplugins.html" class="tsd-kind-icon">joplin.plugins</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinsettings.html" class="tsd-kind-icon">joplin.settings</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviews.html" class="tsd-kind-icon">joplin.views</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewsdialogs.html" class="tsd-kind-icon">joplin.views.dialogs</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewsmenuitems.html" class="tsd-kind-icon">joplin.views.menuItems</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewsmenus.html" class="tsd-kind-icon">joplin.views.menus</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewspanels.html" class="tsd-kind-icon">joplin.views.panels</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinviewstoolbarbuttons.html" class="tsd-kind-icon">joplin.views.toolbarButtons</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/buttonspec.html" class="tsd-kind-icon">ButtonSpec</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/command.html" class="tsd-kind-icon">Command</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/createmenuitemoptions.html" class="tsd-kind-icon">CreateMenuItemOptions</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/dialogresult.html" class="tsd-kind-icon">DialogResult</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/editorcommand.html" class="tsd-kind-icon">EditorCommand</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/exportcontext.html" class="tsd-kind-icon">ExportContext</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/exportmodule.html" class="tsd-kind-icon">ExportModule</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/importcontext.html" class="tsd-kind-icon">ImportContext</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/importmodule.html" class="tsd-kind-icon">ImportModule</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/menuitem.html" class="tsd-kind-icon">MenuItem</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/script.html" class="tsd-kind-icon">Script</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/settingitem.html" class="tsd-kind-icon">SettingItem</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/settingsection.html" class="tsd-kind-icon">SettingSection</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#buttonid" class="tsd-kind-icon">ButtonId</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#path" class="tsd-kind-icon">Path</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#viewhandle" class="tsd-kind-icon">ViewHandle</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

@@ -18,9 +18,9 @@ export const runtime = (comp: any): CommandRuntime => {
 					onClose: async (answer: any) => {
 						if (answer) {
 							if (noteType === 'note' || noteType === 'todo') {
-								CommandService.instance().execute('newNote', answer.value, noteType === 'todo');
+								void CommandService.instance().execute('newNote', answer.value, noteType === 'todo');
 							} else {
-								CommandService.instance().execute('insertText', TemplateUtils.render(answer.value));
+								void CommandService.instance().execute('insertText', TemplateUtils.render(answer.value));
 							}
 						}
 
