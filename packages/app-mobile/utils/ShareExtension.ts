@@ -6,14 +6,16 @@ export interface SharedData {
 	resources?: string[];
 }
 
-const ShareExtension = (Platform.OS === 'android' && NativeModules.ShareExtension) ?
+const ShareExtension = (NativeModules.ShareExtension) ?
 	{
 		data: () => NativeModules.ShareExtension.data(),
 		close: () => NativeModules.ShareExtension.close(),
+		shareURL: (Platform.OS === 'ios') ? NativeModules.ShareExtension.getConstants().SHARE_EXTENSION_SHARE_URL : '',
 	} :
 	{
 		data: () => {},
 		close: () => {},
+		shareURL: '',
 	};
 
 export default ShareExtension;

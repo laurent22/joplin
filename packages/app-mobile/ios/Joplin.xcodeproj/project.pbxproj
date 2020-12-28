@@ -12,7 +12,39 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		46E31F54C547C341F605BB66 /* libPods-Joplin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		AE2908B025CE91F00046344A /* ShareData.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2908AF25CE91F00046344A /* ShareData.m */; };
+		AE290A3025CEA6580046344A /* ShareExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = AE290A2F25CEA6580046344A /* ShareExtension.m */; };
+		AE290AF725CEB9A90046344A /* ShareData.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2908AF25CE91F00046344A /* ShareData.m */; };
+		AE290CBE25CEE6710046344A /* ShareExtensionConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = AE290CBD25CEE6710046344A /* ShareExtensionConstants.m */; };
+		AE290CBF25CEE6710046344A /* ShareExtensionConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = AE290CBD25CEE6710046344A /* ShareExtensionConstants.m */; };
+		AE82E4AC2599FA3A0013551B /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE82E4AB2599FA3A0013551B /* ShareViewController.m */; };
+		AE82E4AF2599FA3A0013551B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE82E4AD2599FA3A0013551B /* MainInterface.storyboard */; };
+		AE82E4B32599FA3A0013551B /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AE82E4A82599FA3A0013551B /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AE82E4B12599FA3A0013551B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AE82E4A72599FA3A0013551B;
+			remoteInfo = ShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AE82E4B42599FA3A0013551B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AE82E4B32599FA3A0013551B /* ShareExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -35,6 +67,18 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Joplin/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A3FEB746EE7F1B0FF28528E1 /* Pods-Joplin-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOS/Pods-Joplin-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE2908AE25CE91F00046344A /* ShareData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareData.h; sourceTree = "<group>"; };
+		AE2908AF25CE91F00046344A /* ShareData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareData.m; sourceTree = "<group>"; };
+		AE290A2F25CEA6580046344A /* ShareExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ShareExtension.m; path = Joplin/ShareExtension.m; sourceTree = "<group>"; };
+		AE290CBC25CEE5BA0046344A /* ShareExtensionConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareExtensionConstants.h; sourceTree = "<group>"; };
+		AE290CBD25CEE6710046344A /* ShareExtensionConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareExtensionConstants.m; sourceTree = "<group>"; };
+		AE7945DB259C9A2500051BE2 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
+		AE7945E6259C9AEE00051BE2 /* Joplin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Joplin.entitlements; path = Joplin/Joplin.entitlements; sourceTree = "<group>"; };
+		AE82E4A82599FA3A0013551B /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE82E4AA2599FA3A0013551B /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		AE82E4AB2599FA3A0013551B /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		AE82E4AE2599FA3A0013551B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		AE82E4B02599FA3A0013551B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B61798F36B3BC123BF8EA4D9 /* libPods-Joplin-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -47,6 +91,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				46E31F54C547C341F605BB66 /* libPods-Joplin.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE82E4A52599FA3A0013551B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +124,7 @@
 		13B07FAE1A68108700A75B9A /* Joplin */ = {
 			isa = PBXGroup;
 			children = (
+				AE7945E6259C9AEE00051BE2 /* Joplin.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -80,6 +132,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				AE290A2F25CEA6580046344A /* ShareExtension.m */,
 			);
 			name = Joplin;
 			sourceTree = "<group>";
@@ -110,6 +163,7 @@
 				13B07FAE1A68108700A75B9A /* Joplin */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* JoplinTests */,
+				AE82E4A92599FA3A0013551B /* ShareExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				9CDB1D9DB6483D893504BFCB /* Pods */,
@@ -123,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* Joplin.app */,
+				AE82E4A82599FA3A0013551B /* ShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,6 +197,22 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		AE82E4A92599FA3A0013551B /* ShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				AE7945DB259C9A2500051BE2 /* ShareExtension.entitlements */,
+				AE290CBC25CEE5BA0046344A /* ShareExtensionConstants.h */,
+				AE290CBD25CEE6710046344A /* ShareExtensionConstants.m */,
+				AE82E4AA2599FA3A0013551B /* ShareViewController.h */,
+				AE82E4AB2599FA3A0013551B /* ShareViewController.m */,
+				AE82E4AD2599FA3A0013551B /* MainInterface.storyboard */,
+				AE82E4B02599FA3A0013551B /* Info.plist */,
+				AE2908AE25CE91F00046344A /* ShareData.h */,
+				AE2908AF25CE91F00046344A /* ShareData.m */,
+			);
+			path = ShareExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -156,15 +227,34 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				CBC8354E4CF5CF4E15F2FCDE /* [CP] Copy Pods Resources */,
+				AE82E4B42599FA3A0013551B /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AE82E4B22599FA3A0013551B /* PBXTargetDependency */,
 			);
 			name = Joplin;
 			productName = Joplin;
 			productReference = 13B07F961A680F5B00A75B9A /* Joplin.app */;
 			productType = "com.apple.product-type.application";
+		};
+		AE82E4A72599FA3A0013551B /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AE82E4B72599FA3A0013551B /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				AE82E4A42599FA3A0013551B /* Sources */,
+				AE82E4A52599FA3A0013551B /* Frameworks */,
+				AE82E4A62599FA3A0013551B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareExtension;
+			productName = ShareExtension;
+			productReference = AE82E4A82599FA3A0013551B /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -178,6 +268,10 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = A9BXAFS6CT;
 						LastSwiftMigration = 1120;
+					};
+					AE82E4A72599FA3A0013551B = {
+						CreatedOnToolsVersion = 12.0.1;
+						DevelopmentTeam = A9BXAFS6CT;
 					};
 				};
 			};
@@ -195,6 +289,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* Joplin */,
+				AE82E4A72599FA3A0013551B /* ShareExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -206,6 +301,14 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE82E4A62599FA3A0013551B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE82E4AF2599FA3A0013551B /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,10 +429,42 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				AE290CBE25CEE6710046344A /* ShareExtensionConstants.m in Sources */,
+				AE290A3025CEA6580046344A /* ShareExtension.m in Sources */,
+				AE290AF725CEB9A90046344A /* ShareData.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE82E4A42599FA3A0013551B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE290CBF25CEE6710046344A /* ShareExtensionConstants.m in Sources */,
+				AE82E4AC2599FA3A0013551B /* ShareViewController.m in Sources */,
+				AE2908B025CE91F00046344A /* ShareData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AE82E4B22599FA3A0013551B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AE82E4A72599FA3A0013551B /* ShareExtension */;
+			targetProxy = AE82E4B12599FA3A0013551B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		AE82E4AD2599FA3A0013551B /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AE82E4AE2599FA3A0013551B /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -338,6 +473,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				ENABLE_BITCODE = NO;
@@ -365,6 +501,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				INFOPLIST_FILE = Joplin/Info.plist;
@@ -497,6 +634,60 @@
 			};
 			name = Release;
 		};
+		AE82E4B52599FA3A0013551B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = A9BXAFS6CT;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AE82E4B62599FA3A0013551B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = A9BXAFS6CT;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -514,6 +705,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AE82E4B72599FA3A0013551B /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE82E4B52599FA3A0013551B /* Debug */,
+				AE82E4B62599FA3A0013551B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
