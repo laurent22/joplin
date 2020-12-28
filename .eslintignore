@@ -718,6 +718,9 @@ packages/app-desktop/gui/style/StyledTextInput.js.map
 packages/app-desktop/gui/utils/NoteListUtils.d.ts
 packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/NoteListUtils.js.map
+packages/app-desktop/gui/utils/convertToScreenCoordinates.d.ts
+packages/app-desktop/gui/utils/convertToScreenCoordinates.js
+packages/app-desktop/gui/utils/convertToScreenCoordinates.js.map
 packages/app-desktop/plugins/GotoAnything.d.ts
 packages/app-desktop/plugins/GotoAnything.js
 packages/app-desktop/plugins/GotoAnything.js.map

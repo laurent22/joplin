@@ -1,9 +1,11 @@
-const { execCommand, execCommandVerbose, rootDir, gitPullTry } = require('./tool-utils.js');
+const { execCommand, execCommandVerbose, rootDir, gitPullTry, setPackagePrivateField } = require('./tool-utils.js');
 
 const genDir = `${rootDir}/packages/generator-joplin`;
 
 async function main() {
 	process.chdir(genDir);
+
+	const packageFilePath = `${genDir}/package.json`;
 
 	console.info(`Running from: ${process.cwd()}`);
 
@@ -14,7 +16,13 @@ async function main() {
 
 	console.info(`New version number: ${version}`);
 
-	await execCommandVerbose('npm', ['publish']);
+	await setPackagePrivateField(packageFilePath, false);
+	try {
+		await execCommandVerbose('npm', ['publish']);
+	} finally {
+		await setPackagePrivateField(packageFilePath, true);
+	}
+
 	await gitPullTry();
 	await execCommandVerbose('git', ['add', '-A']);
 	await execCommandVerbose('git', ['commit', '-m', `Plugin Generator release ${version}`]);
