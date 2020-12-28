@@ -1470,6 +1470,9 @@ packages/server/src/models/ChangeModel.test.js.map
 packages/server/src/models/FileModel.d.ts
 packages/server/src/models/FileModel.js
 packages/server/src/models/FileModel.js.map
+packages/server/src/models/FileModel.test.d.ts
+packages/server/src/models/FileModel.test.js
+packages/server/src/models/FileModel.test.js.map
 packages/server/src/models/PermissionModel.d.ts
 packages/server/src/models/PermissionModel.js
 packages/server/src/models/PermissionModel.js.map

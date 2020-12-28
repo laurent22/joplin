@@ -3,6 +3,7 @@ import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { Pagination } from '../../models/utils/pagination';
 import { File } from '../../db';
+import { baseUrl } from '../../config';
 
 export default class FileController extends BaseController {
 
@@ -13,8 +14,17 @@ export default class FileController extends BaseController {
 		const parent: File = dirId ? await fileModel.entityFromItemId(dirId) : await fileModel.userRootFile();
 		const paginatedFiles = await fileModel.childrens(parent.id, pagination);
 
+		const files: any[] = [];
+		for (const file of paginatedFiles.items) {
+			const filePath = await fileModel.itemFullPath(file);
+			files.push({
+				name: file.name,
+				url: `${baseUrl()}/files/${filePath}`,
+			});
+		}
+
 		const view: View = defaultView('files', owner);
-		view.content.paginatedFiles = paginatedFiles;
+		view.content.paginatedFiles = { ...paginatedFiles, items: files };
 		return view;
 	}
 

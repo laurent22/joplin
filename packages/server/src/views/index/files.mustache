@@ -1,5 +1,16 @@
-<div>
-	{{#paginatedFiles.items}}
-		<div>{{name}}</div>
-	{{/paginatedFiles.items}}
-</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Timestamp</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#paginatedFiles.items}}
+			<tr>
+				<td><a href="{{url}}">{{name}}</a></td>
+				<td></td>
+			</tr>
+		{{/paginatedFiles.items}}
+	</tbody>
+</table>
