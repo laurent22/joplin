@@ -1,6 +1,7 @@
 const moment = require('moment');
 const { dirname, basename } = require('./path-utils');
 const shim = require('./shim').default;
+const Buffer = require('buffer').Buffer;
 
 class FileApiDriverOneDrive {
 	constructor(api) {
@@ -140,7 +141,8 @@ class FileApiDriverOneDrive {
 			byteSize = (await shim.fsDriver().stat(options.path)).size;
 		} else {
 			options.headers = { 'Content-Type': 'text/plain' };
-			byteSize = new Blob([content]).size;
+			// byteSize = new Blob([content]).size;
+			byteSize = Buffer.byteLength(content);
 		}
 
 		path = byteSize < 4 * 1024 * 1024 ? `${this.makePath_(path)}:/content` : `${this.makePath_(path)}:/createUploadSession`;
