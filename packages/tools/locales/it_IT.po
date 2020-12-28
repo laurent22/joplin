@@ -455,11 +455,11 @@ msgstr "Codice"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
 msgid "Numbered List"
-msgstr "Elenco Numerato"
+msgstr "Elenco numerato"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
 msgid "Bulleted List"
-msgstr "Elenco Puntato"
+msgstr "Elenco puntato"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:68
 msgid "Checkbox"
@@ -690,7 +690,7 @@ msgstr "Rinomina"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
 msgid "Rename notebook:"
-msgstr "Rinomina il Taccuino:"
+msgstr "Rinomina il taccuino:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
 #: packages/app-mobile/components/action-button.js:77
@@ -729,11 +729,11 @@ msgstr "Nuova nota"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
 msgid "Move to notebook"
-msgstr "Sposta sul Taccuino"
+msgstr "Sposta sul taccuino"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
 msgid "Move to notebook:"
-msgstr "Sposta sul Taccuino:"
+msgstr "Sposta sul taccuino:"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
@@ -749,7 +749,7 @@ msgstr "Modifica il layout dell'applicazione"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
-msgstr "Rinomina Tag:"
+msgstr "Rinomina etichetta:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
 msgid "New notebook"
@@ -757,7 +757,7 @@ msgstr "Nuovo taccuino"
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
 msgid "Notebook title:"
-msgstr "Titolo del Taccuino:"
+msgstr "Titolo del taccuino:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
