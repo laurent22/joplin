@@ -24,6 +24,10 @@ module.exports = function(markdownIt) {
 		// url should be normalized at this point, and existing entities are decoded
 		const str = url.trim().toLowerCase();
 
+		if (str.indexOf('data:image/svg+xml,') === 0) {
+			return true;
+		}
+
 		return BAD_PROTO_RE.test(str) ? (GOOD_DATA_RE.test(str) ? true : false) : true;
 	};
 

@@ -1,3 +1,5 @@
+import markdownUtils from './markdownUtils';
+import { ResourceEntity } from './services/database/types';
 const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
 const resourceUtils = require('./resourceUtils.js');
@@ -8,7 +10,51 @@ const NEWLINE = '[[NEWLINE]]';
 const NEWLINE_MERGED = '[[MERGED]]';
 const SPACE = '[[SPACE]]';
 
-function processMdArrayNewLines(md) {
+enum SectionType {
+	Text = 'text',
+	Tr = 'tr',
+	Td = 'td',
+	Table = 'table',
+	Caption = 'caption',
+	Hidden = 'hidden',
+	Code = 'code',
+}
+
+interface Section {
+	type: SectionType;
+	parent: Section;
+	lines: any[];
+	isHeader?: boolean;
+}
+
+interface ParserStateTag {
+	name: string;
+	visible: boolean;
+}
+
+interface ParserStateList {
+	tag: string;
+	counter: number;
+	startedText: boolean;
+}
+
+interface ParserState {
+	inCode: boolean[];
+	inPre: boolean;
+	inQuote: boolean;
+	lists: ParserStateList[];
+	anchorAttributes: any[];
+	spanAttributes: string[];
+	tags: ParserStateTag[];
+	currentCode?: string;
+}
+
+interface EnexXmlToMdArrayResult {
+	content: Section;
+	resources: ResourceEntity[];
+}
+
+function processMdArrayNewLines(md: string[]): string {
 	while (md.length && md[0] == BLOCK_OPEN) {
 		md.shift();
 	}
@@ -102,7 +148,7 @@ function processMdArrayNewLines(md) {
 	if (!output.trim().length) return '';
 
 	// To simplify the result, we only allow up to one empty line between blocks of text
-	const mergeMultipleNewLines = function(lines) {
+	const mergeMultipleNewLines = function(lines: string[]) {
 		const output = [];
 		let newlineCount = 0;
 		for (let i = 0; i < lines.length; i++) {
@@ -159,23 +205,23 @@ function processMdArrayNewLines(md) {
 // differently than if there's a newlines between them. So the function below parses the almost final MD and add new lines depending
 // on various rules.
 
-const isHeading = function(line) {
+const isHeading = function(line: string) {
 	return !!line.match(/^#+\s/);
 };
 
-const isListItem = function(line) {
+const isListItem = function(line: string) {
 	return line && line.trim().indexOf('- ') === 0;
 };
 
-const isCodeLine = function(line) {
+const isCodeLine = function(line: string) {
 	return line && line.indexOf('\t') === 0;
 };
 
-const isTableLine = function(line) {
+const isTableLine = function(line: string) {
 	return line.indexOf('| ') === 0;
 };
 
-const isPlainParagraph = function(line) {
+const isPlainParagraph = function(line: string) {
 	// Note: if a line is no longer than 80 characters, we don't consider it's a paragraph, which
 	// means no newlines will be added before or after. This is to handle text that has been
 	// written with "hard" new lines.
@@ -189,7 +235,7 @@ const isPlainParagraph = function(line) {
 	return true;
 };
 
-function formatMdLayout(lines) {
+function formatMdLayout(lines: string[]) {
 	let previous = '';
 	const newLines = [];
 	for (let i = 0; i < lines.length; i++) {
@@ -235,13 +281,13 @@ function formatMdLayout(lines) {
 	return newLines;
 }
 
-function isWhiteSpace(c) {
+function isWhiteSpace(c: string): boolean {
 	return c == '\n' || c == '\r' || c == '\v' || c == '\f' || c == '\t' || c == ' ';
 }
 
 // Like QString::simpified(), except that it preserves non-breaking spaces (which
 // Evernote uses for identation, etc.)
-function simplifyString(s) {
+function simplifyString(s: string): string {
 	let output = '';
 	let previousWhite = false;
 	for (let i = 0; i < s.length; i++) {
@@ -261,7 +307,7 @@ function simplifyString(s) {
 	return output;
 }
 
-function collapseWhiteSpaceAndAppend(lines, state, text) {
+function collapseWhiteSpaceAndAppend(lines: string[], state: any, text: string) {
 	if (state.inCode.length) {
 		lines.push(text);
 	} else {
@@ -296,7 +342,7 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 	return lines;
 }
 
-function tagAttributeToMdText(attr) {
+function tagAttributeToMdText(attr: string): string {
 	// HTML attributes may contain newlines so remove them.
 	// https://github.com/laurent22/joplin/issues/1583
 	if (!attr) return '';
@@ -305,7 +351,7 @@ function tagAttributeToMdText(attr) {
 	return attr;
 }
 
-function addResourceTag(lines, resource, alt = '') {
+function addResourceTag(lines: string[], resource: ResourceEntity, alt: string = ''): string[] {
 	// Note: refactor to use Resource.markdownTag
 
 	if (!alt) alt = resource.title;
@@ -326,50 +372,50 @@ function addResourceTag(lines, resource, alt = '') {
 	return lines;
 }
 
-function isBlockTag(n) {
+function isBlockTag(n: string) {
 	return ['div', 'p', 'dl', 'dd', 'dt', 'center', 'address'].indexOf(n) >= 0;
 }
 
-function isStrongTag(n) {
+function isStrongTag(n: string) {
 	return n == 'strong' || n == 'b' || n == 'big';
 }
 
-function isStrikeTag(n) {
+function isStrikeTag(n: string) {
 	return n == 'strike' || n == 's' || n == 'del';
 }
 
-function isEmTag(n) {
+function isEmTag(n: string) {
 	return n == 'em' || n == 'i' || n == 'u';
 }
 
-function isAnchor(n) {
+function isAnchor(n: string) {
 	return n == 'a';
 }
 
-function isIgnoredEndTag(n) {
+function isIgnoredEndTag(n: string) {
 	return ['en-note', 'en-todo', 'body', 'html', 'font', 'br', 'hr', 'tbody', 'sup', 'img', 'abbr', 'cite', 'thead', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0;
 }
 
-function isListTag(n) {
+function isListTag(n: string) {
 	return n == 'ol' || n == 'ul';
 }
 
 // Elements that don't require any special treatment beside adding a newline character
-function isNewLineOnlyEndTag(n) {
+function isNewLineOnlyEndTag(n: string) {
 	return ['div', 'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'dl', 'dd', 'dt', 'center', 'address'].indexOf(n) >= 0;
 }
 
-function isInlineCodeTag(n) {
+function isInlineCodeTag(n: string) {
 	return ['samp', 'kbd'].indexOf(n) >= 0;
 }
 
-function isNewLineBlock(s) {
+function isNewLineBlock(s: string) {
 	return s == BLOCK_OPEN || s == BLOCK_CLOSE;
 }
 
-function attributeToLowerCase(node) {
+function attributeToLowerCase(node: any) {
 	if (!node.attributes) return {};
-	const output = {};
+	const output: any = {};
 	for (const n in node.attributes) {
 		if (!node.attributes.hasOwnProperty(n)) continue;
 		output[n.toLowerCase()] = node.attributes[n];
@@ -377,13 +423,13 @@ function attributeToLowerCase(node) {
 	return output;
 }
 
-function isInvisibleBlock(attributes) {
+function isInvisibleBlock(attributes: any) {
 	const style = attributes.style;
 	if (!style) return false;
 	return !!style.match(/display:[\s\S]*none/);
 }
 
-function isSpanWithStyle(attributes) {
+function isSpanWithStyle(attributes: any) {
 	if (attributes != undefined) {
 		if ('style' in attributes) {
 			return true;
@@ -391,9 +437,10 @@ function isSpanWithStyle(attributes) {
 			return false;
 		}
 	}
+	return false;
 }
 
-function isSpanStyleBold(attributes) {
+function isSpanStyleBold(attributes: any) {
 	const style = attributes.style;
 	if (!style) return false;
 
@@ -406,13 +453,13 @@ function isSpanStyleBold(attributes) {
 	}
 }
 
-function isSpanStyleItalic(attributes) {
+function isSpanStyleItalic(attributes: any) {
 	let style = attributes.style;
 	style = style.replace(/\s+/g, '');
 	return (style.toLowerCase().includes('font-style:italic;'));
 }
 
-function displaySaxWarning(context, message) {
+function displaySaxWarning(context: any, message: string) {
 	const line = [];
 	const parser = context ? context._parser : null;
 	if (parser) {
@@ -422,31 +469,29 @@ function displaySaxWarning(context, message) {
 	console.warn(line.join(': '));
 }
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-function removeSectionParent(section) {
-	if (typeof section === 'string') return section;
+// function removeSectionParent(section:Section | string) {
+// 	if (typeof section === 'string') return section;
 
-	section = { ...section };
-	delete section.parent;
+// 	section = { ...section };
+// 	delete section.parent;
 
-	section.lines = section.lines.slice();
+// 	section.lines = section.lines.slice();
 
-	for (let i = 0; i < section.lines.length; i++) {
-		section.lines[i] = removeSectionParent(section.lines[i]);
-	}
+// 	for (let i = 0; i < section.lines.length; i++) {
+// 		section.lines[i] = removeSectionParent(section.lines[i]);
+// 	}
 
-	return section;
-}
+// 	return section;
+// }
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-function printSection(section) {
-	console.info(JSON.stringify(removeSectionParent(section), null, 4));
-}
+// function printSection(section:Section) {
+// 	console.info(JSON.stringify(removeSectionParent(section), null, 4));
+// }
 
-function enexXmlToMdArray(stream, resources) {
+function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
 
-	const removeRemainingResource = id => {
+	const removeRemainingResource = (id: string) => {
 		for (let i = 0; i < remainingResources.length; i++) {
 			const r = remainingResources[i];
 			if (r.id === id) {
@@ -456,7 +501,7 @@ function enexXmlToMdArray(stream, resources) {
 	};
 
 	return new Promise((resolve) => {
-		const state = {
+		const state: ParserState = {
 			inCode: [],
 			inPre: false,
 			inQuote: false,
@@ -470,17 +515,17 @@ function enexXmlToMdArray(stream, resources) {
 		const strict = false;
 		const saxStream = require('@joplin/fork-sax').createStream(strict, options);
 
-		let section = {
-			type: 'text',
+		let section: Section = {
+			type: SectionType.Text,
 			lines: [],
 			parent: null,
 		};
 
-		saxStream.on('error', function(e) {
+		saxStream.on('error', function(e: any) {
 			console.warn(e);
 		});
 
-		const unwrapInnerText = text => {
+		const unwrapInnerText = (text: string) => {
 			const lines = text.split('\n');
 
 			let output = '';
@@ -504,14 +549,14 @@ function enexXmlToMdArray(stream, resources) {
 			return output;
 		};
 
-		saxStream.on('text', function(text) {
+		saxStream.on('text', function(text: string) {
 			if (['table', 'tr', 'tbody'].indexOf(section.type) >= 0) return;
 
 			text = !state.inPre ? unwrapInnerText(text) : text;
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		});
 
-		saxStream.on('opentag', function(node) {
+		saxStream.on('opentag', function(node: any) {
 			const nodeAttributes = attributeToLowerCase(node);
 			const n = node.name.toLowerCase();
 			const isVisible = !isInvisibleBlock(nodeAttributes);
@@ -542,8 +587,8 @@ function enexXmlToMdArray(stream, resources) {
 			if (n == 'en-note') {
 				// Start of note
 			} else if (n == 'table') {
-				const newSection = {
-					type: 'table',
+				const newSection: Section = {
+					type: SectionType.Table,
 					lines: [],
 					parent: section,
 				};
@@ -568,8 +613,8 @@ function enexXmlToMdArray(stream, resources) {
 					// return;
 				}
 
-				const newSection = {
-					type: 'tr',
+				const newSection: Section = {
+					type: SectionType.Tr,
 					lines: [],
 					parent: section,
 					isHeader: false,
@@ -585,8 +630,8 @@ function enexXmlToMdArray(stream, resources) {
 
 				if (n == 'th') section.isHeader = true;
 
-				const newSection = {
-					type: 'td',
+				const newSection: Section = {
+					type: SectionType.Td,
 					lines: [],
 					parent: section,
 				};
@@ -599,8 +644,8 @@ function enexXmlToMdArray(stream, resources) {
 					// return;
 				}
 
-				const newSection = {
-					type: 'caption',
+				const newSection: Section = {
+					type: SectionType.Caption,
 					lines: [],
 					parent: section,
 				};
@@ -608,8 +653,8 @@ function enexXmlToMdArray(stream, resources) {
 				section.lines.push(newSection);
 				section = newSection;
 			} else if (isInvisibleBlock(nodeAttributes)) {
-				const newSection = {
-					type: 'hidden',
+				const newSection: Section = {
+					type: SectionType.Hidden,
 					lines: [],
 					parent: section,
 				};
@@ -650,7 +695,7 @@ function enexXmlToMdArray(stream, resources) {
 					// Many (most?) img tags don't have no source associated, especially when they were imported from HTML
 					let s = '![';
 					if (nodeAttributes.alt) s += tagAttributeToMdText(nodeAttributes.alt);
-					s += `](${nodeAttributes.src})`;
+					s += `](${markdownUtils.escapeLinkUrl(nodeAttributes.src)})`;
 					section.lines.push(s);
 				}
 			} else if (isAnchor(n)) {
@@ -694,8 +739,8 @@ function enexXmlToMdArray(stream, resources) {
 				state.inCode.push(true);
 				state.currentCode = '';
 
-				const newSection = {
-					type: 'code',
+				const newSection: Section = {
+					type: SectionType.Code,
 					lines: [],
 					parent: section,
 				};
@@ -802,7 +847,7 @@ function enexXmlToMdArray(stream, resources) {
 			}
 		});
 
-		saxStream.on('closetag', function(n) {
+		saxStream.on('closetag', function(n: string) {
 			n = n ? n.toLowerCase() : n;
 
 			const poppedTag = state.tags.pop();
@@ -940,7 +985,7 @@ function enexXmlToMdArray(stream, resources) {
 						//     [ Sign in   ](https://example.com)
 						// to:
 						//     [Sign in](https://example.com)
-						const trimTextStartAndEndSpaces = function(lines) {
+						const trimTextStartAndEndSpaces = function(lines: string[]) {
 							let firstBracketIndex = 0;
 							let foundFirstNonWhite = false;
 							for (let i = lines.length - 1; i >= 0; i--) {
@@ -999,14 +1044,14 @@ function enexXmlToMdArray(stream, resources) {
 			resolve({
 				content: section,
 				resources: remainingResources,
-			});
+			} as EnexXmlToMdArrayResult);
 		});
 
 		stream.pipe(saxStream);
 	});
 }
 
-function tableHasSubTables(table) {
+function tableHasSubTables(table: Section) {
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
 		const tr = table.lines[trIndex];
 		if (!tr || !tr.lines) continue;
@@ -1029,7 +1074,7 @@ function tableHasSubTables(table) {
 // via Web Clipper. So to handle this, we render all the outer tables as regular text (as if replacing all the <table>, <tr> and <td>
 // elements by <div>) and only the inner ones, those that don't contain any other tables, are rendered as actual tables. This is generally
 // the required behaviour since the outer tables are usually for layout and the inner ones are the content.
-function drawTable(table) {
+function drawTable(table: Section) {
 	// | First Header  | Second Header |
 	// | ------------- | ------------- |
 	// | Content Cell  | Content Cell  |
@@ -1061,7 +1106,7 @@ function drawTable(table) {
 			if (flatRender) {
 				line.push(BLOCK_OPEN);
 
-				let currentCells = [];
+				let currentCells: any[] = [];
 
 				const renderCurrentCells = () => {
 					if (!currentCells.length) return;
@@ -1092,7 +1137,7 @@ function drawTable(table) {
 
 				// A cell in a Markdown table cannot have actual new lines so replace
 				// them with <br>, which are supported by the markdown renderers.
-				let cellText = processMdArrayNewLines(td.lines, true);
+				let cellText = processMdArrayNewLines(td.lines);
 				let lines = cellText.split('\n');
 				lines = postProcessMarkdown(lines);
 				cellText = lines.join('\n').replace(/\n+/g, '<br>');
@@ -1142,19 +1187,19 @@ function drawTable(table) {
 	lines.push(BLOCK_CLOSE);
 
 	if (caption) {
-		const captionLines = renderLines(caption.lines);
+		const captionLines: any[] = renderLines(caption.lines);
 		lines = lines.concat(captionLines);
 	}
 
 	return flatRender ? lines : lines.join(`<<<<:D>>>>${NEWLINE}<<<<:D>>>>`).split('<<<<:D>>>>');
 }
 
-function postProcessMarkdown(lines) {
+function postProcessMarkdown(lines: string[]) {
 	// After importing HTML, the resulting Markdown often has empty lines at the beginning and end due to
 	// block start/end or elements that were ignored, etc. If these white spaces were intended it's not really
 	// possible to detect it, so simply trim them all so that the result is more deterministic and can be
 	// easily unit tested.
-	const trimEmptyLines = function(lines) {
+	const trimEmptyLines = function(lines: string[]) {
 		while (lines.length) {
 			if (!lines[0].trim()) {
 				lines.splice(0, 1);
@@ -1174,7 +1219,7 @@ function postProcessMarkdown(lines) {
 		return lines;
 	};
 
-	function cleanUpSpaces(lines) {
+	function cleanUpSpaces(lines: string[]) {
 		const output = [];
 
 		for (let i = 0; i < lines.length; i++) {
@@ -1203,7 +1248,7 @@ function postProcessMarkdown(lines) {
 
 // A "line" can be some Markdown text, or it can be a section, like a table,
 // etc. so this function returns an array of strings.
-function renderLine(line) {
+function renderLine(line: any) {
 	if (typeof line === 'object' && line.type === 'table') {
 		// A table
 		const table = line;
@@ -1227,8 +1272,8 @@ function renderLine(line) {
 	}
 }
 
-function renderLines(lines) {
-	let mdLines = [];
+function renderLines(lines: any[]) {
+	let mdLines: string[] = [];
 	for (let i = 0; i < lines.length; i++) {
 		const renderedLines = renderLine(lines[i]);
 		mdLines = mdLines.concat(renderedLines);
@@ -1236,9 +1281,9 @@ function renderLines(lines) {
 	return mdLines;
 }
 
-async function enexXmlToMd(xmlString, resources, options = {}) {
+async function enexXmlToMd(xmlString: string, resources: ResourceEntity[]) {
 	const stream = stringToStream(xmlString);
-	const result = await enexXmlToMdArray(stream, resources, options);
+	const result = await enexXmlToMdArray(stream, resources);
 
 	let mdLines = renderLines(result.content.lines);
 
@@ -1258,4 +1303,4 @@ async function enexXmlToMd(xmlString, resources, options = {}) {
 	return output.join('\n');
 }
 
-module.exports = { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag };
+export { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag };

@@ -911,6 +911,9 @@ packages/lib/fs-driver-base.js.map
 packages/lib/fs-driver-node.d.ts
 packages/lib/fs-driver-node.js
 packages/lib/fs-driver-node.js.map
+packages/lib/import-enex-md-gen.d.ts
+packages/lib/import-enex-md-gen.js
+packages/lib/import-enex-md-gen.js.map
 packages/lib/locale.d.ts
 packages/lib/locale.js
 packages/lib/locale.js.map
