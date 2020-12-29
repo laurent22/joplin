@@ -145,7 +145,7 @@ export default function useKeymap(CodeMirror: any) {
 		};
 		if (shim.isMac()) {
 			CodeMirror.keyMap.default = {
-				// MacOS
+				// macOS
 				'Shift-Cmd-Z': 'redo',
 				'Cmd-Y': 'redo',
 				'Cmd-End': 'goDocEnd',
