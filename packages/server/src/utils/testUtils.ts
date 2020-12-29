@@ -57,8 +57,12 @@ export function db() {
 	return db_;
 }
 
+function baseUrl() {
+	return 'http://localhost:22300';
+}
+
 export function models() {
-	return modelFactory(db());
+	return modelFactory(db(), baseUrl());
 }
 
 export function controllers() {

@@ -34,10 +34,12 @@ export default abstract class BaseModel {
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
 	private modelFactory_: Function;
+	private baseUrl_: string;
 
-	public constructor(db: DbConnection, modelFactory: Function, options: ModelOptions = null) {
+	public constructor(db: DbConnection, modelFactory: Function, baseUrl: string, options: ModelOptions = null) {
 		this.db_ = db;
 		this.modelFactory_ = modelFactory;
+		this.baseUrl_ = baseUrl;
 		this.options_ = Object.assign({}, options);
 
 		this.transactionHandler_ = new TransactionHandler(db);
@@ -50,6 +52,10 @@ export default abstract class BaseModel {
 	// connection, or the active transaction.
 	protected models(db: DbConnection = null): Models {
 		return this.modelFactory_(db || this.db);
+	}
+
+	protected get baseUrl(): string {
+		return this.baseUrl_;
 	}
 
 	protected get options(): ModelOptions {

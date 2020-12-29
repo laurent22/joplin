@@ -2,6 +2,9 @@
 	<div class="container">
 		<div class="notification is-danger">
 			{{error.message}}
+			{{#stack}}
+				<pre>{{.}}</pre>
+			{{/stack}}
 		</div>
 		<p><a href="{{{global.baseUrl}}}/login">Back to the login page</a></p>
 	</div>

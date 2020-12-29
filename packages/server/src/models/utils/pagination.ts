@@ -26,17 +26,17 @@ export interface PaginatedResults {
 	cursor?: string;
 }
 
-const pageMaxSize = 1000;
-const defaultOrderField = 'updated_time';
-const defaultOrderDir = PaginationOrderDir.DESC;
+export const pageMaxSize = 1000;
+const defaultOrderField_ = 'updated_time';
+const defaultOrderDir_ = PaginationOrderDir.DESC;
 
 export function defaultPagination(): Pagination {
 	return {
 		limit: pageMaxSize,
 		order: [
 			{
-				by: defaultOrderField,
-				dir: defaultOrderDir,
+				by: defaultOrderField_,
+				dir: defaultOrderDir_,
 			},
 		],
 		page: 1,
@@ -47,7 +47,10 @@ function dbOffset(pagination: Pagination): number {
 	return pagination.limit * (pagination.page - 1);
 }
 
-function requestPaginationOrder(query: any): PaginationOrder[] {
+export function requestPaginationOrder(query: any, defaultOrderField: string = null, defaultOrderDir: PaginationOrderDir = null): PaginationOrder[] {
+	if (defaultOrderField === null) defaultOrderField = defaultOrderField_;
+	if (defaultOrderDir === null) defaultOrderDir = defaultOrderDir_;
+
 	const orderBy: string = 'order_by' in query ? query.order_by : defaultOrderField;
 	const orderDir: PaginationOrderDir = 'order_dir' in query ? query.order_dir : defaultOrderDir;
 
@@ -59,7 +62,7 @@ function requestPaginationOrder(query: any): PaginationOrder[] {
 	}];
 }
 
-function validatePagination(p: Pagination): Pagination {
+export function validatePagination(p: Pagination): Pagination {
 	if (p.limit < 0 || p.limit > pageMaxSize) throw new ErrorBadRequest(`Limit out of bond: ${p.limit}`);
 	if (p.page <= 0) throw new ErrorBadRequest(`Invalid page number: ${p.page}`);
 
@@ -104,11 +107,74 @@ export function requestChangePagination(query: any): ChangePagination {
 	return output;
 }
 
+export interface PageLink {
+	page?: number;
+	isEllipsis?: boolean;
+	isCurrent?: boolean;
+	url?: string;
+}
+
+export function createPaginationLinks(page: number, pageCount: number, urlTemplate: string = null): PageLink[] {
+	if (!pageCount) return [];
+
+	let output: PageLink[] = [];
+	const firstPage: number = Math.max(page - 2, 1);
+
+	for (let p = firstPage; p <= firstPage + 4; p++) {
+		if (p > pageCount) break;
+		output.push({ page: p });
+	}
+
+	const firstPages: PageLink[] = [];
+	for (let p = 1; p <= 2; p++) {
+		if (output.find(o => o.page === p) || p > pageCount) continue;
+		firstPages.push({ page: p });
+	}
+
+	if (firstPages.length && (output[0].page - firstPages[firstPages.length - 1].page) > 1) {
+		firstPages.push({ isEllipsis: true });
+	}
+
+	output = firstPages.concat(output);
+
+	const lastPages: PageLink[] = [];
+	for (let p = pageCount - 1; p <= pageCount; p++) {
+		if (output.find(o => o.page === p) || p > pageCount || p < 1) continue;
+		lastPages.push({ page: p });
+	}
+
+	if (lastPages.length && (lastPages[0].page - output[output.length - 1].page) > 1) {
+		output.push({ isEllipsis: true });
+	}
+
+	output = output.concat(lastPages);
+
+	output = output.map(o => {
+		return o.page === page ? { ...o, isCurrent: true } : o;
+	});
+
+	if (urlTemplate) {
+		output = output.map(o => {
+			if (o.isEllipsis) return o;
+			return { ...o, url: urlTemplate.replace(/PAGE_NUMBER/, o.page.toString()) };
+		});
+	}
+
+	return output;
+}
+
 export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination): Promise<PaginatedResults> {
 	pagination = processCursor(pagination);
 
+	const orderSql: any[] = pagination.order.map(o => {
+		return {
+			column: o.by,
+			order: o.dir,
+		};
+	});
+
 	const items = await query
-		.orderBy(pagination.order[0].by, pagination.order[0].dir)
+		.orderBy(orderSql)
 		.offset(dbOffset(pagination))
 		.limit(pagination.limit);
 

@@ -25,3 +25,11 @@ input.form-control {
 .main {
 	padding: 0 3rem;
 }
+
+table.table .nowrap {
+	white-space: nowrap;
+}
+
+table.table .stretch {
+	width: 100%;
+}

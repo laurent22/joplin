@@ -1,7 +1,7 @@
 import { ErrorNotFound, ErrorMethodNotAllowed, ErrorBadRequest } from '../../utils/errors';
 import { File } from '../../db';
 import { bodyFields, formParse, headerSessionId } from '../../utils/requestUtils';
-import { SubPath, Route, ResponseType, Response } from '../../utils/routeUtils';
+import { SubPath, Route, respondWithFileContent } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
@@ -31,12 +31,8 @@ const route: Route = {
 
 		if (path.link === 'content') {
 			if (ctx.method === 'GET') {
-				const koaResponse = ctx.response;
 				const file: File = await fileController.getFileContent(headerSessionId(ctx.headers), path.id);
-				koaResponse.body = file.content;
-				koaResponse.set('Content-Type', file.mime_type);
-				koaResponse.set('Content-Length', file.size.toString());
-				return new Response(ResponseType.KoaResponse, koaResponse);
+				return respondWithFileContent(ctx.response, file);
 			}
 
 			if (ctx.method === 'PUT') {

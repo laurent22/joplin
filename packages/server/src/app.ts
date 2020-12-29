@@ -87,6 +87,7 @@ app.use(async (ctx: Koa.Context) => {
 				path: 'index/error',
 				content: {
 					error,
+					stack: env === 'dev' ? error.stack : '',
 				},
 			};
 			ctx.response.body = await mustacheService.renderView(view);
@@ -150,8 +151,8 @@ async function main() {
 		delete connectionCheckLogInfo.connection;
 
 		appLogger().info('Connection check:', connectionCheckLogInfo);
-		appContext.db = connectionCheck.connection;//
-		appContext.models = modelFactory(appContext.db);
+		appContext.db = connectionCheck.connection;
+		appContext.models = modelFactory(appContext.db, baseUrl());
 		appContext.controllers = controllerFactory(appContext.models);
 
 		appLogger().info('Migrating database...');
