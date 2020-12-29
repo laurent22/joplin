@@ -2202,7 +2202,7 @@ msgstr "Synchronisationsziel"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Das Ziel, mit dem synchronisiert werden soll. Jedes Synchronisationsziel "
@@ -4314,7 +4314,7 @@ msgstr "Notiz ist keine Aufgabe: „%s“"
 #~ msgstr "Die Notiz zu einem Notizbuch verschieben."
 
 #~ msgid ""
-#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "The target to synchronise to. If synchronising with the file system, set "
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit "

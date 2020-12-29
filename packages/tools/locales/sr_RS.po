@@ -2199,7 +2199,7 @@ msgstr "Одредиште синхронизације"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Одредиште са којим ће се синхронизовати. Свако одредиште за синхронизацију "

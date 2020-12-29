@@ -161,7 +161,7 @@ class Setting extends BaseModel {
 				section: 'sync',
 				label: () => _('Synchronisation target'),
 				description: (appType: string) => {
-					return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
+					return appType !== 'cli' ? null : _('The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 				},
 				options: () => {
 					return SyncTargetRegistry.idAndLabelPlainObject(platform);

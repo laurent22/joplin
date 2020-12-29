@@ -2149,7 +2149,7 @@ msgstr "同期先"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
@@ -4198,7 +4198,7 @@ msgstr "ノートはToDoリストではありません：\"%s\""
 #~ msgstr "ノートをノートブックに移動"
 
 #~ msgid ""
-#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "The target to synchronise to. If synchronising with the file system, set "
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "同期先です。ローカルのファイルシステムと同期する場合は、`sync.2.path`を同"

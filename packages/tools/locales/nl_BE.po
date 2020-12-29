@@ -2175,7 +2175,7 @@ msgstr "Synchronisatiedoel"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
@@ -4139,7 +4139,7 @@ msgstr "Notitie is geen to-do: \"%s\""
 #~ msgstr "Verplaats de notitie naar een notitieboek."
 
 #~ msgid ""
-#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "The target to synchronise to. If synchronising with the file system, set "
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "Het doel om mee te synchroniseren. Indien synchroniseren met het "

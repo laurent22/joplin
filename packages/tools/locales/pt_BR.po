@@ -2178,7 +2178,7 @@ msgstr "Alvo de sincronização"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "O alvo para onde sincronizar. Cada alvo pode ter parâmetros adicionais que "
@@ -4215,7 +4215,7 @@ msgstr "Nota não é uma tarefa: \"%s\""
 #~ msgstr "Mover nota para um caderno."
 
 #~ msgid ""
-#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "The target to synchronise to. If synchronising with the file system, set "
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "O alvo para sincronizar. Se estiver sincronizando com o sistema de "
