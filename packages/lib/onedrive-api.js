@@ -4,7 +4,6 @@ const time = require('./time').default;
 const Logger = require('./Logger').default;
 const { _ } = require('./locale');
 const urlUtils = require('./urlUtils.js');
-const str2ab = require('string-to-arraybuffer');
 const Buffer = require('buffer').Buffer;
 
 class OneDriveApi {
@@ -138,16 +137,15 @@ class OneDriveApi {
 		}
 	}
 
-	async uploadChunk(url, handle, content, options) {
+	async uploadChunk(url, handle, buffer, options) {
 		options = Object.assign({}, options);
 		if (!options.method) { options.method = 'POST'; }
 
 		if (!options.contentLength) throw new Error('uploadChunk: contentLength is missing');
 		if (!options.headers) throw new Error('uploadChunk: header is missing');
 
-		if (content) {
-			const arrBuff = str2ab(content);
-			options.body = Buffer.from(arrBuff, options.startByte, options.contentLength);
+		if (buffer) {
+			options.body = buffer.slice(options.startByte, options.startByte + options.contentLength);
 		} else {
 			const chunk = await shim.fsDriver().readFileChunk(handle, options.contentLength);
 			const buffer = Buffer.from(chunk, 'base64');
@@ -177,8 +175,10 @@ class OneDriveApi {
 
 			let byteSize = null;
 			let handle = null;
+			let buffer = null;
 			if (options.body) {
 				byteSize = Buffer.byteLength(options.body);
+				buffer = Buffer.from(options.body);
 			} else {
 				byteSize = (await shim.fsDriver().stat(options.path)).size;
 				handle = await shim.fsDriver().open(options.path, 'r');
@@ -206,7 +206,7 @@ class OneDriveApi {
 						'Content-Type': 'application/octet-stream; charset=utf-8',
 					};
 
-					const response = await this.uploadChunk(uploadUrl, handle, options.body, { startByte: startByte, contentLength: contentLength, method: 'PUT', headers: headers });
+					const response = await this.uploadChunk(uploadUrl, handle, buffer, { startByte: startByte, contentLength: contentLength, method: 'PUT', headers: headers });
 					if (!response.ok) {
 						return response;
 					}
