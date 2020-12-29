@@ -68,7 +68,8 @@ class MustacheService {
 			partialContents
 		);
 
-		const layoutView: any = Object.assign({}, this.defaultLayoutOptions, {
+		const layoutView: any = Object.assign({}, {
+			global: this.defaultLayoutOptions,
 			pageName: view.name,
 			contentHtml: contentHtml,
 			cssFiles: cssFiles,
