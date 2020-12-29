@@ -2143,7 +2143,7 @@ msgstr "Điểm đến của quá trình đồng bộ"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Điểm đến của quá trình đông bộ. Mỗi điểm đến có thể có tham số tên `sync.NUM."

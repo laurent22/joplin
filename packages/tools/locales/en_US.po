@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -2081,11 +2083,11 @@ msgstr "Synchronization target"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"The target to synchonize to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronize to. Each sync target may have additional "
+"parameters which are named as `sync.NUM.NAME` (all documented below)."
 
 #: packages/lib/models/Setting.js:133
 msgid "Directory to synchronise with (absolute path)"

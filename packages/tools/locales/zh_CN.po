@@ -14,6 +14,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -406,15 +408,15 @@ msgstr "新建 %s..."
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
-msgstr ""
+msgstr "此富文本编辑器有许多限制，建议在使用它之前注意它们。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:340
 msgid "Read more about it"
-msgstr ""
+msgstr "进一步了解"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:345
 msgid "Dismiss"
-msgstr ""
+msgstr "忽略"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:381
 msgid "The following attachments are being watched for changes:"
@@ -472,42 +474,40 @@ msgid "Horizontal Rule"
 msgstr "水平线"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "是否删除笔记？"
+msgstr "删除行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "撤销"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "重做"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "减少缩进"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "增加缩进"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
-msgstr "切换笔记列表"
+msgstr "切换注释"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "排序所选行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "向上交换行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "向下交换行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -2006,9 +2006,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Joplin 官网"
+msgstr "Joplin 服务器"
 
 #: packages/lib/shim-init-node.js:201
 #, javascript-format
@@ -2097,7 +2096,7 @@ msgstr "同步目标"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "所要同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数 (见下"
@@ -2149,21 +2148,19 @@ msgstr "AWS 密码"
 
 #: packages/lib/models/Setting.js:259
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "Joplin 服务器 URL"
 
 #: packages/lib/models/Setting.js:273
-#, fuzzy
 msgid "Joplin Server Directory"
-msgstr "Joplin 导出目录"
+msgstr "Joplin 服务器目录"
 
 #: packages/lib/models/Setting.js:283
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Joplin 服务器用户名"
 
 #: packages/lib/models/Setting.js:293
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "输入主密码："
+msgstr "Joplin 服务器密码"
 
 #: packages/lib/models/Setting.js:305
 msgid "Attachment download behaviour"
@@ -2295,9 +2292,8 @@ msgid "Enable typographer support"
 msgstr "启用 Typographer 支持"
 
 #: packages/lib/models/Setting.js:562
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "启用笔记历史"
+msgstr "启用自动链接"
 
 #: packages/lib/models/Setting.js:563
 msgid "Enable math expressions"
@@ -2312,17 +2308,16 @@ msgid "Enable Mermaid diagrams support"
 msgstr "启用 Mermaid 流程图支持"
 
 #: packages/lib/models/Setting.js:566
-#, fuzzy
 msgid "Enable audio player"
-msgstr "启用 Markdown Emoji"
+msgstr "启用音频播放器"
 
 #: packages/lib/models/Setting.js:567
 msgid "Enable video player"
-msgstr ""
+msgstr "启用视频播放器"
 
 #: packages/lib/models/Setting.js:568
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "启用 PDF 查看器"
 
 #: packages/lib/models/Setting.js:569
 msgid "Enable ==mark== syntax"

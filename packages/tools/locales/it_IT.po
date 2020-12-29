@@ -2177,7 +2177,7 @@ msgstr "Destinazione di sincronizzazione"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Ogni target di sincronizzazione può avere parametri aggiuntivi denominati "
@@ -4239,7 +4239,7 @@ msgstr "La nota non è un \"Cose-da-fare\": \"%s\""
 #~ msgstr "Sposta la nota in un taccuino."
 
 #~ msgid ""
-#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "The target to synchronise to. If synchronising with the file system, set "
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "La destinazione della sincronizzazione. Se si sincronizza con il file "

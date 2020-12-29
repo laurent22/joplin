@@ -2183,7 +2183,7 @@ msgstr "Destino de sincronización"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "El destino de la sincronización. Cada destino de la sincronización puede "
@@ -4247,7 +4247,7 @@ msgstr "La nota no es una tarea: «%s»"
 #~ msgstr "WebDAV (Beta)"
 
 #~ msgid ""
-#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "The target to synchronise to. If synchronising with the file system, set "
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "El destino de la sincronización. Si se sincroniza con el sistema de "

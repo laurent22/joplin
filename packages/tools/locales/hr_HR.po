@@ -2161,7 +2161,7 @@ msgstr "Sinkroniziraj sa"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
@@ -4091,7 +4091,7 @@ msgstr "Bilješka nije zadatak: \"%s\""
 #~ msgstr "Premjesti bilješku u bilježnicu."
 
 #~ msgid ""
-#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "The target to synchronise to. If synchronising with the file system, set "
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "Meta sinkronizacije. U slučaju sinkroniziranja s vlastitim datotečnim "

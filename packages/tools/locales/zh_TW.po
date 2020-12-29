@@ -2109,7 +2109,7 @@ msgstr "同步目標"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
+"The target to synchronise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "要同步的目標。每個同步目標可能有附加的參數，它們被命名為 `sync.NUM.NAME` (全"
