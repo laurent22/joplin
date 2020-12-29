@@ -111,9 +111,10 @@ export interface PageLink {
 	page?: number;
 	isEllipsis?: boolean;
 	isCurrent?: boolean;
+	url?: string;
 }
 
-export function paginationLinks(page: number, pageCount: number): PageLink[] {
+export function createPaginationLinks(page: number, pageCount: number, urlTemplate: string = null): PageLink[] {
 	if (!pageCount) return [];
 
 	let output: PageLink[] = [];
@@ -151,6 +152,13 @@ export function paginationLinks(page: number, pageCount: number): PageLink[] {
 	output = output.map(o => {
 		return o.page === page ? { ...o, isCurrent: true } : o;
 	});
+
+	if (urlTemplate) {
+		output = output.map(o => {
+			if (o.isEllipsis) return o;
+			return { ...o, url: urlTemplate.replace(/PAGE_NUMBER/, o.page.toString()) };
+		});
+	}
 
 	return output;
 }

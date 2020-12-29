@@ -13,14 +13,17 @@ interface PathToFileMap {
 }
 
 // Most static assets should be in /public, but for those that are not, for
-// example if they are in node_modules, use the map below
+// example if they are in node_modules, use the map below.
 const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
 	'css/bulma-prefers-dark.min.css': 'node_modules/bulma-prefers-dark/css/bulma-prefers-dark.min.css',
+	'css/fontawesome/css/all.min.css': 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
 };
 
 async function findLocalFile(path: string): Promise<string> {
 	if (path in pathToFileMap) return pathToFileMap[path];
+	// For now a bit of a hack to load FontAwesome fonts.
+	if (path.indexOf('css/fontawesome/webfonts/fa-') === 0) return `node_modules/@fortawesome/fontawesome-free/${path.substr(16)}`;
 
 	let localPath = normalize(path);
 	if (localPath.indexOf('..') >= 0) throw new ErrorNotFound(`Cannot resolve path: ${path}`);

@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import dayjs = require('dayjs');
 
 export function msleep(ms: number) {

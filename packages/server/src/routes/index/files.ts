@@ -1,8 +1,8 @@
-import { SubPath, Route } from '../../utils/routeUtils';
+import { SubPath, Route, respondWithFileContent } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import { contextSessionId } from '../../utils/requestUtils';
-import { ErrorMethodNotAllowed } from '../../utils/errors';
-import { makeFilePagination } from '../../controllers/index/FileController';
+import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
+import { File } from '../../db';
 
 const route: Route = {
 
@@ -10,7 +10,14 @@ const route: Route = {
 		const sessionId = contextSessionId(ctx);
 
 		if (ctx.method === 'GET') {
-			return ctx.controllers.indexFiles().getIndex(sessionId, path.id, makeFilePagination(ctx.query));
+			if (!path.link) {
+				return ctx.controllers.indexFiles().getIndex(sessionId, path.id, ctx.query);
+			} else if (path.link === 'content') {
+				const file: File = await ctx.controllers.apiFile().getFileContent(sessionId, path.id);
+				return respondWithFileContent(ctx.response, file);
+			}
+
+			throw new ErrorNotFound();
 		}
 
 		throw new ErrorMethodNotAllowed();

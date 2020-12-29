@@ -12,6 +12,7 @@
     "watch": "tsc --watch --project tsconfig.json"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.1",
     "@joplin/lib": "^1.0.9",
     "bcryptjs": "^2.4.3",
     "bulma": "^0.9.1",

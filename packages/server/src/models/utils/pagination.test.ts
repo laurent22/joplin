@@ -1,5 +1,5 @@
 import { expectThrow } from '../../utils/testUtils';
-import { defaultPagination, Pagination, paginationLinks, requestPagination } from './pagination';
+import { defaultPagination, Pagination, createPaginationLinks, requestPagination } from './pagination';
 
 describe('pagination', function() {
 
@@ -70,7 +70,7 @@ describe('pagination', function() {
 	});
 
 	test('should create page link logic', async function() {
-		expect(paginationLinks(1, 5)).toEqual([
+		expect(createPaginationLinks(1, 5)).toEqual([
 			{ page: 1, isCurrent: true },
 			{ page: 2 },
 			{ page: 3 },
@@ -78,7 +78,7 @@ describe('pagination', function() {
 			{ page: 5 },
 		]);
 
-		expect(paginationLinks(3, 5)).toEqual([
+		expect(createPaginationLinks(3, 5)).toEqual([
 			{ page: 1 },
 			{ page: 2 },
 			{ page: 3, isCurrent: true },
@@ -86,7 +86,7 @@ describe('pagination', function() {
 			{ page: 5 },
 		]);
 
-		expect(paginationLinks(1, 10)).toEqual([
+		expect(createPaginationLinks(1, 10)).toEqual([
 			{ page: 1, isCurrent: true },
 			{ page: 2 },
 			{ page: 3 },
@@ -97,7 +97,7 @@ describe('pagination', function() {
 			{ page: 10 },
 		]);
 
-		expect(paginationLinks(10, 20)).toEqual([
+		expect(createPaginationLinks(10, 20)).toEqual([
 			{ page: 1 },
 			{ page: 2 },
 			{ isEllipsis: true },
@@ -111,7 +111,7 @@ describe('pagination', function() {
 			{ page: 20 },
 		]);
 
-		expect(paginationLinks(20, 20)).toEqual([
+		expect(createPaginationLinks(20, 20)).toEqual([
 			{ page: 1 },
 			{ page: 2 },
 			{ isEllipsis: true },
