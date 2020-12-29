@@ -2,7 +2,7 @@ import { SubPath, Route } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import { contextSessionId } from '../../utils/requestUtils';
 import { ErrorMethodNotAllowed } from '../../utils/errors';
-import { requestPagination } from '../../models/utils/pagination';
+import { makeFilePagination } from '../../controllers/index/FileController';
 
 const route: Route = {
 
@@ -10,7 +10,7 @@ const route: Route = {
 		const sessionId = contextSessionId(ctx);
 
 		if (ctx.method === 'GET') {
-			return ctx.controllers.indexFiles().getIndex(sessionId, path.id, requestPagination(ctx.query));
+			return ctx.controllers.indexFiles().getIndex(sessionId, path.id, makeFilePagination(ctx.query));
 		}
 
 		throw new ErrorMethodNotAllowed();

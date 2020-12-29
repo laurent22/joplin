@@ -332,6 +332,13 @@ export default class FileModel extends BaseModel {
 		return super.save(file, options);
 	}
 
+	public async childrenCount(id: string): Promise<number> {
+		const parent = await this.load(id);
+		await this.checkCanReadPermissions(parent);
+		const r = await this.db(this.tableName).select('id').count('id', { as: 'total' });
+		return r.length && r[0].total ? r[0].total : 0;
+	}
+
 	public async childrens(id: string, pagination: Pagination): Promise<PaginatedFiles> {
 		const parent = await this.load(id);
 		await this.checkCanReadPermissions(parent);

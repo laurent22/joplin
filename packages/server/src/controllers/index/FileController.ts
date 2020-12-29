@@ -1,9 +1,21 @@
 import BaseController from '../BaseController';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
-import { Pagination } from '../../models/utils/pagination';
+import { Pagination, pageMaxSize, PaginationOrder, requestPaginationOrder, PaginationOrderDir, validatePagination } from '../../models/utils/pagination';
 import { File } from '../../db';
 import { baseUrl } from '../../config';
+import { formatDateTime } from '../../utils/time';
+
+export function makeFilePagination(query: any): Pagination {
+	const limit = query.limit || pageMaxSize;
+	const order: PaginationOrder[] = requestPaginationOrder(query, 'name', PaginationOrderDir.ASC);
+	order.splice(0, 0, { by: 'is_directory', dir: PaginationOrderDir.DESC });
+	const page: number = 'page' in query ? query.page : 1;
+
+	const output: Pagination = { limit, order, page };
+	validatePagination(output);
+	return output;
+}
 
 export default class FileController extends BaseController {
 
@@ -13,18 +25,23 @@ export default class FileController extends BaseController {
 		const fileModel = this.models.file({ userId: user.id });
 		const parent: File = dirId ? await fileModel.entityFromItemId(dirId) : await fileModel.userRootFile();
 		const paginatedFiles = await fileModel.childrens(parent.id, pagination);
+		// const pageCount = Math.ceil((await fileModel.childrenCount(parent.id)) / pagination.limit);
 
 		const files: any[] = [];
+
 		for (const file of paginatedFiles.items) {
 			const filePath = await fileModel.itemFullPath(file);
 			files.push({
 				name: file.name,
 				url: `${baseUrl()}/files/${filePath}`,
+				type: file.is_directory ? 'directory' : 'file',
+				timestamp: formatDateTime(file.updated_time),
 			});
 		}
 
 		const view: View = defaultView('files', owner);
 		view.content.paginatedFiles = { ...paginatedFiles, items: files };
+		view.cssFiles = ['index/files'];
 		return view;
 	}
 
