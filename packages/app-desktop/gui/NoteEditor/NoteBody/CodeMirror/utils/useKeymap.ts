@@ -156,6 +156,7 @@ export default function useKeymap(CodeMirror: any) {
 		if (shim.isMac()) {
 			CodeMirror.keyMap.default = {
 				// macOS
+				'Shift-Cmd-D': 'duplicateLine',
 				'Shift-Cmd-Z': 'redo',
 				'Cmd-Y': 'redo',
 				'Cmd-End': 'goDocEnd',
