@@ -62,6 +62,36 @@ export default class FileModel extends BaseModel {
 		return null; // Not a special dir
 	}
 
+	public async itemFullPaths(items: File[]): Promise<Record<string, string>> {
+		const output: Record<string, string> = {};
+
+		const itemCache: Record<string, File> = {};
+
+		await this.withTransaction(async () => {
+			for (const item of items) {
+				const segments: string[] = [];
+				let current: File = item;
+
+				while (current) {
+					if (current.is_root) break;
+					segments.splice(0, 0, current.name);
+
+					if (current.parent_id) {
+						const id = current.parent_id;
+						current = itemCache[id] ? itemCache[id] : await this.load(id);
+						itemCache[id] = current;
+					} else {
+						current = null;
+					}
+				}
+
+				output[item.id] = segments.length ? (`root:/${segments.join('/')}:`) : 'root';
+			}
+		});
+
+		return output;
+	}
+
 	public async itemFullPath(item: File): Promise<string> {
 		const segments: string[] = [];
 		while (item) {
@@ -348,8 +378,8 @@ export default class FileModel extends BaseModel {
 	public async childrenCount(id: string): Promise<number> {
 		const parent = await this.load(id);
 		await this.checkCanReadPermissions(parent);
-		const r = await this.db(this.tableName).where('parent_id', id).count('id', { as: 'total' });
-		return Number(r);
+		const r: any = await this.db(this.tableName).where('parent_id', id).count('id', { as: 'total' }).first();
+		return r.total;
 	}
 
 	public async childrens(id: string, pagination: Pagination): Promise<PaginatedFiles> {

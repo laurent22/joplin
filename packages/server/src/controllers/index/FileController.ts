@@ -35,11 +35,12 @@ export default class FileController extends BaseController {
 		const parent: File = await fileModel.load(parentTemp.id);
 		const paginatedFiles = await fileModel.childrens(parent.id, pagination);
 		const pageCount = Math.ceil((await fileModel.childrenCount(parent.id)) / pagination.limit);
+
 		const parentBaseUrl = await fileModel.fileUrl(parent.id);
 		const paginationLinks = createPaginationLinks(pagination.page, pageCount, setQueryParameters(parentBaseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));
 
-		async function fileToViewItem(file: File): Promise<any> {
-			const filePath = await fileModel.itemFullPath(file);
+		async function fileToViewItem(file: File, fileFullPaths: Record<string, string>): Promise<any> {
+			const filePath = fileFullPaths[file.id];
 
 			let url = `${baseUrl()}/files/${filePath}`;
 			if (!file.is_directory) {
@@ -60,17 +61,19 @@ export default class FileController extends BaseController {
 
 		const files: any[] = [];
 
+		const fileFullPaths = await fileModel.itemFullPaths(paginatedFiles.items);
+
 		if (parent.id !== root.id) {
 			const p = await fileModel.load(parent.parent_id);
 			files.push({
-				...await fileToViewItem(p),
+				...await fileToViewItem(p, await fileModel.itemFullPaths([p])),
 				icon: 'fas fa-arrow-left',
 				name: '..',
 			});
 		}
 
 		for (const file of paginatedFiles.items) {
-			files.push(await fileToViewItem(file));
+			files.push(await fileToViewItem(file, fileFullPaths));
 		}
 
 		const view: View = defaultView('files', owner);
@@ -80,6 +83,8 @@ export default class FileController extends BaseController {
 		view.content.parentId = parent.id;
 		view.cssFiles = ['index/files'];
 		view.partials.push('pagination');
+
+
 		return view;
 	}
 

@@ -26,7 +26,7 @@ export interface PaginatedResults {
 	cursor?: string;
 }
 
-export const pageMaxSize = 1000;
+export const pageMaxSize = 100;
 const defaultOrderField_ = 'updated_time';
 const defaultOrderDir_ = PaginationOrderDir.DESC;
 
