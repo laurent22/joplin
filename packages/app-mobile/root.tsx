@@ -1,24 +1,43 @@
 import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 
+import AlarmService from '@joplin/lib/services/AlarmService';
+import Alarm from '@joplin/lib/models/Alarm';
+import time from '@joplin/lib/time';
+import Logger, { TargetType } from '@joplin/lib/Logger';
+import BaseModel from '@joplin/lib/BaseModel';
+import BaseService from '@joplin/lib/services/BaseService';
+import ResourceService from '@joplin/lib/services/ResourceService';
+import KvStore from '@joplin/lib/services/KvStore';
+import NoteScreen from './components/screens/Note';
+import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
+import Setting from '@joplin/lib/models/Setting';
+import RNFetchBlob from 'rn-fetch-blob';
+import PoorManIntervals from '@joplin/lib/PoorManIntervals';
+import reducer from '@joplin/lib/reducer';
+import ShareExtension from './utils/ShareExtension';
+import handleShared from './utils/shareHandler';
+import uuid from '@joplin/lib/uuid';
+import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
+import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
+import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
+import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
+
 const React = require('react');
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 const shim = require('@joplin/lib/shim').default;
 shim.setReact(React);
 
+const DropdownAlert = require('react-native-dropdownalert').default;
+const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('./services/back-button.js');
 const NavService = require('@joplin/lib/services/NavService.js');
-const AlarmService = require('@joplin/lib/services/AlarmService.js').default;
-const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
-const Alarm = require('@joplin/lib/models/Alarm').default;
 const { createStore, applyMiddleware } = require('redux');
 const reduxSharedMiddleware = require('@joplin/lib/components/shared/reduxSharedMiddleware');
 const { shimInit } = require('./utils/shim-init-react.js');
-const time = require('@joplin/lib/time').default;
 const { AppNav } = require('./components/app-nav.js');
-const Logger = require('@joplin/lib/Logger').default;
 const Note = require('@joplin/lib/models/Note.js');
 const Folder = require('@joplin/lib/models/Folder.js');
 const BaseSyncTarget = require('@joplin/lib/BaseSyncTarget.js');
@@ -29,16 +48,11 @@ const NoteTag = require('@joplin/lib/models/NoteTag.js');
 const BaseItem = require('@joplin/lib/models/BaseItem.js');
 const MasterKey = require('@joplin/lib/models/MasterKey.js');
 const Revision = require('@joplin/lib/models/Revision.js');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const BaseService = require('@joplin/lib/services/BaseService').default;
-const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const RevisionService = require('@joplin/lib/services/RevisionService');
-const KvStore = require('@joplin/lib/services/KvStore').default;
 const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
 const { Database } = require('@joplin/lib/database.js');
 const { NotesScreen } = require('./components/screens/notes.js');
 const { TagsScreen } = require('./components/screens/tags.js');
-const NoteScreen = require('./components/screens/Note').default;
 const { ConfigScreen } = require('./components/screens/config.js');
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
@@ -47,31 +61,18 @@ const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 const { EncryptionConfigScreen } = require('./components/screens/encryption-config.js');
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
-const UpgradeSyncTargetScreen = require('./components/screens/UpgradeSyncTargetScreen').default;
-const Setting = require('@joplin/lib/models/Setting').default;
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('./components/side-menu.js');
 const { SideMenuContent } = require('./components/side-menu-content.js');
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 const { reg } = require('@joplin/lib/registry.js');
-const { setLocale, closestSupportedLocale, defaultLocale } = require('@joplin/lib/locale');
-const RNFetchBlob = require('rn-fetch-blob').default;
-const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
-const reducer = require('@joplin/lib/reducer').default;
 const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
-const DropdownAlert = require('react-native-dropdownalert').default;
-const ShareExtension = require('./utils/ShareExtension.js').default;
-const handleShared = require('./utils/shareHandler').default;
 const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
-const uuid = require('@joplin/lib/uuid').default;
-
-const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
-const KeychainServiceDriverMobile = require('@joplin/lib/services/keychain/KeychainServiceDriver.mobile').default;
 
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('@joplin/lib/SyncTargetOneDrive.js');
@@ -87,15 +88,16 @@ SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
+SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 
 const FsDriverRN = require('./utils/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
 const EncryptionService = require('@joplin/lib/services/EncryptionService');
 const MigrationService = require('@joplin/lib/services/MigrationService');
 
-let storeDispatch = function() {};
+let storeDispatch = function(_action: any) {};
 
-const logReducerAction = function(action) {
+const logReducerAction = function(action: any) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
 
 	const msg = [action.type];
@@ -104,7 +106,7 @@ const logReducerAction = function(action) {
 	// reg.logger().debug('Reducer action', msg.join(', '));
 };
 
-const generalMiddleware = store => next => async (action) => {
+const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
@@ -167,9 +169,9 @@ const generalMiddleware = store => next => async (action) => {
 	return result;
 };
 
-const navHistory = [];
+const navHistory: any[] = [];
 
-function historyCanGoBackTo(route) {
+function historyCanGoBackTo(route: any) {
 	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
 
@@ -194,13 +196,14 @@ const appDefaultState = Object.assign({}, defaultState, {
 	noteSideMenuOptions: null,
 });
 
-const appReducer = (state = appDefaultState, action) => {
+const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
 	let historyGoingBack = false;
 
 	try {
 		switch (action.type) {
 
+		// @ts-ignore
 		case 'NAV_BACK':
 
 		{
@@ -224,7 +227,7 @@ const appReducer = (state = appDefaultState, action) => {
 			{
 				const currentRoute = state.route;
 
-				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
+				if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
 				// If the route *name* is the same (even if the other parameters are different), we
 				// overwrite the last route in the history with the current one. If the route name
 				// is different, we push a new history entry.
@@ -368,7 +371,7 @@ const appReducer = (state = appDefaultState, action) => {
 const store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
 
-function resourceFetcher_downloadComplete(event) {
+function resourceFetcher_downloadComplete(event: any) {
 	if (event.encrypted) {
 		DecryptionWorker.instance().scheduleStart();
 	}
@@ -378,9 +381,10 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
-async function initialize(dispatch) {
+async function initialize(dispatch: Function) {
 	shimInit();
 
+	// @ts-ignore
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
@@ -391,18 +395,18 @@ async function initialize(dispatch) {
 	await logDatabase.exec(Logger.databaseCreateTableSql());
 
 	const mainLogger = new Logger();
-	mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
+	mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 	mainLogger.setLevel(Logger.LEVEL_INFO);
 
 	if (Setting.value('env') == 'dev') {
-		mainLogger.addTarget('console');
+		mainLogger.addTarget(TargetType.Console);
 		mainLogger.setLevel(Logger.LEVEL_DEBUG);
 	}
 
 	Logger.initializeGlobalLogger(mainLogger);
 
 	reg.setLogger(mainLogger);
-	reg.setShowErrorMessageBoxHandler((message) => { alert(message); });
+	reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
 
 	BaseService.logger_ = mainLogger;
 	// require('@joplin/lib/ntpDate').setLogger(reg.logger());
@@ -411,9 +415,9 @@ async function initialize(dispatch) {
 	reg.logger().info(`Starting application ${Setting.value('appId')} (${Setting.value('env')})`);
 
 	const dbLogger = new Logger();
-	dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
+	dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 	if (Setting.value('env') == 'dev') {
-		dbLogger.addTarget('console');
+		dbLogger.addTarget(TargetType.Console);
 		dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
 	} else {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
@@ -452,7 +456,7 @@ async function initialize(dispatch) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-76.sqlite' });
+			await db.open({ name: 'joplin-100.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -562,7 +566,7 @@ async function initialize(dispatch) {
 	reg.setupRecurrentSync();
 
 	PoorManIntervals.setTimeout(() => {
-		AlarmService.garbageCollect();
+		void AlarmService.garbageCollect();
 	}, 1000 * 60 * 60);
 
 	ResourceService.runInBackground();
@@ -584,7 +588,7 @@ async function initialize(dispatch) {
 	reg.scheduleSync(1000).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
-		AlarmService.updateAllNotifications();
+		void AlarmService.updateAllNotifications();
 
 		DecryptionWorker.instance().scheduleStart();
 	});
@@ -654,7 +658,7 @@ class AppComponent extends React.Component {
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
-		AlarmService.setInAppNotificationHandler(async (alarmId) => {
+		AlarmService.setInAppNotificationHandler(async (alarmId: string) => {
 			const alarm = await Alarm.load(alarmId);
 			const notification = await Alarm.makeNotification(alarm);
 			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
@@ -666,7 +670,7 @@ class AppComponent extends React.Component {
 		if (sharedData) {
 			reg.logger().info('Received shared data');
 			if (this.props.selectedFolderId) {
-				handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
 			} else {
 				reg.logger.info('Cannot handle share - default folder id is not set');
 			}
@@ -677,7 +681,7 @@ class AppComponent extends React.Component {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps: any) {
 		if (this.props.showSideMenu !== prevProps.showSideMenu) {
 			Animated.timing(this.state.sideMenuContentOpacity, {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
@@ -707,14 +711,14 @@ class AppComponent extends React.Component {
 		return false;
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted != this.lastSyncStarted_) {
 			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
 
-	sideMenu_change(isOpen) {
+	sideMenu_change(isOpen: boolean) {
 		// Make sure showSideMenu property of state is updated
 		// when the menu is open/closed.
 		this.props.dispatch({
@@ -759,8 +763,8 @@ class AppComponent extends React.Component {
 					menu={sideMenuContent}
 					edgeHitWidth={5}
 					menuPosition={menuPosition}
-					onChange={(isOpen) => this.sideMenu_change(isOpen)}
-					onSliding={(percent) => {
+					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
+					onSliding={(percent: number) => {
 						this.props.dispatch({
 							type: 'SIDE_MENU_OPEN_PERCENT',
 							value: percent,
@@ -773,7 +777,7 @@ class AppComponent extends React.Component {
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								<AppNav screens={appNavInit} />
 							</View>
-							<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
 						</SafeAreaView>
 					</MenuContext>
@@ -783,7 +787,7 @@ class AppComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,
@@ -799,7 +803,7 @@ const mapStateToProps = (state) => {
 
 const App = connect(mapStateToProps)(AppComponent);
 
-class Root extends React.Component {
+export default class Root extends React.Component {
 	render() {
 		return (
 			<Provider store={store}>
@@ -808,5 +812,3 @@ class Root extends React.Component {
 		);
 	}
 }
-
-module.exports = { Root };

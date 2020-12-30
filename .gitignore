@@ -792,6 +792,9 @@ packages/app-mobile/components/screens/Note.js.map
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.d.ts
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js.map
+packages/app-mobile/root.d.ts
+packages/app-mobile/root.js
+packages/app-mobile/root.js.map
 packages/app-mobile/services/AlarmServiceDriver.android.d.ts
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.android.js.map

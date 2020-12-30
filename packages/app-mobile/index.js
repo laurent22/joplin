@@ -7,7 +7,7 @@
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
 import { LogBox, AppRegistry } from 'react-native';
-const { Root } = require('./root.js');
+const Root = require('./root').default;
 
 // Seems JavaScript developers love adding warnings everywhere, even when these warnings can't be fixed
 // or don't really matter. Because we want important warnings to actually be fixed, we disable
