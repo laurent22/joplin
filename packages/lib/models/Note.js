@@ -272,8 +272,13 @@ class Note extends BaseItem {
 				let bProp = b[order.by];
 				if (typeof aProp === 'string') aProp = aProp.toLowerCase();
 				if (typeof bProp === 'string') bProp = bProp.toLowerCase();
-				if (aProp < bProp) r = +1;
-				if (aProp > bProp) r = -1;
+
+				if (order.by == 'title' && Setting.value('titleNaturalSort')) {
+					r = this.naturalSortCompare(aProp, bProp, false);
+				} else {
+					if (aProp < bProp) r = +1;
+					if (aProp > bProp) r = -1;
+				}
 				if (order.dir == 'ASC') r = -r;
 				if (r !== 0) return r;
 			}
@@ -390,6 +395,10 @@ class Note extends BaseItem {
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			const theRest = await this.search(tempOptions);
 
+			if (tempOptions.order[0].by == 'title' && Setting.value('titleNaturalSort')) {
+				theRest.sort((a, b) => this.naturalSortCompare(a.title, b.title, tempOptions.order[0].dir));
+			}
+
 			return uncompletedTodos.concat(theRest);
 		}
 
@@ -401,7 +410,13 @@ class Note extends BaseItem {
 			options.conditions.push('is_todo = 1');
 		}
 
-		return this.search(options);
+		const results = await this.search(options);
+
+		if (options.order[0].by == 'title' && Setting.value('titleNaturalSort')) {
+			results.sort((a, b) => this.naturalSortCompare(a.title, b.title, options.order[0].dir));
+		}
+
+		return results;
 	}
 
 	static preview(noteId, options = null) {
@@ -860,6 +875,10 @@ class Note extends BaseItem {
 		} finally {
 			defer();
 		}
+	}
+
+	static naturalSortCompare(a, b, asc) {
+		return (asc ? 1 : -1) * a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
 	}
 
 }

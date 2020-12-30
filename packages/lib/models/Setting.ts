@@ -613,6 +613,17 @@ class Setting extends BaseModel {
 				},
 			},
 
+			titleNaturalSort: {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				label: () => _('When sorting notes by title, use natural sorting'),
+				description: () => {
+					return _('Given notes with titles, e.g., A9 and A10, natural sorting orders A9 before A10');
+				},
+			},
+
 			'plugins.states': {
 				value: '',
 				type: SettingItemType.Object,
