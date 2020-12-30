@@ -1,12 +1,29 @@
+import { LoggerWrapper } from '@joplin/lib/Logger';
 import * as Koa from 'koa';
 import { Controllers } from '../controllers/factory';
-import { DbConnection } from '../db';
+import { DbConnection, Uuid } from '../db';
 import { Models } from '../models/factory';
 
+export enum Env {
+	Dev = 'dev',
+	Prod = 'prod',
+	BuildTypes = 'buildTypes',
+}
+
+export interface NotificationView {
+	id: Uuid;
+	messageHtml: string;
+	level: string;
+	closeUrl: string;
+}
+
 export interface AppContext extends Koa.Context {
+	env: Env;
 	db: DbConnection;
 	models: Models;
 	controllers: Controllers;
+	appLogger(): LoggerWrapper;
+	notifications: NotificationView[];
 }
 
 export interface DatabaseConfig {
@@ -27,3 +44,5 @@ export interface Config {
 	logDir: string;
 	database: DatabaseConfig;
 }
+
+export type KoaNext = ()=> Promise<void>;

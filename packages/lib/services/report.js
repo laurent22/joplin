@@ -187,8 +187,10 @@ class ReportService {
 				if (status === Resource.FETCH_STATUS_DONE) {
 					const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount();
 					const downloadedCount = await Resource.downloadStatusCounts(Resource.FETCH_STATUS_DONE);
+					const createdLocallyCount = await Resource.createdLocallyCount();
 					section.body.push(_('%s: %d', _('Downloaded and decrypted'), downloadedCount - downloadedButEncryptedBlobCount));
 					section.body.push(_('%s: %d', _('Downloaded and encrypted'), downloadedButEncryptedBlobCount));
+					section.body.push(_('%s: %d', _('Created locally'), createdLocallyCount));
 				} else {
 					const count = await Resource.downloadStatusCounts(status);
 					section.body.push(_('%s: %d', Resource.fetchStatusToLabel(status), count));

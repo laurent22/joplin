@@ -313,6 +313,17 @@ class Resource extends BaseItem {
 		return r ? r.total : 0;
 	}
 
+	static async createdLocallyCount() {
+		const r = await this.db().selectOne(`
+			SELECT count(*) as total
+			FROM resources
+			WHERE id NOT IN
+			(SELECT resource_id FROM resource_local_states)
+		`);
+
+		return r ? r.total : 0;
+	}
+
 	static fetchStatusToLabel(status) {
 		if (status === Resource.FETCH_STATUS_IDLE) return _('Not downloaded');
 		if (status === Resource.FETCH_STATUS_STARTED) return _('Downloading');

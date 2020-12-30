@@ -8,6 +8,7 @@ import IndexHomeController from './index/HomeController';
 import IndexProfileController from './index/ProfileController';
 import IndexUserController from './index/UserController';
 import IndexFileController from './index/FileController';
+import IndexNotificationController from './index/NotificationController';
 
 export class Controllers {
 
@@ -51,6 +52,10 @@ export class Controllers {
 
 	public indexFiles() {
 		return new IndexFileController(this.models_);
+	}
+
+	public indexNotifications() {
+		return new IndexNotificationController(this.models_);
 	}
 
 }

@@ -62,6 +62,7 @@ import UserModel from './UserModel';
 import PermissionModel from './PermissionModel';
 import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
+import NotificationModel from './NotificationModel';
 
 export class Models {
 
@@ -96,6 +97,11 @@ export class Models {
 	public change(options: ModelOptions = null) {
 		return new ChangeModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
+
+	public notification(options: ModelOptions = null) {
+		return new NotificationModel(this.db_, newModelFactory, this.baseUrl_, options);
+	}
+
 }
 
 export default function newModelFactory(db: DbConnection, baseUrl: string): Models {

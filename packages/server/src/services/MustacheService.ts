@@ -46,7 +46,7 @@ class MustacheService {
 		return output;
 	}
 
-	public async renderView(view: View): Promise<string> {
+	public async renderView(view: View, globalParams: any = null): Promise<string> {
 		const partials = view.partials || [];
 		const cssFiles = this.resolvesFilePaths('css', view.cssFiles || []);
 		const jsFiles = this.resolvesFilePaths('js', view.jsFiles || []);
@@ -59,17 +59,22 @@ class MustacheService {
 
 		const filePath = `${config().viewDir}/${view.path}.mustache`;
 
+		globalParams = {
+			...this.defaultLayoutOptions,
+			...globalParams,
+		};
+
 		const contentHtml = Mustache.render(
 			await this.loadTemplateContent(filePath),
 			{
 				...view.content,
-				global: this.defaultLayoutOptions,
+				global: globalParams,
 			},
 			partialContents
 		);
 
 		const layoutView: any = Object.assign({}, {
-			global: this.defaultLayoutOptions,
+			global: globalParams,
 			pageName: view.name,
 			contentHtml: contentHtml,
 			cssFiles: cssFiles,
@@ -79,23 +84,6 @@ class MustacheService {
 
 		return Mustache.render(await this.loadTemplateContent(this.defaultLayoutPath), layoutView, partialContents);
 	}
-
-	// public async render(path: string, view: any, options: RenderOptions = null): Promise<string> {
-	// 	const partials = options && options.partials ? options.partials : {};
-	// 	const cssFiles = this.resolvesFilePaths('css', options && options.cssFiles ? options.cssFiles : []);
-	// 	const jsFiles = this.resolvesFilePaths('js', options && options.jsFiles ? options.jsFiles : []);
-
-	// 	const filePath = `${config().viewDir}/${path}.mustache`;
-	// 	const contentHtml = Mustache.render(await this.loadTemplateContent(filePath), { ...view, global: this.defaultLayoutOptions }, partials);
-
-	// 	const layoutView: any = Object.assign({}, this.defaultLayoutOptions, {
-	// 		contentHtml: contentHtml,
-	// 		cssFiles: cssFiles,
-	// 		jsFiles: jsFiles,
-	// 	});
-
-	// 	return Mustache.render(await this.loadTemplateContent(this.defaultLayoutPath), layoutView);
-	// }
 
 }
 

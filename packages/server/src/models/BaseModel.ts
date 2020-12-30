@@ -1,11 +1,11 @@
-import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient, DbConnection, Change, ItemType, ChangeType } from '../db';
+import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient, DbConnection, Change, ItemType, ChangeType, Notification } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models } from './factory';
 
-export type AnyItemType = File | User | Session | Permission | ApiClient | Change;
-export type AnyItemTypes = File[] | User[] | Session[] | Permission[] | ApiClient[] | Change[];
+export type AnyItemType = File | User | Session | Permission | ApiClient | Change | Notification;
+export type AnyItemTypes = File[] | User[] | Session[] | Permission[] | ApiClient[] | Change[] | Notification[];
 
 export interface ModelOptions {
 	userId?: string;
