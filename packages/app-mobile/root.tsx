@@ -1,6 +1,9 @@
+const React = require('react');
+import shim from '@joplin/lib/shim';
+shim.setReact(React);
+
 import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
-
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
 import time from '@joplin/lib/time';
@@ -23,10 +26,7 @@ import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainS
 import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 
-const React = require('react');
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
-const shim = require('@joplin/lib/shim').default;
-shim.setReact(React);
 
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;

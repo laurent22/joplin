@@ -65,7 +65,12 @@ module.exports = {
 		'no-var': ['error'],
 		'no-new-func': ['error'],
 		'import/prefer-default-export': ['error'],
-		'import/first': ['error'],
+
+		// This rule should not be enabled since it matters in what order
+		// imports are done, in particular in relation to the shim.setReact
+		// call, which should be done first, but this rule might move it down.
+		// 'import/first': ['error'],
+
 		'no-array-constructor': ['error'],
 		'radix': ['error'],
 
