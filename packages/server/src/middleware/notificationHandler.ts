@@ -1,6 +1,6 @@
 import { AppContext, KoaNext, NotificationView } from '../utils/types';
-import { isApiRequest, contextSessionId } from '../utils/requestUtils';
-import { defaultAdminEmail, defaultAdminPassword, NotificationLevel, User } from '../db';
+import { isApiRequest } from '../utils/requestUtils';
+import { defaultAdminEmail, defaultAdminPassword, NotificationLevel } from '../db';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
 import * as MarkdownIt from 'markdown-it';
@@ -13,8 +13,7 @@ export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 	try {
 		if (isApiRequest(ctx)) return next();
 
-		const sessionId = contextSessionId(ctx);
-		const user: User = await ctx.models.session().sessionUser(sessionId);
+		const user = ctx.owner;
 		if (!user) return next();
 
 		const notificationModel = ctx.models.notification({ userId: user.id });

@@ -76,7 +76,7 @@ export default class FileController extends BaseController {
 			files.push(await fileToViewItem(file, fileFullPaths));
 		}
 
-		const view: View = defaultView('files', owner);
+		const view: View = defaultView('files');
 		view.content.paginatedFiles = { ...paginatedFiles, items: files };
 		view.content.paginationLinks = paginationLinks;
 		view.content.postUrl = `${baseUrl()}/files`;

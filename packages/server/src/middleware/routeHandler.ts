@@ -21,6 +21,7 @@ export default async function(ctx: AppContext) {
 				ctx.response.status = 200;
 				ctx.response.body = await mustacheService.renderView(responseObject, {
 					notifications: ctx.notifications || [],
+					owner: ctx.owner,
 				});
 			} else {
 				ctx.response.status = 200;

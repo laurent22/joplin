@@ -15,8 +15,9 @@ import modelFactory from './models/factory';
 import controllerFactory from './controllers/factory';
 import { AppContext, Config, Env } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
-import requestProcessor from './middleware/requestProcessor';
+import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
+import ownerHandler from './middleware/ownerHandler';
 
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit();
@@ -44,8 +45,13 @@ function appLogger(): LoggerWrapper {
 
 const app = new Koa();
 
+// Note: the order of middlewares is important. For example, ownerHandler
+// loads the user, which is then used by notificationHandler. And finally
+// routeHandler uses data from both previous middlewares. It would be good to
+// layout these dependencies in code but not clear how to do this.
+app.use(ownerHandler);
 app.use(notificationHandler);
-app.use(requestProcessor);
+app.use(routeHandler);
 
 async function main() {
 	const configObject: Config = configs[env];
