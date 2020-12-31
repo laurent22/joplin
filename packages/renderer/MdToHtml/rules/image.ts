@@ -22,7 +22,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 				const id = r['data-resource-id'];
 
 				const longPressHandler = `${ruleOptions.postMessageSyntax}('longclick:${id}')`;
-				const touchStart = `t=setTimeout(()=>{t=null; ${longPressHandler};}, ${utils.longPressDelay});`;
+				const touchStart = `if (typeof(t) !== 'undefined' && !!t) { clearTimeout(t); t = null; } else { t = setTimeout(() => { t = null; ${longPressHandler}; }, ${utils.longPressDelay}); }`;
 				const cancel = 'if (!!t) clearTimeout(t); t=null';
 
 				js = ` ontouchstart="${touchStart}" ontouchend="${cancel}" ontouchcancel="${cancel}" ontouchmove="${cancel}"`;

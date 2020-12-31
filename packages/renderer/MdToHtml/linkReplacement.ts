@@ -91,7 +91,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	if (options.enableLongPress && !!resourceId) {
 		const onClick = `${options.postMessageSyntax}(${JSON.stringify(href)})`;
 		const onLongClick = `${options.postMessageSyntax}("longclick:${resourceId}")`;
-		const touchStart = `t=setTimeout(()=>{t=null; ${onLongClick};}, ${utils.longPressDelay});`;
+		const touchStart = `if (typeof(t) !== "undefined" && !!t) { clearTimeout(t); t = null; } else { t = setTimeout(() => { t = null; ${onLongClick}; }, ${utils.longPressDelay}); }`;
 		const cancel = 'if (!!t) {clearTimeout(t); t=null;';
 		const touchEnd = `${cancel} ${onClick};}`;
 		js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}' ontouchcancel='${cancel} ontouchmove="${cancel}'`;
