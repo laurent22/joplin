@@ -395,7 +395,7 @@ class Note extends BaseItem {
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			const theRest = await this.search(tempOptions);
 
-			if (tempOptions.order[0].by == 'title' && Setting.value('titleNaturalSort')) {
+			if (tempOptions.order.length > 0 && tempOptions.order[0].by == 'title' && Setting.value('titleNaturalSort')) {
 				theRest.sort((a, b) => this.naturalSortCompare(a.title, b.title, tempOptions.order[0].dir));
 			}
 
@@ -412,7 +412,7 @@ class Note extends BaseItem {
 
 		const results = await this.search(options);
 
-		if (options.order[0].by == 'title' && Setting.value('titleNaturalSort')) {
+		if (options.order.length > 0 && options.order[0].by == 'title' && Setting.value('titleNaturalSort')) {
 			results.sort((a, b) => this.naturalSortCompare(a.title, b.title, options.order[0].dir));
 		}
 
