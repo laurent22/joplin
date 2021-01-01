@@ -22,12 +22,12 @@ Then you can test the various applications:
 
 ## Testing the desktop application
 
-	cd ElectronClient
+	cd packages/app-desktop
 	npm start
 
 ## Testing the Terminal application
 
-	cd CliClient
+	cd packages/app-cli
 	npm start
 
 ## Testing the Mobile application
@@ -36,7 +36,7 @@ First you need to setup React Native to build projects with native code. For thi
 
 Then:
 
-	cd ReactNativeClient
+	cd packages/app-mobile
 	npm run start-android
 	# Or: npm run start-ios
 
