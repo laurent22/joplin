@@ -63,12 +63,13 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
-msgstr "鍵入記事標題來跳轉, 鍵入＃與一個標籤名稱, @ 與一個筆記本名稱。"
+msgstr ""
+"輸入記事標題、部分記事內容、# 後輸入標籤名稱、@ 後輸入筆記本名稱等方式，可前往相應搜尋結果。"
+"或者可輸入 : 以搜尋其他指令。"
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -78,7 +79,7 @@ msgstr "前往任意內容..."
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "命令模式"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -114,9 +115,8 @@ msgid "New version: %s"
 msgstr "最新版本: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "已下載"
+msgstr "下載"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -473,13 +473,12 @@ msgid "Horizontal Rule"
 msgstr "水平線"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "刪除記事？"
+msgstr "刪除整行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "復原"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
@@ -487,11 +486,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "減少縮排"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "增加縮排"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 #, fuzzy
@@ -500,15 +499,15 @@ msgstr "切換記事清單"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "排序所選各行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "本行上移"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "本行下移"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -568,13 +567,13 @@ msgstr "此記事的先前版本"
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:383
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
 msgid "Note properties"
-msgstr "記事本性質"
+msgstr "記事本屬性"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: packages/lib/services/KeymapService.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "錯誤"
+msgstr "錯誤: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -594,9 +593,8 @@ msgid "Command"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "鍵盤模式"
+msgstr "快速鍵"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
 #: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:338
@@ -619,9 +617,8 @@ msgid "Website and documentation"
 msgstr "官方網站及線上說明"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "關於 Joplin"
+msgstr "隱藏 Joplin"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
 #: packages/app-desktop/gui/MenuBar.js:408
@@ -629,9 +626,8 @@ msgid "Close Window"
 msgstr "關閉視窗"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "偏好設定..."
+msgstr "偏好設定"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
 #: packages/app-desktop/gui/MenuBar.js:284 packages/app-desktop/gui/Root.js:100
@@ -639,9 +635,8 @@ msgid "Options"
 msgstr "選項"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "無效的答案: %s"
+msgstr "無效"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -667,9 +662,8 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:405
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "主密鑰需要升級"
+msgstr "重新啟動並升級"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:409
 msgid "Some items cannot be synchronised."
@@ -773,13 +767,12 @@ msgid "Toggle editor layout"
 msgstr "切換編輯器佈局"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "切換編輯器佈局"
+msgstr "切換編輯器"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "調整介面佈局"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -796,7 +789,7 @@ msgstr "記事本標題: "
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "拼字檢查"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -944,7 +937,7 @@ msgstr "從範本建立待辦事項"
 
 #: packages/app-desktop/gui/MenuBar.js:266
 msgid "Open template directory"
-msgstr "開啟暫存目錄"
+msgstr "開啟範本目錄"
 
 #: packages/app-desktop/gui/MenuBar.js:271
 msgid "Refresh templates"
@@ -981,9 +974,8 @@ msgstr "範本"
 
 #: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/MenuBar.js:423
-#, fuzzy
 msgid "Export all"
-msgstr "匯出"
+msgstr "全部匯出"
 
 #: packages/app-desktop/gui/MenuBar.js:389
 #, javascript-format
@@ -1209,9 +1201,8 @@ msgstr ""
 "重要提示：您只需要在一台設備上執行此操作一次。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "加密"
+msgstr "重新加密"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
@@ -1383,7 +1374,7 @@ msgstr "瀏覽..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "程式必須重新啟動以便啟用這些變動"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1395,22 +1386,21 @@ msgid "Later"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
-msgstr "立即取得: "
+msgstr "重新啟動"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "套用"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "刪除此記事 \"%s\"?"
+msgstr "刪除延伸模組 \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "安裝延伸模組"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1447,7 +1437,7 @@ msgstr "閱讀器"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "閱讀時間: %s 分鐘"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
 msgid "Statistics"
@@ -1567,18 +1557,16 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "複製分享連結"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "停止外部編輯"
+msgstr "切換外部編輯模式"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "停止"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "複製路徑到剪貼板"
+msgstr "複製開發模式命令到剪貼簿"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1595,9 +1583,8 @@ msgid "Error opening note in editor: %s"
 msgstr "在編輯器中開啟記事時出錯: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "開啟暫存目錄"
+msgstr "開啟個人資料目錄"
 
 #: packages/app-desktop/app.js:336
 #, javascript-format
@@ -1625,9 +1612,8 @@ msgid "Save alarm"
 msgstr "儲存提醒事項"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "開啟..."
+msgstr "開啟"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 #: packages/app-mobile/components/screens/Note.js:796
@@ -1904,11 +1890,13 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"為了將地理位置資訊加入此筆記，你必須允許程式存取位置資料。\n"
+"\n"
+"你隨時可以到設定畫面關閉此選項。"
 
 #: packages/app-mobile/components/screens/Note.js:343
-#, fuzzy
 msgid "Permission needed"
-msgstr "允許使用相機"
+msgstr "需要權限"
 
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
@@ -2011,16 +1999,15 @@ msgstr ""
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: packages/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Joplin 官方網站"
+msgstr "Joplin 主機"
 
 #: packages/lib/shim-init-node.js:201
 #, javascript-format
@@ -2145,37 +2132,36 @@ msgstr "WebDAV 密碼"
 
 #: packages/lib/models/Setting.js:216
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 bucket"
 
 #: packages/lib/models/Setting.js:227
 msgid "AWS S3 URL"
-msgstr ""
+msgstr "AWS S3 網址"
 
 #: packages/lib/models/Setting.js:238
 msgid "AWS key"
-msgstr ""
+msgstr "AWS 金鑰"
 
 #: packages/lib/models/Setting.js:248
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS secret"
 
 #: packages/lib/models/Setting.js:259
 msgid "Joplin Server URL"
 msgstr ""
 
 #: packages/lib/models/Setting.js:273
-#, fuzzy
+
 msgid "Joplin Server Directory"
-msgstr "Joplin 匯出目錄"
+msgstr "Joplin 主機目錄"
 
 #: packages/lib/models/Setting.js:283
 msgid "Joplin Server username"
 msgstr ""
 
 #: packages/lib/models/Setting.js:293
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "輸入主密碼: "
+msgstr "Joplin 主機密碼"
 
 #: packages/lib/models/Setting.js:305
 msgid "Attachment download behaviour"
@@ -2324,9 +2310,8 @@ msgid "Enable Mermaid diagrams support"
 msgstr "啟用 Mermaid 流程圖支援"
 
 #: packages/lib/models/Setting.js:566
-#, fuzzy
 msgid "Enable audio player"
-msgstr "啟用 Markdown 表情符號"
+msgstr "啟用音效播放器"
 
 #: packages/lib/models/Setting.js:567
 msgid "Enable video player"
@@ -2415,17 +2400,16 @@ msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"必須是 *等距 (monospace)* 字型，否則程式將無法正常工作。如果字型不正確或沒有"
+"必須是 *等距 (monospace)* 字型，否則程式將無法正常運作。如果字型不正確或沒有"
 "填寫，則預設為通用等距字型。"
 
 #: packages/lib/models/Setting.js:662
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "自定義樣式表，適用於整個 Joplin 全域的應用程序風格"
+msgstr "自訂 Markdown 展示樣式表"
 
 #: packages/lib/models/Setting.js:678
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "自定義樣式表，適用於整個 Joplin 全域的應用程序風格"
+msgstr "自訂 Joplin 全域樣式表"
 
 #: packages/lib/models/Setting.js:683
 msgid "Automatically update the application"
@@ -2646,9 +2630,8 @@ msgid "Web Clipper"
 msgstr "網頁剪輯"
 
 #: packages/lib/models/Setting.js:1389
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "鍵盤模式"
+msgstr "快速鍵"
 
 #: packages/lib/models/Setting.js:1396
 msgid ""
@@ -3189,9 +3172,8 @@ msgid "Use spell checker"
 msgstr ""
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "語言"
+msgstr "更換語言"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3950,13 +3932,11 @@ msgstr "記事不等於待辨事項: \"%s\""
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "同步已在進行中。狀態: %s"
 
-#, fuzzy
 #~ msgid "Confirm master password:"
-#~ msgstr "輸入主密碼: "
+#~ msgstr "確認主密碼: "
 
-#, fuzzy
 #~ msgid "Confirm password"
-#~ msgstr "輸入主密碼: "
+#~ msgstr "確認密碼: "
 
 #, fuzzy
 #~ msgid "Missing required argument: note"
