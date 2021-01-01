@@ -1475,9 +1475,12 @@ packages/server/src/db.js.map
 packages/server/src/middleware/notificationHandler.d.ts
 packages/server/src/middleware/notificationHandler.js
 packages/server/src/middleware/notificationHandler.js.map
-packages/server/src/middleware/requestProcessor.d.ts
-packages/server/src/middleware/requestProcessor.js
-packages/server/src/middleware/requestProcessor.js.map
+packages/server/src/middleware/ownerHandler.d.ts
+packages/server/src/middleware/ownerHandler.js
+packages/server/src/middleware/ownerHandler.js.map
+packages/server/src/middleware/routeHandler.d.ts
+packages/server/src/middleware/routeHandler.js
+packages/server/src/middleware/routeHandler.js.map
 packages/server/src/migrations/20190913171451_create.d.ts
 packages/server/src/migrations/20190913171451_create.js
 packages/server/src/migrations/20190913171451_create.js.map
