@@ -239,7 +239,7 @@ class Revision extends BaseItem {
 				}
 			} catch (error) {
 				if (error.code === 'revision_encrypted') {
-					this.logger().info(`Aborted deletion of old revisions for item ${rev.item_id} because one of the revisions is still encrypted`, error);
+					this.logger().info(`Aborted deletion of old revisions for item "${rev.item_id}" (rev "${rev.id}") because one of the revisions is still encrypted`, error);
 				} else {
 					throw error;
 				}
