@@ -41,8 +41,25 @@ This is a known issue and to solve it would require looking ahead in event pages
 
 ## ResyncRequired error
 
-In some cases, in particular when a delta cursor has expired, the server might throw an error with a "resyncRequired" error code. In that case, the client should discard their cursor and sync the complete data again from the beginning.
+In some cases, in particular when a delta cursor has expired or is invalid, the server might throw an error with a "resyncRequired" error code. In that case, the client should discard their cursor and sync the complete data again from the beginning.
 
 This error should be rare - currently it would only happen if the cursor is invalid. Later on, it will also happen when old events have been deleted after x months. So a client that has not synced in a long time might see this error. The error code could also be used to solve server-side errors in some rare cases.
 
 When syncing from the start, there will be many "create" events for files that are already there locally. In that case, they should just be skipped.
+
+## Regarding the deletion of old change events
+
+Keeping all change events permanently would represent a lot of data, however it might be necessary. Without it, it won't be possible for a client to know what file has been deleted and thus a client that has not synced for a long time will keep its files permanently.
+
+So most likely we'll always keep the change events. However, we could compress the old ones to just "create" and "delete" events. All "update" events are not needed. And for a file that has been deleted, we don't need to keep the "create" event.
+
+The client would then follow this logic:
+
+- For "create" events:
+	- If the file is present locally, update it with the version from the server.
+	- If the file is not present, create it using the version from the server.
+- For "delete" events:
+	- If the file is present, delete it.
+	- If it is not, skip the event (not an error).
+
+It might seem we could derive the "create" events simply by looking at the files in the directory - all files that are there would implicitely have a "create" event. The issue however is that it's not possible to reliably iterate over the files in a folder, because they might change in the meantime. The change events on the other hand provide an ID that can be used reliably to iterate over changes, and to resume at any time.
