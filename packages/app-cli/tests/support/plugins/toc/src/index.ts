@@ -1,4 +1,5 @@
 import joplin from 'api';
+import { ToolbarButtonLocation } from 'api/types';
 
 const uslug = require('uslug');
 
@@ -90,6 +91,18 @@ joplin.plugins.register({
 		joplin.workspace.onNoteContentChange(() => {
 			updateTocView();
 		});
+
+		await joplin.commands.register({
+			name: 'toggleToc',
+			label: 'Toggle TOC',
+			iconName: 'fas fa-drum',
+			execute: async () => {
+				const isVisible = await (panels as any).visible(view);
+				(panels as any).show(view, !isVisible);
+			},
+		});
+
+		await joplin.views.toolbarButtons.create('toggleToc', 'toggleToc', ToolbarButtonLocation.NoteToolbar);
 
 		updateTocView();
 	},

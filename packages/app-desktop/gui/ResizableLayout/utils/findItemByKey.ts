@@ -16,8 +16,4 @@ export default function findItemByKey(layout: LayoutItem, key: string): LayoutIt
 	}
 
 	return recurseFind(layout);
-
-	// const output = recurseFind(layout);
-	// if (!output) throw new Error(`Could not find item "${key}"`);
-	// return output;
 }

@@ -17,7 +17,7 @@ export default class JoplinViewsPanels {
 	private store: any;
 	private plugin: Plugin;
 
-	constructor(plugin: Plugin, store: any) {
+	public constructor(plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
 	}
@@ -29,7 +29,7 @@ export default class JoplinViewsPanels {
 	/**
 	 * Creates a new panel
 	 */
-	async create(id: string): Promise<ViewHandle> {
+	public async create(id: string): Promise<ViewHandle> {
 		if (!id) {
 			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.panels.create("my-unique-id")`');
 			id = `${this.plugin.viewCount}`;
@@ -44,22 +44,43 @@ export default class JoplinViewsPanels {
 	/**
 	 * Sets the panel webview HTML
 	 */
-	async setHtml(handle: ViewHandle, html: string) {
+	public async setHtml(handle: ViewHandle, html: string) {
 		return this.controller(handle).html = html;
 	}
 
 	/**
 	 * Adds and loads a new JS or CSS files into the panel.
 	 */
-	async addScript(handle: ViewHandle, scriptPath: string) {
+	public async addScript(handle: ViewHandle, scriptPath: string) {
 		return this.controller(handle).addScript(scriptPath);
 	}
 
 	/**
 	 * Called when a message is sent from the webview (using postMessage).
 	 */
-	async onMessage(handle: ViewHandle, callback: Function) {
+	public async onMessage(handle: ViewHandle, callback: Function) {
 		return this.controller(handle).onMessage(callback);
+	}
+
+	/**
+	 * Shows the panel
+	 */
+	public async show(handle: ViewHandle, show: boolean = true): Promise<void> {
+		await this.controller(handle).show(show);
+	}
+
+	/**
+	 * Hides the panel
+	 */
+	public async hide(handle: ViewHandle): Promise<void> {
+		await this.show(handle, false);
+	}
+
+	/**
+	 * Tells whether the panel is visible or not
+	 */
+	public async visible(handle: ViewHandle): Promise<boolean> {
+		return this.controller(handle).visible;
 	}
 
 }
