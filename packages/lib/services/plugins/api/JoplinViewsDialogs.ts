@@ -78,6 +78,13 @@ export default class JoplinViewsDialogs {
 	}
 
 	/**
+	 * Adds and loads a new JS or CSS files into the dialog.
+	 */
+	public async addScript(handle: ViewHandle, scriptPath: string) {
+		return this.controller(handle).addScript(scriptPath);
+	}
+
+	/**
 	 * Sets the dialog buttons.
 	 */
 	async setButtons(handle: ViewHandle, buttons: ButtonSpec[]) {
