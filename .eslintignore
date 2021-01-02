@@ -1388,6 +1388,12 @@ packages/renderer/MdToHtml/rules/mermaid.js.map
 packages/renderer/MdToHtml/rules/sanitize_html.d.ts
 packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/sanitize_html.js.map
+packages/renderer/MdToHtml/setupLinkify.d.ts
+packages/renderer/MdToHtml/setupLinkify.js
+packages/renderer/MdToHtml/setupLinkify.js.map
+packages/renderer/MdToHtml/validateLinks.d.ts
+packages/renderer/MdToHtml/validateLinks.js
+packages/renderer/MdToHtml/validateLinks.js.map
 packages/renderer/htmlUtils.d.ts
 packages/renderer/htmlUtils.js
 packages/renderer/htmlUtils.js.map

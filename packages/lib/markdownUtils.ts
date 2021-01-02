@@ -1,7 +1,7 @@
+import { validateLinks } from '@joplin/renderer';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
 const MarkdownIt = require('markdown-it');
-const { setupLinkify } = require('@joplin/renderer');
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
@@ -47,7 +47,7 @@ const markdownUtils = {
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
 	extractImageUrls(md: string) {
 		const markdownIt = new MarkdownIt();
-		setupLinkify(markdownIt); // Necessary to support file:/// links
+		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
 		const env = {};
 		const tokens = markdownIt.parse(md, env);
