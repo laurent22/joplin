@@ -307,7 +307,7 @@ export default function(theme: any) {
 
 		.mce-content-body {
 			/* Note: we give a bit more padding at the bottom, to allow scrolling past the end of the document */
-			padding: 5px 10px 10em 10px;
+			padding: 5px 10px 10em 0;
 		}
 
 		/*

@@ -387,6 +387,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				padding-bottom: 400px !important;
 			}
 
+			/* Left padding is applied at the editor component level, so we should remove it from the lines */
+			.CodeMirror pre.CodeMirror-line,
+			.CodeMirror pre.CodeMirror-line-like {
+				padding-left: 0;
+			}
+
 			.CodeMirror-sizer {
 				/* Add a fixed right padding to account for the appearance (and disappearance) */
 				/* of the sidebar */
