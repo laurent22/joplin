@@ -6,14 +6,14 @@ export default class ViewController {
 	private pluginId_: string;
 	private store_: any;
 
-	constructor(handle: ViewHandle, pluginId: string, store: any) {
+	public constructor(handle: ViewHandle, pluginId: string, store: any) {
 		this.handle_ = handle;
 		this.pluginId_ = pluginId;
 		this.store_ = store;
 	}
 
 	protected get storeView(): any {
-		return this.store_.pluginService.plugins[this.pluginId_].views[this.handle];
+		return this.store_.getState().pluginService.plugins[this.pluginId_].views[this.handle];
 	}
 
 	protected get store(): any {

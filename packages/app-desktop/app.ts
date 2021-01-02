@@ -22,6 +22,9 @@ import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import stateToWhenClauseContext from './services/commands/stateToWhenClauseContext';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
+import produce from 'immer';
+import iterateItems from './gui/ResizableLayout/utils/iterateItems';
+import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 const MasterKey = require('@joplin/lib/models/MasterKey');
@@ -245,6 +248,29 @@ class Application extends BaseApplication {
 					...state,
 					mainLayout: action.value,
 				};
+				break;
+
+			case 'MAIN_LAYOUT_SET_ITEM_PROP':
+
+				{
+					let newLayout = produce(state.mainLayout, (draftLayout: LayoutItem) => {
+						iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
+							if (item.key === action.itemKey) {
+								(item as any)[action.propName] = action.propValue;
+								return false;
+							}
+							return true;
+						});
+					});
+
+					if (newLayout !== state.mainLayout) newLayout = validateLayout(newLayout);
+
+					newState = {
+						...state,
+						mainLayout: newLayout,
+					};
+				}
+
 				break;
 
 			case 'NOTE_FILE_WATCHER_ADD':
