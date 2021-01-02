@@ -353,16 +353,16 @@ msgstr ""
 msgid "Insert Date Time"
 msgstr "Chèn ngày tháng"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Drop notes or files here"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 #, fuzzy
 msgid "Code View"
 msgstr "Mã"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -1363,7 +1363,7 @@ msgid "Checking..."
 msgstr "Đang kiểm tra..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:183
-#: packages/lib/models/Resource.js:320
+#: packages/lib/models/Resource.js:331
 msgid "Error"
 msgstr "Lỗi"
 
@@ -2011,6 +2011,13 @@ msgstr "Điền tiêu đề"
 msgid "Search"
 msgstr "Tìm kiếm"
 
+#: packages/server/dist/middleware/notificationHandler.js:31
+#, javascript-format
+msgid ""
+"The default admin password is insecure and has not been changed! [Change it "
+"now](%s)"
+msgstr ""
+
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
@@ -2143,8 +2150,8 @@ msgstr "Điểm đến của quá trình đồng bộ"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchronise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional "
+"parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Điểm đến của quá trình đông bộ. Mỗi điểm đến có thể có tham số tên `sync.NUM."
 "NAME` (xem bên dưới)."
@@ -2705,24 +2712,24 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Notes và cài đặt sẽ được lưu lại tại: %s"
 
-#: packages/lib/models/Resource.js:317
+#: packages/lib/models/Resource.js:328
 msgid "Not downloaded"
 msgstr "Không thể tải"
 
-#: packages/lib/models/Resource.js:318
+#: packages/lib/models/Resource.js:329
 msgid "Downloading"
 msgstr "Đang tải"
 
-#: packages/lib/models/Resource.js:319
+#: packages/lib/models/Resource.js:330
 msgid "Downloaded"
 msgstr "Đã tải"
 
-#: packages/lib/models/Resource.js:371
+#: packages/lib/models/Resource.js:382
 #, fuzzy, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "Đính kèm"
 
-#: packages/lib/models/Resource.js:372
+#: packages/lib/models/Resource.js:383
 #, fuzzy, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -3146,67 +3153,72 @@ msgstr "%s: %s"
 msgid "Attachments"
 msgstr "Đính kèm"
 
-#: packages/lib/services/report.js:190
+#: packages/lib/services/report.js:191
 msgid "Downloaded and decrypted"
 msgstr "Đã tải về và giải mã"
 
-#: packages/lib/services/report.js:190 packages/lib/services/report.js:191
-#: packages/lib/services/report.js:194
+#: packages/lib/services/report.js:191 packages/lib/services/report.js:192
+#: packages/lib/services/report.js:193 packages/lib/services/report.js:196
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/report.js:191
+#: packages/lib/services/report.js:192
 msgid "Downloaded and encrypted"
 msgstr "Đã tải về và đã mã hóa"
 
-#: packages/lib/services/report.js:204
+#: packages/lib/services/report.js:193
+#, fuzzy
+msgid "Created locally"
+msgstr "Số mục được tạo trên máy: %d."
+
+#: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
 msgstr "Không thể tải về được những đính kèm"
 
-#: packages/lib/services/report.js:209
+#: packages/lib/services/report.js:211
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: packages/lib/services/report.js:222
+#: packages/lib/services/report.js:224
 msgid "Sync status (synced items / total items)"
 msgstr "Trạng thái đồng bộ (số mục đã được đồng bộ/ tổng số mục)"
 
-#: packages/lib/services/report.js:226
+#: packages/lib/services/report.js:228
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: packages/lib/services/report.js:229
+#: packages/lib/services/report.js:231
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "Tổng cộng: %d/%d"
 
-#: packages/lib/services/report.js:231
+#: packages/lib/services/report.js:233
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "Mâu thuẫn; %d"
 
-#: packages/lib/services/report.js:232
+#: packages/lib/services/report.js:234
 #, javascript-format
 msgid "To delete: %d"
 msgstr "Xóa: %d"
 
-#: packages/lib/services/report.js:236
+#: packages/lib/services/report.js:238
 msgid "Folders"
 msgstr "Thư mục"
 
-#: packages/lib/services/report.js:244
+#: packages/lib/services/report.js:246
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d notes"
 
-#: packages/lib/services/report.js:252
+#: packages/lib/services/report.js:254
 msgid "Coming alarms"
 msgstr "Báo động sắp gần"
 
-#: packages/lib/services/report.js:257
+#: packages/lib/services/report.js:259
 #, javascript-format
 msgid "On %s: %s"
 msgstr "On %s: %s"

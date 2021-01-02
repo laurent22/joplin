@@ -14,8 +14,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -347,15 +345,15 @@ msgstr "内联代码"
 msgid "Insert Date Time"
 msgstr "插入时间"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Drop notes or files here"
 msgstr "将笔记或文件拖到此处"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Code View"
 msgstr "代码视图"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -1339,7 +1337,7 @@ msgid "Checking..."
 msgstr "正在检查..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:183
-#: packages/lib/models/Resource.js:320
+#: packages/lib/models/Resource.js:331
 msgid "Error"
 msgstr "错误"
 
@@ -1971,6 +1969,13 @@ msgstr "添加标题"
 msgid "Search"
 msgstr "搜索"
 
+#: packages/server/dist/middleware/notificationHandler.js:31
+#, javascript-format
+msgid ""
+"The default admin password is insecure and has not been changed! [Change it "
+"now](%s)"
+msgstr ""
+
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
@@ -2096,8 +2101,8 @@ msgstr "同步目标"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchronise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional "
+"parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "所要同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数 (见下"
 "文) 。"
@@ -2651,24 +2656,24 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置储存于：%s"
 
-#: packages/lib/models/Resource.js:317
+#: packages/lib/models/Resource.js:328
 msgid "Not downloaded"
 msgstr "未下载"
 
-#: packages/lib/models/Resource.js:318
+#: packages/lib/models/Resource.js:329
 msgid "Downloading"
 msgstr "下载中"
 
-#: packages/lib/models/Resource.js:319
+#: packages/lib/models/Resource.js:330
 msgid "Downloaded"
 msgstr "已下载"
 
-#: packages/lib/models/Resource.js:371
+#: packages/lib/models/Resource.js:382
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "附件冲突：“%s”"
 
-#: packages/lib/models/Resource.js:372
+#: packages/lib/models/Resource.js:383
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -3091,67 +3096,72 @@ msgstr "%s：%s"
 msgid "Attachments"
 msgstr "附件"
 
-#: packages/lib/services/report.js:190
+#: packages/lib/services/report.js:191
 msgid "Downloaded and decrypted"
 msgstr "已下载并解密"
 
-#: packages/lib/services/report.js:190 packages/lib/services/report.js:191
-#: packages/lib/services/report.js:194
+#: packages/lib/services/report.js:191 packages/lib/services/report.js:192
+#: packages/lib/services/report.js:193 packages/lib/services/report.js:196
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/report.js:191
+#: packages/lib/services/report.js:192
 msgid "Downloaded and encrypted"
 msgstr "已下载并加密"
 
-#: packages/lib/services/report.js:204
+#: packages/lib/services/report.js:193
+#, fuzzy
+msgid "Created locally"
+msgstr "已新建本地项目: %d。"
+
+#: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
 msgstr "无法下载的附件"
 
-#: packages/lib/services/report.js:209
+#: packages/lib/services/report.js:211
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: packages/lib/services/report.js:222
+#: packages/lib/services/report.js:224
 msgid "Sync status (synced items / total items)"
 msgstr "同步状态 (已同步条目/条目总数)"
 
-#: packages/lib/services/report.js:226
+#: packages/lib/services/report.js:228
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d 条"
 
-#: packages/lib/services/report.js:229
+#: packages/lib/services/report.js:231
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "总数: %d/%d 条"
 
-#: packages/lib/services/report.js:231
+#: packages/lib/services/report.js:233
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "有冲突: %d 条"
 
-#: packages/lib/services/report.js:232
+#: packages/lib/services/report.js:234
 #, javascript-format
 msgid "To delete: %d"
 msgstr "将删除: %d 条"
 
-#: packages/lib/services/report.js:236
+#: packages/lib/services/report.js:238
 msgid "Folders"
 msgstr "文件夹"
 
-#: packages/lib/services/report.js:244
+#: packages/lib/services/report.js:246
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d 条笔记"
 
-#: packages/lib/services/report.js:252
+#: packages/lib/services/report.js:254
 msgid "Coming alarms"
 msgstr "临近提醒"
 
-#: packages/lib/services/report.js:257
+#: packages/lib/services/report.js:259
 #, javascript-format
 msgid "On %s: %s"
 msgstr "位于 %s: %s"

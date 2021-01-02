@@ -352,15 +352,15 @@ msgstr "インラインコード"
 msgid "Insert Date Time"
 msgstr "日付の入力"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Drop notes or files here"
 msgstr "ノートやファイルをここにドロップします"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Code View"
 msgstr "コードビュー"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -1373,7 +1373,7 @@ msgid "Checking..."
 msgstr "チェック中..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:183
-#: packages/lib/models/Resource.js:320
+#: packages/lib/models/Resource.js:331
 msgid "Error"
 msgstr "エラー"
 
@@ -2019,6 +2019,13 @@ msgstr "題名を追加"
 msgid "Search"
 msgstr "検索"
 
+#: packages/server/dist/middleware/notificationHandler.js:31
+#, javascript-format
+msgid ""
+"The default admin password is insecure and has not been changed! [Change it "
+"now](%s)"
+msgstr ""
+
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
@@ -2149,8 +2156,8 @@ msgstr "同期先"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchronise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional "
+"parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
 "持つことができるでしょう（すべてのドキュメントは下にあります）。"
@@ -2715,24 +2722,24 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は次の場所に保存されます: %s"
 
-#: packages/lib/models/Resource.js:317
+#: packages/lib/models/Resource.js:328
 msgid "Not downloaded"
 msgstr "未ダウンロード"
 
-#: packages/lib/models/Resource.js:318
+#: packages/lib/models/Resource.js:329
 msgid "Downloading"
 msgstr "ダウンロード中"
 
-#: packages/lib/models/Resource.js:319
+#: packages/lib/models/Resource.js:330
 msgid "Downloaded"
 msgstr "ダウンロード済み"
 
-#: packages/lib/models/Resource.js:371
+#: packages/lib/models/Resource.js:382
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "添付ファイルの衝突: \"%s\""
 
-#: packages/lib/models/Resource.js:372
+#: packages/lib/models/Resource.js:383
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -3165,67 +3172,72 @@ msgstr "%s: %s"
 msgid "Attachments"
 msgstr "添付ファイル"
 
-#: packages/lib/services/report.js:190
+#: packages/lib/services/report.js:191
 msgid "Downloaded and decrypted"
 msgstr "ダウンロード済み（復号済み）"
 
-#: packages/lib/services/report.js:190 packages/lib/services/report.js:191
-#: packages/lib/services/report.js:194
+#: packages/lib/services/report.js:191 packages/lib/services/report.js:192
+#: packages/lib/services/report.js:193 packages/lib/services/report.js:196
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/report.js:191
+#: packages/lib/services/report.js:192
 msgid "Downloaded and encrypted"
 msgstr "ダウンロード済み（未復号）"
 
-#: packages/lib/services/report.js:204
+#: packages/lib/services/report.js:193
+#, fuzzy
+msgid "Created locally"
+msgstr "ローカルアイテムの作成: %d."
+
+#: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
 msgstr "ダウンロードできなかった添付ファイル"
 
-#: packages/lib/services/report.js:209
+#: packages/lib/services/report.js:211
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: packages/lib/services/report.js:222
+#: packages/lib/services/report.js:224
 msgid "Sync status (synced items / total items)"
 msgstr "同期状況 (同期済/総数)"
 
-#: packages/lib/services/report.js:226
+#: packages/lib/services/report.js:228
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: packages/lib/services/report.js:229
+#: packages/lib/services/report.js:231
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "総数: %d/%d"
 
-#: packages/lib/services/report.js:231
+#: packages/lib/services/report.js:233
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "衝突: %d"
 
-#: packages/lib/services/report.js:232
+#: packages/lib/services/report.js:234
 #, javascript-format
 msgid "To delete: %d"
 msgstr "削除予定: %d"
 
-#: packages/lib/services/report.js:236
+#: packages/lib/services/report.js:238
 msgid "Folders"
 msgstr "フォルダー"
 
-#: packages/lib/services/report.js:244
+#: packages/lib/services/report.js:246
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d ノート"
 
-#: packages/lib/services/report.js:252
+#: packages/lib/services/report.js:254
 msgid "Coming alarms"
 msgstr "直近のアラーム"
 
-#: packages/lib/services/report.js:257
+#: packages/lib/services/report.js:259
 #, javascript-format
 msgid "On %s: %s"
 msgstr "日時 %s: %s"

@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -68,13 +66,13 @@ msgstr ""
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
 msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed by "
-"a tag name, or @ followed by a notebook name. Or type : to search for "
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
 "Geçiş yapmak için not başlığını veya içeriğin bir kısmın yazın. Alternatif "
-"olarak # ile etiket ismi ya da @ ile not defteri ismi yazın. Ayrıca : yazarak "
-"komutlar içinde arama yapabilirsiniz."
+"olarak # ile etiket ismi ya da @ ile not defteri ismi yazın. Ayrıca : "
+"yazarak komutlar içinde arama yapabilirsiniz."
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -156,12 +154,12 @@ msgstr "Geri yükle"
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
 msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s"
-"\". The current version of the note will not be replaced or modified."
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 "Notu geri yükleme için şuna tıklayın: \"%s\". %s isimli not defterine "
-"kopyalanacak. Notun güncel versiyonunun yeri değiştirilmeyecek ya da üzerinde "
-"değişiklik yapılmayacak."
+"kopyalanacak. Notun güncel versiyonunun yeri değiştirilmeyecek ya da "
+"üzerinde değişiklik yapılmayacak."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:528
@@ -354,15 +352,15 @@ msgstr "İç Kod"
 msgid "Insert Date Time"
 msgstr "Tarih Ekle"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Drop notes or files here"
 msgstr "Not veya dosyaları buraya sürükleyin"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Code View"
 msgstr "Kod Görünümü"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -415,8 +413,8 @@ msgstr "Yeni %s oluşturuluyor..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:336
 msgid ""
-"This Rich Text editor has a number of limitations and it is recommended to be "
-"aware of them before using it."
+"This Rich Text editor has a number of limitations and it is recommended to "
+"be aware of them before using it."
 msgstr ""
 "Zengin metin editöründe bazı kısıtlamalar mevcuttur, ve de kullanmadan önce "
 "bunun bilincinde olmanızı öneririz."
@@ -435,7 +433,8 @@ msgstr "Şu ek dosyaları değişiklikler için izlenmekte:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:384
 msgid ""
-"The attachments will no longer be watched when you switch to a different note."
+"The attachments will no longer be watched when you switch to a different "
+"note."
 msgstr "Eğer başka bir not'a geçerseniz ek dosyalar artık izlenmeyecek."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:389
@@ -842,8 +841,8 @@ msgstr "Bir seferde yalnızca bir not yazdırılabilir."
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
-"Joplin'in Dropbox ile senkronize edilmesine izin vermek için lütfen aşağıdaki "
-"adımları izleyin:"
+"Joplin'in Dropbox ile senkronize edilmesine izin vermek için lütfen "
+"aşağıdaki adımları izleyin:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
@@ -898,8 +897,8 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"Joplin Web Alıntılama, tarayıcınızdaki web sayfalarını ve ekran görüntülerini "
-"Joplin'e kaydetmenizi sağlar."
+"Joplin Web Alıntılama, tarayıcınızdaki web sayfalarını ve ekran "
+"görüntülerini Joplin'e kaydetmenizi sağlar."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:129
 msgid "In order to use the web clipper, you need to do the following:"
@@ -916,8 +915,8 @@ msgid ""
 "to a particular port."
 msgstr ""
 "Bu hizmet, tarayıcı uzantısının Joplin ile iletişim kurmasını sağlar. "
-"Etkinleştirme anında güvenlik duvarınız Joplin’e belirli bir bağlantı portunu "
-"dinlemek için izin vermenizi isteyebilir."
+"Etkinleştirme anında güvenlik duvarınız Joplin’e belirli bir bağlantı "
+"portunu dinlemek için izin vermenizi isteyebilir."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:156
 msgid "Step 2: Install the extension"
@@ -944,13 +943,14 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"Bu yetkilendirme yalnızca üçüncü taraf uygulamaların Joplin'e erişmesine izin "
-"vermek için gereklidir."
+"Bu yetkilendirme yalnızca üçüncü taraf uygulamaların Joplin'e erişmesine "
+"izin vermek için gereklidir."
 
 #: packages/app-desktop/gui/MenuBar.js:114
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "\"%s\" kaynağından \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
+msgstr ""
+"\"%s\" kaynağından \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
 
 #: packages/app-desktop/gui/MenuBar.js:231 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
@@ -1079,7 +1079,8 @@ msgstr "Hemen al:"
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
-"Yeni not defteri \"%s\" oluşturulacak ve \"%s\" dosyası onun içine aktarılacak"
+"Yeni not defteri \"%s\" oluşturulacak ve \"%s\" dosyası onun içine "
+"aktarılacak"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-cli/app/command-import.js:47
@@ -1190,8 +1191,8 @@ msgstr "Verini yeniden şifrele"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
-"The default encryption method has been changed to a more secure one and it is "
-"recommended that you apply it to your data."
+"The default encryption method has been changed to a more secure one and it "
+"is recommended that you apply it to your data."
 msgstr ""
 "Varsayılan şifreleme yolu daha güvenli bir yola güncellendi, bu sebeple tüm "
 "verinizi yeniden şifrelemenizi öneriyoruz."
@@ -1258,10 +1259,10 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be re-"
-"synchronised and sent encrypted to the sync target. Do not lose the password "
-"as, for security purposes, this will be the *only* way to decrypt the data! "
-"To enable encryption, please enter your password below."
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
 msgstr ""
 "Şifrelemeyi aktif etmek *tüm* notlarınızın ve eklerinizin yeniden senkronize "
 "edileceği ve senkronizasyon hedefine şifrelenmiş olarak gönderileceği "
@@ -1332,8 +1333,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"Uçtan Uca Şifreleme (E2EE) hakkında bilgi ve nasıl aktif edilebileceğine dair "
-"ipuçları için lütfen belgeleri inceleyin:"
+"Uçtan Uca Şifreleme (E2EE) hakkında bilgi ve nasıl aktif edilebileceğine "
+"dair ipuçları için lütfen belgeleri inceleyin:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-mobile/components/screens/encryption-config.js:279
@@ -1381,14 +1382,14 @@ msgid "Checking..."
 msgstr "Kontrol ediliyor..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:183
-#: packages/lib/models/Resource.js:320
+#: packages/lib/models/Resource.js:331
 msgid "Error"
 msgstr "Hata"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:188
 msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please see "
-"the full error message below:"
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
 msgstr ""
 "Joplin Nextcloud Uygulaması yüklenmemiş ya da yanlış konfigüre edilmiş. "
 "Lütfen aşağıdaki hata mesajını inceleyin:"
@@ -1560,8 +1561,8 @@ msgstr "\"%s\" eki silinsin mi?"
 #: packages/app-desktop/gui/ResourceScreen.js:140
 msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
-"notes. Please be careful when deleting one of them as they cannot be restored "
-"afterwards."
+"notes. Please be careful when deleting one of them as they cannot be "
+"restored afterwards."
 msgstr ""
 "Bu gelişmiş araç notlarınıza iliştirdiğiniz ek dosyaları görmenizi sağlar. "
 "Lütfen bu aracı kullanırken dikkatli olun, çünkü bu dosyalar silinirse "
@@ -1939,7 +1940,8 @@ msgstr "Bu ek henüz indirilmedi veya şifrelenmedi."
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Joplin mobil uygulaması şu anda bu tür bir bağlantıyı desteklemiyor: %s"
+msgstr ""
+"Joplin mobil uygulaması şu anda bu tür bir bağlantıyı desteklemiyor: %s"
 
 #: packages/app-mobile/components/screens/Note.js:178
 #, javascript-format
@@ -2035,10 +2037,18 @@ msgstr "Başlık ekle"
 msgid "Search"
 msgstr "Arama"
 
+#: packages/server/dist/middleware/notificationHandler.js:31
+#, javascript-format
+msgid ""
+"The default admin password is insecure and has not been changed! [Change it "
+"now](%s)"
+msgstr ""
+
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr "Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
+msgstr ""
+"Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2055,14 +2065,14 @@ msgid ""
 "Please open the following URL in your browser to authenticate the "
 "application. The application will create a directory in \"Apps/Joplin\" and "
 "will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data will "
-"be shared with any third party."
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
 msgstr ""
 "Lütfen uygulamayı doğrulamak için tarayıcınızda aşağıdaki URL'yi açın. "
 "Uygulama \"Uygulamalar/Joplin\" de bir dizin oluşturacak ve sadece bu "
-"dizindeki dosyaları okuyacak ve yazacaktır. Bu dizin dışındaki hiçbir dosyaya "
-"veya diğer kişisel verilere erişemeyecektir. Hiçbir veri üçüncü şahıslarla "
-"paylaşılmayacaktır."
+"dizindeki dosyaları okuyacak ve yazacaktır. Bu dizin dışındaki hiçbir "
+"dosyaya veya diğer kişisel verilere erişemeyecektir. Hiçbir veri üçüncü "
+"şahıslarla paylaşılmayacaktır."
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
@@ -2164,8 +2174,8 @@ msgstr "Senkronizasyon hedefi"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchronise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional "
+"parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Senkronize edilecek hedef. Her senkronizasyon hedefi, `sync.NUM.NAME` olarak "
 "adlandırılan ek parametrelere sahip olabilir (tümü aşağıda belgelenmiştir)."
@@ -2616,8 +2626,8 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:784
 msgid ""
-"Specify the port that should be used by the API server. If not set, a default "
-"will be used."
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
 msgstr ""
 "API sunucu tarafından kullanılacak portu belirleyiniz. Belirlenmez ise "
 "varsayılan bir değer kullanılır."
@@ -2730,24 +2740,24 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Notlar ve ayarlar şu konumda saklanır: %s"
 
-#: packages/lib/models/Resource.js:317
+#: packages/lib/models/Resource.js:328
 msgid "Not downloaded"
 msgstr "İndirilmeyen"
 
-#: packages/lib/models/Resource.js:318
+#: packages/lib/models/Resource.js:329
 msgid "Downloading"
 msgstr "İndiriliyor"
 
-#: packages/lib/models/Resource.js:319
+#: packages/lib/models/Resource.js:330
 msgid "Downloaded"
 msgstr "İndirildi"
 
-#: packages/lib/models/Resource.js:371
+#: packages/lib/models/Resource.js:382
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "Ek dosyalarında çakışma: \"%s\""
 
-#: packages/lib/models/Resource.js:372
+#: packages/lib/models/Resource.js:383
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -2848,7 +2858,8 @@ msgstr ""
 "Lütfen tekrar deneyin."
 
 #: packages/lib/components/shared/encryption-config-shared.js:33
-msgid "Please confirm that you would like to re-encrypt your complete database."
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
 msgstr "Lütfen tüm veritabanınızı yeniden şifrelemek istediğinizi doğrulayın."
 
 #: packages/lib/components/shared/encryption-config-shared.js:39
@@ -2951,8 +2962,8 @@ msgstr ""
 #: packages/lib/JoplinServerApi.js:71
 #, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the configuration "
-"in the Synchronisation config screen. Full error was:\n"
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
@@ -3068,7 +3079,8 @@ msgstr "\"%s\" modülü \"%s\" formatı ve \"%s\" hedefi için yüklenemedi"
 #: packages/app-cli/app/command-cp.js:24 packages/app-cli/app/command-cp.js:27
 #: packages/app-cli/app/command-import.js:34
 #: packages/app-cli/app/command-mv.js:22 packages/app-cli/app/command-mv.js:25
-#: packages/app-cli/app/command-use.js:21 packages/app-cli/app/command-ren.js:23
+#: packages/app-cli/app/command-use.js:21
+#: packages/app-cli/app/command-ren.js:23
 #: packages/app-cli/app/command-rmbook.js:25
 #: packages/app-cli/app/command-cat.js:25
 #: packages/app-cli/app/command-rmnote.js:25
@@ -3080,9 +3092,12 @@ msgstr "\"%s\" modülü \"%s\" formatı ve \"%s\" hedefi için yüklenemedi"
 #: packages/app-cli/app/command-set.js:32
 #: packages/app-cli/app/command-help.js:66
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-tag.js:33 packages/app-cli/app/command-tag.js:36
-#: packages/app-cli/app/command-tag.js:42 packages/app-cli/app/command-tag.js:43
-#: packages/app-cli/app/command-tag.js:81 packages/app-cli/app/command-tag.js:87
+#: packages/app-cli/app/command-tag.js:33
+#: packages/app-cli/app/command-tag.js:36
+#: packages/app-cli/app/command-tag.js:42
+#: packages/app-cli/app/command-tag.js:43
+#: packages/app-cli/app/command-tag.js:81
+#: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-done.js:20
 #, javascript-format
 msgid "Cannot find \"%s\"."
@@ -3137,8 +3152,8 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Bu öğeler cihazda kalacak, ancak senkronize edilmeyecekler. Bu öğeleri bulmak "
-"için, başlığı veya kimliği aratın (yukarıdaki parantez içerisinde "
+"Bu öğeler cihazda kalacak, ancak senkronize edilmeyecekler. Bu öğeleri "
+"bulmak için, başlığı veya kimliği aratın (yukarıdaki parantez içerisinde "
 "görüntülenir)."
 
 #: packages/lib/services/report.js:130
@@ -3174,67 +3189,72 @@ msgstr "%s: %s"
 msgid "Attachments"
 msgstr "Ek Dosyalar"
 
-#: packages/lib/services/report.js:190
+#: packages/lib/services/report.js:191
 msgid "Downloaded and decrypted"
 msgstr "İndirildi ve şifresi çözüldü"
 
-#: packages/lib/services/report.js:190 packages/lib/services/report.js:191
-#: packages/lib/services/report.js:194
+#: packages/lib/services/report.js:191 packages/lib/services/report.js:192
+#: packages/lib/services/report.js:193 packages/lib/services/report.js:196
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/report.js:191
+#: packages/lib/services/report.js:192
 msgid "Downloaded and encrypted"
 msgstr "İndirildi ve şifrelendi"
 
-#: packages/lib/services/report.js:204
+#: packages/lib/services/report.js:193
+#, fuzzy
+msgid "Created locally"
+msgstr "Oluşturulan yerel öğeler: %d."
+
+#: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
 msgstr "Eklenti dosyası indirilemedi"
 
-#: packages/lib/services/report.js:209
+#: packages/lib/services/report.js:211
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: packages/lib/services/report.js:222
+#: packages/lib/services/report.js:224
 msgid "Sync status (synced items / total items)"
 msgstr "Senkronizasyon durumu (senkronize öğeler / toplam öğeler)"
 
-#: packages/lib/services/report.js:226
+#: packages/lib/services/report.js:228
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: packages/lib/services/report.js:229
+#: packages/lib/services/report.js:231
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "Toplam: %d/%d"
 
-#: packages/lib/services/report.js:231
+#: packages/lib/services/report.js:233
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "Çakışan: %d"
 
-#: packages/lib/services/report.js:232
+#: packages/lib/services/report.js:234
 #, javascript-format
 msgid "To delete: %d"
 msgstr "Sil: %d"
 
-#: packages/lib/services/report.js:236
+#: packages/lib/services/report.js:238
 msgid "Folders"
 msgstr "Klasörler"
 
-#: packages/lib/services/report.js:244
+#: packages/lib/services/report.js:246
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d not"
 
-#: packages/lib/services/report.js:252
+#: packages/lib/services/report.js:254
 msgid "Coming alarms"
 msgstr "Yaklaşan alarmlar"
 
-#: packages/lib/services/report.js:257
+#: packages/lib/services/report.js:259
 #, javascript-format
 msgid "On %s: %s"
 msgstr "%s: %s"
@@ -3265,8 +3285,8 @@ msgstr ""
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list of "
-"notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
 msgstr ""
 "Geçerli not defterindeki notları görüntüler. Not defteri listesini "
 "görüntülemek için `ls /` kullanın."
@@ -3288,13 +3308,13 @@ msgstr "Sıralama düzenini tersine çevirir."
 #: packages/app-cli/app/command-ls.js:30
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-"
-"dos, while `-ttd` would display notes and to-dos."
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"Sadece belirli tip öğeleri gösterir. Notlar için `n`,  yapılacaklar listeleri "
-"için `t` veya not ve yapılacaklar listesi için `nt` (örnek: `-tt` sadece "
-"yapılacaklar listesini gösterirken, `-ttd` not ve yapılacaklar listesini "
-"gösterir)"
+"Sadece belirli tip öğeleri gösterir. Notlar için `n`,  yapılacaklar "
+"listeleri için `t` veya not ve yapılacaklar listesi için `nt` (örnek: `-tt` "
+"sadece yapılacaklar listesini gösterirken, `-ttd` not ve yapılacaklar "
+"listesini gösterir)"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -3386,8 +3406,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Uçtan Uca Şifreleme ayarını yönetir. Komutlar `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
+"Uçtan Uca Şifreleme ayarını yönetir. Komutlar `enable`, `disable`, "
+"`decrypt`, `status`, `decrypt-file` and `target-status`."
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3405,8 +3425,8 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Şifre çözme başlatılıyor... Çözülecek dosya sayısına bağlı olarak biraz zaman "
-"alabilir, lütfen bekleyiniz."
+"Şifre çözme başlatılıyor... Çözülecek dosya sayısına bağlı olarak biraz "
+"zaman alabilir, lütfen bekleyiniz."
 
 #: packages/app-cli/app/command-e2ee.js:55
 #, javascript-format
@@ -3492,7 +3512,8 @@ msgstr "Senkronizasyon zaten devam ediyor."
 #, javascript-format
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the operation."
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
 msgstr ""
 "Kilit dosyası zaten tutuluyor. Senkronizasyon yapılmadığını biliyorsanız, "
 "kilit dosyasını \"%s\" konumunda silebilir ve işleme devam edebilirsiniz."
@@ -3631,9 +3652,9 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Joplin verilerini belirtilen yere aktarır. Varsayılan olarak, not defterleri, "
-"notlar, etiketler ve kaynaklar dahil olmak üzere tüm veritabanını dışa "
-"aktarır."
+"Joplin verilerini belirtilen yere aktarır. Varsayılan olarak, not "
+"defterleri, notlar, etiketler ve kaynaklar dahil olmak üzere tüm "
+"veritabanını dışa aktarır."
 
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
@@ -3683,10 +3704,10 @@ msgstr ""
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
-"One or more items are currently encrypted and you may need to supply a master "
-"password. To do so please type `e2ee decrypt`. If you have already supplied "
-"the password, the encrypted items are being decrypted in the background and "
-"will be available soon."
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
 msgstr ""
 "Bir veya daha fazla öğe şu anda şifreli ve bir ana parola girmeniz "
 "gerekebilir. Bunu yapmak için lütfen `e2ee decrypt` yazınız. Parolayı daha "
@@ -3713,8 +3734,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"<name> özelliğini verilen <note> içinde verilen [value] ile değiştirir. Olası "
-"özellikler şunlardır:\n"
+"<name> özelliğini verilen <note> içinde verilen [value] ile değiştirir. "
+"Olası özellikler şunlardır:\n"
 "\n"
 "%s"
 
@@ -3778,9 +3799,10 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"Herhangi bir komutta, bir not veya note defteri başlık veya ID ile, veya `$n` "
-"`$b` kestirmelerini kullanılarak atfedilebilinir. Sırasıyla, güncel seçili "
-"not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf yapılabilinir."
+"Herhangi bir komutta, bir not veya note defteri başlık veya ID ile, veya `"
+"$n` `$b` kestirmelerini kullanılarak atfedilebilinir. Sırasıyla, güncel "
+"seçili not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf "
+"yapılabilinir."
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -3788,11 +3810,11 @@ msgstr "Bir bölmeden diğerine geçmek için Tab veya Shift+Tab tuşlarına bas
 
 #: packages/app-cli/app/command-help.js:80
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas (including "
-"this console)."
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
 msgstr ""
-"Liste ve metin alanlarında kaydırma için ok tuşları ve page up/down tuşlarını "
-"kullanınız (bu konsol da dahil)."
+"Liste ve metin alanlarında kaydırma için ok tuşları ve page up/down "
+"tuşlarını kullanınız (bu konsol da dahil)."
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -3816,9 +3838,9 @@ msgstr ""
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the target "
-"is a regular note it will be converted to a to-do). Use \"clear\" to convert "
-"the to-do back to a regular note."
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> “toggle” veya “clear” olabilir. “toggle” kullanarak yapılacak "
 "listesinin tamamlanma değerini değiştirebilirsiniz. (Eğer hedef öğe not ise "
@@ -3877,10 +3899,10 @@ msgstr ""
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign "
-"or remove [tag] from [note], to list notes associated with [tag], or to list "
-"tags associated with [note]. The command `tag list` can be used to list all "
-"the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> [note] öğesine [tag] koymak yada silmek için “add”, “remove”, "
 "“list”, veya “notetags” kullanabilirsiniz, [tag] ile iliştirilmiş notları "
@@ -3903,11 +3925,11 @@ msgid "Note is not a to-do: \"%s\""
 msgstr "Bu not yapılacaklar listesi değildir: “%s”"
 
 #~ msgid ""
-#~ "Type a note title or part of its content to jump to it. Or type # followed "
-#~ "by a tag name, or @ followed by a notebook name."
+#~ "Type a note title or part of its content to jump to it. Or type # "
+#~ "followed by a tag name, or @ followed by a notebook name."
 #~ msgstr ""
-#~ "Geçiş yapmak için not başlığını veya içeriğin bir kısmın yazın. Alternatif "
-#~ "olarak # ile etiket ismi ya da @ ile not defteri ismi yazın."
+#~ "Geçiş yapmak için not başlığını veya içeriğin bir kısmın yazın. "
+#~ "Alternatif olarak # ile etiket ismi ya da @ ile not defteri ismi yazın."
 
 #~ msgid "Name"
 #~ msgstr "İsim"
@@ -4131,7 +4153,8 @@ msgstr "Bu not yapılacaklar listesi değildir: “%s”"
 #~ "Yeni bir not veya not defteri oluşturmak için (+) düğmesine tıklayın. "
 #~ "Mevcut not defterlerinize erişmek için yandaki menüye tıklayın."
 
-#~ msgid "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
 #~ msgstr ""
 #~ "Şu anda not defteriniz yok. (+) butonuna tıklayarak bir tane oluşturun."
 
