@@ -30,4 +30,16 @@ export default class JoplinViewsPanels {
      * Called when a message is sent from the webview (using postMessage).
      */
     onMessage(handle: ViewHandle, callback: Function): Promise<void>;
+    /**
+     * Shows the panel
+     */
+    show(handle: ViewHandle, show?: boolean): Promise<void>;
+    /**
+     * Hides the panel
+     */
+    hide(handle: ViewHandle): Promise<void>;
+    /**
+     * Tells whether the panel is visible or not
+     */
+    visible(handle: ViewHandle): Promise<boolean>;
 }
