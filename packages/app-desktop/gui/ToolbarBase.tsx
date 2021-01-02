@@ -23,6 +23,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 			backgroundColor: theme.backgroundColor3,
 			padding: theme.toolbarPadding,
 			paddingRight: theme.mainPadding,
+			marginLeft: -theme.editorPaddingLeft,
 		}, this.props.style);
 
 		const groupStyle: any = {
