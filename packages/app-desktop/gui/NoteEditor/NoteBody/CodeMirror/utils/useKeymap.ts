@@ -145,7 +145,7 @@ export default function useKeymap(CodeMirror: any) {
 		};
 		if (shim.isMac()) {
 			CodeMirror.keyMap.default = {
-				// MacOS
+				// macOS
 				'Shift-Cmd-Z': 'redo',
 				'Cmd-Y': 'redo',
 				'Cmd-End': 'goDocEnd',
@@ -153,10 +153,12 @@ export default function useKeymap(CodeMirror: any) {
 				'Cmd-Home': 'goDocStart',
 				'Cmd-Up': 'goDocStart',
 				'Ctrl-D': 'delCharAfter',
-				'Cmd-Left': 'goGroupLeft',
-				'Cmd-Right': 'goGroupRight',
+				'Alt-Left': 'goGroupLeft',
+				'Alt-Right': 'goGroupRight',
 				'Ctrl-A': 'goLineStart',
 				'Ctrl-E': 'goLineEnd',
+				'Cmd-Left': 'goLineLeftSmart',
+				'Cmd-Right': 'goLineRightSmart',
 				'Alt-Backspace': 'delGroupBefore',
 				'Alt-Delete': 'delGroupAfter',
 
