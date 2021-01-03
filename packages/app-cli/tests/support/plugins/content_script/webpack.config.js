@@ -114,35 +114,35 @@ const contentScriptConfig = Object.assign({}, baseConfig, {
 			api: path.resolve(__dirname, 'api'),
 		},
 		extensions: ['.tsx', '.ts', '.js'],
-	}
+	},
 });
 
 function resolveContentScriptPaths(name) {
 	if (['.js', '.ts', '.tsx'].includes(path.extname(name).toLowerCase())) {
-		throw new Error('Content script path must not include file extension: ' + name);
+		throw new Error(`Content script path must not include file extension: ${name}`);
 	}
 
 	const pathsToTry = [
-		'./src/' + name + '.ts',
-		'./src/' + '/' + name + '.js',
+		`./src/${name}.ts`,
+		`${'./src/' + '/'}${name}.js`,
 	];
 
 	for (const pathToTry of pathsToTry) {
-		if (fs.pathExistsSync(rootDir + '/' + pathToTry)) {
+		if (fs.pathExistsSync(`${rootDir}/${pathToTry}`)) {
 			return {
 				entry: pathToTry,
 				output: {
-					filename: name + '.js',
+					filename: `${name}.js`,
 					path: distDir,
 					library: 'default',
 					libraryTarget: 'commonjs',
 					libraryExport: 'default',
-				}, 
+				},
 			};
 		}
 	}
 
-	throw new Error('Could not find content script "' + name + '" at locations ' + JSON.stringify(pathsToTry));
+	throw new Error(`Could not find content script "${name}" at locations ${JSON.stringify(pathsToTry)}`);
 }
 
 function createContentScriptConfigs() {
@@ -157,7 +157,7 @@ function createContentScriptConfigs() {
 			output: scriptPaths.output,
 		}));
 	}
-	
+
 	return output;
 }
 
