@@ -260,6 +260,8 @@ class Note extends BaseItem {
 			return noteFieldComp(a.id, b.id);
 		};
 
+		const collator = this.getNaturalSortingCollator();
+
 		return notes.sort((a, b) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
 			if (!noteOnTop(a) && noteOnTop(b)) return +1;
@@ -273,8 +275,8 @@ class Note extends BaseItem {
 				if (typeof aProp === 'string') aProp = aProp.toLowerCase();
 				if (typeof bProp === 'string') bProp = bProp.toLowerCase();
 
-				if (order.by == 'title' && Setting.value('titleNaturalSort')) {
-					r = this.naturalSortCompare(aProp, bProp, false);
+				if (order.by === 'title') {
+					r = -1 * collator.compare(aProp, bProp);
 				} else {
 					if (aProp < bProp) r = +1;
 					if (aProp > bProp) r = -1;
@@ -382,6 +384,7 @@ class Note extends BaseItem {
 			tempOptions.conditions = cond;
 
 			const uncompletedTodos = await this.search(tempOptions);
+			this.handleTitleNaturalSorting(uncompletedTodos, tempOptions);
 
 			cond = options.conditions.slice();
 			if (hasNotes && hasTodos) {
@@ -394,10 +397,7 @@ class Note extends BaseItem {
 			tempOptions.conditions = cond;
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			const theRest = await this.search(tempOptions);
-
-			if (tempOptions.order.length > 0 && tempOptions.order[0].by == 'title' && Setting.value('titleNaturalSort')) {
-				theRest.sort((a, b) => this.naturalSortCompare(a.title, b.title, tempOptions.order[0].dir));
-			}
+			this.handleTitleNaturalSorting(theRest, tempOptions);
 
 			return uncompletedTodos.concat(theRest);
 		}
@@ -411,10 +411,7 @@ class Note extends BaseItem {
 		}
 
 		const results = await this.search(options);
-
-		if (options.order.length > 0 && options.order[0].by == 'title' && Setting.value('titleNaturalSort')) {
-			results.sort((a, b) => this.naturalSortCompare(a.title, b.title, options.order[0].dir));
-		}
+		this.handleTitleNaturalSorting(results, options);
 
 		return results;
 	}
@@ -877,8 +874,15 @@ class Note extends BaseItem {
 		}
 	}
 
-	static naturalSortCompare(a, b, asc) {
-		return (asc ? 1 : -1) * a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+	static handleTitleNaturalSorting(items, options) {
+		if (options.order.length > 0 && options.order[0].by === 'title') {
+			const collator = this.getNaturalSortingCollator();
+			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
+		}
+	}
+
+	static getNaturalSortingCollator() {
+		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
 }
