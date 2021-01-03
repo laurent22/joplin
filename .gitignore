@@ -144,6 +144,9 @@ packages/app-cli/tests/support/plugins/content_script/api/types.js.map
 packages/app-cli/tests/support/plugins/content_script/src/index.d.ts
 packages/app-cli/tests/support/plugins/content_script/src/index.js
 packages/app-cli/tests/support/plugins/content_script/src/index.js.map
+packages/app-cli/tests/support/plugins/content_script/src/markdownItTestPlugin.d.ts
+packages/app-cli/tests/support/plugins/content_script/src/markdownItTestPlugin.js
+packages/app-cli/tests/support/plugins/content_script/src/markdownItTestPlugin.js.map
 packages/app-cli/tests/support/plugins/dialog/api/index.d.ts
 packages/app-cli/tests/support/plugins/dialog/api/index.js
 packages/app-cli/tests/support/plugins/dialog/api/index.js.map

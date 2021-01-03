@@ -171,7 +171,7 @@ describe('services_PluginService', function() {
 
 		const contentScriptPath = `${tempDir}/markdownItTestPlugin.js`;
 		const contentScriptCssPath = `${tempDir}/markdownItTestPlugin.css`;
-		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.js`, contentScriptPath);
+		await shim.fsDriver().copy(`${testPluginDir}/markdownItTestPlugin.js`, contentScriptPath);
 		await shim.fsDriver().copy(`${testPluginDir}/content_script/src/markdownItTestPlugin.css`, contentScriptCssPath);
 
 		const service = newPluginService();
