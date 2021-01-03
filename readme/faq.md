@@ -18,7 +18,7 @@ More info there: https://github.com/electron-userland/electron-builder/issues/40
 
 You can pass [arguments](https://github.com/laurent22/joplin/blob/dev/Joplin_install_and_update.sh#L37) to the installation script by using this command.
 
-`wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh \| bash -s -- --argument1 --argument2`
+<pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash -s -- --argument1 --argument2</code></pre>
 
 ## How can I edit my note in an external text editor?
 

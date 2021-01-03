@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/privacy.md and any manual change
+This file was auto-generated from readme/spec/server_file_url_format.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/dev/readme/privacy.md
+https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md
 
 -->
 
 <head>
-	<title>Joplin Privacy Policy | Joplin</title>
+	<title>Structure of file URLs in Joplin Server | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -302,7 +302,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/privacy.md
 
 <body>
 
-<div class="container root page-privacy">
+<div class="container root page-server_file_url_format">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -401,13 +401,32 @@ https://github.com/laurent22/joplin/blob/dev/readme/privacy.md
 </div>
 
 	<div class="main">
-<h1>Joplin Privacy Policy<a name="joplin-privacy-policy" href="#joplin-privacy-policy" class="heading-anchor">🔗</a></h1>
-<p>The Joplin applications, including the Android, iOS, Windows, macOS and Linux applications, do not send any data to any service without your authorisation. Any data that Joplin saves, such as notes or images, are saved to your own device and you are free to delete this data at any time.</p>
-<p>If you choose to synchronise with a third-party, such as OneDrive or Dropbox, the notes will be sent to that account, in which case the third-party privacy policy applies.</p>
-<p>For any question about Joplin privacy policy, please leave a message <a href="https://discourse.joplinapp.org/">on the forum</a>.</p>
+<h1>Structure of file URLs in Joplin Server<a name="structure-of-file-urls-in-joplin-server" href="#structure-of-file-urls-in-joplin-server" class="heading-anchor">🔗</a></h1>
+<p>To identify a file, Joplin Server supports two types of URLs:</p>
+<h2>Access by ID<a name="access-by-id" href="#access-by-id" class="heading-anchor">🔗</a></h2>
+<p><strong>Format:</strong> <code>BASE_URL/files/FILE_ID</code></p>
+<p>This is the simplest way and it matches how other API items are accessed by ID.</p>
+<p>For example: <code>https://example.com/api/files/5c7e0f3f54434ba</code></p>
+<h2>Access by full path<a name="access-by-full-path" href="#access-by-full-path" class="heading-anchor">🔗</a></h2>
+<p><strong>Format:</strong> <code>BASE_URL/files/SPECIAL_DIR:/path/to/file/:</code></p>
+<p>This is to access a file by its full path. In this case, the path must be prefixed by <code>SPECIAL_DIR</code>, which can only be <code>root</code> at the moment. Then to differentiate the path from URL segments, it needs to be wrapped in colons <code>:</code>.</p>
+<p>For example, to access the metadata of file <code>/my/file.txt</code></p>
+<p><code>https://example.com/api/files/root:/my/file.txt:</code></p>
+<p>To access its content:</p>
+<p><code>https://example.com/api/files/root:/my/file.txt:/content</code></p>
+<p>To access the root only (for example to list its content):</p>
+<p><code>https://example.com/api/files/root:/:</code></p>
+<p>Which can also be written as:</p>
+<p><code>https://example.com/api/files/root</code></p>
+<h2>Difference between API and web app end points<a name="difference-between-api-and-web-app-end-points" href="#difference-between-api-and-web-app-end-points" class="heading-anchor">🔗</a></h2>
+<p>The API and web app end points are consistent in the way they access files, except that in one case the URLs will start with <code>/api</code> and the other with just <code>/</code>. For example, this would access the same file:</p>
+<ul>
+<li>API: <code>https://example.com/api/files/root:/my/file.txt:</code></li>
+<li>Web: <code>https://example.com/files/root:/my/file.txt:</code></li>
+</ul>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/dev/readme/privacy.md">
+			<a href="https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>

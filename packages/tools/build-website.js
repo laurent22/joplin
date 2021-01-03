@@ -86,7 +86,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
-		word-break: break-all;
+	/*	word-break: break-all; */
 	}
 	pre code {
 		border: none;

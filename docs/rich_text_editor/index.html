@@ -81,7 +81,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
-		word-break: break-all;
+	/*	word-break: break-all; */
 	}
 	pre code {
 		border: none;
@@ -377,6 +377,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
 <li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
 </ul>
 </li>
 <li>
@@ -413,6 +415,9 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 </li>
 <li>
 <p>Tables must have a header, because this is a requirement in Markdown. When you create a table, it will let you create it without a header, but under the hood it will add an empty one. And next time you open the note, this empty header will be present.</p>
+</li>
+<li>
+<p>All items in a list must be of the same type, so for example all checkboxes, or all bullet points. If you require two different types, you should create two different lists separated by an horizontal rule or similar.</p>
 </li>
 </ul>
 <p>Those are the known limitations but if you notice any other issue not listed here, please let us know <a href="https://discourse.joplinapp.org/">in the forum</a>.</p>
@@ -455,7 +460,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 </div></div>
 
 <div class="footer">
-Copyright (C) 2016-2020 Laurent Cozic
+Copyright (C) 2016-2021 Laurent Cozic
 </div>
 </body>
 </html>

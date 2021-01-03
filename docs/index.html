@@ -81,7 +81,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
-		word-break: break-all;
+	/*	word-break: break-all; */
 	}
 	pre code {
 		border: none;
@@ -377,6 +377,8 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
 <li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
 </ul>
 </li>
 <li>
@@ -414,27 +416,26 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <tr>
 <th>Operating System</th>
 <th>Download</th>
-<th>Alternative</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
 <td><a href='https://github.com/laurent22/joplin/releases/download/v1.5.11/Joplin-Setup-1.5.11.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
-<td>Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.5.11/JoplinPortable.exe'>Portable version</a><br><br>The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</td>
 </tr>
 <tr>
 <td>macOS</td>
 <td><a href='https://github.com/laurent22/joplin/releases/download/v1.5.11/Joplin-1.5.11.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
-<td>-</td>
 </tr>
 <tr>
 <td>Linux</td>
 <td><a href='https://github.com/laurent22/joplin/releases/download/v1.5.11/Joplin-1.5.11.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
-<td>The recommended way is to use the following installation script as it will handle the desktop icon too:<br><br> <code>wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash</code></td>
 </tr>
 </tbody>
 </table>
+<p><strong>On Windows</strong>, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v1.5.11/JoplinPortable.exe'>Portable version</a>. The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</p>
+<p><strong>On Linux</strong>, the recommended way is to use the following installation script as it will handle the desktop icon too:</p>
+<pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash</code></pre>
 <h2>Mobile applications<a name="mobile-applications" href="#mobile-applications" class="heading-anchor">🔗</a></h2>
 <table>
 <thead>
@@ -927,35 +928,35 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Arabic</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ar.po">ar</a></td>
 <td><a href="mailto:fi_ahmed_bacha@esi.dz">أحمد باشا إبراهيم</a></td>
-<td>77%</td>
+<td>75%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/basque_country.png" alt=""></td>
 <td>Basque</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/eu.po">eu</a></td>
 <td>juan.abasolo@ehu.eus</td>
-<td>33%</td>
+<td>32%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ba.png" alt=""></td>
 <td>Bosnian (Bosna i Hercegovina)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bs_BA.po">bs_BA</a></td>
 <td><a href="mailto:dervis.t@pm.me">Derviš T.</a></td>
-<td>79%</td>
+<td>77%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/bg.png" alt=""></td>
 <td>Bulgarian (България)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bg_BG.po">bg_BG</a></td>
 <td></td>
-<td>64%</td>
+<td>62%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/catalonia.png" alt=""></td>
 <td>Catalan</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ca.po">ca</a></td>
 <td>jmontane, 2019</td>
-<td>92%</td>
+<td>89%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/hr.png" alt=""></td>
@@ -969,28 +970,28 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Czech (Česká republika)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/cs_CZ.po">cs_CZ</a></td>
 <td><a href="mailto:lukas@aiya.cz">Lukas Helebrandt</a></td>
-<td>96%</td>
+<td>93%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/dk.png" alt=""></td>
 <td>Dansk (Danmark)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/da_DK.po">da_DK</a></td>
 <td>Mustafa Al-Dailemi (<a href="mailto:dailemi@hotmail.com">dailemi@hotmail.com</a>)Language-Team:</td>
-<td>79%</td>
+<td>77%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/de.png" alt=""></td>
 <td>Deutsch (Deutschland)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/de_DE.po">de_DE</a></td>
 <td><a href="mailto:atalanttore@users.noreply.github.com">Ettore Atalan</a></td>
-<td>96%</td>
+<td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ee.png" alt=""></td>
 <td>Eesti Keel (Eesti)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/et_EE.po">et_EE</a></td>
 <td></td>
-<td>63%</td>
+<td>61%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gb.png" alt=""></td>
@@ -1011,189 +1012,189 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Español (España)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/es_ES.po">es_ES</a></td>
 <td><a href="mailto:mario.campo@gmail.com">Mario Campo</a></td>
-<td>96%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/esperanto.png" alt=""></td>
 <td>Esperanto</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/eo.po">eo</a></td>
 <td>Marton Paulo</td>
-<td>36%</td>
+<td>35%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fi.png" alt=""></td>
 <td>Finnish (Suomi)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fi_FI.po">fi_FI</a></td>
 <td></td>
-<td>97%</td>
+<td>94%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fr.png" alt=""></td>
 <td>Français (France)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fr_FR.po">fr_FR</a></td>
 <td>Laurent Cozic</td>
-<td>96%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/galicia.png" alt=""></td>
 <td>Galician (España)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/gl_ES.po">gl_ES</a></td>
 <td><a href="mailto:marcoslansgarza@gmail.com">Marcos Lans</a></td>
-<td>42%</td>
+<td>40%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/id.png" alt=""></td>
 <td>Indonesian (Indonesia)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/id_ID.po">id_ID</a></td>
 <td><a href="mailto:16875937+fathyar@users.noreply.github.com">Fathy AR</a></td>
-<td>88%</td>
+<td>85%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/it.png" alt=""></td>
 <td>Italiano (Italia)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/it_IT.po">it_IT</a></td>
 <td><a href="mailto:mailfilledwithspam@gmail.com">Alessandro Bernardello</a></td>
-<td>97%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/be.png" alt=""></td>
 <td>Nederlands (België, Belgique, Belgien)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>33%</td>
+<td>32%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/nl.png" alt=""></td>
 <td>Nederlands (Nederland)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_NL.po">nl_NL</a></td>
 <td><a href="mailto:metbril@users.noreply.github.com">MetBril</a></td>
-<td>96%</td>
+<td>93%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/no.png" alt=""></td>
 <td>Norwegian (Norge, Noreg)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nb_NO.po">nb_NO</a></td>
 <td><a href="mailto:code@mxe.no">Mats Estensen</a></td>
-<td>85%</td>
+<td>82%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ir.png" alt=""></td>
 <td>Persian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fa.po">fa</a></td>
 <td><a href="mailto:kourox@protonmail.com">Kourosh Firoozbakht</a></td>
-<td>79%</td>
+<td>77%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pl.png" alt=""></td>
 <td>Polski (Polska)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pl_PL.po">pl_PL</a></td>
 <td></td>
-<td>95%</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_BR.po">pt_BR</a></td>
 <td><a href="mailto:rnbastos@gmail.com">Renato Nunes Bastos</a></td>
-<td>93%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pt.png" alt=""></td>
 <td>Português (Portugal)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_PT.po">pt_PT</a></td>
 <td><a href="mailto:jduar@protonmail.com">João Duarte</a></td>
-<td>95%</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ro.png" alt=""></td>
 <td>Română</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ro.po">ro</a></td>
 <td><a href="mailto:cristi.duluta@gmail.com">Cristi Duluta</a></td>
-<td>74%</td>
+<td>72%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/si.png" alt=""></td>
 <td>Slovenian (Slovenija)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sl_SI.po">sl_SI</a></td>
 <td></td>
-<td>41%</td>
+<td>40%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/se.png" alt=""></td>
 <td>Svenska</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sv.po">sv</a></td>
 <td><a href="mailto:jonatan@autistici.org">Jonatan Nyberg</a></td>
-<td>68%</td>
+<td>66%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/th.png" alt=""></td>
 <td>Thai (ประเทศไทย)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/th_TH.po">th_TH</a></td>
 <td></td>
-<td>50%</td>
+<td>49%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/vi.png" alt=""></td>
 <td>Tiếng Việt</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/vi.po">vi</a></td>
 <td></td>
-<td>82%</td>
+<td>79%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tr.png" alt=""></td>
 <td>Türkçe (Türkiye)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/tr_TR.po">tr_TR</a></td>
 <td><a href="mailto:arda@kilicdagi.com">Arda Kılıçdağı</a></td>
-<td>94%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gr.png" alt=""></td>
 <td>Ελληνικά (Ελλάδα)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/el_GR.po">el_GR</a></td>
 <td><a href="mailto:xaris@tuta.io">Harris Arvanitis</a></td>
-<td>92%</td>
+<td>89%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ru.png" alt=""></td>
 <td>Русский (Россия)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ru_RU.po">ru_RU</a></td>
 <td><a href="mailto:thesermanarm@gmail.com">Sergey Segeda</a></td>
-<td>92%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/rs.png" alt=""></td>
 <td>српски језик (Србија)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sr_RS.po">sr_RS</a></td>
 <td></td>
-<td>69%</td>
+<td>67%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_CN.po">zh_CN</a></td>
 <td><a href="mailto:fungdaat31@outlook.com">WhiredPlanck</a></td>
-<td>97%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tw.png" alt=""></td>
 <td>中文 (繁體)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_TW.po">zh_TW</a></td>
 <td><a href="mailto:yaozeye@yahoo.co.jp">Yaoze Ye</a></td>
-<td>91%</td>
+<td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/jp.png" alt=""></td>
 <td>日本語 (日本)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ja_JP.po">ja_JP</a></td>
 <td><a href="mailto:genneko217@gmail.com">genneko</a></td>
-<td>97%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/kr.png" alt=""></td>
 <td>한국어</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ko.po">ko</a></td>
 <td><a href="mailto:potatogim@potatogim.net">Ji-Hyeon Gim</a></td>
-<td>97%</td>
+<td>96%</td>
 </tr>
 </tbody>
 </table>
@@ -1587,7 +1588,7 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 </div></div>
 
 <div class="footer">
-Copyright (C) 2016-2020 Laurent Cozic
+Copyright (C) 2016-2021 Laurent Cozic
 </div>
 </body>
 </html>

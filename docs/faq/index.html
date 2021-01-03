@@ -81,7 +81,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
-		word-break: break-all;
+	/*	word-break: break-all; */
 	}
 	pre code {
 		border: none;
@@ -377,6 +377,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
 <li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
 </ul>
 </li>
 <li>
@@ -413,7 +415,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 <p>More info there: <a href="https://github.com/electron-userland/electron-builder/issues/4057">https://github.com/electron-userland/electron-builder/issues/4057</a></p>
 <h2>How can I pass arguments to the Linux installation script?<a name="how-can-i-pass-arguments-to-the-linux-installation-script" href="#how-can-i-pass-arguments-to-the-linux-installation-script" class="heading-anchor">🔗</a></h2>
 <p>You can pass <a href="https://github.com/laurent22/joplin/blob/dev/Joplin_install_and_update.sh#L37">arguments</a> to the installation script by using this command.</p>
-<p><code>wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh \| bash -s -- --argument1 --argument2</code></p>
+<pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash -s -- --argument1 --argument2</code></pre>
 <h2>How can I edit my note in an external text editor?<a name="how-can-i-edit-my-note-in-an-external-text-editor" href="#how-can-i-edit-my-note-in-an-external-text-editor" class="heading-anchor">🔗</a></h2>
 <p>The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -&gt; Text editor command.</p>
 <p>Some example configurations are: (comments after #)</p>
@@ -526,7 +528,7 @@ on this server.&lt;/p&gt;
 </div></div>
 
 <div class="footer">
-Copyright (C) 2016-2020 Laurent Cozic
+Copyright (C) 2016-2021 Laurent Cozic
 </div>
 </body>
 </html>
