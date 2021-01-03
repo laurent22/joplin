@@ -2,10 +2,10 @@
   "name": "generator-joplin",
   "version": "1.6.1",
   "description": "Scaffolds out a new Joplin plugin",
-  "homepage": "https://joplinapp.org",
+  "homepage": "https://github.com/laurent22/joplin/tree/dev/packages/generator-joplin",
   "author": {
     "name": "Laurent Cozic",
-    "url": "https://joplinapp.org"
+    "url": "https://github.com/laurent22/joplin/tree/dev/packages/generator-joplin"
   },
   "files": [
     "generators"
