@@ -2,7 +2,7 @@ import { PaginationOrderDir } from '@joplin/lib/models/utils/types';
 import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
 import shim from '@joplin/lib/shim';
 
-const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep } = require('./test-utils.js');
 const Folder = require('@joplin/lib/models/Folder');
 const Resource = require('@joplin/lib/models/Resource');
 const Note = require('@joplin/lib/models/Note');
@@ -10,14 +10,6 @@ const Tag = require('@joplin/lib/models/Tag');
 const NoteTag = require('@joplin/lib/models/NoteTag');
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
-
-async function msleep(ms: number) {
-	return new Promise((resolve) => {
-		shim.setTimeout(() => {
-			resolve();
-		}, ms);
-	});
-}
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
