@@ -51,17 +51,21 @@ export default class JoplinPlugins {
 	}
 
 	/**
-	 * Registers a new content script. Unlike regular plugin code, which
-	 * runs in a separate process, content scripts run within the main
-	 * process code and thus allow improved performances and more
-	 * customisations in specific cases. It can be used for example to load
-	 * a Markdown or editor plugin.
+	 * Registers a new content script. Unlike regular plugin code, which runs in
+	 * a separate process, content scripts run within the main process code and
+	 * thus allow improved performances and more customisations in specific
+	 * cases. It can be used for example to load a Markdown or editor plugin.
 	 *
-	 * Note that registering a content script in itself will do nothing -
-	 * it will only be loaded in specific cases by the relevant app modules
-	 * (eg. the Markdown renderer or the code editor). So it is not a way
-	 * to inject and run arbitrary code in the app, which for safety and
-	 * performance reasons is not supported.
+	 * Note that registering a content script in itself will do nothing - it
+	 * will only be loaded in specific cases by the relevant app modules (eg.
+	 * the Markdown renderer or the code editor). So it is not a way to inject
+	 * and run arbitrary code in the app, which for safety and performance
+	 * reasons is not supported.
+	 *
+	 * The plugin generator provides a way to build any content script you might
+	 * want to package as well as its dependencies. See the [Plugin Generator
+	 * doc](https://github.com/laurent22/joplin/blob/dev/packages/generator-joplin/README.md)
+	 * for more information.
 	 *
 	 * * [View the renderer demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
 	 * * [View the editor demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)

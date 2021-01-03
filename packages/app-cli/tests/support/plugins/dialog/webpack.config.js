@@ -39,17 +39,17 @@ function createPluginArchive(sourceDir, destPath) {
 	console.info(`Plugin archive has been created in ${destPath}`);
 }
 
-const distDir = path.resolve(__dirname, 'dist');
-const srcDir = path.resolve(__dirname, 'src');
+const rootDir = path.resolve(__dirname);
+const distDir = path.resolve(rootDir, 'dist');
+const srcDir = path.resolve(rootDir, 'src');
 const manifestPath = `${srcDir}/manifest.json`;
 const manifest = readManifest(manifestPath);
 const archiveFilePath = path.resolve(__dirname, `${manifest.id}.jpl`);
 
 fs.removeSync(distDir);
 
-module.exports = {
+const baseConfig = {
 	mode: 'production',
-	entry: './src/index.ts',
 	target: 'node',
 	module: {
 		rules: [
@@ -60,6 +60,10 @@ module.exports = {
 			},
 		],
 	},
+};
+
+const pluginConfig = Object.assign({}, baseConfig, {
+	entry: './src/index.ts',
 	resolve: {
 		alias: {
 			api: path.resolve(__dirname, 'api'),
@@ -70,6 +74,9 @@ module.exports = {
 		filename: 'index.js',
 		path: distDir,
 	},
+});
+
+const lastStepConfig = {
 	plugins: [
 		new CopyPlugin({
 			patterns: [
@@ -79,8 +86,17 @@ module.exports = {
 					to: path.resolve(__dirname, 'dist'),
 					globOptions: {
 						ignore: [
+							// All TypeScript files are compiled to JS and
+							// already copied into /dist so we don't copy them.
 							'**/*.ts',
 							'**/*.tsx',
+
+							// Currently we don't support JS files for the main
+							// plugin script. We support it for content scripts,
+							// but theyr should be declared in manifest.json,
+							// and then they are also compiled and copied to
+							// /dist. So wse also don't need to copy JS files.
+							'**/*.js',
 						],
 					},
 				},
@@ -91,3 +107,62 @@ module.exports = {
 		}),
 	],
 };
+
+const contentScriptConfig = Object.assign({}, baseConfig, {
+	resolve: {
+		alias: {
+			api: path.resolve(__dirname, 'api'),
+		},
+		extensions: ['.tsx', '.ts', '.js'],
+	},
+});
+
+function resolveContentScriptPaths(name) {
+	if (['.js', '.ts', '.tsx'].includes(path.extname(name).toLowerCase())) {
+		throw new Error(`Content script path must not include file extension: ${name}`);
+	}
+
+	const pathsToTry = [
+		`./src/${name}.ts`,
+		`${'./src/' + '/'}${name}.js`,
+	];
+
+	for (const pathToTry of pathsToTry) {
+		if (fs.pathExistsSync(`${rootDir}/${pathToTry}`)) {
+			return {
+				entry: pathToTry,
+				output: {
+					filename: `${name}.js`,
+					path: distDir,
+					library: 'default',
+					libraryTarget: 'commonjs',
+					libraryExport: 'default',
+				},
+			};
+		}
+	}
+
+	throw new Error(`Could not find content script "${name}" at locations ${JSON.stringify(pathsToTry)}`);
+}
+
+function createContentScriptConfigs() {
+	if (!manifest.content_scripts) return [];
+
+	const output = [];
+
+	for (const contentScriptName of manifest.content_scripts) {
+		const scriptPaths = resolveContentScriptPaths(contentScriptName);
+		output.push(Object.assign({}, contentScriptConfig, {
+			entry: scriptPaths.entry,
+			output: scriptPaths.output,
+		}));
+	}
+
+	return output;
+}
+
+const exportedConfigs = [pluginConfig].concat(createContentScriptConfigs());
+
+exportedConfigs[exportedConfigs.length - 1] = Object.assign({}, exportedConfigs[exportedConfigs.length - 1], lastStepConfig);
+
+module.exports = exportedConfigs;

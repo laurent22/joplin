@@ -15,7 +15,7 @@ function mergePackageKey(parentKey, source, dest) {
 			// If we are dealing with the dependencies, overwrite with the
 			// version from source.
 			output[k] = source[k];
-		} else if (typeof source[k] === 'object' && !Array.isArray(k) && source[k] !== null) {
+		} else if (typeof source[k] === 'object' && !Array.isArray(source[k]) && source[k] !== null) {
 			// If it's an object, recursively process it
 			output[k] = mergePackageKey(k, source[k], output[k]);
 		} else {
@@ -116,6 +116,7 @@ module.exports = class extends Generator {
 			'.gitignore_TEMPLATE',
 			'package_TEMPLATE.json',
 			'README.md',
+			'GENERATOR_DOC.md',
 			'tsconfig.json',
 			'webpack.config.js',
 		];

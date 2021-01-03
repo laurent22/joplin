@@ -48,6 +48,10 @@ export default class JoplinViewsDialogs {
      */
     setHtml(handle: ViewHandle, html: string): Promise<string>;
     /**
+     * Adds and loads a new JS or CSS files into the dialog.
+     */
+    addScript(handle: ViewHandle, scriptPath: string): Promise<void>;
+    /**
      * Sets the dialog buttons.
      */
     setButtons(handle: ViewHandle, buttons: ButtonSpec[]): Promise<ButtonSpec[]>;
