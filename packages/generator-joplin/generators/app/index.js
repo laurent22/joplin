@@ -116,6 +116,7 @@ module.exports = class extends Generator {
 			'.gitignore_TEMPLATE',
 			'package_TEMPLATE.json',
 			'README.md',
+			'GENERATOR_DOC.md',
 			'tsconfig.json',
 			'webpack.config.js',
 		];

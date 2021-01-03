@@ -166,5 +166,3 @@ const exportedConfigs = [pluginConfig].concat(createContentScriptConfigs());
 exportedConfigs[exportedConfigs.length - 1] = Object.assign({}, exportedConfigs[exportedConfigs.length - 1], lastStepConfig);
 
 module.exports = exportedConfigs;
-
-// TODO: try to compile math plugin
