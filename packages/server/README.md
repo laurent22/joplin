@@ -11,8 +11,8 @@ First copy `.env-sample` to `.env` and edit the values in there:
 
 ```shell
 mkdir joplin && cd joplin
-wget https://github.com/laurent22/joplin/archive/server-v1.6.3.tar.gz
-tar xzvf server-v1.6.3.tar.gz
+wget https://github.com/laurent22/joplin/archive/server-v1.6.4.tar.gz
+tar xzvf server-v1.6.4.tar.gz
 docker-compose --file docker-compose.server.yml up --detach
 ```
 
