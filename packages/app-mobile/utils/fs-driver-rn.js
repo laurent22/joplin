@@ -1,6 +1,8 @@
 const RNFS = require('react-native-fs');
 const FsDriverBase = require('@joplin/lib/fs-driver-base').default;
 const RNFetchBlob = require('rn-fetch-blob').default;
+const { Writable } = require('stream-browserify');
+const { Buffer } = require('buffer');
 
 class FsDriverRN extends FsDriverBase {
 	appendFileSync() {
@@ -24,8 +26,25 @@ class FsDriverRN extends FsDriverBase {
 		return await this.unlink(path);
 	}
 
-	writeBinaryFile() {
-		throw new Error('Not implemented');
+	writeBinaryFile(path, content) {
+		const buffer = Buffer.from(content);
+		return RNFetchBlob.fs.writeStream(path, 'base64').then(stream => {
+			const fileStream = new Writable({
+				write(chunk, encoding, callback) {
+					this.stream.write(chunk.toString('base64'));
+					callback();
+				},
+				final(callback) {
+					this.stream.close();
+					callback();
+				},
+			});
+			// using options.construct is not implemented in readable-stream so lets
+			// pass the stream from RNFetchBlob to the Writable instance here
+			fileStream.stream = stream;
+			fileStream.write(buffer);
+			fileStream.end();
+		});
 	}
 
 	// Returns a format compatible with Node.js format
