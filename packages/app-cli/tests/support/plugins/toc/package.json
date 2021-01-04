@@ -4,10 +4,9 @@
   "description": "",
   "scripts": {
     "dist": "webpack",
-    "postinstall": "npm run dist",
     "prepare": "npm run dist"
   },
-  "keywords": {},
+  "keywords": ["joplin-plugin"],
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^14.0.14",
