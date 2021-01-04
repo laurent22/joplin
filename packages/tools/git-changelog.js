@@ -56,6 +56,7 @@ function platformFromTag(tagName) {
 	if (tagName.indexOf('ios') >= 0) return 'ios';
 	if (tagName.indexOf('clipper') === 0) return 'clipper';
 	if (tagName.indexOf('cli') === 0) return 'cli';
+	if (tagName.indexOf('server') === 0) return 'server';
 	if (tagName.indexOf('plugin-generator') === 0) return 'plugin-generator';
 	throw new Error(`Could not determine platform from tag: "${tagName}"`);
 }
