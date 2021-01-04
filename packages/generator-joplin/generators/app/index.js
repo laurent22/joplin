@@ -9,7 +9,14 @@ function mergePackageKey(parentKey, source, dest) {
 	const output = Object.assign({}, dest);
 
 	for (const k in source) {
-		if (!(k in output)) {
+		if (k === 'keywords' && !Array.isArray(output[k])) {
+			// Fix an earlier bugs where keywords were set to an empty object
+			output[k] = source[k];
+		} else if (k === 'keywords') {
+			// For keywords, make sure to add the "joplin-plugin" one
+			if (!output['keywords']) output['keywords'] = [];
+			if (output['keywords'].indexOf('joplin-plugin') < 0) output['keywords'].push('joplin-plugin');
+		} else if (!(k in output)) {
 			// If the key doesn't exist in the destination, add it
 			output[k] = source[k];
 		} else if (parentKey === 'devDependencies') {
