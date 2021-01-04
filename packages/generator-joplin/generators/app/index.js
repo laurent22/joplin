@@ -3,6 +3,7 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const slugify = require('slugify');
 
 function mergePackageKey(parentKey, source, dest) {
 	const output = Object.assign({}, dest);
@@ -25,6 +26,18 @@ function mergePackageKey(parentKey, source, dest) {
 	}
 
 	return output;
+}
+
+function packageNameFromPluginName(pluginName) {
+	return `joplin-plugin-${slugify(pluginName, {
+		lower: true,
+	})}`;
+}
+
+function addDerivedProps(props) {
+	return Object.assign({}, props, {
+		packageName: packageNameFromPluginName(props.pluginName),
+	});
 }
 
 module.exports = class extends Generator {
@@ -88,6 +101,11 @@ module.exports = class extends Generator {
 			},
 			{
 				type: 'input',
+				name: 'pluginRepositoryUrl',
+				message: 'Repository URL:',
+			},
+			{
+				type: 'input',
 				name: 'pluginHomepageUrl',
 				message: 'Homepage URL:',
 			},
@@ -98,10 +116,10 @@ module.exports = class extends Generator {
 			for (const prompt of prompts) {
 				props[prompt.name] = '';
 			}
-			this.props = props;
+			this.props = addDerivedProps(props);
 		} else {
 			return this.prompt(prompts).then(props => {
-				this.props = props;
+				this.props = addDerivedProps(props);
 			});
 		}
 	}
@@ -114,9 +132,10 @@ module.exports = class extends Generator {
 
 		const files = [
 			'.gitignore_TEMPLATE',
+			'.npmignore_TEMPLATE',
+			'GENERATOR_DOC.md',
 			'package_TEMPLATE.json',
 			'README.md',
-			'GENERATOR_DOC.md',
 			'tsconfig.json',
 			'webpack.config.js',
 		];
