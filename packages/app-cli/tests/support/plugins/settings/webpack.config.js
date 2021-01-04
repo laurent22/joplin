@@ -1,9 +1,61 @@
 const path = require('path');
+const crypto = require('crypto');
 const fs = require('fs-extra');
+const chalk = require('chalk');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackOnBuildPlugin = require('on-build-webpack');
 const tar = require('tar');
 const glob = require('glob');
+const execSync = require('child_process').execSync;
+
+const rootDir = path.resolve(__dirname);
+const distDir = path.resolve(rootDir, 'dist');
+const srcDir = path.resolve(rootDir, 'src');
+const publishDir = path.resolve(rootDir, 'publish');
+
+const manifestPath = `${srcDir}/manifest.json`;
+const packageJsonPath = `${rootDir}/package.json`;
+const manifest = readManifest(manifestPath);
+const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
+const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
+
+fs.removeSync(distDir);
+fs.removeSync(publishDir);
+fs.mkdirpSync(publishDir);
+
+function validatePackageJson() {
+	const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+	if (!content.name || content.name.indexOf('joplin-plugin-') !== 0) {
+		console.warn(chalk.yellow(`WARNING: To publish the plugin, the package name should start with "joplin-plugin-" (found "${content.name}") in ${packageJsonPath}`));
+	}
+
+	if (!content.keywords || content.keywords.indexOf('joplin-plugin') < 0) {
+		console.warn(chalk.yellow(`WARNING: To publish the plugin, the package keywords should include "joplin-plugin" (found "${JSON.stringify(content.keywords)}") in ${packageJsonPath}`));
+	}
+
+	if (content.scripts && content.scripts.postinstall) {
+		console.warn(chalk.yellow(`WARNING: package.json contains a "postinstall" script. It is recommended to use a "prepare" script instead so that it is executed before publish. In ${packageJsonPath}`));
+	}
+}
+
+function fileSha256(filePath) {
+	const content = fs.readFileSync(filePath);
+	return crypto.createHash('sha256').update(content).digest('hex');
+}
+
+function currentGitInfo() {
+	try {
+		let branch = execSync('git rev-parse --abbrev-ref HEAD', { stdio: 'pipe' }).toString().trim();
+		const commit = execSync('git rev-parse HEAD', { stdio: 'pipe' }).toString().trim();
+		if (branch === 'HEAD') branch = 'master';
+		return `${branch}:${commit}`;
+	} catch (error) {
+		const messages = error.message ? error.message.split('\n') : [''];
+		console.info(chalk.cyan('Could not get git commit (not a git repo?):', messages[0].trim()));
+		console.info(chalk.cyan('Git information will not be stored in plugin info file'));
+		return '';
+	}
+}
 
 function readManifest(manifestPath) {
 	const content = fs.readFileSync(manifestPath, 'utf8');
@@ -19,7 +71,7 @@ function createPluginArchive(sourceDir, destPath) {
 	if (!distFiles.length) {
 		// Usually means there's an error, which is going to be printed by
 		// webpack
-		console.info('Plugin archive was not created because the "dist" directory is empty');
+		console.warn(chalk.yellow('Plugin archive was not created because the "dist" directory is empty'));
 		return;
 	}
 
@@ -36,21 +88,27 @@ function createPluginArchive(sourceDir, destPath) {
 		distFiles
 	);
 
-	console.info(`Plugin archive has been created in ${destPath}`);
+	console.info(chalk.cyan(`Plugin archive has been created in ${destPath}`));
 }
 
-const rootDir = path.resolve(__dirname);
-const distDir = path.resolve(rootDir, 'dist');
-const srcDir = path.resolve(rootDir, 'src');
-const manifestPath = `${srcDir}/manifest.json`;
-const manifest = readManifest(manifestPath);
-const archiveFilePath = path.resolve(__dirname, `${manifest.id}.jpl`);
+function createPluginInfo(manifestPath, destPath, jplFilePath) {
+	const contentText = fs.readFileSync(manifestPath, 'utf8');
+	const content = JSON.parse(contentText);
+	content._publish_hash = `sha256:${fileSha256(jplFilePath)}`;
+	content._publish_commit = currentGitInfo();
+	fs.writeFileSync(destPath, JSON.stringify(content, null, '\t'), 'utf8');
+}
 
-fs.removeSync(distDir);
+function onBuildCompleted() {
+	createPluginArchive(distDir, pluginArchiveFilePath);
+	createPluginInfo(manifestPath, pluginInfoFilePath, pluginArchiveFilePath);
+	validatePackageJson();
+}
 
 const baseConfig = {
 	mode: 'production',
 	target: 'node',
+	stats: 'errors-only',
 	module: {
 		rules: [
 			{
@@ -93,7 +151,7 @@ const lastStepConfig = {
 
 							// Currently we don't support JS files for the main
 							// plugin script. We support it for content scripts,
-							// but theyr should be declared in manifest.json,
+							// but they should be declared in manifest.json,
 							// and then they are also compiled and copied to
 							// /dist. So wse also don't need to copy JS files.
 							'**/*.js',
@@ -102,9 +160,7 @@ const lastStepConfig = {
 				},
 			],
 		}),
-		new WebpackOnBuildPlugin(function() {
-			createPluginArchive(distDir, archiveFilePath);
-		}),
+		new WebpackOnBuildPlugin(onBuildCompleted),
 	],
 };
 

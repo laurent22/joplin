@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "dist": "webpack",
-    "postinstall": "npm run dist"
+    "postinstall": "npm run dist",
+    "prepare": "npm run dist"
   },
   "keywords": {},
   "license": "MIT",
@@ -18,7 +19,8 @@
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.3",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "chalk": "^4.1.0"
   },
   "dependencies": {
     "left-pad": "^1.3.0"

@@ -1,3 +1,4 @@
+import { FolderEntity } from '../../database/types';
 import { Disposable } from './types';
 declare enum ItemChangeEventType {
     Create = 1,
@@ -53,6 +54,13 @@ export default class JoplinWorkspace {
      * Gets the currently selected note
      */
     selectedNote(): Promise<any>;
+    /**
+     * Gets the currently selected folder. In some cases, for example during
+     * search or when viewing a tag, no folder is actually selected in the user
+     * interface. In that case, that function would return the last selected
+     * folder.
+     */
+    selectedFolder(): Promise<FolderEntity>;
     /**
      * Gets the IDs of the selected notes (can be zero, one, or many). Use the data API to retrieve information about these notes.
      */

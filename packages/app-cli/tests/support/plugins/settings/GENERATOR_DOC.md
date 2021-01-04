@@ -37,6 +37,16 @@ To build the plugin, simply run `npm run dist`.
 
 The project is setup to use TypeScript, although you can change the configuration to use plain JavaScript.
 
+## Publishing the plugin
+
+To publish the plugin, add it to npmjs.com by running `npm publish`. Later on, a script will pick up your plugin and add it automatically to the Joplin plugin repository as long as the package satisfies these conditions:
+
+- In `package.json`, the name starts with "joplin-plugin-". For example, "joplin-plugin-toc".
+- In `package.json`, the keywords include "joplin-plugin".
+- In the `publish/` directory, there should be a .jpl and .json file (which are built by `npm run dist`)
+
+In general all this is done automatically by the plugin generator, which will set the name and keywords of package.json, and will put the right files in the "publish" directory. But if something doesn't work and your plugin doesn't appear in the repository, double-check the above conditions.
+
 ## Updating the plugin framework
 
 To update the plugin framework, run `yo joplin --update`
