@@ -10,9 +10,10 @@ First copy `.env-sample` to `.env` and edit the values in there:
 ## Install application
 
 ```shell
-mkdir joplin && cd joplin
 wget https://github.com/laurent22/joplin/archive/server-v1.6.4.tar.gz
 tar xzvf server-v1.6.4.tar.gz
+mv joplin-server-v1.6.4 joplin-server
+cd joplin-server
 docker-compose --file docker-compose.server.yml up --detach
 ```
 
