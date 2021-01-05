@@ -3,53 +3,7 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const slugify = require('slugify');
-
-function mergePackageKey(parentKey, source, dest) {
-	const output = Object.assign({}, dest);
-
-	for (const k in source) {
-		if (k === 'keywords' && !Array.isArray(output[k])) {
-			// Fix an earlier bugs where keywords were set to an empty object
-			output[k] = source[k];
-		} else if (k === 'keywords') {
-			// For keywords, make sure to add the "joplin-plugin" one
-			if (!output['keywords']) output['keywords'] = [];
-			if (output['keywords'].indexOf('joplin-plugin') < 0) output['keywords'].push('joplin-plugin');
-		} else if (!(k in output)) {
-			// If the key doesn't exist in the destination, add it
-			output[k] = source[k];
-		} else if (parentKey === 'devDependencies') {
-			// If we are dealing with the dependencies, overwrite with the
-			// version from source.
-			output[k] = source[k];
-		} else if (typeof source[k] === 'object' && !Array.isArray(source[k]) && source[k] !== null) {
-			// If it's an object, recursively process it
-			output[k] = mergePackageKey(k, source[k], output[k]);
-		} else {
-			// Otherwise, the default is to preserve the destination key
-			output[k] = dest[k];
-		}
-	}
-
-	return output;
-}
-
-function mergeIgnoreFile(source, dest) {
-	const output = source.split('\n').concat(dest.split('\n'));
-
-	return output.filter(function(item, pos) {
-		if (!item) return true; // Leave blank lines
-		return output.indexOf(item) === pos;
-	}).join('\n');
-}
-
-function packageNameFromPluginName(pluginName) {
-	// Package name is limited to 214 characters
-	return `joplin-plugin-${slugify(pluginName, {
-		lower: true,
-	})}`.substr(0, 214);
-}
+const { mergePackageKey, mergeIgnoreFile, packageNameFromPluginName } = require('./utils');
 
 module.exports = class extends Generator {
 

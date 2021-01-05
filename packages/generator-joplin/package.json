@@ -7,6 +7,10 @@
     "name": "Laurent Cozic",
     "url": "https://github.com/laurent22/joplin/tree/dev/packages/generator-joplin"
   },
+  "scripts": {
+    "test": "jest",
+    "test-ci": "npm run test"
+  },
   "files": [
     "generators"
   ],
@@ -23,6 +27,9 @@
     "slugify": "^1.4.6",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
   },
   "repository": "https://github.com/laurent22/generator-joplin",
   "license": "MIT",
