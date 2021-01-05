@@ -206,7 +206,7 @@ One of the goals of Joplin was to avoid being tied to any particular company or 
 Currently, synchronisation is possible with Nextcloud, WebDAV, Dropbox, OneDrive or the local filesystem. To enable synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.  Joplin will background sync automatically after any content change is made on the local application.
 If the **terminal client** has been installed, it is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at a regular interval. For example, this would do it every 30 minutes:
 
- */30 * * * * /path/to/joplin sync
+` */30 * * * * /path/to/joplin sync`
 
 ## Nextcloud synchronisation
 
@@ -271,6 +271,7 @@ The Joplin applications automatically save previous versions of your notes at re
 This feature can be disabled from the "Note history" section in the settings, and it is also possible to change for how long the history of a note is saved.
 
 More information please see the [Note History page](https://github.com/laurent22/joplin/blob/dev/readme/note_history.md).
+***TESTING*** - [Note History page](https://github.com/Daeraxa/joplin/blob/docsupdate-1514/readme/note_history.md)
 
 # External text editor
 

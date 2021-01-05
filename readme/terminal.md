@@ -358,7 +358,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    locale                         Language.
 	                                   Please see localisation section on
-	                                   ![](https://joplinapp.org/#localisation)
+	                                   https://joplinapp.org/#localisation
 	                                   for info on translation completion progress
 	                                   Type: Enum.
 	                                   Possible values: ar (Arabic), eu (Basque),
