@@ -4,7 +4,7 @@
 
 **IMPORTANT: THIS APPLICATION IS DEPRECATED AND WILL NO LONGER BE SUPPORTED FROM JOPLIN 1.6.x**
 
-It is deprecated in favour of [Joplin Server](https://discourse.joplinapp.org/t/joplin-web-api-for-nextcloud/4491/72?u=laurent), so if you are relying on it please do not upgrade to Joplin 1.6.x till you are ready to migrate to Joplin Server or some other alternative.
+It is [deprecated](https://discourse.joplinapp.org/t/joplin-web-api-for-nextcloud/4491/72?u=laurent) in favour of [Joplin Server](https://discourse.joplinapp.org/t/joplin-server-pre-release-is-now-available/13605), so if you are relying on it please do not upgrade to Joplin 1.6.x till you are ready to migrate to Joplin Server or some other alternative.
 
 * * *
 

@@ -33,7 +33,7 @@ subl -n -w      # Opens Sublime (subl) in a new window (-n) and waits for close 
 code -n --wait  # Opens Visual Studio Code (code) in a new window (-n) and waits for close (--wait)
 gedit --new-window    # Opens gedit (Gnome Text Editor) in a new window
 xterm -e vim    # Opens a new terminal and opens vim. Can be replaced with an
-                # alternative terminal (gnome-terminal, terminator, etc.) 
+                # alternative terminal (gnome-terminal, terminator, etc.)
                 # or terminal text-editor (emacs, nano, etc.)
 open -a <application> # Mac only: opens a GUI application
 ```
@@ -103,6 +103,10 @@ For example:
     </body></html>
 
 In this case, [make sure you enter the correct WebDAV URL](https://github.com/laurent22/joplin/issues/309).
+
+### Known problematic/unsupported WebDAV hosts
+
+- Jianguoyun.com (see [Github issue](https://github.com/laurent22/joplin/issues/4294))
 
 ### Nextcloud sync is not working
 
