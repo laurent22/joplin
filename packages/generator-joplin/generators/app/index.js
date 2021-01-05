@@ -36,15 +36,10 @@ function mergePackageKey(parentKey, source, dest) {
 }
 
 function packageNameFromPluginName(pluginName) {
+	// Package name is limited to 214 characters
 	return `joplin-plugin-${slugify(pluginName, {
 		lower: true,
-	})}`;
-}
-
-function addDerivedProps(props) {
-	return Object.assign({}, props, {
-		packageName: packageNameFromPluginName(props.pluginName),
-	});
+	})}`.substr(0, 214);
 }
 
 module.exports = class extends Generator {
@@ -71,9 +66,9 @@ module.exports = class extends Generator {
 					name: 'proceed',
 					message: [
 						'Updating will overwrite all the generator files **except for the',
-						'src/ directory**. So if you have made any changes outside of src/',
-						'make sure your code is under version control so that you can inspect',
-						'the diff and re-apply your changes if needed. Do you want to proceed?',
+						'  src/ directory**. So if you have made any changes outside of src/',
+						'  make sure your code is under version control so that you can inspect',
+						'  the diff and re-apply your changes if needed. Do you want to proceed?',
 					].join('\n'),
 				},
 			]);
@@ -89,12 +84,12 @@ module.exports = class extends Generator {
 			{
 				type: 'input',
 				name: 'pluginId',
-				message: 'Plugin ID [Must be a globally unique ID such as "com.example.MyPlugin" or a UUID]',
+				message: 'Plugin ID\n  Must be a globally unique ID such as "com.example.MyPlugin" or a UUID:',
 			},
 			{
 				type: 'input',
 				name: 'pluginName',
-				message: 'Plugin name [User-friendly string which will be displayed in UI]',
+				message: 'Plugin name\n  User-friendly string which will be displayed in UI:',
 			},
 			{
 				type: 'input',
@@ -123,11 +118,25 @@ module.exports = class extends Generator {
 			for (const prompt of prompts) {
 				props[prompt.name] = '';
 			}
-			this.props = addDerivedProps(props);
+			props.packageName = '';
+
+			this.props = props;
 		} else {
-			return this.prompt(prompts).then(props => {
-				this.props = addDerivedProps(props);
-			});
+			const initialProps = await this.prompt(prompts);
+
+			const defaultPackageName = packageNameFromPluginName(initialProps.pluginName);
+
+			const derivedProps = await this.prompt([
+				{
+					type: 'input',
+					name: 'packageName',
+					message: `The npm package will be named: "${defaultPackageName}"\n  Press ENTER to keep this default, or type a name to change it:`,
+				},
+			]);
+
+			if (!derivedProps.packageName) derivedProps.packageName = defaultPackageName;
+
+			this.props = Object.assign({}, initialProps, derivedProps);
 		}
 	}
 
