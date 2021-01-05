@@ -37,10 +37,11 @@ function mergePackageKey(parentKey, source, dest) {
 
 function mergeIgnoreFile(source, dest) {
 	const output = source.split('\n').concat(dest.split('\n'));
+
 	return output.filter(function(item, pos) {
 		if (!item) return true; // Leave blank lines
 		return output.indexOf(item) === pos;
-	});
+	}).join('\n');
 }
 
 function packageNameFromPluginName(pluginName) {
@@ -65,7 +66,7 @@ module.exports = class extends Generator {
 	}
 
 	async prompting() {
-		this.log(yosay(`Welcome to the fine ${chalk.red('generator-joplin')} generator!`));
+		this.log(yosay(`Welcome to the fine ${chalk.red('Joplin Plugin')} generator!`));
 
 		if (this.options.update && !this.options.silent) {
 			const answers = await this.prompt([
