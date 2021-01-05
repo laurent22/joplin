@@ -690,7 +690,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			bridge().window().webContents.off('context-menu', onContextMenu);
 		};
-	}, []);
+	}, [props.plugins]);
 
 	function renderEditor() {
 

@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
-import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { EditorCommand } from '../../../utils/types';
 import shim from '@joplin/lib/shim';
 const { reg } = require('@joplin/lib/registry.js');
 
-export default function useKeymap(CodeMirror: any, plugins: PluginStates) {
+export default function useKeymap(CodeMirror: any) {
 
 	function save() {
 		void CommandService.instance().execute('synchronize');
@@ -27,17 +26,9 @@ export default function useKeymap(CodeMirror: any, plugins: PluginStates) {
 		CodeMirror.Vim.mapCommand('o', 'action', 'insertListElement', { after: true }, { context: 'normal', isEdit: true, interlaceInsertRepeat: true });
 	}
 
-	function isEditorCommand(command: string) {
-		return command.startsWith('editor.');
-	}
-
 	// Converts a command of the form editor.command to just command
 	function editorCommandToCodeMirror(command: String) {
 		return command.slice(7); // 7 is the length of editor.
-	}
-
-	function supportsCommand(command: string) {
-		return isEditorCommand(command) && editorCommandToCodeMirror(command) in CodeMirror.commands;
 	}
 
 	// CodeMirror and Electron register accelerators slightly different
@@ -72,21 +63,17 @@ export default function useKeymap(CodeMirror: any, plugins: PluginStates) {
 		if (!key.command || !key.accelerator) return;
 
 		let command = '';
-		if (supportsCommand(key.command)) {
-			command = editorCommandToCodeMirror(key.command);
-		} else {
-			// We need to register Joplin commands with codemirror
-			command = `joplin${key.command}`;
-			// Not all commands are registered with the command service
-			// (for example, the Quit command)
-			// This check will ensure that codemirror only takesover the commands that are
-			// see gui/KeymapConfig/getLabel.ts for more information
-			const commandNames = CommandService.instance().commandNames();
-			if (commandNames.includes(key.command)) {
-				CodeMirror.commands[command] = () => {
-					void CommandService.instance().execute(key.command);
-				};
-			}
+		// We need to register Joplin commands with codemirror
+		command = `joplin${key.command}`;
+		// Not all commands are registered with the command service
+		// (for example, the Quit command)
+		// This check will ensure that codemirror only takesover the commands that are
+		// see gui/KeymapConfig/getLabel.ts for more information
+		const commandNames = CommandService.instance().commandNames();
+		if (commandNames.includes(key.command)) {
+			CodeMirror.commands[command] = () => {
+				void CommandService.instance().execute(key.command);
+			};
 		}
 
 		// CodeMirror and Electron have slightly different formats for defining accelerators
@@ -104,7 +91,7 @@ export default function useKeymap(CodeMirror: any, plugins: PluginStates) {
 
 
 	CodeMirror.defineExtension('supportsCommand', function(cmd: EditorCommand) {
-		return supportsCommand(cmd.name);
+		return CommandService.isEditorCommand(cmd.name) && editorCommandToCodeMirror(cmd.name) in CodeMirror.commands;
 	});
 
 	// Used when an editor command is executed using the CommandService.instance().execute
@@ -193,5 +180,5 @@ export default function useKeymap(CodeMirror: any, plugins: PluginStates) {
 
 		setupEmacs();
 		setupVim();
-	}, [plugins]);
+	}, []);
 }

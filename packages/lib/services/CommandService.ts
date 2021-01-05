@@ -310,4 +310,35 @@ export default class CommandService extends BaseService {
 		return !!command;
 	}
 
+	public static isEditorCommand(commandName: string) {
+		return (commandName.indexOf('editor.') === 0 ||
+				// These commands are grandfathered in, but in the future
+				// all editor commands should start with "editor."
+				commandName === 'textCopy' ||
+				commandName === 'textCut' ||
+				commandName === 'textPaste' ||
+				commandName === 'textSelectAll' ||
+				commandName === 'textBold' ||
+				commandName === 'textItalic' ||
+				commandName === 'textLink' ||
+				commandName === 'textCode' ||
+				commandName === 'attachFile' ||
+				commandName === 'textNumberedList' ||
+				commandName === 'textBulletedList' ||
+				commandName === 'textCheckbox' ||
+				commandName === 'textHeading' ||
+				commandName === 'textHorizontalRule' ||
+				commandName === 'insertDateTime'
+		);
+	}
+
+	public editorCommandDeclarations(): CommandDeclaration[] {
+		const output = [];
+
+		for (const name in this.commands_) {
+			if (CommandService.isEditorCommand(name)) { output.push(this.commands_[name].declaration); }
+		}
+
+		return output;
+	}
 }
