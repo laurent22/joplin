@@ -65,10 +65,10 @@ module.exports = class extends Generator {
 					type: 'confirm',
 					name: 'proceed',
 					message: [
-						'Updating will overwrite all the generator files **except for the',
-						'  src/ directory**. So if you have made any changes outside of src/',
-						'  make sure your code is under version control so that you can inspect',
-						'  the diff and re-apply your changes if needed. Do you want to proceed?',
+						'Updating will overwrite the config-related files. It will not change the',
+						'  content of /src or README.md. If you have made any changes to some of the',
+						'  config files make sure your code is under version control so that you can',
+						'  inspect the diff and re-apply your changes if needed. Do you want to proceed?',
 					].join('\n'),
 				},
 			]);
@@ -151,7 +151,6 @@ module.exports = class extends Generator {
 			'.npmignore_TEMPLATE',
 			'GENERATOR_DOC.md',
 			'package_TEMPLATE.json',
-			'README.md',
 			'tsconfig.json',
 			'webpack.config.js',
 		];
@@ -159,6 +158,7 @@ module.exports = class extends Generator {
 		const noUpdateFiles = [
 			'src/index.ts',
 			'src/manifest.json',
+			'README.md',
 		];
 
 		const allFiles = files.concat(noUpdateFiles);

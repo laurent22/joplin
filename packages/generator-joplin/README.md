@@ -49,7 +49,7 @@ In general all this is done automatically by the plugin generator, which will se
 
 ## Updating the plugin framework
 
-To update the plugin framework, run `yo joplin --update`
+To update the plugin framework, run `npm install -g generator-joplin && yo joplin --update`
 
 Keep in mind that doing so will overwrite all the framework-related files **outside of the "src/" directory** (your source code will not be touched). So if you have modified any of the framework-related files, such as package.json or .gitignore, make sure your code is under version control so that you can check the diff and re-apply your changes.
 
