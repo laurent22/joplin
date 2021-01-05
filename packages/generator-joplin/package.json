@@ -1,6 +1,6 @@
 {
   "name": "generator-joplin",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Scaffolds out a new Joplin plugin",
   "homepage": "https://github.com/laurent22/joplin/tree/dev/packages/generator-joplin",
   "author": {
