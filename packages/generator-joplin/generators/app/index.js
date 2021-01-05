@@ -35,6 +35,14 @@ function mergePackageKey(parentKey, source, dest) {
 	return output;
 }
 
+function mergeIgnoreFile(source, dest) {
+	const output = source.split('\n').concat(dest.split('\n'));
+	return output.filter(function(item, pos) {
+		if (!item) return true; // Leave blank lines
+		return output.indexOf(item) === pos;
+	});
+}
+
 function packageNameFromPluginName(pluginName) {
 	// Package name is limited to 214 characters
 	return `joplin-plugin-${slugify(pluginName, {
@@ -179,6 +187,17 @@ module.exports = class extends Generator {
 							const sourceContent = JSON.parse(sourceBuffer.toString());
 							const newContent = mergePackageKey(null, sourceContent, destContent);
 							return JSON.stringify(newContent, null, 2);
+						},
+					}
+				);
+			} else if (this.options.update && (destFile === '.gitignore' || destFile === '.npmignore') && this.fs.exists(destFilePath)) {
+				const destContent = this.fs.read(destFilePath);
+
+				this.fs.copy(
+					this.templatePath(file),
+					destFilePath, {
+						process: (sourceBuffer) => {
+							return mergeIgnoreFile(sourceBuffer.toString(), destContent);
 						},
 					}
 				);
