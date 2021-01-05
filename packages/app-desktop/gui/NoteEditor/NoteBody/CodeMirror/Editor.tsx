@@ -106,7 +106,9 @@ function Editor(props: EditorProps, ref: any) {
 	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
 	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
-	useKeymap(CodeMirror);
+	// plugins can affect keymaps/commands available to CodeMirror
+	// which means useKeymao should be updated with the plugins
+	useKeymap(CodeMirror, props.plugins);
 
 	useImperativeHandle(ref, () => {
 		return editor;

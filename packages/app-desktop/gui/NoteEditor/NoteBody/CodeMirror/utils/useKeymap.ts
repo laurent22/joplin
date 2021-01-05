@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { EditorCommand } from '../../../utils/types';
 import shim from '@joplin/lib/shim';
 const { reg } = require('@joplin/lib/registry.js');
 
-export default function useKeymap(CodeMirror: any) {
+export default function useKeymap(CodeMirror: any, plugins: PluginStates) {
 
 	function save() {
 		void CommandService.instance().execute('synchronize');
@@ -35,13 +36,31 @@ export default function useKeymap(CodeMirror: any) {
 		return command.slice(7); // 7 is the length of editor.
 	}
 
+	function supportsCommand(command: string) {
+		return isEditorCommand(command) && editorCommandToCodeMirror(command) in CodeMirror.commands;
+	}
+
 	// CodeMirror and Electron register accelerators slightly different
 	// CodeMirror requires a - between keys while Electron want's a +
 	// CodeMirror doesn't recognize Option (it uses Alt instead)
-	// This function uses simple regex to translate the Electron
-	// accelerator to a CodeMirror accelerator
+	// CodeMirror requires Shift to be first
 	function normalizeAccelerator(accelerator: String) {
-		return accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
+		const command = accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
+		// From here is taken out of codemirror/lib/codemirror.js
+		const parts = command.split(/-(?!$)/);
+
+		let name = parts[parts.length - 1];
+		let alt, ctrl, shift, cmd;
+		for (let i = 0; i < parts.length - 1; i++) {
+			const mod = parts[i];
+			if (/^(cmd|meta|m)$/i.test(mod)) { cmd = true; } else if (/^a(lt)?$/i.test(mod)) { alt = true; } else if (/^(c|ctrl|control)$/i.test(mod)) { ctrl = true; } else if (/^s(hift)?$/i.test(mod)) { shift = true; } else { throw new Error(`Unrecognized modifier name: ${mod}`); }
+		}
+		if (alt) { name = `Alt-${name}`; }
+		if (ctrl) { name = `Ctrl-${name}`; }
+		if (cmd) { name = `Cmd-${name}`; }
+		if (shift) { name = `Shift-${name}`; }
+		return name;
+		// End of code taken from codemirror/lib/codemirror.js
 	}
 
 	// Because there is sometimes a clash between these keybindings and the Joplin window ones
@@ -53,7 +72,7 @@ export default function useKeymap(CodeMirror: any) {
 		if (!key.command || !key.accelerator) return;
 
 		let command = '';
-		if (isEditorCommand(key.command)) {
+		if (supportsCommand(key.command)) {
 			command = editorCommandToCodeMirror(key.command);
 		} else {
 			// We need to register Joplin commands with codemirror
@@ -83,8 +102,9 @@ export default function useKeymap(CodeMirror: any) {
 		keymapItems.forEach((key) => { registerJoplinCommand(key); });
 	}
 
+
 	CodeMirror.defineExtension('supportsCommand', function(cmd: EditorCommand) {
-		return isEditorCommand(cmd.name) && editorCommandToCodeMirror(cmd.name) in CodeMirror.commands;
+		return supportsCommand(cmd.name);
 	});
 
 	// Used when an editor command is executed using the CommandService.instance().execute
@@ -173,5 +193,5 @@ export default function useKeymap(CodeMirror: any) {
 
 		setupEmacs();
 		setupVim();
-	}, []);
+	}, [plugins]);
 }
