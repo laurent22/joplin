@@ -271,7 +271,6 @@ The Joplin applications automatically save previous versions of your notes at re
 This feature can be disabled from the "Note history" section in the settings, and it is also possible to change for how long the history of a note is saved.
 
 More information please see the [Note History page](https://github.com/laurent22/joplin/blob/dev/readme/note_history.md).
-***TESTING*** - [Note History page](https://github.com/Daeraxa/joplin/blob/docsupdate-1514/readme/note_history.md)
 
 # External text editor
 
