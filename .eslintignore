@@ -1205,6 +1205,12 @@ packages/lib/services/plugins/utils/mapEventHandlersToIds.js.map
 packages/lib/services/plugins/utils/types.d.ts
 packages/lib/services/plugins/utils/types.js
 packages/lib/services/plugins/utils/types.js.map
+packages/lib/services/plugins/utils/validatePluginId.d.ts
+packages/lib/services/plugins/utils/validatePluginId.js
+packages/lib/services/plugins/utils/validatePluginId.js.map
+packages/lib/services/plugins/utils/validatePluginId.test.d.ts
+packages/lib/services/plugins/utils/validatePluginId.test.js
+packages/lib/services/plugins/utils/validatePluginId.test.js.map
 packages/lib/services/rest/Api.d.ts
 packages/lib/services/rest/Api.js
 packages/lib/services/rest/Api.js.map

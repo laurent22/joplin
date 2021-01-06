@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
+import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
 const { execCommand, execCommandVerbose, rootDir, resolveRelativePathWithinDir, gitPullTry } = require('./tool-utils.js');
 
 interface NpmPackage {
@@ -61,10 +62,13 @@ async function extractPluginFilesFromPackage(originalPluginManifests: any, workD
 	if (!(await fs.pathExists(manifestFilePath))) throw new Error(`Could not find manifest file at ${manifestFilePath}`);
 	if (!(await fs.pathExists(pluginFilePath))) throw new Error(`Could not find plugin file at ${pluginFilePath}`);
 
-	// At this point we don't validate any of the plugin files as it's partly
-	// done when publishing, and will be done anyway when the app attempts to
-	// load the plugin. We just assume all files are valid here.
+	// At this point, we need to check the manifest ID as it's used in various
+	// places including as directory name and object key in manifests.json, so
+	// it needs to be correct. It's mostly for security reasons. The other
+	// manifest properties are checked when the plugin is loaded into the app.
 	const manifest = await readJsonFile(manifestFilePath);
+	validatePluginId(manifest.id);
+
 	manifest._npm_package_name = packageName;
 
 	// If there's already a plugin with this ID published under a different
