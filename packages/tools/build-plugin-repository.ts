@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
-const { execCommand, execCommandVerbose, rootDir, resolveRelativePathWithinDir } = require('./tool-utils.js');
+const { execCommand, execCommandVerbose, rootDir, resolveRelativePathWithinDir, gitPullTry } = require('./tool-utils.js');
 
 interface NpmPackage {
 	name: string;
@@ -29,18 +29,24 @@ function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 async function checkPluginRepository(dirPath: string) {
 	if (!(await fs.pathExists(dirPath))) throw new Error(`No plugin repository at: ${dirPath}`);
 	if (!(await fs.pathExists(`${dirPath}/.git`))) throw new Error(`Directory is not a Git repository: ${dirPath}`);
+
+	const previousDir = process.cwd();
+	process.chdir(dirPath);
+	await gitPullTry();
+	process.chdir(previousDir);
 }
 
-async function readManifest(manifestPath: string) {
+async function readJsonFile(manifestPath: string, defaultValue: any = null): Promise<any> {
+	if (!(await fs.pathExists(manifestPath))) {
+		if (defaultValue === null) throw new Error(`No such file: ${manifestPath}`);
+		return defaultValue;
+	}
+
 	const content = await fs.readFile(manifestPath, 'utf8');
 	return JSON.parse(content);
 }
 
-function shortPackageName(packageName: string): string {
-	return packageName.substr('joplin-plugin-'.length);
-}
-
-async function extractPluginFilesFromPackage(workDir: string, packageName: string, destDir: string): Promise<any> {
+async function extractPluginFilesFromPackage(originalPluginManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = process.cwd();
 	process.chdir(workDir);
 
@@ -58,15 +64,22 @@ async function extractPluginFilesFromPackage(workDir: string, packageName: strin
 	// At this point we don't validate any of the plugin files as it's partly
 	// done when publishing, and will be done anyway when the app attempts to
 	// load the plugin. We just assume all files are valid here.
-	const manifest = await readManifest(manifestFilePath);
+	const manifest = await readJsonFile(manifestFilePath);
+	manifest._npm_package_name = packageName;
 
-	// We can't use the manifest plugin ID as directory name since, although
-	// it's supposed to be globally unique, there's no guarantee. However the
-	// package name is definitely unique.
-	const pluginDestDir = resolveRelativePathWithinDir(destDir, shortPackageName(packageName));
+	// If there's already a plugin with this ID published under a different
+	// package name, we skip it. Otherwise it would allow anyone to overwrite
+	// someone else plugin just by using the same ID. So the first plugin with
+	// this ID that was originally added is kept.
+	const originalManifest = originalPluginManifests[manifest.id];
+	if (originalManifest && originalManifest._npm_package_name !== packageName) {
+		throw new Error(`Plugin "${manifest.id}" from npm package "${packageName}" has already been published under npm package "${originalManifest._npm_package_name}". Plugin from package "${packageName}" will not be imported.`);
+	}
+
+	const pluginDestDir = resolveRelativePathWithinDir(destDir, manifest.id);
 	await fs.mkdirp(pluginDestDir);
 
-	await fs.copy(manifestFilePath, path.resolve(pluginDestDir, 'plugin.json'));
+	await fs.writeFile(path.resolve(pluginDestDir, 'manifest.json'), JSON.stringify(manifest, null, '\t'), 'utf8');
 	await fs.copy(pluginFilePath, path.resolve(pluginDestDir, 'plugin.jpl'));
 
 	process.chdir(previousDir);
@@ -79,12 +92,16 @@ async function main() {
 	// Joplin monorepo.
 	const repoDir = path.resolve(path.dirname(rootDir), 'joplin-plugins');
 	const tempDir = `${repoDir}/temp`;
+	const pluginManifestsPath = path.resolve(repoDir, 'manifests.json');
+	const errorsPath = path.resolve(repoDir, 'errors.json');
 
 	await checkPluginRepository(repoDir);
 
 	await fs.mkdirp(tempDir);
 
-	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 1000 --json')).trim();
+	const originalPluginManifests = await readJsonFile(pluginManifestsPath, {});
+
+	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 5000 --json')).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
 
 	const packageTempDir = `${tempDir}/packages`;
@@ -93,15 +110,45 @@ async function main() {
 	process.chdir(packageTempDir);
 	await execCommand('npm init --yes --loglevel silent');
 
-	const manifests: any = {};
+	const errors: any[] = [];
+
+	let manifests: any = {};
+
+	// TODO: validate plugin ID when publishing
 
 	for (const npmPackage of npmPackages) {
-		const destDir = `${repoDir}/plugins/`;
-		const manifest = await extractPluginFilesFromPackage(packageTempDir, npmPackage.name, destDir);
-		manifests[shortPackageName(npmPackage.name)] = manifest;
+		try {
+			const packageName = npmPackage.name;
+			const destDir = `${repoDir}/plugins/`;
+			const manifest = await extractPluginFilesFromPackage(originalPluginManifests, packageTempDir, packageName, destDir);
+			manifests[manifest.id] = manifest;
+		} catch (error) {
+			console.error(error);
+			errors.push(error);
+		}
 	}
 
-	await fs.writeFile(path.resolve(repoDir, 'manifests.json'), JSON.stringify(manifests, null, '\t'), 'utf8');
+	// We preserve the original manifests so that if a plugin has been removed
+	// from npm, we still keep it. It's also a security feature - it means that
+	// if a plugin is removed from npm, it's not possible to highjack it by
+	// creating a new npm package with the same plugin ID.
+	manifests = {
+		...originalPluginManifests,
+		...manifests,
+	};
+
+	await fs.writeFile(pluginManifestsPath, JSON.stringify(manifests, null, '\t'), 'utf8');
+
+	if (errors.length) {
+		const toWrite = errors.map((e: any) => {
+			return {
+				message: e.message || '',
+			};
+		});
+		await fs.writeFile(errorsPath, JSON.stringify(toWrite, null, '\t'), 'utf8');
+	} else {
+		await fs.remove(errorsPath);
+	}
 
 	await fs.remove(tempDir);
 }
