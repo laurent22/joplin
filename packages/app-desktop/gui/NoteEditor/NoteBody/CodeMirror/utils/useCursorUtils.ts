@@ -1,4 +1,5 @@
 import markdownUtils from '@joplin/lib/markdownUtils';
+import Setting from '@joplin/lib/models/Setting';
 
 // Helper functions that use the cursor
 export default function useCursorUtils(CodeMirror: any) {
@@ -120,8 +121,12 @@ export default function useCursorUtils(CodeMirror: any) {
 			return -1;
 		};
 
+		// CodeMirror coordsChar doesn't properly scale values when zoomed
+		// we need to manually apply the zoom
+		const zoomFactor = Setting.value('windowContentZoomFactor') / 100;
+
 		const selectionText = params.selectionText;
-		const coords = this.coordsChar({ left: params.x, top: params.y });
+		const coords = this.coordsChar({ left: params.x / zoomFactor, top: params.y / zoomFactor });
 		const { anchor, head } = this.findWordAt(coords);
 		const selectedWord = this.getRange(anchor, head);
 
