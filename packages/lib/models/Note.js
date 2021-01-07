@@ -260,6 +260,8 @@ class Note extends BaseItem {
 			return noteFieldComp(a.id, b.id);
 		};
 
+		const collator = this.getNaturalSortingCollator();
+
 		return notes.sort((a, b) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
 			if (!noteOnTop(a) && noteOnTop(b)) return +1;
@@ -272,8 +274,13 @@ class Note extends BaseItem {
 				let bProp = b[order.by];
 				if (typeof aProp === 'string') aProp = aProp.toLowerCase();
 				if (typeof bProp === 'string') bProp = bProp.toLowerCase();
-				if (aProp < bProp) r = +1;
-				if (aProp > bProp) r = -1;
+
+				if (order.by === 'title') {
+					r = -1 * collator.compare(aProp, bProp);
+				} else {
+					if (aProp < bProp) r = +1;
+					if (aProp > bProp) r = -1;
+				}
 				if (order.dir == 'ASC') r = -r;
 				if (r !== 0) return r;
 			}
@@ -377,6 +384,7 @@ class Note extends BaseItem {
 			tempOptions.conditions = cond;
 
 			const uncompletedTodos = await this.search(tempOptions);
+			this.handleTitleNaturalSorting(uncompletedTodos, tempOptions);
 
 			cond = options.conditions.slice();
 			if (hasNotes && hasTodos) {
@@ -389,6 +397,7 @@ class Note extends BaseItem {
 			tempOptions.conditions = cond;
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			const theRest = await this.search(tempOptions);
+			this.handleTitleNaturalSorting(theRest, tempOptions);
 
 			return uncompletedTodos.concat(theRest);
 		}
@@ -401,7 +410,10 @@ class Note extends BaseItem {
 			options.conditions.push('is_todo = 1');
 		}
 
-		return this.search(options);
+		const results = await this.search(options);
+		this.handleTitleNaturalSorting(results, options);
+
+		return results;
 	}
 
 	static preview(noteId, options = null) {
@@ -860,6 +872,17 @@ class Note extends BaseItem {
 		} finally {
 			defer();
 		}
+	}
+
+	static handleTitleNaturalSorting(items, options) {
+		if (options.order.length > 0 && options.order[0].by === 'title') {
+			const collator = this.getNaturalSortingCollator();
+			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
+		}
+	}
+
+	static getNaturalSortingCollator() {
+		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
 }
