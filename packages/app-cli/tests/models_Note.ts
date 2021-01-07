@@ -271,4 +271,48 @@ describe('models_Note', function() {
 		expect(result).toBe(`[](:/${note1.id})`);
 	}));
 
+	it('should perform natural sorting', (async () => {
+		const folder1 = await Folder.save({});
+
+		const sortedNotes = await Note.previews(folder1.id, {
+			fields: ['id', 'title'],
+			order: [{ by: 'title', dir: 'ASC' }],
+		});
+		expect(sortedNotes.length).toBe(0);
+
+		const note0 = await Note.save({ title: 'A3', parent_id: folder1.id, is_todo: false });
+		const note1 = await Note.save({ title: 'A20', parent_id: folder1.id, is_todo: false });
+		const note2 = await Note.save({ title: 'A100', parent_id: folder1.id, is_todo: false });
+		const note3 = await Note.save({ title: 'égalité', parent_id: folder1.id, is_todo: false });
+		const note4 = await Note.save({ title: 'z', parent_id: folder1.id, is_todo: false });
+
+		const sortedNotes2 = await Note.previews(folder1.id, {
+			fields: ['id', 'title'],
+			order: [{ by: 'title', dir: 'ASC' }],
+		});
+		expect(sortedNotes2.length).toBe(5);
+		expect(sortedNotes2[0].id).toBe(note0.id);
+		expect(sortedNotes2[1].id).toBe(note1.id);
+		expect(sortedNotes2[2].id).toBe(note2.id);
+		expect(sortedNotes2[3].id).toBe(note3.id);
+		expect(sortedNotes2[4].id).toBe(note4.id);
+
+		const todo3 = Note.changeNoteType(note3, 'todo');
+		const todo4 = Note.changeNoteType(note4, 'todo');
+		await Note.save(todo3);
+		await Note.save(todo4);
+
+		const sortedNotes3 = await Note.previews(folder1.id, {
+			fields: ['id', 'title'],
+			order: [{ by: 'title', dir: 'ASC' }],
+			uncompletedTodosOnTop: true,
+		});
+		expect(sortedNotes3.length).toBe(5);
+		expect(sortedNotes3[0].id).toBe(note3.id);
+		expect(sortedNotes3[1].id).toBe(note4.id);
+		expect(sortedNotes3[2].id).toBe(note0.id);
+		expect(sortedNotes3[3].id).toBe(note1.id);
+		expect(sortedNotes3[4].id).toBe(note2.id);
+	}));
+
 });
