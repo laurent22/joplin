@@ -7,7 +7,6 @@ import JoplinCommands from './JoplinCommands';
 import JoplinViews from './JoplinViews';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
-import Logger from '../../../Logger';
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
  *
@@ -32,7 +31,7 @@ export default class Joplin {
     private views_;
     private interop_;
     private settings_;
-    constructor(logger: Logger, implementation: any, plugin: Plugin, store: any);
+    constructor(implementation: any, plugin: Plugin, store: any);
     get data(): JoplinData;
     get plugins(): JoplinPlugins;
     get workspace(): JoplinWorkspace;
