@@ -620,7 +620,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		function pointerInsideEditor(x: number, y: number) {
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 			if (!elements.length) return null;
-			const rect = convertToScreenCoordinates(elements[0].getBoundingClientRect());
+			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
