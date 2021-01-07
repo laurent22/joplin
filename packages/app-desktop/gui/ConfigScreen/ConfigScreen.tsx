@@ -5,7 +5,7 @@ import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
-import control_PluginsStates from './controls/PluginsStates';
+import control_PluginsStates from './controls/plugins/PluginsStates';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -159,10 +159,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const settingComps = createSettingComponents(false);
 		const advancedSettingComps = createSettingComponents(true);
 
+		const sectionWidths: Record<string, number> = {
+			plugins: 900,
+		};
+
 		const sectionStyle: any = {
 			marginTop: 20,
 			marginBottom: 20,
-			maxWidth: 640,
+			maxWidth: sectionWidths[section.name] ? sectionWidths[section.name] : 640,
 		};
 
 		if (!selected) sectionStyle.display = 'none';
@@ -277,7 +281,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			color: theme.color,
 			fontSize: theme.fontSize * 1.083333,
 			fontWeight: 500,
-			marginBottom: theme.mainPadding / 4,
+			marginBottom: theme.mainPadding / 2,
 		});
 	}
 
@@ -310,7 +314,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const output: any = null;
 
 		const rowStyle = {
-			marginBottom: theme.mainPadding,
+			marginBottom: theme.mainPadding * 1.5,
 		};
 
 		const labelStyle = this.labelStyle(this.props.themeId);
@@ -366,9 +370,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (settingKeyToControl[key]) {
 			const SettingComponent = settingKeyToControl[key];
+			const label = md.label ? this.renderLabel(this.props.themeId, md.label()) : null;
 			return (
 				<div key={key} style={rowStyle}>
-					{this.renderLabel(this.props.themeId, md.label())}
+					{label}
 					{this.renderDescription(this.props.themeId, md.description ? md.description() : null)}
 					<SettingComponent
 						metadata={md}
@@ -377,6 +382,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						onChange={(event: any) => {
 							updateSettingValue(key, event.value);
 						}}
+						renderLabel={this.renderLabel}
+						renderDescription={this.renderDescription}
 					/>
 				</div>
 			);

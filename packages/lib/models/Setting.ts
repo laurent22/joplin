@@ -619,7 +619,6 @@ class Setting extends BaseModel {
 				section: 'plugins',
 				public: true,
 				appTypes: ['desktop'],
-				label: () => _('Plugins'),
 				needRestart: true,
 				autoSave: true,
 			},
@@ -629,6 +628,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'plugins',
 				public: true,
+				advanced: true,
 				appTypes: ['desktop'],
 				label: () => 'Development plugins',
 				description: () => 'You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect.',
@@ -1504,7 +1504,7 @@ class Setting extends BaseModel {
 		if (name === 'appearance') return _('Appearance');
 		if (name === 'note') return _('Note');
 		if (name === 'markdownPlugins') return _('Markdown');
-		if (name === 'plugins') return `${_('Plugins')} (Beta)`;
+		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
 		if (name === 'revisionService') return _('Note History');
 		if (name === 'encryption') return _('Encryption');

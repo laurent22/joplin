@@ -16,4 +16,7 @@ export interface PluginManifest {
 
 	// Private keys
 	_package_hash?: string;
+	_publish_hash?: string;
+	_publish_commit?: string;
+	_npm_package_name?: string;
 }

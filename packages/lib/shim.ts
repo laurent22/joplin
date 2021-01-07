@@ -165,6 +165,12 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	fetchText: async (url: string, options: any = null): Promise<string> => {
+		const r = await shim.fetch(url, options || {});
+		if (!r.ok) throw new Error(`Could not fetch ${url}`);
+		return r.text();
+	},
+
 	createResourceFromPath: async (_filePath: string, _defaultProps: any = null, _options: any = null): Promise<ResourceEntity> => {
 		throw new Error('Not implemented');
 	},
@@ -209,7 +215,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	fetchBlob: async function(_url: string, _options: any = null) {
+	fetchBlob: function(_url: string, _options: any = null): any {
 		throw new Error('Not implemented');
 	},
 
