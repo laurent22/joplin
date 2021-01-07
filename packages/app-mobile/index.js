@@ -44,3 +44,6 @@ LogBox.ignoreLogs([
 ]);
 
 AppRegistry.registerComponent('Joplin', () => Root);
+
+// Using streams on react-native requires to polyfill process.nextTick()
+global.process.nextTick = setImmediate;
