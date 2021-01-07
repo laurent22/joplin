@@ -8,13 +8,12 @@ describe('validatePluginId', () => {
 			'that-s-ok',
 			'that_s_fine12',
 			'com.ok.too',
+			'Good',
 		];
 
 		const errorCases = [
 			'',
 			'verylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongidverylongid',
-			'NO',
-			'NotGood',
 			'-shouldstartwiththis',
 			'shouldntendwithit.',
 			' no space ',
