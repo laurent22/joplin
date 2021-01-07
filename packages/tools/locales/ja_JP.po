@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -416,18 +418,20 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"リッチテキストエディターには多くの制限がありますので、それらをご承知の上でご"
+"使用ください。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:340
 msgid "Read more about it"
-msgstr ""
+msgstr "もっと知りたい"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:345
 msgid "Dismiss"
-msgstr ""
+msgstr "閉じる"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:381
 msgid "The following attachments are being watched for changes:"
-msgstr "下記の添付ファイルが変更されたかどうかを監視中です。"
+msgstr "下記の添付ファイルが変更されたかどうかを監視中です:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:384
 msgid ""
@@ -481,43 +485,40 @@ msgid "Horizontal Rule"
 msgstr "横線"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "ノートを削除しますか？"
+msgstr "行を削除"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "元に戻す"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "やり直す"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "インデントを減らす"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "インデントを増やす"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
-msgstr "ノート一覧の表示切り替え"
+msgstr "コメントの切り替え"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
-#, fuzzy
 msgid "Sort selected lines"
-msgstr "選択したノートを編集"
+msgstr "選択行の並び替え"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "前の行と入れ替え"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "次の行と入れ替え"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -696,7 +697,7 @@ msgstr "いくつかの項目は復号されませんでした。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:421
 msgid "One or more master keys need a password."
-msgstr "パスワードに1つ以上のマスターキーが必要です"
+msgstr "パスワード入力の必要なマスターキーがあります。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:423
 msgid "Set the password"
@@ -984,7 +985,7 @@ msgstr "Joplinについて"
 
 #: packages/app-desktop/gui/MenuBar.js:341
 msgid "Preferences..."
-msgstr "環境設定"
+msgstr "環境設定..."
 
 #: packages/app-desktop/gui/MenuBar.js:351
 #: packages/app-desktop/gui/MenuBar.js:590
@@ -1698,7 +1699,7 @@ msgstr "ノートブックがありません。"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
-msgstr "ノートブックを作成します。"
+msgstr "ノートブックを作成します"
 
 #: packages/app-mobile/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -2025,6 +2026,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"デフォルトの管理者パスワードが変更されておらず危険な状態です! [今すぐ変更]"
+"(%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2062,9 +2065,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "JoplinのWebサイト"
+msgstr "Joplinサーバー"
 
 #: packages/lib/shim-init-node.js:201
 #, javascript-format
@@ -2208,21 +2210,19 @@ msgstr "AWS シークレットアクセスキー"
 
 #: packages/lib/models/Setting.js:259
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "JoplinサーバーURL"
 
 #: packages/lib/models/Setting.js:273
-#, fuzzy
 msgid "Joplin Server Directory"
-msgstr "Joplin エクスポートディレクトリ"
+msgstr "Joplinサーバーディレクトリ"
 
 #: packages/lib/models/Setting.js:283
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Joplinサーバーユーザー名"
 
 #: packages/lib/models/Setting.js:293
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "マスターパスワードを入力してください:"
+msgstr "Joplinサーバーパスワード"
 
 #: packages/lib/models/Setting.js:305
 msgid "Attachment download behaviour"
@@ -2312,7 +2312,7 @@ msgstr "完了したToDoを表示"
 
 #: packages/lib/models/Setting.js:471
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する"
+msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する。"
 
 #: packages/lib/models/Setting.js:473 packages/lib/models/Setting.js:491
 msgid "Reverse sort order"
@@ -2355,9 +2355,8 @@ msgid "Enable typographer support"
 msgstr "Typographer（記号文字）を有効にする"
 
 #: packages/lib/models/Setting.js:562
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "ノートの履歴を有効にする"
+msgstr "Linkifyを有効にする"
 
 #: packages/lib/models/Setting.js:563
 msgid "Enable math expressions"
@@ -2372,17 +2371,16 @@ msgid "Enable Mermaid diagrams support"
 msgstr "Mermaid（作図機能）を有効にする"
 
 #: packages/lib/models/Setting.js:566
-#, fuzzy
 msgid "Enable audio player"
-msgstr "マークダウン絵文字を有効にする"
+msgstr "オーディオプレーヤーを有効にする"
 
 #: packages/lib/models/Setting.js:567
 msgid "Enable video player"
-msgstr ""
+msgstr "動画プレーヤーを有効にする"
 
 #: packages/lib/models/Setting.js:568
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "PDFビューアーを有効にする"
 
 #: packages/lib/models/Setting.js:569
 msgid "Enable ==mark== syntax"
@@ -3109,7 +3107,7 @@ msgstr "ショートカットキー"
 #: packages/lib/services/KeymapService.js:285
 #, javascript-format
 msgid "Invalid %s: %s."
-msgstr "無効な %s: %s"
+msgstr "無効な %s: %s。"
 
 #: packages/lib/services/KeymapService.js:303
 #, javascript-format
@@ -3187,9 +3185,8 @@ msgid "Downloaded and encrypted"
 msgstr "ダウンロード済み（未復号）"
 
 #: packages/lib/services/report.js:193
-#, fuzzy
 msgid "Created locally"
-msgstr "ローカルアイテムの作成: %d."
+msgstr "ローカルに作成"
 
 #: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
@@ -3369,12 +3366,12 @@ msgstr ""
 #: packages/app-cli/app/command-server.js:38
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr "サーバーはすでにポート %d で実行中です。"
+msgstr "サーバーはすでにポート %d で実行中です"
 
 #: packages/app-cli/app/command-server.js:44
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr "サーバーはポート %d で実行中です。"
+msgstr "サーバーはポート %d で実行中です"
 
 #: packages/app-cli/app/command-server.js:44
 #: packages/app-cli/app/command-server.js:47
@@ -3862,7 +3859,7 @@ msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
 "これらのアイテムの復号化を再試行するには、`e2ee decrypt --retry-failed-items`"
-"を実行してください。"
+"を実行してください"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
