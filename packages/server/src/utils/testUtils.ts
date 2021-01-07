@@ -13,10 +13,6 @@ const packageRootDir = `${__dirname}/../..`;
 
 let db_: DbConnection = null;
 
-// We don't want the tests to fail due to timeout, especially on CI, and certain
-// tests can take more time since we do integration testing too.
-jest.setTimeout(30 * 1000);
-
 // require('source-map-support').install();
 
 export async function beforeAllDb(unitName: string) {
