@@ -25,6 +25,11 @@ interface HookDependencies {
 function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, setFormNote: Function): CommandRuntime {
 	return {
 		execute: async (_context: CommandContext, ...args: any[]) => {
+			if (!editorRef.current) {
+				reg.logger().warn('Received command, but editor is gone', declaration.name);
+				return;
+			}
+
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 				return;
