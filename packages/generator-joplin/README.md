@@ -78,7 +78,7 @@ The `manifest.json` file would be:
 {
     "manifest_version": 1,
     "name": "Testing Content Scripts",
-    content_scripts: [
+    "content_scripts": [
         "myContentScript",
         "otherContentScript",
         "vendor/test"
