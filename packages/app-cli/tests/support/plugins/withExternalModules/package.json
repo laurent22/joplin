@@ -4,9 +4,12 @@
   "description": "",
   "scripts": {
     "dist": "webpack",
-    "prepare": "npm run dist"
+    "prepare": "npm run dist",
+    "update": "npm install -g generator-joplin && yo joplin --update"
   },
-  "keywords": ["joplin-plugin"],
+  "keywords": [
+    "joplin-plugin"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^14.0.14",

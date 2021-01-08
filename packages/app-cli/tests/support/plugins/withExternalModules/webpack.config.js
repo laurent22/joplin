@@ -1,3 +1,11 @@
+// -----------------------------------------------------------------------------
+// This file is used to build the plugin file (.jpl) and plugin info (.json). It
+// is recommended not to edit this file as it would be overwritten when updating
+// the plugin framework. If you do make some changes, consider using an external
+// JS file and requiring it here to minimize the changes. That way when you
+// update, you can easily restore the functionality you've added.
+// -----------------------------------------------------------------------------
+
 const path = require('path');
 const crypto = require('crypto');
 const fs = require('fs-extra');
@@ -9,9 +17,15 @@ const glob = require('glob');
 const execSync = require('child_process').execSync;
 
 const rootDir = path.resolve(__dirname);
+const userConfigFilename = './plugin.config.json';
+const userConfigPath = path.resolve(rootDir, userConfigFilename);
 const distDir = path.resolve(rootDir, 'dist');
 const srcDir = path.resolve(rootDir, 'src');
 const publishDir = path.resolve(rootDir, 'publish');
+
+const userConfig = Object.assign({}, {
+	extraScripts: [],
+}, fs.pathExistsSync(userConfigPath) ? require(userConfigFilename) : {});
 
 const manifestPath = `${srcDir}/manifest.json`;
 const packageJsonPath = `${rootDir}/package.json`;
@@ -68,13 +82,7 @@ function createPluginArchive(sourceDir, destPath) {
 	const distFiles = glob.sync(`${sourceDir}/**/*`, { nodir: true })
 		.map(f => f.substr(sourceDir.length + 1));
 
-	if (!distFiles.length) {
-		// Usually means there's an error, which is going to be printed by
-		// webpack
-		console.warn(chalk.yellow('Plugin archive was not created because the "dist" directory is empty'));
-		return;
-	}
-
+	if (!distFiles.length) throw new Error('Plugin archive was not created because the "dist" directory is empty');
 	fs.removeSync(destPath);
 
 	tar.create(
@@ -100,9 +108,13 @@ function createPluginInfo(manifestPath, destPath, jplFilePath) {
 }
 
 function onBuildCompleted() {
-	createPluginArchive(distDir, pluginArchiveFilePath);
-	createPluginInfo(manifestPath, pluginInfoFilePath, pluginArchiveFilePath);
-	validatePackageJson();
+	try {
+		createPluginArchive(distDir, pluginArchiveFilePath);
+		createPluginInfo(manifestPath, pluginInfoFilePath, pluginArchiveFilePath);
+		validatePackageJson();
+	} catch (error) {
+		console.error(chalk.red(error.message));
+	}
 }
 
 const baseConfig = {
@@ -132,9 +144,6 @@ const pluginConfig = Object.assign({}, baseConfig, {
 		filename: 'index.js',
 		path: distDir,
 	},
-});
-
-const lastStepConfig = {
 	plugins: [
 		new CopyPlugin({
 			patterns: [
@@ -148,23 +157,15 @@ const lastStepConfig = {
 							// already copied into /dist so we don't copy them.
 							'**/*.ts',
 							'**/*.tsx',
-
-							// Currently we don't support JS files for the main
-							// plugin script. We support it for content scripts,
-							// but they should be declared in manifest.json,
-							// and then they are also compiled and copied to
-							// /dist. So wse also don't need to copy JS files.
-							'**/*.js',
 						],
 					},
 				},
 			],
 		}),
-		new WebpackOnBuildPlugin(onBuildCompleted),
 	],
-};
+});
 
-const contentScriptConfig = Object.assign({}, baseConfig, {
+const extraScriptConfig = Object.assign({}, baseConfig, {
 	resolve: {
 		alias: {
 			api: path.resolve(__dirname, 'api'),
@@ -173,52 +174,60 @@ const contentScriptConfig = Object.assign({}, baseConfig, {
 	},
 });
 
-function resolveContentScriptPaths(name) {
-	if (['.js', '.ts', '.tsx'].includes(path.extname(name).toLowerCase())) {
-		throw new Error(`Content script path must not include file extension: ${name}`);
-	}
+function resolveExtraScriptPath(name) {
+	const relativePath = `./src/${name}`;
 
-	const pathsToTry = [
-		`./src/${name}.ts`,
-		`${'./src/' + '/'}${name}.js`,
-	];
+	const fullPath = path.resolve(`${rootDir}/${relativePath}`);
+	if (!fs.pathExistsSync(fullPath)) throw new Error(`Could not find extra script: "${name}" at "${fullPath}"`);
 
-	for (const pathToTry of pathsToTry) {
-		if (fs.pathExistsSync(`${rootDir}/${pathToTry}`)) {
-			return {
-				entry: pathToTry,
-				output: {
-					filename: `${name}.js`,
-					path: distDir,
-					library: 'default',
-					libraryTarget: 'commonjs',
-					libraryExport: 'default',
-				},
-			};
-		}
-	}
+	const s = name.split('.');
+	s.pop();
+	const nameNoExt = s.join('.');
 
-	throw new Error(`Could not find content script "${name}" at locations ${JSON.stringify(pathsToTry)}`);
+	return {
+		entry: relativePath,
+		output: {
+			filename: `${nameNoExt}.js`,
+			path: distDir,
+			library: 'default',
+			libraryTarget: 'commonjs',
+			libraryExport: 'default',
+		},
+	};
 }
 
-function createContentScriptConfigs() {
-	if (!manifest.content_scripts) return [];
+function addExtraScriptConfigs(baseConfig, userConfig) {
+	if (!userConfig.extraScripts.length) return baseConfig;
 
 	const output = [];
 
-	for (const contentScriptName of manifest.content_scripts) {
-		const scriptPaths = resolveContentScriptPaths(contentScriptName);
-		output.push(Object.assign({}, contentScriptConfig, {
+	for (const scriptName of userConfig.extraScripts) {
+		const scriptPaths = resolveExtraScriptPath(scriptName);
+		output.push(Object.assign({}, extraScriptConfig, {
 			entry: scriptPaths.entry,
 			output: scriptPaths.output,
 		}));
 	}
 
-	return output;
+	return baseConfig.concat(output);
 }
 
-const exportedConfigs = [pluginConfig].concat(createContentScriptConfigs());
+function addLastConfigStep(config) {
+	const lastConfig = config[config.length - 1];
+	if (!lastConfig.plugins) lastConfig.plugins = [];
+	lastConfig.plugins.push(new WebpackOnBuildPlugin(onBuildCompleted));
+	config[config.length - 1] = lastConfig;
+	return config;
+}
 
-exportedConfigs[exportedConfigs.length - 1] = Object.assign({}, exportedConfigs[exportedConfigs.length - 1], lastStepConfig);
+let exportedConfigs = [pluginConfig];
+
+try {
+	exportedConfigs = addExtraScriptConfigs(exportedConfigs, userConfig);
+	exportedConfigs = addLastConfigStep(exportedConfigs);
+} catch (error) {
+	console.error(chalk.red(error.message));
+	process.exit(1);
+}
 
 module.exports = exportedConfigs;
