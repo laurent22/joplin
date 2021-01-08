@@ -6,8 +6,5 @@
 	"version": "1.0.0",
 	"author": "CalebJohn",
 	"app_min_version": "1.4",
-	"homepage_url": "joplinapp.org",
-	"content_scripts": [
-		"joplinMatchHighlighter"
-	]
+	"homepage_url": "joplinapp.org"
 }

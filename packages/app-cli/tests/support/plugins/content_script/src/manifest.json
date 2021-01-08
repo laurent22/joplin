@@ -6,8 +6,5 @@
 	"description": "",
 	"version": "1.0.0",
 	"author": "",
-	"homepage_url": "",
-	"content_scripts": [
-		"markdownItTestPlugin"
-	]
+	"homepage_url": ""
 }

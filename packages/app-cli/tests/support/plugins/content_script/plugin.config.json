@@ -1,3 +1,5 @@
 {
-	"extraScripts": []
+	"extraScripts": [
+		"markdownItTestPlugin.ts"
+	]
 }
