@@ -1262,6 +1262,12 @@ function renderLine(line: any) {
 		let hiddenLines = ['<div style="display: none;">'];
 		hiddenLines = hiddenLines.concat(renderLines(line.lines));
 		hiddenLines.push('</div>');
+
+		// We need to add two new lines after the HTML block, or the Markdown
+		// after that will not render.
+		// https://github.com/markdown-it/markdown-it/issues/746
+		hiddenLines.push(NEWLINE);
+		hiddenLines.push(NEWLINE);
 		return hiddenLines;
 	} else if (typeof line === 'object') {
 		console.warn('Unhandled object type:', line);
