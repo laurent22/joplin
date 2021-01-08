@@ -1,3 +1,11 @@
+// -----------------------------------------------------------------------------
+// This file is used to build the plugin file (.jpl) and plugin info (.json). It
+// is recommended not to edit this file as it would be overwritten when updating
+// the plugin framework. If you do make some changes, consider using an external
+// JS file and requiring it here to minimize the changes. That way when you
+// update, you can easily restore the functionality you've added.
+// -----------------------------------------------------------------------------
+
 const path = require('path');
 const crypto = require('crypto');
 const fs = require('fs-extra');

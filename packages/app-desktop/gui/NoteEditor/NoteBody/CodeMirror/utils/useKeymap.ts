@@ -26,10 +26,6 @@ export default function useKeymap(CodeMirror: any) {
 		CodeMirror.Vim.mapCommand('o', 'action', 'insertListElement', { after: true }, { context: 'normal', isEdit: true, interlaceInsertRepeat: true });
 	}
 
-	function isEditorCommand(command: string) {
-		return command.startsWith('editor.');
-	}
-
 	// Converts a command of the form editor.command to just command
 	function editorCommandToCodeMirror(command: String) {
 		return command.slice(7); // 7 is the length of editor.
@@ -38,10 +34,24 @@ export default function useKeymap(CodeMirror: any) {
 	// CodeMirror and Electron register accelerators slightly different
 	// CodeMirror requires a - between keys while Electron want's a +
 	// CodeMirror doesn't recognize Option (it uses Alt instead)
-	// This function uses simple regex to translate the Electron
-	// accelerator to a CodeMirror accelerator
+	// CodeMirror requires Shift to be first
 	function normalizeAccelerator(accelerator: String) {
-		return accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
+		const command = accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
+		// From here is taken out of codemirror/lib/codemirror.js
+		const parts = command.split(/-(?!$)/);
+
+		let name = parts[parts.length - 1];
+		let alt, ctrl, shift, cmd;
+		for (let i = 0; i < parts.length - 1; i++) {
+			const mod = parts[i];
+			if (/^(cmd|meta|m)$/i.test(mod)) { cmd = true; } else if (/^a(lt)?$/i.test(mod)) { alt = true; } else if (/^(c|ctrl|control)$/i.test(mod)) { ctrl = true; } else if (/^s(hift)?$/i.test(mod)) { shift = true; } else { throw new Error(`Unrecognized modifier name: ${mod}`); }
+		}
+		if (alt) { name = `Alt-${name}`; }
+		if (ctrl) { name = `Ctrl-${name}`; }
+		if (cmd) { name = `Cmd-${name}`; }
+		if (shift) { name = `Shift-${name}`; }
+		return name;
+		// End of code taken from codemirror/lib/codemirror.js
 	}
 
 	// Because there is sometimes a clash between these keybindings and the Joplin window ones
@@ -53,21 +63,17 @@ export default function useKeymap(CodeMirror: any) {
 		if (!key.command || !key.accelerator) return;
 
 		let command = '';
-		if (isEditorCommand(key.command)) {
-			command = editorCommandToCodeMirror(key.command);
-		} else {
-			// We need to register Joplin commands with codemirror
-			command = `joplin${key.command}`;
-			// Not all commands are registered with the command service
-			// (for example, the Quit command)
-			// This check will ensure that codemirror only takesover the commands that are
-			// see gui/KeymapConfig/getLabel.ts for more information
-			const commandNames = CommandService.instance().commandNames();
-			if (commandNames.includes(key.command)) {
-				CodeMirror.commands[command] = () => {
-					void CommandService.instance().execute(key.command);
-				};
-			}
+		// We need to register Joplin commands with codemirror
+		command = `joplin${key.command}`;
+		// Not all commands are registered with the command service
+		// (for example, the Quit command)
+		// This check will ensure that codemirror only takesover the commands that are
+		// see gui/KeymapConfig/getLabel.ts for more information
+		const commandNames = CommandService.instance().commandNames();
+		if (commandNames.includes(key.command)) {
+			CodeMirror.commands[command] = () => {
+				void CommandService.instance().execute(key.command);
+			};
 		}
 
 		// CodeMirror and Electron have slightly different formats for defining accelerators
@@ -83,8 +89,9 @@ export default function useKeymap(CodeMirror: any) {
 		keymapItems.forEach((key) => { registerJoplinCommand(key); });
 	}
 
+
 	CodeMirror.defineExtension('supportsCommand', function(cmd: EditorCommand) {
-		return isEditorCommand(cmd.name) && editorCommandToCodeMirror(cmd.name) in CodeMirror.commands;
+		return CommandService.isEditorCommand(cmd.name) && editorCommandToCodeMirror(cmd.name) in CodeMirror.commands;
 	});
 
 	// Used when an editor command is executed using the CommandService.instance().execute
