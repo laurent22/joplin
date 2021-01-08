@@ -2,7 +2,7 @@
 	"manifest_version": 1,
 	"id": "org.joplinapp.plugins.ToggleSideBars",
 	"app_min_version": "1.6",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"name": "Note list and side bar toggle buttons",
 	"description": "Adds buttons to toggle note list and side bar",
 	"author": "Laurent Cozic",
