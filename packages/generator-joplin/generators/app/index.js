@@ -116,6 +116,7 @@ module.exports = class extends Generator {
 			'package_TEMPLATE.json',
 			'tsconfig.json',
 			'webpack.config.js',
+			'plugin.config.json',
 		];
 
 		const noUpdateFiles = [
@@ -145,6 +146,8 @@ module.exports = class extends Generator {
 						},
 					}
 				);
+			} else if (this.options.update && destFile === 'plugin.config.json' && this.fs.exists(destFilePath)) {
+				// Keep existing content for now. Maybe later we could merge the configs.
 			} else if (this.options.update && (destFile === '.gitignore' || destFile === '.npmignore') && this.fs.exists(destFilePath)) {
 				const destContent = this.fs.read(destFilePath);
 

@@ -11,7 +11,6 @@ Name | Type | Required? | Description
 `description` | string | No | Detailed description of the plugin.
 `author` | string | No | Plugin author name.
 `homepage_url` | string | No | Homepage URL of the plugin. It can also be, for example, a link to a GitHub repository.
-`content_scripts` | string[] | No | List of [content scripts](https://github.com/laurent22/joplin/blob/dev/packages/generator-joplin/README.md#content-scripts) used by the plugin.
 
 ## Manifest example
 

@@ -1,5 +1,7 @@
 const slugify = require('slugify');
 
+// "source" is the framework current version.
+// "dest" is the user existing version.
 function mergePackageKey(parentKey, source, dest) {
 	const output = Object.assign({}, dest);
 
@@ -16,7 +18,10 @@ function mergePackageKey(parentKey, source, dest) {
 			output[k] = source[k];
 		} else if (parentKey === 'devDependencies') {
 			// If we are dealing with the dependencies, overwrite with the
-			// version from source.
+			// version from source. Note that it can be a problem if the user
+			// prefers a specific package version but it is hard to avoid,
+			// otherwise it's not possible to upgrade the dependencies when the
+			// framework changes.
 			output[k] = source[k];
 		} else if (typeof source[k] === 'object' && !Array.isArray(source[k]) && source[k] !== null) {
 			// If it's an object, recursively process it
