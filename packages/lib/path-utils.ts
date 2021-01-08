@@ -121,7 +121,6 @@ export function toFileProtocolPath(filePathEncode: string, os: string = null) {
 
 	filePathEncode = encodeURI(filePathEncode);
 	filePathEncode = filePathEncode.replace(/\+/g, '%2B'); // escape '+' with unicode
-	filePathEncode = filePathEncode.replace(/%20/g, '+'); // switch space (%20) with '+'. To comply with syntax used by joplin, see urldecode_(str) in MdToHtml.js
 	return `file://${filePathEncode.replace(/\'/g, '%27')}`; // escape '(single quote) with unicode, to prevent crashing the html view
 }
 
