@@ -1,6 +1,7 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
 import { ltrimSlashes } from '../path-utils';
+import eventManager from '../eventManager';
 const BaseModel = require('../BaseModel').default;
 const { Database } = require('../database.js');
 const SyncTargetRegistry = require('../SyncTargetRegistry.js');
@@ -79,8 +80,10 @@ class Setting extends BaseModel {
 	private static keys_: string[] = null;
 	private static cache_: CacheItem[] = [];
 	private static saveTimeoutId_: any = null;
+	private static changeEventTimeoutId_: any = null;
 	private static customMetadata_: SettingItems = {};
 	private static customSections_: SettingSections = {};
+	private static changedKeys_: string[] = [];
 
 	static tableName() {
 		return 'settings';
@@ -92,8 +95,10 @@ class Setting extends BaseModel {
 
 	static async reset() {
 		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
+		if (this.changeEventTimeoutId_) shim.clearTimeout(this.changeEventTimeoutId_);
 
 		this.saveTimeoutId_ = null;
+		this.changeEventTimeoutId_ = null;
 		this.metadata_ = null;
 		this.keys_ = null;
 		this.cache_ = [];
@@ -1070,6 +1075,8 @@ class Setting extends BaseModel {
 
 	static load() {
 		this.cancelScheduleSave();
+		this.cancelScheduleChangeEvent();
+
 		this.cache_ = [];
 		return this.modelSelectAll('SELECT * FROM settings').then(async (rows: any[]) => {
 			this.cache_ = [];
@@ -1154,6 +1161,8 @@ class Setting extends BaseModel {
 
 				if (c.value === value) return;
 
+				this.changedKeys_.push(key);
+
 				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
 				// this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
 
@@ -1169,6 +1178,7 @@ class Setting extends BaseModel {
 				});
 
 				this.scheduleSave();
+				this.scheduleChangeEvent();
 				return;
 			}
 		}
@@ -1184,7 +1194,10 @@ class Setting extends BaseModel {
 			value: this.formatValue(key, value),
 		});
 
+		this.changedKeys_.push(key);
+
 		this.scheduleSave();
+		this.scheduleChangeEvent();
 	}
 
 	static incValue(key: string, inc: any) {
@@ -1422,6 +1435,36 @@ class Setting extends BaseModel {
 		await BaseModel.db().transactionExecBatch(queries);
 
 		this.logger().info('Settings have been saved.');
+	}
+
+	static scheduleChangeEvent() {
+		if (this.changeEventTimeoutId_) shim.clearTimeout(this.changeEventTimeoutId_);
+
+		this.changeEventTimeoutId_ = shim.setTimeout(() => {
+			this.emitScheduledChangeEvent();
+		}, 1000);
+	}
+
+	static cancelScheduleChangeEvent() {
+		if (this.changeEventTimeoutId_) shim.clearTimeout(this.changeEventTimeoutId_);
+		this.changeEventTimeoutId_ = null;
+	}
+
+	public static emitScheduledChangeEvent() {
+		if (!this.changeEventTimeoutId_) return;
+
+		shim.clearTimeout(this.changeEventTimeoutId_);
+		this.changeEventTimeoutId_ = null;
+
+		if (!this.changedKeys_.length) {
+			// Sanity check - shouldn't happen
+			this.logger().warn('Trying to dispatch a change event without any changed keys');
+			return;
+		}
+
+		const keys = this.changedKeys_.slice();
+		this.changedKeys_ = [];
+		eventManager.emit('settingsChange', { keys });
 	}
 
 	static scheduleSave() {

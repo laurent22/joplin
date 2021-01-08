@@ -110,6 +110,9 @@ packages/app-cli/tests/models_Note.js.map
 packages/app-cli/tests/models_Setting.d.ts
 packages/app-cli/tests/models_Setting.js
 packages/app-cli/tests/models_Setting.js.map
+packages/app-cli/tests/services/plugins/api/JoplinSettings.d.ts
+packages/app-cli/tests/services/plugins/api/JoplinSettings.js
+packages/app-cli/tests/services/plugins/api/JoplinSettings.js.map
 packages/app-cli/tests/services/plugins/api/JoplinViewMenuItem.d.ts
 packages/app-cli/tests/services/plugins/api/JoplinViewMenuItem.js
 packages/app-cli/tests/services/plugins/api/JoplinViewMenuItem.js.map

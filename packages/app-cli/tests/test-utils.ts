@@ -768,6 +768,17 @@ function newPluginScript(script: string) {
 	`;
 }
 
+async function waitForFolderCount(count: number) {
+	const timeout = 2000;
+	const startTime = Date.now();
+	while (true) {
+		const folders = await Folder.all();
+		if (folders.length >= count) return;
+		if (Date.now() - startTime > timeout) throw new Error('Timeout waiting for folders to be created');
+		await msleep(10);
+	}
+}
+
 // TODO: Update for Jest
 
 // function mockDate(year, month, day, tick) {
@@ -853,4 +864,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { afterAllCleanUp, exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { waitForFolderCount, afterAllCleanUp, exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
