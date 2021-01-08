@@ -738,6 +738,7 @@ class Application extends BaseApplication {
 				revisionService: RevisionService.instance(),
 				migrationService: MigrationService.instance(),
 				decryptionWorker: DecryptionWorker.instance(),
+				commandService: CommandService.instance(),
 				bridge: bridge(),
 			};
 		};
