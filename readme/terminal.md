@@ -125,21 +125,10 @@ If synchronisation does not work, please consult the logs in the app profile dir
 
 ## WebDAV synchronisation
 
-Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above (for the **terminal application** you will need to select sync target 6 rather than 5)
+Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above (for the **terminal application** you will need to select sync target 6 rather than 5).
 
-WebDAV-compatible services that are known to work with Joplin:
+For WebDAV-compatible services that are known to work with Joplin see [WebDAV synchronisation](https://github.com/laurent22/joplin#webdav-synchronisation).
 
-- [Apache WebDAV Module](https://httpd.apache.org/docs/current/mod/mod_dav.html)
-- [DriveHQ](https://www.drivehq.com)
-- [Fastmail](https://www.fastmail.com/)
-- [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
-- [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
-- [Nextcloud](https://nextcloud.com/)
-- [OwnCloud](https://owncloud.org/)
-- [Seafile](https://www.seafile.com/)
-- [Stack](https://www.transip.nl/stack/)
-- [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
-- [Zimbra](https://www.zimbra.com/)
 
 ## Dropbox synchronisation
 
