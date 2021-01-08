@@ -441,10 +441,11 @@ function isSpanWithStyle(attributes: any) {
 }
 
 function isSpanStyleBold(attributes: any) {
-	const style = attributes.style;
+	let style = attributes.style;
 	if (!style) return false;
 
-	if (style.includes('font-weight: bold;')) {
+	style = style.replace(/\s+/g, '');
+	if (style.includes('font-weight:bold') || style.includes('font-weight:700') || style.includes('font-weight:800') || style.includes('font-weight:900')) {
 		return true;
 	} else if (style.search(/font-family:.*,Bold.*;/) != -1) {
 		return true;
@@ -456,7 +457,7 @@ function isSpanStyleBold(attributes: any) {
 function isSpanStyleItalic(attributes: any) {
 	let style = attributes.style;
 	style = style.replace(/\s+/g, '');
-	return (style.toLowerCase().includes('font-style:italic;'));
+	return (style.toLowerCase().includes('font-style:italic'));
 }
 
 function displaySaxWarning(context: any, message: string) {
