@@ -228,7 +228,7 @@ export default class CommandService extends BaseService {
 		// Some commands such as "showModalMessage" can be executed many
 		// times per seconds, so we should only display this message in
 		// debug mode.
-		this.logger().debug('CommandService::execute:', commandName, args);
+		if (commandName !== 'showModalMessage') this.logger().debug('CommandService::execute:', commandName, args);
 		if (!command.runtime) throw new Error(`Cannot execute a command without a runtime: ${commandName}`);
 		return command.runtime.execute(this.createContext(), ...args);
 	}

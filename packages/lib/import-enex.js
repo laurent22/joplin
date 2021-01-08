@@ -528,7 +528,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				if (noteResource.filename) {
 					const mimeTypeFromFile = mime.fromFilename(noteResource.filename);
 					if (mimeTypeFromFile && mimeTypeFromFile !== mimeType) {
-						importOptions.onError(new Error(`Invalid mime type "${mimeType}" for resource "${noteResource.filename}". Using "${mimeTypeFromFile}" instead.`));
+						console.info(`Invalid mime type "${mimeType}" for resource "${noteResource.filename}". Using "${mimeTypeFromFile}" instead.`);
 						mimeType = mimeTypeFromFile;
 					}
 				}
