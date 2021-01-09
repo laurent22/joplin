@@ -1976,7 +1976,7 @@ msgstr "搜索"
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
-msgstr ""
+msgstr "默认管理员密码不安全且尚未更改！[现在更改](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -3113,9 +3113,8 @@ msgid "Downloaded and encrypted"
 msgstr "已下载并加密"
 
 #: packages/lib/services/report.js:193
-#, fuzzy
 msgid "Created locally"
-msgstr "已新建本地项目: %d。"
+msgstr "已新建本地项目"
 
 #: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
