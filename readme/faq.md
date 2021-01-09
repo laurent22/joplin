@@ -87,7 +87,7 @@ For these reasons, because the OS or yourself can easily protect the local data,
 
 There is however an issue open about it, so pull requests are welcome: https://github.com/laurent22/joplin/issues/289
 
-## WebDAV synchronisation is not working
+## Why is my WebDAV host not working?
 
 ### "Forbidden" error in Strato
 
@@ -104,7 +104,7 @@ For example:
 
 In this case, [make sure you enter the correct WebDAV URL](https://github.com/laurent22/joplin/issues/309).
 
-### Known problematic/unsupported WebDAV hosts
+### The following WebDAV hosts are not supported
 
 - Jianguoyun.com (see [Github issue](https://github.com/laurent22/joplin/issues/4294))
 
