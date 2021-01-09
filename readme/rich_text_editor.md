@@ -16,4 +16,6 @@ However **there is a catch**: in Joplin, notes, even when edited with this Rich 
 
 - All items in a list must be of the same type, so for example all checkboxes, or all bullet points. If you require two different types, you should create two different lists separated by an horizontal rule or similar.
 
+- Special keyboard modes "vim" and "emacs" are not supported.
+
 Those are the known limitations but if you notice any other issue not listed here, please let us know [in the forum](https://discourse.joplinapp.org/).
