@@ -233,6 +233,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	useWindowCommandHandler({
 		dispatch: props.dispatch,
+		plugins: props.plugins,
 		formNote,
 		setShowLocalSearch,
 		noteSearchBarRef,
@@ -498,9 +499,10 @@ function NoteEditor(props: NoteEditorProps) {
 	}
 
 	function renderSearchInfo() {
+		const theme = themeStyle(props.themeId);
 		if (formNoteFolder && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
 			return (
-				<div style={{ paddingTop: 10, paddingBottom: 10 }}>
+				<div style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: theme.editorPaddingLeft }}>
 					<Button
 						iconName="icon-notebooks"
 						level={ButtonLevel.Primary}
@@ -525,6 +527,8 @@ function NoteEditor(props: NoteEditorProps) {
 		return renderNoNotes(styles.root);
 	}
 
+	const theme = themeStyle(props.themeId);
+
 	return (
 		<div style={styles.root} onDrop={onDrop}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -539,13 +543,13 @@ function NoteEditor(props: NoteEditorProps) {
 					onTitleChange={onTitleChange}
 				/>
 				{renderSearchInfo()}
-				<div style={{ display: 'flex', flex: 1 }}>
+				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
+				<div style={{ paddingLeft: theme.editorPaddingLeft, display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
 					{renderTagButton()}
 					{renderTagBar()}
 				</div>

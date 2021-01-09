@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -65,14 +65,14 @@ msgstr ""
 "kapandıktan sonar yeniden çalıştırın."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
 "Geçiş yapmak için not başlığını veya içeriğin bir kısmın yazın. Alternatif "
-"olarak # ile etiket ismi ya da @ ile not defteri ismi yazın."
+"olarak # ile etiket ismi ya da @ ile not defteri ismi yazın. Ayrıca : "
+"yazarak komutlar içinde arama yapabilirsiniz."
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -81,9 +81,8 @@ msgstr "Şuraya Git..."
 
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Command palette"
-msgstr "Komut"
+msgstr "Komut paleti"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -119,9 +118,8 @@ msgid "New version: %s"
 msgstr "Yeni sürüm: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "İndirildi"
+msgstr "İndirme"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -354,15 +352,15 @@ msgstr "İç Kod"
 msgid "Insert Date Time"
 msgstr "Tarih Ekle"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Drop notes or files here"
 msgstr "Not veya dosyaları buraya sürükleyin"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Code View"
 msgstr "Kod Görünümü"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:999
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -418,14 +416,16 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"Zengin metin editöründe bazı kısıtlamalar mevcuttur, ve de kullanmadan önce "
+"bunun bilincinde olmanızı öneririz."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:340
 msgid "Read more about it"
-msgstr ""
+msgstr "Hakkında daha fazlasını oku"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:345
 msgid "Dismiss"
-msgstr ""
+msgstr "Vazgeç"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:381
 msgid "The following attachments are being watched for changes:"
@@ -483,42 +483,40 @@ msgid "Horizontal Rule"
 msgstr "Yatay kural"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "Notu sil?"
+msgstr "Satırı sil"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "Geri al"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "Yenile"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "Daha az girintile"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "Daha çok girintile"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
-msgstr "Not listesini aç/kapat"
+msgstr "Yorumu aç/kapat"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "Seçili satırları sırala"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "Satırı yukarıdaki ile değiştir"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "Satırı aşağıdaki ile değiştir"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -582,9 +580,9 @@ msgstr "Not özellikleri"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: packages/lib/services/KeymapService.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Hata"
+msgstr "Hata: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -646,9 +644,8 @@ msgid "Options"
 msgstr "Seçenekler"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Yanlış cevap: %s"
+msgstr "Geçersiz"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -725,6 +722,8 @@ msgstr "Daha fazla bilgi"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:528
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"Yön oklarını kullanarak görünüm elemanlarını dizebilirsiniz. Çıkmak için "
+"“Escape” tuşuna basabilirsiniz."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -788,13 +787,12 @@ msgid "Toggle editor layout"
 msgstr "Editör düzenini aç / kapat"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Editör düzenini aç / kapat"
+msgstr "Editörleri aç / kapat"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "Ugulama görünümünü değiştir"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -811,7 +809,7 @@ msgstr "Not defteri başlığı:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Metin doğrulama"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -1037,7 +1035,7 @@ msgstr "Uzaklaştır"
 
 #: packages/app-desktop/gui/MenuBar.js:552
 msgid "&Go"
-msgstr ""
+msgstr "&Git"
 
 #: packages/app-desktop/gui/MenuBar.js:564
 msgid "&Note"
@@ -1240,13 +1238,12 @@ msgstr ""
 "Önemli: Bu işlemi cihaz başına SADECE BİR KERE yapmanız yeterlidir."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "Şifreleme"
+msgstr "Yeniden şifreleme"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "Vazgeç"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1385,7 +1382,7 @@ msgid "Checking..."
 msgstr "Kontrol ediliyor..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:183
-#: packages/lib/models/Resource.js:320
+#: packages/lib/models/Resource.js:331
 msgid "Error"
 msgstr "Hata"
 
@@ -1423,7 +1420,7 @@ msgstr "Gözat..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "Değişikliklerin uygulanabilmesi için uygulama yeniden başlatılmalıdır."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1432,25 +1429,24 @@ msgstr "Hemen yap"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 msgid "Later"
-msgstr ""
+msgstr "Daha sonra"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
-msgstr "Hemen al:"
+msgstr "Şimdi yeniden başlat"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "Uygula"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "\"%s\" notu silinsin mi?"
+msgstr "\"%s\" eklentisi silinsin mi?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "Eklenti yükle"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1617,18 +1613,16 @@ msgstr[0] "Paylaşılabilir Bağlantıyı Kopyala"
 msgstr[1] "Paylaşılabilir Bağlantıları Kopyala"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "Dış düzenlemeyi durdur"
+msgstr "Dış düzenlemeyi aç/kapat"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "Dur"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Yolu panoya kopyala"
+msgstr "Geliştirici modu komutunu panoya kopyala"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1645,9 +1639,8 @@ msgid "Error opening note in editor: %s"
 msgstr "Editörde not açılırken hata oluştu: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "Taslak dizinini aç"
+msgstr "Profil dizinini aç"
 
 #: packages/app-desktop/app.js:336
 #, javascript-format
@@ -1675,9 +1668,8 @@ msgid "Save alarm"
 msgstr "Alarm kurun"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "Aç..."
+msgstr "Aç"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 #: packages/app-mobile/components/screens/Note.js:796
@@ -1963,11 +1955,14 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Notlarla konum bilgisi (geo-location) eşleştirebilmek için uygulamaya konum "
+"izni verilmesi gerekmekte.\n"
+"\n"
+"Daha sonra, Ayarlar ekranından bu izni istediğiniz zaman geri alabilirsiniz."
 
 #: packages/app-mobile/components/screens/Note.js:343
-#, fuzzy
 msgid "Permission needed"
-msgstr "Kamera kullanımı için izin"
+msgstr "İzin gerekmekte"
 
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
@@ -2042,6 +2037,13 @@ msgstr "Başlık ekle"
 msgid "Search"
 msgstr "Arama"
 
+#: packages/server/dist/middleware/notificationHandler.js:31
+#, javascript-format
+msgid ""
+"The default admin password is insecure and has not been changed! [Change it "
+"now](%s)"
+msgstr ""
+
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
@@ -2081,9 +2083,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Joplin Web Sitesi"
+msgstr "Joplin Sunucusu"
 
 #: packages/lib/shim-init-node.js:201
 #, javascript-format
@@ -2173,8 +2174,8 @@ msgstr "Senkronizasyon hedefi"
 
 #: packages/lib/models/Setting.js:106
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional "
+"parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Senkronize edilecek hedef. Her senkronizasyon hedefi, `sync.NUM.NAME` olarak "
 "adlandırılan ek parametrelere sahip olabilir (tümü aşağıda belgelenmiştir)."
@@ -2212,9 +2213,8 @@ msgid "AWS S3 bucket"
 msgstr "AWS S3 deposu"
 
 #: packages/lib/models/Setting.js:227
-#, fuzzy
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "AWS S3 URL"
 
 #: packages/lib/models/Setting.js:238
 msgid "AWS key"
@@ -2226,21 +2226,19 @@ msgstr "AWS gizli anahtarı"
 
 #: packages/lib/models/Setting.js:259
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "Joplin Sunucusu URL"
 
 #: packages/lib/models/Setting.js:273
-#, fuzzy
 msgid "Joplin Server Directory"
-msgstr "Joplin Dışa Aktarım Dizini"
+msgstr "Joplin Sunucusu Dizini"
 
 #: packages/lib/models/Setting.js:283
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Joplin Sunucusu kullanıcı adı"
 
 #: packages/lib/models/Setting.js:293
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "Ana parolayı girin:"
+msgstr "Joplin Sunucusu ğarola"
 
 #: packages/lib/models/Setting.js:305
 msgid "Attachment download behaviour"
@@ -2373,9 +2371,8 @@ msgid "Enable typographer support"
 msgstr "Dizgi desteğini etkinleştir"
 
 #: packages/lib/models/Setting.js:562
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "Not tarihçesini etkinleştir"
+msgstr "Linkify’ı aktifleştir"
 
 #: packages/lib/models/Setting.js:563
 msgid "Enable math expressions"
@@ -2390,17 +2387,16 @@ msgid "Enable Mermaid diagrams support"
 msgstr "Mermaid flowchart tipi diagram desteğini etkinleştir"
 
 #: packages/lib/models/Setting.js:566
-#, fuzzy
 msgid "Enable audio player"
-msgstr "Markdown emoji desteğini etkinleştir"
+msgstr "Ses / Müzik oynatıcıyı aktifleştir"
 
 #: packages/lib/models/Setting.js:567
 msgid "Enable video player"
-msgstr ""
+msgstr "Video oynatıcıyı aktifleştir"
 
 #: packages/lib/models/Setting.js:568
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "PDF görüntüleyiciyi aktifleştir"
 
 #: packages/lib/models/Setting.js:569
 msgid "Enable ==mark== syntax"
@@ -2487,9 +2483,8 @@ msgstr ""
 "monospace yazı tipi kullanılacaktır."
 
 #: packages/lib/models/Setting.js:662
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Joplin-geneli uygulama stili için özel stil sayfası"
+msgstr "Derlenmiş Markdown notları için özel stil dosyası"
 
 #: packages/lib/models/Setting.js:678
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2745,24 +2740,24 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Notlar ve ayarlar şu konumda saklanır: %s"
 
-#: packages/lib/models/Resource.js:317
+#: packages/lib/models/Resource.js:328
 msgid "Not downloaded"
 msgstr "İndirilmeyen"
 
-#: packages/lib/models/Resource.js:318
+#: packages/lib/models/Resource.js:329
 msgid "Downloading"
 msgstr "İndiriliyor"
 
-#: packages/lib/models/Resource.js:319
+#: packages/lib/models/Resource.js:330
 msgid "Downloaded"
 msgstr "İndirildi"
 
-#: packages/lib/models/Resource.js:371
+#: packages/lib/models/Resource.js:382
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "Ek dosyalarında çakışma: \"%s\""
 
-#: packages/lib/models/Resource.js:372
+#: packages/lib/models/Resource.js:383
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -2961,6 +2956,8 @@ msgstr "Devam etmekte"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
+"Bilinmeyen tipte bir dosya indirildi - Lütfen Joplin’i en yeni sürüme "
+"güncelleyin"
 
 #: packages/lib/JoplinServerApi.js:71
 #, javascript-format
@@ -3073,9 +3070,9 @@ msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "\"%s\" modülü \"%s\" formatı ve \"%s\" çıktısı için yüklenemedi"
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "\"%s\" modülü \"%s\" formatı ve \"%s\" çıktısı için yüklenemedi"
+msgstr "\"%s\" modülü \"%s\" formatı ve \"%s\" hedefi için yüklenemedi"
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3112,27 +3109,24 @@ msgid "Please specify import format for %s"
 msgstr "Lütfen %s için içe aktarma biçimini belirtin"
 
 #: packages/lib/services/KeymapService.js:273
-#, fuzzy
 msgid "command"
-msgstr "Komut"
+msgstr "komut"
 
 #: packages/lib/services/KeymapService.js:273
 #: packages/lib/services/KeymapService.js:278
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
-"%s tuş haritası, işlemler için gerekli olan \"command\" özelliğini "
-"barındırmıyor."
+msgstr "“%s”, işlemler için gerekli olan “%s” özelliğini barındırmıyor."
 
 #: packages/lib/services/KeymapService.js:278
 #: packages/lib/services/KeymapService.js:285
 msgid "accelerator"
-msgstr ""
+msgstr "hızlandırıcı"
 
 #: packages/lib/services/KeymapService.js:285
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Yanlış cevap: %s"
+msgstr "Hatalı %s: %s."
 
 #: packages/lib/services/KeymapService.js:303
 #, javascript-format
@@ -3195,87 +3189,91 @@ msgstr "%s: %s"
 msgid "Attachments"
 msgstr "Ek Dosyalar"
 
-#: packages/lib/services/report.js:190
+#: packages/lib/services/report.js:191
 msgid "Downloaded and decrypted"
 msgstr "İndirildi ve şifresi çözüldü"
 
-#: packages/lib/services/report.js:190 packages/lib/services/report.js:191
-#: packages/lib/services/report.js:194
+#: packages/lib/services/report.js:191 packages/lib/services/report.js:192
+#: packages/lib/services/report.js:193 packages/lib/services/report.js:196
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/report.js:191
+#: packages/lib/services/report.js:192
 msgid "Downloaded and encrypted"
 msgstr "İndirildi ve şifrelendi"
 
-#: packages/lib/services/report.js:204
+#: packages/lib/services/report.js:193
+#, fuzzy
+msgid "Created locally"
+msgstr "Oluşturulan yerel öğeler: %d."
+
+#: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
 msgstr "Eklenti dosyası indirilemedi"
 
-#: packages/lib/services/report.js:209
+#: packages/lib/services/report.js:211
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: packages/lib/services/report.js:222
+#: packages/lib/services/report.js:224
 msgid "Sync status (synced items / total items)"
 msgstr "Senkronizasyon durumu (senkronize öğeler / toplam öğeler)"
 
-#: packages/lib/services/report.js:226
+#: packages/lib/services/report.js:228
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: packages/lib/services/report.js:229
+#: packages/lib/services/report.js:231
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "Toplam: %d/%d"
 
-#: packages/lib/services/report.js:231
+#: packages/lib/services/report.js:233
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "Çakışan: %d"
 
-#: packages/lib/services/report.js:232
+#: packages/lib/services/report.js:234
 #, javascript-format
 msgid "To delete: %d"
 msgstr "Sil: %d"
 
-#: packages/lib/services/report.js:236
+#: packages/lib/services/report.js:238
 msgid "Folders"
 msgstr "Klasörler"
 
-#: packages/lib/services/report.js:244
+#: packages/lib/services/report.js:246
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d not"
 
-#: packages/lib/services/report.js:252
+#: packages/lib/services/report.js:254
 msgid "Coming alarms"
 msgstr "Yaklaşan alarmlar"
 
-#: packages/lib/services/report.js:257
+#: packages/lib/services/report.js:259
 #, javascript-format
 msgid "On %s: %s"
 msgstr "%s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Öneri yok"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Sözlüğe ekle"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Metin doğrulamayı aktifleştir"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Dil"
+msgstr "Dil değiştir"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3499,7 +3497,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr "Senkronizasyon hedefini en son sürüme yükseltin"
+msgstr "Senkronizasyon hedefini en son sürüme yükseltin."
 
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
@@ -3538,11 +3536,11 @@ msgid "Downloading resources..."
 msgstr "Kaynaklar indiriliyor..."
 
 #: packages/app-cli/app/command-sync.js:242
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
-"Senkronizasyon hedefinin güncellenmesi gerekmekte. Bu banner'a tıklayarak "
-"devam edebilirsiniz."
+"Senkronizasyon hedefinin güncellenmesi gerekmekte. Devam etmek için `%s` "
+"çalıştırın."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
@@ -3600,6 +3598,8 @@ msgstr "\"%s\" notu mevcut değil. Oluşturulsun mu?"
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
+"Notu düzenlemeye başlıyorsunuz. Doğrulamaya dönmek için editörü kapamanız "
+"gerekmekte."
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."

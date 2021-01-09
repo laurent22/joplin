@@ -1,5 +1,5 @@
 import { expectThrow } from '../../utils/testUtils';
-import { defaultPagination, Pagination, requestPagination } from './pagination';
+import { defaultPagination, Pagination, createPaginationLinks, requestPagination } from './pagination';
 
 describe('pagination', function() {
 
@@ -67,6 +67,58 @@ describe('pagination', function() {
 		await expectThrow(async () => requestPagination({ order_dir: 'ASC' }));
 		await expectThrow(async () => requestPagination({ order_dir: 'DESC' }));
 		await expectThrow(async () => requestPagination({ page: 0 }));
+	});
+
+	test('should create page link logic', async function() {
+		expect(createPaginationLinks(1, 5)).toEqual([
+			{ page: 1, isCurrent: true },
+			{ page: 2 },
+			{ page: 3 },
+			{ page: 4 },
+			{ page: 5 },
+		]);
+
+		expect(createPaginationLinks(3, 5)).toEqual([
+			{ page: 1 },
+			{ page: 2 },
+			{ page: 3, isCurrent: true },
+			{ page: 4 },
+			{ page: 5 },
+		]);
+
+		expect(createPaginationLinks(1, 10)).toEqual([
+			{ page: 1, isCurrent: true },
+			{ page: 2 },
+			{ page: 3 },
+			{ page: 4 },
+			{ page: 5 },
+			{ isEllipsis: true },
+			{ page: 9 },
+			{ page: 10 },
+		]);
+
+		expect(createPaginationLinks(10, 20)).toEqual([
+			{ page: 1 },
+			{ page: 2 },
+			{ isEllipsis: true },
+			{ page: 8 },
+			{ page: 9 },
+			{ page: 10, isCurrent: true },
+			{ page: 11 },
+			{ page: 12 },
+			{ isEllipsis: true },
+			{ page: 19 },
+			{ page: 20 },
+		]);
+
+		expect(createPaginationLinks(20, 20)).toEqual([
+			{ page: 1 },
+			{ page: 2 },
+			{ isEllipsis: true },
+			{ page: 18 },
+			{ page: 19 },
+			{ page: 20, isCurrent: true },
+		]);
 	});
 
 });

@@ -8,7 +8,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.
 
-However certain things can interfer with this service and prevent it from being accessible or from starting. If something does not work, check the following:
+However certain things can interfere with this service and prevent it from being accessible or from starting. If something does not work, check the following:
 
 - Check that the service is started. You can check this in the Web clipper options in the desktop app.
 - Check that the port used by the service is not blocked by a firewall. You can find the port number in the Web clipper options in the desktop Joplin application.

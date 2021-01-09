@@ -7,6 +7,7 @@ import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../../uti
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordinates';
+import Setting from '@joplin/lib/models/Setting';
 
 const Resource = require('@joplin/lib/models/Resource');
 
@@ -21,7 +22,7 @@ function contextMenuElement(editor: any, x: number, y: number) {
 	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
 	if (!iframes.length) return null;
 
-	const iframeRect = convertToScreenCoordinates(iframes[0].getBoundingClientRect());
+	const iframeRect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), iframes[0].getBoundingClientRect());
 
 	if (iframeRect.x < x && iframeRect.y < y && iframeRect.right > x && iframeRect.bottom > y) {
 		const relativeX = x - iframeRect.x;

@@ -1,4 +1,5 @@
 import { PluginManifest, PluginPermission } from './types';
+import validatePluginId from './validatePluginId';
 
 export default function manifestFromObject(o: any): PluginManifest {
 
@@ -28,8 +29,11 @@ export default function manifestFromObject(o: any): PluginManifest {
 		author: getString('author', false),
 		description: getString('description', false),
 		homepage_url: getString('homepage_url', false),
+		repository_url: getString('repository_url', false),
 		permissions: permissions,
 	};
+
+	validatePluginId(manifest.id);
 
 	if (o.permissions) {
 		for (const p of o.permissions) {

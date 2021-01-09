@@ -1,6 +1,8 @@
 import InMemoryCache from './InMemoryCache';
 import noteStyle from './noteStyle';
 import { fileExtension } from './pathUtils';
+import setupLinkify from './MdToHtml/setupLinkify';
+import validateLinks from './MdToHtml/validateLinks';
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
@@ -41,7 +43,6 @@ const rules: RendererRules = {
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 };
 
-const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const uslug = require('uslug');
 const markdownItAnchor = require('markdown-it-anchor');
@@ -516,6 +517,8 @@ export default class MdToHtml {
 				markdownIt.use(plugins[key].module, plugins[key].options);
 			}
 		}
+
+		markdownIt.validateLink = validateLinks;
 
 		if (this.pluginEnabled('linkify')) setupLinkify(markdownIt);
 

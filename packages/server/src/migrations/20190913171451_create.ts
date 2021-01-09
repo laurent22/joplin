@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { DbConnection } from '../db';
+import { DbConnection, defaultAdminEmail, defaultAdminPassword } from '../db';
 import { hashPassword } from '../utils/auth';
 import uuidgen from '../utils/uuidgen';
 
@@ -97,8 +97,8 @@ export async function up(db: DbConnection): Promise<any> {
 
 	await db('users').insert({
 		id: adminId,
-		email: 'admin@localhost',
-		password: hashPassword('admin'),
+		email: defaultAdminEmail,
+		password: hashPassword(defaultAdminPassword),
 		full_name: 'Admin',
 		is_admin: 1,
 		updated_time: now,

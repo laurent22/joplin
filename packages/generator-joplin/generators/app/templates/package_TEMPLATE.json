@@ -1,15 +1,18 @@
 {
-  "name": "joplin_plugin",
+  "name": "<%= packageName %>",
   "version": "1.0.0",
-  "description": "",
   "scripts": {
     "dist": "webpack",
-    "postinstall": "npm run dist"
+    "prepare": "npm run dist",
+    "update": "npm install -g generator-joplin && yo joplin --update"
   },
-  "keywords": [],
   "license": "MIT",
+  "keywords": [
+    "joplin-plugin"
+  ],
   "devDependencies": {
     "@types/node": "^14.0.14",
+    "chalk": "^4.1.0",
     "copy-webpack-plugin": "^6.1.0",
     "fs-extra": "^9.0.1",
     "glob": "^7.1.6",

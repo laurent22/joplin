@@ -10,6 +10,7 @@ import indexProfileRoute from './index/profile';
 import indexUsersRoute from './index/users';
 import indexUserRoute from './index/user';
 import indexFilesRoute from './index/files';
+import indexNotificationsRoute from './index/notifications';
 import defaultRoute from './default';
 
 const routes: Routes = {
@@ -24,6 +25,7 @@ const routes: Routes = {
 	'users': indexUsersRoute,
 	'user': indexUserRoute,
 	'files': indexFilesRoute,
+	'notifications': indexNotificationsRoute,
 
 	'': defaultRoute,
 };

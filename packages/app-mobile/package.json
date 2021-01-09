@@ -53,14 +53,15 @@
     "redux": "4.0.0",
     "rn-fetch-blob": "^0.12.0",
     "stream": "0.0.2",
+    "stream-browserify": "^3.0.0",
     "string-natural-compare": "^2.0.2",
     "timers": "^0.1.1",
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
-    "@joplin/tools": "^1.0.9",
     "@babel/core": "^7.11.6",
     "@babel/runtime": "^7.11.2",
+    "@joplin/tools": "^1.0.9",
     "@types/node": "^14.14.6",
     "@types/react": "^16.9.55",
     "execa": "^4.0.0",

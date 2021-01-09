@@ -11,6 +11,7 @@ const StyledRoot = styled.div`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	padding-left: ${props => props.theme.editorPaddingLeft}px;
 
 	@media (max-width: 800px) {
 		flex-direction: column;
@@ -52,7 +53,6 @@ function styles_(props: Props) {
 				paddingBottom: 5,
 				paddingLeft: 0,
 				paddingRight: 8,
-				marginLeft: 5,
 				color: theme.textStyle.color,
 				fontSize: Math.round(theme.textStyle.fontSize * 1.5),
 				backgroundColor: theme.backgroundColor,

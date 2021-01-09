@@ -61,6 +61,7 @@ const globalStyle: any = {
 	appearance: 'light',
 	mainPadding: 12,
 	topRowHeight: 50,
+	editorPaddingLeft: 8,
 };
 
 globalStyle.marginRight = globalStyle.margin;

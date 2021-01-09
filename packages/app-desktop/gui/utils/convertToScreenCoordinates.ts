@@ -1,14 +1,14 @@
 // Converts world coordinate to screen coordinates by applying the current
-// zoom.
-export default function convertToScreenCoordinates(o: any): any {
-	const pixelRatio = window.devicePixelRatio;
+// zoom. `windowContentZoomFactor` is the setting value.
+export default function convertToScreenCoordinates(windowContentZoomFactor: number, o: any): any {
+	const percent = windowContentZoomFactor / 100;
 
-	if (typeof o === 'number') return o * pixelRatio;
+	if (typeof o === 'number') return o * percent;
 
 	if (typeof o === 'object' && o !== null) {
 		o = JSON.parse(JSON.stringify(o));
 		for (const k of Object.keys(o)) {
-			o[k] = convertToScreenCoordinates(o[k]);
+			o[k] = convertToScreenCoordinates(windowContentZoomFactor, o[k]);
 		}
 		return o;
 	}

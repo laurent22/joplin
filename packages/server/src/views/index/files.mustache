@@ -1,5 +1,38 @@
-<div>
-	{{#paginatedFiles.items}}
-		<div>{{name}}</div>
-	{{/paginatedFiles.items}}
-</div>
+<form id="file_form" action="{{{postUrl}}}" method="POST" class="block">
+	<input type="hidden" name="parent_id" value="{{parentId}}"/>
+	<input type="submit" name="delete_all_button" class="button is-danger" value="Delete all" />
+</form>
+
+<table class="table is-fullwidth is-hoverable">
+	<thead>
+		<tr>
+			<th class="stretch">Name</th>
+			<th class="nowrap">Mime</th>
+			<th class="nowrap">Timestamp</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#paginatedFiles.items}}
+			<tr>
+				<td class="stretch item-{{type}}">
+					<a href="{{url}}"><span class="icon"><i class="{{icon}}"></i></span>{{name}}</a>
+				</td>
+				<td class="nowrap">{{mime}}</td>
+				<td class="nowrap">{{timestamp}}</td>
+			</tr>
+		{{/paginatedFiles.items}}
+	</tbody>
+</table>
+
+{{>pagination}}
+
+<script>
+	onDocumentReady(function() {
+		document.getElementById("file_form").addEventListener('submit', function(event) {
+			if (event.submitter.getAttribute('name') === 'delete_all_button') {
+				const ok = confirm('Delete all files and directories in this directory?');
+				if (!ok) event.preventDefault();
+			}
+		});
+	});
+</script>

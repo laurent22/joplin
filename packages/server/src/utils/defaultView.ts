@@ -1,14 +1,14 @@
-import { User } from '../db';
 import { View } from '../services/MustacheService';
 
 // Populate a View object with some good defaults.
-export default function(name: string, owner: User = null): View {
+export default function(name: string): View {
 	return {
 		name: name,
 		path: `index/${name}`,
-		content: {
-			owner,
-		},
-		partials: ['navbar'],
+		content: {},
+		partials: [
+			'navbar',
+			'notifications',
+		],
 	};
 }

@@ -66,7 +66,7 @@ class BaseModel {
 	public static TYPE_SMART_FILTER =  ModelType.SmartFilter;
 	public static TYPE_COMMAND =  ModelType.Command;
 
-	protected static dispatch: Function = function() {};
+	public static dispatch: Function = function() {};
 	private static saveMutexes_: any = {};
 
 	private static db_: any;

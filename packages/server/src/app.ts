@@ -1,10 +1,9 @@
 // Allows displaying error stack traces with TypeScript file paths
+require('source-map-support').install();
+
 import * as Koa from 'koa';
-import routes from './routes/routes';
-import { ErrorNotFound } from './utils/errors';
 import * as fs from 'fs-extra';
 import { argv } from 'yargs';
-import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat, MatchedRoute } from './utils/routeUtils';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, baseUrl } from './config';
 import configDev from './config-dev';
@@ -14,9 +13,16 @@ import { createDb, dropDb } from './tools/dbTools';
 import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection } from './db';
 import modelFactory from './models/factory';
 import controllerFactory from './controllers/factory';
-import { AppContext, Config } from './utils/types';
+import { AppContext, Config, Env } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
-import mustacheService, { isView, View } from './services/MustacheService';
+import routeHandler from './middleware/routeHandler';
+import notificationHandler from './middleware/notificationHandler';
+import ownerHandler from './middleware/ownerHandler';
+
+const { shimInit } = require('@joplin/lib/shim-init-node.js');
+shimInit();
+
+const env: Env = argv.env as Env || Env.Prod;
 
 interface Configs {
 	[name: string]: Config;
@@ -27,13 +33,6 @@ const configs: Configs = {
 	prod: configProd,
 	buildTypes: configBuildTypes,
 };
-
-require('source-map-support').install();
-
-const env: string = argv.env as string || 'prod';
-
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
-shimInit();
 
 let appLogger_: LoggerWrapper = null;
 
@@ -46,59 +45,13 @@ function appLogger(): LoggerWrapper {
 
 const app = new Koa();
 
-app.use(async (ctx: Koa.Context) => {
-	appLogger().info(`${ctx.request.method} ${ctx.path}`);
-
-	const match: MatchedRoute = null;
-
-	try {
-		const match = findMatchingRoute(ctx.path, routes);
-
-		if (match) {
-			const responseObject = await match.route.exec(match.subPath, ctx);
-
-			if (responseObject instanceof Response) {
-				ctx.response = responseObject.response;
-			} else if (isView(responseObject)) {
-				ctx.response.status = 200;
-				ctx.response.body = await mustacheService.renderView(responseObject);
-			} else {
-				ctx.response.status = 200;
-				ctx.response.body = responseObject;
-			}
-		} else {
-			throw new ErrorNotFound();
-		}
-	} catch (error) {
-		if (error.httpCode >= 400 && error.httpCode < 500) {
-			appLogger().error(`${error.httpCode}: ` + `${ctx.request.method} ${ctx.path}` + ` : ${error.message}`);
-		} else {
-			appLogger().error(error);
-		}
-
-		ctx.response.status = error.httpCode ? error.httpCode : 500;
-
-		const responseFormat = routeResponseFormat(match, ctx.path);
-
-		if (responseFormat === RouteResponseFormat.Html) {
-			ctx.response.set('Content-Type', 'text/html');
-			const view: View = {
-				name: 'error',
-				path: 'index/error',
-				content: {
-					error,
-				},
-			};
-			ctx.response.body = await mustacheService.renderView(view);
-		} else { // JSON
-			ctx.response.set('Content-Type', 'application/json');
-			const r: any = { error: error.message };
-			if (env === 'dev' && error.stack) r.stack = error.stack;
-			if (error.code) r.code = error.code;
-			ctx.response.body = r;
-		}
-	}
-});
+// Note: the order of middlewares is important. For example, ownerHandler
+// loads the user, which is then used by notificationHandler. And finally
+// routeHandler uses data from both previous middlewares. It would be good to
+// layout these dependencies in code but not clear how to do this.
+app.use(ownerHandler);
+app.use(notificationHandler);
+app.use(routeHandler);
 
 async function main() {
 	const configObject: Config = configs[env];
@@ -150,9 +103,11 @@ async function main() {
 		delete connectionCheckLogInfo.connection;
 
 		appLogger().info('Connection check:', connectionCheckLogInfo);
-		appContext.db = connectionCheck.connection;//
-		appContext.models = modelFactory(appContext.db);
+		appContext.env = env;
+		appContext.db = connectionCheck.connection;
+		appContext.models = modelFactory(appContext.db, baseUrl());
 		appContext.controllers = controllerFactory(appContext.models);
+		appContext.appLogger = appLogger;
 
 		appLogger().info('Migrating database...');
 		await migrateDb(appContext.db);

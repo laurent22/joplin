@@ -11,8 +11,12 @@ export interface PluginManifest {
 	author?: string;
 	description?: string;
 	homepage_url?: string;
+	repository_url?: string;
 	permissions?: PluginPermission[];
 
 	// Private keys
 	_package_hash?: string;
+	_publish_hash?: string;
+	_publish_commit?: string;
+	_npm_package_name?: string;
 }

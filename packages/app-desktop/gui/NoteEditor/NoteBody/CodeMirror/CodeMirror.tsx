@@ -387,6 +387,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				padding-bottom: 400px !important;
 			}
 
+			/* Left padding is applied at the editor component level, so we should remove it from the lines */
+			.CodeMirror pre.CodeMirror-line,
+			.CodeMirror pre.CodeMirror-line-like {
+				padding-left: 0;
+			}
+
 			.CodeMirror-sizer {
 				/* Add a fixed right padding to account for the appearance (and disappearance) */
 				/* of the sidebar */
@@ -614,7 +620,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		function pointerInsideEditor(x: number, y: number) {
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 			if (!elements.length) return null;
-			const rect = convertToScreenCoordinates(elements[0].getBoundingClientRect());
+			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
@@ -684,7 +690,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			bridge().window().webContents.off('context-menu', onContextMenu);
 		};
-	}, []);
+	}, [props.plugins]);
 
 	function renderEditor() {
 

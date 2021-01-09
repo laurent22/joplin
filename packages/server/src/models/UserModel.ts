@@ -14,6 +14,13 @@ export default class UserModel extends BaseModel {
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
+	public async login(email: string, password: string): Promise<User> {
+		const user = await this.loadByEmail(email);
+		if (!user) return null;
+		if (!auth.checkPassword(password, user.password)) return null;
+		return user;
+	}
+
 	public fromApiInput(object: User): User {
 		const user: User = {};
 
@@ -62,6 +69,10 @@ export default class UserModel extends BaseModel {
 		const s = email.split('@');
 		if (s.length !== 2) return false;
 		return !!s[0].length && !!s[1].length;
+	}
+
+	public async profileUrl(): Promise<string> {
+		return `${this.baseUrl}/profile`;
 	}
 
 	private async checkIsOwnerOrAdmin(userId: string): Promise<void> {

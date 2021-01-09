@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
-import editorCommandDeclarations from '../commands/editorCommandDeclarations';
 import CommandService, { CommandDeclaration,  CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 const time = require('@joplin/lib/time').default;
 const { reg } = require('@joplin/lib/registry.js');
@@ -20,11 +19,17 @@ interface HookDependencies {
 	titleInputRef: any;
 	saveNoteAndWait: Function;
 	setFormNote: Function;
+	plugins: any;
 }
 
 function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, setFormNote: Function): CommandRuntime {
 	return {
 		execute: async (_context: CommandContext, ...args: any[]) => {
+			if (!editorRef.current) {
+				reg.logger().warn('Received command, but editor is gone', declaration.name);
+				return;
+			}
+
 			if (!editorRef.current.execCommand) {
 				reg.logger().warn('Received command, but editor cannot execute commands', declaration.name);
 				return;
@@ -56,10 +61,10 @@ function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, s
 }
 
 export default function useWindowCommandHandler(dependencies: HookDependencies) {
-	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, setFormNote } = dependencies;
+	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, setFormNote, plugins } = dependencies;
 
 	useEffect(() => {
-		for (const declaration of editorCommandDeclarations) {
+		for (const declaration of CommandService.instance().editorCommandDeclarations()) {
 			CommandService.instance().registerRuntime(declaration.name, editorCommandRuntime(declaration, editorRef, setFormNote));
 		}
 
@@ -75,7 +80,7 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 		}
 
 		return () => {
-			for (const declaration of editorCommandDeclarations) {
+			for (const declaration of CommandService.instance().editorCommandDeclarations()) {
 				CommandService.instance().unregisterRuntime(declaration.name);
 			}
 
@@ -83,5 +88,5 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 				CommandService.instance().unregisterRuntime(command.declaration.name);
 			}
 		};
-	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef]);
+	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef, plugins]);
 }

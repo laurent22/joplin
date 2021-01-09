@@ -6,5 +6,6 @@
 	"name": "<%= pluginName %>",
 	"description": "<%= pluginDescription %>",
 	"author": "<%= pluginAuthor %>",
-	"homepage_url": "<%= pluginHomepageUrl %>"
+	"homepage_url": "<%= pluginHomepageUrl %>",
+	"repository_url": "<%= pluginRepositoryUrl %>"
 }

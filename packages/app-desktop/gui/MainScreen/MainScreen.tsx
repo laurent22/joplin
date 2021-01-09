@@ -214,7 +214,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		let output = null;
 
 		try {
-			output = loadLayout(userLayout, defaultLayout, rootLayoutSize);
+			output = loadLayout(Object.keys(userLayout).length ? userLayout : null, defaultLayout, rootLayoutSize);
 
 			if (!findItemByKey(output, 'sideBar') || !findItemByKey(output, 'noteList') || !findItemByKey(output, 'editor')) {
 				throw new Error('"sideBar", "noteList" and "editor" must be present in the layout');

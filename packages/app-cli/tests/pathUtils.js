@@ -66,14 +66,14 @@ describe('pathUtils', function() {
 
 	it('should create correct fileURL syntax', (async () => {
 		const testCases_win32 = [
-			['C:\\handle\\space test', 'file:///C:/handle/space+test'],
+			['C:\\handle\\space test', 'file:///C:/handle/space%20test'],
 			['C:\\escapeplus\\+', 'file:///C:/escapeplus/%2B'],
-			['C:\\handle\\single quote\'', 'file:///C:/handle/single+quote%27'],
+			['C:\\handle\\single quote\'', 'file:///C:/handle/single%20quote%27'],
 		];
 		const testCases_unixlike = [
-			['/handle/space test', 'file:///handle/space+test'],
+			['/handle/space test', 'file:///handle/space%20test'],
 			['/escapeplus/+', 'file:///escapeplus/%2B'],
-			['/handle/single quote\'', 'file:///handle/single+quote%27'],
+			['/handle/single quote\'', 'file:///handle/single%20quote%27'],
 		];
 
 		for (let i = 0; i < testCases_win32.length; i++) {

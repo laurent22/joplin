@@ -82,9 +82,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				resources: noteResources,
 				codeTheme: theme.codeThemeCss,
 				postMessageSyntax: 'window.joplinPostMessage_',
-				// Disabled for now as it causes issues when zooming in or out
-				// https://github.com/laurent22/joplin/pull/3939#issuecomment-734260166
-				enableLongPress: false, // shim.mobilePlatform() === 'android', // On iOS, there's already a built-on open/share menu
+				enableLongPress: shim.mobilePlatform() === 'android', // On iOS, there's already a built-on open/share menu
 			};
 
 			// Whenever a resource state changes, for example when it goes from "not downloaded" to "downloaded", the "noteResources"

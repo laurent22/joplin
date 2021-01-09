@@ -81,7 +81,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manife
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
-		word-break: break-all;
+	/*	word-break: break-all; */
 	}
 	pre code {
 		border: none;
@@ -377,6 +377,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manife
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
 <li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
 </ul>
 </li>
 <li>
@@ -405,6 +407,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manife
 <thead>
 <tr>
 <th>Name</th>
+<th>Type</th>
 <th>Required?</th>
 <th>Description</th>
 </tr>
@@ -412,42 +415,55 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manife
 <tbody>
 <tr>
 <td><code>manifest_version</code></td>
+<td>number</td>
 <td><strong>Yes</strong></td>
 <td>For now should always be &quot;1&quot;.</td>
 </tr>
 <tr>
 <td><code>name</code></td>
+<td>string</td>
 <td><strong>Yes</strong></td>
 <td>Name of the plugin. Should be a user-friendly string, as it will be displayed in the UI.</td>
 </tr>
 <tr>
 <td><code>version</code></td>
+<td>string</td>
 <td><strong>Yes</strong></td>
 <td>Version number such as &quot;1.0.0&quot;.</td>
 </tr>
 <tr>
 <td><code>app_min_version</code></td>
+<td>string</td>
 <td><strong>Yes</strong></td>
 <td>Minimum version of Joplin that the plugin is compatible with. In general it should be whatever version you are using to develop the plugin.</td>
 </tr>
 <tr>
 <td><code>description</code></td>
+<td>string</td>
 <td>No</td>
 <td>Detailed description of the plugin.</td>
 </tr>
 <tr>
 <td><code>author</code></td>
+<td>string</td>
 <td>No</td>
 <td>Plugin author name.</td>
 </tr>
 <tr>
 <td><code>homepage_url</code></td>
+<td>string</td>
 <td>No</td>
 <td>Homepage URL of the plugin. It can also be, for example, a link to a GitHub repository.</td>
 </tr>
+<tr>
+<td><code>content_scripts</code></td>
+<td>string[]</td>
+<td>No</td>
+<td>List of <a href="https://github.com/laurent22/joplin/blob/dev/packages/generator-joplin/README.md#content-scripts">content scripts</a> used by the plugin.</td>
+</tr>
 </tbody>
 </table>
-<p>Here's a complete example:</p>
+<h2>Manifest example<a name="manifest-example" href="#manifest-example" class="heading-anchor">🔗</a></h2>
 <pre><code class="language-json">{
     &quot;manifest_version&quot;: 1,
     &quot;name&quot;: &quot;Joplin Simple Plugin&quot;,
@@ -497,7 +513,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manife
 </div></div>
 
 <div class="footer">
-Copyright (C) 2016-2020 Laurent Cozic
+Copyright (C) 2016-2021 Laurent Cozic
 </div>
 </body>
 </html>

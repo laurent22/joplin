@@ -28,6 +28,7 @@ const config = {
 		'main.files': 'WithDates, WithUuid',
 		'main.api_clients': 'WithDates, WithUuid',
 		'main.changes': 'WithDates, WithUuid',
+		'main.notifications': 'WithDates, WithUuid',
 	},
 };
 
@@ -66,6 +67,7 @@ function createTypeString(table: any) {
 		if (name === 'item_type') type = 'ItemType';
 		if (table.name === 'files' && name === 'content') type = 'Buffer';
 		if (table.name === 'changes' && name === 'type') type = 'ChangeType';
+		if (table.name === 'notifications' && name === 'level') type = 'NotificationLevel';
 		if ((name === 'id' || name.endsWith('_id') || name === 'uuid') && type === 'string') type = 'Uuid';
 
 		colStrings.push(`\t${name}?: ${type};`);
