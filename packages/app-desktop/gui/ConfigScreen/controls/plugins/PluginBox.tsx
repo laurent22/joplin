@@ -43,6 +43,7 @@ export interface PluginItem {
 
 const CellRoot = styled.div`
 	display: flex;
+	box-sizing: border-box;
 	background-color: ${props => props.theme.backgroundColor};
 	flex-direction: column;
 	align-items: flex-start;

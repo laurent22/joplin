@@ -50,6 +50,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.onApplyClick = this.onApplyClick.bind(this);
 		this.renderLabel = this.renderLabel.bind(this);
 		this.renderDescription = this.renderDescription.bind(this);
+		this.renderHeader = this.renderHeader.bind(this);
 	}
 
 	async checkSyncConfig_() {
@@ -304,6 +305,24 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
+	private renderHeader(themeId: number, label: string) {
+		const theme = themeStyle(themeId);
+
+		const labelStyle = Object.assign({}, theme.textStyle, {
+			display: 'block',
+			color: theme.color,
+			fontSize: theme.fontSize * 1.25,
+			fontWeight: 500,
+			marginBottom: theme.mainPadding,
+		});
+
+		return (
+			<div style={labelStyle}>
+				<label>{label}</label>
+			</div>
+		);
+	}
+
 	private renderDescription(themeId: number, description: string) {
 		return description ? <div style={this.descriptionStyle(themeId)}>{description}</div> : null;
 	}
@@ -384,6 +403,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						}}
 						renderLabel={this.renderLabel}
 						renderDescription={this.renderDescription}
+						renderHeader={this.renderHeader}
 					/>
 				</div>
 			);

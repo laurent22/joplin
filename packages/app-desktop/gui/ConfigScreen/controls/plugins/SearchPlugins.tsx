@@ -26,6 +26,7 @@ interface Props {
 	pluginSettings: PluginSettings;
 	onPluginSettingsChange(event: any): void;
 	renderDescription: Function;
+	maxWidth: number;
 }
 
 let repoApi_: RepositoryApi = null;
@@ -99,7 +100,7 @@ export default function(props: Props) {
 
 	return (
 		<Root>
-			<div style={{ marginBottom: 10, width: 250 }}>
+			<div style={{ marginBottom: 10, width: props.maxWidth }}>
 				<SearchInput
 					inputRef={null}
 					value={props.searchQuery}

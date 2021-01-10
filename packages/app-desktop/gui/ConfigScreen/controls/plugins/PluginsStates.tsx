@@ -5,12 +5,14 @@ import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
 import PluginBox from './PluginBox';
-// import Button, { ButtonLevel } from '../../../Button/Button';
+import Button, { ButtonLevel } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
 import { PluginItem } from './PluginBox';
 const { space } = require('styled-system');
+
+const maxWidth: number = 250;
 
 const Root = styled.div`
 	display: flex;
@@ -23,7 +25,9 @@ const UserPluginsRoot = styled.div`
 	flex-wrap: wrap;
 `;
 
-// const InstallButton = styled(Button)``;
+const ToolsButton = styled(Button)`
+	margin-right: 2px;
+`;
 
 interface Props {
 	value: any;
@@ -31,6 +35,7 @@ interface Props {
 	onChange: Function;
 	renderLabel: Function;
 	renderDescription: Function;
+	renderHeader: Function;
 }
 
 function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[] {
@@ -96,22 +101,34 @@ export default function(props: Props) {
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	}, [pluginSettings, props.onChange]);
 
-	// const onInstall = useCallback(async () => {
-	// 	const result = bridge().showOpenDialog({
-	// 		filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
-	// 	});
+	const onInstall = useCallback(async () => {
+		const result = bridge().showOpenDialog({
+			filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
+		});
 
-	// 	const filePath = result && result.length ? result[0] : null;
-	// 	if (!filePath) return;
+		const filePath = result && result.length ? result[0] : null;
+		if (!filePath) return;
 
-	// 	const plugin = await pluginService.installPlugin(filePath);
+		const plugin = await pluginService.installPlugin(filePath);
 
-	// 	const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-	// 		draft[plugin.manifest.id] = defaultPluginSetting();
-	// 	});
+		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
+			draft[plugin.manifest.id] = defaultPluginSetting();
+		});
 
-	// 	props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
-	// }, [pluginSettings, props.onChange]);
+		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+	}, [pluginSettings, props.onChange]);
+
+	const onToolsClick = useCallback(async () => {
+		const template = [];
+
+		template.push({
+			label: _('Install from file'),
+			click: onInstall,
+		});
+
+		const menu = bridge().Menu.buildFromTemplate(template);
+		menu.popup(bridge().window());
+	}, [onInstall]);
 
 	const onSearchQueryChange = useCallback((event: OnChangeEvent) => {
 		setSearchQuery(event.value);
@@ -157,28 +174,14 @@ export default function(props: Props) {
 		}
 	}
 
-	function renderInstallFromFile(): any {
-		return null;
-
-		// Disabled for now since there are already options for developments,
-		// and installing from file can be done by dropping the file in /plugins
-
-		// return (
-		// 	<div>
-		// 		{props.renderLabel(props.themeId, _('Install plugin from file'))}
-		// 		<InstallButton level={ButtonLevel.Primary} onClick={onInstall} title={_('Install plugin')}/>
-		// 		<div style={{ display: 'flex', flex: 1 }}/>
-		// 	</div>
-		// );
-	}
-
 	const pluginItems = usePluginItems(pluginService.plugins, pluginSettings);
 
 	return (
 		<Root>
 			<div style={{ marginBottom: 20 }}>
-				{props.renderLabel(props.themeId, _('Search for plugins'))}
+				{props.renderHeader(props.themeId, _('Search for plugins'))}
 				<SearchPlugins
+					maxWidth={maxWidth}
 					themeId={props.themeId}
 					searchQuery={searchQuery}
 					pluginSettings={pluginSettings}
@@ -188,10 +191,15 @@ export default function(props: Props) {
 				/>
 			</div>
 
-			{props.renderLabel(props.themeId, _('Manage your plugins'))}
-			{renderUserPlugins(pluginItems)}
-
-			{renderInstallFromFile()}
+			<div>
+				<div style={{ display: 'flex', flexDirection: 'row', maxWidth }}>
+					<div style={{ display: 'flex', flex: 1 }}>
+						{props.renderHeader(props.themeId, _('Manage your plugins'))}
+					</div>
+					<ToolsButton tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Primary} onClick={onToolsClick}/>
+				</div>
+				{renderUserPlugins(pluginItems)}
+			</div>
 		</Root>
 	);
 }
