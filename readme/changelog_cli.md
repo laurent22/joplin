@@ -1,6 +1,6 @@
 # Joplin terminal app changelog
 
-## [cli-v1.6.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.6.1) - 2021-01-11T11:10:13Z
+## [cli-v1.6.2](https://github.com/laurent22/joplin/releases/tag/cli-v1.6.2) - 2021-01-11T11:41:56Z
 
 - New: Add more log info when a revision cannot be deleted due to still-encrypted item
 - Improved: Do not display error message when fixing ENEX resource mime type (#4310)
