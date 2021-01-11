@@ -1,5 +1,16 @@
 # Joplin terminal app changelog
 
+## [cli-v1.6.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.6.1) - 2021-01-11T11:10:13Z
+
+- New: Add more log info when a revision cannot be deleted due to still-encrypted item
+- Improved: Do not display error message when fixing ENEX resource mime type (#4310)
+- Improved: Improve support for SVG images when importing ENEX files
+- Improved: Improved support for bold and italic format when importing ENEX file (#4316)
+- Improved: Support natural sorting by title (#4272 by [@volatilevar](https://github.com/volatilevar))
+- Improved: Upload Big Notes to Onedrive (#4120) (#3528 by Jonathan Heard)
+- Fixed: Fixed OneDrive issue that would require a full resync every time (#4324) (#4313 by Jonathan Heard)
+- Fixed: Fixed importing ENEX files that contain hidden sections
+
 ## [cli-v1.5.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.5.1) - 2020-12-26T00:46:31Z
 
 - New: Add table captions when importing ENEX files
