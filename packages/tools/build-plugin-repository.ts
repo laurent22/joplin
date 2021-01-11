@@ -2,6 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
+import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '@joplin/lib/markdownUtils';
 const { execCommand, execCommandVerbose, rootDir, resolveRelativePathWithinDir, gitPullTry } = require('./tool-utils.js');
 
 interface NpmPackage {
@@ -91,6 +92,49 @@ async function extractPluginFilesFromPackage(originalPluginManifests: any, workD
 	return manifest;
 }
 
+async function updateReadme(readmePath: string, manifests: any) {
+	const rows: MarkdownTableRow[] = [];
+
+	for (const pluginId in manifests) {
+		rows.push(manifests[pluginId]);
+	}
+
+	const headers: MarkdownTableHeader[] = [
+		{
+			name: 'homepage_url',
+			label: '-',
+			filter: (value: string) => {
+				return `[🏠](${markdownUtils.escapeLinkUrl(value)})`;
+			},
+		},
+		{
+			name: 'name',
+			label: 'Name',
+		},
+		{
+			name: 'version',
+			label: 'Version',
+		},
+		{
+			name: 'description',
+			label: 'Description',
+		},
+		{
+			name: 'author',
+			label: 'Author',
+		},
+	];
+
+	const mdTable = markdownUtils.createMarkdownTable(headers, rows);
+
+	const tableRegex = /<!-- PLUGIN_LIST -->([^]*)<!-- PLUGIN_LIST -->/;
+
+	const content = await fs.readFile(readmePath, 'utf8');
+	const newContent = content.replace(tableRegex, `<!-- PLUGIN_LIST -->\n${mdTable}\n<!-- PLUGIN_LIST -->`);
+
+	await fs.writeFile(readmePath, newContent, 'utf8');
+}
+
 async function main() {
 	// We assume that the repository is located in a directory next to the main
 	// Joplin monorepo.
@@ -153,6 +197,8 @@ async function main() {
 	} else {
 		await fs.remove(errorsPath);
 	}
+
+	await updateReadme(`${repoDir}/README.md`, manifests);
 
 	await fs.remove(tempDir);
 }
