@@ -314,6 +314,8 @@ export default class CommandService extends BaseService {
 		return (commandName.indexOf('editor.') === 0 ||
 				// These commands are grandfathered in, but in the future
 				// all editor commands should start with "editor."
+				commandName === 'insertText' ||
+				commandName === 'scrollToHash' ||
 				commandName === 'textCopy' ||
 				commandName === 'textCut' ||
 				commandName === 'textPaste' ||
@@ -328,7 +330,9 @@ export default class CommandService extends BaseService {
 				commandName === 'textCheckbox' ||
 				commandName === 'textHeading' ||
 				commandName === 'textHorizontalRule' ||
-				commandName === 'insertDateTime'
+				commandName === 'insertDateTime' ||
+				commandName === 'selectedText' ||
+				commandName === 'replaceSelection'
 		);
 	}
 
