@@ -217,6 +217,16 @@
 								<div class="lead">
 									<p>Called when a message is sent from the webview (using postMessage).</p>
 								</div>
+								<p>To post a message from the webview to the plugin use:</p>
+								<pre><code class="language-javascript"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> webviewApi.postMessage(message);</code></pre>
+								<ul>
+									<li><code>message</code> can be any JavaScript object, string or number</li>
+									<li><code>response</code> is whatever was returned by the <code>onMessage</code> handler</li>
+								</ul>
+								<p>Using this mechanism, you can have two-way communication between the
+								plugin and webview.</p>
+								<p>See the <a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages">postMessage
+								demo</a> for more details.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

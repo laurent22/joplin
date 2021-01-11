@@ -108,42 +108,56 @@
     }
 }</code></pre>
 						<ul>
-							<li><p>The <code>context</code> argument is currently unused but could be used later
-									on to provide access to your own plugin so that the content script
-								and plugin can communicate.</p>
+							<li><p>The <code>context</code> argument is currently unused but could be used later on
+									to provide access to your own plugin so that the content script and
+								plugin can communicate.</p>
 							</li>
 							<li><p>The <code>plugin</code> key is your CodeMirror plugin. This is where you can
-									register new commands with CodeMirror or interact with the
-								CodeMirror instance as needed.</p>
+									register new commands with CodeMirror or interact with the CodeMirror
+								instance as needed.</p>
 							</li>
-							<li><p>The <code>codeMirrorResources</code> key is an array of CodeMirror resources
-									that will be loaded and attached to the CodeMirror module. These
-									are made up of addons, keymaps, and modes. For example, for a
-									plugin that want&#39;s to enable clojure highlighting in code blocks.
-								<code>codeMirrorResources</code> would be set to <code>[&#39;mode/clojure/clojure&#39;]</code>.</p>
+							<li><p>The <code>codeMirrorResources</code> key is an array of CodeMirror resources that
+									will be loaded and attached to the CodeMirror module. These are made up
+									of addons, keymaps, and modes. For example, for a plugin that want&#39;s to
+									enable clojure highlighting in code blocks. <code>codeMirrorResources</code> would
+								be set to <code>[&#39;mode/clojure/clojure&#39;]</code>.</p>
 							</li>
 							<li><p>The <code>codeMirrorOptions</code> key contains all the
-									<a href="https://codemirror.net/doc/manual.html#config">CodeMirror</a>
-									options that will be set or changed by this plugin. New options
-									can alse be declared via
+									<a href="https://codemirror.net/doc/manual.html#config">CodeMirror</a> options
+									that will be set or changed by this plugin. New options can alse be
+									declared via
 									<a href="https://codemirror.net/doc/manual.html#defineOption"><code>CodeMirror.defineOption</code></a>,
-									and then have their value set here. For example, a plugin that
-									enables line numbers would set <code>codeMirrorOptions</code> to
-								<code>{&#39;lineNumbers&#39;: true}</code>.</p>
+									and then have their value set here. For example, a plugin that enables
+								line numbers would set <code>codeMirrorOptions</code> to <code>{&#39;lineNumbers&#39;: true}</code>.</p>
 							</li>
-							<li><p>Using the <strong>optional</strong> <code>assets</code> key you may specify <strong>only</strong> CSS
-									assets that should be loaded in the rendered HTML document. Check
-									for example the Joplin [Mermaid
+							<li><p>Using the <strong>optional</strong> <code>assets</code> key you may specify <strong>only</strong> CSS assets
+									that should be loaded in the rendered HTML document. Check for example
+									the Joplin [Mermaid
 									plugin](<a href="https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts">https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts</a>)
 								to see how the data should be structured.</p>
 							</li>
 						</ul>
-						<p>One of the <code>plugin</code>, <code>codeMirrorResources</code>, or <code>codeMirrorOptions</code>
-							keys must be provided for the plugin to be valid. Having multiple or
-						all provided is also okay.</p>
-						<p>See the <a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script">demo
+						<p>One of the <code>plugin</code>, <code>codeMirrorResources</code>, or <code>codeMirrorOptions</code> keys
+							must be provided for the plugin to be valid. Having multiple or all
+						provided is also okay.</p>
+						<p>See also the <a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script">demo
 							plugin</a>
 						for an example of all these keys being used in one plugin.</p>
+						<a href="#posting-messages-from-the-content-script-to-your-plugin" id="posting-messages-from-the-content-script-to-your-plugin" style="color: inherit; text-decoration: none;">
+							<h2>Posting messages from the content script to your plugin</h2>
+						</a>
+						<p>In order to post messages to the plugin, you can use the postMessage
+						function passed to the <a href="../interfaces/contentscriptcontext.html">context</a>.</p>
+						<pre><code class="language-javascript"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> context.postMessage(<span class="hljs-string">&#x27;messageFromCodeMirrorContentScript&#x27;</span>);</code></pre>
+						<p>When you post a message, the plugin can send back a <code>response</code> thus
+						allowing two-way communication:</p>
+						<pre><code class="language-javascript"><span class="hljs-keyword">await</span> joplin.contentScripts.onMessage(contentScriptId, <span class="hljs-function">(<span class="hljs-params">message</span>) =&gt;</span> {
+    <span class="hljs-comment">// Process message</span>
+    <span class="hljs-keyword">return</span> response; <span class="hljs-comment">// Can be any object, string or number</span>
+});</code></pre>
+						<p>See <a href="../classes/joplincontentscripts.html#onmessage">JoplinContentScripts.onMessage</a> for more details, as well as
+							the <a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages">postMessage
+						demo</a>.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
@@ -176,43 +190,51 @@
 							<h2>Exported members</h2>
 						</a>
 						<ul>
-							<li><p>The <code>context</code> argument is currently unused but could be used later
-									on to provide access to your own plugin so that the content script
-								and plugin can communicate.</p>
+							<li><p>The <code>context</code> argument is currently unused but could be used later on
+									to provide access to your own plugin so that the content script and
+								plugin can communicate.</p>
 							</li>
-							<li><p>The <strong>required</strong> <code>plugin</code> key is the actual Markdown-It plugin -
-									check the [official
-									doc](<a href="https://github.com/markdown-it/markdown-it">https://github.com/markdown-it/markdown-it</a>) for more
+							<li><p>The <strong>required</strong> <code>plugin</code> key is the actual Markdown-It plugin - check
+									the <a href="https://github.com/markdown-it/markdown-it">official doc</a> for more
 									information. The <code>options</code> parameter is of type
 									<a href="https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml.ts">RuleOptions</a>,
-									which contains a number of options, mostly useful for Joplin&#39;s
-								internal code.</p>
+									which contains a number of options, mostly useful for Joplin&#39;s internal
+								code.</p>
 							</li>
-							<li><p>Using the <strong>optional</strong> <code>assets</code> key you may specify assets such as
-									JS or CSS that should be loaded in the rendered HTML document.
-									Check for example the Joplin [Mermaid
+							<li><p>Using the <strong>optional</strong> <code>assets</code> key you may specify assets such as JS
+									or CSS that should be loaded in the rendered HTML document. Check for
+									example the Joplin [Mermaid
 									plugin](<a href="https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts">https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts</a>)
 								to see how the data should be structured.</p>
 							</li>
 						</ul>
-						<a href="#passing-messages-from-the-content-script-to-your-plugin" id="passing-messages-from-the-content-script-to-your-plugin" style="color: inherit; text-decoration: none;">
-							<h2>Passing messages from the content script to your plugin</h2>
+						<a href="#posting-messages-from-the-content-script-to-your-plugin" id="posting-messages-from-the-content-script-to-your-plugin" style="color: inherit; text-decoration: none;">
+							<h2>Posting messages from the content script to your plugin</h2>
 						</a>
 						<p>The application provides the following function to allow executing
 						commands from the rendered HTML code:</p>
-						<p><code>webviewApi.executeCommand(commandName, ...args)</code></p>
-						<p>So you can use this mechanism to pass messages from the note viewer
-							to your own plugin. To do so you would define a command, using
-							<code>joplin.commands.register</code>, then you would call this command using
-							the <code>webviewApi</code> object. See again <a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script">the
-							demo</a>
-						to see how this can be done.</p>
+						<pre><code class="language-javascript"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> webviewApi.postMessage(contentScriptId, message);</code></pre>
+						<ul>
+							<li><code>contentScriptId</code> is the ID you&#39;ve defined when you registered the
+								content script. You can retrieve it from the
+							<a href="../interfaces/contentscriptcontext.html">context</a>.</li>
+							<li><code>message</code> can be any basic JavaScript type (number, string, plain
+							object), but it cannot be a function or class instance.</li>
+						</ul>
+						<p>When you post a message, the plugin can send back a <code>response</code> thus
+						allowing two-way communication:</p>
+						<pre><code class="language-javascript"><span class="hljs-keyword">await</span> joplin.contentScripts.onMessage(contentScriptId, <span class="hljs-function">(<span class="hljs-params">message</span>) =&gt;</span> {
+    <span class="hljs-comment">// Process message</span>
+    <span class="hljs-keyword">return</span> response; <span class="hljs-comment">// Can be any object, string or number</span>
+});</code></pre>
+						<p>See <a href="../classes/joplincontentscripts.html#onmessage">JoplinContentScripts.onMessage</a> for more details, as well as
+							the <a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages">postMessage
+						demo</a>.</p>
 						<a href="#registering-an-existing-markdown-it-plugin" id="registering-an-existing-markdown-it-plugin" style="color: inherit; text-decoration: none;">
 							<h2>Registering an existing Markdown-it plugin</h2>
 						</a>
-						<p>To include a regular Markdown-It plugin, that doesn&#39;t make use of
-							any Joplin-specific features, you would simply create a file such as
-						this:</p>
+						<p>To include a regular Markdown-It plugin, that doesn&#39;t make use of any
+						Joplin-specific features, you would simply create a file such as this:</p>
 						<pre><code class="language-javascript"><span class="hljs-built_in">module</span>.exports = {
     <span class="hljs-attr">default</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{
         <span class="hljs-keyword">return</span> {
