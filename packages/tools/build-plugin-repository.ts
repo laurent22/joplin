@@ -102,7 +102,7 @@ async function updateReadme(readmePath: string, manifests: any) {
 	const headers: MarkdownTableHeader[] = [
 		{
 			name: 'homepage_url',
-			label: '-',
+			label: '&nbsp;',
 			filter: (value: string) => {
 				return `[🏠](${markdownUtils.escapeLinkUrl(value)})`;
 			},
@@ -124,6 +124,10 @@ async function updateReadme(readmePath: string, manifests: any) {
 			label: 'Author',
 		},
 	];
+
+	rows.sort((a: any, b: any) => {
+		return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : +1;
+	});
 
 	const mdTable = markdownUtils.createMarkdownTable(headers, rows);
 
