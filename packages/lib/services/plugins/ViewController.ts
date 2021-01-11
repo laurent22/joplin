@@ -1,5 +1,9 @@
 import { ViewHandle } from './utils/createViewHandle';
 
+export interface EmitMessageEvent {
+	message: any;
+}
+
 export default class ViewController {
 
 	private handle_: ViewHandle;
@@ -36,7 +40,7 @@ export default class ViewController {
 		throw new Error('Must be overriden');
 	}
 
-	public emitMessage(event: any) {
+	public async emitMessage(event: EmitMessageEvent): Promise<any> {
 		console.info('Calling ViewController.emitMessage - but not implemented', event);
 	}
 

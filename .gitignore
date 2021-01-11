@@ -213,6 +213,15 @@ packages/app-cli/tests/support/plugins/multi_selection/api/types.js.map
 packages/app-cli/tests/support/plugins/multi_selection/src/index.d.ts
 packages/app-cli/tests/support/plugins/multi_selection/src/index.js
 packages/app-cli/tests/support/plugins/multi_selection/src/index.js.map
+packages/app-cli/tests/support/plugins/post_messages/api/index.d.ts
+packages/app-cli/tests/support/plugins/post_messages/api/index.js
+packages/app-cli/tests/support/plugins/post_messages/api/index.js.map
+packages/app-cli/tests/support/plugins/post_messages/api/types.d.ts
+packages/app-cli/tests/support/plugins/post_messages/api/types.js
+packages/app-cli/tests/support/plugins/post_messages/api/types.js.map
+packages/app-cli/tests/support/plugins/post_messages/src/index.d.ts
+packages/app-cli/tests/support/plugins/post_messages/src/index.js
+packages/app-cli/tests/support/plugins/post_messages/src/index.js.map
 packages/app-cli/tests/support/plugins/register_command/api/index.d.ts
 packages/app-cli/tests/support/plugins/register_command/api/index.js
 packages/app-cli/tests/support/plugins/register_command/api/index.js.map
@@ -1005,6 +1014,9 @@ packages/lib/services/KeymapService_keysRegExp.js.map
 packages/lib/services/KvStore.d.ts
 packages/lib/services/KvStore.js
 packages/lib/services/KvStore.js.map
+packages/lib/services/PostMessageService.d.ts
+packages/lib/services/PostMessageService.js
+packages/lib/services/PostMessageService.js.map
 packages/lib/services/ResourceEditWatcher/index.d.ts
 packages/lib/services/ResourceEditWatcher/index.js
 packages/lib/services/ResourceEditWatcher/index.js.map
@@ -1143,6 +1155,9 @@ packages/lib/services/plugins/api/Joplin.js.map
 packages/lib/services/plugins/api/JoplinCommands.d.ts
 packages/lib/services/plugins/api/JoplinCommands.js
 packages/lib/services/plugins/api/JoplinCommands.js.map
+packages/lib/services/plugins/api/JoplinContentScripts.d.ts
+packages/lib/services/plugins/api/JoplinContentScripts.js
+packages/lib/services/plugins/api/JoplinContentScripts.js.map
 packages/lib/services/plugins/api/JoplinData.d.ts
 packages/lib/services/plugins/api/JoplinData.js
 packages/lib/services/plugins/api/JoplinData.js.map
