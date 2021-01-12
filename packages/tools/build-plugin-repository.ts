@@ -11,12 +11,23 @@ interface NpmPackage {
 	date: Date;
 }
 
+function stripOffPackageOrg(name: string): string {
+	const n = name.split('/');
+	if (n[0][0] === '@') n.splice(0, 1);
+	return n.join('/');
+}
+
+function isJoplinPluginPackage(pack: any): boolean {
+	if (!pack.keywords || !pack.keywords.includes('joplin-plugin')) return false;
+	if (stripOffPackageOrg(pack.name).indexOf('joplin-plugin') !== 0) return false;
+	return true;
+}
+
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
 
 	for (const r of results) {
-		if (r.name.indexOf('joplin-plugin') !== 0) continue;
-		if (!r.keywords || !r.keywords.includes('joplin-plugin')) continue;
+		if (!isJoplinPluginPackage(r)) continue;
 
 		output.push({
 			name: r.name,
@@ -48,7 +59,14 @@ async function readJsonFile(manifestPath: string, defaultValue: any = null): Pro
 	return JSON.parse(content);
 }
 
-async function extractPluginFilesFromPackage(originalPluginManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
+function caseInsensitiveFindManifest(manifests: any, manifestId: string): any {
+	for (const id of Object.keys(manifests)) {
+		if (id.toLowerCase() === manifestId.toLowerCase()) return manifests[id];
+	}
+	return null;
+}
+
+async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = process.cwd();
 	process.chdir(workDir);
 
@@ -76,7 +94,11 @@ async function extractPluginFilesFromPackage(originalPluginManifests: any, workD
 	// package name, we skip it. Otherwise it would allow anyone to overwrite
 	// someone else plugin just by using the same ID. So the first plugin with
 	// this ID that was originally added is kept.
-	const originalManifest = originalPluginManifests[manifest.id];
+	//
+	// We need case insensitive match because the filesystem might be case
+	// insensitive too.
+	const originalManifest = caseInsensitiveFindManifest(existingManifests, manifest.id);
+
 	if (originalManifest && originalManifest._npm_package_name !== packageName) {
 		throw new Error(`Plugin "${manifest.id}" from npm package "${packageName}" has already been published under npm package "${originalManifest._npm_package_name}". Plugin from package "${packageName}" will not be imported.`);
 	}
@@ -145,6 +167,7 @@ async function main() {
 	const repoDir = path.resolve(path.dirname(rootDir), 'joplin-plugins');
 	const tempDir = `${repoDir}/temp`;
 	const pluginManifestsPath = path.resolve(repoDir, 'manifests.json');
+	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
 	const errorsPath = path.resolve(repoDir, 'errors.json');
 
 	await checkPluginRepository(repoDir);
@@ -152,6 +175,11 @@ async function main() {
 	await fs.mkdirp(tempDir);
 
 	const originalPluginManifests = await readJsonFile(pluginManifestsPath, {});
+	const obsoleteManifests = await readJsonFile(obsoleteManifestsPath, {});
+	const existingManifests = {
+		...originalPluginManifests,
+		...obsoleteManifests,
+	};
 
 	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 5000 --json')).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
@@ -172,8 +200,8 @@ async function main() {
 		try {
 			const packageName = npmPackage.name;
 			const destDir = `${repoDir}/plugins/`;
-			const manifest = await extractPluginFilesFromPackage(originalPluginManifests, packageTempDir, packageName, destDir);
-			manifests[manifest.id] = manifest;
+			const manifest = await extractPluginFilesFromPackage(existingManifests, packageTempDir, packageName, destDir);
+			if (!obsoleteManifests[manifest.id]) manifests[manifest.id] = manifest;
 		} catch (error) {
 			console.error(error);
 			errors.push(error);
