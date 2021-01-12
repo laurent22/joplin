@@ -1,9 +1,12 @@
 {
   "name": "@joplin/joplin-plugin-toggle-sidebars",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "scripts": {
     "dist": "webpack",
     "prepare": "npm run dist"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license": "MIT",
   "keywords": [
