@@ -1,5 +1,59 @@
 # Joplin changelog
 
+## [v1.6.6](https://github.com/laurent22/joplin/releases/tag/v1.6.6) - 2021-01-09T16:15:31Z
+
+- New: Add way to install plugin from file
+
+## [v1.5.14](https://github.com/laurent22/joplin/releases/tag/v1.5.14) - 2020-12-30T01:48:46Z
+
+- Fixed: Fixed importing ENEX files that contain hidden sections
+
+## [v1.5.13](https://github.com/laurent22/joplin/releases/tag/v1.5.13) - 2020-12-29T18:29:15Z
+
+- Improved: Improve support for SVG images when importing ENEX files
+
+## [v1.5.12](https://github.com/laurent22/joplin/releases/tag/v1.5.12) - 2020-12-28T15:14:08Z
+
+Fixed ENEX import regression: Fix issue when importing ENEX file that contains invalid list elements
+
+- New: Add support for media players (video, audio and PDF)
+- New: Add table captions when importing ENEX files
+- New: Added doc about Rich Text editor and added way to dismiss warning banner
+- New: MacOS: Notarize application
+- New: Plugins: Add support for content script asset files, for Markdown-it plugins
+- New: Plugins: Add support for context menu items on notebooks and tags
+- New: Plugins: Add support for workspace.onSyncStart event
+- New: Plugins: Added a way to execute commands from Markdown-it content scripts
+- Fixed: Fix End key behavior with Codemirror spellcheck ([#4215](https://github.com/laurent22/joplin/issues/4215) by Caleb John)
+- Fixed: Fixed basic search when executing a query in Chinese ([#4034](https://github.com/laurent22/joplin/issues/4034) by Naveen M V)
+- Fixed: Fixed context menu when the UI is zoomed in or out ([#4201](https://github.com/laurent22/joplin/issues/4201))
+- Fixed: Fixed importing certain code blocks from ENEX
+- Fixed: Fixed importing ENEX files that contain empty resources
+- Fixed: Fixed importing ENEX files that contain resources with invalid mime type
+- Fixed: Fixed issue when searching for text that contains diacritic ([#4152](https://github.com/laurent22/joplin/issues/4152)) ([#4025](https://github.com/laurent22/joplin/issues/4025) by Roman Musin)
+- Fixed: Fixed issue with attachment paths being invalid when user has spaces in home directory path.
+- Fixed: Fixed issue with note not being saved when a column is added or remove from Rich Text editor
+- Fixed: Fixed issues when importing hidden tables within hidden sections in Enex files
+- Fixed: Fixed numbered list bug in markdown editor ([#4116](https://github.com/laurent22/joplin/issues/4116)) ([#3917](https://github.com/laurent22/joplin/issues/3917) by [@MichBoi](https://github.com/MichBoi))
+- Fixed: Fixed potential crash when watching note files or resources
+- Fixed: Fixed title input field width on small windows
+- Fixed: Focus editor after pressing toolbar buttons ([#4037](https://github.com/laurent22/joplin/issues/4037)) ([#4036](https://github.com/laurent22/joplin/issues/4036) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Plugins: Fixed disabling plugin files that start with "_"
+- Fixed: Prevent double paste when using Shift+Ctrl+V ([#4243](https://github.com/laurent22/joplin/issues/4243))
+- Fixed: Prevents crash when invalid spell checker language is selected, and provide fallback for invalid language codes ([#4146](https://github.com/laurent22/joplin/issues/4146))
+- Fixed: Register Markdown editor commands with the Keyboard Shortcut editor ([#4136](https://github.com/laurent22/joplin/issues/4136)) ([#4130](https://github.com/laurent22/joplin/issues/4130) by Caleb John)
+- Improved: Display Katex parsing errors
+- Improved: Improved warning banner colors
+- Improved: Plugins: Commands would not show up in keymap editor when no shortcut was associated with them
+- Improved: Plugins: Improved note change event handling.
+- Improved: Removed warning for Markdown editor spell checking
+- Improved: Restrict auto-detection of links, and added option to toggle linkify ([#4205](https://github.com/laurent22/joplin/issues/4205))
+- Improved: Rich Text: Do not converts to markdown links URLs that would be linkified
+- Improved: Translation: Update zh_CN ([#4195](https://github.com/laurent22/joplin/issues/4195) by Zhang YANG)
+- Improved: Update macOS icon for macOS Big Sur
+- Improved: Update Mermaid: 8.8.1 -&gt; 8.8.4 ([#4193](https://github.com/laurent22/joplin/issues/4193) by Helmut K. C. Tessarek)
+- Improved: Use plugins whenever printing or exporting notes
+
 ## [v1.5.11](https://github.com/laurent22/joplin/releases/tag/v1.5.11) - 2020-12-27T19:54:07Z
 
 - New: Add support for media players (video, audio and PDF)

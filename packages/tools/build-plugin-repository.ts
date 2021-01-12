@@ -2,6 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
+import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '@joplin/lib/markdownUtils';
 const { execCommand, execCommandVerbose, rootDir, resolveRelativePathWithinDir, gitPullTry } = require('./tool-utils.js');
 
 interface NpmPackage {
@@ -10,12 +11,23 @@ interface NpmPackage {
 	date: Date;
 }
 
+function stripOffPackageOrg(name: string): string {
+	const n = name.split('/');
+	if (n[0][0] === '@') n.splice(0, 1);
+	return n.join('/');
+}
+
+function isJoplinPluginPackage(pack: any): boolean {
+	if (!pack.keywords || !pack.keywords.includes('joplin-plugin')) return false;
+	if (stripOffPackageOrg(pack.name).indexOf('joplin-plugin') !== 0) return false;
+	return true;
+}
+
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
 
 	for (const r of results) {
-		if (r.name.indexOf('joplin-plugin') !== 0) continue;
-		if (!r.keywords || !r.keywords.includes('joplin-plugin')) continue;
+		if (!isJoplinPluginPackage(r)) continue;
 
 		output.push({
 			name: r.name,
@@ -47,7 +59,14 @@ async function readJsonFile(manifestPath: string, defaultValue: any = null): Pro
 	return JSON.parse(content);
 }
 
-async function extractPluginFilesFromPackage(originalPluginManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
+function caseInsensitiveFindManifest(manifests: any, manifestId: string): any {
+	for (const id of Object.keys(manifests)) {
+		if (id.toLowerCase() === manifestId.toLowerCase()) return manifests[id];
+	}
+	return null;
+}
+
+async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = process.cwd();
 	process.chdir(workDir);
 
@@ -75,7 +94,11 @@ async function extractPluginFilesFromPackage(originalPluginManifests: any, workD
 	// package name, we skip it. Otherwise it would allow anyone to overwrite
 	// someone else plugin just by using the same ID. So the first plugin with
 	// this ID that was originally added is kept.
-	const originalManifest = originalPluginManifests[manifest.id];
+	//
+	// We need case insensitive match because the filesystem might be case
+	// insensitive too.
+	const originalManifest = caseInsensitiveFindManifest(existingManifests, manifest.id);
+
 	if (originalManifest && originalManifest._npm_package_name !== packageName) {
 		throw new Error(`Plugin "${manifest.id}" from npm package "${packageName}" has already been published under npm package "${originalManifest._npm_package_name}". Plugin from package "${packageName}" will not be imported.`);
 	}
@@ -91,12 +114,60 @@ async function extractPluginFilesFromPackage(originalPluginManifests: any, workD
 	return manifest;
 }
 
+async function updateReadme(readmePath: string, manifests: any) {
+	const rows: MarkdownTableRow[] = [];
+
+	for (const pluginId in manifests) {
+		rows.push(manifests[pluginId]);
+	}
+
+	const headers: MarkdownTableHeader[] = [
+		{
+			name: 'homepage_url',
+			label: '&nbsp;',
+			filter: (value: string) => {
+				return `[🏠](${markdownUtils.escapeLinkUrl(value)})`;
+			},
+		},
+		{
+			name: 'name',
+			label: 'Name',
+		},
+		{
+			name: 'version',
+			label: 'Version',
+		},
+		{
+			name: 'description',
+			label: 'Description',
+		},
+		{
+			name: 'author',
+			label: 'Author',
+		},
+	];
+
+	rows.sort((a: any, b: any) => {
+		return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : +1;
+	});
+
+	const mdTable = markdownUtils.createMarkdownTable(headers, rows);
+
+	const tableRegex = /<!-- PLUGIN_LIST -->([^]*)<!-- PLUGIN_LIST -->/;
+
+	const content = await fs.readFile(readmePath, 'utf8');
+	const newContent = content.replace(tableRegex, `<!-- PLUGIN_LIST -->\n${mdTable}\n<!-- PLUGIN_LIST -->`);
+
+	await fs.writeFile(readmePath, newContent, 'utf8');
+}
+
 async function main() {
 	// We assume that the repository is located in a directory next to the main
 	// Joplin monorepo.
 	const repoDir = path.resolve(path.dirname(rootDir), 'joplin-plugins');
 	const tempDir = `${repoDir}/temp`;
 	const pluginManifestsPath = path.resolve(repoDir, 'manifests.json');
+	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
 	const errorsPath = path.resolve(repoDir, 'errors.json');
 
 	await checkPluginRepository(repoDir);
@@ -104,6 +175,11 @@ async function main() {
 	await fs.mkdirp(tempDir);
 
 	const originalPluginManifests = await readJsonFile(pluginManifestsPath, {});
+	const obsoleteManifests = await readJsonFile(obsoleteManifestsPath, {});
+	const existingManifests = {
+		...originalPluginManifests,
+		...obsoleteManifests,
+	};
 
 	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 5000 --json')).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
@@ -124,8 +200,8 @@ async function main() {
 		try {
 			const packageName = npmPackage.name;
 			const destDir = `${repoDir}/plugins/`;
-			const manifest = await extractPluginFilesFromPackage(originalPluginManifests, packageTempDir, packageName, destDir);
-			manifests[manifest.id] = manifest;
+			const manifest = await extractPluginFilesFromPackage(existingManifests, packageTempDir, packageName, destDir);
+			if (!obsoleteManifests[manifest.id]) manifests[manifest.id] = manifest;
 		} catch (error) {
 			console.error(error);
 			errors.push(error);
@@ -153,6 +229,8 @@ async function main() {
 	} else {
 		await fs.remove(errorsPath);
 	}
+
+	await updateReadme(`${repoDir}/README.md`, manifests);
 
 	await fs.remove(tempDir);
 }

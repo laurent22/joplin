@@ -7,6 +7,7 @@ import JoplinCommands from './JoplinCommands';
 import JoplinViews from './JoplinViews';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
+import JoplinContentScripts from './JoplinContentScripts';
 
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
@@ -33,6 +34,7 @@ export default class Joplin {
 	private views_: JoplinViews = null;
 	private interop_: JoplinInterop = null;
 	private settings_: JoplinSettings = null;
+	private contentScripts_: JoplinContentScripts = null;
 
 	constructor(implementation: any, plugin: Plugin, store: any) {
 		this.data_ = new JoplinData();
@@ -43,6 +45,7 @@ export default class Joplin {
 		this.views_ = new JoplinViews(implementation.views, plugin, store);
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);
+		this.contentScripts_ = new JoplinContentScripts(plugin);
 	}
 
 	get data(): JoplinData {
@@ -55,6 +58,10 @@ export default class Joplin {
 
 	get workspace(): JoplinWorkspace {
 		return this.workspace_;
+	}
+
+	get contentScripts(): JoplinContentScripts {
+		return this.contentScripts_;
 	}
 
 	/**

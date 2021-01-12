@@ -67,7 +67,7 @@ export default class PluginService extends BaseService {
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 
-	initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
+	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.appVersion_ = appVersion;
 		this.store_ = store;
 		this.runner_ = runner;
@@ -113,6 +113,15 @@ export default class PluginService extends BaseService {
 
 	public serializePluginSettings(settings: PluginSettings): any {
 		return JSON.stringify(settings);
+	}
+
+	public pluginIdByContentScriptId(contentScriptId: string): string {
+		for (const pluginId in this.plugins_) {
+			const plugin = this.plugins_[pluginId];
+			const contentScript = plugin.contentScriptById(contentScriptId);
+			if (contentScript) return pluginId;
+		}
+		return null;
 	}
 
 	private async parsePluginJsBundle(jsBundleString: string) {

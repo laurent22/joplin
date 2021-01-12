@@ -96,6 +96,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#globalvalue" class="tsd-kind-icon">global<wbr>Value</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#onchange" class="tsd-kind-icon">on<wbr>Change</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#registersection" class="tsd-kind-icon">register<wbr>Section</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#registersetting" class="tsd-kind-icon">register<wbr>Setting</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#setvalue" class="tsd-kind-icon">set<wbr>Value</a></li>
@@ -134,6 +135,39 @@
 							</ul>
 							<!-- JOPLINCHANGE
     <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="onchange" class="tsd-anchor"></a>
+					<h3>on<wbr>Change</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Change<span class="tsd-signature-symbol">(</span>handler<span class="tsd-signature-symbol">: </span><a href="../globals.html#changehandler" class="tsd-signature-type">ChangeHandler</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when one or multiple settings of your plugin have been changed.</p>
+									<ul>
+										<li>For performance reasons, this event is triggered with a delay.</li>
+										<li>You will only get events for your own plugin settings.</li>
+									</ul>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>handler: <a href="../globals.html#changehandler" class="tsd-signature-type">ChangeHandler</a></h5>
+								</li>
+							</ul>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 
 
 -->
@@ -292,6 +326,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinsettings.html#globalvalue" class="tsd-kind-icon">global<wbr>Value</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinsettings.html#onchange" class="tsd-kind-icon">on<wbr>Change</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinsettings.html#registersection" class="tsd-kind-icon">register<wbr>Section</a>

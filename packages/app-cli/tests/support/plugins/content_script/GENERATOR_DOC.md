@@ -59,7 +59,7 @@ The file that may cause problem is "webpack.config.js" because it's going to be 
 
 ## External script files
 
-By default, the compiler (webpack) is going to compile `src/index.ts` only (as well as any file it imports), and any other file will simply be copied to the plugin package. In some cases this is sufficient, however if you have [content scripts](https://joplinapp.org/api/references/plugin_api/classes/joplinplugins.html#registercontentscript) or [webview scripts](https://joplinapp.org/api/references/plugin_api/classes/joplinviewspanels.html#addscript) you might want to compile them too, in particular in these two cases:
+By default, the compiler (webpack) is going to compile `src/index.ts` only (as well as any file it imports), and any other file will simply be copied to the plugin package. In some cases this is sufficient, however if you have [content scripts](https://joplinapp.org/api/references/plugin_api/classes/joplincontentscripts.html) or [webview scripts](https://joplinapp.org/api/references/plugin_api/classes/joplinviewspanels.html#addscript) you might want to compile them too, in particular in these two cases:
 
 - The script is a TypeScript file - in which case it has to be compiled to JavaScript.
 

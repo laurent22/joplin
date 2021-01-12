@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SideBar from './SideBar';
+import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
@@ -40,7 +40,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			marginBottom: 10,
 		};
 
-		this.sideBar_selectionChange = this.sideBar_selectionChange.bind(this);
+		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
 		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
 		this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
 		this.showLogButton_click = this.showLogButton_click.bind(this);
@@ -114,7 +114,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ selectedSectionName: section.name, screenName: screenName });
 	}
 
-	sideBar_selectionChange(event: any) {
+	sidebar_selectionChange(event: any) {
 		this.switchSection(event.section.name);
 	}
 
@@ -729,9 +729,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		return (
 			<div style={{ display: 'flex', flexDirection: 'row' }}>
-				<SideBar
+				<Sidebar
 					selection={this.state.selectedSectionName}
-					onSelectionChange={this.sideBar_selectionChange}
+					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
 				/>
 				<div style={style}>

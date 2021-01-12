@@ -31,6 +31,8 @@ export default class Plugin {
 	private dispatch_: Function;
 	private eventEmitter_: any;
 	private devMode_: boolean = false;
+	private messageListener_: Function = null;
+	private contentScriptMessageListeners_: Record<string, Function> = {};
 
 	constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
@@ -106,6 +108,17 @@ export default class Plugin {
 		return this.contentScripts_[type] ? this.contentScripts_[type] : [];
 	}
 
+	public contentScriptById(id: string): ContentScript {
+		for (const type in this.contentScripts_) {
+			const cs = this.contentScripts_[type];
+			for (const c of cs) {
+				if (c.id === id) return c;
+			}
+		}
+
+		return null;
+	}
+
 	public addViewController(v: ViewController) {
 		if (this.viewControllers_[v.handle]) throw new Error(`View already added or there is already a view with this ID: ${v.handle}`);
 		this.viewControllers_[v.handle] = v;
@@ -119,5 +132,30 @@ export default class Plugin {
 	public deprecationNotice(goneInVersion: string, message: string) {
 		logger.warn(`"${this.id}": DEPRECATION NOTICE: ${message} This will stop working in version ${goneInVersion}.`);
 	}
+
+	public emitMessage(message: any) {
+		if (!this.messageListener_) return;
+		return this.messageListener_(message);
+	}
+
+	public onMessage(callback: any) {
+		this.messageListener_ = callback;
+	}
+
+	public onContentScriptMessage(id: string, callback: any) {
+		if (!this.contentScriptById(id)) {
+			// The script could potentially be registered later on, but still
+			// best to print a warning to notify the user of a possible bug.
+			logger.warn(`onContentScriptMessage: No such content script: ${id}`);
+		}
+
+		this.contentScriptMessageListeners_[id] = callback;
+	}
+
+	public emitContentScriptMessage(id: string, message: any) {
+		if (!this.contentScriptMessageListeners_[id]) return;
+		return this.contentScriptMessageListeners_[id](message);
+	}
+
 
 }

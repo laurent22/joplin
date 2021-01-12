@@ -274,7 +274,7 @@ class SideMenuContentComponent extends Component {
 		);
 	}
 
-	renderSideBarButton(key, title, iconName, onPressHandler = null, selected = false) {
+	renderSidebarButton(key, title, iconName, onPressHandler = null, selected = false) {
 		let icon = <Icon name={iconName} style={this.styles().sidebarIcon} />;
 
 		if (key === 'synchronize_button') {
@@ -309,11 +309,11 @@ class SideMenuContentComponent extends Component {
 
 		items.push(this.makeDivider('divider_1'));
 
-		items.push(this.renderSideBarButton('newFolder_button', _('New Notebook'), 'md-folder-open', this.newFolderButton_press));
+		items.push(this.renderSidebarButton('newFolder_button', _('New Notebook'), 'md-folder-open', this.newFolderButton_press));
 
-		items.push(this.renderSideBarButton('tag_button', _('Tags'), 'md-pricetag', this.tagButton_press));
+		items.push(this.renderSidebarButton('tag_button', _('Tags'), 'md-pricetag', this.tagButton_press));
 
-		items.push(this.renderSideBarButton('config_button', _('Configuration'), 'md-settings', this.configButton_press));
+		items.push(this.renderSidebarButton('config_button', _('Configuration'), 'md-settings', this.configButton_press));
 
 		items.push(this.makeDivider('divider_2'));
 
@@ -335,7 +335,7 @@ class SideMenuContentComponent extends Component {
 		if (resourceFetcherText) fullReport.push(resourceFetcherText);
 		if (decryptionReportText) fullReport.push(decryptionReportText);
 
-		items.push(this.renderSideBarButton('synchronize_button', !this.props.syncStarted ? _('Synchronise') : _('Cancel'), 'md-sync', this.synchronize_press));
+		items.push(this.renderSidebarButton('synchronize_button', !this.props.syncStarted ? _('Synchronise') : _('Cancel'), 'md-sync', this.synchronize_press));
 
 		if (fullReport.length) {
 			items.push(
@@ -357,11 +357,11 @@ class SideMenuContentComponent extends Component {
 		// using padding. So instead creating blank elements for padding bottom and top.
 		items.push(<View style={{ height: theme.marginTop }} key="bottom_top_hack" />);
 
-		items.push(this.renderSideBarButton('all_notes', _('All notes'), 'md-document', this.allNotesButton_press, this.props.notesParentType === 'SmartFilter'));
+		items.push(this.renderSidebarButton('all_notes', _('All notes'), 'md-document', this.allNotesButton_press, this.props.notesParentType === 'SmartFilter'));
 
 		items.push(this.makeDivider('divider_all'));
 
-		items.push(this.renderSideBarButton('folder_header', _('Notebooks'), 'md-folder'));
+		items.push(this.renderSidebarButton('folder_header', _('Notebooks'), 'md-folder'));
 
 		if (this.props.folders.length) {
 			const result = shared.renderFolders(this.props, this.renderFolderItem);

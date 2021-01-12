@@ -6,7 +6,7 @@ export enum ButtonLevel {
 	Primary = 'primary',
 	Secondary = 'secondary',
 	Tertiary = 'tertiary',
-	SideBarSecondary = 'sideBarSecondary',
+	SidebarSecondary = 'sidebarSecondary',
 }
 
 interface Props {
@@ -121,7 +121,7 @@ const StyledButtonTertiary = styled(StyledButtonBase)`
 	}
 `;
 
-const StyledButtonSideBarSecondary = styled(StyledButtonBase)`
+const StyledButtonSidebarSecondary = styled(StyledButtonBase)`
 	background: none;
 	border-color: ${(props: any) => props.theme.color2};
 	color: ${(props: any) => props.theme.color2};
@@ -166,7 +166,7 @@ const StyledButtonSideBarSecondary = styled(StyledButtonBase)`
 function buttonClass(level: ButtonLevel) {
 	if (level === ButtonLevel.Primary) return StyledButtonPrimary;
 	if (level === ButtonLevel.Tertiary) return StyledButtonTertiary;
-	if (level === ButtonLevel.SideBarSecondary) return StyledButtonSideBarSecondary;
+	if (level === ButtonLevel.SidebarSecondary) return StyledButtonSidebarSecondary;
 	return StyledButtonSecondary;
 }
 

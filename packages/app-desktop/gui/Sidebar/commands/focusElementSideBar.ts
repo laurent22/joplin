@@ -12,9 +12,9 @@ export const declaration: CommandDeclaration = {
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
-			const sideBarVisible = layoutItemProp((context.state as AppState).mainLayout, 'sideBar', 'visible');
+			const sidebarVisible = layoutItemProp((context.state as AppState).mainLayout, 'sideBar', 'visible');
 
-			if (sideBarVisible) {
+			if (sidebarVisible) {
 				const item = comp.selectedItem();
 				if (item) {
 					const anchorRef = comp.anchorItemRefs[item.type][item.id];
