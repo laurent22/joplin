@@ -7,5 +7,6 @@
 	"description": "<%= pluginDescription %>",
 	"author": "<%= pluginAuthor %>",
 	"homepage_url": "<%= pluginHomepageUrl %>",
-	"repository_url": "<%= pluginRepositoryUrl %>"
+	"repository_url": "<%= pluginRepositoryUrl %>",
+	"keywords": []
 }

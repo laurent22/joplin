@@ -5,7 +5,5 @@
     "name": "Webview test",
     "version": "1.0.0",
     "homepage_url": "https://joplinapp.org",
-    "permissions": [
-        "model"
-    ]
+    "keywords": ["table of content", "toc"]
 }

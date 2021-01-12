@@ -452,9 +452,9 @@ packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js.map
 packages/app-desktop/gui/MainScreen/commands/toggleNoteList.d.ts
 packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js
 packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js.map
-packages/app-desktop/gui/MainScreen/commands/toggleSidebar.d.ts
-packages/app-desktop/gui/MainScreen/commands/toggleSidebar.js
-packages/app-desktop/gui/MainScreen/commands/toggleSidebar.js.map
+packages/app-desktop/gui/MainScreen/commands/toggleSideBar.d.ts
+packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js
+packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js.map
 packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.d.ts
 packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js
 packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js.map
