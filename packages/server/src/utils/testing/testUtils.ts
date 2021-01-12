@@ -42,6 +42,7 @@ export async function beforeEachDb() {
 interface AppContextTestOptions {
 	path?: string;
 	owner?: User;
+	sessionId?: string;
 }
 
 let koaAppContextUserAndSession_: UserAndSession = null;
@@ -50,6 +51,20 @@ export async function koaAppContextUserAndSession(): Promise<UserAndSession> {
 	if (koaAppContextUserAndSession_) return koaAppContextUserAndSession_;
 	koaAppContextUserAndSession_ = await createUserAndSession(1, false);
 	return koaAppContextUserAndSession_;
+}
+
+class FakeCookies {
+
+	private values_: Record<string, string> = {};
+
+	public get(name: string): string {
+		return this.values_[name];
+	}
+
+	public set(name: string, value: string) {
+		this.values_[name] = value;
+	}
+
 }
 
 export async function koaAppContext(options: AppContextTestOptions = null): Promise<AppContext> {
@@ -72,6 +87,11 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	appContext.path = options.path;
 	appContext.owner = options.owner;
+	appContext.cookies = new FakeCookies();
+
+	if (options.sessionId) {
+		appContext.cookies.set('sessionId', options.sessionId);
+	}
 
 	return appContext as AppContext;
 }

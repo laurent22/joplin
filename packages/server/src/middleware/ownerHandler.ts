@@ -2,7 +2,7 @@ import { AppContext, KoaNext } from '../utils/types';
 import { isApiRequest, contextSessionId } from '../utils/requestUtils';
 import Logger from '@joplin/lib/Logger';
 
-const logger = Logger.create('loggedInUserHandler');
+const logger = Logger.create('ownerHandler');
 
 export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 	try {
