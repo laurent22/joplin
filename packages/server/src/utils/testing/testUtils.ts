@@ -7,10 +7,13 @@ import { AppContext, Config, Env } from '../types';
 import { initConfig } from '../../config';
 import FileModel from '../../models/FileModel';
 import Logger from '@joplin/lib/Logger';
+import FakeCookies from './koa/FakeCookies';
+import FakeRequest from './koa/FakeRequest';
+import FakeResponse from './koa/FakeResponse';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
-const packageRootDir = `${__dirname}/../..`;
+const packageRootDir = `${__dirname}/../../..`;
 
 let db_: DbConnection = null;
 
@@ -45,26 +48,9 @@ interface AppContextTestOptions {
 	sessionId?: string;
 }
 
-let koaAppContextUserAndSession_: UserAndSession = null;
-
-export async function koaAppContextUserAndSession(): Promise<UserAndSession> {
-	if (koaAppContextUserAndSession_) return koaAppContextUserAndSession_;
-	koaAppContextUserAndSession_ = await createUserAndSession(1, false);
-	return koaAppContextUserAndSession_;
-}
-
-class FakeCookies {
-
-	private values_: Record<string, string> = {};
-
-	public get(name: string): string {
-		return this.values_[name];
-	}
-
-	public set(name: string, value: string) {
-		this.values_[name] = value;
-	}
-
+function initGlobalLogger() {
+	const globalLogger = new Logger();
+	Logger.initializeGlobalLogger(globalLogger);
 }
 
 export async function koaAppContext(options: AppContextTestOptions = null): Promise<AppContext> {
@@ -75,8 +61,12 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 		...options,
 	};
 
+	initGlobalLogger();
+
 	const appLogger = Logger.create('AppTest');
 
+	// Set type to "any" because the Koa context has many properties and we
+	// don't need to mock all of them.
 	const appContext: any = {};
 
 	appContext.env = Env.Dev;
@@ -88,6 +78,8 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	appContext.path = options.path;
 	appContext.owner = options.owner;
 	appContext.cookies = new FakeCookies();
+	appContext.request = new FakeRequest();
+	appContext.response = new FakeResponse();
 
 	if (options.sessionId) {
 		appContext.cookies.set('sessionId', options.sessionId);
