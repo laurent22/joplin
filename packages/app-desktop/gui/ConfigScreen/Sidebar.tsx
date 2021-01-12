@@ -47,7 +47,7 @@ export const StyledListItemIcon = styled.i`
 	margin-right: ${(props: any) => props.theme.mainPadding / 1.5}px;
 `;
 
-export default function SideBar(props: Props) {
+export default function Sidebar(props: Props) {
 	const buttons: any[] = [];
 
 	function renderButton(section: any) {

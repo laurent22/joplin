@@ -100,7 +100,7 @@ function FolderItem(props: any) {
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
-class SideBarComponent extends React.Component<Props, State> {
+class SidebarComponent extends React.Component<Props, State> {
 
 	private folderItemsOrder_: any[] = [];
 	private tagItemsOrder_: any[] = [];
@@ -472,7 +472,7 @@ class SideBarComponent extends React.Component<Props, State> {
 					<StyledHeaderIcon className={iconName}/>
 					<StyledHeaderLabel>{label}</StyledHeaderLabel>
 				</StyledHeader>
-				{ onPlusButtonClick && <StyledAddButton onClick={onPlusButtonClick} iconName="fas fa-plus" level={ButtonLevel.SideBarSecondary}/> }
+				{ onPlusButtonClick && <StyledAddButton onClick={onPlusButtonClick} iconName="fas fa-plus" level={ButtonLevel.SidebarSecondary}/> }
 			</div>
 		);
 	}
@@ -581,7 +581,7 @@ class SideBarComponent extends React.Component<Props, State> {
 
 		return (
 			<StyledSynchronizeButton
-				level={ButtonLevel.SideBarSecondary}
+				level={ButtonLevel.SidebarSecondary}
 				iconName="icon-sync"
 				key="sync_button"
 				iconAnimation={iconAnimation}
@@ -687,7 +687,7 @@ class SideBarComponent extends React.Component<Props, State> {
 		);
 
 		return (
-			<StyledRoot ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar">
+			<StyledRoot ref={this.rootRef} onKeyDown={this.onKeyDown} className="sidebar">
 				<div style={{ flex: 1, overflowX: 'hidden', overflowY: 'auto' }}>{items}</div>
 				<div style={{ flex: 0, padding: theme.mainPadding }}>
 					{syncReportComp}
@@ -719,4 +719,4 @@ const mapStateToProps = (state: AppState) => {
 	};
 };
 
-export default connect(mapStateToProps)(SideBarComponent);
+export default connect(mapStateToProps)(SidebarComponent);

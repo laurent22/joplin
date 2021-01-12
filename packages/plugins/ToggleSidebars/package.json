@@ -1,5 +1,5 @@
 {
-  "name": "joplin-plugin-toggle-side-bars",
+  "name": "joplin-plugin-toggle-sidebars",
   "version": "1.0.0",
   "scripts": {
     "dist": "webpack",

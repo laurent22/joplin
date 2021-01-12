@@ -9,7 +9,7 @@ import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
-import SideBar from '../SideBar/SideBar';
+import Sidebar from '../Sidebar/Sidebar';
 import UserWebview from '../../services/plugins/UserWebview';
 import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
@@ -578,7 +578,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		const components: any = {
 			sideBar: () => {
-				return <SideBar key={key} />;
+				return <Sidebar key={key} />;
 			},
 
 			noteList: () => {
