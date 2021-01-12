@@ -50,7 +50,7 @@ function loadContentScripts(plugins: PluginStates, scriptType: ContentScriptType
 				const context: ContentScriptContext = {
 					pluginId,
 					contentScriptId: contentScript.id,
-					postMessage: postMessageHandler(pluginId, contentScript.id),
+					postMessage: postMessageHandler(pluginId, scriptType, contentScript.id),
 				};
 
 				const loadedModule = module.default(context);
