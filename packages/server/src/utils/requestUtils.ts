@@ -30,6 +30,11 @@ export async function bodyFields(req: any): Promise<BodyFields> {
 		throw new ErrorBadRequest(`Unsupported Content-Type: "${req.headers['content-type']}". Expected: "application/json"`);
 	}
 
+	// It's not clear how to get mocked requests to be parsed successfully by
+	// formidable so we use this small hack. If it's mocked, we are running test
+	// units and the request body is already an object and can be returned.
+	if (req.__isMocked) return { ...req.body };
+
 	const form = await formParse(req);
 	return form.fields;
 }

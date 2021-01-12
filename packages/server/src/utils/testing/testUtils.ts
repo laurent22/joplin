@@ -10,6 +10,7 @@ import Logger from '@joplin/lib/Logger';
 import FakeCookies from './koa/FakeCookies';
 import FakeRequest from './koa/FakeRequest';
 import FakeResponse from './koa/FakeResponse';
+import * as httpMocks from 'node-mocks-http';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -43,9 +44,10 @@ export async function beforeEachDb() {
 }
 
 interface AppContextTestOptions {
-	path?: string;
+	// path?: string;
 	owner?: User;
 	sessionId?: string;
+	request?: any;
 }
 
 function initGlobalLogger() {
@@ -57,11 +59,23 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	if (!db_) throw new Error('Database must be initialized first');
 
 	options = {
-		path: '/home',
+		// path: '/home',
 		...options,
 	};
 
 	initGlobalLogger();
+
+	const reqOptions = {
+		...options.request,
+	};
+
+	if (!reqOptions.method) reqOptions.method = 'GET';
+	if (!reqOptions.url) reqOptions.url = '/home';
+	if (!reqOptions.headers) reqOptions.headers = {};
+	if (!reqOptions.headers['content-type']) reqOptions.headers['content-type'] = 'application/json';
+
+	const req = httpMocks.createRequest(reqOptions);
+	req.__isMocked = true;
 
 	const appLogger = Logger.create('AppTest');
 
@@ -75,11 +89,13 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	appContext.controllers = controllers();
 	appContext.appLogger = () => appLogger;
 
-	appContext.path = options.path;
+	appContext.path = req.url;
 	appContext.owner = options.owner;
 	appContext.cookies = new FakeCookies();
-	appContext.request = new FakeRequest();
+	appContext.request = new FakeRequest(req);
 	appContext.response = new FakeResponse();
+	appContext.req = req;
+	appContext.method = req.method;
 
 	if (options.sessionId) {
 		appContext.cookies.set('sessionId', options.sessionId);
