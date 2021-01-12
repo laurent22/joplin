@@ -14,8 +14,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -64,7 +66,6 @@ msgid ""
 msgstr "O app irá fechar agora. Por favor, reabra-o para completar o processo."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -72,7 +73,7 @@ msgid ""
 msgstr ""
 "Digite um título de nota ou parte de seu conteúdo para ir direto para ela. "
 "Ou digite # seguido de um nome de etiqueta, ou @ seguido de um nome de "
-"caderno."
+"caderno. Ou digite : para procurar comandos."
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -118,9 +119,8 @@ msgid "New version: %s"
 msgstr "Nova versão: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "Baixado"
+msgstr "Baixar"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -418,18 +418,20 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"O editor de Rich Text tem um número de limitações e é recomendado ter "
+"cuidado com elas, antes de usar."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:340
 msgid "Read more about it"
-msgstr ""
+msgstr "Leia mais sobre isso"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:345
 msgid "Dismiss"
-msgstr ""
+msgstr "Dispensar"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:381
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "Os seguintes anexos estão sendo observados para alterações:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:384
 msgid ""
@@ -484,43 +486,40 @@ msgid "Horizontal Rule"
 msgstr "Régua horizontal"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "Apagar nota?"
+msgstr "Apagar linha"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "Desfazer"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "Refazer"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "Indentar menos"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "Indentar mais"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
-msgstr "Alternar lista de notas"
+msgstr "Alternar comentário"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
-#, fuzzy
 msgid "Sort selected lines"
-msgstr "Editar nota selecionada"
+msgstr "Ordenar linhas selecionadas"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "Trocar a linha acima"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "Trocar a linha abaixo"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -584,9 +583,9 @@ msgstr "Propriedades da nota"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: packages/lib/services/KeymapService.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Erro"
+msgstr "Erro: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -606,9 +605,8 @@ msgid "Command"
 msgstr "Command"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Modo do Teclado"
+msgstr "Atalho de Teclado"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
 #: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:338
@@ -631,9 +629,8 @@ msgid "Website and documentation"
 msgstr "Website e documentação"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Sobre o Joplin"
+msgstr "Esconder o Joplin"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
 #: packages/app-desktop/gui/MenuBar.js:408
@@ -641,9 +638,8 @@ msgid "Close Window"
 msgstr "Fechar Janela"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "Preferências..."
+msgstr "Preferências"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
 #: packages/app-desktop/gui/MenuBar.js:284 packages/app-desktop/gui/Root.js:100
@@ -651,9 +647,8 @@ msgid "Options"
 msgstr "Opções"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Resposta inválida: %s"
+msgstr "Inválido"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -684,9 +679,8 @@ msgstr ""
 "que ser reiniciado. Paraproceder, por favor, clique neste link."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:405
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "Chaves-mestras que necessitam de atualização"
+msgstr "Reiniciar e fazer upgrade"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:409
 msgid "Some items cannot be synchronised."
@@ -729,6 +723,7 @@ msgstr "Mais informações"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:528
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"Use as setas para mover os itens de layout. Tecle \"Escape\" para sair."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -792,14 +787,12 @@ msgid "Toggle editor layout"
 msgstr "Alternar layout do editor"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Alternar layout do editor"
+msgstr "Alternar editores"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
-#, fuzzy
 msgid "Change application layout"
-msgstr "Sair da aplicação."
+msgstr "Alterar layout da aplicação"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -816,7 +809,7 @@ msgstr "Título do caderno:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Corretor ortográfico"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -1009,9 +1002,8 @@ msgstr "Modelos"
 
 #: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/MenuBar.js:423
-#, fuzzy
 msgid "Export all"
-msgstr "Exportar"
+msgstr "Exportar todos"
 
 #: packages/app-desktop/gui/MenuBar.js:389
 #, javascript-format
@@ -1042,7 +1034,7 @@ msgstr "Menos zoom"
 
 #: packages/app-desktop/gui/MenuBar.js:552
 msgid "&Go"
-msgstr ""
+msgstr "&Ir"
 
 #: packages/app-desktop/gui/MenuBar.js:564
 msgid "&Note"
@@ -1246,13 +1238,12 @@ msgstr ""
 "Importante: você só precisa rodar isso UMA VEZ, em um dispositivo."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "Criptografia"
+msgstr "Re-encriptação"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorar"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1427,7 +1418,7 @@ msgstr "Navegar..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "A aplicação deve ser reiniciada para essas alterações tomarem efeito."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1436,25 +1427,24 @@ msgstr "Faça agora"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 msgid "Later"
-msgstr ""
+msgstr "Mais tarde"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
-msgstr "Tenha agora:"
+msgstr "Reiniciar agora"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "Aplicar"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Apagar a nota \"%s\"?"
+msgstr "Apagar o plugin \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "Instalar plugin"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1621,18 +1611,17 @@ msgstr[0] "Copiar Link Compartilhável"
 msgstr[1] "Copiar Links Compartilháveis"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "Encerrar edição externa"
+msgstr "Alternar edição externa"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
 msgstr "Parar"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Copiar caminho para a área de transferência"
+msgstr ""
+"Copiar o comando em modo de desenvolvimento para a área de transferência"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1649,9 +1638,8 @@ msgid "Error opening note in editor: %s"
 msgstr "Erro ao abir a nota no editor: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "Abrir diretório de templates"
+msgstr "Abrir diretório de perfis"
 
 #: packages/app-desktop/app.js:336
 #, javascript-format
@@ -1679,9 +1667,8 @@ msgid "Save alarm"
 msgstr "Salvar alarme"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "Abrir..."
+msgstr "Abrir"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 #: packages/app-mobile/components/screens/Note.js:796
@@ -1753,7 +1740,7 @@ msgstr "Atualizar"
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Upgrade de alvo de sincronização"
 
 #: packages/app-mobile/components/screens/notes.js:154
 #: packages/app-cli/app/command-rmbook.js:26
@@ -1968,11 +1955,14 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Para associar uma geo-localização com a nota, o aplicativo precisa de sua "
+"permissão para acessar sua localização.\n"
+"\n"
+"Você pode desligar essa opção a qualquer momento na tema de Configuração."
 
 #: packages/app-mobile/components/screens/Note.js:343
-#, fuzzy
 msgid "Permission needed"
-msgstr "Permissão para utilizar a câmera"
+msgstr "Permissão necessária"
 
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
@@ -2053,11 +2043,15 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"A senha padrão do administrador é insegura e não foi alterada! [Alterar "
+"agora](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
+"Todas as portas potenciais estão em uso - por favor, reportar essa situação "
+"em %s"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2092,9 +2086,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Site do Joplin"
+msgstr "Servidor do Joplin"
 
 #: packages/lib/shim-init-node.js:201
 #, javascript-format
@@ -2224,9 +2217,8 @@ msgid "AWS S3 bucket"
 msgstr "AWS S3 bucket"
 
 #: packages/lib/models/Setting.js:227
-#, fuzzy
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "AWS S3 URL"
 
 #: packages/lib/models/Setting.js:238
 msgid "AWS key"
@@ -2238,21 +2230,19 @@ msgstr "AWS secret"
 
 #: packages/lib/models/Setting.js:259
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "URL do Servidor Joplin"
 
 #: packages/lib/models/Setting.js:273
-#, fuzzy
 msgid "Joplin Server Directory"
-msgstr "Diretório de Exportação do Joplin"
+msgstr "Diretório do Servidor Joplin"
 
 #: packages/lib/models/Setting.js:283
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Username do Servidor Joplin"
 
 #: packages/lib/models/Setting.js:293
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "Digite a senha mestra:"
+msgstr "Senha do Servidor Joplin"
 
 #: packages/lib/models/Setting.js:305
 msgid "Attachment download behaviour"
@@ -2385,9 +2375,8 @@ msgid "Enable typographer support"
 msgstr "Habilitar suporte para tipógrafos"
 
 #: packages/lib/models/Setting.js:562
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "Habilitar histórico de notas"
+msgstr "Habilitar Linkify"
 
 #: packages/lib/models/Setting.js:563
 msgid "Enable math expressions"
@@ -2402,17 +2391,16 @@ msgid "Enable Mermaid diagrams support"
 msgstr "Habilitar suporte para diagramas Mermaid"
 
 #: packages/lib/models/Setting.js:566
-#, fuzzy
 msgid "Enable audio player"
-msgstr "Habilitar emojis em markdown"
+msgstr "Habilitar áudio player"
 
 #: packages/lib/models/Setting.js:567
 msgid "Enable video player"
-msgstr ""
+msgstr "Habilitar video player"
 
 #: packages/lib/models/Setting.js:568
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "Habilitar visualizador de PDF"
 
 #: packages/lib/models/Setting.js:569
 msgid "Enable ==mark== syntax"
@@ -2499,13 +2487,12 @@ msgstr ""
 "genérica monospace."
 
 #: packages/lib/models/Setting.js:662
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Folha de estilhos customizada para estilos do app Joplin"
+msgstr "Folha de estilos customizada para Markdown rederizado"
 
 #: packages/lib/models/Setting.js:678
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "Folha de estilhos customizada para estilos do app Joplin"
+msgstr "Folha de estilos customizada para estilos do app Joplin"
 
 #: packages/lib/models/Setting.js:683
 msgid "Automatically update the application"
@@ -2733,9 +2720,8 @@ msgid "Web Clipper"
 msgstr "Web Clipper"
 
 #: packages/lib/models/Setting.js:1389
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Modo do Teclado"
+msgstr "Atalhos de Teclado"
 
 #: packages/lib/models/Setting.js:1396
 msgid ""
@@ -3095,10 +3081,10 @@ msgstr ""
 "Não é possível carregar o módulo \"%s\" para o formato \"%s\" e saída \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
-"Não é possível carregar o módulo \"%s\" para o formato \"%s\" e saída \"%s\""
+"Não é possível carregar o módulo \"%s\" para o formato \"%s\" e alvo \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3136,23 +3122,23 @@ msgstr "Favor especificar o formato de importação para %s"
 
 #: packages/lib/services/KeymapService.js:273
 msgid "command"
-msgstr ""
+msgstr "comando"
 
 #: packages/lib/services/KeymapService.js:273
 #: packages/lib/services/KeymapService.js:278
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "\"%s\" está faltando a propriedade \"%s\" requerida."
 
 #: packages/lib/services/KeymapService.js:278
 #: packages/lib/services/KeymapService.js:285
 msgid "accelerator"
-msgstr ""
+msgstr "acelerador"
 
 #: packages/lib/services/KeymapService.js:285
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Resposta inválida: %s"
+msgstr "%s inválido: %s."
 
 #: packages/lib/services/KeymapService.js:303
 #, javascript-format
@@ -3160,11 +3146,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"O acelerador \"%s\" é usado para os comandos \"%s\" e \"%s\". Isso pode "
+"levar a comportamento inesperado."
 
 #: packages/lib/services/KeymapService.js:328
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "O acelerador \"%s\" não é válido."
 
 #: packages/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -3228,9 +3216,8 @@ msgid "Downloaded and encrypted"
 msgstr "Baixado e encriptado"
 
 #: packages/lib/services/report.js:193
-#, fuzzy
 msgid "Created locally"
-msgstr "Itens locais criados: %d."
+msgstr "Criado localmente."
 
 #: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
@@ -3285,20 +3272,19 @@ msgstr "Em %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Sem sugestões"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Adicionar ao dicionário"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Usar corretor ortográfico"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Idioma"
+msgstr "Alterar idioma"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3561,6 +3547,7 @@ msgstr "Baixando os recursos..."
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
+"O alvo de sincronização deve passar por upgrade! Rode `%s` para proceder."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
