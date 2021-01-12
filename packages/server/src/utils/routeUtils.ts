@@ -24,7 +24,6 @@ export enum RouteResponseFormat {
 
 export interface Route {
 	exec: Function;
-	needsBodyMiddleware?: boolean;
 	responseFormat?: RouteResponseFormat;
 }
 

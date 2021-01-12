@@ -17,7 +17,9 @@ describe('api_ping', function() {
 
 	test('should ping', async function() {
 		const context = await koaAppContext({
-			path: '/api/ping',
+			request: {
+				url: '/api/ping',
+			},
 		});
 
 		await routeHandler(context);

@@ -12,6 +12,16 @@ interface FormParseResult {
 
 // Input should be Koa ctx.req, which corresponds to the native Node request
 export async function formParse(req: any): Promise<FormParseResult> {
+	// It's not clear how to get mocked requests to be parsed successfully by
+	// formidable so we use this small hack. If it's mocked, we are running test
+	// units and the request body is already an object and can be returned.
+	if (req.__isMocked) {
+		const output: any = {};
+		if (req.files) output.files = req.files;
+		output.fields = req.body || {};
+		return output;
+	}
+
 	return new Promise((resolve: Function, reject: Function) => {
 		const form = formidable({ multiples: true });
 		form.parse(req, (error: any, fields: any, files: any) => {
@@ -29,11 +39,6 @@ export async function bodyFields(req: any): Promise<BodyFields> {
 	if (req.headers['content-type'] !== 'application/json') {
 		throw new ErrorBadRequest(`Unsupported Content-Type: "${req.headers['content-type']}". Expected: "application/json"`);
 	}
-
-	// It's not clear how to get mocked requests to be parsed successfully by
-	// formidable so we use this small hack. If it's mocked, we are running test
-	// units and the request body is already an object and can be returned.
-	if (req.__isMocked) return { ...req.body };
 
 	const form = await formParse(req);
 	return form.fields;

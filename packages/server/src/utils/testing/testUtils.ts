@@ -44,7 +44,6 @@ export async function beforeEachDb() {
 }
 
 interface AppContextTestOptions {
-	// path?: string;
 	owner?: User;
 	sessionId?: string;
 	request?: any;
@@ -59,7 +58,6 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	if (!db_) throw new Error('Database must be initialized first');
 
 	options = {
-		// path: '/home',
 		...options,
 	};
 
@@ -73,6 +71,10 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	if (!reqOptions.url) reqOptions.url = '/home';
 	if (!reqOptions.headers) reqOptions.headers = {};
 	if (!reqOptions.headers['content-type']) reqOptions.headers['content-type'] = 'application/json';
+
+	if (options.sessionId) {
+		reqOptions.headers['x-api-auth'] = options.sessionId;
+	}
 
 	const req = httpMocks.createRequest(reqOptions);
 	req.__isMocked = true;
@@ -94,6 +96,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	appContext.cookies = new FakeCookies();
 	appContext.request = new FakeRequest(req);
 	appContext.response = new FakeResponse();
+	appContext.headers = { ...reqOptions.headers };
 	appContext.req = req;
 	appContext.method = req.method;
 

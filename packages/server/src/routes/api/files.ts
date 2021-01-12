@@ -76,8 +76,6 @@ const route: Route = {
 		throw new ErrorNotFound(`Invalid link: ${path.link}`);
 	},
 
-	needsBodyMiddleware: true,
-
 };
 
 export default route;
