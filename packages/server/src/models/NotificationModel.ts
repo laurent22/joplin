@@ -14,6 +14,9 @@ export default class NotificationModel extends BaseModel {
 	}
 
 	public async markAsRead(key: string): Promise<void> {
+		const n = await this.loadByKey(key);
+		if (!n) return;
+
 		await this.db(this.tableName)
 			.update({ read: 1 })
 			.where('key', '=', key)

@@ -27,6 +27,8 @@ export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 					NotificationLevel.Important,
 					_('The default admin password is insecure and has not been changed! [Change it now](%s)', await ctx.models.user().profileUrl())
 				);
+			} else {
+				await notificationModel.markAsRead('change_admin_password');
 			}
 		}
 
