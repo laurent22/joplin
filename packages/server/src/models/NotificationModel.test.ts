@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, expectThrow } from '../utils/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, expectThrow } from '../utils/testing/testUtils';
 import { Notification, NotificationLevel } from '../db';
 
 describe('NotificationModel', function() {

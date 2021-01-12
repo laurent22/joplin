@@ -1,4 +1,4 @@
-import { expectThrow } from '../../utils/testUtils';
+import { expectThrow } from '../../utils/testing/testUtils';
 import { defaultPagination, Pagination, createPaginationLinks, requestPagination } from './pagination';
 
 describe('pagination', function() {

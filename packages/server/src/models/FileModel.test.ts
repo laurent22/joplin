@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, createFileTree } from '../utils/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, createFileTree } from '../utils/testing/testUtils';
 import { File } from '../db';
 
 describe('FileModel', function() {

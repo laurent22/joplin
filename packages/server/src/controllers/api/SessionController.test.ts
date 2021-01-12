@@ -1,4 +1,4 @@
-import { createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, controllers } from '../../utils/testUtils';
+import { createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, controllers } from '../../utils/testing/testUtils';
 import { ErrorForbidden } from '../../utils/errors';
 
 describe('SessionController', function() {

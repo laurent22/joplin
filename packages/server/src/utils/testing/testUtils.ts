@@ -1,11 +1,12 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables } from '../db';
-import { createDb } from '../tools/dbTools';
-import modelFactory from '../models/factory';
-import controllerFactory from '../controllers/factory';
-import baseConfig from '../config-tests';
-import { Config } from './types';
-import { initConfig } from '../config';
-import FileModel from '../models/FileModel';
+import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables } from '../../db';
+import { createDb } from '../../tools/dbTools';
+import modelFactory from '../../models/factory';
+import controllerFactory from '../../controllers/factory';
+import baseConfig from '../../config-tests';
+import { AppContext, Config, Env } from '../types';
+import { initConfig } from '../../config';
+import FileModel from '../../models/FileModel';
+import Logger from '@joplin/lib/Logger';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -38,6 +39,47 @@ export async function beforeEachDb() {
 	await truncateTables(db_);
 }
 
+interface AppContextTestOptions {
+	path?: string;
+	owner?: User;
+}
+
+let koaAppContextUserAndSession_: UserAndSession = null;
+
+export async function koaAppContextUserAndSession(): Promise<UserAndSession> {
+	if (koaAppContextUserAndSession_) return koaAppContextUserAndSession_;
+	koaAppContextUserAndSession_ = await createUserAndSession(1, false);
+	return koaAppContextUserAndSession_;
+}
+
+export async function koaAppContext(options: AppContextTestOptions = null): Promise<AppContext> {
+	if (!db_) throw new Error('Database must be initialized first');
+
+	options = {
+		path: '/home',
+		...options,
+	};
+
+	const appLogger = Logger.create('AppTest');
+
+	const appContext: any = {};
+
+	appContext.env = Env.Dev;
+	appContext.db = db_;
+	appContext.models = models();
+	appContext.controllers = controllers();
+	appContext.appLogger = () => appLogger;
+
+	appContext.path = options.path;
+	appContext.owner = options.owner;
+
+	return appContext as AppContext;
+}
+
+export function koaNext(): Promise<void> {
+	return Promise.resolve();
+}
+
 export const testAssetDir = `${packageRootDir}/assets/tests`;
 
 interface UserAndSession {
@@ -61,12 +103,22 @@ export function controllers() {
 	return controllerFactory(models());
 }
 
-export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false): Promise<UserAndSession> {
+interface CreateUserAndSessionOptions {
+	email?: string;
+	password?: string;
+}
+
+export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
 	const sessionController = controllers().apiSession();
 
-	const email: string = `user${index}@localhost`;
-	const user = await models().user().save({ email: email, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
-	const session = await sessionController.authenticate(email, '123456');
+	options = {
+		email: `user${index}@localhost`,
+		password: '123456',
+		...options,
+	};
+
+	const user = await models().user().save({ email: options.email, password: options.password, is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
+	const session = await sessionController.authenticate(options.email, options.password);
 
 	return {
 		user: user,

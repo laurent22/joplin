@@ -1,4 +1,4 @@
-import { models, controllers, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../../utils/testUtils';
+import { models, controllers, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../../utils/testing/testUtils';
 import { File, User } from '../../db';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 

@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, expectThrow } from '../utils/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, expectThrow } from '../utils/testing/testUtils';
 import { ChangeType, File } from '../db';
 import FileModel from './FileModel';
 import { msleep } from '../utils/time';

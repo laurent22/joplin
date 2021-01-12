@@ -1,4 +1,4 @@
-import { testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, models, controllers } from '../../utils/testUtils';
+import { testAssetDir, createUserAndSession, createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, models, controllers } from '../../utils/testing/testUtils';
 import * as fs from 'fs-extra';
 import { ChangeType, File } from '../../db';
 import { ErrorConflict, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
