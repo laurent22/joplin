@@ -2,7 +2,7 @@
   "name": "joplin-plugin-postmessage-demo",
   "version": "1.0.0",
   "scripts": {
-    "dist": "webpack",
+    "dist": "webpack --joplin-plugin-config buildMain && webpack --joplin-plugin-config buildExtraScripts && webpack --joplin-plugin-config createArchive",
     "prepare": "npm run dist",
     "update": "npm install -g generator-joplin && yo joplin --update"
   },
@@ -21,6 +21,7 @@
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.3",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "yargs": "^16.2.0"
   }
 }

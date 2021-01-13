@@ -458,7 +458,7 @@ export enum ContentScriptType {
 	 * });
 	 * ```
 	 *
-	 * See {@link JoplinContentScript.onMessage} for more details, as well as
+	 * See {@link JoplinContentScripts.onMessage} for more details, as well as
 	 * the [postMessage
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages).
 	 *
@@ -557,7 +557,7 @@ export enum ContentScriptType {
 	 * });
 	 * ```
 	 *
-	 * See {@link JoplinContentScript.onMessage} for more details, as well as
+	 * See {@link JoplinContentScripts.onMessage} for more details, as well as
 	 * the [postMessage
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages).
 	 *

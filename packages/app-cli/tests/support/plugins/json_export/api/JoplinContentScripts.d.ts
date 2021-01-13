@@ -23,10 +23,18 @@ export default class JoplinContentScripts {
      * * [View the renderer demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
      * * [View the editor demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
      *
+     * See also the [postMessage demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages)
+     *
      * @param type Defines how the script will be used. See the type definition for more information about each supported type.
      * @param id A unique ID for the content script.
      * @param scriptPath Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set `scriptPath` to `"./content_script.js`.
      */
     register(type: ContentScriptType, id: string, scriptPath: string): Promise<void>;
-    onMessage(id: string, callback: any): Promise<void>;
+    /**
+     * Listens to a messages sent from the content script using postMessage().
+     * See {@link ContentScriptType} for more information as well as the
+     * [postMessage
+     * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages)
+     */
+    onMessage(contentScriptId: string, callback: any): Promise<void>;
 }
