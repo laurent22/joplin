@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, expectThrow } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow } from '../utils/testing/testUtils';
 import { ChangeType, File } from '../db';
 import FileModel from './FileModel';
 import { msleep } from '../utils/time';
@@ -18,7 +18,7 @@ describe('ChangeModel', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllDb();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {

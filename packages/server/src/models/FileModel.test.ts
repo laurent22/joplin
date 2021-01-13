@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, createFileTree } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createFileTree } from '../utils/testing/testUtils';
 import { File } from '../db';
 
 describe('FileModel', function() {
@@ -8,7 +8,7 @@ describe('FileModel', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllDb();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {

@@ -1,4 +1,4 @@
-import { createUser, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb, controllers } from '../../utils/testing/testUtils';
+import { createUser, checkThrowAsync, beforeAllDb, afterAllTests, beforeEachDb, controllers } from '../../utils/testing/testUtils';
 import { ErrorForbidden } from '../../utils/errors';
 
 describe('SessionController', function() {
@@ -8,7 +8,7 @@ describe('SessionController', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllDb();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {

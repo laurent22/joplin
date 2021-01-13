@@ -1,4 +1,4 @@
-import { models, controllers, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllDb, beforeEachDb } from '../../utils/testing/testUtils';
+import { models, controllers, createUserAndSession, checkThrowAsync, beforeAllDb, afterAllTests, beforeEachDb } from '../../utils/testing/testUtils';
 import { File, User } from '../../db';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 
@@ -9,7 +9,7 @@ describe('UserController', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllDb();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {

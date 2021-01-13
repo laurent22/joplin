@@ -11,6 +11,8 @@ import FakeCookies from './koa/FakeCookies';
 import FakeRequest from './koa/FakeRequest';
 import FakeResponse from './koa/FakeResponse';
 import * as httpMocks from 'node-mocks-http';
+import * as crypto from 'crypto';
+import * as fs from 'fs-extra';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -19,6 +21,18 @@ const packageRootDir = `${__dirname}/../../..`;
 let db_: DbConnection = null;
 
 // require('source-map-support').install();
+
+export function randomHash(): string {
+	return crypto.createHash('md5').update(`${Date.now()}-${Math.random()}`).digest('hex');
+}
+
+let tempDir_: string = null;
+export async function tempDir(): Promise<string> {
+	if (tempDir_) return tempDir_;
+	tempDir_ = `${packageRootDir}/temp/${randomHash()}`;
+	await fs.mkdirp(tempDir_);
+	return tempDir_;
+}
 
 export async function beforeAllDb(unitName: string) {
 	const config: Config = {
@@ -34,9 +48,16 @@ export async function beforeAllDb(unitName: string) {
 	db_ = await connectDb(config.database);
 }
 
-export async function afterAllDb() {
-	await disconnectDb(db_);
-	db_ = null;
+export async function afterAllTests() {
+	if (db_) {
+		await disconnectDb(db_);
+		db_ = null;
+	}
+
+	if (tempDir_) {
+		await fs.remove(tempDir_);
+		tempDir_ = null;
+	}
 }
 
 export async function beforeEachDb() {
@@ -98,6 +119,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	appContext.response = new FakeResponse();
 	appContext.headers = { ...reqOptions.headers };
 	appContext.req = req;
+	appContext.query = req.query;
 	appContext.method = req.method;
 
 	if (options.sessionId) {

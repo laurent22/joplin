@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, koaAppContext, koaNext } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, koaNext } from '../utils/testing/testUtils';
 import ownerHandler from './ownerHandler';
 
 describe('ownerHandler', function() {
@@ -8,7 +8,7 @@ describe('ownerHandler', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllDb();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {

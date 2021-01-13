@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, expectThrow } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow } from '../utils/testing/testUtils';
 import { Notification, NotificationLevel } from '../db';
 
 describe('NotificationModel', function() {
@@ -8,7 +8,7 @@ describe('NotificationModel', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllDb();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {

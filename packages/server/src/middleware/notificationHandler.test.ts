@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllDb, beforeEachDb, models, koaAppContext, koaNext } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, koaNext } from '../utils/testing/testUtils';
 import { defaultAdminEmail, defaultAdminPassword, Notification } from '../db';
 import notificationHandler from './notificationHandler';
 
@@ -9,7 +9,7 @@ describe('notificationHandler', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllDb();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {

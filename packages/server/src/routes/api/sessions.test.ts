@@ -1,6 +1,6 @@
 import { Session } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
-import { beforeAllDb, afterAllDb, beforeEachDb, koaAppContext, createUserAndSession, models } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models } from '../../utils/testing/testUtils';
 
 describe('api_sessions', function() {
 
@@ -9,7 +9,7 @@ describe('api_sessions', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllDb();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {
