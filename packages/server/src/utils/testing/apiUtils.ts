@@ -14,7 +14,7 @@ import { PaginatedResults, Pagination, paginationToQueryParams } from '../../mod
 import { AppContext } from '../types';
 import { koaAppContext } from './testUtils';
 
-function checkContextError(context: AppContext) {
+export function checkContextError(context: AppContext) {
 	if (context.response.status >= 400) throw new Error(`Cannot create directory: ${JSON.stringify(context.response)}`);
 }
 

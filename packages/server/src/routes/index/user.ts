@@ -1,59 +1,61 @@
-import { SubPath, Route, redirect } from '../../utils/routeUtils';
-import { AppContext } from '../../utils/types';
-import { contextSessionId, formParse } from '../../utils/requestUtils';
-import { ErrorMethodNotAllowed, ErrorUnprocessableEntity } from '../../utils/errors';
-import { User } from '../../db';
-import { baseUrl } from '../../config';
+// Not used??
 
-function makeUser(isNew: boolean, fields: any): User {
-	const user: User = {
-		email: fields.email,
-		full_name: fields.full_name,
-	};
+// import { SubPath, Route, redirect } from '../../utils/routeUtils';
+// import { AppContext } from '../../utils/types';
+// import { contextSessionId, formParse } from '../../utils/requestUtils';
+// import { ErrorMethodNotAllowed, ErrorUnprocessableEntity } from '../../utils/errors';
+// import { User } from '../../db';
+// import { baseUrl } from '../../config';
 
-	if (fields.password) {
-		if (fields.password !== fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
-		user.password = fields.password;
-	}
+// function makeUser(isNew: boolean, fields: any): User {
+// 	const user: User = {
+// 		email: fields.email,
+// 		full_name: fields.full_name,
+// 	};
 
-	if (!isNew) user.id = fields.id;
+// 	if (fields.password) {
+// 		if (fields.password !== fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
+// 		user.password = fields.password;
+// 	}
 
-	return user;
-}
+// 	if (!isNew) user.id = fields.id;
 
-const route: Route = {
+// 	return user;
+// }
 
-	exec: async function(_path: SubPath, ctx: AppContext) {
-		const sessionId = contextSessionId(ctx);
+// const route: Route = {
 
-		// if (ctx.method === 'GET') {
-		// 	return ctx.controllers.indexUser().getOne(sessionId);
-		// }
+// 	exec: async function(_path: SubPath, ctx: AppContext) {
+// 		const sessionId = contextSessionId(ctx);
 
-		if (ctx.method === 'POST') {
-			const user: User = {};
+// 		// if (ctx.method === 'GET') {
+// 		// 	return ctx.controllers.indexUser().getOne(sessionId);
+// 		// }
 
-			try {
-				const body = await formParse(ctx.req);
-				const fields = body.fields;
-				const isNew = !!Number(fields.is_new);
-				const user = makeUser(isNew, fields);
+// 		if (ctx.method === 'POST') {
+// 			const user: User = {};
 
-				if (isNew) {
-					await ctx.controllers.apiUser().postUser(sessionId, user);
-				} else {
-					await ctx.controllers.apiUser().patchUser(sessionId, user);
-				}
+// 			try {
+// 				const body = await formParse(ctx.req);
+// 				const fields = body.fields;
+// 				const isNew = !!Number(fields.is_new);
+// 				const user = makeUser(isNew, fields);
 
-				return redirect(ctx, `${baseUrl()}/users`);
-			} catch (error) {
-				return ctx.controllers.indexProfile().getIndex(sessionId, user, error);
-			}
-		}
+// 				if (isNew) {
+// 					await ctx.controllers.apiUser().postUser(sessionId, user);
+// 				} else {
+// 					await ctx.controllers.apiUser().patchUser(sessionId, user);
+// 				}
 
-		throw new ErrorMethodNotAllowed();
-	},
+// 				return redirect(ctx, `${baseUrl()}/users`);
+// 			} catch (error) {
+// 				return ctx.controllers.indexProfile().getIndex(sessionId, user, error);
+// 			}
+// 		}
 
-};
+// 		throw new ErrorMethodNotAllowed();
+// 	},
 
-export default route;
+// };
+
+// export default route;

@@ -13,6 +13,7 @@ import FakeResponse from './koa/FakeResponse';
 import * as httpMocks from 'node-mocks-http';
 import * as crypto from 'crypto';
 import * as fs from 'fs-extra';
+import * as jsdom from 'jsdom';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -155,6 +156,11 @@ export function models() {
 
 export function controllers() {
 	return controllerFactory(models());
+}
+
+export function parseHtml(html: string): Document {
+	const dom = new jsdom.JSDOM(html);
+	return dom.window.document;
 }
 
 interface CreateUserAndSessionOptions {

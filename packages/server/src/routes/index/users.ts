@@ -6,10 +6,10 @@ import { User } from '../../db';
 import { baseUrl } from '../../config';
 
 function makeUser(isNew: boolean, fields: any): User {
-	const user: User = {
-		email: fields.email,
-		full_name: fields.full_name,
-	};
+	const user: User = {};
+
+	if ('email' in fields) user.email = fields.email;
+	if ('full_name' in fields) user.full_name = fields.full_name;
 
 	if (fields.password) {
 		if (fields.password !== fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');

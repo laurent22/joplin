@@ -56,14 +56,14 @@ describe('notificationHandler', function() {
 	});
 
 	test('should not check admin password for non-admin', async function() {
-		const { user } = await createUserAndSession(1, false);
+		const { session } = await createUserAndSession(1, false);
 
 		await createUserAndSession(2, true, {
 			email: defaultAdminEmail,
 			password: defaultAdminPassword,
 		});
 
-		const context = await koaAppContext({ owner: user });
+		const context = await koaAppContext({ sessionId: session.id });
 		await notificationHandler(context, koaNext);
 
 		const notifications: Notification[] = await models().notification().all();

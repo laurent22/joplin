@@ -144,7 +144,10 @@ export function parseSubPath(p: string): SubPath {
 	return output;
 }
 
-export function routeResponseFormat(match: MatchedRoute, rawPath: string): RouteResponseFormat {
+export function routeResponseFormat(match: MatchedRoute, context: AppContext): RouteResponseFormat {
+	// if (context.query && context.query.response_format === 'json') return RouteResponseFormat.Json;
+
+	const rawPath = context.path;
 	if (match && match.route.responseFormat) return match.route.responseFormat;
 
 	let path = rawPath;

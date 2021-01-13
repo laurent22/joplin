@@ -39,7 +39,7 @@ export default async function(ctx: AppContext) {
 
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
-		const responseFormat = routeResponseFormat(match, ctx.path);
+		const responseFormat = routeResponseFormat(match, ctx);
 
 		if (responseFormat === RouteResponseFormat.Html) {
 			ctx.response.set('Content-Type', 'text/html');
