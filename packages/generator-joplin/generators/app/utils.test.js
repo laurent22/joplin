@@ -1,4 +1,4 @@
-const { packageNameFromPluginName } = require('./utils');
+const { packageNameFromPluginName, mergeIgnoreFile } = require('./utils');
 
 describe('utils', () => {
 
@@ -27,6 +27,21 @@ describe('utils', () => {
 		}
 
 		expect(hasThrown).toBe(true);
+	});
+
+	test('mergeIgnoreFile', () => {
+		const testCases = [
+			['line1\nline2\n', 'newline\n', 'line1\nline2\nnewline\n'],
+			['line1\nline2\n', 'line1\nnewline\n', 'line1\nline2\nnewline\n'],
+		];
+
+		for (const t of testCases) {
+			const userVersion = t[0];
+			const frameworkVersion = t[1];
+			const expected = t[2];
+			const actual = mergeIgnoreFile(frameworkVersion, userVersion);
+			expect(actual).toBe(expected);
+		}
 	});
 
 });
