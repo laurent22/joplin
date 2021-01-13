@@ -2061,8 +2061,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
-"Le mot de passe admin par défaut n’est pas sûr et n’a pas été modifié! "
-"[Changez-le maintenant] (%s)"
+"Le mot de passe admin par défaut n'est pas sécurisé et n'a pas été modifié ! "
+"[Changez-le maintenant](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
