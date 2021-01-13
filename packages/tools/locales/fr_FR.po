@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -61,7 +63,7 @@ msgstr "Annuler"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
-"L'application va maintenance fermer. Veuillez la relancer pour terminer "
+"L'application va maintenant se fermer. Veuillez la relancer pour terminer "
 "l'opération."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
@@ -2059,6 +2061,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"Le mot de passe admin par défaut n'est pas sécurisé et n'a pas été modifié ! "
+"[Changez-le maintenant](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
