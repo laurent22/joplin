@@ -17,7 +17,7 @@ describe('notificationHandler', function() {
 	});
 
 	test('should check admin password', async function() {
-		const { user } = await createUserAndSession(1, true);
+		const { user, session } = await createUserAndSession(1, true);
 
 		const admin = await models().user({ userId: user.id }).save({
 			email: defaultAdminEmail,
@@ -26,7 +26,7 @@ describe('notificationHandler', function() {
 		});
 
 		{
-			const context = await koaAppContext({ owner: user });
+			const context = await koaAppContext({ sessionId: session.id });
 			await notificationHandler(context, koaNext);
 
 			const notifications: Notification[] = await models().notification().all();
@@ -43,7 +43,7 @@ describe('notificationHandler', function() {
 				password: 'changed!',
 			});
 
-			const context = await koaAppContext({ owner: user });
+			const context = await koaAppContext({ sessionId: session.id });
 			await notificationHandler(context, koaNext);
 
 			const notifications: Notification[] = await models().notification().all();

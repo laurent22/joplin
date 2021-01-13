@@ -22,7 +22,7 @@ describe('ownerHandler', function() {
 			sessionId: session.id,
 		});
 
-		expect(!!context.owner).toBe(false);
+		context.owner = null;
 
 		await ownerHandler(context, koaNext);
 
@@ -37,7 +37,7 @@ describe('ownerHandler', function() {
 			sessionId: 'ihack',
 		});
 
-		expect(!!context.owner).toBe(false);
+		context.owner = null;
 
 		await ownerHandler(context, koaNext);
 

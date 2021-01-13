@@ -1,5 +1,6 @@
 import BaseModel from './BaseModel';
 import { User, Session } from '../db';
+import uuidgen from '../utils/uuidgen';
 
 export default class SessionModel extends BaseModel {
 
@@ -12,6 +13,13 @@ export default class SessionModel extends BaseModel {
 		if (!session) return null;
 		const userModel = this.models().user({ userId: session.user_id });
 		return userModel.load(session.user_id);
+	}
+
+	public async createUserSession(userId: string): Promise<Session> {
+		return this.save({
+			id: uuidgen(),
+			user_id: userId,
+		}, { isNew: true });
 	}
 
 }
