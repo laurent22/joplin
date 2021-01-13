@@ -65,7 +65,7 @@ export async function beforeEachDb() {
 }
 
 interface AppContextTestOptions {
-	owner?: User;
+	// owner?: User;
 	sessionId?: string;
 	request?: any;
 }
@@ -100,6 +100,8 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	const req = httpMocks.createRequest(reqOptions);
 	req.__isMocked = true;
 
+	const owner = options.sessionId ? await models().session().sessionUser(options.sessionId) : null;
+
 	const appLogger = Logger.create('AppTest');
 
 	// Set type to "any" because the Koa context has many properties and we
@@ -111,9 +113,8 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	appContext.models = models();
 	appContext.controllers = controllers();
 	appContext.appLogger = () => appLogger;
-
 	appContext.path = req.url;
-	appContext.owner = options.owner;
+	appContext.owner = owner;
 	appContext.cookies = new FakeCookies();
 	appContext.request = new FakeRequest(req);
 	appContext.response = new FakeResponse();

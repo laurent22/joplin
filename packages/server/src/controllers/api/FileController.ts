@@ -7,16 +7,6 @@ import { ChangePagination, PaginatedChanges } from '../../models/ChangeModel';
 
 export default class FileController extends BaseController {
 
-	// Note: this is only used in tests. To create files with no content
-	// or directories, use postChild()
-	public async postFile_(sessionId: string, file: File): Promise<File> {
-		const user = await this.initSession(sessionId);
-		const fileModel = this.models.file({ userId: user.id });
-		let newFile = fileModel.fromApiInput(file);
-		newFile = await fileModel.save(file);
-		return fileModel.toApiOutput(newFile);
-	}
-
 	public async getFile(sessionId: string, fileId: string): Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = this.models.file({ userId: user.id });

@@ -153,13 +153,25 @@ export function routeResponseFormat(match: MatchedRoute, rawPath: string): Route
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
+// In a path such as "/api/files/SOME_ID/content" we want to find:
+// - The base path: "api/files"
+// - The ID: "SOME_ID"
+// - The link: "content"
 export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {
 	const splittedPath = path.split('/');
+
+	// Because the path starts with "/", we remove the first element, which is
+	// an empty string. So for example we now have ['api', 'files', 'SOME_ID', 'content'].
 	splittedPath.splice(0, 1);
 
 	if (splittedPath.length >= 2) {
+		// Create the base path, eg. "api/files", to match it to one of the
+		// routes.s
 		const basePath = `${splittedPath[0]}/${splittedPath[1]}`;
 		if (routes[basePath]) {
+			// Remove the base path from the array so that parseSubPath() can
+			// extract the ID and link from the URL. So the array will contain
+			// at this point: ['SOME_ID', 'content'].
 			splittedPath.splice(0, 2);
 			return {
 				route: routes[basePath],
