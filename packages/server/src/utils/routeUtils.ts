@@ -1,5 +1,5 @@
 import { File, ItemAddressingType } from '../db';
-import { ErrorBadRequest } from './errors';
+import { ErrorBadRequest, ErrorMethodNotAllowed, ErrorNotFound } from './errors';
 import { AppContext } from './types';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
@@ -22,9 +22,23 @@ export enum RouteResponseFormat {
 	Json = 'json',
 }
 
+type RouteHandler = (path: SubPath, ctx: AppContext, ...args: any[])=> Promise<any>;
+
+export interface RouteEndPoint {
+	[path: string]: RouteHandler | string;
+}
+
+export interface RouteEndPoints {
+	[method: string]: RouteEndPoint;
+}
+
 export interface Route {
-	exec: Function;
+	exec?: RouteHandler;
 	responseFormat?: RouteResponseFormat;
+	endPoints?: RouteEndPoints;
+
+	// Public routes can be accessed without authentication.
+	public?: boolean;
 }
 
 export interface Routes {
@@ -36,6 +50,7 @@ export interface SubPath {
 	link: string;
 	addressingType: ItemAddressingType;
 	raw: string;
+	schema: string;
 }
 
 export interface MatchedRoute {
@@ -68,6 +83,23 @@ function removeTrailingColon(path: string): string {
 export interface PathInfo {
 	basename: string;
 	dirname: string;
+}
+
+export function findEndPoint(route: Route, method: string, schema: string): RouteHandler {
+	if (!route.endPoints[method]) throw new ErrorMethodNotAllowed(`Not allowed: ${method} ${schema}`);
+	const endPoint = route.endPoints[method][schema];
+	if (!endPoint) throw new ErrorNotFound(`Not found: ${method} ${schema}`);
+
+	let endPointFn = endPoint;
+	for (let i = 0; i < 1000; i++) {
+		if (typeof endPointFn === 'string') {
+			endPointFn = route.endPoints[method]?.[endPointFn];
+		} else {
+			return endPointFn;
+		}
+	}
+
+	throw new ErrorNotFound(`Could not resolve: ${method} ${schema}`);
 }
 
 export function redirect(ctx: AppContext, url: string): Response {
@@ -113,7 +145,7 @@ export function isPathBasedAddressing(fileId: string): boolean {
 //
 // root:/Documents/MyFile.md:/content
 // ABCDEFG/content
-export function parseSubPath(p: string): SubPath {
+export function parseSubPath(basePath: string, p: string): SubPath {
 	p = rtrimSlashes(ltrimSlashes(p));
 
 	const output: SubPath = {
@@ -121,6 +153,7 @@ export function parseSubPath(p: string): SubPath {
 		link: '',
 		addressingType: ItemAddressingType.Id,
 		raw: p,
+		schema: '',
 	};
 
 	const colonIndex1 = p.indexOf(':');
@@ -140,6 +173,13 @@ export function parseSubPath(p: string): SubPath {
 		if (s.length >= 1) output.id = s[0];
 		if (s.length >= 2) output.link = s[1];
 	}
+
+	// if (basePath) {
+	const schema = [basePath];
+	if (output.id) schema.push(':id');
+	if (output.link) schema.push(output.link);
+	output.schema = schema.join('/');
+	// }
 
 	return output;
 }
@@ -179,7 +219,7 @@ export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {
 			return {
 				route: routes[basePath],
 				basePath: basePath,
-				subPath: parseSubPath(`/${splittedPath.join('/')}`),
+				subPath: parseSubPath(basePath, `/${splittedPath.join('/')}`),
 			};
 		}
 	}
@@ -190,7 +230,7 @@ export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {
 		return {
 			route: routes[basePath],
 			basePath: basePath,
-			subPath: parseSubPath(`/${splittedPath.join('/')}`),
+			subPath: parseSubPath(basePath, `/${splittedPath.join('/')}`),
 		};
 	}
 
@@ -198,7 +238,7 @@ export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {
 		return {
 			route: routes[''],
 			basePath: '',
-			subPath: parseSubPath(`/${splittedPath.join('/')}`),
+			subPath: parseSubPath('', `/${splittedPath.join('/')}`),
 		};
 	}
 

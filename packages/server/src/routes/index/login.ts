@@ -35,6 +35,8 @@ const route: Route = {
 		throw new ErrorMethodNotAllowed();
 	},
 
+	public: true,
+
 };
 
 export default route;

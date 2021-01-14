@@ -44,4 +44,12 @@ export interface Config {
 	database: DatabaseConfig;
 }
 
+export enum HttpMethod {
+	GET = 'GET',
+	POST = 'POST',
+	DELETE = 'DELETE',
+	PATCH = 'PATCH',
+	HEAD = 'HEAD',
+}
+
 export type KoaNext = ()=> Promise<void>;

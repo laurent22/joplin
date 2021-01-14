@@ -6,6 +6,8 @@ const route: Route = {
 		return { status: 'ok', message: 'Joplin Server is running' };
 	},
 
+	public: true,
+
 };
 
 export default route;

@@ -28,6 +28,8 @@ const route: Route = {
 		throw new ErrorNotFound(`Invalid link: ${path.link}`);
 	},
 
+	public: true,
+
 };
 
 export default route;
