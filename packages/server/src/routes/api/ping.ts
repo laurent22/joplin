@@ -1,13 +1,11 @@
-import { Route } from '../../utils/routeUtils';
+import Router from '../../utils/Router';
 
-const route: Route = {
+const router = new Router();
 
-	exec: async function() {
-		return { status: 'ok', message: 'Joplin Server is running' };
-	},
+router.public = true;
 
-	public: true,
+router.get('api/ping', async () => {
+	return { status: 'ok', message: 'Joplin Server is running' };
+});
 
-};
-
-export default route;
+export default router;

@@ -1,5 +1,5 @@
-import { SubPath, Route, redirect } from '../../utils/routeUtils';
-import { ErrorMethodNotAllowed } from '../../utils/errors';
+import { SubPath, redirect } from '../../utils/routeUtils';
+import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
 import { baseUrl } from '../../config';
@@ -13,30 +13,24 @@ function makeView(error: any = null): View {
 	return view;
 }
 
-const route: Route = {
+const router: Router = new Router();
 
-	exec: async function(_path: SubPath, ctx: AppContext) {
-		if (ctx.method === 'GET') {
-			return makeView();
-		}
+router.public = true;
 
-		if (ctx.method === 'POST') {
-			try {
-				const body = await formParse(ctx.req);
+router.get('login', async (_path: SubPath, _ctx: AppContext) => {
+	return makeView();
+});
 
-				const session = await ctx.models.session().authenticate(body.fields.email, body.fields.password);
-				ctx.cookies.set('sessionId', session.id);
-				return redirect(ctx, `${baseUrl()}/home`);
-			} catch (error) {
-				return makeView(error);
-			}
-		}
+router.post('login', async (_path: SubPath, ctx: AppContext) => {
+	try {
+		const body = await formParse(ctx.req);
 
-		throw new ErrorMethodNotAllowed();
-	},
+		const session = await ctx.models.session().authenticate(body.fields.email, body.fields.password);
+		ctx.cookies.set('sessionId', session.id);
+		return redirect(ctx, `${baseUrl()}/home`);
+	} catch (error) {
+		return makeView(error);
+	}
+});
 
-	public: true,
-
-};
-
-export default route;
+export default router;

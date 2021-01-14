@@ -1,4 +1,4 @@
-import { Routes } from '../utils/routeUtils';
+import { Routers } from '../utils/routeUtils';
 
 import apiSessions from './api/sessions';
 import apiPing from './api/ping';
@@ -11,7 +11,7 @@ import indexFilesRoute from './index/files';
 import indexNotificationsRoute from './index/notifications';
 import defaultRoute from './default';
 
-const routes: Routes = {
+const routes: Routers = {
 	'api/ping': apiPing,
 	'api/sessions': apiSessions,
 	'api/files': apiFiles,

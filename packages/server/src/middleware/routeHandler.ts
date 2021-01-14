@@ -1,7 +1,7 @@
 import routes from '../routes/routes';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
-import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat, MatchedRoute, findEndPoint } from '../utils/routeUtils';
-import { AppContext, Env } from '../utils/types';
+import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat, MatchedRoute } from '../utils/routeUtils';
+import { AppContext, Env, HttpMethod } from '../utils/types';
 import mustacheService, { isView, View } from '../services/MustacheService';
 
 export default async function(ctx: AppContext) {
@@ -15,14 +15,10 @@ export default async function(ctx: AppContext) {
 		if (match) {
 			let responseObject = null;
 
-			if (match.route.endPoints) {
-				const routeHandler = findEndPoint(match.route, ctx.request.method, match.subPath.schema);
-				responseObject = await routeHandler(match.subPath, ctx);
+			const routeHandler = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+			responseObject = await routeHandler(match.subPath, ctx);
 
-				if (!match.route.public && !ctx.owner) throw new ErrorForbidden();
-			} else {
-				responseObject = await match.route.exec(match.subPath, ctx);
-			}
+			if (!match.route.public && !ctx.owner) throw new ErrorForbidden();
 
 			if (responseObject instanceof Response) {
 				ctx.response = responseObject.response;
