@@ -43,14 +43,16 @@ const route: Route = {
 				const fields = body.fields;
 				user = makeUser(isNew, fields);
 
+				const userModel = ctx.models.user({ userId: ctx.owner.id });
+
 				if (fields.post_button) {
 					if (isNew) {
-						await ctx.controllers.apiUser().postUser(sessionId, user);
+						await userModel.save(userModel.fromApiInput(user));
 					} else {
-						await ctx.controllers.apiUser().patchUser(sessionId, user);
+						await userModel.save(userModel.fromApiInput(user), { isNew: false });
 					}
 				} else if (fields.delete_button) {
-					await ctx.controllers.apiUser().deleteUser(sessionId, path.id);
+					await userModel.delete(path.id);
 				} else {
 					throw new Error('Invalid form button');
 				}

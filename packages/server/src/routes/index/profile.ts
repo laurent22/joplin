@@ -32,7 +32,8 @@ const route: Route = {
 					user.password = hashPassword(body.fields.password);
 				}
 
-				await ctx.controllers.indexProfile().patchIndex(sessionId, user);
+				const userModel = this.models.user({ userId: ctx.owner.id });
+				await userModel.save(userModel.fromApiInput(user), { isNew: false });
 				return redirect(ctx, `${baseUrl()}/profile`);
 			} catch (error) {
 				return ctx.controllers.indexProfile().getIndex(sessionId, user, error);
