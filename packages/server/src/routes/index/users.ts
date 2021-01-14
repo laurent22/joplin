@@ -4,6 +4,8 @@ import { contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorMethodNotAllowed, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User } from '../../db';
 import { baseUrl } from '../../config';
+import { View } from '../../services/MustacheService';
+import defaultView from '../../utils/defaultView';
 
 function makeUser(isNew: boolean, fields: any): User {
 	const user: User = {};
@@ -21,35 +23,73 @@ function makeUser(isNew: boolean, fields: any): User {
 	return user;
 }
 
-const route: Route = {
+function userIsNew(path: SubPath): boolean {
+	return path.id === 'new';
+}
 
-	exec: async function(path: SubPath, ctx: AppContext) {
-		const sessionId = contextSessionId(ctx);
-		const isNew = path.id === 'new';
-		const isMe = path.id === 'me';
-		const userId = isMe ? ctx.owner.id : path.id;
+function userIsMe(path: SubPath): boolean {
+	return path.id === 'me';
+}
 
-		if (ctx.method === 'GET') {
-			if (path.id) {
-				return ctx.controllers.indexUser().getOne(sessionId, isNew, isMe, !isNew ? userId : null);
+const endPoints = {
+
+	'GET': {
+		'users': async function(_path: SubPath, ctx: AppContext) {
+			const userModel = ctx.models.user({ userId: ctx.owner.id });
+			const users = await userModel.all();
+
+			const view: View = defaultView('users');
+			view.content.users = users;
+			return view;
+		},
+
+		'users/:id': async function(path: SubPath, ctx: AppContext, user: User = null, error: any = null) {
+			const owner = ctx.owner;
+			const isMe = userIsMe(path);
+			const isNew = userIsNew(path);
+			const userModel = ctx.models.user({ userId: owner.id });
+			const userId = userIsMe(path) ? owner.id : path.id;
+
+			user = !isNew ? user || await userModel.load(userId) : null;
+
+			let postUrl = '';
+
+			if (isNew) {
+				postUrl = `${baseUrl()}/users/new`;
+			} else if (isMe) {
+				postUrl = `${baseUrl()}/users/me`;
 			} else {
-				return ctx.controllers.indexUser().getIndex(sessionId);
+				postUrl = `${baseUrl()}/users/${user.id}`;
 			}
-		}
 
-		if (ctx.method === 'POST') {
+			const view: View = defaultView('user');
+			view.content.user = user;
+			view.content.isNew = isNew;
+			view.content.buttonTitle = isNew ? 'Create user' : 'Update profile';
+			view.content.error = error;
+			view.content.postUrl = postUrl;
+			view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
+			view.partials.push('errorBanner');
+
+			return view;
+		},
+	},
+
+	'POST': {
+		'users': async function(path: SubPath, ctx: AppContext) {
 			let user: User = {};
+			const userId = userIsMe(path) ? ctx.owner.id : path.id;
 
 			try {
 				const body = await formParse(ctx.req);
 				const fields = body.fields;
-				if (isMe) fields.id = userId;
-				user = makeUser(isNew, fields);
+				if (userIsMe(path)) fields.id = userId;
+				user = makeUser(userIsNew(path), fields);
 
 				const userModel = ctx.models.user({ userId: ctx.owner.id });
 
 				if (fields.post_button) {
-					if (isNew) {
+					if (userIsNew(path)) {
 						await userModel.save(userModel.fromApiInput(user));
 					} else {
 						await userModel.save(userModel.fromApiInput(user), { isNew: false });
@@ -60,10 +100,29 @@ const route: Route = {
 					throw new Error('Invalid form button');
 				}
 
-				return redirect(ctx, `${baseUrl()}/users${isMe ? '/me' : ''}`);
+				return redirect(ctx, `${baseUrl()}/users${userIsMe(path) ? '/me' : ''}`);
 			} catch (error) {
-				return ctx.controllers.indexUser().getOne(sessionId, isNew, isMe, user, error);
+				return endPoints.GET['users/:id'](path, ctx, user, error);
 			}
+		},
+	},
+};
+
+const route: Route = {
+
+	exec: async function(path: SubPath, ctx: AppContext) {
+		contextSessionId(ctx);
+
+		if (ctx.method === 'GET') {
+			if (path.id) {
+				return endPoints.GET['users/:id'](path, ctx);
+			} else {
+				return endPoints.GET['users'](path, ctx);
+			}
+		}
+
+		if (ctx.method === 'POST') {
+			return endPoints.POST['users'](path, ctx);
 		}
 
 		throw new ErrorMethodNotAllowed();

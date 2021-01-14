@@ -1470,15 +1470,9 @@ packages/server/src/config.js.map
 packages/server/src/controllers/BaseController.d.ts
 packages/server/src/controllers/BaseController.js
 packages/server/src/controllers/BaseController.js.map
-packages/server/src/controllers/api/FileController.d.ts
-packages/server/src/controllers/api/FileController.js
-packages/server/src/controllers/api/FileController.js.map
 packages/server/src/controllers/api/OAuthController.d.ts
 packages/server/src/controllers/api/OAuthController.js
 packages/server/src/controllers/api/OAuthController.js.map
-packages/server/src/controllers/api/SessionController.d.ts
-packages/server/src/controllers/api/SessionController.js
-packages/server/src/controllers/api/SessionController.js.map
 packages/server/src/controllers/factory.d.ts
 packages/server/src/controllers/factory.js
 packages/server/src/controllers/factory.js.map
@@ -1599,6 +1593,9 @@ packages/server/src/routes/index/home.js.map
 packages/server/src/routes/index/login.d.ts
 packages/server/src/routes/index/login.js
 packages/server/src/routes/index/login.js.map
+packages/server/src/routes/index/login.test.d.ts
+packages/server/src/routes/index/login.test.js
+packages/server/src/routes/index/login.test.js.map
 packages/server/src/routes/index/logout.d.ts
 packages/server/src/routes/index/logout.js
 packages/server/src/routes/index/logout.js.map

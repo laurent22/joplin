@@ -1,6 +1,5 @@
 import { LoggerWrapper } from '@joplin/lib/Logger';
 import * as Koa from 'koa';
-import { Controllers } from '../controllers/factory';
 import { DbConnection, User, Uuid } from '../db';
 import { Models } from '../models/factory';
 
@@ -21,7 +20,6 @@ export interface AppContext extends Koa.Context {
 	env: Env;
 	db: DbConnection;
 	models: Models;
-	controllers: Controllers;
 	appLogger(): LoggerWrapper;
 	notifications: NotificationView[];
 	owner: User;

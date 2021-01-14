@@ -12,7 +12,6 @@ import configBuildTypes from './config-buildTypes';
 import { createDb, dropDb } from './tools/dbTools';
 import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection } from './db';
 import modelFactory from './models/factory';
-import controllerFactory from './controllers/factory';
 import { AppContext, Config, Env } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -106,7 +105,6 @@ async function main() {
 		appContext.env = env;
 		appContext.db = connectionCheck.connection;
 		appContext.models = modelFactory(appContext.db, baseUrl());
-		appContext.controllers = controllerFactory(appContext.models);
 		appContext.appLogger = appLogger;
 
 		appLogger().info('Migrating database...');

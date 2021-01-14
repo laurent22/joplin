@@ -1,7 +1,6 @@
 import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
-import controllerFactory from '../../controllers/factory';
 import baseConfig from '../../config-tests';
 import { AppContext, Config, Env } from '../types';
 import { initConfig } from '../../config';
@@ -112,7 +111,6 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	appContext.env = Env.Dev;
 	appContext.db = db_;
 	appContext.models = models();
-	appContext.controllers = controllers();
 	appContext.appLogger = () => appLogger;
 	appContext.path = req.url;
 	appContext.owner = owner;
@@ -152,10 +150,6 @@ function baseUrl() {
 
 export function models() {
 	return modelFactory(db(), baseUrl());
-}
-
-export function controllers() {
-	return controllerFactory(models());
 }
 
 export function parseHtml(html: string): Document {
