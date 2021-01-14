@@ -52,15 +52,15 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	static async checkConfig(options: FileApiOptions) {
-		const fileApi = await SyncTargetJoplinServer.newFileApi_(options);
-		fileApi.requestRepeatCount_ = 0;
-
 		const output = {
 			ok: false,
 			errorMessage: '',
 		};
 
 		try {
+			const fileApi = await SyncTargetJoplinServer.newFileApi_(options);
+			fileApi.requestRepeatCount_ = 0;
+
 			const result = await fileApi.stat('');
 			if (!result) throw new Error(`Sync directory not found: "${options.directory()}" on server "${options.path()}"`);
 			output.ok = true;

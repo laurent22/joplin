@@ -1490,12 +1490,6 @@ packages/server/src/controllers/api/OAuthController.js.map
 packages/server/src/controllers/api/SessionController.d.ts
 packages/server/src/controllers/api/SessionController.js
 packages/server/src/controllers/api/SessionController.js.map
-packages/server/src/controllers/api/UserController.d.ts
-packages/server/src/controllers/api/UserController.js
-packages/server/src/controllers/api/UserController.js.map
-packages/server/src/controllers/api/UserController.test.d.ts
-packages/server/src/controllers/api/UserController.test.js
-packages/server/src/controllers/api/UserController.test.js.map
 packages/server/src/controllers/factory.d.ts
 packages/server/src/controllers/factory.js
 packages/server/src/controllers/factory.js.map
@@ -1511,9 +1505,6 @@ packages/server/src/controllers/index/LoginController.js.map
 packages/server/src/controllers/index/NotificationController.d.ts
 packages/server/src/controllers/index/NotificationController.js
 packages/server/src/controllers/index/NotificationController.js.map
-packages/server/src/controllers/index/ProfileController.d.ts
-packages/server/src/controllers/index/ProfileController.js
-packages/server/src/controllers/index/ProfileController.js.map
 packages/server/src/controllers/index/UserController.d.ts
 packages/server/src/controllers/index/UserController.js
 packages/server/src/controllers/index/UserController.js.map
@@ -1574,6 +1565,9 @@ packages/server/src/models/SessionModel.js.map
 packages/server/src/models/UserModel.d.ts
 packages/server/src/models/UserModel.js
 packages/server/src/models/UserModel.js.map
+packages/server/src/models/UserModel.test.d.ts
+packages/server/src/models/UserModel.test.js
+packages/server/src/models/UserModel.test.js.map
 packages/server/src/models/factory.d.ts
 packages/server/src/models/factory.js
 packages/server/src/models/factory.js.map
@@ -1622,12 +1616,6 @@ packages/server/src/routes/index/logout.js.map
 packages/server/src/routes/index/notifications.d.ts
 packages/server/src/routes/index/notifications.js
 packages/server/src/routes/index/notifications.js.map
-packages/server/src/routes/index/profile.d.ts
-packages/server/src/routes/index/profile.js
-packages/server/src/routes/index/profile.js.map
-packages/server/src/routes/index/user.d.ts
-packages/server/src/routes/index/user.js
-packages/server/src/routes/index/user.js.map
 packages/server/src/routes/index/users.d.ts
 packages/server/src/routes/index/users.js
 packages/server/src/routes/index/users.js.map

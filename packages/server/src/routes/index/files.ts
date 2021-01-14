@@ -13,7 +13,10 @@ const route: Route = {
 			if (!path.link) {
 				return ctx.controllers.indexFiles().getIndex(sessionId, path.id, ctx.query);
 			} else if (path.link === 'content') {
-				const file: File = await ctx.controllers.apiFile().getFileContent(sessionId, path.id);
+				const fileModel = ctx.models.file({ userId: ctx.owner.id });
+				let file: File = await fileModel.entityFromItemId(path.id);
+				file = await fileModel.loadWithContent(file.id);
+				if (!file) throw new ErrorNotFound();
 				return respondWithFileContent(ctx.response, file);
 			}
 

@@ -48,9 +48,11 @@ export function headerSessionId(headers: any): string {
 	return headers['x-api-auth'] ? headers['x-api-auth'] : '';
 }
 
-export function contextSessionId(ctx: AppContext): string {
+export function contextSessionId(ctx: AppContext, throwIfNotFound = true): string {
+	if (ctx.headers['x-api-auth']) return ctx.headers['x-api-auth'];
+
 	const id = ctx.cookies.get('sessionId');
-	if (!id) throw new ErrorForbidden('Invalid or missing session');
+	if (!id && throwIfNotFound) throw new ErrorForbidden('Invalid or missing session');
 	return id;
 }
 

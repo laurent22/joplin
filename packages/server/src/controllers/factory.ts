@@ -1,5 +1,4 @@
 import { Models } from '../models/factory';
-import FileController from './api/FileController';
 // import OAuthController from './api/OAuthController';
 import SessionController from './api/SessionController';
 import IndexLoginController from './index/LoginController';
@@ -14,10 +13,6 @@ export class Controllers {
 
 	public constructor(models: Models) {
 		this.models_ = models;
-	}
-
-	public apiFile() {
-		return new FileController(this.models_);
 	}
 
 	// public oauth() {
