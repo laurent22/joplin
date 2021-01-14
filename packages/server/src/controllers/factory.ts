@@ -1,6 +1,5 @@
 import { Models } from '../models/factory';
 // import OAuthController from './api/OAuthController';
-import SessionController from './api/SessionController';
 import IndexLoginController from './index/LoginController';
 import IndexHomeController from './index/HomeController';
 import IndexUserController from './index/UserController';
@@ -18,10 +17,6 @@ export class Controllers {
 	// public oauth() {
 	// 	return new OAuthController(this.models_);
 	// }
-
-	public apiSession() {
-		return new SessionController(this.models_);
-	}
 
 	public indexLogin() {
 		return new IndexLoginController(this.models_);

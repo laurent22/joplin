@@ -169,8 +169,6 @@ interface CreateUserAndSessionOptions {
 }
 
 export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
-	const sessionController = controllers().apiSession();
-
 	options = {
 		email: `user${index}@localhost`,
 		password: '123456',
@@ -178,7 +176,7 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 	};
 
 	const user = await models().user().save({ email: options.email, password: options.password, is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
-	const session = await sessionController.authenticate(options.email, options.password);
+	const session = await models().session().authenticate(options.email, options.password);
 
 	return {
 		user: user,

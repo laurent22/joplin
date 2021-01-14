@@ -1,6 +1,7 @@
 import BaseModel from './BaseModel';
 import { User, Session } from '../db';
 import uuidgen from '../utils/uuidgen';
+import { ErrorForbidden } from '../utils/errors';
 
 export default class SessionModel extends BaseModel {
 
@@ -20,6 +21,12 @@ export default class SessionModel extends BaseModel {
 			id: uuidgen(),
 			user_id: userId,
 		}, { isNew: true });
+	}
+
+	public async authenticate(email: string, password: string): Promise<Session> {
+		const user = await this.models().user().login(email, password);
+		if (!user) throw new ErrorForbidden('Invalid username or password');
+		return this.createUserSession(user.id);
 	}
 
 }
