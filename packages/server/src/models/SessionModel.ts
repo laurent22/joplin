@@ -29,4 +29,9 @@ export default class SessionModel extends BaseModel {
 		return this.createUserSession(user.id);
 	}
 
+	public async logout(sessionId: string) {
+		if (!sessionId) return;
+		await this.delete(sessionId);
+	}
+
 }

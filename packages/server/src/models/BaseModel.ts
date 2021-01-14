@@ -102,14 +102,55 @@ export default abstract class BaseModel {
 		return false;
 	}
 
-	protected async withTransaction(fn: Function): Promise<void> {
+	// When using withTransaction, make sure any database call uses an instance
+	// of `this.db()` that was accessed within the `fn` callback, otherwise the
+	// transaction will be stuck!
+	//
+	// This for example, would result in a stuck transaction:
+	//
+	// const query = this.db(this.tableName).where('id', '=', id);
+	//
+	// this.withTransaction(async () => {
+	//     await query.delete();
+	// });
+	//
+	// This is because withTransaction is going to swap the value of "this.db()"
+	// for as long as the transaction is active. So if the query is started
+	// outside the transaction, it will use the regular db connection and wait
+	// for the newly created transaction to finish, which will never happen.
+	//
+	// This is a bit of a leaky abstraction, which ideally should be improved
+	// but for now one just has to be aware of the caveat.
+	//
+	// The `name` argument is only for debugging, so that any stuck transaction
+	// can be more easily identified.
+	protected async withTransaction(fn: Function, name: string = null): Promise<void> {
+		const debugTransaction = false;
+
+		const debugTimerId = debugTransaction ? setTimeout(() => {
+			console.info('Transaction did not complete:', name, txIndex);
+		}, 5000) : null;
+
 		const txIndex = await this.transactionHandler_.start();
+
+		if (debugTransaction) console.info('START', name, txIndex);
 
 		try {
 			await fn();
 		} catch (error) {
 			await this.transactionHandler_.rollback(txIndex);
+
+			if (debugTransaction) {
+				console.info('ROLLBACK', name, txIndex);
+				clearTimeout(debugTimerId);
+			}
+
 			throw error;
+		}
+
+		if (debugTransaction) {
+			console.info('COMMIT', name, txIndex);
+			clearTimeout(debugTimerId);
 		}
 
 		await this.transactionHandler_.commit(txIndex);
@@ -197,7 +238,7 @@ export default abstract class BaseModel {
 				// Sanity check:
 				if (updatedCount !== 1) throw new ErrorBadRequest(`one row should have been updated, but ${updatedCount} row(s) were updated`);
 			}
-		});
+		}, 'BaseModel::save');
 
 		return toSave;
 	}
@@ -220,11 +261,6 @@ export default abstract class BaseModel {
 
 		if (!ids.length) throw new Error('no id provided');
 
-		const query = this.db(this.tableName).where({ id: ids[0] });
-		for (let i = 1; i < ids.length; i++) {
-			await query.orWhere({ id: ids[i] });
-		}
-
 		const trackChanges = this.trackChanges;
 
 		let itemsWithParentIds: AnyItemType[] = null;
@@ -233,13 +269,18 @@ export default abstract class BaseModel {
 		}
 
 		await this.withTransaction(async () => {
+			const query = this.db(this.tableName).where({ id: ids[0] });
+			for (let i = 1; i < ids.length; i++) {
+				await query.orWhere({ id: ids[i] });
+			}
+
 			const deletedCount = await query.del();
 			if (deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
 
 			if (trackChanges) {
 				for (const item of itemsWithParentIds) await this.handleChangeTracking({}, item, ChangeType.Delete);
 			}
-		});
+		}, 'BaseModel::delete');
 	}
 
 }

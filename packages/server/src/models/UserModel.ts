@@ -97,7 +97,7 @@ export default class UserModel extends BaseModel {
 			const rootFile = await fileModel.userRootFile();
 			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
 			await super.delete(id);
-		});
+		}, 'UserModel::delete');
 	}
 
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
@@ -114,7 +114,7 @@ export default class UserModel extends BaseModel {
 				const fileModel = this.models().file({ userId: newUser.id });
 				await fileModel.createRootFile();
 			}
-		});
+		}, 'UserModel::save');
 
 		return newUser;
 	}

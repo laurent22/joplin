@@ -87,7 +87,7 @@ export default class FileModel extends BaseModel {
 
 				output[item.id] = segments.length ? (`root:/${segments.join('/')}:`) : 'root';
 			}
-		});
+		}, 'FileModel::itemFullPaths');
 
 		return output;
 	}
@@ -404,7 +404,7 @@ export default class FileModel extends BaseModel {
 			for (const childId of childrenIds) {
 				await this.delete(childId);
 			}
-		});
+		}, 'FileModel::deleteChildren');
 	}
 
 	public async delete(id: string, options: DeleteOptions = {}): Promise<void> {
@@ -427,7 +427,7 @@ export default class FileModel extends BaseModel {
 			}
 
 			await super.delete(id);
-		});
+		}, 'FileModel::delete');
 	}
 
 }
