@@ -4,7 +4,6 @@ import FileController from './api/FileController';
 import SessionController from './api/SessionController';
 import IndexLoginController from './index/LoginController';
 import IndexHomeController from './index/HomeController';
-import IndexProfileController from './index/ProfileController';
 import IndexUserController from './index/UserController';
 import IndexFileController from './index/FileController';
 import IndexNotificationController from './index/NotificationController';
@@ -35,10 +34,6 @@ export class Controllers {
 
 	public indexHome() {
 		return new IndexHomeController(this.models_);
-	}
-
-	public indexProfile() {
-		return new IndexProfileController(this.models_);
 	}
 
 	public indexUser() {

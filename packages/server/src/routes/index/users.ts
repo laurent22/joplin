@@ -26,10 +26,12 @@ const route: Route = {
 	exec: async function(path: SubPath, ctx: AppContext) {
 		const sessionId = contextSessionId(ctx);
 		const isNew = path.id === 'new';
+		const isMe = path.id === 'me';
+		const userId = isMe ? ctx.owner.id : path.id;
 
 		if (ctx.method === 'GET') {
 			if (path.id) {
-				return ctx.controllers.indexUser().getOne(sessionId, isNew, !isNew ? path.id : null);
+				return ctx.controllers.indexUser().getOne(sessionId, isNew, isMe, !isNew ? userId : null);
 			} else {
 				return ctx.controllers.indexUser().getIndex(sessionId);
 			}
@@ -41,6 +43,7 @@ const route: Route = {
 			try {
 				const body = await formParse(ctx.req);
 				const fields = body.fields;
+				if (isMe) fields.id = userId;
 				user = makeUser(isNew, fields);
 
 				const userModel = ctx.models.user({ userId: ctx.owner.id });
@@ -57,9 +60,9 @@ const route: Route = {
 					throw new Error('Invalid form button');
 				}
 
-				return redirect(ctx, `${baseUrl()}/users`);
+				return redirect(ctx, `${baseUrl()}/users${isMe ? '/me' : ''}`);
 			} catch (error) {
-				return ctx.controllers.indexUser().getOne(sessionId, isNew, user, error);
+				return ctx.controllers.indexUser().getOne(sessionId, isNew, isMe, user, error);
 			}
 		}
 

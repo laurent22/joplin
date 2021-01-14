@@ -16,7 +16,7 @@ export default class UserController extends BaseController {
 		return view;
 	}
 
-	public async getOne(sessionId: string, isNew: boolean, userIdOrString: string | User = null, error: any = null): Promise<View> {
+	public async getOne(sessionId: string, isNew: boolean, isMe: boolean, userIdOrString: string | User = null, error: any = null): Promise<View> {
 		const owner = await this.initSession(sessionId);
 		const userModel = this.models.user({ userId: owner.id });
 
@@ -28,12 +28,17 @@ export default class UserController extends BaseController {
 			user = userIdOrString as User;
 		}
 
+		let postUrl = `${baseUrl()}/users/${user.id}`;
+		if (isNew) postUrl = `${baseUrl()}/users/new`;
+		if (isMe) postUrl = `${baseUrl()}/users/me`;
+
 		const view: View = defaultView('user');
 		view.content.user = user;
 		view.content.isNew = isNew;
 		view.content.buttonTitle = isNew ? 'Create user' : 'Update profile';
 		view.content.error = error;
-		view.content.postUrl = `${baseUrl()}/users${isNew ? '/new' : `/${user.id}`}`;
+		view.content.postUrl = postUrl;
+		view.content.showDeleteButton = !!owner.is_admin && owner.id !== user.id;
 		view.partials.push('errorBanner');
 
 		return view;

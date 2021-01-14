@@ -72,7 +72,7 @@ export default class UserModel extends BaseModel {
 	}
 
 	public async profileUrl(): Promise<string> {
-		return `${this.baseUrl}/profile`;
+		return `${this.baseUrl}/users/me`;
 	}
 
 	private async checkIsOwnerOrAdmin(userId: string): Promise<void> {

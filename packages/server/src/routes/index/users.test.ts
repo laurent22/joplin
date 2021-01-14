@@ -126,14 +126,14 @@ describe('index_users', function() {
 		const userModel = models().user({ userId: user.id });
 
 		await patchUser(session.id, { id: user.id, email: 'test2@example.com' });
-		let modUser: User = await userModel.load(user.id);
+		const modUser: User = await userModel.load(user.id);
 		expect(modUser.email).toBe('test2@example.com');
 
-		const previousPassword = modUser.password;
-		await patchUser(session.id, { id: user.id, password: 'abcdefgh', password2: 'abcdefgh' });
-		modUser = await userModel.load(user.id);
-		expect(!!modUser.password).toBe(true);
-		expect(modUser.password === previousPassword).toBe(false);
+		// const previousPassword = modUser.password;
+		// await patchUser(session.id, { id: user.id, password: 'abcdefgh', password2: 'abcdefgh' });
+		// modUser = await userModel.load(user.id);
+		// expect(!!modUser.password).toBe(true);
+		// expect(modUser.password === previousPassword).toBe(false);
 	});
 
 	test('should get a user', async function() {

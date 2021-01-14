@@ -28,11 +28,9 @@
 	</div>
 	<div class="control">
 		<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
-		{{^isNew}}
-			{{^user.is_admin}}
-				<input type="submit" name="delete_button" class="button is-danger" value="Delete" />
-			{{/user.is_admin}}
-		{{/isNew}}
+		{{#showDeleteButton}}
+			<input type="submit" name="delete_button" class="button is-danger" value="Delete" />
+		{{/showDeleteButton}}
 	</div>
 </form>
 
