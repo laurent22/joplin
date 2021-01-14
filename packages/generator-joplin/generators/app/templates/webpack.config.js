@@ -270,4 +270,10 @@ try {
 	process.exit(1);
 }
 
+if (!exportedConfigs.length) {
+	// Nothing to do - for example where there are no external scripts to
+	// compile.
+	process.exit(0);
+}
+
 module.exports = exportedConfigs;
