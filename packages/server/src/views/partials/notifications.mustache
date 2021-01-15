@@ -1,9 +1,11 @@
-{{#global.notifications}}
-<div class="notification is-{{level}}" id="notification-{{id}}">
-	<button data-close-url="{{closeUrl}}" data-id="{{id}}" class="delete close-notification-button"></button>
-	{{{messageHtml}}}
-</div>
-{{/global.notifications}}
+{{#global.hasNotifications}}
+	{{#global.notifications}}
+	<div class="notification is-{{level}}" id="notification-{{id}}">
+		<button data-close-url="{{closeUrl}}" data-id="{{id}}" class="delete close-notification-button"></button>
+		{{{messageHtml}}}
+	</div>
+	{{/global.notifications}}
+{{/global.hasNotifications}}
 
 <script>
 	onDocumentReady(function() {

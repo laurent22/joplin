@@ -5,12 +5,12 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import config, { initConfig, baseUrl, envVariables } from './config';
+import config, { initConfig, baseUrl } from './config';
 import configDev from './config-dev';
 import configProd from './config-prod';
 import configBuildTypes from './config-buildTypes';
 import { createDb, dropDb } from './tools/dbTools';
-import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection } from './db';
+import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection, sqliteFilePath } from './db';
 import modelFactory from './models/factory';
 import { AppContext, Config, Env } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
@@ -105,8 +105,9 @@ async function main() {
 	} else {
 		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
 		appLogger().info('Public base URL:', baseUrl());
-		appLogger().info('Using environment:', markPasswords(envVariables()));
+		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
+		if (config().database.client === 'sqlite3') appLogger().info('DB file:', sqliteFilePath(config().database.name));
 
 		const appContext = app.context as AppContext;
 

@@ -4,7 +4,7 @@ import * as pathUtils from 'path';
 const rootDir = pathUtils.dirname(__dirname);
 const viewDir = `${pathUtils.dirname(__dirname)}/src/views`;
 
-const envPort = Number(process.env.JOPLIN_PORT);
+const envPort = Number(process.env.APP_PORT);
 
 const config: Config = {
 	port: (envPort && !isNaN(envPort)) ? envPort : 22300,
@@ -16,6 +16,7 @@ const config: Config = {
 		client: 'pg',
 		name: 'joplin',
 	},
+	baseUrl: '',
 };
 
 export default config;

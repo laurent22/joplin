@@ -3,19 +3,19 @@ version: '3'
 services:
     app:
         environment:
-            - JOPLIN_BASE_URL=${JOPLIN_BASE_URL}
-            - JOPLIN_PORT=${JOPLIN_PORT}
-            - JOPLIN_POSTGRES_PASSWORD=joplin
-            - JOPLIN_POSTGRES_DATABASE=joplin
-            - JOPLIN_POSTGRES_USER=joplin 
-            - JOPLIN_POSTGRES_PORT=5432 
-            - JOPLIN_POSTGRES_HOST=pg 
+            - APP_BASE_URL=${APP_BASE_URL}
+            - APP_PORT=${APP_PORT}
+            - POSTGRES_PASSWORD=joplin
+            - POSTGRES_DATABASE=joplin
+            - POSTGRES_USER=joplin 
+            - POSTGRES_PORT=5432 
+            - POSTGRES_HOST=pg 
         restart: unless-stopped
         build:
             context: .
             dockerfile: Dockerfile.server
         ports:
-            - "${JOPLIN_PORT}:${JOPLIN_PORT}"
+            - "${APP_PORT}:${APP_PORT}"
         # volumes:
         #     # Mount the server directory so that it's possible to edit file
         #     # while the container is running. However don't mount the

@@ -1,4 +1,4 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables } from '../../db';
+import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables, sqliteFilePath } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import baseConfig from '../../config-tests';
@@ -34,12 +34,15 @@ export async function tempDir(): Promise<string> {
 	return tempDir_;
 }
 
+let createdDbName_: string = null;
 export async function beforeAllDb(unitName: string) {
+	createdDbName_ = unitName;
+
 	const config: Config = {
 		...baseConfig,
 		database: {
 			...baseConfig.database,
-			name: unitName,
+			name: createdDbName_,
 		},
 	};
 
@@ -57,6 +60,12 @@ export async function afterAllTests() {
 	if (tempDir_) {
 		await fs.remove(tempDir_);
 		tempDir_ = null;
+	}
+
+	if (createdDbName_) {
+		const filePath = sqliteFilePath(createdDbName_);
+		await fs.remove(filePath);
+		createdDbName_ = null;
 	}
 }
 

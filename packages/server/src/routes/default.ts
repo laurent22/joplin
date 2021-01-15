@@ -39,6 +39,10 @@ async function findLocalFile(path: string): Promise<string> {
 
 const router = new Router();
 
+router.public = true;
+
+// Used to serve static files, so it needs to be public because for example the
+// login page, which is public, needs access to the CSS files.
 router.get('', async (path: SubPath, ctx: Koa.Context) => {
 	const localPath = await findLocalFile(path.raw);
 
