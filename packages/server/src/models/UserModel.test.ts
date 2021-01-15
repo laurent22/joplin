@@ -2,10 +2,10 @@ import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models,
 import { File } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 
-describe('NotificationModel', function() {
+describe('UserModel', function() {
 
 	beforeAll(async () => {
-		await beforeAllDb('NotificationModel');
+		await beforeAllDb('UserModel');
 	});
 
 	afterAll(async () => {
