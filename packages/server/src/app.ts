@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import config, { initConfig, baseUrl } from './config';
+import config, { initConfig, baseUrl, envVariables } from './config';
 import configDev from './config-dev';
 import configProd from './config-prod';
 import configBuildTypes from './config-buildTypes';
@@ -52,11 +52,25 @@ app.use(ownerHandler);
 app.use(notificationHandler);
 app.use(routeHandler);
 
+function markPasswords(o: Record<string, any>): Record<string, any> {
+	const output: Record<string, any> = {};
+
+	for (const k of Object.keys(o)) {
+		if (k.toLowerCase().includes('password')) {
+			output[k] = '********';
+		} else {
+			output[k] = o[k];
+		}
+	}
+
+	return output;
+}
+
 async function main() {
 	const configObject: Config = configs[env];
 	if (!configObject) throw new Error(`Invalid env: ${env}`);
 
-	initConfig(configObject);
+	initConfig(configObject, process.env);
 
 	await fs.mkdirp(config().logDir);
 	Logger.fsDriver_ = new FsDriverNode();
@@ -91,7 +105,8 @@ async function main() {
 	} else {
 		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
 		appLogger().info('Public base URL:', baseUrl());
-		appLogger().info('DB Config:', config().database);
+		appLogger().info('Using environment:', markPasswords(envVariables()));
+		appLogger().info('DB Config:', markPasswords(config().database));
 
 		const appContext = app.context as AppContext;
 

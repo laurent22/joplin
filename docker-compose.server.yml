@@ -5,6 +5,11 @@ services:
         environment:
             - JOPLIN_BASE_URL=${JOPLIN_BASE_URL}
             - JOPLIN_PORT=${JOPLIN_PORT}
+            - JOPLIN_POSTGRES_PASSWORD=joplin
+            - JOPLIN_POSTGRES_DATABASE=joplin
+            - JOPLIN_POSTGRES_USER=joplin 
+            - JOPLIN_POSTGRES_PORT=5432 
+            - JOPLIN_POSTGRES_HOST=pg 
         restart: unless-stopped
         build:
             context: .

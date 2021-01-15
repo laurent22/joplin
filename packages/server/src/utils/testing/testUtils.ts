@@ -43,7 +43,7 @@ export async function beforeAllDb(unitName: string) {
 		},
 	};
 
-	initConfig(config);
+	initConfig(config, {});
 	await createDb(config.database, { dropIfExists: true });
 	db_ = await connectDb(config.database);
 }

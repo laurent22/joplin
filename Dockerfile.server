@@ -39,7 +39,6 @@ COPY --chown=$user:$user packages/fork-sax/package*.json ./packages/fork-sax/
 COPY --chown=$user:$user packages/lib/package*.json ./packages/lib/
 COPY --chown=$user:$user packages/renderer/package*.json ./packages/renderer/
 COPY --chown=$user:$user packages/tools/package*.json ./packages/tools/
-COPY --chown=$user:$user packages/server/package*.json ./packages/server/
 COPY --chown=$user:$user lerna.json .
 COPY --chown=$user:$user tsconfig.json .
 
@@ -50,11 +49,15 @@ COPY --chown=$user:$user packages/turndown ./packages/turndown
 COPY --chown=$user:$user packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
 COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
 
-RUN ls -la /home/$user
-
 # Then bootstrap only, without compiling the TypeScript files
 
 RUN npm run bootstrap
+
+# We have a separate step for the server files because they are more likely to
+# change.
+
+COPY --chown=$user:$user packages/server/package*.json ./packages/server/
+RUN npm run bootstrapServerOnly
 
 COPY --chown=$user:$user packages/fork-sax ./packages/fork-sax
 COPY --chown=$user:$user packages/lib ./packages/lib
