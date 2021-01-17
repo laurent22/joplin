@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import config, { initConfig, baseUrl } from './config';
+import config, { initConfig, baseUrl, runningInDocker } from './config';
 import configDev from './config-dev';
 import configProd from './config-prod';
 import configBuildTypes from './config-buildTypes';
@@ -109,6 +109,7 @@ async function main() {
 		await createDb(config().database);
 	} else {
 		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
+		appLogger().info('Running in Docker:', runningInDocker());
 		appLogger().info('Public base URL:', baseUrl());
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));

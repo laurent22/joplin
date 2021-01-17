@@ -70,6 +70,7 @@ COPY --chown=$user:$user packages/server ./packages/server
 
 RUN npm run build
 
+ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
 
 CMD [ "npm", "--prefix", "packages/server", "start" ]
