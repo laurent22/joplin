@@ -9,8 +9,6 @@ const password = process.env.JOPLIN_DB_PASSWORD || 'joplin'
 const host = process.env.JOPLIN_DB_HOST || 'db'
 const port = process.env.JOPLIN_DB_PORT || '5432'
 
-export default config;
-
 const config: Config = {
 	...configBase,
 	rootDir: rootDir,
