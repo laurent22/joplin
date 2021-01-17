@@ -78,7 +78,7 @@ const commands = [
 	require('./gui/NoteEditor/commands/showRevisions'),
 	require('./gui/NoteList/commands/focusElementNoteList'),
 	require('./gui/NoteListControls/commands/focusSearch'),
-	require('./gui/SideBar/commands/focusElementSideBar'),
+	require('./gui/Sidebar/commands/focusElementSideBar'),
 ];
 
 // Commands that are not tied to any particular component.
