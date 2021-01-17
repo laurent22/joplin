@@ -1,9 +1,8 @@
 import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables, sqliteFilePath } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
-import baseConfig from '../../config-tests';
-import { AppContext, Config, Env } from '../types';
-import { initConfig } from '../../config';
+import { AppContext, Env } from '../types';
+import config, { initConfig } from '../../config';
 import FileModel from '../../models/FileModel';
 import Logger from '@joplin/lib/Logger';
 import FakeCookies from './koa/FakeCookies';
@@ -38,17 +37,12 @@ let createdDbName_: string = null;
 export async function beforeAllDb(unitName: string) {
 	createdDbName_ = unitName;
 
-	const config: Config = {
-		...baseConfig,
-		database: {
-			...baseConfig.database,
-			name: createdDbName_,
-		},
-	};
+	initConfig({
+		SQLITE_DATABASE: createdDbName_,
+	});
 
-	initConfig(config, {});
-	await createDb(config.database, { dropIfExists: true });
-	db_ = await connectDb(config.database);
+	await createDb(config().database, { dropIfExists: true });
+	db_ = await connectDb(config().database);
 }
 
 export async function afterAllTests() {

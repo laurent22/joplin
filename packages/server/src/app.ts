@@ -5,14 +5,11 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import config, { initConfig, baseUrl, runningInDocker } from './config';
-import configDev from './config-dev';
-import configProd from './config-prod';
-import configBuildTypes from './config-buildTypes';
+import config, { initConfig, runningInDocker, EnvVariables } from './config';
 import { createDb, dropDb } from './tools/dbTools';
 import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection, sqliteFilePath } from './db';
 import modelFactory from './models/factory';
-import { AppContext, Config, Env } from './utils/types';
+import { AppContext, Env } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
@@ -24,14 +21,14 @@ shimInit();
 
 const env: Env = argv.env as Env || Env.Prod;
 
-interface Configs {
-	[name: string]: Config;
-}
-
-const configs: Configs = {
-	dev: configDev,
-	prod: configProd,
-	buildTypes: configBuildTypes,
+const envVariables: Record<Env, EnvVariables> = {
+	dev: {
+		SQLITE_DATABASE: 'dev',
+	},
+	buildTypes: {
+		SQLITE_DATABASE: 'buildTypes',
+	},
+	prod: {}, // Actually get the env variables from the environment
 };
 
 let appLogger_: LoggerWrapper = null;
@@ -72,10 +69,12 @@ async function main() {
 		nodeEnvFile(argv.envFile);
 	}
 
-	const configObject: Config = configs[env];
-	if (!configObject) throw new Error(`Invalid env: ${env}`);
+	if (!envVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	initConfig(configObject, process.env);
+	initConfig({
+		...envVariables[env],
+		...process.env,
+	});
 
 	await fs.mkdirp(config().logDir);
 	Logger.fsDriver_ = new FsDriverNode();
@@ -110,7 +109,7 @@ async function main() {
 	} else {
 		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
 		appLogger().info('Running in Docker:', runningInDocker());
-		appLogger().info('Public base URL:', baseUrl());
+		appLogger().info('Public base URL:', config().baseUrl);
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
 		if (config().database.client === 'sqlite3') appLogger().info('DB file:', sqliteFilePath(config().database.name));
@@ -126,13 +125,13 @@ async function main() {
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		appContext.env = env;
 		appContext.db = connectionCheck.connection;
-		appContext.models = modelFactory(appContext.db, baseUrl());
+		appContext.models = modelFactory(appContext.db, config().baseUrl);
 		appContext.appLogger = appLogger;
 
 		appLogger().info('Migrating database...');
 		await migrateDb(appContext.db);
 
-		appLogger().info(`Call this for testing: \`curl ${baseUrl()}/api/ping\``);
+		appLogger().info(`Call this for testing: \`curl ${config().baseUrl}/api/ping\``);
 
 		app.listen(config().port);
 	}

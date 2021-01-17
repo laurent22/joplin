@@ -6,7 +6,7 @@ import { ErrorNotFound } from '../../utils/errors';
 import { File } from '../../db';
 import { createPaginationLinks, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
 import { setQueryParameters } from '../../utils/urlUtils';
-import { baseUrl } from '../../config';
+import config from '../../config';
 import { formatDateTime } from '../../utils/time';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
@@ -51,7 +51,7 @@ router.get('files/:id', async (path: SubPath, ctx: AppContext) => {
 	async function fileToViewItem(file: File, fileFullPaths: Record<string, string>): Promise<any> {
 		const filePath = fileFullPaths[file.id];
 
-		let url = `${baseUrl()}/files/${filePath}`;
+		let url = `${config().baseUrl}/files/${filePath}`;
 		if (!file.is_directory) {
 			url += '/content';
 		} else {
@@ -88,7 +88,7 @@ router.get('files/:id', async (path: SubPath, ctx: AppContext) => {
 	const view: View = defaultView('files');
 	view.content.paginatedFiles = { ...paginatedFiles, items: files };
 	view.content.paginationLinks = paginationLinks;
-	view.content.postUrl = `${baseUrl()}/files`;
+	view.content.postUrl = `${config().baseUrl}/files`;
 	view.content.parentId = parent.id;
 	view.cssFiles = ['index/files'];
 	view.partials.push('pagination');
