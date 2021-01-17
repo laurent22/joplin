@@ -25,8 +25,13 @@ export interface AppContext extends Koa.Context {
 	owner: User;
 }
 
+export enum DatabaseConfigClient {
+	PostgreSQL = 'pg',
+	SQLite = 'sqlite3',
+}
+
 export interface DatabaseConfig {
-	client: string;
+	client: DatabaseConfigClient;
 	name: string;
 	host?: string;
 	port?: number;

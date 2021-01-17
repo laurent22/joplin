@@ -18,6 +18,7 @@ import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
 
+const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit();
 
@@ -67,6 +68,10 @@ function markPasswords(o: Record<string, any>): Record<string, any> {
 }
 
 async function main() {
+	if (argv.envFile) {
+		nodeEnvFile(argv.envFile);
+	}
+
 	const configObject: Config = configs[env];
 	if (!configObject) throw new Error(`Invalid env: ${env}`);
 

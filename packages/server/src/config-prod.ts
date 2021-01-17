@@ -1,4 +1,4 @@
-import { Config } from './utils/types';
+import { Config, DatabaseConfigClient } from './utils/types';
 import configBase from './config-base';
 
 const rootDir = __dirname; // '/home/joplin/';
@@ -9,7 +9,7 @@ const config: Config = {
 	logDir: `${rootDir}/logs`,
 	database: {
 		name: 'prod',
-		client: 'sqlite3',
+		client: DatabaseConfigClient.SQLite,
 		asyncStackTraces: true,
 	},
 	// database: {

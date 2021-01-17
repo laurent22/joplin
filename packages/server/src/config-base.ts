@@ -1,4 +1,4 @@
-import { Config } from './utils/types';
+import { Config, DatabaseConfigClient } from './utils/types';
 import * as pathUtils from 'path';
 
 const rootDir = pathUtils.dirname(__dirname);
@@ -13,7 +13,7 @@ const config: Config = {
 	layoutDir: `${viewDir}/layouts`,
 	logDir: `${rootDir}/logs`,
 	database: {
-		client: 'pg',
+		client: DatabaseConfigClient.PostgreSQL,
 		name: 'joplin',
 	},
 	baseUrl: '',
