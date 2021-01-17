@@ -20,8 +20,8 @@ RUN mkdir /home/$user/logs
 # and build TypeScript files, but we don't have the TypeScript files at
 # this point)
 
-RUN npm install --ignore-scripts
 COPY --chown=$user:$user package*.json ./
+RUN npm install --ignore-scripts
 
 # To take advantage of the Docker cache, we first copy all the package.json
 # and package-lock.json files, as they rarely change, and then bootstrap
