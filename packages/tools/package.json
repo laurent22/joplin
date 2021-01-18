@@ -1,6 +1,6 @@
 {
   "name": "@joplin/tools",
-  "version": "1.0.18",
+  "version": "1.7.0",
   "description": "Various tools for Joplin",
   "main": "index.js",
   "author": "Laurent Cozic",
