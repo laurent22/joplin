@@ -14,7 +14,9 @@ async function main() {
 	console.info(`Running from: ${process.cwd()}`);
 
 	await execCommand2(`docker build -t "joplin/server:${versionShort}" -f Dockerfile.server .`);
+	await execCommand2(`docker tag "joplin/server:${versionShort}" "joplin/server:latest"`);
 	await execCommand2(`docker push joplin/server:${versionShort}`);
+	await execCommand2('docker push joplin/server:latest');
 
 	await execCommand2('git add -A');
 	await execCommand2(`git commit -m 'Server release ${version}'`);
