@@ -1,5 +1,4 @@
 import * as fs from 'fs-extra';
-import { execSync } from 'child_process';
 
 const fetch = require('node-fetch');
 const execa = require('execa');
@@ -140,22 +139,6 @@ export function toSystemSlashes(path: string) {
 	const os = process.platform;
 	if (os === 'win32') return path.replace(/\//g, '\\');
 	return path.replace(/\\/g, '/');
-}
-
-export function deleteLink(path: string) {
-	if (isWindows()) {
-		try {
-			execSync(`rmdir "${toSystemSlashes(path)}"`, { stdio: 'pipe' });
-		} catch (error) {
-			// console.info('Error: ' + error.message);
-		}
-	} else {
-		try {
-			fs.unlinkSync(toSystemSlashes(path));
-		} catch (error) {
-			// ignore
-		}
-	}
 }
 
 export async function setPackagePrivateField(filePath: string, value: any) {
