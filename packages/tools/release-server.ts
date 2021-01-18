@@ -8,7 +8,7 @@ async function main() {
 	process.chdir(serverDir);
 	const version = (await execCommand2('npm version patch')).trim();
 	const versionShort = version.substr(1);
-	// const tagName = `server-${version}`;
+	const tagName = `server-${version}`;
 
 	process.chdir(rootDir);
 	console.info(`Running from: ${process.cwd()}`);
@@ -18,9 +18,9 @@ async function main() {
 
 	await execCommand2('git add -A');
 	await execCommand2(`git commit -m 'Server release ${version}'`);
-	// await execCommand2(`git tag ${tagName}`);
+	await execCommand2(`git tag ${tagName}`);
 	await execCommand2('git push');
-	// await execCommand2('git push --tags');
+	await execCommand2('git push --tags');
 }
 
 main().catch((error) => {
