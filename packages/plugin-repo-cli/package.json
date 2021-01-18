@@ -12,7 +12,6 @@
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --project tsconfig.json",
-    "prepare": "npm run tsc",
     "test": "jest",
     "test-ci": "npm run test"
   },

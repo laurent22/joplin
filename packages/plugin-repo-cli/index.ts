@@ -262,6 +262,8 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 }
 
 async function commandBuild(args: CommandBuildArgs) {
+	console.info(new Date(), 'Building repository...');
+
 	const repoDir = args.pluginRepoDir;
 	await checkPluginRepository(repoDir);
 
@@ -275,11 +277,17 @@ async function commandBuild(args: CommandBuildArgs) {
 	await execCommand2('git push');
 }
 
+async function commandVersion() {
+	const p = await readJsonFile(path.resolve(__dirname, 'package.json'));
+	console.info(`Version ${p.version}`);
+}
+
 async function main() {
 	const scriptName: string = 'plugin-repo-cli';
 
 	const commands: Record<string, Function> = {
 		build: commandBuild,
+		version: commandVersion,
 	};
 
 	let selectedCommand: string = '';
@@ -293,12 +301,16 @@ async function main() {
 	require('yargs')
 		.scriptName(scriptName)
 		.usage('$0 <cmd> [args]')
+
 		.command('build <plugin-repo-dir>', 'Build the plugin repository', (yargs: any) => {
 			yargs.positional('plugin-repo-dir', {
 				type: 'string',
 				describe: 'Directory where the plugin repository is located',
 			});
 		}, (args: any) => setSelectedCommand('build', args))
+
+		.command('version', 'Gives version info', () => {}, (args: any) => setSelectedCommand('version', args))
+
 		.help()
 		.argv;
 
