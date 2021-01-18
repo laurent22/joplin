@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as process from 'process';
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '@joplin/lib/markdownUtils';
-const { execCommand, execCommandVerbose, rootDir, resolveRelativePathWithinDir, gitPullTry } = require('./tool-utils.js');
+import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 
 interface NpmPackage {
 	name: string;
@@ -45,6 +45,7 @@ async function checkPluginRepository(dirPath: string) {
 
 	const previousDir = process.cwd();
 	process.chdir(dirPath);
+	await gitRepoCleanTry();
 	await gitPullTry();
 	process.chdir(previousDir);
 }
@@ -70,13 +71,13 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 	const previousDir = process.cwd();
 	process.chdir(workDir);
 
-	await execCommandVerbose('npm', ['install', packageName, '--save', '--ignore-scripts']);
+	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showOutput: false });
 
 	const pluginDir = resolveRelativePathWithinDir(workDir, 'node_modules', packageName, 'publish');
 
 	const files = await fs.readdir(pluginDir);
-	const manifestFilePath = path.resolve(pluginDir, files.find(f => path.extname(f) === '.json'));
-	const pluginFilePath = path.resolve(pluginDir, files.find(f => path.extname(f) === '.jpl'));
+	const manifestFilePath = path.resolve(pluginDir, files.find((f: any) => path.extname(f) === '.json'));
+	const pluginFilePath = path.resolve(pluginDir, files.find((f: any) => path.extname(f) === '.jpl'));
 
 	if (!(await fs.pathExists(manifestFilePath))) throw new Error(`Could not find manifest file at ${manifestFilePath}`);
 	if (!(await fs.pathExists(pluginFilePath))) throw new Error(`Could not find plugin file at ${pluginFilePath}`);
@@ -155,22 +156,40 @@ async function updateReadme(readmePath: string, manifests: any) {
 
 	const tableRegex = /<!-- PLUGIN_LIST -->([^]*)<!-- PLUGIN_LIST -->/;
 
-	const content = await fs.readFile(readmePath, 'utf8');
+	const content = await fs.pathExists(readmePath) ? await fs.readFile(readmePath, 'utf8') : '<!-- PLUGIN_LIST -->\n<!-- PLUGIN_LIST -->';
 	const newContent = content.replace(tableRegex, `<!-- PLUGIN_LIST -->\n${mdTable}\n<!-- PLUGIN_LIST -->`);
 
 	await fs.writeFile(readmePath, newContent, 'utf8');
 }
 
-async function main() {
-	// We assume that the repository is located in a directory next to the main
-	// Joplin monorepo.
-	const repoDir = path.resolve(path.dirname(rootDir), 'joplin-plugins');
+interface CommandBuildArgs {
+	pluginRepoDir: string;
+}
+
+enum ProcessingActionType {
+	Add = 1,
+	Update = 2,
+}
+
+function commitMessage(actionType: ProcessingActionType, npmPackage: NpmPackage): string {
+	const output: string[] = [];
+
+	if (actionType === ProcessingActionType.Add) {
+		output.push('New');
+	} else {
+		output.push('Update');
+	}
+
+	output.push(`${npmPackage.name}@${npmPackage.version}`);
+
+	return output.join(': ');
+}
+
+async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	const tempDir = `${repoDir}/temp`;
 	const pluginManifestsPath = path.resolve(repoDir, 'manifests.json');
 	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
 	const errorsPath = path.resolve(repoDir, 'errors.json');
-
-	await checkPluginRepository(repoDir);
 
 	await fs.mkdirp(tempDir);
 
@@ -181,29 +200,31 @@ async function main() {
 		...obsoleteManifests,
 	};
 
-	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 5000 --json')).trim();
-	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
-
 	const packageTempDir = `${tempDir}/packages`;
 
 	await fs.mkdirp(packageTempDir);
+	const previousDir = process.cwd();
 	process.chdir(packageTempDir);
-	await execCommand('npm init --yes --loglevel silent');
+	await execCommand2('npm init --yes --loglevel silent', { quiet: true });
 
-	const errors: any[] = [];
+	const errors: any = await readJsonFile(errorsPath, {});
+	delete errors[npmPackage.name];
 
+	let actionType: ProcessingActionType = ProcessingActionType.Update;
 	let manifests: any = {};
 
-	for (const npmPackage of npmPackages) {
-		try {
-			const packageName = npmPackage.name;
-			const destDir = `${repoDir}/plugins/`;
-			const manifest = await extractPluginFilesFromPackage(existingManifests, packageTempDir, packageName, destDir);
-			if (!obsoleteManifests[manifest.id]) manifests[manifest.id] = manifest;
-		} catch (error) {
-			console.error(error);
-			errors.push(error);
+	try {
+		const destDir = `${repoDir}/plugins/`;
+		const manifest = await extractPluginFilesFromPackage(existingManifests, packageTempDir, npmPackage.name, destDir);
+
+		if (!existingManifests[manifest.id]) {
+			actionType = ProcessingActionType.Add;
 		}
+
+		if (!obsoleteManifests[manifest.id]) manifests[manifest.id] = manifest;
+	} catch (error) {
+		console.error(error);
+		errors[npmPackage.name] = error.message || '';
 	}
 
 	// We preserve the original manifests so that if a plugin has been removed
@@ -217,20 +238,79 @@ async function main() {
 
 	await fs.writeFile(pluginManifestsPath, JSON.stringify(manifests, null, '\t'), 'utf8');
 
-	if (errors.length) {
-		const toWrite = errors.map((e: any) => {
-			return {
-				message: e.message || '',
-			};
-		});
-		await fs.writeFile(errorsPath, JSON.stringify(toWrite, null, '\t'), 'utf8');
+	if (Object.keys(errors).length) {
+		await fs.writeFile(errorsPath, JSON.stringify(errors, null, '\t'), 'utf8');
 	} else {
 		await fs.remove(errorsPath);
 	}
 
 	await updateReadme(`${repoDir}/README.md`, manifests);
 
+	process.chdir(previousDir);
 	await fs.remove(tempDir);
+
+	process.chdir(repoDir);
+
+	if (!(await gitRepoClean())) {
+		await execCommand2('git add -A', { showOutput: false });
+		await execCommand2(['git', 'commit', '-m', commitMessage(actionType, npmPackage)], { showOutput: false });
+	} else {
+		console.info('Nothing to commit');
+	}
+}
+
+async function commandBuild(args: CommandBuildArgs) {
+	const repoDir = args.pluginRepoDir;
+	await checkPluginRepository(repoDir);
+
+	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showOutput: false })).trim();
+	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
+
+	for (const npmPackage of npmPackages) {
+		await processNpmPackage(npmPackage, repoDir);
+	}
+
+	await execCommand2('git push');
+}
+
+async function main() {
+	const scriptName: string = 'plugin-repo-cli';
+
+	const commands: Record<string, Function> = {
+		build: commandBuild,
+	};
+
+	let selectedCommand: string = '';
+	let selectedCommandArgs: string = '';
+
+	function setSelectedCommand(name: string, args: any) {
+		selectedCommand = name;
+		selectedCommandArgs = args;
+	}
+
+	require('yargs')
+		.scriptName(scriptName)
+		.usage('$0 <cmd> [args]')
+		.command('build <plugin-repo-dir>', 'Build the plugin repository', (yargs: any) => {
+			yargs.positional('plugin-repo-dir', {
+				type: 'string',
+				describe: 'Directory where the plugin repository is located',
+			});
+		}, (args: any) => setSelectedCommand('build', args))
+		.help()
+		.argv;
+
+	if (!selectedCommand) {
+		console.error(`Please provide a command name or type \`${scriptName} --help\` for help`);
+		process.exit(1);
+	}
+
+	if (!commands[selectedCommand]) {
+		console.error(`No such command: ${selectedCommand}`);
+		process.exit(1);
+	}
+
+	await commands[selectedCommand](selectedCommandArgs);
 }
 
 main().catch((error) => {

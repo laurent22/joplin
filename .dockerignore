@@ -7,3 +7,4 @@ packages/app-cli
 packages/app-mobile
 packages/app-clipper
 packages/generator-joplin
+packages/plugin-repo-cli

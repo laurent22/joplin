@@ -1,4 +1,4 @@
-const { execCommand2, rootDir, gitPullTry } = require('./tool-utils.js');
+import { execCommand2, rootDir, gitPullTry } from './tool-utils';
 
 const serverDir = `${rootDir}/packages/server`;
 

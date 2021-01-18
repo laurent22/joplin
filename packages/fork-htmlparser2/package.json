@@ -52,7 +52,7 @@
         "coveralls": "^3.0.1",
         "eslint": "^6.0.0",
         "eslint-config-prettier": "^6.0.0",
-        "jest": "^24.8.0",
+        "jest": "^26.6.3",
         "prettier": "^1.18.2",
         "ts-jest": "^24.0.2",
         "typescript": "^3.5.3"

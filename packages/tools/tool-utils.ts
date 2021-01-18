@@ -1,16 +1,51 @@
+import * as fs from 'fs-extra';
+import { execSync } from 'child_process';
+
 const fetch = require('node-fetch');
-const fs = require('fs-extra');
 const execa = require('execa');
-const { execSync } = require('child_process');
 const { splitCommandString } = require('@joplin/lib/string-utils');
 
-const toolUtils = {};
+function quotePath(path: string) {
+	if (!path) return '';
+	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
+	path = path.replace(/"/, '\\"');
+	return `"${path}"`;
+}
 
-toolUtils.execCommand = function(command) {
+function commandToString(commandName: string, args: string[] = []) {
+	const output = [quotePath(commandName)];
+
+	for (const arg of args) {
+		output.push(quotePath(arg));
+	}
+
+	return output.join(' ');
+}
+
+async function loadGitHubUsernameCache() {
+	const path = `${__dirname}/github_username_cache.json`;
+
+	if (await fs.pathExists(path)) {
+		const jsonString = await fs.readFile(path, 'utf8');
+		return JSON.parse(jsonString);
+	}
+
+	return {};
+}
+
+async function saveGitHubUsernameCache(cache: any) {
+	const path = `${__dirname}/github_username_cache.json`;
+	await fs.writeFile(path, JSON.stringify(cache));
+}
+
+// Returns the project root dir
+export const rootDir = require('path').dirname(require('path').dirname(__dirname));
+
+export function execCommand(command: string) {
 	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
-		exec(command, (error, stdout, stderr) => {
+		exec(command, (error: any, stdout: any, stderr: any) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
@@ -22,39 +57,28 @@ toolUtils.execCommand = function(command) {
 			}
 		});
 	});
-};
-
-function quotePath(path) {
-	if (!path) return '';
-	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
-	path = path.replace(/"/, '\\"');
-	return `"${path}"`;
 }
 
-function commandToString(commandName, args = []) {
-	const output = [quotePath(commandName)];
-
-	for (const arg of args) {
-		output.push(quotePath(arg));
-	}
-
-	return output.join(' ');
-}
-
-toolUtils.resolveRelativePathWithinDir = function(baseDir, ...relativePath) {
+export function resolveRelativePathWithinDir(baseDir: string, ...relativePath: string[]) {
 	const path = require('path');
 	const resolvedBaseDir = path.resolve(baseDir);
 	const resolvedPath = path.resolve(baseDir, ...relativePath);
 	if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${JSON.stringify(relativePath)}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
 	return resolvedPath;
-};
+}
 
-toolUtils.execCommandVerbose = function(commandName, args = []) {
+export function execCommandVerbose(commandName: string, args: string[] = []) {
 	console.info(`> ${commandToString(commandName, args)}`);
 	const promise = execa(commandName, args);
 	promise.stdout.pipe(process.stdout);
 	return promise;
-};
+}
+
+interface ExecCommandOptions {
+	showInput?: boolean;
+	showOutput?: boolean;
+	quiet?: boolean;
+}
 
 // There's lot of execCommandXXX functions, but eventually all scripts should
 // use the one below, which supports:
@@ -62,66 +86,79 @@ toolUtils.execCommandVerbose = function(commandName, args = []) {
 // - Printing the command being executed
 // - Printing the output in real time (piping to stdout)
 // - Returning the command result as string
-toolUtils.execCommand2 = async function(command, options = null) {
+export async function execCommand2(command: string | string[], options: ExecCommandOptions = null): Promise<string> {
 	options = {
 		showInput: true,
 		showOutput: true,
+		quiet: false,
 		...options,
 	};
 
-	if (options.showInput) console.info(`> ${command}`);
-	const args = splitCommandString(command);
+	if (options.quiet) {
+		options.showInput = false;
+		options.showOutput = false;
+	}
+
+	if (options.showInput) {
+		if (typeof command === 'string') {
+			console.info(`> ${command}`);
+		} else {
+			console.info(`> ${commandToString(command[0], command.slice(1))}`);
+		}
+	}
+
+	const args: string[] = typeof command === 'string' ? splitCommandString(command) : command as string[];
 	const executableName = args[0];
 	args.splice(0, 1);
 	const promise = execa(executableName, args);
 	if (options.showOutput) promise.stdout.pipe(process.stdout);
 	const result = await promise;
-	return result.stdout;
-};
+	return result.stdout.trim();
+}
 
-toolUtils.execCommandWithPipes = function(executable, args) {
+export function execCommandWithPipes(executable: string, args: string[]) {
 	const spawn = require('child_process').spawn;
 
 	return new Promise((resolve, reject) => {
 		const child = spawn(executable, args, { stdio: 'inherit' });
 
-		child.on('error', (error) => {
+		child.on('error', (error: any) => {
 			reject(error);
 		});
 
-		child.on('close', (code) => {
+		child.on('close', (code: any) => {
 			if (code !== 0) {
 				reject(`Ended with code ${code}`);
 			} else {
-				resolve();
+				resolve(null);
 			}
 		});
 	});
-};
+}
 
-toolUtils.toSystemSlashes = function(path) {
+export function toSystemSlashes(path: string) {
 	const os = process.platform;
 	if (os === 'win32') return path.replace(/\//g, '\\');
 	return path.replace(/\\/g, '/');
-};
+}
 
-toolUtils.deleteLink = async function(path) {
-	if (toolUtils.isWindows()) {
+export function deleteLink(path: string) {
+	if (isWindows()) {
 		try {
-			execSync(`rmdir "${toolUtils.toSystemSlashes(path)}"`, { stdio: 'pipe' });
+			execSync(`rmdir "${toSystemSlashes(path)}"`, { stdio: 'pipe' });
 		} catch (error) {
 			// console.info('Error: ' + error.message);
 		}
 	} else {
 		try {
-			fs.unlinkSync(toolUtils.toSystemSlashes(path));
+			fs.unlinkSync(toSystemSlashes(path));
 		} catch (error) {
 			// ignore
 		}
 	}
-};
+}
 
-toolUtils.setPackagePrivateField = async function(filePath, value) {
+export async function setPackagePrivateField(filePath: string, value: any) {
 	const text = await fs.readFile(filePath, 'utf8');
 	const obj = JSON.parse(text);
 	if (!value) {
@@ -130,9 +167,9 @@ toolUtils.setPackagePrivateField = async function(filePath, value) {
 		obj.private = true;
 	}
 	await fs.writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
-};
+}
 
-toolUtils.credentialDir = async function() {
+export async function credentialDir() {
 	const username = require('os').userInfo().username;
 
 	const toTry = [
@@ -143,48 +180,45 @@ toolUtils.credentialDir = async function() {
 	];
 
 	for (const dirPath of toTry) {
-		if (await fs.exists(dirPath)) return dirPath;
+		if (await fs.pathExists(dirPath)) return dirPath;
 	}
 
 	throw new Error(`Could not find credential directory in any of these paths: ${JSON.stringify(toTry)}`);
-};
+}
 
-// Returns the project root dir
-toolUtils.rootDir = require('path').dirname(require('path').dirname(__dirname));
-
-toolUtils.credentialFile = async function(filename) {
-	const rootDir = await toolUtils.credentialDir();
+export async function credentialFile(filename: string) {
+	const rootDir = await credentialDir();
 	const output = `${rootDir}/${filename}`;
-	if (!(await fs.exists(output))) throw new Error(`No such file: ${output}`);
+	if (!(await fs.pathExists(output))) throw new Error(`No such file: ${output}`);
 	return output;
-};
+}
 
-toolUtils.readCredentialFile = async function(filename) {
-	const filePath = await toolUtils.credentialFile(filename);
+export async function readCredentialFile(filename: string) {
+	const filePath = await credentialFile(filename);
 	const r = await fs.readFile(filePath);
 	return r.toString();
-};
+}
 
-toolUtils.downloadFile = function(url, targetPath) {
+export async function downloadFile(url: string, targetPath: string) {
 	const https = require('https');
 	const fs = require('fs');
 
 	return new Promise((resolve, reject) => {
 		const file = fs.createWriteStream(targetPath);
-		https.get(url, function(response) {
+		https.get(url, function(response: any) {
 			if (response.statusCode !== 200) reject(new Error(`HTTP error ${response.statusCode}`));
 			response.pipe(file);
 			file.on('finish', function() {
 				// file.close();
-				resolve();
+				resolve(null);
 			});
-		}).on('error', (error) => {
+		}).on('error', (error: any) => {
 			reject(error);
 		});
 	});
-};
+}
 
-toolUtils.fileSha256 = function(filePath) {
+export function fileSha256(filePath: string) {
 	return new Promise((resolve, reject) => {
 		const crypto = require('crypto');
 		const fs = require('fs');
@@ -192,18 +226,18 @@ toolUtils.fileSha256 = function(filePath) {
 		const shasum = crypto.createHash(algo);
 
 		const s = fs.ReadStream(filePath);
-		s.on('data', function(d) { shasum.update(d); });
+		s.on('data', function(d: any) { shasum.update(d); });
 		s.on('end', function() {
 			const d = shasum.digest('hex');
 			resolve(d);
 		});
-		s.on('error', function(error) {
+		s.on('error', function(error: any) {
 			reject(error);
 		});
 	});
-};
+}
 
-toolUtils.unlinkForce = async function(filePath) {
+export async function unlinkForce(filePath: string) {
 	const fs = require('fs-extra');
 
 	try {
@@ -212,13 +246,13 @@ toolUtils.unlinkForce = async function(filePath) {
 		if (error.code === 'ENOENT') return;
 		throw error;
 	}
-};
+}
 
-toolUtils.fileExists = async function(filePath) {
+export function fileExists(filePath: string) {
 	const fs = require('fs-extra');
 
 	return new Promise((resolve, reject) => {
-		fs.stat(filePath, function(err) {
+		fs.stat(filePath, function(err: any) {
 			if (err == null) {
 				resolve(true);
 			} else if (err.code == 'ENOENT') {
@@ -228,27 +262,22 @@ toolUtils.fileExists = async function(filePath) {
 			}
 		});
 	});
-};
-
-async function loadGitHubUsernameCache() {
-	const path = `${__dirname}/github_username_cache.json`;
-
-	if (await fs.exists(path)) {
-		const jsonString = await fs.readFile(path);
-		return JSON.parse(jsonString);
-	}
-
-	return {};
 }
 
-async function saveGitHubUsernameCache(cache) {
-	const path = `${__dirname}/github_username_cache.json`;
-	await fs.writeFile(path, JSON.stringify(cache));
+
+export async function gitRepoClean(): Promise<boolean> {
+	const output = await execCommand2('git status --porcelain', { quiet: true });
+	return !output.trim();
 }
 
-toolUtils.gitPullTry = async function() {
+
+export async function gitRepoCleanTry() {
+	if (!(await gitRepoClean())) throw new Error(`There are pending changes in the repository: ${process.cwd()}`);
+}
+
+export async function gitPullTry() {
 	try {
-		await toolUtils.execCommand('git pull');
+		await execCommand('git pull');
 	} catch (error) {
 		if (error.message.includes('no tracking information for the current branch')) {
 			console.info('Skipping git pull because no tracking information on current branch');
@@ -256,16 +285,16 @@ toolUtils.gitPullTry = async function() {
 			throw error;
 		}
 	}
-};
+}
 
-toolUtils.githubUsername = async function(email, name) {
+export async function githubUsername(email: string, name: string) {
 	const cache = await loadGitHubUsernameCache();
 	const cacheKey = `${email}:${name}`;
 	if (cacheKey in cache) return cache[cacheKey];
 
 	let output = null;
 
-	const oauthToken = await toolUtils.githubOauthToken();
+	const oauthToken = await githubOauthToken();
 
 	const urlsToTry = [
 		`https://api.github.com/search/users?q=${encodeURI(email)}+in:email`,
@@ -296,23 +325,23 @@ toolUtils.githubUsername = async function(email, name) {
 	await saveGitHubUsernameCache(cache);
 
 	return output;
-};
+}
 
-toolUtils.patreonOauthToken = async function() {
-	return toolUtils.readCredentialFile('patreon_oauth_token.txt');
-};
+export function patreonOauthToken() {
+	return readCredentialFile('patreon_oauth_token.txt');
+}
 
-toolUtils.githubOauthToken = async function() {
-	return toolUtils.readCredentialFile('github_oauth_token.txt');
-};
+export function githubOauthToken() {
+	return readCredentialFile('github_oauth_token.txt');
+}
 
-toolUtils.githubRelease = async function(project, tagName, options = null) {
+export async function githubRelease(project: string, tagName: string, options: any = null) {
 	options = Object.assign({}, {
 		isDraft: false,
 		isPreRelease: false,
 	}, options);
 
-	const oauthToken = await toolUtils.githubOauthToken();
+	const oauthToken = await githubOauthToken();
 
 	const response = await fetch(`https://api.github.com/repos/laurent22/${project}/releases`, {
 		method: 'POST',
@@ -336,9 +365,9 @@ toolUtils.githubRelease = async function(project, tagName, options = null) {
 	if (!responseJson.url) throw new Error(`No URL for release: ${responseText}`);
 
 	return responseJson;
-};
+}
 
-toolUtils.readline = question => {
+export function readline(question: string) {
 	return new Promise((resolve) => {
 		const readline = require('readline');
 
@@ -347,63 +376,61 @@ toolUtils.readline = question => {
 			output: process.stdout,
 		});
 
-		rl.question(`${question} `, answer => {
+		rl.question(`${question} `, (answer: string) => {
 			resolve(answer);
 			rl.close();
 		});
 	});
-};
+}
 
-toolUtils.isLinux = () => {
+export function isLinux() {
 	return process && process.platform === 'linux';
-};
+}
 
-toolUtils.isWindows = () => {
+export function isWindows() {
 	return process && process.platform === 'win32';
-};
+}
 
-toolUtils.isMac = () => {
+export function isMac() {
 	return process && process.platform === 'darwin';
-};
+}
 
-toolUtils.insertContentIntoFile = async function(filePath, markerOpen, markerClose, contentToInsert) {
+export async function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string) {
 	const fs = require('fs-extra');
 	let content = await fs.readFile(filePath, 'utf-8');
 	// [^]* matches any character including new lines
 	const regex = new RegExp(`${markerOpen}[^]*?${markerClose}`);
 	content = content.replace(regex, markerOpen + contentToInsert + markerClose);
 	await fs.writeFile(filePath, content);
-};
+}
 
-toolUtils.dirname = (path) => {
+export function dirname(path: string) {
 	if (!path) throw new Error('Path is empty');
 	const s = path.split(/\/|\\/);
 	s.pop();
 	return s.join('/');
-};
+}
 
-toolUtils.basename = (path) => {
+export function basename(path: string) {
 	if (!path) throw new Error('Path is empty');
 	const s = path.split(/\/|\\/);
 	return s[s.length - 1];
-};
+}
 
-toolUtils.filename = (path, includeDir = false) => {
+export function filename(path: string, includeDir = false) {
 	if (!path) throw new Error('Path is empty');
-	const output = includeDir ? path : toolUtils.basename(path);
+	const output = includeDir ? path : basename(path);
 	if (output.indexOf('.') < 0) return output;
 
 	const splitted = output.split('.');
 	splitted.pop();
 	return splitted.join('.');
-};
+}
 
-toolUtils.fileExtension = (path) => {
+export function fileExtension(path: string) {
 	if (!path) throw new Error('Path is empty');
 
 	const output = path.split('.');
 	if (output.length <= 1) return '';
 	return output[output.length - 1];
-};
-
-module.exports = toolUtils;
+}
