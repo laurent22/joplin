@@ -14,7 +14,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.2\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -61,16 +63,17 @@ msgstr "Batal"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"Aplikasi akan ditutup. Silakan luncurkan ulang untuk menyelesaikan prosesnya."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Ketik judul catatan atau bagian dari isinya untuk melompat ke sana. Atau "
-"ketik # diikuti dengan nama label, atau @ diikuti dengan nama buku catatan."
+"Ketik judul catatan atau bagian di isinya untuk temukan catatan yang dicari. "
+"Atau ketik # diikuti dengan nama label, atau @ diikuti dengan nama buku "
+"catatan. Atau ketik : untuk mencari perintah."
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -116,9 +119,8 @@ msgid "New version: %s"
 msgstr "Versi baru: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "Terunduh"
+msgstr "Unduh"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -277,7 +279,6 @@ msgid "strong text"
 msgstr "teks yang ditekankan lebih kuat (strong text)"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:179
-#, fuzzy
 msgid "emphasised text"
 msgstr "teks yang ditekankan (emphasized text)"
 
@@ -324,7 +325,6 @@ msgid "Paste"
 msgstr "Tempel"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
 msgstr "Kotak centang"
 
@@ -355,7 +355,7 @@ msgstr "Masukkan Waktu dan Tanggal"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "Taruh catatan atau file di sini"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 #, fuzzy
@@ -368,6 +368,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"Silakan tunggu sampai semua lampiran sudah diunduh dan didekripsi. Anda juga "
+"bisa beralih ke %s untuk mengedit catatan."
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:73
 msgid "There was an error downloading this attachment:"
@@ -388,7 +390,7 @@ msgstr "Simpan sebagai..."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "Buka file di berkas"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
 msgid "Copy path to clipboard"
@@ -416,24 +418,26 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"Editor Rich Text ini punya beberapa keterbatasan dan Anda dianjurkan untuk "
+"tahu keterbatasannya sebelum menggunakan editor ini."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:340
 msgid "Read more about it"
-msgstr ""
+msgstr "Baca lebih lanjut"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:345
 msgid "Dismiss"
-msgstr ""
+msgstr "Abaikan"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:381
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "Lampiran ini sedang diawasi untuk perubahan:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:384
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr ""
+msgstr "Lampiran tidak akan diawasi ketika Anda berganti ke catatan lain."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:389
 #, javascript-format
@@ -481,34 +485,32 @@ msgid "Horizontal Rule"
 msgstr "Garis Horisontal"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "Hapus catatan?"
+msgstr "Hapus catatan"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "Urungkan"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "Ulangi"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "Kurangi indentasi"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "Tambah indentasi"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
-msgstr "Alihkan daftar catatan"
+msgstr "Lihat/sembunyikan komentar"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "Sortir baris terpilih"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
@@ -580,9 +582,9 @@ msgstr "Properti catatan"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: packages/lib/services/KeymapService.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Kesalahan"
+msgstr "Terjadi kesalahan: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -599,12 +601,11 @@ msgstr "Impor"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "Perintah"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Mode Papan Ketik"
+msgstr "Pintasan Papan Ketik"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
 #: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:338
@@ -627,9 +628,8 @@ msgid "Website and documentation"
 msgstr "Situs web dan dokumentasi"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Tentang Joplin"
+msgstr "Sembunyikan Joplin"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
 #: packages/app-desktop/gui/MenuBar.js:408
@@ -637,9 +637,8 @@ msgid "Close Window"
 msgstr "Tutup jendela"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "Preferensi..."
+msgstr "Preferensi"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
 #: packages/app-desktop/gui/MenuBar.js:284 packages/app-desktop/gui/Root.js:100
@@ -647,19 +646,20 @@ msgid "Options"
 msgstr "Pilihan"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Jawaban tidak valid: %s"
+msgstr "Jawaban tidak valid"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Klik pintasan"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Klik pintasan kemudian tekan ENTER atau tekan BACKSPACE untuk menghapus "
+"pintasan."
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -673,11 +673,13 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"Target sinkronisasi harus diperbarui sebelum Joplin dapat sinkronisasi. "
+"Operasinya akan berjalan beberapa menit dan aplikasi perlu dimulai ulang. "
+"Untuk melanjutkan, silakan klik linknya."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:405
-#, fuzzy
 msgid "Restart and upgrade"
-msgstr "Kunci master yang perlu upgrade"
+msgstr "Mulai ulang dan upgrade"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:409
 msgid "Some items cannot be synchronised."
@@ -719,6 +721,8 @@ msgstr "Info lain"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:528
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"Gunakan tanda panah untuk memindahkan item tata letak. Tekan \"Escape\" "
+"untuk keluar."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -782,13 +786,12 @@ msgid "Toggle editor layout"
 msgstr "Alihkan tata letak editor"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Alihkan tata letak editor"
+msgstr "Alihkan editor"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "Ubah tata letak aplikasi"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -805,7 +808,7 @@ msgstr "Judul buku catatan:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Pemeriksa ejaan"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -999,9 +1002,8 @@ msgstr "Templat"
 
 #: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/MenuBar.js:423
-#, fuzzy
 msgid "Export all"
-msgstr "Ekspor"
+msgstr "Ekspor semuanya"
 
 #: packages/app-desktop/gui/MenuBar.js:389
 #, javascript-format
@@ -1236,27 +1238,23 @@ msgstr ""
 "Penting: Anda hanya perlu menjalankan ini SEKALI pada satu perangkat."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "Enkripsi"
+msgstr "Enkripsi ulang"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "Abaikan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
-#, fuzzy
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"Mengaktifkan enkripsi berarti *semua* catatan dan lampiran Anda akan "
-"disinkronkan ulang dan dikirim dalam keadaan terenkripsi ke target "
-"sinkronisasi. Jangan sampai kehilangan kata sandinya karena, untuk alasan "
-"keamanan, ini akan menjadi *hanya* satu-satunya cara untuk mendekripsi data! "
-"Untuk mengaktifkan enkripsi, silakan masukkan kata sandi Anda di bawah ini."
+"Menonaktifkan enkripsi berarti *semua* catatan dan lampiran Anda akan "
+"disinkronkan ulang dan dikirim dalam keadaan tidak terenkripsi ke target "
+"sinkronisasi. Apa Anda mau lanjut?"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
@@ -1269,8 +1267,8 @@ msgstr ""
 "Mengaktifkan enkripsi berarti *semua* catatan dan lampiran Anda akan "
 "disinkronkan ulang dan dikirim dalam keadaan terenkripsi ke target "
 "sinkronisasi. Jangan sampai kehilangan kata sandinya karena, untuk alasan "
-"keamanan, ini akan menjadi *hanya* satu-satunya cara untuk mendekripsi data! "
-"Untuk mengaktifkan enkripsi, silakan masukkan kata sandi Anda di bawah ini."
+"keamanan, ini *hanya* satu-satunya cara untuk mendekripsi data! Untuk "
+"mengaktifkan enkripsi, silakan masukkan kata sandi Anda di bawah ini."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-mobile/components/screens/encryption-config.js:258
@@ -1283,28 +1281,24 @@ msgid "Enable encryption"
 msgstr "Aktifkan enkripsi"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
-#, fuzzy
 msgid "Master Keys"
-msgstr "Kunci Master %s"
+msgstr "Kunci Master"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
-#, fuzzy
 msgid "Active"
-msgstr "Aksi"
+msgstr "Aktif"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:314
 msgid "Source"
-msgstr ""
+msgstr "Sumber"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
-#, fuzzy
 msgid "Password"
-msgstr "Kata sandi:"
+msgstr "Kata sandi"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:334
-#, fuzzy
 msgid "Password OK"
-msgstr "Kata sandi:"
+msgstr "Kata sandi OK"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
 msgid ""
@@ -1312,6 +1306,10 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
+"Peringatan: Hanya satu kunci master yang akan digunakan untuk enkripsi "
+"(kunci yang ditandai \"aktif\"). Kunci yang lain mungkin digunakan untuk "
+"dekripsi, tergantung bagaimana buku catatan atau catatannya awalnya "
+"dienkripsi."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
@@ -1422,7 +1420,7 @@ msgstr "Telusuri..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "Aplikasi harus dimulai ulang agar perubahan ini diterapkan."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1431,25 +1429,24 @@ msgstr "Lakukan sekarang"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:468
 msgid "Later"
-msgstr ""
+msgstr "Nanti"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#, fuzzy
 msgid "Restart now"
-msgstr "Dapatkan sekarang:"
+msgstr "Mulai ulang sekarang"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
 msgstr "Terapkan"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:137
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Hapus catatan \"%s\"?"
+msgstr "Hapus plugin \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/PluginsStates.js:181
 msgid "Install plugin"
-msgstr ""
+msgstr "Pasang plugin"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1486,12 +1483,11 @@ msgstr "Viewer"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "Waktu baca: %s menit"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
-#, fuzzy
 msgid "Statistics"
-msgstr "Statistik..."
+msgstr "Statistik"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
 #: packages/app-desktop/gui/ShareNoteDialog.js:175
@@ -1619,18 +1615,16 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "Salin Tautan yang Dapat Dibagikan"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "Hentikan pengeditan eksternal"
+msgstr "Ubah pengeditan eksternal"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
 msgstr ""
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Salin jalur ke papan klip"
+msgstr "Salin perintah dev mode ke papan klip"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1647,9 +1641,8 @@ msgid "Error opening note in editor: %s"
 msgstr "Terjadi kesalahan saat membuka catatan di editor: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "Buka direktori templat"
+msgstr "Buka direktori profil"
 
 #: packages/app-desktop/app.js:336
 #, javascript-format
@@ -1677,9 +1670,8 @@ msgid "Save alarm"
 msgstr "Simpan alarm"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "Buka..."
+msgstr "Buka"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 #: packages/app-mobile/components/screens/Note.js:796
@@ -1750,8 +1742,9 @@ msgid "Refresh"
 msgstr "Segarkan"
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
+#, fuzzy
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Sinkronisasi Target Peningkatan"
 
 #: packages/app-mobile/components/screens/notes.js:154
 #: packages/app-cli/app/command-rmbook.js:26
@@ -1967,11 +1960,14 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Untuk menghubungkan geolokasi dengan catatan, aplikasi perlu izin Anda untuk "
+"mengakses lokasi Anda.\n"
+"\n"
+"Anda dapat mematikan fungsi ini kapan saja di layar Konfigurasi."
 
 #: packages/app-mobile/components/screens/Note.js:343
-#, fuzzy
 msgid "Permission needed"
-msgstr "Izin penggunaan kamera"
+msgstr "Izin diperlukan"
 
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
@@ -2052,11 +2048,12 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"Kata sandi default admin tidak aman dan belum diubah. [Ubah sekarang](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgstr "Semua port potensial sedang digunakan - silakan laporkan isu di %s"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2092,9 +2089,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Situs web Joplin"
+msgstr "Server Joplin"
 
 #: packages/lib/shim-init-node.js:201
 #, javascript-format
@@ -2239,21 +2235,19 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:259
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "URL Server Joplin"
 
 #: packages/lib/models/Setting.js:273
-#, fuzzy
 msgid "Joplin Server Directory"
 msgstr "Direktori Ekspor Joplin"
 
 #: packages/lib/models/Setting.js:283
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Nama pengguna Server Joplin"
 
 #: packages/lib/models/Setting.js:293
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "Masukkan kata sandi master:"
+msgstr "Kata sandi Server Joplin"
 
 #: packages/lib/models/Setting.js:305
 msgid "Attachment download behaviour"
@@ -2386,9 +2380,8 @@ msgid "Enable typographer support"
 msgstr "Aktifkan dukungan typographer"
 
 #: packages/lib/models/Setting.js:562
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "Aktifkan riwayat catatan"
+msgstr "Aktifkan Linkify"
 
 #: packages/lib/models/Setting.js:563
 msgid "Enable math expressions"
@@ -2403,17 +2396,16 @@ msgid "Enable Mermaid diagrams support"
 msgstr "Aktifkan dukungan diagram Mermaid"
 
 #: packages/lib/models/Setting.js:566
-#, fuzzy
 msgid "Enable audio player"
-msgstr "Aktifkan emoji markdown"
+msgstr "Aktifkan pemutar audio"
 
 #: packages/lib/models/Setting.js:567
 msgid "Enable video player"
-msgstr ""
+msgstr "Aktifkan pemutar video"
 
 #: packages/lib/models/Setting.js:568
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "Aktifkan penampil PDF"
 
 #: packages/lib/models/Setting.js:569
 msgid "Enable ==mark== syntax"
@@ -2490,20 +2482,18 @@ msgid "Editor font family"
 msgstr "Keluarga font pada editor"
 
 #: packages/lib/models/Setting.js:641
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Ini harus font *monospace* atau ia tidak akan berfungsi sebagaimana "
-"mestinya. Jika font tidak benar atau kosong, font akan disetel secara "
-"otomatis ke font monospace generik."
+"Ini harus font *monospace* atau beberapa elemen tidak akan berfungsi "
+"sebagaimana mestinya. Jika font tidak benar atau kosong, font akan disetel "
+"secara otomatis ke font monospace generik."
 
 #: packages/lib/models/Setting.js:662
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Lembar gaya khusus untuk gaya keseluruhan aplikasi Joplin"
+msgstr "Lembar gaya untuk rendering Markdown"
 
 #: packages/lib/models/Setting.js:678
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2734,9 +2724,8 @@ msgid "Web Clipper"
 msgstr "Web Clipper"
 
 #: packages/lib/models/Setting.js:1389
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Mode Papan Ketik"
+msgstr "Pintasan Papan Ketik"
 
 #: packages/lib/models/Setting.js:1396
 msgid ""
@@ -2774,17 +2763,20 @@ msgid "Downloaded"
 msgstr "Terunduh"
 
 #: packages/lib/models/Resource.js:382
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "Lampiran"
+msgstr "Konflik lampiran: \"%s\""
 
 #: packages/lib/models/Resource.js:383
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "Terjadi kesalahan saat mengunduh lampiran ini:"
+msgstr ""
+"Terjadi konflik (%s) saat mengunduh lampiran ini:\n"
+"\n"
+"%s"
 
 #: packages/lib/models/Tag.js:202
 #, javascript-format
@@ -2978,6 +2970,7 @@ msgstr "Sedang berlangsung"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
+"Tipe item tidak dikenal diunduh - silakan perbarui Joplin ke versi terbaru"
 
 #: packages/lib/JoplinServerApi.js:71
 #, javascript-format
@@ -3007,7 +3000,7 @@ msgstr "Sistem berkas"
 
 #: packages/lib/commands/historyForward.js:17
 msgid "Forward"
-msgstr ""
+msgstr "Maju"
 
 #: packages/lib/versionInfo.js:10
 #, javascript-format
@@ -3037,7 +3030,7 @@ msgstr "Versi Profil: %s"
 #: packages/lib/versionInfo.js:25
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "Keychain Didukung: %s"
 
 #: packages/lib/services/RevisionService.js:221
 msgid "Restored Notes"
@@ -3086,14 +3079,14 @@ msgid "HTML Directory"
 msgstr "Direktori HTML"
 
 #: packages/lib/services/interop/InteropService.js:127
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\""
+msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\" dan output \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\""
+msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\" dan target \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3131,23 +3124,23 @@ msgstr "Silakan tentukan format impor untuk %s"
 
 #: packages/lib/services/KeymapService.js:273
 msgid "command"
-msgstr ""
+msgstr "perintah"
 
 #: packages/lib/services/KeymapService.js:273
 #: packages/lib/services/KeymapService.js:278
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "\"%s\" tidak menemukan properti \"%s\"."
 
 #: packages/lib/services/KeymapService.js:278
 #: packages/lib/services/KeymapService.js:285
 msgid "accelerator"
-msgstr ""
+msgstr "akselerator"
 
 #: packages/lib/services/KeymapService.js:285
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Jawaban tidak valid: %s"
+msgstr "%s tidak valid: %s."
 
 #: packages/lib/services/KeymapService.js:303
 #, javascript-format
@@ -3155,11 +3148,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"Akselerator \"%s\" digunakan untuk perintah \"%s\" dan \"%s\". Ini bisa "
+"memberikan dampak tidak terduga."
 
 #: packages/lib/services/KeymapService.js:328
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "Akselerator \"%s\" tidak valid."
 
 #: packages/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -3223,9 +3218,8 @@ msgid "Downloaded and encrypted"
 msgstr "Terunduh dan terenkripsi"
 
 #: packages/lib/services/report.js:193
-#, fuzzy
 msgid "Created locally"
-msgstr "Item lokal yang dibuat: %d."
+msgstr "Item lokal yang dibuat"
 
 #: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
@@ -3280,20 +3274,19 @@ msgstr "Di %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Tidak ada saran"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Tambahkan ke kamus"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Gunakan pemeriksa ejaan"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Bahasa"
+msgstr "Ubah bahasa"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3368,9 +3361,9 @@ msgid "Do not ask for confirmation."
 msgstr "Jangan meminta konfirmasi."
 
 #: packages/app-cli/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "Format sumber: %s"
+msgstr "Format output: %s"
 
 #: packages/app-cli/app/command-import.js:65
 msgid "Importing notes..."
@@ -3524,7 +3517,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Perbarui target sinkronisasi ke versi terakhir."
 
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
@@ -3554,7 +3547,6 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Target sinkronisasi: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Tidak dapat menginisiasi penyinkron."
 
@@ -3569,7 +3561,7 @@ msgstr "Mengunduh sumber daya..."
 #: packages/app-cli/app/command-sync.js:242
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr ""
+msgstr "Target sinkronisasi harus diperbarui. Jalankan `%s` untuk melanjutkan."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
@@ -3628,12 +3620,11 @@ msgstr "Catatan tidak ada: \"%s\". Buat?"
 
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
+msgstr "Mulai mengedit catatan. Tutup editor untuk kembali ke prompt."
 
 #: packages/app-cli/app/command-edit.js:97
-#, fuzzy
 msgid "Note has been saved."
-msgstr "Belum ada buku catatan yang ditentukan."
+msgstr "Catatan sudah disimpan."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
