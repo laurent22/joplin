@@ -2,7 +2,7 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
-import { baseUrl } from '../../config';
+import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 
@@ -27,7 +27,7 @@ router.post('login', async (_path: SubPath, ctx: AppContext) => {
 
 		const session = await ctx.models.session().authenticate(body.fields.email, body.fields.password);
 		ctx.cookies.set('sessionId', session.id);
-		return redirect(ctx, `${baseUrl()}/home`);
+		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {
 		return makeView(error);
 	}

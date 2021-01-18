@@ -194,8 +194,6 @@ async function main() {
 
 	let manifests: any = {};
 
-	// TODO: validate plugin ID when publishing
-
 	for (const npmPackage of npmPackages) {
 		try {
 			const packageName = npmPackage.name;

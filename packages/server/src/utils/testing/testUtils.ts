@@ -1,9 +1,8 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables } from '../../db';
+import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables, sqliteFilePath } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
-import baseConfig from '../../config-tests';
-import { AppContext, Config, Env } from '../types';
-import { initConfig } from '../../config';
+import { AppContext, Env } from '../types';
+import config, { initConfig } from '../../config';
 import FileModel from '../../models/FileModel';
 import Logger from '@joplin/lib/Logger';
 import FakeCookies from './koa/FakeCookies';
@@ -34,18 +33,16 @@ export async function tempDir(): Promise<string> {
 	return tempDir_;
 }
 
+let createdDbName_: string = null;
 export async function beforeAllDb(unitName: string) {
-	const config: Config = {
-		...baseConfig,
-		database: {
-			...baseConfig.database,
-			name: unitName,
-		},
-	};
+	createdDbName_ = unitName;
 
-	initConfig(config);
-	await createDb(config.database, { dropIfExists: true });
-	db_ = await connectDb(config.database);
+	initConfig({
+		SQLITE_DATABASE: createdDbName_,
+	});
+
+	await createDb(config().database, { dropIfExists: true });
+	db_ = await connectDb(config().database);
 }
 
 export async function afterAllTests() {
@@ -57,6 +54,12 @@ export async function afterAllTests() {
 	if (tempDir_) {
 		await fs.remove(tempDir_);
 		tempDir_ = null;
+	}
+
+	if (createdDbName_) {
+		const filePath = sqliteFilePath(createdDbName_);
+		await fs.remove(filePath);
+		createdDbName_ = null;
 	}
 }
 

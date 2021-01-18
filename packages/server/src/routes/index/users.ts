@@ -4,7 +4,7 @@ import { AppContext, HttpMethod } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
 import { ErrorUnprocessableEntity } from '../../utils/errors';
 import { User } from '../../db';
-import { baseUrl } from '../../config';
+import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 
@@ -55,11 +55,11 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	let postUrl = '';
 
 	if (isNew) {
-		postUrl = `${baseUrl()}/users/new`;
+		postUrl = `${config().baseUrl}/users/new`;
 	} else if (isMe) {
-		postUrl = `${baseUrl()}/users/me`;
+		postUrl = `${config().baseUrl}/users/me`;
 	} else {
-		postUrl = `${baseUrl()}/users/${user.id}`;
+		postUrl = `${config().baseUrl}/users/${user.id}`;
 	}
 
 	const view: View = defaultView('user');
@@ -100,7 +100,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			throw new Error('Invalid form button');
 		}
 
-		return redirect(ctx, `${baseUrl()}/users${userIsMe(path) ? '/me' : ''}`);
+		return redirect(ctx, `${config().baseUrl}/users${userIsMe(path) ? '/me' : ''}`);
 	} catch (error) {
 		const endPoint = router.findEndPoint(HttpMethod.GET, 'users/:id');
 		return endPoint(path, ctx, user, error);

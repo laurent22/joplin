@@ -25,8 +25,13 @@ export interface AppContext extends Koa.Context {
 	owner: User;
 }
 
+export enum DatabaseConfigClient {
+	PostgreSQL = 'pg',
+	SQLite = 'sqlite3',
+}
+
 export interface DatabaseConfig {
-	client: string;
+	client: DatabaseConfigClient;
 	name: string;
 	host?: string;
 	port?: number;
@@ -40,8 +45,11 @@ export interface Config {
 	rootDir: string;
 	viewDir: string;
 	layoutDir: string;
+	// Not that, for now, nothing is being logged to file. Log is just printed
+	// to stdout, which is then handled by Docker own log mechanism
 	logDir: string;
 	database: DatabaseConfig;
+	baseUrl: string;
 }
 
 export enum HttpMethod {

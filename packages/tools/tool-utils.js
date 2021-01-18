@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const execa = require('execa');
 const { execSync } = require('child_process');
+const { splitCommandString } = require('@joplin/lib/string-utils');
 
 const toolUtils = {};
 
@@ -53,6 +54,29 @@ toolUtils.execCommandVerbose = function(commandName, args = []) {
 	const promise = execa(commandName, args);
 	promise.stdout.pipe(process.stdout);
 	return promise;
+};
+
+// There's lot of execCommandXXX functions, but eventually all scripts should
+// use the one below, which supports:
+//
+// - Printing the command being executed
+// - Printing the output in real time (piping to stdout)
+// - Returning the command result as string
+toolUtils.execCommand2 = async function(command, options = null) {
+	options = {
+		showInput: true,
+		showOutput: true,
+		...options,
+	};
+
+	if (options.showInput) console.info(`> ${command}`);
+	const args = splitCommandString(command);
+	const executableName = args[0];
+	args.splice(0, 1);
+	const promise = execa(executableName, args);
+	if (options.showOutput) promise.stdout.pipe(process.stdout);
+	const result = await promise;
+	return result.stdout;
 };
 
 toolUtils.execCommandWithPipes = function(executable, args) {

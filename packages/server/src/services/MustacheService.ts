@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 import * as fs from 'fs-extra';
-import config, { baseUrl } from '../config';
+import config from '../config';
 
 export interface RenderOptions {
 	partials?: any;
@@ -30,7 +30,7 @@ class MustacheService {
 
 	private get defaultLayoutOptions(): any {
 		return {
-			baseUrl: baseUrl(),
+			baseUrl: config().baseUrl,
 		};
 	}
 
@@ -41,7 +41,7 @@ class MustacheService {
 	private resolvesFilePaths(type: string, paths: string[]): string[] {
 		const output: string[] = [];
 		for (const path of paths) {
-			output.push(`${baseUrl()}/${type}/${path}.${type}`);
+			output.push(`${config().baseUrl}/${type}/${path}.${type}`);
 		}
 		return output;
 	}
