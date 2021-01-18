@@ -1,8 +1,11 @@
 {
-  "name": "@joplin/plugin-repo-builder",
+  "name": "@joplin/plugin-repo-cli",
   "version": "1.7.1",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "plugin-repo-cli": "./index.js"
+  },
   "publishConfig": {
     "access": "public"
   },
