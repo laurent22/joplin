@@ -9,10 +9,18 @@ class NavigatorComponent extends Component {
 		if (newProps.route) {
 			const screenInfo = this.props.screens[newProps.route.routeName];
 			const devMarker = Setting.value('env') === 'dev' ? ' (DEV)' : '';
-			const windowTitle = [`Joplin${devMarker}`];
+			const windowTitle = [];
 			if (screenInfo.title) {
 				windowTitle.push(screenInfo.title());
+			} else if (newProps.route.routeName == 'Main' && newProps.currentFolder && newProps.currentNote) {
+				const folderTitle = newProps.currentFolder.title.trim();
+				let noteTitle = newProps.currentNote.title.trim();
+				if (!noteTitle.length) {
+					noteTitle = 'Untitled';
+				}
+				windowTitle.push(`${noteTitle} (${folderTitle})`);
 			}
+			windowTitle.push(`Joplin${devMarker}`);
 			this.updateWindowTitle(windowTitle.join(' - '));
 		}
 	}
@@ -47,8 +55,29 @@ class NavigatorComponent extends Component {
 }
 
 const Navigator = connect(state => {
+	let currentNote = null;
+	let currentFolder = null;
+	if (state.selectedNoteIds.length) {
+		const noteId = state.selectedNoteIds[0];
+		const note = state.notes.find((_note) => _note.id == noteId);
+		if (note) {
+			currentNote = {
+				id: noteId,
+				title: note.title,
+			};
+		}
+	}
+	if (state.selectedFolderId) {
+		const folder = state.folders.find((_folder) => _folder.id == state.selectedFolderId);
+		if (folder) {
+			currentFolder = {
+				id: state.selectedFolderId,
+				title: folder.title,
+			};
+		}
+	}
 	return {
-		route: state.route,
+		route: state.route, currentNote, currentFolder,
 	};
 })(NavigatorComponent);
 
