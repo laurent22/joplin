@@ -1659,6 +1659,7 @@ Setting.constants_ = {
 	profileDir: '',
 	templateDir: '',
 	tempDir: '',
+	cacheDir: '',
 	pluginDir: '',
 	flagOpenDevTools: false,
 	syncVersion: 2,

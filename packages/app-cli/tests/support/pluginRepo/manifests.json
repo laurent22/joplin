@@ -1,0 +1,29 @@
+{
+	"joplin.plugin.ambrt.backlinksToNote": {
+		"manifest_version": 1,
+		"id": "joplin.plugin.ambrt.backlinksToNote",
+		"app_min_version": "1.5",
+		"version": "1.0.4",
+		"name": "Backlinks to note",
+		"description": "Creates backlinks to opened note",
+		"author": "a",
+		"homepage_url": "https://discourse.joplinapp.org/t/insert-referencing-notes-backlinks-plugin/13632",
+		"_publish_hash": "sha256:ab9c9bc776e167a3b1a9ec40a4927d93da14514c0508f46dd6e5ea3f8a3a6c3b",
+		"_publish_commit": "master:5b74f93c687463572c46200292fa911e0ba96033",
+		"_npm_package_name": "joplin-plugin-backlinks"
+	},
+	"org.joplinapp.plugins.ToggleSidebars": {
+		"manifest_version": 1,
+		"id": "org.joplinapp.plugins.ToggleSidebars",
+		"app_min_version": "1.6",
+		"version": "1.0.2",
+		"name": "Note list and side bar toggle buttons",
+		"description": "Adds buttons to toggle note list and sidebar",
+		"author": "Laurent Cozic",
+		"homepage_url": "https://github.com/laurent22/joplin/tree/dev/packages/plugins/ToggleSidebars",
+		"repository_url": "https://github.com/laurent22/joplin/tree/dev/packages/plugins/ToggleSidebars",
+		"_publish_hash": "sha256:e0d833b7ef1bb8f02ee4cb861ef1989621358c45a5614911071302dc0527a3b4",
+		"_publish_commit": "dev:1b5b2342fc25717b77ad9f1627c1a334e5bbae54",
+		"_npm_package_name": "@joplin/joplin-plugin-toggle-sidebars"
+	}
+}

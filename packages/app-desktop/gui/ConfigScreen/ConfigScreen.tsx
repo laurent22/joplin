@@ -148,6 +148,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const createSettingComponents = (advanced: boolean) => {
 			const output = [];
+
 			for (let i = 0; i < section.metadatas.length; i++) {
 				const md = section.metadatas[i];
 				if (!!md.advanced !== advanced) continue;
@@ -160,8 +161,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const settingComps = createSettingComponents(false);
 		const advancedSettingComps = createSettingComponents(true);
 
-		const sectionWidths: Record<string, number> = {
-			plugins: 900,
+		const sectionWidths: Record<string, any> = {
+			plugins: '100%',
 		};
 
 		const sectionStyle: any = {
@@ -305,7 +306,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	private renderHeader(themeId: number, label: string) {
+	private renderHeader(themeId: number, label: string, style: any = null) {
 		const theme = themeStyle(themeId);
 
 		const labelStyle = Object.assign({}, theme.textStyle, {
@@ -314,6 +315,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			fontSize: theme.fontSize * 1.25,
 			fontWeight: 500,
 			marginBottom: theme.mainPadding,
+			...style,
 		});
 
 		return (
@@ -457,7 +459,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			// There's probably a better way to do this but can't figure it out.
 
 			return (
-				<div key={key + value.toString()} style={rowStyle}>
+				<div key={key + (`${value}`).toString()} style={rowStyle}>
 					<div style={{ ...controlStyle, backgroundColor: 'transparent', display: 'flex', alignItems: 'center' }}>
 						<input
 							id={`setting_checkbox_${key}`}
@@ -564,7 +566,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 										value={cmd[1]}
 										spellCheck={false}
 									/>
-									<div style={{ width: inputStyle.width }}>
+									<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
 										{descriptionComp}
 									</div>
 								</div>
@@ -593,7 +595,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							}}
 							spellCheck={false}
 						/>
-						<div style={{ width: inputStyle.width }}>
+						<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
 							{descriptionComp}
 						</div>
 					</div>
