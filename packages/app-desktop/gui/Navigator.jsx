@@ -4,6 +4,13 @@ const Setting = require('@joplin/lib/models/Setting').default;
 const { connect } = require('react-redux');
 const bridge = require('electron').remote.require('./bridge').default;
 
+function truncStr(str, max = 30) {
+	if (str.length > max) {
+		return `${str.substring(0, max - '..'.length)}..`;
+	}
+	return str;
+}
+
 class NavigatorComponent extends Component {
 	constructor(props) {
 		super(props);
@@ -51,13 +58,12 @@ class NavigatorComponent extends Component {
 			if (!noteTitle.length) {
 				noteTitle = 'Untitled';
 			}
-			txt = `${folderTitle} > ${noteTitle}`;
+			txt = `${truncStr(folderTitle)} > ${truncStr(noteTitle, 50)}`;
 		}
 		return txt;
 	}
 	updateWindowTitle(title) {
 		if (this.prevTitle != title) {
-			console.log('updating title',title);
 			try {
 				if (bridge().window()) bridge().window().setTitle(title);
 				this.prevTitle = title;
