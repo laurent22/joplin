@@ -99,7 +99,6 @@ export default function(props: Props) {
 		async function fetchManifests() {
 			const r = await repoApi().manifests();
 			if (cancelled) return;
-
 			setManifests(r);
 		}
 

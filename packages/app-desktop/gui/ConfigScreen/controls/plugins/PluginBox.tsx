@@ -102,6 +102,12 @@ const StyledName = styled.div`
 	flex: 1;
 `;
 
+const  StyledVersion = styled.span`
+	margin-left: 5px;
+	color: ${props => props.theme.colorFaded};
+	font-size: ${props => props.theme.fontSize * 0.9}px;
+`;
+
 const StyledDescription = styled.div`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.colorFaded};
@@ -180,7 +186,7 @@ export default function(props: Props) {
 	return (
 		<CellRoot>
 			<CellTop>
-				<StyledName mb={'5px'}>{item.name} {item.deleted ? '(Deleted)' : ''}</StyledName>
+				<StyledName mb={'5px'}>{item.name} {item.deleted ? '(Deleted)' : ''} <StyledVersion>v{item.version}</StyledVersion></StyledName>
 				{renderToggleButton()}
 			</CellTop>
 			<CellContent>

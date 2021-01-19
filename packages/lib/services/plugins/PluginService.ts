@@ -94,6 +94,10 @@ export default class PluginService extends BaseService {
 		delete this.plugins_[pluginId];
 	}
 
+	private async deletePluginFiles(plugin: Plugin) {
+		await shim.fsDriver().remove(plugin.baseDir);
+	}
+
 	public pluginById(id: string): Plugin {
 		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 
@@ -358,6 +362,7 @@ export default class PluginService extends BaseService {
 		// from where it is now to check that it is valid and to retrieve
 		// the plugin ID.
 		const preloadedPlugin = await this.loadPluginFromPath(jplPath);
+		await this.deletePluginFiles(preloadedPlugin);
 
 		const destPath = `${Setting.value('pluginDir')}/${preloadedPlugin.id}.jpl`;
 		await shim.fsDriver().copy(jplPath, destPath);
