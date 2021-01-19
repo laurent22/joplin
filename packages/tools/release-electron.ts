@@ -16,10 +16,11 @@ async function main() {
 
 	console.info(`New version number: ${version}`);
 
-	console.info(await execCommand2('git add -A'));
-	console.info(await execCommand2(`git commit -m "Desktop release ${version}"`));
-	console.info(await execCommand2(`git tag ${tagName}`));
-	console.info(await execCommand2('git push && git push --tags'));
+	await execCommand2('git add -A');
+	await execCommand2(`git commit -m "Desktop release ${version}"`);
+	await execCommand2(`git tag ${tagName}`);
+	await execCommand2('git push');
+	await execCommand2('git push --tags');
 
 	const releaseOptions = { isDraft: true, isPreRelease: !!argv.beta };
 
