@@ -233,7 +233,7 @@ function main(processArgv) {
 	const configs = {
 		// Builds the main src/index.ts and copy the extra content from /src to
 		// /dist including scripts, CSS and any other asset.
-		buildMain: pluginConfig,
+		buildMain: [pluginConfig],
 
 		// Builds the extra scripts as defined in plugin.config.json. When doing
 		// so, some JavaScript files that were copied in the previous might be
@@ -247,7 +247,7 @@ function main(processArgv) {
 		// run without this. So we give it an entry that we know is going to
 		// exist and output in the publish dir. Then the plugin will delete this
 		// temporary file before packaging the plugin.
-		createArchive: createArchiveConfig,
+		createArchive: [createArchiveConfig],
 	};
 
 	// If we are running the first config step, we clean up and create the build
@@ -268,6 +268,12 @@ try {
 } catch (error) {
 	console.error(chalk.red(error.message));
 	process.exit(1);
+}
+
+if (!exportedConfigs.length) {
+	// Nothing to do - for example where there are no external scripts to
+	// compile.
+	process.exit(0);
 }
 
 module.exports = exportedConfigs;
