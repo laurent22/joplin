@@ -71,7 +71,7 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 				enabled: setting.enabled,
 				deleted: setting.deleted,
 				devMode: plugin.devMode,
-				willUpdate: setting.willUpdate,
+				hasBeenUpdated: setting.hasBeenUpdated,
 			});
 		}
 
@@ -188,6 +188,7 @@ export default function(props: Props) {
 			let updateState = UpdateState.Idle;
 			if (onUpdateHandler) updateState = UpdateState.CanUpdate;
 			if (isUpdating) updateState = UpdateState.Updating;
+			if (item.hasBeenUpdated) updateState = UpdateState.HasBeenUpdated;
 
 			output.push(<PluginBox
 				key={item.id}

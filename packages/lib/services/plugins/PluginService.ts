@@ -8,6 +8,7 @@ import { filename, dirname, rtrimSlashes } from '../../path-utils';
 import Setting from '../../models/Setting';
 import Logger from '../../Logger';
 import RepositoryApi from './RepositoryApi';
+import produce from 'immer';
 const compareVersions = require('compare-versions');
 const uslug = require('uslug');
 const md5File = require('md5-file/promise');
@@ -31,14 +32,19 @@ export interface Plugins {
 export interface PluginSetting {
 	enabled: boolean;
 	deleted: boolean;
-	willUpdate: boolean;
+
+	// After a plugin has been updated, the user needs to restart the app before
+	// loading the new version. In the meantime, we set this property to `true`
+	// so that we know the plugin has been updated. It is used for example to
+	// disable the Update button.
+	hasBeenUpdated: boolean;
 }
 
 export function defaultPluginSetting(): PluginSetting {
 	return {
 		enabled: true,
 		deleted: false,
-		willUpdate: false,
+		hasBeenUpdated: false,
 	};
 }
 
@@ -411,6 +417,16 @@ export default class PluginService extends BaseService {
 		}
 
 		return newSettings;
+	}
+
+	// On startup the "hasBeenUpdated" prop can be cleared since the new version
+	// of the plugin has now been loaded.
+	public clearUpdateState(settings: PluginSettings): PluginSettings {
+		return produce(settings, (draft: PluginSettings) => {
+			for (const pluginId in draft) {
+				if (draft[pluginId].hasBeenUpdated) draft[pluginId].hasBeenUpdated = false;
+			}
+		});
 	}
 
 	public async destroy() {

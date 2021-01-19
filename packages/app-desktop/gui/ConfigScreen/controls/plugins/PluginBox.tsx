@@ -15,6 +15,7 @@ export enum UpdateState {
 	Idle = 1,
 	CanUpdate = 2,
 	Updating = 3,
+	HasBeenUpdated = 4,
 }
 
 interface Props {
@@ -38,7 +39,7 @@ function manifestToItem(manifest: PluginManifest): PluginItem {
 		enabled: true,
 		deleted: false,
 		devMode: false,
-		willUpdate: false,
+		hasBeenUpdated: false,
 	};
 }
 
@@ -50,7 +51,7 @@ export interface PluginItem {
 	enabled: boolean;
 	deleted: boolean;
 	devMode: boolean;
-	willUpdate: boolean;
+	hasBeenUpdated: boolean;
 }
 
 const CellRoot = styled.div`
@@ -162,11 +163,14 @@ export default function(props: Props) {
 		let title = _('Update');
 		if (props.updateState === UpdateState.Updating) title = _('Updating...');
 		if (props.updateState === UpdateState.Idle) title = _('Updated');
+		if (props.updateState === UpdateState.HasBeenUpdated) title = _('Updated');
 
 		return <Button
-			level={ButtonLevel.Secondary}
+			ml={1}
+			level={ButtonLevel.Recommended}
 			onClick={() => props.onUpdate({ item })}
 			title={title}
+			disabled={props.updateState === UpdateState.HasBeenUpdated}
 		/>;
 	}
 
