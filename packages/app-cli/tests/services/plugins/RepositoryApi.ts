@@ -3,7 +3,9 @@ import shim from '@joplin/lib/shim';
 import { setupDatabaseAndSynchronizer, switchClient, supportDir, createTempDir } from '../../test-utils';
 
 async function newRepoApi(): Promise<RepositoryApi> {
-	return new RepositoryApi(`${supportDir}/pluginRepo`, await createTempDir());
+	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, await createTempDir());
+	await repo.loadManifests();
+	return repo;
 }
 
 describe('services_plugins_RepositoryApi', function() {
@@ -46,10 +48,9 @@ describe('services_plugins_RepositoryApi', function() {
 
 	it('should tell if a plugin can be updated', (async () => {
 		const api = await newRepoApi();
-		const manifests = await api.manifests();
-		expect(api.pluginCanBeUpdated(manifests, 'org.joplinapp.plugins.ToggleSidebars', '1.0.0')).toBe(true);
-		expect(api.pluginCanBeUpdated(manifests, 'org.joplinapp.plugins.ToggleSidebars', '1.0.2')).toBe(false);
-		expect(api.pluginCanBeUpdated(manifests, 'does.not.exist', '1.0.0')).toBe(false);
+		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.0')).toBe(true);
+		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.2')).toBe(false);
+		expect(await api.pluginCanBeUpdated('does.not.exist', '1.0.0')).toBe(false);
 	}));
 
 });

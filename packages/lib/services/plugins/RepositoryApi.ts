@@ -21,6 +21,19 @@ export default class RepositoryApi {
 		this.tempDir_ = tempDir;
 	}
 
+	public async loadManifests() {
+		const manifestsText = await this.fetchText('manifests.json');
+		try {
+			const manifests = JSON.parse(manifestsText);
+			if (!manifests) throw new Error('Invalid or missing JSON');
+			this.manifests_ = Object.keys(manifests).map(id => {
+				return manifests[id];
+			});
+		} catch (error) {
+			throw new Error(`Could not parse JSON: ${error.message}`);
+		}
+	}
+
 	private get isLocalRepo(): boolean {
 		return this.baseUrl_.indexOf('http') !== 0;
 	}
@@ -91,22 +104,23 @@ export default class RepositoryApi {
 	}
 
 	public async manifests(): Promise<PluginManifest[]> {
-		if (this.manifests_) return this.manifests_;
-		const manifestsText = await this.fetchText('manifests.json');
-		try {
-			const manifests = JSON.parse(manifestsText);
-			if (!manifests) throw new Error('Invalid or missing JSON');
-			this.manifests_ = Object.keys(manifests).map(id => {
-				return manifests[id];
-			});
-			return this.manifests_;
-		} catch (error) {
-			throw new Error(`Could not parse JSON: ${error.message}`);
-		}
+		if (!this.manifests_) throw new Error('Manifests have no been loaded!');
+		return this.manifests_;
 	}
 
-	public pluginCanBeUpdated(manifests: PluginManifest[], pluginId: string, installedVersion: string): boolean {
-		const manifest = manifests.find(m => m.id === pluginId);
+	public async canBeUpdatedPlugins(installedManifests: PluginManifest[]): Promise<string[]> {
+		const output = [];
+
+		for (const manifest of installedManifests) {
+			const canBe = await this.pluginCanBeUpdated(manifest.id, manifest.version);
+			if (canBe) output.push(manifest.id);
+		}
+
+		return output;
+	}
+
+	public async pluginCanBeUpdated(pluginId: string, installedVersion: string): Promise<boolean> {
+		const manifest = (await this.manifests()).find(m => m.id === pluginId);
 		if (!manifest) return false;
 		return compareVersions(installedVersion, manifest.version) < 0;
 	}

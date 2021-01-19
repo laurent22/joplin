@@ -123,7 +123,7 @@ const StyledButtonTertiary = styled(StyledButtonBase)`
 `;
 
 const StyledButtonRecommended = styled(StyledButtonBase)`
-	border: 1px solid ${(props: any) => props.theme.color};
+	border: 1px solid ${(props: any) => props.theme.borderColor4};
 	background-color: ${(props: any) => props.theme.warningBackgroundColor};
 
 	${StyledIcon} {

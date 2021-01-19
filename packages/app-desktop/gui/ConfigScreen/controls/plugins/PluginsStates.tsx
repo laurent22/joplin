@@ -12,7 +12,6 @@ import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
 import { PluginItem } from './PluginBox';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import Setting from '@joplin/lib/models/Setting';
-import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallHandler';
 const { space } = require('styled-system');
 
@@ -46,8 +45,8 @@ let repoApi_: RepositoryApi = null;
 
 function repoApi(): RepositoryApi {
 	if (repoApi_) return repoApi_;
-	// repoApi_ = new RepositoryApi('https://github.com/joplin/plugins', Setting.value('tempDir'));
-	repoApi_ = new RepositoryApi('/Users/laurent/src/joplin-plugins-test', Setting.value('tempDir'));
+	repoApi_ = new RepositoryApi('https://github.com/joplin/plugins', Setting.value('tempDir'));
+	// repoApi_ = new RepositoryApi('/Users/laurent/src/joplin-plugins-test', Setting.value('tempDir'));
 	return repoApi_;
 }
 
@@ -85,8 +84,9 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 
 export default function(props: Props) {
 	const [searchQuery, setSearchQuery] = useState('');
-	const [manifests, setManifests] = useState<PluginManifest[]>([]);
+	const [manifestsLoaded, setManifestsLoaded] = useState<boolean>(false);
 	const [updatingPluginsIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
+	const [canBeUpdatedPluginIds, setCanBeUpdatedPluginIds] = useState<Record<string, boolean>>({});
 
 	const pluginService = PluginService.instance();
 
@@ -94,12 +94,14 @@ export default function(props: Props) {
 		return pluginService.unserializePluginSettings(props.value);
 	}, [props.value]);
 
+	const pluginItems = usePluginItems(pluginService.plugins, pluginSettings);
+
 	useEffect(() => {
 		let cancelled = false;
 		async function fetchManifests() {
-			const r = await repoApi().manifests();
+			await repoApi().loadManifests();
 			if (cancelled) return;
-			setManifests(r);
+			setManifestsLoaded(true);
 		}
 
 		void fetchManifests();
@@ -108,6 +110,26 @@ export default function(props: Props) {
 			cancelled = true;
 		};
 	}, []);
+
+	useEffect(() => {
+		if (!manifestsLoaded) return () => {};
+
+		let cancelled = false;
+
+		async function fetchPluginIds() {
+			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems as any);
+			if (cancelled) return;
+			const conv: Record<string, boolean> = {};
+			pluginIds.forEach(id => conv[id] = true);
+			setCanBeUpdatedPluginIds(conv);
+		}
+
+		void fetchPluginIds();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [manifestsLoaded, pluginItems]);
 
 	const onDelete = useCallback(async (event: any) => {
 		const item: PluginItem = event.item;
@@ -183,7 +205,7 @@ export default function(props: Props) {
 			if (item.deleted) continue;
 
 			const isUpdating = updatingPluginsIds[item.id];
-			const onUpdateHandler = repoApi().pluginCanBeUpdated(manifests, item.id, item.version) ? onUpdate : null;
+			const onUpdateHandler = canBeUpdatedPluginIds[item.id] ? onUpdate : null;
 
 			let updateState = UpdateState.Idle;
 			if (onUpdateHandler) updateState = UpdateState.CanUpdate;
@@ -226,7 +248,7 @@ export default function(props: Props) {
 		return (
 			<div style={{ marginBottom: 20 }}>
 				<SearchPlugins
-					disabled={!manifests.length}
+					disabled={!manifestsLoaded}
 					maxWidth={maxWidth}
 					themeId={props.themeId}
 					searchQuery={searchQuery}
@@ -255,8 +277,6 @@ export default function(props: Props) {
 			</div>
 		);
 	}
-
-	const pluginItems = usePluginItems(pluginService.plugins, pluginSettings);
 
 	return (
 		<Root>
