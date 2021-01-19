@@ -31,12 +31,14 @@ export interface Plugins {
 export interface PluginSetting {
 	enabled: boolean;
 	deleted: boolean;
+	willUpdate: boolean;
 }
 
 export function defaultPluginSetting(): PluginSetting {
 	return {
 		enabled: true,
 		deleted: false,
+		willUpdate: false,
 	};
 }
 
@@ -173,7 +175,7 @@ export default class PluginService extends BaseService {
 		const fname = filename(path);
 		const hash = await md5File(path);
 
-		const unpackDir = `${Setting.value('tempDir')}/${fname}`;
+		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
 
 		let manifest: any = await this.loadManifestToObject(manifestFilePath);
@@ -194,7 +196,7 @@ export default class PluginService extends BaseService {
 
 			manifest._package_hash = hash;
 
-			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest), 'utf8');
+			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest, null, '\t'), 'utf8');
 		}
 
 		return this.loadPluginFromPath(unpackDir);
@@ -343,6 +345,10 @@ export default class PluginService extends BaseService {
 		const plugin = await this.installPlugin(pluginPath);
 		await shim.fsDriver().remove(pluginPath);
 		return plugin;
+	}
+
+	public async updatePluginFromRepo(repoApi: RepositoryApi, pluginId: string): Promise<Plugin> {
+		return this.installPluginFromRepo(repoApi, pluginId);
 	}
 
 	public async installPlugin(jplPath: string): Promise<Plugin> {

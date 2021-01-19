@@ -11,34 +11,46 @@ export enum InstallState {
 	Installed = 3,
 }
 
+export enum UpdateState {
+	Idle = 1,
+	CanUpdate = 2,
+	Updating = 3,
+}
+
 interface Props {
 	item?: PluginItem;
 	manifest?: PluginManifest;
 	installState?: InstallState;
+	updateState?: UpdateState;
 	themeId: number;
 	onToggle?: Function;
 	onDelete?: Function;
 	onInstall?: Function;
+	onUpdate?: Function;
 }
 
 function manifestToItem(manifest: PluginManifest): PluginItem {
 	return {
 		id: manifest.id,
 		name: manifest.name,
+		version: manifest.version,
 		description: manifest.description,
 		enabled: true,
 		deleted: false,
 		devMode: false,
+		willUpdate: false,
 	};
 }
 
 export interface PluginItem {
 	id: string;
 	name: string;
+	version: string;
 	description: string;
 	enabled: boolean;
 	deleted: boolean;
 	devMode: boolean;
+	willUpdate: boolean;
 }
 
 const CellRoot = styled.div`
@@ -50,7 +62,7 @@ const CellRoot = styled.div`
 	padding: 15px;
 	border: 1px solid ${props => props.theme.dividerColor};
 	border-radius: 6px;
-	width: 250px;
+	width: 320px;
 	margin-right: 20px;
 	margin-bottom: 20px;
 	box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
@@ -138,6 +150,20 @@ export default function(props: Props) {
 		/>;
 	}
 
+	function renderUpdateButton() {
+		if (!props.onUpdate) return null;
+
+		let title = _('Update');
+		if (props.updateState === UpdateState.Updating) title = _('Updating...');
+		if (props.updateState === UpdateState.Idle) title = _('Updated');
+
+		return <Button
+			level={ButtonLevel.Secondary}
+			onClick={() => props.onUpdate({ item })}
+			title={title}
+		/>;
+	}
+
 	function renderFooter() {
 		if (item.devMode) return null;
 
@@ -145,6 +171,7 @@ export default function(props: Props) {
 			<CellFooter>
 				{renderDeleteButton()}
 				{renderInstallButton()}
+				{renderUpdateButton()}
 				<div style={{ display: 'flex', flex: 1 }}/>
 			</CellFooter>
 		);

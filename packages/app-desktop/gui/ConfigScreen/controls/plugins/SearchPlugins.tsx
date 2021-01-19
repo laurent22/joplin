@@ -6,7 +6,6 @@ import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import PluginBox, { InstallState } from './PluginBox';
-import Setting from '@joplin/lib/models/Setting';
 import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from './useOnInstallHandler';
@@ -27,24 +26,18 @@ interface Props {
 	onPluginSettingsChange(event: any): void;
 	renderDescription: Function;
 	maxWidth: number;
-}
-
-let repoApi_: RepositoryApi = null;
-
-function repoApi(): RepositoryApi {
-	if (repoApi_) return repoApi_;
-	repoApi_ = new RepositoryApi('https://github.com/joplin/plugins', Setting.value('tempDir'));
-	return repoApi_;
+	repoApi(): RepositoryApi;
+	disabled: boolean;
 }
 
 export default function(props: Props) {
 	const [searchStarted, setSearchStarted] = useState(false);
 	const [manifests, setManifests] = useState<PluginManifest[]>([]);
-	const asyncSearchQueue = useRef(new AsyncActionQueue(200));
+	const asyncSearchQueue = useRef(new AsyncActionQueue(10));
 	const [installingPluginsIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 	const [searchResultCount, setSearchResultCount] = useState(null);
 
-	const onInstall = useOnInstallHandler(setInstallingPluginIds, props.pluginSettings, repoApi, props.onPluginSettingsChange);
+	const onInstall = useOnInstallHandler(setInstallingPluginIds, props.pluginSettings, props.repoApi, props.onPluginSettingsChange, false);
 
 	useEffect(() => {
 		setSearchResultCount(null);
@@ -53,7 +46,7 @@ export default function(props: Props) {
 				setManifests([]);
 				setSearchResultCount(null);
 			} else {
-				const r = await repoApi().search(props.searchQuery);
+				const r = await props.repoApi().search(props.searchQuery);
 				setManifests(r);
 				setSearchResultCount(r.length);
 			}
@@ -107,6 +100,8 @@ export default function(props: Props) {
 					onChange={onChange}
 					onSearchButtonClick={onSearchButtonClick}
 					searchStarted={searchStarted}
+					placeholder={_('Search for plugins...')}
+					disabled={props.disabled}
 				/>
 			</div>
 

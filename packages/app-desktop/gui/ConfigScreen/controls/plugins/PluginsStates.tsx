@@ -1,18 +1,22 @@
 import * as React from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
-import PluginBox from './PluginBox';
+import PluginBox, { UpdateState } from './PluginBox';
 import Button, { ButtonLevel } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
 import { PluginItem } from './PluginBox';
+import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import Setting from '@joplin/lib/models/Setting';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallHandler';
 const { space } = require('styled-system');
 
-const maxWidth: number = 250;
+const maxWidth: number = 320;
 
 const Root = styled.div`
 	display: flex;
@@ -26,7 +30,7 @@ const UserPluginsRoot = styled.div`
 `;
 
 const ToolsButton = styled(Button)`
-	margin-right: 2px;
+	margin-right: 6px;
 `;
 
 interface Props {
@@ -36,6 +40,15 @@ interface Props {
 	renderLabel: Function;
 	renderDescription: Function;
 	renderHeader: Function;
+}
+
+let repoApi_: RepositoryApi = null;
+
+function repoApi(): RepositoryApi {
+	if (repoApi_) return repoApi_;
+	// repoApi_ = new RepositoryApi('https://github.com/joplin/plugins', Setting.value('tempDir'));
+	repoApi_ = new RepositoryApi('/Users/laurent/src/joplin-plugins-test', Setting.value('tempDir'));
+	return repoApi_;
 }
 
 function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[] {
@@ -53,10 +66,12 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 			output.push({
 				id: pluginId,
 				name: plugin.manifest.name,
+				version: plugin.manifest.version,
 				description: plugin.manifest.description,
 				enabled: setting.enabled,
 				deleted: setting.deleted,
 				devMode: plugin.devMode,
+				willUpdate: setting.willUpdate,
 			});
 		}
 
@@ -70,12 +85,30 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 
 export default function(props: Props) {
 	const [searchQuery, setSearchQuery] = useState('');
+	const [manifests, setManifests] = useState<PluginManifest[]>([]);
+	const [updatingPluginsIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
 
 	const pluginService = PluginService.instance();
 
 	const pluginSettings = useMemo(() => {
 		return pluginService.unserializePluginSettings(props.value);
 	}, [props.value]);
+
+	useEffect(() => {
+		let cancelled = false;
+		async function fetchManifests() {
+			const r = await repoApi().manifests();
+			if (cancelled) return;
+
+			setManifests(r);
+		}
+
+		void fetchManifests();
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
 
 	const onDelete = useCallback(async (event: any) => {
 		const item: PluginItem = event.item;
@@ -118,6 +151,12 @@ export default function(props: Props) {
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	}, [pluginSettings, props.onChange]);
 
+	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
+		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
+	}, []);
+
+	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
+
 	const onToolsClick = useCallback(async () => {
 		const template = [];
 
@@ -144,12 +183,21 @@ export default function(props: Props) {
 		for (const item of items) {
 			if (item.deleted) continue;
 
+			const isUpdating = updatingPluginsIds[item.id];
+			const onUpdateHandler = repoApi().pluginCanBeUpdated(manifests, item.id, item.version) ? onUpdate : null;
+
+			let updateState = UpdateState.Idle;
+			if (onUpdateHandler) updateState = UpdateState.CanUpdate;
+			if (isUpdating) updateState = UpdateState.Updating;
+
 			output.push(<PluginBox
 				key={item.id}
 				item={item}
 				themeId={props.themeId}
+				updateState={updateState}
 				onDelete={onDelete}
 				onToggle={onToggle}
+				onUpdate={onUpdateHandler}
 			/>);
 		}
 
@@ -174,13 +222,11 @@ export default function(props: Props) {
 		}
 	}
 
-	const pluginItems = usePluginItems(pluginService.plugins, pluginSettings);
-
-	return (
-		<Root>
+	function renderSearchArea() {
+		return (
 			<div style={{ marginBottom: 20 }}>
-				{props.renderHeader(props.themeId, _('Search for plugins'))}
 				<SearchPlugins
+					disabled={!manifests.length}
 					maxWidth={maxWidth}
 					themeId={props.themeId}
 					searchQuery={searchQuery}
@@ -188,18 +234,34 @@ export default function(props: Props) {
 					onSearchQueryChange={onSearchQueryChange}
 					onPluginSettingsChange={onSearchPluginSettingsChange}
 					renderDescription={props.renderDescription}
+					repoApi={repoApi}
 				/>
 			</div>
+		);
+	}
 
+	function renderBottomArea() {
+		if (searchQuery) return null;
+
+		return (
 			<div>
 				<div style={{ display: 'flex', flexDirection: 'row', maxWidth }}>
+					<ToolsButton tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
 					<div style={{ display: 'flex', flex: 1 }}>
 						{props.renderHeader(props.themeId, _('Manage your plugins'))}
 					</div>
-					<ToolsButton tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Primary} onClick={onToolsClick}/>
 				</div>
 				{renderUserPlugins(pluginItems)}
 			</div>
+		);
+	}
+
+	const pluginItems = usePluginItems(pluginService.plugins, pluginSettings);
+
+	return (
+		<Root>
+			{renderSearchArea()}
+			{renderBottomArea()}
 		</Root>
 	);
 }

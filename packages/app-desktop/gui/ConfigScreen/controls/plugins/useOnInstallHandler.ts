@@ -6,7 +6,13 @@ import Logger from '@joplin/lib/Logger';
 
 const logger = Logger.create('useOnInstallHandler');
 
-export default function(setInstallingPluginIds: Function, pluginSettings: PluginSettings, repoApi: Function, onPluginSettingsChange: Function) {
+export interface OnPluginSettingChangeEvent {
+	value: PluginSettings;
+}
+
+type OnPluginSettingChangeHandler = (event: OnPluginSettingChangeEvent)=> void;
+
+export default function(setInstallingPluginIds: Function, pluginSettings: PluginSettings, repoApi: Function, onPluginSettingsChange: OnPluginSettingChangeHandler, isUpdate: boolean) {
 	return useCallback(async (event: any) => {
 		const pluginId = event.item.id;
 
@@ -19,7 +25,11 @@ export default function(setInstallingPluginIds: Function, pluginSettings: Plugin
 		let installError = null;
 
 		try {
-			await PluginService.instance().installPluginFromRepo(repoApi(), pluginId);
+			if (isUpdate) {
+				await PluginService.instance().updatePluginFromRepo(repoApi(), pluginId);
+			} else {
+				await PluginService.instance().installPluginFromRepo(repoApi(), pluginId);
+			}
 		} catch (error) {
 			installError = error;
 			logger.error(error);
