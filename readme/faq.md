@@ -33,7 +33,7 @@ subl -n -w      # Opens Sublime (subl) in a new window (-n) and waits for close 
 code -n --wait  # Opens Visual Studio Code (code) in a new window (-n) and waits for close (--wait)
 gedit --new-window    # Opens gedit (Gnome Text Editor) in a new window
 xterm -e vim    # Opens a new terminal and opens vim. Can be replaced with an
-                # alternative terminal (gnome-terminal, terminator, etc.) 
+                # alternative terminal (gnome-terminal, terminator, etc.)
                 # or terminal text-editor (emacs, nano, etc.)
 open -a <application> # Mac only: opens a GUI application
 ```
@@ -87,7 +87,7 @@ For these reasons, because the OS or yourself can easily protect the local data,
 
 There is however an issue open about it, so pull requests are welcome: https://github.com/laurent22/joplin/issues/289
 
-## WebDAV synchronisation is not working
+## Why is my WebDAV host not working?
 
 ### "Forbidden" error in Strato
 
@@ -103,6 +103,10 @@ For example:
     </body></html>
 
 In this case, [make sure you enter the correct WebDAV URL](https://github.com/laurent22/joplin/issues/309).
+
+### The following WebDAV hosts are not supported
+
+- Jianguoyun.com (see [Github issue](https://github.com/laurent22/joplin/issues/4294))
 
 ### Nextcloud sync is not working
 
