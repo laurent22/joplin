@@ -1,17 +1,28 @@
-const shim = require('./shim').default;
+import shim from './shim';
+import time from './time';
+import Logger from './Logger';
+import { _ } from './locale';
+
 const { stringify } = require('query-string');
-const time = require('./time').default;
-const Logger = require('./Logger').default;
-const { _ } = require('./locale');
 const urlUtils = require('./urlUtils.js');
 const Buffer = require('buffer').Buffer;
 
-class OneDriveApi {
+const logger = Logger.create('OneDriveApi');
+
+export default class OneDriveApi {
+
+	private clientId_: string;
+	private clientSecret_: string;
+	private auth_: any = null;
+	private accountProperties_: any = null;
+	private isPublic_: boolean;
+	private listeners_: Record<string, any>;
+
 	// `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
 	// apps are considered "public"), in which case the secret should not be sent to the API.
 	// In practice the React Native app is public, and the Node one is not because we
 	// use a local server for the OAuth dance.
-	constructor(clientId, clientSecret, isPublic) {
+	constructor(clientId: string, clientSecret: string, isPublic: boolean) {
 		this.clientId_ = clientId;
 		this.clientSecret_ = clientSecret;
 		this.auth_ = null;
@@ -20,29 +31,20 @@ class OneDriveApi {
 		this.listeners_ = {
 			authRefreshed: [],
 		};
-		this.logger_ = new Logger();
-	}
-
-	setLogger(l) {
-		this.logger_ = l;
-	}
-
-	logger() {
-		return this.logger_;
 	}
 
 	isPublic() {
 		return this.isPublic_;
 	}
 
-	dispatch(eventName, param) {
+	dispatch(eventName: string, param: any) {
 		const ls = this.listeners_[eventName];
 		for (let i = 0; i < ls.length; i++) {
 			ls[i](param);
 		}
 	}
 
-	on(eventName, callback) {
+	on(eventName: string, callback: Function) {
 		this.listeners_[eventName].push(callback);
 	}
 
@@ -54,11 +56,11 @@ class OneDriveApi {
 		return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
 	}
 
-	auth() {
+	auth(): any {
 		return this.auth_;
 	}
 
-	setAuth(auth) {
+	setAuth(auth: any) {
 		this.auth_ = auth;
 		this.dispatch('authRefreshed', this.auth());
 	}
@@ -81,7 +83,7 @@ class OneDriveApi {
 		return `${r.parentReference.path}/${r.name}`;
 	}
 
-	authCodeUrl(redirectUri) {
+	authCodeUrl(redirectUri: string) {
 		const query = {
 			client_id: this.clientId_,
 			scope: 'files.readwrite offline_access sites.readwrite.all',
@@ -91,8 +93,8 @@ class OneDriveApi {
 		return `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${stringify(query)}`;
 	}
 
-	async execTokenRequest(code, redirectUri) {
-		const body = {};
+	async execTokenRequest(code: string, redirectUri: string) {
+		const body: any = {};
 		body['client_id'] = this.clientId();
 		if (!this.isPublic()) body['client_secret'] = this.clientSecret();
 		body['code'] = code;
@@ -123,12 +125,12 @@ class OneDriveApi {
 		}
 	}
 
-	oneDriveErrorResponseToError(errorResponse) {
+	oneDriveErrorResponseToError(errorResponse: any) {
 		if (!errorResponse) return new Error('Undefined error');
 
 		if (errorResponse.error) {
 			const e = errorResponse.error;
-			const output = new Error(e.message);
+			const output: any = new Error(e.message);
 			if (e.code) output.code = e.code;
 			if (e.innerError) output.innerError = e.innerError;
 			return output;
@@ -137,7 +139,7 @@ class OneDriveApi {
 		}
 	}
 
-	async uploadChunk(url, handle, buffer, options) {
+	async uploadChunk(url: string, handle: any, buffer: any, options: any) {
 		options = Object.assign({}, options);
 		if (!options.method) { options.method = 'POST'; }
 
@@ -159,7 +161,7 @@ class OneDriveApi {
 		return response;
 	}
 
-	async uploadBigFile(url, options) {
+	async uploadBigFile(url: string, options: any) {
 		const response = await shim.fetch(url, {
 			method: 'POST',
 			headers: {
@@ -199,7 +201,7 @@ class OneDriveApi {
 						endByte = (i + 1) * chunkSize - 1;
 						contentLength = chunkSize;
 					}
-					this.logger().debug(`Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(byteSize / 1048576).toFixed(2)} Mbit ...`);
+					logger.debug(`Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(byteSize / 1048576).toFixed(2)} Mbit ...`);
 					const headers = {
 						'Content-Length': contentLength,
 						'Content-Range': `bytes ${startByte}-${endByte}/${byteSize}`,
@@ -215,7 +217,7 @@ class OneDriveApi {
 				return { ok: true };
 			} catch (error) {
 				const type = (handle) ? 'Resource' : 'Note Content';
-				this.logger().error(`Couldn't upload ${type} > 4 Mb. Got unhandled error:`, error ? error.code : '', error ? error.message : '', error);
+				logger.error(`Couldn't upload ${type} > 4 Mb. Got unhandled error:`, error ? error.code : '', error ? error.message : '', error);
 				throw error;
 			} finally {
 				if (handle) await shim.fsDriver().close(handle);
@@ -224,7 +226,7 @@ class OneDriveApi {
 		}
 	}
 
-	async exec(method, path, query = null, data = null, options = null) {
+	async exec(method: string, path: string, query: any = null, data: any = null, options: any = null) {
 		if (!path) throw new Error('Path is required');
 
 		method = method.toUpperCase();
@@ -264,6 +266,12 @@ class OneDriveApi {
 		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = `bearer ${this.token()}`;
 
+			const handleRequestRepeat = async (error: any) => {
+				logger.info(`Got error below - retrying (${i})...`);
+				logger.info(error);
+				await time.sleep((i + 1) * 5);
+			};
+
 			let response = null;
 			try {
 				if (path.includes('/createUploadSession')) {
@@ -277,24 +285,31 @@ class OneDriveApi {
 					response = await shim.fetchBlob(url, options);
 				}
 			} catch (error) {
-				this.logger().error('Got unhandled error:', error ? error.code : '', error ? error.message : '', error);
-				throw error;
+				if (shim.fetchRequestCanBeRetried(error)) {
+					await handleRequestRepeat(error);
+					continue;
+				} else {
+					logger.error('Got unhandled error:', error ? error.code : '', error ? error.message : '', error);
+					throw error;
+				}
 			}
 
 			if (!response.ok) {
 				const errorResponseText = await response.text();
 				let errorResponse = null;
+
 				try {
 					errorResponse = JSON.parse(errorResponseText); // await response.json();
 				} catch (error) {
 					error.message = `OneDriveApi::exec: Cannot parse JSON error: ${errorResponseText} ${error.message}`;
-					throw error;
+					await handleRequestRepeat(error);
+					continue;
 				}
 
 				const error = this.oneDriveErrorResponseToError(errorResponse);
 
 				if (error.code == 'InvalidAuthenticationToken' || error.code == 'unauthenticated') {
-					this.logger().info('Token expired: refreshing...');
+					logger.info('Token expired: refreshing...');
 					await this.refreshAccessToken();
 					continue;
 				} else if (error && ((error.error && error.error.code == 'generalException') || error.code == 'generalException' || error.code == 'EAGAIN')) {
@@ -312,9 +327,7 @@ class OneDriveApi {
 					//   type: 'system',
 					//   errno: 'EAGAIN',
 					//   code: 'EAGAIN' }
-					this.logger().info(`Got error below - retrying (${i})...`);
-					this.logger().info(error);
-					await time.sleep((i + 1) * 3);
+					await handleRequestRepeat(error);
 					continue;
 				} else if (error && (error.code === 'resourceModified' || (error.error && error.error.code === 'resourceModified'))) {
 					// NOTE: not tested, very hard to reproduce and non-informative error message, but can be repeated
@@ -324,9 +337,7 @@ class OneDriveApi {
 					// Header: {"_headers":{"cache-control":["private"],"transfer-encoding":["chunked"],"content-type":["application/json"],"request-id":["d...ea47"],"client-request-id":["d99...ea47"],"x-ms-ags-diagnostic":["{\"ServerInfo\":{\"DataCenter\":\"North Europe\",\"Slice\":\"SliceA\",\"Ring\":\"2\",\"ScaleUnit\":\"000\",\"Host\":\"AGSFE_IN_13\",\"ADSiteName\":\"DUB\"}}"],"duration":["96.9464"],"date":[],"connection":["close"]}}
 					// Request: PATCH https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev/f56c5601fee94b8085524513bf3e352f.md null "{\"fileSystemInfo\":{\"lastModifiedDateTime\":\"....\"}}" {"headers":{"Content-Type":"application/json","Authorization":"bearer ...
 
-					this.logger().info(`Got error below - retrying (${i})...`);
-					this.logger().info(error);
-					await time.sleep((i + 1) * 3);
+					await handleRequestRepeat(error);
 					continue;
 				} else if (error.code == 'itemNotFound' && method == 'DELETE') {
 					// Deleting a non-existing item is ok - noop
@@ -344,7 +355,7 @@ class OneDriveApi {
 		throw new Error(`Could not execute request after multiple attempts: ${method} ${url}`);
 	}
 
-	setAccountProperties(accountProperties) {
+	setAccountProperties(accountProperties: any) {
 		this.accountProperties_ = accountProperties;
 	}
 
@@ -360,7 +371,7 @@ class OneDriveApi {
 		}
 	}
 
-	async execJson(method, path, query, data) {
+	async execJson(method: string, path: string, query: any = null, data: any = null) {
 		const response = await this.exec(method, path, query, data);
 		const errorResponseText = await response.text();
 		try {
@@ -373,7 +384,7 @@ class OneDriveApi {
 		}
 	}
 
-	async execText(method, path, query, data) {
+	async execText(method: string, path: string, query: any = null, data: any = null) {
 		const response = await this.exec(method, path, query, data);
 		const output = await response.text();
 		return output;
@@ -385,7 +396,7 @@ class OneDriveApi {
 			throw new Error(_('Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.'));
 		}
 
-		const body = {};
+		const body: any = {};
 		body['client_id'] = this.clientId();
 		if (!this.isPublic()) body['client_secret'] = this.clientSecret();
 		body['refresh_token'] = this.auth_.refresh_token;
@@ -410,5 +421,3 @@ class OneDriveApi {
 		this.setAuth(auth);
 	}
 }
-
-module.exports = { OneDriveApi };

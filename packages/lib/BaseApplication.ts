@@ -7,6 +7,7 @@ import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.nod
 import { _, setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
+import SyncTargetOneDrive from './SyncTargetOneDrive';
 
 const { createStore, applyMiddleware } = require('redux');
 const { defaultState, stateUtils } = require('./reducer');
@@ -30,7 +31,6 @@ const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
 const SyncTargetRegistry = require('./SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
-const SyncTargetOneDrive = require('./SyncTargetOneDrive.js');
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');

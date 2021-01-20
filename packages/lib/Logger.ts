@@ -2,6 +2,9 @@ const moment = require('moment');
 const time = require('./time').default;
 const { FsDriverDummy } = require('./fs-driver-dummy.js');
 const { sprintf } = require('sprintf-js');
+const Mutex = require('async-mutex').Mutex;
+
+const writeToFileMutex_ = new Mutex();
 
 export enum TargetType {
 	Database = 'database',
@@ -205,12 +208,23 @@ class Logger {
 				const line = [timestamp];
 				if (targetPrefix) line.push(targetPrefix);
 				line.push(this.objectsToString(...object));
-				try {
-					// TODO: Should log async
-					Logger.fsDriver().appendFileSync(target.path, `${line.join(': ')}\n`);
-				} catch (error) {
+
+				// Write to file using a mutex so that log entries appear in the
+				// correct order (otherwise, since the async call is not awaited
+				// by caller, multiple log call in a row are not guaranteed to
+				// appear in the right order). We also can't use a sync call
+				// because that would slow down the main process, especially
+				// when many log operations are being done (eg. during sync in
+				// dev mode).
+				let release: Function = null;
+				writeToFileMutex_.acquire().then((r: Function) => {
+					release = r;
+					return Logger.fsDriver().appendFile(target.path, `${line.join(': ')}\n`, 'utf8');
+				}).catch((error: any) => {
 					console.error('Cannot write to log file:', error);
-				}
+				}).finally(() => {
+					if (release) release();
+				});
 			} else if (target.type == 'database') {
 				const msg = [];
 				if (targetPrefix) msg.push(targetPrefix);

@@ -25,6 +25,7 @@ import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtil
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
 import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
+import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 
@@ -75,7 +76,6 @@ const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
 
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
-const SyncTargetOneDrive = require('@joplin/lib/SyncTargetOneDrive.js');
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
