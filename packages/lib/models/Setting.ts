@@ -62,11 +62,17 @@ interface CacheItem {
 	value: any;
 }
 
+export enum SettingSectionSource {
+	Default = 1,
+	Plugin = 2,
+}
+
 export interface SettingSection {
 	label: string;
 	iconName?: string;
 	description?: string;
 	name?: string;
+	source?: SettingSectionSource;
 }
 
 interface SettingSections {
@@ -1009,8 +1015,8 @@ class Setting extends BaseModel {
 		});
 	}
 
-	static async registerSection(name: string, section: SettingSection) {
-		this.customSections_[name] = { ...section, name: name };
+	static async registerSection(name: string, source: SettingSectionSource, section: SettingSection) {
+		this.customSections_[name] = { ...section, name: name, source: source };
 	}
 
 	static settingMetadata(key: string): SettingItem {
@@ -1512,6 +1518,11 @@ class Setting extends BaseModel {
 		throw new Error(`Invalid type ID: ${typeId}`);
 	}
 
+	private static sectionSource(sectionName: string): SettingSectionSource {
+		if (this.customSections_[sectionName]) return this.customSections_[sectionName].source || SettingSectionSource.Default;
+		return SettingSectionSource.Default;
+	}
+
 	static groupMetadatasBySections(metadatas: SettingItem[]) {
 		const sections = [];
 		const generalSection: any = { name: 'general', metadatas: [] };
@@ -1524,19 +1535,24 @@ class Setting extends BaseModel {
 				generalSection.metadatas.push(md);
 			} else {
 				if (!nameToSections[md.section]) {
-					nameToSections[md.section] = { name: md.section, metadatas: [] };
+					nameToSections[md.section] = {
+						name: md.section,
+						metadatas: [],
+						source: this.sectionSource(md.section),
+					};
 					sections.push(nameToSections[md.section]);
 				}
 				nameToSections[md.section].metadatas.push(md);
 			}
 		}
 
-		for (const name in this.customSections_) {
-			nameToSections[name] = {
-				name: name,
-				metadatas: [],
-			};
-		}
+		// for (const name in this.customSections_) {
+		// 	nameToSections[name] = {
+		// 		name: name,
+		// 		source: this.customSections_[name].source,
+		// 		metadatas: [],
+		// 	};
+		// }
 
 		return sections;
 	}

@@ -1,5 +1,5 @@
 import eventManager from '../../../eventManager';
-import Setting, { SettingItem as InternalSettingItem } from '../../../models/Setting';
+import Setting, { SettingItem as InternalSettingItem, SettingSectionSource } from '../../../models/Setting';
 import Plugin from '../Plugin';
 import { SettingItem, SettingSection } from './types';
 
@@ -71,7 +71,7 @@ export default class JoplinSettings {
 	 * Registers a new setting section. Like for registerSetting, it is dynamic and needs to be done every time the plugin starts.
 	 */
 	public async registerSection(name: string, section: SettingSection) {
-		return Setting.registerSection(this.namespacedKey(name), section);
+		return Setting.registerSection(this.namespacedKey(name), SettingSectionSource.Plugin, section);
 	}
 
 	/**

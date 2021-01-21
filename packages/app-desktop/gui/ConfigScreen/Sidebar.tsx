@@ -1,6 +1,9 @@
+import { SettingSectionSource } from '@joplin/lib/models/Setting';
 import * as React from 'react';
+import { useMemo } from 'react';
+import Setting from '@joplin/lib/models/Setting';
+import { _ } from '@joplin/lib/locale';
 const styled = require('styled-components').default;
-const Setting = require('@joplin/lib/models/Setting').default;
 
 interface Props {
 	selection: string;
@@ -30,6 +33,21 @@ export const StyledListItem = styled.a`
 	}
 `;
 
+export const StyledDivider = styled.div`
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	color: ${(props: any) => props.theme.color2};
+	padding: ${(props: any) => props.theme.mainPadding}px;
+	padding-top: ${(props: any) => props.theme.mainPadding * .8}px;
+	padding-bottom: ${(props: any) => props.theme.mainPadding * .8}px;
+	border-top: 1px solid ${(props: any) => props.theme.dividerColor};
+	border-bottom: 1px solid ${(props: any) => props.theme.dividerColor};
+	background-color: ${(props: any) => props.theme.selectedColor2};
+	font-size: ${(props: any) => Math.round(props.theme.fontSize)}px;
+	opacity: 0.5;
+`;
+
 export const StyledListItemLabel = styled.span`
 	font-size: ${(props: any) => Math.round(props.theme.fontSize * 1.2)}px;
 	font-weight: 500;
@@ -50,6 +68,20 @@ export const StyledListItemIcon = styled.i`
 export default function Sidebar(props: Props) {
 	const buttons: any[] = [];
 
+	const sortedSections = useMemo(() => {
+		const output = props.sections.slice();
+		output.sort((a: any, b: any) => {
+			const s1 = a.source || SettingSectionSource.Default;
+			const s2 = b.source || SettingSectionSource.Default;
+			if (s1 === SettingSectionSource.Default && s2 === SettingSectionSource.Default) return props.sections.indexOf(s1) - props.sections.indexOf(s2);
+			if (s1 === SettingSectionSource.Default && s2 === SettingSectionSource.Plugin) return -1;
+			if (s1 === SettingSectionSource.Plugin && s2 === SettingSectionSource.Default) return +1;
+			return 0;
+		});
+		console.info('SORTED', output);
+		return output;
+	}, [props.sections]);
+
 	function renderButton(section: any) {
 		const selected = props.selection === section.name;
 		return (
@@ -62,7 +94,22 @@ export default function Sidebar(props: Props) {
 		);
 	}
 
-	for (const section of props.sections) {
+	function renderDivider(key: string) {
+		return (
+			<StyledDivider key={key}>
+				{_('Plugins')}
+			</StyledDivider>
+		);
+	}
+
+	let pluginDividerAdded = false;
+
+	for (const section of sortedSections) {
+		if (section.source === SettingSectionSource.Plugin && !pluginDividerAdded) {
+			buttons.push(renderDivider('divider-plugins'));
+			pluginDividerAdded = true;
+		}
+
 		buttons.push(renderButton(section));
 	}
 
