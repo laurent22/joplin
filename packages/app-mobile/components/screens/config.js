@@ -520,7 +520,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					}}
 				>
 					<Text key="label" style={this.styles().linkText}>
-						Privacy Policy
+						{_('Privacy Policy')}
 					</Text>
 				</TouchableOpacity>
 			</View>

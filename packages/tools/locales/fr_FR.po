@@ -3233,9 +3233,8 @@ msgid "Downloaded and encrypted"
 msgstr "Téléchargé et chiffré"
 
 #: packages/lib/services/report.js:193
-#, fuzzy
 msgid "Created locally"
-msgstr "Objets créés localement : %d."
+msgstr "Créé localement"
 
 #: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"

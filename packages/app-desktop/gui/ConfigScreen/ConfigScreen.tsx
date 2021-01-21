@@ -537,7 +537,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						<div style={{ display: 'flex' }}>
 							<div style={{ flex: 1 }}>
 								<div style={{ ...rowStyle, marginBottom: 5 }}>
-									<div style={subLabel}>Path:</div>
+									<div style={subLabel}>{_('Path:')}</div>
 									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: inputStyle.marginBottom }}>
 										<input
 											type={inputType}
@@ -556,7 +556,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 									</div>
 								</div>
 								<div style={{ ...rowStyle, marginBottom: 5 }}>
-									<div style={subLabel}>Arguments:</div>
+									<div style={subLabel}>{_('Arguments:')}</div>
 									<input
 										type={inputType}
 										style={inputStyle}
