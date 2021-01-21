@@ -424,7 +424,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 code -n --wait  # Opens Visual Studio Code (code) in a new window (-n) and waits for close (--wait)
 gedit --new-window    # Opens gedit (Gnome Text Editor) in a new window
 xterm -e vim    # Opens a new terminal and opens vim. Can be replaced with an
-                # alternative terminal (gnome-terminal, terminator, etc.) 
+                # alternative terminal (gnome-terminal, terminator, etc.)
                 # or terminal text-editor (emacs, nano, etc.)
 open -a &lt;application&gt; # Mac only: opens a GUI application
 </code></pre>
@@ -459,7 +459,7 @@ notepad++.exe --openSession   # Opens Notepad ++ in new window
 <p>On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted Truecrypt drive for instance.</p>
 <p>For these reasons, because the OS or yourself can easily protect the local data, no PIN or password is currently supported to access Joplin.</p>
 <p>There is however an issue open about it, so pull requests are welcome: <a href="https://github.com/laurent22/joplin/issues/289">https://github.com/laurent22/joplin/issues/289</a></p>
-<h2>WebDAV synchronisation is not working<a name="webdav-synchronisation-is-not-working" href="#webdav-synchronisation-is-not-working" class="heading-anchor">🔗</a></h2>
+<h2>Why is my WebDAV host not working?<a name="why-is-my-webdav-host-not-working" href="#why-is-my-webdav-host-not-working" class="heading-anchor">🔗</a></h2>
 <h3>&quot;Forbidden&quot; error in Strato<a name="forbidden-error-in-strato" href="#forbidden-error-in-strato" class="heading-anchor">🔗</a></h3>
 <p>For example:</p>
 <pre><code>MKCOL .sync/: Unknown error 2 (403): &lt;!DOCTYPE HTML PUBLIC &quot;-//IETF//DTD HTML 2.0//EN&quot;&gt;
@@ -472,6 +472,10 @@ on this server.&lt;/p&gt;
 &lt;/body&gt;&lt;/html&gt;
 </code></pre>
 <p>In this case, <a href="https://github.com/laurent22/joplin/issues/309">make sure you enter the correct WebDAV URL</a>.</p>
+<h3>The following WebDAV hosts are not supported<a name="the-following-webdav-hosts-are-not-supported" href="#the-following-webdav-hosts-are-not-supported" class="heading-anchor">🔗</a></h3>
+<ul>
+<li><a href="http://Jianguoyun.com">Jianguoyun.com</a> (see <a href="https://github.com/laurent22/joplin/issues/4294">Github issue</a>)</li>
+</ul>
 <h3>Nextcloud sync is not working<a name="nextcloud-sync-is-not-working" href="#nextcloud-sync-is-not-working" class="heading-anchor">🔗</a></h3>
 <ul>
 <li>Check your username and password. <strong>Type it manually</strong> (without copying and pasting it) and try again.</li>

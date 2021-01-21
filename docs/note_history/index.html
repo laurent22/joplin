@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/welcome/3_synchronising_your_notes.md and any manual change
+This file was auto-generated from readme/note_history.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your_notes.md
+https://github.com/laurent22/joplin/blob/dev/readme/note_history.md
 
 -->
 
 <head>
-	<title>Synchronising your notes 🔄 | Joplin</title>
+	<title>Note History | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -302,7 +302,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your
 
 <body>
 
-<div class="container root page-3_synchronising_your_notes">
+<div class="container root page-note_history">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -401,21 +401,25 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your
 </div>
 
 	<div class="main">
-<h1>Synchronising your notes 🔄<a name="synchronising-your-notes" href="#synchronising-your-notes" class="heading-anchor">🔗</a></h1>
-<p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. You basically choose the service you prefer among those supported, setup the configuration, and the app will be able to sync between your computers or mobile devices.</p>
-<p>The supported cloud services are the following:</p>
-<h2>Setting up Dropbox synchronisation<a name="setting-up-dropbox-synchronisation" href="#setting-up-dropbox-synchronisation" class="heading-anchor">🔗</a></h2>
-<p>Select &quot;Dropbox&quot; as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
-<h2>Setting up Nextcloud synchronisation<a name="setting-up-nextcloud-synchronisation" href="#setting-up-nextcloud-synchronisation" class="heading-anchor">🔗</a></h2>
-<p>Nextcloud is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin.</p>
-<p>To set it up, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, go to your Nextcloud page, click on Settings in the bottom left corner of the page and copy the URL). Note that it has to be the <strong>full URL</strong>, so for example if you want the notes to be under <code>/Joplin</code>, the URL would be something like <code>https://example.com/remote.php/webdav/Joplin</code> (note that &quot;/Joplin&quot; part). And <strong>make sure to create the &quot;/Joplin&quot; directory in Nextcloud</strong>. Finally set the username and password. If it does not work, please <a href="https://github.com/laurent22/joplin/issues/61#issuecomment-373282608">see this explanation</a> for more details.</p>
-<h2>Setting up OneDrive or WebDAV synchronisation<a name="setting-up-onedrive-or-webdav-synchronisation" href="#setting-up-onedrive-or-webdav-synchronisation" class="heading-anchor">🔗</a></h2>
-<p>OneDrive and WebDAV are also supported as synchronisation services. Please see <a href="https://github.com/laurent22/joplin#synchronisation">the synchronisation documentation</a> for more information.</p>
-<h2>Using End-To-End Encryption<a name="using-end-to-end-encryption" href="#using-end-to-end-encryption" class="heading-anchor">🔗</a></h2>
-<p>Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the data can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the <a href="https://joplinapp.org/e2ee/">End-To-End Encryption Tutorial</a> for more information about this feature and how to enable it.</p>
+<h1>Note History<a name="note-history" href="#note-history" class="heading-anchor">🔗</a></h1>
+<p>Joplin has support for note history. The applications (desktop, mobile and CLI) now preserve previous versions of the notes, so you can inspect or restore them later on as needed.</p>
+<p>A common complain with many sync-based note taking apps is that they work in an opaque way - sometimes notes are changed or they disappear and it's not clear why - it could be a user error, or some bug, but regardless it makes it hard to trust the app with thousands of notes. So this feature give transparency over what's happening - if some note seems to be gone or changed when it shouldn't, the redundant data allows investigating the issue and restoring content.</p>
+<p>Another medium term goal is to allow the implementation of a recycle bin. Behind the scene, this is essentially already done since whenever a note is deleted, a final revision of that note is preserved. What's missing is a user interface (i.e. the recycle bin) to view these deleted notes.</p>
+<h3>How does it work?<a name="how-does-it-work" href="#how-does-it-work" class="heading-anchor">🔗</a></h3>
+<p>All the apps save a version of the modified notes every 10 minutes. These revisions are then synced across all the devices so if you're looking for a particular version of a note that was made on mobile, you can later find that version on the desktop app too.</p>
+<h3>How to view the history of a note?<a name="how-to-view-the-history-of-a-note" href="#how-to-view-the-history-of-a-note" class="heading-anchor">🔗</a></h3>
+<p>While all the apps save revisions, currently only the desktop one allow viewing these revisions.</p>
+<p>To do so, click on the Information icon in the toolbar, then select &quot;Previous version of this note&quot;.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/readme/blog/images/20190523-231026_0.png" alt=""></p>
+<p>The next screen will show the latest version of the note. You can then choose to view a different version, if any, or to restore one of them.</p>
+<p>To restore a note, simply click on the &quot;Restore&quot; button. The old version of the note will be copied in a folder called &quot;Restored Notes&quot;. The current version of the note will not be replaced or modified.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/readme/blog/images/20190523-231026_1.png" alt=""></p>
+<h3>How to configure the note history feature?<a name="how-to-configure-the-note-history-feature" href="#how-to-configure-the-note-history-feature" class="heading-anchor">🔗</a></h3>
+<p>Additional options are available in the <code>Note History</code> page of the Configuration screen. It is possible to enable/disable the note history feature. It is also possible to specify for how long the history of a note should be kept (by default, for 90 days).</p>
+<p><strong>IMPORTANT</strong>: Please note that since all the revisions are synced across all devices, it means these settings are kind of global. So for example, if on one device you set it to keep revisions for 30 days, and on another to 100 days, the revisions older than 30 days will be deleted, and then this deletion will be synced. So in practice it means revisions are kept for whatever is the minimum number of days as set on any of the devices. In that particular case, the 100 days setting will be essentially ignored, and only the 30 days one will apply.</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/dev/readme/welcome/3_synchronising_your_notes.md">
+			<a href="https://github.com/laurent22/joplin/blob/dev/readme/note_history.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>
