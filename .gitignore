@@ -921,6 +921,9 @@ packages/lib/PoorManIntervals.js.map
 packages/lib/SyncTargetJoplinServer.d.ts
 packages/lib/SyncTargetJoplinServer.js
 packages/lib/SyncTargetJoplinServer.js.map
+packages/lib/SyncTargetOneDrive.d.ts
+packages/lib/SyncTargetOneDrive.js
+packages/lib/SyncTargetOneDrive.js.map
 packages/lib/Synchronizer.d.ts
 packages/lib/Synchronizer.js
 packages/lib/Synchronizer.js.map
@@ -984,6 +987,9 @@ packages/lib/models/utils/types.js.map
 packages/lib/ntpDate.d.ts
 packages/lib/ntpDate.js
 packages/lib/ntpDate.js.map
+packages/lib/onedrive-api.d.ts
+packages/lib/onedrive-api.js
+packages/lib/onedrive-api.js.map
 packages/lib/path-utils.d.ts
 packages/lib/path-utils.js
 packages/lib/path-utils.js.map

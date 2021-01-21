@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v1.6.4](https://github.com/laurent22/joplin/releases/tag/cli-v1.6.4) - 2021-01-21T10:01:15Z
+
+- Fixed: Fixed infinite sync issue with OneDrive (#4305)
+
 ## [cli-v1.6.3](https://github.com/laurent22/joplin/releases/tag/cli-v1.6.3) - 2021-01-11T11:52:11Z
 
 - New: Add more log info when a revision cannot be deleted due to still-encrypted itel
