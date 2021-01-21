@@ -1,5 +1,7 @@
 export default function(id: string): void {
 	if (!id) throw new Error('ID cannot be empty');
+	// Allow a few exceptions that existed before the limit was added
+	if (id.length < 16 && !['Outline', 'outline', 'MyPlugin'].includes(id)) throw new Error('ID cannot be shorter than 16 characters');
 	if (id.length > 256) throw new Error('ID cannot be longer than 256 characters');
 
 	const whitelist = '0-9a-zA-Z._-';

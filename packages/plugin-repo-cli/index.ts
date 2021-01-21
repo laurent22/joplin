@@ -4,8 +4,9 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
-import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '@joplin/lib/markdownUtils';
 import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
+import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
+import updateReadme from './lib/updateReadme';
 
 interface NpmPackage {
 	name: string;
@@ -45,11 +46,10 @@ async function checkPluginRepository(dirPath: string) {
 	if (!(await fs.pathExists(dirPath))) throw new Error(`No plugin repository at: ${dirPath}`);
 	if (!(await fs.pathExists(`${dirPath}/.git`))) throw new Error(`Directory is not a Git repository: ${dirPath}`);
 
-	const previousDir = process.cwd();
-	process.chdir(dirPath);
+	const previousDir = chdir(dirPath);
 	await gitRepoCleanTry();
 	await gitPullTry();
-	process.chdir(previousDir);
+	chdir(previousDir);
 }
 
 async function readJsonFile(manifestPath: string, defaultValue: any = null): Promise<any> {
@@ -62,16 +62,8 @@ async function readJsonFile(manifestPath: string, defaultValue: any = null): Pro
 	return JSON.parse(content);
 }
 
-function caseInsensitiveFindManifest(manifests: any, manifestId: string): any {
-	for (const id of Object.keys(manifests)) {
-		if (id.toLowerCase() === manifestId.toLowerCase()) return manifests[id];
-	}
-	return null;
-}
-
 async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
-	const previousDir = process.cwd();
-	process.chdir(workDir);
+	const previousDir = chdir(workDir);
 
 	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showOutput: false });
 
@@ -93,18 +85,7 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 
 	manifest._npm_package_name = packageName;
 
-	// If there's already a plugin with this ID published under a different
-	// package name, we skip it. Otherwise it would allow anyone to overwrite
-	// someone else plugin just by using the same ID. So the first plugin with
-	// this ID that was originally added is kept.
-	//
-	// We need case insensitive match because the filesystem might be case
-	// insensitive too.
-	const originalManifest = caseInsensitiveFindManifest(existingManifests, manifest.id);
-
-	if (originalManifest && originalManifest._npm_package_name !== packageName) {
-		throw new Error(`Plugin "${manifest.id}" from npm package "${packageName}" has already been published under npm package "${originalManifest._npm_package_name}". Plugin from package "${packageName}" will not be imported.`);
-	}
+	checkIfPluginCanBeAdded(existingManifests, manifest);
 
 	const pluginDestDir = resolveRelativePathWithinDir(destDir, manifest.id);
 	await fs.mkdirp(pluginDestDir);
@@ -112,56 +93,9 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 	await fs.writeFile(path.resolve(pluginDestDir, 'manifest.json'), JSON.stringify(manifest, null, '\t'), 'utf8');
 	await fs.copy(pluginFilePath, path.resolve(pluginDestDir, 'plugin.jpl'));
 
-	process.chdir(previousDir);
+	chdir(previousDir);
 
 	return manifest;
-}
-
-async function updateReadme(readmePath: string, manifests: any) {
-	const rows: MarkdownTableRow[] = [];
-
-	for (const pluginId in manifests) {
-		rows.push(manifests[pluginId]);
-	}
-
-	const headers: MarkdownTableHeader[] = [
-		{
-			name: 'homepage_url',
-			label: '&nbsp;',
-			filter: (value: string) => {
-				return `[🏠](${markdownUtils.escapeLinkUrl(value)})`;
-			},
-		},
-		{
-			name: 'name',
-			label: 'Name',
-		},
-		{
-			name: 'version',
-			label: 'Version',
-		},
-		{
-			name: 'description',
-			label: 'Description',
-		},
-		{
-			name: 'author',
-			label: 'Author',
-		},
-	];
-
-	rows.sort((a: any, b: any) => {
-		return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : +1;
-	});
-
-	const mdTable = markdownUtils.createMarkdownTable(headers, rows);
-
-	const tableRegex = /<!-- PLUGIN_LIST -->([^]*)<!-- PLUGIN_LIST -->/;
-
-	const content = await fs.pathExists(readmePath) ? await fs.readFile(readmePath, 'utf8') : '<!-- PLUGIN_LIST -->\n<!-- PLUGIN_LIST -->';
-	const newContent = content.replace(tableRegex, `<!-- PLUGIN_LIST -->\n${mdTable}\n<!-- PLUGIN_LIST -->`);
-
-	await fs.writeFile(readmePath, newContent, 'utf8');
 }
 
 interface CommandBuildArgs {
@@ -173,29 +107,54 @@ enum ProcessingActionType {
 	Update = 2,
 }
 
-function commitMessage(actionType: ProcessingActionType, npmPackage: NpmPackage): string {
+function commitMessage(actionType: ProcessingActionType, manifest: any, npmPackage: NpmPackage, error: any): string {
 	const output: string[] = [];
 
-	if (actionType === ProcessingActionType.Add) {
-		output.push('New');
-	} else {
-		output.push('Update');
-	}
+	if (!error) {
+		if (actionType === ProcessingActionType.Add) {
+			output.push('New');
+		} else {
+			output.push('Update');
+		}
 
-	output.push(`${npmPackage.name}@${npmPackage.version}`);
+		output.push(`${manifest.id}@${manifest.version}`);
+	} else {
+		output.push(`Error: ${npmPackage.name}@${npmPackage.version}`);
+	}
 
 	return output.join(': ');
 }
 
+function pluginManifestsPath(repoDir: string): string {
+	return path.resolve(repoDir, 'manifests.json');
+}
+
+async function readManifests(repoDir: string): Promise<any> {
+	return readJsonFile(pluginManifestsPath(repoDir), {});
+}
+
+async function writeManifests(repoDir: string, manifests: any) {
+	await fs.writeFile(pluginManifestsPath(repoDir), JSON.stringify(manifests, null, '\t'), 'utf8');
+}
+
+function chdir(path: string): string {
+	const previous = process.cwd();
+	try {
+		process.chdir(path);
+	} catch (error) {
+		throw new Error(`Could not chdir to path: ${path}`);
+	}
+	return previous;
+}
+
 async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	const tempDir = `${repoDir}/temp`;
-	const pluginManifestsPath = path.resolve(repoDir, 'manifests.json');
 	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
 	const errorsPath = path.resolve(repoDir, 'errors.json');
 
 	await fs.mkdirp(tempDir);
 
-	const originalPluginManifests = await readJsonFile(pluginManifestsPath, {});
+	const originalPluginManifests = await readManifests(repoDir);
 	const obsoleteManifests = await readJsonFile(obsoleteManifestsPath, {});
 	const existingManifests = {
 		...originalPluginManifests,
@@ -205,8 +164,7 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	const packageTempDir = `${tempDir}/packages`;
 
 	await fs.mkdirp(packageTempDir);
-	const previousDir = process.cwd();
-	process.chdir(packageTempDir);
+	chdir(packageTempDir);
 	await execCommand2('npm init --yes --loglevel silent', { quiet: true });
 
 	const errors: any = await readJsonFile(errorsPath, {});
@@ -214,31 +172,23 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 
 	let actionType: ProcessingActionType = ProcessingActionType.Update;
 	let manifests: any = {};
+	let manifest: any = {};
+	let error: any = null;
 
 	try {
 		const destDir = `${repoDir}/plugins/`;
-		const manifest = await extractPluginFilesFromPackage(existingManifests, packageTempDir, npmPackage.name, destDir);
+		manifest = await extractPluginFilesFromPackage(existingManifests, packageTempDir, npmPackage.name, destDir);
 
 		if (!existingManifests[manifest.id]) {
 			actionType = ProcessingActionType.Add;
 		}
 
 		if (!obsoleteManifests[manifest.id]) manifests[manifest.id] = manifest;
-	} catch (error) {
-		console.error(error);
-		errors[npmPackage.name] = error.message || '';
+	} catch (e) {
+		console.error(e);
+		errors[npmPackage.name] = e.message || '';
+		error = e;
 	}
-
-	// We preserve the original manifests so that if a plugin has been removed
-	// from npm, we still keep it. It's also a security feature - it means that
-	// if a plugin is removed from npm, it's not possible to highjack it by
-	// creating a new npm package with the same plugin ID.
-	manifests = {
-		...originalPluginManifests,
-		...manifests,
-	};
-
-	await fs.writeFile(pluginManifestsPath, JSON.stringify(manifests, null, '\t'), 'utf8');
 
 	if (Object.keys(errors).length) {
 		await fs.writeFile(errorsPath, JSON.stringify(errors, null, '\t'), 'utf8');
@@ -246,16 +196,26 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 		await fs.remove(errorsPath);
 	}
 
-	await updateReadme(`${repoDir}/README.md`, manifests);
+	if (!error) {
+		// We preserve the original manifests so that if a plugin has been removed
+		// from npm, we still keep it. It's also a security feature - it means that
+		// if a plugin is removed from npm, it's not possible to highjack it by
+		// creating a new npm package with the same plugin ID.
+		manifests = {
+			...originalPluginManifests,
+			...manifests,
+		};
 
-	process.chdir(previousDir);
+		await writeManifests(repoDir, manifests);
+		await updateReadme(`${repoDir}/README.md`, manifests);
+	}
+
+	chdir(repoDir);
 	await fs.remove(tempDir);
-
-	process.chdir(repoDir);
 
 	if (!(await gitRepoClean())) {
 		await execCommand2('git add -A', { showOutput: false });
-		await execCommand2(['git', 'commit', '-m', commitMessage(actionType, npmPackage)], { showOutput: false });
+		await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, npmPackage, error)], { showOutput: false });
 	} else {
 		console.info('Nothing to commit');
 	}
@@ -266,6 +226,21 @@ async function commandBuild(args: CommandBuildArgs) {
 
 	const repoDir = args.pluginRepoDir;
 	await checkPluginRepository(repoDir);
+
+	// When starting, always update and commit README, in case something has
+	// been updated via a pull request (for example obsoletes.json being
+	// modified). We do that separately so that the README update doesn't get
+	// mixed up with plugin updates, as in this example:
+	// https://github.com/joplin/plugins/commit/8a65bbbf64bf267674f854a172466ffd4f07c672
+	const manifests = await readManifests(repoDir);
+	await updateReadme(`${repoDir}/README.md`, manifests);
+	const previousDir = chdir(repoDir);
+	if (!(await gitRepoClean())) {
+		console.info('Updating README...');
+		await execCommand2('git add -A', { showOutput: true });
+		await execCommand2('git commit -m "Update README"', { showOutput: true });
+	}
+	chdir(previousDir);
 
 	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showOutput: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
