@@ -1387,7 +1387,7 @@ class Setting extends BaseModel {
 	static async saveAll() {
 		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
 
-		this.logger().info('Saving settings...');
+		this.logger().debug('Saving settings...');
 		shim.clearTimeout(this.saveTimeoutId_);
 		this.saveTimeoutId_ = null;
 
@@ -1434,7 +1434,7 @@ class Setting extends BaseModel {
 
 		await BaseModel.db().transactionExecBatch(queries);
 
-		this.logger().info('Settings have been saved.');
+		this.logger().debug('Settings have been saved.');
 	}
 
 	static scheduleChangeEvent() {
