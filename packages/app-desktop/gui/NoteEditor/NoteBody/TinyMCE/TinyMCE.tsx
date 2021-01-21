@@ -960,11 +960,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			//
 			// Any maybe others, so to catch them all we only check the prefix
 
-			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem'];
+			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem', 'Bold', 'Italic', 'Underline', 'Paragraph'];
 
 			if (
 				changeCommands.includes(c) ||
 				c.indexOf('Insert') === 0 ||
+				c.indexOf('Header') === 0 ||
 				c.indexOf('mceToggle') === 0 ||
 				c.indexOf('mceInsert') === 0 ||
 				c.indexOf('mceTable') === 0
