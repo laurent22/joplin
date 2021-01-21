@@ -172,6 +172,10 @@ export default function(props: Props) {
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	}, [pluginSettings, props.onChange]);
 
+	const onBrowsePlugins = useCallback(() => {
+		bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
+	}, []);
+
 	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
 		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
 	}, []);
@@ -179,16 +183,20 @@ export default function(props: Props) {
 	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
 
 	const onToolsClick = useCallback(async () => {
-		const template = [];
-
-		template.push({
-			label: _('Install from file'),
-			click: onInstall,
-		});
+		const template = [
+			{
+				label: _('Browse all plugins'),
+				click: onBrowsePlugins,
+			},
+			{
+				label: _('Install from file'),
+				click: onInstall,
+			},
+		];
 
 		const menu = bridge().Menu.buildFromTemplate(template);
 		menu.popup(bridge().window());
-	}, [onInstall]);
+	}, [onInstall, onBrowsePlugins]);
 
 	const onSearchQueryChange = useCallback((event: OnChangeEvent) => {
 		setSearchQuery(event.value);
