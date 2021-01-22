@@ -56,7 +56,7 @@ export default class JoplinSettings {
 
 		if ('isEnum' in settingItem) internalSettingItem.isEnum = settingItem.isEnum;
 		if ('section' in settingItem) internalSettingItem.section = this.namespacedKey(settingItem.section);
-		if ('options' in settingItem) internalSettingItem.options = settingItem.options;
+		if ('options' in settingItem) internalSettingItem.options = () => settingItem.options;
 		if ('appTypes' in settingItem) internalSettingItem.appTypes = settingItem.appTypes;
 		if ('secure' in settingItem) internalSettingItem.secure = settingItem.secure;
 		if ('advanced' in settingItem) internalSettingItem.advanced = settingItem.advanced;

@@ -1,5 +1,5 @@
 import joplin from 'api';
-import { ToolbarButtonLocation } from 'api/types';
+import { SettingItemType, ToolbarButtonLocation } from 'api/types';
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -10,10 +10,24 @@ joplin.plugins.register({
 		
 		await joplin.settings.registerSetting('myCustomSetting', {
 			value: 123,
-			type: 1,
+			type: SettingItemType.Int,
 			section: 'myCustomSection',
 			public: true,
 			label: 'My Custom Setting',
+		});
+
+		await joplin.settings.registerSetting('multiOptionTest', {
+			value: 'en',
+			type: SettingItemType.String,
+			section: 'myCustomSection',
+			isEnum: true,
+			public: true,
+			label: 'Multi-options test',
+			options: {
+				'en': 'English',
+				'fr': 'French',
+				'es': 'Spanish',
+			},
 		});
 
 		await joplin.commands.register({
