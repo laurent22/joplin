@@ -78,7 +78,6 @@ export default function Sidebar(props: Props) {
 			if (s1 === SettingSectionSource.Plugin && s2 === SettingSectionSource.Default) return +1;
 			return 0;
 		});
-		console.info('SORTED', output);
 		return output;
 	}, [props.sections]);
 

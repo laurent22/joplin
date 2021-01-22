@@ -863,7 +863,7 @@ class Setting extends BaseModel {
 				section: 'sync',
 				advanced: true,
 				show: (settings: any) => {
-					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
+					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
 				appTypes: ['desktop', 'cli'],
@@ -876,7 +876,7 @@ class Setting extends BaseModel {
 				advanced: true,
 				section: 'sync',
 				show: (settings: any) => {
-					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
+					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
 				appTypes: ['desktop', 'cli'],
