@@ -10,15 +10,5 @@ joplin.plugins.register({
 			'matchHighlighter',
 			'./joplinMatchHighlighter.js'
 		);
-
-		await joplin.commands.register({
-			name: 'editor.printSomething',
-			label: 'Print some random string',
-			execute: async () => {
-				alert('mathMode.printSomething not implemented by Editor yet');
-			},
-		});
-
-		await joplin.views.menuItems.create('printSomethingButton', 'editor.printSomething', MenuItemLocation.Tools, { accelerator: 'Ctrl+Alt+Shift+U' });
 	},
 });

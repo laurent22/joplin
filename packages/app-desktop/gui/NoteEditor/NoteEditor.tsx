@@ -233,7 +233,6 @@ function NoteEditor(props: NoteEditorProps) {
 
 	useWindowCommandHandler({
 		dispatch: props.dispatch,
-		plugins: props.plugins,
 		formNote,
 		setShowLocalSearch,
 		noteSearchBarRef,
