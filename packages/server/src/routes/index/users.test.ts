@@ -128,12 +128,17 @@ describe('index_users', function() {
 		await patchUser(session.id, { id: user.id, email: 'test2@example.com' });
 		const modUser: User = await userModel.load(user.id);
 		expect(modUser.email).toBe('test2@example.com');
+	});
 
-		// const previousPassword = modUser.password;
-		// await patchUser(session.id, { id: user.id, password: 'abcdefgh', password2: 'abcdefgh' });
-		// modUser = await userModel.load(user.id);
-		// expect(!!modUser.password).toBe(true);
-		// expect(modUser.password === previousPassword).toBe(false);
+	test('should change the password', async function() {
+		const { user, session } = await createUserAndSession(1, true);
+
+		const userModel = models().user({ userId: user.id });
+
+		await patchUser(session.id, { id: user.id, password: 'abcdefgh', password2: 'abcdefgh' });
+		const modUser = await userModel.login('user1@localhost', 'abcdefgh');
+		expect(!!modUser).toBe(true);
+		expect(modUser.id).toBe(user.id);
 	});
 
 	test('should get a user', async function() {
