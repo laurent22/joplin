@@ -1,23 +1,26 @@
-const { execCommand, githubRelease, rootDir } = require('./tool-utils.js');
+import { execCommand2, githubRelease, gitPullTry, rootDir } from './tool-utils';
 
 const appDir = `${rootDir}/packages/app-desktop`;
 
 async function main() {
+	await gitPullTry(false);
+
 	const argv = require('yargs').argv;
 
 	process.chdir(appDir);
 
 	console.info(`Running from: ${process.cwd()}`);
 
-	const version = (await execCommand('npm version patch')).trim();
+	const version = (await execCommand2('npm version patch')).trim();
 	const tagName = version;
 
 	console.info(`New version number: ${version}`);
 
-	console.info(await execCommand('git add -A'));
-	console.info(await execCommand(`git commit -m "Desktop release ${version}"`));
-	console.info(await execCommand(`git tag ${tagName}`));
-	console.info(await execCommand('git push && git push --tags'));
+	await execCommand2('git add -A');
+	await execCommand2(`git commit -m "Desktop release ${version}"`);
+	await execCommand2(`git tag ${tagName}`);
+	await execCommand2('git push');
+	await execCommand2('git push --tags');
 
 	const releaseOptions = { isDraft: true, isPreRelease: !!argv.beta };
 

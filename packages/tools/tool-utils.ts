@@ -258,11 +258,11 @@ export async function gitRepoCleanTry() {
 	if (!(await gitRepoClean())) throw new Error(`There are pending changes in the repository: ${process.cwd()}`);
 }
 
-export async function gitPullTry() {
+export async function gitPullTry(ignoreIfNotBranch = true) {
 	try {
 		await execCommand('git pull');
 	} catch (error) {
-		if (error.message.includes('no tracking information for the current branch')) {
+		if (ignoreIfNotBranch && error.message.includes('no tracking information for the current branch')) {
 			console.info('Skipping git pull because no tracking information on current branch');
 		} else {
 			throw error;
