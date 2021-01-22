@@ -1,15 +1,9 @@
 const React = require('react');
 const Component = React.Component;
-const Setting = require('@joplin/lib/models/Setting').default;
 const { connect } = require('react-redux');
 const bridge = require('electron').remote.require('./bridge').default;
+const getWindowTitle = require('./getWindowTitle');
 
-function truncStr(str, max = 30) {
-	if (str.length > max) {
-		return `${str.substring(0, max - '..'.length)}..`;
-	}
-	return str;
-}
 
 class NavigatorComponent extends Component {
 	constructor(props) {
@@ -18,49 +12,8 @@ class NavigatorComponent extends Component {
 	}
 	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.route) {
-			const windowTitle = [];
-			const txt = this.getWindowTitle(newProps);
-			if (txt) { windowTitle.push(txt); }
-			const devMarker = Setting.value('env') === 'dev' ? ' (DEV)' : '';
-			windowTitle.push(`Joplin${devMarker}`);
-			this.updateWindowTitle(windowTitle.join(' - '));
+			this.updateWindowTitle(getWindowTitle(newProps));
 		}
-	}
-	getWindowTitle(newProps) {
-		let currentNote = null;
-		let currentFolder = null;
-		if (newProps.selectedNoteIds.length) {
-			const noteId = newProps.selectedNoteIds[0];
-			const note = newProps.notes.find((_note) => _note.id == noteId);
-			if (note) {
-				currentNote = {
-					id: noteId,
-					title: note.title,
-				};
-			}
-		}
-		if (newProps.selectedFolderId) {
-			const folder = newProps.folders.find((_folder) => _folder.id == newProps.selectedFolderId);
-			if (folder) {
-				currentFolder = {
-					id: newProps.selectedFolderId,
-					title: folder.title,
-				};
-			}
-		}
-		const screenInfo = this.props.screens[newProps.route.routeName];
-		let txt = null;
-		if (screenInfo.title) {
-			txt = screenInfo.title();
-		} else if (newProps.route.routeName == 'Main' && currentFolder && currentNote) {
-			const folderTitle = currentFolder.title.trim();
-			let noteTitle = currentNote.title.trim();
-			if (!noteTitle.length) {
-				noteTitle = 'Untitled';
-			}
-			txt = `${truncStr(folderTitle)} > ${truncStr(noteTitle, 50)}`;
-		}
-		return txt;
 	}
 	updateWindowTitle(title) {
 		if (this.prevTitle != title) {

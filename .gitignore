@@ -1675,3 +1675,5 @@ packages/tools/tool-utils.d.ts
 packages/tools/tool-utils.js
 packages/tools/tool-utils.js.map
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+packages/app-desktop/gui/getWindowTitle.js
+packages/app-desktop/gui/getWindowTitle.test.js
