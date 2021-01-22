@@ -4,10 +4,10 @@ import ButtonBar from '../ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
-const Setting = require('@joplin/lib/models/Setting').default;
+import Setting from '@joplin/lib/models/Setting';
 const bridge = require('electron').remote.require('./bridge').default;
 const { themeStyle } = require('@joplin/lib/theme');
-const { ReportService } = require('@joplin/lib/services/report.js');
+import  ReportService from '@joplin/lib/services/ReportService';
 const fs = require('fs-extra');
 
 interface Props {

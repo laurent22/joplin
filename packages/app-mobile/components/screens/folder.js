@@ -2,7 +2,7 @@ const React = require('react');
 
 const { View, TextInput, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
-const Folder = require('@joplin/lib/models/Folder.js');
+const Folder = require('@joplin/lib/models/Folder').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { ScreenHeader } = require('../screen-header.js');
 const { BaseScreenComponent } = require('../base-screen.js');

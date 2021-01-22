@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 
 import KeychainService from './keychain/KeychainService';
-const Setting = require('../models/Setting').default;
-const uuid = require('../uuid').default;
+import Setting from '../models/Setting';
+import uuid from '../uuid';
 
 // This function takes care of initialising both the keychain service and settings.
 //

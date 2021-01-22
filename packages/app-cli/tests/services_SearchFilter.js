@@ -4,13 +4,13 @@
 
 const time = require('@joplin/lib/time').default;
 const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('./test-utils.js');
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
-const Note = require('@joplin/lib/models/Note');
-const Folder = require('@joplin/lib/models/Folder');
-const Tag = require('@joplin/lib/models/Tag');
-const ItemChange = require('@joplin/lib/models/ItemChange');
+const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
+const Note = require('@joplin/lib/models/Note').default;
+const Folder = require('@joplin/lib/models/Folder').default;
+const Tag = require('@joplin/lib/models/Tag').default;
+const ItemChange = require('@joplin/lib/models/ItemChange').default;
 const Setting = require('@joplin/lib/models/Setting').default;
-const Resource = require('@joplin/lib/models/Resource.js');
+const Resource = require('@joplin/lib/models/Resource').default;
 const shim = require('@joplin/lib/shim').default;
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 

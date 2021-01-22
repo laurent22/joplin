@@ -7,16 +7,16 @@ import shim from '@joplin/lib/shim';
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Tag = require('@joplin/lib/models/Tag');
-const Folder = require('@joplin/lib/models/Folder');
-const Note = require('@joplin/lib/models/Note');
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import BaseModel from '@joplin/lib/BaseModel';
+import Tag from '@joplin/lib/models/Tag';
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
-const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
+import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 
 const PLUGIN_NAME = 'gotoAnything';
 

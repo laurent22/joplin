@@ -1,7 +1,7 @@
 const { isHidden } = require('./path-utils');
 const Logger = require('./Logger').default;
 const shim = require('./shim').default;
-const BaseItem = require('./models/BaseItem.js');
+const BaseItem = require('./models/BaseItem').default;
 const JoplinError = require('./JoplinError');
 const ArrayUtils = require('./ArrayUtils');
 const time = require('./time').default;

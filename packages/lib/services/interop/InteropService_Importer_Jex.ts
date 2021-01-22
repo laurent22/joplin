@@ -1,7 +1,7 @@
 import { ImportExportResult } from './types';
 
-const InteropService_Importer_Base = require('./InteropService_Importer_Base').default;
-const InteropService_Importer_Raw = require('./InteropService_Importer_Raw').default;
+import InteropService_Importer_Base from './InteropService_Importer_Base';
+import InteropService_Importer_Raw from './InteropService_Importer_Raw';
 const { filename } = require('../../path-utils');
 const fs = require('fs-extra');
 

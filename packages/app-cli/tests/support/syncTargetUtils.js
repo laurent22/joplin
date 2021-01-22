@@ -1,9 +1,9 @@
 const { syncDir, fileApi, synchronizer, createSyncTargetSnapshot, loadEncryptionMasterKey, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../test-utils.js');
 const Setting = require('@joplin/lib/models/Setting').default;
-const Folder = require('@joplin/lib/models/Folder');
-const Note = require('@joplin/lib/models/Note');
-const Tag = require('@joplin/lib/models/Tag');
-const Resource = require('@joplin/lib/models/Resource');
+const Folder = require('@joplin/lib/models/Folder').default;
+const Note = require('@joplin/lib/models/Note').default;
+const Tag = require('@joplin/lib/models/Tag').default;
+const Resource = require('@joplin/lib/models/Resource').default;
 const markdownUtils = require('@joplin/lib/markdownUtils').default;;
 const shim = require('@joplin/lib/shim').default;
 const fs = require('fs-extra');

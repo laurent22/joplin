@@ -9,10 +9,10 @@ import usePrevious from '../../hooks/usePrevious';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 
 const { MarkupToHtml } = require('@joplin/renderer');
-const Note = require('@joplin/lib/models/Note');
+import Note from '@joplin/lib/models/Note';
 const { reg } = require('@joplin/lib/registry.js');
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker.js');
+import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import  DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 
 export interface OnLoadEvent {
 	formNote: FormNote;

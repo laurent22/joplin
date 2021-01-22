@@ -1,10 +1,12 @@
-const BaseModel = require('../BaseModel').default;
-const BaseItem = require('./BaseItem.js');
-const NoteTag = require('./NoteTag.js');
-const Note = require('./Note.js');
-const { _ } = require('../locale');
+import { TagEntity } from '../services/database/types';
 
-class Tag extends BaseItem {
+import BaseModel from '../BaseModel';
+import BaseItem from './BaseItem';
+import NoteTag from './NoteTag';
+import Note from './Note';
+import { _ } from '../locale';
+
+export default class Tag extends BaseItem {
 	static tableName() {
 		return 'tags';
 	}
@@ -13,7 +15,7 @@ class Tag extends BaseItem {
 		return BaseModel.TYPE_TAG;
 	}
 
-	static async noteIds(tagId) {
+	static async noteIds(tagId: string) {
 		const rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
@@ -22,7 +24,7 @@ class Tag extends BaseItem {
 		return output;
 	}
 
-	static async notes(tagId, options = null) {
+	static async notes(tagId: string, options: any = null) {
 		if (options === null) options = {};
 
 		const noteIds = await this.noteIds(tagId);
@@ -37,7 +39,7 @@ class Tag extends BaseItem {
 	}
 
 	// Untag all the notes and delete tag
-	static async untagAll(tagId) {
+	static async untagAll(tagId: string) {
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ?', [tagId]);
 		for (let i = 0; i < noteTags.length; i++) {
 			await NoteTag.delete(noteTags[i].id);
@@ -46,7 +48,7 @@ class Tag extends BaseItem {
 		await Tag.delete(tagId);
 	}
 
-	static async delete(id, options = null) {
+	static async delete(id: string, options: any = null) {
 		if (!options) options = {};
 
 		await super.delete(id, options);
@@ -57,7 +59,7 @@ class Tag extends BaseItem {
 		});
 	}
 
-	static async addNote(tagId, noteId) {
+	static async addNote(tagId: string, noteId: string) {
 		const hasIt = await this.hasNote(tagId, noteId);
 		if (hasIt) return;
 
@@ -87,7 +89,7 @@ class Tag extends BaseItem {
 		return output;
 	}
 
-	static async removeNote(tagId, noteId) {
+	static async removeNote(tagId: string, noteId: string) {
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?', [tagId, noteId]);
 		for (let i = 0; i < noteTags.length; i++) {
 			await NoteTag.delete(noteTags[i].id);
@@ -99,12 +101,12 @@ class Tag extends BaseItem {
 		});
 	}
 
-	static loadWithCount(tagId) {
+	static loadWithCount(tagId: string) {
 		const sql = 'SELECT * FROM tags_with_note_count WHERE id = ?';
 		return this.modelSelectOne(sql, [tagId]);
 	}
 
-	static async hasNote(tagId, noteId) {
+	static async hasNote(tagId: string, noteId: string) {
 		const r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
 		return !!r;
 	}
@@ -113,24 +115,24 @@ class Tag extends BaseItem {
 		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
 	}
 
-	static async searchAllWithNotes(options) {
+	static async searchAllWithNotes(options: any) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
 		options.conditions.push('id IN (SELECT distinct id FROM tags_with_note_count)');
 		return this.search(options);
 	}
 
-	static async tagsByNoteId(noteId) {
+	static async tagsByNoteId(noteId: string) {
 		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
 		if (!tagIds.length) return [];
 		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${tagIds.join('","')}")`);
 	}
 
-	static async commonTagsByNoteIds(noteIds) {
+	static async commonTagsByNoteIds(noteIds: string[]) {
 		if (!noteIds || noteIds.length === 0) {
 			return [];
 		}
-		let commonTagIds = await NoteTag.tagIdsByNoteId(noteIds[0]);
+		let commonTagIds: string[] = await NoteTag.tagIdsByNoteId(noteIds[0]);
 		for (let i = 1; i < noteIds.length; i++) {
 			const tagIds = await NoteTag.tagIdsByNoteId(noteIds[i]);
 			commonTagIds = commonTagIds.filter(value => tagIds.includes(value));
@@ -141,17 +143,17 @@ class Tag extends BaseItem {
 		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${commonTagIds.join('","')}")`);
 	}
 
-	static async loadByTitle(title) {
+	static async loadByTitle(title: string) {
 		return this.loadByField('title', title, { caseInsensitive: true });
 	}
 
-	static async addNoteTagByTitle(noteId, tagTitle) {
+	static async addNoteTagByTitle(noteId: string, tagTitle: string) {
 		let tag = await this.loadByTitle(tagTitle);
 		if (!tag) tag = await Tag.save({ title: tagTitle }, { userSideValidation: true });
 		return await this.addNote(tag.id, noteId);
 	}
 
-	static async setNoteTagsByTitles(noteId, tagTitles) {
+	static async setNoteTagsByTitles(noteId: string, tagTitles: string[]) {
 		const previousTags = await this.tagsByNoteId(noteId);
 		const addedTitles = [];
 
@@ -171,7 +173,7 @@ class Tag extends BaseItem {
 		}
 	}
 
-	static async setNoteTagsByIds(noteId, tagIds) {
+	static async setNoteTagsByIds(noteId: string, tagIds: string[]) {
 		const previousTags = await this.tagsByNoteId(noteId);
 		const addedIds = [];
 
@@ -188,7 +190,7 @@ class Tag extends BaseItem {
 		}
 	}
 
-	static async save(o, options = null) {
+	static async save(o: TagEntity, options: any = null) {
 		options = Object.assign({}, {
 			dispatchUpdateAction: true,
 			userSideValidation: false,
@@ -203,7 +205,7 @@ class Tag extends BaseItem {
 			}
 		}
 
-		return super.save(o, options).then(tag => {
+		return super.save(o, options).then((tag: TagEntity) => {
 			if (options.dispatchUpdateAction) {
 				this.dispatch({
 					type: 'TAG_UPDATE_ONE',
@@ -215,5 +217,3 @@ class Tag extends BaseItem {
 		});
 	}
 }
-
-module.exports = Tag;

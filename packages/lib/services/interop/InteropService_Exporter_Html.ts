@@ -1,17 +1,28 @@
-const InteropService_Exporter_Base = require('./InteropService_Exporter_Base').default;
+import InteropService_Exporter_Base from './InteropService_Exporter_Base';
+import BaseModel from '../../BaseModel';
+import shim from '../../shim';
+import markupLanguageUtils from '../../markupLanguageUtils';
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import Setting from '../../models/Setting';
+import { MarkupToHtml } from '@joplin/renderer';
+import { ResourceEntity } from '../database/types';
 const { basename, friendlySafeFilename, rtrimSlashes } = require('../../path-utils');
-const BaseModel = require('../../BaseModel').default;
-const Folder = require('../../models/Folder');
-const Note = require('../../models/Note');
-const Setting = require('../../models/Setting').default;
-const shim = require('../../shim').default;
 const { themeStyle } = require('../../theme');
 const { dirname } = require('../../path-utils');
 const { escapeHtml } = require('../../string-utils.js');
-const markupLanguageUtils = require('../../markupLanguageUtils').default;
 const { assetsToHeaders } = require('@joplin/renderer');
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {
+
+	private customCss_: string;
+	private destDir_: string;
+	private filePath_: string;
+	private createdDirs_: string[] = [];
+	private resourceDir_: string;
+	private markupToHtml_: MarkupToHtml;
+	private resources_: ResourceEntity[] = [];
+	private style_: any;
 
 	async init(path: string, options: any = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
@@ -24,12 +35,10 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			this.filePath_ = null;
 		}
 
-		this.createdDirs_ = [];
 		this.resourceDir_ = this.destDir_ ? `${this.destDir_}/_resources` : null;
 
 		await shim.fsDriver().mkdir(this.destDir_);
 		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml(options.plugins);
-		this.resources_ = [];
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
 

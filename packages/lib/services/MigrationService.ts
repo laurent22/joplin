@@ -1,10 +1,9 @@
-const BaseService = require('./BaseService').default;
-const Migration = require('../models/Migration');
+import BaseService from './BaseService';
+import Migration from '../models/Migration';
 
-class MigrationService extends BaseService {
-	constructor() {
-		super();
-	}
+export default class MigrationService extends BaseService {
+
+	private static instance_: MigrationService;
 
 	static instance() {
 		if (this.instance_) return this.instance_;
@@ -12,7 +11,7 @@ class MigrationService extends BaseService {
 		return this.instance_;
 	}
 
-	async runScript(num) {
+	async runScript(num: number) {
 		const script = Migration.script(num);
 		await script.exec();
 	}
@@ -33,5 +32,3 @@ class MigrationService extends BaseService {
 		}
 	}
 }
-
-module.exports = MigrationService;

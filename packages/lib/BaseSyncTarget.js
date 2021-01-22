@@ -1,4 +1,4 @@
-const EncryptionService = require('./services/EncryptionService.js');
+const EncryptionService = require('./services/EncryptionService').default;
 const shim = require('./shim').default;
 
 class BaseSyncTarget {

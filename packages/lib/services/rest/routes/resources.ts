@@ -8,8 +8,8 @@ import ApiResponse from '../ApiResponse';
 import NoteResource from '../../../models/NoteResource';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
-const Resource = require('../../../models/Resource');
-const Note = require('../../../models/Note');
+import Resource from '../../../models/Resource';
+import Note from '../../../models/Note';
 
 export default async function(request: Request, id: string = null, link: string = null) {
 	// fieldName: "data"

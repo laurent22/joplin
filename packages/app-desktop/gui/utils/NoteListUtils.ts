@@ -7,11 +7,11 @@ import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import BaseModel from '@joplin/lib/BaseModel';
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const Note = require('@joplin/lib/models/Note');
+import Note from '@joplin/lib/models/Note';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface ContextMenuProps {

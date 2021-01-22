@@ -4,7 +4,7 @@ import { ErrorMethodNotAllowed, ErrorNotFound } from './errors';
 import paginatedResults from './paginatedResults';
 import readonlyProperties from './readonlyProperties';
 import requestFields from './requestFields';
-const BaseItem = require('../../../models/BaseItem');
+import BaseItem from '../../../models/BaseItem';
 
 export default async function(modelType: number, request: Request, id: string = null, link: string = null) {
 	if (link) throw new ErrorNotFound(); // Default action doesn't support links at all for now

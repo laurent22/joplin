@@ -1,6 +1,6 @@
 import shim from './shim';
 import { _ } from './locale';
-const Logger = require('./Logger').default;
+import Logger from './Logger';
 const JoplinError = require('./JoplinError');
 const { rtrimSlashes } = require('./path-utils');
 const base64 = require('base-64');

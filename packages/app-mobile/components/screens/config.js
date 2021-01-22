@@ -11,12 +11,12 @@ const Setting = require('@joplin/lib/models/Setting').default;
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
 const { reg } = require('@joplin/lib/registry.js');
-const NavService = require('@joplin/lib/services/NavService.js');
+const NavService = require('@joplin/lib/services/NavService').default;
 const VersionInfo = require('react-native-version-info').default;
-const { ReportService } = require('@joplin/lib/services/report.js');
+const ReportService = require('@joplin/lib/services/ReportService').default;
 const time = require('@joplin/lib/time').default;
 const shim = require('@joplin/lib/shim').default;
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
+const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
 const RNFS = require('react-native-fs');
 const checkPermissions = require('../../utils/checkPermissions.js').default;
 

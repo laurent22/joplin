@@ -1,17 +1,17 @@
-const time = require('../time').default;
-const BaseItem = require('../models/BaseItem.js');
-const Alarm = require('../models/Alarm').default;
-const Folder = require('../models/Folder.js');
-const Note = require('../models/Note.js');
-const BaseModel = require('../BaseModel').default;
-const DecryptionWorker = require('./DecryptionWorker');
-const ResourceFetcher = require('./ResourceFetcher');
-const Resource = require('../models/Resource');
-const { _ } = require('../locale');
+import time from '../time';
+import BaseItem from '../models/BaseItem';
+import Alarm from '../models/Alarm';
+import Folder from '../models/Folder';
+import Note from '../models/Note';
+import BaseModel from '../BaseModel';
+import DecryptionWorker from './DecryptionWorker';
+import ResourceFetcher from './ResourceFetcher';
+import Resource from '../models/Resource';
+import { _ } from '../locale';
 const { toTitleCase } = require('../string-utils.js');
 
-class ReportService {
-	csvEscapeCell(cell) {
+export default class ReportService {
+	csvEscapeCell(cell: string) {
 		cell = this.csvValueToString(cell);
 		const output = cell.replace(/"/, '""');
 		if (this.csvCellRequiresQuotes(cell, ',')) {
@@ -20,26 +20,26 @@ class ReportService {
 		return output;
 	}
 
-	csvCellRequiresQuotes(cell, delimiter) {
+	csvCellRequiresQuotes(cell: string, delimiter: string) {
 		if (cell.indexOf('\n') >= 0) return true;
 		if (cell.indexOf('"') >= 0) return true;
 		if (cell.indexOf(delimiter) >= 0) return true;
 		return false;
 	}
 
-	csvValueToString(v) {
+	csvValueToString(v: string) {
 		if (v === undefined || v === null) return '';
 		return v.toString();
 	}
 
-	csvCreateLine(row) {
+	csvCreateLine(row: string[]) {
 		for (let i = 0; i < row.length; i++) {
 			row[i] = this.csvEscapeCell(row[i]);
 		}
 		return row.join(',');
 	}
 
-	csvCreate(rows) {
+	csvCreate(rows: any[]) {
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(this.csvCreateLine(rows[i]));
@@ -47,7 +47,7 @@ class ReportService {
 		return output.join('\n');
 	}
 
-	async basicItemList(option = null) {
+	async basicItemList(option: any = null) {
 		if (!option) option = {};
 		if (!option.format) option.format = 'array';
 
@@ -70,8 +70,8 @@ class ReportService {
 		return option.format === 'csv' ? this.csvCreate(output) : output;
 	}
 
-	async syncStatus(syncTarget) {
-		const output = {
+	async syncStatus(syncTarget: number) {
+		const output: any = {
 			items: {},
 			total: {},
 		};
@@ -110,10 +110,10 @@ class ReportService {
 		return output;
 	}
 
-	async status(syncTarget) {
+	async status(syncTarget: number) {
 		const r = await this.syncStatus(syncTarget);
 		const sections = [];
-		let section = null;
+		let section: any = null;
 
 		const disabledItems = await BaseItem.syncDisabledItems(syncTarget);
 
@@ -153,12 +153,12 @@ class ReportService {
 					canRetryType: 'e2ee',
 					retryHandler: async () => {
 						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
-						DecryptionWorker.instance().scheduleStart();
+						void DecryptionWorker.instance().scheduleStart();
 					},
 				});
 			}
 
-			const retryHandlers = [];
+			const retryHandlers: any[] = [];
 
 			for (let i = 0; i < section.body.length; i++) {
 				if (section.body[i].canRetry) {
@@ -213,7 +213,7 @@ class ReportService {
 					canRetryType: 'resourceDownload',
 					retryHandler: async () => {
 						await Resource.resetErrorStatus(row.resource_id);
-						ResourceFetcher.instance().autoAddResources();
+						void ResourceFetcher.instance().autoAddResources();
 					},
 				});
 			}
@@ -265,5 +265,3 @@ class ReportService {
 		return sections;
 	}
 }
-
-module.exports = { ReportService };

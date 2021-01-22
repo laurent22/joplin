@@ -1,9 +1,9 @@
 import BaseModel from '@joplin/lib/BaseModel';
 
 const { fileApi } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import BaseItem from '@joplin/lib/models/BaseItem';
 
 export async function allNotesFolders() {
 	const folders = await Folder.all();

@@ -3,16 +3,16 @@ import BaseModel from '../BaseModel';
 import BaseService from './BaseService';
 import Setting from '../models/Setting';
 import shim from '../shim';
-const ItemChange = require('../models/ItemChange');
-const Note = require('../models/Note');
-const Resource = require('../models/Resource');
-const SearchEngine = require('./searchengine/SearchEngine');
-const ItemChangeUtils = require('./ItemChangeUtils');
+import ItemChange from '../models/ItemChange';
+import Note from '../models/Note';
+import Resource from '../models/Resource';
+import SearchEngine from './searchengine/SearchEngine';
+import ItemChangeUtils from './ItemChangeUtils';
 const { sprintf } = require('sprintf-js');
 
 export default class ResourceService extends BaseService {
 
-	private static isRunningInBackground_: boolean = false;
+	public static isRunningInBackground_: boolean = false;
 
 	private maintenanceCalls_: boolean[] = [];
 	private maintenanceTimer1_: any = null;
@@ -182,7 +182,7 @@ export default class ResourceService extends BaseService {
 		});
 	}
 
-	private static instance_: ResourceService = null;
+	public static instance_: ResourceService = null;
 
 	public static instance() {
 		if (this.instance_) return this.instance_;

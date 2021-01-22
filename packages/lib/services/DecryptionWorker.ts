@@ -1,28 +1,35 @@
-const BaseItem = require('../models/BaseItem');
-const BaseModel = require('../BaseModel').default;
-const MasterKey = require('../models/MasterKey');
-const Resource = require('../models/Resource');
-const ResourceService = require('./ResourceService').default;
-const Logger = require('../Logger').default;
-const EventEmitter = require('events');
-const shim = require('../shim').default;
+import BaseItem, { ItemsThatNeedDecryptionResult } from '../models/BaseItem';
+import BaseModel from '../BaseModel';
+import MasterKey from '../models/MasterKey';
+import Resource from '../models/Resource';
+import ResourceService from './ResourceService';
+import Logger from '../Logger';
+import shim from '../shim';
+import KvStore from './KvStore';
 
-class DecryptionWorker {
+const EventEmitter = require('events');
+
+export default class DecryptionWorker {
+
+	public static instance_: DecryptionWorker = null;
+
+	private state_: string = 'idle';
+	private logger_: Logger;
+	public dispatch: Function = () => {};
+	private scheduleId_: any = null;
+	private eventEmitter_: any;
+	private kvStore_: KvStore = null;
+	private maxDecryptionAttempts_ = 2;
+	private startCalls_: boolean[] = [];
+	private encryptionService_: any = null;
+
 	constructor() {
 		this.state_ = 'idle';
 		this.logger_ = new Logger();
-
-		this.dispatch = () => {};
-
-		this.scheduleId_ = null;
 		this.eventEmitter_ = new EventEmitter();
-		this.kvStore_ = null;
-		this.maxDecryptionAttempts_ = 2;
-
-		this.startCalls_ = [];
 	}
 
-	setLogger(l) {
+	setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
@@ -30,11 +37,11 @@ class DecryptionWorker {
 		return this.logger_;
 	}
 
-	on(eventName, callback) {
+	on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName, callback) {
+	off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
@@ -44,11 +51,11 @@ class DecryptionWorker {
 		return DecryptionWorker.instance_;
 	}
 
-	setEncryptionService(v) {
+	setEncryptionService(v: any) {
 		this.encryptionService_ = v;
 	}
 
-	setKvStore(v) {
+	setKvStore(v: KvStore) {
 		this.kvStore_ = v;
 	}
 
@@ -67,7 +74,7 @@ class DecryptionWorker {
 
 		this.scheduleId_ = shim.setTimeout(() => {
 			this.scheduleId_ = null;
-			this.start({
+			void this.start({
 				masterKeyNotLoadedHandler: 'dispatch',
 			});
 		}, 1000);
@@ -86,7 +93,7 @@ class DecryptionWorker {
 		return items;
 	}
 
-	async clearDisabledItem(typeId, itemId) {
+	async clearDisabledItem(typeId: string, itemId: string) {
 		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
 
@@ -94,13 +101,13 @@ class DecryptionWorker {
 		await this.kvStore().deleteByPrefix('decrypt:');
 	}
 
-	dispatchReport(report) {
+	dispatchReport(report: any) {
 		const action = Object.assign({}, report);
 		action.type = 'DECRYPTION_WORKER_SET';
 		this.dispatch(action);
 	}
 
-	async start_(options = null) {
+	async start_(options: any = null) {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
@@ -140,7 +147,7 @@ class DecryptionWorker {
 		this.state_ = 'started';
 
 		const excludedIds = [];
-		const decryptedItemCounts = {};
+		const decryptedItemCounts: any = {};
 		let skippedItemCount = 0;
 
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
@@ -150,7 +157,7 @@ class DecryptionWorker {
 			const notLoadedMasterKeyDisptaches = [];
 
 			while (true) {
-				const result = await BaseItem.itemsThatNeedDecryption(excludedIds);
+				const result: ItemsThatNeedDecryptionResult = await BaseItem.itemsThatNeedDecryption(excludedIds);
 				const items = result.items;
 
 				for (let i = 0; i < items.length; i++) {
@@ -263,13 +270,13 @@ class DecryptionWorker {
 
 		if (downloadedButEncryptedBlobCount) {
 			this.logger().info(`DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ${downloadedButEncryptedBlobCount}`);
-			this.scheduleStart();
+			void this.scheduleStart();
 		}
 
 		return finalReport;
 	}
 
-	async start(options) {
+	async start(options: any) {
 		this.startCalls_.push(true);
 		let output = null;
 		try {
@@ -293,13 +300,9 @@ class DecryptionWorker {
 			const iid = shim.setInterval(() => {
 				if (!this.startCalls_.length) {
 					shim.clearInterval(iid);
-					resolve();
+					resolve(null);
 				}
 			}, 100);
 		});
 	}
 }
-
-DecryptionWorker.instance_ = null;
-
-module.exports = DecryptionWorker;

@@ -2,10 +2,10 @@ import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
 import { ltrimSlashes } from '../path-utils';
 import eventManager from '../eventManager';
-const BaseModel = require('../BaseModel').default;
+import BaseModel from '../BaseModel';
 const { Database } = require('../database.js');
 const SyncTargetRegistry = require('../SyncTargetRegistry.js');
-const time = require('../time').default;
+import time from '../time';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
@@ -80,6 +80,81 @@ interface SettingSections {
 }
 
 class Setting extends BaseModel {
+
+	// For backward compatibility
+	public static TYPE_INT = SettingItemType.Int;
+	public static TYPE_STRING = SettingItemType.String;
+	public static TYPE_BOOL = SettingItemType.Bool;
+	public static TYPE_ARRAY = SettingItemType.Array;
+	public static TYPE_OBJECT = SettingItemType.Object;
+	public static TYPE_BUTTON = SettingItemType.Button;
+
+	public static THEME_LIGHT = 1;
+	public static THEME_DARK = 2;
+	public static THEME_OLED_DARK = 22;
+	public static THEME_SOLARIZED_LIGHT = 3;
+	public static THEME_SOLARIZED_DARK = 4;
+	public static THEME_DRACULA = 5;
+	public static THEME_NORD = 6;
+	public static THEME_ARITIM_DARK = 7;
+
+	public static FONT_DEFAULT = 0;
+	public static FONT_MENLO = 1;
+	public static FONT_COURIER_NEW = 2;
+	public static FONT_AVENIR = 3;
+	public static FONT_MONOSPACE = 4;
+
+	public static LAYOUT_ALL = 0;
+	public static LAYOUT_EDITOR_VIEWER = 1;
+	public static LAYOUT_EDITOR_SPLIT = 2;
+	public static LAYOUT_VIEWER_SPLIT = 3;
+
+	public static DATE_FORMAT_1 = 'DD/MM/YYYY';
+	public static DATE_FORMAT_2 = 'DD/MM/YY';
+	public static DATE_FORMAT_3 = 'MM/DD/YYYY';
+	public static DATE_FORMAT_4 = 'MM/DD/YY';
+	public static DATE_FORMAT_5 = 'YYYY-MM-DD';
+	public static DATE_FORMAT_6 = 'DD.MM.YYYY';
+	public static DATE_FORMAT_7 = 'YYYY.MM.DD';
+
+	public static TIME_FORMAT_1 = 'HH:mm';
+	public static TIME_FORMAT_2 = 'h:mm A';
+
+	public static SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
+	public static SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
+	public static SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be re-encrypted, and user has been notified
+
+	public static SYNC_UPGRADE_STATE_IDLE = 0; // Doesn't need to be upgraded
+	public static SYNC_UPGRADE_STATE_SHOULD_DO = 1; // Should be upgraded, but waiting for user to confirm
+	public static SYNC_UPGRADE_STATE_MUST_DO = 2; // Must be upgraded - on next restart, the upgrade will start
+
+	public static custom_css_files = {
+		JOPLIN_APP: 'userchrome.css',
+		RENDERED_MARKDOWN: 'userstyle.css',
+	};
+
+
+	// Contains constants that are set by the application and
+	// cannot be modified by the user:
+	public static constants_: any = {
+		env: 'SET_ME',
+		isDemo: false,
+		appName: 'joplin',
+		appId: 'SET_ME', // Each app should set this identifier
+		appType: 'SET_ME', // 'cli' or 'mobile'
+		resourceDirName: '',
+		resourceDir: '',
+		profileDir: '',
+		templateDir: '',
+		tempDir: '',
+		cacheDir: '',
+		pluginDir: '',
+		flagOpenDevTools: false,
+		syncVersion: 2,
+		startupDevPlugins: [],
+	};
+
+	public static autoSaveEnabled = true;
 
 	private static metadata_: SettingItems = null;
 	private static keychainService_: any = null;
@@ -540,7 +615,7 @@ class Setting extends BaseModel {
 				appTypes: ['cli'],
 				label: () => _('Sort notes by'),
 				options: () => {
-					const Note = require('./Note');
+					const Note = require('./Note').default;
 					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order'];
 					const options: any = {};
 					for (let i = 0; i < noteSortFields.length; i++) {
@@ -566,7 +641,7 @@ class Setting extends BaseModel {
 				appTypes: ['cli'],
 				label: () => _('Sort notebooks by'),
 				options: () => {
-					const Folder = require('./Folder');
+					const Folder = require('./Folder').default;
 					const folderSortFields = ['title', 'last_note_user_updated_time'];
 					const options: any = {};
 					for (let i = 0; i < folderSortFields.length; i++) {
@@ -1608,80 +1683,5 @@ class Setting extends BaseModel {
 		return name[0].toUpperCase() + name.substr(1).toLowerCase();
 	}
 }
-
-// For backward compatibility
-Setting.TYPE_INT = SettingItemType.Int;
-Setting.TYPE_STRING = SettingItemType.String;
-Setting.TYPE_BOOL = SettingItemType.Bool;
-Setting.TYPE_ARRAY = SettingItemType.Array;
-Setting.TYPE_OBJECT = SettingItemType.Object;
-Setting.TYPE_BUTTON = SettingItemType.Button;
-
-Setting.THEME_LIGHT = 1;
-Setting.THEME_DARK = 2;
-Setting.THEME_OLED_DARK = 22;
-Setting.THEME_SOLARIZED_LIGHT = 3;
-Setting.THEME_SOLARIZED_DARK = 4;
-Setting.THEME_DRACULA = 5;
-Setting.THEME_NORD = 6;
-Setting.THEME_ARITIM_DARK = 7;
-
-Setting.FONT_DEFAULT = 0;
-Setting.FONT_MENLO = 1;
-Setting.FONT_COURIER_NEW = 2;
-Setting.FONT_AVENIR = 3;
-Setting.FONT_MONOSPACE = 4;
-
-Setting.LAYOUT_ALL = 0;
-Setting.LAYOUT_EDITOR_VIEWER = 1;
-Setting.LAYOUT_EDITOR_SPLIT = 2;
-Setting.LAYOUT_VIEWER_SPLIT = 3;
-
-Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
-Setting.DATE_FORMAT_2 = 'DD/MM/YY';
-Setting.DATE_FORMAT_3 = 'MM/DD/YYYY';
-Setting.DATE_FORMAT_4 = 'MM/DD/YY';
-Setting.DATE_FORMAT_5 = 'YYYY-MM-DD';
-Setting.DATE_FORMAT_6 = 'DD.MM.YYYY';
-Setting.DATE_FORMAT_7 = 'YYYY.MM.DD';
-
-Setting.TIME_FORMAT_1 = 'HH:mm';
-Setting.TIME_FORMAT_2 = 'h:mm A';
-
-Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
-Setting.SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
-Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be re-encrypted, and user has been notified
-
-Setting.SYNC_UPGRADE_STATE_IDLE = 0; // Doesn't need to be upgraded
-Setting.SYNC_UPGRADE_STATE_SHOULD_DO = 1; // Should be upgraded, but waiting for user to confirm
-Setting.SYNC_UPGRADE_STATE_MUST_DO = 2; // Must be upgraded - on next restart, the upgrade will start
-
-Setting.custom_css_files = {
-	JOPLIN_APP: 'userchrome.css',
-	RENDERED_MARKDOWN: 'userstyle.css',
-};
-
-
-// Contains constants that are set by the application and
-// cannot be modified by the user:
-Setting.constants_ = {
-	env: 'SET_ME',
-	isDemo: false,
-	appName: 'joplin',
-	appId: 'SET_ME', // Each app should set this identifier
-	appType: 'SET_ME', // 'cli' or 'mobile'
-	resourceDirName: '',
-	resourceDir: '',
-	profileDir: '',
-	templateDir: '',
-	tempDir: '',
-	cacheDir: '',
-	pluginDir: '',
-	flagOpenDevTools: false,
-	syncVersion: 2,
-	startupDevPlugins: [],
-};
-
-Setting.autoSaveEnabled = true;
 
 export default Setting;

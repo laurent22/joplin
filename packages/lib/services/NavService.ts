@@ -1,5 +1,9 @@
-class NavService {
-	static async go(routeName) {
+export default class NavService {
+
+	public static dispatch: Function = () => {};
+	private static handlers_: Function[] = [];
+
+	static async go(routeName: string) {
 		if (this.handlers_.length) {
 			const r = await this.handlers_[this.handlers_.length - 1]();
 			if (r) return r;
@@ -11,23 +15,19 @@ class NavService {
 		});
 	}
 
-	static addHandler(handler) {
+	static addHandler(handler: Function) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];
 			if (h === handler) return;
 		}
 
-		return this.handlers_.push(handler);
+		this.handlers_.push(handler);
 	}
 
-	static removeHandler(hanlder) {
+	static removeHandler(hanlder: Function) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];
 			if (h === hanlder) this.handlers_.splice(i, 1);
 		}
 	}
 }
-
-NavService.handlers_ = [];
-
-module.exports = NavService;

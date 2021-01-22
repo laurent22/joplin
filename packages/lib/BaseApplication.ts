@@ -14,14 +14,14 @@ const { defaultState, stateUtils } = require('./reducer');
 const { JoplinDatabase } = require('./joplin-database.js');
 const { FoldersScreenUtils } = require('./folders-screen-utils.js');
 const { DatabaseDriverNode } = require('./database-driver-node.js');
-const BaseModel = require('./BaseModel').default;
-const Folder = require('./models/Folder.js');
-const BaseItem = require('./models/BaseItem.js');
-const Note = require('./models/Note.js');
-const Tag = require('./models/Tag.js');
+import BaseModel from './BaseModel';
+import Folder from './models/Folder';
+import BaseItem from './models/BaseItem';
+import Note from './models/Note';
+import Tag from './models/Tag';
 const { splitCommandString } = require('./string-utils.js');
 const { reg } = require('./registry.js');
-const time = require('./time').default;
+import time from './time';
 const BaseSyncTarget = require('./BaseSyncTarget.js');
 const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
 const os = require('os');
@@ -35,15 +35,15 @@ const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
-const EncryptionService = require('./services/EncryptionService');
-const ResourceFetcher = require('./services/ResourceFetcher');
-const SearchEngineUtils = require('./services/searchengine/SearchEngineUtils');
-const SearchEngine = require('./services/searchengine/SearchEngine');
-const RevisionService = require('./services/RevisionService');
-const ResourceService = require('./services/RevisionService');
-const DecryptionWorker = require('./services/DecryptionWorker');
+import  EncryptionService from './services/EncryptionService';
+import  ResourceFetcher from './services/ResourceFetcher';
+import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
+import SearchEngine from './services/searchengine/SearchEngine';
+import  RevisionService from './services/RevisionService';
+import  ResourceService from './services/ResourceService';
+import  DecryptionWorker from './services/DecryptionWorker';
 const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
-const MigrationService = require('./services/MigrationService');
+import  MigrationService from './services/MigrationService';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -94,7 +94,8 @@ export default class BaseApplication {
 		BaseItem.revisionService_ = null;
 		RevisionService.instance_ = null;
 		ResourceService.instance_ = null;
-		ResourceService.isRunningInBackground = false;
+		ResourceService.isRunningInBackground_ = false;
+		// ResourceService.isRunningInBackground_ = false;
 		ResourceFetcher.instance_ = null;
 		EncryptionService.instance_ = null;
 		DecryptionWorker.instance_ = null;
@@ -365,7 +366,7 @@ export default class BaseApplication {
 
 	resourceFetcher_downloadComplete(event: any) {
 		if (event.encrypted) {
-			DecryptionWorker.instance().scheduleStart();
+			void DecryptionWorker.instance().scheduleStart();
 		}
 	}
 
@@ -422,7 +423,7 @@ export default class BaseApplication {
 			'encryption.enabled': async () => {
 				if (this.hasGui()) {
 					await EncryptionService.instance().loadMasterKeysFromSettings();
-					DecryptionWorker.instance().scheduleStart();
+					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
 					this.dispatch({
@@ -568,11 +569,11 @@ export default class BaseApplication {
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
-			DecryptionWorker.instance().scheduleStart();
+			void DecryptionWorker.instance().scheduleStart();
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
-			ResourceFetcher.instance().autoAddResources();
+			void ResourceFetcher.instance().autoAddResources();
 		}
 
 		if (action.type == 'SETTING_UPDATE_ONE') {
@@ -802,7 +803,7 @@ export default class BaseApplication {
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
 
 		if (!Setting.value('api.token')) {
-			EncryptionService.instance()
+			void EncryptionService.instance()
 				.randomHexString(64)
 				.then((token: string) => {
 					Setting.setValue('api.token', token);
@@ -829,7 +830,7 @@ export default class BaseApplication {
 		});
 		ResourceFetcher.instance().setLogger(globalLogger);
 		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
-		ResourceFetcher.instance().start();
+		void ResourceFetcher.instance().start();
 
 		SearchEngine.instance().setDb(reg.db());
 		SearchEngine.instance().setLogger(reg.logger());

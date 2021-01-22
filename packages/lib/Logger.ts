@@ -1,5 +1,5 @@
 const moment = require('moment');
-const time = require('./time').default;
+import time from './time';
 const { FsDriverDummy } = require('./fs-driver-dummy.js');
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;

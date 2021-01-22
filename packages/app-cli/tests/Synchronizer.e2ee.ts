@@ -3,12 +3,12 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 
 const { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Resource = require('@joplin/lib/models/Resource.js');
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
-const MasterKey = require('@joplin/lib/models/MasterKey');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import Resource from '@joplin/lib/models/Resource';
+import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import MasterKey from '@joplin/lib/models/MasterKey';
+import BaseItem from '@joplin/lib/models/BaseItem';
 
 let insideBeforeEach = false;
 

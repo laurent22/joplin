@@ -7,8 +7,8 @@ import Setting from '@joplin/lib/models/Setting';
 
 const fs = require('fs-extra');
 const { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('./test-utils.js');
-const Note = require('@joplin/lib/models/Note');
-const Folder = require('@joplin/lib/models/Folder');
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
 

@@ -1,7 +1,7 @@
-const Setting = require('../models/Setting').default;
-const ItemChange = require('../models/ItemChange');
+import Setting from '../models/Setting';
+import ItemChange from '../models/ItemChange';
 
-class ItemChangeUtils {
+export default class ItemChangeUtils {
 	static async deleteProcessedChanges() {
 		const lastProcessedChangeIds = [Setting.value('resourceService.lastProcessedChangeId'), Setting.value('searchEngine.lastProcessedChangeId'), Setting.value('revisionService.lastProcessedChangeId')];
 
@@ -9,5 +9,3 @@ class ItemChangeUtils {
 		await ItemChange.deleteOldChanges(lowestChangeId);
 	}
 }
-
-module.exports = ItemChangeUtils;

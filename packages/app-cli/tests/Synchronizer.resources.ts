@@ -5,11 +5,11 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { remoteNotesFoldersResources, remoteResources } from './test-utils-synchronizer';
 
 const { synchronizerStart, tempFilePath, resourceFetcher, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Resource = require('@joplin/lib/models/Resource.js');
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import Resource from '@joplin/lib/models/Resource';
+import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import BaseItem from '@joplin/lib/models/BaseItem';
 
 let insideBeforeEach = false;
 

@@ -6,7 +6,7 @@ import { PluginStates } from './services/plugins/reducer';
 import { contentScriptsToRendererRules } from './services/plugins/utils/loadContentScripts';
 
 const htmlUtils = require('./htmlUtils');
-const Resource = require('./models/Resource');
+import Resource from './models/Resource';
 
 class MarkupLanguageUtils {
 	lib_(language: MarkupLanguage) {

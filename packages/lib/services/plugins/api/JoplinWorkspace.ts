@@ -8,12 +8,12 @@ import { Disposable } from './types';
 /**
  * @ignore
  */
-const Note = require('../../../models/Note');
+import Note from '../../../models/Note';
 
 /**
  * @ignore
  */
-const Folder = require('../../../models/Folder');
+import Folder from '../../../models/Folder';
 
 enum ItemChangeEventType {
 	Create = 1,

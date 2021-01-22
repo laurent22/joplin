@@ -19,6 +19,8 @@ let isTestingEnv_ = false;
 let react_: any = null;
 
 const shim = {
+	Geolocation: null as any,
+
 	isNode: () => {
 		if (typeof process === 'undefined') return false;
 		if (shim.isElectron()) return true;
@@ -138,7 +140,7 @@ const shim = {
 	},
 
 	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
-		const time = require('./time').default;
+		const time = require('./time');
 
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms

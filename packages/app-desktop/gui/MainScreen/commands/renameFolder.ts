@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-const Folder = require('@joplin/lib/models/Folder');
+import Folder from '@joplin/lib/models/Folder';
 const bridge = require('electron').remote.require('./bridge').default;
 
 export const declaration: CommandDeclaration = {

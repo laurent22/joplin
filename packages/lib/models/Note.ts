@@ -1,28 +1,36 @@
-const BaseModel = require('../BaseModel').default;
+import BaseModel, { ModelType } from '../BaseModel';
+import BaseItem from './BaseItem';
+import ItemChange from './ItemChange';
+import Setting from './Setting';
+import shim from '../shim';
+import time from '../time';
+import markdownUtils from '../markdownUtils';
+import { NoteEntity } from '../services/database/types';
+
 const { sprintf } = require('sprintf-js');
-const BaseItem = require('./BaseItem.js');
-const ItemChange = require('./ItemChange.js');
-const Resource = require('./Resource.js');
-const Setting = require('./Setting').default;
-const shim = require('../shim').default;
+import  Resource from './Resource';
 const { pregQuote } = require('../string-utils.js');
-const time = require('../time').default;
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('../urlUtils.js');
-const markdownUtils = require('../markdownUtils').default;
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
 
-class Note extends BaseItem {
+export default class Note extends BaseItem {
+
+	public static updateGeolocationEnabled_ = true;
+	private static geolocationUpdating_ = false;
+	private static geolocationCache_: any;
+	private static dueDateObjects_: any;
+
 	static tableName() {
 		return 'notes';
 	}
 
-	static fieldToLabel(field) {
-		const fieldsToLabels = {
+	static fieldToLabel(field: string) {
+		const fieldsToLabels: Record<string, string> = {
 			title: _('title'),
 			user_updated_time: _('updated date'),
 			user_created_time: _('created date'),
@@ -32,11 +40,11 @@ class Note extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	static async serializeForEdit(note) {
+	static async serializeForEdit(note: NoteEntity) {
 		return this.replaceResourceInternalToExternalLinks(await super.serialize(note, ['title', 'body']));
 	}
 
-	static async unserializeForEdit(content) {
+	static async unserializeForEdit(content: string) {
 		content += `\n\ntype_: ${BaseModel.TYPE_NOTE}`;
 		const output = await super.unserialize(content);
 		if (!output.title) output.title = '';
@@ -45,14 +53,14 @@ class Note extends BaseItem {
 		return output;
 	}
 
-	static async serializeAllProps(note) {
+	static async serializeAllProps(note: NoteEntity) {
 		const fieldNames = this.fieldNames();
 		fieldNames.push('type_');
 		lodash.pull(fieldNames, 'title', 'body');
 		return super.serialize(note, fieldNames);
 	}
 
-	static minimalSerializeForDisplay(note) {
+	static minimalSerializeForDisplay(note: NoteEntity) {
 		const n = Object.assign({}, note);
 
 		const fieldNames = this.fieldNames();
@@ -80,21 +88,21 @@ class Note extends BaseItem {
 		return super.serialize(n, fieldNames);
 	}
 
-	static defaultTitle(noteBody) {
+	static defaultTitle(noteBody: string) {
 		return this.defaultTitleFromBody(noteBody);
 	}
 
-	static defaultTitleFromBody(body) {
+	static defaultTitleFromBody(body: string) {
 		return markdownUtils.titleFromBody(body);
 	}
 
-	static geolocationUrl(note) {
+	static geolocationUrl(note: NoteEntity) {
 		if (!('latitude' in note) || !('longitude' in note)) throw new Error('Latitude or longitude is missing');
 		if (!Number(note.latitude) && !Number(note.longitude)) throw new Error(_('This note does not have geolocation information.'));
 		return this.geoLocationUrlFromLatLong(note.latitude, note.longitude);
 	}
 
-	static geoLocationUrlFromLatLong(lat, long) {
+	static geoLocationUrlFromLatLong(lat: number, long: number) {
 		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long);
 	}
 
@@ -102,21 +110,21 @@ class Note extends BaseItem {
 		return BaseModel.TYPE_NOTE;
 	}
 
-	static linkedItemIds(body) {
+	static linkedItemIds(body: string) {
 		if (!body || body.length <= 32) return [];
 
 		const links = urlUtils.extractResourceUrls(body);
-		const itemIds = links.map(l => l.itemId);
+		const itemIds = links.map((l: any) => l.itemId);
 		return ArrayUtils.unique(itemIds);
 	}
 
-	static async linkedItems(body) {
+	static async linkedItems(body: string) {
 		const itemIds = this.linkedItemIds(body);
 		const r = await BaseItem.loadItemsByIds(itemIds);
 		return r;
 	}
 
-	static async linkedItemIdsByType(type, body) {
+	static async linkedItemIdsByType(type: ModelType, body: string) {
 		const items = await this.linkedItems(body);
 		const output = [];
 
@@ -128,15 +136,15 @@ class Note extends BaseItem {
 		return output;
 	}
 
-	static async linkedResourceIds(body) {
+	static async linkedResourceIds(body: string) {
 		return this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
 	}
 
-	static async linkedNoteIds(body) {
+	static async linkedNoteIds(body: string) {
 		return this.linkedItemIdsByType(BaseModel.TYPE_NOTE, body);
 	}
 
-	static async replaceResourceInternalToExternalLinks(body, options = null) {
+	static async replaceResourceInternalToExternalLinks(body: string, options: any = null) {
 		options = Object.assign({}, {
 			useAbsolutePaths: false,
 		}, options);
@@ -166,7 +174,7 @@ class Note extends BaseItem {
 		return body;
 	}
 
-	static async replaceResourceExternalToInternalLinks(body, options = null) {
+	static async replaceResourceExternalToInternalLinks(body: string, options: any = null) {
 		options = Object.assign({}, {
 			useAbsolutePaths: false,
 		}, options);
@@ -233,19 +241,19 @@ class Note extends BaseItem {
 	}
 
 	// Note: sort logic must be duplicated in previews();
-	static sortNotes(notes, orders, uncompletedTodosOnTop) {
-		const noteOnTop = note => {
+	static sortNotes(notes: NoteEntity[], orders: any[], uncompletedTodosOnTop: boolean) {
+		const noteOnTop = (note: NoteEntity) => {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
 		};
 
-		const noteFieldComp = (f1, f2) => {
+		const noteFieldComp = (f1: any, f2: any) => {
 			if (f1 === f2) return 0;
 			return f1 < f2 ? -1 : +1;
 		};
 
 		// Makes the sort deterministic, so that if, for example, a and b have the
 		// same updated_time, they aren't swapped every time a list is refreshed.
-		const sortIdenticalNotes = (a, b) => {
+		const sortIdenticalNotes = (a: NoteEntity, b: NoteEntity) => {
 			let r = null;
 			r = noteFieldComp(a.user_updated_time, b.user_updated_time);
 			if (r) return r;
@@ -262,7 +270,7 @@ class Note extends BaseItem {
 
 		const collator = this.getNaturalSortingCollator();
 
-		return notes.sort((a, b) => {
+		return notes.sort((a: NoteEntity, b: NoteEntity) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
 			if (!noteOnTop(a) && noteOnTop(b)) return +1;
 
@@ -270,8 +278,8 @@ class Note extends BaseItem {
 
 			for (let i = 0; i < orders.length; i++) {
 				const order = orders[i];
-				let aProp = a[order.by];
-				let bProp = b[order.by];
+				let aProp = (a as any)[order.by];
+				let bProp = (b as any)[order.by];
 				if (typeof aProp === 'string') aProp = aProp.toLowerCase();
 				if (typeof bProp === 'string') bProp = bProp.toLowerCase();
 
@@ -289,11 +297,11 @@ class Note extends BaseItem {
 		});
 	}
 
-	static previewFieldsWithDefaultValues(options = null) {
+	static previewFieldsWithDefaultValues(options: any = null) {
 		return Note.defaultValues(this.previewFields(options));
 	}
 
-	static previewFields(options = null) {
+	static previewFields(options: any = null) {
 		options = Object.assign({
 			includeTimestamps: true,
 		}, options);
@@ -309,12 +317,12 @@ class Note extends BaseItem {
 		return output;
 	}
 
-	static previewFieldsSql(fields = null) {
+	static previewFieldsSql(fields: string[] = null) {
 		if (fields === null) fields = this.previewFields();
 		return this.db().escapeFields(fields).join(',');
 	}
 
-	static async loadFolderNoteByField(folderId, field, value) {
+	static async loadFolderNoteByField(folderId: string, field: string, value: any) {
 		if (!folderId) throw new Error('folderId is undefined');
 
 		const options = {
@@ -327,7 +335,7 @@ class Note extends BaseItem {
 		return results.length ? results[0] : null;
 	}
 
-	static async previews(parentId, options = null) {
+	static async previews(parentId: string, options: any = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which is used
 		// to sort already loaded notes.
 
@@ -416,12 +424,12 @@ class Note extends BaseItem {
 		return results;
 	}
 
-	static preview(noteId, options = null) {
+	static preview(noteId: string, options: any = null) {
 		if (!options) options = { fields: null };
 		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
 	}
 
-	static async search(options = null) {
+	static async search(options: any = null) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
@@ -448,7 +456,7 @@ class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
-	static async updateGeolocation(noteId) {
+	static async updateGeolocation(noteId: string) {
 		if (!Setting.value('trackLocation')) return;
 		if (!Note.updateGeolocationEnabled_) return;
 
@@ -496,7 +504,7 @@ class Note extends BaseItem {
 		return Note.save(note);
 	}
 
-	static filter(note) {
+	static filter(note: NoteEntity) {
 		if (!note) return note;
 
 		const output = super.filter(note);
@@ -506,7 +514,7 @@ class Note extends BaseItem {
 		return output;
 	}
 
-	static async copyToFolder(noteId, folderId) {
+	static async copyToFolder(noteId: string, folderId: string) {
 		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
@@ -517,7 +525,7 @@ class Note extends BaseItem {
 		});
 	}
 
-	static async moveToFolder(noteId, folderId) {
+	static async moveToFolder(noteId: string, folderId: string) {
 		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
@@ -533,7 +541,7 @@ class Note extends BaseItem {
 		return Note.save(modifiedNote, { autoTimestamp: false });
 	}
 
-	static changeNoteType(note, type) {
+	static changeNoteType(note: NoteEntity, type: string) {
 		if (!('is_todo' in note)) throw new Error('Missing "is_todo" property');
 
 		const newIsTodo = type === 'todo' ? 1 : 0;
@@ -548,11 +556,11 @@ class Note extends BaseItem {
 		return output;
 	}
 
-	static toggleIsTodo(note) {
+	static toggleIsTodo(note: NoteEntity) {
 		return this.changeNoteType(note, note.is_todo ? 'note' : 'todo');
 	}
 
-	static toggleTodoCompleted(note) {
+	static toggleTodoCompleted(note: NoteEntity) {
 		if (!('todo_completed' in note)) throw new Error('Missing "todo_completed" property');
 
 		note = Object.assign({}, note);
@@ -565,12 +573,12 @@ class Note extends BaseItem {
 		return note;
 	}
 
-	static async duplicateMultipleNotes(noteIds, options = null) {
+	static async duplicateMultipleNotes(noteIds: string[], options: any = null) {
 		// if options.uniqueTitle is true, a unique title for the duplicated file will be assigned.
 		const ensureUniqueTitle = options && options.ensureUniqueTitle;
 
 		for (const noteId of noteIds) {
-			const noteOptions = {};
+			const noteOptions: any = {};
 
 			// If ensureUniqueTitle is truthy, set the original note's name as root for the unique title.
 			if (ensureUniqueTitle) {
@@ -582,7 +590,7 @@ class Note extends BaseItem {
 		}
 	}
 
-	static async duplicate(noteId, options = null) {
+	static async duplicate(noteId: string, options: any = null) {
 		const changes = options && options.changes;
 		const uniqueTitle = options && options.uniqueTitle;
 
@@ -609,13 +617,13 @@ class Note extends BaseItem {
 		return this.save(newNote);
 	}
 
-	static async noteIsOlderThan(noteId, date) {
+	static async noteIsOlderThan(noteId: string, date: number) {
 		const n = await this.db().selectOne('SELECT updated_time FROM notes WHERE id = ?', [noteId]);
 		if (!n) throw new Error(`No such note: ${noteId}`);
 		return n.updated_time < date;
 	}
 
-	static async save(o, options = null) {
+	static async save(o: NoteEntity, options: any = null) {
 		const isNew = this.isNew(o, options);
 		const isProvisional = options && !!options.provisional;
 		const dispatchUpdateAction = options ? options.dispatchUpdateAction !== false : true;
@@ -647,7 +655,7 @@ class Note extends BaseItem {
 		if (oldNote) {
 			for (const field in o) {
 				if (!o.hasOwnProperty(field)) continue;
-				if (o[field] !== oldNote[field]) {
+				if ((o as any)[field] !== oldNote[field]) {
 					changedFields.push(field);
 				}
 			}
@@ -656,7 +664,7 @@ class Note extends BaseItem {
 		const note = await super.save(o, options);
 
 		const changeSource = options && options.changeSource ? options.changeSource : null;
-		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
+		void ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
 		if (dispatchUpdateAction) {
 			this.dispatch({
@@ -677,14 +685,14 @@ class Note extends BaseItem {
 		return note;
 	}
 
-	static async batchDelete(ids, options = null) {
+	static async batchDelete(ids: string[], options: any = null) {
 		ids = ids.slice();
 
 		while (ids.length) {
 			const processIds = ids.splice(0, 50);
 
 			const notes = await Note.byIds(processIds);
-			const beforeChangeItems = {};
+			const beforeChangeItems: any = {};
 			for (const note of notes) {
 				beforeChangeItems[note.id] = JSON.stringify(note);
 			}
@@ -693,7 +701,7 @@ class Note extends BaseItem {
 			const changeSource = options && options.changeSource ? options.changeSource : null;
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];
-				ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
+				void ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
 
 				this.dispatch({
 					type: 'NOTE_DELETE',
@@ -707,11 +715,11 @@ class Note extends BaseItem {
 		return this.modelSelectAll('SELECT id, title, body, is_todo, todo_due, todo_completed, is_conflict FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?', [time.unixMs()]);
 	}
 
-	static needAlarm(note) {
+	static needAlarm(note: NoteEntity) {
 		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict;
 	}
 
-	static dueDateObject(note) {
+	static dueDateObject(note: NoteEntity) {
 		if (!!note.is_todo && note.todo_due) {
 			if (!this.dueDateObjects_) this.dueDateObjects_ = {};
 			if (this.dueDateObjects_[note.todo_due]) return this.dueDateObjects_[note.todo_due];
@@ -723,7 +731,7 @@ class Note extends BaseItem {
 	}
 
 	// Tells whether the conflict between the local and remote note can be ignored.
-	static mustHandleConflict(localNote, remoteNote) {
+	static mustHandleConflict(localNote: NoteEntity, remoteNote: NoteEntity) {
 		// That shouldn't happen so throw an exception
 		if (localNote.id !== remoteNote.id) throw new Error('Cannot handle conflict for two different notes');
 
@@ -737,7 +745,7 @@ class Note extends BaseItem {
 		return false;
 	}
 
-	static markupLanguageToLabel(markupLanguageId) {
+	static markupLanguageToLabel(markupLanguageId: number) {
 		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
 		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_HTML) return 'HTML';
 		throw new Error(`Invalid markup language ID: ${markupLanguageId}`);
@@ -745,7 +753,7 @@ class Note extends BaseItem {
 
 	// When notes are sorted in "custom order", they are sorted by the "order" field first and,
 	// in those cases, where the order field is the same for some notes, by created time.
-	static customOrderByColumns(type = null) {
+	static customOrderByColumns(type: string = null) {
 		if (!type) type = 'object';
 		if (type === 'object') return [{ by: 'order', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }];
 		if (type === 'string') return 'ORDER BY `order` DESC, user_created_time DESC';
@@ -754,7 +762,7 @@ class Note extends BaseItem {
 
 	// Update the note "order" field without changing the user timestamps,
 	// which is generally what we want.
-	static async updateNoteOrder_(note, order) {
+	static async updateNoteOrder_(note: NoteEntity, order: any) {
 		return Note.save(Object.assign({}, note, {
 			order: order,
 			user_updated_time: note.user_updated_time,
@@ -765,7 +773,7 @@ class Note extends BaseItem {
 	// of unecessary updates, so it's the caller's responsability to update
 	// the UI once the call is finished. This is done by listening to the
 	// NOTE_IS_INSERTING_NOTES action in the application middleware.
-	static async insertNotesAt(folderId, noteIds, index) {
+	static async insertNotesAt(folderId: string, noteIds: string[], index: number) {
 		if (!noteIds.length) return;
 
 		const defer = () => {
@@ -874,7 +882,7 @@ class Note extends BaseItem {
 		}
 	}
 
-	static handleTitleNaturalSorting(items, options) {
+	static handleTitleNaturalSorting(items: NoteEntity[], options: any) {
 		if (options.order.length > 0 && options.order[0].by === 'title') {
 			const collator = this.getNaturalSortingCollator();
 			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
@@ -886,8 +894,3 @@ class Note extends BaseItem {
 	}
 
 }
-
-Note.updateGeolocationEnabled_ = true;
-Note.geolocationUpdating_ = false;
-
-module.exports = Note;

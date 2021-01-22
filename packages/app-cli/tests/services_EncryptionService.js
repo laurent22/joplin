@@ -3,16 +3,16 @@
 
 const time = require('@joplin/lib/time').default;
 const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Tag = require('@joplin/lib/models/Tag.js');
+const Folder = require('@joplin/lib/models/Folder').default;
+const Note = require('@joplin/lib/models/Note').default;
+const Tag = require('@joplin/lib/models/Tag').default;
 const { Database } = require('@joplin/lib/database.js');
 const Setting = require('@joplin/lib/models/Setting').default;
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
+const BaseItem = require('@joplin/lib/models/BaseItem').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
-const MasterKey = require('@joplin/lib/models/MasterKey');
+const MasterKey = require('@joplin/lib/models/MasterKey').default;
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
-const EncryptionService = require('@joplin/lib/services/EncryptionService.js');
+const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
 
 let service = null;
 

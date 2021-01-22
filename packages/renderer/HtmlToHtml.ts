@@ -3,9 +3,9 @@ import linkReplacement from './MdToHtml/linkReplacement';
 import utils from './utils';
 
 // TODO: fix
-// const Setting = require('@joplin/lib/models/Setting').default;
+// import Setting from '@joplin/lib/models/Setting';
 // const { themeStyle } = require('@joplin/lib/theme');
-const InMemoryCache = require('./InMemoryCache').default;
+import InMemoryCache from './InMemoryCache';
 const md5 = require('md5');
 
 // Renderered notes can potentially be quite large (for example

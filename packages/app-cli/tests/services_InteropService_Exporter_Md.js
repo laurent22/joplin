@@ -5,9 +5,9 @@ const fs = require('fs-extra');
 const { setupDatabaseAndSynchronizer, switchClient, exportDir } = require('./test-utils.js');
 const InteropService_Exporter_Md = require('@joplin/lib/services/interop/InteropService_Exporter_Md').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
-const Folder = require('@joplin/lib/models/Folder.js');
-const Resource = require('@joplin/lib/models/Resource.js');
-const Note = require('@joplin/lib/models/Note.js');
+const Folder = require('@joplin/lib/models/Folder').default;
+const Resource = require('@joplin/lib/models/Resource').default;
+const Note = require('@joplin/lib/models/Note').default;
 const shim = require('@joplin/lib/shim').default;
 
 describe('services_InteropService_Exporter_Md', function() {

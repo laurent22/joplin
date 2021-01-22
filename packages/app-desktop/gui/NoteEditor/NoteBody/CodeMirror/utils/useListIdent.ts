@@ -1,4 +1,4 @@
-const { isListItem, isEmptyListItem, extractListToken, olLineNumber } = require('@joplin/lib/markdownUtils').default;
+import markdownUtils from '@joplin/lib/markdownUtils';
 
 // Markdown list indentation.
 // If the current line starts with `markup.list` token,
@@ -21,22 +21,22 @@ export default function useListIdent(CodeMirror: any) {
 	}
 
 	function newListToken(cm: any, line: number) {
-		const currentToken = extractListToken(cm.getLine(line));
+		const currentToken = markdownUtils.extractListToken(cm.getLine(line));
 		const indentLevel = getIndentLevel(cm, line);
 
 		while (--line > 0) {
 			const currentLine = cm.getLine(line);
-			if (!isListItem(currentLine)) return currentToken;
+			if (!markdownUtils.isListItem(currentLine)) return currentToken;
 
 			const indent = getIndentLevel(cm, line);
 
 			if (indent < indentLevel - 1) return currentToken;
 
 			if (indent === indentLevel - 1) {
-				if (olLineNumber(currentLine)) {
-					return `${olLineNumber(currentLine) + 1}. `;
+				if (markdownUtils.olLineNumber(currentLine)) {
+					return `${markdownUtils.olLineNumber(currentLine) + 1}. `;
 				}
-				const token = extractListToken(currentLine);
+				const token = markdownUtils.extractListToken(currentLine);
 				if (token.match(/x/)) {
 					return '- [ ] ';
 				}
@@ -50,7 +50,7 @@ export default function useListIdent(CodeMirror: any) {
 	// Gets the character coordinates of the start and end of a list token
 	function getListSpan(listTokens: any, line: string) {
 		let start = listTokens[0].start;
-		const token = extractListToken(line);
+		const token = markdownUtils.extractListToken(line);
 
 		if (listTokens.length > 1 && listTokens[0].string.match(/^\s/)) {
 			start = listTokens[1].start;
@@ -77,10 +77,10 @@ export default function useListIdent(CodeMirror: any) {
 					// this is an edge case for users because there is no clear intended behavior
 					// if the use multicursor with a mix of selected and not selected
 					break;
-				} else if (!isListItem(line) || !isEmptyListItem(line)) {
+				} else if (!markdownUtils.isListItem(line) || !markdownUtils.isEmptyListItem(line)) {
 					cm.replaceRange('\t', anchor, head);
 				} else {
-					if (olLineNumber(line)) {
+					if (markdownUtils.olLineNumber(line)) {
 						const tokens = cm.getLineTokens(anchor.line);
 						const { start, end } = getListSpan(tokens, line);
 						// Resets numbered list to 1.
@@ -111,7 +111,7 @@ export default function useListIdent(CodeMirror: any) {
 					// this is an edge case for users because there is no clear intended behavior
 					// if the use multicursor with a mix of selected and not selected
 					break;
-				} else if (!isListItem(line) || !isEmptyListItem(line)) {
+				} else if (!markdownUtils.isListItem(line) || !markdownUtils.isEmptyListItem(line)) {
 					cm.indentLine(anchor.line, 'subtract');
 				} else {
 					const newToken = newListToken(cm, anchor.line);
@@ -156,7 +156,7 @@ export default function useListIdent(CodeMirror: any) {
 		if (ranges.length === 1) {
 			const line = cm.getLine(anchor.line);
 
-			if (isEmptyListItem(line)) {
+			if (markdownUtils.isEmptyListItem(line)) {
 				const tokens = cm.getLineTokens(anchor.line);
 				//  A empty list item with an indent will have whitespace as the first token
 				if (tokens.length > 1 && tokens[0].string.match(/^\s/)) {

@@ -3,7 +3,7 @@ const { app } = require('./app.js');
 const { _ } = require('@joplin/lib/locale');
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { Database } = require('@joplin/lib/database.js');
-const Note = require('@joplin/lib/models/Note.js');
+const Note = require('@joplin/lib/models/Note').default;
 
 class Command extends BaseCommand {
 	usage() {

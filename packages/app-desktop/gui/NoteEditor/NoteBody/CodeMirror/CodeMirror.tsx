@@ -25,8 +25,7 @@ import { ThemeAppearance } from '@joplin/lib/themes/type';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import dialogs from '../../../dialogs';
 import convertToScreenCoordinates from '../../../utils/convertToScreenCoordinates';
-
-const Note = require('@joplin/lib/models/Note.js');
+import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
@@ -301,7 +300,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			element.id = script.id;
 
 			element.onload = () => {
-				resolve();
+				resolve(null);
 			};
 
 			document.getElementsByTagName('head')[0].appendChild(element);
@@ -700,7 +699,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					value={props.content}
 					searchMarkers={props.searchMarkers}
 					ref={editorRef}
-					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
+					mode={props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					codeMirrorTheme={styles.editor.codeMirrorTheme}
 					style={styles.editor}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}

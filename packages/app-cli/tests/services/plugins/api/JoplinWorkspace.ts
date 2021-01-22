@@ -2,9 +2,9 @@ import Setting from '@joplin/lib/models/Setting';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 const { newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('../../../test-utils');
-const Note = require('@joplin/lib/models/Note');
-const Folder = require('@joplin/lib/models/Folder');
-const ItemChange = require('@joplin/lib/models/ItemChange');
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
+import ItemChange from '@joplin/lib/models/ItemChange';
 
 describe('JoplinWorkspace', () => {
 

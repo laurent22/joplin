@@ -2,7 +2,7 @@ import { Dirnames } from './utils/types';
 import shim from '../../shim';
 
 const JoplinError = require('../../JoplinError');
-const time = require('../../time').default;
+import time from '../../time';
 const { fileExtension, filename } = require('../../path-utils');
 
 export enum LockType {

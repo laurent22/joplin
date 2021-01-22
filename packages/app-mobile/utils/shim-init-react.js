@@ -10,7 +10,7 @@ const { Linking, Platform } = require('react-native');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('@joplin/lib/path-utils');
 const uuid = require('@joplin/lib/uuid').default;
-const Resource = require('@joplin/lib/models/Resource');
+const Resource = require('@joplin/lib/models/Resource').default;
 
 const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),

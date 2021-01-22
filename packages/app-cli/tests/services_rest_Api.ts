@@ -3,13 +3,13 @@ import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
 import shim from '@joplin/lib/shim';
 
 const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder');
-const Resource = require('@joplin/lib/models/Resource');
-const Note = require('@joplin/lib/models/Note');
-const Tag = require('@joplin/lib/models/Tag');
-const NoteTag = require('@joplin/lib/models/NoteTag');
-const ResourceService = require('@joplin/lib/services/ResourceService').default;
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
+import Folder from '@joplin/lib/models/Folder';
+import Resource from '@joplin/lib/models/Resource';
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
+import NoteTag from '@joplin/lib/models/NoteTag';
+import  ResourceService from '@joplin/lib/services/ResourceService';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -422,8 +422,8 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({
 			title: 'ma note un',
 		});
-		Tag.addNote(tag1.id, note.id);
-		Tag.addNote(tag2.id, note.id);
+		await Tag.addNote(tag1.id, note.id);
+		await Tag.addNote(tag2.id, note.id);
 
 		const response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
 			tags: `${tag1.title},${tag3.title}`,
@@ -443,8 +443,8 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({
 			title: 'ma note un',
 		});
-		Tag.addNote(tag1.id, note.id);
-		Tag.addNote(tag2.id, note.id);
+		await Tag.addNote(tag1.id, note.id);
+		await Tag.addNote(tag2.id, note.id);
 
 		const response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
 			tags: `${tag1.title},${newTagTitle}`,
@@ -464,8 +464,8 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({
 			title: 'ma note un',
 		});
-		Tag.addNote(tag1.id, note.id);
-		Tag.addNote(tag2.id, note.id);
+		await Tag.addNote(tag1.id, note.id);
+		await Tag.addNote(tag2.id, note.id);
 
 		const response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
 			title: 'Some other title',
@@ -484,8 +484,8 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({
 			title: 'ma note un',
 		});
-		Tag.addNote(tag1.id, note.id);
-		Tag.addNote(tag2.id, note.id);
+		await Tag.addNote(tag1.id, note.id);
+		await Tag.addNote(tag2.id, note.id);
 
 		const response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
 			tags: '',

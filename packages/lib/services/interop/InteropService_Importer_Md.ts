@@ -1,12 +1,12 @@
 import { ImportExportResult } from './types';
 import { _ } from '../../locale';
 
-const InteropService_Importer_Base = require('./InteropService_Importer_Base').default;
-const Folder = require('../../models/Folder.js');
-const Note = require('../../models/Note.js');
+import InteropService_Importer_Base from './InteropService_Importer_Base';
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
 const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('../../path-utils');
-const shim = require('../../shim').default;
-const { extractImageUrls } = require('../../markdownUtils').default;
+import shim from '../../shim';
+import markdownUtils from '../../markdownUtils';
 const { unique } = require('../../ArrayUtils');
 const { pregQuote } = require('../../string-utils-common');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -65,7 +65,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	 */
 	async importLocalImages(filePath: string, md: string) {
 		let updated = md;
-		const imageLinks = unique(extractImageUrls(md));
+		const imageLinks = unique(markdownUtils.extractImageUrls(md));
 		await Promise.all(imageLinks.map(async (encodedLink: string) => {
 			const link = decodeURI(encodedLink);
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);

@@ -1,8 +1,8 @@
-const SearchEngine = require('./SearchEngine');
-const Note = require('../../models/Note');
+import SearchEngine from './SearchEngine';
+import Note from '../../models/Note';
 
-class SearchEngineUtils {
-	static async notesForQuery(query, options = null) {
+export default class SearchEngineUtils {
+	static async notesForQuery(query: string, options: any = null) {
 		if (!options) options = {};
 
 		let searchType = SearchEngine.SEARCH_TYPE_FTS;
@@ -12,7 +12,7 @@ class SearchEngineUtils {
 		}
 
 		const results = await SearchEngine.instance().search(query, { searchType });
-		const noteIds = results.map(n => n.id);
+		const noteIds = results.map((n: any) => n.id);
 
 		// We need at least the note ID to be able to sort them below so if not
 		// present in field list, add it.L Also remember it was auto-added so that
@@ -56,5 +56,3 @@ class SearchEngineUtils {
 
 	}
 }
-
-module.exports = SearchEngineUtils;

@@ -1,12 +1,17 @@
-const InteropService_Exporter_Base = require('./InteropService_Exporter_Base').default;
-const { basename, dirname, friendlySafeFilename } = require('../../path-utils');
-const BaseModel = require('../../BaseModel').default;
-const Folder = require('../../models/Folder');
-const Note = require('../../models/Note');
-const shim = require('../../shim').default;
-const markdownUtils = require('../../markdownUtils').default;
+import InteropService_Exporter_Base from './InteropService_Exporter_Base';
+import BaseModel from '../../BaseModel';
+import shim from '../../shim';
+import markdownUtils from '../../markdownUtils';
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import { basename, dirname, friendlySafeFilename } from '../../path-utils';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
+
+	private destDir_: string;
+	private resourceDir_: string;
+	private createdDirs_: string[];
+
 	async init(destDir: string) {
 		this.destDir_ = destDir;
 		this.resourceDir_ = destDir ? `${destDir}/_resources` : null;
@@ -23,7 +28,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				if (pathPart) {
 					output = `${pathPart}/${output}`;
 				} else {
-					output = `${friendlySafeFilename(item.title, null, true)}/${output}`;
+					output = `${friendlySafeFilename(item.title, null)}/${output}`;
 					if (findUniqueFilename) output = await shim.fsDriver().findUniqueFilename(output);
 				}
 			}
@@ -87,7 +92,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 
 				if (!note) continue;
 
-				let notePath = `${await this.makeDirPath_(note, null, false)}${friendlySafeFilename(note.title, null, true)}.md`;
+				let notePath = `${await this.makeDirPath_(note, null, false)}${friendlySafeFilename(note.title, null)}.md`;
 				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths));
 				context.notePaths[note.id] = notePath;
 			}

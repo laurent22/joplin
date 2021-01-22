@@ -1,5 +1,5 @@
-const Folder = require('@joplin/lib/models/Folder.js');
-const Tag = require('@joplin/lib/models/Tag.js');
+const Folder = require('@joplin/lib/models/Folder').default;
+const Tag = require('@joplin/lib/models/Tag').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const ListWidget = require('tkwidgets/ListWidget.js');
 const _ = require('@joplin/lib/locale')._;

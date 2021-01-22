@@ -5,9 +5,9 @@ import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { _, _n } from '@joplin/lib/locale';
 const { themeStyle, buildStyle } = require('@joplin/lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
-const Note = require('@joplin/lib/models/Note');
-const Setting = require('@joplin/lib/models/Setting').default;
-const BaseItem = require('@joplin/lib/models/BaseItem');
+import Note from '@joplin/lib/models/Note';
+import Setting from '@joplin/lib/models/Setting';
+import BaseItem from '@joplin/lib/models/BaseItem';
 const { reg } = require('@joplin/lib/registry.js');
 const { clipboard } = require('electron');
 

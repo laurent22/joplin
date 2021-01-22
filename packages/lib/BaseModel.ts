@@ -1,8 +1,8 @@
 import paginationToSql from './models/utils/paginationToSql';
 
 const { Database } = require('./database.js');
-const uuid = require('./uuid').default;
-const time = require('./time').default;
+import uuid from './uuid';
+import time from './time';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -344,7 +344,7 @@ class BaseModel {
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
-	static loadByFields(fields: string[], options: any = null) {
+	static loadByFields(fields: any, options: any = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -644,9 +644,9 @@ class BaseModel {
 		return this.db_;
 	}
 
-	static isReady() {
-		return !!this.db_;
-	}
+	// static isReady() {
+	// 	return !!this.db_;
+	// }
 }
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {

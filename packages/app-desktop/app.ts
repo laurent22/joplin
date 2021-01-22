@@ -27,22 +27,22 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
-const MasterKey = require('@joplin/lib/models/MasterKey');
-const Folder = require('@joplin/lib/models/Folder');
+import MasterKey from '@joplin/lib/models/MasterKey';
+import Folder from '@joplin/lib/models/Folder';
 const fs = require('fs-extra');
-const Tag = require('@joplin/lib/models/Tag.js');
+import Tag from '@joplin/lib/models/Tag';
 const { reg } = require('@joplin/lib/registry.js');
 const packageInfo = require('./packageInfo.js');
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
+import  DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 const ClipperServer = require('@joplin/lib/ClipperServer');
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
-const RevisionService = require('@joplin/lib/services/RevisionService');
-const MigrationService = require('@joplin/lib/services/MigrationService');
+import  RevisionService from '@joplin/lib/services/RevisionService';
+import  MigrationService from '@joplin/lib/services/MigrationService';
 const TemplateUtils = require('@joplin/lib/TemplateUtils');
 const CssUtils = require('@joplin/lib/CssUtils');
-// const populateDatabase = require('@joplin/lib/services/debug/populateDatabase').default;
+// import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 const commands = [
 	require('./gui/MainScreen/commands/editAlarm'),
@@ -97,7 +97,7 @@ const globalCommands = [
 	require('@joplin/lib/commands/synchronize'),
 ];
 
-const editorCommandDeclarations = require('./gui/NoteEditor/commands/editorCommandDeclarations').default;
+import editorCommandDeclarations from './gui/NoteEditor/commands/editorCommandDeclarations';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -709,7 +709,7 @@ class Application extends BaseApplication {
 				// might change the notifications.
 				void AlarmService.updateAllNotifications();
 
-				DecryptionWorker.instance().scheduleStart();
+				void DecryptionWorker.instance().scheduleStart();
 			});
 		}
 

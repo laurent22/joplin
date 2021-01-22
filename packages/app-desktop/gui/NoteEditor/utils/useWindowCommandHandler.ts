@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
 import CommandService, { CommandDeclaration,  CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
-const time = require('@joplin/lib/time').default;
+import time from '@joplin/lib/time';
 const { reg } = require('@joplin/lib/registry.js');
 
 const commandsWithDependencies = [

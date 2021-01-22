@@ -1,24 +1,31 @@
-const Logger = require('../../Logger').default;
-const ItemChange = require('../../models/ItemChange.js');
-const Setting = require('../../models/Setting').default;
-const Note = require('../../models/Note.js');
-const BaseModel = require('../../BaseModel').default;
-const ItemChangeUtils = require('../ItemChangeUtils');
-const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
+import Logger from '../../Logger';
+import ItemChange from '../../models/ItemChange';
+import Setting from '../../models/Setting';
+import Note from '../../models/Note';
+import BaseModel from '../../BaseModel';
+import ItemChangeUtils from '../ItemChangeUtils';
+import shim from '../../shim';
+import filterParser from './filterParser';
+import queryBuilder from './queryBuilder';
+import { ItemChangeEntity, NoteEntity } from '../database/types';
 const { sprintf } = require('sprintf-js');
-const filterParser = require('./filterParser').default;
-const queryBuilder = require('./queryBuilder').default;
-const shim = require('../../shim').default;
+const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
-class SearchEngine {
+export default class SearchEngine {
 
-	constructor() {
-		this.dispatch = () => {};
-		this.logger_ = new Logger();
-		this.db_ = null;
-		this.isIndexing_ = false;
-		this.syncCalls_ = [];
-	}
+	public static instance_: SearchEngine = null;
+	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude, source_url';
+	public static SEARCH_TYPE_AUTO = 'auto';
+	public static SEARCH_TYPE_BASIC = 'basic';
+	public static SEARCH_TYPE_FTS = 'fts';
+	public static SEARCH_TYPE_FTS_FUZZY = 'fts_fuzzy';
+
+	public dispatch: Function = (_o: any) => {};
+	private logger_ = new Logger();
+	private db_: any = null;
+	private isIndexing_ = false;
+	private syncCalls_: any[] = [];
+	private scheduleSyncTablesIID_: any;
 
 	static instance() {
 		if (SearchEngine.instance_) return SearchEngine.instance_;
@@ -26,7 +33,7 @@ class SearchEngine {
 		return SearchEngine.instance_;
 	}
 
-	setLogger(logger) {
+	setLogger(logger: Logger) {
 		this.logger_ = logger;
 	}
 
@@ -34,7 +41,7 @@ class SearchEngine {
 		return this.logger_;
 	}
 
-	setDb(db) {
+	setDb(db: any) {
 		this.db_ = db;
 	}
 
@@ -42,7 +49,7 @@ class SearchEngine {
 		return this.db_;
 	}
 
-	noteById_(notes, noteId) {
+	noteById_(notes: NoteEntity[], noteId: string) {
 		for (let i = 0; i < notes.length; i++) {
 			if (notes[i].id === noteId) return notes[i];
 		}
@@ -55,8 +62,8 @@ class SearchEngine {
 	}
 
 	async rebuildIndex_() {
-		let noteIds = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
-		noteIds = noteIds.map(n => n.id);
+		let noteIds: string[] = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+		noteIds = noteIds.map((n: any) => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
 
@@ -138,7 +145,7 @@ class SearchEngine {
 
 		try {
 			while (true) {
-				const changes = await ItemChange.modelSelectAll(
+				const changes: ItemChangeEntity[] = await ItemChange.modelSelectAll(
 					`
 					SELECT id, item_id, type
 					FROM item_changes
@@ -221,10 +228,10 @@ class SearchEngine {
 		return row && row['total'] ? row['total'] : 0;
 	}
 
-	fieldNamesFromOffsets_(offsets) {
+	fieldNamesFromOffsets_(offsets: any[]) {
 		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
 		const occurenceCount = Math.floor(offsets.length / 4);
-		const output = [];
+		const output: string[] = [];
 		for (let i = 0; i < occurenceCount; i++) {
 			const colIndex = offsets[i * 4];
 			const fieldName = notesNormalizedFieldNames[colIndex];
@@ -234,7 +241,7 @@ class SearchEngine {
 		return output;
 	}
 
-	calculateWeight_(offsets, termCount) {
+	calculateWeight_(offsets: any[], termCount: number) {
 		// Offset doc: https://www.sqlite.org/fts3.html#offsets
 
 		// - If there's only one term in the query string, the content with the most matches goes on top
@@ -266,7 +273,7 @@ class SearchEngine {
 
 
 
-	calculateWeightBM25_(rows, fuzzyScore) {
+	calculateWeightBM25_(rows: any[], fuzzyScore: any) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -308,19 +315,19 @@ class SearchEngine {
 
 		const X = matchInfo.map(m => m.slice(27)); // x
 
-		const hitsThisRow = (array, c, p) => array[3 * (c + p * numColumns) + 0];
+		const hitsThisRow = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 0];
 		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
-		const docsWithHits = (array, c, p) => array[3 * (c + p * numColumns) + 2];
+		const docsWithHits = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 2];
 
 
 		// if a term occurs in over half the documents in the collection
 		// then this model gives a negative term weight, which is presumably undesirable.
 		// But, assuming the use of a stop list, this normally doesn't happen,
 		// and the value for each summand can be given a floor of 0.
-		const IDF = (n, N) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
+		const IDF = (n: number, N: number) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
 
 		// https://en.wikipedia.org/wiki/Okapi_BM25
-		const BM25 = (idf, freq, numTokens, avgTokens) => {
+		const BM25 = (idf: any, freq: any, numTokens: number, avgTokens: any) => {
 			if (avgTokens === 0) {
 				return 0; // To prevent division by zero
 			}
@@ -329,7 +336,7 @@ class SearchEngine {
 
 		const msSinceEpoch = Math.round(new Date().getTime());
 		const msPerDay = 86400000;
-		const weightForDaysSinceLastUpdate = (row) => {
+		const weightForDaysSinceLastUpdate = (row: any) => {
 			// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
 			// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
 			// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
@@ -365,32 +372,32 @@ class SearchEngine {
 		}
 	}
 
-	processBasicSearchResults_(rows, parsedQuery) {
-		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map(term => term.valueRegex || term.value) : [];
+	processBasicSearchResults_(rows: any[], parsedQuery: any) {
+		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map((term: any) => term.valueRegex || term.value) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
-			const testTitle = regex => new RegExp(regex, 'ig').test(row.title);
-			const matchedFields = {
+			const testTitle = (regex: any) => new RegExp(regex, 'ig').test(row.title);
+			const matchedFields: any = {
 				title: isTitleSearch || valueRegexs.some(testTitle),
 				body: !isOnlyTitle,
 			};
 
-			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
+			row.fields = Object.keys(matchedFields).filter((key: any) => matchedFields[key]);
 			row.weight = 0;
 			row.fuzziness = 0;
 		}
 	}
 
-	processResults_(rows, parsedQuery, isBasicSearchResults = false) {
-		const rowContainsAllWords = (wordsFound, numFuzzyMatches) => {
+	processResults_(rows: any[], parsedQuery: any, isBasicSearchResults = false) {
+		const rowContainsAllWords = (wordsFound: any, numFuzzyMatches: any) => {
 			let start = 0;
 			let end = 0;
 			for (let i = 0; i < numFuzzyMatches.length; i++) {
 				end = end + numFuzzyMatches[i];
-				if (!(wordsFound.slice(start, end).find(x => x))) {
+				if (!(wordsFound.slice(start, end).find((x: any) => x))) {
 					// This note doesn't contain any fuzzy matches for the word
 					return false;
 				}
@@ -406,7 +413,7 @@ class SearchEngine {
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
 				row.include = (parsedQuery.fuzzy && !parsedQuery.any) ? rowContainsAllWords(row.wordFound, parsedQuery.numFuzzyMatches) : true;
-				const offsets = row.offsets.split(' ').map(o => Number(o));
+				const offsets = row.offsets.split(' ').map((o: any) => Number(o));
 				row.fields = this.fieldNamesFromOffsets_(offsets);
 			}
 		}
@@ -427,7 +434,7 @@ class SearchEngine {
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
-	queryTermToRegex(term) {
+	queryTermToRegex(term: any) {
 		while (term.length && term.indexOf('*') === 0) {
 			term = term.substr(1);
 		}
@@ -441,8 +448,8 @@ class SearchEngine {
 		return regexString;
 	}
 
-	async fuzzifier(words) {
-		const fuzzyMatches = [];
+	async fuzzifier(words: string[]) {
+		const fuzzyMatches: any[] = [];
 		words.forEach(word => {
 			const fuzzyWords = this.db().selectAll('SELECT word, score FROM notes_spellfix WHERE word MATCH ? AND top=3', [word]);
 			fuzzyMatches.push(fuzzyWords);
@@ -450,12 +457,12 @@ class SearchEngine {
 		return await Promise.all(fuzzyMatches);
 	}
 
-	async parseQuery(query, fuzzy = null) {
+	async parseQuery(query: string, fuzzy: any = null) {
 		if (fuzzy === null) fuzzy = Setting.value('db.fuzzySearchEnabled') === 1;
 
-		const trimQuotes = (str) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
+		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
-		let allTerms = [];
+		let allTerms: any[] = [];
 		let allFuzzyTerms = [];
 
 		try {
@@ -470,7 +477,7 @@ class SearchEngine {
 
 		const fuzzyScore = [];
 		let numFuzzyMatches = [];
-		let terms = null;
+		let terms: any = null;
 
 		if (fuzzy) {
 			const fuzzyText = await this.fuzzifier(textTerms.filter(x => !(x.quoted || x.wildcard)).map(x => trimQuotes(x.value)));
@@ -478,7 +485,7 @@ class SearchEngine {
 			const fuzzyBody = await this.fuzzifier(bodyTerms.filter(x => !x.wildcard).map(x => trimQuotes(x.value)));
 
 			// Floor the fuzzy scores to 0, 1 and 2.
-			const floorFuzzyScore = (matches) => {
+			const floorFuzzyScore = (matches: any) => {
 				for (let i = 0; i < matches.length; i++) matches[i].score = i;
 			};
 
@@ -604,10 +611,10 @@ class SearchEngine {
 		};
 	}
 
-	allParsedQueryTerms(parsedQuery) {
+	allParsedQueryTerms(parsedQuery: any) {
 		if (!parsedQuery || !parsedQuery.termCount) return [];
 
-		let output = [];
+		let output: any[] = [];
 		for (const col in parsedQuery.terms) {
 			if (!parsedQuery.terms.hasOwnProperty(col)) continue;
 			output = output.concat(parsedQuery.terms[col]);
@@ -615,27 +622,27 @@ class SearchEngine {
 		return output;
 	}
 
-	normalizeText_(text) {
+	normalizeText_(text: string) {
 		const normalizedText = text.normalize ? text.normalize() : text;
 		return removeDiacritics(normalizedText.toLowerCase());
 	}
 
-	normalizeNote_(note) {
+	normalizeNote_(note: NoteEntity) {
 		const n = Object.assign({}, note);
 		n.title = this.normalizeText_(n.title);
 		n.body = this.normalizeText_(n.body);
 		return n;
 	}
 
-	async basicSearch(query) {
+	async basicSearch(query: string) {
 		query = query.replace(/\*/, '');
 		const parsedQuery = await this.parseQuery(query);
-		const searchOptions = {};
+		const searchOptions: any = {};
 
 		for (const key of parsedQuery.keys) {
 			if (parsedQuery.terms[key].length === 0) continue;
 
-			const term = parsedQuery.terms[key].map(x => x.value).join(' ');
+			const term = parsedQuery.terms[key].map((x: any) => x.value).join(' ');
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
@@ -644,13 +651,13 @@ class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	determineSearchType_(query, options) {
+	determineSearchType_(query: string, options: any) {
 		if (options.searchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
 
-		let allTerms = [];
+		let allTerms: any[] = [];
 		try {
 			allTerms = filterParser(query);
 		} catch (error) {
@@ -670,7 +677,7 @@ class SearchEngine {
 
 	}
 
-	async search(searchString, options = null) {
+	async search(searchString: string, options: any = null) {
 		if (!searchString) return [];
 
 		options = Object.assign({}, {
@@ -702,7 +709,7 @@ class SearchEngine {
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows, parsedQuery);
 				if (searchType === SearchEngine.SEARCH_TYPE_FTS_FUZZY && !parsedQuery.any) {
-					return rows.filter(row => row.include);
+					return rows.filter((row: any) => row.include);
 				}
 				return rows;
 			} catch (error) {
@@ -723,21 +730,10 @@ class SearchEngine {
 			const iid = shim.setInterval(() => {
 				if (!this.syncCalls_.length) {
 					shim.clearInterval(iid);
-					this.instance_ = null;
-					resolve();
+					SearchEngine.instance_ = null;
+					resolve(null);
 				}
 			}, 100);
 		});
 	}
 }
-
-SearchEngine.relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude, source_url';
-
-SearchEngine.instance_ = null;
-
-SearchEngine.SEARCH_TYPE_AUTO = 'auto';
-SearchEngine.SEARCH_TYPE_BASIC = 'basic';
-SearchEngine.SEARCH_TYPE_FTS = 'fts';
-SearchEngine.SEARCH_TYPE_FTS_FUZZY = 'fts_fuzzy';
-
-module.exports = SearchEngine;

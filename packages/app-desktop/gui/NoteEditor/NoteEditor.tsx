@@ -35,8 +35,8 @@ const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
 const { reg } = require('@joplin/lib/registry.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Folder = require('@joplin/lib/models/Folder.js');
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 const bridge = require('electron').remote.require('./bridge').default;
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 

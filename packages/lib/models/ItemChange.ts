@@ -1,9 +1,21 @@
-const BaseModel = require('../BaseModel').default;
+import BaseModel, { ModelType } from '../BaseModel';
+import shim from '../shim';
+import eventManager from '../eventManager';
 const Mutex = require('async-mutex').Mutex;
-const shim = require('../shim').default;
-const eventManager = require('../eventManager').default;
 
-class ItemChange extends BaseModel {
+export default class ItemChange extends BaseModel {
+
+	private static addChangeMutex_: any = new Mutex();
+	private static saveCalls_: any[] = [];
+
+	public static TYPE_CREATE = 1;
+	public static TYPE_UPDATE = 2;
+	public static TYPE_DELETE = 3;
+
+	public static SOURCE_UNSPECIFIED = 1;
+	public static SOURCE_SYNC = 2;
+	public static SOURCE_DECRYPTION = 2; // CAREFUL - SAME ID AS SOURCE_SYNC!
+
 	static tableName() {
 		return 'item_changes';
 	}
@@ -12,7 +24,7 @@ class ItemChange extends BaseModel {
 		return BaseModel.TYPE_ITEM_CHANGE;
 	}
 
-	static async add(itemType, itemId, type, changeSource = null, beforeChangeItemJson = null) {
+	static async add(itemType: ModelType, itemId: string, type: number, changeSource: any = null, beforeChangeItemJson: string = null) {
 		if (changeSource === null) changeSource = ItemChange.SOURCE_UNSPECIFIED;
 		if (!beforeChangeItemJson) beforeChangeItemJson = '';
 
@@ -57,27 +69,14 @@ class ItemChange extends BaseModel {
 			const iid = shim.setInterval(() => {
 				if (!ItemChange.saveCalls_.length) {
 					shim.clearInterval(iid);
-					resolve();
+					resolve(null);
 				}
 			}, 100);
 		});
 	}
 
-	static async deleteOldChanges(lowestChangeId) {
+	static async deleteOldChanges(lowestChangeId: number) {
 		if (!lowestChangeId) return;
 		return this.db().exec('DELETE FROM item_changes WHERE id <= ?', [lowestChangeId]);
 	}
 }
-
-ItemChange.addChangeMutex_ = new Mutex();
-ItemChange.saveCalls_ = [];
-
-ItemChange.TYPE_CREATE = 1;
-ItemChange.TYPE_UPDATE = 2;
-ItemChange.TYPE_DELETE = 3;
-
-ItemChange.SOURCE_UNSPECIFIED = 1;
-ItemChange.SOURCE_SYNC = 2;
-ItemChange.SOURCE_DECRYPTION = 2; // CAREFUL - SAME ID AS SOURCE_SYNC!
-
-module.exports = ItemChange;

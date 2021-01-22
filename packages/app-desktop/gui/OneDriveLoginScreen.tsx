@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 const { reg } = require('@joplin/lib/registry.js');
-const Setting = require('@joplin/lib/models/Setting').default;
+import Setting from '@joplin/lib/models/Setting';
 const bridge = require('electron').remote.require('./bridge').default;
 const { themeStyle } = require('@joplin/lib/theme');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');

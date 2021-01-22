@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 const { themeStyle } = require('@joplin/lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Countable = require('countable');
-const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
+import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 
 interface NoteContentPropertiesDialogProps {
 	themeId: number;

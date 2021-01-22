@@ -12,12 +12,12 @@ import collectionToPaginatedResults from '../utils/collectionToPaginatedResults'
 
 const { reg } = require('../../../registry.js');
 const { Database } = require('../../../database.js');
-const Folder = require('../../../models/Folder');
-const Note = require('../../../models/Note');
-const Tag = require('../../../models/Tag');
-const Resource = require('../../../models/Resource');
+import Folder from '../../../models/Folder';
+import Note from '../../../models/Note';
+import Tag from '../../../models/Tag';
+import Resource from '../../../models/Resource';
 const htmlUtils = require('../../../htmlUtils');
-const markupLanguageUtils = require('../../../markupLanguageUtils').default;
+import markupLanguageUtils from '../../../markupLanguageUtils';
 const mimeUtils = require('../../../mime-utils.js').mime;
 const md5 = require('md5');
 const HtmlToMd = require('../../../HtmlToMd');

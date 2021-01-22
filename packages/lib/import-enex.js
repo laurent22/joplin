@@ -1,9 +1,9 @@
 const uuid = require('./uuid').default;
 const moment = require('moment');
 const BaseModel = require('./BaseModel').default;
-const Note = require('./models/Note.js');
-const Tag = require('./models/Tag.js');
-const Resource = require('./models/Resource.js');
+const Note = require('./models/Note').default;
+const Tag = require('./models/Tag').default;
+const Resource = require('./models/Resource').default;
 const Setting = require('./models/Setting').default;
 const { MarkupToHtml } = require('@joplin/renderer');
 const { wrapError } = require('./errorUtils');

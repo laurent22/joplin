@@ -4,8 +4,8 @@ import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { ErrorBadRequest, ErrorMethodNotAllowed } from '../utils/errors';
 import requestFields from '../utils/requestFields';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
-const BaseItem = require('../../../models/BaseItem');
-const SearchEngineUtils = require('../../searchengine/SearchEngineUtils');
+import BaseItem from '../../../models/BaseItem';
+import SearchEngineUtils from '../../searchengine/SearchEngineUtils';
 
 export default async function(request: Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();

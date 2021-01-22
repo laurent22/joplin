@@ -3,8 +3,8 @@ import BaseModel, { ModelType } from '../../../BaseModel';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { Request, RequestMethod } from '../Api';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
-const Note = require('../../../models/Note');
-const Tag = require('../../../models/Tag');
+import Note from '../../../models/Note';
+import Tag from '../../../models/Tag';
 const { ErrorBadRequest, ErrorNotFound } = require('../utils/errors');
 
 export default async function(request: Request, id: string = null, link: string = null) {

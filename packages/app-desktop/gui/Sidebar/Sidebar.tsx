@@ -15,10 +15,10 @@ import { ModelType } from '@joplin/lib/BaseModel';
 
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Tag = require('@joplin/lib/models/Tag.js');
+import BaseModel from '@joplin/lib/BaseModel';
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;

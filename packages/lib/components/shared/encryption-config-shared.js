@@ -1,8 +1,8 @@
-const EncryptionService = require('../../services/EncryptionService');
+const EncryptionService = require('../../services/EncryptionService').default;
 const { _ } = require('../../locale');
-const BaseItem = require('../../models/BaseItem.js');
+const BaseItem = require('../../models/BaseItem').default;
 const Setting = require('../../models/Setting').default;
-const MasterKey = require('../../models/MasterKey.js');
+const MasterKey = require('../../models/MasterKey').default;
 const { reg } = require('../../registry.js');
 const shim = require('../../shim').default;
 

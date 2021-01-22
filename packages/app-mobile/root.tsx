@@ -30,26 +30,26 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 
 const DropdownAlert = require('react-native-dropdownalert').default;
-const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
+const AlarmServiceDriver = require('./services/AlarmServiceDriver');
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('./services/back-button.js');
-const NavService = require('@joplin/lib/services/NavService.js');
+import  NavService from '@joplin/lib/services/NavService';
 const { createStore, applyMiddleware } = require('redux');
 const reduxSharedMiddleware = require('@joplin/lib/components/shared/reduxSharedMiddleware');
 const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Folder = require('@joplin/lib/models/Folder.js');
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 const BaseSyncTarget = require('@joplin/lib/BaseSyncTarget.js');
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
-const Resource = require('@joplin/lib/models/Resource.js');
-const Tag = require('@joplin/lib/models/Tag.js');
-const NoteTag = require('@joplin/lib/models/NoteTag.js');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
-const MasterKey = require('@joplin/lib/models/MasterKey.js');
-const Revision = require('@joplin/lib/models/Revision.js');
-const RevisionService = require('@joplin/lib/services/RevisionService');
+import Resource from '@joplin/lib/models/Resource';
+import Tag from '@joplin/lib/models/Tag';
+import NoteTag from '@joplin/lib/models/NoteTag';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import MasterKey from '@joplin/lib/models/MasterKey';
+import Revision from '@joplin/lib/models/Revision';
+import  RevisionService from '@joplin/lib/services/RevisionService';
 const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
 const { Database } = require('@joplin/lib/database.js');
 const { NotesScreen } = require('./components/screens/notes.js');
@@ -70,8 +70,8 @@ const { DatabaseDriverReactNative } = require('./utils/database-driver-react-nat
 const { reg } = require('@joplin/lib/registry.js');
 const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
+import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
 
@@ -91,9 +91,9 @@ SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 
 const FsDriverRN = require('./utils/fs-driver-rn.js').FsDriverRN;
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
-const EncryptionService = require('@joplin/lib/services/EncryptionService');
-const MigrationService = require('@joplin/lib/services/MigrationService');
+import  DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import  EncryptionService from '@joplin/lib/services/EncryptionService';
+import  MigrationService from '@joplin/lib/services/MigrationService';
 
 let storeDispatch = function(_action: any) {};
 
@@ -141,7 +141,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
 		await EncryptionService.instance().loadMasterKeysFromSettings();
-		DecryptionWorker.instance().scheduleStart();
+		void DecryptionWorker.instance().scheduleStart();
 		const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
 		storeDispatch({
@@ -159,11 +159,11 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	}
 
 	if (action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
-		DecryptionWorker.instance().scheduleStart();
+		void DecryptionWorker.instance().scheduleStart();
 	}
 
 	if (action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
-		ResourceFetcher.instance().autoAddResources();
+		void ResourceFetcher.instance().autoAddResources();
 	}
 
 	return result;
@@ -373,7 +373,7 @@ storeDispatch = store.dispatch;
 
 function resourceFetcher_downloadComplete(event: any) {
 	if (event.encrypted) {
-		DecryptionWorker.instance().scheduleStart();
+		void DecryptionWorker.instance().scheduleStart();
 	}
 }
 
@@ -575,7 +575,7 @@ async function initialize(dispatch: Function) {
 	ResourceFetcher.instance().setLogger(reg.logger());
 	ResourceFetcher.instance().dispatch = dispatch;
 	ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
-	ResourceFetcher.instance().start();
+	void ResourceFetcher.instance().start();
 
 	SearchEngine.instance().setDb(reg.db());
 	SearchEngine.instance().setLogger(reg.logger());
@@ -590,7 +590,7 @@ async function initialize(dispatch: Function) {
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
 
-		DecryptionWorker.instance().scheduleStart();
+		void DecryptionWorker.instance().scheduleStart();
 	});
 
 	await WelcomeUtils.install(dispatch);

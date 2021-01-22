@@ -1,7 +1,8 @@
-const BaseModel = require('../BaseModel').default;
+import BaseModel from '../BaseModel';
+import { ResourceLocalStateEntity } from '../services/database/types';
 const { Database } = require('../database.js');
 
-class ResourceLocalState extends BaseModel {
+export default class ResourceLocalState extends BaseModel {
 	static tableName() {
 		return 'resource_local_states';
 	}
@@ -10,7 +11,7 @@ class ResourceLocalState extends BaseModel {
 		return BaseModel.TYPE_RESOURCE_LOCAL_STATE;
 	}
 
-	static async byResourceId(resourceId) {
+	static async byResourceId(resourceId: string) {
 		if (!resourceId) throw new Error('Resource ID not provided'); // Sanity check
 
 		const result = await this.modelSelectOne('SELECT * FROM resource_local_states WHERE resource_id = ?', [resourceId]);
@@ -25,17 +26,15 @@ class ResourceLocalState extends BaseModel {
 		return result;
 	}
 
-	static async save(o) {
+	static async save(o: ResourceLocalStateEntity) {
 		const queries = [{ sql: 'DELETE FROM resource_local_states WHERE resource_id = ?', params: [o.resource_id] }, Database.insertQuery(this.tableName(), o)];
 
 		return this.db().transactionExecBatch(queries);
 	}
 
-	static batchDelete(ids, options = null) {
+	static batchDelete(ids: string[], options: any = null) {
 		options = options ? Object.assign({}, options) : {};
 		options.idFieldName = 'resource_id';
 		return super.batchDelete(ids, options);
 	}
 }
-
-module.exports = ResourceLocalState;

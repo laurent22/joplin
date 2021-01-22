@@ -6,10 +6,10 @@ import { ExportOptions, FileSystemItem, Module } from '@joplin/lib/services/inte
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 const bridge = require('electron').remote.require('./bridge').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const Note = require('@joplin/lib/models/Note.js');
+import Setting from '@joplin/lib/models/Setting';
+import Note from '@joplin/lib/models/Note';
 const { friendlySafeFilename } = require('@joplin/lib/path-utils');
-const time = require('@joplin/lib/time').default;
+import time from '@joplin/lib/time';
 const md5 = require('md5');
 const url = require('url');
 

@@ -9,7 +9,7 @@ const React = require('react');
 const { View } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('../global-style.js');
-const BackButtonDialogBox = require('../BackButtonDialogBox').default;
+import BackButtonDialogBox from '../BackButtonDialogBox';
 const { reg } = require('@joplin/lib/registry.js');
 
 interface Props {
@@ -89,6 +89,8 @@ export default function NoteBodyViewer(props: Props) {
 	// since the WebView package went through many versions it's possible that
 	// the above no longer applies.
 
+	const BackButtonDialogBox_ = BackButtonDialogBox as any;
+
 	return (
 		<View style={props.style}>
 			<WebView
@@ -105,7 +107,7 @@ export default function NoteBodyViewer(props: Props) {
 				onError={onError}
 				onMessage={onMessage}
 			/>
-			<BackButtonDialogBox ref={dialogBoxRef}/>
+			<BackButtonDialogBox_ ref={dialogBoxRef}/>
 		</View>
 	);
 }

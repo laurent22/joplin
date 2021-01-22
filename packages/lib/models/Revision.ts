@@ -1,5 +1,6 @@
-const BaseModel = require('../BaseModel').default;
-const BaseItem = require('./BaseItem.js');
+import BaseModel, { ModelType } from '../BaseModel';
+import { RevisionEntity } from '../services/database/types';
+import BaseItem from './BaseItem';
 const DiffMatchPatch = require('diff-match-patch');
 const ArrayUtils = require('../ArrayUtils.js');
 const JoplinError = require('../JoplinError');
@@ -7,7 +8,7 @@ const { sprintf } = require('sprintf-js');
 
 const dmp = new DiffMatchPatch();
 
-class Revision extends BaseItem {
+export default class Revision extends BaseItem {
 	static tableName() {
 		return 'revisions';
 	}
@@ -16,21 +17,21 @@ class Revision extends BaseItem {
 		return BaseModel.TYPE_REVISION;
 	}
 
-	static createTextPatch(oldText, newText) {
+	static createTextPatch(oldText: string, newText: string) {
 		return dmp.patch_toText(dmp.patch_make(oldText, newText));
 	}
 
-	static applyTextPatch(text, patch) {
+	static applyTextPatch(text: string, patch: string) {
 		patch = dmp.patch_fromText(patch);
 		const result = dmp.patch_apply(patch, text);
 		if (!result || !result.length) throw new Error('Could not apply patch');
 		return result[0];
 	}
 
-	static createObjectPatch(oldObject, newObject) {
+	static createObjectPatch(oldObject: any, newObject: any) {
 		if (!oldObject) oldObject = {};
 
-		const output = {
+		const output: any = {
 			new: {},
 			deleted: [],
 		};
@@ -49,7 +50,7 @@ class Revision extends BaseItem {
 		return JSON.stringify(output);
 	}
 
-	static applyObjectPatch(object, patch) {
+	static applyObjectPatch(object: any, patch: any) {
 		patch = JSON.parse(patch);
 		const output = Object.assign({}, object);
 
@@ -64,10 +65,10 @@ class Revision extends BaseItem {
 		return output;
 	}
 
-	static patchStats(patch) {
+	static patchStats(patch: string) {
 		if (typeof patch === 'object') throw new Error('Not implemented');
 
-		const countChars = diffLine => {
+		const countChars = (diffLine: string) => {
 			return unescape(diffLine).length - 1;
 		};
 
@@ -93,7 +94,7 @@ class Revision extends BaseItem {
 		};
 	}
 
-	static revisionPatchStatsText(rev) {
+	static revisionPatchStatsText(rev: RevisionEntity) {
 		const titleStats = this.patchStats(rev.title_diff);
 		const bodyStats = this.patchStats(rev.body_diff);
 		const total = {
@@ -107,28 +108,28 @@ class Revision extends BaseItem {
 		return output.join(', ');
 	}
 
-	static async countRevisions(itemType, itemId) {
+	static async countRevisions(itemType: ModelType, itemId: string) {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM revisions WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
 
 		return r ? r.total : 0;
 	}
 
-	static latestRevision(itemType, itemId) {
+	static latestRevision(itemType: ModelType, itemId: string) {
 		return this.modelSelectOne('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time DESC LIMIT 1', [itemType, itemId]);
 	}
 
-	static allByType(itemType, itemId) {
+	static allByType(itemType: ModelType, itemId: string) {
 		return this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time ASC', [itemType, itemId]);
 	}
 
-	static async itemsWithRevisions(itemType, itemIds) {
+	static async itemsWithRevisions(itemType: ModelType, itemIds: string[]) {
 		if (!itemIds.length) return [];
 		const rows = await this.db().selectAll(`SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("${itemIds.join('","')}")`, [itemType]);
 
-		return rows.map(r => r.item_id);
+		return rows.map((r: RevisionEntity) => r.item_id);
 	}
 
-	static async itemsWithNoRevisions(itemType, itemIds) {
+	static async itemsWithNoRevisions(itemType: ModelType, itemIds: string[]) {
 		const withRevs = await this.itemsWithRevisions(itemType, itemIds);
 		const output = [];
 		for (let i = 0; i < itemIds.length; i++) {
@@ -137,7 +138,7 @@ class Revision extends BaseItem {
 		return ArrayUtils.unique(output);
 	}
 
-	static moveRevisionToTop(revision, revs) {
+	static moveRevisionToTop(revision: RevisionEntity, revs: RevisionEntity[]) {
 		let targetIndex = -1;
 		for (let i = revs.length - 1; i >= 0; i--) {
 			const rev = revs[i];
@@ -160,7 +161,7 @@ class Revision extends BaseItem {
 	}
 
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
-	static async mergeDiffs(revision, revs = null) {
+	static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null) {
 		if (!('encryption_applied' in revision) || !!revision.encryption_applied) throw new JoplinError('Target revision is encrypted', 'revision_encrypted');
 
 		if (!revs) {
@@ -202,7 +203,7 @@ class Revision extends BaseItem {
 		return output;
 	}
 
-	static async deleteOldRevisions(ttl) {
+	static async deleteOldRevisions(ttl: number) {
 		// When deleting old revisions, we need to make sure that the oldest surviving revision
 		// is a "merged" one (as opposed to a diff from a now deleted revision). So every time
 		// we deleted a revision, we need to find if there's a corresponding surviving revision
@@ -210,7 +211,7 @@ class Revision extends BaseItem {
 
 		const cutOffDate = Date.now() - ttl;
 		const revisions = await this.modelSelectAll('SELECT * FROM revisions WHERE item_updated_time < ? ORDER BY item_updated_time DESC', [cutOffDate]);
-		const doneItems = {};
+		const doneItems: Record<string, boolean> = {};
 
 		for (const rev of revisions) {
 			const doneKey = `${rev.item_type}_${rev.item_id}`;
@@ -249,10 +250,8 @@ class Revision extends BaseItem {
 		}
 	}
 
-	static async revisionExists(itemType, itemId, updatedTime) {
+	static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;
 	}
 }
-
-module.exports = Revision;

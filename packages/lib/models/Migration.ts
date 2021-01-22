@@ -1,12 +1,12 @@
-const BaseModel = require('../BaseModel').default;
+import BaseModel from '../BaseModel';
 
-const migrationScripts = {
+const migrationScripts: Record<number, any> = {
 	20: require('../migrations/20.js'),
 	27: require('../migrations/27.js'),
 	33: require('../migrations/33.js'),
 };
 
-class Migration extends BaseModel {
+export default class Migration extends BaseModel {
 	static tableName() {
 		return 'migrations';
 	}
@@ -19,10 +19,8 @@ class Migration extends BaseModel {
 		return this.modelSelectAll('SELECT * FROM migrations ORDER BY number ASC');
 	}
 
-	static script(number) {
+	static script(number: number) {
 		if (!migrationScripts[number]) throw new Error('Migration script has not been added to "migrationScripts" array');
 		return migrationScripts[number];
 	}
 }
-
-module.exports = Migration;

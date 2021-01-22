@@ -3,12 +3,12 @@ import InteropService_Importer_Custom from './InteropService_Importer_Custom';
 import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
 import shim from '../../shim';
 import { _ } from '../../locale';
-const BaseItem = require('../../models/BaseItem.js');
-const BaseModel = require('../../BaseModel').default;
-const Resource = require('../../models/Resource.js');
-const Folder = require('../../models/Folder.js');
-const NoteTag = require('../../models/NoteTag.js');
-const Note = require('../../models/Note.js');
+import BaseItem from '../../models/BaseItem';
+import BaseModel from '../../BaseModel';
+import Resource from '../../models/Resource';
+import Folder from '../../models/Folder';
+import NoteTag from '../../models/NoteTag';
+import Note from '../../models/Note';
 const ArrayUtils = require('../../ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
@@ -338,7 +338,7 @@ export default class InteropService {
 		let resourceIds: string[] = [];
 
 		// Recursively get all the folders that have valid parents
-		const folderIds = await Folder.childrenIds('', true);
+		const folderIds = await Folder.childrenIds('');
 
 		if (options.includeConflicts) folderIds.push(Folder.conflictFolderId());
 

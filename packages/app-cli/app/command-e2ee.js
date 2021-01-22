@@ -1,8 +1,8 @@
 const { BaseCommand } = require('./base-command.js');
 const { _ } = require('@joplin/lib/locale');
-const EncryptionService = require('@joplin/lib/services/EncryptionService');
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
-const BaseItem = require('@joplin/lib/models/BaseItem');
+const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
+const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker').default;
+const BaseItem = require('@joplin/lib/models/BaseItem').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const shim = require('@joplin/lib/shim').default;
 const pathUtils = require('@joplin/lib/path-utils');

@@ -4,7 +4,7 @@ const { splitCommandString } = require('@joplin/lib/string-utils.js');
 const uuid = require('@joplin/lib/uuid').default;
 const { app } = require('./app.js');
 const { _ } = require('@joplin/lib/locale');
-const Note = require('@joplin/lib/models/Note.js');
+const Note = require('@joplin/lib/models/Note').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 

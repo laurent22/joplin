@@ -10,8 +10,8 @@ import { Dirnames } from '@joplin/lib/services/synchronizer/utils/types';
 
 const { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 const { deploySyncTargetSnapshot, testData, checkTestData } = require('./support/syncTargetUtils');
-const Setting = require('@joplin/lib/models/Setting').default;
-const MasterKey = require('@joplin/lib/models/MasterKey');
+import Setting from '@joplin/lib/models/Setting';
+import MasterKey from '@joplin/lib/models/MasterKey';
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 

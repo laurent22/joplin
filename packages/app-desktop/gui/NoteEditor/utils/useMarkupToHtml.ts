@@ -5,7 +5,7 @@ import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 
 const { themeStyle } = require('@joplin/lib/theme');
-const Note = require('@joplin/lib/models/Note');
+import Note from '@joplin/lib/models/Note';
 
 interface HookDependencies {
 	themeId: number;

@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const Resource = require('@joplin/lib/models/Resource.js');
+import Resource from '@joplin/lib/models/Resource';
 const fs = require('fs-extra');
 const { clipboard } = require('electron');
 const { toSystemSlashes } = require('@joplin/lib/path-utils');

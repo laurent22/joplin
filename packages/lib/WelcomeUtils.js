@@ -1,8 +1,8 @@
 const welcomeAssets = require('./welcomeAssets');
-const Note = require('./models/Note');
+const Note = require('./models/Note').default;
 const Setting = require('./models/Setting').default;
-const Folder = require('./models/Folder');
-const Tag = require('./models/Tag');
+const Folder = require('./models/Folder').default;
+const Tag = require('./models/Tag').default;
 const shim = require('./shim').default;
 const uuid = require('./uuid').default;
 const { fileExtension, basename } = require('./path-utils');

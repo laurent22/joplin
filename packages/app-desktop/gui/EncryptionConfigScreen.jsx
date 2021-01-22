@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Setting = require('@joplin/lib/models/Setting').default;
-const EncryptionService = require('@joplin/lib/services/EncryptionService');
+const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
 const { themeStyle } = require('@joplin/lib/theme');
 const { _ } = require('@joplin/lib/locale');
 const time = require('@joplin/lib/time').default;

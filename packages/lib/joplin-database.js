@@ -1,7 +1,7 @@
 const { promiseChain } = require('./promise-utils.js');
 const { Database } = require('./database.js');
 const { sprintf } = require('sprintf-js');
-const Resource = require('./models/Resource');
+const Resource = require('./models/Resource').default;
 const shim = require('./shim').default;
 
 const structureSql = `
