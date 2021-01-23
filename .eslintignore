@@ -1458,6 +1458,15 @@ packages/plugin-repo-cli/lib/checkIfPluginCanBeAdded.js.map
 packages/plugin-repo-cli/lib/checkIfPluginCanBeAdded.test.d.ts
 packages/plugin-repo-cli/lib/checkIfPluginCanBeAdded.test.js
 packages/plugin-repo-cli/lib/checkIfPluginCanBeAdded.test.js.map
+packages/plugin-repo-cli/lib/errorsHaveChanged.d.ts
+packages/plugin-repo-cli/lib/errorsHaveChanged.js
+packages/plugin-repo-cli/lib/errorsHaveChanged.js.map
+packages/plugin-repo-cli/lib/errorsHaveChanged.test.d.ts
+packages/plugin-repo-cli/lib/errorsHaveChanged.test.js
+packages/plugin-repo-cli/lib/errorsHaveChanged.test.js.map
+packages/plugin-repo-cli/lib/types.d.ts
+packages/plugin-repo-cli/lib/types.js
+packages/plugin-repo-cli/lib/types.js.map
 packages/plugin-repo-cli/lib/updateReadme.d.ts
 packages/plugin-repo-cli/lib/updateReadme.js
 packages/plugin-repo-cli/lib/updateReadme.js.map
