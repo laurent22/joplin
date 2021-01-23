@@ -56,7 +56,7 @@ export const StyledListItem = styled.div`
 	transition: 0.1s;
 
 	&:hover {
-		background-color: ${(props: any) =>  props.theme.backgroundColorHover2};
+		background-color: ${(props: any) => props.theme.backgroundColorHover2};
 	}
 `;
 

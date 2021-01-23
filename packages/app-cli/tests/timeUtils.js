@@ -18,7 +18,7 @@ describe('timeUtils', function() {
 		expect(time.goBackInTime(startDate, 1, 'day')).toBe(endDate.getTime().toString());
 
 		// We're always subtracting time from the beginning of the current period.
-		startDate =  new Date('3 Aug 2020 07:30:20');
+		startDate = new Date('3 Aug 2020 07:30:20');
 		expect(time.goBackInTime(startDate, 1, 'day')).toBe(endDate.getTime().toString());
 
 		// Note: this test randomly fails - https://github.com/laurent22/joplin/issues/3722
@@ -42,7 +42,7 @@ describe('timeUtils', function() {
 
 		expect(time.goForwardInTime(startDate, 1, 'day')).toBe(endDate.getTime().toString());
 
-		startDate =  new Date('2 Aug 2020 07:30:20');
+		startDate = new Date('2 Aug 2020 07:30:20');
 		expect(time.goForwardInTime(startDate, 1, 'day')).toBe(endDate.getTime().toString());
 
 

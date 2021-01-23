@@ -49,22 +49,22 @@ class BaseModel {
 		['TYPE_COMMAND', ModelType.Command],
 	];
 
-	public static TYPE_NOTE =  ModelType.Note;
-	public static TYPE_FOLDER =  ModelType.Folder;
-	public static TYPE_SETTING =  ModelType.Setting;
-	public static TYPE_RESOURCE =  ModelType.Resource;
-	public static TYPE_TAG =  ModelType.Tag;
-	public static TYPE_NOTE_TAG =  ModelType.NoteTag;
-	public static TYPE_SEARCH =  ModelType.Search;
-	public static TYPE_ALARM =  ModelType.Alarm;
-	public static TYPE_MASTER_KEY =  ModelType.MasterKey;
-	public static TYPE_ITEM_CHANGE =  ModelType.ItemChange;
-	public static TYPE_NOTE_RESOURCE =  ModelType.NoteResource;
-	public static TYPE_RESOURCE_LOCAL_STATE =  ModelType.ResourceLocalState;
-	public static TYPE_REVISION =  ModelType.Revision;
-	public static TYPE_MIGRATION =  ModelType.Migration;
-	public static TYPE_SMART_FILTER =  ModelType.SmartFilter;
-	public static TYPE_COMMAND =  ModelType.Command;
+	public static TYPE_NOTE = ModelType.Note;
+	public static TYPE_FOLDER = ModelType.Folder;
+	public static TYPE_SETTING = ModelType.Setting;
+	public static TYPE_RESOURCE = ModelType.Resource;
+	public static TYPE_TAG = ModelType.Tag;
+	public static TYPE_NOTE_TAG = ModelType.NoteTag;
+	public static TYPE_SEARCH = ModelType.Search;
+	public static TYPE_ALARM = ModelType.Alarm;
+	public static TYPE_MASTER_KEY = ModelType.MasterKey;
+	public static TYPE_ITEM_CHANGE = ModelType.ItemChange;
+	public static TYPE_NOTE_RESOURCE = ModelType.NoteResource;
+	public static TYPE_RESOURCE_LOCAL_STATE = ModelType.ResourceLocalState;
+	public static TYPE_REVISION = ModelType.Revision;
+	public static TYPE_MIGRATION = ModelType.Migration;
+	public static TYPE_SMART_FILTER = ModelType.SmartFilter;
+	public static TYPE_COMMAND = ModelType.Command;
 
 	public static dispatch: Function = function() {};
 	private static saveMutexes_: any = {};

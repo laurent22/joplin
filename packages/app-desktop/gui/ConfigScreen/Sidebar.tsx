@@ -29,7 +29,7 @@ export const StyledListItem = styled.a`
 	opacity: ${(props: any) => props.selected ? 1 : 0.8};
 
 	&:hover {
-		background-color: ${(props: any) =>  props.theme.backgroundColorHover2};
+		background-color: ${(props: any) => props.theme.backgroundColorHover2};
 	}
 `;
 

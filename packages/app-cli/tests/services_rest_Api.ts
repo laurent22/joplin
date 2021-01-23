@@ -8,7 +8,7 @@ import Resource from '@joplin/lib/models/Resource';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import NoteTag from '@joplin/lib/models/NoteTag';
-import  ResourceService from '@joplin/lib/services/ResourceService';
+import ResourceService from '@joplin/lib/services/ResourceService';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 
 const createFolderForPagination = async (num: number, time: number) => {

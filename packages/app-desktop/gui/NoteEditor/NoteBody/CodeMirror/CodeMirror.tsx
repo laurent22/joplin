@@ -9,7 +9,7 @@ import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize 
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
-import NoteTextViewer  from '../../../NoteTextViewer';
+import NoteTextViewer from '../../../NoteTextViewer';
 import Editor from './Editor';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import Setting from '@joplin/lib/models/Setting';

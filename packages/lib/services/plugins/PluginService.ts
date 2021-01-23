@@ -2,7 +2,7 @@ import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
 import Global from './api/Global';
 import BasePluginRunner from './BasePluginRunner';
-import BaseService  from '../BaseService';
+import BaseService from '../BaseService';
 import shim from '../../shim';
 import { filename, dirname, rtrimSlashes } from '../../path-utils';
 import Setting from '../../models/Setting';

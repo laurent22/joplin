@@ -6,7 +6,7 @@ const { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, setupDatabaseAn
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
-import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import BaseItem from '@joplin/lib/models/BaseItem';
 

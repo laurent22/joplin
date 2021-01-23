@@ -7,7 +7,7 @@ import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
 
 const { Database } = require('../database.js');
-import  ItemChange from './ItemChange';
+import ItemChange from './ItemChange';
 const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');

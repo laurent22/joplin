@@ -3,9 +3,9 @@ import BaseModel from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
 
-import  Note from './Note';
+import Note from './Note';
 const { Database } = require('../database.js');
-import  BaseItem from './BaseItem';
+import BaseItem from './BaseItem';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 interface FolderEntityWithChildren extends FolderEntity {

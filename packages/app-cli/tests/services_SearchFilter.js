@@ -513,8 +513,8 @@ describe('services_SearchFilter', function() {
 		const today = parseInt(time.goBackInTime(Date.now(), 0, 'day'), 10);
 		const yesterday = parseInt(time.goBackInTime(Date.now(), 1, 'day'), 10);
 		const dayBeforeYesterday = parseInt(time.goBackInTime(Date.now(), 2, 'day'), 10);
-		const n1 = await Note.save({ title: 'I made this', body: 'today', updated_time: today, user_updated_time: today  }, { autoTimestamp: false });
-		const n11 = await Note.save({ title: 'I also made this', body: 'today', updated_time: today, user_updated_time: today  }, { autoTimestamp: false });
+		const n1 = await Note.save({ title: 'I made this', body: 'today', updated_time: today, user_updated_time: today }, { autoTimestamp: false });
+		const n11 = await Note.save({ title: 'I also made this', body: 'today', updated_time: today, user_updated_time: today }, { autoTimestamp: false });
 
 		const n2 = await Note.save({ title: 'I made this', body: 'yesterday', updated_time: yesterday, user_updated_time: yesterday }, { autoTimestamp: false });
 		const n3 = await Note.save({ title: 'I made this', body: 'day before yesterday', updated_time: dayBeforeYesterday ,user_updated_time: dayBeforeYesterday }, { autoTimestamp: false });
@@ -582,9 +582,9 @@ describe('services_SearchFilter', function() {
 
 	it('should support filtering by latitude, longitude, altitude', (async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'I made this', body: 'this week', latitude: 12.97, longitude: 88.88, altitude: 69.96  });
-		const n2 = await Note.save({ title: 'I made this', body: 'the week before', latitude: 42.11, longitude: 77.77, altitude: 42.00  });
-		const n3 = await Note.save({ title: 'I made this', body: 'before before week', latitude: 82.01, longitude: 66.66, altitude: 13.13  });
+		const n1 = await Note.save({ title: 'I made this', body: 'this week', latitude: 12.97, longitude: 88.88, altitude: 69.96 });
+		const n2 = await Note.save({ title: 'I made this', body: 'the week before', latitude: 42.11, longitude: 77.77, altitude: 42.00 });
+		const n3 = await Note.save({ title: 'I made this', body: 'before before week', latitude: 82.01, longitude: 66.66, altitude: 13.13 });
 
 		await engine.syncTables();
 

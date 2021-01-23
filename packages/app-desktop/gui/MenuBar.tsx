@@ -133,7 +133,7 @@ function useMenu(props: Props) {
 
 		if (Array.isArray(path)) path = path[0];
 
-		const modalMessage =  _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
+		const modalMessage = _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
 
 		void CommandService.instance().execute('showModalMessage', modalMessage);
 

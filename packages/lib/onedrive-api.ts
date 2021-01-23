@@ -277,7 +277,7 @@ export default class OneDriveApi {
 				if (path.includes('/createUploadSession')) {
 					response = await this.uploadBigFile(url, options);
 				} else if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
-					response =  await shim.uploadBlob(url, options);
+					response = await shim.uploadBlob(url, options);
 				} else if (options.target == 'string') {
 					response = await shim.fetch(url, options);
 				} else {

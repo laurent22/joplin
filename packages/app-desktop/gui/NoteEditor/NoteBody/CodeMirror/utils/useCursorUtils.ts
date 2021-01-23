@@ -158,7 +158,7 @@ export default function useCursorUtils(CodeMirror: any) {
 	CodeMirror.defineExtension('isAfterTrailingWhitespace', function() {
 		const { line, ch } = this.getCursor('head');
 		const beforeCursor = this.charCoords({ line: line, ch: ch - 1 });
-		const afterCursor = this.charCoords({ line: line, ch: ch  });
+		const afterCursor = this.charCoords({ line: line, ch: ch });
 
 		const currentLine = this.getLine(line);
 

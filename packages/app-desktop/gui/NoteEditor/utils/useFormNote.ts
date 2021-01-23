@@ -11,8 +11,8 @@ import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index'
 const { MarkupToHtml } = require('@joplin/renderer');
 import Note from '@joplin/lib/models/Note';
 const { reg } = require('@joplin/lib/registry.js');
-import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import  DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 
 export interface OnLoadEvent {
 	formNote: FormNote;

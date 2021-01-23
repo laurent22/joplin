@@ -8,7 +8,7 @@ const { synchronizerStart, tempFilePath, resourceFetcher, setupDatabaseAndSynchr
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
-import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import BaseItem from '@joplin/lib/models/BaseItem';
 
 let insideBeforeEach = false;
@@ -246,7 +246,7 @@ describe('Synchronizer.resources', function() {
 			// the content from client 2
 			await resourceFetcher().start();
 			await resourceFetcher().waitForAllFinished();
-			const localContent =  await Resource.resourceBlobContent(resource.id, 'utf8');
+			const localContent = await Resource.resourceBlobContent(resource.id, 'utf8');
 			expect(localContent).toBe('1234 MOD 2');
 
 			// Check that the Conflict note has been generated, with the conflict resource
@@ -259,7 +259,7 @@ describe('Synchronizer.resources', function() {
 			expect(!!conflictNote).toBe(true);
 			const resourceIds = await Note.linkedResourceIds(conflictNote.body);
 			expect(resourceIds.length).toBe(1);
-			const conflictContent =  await Resource.resourceBlobContent(resourceIds[0], 'utf8');
+			const conflictContent = await Resource.resourceBlobContent(resourceIds[0], 'utf8');
 			expect(conflictContent).toBe('1234 MOD 1');
 		}
 	}));

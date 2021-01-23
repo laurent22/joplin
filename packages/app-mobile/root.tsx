@@ -34,7 +34,7 @@ const AlarmServiceDriver = require('./services/AlarmServiceDriver');
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('./services/back-button.js');
-import  NavService from '@joplin/lib/services/NavService';
+import NavService from '@joplin/lib/services/NavService';
 const { createStore, applyMiddleware } = require('redux');
 const reduxSharedMiddleware = require('@joplin/lib/components/shared/reduxSharedMiddleware');
 const { shimInit } = require('./utils/shim-init-react.js');
@@ -49,7 +49,7 @@ import NoteTag from '@joplin/lib/models/NoteTag';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
-import  RevisionService from '@joplin/lib/services/RevisionService';
+import RevisionService from '@joplin/lib/services/RevisionService';
 const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
 const { Database } = require('@joplin/lib/database.js');
 const { NotesScreen } = require('./components/screens/notes.js');
@@ -70,7 +70,7 @@ const { DatabaseDriverReactNative } = require('./utils/database-driver-react-nat
 const { reg } = require('@joplin/lib/registry.js');
 const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
-import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
@@ -91,9 +91,9 @@ SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 
 const FsDriverRN = require('./utils/fs-driver-rn.js').FsDriverRN;
-import  DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-import  EncryptionService from '@joplin/lib/services/EncryptionService';
-import  MigrationService from '@joplin/lib/services/MigrationService';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import EncryptionService from '@joplin/lib/services/EncryptionService';
+import MigrationService from '@joplin/lib/services/MigrationService';
 
 let storeDispatch = function(_action: any) {};
 

@@ -121,7 +121,7 @@ class NoteSearchBarComponent extends React.Component {
 		// For more info: https://github.com/laurent22/joplin/pull/2329#issuecomment-578376835
 		const theme = themeStyle(this.props.themeId);
 		if (!this.props.searching) {
-			if (this.props.resultCount === 0 && query.length >  0) {
+			if (this.props.resultCount === 0 && query.length > 0) {
 				this.backgroundColor = theme.warningBackgroundColor;
 			} else {
 				this.backgroundColor = theme.backgroundColor;

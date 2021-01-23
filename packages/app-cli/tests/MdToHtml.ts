@@ -14,7 +14,7 @@ function newTestMdToHtml(options: any = null) {
 		...options,
 	};
 
-	return  new MdToHtml(options);
+	return new MdToHtml(options);
 }
 
 describe('MdToHtml', function() {

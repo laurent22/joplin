@@ -29,7 +29,7 @@ const notebookFilter = (terms: Term[], conditions: string[], params: string[], w
 	for (let i = 0; i < notebooks.length; i++) {
 		likes.push('folders.title LIKE ?');
 	}
-	const relevantFolders =  likes.join(' OR ');
+	const relevantFolders = likes.join(' OR ');
 
 	const withInNotebook = `
 	notebooks_in_scope(id)
