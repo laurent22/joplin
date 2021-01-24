@@ -264,15 +264,17 @@ async function saveNoteToStorage(note, importOptions) {
 
 function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!importOptions) importOptions = {};
-	// console.info(JSON.stringify({importOptions}, null, 2));
 	if (!('fuzzyMatching' in importOptions)) importOptions.fuzzyMatching = false;
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
 	if (!('onError' in importOptions)) importOptions.onError = function() {};
 
-	const handleSaxStreamEvent = (fn) => {
+	function handleSaxStreamEvent(fn) {
 		return function(...args) {
+			// Pass the parser to the wrapped function for debugging purposes
+			if (this._parser) fn._parser = this._parser;
+
 			try {
-				fn(...args);
+				fn.call(this, ...args);
 			} catch (error) {
 				if (importOptions.onError) {
 					importOptions.onError(error);
@@ -281,9 +283,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				}
 			}
 		};
-	};
+	}
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		const progressState = {
 			loaded: 0,
 			created: 0,
@@ -308,8 +310,27 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		const notes = [];
 		let processingNotes = false;
 
-		stream.on('error', error => {
-			reject(new Error(error.toString()));
+		const createErrorWithNoteTitle = (fnThis, error) => {
+			const line = [];
+
+			const parser = fnThis ? fnThis._parser : null;
+			if (parser) {
+				line.push(`Line ${parser.line}:${parser.column}`);
+			}
+
+			if (note && note.title) {
+				line.push(`"${note.title}"`);
+			}
+
+			line.push(error.message);
+
+			error.message = line.join(': ');
+
+			return error;
+		};
+
+		stream.on('error', function(error) {
+			importOptions.onError(createErrorWithNoteTitle(this, error));
 		});
 
 		function currentNodeName() {
@@ -338,7 +359,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 						try {
 							resource = await processNoteResource(resource);
 						} catch (error) {
-							importOptions.onError(error);
+							importOptions.onError(createErrorWithNoteTitle(null, error));
 							continue;
 						}
 
@@ -387,7 +408,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					importOptions.onProgress(progressState);
 				} catch (error) {
 					const newError = wrapError(`Error on note "${note.title}"`, error);
-					importOptions.onError(newError);
+					importOptions.onError(createErrorWithNoteTitle(null, newError));
 				}
 			}
 
@@ -396,8 +417,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			return true;
 		}
 
-		saxStream.on('error', error => {
-			importOptions.onError(error);
+		saxStream.on('error', function(error) {
+			importOptions.onError(createErrorWithNoteTitle(this, error));
 		});
 
 		saxStream.on('text', handleSaxStreamEvent(function(text) {
@@ -439,7 +460,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				} else if (n == 'content') {
 					// Ignore - white space between the opening tag <content> and the <![CDATA[< block where the content actually is
 				} else {
-					console.warn(`Unsupported note tag: ${n}`);
+					console.warn(createErrorWithNoteTitle(this, new Error(`Unsupported note tag: ${n}`)));
 				}
 			}
 		}));
@@ -492,7 +513,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 				if (notes.length >= 10) {
 					processNotes().catch(error => {
-						importOptions.onError(error);
+						importOptions.onError(createErrorWithNoteTitle(this, error));
 					});
 				}
 				note = null;
