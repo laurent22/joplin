@@ -1,0 +1,12 @@
+{
+	"manifest_version": 1,
+	"id": "org.joplinapp.plugins.NativeModuleTest",
+	"app_min_version": "1.7",
+	"version": "1.0.0",
+	"name": "Native Module Test",
+	"description": "",
+	"author": "",
+	"homepage_url": "",
+	"repository_url": "",
+	"keywords": []
+}

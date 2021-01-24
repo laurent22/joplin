@@ -66,6 +66,7 @@
   },
   "devDependencies": {
     "@joplin/tools": "^1.0.9",
+    "@types/fs-extra": "^9.0.6",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "gulp": "^4.0.2",

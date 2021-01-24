@@ -228,6 +228,15 @@ packages/app-cli/tests/support/plugins/multi_selection/api/types.js.map
 packages/app-cli/tests/support/plugins/multi_selection/src/index.d.ts
 packages/app-cli/tests/support/plugins/multi_selection/src/index.js
 packages/app-cli/tests/support/plugins/multi_selection/src/index.js.map
+packages/app-cli/tests/support/plugins/nativeModule/api/index.d.ts
+packages/app-cli/tests/support/plugins/nativeModule/api/index.js
+packages/app-cli/tests/support/plugins/nativeModule/api/index.js.map
+packages/app-cli/tests/support/plugins/nativeModule/api/types.d.ts
+packages/app-cli/tests/support/plugins/nativeModule/api/types.js
+packages/app-cli/tests/support/plugins/nativeModule/api/types.js.map
+packages/app-cli/tests/support/plugins/nativeModule/src/index.d.ts
+packages/app-cli/tests/support/plugins/nativeModule/src/index.js
+packages/app-cli/tests/support/plugins/nativeModule/src/index.js.map
 packages/app-cli/tests/support/plugins/post_messages/api/index.d.ts
 packages/app-cli/tests/support/plugins/post_messages/api/index.js
 packages/app-cli/tests/support/plugins/post_messages/api/index.js.map
