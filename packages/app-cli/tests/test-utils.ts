@@ -182,6 +182,7 @@ Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
+Setting.setConstant('pluginDataDir', `${dataDir}/plugin-data`);
 Setting.setConstant('env', 'dev');
 
 BaseService.logger_ = logger;

@@ -58,12 +58,11 @@ export default class JoplinPlugins {
 		return this.plugin.registerContentScript(type, id, scriptPath);
 	}
 
-	// public async onMessage(callback: any) {
-	// 	this.plugin.onMessage(callback);
-	// }
-
-	// public async onContentScriptMessage(id: string, callback: any) {
-	// 	this.plugin.onContentScriptMessage(id, callback);
-	// }
+	/**
+	 * Gets the plugin own data directory path. Use this to store any plugin-related data.
+	 */
+	public async dataDir(): Promise<string> {
+		return this.plugin.dataDir();
+	}
 
 }

@@ -267,7 +267,9 @@ export default class PluginService extends BaseService {
 
 		const manifest = manifestFromObject(manifestObj);
 
-		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action));
+		const dataDir = `${Setting.value('pluginDataDir')}/${manifest.id}`;
+
+		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir);
 
 		for (const msg of deprecationNotices) {
 			plugin.deprecationNotice('1.5', msg);
