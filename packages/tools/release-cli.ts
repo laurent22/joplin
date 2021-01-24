@@ -1,4 +1,4 @@
-import { execCommand, rootDir, completeReleaseWithChangelog } from './tool-utils';
+import { execCommand2, rootDir, completeReleaseWithChangelog } from './tool-utils';
 
 const appDir = `${rootDir}/packages/app-cli`;
 const changelogPath = `${rootDir}/readme/changelog_cli.md`;
@@ -8,18 +8,18 @@ const changelogPath = `${rootDir}/readme/changelog_cli.md`;
 async function main() {
 	process.chdir(appDir);
 
-	const newVersion = (await execCommand('npm version patch')).trim();
+	const newVersion = (await execCommand2('npm version patch')).trim();
 	console.info(`Building ${newVersion}...`);
 	const newTag = `cli-${newVersion}`;
 
-	await execCommand('git pull');
-	await execCommand('touch app/main.js');
-	await execCommand('npm run build');
-	await execCommand('cp ../../README.md build/');
+	await execCommand2('git pull');
+	await execCommand2('touch app/main.js');
+	await execCommand2('npm run build');
+	await execCommand2('cp ../../README.md build/');
 
 	process.chdir(`${appDir}/build`);
 
-	await execCommand('npm publish');
+	await execCommand2('npm publish');
 
 	await completeReleaseWithChangelog(changelogPath, newVersion, newTag, 'CLI');
 }
