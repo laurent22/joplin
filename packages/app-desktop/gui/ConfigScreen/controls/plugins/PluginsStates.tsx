@@ -71,6 +71,7 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 				deleted: setting.deleted,
 				devMode: plugin.devMode,
 				hasBeenUpdated: setting.hasBeenUpdated,
+				homepage_url: plugin.manifest.homepage_url,
 			});
 		}
 

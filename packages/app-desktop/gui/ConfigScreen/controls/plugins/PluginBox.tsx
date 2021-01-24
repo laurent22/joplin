@@ -1,9 +1,11 @@
 import * as React from 'react';
+import { useCallback } from 'react';
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import ToggleButton from '../../../lib/ToggleButton/ToggleButton';
 import Button, { ButtonLevel } from '../../../Button/Button';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+import bridge from '../../../../services/bridge';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -40,6 +42,7 @@ function manifestToItem(manifest: PluginManifest): PluginItem {
 		deleted: false,
 		devMode: false,
 		hasBeenUpdated: false,
+		homepage_url: manifest.homepage_url,
 	};
 }
 
@@ -52,6 +55,7 @@ export interface PluginItem {
 	deleted: boolean;
 	devMode: boolean;
 	hasBeenUpdated: boolean;
+	homepage_url: string;
 }
 
 const CellRoot = styled.div`
@@ -95,13 +99,21 @@ const DevModeLabel = styled.div`
 	color: ${props => props.theme.color};
 `;
 
-const StyledName = styled.div`
+const StyledNameAndVersion = styled.div`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
 	font-size: ${props => props.theme.fontSize}px;
 	font-weight: bold;
 	padding-right: 5px;
 	flex: 1;
+`;
+
+const StyledName = styled.a`
+	color: ${props => props.theme.color};
+
+	&:hover {
+		text-decoration: underline;
+	}
 `;
 
 const StyledVersion = styled.span`
@@ -118,6 +130,11 @@ const StyledDescription = styled.div`
 
 export default function(props: Props) {
 	const item = props.item ? props.item : manifestToItem(props.manifest);
+
+	const onNameClick = useCallback(() => {
+		if (!props.item.homepage_url) return;
+		bridge().openExternal(props.item.homepage_url);
+	}, [props.item]);
 
 	// For plugins in dev mode things like enabling/disabling or
 	// uninstalling them doesn't make sense, as that should be done by
@@ -190,7 +207,7 @@ export default function(props: Props) {
 	return (
 		<CellRoot>
 			<CellTop>
-				<StyledName mb={'5px'}><span style={{ marginRight: 5 }}>{item.name} {item.deleted ? '(Deleted)' : ''}</span><StyledVersion>v{item.version}</StyledVersion></StyledName>
+				<StyledNameAndVersion mb={'5px'}><StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }}>{item.name} {item.deleted ? _('(%s)', 'Deleted') : ''}</StyledName><StyledVersion>v{item.version}</StyledVersion></StyledNameAndVersion>
 				{renderToggleButton()}
 			</CellTop>
 			<CellContent>
