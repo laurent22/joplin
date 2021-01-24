@@ -1782,6 +1782,9 @@ packages/server/src/utils/uuidgen.js.map
 packages/tools/lerna-add.d.ts
 packages/tools/lerna-add.js
 packages/tools/lerna-add.js.map
+packages/tools/release-cli.d.ts
+packages/tools/release-cli.js
+packages/tools/release-cli.js.map
 packages/tools/release-electron.d.ts
 packages/tools/release-electron.js
 packages/tools/release-electron.js.map

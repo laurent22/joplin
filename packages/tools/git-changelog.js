@@ -95,7 +95,8 @@ function filterLogs(logs, platform) {
 
 		let addIt = false;
 
-		if (prefix.indexOf('all') >= 0 && platform !== 'clipper') addIt = true;
+		// "All" refers to desktop, CLI and mobile app. Clipper and Server are not included.
+		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server')) addIt = true;
 		if ((platform === 'android' || platform === 'ios') && prefix.indexOf('mobile') >= 0) addIt = true;
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
@@ -103,6 +104,7 @@ function filterLogs(logs, platform) {
 		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0 || prefix.indexOf('macos') >= 0)) addIt = true;
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
+		if (platform === 'server' && prefix.indexOf('server') >= 0) addIt = true;
 
 		// Translation updates often comes in format "Translation: Update pt_PT.po"
 		// but that's not useful in a changelog especially since most people
@@ -134,7 +136,7 @@ function formatCommitMessage(msg, author, options) {
 	const isPlatformPrefix = prefix => {
 		prefix = prefix.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api', 'plugins'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api', 'plugins', 'server'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};

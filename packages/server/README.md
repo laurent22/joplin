@@ -87,3 +87,7 @@ To use Postgres, from the monorepo root, run `docker-compose --file docker-compo
 ## Starting the server
 
 From `packages/server`, run `npm run start-dev`
+
+# Changelog
+
+[View the changelog](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)

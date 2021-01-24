@@ -3,6 +3,7 @@ import * as fs from 'fs-extra';
 const fetch = require('node-fetch');
 const execa = require('execa');
 const { splitCommandString } = require('@joplin/lib/string-utils');
+const moment = require('moment');
 
 function quotePath(path: string) {
 	if (!path) return '';
@@ -19,6 +20,72 @@ function commandToString(commandName: string, args: string[] = []) {
 	}
 
 	return output.join(' ');
+}
+
+async function insertChangelog(tag: string, changelogPath: string, changelog: string) {
+	const currentText = await fs.readFile(changelogPath, 'UTF-8');
+	const lines = currentText.split('\n');
+
+	const beforeLines = [];
+	const afterLines = [];
+
+	for (const line of lines) {
+		if (afterLines.length) {
+			afterLines.push(line);
+			continue;
+		}
+
+		if (line.indexOf('##') === 0) {
+			afterLines.push(line);
+			continue;
+		}
+
+		beforeLines.push(line);
+	}
+
+	const header = [
+		'##',
+		`[${tag}](https://github.com/laurent22/joplin/releases/tag/${tag})`,
+		'-',
+		// eslint-disable-next-line no-useless-escape
+		`${moment.utc().format('YYYY-MM-DD\THH:mm:ss')}Z`,
+	];
+
+	let newLines = [];
+	newLines.push(header.join(' '));
+	newLines.push('');
+	newLines = newLines.concat(changelog.split('\n'));
+	newLines.push('');
+
+	const output = beforeLines.concat(newLines).concat(afterLines);
+
+	return output.join('\n');
+}
+
+export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string) {
+	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag}`, { })).trim();
+
+	const newChangelog = await insertChangelog(newTag, changelogPath, changelog);
+
+	await fs.writeFile(changelogPath, newChangelog);
+
+	const finalCmds = [
+		'git pull',
+		'git add -A',
+		`git commit -m "${appName} ${newVersion}"`,
+		`git tag "${newTag}"`,
+		'git push',
+		'git push --tags',
+	];
+
+	console.info('');
+	console.info('Verify that the changelog is correct:');
+	console.info('');
+	console.info(`${process.env.EDITOR} "${changelogPath}"`);
+	console.info('');
+	console.info('Then run these commands:');
+	console.info('');
+	console.info(finalCmds.join(' && '));
 }
 
 async function loadGitHubUsernameCache() {
