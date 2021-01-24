@@ -147,6 +147,7 @@ class Setting extends BaseModel {
 		profileDir: '',
 		templateDir: '',
 		tempDir: '',
+		pluginDataDir: '',
 		cacheDir: '',
 		pluginDir: '',
 		flagOpenDevTools: false,

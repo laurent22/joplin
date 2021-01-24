@@ -6,7 +6,7 @@ import Setting from './Setting';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
 import { ResourceEntity, ResourceLocalStateEntity } from '../services/database/types';
-import  ResourceLocalState from './ResourceLocalState';
+import ResourceLocalState from './ResourceLocalState';
 const pathUtils = require('../path-utils');
 const { mime } = require('../mime-utils.js');
 const { filename, safeFilename } = require('../path-utils');

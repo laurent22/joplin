@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
-import CodeMirror  from './NoteBody/CodeMirror/CodeMirror';
+import CodeMirror from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
 import { htmlToMarkdown, formNoteToNote } from './utils';

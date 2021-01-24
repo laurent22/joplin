@@ -2,7 +2,7 @@ import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
 import Global from './api/Global';
 import BasePluginRunner from './BasePluginRunner';
-import BaseService  from '../BaseService';
+import BaseService from '../BaseService';
 import shim from '../../shim';
 import { filename, dirname, rtrimSlashes } from '../../path-utils';
 import Setting from '../../models/Setting';
@@ -267,7 +267,9 @@ export default class PluginService extends BaseService {
 
 		const manifest = manifestFromObject(manifestObj);
 
-		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action));
+		const dataDir = `${Setting.value('pluginDataDir')}/${manifest.id}`;
+
+		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir);
 
 		for (const msg of deprecationNotices) {
 			plugin.deprecationNotice('1.5', msg);
@@ -332,8 +334,12 @@ export default class PluginService extends BaseService {
 		}
 	}
 
+	public isCompatible(pluginVersion: string): boolean {
+		return compareVersions(this.appVersion_, pluginVersion) >= 0;
+	}
+
 	public async runPlugin(plugin: Plugin) {
-		if (compareVersions(this.appVersion_, plugin.manifest.app_min_version) < 0) {
+		if (!this.isCompatible(plugin.manifest.app_min_version)) {
 			throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
 		} else {
 			this.store_.dispatch({

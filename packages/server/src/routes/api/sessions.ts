@@ -10,7 +10,7 @@ const router = new Router();
 router.public = true;
 
 router.post('api/sessions', async (_path: SubPath, ctx: AppContext) => {
-	const fields: User =  await bodyFields(ctx.req);
+	const fields: User = await bodyFields(ctx.req);
 	const user = await ctx.models.user().login(fields.email, fields.password);
 	if (!user) throw new ErrorForbidden('Invalid username or password');
 

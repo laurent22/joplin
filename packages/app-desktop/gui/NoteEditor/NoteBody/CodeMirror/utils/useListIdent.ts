@@ -84,7 +84,7 @@ export default function useListIdent(CodeMirror: any) {
 						const tokens = cm.getLineTokens(anchor.line);
 						const { start, end } = getListSpan(tokens, line);
 						// Resets numbered list to 1.
-						cm.replaceRange('1. ',  { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
+						cm.replaceRange('1. ', { line: anchor.line, ch: start }, { line: anchor.line, ch: end });
 					}
 
 					cm.indentLine(anchor.line, 'add');

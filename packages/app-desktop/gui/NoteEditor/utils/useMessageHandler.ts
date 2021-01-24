@@ -11,7 +11,7 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('electron').remote.require('./bridge').default;
 const { urlDecode } = require('@joplin/lib/string-utils');
 const urlUtils = require('@joplin/lib/urlUtils');
-import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { reg } = require('@joplin/lib/registry.js');
 
 export default function useMessageHandler(scrollWhenReady: any, setScrollWhenReady: Function, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote) {

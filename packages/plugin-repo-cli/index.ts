@@ -7,12 +7,8 @@ import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginI
 import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
-
-interface NpmPackage {
-	name: string;
-	version: string;
-	date: Date;
-}
+import { ImportErrors, NpmPackage } from './lib/types';
+import errorsHaveChanged from './lib/errorsHaveChanged';
 
 function stripOffPackageOrg(name: string): string {
 	const n = name.split('/');
@@ -167,7 +163,7 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	chdir(packageTempDir);
 	await execCommand2('npm init --yes --loglevel silent', { quiet: true });
 
-	const errors: any = await readJsonFile(errorsPath, {});
+	const errors: ImportErrors = await readJsonFile(errorsPath, {});
 	delete errors[npmPackage.name];
 
 	let actionType: ProcessingActionType = ProcessingActionType.Update;
@@ -191,7 +187,9 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	}
 
 	if (Object.keys(errors).length) {
-		await fs.writeFile(errorsPath, JSON.stringify(errors, null, '\t'), 'utf8');
+		if (errorsHaveChanged(await readJsonFile(errorsPath, {}), errors)) {
+			await fs.writeFile(errorsPath, JSON.stringify(errors, null, '\t'), 'utf8');
+		}
 	} else {
 		await fs.remove(errorsPath);
 	}

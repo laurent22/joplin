@@ -4,11 +4,11 @@ import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
-
-const fs = require('fs-extra');
-const { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } = require('./test-utils.js');
+import * as fs from 'fs-extra';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
+import { newPluginScript } from './test-utils';
+import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } from './test-utils.js';
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
 
@@ -268,7 +268,7 @@ describe('services_PluginService', function() {
 		const pluginPath = `${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`;
 		await service.installPlugin(pluginPath);
 		const installedPluginPath = `${Setting.value('pluginDir')}/org.joplinapp.FirstJplPlugin.jpl`;
-		expect(await fs.existsSync(installedPluginPath)).toBe(true);
+		expect(await fs.pathExists(installedPluginPath)).toBe(true);
 	}));
 
 	it('should rename the plugin archive to the right name', (async () => {
@@ -279,7 +279,30 @@ describe('services_PluginService', function() {
 		await shim.fsDriver().copy(pluginPath, tempPath);
 		const installedPluginPath = `${Setting.value('pluginDir')}/org.joplinapp.FirstJplPlugin.jpl`;
 		await service.installPlugin(tempPath);
-		expect(await fs.existsSync(installedPluginPath)).toBe(true);
+		expect(await fs.pathExists(installedPluginPath)).toBe(true);
+	}));
+
+	it('should create the data directory', (async () => {
+		const pluginScript = newPluginScript(`			
+			joplin.plugins.register({
+				onStart: async function() {
+					const dataDir = await joplin.plugins.dataDir();
+					joplin.data.post(['folders'], null, { title: JSON.stringify(dataDir) });
+				},
+			});
+		`);
+
+		const expectedPath = `${Setting.value('pluginDataDir')}/org.joplinapp.plugins.PluginTest`;
+		expect(await fs.pathExists(expectedPath)).toBe(false);
+
+		const service = newPluginService();
+		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		await service.runPlugin(plugin);
+
+		expect(await fs.pathExists(expectedPath)).toBe(true);
+
+		const folders = await Folder.all();
+		expect(JSON.parse(folders[0].title)).toBe(expectedPath);
 	}));
 
 });

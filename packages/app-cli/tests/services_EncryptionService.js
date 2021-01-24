@@ -21,7 +21,7 @@ describe('services_EncryptionService', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		service =  new EncryptionService();
+		service = new EncryptionService();
 		BaseItem.encryptionService_ = service;
 		Setting.setValue('encryption.enabled', true);
 		done();

@@ -35,15 +35,15 @@ const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
-import  EncryptionService from './services/EncryptionService';
-import  ResourceFetcher from './services/ResourceFetcher';
+import EncryptionService from './services/EncryptionService';
+import ResourceFetcher from './services/ResourceFetcher';
 import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
 import SearchEngine from './services/searchengine/SearchEngine';
-import  RevisionService from './services/RevisionService';
-import  ResourceService from './services/ResourceService';
-import  DecryptionWorker from './services/DecryptionWorker';
+import RevisionService from './services/RevisionService';
+import ResourceService from './services/ResourceService';
+import DecryptionWorker from './services/DecryptionWorker';
 const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
-import  MigrationService from './services/MigrationService';
+import MigrationService from './services/MigrationService';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -676,6 +676,7 @@ export default class BaseApplication {
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
+		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
 		Setting.setConstant('cacheDir', cacheDir);
 		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
 

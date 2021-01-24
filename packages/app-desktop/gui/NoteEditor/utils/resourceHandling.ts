@@ -4,7 +4,7 @@ import Note from '@joplin/lib/models/Note';
 import BaseModel from '@joplin/lib/BaseModel';
 import Resource from '@joplin/lib/models/Resource';
 const bridge = require('electron').remote.require('./bridge').default;
-import  ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { reg } = require('@joplin/lib/registry.js');
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');

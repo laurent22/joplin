@@ -33,12 +33,15 @@ export default class Plugin {
 	private devMode_: boolean = false;
 	private messageListener_: Function = null;
 	private contentScriptMessageListeners_: Record<string, Function> = {};
+	private dataDir_: string;
+	private dataDirCreated_: boolean = false;
 
-	constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function) {
+	constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
 		this.dispatch_ = dispatch;
+		this.dataDir_ = dataDir;
 		this.eventEmitter_ = new EventEmitter();
 	}
 
@@ -64,6 +67,17 @@ export default class Plugin {
 
 	public get baseDir(): string {
 		return this.baseDir_;
+	}
+
+	public async dataDir(): Promise<string> {
+		if (this.dataDirCreated_) return this.dataDir_;
+
+		if (!(await shim.fsDriver().exists(this.dataDir_))) {
+			await shim.fsDriver().mkdir(this.dataDir_);
+			this.dataDirCreated_ = true;
+		}
+
+		return this.dataDir_;
 	}
 
 	public get viewCount(): number {
@@ -156,6 +170,5 @@ export default class Plugin {
 		if (!this.contentScriptMessageListeners_[id]) return;
 		return this.contentScriptMessageListeners_[id](message);
 	}
-
 
 }

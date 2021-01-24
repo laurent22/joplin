@@ -8,7 +8,7 @@ import markdownUtils from '../markdownUtils';
 import { NoteEntity } from '../services/database/types';
 
 const { sprintf } = require('sprintf-js');
-import  Resource from './Resource';
+import Resource from './Resource';
 const { pregQuote } = require('../string-utils.js');
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');

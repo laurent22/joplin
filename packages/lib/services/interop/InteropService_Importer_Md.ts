@@ -69,7 +69,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		await Promise.all(imageLinks.map(async (encodedLink: string) => {
 			const link = decodeURI(encodedLink);
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
-			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
+			const pathWithExtension = `${attachmentPath}.${fileExtension(link)}`;
 			const stat = await shim.fsDriver().stat(pathWithExtension);
 			const isDir = stat ? stat.isDirectory() : false;
 			if (stat && !isDir) {

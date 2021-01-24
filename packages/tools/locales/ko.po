@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -60,7 +62,7 @@ msgstr "취소"
 #: packages/app-desktop/bridge.js:188
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
-msgstr "애플리케이션이 곧 종료됩니다. 프로세스를 완료하려면 다시 실해주세요."
+msgstr "애플리케이션이 곧 종료됩니다. 프로세스를 완료하려면 다시 실행해주세요."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
 msgid ""
@@ -80,7 +82,7 @@ msgstr "가고자 하는 곳으로 이동..."
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr "명령 팔레트를"
+msgstr "명령 팔레트"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -94,7 +96,7 @@ msgstr "노트를 내보낼 수 없습니다: %s"
 
 #: packages/app-desktop/checkForUpdates.js:138
 msgid "Current version is up-to-date."
-msgstr "현재 최신 버전을 사용중입니다."
+msgstr "현재 최신 버전을 사용 중입니다."
 
 #: packages/app-desktop/checkForUpdates.js:148
 #, javascript-format
@@ -103,7 +105,7 @@ msgstr "%s (프리-릴리즈)"
 
 #: packages/app-desktop/checkForUpdates.js:152
 msgid "An update is available, do you want to download it now?"
-msgstr "업데이트가 있습니다. 지금 다운로드 할까요?"
+msgstr "업데이트가 있습니다. 지금 내려 받을까요?"
 
 #: packages/app-desktop/checkForUpdates.js:153
 #, javascript-format
@@ -121,7 +123,7 @@ msgstr "다운로드"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
-msgstr "전체 릴리즈된 노트들"
+msgstr "전체 릴리즈 노트"
 
 #: packages/app-desktop/gui/SearchBar/SearchBar.js:113
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
@@ -142,7 +144,7 @@ msgstr "이 노트엔 역사가 없습니다"
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:118
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "지원하지 않는 링크 또는 메세지: %s"
+msgstr "지원하지 않는 링크 또는 메시지: %s"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
@@ -368,7 +370,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:73
 msgid "There was an error downloading this attachment:"
-msgstr "첨부 파일을 다운로드하던 중에 오류가 발생했습니다:"
+msgstr "첨부 파일을 내려 받는 중에 오류가 발생했습니다:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:76
 #: packages/lib/services/ResourceEditWatcher/index.js:196
@@ -413,14 +415,16 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"서식 있는 텍스트 편집기에는 몇가지의 제한 사항들이 있으며, 사용하기 전에 이러"
+"한 제약 사항들을 미리 알고 있는 것이 좋습니다."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:340
 msgid "Read more about it"
-msgstr ""
+msgstr "더 자세히 알아보기"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:345
 msgid "Dismiss"
-msgstr ""
+msgstr "취소"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:381
 msgid "The following attachments are being watched for changes:"
@@ -478,42 +482,40 @@ msgid "Horizontal Rule"
 msgstr "수평줄"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "이 노트를 삭제할까요?"
+msgstr "줄 삭제"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "실행 취소"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "다시 실행"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "들여쓰기 제거"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "들여쓰기 추가"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
-msgstr "노트 목록 전환"
+msgstr "주석 전환"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "선택된 줄들을 정렬"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "윗줄과 위치 바꾸기"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "아랫줄과 위치 바꾸기"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -692,7 +694,7 @@ msgstr "일부 항목들은 암호화할 수 없습니다."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:421
 msgid "One or more master keys need a password."
-msgstr "하나 혹은 그 이상의 마스터 키 비밀번호를 입력해주세요."
+msgstr "하나 혹은 그 이상의 마스터 키 비밀번호가 필요합니다."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:423
 msgid "Set the password"
@@ -706,7 +708,7 @@ msgstr "마스터 키 중 하나가 오래된 암호화 방식을 사용합니�
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr "기본 암호과 구문이 변경 되었습니다. 데이터를 재암호화 해야합니다."
+msgstr "기본 암호 방법이 변경되었습니다. 데이터를 다시 암호화해야 합니다."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:435
 msgid "More info"
@@ -780,7 +782,7 @@ msgstr "편집기 배치 형태 전환"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
 msgid "Toggle editors"
-msgstr "편집기 배치 형태 전환"
+msgstr "편집기 전환"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -825,7 +827,7 @@ msgstr "인쇄"
 
 #: packages/app-desktop/gui/MainScreen/commands/print.js:26
 msgid "Only one note can be printed at a time."
-msgstr "한 번에 오직 하나의 노트만 출력할 수 있습니다."
+msgstr "한 번에 하나의 노트만 출력할 수 있습니다."
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:29
 #: packages/app-mobile/components/screens/dropbox-login.js:58
@@ -1065,7 +1067,7 @@ msgstr "설치하기:"
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "새 \"%s\" 노트북이 생성되었으며 \"%s\" 파일을 가져왔습니다"
+msgstr "새 \"%s\" 노트북이 생성되고 \"%s\" 파일을 여기에 가져옵니다"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-cli/app/command-import.js:47
@@ -1124,7 +1126,7 @@ msgstr "'노트' 또는 '할 일' 형식으로 전환합니다"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:86
 msgid "Switch to note type"
-msgstr "'노트' 형식으로 전환합니다"
+msgstr "'노트'  형식으로 전환합니다"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:92
 msgid "Switch to to-do type"
@@ -1393,7 +1395,7 @@ msgstr "고급 옵션"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Browse..."
-msgstr "훑어보기..."
+msgstr "찾아보기..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:456
 msgid "The application must be restarted for these changes to take effect."
@@ -1410,7 +1412,7 @@ msgstr "나중에"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 msgid "Restart now"
-msgstr "지금 재시작하"
+msgstr "지금 재시작"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
@@ -1902,7 +1904,7 @@ msgstr "식별자 %s에 해당하는 항목이 없습니다"
 
 #: packages/app-mobile/components/screens/Note.js:168
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "이 첨부는 아직 다운로드 또는 복호화 되지 않았습니다."
+msgstr "이 첨부는 아직 다운로드 또는 복호화되지 않았습니다."
 
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
@@ -2009,11 +2011,13 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"기본 관리자 암호는가 변경되지 않았으며, 이는 보안상 안전하지 않습니다! [지금 "
+"바꾸기](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr "모든 가능한 포트들이 사용중에 있습니다 - %s 에 대한 문제를 알려주세요"
+msgstr "모든 포트들이 사용 중입니다 - %s에 문제를 공유해주시면 감사하겠습니다"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2046,9 +2050,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Joplin 웹사이트"
+msgstr "Joplin 서버"
 
 #: packages/lib/shim-init-node.js:201
 #, javascript-format
@@ -2189,21 +2192,19 @@ msgstr "AWS 보안 암호"
 
 #: packages/lib/models/Setting.js:259
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "Joplin 서버 URL"
 
 #: packages/lib/models/Setting.js:273
-#, fuzzy
 msgid "Joplin Server Directory"
-msgstr "Joplin 내보내기 폴더"
+msgstr "Joplin 서버 디렉터리"
 
 #: packages/lib/models/Setting.js:283
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Joplin 서버 사용자 이름"
 
 #: packages/lib/models/Setting.js:293
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "마스터 키를 넣어주세요:"
+msgstr "Joplin 서버 암호"
 
 #: packages/lib/models/Setting.js:305
 msgid "Attachment download behaviour"
@@ -2336,9 +2337,8 @@ msgid "Enable typographer support"
 msgstr "조판부호 지원 활성화"
 
 #: packages/lib/models/Setting.js:562
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "노트 변경 이력 활성화"
+msgstr "링크 자동 감지 활성화"
 
 #: packages/lib/models/Setting.js:563
 msgid "Enable math expressions"
@@ -2353,21 +2353,20 @@ msgid "Enable Mermaid diagrams support"
 msgstr "Mermaid 다이어그램 지원 활성화"
 
 #: packages/lib/models/Setting.js:566
-#, fuzzy
 msgid "Enable audio player"
-msgstr "마크다운 이모지 활성화"
+msgstr "음성 재생 활성화"
 
 #: packages/lib/models/Setting.js:567
 msgid "Enable video player"
-msgstr ""
+msgstr "비디오 재생 활성화"
 
 #: packages/lib/models/Setting.js:568
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "PDF 보기 활성화"
 
 #: packages/lib/models/Setting.js:569
 msgid "Enable ==mark== syntax"
-msgstr "==Mark== 구문 활성화"
+msgstr "==mark== 구문 활성화"
 
 #: packages/lib/models/Setting.js:570
 msgid "Enable footnotes"
@@ -2375,7 +2374,7 @@ msgstr "각주 활성화"
 
 #: packages/lib/models/Setting.js:571
 msgid "Enable table of contents extension"
-msgstr "표 내용 확장 활성화"
+msgstr "목차 확장 활성화"
 
 #: packages/lib/models/Setting.js:572
 msgid "Enable ~sub~ syntax"
@@ -2419,12 +2418,12 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되므로, 충돌 횟"
-"수가 줄어들게 되므로 이 옵션을 활성화 하시는 것을 추천드립니다."
+"Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화되어 충돌 횟수를 "
+"줄일 수 있기 때문에 이 옵션을 활성화하는 것을 추천합니다."
 
 #: packages/lib/models/Setting.js:594
 msgid "Start application minimised in the tray icon"
-msgstr "트레이 아이콘에 최소화 된 채로 Joplin 실행"
+msgstr "최소화된 채로 트레이 아이콘에서 Joplin 실행"
 
 #: packages/lib/models/Setting.js:609
 msgid "Editor font size"
@@ -2445,7 +2444,7 @@ msgid ""
 "font."
 msgstr ""
 "반드시 *고정폭* 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 "
-"올바르지 않을 경우, 일반 c고정폭 글꼴을 기본값으로 사용합니다."
+"올바르지 않을 경우, 일반 고정폭 글꼴을 기본값으로 사용합니다."
 
 #: packages/lib/models/Setting.js:662
 msgid "Custom stylesheet for rendered Markdown"
@@ -3014,11 +3013,11 @@ msgstr "Joplin 내보내기 폴더"
 
 #: packages/lib/services/interop/InteropService.js:51
 msgid "Evernote Export File (as Markdown)"
-msgstr "에버노트 내보내기 파일 (마크다운으로)"
+msgstr "Evernote 내보내기 파일 (마크다운으로)"
 
 #: packages/lib/services/interop/InteropService.js:52
 msgid "Evernote Export File (as HTML)"
-msgstr "에버노트 내보내기 파일 (HTML 으로)"
+msgstr "Evernote 내보내기 파일 (HTML로)"
 
 #: packages/lib/services/interop/InteropService.js:60
 msgid "HTML File"
@@ -3168,9 +3167,8 @@ msgid "Downloaded and encrypted"
 msgstr "다운로드 및 암호화됨"
 
 #: packages/lib/services/report.js:193
-#, fuzzy
 msgid "Created locally"
-msgstr "로컬 항목 생성됨: %d."
+msgstr "로컬에서 생성됨"
 
 #: packages/lib/services/report.js:206
 msgid "Attachments that could not be downloaded"
@@ -3237,7 +3235,7 @@ msgstr "맞춤법 검사기 사용"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
 msgid "Change language"
-msgstr "언어 전"
+msgstr "언어 전환"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3716,7 +3714,7 @@ msgstr "암호화된 항목을 변경할 수 없습니다"
 
 #: packages/app-cli/app/command-help.js:13
 msgid "Displays usage information."
-msgstr "얼마나 썼는지 표시합니다."
+msgstr "사용량 정보를 보여줍니다."
 
 #: packages/app-cli/app/command-help.js:36
 #, javascript-format

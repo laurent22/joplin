@@ -198,7 +198,7 @@ function Button(props: Props) {
 
 	function renderTitle() {
 		if (!props.title) return null;
-		return  <StyledTitle color={props.color}>{props.title}</StyledTitle>;
+		return <StyledTitle color={props.color}>{props.title}</StyledTitle>;
 	}
 
 	function onClick() {

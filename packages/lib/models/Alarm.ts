@@ -1,5 +1,5 @@
 import BaseModel from '../BaseModel';
-import  Note from './Note';
+import Note from './Note';
 
 export interface Notification {
 	id: number;

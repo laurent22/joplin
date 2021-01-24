@@ -58,12 +58,27 @@ export default class JoplinPlugins {
 		return this.plugin.registerContentScript(type, id, scriptPath);
 	}
 
-	// public async onMessage(callback: any) {
-	// 	this.plugin.onMessage(callback);
-	// }
+	/**
+	 * Gets the plugin own data directory path. Use this to store any plugin-related data.
+	 */
+	public async dataDir(): Promise<string> {
+		return this.plugin.dataDir();
+	}
 
-	// public async onContentScriptMessage(id: string, callback: any) {
-	// 	this.plugin.onContentScriptMessage(id, callback);
-	// }
+	/**
+	 * It is not possible to bundle native packages with a plugin, because they
+	 * need to work cross-platforms. Instead access to certain useful native
+	 * packages is provided using this function.
+	 *
+	 * Currently these packages are available:
+	 *
+	 * - [sqlite3](https://www.npmjs.com/package/sqlite3)
+	 * - [fs-extra](https://www.npmjs.com/package/fs-extra)
+	 *
+	 * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/nativeModule)
+	 */
+	public require(_path: string): any {
+		// Just a stub. Implementation has to be done within plugin process, in plugin_index.js
+	}
 
 }

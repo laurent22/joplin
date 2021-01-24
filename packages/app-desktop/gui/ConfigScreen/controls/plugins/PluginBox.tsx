@@ -1,9 +1,11 @@
 import * as React from 'react';
+import { useCallback } from 'react';
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import ToggleButton from '../../../lib/ToggleButton/ToggleButton';
 import Button, { ButtonLevel } from '../../../Button/Button';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+import bridge from '../../../../services/bridge';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -24,6 +26,7 @@ interface Props {
 	installState?: InstallState;
 	updateState?: UpdateState;
 	themeId: number;
+	isCompatible: boolean;
 	onToggle?: Function;
 	onDelete?: Function;
 	onInstall?: Function;
@@ -32,10 +35,7 @@ interface Props {
 
 function manifestToItem(manifest: PluginManifest): PluginItem {
 	return {
-		id: manifest.id,
-		name: manifest.name,
-		version: manifest.version,
-		description: manifest.description,
+		manifest: manifest,
 		enabled: true,
 		deleted: false,
 		devMode: false,
@@ -44,10 +44,7 @@ function manifestToItem(manifest: PluginManifest): PluginItem {
 }
 
 export interface PluginItem {
-	id: string;
-	name: string;
-	version: string;
-	description: string;
+	manifest: PluginManifest;
 	enabled: boolean;
 	deleted: boolean;
 	devMode: boolean;
@@ -67,6 +64,8 @@ const CellRoot = styled.div`
 	margin-right: 20px;
 	margin-bottom: 20px;
 	box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+
+	opacity: ${props => props.isCompatible ? '1' : '0.6'};
 `;
 
 const CellTop = styled.div`
@@ -87,6 +86,12 @@ const CellFooter = styled.div`
 	flex-direction: row;
 `;
 
+const NeedUpgradeMessage = styled.span`
+	font-family: ${props => props.theme.fontFamily};
+	color: ${props => props.theme.colorWarn};
+	font-size: ${props => props.theme.fontSize}px;
+`;
+
 const DevModeLabel = styled.div`
 	border: 1px solid ${props => props.theme.color};
 	border-radius: 4px;
@@ -95,13 +100,21 @@ const DevModeLabel = styled.div`
 	color: ${props => props.theme.color};
 `;
 
-const StyledName = styled.div`
+const StyledNameAndVersion = styled.div`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
 	font-size: ${props => props.theme.fontSize}px;
 	font-weight: bold;
 	padding-right: 5px;
 	flex: 1;
+`;
+
+const StyledName = styled.a`
+	color: ${props => props.theme.color};
+
+	&:hover {
+		text-decoration: underline;
+	}
 `;
 
 const StyledVersion = styled.span`
@@ -118,6 +131,11 @@ const StyledDescription = styled.div`
 
 export default function(props: Props) {
 	const item = props.item ? props.item : manifestToItem(props.manifest);
+
+	const onNameClick = useCallback(() => {
+		if (!props.item.manifest.homepage_url) return;
+		bridge().openExternal(props.item.manifest.homepage_url);
+	}, [props.item]);
 
 	// For plugins in dev mode things like enabling/disabling or
 	// uninstalling them doesn't make sense, as that should be done by
@@ -177,6 +195,16 @@ export default function(props: Props) {
 	function renderFooter() {
 		if (item.devMode) return null;
 
+		if (!props.isCompatible) {
+			return (
+				<CellFooter>
+					<NeedUpgradeMessage>
+						{_('Please upgrade Joplin to use this plugin')}
+					</NeedUpgradeMessage>
+				</CellFooter>
+			);
+		}
+
 		return (
 			<CellFooter>
 				{renderDeleteButton()}
@@ -188,13 +216,13 @@ export default function(props: Props) {
 	}
 
 	return (
-		<CellRoot>
+		<CellRoot isCompatible={props.isCompatible}>
 			<CellTop>
-				<StyledName mb={'5px'}><span style={{ marginRight: 5 }}>{item.name} {item.deleted ? '(Deleted)' : ''}</span><StyledVersion>v{item.version}</StyledVersion></StyledName>
+				<StyledNameAndVersion mb={'5px'}><StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }}>{item.manifest.name} {item.deleted ? _('(%s)', 'Deleted') : ''}</StyledName><StyledVersion>v{item.manifest.version}</StyledVersion></StyledNameAndVersion>
 				{renderToggleButton()}
 			</CellTop>
 			<CellContent>
-				<StyledDescription>{item.description}</StyledDescription>
+				<StyledDescription>{item.manifest.description}</StyledDescription>
 			</CellContent>
 			{renderFooter()}
 		</CellRoot>

@@ -245,7 +245,7 @@ function shimInit(sharp = null, keytar = null, React = null) {
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;
 
-		const saveOptions =  { isNew: true };
+		const saveOptions = { isNew: true };
 		if (options.userSideValidation) saveOptions.userSideValidation = true;
 		return Resource.save(resource, saveOptions);
 	};

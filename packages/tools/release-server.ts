@@ -1,4 +1,4 @@
-import { execCommand2, rootDir, gitPullTry } from './tool-utils';
+import { execCommand2, rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 
 const serverDir = `${rootDir}/packages/server`;
 
@@ -18,11 +18,8 @@ async function main() {
 	await execCommand2(`docker push joplin/server:${versionShort}`);
 	await execCommand2('docker push joplin/server:latest');
 
-	await execCommand2('git add -A');
-	await execCommand2(`git commit -m 'Server release ${version}'`);
-	await execCommand2(`git tag ${tagName}`);
-	await execCommand2('git push');
-	await execCommand2('git push --tags');
+	const changelogPath = `${rootDir}/readme/changelog_server.md`;
+	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server');
 }
 
 main().catch((error) => {

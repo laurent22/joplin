@@ -6,7 +6,7 @@ import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import PluginBox, { InstallState } from './PluginBox';
-import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from './useOnInstallHandler';
 
@@ -82,6 +82,7 @@ export default function(props: Props) {
 					key={manifest.id}
 					manifest={manifest}
 					themeId={props.themeId}
+					isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
 					onInstall={onInstall}
 					installState={installState(manifest.id)}
 				/>);
