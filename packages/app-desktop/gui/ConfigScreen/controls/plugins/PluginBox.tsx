@@ -26,6 +26,7 @@ interface Props {
 	installState?: InstallState;
 	updateState?: UpdateState;
 	themeId: number;
+	isCompatible: boolean;
 	onToggle?: Function;
 	onDelete?: Function;
 	onInstall?: Function;
@@ -34,28 +35,20 @@ interface Props {
 
 function manifestToItem(manifest: PluginManifest): PluginItem {
 	return {
-		id: manifest.id,
-		name: manifest.name,
-		version: manifest.version,
-		description: manifest.description,
+		manifest: manifest,
 		enabled: true,
 		deleted: false,
 		devMode: false,
 		hasBeenUpdated: false,
-		homepage_url: manifest.homepage_url,
 	};
 }
 
 export interface PluginItem {
-	id: string;
-	name: string;
-	version: string;
-	description: string;
+	manifest: PluginManifest;
 	enabled: boolean;
 	deleted: boolean;
 	devMode: boolean;
 	hasBeenUpdated: boolean;
-	homepage_url: string;
 }
 
 const CellRoot = styled.div`
@@ -71,6 +64,8 @@ const CellRoot = styled.div`
 	margin-right: 20px;
 	margin-bottom: 20px;
 	box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+
+	opacity: ${props => props.isCompatible ? '1' : '0.6'};
 `;
 
 const CellTop = styled.div`
@@ -89,6 +84,12 @@ const CellContent = styled.div`
 const CellFooter = styled.div`
 	display: flex;
 	flex-direction: row;
+`;
+
+const NeedUpgradeMessage = styled.span`
+	font-family: ${props => props.theme.fontFamily};
+	color: ${props => props.theme.colorWarn};
+	font-size: ${props => props.theme.fontSize}px;
 `;
 
 const DevModeLabel = styled.div`
@@ -132,8 +133,8 @@ export default function(props: Props) {
 	const item = props.item ? props.item : manifestToItem(props.manifest);
 
 	const onNameClick = useCallback(() => {
-		if (!props.item.homepage_url) return;
-		bridge().openExternal(props.item.homepage_url);
+		if (!props.item.manifest.homepage_url) return;
+		bridge().openExternal(props.item.manifest.homepage_url);
 	}, [props.item]);
 
 	// For plugins in dev mode things like enabling/disabling or
@@ -194,6 +195,16 @@ export default function(props: Props) {
 	function renderFooter() {
 		if (item.devMode) return null;
 
+		if (!props.isCompatible) {
+			return (
+				<CellFooter>
+					<NeedUpgradeMessage>
+						{_('Please upgrade Joplin to use this plugin')}
+					</NeedUpgradeMessage>
+				</CellFooter>
+			);
+		}
+
 		return (
 			<CellFooter>
 				{renderDeleteButton()}
@@ -205,13 +216,13 @@ export default function(props: Props) {
 	}
 
 	return (
-		<CellRoot>
+		<CellRoot isCompatible={props.isCompatible}>
 			<CellTop>
-				<StyledNameAndVersion mb={'5px'}><StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }}>{item.name} {item.deleted ? _('(%s)', 'Deleted') : ''}</StyledName><StyledVersion>v{item.version}</StyledVersion></StyledNameAndVersion>
+				<StyledNameAndVersion mb={'5px'}><StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }}>{item.manifest.name} {item.deleted ? _('(%s)', 'Deleted') : ''}</StyledName><StyledVersion>v{item.manifest.version}</StyledVersion></StyledNameAndVersion>
 				{renderToggleButton()}
 			</CellTop>
 			<CellContent>
-				<StyledDescription>{item.description}</StyledDescription>
+				<StyledDescription>{item.manifest.description}</StyledDescription>
 			</CellContent>
 			{renderFooter()}
 		</CellRoot>

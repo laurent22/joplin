@@ -63,20 +63,16 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 			};
 
 			output.push({
-				id: pluginId,
-				name: plugin.manifest.name,
-				version: plugin.manifest.version,
-				description: plugin.manifest.description,
+				manifest: plugin.manifest,
 				enabled: setting.enabled,
 				deleted: setting.deleted,
 				devMode: plugin.devMode,
 				hasBeenUpdated: setting.hasBeenUpdated,
-				homepage_url: plugin.manifest.homepage_url,
 			});
 		}
 
 		output.sort((a: PluginItem, b: PluginItem) => {
-			return a.name < b.name ? -1 : +1;
+			return a.manifest.name < b.manifest.name ? -1 : +1;
 		});
 
 		return output;
@@ -134,12 +130,12 @@ export default function(props: Props) {
 
 	const onDelete = useCallback(async (event: any) => {
 		const item: PluginItem = event.item;
-		const confirm = await bridge().showConfirmMessageBox(_('Delete plugin "%s"?', item.name));
+		const confirm = await bridge().showConfirmMessageBox(_('Delete plugin "%s"?', item.manifest.name));
 		if (!confirm) return;
 
 		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-			if (!draft[item.id]) draft[item.id] = defaultPluginSetting();
-			draft[item.id].deleted = true;
+			if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
+			draft[item.manifest.id].deleted = true;
 		});
 
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
@@ -149,8 +145,8 @@ export default function(props: Props) {
 		const item: PluginItem = event.item;
 
 		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-			if (!draft[item.id]) draft[item.id] = defaultPluginSetting();
-			draft[item.id].enabled = !draft[item.id].enabled;
+			if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
+			draft[item.manifest.id].enabled = !draft[item.manifest.id].enabled;
 		});
 
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
@@ -213,8 +209,8 @@ export default function(props: Props) {
 		for (const item of items) {
 			if (item.deleted) continue;
 
-			const isUpdating = updatingPluginsIds[item.id];
-			const onUpdateHandler = canBeUpdatedPluginIds[item.id] ? onUpdate : null;
+			const isUpdating = updatingPluginsIds[item.manifest.id];
+			const onUpdateHandler = canBeUpdatedPluginIds[item.manifest.id] ? onUpdate : null;
 
 			let updateState = UpdateState.Idle;
 			if (onUpdateHandler) updateState = UpdateState.CanUpdate;
@@ -222,10 +218,11 @@ export default function(props: Props) {
 			if (item.hasBeenUpdated) updateState = UpdateState.HasBeenUpdated;
 
 			output.push(<PluginBox
-				key={item.id}
+				key={item.manifest.id}
 				item={item}
 				themeId={props.themeId}
 				updateState={updateState}
+				isCompatible={PluginService.instance().isCompatible(item.manifest.app_min_version)}
 				onDelete={onDelete}
 				onToggle={onToggle}
 				onUpdate={onUpdateHandler}

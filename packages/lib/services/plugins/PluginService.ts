@@ -334,8 +334,12 @@ export default class PluginService extends BaseService {
 		}
 	}
 
+	public isCompatible(pluginVersion: string): boolean {
+		return compareVersions(this.appVersion_, pluginVersion) >= 0;
+	}
+
 	public async runPlugin(plugin: Plugin) {
-		if (compareVersions(this.appVersion_, plugin.manifest.app_min_version) < 0) {
+		if (!this.isCompatible(plugin.manifest.app_min_version)) {
 			throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
 		} else {
 			this.store_.dispatch({
