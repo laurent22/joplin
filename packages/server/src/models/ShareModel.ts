@@ -2,7 +2,7 @@ import { File, Share, ShareType } from '../db';
 import { ErrorBadRequest } from '../utils/errors';
 import BaseModel, { ValidateOptions } from './BaseModel';
 
-export default class ShareModel extends BaseModel {
+export default class ShareModel extends BaseModel<Share> {
 
 	public get tableName(): string {
 		return 'shares';
@@ -23,7 +23,7 @@ export default class ShareModel extends BaseModel {
 			owner_id: this.userId,
 		};
 
-		return this.save(toSave) as Share;
+		return this.save(toSave);
 	}
 
 }

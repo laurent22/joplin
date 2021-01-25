@@ -23,7 +23,7 @@ export interface LoadOptions {
 	skipPermissionCheck?: boolean;
 }
 
-export default class FileModel extends BaseModel {
+export default class FileModel extends BaseModel<File> {
 
 	private readonly reservedCharacters = ['/', '\\', '*', '<', '>', '?', ':', '|', '#', '%'];
 

@@ -24,7 +24,7 @@ export function defaultChangePagination(): ChangePagination {
 	};
 }
 
-export default class ChangeModel extends BaseModel {
+export default class ChangeModel extends BaseModel<Change> {
 
 	public get tableName(): string {
 		return 'changes';
