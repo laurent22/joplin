@@ -1,4 +1,4 @@
-import { ErrorBadRequest, ErrorForbidden } from './errors';
+import { ErrorForbidden } from './errors';
 import { AppContext } from './types';
 
 const formidable = require('formidable');
@@ -36,11 +36,17 @@ export async function formParse(req: any): Promise<FormParseResult> {
 }
 
 export async function bodyFields(req: any): Promise<BodyFields> {
+	// Formidable needs the content-type to be 'application/json' so on our side
+	// we explicitely set it to that. However save the previous value so that it
+	// can be restored.
+	let previousContentType = null;
 	if (req.headers['content-type'] !== 'application/json') {
-		throw new ErrorBadRequest(`Unsupported Content-Type: "${req.headers['content-type']}". Expected: "application/json"`);
+		previousContentType = req.headers['content-type'];
+		req.headers['content-type'] = 'application/json';
 	}
 
 	const form = await formParse(req);
+	if (previousContentType) req.headers['content-type'] = previousContentType;
 	return form.fields;
 }
 

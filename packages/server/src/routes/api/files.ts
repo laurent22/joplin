@@ -1,4 +1,4 @@
-import { ErrorNotFound, ErrorBadRequest } from '../../utils/errors';
+import { ErrorNotFound } from '../../utils/errors';
 import { File } from '../../db';
 import { bodyFields, formParse } from '../../utils/requestUtils';
 import { SubPath, respondWithFileContent } from '../../utils/routeUtils';
@@ -57,8 +57,12 @@ router.put('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const fileModel = ctx.models.file({ userId: ctx.owner.id });
 	const fileId = path.id;
 	const result = await formParse(ctx.req);
-	if (!result?.files?.file) throw new ErrorBadRequest('File data is missing');
-	const buffer = await fs.readFile(result.files.file.path);
+
+	// When an app PUTs an empty file, `result.files` will be an emtpy object
+	// (could be the way Formidable parses the data?), but we still need to
+	// process the file so we set its content to an empty buffer.
+	// https://github.com/laurent22/joplin/issues/4402
+	const buffer = result?.files?.file ? await fs.readFile(result.files.file.path) : Buffer.alloc(0);
 
 	const file: File = await fileModel.entityFromItemId(fileId, { mustExist: false });
 	file.content = buffer;
