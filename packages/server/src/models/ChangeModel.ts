@@ -44,7 +44,7 @@ export default class ChangeModel extends BaseModel {
 			owner_id: this.userId,
 		};
 
-		return this.save(change);
+		return this.save(change) as Change;
 	}
 
 	// Note: doesn't currently support checking for changes recursively but this
@@ -58,7 +58,7 @@ export default class ChangeModel extends BaseModel {
 		let changeAtCursor: Change = null;
 
 		if (pagination.cursor) {
-			changeAtCursor = await this.load(pagination.cursor);
+			changeAtCursor = await this.load(pagination.cursor) as Change;
 			if (!changeAtCursor) throw new ErrorResyncRequired();
 		}
 

@@ -3,6 +3,7 @@ import { contextSessionId } from '../utils/requestUtils';
 
 export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 	const sessionId = contextSessionId(ctx, false);
+	console.info('SSSSSSSSSSS', sessionId);
 	if (sessionId) ctx.owner = await ctx.models.session().sessionUser(sessionId);
 	return next();
 }

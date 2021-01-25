@@ -211,6 +211,11 @@ export enum ChangeType {
 	Delete = 3,
 }
 
+export enum ShareType {
+	Link = 1, // When a note is shared via a public link
+	App = 2, // When a note is shared with another user on the same server instance
+}
+
 export interface WithDates {
 	updated_time?: number;
 	created_time?: number;
@@ -289,6 +294,12 @@ export interface Notification extends WithDates, WithUuid {
 	canBeDismissed?: number;
 }
 
+export interface Share extends WithDates, WithUuid {
+	owner_id?: Uuid;
+	file_id?: Uuid;
+	type?: ShareType;
+}
+
 export const databaseSchema: DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -356,6 +367,14 @@ export const databaseSchema: DatabaseTables = {
 		message: { type: 'string' },
 		read: { type: 'number' },
 		canBeDismissed: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	shares: {
+		id: { type: 'string' },
+		owner_id: { type: 'string' },
+		file_id: { type: 'string' },
+		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

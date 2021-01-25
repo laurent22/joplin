@@ -1,11 +1,11 @@
-import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient, DbConnection, Change, ItemType, ChangeType, Notification } from '../db';
+import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient, DbConnection, Change, ItemType, ChangeType, Notification, Share } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models } from './factory';
 
-export type AnyItemType = File | User | Session | Permission | ApiClient | Change | Notification;
-export type AnyItemTypes = File[] | User[] | Session[] | Permission[] | ApiClient[] | Change[] | Notification[];
+export type AnyItemType = File | User | Session | Permission | ApiClient | Change | Notification | Share;
+export type AnyItemTypes = File[] | User[] | Session[] | Permission[] | ApiClient[] | Change[] | Notification[] | Share[];
 
 export interface ModelOptions {
 	userId?: string;
@@ -161,7 +161,16 @@ export default abstract class BaseModel {
 	}
 
 	public fromApiInput(object: AnyItemType): AnyItemType {
-		return object;
+		const blackList = ['updated_time', 'created_time', 'owner_id'];
+		const whiteList = Object.keys(databaseSchema[this.tableName]);
+		const output: any = { ...object };
+
+		for (const f in object) {
+			if (blackList.includes(f)) delete output[f];
+			if (!whiteList.includes(f)) delete output[f];
+		}
+
+		return output;
 	}
 
 	public toApiOutput(object: any): any {

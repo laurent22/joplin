@@ -113,7 +113,13 @@ export default class FileModel extends BaseModel {
 		if (specialDirId) {
 			return options.returnFullEntity ? this.load(specialDirId) : { id: specialDirId };
 		} else if (idOrPath.indexOf(':') < 0) {
-			return options.returnFullEntity ? this.load(idOrPath) : { id: idOrPath };
+			if (options.mustExist) {
+				const file = await this.load(idOrPath);
+				if (!file) throw new ErrorNotFound(`file not found: ${idOrPath}`);
+				return options.returnFullEntity ? file : { id: file.id };
+			} else {
+				return options.returnFullEntity ? this.load(idOrPath) : { id: idOrPath };
+			}
 		} else {
 			// When this input is a path, there can be two cases:
 			// - A path to an existing file - in which case we return the file
