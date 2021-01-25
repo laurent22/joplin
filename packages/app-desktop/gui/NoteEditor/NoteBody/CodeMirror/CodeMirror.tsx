@@ -218,6 +218,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textCheckbox: () => addListItem('- [ ] ', _('List item')),
 						textHeading: () => addListItem('## ', ''),
 						textHorizontalRule: () => addListItem('* * *'),
+						'editor.execCommand': (value: any) => {
+							if (editorRef.current[value.name]) {
+								editorRef.current[value.name](...value.args);
+							} else {
+								reg.logger().warn('CodeMirror execCommand: unsupported command: ', value.name);
+							}
+						},
 					};
 
 					if (commands[cmd.name]) {
