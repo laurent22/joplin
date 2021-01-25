@@ -20,9 +20,8 @@ async function postShare(sessionId: string, itemId: Uuid): Promise<AppContext> {
 	return context;
 }
 
-async function getShare(sessionId: string, shareId: Uuid): Promise<AppContext> {
+async function getShare(shareId: Uuid): Promise<AppContext> {
 	const context = await koaAppContext({
-		sessionId: sessionId,
 		request: {
 			method: 'GET',
 			url: `/api/shares/${shareId}`,
@@ -46,17 +45,20 @@ describe('api_shares', function() {
 		await beforeEachDb();
 	});
 
-	test('should share a note', async function() {
+	test('should share a file', async function() {
 		const { session } = await createUserAndSession(1, false);
-		await putFileContent(session.id, 'root:/photo.jpg:', testFilePath());
+		const file = await putFileContent(session.id, 'root:/photo.jpg:', testFilePath());
 
 		const context = await postShare(session.id, 'root:/photo.jpg:');
 		expect(context.response.status).toBe(200);
-
 		const shareId = context.response.body.id;
-		const context2 = await getShare(session.id, shareId);
 
-		console.info(context2.response.body);
+		{
+			const context = await getShare(shareId);
+			expect(context.response.body.id).toBe(shareId);
+			expect(context.response.body.file_id).toBe(file.id);
+			expect(context.response.body.type).toBe(ShareType.Link);
+		}
 	});
 
 });

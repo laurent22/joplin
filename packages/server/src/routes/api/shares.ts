@@ -18,9 +18,10 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
-	ownerRequired(ctx);
+	// No authentication is necessary - anyone who knows the share ID is allowed
+	// to access the file. It is essentially public.
 
-	const shareModel = ctx.models.share({ userId: ctx.owner.id });
+	const shareModel = ctx.models.share();
 	const share = await shareModel.load(path.id);
 	if (!share) throw new ErrorNotFound();
 	return shareModel.toApiOutput(share);
