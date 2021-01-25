@@ -416,4 +416,9 @@ describe('api_files', function() {
 		expect(page3.items.length).toBe(0);
 	});
 
+	test('should not allow creating file without auth', async function() {
+		const context = await putFileContentContext('', 'root:/photo.jpg:', testFilePath());
+		expect(context.response.status).toBe(ErrorForbidden.httpCode);
+	});
+
 });

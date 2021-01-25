@@ -15,7 +15,7 @@ import { AppContext } from '../types';
 import { koaAppContext } from './testUtils';
 
 export function checkContextError(context: AppContext) {
-	if (context.response.status >= 400) throw new Error(`Cannot create directory: ${JSON.stringify(context.response)}`);
+	if (context.response.status >= 400) throw new Error(JSON.stringify(context.response));
 }
 
 export async function getFileMetadataContext(sessionId: string, path: string): Promise<AppContext> {

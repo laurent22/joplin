@@ -16,9 +16,13 @@ export default async function(ctx: AppContext) {
 			let responseObject = null;
 
 			const routeHandler = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
-			responseObject = await routeHandler(match.subPath, ctx);
 
+			// This is a generic catch-all for all private end points - if we
+			// couldn't get a valid session, we exit now. Individual end points
+			// might have additional permission checks depending on the action.
 			if (!match.route.public && !ctx.owner) throw new ErrorForbidden();
+
+			responseObject = await routeHandler(match.subPath, ctx);
 
 			if (responseObject instanceof Response) {
 				ctx.response = responseObject.response;
