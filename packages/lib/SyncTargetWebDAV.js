@@ -1,4 +1,4 @@
-const BaseSyncTarget = require('./BaseSyncTarget.js');
+const BaseSyncTarget = require('./BaseSyncTarget').default;
 const { _ } = require('./locale');
 const Setting = require('./models/Setting').default;
 const { FileApi } = require('./file-api.js');

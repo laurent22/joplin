@@ -83,7 +83,7 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 	}, [props.noteIds]);
 
 	const appApi = async () => {
-		return reg.syncTargetNextcloud().appApi();
+		return reg.syncTarget().appApi();
 	};
 
 	const buttonRow_click = () => {

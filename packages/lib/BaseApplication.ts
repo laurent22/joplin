@@ -22,7 +22,7 @@ import Tag from './models/Tag';
 const { splitCommandString } = require('./string-utils.js');
 const { reg } = require('./registry.js');
 import time from './time';
-const BaseSyncTarget = require('./BaseSyncTarget.js');
+import BaseSyncTarget from './BaseSyncTarget';
 const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
 const os = require('os');
 const fs = require('fs-extra');
