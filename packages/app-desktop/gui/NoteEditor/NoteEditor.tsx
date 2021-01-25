@@ -362,7 +362,7 @@ function NoteEditor(props: NoteEditorProps) {
 	function renderTagBar() {
 		const theme = themeStyle(props.themeId);
 		const noteIds = [formNote.id];
-		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
+		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>{_('Click to add tags...')}</span>;
 		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 
 		return (
