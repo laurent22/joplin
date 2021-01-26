@@ -545,7 +545,7 @@ export default class MdToHtml {
 
 			if (options.splitted) {
 				output.cssStrings = cssStrings;
-				output.html = `<div id="rendered-md">${renderedBody}</div>`;
+				output.html = `<div id="rendered-md">${renderedBody}<p>&nbsp;</p></div>`;
 			}
 		}
 
