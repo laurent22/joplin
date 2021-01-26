@@ -8,7 +8,7 @@ import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker, EnvVariables } from './config';
 import { createDb, dropDb } from './tools/dbTools';
 import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection, sqliteFilePath } from './db';
-import modelFactory from './models/factory';
+import modelFactory, { Models } from './models/factory';
 import { AppContext, Env } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -44,12 +44,20 @@ function appLogger(): LoggerWrapper {
 export class Applications {
 
 	private joplin_:ApplicationJoplin = null;
+	private models_:Models;
 
-	public async joplin():Promise<ApplicationJoplin> {
-		if (this.joplin_) return this.joplin_;
+	public constructor(models:Models) {
+		this.models_ = models;
+	}
 
-		this.joplin_ = new ApplicationJoplin(config());
-		await this.joplin_.initialize();
+	public async joplin(context:AppContext):Promise<ApplicationJoplin> {
+		if (!this.joplin_) {
+			this.joplin_ = new ApplicationJoplin(config(), this.models_);
+			await this.joplin_.initialize();
+		}
+
+		this.joplin_.context = context;
+
 		return this.joplin_;
 	}
 
@@ -144,7 +152,7 @@ async function main() {
 		appContext.db = connectionCheck.connection;
 		appContext.models = modelFactory(appContext.db, config().baseUrl);
 		appContext.appLogger = appLogger;
-		appContext.apps = new Applications();
+		appContext.apps = new Applications(appContext.models);
 
 		appLogger().info('Migrating database...');
 		await migrateDb(appContext.db);

@@ -27,7 +27,7 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const file = await fileModel.loadWithContent(share.file_id, { skipPermissionCheck: true });
 	if (!file) throw new ErrorNotFound();
-	return respondWithFileContent2(ctx, file);
+	return respondWithFileContent2(ctx, file, share);
 });
 
 export default router;

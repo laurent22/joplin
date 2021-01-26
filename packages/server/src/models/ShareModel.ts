@@ -1,5 +1,6 @@
 import { File, Share, ShareType, Uuid } from '../db';
 import { ErrorBadRequest } from '../utils/errors';
+import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { ValidateOptions } from './BaseModel';
 
 export default class ShareModel extends BaseModel<Share> {
@@ -24,6 +25,10 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		return this.save(toSave);
+	}
+
+	public shareUrl(id: Uuid, query: any = null): string {
+		return setQueryParameters(`${this.baseUrl}/shares/${id}`, query);
 	}
 
 }

@@ -139,12 +139,22 @@ utils.imageReplacement = function(ResourceModel: any, src: string, resources: an
 
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';
 	if (ResourceModel.isSupportedImageMimeType(mime)) {
-		let newSrc = `./${ResourceModel.filename(resource)}`;
-		if (resourceBaseUrl) newSrc = resourceBaseUrl + newSrc;
-		newSrc += `?t=${resource.updated_time}`;
+		const newSrc = [];
+
+		if (resourceBaseUrl) {
+			newSrc.push(resourceBaseUrl);
+		} else {
+			newSrc.push('./');
+		}
+
+		newSrc.push(ResourceModel.filename(resource));
+		newSrc.push(`?t=${resource.updated_time}`);
+
+		// let newSrc = `./${ResourceModel.filename(resource)}`;
+		// newSrc += `?t=${resource.updated_time}`;
 		return {
 			'data-resource-id': resource.id,
-			src: newSrc,
+			src: newSrc.join(''),
 		};
 	}
 

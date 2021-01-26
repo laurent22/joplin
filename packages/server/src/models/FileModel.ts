@@ -92,12 +92,12 @@ export default class FileModel extends BaseModel<File> {
 		return output;
 	}
 
-	public async itemFullPath(item: File): Promise<string> {
+	public async itemFullPath(item: File, loadOptions:LoadOptions = {}): Promise<string> {
 		const segments: string[] = [];
 		while (item) {
 			if (item.is_root) break;
 			segments.splice(0, 0, item.name);
-			item = item.parent_id ? await this.load(item.parent_id) : null;
+			item = item.parent_id ? await this.load(item.parent_id, loadOptions) : null;
 		}
 
 		return segments.length ? (`root:/${segments.join('/')}:`) : 'root';
@@ -174,11 +174,15 @@ export default class FileModel extends BaseModel<File> {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
 	}
 
-	private async fileByName(parentId: string, name: string): Promise<File> {
-		return this.db<File>(this.tableName).select(...this.defaultFields).where({
+	public async fileByName(parentId: string, name: string, options: LoadOptions = {}): Promise<File> {
+		const file = await this.db<File>(this.tableName).select(...this.defaultFields).where({
 			parent_id: parentId,
 			name: name,
 		}).first();
+
+		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
+
+		return file;
 	}
 
 	protected async validate(object: File, options: ValidateOptions = {}): Promise<File> {

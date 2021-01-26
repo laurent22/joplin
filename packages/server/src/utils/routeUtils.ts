@@ -1,6 +1,6 @@
 import isNoteFile from '../apps/joplin/isNoteFile';
 import isJoplinNote from '../apps/joplin/isNoteFile';
-import { File, ItemAddressingType } from '../db';
+import { File, ItemAddressingType, Share } from '../db';
 import { ErrorBadRequest } from './errors';
 import Router from './Router';
 import { AppContext } from './types';
@@ -218,11 +218,11 @@ export interface FileViewerResponse {
 	size: number;
 }
 
-async function renderFile(context:AppContext, file: File): Promise<FileViewerResponse> {
-	const joplinApp = await context.apps.joplin();
+async function renderFile(context:AppContext, file: File, share:Share): Promise<FileViewerResponse> {
+	const joplinApp = await context.apps.joplin(context);
 
 	if (await joplinApp.isNoteFile(file)) {
-		const body = await joplinApp.renderFile(file);
+		const body = await joplinApp.renderFile(file, share);
 		return {
 			body,
 			mime: 'text/html',
@@ -237,8 +237,8 @@ async function renderFile(context:AppContext, file: File): Promise<FileViewerRes
 	}
 }
 
-export async function respondWithFileContent2(context: AppContext, file: File): Promise<Response> {
-	const r = await renderFile(context, file);
+export async function respondWithFileContent2(context: AppContext, file: File, share:Share = null): Promise<Response> {
+	const r = await renderFile(context, file, share);
 	context.response.body = r.body;
 	context.response.set('Content-Type', r.mime);
 	context.response.set('Content-Length', r.size.toString());
