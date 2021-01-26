@@ -399,6 +399,7 @@ function NoteEditor(props: NoteEditorProps) {
 		onDrop: onDrop,
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
+		fontSize: Setting.value('style.editor.fontSize'),
 	};
 
 	let editor = null;

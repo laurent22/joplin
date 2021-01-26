@@ -368,10 +368,9 @@ const themeCache_: any = {};
 function themeStyle(themeId: number) {
 	if (!themeId) throw new Error('Theme must be specified');
 
-	const zoomRatio = 1; // Setting.value('style.zoom') / 100;
-	const editorFontSize = Setting.value('style.editor.fontSize');
+	const zoomRatio = 1;
 
-	const cacheKey = [themeId, zoomRatio, editorFontSize].join('-');
+	const cacheKey = themeId;
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
 	// Font size are not theme specific, but they must be referenced
@@ -380,8 +379,6 @@ function themeStyle(themeId: number) {
 	const fontSizes: any = {
 		fontSize: Math.round(12 * zoomRatio),
 		toolbarIconSize: 18,
-		editorFontSize: editorFontSize,
-		textAreaLineHeight: Math.round(globalStyle.textAreaLineHeight * editorFontSize / 12),
 	};
 
 	fontSizes.noteViewerFontSize = Math.round(fontSizes.fontSize * 1.25);
