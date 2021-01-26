@@ -1,10 +1,11 @@
-import { SubPath, redirect } from '../../utils/routeUtils';
+import { SubPath, redirect, respondWithFileContent } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
+import { ErrorNotFound } from '../../utils/errors';
 
 // function makeView(error: any = null): View {
 // 	const view = defaultView('login');
@@ -18,13 +19,15 @@ const router: Router = new Router();
 router.public = true;
 
 router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
-	const share = ctx.models.share().load(path.id);
+	const fileModel = ctx.models.file();
+	const shareModel = ctx.models.share();
 
-	// const fileModel = ctx.models.file({ userId: ctx.owner.id });
-	// let file: File = await fileModel.pathToFile(path.id, { returnFullEntity: false });
-	// file = await fileModel.loadWithContent(file.id);
-	// if (!file) throw new ErrorNotFound();
-	// return respondWithFileContent(ctx.response, file);
+	const share = await shareModel.load(path.id);
+	if (!share) throw new ErrorNotFound();
+
+	const file = await fileModel.loadWithContent(share.file_id, { skipPermissionCheck: true });
+	if (!file) throw new ErrorNotFound();
+	return respondWithFileContent(ctx.response, file);
 });
 
 export default router;
