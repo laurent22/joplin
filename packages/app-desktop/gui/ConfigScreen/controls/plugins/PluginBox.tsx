@@ -20,6 +20,10 @@ export enum UpdateState {
 	HasBeenUpdated = 4,
 }
 
+export interface ItemEvent {
+	item: PluginItem;
+}
+
 interface Props {
 	item?: PluginItem;
 	manifest?: PluginManifest;
@@ -27,10 +31,10 @@ interface Props {
 	updateState?: UpdateState;
 	themeId: number;
 	isCompatible: boolean;
-	onToggle?: Function;
-	onDelete?: Function;
-	onInstall?: Function;
-	onUpdate?: Function;
+	onToggle?: (event: ItemEvent)=> void;
+	onDelete?: (event: ItemEvent)=> void;
+	onInstall?: (event: ItemEvent)=> void;
+	onUpdate?: (event: ItemEvent)=> void;
 }
 
 function manifestToItem(manifest: PluginManifest): PluginItem {

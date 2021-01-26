@@ -4,7 +4,7 @@ import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSett
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
-import PluginBox, { UpdateState } from './PluginBox';
+import PluginBox, { ItemEvent, UpdateState } from './PluginBox';
 import Button, { ButtonLevel } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
@@ -128,8 +128,8 @@ export default function(props: Props) {
 		};
 	}, [manifestsLoaded, pluginItems]);
 
-	const onDelete = useCallback(async (event: any) => {
-		const item: PluginItem = event.item;
+	const onDelete = useCallback(async (event: ItemEvent) => {
+		const item = event.item;
 		const confirm = await bridge().showConfirmMessageBox(_('Delete plugin "%s"?', item.manifest.name));
 		if (!confirm) return;
 
@@ -141,8 +141,8 @@ export default function(props: Props) {
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	}, [pluginSettings, props.onChange]);
 
-	const onToggle = useCallback((event: any) => {
-		const item: PluginItem = event.item;
+	const onToggle = useCallback((event: ItemEvent) => {
+		const item = event.item;
 
 		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
 			if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
