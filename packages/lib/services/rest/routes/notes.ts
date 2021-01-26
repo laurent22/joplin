@@ -11,7 +11,7 @@ import markdownUtils from '../../../markdownUtils';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 
 import { reg } from '../../../registry';
-const { Database } = require('../../../database.js');
+import Database from '../../../database';
 import Folder from '../../../models/Folder';
 import Note from '../../../models/Note';
 import Tag from '../../../models/Tag';

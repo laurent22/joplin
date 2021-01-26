@@ -48,6 +48,7 @@ export interface Config {
 	// Not that, for now, nothing is being logged to file. Log is just printed
 	// to stdout, which is then handled by Docker own log mechanism
 	logDir: string;
+	tempDir: string;
 	database: DatabaseConfig;
 	baseUrl: string;
 }

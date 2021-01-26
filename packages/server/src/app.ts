@@ -77,6 +77,8 @@ async function main() {
 	});
 
 	await fs.mkdirp(config().logDir);
+	await fs.mkdirp(config().tempDir);
+
 	Logger.fsDriver_ = new FsDriverNode();
 	const globalLogger = new Logger();
 	// globalLogger.addTarget(TargetType.File, { path: `${config().logDir}/app.txt` });

@@ -18,9 +18,9 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import FileApiDriverJoplinServer from '@joplin/lib/file-api-driver-joplinServer';
 import OneDriveApi from '@joplin/lib/onedrive-api';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
+import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 
 const fs = require('fs-extra');
-const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';

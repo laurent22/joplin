@@ -4,7 +4,7 @@ const BaseModel = require('@joplin/lib/BaseModel').default;
 const { toTitleCase } = require('@joplin/lib/string-utils.js');
 const { reg } = require('@joplin/lib/registry.js');
 const markdownUtils = require('@joplin/lib/markdownUtils').default;
-const { Database } = require('@joplin/lib/database.js');
+const Database = require('@joplin/lib/database').default;
 const shim = require('@joplin/lib/shim').default;
 
 class Command extends BaseCommand {

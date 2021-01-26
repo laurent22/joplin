@@ -1,6 +1,6 @@
 import paginationToSql from './models/utils/paginationToSql';
 
-const { Database } = require('./database.js');
+import Database from './database';
 import uuid from './uuid';
 import time from './time';
 const Mutex = require('async-mutex').Mutex;

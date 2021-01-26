@@ -1,3 +1,5 @@
+import isNoteFile from '../apps/joplin/isNoteFile';
+import isJoplinNote from '../apps/joplin/isNoteFile';
 import { File, ItemAddressingType } from '../db';
 import { ErrorBadRequest } from './errors';
 import Router from './Router';
@@ -210,9 +212,16 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	throw new Error('Unreachable');
 }
 
-export function respondWithFileContent(koaResponse: any, file: File): Response {
-	koaResponse.body = file.content;
-	koaResponse.set('Content-Type', file.mime_type);
-	koaResponse.set('Content-Length', file.size.toString());
-	return new Response(ResponseType.KoaResponse, koaResponse);
+export async function respondWithFileContent(koaResponse: any, file: File): Response {
+	if (await isNoteFile(file)) {
+		koaResponse.body = 'IT IS';
+		koaResponse.set('Content-Type', file.mime_type);
+		// koaResponse.set('Content-Length', file.size.toString());
+		return new Response(ResponseType.KoaResponse, koaResponse);
+	} else {
+		koaResponse.body = file.content;
+		koaResponse.set('Content-Type', file.mime_type);
+		koaResponse.set('Content-Length', file.size.toString());
+		return new Response(ResponseType.KoaResponse, koaResponse);
+	}
 }

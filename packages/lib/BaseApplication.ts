@@ -11,7 +11,7 @@ import SyncTargetOneDrive from './SyncTargetOneDrive';
 
 const { createStore, applyMiddleware } = require('redux');
 const { defaultState, stateUtils } = require('./reducer');
-const { JoplinDatabase } = require('./joplin-database.js');
+import JoplinDatabase from './JoplinDatabase';
 const { FoldersScreenUtils } = require('./folders-screen-utils.js');
 const { DatabaseDriverNode } = require('./database-driver-node.js');
 import BaseModel from './BaseModel';

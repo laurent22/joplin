@@ -4,7 +4,7 @@ import time from '../time';
 import { _ } from '../locale';
 
 import Note from './Note';
-const { Database } = require('../database.js');
+import Database from '../database';
 import BaseItem from './BaseItem';
 const { substrWithEllipsis } = require('../string-utils.js');
 

@@ -6,7 +6,7 @@ import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
 
-const { Database } = require('../database.js');
+import Database from '../database';
 import ItemChange from './ItemChange';
 const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
