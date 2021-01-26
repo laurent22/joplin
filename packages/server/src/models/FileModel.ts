@@ -1,5 +1,5 @@
 import BaseModel, { ValidateOptions, SaveOptions, DeleteOptions } from './BaseModel';
-import { File, ItemType, databaseSchema } from '../db';
+import { File, ItemType, databaseSchema, Uuid } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import { splitItemPath, filePathInfo } from '../utils/routeUtils';
@@ -14,7 +14,7 @@ export interface PaginatedFiles extends PaginatedResults {
 	items: File[];
 }
 
-export interface EntityFromItemIdOptions {
+export interface PathToFileOptions {
 	mustExist?: boolean;
 	returnFullEntity?: boolean;
 }
@@ -103,10 +103,25 @@ export default class FileModel extends BaseModel<File> {
 		return segments.length ? (`root:/${segments.join('/')}:`) : 'root';
 	}
 
-	public async entityFromItemId(idOrPath: string, options: EntityFromItemIdOptions = {}): Promise<File> {
+	// Same as `pathToFile` but returns the ID only.
+	public async pathToFileId(idOrPath: string, options: PathToFileOptions = {}): Promise<Uuid> {
+		const file = await this.pathToFile(idOrPath, {
+			...options,
+			returnFullEntity: false,
+		});
+		return file ? file.id : null;
+	}
+
+	// Converts an ID such as "Ps2YtQ8Udi4eCYm1A5bLFDGhHCWWCR43" or a path such
+	// as "root:/path/to/file.txt:" to the actual file.
+	public async pathToFile(idOrPath: string, options: PathToFileOptions = {}): Promise<File> {
 		if (!idOrPath) throw new Error('ID cannot be null');
 
-		options = { mustExist: true, ...options };
+		options = {
+			mustExist: true,
+			returnFullEntity: true,
+			...options,
+		};
 
 		const specialDirId = await this.specialDirId(idOrPath);
 
@@ -293,7 +308,7 @@ export default class FileModel extends BaseModel<File> {
 	}
 
 	public async fileUrl(idOrPath: string, query: any = null): Promise<string> {
-		const file: File = await this.entityFromItemId(idOrPath, { returnFullEntity: true });
+		const file: File = await this.pathToFile(idOrPath);
 		return setQueryParameters(`${this.baseUrl}/files/${await this.itemFullPath(file)}`, query);
 	}
 

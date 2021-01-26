@@ -1,4 +1,4 @@
-import { File, Share, ShareType } from '../db';
+import { File, Share, ShareType, Uuid } from '../db';
 import { ErrorBadRequest } from '../utils/errors';
 import BaseModel, { ValidateOptions } from './BaseModel';
 
@@ -14,12 +14,12 @@ export default class ShareModel extends BaseModel<Share> {
 		return share;
 	}
 
-	public async add(type: ShareType, fileId: string): Promise<Share> {
-		const file: File = await this.models().file({ userId: this.userId }).entityFromItemId(fileId, { mustExist: true });
+	public async add(type: ShareType, path: string): Promise<Share> {
+		const fileId: Uuid = await this.models().file({ userId: this.userId }).pathToFileId(path);
 
 		const toSave: Share = {
 			type: type,
-			file_id: file.id,
+			file_id: fileId,
 			owner_id: this.userId,
 		};
 

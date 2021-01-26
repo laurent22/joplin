@@ -43,14 +43,14 @@ describe('FileModel', function() {
 		for (const t of testCases) {
 			const file: File = await fileModel.loadByName(t);
 			const path = await fileModel.itemFullPath(file);
-			const fileBack: File = await fileModel.entityFromItemId(path);
-			expect(file.id).toBe(fileBack.id);
+			const fileBackId: string = await fileModel.pathToFileId(path);
+			expect(file.id).toBe(fileBackId);
 		}
 
 		const rootPath = await fileModel.itemFullPath(await fileModel.userRootFile());
 		expect(rootPath).toBe('root');
-		const fileBack: File = await fileModel.entityFromItemId(rootPath);
-		expect(fileBack.id).toBe(rootId);
+		const fileBackId: string = await fileModel.pathToFileId(rootPath);
+		expect(fileBackId).toBe(rootId);
 	});
 
 });
