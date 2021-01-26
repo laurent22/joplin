@@ -10,7 +10,7 @@ import { RequestMethod, Request } from '../Api';
 import markdownUtils from '../../../markdownUtils';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 
-const { reg } = require('../../../registry.js');
+import { reg } from '../../../registry';
 const { Database } = require('../../../database.js');
 import Folder from '../../../models/Folder';
 import Note from '../../../models/Note';

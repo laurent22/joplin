@@ -31,7 +31,7 @@ import Setting from '@joplin/lib/models/Setting';
 
 // import eventManager from '@joplin/lib/eventManager';
 
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 
 // Based on http://pypl.github.io/PYPL.html
 const topLanguages = [

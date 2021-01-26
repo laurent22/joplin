@@ -133,8 +133,6 @@ export default class NoteListUtils {
 				})
 			);
 
-			console.info('AAAAAAAAAAAAAAAAAAA', Setting.value('sync.target'));
-
 			if (Setting.value('sync.target') === SyncTargetJoplinServer.id()) {
 				menu.append(
 					new MenuItem(

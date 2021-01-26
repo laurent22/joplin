@@ -2,9 +2,9 @@ import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import { _ } from './locale.js';
-import JoplinServerApi from './JoplinServerApi2';
+import JoplinServerApi from './JoplinServerApi';
 import BaseSyncTarget from './BaseSyncTarget';
-const { FileApi } = require('./file-api.js');
+import { FileApi } from './file-api';
 
 interface FileApiOptions {
 	path(): string;
@@ -33,6 +33,10 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 
 	public async isAuthenticated() {
 		return true;
+	}
+
+	public async fileApi(): Promise<FileApi> {
+		return super.fileApi();
 	}
 
 	private static async newFileApi_(options: FileApiOptions) {

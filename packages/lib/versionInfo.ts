@@ -1,6 +1,6 @@
 import { _ } from './locale';
 import Setting from './models/Setting';
-const { reg } = require('./registry.js');
+import { reg } from './registry';
 
 export default function versionInfo(packageInfo: any) {
 	const p = packageInfo;

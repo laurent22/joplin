@@ -19,7 +19,7 @@ import stateToWhenClauseContext from '../services/commands/stateToWhenClauseCont
 import bridge from '../services/bridge';
 
 const { connect } = require('react-redux');
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;

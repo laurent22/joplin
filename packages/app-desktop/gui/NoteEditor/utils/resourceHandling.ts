@@ -5,7 +5,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import Resource from '@joplin/lib/models/Resource';
 const bridge = require('electron').remote.require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;

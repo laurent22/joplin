@@ -1,16 +1,17 @@
+import Logger from './Logger';
+import shim from './shim';
+import BaseItem from './models/BaseItem';
+import time from './time';
+
 const { isHidden } = require('./path-utils');
-const Logger = require('./Logger').default;
-const shim = require('./shim').default;
-const BaseItem = require('./models/BaseItem').default;
 const JoplinError = require('./JoplinError');
 const ArrayUtils = require('./ArrayUtils');
-const time = require('./time').default;
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
 const logger = Logger.create('FileApi');
 
-function requestCanBeRepeated(error) {
+function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
 	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
@@ -25,7 +26,7 @@ function requestCanBeRepeated(error) {
 	return true;
 }
 
-async function tryAndRepeat(fn, count) {
+async function tryAndRepeat(fn: Function, count: number) {
 	let retryCount = 0;
 
 	// Don't use internal fetch retry mechanim since we
@@ -52,24 +53,28 @@ async function tryAndRepeat(fn, count) {
 }
 
 class FileApi {
-	constructor(baseDir, driver) {
+
+	private baseDir_: any;
+	private driver_: any;
+	private logger_: Logger = new Logger();
+	private syncTargetId_: number = null;
+	private tempDirName_: string = null;
+	public requestRepeatCount_: number = null; // For testing purpose only - normally this value should come from the driver
+	private remoteDateOffset_ = 0;
+	private remoteDateNextCheckTime_ = 0;
+	private remoteDateMutex_ = new Mutex();
+	private initialized_ = false;
+
+	constructor(baseDir: string | Function, driver: any) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
-		this.logger_ = new Logger();
-		this.syncTargetId_ = null;
-		this.tempDirName_ = null;
 		this.driver_.fileApi_ = this;
-		this.requestRepeatCount_ = null; // For testing purpose only - normally this value should come from the driver
-		this.remoteDateOffset_ = 0;
-		this.remoteDateNextCheckTime_ = 0;
-		this.remoteDateMutex_ = new Mutex();
-		this.initialized_ = false;
 	}
 
 	async initialize() {
 		if (this.initialized_) return;
 		this.initialized_ = true;
-		if (this.driver_.initialize) return this.driver_.initialize(this.fullPath_(''));
+		if (this.driver_.initialize) return this.driver_.initialize(this.fullPath(''));
 	}
 
 	async fetchRemoteDateOffset_() {
@@ -89,7 +94,7 @@ class FileApi {
 
 		if (!stat) throw new Error('Timed out trying to get sync target clock time');
 
-		this.delete(tempFile); // No need to await for this call
+		void this.delete(tempFile); // No need to await for this call
 
 		const endTime = Date.now();
 		const expectedTime = Math.round((endTime + startTime) / 2);
@@ -153,7 +158,7 @@ class FileApi {
 		return this.tempDirName_;
 	}
 
-	setTempDirName(v) {
+	setTempDirName(v: string) {
 		this.tempDirName_ = v;
 	}
 
@@ -165,7 +170,7 @@ class FileApi {
 		return this.driver_;
 	}
 
-	setSyncTargetId(v) {
+	setSyncTargetId(v: number) {
 		this.syncTargetId_ = v;
 	}
 
@@ -174,7 +179,7 @@ class FileApi {
 		return this.syncTargetId_;
 	}
 
-	setLogger(l) {
+	setLogger(l: Logger) {
 		if (!l) l = new Logger();
 		this.logger_ = l;
 	}
@@ -183,7 +188,7 @@ class FileApi {
 		return this.logger_;
 	}
 
-	fullPath_(path) {
+	fullPath(path: string) {
 		const output = [];
 		if (this.baseDir()) output.push(this.baseDir());
 		if (path) output.push(path);
@@ -192,7 +197,7 @@ class FileApi {
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	async list(path = '', options = null) {
+	async list(path = '', options: any = null) {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
@@ -201,7 +206,7 @@ class FileApi {
 
 		logger.debug(`list ${this.baseDir()}`);
 
-		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath_(path), options), this.requestRepeatCount());
+		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath(path), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
 			const temp = [];
@@ -212,38 +217,38 @@ class FileApi {
 		}
 
 		if (!options.includeDirs) {
-			result.items = result.items.filter(f => !f.isDir);
+			result.items = result.items.filter((f: any) => !f.isDir);
 		}
 
 		if (options.syncItemsOnly) {
-			result.items = result.items.filter(f => !f.isDir && BaseItem.isSystemPath(f.path));
+			result.items = result.items.filter((f: any) => !f.isDir && BaseItem.isSystemPath(f.path));
 		}
 
 		return result;
 	}
 
 	// Deprectated
-	setTimestamp(path, timestampMs) {
-		logger.debug(`setTimestamp ${this.fullPath_(path)}`);
-		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath_(path), timestampMs), this.requestRepeatCount());
-		// return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
+	setTimestamp(path: string, timestampMs: number) {
+		logger.debug(`setTimestamp ${this.fullPath(path)}`);
+		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath(path), timestampMs), this.requestRepeatCount());
+		// return this.driver_.setTimestamp(this.fullPath(path), timestampMs);
 	}
 
-	mkdir(path) {
-		logger.debug(`mkdir ${this.fullPath_(path)}`);
-		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath_(path)), this.requestRepeatCount());
+	mkdir(path: string) {
+		logger.debug(`mkdir ${this.fullPath(path)}`);
+		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath(path)), this.requestRepeatCount());
 	}
 
-	async stat(path) {
-		logger.debug(`stat ${this.fullPath_(path)}`);
+	async stat(path: string) {
+		logger.debug(`stat ${this.fullPath(path)}`);
 
-		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath_(path)), this.requestRepeatCount());
+		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath(path)), this.requestRepeatCount());
 
 		if (!output) return output;
 		output.path = path;
 		return output;
 
-		// return this.driver_.stat(this.fullPath_(path)).then((output) => {
+		// return this.driver_.stat(this.fullPath(path)).then((output) => {
 		// 	if (!output) return output;
 		// 	output.path = path;
 		// 	return output;
@@ -251,32 +256,32 @@ class FileApi {
 	}
 
 	// Returns UTF-8 encoded string by default, or a Response if `options.target = 'file'`
-	get(path, options = null) {
+	get(path: string, options: any = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
-		logger.debug(`get ${this.fullPath_(path)}`);
-		return tryAndRepeat(() => this.driver_.get(this.fullPath_(path), options), this.requestRepeatCount());
+		logger.debug(`get ${this.fullPath(path)}`);
+		return tryAndRepeat(() => this.driver_.get(this.fullPath(path), options), this.requestRepeatCount());
 	}
 
-	async put(path, content, options = null) {
-		logger.debug(`put ${this.fullPath_(path)}`, options);
+	async put(path: string, content: any, options: any = null) {
+		logger.debug(`put ${this.fullPath(path)}`, options);
 
 		if (options && options.source === 'file') {
 			if (!(await this.fsDriver().exists(options.path))) throw new JoplinError(`File not found: ${options.path}`, 'fileNotFound');
 		}
 
-		return tryAndRepeat(() => this.driver_.put(this.fullPath_(path), content, options), this.requestRepeatCount());
+		return tryAndRepeat(() => this.driver_.put(this.fullPath(path), content, options), this.requestRepeatCount());
 	}
 
-	delete(path) {
-		logger.debug(`delete ${this.fullPath_(path)}`);
-		return tryAndRepeat(() => this.driver_.delete(this.fullPath_(path)), this.requestRepeatCount());
+	delete(path: string) {
+		logger.debug(`delete ${this.fullPath(path)}`);
+		return tryAndRepeat(() => this.driver_.delete(this.fullPath(path)), this.requestRepeatCount());
 	}
 
 	// Deprectated
-	move(oldPath, newPath) {
-		logger.debug(`move ${this.fullPath_(oldPath)} => ${this.fullPath_(newPath)}`);
-		return tryAndRepeat(() => this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath)), this.requestRepeatCount());
+	move(oldPath: string, newPath: string) {
+		logger.debug(`move ${this.fullPath(oldPath)} => ${this.fullPath(newPath)}`);
+		return tryAndRepeat(() => this.driver_.move(this.fullPath(oldPath), this.fullPath(newPath)), this.requestRepeatCount());
 	}
 
 	// Deprectated
@@ -288,14 +293,14 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir()), this.requestRepeatCount());
 	}
 
-	delta(path, options = null) {
-		logger.debug(`delta ${this.fullPath_(path)}`);
-		return tryAndRepeat(() => this.driver_.delta(this.fullPath_(path), options), this.requestRepeatCount());
+	delta(path: string, options: any = null) {
+		logger.debug(`delta ${this.fullPath(path)}`);
+		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path), options), this.requestRepeatCount());
 	}
 }
 
-function basicDeltaContextFromOptions_(options) {
-	const output = {
+function basicDeltaContextFromOptions_(options: any) {
+	const output: any = {
 		timestamp: 0,
 		filesAtTimestamp: [],
 		statsCache: null,
@@ -319,7 +324,7 @@ function basicDeltaContextFromOptions_(options) {
 // This is the basic delta algorithm, which can be used in case the cloud service does not have
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
-async function basicDelta(path, getDirStatFn, options) {
+async function basicDelta(path: string, getDirStatFn: Function, options: any) {
 	const outputLimit = 50;
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
@@ -344,10 +349,10 @@ async function basicDelta(path, getDirStatFn, options) {
 	// Stats are cached until all items have been processed (until hasMore is false)
 	if (newContext.statsCache === null) {
 		newContext.statsCache = await getDirStatFn(path);
-		newContext.statsCache.sort(function(a, b) {
+		newContext.statsCache.sort(function(a: any, b: any) {
 			return a.updated_time - b.updated_time;
 		});
-		newContext.statIdsCache = newContext.statsCache.filter(item => BaseItem.isSystemPath(item.path)).map(item => BaseItem.pathToId(item.path));
+		newContext.statIdsCache = newContext.statsCache.filter((item: any) => BaseItem.isSystemPath(item.path)).map((item: any) => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
 	}
 
@@ -449,4 +454,4 @@ async function basicDelta(path, getDirStatFn, options) {
 	};
 }
 
-module.exports = { FileApi, basicDelta };
+export { FileApi, basicDelta };

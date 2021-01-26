@@ -4,7 +4,7 @@ import shim from '@joplin/lib/shim';
 
 const { ToastAndroid } = require('react-native');
 const { _ } = require('@joplin/lib/locale.js');
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 const { dialogs } = require('../../../utils/dialogs.js');
 import Resource from '@joplin/lib/models/Resource';
 const Share = require('react-native-share').default;

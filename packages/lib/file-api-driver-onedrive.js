@@ -198,7 +198,7 @@ class FileApiDriverOneDrive {
 
 	async clearRoot() {
 		const recurseItems = async (path) => {
-			const result = await this.list(this.fileApi_.fullPath_(path));
+			const result = await this.list(this.fileApi_.fullPath(path));
 			const output = [];
 
 			for (const item of result.items) {
@@ -206,7 +206,7 @@ class FileApiDriverOneDrive {
 				if (item.isDir) {
 					await recurseItems(fullPath);
 				}
-				await this.delete(this.fileApi_.fullPath_(fullPath));
+				await this.delete(this.fileApi_.fullPath(fullPath));
 			}
 
 			return output;

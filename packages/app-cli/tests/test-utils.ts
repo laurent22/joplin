@@ -52,7 +52,7 @@ import RevisionService from '@joplin/lib/services/RevisionService';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const WebDavApi = require('@joplin/lib/WebDavApi');
 const DropboxApi = require('@joplin/lib/DropboxApi');
-import JoplinServerApi from '@joplin/lib/JoplinServerApi2';
+import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');

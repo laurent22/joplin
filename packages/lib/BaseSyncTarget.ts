@@ -70,7 +70,7 @@ export default class BaseSyncTarget {
 		throw new Error('initSynchronizer() not implemented');
 	}
 
-	protected async initFileApi() {
+	protected async initFileApi(): Promise<any> {
 		throw new Error('initFileApi() not implemented');
 	}
 

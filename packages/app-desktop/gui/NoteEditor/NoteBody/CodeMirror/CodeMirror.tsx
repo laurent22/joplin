@@ -30,7 +30,7 @@ const { clipboard } = require('electron');
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 

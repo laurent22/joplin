@@ -115,7 +115,7 @@ export default class BaseItem extends BaseModel {
 		return r.total;
 	}
 
-	static systemPath(itemOrId: any, extension: string = null) {
+	public static systemPath(itemOrId: any, extension: string = null) {
 		if (extension === null) extension = 'md';
 
 		if (typeof itemOrId === 'string') return `${itemOrId}.${extension}`;

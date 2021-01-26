@@ -921,9 +921,6 @@ packages/lib/InMemoryCache.js.map
 packages/lib/JoplinServerApi.d.ts
 packages/lib/JoplinServerApi.js
 packages/lib/JoplinServerApi.js.map
-packages/lib/JoplinServerApi2.d.ts
-packages/lib/JoplinServerApi2.js
-packages/lib/JoplinServerApi2.js.map
 packages/lib/Logger.d.ts
 packages/lib/Logger.js
 packages/lib/Logger.js.map
@@ -960,6 +957,9 @@ packages/lib/eventManager.js.map
 packages/lib/file-api-driver-joplinServer.d.ts
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-joplinServer.js.map
+packages/lib/file-api.d.ts
+packages/lib/file-api.js
+packages/lib/file-api.js.map
 packages/lib/fs-driver-base.d.ts
 packages/lib/fs-driver-base.js
 packages/lib/fs-driver-base.js.map
@@ -1047,6 +1047,9 @@ packages/lib/path-utils.js.map
 packages/lib/reducer.d.ts
 packages/lib/reducer.js
 packages/lib/reducer.js.map
+packages/lib/registry.d.ts
+packages/lib/registry.js
+packages/lib/registry.js.map
 packages/lib/services/AlarmService.d.ts
 packages/lib/services/AlarmService.js
 packages/lib/services/AlarmService.js.map
