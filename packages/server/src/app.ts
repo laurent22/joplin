@@ -14,6 +14,7 @@ import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
+import ApplicationJoplin from './apps/joplin/Application';
 
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -38,6 +39,20 @@ function appLogger(): LoggerWrapper {
 		appLogger_ = Logger.create('App');
 	}
 	return appLogger_;
+}
+
+export class Applications {
+
+	private joplin_:ApplicationJoplin = null;
+
+	public async joplin():Promise<ApplicationJoplin> {
+		if (this.joplin_) return this.joplin_;
+
+		this.joplin_ = new ApplicationJoplin(config());
+		await this.joplin_.initialize();
+		return this.joplin_;
+	}
+
 }
 
 const app = new Koa();
@@ -129,6 +144,7 @@ async function main() {
 		appContext.db = connectionCheck.connection;
 		appContext.models = modelFactory(appContext.db, config().baseUrl);
 		appContext.appLogger = appLogger;
+		appContext.apps = new Applications();
 
 		appLogger().info('Migrating database...');
 		await migrateDb(appContext.db);

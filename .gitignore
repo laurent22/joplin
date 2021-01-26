@@ -918,6 +918,9 @@ packages/lib/BaseSyncTarget.js.map
 packages/lib/InMemoryCache.d.ts
 packages/lib/InMemoryCache.js
 packages/lib/InMemoryCache.js.map
+packages/lib/JoplinDatabase.d.ts
+packages/lib/JoplinDatabase.js
+packages/lib/JoplinDatabase.js.map
 packages/lib/JoplinServerApi.d.ts
 packages/lib/JoplinServerApi.js
 packages/lib/JoplinServerApi.js.map
@@ -945,6 +948,9 @@ packages/lib/commands/historyForward.js.map
 packages/lib/commands/synchronize.d.ts
 packages/lib/commands/synchronize.js
 packages/lib/commands/synchronize.js.map
+packages/lib/database.d.ts
+packages/lib/database.js
+packages/lib/database.js.map
 packages/lib/dummy.test.d.ts
 packages/lib/dummy.test.js
 packages/lib/dummy.test.js.map

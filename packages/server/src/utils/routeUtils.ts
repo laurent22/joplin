@@ -212,6 +212,40 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	throw new Error('Unreachable');
 }
 
+export interface FileViewerResponse {
+	body: any;
+	mime: string;
+	size: number;
+}
+
+async function renderFile(context:AppContext, file: File): Promise<FileViewerResponse> {
+	const joplinApp = await context.apps.joplin();
+
+	if (await joplinApp.isNoteFile(file)) {
+		const body = await joplinApp.renderFile(file);
+		return {
+			body,
+			mime: 'text/html',
+			size: body.length,
+		}
+	}
+
+	return {
+		body: file.content,
+		mime: file.mime_type,
+		size: file.size,
+	}
+}
+
+export async function respondWithFileContent2(context: AppContext, file: File): Promise<Response> {
+	const r = await renderFile(context, file);
+	context.response.body = r.body;
+	context.response.set('Content-Type', r.mime);
+	context.response.set('Content-Length', r.size.toString());
+	return new Response(ResponseType.KoaResponse, context.response);
+}
+
+
 export async function respondWithFileContent(koaResponse: any, file: File): Response {
 	if (await isNoteFile(file)) {
 		koaResponse.body = 'IT IS';

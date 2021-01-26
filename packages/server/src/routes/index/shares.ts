@@ -1,4 +1,4 @@
-import { SubPath, redirect, respondWithFileContent } from '../../utils/routeUtils';
+import { SubPath, redirect, respondWithFileContent2 } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
@@ -27,7 +27,7 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const file = await fileModel.loadWithContent(share.file_id, { skipPermissionCheck: true });
 	if (!file) throw new ErrorNotFound();
-	return respondWithFileContent(ctx.response, file);
+	return respondWithFileContent2(ctx, file);
 });
 
 export default router;
