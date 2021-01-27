@@ -180,6 +180,8 @@ export default class FileModel extends BaseModel<File> {
 			name: name,
 		}).first();
 
+		if (!file) return null;
+
 		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
 
 		return file;
