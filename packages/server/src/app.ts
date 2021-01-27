@@ -41,6 +41,7 @@ function appLogger(): LoggerWrapper {
 	return appLogger_;
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export class Applications {
 
 	private joplin_: ApplicationJoplin = null;
