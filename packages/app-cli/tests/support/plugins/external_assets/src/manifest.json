@@ -1,0 +1,12 @@
+{
+	"manifest_version": 1,
+	"id": "org.joplinapp.plugins.ExternalAssetsTest",
+	"app_min_version": "1.7",
+	"version": "1.0.0",
+	"name": "External Assets Test",
+	"description": "Demonstrates how to access external assets that were packaged with the plugin",
+	"author": "",
+	"homepage_url": "",
+	"repository_url": "",
+	"keywords": []
+}

@@ -49,4 +49,17 @@ export default class Joplin {
     get views(): JoplinViews;
     get interop(): JoplinInterop;
     get settings(): JoplinSettings;
+    /**
+     * It is not possible to bundle native packages with a plugin, because they
+     * need to work cross-platforms. Instead access to certain useful native
+     * packages is provided using this function.
+     *
+     * Currently these packages are available:
+     *
+     * - [sqlite3](https://www.npmjs.com/package/sqlite3)
+     * - [fs-extra](https://www.npmjs.com/package/fs-extra)
+     *
+     * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/nativeModule)
+     */
+    require(_path: string): any;
 }
