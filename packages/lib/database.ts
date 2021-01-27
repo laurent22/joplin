@@ -20,29 +20,29 @@ export default class Database {
 
 	protected debugMode_ = false;
 	private sqlQueryLogEnabled_ = false;
-	private driver_:any;
+	private driver_: any;
 	private logger_ = new Logger();
-	private logExcludedQueryTypes_:string[] = [];
+	private logExcludedQueryTypes_: string[] = [];
 	private batchTransactionMutex_ = new Mutex();
 	private profilingEnabled_ = false;
 	private queryId_ = 1;
 
-	public constructor(driver:any) {
+	public constructor(driver: any) {
 		this.driver_ = driver;
 	}
 
-	setLogExcludedQueryTypes(v:string[]) {
+	setLogExcludedQueryTypes(v: string[]) {
 		this.logExcludedQueryTypes_ = v;
 	}
 
 	// Converts the SQLite error to a regular JS error
 	// so that it prints a stacktrace when passed to
 	// console.error()
-	sqliteErrorToJsError(error:any, sql:string = null, params:SqlParams = null) {
+	sqliteErrorToJsError(error: any, sql: string = null, params: SqlParams = null) {
 		return this.driver().sqliteErrorToJsError(error, sql, params);
 	}
 
-	setLogger(l:Logger) {
+	setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
@@ -54,7 +54,7 @@ export default class Database {
 		return this.driver_;
 	}
 
-	async open(options:any) {
+	async open(options: any) {
 		try {
 			await this.driver().open(options);
 		} catch (error) {
@@ -64,7 +64,7 @@ export default class Database {
 		this.logger().info('Database was open successfully');
 	}
 
-	escapeField(field:string) {
+	escapeField(field: string) {
 		if (field == '*') return '*';
 		const p = field.split('.');
 		if (p.length == 1) return `\`${field}\``;
@@ -73,7 +73,7 @@ export default class Database {
 		throw new Error(`Invalid field format: ${field}`);
 	}
 
-	escapeFields(fields:string[] | string):string[] | string {
+	escapeFields(fields: string[] | string): string[] | string {
 		if (fields == '*') return '*';
 
 		const output = [];
@@ -83,7 +83,7 @@ export default class Database {
 		return output;
 	}
 
-	async tryCall(callName:string, sql:string, params:SqlParams) {
+	async tryCall(callName: string, sql: string, params: SqlParams) {
 		if (typeof sql === 'object') {
 			params = (sql as any).params;
 			sql = (sql as any).sql;
@@ -135,7 +135,7 @@ export default class Database {
 		}
 	}
 
-	async selectOne(sql:string, params:SqlParams = null) {
+	async selectOne(sql: string, params: SqlParams = null) {
 		return this.tryCall('selectOne', sql, params);
 	}
 
@@ -151,11 +151,11 @@ export default class Database {
 		// }
 	}
 
-	async selectAll(sql:string, params:SqlParams = null) {
+	async selectAll(sql: string, params: SqlParams = null) {
 		return this.tryCall('selectAll', sql, params);
 	}
 
-	async selectAllFields(sql:string, params:SqlParams, field:string) {
+	async selectAllFields(sql: string, params: SqlParams, field: string) {
 		const rows = await this.tryCall('selectAll', sql, params);
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
@@ -166,11 +166,11 @@ export default class Database {
 		return output;
 	}
 
-	async exec(sql:string, params:SqlParams = null) {
+	async exec(sql: string, params: SqlParams = null) {
 		return this.tryCall('exec', sql, params);
 	}
 
-	async transactionExecBatch(queries:SqlQuery[] | string[]) {
+	async transactionExecBatch(queries: SqlQuery[] | string[]) {
 		if (queries.length <= 0) return;
 
 		if (queries.length == 1) {
@@ -199,7 +199,7 @@ export default class Database {
 		}
 	}
 
-	static enumId(type:string, s:string) {
+	static enumId(type: string, s: string) {
 		if (type == 'settings') {
 			if (s == 'int') return 1;
 			if (s == 'string') return 2;
@@ -218,7 +218,7 @@ export default class Database {
 		throw new Error(`Unknown enum type or value: ${type}, ${s}`);
 	}
 
-	static enumName(type:string, id:number) {
+	static enumName(type: string, id: number) {
 		if (type === 'fieldType') {
 			if (id === Database.TYPE_UNKNOWN) return 'unknown';
 			if (id === Database.TYPE_INT) return 'int';
@@ -231,7 +231,7 @@ export default class Database {
 		return undefined;
 	}
 
-	static formatValue(type:number, value:any) {
+	static formatValue(type: number, value: any) {
 		if (value === null || value === undefined) return null;
 		if (type == this.TYPE_INT) return Number(value);
 		if (type == this.TYPE_TEXT) return value;
@@ -239,7 +239,7 @@ export default class Database {
 		throw new Error(`Unknown type: ${type}`);
 	}
 
-	sqlStringToLines(sql:string) {
+	sqlStringToLines(sql: string) {
 		const output = [];
 		const lines = sql.split('\n');
 		let statement = '';
@@ -257,7 +257,7 @@ export default class Database {
 		return output;
 	}
 
-	logQuery(sql:string, params:SqlParams = null) {
+	logQuery(sql: string, params: SqlParams = null) {
 		if (!this.sqlQueryLogEnabled_) return;
 
 		if (this.logExcludedQueryTypes_.length) {
@@ -271,7 +271,7 @@ export default class Database {
 		if (params !== null && params.length) this.logger().debug(JSON.stringify(params));
 	}
 
-	static insertQuery(tableName:string, data:Record<string, any>) {
+	static insertQuery(tableName: string, data: Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
 		let keySql = '';
@@ -292,7 +292,7 @@ export default class Database {
 		};
 	}
 
-	static updateQuery(tableName:string, data:Record<string, any>, where:string | Record<string, any>) {
+	static updateQuery(tableName: string, data: Record<string, any>, where: string | Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
 		let sql = '';
@@ -321,7 +321,7 @@ export default class Database {
 		};
 	}
 
-	alterColumnQueries(tableName:string, fields:Record<string, string>) {
+	alterColumnQueries(tableName: string, fields: Record<string, string>) {
 		const fieldsNoType = [];
 		for (const n in fields) {
 			if (!fields.hasOwnProperty(n)) continue;
@@ -351,7 +351,7 @@ export default class Database {
 		return sql.trim().split('\n');
 	}
 
-	wrapQueries(queries:any[]) {
+	wrapQueries(queries: any[]) {
 		const output = [];
 		for (let i = 0; i < queries.length; i++) {
 			output.push(this.wrapQuery(queries[i]));
@@ -359,14 +359,14 @@ export default class Database {
 		return output;
 	}
 
-	wrapQuery(sql:any, params:SqlParams = null):SqlQuery {
+	wrapQuery(sql: any, params: SqlParams = null): SqlQuery {
 		if (!sql) throw new Error(`Cannot wrap empty string: ${sql}`);
 
 		if (Array.isArray(sql)) {
 			return {
 				sql: sql[0],
 				params: sql.length >= 2 ? sql[1] : null,
-			}
+			};
 		} else if (typeof sql === 'string') {
 			return { sql: sql, params: params };
 		} else {

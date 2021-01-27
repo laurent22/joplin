@@ -1,8 +1,8 @@
-import { AppContext, Config } from '../../utils/types';
+import { Config } from '../../utils/types';
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Logger from '@joplin/lib/Logger';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-import BaseItem from "@joplin/lib/models/BaseItem";
+import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
 import { File, Share, Uuid } from '../../db';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
@@ -11,15 +11,23 @@ import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
 import { Models } from '../../models/factory';
 import FileModel from '../../models/FileModel';
+import { ErrorNotFound } from '../../utils/errors';
+import { escapeHtml } from '../../utils/htmlUtils';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 const { themeStyle } = require('@joplin/lib/theme');
 
 const logger = Logger.create('JoplinApp');
 
+export interface FileViewerResponse {
+	body: any;
+	mime: string;
+	size: number;
+}
+
 export default class Application {
 
 	private config_: Config;
-	private models_:Models;
+	private models_: Models;
 
 	// Although we don't use the database to store data, we still need to setup
 	// so that its schema can be accessed. This is needed for example by
@@ -27,11 +35,7 @@ export default class Application {
 	// the field values correctly.
 	private db_: JoplinDatabase;
 
-	private context_:AppContext;
-
-	// private markupToHtml_: MarkupToHtml;
-
-	public constructor(config: Config, models:Models) {
+	public constructor(config: Config, models: Models) {
 		this.config_ = config;
 		this.models_ = models;
 	}
@@ -45,34 +49,22 @@ export default class Application {
 
 		BaseModel.setDb(this.db_);
 
-		// BaseItem.loadClass('Note', Note);
-		// BaseItem.loadClass('Folder', Folder);
+		// Only load the classes that will be needed to render the notes and
+		// resources.
+		BaseItem.loadClass('Note', Note);
 		BaseItem.loadClass('Resource', Resource);
-		// BaseItem.loadClass('Tag', Tag);
-		// BaseItem.loadClass('NoteTag', NoteTag);
-		// BaseItem.loadClass('MasterKey', MasterKey);
-		// BaseItem.loadClass('Revision', Revision);
-
 	}
 
-	public get context():AppContext {
-		return this.context_;
+	private idToFilename(itemId: string): string {
+		return `${itemId}.md`;
 	}
 
-	public set context(c:AppContext) {
-		this.context_ = c;
-	}
-
-	private idToFilename(itemId:string):string {
-		return itemId + '.md';
-	}
-
-	private async resourceMetadataFile(parentId:Uuid, resourceId:string):Promise<File> {
+	private async resourceMetadataFile(parentId: Uuid, resourceId: string): Promise<File> {
 		const file = await this.models_.file().fileByName(parentId, this.idToFilename(resourceId), { skipPermissionCheck: true });
 		return this.models_.file().loadWithContent(file.id, { skipPermissionCheck: true });
 	}
 
-	private async unserializeItem(type:ModelType, file:File):Promise<any> {
+	private async unserializeItem(type: ModelType, file: File): Promise<any> {
 		const content = file.content.toString();
 
 		if (type === ModelType.Note) {
@@ -81,16 +73,16 @@ export default class Application {
 			return Resource.unserialize(content);
 		}
 
-		throw new Error('Unsupported type: ' + type);
+		throw new Error(`Unsupported type: ${type}`);
 	}
 
-	private async noteResourceInfos(noteFileParentId:string, note:NoteEntity):Promise<Record<string, any>> {
+	private async noteResourceInfos(noteFileParentId: string, note: NoteEntity): Promise<Record<string, any>> {
 		const resourceIds = await Note.linkedItemIds(note.body);
-		const output:Record<string, any> = {};
+		const output: Record<string, any> = {};
 
 		for (const resourceId of resourceIds) {
 			const resourceFile = await this.resourceMetadataFile(noteFileParentId, resourceId);
-			const resource:ResourceEntity = await this.unserializeItem(ModelType.Resource, resourceFile);
+			const resource: ResourceEntity = await this.unserializeItem(ModelType.Resource, resourceFile);
 
 			output[resource.id] = {
 				item: resource,
@@ -103,41 +95,59 @@ export default class Application {
 		return output;
 	}
 
-	private async resourceDir(fileModel:FileModel, parentId:Uuid):Promise<File> {
+	private async resourceDir(fileModel: FileModel, parentId: Uuid): Promise<File> {
 		const parent = await fileModel.load(parentId);
 		const fileFullPath = await fileModel.itemFullPath(parent);
-		const dirPath = fileFullPath.substring(0, fileFullPath.length - 1) + '/.resource';
-		return fileModel.pathToFile(dirPath + ':');
+		const dirPath = `${fileFullPath.substring(0, fileFullPath.length - 1)}/.resource`;
+		return fileModel.pathToFile(`${dirPath}:`);
 	}
 
-	public async renderFile(file: File, share:Share): Promise<string> {
+	public async renderFile(file: File, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
 		const fileModel = this.models_.file({ userId: file.owner_id });
 
 		const note: NoteEntity = await this.unserializeItem(ModelType.Note, file);
-		const resourceInfos:Record<string, any> = await this.noteResourceInfos(file.parent_id, note);
+		const resourceInfos: Record<string, any> = await this.noteResourceInfos(file.parent_id, note);
 
-		const resourceDir = await this.resourceDir(fileModel, file.parent_id);
-		console.info('RRRRRRRRRRRR', resourceDir);
-		
+		if (query.resource_id) {
+			if (!resourceInfos[query.resource_id]) throw new ErrorNotFound(`Resource "${query.resource_id}" does not belong to this note`);
 
-		const markupToHtml = new MarkupToHtml({
-			ResourceModel: Resource,
-			// resourceBaseUrl:   //this.models_.share().shareUrl(share.id) + '/resources/' +  //'http://localhost:22300/shares/testing/',
-		});
+			const resourceDir = await this.resourceDir(fileModel, file.parent_id);
+			const resourceFile = await fileModel.fileByName(resourceDir.id, query.resource_id);
+			const withContent = await fileModel.loadWithContent(resourceFile.id);
+			return {
+				body: withContent.content,
+				mime: withContent.mime_type,
+				size: withContent.size,
+			};
+		} else {
+			const markupToHtml = new MarkupToHtml({
+				ResourceModel: Resource,
+				resourceBaseUrl: `${this.models_.share().shareUrl(share.id)}?resource_id=`,
+			});
 
-		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), {
-			resources: resourceInfos,
-		});
-		return `${note.title}\n\n${result.html}`;
+			const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), {
+				resources: resourceInfos,
+				resourceIdToUrl: (resource: ResourceEntity) => {
+					return `${this.models_.share().shareUrl(share.id)}?resource_id=${resource.id}&t=${resource.updated_time}`;
+				},
+			});
+
+			const bodyHtml = `<h1>${escapeHtml(note.title)}<h1>${result.html}`;
+
+			return {
+				body: bodyHtml,
+				mime: 'text/html',
+				size: bodyHtml.length,
+			};
+		}
 	}
 
-	public async isNoteFile(file: File): Promise<boolean> {
+	public async isItemFile(file: File, query: Record<string, any>): Promise<boolean> {
 		if (file.mime_type !== 'text/markdown') return false;
 
 		try {
-			await this.unserializeItem(ModelType.Note, file);
+			await this.unserializeItem(query.resource_id ? ModelType.Resource : ModelType.Note, file);
 		} catch (error) {
-			console.info(error);
 			// No need to log - it means it's not a note file
 			return false;
 		}

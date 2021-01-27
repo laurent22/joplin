@@ -1,6 +1,6 @@
-import BaseItem from "@joplin/lib/models/BaseItem";
-import Note from "@joplin/lib/models/Note";
-import { File } from "../../db";
+import BaseItem from '@joplin/lib/models/BaseItem';
+import Note from '@joplin/lib/models/Note';
+import { File } from '../../db';
 
 BaseItem.loadClass('Note', Note);
 // BaseItem.loadClass('Folder', Folder);
@@ -10,7 +10,7 @@ BaseItem.loadClass('Note', Note);
 // BaseItem.loadClass('MasterKey', MasterKey);
 // BaseItem.loadClass('Revision', Revision);
 
-export default async function(file:File):Promise<boolean> {
+export default async function(file: File): Promise<boolean> {
 	console.info('FILE', file);
 
 	if (file.mime_type !== 'text/markdown') return false;

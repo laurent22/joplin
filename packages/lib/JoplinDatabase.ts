@@ -120,8 +120,8 @@ INSERT INTO version (version) VALUES (1);
 `;
 
 interface TableField {
-	name: string,
-	type: number,
+	name: string;
+	type: number;
 	default: any;
 	description?: string;
 }
@@ -133,14 +133,14 @@ export default class JoplinDatabase extends Database {
 	public static TYPE_NUMERIC = 3;
 
 	private initialized_ = false;
-	private tableFields_:Record<string, TableField[]> = null;
-	private version_:number = null;
-	private tableFieldNames_:Record<string, string[]> = {};
-	private tableDescriptions_:any;
+	private tableFields_: Record<string, TableField[]> = null;
+	private version_: number = null;
+	private tableFieldNames_: Record<string, string[]> = {};
+	private tableDescriptions_: any;
 
-	constructor(driver:any) {
+	constructor(driver: any) {
 		super(driver);
-		
+
 		// this.extensionToLoad = './build/lib/sql-extensions/spellfix';
 	}
 
@@ -148,12 +148,12 @@ export default class JoplinDatabase extends Database {
 		return this.initialized_;
 	}
 
-	async open(options:any) {
+	async open(options: any) {
 		await super.open(options);
 		return this.initialize();
 	}
 
-	tableFieldNames(tableName:string) {
+	tableFieldNames(tableName: string) {
 		if (this.tableFieldNames_[tableName]) return this.tableFieldNames_[tableName].slice();
 
 		const tf = this.tableFields(tableName);
@@ -166,7 +166,7 @@ export default class JoplinDatabase extends Database {
 		return output.slice();
 	}
 
-	tableFields(tableName:string, options:any = null) {
+	tableFields(tableName: string, options: any = null) {
 		if (options === null) options = {};
 
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
@@ -223,7 +223,7 @@ export default class JoplinDatabase extends Database {
 	}
 
 	createDefaultRow() {
-		const row:any = {};
+		const row: any = {};
 		const fields = this.tableFields('resource_local_states');
 		for (let i = 0; i < fields.length; i++) {
 			const f = fields[i];
@@ -232,7 +232,7 @@ export default class JoplinDatabase extends Database {
 		return row;
 	}
 
-	fieldByName(tableName:string, fieldName:string) {
+	fieldByName(tableName: string, fieldName: string) {
 		const fields = this.tableFields(tableName);
 		for (const field of fields) {
 			if (field.name === fieldName) return field;
@@ -240,11 +240,11 @@ export default class JoplinDatabase extends Database {
 		throw new Error(`No such field: ${tableName}: ${fieldName}`);
 	}
 
-	fieldDefaultValue(tableName:string, fieldName:string) {
+	fieldDefaultValue(tableName: string, fieldName: string) {
 		return this.fieldByName(tableName, fieldName).default;
 	}
 
-	fieldDescription(tableName:string, fieldName:string) {
+	fieldDescription(tableName: string, fieldName: string) {
 		const sp = sprintf;
 
 		if (!this.tableDescriptions_) {
@@ -280,9 +280,9 @@ export default class JoplinDatabase extends Database {
 		return d && d[fieldName] ? d[fieldName] : '';
 	}
 
-	refreshTableFields(newVersion:number) {
+	refreshTableFields(newVersion: number) {
 		this.logger().info('Initializing tables...');
-		const queries:SqlQuery[] = [];
+		const queries: SqlQuery[] = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
 
 		return this.selectAll('SELECT name FROM sqlite_master WHERE type="table"')
@@ -325,12 +325,12 @@ export default class JoplinDatabase extends Database {
 			});
 	}
 
-	addMigrationFile(num:number) {
+	addMigrationFile(num: number) {
 		const timestamp = Date.now();
 		return { sql: 'INSERT INTO migrations (number, created_time, updated_time) VALUES (?, ?, ?)', params: [num, timestamp, timestamp] };
 	}
 
-	async upgradeDatabase(fromVersion:number) {
+	async upgradeDatabase(fromVersion: number) {
 		// INSTRUCTIONS TO UPGRADE THE DATABASE:
 		//
 		// 1. Add the new version number to the existingDatabaseVersions array
@@ -369,7 +369,7 @@ export default class JoplinDatabase extends Database {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
 			this.logger().info(`Converting database to version ${targetVersion}`);
 
-			let queries:any[] = [];
+			let queries: any[] = [];
 
 			if (targetVersion == 1) {
 				queries = this.wrapQueries(this.sqlStringToLines(structureSql));

@@ -92,7 +92,7 @@ export default class FileModel extends BaseModel<File> {
 		return output;
 	}
 
-	public async itemFullPath(item: File, loadOptions:LoadOptions = {}): Promise<string> {
+	public async itemFullPath(item: File, loadOptions: LoadOptions = {}): Promise<string> {
 		const segments: string[] = [];
 		while (item) {
 			if (item.is_root) break;

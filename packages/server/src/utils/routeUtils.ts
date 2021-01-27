@@ -1,6 +1,4 @@
-import isNoteFile from '../apps/joplin/isNoteFile';
-import isJoplinNote from '../apps/joplin/isNoteFile';
-import { File, ItemAddressingType, Share } from '../db';
+import { File, ItemAddressingType } from '../db';
 import { ErrorBadRequest } from './errors';
 import Router from './Router';
 import { AppContext } from './types';
@@ -212,50 +210,9 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	throw new Error('Unreachable');
 }
 
-export interface FileViewerResponse {
-	body: any;
-	mime: string;
-	size: number;
-}
-
-async function renderFile(context:AppContext, file: File, share:Share): Promise<FileViewerResponse> {
-	const joplinApp = await context.apps.joplin(context);
-
-	if (await joplinApp.isNoteFile(file)) {
-		const body = await joplinApp.renderFile(file, share);
-		return {
-			body,
-			mime: 'text/html',
-			size: body.length,
-		}
-	}
-
-	return {
-		body: file.content,
-		mime: file.mime_type,
-		size: file.size,
-	}
-}
-
-export async function respondWithFileContent2(context: AppContext, file: File, share:Share = null): Promise<Response> {
-	const r = await renderFile(context, file, share);
-	context.response.body = r.body;
-	context.response.set('Content-Type', r.mime);
-	context.response.set('Content-Length', r.size.toString());
-	return new Response(ResponseType.KoaResponse, context.response);
-}
-
-
-export async function respondWithFileContent(koaResponse: any, file: File): Response {
-	if (await isNoteFile(file)) {
-		koaResponse.body = 'IT IS';
-		koaResponse.set('Content-Type', file.mime_type);
-		// koaResponse.set('Content-Length', file.size.toString());
-		return new Response(ResponseType.KoaResponse, koaResponse);
-	} else {
-		koaResponse.body = file.content;
-		koaResponse.set('Content-Type', file.mime_type);
-		koaResponse.set('Content-Length', file.size.toString());
-		return new Response(ResponseType.KoaResponse, koaResponse);
-	}
+export function respondWithFileContent(koaResponse: any, file: File): Response {
+	koaResponse.body = file.content;
+	koaResponse.set('Content-Type', file.mime_type);
+	koaResponse.set('Content-Length', file.size.toString());
+	return new Response(ResponseType.KoaResponse, koaResponse);
 }

@@ -1,4 +1,4 @@
-import { File, Share, ShareType, Uuid } from '../db';
+import { Share, ShareType, Uuid } from '../db';
 import { ErrorBadRequest } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { ValidateOptions } from './BaseModel';

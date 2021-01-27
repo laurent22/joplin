@@ -43,20 +43,18 @@ function appLogger(): LoggerWrapper {
 
 export class Applications {
 
-	private joplin_:ApplicationJoplin = null;
-	private models_:Models;
+	private joplin_: ApplicationJoplin = null;
+	private models_: Models;
 
-	public constructor(models:Models) {
+	public constructor(models: Models) {
 		this.models_ = models;
 	}
 
-	public async joplin(context:AppContext):Promise<ApplicationJoplin> {
+	public async joplin(): Promise<ApplicationJoplin> {
 		if (!this.joplin_) {
 			this.joplin_ = new ApplicationJoplin(config(), this.models_);
 			await this.joplin_.initialize();
 		}
-
-		this.joplin_.context = context;
 
 		return this.joplin_;
 	}

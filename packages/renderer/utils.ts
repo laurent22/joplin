@@ -122,7 +122,9 @@ utils.resourceStatus = function(ResourceModel: any, resourceInfo: any) {
 	return resourceStatus;
 };
 
-utils.imageReplacement = function(ResourceModel: any, src: string, resources: any, resourceBaseUrl: string) {
+export type ResourceIdToUrlHandler = (resource: any)=> string;
+
+utils.imageReplacement = function(ResourceModel: any, src: string, resources: any, resourceBaseUrl: string, resourceIdToUrl: ResourceIdToUrlHandler = null) {
 	if (!ResourceModel || !resources) return null;
 
 	if (!ResourceModel.isResourceUrl(src)) return null;
@@ -139,22 +141,30 @@ utils.imageReplacement = function(ResourceModel: any, src: string, resources: an
 
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';
 	if (ResourceModel.isSupportedImageMimeType(mime)) {
-		const newSrc = [];
+		let newSrc = '';
 
-		if (resourceBaseUrl) {
-			newSrc.push(resourceBaseUrl);
+		if (resourceIdToUrl) {
+			newSrc = resourceIdToUrl(resource);
 		} else {
-			newSrc.push('./');
-		}
+			const temp = [];
 
-		newSrc.push(ResourceModel.filename(resource));
-		newSrc.push(`?t=${resource.updated_time}`);
+			if (resourceBaseUrl) {
+				temp.push(resourceBaseUrl);
+			} else {
+				temp.push('./');
+			}
+
+			temp.push(ResourceModel.filename(resource));
+			temp.push(`?t=${resource.updated_time}`);
+
+			newSrc = temp.join('');
+		}
 
 		// let newSrc = `./${ResourceModel.filename(resource)}`;
 		// newSrc += `?t=${resource.updated_time}`;
 		return {
 			'data-resource-id': resource.id,
-			src: newSrc.join(''),
+			src: newSrc,
 		};
 	}
 

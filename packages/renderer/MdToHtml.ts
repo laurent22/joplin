@@ -3,6 +3,7 @@ import noteStyle from './noteStyle';
 import { fileExtension } from './pathUtils';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
+import { ResourceIdToUrlHandler } from './utils';
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
@@ -157,6 +158,8 @@ export interface RuleOptions {
 	audioPlayerEnabled: boolean;
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
+
+	resourceIdToUrl?: ResourceIdToUrlHandler;
 }
 
 export default class MdToHtml {
