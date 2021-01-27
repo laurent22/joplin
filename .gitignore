@@ -1320,6 +1320,12 @@ packages/plugin-repo-cli/lib/errorsHaveChanged.js.map
 packages/plugin-repo-cli/lib/errorsHaveChanged.test.d.ts
 packages/plugin-repo-cli/lib/errorsHaveChanged.test.js
 packages/plugin-repo-cli/lib/errorsHaveChanged.test.js.map
+packages/plugin-repo-cli/lib/gitCompareUrl.d.ts
+packages/plugin-repo-cli/lib/gitCompareUrl.js
+packages/plugin-repo-cli/lib/gitCompareUrl.js.map
+packages/plugin-repo-cli/lib/gitCompareUrl.test.d.ts
+packages/plugin-repo-cli/lib/gitCompareUrl.test.js
+packages/plugin-repo-cli/lib/gitCompareUrl.test.js.map
 packages/plugin-repo-cli/lib/types.d.ts
 packages/plugin-repo-cli/lib/types.js
 packages/plugin-repo-cli/lib/types.js.map

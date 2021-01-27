@@ -366,8 +366,30 @@ export interface SettingSection {
 export type Path = string[];
 
 // =================================================================
-// Plugins type
+// Content Script types
 // =================================================================
+
+export type PostMessageHandler = (id: string, message: any)=> Promise<any>;
+
+/**
+ * When a content script is initialised, it receives a `context` object.
+ */
+export interface ContentScriptContext {
+	/**
+	 * The plugin ID that registered this content script
+	 */
+	pluginId: string;
+
+	/**
+	 * The content script ID, which may be necessary to post messages
+	 */
+	contentScriptId: string;
+
+	/**
+	 * Can be used by CodeMirror content scripts to post a message to the plugin
+	 */
+	postMessage: PostMessageHandler;
+}
 
 export enum ContentScriptType {
 	/**
@@ -394,43 +416,56 @@ export enum ContentScriptType {
 	 *
 	 * ## Exported members
 	 *
-	 * - The `context` argument is currently unused but could be used later
-	 *   on to provide access to your own plugin so that the content script
-	 *   and plugin can communicate.
+	 * - The `context` argument is currently unused but could be used later on
+	 *   to provide access to your own plugin so that the content script and
+	 *   plugin can communicate.
 	 *
-	 * - The **required** `plugin` key is the actual Markdown-It plugin -
-	 *   check the [official
-	 *   doc](https://github.com/markdown-it/markdown-it) for more
+	 * - The **required** `plugin` key is the actual Markdown-It plugin - check
+	 *   the [official doc](https://github.com/markdown-it/markdown-it) for more
 	 *   information. The `options` parameter is of type
 	 *   [RuleOptions](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml.ts),
-	 *   which contains a number of options, mostly useful for Joplin's
-	 *   internal code.
+	 *   which contains a number of options, mostly useful for Joplin's internal
+	 *   code.
 	 *
-	 * - Using the **optional** `assets` key you may specify assets such as
-	 *   JS or CSS that should be loaded in the rendered HTML document.
-	 *   Check for example the Joplin [Mermaid
+	 * - Using the **optional** `assets` key you may specify assets such as JS
+	 *   or CSS that should be loaded in the rendered HTML document. Check for
+	 *   example the Joplin [Mermaid
 	 *   plugin](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts)
 	 *   to see how the data should be structured.
 	 *
-	 * ## Passing messages from the content script to your plugin
+	 * ## Posting messages from the content script to your plugin
 	 *
 	 * The application provides the following function to allow executing
 	 * commands from the rendered HTML code:
 	 *
-	 * `webviewApi.executeCommand(commandName, ...args)`
+	 * ```javascript
+	 * const response = await webviewApi.postMessage(contentScriptId, message);
+	 * ```
 	 *
-	 * So you can use this mechanism to pass messages from the note viewer
-	 * to your own plugin. To do so you would define a command, using
-	 * `joplin.commands.register`, then you would call this command using
-	 * the `webviewApi` object. See again [the
-	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
-	 * to see how this can be done.
+	 * - `contentScriptId` is the ID you've defined when you registered the
+	 *   content script. You can retrieve it from the
+	 *   {@link ContentScriptContext | context}.
+	 * - `message` can be any basic JavaScript type (number, string, plain
+	 *   object), but it cannot be a function or class instance.
+	 *
+	 * When you post a message, the plugin can send back a `response` thus
+	 * allowing two-way communication:
+	 *
+	 * ```javascript
+	 * await joplin.contentScripts.onMessage(contentScriptId, (message) => {
+	 *     // Process message
+	 *     return response; // Can be any object, string or number
+	 * });
+	 * ```
+	 *
+	 * See {@link JoplinContentScripts.onMessage} for more details, as well as
+	 * the [postMessage
+	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages).
 	 *
 	 * ## Registering an existing Markdown-it plugin
 	 *
-	 * To include a regular Markdown-It plugin, that doesn't make use of
-	 * any Joplin-specific features, you would simply create a file such as
-	 * this:
+	 * To include a regular Markdown-It plugin, that doesn't make use of any
+	 * Joplin-specific features, you would simply create a file such as this:
 	 *
 	 * ```javascript
 	 * module.exports = {
@@ -443,6 +478,7 @@ export enum ContentScriptType {
 	 * ```
 	 */
 	MarkdownItPlugin = 'markdownItPlugin',
+
 	/**
 	 * Registers a new CodeMirror plugin, which should follow the template
 	 * below.
@@ -466,42 +502,65 @@ export enum ContentScriptType {
 	 * }
 	 * ```
 	 *
-	 * - The `context` argument is currently unused but could be used later
-	 *   on to provide access to your own plugin so that the content script
-	 *   and plugin can communicate.
+	 * - The `context` argument is currently unused but could be used later on
+	 *   to provide access to your own plugin so that the content script and
+	 *   plugin can communicate.
 	 *
 	 * - The `plugin` key is your CodeMirror plugin. This is where you can
-	 *   register new commands with CodeMirror or interact with the
-	 *   CodeMirror instance as needed.
+	 *   register new commands with CodeMirror or interact with the CodeMirror
+	 *   instance as needed.
 	 *
-	 * - The `codeMirrorResources` key is an array of CodeMirror resources
-	 *   that will be loaded and attached to the CodeMirror module. These
-	 *   are made up of addons, keymaps, and modes. For example, for a
-	 *   plugin that want's to enable clojure highlighting in code blocks.
-	 *   `codeMirrorResources` would be set to `['mode/clojure/clojure']`.
+	 * - The `codeMirrorResources` key is an array of CodeMirror resources that
+	 *   will be loaded and attached to the CodeMirror module. These are made up
+	 *   of addons, keymaps, and modes. For example, for a plugin that want's to
+	 *   enable clojure highlighting in code blocks. `codeMirrorResources` would
+	 *   be set to `['mode/clojure/clojure']`.
 	 *
 	 * - The `codeMirrorOptions` key contains all the
-	 *   [CodeMirror](https://codemirror.net/doc/manual.html#config)
-	 *   options that will be set or changed by this plugin. New options
-	 *   can alse be declared via
+	 *   [CodeMirror](https://codemirror.net/doc/manual.html#config) options
+	 *   that will be set or changed by this plugin. New options can alse be
+	 *   declared via
 	 *   [`CodeMirror.defineOption`](https://codemirror.net/doc/manual.html#defineOption),
-	 *   and then have their value set here. For example, a plugin that
-	 *   enables line numbers would set `codeMirrorOptions` to
-	 *   `{'lineNumbers': true}`.
+	 *   and then have their value set here. For example, a plugin that enables
+	 *   line numbers would set `codeMirrorOptions` to `{'lineNumbers': true}`.
 	 *
-	 * - Using the **optional** `assets` key you may specify **only** CSS
-	 *   assets that should be loaded in the rendered HTML document. Check
-	 *   for example the Joplin [Mermaid
+	 * - Using the **optional** `assets` key you may specify **only** CSS assets
+	 *   that should be loaded in the rendered HTML document. Check for example
+	 *   the Joplin [Mermaid
 	 *   plugin](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts)
 	 *   to see how the data should be structured.
 	 *
-	 * One of the `plugin`, `codeMirrorResources`, or `codeMirrorOptions`
-	 * keys must be provided for the plugin to be valid. Having multiple or
-	 * all provided is also okay.
+	 * One of the `plugin`, `codeMirrorResources`, or `codeMirrorOptions` keys
+	 * must be provided for the plugin to be valid. Having multiple or all
+	 * provided is also okay.
 	 *
-	 * See the [demo
+	 * See also the [demo
 	 * plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
 	 * for an example of all these keys being used in one plugin.
+	 *
+	 * ## Posting messages from the content script to your plugin
+	 *
+	 * In order to post messages to the plugin, you can use the postMessage
+	 * function passed to the {@link ContentScriptContext | context}.
+	 *
+	 * ```javascript
+	 * const response = await context.postMessage('messageFromCodeMirrorContentScript');
+	 * ```
+	 *
+	 * When you post a message, the plugin can send back a `response` thus
+	 * allowing two-way communication:
+	 *
+	 * ```javascript
+	 * await joplin.contentScripts.onMessage(contentScriptId, (message) => {
+	 *     // Process message
+	 *     return response; // Can be any object, string or number
+	 * });
+	 * ```
+	 *
+	 * See {@link JoplinContentScripts.onMessage} for more details, as well as
+	 * the [postMessage
+	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages).
+	 *
 	 */
 	CodeMirrorPlugin = 'codeMirrorPlugin',
 }
