@@ -45,6 +45,13 @@ module.exports = async function(params) {
 
 	console.log(`Notarizing ${appId} found at ${appPath}`);
 
+	// Every x seconds we print something to stdout, otherwise Travis will
+	// timeout the task after 10 minutes, and Apple notarization can take more
+	// time.
+	const waitingIntervalId = setInterval(() => {
+		console.log('.');
+	}, 60000);
+
 	await electron_notarize.notarize({
 		appBundleId: appId,
 		appPath: appPath,
@@ -65,6 +72,8 @@ module.exports = async function(params) {
 		// xcrun altool --list-providers -u APPLE_ID -p APPLE_ID_PASSWORD
 		ascProvider: process.env.APPLE_ASC_PROVIDER,
 	});
+
+	clearInterval(waitingIntervalId);
 
 	// It appears that electron-notarize doesn't staple the app, but without
 	// this we were still getting the malware warning when launching the app.
