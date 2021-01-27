@@ -70,8 +70,9 @@ msgid ""
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Унесите назив белешке да би се пребацили на њу. Или укуцајте # са називом "
-"ознаке или @ са називом бележнице."
+"Унесите наслов белешке или део њеног садржаја да бисте прешли на њу. Или укуцајте "
+"# са називом ознаке или @ са називом бележнице. Или укуцајте : за тражење "
+"команди."
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -81,7 +82,7 @@ msgstr "Иди на било шта..."
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "Командна палета"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -91,7 +92,7 @@ msgstr "Извозим у \"%s као \"%s\" формат. Молимо вас �
 #: packages/app-desktop/InteropServiceHelper.js:174
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "Извоз белешки није успео: %s"
 
 #: packages/app-desktop/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -104,7 +105,7 @@ msgstr "%s (верзија пре главне)"
 
 #: packages/app-desktop/checkForUpdates.js:152
 msgid "An update is available, do you want to download it now?"
-msgstr "Доступно је ажурирање програма, да ли желите да га сада преузмете?"
+msgstr "Доступно је ажурирање програма, да ли желите да га преузмете сада?"
 
 #: packages/app-desktop/checkForUpdates.js:153
 #, javascript-format
@@ -119,12 +120,12 @@ msgstr "Нова верзија: %s"
 #: packages/app-desktop/checkForUpdates.js:154
 #, fuzzy
 msgid "Download"
-msgstr "Преузето"
+msgstr "Преузми"
 
 #: packages/app-desktop/checkForUpdates.js:154
 #, fuzzy
 msgid "Full Release Notes"
-msgstr "Повраћене белешке"
+msgstr "Напомене о пуној верзији"
 
 #: packages/app-desktop/gui/SearchBar/SearchBar.js:113
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
@@ -147,10 +148,10 @@ msgstr "Ова белешка нема историју"
 msgid "Unsupported link or message: %s"
 msgstr "Неподржана веза или порука: %s"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
-#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
+#: packages/app-desktop/gui/NoteRevisionViewer.jsx:183
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:78
 msgid "Restore"
-msgstr "Повраћај"
+msgstr "Поврати"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
@@ -180,9 +181,9 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Обрисати бележницу \"%s\"\n"
+"Обриши бележницу \"%s\"\n"
 "\n"
-"Све белешке и под-бележницe унутар ове бележнице ће такође бити обрисане."
+"Све белешке и под-белешке унутар ове бележнице ће такође бити обрисане."
 
 #: packages/app-desktop/gui/SideBar/SideBar.js:180
 #: packages/app-desktop/gui/utils/NoteListUtils.js:136
@@ -200,9 +201,9 @@ msgstr "Обриши"
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Уклонити ознаку \"%s\" из свих белешки?"
 
-#: packages/app-desktop/gui/SideBar/SideBar.js:187
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:235
 msgid "Remove this search from the sidebar?"
-msgstr "Уклонити ову претраку из бочне траке?"
+msgstr "Уклони ову претрагу из бочне траке?"
 
 #: packages/app-desktop/gui/SideBar/SideBar.js:238
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
@@ -215,7 +216,7 @@ msgstr "Извоз"
 #: packages/app-mobile/components/screens/notes.js:188
 #, fuzzy
 msgid "All notes"
-msgstr "белешка"
+msgstr "Све белешке"
 
 #: packages/app-desktop/gui/SideBar/SideBar.js:430
 #: packages/app-mobile/components/side-menu-content.js:338
@@ -246,19 +247,19 @@ msgstr "Дешифрујем ставке: %d/%d"
 #: packages/app-mobile/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Дохватам ресурсе: %d/%d"
+msgstr "Преузимање ресурса: %d/%d"
 
 #: packages/app-desktop/gui/SideBar/commands/focusElementSideBar.js:17
 msgid "Sidebar"
 msgstr "Бочна трака"
 
 #: packages/app-desktop/gui/SideBar/commands/focusElementSideBar.js:18
-#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
-#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
-#: packages/app-desktop/gui/MenuBar.js:558
-#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
+#: packages/app-desktop/gui/MenuBar.tsx:626
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
 msgid "Focus"
-msgstr "Концентрација"
+msgstr "Фокусирај"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
 msgid "Please select where the sync status should be exported to"
@@ -268,7 +269,7 @@ msgstr "Молимо вас да одаберете где ће се извес�
 #: packages/app-mobile/components/screens/status.js:112
 #, fuzzy
 msgid "Retry All"
-msgstr "Покушај поново"
+msgstr "Покушај поново све"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
 #: packages/app-mobile/components/screens/status.js:118
@@ -304,14 +305,14 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
-"Ова белешка нема садржаја. Кликните на \"%s\" да активирате уредника и "
+"Ова белешка нема садржаја. Кликните на \"%s\" да активирате едитор и "
 "уредите белешку."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:589
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:90
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
-msgstr "Исецфи"
+msgstr "Исеци"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:596
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:98
@@ -345,11 +346,11 @@ msgstr "Приложи фајл"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 msgid "Code Block"
-msgstr ""
+msgstr "Код блок"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
 msgid "Inline Code"
-msgstr ""
+msgstr "Код у линији"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
@@ -358,7 +359,7 @@ msgstr "Уметни време и датум"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "Превуците белешке или датотеке овде"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1003
 #, fuzzy
@@ -392,7 +393,7 @@ msgstr "Сачувај као..."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "Прикажи датотеку у фолдеру"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
 msgid "Copy path to clipboard"
@@ -413,7 +414,7 @@ msgstr "белешка"
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "Креирам ново %s..."
+msgstr "Креирам нову %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:336
 msgid ""
@@ -423,15 +424,15 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:340
 msgid "Read more about it"
-msgstr ""
+msgstr "Прочитајте више о томе"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:345
 msgid "Dismiss"
-msgstr ""
+msgstr "Одбаци"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:381
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "Следећи прилози се прате ради промена:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:384
 msgid ""
@@ -484,43 +485,43 @@ msgstr "Заглавље"
 msgid "Horizontal Rule"
 msgstr "Хоризонтална линија"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.ts:88
 #, fuzzy
 msgid "Delete line"
-msgstr "Обрисати белешку?"
+msgstr "Обриши ред?"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "Корак назад"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "Корак напред"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "Увуци манје"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "Увуци више"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 #, fuzzy
 msgid "Toggle comment"
-msgstr "Листа белешки"
+msgstr "Укључи/искључи коментар"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "Посложи изабране редове"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "Помери ред горе"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "Помери ред доле"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -583,11 +584,11 @@ msgstr "Претхнодне верзије ове белешке"
 msgid "Note properties"
 msgstr "Својства белешке"
 
-#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
-#: packages/lib/services/KeymapService.js:176
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
+#: packages/lib/services/KeymapService.ts:195
 #, fuzzy, javascript-format
 msgid "Error: %s"
-msgstr "Само грешке"
+msgstr "Грешка"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
