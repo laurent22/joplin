@@ -651,6 +651,9 @@ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js.map
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.d.ts
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js.map
+packages/app-desktop/utils/markupLanguageUtils.d.ts
+packages/app-desktop/utils/markupLanguageUtils.js
+packages/app-desktop/utils/markupLanguageUtils.js.map
 packages/app-mobile/PluginAssetsLoader.d.ts
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/PluginAssetsLoader.js.map
@@ -699,6 +702,9 @@ packages/app-mobile/utils/ShareExtension.js.map
 packages/app-mobile/utils/checkPermissions.d.ts
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/checkPermissions.js.map
+packages/app-mobile/utils/fs-driver-rn.d.ts
+packages/app-mobile/utils/fs-driver-rn.js
+packages/app-mobile/utils/fs-driver-rn.js.map
 packages/app-mobile/utils/shareHandler.d.ts
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shareHandler.js.map

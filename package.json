@@ -17,7 +17,8 @@
     "buildTranslations": "npm run tsc && node packages/tools/build-translation.js",
     "buildTranslationsNoTsc": "node packages/tools/build-translation.js",
     "buildWebsite": "npm run buildApiDoc && node ./packages/tools/build-website.js && npm run buildPluginDoc",
-    "circularDependencyCheck": "npx madge --warning --circular --extensions js ./",
+    "circularDependencyCheck": "madge --warning --circular --extensions js ./",
+    "dependencyTree": "madge",
     "clean": "lerna clean -y && lerna run clean",
     "generateDatabaseTypes": "node packages/tools/generate-database-types",
     "linkChecker": "linkchecker https://joplinapp.org",
@@ -60,6 +61,7 @@
     "husky": "^3.0.2",
     "lerna": "^3.22.1",
     "lint-staged": "^9.2.1",
+    "madge": "^4.0.0",
     "typedoc": "^0.17.8",
     "typescript": "^4.0.5"
   }
