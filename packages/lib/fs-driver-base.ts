@@ -118,4 +118,12 @@ export default class FsDriverBase {
 		};
 	}
 
+	public async tarExtract(_options: any) {
+		throw new Error('Not implemented');
+	}
+
+	public async tarCreate(_options: any, _filePaths: string[]) {
+		throw new Error('Not implemented');
+	}
+
 }

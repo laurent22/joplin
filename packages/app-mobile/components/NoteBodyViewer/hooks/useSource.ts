@@ -38,7 +38,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 	}, [themeId, paddingBottom]);
 
 	const markupToHtml = useMemo(() => {
-		return markupLanguageUtils.newMarkupToHtml({});
+		return markupLanguageUtils.newMarkupToHtml();
 	}, [isFirstRender]);
 
 	// To address https://github.com/laurent22/joplin/issues/433

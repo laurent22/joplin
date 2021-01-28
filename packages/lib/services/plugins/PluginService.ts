@@ -11,7 +11,6 @@ import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
 const compareVersions = require('compare-versions');
 const uslug = require('uslug');
-const md5File = require('md5-file/promise');
 
 const logger = Logger.create('PluginService');
 
@@ -183,7 +182,7 @@ export default class PluginService extends BaseService {
 		baseDir = rtrimSlashes(baseDir);
 
 		const fname = filename(path);
-		const hash = await md5File(path);
+		const hash = await shim.fsDriver().md5File(path);
 
 		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
@@ -194,7 +193,7 @@ export default class PluginService extends BaseService {
 			await shim.fsDriver().remove(unpackDir);
 			await shim.fsDriver().mkdir(unpackDir);
 
-			await require('tar').extract({
+			await shim.fsDriver().tarExtract({
 				strict: true,
 				portable: true,
 				file: path,

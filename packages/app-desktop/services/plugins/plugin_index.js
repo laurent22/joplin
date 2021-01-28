@@ -46,7 +46,7 @@
 	let callbackIndex = 1;
 
 	const target = (path, args) => {
-		if (path === 'plugins.require') {
+		if (path === 'require' || path === 'plugins.require') { // plugins.require is deprecated
 			const modulePath = args && args.length ? args[0] : null;
 			if (!modulePath) throw new Error('No module path specified on `require` call');
 

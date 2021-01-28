@@ -15,7 +15,7 @@ const time = require('@joplin/lib/time').default;
 const ReactTooltip = require('react-tooltip');
 const { urlDecode, substrWithEllipsis } = require('@joplin/lib/string-utils');
 const bridge = require('electron').remote.require('./bridge').default;
-const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
+const markupLanguageUtils = require('../utils/markupLanguageUtils').default;
 
 class NoteRevisionViewerComponent extends React.PureComponent {
 	constructor() {

@@ -572,6 +572,15 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	resizableLayout_renderItem(key: string, event: any) {
+		// Key should never be undefined but somehow it can happen, also not
+		// clear how. For now in this case render nothing so that the app
+		// doesn't crash.
+		// https://discourse.joplinapp.org/t/rearranging-the-pannels-crushed-the-app-and-generated-fatal-error/14373?u=laurent
+		if (!key) {
+			console.error('resizableLayout_renderItem: Trying to render an item using an empty key. Full layout is:', this.props.mainLayout);
+			return null;
+		}
+
 		const eventEmitter = event.eventEmitter;
 
 		// const viewsToRemove:string[] = [];
