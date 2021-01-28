@@ -1,7 +1,7 @@
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { useCallback, useMemo } from 'react';
 import { ResourceInfos } from './types';
-import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
+import markupLanguageUtils from '../../../utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 
 const { themeStyle } = require('@joplin/lib/theme');

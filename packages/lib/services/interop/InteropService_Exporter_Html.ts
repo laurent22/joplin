@@ -7,6 +7,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { MarkupToHtml } from '@joplin/renderer';
 import { ResourceEntity } from '../database/types';
+import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
 const { basename, friendlySafeFilename, rtrimSlashes } = require('../../path-utils');
 const { themeStyle } = require('../../theme');
 const { dirname } = require('../../path-utils');
@@ -38,7 +39,9 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		this.resourceDir_ = this.destDir_ ? `${this.destDir_}/_resources` : null;
 
 		await shim.fsDriver().mkdir(this.destDir_);
-		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml(options.plugins);
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml({
+			extraRendererRules: contentScriptsToRendererRules(options.plugins),
+		});
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
 

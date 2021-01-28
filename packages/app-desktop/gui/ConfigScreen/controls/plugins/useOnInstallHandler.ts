@@ -3,6 +3,7 @@ import PluginService, { defaultPluginSetting, PluginSettings } from '@joplin/lib
 import produce from 'immer';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
+import { ItemEvent } from './PluginBox';
 
 const logger = Logger.create('useOnInstallHandler');
 
@@ -13,8 +14,8 @@ export interface OnPluginSettingChangeEvent {
 type OnPluginSettingChangeHandler = (event: OnPluginSettingChangeEvent)=> void;
 
 export default function(setInstallingPluginIds: Function, pluginSettings: PluginSettings, repoApi: Function, onPluginSettingsChange: OnPluginSettingChangeHandler, isUpdate: boolean) {
-	return useCallback(async (event: any) => {
-		const pluginId = event.item.id;
+	return useCallback(async (event: ItemEvent) => {
+		const pluginId = event.item.manifest.id;
 
 		setInstallingPluginIds((prev: any) => {
 			return {

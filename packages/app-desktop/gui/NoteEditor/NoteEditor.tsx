@@ -25,7 +25,7 @@ import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils
 import { _ } from '@joplin/lib/locale';
 import TagList from '../TagList';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
-import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
+import markupLanguageUtils from '../../utils/markupLanguageUtils';
 import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';

@@ -24,20 +24,20 @@ export default class JoplinPlugins {
      */
     registerContentScript(type: ContentScriptType, id: string, scriptPath: string): Promise<void>;
     /**
-     * Gets the plugin own data directory path. Use this to store any plugin-related data.
+     * Gets the plugin own data directory path. Use this to store any
+     * plugin-related data. Unlike [[installationDir]], any data stored here
+     * will be persisted.
      */
     dataDir(): Promise<string>;
     /**
-     * It is not possible to bundle native packages with a plugin, because they
-     * need to work cross-platforms. Instead access to certain useful native
-     * packages is provided using this function.
-     *
-     * Currently these packages are available:
-     *
-     * - [sqlite3](https://www.npmjs.com/package/sqlite3)
-     * - [fs-extra](https://www.npmjs.com/package/fs-extra)
-     *
-     * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/nativeModule)
+     * Gets the plugin installation directory. This can be used to access any
+     * asset that was packaged with the plugin. This directory should be
+     * considered read-only because any data you store here might be deleted or
+     * re-created at any time. To store new persistent data, use [[dataDir]].
+     */
+    installationDir(): Promise<string>;
+    /**
+     * @deprecated Use joplin.require()
      */
     require(_path: string): any;
 }

@@ -312,6 +312,20 @@ async function fetchAllNotes() {
 				lines.push('');
 				lines.push('The "data" field is required, while the "props" one is not. If not specified, default values will be used.');
 				lines.push('');
+				lines.push('**From a plugin** the syntax to create a resource is also a bit special:');
+				lines.push('');
+				lines.push('```javascript');
+				lines.push('\tawait joplin.data.post(');
+				lines.push('\t\t["resources"],');
+				lines.push('\t\tnull,');
+				lines.push('\t\t{ title: "test.jpg" }, // Resource metadata');
+				lines.push('\t\t[');
+				lines.push('\t\t\t{');
+				lines.push('\t\t\t\tpath: "/path/to/test.jpg", // Actual file');
+				lines.push('\t\t\t},');
+				lines.push('\t\t]');
+				lines.push('\t);');
+				lines.push('```');
 			}
 
 			if (model.type === BaseModel.TYPE_TAG) {
