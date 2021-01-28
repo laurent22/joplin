@@ -158,25 +158,30 @@ export default class Application extends BaseApplication {
 			ResourceModel: Resource,
 		});
 
-		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), {
+		const renderOptions: any = {
 			resources: resourceInfos,
 
 			itemIdToUrl: (itemId: Uuid) => {
-				let queryParam = '';
 				const item = linkedItemInfos[itemId].item;
 				if (!item) throw new Error(`No such item in this note: ${itemId}`);
 
 				if (item.type_ === ModelType.Note) {
-					queryParam = 'note_id';
+					return '#';
 				} else if (item.type_ === ModelType.Resource) {
-					queryParam = 'resource_id';
+					return `${this.models.share().shareUrl(share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
 				} else {
 					throw new Error(`Unsupported item type: ${item.type_}`);
 				}
-
-				return `${this.models.share().shareUrl(share.id)}?${queryParam}=${item.id}&t=${item.updated_time}`;
 			},
-		});
+
+			// Switch-off the media players because there's no option to toggle
+			// them on and off.
+			audioPlayerEnabled: false,
+			videoPlayerEnabled: false,
+			pdfViewerEnabled: false,
+		};
+
+		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
 
 		const bodyHtml = await this.mustache.renderView({
 			cssFiles: ['note'],
@@ -223,10 +228,12 @@ export default class Application extends BaseApplication {
 			fileToRender.itemId = query.resource_id;
 		}
 
-		if (query.note_id) {
-			fileToRender.file = await this.itemFile(fileModel, file.parent_id, ModelType.Note, query.note_id);
-			fileToRender.itemId = query.note_id;
-		}
+		// No longer supported - need to decide what to do about note links.
+
+		// if (query.note_id) {
+		// 	fileToRender.file = await this.itemFile(fileModel, file.parent_id, ModelType.Note, query.note_id);
+		// 	fileToRender.itemId = query.note_id;
+		// }
 
 		if (fileToRender.file !== file && !linkedItemInfos[fileToRender.itemId]) {
 			throw new ErrorNotFound(`Item "${fileToRender.itemId}" does not belong to this note`);

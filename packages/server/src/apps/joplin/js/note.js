@@ -31,4 +31,14 @@ function docReady(fn) {
 
 docReady(() => {
 	addPluginAssets(joplinNoteViewer.appBaseUrl, joplinNoteViewer.pluginAssets);
+
+	document.addEventListener('click', event => {
+		const element = event.target;
+
+		// Detects if it's a note link and, if so, display a message
+		if (element && element.getAttribute('href') === '#' && element.getAttribute('data-resource-id')) {
+			event.preventDefault();
+			alert('Note links are not supported');
+		}
+	});
 });
