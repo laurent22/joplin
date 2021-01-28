@@ -1,4 +1,4 @@
-import utils, { ResourceIdToUrlHandler } from '../utils';
+import utils, { ItemIdToUrlHandler } from '../utils';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
@@ -12,7 +12,7 @@ export interface Options {
 	plainResourceRendering?: boolean;
 	postMessageSyntax?: string;
 	enableLongPress?: boolean;
-	resourceIdToUrl?: ResourceIdToUrlHandler;
+	itemIdToUrl?: ItemIdToUrlHandler;
 }
 
 export interface LinkReplacementResult {
@@ -114,8 +114,8 @@ export default function(href: string, options: Options = null): LinkReplacementR
 
 	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
 
-	if (resourceId && options.resourceIdToUrl) {
-		const url = options.resourceIdToUrl(resourceId);
+	if (resourceId && options.itemIdToUrl) {
+		const url = options.itemIdToUrl(resourceId);
 		attrHtml.push(`href='${htmlentities(url)}'`);
 		resourceFullPath = url;
 	} else if (options.plainResourceRendering || options.linkRenderingType === 2) {

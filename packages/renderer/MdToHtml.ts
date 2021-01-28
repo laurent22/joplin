@@ -3,7 +3,7 @@ import noteStyle from './noteStyle';
 import { fileExtension } from './pathUtils';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
-import { ResourceIdToUrlHandler } from './utils';
+import { ItemIdToUrlHandler } from './utils';
 import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
 
 const MarkdownIt = require('markdown-it');
@@ -148,7 +148,7 @@ export interface RuleOptions {
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
 
-	resourceIdToUrl?: ResourceIdToUrlHandler;
+	itemIdToUrl?: ItemIdToUrlHandler;
 }
 
 export default class MdToHtml {

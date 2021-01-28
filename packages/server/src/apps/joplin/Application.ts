@@ -161,13 +161,10 @@ export default class Application extends BaseApplication {
 		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), {
 			resources: resourceInfos,
 
-			// TODO: rename to itemToUrl
-			resourceIdToUrl: (itemId: Uuid) => {
+			itemIdToUrl: (itemId: Uuid) => {
 				let queryParam = '';
 				const item = linkedItemInfos[itemId].item;
 				if (!item) throw new Error(`No such item in this note: ${itemId}`);
-
-				console.info('resourceIdToUrl', item);
 
 				if (item.type_ === ModelType.Note) {
 					queryParam = 'note_id';

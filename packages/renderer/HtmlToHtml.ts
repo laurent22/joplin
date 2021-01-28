@@ -1,6 +1,6 @@
 import htmlUtils from './htmlUtils';
 import linkReplacement from './MdToHtml/linkReplacement';
-import utils, { ResourceIdToUrlHandler } from './utils';
+import utils, { ItemIdToUrlHandler } from './utils';
 
 // TODO: fix
 // import Setting from '@joplin/lib/models/Setting';
@@ -32,7 +32,7 @@ interface RenderOptions {
 	resources: any;
 	postMessageSyntax: string;
 	enableLongPress: boolean;
-	resourceIdToUrl?: ResourceIdToUrlHandler;
+	itemIdToUrl?: ItemIdToUrlHandler;
 }
 
 interface RenderResult {
@@ -117,7 +117,7 @@ export default class HtmlToHtml {
 			html = htmlUtils.processImageTags(html, (data: any) => {
 				if (!data.src) return null;
 
-				const r = utils.imageReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_, options.resourceIdToUrl);
+				const r = utils.imageReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_, options.itemIdToUrl);
 				if (!r) return null;
 
 				if (typeof r === 'string') {

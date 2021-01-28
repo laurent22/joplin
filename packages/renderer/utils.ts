@@ -122,9 +122,9 @@ utils.resourceStatus = function(ResourceModel: any, resourceInfo: any) {
 	return resourceStatus;
 };
 
-export type ResourceIdToUrlHandler = (resource: any)=> string;
+export type ItemIdToUrlHandler = (resource: any)=> string;
 
-utils.imageReplacement = function(ResourceModel: any, src: string, resources: any, resourceBaseUrl: string, resourceIdToUrl: ResourceIdToUrlHandler = null) {
+utils.imageReplacement = function(ResourceModel: any, src: string, resources: any, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
 	if (!ResourceModel || !resources) return null;
 
 	if (!ResourceModel.isResourceUrl(src)) return null;
@@ -142,8 +142,8 @@ utils.imageReplacement = function(ResourceModel: any, src: string, resources: an
 	if (ResourceModel.isSupportedImageMimeType(mime)) {
 		let newSrc = '';
 
-		if (resourceIdToUrl) {
-			newSrc = resourceIdToUrl(resource.id);
+		if (itemIdToUrl) {
+			newSrc = itemIdToUrl(resource.id);
 		} else {
 			const temp = [];
 
