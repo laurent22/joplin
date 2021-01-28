@@ -4,6 +4,7 @@ import { fileExtension } from './pathUtils';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import { ResourceIdToUrlHandler } from './utils';
+import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
@@ -113,18 +114,6 @@ interface PluginContext {
 	cache: any;
 	userData: any;
 	currentLinks: Link[];
-}
-
-interface RenderResultPluginAsset {
-	name: string;
-	path: string;
-	mime: string;
-}
-
-interface RenderResult {
-	html: string;
-	pluginAssets: RenderResultPluginAsset[];
-	cssStrings: string[];
 }
 
 export interface RuleOptions {

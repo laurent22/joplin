@@ -61,6 +61,30 @@ export class Applications {
 		return this.joplin_;
 	}
 
+	public async localFileFromUrl(url: string): Promise<string> {
+		if (url.indexOf('apps/') !== 0) return null;
+
+		// The below is roughtly hard-coded for the Joplin app but could be
+		// generalised if multiple apps are supported.
+
+		const joplinApp = await this.joplin();
+
+		const fromAppUrl = await joplinApp.localFileFromUrl(url);
+		if (fromAppUrl) return fromAppUrl;
+
+		const rootDir = joplinApp.rootDir;
+
+		const defaultPaths = [
+			'apps/joplin',
+		];
+
+		for (const p of defaultPaths) {
+			if (url.indexOf(p) === 0) return `${rootDir}/${url.substr(p.length + 1)}`;
+		}
+
+		return null;
+	}
+
 }
 
 const app = new Koa();

@@ -12,6 +12,9 @@
 	{{#cssFiles}}
 		<link rel="stylesheet" href="{{{.}}}" crossorigin="anonymous">
 	{{/cssFiles}}
+	{{#jsFiles}}
+		<script src="{{{.}}}"></script>
+	{{/jsFiles}}
 </head>
 	<body class="page-{{{pageName}}}">
 		{{> navbar}}

@@ -138,13 +138,12 @@ utils.imageReplacement = function(ResourceModel: any, src: string, resources: an
 		const icon = utils.resourceStatusImage(resourceStatus);
 		return `<div class="not-loaded-resource resource-status-${resourceStatus}" data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>` + '</div>';
 	}
-
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';
 	if (ResourceModel.isSupportedImageMimeType(mime)) {
 		let newSrc = '';
 
 		if (resourceIdToUrl) {
-			newSrc = resourceIdToUrl(resource);
+			newSrc = resourceIdToUrl(resource.id);
 		} else {
 			const temp = [];
 
