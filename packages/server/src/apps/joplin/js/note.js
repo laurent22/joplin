@@ -1,3 +1,5 @@
+/* global joplinNoteViewer */
+
 function addPluginAssets(appBaseUrl, assets) {
 	if (!assets) return;
 
@@ -28,6 +30,5 @@ function docReady(fn) {
 }
 
 docReady(() => {
-	// eslint-disable-next-line no-undef
 	addPluginAssets(joplinNoteViewer.appBaseUrl, joplinNoteViewer.pluginAssets);
 });
