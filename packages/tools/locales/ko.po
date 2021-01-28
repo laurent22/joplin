@@ -1493,8 +1493,8 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"노트들을 수동으로 정렬하려면 \"%s\"가 변경되어야만 합니다.(\"%s\" > \"%s\" 메"
-"뉴)"
+"노트들을 수동으로 정렬하려면 정렬 옵션이 \"%s\"로 변경되어야만 합니다.(\"%s"
+"\" > \"%s\" 메뉴)"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -2302,7 +2302,7 @@ msgstr "정렬 순서 반전"
 
 #: packages/lib/models/Setting.js:480
 msgid "Sort notebooks by"
-msgstr "노트를 다음 기준으로 정렬"
+msgstr "노트북을 다음 기준으로 정렬"
 
 #: packages/lib/models/Setting.js:492
 msgid "Save geo-location with notes"
