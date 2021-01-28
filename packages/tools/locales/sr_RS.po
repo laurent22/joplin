@@ -340,11 +340,11 @@ msgstr "Приложи фајл"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 msgid "Code Block"
-msgstr "Код блок"
+msgstr "Кôд блок"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
 msgid "Inline Code"
-msgstr "Код у линији"
+msgstr "Кôд у линији"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
@@ -358,7 +358,7 @@ msgstr "Превуците белешке или датотеке овде"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
 #, fuzzy
 msgid "Code View"
-msgstr "Код"
+msgstr "Кôд"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
 #, javascript-format
@@ -462,7 +462,7 @@ msgstr "Хипер-веза"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:48
 msgid "Code"
-msgstr "Код"
+msgstr "Кôд"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
 msgid "Numbered List"
@@ -612,12 +612,12 @@ msgstr "Увоз"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "Наредба"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
 #, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Режим тастатуре"
+msgstr "Пречица на тастатури"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
 #: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:357
@@ -628,12 +628,12 @@ msgstr "Излаз"
 #: packages/app-desktop/gui/MenuBar.js:260
 #, fuzzy
 msgid "Insert template"
-msgstr "Уметни време и датум"
+msgstr "Убаци шаблон"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
 #: packages/app-desktop/gui/MenuBar.js:519
 msgid "Actual Size"
-msgstr ""
+msgstr "Стварна велиичина"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
 #: packages/app-desktop/gui/MenuBar.js:580
@@ -643,7 +643,7 @@ msgstr "Вебсајт и документација"
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
 #, fuzzy
 msgid "Hide Joplin"
-msgstr "О Џоплину"
+msgstr "Сакриј Џоплин"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
 #: packages/app-desktop/gui/MenuBar.js:408
@@ -663,11 +663,11 @@ msgstr "Опције"
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
 #, fuzzy
 msgid "Invalid"
-msgstr "Невалидан одговор %s"
+msgstr "Неважећи одговор %s"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Притисните пречицу"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
@@ -679,7 +679,7 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
 #: packages/app-mobile/components/screens/encryption-config.js:125
 msgid "Save"
-msgstr "Сними"
+msgstr "Сачувај"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:399
 msgid ""
@@ -690,7 +690,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:401
 msgid "Restart and upgrade"
-msgstr ""
+msgstr "Поново покрени и надогради"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:405
 msgid "Some items cannot be synchronised."
@@ -700,12 +700,12 @@ msgstr "Неке ставке се не могу синхронизовати."
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:413
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:425
 msgid "View them now"
-msgstr "Прикажи ставку одмах"
+msgstr "Прикажи их сада"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:411
 #, fuzzy
 msgid "Some items cannot be decrypted."
-msgstr "Неке ставке се не могу синхронизовати."
+msgstr "Неке ставке није могуће дешифровати."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:417
 msgid "One or more master keys need a password."
@@ -718,7 +718,7 @@ msgstr "Постави лозинку"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:423
 #, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "Једном или више главних кључева је потребна лозинка."
+msgstr "Један од ваших главних кључева користи застарели метод шифровања."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:429
 msgid ""
@@ -733,11 +733,11 @@ msgstr "Више информација"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:552
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
+msgstr "Помоћу стрелица промените распоред ставки. Притисните \"Esc\" да бисте изашли."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
-msgstr ""
+msgstr "Статистика"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:18
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:18
@@ -758,11 +758,11 @@ msgstr "Нова ставка задужења"
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
 #, fuzzy
 msgid "Toggle note list"
-msgstr "Листа белешки"
+msgstr "Прикажи/сакриј листу белешки"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
 msgid "Toggle sidebar"
-msgstr "Бочна трака"
+msgstr "Прикажи/сакриј бочну траку"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -797,16 +797,16 @@ msgstr "Премести у бележницу..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
-msgstr "Промени распоред уредника"
+msgstr "Прикажи/сакриј едитор"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
 #, fuzzy
 msgid "Toggle editors"
-msgstr "Промени распоред уредника"
+msgstr "Прикажи/сакриј едиторе"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "Промените изглед апликације"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -823,17 +823,17 @@ msgstr "Назив бележнице:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Провера правописа"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 #, fuzzy
 msgid "Share note..."
-msgstr "Повраћене белешке"
+msgstr "Подели белешку ..."
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
 #, fuzzy
 msgid "New sub-notebook"
-msgstr "Нова бележница"
+msgstr "Нова подбележница"
 
 #: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
 msgid "Template file:"
@@ -851,7 +851,7 @@ msgstr "Штампај"
 #, fuzzy
 msgid "Only one note can be printed at a time."
 msgstr ""
-"Jедино једна белешка може бити одштампана или извезена у ПДВ истовремено."
+"Највише једна белешка може бити одштампана истовремено."
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:29
 #: packages/app-mobile/components/screens/dropbox-login.js:58
@@ -867,19 +867,19 @@ msgstr ""
 #: packages/app-cli/app/command-sync.js:91
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
-"Корак 1: Отворите овај УРЛ у вашем интернет претраживачу да би сте "
+"Корак 1: Отворите овај УРЛ у вашем интернет претраживачу да бисте "
 "ауторизовали апликацију:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:32
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 #: packages/app-cli/app/command-sync.js:93
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "Корак 2: Унесите код који сте добили од Дропбокса:"
+msgstr "Корак 2: Унесите кôд који сте добили од Дропбокса:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:35
 #: packages/app-mobile/components/screens/dropbox-login.js:68
 msgid "Submit"
-msgstr "Поднеси"
+msgstr "Потврди"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
@@ -916,8 +916,8 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"Џоплин веб клипер вам омогућава да сачувате веб странице и исечке екрана из "
-"вашег интернет браузера у џоплин."
+"Џоплин веб клипер вам омогућава да сачувате веб странице и снимке екрана из "
+"вашег интернет претраживача у Џоплин."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:129
 msgid "In order to use the web clipper, you need to do the following:"
@@ -933,17 +933,17 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"Ова услуга дозвољава додатку за веб браузер да комуницира са Џоплином. Када "
+"Ова услуга дозвољава додатку за интернет претраживач да комуницира са Џоплином. Када "
 "је активирате можете добити упит од вашег заштитног зида да дате дозволу да "
-"џоплин апликација слуша на одређеном порту."
+"Џоплин апликација слуша на одређеном порту."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:156
 msgid "Step 2: Install the extension"
-msgstr "Корак 2: Инсталирање додатка за веб претраживач"
+msgstr "Корак 2: Инсталирај додатак за интернет претраживач"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:161
 msgid "Download and install the relevant extension for your browser:"
-msgstr "Преузмите и инсталирајте релевантни додатак за ваш интернет браузер:"
+msgstr "Преузмите и инсталирајте релевантни додатак за ваш интернет претраживач:"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:176
 msgid "Advanced options"
@@ -977,26 +977,26 @@ msgstr "Статус синхронизације"
 #: packages/app-desktop/gui/MenuBar.js:250
 #, fuzzy
 msgid "Create note from template"
-msgstr "Уметни време и датум"
+msgstr "Направи белешку из шаблона"
 
 #: packages/app-desktop/gui/MenuBar.js:255
 msgid "Create to-do from template"
-msgstr ""
+msgstr "Направи задужење из шаблона"
 
 #: packages/app-desktop/gui/MenuBar.js:266
 #, fuzzy
 msgid "Open template directory"
-msgstr "Џоплин директоријум за извоз"
+msgstr "Отвори фолдер шаблона"
 
 #: packages/app-desktop/gui/MenuBar.js:271
 #, fuzzy
 msgid "Refresh templates"
-msgstr "Уметни време и датум"
+msgstr "Освежи шаблоне"
 
 #: packages/app-desktop/gui/MenuBar.js:297
 #, fuzzy
 msgid "Note attachments..."
-msgstr "Приложи фајл"
+msgstr "Прилози у белешкама..."
 
 #: packages/app-desktop/gui/MenuBar.js:328
 #: packages/app-desktop/gui/MenuBar.js:400
