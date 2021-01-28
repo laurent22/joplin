@@ -1,4 +1,3 @@
-import { Config } from '../../utils/types';
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Logger from '@joplin/lib/Logger';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
@@ -9,10 +8,10 @@ import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types'
 import { MarkupToHtml } from '@joplin/renderer';
 import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
-import { Models } from '../../models/factory';
 import FileModel from '../../models/FileModel';
 import { ErrorNotFound } from '../../utils/errors';
-import { escapeHtml } from '../../utils/htmlUtils';
+import BaseApplication from '../../services/BaseApplication';
+import { formatDateTime } from '../../utils/time';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -24,10 +23,7 @@ export interface FileViewerResponse {
 	size: number;
 }
 
-export default class Application {
-
-	private config_: Config;
-	private models_: Models;
+export default class Application extends BaseApplication {
 
 	// Although we don't use the database to store data, we still need to setup
 	// so that its schema can be accessed. This is needed for example by
@@ -35,13 +31,10 @@ export default class Application {
 	// the field values correctly.
 	private db_: JoplinDatabase;
 
-	public constructor(config: Config, models: Models) {
-		this.config_ = config;
-		this.models_ = models;
-	}
-
 	public async initialize() {
-		const filePath = `${this.config_.tempDir}/joplin.sqlite`;
+		this.mustache.prefersDarkEnabled = false;
+
+		const filePath = `${this.config.tempDir}/joplin.sqlite`;
 
 		this.db_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.db_.setLogger(logger as Logger);
@@ -60,8 +53,8 @@ export default class Application {
 	}
 
 	private async resourceMetadataFile(parentId: Uuid, resourceId: string): Promise<File> {
-		const file = await this.models_.file().fileByName(parentId, this.idToFilename(resourceId), { skipPermissionCheck: true });
-		return this.models_.file().loadWithContent(file.id, { skipPermissionCheck: true });
+		const file = await this.models.file().fileByName(parentId, this.idToFilename(resourceId), { skipPermissionCheck: true });
+		return this.models.file().loadWithContent(file.id, { skipPermissionCheck: true });
 	}
 
 	private async unserializeItem(type: ModelType, file: File): Promise<any> {
@@ -103,7 +96,7 @@ export default class Application {
 	}
 
 	public async renderFile(file: File, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
-		const fileModel = this.models_.file({ userId: file.owner_id });
+		const fileModel = this.models.file({ userId: file.owner_id });
 
 		const note: NoteEntity = await this.unserializeItem(ModelType.Note, file);
 		const resourceInfos: Record<string, any> = await this.noteResourceInfos(file.parent_id, note);
@@ -122,17 +115,28 @@ export default class Application {
 		} else {
 			const markupToHtml = new MarkupToHtml({
 				ResourceModel: Resource,
-				resourceBaseUrl: `${this.models_.share().shareUrl(share.id)}?resource_id=`,
+				resourceBaseUrl: `${this.models.share().shareUrl(share.id)}?resource_id=`,
 			});
 
 			const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), {
 				resources: resourceInfos,
 				resourceIdToUrl: (resource: ResourceEntity) => {
-					return `${this.models_.share().shareUrl(share.id)}?resource_id=${resource.id}&t=${resource.updated_time}`;
+					return `${this.models.share().shareUrl(share.id)}?resource_id=${resource.id}&t=${resource.updated_time}`;
 				},
 			});
 
-			const bodyHtml = `<h1>${escapeHtml(note.title)}<h1>${result.html}`;
+			const bodyHtml = await this.mustache.renderView({
+				cssFiles: ['note'],
+				name: 'note',
+				path: 'note',
+				content: {
+					note: {
+						...note,
+						bodyHtml: result.html,
+						updatedDateTime: formatDateTime(note.updated_time),
+					},
+				},
+			});
 
 			return {
 				body: bodyHtml,

@@ -19,6 +19,9 @@ const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
 	'css/bulma-prefers-dark.min.css': 'node_modules/bulma-prefers-dark/css/bulma-prefers-dark.min.css',
 	'css/fontawesome/css/all.min.css': 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+
+	// Hard-coded for now but it could be made dynamic later on
+	'apps/joplin/css/note.css': 'src/apps/joplin/css/note.css',
 };
 
 async function findLocalFile(path: string): Promise<string> {

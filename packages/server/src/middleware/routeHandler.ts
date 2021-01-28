@@ -2,7 +2,16 @@ import routes from '../routes/routes';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat, MatchedRoute } from '../utils/routeUtils';
 import { AppContext, Env, HttpMethod } from '../utils/types';
-import mustacheService, { isView, View } from '../services/MustacheService';
+import MustacheService, { isView, View } from '../services/MustacheService';
+import config from '../config';
+
+let mustache_: MustacheService = null;
+function mustache(): MustacheService {
+	if (!mustache_) {
+		mustache_ = new MustacheService(config().viewDir, config().baseUrl);
+	}
+	return mustache_;
+}
 
 export default async function(ctx: AppContext) {
 	ctx.appLogger().info(`${ctx.request.method} ${ctx.path}`);
@@ -28,7 +37,7 @@ export default async function(ctx: AppContext) {
 				ctx.response = responseObject.response;
 			} else if (isView(responseObject)) {
 				ctx.response.status = 200;
-				ctx.response.body = await mustacheService.renderView(responseObject, {
+				ctx.response.body = await mustache().renderView(responseObject, {
 					notifications: ctx.notifications || [],
 					hasNotifications: !!ctx.notifications && !!ctx.notifications.length,
 					owner: ctx.owner,
@@ -61,7 +70,7 @@ export default async function(ctx: AppContext) {
 					stack: ctx.env === Env.Dev ? error.stack : '',
 				},
 			};
-			ctx.response.body = await mustacheService.renderView(view);
+			ctx.response.body = await mustache().renderView(view);
 		} else { // JSON
 			ctx.response.set('Content-Type', 'application/json');
 			const r: any = { error: error.message };

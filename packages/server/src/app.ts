@@ -53,7 +53,8 @@ export class Applications {
 
 	public async joplin(): Promise<ApplicationJoplin> {
 		if (!this.joplin_) {
-			this.joplin_ = new ApplicationJoplin(config(), this.models_);
+			this.joplin_ = new ApplicationJoplin();
+			this.joplin_.initBase_('joplin', config(), this.models_);
 			await this.joplin_.initialize();
 		}
 
