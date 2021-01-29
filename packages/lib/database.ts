@@ -92,8 +92,8 @@ export default class Database {
 		let params: SqlParams = null;
 
 		if (typeof inputSql === 'object') {
-			params = (sql as any).params;
-			sql = (sql as any).sql;
+			params = (inputSql as SqlQuery).params;
+			sql = (inputSql as SqlQuery).sql;
 		} else {
 			params = inputParams;
 			sql = inputSql as string;

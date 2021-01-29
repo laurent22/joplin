@@ -77,8 +77,8 @@ class Database {
             let sql = null;
             let params = null;
             if (typeof inputSql === 'object') {
-                params = sql.params;
-                sql = sql.sql;
+                params = inputSql.params;
+                sql = inputSql.sql;
             }
             else {
                 params = inputParams;
