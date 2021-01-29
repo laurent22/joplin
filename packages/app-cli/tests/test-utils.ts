@@ -402,7 +402,7 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	await fileApi().clearRoot();
 }
 
-function db(id: number = null) {
+function db(id: number = null): JoplinDatabase {
 	if (id === null) id = currentClient_;
 	return databases_[id];
 }

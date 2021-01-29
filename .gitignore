@@ -84,6 +84,9 @@ packages/app-cli/tests/Synchronizer.resources.js.map
 packages/app-cli/tests/Synchronizer.revisions.d.ts
 packages/app-cli/tests/Synchronizer.revisions.js
 packages/app-cli/tests/Synchronizer.revisions.js.map
+packages/app-cli/tests/Synchronizer.sharing.d.ts
+packages/app-cli/tests/Synchronizer.sharing.js
+packages/app-cli/tests/Synchronizer.sharing.js.map
 packages/app-cli/tests/Synchronizer.tags.d.ts
 packages/app-cli/tests/Synchronizer.tags.js
 packages/app-cli/tests/Synchronizer.tags.js.map
@@ -981,9 +984,6 @@ packages/lib/services/RevisionService.js.map
 packages/lib/services/SettingUtils.d.ts
 packages/lib/services/SettingUtils.js
 packages/lib/services/SettingUtils.js.map
-packages/lib/services/ShareService.d.ts
-packages/lib/services/ShareService.js
-packages/lib/services/ShareService.js.map
 packages/lib/services/UndoRedoService.d.ts
 packages/lib/services/UndoRedoService.js
 packages/lib/services/UndoRedoService.js.map

@@ -47,6 +47,10 @@ export default class Resource extends BaseItem {
 		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
 	}
 
+	public static sharedResourceIds(): Promise<string[]> {
+		return this.db().selectAllFields('SELECT id FROM resources WHERE is_shared = 1', {}, 'id');
+	}
+
 	static errorFetchStatuses() {
 		return this.db().selectAll(`
 			SELECT title AS resource_title, resource_id, fetch_error
