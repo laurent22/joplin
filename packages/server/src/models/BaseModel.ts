@@ -1,11 +1,8 @@
-import { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient, DbConnection, Change, ItemType, ChangeType, Notification } from '../db';
+import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, ChangeType } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models } from './factory';
-
-export type AnyItemType = File | User | Session | Permission | ApiClient | Change | Notification;
-export type AnyItemTypes = File[] | User[] | Session[] | Permission[] | ApiClient[] | Change[] | Notification[];
 
 export interface ModelOptions {
 	userId?: string;
@@ -27,7 +24,7 @@ export interface ValidateOptions {
 	rules?: any;
 }
 
-export default abstract class BaseModel {
+export default abstract class BaseModel<T> {
 
 	private options_: ModelOptions = null;
 	private defaultFields_: string[] = [];
@@ -156,52 +153,61 @@ export default abstract class BaseModel {
 		await this.transactionHandler_.commit(txIndex);
 	}
 
-	public async all(): Promise<AnyItemTypes> {
+	public async all(): Promise<T[]> {
 		return this.db(this.tableName).select(...this.defaultFields);
 	}
 
-	public fromApiInput(object: AnyItemType): AnyItemType {
-		return object;
+	public fromApiInput(object: T): T {
+		const blackList = ['updated_time', 'created_time', 'owner_id'];
+		const whiteList = Object.keys(databaseSchema[this.tableName]);
+		const output: any = { ...object };
+
+		for (const f in object) {
+			if (blackList.includes(f)) delete output[f];
+			if (!whiteList.includes(f)) delete output[f];
+		}
+
+		return output;
 	}
 
 	public toApiOutput(object: any): any {
 		return { ...object };
 	}
 
-	protected async validate(object: AnyItemType, options: ValidateOptions = {}): Promise<AnyItemType> {
+	protected async validate(object: T, options: ValidateOptions = {}): Promise<T> {
 		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;
 	}
 
-	protected async isNew(object: AnyItemType, options: SaveOptions): Promise<boolean> {
+	protected async isNew(object: T, options: SaveOptions): Promise<boolean> {
 		if (options.isNew === false) return false;
 		if (options.isNew === true) return true;
 		return !(object as WithUuid).id;
 	}
 
-	private async handleChangeTracking(options: SaveOptions, item: AnyItemType, changeType: ChangeType): Promise<void> {
+	private async handleChangeTracking(options: SaveOptions, item: T, changeType: ChangeType): Promise<void> {
 		const trackChanges = this.trackChanges && options.trackChanges !== false;
 		if (!trackChanges) return;
 
 		let parentId = null;
 		if (this.hasParentId) {
 			if (!('parent_id' in item)) {
-				const temp: any = await this.db(this.tableName).select(['parent_id']).where('id', '=', item.id).first();
+				const temp: any = await this.db(this.tableName).select(['parent_id']).where('id', '=', (item as WithUuid).id).first();
 				parentId = temp.parent_id;
 			} else {
-				parentId = item.parent_id;
+				parentId = (item as any).parent_id;
 			}
 		}
 
 		// Sanity check - shouldn't happen
 		// Parent ID can be an empty string for root folders, but it shouldn't be null or undefined
-		if (this.hasParentId && !parentId && parentId !== '') throw new Error(`Could not find parent ID for item: ${item.id}`);
+		if (this.hasParentId && !parentId && parentId !== '') throw new Error(`Could not find parent ID for item: ${(item as WithUuid).id}`);
 
 		const changeModel = this.models().change({ userId: this.userId });
 		await changeModel.add(this.itemType, parentId, (item as WithUuid).id, (item as any).name || '', changeType);
 	}
 
-	public async save(object: AnyItemType, options: SaveOptions = {}): Promise<AnyItemType> {
+	public async save(object: T, options: SaveOptions = {}): Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
 
 		const toSave = Object.assign({}, object);
@@ -231,7 +237,7 @@ export default abstract class BaseModel {
 				if (!objectId) throw new Error('Missing "id" property');
 				delete (toSave as WithUuid).id;
 				const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId });
-				toSave.id = objectId;
+				(toSave as WithUuid).id = objectId;
 
 				await this.handleChangeTracking(options, toSave, ChangeType.Update);
 
@@ -243,12 +249,12 @@ export default abstract class BaseModel {
 		return toSave;
 	}
 
-	public async loadByIds(ids: string[]): Promise<AnyItemType[]> {
+	public async loadByIds(ids: string[]): Promise<T[]> {
 		if (!ids.length) return [];
 		return this.db(this.tableName).select(this.defaultFields).whereIn('id', ids);
 	}
 
-	public async load(id: string): Promise<AnyItemType> {
+	public async load(id: string): Promise<T> {
 		if (!id) throw new Error('id cannot be empty');
 
 		return this.db(this.tableName).select(this.defaultFields).where({ id: id }).first();
@@ -263,7 +269,7 @@ export default abstract class BaseModel {
 
 		const trackChanges = this.trackChanges;
 
-		let itemsWithParentIds: AnyItemType[] = null;
+		let itemsWithParentIds: T[] = null;
 		if (trackChanges) {
 			itemsWithParentIds = await this.db(this.tableName).select(['id', 'parent_id', 'name']).whereIn('id', ids);
 		}

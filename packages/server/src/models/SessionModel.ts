@@ -3,7 +3,7 @@ import { User, Session } from '../db';
 import uuidgen from '../utils/uuidgen';
 import { ErrorForbidden } from '../utils/errors';
 
-export default class SessionModel extends BaseModel {
+export default class SessionModel extends BaseModel<Session> {
 
 	protected get tableName(): string {
 		return 'sessions';

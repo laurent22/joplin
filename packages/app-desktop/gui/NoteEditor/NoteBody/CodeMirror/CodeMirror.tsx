@@ -30,7 +30,7 @@ const { clipboard } = require('electron');
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -371,7 +371,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			/* These must be important to prevent the codemirror defaults from taking over*/
 			.CodeMirror {
 				font-family: monospace;
-				font-size: ${theme.editorFontSize}px;
+				font-size: ${props.fontSize}px;
 				height: 100% !important;
 				width: 100% !important;
 				color: inherit !important;

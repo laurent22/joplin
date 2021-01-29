@@ -34,7 +34,7 @@ import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 const bridge = require('electron').remote.require('./bridge').default;
@@ -399,6 +399,7 @@ function NoteEditor(props: NoteEditorProps) {
 		onDrop: onDrop,
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
+		fontSize: Setting.value('style.editor.fontSize'),
 	};
 
 	let editor = null;

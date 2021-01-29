@@ -50,8 +50,8 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
 import RevisionService from '@joplin/lib/services/RevisionService';
-const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
-const { Database } = require('@joplin/lib/database.js');
+import JoplinDatabase from '@joplin/lib/JoplinDatabase';
+import Database from '@joplin/lib/database';
 const { NotesScreen } = require('./components/screens/notes.js');
 const { TagsScreen } = require('./components/screens/tags.js');
 const { ConfigScreen } = require('./components/screens/config.js');
@@ -67,7 +67,7 @@ const { SideMenu } = require('./components/side-menu.js');
 const { SideMenuContent } = require('./components/side-menu-content.js');
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
@@ -118,7 +118,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -151,7 +151,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 		// Schedule a sync operation so that items that need to be encrypted
 		// are sent to sync target.
-		reg.scheduleSync();
+		void reg.scheduleSync();
 	}
 
 	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
@@ -427,7 +427,7 @@ async function initialize(dispatch: Function) {
 	db.setLogger(dbLogger);
 	reg.setDb(db);
 
-	reg.dispatch = dispatch;
+	// reg.dispatch = dispatch;
 	BaseModel.dispatch = dispatch;
 	FoldersScreenUtils.dispatch = dispatch;
 	BaseSyncTarget.dispatch = dispatch;
@@ -585,7 +585,7 @@ async function initialize(dispatch: Function) {
 
 	// When the app starts we want the full sync to
 	// start almost immediately to get the latest data.
-	reg.scheduleSync(1000).then(() => {
+	void reg.scheduleSync(1000).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
@@ -672,7 +672,7 @@ class AppComponent extends React.Component {
 			if (this.props.selectedFolderId) {
 				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
 			} else {
-				reg.logger.info('Cannot handle share - default folder id is not set');
+				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
 		}
 	}

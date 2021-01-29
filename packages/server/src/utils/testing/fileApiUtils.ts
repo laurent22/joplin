@@ -12,10 +12,11 @@ import { File } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
 import { PaginatedResults, Pagination, paginationToQueryParams } from '../../models/utils/pagination';
 import { AppContext } from '../types';
-import { koaAppContext } from './testUtils';
+import { checkContextError, koaAppContext, testAssetDir } from './testUtils';
 
-export function checkContextError(context: AppContext) {
-	if (context.response.status >= 400) throw new Error(JSON.stringify(context.response));
+export function testFilePath(ext: string = 'jpg') {
+	const basename = ext === 'jpg' ? 'photo' : 'poster';
+	return `${testAssetDir}/${basename}.${ext}`;
 }
 
 export async function getFileMetadataContext(sessionId: string, path: string): Promise<AppContext> {

@@ -5,7 +5,7 @@
   "scripts": {
     "start-dev": "nodemon --config nodemon.json dist/app.js --env dev",
     "start": "node dist/app.js",
-    "generate-types": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
+    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && rm -f db-buildTypes.sqlite",
     "tsc": "tsc --project tsconfig.json",
     "test": "jest",
     "test-ci": "npm run test",
@@ -14,6 +14,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@joplin/lib": "^1.0.9",
+    "@joplin/renderer": "^1.7.4",
     "bcryptjs": "^2.4.3",
     "bulma": "^0.9.1",
     "bulma-prefers-dark": "^0.1.0-beta.0",

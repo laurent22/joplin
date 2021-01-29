@@ -12,6 +12,7 @@ import * as httpMocks from 'node-mocks-http';
 import * as crypto from 'crypto';
 import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
+import setupAppContext from '../setupAppContext';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -111,6 +112,8 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	// don't need to mock all of them.
 	const appContext: any = {};
 
+	await setupAppContext(appContext, Env.Dev, db_, () => appLogger);
+
 	appContext.env = Env.Dev;
 	appContext.db = db_;
 	appContext.models = models();
@@ -196,6 +199,21 @@ export async function createFileTree(fileModel: FileModel, parentId: string, tre
 		});
 
 		if (isDir && Object.keys(children).length) await createFileTree(fileModel, newFile.id, children);
+	}
+}
+
+export async function createFile(userId: string, path: string, content: string): Promise<File> {
+	const fileModel = models().file({ userId });
+	const file: File = await fileModel.pathToFile(path, { mustExist: false, returnFullEntity: false });
+	file.content = Buffer.from(content);
+	const savedFile = await fileModel.save(file);
+	return fileModel.load(savedFile.id);
+}
+
+export function checkContextError(context: AppContext) {
+	if (context.response.status >= 400) {
+		// console.info(context.response.body);
+		throw new Error(`${context.method} ${context.path} ${JSON.stringify(context.response)}`);
 	}
 }
 

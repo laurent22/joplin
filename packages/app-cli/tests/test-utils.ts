@@ -18,9 +18,9 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import FileApiDriverJoplinServer from '@joplin/lib/file-api-driver-joplinServer';
 import OneDriveApi from '@joplin/lib/onedrive-api';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
+import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 
 const fs = require('fs-extra');
-const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
@@ -52,7 +52,7 @@ import RevisionService from '@joplin/lib/services/RevisionService';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const WebDavApi = require('@joplin/lib/WebDavApi');
 const DropboxApi = require('@joplin/lib/DropboxApi');
-import JoplinServerApi from '@joplin/lib/JoplinServerApi2';
+import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
@@ -402,7 +402,7 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	await fileApi().clearRoot();
 }
 
-function db(id: number = null) {
+function db(id: number = null): JoplinDatabase {
 	if (id === null) id = currentClient_;
 	return databases_[id];
 }

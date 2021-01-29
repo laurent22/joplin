@@ -1,15 +1,10 @@
 import { testAssetDir, beforeAllDb, randomHash, afterAllTests, beforeEachDb, createUserAndSession, models, tempDir } from '../../utils/testing/testUtils';
-import { getFileMetadataContext, getFileMetadata, deleteFileContent, deleteFileContext, deleteFile, postDirectoryContext, postDirectory, getDirectoryChildren, putFileContentContext, putFileContent, getFileContent, patchFileContext, patchFile, getDelta } from '../../utils/testing/apiUtils';
+import { testFilePath, getFileMetadataContext, getFileMetadata, deleteFileContent, deleteFileContext, deleteFile, postDirectoryContext, postDirectory, getDirectoryChildren, putFileContentContext, putFileContent, getFileContent, patchFileContext, patchFile, getDelta } from '../../utils/testing/fileApiUtils';
 import * as fs from 'fs-extra';
 import { ChangeType, File } from '../../db';
 import { Pagination, PaginationOrderDir } from '../../models/utils/pagination';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorNotFound, ErrorConflict } from '../../utils/errors';
 import { msleep } from '../../utils/time';
-
-function testFilePath(ext: string = 'jpg') {
-	const basename = ext === 'jpg' ? 'photo' : 'poster';
-	return `${testAssetDir}/${basename}.${ext}`;
-}
 
 async function makeTempFileWithContent(content: string): Promise<string> {
 	const d = await tempDir();

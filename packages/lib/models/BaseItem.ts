@@ -6,7 +6,7 @@ import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
 
-const { Database } = require('../database.js');
+import Database from '../database';
 import ItemChange from './ItemChange';
 const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
@@ -115,7 +115,7 @@ export default class BaseItem extends BaseModel {
 		return r.total;
 	}
 
-	static systemPath(itemOrId: any, extension: string = null) {
+	public static systemPath(itemOrId: any, extension: string = null) {
 		if (extension === null) extension = 'md';
 
 		if (typeof itemOrId === 'string') return `${itemOrId}.${extension}`;
@@ -225,7 +225,7 @@ export default class BaseItem extends BaseModel {
 
 		// Don't create a deleted_items entry when conflicted notes are deleted
 		// since no other client have (or should have) them.
-		let conflictNoteIds = [];
+		let conflictNoteIds: string[] = [];
 		if (this.modelType() == BaseModel.TYPE_NOTE) {
 			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN ("${ids.join('","')}") AND is_conflict = 1`);
 			conflictNoteIds = conflictNotes.map((n: NoteEntity) => {

@@ -42,7 +42,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
 		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
-		this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
+		// this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
 		this.showLogButton_click = this.showLogButton_click.bind(this);
 		this.nextcloudAppHelpLink_click = this.nextcloudAppHelpLink_click.bind(this);
 		this.onCancelClick = this.onCancelClick.bind(this);
@@ -57,10 +57,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		await shared.checkSyncConfig(this, this.state.settings);
 	}
 
-	async checkNextcloudAppButton_click() {
-		this.setState({ showNextcloudAppLog: true });
-		await shared.checkNextcloudApp(this, this.state.settings);
-	}
+	// async checkNextcloudAppButton_click() {
+	// 	this.setState({ showNextcloudAppLog: true });
+	// 	await shared.checkNextcloudApp(this, this.state.settings);
+	// }
 
 	showLogButton_click() {
 		this.setState({ showNextcloudAppLog: true });
@@ -203,48 +203,48 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				);
 			}
 
-			if (syncTargetMd.name === 'nextcloud') {
-				const syncTarget = settings['sync.5.syncTargets'][settings['sync.5.path']];
+			// if (syncTargetMd.name === 'nextcloud') {
+			// 	const syncTarget = settings['sync.5.syncTargets'][settings['sync.5.path']];
 
-				let status = _('Unknown');
-				let errorMessage = null;
+			// 	let status = _('Unknown');
+			// 	let errorMessage = null;
 
-				if (this.state.checkNextcloudAppResult === 'checking') {
-					status = _('Checking...');
-				} else if (syncTarget) {
-					if (syncTarget.uuid) status = _('OK');
-					if (syncTarget.error) {
-						status = _('Error');
-						errorMessage = syncTarget.error;
-					}
-				}
+			// 	if (this.state.checkNextcloudAppResult === 'checking') {
+			// 		status = _('Checking...');
+			// 	} else if (syncTarget) {
+			// 		if (syncTarget.uuid) status = _('OK');
+			// 		if (syncTarget.error) {
+			// 			status = _('Error');
+			// 			errorMessage = syncTarget.error;
+			// 		}
+			// 	}
 
-				const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' || !this.state.showNextcloudAppLog ? null : (
-					<div style={statusStyle}>
-						<p style={theme.textStyle}>{_('The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:')}</p>
-						<pre>{errorMessage}</pre>
-					</div>
-				);
+			// 	const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' || !this.state.showNextcloudAppLog ? null : (
+			// 		<div style={statusStyle}>
+			// 			<p style={theme.textStyle}>{_('The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:')}</p>
+			// 			<pre>{errorMessage}</pre>
+			// 		</div>
+			// 	);
 
-				const showLogButton = !errorMessage || this.state.showNextcloudAppLog ? null : (
-					<a style={theme.urlStyle} href="#" onClick={this.showLogButton_click}>[{_('Show Log')}]</a>
-				);
+			// 	const showLogButton = !errorMessage || this.state.showNextcloudAppLog ? null : (
+			// 		<a style={theme.urlStyle} href="#" onClick={this.showLogButton_click}>[{_('Show Log')}]</a>
+			// 	);
 
-				const appStatusStyle = Object.assign({}, theme.textStyle, { fontWeight: 'bold' });
+			// 	const appStatusStyle = Object.assign({}, theme.textStyle, { fontWeight: 'bold' });
 
-				settingComps.push(
-					<div key="nextcloud_app_check" style={this.rowStyle_}>
-						<span style={theme.textStyle}>Beta: {_('Joplin Nextcloud App status:')} </span><span style={appStatusStyle}>{status}</span>
-						&nbsp;&nbsp;
-						{showLogButton}
-						&nbsp;&nbsp;
-						<Button level={ButtonLevel.Secondary} style={{ display: 'inline-block' }} title={_('Check Status')} disabled={this.state.checkNextcloudAppResult === 'checking'} onClick={this.checkNextcloudAppButton_click}/>
-						&nbsp;&nbsp;
-						<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
-						{statusComp}
-					</div>
-				);
-			}
+			// 	settingComps.push(
+			// 		<div key="nextcloud_app_check" style={this.rowStyle_}>
+			// 			<span style={theme.textStyle}>Beta: {_('Joplin Nextcloud App status:')} </span><span style={appStatusStyle}>{status}</span>
+			// 			&nbsp;&nbsp;
+			// 			{showLogButton}
+			// 			&nbsp;&nbsp;
+			// 			<Button level={ButtonLevel.Secondary} style={{ display: 'inline-block' }} title={_('Check Status')} disabled={this.state.checkNextcloudAppResult === 'checking'} onClick={this.checkNextcloudAppButton_click}/>
+			// 			&nbsp;&nbsp;
+			// 			<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
+			// 			{statusComp}
+			// 		</div>
+			// 	);
+			// }
 		}
 
 		let advancedSettingsButton = null;

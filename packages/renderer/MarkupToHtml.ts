@@ -8,6 +8,18 @@ export enum MarkupLanguage {
 	Html = 2,
 }
 
+export interface RenderResultPluginAsset {
+	name: string;
+	path: string;
+	mime: string;
+}
+
+export interface RenderResult {
+	html: string;
+	pluginAssets: RenderResultPluginAsset[];
+	cssStrings: string[];
+}
+
 export default class MarkupToHtml {
 
 	static MARKUP_LANGUAGE_MARKDOWN: number = MarkupLanguage.Markdown;
@@ -75,7 +87,7 @@ export default class MarkupToHtml {
 		if (r.clearCache) r.clearCache();
 	}
 
-	async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any) {
+	async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult> {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
 

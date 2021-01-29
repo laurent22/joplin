@@ -2,10 +2,9 @@ import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import { _ } from './locale.js';
-import JoplinServerApi from './JoplinServerApi2';
-
-const BaseSyncTarget = require('./BaseSyncTarget.js');
-const { FileApi } = require('./file-api.js');
+import JoplinServerApi from './JoplinServerApi';
+import BaseSyncTarget from './BaseSyncTarget';
+import { FileApi } from './file-api';
 
 interface FileApiOptions {
 	path(): string;
@@ -16,27 +15,31 @@ interface FileApiOptions {
 
 export default class SyncTargetJoplinServer extends BaseSyncTarget {
 
-	static id() {
+	public static id() {
 		return 9;
 	}
 
-	static supportsConfigCheck() {
+	public static supportsConfigCheck() {
 		return true;
 	}
 
-	static targetName() {
+	public static targetName() {
 		return 'joplinServer';
 	}
 
-	static label() {
+	public static label() {
 		return _('Joplin Server');
 	}
 
-	async isAuthenticated() {
+	public async isAuthenticated() {
 		return true;
 	}
 
-	static async newFileApi_(options: FileApiOptions) {
+	public async fileApi(): Promise<FileApi> {
+		return super.fileApi();
+	}
+
+	private static async newFileApi_(options: FileApiOptions) {
 		const apiOptions = {
 			baseUrl: () => options.path(),
 			username: () => options.username(),
@@ -51,7 +54,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return fileApi;
 	}
 
-	static async checkConfig(options: FileApiOptions) {
+	public static async checkConfig(options: FileApiOptions) {
 		const output = {
 			ok: false,
 			errorMessage: '',
@@ -72,7 +75,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return output;
 	}
 
-	async initFileApi() {
+	protected async initFileApi() {
 		const fileApi = await SyncTargetJoplinServer.newFileApi_({
 			path: () => Setting.value('sync.9.path'),
 			username: () => Setting.value('sync.9.username'),
@@ -85,7 +88,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return fileApi;
 	}
 
-	async initSynchronizer() {
+	protected async initSynchronizer() {
 		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
 }

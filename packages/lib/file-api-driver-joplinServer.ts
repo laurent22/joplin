@@ -1,4 +1,4 @@
-import JoplinServerApi from './JoplinServerApi2';
+import JoplinServerApi from './JoplinServerApi';
 const { dirname, basename } = require('./path-utils');
 
 function removeTrailingColon(path: string) {
