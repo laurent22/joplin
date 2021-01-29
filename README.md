@@ -117,6 +117,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md)
 	- [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md)
 	- [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md)
+	- [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md)
 
 - Google Summer of Code 2020
 
