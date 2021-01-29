@@ -53,4 +53,41 @@ describe('FileModel', function() {
 		expect(fileBackId).toBe(rootId);
 	});
 
+	test('should resolve file paths', async function() {
+		const testCases = [
+			[
+				['root', '.resource', 'test'],
+				'root:/.resource/test:',
+			],
+			[
+				['root:/.resource:', 'test'],
+				'root:/.resource/test:',
+			],
+			[
+				['root:/.resource:', ''],
+				'root:/.resource:',
+			],
+			[
+				['root:/.resource:'],
+				'root:/.resource:',
+			],
+			[
+				['root:/.resource:'],
+				'root:/.resource:',
+			],
+			[
+				['root'],
+				'root',
+			],
+		];
+
+		const fileModel = models().file();
+
+		for (const t of testCases) {
+			const [input, expected] = t;
+			const actual = fileModel.resolve(...input);
+			expect(actual).toBe(expected);
+		}
+	});
+
 });

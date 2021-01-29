@@ -10,6 +10,8 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
+const removeTrailingColonsRegex = /^(:|)(.*?)(:|)$/;
+
 export interface PaginatedFiles extends PaginatedResults {
 	items: File[];
 }
@@ -107,18 +109,30 @@ export default class FileModel extends BaseModel<File> {
 		return segments.length ? (`root:/${segments.join('/')}:`) : 'root';
 	}
 
+	// Remove first and last colon from a path element
+	private removeTrailingColons(path: string): string {
+		return path.replace(removeTrailingColonsRegex, '$2');
+	}
+
 	public resolve(...paths: string[]): string {
-		const output = [];
+		if (!paths.length) throw new Error('Path is empty');
+
+		let pathElements: string[] = [];
 
 		for (const p of paths) {
-			output.push(p[0] === ':' ? p.substr(0, p.length - 1) : p);
+			pathElements = pathElements.concat(p.split('/').map(s => this.removeTrailingColons(s)));
 		}
 
-		// If the output is just "root", we return that only. If it's a path,
-		// such as root:/.resource/file', then we append the ":" to get a valid
-		// path.
-		const merged = output.join('/');
-		return this.isSpecialDir(merged) ? merged : `${merged}:`;
+		pathElements = pathElements.filter(p => !!p);
+
+		if (!this.isSpecialDir(pathElements[0])) throw new Error(`Path must start with a special dir: ${pathElements.join('/')}`);
+
+		if (pathElements.length === 1) return pathElements[0];
+
+		// If the output is just "root", we return that only. Otherwise we build the path, eg. `root:/.resource/file:'`
+		const specialDir = pathElements.splice(0, 1)[0];
+
+		return `${specialDir}:/${pathElements.join('/')}:`;
 	}
 
 	// Same as `pathToFile` but returns the ID only.
