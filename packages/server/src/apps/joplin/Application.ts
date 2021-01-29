@@ -125,9 +125,9 @@ export default class Application extends BaseApplication {
 
 	private async resourceDir(fileModel: FileModel, parentId: Uuid): Promise<File> {
 		const parent = await fileModel.load(parentId);
-		const fileFullPath = await fileModel.itemFullPath(parent);
-		const dirPath = `${fileFullPath.substring(0, fileFullPath.length - 1)}/.resource`;
-		return fileModel.pathToFile(`${dirPath}:`);
+		const parentFullPath = await fileModel.itemFullPath(parent);
+		const dirPath = fileModel.resolve(parentFullPath, '.resource');
+		return fileModel.pathToFile(dirPath);
 	}
 
 	private async itemFile(fileModel: FileModel, parentId: Uuid, itemType: ModelType, itemId: string): Promise<File> {

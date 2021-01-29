@@ -1,5 +1,5 @@
 import { testAssetDir, beforeAllDb, randomHash, afterAllTests, beforeEachDb, createUserAndSession, models, tempDir } from '../../utils/testing/testUtils';
-import { testFilePath, getFileMetadataContext, getFileMetadata, deleteFileContent, deleteFileContext, deleteFile, postDirectoryContext, postDirectory, getDirectoryChildren, putFileContentContext, putFileContent, getFileContent, patchFileContext, patchFile, getDelta } from '../../utils/testing/apiUtils';
+import { testFilePath, getFileMetadataContext, getFileMetadata, deleteFileContent, deleteFileContext, deleteFile, postDirectoryContext, postDirectory, getDirectoryChildren, putFileContentContext, putFileContent, getFileContent, patchFileContext, patchFile, getDelta } from '../../utils/testing/fileApiUtils';
 import * as fs from 'fs-extra';
 import { ChangeType, File } from '../../db';
 import { Pagination, PaginationOrderDir } from '../../models/utils/pagination';

@@ -57,6 +57,10 @@ export default class FileModel extends BaseModel<File> {
 		return r ? r.id : '';
 	}
 
+	private isSpecialDir(dirname: string): boolean {
+		return dirname === 'root';
+	}
+
 	private async specialDirId(dirname: string): Promise<string> {
 		if (dirname === 'root') return this.userRootFileId();
 		return null; // Not a special dir
@@ -101,6 +105,20 @@ export default class FileModel extends BaseModel<File> {
 		}
 
 		return segments.length ? (`root:/${segments.join('/')}:`) : 'root';
+	}
+
+	public resolve(...paths: string[]): string {
+		const output = [];
+
+		for (const p of paths) {
+			output.push(p[0] === ':' ? p.substr(0, p.length - 1) : p);
+		}
+
+		// If the output is just "root", we return that only. If it's a path,
+		// such as root:/.resource/file', then we append the ":" to get a valid
+		// path.
+		const merged = output.join('/');
+		return this.isSpecialDir(merged) ? merged : `${merged}:`;
 	}
 
 	// Same as `pathToFile` but returns the ID only.

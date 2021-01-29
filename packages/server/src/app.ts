@@ -8,13 +8,12 @@ import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker, EnvVariables } from './config';
 import { createDb, dropDb } from './tools/dbTools';
 import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection, sqliteFilePath } from './db';
-import modelFactory, { Models } from './models/factory';
 import { AppContext, Env } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
-import ApplicationJoplin from './apps/joplin/Application';
+import setupAppContext from './utils/setupAppContext';
 
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -39,52 +38,6 @@ function appLogger(): LoggerWrapper {
 		appLogger_ = Logger.create('App');
 	}
 	return appLogger_;
-}
-
-// eslint-disable-next-line import/prefer-default-export
-export class Applications {
-
-	private joplin_: ApplicationJoplin = null;
-	private models_: Models;
-
-	public constructor(models: Models) {
-		this.models_ = models;
-	}
-
-	public async joplin(): Promise<ApplicationJoplin> {
-		if (!this.joplin_) {
-			this.joplin_ = new ApplicationJoplin();
-			this.joplin_.initBase_('joplin', config(), this.models_);
-			await this.joplin_.initialize();
-		}
-
-		return this.joplin_;
-	}
-
-	public async localFileFromUrl(url: string): Promise<string> {
-		if (url.indexOf('apps/') !== 0) return null;
-
-		// The below is roughtly hard-coded for the Joplin app but could be
-		// generalised if multiple apps are supported.
-
-		const joplinApp = await this.joplin();
-
-		const fromAppUrl = await joplinApp.localFileFromUrl(url);
-		if (fromAppUrl) return fromAppUrl;
-
-		const rootDir = joplinApp.rootDir;
-
-		const defaultPaths = [
-			'apps/joplin',
-		];
-
-		for (const p of defaultPaths) {
-			if (url.indexOf(p) === 0) return `${rootDir}/${url.substr(p.length + 1)}`;
-		}
-
-		return null;
-	}
-
 }
 
 const app = new Koa();
@@ -163,8 +116,6 @@ async function main() {
 		appLogger().info('DB Config:', markPasswords(config().database));
 		if (config().database.client === 'sqlite3') appLogger().info('DB file:', sqliteFilePath(config().database.name));
 
-		const appContext = app.context as AppContext;
-
 		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);
 
@@ -172,11 +123,9 @@ async function main() {
 		delete connectionCheckLogInfo.connection;
 
 		appLogger().info('Connection check:', connectionCheckLogInfo);
-		appContext.env = env;
-		appContext.db = connectionCheck.connection;
-		appContext.models = modelFactory(appContext.db, config().baseUrl);
-		appContext.appLogger = appLogger;
-		appContext.apps = new Applications(appContext.models);
+		const appContext = app.context as AppContext;
+
+		await setupAppContext(appContext, env, connectionCheck.connection, appLogger);
 
 		appLogger().info('Migrating database...');
 		await migrateDb(appContext.db);

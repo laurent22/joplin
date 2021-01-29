@@ -1,8 +1,8 @@
 import { LoggerWrapper } from '@joplin/lib/Logger';
 import * as Koa from 'koa';
-import { Applications } from '../app';
 import { DbConnection, User, Uuid } from '../db';
 import { Models } from '../models/factory';
+import Applications from '../services/Applications';
 
 export enum Env {
 	Dev = 'dev',
