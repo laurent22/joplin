@@ -20,7 +20,7 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
 
-- Install node 10+ (but not node 15) - https://nodejs.org/en/
+- Install node 10+ - https://nodejs.org/en/
 - macOS, Linux: Install rsync - https://nodejs.org/en/
 - macOS: Install Cocoapods - `brew install cocoapods`
 - Windows: Install Windows Build Tools - `npm install -g windows-build-tools`
