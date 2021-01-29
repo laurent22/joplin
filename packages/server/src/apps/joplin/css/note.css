@@ -26,10 +26,3 @@
 	margin-top: 0.4em;
 	border-bottom: none;
 }
-
-.page-note .resource-icon {
-	/* Not clear why .resource-icon is set to "relative" by default, and why it
-	displays correctly in the Joplin app but not in the web page. Setting it to
-	"static" as it seems to fix the issue. */
-	position: static;
-}

@@ -38,7 +38,7 @@ docReady(() => {
 		// Detects if it's a note link and, if so, display a message
 		if (element && element.getAttribute('href') === '#' && element.getAttribute('data-resource-id')) {
 			event.preventDefault();
-			alert('Note links are not supported');
+			alert('This note has not been shared');
 		}
 	});
 });
