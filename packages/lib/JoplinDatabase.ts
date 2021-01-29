@@ -222,9 +222,9 @@ export default class JoplinDatabase extends Database {
 		await this.transactionExecBatch(queries);
 	}
 
-	createDefaultRow() {
+	createDefaultRow(tableName: string) {
 		const row: any = {};
-		const fields = this.tableFields('resource_local_states');
+		const fields = this.tableFields(tableName);
 		for (let i = 0; i < fields.length; i++) {
 			const f = fields[i];
 			row[f.name] = Database.formatValue(f.type, f.default);

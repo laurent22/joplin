@@ -11,6 +11,10 @@ export interface SqlQuery {
 	params?: SqlParams;
 }
 
+type StringOrSqlQuery = string | SqlQuery;
+
+export type Row = Record<string, any>;
+
 export default class Database {
 
 	public static TYPE_UNKNOWN = 0;
@@ -83,10 +87,16 @@ export default class Database {
 		return output;
 	}
 
-	async tryCall(callName: string, sql: string, params: SqlParams) {
-		if (typeof sql === 'object') {
+	async tryCall(callName: string, inputSql: StringOrSqlQuery, inputParams: SqlParams) {
+		let sql: string = null;
+		let params: SqlParams = null;
+
+		if (typeof inputSql === 'object') {
 			params = (sql as any).params;
 			sql = (sql as any).sql;
+		} else {
+			params = inputParams;
+			sql = inputSql as string;
 		}
 
 		let waitTime = 50;
@@ -135,7 +145,7 @@ export default class Database {
 		}
 	}
 
-	async selectOne(sql: string, params: SqlParams = null) {
+	async selectOne(sql: string, params: SqlParams = null): Promise<Row> {
 		return this.tryCall('selectOne', sql, params);
 	}
 
@@ -151,11 +161,11 @@ export default class Database {
 		// }
 	}
 
-	async selectAll(sql: string, params: SqlParams = null) {
+	async selectAll(sql: string, params: SqlParams = null): Promise<Row[]> {
 		return this.tryCall('selectAll', sql, params);
 	}
 
-	async selectAllFields(sql: string, params: SqlParams, field: string) {
+	async selectAllFields(sql: string, params: SqlParams, field: string): Promise<any[]> {
 		const rows = await this.tryCall('selectAll', sql, params);
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
@@ -166,11 +176,11 @@ export default class Database {
 		return output;
 	}
 
-	async exec(sql: string, params: SqlParams = null) {
+	async exec(sql: StringOrSqlQuery, params: SqlParams = null) {
 		return this.tryCall('exec', sql, params);
 	}
 
-	async transactionExecBatch(queries: SqlQuery[] | string[]) {
+	async transactionExecBatch(queries: StringOrSqlQuery[]) {
 		if (queries.length <= 0) return;
 
 		if (queries.length == 1) {

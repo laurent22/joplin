@@ -72,11 +72,17 @@ class Database {
         }
         return output;
     }
-    tryCall(callName, sql, params) {
+    tryCall(callName, inputSql, inputParams) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (typeof sql === 'object') {
+            let sql = null;
+            let params = null;
+            if (typeof inputSql === 'object') {
                 params = sql.params;
                 sql = sql.sql;
+            }
+            else {
+                params = inputParams;
+                sql = inputSql;
             }
             let waitTime = 50;
             let totalWaitTime = 0;

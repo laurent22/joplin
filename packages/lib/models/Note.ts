@@ -319,7 +319,8 @@ export default class Note extends BaseItem {
 
 	static previewFieldsSql(fields: string[] = null) {
 		if (fields === null) fields = this.previewFields();
-		return this.db().escapeFields(fields).join(',');
+		const escaped = this.db().escapeFields(fields);
+		return Array.isArray(escaped) ? escaped.join(',') : escaped;
 	}
 
 	static async loadFolderNoteByField(folderId: string, field: string, value: any) {

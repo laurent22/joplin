@@ -994,6 +994,9 @@ packages/lib/services/RevisionService.js.map
 packages/lib/services/SettingUtils.d.ts
 packages/lib/services/SettingUtils.js
 packages/lib/services/SettingUtils.js.map
+packages/lib/services/ShareService.d.ts
+packages/lib/services/ShareService.js
+packages/lib/services/ShareService.js.map
 packages/lib/services/UndoRedoService.d.ts
 packages/lib/services/UndoRedoService.js
 packages/lib/services/UndoRedoService.js.map
