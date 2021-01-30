@@ -20,6 +20,15 @@ export interface Pagination {
 	cursor?: string;
 }
 
+
+interface PaginationQueryParams {
+	limit?: number;
+	order_by?: string;
+	order_dir?: string;
+	page?: number;
+	cursor?: string;
+}
+
 export interface PaginatedResults {
 	items: any[];
 	has_more: boolean;
@@ -104,6 +113,25 @@ export function requestChangePagination(query: any): ChangePagination {
 	const output: ChangePagination = {};
 	if ('limit' in query) output.limit = query.limit;
 	if ('cursor' in query) output.cursor = query.cursor;
+	return output;
+}
+
+export function paginationToQueryParams(pagination: Pagination): PaginationQueryParams {
+	const output: PaginationQueryParams = {};
+	if (!pagination) return {};
+
+	if ('limit' in pagination) output.limit = pagination.limit;
+	if ('page' in pagination) output.page = pagination.page;
+	if ('cursor' in pagination) output.cursor = pagination.cursor;
+
+	if ('order' in pagination) {
+		const o = pagination.order;
+		if (o.length) {
+			output.order_by = o[0].by;
+			output.order_dir = o[0].dir;
+		}
+	}
+
 	return output;
 }
 

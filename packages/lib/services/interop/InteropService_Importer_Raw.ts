@@ -1,17 +1,17 @@
 import { ImportExportResult } from './types';
 
-const InteropService_Importer_Base = require('./InteropService_Importer_Base').default;
-const BaseItem = require('../../models/BaseItem.js');
-const BaseModel = require('../../BaseModel').default;
-const Resource = require('../../models/Resource.js');
-const Folder = require('../../models/Folder.js');
-const NoteTag = require('../../models/NoteTag.js');
-const Note = require('../../models/Note.js');
-const Tag = require('../../models/Tag.js');
+import InteropService_Importer_Base from './InteropService_Importer_Base';
+import BaseItem from '../../models/BaseItem';
+import BaseModel from '../../BaseModel';
+import Resource from '../../models/Resource';
+import Folder from '../../models/Folder';
+import NoteTag from '../../models/NoteTag';
+import Note from '../../models/Note';
+import Tag from '../../models/Tag';
 const { sprintf } = require('sprintf-js');
-const shim = require('../../shim').default;
+import shim from '../../shim';
 const { fileExtension } = require('../../path-utils');
-const uuid = require('../../uuid').default;
+import uuid from '../../uuid';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	async exec(result: ImportExportResult) {

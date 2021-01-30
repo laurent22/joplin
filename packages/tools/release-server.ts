@@ -1,35 +1,25 @@
-import * as fs from 'fs-extra';
-const { execCommand, execCommandVerbose, rootDir, gitPullTry } = require('./tool-utils.js');
+import { execCommand2, rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 
 const serverDir = `${rootDir}/packages/server`;
-const readmePath = `${serverDir}/README.md`;
-
-async function updateReadmeLinkVersion(version: string) {
-	const content = await fs.readFile(readmePath, 'utf8');
-	const newContent = content.replace(/server-v(.*?).tar.gz/g, `server-${version}.tar.gz`);
-	if (content === newContent) throw new Error(`Could not change version number in ${readmePath}`);
-	await fs.writeFile(readmePath, newContent, 'utf8');
-}
 
 async function main() {
-	process.chdir(serverDir);
-
-	console.info(`Running from: ${process.cwd()}`);
-
 	await gitPullTry();
 
-	const version = (await execCommand('npm version patch')).trim();
+	process.chdir(serverDir);
+	const version = (await execCommand2('npm version patch')).trim();
+	const versionShort = version.substr(1);
 	const tagName = `server-${version}`;
 
-	console.info(`New version number: ${version}`);
+	process.chdir(rootDir);
+	console.info(`Running from: ${process.cwd()}`);
 
-	await updateReadmeLinkVersion(version);
+	await execCommand2(`docker build -t "joplin/server:${versionShort}" -f Dockerfile.server .`);
+	await execCommand2(`docker tag "joplin/server:${versionShort}" "joplin/server:latest"`);
+	await execCommand2(`docker push joplin/server:${versionShort}`);
+	await execCommand2('docker push joplin/server:latest');
 
-	await execCommandVerbose('git', ['add', '-A']);
-	await execCommandVerbose('git', ['commit', '-m', `Server release ${version}`]);
-	await execCommandVerbose('git', ['tag', tagName]);
-	await execCommandVerbose('git', ['push']);
-	await execCommandVerbose('git', ['push', '--tags']);
+	const changelogPath = `${rootDir}/readme/changelog_server.md`;
+	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server');
 }
 
 main().catch((error) => {

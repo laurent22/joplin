@@ -3,6 +3,7 @@ import { ResourceEntity } from './services/database/types';
 const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
 const resourceUtils = require('./resourceUtils.js');
+const cssParser = require('css');
 
 const BLOCK_OPEN = '[[BLOCK_OPEN]]';
 const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
@@ -423,10 +424,23 @@ function attributeToLowerCase(node: any) {
 	return output;
 }
 
-function isInvisibleBlock(attributes: any) {
-	const style = attributes.style;
-	if (!style) return false;
-	return !!style.match(/display:[\s\S]*none/);
+function cssValue(context: any, style: string, propName: string): string {
+	if (!style) return null;
+
+	try {
+		const o = cssParser.parse(`pre {${style}}`);
+		if (!o.stylesheet.rules.length) return null;
+		const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
+		return prop && prop.value ? prop.value.trim().toLowerCase() : null;
+	} catch (error) {
+		displaySaxWarning(context, error.message);
+		return null;
+	}
+}
+
+function isInvisibleBlock(context: any, attributes: any) {
+	const display = cssValue(context, attributes.style, 'display');
+	return display && display.indexOf('none') === 0;
 }
 
 function isSpanWithStyle(attributes: any) {
@@ -560,7 +574,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 		saxStream.on('opentag', function(node: any) {
 			const nodeAttributes = attributeToLowerCase(node);
 			const n = node.name.toLowerCase();
-			const isVisible = !isInvisibleBlock(nodeAttributes);
+			const isVisible = !isInvisibleBlock(this, nodeAttributes);
 
 			state.tags.push({
 				name: n,
@@ -653,7 +667,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 
 				section.lines.push(newSection);
 				section = newSection;
-			} else if (isInvisibleBlock(nodeAttributes)) {
+			} else if (!isVisible) {
 				const newSection: Section = {
 					type: SectionType.Hidden,
 					lines: [],

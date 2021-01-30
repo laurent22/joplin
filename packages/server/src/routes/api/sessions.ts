@@ -1,23 +1,21 @@
-import { SubPath, Route } from '../../utils/routeUtils';
-import { ErrorNotFound } from '../../utils/errors';
+import { SubPath } from '../../utils/routeUtils';
+import Router from '../../utils/Router';
+import { ErrorForbidden } from '../../utils/errors';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
+import { User } from '../../db';
 
-const route: Route = {
+const router = new Router();
 
-	exec: async function(path: SubPath, ctx: AppContext) {
-		if (!path.link) {
-			if (ctx.method === 'POST') {
-				const user =  await bodyFields(ctx.req);
-				const sessionController = ctx.controllers.apiSession();
-				const session = await sessionController.authenticate(user.email, user.password);
-				return { id: session.id };
-			}
-		}
+router.public = true;
 
-		throw new ErrorNotFound(`Invalid link: ${path.link}`);
-	},
+router.post('api/sessions', async (_path: SubPath, ctx: AppContext) => {
+	const fields: User = await bodyFields(ctx.req);
+	const user = await ctx.models.user().login(fields.email, fields.password);
+	if (!user) throw new ErrorForbidden('Invalid username or password');
 
-};
+	const session = await ctx.models.session().createUserSession(user.id);
+	return { id: session.id };
+});
 
-export default route;
+export default router;

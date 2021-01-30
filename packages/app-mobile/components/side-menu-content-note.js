@@ -54,7 +54,7 @@ class SideMenuContentNoteComponent extends Component {
 		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: theme.dividerColor }} key={key}></View>;
 	}
 
-	renderSideBarButton(key, title, iconName, onPressHandler) {
+	renderSidebarButton(key, title, iconName, onPressHandler) {
 		const content = (
 			<View key={key} style={onPressHandler ? this.styles().sideButton : this.styles().sideButtonDisabled}>
 				{!iconName ? null : <Icon name={iconName} style={this.styles().sidebarIcon} />}
@@ -83,7 +83,7 @@ class SideMenuContentNoteComponent extends Component {
 			if (option.isDivider) {
 				items.push(this.renderDivider(`divider_${dividerIndex++}`));
 			} else {
-				items.push(this.renderSideBarButton(option.title, option.title, null, option.onPress));
+				items.push(this.renderSidebarButton(option.title, option.title, null, option.onPress));
 			}
 		}
 

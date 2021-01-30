@@ -1,5 +1,6 @@
 import { utils as pluginUtils, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
+import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import eventManager from '@joplin/lib/eventManager';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
@@ -7,11 +8,12 @@ import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import BaseModel from '@joplin/lib/BaseModel';
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const Note = require('@joplin/lib/models/Note');
+import Note from '@joplin/lib/models/Note';
+import Setting from '@joplin/lib/models/Setting';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface ContextMenuProps {
@@ -131,11 +133,13 @@ export default class NoteListUtils {
 				})
 			);
 
-			menu.append(
-				new MenuItem(
-					menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice())
-				)
-			);
+			if (Setting.value('sync.target') === SyncTargetJoplinServer.id()) {
+				menu.append(
+					new MenuItem(
+						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice())
+					)
+				);
+			}
 
 			const exportMenu = new Menu();
 

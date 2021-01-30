@@ -4,7 +4,7 @@
 	"app_min_version": "1.4",
 	"name": "Register Command Test",
 	"description": "To test registering commands",
-	"version": "1.0.0",
+	"version": "1.0.3",
 	"author": "Laurent Cozic",
 	"homepage_url": "https://joplinapp.org"
 }

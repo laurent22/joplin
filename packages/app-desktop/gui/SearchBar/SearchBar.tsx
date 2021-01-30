@@ -6,7 +6,7 @@ import { stateUtils } from '@joplin/lib/reducer';
 import BaseModel from '@joplin/lib/BaseModel';
 import uuid from '@joplin/lib/uuid';
 const { connect } = require('react-redux');
-const Note = require('@joplin/lib/models/Note');
+import Note from '@joplin/lib/models/Note';
 const debounce = require('debounce');
 const styled = require('styled-components').default;
 

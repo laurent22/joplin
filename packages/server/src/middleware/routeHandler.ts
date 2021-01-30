@@ -1,8 +1,17 @@
 import routes from '../routes/routes';
-import { ErrorNotFound } from '../utils/errors';
+import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { routeResponseFormat, findMatchingRoute, Response, RouteResponseFormat, MatchedRoute } from '../utils/routeUtils';
-import { AppContext, Env } from '../utils/types';
-import mustacheService, { isView, View } from '../services/MustacheService';
+import { AppContext, Env, HttpMethod } from '../utils/types';
+import MustacheService, { isView, View } from '../services/MustacheService';
+import config from '../config';
+
+let mustache_: MustacheService = null;
+function mustache(): MustacheService {
+	if (!mustache_) {
+		mustache_ = new MustacheService(config().viewDir, config().baseUrl);
+	}
+	return mustache_;
+}
 
 export default async function(ctx: AppContext) {
 	ctx.appLogger().info(`${ctx.request.method} ${ctx.path}`);
@@ -13,14 +22,24 @@ export default async function(ctx: AppContext) {
 		const match = findMatchingRoute(ctx.path, routes);
 
 		if (match) {
-			const responseObject = await match.route.exec(match.subPath, ctx);
+			let responseObject = null;
+
+			const routeHandler = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+
+			// This is a generic catch-all for all private end points - if we
+			// couldn't get a valid session, we exit now. Individual end points
+			// might have additional permission checks depending on the action.
+			if (!match.route.public && !ctx.owner) throw new ErrorForbidden();
+
+			responseObject = await routeHandler(match.subPath, ctx);
 
 			if (responseObject instanceof Response) {
 				ctx.response = responseObject.response;
 			} else if (isView(responseObject)) {
 				ctx.response.status = 200;
-				ctx.response.body = await mustacheService.renderView(responseObject, {
+				ctx.response.body = await mustache().renderView(responseObject, {
 					notifications: ctx.notifications || [],
+					hasNotifications: !!ctx.notifications && !!ctx.notifications.length,
 					owner: ctx.owner,
 				});
 			} else {
@@ -39,7 +58,7 @@ export default async function(ctx: AppContext) {
 
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
-		const responseFormat = routeResponseFormat(match, ctx.path);
+		const responseFormat = routeResponseFormat(match, ctx);
 
 		if (responseFormat === RouteResponseFormat.Html) {
 			ctx.response.set('Content-Type', 'text/html');
@@ -51,7 +70,7 @@ export default async function(ctx: AppContext) {
 					stack: ctx.env === Env.Dev ? error.stack : '',
 				},
 			};
-			ctx.response.body = await mustacheService.renderView(view);
+			ctx.response.body = await mustache().renderView(view);
 		} else { // JSON
 			ctx.response.set('Content-Type', 'application/json');
 			const r: any = { error: error.message };

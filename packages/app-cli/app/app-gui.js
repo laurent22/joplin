@@ -1,10 +1,10 @@
 const Logger = require('@joplin/lib/Logger').default;
-const Folder = require('@joplin/lib/models/Folder.js');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
-const Tag = require('@joplin/lib/models/Tag.js');
+const Folder = require('@joplin/lib/models/Folder').default;
+const BaseItem = require('@joplin/lib/models/BaseItem').default;
+const Tag = require('@joplin/lib/models/Tag').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
-const Note = require('@joplin/lib/models/Note.js');
-const Resource = require('@joplin/lib/models/Resource.js');
+const Note = require('@joplin/lib/models/Note').default;
+const Resource = require('@joplin/lib/models/Resource').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const reducer = require('@joplin/lib/reducer').default;
 const { defaultState } = require('@joplin/lib/reducer');
@@ -19,7 +19,7 @@ const chalk = require('chalk');
 const tk = require('terminal-kit');
 const TermWrapper = require('tkwidgets/framework/TermWrapper.js');
 const Renderer = require('tkwidgets/framework/Renderer.js');
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
+const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker').default;
 
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 const TextWidget = require('tkwidgets/TextWidget.js');

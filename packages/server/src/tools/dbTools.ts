@@ -33,7 +33,7 @@ export async function createDb(config: DatabaseConfig, options: CreateDbOptions 
 
 		await execCommand(cmd.join(' '));
 	} else if (config.client === 'sqlite3') {
-		const filePath = sqliteFilePath(config);
+		const filePath = sqliteFilePath(config.name);
 
 		if (await fs.pathExists(filePath)) {
 			if (options.dropIfExists) {
@@ -71,6 +71,6 @@ export async function dropDb(config: DatabaseConfig, options: DropDbOptions = nu
 			throw error;
 		}
 	} else if (config.client === 'sqlite3') {
-		await fs.remove(sqliteFilePath(config));
+		await fs.remove(sqliteFilePath(config.name));
 	}
 }

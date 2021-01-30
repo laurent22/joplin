@@ -1,16 +1,21 @@
 import * as React from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
-import PluginBox from './PluginBox';
-// import Button, { ButtonLevel } from '../../../Button/Button';
+import PluginBox, { ItemEvent, UpdateState } from './PluginBox';
+import Button, { ButtonLevel } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
 import { PluginItem } from './PluginBox';
+import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import Setting from '@joplin/lib/models/Setting';
+import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallHandler';
 const { space } = require('styled-system');
+
+const maxWidth: number = 320;
 
 const Root = styled.div`
 	display: flex;
@@ -23,7 +28,9 @@ const UserPluginsRoot = styled.div`
 	flex-wrap: wrap;
 `;
 
-// const InstallButton = styled(Button)``;
+const ToolsButton = styled(Button)`
+	margin-right: 6px;
+`;
 
 interface Props {
 	value: any;
@@ -31,6 +38,16 @@ interface Props {
 	onChange: Function;
 	renderLabel: Function;
 	renderDescription: Function;
+	renderHeader: Function;
+}
+
+let repoApi_: RepositoryApi = null;
+
+function repoApi(): RepositoryApi {
+	if (repoApi_) return repoApi_;
+	repoApi_ = new RepositoryApi('https://github.com/joplin/plugins', Setting.value('tempDir'));
+	// repoApi_ = new RepositoryApi('/Users/laurent/src/joplin-plugins-test', Setting.value('tempDir'));
+	return repoApi_;
 }
 
 function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[] {
@@ -46,17 +63,16 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 			};
 
 			output.push({
-				id: pluginId,
-				name: plugin.manifest.name,
-				description: plugin.manifest.description,
+				manifest: plugin.manifest,
 				enabled: setting.enabled,
 				deleted: setting.deleted,
 				devMode: plugin.devMode,
+				hasBeenUpdated: setting.hasBeenUpdated,
 			});
 		}
 
 		output.sort((a: PluginItem, b: PluginItem) => {
-			return a.name < b.name ? -1 : +1;
+			return a.manifest.name < b.manifest.name ? -1 : +1;
 		});
 
 		return output;
@@ -65,6 +81,9 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 
 export default function(props: Props) {
 	const [searchQuery, setSearchQuery] = useState('');
+	const [manifestsLoaded, setManifestsLoaded] = useState<boolean>(false);
+	const [updatingPluginsIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
+	const [canBeUpdatedPluginIds, setCanBeUpdatedPluginIds] = useState<Record<string, boolean>>({});
 
 	const pluginService = PluginService.instance();
 
@@ -72,46 +91,109 @@ export default function(props: Props) {
 		return pluginService.unserializePluginSettings(props.value);
 	}, [props.value]);
 
-	const onDelete = useCallback(async (event: any) => {
-		const item: PluginItem = event.item;
-		const confirm = await bridge().showConfirmMessageBox(_('Delete plugin "%s"?', item.name));
+	const pluginItems = usePluginItems(pluginService.plugins, pluginSettings);
+
+	useEffect(() => {
+		let cancelled = false;
+		async function fetchManifests() {
+			await repoApi().loadManifests();
+			if (cancelled) return;
+			setManifestsLoaded(true);
+		}
+
+		void fetchManifests();
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
+	useEffect(() => {
+		if (!manifestsLoaded) return () => {};
+
+		let cancelled = false;
+
+		async function fetchPluginIds() {
+			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems as any);
+			if (cancelled) return;
+			const conv: Record<string, boolean> = {};
+			pluginIds.forEach(id => conv[id] = true);
+			setCanBeUpdatedPluginIds(conv);
+		}
+
+		void fetchPluginIds();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [manifestsLoaded, pluginItems]);
+
+	const onDelete = useCallback(async (event: ItemEvent) => {
+		const item = event.item;
+		const confirm = await bridge().showConfirmMessageBox(_('Delete plugin "%s"?', item.manifest.name));
 		if (!confirm) return;
 
 		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-			if (!draft[item.id]) draft[item.id] = defaultPluginSetting();
-			draft[item.id].deleted = true;
+			if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
+			draft[item.manifest.id].deleted = true;
 		});
 
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	}, [pluginSettings, props.onChange]);
 
-	const onToggle = useCallback((event: any) => {
-		const item: PluginItem = event.item;
+	const onToggle = useCallback((event: ItemEvent) => {
+		const item = event.item;
 
 		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-			if (!draft[item.id]) draft[item.id] = defaultPluginSetting();
-			draft[item.id].enabled = !draft[item.id].enabled;
+			if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
+			draft[item.manifest.id].enabled = !draft[item.manifest.id].enabled;
 		});
 
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	}, [pluginSettings, props.onChange]);
 
-	// const onInstall = useCallback(async () => {
-	// 	const result = bridge().showOpenDialog({
-	// 		filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
-	// 	});
+	const onInstall = useCallback(async () => {
+		const result = bridge().showOpenDialog({
+			filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
+		});
 
-	// 	const filePath = result && result.length ? result[0] : null;
-	// 	if (!filePath) return;
+		const filePath = result && result.length ? result[0] : null;
+		if (!filePath) return;
 
-	// 	const plugin = await pluginService.installPlugin(filePath);
+		const plugin = await pluginService.installPlugin(filePath);
 
-	// 	const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-	// 		draft[plugin.manifest.id] = defaultPluginSetting();
-	// 	});
+		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
+			draft[plugin.manifest.id] = defaultPluginSetting();
+		});
 
-	// 	props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
-	// }, [pluginSettings, props.onChange]);
+		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+	}, [pluginSettings, props.onChange]);
+
+	const onBrowsePlugins = useCallback(() => {
+		bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
+	}, []);
+
+	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
+		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
+	}, []);
+
+	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
+
+	const onToolsClick = useCallback(async () => {
+		const template = [
+			{
+				label: _('Browse all plugins'),
+				click: onBrowsePlugins,
+			},
+			{
+				label: _('Install from file'),
+				click: onInstall,
+			},
+		];
+
+		const menu = bridge().Menu.buildFromTemplate(template);
+		menu.popup(bridge().window());
+	}, [onInstall, onBrowsePlugins]);
 
 	const onSearchQueryChange = useCallback((event: OnChangeEvent) => {
 		setSearchQuery(event.value);
@@ -127,12 +209,23 @@ export default function(props: Props) {
 		for (const item of items) {
 			if (item.deleted) continue;
 
+			const isUpdating = updatingPluginsIds[item.manifest.id];
+			const onUpdateHandler = canBeUpdatedPluginIds[item.manifest.id] ? onUpdate : null;
+
+			let updateState = UpdateState.Idle;
+			if (onUpdateHandler) updateState = UpdateState.CanUpdate;
+			if (isUpdating) updateState = UpdateState.Updating;
+			if (item.hasBeenUpdated) updateState = UpdateState.HasBeenUpdated;
+
 			output.push(<PluginBox
-				key={item.id}
+				key={item.manifest.id}
 				item={item}
 				themeId={props.themeId}
+				updateState={updateState}
+				isCompatible={PluginService.instance().isCompatible(item.manifest.app_min_version)}
 				onDelete={onDelete}
 				onToggle={onToggle}
+				onUpdate={onUpdateHandler}
 			/>);
 		}
 
@@ -157,41 +250,44 @@ export default function(props: Props) {
 		}
 	}
 
-	function renderInstallFromFile(): any {
-		return null;
-
-		// Disabled for now since there are already options for developments,
-		// and installing from file can be done by dropping the file in /plugins
-
-		// return (
-		// 	<div>
-		// 		{props.renderLabel(props.themeId, _('Install plugin from file'))}
-		// 		<InstallButton level={ButtonLevel.Primary} onClick={onInstall} title={_('Install plugin')}/>
-		// 		<div style={{ display: 'flex', flex: 1 }}/>
-		// 	</div>
-		// );
-	}
-
-	const pluginItems = usePluginItems(pluginService.plugins, pluginSettings);
-
-	return (
-		<Root>
+	function renderSearchArea() {
+		return (
 			<div style={{ marginBottom: 20 }}>
-				{props.renderLabel(props.themeId, _('Search for plugins'))}
 				<SearchPlugins
+					disabled={!manifestsLoaded}
+					maxWidth={maxWidth}
 					themeId={props.themeId}
 					searchQuery={searchQuery}
 					pluginSettings={pluginSettings}
 					onSearchQueryChange={onSearchQueryChange}
 					onPluginSettingsChange={onSearchPluginSettingsChange}
 					renderDescription={props.renderDescription}
+					repoApi={repoApi}
 				/>
 			</div>
+		);
+	}
 
-			{props.renderLabel(props.themeId, _('Manage your plugins'))}
-			{renderUserPlugins(pluginItems)}
+	function renderBottomArea() {
+		if (searchQuery) return null;
 
-			{renderInstallFromFile()}
+		return (
+			<div>
+				<div style={{ display: 'flex', flexDirection: 'row', maxWidth }}>
+					<ToolsButton tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
+					<div style={{ display: 'flex', flex: 1 }}>
+						{props.renderHeader(props.themeId, _('Manage your plugins'))}
+					</div>
+				</div>
+				{renderUserPlugins(pluginItems)}
+			</div>
+		);
+	}
+
+	return (
+		<Root>
+			{renderSearchArea()}
+			{renderBottomArea()}
 		</Root>
 	);
 }

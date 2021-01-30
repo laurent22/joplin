@@ -7,9 +7,9 @@ const { filename } = require('@joplin/lib/path-utils');
 const { setupDatabaseAndSynchronizer, switchClient, expectNotThrow } = require('./test-utils.js');
 const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 const { importEnex } = require('@joplin/lib/import-enex');
-const Note = require('@joplin/lib/models/Note');
-const Tag = require('@joplin/lib/models/Tag');
-const Resource = require('@joplin/lib/models/Resource');
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
+import Resource from '@joplin/lib/models/Resource';
 
 const enexSampleBaseDir = `${__dirname}/enex_to_md`;
 

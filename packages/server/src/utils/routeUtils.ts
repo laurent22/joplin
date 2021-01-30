@@ -1,5 +1,6 @@
 import { File, ItemAddressingType } from '../db';
 import { ErrorBadRequest } from './errors';
+import Router from './Router';
 import { AppContext } from './types';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
@@ -22,14 +23,10 @@ export enum RouteResponseFormat {
 	Json = 'json',
 }
 
-export interface Route {
-	exec: Function;
-	needsBodyMiddleware?: boolean;
-	responseFormat?: RouteResponseFormat;
-}
+export type RouteHandler = (path: SubPath, ctx: AppContext, ...args: any[])=> Promise<any>;
 
-export interface Routes {
-	[key: string]: Route;
+export interface Routers {
+	[key: string]: Router;
 }
 
 export interface SubPath {
@@ -37,10 +34,11 @@ export interface SubPath {
 	link: string;
 	addressingType: ItemAddressingType;
 	raw: string;
+	schema: string;
 }
 
 export interface MatchedRoute {
-	route: Route;
+	route: Router;
 	basePath: string;
 	subPath: SubPath;
 }
@@ -114,7 +112,7 @@ export function isPathBasedAddressing(fileId: string): boolean {
 //
 // root:/Documents/MyFile.md:/content
 // ABCDEFG/content
-export function parseSubPath(p: string): SubPath {
+export function parseSubPath(basePath: string, p: string): SubPath {
 	p = rtrimSlashes(ltrimSlashes(p));
 
 	const output: SubPath = {
@@ -122,6 +120,7 @@ export function parseSubPath(p: string): SubPath {
 		link: '',
 		addressingType: ItemAddressingType.Id,
 		raw: p,
+		schema: '',
 	};
 
 	const colonIndex1 = p.indexOf(':');
@@ -142,10 +141,18 @@ export function parseSubPath(p: string): SubPath {
 		if (s.length >= 2) output.link = s[1];
 	}
 
+	if (basePath) {
+		const schema = [basePath];
+		if (output.id) schema.push(':id');
+		if (output.link) schema.push(output.link);
+		output.schema = schema.join('/');
+	}
+
 	return output;
 }
 
-export function routeResponseFormat(match: MatchedRoute, rawPath: string): RouteResponseFormat {
+export function routeResponseFormat(match: MatchedRoute, context: AppContext): RouteResponseFormat {
+	const rawPath = context.path;
 	if (match && match.route.responseFormat) return match.route.responseFormat;
 
 	let path = rawPath;
@@ -154,18 +161,30 @@ export function routeResponseFormat(match: MatchedRoute, rawPath: string): Route
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
-export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {
+// In a path such as "/api/files/SOME_ID/content" we want to find:
+// - The base path: "api/files"
+// - The ID: "SOME_ID"
+// - The link: "content"
+export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	const splittedPath = path.split('/');
+
+	// Because the path starts with "/", we remove the first element, which is
+	// an empty string. So for example we now have ['api', 'files', 'SOME_ID', 'content'].
 	splittedPath.splice(0, 1);
 
 	if (splittedPath.length >= 2) {
+		// Create the base path, eg. "api/files", to match it to one of the
+		// routes.s
 		const basePath = `${splittedPath[0]}/${splittedPath[1]}`;
 		if (routes[basePath]) {
+			// Remove the base path from the array so that parseSubPath() can
+			// extract the ID and link from the URL. So the array will contain
+			// at this point: ['SOME_ID', 'content'].
 			splittedPath.splice(0, 2);
 			return {
 				route: routes[basePath],
 				basePath: basePath,
-				subPath: parseSubPath(`/${splittedPath.join('/')}`),
+				subPath: parseSubPath(basePath, `/${splittedPath.join('/')}`),
 			};
 		}
 	}
@@ -176,7 +195,7 @@ export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {
 		return {
 			route: routes[basePath],
 			basePath: basePath,
-			subPath: parseSubPath(`/${splittedPath.join('/')}`),
+			subPath: parseSubPath(basePath, `/${splittedPath.join('/')}`),
 		};
 	}
 
@@ -184,7 +203,7 @@ export function findMatchingRoute(path: string, routes: Routes): MatchedRoute {
 		return {
 			route: routes[''],
 			basePath: '',
-			subPath: parseSubPath(`/${splittedPath.join('/')}`),
+			subPath: parseSubPath('', `/${splittedPath.join('/')}`),
 		};
 	}
 

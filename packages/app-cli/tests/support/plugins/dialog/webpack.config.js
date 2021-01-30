@@ -33,10 +33,6 @@ const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
 
-fs.removeSync(distDir);
-fs.removeSync(publishDir);
-fs.mkdirpSync(publishDir);
-
 function validatePackageJson() {
 	const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 	if (!content.name || content.name.indexOf('joplin-plugin-') !== 0) {
@@ -109,6 +105,7 @@ function createPluginInfo(manifestPath, destPath, jplFilePath) {
 
 function onBuildCompleted() {
 	try {
+		fs.removeSync(path.resolve(publishDir, 'index.js'));
 		createPluginArchive(distDir, pluginArchiveFilePath);
 		createPluginInfo(manifestPath, pluginInfoFilePath, pluginArchiveFilePath);
 		validatePackageJson();
@@ -174,6 +171,16 @@ const extraScriptConfig = Object.assign({}, baseConfig, {
 	},
 });
 
+const createArchiveConfig = {
+	stats: 'errors-only',
+	entry: './dist/index.js',
+	output: {
+		filename: 'index.js',
+		path: publishDir,
+	},
+	plugins: [new WebpackOnBuildPlugin(onBuildCompleted)],
+};
+
 function resolveExtraScriptPath(name) {
 	const relativePath = `./src/${name}`;
 
@@ -196,8 +203,8 @@ function resolveExtraScriptPath(name) {
 	};
 }
 
-function addExtraScriptConfigs(baseConfig, userConfig) {
-	if (!userConfig.extraScripts.length) return baseConfig;
+function buildExtraScriptConfigs(userConfig) {
+	if (!userConfig.extraScripts.length) return [];
 
 	const output = [];
 
@@ -209,25 +216,64 @@ function addExtraScriptConfigs(baseConfig, userConfig) {
 		}));
 	}
 
-	return baseConfig.concat(output);
+	return output;
 }
 
-function addLastConfigStep(config) {
-	const lastConfig = config[config.length - 1];
-	if (!lastConfig.plugins) lastConfig.plugins = [];
-	lastConfig.plugins.push(new WebpackOnBuildPlugin(onBuildCompleted));
-	config[config.length - 1] = lastConfig;
-	return config;
+function main(processArgv) {
+	const yargs = require('yargs/yargs');
+	const argv = yargs(processArgv).argv;
+
+	const configName = argv['joplin-plugin-config'];
+	if (!configName) throw new Error('A config file must be specified via the --joplin-plugin-config flag');
+
+	// Webpack configurations run in parallel, while we need them to run in
+	// sequence, and to do that it seems the only way is to run webpack multiple
+	// times, with different config each time.
+
+	const configs = {
+		// Builds the main src/index.ts and copy the extra content from /src to
+		// /dist including scripts, CSS and any other asset.
+		buildMain: [pluginConfig],
+
+		// Builds the extra scripts as defined in plugin.config.json. When doing
+		// so, some JavaScript files that were copied in the previous might be
+		// overwritten here by the compiled version. This is by design. The
+		// result is that JS files that don't need compilation, are simply
+		// copied to /dist, while those that do need it are correctly compiled.
+		buildExtraScripts: buildExtraScriptConfigs(userConfig),
+
+		// Ths config is for creating the .jpl, which is done via the plugin, so
+		// it doesn't actually need an entry and output, however webpack won't
+		// run without this. So we give it an entry that we know is going to
+		// exist and output in the publish dir. Then the plugin will delete this
+		// temporary file before packaging the plugin.
+		createArchive: [createArchiveConfig],
+	};
+
+	// If we are running the first config step, we clean up and create the build
+	// directories.
+	if (configName === 'buildMain') {
+		fs.removeSync(distDir);
+		fs.removeSync(publishDir);
+		fs.mkdirpSync(publishDir);
+	}
+
+	return configs[configName];
 }
 
-let exportedConfigs = [pluginConfig];
+let exportedConfigs = [];
 
 try {
-	exportedConfigs = addExtraScriptConfigs(exportedConfigs, userConfig);
-	exportedConfigs = addLastConfigStep(exportedConfigs);
+	exportedConfigs = main(process.argv);
 } catch (error) {
 	console.error(chalk.red(error.message));
 	process.exit(1);
+}
+
+if (!exportedConfigs.length) {
+	// Nothing to do - for example where there are no external scripts to
+	// compile.
+	process.exit(0);
 }
 
 module.exports = exportedConfigs;

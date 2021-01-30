@@ -102,6 +102,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinworkspace.html#onnoteselectionchange" class="tsd-kind-icon">on<wbr>Note<wbr>Selection<wbr>Change</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinworkspace.html#onsynccomplete" class="tsd-kind-icon">on<wbr>Sync<wbr>Complete</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinworkspace.html#onsyncstart" class="tsd-kind-icon">on<wbr>Sync<wbr>Start</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinworkspace.html#selectedfolder" class="tsd-kind-icon">selected<wbr>Folder</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinworkspace.html#selectednote" class="tsd-kind-icon">selected<wbr>Note</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinworkspace.html#selectednoteids" class="tsd-kind-icon">selected<wbr>Note<wbr>Ids</a></li>
 							</ul>
@@ -293,6 +294,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="selectedfolder" class="tsd-anchor"></a>
+					<h3>selected<wbr>Folder</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">selected<wbr>Folder<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">FolderEntity</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the currently selected folder. In some cases, for example during
+										search or when viewing a tag, no folder is actually selected in the user
+										interface. In that case, that function would return the last selected
+									folder.</p>
+								</div>
+							</div>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">FolderEntity</span><span class="tsd-signature-symbol">&gt;</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="selectednote" class="tsd-anchor"></a>
 					<h3>selected<wbr>Note</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -377,6 +404,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinworkspace.html#onsyncstart" class="tsd-kind-icon">on<wbr>Sync<wbr>Start</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinworkspace.html#selectedfolder" class="tsd-kind-icon">selected<wbr>Folder</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinworkspace.html#selectednote" class="tsd-kind-icon">selected<wbr>Note</a>

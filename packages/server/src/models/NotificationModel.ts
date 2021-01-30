@@ -1,7 +1,7 @@
 import { Notification, NotificationLevel, Uuid } from '../db';
 import BaseModel from './BaseModel';
 
-export default class NotificationModel extends BaseModel {
+export default class NotificationModel extends BaseModel<Notification> {
 
 	protected get tableName(): string {
 		return 'notifications';
@@ -14,6 +14,9 @@ export default class NotificationModel extends BaseModel {
 	}
 
 	public async markAsRead(key: string): Promise<void> {
+		const n = await this.loadByKey(key);
+		if (!n) return;
+
 		await this.db(this.tableName)
 			.update({ read: 1 })
 			.where('key', '=', key)

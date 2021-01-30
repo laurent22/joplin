@@ -155,7 +155,7 @@ export default class AlarmServiceDriverNode {
 		// https://stackoverflow.com/questions/3468607/why-does-settimeout-break-for-large-millisecond-delay-values/3468699
 
 		const maxInterval = 60 * 60 * 1000;
-		if (interval >= maxInterval)  {
+		if (interval >= maxInterval) {
 			this.logger().info(`AlarmServiceDriverNode::scheduleNotification: Notification interval is greater than ${maxInterval}ms - will reschedule in ${maxInterval}ms`);
 
 			timeoutId = shim.setTimeout(() => {

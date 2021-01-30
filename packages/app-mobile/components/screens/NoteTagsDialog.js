@@ -2,7 +2,7 @@ const React = require('react');
 
 const { StyleSheet, View, Text, FlatList, TouchableOpacity, TextInput } = require('react-native');
 const { connect } = require('react-redux');
-const Tag = require('@joplin/lib/models/Tag.js');
+const Tag = require('@joplin/lib/models/Tag').default;
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('../global-style.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;

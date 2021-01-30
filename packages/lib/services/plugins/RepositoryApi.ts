@@ -1,11 +1,15 @@
 import shim from '../../shim';
 import { PluginManifest } from './utils/types';
 const md5 = require('md5');
+const compareVersions = require('compare-versions');
 
 export default class RepositoryApi {
 
-	// For now, it's assumed that the baseUrl is a GitHub repo URL, such as
-	// https://github.com/joplin/plugins
+	// As a base URL, this class can support either a remote repository or a
+	// local one (a directory path), which is useful for testing.
+	//
+	// For now, if the baseUrl is an actual URL it's assumed it's a GitHub repo
+	// URL, such as https://github.com/joplin/plugins
 	//
 	// Later on, other repo types could be supported.
 	private baseUrl_: string;
@@ -17,8 +21,29 @@ export default class RepositoryApi {
 		this.tempDir_ = tempDir;
 	}
 
+	public async loadManifests() {
+		const manifestsText = await this.fetchText('manifests.json');
+		try {
+			const manifests = JSON.parse(manifestsText);
+			if (!manifests) throw new Error('Invalid or missing JSON');
+			this.manifests_ = Object.keys(manifests).map(id => {
+				return manifests[id];
+			});
+		} catch (error) {
+			throw new Error(`Could not parse JSON: ${error.message}`);
+		}
+	}
+
+	private get isLocalRepo(): boolean {
+		return this.baseUrl_.indexOf('http') !== 0;
+	}
+
 	private get contentBaseUrl(): string {
-		return `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
+		if (this.isLocalRepo) {
+			return this.baseUrl_;
+		} else {
+			return `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
+		}
 	}
 
 	private fileUrl(relativePath: string): string {
@@ -26,7 +51,11 @@ export default class RepositoryApi {
 	}
 
 	private async fetchText(path: string): Promise<string> {
-		return shim.fetchText(this.fileUrl(path));
+		if (this.isLocalRepo) {
+			return shim.fsDriver().readFile(this.fileUrl(path), 'utf8');
+		} else {
+			return shim.fetchText(this.fileUrl(path));
+		}
 	}
 
 	public async search(query: string): Promise<PluginManifest[]> {
@@ -60,27 +89,40 @@ export default class RepositoryApi {
 		const fileUrl = this.fileUrl(`plugins/${manifest.id}/plugin.jpl`);
 		const hash = md5(Date.now() + Math.random());
 		const targetPath = `${this.tempDir_}/${hash}_${manifest.id}.jpl`;
-		const response = await shim.fetchBlob(fileUrl, {
-			path: targetPath,
-		});
 
-		if (!response.ok) throw new Error(`Could not download plugin "${pluginId}" from "${fileUrl}"`);
+		if (this.isLocalRepo) {
+			await shim.fsDriver().copy(fileUrl, targetPath);
+		} else {
+			const response = await shim.fetchBlob(fileUrl, {
+				path: targetPath,
+			});
+
+			if (!response.ok) throw new Error(`Could not download plugin "${pluginId}" from "${fileUrl}"`);
+		}
+
 		return targetPath;
 	}
 
-	private async manifests(): Promise<PluginManifest[]> {
-		if (this.manifests_) return this.manifests_;
-		const manifestsText = await this.fetchText('manifests.json');
-		try {
-			const manifests = JSON.parse(manifestsText);
-			if (!manifests) throw new Error('Invalid or missing JSON');
-			this.manifests_ = Object.keys(manifests).map(id => {
-				return manifests[id];
-			});
-			return this.manifests_;
-		} catch (error) {
-			throw new Error(`Could not parse JSON: ${error.message}`);
+	public async manifests(): Promise<PluginManifest[]> {
+		if (!this.manifests_) throw new Error('Manifests have no been loaded!');
+		return this.manifests_;
+	}
+
+	public async canBeUpdatedPlugins(installedManifests: PluginManifest[]): Promise<string[]> {
+		const output = [];
+
+		for (const manifest of installedManifests) {
+			const canBe = await this.pluginCanBeUpdated(manifest.id, manifest.version);
+			if (canBe) output.push(manifest.id);
 		}
+
+		return output;
+	}
+
+	public async pluginCanBeUpdated(pluginId: string, installedVersion: string): Promise<boolean> {
+		const manifest = (await this.manifests()).find(m => m.id === pluginId);
+		if (!manifest) return false;
+		return compareVersions(installedVersion, manifest.version) < 0;
 	}
 
 }

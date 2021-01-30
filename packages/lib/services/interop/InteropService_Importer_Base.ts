@@ -2,7 +2,7 @@
 
 import { ImportExportResult } from './types';
 
-const Setting = require('../../models/Setting').default;
+import Setting from '../../models/Setting';
 
 export default class InteropService_Importer_Base {
 	private metadata_: any = null;
@@ -23,7 +23,7 @@ export default class InteropService_Importer_Base {
 	}
 
 	// @ts-ignore
-	async exec(result: ImportExportResult) {}
+	async exec(result: ImportExportResult): Promise<ImportExportResult> {}
 
 	async temporaryDirectory_(createIt: boolean) {
 		const md5 = require('md5');

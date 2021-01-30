@@ -10,7 +10,7 @@ import styles_ from './styles';
 import { _ } from '@joplin/lib/locale';
 
 const bridge = require('electron').remote.require('./bridge').default;
-const shim = require('@joplin/lib/shim').default;
+import shim from '@joplin/lib/shim';
 
 const keymapService = KeymapService.instance();
 

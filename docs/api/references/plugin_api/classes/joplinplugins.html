@@ -149,45 +149,22 @@
 							<aside class="tsd-sources">
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Registers a new content script. Unlike regular plugin code, which runs in
-										a separate process, content scripts run within the main process code and
-										thus allow improved performances and more customisations in specific
-									cases. It can be used for example to load a Markdown or editor plugin.</p>
-								</div>
-								<p>Note that registering a content script in itself will do nothing - it
-									will only be loaded in specific cases by the relevant app modules (eg.
-									the Markdown renderer or the code editor). So it is not a way to inject
-									and run arbitrary code in the app, which for safety and performance
-								reasons is not supported.</p>
-								<p>The plugin generator provides a way to build any content script you might
-									want to package as well as its dependencies. See the <a href="https://github.com/laurent22/joplin/blob/dev/packages/generator-joplin/README.md">Plugin Generator
-									doc</a>
-								for more information.</p>
-								<ul>
-									<li><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script">View the renderer demo plugin</a></li>
-									<li><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script">View the editor demo plugin</a></li>
-								</ul>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>Use joplin.contentScripts.register()</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>type: <a href="../enums/contentscripttype.html" class="tsd-signature-type">ContentScriptType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Defines how the script will be used. See the type definition for more information about each supported type.</p>
-									</div>
 								</li>
 								<li>
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>A unique ID for the content script.</p>
-									</div>
 								</li>
 								<li>
 									<h5>scriptPath: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set <code>scriptPath</code> to <code>&quot;./content_script.js</code>.</p>
-									</div>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE

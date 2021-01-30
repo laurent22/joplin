@@ -3,7 +3,7 @@ import { useRef, forwardRef, useImperativeHandle, useCallback } from 'react';
 const { themeStyle } = require('@joplin/lib/theme');
 const Mark = require('mark.js/dist/mark.min.js');
 const markJsUtils = require('@joplin/lib/markJsUtils');
-const Note = require('@joplin/lib/models/Note');
+import Note from '@joplin/lib/models/Note';
 const { replaceRegexDiacritics, pregQuote } = require('@joplin/lib/string-utils');
 const styled = require('styled-components').default;
 

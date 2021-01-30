@@ -3,7 +3,7 @@ import htmlUtils from '../../htmlUtils';
 import utils from '../../utils';
 
 function renderImageHtml(before: string, src: string, after: string, ruleOptions: RuleOptions) {
-	const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
+	const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);
 	if (typeof r === 'string') return r;
 	if (r) return `<img ${before} ${htmlUtils.attributesHtml(r)} ${after}/>`;
 	return `[Image: ${src}]`;

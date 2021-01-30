@@ -139,7 +139,7 @@ const trimQuotes = (str: string): string => str.startsWith('"') ? str.substr(1, 
 export default function filterParser(searchString: string) {
 	searchString = searchString.trim();
 
-	const result =  parseQuery(searchString);
+	const result = parseQuery(searchString);
 
 	return result;
 }

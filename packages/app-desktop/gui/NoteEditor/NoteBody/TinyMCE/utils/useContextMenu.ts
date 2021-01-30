@@ -9,7 +9,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordinates';
 import Setting from '@joplin/lib/models/Setting';
 
-const Resource = require('@joplin/lib/models/Resource');
+import Resource from '@joplin/lib/models/Resource';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 

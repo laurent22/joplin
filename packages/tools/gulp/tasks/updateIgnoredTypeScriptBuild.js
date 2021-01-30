@@ -13,14 +13,15 @@ module.exports = {
 				'**/.git/**',
 				'**/node_modules/**',
 				'Assets/**/*',
-				'packages/api-cli/tests/support/plugins/**/*',
-				'packages/api-desktop/dist/**/*',
+				'packages/app-desktop/dist/**/*',
 				'packages/app-cli/build/**/*',
 				'packages/app-cli/tests-build/**/*',
+				'packages/app-cli/tests/support/plugins/**/*',
 				'packages/app-desktop/dist/**/*',
 				'packages/app-mobile/android/**/*',
 				'packages/app-mobile/ios/**/*',
 				'packages/lib/plugin_types/**/*',
+				'packages/server/**/*',
 			],
 		}).filter(f => !f.endsWith('.d.ts'));
 

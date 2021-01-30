@@ -1,0 +1,28 @@
+.main {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.navbar {
+	padding: .5em;
+	border-bottom: 1px solid #dddddd;
+	box-shadow: 0px 2px 8px #cccccc;
+}
+
+.page-note .note-main {
+	margin-top: 2em;
+	max-width: 840px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.page-note .last-updated {
+	font-size: 1.1em;
+	opacity: 0.6;
+}
+
+.page-note h1.title {
+	font-size: 2.2em;
+	margin-top: 0.4em;
+	border-bottom: none;
+}

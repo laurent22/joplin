@@ -1,4 +1,4 @@
-import ViewController from './ViewController';
+import ViewController, { EmitMessageEvent } from './ViewController';
 import shim from '../../shim';
 import { ButtonSpec, DialogResult } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
@@ -102,9 +102,9 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
-	public emitMessage(event: any) {
+	public async emitMessage(event: EmitMessageEvent): Promise<any> {
 		if (!this.messageListener_) return;
-		this.messageListener_(event.message);
+		return this.messageListener_(event.message);
 	}
 
 	public onMessage(callback: any) {

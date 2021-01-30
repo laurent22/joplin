@@ -16,8 +16,8 @@ import shim from '@joplin/lib/shim';
 
 const { MarkupToHtml } = require('@joplin/renderer');
 const taboverride = require('taboverride');
-const { reg } = require('@joplin/lib/registry.js');
-const BaseItem = require('@joplin/lib/models/BaseItem');
+import { reg } from '@joplin/lib/registry';
+import BaseItem from '@joplin/lib/models/BaseItem';
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -960,11 +960,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			//
 			// Any maybe others, so to catch them all we only check the prefix
 
-			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem'];
+			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem', 'Bold', 'Italic', 'Underline', 'Paragraph'];
 
 			if (
 				changeCommands.includes(c) ||
 				c.indexOf('Insert') === 0 ||
+				c.indexOf('Header') === 0 ||
 				c.indexOf('mceToggle') === 0 ||
 				c.indexOf('mceInsert') === 0 ||
 				c.indexOf('mceTable') === 0

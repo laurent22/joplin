@@ -6,7 +6,7 @@
 // whenever the update() function is called, and in mobile it's called for
 // example on the Redux action middleware or when the app gets focus.
 
-const time = require('./time').default;
+import time from './time';
 
 type IntervalId = number;
 

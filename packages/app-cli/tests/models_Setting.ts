@@ -1,4 +1,4 @@
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { SettingSectionSource } from '@joplin/lib/models/Setting';
 
 const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
 
@@ -121,7 +121,7 @@ describe('models_Setting', function() {
 	}));
 
 	it('should register new sections', (async () => {
-		await Setting.registerSection('mySection', {
+		await Setting.registerSection('mySection', SettingSectionSource.Default, {
 			label: 'My section',
 		});
 

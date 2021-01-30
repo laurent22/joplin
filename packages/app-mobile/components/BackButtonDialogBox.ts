@@ -2,8 +2,8 @@ const { BackButtonService } = require('../services/back-button.js');
 const DialogBox = require('react-native-dialogbox').default;
 
 export default class BackButtonDialogBox extends DialogBox {
-	constructor() {
-		super();
+	constructor(props: any) {
+		super(props);
 
 		this.backHandler_ = () => {
 			if (this.state.isVisible) {

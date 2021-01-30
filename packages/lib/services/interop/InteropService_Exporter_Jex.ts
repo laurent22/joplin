@@ -34,15 +34,12 @@ export default class InteropService_Exporter_Jex extends InteropService_Exporter
 
 		if (!filePaths.length) throw new Error(_('There is no data to export.'));
 
-		await require('tar').create(
-			{
-				strict: true,
-				portable: true,
-				file: this.destPath_,
-				cwd: this.tempDir_,
-			},
-			filePaths
-		);
+		await shim.fsDriver().tarCreate({
+			strict: true,
+			portable: true,
+			file: this.destPath_,
+			cwd: this.tempDir_,
+		}, filePaths);
 
 		await fs.remove(this.tempDir_);
 	}

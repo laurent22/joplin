@@ -1,3 +1,5 @@
+/* eslint-disable no-multi-spaces */
+
 // This is the keycode map for Electron.
 
 const keycodeToElectronMap = [

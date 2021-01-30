@@ -85,39 +85,39 @@ const declarations: CommandDeclaration[] = [
 	},
 	{
 		name: 'editor.deleteLine',
-		label: _('Delete line'),
+		label: () => _('Delete line'),
 	},
 	{
 		name: 'editor.undo',
-		label: _('Undo'),
+		label: () => _('Undo'),
 	},
 	{
 		name: 'editor.redo',
-		label: _('Redo'),
+		label: () => _('Redo'),
 	},
 	{
 		name: 'editor.indentLess',
-		label: _('Indent less'),
+		label: () => _('Indent less'),
 	},
 	{
 		name: 'editor.indentMore',
-		label: _('Indent more'),
+		label: () => _('Indent more'),
 	},
 	{
 		name: 'editor.toggleComment',
-		label: _('Toggle comment'),
+		label: () => _('Toggle comment'),
 	},
 	{
 		name: 'editor.sortSelectedLines',
-		label: _('Sort selected lines'),
+		label: () => _('Sort selected lines'),
 	},
 	{
 		name: 'editor.swapLineUp',
-		label: _('Swap line up'),
+		label: () => _('Swap line up'),
 	},
 	{
 		name: 'editor.swapLineDown',
-		label: _('Swap line down'),
+		label: () => _('Swap line down'),
 	},
 	{
 		name: 'selectedText',

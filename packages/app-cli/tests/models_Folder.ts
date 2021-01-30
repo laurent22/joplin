@@ -1,7 +1,7 @@
 import { FolderEntity } from '@joplin/lib/services/database/types';
-const { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
+import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync } from './test-utils';
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -169,9 +169,9 @@ describe('models_Folder', function() {
 		await Note.save({ title: 'note1', parent_id: f3.id });
 		await Note.save({ title: 'note2', parent_id: f3.id });
 		await Note.save({ title: 'note3', parent_id: f1.id });
-		await Note.save({ title: 'note4', parent_id: f3.id, is_todo: true, todo_completed: 0 });
-		await Note.save({ title: 'note5', parent_id: f3.id, is_todo: true, todo_completed: 999 });
-		await Note.save({ title: 'note6', parent_id: f3.id, is_todo: true, todo_completed: 999 });
+		await Note.save({ title: 'note4', parent_id: f3.id, is_todo: 1, todo_completed: 0 });
+		await Note.save({ title: 'note5', parent_id: f3.id, is_todo: 1, todo_completed: 999 });
+		await Note.save({ title: 'note6', parent_id: f3.id, is_todo: 1, todo_completed: 999 });
 
 		const folders = await Folder.all();
 		await Folder.addNoteCounts(folders, false);

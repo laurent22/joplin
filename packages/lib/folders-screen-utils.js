@@ -1,4 +1,4 @@
-const Folder = require('./models/Folder.js');
+const Folder = require('./models/Folder').default;
 const Setting = require('./models/Setting').default;
 const shim = require('./shim').default;
 

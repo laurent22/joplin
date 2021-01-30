@@ -3,7 +3,7 @@ import { User } from '../db';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
 
-export default class UserModel extends BaseModel {
+export default class UserModel extends BaseModel<User> {
 
 	public get tableName(): string {
 		return 'users';
@@ -72,7 +72,7 @@ export default class UserModel extends BaseModel {
 	}
 
 	public async profileUrl(): Promise<string> {
-		return `${this.baseUrl}/profile`;
+		return `${this.baseUrl}/users/me`;
 	}
 
 	private async checkIsOwnerOrAdmin(userId: string): Promise<void> {
@@ -97,7 +97,7 @@ export default class UserModel extends BaseModel {
 			const rootFile = await fileModel.userRootFile();
 			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
 			await super.delete(id);
-		});
+		}, 'UserModel::delete');
 	}
 
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
@@ -114,7 +114,7 @@ export default class UserModel extends BaseModel {
 				const fileModel = this.models().file({ userId: newUser.id });
 				await fileModel.createRootFile();
 			}
-		});
+		}, 'UserModel::save');
 
 		return newUser;
 	}

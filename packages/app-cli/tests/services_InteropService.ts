@@ -3,10 +3,10 @@ import { CustomExportContext, CustomImportContext, Module, ModuleType } from '@j
 import shim from '@joplin/lib/shim';
 
 const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Tag = require('@joplin/lib/models/Tag.js');
-const Resource = require('@joplin/lib/models/Resource.js');
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
+import Resource from '@joplin/lib/models/Resource';
 const fs = require('fs-extra');
 const ArrayUtils = require('@joplin/lib/ArrayUtils');
 

@@ -1,10 +1,10 @@
 const { reg } = require('../../registry.js');
-const Folder = require('../../models/Folder.js');
+const Folder = require('../../models/Folder').default;
 const BaseModel = require('../../BaseModel').default;
-const Note = require('../../models/Note.js');
-const Resource = require('../../models/Resource.js');
-const ResourceFetcher = require('../../services/ResourceFetcher.js');
-const DecryptionWorker = require('../../services/DecryptionWorker.js');
+const Note = require('../../models/Note').default;
+const Resource = require('../../models/Resource').default;
+const ResourceFetcher = require('../../services/ResourceFetcher').default;
+const DecryptionWorker = require('../../services/DecryptionWorker').default;
 const Setting = require('../../models/Setting').default;
 const Mutex = require('async-mutex').Mutex;
 

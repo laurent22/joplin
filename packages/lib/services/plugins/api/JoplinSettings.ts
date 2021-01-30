@@ -1,5 +1,5 @@
 import eventManager from '../../../eventManager';
-import Setting, { SettingItem as InternalSettingItem } from '../../../models/Setting';
+import Setting, { SettingItem as InternalSettingItem, SettingSectionSource } from '../../../models/Setting';
 import Plugin from '../Plugin';
 import { SettingItem, SettingSection } from './types';
 
@@ -56,7 +56,7 @@ export default class JoplinSettings {
 
 		if ('isEnum' in settingItem) internalSettingItem.isEnum = settingItem.isEnum;
 		if ('section' in settingItem) internalSettingItem.section = this.namespacedKey(settingItem.section);
-		if ('options' in settingItem) internalSettingItem.options = settingItem.options;
+		if ('options' in settingItem) internalSettingItem.options = () => settingItem.options;
 		if ('appTypes' in settingItem) internalSettingItem.appTypes = settingItem.appTypes;
 		if ('secure' in settingItem) internalSettingItem.secure = settingItem.secure;
 		if ('advanced' in settingItem) internalSettingItem.advanced = settingItem.advanced;
@@ -71,7 +71,7 @@ export default class JoplinSettings {
 	 * Registers a new setting section. Like for registerSetting, it is dynamic and needs to be done every time the plugin starts.
 	 */
 	public async registerSection(name: string, section: SettingSection) {
-		return Setting.registerSection(this.namespacedKey(name), section);
+		return Setting.registerSection(this.namespacedKey(name), SettingSectionSource.Plugin, section);
 	}
 
 	/**

@@ -125,6 +125,7 @@ module.exports = {
 		'space-before-blocks': 'error',
 		'spaced-comment': ['error', 'always'],
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
+		'no-multi-spaces': ['error'],
 	},
 	'plugins': [
 		'react',

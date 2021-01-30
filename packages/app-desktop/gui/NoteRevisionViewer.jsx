@@ -5,17 +5,17 @@ const { _ } = require('@joplin/lib/locale');
 const NoteTextViewer = require('./NoteTextViewer').default;
 const HelpButton = require('./HelpButton.min');
 const BaseModel = require('@joplin/lib/BaseModel').default;
-const Revision = require('@joplin/lib/models/Revision');
+const Revision = require('@joplin/lib/models/Revision').default;
 const urlUtils = require('@joplin/lib/urlUtils');
 const Setting = require('@joplin/lib/models/Setting').default;
-const RevisionService = require('@joplin/lib/services/RevisionService');
+const RevisionService = require('@joplin/lib/services/RevisionService').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const { MarkupToHtml } = require('@joplin/renderer');
 const time = require('@joplin/lib/time').default;
 const ReactTooltip = require('react-tooltip');
 const { urlDecode, substrWithEllipsis } = require('@joplin/lib/string-utils');
 const bridge = require('electron').remote.require('./bridge').default;
-const markupLanguageUtils = require('@joplin/lib/markupLanguageUtils').default;
+const markupLanguageUtils = require('../utils/markupLanguageUtils').default;
 
 class NoteRevisionViewerComponent extends React.PureComponent {
 	constructor() {

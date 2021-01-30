@@ -16,19 +16,21 @@ import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainSe
 import PluginRunner from '../app/services/plugins/PluginRunner';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import FileApiDriverJoplinServer from '@joplin/lib/file-api-driver-joplinServer';
+import OneDriveApi from '@joplin/lib/onedrive-api';
+import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
+import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 
 const fs = require('fs-extra');
-const { JoplinDatabase } = require('@joplin/lib/joplin-database.js');
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const ItemChange = require('@joplin/lib/models/ItemChange.js');
-const Resource = require('@joplin/lib/models/Resource.js');
-const Tag = require('@joplin/lib/models/Tag.js');
-const NoteTag = require('@joplin/lib/models/NoteTag.js');
-const Revision = require('@joplin/lib/models/Revision.js');
-const MasterKey = require('@joplin/lib/models/MasterKey');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import ItemChange from '@joplin/lib/models/ItemChange';
+import Resource from '@joplin/lib/models/Resource';
+import Tag from '@joplin/lib/models/Tag';
+import NoteTag from '@joplin/lib/models/NoteTag';
+import Revision from '@joplin/lib/models/Revision';
+import MasterKey from '@joplin/lib/models/MasterKey';
+import BaseItem from '@joplin/lib/models/BaseItem';
 const { FileApi } = require('@joplin/lib/file-api.js');
 const { FileApiDriverMemory } = require('@joplin/lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
@@ -40,19 +42,17 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const SyncTargetMemory = require('@joplin/lib/SyncTargetMemory.js');
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
-const SyncTargetOneDrive = require('@joplin/lib/SyncTargetOneDrive.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
-const SyncTargetJoplinServer = require('@joplin/lib/SyncTargetJoplinServer').default;
-const EncryptionService = require('@joplin/lib/services/EncryptionService.js');
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker.js');
-const RevisionService = require('@joplin/lib/services/RevisionService.js');
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
+import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
+import EncryptionService from '@joplin/lib/services/EncryptionService';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import RevisionService from '@joplin/lib/services/RevisionService';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const WebDavApi = require('@joplin/lib/WebDavApi');
 const DropboxApi = require('@joplin/lib/DropboxApi');
-const JoplinServerApi = require('@joplin/lib/JoplinServerApi2').default;
-const { OneDriveApi } = require('@joplin/lib/onedrive-api');
+import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
@@ -104,6 +104,7 @@ FileApiDriverLocal.fsDriver_ = fsDriver;
 
 const logDir = `${__dirname}/../tests/logs`;
 const baseTempDir = `${__dirname}/../tests/tmp/${suiteName_}`;
+const supportDir = `${__dirname}/support`;
 
 // We add a space in the data directory path as that will help uncover
 // various space-in-path issues.
@@ -180,6 +181,8 @@ BaseItem.loadClass('Revision', Revision);
 Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', baseTempDir);
+Setting.setConstant('cacheDir', baseTempDir);
+Setting.setConstant('pluginDataDir', `${dataDir}/plugin-data`);
 Setting.setConstant('env', 'dev');
 
 BaseService.logger_ = logger;
@@ -399,7 +402,7 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	await fileApi().clearRoot();
 }
 
-function db(id: number = null) {
+function db(id: number = null): JoplinDatabase {
 	if (id === null) id = currentClient_;
 	return databases_[id];
 }
@@ -864,4 +867,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-module.exports = { waitForFolderCount, afterAllCleanUp, exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+export { supportDir, waitForFolderCount, afterAllCleanUp, exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

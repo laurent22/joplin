@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
-import CodeMirror  from './NoteBody/CodeMirror/CodeMirror';
+import CodeMirror from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
 import { htmlToMarkdown, formNoteToNote } from './utils';
@@ -25,7 +25,7 @@ import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils
 import { _ } from '@joplin/lib/locale';
 import TagList from '../TagList';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
-import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
+import markupLanguageUtils from '../../utils/markupLanguageUtils';
 import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
@@ -34,9 +34,9 @@ import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
-const { reg } = require('@joplin/lib/registry.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Folder = require('@joplin/lib/models/Folder.js');
+import { reg } from '@joplin/lib/registry';
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 const bridge = require('electron').remote.require('./bridge').default;
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
@@ -362,7 +362,7 @@ function NoteEditor(props: NoteEditorProps) {
 	function renderTagBar() {
 		const theme = themeStyle(props.themeId);
 		const noteIds = [formNote.id];
-		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>Click to add tags...</span>;
+		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>{_('Click to add tags...')}</span>;
 		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 
 		return (
@@ -399,6 +399,7 @@ function NoteEditor(props: NoteEditorProps) {
 		onDrop: onDrop,
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
+		fontSize: Setting.value('style.editor.fontSize'),
 	};
 
 	let editor = null;

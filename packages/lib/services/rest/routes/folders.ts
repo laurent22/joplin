@@ -4,7 +4,7 @@ import defaultAction from '../utils/defaultAction';
 import paginatedResults from '../utils/paginatedResults';
 import BaseModel from '../../../BaseModel';
 import requestFields from '../utils/requestFields';
-const Folder = require('../../../models/Folder');
+import Folder from '../../../models/Folder';
 const { FoldersScreenUtils } = require('../../../folders-screen-utils.js');
 const { ErrorNotFound } = require('../utils/errors');
 

@@ -1,0 +1,19 @@
+<script>{{{assetsJs}}}</script>
+
+<style>{{{cssStrings}}}</style>
+
+<div id="joplin-container-pluginAssetsContainer"></div>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand logo-container">
+		<a class="navbar-item" href="{{{global.baseUrl}}}/home">
+			<img class="logo" src="{{{global.baseUrl}}}/images/Logo.png"/><span class="logo-text">Joplin</span>
+		</a>
+	</div>
+</nav>
+
+<div class="note-main">
+	<p class="last-updated">Last updated: {{note.updatedDateTime}}</p>
+	<h1 class="title">{{note.title}}</h1>
+	{{{note.bodyHtml}}}
+</div>

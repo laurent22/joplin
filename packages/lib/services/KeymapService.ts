@@ -4,7 +4,7 @@ import { _ } from '../locale';
 import keysRegExp from './KeymapService_keysRegExp';
 import keycodeToElectronMap from './KeymapService_keycodeToElectronMap';
 
-const BaseService = require('./BaseService').default;
+import BaseService from './BaseService';
 
 const modifiersRegExp = {
 	darwin: /^(Ctrl|Option|Shift|Cmd)$/,
@@ -114,6 +114,7 @@ export default class KeymapService extends BaseService {
 	private customKeymapPath: string;
 	private defaultKeymapItems: KeymapItem[];
 	private lastSaveTime_: number;
+	private modifiersRegExp: any;
 
 	public constructor() {
 		super();
