@@ -19,6 +19,16 @@ If there's an error `while loading shared libraries: libgconf-2.so.4: cannot ope
 
 If you get a node-gyp related error, you might need to manually install it: `npm install -g node-gyp`.
 
+If you get unexpected `npm` dependency errors on a fresh git pull, try `npm run clean`
+
+If `npm i` gives you a fatal error like the following:
+```
+node-pre-gyp WARN Tried to download(403): https://mapbox-node-binary.s3.amazonaws.com/sqlite3/v5.0.1/napi-v6-linux-x64.tar.gz 
+node-pre-gyp WARN Pre-built binaries not found for sqlite3@5.0.1 and node@14.15.4 (node-v83 ABI, glibc) (falling back to source compile with node-gyp)
+/bin/sh: 1: python: not found
+```
+Try `sudo apt install python` (or the `apt` equivalent for your operating system) and then run `npm i` again.
+
 If you get the error `libtool: unrecognized option '-static'`, follow the instructions [in this post](https://stackoverflow.com/a/38552393/561309) to use the correct libtool version.
 
 ## Other issues
