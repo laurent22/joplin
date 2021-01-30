@@ -106,6 +106,9 @@ packages/app-cli/tests/Synchronizer.tags.js.map
 packages/app-cli/tests/fsDriver.d.ts
 packages/app-cli/tests/fsDriver.js
 packages/app-cli/tests/fsDriver.js.map
+packages/app-cli/tests/htmlUtils.d.ts
+packages/app-cli/tests/htmlUtils.js
+packages/app-cli/tests/htmlUtils.js.map
 packages/app-cli/tests/models_Folder.d.ts
 packages/app-cli/tests/models_Folder.js
 packages/app-cli/tests/models_Folder.js.map
@@ -847,6 +850,9 @@ packages/lib/fs-driver-base.js.map
 packages/lib/fs-driver-node.d.ts
 packages/lib/fs-driver-node.js
 packages/lib/fs-driver-node.js.map
+packages/lib/htmlUtils.d.ts
+packages/lib/htmlUtils.js
+packages/lib/htmlUtils.js.map
 packages/lib/import-enex-md-gen.d.ts
 packages/lib/import-enex-md-gen.js
 packages/lib/import-enex-md-gen.js.map
