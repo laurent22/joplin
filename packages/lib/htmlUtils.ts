@@ -31,19 +31,20 @@ const selfClosingElements = [
 ];
 
 class HtmlUtils {
-	headAndBodyHtml(doc: any) {
+
+	public headAndBodyHtml(doc: any) {
 		const output = [];
 		if (doc.head) output.push(doc.head.innerHTML);
 		if (doc.body) output.push(doc.body.innerHTML);
 		return output.join('\n');
 	}
 
-	isSelfClosingTag(tagName: string) {
+	public isSelfClosingTag(tagName: string) {
 		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractImageUrls(html: string) {
+	public extractImageUrls(html: string) {
 		if (!html) return [];
 
 		const output = [];
@@ -55,7 +56,7 @@ class HtmlUtils {
 		return output.filter(url => !!url);
 	}
 
-	replaceImageUrls(html: string, callback: Function) {
+	public replaceImageUrls(html: string, callback: Function) {
 		return this.processImageTags(html, (data: any) => {
 			const newSrc = callback(data.src);
 			return {
@@ -65,7 +66,7 @@ class HtmlUtils {
 		});
 	}
 
-	processImageTags(html: string, callback: Function) {
+	public processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 
 		return html.replace(imageRegex, (_v: string, before: string, src: string, after: string) => {
@@ -90,7 +91,7 @@ class HtmlUtils {
 		});
 	}
 
-	prependBaseUrl(html: string, baseUrl: string) {
+	public prependBaseUrl(html: string, baseUrl: string) {
 		if (!html) return '';
 
 		return html.replace(anchorRegex, (_v: string, before: string, href: string, after: string) => {
@@ -99,7 +100,7 @@ class HtmlUtils {
 		});
 	}
 
-	attributesHtml(attr: any) {
+	public attributesHtml(attr: any) {
 		const output = [];
 
 		for (const n in attr) {
@@ -110,7 +111,7 @@ class HtmlUtils {
 		return output.join(' ');
 	}
 
-	stripHtml(html: string) {
+	public stripHtml(html: string) {
 		const output: string[] = [];
 
 		const tagStack: any[] = [];

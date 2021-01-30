@@ -90,6 +90,9 @@ packages/app-cli/tests/Synchronizer.tags.js.map
 packages/app-cli/tests/fsDriver.d.ts
 packages/app-cli/tests/fsDriver.js
 packages/app-cli/tests/fsDriver.js.map
+packages/app-cli/tests/htmlUtils.d.ts
+packages/app-cli/tests/htmlUtils.js
+packages/app-cli/tests/htmlUtils.js.map
 packages/app-cli/tests/models_Folder.d.ts
 packages/app-cli/tests/models_Folder.js
 packages/app-cli/tests/models_Folder.js.map
