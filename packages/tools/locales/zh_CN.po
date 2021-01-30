@@ -6,7 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: WhiredPlanck <fungdaat31@outlook.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Yang Zhang <zyangmath@gmail.com>\n"
 "Language-Team: zh_CN <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -397,9 +399,8 @@ msgid "Creating new %s..."
 msgstr "新建 %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "检查更新..."
+msgstr "单击以添加标签..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
@@ -557,7 +558,7 @@ msgstr "笔记历史"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 msgid "Markup"
-msgstr "标记"
+msgstr "标记语言"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:306
 msgid "Previous versions of this note"
@@ -1376,7 +1377,7 @@ msgstr "显示高级选项"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:412
 msgid "Path:"
-msgstr ""
+msgstr "路径："
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:417
 msgid "Browse..."
@@ -1384,7 +1385,7 @@ msgstr "浏览..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:419
 msgid "Arguments:"
-msgstr ""
+msgstr "参数："
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:467
 msgid "The application must be restarted for these changes to take effect."
@@ -1418,75 +1419,66 @@ msgid "Delete plugin \"%s\"?"
 msgstr "删除插件“%s”吗？"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
-#, fuzzy
 msgid "Browse all plugins"
-msgstr "安装插件"
+msgstr "浏览所有插件"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "从文件安装"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "您尚未安装任何插件。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
-#, fuzzy
 msgid "Plugin tools"
-msgstr "插件"
+msgstr "插件工具"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "管理您的插件"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-#, fuzzy
 msgid "No results"
-msgstr "没有资源！"
+msgstr "无结果"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
-msgstr "搜索..."
+msgstr "搜索插件..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
-#, fuzzy
 msgid "Install"
-msgstr "安装插件"
+msgstr "安装"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
-#, fuzzy
 msgid "Installing..."
-msgstr "正在取消..."
+msgstr "正在安装…"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
-#, fuzzy
 msgid "Installed"
-msgstr "安装插件"
+msgstr "已安装"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
-#, fuzzy
 msgid "Update"
-msgstr "更新日期"
+msgstr "更新"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
-#, fuzzy
 msgid "Updating..."
-msgstr "正在监控..."
+msgstr "正在更新…"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "请升级 Joplin 以使用此插件"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "无法导出笔记：%s"
+msgstr "无法安装插件：%s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1940,7 +1932,7 @@ msgstr "Joplin 官网"
 
 #: packages/app-mobile/components/screens/config.js:523
 msgid "Privacy Policy"
-msgstr ""
+msgstr "隐私政策"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2065,7 +2057,7 @@ msgstr "搜索"
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
-msgstr ""
+msgstr "默认管理员密码不安全且尚未更改！[现在更改](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -3198,9 +3190,8 @@ msgid "Downloaded and encrypted"
 msgstr "已下载并加密"
 
 #: packages/lib/services/ReportService.js:180
-#, fuzzy
 msgid "Created locally"
-msgstr "已新建本地项目: %d。"
+msgstr "已新建本地项目"
 
 #: packages/lib/services/ReportService.js:191
 msgid "Attachments that could not be downloaded"
