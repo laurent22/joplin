@@ -71,7 +71,8 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 | <img width="50" src="https://avatars0.githubusercontent.com/u/6979755?s=96&v=4"/></br>[Devon Zuegel](https://github.com/devonzuegel) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[小西　孝宗](https://github.com/konishi-t) | <img width="50" src="https://avatars2.githubusercontent.com/u/215668?s=96&v=4"/></br>[Alexander van der Berg](https://github.com/avanderberg)
 | <img width="50" src="https://avatars0.githubusercontent.com/u/1168659?s=96&v=4"/></br>[Nicholas Head](https://github.com/nicholashead) | <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[Frank Bloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[Thomas Broussard](https://github.com/thomasbroussard)
 | <img width="50" src="https://avatars2.githubusercontent.com/u/1307332?s=96&v=4"/></br>[Brandon Johnson](https://github.com/dbrandonjohnson) | <img width="50" src="https://avatars1.githubusercontent.com/u/3061769?s=96&v=4"/></br>[@cnagy](https://github.com/c-nagy) | <img width="50" src="https://avatars3.githubusercontent.com/u/53228972?s=96&v=4"/></br>[clmntsl](https://github.com/clmntsl)
-| <img width="50" src="https://avatars1.githubusercontent.com/u/29300939?s=96&v=4"/></br>[mcejp](https://github.com/mcejp)
+| <img width="50" src="https://avatars1.githubusercontent.com/u/29300939?s=96&v=4"/></br>[mcejp](https://github.com/mcejp) | <img width="50" src="https://avatars.githubusercontent.com/u/1248504?s=96&v=4"/></br>[joesfer](https://github.com/joesfer) | <img width="50" src="https://avatars.githubusercontent.com/u/67130?s=96&v=4"/></br>[chr15m](https://github.com/chr15m)
+| <img width="50" src="https://avatars.githubusercontent.com/u/5782817?s=96&v=4"/></br>[piccobit](https://github.com/piccobit)
 
 <!-- TOC -->
 # Table of contents
