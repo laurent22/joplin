@@ -24,7 +24,7 @@ There are also a few forks of existing packages under the "fork-*" name.
 - macOS, Linux: Install rsync - https://nodejs.org/en/
 - macOS: Install Cocoapods - `brew install cocoapods`
 - Windows: Install Windows Build Tools - `npm install -g windows-build-tools`
-- Linux: Install dependencies - `sudo apt install libnss3 libsecret-1-dev`
+- Linux: Install dependencies - `sudo apt install libnss3 libsecret-1-dev python`
 
 ## Building
 
