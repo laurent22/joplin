@@ -1,9 +1,9 @@
-const fs = require('fs-extra');
-const { execCommandVerbose, rootDir, gitPullTry } = require('./tool-utils.js');
+import * as fs from 'fs-extra';
+import { execCommand2, rootDir, gitPullTry } from './tool-utils';
 
 const mobileDir = `${rootDir}/packages/app-mobile`;
 
-async function updateCodeProjVersions(filePath) {
+async function updateCodeProjVersions(filePath: string) {
 	const originalContent = await fs.readFile(filePath, 'utf8');
 	let newContent = originalContent;
 	let newVersion = '';
@@ -40,11 +40,11 @@ async function main() {
 	console.info(`New version: ${newVersion}`);
 
 	const tagName = `ios-v${newVersion}`;
-	await execCommandVerbose('git', ['add', '-A']);
-	await execCommandVerbose('git', ['commit', '-m', tagName]);
-	await execCommandVerbose('git', ['tag', tagName]);
-	await execCommandVerbose('git', ['push']);
-	await execCommandVerbose('git', ['push', '--tags']);
+	await execCommand2('git add -A');
+	await execCommand2(`git commit -m "${tagName}"`);
+	await execCommand2(`git tag ${tagName}`);
+	await execCommand2('git push');
+	await execCommand2('git push --tags');
 
 	console.info(`To create changelog: node packages/tools/git-changelog.js ${tagName}`);
 }
