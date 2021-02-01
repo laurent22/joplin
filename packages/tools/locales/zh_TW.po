@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -374,7 +376,7 @@ msgstr "另存為..."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
 msgid "Reveal file in folder"
-msgstr "在资料夹中展示檔案"
+msgstr "在資料夾中展示檔案"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
 msgid "Copy path to clipboard"
@@ -748,7 +750,7 @@ msgstr "設置提醒"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
 msgid "Set alarm:"
-msgstr "設置提醒: "
+msgstr "設定提醒: "
 
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
@@ -827,7 +829,7 @@ msgstr "一次只能列印一個記事。"
 #: packages/app-cli/app/command-sync.js:90
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "請按照以下步驟，設置 Joplin 與 Dropbox 同步所需的選項: "
+msgstr "請按照以下步驟，設定 Joplin 與 Dropbox 同步所需的選項: "
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
@@ -857,7 +859,7 @@ msgstr "網頁剪輯服務已啟用，並設置為自動啟動。"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:78
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "狀態: 已在 %d 端口上啟動"
+msgstr "狀態: 已在 %d 埠上啟動"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #, javascript-format
@@ -896,16 +898,16 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"此服務允許瀏覽器插件與 Joplin 溝通。當啟用它時，您的防火牆可能要求您授予 "
-"Joplin 偵聽特定端口的許可權。"
+"此服務允許瀏覽器外掛與 Joplin 溝通。當啟用它時，您的防火牆可能要求您授予 "
+"Joplin 偵聽特定埠的許可權。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:156
 msgid "Step 2: Install the extension"
-msgstr "步驟 2: 安裝插件"
+msgstr "步驟 2: 安裝外掛"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:161
 msgid "Download and install the relevant extension for your browser:"
-msgstr "下載並安裝瀏覽器插件: "
+msgstr "下載並安裝瀏覽器外掛: "
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:176
 msgid "Advanced options"
@@ -1389,7 +1391,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:467
 msgid "The application must be restarted for these changes to take effect."
-msgstr "程式必須重新啟動以便啟用這些變動"
+msgstr "程式必須重新啟動以便套用這些變動"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1600,7 +1602,7 @@ msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
-msgstr "這是用於展示與記事相關聯的附件的高級工具。需要小心，刪除後無法復原。"
+msgstr "這是用於展示與記事相關聯的附件的高級工具。請小心，刪除後無法復原。"
 
 #: packages/app-desktop/gui/ResourceScreen.js:142
 msgid "Please wait..."
@@ -1763,7 +1765,7 @@ msgstr "輸入記事本標題"
 
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
-msgstr "以 OneDrive 登錄"
+msgstr "以 OneDrive 登入"
 
 #: packages/app-mobile/components/screens/onedrive-login.js:121
 #: packages/app-mobile/components/screens/status.js:144
@@ -1791,7 +1793,7 @@ msgstr "輸入新標籤，或在清單中選擇"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
-msgstr "以 Dropbox 登錄"
+msgstr "以 Dropbox 登入"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
@@ -1838,7 +1840,7 @@ msgstr "啟用"
 #: packages/app-mobile/components/screens/encryption-config.js:264
 #: packages/app-mobile/components/screens/config.js:316
 msgid "Encryption Config"
-msgstr "加密設置"
+msgstr "加密設定"
 
 #: packages/app-mobile/components/screens/encryption-config.js:280
 #: packages/app-cli/app/command-e2ee.js:110
@@ -2307,7 +2309,7 @@ msgstr "界面主題"
 
 #: packages/lib/models/Setting.js:407
 msgid "Automatically switch theme to match system theme"
-msgstr "自動切換主題以匹配系統主題"
+msgstr "自動切換主題以配合系統主題"
 
 #: packages/lib/models/Setting.js:418
 msgid "Preferred light theme"
@@ -2520,7 +2522,7 @@ msgstr "獲取預發行更新"
 #: packages/lib/models/Setting.js:693
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "有關更多詳細信息，請查閱預發行頁面: %s"
+msgstr "有關更多詳細訊息，請查閱預發行頁面: %s"
 
 #: packages/lib/models/Setting.js:701
 msgid "Synchronisation interval"
@@ -2682,7 +2684,7 @@ msgstr "記事清單增長因數"
 
 #: packages/lib/models/Setting.js:859
 msgid "Note area growth factor"
-msgstr "記事区域增長因數"
+msgstr "記事區域增長因數"
 
 #: packages/lib/models/Setting.js:1031
 #, javascript-format
@@ -2739,14 +2741,14 @@ msgid ""
 msgstr ""
 "這些延伸模組為 Markdown 渲染器提供額外特性。請注意，儘管這些額外特性可能是可"
 "用的，但它們並非標準 Markdown 語法，因此這些功能基本只能在 Joplin 內運行。此"
-"外，其中的一些功能與所見即所得 (WYSIWYG) 編輯器是*不兼容*的。如果你在上述編輯"
+"外，其中的一些功能與所見即所得 (WYSIWYG) 編輯器是*不相容*的。如果你在上述編輯"
 "器中打開使用了這些延伸模組的記事，就將會丟失延伸模組格式。下面已表明延伸模組"
-"與所見即所得 (WYSIWYG) 編輯器兼容與否。"
+"與所見即所得 (WYSIWYG) 編輯器相容與否。"
 
 #: packages/lib/models/Setting.js:1448
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr "所有記事和設置均儲存於: %s"
+msgstr "所有記事和設定均儲存於: %s"
 
 #: packages/lib/models/Resource.js:349
 msgid "Not downloaded"
@@ -3452,7 +3454,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
-msgstr "亦顯示未設置和隱藏的設置變數。"
+msgstr "亦顯示未設定和隱藏的設定變數。"
 
 #: packages/app-cli/app/command-config.js:79
 #, javascript-format
@@ -3592,11 +3594,11 @@ msgstr "請先選擇要刪除的記事或記事本。"
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "按 Ctrl+D 或鍵入 \"exit\" 以退出應用程式"
+msgstr "按 Ctrl+D 或輸入 \"exit\" 以退出應用程式"
 
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "刪除匹配 <note-pattern> 的記事。"
+msgstr "刪除符合 <note-pattern> 的記事。"
 
 #: packages/app-cli/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
@@ -3605,7 +3607,7 @@ msgstr "刪除記事時不要求確認。"
 #: packages/app-cli/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d 則記事與此模式匹配。要刪除它們？"
+msgstr "%d 則記事與此模式相符。要刪除它們？"
 
 #: packages/app-cli/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -3672,9 +3674,9 @@ msgid ""
 msgstr ""
 "Joplin 歡迎您!\n"
 "\n"
-"鍵入: `:help shortcuts` 檢視鍵盤快速鍵清單，或只鍵入 `:help` 檢視使用說明。\n"
+"鍵入: `:help shortcuts` 檢視鍵盤快速鍵清單，或只輸入 `:help` 檢視使用說明。\n"
 "\n"
-"例如，您可鍵入: `mb` 去新增一本記事本; 鍵入 `mn` 去新增記事。"
+"例如，您可輸入: `mb` 去新增一本記事本; 輸入 `mn` 去新增記事。"
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
@@ -3688,7 +3690,7 @@ msgstr ""
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
-msgstr "鍵入 `status` 可獲取更多信息。"
+msgstr "鍵入 `status` 可獲取更多訊息。"
 
 #: packages/app-cli/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -3795,7 +3797,7 @@ msgstr "要退出命令行模式，請按 ESC 鍵"
 #: packages/app-cli/app/command-help.js:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr "請輸入`help keymap` 查看有關鍵盤快捷鍵和設置選項"
+msgstr "請輸入`help keymap` 查看有關鍵盤快捷鍵和設定選項"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -3815,7 +3817,7 @@ msgstr "離開本程式。"
 #: packages/app-cli/app/app.js:62
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "找到多過一個項目與 \"%s\" 匹配。請縮窄查詢範圍。"
+msgstr "找到多過一個項目與 \"%s\" 相符。請縮窄查詢範圍。"
 
 #: packages/app-cli/app/app.js:92
 msgid "No notebook selected."
@@ -3898,7 +3900,6 @@ msgstr "記事不等於待辨事項: \"%s\""
 #~ msgid "Notebook properties"
 #~ msgstr "記事本屬性"
 
-#, javascript-format
 #~ msgid "This file could not be opened: %s"
 #~ msgstr "無法開啟檔案: %s"
 
@@ -3923,7 +3924,6 @@ msgstr "記事不等於待辨事項: \"%s\""
 #~ msgid "Move to notebook..."
 #~ msgstr "移動至記事本..."
 
-#, javascript-format
 #~ msgid "Move %d notes to notebook \"%s\"?"
 #~ msgstr "移動 %d 記事到記事本 \"%s\"？"
 
@@ -3939,11 +3939,9 @@ msgstr "記事不等於待辨事項: \"%s\""
 #~ msgid "Errors only"
 #~ msgstr "僅顯示錯誤"
 
-#, javascript-format
 #~ msgid "Database v%s"
 #~ msgstr "資料庫 V%s"
 
-#, javascript-format
 #~ msgid "FTS enabled: %d"
 #~ msgstr "FTS 已啟用: %d"
 
