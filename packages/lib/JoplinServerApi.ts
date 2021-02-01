@@ -31,6 +31,7 @@ export default class JoplinServerApi {
 
 	private options_: Options;
 	private session_: any;
+	private debugRequests_: boolean = false;
 
 	public constructor(options: Options) {
 		this.options_ = options;
@@ -73,22 +74,22 @@ export default class JoplinServerApi {
 		return `${this.baseUrl()}/shares/${share.id}`;
 	}
 
-	// private requestToCurl_(url: string, options: any) {
-	// 	const output = [];
-	// 	output.push('curl');
-	// 	output.push('-v');
-	// 	if (options.method) output.push(`-X ${options.method}`);
-	// 	if (options.headers) {
-	// 		for (const n in options.headers) {
-	// 			if (!options.headers.hasOwnProperty(n)) continue;
-	// 			output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
-	// 		}
-	// 	}
-	// 	if (options.body) output.push(`${'--data ' + '\''}${JSON.stringify(options.body)}'`);
-	// 	output.push(url);
+	private requestToCurl_(url: string, options: any) {
+		const output = [];
+		output.push('curl');
+		output.push('-v');
+		if (options.method) output.push(`-X ${options.method}`);
+		if (options.headers) {
+			for (const n in options.headers) {
+				if (!options.headers.hasOwnProperty(n)) continue;
+				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
+			}
+		}
+		if (options.body) output.push(`${'--data ' + '\''}${JSON.stringify(options.body)}'`);
+		output.push(url);
 
-	// 	return output.join(' ');
-	// }
+		return output.join(' ');
+	}
 
 	public async exec(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
@@ -128,8 +129,10 @@ export default class JoplinServerApi {
 
 		let response: any = null;
 
-		// console.info('Joplin API Call', `${method} ${url}`, headers, options);
-		// console.info(this.requestToCurl_(url, fetchOptions));
+		if (this.debugRequests_) {
+			console.info('Joplin API Call', `${method} ${url}`, headers, options);
+			console.info(this.requestToCurl_(url, fetchOptions));
+		}
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 			if (fetchOptions.path) {
