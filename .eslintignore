@@ -1660,6 +1660,9 @@ packages/tools/release-cli.js.map
 packages/tools/release-electron.d.ts
 packages/tools/release-electron.js
 packages/tools/release-electron.js.map
+packages/tools/release-ios.d.ts
+packages/tools/release-ios.js
+packages/tools/release-ios.js.map
 packages/tools/release-server.d.ts
 packages/tools/release-server.js
 packages/tools/release-server.js.map
