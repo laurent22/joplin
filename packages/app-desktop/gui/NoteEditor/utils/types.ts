@@ -158,3 +158,10 @@ export interface EditorCommand {
 	name: string;
 	value: any;
 }
+
+export interface CommandValue {
+	name: string;
+	args?: any; // Should be an array for CodeMirror or an object for TinyMCE
+	ui?: boolean; // For TinyMCE only
+	value?: any; // For TinyMCE only
+}
