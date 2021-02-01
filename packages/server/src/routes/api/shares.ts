@@ -14,7 +14,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 
 	const shareModel = ctx.models.share({ userId: ctx.owner.id });
 	const share: Share = shareModel.fromApiInput(await bodyFields(ctx.req)) as Share;
-	return shareModel.add(share.type, share.file_id);
+	return shareModel.createLinkShare(share.file_id);
 });
 
 router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {

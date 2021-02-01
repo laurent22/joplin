@@ -26,10 +26,10 @@ describe('ShareModel', function() {
 
 		let error = null;
 
-		error = await checkThrowAsync(async () => await models().share({ userId: user.id }).add(20 as ShareType, file.id));
+		error = await checkThrowAsync(async () => await models().share({ userId: user.id }).createLinkShare(file.id));
 		expect(error instanceof ErrorBadRequest).toBe(true);
 
-		error = await checkThrowAsync(async () => await models().share({ userId: user.id }).add(ShareType.Link, 'doesntexist'));
+		error = await checkThrowAsync(async () => await models().share({ userId: user.id }).createLinkShare('doesntexist'));
 		expect(error instanceof ErrorNotFound).toBe(true);
 	});
 

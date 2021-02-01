@@ -285,6 +285,14 @@ export interface ApiClient extends WithDates, WithUuid {
 	secret?: string;
 }
 
+export interface ShareRecipient {
+	id?: Uuid;
+	share_id?: Uuid;
+	user_id?: Uuid;
+	updated_time?: string;
+	created_time?: string;
+}
+
 export interface Notification extends WithDates, WithUuid {
 	owner_id?: Uuid;
 	level?: NotificationLevel;
@@ -356,6 +364,13 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'string' },
 		name: { type: 'string' },
 		secret: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	share_recipients: {
+		id: { type: 'string' },
+		share_id: { type: 'string' },
+		user_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

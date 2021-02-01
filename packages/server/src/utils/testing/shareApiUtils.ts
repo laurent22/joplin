@@ -3,7 +3,7 @@ import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { checkContextError, koaAppContext } from './testUtils';
 
-export async function postShareContext(sessionId: string, itemId: Uuid): Promise<AppContext> {
+export async function postShareContext(sessionId: string, shareType:ShareType, itemId: Uuid): Promise<AppContext> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
@@ -11,7 +11,7 @@ export async function postShareContext(sessionId: string, itemId: Uuid): Promise
 			url: '/api/shares',
 			body: {
 				file_id: itemId,
-				type: ShareType.Link,
+				type: shareType,
 			},
 		},
 	});
@@ -19,8 +19,8 @@ export async function postShareContext(sessionId: string, itemId: Uuid): Promise
 	return context;
 }
 
-export async function postShare(sessionId: string, itemId: Uuid): Promise<Share> {
-	const context = await postShareContext(sessionId, itemId);
+export async function postShare(sessionId: string, shareType:ShareType, itemId: Uuid): Promise<Share> {
+	const context = await postShareContext(sessionId, shareType, itemId);
 	checkContextError(context);
 	return context.response.body;
 }

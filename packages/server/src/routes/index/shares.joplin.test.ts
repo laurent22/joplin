@@ -1,4 +1,5 @@
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { ShareType } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
 import { putFileContent, testFilePath, postDirectory } from '../../utils/testing/fileApiUtils';
 import { postShare } from '../../utils/testing/shareApiUtils';
@@ -92,7 +93,7 @@ describe('shares.joplin', function() {
 			body: 'Testing body',
 		}));
 
-		const share = await postShare(session.id, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
+		const share = await postShare(session.id, ShareType.Link, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
 
 		const bodyHtml = await getShareContent(share.id);
 
@@ -109,7 +110,7 @@ describe('shares.joplin', function() {
 			body: '$\\sqrt{3x-1}+(1+x)^2$',
 		}));
 
-		const share = await postShare(session.id, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
+		const share = await postShare(session.id, ShareType.Link, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
 
 		const bodyHtml = await getShareContent(share.id);
 
@@ -126,7 +127,7 @@ describe('shares.joplin', function() {
 		await putFileContent(session.id, 'root:/.resource/96765a68655f4446b3dbad7d41b6566e:', testFilePath());
 		await createFile(user.id, 'root:/96765a68655f4446b3dbad7d41b6566e.md:', resourceContents.image);
 
-		const share = await postShare(session.id, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
+		const share = await postShare(session.id, ShareType.Link, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
 
 		const bodyHtml = await getShareContent(share.id) as string;
 
@@ -156,7 +157,7 @@ describe('shares.joplin', function() {
 			await createFile(user.id, `root:/${noteId}.md:`, makeNoteSerializedBody({
 				body: '![missing](:/531a2a839a2c493a88c45e39c6cb9ed4)',
 			}));
-			const share = await postShare(session.id, `root:/${noteId}.md:`);
+			const share = await postShare(session.id, ShareType.Link, `root:/${noteId}.md:`);
 			await expectNotThrow(async () => getShareContent(share.id));
 		}
 
@@ -165,7 +166,7 @@ describe('shares.joplin', function() {
 			await createFile(user.id, `root:/${noteId}.md:`, makeNoteSerializedBody({
 				body: '[missing too](:/531a2a839a2c493a88c45e39c6cb9ed4)',
 			}));
-			const share = await postShare(session.id, `root:/${noteId}.md:`);
+			const share = await postShare(session.id, ShareType.Link, `root:/${noteId}.md:`);
 			await expectNotThrow(async () => getShareContent(share.id));
 		}
 	});

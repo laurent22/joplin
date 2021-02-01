@@ -429,7 +429,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
-				label: () => _('Joplin Server username'),
+				label: () => _('Joplin Server email'),
 			},
 			'sync.9.password': {
 				value: '',
