@@ -379,6 +379,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
 <li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
 <li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="https://joplinapp.org/spec/server_sharing/">Server: Sharing</a></li>
 </ul>
 </li>
 <li>
@@ -393,6 +394,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <ul>
 <li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
 <li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/changelog_server/">Changelog (Server)</a></li>
 <li><a href="https://joplinapp.org/stats/">Stats</a></li>
 <li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
@@ -402,6 +404,28 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 
 	<div class="main">
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.7.10">v1.7.10</a> - 2021-01-30T13:25:29Z<a name="v1-7-10-https-github-com-laurent22-joplin-releases-tag-v1-7-10-2021-01-30t13-25-29z" href="#v1-7-10-https-github-com-laurent22-joplin-releases-tag-v1-7-10-2021-01-30t13-25-29z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added button to browse plugins</li>
+<li>New: Allow updating a plugin</li>
+<li>New: Plugins: Add support for &quot;keywords&quot; manifest field</li>
+<li>New: Plugins: Add support for <code>joplin.plugins.installationDir</code> to allow accessing external files packaged with the plugin</li>
+<li>New: Plugins: Add support for <code>joplin.plugins.require</code> API to allow using sqlite3 or fs-extra from a plugin</li>
+<li>New: Plugins: Add support for <code>plugins.dataDir</code> function, to provide a path for plugin to store its own data</li>
+<li>New: Plugins: Added support for bi-directional messages in content scripts and webview scripts using postMessage</li>
+<li>Fixed: Added missing translations (<a href="https://github.com/laurent22/joplin/issues/4363">#4363</a>)</li>
+<li>Fixed: Fixed copying text from Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/4441">#4441</a>)</li>
+<li>Fixed: Fixed plugin panel issue that could crash app in rare case</li>
+<li>Fixed: Make sure note is automatically saved when format is set via keyboard shortcut in Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/4337">#4337</a>)</li>
+<li>Fixed: Plugins: Fixed dropdown settings</li>
+<li>Fixed: Some commands were no longer working (<a href="https://github.com/laurent22/joplin/issues/4343">#4343</a>) (<a href="https://github.com/laurent22/joplin/issues/4338">#4338</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Do not allow installing plugins incompatible with current app version</li>
+<li>Improved: Enable TLS options for Joplin Server</li>
+<li>Improved: Improved error handling when importing ENEX</li>
+<li>Improved: In config screen, click on a plugin name to open its home page</li>
+<li>Improved: Move plugin settings under separate section in config menu</li>
+<li>Improved: Some imported ENEX files incorrectly had invisible sections</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.6.8">v1.6.8</a> - 2021-01-20T18:11:34Z<a name="v1-6-8-https-github-com-laurent22-joplin-releases-tag-v1-6-8-2021-01-20t18-11-34z" href="#v1-6-8-https-github-com-laurent22-joplin-releases-tag-v1-6-8-2021-01-20t18-11-34z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed infinite sync issue with OneDrive (<a href="https://github.com/laurent22/joplin/issues/4305">#4305</a>)</li>

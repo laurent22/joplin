@@ -379,6 +379,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md
 <li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
 <li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
 <li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="https://joplinapp.org/spec/server_sharing/">Server: Sharing</a></li>
 </ul>
 </li>
 <li>
@@ -393,6 +394,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md
 <ul>
 <li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
 <li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/changelog_server/">Changelog (Server)</a></li>
 <li><a href="https://joplinapp.org/stats/">Stats</a></li>
 <li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
@@ -950,6 +952,18 @@ async function fetchAllNotes() {
 <pre><code>curl -F 'data=@/path/to/file.jpg' -F 'props={&quot;title&quot;:&quot;my resource title&quot;}' http://localhost:41184/resources
 </code></pre>
 <p>The &quot;data&quot; field is required, while the &quot;props&quot; one is not. If not specified, default values will be used.</p>
+<p><strong>From a plugin</strong> the syntax to create a resource is also a bit special:</p>
+<pre><code class="language-javascript">	await joplin.data.post(
+		[&quot;resources&quot;],
+		null,
+		{ title: &quot;test.jpg&quot; }, // Resource metadata
+		[
+			{
+				path: &quot;/path/to/test.jpg&quot;, // Actual file
+			},
+		]
+	);
+</code></pre>
 <h2>PUT /resources/:id<a name="put-resources-id" href="#put-resources-id" class="heading-anchor">🔗</a></h2>
 <p>Sets the properties of the resource with ID :id</p>
 <h2>DELETE /resources/:id<a name="delete-resources-id" href="#delete-resources-id" class="heading-anchor">🔗</a></h2>

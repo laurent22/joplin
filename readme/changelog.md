@@ -1,5 +1,27 @@
 # Joplin changelog
 
+## [v1.7.10](https://github.com/laurent22/joplin/releases/tag/v1.7.10) - 2021-01-30T13:25:29Z
+
+- New: Added button to browse plugins
+- New: Allow updating a plugin
+- New: Plugins: Add support for "keywords" manifest field
+- New: Plugins: Add support for `joplin.plugins.installationDir` to allow accessing external files packaged with the plugin
+- New: Plugins: Add support for `joplin.plugins.require` API to allow using sqlite3 or fs-extra from a plugin
+- New: Plugins: Add support for `plugins.dataDir` function, to provide a path for plugin to store its own data
+- New: Plugins: Added support for bi-directional messages in content scripts and webview scripts using postMessage
+- Fixed: Added missing translations ([#4363](https://github.com/laurent22/joplin/issues/4363))
+- Fixed: Fixed copying text from Rich Text editor ([#4441](https://github.com/laurent22/joplin/issues/4441))
+- Fixed: Fixed plugin panel issue that could crash app in rare case
+- Fixed: Make sure note is automatically saved when format is set via keyboard shortcut in Rich Text editor ([#4337](https://github.com/laurent22/joplin/issues/4337))
+- Fixed: Plugins: Fixed dropdown settings
+- Fixed: Some commands were no longer working ([#4343](https://github.com/laurent22/joplin/issues/4343)) ([#4338](https://github.com/laurent22/joplin/issues/4338) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Do not allow installing plugins incompatible with current app version
+- Improved: Enable TLS options for Joplin Server
+- Improved: Improved error handling when importing ENEX
+- Improved: In config screen, click on a plugin name to open its home page
+- Improved: Move plugin settings under separate section in config menu
+- Improved: Some imported ENEX files incorrectly had invisible sections
+
 ## [v1.6.8](https://github.com/laurent22/joplin/releases/tag/v1.6.8) - 2021-01-20T18:11:34Z
 
 - Fixed: Fixed infinite sync issue with OneDrive ([#4305](https://github.com/laurent22/joplin/issues/4305))

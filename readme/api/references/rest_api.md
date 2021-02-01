@@ -322,6 +322,20 @@ Creating a new resource is special because you also need to upload the file. Unl
 
 The "data" field is required, while the "props" one is not. If not specified, default values will be used.
 
+**From a plugin** the syntax to create a resource is also a bit special:
+
+```javascript
+	await joplin.data.post(
+		["resources"],
+		null,
+		{ title: "test.jpg" }, // Resource metadata
+		[
+			{
+				path: "/path/to/test.jpg", // Actual file
+			},
+		]
+	);
+```
 ## PUT /resources/:id
 
 Sets the properties of the resource with ID :id

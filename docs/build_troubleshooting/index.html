@@ -379,6 +379,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md
 <li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
 <li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
 <li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="https://joplinapp.org/spec/server_sharing/">Server: Sharing</a></li>
 </ul>
 </li>
 <li>
@@ -393,6 +394,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/build_troubleshooting.md
 <ul>
 <li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
 <li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/changelog_server/">Changelog (Server)</a></li>
 <li><a href="https://joplinapp.org/stats/">Stats</a></li>
 <li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
@@ -412,6 +414,13 @@ set &quot;PATH=C:\Program Files\nodejs;%PATH%&quot;
 <h2>On Linux and macOS<a name="on-linux-and-macos" href="#on-linux-and-macos" class="heading-anchor">🔗</a></h2>
 <p>If there's an error <code>while loading shared libraries: libgconf-2.so.4: cannot open shared object file: No such file or directory</code>, run <code>sudo apt-get install libgconf-2-4</code></p>
 <p>If you get a node-gyp related error, you might need to manually install it: <code>npm install -g node-gyp</code>.</p>
+<p>If you get unexpected <code>npm</code> dependency errors on a fresh git pull, try <code>npm run clean</code></p>
+<p>If <code>npm i</code> gives you a fatal error like the following:</p>
+<pre><code>node-pre-gyp WARN Tried to download(403): https://mapbox-node-binary.s3.amazonaws.com/sqlite3/v5.0.1/napi-v6-linux-x64.tar.gz 
+node-pre-gyp WARN Pre-built binaries not found for sqlite3@5.0.1 and node@14.15.4 (node-v83 ABI, glibc) (falling back to source compile with node-gyp)
+/bin/sh: 1: python: not found
+</code></pre>
+<p>Try <code>sudo apt install python</code> (or the <code>apt</code> equivalent for your operating system) and then run <code>npm i</code> again.</p>
 <p>If you get the error <code>libtool: unrecognized option '-static'</code>, follow the instructions <a href="https://stackoverflow.com/a/38552393/561309">in this post</a> to use the correct libtool version.</p>
 <h2>Other issues<a name="other-issues" href="#other-issues" class="heading-anchor">🔗</a></h2>
 <blockquote>
