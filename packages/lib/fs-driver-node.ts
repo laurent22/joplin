@@ -1,7 +1,7 @@
 import { resolve as nodeResolve } from 'path';
 import FsDriverBase, { Stat } from './fs-driver-base';
 import time from './time';
-
+const md5File = require('md5-file/promise');
 const fs = require('fs-extra');
 
 export default class FsDriverNode extends FsDriverBase {
@@ -204,6 +204,18 @@ export default class FsDriverNode extends FsDriverBase {
 		const resolvedPath = nodeResolve(baseDir, relativePath);
 		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
 		return resolvedPath;
+	}
+
+	public async md5File(path: string): Promise<string> {
+		return md5File(path);
+	}
+
+	public async tarExtract(options: any) {
+		await require('tar').extract(options);
+	}
+
+	public async tarCreate(options: any, filePaths: string[]) {
+		await require('tar').create(options, filePaths);
 	}
 
 }

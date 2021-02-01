@@ -2,7 +2,7 @@ import { NoteBodyEditorProps } from '../../../utils/types';
 const { buildStyle } = require('@joplin/lib/theme');
 
 export default function styles(props: NoteBodyEditorProps) {
-	return buildStyle('CodeMirror', props.themeId, (theme: any) => {
+	return buildStyle(['CodeMirror', props.fontSize], props.themeId, (theme: any) => {
 		return {
 			root: {
 				position: 'relative',
@@ -49,8 +49,8 @@ export default function styles(props: NoteBodyEditorProps) {
 				flex: 1,
 				overflowY: 'hidden',
 				paddingTop: 0,
-				lineHeight: `${theme.textAreaLineHeight}px`,
-				fontSize: `${theme.editorFontSize}px`,
+				lineHeight: `${Math.round(17 * props.fontSize / 12)}px`,
+				fontSize: `${props.fontSize}px`,
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 				codeMirrorTheme: theme.codeMirrorTheme, // Defined in theme.js

@@ -3,7 +3,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import { EditorCommand } from '../../../utils/types';
 import shim from '@joplin/lib/shim';
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 
 export default function useKeymap(CodeMirror: any) {
 

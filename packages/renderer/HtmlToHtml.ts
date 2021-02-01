@@ -1,6 +1,6 @@
 import htmlUtils from './htmlUtils';
 import linkReplacement from './MdToHtml/linkReplacement';
-import utils from './utils';
+import utils, { ItemIdToUrlHandler } from './utils';
 
 // TODO: fix
 // import Setting from '@joplin/lib/models/Setting';
@@ -32,11 +32,19 @@ interface RenderOptions {
 	resources: any;
 	postMessageSyntax: string;
 	enableLongPress: boolean;
+	itemIdToUrl?: ItemIdToUrlHandler;
 }
 
 interface RenderResult {
 	html: string;
 	pluginAssets: any[];
+}
+
+// https://github.com/es-shims/String.prototype.trimStart/blob/main/implementation.js
+function trimStart(s: string): string {
+	// eslint-disable-next-line no-control-regex
+	const startWhitespace = /^[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF]*/;
+	return s.replace(startWhitespace, '');
 }
 
 export default class HtmlToHtml {
@@ -73,7 +81,7 @@ export default class HtmlToHtml {
 	}
 
 	splitHtml(html: string) {
-		const trimmedHtml = html.trimStart();
+		const trimmedHtml = trimStart(html);
 		if (trimmedHtml.indexOf('<style>') !== 0) return { html: html, css: '' };
 
 		const closingIndex = trimmedHtml.indexOf('</style>');
@@ -109,7 +117,7 @@ export default class HtmlToHtml {
 			html = htmlUtils.processImageTags(html, (data: any) => {
 				if (!data.src) return null;
 
-				const r = utils.imageReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_);
+				const r = utils.imageReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_, options.itemIdToUrl);
 				if (!r) return null;
 
 				if (typeof r === 'string') {

@@ -31,7 +31,7 @@ import MasterKey from '@joplin/lib/models/MasterKey';
 import Folder from '@joplin/lib/models/Folder';
 const fs = require('fs-extra');
 import Tag from '@joplin/lib/models/Tag';
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 const packageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 const ClipperServer = require('@joplin/lib/ClipperServer');
@@ -704,7 +704,7 @@ class Application extends BaseApplication {
 		if (Setting.value('env') === 'dev') {
 			void AlarmService.updateAllNotifications();
 		} else {
-			reg.scheduleSync(1000).then(() => {
+			void reg.scheduleSync(1000).then(() => {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.
 				void AlarmService.updateAllNotifications();

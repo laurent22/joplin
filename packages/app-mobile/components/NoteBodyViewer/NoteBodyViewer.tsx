@@ -10,7 +10,7 @@ const { View } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('../global-style.js');
 import BackButtonDialogBox from '../BackButtonDialogBox';
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	themeId: number;

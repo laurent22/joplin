@@ -1,4 +1,5 @@
 import BaseModel from '../BaseModel';
+import { SqlQuery } from '../database';
 
 // - If is_associated = 1, note_resources indicates which note_id is currently associated with the given resource_id
 // - If is_associated = 0, note_resources indicates which note_id *was* associated with the given resource_id
@@ -12,6 +13,27 @@ export default class NoteResource extends BaseModel {
 
 	static modelType() {
 		return BaseModel.TYPE_NOTE_RESOURCE;
+	}
+
+	public static async applySharedStatusToLinkedResources() {
+		const queries: SqlQuery[] = [];
+
+		queries.push({ sql: `
+			UPDATE resources
+			SET is_shared = 0
+		` });
+
+		queries.push({ sql: `
+			UPDATE resources
+			SET is_shared = 1
+			WHERE id IN (
+				SELECT DISTINCT note_resources.resource_id
+				FROM notes JOIN note_resources ON notes.id = note_resources.note_id
+				WHERE notes.is_shared = 1
+			)
+		` });
+
+		await this.db().transactionExecBatch(queries);
 	}
 
 	static async associatedNoteIds(resourceId: string): Promise<string[]> {

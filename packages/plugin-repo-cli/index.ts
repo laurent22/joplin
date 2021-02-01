@@ -7,8 +7,8 @@ import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginI
 import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
-import { ImportErrors, NpmPackage } from './lib/types';
-import errorsHaveChanged from './lib/errorsHaveChanged';
+import { NpmPackage } from './lib/types';
+import gitCompareUrl from './lib/gitCompareUrl';
 
 function stripOffPackageOrg(name: string): string {
 	const n = name.split('/');
@@ -103,7 +103,7 @@ enum ProcessingActionType {
 	Update = 2,
 }
 
-function commitMessage(actionType: ProcessingActionType, manifest: any, npmPackage: NpmPackage, error: any): string {
+function commitMessage(actionType: ProcessingActionType, manifest: any, previousManifest: any, npmPackage: NpmPackage, error: any): string {
 	const output: string[] = [];
 
 	if (!error) {
@@ -118,7 +118,9 @@ function commitMessage(actionType: ProcessingActionType, manifest: any, npmPacka
 		output.push(`Error: ${npmPackage.name}@${npmPackage.version}`);
 	}
 
-	return output.join(': ');
+	const compareUrl = gitCompareUrl(manifest, previousManifest);
+
+	return output.join(': ') + (compareUrl ? `\n\n${compareUrl}` : '');
 }
 
 function pluginManifestsPath(repoDir: string): string {
@@ -146,7 +148,6 @@ function chdir(path: string): string {
 async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	const tempDir = `${repoDir}/temp`;
 	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
-	const errorsPath = path.resolve(repoDir, 'errors.json');
 
 	await fs.mkdirp(tempDir);
 
@@ -163,13 +164,11 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	chdir(packageTempDir);
 	await execCommand2('npm init --yes --loglevel silent', { quiet: true });
 
-	const errors: ImportErrors = await readJsonFile(errorsPath, {});
-	delete errors[npmPackage.name];
-
 	let actionType: ProcessingActionType = ProcessingActionType.Update;
 	let manifests: any = {};
 	let manifest: any = {};
 	let error: any = null;
+	let previousManifest: any = null;
 
 	try {
 		const destDir = `${repoDir}/plugins/`;
@@ -179,19 +178,13 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 			actionType = ProcessingActionType.Add;
 		}
 
-		if (!obsoleteManifests[manifest.id]) manifests[manifest.id] = manifest;
+		if (!obsoleteManifests[manifest.id]) {
+			previousManifest = { ...manifests[manifest.id] };
+			manifests[manifest.id] = manifest;
+		}
 	} catch (e) {
 		console.error(e);
-		errors[npmPackage.name] = e.message || '';
 		error = e;
-	}
-
-	if (Object.keys(errors).length) {
-		if (errorsHaveChanged(await readJsonFile(errorsPath, {}), errors)) {
-			await fs.writeFile(errorsPath, JSON.stringify(errors, null, '\t'), 'utf8');
-		}
-	} else {
-		await fs.remove(errorsPath);
 	}
 
 	if (!error) {
@@ -213,7 +206,7 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 
 	if (!(await gitRepoClean())) {
 		await execCommand2('git add -A', { showOutput: false });
-		await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, npmPackage, error)], { showOutput: false });
+		await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showOutput: false });
 	} else {
 		console.info('Nothing to commit');
 	}

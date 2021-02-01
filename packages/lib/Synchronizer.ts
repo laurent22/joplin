@@ -16,6 +16,9 @@ import MasterKey from './models/MasterKey';
 import BaseModel from './BaseModel';
 const { sprintf } = require('sprintf-js');
 import time from './time';
+import ResourceService from './services/ResourceService';
+import EncryptionService from './services/EncryptionService';
+import NoteResource from './models/NoteResource';
 const JoplinError = require('./JoplinError');
 const TaskQueue = require('./TaskQueue');
 const { Dirnames } = require('./services/synchronizer/utils/types');
@@ -39,7 +42,8 @@ export default class Synchronizer {
 	private clientId_: string;
 	private lockHandler_: LockHandler;
 	private migrationHandler_: MigrationHandler;
-	private encryptionService_: any = null;
+	private encryptionService_: EncryptionService = null;
+	private resourceService_: ResourceService = null;
 	private syncTargetIsLocked_: boolean = false;
 
 	// Debug flags are used to test certain hard-to-test conditions
@@ -104,12 +108,20 @@ export default class Synchronizer {
 		return this.appType_ === 'mobile' ? 100 * 1000 * 1000 : Infinity;
 	}
 
-	setEncryptionService(v: any) {
+	public setEncryptionService(v: any) {
 		this.encryptionService_ = v;
 	}
 
 	encryptionService() {
 		return this.encryptionService_;
+	}
+
+	public setResourceService(v: ResourceService) {
+		this.resourceService_ = v;
+	}
+
+	protected resourceService(): ResourceService {
+		return this.resourceService_;
 	}
 
 	async waitForSyncToFinish() {
@@ -220,7 +232,7 @@ export default class Synchronizer {
 			const iid = shim.setInterval(() => {
 				if (this.state() == 'idle') {
 					shim.clearInterval(iid);
-					resolve();
+					resolve(null);
 				}
 			}, 100);
 		});
@@ -331,6 +343,19 @@ export default class Synchronizer {
 		const resourceRemotePath = (resourceId: string) => {
 			return `${Dirnames.Resources}/${resourceId}`;
 		};
+
+		// We index resources and apply the "is_shared" flag before syncing
+		// because it's going to affect what's sent encrypted, and what's sent
+		// plain text.
+		try {
+			if (this.resourceService()) {
+				this.logger().info('Indexing resources...');
+				await this.resourceService().indexNoteResources();
+				await NoteResource.applySharedStatusToLinkedResources();
+			}
+		} catch (error) {
+			this.logger().error('Error indexing resources:', error);
+		}
 
 		let errorToThrow = null;
 		let syncLock = null;

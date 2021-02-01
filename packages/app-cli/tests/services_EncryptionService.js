@@ -6,7 +6,7 @@ const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synch
 const Folder = require('@joplin/lib/models/Folder').default;
 const Note = require('@joplin/lib/models/Note').default;
 const Tag = require('@joplin/lib/models/Tag').default;
-const { Database } = require('@joplin/lib/database.js');
+const Database = require('@joplin/lib/database').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const BaseItem = require('@joplin/lib/models/BaseItem').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;

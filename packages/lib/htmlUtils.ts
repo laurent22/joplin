@@ -31,19 +31,20 @@ const selfClosingElements = [
 ];
 
 class HtmlUtils {
-	headAndBodyHtml(doc) {
+
+	public headAndBodyHtml(doc: any) {
 		const output = [];
 		if (doc.head) output.push(doc.head.innerHTML);
 		if (doc.body) output.push(doc.body.innerHTML);
 		return output.join('\n');
 	}
 
-	isSelfClosingTag(tagName) {
+	public isSelfClosingTag(tagName: string) {
 		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractImageUrls(html) {
+	public extractImageUrls(html: string) {
 		if (!html) return [];
 
 		const output = [];
@@ -55,8 +56,8 @@ class HtmlUtils {
 		return output.filter(url => !!url);
 	}
 
-	replaceImageUrls(html, callback) {
-		return this.processImageTags(html, data => {
+	public replaceImageUrls(html: string, callback: Function) {
+		return this.processImageTags(html, (data: any) => {
 			const newSrc = callback(data.src);
 			return {
 				type: 'replaceSource',
@@ -65,10 +66,10 @@ class HtmlUtils {
 		});
 	}
 
-	processImageTags(html, callback) {
+	public processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 
-		return html.replace(imageRegex, (v, before, src, after) => {
+		return html.replace(imageRegex, (_v: string, before: string, src: string, after: string) => {
 			const action = callback({ src: src });
 
 			if (!action) return `<img${before}src="${src}"${after}>`;
@@ -90,16 +91,16 @@ class HtmlUtils {
 		});
 	}
 
-	prependBaseUrl(html, baseUrl) {
+	public prependBaseUrl(html: string, baseUrl: string) {
 		if (!html) return '';
 
-		return html.replace(anchorRegex, (v, before, href, after) => {
+		return html.replace(anchorRegex, (_v: string, before: string, href: string, after: string) => {
 			const newHref = urlUtils.prependBaseUrl(href, baseUrl);
 			return `<a${before}href="${newHref}"${after}>`;
 		});
 	}
 
-	attributesHtml(attr) {
+	public attributesHtml(attr: any) {
 		const output = [];
 
 		for (const n in attr) {
@@ -110,10 +111,10 @@ class HtmlUtils {
 		return output.join(' ');
 	}
 
-	stripHtml(html) {
-		const output = [];
+	public stripHtml(html: string) {
+		const output: string[] = [];
 
-		const tagStack = [];
+		const tagStack: any[] = [];
 
 		const currentTag = () => {
 			if (!tagStack.length) return '';
@@ -124,16 +125,16 @@ class HtmlUtils {
 
 		const parser = new htmlparser2.Parser({
 
-			onopentag: (name) => {
+			onopentag: (name: string) => {
 				tagStack.push(name.toLowerCase());
 			},
 
-			ontext: (decodedText) => {
+			ontext: (decodedText: string) => {
 				if (disallowedTags.includes(currentTag())) return;
 				output.push(decodedText);
 			},
 
-			onclosetag: (name) => {
+			onclosetag: (name: string) => {
 				if (currentTag() === name.toLowerCase()) tagStack.pop();
 			},
 
@@ -146,6 +147,4 @@ class HtmlUtils {
 	}
 }
 
-const htmlUtils = new HtmlUtils();
-
-module.exports = htmlUtils;
+export default new HtmlUtils();

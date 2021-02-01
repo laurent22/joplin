@@ -162,7 +162,15 @@ DESKTOP=${DESKTOP,,}  # convert to lower case
 
 #-----------------------------------------------------
 echo 'Create Desktop icon...'
-if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.*|.*i3.*|.*sway.* ]]
+# Initially only desktop environments that were confirmed to use desktop files stored in
+# `.local/share/desktop` had a desktop file created.
+# However some environments don't return a desktop BUT still support these desktop files
+# the command check was added to support all Desktops that have support for the
+# freedesktop standard 
+# The old checks are left in place for historical reasons, but
+# NO MORE DESKTOP ENVIRONMENTS SHOULD BE ADDED
+# If a new environment needs to be supported, then the command check section should be re-thought
+if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.*|.*i3.*|.*sway.* ]] || [[ `command -v update-desktop-database` ]]
 then
     # Only delete the desktop file if it will be replaced
     rm -f ~/.local/share/applications/appimagekit-joplin.desktop

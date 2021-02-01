@@ -29,7 +29,7 @@ const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
 const { _ } = require('@joplin/lib/locale');
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');

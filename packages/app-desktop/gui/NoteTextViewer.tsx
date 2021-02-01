@@ -1,7 +1,7 @@
 import PostMessageService, { MessageResponse, ResponderComponentType } from '@joplin/lib/services/PostMessageService';
 import * as React from 'react';
 const { connect } = require('react-redux');
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	onDomReady: Function;

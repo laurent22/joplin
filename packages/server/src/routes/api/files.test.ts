@@ -1,15 +1,10 @@
 import { testAssetDir, beforeAllDb, randomHash, afterAllTests, beforeEachDb, createUserAndSession, models, tempDir } from '../../utils/testing/testUtils';
-import { getFileMetadataContext, getFileMetadata, deleteFileContent, deleteFileContext, deleteFile, postDirectoryContext, postDirectory, getDirectoryChildren, putFileContentContext, putFileContent, getFileContent, patchFileContext, patchFile, getDelta } from '../../utils/testing/apiUtils';
+import { testFilePath, getFileMetadataContext, getFileMetadata, deleteFileContent, deleteFileContext, deleteFile, postDirectoryContext, postDirectory, getDirectoryChildren, putFileContentContext, putFileContent, getFileContent, patchFileContext, patchFile, getDelta } from '../../utils/testing/fileApiUtils';
 import * as fs from 'fs-extra';
 import { ChangeType, File } from '../../db';
 import { Pagination, PaginationOrderDir } from '../../models/utils/pagination';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorNotFound, ErrorConflict } from '../../utils/errors';
 import { msleep } from '../../utils/time';
-
-function testFilePath(ext: string = 'jpg') {
-	const basename = ext === 'jpg' ? 'photo' : 'poster';
-	return `${testAssetDir}/${basename}.${ext}`;
-}
 
 async function makeTempFileWithContent(content: string): Promise<string> {
 	const d = await tempDir();
@@ -414,6 +409,11 @@ describe('api_files', function() {
 		const page3 = await getDelta(session1.id, file1.parent_id, { cursor: page2.cursor, limit: 1 });
 		expect(page3.has_more).toBe(false);
 		expect(page3.items.length).toBe(0);
+	});
+
+	test('should not allow creating file without auth', async function() {
+		const context = await putFileContentContext('', 'root:/photo.jpg:', testFilePath());
+		expect(context.response.status).toBe(ErrorForbidden.httpCode);
 	});
 
 });

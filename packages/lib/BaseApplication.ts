@@ -11,7 +11,7 @@ import SyncTargetOneDrive from './SyncTargetOneDrive';
 
 const { createStore, applyMiddleware } = require('redux');
 const { defaultState, stateUtils } = require('./reducer');
-const { JoplinDatabase } = require('./joplin-database.js');
+import JoplinDatabase from './JoplinDatabase';
 const { FoldersScreenUtils } = require('./folders-screen-utils.js');
 const { DatabaseDriverNode } = require('./database-driver-node.js');
 import BaseModel from './BaseModel';
@@ -20,9 +20,9 @@ import BaseItem from './models/BaseItem';
 import Note from './models/Note';
 import Tag from './models/Tag';
 const { splitCommandString } = require('./string-utils.js');
-const { reg } = require('./registry.js');
+import { reg } from './registry';
 import time from './time';
-const BaseSyncTarget = require('./BaseSyncTarget.js');
+import BaseSyncTarget from './BaseSyncTarget';
 const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
 const os = require('os');
 const fs = require('fs-extra');
@@ -433,7 +433,7 @@ export default class BaseApplication {
 
 					// Schedule a sync operation so that items that need to be encrypted
 					// are sent to sync target.
-					reg.scheduleSync();
+					void reg.scheduleSync();
 				}
 			},
 			'sync.interval': async () => {
@@ -470,7 +470,7 @@ export default class BaseApplication {
 		await reduxSharedMiddleware(store, next, action);
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-			if (!(await reg.syncTarget().syncStarted())) reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
 			SearchEngine.instance().scheduleSyncTables();
 		}
 
@@ -604,7 +604,7 @@ export default class BaseApplication {
 		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn()));
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
-		reg.dispatch = this.store().dispatch;
+		// reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
@@ -614,7 +614,7 @@ export default class BaseApplication {
 		this.store_ = null;
 		BaseModel.dispatch = function() {};
 		FoldersScreenUtils.dispatch = function() {};
-		reg.dispatch = function() {};
+		// reg.dispatch = function() {};
 		BaseSyncTarget.dispatch = function() {};
 		DecryptionWorker.instance().dispatch = function() {};
 		ResourceFetcher.instance().dispatch = function() {};
@@ -720,8 +720,8 @@ export default class BaseApplication {
 
 
 
-		reg.setLogger(Logger.create(''));
-		reg.dispatch = () => {};
+		reg.setLogger(Logger.create('') as Logger);
+		// reg.dispatch = () => {};
 
 		BaseService.logger_ = globalLogger;
 

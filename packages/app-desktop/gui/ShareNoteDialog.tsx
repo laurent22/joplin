@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import JoplinServerApi from '@joplin/lib/JoplinServerApi';
-
 import { _, _n } from '@joplin/lib/locale';
-const { themeStyle, buildStyle } = require('@joplin/lib/theme');
-const DialogButtonRow = require('./DialogButtonRow.min');
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 import BaseItem from '@joplin/lib/models/BaseItem';
-const { reg } = require('@joplin/lib/registry.js');
+import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
+
+const { themeStyle, buildStyle } = require('@joplin/lib/theme');
+const DialogButtonRow = require('./DialogButtonRow.min');
+import { reg } from '@joplin/lib/registry';
 const { clipboard } = require('electron');
 
 interface ShareNoteDialogProps {
@@ -82,17 +83,22 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 		void fetchNotes();
 	}, [props.noteIds]);
 
-	const appApi = async () => {
-		return reg.syncTargetNextcloud().appApi();
+	const fileApi = async () => {
+		const syncTarget = reg.syncTarget() as SyncTargetJoplinServer;
+		return syncTarget.fileApi();
+	};
+
+	const joplinServerApi = async (): Promise<JoplinServerApi> => {
+		return (await fileApi()).driver().api();
 	};
 
 	const buttonRow_click = () => {
 		props.onClose();
 	};
 
-	const copyLinksToClipboard = (shares: SharesMap) => {
+	const copyLinksToClipboard = (api: JoplinServerApi, shares: SharesMap) => {
 		const links = [];
-		for (const n in shares) links.push(shares[n]._url);
+		for (const n in shares) links.push(api.shareUrl(shares[n]));
 		clipboard.writeText(links.join('\n'));
 	};
 
@@ -110,17 +116,15 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 
 				setSharesState('creating');
 
-				const api = await appApi();
-				const syncTargetId = api.syncTargetId(Setting.toPlainObject());
+				const api = await joplinServerApi();
+
 				const newShares = Object.assign({}, shares);
 				let sharedStatusChanged = false;
 
 				for (const note of notes) {
-					const result = await api.exec('POST', 'shares', {
-						syncTargetId: syncTargetId,
-						noteId: note.id,
-					});
-					newShares[note.id] = result;
+					const fullPath = (await fileApi()).fullPath(BaseItem.systemPath(note.id));
+					const share = await api.shareFile(fullPath);
+					newShares[note.id] = share;
 
 					const changed = await BaseItem.updateShareStatus(note, true);
 					if (changed) sharedStatusChanged = true;
@@ -134,7 +138,7 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 					setSharesState('creating');
 				}
 
-				copyLinksToClipboard(newShares);
+				copyLinksToClipboard(api, newShares);
 
 				setSharesState('created');
 			} catch (error) {
@@ -193,7 +197,14 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 		return '';
 	};
 
-	const encryptionWarningMessage = !Setting.value('encryption.enabled') ? null : <div style={theme.textStyle}>{_('Note: When a note is shared, it will no longer be encrypted on the server.')}</div>;
+	function renderEncryptionWarningMessage() {
+		if (!Setting.value('encryption.enabled')) return null;
+		return <div style={theme.textStyle}>{_('Note: When a note is shared, it will no longer be encrypted on the server.')}<hr/></div>;
+	}
+
+	function renderBetaWarningMessage() {
+		return <div style={theme.textStyle}>{'Sharing notes via Joplin Server is a Beta feature and the API might change later on. What it means is that if you share a note, the link might become invalid after an upgrade, and you will have to share it again.'}</div>;
+	}
 
 	const rootStyle = Object.assign({}, theme.dialogBox);
 	rootStyle.width = '50%';
@@ -205,7 +216,8 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 				{renderNoteList(notes)}
 				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
 				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>
-				{encryptionWarningMessage}
+				{renderEncryptionWarningMessage()}
+				{renderBetaWarningMessage()}
 				<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>

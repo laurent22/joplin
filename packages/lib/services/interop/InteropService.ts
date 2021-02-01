@@ -198,7 +198,7 @@ export default class InteropService {
 		if (moduleMetadata.isCustom) {
 			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
-			const ModuleClass = require(this.modulePath(moduleMetadata)).default;
+			const ModuleClass = shim.requireDynamic(this.modulePath(moduleMetadata)).default;
 			output = new ModuleClass();
 		}
 
@@ -225,7 +225,7 @@ export default class InteropService {
 			output = this.newModuleFromCustomFactory(moduleMetadata);
 		} else {
 			const modulePath = this.modulePath(moduleMetadata);
-			const ModuleClass = require(modulePath).default;
+			const ModuleClass = shim.requireDynamic(modulePath).default;
 			output = new ModuleClass();
 		}
 
@@ -248,7 +248,7 @@ export default class InteropService {
 		// if (moduleMetadata.isCustom) {
 		// 	output = this.newModuleFromCustomFactory(moduleMetadata);
 		// } else {
-		// 	const ModuleClass = require(modulePath).default;
+		// 	const ModuleClass = shim.requireDynamic(modulePath).default;
 		// 	output = new ModuleClass();
 		// }
 

@@ -4,7 +4,7 @@ import time from '../time';
 import { _ } from '../locale';
 
 import Note from './Note';
-const { Database } = require('../database.js');
+import Database from '../database';
 import BaseItem from './BaseItem';
 const { substrWithEllipsis } = require('../string-utils.js');
 
@@ -107,7 +107,7 @@ export default class Folder extends BaseItem {
 		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
 	}
 
-	static conflictFolder() {
+	static conflictFolder(): FolderEntity {
 		return {
 			type_: this.TYPE_FOLDER,
 			id: this.conflictFolderId(),
@@ -380,8 +380,8 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	static load(id: string) {
-		if (id == this.conflictFolderId()) return this.conflictFolder();
+	static load(id: string, _options: any = null): Promise<FolderEntity> {
+		if (id == this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
 		return super.load(id);
 	}
 

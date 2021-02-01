@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-
-const htmlUtils = require('@joplin/lib/htmlUtils.js');
+import htmlUtils from '@joplin/lib/htmlUtils';
 
 describe('htmlUtils', function() {
 
@@ -19,8 +17,8 @@ describe('htmlUtils', function() {
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
-			const md = testCases[i][0];
-			const expected = testCases[i][1];
+			const md = testCases[i][0] as string;
+			const expected = testCases[i][1] as string[];
 
 			expect(htmlUtils.extractImageUrls(md).join(' ')).toBe(expected.join(' '));
 		}
@@ -33,19 +31,19 @@ describe('htmlUtils', function() {
 			['<img src="http://test.com/img.png" alt="testing"  >', ['http://other.com/img.png'], '<img src="http://other.com/img.png" alt="testing"  >'],
 		];
 
-		const callback = (urls) => {
+		const callback = (urls: string[]) => {
 			let i = -1;
 
-			return function(src) {
+			return function(_src: string) {
 				i++;
 				return urls[i];
 			};
 		};
 
 		for (let i = 0; i < testCases.length; i++) {
-			const md = testCases[i][0];
-			const r = htmlUtils.replaceImageUrls(md, callback(testCases[i][1]));
-			expect(r.trim()).toBe(testCases[i][2].trim());
+			const md = testCases[i][0] as string;
+			const r = htmlUtils.replaceImageUrls(md, callback(testCases[i][1] as string[]));
+			expect(r.trim()).toBe((testCases[i][2] as string).trim());
 		}
 	}));
 

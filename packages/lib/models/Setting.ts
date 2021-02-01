@@ -3,7 +3,7 @@ import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
 import { ltrimSlashes } from '../path-utils';
 import eventManager from '../eventManager';
 import BaseModel from '../BaseModel';
-const { Database } = require('../database.js');
+import Database from '../database';
 const SyncTargetRegistry = require('../SyncTargetRegistry.js');
 import time from '../time';
 const { sprintf } = require('sprintf-js');
