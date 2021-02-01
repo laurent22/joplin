@@ -28,6 +28,8 @@ export const runtime = (): CommandRuntime => {
 
 			newNote = await Note.save(newNote, { provisional: true });
 
+			void Note.updateGeolocation(newNote.id);
+
 			utils.store.dispatch({
 				type: 'NOTE_SELECT',
 				id: newNote.id,
