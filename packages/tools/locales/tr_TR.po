@@ -409,7 +409,7 @@ msgstr "Yeni %s oluşturuluyor..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
 msgid "Click to add tags..."
-msgstr "Etiket eklemek için tıklayın…"
+msgstr "Etiket eklemek için tıklayın..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
@@ -1491,7 +1491,7 @@ msgstr "Sonuç yok"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 msgid "Search for plugins..."
-msgstr "Eklentileri ara…"
+msgstr "Eklentileri ara..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
 msgid "Install"
@@ -1499,7 +1499,7 @@ msgstr "Yükle"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
 msgid "Installing..."
-msgstr "Yükleniyor…"
+msgstr "Yükleniyor..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
 msgid "Installed"
@@ -1511,7 +1511,7 @@ msgstr "Güncelle"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
 msgid "Updating..."
-msgstr "Güncelleniyor…"
+msgstr "Güncelleniyor..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
 msgid "Please upgrade Joplin to use this plugin"
