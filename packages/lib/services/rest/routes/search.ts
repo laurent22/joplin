@@ -31,5 +31,5 @@ export default async function(request: Request) {
 		results = await SearchEngineUtils.notesForQuery(query, defaultLoadOptions(request, ModelType.Note));
 	}
 
-	return collectionToPaginatedResults(results, request);
+	return collectionToPaginatedResults(modelType, results, request);
 }

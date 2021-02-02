@@ -7,8 +7,7 @@ import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginI
 import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
-import { ImportErrors, NpmPackage } from './lib/types';
-import errorsHaveChanged from './lib/errorsHaveChanged';
+import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
 
 function stripOffPackageOrg(name: string): string {
@@ -149,7 +148,6 @@ function chdir(path: string): string {
 async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	const tempDir = `${repoDir}/temp`;
 	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
-	const errorsPath = path.resolve(repoDir, 'errors.json');
 
 	await fs.mkdirp(tempDir);
 
@@ -165,9 +163,6 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	await fs.mkdirp(packageTempDir);
 	chdir(packageTempDir);
 	await execCommand2('npm init --yes --loglevel silent', { quiet: true });
-
-	const errors: ImportErrors = await readJsonFile(errorsPath, {});
-	delete errors[npmPackage.name];
 
 	let actionType: ProcessingActionType = ProcessingActionType.Update;
 	let manifests: any = {};
@@ -189,16 +184,7 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 		}
 	} catch (e) {
 		console.error(e);
-		errors[npmPackage.name] = e.message || '';
 		error = e;
-	}
-
-	if (Object.keys(errors).length) {
-		if (errorsHaveChanged(await readJsonFile(errorsPath, {}), errors)) {
-			await fs.writeFile(errorsPath, JSON.stringify(errors, null, '\t'), 'utf8');
-		}
-	} else {
-		await fs.remove(errorsPath);
 	}
 
 	if (!error) {

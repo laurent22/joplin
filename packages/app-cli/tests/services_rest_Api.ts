@@ -410,8 +410,18 @@ describe('services_rest_Api', function() {
 		const response2 = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`);
 		expect(response2.items.length).toBe(1);
 		await Tag.addNote(tag2.id, note1.id);
-		const response3 = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`);
+		const response3 = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`, { fields: 'id' });
 		expect(response3.items.length).toBe(2);
+
+		// Also check that it only returns the required fields
+		response3.items.sort((a: any, b: any) => {
+			return a.id < b.id ? -1 : +1;
+		});
+
+		const sortedTagIds = [tag.id, tag2.id];
+		sortedTagIds.sort();
+
+		expect(JSON.stringify(response3.items)).toBe(`[{"id":"${sortedTagIds[0]}"},{"id":"${sortedTagIds[1]}"}]`);
 	}));
 
 	it('should update tags when updating notes', (async () => {
