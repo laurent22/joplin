@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -406,9 +408,8 @@ msgid "Creating new %s..."
 msgstr "Yeni %s oluşturuluyor..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "Güncellemeleri kontrol et..."
+msgstr "Etiket eklemek için tıklayın..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
@@ -1423,7 +1424,7 @@ msgstr "Gelişmiş Seçenekleri Göster"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:412
 msgid "Path:"
-msgstr ""
+msgstr "Yol:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:417
 msgid "Browse..."
@@ -1431,7 +1432,7 @@ msgstr "Gözat..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:419
 msgid "Arguments:"
-msgstr ""
+msgstr "Argümanlar:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:467
 msgid "The application must be restarted for these changes to take effect."
@@ -1465,75 +1466,66 @@ msgid "Delete plugin \"%s\"?"
 msgstr "\"%s\" eklentisi silinsin mi?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
-#, fuzzy
 msgid "Browse all plugins"
-msgstr "Eklenti yükle"
+msgstr "Tüm eklentilere göz at"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "Dosyadan yükle"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "Herhangi bir yüklü eklentiniz bulunmamakta."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
-#, fuzzy
 msgid "Plugin tools"
-msgstr "Eklentiler"
+msgstr "Eklenti araçları"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "Eklentileri yönet"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-#, fuzzy
 msgid "No results"
-msgstr "Kaynak yok!"
+msgstr "Sonuç yok"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
-msgstr "Ara..."
+msgstr "Eklentileri ara..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
-#, fuzzy
 msgid "Install"
-msgstr "Eklenti yükle"
+msgstr "Yükle"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
-#, fuzzy
 msgid "Installing..."
-msgstr "İptal ediliyor..."
+msgstr "Yükleniyor..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
-#, fuzzy
 msgid "Installed"
-msgstr "Eklenti yükle"
+msgstr "Yüklendi"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
-#, fuzzy
 msgid "Update"
-msgstr "Güncellendi"
+msgstr "Güncelle"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
-#, fuzzy
 msgid "Updating..."
-msgstr "İzleniyor..."
+msgstr "Güncelleniyor..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "Bu özelliği kullanmak için lütfen Joplin’i güncelleyin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "Notlar dışarı aktarılamadı: %s"
+msgstr "Eklenti yüklenemedi: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -2005,7 +1997,7 @@ msgstr "Joplin Web Sitesi"
 
 #: packages/app-mobile/components/screens/config.js:523
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Gizlilik Politikası"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2134,6 +2126,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"Varsayılan admin parolası güvenli değil ve de henüz güncellenmedi! [Şimdi "
+"güncelle](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -3291,9 +3285,8 @@ msgid "Downloaded and encrypted"
 msgstr "İndirildi ve şifrelendi"
 
 #: packages/lib/services/ReportService.js:180
-#, fuzzy
 msgid "Created locally"
-msgstr "Oluşturulan yerel öğeler: %d."
+msgstr "Yerel olarak oluşturuldu"
 
 #: packages/lib/services/ReportService.js:191
 msgid "Attachments that could not be downloaded"
