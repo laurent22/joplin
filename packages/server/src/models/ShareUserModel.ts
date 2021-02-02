@@ -32,22 +32,23 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async accept(shareId: Uuid, userId: Uuid, accept: boolean = true) {
-		const link = await this.loadByShareIdAndUser(shareId, userId);
-		if (!link) throw new ErrorNotFound(`File has not been shared with this user: ${shareId} / ${userId}`);
+		const shareUser = await this.loadByShareIdAndUser(shareId, userId);
+		if (!shareUser) throw new ErrorNotFound(`File has not been shared with this user: ${shareId} / ${userId}`);
 
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
+		const sourceFile = await this.models().file({ userId: share.owner_id }).load(share.file_id);
 		const rootId = await this.models().file({ userId: this.userId }).userRootFileId();
 
 		await this.withTransaction(async () => {
-			await this.save({ ...link, is_accepted: accept ? 1 : 0 });
+			await this.save({ ...shareUser, is_accepted: accept ? 1 : 0 });
 
 			const file: File = {
 				owner_id: userId,
 				linked_file_id: share.file_id,
 				parent_id: rootId,
-				name: '',
+				name: sourceFile.name,
 			};
 
 			await this.models().file({ userId }).save(file);

@@ -68,7 +68,7 @@ export async function beforeEachDb() {
 	await truncateTables(db_);
 }
 
-interface AppContextTestOptions {
+export interface AppContextTestOptions {
 	// owner?: User;
 	sessionId?: string;
 	request?: any;
