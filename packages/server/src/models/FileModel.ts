@@ -225,7 +225,7 @@ export default class FileModel extends BaseModel<File> {
 		const mustBeFile = options.rules.mustBeFile === true;
 
 		if (options.isNew) {
-			if (!file.is_root && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
+			if (!file.is_root && !file.name && !file.linked_file_id) throw new ErrorUnprocessableEntity('name cannot be empty');
 			if (file.is_directory && mustBeFile) throw new ErrorUnprocessableEntity('item must not be a directory');
 		} else {
 			if ('name' in file && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');

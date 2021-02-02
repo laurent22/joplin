@@ -64,7 +64,7 @@ import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
-import ShareRecipientModel from './ShareRecipientModel';
+import ShareUserModel from './ShareUserModel';
 
 export class Models {
 
@@ -108,8 +108,8 @@ export class Models {
 		return new ShareModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
-	public shareRecipient(options: ModelOptions = null) {
-		return new ShareRecipientModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public shareUser(options: ModelOptions = null) {
+		return new ShareUserModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 }

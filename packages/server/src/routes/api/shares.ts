@@ -1,5 +1,5 @@
 import { ErrorNotFound } from '../../utils/errors';
-import { Share } from '../../db';
+import { Share, User } from '../../db';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
@@ -14,7 +14,14 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 
 	const shareModel = ctx.models.share({ userId: ctx.owner.id });
 	const share: Share = shareModel.fromApiInput(await bodyFields(ctx.req)) as Share;
-	return shareModel.createLinkShare(share.file_id);
+	return shareModel.createShare(share.type, share.file_id);
+});
+
+router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
+	ownerRequired(ctx);
+
+	const user: User = await bodyFields(ctx.req) as User;
+	return ctx.models.shareUser({ userId: ctx.owner.id }).addByEmail(path.id, user.email);
 });
 
 router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {

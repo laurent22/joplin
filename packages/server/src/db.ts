@@ -268,6 +268,7 @@ export interface File extends WithDates, WithUuid {
 	is_directory?: number;
 	is_root?: number;
 	parent_id?: Uuid;
+	linked_file_id?: Uuid;
 }
 
 export interface Change extends WithDates, WithUuid {
@@ -285,14 +286,6 @@ export interface ApiClient extends WithDates, WithUuid {
 	secret?: string;
 }
 
-export interface ShareRecipient {
-	id?: Uuid;
-	share_id?: Uuid;
-	user_id?: Uuid;
-	updated_time?: string;
-	created_time?: string;
-}
-
 export interface Notification extends WithDates, WithUuid {
 	owner_id?: Uuid;
 	level?: NotificationLevel;
@@ -306,6 +299,15 @@ export interface Share extends WithDates, WithUuid {
 	owner_id?: Uuid;
 	file_id?: Uuid;
 	type?: ShareType;
+}
+
+export interface ShareUser {
+	id?: Uuid;
+	share_id?: Uuid;
+	user_id?: Uuid;
+	is_accepted?: number;
+	updated_time?: string;
+	created_time?: string;
 }
 
 export const databaseSchema: DatabaseTables = {
@@ -347,6 +349,7 @@ export const databaseSchema: DatabaseTables = {
 		parent_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		linked_file_id: { type: 'string' },
 	},
 	changes: {
 		counter: { type: 'number' },
@@ -367,13 +370,6 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},
-	share_recipients: {
-		id: { type: 'string' },
-		share_id: { type: 'string' },
-		user_id: { type: 'string' },
-		updated_time: { type: 'string' },
-		created_time: { type: 'string' },
-	},
 	notifications: {
 		id: { type: 'string' },
 		owner_id: { type: 'string' },
@@ -390,6 +386,14 @@ export const databaseSchema: DatabaseTables = {
 		owner_id: { type: 'string' },
 		file_id: { type: 'string' },
 		type: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	share_users: {
+		id: { type: 'string' },
+		share_id: { type: 'string' },
+		user_id: { type: 'string' },
+		is_accepted: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

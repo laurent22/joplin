@@ -4,6 +4,7 @@ import apiSessions from './api/sessions';
 import apiPing from './api/ping';
 import apiFiles from './api/files';
 import apiShares from './api/shares';
+import apiShareUsers from './api/share_users';
 
 import indexLogin from './index/login';
 import indexLogout from './index/logout';
@@ -20,6 +21,7 @@ const routes: Routers = {
 	'api/sessions': apiSessions,
 	'api/files': apiFiles,
 	'api/shares': apiShares,
+	'api/share_users': apiShareUsers,
 
 	'login': indexLogin,
 	'logout': indexLogout,

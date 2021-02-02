@@ -1,7 +1,7 @@
 import { ShareType } from '../../db';
 import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
-import { getShareContext, postShare, postShareContext } from '../../utils/testing/shareApiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession } from '../../utils/testing/testUtils';
+import { getShareContext, patchShareUser, postShare, postShareContext, postShareUser } from '../../utils/testing/shareApiUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models } from '../../utils/testing/testUtils';
 
 describe('api_shares', function() {
 
@@ -35,11 +35,23 @@ describe('api_shares', function() {
 
 	test('should share a file with another user', async function() {
 		const { session: session1 } = await createUserAndSession(1, false);
-		const { session: session2 } = await createUserAndSession(2, false);
-		const file = await putFileContent(session1.id, 'root:/photo.jpg:', testFilePath());
+		const { user: user2, session: session2 } = await createUserAndSession(2, false);
+		await putFileContent(session1.id, 'root:/photo.jpg:', testFilePath());
 
 		const share = await postShare(session1.id, ShareType.App, 'root:/photo.jpg:');
-		
+		let shareUser = await postShareUser(session1.id, share.id, user2.email);
+
+		shareUser = await models().shareUser().load(shareUser.id);
+		expect(shareUser.share_id).toBe(share.id);
+		expect(shareUser.user_id).toBe(user2.id);
+		expect(shareUser.is_accepted).toBe(0);
+
+		await patchShareUser(session2.id, shareUser.id, { is_accepted: 1 });
+
+		{
+			shareUser = await models().shareUser().load(shareUser.id);
+			expect(shareUser.is_accepted).toBe(1);
+		}
 	});
 
 });
