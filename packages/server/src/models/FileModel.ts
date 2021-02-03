@@ -23,6 +23,8 @@ export interface PathToFileOptions {
 
 export interface LoadOptions {
 	skipPermissionCheck?: boolean;
+	fields?: string[];
+	skipFollowLinks?: boolean;
 }
 
 export default class FileModel extends BaseModel<File> {
@@ -319,7 +321,10 @@ export default class FileModel extends BaseModel<File> {
 
 		if (!files.length || !files[0]) throw new ErrorNotFound();
 
-		const fileIds = files.map(f => f.id);
+		const fileIds = files.map(f => {
+			if (!f.id) throw new Error('One of the file is missing an ID');
+			return f.id
+		});
 
 		const permissionModel = this.models().permission();
 		const permissionGrantedMap = await permissionModel[methodName](fileIds, this.userId);
@@ -391,11 +396,33 @@ export default class FileModel extends BaseModel<File> {
 		return file;
 	}
 
-	public async loadWithContent(id: string, options: LoadOptions = {}): Promise<any> {
-		const file: File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
+	// If the file is a link to another file, the content of the source if
+	// assigned to the content of the destination.
+	private async processFileLink(file:File):Promise<File> {
+		if (!('linked_file_id' in file)) throw new Error('Cannot process a file without a linked_file_id');
+		if (!file.linked_file_id) return file;
+		const content = await this.loadContent(file.linked_file_id, {
+			skipPermissionCheck: true,
+			// Current we don't follow links more than one level deep. In
+			// practice it means that if a user tries to share a note that has
+			// been shared with them, it will not work. Instead they'll have to
+			// make a copy of that note and share that. Anything else would
+			// probably be too complex to make any sense in terms of UI.
+			skipFollowLinks: true,
+		});
+		return { ...file, content };
+	}
+
+	private async loadContent(id:string, options:LoadOptions = {}):Promise<Buffer> {
+		const file: File = await this.loadWithContent(id, { ...options, fields: ['id', 'content'] });
+		return file.content;
+	}
+
+	public async loadWithContent(id: string, options: LoadOptions = {}): Promise<File> {
+		const file: File = await this.db<File>(this.tableName).select(options.fields || '*').where({ id: id }).first();
 		if (!file) return null;
 		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
-		return file;
+		return options.skipFollowLinks ? file : this.processFileLink(file);
 	}
 
 	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<File[]> {
