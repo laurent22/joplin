@@ -21,6 +21,14 @@ let react_: any = null;
 const shim = {
 	Geolocation: null as any,
 
+	msleep_: (ms: number) => {
+		return new Promise((resolve: Function) => {
+			shim.setTimeout(() => {
+				resolve(null);
+			}, ms);
+		});
+	},
+
 	isNode: () => {
 		if (typeof process === 'undefined') return false;
 		if (shim.isElectron()) return true;
@@ -140,8 +148,6 @@ const shim = {
 	},
 
 	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
-		const time = require('./time');
-
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms
 		if (!('maxRetry' in options)) options.maxRetry = shim.fetchMaxRetry_;
@@ -155,7 +161,7 @@ const shim = {
 				if (shim.fetchRequestCanBeRetried(error)) {
 					retryCount++;
 					if (retryCount > options.maxRetry) throw error;
-					await time.sleep(retryCount * 3);
+					await shim.msleep_(retryCount * 3000);
 				} else {
 					throw error;
 				}
