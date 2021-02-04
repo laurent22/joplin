@@ -1,4 +1,4 @@
-import { Share, ShareType, Uuid } from '../db';
+import { File, Share, ShareType, Uuid } from '../db';
 import { ErrorBadRequest } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { ValidateOptions } from './BaseModel';
@@ -16,11 +16,13 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public async createShare(shareType: ShareType, path: string): Promise<Share> {
-		const fileId: Uuid = await this.models().file({ userId: this.userId }).pathToFileId(path);
+		const file: File = await this.models().file({ userId: this.userId }).pathToFile(path);
+
+		if (file.source_file_id) throw new ErrorBadRequest('A shared file cannot be shared again');
 
 		const toSave: Share = {
 			type: shareType,
-			file_id: fileId,
+			file_id: file.id,
 			owner_id: this.userId,
 		};
 

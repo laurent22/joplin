@@ -1,11 +1,12 @@
 import { ChangeType, Share, ShareType, ShareUser } from '../../db';
 import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync } from '../../utils/testing/testUtils';
 import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedFiles } from '../../models/FileModel';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
+import { ErrorBadRequest } from '../../utils/errors';
 
 describe('api_shares', function() {
 
@@ -111,6 +112,16 @@ describe('api_shares', function() {
 		sharerFile = await models().file({ userId: user1.id }).load(sharerFile.id);
 		shareeFile = await models().file({ userId: user2.id }).load(shareeFile.id);
 		expect(shareeFile.updated_time).toBe(sharerFile.updated_time);
+	});
+
+	test('should not share an already shared file', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const { user: user3, session: session3 } = await createUserAndSession(3);
+
+		const { shareeFile } = await shareWithUserAndAccept(session1.id, user1, session2.id, user2);
+		const error = await checkThrowAsync(async () => shareWithUserAndAccept(session2.id, user2, session3.id, user3, shareeFile));
+		expect(error.httpCode).toBe(ErrorBadRequest.httpCode);
 	});
 
 	test('should see delta changes for linked files', async function() {

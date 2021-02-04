@@ -1,7 +1,7 @@
 // For explanation of the setPrototypeOf call, see:
 // https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
 
-class ApiError extends Error {
+export class ApiError extends Error {
 	public static httpCode: number = 400;
 
 	public httpCode: number;

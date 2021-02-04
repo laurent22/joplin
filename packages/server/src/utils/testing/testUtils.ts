@@ -13,6 +13,7 @@ import * as crypto from 'crypto';
 import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
+import { ApiError } from '../errors';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -251,7 +252,7 @@ export async function updateFile(userId: string, path: string, content: string):
 export function checkContextError(context: AppContext) {
 	if (context.response.status >= 400) {
 		// console.info(context.response.body);
-		throw new Error(`${context.method} ${context.path} ${JSON.stringify(context.response)}`);
+		throw new ApiError(`${context.method} ${context.path} ${JSON.stringify(context.response)}`, context.response.status);
 	}
 }
 
