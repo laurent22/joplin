@@ -18,6 +18,15 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.table('files', function(table: Knex.CreateTableBuilder) {
 		table.string('source_file_id', 32).defaultTo('').notNullable();
 	});
+
+	await db.schema.alterTable('files', function(table: Knex.CreateTableBuilder) {
+		table.index(['owner_id']);
+		table.index(['source_file_id']);
+	});
+
+	await db.schema.alterTable('changes', function(table: Knex.CreateTableBuilder) {
+		table.index(['item_id']);
+	});
 }
 
 export async function down(db: DbConnection): Promise<any> {

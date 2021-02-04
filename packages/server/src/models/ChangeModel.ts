@@ -72,8 +72,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		const directory = await fileModel.load(dirId);
 		if (!directory.is_directory) throw new ErrorUnprocessableEntity(`Item with id "${dirId}" is not a directory.`);
 
-		// TODO: Add indexes
-
 		// Retrieves the IDs of all the files that have been shared with the
 		// current user.
 		const linkedFilesQuery = this
