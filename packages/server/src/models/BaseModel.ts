@@ -15,6 +15,10 @@ export interface SaveOptions {
 	trackChanges?: boolean;
 }
 
+export interface LoadOptions {
+	fields?: string[];
+}
+
 export interface DeleteOptions {
 	validationRules?: any;
 }
@@ -132,7 +136,7 @@ export default abstract class BaseModel<T> {
 
 		if (debugTransaction) console.info('START', name, txIndex);
 
-		let output:T = null;
+		let output: T = null;
 
 		try {
 			output = await fn();
@@ -252,15 +256,15 @@ export default abstract class BaseModel<T> {
 		return toSave;
 	}
 
-	public async loadByIds(ids: string[]): Promise<T[]> {
+	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<T[]> {
 		if (!ids.length) return [];
-		return this.db(this.tableName).select(this.defaultFields).whereIn('id', ids);
+		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
 	}
 
-	public async load(id: string): Promise<T> {
+	public async load(id: string, options: LoadOptions = {}): Promise<T> {
 		if (!id) throw new Error('id cannot be empty');
 
-		return this.db(this.tableName).select(this.defaultFields).where({ id: id }).first();
+		return this.db(this.tableName).select(options.fields || this.defaultFields).where({ id: id }).first();
 	}
 
 	public async delete(id: string | string[]): Promise<void> {

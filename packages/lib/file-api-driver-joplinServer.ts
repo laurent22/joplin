@@ -42,9 +42,6 @@ export default class FileApiDriverJoplinServer {
 			isDeleted: isDeleted,
 		};
 
-		// TODO - HANDLE DELETED
-		// if (md['.tag'] === 'deleted') output.isDeleted = true;
-
 		return output;
 	}
 

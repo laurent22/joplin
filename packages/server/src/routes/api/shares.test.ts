@@ -5,6 +5,7 @@ import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testin
 import { PaginatedFiles } from '../../models/FileModel';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
+import { msleep } from '../../utils/time';
 
 describe('api_shares', function() {
 
@@ -87,6 +88,22 @@ describe('api_shares', function() {
 		expect(fileContent.toString()).toBe('testing share');
 	});
 
+	test('should get updated time of shared file', async function() {
+		// If sharer changes the file, sharee should see the updated_time of the sharer file.
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		let { sharerFile, shareeFile } = await shareWithUserAndAccept(session1.id, user1, session2.id, user2);
+
+		await msleep(1);
+
+		await updateFile(user1.id, sharerFile.id, 'content modified');
+
+		sharerFile = await models().file({ userId: user1.id }).load(sharerFile.id);
+		shareeFile = await models().file({ userId: user2.id }).load(shareeFile.id);
+		expect(shareeFile.updated_time).toBe(sharerFile.updated_time);
+	});
+
 	test('should see delta changes for linked files', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
@@ -111,6 +128,8 @@ describe('api_shares', function() {
 			expect(page2.items[0].type).toBe(ChangeType.Create);
 			cursor2 = page2.cursor;
 		}
+
+		await msleep(1);
 
 		await updateFile(user1.id, sharerFile.id, 'from sharer');
 

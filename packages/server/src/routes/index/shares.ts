@@ -33,7 +33,6 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 	const file = await fileModel.loadWithContent(share.file_id, { skipPermissionCheck: true });
 	if (!file) throw new ErrorNotFound();
 
-
 	const result = await renderFile(ctx, file, share);
 
 	ctx.response.body = result.body;
