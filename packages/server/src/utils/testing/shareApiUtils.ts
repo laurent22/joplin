@@ -1,7 +1,38 @@
-import { Share, ShareType, ShareUser, Uuid } from '../../db';
+import { File, Share, ShareType, ShareUser, User, Uuid } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
-import { checkContextError, koaAppContext } from './testUtils';
+import { patchApi, postApi } from './apiUtils';
+import { checkContextError, createFile, koaAppContext, models } from './testUtils';
+
+// Handles the whole process of:
+//
+// - User 1 creates a file (optionally)
+// - User 1 creates a file share for it
+// - User 1 shares this with user 2
+// - User 2 accepts the share
+//
+// The result is that user 2 will have a file linked to user 1's file.
+export async function shareWithUserAndAccept(sharerSessionId:string, sharer:User, shareeSessionId:string, sharee:User, file:File = null) {
+	file = file || await createFile(sharer.id, 'root:/test.txt:', 'testing share');
+
+	const share = await postApi<Share>(sharerSessionId, 'shares', {
+		type: ShareType.App,
+		file_id: file.id,
+	});
+
+	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
+		email: sharee.email,
+	}) as ShareUser;
+
+	shareUser = await models().shareUser().load(shareUser.id);
+
+	const shareeFile:File = await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { is_accepted: 1 });
+
+	return {
+		sharerFile: file,
+		shareeFile: shareeFile,
+	};
+}
 
 export async function postShareContext(sessionId: string, shareType: ShareType, itemId: Uuid): Promise<AppContext> {
 	const context = await koaAppContext({

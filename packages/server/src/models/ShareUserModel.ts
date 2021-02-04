@@ -1,4 +1,4 @@
-import { File, ShareUser, Uuid } from '../db';
+import { File, ShareUser, User, Uuid } from '../db';
 import { ErrorNotFound } from '../utils/errors';
 import BaseModel from './BaseModel';
 
@@ -31,7 +31,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		});
 	}
 
-	public async accept(shareId: Uuid, userId: Uuid, accept: boolean = true) {
+	public async accept(shareId: Uuid, userId: Uuid, accept: boolean = true): Promise<File> {
 		const shareUser = await this.loadByShareIdAndUser(shareId, userId);
 		if (!shareUser) throw new ErrorNotFound(`File has not been shared with this user: ${shareId} / ${userId}`);
 
@@ -41,7 +41,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		const sourceFile = await this.models().file({ userId: share.owner_id }).load(share.file_id);
 		const rootId = await this.models().file({ userId: this.userId }).userRootFileId();
 
-		await this.withTransaction(async () => {
+		return this.withTransaction<File>(async () => {
 			await this.save({ ...shareUser, is_accepted: accept ? 1 : 0 });
 
 			const file: File = {
@@ -51,12 +51,27 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 				name: sourceFile.name,
 			};
 
-			await this.models().file({ userId }).save(file);
+			return this.models().file({ userId }).save(file);
 		});
 	}
 
 	public async reject(shareId: Uuid, userId: Uuid) {
 		await this.accept(shareId, userId, false);
+	}
+
+	// Returns the users who have shared files with the current user
+	public async linkedUserIds(): Promise<Uuid[]> {
+		const fileSubQuery = this
+			.db('files')
+			.select('linked_file_id')
+			.where('linked_file_id', '!=', '')
+			.andWhere('owner_id', '=', this.userId);
+
+		return this
+			.db('files')
+			.distinct('owner_id')
+			.whereIn('files.id', fileSubQuery)
+			.pluck('owner_id');
 	}
 
 }

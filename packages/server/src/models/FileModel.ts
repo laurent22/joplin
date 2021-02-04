@@ -334,7 +334,7 @@ export default class FileModel extends BaseModel<File> {
 		}
 
 		for (const fileId in permissionGrantedMap) {
-			if (!permissionGrantedMap[fileId]) throw new ErrorForbidden(`No read access to: ${fileId}`);
+			if (!permissionGrantedMap[fileId]) throw new ErrorForbidden(`No "${methodName}" access to: ${fileId}`);
 		}
 	}
 

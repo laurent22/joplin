@@ -15,7 +15,7 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 	const body = await bodyFields(ctx.req);
 
 	if ('is_accepted' in body) {
-		await shareUserModel.accept(shareUser.share_id, shareUser.user_id, !!body.is_accepted);
+		return shareUserModel.accept(shareUser.share_id, shareUser.user_id, !!body.is_accepted);
 	} else {
 		throw new ErrorBadRequest('Only setting is_accepted is supported');
 	}

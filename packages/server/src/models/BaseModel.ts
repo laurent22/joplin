@@ -121,7 +121,7 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
-	protected async withTransaction(fn: Function, name: string = null): Promise<void> {
+	protected async withTransaction<T>(fn: Function, name: string = null): Promise<T> {
 		const debugTransaction = false;
 
 		const debugTimerId = debugTransaction ? setTimeout(() => {
@@ -132,8 +132,10 @@ export default abstract class BaseModel<T> {
 
 		if (debugTransaction) console.info('START', name, txIndex);
 
+		let output:T = null;
+
 		try {
-			await fn();
+			output = await fn();
 		} catch (error) {
 			await this.transactionHandler_.rollback(txIndex);
 
@@ -151,6 +153,7 @@ export default abstract class BaseModel<T> {
 		}
 
 		await this.transactionHandler_.commit(txIndex);
+		return output;
 	}
 
 	public async all(): Promise<T[]> {

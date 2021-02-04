@@ -30,8 +30,6 @@ export default class PermissionModel extends BaseModel<Permission> {
 
 		if (userId) p.user_id = userId;
 
-		// console.info('FFFFFFFFFFFFFF', fileIds);
-
 		const permissions: Permission[] = await this.db<Permission>(this.tableName).where(p).whereIn('item_id', fileIds).select();
 		const output: PermissionMap = {};
 
