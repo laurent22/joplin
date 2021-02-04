@@ -30,6 +30,7 @@ const config = {
 		'main.changes': 'WithDates, WithUuid',
 		'main.notifications': 'WithDates, WithUuid',
 		'main.shares': 'WithDates, WithUuid',
+		'main.share_users': 'WithDates, WithUuid',
 	},
 };
 

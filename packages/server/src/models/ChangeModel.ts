@@ -72,9 +72,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		const directory = await fileModel.load(dirId);
 		if (!directory.is_directory) throw new ErrorUnprocessableEntity(`Item with id "${dirId}" is not a directory.`);
 
-		const linkedUserIds = await this.models().shareUser({ userId: this.userId }).linkedUserIds();
-
-		// TODO: Restrict query to associated users only
 		// TODO: Add indexes
 
 		// Retrieves the IDs of all the files that have been shared with the
@@ -124,8 +121,7 @@ export default class ChangeModel extends BaseModel<Change> {
 				'files.id as dest_file_id',
 			])
 			.join('files', 'changes.item_id', 'files.source_file_id')
-			.whereIn('changes.item_id', linkedFilesQuery)
-			.whereIn('changes.owner_id', linkedUserIds);
+			.whereIn('changes.item_id', linkedFilesQuery);
 
 		// If a cursor was provided, apply it to both queries.
 		if (changeAtCursor) {
@@ -138,7 +134,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		// to be buggy here as it reports that will return `any[][]` so we fix
 		// that by forcing `any[]`
 		const unionQuery = ownChangesQuery;
-		if (linkedUserIds.length) void unionQuery.union(sharedChangesQuery);
+		void unionQuery.union(sharedChangesQuery);
 		void unionQuery.orderBy('counter', 'asc').limit(pagination.limit);
 
 		const changesWithDestFile: ChangeWithDestFile[] = await unionQuery as any[];

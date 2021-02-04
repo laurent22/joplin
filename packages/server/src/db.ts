@@ -301,13 +301,10 @@ export interface Share extends WithDates, WithUuid {
 	type?: ShareType;
 }
 
-export interface ShareUser {
-	id?: Uuid;
+export interface ShareUser extends WithDates, WithUuid {
 	share_id?: Uuid;
 	user_id?: Uuid;
 	is_accepted?: number;
-	updated_time?: string;
-	created_time?: string;
 }
 
 export const databaseSchema: DatabaseTables = {
