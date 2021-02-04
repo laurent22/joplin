@@ -77,7 +77,7 @@ export default function useListIdent(CodeMirror: any) {
 					// this is an edge case for users because there is no clear intended behavior
 					// if the use multicursor with a mix of selected and not selected
 					break;
-				} else if (!markdownUtils.isListItem(line) || !markdownUtils.isEmptyListItem(line)) {
+				} else if (!markdownUtils.isListItem(line)) {
 					cm.replaceRange('\t', anchor, head);
 				} else {
 					if (markdownUtils.olLineNumber(line)) {
@@ -111,7 +111,7 @@ export default function useListIdent(CodeMirror: any) {
 					// this is an edge case for users because there is no clear intended behavior
 					// if the use multicursor with a mix of selected and not selected
 					break;
-				} else if (!markdownUtils.isListItem(line) || !markdownUtils.isEmptyListItem(line)) {
+				} else if (!markdownUtils.isListItem(line)) {
 					cm.indentLine(anchor.line, 'subtract');
 				} else {
 					const newToken = newListToken(cm, anchor.line);
