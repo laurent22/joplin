@@ -74,17 +74,19 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		// TODO: Restrict query to associated users only
 		// TODO: Add indexes
-		const linkedFilesSubQuery = this
+
+		// Retrieves the IDs of all the files that have been shared with the
+		// current user.
+		const linkedFilesQuery = this
 			.db('files')
 			.select('source_file_id')
 			.where('source_file_id', '!=', '')
 			.andWhere('parent_id', '=', dirId)
 			.andWhere('owner_id', '=', this.userId);
 
-		// Rather than query the changes, then use JS to compress them, it might
-		// be possible to do both in one query.
-		// https://stackoverflow.com/questions/65348794
-		const ownItemsQuery = this.db(this.tableName)
+		// Retrieves all the changes for the files that belong to the current
+		// user.
+		const ownChangesQuery = this.db(this.tableName)
 			.select([
 				'counter',
 				'id',
@@ -95,7 +97,22 @@ export default class ChangeModel extends BaseModel<Change> {
 			])
 			.where('parent_id', dirId);
 
-		const shareQuery = this.db(this.tableName)
+		// Retrieves all the changes for the files that have been shared with
+		// this user.
+		//
+		// Each row will have an additional "dest_file_id" property that points
+		// to the destination of the link. For example:
+		//
+		// - User 1 shares a file with ID 123 with user 2.
+		// - User 2 get a new file with ID 456 that links to file 123.
+		// - User 1 changes file 123
+		// - When user 2 retrieves all the changes, they'll get a change for
+		//   item_id = 123, and dest_file_id = 456
+		//
+		// We need this dest_file_id because when sending the list of files, we
+		// want to send back metadata for file 456, and not 123, as that belongs
+		// to a different user.
+		const sharedChangesQuery = this.db(this.tableName)
 			.select([
 				'counter',
 				'changes.id',
@@ -105,20 +122,25 @@ export default class ChangeModel extends BaseModel<Change> {
 				'files.id as dest_file_id',
 			])
 			.join('files', 'changes.item_id', 'files.source_file_id')
-			.whereIn('changes.item_id', linkedFilesSubQuery);
+			.whereIn('changes.item_id', linkedFilesQuery);
 
+		// If a cursor was provided, apply it to both queries.
 		if (changeAtCursor) {
-			void ownItemsQuery.where('counter', '>', changeAtCursor.counter);
-			void shareQuery.where('counter', '>', changeAtCursor.counter);
+			void ownChangesQuery.where('counter', '>', changeAtCursor.counter);
+			void sharedChangesQuery.where('counter', '>', changeAtCursor.counter);
 		}
 
-		const unionQuery = ownItemsQuery
-			.union(shareQuery)
+		// This will give the list of all changes for shared and not shared
+		// files for the provided directory ID. Knexjs TypeScript support seems
+		// to be buggy here as it reports that will return `any[][]` so we fix
+		// that by forcing `any[]`
+		const changesWithDestFile: ChangeWithDestFile[] = await ownChangesQuery
+			.union(sharedChangesQuery)
 			.orderBy('counter', 'asc')
-			.limit(pagination.limit);
+			.limit(pagination.limit) as any[];
 
-		const changesWithDestFile: ChangeWithDestFile[] = (await unionQuery) as any[];
-
+		// Maps dest_file_id to item_id and then the rest of the code can just
+		// work without having to check if it's a shared file or not.
 		const changes = changesWithDestFile.map(c => {
 			if (c.dest_file_id) {
 				return { ...c, item_id: c.dest_file_id };
@@ -128,6 +150,8 @@ export default class ChangeModel extends BaseModel<Change> {
 		});
 
 		const compressedChanges = this.compressChanges(changes);
+
+		// TODO: Check file content for shared items
 		const changeWithItems = await this.loadChangeItems(compressedChanges);
 
 		return {
