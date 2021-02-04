@@ -1,25 +1,10 @@
-import { Share, ShareType, ShareUser, User } from '../../db';
+import { ChangeType, Share, ShareType, ShareUser } from '../../db';
 import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile } from '../../utils/testing/testUtils';
 import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedFiles } from '../../models/FileModel';
-
-async function shareWithUserAndAccept(sharerSessionId:string, sharer:User, shareeSessionId:string, sharee:User) {
-	await createFile(sharer.id, 'root:/test.txt:', 'testing share');
-
-	const share = await postApi<Share>(sharerSessionId, 'shares', {
-		type: ShareType.App,
-		file_id: 'root:/test.txt:',
-	});
-
-	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
-		email: sharee.email,
-	}) as ShareUser;
-
-	shareUser = await models().shareUser().load(shareUser.id);
-
-	await patchApi<ShareUser>(shareeSessionId, `share_users/${shareUser.id}`, { is_accepted: 1 });
-}
+import { PaginatedChanges } from '../../models/ChangeModel';
+import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 
 describe('api_shares', function() {
 
@@ -36,7 +21,7 @@ describe('api_shares', function() {
 	});
 
 	test('should share a file by link', async function() {
-		const { session } = await createUserAndSession(1, false);
+		const { session } = await createUserAndSession(1);
 		const file = await putFileContent(session.id, 'root:/photo.jpg:', testFilePath());
 
 		const context = await postApiC(session.id, 'shares', {
@@ -56,8 +41,8 @@ describe('api_shares', function() {
 	});
 
 	test('should share a file with another user', async function() {
-		const { user: user1, session: session1 } = await createUserAndSession(1, false);
-		const { user: user2, session: session2 } = await createUserAndSession(2, false);
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
 		await createFile(user1.id, 'root:/test.txt:', 'testing share');
 
 		// ----------------------------------------------------------------
@@ -97,9 +82,51 @@ describe('api_shares', function() {
 		const results = await getApi<PaginatedFiles>(session2.id, 'files/root/children');
 		expect(results.items.length).toBe(1);
 		expect(results.items[0].name).toBe('test.txt');
-		
+
 		const fileContent = await getApi<Buffer>(session2.id, 'files/root:/test.txt:/content');
 		expect(fileContent.toString()).toBe('testing share');
+	});
+
+	test('should see delta changes for linked files', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const rootDirId1 = await models().file({ userId: user1.id }).userRootFileId();
+		const rootDirId2 = await models().file({ userId: user2.id }).userRootFileId();
+
+		const { sharerFile, shareeFile } = await shareWithUserAndAccept(session1.id, user1, session2.id, user2);
+
+		let cursor1: string = null;
+		let cursor2: string = null;
+
+		{
+			const page1 = await getApi<PaginatedChanges>(session1.id, `files/${rootDirId1}/delta`);
+			expect(page1.items.length).toBe(1);
+			expect(page1.items[0].item.id).toBe(sharerFile.id);
+			expect(page1.items[0].type).toBe(ChangeType.Create);
+			cursor1 = page1.cursor;
+
+			const page2 = await getApi<PaginatedChanges>(session2.id, `files/${rootDirId2}/delta`);
+			expect(page2.items.length).toBe(1);
+			expect(page2.items[0].item.id).toBe(shareeFile.id);
+			expect(page2.items[0].type).toBe(ChangeType.Create);
+			cursor2 = page2.cursor;
+		}
+
+		await updateFile(user1.id, sharerFile.id, 'from sharer');
+
+		{
+			const page1 = await getApi<PaginatedChanges>(session1.id, `files/${rootDirId1}/delta`, { query: { cursor: cursor1 } });
+			expect(page1.items.length).toBe(1);
+			expect(page1.items[0].item.id).toBe(sharerFile.id);
+			expect(page1.items[0].type).toBe(ChangeType.Update);
+			cursor1 = page1.cursor;
+
+			const page2 = await getApi<PaginatedChanges>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor: cursor2 } });
+			expect(page2.items.length).toBe(1);
+			expect(page2.items[0].item.id).toBe(shareeFile.id);
+			expect(page2.items[0].type).toBe(ChangeType.Update);
+			cursor2 = page2.cursor;
+		}
 	});
 
 	// TODO: test delta:

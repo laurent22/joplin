@@ -268,7 +268,7 @@ export interface File extends WithDates, WithUuid {
 	is_directory?: number;
 	is_root?: number;
 	parent_id?: Uuid;
-	linked_file_id?: Uuid;
+	source_file_id?: Uuid;
 }
 
 export interface Change extends WithDates, WithUuid {
@@ -349,7 +349,7 @@ export const databaseSchema: DatabaseTables = {
 		parent_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
-		linked_file_id: { type: 'string' },
+		source_file_id: { type: 'string' },
 	},
 	changes: {
 		counter: { type: 'number' },

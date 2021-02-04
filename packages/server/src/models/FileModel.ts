@@ -323,7 +323,7 @@ export default class FileModel extends BaseModel<File> {
 
 		const fileIds = files.map(f => {
 			if (!f.id) throw new Error('One of the file is missing an ID');
-			return f.id
+			return f.id;
 		});
 
 		const permissionModel = this.models().permission();
@@ -398,10 +398,10 @@ export default class FileModel extends BaseModel<File> {
 
 	// If the file is a link to another file, the content of the source if
 	// assigned to the content of the destination.
-	private async processFileLink(file:File):Promise<File> {
-		if (!('linked_file_id' in file)) throw new Error('Cannot process a file without a linked_file_id');
-		if (!file.linked_file_id) return file;
-		const content = await this.loadContent(file.linked_file_id, {
+	private async processFileLink(file: File): Promise<File> {
+		if (!('source_file_id' in file)) throw new Error('Cannot process a file without a source_file_id');
+		if (!file.source_file_id) return file;
+		const content = await this.loadContent(file.source_file_id, {
 			skipPermissionCheck: true,
 			// Current we don't follow links more than one level deep. In
 			// practice it means that if a user tries to share a note that has
@@ -413,7 +413,7 @@ export default class FileModel extends BaseModel<File> {
 		return { ...file, content };
 	}
 
-	private async loadContent(id:string, options:LoadOptions = {}):Promise<Buffer> {
+	private async loadContent(id: string, options: LoadOptions = {}): Promise<Buffer> {
 		const file: File = await this.loadWithContent(id, { ...options, fields: ['id', 'content'] });
 		return file.content;
 	}

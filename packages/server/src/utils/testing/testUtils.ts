@@ -210,11 +210,11 @@ export async function createFile(userId: string, path: string, content: string):
 	return fileModel.load(savedFile.id);
 }
 
-export async function updateFile(userId:string, path:string, content:string):Promise<File> {
+export async function updateFile(userId: string, path: string, content: string): Promise<File> {
 	const fileModel = models().file({ userId });
 	const file: File = await fileModel.pathToFile(path, { returnFullEntity: false });
 	file.content = Buffer.from(content);
-	const savedFile = await fileModel.save(file);
+	await fileModel.save(file);
 	return fileModel.load(file.id);
 }
 

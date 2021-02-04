@@ -16,7 +16,7 @@ export async function up(db: DbConnection): Promise<any> {
 	});
 
 	await db.schema.table('files', function(table: Knex.CreateTableBuilder) {
-		table.string('linked_file_id', 32).defaultTo('').notNullable();
+		table.string('source_file_id', 32).defaultTo('').notNullable();
 	});
 }
 

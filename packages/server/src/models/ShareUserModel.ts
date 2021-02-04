@@ -1,4 +1,4 @@
-import { File, ShareUser, User, Uuid } from '../db';
+import { File, ShareUser, Uuid } from '../db';
 import { ErrorNotFound } from '../utils/errors';
 import BaseModel from './BaseModel';
 
@@ -46,7 +46,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 			const file: File = {
 				owner_id: userId,
-				linked_file_id: share.file_id,
+				source_file_id: share.file_id,
 				parent_id: rootId,
 				name: sourceFile.name,
 			};
@@ -63,8 +63,8 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	public async linkedUserIds(): Promise<Uuid[]> {
 		const fileSubQuery = this
 			.db('files')
-			.select('linked_file_id')
-			.where('linked_file_id', '!=', '')
+			.select('source_file_id')
+			.where('source_file_id', '!=', '')
 			.andWhere('owner_id', '=', this.userId);
 
 		return this

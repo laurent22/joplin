@@ -8,6 +8,10 @@ export interface ChangeWithItem {
 	type: ChangeType;
 }
 
+export interface ChangeWithDestFile extends Change {
+	dest_file_id: Uuid;
+}
+
 export interface PaginatedChanges extends PaginatedResults {
 	items: ChangeWithItem[];
 }
@@ -68,26 +72,61 @@ export default class ChangeModel extends BaseModel<Change> {
 		const directory = await fileModel.load(dirId);
 		if (!directory.is_directory) throw new ErrorUnprocessableEntity(`Item with id "${dirId}" is not a directory.`);
 
+		// TODO: Restrict query to associated users only
+		// TODO: Add indexes
+		const linkedFilesSubQuery = this
+			.db('files')
+			.select('source_file_id')
+			.where('source_file_id', '!=', '')
+			.andWhere('parent_id', '=', dirId)
+			.andWhere('owner_id', '=', this.userId);
+
 		// Rather than query the changes, then use JS to compress them, it might
 		// be possible to do both in one query.
 		// https://stackoverflow.com/questions/65348794
-		const query = this.db(this.tableName)
+		const ownItemsQuery = this.db(this.tableName)
 			.select([
 				'counter',
 				'id',
 				'item_id',
 				'item_name',
 				'type',
+				this.db.raw('"" as dest_file_id'),
 			])
-			.where('parent_id', dirId)
+			.where('parent_id', dirId);
+
+		const shareQuery = this.db(this.tableName)
+			.select([
+				'counter',
+				'changes.id',
+				'item_id',
+				'item_name',
+				'type',
+				'files.id as dest_file_id',
+			])
+			.join('files', 'changes.item_id', 'files.source_file_id')
+			.whereIn('changes.item_id', linkedFilesSubQuery);
+
+		if (changeAtCursor) {
+			void ownItemsQuery.where('counter', '>', changeAtCursor.counter);
+			void shareQuery.where('counter', '>', changeAtCursor.counter);
+		}
+
+		const unionQuery = ownItemsQuery
+			.union(shareQuery)
 			.orderBy('counter', 'asc')
 			.limit(pagination.limit);
 
-		if (changeAtCursor) {
-			void query.where('counter', '>', changeAtCursor.counter);
-		}
+		const changesWithDestFile: ChangeWithDestFile[] = (await unionQuery) as any[];
 
-		const changes: Change[] = await query;
+		const changes = changesWithDestFile.map(c => {
+			if (c.dest_file_id) {
+				return { ...c, item_id: c.dest_file_id };
+			} else {
+				return c;
+			}
+		});
+
 		const compressedChanges = this.compressChanges(changes);
 		const changeWithItems = await this.loadChangeItems(compressedChanges);
 
@@ -102,8 +141,12 @@ export default class ChangeModel extends BaseModel<Change> {
 
 	private async loadChangeItems(changes: Change[]): Promise<ChangeWithItem[]> {
 		const itemIds = changes.map(c => c.item_id);
-		const fileModel = this.models().file({ userId: this.userId });
-		const items: File[] = await fileModel.loadByIds(itemIds);
+
+		// We skip permission check here because, when a file is shared, we need
+		// to fetch files that don't belong to the current user. This check
+		// would not be needed anyway because the change items are generated in
+		// a context where permissions have already been checked.
+		const items: File[] = await this.models().file().loadByIds(itemIds, { skipPermissionCheck: true });
 
 		const output: ChangeWithItem[] = [];
 
@@ -140,7 +183,8 @@ export default class ChangeModel extends BaseModel<Change> {
 		const itemChanges: Record<Uuid, Change> = {};
 
 		for (const change of changes) {
-			const previous = itemChanges[change.item_id];
+			const itemId = change.item_id;
+			const previous = itemChanges[itemId];
 
 			if (previous) {
 				// create - update => create
@@ -153,22 +197,22 @@ export default class ChangeModel extends BaseModel<Change> {
 				}
 
 				if (previous.type === ChangeType.Create && change.type === ChangeType.Delete) {
-					delete itemChanges[change.item_id];
+					delete itemChanges[itemId];
 				}
 
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Update) {
-					itemChanges[change.item_id] = change;
+					itemChanges[itemId] = change;
 				}
 
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Delete) {
-					itemChanges[change.item_id] = change;
+					itemChanges[itemId] = change;
 				}
 			} else {
-				itemChanges[change.item_id] = change;
+				itemChanges[itemId] = change;
 			}
 		}
 
-		const output = [];
+		const output: Change[] = [];
 
 		for (const itemId in itemChanges) {
 			output.push(itemChanges[itemId]);
