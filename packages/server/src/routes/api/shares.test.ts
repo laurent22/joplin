@@ -144,6 +144,7 @@ describe('api_shares', function() {
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item.id).toBe(shareeFile.id);
 			expect(page2.items[0].type).toBe(ChangeType.Update);
+			expect(page2.items[0].item.updated_time).toBe(page1.items[0].item.updated_time);
 			cursor2 = page2.cursor;
 		}
 	});

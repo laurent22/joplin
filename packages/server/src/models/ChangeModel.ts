@@ -72,6 +72,8 @@ export default class ChangeModel extends BaseModel<Change> {
 		const directory = await fileModel.load(dirId);
 		if (!directory.is_directory) throw new ErrorUnprocessableEntity(`Item with id "${dirId}" is not a directory.`);
 
+		const linkedUserIds = await this.models().shareUser({ userId: this.userId }).linkedUserIds();
+
 		// TODO: Restrict query to associated users only
 		// TODO: Add indexes
 
@@ -122,7 +124,8 @@ export default class ChangeModel extends BaseModel<Change> {
 				'files.id as dest_file_id',
 			])
 			.join('files', 'changes.item_id', 'files.source_file_id')
-			.whereIn('changes.item_id', linkedFilesQuery);
+			.whereIn('changes.item_id', linkedFilesQuery)
+			.whereIn('changes.owner_id', linkedUserIds);
 
 		// If a cursor was provided, apply it to both queries.
 		if (changeAtCursor) {
@@ -134,10 +137,11 @@ export default class ChangeModel extends BaseModel<Change> {
 		// files for the provided directory ID. Knexjs TypeScript support seems
 		// to be buggy here as it reports that will return `any[][]` so we fix
 		// that by forcing `any[]`
-		const changesWithDestFile: ChangeWithDestFile[] = await ownChangesQuery
-			.union(sharedChangesQuery)
-			.orderBy('counter', 'asc')
-			.limit(pagination.limit) as any[];
+		const unionQuery = ownChangesQuery;
+		if (linkedUserIds.length) void unionQuery.union(sharedChangesQuery);
+		void unionQuery.orderBy('counter', 'asc').limit(pagination.limit);
+
+		const changesWithDestFile: ChangeWithDestFile[] = await unionQuery as any[];
 
 		// Maps dest_file_id to item_id and then the rest of the code can just
 		// work without having to check if it's a shared file or not.
