@@ -131,11 +131,10 @@ export default class ChangeModel extends BaseModel<Change> {
 		// files for the provided directory ID. Knexjs TypeScript support seems
 		// to be buggy here as it reports that will return `any[][]` so we fix
 		// that by forcing `any[]`
-		const unionQuery = ownChangesQuery;
-		void unionQuery.union(sharedChangesQuery);
-		void unionQuery.orderBy('counter', 'asc').limit(pagination.limit);
-
-		const changesWithDestFile: ChangeWithDestFile[] = await unionQuery as any[];
+		const changesWithDestFile: ChangeWithDestFile[] = await ownChangesQuery
+			.union(sharedChangesQuery)
+			.orderBy('counter', 'asc')
+			.limit(pagination.limit) as any[];
 
 		// Maps dest_file_id to item_id and then the rest of the code can just
 		// work without having to check if it's a shared file or not.
@@ -149,7 +148,6 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const compressedChanges = this.compressChanges(changes);
 
-		// TODO: Check file content for shared items
 		const changeWithItems = await this.loadChangeItems(compressedChanges);
 
 		return {
