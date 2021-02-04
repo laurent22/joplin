@@ -44,7 +44,7 @@ describe('api_shares', function() {
 	test('should share a file with another user', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
-		await createFile(user1.id, 'root:/test.txt:', 'testing share');
+		await createFile(user1.id, 'root:/test.txt:', 'created by sharer');
 
 		// ----------------------------------------------------------------
 		// Create the file share object
@@ -85,7 +85,16 @@ describe('api_shares', function() {
 		expect(results.items[0].name).toBe('test.txt');
 
 		const fileContent = await getApi<Buffer>(session2.id, 'files/root:/test.txt:/content');
-		expect(fileContent.toString()).toBe('testing share');
+		expect(fileContent.toString()).toBe('created by sharer');
+
+		// ----------------------------------------------------------------
+		// If file is changed by sharee, sharer should see the change too
+		// ----------------------------------------------------------------
+		{
+			await updateFile(user2.id, 'root:/test.txt:', 'modified by sharee');
+			const fileContent = await getApi<Buffer>(session1.id, 'files/root:/test.txt:/content');
+			expect(fileContent.toString()).toBe('modified by sharee');
+		}
 	});
 
 	test('should get updated time of shared file', async function() {
@@ -131,6 +140,10 @@ describe('api_shares', function() {
 
 		await msleep(1);
 
+		// --------------------------------------------------------------------
+		// If file is changed on sharer side, sharee should see the changes
+		// --------------------------------------------------------------------
+
 		await updateFile(user1.id, sharerFile.id, 'from sharer');
 
 		{
@@ -147,7 +160,14 @@ describe('api_shares', function() {
 			expect(page2.items[0].item.updated_time).toBe(page1.items[0].item.updated_time);
 			cursor2 = page2.cursor;
 		}
+
+		// --------------------------------------------------------------------
+		// If file is changed on sharee side, sharer should see the changes
+		// --------------------------------------------------------------------
+
 	});
+
+
 
 	// TODO: test delta:
 	// - File is changed on sharer side

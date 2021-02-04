@@ -266,8 +266,8 @@ export default class FileModel extends BaseModel<File> {
 
 		if ('name' in file && !file.is_root) {
 			const existingFile = await this.fileByName(parentId, file.name);
-			if (existingFile && options.isNew) throw new ErrorConflict(`Already a file with name "${file.name}"`);
-			if (existingFile && file.id === existingFile.id) throw new ErrorConflict(`Already a file with name "${file.name}"`);
+			if (existingFile && options.isNew) throw new ErrorConflict(`Already a file with name "${file.name}" (1)`);
+			if (existingFile && file.id !== existingFile.id) throw new ErrorConflict(`Already a file with name "${file.name}" (2)`);
 		}
 
 		if ('name' in file) {
@@ -471,8 +471,30 @@ export default class FileModel extends BaseModel<File> {
 		const isNew = await this.isNew(object, options);
 
 		const file: File = { ... object };
+		let sourceFile: File = null;
 
-		if ('content' in file) file.size = file.content ? file.content.byteLength : 0;
+		if ('content' in file) {
+			let sourceFileId: string = null;
+
+			if (file.id) {
+				if (!('source_file_id' in file)) throw new Error('source_file_id is required when setting the content');
+				sourceFileId = file.source_file_id;
+			}
+
+			const fileSize = file.content ? file.content.byteLength : 0;
+
+			if (sourceFileId) {
+				sourceFile = {
+					id: sourceFileId,
+					content: file.content,
+					size: fileSize,
+					source_file_id: '',
+				};
+				delete file.content;
+			} else {
+				file.size = fileSize;
+			}
+		}
 
 		if (isNew) {
 			if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
@@ -486,7 +508,10 @@ export default class FileModel extends BaseModel<File> {
 			file.owner_id = this.userId;
 		}
 
-		return super.save(file, options);
+		return this.withTransaction(async () => {
+			if (sourceFile) await this.save(sourceFile);
+			return super.save(file, options);
+		});
 	}
 
 	public async childrenCount(id: string): Promise<number> {

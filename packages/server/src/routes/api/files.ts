@@ -60,8 +60,23 @@ router.put('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
 	// https://github.com/laurent22/joplin/issues/4402
 	const buffer = result?.files?.file ? await fs.readFile(result.files.file.path) : Buffer.alloc(0);
 
-	const file: File = await fileModel.pathToFile(fileId, { mustExist: false, returnFullEntity: false });
-	file.content = buffer;
+	const parsedFile: File = await fileModel.pathToFile(fileId, { mustExist: false });
+
+	const isNewFile = !parsedFile.id;
+
+	const file: File = {
+		name: parsedFile.name,
+		content: buffer,
+		source_file_id: 'source_file_id' in parsedFile ? parsedFile.source_file_id : '',
+	};
+
+	if (!isNewFile) {
+		file.id = parsedFile.id;
+	} else {
+		file.name = parsedFile.name;
+		if ('parent_id' in parsedFile) file.parent_id = parsedFile.parent_id;
+	}
+
 	return fileModel.toApiOutput(await fileModel.save(file, { validationRules: { mustBeFile: true } }));
 });
 
@@ -70,8 +85,12 @@ router.del('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const fileId = path.id;
 	const file: File = await fileModel.pathToFile(fileId, { mustExist: false, returnFullEntity: false });
 	if (!file) return;
-	file.content = Buffer.alloc(0);
-	await fileModel.save(file, { validationRules: { mustBeFile: true } });
+
+	await fileModel.save({
+		id: file.id,
+		content: Buffer.alloc(0),
+		source_file_id: file.source_file_id,
+	}, { validationRules: { mustBeFile: true } });
 });
 
 router.get('api/files/:id/delta', async (path: SubPath, ctx: AppContext) => {
