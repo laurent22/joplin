@@ -1,4 +1,4 @@
-import { ChangeType, Share, ShareType, ShareUser } from '../../db';
+import { ChangeType, File, Share, ShareType, ShareUser } from '../../db';
 import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync } from '../../utils/testing/testUtils';
 import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testing/apiUtils';
@@ -110,8 +110,17 @@ describe('api_shares', function() {
 		await updateFile(user1.id, sharerFile.id, 'content modified');
 
 		sharerFile = await models().file({ userId: user1.id }).load(sharerFile.id);
-		shareeFile = await models().file({ userId: user2.id }).load(shareeFile.id);
+
+		// Check files/:id
+
+		shareeFile = await getApi<File>(session2.id, `files/${shareeFile.id}`);
 		expect(shareeFile.updated_time).toBe(sharerFile.updated_time);
+
+		// Check files/:id/children
+
+		const rootFileId2 = await models().file({ userId: user2.id }).userRootFileId();
+		const page = await getApi<PaginatedFiles>(session2.id, `files/${rootFileId2}/children`);
+		expect(page.items[0].updated_time).toBe(sharerFile.updated_time);
 	});
 
 	test('should not share an already shared file', async function() {

@@ -209,16 +209,19 @@ export default class FileModel extends BaseModel<File> {
 	}
 
 	public async fileByName(parentId: string, name: string, options: LoadOptions = {}): Promise<File> {
-		const file = await this.db<File>(this.tableName).select(...this.defaultFields).where({
-			parent_id: parentId,
-			name: name,
-		}).first();
+		const file = await this.db<File>(this.tableName)
+			.select(...this.defaultFields)
+			.where({
+				parent_id: parentId,
+				name: name,
+			})
+			.first();
 
 		if (!file) return null;
 
 		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
 
-		return file;
+		return this.processFileLink(file);
 	}
 
 	protected async validate(object: File, options: ValidateOptions = {}): Promise<File> {
@@ -383,39 +386,23 @@ export default class FileModel extends BaseModel<File> {
 		return output;
 	}
 
-	// Mostly makes sense for testing/debugging because the filename would
-	// have to globally unique, which is not a requirement.
-	public async loadByName(name: string, options: LoadOptions = {}): Promise<File> {
-		const file: File = await this.db(this.tableName)
-			.select(this.defaultFields)
-			.where({ name: name })
-			.andWhere({ owner_id: this.userId })
-			.first();
-		if (!file) throw new ErrorNotFound(`No such file: ${name}`);
-		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
-		return file;
+	private async processFileLink(file: File): Promise<File> {
+		const files = await this.processFileLinks([file]);
+		return files[0];
 	}
-
-	// private async processFileLink(file: File): Promise<File> {
-	// 	if (!('source_file_id' in file)) throw new Error('Cannot process a file without a source_file_id');
-	// 	if (!file.source_file_id) return file;
-	// 	const content = await this.loadContent(file.source_file_id, {
-	// 		skipPermissionCheck: true,
-	// 		// Current we don't follow links more than one level deep. In
-	// 		// practice it means that if a user tries to share a note that has
-	// 		// been shared with them, it will not work. Instead they'll have to
-	// 		// make a copy of that note and share that. Anything else would
-	// 		// probably be too complex to make any sense in terms of UI.
-	// 		skipFollowLinks: true,
-	// 	});
-	// 	return { ...file, content };
-	// }
 
 	// If the file is a link to another file, the content of the source if
 	// assigned to the content of the destination. The updated_time property is
 	// also set to the most recent one among the source and the dest.
 	private async processFileLinks(files: File[]): Promise<File[]> {
-		const sourceFileIds = files.filter(f => !!f.source_file_id).map(f => f.source_file_id);
+		const sourceFileIds: Uuid[] = [];
+
+		for (const file of files) {
+			if (!('source_file_id' in file)) throw new Error('Cannot process file links without a "source_file_id" property');
+			if (!file.source_file_id) continue;
+			sourceFileIds.push(file.source_file_id);
+		}
+
 		if (!sourceFileIds.length) return files;
 
 		const fields = Object.keys(files[0]);
@@ -524,7 +511,9 @@ export default class FileModel extends BaseModel<File> {
 	public async childrens(id: string, pagination: Pagination): Promise<PaginatedFiles> {
 		const parent = await this.load(id);
 		await this.checkCanReadPermissions(parent);
-		return paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('parent_id', id), pagination);
+		const page = await paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('parent_id', id), pagination);
+		page.items = await this.processFileLinks(page.items);
+		return page;
 	}
 
 	private async childrenIds(id: string): Promise<string[]> {

@@ -40,8 +40,13 @@ describe('FileModel', function() {
 			.concat(Object.keys(tree.folder2))
 			.concat(Object.keys(tree.folder3));
 
+		const allFiles = await fileModel.all();
+		const loadByName = (name: string) => {
+			return allFiles.find(f => f.name === name);
+		};
+
 		for (const t of testCases) {
-			const file: File = await fileModel.loadByName(t);
+			const file: File = await loadByName(t);
 			const path = await fileModel.itemFullPath(file);
 			const fileBackId: string = await fileModel.pathToFileId(path);
 			expect(file.id).toBe(fileBackId);
