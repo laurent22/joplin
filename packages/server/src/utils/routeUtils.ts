@@ -1,7 +1,7 @@
 import { File, ItemAddressingType } from '../db';
-import { ErrorBadRequest } from './errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
-import { AppContext } from './types';
+import { AppContext, HttpMethod } from './types';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -151,14 +151,31 @@ export function parseSubPath(basePath: string, p: string): SubPath {
 	return output;
 }
 
-export function routeResponseFormat(match: MatchedRoute, context: AppContext): RouteResponseFormat {
-	const rawPath = context.path;
-	if (match && match.route.responseFormat) return match.route.responseFormat;
+export function routeResponseFormat(context: AppContext): RouteResponseFormat {
+	// const rawPath = context.path;
+	// if (match && match.route.responseFormat) return match.route.responseFormat;
 
-	let path = rawPath;
-	if (match) path = match.basePath ? match.basePath : match.subPath.raw;
+	// let path = rawPath;
+	// if (match) path = match.basePath ? match.basePath : match.subPath.raw;
 
+	const path = context.path;
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
+}
+
+export async function execRequest(routes:Routers, ctx:AppContext, path:string = null) {
+	path = path || ctx.path;
+	
+	const match = findMatchingRoute(ctx.path, routes);
+	if (!match) throw new ErrorNotFound();
+
+	const routeHandler = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+
+	// This is a generic catch-all for all private end points - if we
+	// couldn't get a valid session, we exit now. Individual end points
+	// might have additional permission checks depending on the action.
+	if (!match.route.public && !ctx.owner) throw new ErrorForbidden();
+
+	return routeHandler(match.subPath, ctx);
 }
 
 // In a path such as "/api/files/SOME_ID/content" we want to find:

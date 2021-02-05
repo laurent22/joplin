@@ -274,4 +274,8 @@ export default class Application extends BaseApplication {
 		return true;
 	}
 
+	public async processSharedContentForSave(file:File):Promise<File> {
+		// console.info('
+	}
+
 }

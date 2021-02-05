@@ -302,6 +302,12 @@ export default class FileModel extends BaseModel<File> {
 		}
 	}
 
+	private async processSharedContentForSave(file:File):Promise<File> {
+		if (!('source_file_id' in file)) throw new Error('source_file_id prop is required');
+		if (!file.source_file_id) return file;
+		return this.apps.processSharedContentForSave(file);
+	}
+
 	public async createRootFile(): Promise<File> {
 		const existingRootFile = await this.userRootFile();
 		if (existingRootFile) throw new Error(`User ${this.userId} has already a root file`);
@@ -477,9 +483,12 @@ export default class FileModel extends BaseModel<File> {
 					size: fileSize,
 					source_file_id: '',
 				};
+
+				sourceFile = await this.processSharedContentForSave(file);
+
 				delete file.content;
 			} else {
-				file.size = fileSize;
+				file.size = file.content ? file.content.byteLength : 0;
 			}
 		}
 

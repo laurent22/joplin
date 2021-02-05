@@ -3,9 +3,11 @@ import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models } from './factory';
+import Applications from '../services/Applications';
 
 export interface ModelOptions {
 	userId?: string;
+	apps?: Applications;
 }
 
 export interface SaveOptions {
@@ -65,6 +67,10 @@ export default abstract class BaseModel<T> {
 
 	protected get userId(): string {
 		return this.options.userId;
+	}
+
+	protected get apps():Applications {
+		return this.options.apps;
 	}
 
 	protected get db(): DbConnection {

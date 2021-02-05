@@ -65,19 +65,22 @@ import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
 import ShareUserModel from './ShareUserModel';
+import Applications from '../services/Applications';
 
 export class Models {
 
 	private db_: DbConnection;
 	private baseUrl_: string;
+	private apps_:Applications;
 
-	public constructor(db: DbConnection, baseUrl: string) {
+	public constructor(db: DbConnection, baseUrl: string, apps:Applications) {
 		this.db_ = db;
 		this.baseUrl_ = baseUrl;
+		this.apps_ = apps;
 	}
 
 	public file(options: ModelOptions = null) {
-		return new FileModel(this.db_, newModelFactory, this.baseUrl_, options);
+		return new FileModel(this.db_, newModelFactory, this.baseUrl_, { ...options, apps: this.apps_ });
 	}
 
 	public user(options: ModelOptions = null) {
