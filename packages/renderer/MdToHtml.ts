@@ -14,6 +14,7 @@ interface RendererRule {
 	assets?(theme: any): any;
 	plugin?: any;
 	assetPath?: string;
+	assetPathIsAbsolute?: boolean;
 }
 
 interface RendererRules {
@@ -231,6 +232,7 @@ export default class MdToHtml {
 		this.extraRendererRules_[id] = {
 			...module,
 			assetPath,
+			assetPathIsAbsolute: true,
 		};
 	}
 
@@ -282,6 +284,7 @@ export default class MdToHtml {
 					files.push(Object.assign({}, asset, {
 						name: name,
 						path: assetPath,
+						pathIsAbsolute: !!rule && !!rule.assetPathIsAbsolute,
 						mime: mime,
 					}));
 				}

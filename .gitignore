@@ -126,6 +126,9 @@ packages/app-cli/tests/services_CommandService.js.map
 packages/app-cli/tests/services_InteropService.d.ts
 packages/app-cli/tests/services_InteropService.js
 packages/app-cli/tests/services_InteropService.js.map
+packages/app-cli/tests/services_InteropService_Exporter_Html.d.ts
+packages/app-cli/tests/services_InteropService_Exporter_Html.js
+packages/app-cli/tests/services_InteropService_Exporter_Html.js.map
 packages/app-cli/tests/services_PluginService.d.ts
 packages/app-cli/tests/services_PluginService.js
 packages/app-cli/tests/services_PluginService.js.map
