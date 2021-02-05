@@ -14,6 +14,8 @@ import indexFiles from './index/files';
 import indexNotifications from './index/notifications';
 import indexShares from './index/shares';
 
+import appJoplinNotes from '../apps/joplin/routes/notes';
+
 import defaultRoute from './default';
 
 const routes: Routers = {
@@ -30,6 +32,8 @@ const routes: Routers = {
 	'files': indexFiles,
 	'notifications': indexNotifications,
 	'shares': indexShares,
+
+	'apps/joplin/notes': appJoplinNotes,
 
 	'': defaultRoute,
 };

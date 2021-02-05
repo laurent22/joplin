@@ -172,10 +172,16 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	// an empty string. So for example we now have ['api', 'files', 'SOME_ID', 'content'].
 	splittedPath.splice(0, 1);
 
+	let namespace = '';
+	if (splittedPath[0] === 'apps') {
+		namespace = splittedPath.splice(0, 2).join('/');
+	}
+
+	// Paths such as "/api/files/:id" will be processed here
 	if (splittedPath.length >= 2) {
 		// Create the base path, eg. "api/files", to match it to one of the
-		// routes.s
-		const basePath = `${splittedPath[0]}/${splittedPath[1]}`;
+		// routes.
+		const basePath = `${namespace ? `${namespace}/` : ''}${splittedPath[0]}/${splittedPath[1]}`;
 		if (routes[basePath]) {
 			// Remove the base path from the array so that parseSubPath() can
 			// extract the ID and link from the URL. So the array will contain
@@ -189,16 +195,19 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 		}
 	}
 
+	// Paths such as "/users/:id" or "/apps/joplin/notes/:id" will get here
 	const basePath = splittedPath[0];
-	if (routes[basePath]) {
+	const basePathNS = (namespace ? `${namespace}/` : '') + basePath;
+	if (routes[basePathNS]) {
 		splittedPath.splice(0, 1);
 		return {
-			route: routes[basePath],
+			route: routes[basePathNS],
 			basePath: basePath,
 			subPath: parseSubPath(basePath, `/${splittedPath.join('/')}`),
 		};
 	}
 
+	// Default routes - to process CSS or JS files for example
 	if (routes['']) {
 		return {
 			route: routes[''],
