@@ -3,17 +3,20 @@ import BaseModel from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
-function getWindowTitle(props: any) {
+function getWindowTitle(notes: any, selectedNoteIds: any, selectedFolderId: any, folders: any, screens: any, route: any) {
 	const windowTitle = [];
-	const note = props.selectedNoteIds.length ? BaseModel.byId(props.notes, props.selectedNoteIds[0]) : null;
-	const folder = props.selectedFolderId ? BaseModel.byId(props.folders, props.selectedFolderId) : null;
-	const screenInfo = props.screens[props.route.routeName];
+	const note = selectedNoteIds.length ? BaseModel.byId(notes, selectedNoteIds[0]) : null;
+	const folderId = note ? note.parent_id : selectedFolderId;
+	const folder = folderId ? BaseModel.byId(folders, folderId) : null;
+	const screenInfo = screens[route.routeName];
 	if (screenInfo.title) {
 		windowTitle.push(screenInfo.title());
-	} else if (props.route.routeName == 'Main' && folder && note) {
+	} else if (route.routeName == 'Main' && folder) {
 		const folderTitle = folder.title.trim();
-		const noteTitle = note.title.trim().length ? note.title.trim() : _('Untitled');
-		windowTitle.push(`${substrWithEllipsis(folderTitle, 0, 30)} > ${substrWithEllipsis(noteTitle, 0, 50)}`);
+		if (note) {
+			const noteTitle = note.title.trim().length ? note.title.trim() : _('Untitled');
+			windowTitle.push(`${substrWithEllipsis(folderTitle, 0, 30)} > ${substrWithEllipsis(noteTitle, 0, 50)}`);
+		} else { windowTitle.push(folderTitle); }
 	}
 	const devMarker = Setting.value('env') === 'dev' ? ' (DEV)' : '';
 	windowTitle.push(`Joplin${devMarker}`);

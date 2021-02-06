@@ -12,7 +12,7 @@ class NavigatorComponent extends Component {
 	}
 	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.route) {
-			this.updateWindowTitle(getWindowTitle(newProps));
+			this.updateWindowTitle(getWindowTitle(newProps.notes, newProps.selectedNoteIds, newProps.selectedFolderId, newProps.folders, newProps.screens, newProps.route));
 		}
 	}
 	updateWindowTitle(title) {
