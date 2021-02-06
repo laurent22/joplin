@@ -1492,7 +1492,7 @@ msgstr "업데이트 중..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
 msgid "Please upgrade Joplin to use this plugin"
-msgstr "이 플러그인을 사용하기 위해서는 Joplin을 업그레이드 해주세요."
+msgstr "이 플러그인을 사용하기 위해서는 Joplin을 업그레이드해야 합니다"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
 #, javascript-format
