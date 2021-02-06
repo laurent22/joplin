@@ -12,7 +12,7 @@ export type PermissionGrantedMap = Record<Uuid, boolean>;
 
 export type PermissionMap = Record<Uuid, Permission[]>;
 
-export default class PermissionModel extends BaseModel {
+export default class PermissionModel extends BaseModel<Permission> {
 
 	protected get tableName(): string {
 		return 'permissions';

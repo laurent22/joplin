@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import shim from '@joplin/lib/shim';
-const Setting = require('@joplin/lib/models/Setting').default;
+import Setting from '@joplin/lib/models/Setting';
 const { camelCaseToDash, formatCssSize } = require('@joplin/lib/string-utils');
 
 interface HookDependencies {

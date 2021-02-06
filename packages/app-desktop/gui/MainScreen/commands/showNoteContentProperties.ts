@@ -1,7 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
-const Note = require('@joplin/lib/models/Note');
+import Note from '@joplin/lib/models/Note';
 
 export const declaration: CommandDeclaration = {
 	name: 'showNoteContentProperties',

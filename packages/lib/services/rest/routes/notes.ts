@@ -4,20 +4,20 @@ import uuid from '../../../uuid';
 import readonlyProperties from '../utils/readonlyProperties';
 import defaultSaveOptions from '../utils/defaultSaveOptions';
 import defaultAction from '../utils/defaultAction';
-import BaseModel from '../../../BaseModel';
+import BaseModel, { ModelType } from '../../../BaseModel';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { RequestMethod, Request } from '../Api';
 import markdownUtils from '../../../markdownUtils';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 
-const { reg } = require('../../../registry.js');
-const { Database } = require('../../../database.js');
-const Folder = require('../../../models/Folder');
-const Note = require('../../../models/Note');
-const Tag = require('../../../models/Tag');
-const Resource = require('../../../models/Resource');
-const htmlUtils = require('../../../htmlUtils');
-const markupLanguageUtils = require('../../../markupLanguageUtils').default;
+import { reg } from '../../../registry';
+import Database from '../../../database';
+import Folder from '../../../models/Folder';
+import Note from '../../../models/Note';
+import Tag from '../../../models/Tag';
+import Resource from '../../../models/Resource';
+import htmlUtils from '../../../htmlUtils';
+import markupLanguageUtils from '../../../markupLanguageUtils';
 const mimeUtils = require('../../../mime-utils.js').mime;
 const md5 = require('md5');
 const HtmlToMd = require('../../../HtmlToMd');
@@ -300,7 +300,7 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 export default async function(request: Request, id: string = null, link: string = null) {
 	if (request.method === 'GET') {
 		if (link && link === 'tags') {
-			return collectionToPaginatedResults(await Tag.tagsByNoteId(id), request);
+			return collectionToPaginatedResults(ModelType.Tag, await Tag.tagsByNoteId(id), request);
 		} else if (link && link === 'resources') {
 			const note = await Note.load(id);
 			if (!note) throw new ErrorNotFound();
@@ -310,7 +310,7 @@ export default async function(request: Request, id: string = null, link: string 
 			for (const resourceId of resourceIds) {
 				output.push(await Resource.load(resourceId, loadOptions));
 			}
-			return collectionToPaginatedResults(output, request);
+			return collectionToPaginatedResults(ModelType.Resource, output, request);
 		} else if (link) {
 			throw new ErrorNotFound();
 		}

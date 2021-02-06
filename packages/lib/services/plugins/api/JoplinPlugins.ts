@@ -51,26 +51,37 @@ export default class JoplinPlugins {
 	}
 
 	/**
-	 * Registers a new content script. Unlike regular plugin code, which
-	 * runs in a separate process, content scripts run within the main
-	 * process code and thus allow improved performances and more
-	 * customisations in specific cases. It can be used for example to load
-	 * a Markdown or editor plugin.
-	 *
-	 * Note that registering a content script in itself will do nothing -
-	 * it will only be loaded in specific cases by the relevant app modules
-	 * (eg. the Markdown renderer or the code editor). So it is not a way
-	 * to inject and run arbitrary code in the app, which for safety and
-	 * performance reasons is not supported.
-	 *
-	 * * [View the renderer demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
-	 * * [View the editor demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
-	 *
-	 * @param type Defines how the script will be used. See the type definition for more information about each supported type.
-	 * @param id A unique ID for the content script.
-	 * @param scriptPath Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set `scriptPath` to `"./content_script.js`.
+	 * @deprecated Use joplin.contentScripts.register()
 	 */
 	public async registerContentScript(type: ContentScriptType, id: string, scriptPath: string) {
+		this.plugin.deprecationNotice('1.8', 'joplin.plugins.registerContentScript() is deprecated in favour of joplin.contentScripts.register()');
 		return this.plugin.registerContentScript(type, id, scriptPath);
 	}
+
+	/**
+	 * Gets the plugin own data directory path. Use this to store any
+	 * plugin-related data. Unlike [[installationDir]], any data stored here
+	 * will be persisted.
+	 */
+	public async dataDir(): Promise<string> {
+		return this.plugin.dataDir();
+	}
+
+	/**
+	 * Gets the plugin installation directory. This can be used to access any
+	 * asset that was packaged with the plugin. This directory should be
+	 * considered read-only because any data you store here might be deleted or
+	 * re-created at any time. To store new persistent data, use [[dataDir]].
+	 */
+	public async installationDir(): Promise<string> {
+		return this.plugin.baseDir;
+	}
+
+	/**
+	 * @deprecated Use joplin.require()
+	 */
+	public require(_path: string): any {
+		// Just a stub. Implementation has to be done within plugin process, in plugin_index.js
+	}
+
 }

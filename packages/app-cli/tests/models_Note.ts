@@ -3,8 +3,8 @@ import BaseModel from '@joplin/lib/BaseModel';
 import shim from '@joplin/lib/shim';
 import markdownUtils from '@joplin/lib/markdownUtils';
 const { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
 const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
 
 async function allItems() {
@@ -55,7 +55,7 @@ describe('models_Note', function() {
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
 
-			const input = t[0];
+			const input = t[0] as string;
 			const expected = t[1];
 			const actual = Note.linkedItemIds(input);
 			const contentEquals = ArrayUtils.contentEquals(actual, expected);
@@ -204,7 +204,7 @@ describe('models_Note', function() {
 		const folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
 		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
 
-		const hasThrown = await checkThrowAsync(async () => await Folder.copyToFolder(note1.id, folder2.id));
+		const hasThrown = await checkThrowAsync(async () => await Note.copyToFolder(note1.id, folder2.id));
 		expect(hasThrown).toBe(true);
 	}));
 
@@ -260,7 +260,7 @@ describe('models_Note', function() {
 
 		for (const testCase of testCases) {
 			const [useAbsolutePaths, input, expected] = testCase;
-			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input, { useAbsolutePaths });
+			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input as string, { useAbsolutePaths });
 			expect(internalToExternal).toBe(expected);
 
 			const externalToInternal = await Note.replaceResourceExternalToInternalLinks(internalToExternal, { useAbsolutePaths });
@@ -269,6 +269,50 @@ describe('models_Note', function() {
 
 		const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
 		expect(result).toBe(`[](:/${note1.id})`);
+	}));
+
+	it('should perform natural sorting', (async () => {
+		const folder1 = await Folder.save({});
+
+		const sortedNotes = await Note.previews(folder1.id, {
+			fields: ['id', 'title'],
+			order: [{ by: 'title', dir: 'ASC' }],
+		});
+		expect(sortedNotes.length).toBe(0);
+
+		const note0 = await Note.save({ title: 'A3', parent_id: folder1.id, is_todo: 0 });
+		const note1 = await Note.save({ title: 'A20', parent_id: folder1.id, is_todo: 0 });
+		const note2 = await Note.save({ title: 'A100', parent_id: folder1.id, is_todo: 0 });
+		const note3 = await Note.save({ title: 'égalité', parent_id: folder1.id, is_todo: 0 });
+		const note4 = await Note.save({ title: 'z', parent_id: folder1.id, is_todo: 0 });
+
+		const sortedNotes2 = await Note.previews(folder1.id, {
+			fields: ['id', 'title'],
+			order: [{ by: 'title', dir: 'ASC' }],
+		});
+		expect(sortedNotes2.length).toBe(5);
+		expect(sortedNotes2[0].id).toBe(note0.id);
+		expect(sortedNotes2[1].id).toBe(note1.id);
+		expect(sortedNotes2[2].id).toBe(note2.id);
+		expect(sortedNotes2[3].id).toBe(note3.id);
+		expect(sortedNotes2[4].id).toBe(note4.id);
+
+		const todo3 = Note.changeNoteType(note3, 'todo');
+		const todo4 = Note.changeNoteType(note4, 'todo');
+		await Note.save(todo3);
+		await Note.save(todo4);
+
+		const sortedNotes3 = await Note.previews(folder1.id, {
+			fields: ['id', 'title'],
+			order: [{ by: 'title', dir: 'ASC' }],
+			uncompletedTodosOnTop: true,
+		});
+		expect(sortedNotes3.length).toBe(5);
+		expect(sortedNotes3[0].id).toBe(note3.id);
+		expect(sortedNotes3[1].id).toBe(note4.id);
+		expect(sortedNotes3[2].id).toBe(note0.id);
+		expect(sortedNotes3[3].id).toBe(note1.id);
+		expect(sortedNotes3[4].id).toBe(note2.id);
 	}));
 
 });

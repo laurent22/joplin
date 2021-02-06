@@ -1,7 +1,7 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('@joplin/lib/locale');
-const Folder = require('@joplin/lib/models/Folder.js');
+const Folder = require('@joplin/lib/models/Folder').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 
 class Command extends BaseCommand {

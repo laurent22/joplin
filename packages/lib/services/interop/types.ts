@@ -63,7 +63,7 @@ export interface Module {
 	fullLabel?: Function;
 
 	// Used only if `isCustom` is true
-	onExec?(context: any): Promise<void>;
+	onExec?(context: any): Promise<any>;
 
 	// ---------------------------------------
 	// Export-only properties

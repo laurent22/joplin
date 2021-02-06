@@ -1,11 +1,11 @@
 import * as React from 'react';
-import SideBar from './SideBar';
+import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
-import control_PluginsStates from './controls/PluginsStates';
+import control_PluginsStates from './controls/plugins/PluginsStates';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -40,9 +40,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			marginBottom: 10,
 		};
 
-		this.sideBar_selectionChange = this.sideBar_selectionChange.bind(this);
+		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
 		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
-		this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
+		// this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
 		this.showLogButton_click = this.showLogButton_click.bind(this);
 		this.nextcloudAppHelpLink_click = this.nextcloudAppHelpLink_click.bind(this);
 		this.onCancelClick = this.onCancelClick.bind(this);
@@ -50,16 +50,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.onApplyClick = this.onApplyClick.bind(this);
 		this.renderLabel = this.renderLabel.bind(this);
 		this.renderDescription = this.renderDescription.bind(this);
+		this.renderHeader = this.renderHeader.bind(this);
 	}
 
 	async checkSyncConfig_() {
 		await shared.checkSyncConfig(this, this.state.settings);
 	}
 
-	async checkNextcloudAppButton_click() {
-		this.setState({ showNextcloudAppLog: true });
-		await shared.checkNextcloudApp(this, this.state.settings);
-	}
+	// async checkNextcloudAppButton_click() {
+	// 	this.setState({ showNextcloudAppLog: true });
+	// 	await shared.checkNextcloudApp(this, this.state.settings);
+	// }
 
 	showLogButton_click() {
 		this.setState({ showNextcloudAppLog: true });
@@ -113,7 +114,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ selectedSectionName: section.name, screenName: screenName });
 	}
 
-	sideBar_selectionChange(event: any) {
+	sidebar_selectionChange(event: any) {
 		this.switchSection(event.section.name);
 	}
 
@@ -147,6 +148,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const createSettingComponents = (advanced: boolean) => {
 			const output = [];
+
 			for (let i = 0; i < section.metadatas.length; i++) {
 				const md = section.metadatas[i];
 				if (!!md.advanced !== advanced) continue;
@@ -159,10 +161,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const settingComps = createSettingComponents(false);
 		const advancedSettingComps = createSettingComponents(true);
 
+		const sectionWidths: Record<string, any> = {
+			plugins: '100%',
+		};
+
 		const sectionStyle: any = {
 			marginTop: 20,
 			marginBottom: 20,
-			maxWidth: 640,
+			maxWidth: sectionWidths[section.name] ? sectionWidths[section.name] : 640,
 		};
 
 		if (!selected) sectionStyle.display = 'none';
@@ -197,48 +203,48 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				);
 			}
 
-			if (syncTargetMd.name === 'nextcloud') {
-				const syncTarget = settings['sync.5.syncTargets'][settings['sync.5.path']];
+			// if (syncTargetMd.name === 'nextcloud') {
+			// 	const syncTarget = settings['sync.5.syncTargets'][settings['sync.5.path']];
 
-				let status = _('Unknown');
-				let errorMessage = null;
+			// 	let status = _('Unknown');
+			// 	let errorMessage = null;
 
-				if (this.state.checkNextcloudAppResult === 'checking') {
-					status = _('Checking...');
-				} else if (syncTarget) {
-					if (syncTarget.uuid) status = _('OK');
-					if (syncTarget.error) {
-						status = _('Error');
-						errorMessage = syncTarget.error;
-					}
-				}
+			// 	if (this.state.checkNextcloudAppResult === 'checking') {
+			// 		status = _('Checking...');
+			// 	} else if (syncTarget) {
+			// 		if (syncTarget.uuid) status = _('OK');
+			// 		if (syncTarget.error) {
+			// 			status = _('Error');
+			// 			errorMessage = syncTarget.error;
+			// 		}
+			// 	}
 
-				const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' || !this.state.showNextcloudAppLog ? null : (
-					<div style={statusStyle}>
-						<p style={theme.textStyle}>{_('The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:')}</p>
-						<pre>{errorMessage}</pre>
-					</div>
-				);
+			// 	const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' || !this.state.showNextcloudAppLog ? null : (
+			// 		<div style={statusStyle}>
+			// 			<p style={theme.textStyle}>{_('The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:')}</p>
+			// 			<pre>{errorMessage}</pre>
+			// 		</div>
+			// 	);
 
-				const showLogButton = !errorMessage || this.state.showNextcloudAppLog ? null : (
-					<a style={theme.urlStyle} href="#" onClick={this.showLogButton_click}>[{_('Show Log')}]</a>
-				);
+			// 	const showLogButton = !errorMessage || this.state.showNextcloudAppLog ? null : (
+			// 		<a style={theme.urlStyle} href="#" onClick={this.showLogButton_click}>[{_('Show Log')}]</a>
+			// 	);
 
-				const appStatusStyle = Object.assign({}, theme.textStyle, { fontWeight: 'bold' });
+			// 	const appStatusStyle = Object.assign({}, theme.textStyle, { fontWeight: 'bold' });
 
-				settingComps.push(
-					<div key="nextcloud_app_check" style={this.rowStyle_}>
-						<span style={theme.textStyle}>Beta: {_('Joplin Nextcloud App status:')} </span><span style={appStatusStyle}>{status}</span>
-						&nbsp;&nbsp;
-						{showLogButton}
-						&nbsp;&nbsp;
-						<Button level={ButtonLevel.Secondary} style={{ display: 'inline-block' }} title={_('Check Status')} disabled={this.state.checkNextcloudAppResult === 'checking'} onClick={this.checkNextcloudAppButton_click}/>
-						&nbsp;&nbsp;
-						<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
-						{statusComp}
-					</div>
-				);
-			}
+			// 	settingComps.push(
+			// 		<div key="nextcloud_app_check" style={this.rowStyle_}>
+			// 			<span style={theme.textStyle}>Beta: {_('Joplin Nextcloud App status:')} </span><span style={appStatusStyle}>{status}</span>
+			// 			&nbsp;&nbsp;
+			// 			{showLogButton}
+			// 			&nbsp;&nbsp;
+			// 			<Button level={ButtonLevel.Secondary} style={{ display: 'inline-block' }} title={_('Check Status')} disabled={this.state.checkNextcloudAppResult === 'checking'} onClick={this.checkNextcloudAppButton_click}/>
+			// 			&nbsp;&nbsp;
+			// 			<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
+			// 			{statusComp}
+			// 		</div>
+			// 	);
+			// }
 		}
 
 		let advancedSettingsButton = null;
@@ -277,7 +283,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			color: theme.color,
 			fontSize: theme.fontSize * 1.083333,
 			fontWeight: 500,
-			marginBottom: theme.mainPadding / 4,
+			marginBottom: theme.mainPadding / 2,
 		});
 	}
 
@@ -300,6 +306,25 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
+	private renderHeader(themeId: number, label: string, style: any = null) {
+		const theme = themeStyle(themeId);
+
+		const labelStyle = Object.assign({}, theme.textStyle, {
+			display: 'block',
+			color: theme.color,
+			fontSize: theme.fontSize * 1.25,
+			fontWeight: 500,
+			marginBottom: theme.mainPadding,
+			...style,
+		});
+
+		return (
+			<div style={labelStyle}>
+				<label>{label}</label>
+			</div>
+		);
+	}
+
 	private renderDescription(themeId: number, description: string) {
 		return description ? <div style={this.descriptionStyle(themeId)}>{description}</div> : null;
 	}
@@ -310,7 +335,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const output: any = null;
 
 		const rowStyle = {
-			marginBottom: theme.mainPadding,
+			marginBottom: theme.mainPadding * 1.5,
 		};
 
 		const labelStyle = this.labelStyle(this.props.themeId);
@@ -366,9 +391,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (settingKeyToControl[key]) {
 			const SettingComponent = settingKeyToControl[key];
+			const label = md.label ? this.renderLabel(this.props.themeId, md.label()) : null;
 			return (
 				<div key={key} style={rowStyle}>
-					{this.renderLabel(this.props.themeId, md.label())}
+					{label}
 					{this.renderDescription(this.props.themeId, md.description ? md.description() : null)}
 					<SettingComponent
 						metadata={md}
@@ -377,6 +403,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						onChange={(event: any) => {
 							updateSettingValue(key, event.value);
 						}}
+						renderLabel={this.renderLabel}
+						renderDescription={this.renderDescription}
+						renderHeader={this.renderHeader}
 					/>
 				</div>
 			);
@@ -430,7 +459,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			// There's probably a better way to do this but can't figure it out.
 
 			return (
-				<div key={key + value.toString()} style={rowStyle}>
+				<div key={key + (`${value}`).toString()} style={rowStyle}>
 					<div style={{ ...controlStyle, backgroundColor: 'transparent', display: 'flex', alignItems: 'center' }}>
 						<input
 							id={`setting_checkbox_${key}`}
@@ -508,7 +537,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						<div style={{ display: 'flex' }}>
 							<div style={{ flex: 1 }}>
 								<div style={{ ...rowStyle, marginBottom: 5 }}>
-									<div style={subLabel}>Path:</div>
+									<div style={subLabel}>{_('Path:')}</div>
 									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: inputStyle.marginBottom }}>
 										<input
 											type={inputType}
@@ -527,7 +556,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 									</div>
 								</div>
 								<div style={{ ...rowStyle, marginBottom: 5 }}>
-									<div style={subLabel}>Arguments:</div>
+									<div style={subLabel}>{_('Arguments:')}</div>
 									<input
 										type={inputType}
 										style={inputStyle}
@@ -537,7 +566,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 										value={cmd[1]}
 										spellCheck={false}
 									/>
-									<div style={{ width: inputStyle.width }}>
+									<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
 										{descriptionComp}
 									</div>
 								</div>
@@ -566,7 +595,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							}}
 							spellCheck={false}
 						/>
-						<div style={{ width: inputStyle.width }}>
+						<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
 							{descriptionComp}
 						</div>
 					</div>
@@ -702,9 +731,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		return (
 			<div style={{ display: 'flex', flexDirection: 'row' }}>
-				<SideBar
+				<Sidebar
 					selection={this.state.selectedSectionName}
-					onSelectionChange={this.sideBar_selectionChange}
+					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
 				/>
 				<div style={style}>

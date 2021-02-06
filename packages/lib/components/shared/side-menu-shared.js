@@ -1,4 +1,4 @@
-const Folder = require('../../models/Folder');
+const Folder = require('../../models/Folder').default;
 const BaseModel = require('../../BaseModel').default;
 
 const shared = {};

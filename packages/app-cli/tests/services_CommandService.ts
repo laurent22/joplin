@@ -141,7 +141,7 @@ describe('services_CommandService', function() {
 		expect(toolbarInfos1[0] === toolbarInfos2[0]).toBe(true);
 		expect(toolbarInfos1[1] === toolbarInfos2[1]).toBe(true);
 
-		const toolbarInfos3 =  toolbarButtonUtils.commandsToToolbarButtons(['test1', 'test2'], {
+		const toolbarInfos3 = toolbarButtonUtils.commandsToToolbarButtons(['test1', 'test2'], {
 			cond1: true,
 			cond2: true,
 		});

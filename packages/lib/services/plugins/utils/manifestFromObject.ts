@@ -1,4 +1,5 @@
 import { PluginManifest, PluginPermission } from './types';
+import validatePluginId from './validatePluginId';
 
 export default function manifestFromObject(o: any): PluginManifest {
 
@@ -16,6 +17,13 @@ export default function manifestFromObject(o: any): PluginManifest {
 		return o[name];
 	};
 
+	const getStrings = (name: string, required: boolean = true, defaultValue: string[] = []): string[] => {
+		if (required && !o[name]) throw new Error(`Missing required field: ${name}`);
+		if (!o[name]) return defaultValue;
+		if (!Array.isArray(o[name])) throw new Error(`Field must be an array: ${name}`);
+		return o[name];
+	};
+
 	const permissions: PluginPermission[] = [];
 
 	const manifest: PluginManifest = {
@@ -28,8 +36,12 @@ export default function manifestFromObject(o: any): PluginManifest {
 		author: getString('author', false),
 		description: getString('description', false),
 		homepage_url: getString('homepage_url', false),
+		repository_url: getString('repository_url', false),
+		keywords: getStrings('keywords', false),
 		permissions: permissions,
 	};
+
+	validatePluginId(manifest.id);
 
 	if (o.permissions) {
 		for (const p of o.permissions) {

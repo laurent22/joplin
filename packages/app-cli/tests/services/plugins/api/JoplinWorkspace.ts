@@ -1,9 +1,10 @@
+import Setting from '@joplin/lib/models/Setting';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 const { newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('../../../test-utils');
-const Note = require('@joplin/lib/models/Note');
-const Folder = require('@joplin/lib/models/Folder');
-const ItemChange = require('@joplin/lib/models/ItemChange');
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
+import ItemChange from '@joplin/lib/models/ItemChange';
 
 describe('JoplinWorkspace', () => {
 
@@ -47,6 +48,28 @@ describe('JoplinWorkspace', () => {
 		expect(result.event).toBe(ItemChange.TYPE_UPDATE);
 
 		await service.destroy();
+	});
+
+	test('should return the selected folder', async () => {
+		const service = new newPluginService() as PluginService;
+
+		const pluginScript = newPluginScript(`			
+			joplin.plugins.register({
+				onStart: async function() {
+					const folder = await joplin.workspace.selectedFolder();
+					await joplin.data.put(['folders', folder.id], null, { title: "changedtitle" });
+				},
+			});
+		`);
+
+		const folder = await Folder.save({ title: 'folder' });
+		Setting.setValue('activeFolderId', folder.id);
+
+		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		await service.runPlugin(plugin);
+
+		const modFolder = await Folder.load(folder.id);
+		expect(modFolder.title).toBe('changedtitle');
 	});
 
 });

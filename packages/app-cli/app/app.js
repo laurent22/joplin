@@ -2,10 +2,10 @@ const BaseApplication = require('@joplin/lib/BaseApplication').default;
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 const ResourceService = require('@joplin/lib/services/ResourceService').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
-const Folder = require('@joplin/lib/models/Folder.js');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Tag = require('@joplin/lib/models/Tag.js');
+const Folder = require('@joplin/lib/models/Folder').default;
+const BaseItem = require('@joplin/lib/models/BaseItem').default;
+const Note = require('@joplin/lib/models/Note').default;
+const Tag = require('@joplin/lib/models/Tag').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { fileExtension } = require('@joplin/lib/path-utils');
@@ -13,7 +13,7 @@ const { _ } = require('@joplin/lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('@joplin/lib/Cache');
-const RevisionService = require('@joplin/lib/services/RevisionService');
+const RevisionService = require('@joplin/lib/services/RevisionService').default;
 const shim = require('@joplin/lib/shim').default;
 
 class Application extends BaseApplication {

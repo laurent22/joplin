@@ -3,7 +3,7 @@ import { User } from '../db';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
 
-export default class UserModel extends BaseModel {
+export default class UserModel extends BaseModel<User> {
 
 	public get tableName(): string {
 		return 'users';
@@ -12,6 +12,13 @@ export default class UserModel extends BaseModel {
 	public async loadByEmail(email: string): Promise<User> {
 		const user: User = { email: email };
 		return this.db<User>(this.tableName).where(user).first();
+	}
+
+	public async login(email: string, password: string): Promise<User> {
+		const user = await this.loadByEmail(email);
+		if (!user) return null;
+		if (!auth.checkPassword(password, user.password)) return null;
+		return user;
 	}
 
 	public fromApiInput(object: User): User {
@@ -64,6 +71,10 @@ export default class UserModel extends BaseModel {
 		return !!s[0].length && !!s[1].length;
 	}
 
+	public async profileUrl(): Promise<string> {
+		return `${this.baseUrl}/users/me`;
+	}
+
 	private async checkIsOwnerOrAdmin(userId: string): Promise<void> {
 		if (!this.userId) throw new ErrorForbidden('no user is active');
 
@@ -86,7 +97,7 @@ export default class UserModel extends BaseModel {
 			const rootFile = await fileModel.userRootFile();
 			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
 			await super.delete(id);
-		});
+		}, 'UserModel::delete');
 	}
 
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
@@ -103,7 +114,7 @@ export default class UserModel extends BaseModel {
 				const fileModel = this.models().file({ userId: newUser.id });
 				await fileModel.createRootFile();
 			}
-		});
+		}, 'UserModel::save');
 
 		return newUser;
 	}

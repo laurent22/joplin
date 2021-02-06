@@ -8,6 +8,25 @@ export enum MarkupLanguage {
 	Html = 2,
 }
 
+export interface RenderResultPluginAsset {
+	name: string;
+	mime: string;
+	path: string;
+
+	// For built-in Mardown-it plugins, the asset path is relative (and can be
+	// found inside the @joplin/renderer package), while for external plugins
+	// (content scripts), the path is absolute. We use this property to tell if
+	// it's relative or absolute, as that will inform how it's loaded in various
+	// places.
+	pathIsAbsolute: boolean;
+}
+
+export interface RenderResult {
+	html: string;
+	pluginAssets: RenderResultPluginAsset[];
+	cssStrings: string[];
+}
+
 export default class MarkupToHtml {
 
 	static MARKUP_LANGUAGE_MARKDOWN: number = MarkupLanguage.Markdown;
@@ -75,7 +94,7 @@ export default class MarkupToHtml {
 		if (r.clearCache) r.clearCache();
 	}
 
-	async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any) {
+	async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult> {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
 

@@ -1,12 +1,11 @@
 // The Nextcloud sync target is essentially a wrapper over the WebDAV sync target,
 // thus all the calls to SyncTargetWebDAV to avoid duplicate code.
 
-const BaseSyncTarget = require('./BaseSyncTarget.js');
+const BaseSyncTarget = require('./BaseSyncTarget').default;
 const { _ } = require('./locale');
 const Setting = require('./models/Setting').default;
 const Synchronizer = require('./Synchronizer').default;
 const SyncTargetWebDAV = require('./SyncTargetWebDAV');
-const JoplinServerApi = require('./JoplinServerApi.js').default;
 
 class SyncTargetNextcloud extends BaseSyncTarget {
 
@@ -48,24 +47,6 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 
 	async initSynchronizer() {
 		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
-	}
-
-	async appApi(settings = null) {
-		const useCache = !settings;
-
-		if (this.appApi_ && useCache) return this.appApi_;
-
-		const appApi = new JoplinServerApi({
-			baseUrl: () => JoplinServerApi.baseUrlFromNextcloudWebDavUrl(settings ? settings['sync.5.path'] : Setting.value('sync.5.path')),
-			username: () => settings ? settings['sync.5.username'] : Setting.value('sync.5.username'),
-			password: () => settings ? settings['sync.5.password'] : Setting.value('sync.5.password'),
-		});
-
-		appApi.setLogger(this.logger());
-
-		if (useCache) this.appApi_ = appApi;
-
-		return appApi;
 	}
 
 }

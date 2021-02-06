@@ -1,8 +1,8 @@
 import ShareExtension, { SharedData } from './ShareExtension';
 import shim from '@joplin/lib/shim';
 
-const Note = require('@joplin/lib/models/Note.js');
-const checkPermissions = require('./checkPermissions.js').default;
+import Note from '@joplin/lib/models/Note';
+import checkPermissions from './checkPermissions.js';
 const { ToastAndroid } = require('react-native');
 const { PermissionsAndroid } = require('react-native');
 
@@ -24,9 +24,9 @@ export default async (sharedData: SharedData, folderId: string, dispatch: Functi
 	// below will do nothing (because routeName wouldn't change)
 	// Then we wait a bit for the state to be set correctly, and
 	// finally we go to the new note.
-	await dispatch({ type: 'NAV_BACK' });
+	dispatch({ type: 'NAV_BACK' });
 
-	await dispatch({ type: 'SIDE_MENU_CLOSE' });
+	dispatch({ type: 'SIDE_MENU_CLOSE' });
 
 	const newNote = await Note.save({
 		parent_id: folderId,

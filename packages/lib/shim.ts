@@ -19,6 +19,16 @@ let isTestingEnv_ = false;
 let react_: any = null;
 
 const shim = {
+	Geolocation: null as any,
+
+	msleep_: (ms: number) => {
+		return new Promise((resolve: Function) => {
+			shim.setTimeout(() => {
+				resolve(null);
+			}, ms);
+		});
+	},
+
 	isNode: () => {
 		if (typeof process === 'undefined') return false;
 		if (shim.isElectron()) return true;
@@ -138,8 +148,6 @@ const shim = {
 	},
 
 	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
-		const time = require('./time').default;
-
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms
 		if (!('maxRetry' in options)) options.maxRetry = shim.fetchMaxRetry_;
@@ -153,7 +161,7 @@ const shim = {
 				if (shim.fetchRequestCanBeRetried(error)) {
 					retryCount++;
 					if (retryCount > options.maxRetry) throw error;
-					await time.sleep(retryCount * 3);
+					await shim.msleep_(retryCount * 3000);
 				} else {
 					throw error;
 				}
@@ -163,6 +171,12 @@ const shim = {
 
 	fetch: (_url: string, _options: any): any => {
 		throw new Error('Not implemented');
+	},
+
+	fetchText: async (url: string, options: any = null): Promise<string> => {
+		const r = await shim.fetch(url, options || {});
+		if (!r.ok) throw new Error(`Could not fetch ${url}`);
+		return r.text();
 	},
 
 	createResourceFromPath: async (_filePath: string, _defaultProps: any = null, _options: any = null): Promise<ResourceEntity> => {
@@ -209,7 +223,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	fetchBlob: async function(_url: string, _options: any = null) {
+	fetchBlob: function(_url: string, _options: any = null): any {
 		throw new Error('Not implemented');
 	},
 

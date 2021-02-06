@@ -81,7 +81,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 		background-color: #eee;
 		border: 1px solid #ccc;
 		font-size: .85em;
-		word-break: break-all;
+	/*	word-break: break-all; */
 	}
 	pre code {
 		border: none;
@@ -377,6 +377,9 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 <li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
 <li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
 <li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="https://joplinapp.org/spec/server_sharing/">Server: Sharing</a></li>
 </ul>
 </li>
 <li>
@@ -391,6 +394,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 <ul>
 <li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
 <li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/changelog_server/">Changelog (Server)</a></li>
 <li><a href="https://joplinapp.org/stats/">Stats</a></li>
 <li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
@@ -640,6 +644,20 @@ graph TD;
 <td><a href="https://joplinapp.org/images/md_plugins/katex_plugin.jpg">View</a></td>
 </tr>
 <tr>
+<td><a href="https://fountain.io">Fountain</a></td>
+<td><code>```fountain</code><br/>Your screenplay...<br/><code>```</code></td>
+<td>Adds support for the Fountain markup language, a plain text markup language for screenwriting</td>
+<td>no</td>
+<td><a href="https://joplinapp.org/images/md_plugins/fountain_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://mermaid-js.github.io/mermaid/">Mermaid</a></td>
+<td><code>```mermaid</code><br/>mermaid syntax...<br/><code>```</code></td>
+<td>See <a href="https://mermaid-js.github.io/mermaid/#/examples">plugin page</a> for full description</td>
+<td>yes</td>
+<td><a href="https://joplinapp.org/images/md_plugins/mermaid.jpg">View</a></td>
+</tr>
+<tr>
 <td><a href="https://github.com/markdown-it/markdown-it-mark">Mark</a></td>
 <td><code>==marked==</code></td>
 <td>Transforms into <code>&lt;mark&gt;marked&lt;/mark&gt;</code> (highlighted)</td>
@@ -657,7 +675,7 @@ graph TD;
 <td><a href="https://github.com/nagaozen/markdown-it-toc-done-right">TOC</a></td>
 <td>Any of <code>${toc}, [[toc]], [toc], [[_toc_]]</code></td>
 <td>Adds a table of contents to the location of the toc page. Based on headings and sub-headings</td>
-<td>no</td>
+<td>yes</td>
 <td><a href="https://joplinapp.org/images/md_plugins/toc_plugin.jpg">View</a></td>
 </tr>
 <tr>
@@ -709,20 +727,6 @@ graph TD;
 <td>no</td>
 <td><a href="https://joplinapp.org/images/md_plugins/multitable_plugin.jpg">View</a></td>
 </tr>
-<tr>
-<td><a href="https://fountain.io">Fountain</a></td>
-<td><code>```fountain</code><br/>Your screenplay...<br/><code>```</code></td>
-<td>Adds support for the Fountain markup language, a plain text markup language for screenwriting</td>
-<td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/fountain_plugin.jpg">View</a></td>
-</tr>
-<tr>
-<td><a href="https://mermaid-js.github.io/mermaid/">Mermaid</a></td>
-<td><code>```mermaid</code><br/>mermaid syntax...<br/><code>```</code></td>
-<td>See <a href="https://mermaid-js.github.io/mermaid/#/examples">plugin page</a> for full description</td>
-<td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/mermaid.jpg">View</a></td>
-</tr>
 </tbody>
 </table>
 
@@ -764,7 +768,7 @@ graph TD;
 </div></div>
 
 <div class="footer">
-Copyright (C) 2016-2020 Laurent Cozic
+Copyright (C) 2016-2021 Laurent Cozic
 </div>
 </body>
 </html>

@@ -2,7 +2,7 @@ import MdToHtml from '@joplin/renderer/MdToHtml';
 const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
 const { setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
-const shim = require('@joplin/lib/shim').default;
+import shim from '@joplin/lib/shim';
 const { themeStyle } = require('@joplin/lib/theme');
 
 function newTestMdToHtml(options: any = null) {
@@ -14,7 +14,7 @@ function newTestMdToHtml(options: any = null) {
 		...options,
 	};
 
-	return  new MdToHtml(options);
+	return new MdToHtml(options);
 }
 
 describe('MdToHtml', function() {
@@ -147,27 +147,86 @@ describe('MdToHtml', function() {
 		expect(result.html.trim()).toBe('<div id="rendered-md"><p>just <strong>testing</strong></p>\n</div>');
 	}));
 
-	// it('should render links correctly', (async () => {
-	// 	const mdToHtml = newTestMdToHtml();
+	it('should render links correctly', (async () => {
+		const testCases = [
+			// 0: input
+			// 1: output with linkify = off
+			// 2: output with linkify = on
+			[
+				'https://example.com',
+				'https://example.com',
+				'<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>https://example.com</a>',
+			],
+			[
+				'file://C:\\AUTOEXEC.BAT',
+				'file://C:\\AUTOEXEC.BAT',
+				'<a data-from-md title=\'file://C:%5CAUTOEXEC.BAT\' href=\'file://C:%5CAUTOEXEC.BAT\'>file://C:\\AUTOEXEC.BAT</a>',
+			],
+			[
+				'example.com',
+				'example.com',
+				'example.com',
+			],
+			[
+				'oo.ps',
+				'oo.ps',
+				'oo.ps',
+			],
+			[
+				'test@example.com',
+				'test@example.com',
+				'test@example.com',
+			],
+			[
+				'<https://example.com>',
+				'<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>https://example.com</a>',
+				'<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>https://example.com</a>',
+			],
+			[
+				'[ok](https://example.com)',
+				'<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>ok</a>',
+				'<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>ok</a>',
+			],
+			[
+				'[bla.pdf](file:///Users/tessus/Downloads/bla.pdf)',
+				'<a data-from-md title=\'file:///Users/tessus/Downloads/bla.pdf\' href=\'file:///Users/tessus/Downloads/bla.pdf\'>bla.pdf</a>',
+				'<a data-from-md title=\'file:///Users/tessus/Downloads/bla.pdf\' href=\'file:///Users/tessus/Downloads/bla.pdf\'>bla.pdf</a>',
+			],
+		];
 
-	// 	const testCases = [
-	// 		// None of these should result in a link
-	// 		['https://example.com', 'https://example.com'],
-	// 		['file://C:\\AUTOEXEC.BAT', 'file://C:\\AUTOEXEC.BAT'],
-	// 		['example.com', 'example.com'],
-	// 		['oo.ps', 'oo.ps'],
-	// 		['test@example.com', 'test@example.com'],
+		const mdToHtmlLinkifyOn = newTestMdToHtml({
+			pluginOptions: {
+				linkify: { enabled: true },
+			},
+		});
 
-	// 		// Those should be converted to links
-	// 		['<https://example.com>', '<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>https://example.com</a>'],
-	// 		['[ok](https://example.com)', '<a data-from-md title=\'https://example.com\' href=\'https://example.com\'>ok</a>'],
-	// 	];
+		const mdToHtmlLinkifyOff = newTestMdToHtml({
+			pluginOptions: {
+				linkify: { enabled: false },
+			},
+		});
 
-	// 	for (const testCase of testCases) {
-	// 		const [input, expected] = testCase;
-	// 		const actual = await mdToHtml.render(input, null, { bodyOnly: true, plainResourceRendering: true });
-	// 		expect(actual.html).toBe(expected);
-	// 	}
-	// }));
+		for (const testCase of testCases) {
+			const [input, expectedLinkifyOff, expectedLinkifyOn] = testCase;
+
+			{
+				const actual = await mdToHtmlLinkifyOn.render(input, null, {
+					bodyOnly: true,
+					plainResourceRendering: true,
+				});
+
+				expect(actual.html).toBe(expectedLinkifyOn);
+			}
+
+			{
+				const actual = await mdToHtmlLinkifyOff.render(input, null, {
+					bodyOnly: true,
+					plainResourceRendering: true,
+				});
+
+				expect(actual.html).toBe(expectedLinkifyOff);
+			}
+		}
+	}));
 
 });

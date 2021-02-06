@@ -155,4 +155,15 @@ utils.registerGulpTasks = function(gulp, tasks) {
 	}
 };
 
+utils.setPackagePrivateField = async function(filePath, value) {
+	const text = await fs.readFile(filePath, 'utf8');
+	const obj = JSON.parse(text);
+	if (!value) {
+		delete obj.private;
+	} else {
+		obj.private = true;
+	}
+	await fs.writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
+};
+
 module.exports = utils;

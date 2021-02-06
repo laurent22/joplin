@@ -12,25 +12,25 @@ const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, 
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
-const Note = require('@joplin/lib/models/Note.js');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
-const Resource = require('@joplin/lib/models/Resource.js');
-const Folder = require('@joplin/lib/models/Folder.js');
+import Note from '@joplin/lib/models/Note';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import Resource from '@joplin/lib/models/Resource';
+import Folder from '@joplin/lib/models/Folder';
 const Clipboard = require('@react-native-community/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
-const NavService = require('@joplin/lib/services/NavService.js');
-const BaseModel = require('@joplin/lib/BaseModel').default;
+import NavService from '@joplin/lib/services/NavService';
+import BaseModel from '@joplin/lib/BaseModel';
 const { ActionButton } = require('../action-button.js');
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const { ScreenHeader } = require('../screen-header.js');
 const NoteTagsDialog = require('./NoteTagsDialog');
-const time = require('@joplin/lib/time').default;
+import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
 const { _ } = require('@joplin/lib/locale');
-const { reg } = require('@joplin/lib/registry.js');
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher');
+import { reg } from '@joplin/lib/registry';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
@@ -39,9 +39,9 @@ const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker').default;
-const SelectDateTimeDialog = require('../SelectDateTimeDialog').default;
-const ShareExtension = require('../../utils/ShareExtension.js').default;
-const CameraView = require('../CameraView').default;
+import SelectDateTimeDialog from '../SelectDateTimeDialog';
+import ShareExtension from '../../utils/ShareExtension.js';
+import CameraView from '../CameraView';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -408,7 +408,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	onMarkForDownload(event: any) {
-		ResourceFetcher.instance().markForDownload(event.resourceId);
+		void ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
 	componentDidUpdate(prevProps: any) {
@@ -635,8 +635,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let resource = Resource.new();
 		resource.id = uuid.create();
 		resource.mime = mimeType;
-		resource.title = pickerResponse.fileName ? pickerResponse.fileName : '';
-		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName ? pickerResponse.fileName : localFilePath));
+		resource.title = pickerResponse.name ? pickerResponse.name : '';
+		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.name ? pickerResponse.name : localFilePath));
 
 		if (!resource.mime) resource.mime = 'application/octet-stream';
 

@@ -2,22 +2,14 @@ import { PaginationOrderDir } from '@joplin/lib/models/utils/types';
 import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
 import shim from '@joplin/lib/shim';
 
-const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder');
-const Resource = require('@joplin/lib/models/Resource');
-const Note = require('@joplin/lib/models/Note');
-const Tag = require('@joplin/lib/models/Tag');
-const NoteTag = require('@joplin/lib/models/NoteTag');
-const ResourceService = require('@joplin/lib/services/ResourceService').default;
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
-
-async function msleep(ms: number) {
-	return new Promise((resolve) => {
-		shim.setTimeout(() => {
-			resolve();
-		}, ms);
-	});
-}
+const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep } = require('./test-utils.js');
+import Folder from '@joplin/lib/models/Folder';
+import Resource from '@joplin/lib/models/Resource';
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
+import NoteTag from '@joplin/lib/models/NoteTag';
+import ResourceService from '@joplin/lib/services/ResourceService';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -418,8 +410,18 @@ describe('services_rest_Api', function() {
 		const response2 = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`);
 		expect(response2.items.length).toBe(1);
 		await Tag.addNote(tag2.id, note1.id);
-		const response3 = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`);
+		const response3 = await api.route(RequestMethod.GET, `notes/${note1.id}/tags`, { fields: 'id' });
 		expect(response3.items.length).toBe(2);
+
+		// Also check that it only returns the required fields
+		response3.items.sort((a: any, b: any) => {
+			return a.id < b.id ? -1 : +1;
+		});
+
+		const sortedTagIds = [tag.id, tag2.id];
+		sortedTagIds.sort();
+
+		expect(JSON.stringify(response3.items)).toBe(`[{"id":"${sortedTagIds[0]}"},{"id":"${sortedTagIds[1]}"}]`);
 	}));
 
 	it('should update tags when updating notes', (async () => {
@@ -430,8 +432,8 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({
 			title: 'ma note un',
 		});
-		Tag.addNote(tag1.id, note.id);
-		Tag.addNote(tag2.id, note.id);
+		await Tag.addNote(tag1.id, note.id);
+		await Tag.addNote(tag2.id, note.id);
 
 		const response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
 			tags: `${tag1.title},${tag3.title}`,
@@ -451,8 +453,8 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({
 			title: 'ma note un',
 		});
-		Tag.addNote(tag1.id, note.id);
-		Tag.addNote(tag2.id, note.id);
+		await Tag.addNote(tag1.id, note.id);
+		await Tag.addNote(tag2.id, note.id);
 
 		const response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
 			tags: `${tag1.title},${newTagTitle}`,
@@ -472,8 +474,8 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({
 			title: 'ma note un',
 		});
-		Tag.addNote(tag1.id, note.id);
-		Tag.addNote(tag2.id, note.id);
+		await Tag.addNote(tag1.id, note.id);
+		await Tag.addNote(tag2.id, note.id);
 
 		const response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
 			title: 'Some other title',
@@ -492,8 +494,8 @@ describe('services_rest_Api', function() {
 		const note = await Note.save({
 			title: 'ma note un',
 		});
-		Tag.addNote(tag1.id, note.id);
-		Tag.addNote(tag2.id, note.id);
+		await Tag.addNote(tag1.id, note.id);
+		await Tag.addNote(tag2.id, note.id);
 
 		const response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
 			tags: '',

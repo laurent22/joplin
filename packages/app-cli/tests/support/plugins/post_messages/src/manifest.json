@@ -1,0 +1,11 @@
+{
+	"manifest_version": 1,
+	"id": "org.joplinapp.plugins.PostMessageDemo",
+	"app_min_version": "1.6",
+	"version": "1.0.0",
+	"name": "PostMessage demo",
+	"description": "",
+	"author": "",
+	"homepage_url": "",
+	"repository_url": ""
+}

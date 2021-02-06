@@ -3,14 +3,14 @@ const { GeolocationReact } = require('./geolocation-react.js');
 const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
-const FsDriverRN = require('./fs-driver-rn.js').FsDriverRN;
+const FsDriverRN = require('./fs-driver-rn').default;
 const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
 const { Linking, Platform } = require('react-native');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('@joplin/lib/path-utils');
 const uuid = require('@joplin/lib/uuid').default;
-const Resource = require('@joplin/lib/models/Resource');
+const Resource = require('@joplin/lib/models/Resource').default;
 
 const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),

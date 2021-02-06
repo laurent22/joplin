@@ -1,8 +1,8 @@
 import produce, { Draft } from 'immer';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
-const Note = require('./models/Note.js');
-const Folder = require('./models/Folder.js');
-const BaseModel = require('./BaseModel').default;
+import Note from './models/Note';
+import Folder from './models/Folder';
+import BaseModel from './BaseModel';
 const ArrayUtils = require('./ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -350,7 +350,7 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 	if (newItems.length == 0) {
 		newSelectedIndexes = []; // no remaining items so no selection
 
-	}  else if (newSelectedIndexes.length == 0) {
+	} else if (newSelectedIndexes.length == 0) {
 		newSelectedIndexes.push(0); // no selection exists so select the top
 
 	} else {
@@ -580,7 +580,7 @@ function handleHistory(draft: Draft<State>, action: any) {
 		break;
 	}
 	case 'NOTE_SELECT':
-		if (currentNote != null &&  action.id != currentNote.id) {
+		if (currentNote != null && action.id != currentNote.id) {
 			draft.forwardHistoryNotes = [];
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}

@@ -16,7 +16,7 @@ To set it up, go to the config screen and select Nextcloud as the synchronisatio
 
 ## Setting up OneDrive or WebDAV synchronisation
 
-OneDrive and WebDAV are also supported as synchronisation services. Please see [the export documentation](https://github.com/laurent22/joplin#exporting) for more information.
+OneDrive and WebDAV are also supported as synchronisation services. Please see [the synchronisation documentation](https://github.com/laurent22/joplin#synchronisation) for more information.
 
 ## Using End-To-End Encryption
 

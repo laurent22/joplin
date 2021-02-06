@@ -28,6 +28,34 @@ export default class JoplinViewsPanels {
     addScript(handle: ViewHandle, scriptPath: string): Promise<void>;
     /**
      * Called when a message is sent from the webview (using postMessage).
+     *
+     * To post a message from the webview to the plugin use:
+     *
+     * ```javascript
+     * const response = await webviewApi.postMessage(message);
+     * ```
+     *
+     * - `message` can be any JavaScript object, string or number
+     * - `response` is whatever was returned by the `onMessage` handler
+     *
+     * Using this mechanism, you can have two-way communication between the
+     * plugin and webview.
+     *
+     * See the [postMessage
+     * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages) for more details.
+     *
      */
     onMessage(handle: ViewHandle, callback: Function): Promise<void>;
+    /**
+     * Shows the panel
+     */
+    show(handle: ViewHandle, show?: boolean): Promise<void>;
+    /**
+     * Hides the panel
+     */
+    hide(handle: ViewHandle): Promise<void>;
+    /**
+     * Tells whether the panel is visible or not
+     */
+    visible(handle: ViewHandle): Promise<boolean>;
 }

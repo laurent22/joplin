@@ -19,6 +19,9 @@ const logger = Logger.create('db');
 const migrationDir = `${__dirname}/migrations`;
 const sqliteDbDir = pathUtils.dirname(__dirname);
 
+export const defaultAdminEmail = 'admin@localhost';
+export const defaultAdminPassword = 'admin';
+
 export type DbConnection = Knex;
 
 export interface DbConfigConnection {
@@ -44,15 +47,15 @@ export interface ConnectionCheckResult {
 	connection: DbConnection;
 }
 
-export function sqliteFilePath(dbConfig: DatabaseConfig): string {
-	return `${sqliteDbDir}/db-${dbConfig.name}.sqlite`;
+export function sqliteFilePath(name: string): string {
+	return `${sqliteDbDir}/db-${name}.sqlite`;
 }
 
 export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	const connection: DbConfigConnection = {};
 
 	if (dbConfig.client === 'sqlite3') {
-		connection.filename = sqliteFilePath(dbConfig);
+		connection.filename = sqliteFilePath(dbConfig.name);
 	} else {
 		connection.database = dbConfig.name;
 		connection.host = dbConfig.host;
@@ -128,6 +131,17 @@ export async function dropTables(db: DbConnection): Promise<void> {
 	}
 }
 
+export async function truncateTables(db: DbConnection): Promise<void> {
+	for (const tableName of allTableNames()) {
+		try {
+			await db(tableName).truncate();
+		} catch (error) {
+			if (isNoSuchTableError(error)) continue;
+			throw error;
+		}
+	}
+}
+
 function isNoSuchTableError(error: any): boolean {
 	if (error) {
 		// Postgres error: 42P01: undefined_table
@@ -181,6 +195,11 @@ export enum ItemAddressingType {
 	Path,
 }
 
+export enum NotificationLevel {
+	Important = 10,
+	Normal = 20,
+}
+
 export enum ItemType {
     File = 1,
     User,
@@ -190,6 +209,11 @@ export enum ChangeType {
 	Create = 1,
 	Update = 2,
 	Delete = 3,
+}
+
+export enum ShareType {
+	Link = 1, // When a note is shared via a public link
+	App = 2, // When a note is shared with another user on the same server instance
 }
 
 export interface WithDates {
@@ -261,6 +285,21 @@ export interface ApiClient extends WithDates, WithUuid {
 	secret?: string;
 }
 
+export interface Notification extends WithDates, WithUuid {
+	owner_id?: Uuid;
+	level?: NotificationLevel;
+	key?: string;
+	message?: string;
+	read?: number;
+	canBeDismissed?: number;
+}
+
+export interface Share extends WithDates, WithUuid {
+	owner_id?: Uuid;
+	file_id?: Uuid;
+	type?: ShareType;
+}
+
 export const databaseSchema: DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -317,6 +356,25 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'string' },
 		name: { type: 'string' },
 		secret: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	notifications: {
+		id: { type: 'string' },
+		owner_id: { type: 'string' },
+		level: { type: 'number' },
+		key: { type: 'string' },
+		message: { type: 'string' },
+		read: { type: 'number' },
+		canBeDismissed: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	shares: {
+		id: { type: 'string' },
+		owner_id: { type: 'string' },
+		file_id: { type: 'string' },
+		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

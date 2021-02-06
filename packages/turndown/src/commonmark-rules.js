@@ -591,7 +591,7 @@ rules.joplinSourceBlock = {
     const info = joplinEditableBlockInfo(node);
     if (!info) return;
 
-    return info.openCharacters + info.content + info.closeCharacters;
+    return '\n\n' + info.openCharacters + info.content + info.closeCharacters + '\n\n';
   }
 }
 

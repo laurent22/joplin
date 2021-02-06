@@ -37,6 +37,7 @@ module.exports = {
 		'<rootDir>/tests/test-utils-synchronizer.js',
 		'<rootDir>/tests/file_api_driver.js',
 		'<rootDir>/tests/tmp/',
+		'<rootDir>/tests/test data/',
 	],
 
 	// To avoid this warning:
@@ -54,5 +55,5 @@ module.exports = {
 
 	testEnvironment: 'node',
 	setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-	slowTestThreshold: 20,
+	slowTestThreshold: 40,
 };

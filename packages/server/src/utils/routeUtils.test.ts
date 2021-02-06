@@ -18,7 +18,7 @@ describe('routeUtils', function() {
 			const link = t[2];
 			const addressingType = t[3];
 
-			const parsed = parseSubPath(path);
+			const parsed = parseSubPath('', path);
 			expect(parsed.id).toBe(id);
 			expect(parsed.link).toBe(link);
 			expect(parsed.addressingType).toBe(addressingType);

@@ -10,7 +10,7 @@ export default class InteropService_Importer_Custom extends InteropService_Impor
 		this.module_ = handler;
 	}
 
-	async exec(result: ImportExportResult) {
+	async exec(result: ImportExportResult): Promise<ImportExportResult> {
 		return this.module_.onExec({
 			sourcePath: this.sourcePath_,
 			options: this.options_,

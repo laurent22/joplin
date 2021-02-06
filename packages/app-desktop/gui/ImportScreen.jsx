@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Folder = require('@joplin/lib/models/Folder.js');
+const Folder = require('@joplin/lib/models/Folder').default;
 const { themeStyle } = require('@joplin/lib/theme');
 const { _ } = require('@joplin/lib/locale');
 const { filename, basename } = require('@joplin/lib/path-utils');

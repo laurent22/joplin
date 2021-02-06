@@ -1,7 +1,7 @@
 const { app } = require('./app.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Tag = require('@joplin/lib/models/Tag.js');
+const Note = require('@joplin/lib/models/Note').default;
+const Folder = require('@joplin/lib/models/Folder').default;
+const Tag = require('@joplin/lib/models/Tag').default;
 const { cliUtils } = require('./cli-utils.js');
 const yargParser = require('yargs-parser');
 const fs = require('fs-extra');

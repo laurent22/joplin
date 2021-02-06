@@ -1,10 +1,10 @@
 const Setting = require('../../models/Setting').default;
-const Tag = require('../../models/Tag');
+const Tag = require('../../models/Tag').default;
 const BaseModel = require('../../BaseModel').default;
-const Note = require('../../models/Note');
+const Note = require('../../models/Note').default;
 const { reg } = require('../../registry.js');
-const ResourceFetcher = require('../../services/ResourceFetcher');
-const DecryptionWorker = require('../../services/DecryptionWorker');
+const ResourceFetcher = require('../../services/ResourceFetcher').default;
+const DecryptionWorker = require('../../services/DecryptionWorker').default;
 const eventManager = require('../../eventManager').default;
 
 const reduxSharedMiddleware = async function(store, next, action) {

@@ -1,33 +1,36 @@
-import { SubPath, Route, redirect } from '../../utils/routeUtils';
-import { ErrorMethodNotAllowed } from '../../utils/errors';
+import { SubPath, redirect } from '../../utils/routeUtils';
+import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
-import { baseUrl } from '../../config';
+import config from '../../config';
+import defaultView from '../../utils/defaultView';
+import { View } from '../../services/MustacheService';
 
-const route: Route = {
+function makeView(error: any = null): View {
+	const view = defaultView('login');
+	view.content.error = error;
+	view.partials = ['errorBanner'];
+	return view;
+}
 
-	exec: async function(_path: SubPath, ctx: AppContext) {
-		const loginController = ctx.controllers.indexLogin();
+const router: Router = new Router();
 
-		if (ctx.method === 'GET') {
-			return loginController.getIndex();
-		}
+router.public = true;
 
-		if (ctx.method === 'POST') {
-			try {
-				const body = await formParse(ctx.req);
-				const session = await ctx.controllers.apiSession().authenticate(body.fields.email, body.fields.password);
+router.get('login', async (_path: SubPath, _ctx: AppContext) => {
+	return makeView();
+});
 
-				ctx.cookies.set('sessionId', session.id);
-				return redirect(ctx, `${baseUrl()}/home`);
-			} catch (error) {
-				return loginController.getIndex(error);
-			}
-		}
+router.post('login', async (_path: SubPath, ctx: AppContext) => {
+	try {
+		const body = await formParse(ctx.req);
 
-		throw new ErrorMethodNotAllowed();
-	},
+		const session = await ctx.models.session().authenticate(body.fields.email, body.fields.password);
+		ctx.cookies.set('sessionId', session.id);
+		return redirect(ctx, `${config().baseUrl}/home`);
+	} catch (error) {
+		return makeView(error);
+	}
+});
 
-};
-
-export default route;
+export default router;

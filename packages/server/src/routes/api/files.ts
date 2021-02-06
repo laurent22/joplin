@@ -1,87 +1,98 @@
-import { ErrorNotFound, ErrorMethodNotAllowed, ErrorBadRequest } from '../../utils/errors';
-import { File } from '../../db';
-import { bodyFields, formParse, headerSessionId } from '../../utils/requestUtils';
-import { SubPath, Route, ResponseType, Response } from '../../utils/routeUtils';
+import { ErrorNotFound } from '../../utils/errors';
+import { File, Uuid } from '../../db';
+import { bodyFields, formParse } from '../../utils/requestUtils';
+import { SubPath, respondWithFileContent } from '../../utils/routeUtils';
+import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
 
-const route: Route = {
+const router = new Router();
 
-	exec: async function(path: SubPath, ctx: AppContext) {
-		const fileController = ctx.controllers.apiFile();
+router.get('api/files/:id', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const file: File = await fileModel.pathToFile(path.id);
+	return fileModel.toApiOutput(file);
+});
 
-		// console.info(`${ctx.method} ${path.id}${path.link ? `/${path.link}` : ''}`);
+router.patch('api/files/:id', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const fileId = path.id;
+	const inputFile: File = await bodyFields(ctx.req);
+	const existingFileId: Uuid = await fileModel.pathToFileId(fileId);
+	const newFile = fileModel.fromApiInput(inputFile);
+	newFile.id = existingFileId;
+	return fileModel.toApiOutput(await fileModel.save(newFile));
+});
 
-		if (!path.link) {
-			if (ctx.method === 'GET') {
-				return fileController.getFile(headerSessionId(ctx.headers), path.id);
-			}
-
-			if (ctx.method === 'PATCH') {
-				return fileController.patchFile(headerSessionId(ctx.headers), path.id, await bodyFields(ctx.req));
-			}
-
-			if (ctx.method === 'DELETE') {
-				return fileController.deleteFile(headerSessionId(ctx.headers), path.id);
-			}
-
-			throw new ErrorMethodNotAllowed();
+router.del('api/files/:id', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	// const fileId = path.id;
+	try {
+		const fileId: Uuid = await fileModel.pathToFileId(path.id, { mustExist: false });
+		if (!fileId) return;
+		await fileModel.delete(fileId);
+	} catch (error) {
+		if (error instanceof ErrorNotFound) {
+			// That's ok - a no-op
+		} else {
+			throw error;
 		}
+	}
+});
 
-		if (path.link === 'content') {
-			if (ctx.method === 'GET') {
-				const koaResponse = ctx.response;
-				const file: File = await fileController.getFileContent(headerSessionId(ctx.headers), path.id);
-				koaResponse.body = file.content;
-				koaResponse.set('Content-Type', file.mime_type);
-				koaResponse.set('Content-Length', file.size.toString());
-				return new Response(ResponseType.KoaResponse, koaResponse);
-			}
+router.get('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const fileId: Uuid = await fileModel.pathToFileId(path.id);
+	const file = await fileModel.loadWithContent(fileId);
+	if (!file) throw new ErrorNotFound();
+	return respondWithFileContent(ctx.response, file);
+});
 
-			if (ctx.method === 'PUT') {
-				const result = await formParse(ctx.req);
-				if (!result?.files?.file) throw new ErrorBadRequest('File data is missing');
-				const buffer = await fs.readFile(result.files.file.path);
-				return fileController.putFileContent(headerSessionId(ctx.headers), path.id, buffer);
-			}
+router.put('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const fileId = path.id;
+	const result = await formParse(ctx.req);
 
-			if (ctx.method === 'DELETE') {
-				return fileController.deleteFileContent(headerSessionId(ctx.headers), path.id);
-			}
+	// When an app PUTs an empty file, `result.files` will be an emtpy object
+	// (could be the way Formidable parses the data?), but we still need to
+	// process the file so we set its content to an empty buffer.
+	// https://github.com/laurent22/joplin/issues/4402
+	const buffer = result?.files?.file ? await fs.readFile(result.files.file.path) : Buffer.alloc(0);
 
-			throw new ErrorMethodNotAllowed();
-		}
+	const file: File = await fileModel.pathToFile(fileId, { mustExist: false, returnFullEntity: false });
+	file.content = buffer;
+	return fileModel.toApiOutput(await fileModel.save(file, { validationRules: { mustBeFile: true } }));
+});
 
-		if (path.link === 'delta') {
-			if (ctx.method === 'GET') {
-				return fileController.getDelta(
-					headerSessionId(ctx.headers),
-					path.id,
-					requestChangePagination(ctx.query)
-				);
-			}
+router.del('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const fileId = path.id;
+	const file: File = await fileModel.pathToFile(fileId, { mustExist: false, returnFullEntity: false });
+	if (!file) return;
+	file.content = Buffer.alloc(0);
+	await fileModel.save(file, { validationRules: { mustBeFile: true } });
+});
 
-			throw new ErrorMethodNotAllowed();
-		}
+router.get('api/files/:id/delta', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const dirId: Uuid = await fileModel.pathToFileId(path.id);
+	const changeModel = ctx.models.change({ userId: ctx.owner.id });
+	return changeModel.byDirectoryId(dirId, requestChangePagination(ctx.query));
+});
 
-		if (path.link === 'children') {
-			if (ctx.method === 'GET') {
-				return fileController.getChildren(headerSessionId(ctx.headers), path.id, requestPagination(ctx.query));
-			}
+router.get('api/files/:id/children', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const parentId: Uuid = await fileModel.pathToFileId(path.id);
+	return fileModel.toApiOutput(await fileModel.childrens(parentId, requestPagination(ctx.query)));
+});
 
-			if (ctx.method === 'POST') {
-				return fileController.postChild(headerSessionId(ctx.headers), path.id, await bodyFields(ctx.req));
-			}
+router.post('api/files/:id/children', async (path: SubPath, ctx: AppContext) => {
+	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const child: File = fileModel.fromApiInput(await bodyFields(ctx.req));
+	const parentId: Uuid = await fileModel.pathToFileId(path.id);
+	child.parent_id = parentId;
+	return fileModel.toApiOutput(await fileModel.save(child));
+});
 
-			throw new ErrorMethodNotAllowed();
-		}
-
-		throw new ErrorNotFound(`Invalid link: ${path.link}`);
-	},
-
-	needsBodyMiddleware: true,
-
-};
-
-export default route;
+export default router;

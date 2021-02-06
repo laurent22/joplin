@@ -62,40 +62,53 @@ import UserModel from './UserModel';
 import PermissionModel from './PermissionModel';
 import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
+import NotificationModel from './NotificationModel';
+import ShareModel from './ShareModel';
 
 export class Models {
 
 	private db_: DbConnection;
+	private baseUrl_: string;
 
-	public constructor(db: DbConnection) {
+	public constructor(db: DbConnection, baseUrl: string) {
 		this.db_ = db;
+		this.baseUrl_ = baseUrl;
 	}
 
 	public file(options: ModelOptions = null) {
-		return new FileModel(this.db_, newModelFactory, options);
+		return new FileModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public user(options: ModelOptions = null) {
-		return new UserModel(this.db_, newModelFactory, options);
+		return new UserModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public apiClient(options: ModelOptions = null) {
-		return new ApiClientModel(this.db_, newModelFactory, options);
+		return new ApiClientModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public permission(options: ModelOptions = null) {
-		return new PermissionModel(this.db_, newModelFactory, options);
+		return new PermissionModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public session(options: ModelOptions = null) {
-		return new SessionModel(this.db_, newModelFactory, options);
+		return new SessionModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public change(options: ModelOptions = null) {
-		return new ChangeModel(this.db_, newModelFactory, options);
+		return new ChangeModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
+
+	public notification(options: ModelOptions = null) {
+		return new NotificationModel(this.db_, newModelFactory, this.baseUrl_, options);
+	}
+
+	public share(options: ModelOptions = null) {
+		return new ShareModel(this.db_, newModelFactory, this.baseUrl_, options);
+	}
+
 }
 
-export default function newModelFactory(db: DbConnection): Models {
-	return new Models(db);
+export default function newModelFactory(db: DbConnection, baseUrl: string): Models {
+	return new Models(db, baseUrl);
 }

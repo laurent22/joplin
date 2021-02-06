@@ -1,6 +1,6 @@
 import KeychainServiceDriverBase from './KeychainServiceDriverBase';
-const Setting = require('../../models/Setting').default;
-const BaseService = require('../BaseService').default;
+import Setting from '../../models/Setting';
+import BaseService from '../BaseService';
 
 export default class KeychainService extends BaseService {
 

@@ -1,7 +1,7 @@
 import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-const Setting = require('@joplin/lib/models/Setting').default;
-const Note = require('@joplin/lib/models/Note');
+import Setting from '@joplin/lib/models/Setting';
+import Note from '@joplin/lib/models/Note';
 const TemplateUtils = require('@joplin/lib/TemplateUtils');
 
 export const declaration: CommandDeclaration = {
@@ -27,6 +27,8 @@ export const runtime = (): CommandRuntime => {
 			});
 
 			newNote = await Note.save(newNote, { provisional: true });
+
+			void Note.updateGeolocation(newNote.id);
 
 			utils.store.dispatch({
 				type: 'NOTE_SELECT',

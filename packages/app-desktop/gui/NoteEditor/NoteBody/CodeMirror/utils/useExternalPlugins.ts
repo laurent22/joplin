@@ -5,7 +5,7 @@ import { extname } from 'path';
 import shim from '@joplin/lib/shim';
 import uuid from '@joplin/lib/uuid';
 
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 
 export default function useExternalPlugins(CodeMirror: any, plugins: PluginStates) {
 

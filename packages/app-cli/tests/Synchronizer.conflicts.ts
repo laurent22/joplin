@@ -3,9 +3,9 @@ import Setting from '@joplin/lib/models/Setting';
 import { allNotesFolders, localNotesFoldersSameAsRemote } from './test-utils-synchronizer';
 
 const { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const BaseItem = require('@joplin/lib/models/BaseItem.js');
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import BaseItem from '@joplin/lib/models/BaseItem';
 
 describe('Synchronizer.conflicts', function() {
 

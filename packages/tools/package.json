@@ -1,11 +1,13 @@
 {
   "name": "@joplin/tools",
-  "version": "1.0.15",
+  "version": "1.7.5",
   "description": "Various tools for Joplin",
   "main": "index.js",
   "author": "Laurent Cozic",
   "scripts": {
-    "updateIgnored": "gulp updateIgnoredTypeScriptBuild"
+    "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --project tsconfig.json"
   },
   "publishConfig": {
     "access": "public"
@@ -16,7 +18,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@joplin/lib": "^1.0.15",
+    "@joplin/lib": "^1.7.5",
     "execa": "^4.1.0",
     "fs-extra": "^4.0.3",
     "gettext-parser": "^1.3.0",
@@ -29,14 +31,17 @@
     "relative": "^3.0.2",
     "request": "^2.88.0",
     "sharp": "^0.25.2",
+    "source-map-support": "^0.5.19",
     "uri-template": "^1.0.1",
     "yargs": "^16.0.3"
   },
   "devDependencies": {
     "@rmp135/sql-ts": "^1.6.0",
+    "@types/fs-extra": "^9.0.6",
     "@types/node": "^14.14.6",
     "gulp": "^4.0.2",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "typescript": "^4.1.3"
   },
   "gitHead": "80c0089d2c52aff608b2bea74389de5a7f12f2e2"
 }

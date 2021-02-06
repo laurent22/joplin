@@ -1,6 +1,10 @@
 import InMemoryCache from './InMemoryCache';
 import noteStyle from './noteStyle';
 import { fileExtension } from './pathUtils';
+import setupLinkify from './MdToHtml/setupLinkify';
+import validateLinks from './MdToHtml/validateLinks';
+import { ItemIdToUrlHandler } from './utils';
+import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
@@ -10,6 +14,7 @@ interface RendererRule {
 	assets?(theme: any): any;
 	plugin?: any;
 	assetPath?: string;
+	assetPathIsAbsolute?: boolean;
 }
 
 interface RendererRules {
@@ -41,7 +46,6 @@ const rules: RendererRules = {
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 };
 
-const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const uslug = require('uslug');
 const markdownItAnchor = require('markdown-it-anchor');
@@ -113,18 +117,6 @@ interface PluginContext {
 	currentLinks: Link[];
 }
 
-interface RenderResultPluginAsset {
-	name: string;
-	path: string;
-	mime: string;
-}
-
-interface RenderResult {
-	html: string;
-	pluginAssets: RenderResultPluginAsset[];
-	cssStrings: string[];
-}
-
 export interface RuleOptions {
 	context: PluginContext;
 	theme: any;
@@ -156,6 +148,8 @@ export interface RuleOptions {
 	audioPlayerEnabled: boolean;
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
+
+	itemIdToUrl?: ItemIdToUrlHandler;
 }
 
 export default class MdToHtml {
@@ -238,6 +232,7 @@ export default class MdToHtml {
 		this.extraRendererRules_[id] = {
 			...module,
 			assetPath,
+			assetPathIsAbsolute: true,
 		};
 	}
 
@@ -289,6 +284,7 @@ export default class MdToHtml {
 					files.push(Object.assign({}, asset, {
 						name: name,
 						path: assetPath,
+						pathIsAbsolute: !!rule && !!rule.assetPathIsAbsolute,
 						mime: mime,
 					}));
 				}
@@ -516,6 +512,8 @@ export default class MdToHtml {
 				markdownIt.use(plugins[key].module, plugins[key].options);
 			}
 		}
+
+		markdownIt.validateLink = validateLinks;
 
 		if (this.pluginEnabled('linkify')) setupLinkify(markdownIt);
 

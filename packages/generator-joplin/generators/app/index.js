@@ -3,29 +3,7 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-
-function mergePackageKey(parentKey, source, dest) {
-	const output = Object.assign({}, dest);
-
-	for (const k in source) {
-		if (!(k in output)) {
-			// If the key doesn't exist in the destination, add it
-			output[k] = source[k];
-		} else if (parentKey === 'devDependencies') {
-			// If we are dealing with the dependencies, overwrite with the
-			// version from source.
-			output[k] = source[k];
-		} else if (typeof source[k] === 'object' && !Array.isArray(k) && source[k] !== null) {
-			// If it's an object, recursively process it
-			output[k] = mergePackageKey(k, source[k], output[k]);
-		} else {
-			// Otherwise, the default is to preserve the destination key
-			output[k] = dest[k];
-		}
-	}
-
-	return output;
-}
+const { mergePackageKey, mergeIgnoreFile, packageNameFromPluginName } = require('./utils');
 
 module.exports = class extends Generator {
 
@@ -42,7 +20,7 @@ module.exports = class extends Generator {
 	}
 
 	async prompting() {
-		this.log(yosay(`Welcome to the fine ${chalk.red('generator-joplin')} generator!`));
+		this.log(yosay(`Welcome to the fine ${chalk.red('Joplin Plugin')} generator!`));
 
 		if (this.options.update && !this.options.silent) {
 			const answers = await this.prompt([
@@ -50,10 +28,10 @@ module.exports = class extends Generator {
 					type: 'confirm',
 					name: 'proceed',
 					message: [
-						'Updating will overwrite all the generator files **except for the',
-						'src/ directory**. So if you have made any changes outside of src/',
-						'make sure your code is under version control so that you can inspect',
-						'the diff and re-apply your changes if needed. Do you want to proceed?',
+						'Updating will overwrite the config-related files. It will not change the',
+						'  content of /src or README.md. If you have made any changes to some of the',
+						'  config files make sure your code is under version control so that you can',
+						'  inspect the diff and re-apply your changes if needed. Do you want to proceed?',
 					].join('\n'),
 				},
 			]);
@@ -69,12 +47,12 @@ module.exports = class extends Generator {
 			{
 				type: 'input',
 				name: 'pluginId',
-				message: 'Plugin ID [Must be a globally unique ID such as "com.example.MyPlugin" or a UUID]',
+				message: 'Plugin ID\n  Must be a globally unique ID such as "com.example.MyPlugin" or a UUID:',
 			},
 			{
 				type: 'input',
 				name: 'pluginName',
-				message: 'Plugin name [User-friendly string which will be displayed in UI]',
+				message: 'Plugin name\n  User-friendly string which will be displayed in UI:',
 			},
 			{
 				type: 'input',
@@ -88,6 +66,11 @@ module.exports = class extends Generator {
 			},
 			{
 				type: 'input',
+				name: 'pluginRepositoryUrl',
+				message: 'Repository URL:',
+			},
+			{
+				type: 'input',
 				name: 'pluginHomepageUrl',
 				message: 'Homepage URL:',
 			},
@@ -98,11 +81,25 @@ module.exports = class extends Generator {
 			for (const prompt of prompts) {
 				props[prompt.name] = '';
 			}
+			props.packageName = '';
+
 			this.props = props;
 		} else {
-			return this.prompt(prompts).then(props => {
-				this.props = props;
-			});
+			const initialProps = await this.prompt(prompts);
+
+			const defaultPackageName = packageNameFromPluginName(initialProps.pluginName);
+
+			const derivedProps = await this.prompt([
+				{
+					type: 'input',
+					name: 'packageName',
+					message: `The npm package will be named: "${defaultPackageName}"\n  Press ENTER to keep this default, or type a name to change it:`,
+				},
+			]);
+
+			if (!derivedProps.packageName) derivedProps.packageName = defaultPackageName;
+
+			this.props = Object.assign({}, initialProps, derivedProps);
 		}
 	}
 
@@ -114,15 +111,18 @@ module.exports = class extends Generator {
 
 		const files = [
 			'.gitignore_TEMPLATE',
+			'.npmignore_TEMPLATE',
+			'GENERATOR_DOC.md',
 			'package_TEMPLATE.json',
-			'README.md',
 			'tsconfig.json',
 			'webpack.config.js',
+			'plugin.config.json',
 		];
 
 		const noUpdateFiles = [
 			'src/index.ts',
 			'src/manifest.json',
+			'README.md',
 		];
 
 		const allFiles = files.concat(noUpdateFiles);
@@ -143,6 +143,19 @@ module.exports = class extends Generator {
 							const sourceContent = JSON.parse(sourceBuffer.toString());
 							const newContent = mergePackageKey(null, sourceContent, destContent);
 							return JSON.stringify(newContent, null, 2);
+						},
+					}
+				);
+			} else if (this.options.update && destFile === 'plugin.config.json' && this.fs.exists(destFilePath)) {
+				// Keep existing content for now. Maybe later we could merge the configs.
+			} else if (this.options.update && (destFile === '.gitignore' || destFile === '.npmignore') && this.fs.exists(destFilePath)) {
+				const destContent = this.fs.read(destFilePath);
+
+				this.fs.copy(
+					this.templatePath(file),
+					destFilePath, {
+						process: (sourceBuffer) => {
+							return mergeIgnoreFile(sourceBuffer.toString(), destContent);
 						},
 					}
 				);

@@ -3,15 +3,15 @@
 
 const time = require('@joplin/lib/time').default;
 const { fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
+const Folder = require('@joplin/lib/models/Folder').default;
 const Setting = require('@joplin/lib/models/Setting').default;
-const Note = require('@joplin/lib/models/Note.js');
-const NoteTag = require('@joplin/lib/models/NoteTag.js');
-const ItemChange = require('@joplin/lib/models/ItemChange.js');
-const Tag = require('@joplin/lib/models/Tag.js');
-const Revision = require('@joplin/lib/models/Revision.js');
+const Note = require('@joplin/lib/models/Note').default;
+const NoteTag = require('@joplin/lib/models/NoteTag').default;
+const ItemChange = require('@joplin/lib/models/ItemChange').default;
+const Tag = require('@joplin/lib/models/Tag').default;
+const Revision = require('@joplin/lib/models/Revision').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
-const RevisionService = require('@joplin/lib/services/RevisionService.js');
+const RevisionService = require('@joplin/lib/services/RevisionService').default;
 const shim = require('@joplin/lib/shim').default;
 
 describe('services_Revision', function() {

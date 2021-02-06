@@ -1,19 +1,23 @@
 import { ViewHandle } from './utils/createViewHandle';
 
+export interface EmitMessageEvent {
+	message: any;
+}
+
 export default class ViewController {
 
 	private handle_: ViewHandle;
 	private pluginId_: string;
 	private store_: any;
 
-	constructor(handle: ViewHandle, pluginId: string, store: any) {
+	public constructor(handle: ViewHandle, pluginId: string, store: any) {
 		this.handle_ = handle;
 		this.pluginId_ = pluginId;
 		this.store_ = store;
 	}
 
 	protected get storeView(): any {
-		return this.store_.pluginService.plugins[this.pluginId_].views[this.handle];
+		return this.store_.getState().pluginService.plugins[this.pluginId_].views[this.handle];
 	}
 
 	protected get store(): any {
@@ -36,7 +40,7 @@ export default class ViewController {
 		throw new Error('Must be overriden');
 	}
 
-	public emitMessage(event: any) {
+	public async emitMessage(event: EmitMessageEvent): Promise<any> {
 		console.info('Calling ViewController.emitMessage - but not implemented', event);
 	}
 

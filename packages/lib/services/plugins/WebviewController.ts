@@ -1,4 +1,4 @@
-import ViewController from './ViewController';
+import ViewController, { EmitMessageEvent } from './ViewController';
 import shim from '../../shim';
 import { ButtonSpec, DialogResult } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
@@ -17,13 +17,33 @@ interface CloseResponse {
 	reject: Function;
 }
 
+// TODO: Copied from:
+// packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.ts
+function findItemByKey(layout: any, key: string): any {
+	if (!layout) throw new Error('Layout cannot be null');
+
+	function recurseFind(item: any): any {
+		if (item.key === key) return item;
+
+		if (item.children) {
+			for (const child of item.children) {
+				const found = recurseFind(child);
+				if (found) return found;
+			}
+		}
+		return null;
+	}
+
+	return recurseFind(layout);
+}
+
 export default class WebviewController extends ViewController {
 
 	private baseDir_: string;
 	private messageListener_: Function = null;
 	private closeResponse_: CloseResponse = null;
 
-	constructor(id: string, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
+	public constructor(id: string, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
 		super(id, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 
@@ -82,13 +102,36 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
-	public emitMessage(event: any) {
+	public async emitMessage(event: EmitMessageEvent): Promise<any> {
 		if (!this.messageListener_) return;
-		this.messageListener_(event.message);
+		return this.messageListener_(event.message);
 	}
 
 	public onMessage(callback: any) {
 		this.messageListener_ = callback;
+	}
+
+	// ---------------------------------------------
+	// Specific to panels
+	// ---------------------------------------------
+
+	public async show(show: boolean = true): Promise<void> {
+		this.store.dispatch({
+			type: 'MAIN_LAYOUT_SET_ITEM_PROP',
+			itemKey: this.handle,
+			propName: 'visible',
+			propValue: show,
+		});
+	}
+
+	public async hide(): Promise<void> {
+		return this.show(false);
+	}
+
+	public get visible(): boolean {
+		const mainLayout = this.store.getState().mainLayout;
+		const item = findItemByKey(mainLayout, this.handle);
+		return item ? item.visible : false;
 	}
 
 	// ---------------------------------------------

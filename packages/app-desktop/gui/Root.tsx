@@ -13,8 +13,8 @@ const React = require('react');
 
 const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
-const Setting = require('@joplin/lib/models/Setting').default;
-const shim = require('@joplin/lib/shim').default;
+import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');

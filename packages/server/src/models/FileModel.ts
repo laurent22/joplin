@@ -1,23 +1,31 @@
 import BaseModel, { ValidateOptions, SaveOptions, DeleteOptions } from './BaseModel';
-import { File, ItemType, databaseSchema } from '../db';
+import { File, ItemType, databaseSchema, Uuid } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import { splitItemPath, filePathInfo } from '../utils/routeUtils';
 import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
+import { setQueryParameters } from '../utils/urlUtils';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
+const removeTrailingColonsRegex = /^(:|)(.*?)(:|)$/;
+
 export interface PaginatedFiles extends PaginatedResults {
 	items: File[];
 }
 
-export interface EntityFromItemIdOptions {
+export interface PathToFileOptions {
 	mustExist?: boolean;
+	returnFullEntity?: boolean;
 }
 
-export default class FileModel extends BaseModel {
+export interface LoadOptions {
+	skipPermissionCheck?: boolean;
+}
+
+export default class FileModel extends BaseModel<File> {
 
 	private readonly reservedCharacters = ['/', '\\', '*', '<', '>', '?', ':', '|', '#', '%'];
 
@@ -51,31 +59,114 @@ export default class FileModel extends BaseModel {
 		return r ? r.id : '';
 	}
 
+	private isSpecialDir(dirname: string): boolean {
+		return dirname === 'root';
+	}
+
 	private async specialDirId(dirname: string): Promise<string> {
 		if (dirname === 'root') return this.userRootFileId();
 		return null; // Not a special dir
 	}
 
-	public async itemFullPath(item: File): Promise<string> {
+	public async itemFullPaths(items: File[]): Promise<Record<string, string>> {
+		const output: Record<string, string> = {};
+
+		const itemCache: Record<string, File> = {};
+
+		await this.withTransaction(async () => {
+			for (const item of items) {
+				const segments: string[] = [];
+				let current: File = item;
+
+				while (current) {
+					if (current.is_root) break;
+					segments.splice(0, 0, current.name);
+
+					if (current.parent_id) {
+						const id = current.parent_id;
+						current = itemCache[id] ? itemCache[id] : await this.load(id);
+						itemCache[id] = current;
+					} else {
+						current = null;
+					}
+				}
+
+				output[item.id] = segments.length ? (`root:/${segments.join('/')}:`) : 'root';
+			}
+		}, 'FileModel::itemFullPaths');
+
+		return output;
+	}
+
+	public async itemFullPath(item: File, loadOptions: LoadOptions = {}): Promise<string> {
 		const segments: string[] = [];
 		while (item) {
 			if (item.is_root) break;
 			segments.splice(0, 0, item.name);
-			item = item.parent_id ? await this.load(item.parent_id) : null;
+			item = item.parent_id ? await this.load(item.parent_id, loadOptions) : null;
 		}
 
 		return segments.length ? (`root:/${segments.join('/')}:`) : 'root';
 	}
 
-	public async entityFromItemId(idOrPath: string, options: EntityFromItemIdOptions = {}): Promise<File> {
-		options = { mustExist: true, ...options };
+	// Remove first and last colon from a path element
+	private removeTrailingColons(path: string): string {
+		return path.replace(removeTrailingColonsRegex, '$2');
+	}
+
+	public resolve(...paths: string[]): string {
+		if (!paths.length) throw new Error('Path is empty');
+
+		let pathElements: string[] = [];
+
+		for (const p of paths) {
+			pathElements = pathElements.concat(p.split('/').map(s => this.removeTrailingColons(s)));
+		}
+
+		pathElements = pathElements.filter(p => !!p);
+
+		if (!this.isSpecialDir(pathElements[0])) throw new Error(`Path must start with a special dir: ${pathElements.join('/')}`);
+
+		if (pathElements.length === 1) return pathElements[0];
+
+		// If the output is just "root", we return that only. Otherwise we build the path, eg. `root:/.resource/file:'`
+		const specialDir = pathElements.splice(0, 1)[0];
+
+		return `${specialDir}:/${pathElements.join('/')}:`;
+	}
+
+	// Same as `pathToFile` but returns the ID only.
+	public async pathToFileId(idOrPath: string, options: PathToFileOptions = {}): Promise<Uuid> {
+		const file = await this.pathToFile(idOrPath, {
+			...options,
+			returnFullEntity: false,
+		});
+		return file ? file.id : null;
+	}
+
+	// Converts an ID such as "Ps2YtQ8Udi4eCYm1A5bLFDGhHCWWCR43" or a path such
+	// as "root:/path/to/file.txt:" to the actual file.
+	public async pathToFile(idOrPath: string, options: PathToFileOptions = {}): Promise<File> {
+		if (!idOrPath) throw new Error('ID cannot be null');
+
+		options = {
+			mustExist: true,
+			returnFullEntity: true,
+			...options,
+		};
 
 		const specialDirId = await this.specialDirId(idOrPath);
 
 		if (specialDirId) {
-			return { id: specialDirId };
+			return options.returnFullEntity ? this.load(specialDirId) : { id: specialDirId };
 		} else if (idOrPath.indexOf(':') < 0) {
-			return { id: idOrPath };
+			if (options.mustExist) {
+				const file = await this.load(idOrPath);
+				if (!file) throw new ErrorNotFound(`file not found: ${idOrPath}`);
+				return options.returnFullEntity ? file : { id: file.id };
+			} else {
+				return options.returnFullEntity ? this.load(idOrPath) : { id: idOrPath };
+			}
 		} else {
 			// When this input is a path, there can be two cases:
 			// - A path to an existing file - in which case we return the file
@@ -99,7 +190,7 @@ export default class FileModel extends BaseModel {
 
 			// This is an existing file
 			const existingFile = await this.fileByName(parentId, fileInfo.basename);
-			if (existingFile) return { id: existingFile.id };
+			if (existingFile) return options.returnFullEntity ? existingFile : { id: existingFile.id };
 
 			if (options.mustExist) throw new ErrorNotFound(`file not found: ${idOrPath}`);
 
@@ -115,11 +206,17 @@ export default class FileModel extends BaseModel {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
 	}
 
-	private async fileByName(parentId: string, name: string): Promise<File> {
-		return this.db<File>(this.tableName).select(...this.defaultFields).where({
+	public async fileByName(parentId: string, name: string, options: LoadOptions = {}): Promise<File> {
+		const file = await this.db<File>(this.tableName).select(...this.defaultFields).where({
 			parent_id: parentId,
 			name: name,
 		}).first();
+
+		if (!file) return null;
+
+		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
+
+		return file;
 	}
 
 	protected async validate(object: File, options: ValidateOptions = {}): Promise<File> {
@@ -172,7 +269,7 @@ export default class FileModel extends BaseModel {
 		}
 
 		if ('name' in file) {
-			if (this.includesReservedCharacter(file.name)) throw new ErrorUnprocessableEntity(`File name may not contain any of these characters: ${this.reservedCharacters.join('')}`);
+			if (this.includesReservedCharacter(file.name)) throw new ErrorUnprocessableEntity(`File name may not contain any of these characters: ${this.reservedCharacters.join('')}: ${file.name}`);
 		}
 
 		return file;
@@ -248,6 +345,11 @@ export default class FileModel extends BaseModel {
 		return this.reservedCharacters.some(c => path.indexOf(c) >= 0);
 	}
 
+	public async fileUrl(idOrPath: string, query: any = null): Promise<string> {
+		const file: File = await this.pathToFile(idOrPath);
+		return setQueryParameters(`${this.baseUrl}/files/${await this.itemFullPath(file)}`, query);
+	}
+
 	private async pathToFiles(path: string, mustExist: boolean = true): Promise<File[]> {
 		const filenames = splitItemPath(path);
 		const output: File[] = [];
@@ -278,35 +380,35 @@ export default class FileModel extends BaseModel {
 
 	// Mostly makes sense for testing/debugging because the filename would
 	// have to globally unique, which is not a requirement.
-	public async loadByName(name: string): Promise<File> {
+	public async loadByName(name: string, options: LoadOptions = {}): Promise<File> {
 		const file: File = await this.db(this.tableName)
 			.select(this.defaultFields)
 			.where({ name: name })
 			.andWhere({ owner_id: this.userId })
 			.first();
 		if (!file) throw new ErrorNotFound(`No such file: ${name}`);
-		await this.checkCanReadPermissions(file);
+		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
 		return file;
 	}
 
-	public async loadWithContent(id: string): Promise<any> {
+	public async loadWithContent(id: string, options: LoadOptions = {}): Promise<any> {
 		const file: File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
 		if (!file) return null;
-		await this.checkCanReadPermissions(file);
+		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
 		return file;
 	}
 
-	public async loadByIds(ids: string[]): Promise<File[]> {
+	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<File[]> {
 		const files: File[] = await super.loadByIds(ids);
 		if (!files.length) return [];
-		await this.checkCanReadPermissions(files);
+		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(files);
 		return files;
 	}
 
-	public async load(id: string): Promise<File> {
+	public async load(id: string, options: LoadOptions = {}): Promise<File> {
 		const file: File = await super.load(id);
 		if (!file) return null;
-		await this.checkCanReadPermissions(file);
+		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
 		return file;
 	}
 
@@ -332,6 +434,13 @@ export default class FileModel extends BaseModel {
 		return super.save(file, options);
 	}
 
+	public async childrenCount(id: string): Promise<number> {
+		const parent = await this.load(id);
+		await this.checkCanReadPermissions(parent);
+		const r: any = await this.db(this.tableName).where('parent_id', id).count('id', { as: 'total' }).first();
+		return r.total;
+	}
+
 	public async childrens(id: string, pagination: Pagination): Promise<PaginatedFiles> {
 		const parent = await this.load(id);
 		await this.checkCanReadPermissions(parent);
@@ -341,6 +450,20 @@ export default class FileModel extends BaseModel {
 	private async childrenIds(id: string): Promise<string[]> {
 		const output = await this.db(this.tableName).select('id').where('parent_id', id);
 		return output.map(r => r.id);
+	}
+
+	public async deleteChildren(id: string): Promise<void> {
+		const file: File = await this.load(id);
+		if (!file) return;
+		await this.checkCanWritePermission(file);
+		if (!file.is_directory) throw new ErrorBadRequest(`Not a directory: ${id}`);
+
+		await this.withTransaction(async () => {
+			const childrenIds = await this.childrenIds(file.id);
+			for (const childId of childrenIds) {
+				await this.delete(childId);
+			}
+		}, 'FileModel::deleteChildren');
 	}
 
 	public async delete(id: string, options: DeleteOptions = {}): Promise<void> {
@@ -363,7 +486,7 @@ export default class FileModel extends BaseModel {
 			}
 
 			await super.delete(id);
-		});
+		}, 'FileModel::delete');
 	}
 
 }

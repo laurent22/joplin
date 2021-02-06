@@ -4,14 +4,15 @@ import contextMenu from './contextMenu';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
-const BaseItem = require('@joplin/lib/models/BaseItem');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Resource = require('@joplin/lib/models/Resource.js');
+import PostMessageService from '@joplin/lib/services/PostMessageService';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import BaseModel from '@joplin/lib/BaseModel';
+import Resource from '@joplin/lib/models/Resource';
 const bridge = require('electron').remote.require('./bridge').default;
 const { urlDecode } = require('@joplin/lib/string-utils');
 const urlUtils = require('@joplin/lib/urlUtils');
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher.js');
-const { reg } = require('@joplin/lib/registry.js');
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import { reg } from '@joplin/lib/registry';
 
 export default function useMessageHandler(scrollWhenReady: any, setScrollWhenReady: Function, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote) {
 	return useCallback(async (event: any) => {
@@ -36,7 +37,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 		} else if (msg.indexOf('markForDownload:') === 0) {
 			const s = msg.split(':');
 			if (s.length < 2) throw new Error(`Invalid message: ${msg}`);
-			ResourceFetcher.instance().markForDownload(s[1]);
+			void ResourceFetcher.instance().markForDownload(s[1]);
 		} else if (msg === 'contextMenu') {
 			const menu = await contextMenu({
 				itemType: arg0 && arg0.type,
@@ -95,6 +96,8 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 			const commandName = arg0.name;
 			const commandArgs = arg0.args || [];
 			void CommandService.instance().execute(commandName, ...commandArgs);
+		} else if (msg === 'postMessageService.message') {
+			void PostMessageService.instance().postMessage(arg0);
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}

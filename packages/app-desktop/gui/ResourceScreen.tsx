@@ -6,7 +6,7 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const prettyBytes = require('pretty-bytes');
-const Resource = require('@joplin/lib/models/Resource.js');
+import Resource from '@joplin/lib/models/Resource';
 
 interface Style {
 	width: number;
@@ -153,6 +153,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			order: [{
 				by: getSortingOrderColumn(sorting.order),
 				dir: sorting.type,
+				caseInsensitive: true,
 			}],
 			limit: MAX_RESOURCES,
 			fields: ['title', 'id', 'size', 'file_extension'],

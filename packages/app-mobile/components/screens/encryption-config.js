@@ -1,7 +1,7 @@
 const React = require('react');
 
 const { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView } = require('react-native');
-const EncryptionService = require('@joplin/lib/services/EncryptionService');
+const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
 const { _ } = require('@joplin/lib/locale');

@@ -1,7 +1,7 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('@joplin/lib/locale');
-const Tag = require('@joplin/lib/models/Tag.js');
+const Tag = require('@joplin/lib/models/Tag').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const time = require('@joplin/lib/time').default;
 

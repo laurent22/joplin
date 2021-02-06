@@ -22,7 +22,8 @@ module.exports = {
 
 		return `joplin.${camelCaseToDots(p)
 			.replace(/menu\.items/, 'menuItems')
-			.replace(/toolbar\.buttons/, 'toolbarButtons')}`;
+			.replace(/toolbar\.buttons/, 'toolbarButtons')
+			.replace(/content\.scripts/, 'contentScripts')}`;
 	},
 
 	jpIsAllowedGroup: function(name) {

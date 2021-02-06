@@ -4,10 +4,10 @@ import ResourceService from '@joplin/lib/services/ResourceService';
 import shim from '@joplin/lib/shim';
 
 const { resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('./test-utils.js');
-const Folder = require('@joplin/lib/models/Folder.js');
-const Note = require('@joplin/lib/models/Note.js');
-const Resource = require('@joplin/lib/models/Resource.js');
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine');
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import Resource from '@joplin/lib/models/Resource';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 
 describe('services_ResourceService', function() {
 

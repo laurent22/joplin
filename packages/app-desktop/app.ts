@@ -22,24 +22,27 @@ import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import stateToWhenClauseContext from './services/commands/stateToWhenClauseContext';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
+import produce from 'immer';
+import iterateItems from './gui/ResizableLayout/utils/iterateItems';
+import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
-const MasterKey = require('@joplin/lib/models/MasterKey');
-const Folder = require('@joplin/lib/models/Folder');
+import MasterKey from '@joplin/lib/models/MasterKey';
+import Folder from '@joplin/lib/models/Folder';
 const fs = require('fs-extra');
-const Tag = require('@joplin/lib/models/Tag.js');
-const { reg } = require('@joplin/lib/registry.js');
+import Tag from '@joplin/lib/models/Tag';
+import { reg } from '@joplin/lib/registry';
 const packageInfo = require('./packageInfo.js');
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker');
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 const ClipperServer = require('@joplin/lib/ClipperServer');
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
-const RevisionService = require('@joplin/lib/services/RevisionService');
-const MigrationService = require('@joplin/lib/services/MigrationService');
+import RevisionService from '@joplin/lib/services/RevisionService';
+import MigrationService from '@joplin/lib/services/MigrationService';
 const TemplateUtils = require('@joplin/lib/TemplateUtils');
 const CssUtils = require('@joplin/lib/CssUtils');
-// const populateDatabase = require('@joplin/lib/services/debug/populateDatabase').default;
+// import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 const commands = [
 	require('./gui/MainScreen/commands/editAlarm'),
@@ -75,7 +78,7 @@ const commands = [
 	require('./gui/NoteEditor/commands/showRevisions'),
 	require('./gui/NoteList/commands/focusElementNoteList'),
 	require('./gui/NoteListControls/commands/focusSearch'),
-	require('./gui/SideBar/commands/focusElementSideBar'),
+	require('./gui/Sidebar/commands/focusElementSideBar'),
 ];
 
 // Commands that are not tied to any particular component.
@@ -94,7 +97,7 @@ const globalCommands = [
 	require('@joplin/lib/commands/synchronize'),
 ];
 
-const editorCommandDeclarations = require('./gui/NoteEditor/commands/editorCommandDeclarations').default;
+import editorCommandDeclarations from './gui/NoteEditor/commands/editorCommandDeclarations';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -245,6 +248,29 @@ class Application extends BaseApplication {
 					...state,
 					mainLayout: action.value,
 				};
+				break;
+
+			case 'MAIN_LAYOUT_SET_ITEM_PROP':
+
+				{
+					let newLayout = produce(state.mainLayout, (draftLayout: LayoutItem) => {
+						iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
+							if (item.key === action.itemKey) {
+								(item as any)[action.propName] = action.propValue;
+								return false;
+							}
+							return true;
+						});
+					});
+
+					if (newLayout !== state.mainLayout) newLayout = validateLayout(newLayout);
+
+					newState = {
+						...state,
+						mainLayout: newLayout,
+					};
+				}
+
 				break;
 
 			case 'NOTE_FILE_WATCHER_ADD':
@@ -501,7 +527,7 @@ class Application extends BaseApplication {
 		// time, however we only effectively uninstall the plugin the next
 		// time the app is started. What plugin should be uninstalled is
 		// stored in the settings.
-		const newSettings = await service.uninstallPlugins(pluginSettings);
+		const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
 		Setting.setValue('plugins.states', newSettings);
 
 		try {
@@ -678,12 +704,12 @@ class Application extends BaseApplication {
 		if (Setting.value('env') === 'dev') {
 			void AlarmService.updateAllNotifications();
 		} else {
-			reg.scheduleSync(1000).then(() => {
+			void reg.scheduleSync(1000).then(() => {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.
 				void AlarmService.updateAllNotifications();
 
-				DecryptionWorker.instance().scheduleStart();
+				void DecryptionWorker.instance().scheduleStart();
 			});
 		}
 
@@ -712,6 +738,7 @@ class Application extends BaseApplication {
 				revisionService: RevisionService.instance(),
 				migrationService: MigrationService.instance(),
 				decryptionWorker: DecryptionWorker.instance(),
+				commandService: CommandService.instance(),
 				bridge: bridge(),
 			};
 		};
@@ -730,13 +757,15 @@ class Application extends BaseApplication {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));
 		// }, 2000);
 
-		// this.dispatch({
-		// 	type: 'NAV_GO',
-		// 	routeName: 'Config',
-		// 	props: {
-		// 		defaultSection: 'plugins',
-		// 	},
-		// });
+		// setTimeout(() => {
+		// 	this.dispatch({
+		// 		type: 'NAV_GO',
+		// 		routeName: 'Config',
+		// 		props: {
+		// 			defaultSection: 'plugins',
+		// 		},
+		// 	});
+		// }, 5000);
 
 		return null;
 	}

@@ -1,0 +1,16 @@
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+	<ul class="pagination-list">
+		{{#paginationLinks}}
+			{{#isEllipsis}}
+				<li>
+					<span class="pagination-ellipsis">&hellip;</span>
+				</li>
+			{{/isEllipsis}}
+			{{^isEllipsis}}
+				<li>
+					<a class="pagination-link {{#isCurrent}}is-current{{/isCurrent}}" aria-label="Goto page {{page}}" href="{{url}}">{{page}}</a>
+				</li>
+			{{/isEllipsis}}
+		{{/paginationLinks}}
+	</ul>
+</nav>

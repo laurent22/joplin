@@ -37,7 +37,7 @@ function plugin(markdownIt: any) {
 		// May be, one day we will add .clone() for token and simplify this part, but
 		// now we prefer to keep things local.
 		if (info) {
-			i        = token.attrIndex('class');
+			i = token.attrIndex('class');
 			tmpAttrs = token.attrs ? token.attrs.slice() : [];
 
 			if (i < 0) {
@@ -51,13 +51,13 @@ function plugin(markdownIt: any) {
 				attrs: tmpAttrs,
 			};
 
-			return  `<pre><code${slf.renderAttrs(tmpToken)}>${
+			return `<pre><code${slf.renderAttrs(tmpToken)}>${
 				highlighted
 			}</code></pre>\n`;
 		}
 
 
-		return  `<pre><code${slf.renderAttrs(token)}>${
+		return `<pre><code${slf.renderAttrs(token)}>${
 			highlighted
 		}</code></pre>\n`;
 	};

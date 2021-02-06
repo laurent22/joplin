@@ -1,7 +1,7 @@
 const React = require('react');
 
 const { StyleSheet } = require('react-native');
-const Note = require('@joplin/lib/models/Note');
+const Note = require('@joplin/lib/models/Note').default;
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');

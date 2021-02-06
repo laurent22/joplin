@@ -4,7 +4,7 @@ import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from '@joplin/lib/servi
 
 const { render } = require('react-dom');
 const ipcRenderer = require('electron').ipcRenderer;
-const Setting = require('@joplin/lib/models/Setting').default;
+import Setting from '@joplin/lib/models/Setting';
 const bridge = require('electron').remote.require('./bridge').default;
 
 function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {

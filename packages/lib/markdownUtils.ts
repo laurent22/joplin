@@ -1,7 +1,7 @@
+import { validateLinks } from '@joplin/renderer';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
 const MarkdownIt = require('markdown-it');
-const { setupLinkify } = require('@joplin/renderer');
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
@@ -30,6 +30,17 @@ const markdownUtils = {
 		return url;
 	},
 
+	escapeTableCell(text: string) {
+		// Disable HTML code
+		text = text.replace(/</g, '&lt;');
+		text = text.replace(/>/g, '&gt;');
+		// Table cells can't contain new lines so replace with <br/>
+		text = text.replace(/\n/g, '<br/>');
+		// "|" is a reserved characters that should be escaped
+		text = text.replace(/\|/g, '\\|');
+		return text;
+	},
+
 	unescapeLinkUrl(url: string) {
 		url = url.replace(/%28/g, '(');
 		url = url.replace(/%29/g, ')');
@@ -47,7 +58,7 @@ const markdownUtils = {
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
 	extractImageUrls(md: string) {
 		const markdownIt = new MarkdownIt();
-		setupLinkify(markdownIt); // Necessary to support file:/// links
+		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
 		const env = {};
 		const tokens = markdownIt.parse(md, env);
@@ -117,8 +128,8 @@ const markdownUtils = {
 			const rowMd = [];
 			for (let j = 0; j < headers.length; j++) {
 				const h = headers[j];
-				const value = h.filter ? h.filter(row[h.name]) : row[h.name];
-				rowMd.push(stringPadding(value, 3, ' ', stringPadding.RIGHT));
+				const valueMd = markdownUtils.escapeTableCell(h.filter ? h.filter(row[h.name]) : row[h.name]);
+				rowMd.push(stringPadding(valueMd, 3, ' ', stringPadding.RIGHT));
 			}
 			output.push(rowMd.join(' | '));
 		}

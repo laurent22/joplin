@@ -1,4 +1,4 @@
 {
   "verbose": true,
-  "watch": ["dist/"]
+  "watch": ["dist/", "../renderer", "../lib"]
 }

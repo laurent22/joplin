@@ -1,4 +1,4 @@
-const Resource = require('../models/Resource');
+const Resource = require('../models/Resource').default;
 const Setting = require('../models/Setting').default;
 const shim = require('../shim').default;
 const { reg } = require('../registry.js');

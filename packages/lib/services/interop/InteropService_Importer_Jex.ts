@@ -1,8 +1,10 @@
 import { ImportExportResult } from './types';
 
-const InteropService_Importer_Base = require('./InteropService_Importer_Base').default;
-const InteropService_Importer_Raw = require('./InteropService_Importer_Raw').default;
+import InteropService_Importer_Base from './InteropService_Importer_Base';
+import InteropService_Importer_Raw from './InteropService_Importer_Raw';
 const { filename } = require('../../path-utils');
+import shim from '../../shim';
+
 const fs = require('fs-extra');
 
 export default class InteropService_Importer_Jex extends InteropService_Importer_Base {
@@ -10,7 +12,7 @@ export default class InteropService_Importer_Jex extends InteropService_Importer
 		const tempDir = await this.temporaryDirectory_(true);
 
 		try {
-			await require('tar').extract({
+			await shim.fsDriver().tarExtract({
 				strict: true,
 				portable: true,
 				file: this.sourcePath_,

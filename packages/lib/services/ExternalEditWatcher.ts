@@ -5,7 +5,7 @@ import { fileExtension, basename, toSystemSlashes } from '../path-utils';
 import time from '../time';
 import { NoteEntity } from './database/types';
 
-const Note = require('../models/Note');
+import Note from '../models/Note';
 const EventEmitter = require('events');
 const { splitCommandString } = require('../string-utils');
 const spawn = require('child_process').spawn;

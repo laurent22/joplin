@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+import dayjs = require('dayjs');
 
 export function msleep(ms: number) {
 	return new Promise((resolve: Function) => {
@@ -6,4 +6,8 @@ export function msleep(ms: number) {
 			resolve(null);
 		}, ms);
 	});
+}
+
+export function formatDateTime(ms: number): string {
+	return dayjs(ms).format('D MMM YY HH:mm:ss');
 }

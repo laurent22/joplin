@@ -7,21 +7,22 @@ import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.nod
 import { _, setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
+import SyncTargetOneDrive from './SyncTargetOneDrive';
 
 const { createStore, applyMiddleware } = require('redux');
 const { defaultState, stateUtils } = require('./reducer');
-const { JoplinDatabase } = require('./joplin-database.js');
+import JoplinDatabase from './JoplinDatabase';
 const { FoldersScreenUtils } = require('./folders-screen-utils.js');
 const { DatabaseDriverNode } = require('./database-driver-node.js');
-const BaseModel = require('./BaseModel').default;
-const Folder = require('./models/Folder.js');
-const BaseItem = require('./models/BaseItem.js');
-const Note = require('./models/Note.js');
-const Tag = require('./models/Tag.js');
+import BaseModel from './BaseModel';
+import Folder from './models/Folder';
+import BaseItem from './models/BaseItem';
+import Note from './models/Note';
+import Tag from './models/Tag';
 const { splitCommandString } = require('./string-utils.js');
-const { reg } = require('./registry.js');
-const time = require('./time').default;
-const BaseSyncTarget = require('./BaseSyncTarget.js');
+import { reg } from './registry';
+import time from './time';
+import BaseSyncTarget from './BaseSyncTarget';
 const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
 const os = require('os');
 const fs = require('fs-extra');
@@ -30,20 +31,19 @@ const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
 const SyncTargetRegistry = require('./SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
-const SyncTargetOneDrive = require('./SyncTargetOneDrive.js');
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
-const EncryptionService = require('./services/EncryptionService');
-const ResourceFetcher = require('./services/ResourceFetcher');
-const SearchEngineUtils = require('./services/searchengine/SearchEngineUtils');
-const SearchEngine = require('./services/searchengine/SearchEngine');
-const RevisionService = require('./services/RevisionService');
-const ResourceService = require('./services/RevisionService');
-const DecryptionWorker = require('./services/DecryptionWorker');
+import EncryptionService from './services/EncryptionService';
+import ResourceFetcher from './services/ResourceFetcher';
+import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
+import SearchEngine from './services/searchengine/SearchEngine';
+import RevisionService from './services/RevisionService';
+import ResourceService from './services/ResourceService';
+import DecryptionWorker from './services/DecryptionWorker';
 const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
-const MigrationService = require('./services/MigrationService');
+import MigrationService from './services/MigrationService';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -94,7 +94,8 @@ export default class BaseApplication {
 		BaseItem.revisionService_ = null;
 		RevisionService.instance_ = null;
 		ResourceService.instance_ = null;
-		ResourceService.isRunningInBackground = false;
+		ResourceService.isRunningInBackground_ = false;
+		// ResourceService.isRunningInBackground_ = false;
 		ResourceFetcher.instance_ = null;
 		EncryptionService.instance_ = null;
 		DecryptionWorker.instance_ = null;
@@ -365,7 +366,7 @@ export default class BaseApplication {
 
 	resourceFetcher_downloadComplete(event: any) {
 		if (event.encrypted) {
-			DecryptionWorker.instance().scheduleStart();
+			void DecryptionWorker.instance().scheduleStart();
 		}
 	}
 
@@ -422,7 +423,7 @@ export default class BaseApplication {
 			'encryption.enabled': async () => {
 				if (this.hasGui()) {
 					await EncryptionService.instance().loadMasterKeysFromSettings();
-					DecryptionWorker.instance().scheduleStart();
+					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
 					this.dispatch({
@@ -432,7 +433,7 @@ export default class BaseApplication {
 
 					// Schedule a sync operation so that items that need to be encrypted
 					// are sent to sync target.
-					reg.scheduleSync();
+					void reg.scheduleSync();
 				}
 			},
 			'sync.interval': async () => {
@@ -469,7 +470,7 @@ export default class BaseApplication {
 		await reduxSharedMiddleware(store, next, action);
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-			if (!(await reg.syncTarget().syncStarted())) reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
 			SearchEngine.instance().scheduleSyncTables();
 		}
 
@@ -568,11 +569,11 @@ export default class BaseApplication {
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
-			DecryptionWorker.instance().scheduleStart();
+			void DecryptionWorker.instance().scheduleStart();
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_CREATED_OR_UPDATED_RESOURCE') {
-			ResourceFetcher.instance().autoAddResources();
+			void ResourceFetcher.instance().autoAddResources();
 		}
 
 		if (action.type == 'SETTING_UPDATE_ONE') {
@@ -603,7 +604,7 @@ export default class BaseApplication {
 		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn()));
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
-		reg.dispatch = this.store().dispatch;
+		// reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
@@ -613,7 +614,7 @@ export default class BaseApplication {
 		this.store_ = null;
 		BaseModel.dispatch = function() {};
 		FoldersScreenUtils.dispatch = function() {};
-		reg.dispatch = function() {};
+		// reg.dispatch = function() {};
 		BaseSyncTarget.dispatch = function() {};
 		DecryptionWorker.instance().dispatch = function() {};
 		ResourceFetcher.instance().dispatch = function() {};
@@ -667,6 +668,7 @@ export default class BaseApplication {
 		const resourceDirName = 'resources';
 		const resourceDir = `${profileDir}/${resourceDirName}`;
 		const tempDir = `${profileDir}/tmp`;
+		const cacheDir = `${profileDir}/cache`;
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
@@ -674,6 +676,8 @@ export default class BaseApplication {
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
+		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
+		Setting.setConstant('cacheDir', cacheDir);
 		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
 
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -695,6 +699,7 @@ export default class BaseApplication {
 		await fs.mkdirp(profileDir, 0o755);
 		await fs.mkdirp(resourceDir, 0o755);
 		await fs.mkdirp(tempDir, 0o755);
+		await fs.mkdirp(cacheDir, 0o755);
 
 		// Clean up any remaining watched files (they start with "edit-")
 		await shim.fsDriver().removeAllThatStartWith(profileDir, 'edit-');
@@ -715,8 +720,8 @@ export default class BaseApplication {
 
 
 
-		reg.setLogger(Logger.create(''));
-		reg.dispatch = () => {};
+		reg.setLogger(Logger.create('') as Logger);
+		// reg.dispatch = () => {};
 
 		BaseService.logger_ = globalLogger;
 
@@ -799,7 +804,7 @@ export default class BaseApplication {
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
 
 		if (!Setting.value('api.token')) {
-			EncryptionService.instance()
+			void EncryptionService.instance()
 				.randomHexString(64)
 				.then((token: string) => {
 					Setting.setValue('api.token', token);
@@ -826,7 +831,7 @@ export default class BaseApplication {
 		});
 		ResourceFetcher.instance().setLogger(globalLogger);
 		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
-		ResourceFetcher.instance().start();
+		void ResourceFetcher.instance().start();
 
 		SearchEngine.instance().setDb(reg.db());
 		SearchEngine.instance().setLogger(reg.logger());

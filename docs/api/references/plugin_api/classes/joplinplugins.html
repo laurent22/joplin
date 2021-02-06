@@ -92,8 +92,11 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinplugins.html#datadir" class="tsd-kind-icon">data<wbr>Dir</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinplugins.html#installationdir" class="tsd-kind-icon">installation<wbr>Dir</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinplugins.html#register" class="tsd-kind-icon">register</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinplugins.html#registercontentscript" class="tsd-kind-icon">register<wbr>Content<wbr>Script</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinplugins.html#require" class="tsd-kind-icon">require</a></li>
 							</ul>
 						</section>
 					</div>
@@ -103,6 +106,57 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="datadir" class="tsd-anchor"></a>
+					<h3>data<wbr>Dir</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">data<wbr>Dir<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the plugin own data directory path. Use this to store any
+										plugin-related data. Unlike <a href="joplinplugins.html#installationdir">installationDir</a>, any data stored here
+									will be persisted.</p>
+								</div>
+							</div>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="installationdir" class="tsd-anchor"></a>
+					<h3>installation<wbr>Dir</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">installation<wbr>Dir<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the plugin installation directory. This can be used to access any
+										asset that was packaged with the plugin. This directory should be
+										considered read-only because any data you store here might be deleted or
+									re-created at any time. To store new persistent data, use <a href="joplinplugins.html#datadir">dataDir</a>.</p>
+								</div>
+							</div>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="register" class="tsd-anchor"></a>
 					<h3>register</h3>
@@ -149,46 +203,57 @@
 							<aside class="tsd-sources">
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Registers a new content script. Unlike regular plugin code, which
-										runs in a separate process, content scripts run within the main
-										process code and thus allow improved performances and more
-										customisations in specific cases. It can be used for example to load
-									a Markdown or editor plugin.</p>
-								</div>
-								<p>Note that registering a content script in itself will do nothing -
-									it will only be loaded in specific cases by the relevant app modules
-									(eg. the Markdown renderer or the code editor). So it is not a way
-									to inject and run arbitrary code in the app, which for safety and
-								performance reasons is not supported.</p>
-								<ul>
-									<li><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script">View the renderer demo plugin</a></li>
-									<li><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script">View the editor demo plugin</a></li>
-								</ul>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>Use joplin.contentScripts.register()</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>type: <a href="../enums/contentscripttype.html" class="tsd-signature-type">ContentScriptType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Defines how the script will be used. See the type definition for more information about each supported type.</p>
-									</div>
 								</li>
 								<li>
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>A unique ID for the content script.</p>
-									</div>
 								</li>
 								<li>
 									<h5>scriptPath: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set <code>scriptPath</code> to <code>&quot;./content_script.js</code>.</p>
-									</div>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
     <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="require" class="tsd-anchor"></a>
+					<h3>require</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">require<span class="tsd-signature-symbol">(</span>_path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>Use joplin.require()</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>_path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 
 
 -->
@@ -218,10 +283,19 @@
 								<a href="joplinplugins.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinplugins.html#datadir" class="tsd-kind-icon">data<wbr>Dir</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinplugins.html#installationdir" class="tsd-kind-icon">installation<wbr>Dir</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinplugins.html#register" class="tsd-kind-icon">register</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinplugins.html#registercontentscript" class="tsd-kind-icon">register<wbr>Content<wbr>Script</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinplugins.html#require" class="tsd-kind-icon">require</a>
 							</li>
 						</ul>
 					</li>

@@ -15,7 +15,6 @@ const logger = Logger.create('UserWebview');
 export interface Props {
 	html: string;
 	scripts: string[];
-	onMessage: Function;
 	pluginId: string;
 	viewId: string;
 	themeId: number;
@@ -119,9 +118,9 @@ function UserWebview(props: Props, ref: any) {
 	useWebviewToPluginMessages(
 		frameWindow(),
 		isReady,
-		props.onMessage,
 		props.pluginId,
-		props.viewId
+		props.viewId,
+		postMessage
 	);
 
 	useScriptLoader(

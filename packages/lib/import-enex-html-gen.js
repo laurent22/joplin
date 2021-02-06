@@ -1,7 +1,7 @@
 const stringToStream = require('string-to-stream');
 // const cleanHtml = require('clean-html');
 const resourceUtils = require('./resourceUtils.js');
-const { isSelfClosingTag } = require('./htmlUtils');
+const htmlUtils = require('./htmlUtils').default;
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 
@@ -126,7 +126,7 @@ function enexXmlToHtml_(stream, resources) {
 				const nodeAttributes = attributeToLowerCase(node);
 				const checkedHtml = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? ' checked="checked" ' : ' ';
 				section.lines.push(`<input${checkedHtml}type="checkbox" onclick="return false;" />`);
-			} else if (isSelfClosingTag(tagName)) {
+			} else if (htmlUtils.isSelfClosingTag(tagName)) {
 				section.lines.push(`<${tagName}${attributesStr}/>`);
 			} else {
 				section.lines.push(`<${tagName}${attributesStr}>`);
@@ -135,7 +135,7 @@ function enexXmlToHtml_(stream, resources) {
 
 		saxStream.on('closetag', function(node) {
 			const tagName = node ? node.toLowerCase() : node;
-			if (!isSelfClosingTag(tagName)) section.lines.push(`</${tagName}>`);
+			if (!htmlUtils.isSelfClosingTag(tagName)) section.lines.push(`</${tagName}>`);
 		});
 
 		saxStream.on('attribute', function() {});

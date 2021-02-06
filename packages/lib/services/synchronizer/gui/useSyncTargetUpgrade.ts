@@ -1,8 +1,8 @@
 import shim from '../../../shim';
 import MigrationHandler from '../MigrationHandler';
 const { useEffect, useState } = shim.react();
-const Setting = require('../../../models/Setting').default;
-const { reg } = require('../../../registry');
+import Setting from '../../../models/Setting';
+import { reg } from '../../../registry';
 
 export interface SyncTargetUpgradeResult {
 	done: boolean;

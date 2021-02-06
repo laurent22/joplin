@@ -1,4 +1,4 @@
-const Note = require('@joplin/lib/models/Note.js');
+const Note = require('@joplin/lib/models/Note').default;
 const TextWidget = require('tkwidgets/TextWidget.js');
 const { _ } = require('@joplin/lib/locale');
 

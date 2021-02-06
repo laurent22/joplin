@@ -1,10 +1,10 @@
 const { BaseCommand } = require('./base-command.js');
-const BaseItem = require('@joplin/lib/models/BaseItem');
+const BaseItem = require('@joplin/lib/models/BaseItem').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { toTitleCase } = require('@joplin/lib/string-utils.js');
 const { reg } = require('@joplin/lib/registry.js');
 const markdownUtils = require('@joplin/lib/markdownUtils').default;
-const { Database } = require('@joplin/lib/database.js');
+const Database = require('@joplin/lib/database').default;
 const shim = require('@joplin/lib/shim').default;
 
 class Command extends BaseCommand {
@@ -312,6 +312,20 @@ async function fetchAllNotes() {
 				lines.push('');
 				lines.push('The "data" field is required, while the "props" one is not. If not specified, default values will be used.');
 				lines.push('');
+				lines.push('**From a plugin** the syntax to create a resource is also a bit special:');
+				lines.push('');
+				lines.push('```javascript');
+				lines.push('\tawait joplin.data.post(');
+				lines.push('\t\t["resources"],');
+				lines.push('\t\tnull,');
+				lines.push('\t\t{ title: "test.jpg" }, // Resource metadata');
+				lines.push('\t\t[');
+				lines.push('\t\t\t{');
+				lines.push('\t\t\t\tpath: "/path/to/test.jpg", // Actual file');
+				lines.push('\t\t\t},');
+				lines.push('\t\t]');
+				lines.push('\t);');
+				lines.push('```');
 			}
 
 			if (model.type === BaseModel.TYPE_TAG) {

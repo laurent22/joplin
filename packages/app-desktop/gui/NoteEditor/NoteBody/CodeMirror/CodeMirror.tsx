@@ -9,7 +9,7 @@ import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize 
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
-import NoteTextViewer  from '../../../NoteTextViewer';
+import NoteTextViewer from '../../../NoteTextViewer';
 import Editor from './Editor';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import Setting from '@joplin/lib/models/Setting';
@@ -25,13 +25,12 @@ import { ThemeAppearance } from '@joplin/lib/themes/type';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import dialogs from '../../../dialogs';
 import convertToScreenCoordinates from '../../../utils/convertToScreenCoordinates';
-
-const Note = require('@joplin/lib/models/Note.js');
+import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -301,7 +300,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			element.id = script.id;
 
 			element.onload = () => {
-				resolve();
+				resolve(null);
 			};
 
 			document.getElementsByTagName('head')[0].appendChild(element);
@@ -372,7 +371,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			/* These must be important to prevent the codemirror defaults from taking over*/
 			.CodeMirror {
 				font-family: monospace;
-				font-size: ${theme.editorFontSize}px;
+				font-size: ${props.fontSize}px;
 				height: 100% !important;
 				width: 100% !important;
 				color: inherit !important;
@@ -385,6 +384,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				/* This is used to enable the scroll-past end behaviour. The same height should */
 				/* be applied to the viewer. */
 				padding-bottom: 400px !important;
+			}
+
+			/* Left padding is applied at the editor component level, so we should remove it from the lines */
+			.CodeMirror pre.CodeMirror-line,
+			.CodeMirror pre.CodeMirror-line-like {
+				padding-left: 0;
 			}
 
 			.CodeMirror-sizer {
@@ -614,7 +619,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		function pointerInsideEditor(x: number, y: number) {
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 			if (!elements.length) return null;
-			const rect = convertToScreenCoordinates(elements[0].getBoundingClientRect());
+			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
@@ -684,7 +689,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			bridge().window().webContents.off('context-menu', onContextMenu);
 		};
-	}, []);
+	}, [props.plugins]);
 
 	function renderEditor() {
 
@@ -694,7 +699,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					value={props.content}
 					searchMarkers={props.searchMarkers}
 					ref={editorRef}
-					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
+					mode={props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					codeMirrorTheme={styles.editor.codeMirrorTheme}
 					style={styles.editor}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}

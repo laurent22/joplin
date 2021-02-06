@@ -18,10 +18,29 @@ input.form-control {
 	align-items: center;
 }
 
+.navbar .logo-text {
+	font-size: 2.2em;
+	font-weight: bold;
+	margin-left: 0.5em;
+}
+
+/* 
 .navbar .logo {
 	height: 50px;
+} */
+
+.navbar .navbar-item img {
+	max-height: 3em;
 }
 
 .main {
 	padding: 0 3rem;
+}
+
+table.table .nowrap {
+	white-space: nowrap;
+}
+
+table.table .stretch {
+	width: 100%;
 }

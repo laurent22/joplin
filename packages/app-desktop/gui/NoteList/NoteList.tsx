@@ -7,7 +7,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import NoteListItem from '../NoteListItem';
-import CommandService from '@joplin/lib/services/CommandService.js';
+import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
@@ -15,8 +15,8 @@ const React = require('react');
 
 const { ItemList } = require('../ItemList.min.js');
 const { connect } = require('react-redux');
-const Note = require('@joplin/lib/models/Note');
-const Folder = require('@joplin/lib/models/Folder');
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 
 const commands = [
 	require('./commands/focusElementNoteList'),
@@ -186,7 +186,7 @@ class NoteListComponent extends React.Component {
 		const targetNoteIndex = this.dragTargetNoteIndex_(event);
 		const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
-		Note.insertNotesAt(this.props.selectedFolderId, noteIds, targetNoteIndex);
+		void Note.insertNotesAt(this.props.selectedFolderId, noteIds, targetNoteIndex);
 	}
 
 

@@ -1,8 +1,9 @@
 import paginationToSql from './models/utils/paginationToSql';
 
-const { Database } = require('./database.js');
-const uuid = require('./uuid').default;
-const time = require('./time').default;
+import Database from './database';
+import uuid from './uuid';
+import time from './time';
+import JoplinDatabase from './JoplinDatabase';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -49,27 +50,27 @@ class BaseModel {
 		['TYPE_COMMAND', ModelType.Command],
 	];
 
-	public static TYPE_NOTE =  ModelType.Note;
-	public static TYPE_FOLDER =  ModelType.Folder;
-	public static TYPE_SETTING =  ModelType.Setting;
-	public static TYPE_RESOURCE =  ModelType.Resource;
-	public static TYPE_TAG =  ModelType.Tag;
-	public static TYPE_NOTE_TAG =  ModelType.NoteTag;
-	public static TYPE_SEARCH =  ModelType.Search;
-	public static TYPE_ALARM =  ModelType.Alarm;
-	public static TYPE_MASTER_KEY =  ModelType.MasterKey;
-	public static TYPE_ITEM_CHANGE =  ModelType.ItemChange;
-	public static TYPE_NOTE_RESOURCE =  ModelType.NoteResource;
-	public static TYPE_RESOURCE_LOCAL_STATE =  ModelType.ResourceLocalState;
-	public static TYPE_REVISION =  ModelType.Revision;
-	public static TYPE_MIGRATION =  ModelType.Migration;
-	public static TYPE_SMART_FILTER =  ModelType.SmartFilter;
-	public static TYPE_COMMAND =  ModelType.Command;
+	public static TYPE_NOTE = ModelType.Note;
+	public static TYPE_FOLDER = ModelType.Folder;
+	public static TYPE_SETTING = ModelType.Setting;
+	public static TYPE_RESOURCE = ModelType.Resource;
+	public static TYPE_TAG = ModelType.Tag;
+	public static TYPE_NOTE_TAG = ModelType.NoteTag;
+	public static TYPE_SEARCH = ModelType.Search;
+	public static TYPE_ALARM = ModelType.Alarm;
+	public static TYPE_MASTER_KEY = ModelType.MasterKey;
+	public static TYPE_ITEM_CHANGE = ModelType.ItemChange;
+	public static TYPE_NOTE_RESOURCE = ModelType.NoteResource;
+	public static TYPE_RESOURCE_LOCAL_STATE = ModelType.ResourceLocalState;
+	public static TYPE_REVISION = ModelType.Revision;
+	public static TYPE_MIGRATION = ModelType.Migration;
+	public static TYPE_SMART_FILTER = ModelType.SmartFilter;
+	public static TYPE_COMMAND = ModelType.Command;
 
-	protected static dispatch: Function = function() {};
+	public static dispatch: Function = function() {};
 	private static saveMutexes_: any = {};
 
-	private static db_: any;
+	private static db_: JoplinDatabase;
 
 	static modelType(): ModelType {
 		throw new Error('Must be overriden');
@@ -344,7 +345,7 @@ class BaseModel {
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
-	static loadByFields(fields: string[], options: any = null) {
+	static loadByFields(fields: any, options: any = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -631,12 +632,12 @@ class BaseModel {
 		return this.db().exec(`DELETE FROM ${this.tableName()} WHERE id = ?`, [id]);
 	}
 
-	static batchDelete(ids: string[], options: any = null) {
+	static async batchDelete(ids: string[], options: any = null) {
 		if (!ids.length) return;
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';
 		const sql = `DELETE FROM ${this.tableName()} WHERE ${idFieldName} IN ("${ids.join('","')}")`;
-		return this.db().exec(sql);
+		await this.db().exec(sql);
 	}
 
 	static db() {
@@ -644,9 +645,9 @@ class BaseModel {
 		return this.db_;
 	}
 
-	static isReady() {
-		return !!this.db_;
-	}
+	// static isReady() {
+	// 	return !!this.db_;
+	// }
 }
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
