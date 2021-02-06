@@ -323,6 +323,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 			const toSave = saveLayout(this.props.mainLayout);
 			Setting.setValue('ui.layout', toSave);
 		}
+
+		if (prevState.promptOptions !== this.state.promptOptions) {
+			this.props.dispatch({
+				type: !prevState.promptOptions ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
+				name: 'promptDialog',
+			});
+		}
 	}
 
 	layoutModeListenerKeyDown(event: any) {

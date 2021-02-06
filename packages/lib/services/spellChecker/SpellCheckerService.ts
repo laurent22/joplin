@@ -98,7 +98,7 @@ export default class SpellCheckerService {
 				output.push({
 					label: suggestion,
 					click: () => {
-						void CommandService.instance().execute('replaceSelection', suggestion);
+						void CommandService.instance().execute('replaceMisspelling', suggestion);
 					},
 				});
 			}

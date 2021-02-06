@@ -92,6 +92,7 @@ const globalCommands = [
 	require('./commands/startExternalEditing'),
 	require('./commands/stopExternalEditing'),
 	require('./commands/toggleExternalEditing'),
+	require('./commands/replaceMisspelling'),
 	require('@joplin/lib/commands/historyBackward'),
 	require('@joplin/lib/commands/historyForward'),
 	require('@joplin/lib/commands/synchronize'),

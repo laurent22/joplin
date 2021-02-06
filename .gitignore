@@ -180,6 +180,9 @@ packages/app-desktop/commands/focusElement.js.map
 packages/app-desktop/commands/openProfileDirectory.d.ts
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/openProfileDirectory.js.map
+packages/app-desktop/commands/replaceMisspelling.d.ts
+packages/app-desktop/commands/replaceMisspelling.js
+packages/app-desktop/commands/replaceMisspelling.js.map
 packages/app-desktop/commands/startExternalEditing.d.ts
 packages/app-desktop/commands/startExternalEditing.js
 packages/app-desktop/commands/startExternalEditing.js.map
