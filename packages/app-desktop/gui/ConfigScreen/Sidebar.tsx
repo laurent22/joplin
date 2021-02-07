@@ -78,6 +78,10 @@ export default function Sidebar(props: Props) {
 			if (s1 === SettingSectionSource.Default && s2 === SettingSectionSource.Default) return props.sections.indexOf(s1) - props.sections.indexOf(s2);
 			if (s1 === SettingSectionSource.Default && s2 === SettingSectionSource.Plugin) return -1;
 			if (s1 === SettingSectionSource.Plugin && s2 === SettingSectionSource.Default) return +1;
+
+			const l1 = Setting.sectionNameToLabel(a.name);
+			const l2 = Setting.sectionNameToLabel(b.name);
+			if (s1 === SettingSectionSource.Plugin && s2 === SettingSectionSource.Plugin) return l1.toLowerCase() < l2.toLowerCase() ? -1 : +1;
 			return 0;
 		});
 		return output;
