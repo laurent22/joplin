@@ -15,6 +15,8 @@ export const StyledRoot = styled.div`
 	display: flex;
 	background-color: ${(props: any) => props.theme.backgroundColor2};
 	flex-direction: column;
+	overflow-x: hidden;
+	overflow-y: auto;
 `;
 
 export const StyledListItem = styled.a`
