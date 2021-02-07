@@ -62,6 +62,7 @@ interface Props {
 	themeId: number;
 	settingEditorCodeView: boolean;
 	pluginsLegacy: any;
+	startupPluginsLoaded: boolean;
 }
 
 interface State {
@@ -616,19 +617,21 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		if (components[key]) return components[key]();
 
+		const viewsToRemove: string[] = [];
+
 		if (key.indexOf('plugin-view') === 0) {
 			const viewInfo = pluginUtils.viewInfoByViewId(this.props.plugins, event.item.key);
 
 			if (!viewInfo) {
-				// Note that it will happen when the component is rendered
-				// before the plugins have loaded their views, so because of
-				// this we need to keep the view in the layout.
+				// Once all startup plugins have loaded, we know that all the
+				// views are ready so we can remove the orphans ones.
 				//
-				// But it can also be a problem if the view really is invalid
-				// due to a faulty plugin as currently there would be no way to
-				// remove it.
-				console.warn(`Could not find plugin associated with view: ${event.item.key}`);
-				return null;
+				// Before they are loaded, there might be views that don't match
+				// any plugins, but that's only because it hasn't loaded yet.
+				if (this.props.startupPluginsLoaded) {
+					console.warn(`Could not find plugin associated with view: ${event.item.key}`);
+					viewsToRemove.push(event.item.key);
+				}
 			} else {
 				const { view, plugin } = viewInfo;
 
@@ -647,19 +650,19 @@ class MainScreenComponent extends React.Component<Props, State> {
 			throw new Error(`Invalid layout component: ${key}`);
 		}
 
-		// if (viewsToRemove.length) {
-		// 	window.requestAnimationFrame(() => {
-		// 		let newLayout = this.props.mainLayout;
-		// 		for (const itemKey of viewsToRemove) {
-		// 			newLayout = removeItem(newLayout, itemKey);
-		// 		}
+		if (viewsToRemove.length) {
+			window.requestAnimationFrame(() => {
+				let newLayout = this.props.mainLayout;
+				for (const itemKey of viewsToRemove) {
+					newLayout = removeItem(newLayout, itemKey);
+				}
 
-		// 		if (newLayout !== this.props.mainLayout) {
-		// 			console.warn('Removed invalid views:', viewsToRemove);
-		// 			this.updateMainLayout(newLayout);
-		// 		}
-		// 	});
-		// }
+				if (newLayout !== this.props.mainLayout) {
+					console.warn('Removed invalid views:', viewsToRemove);
+					this.updateMainLayout(newLayout);
+				}
+			});
+		}
 	}
 
 	renderPluginDialogs() {
@@ -773,6 +776,7 @@ const mapStateToProps = (state: AppState) => {
 		focusedField: state.focusedField,
 		layoutMoveMode: state.layoutMoveMode,
 		mainLayout: state.mainLayout,
+		startupPluginsLoaded: state.startupPluginsLoaded,
 	};
 };
 

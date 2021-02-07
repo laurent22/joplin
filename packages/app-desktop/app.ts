@@ -121,6 +121,7 @@ export interface AppState extends State {
 	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 	focusedField: string;
 	layoutMoveMode: boolean;
+	startupPluginsLoaded: boolean;
 
 	// Extra reducer keys go here
 	watchedResources: any;
@@ -144,10 +145,13 @@ const appDefaultState: AppState = {
 	focusedField: null,
 	layoutMoveMode: false,
 	mainLayout: null,
+	startupPluginsLoaded: false,
 	...resourceEditWatcherDefaultState,
 };
 
 class Application extends BaseApplication {
+
+	private checkAllPluginStartedIID_: any = null;
 
 	constructor() {
 		super();
@@ -197,6 +201,20 @@ class Application extends BaseApplication {
 					if (!goingBack) newNavHistory.push(currentRoute);
 					newState.navHistory = newNavHistory;
 					newState.route = action;
+				}
+				break;
+
+			case 'STARTUP_PLUGINS_LOADED':
+
+				// When all startup plugins have loaded, we also recreate the
+				// main layout to ensure that it is updated in the UI. There's
+				// probably a cleaner way to do this, but for now that will do.
+				if (state.startupPluginsLoaded !== action.value) {
+					newState = {
+						...newState,
+						startupPluginsLoaded: action.value,
+						mainLayout: JSON.parse(JSON.stringify(newState.mainLayout)),
+					};
 				}
 				break;
 
@@ -552,6 +570,16 @@ class Application extends BaseApplication {
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
+
+		this.checkAllPluginStartedIID_ = setInterval(() => {
+			if (service.allPluginsStarted) {
+				clearInterval(this.checkAllPluginStartedIID_);
+				this.dispatch({
+					type: 'STARTUP_PLUGINS_LOADED',
+					value: true,
+				});
+			}
+		}, 500);
 	}
 
 	async start(argv: string[]): Promise<any> {
