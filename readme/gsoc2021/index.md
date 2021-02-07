@@ -22,6 +22,7 @@ The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/#inst
 
 More details can be found on:
 
+- [How to submit a pull request for GSoC 2021](https://joplinapp.org/gsoc2021/pull_request_guidelines/)
 - [How to contribute](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md)
 - [How to build](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 
@@ -35,7 +36,7 @@ You don't have to be a proven developer - in fact, this whole program is meant t
 
 In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.
 
-Before you can be accepted as a student we expect you to fix some bugs or implement a small plugin or external application and link that work on your proposal. You may browse the [GitHub Issues](https://github.com/laurent22/joplin/issues?q=is:open+is:issue+label:bug) to find some simple bugs to fix.
+Before you can be accepted as a student we expect you to fix some bugs or implement a small plugin or external application and link that work on your proposal. You may browse the [GitHub Issues](https://github.com/laurent22/joplin/issues?q=is:open+is:issue+label:bug) to find some simple bugs to fix. Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2021](https://joplinapp.org/gsoc2021/pull_request_guidelines/).
 
 You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.
 
