@@ -1675,7 +1675,7 @@ class Setting extends BaseModel {
 
 		if (this.customSections_[name] && this.customSections_[name].iconName) return this.customSections_[name].iconName;
 
-		return name;
+		return 'fas fa-cog';
 	}
 
 	static appTypeToLabel(name: string) {
