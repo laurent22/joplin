@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/blog/20190925-000254.md and any manual change
+This file was auto-generated from readme/gsoc2021/ideas.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/dev/readme/blog/20190925-000254.md
+https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/ideas.md
 
 -->
 
 <head>
-	<title>New icon for Joplin! | Joplin</title>
+	<title>GSoC 2021 Ideas | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -304,7 +304,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190925-000254.md
 
 <body>
 
-<div class="container root page-20190925-000254">
+<div class="container root page-ideas">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -405,32 +405,45 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190925-000254.md
 </div>
 
 	<div class="main">
-<h1>New icon for Joplin!<a name="new-icon-for-joplin" href="#new-icon-for-joplin" class="heading-anchor">🔗</a></h1>
-<p>The Joplin icon is going to change soon. The one we have now is something I put together quickly, not knowing if the project would interest someone, so I didn't want to spend too much time on it. Now that the project is more mature, it makes sense to start improving the visuals - first the icon, then the logo font, the website and finally the app UI (although these have already been improved little by little over the past year).</p>
-<p>Before picking an icon, I'd be interested to hear about your feedback and whether you have a preference among those below. They all share the same idea - which is something that looks like a note, and that contains a &quot;J&quot; too.</p>
-<p>Feedback is welcome! And if you have a preference <strong>please answer this post and put your top 2 or 3 icons</strong> in your post and we'll do a tally in a few days.</p>
-<p><strong>Icon A</strong></p>
-<p><img src="images/20190925-000254_0.png" alt=""></p>
-<p><strong>Icon B</strong></p>
-<p><img src="images/20190925-000254_1.png" alt=""></p>
-<p><strong>Icon C</strong></p>
-<p><img src="images/20190925-000254_2.png" alt=""></p>
-<p><strong>Icon D</strong></p>
-<p><img src="images/20190925-000254_3.png" alt=""></p>
-<p><strong>Icon E</strong></p>
-<p><img src="images/20190925-000254_4.png" alt=""></p>
-<p><strong>Icon F</strong></p>
-<p><img src="images/20190925-000254_5.png" alt=""></p>
-<p><strong>Icon G</strong></p>
-<p><img src="images/20190925-000254_6.png" alt=""></p>
-<p><strong>Icon H</strong></p>
-<p><img src="images/20190925-000254_7.png" alt=""></p>
-<hr>
-<p>url: <a href="https://www.patreon.com/posts/new-icon-for-30218482">https://www.patreon.com/posts/new-icon-for-30218482</a><br>
-published_at: 2019-09-24T23:02:54.000+00:00</p>
+<h1>GSoC 2021 Ideas<a name="gsoc-2021-ideas" href="#gsoc-2021-ideas" class="heading-anchor">🔗</a></h1>
+<p>2021 is Joplin second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the <a href="https://joplinapp.org/gsoc2021/index/">general Summer of Code introduction</a></p>
+<p><strong>These are all proposals! We are open to new ideas you might have!!</strong> Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. Just make sure your idea is within this year's theme:</p>
+<ul>
+<li><strong>Plugin development</strong> - implementing new features using Joplin's plugin system.</li>
+<li><strong>External desktop applications</strong> - build external Joplin applications by retrieving, creating or modifying notes via the Data API.</li>
+<li><strong>External server applications</strong> - leverage the Joplin Server API to provide online features to Joplin users.</li>
+</ul>
+<h1>Information for Students<a name="information-for-students" href="#information-for-students" class="heading-anchor">🔗</a></h1>
+<p>These ideas were contributed by our developers and users. They are sometimes vague or incomplete. If you wish to submit a proposal based on these ideas, you are urged to contact the developers and find out more about the particular suggestion you're looking at.</p>
+<p>Becoming accepted as a Google Summer of Code student is quite competitive. Accepted students typically have thoroughly researched the technologies of their proposed project and have been in frequent contact with potential mentors. <strong>Simply copying and pasting an idea here will not work.</strong> On the other hand, creating a completely new idea without first consulting potential mentors rarely works.</p>
+<h1>List of ideas<a name="list-of-ideas" href="#list-of-ideas" class="heading-anchor">🔗</a></h1>
+<h2>1. OCR plugin<a name="1-ocr-plugin" href="#1-ocr-plugin" class="heading-anchor">🔗</a></h2>
+<p>It is possible to add support for OCR content in Joplin via the <a href="http://tesseract.projectnaptha.com/">Tesseract library</a>. A first step would be to assess the feasibility of this project by integrating the lib in the desktop app and trying to OCR an image. OCR support should be implemented as a service of the desktop app. It would extract the text from the images, and append the content as plain text to the notes.</p>
+<p>Expected Outcome: A plugin for the desktop app that extract text from images and attach it to the note.</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: JavaScript, Image processing</p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<h2>2. Template plugin<a name="2-template-plugin" href="#2-template-plugin" class="heading-anchor">🔗</a></h2>
+<p>Joplin already supports templates however we would like to re-package this feature as a plugin. Thus you would remove it from the main app and create a new plugin for it. It should be compatible with existing templates. Once the plugin is created, it could be a good idea to improve the feature further, perhaps based on user feedback on GitHub or in the forum.</p>
+<p>Expected Outcome: A plugin for the desktop app that handle note templates.</p>
+<p>Difficulty Level: Medium</p>
+<p>Skills Required: JavaScript</p>
+<p>Potential Mentor(s):</p>
+<h2>3. BibTex plugin<a name="3-bibtex-plugin" href="#3-bibtex-plugin" class="heading-anchor">🔗</a></h2>
+<p>Many of our users use Joplin for research note and as such a plugin that can add support for <a href="http://www.bibtex.org">BibTex</a> would be very useful. The plugin should use locally stored citations, then display popup with type-ahead to allow the user to enter the citation into the document. A content script should also be created so that these citations are rendered correctly in the note viewer.</p>
+<p>Expected Outcome: A plugin to enter BibTex citations</p>
+<p>Difficulty Level: Medium</p>
+<p>Skills Required: JavaScript, understanding of BibTex format</p>
+<p>Potential Mentor(s):</p>
+<h2>4. Real-time collaboration on a note<a name="4-real-time-collaboration-on-a-note" href="#4-real-time-collaboration-on-a-note" class="heading-anchor">🔗</a></h2>
+<p>Create a web applications that allows two or more users to collaborate in real time on the same note. Use the Joplin Server API to save and load the note.</p>
+<p>Expected Outcome: A web application that allows users to collaborate on a note</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: JavaScript, Text editor, Web development</p>
+<p>Potential Mentor(s):</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/dev/readme/blog/20190925-000254.md">
+			<a href="https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/ideas.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>
