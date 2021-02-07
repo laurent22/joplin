@@ -21,7 +21,6 @@ msgstr ""
 #: packages/app-desktop/checkForUpdates.js:139
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/MenuBar.js:317
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:185
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
@@ -38,8 +37,8 @@ msgstr "OK"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:430
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -150,7 +149,7 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
@@ -170,8 +169,8 @@ msgid ""
 msgstr "Koadernoa ezabatu? Dituen ohar guztiak ere ezabatuko dira."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:180
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
+#: packages/app-desktop/gui/utils/NoteListUtils.js:140
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:122
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -191,7 +190,7 @@ msgstr "Kendu bilaketa hori ohar guztietatik?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:238
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
-#: packages/app-desktop/gui/utils/NoteListUtils.js:132
+#: packages/app-desktop/gui/utils/NoteListUtils.js:136
 #, fuzzy
 msgid "Export"
 msgstr "Inportatu"
@@ -279,32 +278,32 @@ msgstr ""
 msgid "List item"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
 msgid "Layout"
 msgstr "Diseinua"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:595
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:90
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:605
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Moztu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:602
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:98
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:612
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:317
 msgid "Copy"
 msgstr "Kopiatu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:609
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "Itsatsi"
@@ -313,40 +312,40 @@ msgstr "Itsatsi"
 msgid "Checkbox list"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:521
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:458
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:530
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1013
 msgid "Edit"
 msgstr "Editatu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:577
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "Erantsi fitxategia"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
 msgid "Code Block"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:604
 msgid "Inline Code"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:619
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 msgid "Drop notes or files here"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 msgid "Code View"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -362,24 +361,24 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:48
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:55
 msgid "Open..."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:61
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:68
 #, fuzzy
 msgid "Save as..."
 msgstr "Gorde aldaketak"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:81
 msgid "Reveal file in folder"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:89
 msgid "Copy path to clipboard"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:113
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy Link Address"
 msgstr ""
 
@@ -398,7 +397,7 @@ msgstr "Ohar berria"
 msgid "Creating new %s..."
 msgstr "Oharrak inportatzen..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
 msgid "Click to add tags..."
 msgstr ""
 
@@ -614,7 +613,7 @@ msgid "Keyboard Shortcut"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:357
+#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:358
 msgid "Quit"
 msgstr "Irten"
 
@@ -673,57 +672,57 @@ msgstr ""
 msgid "Save"
 msgstr "Gorde"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:399
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:401
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
 msgid "Some items cannot be synchronised."
 msgstr "Zenbait item ezin dira sinkronizatu."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:413
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
 msgid "View them now"
 msgstr "Ikusi hori orain"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
 msgid "Some items cannot be decrypted."
 msgstr "Zenbait item ezin dira deszifratu."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
 #, fuzzy
 msgid "One or more master keys need a password."
 msgstr "Sartu pasahitz nagusia:"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
 msgid "Set the password"
 msgstr "Ezarri pasahitza"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
 #, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Sartu pasahitz nagusia:"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:435
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:437
 #, fuzzy
 msgid "More info"
 msgstr "Konfigurazioa"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:552
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:558
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 
@@ -1134,41 +1133,41 @@ msgstr "Etiketatuta: %d."
 msgid "The notes have been imported: %s"
 msgstr "Oharrak inportatu dira: %s"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:42
+#: packages/app-desktop/gui/utils/NoteListUtils.js:44
 #, fuzzy
 msgid "Duplicate"
 msgstr "Irten aplikaziotik"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:47
+#: packages/app-desktop/gui/utils/NoteListUtils.js:49
 #, fuzzy, javascript-format
 msgid "%s - Copy"
 msgstr "Kopiatu"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:58
+#: packages/app-desktop/gui/utils/NoteListUtils.js:60
 msgid "Switch between note and to-do type"
 msgstr "Aldatu oharra eta zeregin eren artean."
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:86
+#: packages/app-desktop/gui/utils/NoteListUtils.js:88
 #, fuzzy
 msgid "Switch to note type"
 msgstr "Aldatu oharra eta zeregin eren artean."
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:92
+#: packages/app-desktop/gui/utils/NoteListUtils.js:94
 #, fuzzy
 msgid "Switch to to-do type"
 msgstr "Aldatu oharra eta zeregin eren artean."
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:99
+#: packages/app-desktop/gui/utils/NoteListUtils.js:101
 #: packages/app-mobile/components/screens/Note.js:817
 msgid "Copy Markdown link"
 msgstr ""
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:159
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #, fuzzy, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "Oharrak ezabatu?"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:162
+#: packages/app-desktop/gui/utils/NoteListUtils.js:166
 #, fuzzy, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Oharrok ezabatu?"
@@ -1354,86 +1353,47 @@ msgstr ""
 msgid "Note attachments"
 msgstr "Erantsi fitxategia"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:107
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
 msgid "This will open a new screen. Save your current changes?"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:173
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
 #: packages/app-mobile/components/screens/config.js:307
 #, fuzzy
 msgid "Check synchronisation configuration"
 msgstr "Sinkronizazioa utzi"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:178
-#, fuzzy
-msgid "Unknown"
-msgstr "Marka ezezaguna: %s"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:181
-#, fuzzy
-msgid "Checking..."
-msgstr "Bertan behera uzten..."
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:187
-#: packages/lib/models/Resource.js:355
-msgid "Error"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:192
-msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:196
-msgid "Show Log"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:202
-msgid "Joplin Nextcloud App status:"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:208
-#, fuzzy
-msgid "Check Status"
-msgstr "Egoera"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:212
-#, fuzzy
-msgid "Help"
-msgstr "Laguntza"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:223
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
 #, fuzzy
 msgid "Show Advanced Settings"
 msgstr "Erakutsi aukera aurreratuak"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:412
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Path:"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:417
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
 msgid "Browse..."
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:419
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:467
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Do it now"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:532
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
 msgid "Restart now"
 msgstr ""
 
@@ -1561,7 +1521,7 @@ msgid "Statistics"
 msgstr "Egoera"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:175
+#: packages/app-desktop/gui/ShareNoteDialog.js:186
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr ""
@@ -1649,35 +1609,35 @@ msgstr ""
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:158
+#: packages/app-desktop/gui/ShareNoteDialog.js:159
 #, fuzzy
 msgid "Synchronising..."
 msgstr "Sinkronizazioaren egoera"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:160
+#: packages/app-desktop/gui/ShareNoteDialog.js:161
 #, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Oharrak inportatzen..."
 msgstr[1] "Oharrak inportatzen..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:162
+#: packages/app-desktop/gui/ShareNoteDialog.js:163
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:165
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:180
 #, fuzzy
 msgid "Share Notes"
 msgstr "Oharrak ezabatu?"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] ""
@@ -1715,7 +1675,7 @@ msgstr "Errorea editorean oharra zabaltzean: %s"
 msgid "Open profile directory"
 msgstr "Evernotetik esportatutako fitxategiak"
 
-#: packages/app-desktop/app.js:355
+#: packages/app-desktop/app.js:356
 #, fuzzy, javascript-format
 msgid "Open %s"
 msgstr "On %s: %s"
@@ -2821,24 +2781,28 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Oharrak eta ezarpenak hemen daude gordeta: %s"
 
-#: packages/lib/models/Resource.js:349
+#: packages/lib/models/Resource.js:352
 msgid "Not downloaded"
 msgstr ""
 
-#: packages/lib/models/Resource.js:351
+#: packages/lib/models/Resource.js:354
 msgid "Downloading"
 msgstr ""
 
-#: packages/lib/models/Resource.js:353
+#: packages/lib/models/Resource.js:356
 msgid "Downloaded"
 msgstr ""
 
-#: packages/lib/models/Resource.js:400
+#: packages/lib/models/Resource.js:358
+msgid "Error"
+msgstr ""
+
+#: packages/lib/models/Resource.js:403
 #, fuzzy, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "Erantsi fitxategia"
 
-#: packages/lib/models/Resource.js:401
+#: packages/lib/models/Resource.js:404
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -2864,12 +2828,12 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "Ohar honek ez du geokokapen informaziorik."
 
-#: packages/lib/models/Note.js:523
+#: packages/lib/models/Note.js:524
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Ezin kopia daiteke oharra \"%s\" koadernora"
 
-#: packages/lib/models/Note.js:535
+#: packages/lib/models/Note.js:536
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Ezin eraman daiteke oharra \"%s\" koadernora"
@@ -2897,17 +2861,17 @@ msgstr "Marka ezezaguna: %s"
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: packages/lib/components/shared/config-shared.js:46
+#: packages/lib/components/shared/config-shared.js:45
 #, fuzzy
 msgid "Checking... Please wait."
 msgstr "Bertan behera uzten... itxaron, mesedez."
 
-#: packages/lib/components/shared/config-shared.js:48
+#: packages/lib/components/shared/config-shared.js:47
 #, fuzzy
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Sinkronizazioa utzi"
 
-#: packages/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:49
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -2965,78 +2929,78 @@ msgstr ""
 "Tokena ezin eguneratu daiteke: egiaztatze-datuak desagertuta daude. Agian, "
 "berriro sinkronizatzeak arazoa konpon lezake."
 
-#: packages/lib/Synchronizer.js:111
+#: packages/lib/Synchronizer.js:119
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Item lokalak sortuta: %d."
 
-#: packages/lib/Synchronizer.js:113
+#: packages/lib/Synchronizer.js:121
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Item lokalak eguneratuta: %d."
 
-#: packages/lib/Synchronizer.js:115
+#: packages/lib/Synchronizer.js:123
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "Urruneko itemak sortuta: %d."
 
-#: packages/lib/Synchronizer.js:117
+#: packages/lib/Synchronizer.js:125
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "Urruneko itemak eguneratuta: %d."
 
-#: packages/lib/Synchronizer.js:119
+#: packages/lib/Synchronizer.js:127
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Item lokala ezabatuta: %d."
 
-#: packages/lib/Synchronizer.js:121
+#: packages/lib/Synchronizer.js:129
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Urruneko itemak ezabatuta: %d."
 
-#: packages/lib/Synchronizer.js:123
+#: packages/lib/Synchronizer.js:131
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Itemak eskuratuta: %d%d."
 
-#: packages/lib/Synchronizer.js:125
+#: packages/lib/Synchronizer.js:133
 msgid "Cancelling..."
 msgstr "Bertan behera uzten..."
 
-#: packages/lib/Synchronizer.js:127
+#: packages/lib/Synchronizer.js:135
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Osatuta: %s"
 
-#: packages/lib/Synchronizer.js:129
+#: packages/lib/Synchronizer.js:137
 #, fuzzy, javascript-format
 msgid "Last error: %s"
 msgstr "Aio! Agur! :_( "
 
-#: packages/lib/Synchronizer.js:236
+#: packages/lib/Synchronizer.js:244
 msgid "Idle"
 msgstr ""
 
-#: packages/lib/Synchronizer.js:238
+#: packages/lib/Synchronizer.js:246
 msgid "In progress"
 msgstr ""
 
-#: packages/lib/Synchronizer.js:823
+#: packages/lib/Synchronizer.js:844
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 
-#: packages/lib/JoplinServerApi.js:71
+#: packages/lib/JoplinServerApi.js:63
 #, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options "
+"in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
 
-#: packages/lib/SyncTargetNextcloud.js:26
+#: packages/lib/SyncTargetNextcloud.js:25
 #, fuzzy
 msgid "Nextcloud"
 msgstr "NextCloud (Beta)"
@@ -3987,6 +3951,22 @@ msgstr "Markatu zeregina egindakotzat."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Oharra ez da zeregina: \"%s\""
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "Marka ezezaguna: %s"
+
+#, fuzzy
+#~ msgid "Checking..."
+#~ msgstr "Bertan behera uzten..."
+
+#, fuzzy
+#~ msgid "Check Status"
+#~ msgstr "Egoera"
+
+#, fuzzy
+#~ msgid "Help"
+#~ msgstr "Laguntza"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive Dev (aprobetarako soilik)"

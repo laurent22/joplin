@@ -6,8 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Yang Zhang <zyangmath@gmail.com>\n"
 "Language-Team: zh_CN <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_CN\n"
@@ -22,7 +20,6 @@ msgstr ""
 #: packages/app-desktop/checkForUpdates.js:139
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/MenuBar.js:317
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:185
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
@@ -39,8 +36,8 @@ msgstr "确认"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:430
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -153,7 +150,7 @@ msgstr ""
 "换或修改。"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
@@ -176,8 +173,8 @@ msgstr ""
 "所有在该笔记本内的笔记和子笔记本也将同时被删除。"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:180
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
+#: packages/app-desktop/gui/utils/NoteListUtils.js:140
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:122
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -197,7 +194,7 @@ msgstr "从边栏中删除该项搜索？"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:238
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
-#: packages/app-desktop/gui/utils/NoteListUtils.js:132
+#: packages/app-desktop/gui/utils/NoteListUtils.js:136
 msgid "Export"
 msgstr "导出"
 
@@ -282,32 +279,32 @@ msgstr "插入超链接"
 msgid "List item"
 msgstr "列表项"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
 msgid "Layout"
 msgstr "布局"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑笔记。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:595
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:90
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:605
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "剪切"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:602
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:98
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:612
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:317
 msgid "Copy"
 msgstr "复制"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:609
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "粘贴"
@@ -316,40 +313,40 @@ msgstr "粘贴"
 msgid "Checkbox list"
 msgstr "复选框列表"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:521
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:458
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:530
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1013
 msgid "Edit"
 msgstr "编辑"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:577
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "附加文件"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
 msgid "Code Block"
 msgstr "代码块"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:604
 msgid "Inline Code"
 msgstr "内联代码"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:619
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "插入时间"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 msgid "Drop notes or files here"
 msgstr "将笔记或文件拖到此处"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 msgid "Code View"
 msgstr "代码视图"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -365,23 +362,23 @@ msgstr "下载此附件时出错："
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "该附件没有下载或者尚未解密"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:48
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:55
 msgid "Open..."
 msgstr "打开..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:61
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:68
 msgid "Save as..."
 msgstr "另存为..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:81
 msgid "Reveal file in folder"
 msgstr "在文件夹中展示文件"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:89
 msgid "Copy path to clipboard"
 msgstr "复制路径到剪贴板"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:113
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy Link Address"
 msgstr "复制链接地址"
 
@@ -398,7 +395,7 @@ msgstr "笔记"
 msgid "Creating new %s..."
 msgstr "新建 %s..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
 msgid "Click to add tags..."
 msgstr "单击以添加标签..."
 
@@ -603,7 +600,7 @@ msgid "Keyboard Shortcut"
 msgstr "键盘快捷键"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:357
+#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:358
 msgid "Quit"
 msgstr "退出"
 
@@ -660,7 +657,7 @@ msgstr "按下快捷键然后按下回车。或者：按下退格键以清除快
 msgid "Save"
 msgstr "保存"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:399
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -669,47 +666,47 @@ msgstr ""
 "需要更新同步目标以启用 Joplin 同步。该操作可能需要数分钟时间完成，应用也需要"
 "重启。单击链接以继续。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:401
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
 msgstr "重启后升级"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
 msgid "Some items cannot be synchronised."
 msgstr "一些条目无法被同步。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:413
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
 msgid "View them now"
 msgstr "立刻查看"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
 msgid "Some items cannot be decrypted."
 msgstr "一些项目无法被解密。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
 msgid "One or more master keys need a password."
 msgstr "一个或多个主密钥需要密码。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
 msgid "Set the password"
 msgstr "设置密码"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "您的主密钥之一使用了过时的加密方法。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:435
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr "默认的加密方法已更改，您应当重新加密数据。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:437
 msgid "More info"
 msgstr "更多信息"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:552
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:558
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "使用箭头移动布局项。按“Escape”退出。"
 
@@ -1101,38 +1098,38 @@ msgstr "已加标签: %d条。"
 msgid "The notes have been imported: %s"
 msgstr "以下笔记已被导入: %s"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:42
+#: packages/app-desktop/gui/utils/NoteListUtils.js:44
 msgid "Duplicate"
 msgstr "创建副本"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:47
+#: packages/app-desktop/gui/utils/NoteListUtils.js:49
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - 副本"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:58
+#: packages/app-desktop/gui/utils/NoteListUtils.js:60
 msgid "Switch between note and to-do type"
 msgstr "在笔记和待办事项类型之间切换"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:86
+#: packages/app-desktop/gui/utils/NoteListUtils.js:88
 msgid "Switch to note type"
 msgstr "切换为笔记"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:92
+#: packages/app-desktop/gui/utils/NoteListUtils.js:94
 msgid "Switch to to-do type"
 msgstr "切换为待办事项"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:99
+#: packages/app-desktop/gui/utils/NoteListUtils.js:101
 #: packages/app-mobile/components/screens/Note.js:817
 msgid "Copy Markdown link"
 msgstr "复制 Markdown 链接"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:159
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "是否删除笔记“%s”？"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:162
+#: packages/app-desktop/gui/utils/NoteListUtils.js:166
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "是否删除这 %d 条笔记？"
@@ -1327,80 +1324,45 @@ msgstr "登录 Dropbox"
 msgid "Note attachments"
 msgstr "笔记附件"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:107
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
 msgid "This will open a new screen. Save your current changes?"
 msgstr "这将打开一个新页面。是否保存当前更改？"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:173
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
 #: packages/app-mobile/components/screens/config.js:307
 msgid "Check synchronisation configuration"
 msgstr "检查同步配置"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:178
-msgid "Unknown"
-msgstr "未知"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:181
-msgid "Checking..."
-msgstr "正在检查..."
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:187
-#: packages/lib/models/Resource.js:355
-msgid "Error"
-msgstr "错误"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:192
-msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
-msgstr "没有安装 Joplin Nextcloud 应用或配置错误。请查看下面的完整错误消息："
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:196
-msgid "Show Log"
-msgstr "显示日志"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:202
-msgid "Joplin Nextcloud App status:"
-msgstr "Joplin Nextcloud 应用状态："
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:208
-msgid "Check Status"
-msgstr "检查状态"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:212
-msgid "Help"
-msgstr "帮助"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:223
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
 msgid "Show Advanced Settings"
 msgstr "显示高级选项"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:412
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Path:"
 msgstr "路径："
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:417
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
 msgid "Browse..."
 msgstr "浏览..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:419
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
 msgstr "参数："
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:467
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
 msgstr "必须重新启动应用程序才能使这些更改生效。"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Do it now"
 msgstr "现在完成"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 msgid "Later"
 msgstr "稍后"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:532
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
 msgid "Restart now"
 msgstr "立即重启"
 
@@ -1522,7 +1484,7 @@ msgid "Statistics"
 msgstr "统计数据"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:175
+#: packages/app-desktop/gui/ShareNoteDialog.js:186
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "关闭"
@@ -1607,30 +1569,30 @@ msgstr "没有资源！"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "警告: 由于性能原因无法显示所有资源 (最多：%s)。"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:158
+#: packages/app-desktop/gui/ShareNoteDialog.js:159
 msgid "Synchronising..."
 msgstr "正在同步..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:160
+#: packages/app-desktop/gui/ShareNoteDialog.js:161
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "生成链接..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:162
+#: packages/app-desktop/gui/ShareNoteDialog.js:163
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "链接已复制到剪贴板！"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:165
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr "注意: 笔记分享后，便不再在服务器上加密。"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:180
 msgid "Share Notes"
 msgstr "分享笔记"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "复制分享链接"
@@ -1665,7 +1627,7 @@ msgstr "在编辑器中打开笔记出错：%s"
 msgid "Open profile directory"
 msgstr "打开配置文件目录"
 
-#: packages/app-desktop/app.js:355
+#: packages/app-desktop/app.js:356
 #, javascript-format
 msgid "Open %s"
 msgstr "打开 %s"
@@ -2736,24 +2698,28 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置储存于：%s"
 
-#: packages/lib/models/Resource.js:349
+#: packages/lib/models/Resource.js:352
 msgid "Not downloaded"
 msgstr "未下载"
 
-#: packages/lib/models/Resource.js:351
+#: packages/lib/models/Resource.js:354
 msgid "Downloading"
 msgstr "下载中"
 
-#: packages/lib/models/Resource.js:353
+#: packages/lib/models/Resource.js:356
 msgid "Downloaded"
 msgstr "已下载"
 
-#: packages/lib/models/Resource.js:400
+#: packages/lib/models/Resource.js:358
+msgid "Error"
+msgstr "错误"
+
+#: packages/lib/models/Resource.js:403
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "附件冲突：“%s”"
 
-#: packages/lib/models/Resource.js:401
+#: packages/lib/models/Resource.js:404
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -2781,12 +2747,12 @@ msgstr "自定义顺序"
 msgid "This note does not have geolocation information."
 msgstr "该笔记不含地理位置信息。"
 
-#: packages/lib/models/Note.js:523
+#: packages/lib/models/Note.js:524
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "无法复制笔记到笔记本 \"%s\""
 
-#: packages/lib/models/Note.js:535
+#: packages/lib/models/Note.js:536
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "无法移动笔记到笔记本 \"%s\""
@@ -2814,15 +2780,15 @@ msgstr "未知标记：%s"
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: packages/lib/components/shared/config-shared.js:46
+#: packages/lib/components/shared/config-shared.js:45
 msgid "Checking... Please wait."
 msgstr "正在检查... 请稍候。"
 
-#: packages/lib/components/shared/config-shared.js:48
+#: packages/lib/components/shared/config-shared.js:47
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "成功！同步配置看起来没问题。"
 
-#: packages/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:49
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -2884,73 +2850,73 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr "无法刷新令牌：缺少认证数据。重新同步可能会修正此错误。"
 
-#: packages/lib/Synchronizer.js:111
+#: packages/lib/Synchronizer.js:119
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "已新建本地项目: %d。"
 
-#: packages/lib/Synchronizer.js:113
+#: packages/lib/Synchronizer.js:121
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "已更新本地项目: %d。"
 
-#: packages/lib/Synchronizer.js:115
+#: packages/lib/Synchronizer.js:123
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "已新建远程项目: %d。"
 
-#: packages/lib/Synchronizer.js:117
+#: packages/lib/Synchronizer.js:125
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "已更新远程项目: %d。"
 
-#: packages/lib/Synchronizer.js:119
+#: packages/lib/Synchronizer.js:127
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "已删除本地项目: %d。"
 
-#: packages/lib/Synchronizer.js:121
+#: packages/lib/Synchronizer.js:129
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "已删除远程项目: %d。"
 
-#: packages/lib/Synchronizer.js:123
+#: packages/lib/Synchronizer.js:131
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "已获取项目: %d/%d."
 
-#: packages/lib/Synchronizer.js:125
+#: packages/lib/Synchronizer.js:133
 msgid "Cancelling..."
 msgstr "正在取消..."
 
-#: packages/lib/Synchronizer.js:127
+#: packages/lib/Synchronizer.js:135
 #, javascript-format
 msgid "Completed: %s"
 msgstr "已完成: %s"
 
-#: packages/lib/Synchronizer.js:129
+#: packages/lib/Synchronizer.js:137
 #, javascript-format
 msgid "Last error: %s"
 msgstr "最后错误: %s"
 
-#: packages/lib/Synchronizer.js:236
+#: packages/lib/Synchronizer.js:244
 msgid "Idle"
 msgstr "空闲"
 
-#: packages/lib/Synchronizer.js:238
+#: packages/lib/Synchronizer.js:246
 msgid "In progress"
 msgstr "正在进行"
 
-#: packages/lib/Synchronizer.js:823
+#: packages/lib/Synchronizer.js:844
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "已下载项目为未知类型，请将 Joplin 升级至最新版本"
 
-#: packages/lib/JoplinServerApi.js:71
-#, javascript-format
+#: packages/lib/JoplinServerApi.js:63
+#, fuzzy, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options "
+"in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
@@ -2959,7 +2925,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/lib/SyncTargetNextcloud.js:26
+#: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
@@ -3868,6 +3834,30 @@ msgstr "标记待办事项为完成。"
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "笔记并非待办事项：“%s”"
+
+#~ msgid "Unknown"
+#~ msgstr "未知"
+
+#~ msgid "Checking..."
+#~ msgstr "正在检查..."
+
+#~ msgid ""
+#~ "The Joplin Nextcloud App is either not installed or misconfigured. Please "
+#~ "see the full error message below:"
+#~ msgstr ""
+#~ "没有安装 Joplin Nextcloud 应用或配置错误。请查看下面的完整错误消息："
+
+#~ msgid "Show Log"
+#~ msgstr "显示日志"
+
+#~ msgid "Joplin Nextcloud App status:"
+#~ msgstr "Joplin Nextcloud 应用状态："
+
+#~ msgid "Check Status"
+#~ msgstr "检查状态"
+
+#~ msgid "Help"
+#~ msgstr "帮助"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive 开发版 (仅供测试)"

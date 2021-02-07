@@ -22,7 +22,6 @@ msgstr ""
 #: packages/app-desktop/checkForUpdates.js:139
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/MenuBar.js:317
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:185
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
@@ -39,8 +38,8 @@ msgstr "ОК"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:430
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -157,7 +156,7 @@ msgstr ""
 "\"%s\". Тренутна верзија белешке неће бити замењена или измењена."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
@@ -180,8 +179,8 @@ msgstr ""
 "Све белешке и под-белешке унутар ове бележнице ће такође бити обрисане."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:180
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
+#: packages/app-desktop/gui/utils/NoteListUtils.js:140
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:122
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -201,7 +200,7 @@ msgstr "Уклони ову претрагу из бочне траке?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:238
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
-#: packages/app-desktop/gui/utils/NoteListUtils.js:132
+#: packages/app-desktop/gui/utils/NoteListUtils.js:136
 msgid "Export"
 msgstr "Извоз"
 
@@ -289,11 +288,11 @@ msgstr "Уметни хипер-везу"
 msgid "List item"
 msgstr "Lиста ставки"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
 msgid "Layout"
 msgstr "Распоред"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -302,21 +301,21 @@ msgstr ""
 "Ова белешка нема садржаја. Кликните на \"%s\" да активирате едитор и уредите "
 "белешку."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:595
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:90
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:605
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Исеци"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:602
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:98
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:612
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:317
 msgid "Copy"
 msgstr "Копирај"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:609
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "Налепи"
@@ -326,41 +325,41 @@ msgstr "Налепи"
 msgid "Checkbox list"
 msgstr "Поље за потврду"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:521
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:458
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:530
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1013
 msgid "Edit"
 msgstr "Уреди"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:577
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "Приложи фајл"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
 msgid "Code Block"
 msgstr "Кôд блок"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:604
 msgid "Inline Code"
 msgstr "Кôд у линији"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:619
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "Уметни време и датум"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 msgid "Drop notes or files here"
 msgstr "Превуците белешке или датотеке овде"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 #, fuzzy
 msgid "Code View"
 msgstr "Кôд"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -377,23 +376,23 @@ msgstr "Дошло је до грешке приликом преузимања 
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Овај прилог још увек није преузет или дешифрован."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:48
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:55
 msgid "Open..."
 msgstr "Отвори..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:61
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:68
 msgid "Save as..."
 msgstr "Сачувај као..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:81
 msgid "Reveal file in folder"
 msgstr "Прикажи датотеку у фолдеру"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:89
 msgid "Copy path to clipboard"
 msgstr "Копирај путању у клипборд"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:113
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy Link Address"
 msgstr "Копирај адресу везе"
 
@@ -410,7 +409,7 @@ msgstr "белешка"
 msgid "Creating new %s..."
 msgstr "Креирам нову %s..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
 #, fuzzy
 msgid "Click to add tags..."
 msgstr "Провери да ли су доступна ажурирања."
@@ -620,7 +619,7 @@ msgid "Keyboard Shortcut"
 msgstr "Пречица на тастатури"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:357
+#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:358
 msgid "Quit"
 msgstr "Излаз"
 
@@ -681,59 +680,61 @@ msgstr ""
 msgid "Save"
 msgstr "Сачувај"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:399
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:401
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
 msgstr "Поново покрени и надогради"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
 msgid "Some items cannot be synchronised."
 msgstr "Неке ставке се не могу синхронизовати."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:413
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
 msgid "View them now"
 msgstr "Прикажи их сада"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
 #, fuzzy
 msgid "Some items cannot be decrypted."
 msgstr "Неке ставке није могуће дешифровати."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
 msgid "One or more master keys need a password."
 msgstr "Једном или више главних кључева је потребна лозинка."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
 msgid "Set the password"
 msgstr "Постави лозинку"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
 #, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Један од ваших главних кључева користи застарели метод шифровања."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:435
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:437
 #, fuzzy
 msgid "More info"
 msgstr "Више информација"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:552
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:558
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr "Помоћу стрелица промените распоред ставки. Притисните \"Esc\" да бисте изашли."
+msgstr ""
+"Помоћу стрелица промените распоред ставки. Притисните \"Esc\" да бисте "
+"изашли."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -850,14 +851,14 @@ msgstr "Штампај"
 #: packages/app-desktop/gui/MainScreen/commands/print.js:26
 #, fuzzy
 msgid "Only one note can be printed at a time."
-msgstr ""
-"Највише једна белешка може бити одштампана истовремено."
+msgstr "Највише једна белешка може бити одштампана истовремено."
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:29
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 #: packages/app-cli/app/command-sync.js:90
+#, fuzzy
 msgid ""
-"To allow Joplin to synchronise with \"Dropbox\", please follow the steps below:"
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 "Да би сте допустили Џоплину да се синхронизује са Дропбоксом, молимо вас "
 "пратите следеће кораке:"
@@ -933,9 +934,9 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"Ова услуга дозвољава додатку за интернет претраживач да комуницира са Џоплином. Када "
-"је активирате можете добити упит од вашег заштитног зида да дате дозволу да "
-"Џоплин апликација слуша на одређеном порту."
+"Ова услуга дозвољава додатку за интернет претраживач да комуницира са "
+"Џоплином. Када је активирате можете добити упит од вашег заштитног зида да "
+"дате дозволу да Џоплин апликација слуша на одређеном порту."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:156
 msgid "Step 2: Install the extension"
@@ -943,7 +944,8 @@ msgstr "Корак 2: Инсталирај додатак за интернет 
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:161
 msgid "Download and install the relevant extension for your browser:"
-msgstr "Преузмите и инсталирајте релевантни додатак за ваш интернет претраживач:"
+msgstr ""
+"Преузмите и инсталирајте релевантни додатак за ваш интернет претраживач:"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:176
 msgid "Advanced options"
@@ -1148,38 +1150,38 @@ msgstr "Означено: %d."
 msgid "The notes have been imported: %s"
 msgstr "Белешке су увезене: %s"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:42
+#: packages/app-desktop/gui/utils/NoteListUtils.js:44
 msgid "Duplicate"
 msgstr "Дуплирај"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:47
+#: packages/app-desktop/gui/utils/NoteListUtils.js:49
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Копирај"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:58
+#: packages/app-desktop/gui/utils/NoteListUtils.js:60
 msgid "Switch between note and to-do type"
 msgstr "Пребацуј између белешке и ставке задужења"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:86
+#: packages/app-desktop/gui/utils/NoteListUtils.js:88
 msgid "Switch to note type"
 msgstr "Пребаци се на тип белешке"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:92
+#: packages/app-desktop/gui/utils/NoteListUtils.js:94
 msgid "Switch to to-do type"
 msgstr "Пребаци се на тип ставке задужења"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:99
+#: packages/app-desktop/gui/utils/NoteListUtils.js:101
 #: packages/app-mobile/components/screens/Note.js:817
 msgid "Copy Markdown link"
 msgstr "Копирај маркдаун везу"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:159
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "Обриши белешку \"%s\"?"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:162
+#: packages/app-desktop/gui/utils/NoteListUtils.js:166
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Обриши ове %d белешке?"
@@ -1312,8 +1314,8 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Напомена: Само један главни кључ ће се користити за шифровање (онај обележен као "
-"\"Активан\"). Било који од кључева се може користити за дешифровање, у "
+"Напомена: Само један главни кључ ће се користити за шифровање (онај обележен "
+"као \"Активан\"). Било који од кључева се може користити за дешифровање, у "
 "зависности од тога како су белешке или бележнице оригинално шифроване."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
@@ -1338,8 +1340,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"За више информација о \"End-To-End\" Шифровању (Е2ЕЕ) и саветима о томе како да "
-"га омогућите, молимо вас да проверите документацију:"
+"За више информација о \"End-To-End\" Шифровању (Е2ЕЕ) и саветима о томе како "
+"да га омогућите, молимо вас да проверите документацију:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-mobile/components/screens/encryption-config.js:279
@@ -1370,88 +1372,48 @@ msgstr "Пријава у \"Dropbox\""
 msgid "Note attachments"
 msgstr "Приложи фајл"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:107
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Ово ће отворити нови екран. Сачувај своје промене?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:173
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
 #: packages/app-mobile/components/screens/config.js:307
 msgid "Check synchronisation configuration"
 msgstr "Проверите поставке синхронизације"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:178
-#, fuzzy
-msgid "Unknown"
-msgstr "Непозната заставица: %s"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:181
-#, fuzzy
-msgid "Checking..."
-msgstr "Провера..."
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:187
-#: packages/lib/models/Resource.js:355
-#, fuzzy
-msgid "Error"
-msgstr "Gрешкa"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:192
-msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:196
-#, fuzzy
-msgid "Show Log"
-msgstr "Прикажи евиденцију"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:202
-msgid "Joplin Nextcloud App status:"
-msgstr "Статус Џоплин \"Nextcloud\" апликације"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:208
-#, fuzzy
-msgid "Check Status"
-msgstr "Провери статус"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:212
-#, fuzzy
-msgid "Help"
-msgstr "Помоћ"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:223
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
 #, fuzzy
 msgid "Show Advanced Settings"
 msgstr "Прикажи напредне опције"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:412
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Path:"
 msgstr "Путања"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:417
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
 msgid "Browse..."
 msgstr "Пронађи..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:419
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
 msgstr "Аргументи:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:467
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
-msgstr "Апликација се мора поново покренути да би ове промене ступиле на снагу."
+msgstr ""
+"Апликација се мора поново покренути да би ове промене ступиле на снагу."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #, fuzzy
 msgid "Do it now"
 msgstr "Урадите то сада"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 msgid "Later"
 msgstr "Касније"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:532
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
 #, fuzzy
 msgid "Restart now"
 msgstr "Рестартуј сада"
@@ -1583,7 +1545,7 @@ msgid "Statistics"
 msgstr "Статистика"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:175
+#: packages/app-desktop/gui/ShareNoteDialog.js:186
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "Затвори"
@@ -1674,12 +1636,12 @@ msgstr "Нема ресурса!"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "Упозорење: нису сви ресурси приказани због перформанси (лимит: %s)."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:158
+#: packages/app-desktop/gui/ShareNoteDialog.js:159
 #, fuzzy
 msgid "Synchronising..."
 msgstr "Синхронизација..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:160
+#: packages/app-desktop/gui/ShareNoteDialog.js:161
 #, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
@@ -1687,7 +1649,7 @@ msgstr[0] "Креирам везу %s..."
 msgstr[1] "Креирам везу %s..."
 msgstr[2] "Креирам везу %s..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:162
+#: packages/app-desktop/gui/ShareNoteDialog.js:163
 #, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
@@ -1695,17 +1657,18 @@ msgstr[0] "Токен је копиран у клипборд!"
 msgstr[1] "Токен је копиран у клипборд!"
 msgstr[2] "Токен је копиран у клипборд!"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:165
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr "Напомена: Када се белешка дели, она више неће бити шифрована на серверу."
+msgstr ""
+"Напомена: Када се белешка дели, она више неће бити шифрована на серверу."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:180
 #, fuzzy
 msgid "Share Notes"
 msgstr "Дели белешке"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 #, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
@@ -1747,7 +1710,7 @@ msgstr "Грешка при отварању белешке у уређивач�
 msgid "Open profile directory"
 msgstr "Отворите директоријум профила"
 
-#: packages/app-desktop/app.js:355
+#: packages/app-desktop/app.js:356
 #, javascript-format
 msgid "Open %s"
 msgstr "Отвори %s"
@@ -1861,8 +1824,8 @@ msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
-"Обриши бележницу? Све белешке и под-бележнице унутар ове бележнице ће "
-"такође бити обрисане."
+"Обриши бележницу? Све белешке и под-бележнице унутар ове бележнице ће такође "
+"бити обрисане."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -2170,7 +2133,8 @@ msgstr ""
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
-"Апликација је ауторизована - сада можете затворити ову картицу у претраживачу."
+"Апликација је ауторизована - сада можете затворити ову картицу у "
+"претраживачу."
 
 #: packages/lib/onedrive-api-node-utils.js:88
 msgid "The application has been successfully authorised."
@@ -2212,7 +2176,7 @@ msgstr "Не могу да приступим %s"
 msgid "title"
 msgstr "назив"
 
-#: packages/lib/models/Folder.ts:34 packages/lib/models/Note.ts:35
+#: packages/lib/models/Folder.js:35 packages/lib/models/Note.js:36
 msgid "updated date"
 msgstr "ажурирано"
 
@@ -2666,8 +2630,8 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Команда уређивача текста (може имати аргументе) који ће се користити приликом "
-"отварања белешке. Уколико нису унети аргументи\n"
+"Команда уређивача текста (може имати аргументе) који ће се користити "
+"приликом отварања белешке. Уколико нису унети аргументи\n"
 "програм ће аутоматски покушати да открије подразумеваног уређивача."
 
 #: packages/lib/models/Setting.js:718
@@ -2735,9 +2699,9 @@ msgid ""
 msgstr ""
 "Зарезом одвојена листа путања до директоријума из којих ће се учитавати "
 "сертификати, или путања до индивидуелних фајлова сертификата На пример: /my/"
-"cert_dir, /other/custom.pem. Имајте на уму да уколико направите промене у ТЛС "
-"подешавањима неопходно је да сачувате ваше промене пре него што кликнете на "
-"\"Провери поставке синхронизације\"."
+"cert_dir, /other/custom.pem. Имајте на уму да уколико направите промене у "
+"ТЛС подешавањима неопходно је да сачувате ваше промене пре него што кликнете "
+"на \"Провери поставке синхронизације\"."
 
 #: packages/lib/models/Setting.js:781
 msgid "Ignore TLS certificate errors"
@@ -2859,25 +2823,30 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Белешке и подешавања су складиштени у: %s"
 
-#: packages/lib/models/Resource.js:349
+#: packages/lib/models/Resource.js:352
 msgid "Not downloaded"
 msgstr "Није преузето"
 
-#: packages/lib/models/Resource.js:351
+#: packages/lib/models/Resource.js:354
 #, fuzzy
 msgid "Downloading"
 msgstr "Преузимам..."
 
-#: packages/lib/models/Resource.js:353
+#: packages/lib/models/Resource.js:356
 msgid "Downloaded"
 msgstr "Преузето"
 
-#: packages/lib/models/Resource.js:400
+#: packages/lib/models/Resource.js:358
+#, fuzzy
+msgid "Error"
+msgstr "Gрешкa"
+
+#: packages/lib/models/Resource.js:403
 #, fuzzy, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "Сукоб прилога: \"%s\""
 
-#: packages/lib/models/Resource.js:401
+#: packages/lib/models/Resource.js:404
 #, fuzzy, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -2902,12 +2871,12 @@ msgstr "прилагођени редослед"
 msgid "This note does not have geolocation information."
 msgstr "Ова белешка нема податке о геолокацији."
 
-#: packages/lib/models/Note.js:523
+#: packages/lib/models/Note.js:524
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Не могу да копирам белешку у \"%s\" бележницу"
 
-#: packages/lib/models/Note.js:535
+#: packages/lib/models/Note.js:536
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Не могу да преместим бележницу у \"%s\" бележницу"
@@ -2935,15 +2904,15 @@ msgstr "Непозната заставица: %s"
 msgid "OneDrive"
 msgstr "\"OneDrive\""
 
-#: packages/lib/components/shared/config-shared.js:46
+#: packages/lib/components/shared/config-shared.js:45
 msgid "Checking... Please wait."
 msgstr "Проверавам... Молимо сачекајте."
 
-#: packages/lib/components/shared/config-shared.js:48
+#: packages/lib/components/shared/config-shared.js:47
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Успешно! Излгеда да су поставке конфигурације синхронизације тачне."
 
-#: packages/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:49
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -3008,80 +2977,80 @@ msgstr ""
 "Не могу да освежим токе: подаци за аутентификацију недостају. Поново "
 "покретање синхронизације могу поправити проблем."
 
-#: packages/lib/Synchronizer.js:111
+#: packages/lib/Synchronizer.js:119
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Направљено локалних ставки: %d."
 
-#: packages/lib/Synchronizer.js:113
+#: packages/lib/Synchronizer.js:121
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Ажурирано локалних ставки: %d."
 
-#: packages/lib/Synchronizer.js:115
+#: packages/lib/Synchronizer.js:123
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "Креирано удаљених ставки %d."
 
-#: packages/lib/Synchronizer.js:117
+#: packages/lib/Synchronizer.js:125
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "Ажурирано удаљених ставки: %d."
 
-#: packages/lib/Synchronizer.js:119
+#: packages/lib/Synchronizer.js:127
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Обрисано локалних ставки %d."
 
-#: packages/lib/Synchronizer.js:121
+#: packages/lib/Synchronizer.js:129
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Обрисано удаљених ставки: %d."
 
-#: packages/lib/Synchronizer.js:123
+#: packages/lib/Synchronizer.js:131
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Дохваћене ставке: %d/%d."
 
-#: packages/lib/Synchronizer.js:125
+#: packages/lib/Synchronizer.js:133
 msgid "Cancelling..."
 msgstr "Обустављам..."
 
-#: packages/lib/Synchronizer.js:127
+#: packages/lib/Synchronizer.js:135
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Завршено %s"
 
-#: packages/lib/Synchronizer.js:129
+#: packages/lib/Synchronizer.js:137
 #, javascript-format
 msgid "Last error: %s"
 msgstr "Последња грешка %s"
 
-#: packages/lib/Synchronizer.js:236
+#: packages/lib/Synchronizer.js:244
 msgid "Idle"
 msgstr "Неактивно"
 
-#: packages/lib/Synchronizer.js:238
+#: packages/lib/Synchronizer.js:246
 msgid "In progress"
 msgstr "У току"
 
-#: packages/lib/Synchronizer.js:823
+#: packages/lib/Synchronizer.js:844
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 "Непознати тип ставке је преузет - молимо вас да надоградите Џоплин у "
 "последњу верзију"
 
-#: packages/lib/JoplinServerApi.js:71
+#: packages/lib/JoplinServerApi.js:63
 #, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options "
+"in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
 
-#: packages/lib/SyncTargetNextcloud.js:26
+#: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
 msgstr "НекстКлауд"
 
@@ -4029,6 +3998,29 @@ msgstr "Обележава ставку као одрађену."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Белешка није ставка задужења: \"%s\""
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "Непозната заставица: %s"
+
+#, fuzzy
+#~ msgid "Checking..."
+#~ msgstr "Провера..."
+
+#, fuzzy
+#~ msgid "Show Log"
+#~ msgstr "Прикажи евиденцију"
+
+#~ msgid "Joplin Nextcloud App status:"
+#~ msgstr "Статус Џоплин \"Nextcloud\" апликације"
+
+#, fuzzy
+#~ msgid "Check Status"
+#~ msgstr "Провери статус"
+
+#, fuzzy
+#~ msgid "Help"
+#~ msgstr "Помоћ"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "УванДрајв Дев (само за тестирање)"

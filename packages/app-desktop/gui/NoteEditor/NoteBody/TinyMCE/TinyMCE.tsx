@@ -249,6 +249,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.insertContent(result.html);
 				} else if (cmd.name === 'editor.focus') {
 					editor.focus();
+				} else if (cmd.name === 'editor.execCommand') {
+					if (!('ui' in cmd.value)) cmd.value.ui = false;
+					if (!('value' in cmd.value)) cmd.value.value = null;
+					if (!('args' in cmd.value)) cmd.value.args = {};
+
+					editor.execCommand(cmd.value.name, cmd.value.ui, cmd.value.value, cmd.value.args);
 				} else if (cmd.name === 'dropItems') {
 					if (cmd.value.type === 'notes') {
 						const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, cmd.value.markdownTags.join('\n'), markupRenderOptions({ bodyOnly: true }));
