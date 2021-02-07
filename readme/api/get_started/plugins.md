@@ -39,7 +39,7 @@ You should test your plugin in Development Mode. Doing so means that Joplin will
 From the scaffolding, `src/index.ts` now contains the basic code for a Hello World plugin. 
 
 Two things to note:
-1. It contains a call to [joplin.plugins.register](https://joplinapp.org/api/references/plugin_api/classes/joplinplugins.html). All plugins call this to register the plugin in the app.
+1. It contains a call to [joplin.plugins.register](https://joplinapp.org/api/references/plugin_api/classes/joplinplugins.html#register). All plugins call this to register the plugin in the app.
 2. An `onStart()` event handler method, which is called when the plugin starts.
 
 To try this basic plugin, compile the app by running the following from the root of the project:
