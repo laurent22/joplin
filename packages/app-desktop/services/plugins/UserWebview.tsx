@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useImperativeHandle, forwardRef } from 'react';
+import { useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
 import useViewIsReady from './hooks/useViewIsReady';
 import useThemeCss from './hooks/useThemeCss';
 import useContentSize from './hooks/useContentSize';
@@ -23,8 +23,9 @@ export interface Props {
 	fitToContent?: boolean;
 	borderBottom?: boolean;
 	theme?: any;
-	onSubmit?: any;
-	onDismiss?: any;
+	onSubmit?: Function;
+	onDismiss?: Function;
+	onReady?: Function;
 }
 
 const StyledFrame = styled.iframe`
@@ -66,6 +67,10 @@ function UserWebview(props: Props, ref: any) {
 	const isReady = useViewIsReady(viewRef);
 	const cssFilePath = useThemeCss({ pluginId: props.pluginId, themeId: props.themeId });
 
+	useEffect(() => {
+		if (isReady && props.onReady) props.onReady();
+	}, [isReady]);
+
 	function frameWindow() {
 		if (!viewRef.current) return null;
 		return viewRef.current.contentWindow;
@@ -88,6 +93,9 @@ function UserWebview(props: Props, ref: any) {
 				} else {
 					return null;
 				}
+			},
+			focus: function() {
+				if (viewRef.current) viewRef.current.focus();
 			},
 		};
 	});
