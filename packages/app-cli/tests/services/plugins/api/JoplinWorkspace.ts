@@ -1,5 +1,4 @@
 import Setting from '@joplin/lib/models/Setting';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } from '../../../test-utils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
@@ -59,7 +58,7 @@ describe('JoplinWorkspace', () => {
 	});
 
 	test('should return the selected folder', async () => {
-		const service = new newPluginService() as PluginService;
+		const service = newPluginService();
 
 		const pluginScript = newPluginScript(`			
 			joplin.plugins.register({
