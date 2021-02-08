@@ -738,7 +738,13 @@ async function createTempDir() {
 	return tempDirPath;
 }
 
-function newPluginService(appVersion = '1.4') {
+interface PluginServiceOptions {
+	getState?(): Record<string, any>;
+}
+
+function newPluginService(appVersion = '1.4', options: PluginServiceOptions = null): PluginService {
+	options = options || {};
+
 	const runner = new PluginRunner();
 	const service = new PluginService();
 	service.initialize(
@@ -749,7 +755,7 @@ function newPluginService(appVersion = '1.4') {
 		runner,
 		{
 			dispatch: () => {},
-			getState: () => {},
+			getState: options.getState ? options.getState : () => {},
 		}
 	);
 	return service;

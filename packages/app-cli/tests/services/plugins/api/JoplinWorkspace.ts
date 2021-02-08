@@ -1,7 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-
-const { newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('../../../test-utils');
+import { newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } from '../../../test-utils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import ItemChange from '@joplin/lib/models/ItemChange';
@@ -19,7 +18,15 @@ describe('JoplinWorkspace', () => {
 	});
 
 	test('should listen to noteChange events', async () => {
-		const service = new newPluginService() as PluginService;
+		const appState: Record<string, any> = {
+			selectedNoteIds: [],
+		};
+
+		const service = newPluginService('1.4', {
+			getState: () => {
+				return appState;
+			},
+		});
 
 		const pluginScript = newPluginScript(`			
 			joplin.plugins.register({
@@ -32,6 +39,7 @@ describe('JoplinWorkspace', () => {
 		`);
 
 		const note = await Note.save({});
+		appState.selectedNoteIds.push(note.id);
 		await ItemChange.waitForAllSaved();
 
 		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
