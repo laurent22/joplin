@@ -49,11 +49,11 @@ To try this basic plugin, compile the app by running the following from the root
 Doing so should compile all the files into the `dist/` directory. This is where Joplin will load the plugin.
 
 ## Install the plugin
-Open Joplin **Configuration > Plugins** section. Under Advanced Settings, add the plugin path in the `Development plugins` text field. 
+Open Joplin **Configuration > Plugins** section. Under Advanced Settings, add the plugin path in the **Development plugins** text field. 
 This should be the path to your main plugin directory, i.e. `path/to/your/root/plugin/directory`.
 
 ## Test the Plugin, Hello World!
-Restart the Development app from the command line/terminal, and Joplin should load the plugin and execute its `onStart` handler. If all went well you should see the test message in the plugin console: "Hello world. Test plugin started!". You will also be able to see the information from the manifest in the `Settings > Plugins`
+Restart the Development app from the command line/terminal, and Joplin should load the plugin and execute its `onStart` handler. If all went well you should see the test message in the plugin console: "Hello world. Test plugin started!". You will also be able to see the information from the manifest in the **Settings > Plugins**
 
 # Next steps
 Great, you now have the basics of a working plugin! 
