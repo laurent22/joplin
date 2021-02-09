@@ -1,0 +1,772 @@
+{
+	"title": "JSON schema for Joplin setting files",
+	"$id": "https://joplinapp.org/schema/settings.json",
+	"$schema": "https://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"properties": {
+		"clientId": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"editor.codeView": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"sync.target": {
+			"type": "integer",
+			"default": 7,
+			"enum": [
+				2,
+				3,
+				5,
+				6,
+				7,
+				8,
+				9
+			]
+		},
+		"sync.upgradeState": {
+			"type": "integer",
+			"default": 0,
+			"$comment": "private"
+		},
+		"sync.2.path": {
+			"type": "string",
+			"default": "",
+			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+		},
+		"sync.5.path": {
+			"type": "string",
+			"default": "",
+			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+		},
+		"sync.5.username": {
+			"type": "string",
+			"default": ""
+		},
+		"sync.5.password": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.6.path": {
+			"type": "string",
+			"default": "",
+			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+		},
+		"sync.6.username": {
+			"type": "string",
+			"default": ""
+		},
+		"sync.6.password": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.8.path": {
+			"type": "string",
+			"default": "",
+			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+		},
+		"sync.8.url": {
+			"type": "string",
+			"default": "https://s3.amazonaws.com/"
+		},
+		"sync.8.username": {
+			"type": "string",
+			"default": ""
+		},
+		"sync.8.password": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.9.path": {
+			"type": "string",
+			"default": "",
+			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+		},
+		"sync.9.directory": {
+			"type": "string",
+			"default": "Apps/Joplin"
+		},
+		"sync.9.username": {
+			"type": "string",
+			"default": ""
+		},
+		"sync.9.password": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.5.syncTargets": {
+			"type": "object",
+			"default": {},
+			"$comment": "private"
+		},
+		"sync.resourceDownloadMode": {
+			"type": "string",
+			"default": "always",
+			"description": "In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.",
+			"enum": [
+				"always",
+				"manual",
+				"auto"
+			]
+		},
+		"sync.3.auth": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.4.auth": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.7.auth": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.9.auth": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.1.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.2.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.3.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.4.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.5.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.6.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.7.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.8.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.9.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.maxConcurrentConnections": {
+			"type": "integer",
+			"default": 5,
+			"minimum": 1,
+			"maximum": 20
+		},
+		"activeFolderId": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"richTextBannerDismissed": {
+			"type": "boolean",
+			"default": false,
+			"$comment": "private"
+		},
+		"firstStart": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"locale": {
+			"type": "string",
+			"default": "en_GB",
+			"enum": [
+				"ar",
+				"eu",
+				"bs_BA",
+				"bg_BG",
+				"ca",
+				"hr_HR",
+				"cs_CZ",
+				"da_DK",
+				"de_DE",
+				"et_EE",
+				"en_GB",
+				"en_US",
+				"es_ES",
+				"eo",
+				"fi_FI",
+				"fr_FR",
+				"gl_ES",
+				"id_ID",
+				"it_IT",
+				"nl_BE",
+				"nl_NL",
+				"nb_NO",
+				"fa",
+				"pl_PL",
+				"pt_BR",
+				"pt_PT",
+				"ro",
+				"sl_SI",
+				"sv",
+				"th_TH",
+				"vi",
+				"tr_TR",
+				"el_GR",
+				"ru_RU",
+				"sr_RS",
+				"zh_CN",
+				"zh_TW",
+				"ja_JP",
+				"ko"
+			]
+		},
+		"dateFormat": {
+			"type": "string",
+			"default": "DD/MM/YYYY",
+			"enum": [
+				"DD/MM/YYYY",
+				"DD/MM/YY",
+				"MM/DD/YYYY",
+				"MM/DD/YY",
+				"YYYY-MM-DD",
+				"DD.MM.YYYY",
+				"YYYY.MM.DD"
+			]
+		},
+		"timeFormat": {
+			"type": "string",
+			"default": "HH:mm",
+			"enum": [
+				"HH:mm",
+				"h:mm A"
+			]
+		},
+		"theme": {
+			"type": "integer",
+			"default": 1,
+			"enum": [
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				22
+			]
+		},
+		"themeAutoDetect": {
+			"type": "boolean",
+			"default": false
+		},
+		"preferredLightTheme": {
+			"type": "integer",
+			"default": 1,
+			"enum": [
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				22
+			]
+		},
+		"preferredDarkTheme": {
+			"type": "integer",
+			"default": 2,
+			"enum": [
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				22
+			]
+		},
+		"notificationPermission": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"showNoteCounts": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"layoutButtonSequence": {
+			"type": "integer",
+			"default": 0,
+			"enum": [
+				0,
+				1,
+				2,
+				3
+			],
+			"$comment": "private"
+		},
+		"uncompletedTodosOnTop": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCompletedTodos": {
+			"type": "boolean",
+			"default": true
+		},
+		"notes.sortOrder.field": {
+			"type": "string",
+			"default": "user_updated_time",
+			"enum": [
+				"user_updated_time",
+				"user_created_time",
+				"title",
+				"order"
+			]
+		},
+		"editor.autoMatchingBraces": {
+			"type": "boolean",
+			"default": true
+		},
+		"notes.sortOrder.reverse": {
+			"type": "boolean",
+			"default": true
+		},
+		"folders.sortOrder.field": {
+			"type": "string",
+			"default": "title",
+			"enum": [
+				"title",
+				"last_note_user_updated_time"
+			]
+		},
+		"folders.sortOrder.reverse": {
+			"type": "boolean",
+			"default": false
+		},
+		"trackLocation": {
+			"type": "boolean",
+			"default": true
+		},
+		"editor.beta": {
+			"type": "boolean",
+			"default": false,
+			"description": "This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.",
+			"$comment": "private"
+		},
+		"newTodoFocus": {
+			"type": "string",
+			"default": "title",
+			"enum": [
+				"title",
+				"body"
+			]
+		},
+		"newNoteFocus": {
+			"type": "string",
+			"default": "body",
+			"enum": [
+				"title",
+				"body"
+			]
+		},
+		"plugins.states": {
+			"type": "object",
+			"default": "",
+			"$comment": "private"
+		},
+		"plugins.devPluginPaths": {
+			"type": "string",
+			"default": "",
+			"description": "You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect."
+		},
+		"markdown.softbreaks": {
+			"type": "boolean",
+			"default": false,
+			"$comment": "private"
+		},
+		"markdown.typographer": {
+			"type": "boolean",
+			"default": false,
+			"$comment": "private"
+		},
+		"markdown.plugin.softbreaks": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.typographer": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.linkify": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.katex": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.fountain": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.mermaid": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.audioPlayer": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.videoPlayer": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.pdfViewer": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.mark": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.footnote": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.toc": {
+			"type": "boolean",
+			"default": true
+		},
+		"markdown.plugin.sub": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.sup": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.deflist": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.abbr": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.emoji": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.insert": {
+			"type": "boolean",
+			"default": false
+		},
+		"markdown.plugin.multitable": {
+			"type": "boolean",
+			"default": false
+		},
+		"showTrayIcon": {
+			"type": "boolean",
+			"default": true,
+			"description": "This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts."
+		},
+		"startMinimized": {
+			"type": "boolean",
+			"default": false
+		},
+		"collapsedFolderIds": {
+			"type": "array",
+			"default": [],
+			"$comment": "private"
+		},
+		"keychain.supported": {
+			"type": "integer",
+			"default": -1,
+			"$comment": "private"
+		},
+		"db.ftsEnabled": {
+			"type": "integer",
+			"default": -1,
+			"$comment": "private"
+		},
+		"db.fuzzySearchEnabled": {
+			"type": "integer",
+			"default": -1,
+			"$comment": "private"
+		},
+		"encryption.enabled": {
+			"type": "boolean",
+			"default": false,
+			"$comment": "private"
+		},
+		"encryption.activeMasterKeyId": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"encryption.passwordCache": {
+			"type": "object",
+			"default": {},
+			"$comment": "private"
+		},
+		"encryption.shouldReencrypt": {
+			"type": "integer",
+			"default": -1,
+			"$comment": "private"
+		},
+		"style.zoom": {
+			"type": "integer",
+			"default": 100,
+			"minimum": 50,
+			"maximum": 500,
+			"$comment": "private"
+		},
+		"style.editor.fontSize": {
+			"type": "integer",
+			"default": 13,
+			"minimum": 4,
+			"maximum": 50
+		},
+		"style.editor.fontFamily": {
+			"type": "string",
+			"default": "",
+			"description": "This should be a *monospace* font or some elements will render incorrectly. If the font is incorrect or empty, it will default to a generic monospace font."
+		},
+		"ui.layout": {
+			"type": "object",
+			"default": {},
+			"$comment": "private"
+		},
+		"autoUpdateEnabled": {
+			"type": "boolean",
+			"default": false
+		},
+		"autoUpdate.includePreReleases": {
+			"type": "boolean",
+			"default": false,
+			"description": "See the pre-release page for more details: https://joplinapp.org/prereleases"
+		},
+		"clipperServer.autoStart": {
+			"type": "boolean",
+			"default": false,
+			"$comment": "private"
+		},
+		"sync.interval": {
+			"type": "integer",
+			"default": 300,
+			"enum": [
+				0,
+				300,
+				600,
+				1800,
+				3600,
+				43200,
+				86400
+			]
+		},
+		"noteVisiblePanes": {
+			"type": "array",
+			"default": [
+				"editor",
+				"viewer"
+			],
+			"$comment": "private"
+		},
+		"tagHeaderIsExpanded": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"folderHeaderIsExpanded": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"editor": {
+			"type": "string",
+			"default": "",
+			"description": "The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor."
+		},
+		"export.pdfPageSize": {
+			"type": "string",
+			"default": "A4",
+			"enum": [
+				"A4",
+				"Letter",
+				"A3",
+				"A5",
+				"Tabloid",
+				"Legal"
+			]
+		},
+		"export.pdfPageOrientation": {
+			"type": "string",
+			"default": "portrait",
+			"enum": [
+				"portrait",
+				"landscape"
+			]
+		},
+		"editor.keyboardMode": {
+			"type": "string",
+			"default": "",
+			"enum": [
+				"",
+				"emacs",
+				"vim"
+			]
+		},
+		"editor.spellcheckBeta": {
+			"type": "boolean",
+			"default": false,
+			"description": "Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)",
+			"$comment": "private"
+		},
+		"net.customCertificates": {
+			"type": "string",
+			"default": "",
+			"description": "Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\"."
+		},
+		"net.ignoreTlsErrors": {
+			"type": "boolean",
+			"default": false
+		},
+		"sync.wipeOutFailSafe": {
+			"type": "boolean",
+			"default": true,
+			"description": "Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)"
+		},
+		"api.token": {
+			"type": "string",
+			"default": null,
+			"$comment": "private"
+		},
+		"api.port": {
+			"type": "integer",
+			"default": null,
+			"description": "Specify the port that should be used by the API server. If not set, a default will be used."
+		},
+		"resourceService.lastProcessedChangeId": {
+			"type": "integer",
+			"default": 0,
+			"$comment": "private"
+		},
+		"searchEngine.lastProcessedChangeId": {
+			"type": "integer",
+			"default": 0,
+			"$comment": "private"
+		},
+		"revisionService.lastProcessedChangeId": {
+			"type": "integer",
+			"default": 0,
+			"$comment": "private"
+		},
+		"searchEngine.initialIndexingDone": {
+			"type": "boolean",
+			"default": false,
+			"$comment": "private"
+		},
+		"revisionService.enabled": {
+			"type": "boolean",
+			"default": true
+		},
+		"revisionService.ttlDays": {
+			"type": "integer",
+			"default": 90,
+			"minimum": 1,
+			"maximum": 730
+		},
+		"revisionService.intervalBetweenRevisions": {
+			"type": "integer",
+			"default": 600000,
+			"$comment": "private"
+		},
+		"revisionService.oldNoteInterval": {
+			"type": "integer",
+			"default": 604800000,
+			"$comment": "private"
+		},
+		"welcome.wasBuilt": {
+			"type": "boolean",
+			"default": false,
+			"$comment": "private"
+		},
+		"welcome.enabled": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"camera.type": {
+			"type": "integer",
+			"default": 0,
+			"$comment": "private"
+		},
+		"camera.ratio": {
+			"type": "string",
+			"default": "4:3",
+			"$comment": "private"
+		},
+		"spellChecker.enabled": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"spellChecker.language": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"windowContentZoomFactor": {
+			"type": "integer",
+			"default": 100,
+			"minimum": 30,
+			"maximum": 300,
+			"$comment": "private"
+		},
+		"layout.folderList.factor": {
+			"type": "integer",
+			"default": 1,
+			"description": "The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
+		},
+		"layout.noteList.factor": {
+			"type": "integer",
+			"default": 1,
+			"description": "The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
+		},
+		"layout.note.factor": {
+			"type": "integer",
+			"default": 2,
+			"description": "The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
+		}
+	}
+}

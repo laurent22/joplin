@@ -109,10 +109,12 @@ const supportDir = `${__dirname}/support`;
 // We add a space in the data directory path as that will help uncover
 // various space-in-path issues.
 const dataDir = `${__dirname}/test data/${suiteName_}`;
+const profileDir = `${dataDir}/profile`;
 
 fs.mkdirpSync(logDir, 0o755);
 fs.mkdirpSync(baseTempDir, 0o755);
 fs.mkdirpSync(dataDir);
+fs.mkdirpSync(profileDir);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -182,7 +184,8 @@ Setting.setConstant('appId', 'net.cozic.joplintest-cli');
 Setting.setConstant('appType', 'cli');
 Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
-Setting.setConstant('pluginDataDir', `${dataDir}/plugin-data`);
+Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
+Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('env', 'dev');
 
 BaseService.logger_ = logger;

@@ -54,6 +54,9 @@ lerna-debug.log
 packages/app-cli/app/LinkSelector.d.ts
 packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/LinkSelector.js.map
+packages/app-cli/app/command-settingschema.d.ts
+packages/app-cli/app/command-settingschema.js
+packages/app-cli/app/command-settingschema.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
@@ -906,6 +909,9 @@ packages/lib/models/SmartFilter.js.map
 packages/lib/models/Tag.d.ts
 packages/lib/models/Tag.js
 packages/lib/models/Tag.js.map
+packages/lib/models/settings/FileHandler.d.ts
+packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/FileHandler.js.map
 packages/lib/models/utils/paginatedFeed.d.ts
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginatedFeed.js.map
