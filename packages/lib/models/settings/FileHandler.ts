@@ -16,12 +16,12 @@ export default class FileHandler {
 	}
 
 	public async load(): Promise<SettingValues> {
-		if (this.valueJsonCache_) return JSON.parse(this.valueJsonCache_);
-
-		if (!(await shim.fsDriver().exists(this.filePath_))) {
-			this.valueJsonCache_ = '{}';
-		} else {
-			this.valueJsonCache_ = await shim.fsDriver().readFile(this.filePath_, 'utf8');
+		if (!this.valueJsonCache_) {
+			if (!(await shim.fsDriver().exists(this.filePath_))) {
+				this.valueJsonCache_ = '{}';
+			} else {
+				this.valueJsonCache_ = await shim.fsDriver().readFile(this.filePath_, 'utf8');
+			}
 		}
 
 		try {
