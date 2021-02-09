@@ -17,6 +17,7 @@
 		"sync.target": {
 			"type": "integer",
 			"default": 7,
+			"description": "Synchronisation target",
 			"enum": [
 				2,
 				3,
@@ -35,70 +36,80 @@
 		"sync.2.path": {
 			"type": "string",
 			"default": "",
-			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "Directory to synchronise with (absolute path). Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
 		"sync.5.path": {
 			"type": "string",
 			"default": "",
-			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "Nextcloud WebDAV URL. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
 		"sync.5.username": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"description": "Nextcloud username"
 		},
 		"sync.5.password": {
 			"type": "string",
 			"default": "",
+			"description": "Nextcloud password",
 			"$comment": "private"
 		},
 		"sync.6.path": {
 			"type": "string",
 			"default": "",
-			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "WebDAV URL. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
 		"sync.6.username": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"description": "WebDAV username"
 		},
 		"sync.6.password": {
 			"type": "string",
 			"default": "",
+			"description": "WebDAV password",
 			"$comment": "private"
 		},
 		"sync.8.path": {
 			"type": "string",
 			"default": "",
-			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "AWS S3 bucket. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
 		"sync.8.url": {
 			"type": "string",
-			"default": "https://s3.amazonaws.com/"
+			"default": "https://s3.amazonaws.com/",
+			"description": "AWS S3 URL"
 		},
 		"sync.8.username": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"description": "AWS key"
 		},
 		"sync.8.password": {
 			"type": "string",
 			"default": "",
+			"description": "AWS secret",
 			"$comment": "private"
 		},
 		"sync.9.path": {
 			"type": "string",
 			"default": "",
-			"description": "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "Joplin Server URL. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
 		"sync.9.directory": {
 			"type": "string",
-			"default": "Apps/Joplin"
+			"default": "Apps/Joplin",
+			"description": "Joplin Server Directory"
 		},
 		"sync.9.username": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"description": "Joplin Server username"
 		},
 		"sync.9.password": {
 			"type": "string",
 			"default": "",
+			"description": "Joplin Server password",
 			"$comment": "private"
 		},
 		"sync.5.syncTargets": {
@@ -109,7 +120,7 @@
 		"sync.resourceDownloadMode": {
 			"type": "string",
 			"default": "always",
-			"description": "In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.",
+			"description": "Attachment download behaviour. In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.",
 			"enum": [
 				"always",
 				"manual",
@@ -184,6 +195,7 @@
 		"sync.maxConcurrentConnections": {
 			"type": "integer",
 			"default": 5,
+			"description": "Max concurrent connections",
 			"minimum": 1,
 			"maximum": 20
 		},
@@ -205,6 +217,7 @@
 		"locale": {
 			"type": "string",
 			"default": "en_GB",
+			"description": "Language",
 			"enum": [
 				"ar",
 				"eu",
@@ -250,6 +263,7 @@
 		"dateFormat": {
 			"type": "string",
 			"default": "DD/MM/YYYY",
+			"description": "Date format",
 			"enum": [
 				"DD/MM/YYYY",
 				"DD/MM/YY",
@@ -263,6 +277,7 @@
 		"timeFormat": {
 			"type": "string",
 			"default": "HH:mm",
+			"description": "Time format",
 			"enum": [
 				"HH:mm",
 				"h:mm A"
@@ -271,6 +286,7 @@
 		"theme": {
 			"type": "integer",
 			"default": 1,
+			"description": "Theme",
 			"enum": [
 				1,
 				2,
@@ -284,11 +300,13 @@
 		},
 		"themeAutoDetect": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Automatically switch theme to match system theme"
 		},
 		"preferredLightTheme": {
 			"type": "integer",
 			"default": 1,
+			"description": "Preferred light theme",
 			"enum": [
 				1,
 				2,
@@ -303,6 +321,7 @@
 		"preferredDarkTheme": {
 			"type": "integer",
 			"default": 2,
+			"description": "Preferred dark theme",
 			"enum": [
 				1,
 				2,
@@ -322,6 +341,7 @@
 		"showNoteCounts": {
 			"type": "boolean",
 			"default": true,
+			"description": "Show note counts",
 			"$comment": "private"
 		},
 		"layoutButtonSequence": {
@@ -337,15 +357,18 @@
 		},
 		"uncompletedTodosOnTop": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Uncompleted to-dos on top"
 		},
 		"showCompletedTodos": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Show completed to-dos"
 		},
 		"notes.sortOrder.field": {
 			"type": "string",
 			"default": "user_updated_time",
+			"description": "Sort notes by",
 			"enum": [
 				"user_updated_time",
 				"user_created_time",
@@ -355,15 +378,18 @@
 		},
 		"editor.autoMatchingBraces": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Auto-pair braces, parenthesis, quotations, etc."
 		},
 		"notes.sortOrder.reverse": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Reverse sort order"
 		},
 		"folders.sortOrder.field": {
 			"type": "string",
 			"default": "title",
+			"description": "Sort notebooks by",
 			"enum": [
 				"title",
 				"last_note_user_updated_time"
@@ -371,21 +397,24 @@
 		},
 		"folders.sortOrder.reverse": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Reverse sort order"
 		},
 		"trackLocation": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Save geo-location with notes"
 		},
 		"editor.beta": {
 			"type": "boolean",
 			"default": false,
-			"description": "This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.",
+			"description": "Opt-in to the editor beta. This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.",
 			"$comment": "private"
 		},
 		"newTodoFocus": {
 			"type": "string",
 			"default": "title",
+			"description": "When creating a new to-do:",
 			"enum": [
 				"title",
 				"body"
@@ -394,6 +423,7 @@
 		"newNoteFocus": {
 			"type": "string",
 			"default": "body",
+			"description": "When creating a new note:",
 			"enum": [
 				"title",
 				"body"
@@ -407,7 +437,7 @@
 		"plugins.devPluginPaths": {
 			"type": "string",
 			"default": "",
-			"description": "You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect."
+			"description": "Development plugins. You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect."
 		},
 		"markdown.softbreaks": {
 			"type": "boolean",
@@ -421,88 +451,108 @@
 		},
 		"markdown.plugin.softbreaks": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable soft breaks"
 		},
 		"markdown.plugin.typographer": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable typographer support"
 		},
 		"markdown.plugin.linkify": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable Linkify"
 		},
 		"markdown.plugin.katex": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable math expressions"
 		},
 		"markdown.plugin.fountain": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable Fountain syntax support"
 		},
 		"markdown.plugin.mermaid": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable Mermaid diagrams support"
 		},
 		"markdown.plugin.audioPlayer": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable audio player"
 		},
 		"markdown.plugin.videoPlayer": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable video player"
 		},
 		"markdown.plugin.pdfViewer": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable PDF viewer"
 		},
 		"markdown.plugin.mark": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable ==mark== syntax"
 		},
 		"markdown.plugin.footnote": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable footnotes"
 		},
 		"markdown.plugin.toc": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable table of contents extension"
 		},
 		"markdown.plugin.sub": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable ~sub~ syntax"
 		},
 		"markdown.plugin.sup": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable ^sup^ syntax"
 		},
 		"markdown.plugin.deflist": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable deflist syntax"
 		},
 		"markdown.plugin.abbr": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable abbreviation syntax"
 		},
 		"markdown.plugin.emoji": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable markdown emoji"
 		},
 		"markdown.plugin.insert": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable ++insert++ syntax"
 		},
 		"markdown.plugin.multitable": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Enable multimarkdown table extension"
 		},
 		"showTrayIcon": {
 			"type": "boolean",
 			"default": true,
-			"description": "This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts."
+			"description": "Show tray icon. This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts."
 		},
 		"startMinimized": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Start application minimised in the tray icon"
 		},
 		"collapsedFolderIds": {
 			"type": "array",
@@ -554,13 +604,14 @@
 		"style.editor.fontSize": {
 			"type": "integer",
 			"default": 13,
+			"description": "Editor font size",
 			"minimum": 4,
 			"maximum": 50
 		},
 		"style.editor.fontFamily": {
 			"type": "string",
 			"default": "",
-			"description": "This should be a *monospace* font or some elements will render incorrectly. If the font is incorrect or empty, it will default to a generic monospace font."
+			"description": "Editor font family. This should be a *monospace* font or some elements will render incorrectly. If the font is incorrect or empty, it will default to a generic monospace font."
 		},
 		"ui.layout": {
 			"type": "object",
@@ -569,12 +620,13 @@
 		},
 		"autoUpdateEnabled": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Automatically update the application"
 		},
 		"autoUpdate.includePreReleases": {
 			"type": "boolean",
 			"default": false,
-			"description": "See the pre-release page for more details: https://joplinapp.org/prereleases"
+			"description": "Get pre-releases when checking for updates. See the pre-release page for more details: https://joplinapp.org/prereleases"
 		},
 		"clipperServer.autoStart": {
 			"type": "boolean",
@@ -584,6 +636,7 @@
 		"sync.interval": {
 			"type": "integer",
 			"default": 300,
+			"description": "Synchronisation interval",
 			"enum": [
 				0,
 				300,
@@ -615,11 +668,12 @@
 		"editor": {
 			"type": "string",
 			"default": "",
-			"description": "The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor."
+			"description": "Text editor command. The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor."
 		},
 		"export.pdfPageSize": {
 			"type": "string",
 			"default": "A4",
+			"description": "Page size for PDF export",
 			"enum": [
 				"A4",
 				"Letter",
@@ -632,6 +686,7 @@
 		"export.pdfPageOrientation": {
 			"type": "string",
 			"default": "portrait",
+			"description": "Page orientation for PDF export",
 			"enum": [
 				"portrait",
 				"landscape"
@@ -640,6 +695,7 @@
 		"editor.keyboardMode": {
 			"type": "string",
 			"default": "",
+			"description": "Keyboard Mode",
 			"enum": [
 				"",
 				"emacs",
@@ -649,22 +705,23 @@
 		"editor.spellcheckBeta": {
 			"type": "boolean",
 			"default": false,
-			"description": "Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)",
+			"description": "Enable spell checking in Markdown editor? (WARNING BETA feature). Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)",
 			"$comment": "private"
 		},
 		"net.customCertificates": {
 			"type": "string",
 			"default": "",
-			"description": "Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\"."
+			"description": "Custom TLS certificates. Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\"."
 		},
 		"net.ignoreTlsErrors": {
 			"type": "boolean",
-			"default": false
+			"default": false,
+			"description": "Ignore TLS certificate errors"
 		},
 		"sync.wipeOutFailSafe": {
 			"type": "boolean",
 			"default": true,
-			"description": "Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)"
+			"description": "Fail-safe. Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)"
 		},
 		"api.token": {
 			"type": "string",
@@ -698,11 +755,13 @@
 		},
 		"revisionService.enabled": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Enable note history"
 		},
 		"revisionService.ttlDays": {
 			"type": "integer",
 			"default": 90,
+			"description": "Keep note history for",
 			"minimum": 1,
 			"maximum": 730
 		},
@@ -756,17 +815,17 @@
 		"layout.folderList.factor": {
 			"type": "integer",
 			"default": 1,
-			"description": "The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
+			"description": "Notebook list growth factor. The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
 		},
 		"layout.noteList.factor": {
 			"type": "integer",
 			"default": 1,
-			"description": "The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
+			"description": "Note list growth factor. The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
 		},
 		"layout.note.factor": {
 			"type": "integer",
 			"default": 2,
-			"description": "The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
+			"description": "Note area growth factor. The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
 		}
 	}
 }

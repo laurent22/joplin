@@ -55,7 +55,12 @@ class Command extends BaseCommand {
 			const props: Record<string, any> = {};
 			props.type = type;
 			props.default = md.value;
-			if (md.description && md.description('desktop')) props.description = md.description('desktop');
+
+			const description: string[] = [];
+			if (md.label && md.label()) description.push(md.label());
+			if (md.description && md.description('desktop')) description.push(md.description('desktop'));
+
+			if (description.length) props.description = description.join('. ');
 			if (md.isEnum) props.enum = Object.keys(md.options()).map((v: any) => Setting.formatValue(key, v));
 			if ('minimum' in md) props.minimum = md.minimum;
 			if ('maximum' in md) props.maximum = md.maximum;
