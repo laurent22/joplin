@@ -114,6 +114,12 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 		this.domReady_ = false;
 	}
 
+	focus() {
+		if (this.webviewRef_.current) {
+			this.webviewRef_.current.focus();
+		}
+	}
+
 	tryInit() {
 		if (!this.initialized_ && this.webviewRef_.current) {
 			this.initWebview();
