@@ -33,16 +33,27 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
+	// Editor commands will focus the editor after they're executed
 	private isEditorCommand(commandName: string) {
-		return CommandService.isEditorCommand(commandName) && !(
-			// These commands are attached to the editor runtime,
-			// but they either handle focus themselves or don't need
-			// to focus the editor
-			commandName === 'textLink' ||
-			commandName === 'insertText' ||
-			commandName === 'scrollToHash' ||
-			commandName === 'selectedText' ||
-			commandName === 'replaceSelection'
+		return (commandName.indexOf('editor.') === 0 ||
+				// These commands are grandfathered in, but in the future
+				// all editor commands should start with "editor."
+				// WARNING: Some commands such as textLink are not defined here
+				// because they are more complex and handle focus manually
+				commandName === 'textCopy' ||
+				commandName === 'textCut' ||
+				commandName === 'textPaste' ||
+				commandName === 'textSelectAll' ||
+				commandName === 'textBold' ||
+				commandName === 'textItalic' ||
+				commandName === 'textCode' ||
+				commandName === 'attachFile' ||
+				commandName === 'textNumberedList' ||
+				commandName === 'textBulletedList' ||
+				commandName === 'textCheckbox' ||
+				commandName === 'textHeading' ||
+				commandName === 'textHorizontalRule' ||
+				commandName === 'insertDateTime'
 		);
 	}
 

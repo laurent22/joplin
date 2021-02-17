@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: أحمد باشا إبراهيم <fi_ahmed_bacha@esi.dz>\n"
+"Last-Translator: Whaell <Whaell@protonmail.com>\n"
 "Language-Team: \n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -15,14 +15,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
 #: packages/app-desktop/checkForUpdates.js:139
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/MenuBar.js:317
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:185
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
@@ -39,8 +38,8 @@ msgstr "موافق"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:430
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -61,17 +60,16 @@ msgstr "إلغاء"
 #: packages/app-desktop/bridge.js:188
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
-msgstr ""
+msgstr "سيتم إغلاق التطبيق الآن. يرجى إعادة تشغيله لإكمال العملية."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"اكتب عنوان الملاحظة للانتقال إليها. أو اكتب # متبوعًا باسم الوسم، أو @ متبوعًا "
-"باسم دفتر الملاحظات."
+"اكتب عنوان ملاحظة أو جزء من محتواه للانتقال إليه. أو اكتب # متبوعاً بإسم وسم، "
+"أو @ متبوعاً باسم دفتر ملاحظات. أو اكتب : للبحث عن الأوامر."
 
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -81,7 +79,7 @@ msgstr "اذهب إلى أي شيء..."
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "لوحة الأوامر"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -91,7 +89,7 @@ msgstr "التصدير إلى \"%s\" بتنسيق \"%s\". فضلاً انتظر.
 #: packages/app-desktop/InteropServiceHelper.js:174
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "تعذر تصدير الملاحظات: %s"
 
 #: packages/app-desktop/checkForUpdates.js:138
 msgid "Current version is up-to-date."
@@ -117,9 +115,8 @@ msgid "New version: %s"
 msgstr "النسخة الجديدة: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
-#, fuzzy
 msgid "Download"
-msgstr "يجري تنزيل الموارد..."
+msgstr "تحميل"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -155,7 +152,7 @@ msgstr ""
 "يتم استبدال أو تعديل الإصدار الحالي من الملاحظة."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
@@ -178,8 +175,8 @@ msgstr ""
 "سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر أيضاً."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:180
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
+#: packages/app-desktop/gui/utils/NoteListUtils.js:140
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:122
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -199,7 +196,7 @@ msgstr "حذف هذا البحث من الشريط الجانبي؟"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:238
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
-#: packages/app-desktop/gui/utils/NoteListUtils.js:132
+#: packages/app-desktop/gui/utils/NoteListUtils.js:136
 msgid "Export"
 msgstr "تصدير"
 
@@ -258,9 +255,8 @@ msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
 #: packages/app-mobile/components/screens/status.js:112
-#, fuzzy
 msgid "Retry All"
-msgstr "إعادة المحاولة"
+msgstr "إعادة محاولة الجميع"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
 #: packages/app-mobile/components/screens/status.js:118
@@ -272,9 +268,8 @@ msgid "strong text"
 msgstr "نص مشدَّد"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:179
-#, fuzzy
 msgid "emphasised text"
-msgstr "نص مؤكد"
+msgstr "نص مشدَّد علية"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:181
 msgid "Insert Hyperlink"
@@ -286,11 +281,11 @@ msgstr "إدراج ارتباط تشعبي"
 msgid "List item"
 msgstr "عنصر قائمة"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
 msgid "Layout"
 msgstr "تخطيط"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -298,98 +293,97 @@ msgid ""
 msgstr ""
 "ليس لهذه الملاحظة أي محتوى. اضغط على \"%s\" لتبديل المحرّر وتحرير الملاحظة."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:595
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:90
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:605
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "قص"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:602
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:98
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:612
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:317
 msgid "Copy"
 msgstr "نسخ"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:609
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "لصق"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
 msgid "Checkbox list"
-msgstr "خانة اختيار"
+msgstr "قائمة خانات اختيار"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:521
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:458
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:530
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1013
 msgid "Edit"
 msgstr "تحرير"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:577
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "إرفاق ملف"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
-msgid "Code Block"
-msgstr ""
-
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
-msgid "Inline Code"
-msgstr ""
+msgid "Code Block"
+msgstr "كتلة للغة البرمجة"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:604
+msgid "Inline Code"
+msgstr "نص لغة برمجة في النسق"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:619
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "إدراج التاريخ والوقت"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 msgid "Drop notes or files here"
-msgstr ""
+msgstr "قم بإسقاط الملاحظات أو الملفات هنا"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
-#, fuzzy
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 msgid "Code View"
-msgstr "رمز"
+msgstr "عرض بلغة البرمجة"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
+"يرجى الانتظار حتى يتم تنزيل جميع المرفقات وفك تشفيرها. يمكنك أيضًا التبديل "
+"إلى %s لتحرير الملاحظة."
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "حدث خطأ أثناء تنزيل هذا المرفق:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:77
 #: packages/lib/services/ResourceEditWatcher/index.js:196
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "لم يجر تنزيل هذا المرفق أو فك تشفيره حتى الآن."
+msgstr "لم يجر تنزيل هذا المرفق أو فك تشفيره حتى الآن"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:48
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:55
 msgid "Open..."
 msgstr "فتح..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:61
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:68
 msgid "Save as..."
 msgstr "حفظ باسم..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:81
 msgid "Reveal file in folder"
-msgstr ""
+msgstr "اضهار الملف في المجلد"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:89
 msgid "Copy path to clipboard"
 msgstr "نسخ المسار إلى الحافظة"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:113
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy Link Address"
 msgstr "نسخ عنوان الرابط"
 
@@ -406,34 +400,35 @@ msgstr "ملاحظة"
 msgid "Creating new %s..."
 msgstr "إنشاء %s جديد ..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
-#, fuzzy
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
 msgid "Click to add tags..."
-msgstr "البحث جارٍ عن تحديثات..."
+msgstr "اضغط لإدراج سمات..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"يحتوي محرر النص المنسق هذا على عدد من القيود ومن المستحسن أن تكون على دراية "
+"بها قبل استخدامه."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
-msgstr ""
+msgstr "إقرأ المزيد عن هذا"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr ""
+msgstr "صرف"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "تتم مراقبة المرفقات التالية للتغييرات:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr ""
+msgstr "لن تتم مشاهدة المرفقات بعد الآن عند التبديل إلى ملاحظة مختلفة."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
 #, javascript-format
@@ -481,42 +476,40 @@ msgid "Horizontal Rule"
 msgstr "خط تسطير أفقي"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "حذف الملاحظة؟"
+msgstr "حذف الخط"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "الغاء التحميل"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "إعادة التحميل"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "مسافة بادئة أقل"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "مسافة بادئة أكثر"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
 msgstr "تبديل قائمة الملاحظات"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "فرز الخطوط المحددة"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "اصطف بلمبادلة لأعلى"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "اصطف بلمبادلة لأسفل"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -551,9 +544,8 @@ msgid "Updated"
 msgstr "التحديث"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
-#, fuzzy
 msgid "Completed"
-msgstr "مكتملة: %s"
+msgstr "مكتملة"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 msgid "Location"
@@ -583,9 +575,9 @@ msgstr "خصائص الملاحظة"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: packages/lib/services/KeymapService.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "خطأ"
+msgstr "خطأ: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -608,28 +600,26 @@ msgstr "استيراد"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "أمر"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "وضع لوحة المفاتيح"
+msgstr "اختصار لوحة المفاتيح"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:357
+#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:358
 msgid "Quit"
 msgstr "إغلاق"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
 #: packages/app-desktop/gui/MenuBar.js:260
-#, fuzzy
 msgid "Insert template"
-msgstr "إدراج التاريخ والوقت"
+msgstr "إدراج نموذج"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
 #: packages/app-desktop/gui/MenuBar.js:519
 msgid "Actual Size"
-msgstr ""
+msgstr "الحجم الفعلي"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
 #: packages/app-desktop/gui/MenuBar.js:580
@@ -637,9 +627,8 @@ msgid "Website and documentation"
 msgstr "موقع الويب و التوثيق"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "حول Joplin"
+msgstr "إخفي Joplin"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
 #: packages/app-desktop/gui/MenuBar.js:408
@@ -647,9 +636,8 @@ msgid "Close Window"
 msgstr "إغلاق النافذة"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "تفضيلات..."
+msgstr "التفضيلات"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
 #: packages/app-desktop/gui/MenuBar.js:284 packages/app-desktop/gui/Root.js:100
@@ -657,19 +645,20 @@ msgid "Options"
 msgstr "خيارات"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "إجابة غير صحيحة: %s"
+msgstr "غير صحيح"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "اضغط على الاختصار"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"اضغط على الاختصار ثم اضغط على \"ENTER\". أو اضغط على \"BACKSPACE\" لمسح "
+"الاختصار."
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -677,62 +666,63 @@ msgstr ""
 msgid "Save"
 msgstr "حفظ"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:399
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"يجب ترقية هدف المزامنة قبل أن يتمكن Joplin من المزامنة. قد تستغرق العملية "
+"بضع دقائق حتى تكتمل ويحتاج التطبيق إلى إعادة التشغيل. للمتابعة الرجاء الضغط "
+"على الرابط."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:401
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
-msgstr ""
+msgstr "أعد التشغيل ورقّي"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
 msgid "Some items cannot be synchronised."
 msgstr "لا يمكن مزامنة بعض العناصر."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:413
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
 msgid "View them now"
 msgstr "عرضها الآن"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
 msgid "Some items cannot be decrypted."
 msgstr "لا يمكن فك تشفير بعض العناصر."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
 msgid "One or more master keys need a password."
 msgstr "مفتاح رئيسي واحد أو أكثر يحتاج إلى كلمة مرور."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
 msgid "Set the password"
 msgstr "ضبط كلمة المرور"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
-#, fuzzy
-msgid "One of your master keys use an obsolete encryption method."
-msgstr "مفتاح رئيسي واحد أو أكثر يحتاج إلى كلمة مرور."
-
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:429
+msgid "One of your master keys use an obsolete encryption method."
+msgstr "يستخدم أحد مفاتيحك الرئيسية طريقة تشفير قديمة."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:435
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr ""
+msgstr "تم تغيير طريقة التشفير الافتراضية، يجب إعادة تشفير بياناتك."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
-#, fuzzy
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:437
 msgid "More info"
 msgstr "معلومات اكثر"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:552
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:558
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
+msgstr "استخدم الأسهم لتحريك عناصر التخطيط. اضغط على \"Escape\" للخروج."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
-msgstr ""
+msgstr "إحصائيات..."
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:18
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:18
@@ -780,27 +770,24 @@ msgid "New note"
 msgstr "ملاحظة جديدة"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
-#, fuzzy
 msgid "Move to notebook"
-msgstr "النقل إلى دفتر ملاحظات..."
+msgstr "النقل إلى دفتر ملاحظات"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "النقل إلى دفتر ملاحظات..."
+msgstr "النقل إلى دفتر ملاحظات:"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
 msgstr "تبديل تخطيط المحرّر"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "تبديل تخطيط المحرّر"
+msgstr "تبديل المحرّرات"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "تغيير تصميم التطبيق"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -817,7 +804,7 @@ msgstr "عنوان دفتر الملاحظات:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "مدقق املائي"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -840,9 +827,8 @@ msgid "Print"
 msgstr "اطبع"
 
 #: packages/app-desktop/gui/MainScreen/commands/print.js:26
-#, fuzzy
 msgid "Only one note can be printed at a time."
-msgstr "يمكن طباعة ملاحظة واحدة فقط أو تصديرها إلى PDF كل مرة."
+msgstr "يمكن طباعة ملاحظة واحدة فقط في كل مرة."
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:29
 #: packages/app-mobile/components/screens/dropbox-login.js:58
@@ -960,28 +946,24 @@ msgid "Synchronisation Status"
 msgstr "حالة المزامنة"
 
 #: packages/app-desktop/gui/MenuBar.js:250
-#, fuzzy
 msgid "Create note from template"
-msgstr "إدراج التاريخ والوقت"
+msgstr "إنشاء ملاحظة من النموذج"
 
 #: packages/app-desktop/gui/MenuBar.js:255
 msgid "Create to-do from template"
-msgstr ""
+msgstr "إنشاء صفحة مهام من النموذج"
 
 #: packages/app-desktop/gui/MenuBar.js:266
-#, fuzzy
 msgid "Open template directory"
-msgstr "دليل تصدير بيانات Joplin"
+msgstr "فتح المجلّد الذي يحتوي على النماذج"
 
 #: packages/app-desktop/gui/MenuBar.js:271
-#, fuzzy
 msgid "Refresh templates"
-msgstr "إدراج التاريخ والوقت"
+msgstr "تحديث النماذج"
 
 #: packages/app-desktop/gui/MenuBar.js:297
-#, fuzzy
 msgid "Note attachments..."
-msgstr "إرفاق ملف"
+msgstr "مرفقات الملاحظات..."
 
 #: packages/app-desktop/gui/MenuBar.js:328
 #: packages/app-desktop/gui/MenuBar.js:400
@@ -1010,9 +992,8 @@ msgstr "قوالب"
 
 #: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/MenuBar.js:423
-#, fuzzy
 msgid "Export all"
-msgstr "تصدير"
+msgstr "تصدير الجميع"
 
 #: packages/app-desktop/gui/MenuBar.js:389
 #, javascript-format
@@ -1035,20 +1016,19 @@ msgstr "نسق زر التسلسل"
 #: packages/app-desktop/gui/MenuBar.js:530
 #: packages/app-desktop/gui/MenuBar.js:536
 msgid "Zoom In"
-msgstr ""
+msgstr "تكبير"
 
 #: packages/app-desktop/gui/MenuBar.js:543
 msgid "Zoom Out"
-msgstr ""
+msgstr "تصغير"
 
 #: packages/app-desktop/gui/MenuBar.js:552
 msgid "&Go"
-msgstr ""
+msgstr "&اذهب"
 
 #: packages/app-desktop/gui/MenuBar.js:564
-#, fuzzy
 msgid "&Note"
-msgstr "ملاحظة"
+msgstr "&ملاحظة"
 
 #: packages/app-desktop/gui/MenuBar.js:573
 msgid "&Tools"
@@ -1131,38 +1111,38 @@ msgstr "تم وسمها: %d."
 msgid "The notes have been imported: %s"
 msgstr "جرى استيراد الملاحظات: %s"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:42
+#: packages/app-desktop/gui/utils/NoteListUtils.js:44
 msgid "Duplicate"
 msgstr "تكرار"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:47
+#: packages/app-desktop/gui/utils/NoteListUtils.js:49
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - نسخ"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:58
+#: packages/app-desktop/gui/utils/NoteListUtils.js:60
 msgid "Switch between note and to-do type"
 msgstr "التبديل بين نوعي الملاحظة و قائمة المهام"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:86
+#: packages/app-desktop/gui/utils/NoteListUtils.js:88
 msgid "Switch to note type"
 msgstr "التبديل إلى النوع ملاحظة"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:92
+#: packages/app-desktop/gui/utils/NoteListUtils.js:94
 msgid "Switch to to-do type"
 msgstr "التبديل إلى النوع قائمة مهام"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:99
+#: packages/app-desktop/gui/utils/NoteListUtils.js:101
 #: packages/app-mobile/components/screens/Note.js:817
 msgid "Copy Markdown link"
 msgstr "نسخ رابط Markdown"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:159
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "حذف الملاحظة \"%s\" ؟"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:162
+#: packages/app-desktop/gui/utils/NoteListUtils.js:166
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "حذف ملاحظات %d هذه ؟"
@@ -1176,7 +1156,7 @@ msgstr "لم تكتمل المصادقة (لم أستلم الرمز الممي�
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "المفاتيح الرئيسية التي تحتاج إلى ترقية"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:150
 msgid ""
@@ -1184,27 +1164,32 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"تستخدم المفاتيح الرئيسية التالية خوارزمية تشفير قديمة ويوَصّى بترقيتها. سيظل "
+"المفتاح الرئيسي الذي تمت ترقيته قادرًا على فك تشفير بياناتك وتشفيرها كالمعتاد."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
-msgstr ""
+msgstr "ترقية"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:182
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "إختر التاريخ"
+msgstr "إعادة تشفير البيانات"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"تم تغيير طريقة التشفير الافتراضية إلى طريقة أكثر أمانًا ويوصى بتطبيقها على "
+"بياناتك."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"يمكنك استخدام الأداة أدناه لإعادة تشفير بياناتك، على سبيل المثال إذا كنت "
+"تعلم أن بعض ملاحظاتك مشفرة بطريقة تشفير قديمة."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1223,15 +1208,27 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"للقيام بذلك، يجب تشفير مجموعة بياناتك بالكامل ومزامنتها، لذا من الأفضل "
+"تشغيلها خلال الليل.\n"
+"\n"
+"للبدء، يرجى اتباع هذه التعليمات:\n"
+"\n"
+"1. قم بمزامنة جميع أجهزتك.\n"
+"2. انقر فوق \"%s\" \n"
+"3. دعها تعمل حتى الاكتمال. أثناء تشغيله، تجنب تغيير أي ملاحظة على أجهزتك "
+"الأخرى، لتجنب التعارضات.\n"
+"4. بمجرد إتمام المزامنة على هذا الجهاز، قم بمزامنة جميع أجهزتك الأخرى "
+"واتركها تعمل حتى الاكتمال.\n"
+"\n"
+"هام: ما عليك سوى تشغيل هذا مرة واحدة على جهاز واحد."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "التشفير"
+msgstr "اعادة التشفير"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "تجاهل"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1335,7 +1332,7 @@ msgstr "التشفير هو:"
 #: packages/app-mobile/components/screens/encryption-config.js:280
 #: packages/app-cli/app/command-e2ee.js:110
 msgid "Enabled"
-msgstr "مفعََّل"
+msgstr "مفعَّل"
 
 #: packages/app-desktop/gui/Root.js:97
 msgid "OneDrive Login"
@@ -1346,90 +1343,50 @@ msgid "Dropbox Login"
 msgstr "تسجيل الدخول إلى Dropbox"
 
 #: packages/app-desktop/gui/Root.js:101
-#, fuzzy
 msgid "Note attachments"
-msgstr "إرفاق ملف"
+msgstr "مرفقات الملاحظات"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:107
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
 msgid "This will open a new screen. Save your current changes?"
 msgstr "هذا سيفتح شاشة جديدة. حفظ التغييرات الحالية الخاصة بك؟"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:173
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
 #: packages/app-mobile/components/screens/config.js:307
 msgid "Check synchronisation configuration"
 msgstr "فحص ضبط المزامنة"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:178
-msgid "Unknown"
-msgstr "مجهول"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:181
-msgid "Checking..."
-msgstr "تدقيق..."
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:187
-#: packages/lib/models/Resource.js:355
-msgid "Error"
-msgstr "خطأ"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:192
-msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
-msgstr ""
-"تطبيق Joplin Nextcloud إما غير مثبت أو تم تكوينه بشكل خاطئ. يرجى الاطلاع على "
-"رسالة الخطأ الكاملة أدناه:"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:196
-msgid "Show Log"
-msgstr "إظهار السجل"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:202
-msgid "Joplin Nextcloud App status:"
-msgstr "حالة تطبيق Joplin Nextcloud:"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:208
-msgid "Check Status"
-msgstr "تحقق من الحالة"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:212
-msgid "Help"
-msgstr "مساعدة"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:223
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
 msgid "Show Advanced Settings"
 msgstr "أظهر الاعدادات المتقدمة"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:412
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Path:"
-msgstr ""
+msgstr "المسار:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:417
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
 msgid "Browse..."
 msgstr "استعراض..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:419
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
-msgstr ""
+msgstr "الحجج:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:467
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "يجب إعادة تشغيل التطبيق حتى تصبح هذه التغييرات سارية المفعول."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
-#, fuzzy
 msgid "Do it now"
-msgstr "احصل عليها الآن:"
+msgstr "إفعلها الآن"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 msgid "Later"
-msgstr ""
+msgstr "لاحقا"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:532
-#, fuzzy
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
 msgid "Restart now"
-msgstr "احصل عليها الآن:"
+msgstr "إعادة التشغيل الآن"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:83
 #: packages/lib/models/Setting.js:1429
@@ -1441,76 +1398,71 @@ msgid "Apply"
 msgstr "تطبيق"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "حذف الملاحظة \"%s\" ؟"
+msgstr "حذف المكون الإضافي \"%s\"؟"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
 msgid "Browse all plugins"
-msgstr ""
+msgstr "تصفح جميع المكونات الإضافية"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "التثبيت من ملف"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "ليس لديك أي مكون إضافي مثبت."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
-#, fuzzy
 msgid "Plugin tools"
-msgstr "المكونات الإضافية"
+msgstr "أدوات البرامج الإضافية"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "إدارة الإضافات الخاصة بك"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 msgid "No results"
-msgstr ""
+msgstr "لا نتائج"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
-msgstr "بحث..."
+msgstr "البحث عن الإضافات..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
 msgid "Install"
-msgstr ""
+msgstr "تثبيت"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
-#, fuzzy
 msgid "Installing..."
-msgstr "الإلغاء جارٍ..."
+msgstr "جارٍ التثبيت..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
 msgid "Installed"
-msgstr ""
+msgstr "مثبّت"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
-#, fuzzy
 msgid "Update"
-msgstr "التحديث"
+msgstr "تحديث"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
-#, fuzzy
 msgid "Updating..."
-msgstr "المراقبة جارية..."
+msgstr "جارٍ التحديث..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "يرجى تحديث Joplin لإستخدام هذا البرنامج الإضافي"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
 #, javascript-format
 msgid "Could not install plugin: %s"
-msgstr ""
+msgstr "تعذّر تثبيت المكوّن الإضافي : %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1518,19 +1470,19 @@ msgstr "مسح"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
-msgstr ""
+msgstr "كلمات"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
-msgstr ""
+msgstr "أحرف"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "الأحرف بإستثناء المسافات"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
-msgstr ""
+msgstr "خطوط"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
 #: packages/lib/models/Setting.js:448 packages/lib/models/Setting.js:449
@@ -1547,27 +1499,25 @@ msgstr "عارض"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "وقت القراءة: %s دقيقة"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
-#, fuzzy
 msgid "Statistics"
-msgstr "الحالة"
+msgstr "إحصائيات"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:175
+#: packages/app-desktop/gui/ShareNoteDialog.js:186
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "إغلاق"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:162
 msgid "Custom order"
-msgstr ""
+msgstr "ترتيب مخصّص"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:162
-#, fuzzy
 msgid "View"
-msgstr "&عرض"
+msgstr "عرض"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:162
 #: packages/lib/models/Setting.js:463
@@ -1580,6 +1530,8 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
+"لفرز الملاحظات يدويًا، يجب تغيير ترتيب الفرز إلى \"%s\" في القائمة \"%s\" > "
+"\"%s\""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1592,27 +1544,24 @@ msgstr ""
 "لا يوجد دفتر ملاحظات حالياً. أنشئ واحداً بالضغط على \"دفتر ملاحظات جديد\"."
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
-#, fuzzy
 msgid "Note list"
-msgstr "تاريخ الملاحظة"
+msgstr "قائمة الملاحظات"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
 msgstr "البحث في كل الملاحظات"
 
 #: packages/app-desktop/gui/ResourceScreen.js:32
-#, fuzzy
 msgid "Title"
 msgstr "العنوان"
 
 #: packages/app-desktop/gui/ResourceScreen.js:36
 msgid "Size"
-msgstr ""
+msgstr "حجم"
 
 #: packages/app-desktop/gui/ResourceScreen.js:40
-#, fuzzy
 msgid "Action"
-msgstr "المكان"
+msgstr "عمل"
 
 #: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
 #: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
@@ -1620,9 +1569,9 @@ msgid "Untitled"
 msgstr "بدون اسم"
 
 #: packages/app-desktop/gui/ResourceScreen.js:95
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "حذف الملاحظة \"%s\" ؟"
+msgstr "هل تريد حذف المرفقات \"%s\"؟"
 
 #: packages/app-desktop/gui/ResourceScreen.js:141
 msgid ""
@@ -1630,26 +1579,27 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"هذه أداة متقدمة لإظهار المرفقات المرتبطة بملاحظاتك. يرجى توخّي الحذر عند حذف "
+"أحدها حيث لا يمكن استعادتها بعد ذلك."
 
 #: packages/app-desktop/gui/ResourceScreen.js:142
-#, fuzzy
 msgid "Please wait..."
-msgstr "التحقق جارٍ... فضلاً انتظر."
+msgstr "الرجاء الإنتظار..."
 
 #: packages/app-desktop/gui/ResourceScreen.js:144
 msgid "No resources!"
-msgstr ""
+msgstr "لا توجد موارد!"
 
 #: packages/app-desktop/gui/ResourceScreen.js:146
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
+msgstr "تحذير: لم يتم عرض كافّة الموارد لأسباب تتعلق بالأداء (الحد: %s)."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:158
+#: packages/app-desktop/gui/ShareNoteDialog.js:159
 msgid "Synchronising..."
 msgstr "مزامنة..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:160
+#: packages/app-desktop/gui/ShareNoteDialog.js:161
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "جارٍ إنشاء الرابط..."
@@ -1659,7 +1609,7 @@ msgstr[3] "جارٍ إنشاء الروابط..."
 msgstr[4] "جارٍ إنشاء الروابط..."
 msgstr[5] "جارٍ إنشاء الروابط..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:162
+#: packages/app-desktop/gui/ShareNoteDialog.js:163
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "تم نسخ الرابط إلى الحافظة!"
@@ -1669,16 +1619,16 @@ msgstr[3] "تم نسخ الروابط إلى الحافظة!"
 msgstr[4] "تم نسخ الروابط إلى الحافظة!"
 msgstr[5] "تم نسخ الروابط إلى الحافظة!"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:165
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr "ملاحظة: عند مشاركة ملاحظة ، لن يتم تشفيرها على الخادم."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:180
 msgid "Share Notes"
 msgstr "مشاركة ملاحظات"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "نسخ رابط قابل للمشاركة"
@@ -1689,23 +1639,20 @@ msgstr[4] "نسخ روابط قابلة للمشاركة"
 msgstr[5] "نسخ روابط قابلة للمشاركة"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "اضغط لإيقاف التحرير خارج التطبيق"
+msgstr "تبديل وضع التحرير الخارجي"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "قف"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "نسخ المسار إلى الحافظة"
+msgstr "نسخ أمر وضع المبرمج إلى الحافظة"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
-#, fuzzy
 msgid "Stop external editing"
-msgstr "اضغط لإيقاف التحرير خارج التطبيق"
+msgstr "إيقاف التحرير خارج التطبيق"
 
 #: packages/app-desktop/commands/startExternalEditing.js:20
 msgid "Edit in external editor"
@@ -1718,11 +1665,10 @@ msgid "Error opening note in editor: %s"
 msgstr "حدث خطأ أثناء فتح الملاحظة: %s في المحرر"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "دليل تصدير بيانات Joplin"
+msgstr "فتح مجلّد ملف التعريف"
 
-#: packages/app-desktop/app.js:355
+#: packages/app-desktop/app.js:356
 #, javascript-format
 msgid "Open %s"
 msgstr "افتح %s"
@@ -1748,9 +1694,8 @@ msgid "Save alarm"
 msgstr "حفظ المنبّه"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#, fuzzy
 msgid "Open"
-msgstr "فتح..."
+msgstr "فتح"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
 #: packages/app-mobile/components/screens/Note.js:796
@@ -1822,7 +1767,7 @@ msgstr "تحديث"
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "ترقية هدف المزامنة"
 
 #: packages/app-mobile/components/screens/notes.js:154
 #: packages/app-cli/app/command-rmbook.js:26
@@ -1912,9 +1857,8 @@ msgstr ""
 "الخارجية."
 
 #: packages/app-mobile/components/screens/config.js:146
-#, fuzzy
 msgid "Information"
-msgstr "الضبط"
+msgstr "معلومات"
 
 #: packages/app-mobile/components/screens/config.js:436
 msgid "Tools"
@@ -1953,18 +1897,18 @@ msgstr ""
 "الأمر وقتًا طويلًا اعتمادًا على عدد الملاحظات."
 
 #: packages/app-mobile/components/screens/config.js:446
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "استيراد الملاحظات جارٍ..."
+msgstr "جارٍ تصدير ملف التعريف..."
 
 #: packages/app-mobile/components/screens/config.js:446
-#, fuzzy
 msgid "Export profile"
-msgstr "ملف تصدير Joplin"
+msgstr "تصديرملف التعريف"
 
 #: packages/app-mobile/components/screens/config.js:446
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
+"التصدير هذا لغرض التصحيح فقط: قم بتصدير ملف التعريف الخاص بك إلى بطاقة SD "
+"الخارجية."
 
 #: packages/app-mobile/components/screens/config.js:461
 msgid "More information"
@@ -1999,7 +1943,7 @@ msgstr "موقع ويب Joplin"
 
 #: packages/app-mobile/components/screens/config.js:523
 msgid "Privacy Policy"
-msgstr ""
+msgstr "سياسة الخصوصية"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2039,11 +1983,13 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"لربط الموقع الجغرافي بالملاحظة ، يحتاج التطبيق إلى إذنك للوصول إلى موقعك.\n"
+"\n"
+"يمكنك إيقاف تشغيل هذا الخيار في أي وقت في شاشة الإعدادات."
 
 #: packages/app-mobile/components/screens/Note.js:343
-#, fuzzy
 msgid "Permission needed"
-msgstr "الإذن باستخدام الكاميرا"
+msgstr "مطلوب الإذن"
 
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
@@ -2057,6 +2003,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"أنت على وشك إرفاق صورة كبيرة (% dx% d بكسل). هل ترغب في تغيّير حجمة إلى %d "
+"بكسل قبل إرفاقه؟"
 
 #: packages/app-mobile/components/screens/Note.js:585
 #, javascript-format
@@ -2122,11 +2070,12 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"كلمة مرور المسؤول الافتراضية غير آمنة ولم يتم تغييرها! [غيرها الآن] (%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgstr "كافة المنافذ المحتملة قيد الاستخدام - الرجاء الإبلاغ عن المشكلة على %s"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2152,16 +2101,15 @@ msgstr ""
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "أمازون إس 3"
 
 #: packages/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "موقع ويب Joplin"
+msgstr "خادم Joplin"
 
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
@@ -2190,19 +2138,17 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "لا يمكن تسمية دفتر الملاحظات بـ \"%s\" لأنه عنوان محجوز."
 
 #: packages/lib/models/Setting.js:76
-#, fuzzy
 msgid "yes"
 msgstr "نعم"
 
 #: packages/lib/models/Setting.js:76 packages/lib/models/Setting.js:77
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(wysiwyg: %s)"
 
 #: packages/lib/models/Setting.js:77
-#, fuzzy
 msgid "no"
-msgstr "لا"
+msgstr "كلّا"
 
 #: packages/lib/models/Setting.js:79
 #, javascript-format
@@ -2240,12 +2186,11 @@ msgstr "Nord"
 
 #: packages/lib/models/Setting.js:91
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Dark"
 
 #: packages/lib/models/Setting.js:92
-#, fuzzy
 msgid "OLED Dark"
-msgstr "غامقة"
+msgstr "ظلام لشاشات OLED"
 
 #: packages/lib/models/Setting.js:113
 msgid "Synchronisation target"
@@ -2289,37 +2234,35 @@ msgstr "كلمة مرور WebDAV"
 
 #: packages/lib/models/Setting.js:225
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "حاوية AWS S3"
 
 #: packages/lib/models/Setting.js:236
 msgid "AWS S3 URL"
-msgstr ""
+msgstr "عنوان URL ل AWS S3"
 
 #: packages/lib/models/Setting.js:247
 msgid "AWS key"
-msgstr ""
+msgstr "مفتاح AWS"
 
 #: packages/lib/models/Setting.js:257
 msgid "AWS secret"
-msgstr ""
+msgstr "سر AWS"
 
 #: packages/lib/models/Setting.js:268
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "عنوان URL لخادم Joplin"
 
 #: packages/lib/models/Setting.js:282
-#, fuzzy
 msgid "Joplin Server Directory"
-msgstr "دليل تصدير بيانات Joplin"
+msgstr "موقع مجلّد خادم Joplin"
 
 #: packages/lib/models/Setting.js:292
 msgid "Joplin Server username"
-msgstr ""
+msgstr "اسم مستخدم خادم Joplin"
 
 #: packages/lib/models/Setting.js:302
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "أدخل كلمة المرور الرئيسة:"
+msgstr "كلمة مرور خادم Joplin"
 
 #: packages/lib/models/Setting.js:314
 msgid "Attachment download behaviour"
@@ -2369,15 +2312,15 @@ msgstr "السمة"
 
 #: packages/lib/models/Setting.js:407
 msgid "Automatically switch theme to match system theme"
-msgstr ""
+msgstr "التبديل تلقائيا للتنسيق لمطابقة تنسيق النضام"
 
 #: packages/lib/models/Setting.js:418
 msgid "Preferred light theme"
-msgstr ""
+msgstr "التنسيق الغامق المفضّل"
 
 #: packages/lib/models/Setting.js:431
 msgid "Preferred dark theme"
-msgstr ""
+msgstr "التنسيق الفاتح المفضّل"
 
 #: packages/lib/models/Setting.js:440
 msgid "Show note counts"
@@ -2409,7 +2352,7 @@ msgstr "إظهار قوائم المهام المكتملة"
 
 #: packages/lib/models/Setting.js:480
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "ادراج النصف الآخر للأقواس و علامات الإقتباس."
 
 #: packages/lib/models/Setting.js:482 packages/lib/models/Setting.js:500
 msgid "Reverse sort order"
@@ -2448,9 +2391,8 @@ msgid "Enable typographer support"
 msgstr "تمكين دعم صائغ الحروف"
 
 #: packages/lib/models/Setting.js:571
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "تمكين تاريخ الملاحظة"
+msgstr "تمكين لينكيفاي"
 
 #: packages/lib/models/Setting.js:572
 msgid "Enable math expressions"
@@ -2461,22 +2403,20 @@ msgid "Enable Fountain syntax support"
 msgstr "تمكين دعم بناء جملة Fountain"
 
 #: packages/lib/models/Setting.js:574
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "تمكين دعم صائغ الحروف"
+msgstr "تفعيل دعم مخططات ميرمايد"
 
 #: packages/lib/models/Setting.js:575
-#, fuzzy
 msgid "Enable audio player"
-msgstr "تمكين بناء جملة ترميز رمز تعبيري"
+msgstr "تفعيل مشغّل الصوت"
 
 #: packages/lib/models/Setting.js:576
 msgid "Enable video player"
-msgstr ""
+msgstr "تفعيل مشغّل الفيديو"
 
 #: packages/lib/models/Setting.js:577
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "تمكين عارض PDF"
 
 #: packages/lib/models/Setting.js:578
 msgid "Enable ==mark== syntax"
@@ -2557,19 +2497,17 @@ msgid "Editor font family"
 msgstr "نوع خط المحرّر"
 
 #: packages/lib/models/Setting.js:650
-#, fuzzy
 msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"لابد أن يكون نوع الخط أحادي المسافة وإلا فلن يعمل بشكل صحيح. إذا كان الخط "
-"غير صحيح أو فارغاً فسيستخدم خط أحادي المسافة عام تلقائياً."
+"لابد أن يكون نوع الخط أحادي المسافة وإلا فلن تظهر جميع الملاحظات بشكل صحيح. "
+"إذا كان الخط غير صحيح أو فارغاً فسيستخدم خط أحادي المسافة عام تلقائياً."
 
 #: packages/lib/models/Setting.js:671
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "ورقة أنماط مخصصة لأنماط التطبيق على نطاق Joplin"
+msgstr "ورقة أنماط مخصصة لأنماط التطبيق التي تظهر على نطاق Joplin"
 
 #: packages/lib/models/Setting.js:687
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2694,7 +2632,7 @@ msgstr "تجاهل أخطاء شهادات TLS"
 
 #: packages/lib/models/Setting.js:789
 msgid "Fail-safe"
-msgstr ""
+msgstr "أمان فشل"
 
 #: packages/lib/models/Setting.js:790
 msgid ""
@@ -2731,7 +2669,7 @@ msgstr "الاحتفاظ بتاريخ الملاحظة لـ"
 
 #: packages/lib/models/Setting.js:835
 msgid "Notebook list growth factor"
-msgstr ""
+msgstr "عامل نمو قائمة المفكرة"
 
 #: packages/lib/models/Setting.js:836 packages/lib/models/Setting.js:848
 #: packages/lib/models/Setting.js:860
@@ -2741,14 +2679,18 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
+"تحدد خاصية العامل الرياضي كيف سينمو العنصر أو يتقلص ليلائم المساحة المتوفرة "
+"في الحاوية الخاصة به فيما يتعلق بالعناصر الأخرى. وبالتالي، فإن العنصر الذي "
+"ينضرب مع العامل 2 سيأخذ ضِعف مساحة العنصر بمعامل 1. أعد تشغيل التطبيق لمشاهدة "
+"التغييرات."
 
 #: packages/lib/models/Setting.js:847
 msgid "Note list growth factor"
-msgstr ""
+msgstr "عامل نمو قائمة ااملاحظات"
 
 #: packages/lib/models/Setting.js:859
 msgid "Note area growth factor"
-msgstr ""
+msgstr "عامل نمو منطقة الملاحظة"
 
 #: packages/lib/models/Setting.js:1031
 #, javascript-format
@@ -2790,9 +2732,8 @@ msgid "Web Clipper"
 msgstr "Web Clipper"
 
 #: packages/lib/models/Setting.js:1439
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "وضع لوحة المفاتيح"
+msgstr "اختصارات لوحة المفاتيح"
 
 #: packages/lib/models/Setting.js:1446
 msgid ""
@@ -2804,37 +2745,49 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"تعمل هذه المكونات الإضافية على تحسين عارض Markdown بميّزات إضافية. يرجى "
+"ملاحظة أنه على الرغم من أن هذه الميزات قد تكون مفيدة، إلا أنها ليست Markdown "
+"قياسية وبالتالي فإن معظمها سيعمل فقط في Joplin. بالإضافة إلى ذلك، بعضها *غير "
+"متوافق* مع محرّر WYSIWYG. إذا فتحت ملاحظة تستخدم أحد هذه المكونات الإضافية في "
+"ذلك المحرر، فستفقد تنسيق المكون الإضافي. تمت الإشارة أدناه إلى المكونات "
+"الإضافية المتوافقة مع محرر WYSIWYG و الغير متوافقة."
 
 #: packages/lib/models/Setting.js:1448
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "الملاحظات و الإعدادات مخزّنة في: %s"
 
-#: packages/lib/models/Resource.js:349
+#: packages/lib/models/Resource.js:352
 msgid "Not downloaded"
-msgstr ""
+msgstr "لم تنزّل"
 
-#: packages/lib/models/Resource.js:351
-#, fuzzy
+#: packages/lib/models/Resource.js:354
 msgid "Downloading"
-msgstr "يجري تنزيل الموارد..."
+msgstr "جاري التنزيل"
 
-#: packages/lib/models/Resource.js:353
+#: packages/lib/models/Resource.js:356
 msgid "Downloaded"
-msgstr ""
+msgstr "تم التنزيل"
 
-#: packages/lib/models/Resource.js:400
-#, fuzzy, javascript-format
+#: packages/lib/models/Resource.js:358
+msgid "Error"
+msgstr "خطأ"
+
+#: packages/lib/models/Resource.js:403
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "إرفاق ملف"
+msgstr "تعارض في المرفقات: \"%s\""
 
-#: packages/lib/models/Resource.js:401
+#: packages/lib/models/Resource.js:404
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
 msgstr ""
+"كان هناك (%s)[conflict] على المرفق أدناه.\n"
+"\n"
+"%s"
 
 #: packages/lib/models/Tag.js:223
 #, javascript-format
@@ -2847,18 +2800,18 @@ msgstr "تاريخ الإنشاء"
 
 #: packages/lib/models/Note.js:38
 msgid "custom order"
-msgstr ""
+msgstr "ترتيب مخصص"
 
 #: packages/lib/models/Note.js:116
 msgid "This note does not have geolocation information."
 msgstr "ليس لدى هذه الملاحظة معلومة موقع جغرافي."
 
-#: packages/lib/models/Note.js:523
+#: packages/lib/models/Note.js:524
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "لا يمكن نسخ الملاحظة إلى دفتر الملاحظات \"%s\""
 
-#: packages/lib/models/Note.js:535
+#: packages/lib/models/Note.js:536
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "لا يمكن نقل الملاحظة إلى دفتر الملاحظات \"%s\""
@@ -2886,15 +2839,15 @@ msgstr "علامة غير معروفة: %s"
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: packages/lib/components/shared/config-shared.js:46
+#: packages/lib/components/shared/config-shared.js:45
 msgid "Checking... Please wait."
 msgstr "التحقق جارٍ... فضلاً انتظر."
 
-#: packages/lib/components/shared/config-shared.js:48
+#: packages/lib/components/shared/config-shared.js:47
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "نجاح! يبدو أن إعداد المزامنة صحيح."
 
-#: packages/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:49
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -2922,26 +2875,28 @@ msgstr ""
 #: packages/lib/components/shared/encryption-config-shared.js:33
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
+msgstr "يرجى تأكيد رغبتك في إعادة تشفير قاعدة البيانات الكاملة الخاصة بك."
 
 #: packages/lib/components/shared/encryption-config-shared.js:39
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "ستتم إعادة تشفير بياناتك ومزامنتها مرة أخرى."
 
 #: packages/lib/components/shared/encryption-config-shared.js:49
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"الرجاء إدخال كلمة المرور الخاصة بك في قائمة المفاتيح الرئيسية أدناه قبل "
+"ترقية المفتاح."
 
 #: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "تمت ترقية المفتاح الرئيسي بنجاح!"
 
 #: packages/lib/components/shared/encryption-config-shared.js:60
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr ""
+msgstr "تعذرت ترقية المفتاح الرئيسي: %s\\"
 
 #: packages/lib/components/shared/encryption-config-shared.js:116
 #, javascript-format
@@ -2956,73 +2911,73 @@ msgstr ""
 "لا يمكن تحديث الرمز المميز: بيانات المصادقة مفقودة. بدء المزامنة مرة ثانية "
 "قد يحل المشكلة."
 
-#: packages/lib/Synchronizer.js:111
+#: packages/lib/Synchronizer.js:119
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "العناصر المحلية المنشأة: %d."
 
-#: packages/lib/Synchronizer.js:113
+#: packages/lib/Synchronizer.js:121
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "العناصر المحلية المحدَّثة: %d."
 
-#: packages/lib/Synchronizer.js:115
+#: packages/lib/Synchronizer.js:123
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "العناصر البعيدة المنشأة: %d."
 
-#: packages/lib/Synchronizer.js:117
+#: packages/lib/Synchronizer.js:125
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "العناصر البعيدة المحدَّثة: %d."
 
-#: packages/lib/Synchronizer.js:119
+#: packages/lib/Synchronizer.js:127
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "العناصر المحلية المحذوفة: %d."
 
-#: packages/lib/Synchronizer.js:121
+#: packages/lib/Synchronizer.js:129
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "العناصر البعيدة المحذوفة: %d."
 
-#: packages/lib/Synchronizer.js:123
+#: packages/lib/Synchronizer.js:131
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "العناصر المجلوبة: %d/%d."
 
-#: packages/lib/Synchronizer.js:125
+#: packages/lib/Synchronizer.js:133
 msgid "Cancelling..."
 msgstr "الإلغاء جارٍ..."
 
-#: packages/lib/Synchronizer.js:127
+#: packages/lib/Synchronizer.js:135
 #, javascript-format
 msgid "Completed: %s"
 msgstr "مكتملة: %s"
 
-#: packages/lib/Synchronizer.js:129
+#: packages/lib/Synchronizer.js:137
 #, javascript-format
 msgid "Last error: %s"
 msgstr "آخر خطأ: %s"
 
-#: packages/lib/Synchronizer.js:236
+#: packages/lib/Synchronizer.js:244
 msgid "Idle"
 msgstr "خامل"
 
-#: packages/lib/Synchronizer.js:238
+#: packages/lib/Synchronizer.js:246
 msgid "In progress"
 msgstr "قيد التقدم"
 
-#: packages/lib/Synchronizer.js:823
+#: packages/lib/Synchronizer.js:844
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
+msgstr "تم تنزيل نوع عنصر غير معروف - يرجى ترقية Joplin إلى أحدث إصدار"
 
-#: packages/lib/JoplinServerApi.js:71
-#, javascript-format
+#: packages/lib/JoplinServerApi.js:63
+#, fuzzy, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options "
+"in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
@@ -3031,7 +2986,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/lib/SyncTargetNextcloud.js:26
+#: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
@@ -3045,12 +3000,12 @@ msgstr "نظام الملفات"
 
 #: packages/lib/commands/historyForward.js:17
 msgid "Forward"
-msgstr ""
+msgstr "إلى الأمام"
 
 #: packages/lib/versionInfo.js:10
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
+msgstr "المراجعة: %s (%s)"
 
 #: packages/lib/versionInfo.js:20
 #, javascript-format
@@ -3058,24 +3013,24 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 #: packages/lib/versionInfo.js:22
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "مكتملة: %s"
+msgstr "معرف العميل: %s"
 
 #: packages/lib/versionInfo.js:23
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "النسخة الجديدة: %s"
+msgstr "النسخة المتزامنة: %s"
 
 #: packages/lib/versionInfo.js:24
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "النسخة الجديدة: %s"
+msgstr "نسخة الملف الشخصي: %s"
 
 #: packages/lib/versionInfo.js:25
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr ""
+msgstr "سلسلة المفاتيح المدعومة: %s"
 
 #: packages/lib/services/RevisionService.js:217
 msgid "Restored Notes"
@@ -3124,14 +3079,14 @@ msgid "HTML Directory"
 msgstr "دليل HTML"
 
 #: packages/lib/services/interop/InteropService.js:127
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "لا يمكن تحميل وحدة \"%s\" للتنسيق \"%s\""
+msgstr "لا يمكن تحميل الوحدة النمطية \"%s\" للتنسيق \"%s\" والإخراج \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "لا يمكن تحميل وحدة \"%s\" للتنسيق \"%s\""
+msgstr "لا يمكن تحميل الوحدة النمطية \"%s\" للتنسيق \"%s\" والهدف \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3169,23 +3124,23 @@ msgstr "فضلاً حدّد تنسيق الاستيراد لـ %s"
 
 #: packages/lib/services/KeymapService.js:273
 msgid "command"
-msgstr ""
+msgstr "أمر"
 
 #: packages/lib/services/KeymapService.js:273
 #: packages/lib/services/KeymapService.js:278
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "يفتقد \"%s\" خاصية \"%s\" المطلوبة."
 
 #: packages/lib/services/KeymapService.js:278
 #: packages/lib/services/KeymapService.js:285
 msgid "accelerator"
-msgstr ""
+msgstr "مُسَرّع"
 
 #: packages/lib/services/KeymapService.js:285
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "إجابة غير صحيحة: %s"
+msgstr "%s غير صالح: %s."
 
 #: packages/lib/services/KeymapService.js:303
 #, javascript-format
@@ -3193,11 +3148,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"يتم استخدام المسرّع \"%s\" للأوامر \"%s\" و \"%s\". قد يؤدي هذا إلى سلوك غير "
+"متوقع."
 
 #: packages/lib/services/KeymapService.js:328
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "المسرع \"%s\" غير صالح."
 
 #: packages/lib/services/ReportService.js:123
 msgid "Items that cannot be synchronised"
@@ -3243,35 +3200,32 @@ msgid "%s: %s"
 msgstr "%s: %s"
 
 #: packages/lib/services/ReportService.js:171
-#, fuzzy
 msgid "Attachments"
-msgstr "إرفاق ملف"
+msgstr "المرفقات"
 
 #: packages/lib/services/ReportService.js:178
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "تم تنزيلها وفك تشفيرها"
 
 #: packages/lib/services/ReportService.js:178
 #: packages/lib/services/ReportService.js:179
 #: packages/lib/services/ReportService.js:180
 #: packages/lib/services/ReportService.js:184
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s : %d"
 
 #: packages/lib/services/ReportService.js:179
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "تم تنزيلها وتشفيرها"
 
 #: packages/lib/services/ReportService.js:180
-#, fuzzy
 msgid "Created locally"
-msgstr "العناصر المحلية المنشأة: %d."
+msgstr "تم إنشاؤها محليًا"
 
 #: packages/lib/services/ReportService.js:191
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "العنصر \"%s\" لم يتم الإمكان من تحميله: %s"
+msgstr "المرفقات التي لا يمكن تنزيلها"
 
 #: packages/lib/services/ReportService.js:195
 #, javascript-format
@@ -3322,20 +3276,19 @@ msgstr "في %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "لا يوجد اقتراحات"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "أضف إلى القاموس"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "إستخدام مفتش التهجأة"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "اللغة"
+msgstr "تغيّير اللغة"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3407,7 +3360,7 @@ msgid "Do not ask for confirmation."
 msgstr "لا تطلب التأكيد."
 
 #: packages/app-cli/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
 msgstr "تنسيق المصدر: %s"
 
@@ -3417,7 +3370,7 @@ msgstr "استيراد الملاحظات جارٍ..."
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
-msgstr "تعداد"
+msgstr "سرد"
 
 #: packages/app-cli/app/help-utils.js:56
 #, javascript-format
@@ -3490,14 +3443,16 @@ msgstr ""
 "كمية البيانات المطلوب فك تشفيرها."
 
 #: packages/app-cli/app/command-e2ee.js:55
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "العناصر المفكوك تشفيرها: %s / %s"
+msgstr "العناصر التي تم فك تشفيرها: %d"
 
 #: packages/app-cli/app/command-e2ee.js:56
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
+"العناصر التي تم تخطيها: %d (استخدم \"retry-failed-items--\" لإعادة محاولة فك "
+"تشفيرها)"
 
 #: packages/app-cli/app/command-e2ee.js:70
 msgid "Completed decryption."
@@ -3551,7 +3506,7 @@ msgstr "يزامن مع الوجهة المذكورة (قيمة الإعداد �
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "قم بترقية هدف المزامنة إلى أحدث إصدار."
 
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
@@ -3580,9 +3535,8 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "وجهة المزامنة: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
-msgstr "لم نتمكن من تمهيد مكوّن المزامنة."
+msgstr "لم يتمكن من تمهيد المزامن."
 
 #: packages/app-cli/app/command-sync.js:207
 msgid "Starting synchronisation..."
@@ -3595,7 +3549,7 @@ msgstr "يجري تنزيل الموارد..."
 #: packages/app-cli/app/command-sync.js:242
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr ""
+msgstr "يجب ترقية هدف المزامنة! قم بتشغيل `%s` للمتابعة."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
@@ -3764,9 +3718,8 @@ msgstr ""
 "العناصر المشفَّرة جارٍ في الخلفية وستكون متوفرة قريباً."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "لا تطلب التأكيد."
+msgstr "يمكنك أيضًا كتابة \"الحالة\" لمزيد من المعلومات."
 
 #: packages/app-cli/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -3939,6 +3892,7 @@ msgstr "يعرض موجزاً عن الملاحظات و دفاتر الملاح
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"لإعادة محاولة فك تشفير هذه العناصر. شغّل `e2ee decrypt --retry-failed-items`"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -3965,6 +3919,31 @@ msgstr "يعلّم قائمة مهام أنها تمت."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "الملاحظة: \"%s\" ليست قائمة مهام"
+
+#~ msgid "Unknown"
+#~ msgstr "مجهول"
+
+#~ msgid "Checking..."
+#~ msgstr "تدقيق..."
+
+#~ msgid ""
+#~ "The Joplin Nextcloud App is either not installed or misconfigured. Please "
+#~ "see the full error message below:"
+#~ msgstr ""
+#~ "تطبيق Joplin Nextcloud إما غير مثبت أو تم تكوينه بشكل خاطئ. يرجى الاطلاع "
+#~ "على رسالة الخطأ الكاملة أدناه:"
+
+#~ msgid "Show Log"
+#~ msgstr "إظهار السجل"
+
+#~ msgid "Joplin Nextcloud App status:"
+#~ msgstr "حالة تطبيق Joplin Nextcloud:"
+
+#~ msgid "Check Status"
+#~ msgstr "تحقق من الحالة"
+
+#~ msgid "Help"
+#~ msgstr "مساعدة"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive Dev (للاختبار فقط)"

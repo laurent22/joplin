@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+// To test the tool with existing packages, the best is to:
+//
+// - Create a separate copy of the plugin repo
+// - Reset back a few commits
+// - Run with the --dry-run option: `plugin-repo-cli build ~/src/joplin-plugins-test/ --dry-run`
+
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
@@ -38,13 +44,13 @@ function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	return output;
 }
 
-async function checkPluginRepository(dirPath: string) {
+async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 	if (!(await fs.pathExists(dirPath))) throw new Error(`No plugin repository at: ${dirPath}`);
 	if (!(await fs.pathExists(`${dirPath}/.git`))) throw new Error(`Directory is not a Git repository: ${dirPath}`);
 
 	const previousDir = chdir(dirPath);
 	await gitRepoCleanTry();
-	await gitPullTry();
+	if (!dryRun) await gitPullTry();
 	chdir(previousDir);
 }
 
@@ -96,6 +102,7 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 
 interface CommandBuildArgs {
 	pluginRepoDir: string;
+	dryRun: boolean;
 }
 
 enum ProcessingActionType {
@@ -179,7 +186,7 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 		}
 
 		if (!obsoleteManifests[manifest.id]) {
-			previousManifest = { ...manifests[manifest.id] };
+			previousManifest = { ...originalPluginManifests[manifest.id] };
 			manifests[manifest.id] = manifest;
 		}
 	} catch (e) {
@@ -213,10 +220,12 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 }
 
 async function commandBuild(args: CommandBuildArgs) {
+	const dryRun = !!args.dryRun;
 	console.info(new Date(), 'Building repository...');
+	if (dryRun) console.info('Dry run: on');
 
 	const repoDir = args.pluginRepoDir;
-	await checkPluginRepository(repoDir);
+	await checkPluginRepository(repoDir, dryRun);
 
 	// When starting, always update and commit README, in case something has
 	// been updated via a pull request (for example obsoletes.json being
@@ -240,7 +249,7 @@ async function commandBuild(args: CommandBuildArgs) {
 		await processNpmPackage(npmPackage, repoDir);
 	}
 
-	await execCommand2('git push');
+	if (!dryRun) await execCommand2('git push');
 }
 
 async function commandVersion() {
@@ -268,7 +277,7 @@ async function main() {
 		.scriptName(scriptName)
 		.usage('$0 <cmd> [args]')
 
-		.command('build <plugin-repo-dir>', 'Build the plugin repository', (yargs: any) => {
+		.command('build <plugin-repo-dir> [dry-run]', 'Build the plugin repository', (yargs: any) => {
 			yargs.positional('plugin-repo-dir', {
 				type: 'string',
 				describe: 'Directory where the plugin repository is located',

@@ -729,14 +729,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			</div>
 		) : null;
 
+		const rightStyle = { ...style, flex: 1 };
+		delete style.width;
+
 		return (
-			<div style={{ display: 'flex', flexDirection: 'row' }}>
+			<div style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
 				/>
-				<div style={style}>
+				<div style={rightStyle}>
 					{screenComp}
 					{needRestartComp}
 					<div style={containerStyle}>{settingComps}</div>

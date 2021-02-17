@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
+import { CommandValue } from '../../utils/types';
 import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize } from './utils';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
@@ -218,6 +219,15 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textCheckbox: () => addListItem('- [ ] ', _('List item')),
 						textHeading: () => addListItem('## ', ''),
 						textHorizontalRule: () => addListItem('* * *'),
+						'editor.execCommand': (value: CommandValue) => {
+							if (editorRef.current[value.name]) {
+								if (!('args' in value)) value.args = [];
+
+								editorRef.current[value.name](...value.args);
+							} else {
+								reg.logger().warn('CodeMirror execCommand: unsupported command: ', value.name);
+							}
+						},
 					};
 
 					if (commands[cmd.name]) {
