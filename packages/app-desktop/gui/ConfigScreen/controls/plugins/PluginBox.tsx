@@ -137,9 +137,10 @@ export default function(props: Props) {
 	const item = props.item ? props.item : manifestToItem(props.manifest);
 
 	const onNameClick = useCallback(() => {
-		if (!props.item.manifest.homepage_url) return;
-		bridge().openExternal(props.item.manifest.homepage_url);
-	}, [props.item]);
+		const manifest = props.item ? props.item.manifest : props.manifest;
+		if (!manifest.homepage_url) return;
+		bridge().openExternal(manifest.homepage_url);
+	}, [props.item, props.manifest]);
 
 	// For plugins in dev mode things like enabling/disabling or
 	// uninstalling them doesn't make sense, as that should be done by
