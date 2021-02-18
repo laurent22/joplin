@@ -26,7 +26,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript, Image processing
 
-Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m)
 
 ## 2. Template plugin
 
@@ -38,7 +38,7 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript
 
-Potential Mentor(s):
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [Tessus](https://discourse.joplinapp.org/u/tessus)
 
 ## 3. BibTex plugin
 
@@ -50,7 +50,7 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript, understanding of BibTex format
 
-Potential Mentor(s):
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m), [laurent22](https://github.com/laurent22/)
 
 ## 4. Real-time collaboration on a note
 
@@ -62,7 +62,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript, Text editor, Web development
 
-Potential Mentor(s):
+Potential Mentor(s): [PackElend](https://discourse.joplinapp.org/u/PackElend), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m)
 
 ## 5. Paste special
 
@@ -74,7 +74,7 @@ Difficulty Level: Normal
 
 Skills Required: JavaScript, Markdown, HTML, and knowledge of various text file formats (PDF, RTF, HTML, etc.)
 
-Potential Mentor(s):
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [Tessus](https://discourse.joplinapp.org/u/tessus), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m)
 
 ## 6. Plugin system on mobile
 
@@ -86,7 +86,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript, React Native
 
-Potential Mentor(s):
+Potential Mentor(s): [PackElend](https://discourse.joplinapp.org/u/PackElend), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m), [laurent22](https://github.com/laurent22/)
 
 ## 7. Conflict resolution editor plugin
 
@@ -98,7 +98,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript, Markdown, Understanding of diff and merging conflicts
 
-Potential Mentor(s): Tessus
+Potential Mentor(s): [Tessus](https://discourse.joplinapp.org/u/tessus), [PackElend](https://discourse.joplinapp.org/u/PackElend), [CalebJohn](https://github.com/CalebJohn/)
 
 ## 8. Kanban plugin
 
@@ -110,4 +110,4 @@ Difficulty Level: High
 
 Skills Required: JavaScript
 
-Potential Mentor(s):
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/)
