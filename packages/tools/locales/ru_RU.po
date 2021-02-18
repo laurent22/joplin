@@ -503,7 +503,7 @@ msgstr "Увеличить отступ"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 msgid "Toggle comment"
-msgstr "Переключить коментарий"
+msgstr "Переключить комментарий"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
