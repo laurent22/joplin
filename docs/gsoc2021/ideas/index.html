@@ -422,25 +422,49 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/ideas.md
 <p>Expected Outcome: A plugin for the desktop app that extract text from images and attach it to the note.</p>
 <p>Difficulty Level: High</p>
 <p>Skills Required: JavaScript, Image processing</p>
-<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://github.com/laurent22/">laurent22</a>, <a href="https://discourse.joplinapp.org/u/roman_r_m">roman_r_m</a></p>
 <h2>2. Template plugin<a name="2-template-plugin" href="#2-template-plugin" class="heading-anchor">🔗</a></h2>
 <p>Joplin already supports templates however we would like to re-package this feature as a plugin. Thus you would remove it from the main app and create a new plugin for it. It should be compatible with existing templates. Once the plugin is created, it could be a good idea to improve the feature further, perhaps based on user feedback on GitHub or in the forum.</p>
 <p>Expected Outcome: A plugin for the desktop app that handle note templates.</p>
 <p>Difficulty Level: Medium</p>
 <p>Skills Required: JavaScript</p>
-<p>Potential Mentor(s):</p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://discourse.joplinapp.org/u/tessus">Tessus</a></p>
 <h2>3. BibTex plugin<a name="3-bibtex-plugin" href="#3-bibtex-plugin" class="heading-anchor">🔗</a></h2>
 <p>Many of our users use Joplin for research note and as such a plugin that can add support for <a href="http://www.bibtex.org">BibTex</a> would be very useful. The plugin should use locally stored citations, then display popup with type-ahead to allow the user to enter the citation into the document. A content script should also be created so that these citations are rendered correctly in the note viewer.</p>
 <p>Expected Outcome: A plugin to enter BibTex citations</p>
 <p>Difficulty Level: Medium</p>
 <p>Skills Required: JavaScript, understanding of BibTex format</p>
-<p>Potential Mentor(s):</p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://discourse.joplinapp.org/u/roman_r_m">roman_r_m</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
 <h2>4. Real-time collaboration on a note<a name="4-real-time-collaboration-on-a-note" href="#4-real-time-collaboration-on-a-note" class="heading-anchor">🔗</a></h2>
 <p>Create a web applications that allows two or more users to collaborate in real time on the same note. Use the Joplin Server API to save and load the note.</p>
 <p>Expected Outcome: A web application that allows users to collaborate on a note</p>
 <p>Difficulty Level: High</p>
 <p>Skills Required: JavaScript, Text editor, Web development</p>
-<p>Potential Mentor(s):</p>
+<p>Potential Mentor(s): <a href="https://discourse.joplinapp.org/u/PackElend">PackElend</a>, <a href="https://discourse.joplinapp.org/u/roman_r_m">roman_r_m</a></p>
+<h2>5. Paste special<a name="5-paste-special" href="#5-paste-special" class="heading-anchor">🔗</a></h2>
+<p>A plugin that will allow pasting special text into Joplin and have it converted to Markdown. For example, paste an Excel or CSV table, and have it converted to a Markdown table. Paste some HTML or PDF text and again have it converted to formatted Markdown. This could be one plugin, or a collection of plugins, one for eadch &quot;paste special&quot; operation.</p>
+<p>Expected Outcome: One or more plugins that allow pasting special text.</p>
+<p>Difficulty Level: Normal</p>
+<p>Skills Required: JavaScript, Markdown, HTML, and knowledge of various text file formats (PDF, RTF, HTML, etc.)</p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://discourse.joplinapp.org/u/tessus">Tessus</a>, <a href="https://discourse.joplinapp.org/u/roman_r_m">roman_r_m</a></p>
+<h2>6. Plugin system on mobile<a name="6-plugin-system-on-mobile" href="#6-plugin-system-on-mobile" class="heading-anchor">🔗</a></h2>
+<p>The plugin system is currently available on desktop and CLI. We believe it could work on mobile too although some work will have to be done to make the plugin API compatible, as well as add a mechanism to load plugins.</p>
+<p>Expected Outcome: Allow loading and running plugins on mobile</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: JavaScript, React Native</p>
+<p>Potential Mentor(s): <a href="https://discourse.joplinapp.org/u/PackElend">PackElend</a>, <a href="https://discourse.joplinapp.org/u/roman_r_m">roman_r_m</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<h2>7. Conflict resolution editor plugin<a name="7-conflict-resolution-editor-plugin" href="#7-conflict-resolution-editor-plugin" class="heading-anchor">🔗</a></h2>
+<p>When a note is modified on two different devices, a &quot;conflict note&quot; is generated. It would be useful to create a plugin that allows taking this &quot;conflict note&quot; and the current version of the note, and compare them using a colored diff editor. It could be a built-in editor, or perhaps the plugin could leverage existing diff editors and feed the note versions to it.</p>
+<p>Expected Outcome: Allow resolving note conflicts using a merge editor</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: JavaScript, Markdown, Understanding of diff and merging conflicts</p>
+<p>Potential Mentor(s): <a href="https://discourse.joplinapp.org/u/tessus">Tessus</a>, <a href="https://discourse.joplinapp.org/u/PackElend">PackElend</a>, <a href="https://github.com/CalebJohn/">CalebJohn</a></p>
+<h2>8. Kanban plugin<a name="8-kanban-plugin" href="#8-kanban-plugin" class="heading-anchor">🔗</a></h2>
+<p>Use Joplin built-in types - notes, to-dos and tags to implement <a href="https://discourse.joplinapp.org/t/kanban-for-tasks/7342">Kanban for Tasks</a>.</p>
+<p>Expected Outcome: A Kanban plugin to allow organising tasks</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: JavaScript</p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
 
 		<div class="bottom-links">
 			<a href="https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/ideas.md">
