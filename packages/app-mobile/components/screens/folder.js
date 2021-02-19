@@ -45,6 +45,9 @@ class FolderScreenComponent extends BaseScreenComponent {
 	UNSAFE_componentWillMount() {
 		if (!this.props.folderId) {
 			const folder = Folder.new();
+			if (this.props.parent_id) {
+				folder.parent_id = this.props.parent_id;
+			}
 			this.setState({
 				folder: folder,
 				lastSavedFolder: Object.assign({}, folder),
@@ -80,7 +83,6 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 	async saveFolderButton_press() {
 		let folder = Object.assign({}, this.state.folder);
-
 		try {
 			folder = await Folder.save(folder, { userSideValidation: true });
 		} catch (error) {
@@ -122,6 +124,7 @@ const FolderScreen = connect(state => {
 	return {
 		folderId: state.selectedFolderId,
 		themeId: state.settings.theme,
+		parent_id: state.parent_id,
 	};
 })(FolderScreenComponent);
 
