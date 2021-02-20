@@ -1,6 +1,6 @@
 # GSoC 2021 Ideas
 
-2021 is Joplin second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2021/index/) 
+2021 is Joplin second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2021/index/)
 
 **These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. Just make sure your idea is within this year's theme:
 
@@ -38,7 +38,7 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript
 
-Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [Tessus](https://discourse.joplinapp.org/u/tessus)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [tessus](https://github.com/tessus/)
 
 ## 3. BibTex plugin
 
@@ -74,7 +74,7 @@ Difficulty Level: Normal
 
 Skills Required: JavaScript, Markdown, HTML, and knowledge of various text file formats (PDF, RTF, HTML, etc.)
 
-Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [Tessus](https://discourse.joplinapp.org/u/tessus), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [tessus](https://github.com/tessus/), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m)
 
 ## 6. Plugin system on mobile
 
@@ -98,7 +98,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript, Markdown, Understanding of diff and merging conflicts
 
-Potential Mentor(s): [Tessus](https://discourse.joplinapp.org/u/tessus), [PackElend](https://discourse.joplinapp.org/u/PackElend), [CalebJohn](https://github.com/CalebJohn/)
+Potential Mentor(s): [tessus](https://github.com/tessus/), [PackElend](https://discourse.joplinapp.org/u/PackElend), [CalebJohn](https://github.com/CalebJohn/)
 
 ## 8. Kanban plugin
 
