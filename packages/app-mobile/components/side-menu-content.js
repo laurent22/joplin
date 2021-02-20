@@ -9,6 +9,7 @@ const NavService = require('@joplin/lib/services/NavService').default;
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('./global-style.js');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
+const { Menu, MenuOptions, MenuOption, MenuTrigger } = require('react-native-popup-menu');
 
 Icon.loadFont();
 
@@ -17,6 +18,7 @@ class SideMenuContentComponent extends Component {
 		super();
 		this.state = {
 			syncReportText: '',
+			moveFolderId: null,
 		};
 		this.styles_ = {};
 
@@ -26,6 +28,7 @@ class SideMenuContentComponent extends Component {
 		this.configButton_press = this.configButton_press.bind(this);
 		this.allNotesButton_press = this.allNotesButton_press.bind(this);
 		this.renderFolderItem = this.renderFolderItem.bind(this);
+		this.cancelMove_press = this.cancelMove_press.bind(this);
 
 		this.syncIconRotationValue = new Animated.Value(0);
 		this.syncIconRotation = this.syncIconRotationValue.interpolate({
@@ -70,6 +73,23 @@ class SideMenuContentComponent extends Component {
 				fontSize: 22,
 				color: theme.color,
 			},
+			contextMenu: {
+				backgroundColor: theme.backgroundColor2,
+			},
+			contextMenuItem: {
+				backgroundColor: theme.backgroundColor,
+			},
+			contextMenuItemText: {
+				flex: 1,
+				textAlignVertical: 'center',
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				paddingTop: theme.itemMarginTop,
+				paddingBottom: theme.itemMarginBottom,
+				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+				fontSize: theme.fontSize,
+			},
 		};
 
 		styles.folderButton = Object.assign({}, styles.button);
@@ -109,68 +129,67 @@ class SideMenuContentComponent extends Component {
 	}
 
 	folder_press(folder) {
-		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+		if (this.state.moveFolderId) {
+			if (this.state.moveFolderId === folder.id) return;
+			Folder.moveToFolder(this.state.moveFolderId, folder.id).then(() => this.setState({ moveFolderId: null }));
+		} else {
+			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Notes',
-			folderId: folder.id,
-		});
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				folderId: folder.id,
+			});
+		}
+	}
+
+	menu_backdrop_press(folder) {
+		this.setState({ [`${folder.id}_context_open`]: false });
+	}
+
+	menu_select(folder, value) {
+		value();
+		this.setState({ [`${folder.id}_context_open`]: false });
 	}
 
 	async folder_longPress(folder) {
 		if (folder === 'all') return;
+		this.setState({ [`${folder.id}_context_open`]: true });
+	}
 
-		Alert.alert(
-			'',
-			_('Notebook: %s', folder.title),
-			[
-				{
-					text: _('Rename'),
-					onPress: () => {
-						if (folder.encryption_applied) {
-							alert(_('Encrypted notebooks cannot be renamed'));
-							return;
-						}
+	folder_rename(folder) {
+		if (folder.encryption_applied) {
+			alert(_('Encrypted notebooks cannot be renamed'));
+		}
 
-						this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
-						this.props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Folder',
-							folderId: folder.id,
-						});
-					},
-				},
-				{
-					text: _('Delete'),
-					onPress: () => {
-						Alert.alert('', _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title), [
-							{
-								text: _('OK'),
-								onPress: () => {
-									Folder.delete(folder.id);
-								},
-							},
-							{
-								text: _('Cancel'),
-								onPress: () => {},
-								style: 'cancel',
-							},
-						]);
-					},
-					style: 'destructive',
-				},
-				{
-					text: _('Cancel'),
-					onPress: () => {},
-					style: 'cancel',
-				},
-			],
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Folder',
+			folderId: folder.id,
+		});
+	}
+
+	folder_delete(folder) {
+		Alert.alert('', _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title), [
 			{
-				cancelable: false,
-			}
-		);
+				text: _('OK'),
+				onPress: () => {
+					Folder.delete(folder.id);
+				},
+			},
+			{
+				text: _('Cancel'),
+				onPress: () => { },
+				style: 'cancel',
+			},
+		]);
+	}
+
+	folder_move(folder) {
+		this.setState({ [`${folder.id}_context_open`]: false });
+		this.setState({ moveFolderId: folder.id });
 	}
 
 	folder_togglePress(folder) {
@@ -219,6 +238,10 @@ class SideMenuContentComponent extends Component {
 		if (actionDone === 'auth') this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}
 
+	cancelMove_press() {
+		this.setState({ moveFolderId: null });
+	}
+
 	renderFolderItem(folder, selected, hasChildren, depth) {
 		const theme = themeStyle(this.props.themeId);
 
@@ -264,9 +287,29 @@ class SideMenuContentComponent extends Component {
 					}}
 				>
 					<View style={folderButtonStyle}>
+						{this.state.moveFolderId && (this.state.moveFolderId !== folder.id) && <Icon name="enter-outline" style={this.styles().sidebarIcon} />}
 						<Text numberOfLines={1} style={this.styles().folderButtonText}>
 							{Folder.displayTitle(folder)}
 						</Text>
+						<Menu
+							style={this.styles().contextMenu}
+							opened={this.state[`${folder.id}_context_open`]}
+							onSelect={value => this.menu_select(folder, value)}
+							onBackdropPress={() => this.menu_backdrop_press(folder)}
+						>
+							<MenuTrigger />
+							<MenuOptions>
+								<MenuOption value={() => this.folder_rename(folder)} key={'menuOption_rename'} style={this.styles().contextMenuItem}>
+									<Text style={this.styles().contextMenuItemText}>{_('Rename')}</Text>
+								</MenuOption>
+								<MenuOption value={() => this.folder_move(folder)} key={'menuOption_move'} style={this.styles().contextMenuItem}>
+									<Text style={this.styles().contextMenuItemText}>{_('Move')}</Text>
+								</MenuOption>
+								<MenuOption value={() => this.folder_delete(folder)} key={'menuOption_delete'} style={this.styles().contextMenuItem}>
+									<Text style={this.styles().contextMenuItemText}>{_('Delete')}</Text>
+								</MenuOption>
+							</MenuOptions>
+						</Menu>
 					</View>
 				</TouchableOpacity>
 				{iconWrapper}
@@ -368,6 +411,8 @@ class SideMenuContentComponent extends Component {
 			const folderItems = result.items;
 			items = items.concat(folderItems);
 		}
+
+		if (this.state.moveFolderId) { items.push(this.renderSidebarButton('cancel_move', _('Cancel'), 'close-circle-outline', this.cancelMove_press)); }
 
 		const style = {
 			flex: 1,
