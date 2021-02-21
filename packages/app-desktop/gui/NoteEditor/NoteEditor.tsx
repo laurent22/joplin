@@ -107,7 +107,7 @@ function NoteEditor(props: NoteEditorProps) {
 			return async function() {
 				const note = await formNoteToNote(formNote);
 				reg.logger().debug('Saving note...', note);
-				const savedNote: any = await Note.save(note);
+				const savedNote: any = await Note.save(note, { dispatchUpdateAction: false });
 
 				setFormNote((prev: FormNote) => {
 					return { ...prev, user_updated_time: savedNote.user_updated_time };
