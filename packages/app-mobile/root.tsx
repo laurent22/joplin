@@ -228,11 +228,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
-				// If the route *name* is the same (even if the other parameters are different), we
-				// overwrite the last route in the history with the current one. If the route name
-				// is different, we push a new history entry.
+					// If the route *name* is the same (even if the other parameters are different), we
+					// overwrite the last route in the history with the current one. If the route name
+					// is different, we push a new history entry.
 					if (currentRoute.routeName == action.routeName) {
-					// nothing
+						// nothing
 					} else {
 						navHistory.push(currentRoute);
 					}
@@ -262,6 +262,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 				if ('folderId' in action) {
 					newState.selectedFolderId = action.folderId;
 					newState.notesParentType = 'Folder';
+					newState.parent_id = action.parent_id;
 				}
 
 				if ('tagId' in action) {
@@ -759,30 +760,31 @@ class AppComponent extends React.Component {
 
 		return (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-				<SideMenu
-					menu={sideMenuContent}
-					edgeHitWidth={5}
-					menuPosition={menuPosition}
-					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
-					onSliding={(percent: number) => {
-						this.props.dispatch({
-							type: 'SIDE_MENU_OPEN_PERCENT',
-							value: percent,
-						});
-					}}
-				>
-					<StatusBar barStyle={statusBarStyle} />
-					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+				<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+					<SideMenu
+						menu={sideMenuContent}
+						edgeHitWidth={5}
+						menuPosition={menuPosition}
+						onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
+						onSliding={(percent: number) => {
+							this.props.dispatch({
+								type: 'SIDE_MENU_OPEN_PERCENT',
+								value: percent,
+							});
+						}}
+					>
+						<StatusBar barStyle={statusBarStyle} />
+
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								<AppNav screens={appNavInit} />
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
+							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }} />
 						</SafeAreaView>
-					</MenuContext>
-				</SideMenu>
-			</View>
+					</SideMenu>
+				</MenuContext>
+			</View >
 		);
 	}
 }
