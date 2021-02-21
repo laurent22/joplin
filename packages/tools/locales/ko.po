@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -2961,15 +2963,15 @@ msgstr ""
 "세요"
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Joplin Nextcloud 애플리케이션에 연결할 수 없습니다. 동기화 설정 화면에서 설정"
-"을 확인해주세요. 전체 오류 메시지:\n"
+"Joplin 서버에 연결할 수 없습니다. 동기화 설정 화면에서 설정을 확인해주세요. "
+"전체 오류 메시지:\n"
 "\n"
 "%s"
 
