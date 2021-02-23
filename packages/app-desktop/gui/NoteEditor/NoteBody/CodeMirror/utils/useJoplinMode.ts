@@ -20,8 +20,8 @@ export default function useJoplinMode(CodeMirror: any) {
 		const markdownMode = CodeMirror.getMode(config, markdownConfig);
 		const stex = CodeMirror.getMode(config, { name: 'stex', inMathMode: true });
 
-		const inlineKatexOpenRE = /(?<!\S)\$(?=[^\s$].*?[^\\\s$]\$(?!\S))/;
-		const inlineKatexCloseRE = /(?<![\\\s$])\$(?!\S)/;
+		const inlineKatexOpenRE = /(?<!\S)\$(?=[^\s$].*?[^\\\s$]\$(?![^\s!"#%&'()*+,\-.:;<=>?@[\]^_`{|}~]))/;
+		const inlineKatexCloseRE = /(?<![\\\s$])\$(?![^\s!"#%&'()*+,\-.:;<=>?@[\]^_`{|}~])/;
 		const blockKatexOpenRE = /(?<!\S)\$\$/;
 		const blockKatexCloseRE = /(?<![\\\s])\$\$/;
 
