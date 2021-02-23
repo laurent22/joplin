@@ -18,6 +18,6 @@ However **there is a catch**: in Joplin, notes, even when edited with this Rich 
 
 - Special keyboard modes "vim" and "emacs" are not supported.
 
-- If a note is of 'Markup - Markdown' and contains HTML formatting, this may be lost when editing in the Rich Text editor as it cannot be converted to Markdown. Notes of 'Markup - HTML' are not affected by edits in the Rich Rext editor as this conversion does not take place.
+- If a note is of 'Markup - Markdown' and contains HTML formatting, this may be lost when editing in the Rich Text editor as it cannot be converted to Markdown. Notes of 'Markup - HTML' are not affected by edits in the Rich Text editor as this conversion does not take place.
 
 Those are the known limitations but if you notice any other issue not listed here, please let us know [in the forum](https://discourse.joplinapp.org/).
