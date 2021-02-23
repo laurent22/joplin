@@ -140,7 +140,7 @@ export default function(props: Props) {
 		const manifest = item.manifest;
 		if (!manifest.homepage_url) return;
 		bridge().openExternal(manifest.homepage_url);
-	}, [props.item, props.manifest]);
+	}, [props.item]);
 
 	// For plugins in dev mode things like enabling/disabling or
 	// uninstalling them doesn't make sense, as that should be done by
