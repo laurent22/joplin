@@ -1,0 +1,3880 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator:  Szőke Sándor <mail@szokesandor.hu>\n"
+"Language: hu_HU\n"
+
+#: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
+#: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
+#: packages/app-desktop/checkForUpdates.js:139
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
+#: packages/app-desktop/gui/MenuBar.js:317
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:185
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
+#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
+#: packages/app-mobile/components/ModalDialog.js:67
+#: packages/app-mobile/components/CameraView.js:160
+#: packages/app-mobile/components/side-menu-content.js:150
+#: packages/app-mobile/components/screens/config.js:148
+msgid "OK"
+msgstr "OK"
+
+#: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
+#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:201
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:430
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
+#: packages/app-desktop/gui/utils/NoteListUtils.js:165
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/app-desktop/gui/ResourceScreen.js:96
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
+#: packages/app-mobile/components/ModalDialog.js:70
+#: packages/app-mobile/components/SelectDateTimeDialog.js:82
+#: packages/app-mobile/components/CameraView.js:161
+#: packages/app-mobile/components/side-menu-content.js:156
+#: packages/app-mobile/components/side-menu-content.js:165
+#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/app-mobile/components/screens/encryption-config.js:185
+#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:506
+#: packages/lib/shim-init-node.js:148
+msgid "Cancel"
+msgstr "Mégse"
+
+#: packages/app-desktop/bridge.js:188
+msgid ""
+"The app is now going to close. Please relaunch it to complete the process."
+msgstr "Az alkalmazás bezárul. kérem indítsa újra a folyamat befejezéséhez."
+
+#: packages/app-desktop/plugins/GotoAnything.js:431
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name. Or type : to search for "
+"commands."
+msgstr ""
+"Írja be a jegyzet címét vagy a tartalmának egy részletét, ahova ugrani "
+"szeretne. Esetleg írja be a #-et a tag nevével, vagy @ a jegyzetfüzet "
+"nevével. Beírhatja :-ot parancsok kereséséhez."
+
+#: packages/app-desktop/plugins/GotoAnything.js:456
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
+msgid "Goto Anything..."
+msgstr "Ugrás bárhova..."
+
+#: packages/app-desktop/plugins/GotoAnything.js:463
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
+msgid "Command palette"
+msgstr "Parancs paletta"
+
+#: packages/app-desktop/InteropServiceHelper.js:154
+#, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Exportálás \"%s\"-ként, \"%s\" formátumban. Kérem várjon..."
+
+#: packages/app-desktop/InteropServiceHelper.js:174
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr "Jegyzetek nem exportálhatóak: %s"
+
+#: packages/app-desktop/checkForUpdates.js:138
+msgid "Current version is up-to-date."
+msgstr "Aktuális verzió a legfrissebb."
+
+#: packages/app-desktop/checkForUpdates.js:148
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (pre-release)"
+
+#: packages/app-desktop/checkForUpdates.js:152
+msgid "An update is available, do you want to download it now?"
+msgstr "Egy frissítés elérhető, le szeretné tölteni most?"
+
+#: packages/app-desktop/checkForUpdates.js:153
+#, javascript-format
+msgid "Your version: %s"
+msgstr "Verziója: %s"
+
+#: packages/app-desktop/checkForUpdates.js:153
+#, javascript-format
+msgid "New version: %s"
+msgstr "Új verzió: %s"
+
+#: packages/app-desktop/checkForUpdates.js:154
+msgid "Download"
+msgstr "Letöltés"
+
+#: packages/app-desktop/checkForUpdates.js:154
+msgid "Full Release Notes"
+msgstr "Teljes kiadási megjegyzések"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "A \"%s\" jegyzet sikeresen visszaállítva a \"%s\" jegyzetfüzetbe."
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "Jegyzetnek nincs előélete"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:122
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Nem támogatott hivatkozás vagy üzenet: %s"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
+msgid "Restore"
+msgstr "Visszaállítás"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Kattintson \"%s\" a jegyzet visszaállításához. Be fog másolodni a \"%s\" "
+"nevű jegyzetfüzetbe. A jegyzet aktuális verziója nem lesz kicserélve vagy "
+"módosítva."
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:539
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
+#: packages/lib/commands/historyBackward.js:17
+msgid "Back"
+msgstr "Vissza"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:176
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:179
+#: packages/app-mobile/components/side-menu-content.js:148
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"\"%s\" jegyzetfüzet törlése?\n"
+"\n"
+"A füzetben található minden jegyzet és aljegyzetfüzet is törlődni fog."
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:180
+#: packages/app-desktop/gui/utils/NoteListUtils.js:136
+#: packages/app-desktop/gui/utils/NoteListUtils.js:165
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:122
+#: packages/app-desktop/gui/ResourceScreen.js:47
+#: packages/app-desktop/gui/ResourceScreen.js:96
+#: packages/app-mobile/components/side-menu-content.js:146
+#: packages/app-mobile/components/screens/Note.js:830
+msgid "Delete"
+msgstr "Törlés"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:184
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Tag \"%s\" eltávolítása minden jegyzetből?"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:187
+msgid "Remove this search from the sidebar?"
+msgstr "Eltávolítsam ezt a keresést az oldalsávról?"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:238
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
+#: packages/app-desktop/gui/utils/NoteListUtils.js:132
+msgid "Export"
+msgstr "Exportálás"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:301
+#: packages/app-mobile/components/side-menu-content.js:360
+#: packages/app-mobile/components/screens/notes.js:188
+msgid "All notes"
+msgstr "Minden jegyzet"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:430
+#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/lib/commands/synchronize.js:18
+msgid "Synchronise"
+msgstr "Szinkronizálás"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
+#: packages/app-mobile/components/side-menu-content.js:364
+msgid "Notebooks"
+msgstr "Jegyzetfüzetek"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:467
+#: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
+#: packages/app-mobile/components/side-menu-content.js:314
+#: packages/app-mobile/components/screens/tags.js:101
+#: packages/app-mobile/components/screens/Note.js:803
+msgid "Tags"
+msgstr "Tagek"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:478
+#: packages/app-mobile/components/side-menu-content.js:325
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Elemek titkosítása: %d/%d"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:482
+#: packages/app-mobile/components/side-menu-content.js:330
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Fetched erőforrások: %d/%d."
+
+#: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:17
+msgid "Sidebar"
+msgstr "Oldalsáv"
+
+#: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:18
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
+#: packages/app-desktop/gui/MenuBar.js:558
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
+msgid "Focus"
+msgstr "Fókusz"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
+msgid "Please select where the sync status should be exported to"
+msgstr "Kérem válassza ki, hova exportáljam a szinkronizációs státuszt"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
+#: packages/app-mobile/components/screens/status.js:112
+msgid "Retry All"
+msgstr "Próbálja mindet újra"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
+#: packages/app-mobile/components/screens/status.js:118
+msgid "Retry"
+msgstr "Ismét"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:178
+msgid "strong text"
+msgstr "félkövér szöveg"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:179
+msgid "emphasised text"
+msgstr "kiemelt szöveg"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:181
+msgid "Insert Hyperlink"
+msgstr "Hiperhivatkozás beszúrása"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:215
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:217
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:218
+msgid "List item"
+msgstr "Felsorolás elem"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+msgid "Layout"
+msgstr "Elrendezés"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:486
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Ez a jegyzet üres. Kattintson a \"%s\"-on váltani a szerkesztőt és "
+"szerkeszteni a jegyzetet."
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:595
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:90
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
+msgid "Cut"
+msgstr "Kivágás"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:602
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:98
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
+#: packages/app-desktop/gui/MenuBar.js:317
+msgid "Copy"
+msgstr "Másolás"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:609
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
+msgid "Paste"
+msgstr "Beillesztés"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+msgid "Checkbox list"
+msgstr "Jelölőnégyzet lista"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:521
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:458
+#: packages/app-mobile/components/screens/Note.js:1013
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:577
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
+#: packages/app-mobile/components/screens/Note.js:771
+msgid "Attach file"
+msgstr "Fájl csatolása"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
+msgid "Code Block"
+msgstr "Code Blokk"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
+msgid "Inline Code"
+msgstr "Beágyazott kód"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
+msgid "Insert Date Time"
+msgstr "Dátum-idő beszúrása"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+msgid "Drop notes or files here"
+msgstr "Dobja ide a jegyzeteket vagy fájlokat"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+msgid "Code View"
+msgstr "Kód nézet"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#, javascript-format
+msgid ""
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
+msgstr ""
+"Kérem várjon minden csatolmány letöltésére és dekódolására. Átválthat %s-re "
+"a jegyzet szerkesztéséhez. "
+
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
+msgid "There was an error downloading this attachment:"
+msgstr "Hiba történt ezen csatolmány letöltése közben:"
+
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:77
+#: packages/lib/services/ResourceEditWatcher/index.js:196
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Ez a csatolmány még nincs letöltve és dekódolva"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:48
+msgid "Open..."
+msgstr "Megnyitás..."
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:61
+msgid "Save as..."
+msgstr "Mentés másként..."
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:74
+msgid "Reveal file in folder"
+msgstr "Mutassa a fájlt a mappában"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:82
+msgid "Copy path to clipboard"
+msgstr "Útvonal másolása vágólapra"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:113
+msgid "Copy Link Address"
+msgstr "Link címének másolása"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
+msgid "to-do"
+msgstr "to-do"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
+msgid "note"
+msgstr "megjegyzés"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Új %s létrehozása..."
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
+msgid "Click to add tags..."
+msgstr "Kattintson tag hozzáadáshoz..."
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
+msgid ""
+"This Rich Text editor has a number of limitations and it is recommended to "
+"be aware of them before using it."
+msgstr ""
+"Ennek a Rich Text szerkesztőnek számos korlátja van és javasolt ezekkel "
+"tisztában lenni a használata előtt."
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
+msgid "Read more about it"
+msgstr "Olvasson erről többet"
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
+msgid "Dismiss"
+msgstr "Elvetés"
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
+msgid "The following attachments are being watched for changes:"
+msgstr "A következő csatolmányok változása figyelve van:"
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
+msgid ""
+"The attachments will no longer be watched when you switch to a different "
+"note."
+msgstr "A csatolmányok figyelése megszűnik, ha átvált egy másik jegyzetre."
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
+#, fuzzy, javascript-format
+msgid "In: %s"
+msgstr "In: %s"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:28
+msgid "Select all"
+msgstr "Minden kiválasztása"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:33
+msgid "Bold"
+msgstr "Félkövér"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:38
+msgid "Italic"
+msgstr "Dőlt"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:43
+msgid "Hyperlink"
+msgstr "Hiperlink"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:48
+msgid "Code"
+msgstr "Kód"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
+msgid "Numbered List"
+msgstr "Számozott lista"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
+msgid "Bulleted List"
+msgstr "Felsorolás"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:68
+msgid "Checkbox"
+msgstr "Jelölőnégyzet"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:73
+msgid "Heading"
+msgstr "Címsor"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:78
+msgid "Horizontal Rule"
+msgstr "Vízszintes vonal"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
+msgid "Delete line"
+msgstr "Sor törlése"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
+msgid "Undo"
+msgstr "Visszavonás"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
+msgid "Redo"
+msgstr "Mégis"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
+msgid "Indent less"
+msgstr "Behúzása csökkentése"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
+msgid "Indent more"
+msgstr "Behúzás növelése"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
+msgid "Toggle comment"
+msgstr "Megjegyzés váltása"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
+msgid "Sort selected lines"
+msgstr "Kiválasztott sorok rendezése"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
+msgid "Swap line up"
+msgstr "Sor csere fel"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
+msgid "Swap line down"
+msgstr "Sor csere le"
+
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
+msgid "Note title"
+msgstr "Jegyzet címe"
+
+#: packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js:16
+msgid "Search in current note"
+msgstr "Keresés aktuális jegyzetben"
+
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:16
+msgid "Note body"
+msgstr "Jegyzet szövege"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:27
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
+#: packages/app-desktop/gui/ResourceScreen.js:39
+msgid "ID"
+msgstr "ID"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:319
+msgid "Created"
+msgstr "Létrehozva"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:141
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:143
+msgid "Updated"
+msgstr "Frissítve"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
+msgid "Completed"
+msgstr "Befejeződött"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
+msgid "Location"
+msgstr "Hely"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
+msgid "URL"
+msgstr "URL"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
+#: packages/lib/models/Setting.js:1433
+msgid "Note History"
+msgstr "Jegyzet előélete"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
+msgid "Markup"
+msgstr "Formátum"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:306
+msgid "Previous versions of this note"
+msgstr "Jegyzet előző verziói"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:383
+#: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
+msgid "Note properties"
+msgstr "Jegyzet tulajdonságai"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
+#: packages/lib/services/KeymapService.js:176
+#, javascript-format
+msgid "Error: %s"
+msgstr "Hibák: %s"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/lib/models/Setting.js:704 packages/app-cli/app/command-e2ee.js:110
+msgid "Disabled"
+msgstr "Letiltva"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
+#: packages/app-desktop/gui/NoteSearchBar.min.js:167
+#: packages/app-desktop/gui/lib/SearchInput/SearchInput.js:38
+msgid "Search..."
+msgstr "Keresés..."
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
+#: packages/app-desktop/gui/MenuBar.js:373
+#: packages/app-desktop/gui/MenuBar.js:420 packages/app-desktop/gui/Root.js:99
+msgid "Import"
+msgstr "Importálás"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
+msgid "Command"
+msgstr "Parancs"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
+msgid "Keyboard Shortcut"
+msgstr "Gyorsbillentyű"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
+#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:357
+msgid "Quit"
+msgstr "Kilépés"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
+#: packages/app-desktop/gui/MenuBar.js:260
+msgid "Insert template"
+msgstr "Sablon beszúrása"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
+#: packages/app-desktop/gui/MenuBar.js:519
+msgid "Actual Size"
+msgstr "Aktív Méret"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
+#: packages/app-desktop/gui/MenuBar.js:580
+msgid "Website and documentation"
+msgstr "Web oldal és dokumentáció"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
+msgid "Hide Joplin"
+msgstr "Joplin elrejtése"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
+#: packages/app-desktop/gui/MenuBar.js:408
+msgid "Close Window"
+msgstr "Ablak bezárása"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
+msgid "Preferences"
+msgstr "Beállítások"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
+#: packages/app-desktop/gui/MenuBar.js:284 packages/app-desktop/gui/Root.js:100
+msgid "Options"
+msgstr "Beállítások"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
+msgid "Invalid"
+msgstr "Érvénytelen"
+
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
+msgid "Press the shortcut"
+msgstr "Nyomja le a gyorsbillentyűt"
+
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
+msgid ""
+"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
+"shortcut."
+msgstr ""
+"Nyomja le a gyorsbillentyűt, majd az ENTER-t. Vagy nyomja le a BACKSPACE-t a "
+"gyorsbillentyű törléséhez."
+
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
+#: packages/app-mobile/components/screens/encryption-config.js:125
+msgid "Save"
+msgstr "Mentés"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:399
+msgid ""
+"The sync target needs to be upgraded before Joplin can sync. The operation "
+"may take a few minutes to complete and the app needs to be restarted. To "
+"proceed please click on the link."
+msgstr ""
+"A szinkronizációs célt frissíteni kell a Joplin szinkronizációhoz. Ez a "
+"művelet, igénybe vehet pár percet és az alkalmazást újra kell indítani. A "
+"folytatáshoz kattintson a lenti linkre."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:401
+msgid "Restart and upgrade"
+msgstr "Újraindítás és frissítés"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
+msgid "Some items cannot be synchronised."
+msgstr "Néhány elemet nem lehet szinkronizálnii."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:413
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
+msgid "View them now"
+msgstr "Mutasd ezeket most"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
+msgid "Some items cannot be decrypted."
+msgstr "Néhány elemet nem lehet visszafejteni."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
+msgid "One or more master keys need a password."
+msgstr "Egy vagy több mester kulcs igényel jelszót."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
+msgid "Set the password"
+msgstr "Jelszó beállítása"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
+msgid "One of your master keys use an obsolete encryption method."
+msgstr "Az egyik mester kulcsa egy elavult titkosítási módot használ."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
+msgid ""
+"The default encryption method has been changed, you should re-encrypt your "
+"data."
+msgstr ""
+"Az alapértelmezett titkosítási mód megváltozott, újra kell titkosítani az "
+"adatokat."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
+msgid "More info"
+msgstr "Több info"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:552
+msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
+msgstr ""
+"Használja a nyilakat az elrendezés elemek mozgatásához. Majd nyomja le az "
+"\"Escape\"-et a kilépéshez. "
+
+#: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
+msgid "Statistics..."
+msgstr "Statisztikák..."
+
+#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:18
+#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:18
+#: packages/app-mobile/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Átnevezés"
+
+#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
+msgid "Rename notebook:"
+msgstr "Jegyzetfüzet átnevezéses:"
+
+#: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
+#: packages/app-mobile/components/action-button.js:77
+#: packages/app-mobile/setUpQuickActions.js:15
+msgid "New to-do"
+msgstr "Új to-do"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
+msgid "Toggle note list"
+msgstr "Jegyzetlista váltása"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
+msgid "Toggle sidebar"
+msgstr "Oldalsáv váltása"
+
+#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
+#: packages/app-mobile/components/SelectDateTimeDialog.js:84
+#: packages/app-mobile/components/screens/Note.js:789
+msgid "Set alarm"
+msgstr "Riasztás beállítása"
+
+#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
+msgid "Set alarm:"
+msgstr "Riasztás beállítása:"
+
+#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
+#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
+msgid "PDF File"
+msgstr "PDF Fájl"
+
+#: packages/app-desktop/gui/MainScreen/commands/newNote.js:20
+#: packages/app-mobile/components/action-button.js:86
+#: packages/app-mobile/setUpQuickActions.js:14
+msgid "New note"
+msgstr "Új jegyzet"
+
+#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
+msgid "Move to notebook"
+msgstr "Jegyzetfüzetbe mozgatás"
+
+#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
+msgid "Move to notebook:"
+msgstr "Jegyzetfüzetbe mozgatás:"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
+msgid "Toggle editor layout"
+msgstr "Szerkesztő elrendezés váltása"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
+msgid "Toggle editors"
+msgstr "Szerkesztő váltása"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
+msgid "Change application layout"
+msgstr "Alkalmazás kinézet megváltoztatása"
+
+#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
+msgid "Rename tag:"
+msgstr "Tag átnevezése:"
+
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
+msgid "New notebook"
+msgstr "Új jegyzetfüzet"
+
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
+msgid "Notebook title:"
+msgstr "Jegyzetfüzet címe:"
+
+#: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
+#: packages/lib/services/spellChecker/SpellCheckerService.js:180
+msgid "Spell checker"
+msgstr "Helyesírás-ellenőrző"
+
+#: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
+msgid "Share note..."
+msgstr "Jegyzet megosztása..."
+
+#: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
+msgid "New sub-notebook"
+msgstr "Új al-jegyzetfüzet"
+
+#: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
+msgid "Template file:"
+msgstr "Sablon fájl:"
+
+#: packages/app-desktop/gui/MainScreen/commands/setTags.js:45
+msgid "Add or remove tags:"
+msgstr "Tagek hozzáadása vagy törlése:"
+
+#: packages/app-desktop/gui/MainScreen/commands/print.js:17
+msgid "Print"
+msgstr "Nyomtatás"
+
+#: packages/app-desktop/gui/MainScreen/commands/print.js:26
+msgid "Only one note can be printed at a time."
+msgstr "Csak egy jegyzet nyomtatható ki egyidőben."
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:29
+#: packages/app-mobile/components/screens/dropbox-login.js:58
+#: packages/app-cli/app/command-sync.js:90
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Hogy a Joplin tudjon szinkronizálni Dropbox-al, kérem kövesse a következő "
+"lépéseket."
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:30
+#: packages/app-mobile/components/screens/dropbox-login.js:59
+#: packages/app-cli/app/command-sync.js:91
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"1. lépés: Nyissa meg ezt az URL-t a böngészőben, hogy hitelesítse az "
+"alkalmazást:"
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:32
+#: packages/app-mobile/components/screens/dropbox-login.js:65
+#: packages/app-cli/app/command-sync.js:93
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "2. lépés: Írja be a Dropbox által adott kódot:"
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:35
+#: packages/app-mobile/components/screens/dropbox-login.js:68
+msgid "Submit"
+msgstr "Elküld"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:39
+msgid "Token has been copied to the clipboard!"
+msgstr "Token vágólapra másolva!"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:71
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr "A Web Vágó szolgáltatás engedélyezve van és automatikusan indul."
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:78
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr "Státusz: Elindítva a %d  porton"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
+#, javascript-format
+msgid "Status: %s"
+msgstr "Státusz: %s"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:90
+msgid "Disable Web Clipper Service"
+msgstr "Web Vágó szolgáltatás letiltása"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:96
+msgid "The web clipper service is not enabled."
+msgstr "A Web Vágó szolgáltatás nincs engedélyezve."
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:101
+msgid "Enable Web Clipper Service"
+msgstr "Web Vágó Szolgáltatás engedélyezése"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:124
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+"Joplin Web Vágó segítségével lementhetünk web oldalakat és képernyőképeket a "
+"böngészőből Joplin-ba."
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:129
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr "Ahhoz, hogy a Web Vágó működjön csinálja a következőt:"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
+msgid "Step 1: Enable the clipper service"
+msgstr "1. lépés: Engedélyezze a Web Vágó szolgáltatást"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+"Ez a szolgáltatás lehetővé teszi, hogy a böngésző kommunikájon Joplin-nal. "
+"Amikor engedélyezi ezt, a tűzfal kérheti, hogy adjon jogot a port "
+"használatához."
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:156
+msgid "Step 2: Install the extension"
+msgstr "2. lépés: telepítse a bővítményt"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:161
+msgid "Download and install the relevant extension for your browser:"
+msgstr "Töltse le és telepítse a releváns böngésző bővítményt:"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:176
+msgid "Advanced options"
+msgstr "Haladó beállítások"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:181
+msgid "Authorisation token:"
+msgstr "Hitelesítő token:"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:191
+msgid "Copy token"
+msgstr "Token másolása"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:197
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
+"Ez a hitelesítő token csak ahhoz kell, hogy 3. fél alkalmazásai "
+"hozzáférjenek Joplin-hoz."
+
+#: packages/app-desktop/gui/MenuBar.js:114
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "\"%s\" importálása,\"%s\" formátumban. Kérem várjon..."
+
+#: packages/app-desktop/gui/MenuBar.js:231 packages/app-desktop/gui/Root.js:102
+msgid "Synchronisation Status"
+msgstr "Szinkronizációs státusz"
+
+#: packages/app-desktop/gui/MenuBar.js:250
+msgid "Create note from template"
+msgstr "Jegyzet létrehozás sablonból"
+
+#: packages/app-desktop/gui/MenuBar.js:255
+msgid "Create to-do from template"
+msgstr "To-do létrehozás sablonból"
+
+#: packages/app-desktop/gui/MenuBar.js:266
+msgid "Open template directory"
+msgstr "Sablon mappa megnyitása"
+
+#: packages/app-desktop/gui/MenuBar.js:271
+msgid "Refresh templates"
+msgstr "Sablonok frissítése"
+
+#: packages/app-desktop/gui/MenuBar.js:297
+msgid "Note attachments..."
+msgstr "Jegyzet csatolmányok..."
+
+#: packages/app-desktop/gui/MenuBar.js:328
+#: packages/app-desktop/gui/MenuBar.js:400
+#: packages/app-desktop/gui/MenuBar.js:690
+msgid "&File"
+msgstr "&Fájl"
+
+#: packages/app-desktop/gui/MenuBar.js:334
+#: packages/app-desktop/gui/MenuBar.js:612
+msgid "About Joplin"
+msgstr "Joplin névjegy"
+
+#: packages/app-desktop/gui/MenuBar.js:341
+msgid "Preferences..."
+msgstr "Beállítások..."
+
+#: packages/app-desktop/gui/MenuBar.js:351
+#: packages/app-desktop/gui/MenuBar.js:590
+msgid "Check for updates..."
+msgstr "Frissítés keresése..."
+
+#: packages/app-desktop/gui/MenuBar.js:366
+#: packages/app-desktop/gui/MenuBar.js:415
+msgid "Templates"
+msgstr "Sablonok"
+
+#: packages/app-desktop/gui/MenuBar.js:377
+#: packages/app-desktop/gui/MenuBar.js:423
+msgid "Export all"
+msgstr "Mindent exportál"
+
+#: packages/app-desktop/gui/MenuBar.js:389
+#, javascript-format
+msgid "Hide %s"
+msgstr "%s elrejtése"
+
+#: packages/app-desktop/gui/MenuBar.js:446
+#: packages/app-desktop/gui/MenuBar.js:694
+msgid "&Edit"
+msgstr "Sz&erkesztés"
+
+#: packages/app-desktop/gui/MenuBar.js:477
+msgid "&View"
+msgstr "&Nézet"
+
+#: packages/app-desktop/gui/MenuBar.js:485
+msgid "Layout button sequence"
+msgstr "Elrendezés gomb sorrend"
+
+#: packages/app-desktop/gui/MenuBar.js:530
+#: packages/app-desktop/gui/MenuBar.js:536
+msgid "Zoom In"
+msgstr "Nagyítás"
+
+#: packages/app-desktop/gui/MenuBar.js:543
+msgid "Zoom Out"
+msgstr "Kicsinyítés"
+
+#: packages/app-desktop/gui/MenuBar.js:552
+msgid "&Go"
+msgstr "&Ugrás"
+
+#: packages/app-desktop/gui/MenuBar.js:564
+msgid "&Note"
+msgstr "&Jegyzet"
+
+#: packages/app-desktop/gui/MenuBar.js:573
+msgid "&Tools"
+msgstr "&Eszközök"
+
+#: packages/app-desktop/gui/MenuBar.js:577
+msgid "&Help"
+msgstr "&Segítség"
+
+#: packages/app-desktop/gui/MenuBar.js:584
+msgid "Joplin Forum"
+msgstr "Joplin Forum"
+
+#: packages/app-desktop/gui/MenuBar.js:587
+#: packages/app-mobile/components/screens/config.js:495
+msgid "Make a donation"
+msgstr "Adakozzon"
+
+#: packages/app-desktop/gui/MenuBar.js:599
+msgid "Toggle development tools"
+msgstr "Fejlesztőeszközök váltása"
+
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "Firefox Bővítmény"
+
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome Web Store"
+
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr "Szerezze be most:"
+
+#: packages/app-desktop/gui/ImportScreen.min.js:61
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+"Új jegyzetfüzet \"%s\" létrehozása és a fájl \"%s\" bele lesz importálva"
+
+#: packages/app-desktop/gui/ImportScreen.min.js:68
+#: packages/app-cli/app/command-import.js:47
+#, javascript-format
+msgid "Found: %d."
+msgstr "Találtam: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:69
+#: packages/app-cli/app/command-import.js:48
+#, javascript-format
+msgid "Created: %d."
+msgstr "Létrehozva: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:70
+#: packages/app-cli/app/command-import.js:49
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Frissített: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:71
+#: packages/app-cli/app/command-import.js:50
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Kihagyva: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:72
+#: packages/app-cli/app/command-import.js:51
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Erőforrások: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:73
+#: packages/app-cli/app/command-import.js:52
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Taggelve: %d."
+
+#: packages/app-desktop/gui/ImportScreen.min.js:88
+#: packages/app-cli/app/command-import.js:70
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "A jegyeztek importálva: %s"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:42
+msgid "Duplicate"
+msgstr "Duplikált"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:47
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Másolás"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:58
+msgid "Switch between note and to-do type"
+msgstr "Váltás jegyzet és todo típus között"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:86
+msgid "Switch to note type"
+msgstr "Váltás jegyzet típusra"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:92
+msgid "Switch to to-do type"
+msgstr "Váltás to-do típusra"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:99
+#: packages/app-mobile/components/screens/Note.js:817
+msgid "Copy Markdown link"
+msgstr "Markdown hivatkozás másolása"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:159
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "\"%s\" jegyzet törlése?"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:162
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "%d jegyzetek törlése?"
+
+#: packages/app-desktop/gui/OneDriveLoginScreen.js:46
+#: packages/app-cli/app/command-sync.js:81
+#: packages/app-cli/app/command-sync.js:95
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Hitelesítés nem fejeződött be (nem érkezett hitelesítő token)"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
+msgid "Master keys that need upgrading"
+msgstr "Mester kulcsok amiket frissíteni kell"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:150
+msgid ""
+"The following master keys use an out-dated encryption algorithm and it is "
+"recommended to upgrade them. The upgraded master key will still be able to "
+"decrypt and encrypt your data as usual."
+msgstr ""
+"A következő mester kulcsok elavult titkosítási algoritmust használnak és "
+"javasolt frissíteni őket. A frissített mester kulcs továbbra is képes lesz "
+"dekódolni és titkosítani az adatait."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:182
+msgid "Re-encrypt data"
+msgstr "Adat újratitkosítása"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
+msgid ""
+"The default encryption method has been changed to a more secure one and it "
+"is recommended that you apply it to your data."
+msgstr ""
+"Az alapértelmezett titkosítási mód megváltozott egy sokkal biztonságosabbra "
+"és javasolt hogy alkalmazza azt adataira."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
+msgid ""
+"You may use the tool below to re-encrypt your data, for example if you know "
+"that some of your notes are encrypted with an obsolete encryption method."
+msgstr ""
+"Használhatja a lenti eszközt, hogy újra titkosítsa az adatait, ha például "
+"tudja, hogy néhány jegyzete elavult titkosítási módot használ."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
+#, javascript-format
+msgid ""
+"In order to do so, your entire data set will have to be encrypted and "
+"synchronised, so it is best to run it overnight.\n"
+"\n"
+"To start, please follow these instructions:\n"
+"\n"
+"1. Synchronise all your devices.\n"
+"2. Click \"%s\".\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your "
+"other devices, to avoid conflicts.\n"
+"4. Once sync is done on this device, sync all your other devices and let it "
+"run to completion.\n"
+"\n"
+"Important: you only need to run this ONCE on one device."
+msgstr ""
+"Ahhoz hogy megcsinálja, a teljes adat készletét titkosítani és "
+"szinkronizálni kell, emiatt a legjobb ha ez éjszaka történik.\n"
+"\n"
+"Az indításhoz kövesse a következő utasításokat:\n"
+"\n"
+"1. Szinkronizálja az összes eszközét.\n"
+"2. Kattintson a \"%s\"-ra.\n"
+"3. Futtassa befejezésig. Amíg fut, kerülje bármelyik jegyzete módosítását a "
+"többi eszközén, a konfliktusok elkerüléséhez.\n"
+"4. Amint a szinkronizálás kész ezen az eszközön, szinkronizálja az összes "
+"többi eszközét és futtassa befejezésig.\n"
+"\n"
+"Fontos: ezt egy eszközön csak EGYSZER kell futtatnia."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
+msgid "Re-encryption"
+msgstr "Újratitkosítás"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
+msgid "Ignore"
+msgstr "Mellőz"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
+#: packages/app-mobile/components/screens/encryption-config.js:215
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+"Titkosítás letiltása azt jelenti, az *összes* jegyzete és csatolmányai "
+"együtt, újra lesznek szinkronizálva és titkosítás nélkül utaznak a cél "
+"eszközre. Akarja folytatni?"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
+#: packages/app-mobile/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Titkosítás engedélyezése azt jelenti, az *összes* jegyzete és csatolmányai "
+"együtt, újra lesznek szinkronizálva és titkosítva utaznak a cél eszközre. "
+"Őrizze meg a jelszót, mivel biztonsági okok miatt ez az *egyetlen* mód az "
+"adatai dekódolására! A titkosítás engedélyezéséhez, kérem adja meg a jelszót "
+"lent."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-mobile/components/screens/encryption-config.js:258
+msgid "Disable encryption"
+msgstr "Titkosítás letiltása"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-mobile/components/screens/encryption-config.js:258
+msgid "Enable encryption"
+msgstr "Titkosítás engedélyezése"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
+msgid "Master Keys"
+msgstr "Mester Kulcsok"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
+msgid "Active"
+msgstr "Aktív"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:314
+msgid "Source"
+msgstr "Forrás"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
+msgid "Password"
+msgstr "Jelszó"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:334
+msgid "Password OK"
+msgstr "Jelszó OK"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"Megjegyzés: A titkosításhoz, csak egy mester kulcs lesz felhasználva "
+"(amelyik \"aktív\"-ként van jelölve). Elvileg bármelyik kulcsa "
+"felhasználható dekódolásra, függően attól, hogy jegyzetei vagy "
+"jegyzetfüzetei hogyan voltak eredetileg titkosítva."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
+#: packages/app-mobile/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr "Hiányzó Mester Kulcsok"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
+#: packages/app-mobile/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
+#: packages/app-mobile/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
+#: packages/app-mobile/components/screens/encryption-config.js:279
+#: packages/app-mobile/components/screens/status.js:142
+msgid "Status"
+msgstr "Státusz"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
+msgid "Encryption is:"
+msgstr "Titkosítás:"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/app-cli/app/command-e2ee.js:110
+msgid "Enabled"
+msgstr "Engedélyezve"
+
+#: packages/app-desktop/gui/Root.js:97
+msgid "OneDrive Login"
+msgstr "OneDrive Login"
+
+#: packages/app-desktop/gui/Root.js:98
+msgid "Dropbox Login"
+msgstr "Dropbox Login"
+
+#: packages/app-desktop/gui/Root.js:101
+msgid "Note attachments"
+msgstr "Jegyzet csatolmányok"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:107
+msgid "This will open a new screen. Save your current changes?"
+msgstr "Ez új képernyőt nyit. Mentsem az aktuális változásokat?"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:173
+#: packages/app-mobile/components/screens/config.js:307
+msgid "Check synchronisation configuration"
+msgstr "Szinkronizációs beállítások ellenőrzése"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:178
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:181
+msgid "Checking..."
+msgstr "Ellenőrzés..."
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:187
+#: packages/lib/models/Resource.js:355
+msgid "Error"
+msgstr "Hiba"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:192
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+"A Joplin Nextcloud App vagy nincs telepítve vagy nincs beállítva. Kérem "
+"ellenőrizze a lenti teljes hibaüzenetet:"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:196
+msgid "Show Log"
+msgstr "Napló mutatása"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:202
+msgid "Joplin Nextcloud App status:"
+msgstr "Joplin Nextcloud App statusz:"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:208
+msgid "Check Status"
+msgstr "Státusz ellenőrzése"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:212
+msgid "Help"
+msgstr "Segítség"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:223
+msgid "Show Advanced Settings"
+msgstr "Speciális beállítások megjelenítése"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:412
+msgid "Path:"
+msgstr "Útvonal:"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:417
+msgid "Browse..."
+msgstr "Tallózás..."
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:419
+msgid "Arguments:"
+msgstr "Paraméterek:"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:467
+msgid "The application must be restarted for these changes to take effect."
+msgstr "Az alkalmazást újra kell indítani a változások érvényesítéséhez."
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
+msgid "Do it now"
+msgstr "Csináld meg most"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:479
+msgid "Later"
+msgstr "Később"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:532
+msgid "Restart now"
+msgstr "Újraindítás most"
+
+#: packages/app-desktop/gui/ConfigScreen/Sidebar.js:83
+#: packages/lib/models/Setting.js:1429
+msgid "Plugins"
+msgstr "Bővítméníek"
+
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
+msgid "Apply"
+msgstr "Alkalmaz"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
+#, javascript-format
+msgid "Delete plugin \"%s\"?"
+msgstr "\"%s\" bővítmény törlése?"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
+msgid "Browse all plugins"
+msgstr "Plugin-ok tallózása"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
+msgid "Install from file"
+msgstr "Telepítés fájlból"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
+msgid "You do not have any installed plugin."
+msgstr "Nincs telepített bővítmény."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
+msgid "Plugin tools"
+msgstr "Bővítmény eszközök"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
+msgid "Manage your plugins"
+msgstr "Pluginok kezelése"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
+msgid "No results"
+msgstr "Nincs eredmény"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+msgid "Search for plugins..."
+msgstr "Bővítmények keresése..."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
+msgid "Install"
+msgstr "Telepítés"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
+msgid "Installing..."
+msgstr "Telepítés..."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
+msgid "Installed"
+msgstr "Telepítve"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
+msgid "Update"
+msgstr "Frissítés"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
+msgid "Updating..."
+msgstr "Frissítés..."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
+msgid "Please upgrade Joplin to use this plugin"
+msgstr "Kérem frissítse a Joplin-t ezen bővítmény használatához"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
+#, javascript-format
+msgid "(%s)"
+msgstr "(%s)"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
+#, javascript-format
+msgid "Could not install plugin: %s"
+msgstr "Bővítmény nem telepíthető: %s"
+
+#: packages/app-desktop/gui/PromptDialog.min.js:249
+msgid "Clear"
+msgstr "Törlés"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:76
+msgid "Words"
+msgstr "Szavak"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:77
+msgid "Characters"
+msgstr "Karakterek"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:78
+msgid "Characters excluding spaces"
+msgstr "Karaktere szóköz kivételével"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:79
+msgid "Lines"
+msgstr "Sorok"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
+#: packages/lib/models/Setting.js:448 packages/lib/models/Setting.js:449
+#: packages/lib/models/Setting.js:450
+msgid "Editor"
+msgstr "Szerkesztő"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
+#: packages/lib/models/Setting.js:448 packages/lib/models/Setting.js:449
+#: packages/lib/models/Setting.js:451
+msgid "Viewer"
+msgstr "Megjelenítő"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
+#, javascript-format
+msgid "Read time: %s min"
+msgstr "Olvasási idő: %s perc"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
+msgid "Statistics"
+msgstr "Statisztika"
+
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
+#: packages/app-desktop/gui/ShareNoteDialog.js:175
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
+msgid "Close"
+msgstr "Bezár"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+msgid "Custom order"
+msgstr "Egyedi sorrend"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+msgid "View"
+msgstr "Nézet"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/lib/models/Setting.js:463
+msgid "Sort notes by"
+msgstr "Jegyzetek rendezése"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+"A jegyzetek kézi rendezéséhez, a rendezési sorrendet át kell állítani \"%s\"-"
+"ra, \"%s\" > \"%s\" a menüben"
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:414
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "Itt nincs jegyzet. Hozzon létre újat az \"Új jegyzet\"-re kattintva."
+
+#: packages/app-desktop/gui/NoteList/NoteList.js:414
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Jelenleg nincs jegyzetfüzete. Hozzon létre egyet kattintva az \"Új "
+"jegyzetfüzet\"-re."
+
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
+msgid "Note list"
+msgstr "Jegyzet lista"
+
+#: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
+msgid "Search in all the notes"
+msgstr "Keresés összes jegyzetben"
+
+#: packages/app-desktop/gui/ResourceScreen.js:32
+msgid "Title"
+msgstr "Cím"
+
+#: packages/app-desktop/gui/ResourceScreen.js:36
+msgid "Size"
+msgstr "Méret"
+
+#: packages/app-desktop/gui/ResourceScreen.js:40
+msgid "Action"
+msgstr ""
+
+#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
+msgid "Untitled"
+msgstr "Névtelen"
+
+#: packages/app-desktop/gui/ResourceScreen.js:95
+#, javascript-format
+msgid "Delete attachment \"%s\"?"
+msgstr "\"%s\" csatolmány törlése ?"
+
+#: packages/app-desktop/gui/ResourceScreen.js:141
+msgid ""
+"This is an advanced tool to show the attachments that are linked to your "
+"notes. Please be careful when deleting one of them as they cannot be "
+"restored afterwards."
+msgstr ""
+
+#: packages/app-desktop/gui/ResourceScreen.js:142
+msgid "Please wait..."
+msgstr "Kérem várjon..."
+
+#: packages/app-desktop/gui/ResourceScreen.js:144
+msgid "No resources!"
+msgstr "Nincs erőforrás!"
+
+#: packages/app-desktop/gui/ResourceScreen.js:146
+#, javascript-format
+msgid "Warning: not all resources shown for performance reasons (limit: %s)."
+msgstr ""
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:158
+msgid "Synchronising..."
+msgstr "Szinkronizálás..."
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:160
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Link létrehozása..."
+msgstr[1] "Linkek létrehozása..."
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:162
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "Hivatkozás a vágólapra másolva!"
+msgstr[1] "Hivatkozások a vágólapra másolva!"
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:165
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
+msgid "Share Notes"
+msgstr "Jegyzetek megosztása"
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:172
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "Megosztható hivatkozás másolása"
+msgstr[1] "Megosztható hivatkozások másolása"
+
+#: packages/app-desktop/commands/toggleExternalEditing.js:18
+msgid "Toggle external editing"
+msgstr "Külső szerkesztés váltása"
+
+#: packages/app-desktop/commands/toggleExternalEditing.js:37
+msgid "Stop"
+msgstr "Stop"
+
+#: packages/app-desktop/commands/copyDevCommand.js:18
+msgid "Copy dev mode command to clipboard"
+msgstr "Dev mód parancs másolása vágólapra"
+
+#: packages/app-desktop/commands/stopExternalEditing.js:18
+msgid "Stop external editing"
+msgstr "Külső szerkesztés leállítása"
+
+#: packages/app-desktop/commands/startExternalEditing.js:20
+msgid "Edit in external editor"
+msgstr "Szerkesztés külső szerkesztőben"
+
+#: packages/app-desktop/commands/startExternalEditing.js:32
+#: packages/app-cli/app/command-edit.js:82
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Hiba szerkesztőben a jegyzet megnyitáskor: %s"
+
+#: packages/app-desktop/commands/openProfileDirectory.js:18
+msgid "Open profile directory"
+msgstr "Adatmappa megnyitása"
+
+#: packages/app-desktop/app.js:355
+#, javascript-format
+msgid "Open %s"
+msgstr "Megnyitás %s"
+
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
+#: packages/app-mobile/components/screens/Note.js:504
+#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:25
+msgid "Yes"
+msgstr "Igen"
+
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
+#: packages/app-mobile/components/screens/Note.js:505
+#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:25
+msgid "No"
+msgstr "Nem"
+
+#: packages/app-mobile/components/SelectDateTimeDialog.js:78
+msgid "Clear alarm"
+msgstr "Riasztás törlése"
+
+#: packages/app-mobile/components/SelectDateTimeDialog.js:80
+msgid "Save alarm"
+msgstr "Riasztás mentése"
+
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+msgid "Open"
+msgstr "Megnyitás"
+
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
+#: packages/app-mobile/components/screens/Note.js:796
+msgid "Share"
+msgstr "Megosztás"
+
+#: packages/app-mobile/components/CameraView.js:158
+msgid "Permission to use camera"
+msgstr "Engedély a kamera használatához"
+
+#: packages/app-mobile/components/CameraView.js:159
+msgid "Your permission to use your camera is required."
+msgstr "A kamera használati engedélyre szükség van. "
+
+#: packages/app-mobile/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "Ezen jegyzetek törlése?"
+
+#: packages/app-mobile/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "Jegyzetfüzet: %s"
+
+#: packages/app-mobile/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Titkosított jegyzetfüzetek nem nevezhetőek át"
+
+#: packages/app-mobile/components/side-menu-content.js:312
+msgid "New Notebook"
+msgstr "Új Jegyzetfüzet"
+
+#: packages/app-mobile/components/side-menu-content.js:316
+msgid "Configuration"
+msgstr "Beállítások"
+
+#: packages/app-mobile/components/note-list.js:97
+msgid "You currently have no notebooks."
+msgstr "Önnek nincs egyetlen jegyzetfüzete sem."
+
+#: packages/app-mobile/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "Jegyzetfüzet létrehozása"
+
+#: packages/app-mobile/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+
+#: packages/app-mobile/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "A jegyzetfüzet nem menthető el: %s"
+
+#: packages/app-mobile/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Jegyzetfüzet szerkesztése"
+
+#: packages/app-mobile/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "Adja meg a jegyzetfüzet címét"
+
+#: packages/app-mobile/components/screens/onedrive-login.js:110
+msgid "Login with OneDrive"
+msgstr "Belép OneDrive-al"
+
+#: packages/app-mobile/components/screens/onedrive-login.js:121
+#: packages/app-mobile/components/screens/status.js:144
+msgid "Refresh"
+msgstr "Frissítés"
+
+#: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
+msgid "Sync Target Upgrade"
+msgstr "Szinkronizációs Eszköz Frissítése"
+
+#: packages/app-mobile/components/screens/notes.js:154
+#: packages/app-cli/app/command-rmbook.js:26
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"Jegyzetfüzet törlése? A füzetben található minden jegyzet és aljegyzetfüzet "
+"is törlődni fog."
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Új tag-ek:"
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr "Írjon be egy új tag-et vagy válasszon a listáról"
+
+#: packages/app-mobile/components/screens/dropbox-login.js:55
+msgid "Login with Dropbox"
+msgstr "Belép Dropbox-al"
+
+#: packages/app-mobile/components/screens/dropbox-login.js:66
+msgid "Enter code here"
+msgstr "A kódot írja ide"
+
+#: packages/app-mobile/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Mester Kulcs %s"
+
+#: packages/app-mobile/components/screens/encryption-config.js:120
+#: packages/app-mobile/components/screens/Note.js:724
+#, javascript-format
+msgid "Created: %s"
+msgstr "Létrehozva: %s"
+
+#: packages/app-mobile/components/screens/encryption-config.js:122
+#: packages/app-mobile/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "Jelszó:"
+
+#: packages/app-mobile/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "Jelszó nem lehet üres"
+
+#: packages/app-mobile/components/screens/encryption-config.js:139
+msgid "Confirm password cannot be empty"
+msgstr "Jelszó ismétlése nem lehet üres"
+
+#: packages/app-mobile/components/screens/encryption-config.js:140
+#: packages/app-cli/app/command-e2ee.js:85
+msgid "Passwords do not match!"
+msgstr "Jelszavak nem egyeznek!"
+
+#: packages/app-mobile/components/screens/encryption-config.js:163
+#: packages/app-cli/app/command-e2ee.js:79
+msgid "Confirm password:"
+msgstr "Jelszó ismétlése:"
+
+#: packages/app-mobile/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "Engedélyez"
+
+#: packages/app-mobile/components/screens/encryption-config.js:264
+#: packages/app-mobile/components/screens/config.js:316
+msgid "Encryption Config"
+msgstr "Titkosítás beállítás"
+
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/app-cli/app/command-e2ee.js:110
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Titkosítás: %s"
+
+#: packages/app-mobile/components/screens/config.js:50
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+#: packages/app-mobile/components/screens/config.js:50
+#: packages/app-mobile/components/screens/config.js:147
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+
+#: packages/app-mobile/components/screens/config.js:146
+msgid "Information"
+msgstr "Információ"
+
+#: packages/app-mobile/components/screens/config.js:436
+msgid "Tools"
+msgstr "Eszközök"
+
+#: packages/app-mobile/components/screens/config.js:438
+msgid "Sync Status"
+msgstr "Szinkronizációs státusz"
+
+#: packages/app-mobile/components/screens/config.js:439
+msgid "Log"
+msgstr "Napló"
+
+#: packages/app-mobile/components/screens/config.js:441
+msgid "Creating report..."
+msgstr "Jelentés készítése..."
+
+#: packages/app-mobile/components/screens/config.js:441
+msgid "Export Debug Report"
+msgstr "Debug jelentés exportálása"
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid "Fixing search index..."
+msgstr "Keresési index javítása..."
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid "Fix search index"
+msgstr "Keresési index javítása"
+
+#: packages/app-mobile/components/screens/config.js:443
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "Exporting profile..."
+msgstr "Profil exportálása..."
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "Export profile"
+msgstr "Profil exportálása"
+
+#: packages/app-mobile/components/screens/config.js:446
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr ""
+
+#: packages/app-mobile/components/screens/config.js:461
+msgid "More information"
+msgstr "Több információ"
+
+#: packages/app-mobile/components/screens/config.js:471
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+
+#: packages/app-mobile/components/screens/config.js:474
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- Tároló: engedélyezi a fájlok csatolását a jegyzetekhez és engedélyezi a "
+"fájlrendszer szinkronizációt."
+
+#: packages/app-mobile/components/screens/config.js:477
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "- Kamera: engedélyezze kép készítéséhez és csatolja azt a jegyzethez."
+
+#: packages/app-mobile/components/screens/config.js:480
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- Hely: engedélyezze, a geo-location hozzáadását a jegyzethez."
+
+#: packages/app-mobile/components/screens/config.js:509
+msgid "Joplin website"
+msgstr "Joplin weboldal"
+
+#: packages/app-mobile/components/screens/config.js:523
+msgid "Privacy Policy"
+msgstr "Adatvédelmi Irányelvek"
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "This note has been modified:"
+msgstr "Jegyzet módosult:"
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "Save changes"
+msgstr "Változások mentése"
+
+#: packages/app-mobile/components/screens/Note.js:98
+msgid "Discard changes"
+msgstr "Változások elvetése"
+
+#: packages/app-mobile/components/screens/Note.js:150
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Nincs ID %s azonosítójú elem"
+
+#: packages/app-mobile/components/screens/Note.js:168
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Ez a csatolmány nincs letöltve vagy nincs dekódolva még."
+
+#: packages/app-mobile/components/screens/Note.js:173
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+
+#: packages/app-mobile/components/screens/Note.js:178
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "Hivatkozások a \"%s\" protokollal nem támogatottak"
+
+#: packages/app-mobile/components/screens/Note.js:342
+msgid ""
+"In order to associate a geo-location with the note, the app needs your "
+"permission to access your location.\n"
+"\n"
+"You may turn off this option at any time in the Configuration screen."
+msgstr ""
+
+#: packages/app-mobile/components/screens/Note.js:343
+msgid "Permission needed"
+msgstr "Hozzáférés szükséges"
+
+#: packages/app-mobile/components/screens/Note.js:449
+#: packages/app-cli/app/command-rmnote.js:27
+msgid "Delete note?"
+msgstr "Jegyzet törlése?"
+
+#: packages/app-mobile/components/screens/Note.js:503
+#: packages/lib/shim-init-node.js:147
+#, javascript-format
+msgid ""
+"You are about to attach a large image (%dx%d pixels). Would you like to "
+"resize it down to %d pixels before attaching it?"
+msgstr ""
+
+#: packages/app-mobile/components/screens/Note.js:585
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Nem támogatott kép típus: %s"
+
+#: packages/app-mobile/components/screens/Note.js:725
+#, javascript-format
+msgid "Updated: %s"
+msgstr "Frissített: %s"
+
+#: packages/app-mobile/components/screens/Note.js:728
+msgid "View on map"
+msgstr "Mutasd a térképen"
+
+#: packages/app-mobile/components/screens/Note.js:735
+msgid "Go to source URL"
+msgstr "Ugrás forrás URL-re"
+
+#: packages/app-mobile/components/screens/Note.js:764
+msgid "Attach..."
+msgstr "Csatol..."
+
+#: packages/app-mobile/components/screens/Note.js:775
+msgid "Attach photo"
+msgstr "Fotó csatolása"
+
+#: packages/app-mobile/components/screens/Note.js:776
+msgid "Take photo"
+msgstr "Fotó készítése"
+
+#: packages/app-mobile/components/screens/Note.js:777
+msgid "Choose an option"
+msgstr "Válasszon egy opciót"
+
+#: packages/app-mobile/components/screens/Note.js:810
+msgid "Convert to note"
+msgstr "Átalakítás jegyzetté"
+
+#: packages/app-mobile/components/screens/Note.js:810
+msgid "Convert to todo"
+msgstr "Átalakítás todo-ra"
+
+#: packages/app-mobile/components/screens/Note.js:824
+msgid "Properties"
+msgstr "Tulajdonságok"
+
+#: packages/app-mobile/components/screens/Note.js:1008
+msgid "Add body"
+msgstr "Törzsszöveg hozzáadása"
+
+#: packages/app-mobile/components/screens/Note.js:1034
+msgid "Add title"
+msgstr "Cím hozzáadása"
+
+#: packages/app-mobile/components/screens/search.js:160
+msgid "Search"
+msgstr "Keresés"
+
+#: packages/server/dist/middleware/notificationHandler.js:26
+#, javascript-format
+msgid ""
+"The default admin password is insecure and has not been changed! [Change it "
+"now](%s)"
+msgstr ""
+
+#: packages/lib/onedrive-api-node-utils.js:46
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr "Minden potenciális port használva van - kérem jelentse a hibát itt: %s"
+
+#: packages/lib/onedrive-api-node-utils.js:86
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr "Az alkalmazás hitelesítve - már becsukhatja a böngésző ablakot. "
+
+#: packages/lib/onedrive-api-node-utils.js:88
+msgid "The application has been successfully authorised."
+msgstr "Az alkalmazás sikeresen hitelesítve!"
+
+#: packages/lib/onedrive-api-node-utils.js:116
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+
+#: packages/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
+msgstr "AWS S3"
+
+#: packages/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: packages/lib/SyncTargetJoplinServer.js:30
+msgid "Joplin Server"
+msgstr "Joplin Szerver"
+
+#: packages/lib/shim-init-node.js:212
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Hozzáférés sikertelen %s"
+
+#: packages/lib/models/Folder.js:34 packages/lib/models/Note.js:35
+msgid "title"
+msgstr "cím"
+
+#: packages/lib/models/Folder.js:35 packages/lib/models/Note.js:36
+msgid "updated date"
+msgstr "Frissítési dátum"
+
+#: packages/lib/models/Folder.js:102
+msgid "Conflicts"
+msgstr "Ütközés"
+
+#: packages/lib/models/Folder.js:393
+msgid "Cannot move notebook to this location"
+msgstr "Jegyzetfüzet nem mozgatható ide"
+
+#: packages/lib/models/Folder.js:445
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr "Jegyzetfüzet nem nevezhető \"%s\"-nak, az egy fenntartott cím."
+
+#: packages/lib/models/Setting.js:76
+msgid "yes"
+msgstr "igen"
+
+#: packages/lib/models/Setting.js:76 packages/lib/models/Setting.js:77
+#, javascript-format
+msgid "(wysiwyg: %s)"
+msgstr "(wysiwyg: %s)"
+
+#: packages/lib/models/Setting.js:77
+msgid "no"
+msgstr "nem"
+
+#: packages/lib/models/Setting.js:79
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Figyelem: ha megváltoztatja ezt a helyet, bizonyosodjon meg abban hogy "
+"átmásolta az új helyre az összes tartalmat mielőtt szinkronizál, különben "
+"minden fájlja el lesz távolítva! A részleteket elolvashatja a GYIK-ben: %s"
+
+#: packages/lib/models/Setting.js:85
+msgid "Light"
+msgstr "Világos"
+
+#: packages/lib/models/Setting.js:86
+msgid "Dark"
+msgstr "Sötét"
+
+#: packages/lib/models/Setting.js:87
+msgid "Dracula"
+msgstr "Dracula"
+
+#: packages/lib/models/Setting.js:88
+msgid "Solarised Light"
+msgstr "Solarised Light"
+
+#: packages/lib/models/Setting.js:89
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: packages/lib/models/Setting.js:90
+msgid "Nord"
+msgstr "Nord"
+
+#: packages/lib/models/Setting.js:91
+msgid "Aritim Dark"
+msgstr "Aritim sötét"
+
+#: packages/lib/models/Setting.js:92
+msgid "OLED Dark"
+msgstr "OLED Sötét"
+
+#: packages/lib/models/Setting.js:113
+msgid "Synchronisation target"
+msgstr "Szinkronizációs cél"
+
+#: packages/lib/models/Setting.js:115
+msgid ""
+"The target to synchronise to. Each sync target may have additional "
+"parameters which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+#: packages/lib/models/Setting.js:142
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Könyvtár amivel szinkronizálunk (abszolút útvonal)"
+
+#: packages/lib/models/Setting.js:153
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+#: packages/lib/models/Setting.js:164
+msgid "Nextcloud username"
+msgstr "Nextcloud felhasználó"
+
+#: packages/lib/models/Setting.js:174
+msgid "Nextcloud password"
+msgstr "Nextcloud jelszó"
+
+#: packages/lib/models/Setting.js:185
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+#: packages/lib/models/Setting.js:196
+msgid "WebDAV username"
+msgstr "WebDAV felhasználónév"
+
+#: packages/lib/models/Setting.js:206
+msgid "WebDAV password"
+msgstr "WebDAV jelszó"
+
+#: packages/lib/models/Setting.js:225
+msgid "AWS S3 bucket"
+msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.js:236
+msgid "AWS S3 URL"
+msgstr "AWS S3 URL"
+
+#: packages/lib/models/Setting.js:247
+msgid "AWS key"
+msgstr "AWS key"
+
+#: packages/lib/models/Setting.js:257
+msgid "AWS secret"
+msgstr "AWS secret"
+
+#: packages/lib/models/Setting.js:268
+msgid "Joplin Server URL"
+msgstr "Joplin Szerver URL"
+
+#: packages/lib/models/Setting.js:282
+msgid "Joplin Server Directory"
+msgstr "Joplin Szerver Könyvtár"
+
+#: packages/lib/models/Setting.js:292
+msgid "Joplin Server username"
+msgstr "Joplin Szerver felhasználó"
+
+#: packages/lib/models/Setting.js:302
+msgid "Joplin Server password"
+msgstr "Joplin Szerver jelszó"
+
+#: packages/lib/models/Setting.js:314
+msgid "Attachment download behaviour"
+msgstr "Csatolmányok letöltésének működése"
+
+#: packages/lib/models/Setting.js:315
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+#: packages/lib/models/Setting.js:318
+msgid "Always"
+msgstr "Mindig"
+
+#: packages/lib/models/Setting.js:319
+msgid "Manual"
+msgstr "Kézi"
+
+#: packages/lib/models/Setting.js:320
+msgid "Auto"
+msgstr "Auto"
+
+#: packages/lib/models/Setting.js:337
+msgid "Max concurrent connections"
+msgstr "Maximális konkurrens kapcsolat"
+
+#: packages/lib/models/Setting.js:350
+msgid "Language"
+msgstr "Nyelv"
+
+#: packages/lib/models/Setting.js:360
+msgid "Date format"
+msgstr "Dátumforma"
+
+#: packages/lib/models/Setting.js:379
+msgid "Time format"
+msgstr "Idő formátum"
+
+#: packages/lib/models/Setting.js:397
+msgid "Theme"
+msgstr "Téma"
+
+#: packages/lib/models/Setting.js:407
+msgid "Automatically switch theme to match system theme"
+msgstr "Automatikusan kapcsoljon olyan témára, ami egyezik a rendszer témával"
+
+#: packages/lib/models/Setting.js:418
+msgid "Preferred light theme"
+msgstr "Javasolt világos téma"
+
+#: packages/lib/models/Setting.js:431
+msgid "Preferred dark theme"
+msgstr "Javasolt sötét téma"
+
+#: packages/lib/models/Setting.js:440
+msgid "Show note counts"
+msgstr "Mutassa a jegyzet számot"
+
+#: packages/lib/models/Setting.js:448 packages/lib/models/Setting.js:450
+#: packages/lib/models/Setting.js:451
+msgid "Split View"
+msgstr "Nézet megosztása"
+
+#: packages/lib/models/Setting.js:448
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: packages/lib/models/Setting.js:449 packages/lib/models/Setting.js:450
+#: packages/lib/models/Setting.js:451
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: packages/lib/models/Setting.js:454
+msgid "Uncompleted to-dos on top"
+msgstr "Befejezetlen to-do-k felül"
+
+#: packages/lib/models/Setting.js:455
+msgid "Show completed to-dos"
+msgstr "Mutassa a befejezett to-do-kat"
+
+#: packages/lib/models/Setting.js:480
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "Auto-párosítása az idézőjeleknek, zárójeleknek, stb."
+
+#: packages/lib/models/Setting.js:482 packages/lib/models/Setting.js:500
+msgid "Reverse sort order"
+msgstr "Fordított sorrend"
+
+#: packages/lib/models/Setting.js:489
+msgid "Sort notebooks by"
+msgstr "Jegyzetfüzetek rendezése"
+
+#: packages/lib/models/Setting.js:501
+msgid "Save geo-location with notes"
+msgstr "Geo-lokáció mentése jegyzetekkel"
+
+#: packages/lib/models/Setting.js:523
+msgid "When creating a new to-do:"
+msgstr "Amikor egy új to-do-t hoz létre:"
+
+#: packages/lib/models/Setting.js:526 packages/lib/models/Setting.js:541
+msgid "Focus title"
+msgstr "Cím legyen a fókusz"
+
+#: packages/lib/models/Setting.js:527 packages/lib/models/Setting.js:542
+msgid "Focus body"
+msgstr "Szövegtörzs legyen a fókusz"
+
+#: packages/lib/models/Setting.js:538
+msgid "When creating a new note:"
+msgstr "Amikor egy új jegyzetet hoz létre:"
+
+#: packages/lib/models/Setting.js:569
+msgid "Enable soft breaks"
+msgstr "Lágy törések engedélyezése"
+
+#: packages/lib/models/Setting.js:570
+msgid "Enable typographer support"
+msgstr "Tipográfiai támogatás engedélyezése"
+
+#: packages/lib/models/Setting.js:571
+msgid "Enable Linkify"
+msgstr "Linkify engedélyezése"
+
+#: packages/lib/models/Setting.js:572
+msgid "Enable math expressions"
+msgstr "Képletek engedélyezése"
+
+#: packages/lib/models/Setting.js:573
+msgid "Enable Fountain syntax support"
+msgstr "Fountain szintakszis engedélyezése"
+
+#: packages/lib/models/Setting.js:574
+msgid "Enable Mermaid diagrams support"
+msgstr "Mermaid diagram támogatás engedélyezése"
+
+#: packages/lib/models/Setting.js:575
+msgid "Enable audio player"
+msgstr "Audio lejátszó engedélyezése"
+
+#: packages/lib/models/Setting.js:576
+msgid "Enable video player"
+msgstr "Video lejátszó engedélyezése"
+
+#: packages/lib/models/Setting.js:577
+msgid "Enable PDF viewer"
+msgstr "PDF megjelenítő engedélyezése"
+
+#: packages/lib/models/Setting.js:578
+msgid "Enable ==mark== syntax"
+msgstr "==mark== szintaxis engedélyezése"
+
+#: packages/lib/models/Setting.js:579
+msgid "Enable footnotes"
+msgstr "Lábjegyzetek engedélyezése"
+
+#: packages/lib/models/Setting.js:580
+msgid "Enable table of contents extension"
+msgstr "Tartalomjegyzék bővítmény engedélyezése"
+
+#: packages/lib/models/Setting.js:581
+msgid "Enable ~sub~ syntax"
+msgstr "~sub~ szintaxis engedélyezése"
+
+#: packages/lib/models/Setting.js:582
+msgid "Enable ^sup^ syntax"
+msgstr "^sup^ szintakszis engedélyezése"
+
+#: packages/lib/models/Setting.js:583
+msgid "Enable deflist syntax"
+msgstr "Deflist szintakszis engedélyezése"
+
+#: packages/lib/models/Setting.js:584
+msgid "Enable abbreviation syntax"
+msgstr "Rövidítés szintakszis engedélyezése"
+
+#: packages/lib/models/Setting.js:585
+msgid "Enable markdown emoji"
+msgstr "Markdown emoji engedélyezése"
+
+#: packages/lib/models/Setting.js:586
+msgid "Enable ++insert++ syntax"
+msgstr "++insert++ szintaxis engedélyezése"
+
+#: packages/lib/models/Setting.js:587
+msgid "Enable multimarkdown table extension"
+msgstr "Multimarkdown táblázat bővítmény engedélyezése"
+
+#: packages/lib/models/Setting.js:598
+msgid "Show tray icon"
+msgstr "Mutassa a tálca ikon-t"
+
+#: packages/lib/models/Setting.js:600
+msgid "Note: Does not work in all desktop environments."
+msgstr "Megjegyzés: Nem működik minden asztali környezetben."
+
+#: packages/lib/models/Setting.js:600
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+
+#: packages/lib/models/Setting.js:603
+msgid "Start application minimised in the tray icon"
+msgstr "Alkalmazás indításakor kicsinyítse azt a tálcára"
+
+#: packages/lib/models/Setting.js:618
+msgid "Editor font size"
+msgstr "Szerkesztő betű méret"
+
+#: packages/lib/models/Setting.js:625
+msgid "Editor font"
+msgstr "Szerkesztő betűkészlet"
+
+#: packages/lib/models/Setting.js:632 packages/lib/models/Setting.js:639
+#: packages/lib/models/Setting.js:744
+msgid "Default"
+msgstr "Alapérték"
+
+#: packages/lib/models/Setting.js:649
+msgid "Editor font family"
+msgstr "Szerkesztő betű család"
+
+#: packages/lib/models/Setting.js:650
+msgid ""
+"This should be a *monospace* font or some elements will render incorrectly. "
+"If the font is incorrect or empty, it will default to a generic monospace "
+"font."
+msgstr ""
+
+#: packages/lib/models/Setting.js:671
+msgid "Custom stylesheet for rendered Markdown"
+msgstr "Egyedi stíluslap Markdown megjelenítéshez"
+
+#: packages/lib/models/Setting.js:687
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Egyedi stíluslap Joplin-széles app stílushoz"
+
+#: packages/lib/models/Setting.js:692
+msgid "Automatically update the application"
+msgstr "Automatikusan frissítse az alkalmazást"
+
+#: packages/lib/models/Setting.js:693
+msgid "Get pre-releases when checking for updates"
+msgstr "Előzetes kiadások beszerzése amikor frissítéseket keresek"
+
+#: packages/lib/models/Setting.js:693
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr "Nézze meg a előzetes kiadás oldalát a részletekért: %s"
+
+#: packages/lib/models/Setting.js:701
+msgid "Synchronisation interval"
+msgstr "Szinkronizációs időköz"
+
+#: packages/lib/models/Setting.js:705 packages/lib/models/Setting.js:706
+#: packages/lib/models/Setting.js:707
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d percenként"
+
+#: packages/lib/models/Setting.js:708
+#, javascript-format
+msgid "%d hour"
+msgstr "%d óra"
+
+#: packages/lib/models/Setting.js:709 packages/lib/models/Setting.js:710
+#, javascript-format
+msgid "%d hours"
+msgstr "%d óranként"
+
+#: packages/lib/models/Setting.js:717
+msgid "Text editor command"
+msgstr "Szövegszerkesztő parancs"
+
+#: packages/lib/models/Setting.js:717
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+
+#: packages/lib/models/Setting.js:718
+msgid "Page size for PDF export"
+msgstr "Oldal méret PDF export-hoz"
+
+#: packages/lib/models/Setting.js:720
+msgid "A4"
+msgstr "A4"
+
+#: packages/lib/models/Setting.js:721
+msgid "Letter"
+msgstr "US Levél"
+
+#: packages/lib/models/Setting.js:722
+msgid "A3"
+msgstr "A3"
+
+#: packages/lib/models/Setting.js:723
+msgid "A5"
+msgstr "A5"
+
+#: packages/lib/models/Setting.js:724
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: packages/lib/models/Setting.js:725
+msgid "Legal"
+msgstr "US Legal"
+
+#: packages/lib/models/Setting.js:728
+msgid "Page orientation for PDF export"
+msgstr "Oldal tájolás PDF export-hoz"
+
+#: packages/lib/models/Setting.js:730
+msgid "Portrait"
+msgstr "Álló"
+
+#: packages/lib/models/Setting.js:731
+msgid "Landscape"
+msgstr "Fekvő"
+
+#: packages/lib/models/Setting.js:741
+msgid "Keyboard Mode"
+msgstr "Billentyűzet mód"
+
+#: packages/lib/models/Setting.js:745
+msgid "Emacs"
+msgstr "Emacs"
+
+#: packages/lib/models/Setting.js:746
+msgid "Vim"
+msgstr "Vim"
+
+#: packages/lib/models/Setting.js:768
+msgid "Custom TLS certificates"
+msgstr "Egyedi TLS bizonyítvány"
+
+#: packages/lib/models/Setting.js:769
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+"Vesszóvel elválasztott listája azoknak a mappáknak ahonnan betölthetjük a "
+"bizonyítványokat vagy egyedi elérési útvonal cert fájlok betöltéséhez. "
+"Például: /my/cert_dir, /other/custom.pem.  Figyelem, amennyiben "
+"megváltoztatja a TLS beállításokat, el kell mentenie a változásokat mielőtt "
+"kattint a \"Szinkronizációs beállítások ellenőrzése\"-re. \n"
+"Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+
+#: packages/lib/models/Setting.js:781
+msgid "Ignore TLS certificate errors"
+msgstr "TLS bizonyítvány hibák figyelmen kívül hagyása"
+
+#: packages/lib/models/Setting.js:789
+msgid "Fail-safe"
+msgstr "Hibatűrő"
+
+#: packages/lib/models/Setting.js:790
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+"Hibatűrő: Ne törölje a helyi adatot, ha a távoli adat üres (gyakran rossz "
+"beállítás vagy hiba eredménye)"
+
+#: packages/lib/models/Setting.js:793
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
+#: packages/lib/models/Setting.js:798
+msgid "Enable note history"
+msgstr "Jegyzet előélet engedélyezése"
+
+#: packages/lib/models/Setting.js:808
+msgid "days"
+msgstr "napok"
+
+#: packages/lib/models/Setting.js:808
+#, javascript-format
+msgid "%d days"
+msgstr "%d nap"
+
+#: packages/lib/models/Setting.js:810
+msgid "Keep note history for"
+msgstr "Jegyzet előélet megtartása"
+
+#: packages/lib/models/Setting.js:835
+msgid "Notebook list growth factor"
+msgstr "Jegyzetfüzet lista növekedési faktor"
+
+#: packages/lib/models/Setting.js:836 packages/lib/models/Setting.js:848
+#: packages/lib/models/Setting.js:860
+msgid ""
+"The factor property sets how the item will grow or shrink to fit the "
+"available space in its container with respect to the other items. Thus an "
+"item with a factor of 2 will take twice as much space as an item with a "
+"factor of 1.Restart app to see changes."
+msgstr ""
+
+#: packages/lib/models/Setting.js:847
+msgid "Note list growth factor"
+msgstr "Jegyzet lista növekedési faktor"
+
+#: packages/lib/models/Setting.js:859
+msgid "Note area growth factor"
+msgstr "Jegyzet terület növekedési faktor"
+
+#: packages/lib/models/Setting.js:1031
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Érvénytelen opció érték: \"%s\". Lehetséges értékek: %s."
+
+#: packages/lib/models/Setting.js:1419
+msgid "General"
+msgstr "Általános"
+
+#: packages/lib/models/Setting.js:1421
+msgid "Synchronisation"
+msgstr "Szinkronizáció"
+
+#: packages/lib/models/Setting.js:1423
+msgid "Appearance"
+msgstr "Megjelenés"
+
+#: packages/lib/models/Setting.js:1425
+msgid "Note"
+msgstr "Megjegyzés"
+
+#: packages/lib/models/Setting.js:1427
+#: packages/lib/services/interop/InteropService.js:49
+#: packages/lib/services/interop/InteropService.js:59
+msgid "Markdown"
+msgstr "Markdown"
+
+#: packages/lib/models/Setting.js:1431
+msgid "Application"
+msgstr "Alkalmazás"
+
+#: packages/lib/models/Setting.js:1435
+msgid "Encryption"
+msgstr "Titkosítás"
+
+#: packages/lib/models/Setting.js:1437
+msgid "Web Clipper"
+msgstr "Web Vágó"
+
+#: packages/lib/models/Setting.js:1439
+msgid "Keyboard Shortcuts"
+msgstr "Gyorsbillentyűk"
+
+#: packages/lib/models/Setting.js:1446
+msgid ""
+"These plugins enhance the Markdown renderer with additional features. Please "
+"note that, while these features might be useful, they are not standard "
+"Markdown and thus most of them will only work in Joplin. Additionally, some "
+"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
+"uses one of these plugins in that editor, you will lose the plugin "
+"formatting. It is indicated below which plugins are compatible or not with "
+"the WYSIWYG editor."
+msgstr ""
+
+#: packages/lib/models/Setting.js:1448
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Jegyzetek és beállítások tárolása itt: %s"
+
+#: packages/lib/models/Resource.js:349
+msgid "Not downloaded"
+msgstr "Nincs letöltve"
+
+#: packages/lib/models/Resource.js:351
+msgid "Downloading"
+msgstr "Letöltés"
+
+#: packages/lib/models/Resource.js:353
+msgid "Downloaded"
+msgstr "Letöltve"
+
+#: packages/lib/models/Resource.js:400
+#, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "Csatolmány ütközés: \"%s\""
+
+#: packages/lib/models/Resource.js:401
+#, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr ""
+"Van egy [conflict](%s) a lenti csatolmányon.\n"
+"\n"
+"%s"
+
+#: packages/lib/models/Tag.js:223
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
+
+#: packages/lib/models/Note.js:37
+msgid "created date"
+msgstr "létrehozás dátuma"
+
+#: packages/lib/models/Note.js:38
+msgid "custom order"
+msgstr "egyedi sorrend"
+
+#: packages/lib/models/Note.js:116
+msgid "This note does not have geolocation information."
+msgstr "Ennek a jegyzetnek nincs geolokációs információja."
+
+#: packages/lib/models/Note.js:523
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Jegyzet nem másolható a \"%s\" jegyzetfüzetbe"
+
+#: packages/lib/models/Note.js:535
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Jegyzet nem mozgatható a \"%s\" jegyzetfüzetbe"
+
+#: packages/lib/models/BaseItem.js:707
+msgid "Encrypted"
+msgstr "Titkosítva"
+
+#: packages/lib/models/BaseItem.js:768
+msgid "Encrypted items cannot be modified"
+msgstr "Titkosított elemek nem módosíthatóak"
+
+#: packages/lib/BaseApplication.js:149 packages/lib/BaseApplication.js:161
+#: packages/lib/BaseApplication.js:193
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Használat: %s"
+
+#: packages/lib/BaseApplication.js:228
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Ismeretlen jelző %s"
+
+#: packages/lib/SyncTargetOneDrive.js:32
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: packages/lib/components/shared/config-shared.js:46
+msgid "Checking... Please wait."
+msgstr "Ellenőrzés... Kérem várjon."
+
+#: packages/lib/components/shared/config-shared.js:48
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Siker! Szinkronizációs beállítás jónak tűnik."
+
+#: packages/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Hiba. Kérem ellenőrizze az URL-t, a felhasználónevet, jelszót, stb. hogy "
+"megfelelőek-e és a szinkronizációs cél elérhető. A hiba a következő:"
+
+#: packages/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "Az alkalmazás hitelesítve!"
+
+#: packages/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Alkalmazás nem hitelesíthető:\n"
+"\n"
+"%s\n"
+"\n"
+"Kérem próbálja újra."
+
+#: packages/lib/components/shared/encryption-config-shared.js:33
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr ""
+"Kérem erősítse meg, hogy szeretné újra titkosítani a teljes adatbázisát."
+
+#: packages/lib/components/shared/encryption-config-shared.js:39
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr "Az adatai újra lesznek titkosítva és utána szinkronizálva."
+
+#: packages/lib/components/shared/encryption-config-shared.js:49
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+
+#: packages/lib/components/shared/encryption-config-shared.js:58
+msgid "The master key has been upgraded successfully!"
+msgstr "A mester kulcs frissítése sikeresen megtörtént!"
+
+#: packages/lib/components/shared/encryption-config-shared.js:60
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr "Mesterkulcs nem frissíthető: %s"
+
+#: packages/lib/components/shared/encryption-config-shared.js:116
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Dekódolt elemek: %s / %s"
+
+#: packages/lib/onedrive-api.js:392
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Token nem frissíthető: hitelesítési adat hiányzik. A szinkronizáció ismételt "
+"indítása megoldhatja a problémát."
+
+#: packages/lib/Synchronizer.js:111
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Created local items: %d."
+
+#: packages/lib/Synchronizer.js:113
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Frissített helyi elemek: %d."
+
+#: packages/lib/Synchronizer.js:115
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Helyben létrehozott elemek: %d."
+
+#: packages/lib/Synchronizer.js:117
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Frissített távoli elemek: %d."
+
+#: packages/lib/Synchronizer.js:119
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Törölt helyi elemek: %d."
+
+#: packages/lib/Synchronizer.js:121
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Törölt távoli elemek: %d."
+
+#: packages/lib/Synchronizer.js:123
+#, fuzzy, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Fetched elemek: %d/%d."
+
+#: packages/lib/Synchronizer.js:125
+msgid "Cancelling..."
+msgstr "Megszakítás..."
+
+#: packages/lib/Synchronizer.js:127
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Befejeződött: %s"
+
+#: packages/lib/Synchronizer.js:129
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Utolsó hiba: %s"
+
+#: packages/lib/Synchronizer.js:236
+msgid "Idle"
+msgstr "Tétlen"
+
+#: packages/lib/Synchronizer.js:238
+msgid "In progress"
+msgstr "Folyamatban"
+
+#: packages/lib/Synchronizer.js:823
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+"Ismeretlen elem típus lett letöltve - kérem frissítse a Joplin-t a "
+"legfrissebb verzióra"
+
+#: packages/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+"Nem lehet kapcsolódni a Joplin Nextcloud applikációhoz. Kérem ellenőrizze a "
+"beállításokat a Szinkronizáció beállításoknál. Ez volt a tejles hiba:\n"
+"\n"
+"%s"
+
+#: packages/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: packages/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: packages/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "Fájl-rendszer"
+
+#: packages/lib/commands/historyForward.js:17
+msgid "Forward"
+msgstr "Tovább"
+
+#: packages/lib/versionInfo.js:10
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Revízió: %s (%s)"
+
+#: packages/lib/versionInfo.js:20
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: packages/lib/versionInfo.js:22
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "Kliens ID: %s"
+
+#: packages/lib/versionInfo.js:23
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "Szinkronizáció verzió: %s"
+
+#: packages/lib/versionInfo.js:24
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "Profil verzió: %s"
+
+#: packages/lib/versionInfo.js:25
+#, fuzzy, javascript-format
+msgid "Keychain Supported: %s"
+msgstr "Támogatott kulcstartók: %s"
+
+#: packages/lib/services/RevisionService.js:217
+msgid "Restored Notes"
+msgstr "Visszaállított jegyzetek"
+
+#: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
+msgid "There is no data to export."
+msgstr "Nincs exportálható adat."
+
+#: packages/lib/services/interop/types.js:23
+msgid "File"
+msgstr "Fájl"
+
+#: packages/lib/services/interop/types.js:23
+msgid "Directory"
+msgstr "Könyvtár"
+
+#: packages/lib/services/interop/InteropService_Importer_Md.js:41
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr ""
+"Kérem adja meg a jegyzetfüzet nevét, ahova a jegyzetek kell importálni."
+
+#: packages/lib/services/interop/InteropService.js:48
+#: packages/lib/services/interop/InteropService.js:57
+msgid "Joplin Export File"
+msgstr "Joplin Export fájl"
+
+#: packages/lib/services/interop/InteropService.js:50
+#: packages/lib/services/interop/InteropService.js:58
+msgid "Joplin Export Directory"
+msgstr "Joplin Export Könyvtár"
+
+#: packages/lib/services/interop/InteropService.js:51
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote fájl export (Markdown-ként)"
+
+#: packages/lib/services/interop/InteropService.js:52
+msgid "Evernote Export File (as HTML)"
+msgstr "Evernote fájl export (HTML-ként)"
+
+#: packages/lib/services/interop/InteropService.js:60
+msgid "HTML File"
+msgstr "HTML fájl"
+
+#: packages/lib/services/interop/InteropService.js:61
+msgid "HTML Directory"
+msgstr "HTML Könyvtár"
+
+#: packages/lib/services/interop/InteropService.js:127
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
+msgstr ""
+"Nem tölthető be a \"%s\" modul, a \"%s\" formátumhoz és a \"%s\" kimenethez."
+
+#: packages/lib/services/interop/InteropService.js:150
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
+msgstr "Nem tölthető be a \"%s\" modul a \"%s\" formátumhoz és \"%s\" célhoz."
+
+#: packages/lib/services/interop/InteropService.js:194
+#: packages/lib/services/interop/InteropService.js:206
+#: packages/app-cli/app/command-cp.js:24 packages/app-cli/app/command-cp.js:27
+#: packages/app-cli/app/command-import.js:34
+#: packages/app-cli/app/command-mv.js:22 packages/app-cli/app/command-mv.js:25
+#: packages/app-cli/app/command-use.js:21
+#: packages/app-cli/app/command-ren.js:23
+#: packages/app-cli/app/command-rmbook.js:25
+#: packages/app-cli/app/command-cat.js:25
+#: packages/app-cli/app/command-rmnote.js:25
+#: packages/app-cli/app/command-attach.js:21
+#: packages/app-cli/app/command-export.js:36
+#: packages/app-cli/app/command-export.js:40
+#: packages/app-cli/app/command-geoloc.js:20
+#: packages/app-cli/app/command-search.js:27
+#: packages/app-cli/app/command-set.js:32
+#: packages/app-cli/app/command-help.js:66
+#: packages/app-cli/app/command-todo.js:21
+#: packages/app-cli/app/command-tag.js:33
+#: packages/app-cli/app/command-tag.js:36
+#: packages/app-cli/app/command-tag.js:42
+#: packages/app-cli/app/command-tag.js:43
+#: packages/app-cli/app/command-tag.js:81
+#: packages/app-cli/app/command-tag.js:87
+#: packages/app-cli/app/command-done.js:20
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Nem található \"%s\"."
+
+#: packages/lib/services/interop/InteropService.js:199
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Kérem adja meg az importálási formátumot %s-hoz"
+
+#: packages/lib/services/KeymapService.js:273
+msgid "command"
+msgstr "parancs"
+
+#: packages/lib/services/KeymapService.js:273
+#: packages/lib/services/KeymapService.js:278
+#, javascript-format
+msgid "\"%s\" is missing the required \"%s\" property."
+msgstr "\"%s\" hiányzik a szükséges \"%s\" tulajdonság."
+
+#: packages/lib/services/KeymapService.js:278
+#: packages/lib/services/KeymapService.js:285
+msgid "accelerator"
+msgstr "gyorsbillentyű"
+
+#: packages/lib/services/KeymapService.js:285
+#, javascript-format
+msgid "Invalid %s: %s."
+msgstr "Érvénytelen %s: %s."
+
+#: packages/lib/services/KeymapService.js:303
+#, javascript-format
+msgid ""
+"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
+"unexpected behaviour."
+msgstr ""
+"Gyorsbillentyű \"%s\" használva van a \"%s\" és \"%s\" parancsoknál. Ez "
+"váratlan viselkedéshez vezethet."
+
+#: packages/lib/services/KeymapService.js:328
+#, javascript-format
+msgid "Accelerator \"%s\" is not valid."
+msgstr "Gyorsbillentyű \"%s\" nem érvényes."
+
+#: packages/lib/services/ReportService.js:123
+msgid "Items that cannot be synchronised"
+msgstr "Elemeket nem lehet szinkronizálni"
+
+#: packages/lib/services/ReportService.js:124
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+
+#: packages/lib/services/ReportService.js:129
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) nem tölthető fel: %s"
+
+#: packages/lib/services/ReportService.js:132
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Elem \"%s\" nem tölthető le: %s"
+
+#: packages/lib/services/ReportService.js:139
+msgid "Items that cannot be decrypted"
+msgstr "Elemeket nem lehet dekódolni"
+
+#: packages/lib/services/ReportService.js:140
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+
+#: packages/lib/services/ReportService.js:145
+#: packages/app-cli/app/cli-utils.js:140
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: packages/lib/services/ReportService.js:171
+msgid "Attachments"
+msgstr "Csatolmányok"
+
+#: packages/lib/services/ReportService.js:178
+msgid "Downloaded and decrypted"
+msgstr "Letöltve és visszafejtve"
+
+#: packages/lib/services/ReportService.js:178
+#: packages/lib/services/ReportService.js:179
+#: packages/lib/services/ReportService.js:180
+#: packages/lib/services/ReportService.js:184
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: packages/lib/services/ReportService.js:179
+msgid "Downloaded and encrypted"
+msgstr "Letöltve és titkosítva"
+
+#: packages/lib/services/ReportService.js:180
+msgid "Created locally"
+msgstr "Helyben létrehozva"
+
+#: packages/lib/services/ReportService.js:191
+msgid "Attachments that could not be downloaded"
+msgstr "Csatolmányokat nem lehet letölteni"
+
+#: packages/lib/services/ReportService.js:195
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: packages/lib/services/ReportService.js:206
+msgid "Sync status (synced items / total items)"
+msgstr "Szinkronizációs státusz (mozgatott elemek / minden elem)"
+
+#: packages/lib/services/ReportService.js:210
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: packages/lib/services/ReportService.js:212
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Összes: %d/%d"
+
+#: packages/lib/services/ReportService.js:214
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Ütközik: %d"
+
+#: packages/lib/services/ReportService.js:215
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Törölni: %d"
+
+#: packages/lib/services/ReportService.js:217
+msgid "Folders"
+msgstr "Mappák"
+
+#: packages/lib/services/ReportService.js:223
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d jegyzetek"
+
+#: packages/lib/services/ReportService.js:228
+msgid "Coming alarms"
+msgstr "Riasztás beállítása"
+
+#: packages/lib/services/ReportService.js:232
+#, javascript-format
+msgid "On %s: %s"
+msgstr "%s-on: %s"
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:107
+msgid "No suggestions"
+msgstr "Nincs javaslat"
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:114
+msgid "Add to dictionary"
+msgstr "Hozzáadás szótárhoz"
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:153
+msgid "Use spell checker"
+msgstr "Használja a helyesírás-ellenőrzőt"
+
+#: packages/lib/services/spellChecker/SpellCheckerService.js:173
+msgid "Change language"
+msgstr "Nyelv váltása"
+
+#: packages/app-cli/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+
+#: packages/app-cli/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Mutasson minden jegyzetet az aktuális jegyzetfüzetben. Használja az `ls /`-t "
+"a jegyzetfüzetek listájának megjelenítéséhez."
+
+#: packages/app-cli/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "Mutassa csak az első  <num> jegyzetet."
+
+#: packages/app-cli/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "Elem rendezése <field> szerint (pl. title, updated_time, created_time)"
+
+#: packages/app-cli/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "Rendezés sorrendjének megfordítása."
+
+#: packages/app-cli/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Csak bizonyos típusú elemeket mutasson. Az `n` a jegyetekhez, a `t` a to-do-"
+"khoz vagy `nt` mindkettőhöz (pl. `-tt` mutatja a to-do-kat, míg a `-ttd` "
+"mutatja a jegyzeteket és to-do-kat)."
+
+#: packages/app-cli/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "\"szöveg\" vagy \"json\""
+
+#: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+
+#: packages/app-cli/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "Kérem, először válasszon egy jegyzetfüzetet."
+
+#: packages/app-cli/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Adat importálása Joplin-ba."
+
+#: packages/app-cli/app/command-import.js:25
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Forrás formátum: %s"
+
+#: packages/app-cli/app/command-import.js:26
+msgid "Do not ask for confirmation."
+msgstr "Ne kérjen jóváhagyást."
+
+#: packages/app-cli/app/command-import.js:27
+#, javascript-format
+msgid "Output format: %s"
+msgstr "Kimeneti formátum: %s"
+
+#: packages/app-cli/app/command-import.js:65
+msgid "Importing notes..."
+msgstr "Jegyzetek importálása..."
+
+#: packages/app-cli/app/help-utils.js:56
+msgid "Enum"
+msgstr "Felsorolás"
+
+#: packages/app-cli/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Típus: %s."
+
+#: packages/app-cli/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Lehetséges értékek: %s."
+
+#: packages/app-cli/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Alapérték: %s"
+
+#: packages/app-cli/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Lehetséges kulcsok/értékek:"
+
+#: packages/app-cli/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#: packages/app-cli/app/command-server.js:38
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Szerver már fut a %d porton"
+
+#: packages/app-cli/app/command-server.js:44
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Szerver fut a %d porton"
+
+#: packages/app-cli/app/command-server.js:44
+#: packages/app-cli/app/command-server.js:47
+msgid "Server is not running."
+msgstr "Szerver nem működik."
+
+#: packages/app-cli/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"E2EE beállítások kezelése. Parancsok:  `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` és `target-status`."
+
+#: packages/app-cli/app/command-e2ee.js:36
+#: packages/app-cli/app/command-e2ee.js:74
+msgid "Enter master password:"
+msgstr "Adja meg a mester jelszót:"
+
+#: packages/app-cli/app/command-e2ee.js:38
+#: packages/app-cli/app/command-e2ee.js:76
+#: packages/app-cli/app/command-e2ee.js:81
+msgid "Operation cancelled"
+msgstr "Művelet megszakítva"
+
+#: packages/app-cli/app/command-e2ee.js:47
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+
+#: packages/app-cli/app/command-e2ee.js:55
+#, javascript-format
+msgid "Decrypted items: %d"
+msgstr "Dekódolt elemek: %d"
+
+#: packages/app-cli/app/command-e2ee.js:56
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+"Kihagyott elemek: %d (használja a --retry-failed-items hogy megismételje a "
+"dekódolást)"
+
+#: packages/app-cli/app/command-e2ee.js:70
+msgid "Completed decryption."
+msgstr "Visszafejtés befejeződött."
+
+#: packages/app-cli/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "Új jegyzetfüzet létrehozása."
+
+#: packages/app-cli/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Egyező jegyzetek <note> mozgása [notebook]-ba."
+
+#: packages/app-cli/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+
+#: packages/app-cli/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "Megjeleníti a beállítatlan és rejtett config változókat."
+
+#: packages/app-cli/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: packages/app-cli/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: packages/app-cli/app/command-use.js:12
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Átváltás a [notebook]-ra - minden további művelet, ezen jegyzetfüzetben fog "
+"megtörténni."
+
+#: packages/app-cli/app/command-sync.js:29
+msgid "Synchronises with remote storage."
+msgstr "Szinkronizáció távoli tárolóra."
+
+#: packages/app-cli/app/command-sync.js:34
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+"Szinkronizáció a megadott helyre (alapérték a sync.target beállítás értéke)"
+
+#: packages/app-cli/app/command-sync.js:35
+msgid "Upgrade the sync target to the latest version."
+msgstr "Frissítse a szinkronizációs célt a legfrissebb verzióra."
+
+#: packages/app-cli/app/command-sync.js:105
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+"Nincs hitelesítve a %s-val. Kérem adja meg a hiányzó hitelesítő adatokat."
+
+#: packages/app-cli/app/command-sync.js:128
+msgid "Synchronisation is already in progress."
+msgstr "Szinkronizáció már folyamatban van."
+
+#: packages/app-cli/app/command-sync.js:133
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+
+#: packages/app-cli/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Szinkronizációs cél: %s (%s)"
+
+#: packages/app-cli/app/command-sync.js:177
+msgid "Cannot initialise synchroniser."
+msgstr "Szinkronizáló inicializálása sikertelen."
+
+#: packages/app-cli/app/command-sync.js:207
+msgid "Starting synchronisation..."
+msgstr "Szinkronizáció elkezdése..."
+
+#: packages/app-cli/app/command-sync.js:230
+msgid "Downloading resources..."
+msgstr "Erőforrások letöltése..."
+
+#: packages/app-cli/app/command-sync.js:242
+#, javascript-format
+msgid "Sync target must be upgraded! Run `%s` to proceed."
+msgstr ""
+"Szinkronizációs eszközt frissíteni kell! Futtassa a `%s`-t a folytatáshoz."
+
+#: packages/app-cli/app/command-sync.js:260
+msgid "Cancelling... Please wait."
+msgstr "Megszakítás... Kérem várjon."
+
+#: packages/app-cli/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Átnevezi az adott  <item> (jegyzet vagy jegyzetfüzet) erre <name>."
+
+#: packages/app-cli/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Adott jegyzetfüzet törlése."
+
+#: packages/app-cli/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Adott jegyzetfüzet törlése, megerősítés kérése nélkül."
+
+#: packages/app-cli/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Új to-do létrehozása."
+
+#: packages/app-cli/app/command-mktodo.js:16
+#: packages/app-cli/app/command-mknote.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Jegyzetek csak jegyezetfüzetben hozhatóak létre."
+
+#: packages/app-cli/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "Megjelenít egy adott jegyzetet."
+
+#: packages/app-cli/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "Minden információt mutasson meg a jegyzetről."
+
+#: packages/app-cli/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Jegyzet szerkesztése."
+
+#: packages/app-cli/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Nincs szövegszerkesztő megadva. Kérem állítson be egyet a `config editor "
+"<editor-path>`-al"
+
+#: packages/app-cli/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Nincs aktív jegyzetfüzet."
+
+#: packages/app-cli/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Jegyzet nem létezik: \"%s\". Létrehozzam?"
+
+#: packages/app-cli/app/command-edit.js:75
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+"Jegyzet szerkesztés elkezdése. Zárja be a szerkesztőt, hogy visszakapja a "
+"prompt-ot."
+
+#: packages/app-cli/app/command-edit.js:97
+msgid "Note has been saved."
+msgstr "Jegyzet mentve."
+
+#: packages/app-cli/app/app-gui.js:452
+msgid "To delete a tag, untag the associated notes."
+msgstr "Tag törléséhez, törölje a taget a hivatkozott jegyzetekből."
+
+#: packages/app-cli/app/app-gui.js:462
+msgid "Please select the note or notebook to be deleted first."
+msgstr ""
+"A törléshez, először kérem válasszon egy jegyzetet vagy jegyzetfüzetet."
+
+#: packages/app-cli/app/app-gui.js:750
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Nyomja le Ctrl+D vagy írja be \"exit\" a programból való kilépéshez"
+
+#: packages/app-cli/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Adott jegyzetek törlése <note-pattern>."
+
+#: packages/app-cli/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Adott jegyzetek törlése, megerősítés kérése nélkül."
+
+#: packages/app-cli/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d jegyzetek egyeznek ezen mintával. Töröljem őket?"
+
+#: packages/app-cli/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Csatolja az adott fájlt a jegyzethez."
+
+#: packages/app-cli/app/command-version.js:11
+msgid "Displays version information"
+msgstr "Megjeleníti a verzió információit"
+
+#: packages/app-cli/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: packages/app-cli/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr "Egy to-do befejezetlenkén jelölése."
+
+#: packages/app-cli/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+
+#: packages/app-cli/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Cél formátum: %s"
+
+#: packages/app-cli/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Adott jegyzet exportálása."
+
+#: packages/app-cli/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Adott jegyzetfüzet exportálása."
+
+#: packages/app-cli/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Új jegyzet létrehozása."
+
+#: packages/app-cli/app/main.js:87
+msgid "Type `joplin help` for usage information."
+msgstr "Írja be `joplin help` a használati információkért."
+
+#: packages/app-cli/app/main.js:89
+msgid "Fatal error:"
+msgstr "Végzetes hiba:"
+
+#: packages/app-cli/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Mutassa a geolokációs URL-t a jegyzethez."
+
+#: packages/app-cli/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+
+#: packages/app-cli/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
+#: packages/app-cli/app/gui/NoteWidget.js:50
+msgid "You may also type `status` for more information."
+msgstr "További információért beírhatja `status`."
+
+#: packages/app-cli/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Keresés:"
+
+#: packages/app-cli/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Keres egy adott <pattern> minden jegyetben."
+
+#: packages/app-cli/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: packages/app-cli/app/cli-utils.js:109
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Szükséges paraméter hiányzik: %s"
+
+#: packages/app-cli/app/cli-utils.js:144
+msgid "Your choice: "
+msgstr "Ön választása: "
+
+#: packages/app-cli/app/cli-utils.js:151
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Érvénytelen válasz: %s"
+
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+msgid "Y"
+msgstr "Y"
+
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+msgid "n"
+msgstr "n"
+
+#: packages/app-cli/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Titkosított elem nem módosítható"
+
+#: packages/app-cli/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "Megjeleníti a használati információkat."
+
+#: packages/app-cli/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+
+#: packages/app-cli/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Gyorsbillentyűk nem érhetőek el CLI módban."
+
+#: packages/app-cli/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+
+#: packages/app-cli/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Az elérhető parancsok:"
+
+#: packages/app-cli/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+
+#: packages/app-cli/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Egyik panelről a másikra mozgatáshoz, nyomja le a Shift+Tab-ot."
+
+#: packages/app-cli/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+
+#: packages/app-cli/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "A konzol teljes méret, kis méret váltáshoz, nyomja le a \"tc\"-t."
+
+#: packages/app-cli/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Parancssor módba lépéshez nyomja meg a \":\""
+
+#: packages/app-cli/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Parancssor módból kilépéshez, nyomja le az ESCAPE gombot"
+
+#: packages/app-cli/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+
+#: packages/app-cli/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+
+#: packages/app-cli/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Kilép a programból."
+
+#: packages/app-cli/app/app.js:62
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr "Több mint egy elem egyezik ezzel \"%s\". Kérem szűkítse a lekérdezést."
+
+#: packages/app-cli/app/app.js:92
+msgid "No notebook selected."
+msgstr "Nincs kiválasztva jegyzetfüzet!"
+
+#: packages/app-cli/app/app.js:98
+msgid "No notebook has been specified."
+msgstr "Nincs jegyzetfüzet megadva."
+
+#: packages/app-cli/app/app.js:137
+msgid "N"
+msgstr "N"
+
+#: packages/app-cli/app/app.js:137
+msgid "y"
+msgstr "y"
+
+#: packages/app-cli/app/app.js:170
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Háttér szinkronizáció megszakítása... Kérem várjon."
+
+#: packages/app-cli/app/app.js:255
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Nincs ilyen parancs: %s"
+
+#: packages/app-cli/app/app.js:303
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "A \"%s\" parancs csak a GUI verzióban érhető el"
+
+#: packages/app-cli/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr "Mutasson összegzést a jegyzetekről és jegyzetfüzetekről."
+
+#: packages/app-cli/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgstr ""
+
+#: packages/app-cli/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+
+#: packages/app-cli/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Érvénytelen parancs: \"%s\""
+
+#: packages/app-cli/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Egy to-do készként jelölése."
+
+#: packages/app-cli/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "A jegyzet nem to-do: \"%s\""
