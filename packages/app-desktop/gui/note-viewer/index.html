@@ -395,6 +395,16 @@
 			}
 		}
 
+		window.addEventListener('hashchange', webviewLib.logEnabledEventHandler(e => {
+			if (!window.location.hash) return;
+
+			// The timeout is necessary to prevent a race condition and give time for the window to scroll
+			setTimeout(() => {
+				// Reset the window hash to allow clicking on the same anchor link more than once
+				window.location.hash = '';
+			}, 100);
+		}));
+
 		document.addEventListener('contextmenu', webviewLib.logEnabledEventHandler(event => {
 			let element = event.target;
 
