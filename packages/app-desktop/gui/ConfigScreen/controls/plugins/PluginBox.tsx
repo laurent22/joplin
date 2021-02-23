@@ -137,7 +137,7 @@ export default function(props: Props) {
 	const item = props.item ? props.item : manifestToItem(props.manifest);
 
 	const onNameClick = useCallback(() => {
-		const manifest = props.item ? props.item.manifest : props.manifest;
+		const manifest = item.manifest;
 		if (!manifest.homepage_url) return;
 		bridge().openExternal(manifest.homepage_url);
 	}, [props.item, props.manifest]);
