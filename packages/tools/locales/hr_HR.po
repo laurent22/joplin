@@ -3955,3 +3955,254 @@ msgstr "Označava zadatak završenim."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Bilješka nije zadatak: \"%s\""
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "Nepoznata zastavica: %s"
+
+#, fuzzy
+#~ msgid "Checking..."
+#~ msgstr "Prekidam..."
+
+#, fuzzy
+#~ msgid "Check Status"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Help"
+#~ msgstr "Pomoć"
+
+#~ msgid "OneDrive Dev (For testing only)"
+#~ msgstr "OneDrive Dev (Samo za testiranje)"
+
+#, fuzzy
+#~ msgid "Notebook properties"
+#~ msgstr "Naslov bilježnice:"
+
+#, fuzzy, javascript-format
+#~ msgid "This file could not be opened: %s"
+#~ msgstr "Bilježnicu nije moguće snimiti: %s"
+
+#, fuzzy
+#~ msgid "Click to stop external editing"
+#~ msgstr "Bilješka je promijenjena:"
+
+#, fuzzy
+#~ msgid "Content Properties"
+#~ msgstr "Naslov bilježnice:"
+
+#~ msgid "Please create a notebook first."
+#~ msgstr "Prvo stvori bilježnicu."
+
+#~ msgid "Please create a notebook first"
+#~ msgstr "Prvo stvori bilježnicu"
+
+#, fuzzy
+#~ msgid "Usage"
+#~ msgstr "Korištenje: %s"
+
+#~ msgid "Move to notebook..."
+#~ msgstr "Premjesti u bilježnicu..."
+
+#, javascript-format
+#~ msgid "Move %d notes to notebook \"%s\"?"
+#~ msgstr "Premjesti %d bilješke u bilježnicu \"%s\"?"
+
+#, fuzzy
+#~ msgid "Some items cannot be synchronised. Press for more info."
+#~ msgstr "Neke stavke se ne mogu sinkronizirati."
+
+#, fuzzy, javascript-format
+#~ msgid "FTS enabled: %d"
+#~ msgstr "Za brisanje: %d"
+
+#~ msgid "Select date"
+#~ msgstr "Odaberi datum"
+
+#~ msgid "Confirm"
+#~ msgstr "Potvrdi"
+
+#~ msgid "Attach any file"
+#~ msgstr "Priloži datoteku"
+
+#~ msgid "Unknown log level: %s"
+#~ msgstr "Nepoznata razina logiranja: %s"
+
+#~ msgid "Unknown level ID: %s"
+#~ msgstr "Nepoznat ID razine: %s"
+
+#, fuzzy
+#~ msgid "Synchronize"
+#~ msgstr "Sinkroniziraj"
+
+#, fuzzy
+#~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
+#~ msgstr "Makni ovu oznaku iz svih bilješki?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not synchronise with OneDrive.\n"
+#~ "\n"
+#~ "This error often happens when using OneDrive for Business, which "
+#~ "unfortunately cannot be supported.\n"
+#~ "\n"
+#~ "Please consider using a regular OneDrive account."
+#~ msgstr ""
+#~ "Ne mogu sinkronizirati OneDrive.\n"
+#~ "\n"
+#~ "Ova greška se često javlja pri korištenju usluge OneDrive for Business "
+#~ "koja nije podržana.\n"
+#~ "\n"
+#~ "Molimo da koristite obični OneDrive korisnički račun."
+
+#, fuzzy
+#~ msgid "Cannot move tag to this location."
+#~ msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Dodaj ili makni oznake"
+
+#, fuzzy
+#~ msgid "Content properties"
+#~ msgstr "Naslov bilježnice:"
+
+#, fuzzy
+#~ msgid "Resources"
+#~ msgstr "Resursi: %d."
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Sinkronizacija je već u toku. Stanje: %s"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Nedostaje obavezni argument: %s"
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Status sinkronizacije"
+
+#, fuzzy
+#~ msgid "General Options"
+#~ msgstr "Opcije"
+
+#, fuzzy
+#~ msgid "Clipper Options"
+#~ msgstr "Opcije"
+
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Prekini sinkronizaciju"
+
+#~ msgid "Hide metadata"
+#~ msgstr "Sakrij metapodatke"
+
+#~ msgid "Show metadata"
+#~ msgstr "Prikaži metapodatke"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Obriši bilježnicu"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Klikni (+) gumb za dodavanje nove bilješke ili bilježnice ili odaberi "
+#~ "postojeću bilježnicu iz izbornika."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
+
+#~ msgid "Welcome"
+#~ msgstr "Dobro došli"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Odvoji oznake zarezom."
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija "
+#~ "sa datotečnim sustavom omogućena. Vidi `sync.target`."
+
+#, fuzzy
+#~ msgid "State: %s."
+#~ msgstr "Stanje: \"%s\"."
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Bilježnica s ovim naslovom već postoji: \"%s\""
+
+#~ msgid "Searches"
+#~ msgstr "Pretraživanja"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Uvozi Evernote bilježnicu (.enex datoteku)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Datoteka \"%s\" će biti uvezena u postojeću bilježnicu \"%s\". Nastavi?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena "
+#~ "u nju. Nastavi?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Uvezi Evernote bilješke"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Fokusiraj sljedeće okno"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Fokusiraj prethodno okno"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Napusti naredbeni redak"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Prekini trenutnu naredbu."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Postavi zadatak kao završen/nezavršen"
+
+#, fuzzy
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+
+#, fuzzy
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "[t]oggle note [m]etadata."
+
+#, fuzzy
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "[M]ake a new [n]ote"
+
+#, fuzzy
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "[M]ake a new [t]odo"
+
+#, fuzzy
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "[M]ake a new note[b]ook"
+
+#, fuzzy
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Copy ([Y]ank) the [n]ote to a notebook."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Premjesti bilješku u bilježnicu."
+
+#~ msgid ""
+#~ "The target to synchronise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "Meta sinkronizacije. U slučaju sinkroniziranja s vlastitim datotečnim "
+#~ "sustavom, postavi `sync.2.path` na ciljani direktorij."
+
+#~ msgid "To-do title:"
+#~ msgstr "Naslov zadatka:"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "\"%s\": \"%s\""
