@@ -3366,11 +3366,11 @@ msgstr "Меняет порядок сортировки."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Отображает только элементы заданного типа(ов). Поддерживаемые типы: `n` для "
 "заметок, `t` для задач или `nt` для заметок и задач (напр. `-tt` выведет "
-"только задачи, в то время как `-ttd` выведет и заметки, и задачи)."
+"только задачи, в то время как `-tnt` выведет и заметки, и задачи)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

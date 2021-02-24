@@ -3387,11 +3387,11 @@ msgstr "Inverser l'ordre."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Affiche uniquement les notes du ou des types spécifiés. Le type peut-être "
 "`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
-"uniquement les tâches, tandis que `-ttd` affiche les notes et les tâches)."
+"uniquement les tâches, tandis que `-tnt` affiche les notes et les tâches)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

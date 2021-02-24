@@ -3331,11 +3331,11 @@ msgstr "Inverte a orde."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Motra só os elementos do tipo específicado. Pode ser «n» para notas, «t» "
 "para tarefas ou «nt» para notas e tarefas (p.e: «-tt» mostraría só as "
-"tarefas mentres «-ttd» mostraría notas e tarefas)."
+"tarefas mentres «-tnt» mostraría notas e tarefas)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

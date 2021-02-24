@@ -3331,11 +3331,11 @@ msgstr "Reverserer sorteringsrekkefølgen."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Viser kun elementene av den spesifikke typen. Kan være `n` for notater, `t` "
 "for gjøremål eller `nt` for notater og gjøremål (f.eks.` -tt` vile kun vise "
-"gjøremål, mens `-ttd` vil vise notater og gjøremål.)"
+"gjøremål, mens `-tnt` vil vise notater og gjøremål.)"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

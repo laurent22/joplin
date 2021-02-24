@@ -3370,11 +3370,11 @@ msgstr "Inverteix el criteri d'ordenació."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Només mostra els elements dels tipus específics. Pot ser «n» per a les "
 "notes, «t» per les tasques pendents, o «nt» per a notes i tasques pendents "
-"(p. ex. «-tt» mostrarà només les tasques pendents, mentre que «-ttd» "
+"(p. ex. «-tt» mostrarà només les tasques pendents, mentre que «-tnt» "
 "mostrarà notes i tasques pendents)."
 
 #: packages/app-cli/app/command-ls.js:31

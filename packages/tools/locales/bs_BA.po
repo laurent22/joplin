@@ -3429,11 +3429,11 @@ msgstr "Inverzni redoslijed sortiranja."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Prikazuje samo stavke određenog tipa. To može biti `n` za bilješke, `t` za "
 "zadatke, ili `nt` za bilješke i zadatke (npr. `-tt` prikazuje samo zadatke, "
-"dok `-ttd` prikazuje i bilješke i zadatke.)"
+"dok `-tnt` prikazuje i bilješke i zadatke.)"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

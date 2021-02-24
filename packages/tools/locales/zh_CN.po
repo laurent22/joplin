@@ -3256,10 +3256,10 @@ msgstr "反转排序顺序。"
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "仅显示指定类型的项目。可以把 `n` 用于笔记，`t` 用于待办事项，或者 `nt` 用于笔"
-"记和待办事项 (示例: `-tt` 只会显示待办事项，当使用 `-ttd` 时将会显示笔记和待"
+"记和待办事项 (示例: `-tt` 只会显示待办事项，当使用 `-tnt` 时将会显示笔记和待"
 "办事项。"
 
 #: packages/app-cli/app/command-ls.js:31

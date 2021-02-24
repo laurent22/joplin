@@ -3328,10 +3328,10 @@ msgstr "逆順に並び替えます。"
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "選択した種類の項目のみ表示します。`n`でノートを、`t`でToDoを、`nt`でその両方"
-"を指定できます。 (例： `-tt` ではToDoのみを表示し、`-ttd`ではノートとToDoを表"
+"を指定できます。 (例： `-tt` ではToDoのみを表示し、`-tnt`ではノートとToDoを表"
 "示します。)"
 
 #: packages/app-cli/app/command-ls.js:31

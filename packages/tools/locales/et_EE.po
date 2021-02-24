@@ -3402,11 +3402,11 @@ msgstr "Pöörab sorteerimis järjestuse ümber."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Kuvab ainult konkreetset tüüpi tüübid. Võib olla `n` märkmete jaoks, `t` "
 "ülesannete jaoks või `nt` märkmete ja ülesannete jaoks (nt `-tt` kuvaks "
-"ainult ülesandeid, `-ttd` aga märkmeid ja ülesanded."
+"ainult ülesandeid, `-tnt` aga märkmeid ja ülesanded."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

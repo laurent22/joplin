@@ -3346,11 +3346,11 @@ msgstr "Alderantziz antolatzen du."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Zehaztutako item motak baino ez du erakusten. Izan daiteke `n` oharretarako, "
 "`t` zereginetarako, edo `nt` ohar eta zereginetarako (esate batrako, `-tt` "
-"zereginak erakutsiko ditu soilik, `-ttd` berriz zereginak eta oharrak."
+"zereginak erakutsiko ditu soilik, `-tnt` berriz zereginak eta oharrak."
 
 #: packages/app-cli/app/command-ls.js:31
 #, fuzzy

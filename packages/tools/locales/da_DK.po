@@ -3358,11 +3358,11 @@ msgstr "Modsat sortering."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Vis kun emner af specifik(ke) type(r). Kan være `n` for noter. `t` for "
 "opgaver eller `nt` for noter og opgaver (tilsvarende `-tt` vil kun vise "
-"opgaver, mens `-ttd` vil vise noter og opgaver)."
+"opgaver, mens `-tnt` vil vise noter og opgaver)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

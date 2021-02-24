@@ -3358,11 +3358,11 @@ msgstr "Kääntää lajittelujärjestyksen."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Näyttää vain tietyn tyyppiset kohteet. Voi olla `n` muistiinpanoja, `t` "
 "tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. `-tt` näyttäisi vain "
-"tehtävät, kun taas `-ttd` näyttää muistiinpanoja ja tehtäviä."
+"tehtävät, kun taas `-tnt` näyttää muistiinpanoja ja tehtäviä."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

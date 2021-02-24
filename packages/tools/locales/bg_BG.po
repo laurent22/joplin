@@ -3382,11 +3382,11 @@ msgstr "Обръща реда на сортиране."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Показва само обекти от даден тип или типове. Може да е `n` за бележки, `t` "
 "за задачи, или `nt` за бележки и задачи (напр. `-tt` би показало само "
-"задачи, а `-ttd` би показало бележки и задачи."
+"задачи, а `-tnt` би показало бележки и задачи."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

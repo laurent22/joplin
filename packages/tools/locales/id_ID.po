@@ -3374,11 +3374,11 @@ msgstr "Membalikkan urutan."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Menampilkan hanya item dengan tipe-tipe tertentu. Dapat berupa `n` untuk "
 "catatan, `t` untuk tugas, atau `nt` untuk catatan dan tugas (contoh: `-tt` "
-"hanya akan menampilkan tugas, sedangkan `-ttd` akan menampilkan catatan dan "
+"hanya akan menampilkan tugas, sedangkan `-tnt` akan menampilkan catatan dan "
 "tugas)."
 
 #: packages/app-cli/app/command-ls.js:31

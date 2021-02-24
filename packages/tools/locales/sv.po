@@ -3434,11 +3434,11 @@ msgstr "Omvänder sorteringsordningen."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Visar endast objekt av den specifika typen/typerna. Kan vara `n` för "
 "anteckningar, `t` för att-göra eller `nt` för anteckningar och att-göra (t."
-"ex. `-tt` skulle bara visa att-göra, medan `-ttd` skulle visa anteckningar "
+"ex. `-tt` skulle bara visa att-göra, medan `-tnt` skulle visa anteckningar "
 "och att-göra."
 
 #: packages/app-cli/app/command-ls.js:31

@@ -3313,10 +3313,10 @@ msgstr "정렬 순서를 바꿉니다."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "특정 형식의 항목만 표시합니다. 노트의 경우 `n`, 할 일의 경우 `t`, 노트와 할 "
-"일 모두는 `nt` 입니다. (예시: 할 일은 `-tt`, 노트와 할 일은 `-ttd`)."
+"일 모두는 `nt` 입니다. (예시: 할 일은 `-tt`, 노트와 할 일은 `-tnt`)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

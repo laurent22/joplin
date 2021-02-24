@@ -3324,11 +3324,11 @@ msgstr "Đảo ngược thứ tự sắp xếp."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Chỉ hiển thị những mục theo phân loại đã được xác định. Có thể sử dụng `n` "
 "cho notes, `t` cho to-do, hoặc `nt` cho notes và to-dos (ví dụ `-tt` sẽ chỉ "
-"hiển thị to-dos, trong khi đó `-ttd` sẽ chỉ hiển thị notes và to-dos)."
+"hiển thị to-dos, trong khi đó `-tnt` sẽ chỉ hiển thị notes và to-dos)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

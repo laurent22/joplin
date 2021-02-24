@@ -3319,10 +3319,10 @@ msgstr "Rendezés sorrendjének megfordítása."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Csak bizonyos típusú elemeket mutasson. Az `n` a jegyetekhez, a `t` a to-do-"
-"khoz vagy `nt` mindkettőhöz (pl. `-tt` mutatja a to-do-kat, míg a `-ttd` "
+"khoz vagy `nt` mindkettőhöz (pl. `-tt` mutatja a to-do-kat, míg a `-tnt` "
 "mutatja a jegyzeteket és to-do-kat)."
 
 #: packages/app-cli/app/command-ls.js:31

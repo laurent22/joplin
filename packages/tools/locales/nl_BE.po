@@ -3404,11 +3404,11 @@ msgstr "Draait de rangschikking om."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Toont enkel de items van de specifieke type(s). Kan `n` zijn voor notities, "
 "`t` voor to-do's, of `nt` voor notities en to-do's (bv. `-tt` zou alleen to-"
-"do's tonen, terwijl `-ttd` notities en to-do's zou tonen)."
+"do's tonen, terwijl `-tnt` notities en to-do's zou tonen)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

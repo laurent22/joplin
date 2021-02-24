@@ -3431,11 +3431,11 @@ msgstr "Kehrt die Sortierreihenfolge um."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Zeigt nur die Elemente eines bestimmten Typs oder bestimmter Typen an. Kann "
 "`n` für Notizen sein, `t` für Aufgaben, oder `nt` für Notizen und Aufgaben "
-"(z. B. zeigt `-tt` nur Aufgaben an, während `-ttd` Notizen und Aufgaben "
+"(z. B. zeigt `-tt` nur Aufgaben an, während `-tnt` Notizen und Aufgaben "
 "anzeigt)."
 
 #: packages/app-cli/app/command-ls.js:31

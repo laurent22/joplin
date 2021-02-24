@@ -3347,11 +3347,11 @@ msgstr "Obrne vrstni red."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Prikaže samo predmete specifičnega tipa(tipov). Lahko je `n` za zabeležke, "
 "`t` za seznam opravil ali `nt` za zabeležke in za seznam opravil (to pomeni. "
-"`-tt` bi prikazal samo za narediti, med tem ko `-ttd` bi prikazal zabeležke "
+"`-tt` bi prikazal samo za narediti, med tem ko `-tnt` bi prikazal zabeležke "
 "in seznam opravil."
 
 #: packages/app-cli/app/command-ls.js:31

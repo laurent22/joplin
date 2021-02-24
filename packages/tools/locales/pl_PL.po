@@ -3363,11 +3363,11 @@ msgstr "Odwraca kierunek sortowania."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Wyświetla jedynie obiekty określonego typu(ów). Mogą być to `n` dla notatek, "
 "`t` dla zadań, `nt` dla notatek i zadań (np. `-tt` wyświetli jedynie "
-"zadania, podczas gdy `-ttd` wyświetli zarówno notatki, jak i zadania."
+"zadania, podczas gdy `-tnt` wyświetli zarówno notatki, jak i zadania."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

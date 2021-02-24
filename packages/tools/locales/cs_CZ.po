@@ -3351,11 +3351,11 @@ msgstr "Řadit opačně."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Zobrazit pouze položky vybraného typu. Možnosti jsou `n` pro poznámky, `t` "
 "pro úkoly, a `nt` pro poznámky a úkoly (tedy `-tt` zobrazí pouze úkoly, "
-"zatímco `-ttd` zobrazí poznámky a úkoly)."
+"zatímco `-tnt` zobrazí poznámky a úkoly)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

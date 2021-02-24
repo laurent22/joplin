@@ -3285,11 +3285,11 @@ msgstr "معکوس کردن ترتیب مرتب‌سازی."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "تنها موارد نوع/انواع مشخص شده را نمایش می‌دهد. می‌تواند برای یادداشت‌ها `n`، "
 "برای فهرست کار‌ها `t` یا برای یادداشت‌ها و فهرست کار‌ها `nt` باشد. (به عنوان "
-"مثال: `-tt` تنها فهرست کار‌ها را نمایش خواهد داد در حالی که `-ttd` یادداشت‌ها "
+"مثال: `-tt` تنها فهرست کار‌ها را نمایش خواهد داد در حالی که `-tnt` یادداشت‌ها "
 "و فهرست کار‌ها را نمایش خواهد داد.)"
 
 #: packages/app-cli/app/command-ls.js:31

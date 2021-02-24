@@ -3410,11 +3410,11 @@ msgstr "Αντιστρέφει τη σειρά ταξινόμησης."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Εμφανίζει μόνο τα στοιχεία του συγκεκριμένου τύπου. Μπορεί να είναι `n` για "
 "σημειώσεις, `t` για to-dos ή `nt` για σημειώσεις και to-dos (π.χ. `-tt` θα "
-"εμφανίζει μόνο τα to-dos, ενώ το `-ttd` και σημειώσεις και to-dos."
+"εμφανίζει μόνο τα to-dos, ενώ το `-tnt` και σημειώσεις και to-dos."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""

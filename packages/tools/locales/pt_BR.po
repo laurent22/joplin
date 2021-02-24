@@ -3368,11 +3368,11 @@ msgstr "Inverte a ordem de classificação."
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Exibe apenas os itens do(s) tipo(s) específico(s). Pode ser `n` para notas,` "
 "t` para tarefas, ou `nt` para notas e tarefas (por exemplo.` -tt` exibiria "
-"apenas os itens pendentes, enquanto `-ttd` exibiria notas e tarefas ."
+"apenas os itens pendentes, enquanto `-tnt` exibiria notas e tarefas ."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
