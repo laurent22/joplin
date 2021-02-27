@@ -27,7 +27,7 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Platform } = require('react-native');
 
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
@@ -557,7 +557,9 @@ async function initialize(dispatch: Function) {
 			});
 		}
 
-		setUpQuickActions(dispatch, folderId);
+		if (Platform.OS === 'ios') {
+			setUpQuickActions(dispatch, folderId);
+		}
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
@@ -674,6 +676,10 @@ class AppComponent extends React.Component {
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
+		}
+
+		if (Platform.OS === 'android') {
+			setUpQuickActions(this.props.dispatch, this.props.selectedFolderId);
 		}
 	}
 
