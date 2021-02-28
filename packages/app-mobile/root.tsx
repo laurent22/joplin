@@ -27,7 +27,7 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Platform } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
@@ -556,10 +556,6 @@ async function initialize(dispatch: Function) {
 				folderId: folder.id,
 			});
 		}
-
-		if (Platform.OS === 'ios') {
-			setUpQuickActions(dispatch, folderId);
-		}
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
@@ -678,9 +674,7 @@ class AppComponent extends React.Component {
 			}
 		}
 
-		if (Platform.OS === 'android') {
-			setUpQuickActions(this.props.dispatch, this.props.selectedFolderId);
-		}
+		setUpQuickActions(this.props.dispatch, this.props.selectedFolderId);
 	}
 
 	componentWillUnmount() {
