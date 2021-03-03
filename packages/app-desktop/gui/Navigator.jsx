@@ -2,27 +2,23 @@ const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
 const bridge = require('electron').remote.require('./bridge').default;
-const getWindowTitle = require('./getWindowTitle');
+const getWindowTitle = require('./getWindowTitle').default;
 
 
 class NavigatorComponent extends Component {
 	constructor(props) {
 		super(props);
-		this.prevTitle = null;
 	}
 	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.route) {
-			this.updateWindowTitle(getWindowTitle(newProps.notes, newProps.selectedNoteIds, newProps.selectedFolderId, newProps.folders, newProps.screens, newProps.route));
+			this.updateWindowTitle(getWindowTitle(newProps));
 		}
 	}
 	updateWindowTitle(title) {
-		if (this.prevTitle != title) {
-			try {
-				if (bridge().window()) bridge().window().setTitle(title);
-				this.prevTitle = title;
-			} catch (error) {
-				console.warn('updateWindowTitle', error);
-			}
+		try {
+			if (bridge().window()) bridge().window().setTitle(title);
+		} catch (error) {
+			console.warn('updateWindowTitle', error);
 		}
 	}
 
