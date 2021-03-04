@@ -34,6 +34,7 @@
 		android:allowBackup="true"
 		android:networkSecurityConfig="@xml/network_security_config"
 		android:requestLegacyExternalStorage="true"
+		android:resizeableActivity="true"
 		android:theme="@style/AppTheme">
 
 		<!-- RN-NOTIFICATION -->
