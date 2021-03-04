@@ -817,7 +817,7 @@ msgstr "Titre du carnet :"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr "Vérification ortographique"
+msgstr "Vérification orthographique"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -3348,7 +3348,7 @@ msgstr "Ajouter au dictionnaire"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr "Utiliser le correcteur ortographique"
+msgstr "Utiliser le correcteur orthographique"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
 msgid "Change language"
