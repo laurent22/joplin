@@ -105,7 +105,7 @@ export default class UserModel extends BaseModel<User> {
 
 		let newUser = { ...object };
 
-		if (isNew && newUser.password) newUser.password = auth.hashPassword(newUser.password);
+		if (newUser.password) newUser.password = auth.hashPassword(newUser.password);
 
 		await this.withTransaction(async () => {
 			newUser = await super.save(newUser, options);

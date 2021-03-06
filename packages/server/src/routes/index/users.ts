@@ -7,7 +7,6 @@ import { User } from '../../db';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
-import { hashPassword } from '../../utils/auth';
 
 function makeUser(isNew: boolean, fields: any): User {
 	const user: User = {};
@@ -17,7 +16,7 @@ function makeUser(isNew: boolean, fields: any): User {
 
 	if (fields.password) {
 		if (fields.password !== fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
-		user.password = hashPassword(fields.password);
+		user.password = fields.password;
 	}
 
 	if (!isNew) user.id = fields.id;
