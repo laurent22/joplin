@@ -18,7 +18,7 @@ describe('JoplinSettings', () => {
 	test('should listen to setting change event', async () => {
 		const service = new newPluginService() as PluginService;
 
-		const pluginScript = newPluginScript(`			
+		const pluginScript = newPluginScript(`
 			joplin.plugins.register({
 				onStart: async function() {
 					await joplin.settings.registerSetting('myCustomSetting1', {
@@ -35,6 +35,21 @@ describe('JoplinSettings', () => {
 						label: 'My Custom Setting 2',
 					});
 
+					await joplin.settings.registerSettings({
+						'myCustomSetting3': {
+							value: 3,
+							type: 1,
+							public: true,
+							label: 'My Custom Setting 3',
+						},
+						'myCustomSetting4': {
+							value: 4,
+							type: 1,
+							public: true,
+							label: 'My Custom Setting 4',
+						}
+					})
+
 					joplin.settings.onChange((event) => {
 						joplin.data.post(['folders'], null, { title: JSON.stringify(event.keys) });
 					});
@@ -47,6 +62,8 @@ describe('JoplinSettings', () => {
 
 		Setting.setValue('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting1', 111);
 		Setting.setValue('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting2', 222);
+		Setting.setValue('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting3', 333);
+		Setting.setValue('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting4', 444);
 
 		// Also change a global setting, to verify that the plugin doesn't get
 		// notifications for non-plugin related events.
@@ -61,7 +78,7 @@ describe('JoplinSettings', () => {
 		const settingNames: string[] = JSON.parse(folder.title);
 		settingNames.sort();
 
-		expect(settingNames.join(',')).toBe('myCustomSetting1,myCustomSetting2');
+		expect(settingNames.join(',')).toBe('myCustomSetting1,myCustomSetting2,myCustomSetting3,myCustomSetting4');
 
 		await service.destroy();
 	});
