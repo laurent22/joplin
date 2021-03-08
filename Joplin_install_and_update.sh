@@ -177,7 +177,7 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p ~/.local/share/applications
-    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=${HOME}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;" >> ~/.local/share/applications/appimagekit-joplin.desktop
+    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=env XDG_CURRENT_DESKTOP=Unity ${HOME}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;" >> ~/.local/share/applications/appimagekit-joplin.desktop
     # Update application icons
     [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications && update-desktop-database ~/.local/share/icons
     print "${COLOR_GREEN}OK${COLOR_RESET}"
