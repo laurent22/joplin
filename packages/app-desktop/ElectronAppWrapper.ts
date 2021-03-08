@@ -268,12 +268,14 @@ export default class ElectronAppWrapper {
 		let output = '';
 
 		if (process.platform === 'darwin') {
-			output = 'macos-16x16Template.png'; // Electron Template Image format
+			output = 'tray-roundrect-mac-Template.png'; // Electron Template Image format
+		} else if (process.platform === 'linux') {
+			output = 'tray-roundrect-linux.png';
 		} else {
-			output = '16x16.png';
+			output = 'tray-roundrect-windows.png';
 		}
 
-		if (this.env_ === 'dev') output = '16x16-dev.png';
+		if (this.env_ === 'dev') output = 'tray-roundrect-dev.png';
 
 		return output;
 	}
