@@ -61,7 +61,7 @@ msgstr "Anuluj"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
-"Aplikacja zostanie teraz zamknięta. Uruchom ją ponownie aby ukończyć proces."
+"Aplikacja zostanie teraz zamknięta. Uruchom ją ponownie, aby ukończyć proces."
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
 msgid ""
@@ -3567,8 +3567,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Plik blokady jest aktualnie w użyciu. Jezeli wiesz, że synchronizacja nie "
-"odbywa się, możesz usunać plik blokady w \"%s\" i wznowić operację."
+"Plik blokady jest aktualnie w użyciu. Jeżeli wiesz, że synchronizacja nie "
+"odbywa się, możesz usunąć plik blokady w \"%s\" i wznowić operację."
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
@@ -4053,7 +4053,7 @@ msgstr "Notatka nie jest zadaniem: \"%s\""
 #~ msgstr "Naciśnij, aby ustawić hasło szyfrowania."
 
 #~ msgid "Some items cannot be synchronised. Press for more info."
-#~ msgstr "Niektóre przedmioty nie mogą być zsynchronizowane."
+#~ msgstr "Niektóre przedmioty nie mogą zostać zsynchronizowane."
 
 #~ msgid "Show all"
 #~ msgstr "Pokaż wszystko"
@@ -4165,7 +4165,7 @@ msgstr "Notatka nie jest zadaniem: \"%s\""
 
 #, fuzzy
 #~ msgid "Content properties"
-#~ msgstr "Właściwośći notatki"
+#~ msgstr "Właściwości notatki"
 
 #~ msgid "Split"
 #~ msgstr "Podziel"
@@ -4213,7 +4213,7 @@ msgstr "Notatka nie jest zadaniem: \"%s\""
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"
-#~ msgstr "Uprawenie do użytkowania kamery"
+#~ msgstr "Uprawnienie do użytkowania kamery"
 
 #~ msgid "Cancel synchronisation"
 #~ msgstr "Anuluj synchronizację"
