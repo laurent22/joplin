@@ -14,4 +14,6 @@ Due to our limited resources and in order to give everyone a chance to submit a 
 
 6. **No Work In Progress**. ONLY completed and working pull requests, and with test units, will be accepted. A WIP would fall under rule 3 and be closed immediately.
 
+7. Please **do not `@mention` contributors and mentors**. Sometimes it takes time before we can review your pull request or answer your questions but we'll get to it sooner or later. `@mentioning` someone just adds to the pile of notifications we get and it won't make us look at your issue faster.
+
 These rules we hope are fair to everyone, to contributors and maintainers, however if something is unclear or you have any question about them, please let us know!
