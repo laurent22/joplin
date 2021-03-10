@@ -659,7 +659,7 @@ export default class SearchEngine {
 
 		let allTerms: any[] = [];
 		try {
-			allTerms = filterParser(query);
+			allTerms = filterParser(query.replace(/[()]/g, ' '));
 		} catch (error) {
 			console.warn(error);
 		}
@@ -676,6 +676,109 @@ export default class SearchEngine {
 		}
 
 	}
+
+	recursiveParser(str: string) {
+		let i = 0;
+		function main(): any {
+			const arr = [];
+			let startIndex = i;
+			function addWord() {
+				if (i - 1 > startIndex) {
+					arr.push(str.slice(startIndex, i - 1));
+				}
+			}
+			while (i < str.length) {
+				switch (str[i++]) {
+				case ' ':
+					addWord();
+					startIndex = i;
+					continue;
+				case '(':
+					arr.push(main());
+					startIndex = i;
+					continue;
+				case ')':
+					addWord();
+					return arr;
+				}
+			}
+			addWord();
+			return arr;
+		}
+		return main();
+	}
+
+	async _recursiveSearcher(parseTree: any) {
+
+		const intersection = (lists: any[]) => {
+			const result: any[] = [];
+			for (let i = 0; i < lists.length; i++) {
+				const currentList = lists[i];
+				for (let y = 0; y < currentList.length; y++) {
+					const currentValue = currentList[y];
+					if (!result.some(x => (x.id === currentValue.id))) {
+						if (lists.filter(function(list: any) { return !list.some((x: any) => (x.id === currentValue.id)); }).length === 0) {
+							result.push(currentValue);
+						}
+					}
+				}
+			}
+			return result;
+		};
+
+		const subTrees = parseTree.filter((x: any) => Array.isArray(x));
+		if (subTrees.length) {
+			const childLevelResultsPromise = subTrees.map((x: any) => {
+				return this._recursiveSearcher(x);
+			});
+
+			const childLevelResults: any = await Promise.all(childLevelResultsPromise);
+
+			const filterString = parseTree.filter((x: any) => (typeof x === 'string' || x instanceof String)).join(' ');
+
+			if (filterString === '') {
+				// all terms are sub trees; return their intersection
+				return intersection(childLevelResults);
+			}
+			const parsedQuery = await this.parseQuery(filterString, false);
+			const currLevelResult = await this._search(filterString, parsedQuery);
+
+			if (parsedQuery.any) {
+			// union
+				return childLevelResults.flat().concat(currLevelResult);
+			} else {
+			// intersection
+				return intersection(childLevelResults.concat([currLevelResult]));
+			}
+		} else {
+			const searchString = parseTree.join(' ');
+			const parsedQuery = await this.parseQuery(searchString, false);
+			const rows = await this._search(searchString, parsedQuery);
+			return rows;
+		}
+	}
+
+	recursiveSearcher(searchString: string) {
+		const parseTree = this.recursiveParser(`(${searchString})`);
+		return this._recursiveSearcher(parseTree);
+	}
+
+
+	async _search(searchString: string, parsedQuery: any) {
+		try {
+			const { query, params } = queryBuilder(parsedQuery.allTerms, false);
+			const rows = await this.db().selectAll(query, params);
+			this.processResults_(rows, parsedQuery);
+			if (!parsedQuery.any) {
+				return rows.filter((row: any) => row.include);
+			}
+			return rows;
+		} catch (error) {
+			this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
+			return [];
+		}
+	}
+
 
 	async search(searchString: string, options: any = null) {
 		if (!searchString) return [];
@@ -702,20 +805,7 @@ export default class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
-			const parsedQuery = await this.parseQuery(searchString, searchType === SearchEngine.SEARCH_TYPE_FTS_FUZZY);
-
-			try {
-				const { query, params } = queryBuilder(parsedQuery.allTerms, searchType === SearchEngine.SEARCH_TYPE_FTS_FUZZY);
-				const rows = await this.db().selectAll(query, params);
-				this.processResults_(rows, parsedQuery);
-				if (searchType === SearchEngine.SEARCH_TYPE_FTS_FUZZY && !parsedQuery.any) {
-					return rows.filter((row: any) => row.include);
-				}
-				return rows;
-			} catch (error) {
-				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
-				return [];
-			}
+			return this.recursiveSearcher(searchString);
 		}
 	}
 

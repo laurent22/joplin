@@ -299,6 +299,66 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 	}));
 
+	it('should support nested filtering of tags', (async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'note1' });
+		const n2 = await Note.save({ title: 'note2' });
+		const n3 = await Note.save({ title: 'note3' });
+		const n4 = await Note.save({ title: 'note4' });
+		const n5 = await Note.save({ title: 'note5' });
+		const n6 = await Note.save({ title: 'note6' });
+
+		await Tag.setNoteTagsByTitles(n1.id, ['tag1', 'tag2']);
+		await Tag.setNoteTagsByTitles(n2.id, ['tag1', 'tag3']);
+		await Tag.setNoteTagsByTitles(n3.id, ['tag2', 'tag3']);
+		await Tag.setNoteTagsByTitles(n4.id, ['tag3']);
+		await Tag.setNoteTagsByTitles(n5.id, ['tag1', 'tag4']);
+		await Tag.setNoteTagsByTitles(n5.id, ['tag1']);
+
+		await engine.syncTables();
+
+		rows = await engine.search('tag:tag1 (any:1 tag:tag2 tag:tag3)');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+
+	}));
+
+	it('should support nested filtering of text', (async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abc def' });
+		const n2 = await Note.save({ title: 'def ghj' });
+		const n3 = await Note.save({ title: 'important' });
+		const n4 = await Note.save({ title: 'abc def ghi' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('any:1 important (abc def)');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n3.id);
+		expect(ids(rows)).toContain(n4.id);
+
+	}));
+
+
+	it('should support nested with any', (async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'abc def' });
+		const n2 = await Note.save({ title: 'def ghj' });
+		const n3 = await Note.save({ title: 'important' });
+		const n4 = await Note.save({ title: 'abc def ghi' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('any:1 (abc) (def)');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n4.id);
+
+	}));
+
 	it('should support filtering by notebook', (async () => {
 		let rows;
 		const folder0 = await Folder.save({ title: 'notebook0' });
@@ -741,5 +801,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n3.id);
 
 	}));
+
+
 
 });

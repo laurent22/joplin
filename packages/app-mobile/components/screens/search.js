@@ -123,7 +123,8 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		if (!this.isMounted_) return;
 
-		const parsedQuery = await SearchEngine.instance().parseQuery(query);
+		// ignore paranthesis when finding words to highlight
+		const parsedQuery = await SearchEngine.instance().parseQuery(query.replace(/[()]/g, ' '));
 		const highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 
 		this.props.dispatch({
