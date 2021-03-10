@@ -67,7 +67,6 @@ class GotoAnything {
 
 class Dialog extends React.PureComponent<Props, State> {
 
-	private fuzzy_: boolean;
 	private styles_: any;
 	private inputRef: any;
 	private itemListRef: any;
@@ -76,8 +75,6 @@ class Dialog extends React.PureComponent<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-
-		this.fuzzy_ = false;
 
 		const startString = props?.userData?.startString ? props?.userData?.startString : '';
 
@@ -242,7 +239,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	async keywords(searchQuery: string) {
-		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, this.fuzzy_);
+		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
@@ -296,7 +293,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = this.makeSearchQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
+				results = await SearchEngine.instance().search(searchQuery);
 
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 
