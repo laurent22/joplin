@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import ToggleButton from '../../../lib/ToggleButton/ToggleButton';
@@ -134,12 +134,15 @@ const StyledDescription = styled.div`
 `;
 
 export default function(props: Props) {
-	const item = props.item ? props.item : manifestToItem(props.manifest);
+	const item = useMemo(() => {
+		return props.item ? props.item : manifestToItem(props.manifest);
+	}, [props.item, props.manifest]);
 
 	const onNameClick = useCallback(() => {
-		if (!props.item.manifest.homepage_url) return;
-		bridge().openExternal(props.item.manifest.homepage_url);
-	}, [props.item]);
+		const manifest = item.manifest;
+		if (!manifest.homepage_url) return;
+		bridge().openExternal(manifest.homepage_url);
+	}, [item]);
 
 	// For plugins in dev mode things like enabling/disabling or
 	// uninstalling them doesn't make sense, as that should be done by
