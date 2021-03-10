@@ -37,6 +37,7 @@ module.exports = {
 		'<rootDir>/tests/test-utils-synchronizer.js',
 		'<rootDir>/tests/file_api_driver.js',
 		'<rootDir>/tests/tmp/',
+		'<rootDir>/tests/test data/',
 	],
 
 	// To avoid this warning:

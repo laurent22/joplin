@@ -48,7 +48,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 
 		const api = new JoplinServerApi(apiOptions);
 		const driver = new FileApiDriverJoplinServer(api);
-		const fileApi = new FileApi(() => `root:/${options.directory()}`, driver);
+		const fileApi = new FileApi(options.directory, driver);
 		fileApi.setSyncTargetId(this.id());
 		await fileApi.initialize();
 		return fileApi;

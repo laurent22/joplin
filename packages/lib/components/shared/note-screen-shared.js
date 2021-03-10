@@ -232,7 +232,7 @@ shared.initState = async function(comp) {
 				await comp.attachFile({
 					uri: resource.uri,
 					type: resource.mimeType,
-					fileName: resource.name,
+					name: resource.name,
 				}, null);
 			}
 		}

@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+// To test the tool with existing packages, the best is to:
+//
+// - Create a separate copy of the plugin repo
+// - Reset back a few commits
+// - Run with the --dry-run option: `plugin-repo-cli build ~/src/joplin-plugins-test/ --dry-run`
+
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
@@ -7,8 +13,7 @@ import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginI
 import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
-import { ImportErrors, NpmPackage } from './lib/types';
-import errorsHaveChanged from './lib/errorsHaveChanged';
+import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
 
 function stripOffPackageOrg(name: string): string {
@@ -39,13 +44,13 @@ function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	return output;
 }
 
-async function checkPluginRepository(dirPath: string) {
+async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 	if (!(await fs.pathExists(dirPath))) throw new Error(`No plugin repository at: ${dirPath}`);
 	if (!(await fs.pathExists(`${dirPath}/.git`))) throw new Error(`Directory is not a Git repository: ${dirPath}`);
 
 	const previousDir = chdir(dirPath);
 	await gitRepoCleanTry();
-	await gitPullTry();
+	if (!dryRun) await gitPullTry();
 	chdir(previousDir);
 }
 
@@ -97,6 +102,7 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 
 interface CommandBuildArgs {
 	pluginRepoDir: string;
+	dryRun: boolean;
 }
 
 enum ProcessingActionType {
@@ -149,7 +155,6 @@ function chdir(path: string): string {
 async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	const tempDir = `${repoDir}/temp`;
 	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
-	const errorsPath = path.resolve(repoDir, 'errors.json');
 
 	await fs.mkdirp(tempDir);
 
@@ -166,9 +171,6 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	chdir(packageTempDir);
 	await execCommand2('npm init --yes --loglevel silent', { quiet: true });
 
-	const errors: ImportErrors = await readJsonFile(errorsPath, {});
-	delete errors[npmPackage.name];
-
 	let actionType: ProcessingActionType = ProcessingActionType.Update;
 	let manifests: any = {};
 	let manifest: any = {};
@@ -184,21 +186,12 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 		}
 
 		if (!obsoleteManifests[manifest.id]) {
-			previousManifest = { ...manifests[manifest.id] };
+			previousManifest = { ...originalPluginManifests[manifest.id] };
 			manifests[manifest.id] = manifest;
 		}
 	} catch (e) {
 		console.error(e);
-		errors[npmPackage.name] = e.message || '';
 		error = e;
-	}
-
-	if (Object.keys(errors).length) {
-		if (errorsHaveChanged(await readJsonFile(errorsPath, {}), errors)) {
-			await fs.writeFile(errorsPath, JSON.stringify(errors, null, '\t'), 'utf8');
-		}
-	} else {
-		await fs.remove(errorsPath);
 	}
 
 	if (!error) {
@@ -227,10 +220,12 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 }
 
 async function commandBuild(args: CommandBuildArgs) {
+	const dryRun = !!args.dryRun;
 	console.info(new Date(), 'Building repository...');
+	if (dryRun) console.info('Dry run: on');
 
 	const repoDir = args.pluginRepoDir;
-	await checkPluginRepository(repoDir);
+	await checkPluginRepository(repoDir, dryRun);
 
 	// When starting, always update and commit README, in case something has
 	// been updated via a pull request (for example obsoletes.json being
@@ -254,7 +249,7 @@ async function commandBuild(args: CommandBuildArgs) {
 		await processNpmPackage(npmPackage, repoDir);
 	}
 
-	await execCommand2('git push');
+	if (!dryRun) await execCommand2('git push');
 }
 
 async function commandVersion() {
@@ -282,7 +277,7 @@ async function main() {
 		.scriptName(scriptName)
 		.usage('$0 <cmd> [args]')
 
-		.command('build <plugin-repo-dir>', 'Build the plugin repository', (yargs: any) => {
+		.command('build <plugin-repo-dir> [dry-run]', 'Build the plugin repository', (yargs: any) => {
 			yargs.positional('plugin-repo-dir', {
 				type: 'string',
 				describe: 'Directory where the plugin repository is located',

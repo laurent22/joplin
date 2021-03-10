@@ -34,7 +34,7 @@ export default async function(request: Request, id: string = null, link: string 
 				if (!n) continue;
 				output.push(n);
 			}
-			return collectionToPaginatedResults(output, request);
+			return collectionToPaginatedResults(ModelType.Note, output, request);
 		}
 	}
 

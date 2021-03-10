@@ -114,7 +114,7 @@ export default function(props: Props) {
 		let cancelled = false;
 
 		async function fetchPluginIds() {
-			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems as any);
+			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems.map(p => p.manifest));
 			if (cancelled) return;
 			const conv: Record<string, boolean> = {};
 			pluginIds.forEach(id => conv[id] = true);

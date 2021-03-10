@@ -127,14 +127,10 @@ export default function(theme: any) {
 			margin-bottom: 0;
 		}
 
-		a[data-resource-id] {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-		}
-
 		.resource-icon {
 			display: inline-block;
+			position: relative;
+			top: 0.3em;
 			text-decoration: none;
 			width: 1.2em;
 			height: 1.4em;

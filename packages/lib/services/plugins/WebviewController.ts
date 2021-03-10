@@ -1,6 +1,6 @@
 import ViewController, { EmitMessageEvent } from './ViewController';
 import shim from '../../shim';
-import { ButtonSpec, DialogResult } from './api/types';
+import { ButtonSpec, DialogResult, ViewHandle } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
 
 export enum ContainerType {
@@ -43,8 +43,8 @@ export default class WebviewController extends ViewController {
 	private messageListener_: Function = null;
 	private closeResponse_: CloseResponse = null;
 
-	public constructor(id: string, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
-		super(id, pluginId, store);
+	public constructor(handle: ViewHandle, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
+		super(handle, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 
 		this.store.dispatch({
@@ -139,6 +139,11 @@ export default class WebviewController extends ViewController {
 	// ---------------------------------------------
 
 	public async open(): Promise<DialogResult> {
+		this.store.dispatch({
+			type: 'VISIBLE_DIALOGS_ADD',
+			name: this.handle,
+		});
+
 		this.setStoreProp('opened', true);
 
 		return new Promise((resolve: Function, reject: Function) => {
@@ -147,6 +152,11 @@ export default class WebviewController extends ViewController {
 	}
 
 	public close() {
+		this.store.dispatch({
+			type: 'VISIBLE_DIALOGS_REMOVE',
+			name: this.handle,
+		});
+
 		this.setStoreProp('opened', false);
 	}
 

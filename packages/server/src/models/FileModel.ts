@@ -269,7 +269,7 @@ export default class FileModel extends BaseModel<File> {
 		}
 
 		if ('name' in file) {
-			if (this.includesReservedCharacter(file.name)) throw new ErrorUnprocessableEntity(`File name may not contain any of these characters: ${this.reservedCharacters.join('')}`);
+			if (this.includesReservedCharacter(file.name)) throw new ErrorUnprocessableEntity(`File name may not contain any of these characters: ${this.reservedCharacters.join('')}: ${file.name}`);
 		}
 
 		return file;

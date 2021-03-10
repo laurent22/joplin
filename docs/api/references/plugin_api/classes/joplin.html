@@ -111,6 +111,12 @@
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="joplin.html#workspace" class="tsd-kind-icon">workspace</a></li>
 							</ul>
 						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplin.html#require" class="tsd-kind-icon">require</a></li>
+							</ul>
+						</section>
 					</div>
 				</section>
 			</section>
@@ -263,6 +269,46 @@
 					</ul>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="require" class="tsd-anchor"></a>
+					<h3>require</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">require<span class="tsd-signature-symbol">(</span>_path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>It is not possible to bundle native packages with a plugin, because they
+										need to work cross-platforms. Instead access to certain useful native
+									packages is provided using this function.</p>
+								</div>
+								<p>Currently these packages are available:</p>
+								<ul>
+									<li><a href="https://www.npmjs.com/package/sqlite3">sqlite3</a></li>
+									<li><a href="https://www.npmjs.com/package/fs-extra">fs-extra</a></li>
+								</ul>
+								<p><a href="https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/nativeModule">View the demo plugin</a></p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>_path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<!--
@@ -307,6 +353,9 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="joplin.html#workspace" class="tsd-kind-icon">workspace</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplin.html#require" class="tsd-kind-icon">require</a>
 							</li>
 						</ul>
 					</li>

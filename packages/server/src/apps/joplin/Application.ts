@@ -79,8 +79,14 @@ export default class Application extends BaseApplication {
 		return `${itemId}.md`;
 	}
 
-	private async itemMetadataFile(parentId: Uuid, itemId: string): Promise<File> {
+	private async itemMetadataFile(parentId: Uuid, itemId: string): Promise<File | null> {
 		const file = await this.models.file().fileByName(parentId, this.itemIdFilename(itemId), { skipPermissionCheck: true });
+		if (!file) {
+			// We don't throw an error because it can happen if the note
+			// contains an invalid link to a resource or note.
+			logger.error(`Could not find item with ID "${itemId}" on parent "${parentId}"`);
+			return null;
+		}
 		return this.models.file().loadWithContent(file.id, { skipPermissionCheck: true });
 	}
 
@@ -114,6 +120,8 @@ export default class Application extends BaseApplication {
 
 		for (const itemId of itemIds) {
 			const itemFile = await this.itemMetadataFile(noteFileParentId, itemId);
+			if (!itemFile) continue;
+
 			output[itemId] = {
 				item: await this.unserializeItem(itemFile),
 				file: itemFile,
@@ -162,6 +170,8 @@ export default class Application extends BaseApplication {
 			resources: resourceInfos,
 
 			itemIdToUrl: (itemId: Uuid) => {
+				if (!linkedItemInfos[itemId]) return '#';
+
 				const item = linkedItemInfos[itemId].item;
 				if (!item) throw new Error(`No such item in this note: ${itemId}`);
 

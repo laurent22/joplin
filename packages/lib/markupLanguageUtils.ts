@@ -3,7 +3,7 @@ import Setting from './models/Setting';
 import shim from './shim';
 import MarkupToHtml, { MarkupLanguage } from '@joplin/renderer/MarkupToHtml';
 
-const htmlUtils = require('./htmlUtils');
+import htmlUtils from './htmlUtils';
 import Resource from './models/Resource';
 
 export class MarkupLanguageUtils {

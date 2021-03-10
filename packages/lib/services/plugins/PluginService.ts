@@ -73,6 +73,7 @@ export default class PluginService extends BaseService {
 	private platformImplementation_: any = null;
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
+	private startedPlugins_: Record<string, boolean> = {};
 
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.appVersion_ = appVersion;
@@ -337,6 +338,13 @@ export default class PluginService extends BaseService {
 		return compareVersions(this.appVersion_, pluginVersion) >= 0;
 	}
 
+	public get allPluginsStarted(): boolean {
+		for (const pluginId of Object.keys(this.startedPlugins_)) {
+			if (!this.startedPlugins_[pluginId]) return false;
+		}
+		return true;
+	}
+
 	public async runPlugin(plugin: Plugin) {
 		if (!this.isCompatible(plugin.manifest.app_min_version)) {
 			throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
@@ -350,6 +358,15 @@ export default class PluginService extends BaseService {
 				},
 			});
 		}
+
+		this.startedPlugins_[plugin.id] = false;
+
+		const onStarted = () => {
+			this.startedPlugins_[plugin.id] = true;
+			plugin.off('started', onStarted);
+		};
+
+		plugin.on('started', onStarted);
 
 		const pluginApi = new Global(this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);

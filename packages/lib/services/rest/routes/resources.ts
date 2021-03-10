@@ -1,4 +1,4 @@
-import BaseModel from '../../../BaseModel';
+import BaseModel, { ModelType } from '../../../BaseModel';
 import shim from '../../../shim';
 import { Request, RequestMethod } from '../Api';
 import defaultAction from '../utils/defaultAction';
@@ -41,7 +41,7 @@ export default async function(request: Request, id: string = null, link: string 
 			for (const noteId of noteIds) {
 				notes.push(await Note.load(noteId, loadOptions));
 			}
-			return collectionToPaginatedResults(notes, request);
+			return collectionToPaginatedResults(ModelType.Note, notes, request);
 		}
 
 		if (link) throw new ErrorNotFound();
