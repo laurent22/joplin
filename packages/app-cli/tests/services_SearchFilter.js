@@ -802,6 +802,4 @@ describe('services_SearchFilter', function() {
 
 	}));
 
-
-
 });
