@@ -732,22 +732,6 @@ export default class BaseApplication {
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(globalLogger);
 
-		// if (Setting.value('env') === 'dev') {
-		// 	if (shim.isElectron()) {
-		// 		this.database_.extensionToLoad = './lib/sql-extensions/spellfix';
-		// 	}
-		// } else {
-		// 	if (shim.isElectron()) {
-		// 		if (shim.isWindows()) {
-		// 			const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('\\'));
-		// 			this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
-		// 		} else {
-		// 			const appDir = process.execPath.substring(0, process.execPath.lastIndexOf('/'));
-		// 			this.database_.extensionToLoad = `${appDir}/usr/lib/spellfix`;
-		// 		}
-		// 	}
-		// }
-
 		await this.database_.open({ name: `${profileDir}/database.sqlite` });
 
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
@@ -773,19 +757,6 @@ export default class BaseApplication {
 		} else {
 			setLocale(Setting.value('locale'));
 		}
-
-		// if (Setting.value('db.fuzzySearchEnabled') === -1) {
-		// 	const fuzzySearchEnabled = await this.database_.fuzzySearchEnabled();
-		// 	Setting.setValue('db.fuzzySearchEnabled', fuzzySearchEnabled ? 1 : 0);
-		// }
-
-		// // Always disable on CLI because building and packaging the extension is not working
-		// // and is too error-prone - requires gcc on the machine, or we should package the .so
-		// // and dylib files, but it's not sure it would work everywhere if not built from
-		// // source on the target machine.
-		// if (Setting.value('appType') !== 'desktop') {
-		// 	Setting.setValue('db.fuzzySearchEnabled', 0);
-		// }
 
 		// For now always disable fuzzy search due to performance issues:
 		// https://discourse.joplinapp.org/t/1-1-4-keyboard-locks-up-while-typing/11231/11

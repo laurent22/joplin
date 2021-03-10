@@ -300,7 +300,7 @@ const sourceUrlFilter = (terms: Term[], conditons: string[], params: string[], r
 };
 
 
-const textFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, fuzzy: Boolean) => {
+const textFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation) => {
 	const addExcludeTextConditions = (excludedTerms: Term[], conditions: string[], params: string[], relation: Relation) => {
 		const type = excludedTerms[0].name === 'text' ? '' : `.${excludedTerms[0].name}`;
 
@@ -342,7 +342,7 @@ const textFilter = (terms: Term[], conditions: string[], params: string[], relat
 			if (term.name === 'text') return term.value;
 			else return `${term.name}:${term.value}`;
 		});
-		const matchQuery = (fuzzy || (relation === 'OR')) ? termsToMatch.join(' OR ') : termsToMatch.join(' ');
+		const matchQuery = (relation === 'OR') ? termsToMatch.join(' OR ') : termsToMatch.join(' ');
 		params.push(matchQuery);
 	}
 
@@ -374,7 +374,7 @@ const getConnective = (terms: Term[], relation: Relation): string => {
 	return (!notebookTerm && (relation === 'OR')) ? 'ROWID=-1' : '1'; // ROWID=-1 acts as 0 (something always false)
 };
 
-export default function queryBuilder(terms: Term[], fuzzy: boolean) {
+export default function queryBuilder(terms: Term[]) {
 	const queryParts: string[] = [];
 	const params: string[] = [];
 	const withs: string[] = [];
@@ -402,7 +402,7 @@ export default function queryBuilder(terms: Term[], fuzzy: boolean) {
 
 	resourceFilter(terms, queryParts, params, relation, withs);
 
-	textFilter(terms, queryParts, params, relation, fuzzy);
+	textFilter(terms, queryParts, params, relation);
 
 
 	typeFilter(terms, queryParts, params, relation);
