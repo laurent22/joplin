@@ -21,86 +21,59 @@ enum Requirement {
 	INCLUSION = 'INCLUSION',
 }
 
+const _notebookFilter = (notebooks: string[], requirement: Requirement, conditions: string[], params: string[], withs: string[]) => {
+	if (notebooks.length === 0) return;
+
+	const likes = [];
+	for (let i = 0; i < notebooks.length; i++) {
+		likes.push('folders.title LIKE ?');
+	}
+
+	const relevantFolders = likes.join(' OR ');
+
+	const viewName = requirement === Requirement.EXCLUSION ? 'notebooks_not_in_scope' : 'notebooks_in_scope';
+	const withInNotebook = `
+	${viewName}(id)
+	AS (
+		SELECT folders.id
+		FROM folders
+		WHERE id
+		IN (
+			SELECT id
+			FROM folders
+			WHERE ${relevantFolders}
+		)
+		UNION ALL
+		SELECT folders.id
+		FROM folders
+		JOIN ${viewName}
+		ON folders.parent_id=${viewName}.id
+	)`;
+
+	const where = `
+	AND ROWID ${requirement === Requirement.EXCLUSION ? 'NOT' : ''} IN (
+		SELECT notes_normalized.ROWID
+		FROM ${viewName}
+		JOIN notes_normalized
+		ON ${viewName}.id=notes_normalized.parent_id
+	)`;
+
+
+	withs.push(withInNotebook);
+	params.push(...notebooks);
+	conditions.push(where);
+
+};
+
 const notebookFilter = (terms: Term[], conditions: string[], params: string[], withs: string[]) => {
-	const notebooks = terms.filter(x => x.name === 'notebook' && !x.negated).map(x => x.value);
-	if (notebooks.length === 0) return;
+	const notebooksToInclude = terms.filter(x => x.name === 'notebook' && !x.negated).map(x => x.value);
+	_notebookFilter(notebooksToInclude, Requirement.INCLUSION, conditions, params, withs);
 
-	const likes = [];
-	for (let i = 0; i < notebooks.length; i++) {
-		likes.push('folders.title LIKE ?');
-	}
-	const relevantFolders = likes.join(' OR ');
-
-	const withInNotebook = `
-	notebooks_in_scope(id)
-	AS (
-		SELECT folders.id
-		FROM folders
-		WHERE id
-		IN (
-			SELECT id
-			FROM folders
-			WHERE ${relevantFolders}
-		)
-		UNION ALL
-		SELECT folders.id
-		FROM folders
-		JOIN notebooks_in_scope
-		ON folders.parent_id=notebooks_in_scope.id
-	)`;
-	const where = `
-	AND ROWID IN (
-		SELECT notes_normalized.ROWID
-		FROM notebooks_in_scope
-		JOIN notes_normalized
-		ON notebooks_in_scope.id=notes_normalized.parent_id
-	)`;
-
-	withs.push(withInNotebook);
-	params.push(...notebooks);
-	conditions.push(where);
+	const notebooksToExclude = terms.filter(x => x.name === 'notebook' && x.negated).map(x => x.value);
+	_notebookFilter(notebooksToExclude, Requirement.EXCLUSION, conditions, params, withs);
 };
 
 
-const notebookFilterNegated = (terms: Term[], conditions: string[], params: string[], withs: string[]) => {
-	const notebooks = terms.filter(x => x.name === 'notebook' && x.negated).map(x => x.value);
-	if (notebooks.length === 0) return;
-
-	const likes = [];
-	for (let i = 0; i < notebooks.length; i++) {
-		likes.push('folders.title LIKE ?');
-	}
-	const relevantFolders = likes.join(' OR ');
-
-	const withInNotebook = `
-	notebooks_not_in_scope(id)
-	AS (
-		SELECT folders.id
-		FROM folders
-		WHERE id
-		IN (
-			SELECT id
-			FROM folders
-			WHERE ${relevantFolders}
-		)
-		UNION ALL
-		SELECT folders.id
-		FROM folders
-		JOIN notebooks_not_in_scope
-		ON folders.parent_id=notebooks_not_in_scope.id
-	)`;
-	const where = `
-	AND ROWID NOT IN (
-		SELECT notes_normalized.ROWID
-		FROM notebooks_not_in_scope
-		JOIN notes_normalized
-		ON notebooks_not_in_scope.id=notes_normalized.parent_id
-	)`;
-
-	withs.push(withInNotebook);
-	params.push(...notebooks);
-	conditions.push(where);
-};
 
 const getOperator = (requirement: Requirement, relation: Relation): Operation => {
 	if (relation === 'AND' && requirement === 'INCLUSION') { return Operation.INTERSECT; } else { return Operation.UNION; }
@@ -438,8 +411,6 @@ export default function queryBuilder(terms: Term[], fuzzy: boolean) {
 
 
 	notebookFilter(terms, queryParts, params, withs);
-
-	notebookFilterNegated(terms, queryParts, params, withs);
 
 	tagFilter(terms, queryParts, params, relation, withs);
 
