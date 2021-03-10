@@ -2913,15 +2913,14 @@ msgid ""
 msgstr "已下载项目为未知类型，请将 Joplin 升级至最新版本"
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"无法连接到 Joplin Nextcloud 应用。 请在“同步”配置页面中检查配置。 完整的错误"
-"信息是: \n"
+"无法连接到 Joplin 服务器。请在配置页面中检查同步选项。 完整的错误信息是: \n"
 "\n"
 "%s"
 
