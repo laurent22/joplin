@@ -152,8 +152,6 @@ describe('filterParser should be correct filter for keyword', () => {
 		searchString = 'iscompleted:blah';
 		expect(() => filterParser(searchString)).toThrow(new Error('The value of filter "iscompleted" must be "1" or "0"'));
 
-		searchString = '-notebook:n1';
-		expect(() => filterParser(searchString)).toThrow(new Error('notebook can\'t be negated'));
 
 		searchString = '-iscompleted:1';
 		expect(() => filterParser(searchString)).toThrow(new Error('iscompleted can\'t be negated'));
