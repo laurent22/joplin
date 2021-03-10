@@ -311,7 +311,7 @@ export default class BaseApplication {
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
 				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
-				// ignore paranthesis when finding words to highlight
+				// ignore brackets when finding words to highlight
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern.replace(/[()]/g, ' '));
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
