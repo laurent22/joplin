@@ -68,7 +68,7 @@ export default function useJoplinMode(CodeMirror: any) {
 
 					if (state.openCharacter === '$$' && blockPos !== -1) nextTokenPos = blockPos;
 					if (state.openCharacter === '$' && inlinePos !== -1) nextTokenPos = inlinePos;
-				} else if (!currentState.code) {
+				} else if (!currentState.code && Setting.value('markdown.plugin.katex')) {
 					const blockPos = findToken(stream, blockKatexOpenRE);
 					const inlinePos = findToken(stream, inlineKatexOpenRE);
 
