@@ -70,7 +70,7 @@ export default class JoplinSettings {
 
 			settingsPromises.push(Setting.registerSetting(this.namespacedKey(key), internalSettingItem));
 		}
-		return Promise.all(settingsPromises);
+		await Promise.all(settingsPromises);
 	}
 
 	/**
