@@ -7,6 +7,7 @@ export default function versionInfo(packageInfo: any) {
 	let gitInfo = '';
 	if ('git' in p) {
 		gitInfo = _('Revision: %s (%s)', p.git.hash, p.git.branch);
+		if (p.git.branch === 'HEAD') gitInfo = gitInfo.slice(0, -7);
 	}
 	const copyrightText = 'Copyright © 2016-YYYY Laurent Cozic';
 	const now = new Date();
