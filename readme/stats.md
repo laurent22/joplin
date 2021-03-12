@@ -2,25 +2,25 @@
 
 Name | Value
 --- | ---
-Total Windows downloads | 1,282,623
-Total macOs downloads | 501,673
-Total Linux downloads | 388,748
+Total Windows downloads | 1,282,724
+Total macOs downloads | 501,703
+Total Linux downloads | 388,789
 Windows % | 59%
 macOS % | 23%
 Linux % | 18%
 
 Version | Date | Windows | macOS | Linux | Total
 --- | --- | --- | --- | --- | ---
-[v1.7.11](https://github.com/laurent22/joplin/releases/tag/v1.7.11) | 2021-02-03T12:50:01Z | 42,164 | 18,144 | 23,829 | 84,137
-[v1.7.10](https://github.com/laurent22/joplin/releases/tag/v1.7.10) | 2021-01-30T13:25:29Z | 13,718 | 4,812 | 4,401 | 22,931
-[v1.6.8](https://github.com/laurent22/joplin/releases/tag/v1.6.8) | 2021-01-20T18:11:34Z | 17,708 | 7,634 | 7,547 | 32,889
+[v1.7.11](https://github.com/laurent22/joplin/releases/tag/v1.7.11) | 2021-02-03T12:50:01Z | 42,257 | 18,172 | 23,869 | 84,298
+[v1.7.10](https://github.com/laurent22/joplin/releases/tag/v1.7.10) | 2021-01-30T13:25:29Z | 13,719 | 4,812 | 4,401 | 22,932
+[v1.6.8](https://github.com/laurent22/joplin/releases/tag/v1.6.8) | 2021-01-20T18:11:34Z | 17,712 | 7,634 | 7,547 | 32,893
 [v1.6.7](https://github.com/laurent22/joplin/releases/tag/v1.6.7) | 2021-01-11T23:20:33Z | 10,130 | 4,599 | 4,524 | 19,253
 [v1.6.6](https://github.com/laurent22/joplin/releases/tag/v1.6.6) | 2021-01-09T16:15:31Z | 12,334 | 3,401 | 4,771 | 20,506
 [v1.5.14](https://github.com/laurent22/joplin/releases/tag/v1.5.14) | 2020-12-30T01:48:46Z | 10,629 | 5,173 | 5,505 | 21,307
 [v1.5.13](https://github.com/laurent22/joplin/releases/tag/v1.5.13) | 2020-12-29T18:29:15Z | 599 | 210 | 188 | 997
 [v1.5.12](https://github.com/laurent22/joplin/releases/tag/v1.5.12) | 2020-12-28T15:14:08Z | 2,340 | 1,755 | 908 | 5,003
 [v1.5.11](https://github.com/laurent22/joplin/releases/tag/v1.5.11) | 2020-12-27T19:54:07Z | 13,933 | 4,601 | 4,249 | 22,783
-[v1.4.19](https://github.com/laurent22/joplin/releases/tag/v1.4.19) | 2020-12-01T11:11:16Z | 25,303 | 13,265 | 11,588 | 50,156
+[v1.4.19](https://github.com/laurent22/joplin/releases/tag/v1.4.19) | 2020-12-01T11:11:16Z | 25,303 | 13,267 | 11,588 | 50,158
 [v1.4.18](https://github.com/laurent22/joplin/releases/tag/v1.4.18) | 2020-11-28T12:21:41Z | 11,061 | 3,869 | 3,050 | 17,980
 [v1.4.16](https://github.com/laurent22/joplin/releases/tag/v1.4.16) | 2020-11-27T19:40:16Z | 1,426 | 821 | 583 | 2,830
 [v1.4.15](https://github.com/laurent22/joplin/releases/tag/v1.4.15) | 2020-11-27T13:25:43Z | 875 | 481 | 260 | 1,616
@@ -31,7 +31,7 @@ Version | Date | Windows | macOS | Linux | Total
 [v1.1.4](https://github.com/laurent22/joplin/releases/tag/v1.1.4) | 2020-09-21T11:20:09Z | 27,502 | 13,485 | 7,723 | 48,710
 [v1.0.245](https://github.com/laurent22/joplin/releases/tag/v1.0.245) | 2020-09-09T12:56:10Z | 21,004 | 9,995 | 5,631 | 36,630
 [v1.0.242](https://github.com/laurent22/joplin/releases/tag/v1.0.242) | 2020-09-04T22:00:34Z | 12,384 | 6,415 | 3,014 | 21,813
-[v1.0.241](https://github.com/laurent22/joplin/releases/tag/v1.0.241) | 2020-09-04T18:06:00Z | 23,341 | 5,727 | 4,984 | 34,052
+[v1.0.241](https://github.com/laurent22/joplin/releases/tag/v1.0.241) | 2020-09-04T18:06:00Z | 23,342 | 5,727 | 4,984 | 34,053
 [v1.0.233](https://github.com/laurent22/joplin/releases/tag/v1.0.233) | 2020-08-01T14:51:15Z | 42,872 | 18,185 | 12,356 | 73,413
 [v1.0.227](https://github.com/laurent22/joplin/releases/tag/v1.0.227) | 2020-07-07T20:44:54Z | 40,297 | 15,271 | 9,626 | 65,194
 [v1.0.224](https://github.com/laurent22/joplin/releases/tag/v1.0.224) | 2020-06-20T22:26:08Z | 24,757 | 11,001 | 6,005 | 41,763
@@ -46,7 +46,7 @@ Version | Date | Windows | macOS | Linux | Total
 [v1.0.193](https://github.com/laurent22/joplin/releases/tag/v1.0.193) | 2020-03-08T08:58:53Z | 28,626 | 10,903 | 7,385 | 46,914
 [v1.0.179](https://github.com/laurent22/joplin/releases/tag/v1.0.179) | 2020-01-24T22:42:41Z | 70,992 | 28,516 | 22,519 | 122,027
 [v1.0.178](https://github.com/laurent22/joplin/releases/tag/v1.0.178) | 2020-01-20T19:06:45Z | 17,537 | 5,959 | 2,583 | 26,079
-[v1.0.175](https://github.com/laurent22/joplin/releases/tag/v1.0.175) | 2019-12-08T11:48:47Z | 72,390 | 16,888 | 16,499 | 105,777
+[v1.0.175](https://github.com/laurent22/joplin/releases/tag/v1.0.175) | 2019-12-08T11:48:47Z | 72,392 | 16,888 | 16,499 | 105,779
 [v1.0.174](https://github.com/laurent22/joplin/releases/tag/v1.0.174) | 2019-11-12T18:20:58Z | 30,397 | 11,712 | 8,219 | 50,328
 [v1.0.173](https://github.com/laurent22/joplin/releases/tag/v1.0.173) | 2019-11-11T08:33:35Z | 5,064 | 2,075 | 742 | 7,881
 [v1.0.170](https://github.com/laurent22/joplin/releases/tag/v1.0.170) | 2019-10-13T22:13:04Z | 27,398 | 8,749 | 7,673 | 43,820
@@ -91,7 +91,7 @@ Version | Date | Windows | macOS | Linux | Total
 [v1.0.100](https://github.com/laurent22/joplin/releases/tag/v1.0.100) | 2018-06-14T17:41:43Z | 882 | 434 | 246 | 1,562
 [v1.0.99](https://github.com/laurent22/joplin/releases/tag/v1.0.99) | 2018-06-10T13:18:23Z | 1,256 | 598 | 380 | 2,234
 [v1.0.97](https://github.com/laurent22/joplin/releases/tag/v1.0.97) | 2018-06-09T19:23:34Z | 315 | 159 | 61  | 535
-[v1.0.96](https://github.com/laurent22/joplin/releases/tag/v1.0.96) | 2018-05-26T16:36:39Z | 2,721 | 1,225 | 1,686 | 5,632
+[v1.0.96](https://github.com/laurent22/joplin/releases/tag/v1.0.96) | 2018-05-26T16:36:39Z | 2,721 | 1,225 | 1,687 | 5,633
 [v1.0.95](https://github.com/laurent22/joplin/releases/tag/v1.0.95) | 2018-05-25T13:04:30Z | 420 | 220 | 120 | 760
 [v1.0.94](https://github.com/laurent22/joplin/releases/tag/v1.0.94) | 2018-05-21T20:52:59Z | 1,134 | 586 | 397 | 2,117
 [v1.0.93](https://github.com/laurent22/joplin/releases/tag/v1.0.93) | 2018-05-14T11:36:01Z | 1,791 | 1,128 | 759 | 3,678
