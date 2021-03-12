@@ -412,31 +412,45 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md
 <p>First you need to setup your environment:</p>
 <ul>
 <li>Make sure you have <a href="https://nodejs.org/">Node.js</a> and <a href="https://git-scm.com">git</a> installed.</li>
-<li>Install Joplin and run it in development mode.</li>
+<li>Install <a href="https://joplinapp.org/">Joplin</a></li>
 </ul>
-<p>You will also need to have Joplin installed and running in development mode, which we'll describe later.</p>
-<p>But first install Yeoman and the Joplin Plugin Generator:</p>
+<p>But first install <a href="https://yeoman.io/">Yeoman</a> and the <a href="https://github.com/laurent22/joplin/tree/dev/packages/generator-joplin">Joplin Plugin Generator</a>:</p>
 <pre><code>npm install -g yo generator-joplin
 </code></pre>
-<p>Then to create the plugin, run:</p>
+<p>Then, in the directory where you plan to develop the plugin, run:</p>
 <pre><code>yo joplin
 </code></pre>
-<p>This will create the basic scafolding of the plugin. At the root of it, there is a number of configuration files which you normally won't need to change. Then the <code>src/</code> directory will contain your code. By default, the project uses TypeScript, but you are free to use plain JavaScript too - eventually the project is compiled to plain JS in any case.</p>
-<p>The <code>src/</code> directory also contains a <a href="https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest/">manifest.json</a> file, which you can edit to set various information about the plugin, such as its name, homepage URL, etc.</p>
+<p>This will generate the basic scafolding of the plugin. At the root of it, there are a number of configuration files which you normally won't need to change. Then the <code>src/</code> directory will contain your code. By default, the project uses TypeScript, but you are free to use plain JavaScript too - eventually the project is compiled to plain JS in any case.</p>
+<p>The <code>src/</code> directory also contains a <a href="https://joplinapp.org/api/references/plugin_manifest/">manifest.json</a> file, which contains the various information about the plugin that was set in the inital generation of the scaffolding, such as its name, homepage URL, etc. You can edit this at any time, but editing it after it has been published may cause users to have to download it again.</p>
+<h2>Setup Source Control<a name="setup-source-control" href="#setup-source-control" class="heading-anchor">🔗</a></h2>
+<p>In your plugin directory, run:</p>
+<pre><code>git init 
+</code></pre>
+<p>This will setup source control.</p>
+<h2>Run Joplin in Development Mode<a name="run-joplin-in-development-mode" href="#run-joplin-in-development-mode" class="heading-anchor">🔗</a></h2>
+<p>You should test your plugin in Development Mode. Doing so means that Joplin will run using a different profile, so you can experiment with the plugin without risking to accidentally change or delete your data.</p>
 <h2>Building the plugin<a name="building-the-plugin" href="#building-the-plugin" class="heading-anchor">🔗</a></h2>
-<p>The file <code>src/index.ts</code> already contain some basic code meant for testing the plugin. In particular it contains a call to <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinplugins.html">joplin.plugins.register</a>, which all plugins should call to register the plugin. And an <code>onStart()</code> event handler, which will be executed by Joplin when the plugin starts.</p>
+<p>From the scaffolding, <code>src/index.ts</code> now contains the basic code for a Hello World plugin.</p>
+<p>Two things to note:</p>
+<ol>
+<li>It contains a call to <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinplugins.html#register">joplin.plugins.register</a>. All plugins call this to register the plugin in the app.</li>
+<li>An <code>onStart()</code> event handler method, which is called when the plugin starts.</li>
+</ol>
 <p>To try this basic plugin, compile the app by running the following from the root of the project:</p>
 <pre><code>npm run dist
 </code></pre>
-<p>Doing so should compile all the files into the <code>dist/</code> directory. This is from here that Joplin will load the plugin.</p>
-<h2>Testing the plugin<a name="testing-the-plugin" href="#testing-the-plugin" class="heading-anchor">🔗</a></h2>
-<p>In order to test the plugin, you might want to run Joplin in <a href="https://joplinapp.org/api/references/development_mode/">Development Mode</a>. Doing so means that Joplin will run using a different profile, so you can experiment with the plugin without risking to accidentally change or delete your data.</p>
-<p>Finally, in order to test the plugin, open the Setting screen, then navigate the the <strong>Plugins</strong> section, and add the plugin path in the <strong>Development plugins</strong> text field. For example, if your plugin project path is <code>/home/user/src/joplin-plugin</code>, add this in the text field.</p>
-<p>Restart the app, and Joplin should load the plugin and execute its <code>onStart</code> handler. If all went well you should see the test message in the plugin console: &quot;Test plugin started!&quot;.</p>
+<p>Doing so should compile all the files into the <code>dist/</code> directory. This is where Joplin will load the plugin.</p>
+<h2>Install the plugin<a name="install-the-plugin" href="#install-the-plugin" class="heading-anchor">🔗</a></h2>
+<p>Open Joplin <strong>Configuration &gt; Plugins</strong> section. Under Advanced Settings, add the plugin path in the <strong>Development plugins</strong> text field.<br>
+This should be the path to your main plugin directory, i.e. <code>path/to/your/root/plugin/directory</code>.</p>
+<h2>Test the Plugin, Hello World!<a name="test-the-plugin-hello-world" href="#test-the-plugin-hello-world" class="heading-anchor">🔗</a></h2>
+<p>Restart the Development app from the command line/terminal, and Joplin should load the plugin and execute its <code>onStart</code> handler. If all went well you should see the test message in the plugin console: &quot;Hello world. Test plugin started!&quot;. You will also be able to see the information from the manifest in the <strong>Settings &gt; Plugins</strong></p>
 <h1>Next steps<a name="next-steps" href="#next-steps" class="heading-anchor">🔗</a></h1>
+<p>Great, you now have the basics of a working plugin!</p>
 <ul>
-<li>You might want to check the <a href="https://joplinapp.org/api/tutorials/toc_plugin/">plugin tutorial</a> to get a good overview of how to create a complete plugin and how to use the plugin API.</li>
-<li>For more information about the plugin API, check the <a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API reference</a>.</li>
+<li>Start the <a href="https://joplinapp.org/api/tutorials/toc_plugin/">plugin tutorial</a> to learn how to use the plugin API.</li>
+<li>See what the plugin API supports, <a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API reference</a>.</li>
+<li>For plugin feature ideas, see this thread: <a href="https://discourse.joplinapp.org/t/any-suggestions-on-what-plugins-could-be-created/9479">https://discourse.joplinapp.org/t/any-suggestions-on-what-plugins-could-be-created/9479</a></li>
 </ul>
 
 		<div class="bottom-links">
