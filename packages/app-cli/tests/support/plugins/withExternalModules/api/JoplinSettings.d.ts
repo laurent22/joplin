@@ -22,18 +22,11 @@ export default class JoplinSettings {
     private get keyPrefix();
     private namespacedKey;
     /**
-	 * Registers new settings.
-	 * Note that registering a setting item is dynamic and will be gone next time Joplin starts.
-	 * What it means is that you need to register the setting every time the plugin starts (for example in the onStart event).
-	 * The setting value however will be preserved from one launch to the next so there is no risk that it will be lost even if for some
-	 * reason the plugin fails to start at some point.
-	 */
-    registerSettings(settings: Record<string, SettingItem>): Promise<void>;
-    /**
-	 * @deprecated Use joplin.settings.registerSettings()
-	 *
-	 * Registers a new setting.
-	 */
+     * Registers a new setting. Note that registering a setting item is dynamic and will be gone next time Joplin starts.
+     * What it means is that you need to register the setting every time the plugin starts (for example in the onStart event).
+     * The setting value however will be preserved from one launch to the next so there is no risk that it will be lost even if for some
+     * reason the plugin fails to start at some point.
+     */
     registerSetting(key: string, settingItem: SettingItem): Promise<void>;
     /**
      * Registers a new setting section. Like for registerSetting, it is dynamic and needs to be done every time the plugin starts.

@@ -46,8 +46,6 @@ export default class JoplinSettings {
 	 * reason the plugin fails to start at some point.
 	 */
 	public async registerSettings(settings: Record<string, SettingItem>) {
-		const settingsPromises = [];
-
 		for (const [key, setting] of Object.entries(settings)) {
 			const internalSettingItem: InternalSettingItem = {
 				key: key,
@@ -68,9 +66,8 @@ export default class JoplinSettings {
 			if ('maximum' in setting) internalSettingItem.maximum = setting.maximum;
 			if ('step' in setting) internalSettingItem.step = setting.step;
 
-			settingsPromises.push(Setting.registerSetting(this.namespacedKey(key), internalSettingItem));
+			await Setting.registerSetting(this.namespacedKey(key), internalSettingItem);
 		}
-		await Promise.all(settingsPromises);
 	}
 
 	/**
@@ -79,7 +76,7 @@ export default class JoplinSettings {
 	 * Registers a new setting.
 	 */
 	public async registerSetting(key: string, settingItem: SettingItem) {
-		this.plugin_.deprecationNotice('1.8', 'joplin.settings.registerSetting() is disabled in favour of joplin.settings.registerSettings()');
+		this.plugin_.deprecationNotice('1.8', 'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()');
 		await this.registerSettings({ [key]: settingItem });
 	}
 
