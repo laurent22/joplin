@@ -84,6 +84,7 @@ export default class ElectronAppWrapper {
 			minWidth: 100,
 			minHeight: 100,
 			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
+			frame: false,
 			webPreferences: {
 				nodeIntegration: true,
 				spellcheck: true,
@@ -203,6 +204,13 @@ export default class ElectronAppWrapper {
 				win.webContents.send('pluginMessage', message);
 			}
 		});
+
+		ipcMain.on('minimize-handler', () => this.win_.minimize());
+
+		ipcMain.on('maximize-handler', () => this.win_.isMaximized() ?
+			this.win_.restore() : this.win_.maximize());
+
+		ipcMain.on('close-window-handler', () => this.win_.close());
 
 		// Let us register listeners on the window, so we can update the state
 		// automatically (the listeners will be removed when the window is closed)
