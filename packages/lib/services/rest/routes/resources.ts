@@ -51,7 +51,10 @@ export default async function(request: Request, id: string = null, link: string 
 		if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
 		const filePath = request.files[0].path;
 		const defaultProps = request.bodyJson(readonlyProperties('POST'));
-		return shim.createResourceFromPath(filePath, defaultProps, { userSideValidation: true });
+		return shim.createResourceFromPath(filePath, defaultProps, {
+			userSideValidation: true,
+			resizeLargeImages: 'never',
+		});
 	}
 
 	return defaultAction(BaseModel.TYPE_RESOURCE, request, id, link);
