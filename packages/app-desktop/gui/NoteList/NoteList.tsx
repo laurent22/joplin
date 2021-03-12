@@ -254,29 +254,35 @@ class NoteListComponent extends React.Component {
 
 		if (!this.itemAnchorRefs_[item.id]) this.itemAnchorRefs_[item.id] = React.createRef();
 		const ref = this.itemAnchorRefs_[item.id];
-
-		return <NoteListItem
-			ref={ref}
-			key={item.id}
-			style={this.style()}
-			item={item}
-			index={index}
-			themeId={this.props.themeId}
-			width={this.state.width}
-			height={this.itemHeight}
-			dragItemIndex={this.state.dragOverTargetNoteIndex}
-			highlightedWords={highlightedWords()}
-			isProvisional={this.props.provisionalNoteIds.includes(item.id)}
-			isSelected={this.props.selectedNoteIds.indexOf(item.id) >= 0}
-			isWatched={this.props.watchedNoteFiles.indexOf(item.id) < 0}
-			itemCount={this.props.notes.length}
-			onCheckboxClick={this.noteItem_checkboxClick}
-			onDragStart={this.noteItem_dragStart}
-			onNoteDragOver={this.noteItem_noteDragOver}
-			onNoteDrop={this.noteItem_noteDrop}
-			onTitleClick={this.noteItem_titleClick}
-			onContextMenu={this.itemContextMenu}
+    
+    if(!Setting.value('showCompletedTodos') && item.todo_completed){
+      return null;
+    }else{
+      return <NoteListItem
+			  ref={ref}
+			  key={item.id}
+			  style={this.style()}
+			  item={item}
+			  index={index}
+			  themeId={this.props.themeId}
+			  width={this.state.width}
+			  height={this.itemHeight}
+			  dragItemIndex={this.state.dragOverTargetNoteIndex}
+			  highlightedWords={highlightedWords()}
+			  isProvisional={this.props.provisionalNoteIds.includes(item.id)}
+			  isSelected={this.props.selectedNoteIds.indexOf(item.id) >= 0}
+			  isWatched={this.props.watchedNoteFiles.indexOf(item.id) < 0}
+			  itemCount={this.props.notes.length}
+			  onCheckboxClick={this.noteItem_checkboxClick}
+			  onDragStart={this.noteItem_dragStart}
+			  onNoteDragOver={this.noteItem_noteDragOver}
+			  onNoteDrop={this.noteItem_noteDrop}
+			  onTitleClick={this.noteItem_titleClick}
+			  onContextMenu={this.itemContextMenu}
 		/>;
+    }
+
+		
 	}
 
 	itemAnchorRef(itemId: string) {
