@@ -327,7 +327,7 @@ describe('services_rest_Api', function() {
 	}));
 
 	it('should not compress images uploaded through resource api', (async () => {
-		const originalImagePath = `${__dirname}/../tests/support/photo-large.jpg`;
+		const originalImagePath = `${__dirname}/../tests/support/photo-large.png`;
 		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
 			title: 'testing resource',
 		}), [
