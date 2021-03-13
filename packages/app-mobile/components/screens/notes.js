@@ -98,9 +98,9 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	async componentDidMount() {
+		BackButtonService.addHandler(this.backHandler);
 		await this.refreshNotes();
 		AppState.addEventListener('change', this.onAppStateChange_);
-		BackButtonService.addHandler(this.backHandler);
 	}
 
 	async componentWillUnmount() {

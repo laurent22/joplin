@@ -118,7 +118,7 @@ const parseQuery = (query: string): Term[] => {
 	}
 
 	// validation
-	let incorrect = result.filter(term => term.name === 'type' || term.name === 'iscompleted' || term.name === 'notebook')
+	let incorrect = result.filter(term => term.name === 'type' || term.name === 'iscompleted')
 		.find(x => x.negated);
 	if (incorrect) throw new Error(`${incorrect.name} can't be negated`);
 

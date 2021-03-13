@@ -20,8 +20,8 @@ export default function useJoplinMode(CodeMirror: any) {
 		const markdownMode = CodeMirror.getMode(config, markdownConfig);
 		const stex = CodeMirror.getMode(config, { name: 'stex', inMathMode: true });
 
-		const inlineKatexOpenRE = /(?<!\S)\$(?=[^\s$].*?[^\\\s$]\$(?![^\s!"#%&'()*+,\-.:;<=>?@[\]^_`{|}~]))/;
-		const inlineKatexCloseRE = /(?<![\\\s$])\$(?![^\s!"#%&'()*+,\-.:;<=>?@[\]^_`{|}~])/;
+		const inlineKatexOpenRE = /(?<!\\)\$(?=[^\s$].*?[^\\\s$]\$(?![0-9]))/;
+		const inlineKatexCloseRE = /(?<![\\\s$])\$(?![0-9])/;
 		const blockKatexOpenRE = /(?<!\S)\$\$/;
 		const blockKatexCloseRE = /(?<![\\\s])\$\$/;
 
@@ -68,7 +68,7 @@ export default function useJoplinMode(CodeMirror: any) {
 
 					if (state.openCharacter === '$$' && blockPos !== -1) nextTokenPos = blockPos;
 					if (state.openCharacter === '$' && inlinePos !== -1) nextTokenPos = inlinePos;
-				} else if (!currentState.code) {
+				} else if (!currentState.code && Setting.value('markdown.plugin.katex')) {
 					const blockPos = findToken(stream, blockKatexOpenRE);
 					const inlinePos = findToken(stream, inlineKatexOpenRE);
 

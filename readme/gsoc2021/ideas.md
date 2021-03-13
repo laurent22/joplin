@@ -111,3 +111,9 @@ Difficulty Level: High
 Skills Required: JavaScript
 
 Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/)
+
+# More info
+
+- Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2021/index/)
+- To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+- And before creating a pull request, please read the [pull request guidelines](https://joplinapp.org/gsoc2021/pull_request_guidelines/)
