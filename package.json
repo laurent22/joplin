@@ -63,7 +63,7 @@
     "husky": "^3.0.2",
     "lerna": "^3.22.1",
     "lint-staged": "^9.2.1",
-    "madge": "^4.0.0",
+    "madge": "^4.0.2",
     "typedoc": "^0.17.8",
     "typescript": "^4.0.5"
   }
