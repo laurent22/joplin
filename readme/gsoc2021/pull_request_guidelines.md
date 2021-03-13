@@ -10,7 +10,7 @@ Due to our limited resources and in order to give everyone a chance to submit a 
 
 4. **If you are borrowing code, please disclose it**. It is fine and sometimes even recommended to borrow code, but we need to know about it to assess your work. If we find out that your pull request contains a lot of code copied from elsewhere, we will close the pull request.
 
-5. **All pull request must have test units**. If for some reason it is not possible to add tests, please let us know and explain why.
+5. **All pull request must have test units**. If for some reason it is not possible to add tests, please let us know and explain why. In that case, you'll need to tell us **what steps you followed to manually test your changes**.
 
 6. **No Work In Progress**. ONLY completed and working pull requests, and with test units, will be accepted. A WIP would fall under rule 3 and be closed immediately.
 
