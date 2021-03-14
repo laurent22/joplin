@@ -141,7 +141,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
 					}
 				} else if (cmd.name === 'editor.focus') {
-					editorRef.current.focus();
+					if (props.visiblePanes.indexOf('editor') >= 0) {
+						editorRef.current.focus();
+					} else {
+						webviewRef.current.wrappedInstance.focus();
+					}
 				} else {
 					commandProcessed = false;
 				}
@@ -242,7 +246,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				return commandOutput;
 			},
 		};
-	}, [props.content, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+	}, [props.content, props.visiblePanes, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await handlePasteEvent(event);
