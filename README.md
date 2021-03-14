@@ -275,7 +275,7 @@ In the **desktop application** or **mobile application**, select "AWS S3 (Beta)"
 While creating a new Bucket for Joplin, disable **Bucket Versioning**, enable **Block all public access** and enable **Default encryption** with `Amazon S3 key (SSE-S3)`.  
 
 To add a **Bucket Policy** from the AWS S3 Web Console, navigate to the **Permissions** tab. Temporarily disable **Block all public access**  to edit the Bucket policy, something along the lines of:
-```json
+```
 {
     "Version": "2012-10-17",
     "Statement": [
