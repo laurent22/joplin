@@ -100,12 +100,19 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::delete');
 	}
 
+	// Note that when the "password" property is provided, it is going to be
+	// hashed automatically. It means that it is not safe to do:
+	//
+	//     const user = await model.load(id);
+	//     await model.save(user);
+	//
+	// Because the password would be hashed twice.
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const isNew = await this.isNew(object, options);
 
 		let newUser = { ...object };
 
-		if (isNew && newUser.password) newUser.password = auth.hashPassword(newUser.password);
+		if (newUser.password) newUser.password = auth.hashPassword(newUser.password);
 
 		await this.withTransaction(async () => {
 			newUser = await super.save(newUser, options);
