@@ -8,23 +8,25 @@ Joplin is about to make another big step to answers these demands by applying at
 - **External desktop applications** - build external Joplin applications by retrieving, creating or modifying notes via the Data API.
 - **External server applications** - leverage the Joplin Server API to provide online features to Joplin users.
 
-Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).   
-**Most IMPORTANT, read this page carefully, line by line. We don't want to quote pharagraphs from this page answering question in the forum.   
-Moreover, watch/subscribe the topic [GSoC 2021 live blog](https://discourse.joplinapp.org/t/gsoc-2021-live-blog/6219) as this page here contains rather static content whereas the mentioned topic is updated much more frequently.**
+Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).
+
+**Please read this page carefully as most likely it will have all the answers to the questions you might have, such as how to build the app, how to contribute and what are the rules for submitting a pull request.**
 
 All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  [Joplin Forum](https://discourse.joplinapp.org).
+
+## How to contribute
+
+We suggest you read carefully these important documents and bookmark the links as you will need to refer to them throughout GSoC:
+
+- [How to submit a pull request for GSoC](https://joplinapp.org/gsoc2021/pull_request_guidelines/)
+- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+- [How to contribute](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md)
 
 ## Programming Language
 
 All applications share the same back-end written in JavaScript (Node.js), with Redux for state management. The back-end runs locally.
 
 The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/#installation) is done using Electron.
-
-More details can be found on:
-
-- [How to submit a pull request for GSoC 2021](https://joplinapp.org/gsoc2021/pull_request_guidelines/)
-- [How to contribute](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md)
-- [How to build](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 
 Submissions and ideas for projects in any other language should specifically mention the choice.
 
