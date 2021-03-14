@@ -1,13 +1,13 @@
-const smalltalk = require('smalltalk');
+import modals from './modal/modals';
 
 class Dialogs {
 	async alert(message: string, title = '') {
-		await smalltalk.alert(title, message);
+		await modals.alert(title, message);
 	}
 
 	async confirm(message: string, title = '', options: any = {}) {
 		try {
-			await smalltalk.confirm(title, message, options);
+			await modals.confirm(title, message, options);
 			return true;
 		} catch (error) {
 			return false;
@@ -18,7 +18,7 @@ class Dialogs {
 		if (options === null) options = {};
 
 		try {
-			const answer = await smalltalk.prompt(title, message, defaultValue, options);
+			const answer = await modals.prompt(title, message, defaultValue, options);
 			return answer;
 		} catch (error) {
 			return null;
