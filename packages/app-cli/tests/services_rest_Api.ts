@@ -326,6 +326,26 @@ describe('services_rest_Api', function() {
 		expect(response.body.indexOf(resource.id) >= 0).toBe(true);
 	}));
 
+	it('should not compress images uploaded through resource api', (async () => {
+		const originalImagePath = `${__dirname}/../tests/support/photo-large.png`;
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'testing resource',
+		}), [
+			{
+				path: originalImagePath,
+			},
+		]);
+
+		const resources = await Resource.all();
+		expect(resources.length).toBe(1);
+		const uploadedImagePath = Resource.fullPath(resources[0]);
+
+		const originalImageSize = (await shim.fsDriver().stat(originalImagePath)).size;
+		const uploadedImageSize = (await shim.fsDriver().stat(uploadedImagePath)).size;
+
+		expect(originalImageSize).toEqual(uploadedImageSize);
+	}));
+
 	it('should delete resources', (async () => {
 		const f = await Folder.save({ title: 'mon carnet' });
 
