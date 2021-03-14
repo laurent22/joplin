@@ -66,7 +66,7 @@ Potential Mentor(s): [PackElend](https://discourse.joplinapp.org/u/PackElend), [
 
 ## 5. Paste special
 
-A plugin that will allow pasting special text into Joplin and have it converted to Markdown. For example, paste an Excel or CSV table, and have it converted to a Markdown table. Paste some HTML or PDF text and again have it converted to formatted Markdown. This could be one plugin, or a collection of plugins, one for eadch "paste special" operation.
+A plugin that will allow pasting special text into Joplin and have it converted to Markdown. For example, paste an Excel or CSV table, and have it converted to a Markdown table. Paste some HTML or PDF text and again have it converted to formatted Markdown. This could be one plugin, or a collection of plugins, one for each "paste special" operation.
 
 Expected Outcome: One or more plugins that allow pasting special text.
 
