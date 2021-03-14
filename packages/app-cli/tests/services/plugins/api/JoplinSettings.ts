@@ -1,6 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-const { waitForFolderCount, newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('../../../test-utils');
+const { waitForFolderCount, newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp, expectNotThrow } = require('../../../test-utils');
 import Folder from '@joplin/lib/models/Folder';
 
 describe('JoplinSettings', () => {
@@ -67,4 +67,38 @@ describe('JoplinSettings', () => {
 		await service.destroy();
 	});
 
+	test('should allow registering multiple settings', async () => {
+		const service = new newPluginService() as PluginService;
+
+		const pluginScript = newPluginScript(`
+			joplin.plugins.register({
+				onStart: async function() {
+					await joplin.settings.registerSettings({
+						'myCustomSetting1': {
+							value: 1,
+							type: 1,
+							public: true,
+							label: 'My Custom Setting 1',
+						},
+						'myCustomSetting2': {
+							value: 2,
+							type: 1,
+							public: true,
+							label: 'My Custom Setting 2',
+						}
+					})
+				},
+			});
+		`);
+		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		await service.runPlugin(plugin);
+
+		await expectNotThrow(() => Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting1'));
+		await expectNotThrow(() => Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting2'));
+
+		expect(Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting1')).toBe(1);
+		expect(Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting2')).toBe(2);
+
+		await service.destroy();
+	});
 });
