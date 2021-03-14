@@ -25,6 +25,9 @@
 
 		android:allowBackup: used to enable Android Backup which some users need:
 		https://github.com/laurent22/joplin/issues/4020
+
+		android:resizeableActivity: allows user to resize Joplin window
+		https://github.com/laurent22/joplin/issues/3547
 	-->
 	<application
 		android:name=".MainApplication"
@@ -34,6 +37,7 @@
 		android:allowBackup="true"
 		android:networkSecurityConfig="@xml/network_security_config"
 		android:requestLegacyExternalStorage="true"
+		android:resizeableActivity="true"
 		android:theme="@style/AppTheme">
 
 		<!-- RN-NOTIFICATION -->
