@@ -22,7 +22,7 @@ It is possible to get the apps to display or log more information that might hel
 
 https://developer.android.com/studio/debug/bug-report
 
-To get a bugreport directly from your device, do the following:
+To get a bug report directly from your device, do the following:
 
 - Be sure you have [Developer Options](https://developer.android.com/studio/debug/dev-options) enabled.
 - In Developer options, tap Take bug report.

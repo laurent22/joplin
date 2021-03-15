@@ -14,7 +14,7 @@ However **there is a catch**: in Joplin, notes, even when edited with this Rich 
 
 - Tables must have a header, because this is a requirement in Markdown. When you create a table, it will let you create it without a header, but under the hood it will add an empty one. And next time you open the note, this empty header will be present.
 
-- All items in a list must be of the same type, so for example all checkboxes, or all bullet points. If you require two different types, you should create two different lists separated by an horizontal rule or similar.
+- All items in a list must be of the same type, so for example all checkboxes, or all bullet points. If you require two different types, you should create two different lists separated by a horizontal rule or similar.
 
 - Special keyboard modes "vim" and "emacs" are not supported.
 
