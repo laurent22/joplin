@@ -74,7 +74,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 | <img width="50" src="https://avatars0.githubusercontent.com/u/1168659?s=96&v=4"/></br>[Nicholas Head](https://github.com/nicholashead) | <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[Frank Bloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[Thomas Broussard](https://github.com/thomasbroussard)
 | <img width="50" src="https://avatars2.githubusercontent.com/u/1307332?s=96&v=4"/></br>[Brandon Johnson](https://github.com/dbrandonjohnson) | <img width="50" src="https://avatars1.githubusercontent.com/u/3061769?s=96&v=4"/></br>[@cnagy](https://github.com/c-nagy) | <img width="50" src="https://avatars3.githubusercontent.com/u/53228972?s=96&v=4"/></br>[clmntsl](https://github.com/clmntsl)
 | <img width="50" src="https://avatars1.githubusercontent.com/u/29300939?s=96&v=4"/></br>[mcejp](https://github.com/mcejp) | <img width="50" src="https://avatars.githubusercontent.com/u/1248504?s=96&v=4"/></br>[joesfer](https://github.com/joesfer) | <img width="50" src="https://avatars.githubusercontent.com/u/67130?s=96&v=4"/></br>[chr15m](https://github.com/chr15m)
-| <img width="50" src="https://avatars.githubusercontent.com/u/5782817?s=96&v=4"/></br>[piccobit](https://github.com/piccobit)
+| <img width="50" src="https://avatars.githubusercontent.com/u/5782817?s=96&v=4"/></br>[piccobit](https://github.com/piccobit) |  <img width="50" src="https://avatars3.githubusercontent.com/u/37297218?s=96&v=4"/></br>[Jess Sullivan](https://github.com/jesssullivan)
 
 <!-- TOC -->
 # Table of contents
@@ -264,6 +264,44 @@ When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps
 In the **desktop application** or **mobile application**, select "OneDrive" as the synchronisation target in the Configuration screen. Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
 
 In the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
+
+## AWS S3 synchronisation
+
+In the **desktop application** or **mobile application**, select "AWS S3 (Beta)" as the synchronisation target in the Configuration screen.
+
+- **AWS S3 Bucket:** The name of your Bucket, such as `joplin-bucket`
+- **AWS S3 URL:** Fully qualified URL; By default this should be `https://s3.amazonaws.com/`
+- **AWS key & AWS secret:**  IAM user's programmatic access key.  To create a new key & secret, visit [IAM Security Credentials](https://console.aws.amazon.com/iam/home#/security_credentials).
+
+
+While creating a new Bucket for Joplin, disable **Bucket Versioning**, enable **Block all public access** and enable **Default encryption** with `Amazon S3 key (SSE-S3)`.  
+
+To add a **Bucket Policy** from the AWS S3 Web Console, navigate to the **Permissions** tab. Temporarily disable **Block all public access**  to edit the Bucket policy, something along the lines of:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": [
+                  "s3:ListBucket",
+                  "s3:GetBucketLocation",
+                  "s3:DeleteObject",
+                  "s3:DeleteObjectVersion",
+                  "s3:PutObject"
+            ]
+            "Resource": [
+                "arn:aws:s3:::joplin-bucket",
+                "arn:aws:s3:::joplin-bucket/*"
+            ]
+        }
+    ]
+}
+```
+
+
 
 # Encryption
 
