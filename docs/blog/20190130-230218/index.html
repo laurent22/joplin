@@ -317,14 +317,9 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20190130-230218.md
 		<ul>
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
-			<li><a class="help" href="#" title="Menu">Menu</a></li>
 			<li><a class="gsoc" href="https://joplinapp.org/gsoc2021/index/" title="Google Summer of Code 2021">GSoC 2021</a></li>
 		</ul>
 		<div class="nav-right">
-			<!--
-				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
-			-->
 			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
 		</div>
 	</div>
@@ -434,13 +429,6 @@ published_at: 2019-01-30T23:02:18.000+00:00</p>
 			$('.nav').removeClass('sticky');
 		}
 	}
-
-	$('#toc').hide();
-
-	$('.help').click(function(event) {
-		event.preventDefault();
-		$('#toc').show();
-	});
 
 	$(window).scroll(function() {
 		stickyHeader();
