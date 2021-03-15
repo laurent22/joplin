@@ -178,6 +178,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textPaste: () => {
 							editorPaste();
 						},
+						textPasteSpecial: () => {
+							editorSpecialPaste();
+						},
 						textSelectAll: () => {
 							return editorRef.current.execCommand('selectAll');
 						},
@@ -273,6 +276,23 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			const selections = editorRef.current.getSelections();
 			if (selections.length > 0) {
 				clipboard.writeText(selections[0]);
+			}
+		}
+	}, []);
+
+	const editorSpecialPaste = useCallback(() => {
+		if (editorRef.current) {
+			const clipboardContent = clipboard.readText();
+			const selectionContent = editorRef.current.getSelection();
+
+			const urlRegex = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi);
+
+			if (clipboardContent.length > 0 && clipboardContent.match(urlRegex)) {
+				if (selectionContent.length > 0) {
+					editorRef.current.replaceSelection(`[${selectionContent}](${clipboardContent})`);
+				} else {
+					editorRef.current.replaceSelection(`[${clipboardContent}](${clipboardContent})`);
+				}
 			}
 		}
 	}, []);
@@ -670,6 +690,16 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					enabled: true,
 					click: async () => {
 						editorPaste();
+					},
+				})
+			);
+
+			menu.append(
+				new MenuItem({
+					label: _('Special Paste'),
+					enabled: true,
+					click: async () => {
+						editorSpecialPaste();
 					},
 				})
 			);
