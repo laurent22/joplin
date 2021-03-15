@@ -1,6 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-const { waitForFolderCount, newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp, expectNotThrow } = require('../../../test-utils');
+const { waitForFolderCount, newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('../../../test-utils');
 import Folder from '@joplin/lib/models/Folder';
 
 describe('JoplinSettings', () => {
@@ -92,9 +92,6 @@ describe('JoplinSettings', () => {
 		`);
 		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
 		await service.runPlugin(plugin);
-
-		await expectNotThrow(() => Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting1'));
-		await expectNotThrow(() => Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting2'));
 
 		expect(Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting1')).toBe(1);
 		expect(Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting2')).toBe(2);
