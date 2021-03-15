@@ -24,9 +24,16 @@ We suggest you read carefully these important documents and bookmark the links a
 
 ## Programming Language
 
-All applications share the same back-end written in JavaScript (Node.js), with Redux for state management. The back-end runs locally.
+- Any new application or plugin should be done using TypeScript.
+- For web publishing, please use WebPack.
+- For UI, we use React/Redux. Make sure you use React Hooks when creating new components.
+- For styling, we use styled-components
 
-The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/#installation) is done using Electron.
+In general, all applications share the same back-end written in TypeScript or JavaScript (Node.js), with Redux for state management. The back-end runs locally.
+
+The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/#installation) is done using Electron and React.
+
+The mobile app is done using React Native.
 
 Submissions and ideas for projects in any other language should specifically mention the choice.
 
