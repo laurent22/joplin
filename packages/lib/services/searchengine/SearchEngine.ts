@@ -662,10 +662,10 @@ export default class SearchEngine {
 		} else {
 			// SEARCH_TYPE_FTS
 			const parsedQuery = await this.parseQuery(searchString.replace(/[()]/g, ' '));
-			const searchTree = this.makeSearchTree(`(${searchString})`);
-			const { query, params } = await this.makeQuery(searchTree);
 			// this.logger().info(`Executing query: ${query}: with params: ${params}`);
 			try {
+				const searchTree = this.makeSearchTree(`(${searchString})`);
+				const { query, params } = await this.makeQuery(searchTree);
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows, parsedQuery);
 				return rows;
