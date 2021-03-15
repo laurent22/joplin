@@ -541,6 +541,16 @@ function tocMd() {
 	return tocMd_;
 }
 
+const donateLinksRegex_ = /<!-- DONATELINKS -->([^]*)<!-- DONATELINKS -->/;
+async function getDonateLinks() {
+	const md = await fs.readFile(`${rootDir}/README.md`, 'utf8');
+	const matches = md.match(donateLinksRegex_, '');
+
+	if (!matches) throw new Error('Cannot fetch donate links');
+
+	return matches[1].trim();
+}
+
 function replaceGitHubByJoplinAppLinks(md) {
 	// let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
 	return md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
@@ -576,6 +586,10 @@ function renderMdToHtml(md, targetPath, templateParams) {
 	}
 
 	md = replaceGitHubByJoplinAppLinks(md);
+
+	if (templateParams.donateLinksMd) {
+		md = `${templateParams.donateLinksMd}\n\n* * *\n\n${md}`;
+	}
 
 	templateParams.pageTitle = title.join(' | ');
 	const html = markdownToHtml(md, templateParams);
@@ -626,11 +640,15 @@ async function main() {
 	}).map(f => f.substr(rootDir.length + 1));
 
 	const sources = [];
+	const donateLinksMd = await getDonateLinks();
 
 	for (const mdFile of mdFiles) {
 		const title = await readmeFileTitle(`${rootDir}/${mdFile}`);
 		const targetFilePath = `${mdFile.replace(/\.md/, '').replace(/readme\//, 'docs/')}/index.html`;
-		sources.push([mdFile, targetFilePath, { title: title }]);
+		sources.push([mdFile, targetFilePath, {
+			title: title,
+			donateLinksMd: donateLinksMd,
+		}]);
 	}
 
 	const path = require('path');
