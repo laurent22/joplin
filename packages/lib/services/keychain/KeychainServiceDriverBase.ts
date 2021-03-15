@@ -16,9 +16,9 @@ abstract class KeychainServiceDriverBase {
 		return this.clientId_;
 	}
 
-	abstract async setPassword(name: string, password: string): Promise<boolean>;
-	abstract async password(name: string): Promise<string>;
-	abstract async deletePassword(name: string): Promise<void>;
+	abstract setPassword(name: string, password: string): Promise<boolean>;
+	abstract password(name: string): Promise<string>;
+	abstract deletePassword(name: string): Promise<void>;
 
 }
 
