@@ -555,6 +555,7 @@ export default class SearchEngine {
 	}
 
 	recursiveParser(str: string) {
+		// (tag:A (any:1 tag:B tag:C)) -> [ "tag:A", [ "any:1", "tag:B", "tag:C"]]
 		let i = 0;
 		function main(): any {
 			const arr = [];
@@ -585,61 +586,78 @@ export default class SearchEngine {
 		return main();
 	}
 
+	async getQueryWithParms(searchString: string) {
+		const parsedQuery = await this.parseQuery(searchString);
+		const { query, params } = queryBuilder(parsedQuery.allTerms);
+		return { query, params };
+	}
+
 	async _recursiveSearcher(parseTree: any) {
 
-		const intersection = (lists: any[]) => {
-			const result: any[] = [];
-			for (let i = 0; i < lists.length; i++) {
-				const currentList = lists[i];
-				for (let y = 0; y < currentList.length; y++) {
-					const currentValue = currentList[y];
-					if (!result.some(x => (x.id === currentValue.id))) {
-						if (lists.filter(function(list: any) { return !list.some((x: any) => (x.id === currentValue.id)); }).length === 0) {
-							result.push(currentValue);
-						}
-					}
-				}
-			}
+		const intersection = (queries: any) => {
+			const result = queries.reduce((acc: any, curr: any, idx: number) => {
+				return {
+					query: `SELECT * FROM (${acc.query}) t${idx - 1} INNER JOIN (${curr.query}) t${idx} ON t${idx - 1}.id=t${idx}.id`,
+					params: acc.params.concat(curr.params),
+				};
+			});
 			return result;
 		};
 
-		const subTrees = parseTree.filter((x: any) => Array.isArray(x));
-		if (subTrees.length) {
-			const childLevelResultsPromise = subTrees.map((x: any) => {
+		const union = (queries: any) => {
+			const query = `SELECT * FROM (${queries.map((x: any) => x.query).join(' UNION ')})`;
+			const params = queries.map((x: any)=>x.params).flat();
+			return { query, params };
+		};
+
+		const subQueries = parseTree.filter((x: any) => Array.isArray(x));
+		if (subQueries.length) {
+
+			const childLevelResultsPromise = subQueries.map((x: any) => {
 				return this._recursiveSearcher(x);
 			});
 
-			const childLevelResults: any = await Promise.all(childLevelResultsPromise);
+			const childLevelResults = await Promise.all(childLevelResultsPromise);
 
-			const filterString = parseTree.filter((x: any) => (typeof x === 'string' || x instanceof String)).join(' ');
+			const searchString = parseTree.filter((x: any) => (typeof x === 'string' || x instanceof String)).join(' ');
 
-			if (filterString === '') {
-				// all terms are sub trees; return their intersection
+			if (searchString === '') {
+				// No "any" modifier; all terms are sub trees, so return their intersection
 				return intersection(childLevelResults);
 			}
-			const parsedQuery = await this.parseQuery(filterString);
-			const currLevelResult = await this._search(filterString, parsedQuery);
+			const parsedQuery = await this.parseQuery(searchString);
+			const currLevelResults = await this.getQueryWithParms(searchString);
+			const allResults = childLevelResults.concat([currLevelResults]);
+
+			if (allResults.length < 2) return allResults;
 
 			if (parsedQuery.any) {
-			// union
-				return childLevelResults.flat().concat(currLevelResult);
+				return union(allResults);
 			} else {
-			// intersection
-				return intersection(childLevelResults.concat([currLevelResult]));
+
+				return intersection(allResults);
 			}
 		} else {
 			const searchString = parseTree.join(' ');
-			const parsedQuery = await this.parseQuery(searchString);
-			const rows = await this._search(searchString, parsedQuery);
-			return rows;
+			const { query, params } = await this.getQueryWithParms(searchString);
+			return { query, params };
 		}
 	}
 
-	recursiveSearcher(searchString: string) {
+	async recursiveSearcher(searchString: string) {
 		const parseTree = this.recursiveParser(`(${searchString})`);
-		return this._recursiveSearcher(parseTree);
+		const { query, params } = await this._recursiveSearcher(parseTree); // rename to rec query builder?
+		const parsedQuery = await this.parseQuery(searchString.replace(/[()]/g, ' '));
+		this.logger().info(`Executing query: ${query}: with params: ${params}`);
+		try {
+			const rows = await this.db().selectAll(query, params);
+			this.processResults_(rows, parsedQuery);
+			return rows;
+		} catch (error) {
+			this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
+			return [];
+		}
 	}
-
 
 	async _search(searchString: string, parsedQuery: any) {
 		try {
@@ -662,9 +680,9 @@ export default class SearchEngine {
 		}, options);
 
 		const searchType = this.determineSearchType_(searchString, options.searchType);
-		const parsedQuery = await this.parseQuery(searchString);
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
+			const parsedQuery = await this.parseQuery(searchString);
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
 			searchString = this.normalizeText_(searchString);
 			const rows = await this.basicSearch(searchString);

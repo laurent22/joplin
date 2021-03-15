@@ -345,13 +345,19 @@ describe('services_SearchFilter', function() {
 	it('should support nested with any', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abc def' });
-		const n2 = await Note.save({ title: 'def ghj' });
+		const n2 = await Note.save({ title: 'def xyz' });
 		const n3 = await Note.save({ title: 'important' });
 		const n4 = await Note.save({ title: 'abc def ghi' });
 
 		await engine.syncTables();
 
-		rows = await engine.search('any:1 (abc) (def)');
+		rows = await engine.search('any:1 (abc def) xyz');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n4.id);
+
+		rows = await engine.search('any:1 (abc def) (xyz)');
 		expect(rows.length).toBe(3);
 		expect(ids(rows)).toContain(n1.id);
 		expect(ids(rows)).toContain(n2.id);
