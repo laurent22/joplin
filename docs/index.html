@@ -406,7 +406,9 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 </div>
 
 	<div class="main">
-<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a></p>
+<!-- DONATELINKS -->
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+<!-- DONATELINKS -->
 <hr>
 <p><img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" /> <strong>Joplin</strong> is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="#markdown">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
@@ -536,7 +538,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 </tr>
 <tr>
 <td style="text-align:center"><img width="50" src="https://avatars.githubusercontent.com/u/5782817?s=96&v=4"/></br><a href="https://github.com/piccobit">piccobit</a></td>
-<td style="text-align:center"></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/37297218?s=96&v=4"/></br><a href="https://github.com/jesssullivan">Jess Sullivan</a></td>
 <td style="text-align:center"></td>
 </tr>
 </tbody>
@@ -642,6 +644,37 @@ Joplin is also capable of exporting to a number of other formats including HTML 
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
 <p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;OneDrive&quot; as the synchronisation target in the Configuration screen. Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
 <p>In the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).</p>
+<h2>AWS S3 synchronisation<a name="aws-s3-synchronisation" href="#aws-s3-synchronisation" class="heading-anchor">🔗</a></h2>
+<p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;AWS S3 (Beta)&quot; as the synchronisation target in the Configuration screen.</p>
+<ul>
+<li><strong>AWS S3 Bucket:</strong> The name of your Bucket, such as <code>joplin-bucket</code></li>
+<li><strong>AWS S3 URL:</strong> Fully qualified URL; By default this should be <code>https://s3.amazonaws.com/</code></li>
+<li><strong>AWS key &amp; AWS secret:</strong>  IAM user's programmatic access key.  To create a new key &amp; secret, visit <a href="https://console.aws.amazon.com/iam/home#/security_credentials">IAM Security Credentials</a>.</li>
+</ul>
+<p>While creating a new Bucket for Joplin, disable <strong>Bucket Versioning</strong>, enable <strong>Block all public access</strong> and enable <strong>Default encryption</strong> with <code>Amazon S3 key (SSE-S3)</code>.</p>
+<p>To add a <strong>Bucket Policy</strong> from the AWS S3 Web Console, navigate to the <strong>Permissions</strong> tab. Temporarily disable <strong>Block all public access</strong>  to edit the Bucket policy, something along the lines of:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;VisualEditor0&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Principal&quot;: &quot;*&quot;,
+            &quot;Action&quot;: [
+                  &quot;s3:ListBucket&quot;,
+                  &quot;s3:GetBucketLocation&quot;,
+                  &quot;s3:DeleteObject&quot;,
+                  &quot;s3:DeleteObjectVersion&quot;,
+                  &quot;s3:PutObject&quot;
+            ]
+            &quot;Resource&quot;: [
+                &quot;arn:aws:s3:::joplin-bucket&quot;,
+                &quot;arn:aws:s3:::joplin-bucket/*&quot;
+            ]
+        }
+    ]
+}
+</code></pre>
 <h1>Encryption<a name="encryption" href="#encryption" class="heading-anchor">🔗</a></h1>
 <p>Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the <a href="https://joplinapp.org/e2ee/">End-To-End Encryption Tutorial</a> for more information about this feature and how to enable it.</p>
 <p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="https://joplinapp.org/spec/e2ee/">Encryption specification</a>.</p>
