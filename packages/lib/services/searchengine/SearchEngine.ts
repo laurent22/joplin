@@ -554,7 +554,7 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	recursiveParser(str: string) {
+	makeSearchTree(str: string) {
 		// (tag:A (any:1 tag:B tag:C)) -> [ "tag:A", [ "any:1", "tag:B", "tag:C"]]
 		let i = 0;
 		function main(): any {
@@ -586,13 +586,15 @@ export default class SearchEngine {
 		return main();
 	}
 
-	async getQueryWithParms(searchString: string) {
-		const parsedQuery = await this.parseQuery(searchString);
-		const { query, params } = queryBuilder(parsedQuery.allTerms);
-		return { query, params };
-	}
 
-	async _recursiveSearcher(parseTree: any) {
+
+	async makeQuery(parseTree: any) {
+
+		const getQueryWithParms = async (searchString: string) => {
+			const parsedQuery = await this.parseQuery(searchString);
+			const { query, params } = queryBuilder(parsedQuery.allTerms);
+			return { query, params };
+		};
 
 		const intersection = (queries: any) => {
 			const result = queries.reduce((acc: any, curr: any, idx: number) => {
@@ -610,64 +612,32 @@ export default class SearchEngine {
 			return { query, params };
 		};
 
-		const subQueries = parseTree.filter((x: any) => Array.isArray(x));
-		if (subQueries.length) {
-
-			const childLevelResultsPromise = subQueries.map((x: any) => {
-				return this._recursiveSearcher(x);
+		const makeQueryForNested = async (parseTree: any) => {
+			const nested = parseTree.filter((x: any) => Array.isArray(x));
+			const promises = nested.map((x: any) => {
+				return this.makeQuery(x);
 			});
+			const result = await Promise.all(promises);
+			return result;
+		};
 
-			const childLevelResults = await Promise.all(childLevelResultsPromise);
-
-			const searchString = parseTree.filter((x: any) => (typeof x === 'string' || x instanceof String)).join(' ');
-
-			if (searchString === '') {
-				// No "any" modifier; all terms are sub trees, so return their intersection
-				return intersection(childLevelResults);
-			}
-			const parsedQuery = await this.parseQuery(searchString);
-			const currLevelResults = await this.getQueryWithParms(searchString);
-			const allResults = childLevelResults.concat([currLevelResults]);
-
-			if (allResults.length < 2) return allResults;
-
-			if (parsedQuery.any) {
-				return union(allResults);
-			} else {
-
-				return intersection(allResults);
-			}
-		} else {
-			const searchString = parseTree.join(' ');
-			const { query, params } = await this.getQueryWithParms(searchString);
+		const makeQueryForTopLevel = async (searchString: any) => {
+			if (searchString === '') { return null; }
+			const { query, params } = await getQueryWithParms(searchString);
 			return { query, params };
-		}
-	}
+		};
 
-	async recursiveSearcher(searchString: string) {
-		const parseTree = this.recursiveParser(`(${searchString})`);
-		const { query, params } = await this._recursiveSearcher(parseTree); // rename to rec query builder?
-		const parsedQuery = await this.parseQuery(searchString.replace(/[()]/g, ' '));
-		this.logger().info(`Executing query: ${query}: with params: ${params}`);
-		try {
-			const rows = await this.db().selectAll(query, params);
-			this.processResults_(rows, parsedQuery);
-			return rows;
-		} catch (error) {
-			this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
-			return [];
-		}
-	}
+		const nestedQueries = await makeQueryForNested(parseTree);
 
-	async _search(searchString: string, parsedQuery: any) {
-		try {
-			const { query, params } = queryBuilder(parsedQuery.allTerms);
-			const rows = await this.db().selectAll(query, params);
-			this.processResults_(rows, parsedQuery);
-			return rows;
-		} catch (error) {
-			this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
-			return [];
+		const topLevelSearchString = parseTree.filter((x: any) => (typeof x === 'string' || x instanceof String)).join(' ');
+		const topLevelQuery = await makeQueryForTopLevel(topLevelSearchString);
+
+
+		if (topLevelQuery === null) {
+			return intersection(nestedQueries);
+		} else {
+			const parsedQuery = await this.parseQuery(topLevelSearchString);
+			return parsedQuery.any ? union(nestedQueries.concat([topLevelQuery])) : intersection(nestedQueries.concat([topLevelQuery]));
 		}
 	}
 
@@ -691,13 +661,18 @@ export default class SearchEngine {
 			return rows;
 		} else {
 			// SEARCH_TYPE_FTS
-			// FTS will ignore all special characters, like "-" in the index. So if
-			// we search for "this-phrase" it won't find it because it will only
-			// see "this phrase" in the index. Because of this, we remove the dashes
-			// when searching.
-			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
-
-			return this.recursiveSearcher(searchString);
+			const parsedQuery = await this.parseQuery(searchString.replace(/[()]/g, ' '));
+			const searchTree = this.makeSearchTree(`(${searchString})`);
+			const { query, params } = await this.makeQuery(searchTree);
+			// this.logger().info(`Executing query: ${query}: with params: ${params}`);
+			try {
+				const rows = await this.db().selectAll(query, params);
+				this.processResults_(rows, parsedQuery);
+				return rows;
+			} catch (error) {
+				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
+				return [];
+			}
 		}
 	}
 

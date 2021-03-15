@@ -95,6 +95,14 @@ const parseQuery = (query: string): Term[] => {
 				result.push({ name, value, negated });
 			}
 		} else {
+
+			// FTS will ignore all special characters, like "-" in the index. So if
+			// we search for "this-phrase" it won't find it because it will only
+			// see "this phrase" in the index. Because of this, we remove the dashes
+			// when searching.
+			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
+
+
 			// Every word is quoted if not already.
 			// By quoting the word, FTS match query will take care of removing dashes and other word seperators.
 			if (value.startsWith('-')) {
