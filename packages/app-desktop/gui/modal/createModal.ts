@@ -33,7 +33,7 @@ export default function createModal(renderModal: RenderFunction, options: Option
 	const container = document.createElement('div');
 	let handleKeyDownRef: any;
 	document.body.appendChild(container);
-	function onKeyDown(onSubmit: CallbackType, onDismiss: CallbackType) {
+	function onKeyDown(onDismiss: CallbackType) {
 		return function handleKeyDown(e: KeyboardEvent) {
 			const defaultBehaviourInputs = ['select', 'button', 'textarea'];
 			const focusable = container.querySelectorAll('button, input, select, textarea');
@@ -77,8 +77,8 @@ export default function createModal(renderModal: RenderFunction, options: Option
 	}
 
 
-	function addListeners({ onSubmit, onDismiss }: OnCallback) {
-		handleKeyDownRef = onKeyDown(onSubmit, onDismiss);
+	function addListeners({ onDismiss }: OnCallback) {
+		handleKeyDownRef = onKeyDown(onDismiss);
 		document.addEventListener('keydown', handleKeyDownRef, true);
 	}
 

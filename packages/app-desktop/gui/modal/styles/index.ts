@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+const styled = require('styled-components').default;
 
 export const RootStyle = styled.div`
-    background-color: ${props => props.theme.color};
+    background-color: rgba(0,0,0,0.5);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -49,7 +49,6 @@ export const StyledInput = styled.input`
     box-sizing: border-box;
     font: inherit;
     margin: 0;
-    margin-top: 1em;
     min-height: 2em;
     padding: 3px;
     outline: none;
@@ -58,6 +57,19 @@ export const StyledInput = styled.input`
         border-color: rgb(77, 144, 254);
         outline: none;
     }
+`;
+
+export const StyledLabel = styled.label`
+    margin: 0.4em 0;
+    display: block;
+`;
+export const StyledInputSeparator = styled.div`
+    margin-top: 1em;
+`;
+export const StyledError = styled.small`
+    display: block;
+    color: red;
+    margin-top: 10px;
 `;
 
 export const StyledButonStrip = styled.div`

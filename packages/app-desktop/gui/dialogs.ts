@@ -24,6 +24,17 @@ class Dialogs {
 			return null;
 		}
 	}
+
+	async promptWithConfirmation(message: string, title = '', defaultValue = '', options: any = null) {
+		if (options === null) options = {};
+
+		try {
+			const answer = await modals.promptWithConfirmation(title, message, defaultValue, options);
+			return answer;
+		} catch (error) {
+			return null;
+		}
+	}
 }
 
 const dialogs = new Dialogs();
