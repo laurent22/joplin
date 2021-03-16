@@ -1,8 +1,8 @@
 # GSoC 2021 Ideas
 
-2021 is Joplin second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2021/index/)
+2021 is Joplin's second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2021/index/).
 
-**These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. Just make sure your idea is within this year's theme:
+**These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour. Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. Just make sure your idea is within this year's theme:
 
 - **Plugin development** - implementing new features using Joplin's plugin system.
 - **External desktop applications** - build external Joplin applications by retrieving, creating or modifying notes via the Data API.
@@ -68,7 +68,7 @@ Potential Mentor(s): [PackElend](https://discourse.joplinapp.org/u/PackElend), [
 
 A plugin that will allow pasting special text into Joplin and have it converted to Markdown. For example, paste an Excel or CSV table, and have it converted to a Markdown table. Paste some HTML or PDF text and again have it converted to formatted Markdown. This could be one plugin, or a collection of plugins, one for each "paste special" operation.
 
-Expected Outcome: One or more plugins that allow pasting special text.
+Expected Outcome: One or more plugins that allow pasting special text
 
 Difficulty Level: Normal
 
