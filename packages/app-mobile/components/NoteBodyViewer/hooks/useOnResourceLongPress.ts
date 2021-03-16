@@ -14,7 +14,7 @@ export default function useOnResourceLongPress(onJoplinLinkClick: Function, dial
 		try {
 			const resourceId = msg.split(':')[1];
 			const resource = await Resource.load(resourceId);
-			const name = resource.title ? resource.title : resource.file_name;
+			const name = resource.title ? resource.title : resource.filename;
 
 			const action = await dialogs.pop({ dialogbox: dialogBoxRef.current }, name, [
 				{ text: _('Open'), id: 'open' },
@@ -24,8 +24,8 @@ export default function useOnResourceLongPress(onJoplinLinkClick: Function, dial
 			if (action === 'open') {
 				onJoplinLinkClick(`joplin://${resourceId}`);
 			} else if (action === 'share') {
-				const filename = resource.file_name ?
-					`${resource.file_name}.${resource.file_extension}` :
+				const filename = resource.filename ?
+					`${resource.filename}.${resource.file_extension}` :
 					resource.title;
 				const targetPath = `${Setting.value('resourceDir')}/${filename}`;
 
