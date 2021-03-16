@@ -412,6 +412,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				padding-right: 10px !important;
 			}
 
+			/* This enforces monospace for certain elements (code, tables, etc.) */
+			.cm-jn-monospace {
+				font-family: monospace !important;
+			}
+
 			.cm-header-1 {
 				font-size: 1.5em;
 			}

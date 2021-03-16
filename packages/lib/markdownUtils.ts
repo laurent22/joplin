@@ -137,6 +137,30 @@ const markdownUtils = {
 		return output.join('\n');
 	},
 
+	countTableColumns(line: string) {
+		if (!line) return 0;
+
+		const trimmed = line.trim();
+		let pipes = (line.match(/\|/g) || []).length;
+
+		if (trimmed[0] === '|') { pipes -= 1; }
+		if (trimmed[trimmed.length - 1] === '|') { pipes -= 1; }
+
+		return pipes + 1;
+	},
+
+	matchingTableDivider(header: string, divider: string) {
+		if (!header || !divider) return false;
+
+		const invalidChars = divider.match(/[^\s\-:|]/g);
+
+		if (invalidChars) { return false; }
+
+		const columns = markdownUtils.countTableColumns(header);
+		const cols = markdownUtils.countTableColumns(divider);
+		return cols > 0 && (cols >= columns);
+	},
+
 	titleFromBody(body: string) {
 		if (!body) return '';
 		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;

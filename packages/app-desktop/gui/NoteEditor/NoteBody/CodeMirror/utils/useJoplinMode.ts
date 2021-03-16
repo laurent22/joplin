@@ -1,6 +1,15 @@
 import 'codemirror/addon/mode/multiplex';
 import 'codemirror/mode/stex/stex';
+import MarkdownUtils from '@joplin/lib/markdownUtils';
 import Setting from '@joplin/lib/models/Setting';
+
+interface JoplinModeState {
+	outer: any;
+	openCharacter: string;
+	inTable: boolean;
+	inner: any;
+}
+
 
 // Joplin markdown is a the same as markdown mode, but it has configured defaults
 // and support for katex math blocks
@@ -34,25 +43,29 @@ export default function useJoplinMode(CodeMirror: any) {
 		}
 
 		return {
-			startState: function(): { outer: any; openCharacter: string; inner: any } {
+			startState: function(): JoplinModeState {
 				return {
 					outer: CodeMirror.startState(markdownMode),
 					openCharacter: '',
+					inTable: false,
 					inner: CodeMirror.startState(stex),
 				};
 			},
 
-			copyState: function(state: any) {
+			copyState: function(state: JoplinModeState) {
 				return {
 					outer: CodeMirror.copyState(markdownMode, state.outer),
 					openCharacter: state.openCharacter,
+					inTable: state.inTable,
 					inner: CodeMirror.copyState(stex, state.inner),
 				};
 			},
 
-			token: function(stream: any, state: any) {
+			token: function(stream: any, state: JoplinModeState) {
 				let currentMode = markdownMode;
 				let currentState = state.outer;
+
+				// //////// KATEX //////////
 				let tokenLabel = 'katex-marker-open';
 				let nextTokenPos = stream.string.length;
 				let closing = false;
@@ -86,34 +99,67 @@ export default function useJoplinMode(CodeMirror: any) {
 
 					return tokenLabel;
 				}
+				// //////// End KATEX //////////
 
+				// //////// Markdown //////////
 				// If we found a token in this stream but haven;t reached it yet, then we will
 				// pass all the characters leading up to our token to markdown mode
 				const oldString = stream.string;
 
 				stream.string = oldString.slice(0, nextTokenPos);
-				const token = currentMode.token(stream, currentState);
+				let token = currentMode.token(stream, currentState);
 				stream.string = oldString;
+				// //////// End Markdown //////////
+
+				// //////// Monospace //////////
+				// After being passed to the markdown mode we can check if the
+				// code state variables are set
+				if (state.outer.code || (state.outer.thisLine && state.outer.thisLine.fencedCodeEnd)) {
+					token = `${token} jn-monospace`;
+				}
+				// Task lists also have enforced monospace
+				if (state.outer.taskList || state.outer.taskOpen || state.outer.taskClosed) {
+					token = `${token} jn-monospace`;
+				}
+
+				// Any line that contains a | is potentially a table row
+				if (stream.string.match(/\|/g)) {
+					// Check if the current and following line together make a valid
+					// markdown table header
+					if (MarkdownUtils.matchingTableDivider(stream.string, stream.lookAhead(1))) {
+						state.inTable = true;
+					}
+
+					// Treat all lines that start with | as a table row
+					if (state.inTable || stream.string[0] === '|') {
+						token = `${token} jn-monospace`;
+					}
+				} else {
+					state.inTable = false;
+				}
+				// //////// End Monospace //////////
 
 				return token;
 			},
 
-			indent: function(state: any, textAfter: string, line: any) {
+			indent: function(state: JoplinModeState, textAfter: string, line: any) {
 				const mode = state.openCharacter ? stex : markdownMode;
 				if (!mode.indent) return CodeMirror.Pass;
 				return mode.indent(state.openCharacter ? state.inner : state.outer, textAfter, line);
 			},
 
-			blankLine: function(state: any) {
+			blankLine: function(state: JoplinModeState) {
 				const mode = state.openCharacter ? stex : markdownMode;
 				if (mode.blankLine) {
 					mode.blankLine(state.openCharacter ? state.inner : state.outer);
 				}
+
+				state.inTable = false;
 			},
 
 			electricChars: markdownMode.electricChars,
 
-			innerMode: function(state: any) {
+			innerMode: function(state: JoplinModeState) {
 				return state.openCharacter ? { state: state.inner, mode: stex } : { state: state.outer, mode: markdownMode };
 			},
 
