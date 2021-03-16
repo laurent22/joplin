@@ -24,31 +24,42 @@ We suggest you read carefully these important documents and bookmark the links a
 
 ## Programming Language
 
-All applications share the same back-end written in JavaScript (Node.js), with Redux for state management. The back-end runs locally.
+- Any new application or plugin should be done using TypeScript.
+- For web publishing, please use WebPack.
+- For UI, we use React/Redux. Make sure you use React Hooks when creating new components.
+- For styling, we use styled-components
 
-The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/#installation) is done using Electron.
+In general, all applications share the same back-end written in TypeScript or JavaScript (Node.js), with Redux for state management. The back-end runs locally.
+
+The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/#installation) is done using Electron and React.
+
+The mobile app is done using React Native.
 
 Submissions and ideas for projects in any other language should specifically mention the choice.
 
 ## Instructions for students
 
-Students wishing to participate in Summer of Code must realize, that this is a important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).
+Students wishing to participate in Summer of Code must realize, that this is an important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).
 
 You don't have to be a proven developer - in fact, this whole program is meant to facilitate joining Joplin and other Open Source communities. However, experience in coding and/or experience with the above mentioned programming languages and the applications is welcome.
 
-In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.
-
-Before you can be accepted as a student we expect you to fix some bugs or implement a small plugin or external application and link that work on your proposal. You may browse the [GitHub Issues](https://github.com/laurent22/joplin/issues?q=is:open+is:issue+label:bug) to find some simple bugs to fix. Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2021](https://joplinapp.org/gsoc2021/pull_request_guidelines/).
-
-You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.
-
-Do not worry, the timeline from Google reserves a lot of time for bonding periods so use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with `#gsoc-2021`.
-
-You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to chose the format, it can be an sophisticated online document or simple continuous blog on GitHub.
-
-Moreover, we require that you come to clear agreement on how to commit, test and build.
+You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel. You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to choose the format, it can be a sophisticated online document or simple continuous blog on GitHub.
 
 Students who neglect active communication will be failed!
+
+## How to create your first pull request
+
+Before you can be accepted as a student we expect you to write some code and link that work on your proposal. As a first pull request, we suggest one of the following:
+
+- Fix a [high priority](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is:open+is:issue+label:bug+label:high) or [medium priority](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is:open+is:issue+label:bug+label:medium) bug. This is something we highly value and is a good way to get a deep understanding of certain parts of the codebase.
+
+- Implement a small plugin or external application, to get yourself familiar with the Joplin API.
+
+- Alternatively you may browse the [GitHub Issues](https://github.com/laurent22/joplin/issues) to find something that can be worked on. Note that this is a difficult way to get a pull request in, so make sure the issue you choose has a very clear technical spec. If we need to discuss how it should work or what it should do in the pull request, it means there was no consensus for this feature, and we are likely to close the pull request.
+
+- Please **do not submit a pull request just to fix some typo**.
+
+Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2021](https://joplinapp.org/gsoc2021/pull_request_guidelines/).
 
 ## General instructions
 
@@ -61,7 +72,7 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 3. Take a look at the [list of ideas](https://joplinapp.org/gsoc2021/ideas/). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features)
 5. Write a first draft and get someone to review it
-6. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.
+6. Remember: you must link to work such as commits in your proposal. A private place will be created within the forum for that purposes.
 7. Read [How to write a kickass proposal for GSoC](http://teom.org/blog/kde/how-to-write-a-kick-ass-proposal-for-google-summer-of-code/)
 8. Submit proposal using [Google's web interface](https://summerofcode.withgoogle.com/) ahead of the deadline
 9. Submit proof of enrolment well ahead of the deadline
@@ -143,7 +154,7 @@ Your idea proposal should be a brief description of what the project is, what th
 
 Anyone developer can be a mentor if you meet the GSoC eligibility requirements. We will potentially assign a student to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.
 
-Before subscribing yourself as a mentor, please make sure that  the [staff](https://discourse.joplinapp.org/g/staff) is aware of that. Ask them to send the Summer of Code  Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us an message in the forum.
+Before subscribing yourself as a mentor, please make sure that  the [staff](https://discourse.joplinapp.org/g/staff) is aware of that. Ask them to send the Summer of Code  Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us a message in the forum.
 
 Prospective mentors should read the [mentoring guide](http://www.booki.cc/gsoc-mentoring). Also, Federico Mena-Quintero has written some helpful information based on his experiences in previous years. [His HOWTO](https://people.gnome.org/~federico/docs/summer-of-code-mentoring-howto/index.html) has some useful suggestions for anyone planning to mentor this year.
 

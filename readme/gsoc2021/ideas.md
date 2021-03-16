@@ -54,7 +54,7 @@ Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [roman_r_m](htt
 
 ## 4. Real-time collaboration on a note
 
-Create a web applications that allows two or more users to collaborate in real time on the same note. Use the Joplin Server API to save and load the note.
+Create a web application that allows two or more users to collaborate in real time on the same note. Use the Joplin Server API to save and load the note.
 
 Expected Outcome: A web application that allows users to collaborate on a note
 

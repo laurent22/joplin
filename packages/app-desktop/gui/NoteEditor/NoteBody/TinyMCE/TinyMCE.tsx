@@ -447,12 +447,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox .tox-button--naked:hover:not(:disabled) {
 				background-color: ${theme.backgroundColor} !important;
 			}
-
+			
+			.tox .tox-tbtn:focus {
+				background-color: ${theme.backgroundColor3}
+			}
+			
 			.tox .tox-tbtn:hover {
 				color: ${theme.colorHover3} !important;
 				fill: ${theme.colorHover3} !important;
 				background-color: ${theme.backgroundColorHover3}
-			}
+			}			
+			
 
 			.tox .tox-tbtn {
 				width: ${theme.toolbarHeight}px;
