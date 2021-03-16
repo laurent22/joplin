@@ -320,7 +320,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/index.md
 			<li><a class="gsoc" href="https://joplinapp.org/gsoc2021/index/" title="Google Summer of Code 2021">GSoC 2021</a></li>
 		</ul>
 		<div class="nav-right">
-			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="115px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -422,19 +422,38 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/index.md
 <li><a href="https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md">How to contribute</a></li>
 </ul>
 <h2>Programming Language<a name="programming-language" href="#programming-language" class="heading-anchor">🔗</a></h2>
-<p>All applications share the same back-end written in JavaScript (Node.js), with Redux for state management. The back-end runs locally.</p>
-<p>The desktop GUI, as listed on the <a href="https://joplinapp.org/#installation">Joplin's website</a> is done using Electron.</p>
+<ul>
+<li>Any new application or plugin should be done using TypeScript.</li>
+<li>For web publishing, please use WebPack.</li>
+<li>For UI, we use React/Redux. Make sure you use React Hooks when creating new components.</li>
+<li>For styling, we use styled-components</li>
+</ul>
+<p>In general, all applications share the same back-end written in TypeScript or JavaScript (Node.js), with Redux for state management. The back-end runs locally.</p>
+<p>The desktop GUI, as listed on the <a href="https://joplinapp.org/#installation">Joplin's website</a> is done using Electron and React.</p>
+<p>The mobile app is done using React Native.</p>
 <p>Submissions and ideas for projects in any other language should specifically mention the choice.</p>
 <h2>Instructions for students<a name="instructions-for-students" href="#instructions-for-students" class="heading-anchor">🔗</a></h2>
-<p>Students wishing to participate in Summer of Code must realize, that this is a important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).</p>
+<p>Students wishing to participate in Summer of Code must realize, that this is an important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).</p>
 <p>You don't have to be a proven developer - in fact, this whole program is meant to facilitate joining Joplin and other Open Source communities. However, experience in coding and/or experience with the above mentioned programming languages and the applications is welcome.</p>
-<p>In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.</p>
-<p>Before you can be accepted as a student we expect you to fix some bugs or implement a small plugin or external application and link that work on your proposal. You may browse the <a href="https://github.com/laurent22/joplin/issues?q=is:open+is:issue+label:bug">GitHub Issues</a> to find some simple bugs to fix. Before submitting a pull request, please make sure you read the <a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">pull request guidelines for GSoC 2021</a>.</p>
-<p>You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.</p>
-<p>Do not worry, the timeline from Google reserves a lot of time for bonding periods so use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with <code>#gsoc-2021</code>.</p>
-<p>You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to chose the format, it can be an sophisticated online document or simple continuous blog on GitHub.</p>
-<p>Moreover, we require that you come to clear agreement on how to commit, test and build.</p>
+<p>You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel. You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to choose the format, it can be a sophisticated online document or simple continuous blog on GitHub.</p>
 <p>Students who neglect active communication will be failed!</p>
+<h2>How to create your first pull request<a name="how-to-create-your-first-pull-request" href="#how-to-create-your-first-pull-request" class="heading-anchor">🔗</a></h2>
+<p>Before you can be accepted as a student we expect you to write some code and link that work on your proposal. As a first pull request, we suggest one of the following:</p>
+<ul>
+<li>
+<p>Fix a <a href="https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&amp;q=is:open+is:issue+label:bug+label:high">high priority</a> or <a href="https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&amp;q=is:open+is:issue+label:bug+label:medium">medium priority</a> bug. This is something we highly value and is a good way to get a deep understanding of certain parts of the codebase.</p>
+</li>
+<li>
+<p>Implement a small plugin or external application, to get yourself familiar with the Joplin API.</p>
+</li>
+<li>
+<p>Alternatively you may browse the <a href="https://github.com/laurent22/joplin/issues">GitHub Issues</a> to find something that can be worked on. Note that this is a difficult way to get a pull request in, so make sure the issue you choose has a very clear technical spec. If we need to discuss how it should work or what it should do in the pull request, it means there was no consensus for this feature, and we are likely to close the pull request.</p>
+</li>
+<li>
+<p>Please <strong>do not submit a pull request just to fix some typo</strong>.</p>
+</li>
+</ul>
+<p>Before submitting a pull request, please make sure you read the <a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">pull request guidelines for GSoC 2021</a>.</p>
 <h2>General instructions<a name="general-instructions" href="#general-instructions" class="heading-anchor">🔗</a></h2>
 <p>First of all, please read the above referenced resources and the <a href="https://developers.google.com/open-source/gsoc/faq">GSoC FAQ</a>. Pay special attention to the <strong>Eligibility</strong> section of the FAQ.</p>
 <h2>Recommended steps<a name="recommended-steps" href="#recommended-steps" class="heading-anchor">🔗</a></h2>
@@ -444,7 +463,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/index.md
 <li>Take a look at the <a href="https://joplinapp.org/gsoc2021/ideas/">list of ideas</a>. You can have you own idea added by posting it in the <a href="https://discourse.joplinapp.org/c/features">Features category</a></li>
 <li>Come up with project that you're interested in and discuss it in <a href="https://discourse.joplinapp.org/c/features">Features category</a></li>
 <li>Write a first draft and get someone to review it</li>
-<li>Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.</li>
+<li>Remember: you must link to work such as commits in your proposal. A private place will be created within the forum for that purposes.</li>
 <li>Read <a href="http://teom.org/blog/kde/how-to-write-a-kick-ass-proposal-for-google-summer-of-code/">How to write a kickass proposal for GSoC</a></li>
 <li>Submit proposal using <a href="https://summerofcode.withgoogle.com/">Google's web interface</a> ahead of the deadline</li>
 <li>Submit proof of enrolment well ahead of the deadline</li>
@@ -498,7 +517,7 @@ There could be exceptional reason to accept proposal what cannot be finished ove
 <p>Your idea proposal should be a brief description of what the project is, what the desired goals would be, what the student should know and an email address for contact. Students are not required to follow your idea to the letter, so regard your proposal as inspiration for the students.</p>
 <h3>Mentoring<a name="mentoring" href="#mentoring" class="heading-anchor">🔗</a></h3>
 <p>Anyone developer can be a mentor if you meet the GSoC eligibility requirements. We will potentially assign a student to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.</p>
-<p>Before subscribing yourself as a mentor, please make sure that  the <a href="https://discourse.joplinapp.org/g/staff">staff</a> is aware of that. Ask them to send the Summer of Code  Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us an message in the forum.</p>
+<p>Before subscribing yourself as a mentor, please make sure that  the <a href="https://discourse.joplinapp.org/g/staff">staff</a> is aware of that. Ask them to send the Summer of Code  Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us a message in the forum.</p>
 <p>Prospective mentors should read the <a href="http://www.booki.cc/gsoc-mentoring">mentoring guide</a>. Also, Federico Mena-Quintero has written some helpful information based on his experiences in previous years. <a href="https://people.gnome.org/~federico/docs/summer-of-code-mentoring-howto/index.html">His HOWTO</a> has some useful suggestions for anyone planning to mentor this year.</p>
 <p>You will subscribe to the relevant tags in the forum to discuss ideas. You will need to read the proposals as they come in, and vote on the proposals. Daily communication is required with your student during the Community Bonding period, and multiple times per week during the coding period.</p>
 <p>Finally, know that we will never assign you to a project you do not want to work on. We will not assign you more projects than you can/want to take on either. And you will have a backup mentor, just in case something unforeseen takes place.</p>
