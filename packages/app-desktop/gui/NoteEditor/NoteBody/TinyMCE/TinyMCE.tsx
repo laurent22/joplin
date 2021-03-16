@@ -543,7 +543,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			const toolbarPluginButtons = pluginCommandNames.length ? ` | ${pluginCommandNames.join(' ')}` : '';
 
 			const toolbar = [
-				'bold', 'italic', '|',
+				'bold', 'italic', 'joplinHighlight', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
 				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
@@ -571,6 +571,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				localization_function: _,
 				contextmenu: false,
 				browser_spellcheck: true,
+				formats: {
+					'joplin-highlight': { inline: 'mark', remove: 'all' },
+				},
 				setup: (editor: any) => {
 
 					function openEditDialog(editable: any) {
@@ -641,6 +644,19 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						icon: 'paperclip',
 						onAction: async function() {
 							insertResourcesIntoContentRef.current();
+						},
+					});
+
+					editor.ui.registry.addToggleButton('joplinHighlight', {
+						tooltip: _('Highlight'),
+						icon: 'highlight-bg-color',
+						onAction: async function() {
+							editor.execCommand('mceToggleFormat', false, 'joplin-highlight');
+						},
+						onSetup: function(api: any) {
+							editor.formatter.formatChanged('joplin-highlight', function(state: boolean) {
+								api.setActive(state);
+							});
 						},
 					});
 

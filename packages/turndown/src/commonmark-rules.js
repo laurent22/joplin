@@ -54,6 +54,22 @@ rules.heading = {
   }
 }
 
+// ==============================
+// Joplin format support
+// ==============================
+
+rules.highlight = {
+  filter: 'mark',
+
+  replacement: function (content, node, options) {
+    return '==' + content + '=='
+  }
+}
+
+// ==============================
+// END Joplin format support
+// ==============================
+
 rules.blockquote = {
   filter: 'blockquote',
 

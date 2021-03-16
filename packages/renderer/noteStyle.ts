@@ -302,6 +302,11 @@ export default function(theme: any) {
 			display: none;
 		}
 
+		mark {
+			background: #F7D26E;
+			color: black;
+		}
+
 		/* =============================================== */
 		/* For TinyMCE */
 		/* =============================================== */
