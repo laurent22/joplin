@@ -235,6 +235,7 @@ function shimInit(sharp = null, keytar = null, React = null) {
 		}
 
 		resource.file_extension = fileExt;
+		resource.filename = Resource.filename(resource);
 
 		const targetPath = Resource.fullPath(resource);
 

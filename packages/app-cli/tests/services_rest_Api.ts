@@ -346,6 +346,25 @@ describe('services_rest_Api', function() {
 		expect(originalImageSize).toEqual(uploadedImageSize);
 	}));
 
+	it('should display and set all resource properties correctly', (async () => {
+		const response = await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'testing resource',
+		}), [
+			{
+				path: `${__dirname}/../tests/support/photo.jpg`,
+			},
+		]);
+
+		const resources = await Resource.all();
+		expect(resources.length).toBe(1);
+		const resource = resources[0];
+
+		expect(response.id).toEqual(resource.id);
+		expect(response.title).toEqual('testing resource');
+		expect(response.mime).toEqual('image/jpeg');
+		expect(response.filename).toEqual(Resource.filename(resource));
+	}));
+
 	it('should delete resources', (async () => {
 		const f = await Folder.save({ title: 'mon carnet' });
 
