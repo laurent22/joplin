@@ -43,19 +43,23 @@ Students wishing to participate in Summer of Code must realize, that this is an 
 
 You don't have to be a proven developer - in fact, this whole program is meant to facilitate joining Joplin and other Open Source communities. However, experience in coding and/or experience with the above mentioned programming languages and the applications is welcome.
 
-In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.
-
-Before you can be accepted as a student we expect you to fix some bugs or implement a small plugin or external application and link that work on your proposal. You may browse the [GitHub Issues](https://github.com/laurent22/joplin/issues?q=is:open+is:issue+label:bug) to find some simple bugs to fix. Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2021](https://joplinapp.org/gsoc2021/pull_request_guidelines/).
-
-You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.
-
-Do not worry, the timeline from Google reserves a lot of time for bonding periods so use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with `#gsoc-2021`.
-
-You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to choose the format, it can be a sophisticated online document or simple continuous blog on GitHub.
-
-Moreover, we require that you come to clear agreement on how to commit, test and build.
+You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel. You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to choose the format, it can be a sophisticated online document or simple continuous blog on GitHub.
 
 Students who neglect active communication will be failed!
+
+### How to create your first pull request
+
+Before you can be accepted as a student we expect you to write some code and link that work on your proposal. As a first pull request, we suggest one of the following:
+
+- Fix a [high priority](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is:open+is:issue+label:bug+label:high) or [medium priority](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is:open+is:issue+label:bug+label:medium) bug. This is something we highly value and is a good way to get a deep understanding of certain parts of the codebase.
+
+- Implement a small plugin or external application, to get yourself familiar with the Joplin API.
+
+- Alternatively you may browse the [GitHub Issues](https://github.com/laurent22/joplin/issues) to find something that can be worked on. Note that this is a difficult way to get a pull request in, so make sure the issue you choose has a very clear technical spec. If we need to discuss how it should work or what it should do in the pull request, it means there was no consensus for this feature, and we are likely to close the pull request.
+
+- Please **do not submit a pull request just to fix some typo**.
+
+Before submitting a pull request, please make sure you read the [pull request guidelines for GSoC 2021](https://joplinapp.org/gsoc2021/pull_request_guidelines/).
 
 ## General instructions
 
