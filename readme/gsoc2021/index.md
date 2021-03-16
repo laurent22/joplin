@@ -47,7 +47,7 @@ You should start learning the components that you plan on working on before the 
 
 Students who neglect active communication will be failed!
 
-### How to create your first pull request
+## How to create your first pull request
 
 Before you can be accepted as a student we expect you to write some code and link that work on your proposal. As a first pull request, we suggest one of the following:
 
