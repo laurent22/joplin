@@ -1,5 +1,6 @@
 import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
+import Setting from '../../models/Setting';
 
 export default class SearchEngineUtils {
 	static async notesForQuery(query: string, options: any = null) {
@@ -49,9 +50,24 @@ export default class SearchEngineUtils {
 		// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
 		if (noteIds.length !== notes.length) {
 			// remove null objects
-			return sortedNotes.filter(n => n);
+      const results2:any = [];
+      const filtered_notes = sortedNotes.filter(n => n);
+      for(let i=0;i<filtered_notes.length;i++){
+        if(!Setting.value('showCompletedTodos') && filtered_notes[i].todo_completed){
+          continue;
+        }
+        results2.push(filtered_notes[i]);
+      }
+			return results2;
 		} else {
-			return sortedNotes;
+      const results1:any = [];
+      for (let i=0;i<sortedNotes.length;i++){
+        if(!Setting.value('showCompletedTodos') && sortedNotes[i].todo_completed){
+          continue;
+        }
+        results1.push(sortedNotes[i]);
+      }
+			return results1;
 		}
 
 	}
