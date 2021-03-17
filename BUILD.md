@@ -6,24 +6,29 @@ The Joplin source code is hosted on a [monorepo](https://en.wikipedia.org/wiki/M
 
 The list of the main sub-packages is below:
 
-Package name | Description
---- | ---
-app-cli | The CLI application
-app-clipper | The web clipper
-app-desktop | The desktop application
-app-mobile | The mobile application
-lib | The core library, shared by all applications. It deals with things like synchronisation, encryption, import/export, database and pretty much all the app business logic
-renderer | The Joplin Markdown and HTML renderer
-tools | Tools used to build the apps and other tasks
+| Package name | Description                                                                                                                                                             |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| app-cli      | The CLI application                                                                                                                                                     |
+| app-clipper  | The web clipper                                                                                                                                                         |
+| app-desktop  | The desktop application                                                                                                                                                 |
+| app-mobile   | The mobile application                                                                                                                                                  |
+| lib          | The core library, shared by all applications. It deals with things like synchronisation, encryption, import/export, database and pretty much all the app business logic |
+| renderer     | The Joplin Markdown and HTML renderer                                                                                                                                   |
+| tools        | Tools used to build the apps and other tasks                                                                                                                            |
 
 There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
 
 - Install node 10+ - https://nodejs.org/en/
-- macOS: Install Cocoapods - `brew install cocoapods`
-- Windows: Install Windows Build Tools - `npm install -g windows-build-tools`
-- Linux: Install dependencies - `sudo apt install libnss3 libsecret-1-dev python rsync`
+
+- And:
+
+| OS        | Install             | Command                                                   |
+| :-------- | :------------------ | :-------------------------------------------------------- |
+| macOS     | Cocoapods           | `brew install cocoapods`                                  |
+| Windows   | Windows Build Tools | `npm install -g windows-build-tools`                      |
+| Linux     | dependencies        | `sudo apt install libnss3 libsecret-1-dev python rsync`   |
 
 ## Building
 
@@ -52,7 +57,11 @@ First you need to setup React Native to build projects with native code. For thi
 Then, for **Android**:
 
 	cd packages/app-mobile/android
-	./gradlew installDebug # or gradlew.bat installDebug on Windows
+	./gradlew installDebug
+	
+or on Windows:
+	
+	gradlew.bat installDebug
 
 On **iOS**, open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
