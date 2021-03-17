@@ -377,6 +377,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			`.CodeMirror-selected {
 				background: #6b6b6b !important;
 			}` : '';
+		const monospaceFont = Setting.value('style.editor.monospaceFontFamily');
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
@@ -414,7 +415,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 			/* This enforces monospace for certain elements (code, tables, etc.) */
 			.cm-jn-monospace {
-				font-family: monospace !important;
+				font-family: ${monospaceFont}, monospace !important;
 			}
 
 			.cm-header-1 {
