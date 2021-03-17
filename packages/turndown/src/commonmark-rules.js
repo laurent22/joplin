@@ -66,6 +66,36 @@ rules.highlight = {
   }
 }
 
+// Unlike strikethrough and mark formatting, insert, sup and sub aren't
+// widespread enough to automatically convert them to Markdown, but keep them as
+// HTML anyway. Another issue is that we use "~" for subscript but that's
+// actually the syntax for strikethrough on GitHub, so it's best to keep it as
+// HTML to avoid any ambiguity.
+
+rules.insert = {
+  filter: 'ins',
+
+  replacement: function (content, node, options) {
+    return '<ins>' + content + '</ins>'
+  }
+}
+
+rules.superscript = {
+  filter: 'sup',
+
+  replacement: function (content, node, options) {
+    return '<sup>' + content + '</sup>'
+  }
+}
+
+rules.subscript = {
+  filter: 'sub',
+
+  replacement: function (content, node, options) {
+    return '<sub>' + content + '</sub>'
+  }
+}
+
 // ==============================
 // END Joplin format support
 // ==============================
