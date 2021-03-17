@@ -1,6 +1,7 @@
 import Logger from '@joplin/lib/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
+import { Menu } from 'electron';
 
 const { BrowserWindow, Tray, screen } = require('electron');
 const url = require('url');
@@ -83,6 +84,7 @@ export default class ElectronAppWrapper {
 			height: windowState.height,
 			minWidth: 100,
 			minHeight: 100,
+			frame: false,
 			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
 			webPreferences: {
 				nodeIntegration: true,
@@ -201,6 +203,23 @@ export default class ElectronAppWrapper {
 				}
 
 				win.webContents.send('pluginMessage', message);
+			}
+		});
+
+		ipcMain.on('minimize-handler', () => this.win_.minimize());
+
+		ipcMain.on('maximize-handler', () => this.win_.isMaximized() ?
+			this.win_.restore() : this.win_.maximize());
+
+		ipcMain.on('close-window-handler', () => this.win_.close());
+		ipcMain.on('display-app-menu', function(_: any, args: {x: number; y: number}) {
+			const menu = Menu.getApplicationMenu();
+			if (process.platform === 'win32') {
+				menu.popup({
+					window: this.win_,
+					x: args.x,
+					y: args.y,
+				});
 			}
 		});
 
