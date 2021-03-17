@@ -738,7 +738,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		return (
 			<>
-				<TitleBar />
+				{process.platform === 'win32' && <TitleBar />}
 				<div style={style}>
 					<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 					{this.renderPluginDialogs()}

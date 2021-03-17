@@ -25,6 +25,7 @@ export const StyledCloseHolder = styled.span<RootProps>`
 `;
 
 export const StyledDragBar = styled.div<RootProps>`
+	color: ${(props: RootProps) => props.theme.color};
 	display: flex;
 	justify-content: center;
 	align-items: center;
