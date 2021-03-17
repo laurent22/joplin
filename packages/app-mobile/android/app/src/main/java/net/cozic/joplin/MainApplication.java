@@ -9,6 +9,7 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.modules.network.OkHttpClientProvider;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -68,6 +69,7 @@ public class MainApplication extends Application implements ReactApplication {
     }
     
     SoLoader.init(this, /* native exopackage */ false);
+    OkHttpClientProvider.setOkHttpClientFactory(new CustomClientFactory());
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
 
     // To allow debugging the webview using the Chrome developer tools.
