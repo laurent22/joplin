@@ -109,6 +109,11 @@ a {
 	}
 }
 
+.rdtPicker {
+	min-width: 250px;
+	width: auto !important;
+}
+
 .smalltalk {
 	font-family: sans-serif;
 }
