@@ -335,7 +335,7 @@ class Application extends BaseApplication {
 
 			case 'NOTE_DEVTOOLS_TOGGLE':
 				newState = Object.assign({}, state);
-				newState.devToolsVisible = !newState.devToolsVisible;
+				newState.devToolsVisible = !bridge().isDevToolsOpened();
 				break;
 
 			case 'NOTE_DEVTOOLS_SET':

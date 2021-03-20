@@ -76,6 +76,10 @@ export class Bridge {
 		return this.window().webContents.closeDevTools();
 	}
 
+	isDevToolsOpened() {
+		return this.window().webContents.isDevToolsOpened();
+	}
+
 	showSaveDialog(options: any) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
