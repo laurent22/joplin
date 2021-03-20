@@ -45,8 +45,6 @@ export default function useOnResourceLongPress(onJoplinLinkClick: Function, dial
 					url: `file://${targetPath}`,
 					failOnCancel: false,
 				});
-
-				await shim.fsDriver().remove(targetPath);
 			}
 		} catch (e) {
 			reg.logger().error('Could not handle link long press', e);

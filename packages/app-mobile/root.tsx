@@ -74,6 +74,7 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
+import { CachesDirectoryPath } from 'react-native-fs';
 
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
@@ -556,6 +557,8 @@ async function initialize(dispatch: Function) {
 				folderId: folder.id,
 			});
 		}
+
+		shim.fsDriver().remove(`${CachesDirectoryPath}/sharedFiles`);
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
