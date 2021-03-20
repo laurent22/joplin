@@ -211,6 +211,13 @@ export enum ChangeType {
 	Delete = 3,
 }
 
+export function changeTypeToString(t: ChangeType): string {
+	if (t === ChangeType.Create) return 'create';
+	if (t === ChangeType.Update) return 'update';
+	if (t === ChangeType.Delete) return 'delete';
+	throw new Error(`Unkown type: ${t}`);
+}
+
 export enum ShareType {
 	Link = 1, // When a note is shared via a public link
 	App = 2, // When a note is shared with another user on the same server instance
