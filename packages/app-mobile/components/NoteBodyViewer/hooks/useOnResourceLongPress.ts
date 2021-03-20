@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import { CachesDirectoryPath } from 'react-native-fs';
 
 const { ToastAndroid } = require('react-native');
 const { _ } = require('@joplin/lib/locale.js');
@@ -32,7 +32,10 @@ export default function useOnResourceLongPress(onJoplinLinkClick: Function, dial
 					filename = ['untitled', resource.file_extension].join('.');
 				}
 
-				const targetPath = `${Setting.value('resourceDir')}/${filename}`;
+				const targetDir = `${CachesDirectoryPath}/sharedFiles`;
+				await shim.fsDriver().mkdir(targetDir);
+
+				const targetPath = `${targetDir}/${filename}`;
 
 				await shim.fsDriver().copy(Resource.fullPath(resource), targetPath);
 
