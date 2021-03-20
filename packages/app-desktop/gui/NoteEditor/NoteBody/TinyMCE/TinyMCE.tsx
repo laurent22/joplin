@@ -18,6 +18,7 @@ const { MarkupToHtml } = require('@joplin/renderer');
 const taboverride = require('taboverride');
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
+import setupToolbarButtons from './utils/setupToolbarButtons';
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -543,7 +544,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			const toolbarPluginButtons = pluginCommandNames.length ? ` | ${pluginCommandNames.join(' ')}` : '';
 
 			const toolbar = [
-				'bold', 'italic', 'joplinHighlight', '|',
+				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
 				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
@@ -572,7 +573,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				contextmenu: false,
 				browser_spellcheck: true,
 				formats: {
-					'joplin-highlight': { inline: 'mark', remove: 'all' },
+					joplinHighlight: { inline: 'mark', remove: 'all' },
+					joplinStrikethrough: { inline: 's', remove: 'all' },
+					joplinInsert: { inline: 'ins', remove: 'all' },
+					joplinSub: { inline: 'sub', remove: 'all' },
+					joplinSup: { inline: 'sup', remove: 'all' },
 				},
 				setup: (editor: any) => {
 
@@ -647,18 +652,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						},
 					});
 
-					editor.ui.registry.addToggleButton('joplinHighlight', {
-						tooltip: _('Highlight'),
-						icon: 'highlight-bg-color',
-						onAction: async function() {
-							editor.execCommand('mceToggleFormat', false, 'joplin-highlight');
-						},
-						onSetup: function(api: any) {
-							editor.formatter.formatChanged('joplin-highlight', function(state: boolean) {
-								api.setActive(state);
-							});
-						},
-					});
+					setupToolbarButtons(editor);
 
 					editor.ui.registry.addButton('joplinCodeBlock', {
 						tooltip: _('Code Block'),
