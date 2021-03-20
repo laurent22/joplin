@@ -22,11 +22,16 @@ export default function useOnResourceLongPress(onJoplinLinkClick: Function, dial
 			]);
 
 			if (action === 'open') {
-				onJoplinLinkClick(`joplin://${resourceId}`);
+				onJoplinLinkClick(`joplgit in://${resourceId}`);
 			} else if (action === 'share') {
-				const filename = resource.file_name ?
+				let filename = resource.file_name ?
 					`${resource.file_name}.${resource.file_extension}` :
 					resource.title;
+
+				if (!filename) {
+					filename = ['untitled', resource.file_extension].join('.');
+				}
+
 				const targetPath = `${Setting.value('resourceDir')}/${filename}`;
 
 				await shim.fsDriver().copy(Resource.fullPath(resource), targetPath);
