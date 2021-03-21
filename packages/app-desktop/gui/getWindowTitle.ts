@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 
-export default function getWindowTitle(notes: any[], selectedNoteIds: string[], selectedFolderId: string, folders: any[], screens: any, route: any) {
+export default function getWindowTitle(notes: any[], selectedNoteIds: string[], selectedFolderId: string, folders: any[], screens: any, route: { type: string; routeName: string; props: any}) {
 	const windowTitle = [];
 	const note = selectedNoteIds.length ? BaseModel.byId(notes, selectedNoteIds[0]) : null;
 	const folderId = note ? note.parent_id : selectedFolderId;
