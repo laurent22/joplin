@@ -112,14 +112,20 @@ export default function useJoplinMode(CodeMirror: any) {
 				// //////// End Markdown //////////
 
 				// //////// Monospace //////////
+				let isMonospace = false;
 				// After being passed to the markdown mode we can check if the
 				// code state variables are set
+				// Code Block
 				if (state.outer.code || (state.outer.thisLine && state.outer.thisLine.fencedCodeEnd)) {
-					token = `${token} jn-monospace`;
+					isMonospace = true;
 				}
-				// Task lists also have enforced monospace
+				// Indented Code
+				if (state.outer.indentedCode) {
+					isMonospace = true;
+				}
+				// Task lists
 				if (state.outer.taskList || state.outer.taskOpen || state.outer.taskClosed) {
-					token = `${token} jn-monospace`;
+					isMonospace = true;
 				}
 
 				// Any line that contains a | is potentially a table row
@@ -132,11 +138,13 @@ export default function useJoplinMode(CodeMirror: any) {
 
 					// Treat all lines that start with | as a table row
 					if (state.inTable || stream.string[0] === '|') {
-						token = `${token} jn-monospace`;
+						isMonospace = true;
 					}
 				} else {
 					state.inTable = false;
 				}
+
+				if (isMonospace) { token = `${token} jn-monospace`; }
 				// //////// End Monospace //////////
 
 				return token;

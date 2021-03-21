@@ -867,8 +867,7 @@ class Setting extends BaseModel {
 						section: 'appearance',
 						label: () => _('Editor font family'),
 						description: () =>
-							_('If the font ' +
-						'is incorrect or empty, it will default to a generic monospace font.'),
+							_('If the font is incorrect or empty, it will default to a generic monospace font.'),
 						storage: SettingStorage.File,
 					},
 			'style.editor.monospaceFontFamily': {
