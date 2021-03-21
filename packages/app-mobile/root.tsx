@@ -74,7 +74,6 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
-import { CachesDirectoryPath } from 'react-native-fs';
 
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
@@ -95,6 +94,7 @@ import FsDriverRN from './utils/fs-driver-rn';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
+import { clearSharedFilesCache } from './utils/ShareUtils';
 
 let storeDispatch = function(_action: any) {};
 
@@ -558,7 +558,7 @@ async function initialize(dispatch: Function) {
 			});
 		}
 
-		shim.fsDriver().remove(`${CachesDirectoryPath}/sharedFiles`);
+		await clearSharedFilesCache();
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
