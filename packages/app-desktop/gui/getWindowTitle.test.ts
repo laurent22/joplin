@@ -25,27 +25,23 @@ const props: any = {
 describe('Get Window Title', () => {
 	Setting.setConstant('env', 'dev');
 	test('Should produce string as Folder > Note', () => {
-		const title = getWindowTitle(props);
+		const title = getWindowTitle(props.notes, props.selectedNoteIds, props.selectedFolderId, props.folders, props.screens, props.route);
 		expect(title).toBe('testbook > Open source projects to contribute - Joplin (DEV)');
 	});
 	test('When no note is selected', () => {
-		const _props = { ...props, selectedNoteIds: [] };
-		const title = getWindowTitle(_props);
+		const title = getWindowTitle(props.notes, [], props.selectedFolderId, props.folders, props.screens, props.route);
 		expect(title).toBe('testbook - Joplin (DEV)');
 	});
 	test('When no folder is selected', () => {
-		const _props = { ...props, selectedFolderId: null };
-		const title = getWindowTitle(_props);
+		const title = getWindowTitle(props.notes, props.selectedNoteIds, null, props.folders, props.screens, props.route);
 		expect(title).toBe('testbook > Open source projects to contribute - Joplin (DEV)');
 	});
 	test('When no note and folder is selected', () => {
-		const _props = { ...props, selectedNoteIds: [], selectedFolderId: null };
-		const title = getWindowTitle(_props);
+		const title = getWindowTitle(props.notes, [], null, props.folders, props.screens, props.route);
 		expect(title).toBe('Joplin (DEV)');
 	});
 	test('When not on main screen (dropbox login)', () => {
-		const _props = { ...props, route: { 'routeName': 'DropboxLogin' } };
-		const title = getWindowTitle(_props);
+		const title = getWindowTitle(props.notes, props.selectedNoteIds, props.selectedFolderId, props.folders, props.screens, { 'routeName': 'DropboxLogin' });
 		expect(title).toBe('Dropbox Login - Joplin (DEV)');
 	});
 });
