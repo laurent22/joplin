@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Ettore Atalan <atalanttore@users.noreply.github.com>\n"
+"Last-Translator: pomeloy <45542782+pomeloy@users.noreply.github.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -412,21 +412,23 @@ msgstr "Neue(s) %s wird erstellt ..."
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
 #, fuzzy
 msgid "Click to add tags..."
-msgstr "Auf Aktualisierungen prüfen ..."
+msgstr "Klicke, um Schlagwörter hinzuzufügen ..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"Dieser Rich Text Editor hat eine Reihe von Unzulänglichkeiten, die bei der "
+"Nutzung beachtet werden sollten."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
-msgstr ""
+msgstr "Mehr erfahren"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr ""
+msgstr "Ausblenden"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
@@ -492,19 +494,19 @@ msgstr "Notiz löschen?"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "Rückgängig"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "Wiederholen"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "Ausrücken"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "Einrücken"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 #, fuzzy
@@ -518,11 +520,11 @@ msgstr "Die ausgewählte Notiz bearbeiten"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "Zeile nach oben verschieben"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "Zeile nach unten verschieben"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -1401,7 +1403,7 @@ msgstr "Erweiterte Einstellungen anzeigen"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Path:"
-msgstr ""
+msgstr "Pfad:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
 msgid "Browse..."
@@ -1409,7 +1411,7 @@ msgstr "Durchsuchen ..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
-msgstr ""
+msgstr "Kommandozeilenargumente:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
@@ -1433,7 +1435,7 @@ msgstr "Hole es jetzt:"
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
 #: packages/lib/models/Setting.js:1524
 msgid "Plugins"
-msgstr "Zusatzprogramme"
+msgstr "Erweiterungen"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
@@ -1442,34 +1444,34 @@ msgstr "Anwenden"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
 #, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Plugin „%s“ löschen?"
+msgstr "Erweiterung „%s“ löschen?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
 #, fuzzy
 msgid "Browse all plugins"
-msgstr "Plugin installieren"
+msgstr "Erweiterungen durchsuchen"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "Aus Datei installieren"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "Es sind keine Erweiterungen installiert."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
 #, fuzzy
 msgid "Plugin tools"
-msgstr "Zusatzprogramme"
+msgstr "Erweiterungen"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "Erweiterungen verwalten"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 #, fuzzy
 msgid "No results"
-msgstr "Keine Anhänge!"
+msgstr "Keine Ergebnisse"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 #, fuzzy
@@ -1479,36 +1481,36 @@ msgstr "Suchen ..."
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
 #, fuzzy
 msgid "Install"
-msgstr "Plugin installieren"
+msgstr "Erweiterung installieren"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
 #, fuzzy
 msgid "Installing..."
-msgstr "Wird abgebrochen ..."
+msgstr "Wird installiert ..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
 #, fuzzy
 msgid "Installed"
-msgstr "Plugin installieren"
+msgstr "Erweiterung installiert"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
 #, fuzzy
 msgid "Update"
-msgstr "Aktualisiert"
+msgstr "Aktualisieren"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
 #, fuzzy
 msgid "Updating..."
-msgstr "Zuschauend ..."
+msgstr "Wird aktualisiert ..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "Bitte aktualisiere Joplin, um diese Erweiterung zu nutzen"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
 #, fuzzy, javascript-format
@@ -2640,7 +2642,7 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Der Editor-Befehl (kann Argumente enthalten), der zum Öffnen einer Notiz "
+"Der Editor-Befehl (kann Kommandozeilenargumente enthalten), der zum Öffnen einer Notiz "
 "verwendet wird. Wenn keiner angegeben wird, wird versucht, den Standard-"
 "Editor automatisch zu erkennen."
 
@@ -2835,14 +2837,14 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Diese Zusatzprogramme erweitern den Markdown-Renderer um zusätzliche "
+"Diese Erweiterungen erweitern den Markdown-Renderer um zusätzliche "
 "Funktionen. Bitte beachte, dass diese Funktionen zwar nützlich sein können, "
 "es sich dabei jedoch nicht um Standard-Markdown handelt und die meisten von "
 "ihnen daher nur in Joplin funktionieren. Außerdem sind einige von ihnen "
-"*inkompatibel* mit dem WYSIWYG-Editor. Wenn du eine Notiz, die eines dieser "
-"Zusatzprogramme verwendet, in diesem Editor öffnest, verlierst du die "
-"Formatierung des Zusatzprogramms. Es ist unten angegeben, welche "
-"Zusatzprogramme mit dem WYSIWYG-Editor kompatibel sind oder nicht."
+"*inkompatibel* mit dem WYSIWYG-Editor. Wenn du eine Notiz, die eine dieser "
+"Erweiterungen verwendet, in diesem Editor öffnest, verlierst du die "
+"Formatierung der Erweiterung. Es ist unten angegeben, welche "
+"Erweiterungen mit dem WYSIWYG-Editor kompatibel sind oder nicht."
 
 #: packages/lib/models/Setting.js:1543
 #, javascript-format
