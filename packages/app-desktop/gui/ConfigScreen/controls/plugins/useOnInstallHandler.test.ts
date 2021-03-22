@@ -1,14 +1,12 @@
 import useOnInstallHandler from './useOnInstallHandler';
 import { renderHook } from '@testing-library/react-hooks';
 
-import PluginService, { defaultPluginSetting, PluginSetting } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import { ItemEvent } from './PluginBox';
-import produce from 'immer';
 
 jest.mock('@joplin/lib/services/plugins/PluginService');
-jest.mock('immer');
 
-const pluginServiceinstance = {
+const pluginServiceInstance = {
 	updatePluginFromRepo: jest.fn(),
 	installPluginFromRepo: jest.fn(),
 };
@@ -37,7 +35,7 @@ const callHook = (isUpdate: boolean, pluginEnabled = true) => () => useOnInstall
 describe('useOnInstallHandler', () => {
 
 	beforeAll(() => {
-		(PluginService.instance as jest.Mock).mockReturnValue(pluginServiceinstance);
+		(PluginService.instance as jest.Mock).mockReturnValue(pluginServiceInstance);
 		(defaultPluginSetting as jest.Mock).mockImplementation(
 			jest.requireActual('@joplin/lib/services/plugins/PluginService').defaultPluginSetting
 		);
@@ -47,51 +45,42 @@ describe('useOnInstallHandler', () => {
 		jest.clearAllMocks();
 	});
 
-	test('should set updatingPluginIds while updating', async () => {
-		const { result: { current: cb } } = renderHook(callHook(true));
-		await cb(itemEvent);
+	test('should report that the plugin is being updated', async () => {
+		const { result: { current: onUpdate } } = renderHook(callHook(true));
+		await onUpdate(itemEvent);
 
 		expect(setInstallingPluginIds).toHaveBeenCalledTimes(2);
 		expect(setInstallingPluginIds.mock.calls[0][0]({})).toMatchObject({ [pluginId]: true });
 		expect(setInstallingPluginIds.mock.calls[1][0]({})).toMatchObject({ [pluginId]: false });
 	});
 
-	test('should call updatePluginFromRepo if plugin is updated', async () => {
-		const { result: { current: cb } } = renderHook(callHook(true));
-		await cb(itemEvent);
+	test('should update the plugin when there is an update', async () => {
+		const { result: { current: onUpdate } } = renderHook(callHook(true));
+		await onUpdate(itemEvent);
 
-		expect(pluginServiceinstance.updatePluginFromRepo).toHaveBeenCalledWith(undefined, pluginId);
+		expect(pluginServiceInstance.updatePluginFromRepo).toHaveBeenCalledWith(undefined, pluginId);
 	});
 
-	test('should call installPluginFromRepo if plugin is installed', async () => {
-		const { result: { current: cb } } = renderHook(callHook(false));
-		await cb(itemEvent);
+	test('should install the plugin when it is not yet installed', async () => {
+		const { result: { current: onInstall } } = renderHook(callHook(false));
+		await onInstall(itemEvent);
 
-		expect(pluginServiceinstance.installPluginFromRepo).toHaveBeenCalledWith(undefined, pluginId);
+		expect(pluginServiceInstance.installPluginFromRepo).toHaveBeenCalledWith(undefined, pluginId);
 	});
 
-	test('when plugin is updated should preserve enabled flag', async () => {
-		const { result: { current: cb } } = renderHook(callHook(true, false));
-		await cb(itemEvent);
+	test('should preserve the enabled flag when plugin is updated', async () => {
+		const { result: { current: onUpdate } } = renderHook(callHook(true, false));
+		await onUpdate(itemEvent);
 
-		const draft = { [pluginId]: {} as PluginSetting };
-		(produce as jest.Mock).mock.calls[0][1](draft);
-		expect(draft[pluginId].enabled).toBe(false);
+		const newSettings = onPluginSettingsChange.mock.calls[0][0].value;
+		expect(newSettings[pluginId].enabled).toBe(false);
 	});
 
-	test('when plugin is updated should set hasBeenUpdated', async () => {
-		const { result: { current: cb } } = renderHook(callHook(true));
-		await cb(itemEvent);
+	test('should indicate it when plugin has been updated', async () => {
+		const { result: { current: onUpdate } } = renderHook(callHook(true));
+		await onUpdate(itemEvent);
 
-		const draft = { [pluginId]: {} as PluginSetting };
-		(produce as jest.Mock).mock.calls[0][1](draft);
-		expect(draft[pluginId].hasBeenUpdated).toBe(true);
-	});
-
-	test('when plugin is updated or installed should call onPluginSettingsChange', async () => {
-		const { result: { current: cb } } = renderHook(callHook(true));
-		await cb(itemEvent);
-
-		expect(onPluginSettingsChange).toHaveBeenCalled();
+		const newSettings = onPluginSettingsChange.mock.calls[0][0].value;
+		expect(newSettings[pluginId].hasBeenUpdated).toBe(true);
 	});
 });
