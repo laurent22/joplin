@@ -21,7 +21,7 @@ export default function useOnResourceLongPress(onJoplinLinkClick: Function, dial
 			]);
 
 			if (action === 'open') {
-				onJoplinLinkClick(`joplgit in://${resourceId}`);
+				onJoplinLinkClick(`joplin://${resourceId}`);
 			} else if (action === 'share') {
 				const fileToShare = await copyToCache(resource);
 
