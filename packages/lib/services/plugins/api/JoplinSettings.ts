@@ -39,32 +39,45 @@ export default class JoplinSettings {
 	}
 
 	/**
-	 * Registers a new setting. Note that registering a setting item is dynamic and will be gone next time Joplin starts.
+	 * Registers new settings.
+	 * Note that registering a setting item is dynamic and will be gone next time Joplin starts.
 	 * What it means is that you need to register the setting every time the plugin starts (for example in the onStart event).
 	 * The setting value however will be preserved from one launch to the next so there is no risk that it will be lost even if for some
 	 * reason the plugin fails to start at some point.
 	 */
+	public async registerSettings(settings: Record<string, SettingItem>) {
+		for (const [key, setting] of Object.entries(settings)) {
+			const internalSettingItem: InternalSettingItem = {
+				key: key,
+				value: setting.value,
+				type: setting.type,
+				public: setting.public,
+				label: () => setting.label,
+				description: (_appType: string) => setting.description,
+			};
+
+			if ('isEnum' in setting) internalSettingItem.isEnum = setting.isEnum;
+			if ('section' in setting) internalSettingItem.section = this.namespacedKey(setting.section);
+			if ('options' in setting) internalSettingItem.options = () => setting.options;
+			if ('appTypes' in setting) internalSettingItem.appTypes = setting.appTypes;
+			if ('secure' in setting) internalSettingItem.secure = setting.secure;
+			if ('advanced' in setting) internalSettingItem.advanced = setting.advanced;
+			if ('minimum' in setting) internalSettingItem.minimum = setting.minimum;
+			if ('maximum' in setting) internalSettingItem.maximum = setting.maximum;
+			if ('step' in setting) internalSettingItem.step = setting.step;
+
+			await Setting.registerSetting(this.namespacedKey(key), internalSettingItem);
+		}
+	}
+
+	/**
+	 * @deprecated Use joplin.settings.registerSettings()
+	 *
+	 * Registers a new setting.
+	 */
 	public async registerSetting(key: string, settingItem: SettingItem) {
-		const internalSettingItem: InternalSettingItem = {
-			key: key,
-			value: settingItem.value,
-			type: settingItem.type,
-			public: settingItem.public,
-			label: () => settingItem.label,
-			description: (_appType: string) => settingItem.description,
-		};
-
-		if ('isEnum' in settingItem) internalSettingItem.isEnum = settingItem.isEnum;
-		if ('section' in settingItem) internalSettingItem.section = this.namespacedKey(settingItem.section);
-		if ('options' in settingItem) internalSettingItem.options = () => settingItem.options;
-		if ('appTypes' in settingItem) internalSettingItem.appTypes = settingItem.appTypes;
-		if ('secure' in settingItem) internalSettingItem.secure = settingItem.secure;
-		if ('advanced' in settingItem) internalSettingItem.advanced = settingItem.advanced;
-		if ('minimum' in settingItem) internalSettingItem.minimum = settingItem.minimum;
-		if ('maximum' in settingItem) internalSettingItem.maximum = settingItem.maximum;
-		if ('step' in settingItem) internalSettingItem.step = settingItem.step;
-
-		return Setting.registerSetting(this.namespacedKey(key), internalSettingItem);
+		this.plugin_.deprecationNotice('1.8', 'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()');
+		await this.registerSettings({ [key]: settingItem });
 	}
 
 	/**
