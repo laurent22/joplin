@@ -860,7 +860,7 @@ class Setting extends BaseModel {
 						},
 						storage: SettingStorage.File,
 					}) : {
-						value: '',
+						value: 'Open Sans',
 						type: SettingItemType.String,
 						public: true,
 						appTypes: ['desktop'],
