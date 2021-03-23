@@ -29,6 +29,7 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 
+import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
@@ -194,6 +195,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
+	isOnMobileData: false,
 });
 
 const appReducer = (state = appDefaultState, action: any) => {
@@ -357,6 +359,12 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 			newState = Object.assign({}, state);
 			newState.noteSideMenuOptions = action.options;
+			break;
+
+		case 'NETWORK_TYPE_CHANGE':
+
+			newState = Object.assign({}, state);
+			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
 		}
@@ -646,6 +654,20 @@ class AppComponent extends React.Component {
 				state: 'initializing',
 			});
 
+			try {
+				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
+					const isMobile = details.isConnectionExpensive || type === 'cellular';
+					reg.setNetworkState(isMobile);
+					this.props.dispatch({
+						type: 'NETWORK_TYPE_CHANGE',
+						isOnMobileData: isMobile,
+					});
+				});
+			} catch (error) {
+				reg.logger().warn('Something went wrong while checking network info');
+				reg.logger().info(error);
+			}
+
 			await initialize(this.props.dispatch);
 
 			this.props.dispatch({
@@ -679,6 +701,7 @@ class AppComponent extends React.Component {
 
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
+		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
 	componentDidUpdate(prevProps: any) {

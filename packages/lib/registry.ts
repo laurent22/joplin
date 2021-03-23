@@ -15,6 +15,7 @@ class Registry {
 	private scheduleSyncId_: any;
 	private recurrentSyncId_: any;
 	private db_: any;
+	private isOnMobileData_ = true;
 
 	logger() {
 		if (!this.logger_) {
@@ -36,6 +37,12 @@ class Registry {
 	showErrorMessageBox(message: string) {
 		if (!this.showErrorMessageBoxHandler_) return;
 		this.showErrorMessageBoxHandler_(message);
+	}
+
+	// If isOnMobileData is true, the overrideNetworkCheck is not set
+	// and the sync.mobileWifiOnly setting is true it will cancel the sync.
+	setNetworkState(isOnMobileData: boolean) {
+		this.isOnMobileData_ = isOnMobileData;
 	}
 
 	resetSyncTarget(syncTargetId: number = null) {
@@ -74,7 +81,7 @@ class Registry {
 		}
 	};
 
-	scheduleSync = async (delay: number = null, syncOptions: any = null) => {
+	scheduleSync = async (delay: number = null, syncOptions: any = null, overrideNetworkCheck: boolean = false) => {
 		this.schedSyncCalls_.push(true);
 
 		try {
@@ -103,6 +110,11 @@ class Registry {
 				try {
 					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
+
+					if (!overrideNetworkCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
+						this.logger().info('Sync cancelled because we\'re on mobile data');
+						return;
+					}
 
 					const syncTargetId = Setting.value('sync.target');
 
