@@ -13,6 +13,7 @@ import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import useContextMenu from './utils/useContextMenu';
 import shim from '@joplin/lib/shim';
+import HtmlUtils from '@joplin/lib/htmlUtils';
 
 const { MarkupToHtml } = require('@joplin/renderer');
 const taboverride = require('taboverride');
@@ -398,7 +399,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				padding-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
 				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
 			}
-			
+
 			.tox .tox-toolbar,
 			.tox .tox-toolbar__overflow,
 			.tox .tox-toolbar__primary,
@@ -448,17 +449,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox .tox-button--naked:hover:not(:disabled) {
 				background-color: ${theme.backgroundColor} !important;
 			}
-			
+
 			.tox .tox-tbtn:focus {
 				background-color: ${theme.backgroundColor3}
 			}
-			
+
 			.tox .tox-tbtn:hover {
 				color: ${theme.colorHover3} !important;
 				fill: ${theme.colorHover3} !important;
 				background-color: ${theme.backgroundColorHover3}
-			}			
-			
+			}
+
 
 			.tox .tox-tbtn {
 				width: ${theme.toolbarHeight}px;
@@ -1037,6 +1038,19 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		async function onCopy(event: any) {
+			const copiedContent = editor.selection.getContent();
+
+			const removeTimestampFromUrl = (url: string) => {
+				const index = url.lastIndexOf('?t=');
+				return index === -1 ? url : url.substr(0, index);
+			};
+
+			const updatedContent = HtmlUtils.replaceImageUrls(copiedContent, removeTimestampFromUrl);
+			clipboard.writeHTML(updatedContent);
+			if (event) event.preventDefault();
+		}
+
 		function onKeyDown(event: any) {
 			// It seems "paste as text" is handled automatically by
 			// on Windows so the code below so we need to run the below
@@ -1059,6 +1073,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		editor.on('keydown', onKeyDown);
 		editor.on('keypress', onKeypress);
 		editor.on('paste', onPaste);
+		editor.on('copy', onCopy);
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
 		editor.on('compositionend', onChangeHandler);
@@ -1074,6 +1089,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off('keydown', onKeyDown);
 				editor.off('keypress', onKeypress);
 				editor.off('paste', onPaste);
+				editor.off('copy', onCopy);
 				editor.off('compositionend', onChangeHandler);
 				editor.off('cut', onChangeHandler);
 				editor.off('joplinChange', onChangeHandler);
