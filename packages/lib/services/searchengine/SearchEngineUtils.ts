@@ -48,12 +48,12 @@ export default class SearchEngineUtils {
 		// references to notes that don't exist. Not clear how it can happen, but anyway
 		// handle it here by checking if `user_updated_time` IS NOT NULL. Was causing this
 		// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
-		if ( noteIds.length !== notes.length ) {
-			const results1 : any[] = [];
-			const filtered_notes = sortedNotes.filter (n => n);
-			if ( !Setting.value('showCompletedTodos') ) {
-				for ( let i = 0 ; i < filtered_notes.length ; i++ ) {
-					if ( filtered_notes[i].todo_completed ) {
+		if (noteIds.length !== notes.length) {
+			const results1: any[] = [];
+			const filtered_notes = sortedNotes.filter(n => n);
+			if (!Setting.value('showCompletedTodos')) {
+				for (let i = 0 ; i < filtered_notes.length ; i++) {
+					if (filtered_notes[i].todo_completed) {
 						continue;
 					}
 					results1.push(filtered_notes[i]);
@@ -63,16 +63,16 @@ export default class SearchEngineUtils {
 				return filtered_notes;
 			}
 		} else {
-			const results2 : any[] = [];
-			if ( !Setting.value('showCompletedTodos') ) {
-				for ( let i = 0 ; i < sortedNotes.length ; i++ ) {
-					if ( sortedNotes[i].todo_completed ) {
+			const results2: any[] = [];
+			if (!Setting.value('showCompletedTodos')) {
+				for (let i = 0 ; i < sortedNotes.length ; i++) {
+					if (sortedNotes[i].todo_completed) {
 						continue;
 					}
 					results2.push(sortedNotes[i]);
 				}
 				return results2;
-			}else{
+			} else {
 				return sortedNotes;
 			}
 		}
