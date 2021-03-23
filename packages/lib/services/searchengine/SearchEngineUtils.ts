@@ -1,5 +1,6 @@
 import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
+import Setting from '../../models/Setting';
 
 export default class SearchEngineUtils {
 	static async notesForQuery(query: string, options: any = null) {
@@ -48,11 +49,32 @@ export default class SearchEngineUtils {
 		// handle it here by checking if `user_updated_time` IS NOT NULL. Was causing this
 		// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
 		if (noteIds.length !== notes.length) {
-			// remove null objects
-			return sortedNotes.filter(n => n);
+			const results1:any[] = [];
+			const filtered_notes = sortedNotes.filter(n => n);
+			if(!Setting.value('showCompletedTodos')){
+				for(let i=0;i<filtered_notes.length;i++){
+					if(filtered_notes[i].todo_completed){
+						continue;
+					}
+					results1.push(filtered_notes[i]);
+				}
+				return results1;
+			} else {
+				return filtered_notes;
+			}
 		} else {
-			return sortedNotes;
+			const results2:any[] = [];
+			if(!Setting.value('showCompletedTodos')){
+				for(let i=0;i<sortedNotes.length;i++){
+					if(sortedNotes[i].todo_completed){
+						continue;
+					}
+					results2.push(sortedNotes[i]);
+				}
+				return results2;
+			}else{
+				return sortedNotes;
+			}
 		}
-
 	}
 }
