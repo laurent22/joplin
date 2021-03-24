@@ -17,6 +17,7 @@ export interface SaveOptions {
 
 export interface DeleteOptions {
 	validationRules?: any;
+	allowNoOp?: boolean;
 }
 
 export interface ValidateOptions {
@@ -91,7 +92,7 @@ export default abstract class BaseModel<T> {
 		return true;
 	}
 
-	protected hasDateProperties(): boolean {
+	protected autoTimestampEnabled(): boolean {
 		return true;
 	}
 
@@ -218,7 +219,7 @@ export default abstract class BaseModel<T> {
 			(toSave as WithUuid).id = uuidgen();
 		}
 
-		if (this.hasDateProperties()) {
+		if (this.autoTimestampEnabled()) {
 			const timestamp = Date.now();
 			if (isNew) {
 				(toSave as WithDates).created_time = timestamp;
@@ -260,7 +261,7 @@ export default abstract class BaseModel<T> {
 		return this.db(this.tableName).select(this.defaultFields).where({ id: id }).first();
 	}
 
-	public async delete(id: string | string[]): Promise<void> {
+	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
 		if (!id) throw new Error('id cannot be empty');
 
 		const ids = typeof id === 'string' ? [id] : id;
@@ -281,7 +282,7 @@ export default abstract class BaseModel<T> {
 			}
 
 			const deletedCount = await query.del();
-			if (deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
+			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
 
 			if (trackChanges) {
 				for (const item of itemsWithParentIds) await this.handleChangeTracking({}, item, ChangeType.Delete);

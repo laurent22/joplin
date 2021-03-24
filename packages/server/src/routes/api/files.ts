@@ -44,9 +44,9 @@ router.del('api/files/:id', async (path: SubPath, ctx: AppContext) => {
 router.get('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const fileModel = ctx.models.file({ userId: ctx.owner.id });
 	const fileId: Uuid = await fileModel.pathToFileId(path.id);
-	const file = await fileModel.loadWithContent(fileId);
-	if (!file) throw new ErrorNotFound();
-	return respondWithFileContent(ctx.response, file);
+	const fileWithContent = await fileModel.loadWithContent(fileId);
+	if (!fileWithContent) throw new ErrorNotFound();
+	return respondWithFileContent(ctx.response, fileWithContent.file, fileWithContent.content);
 });
 
 router.put('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {

@@ -211,6 +211,11 @@ export enum ChangeType {
 	Delete = 3,
 }
 
+export enum FileContentType {
+	Any = 1,
+	JoplinItem = 2,
+}
+
 export function changeTypeToString(t: ChangeType): string {
 	if (t === ChangeType.Create) return 'create';
 	if (t === ChangeType.Update) return 'update';
@@ -275,6 +280,8 @@ export interface File extends WithDates, WithUuid {
 	is_directory?: number;
 	is_root?: number;
 	parent_id?: Uuid;
+	content_type?: FileContentType;
+	content_id?: Uuid;
 }
 
 export interface Change extends WithDates, WithUuid {
@@ -305,6 +312,17 @@ export interface Share extends WithDates, WithUuid {
 	owner_id?: Uuid;
 	file_id?: Uuid;
 	type?: ShareType;
+}
+
+export interface JoplinFileContent {
+	id?: Uuid;
+	owner_id?: Uuid;
+	parent_id?: Uuid;
+	type?: number;
+	updated_time?: string;
+	created_time?: string;
+	encryption_applied?: number;
+	content?: any;
 }
 
 export const databaseSchema: DatabaseTables = {
@@ -346,6 +364,8 @@ export const databaseSchema: DatabaseTables = {
 		parent_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		content_type: { type: 'number' },
+		content_id: { type: 'string' },
 	},
 	changes: {
 		counter: { type: 'number' },
@@ -384,6 +404,16 @@ export const databaseSchema: DatabaseTables = {
 		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+	},
+	joplin_file_contents: {
+		id: { type: 'string' },
+		owner_id: { type: 'string' },
+		parent_id: { type: 'string' },
+		type: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+		encryption_applied: { type: 'number' },
+		content: { type: 'any' },
 	},
 };
 // AUTO-GENERATED-TYPES

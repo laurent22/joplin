@@ -93,10 +93,10 @@ router.get('files/:id', async (path: SubPath, ctx: AppContext) => {
 
 router.get('files/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const fileModel = ctx.models.file({ userId: ctx.owner.id });
-	let file: File = await fileModel.pathToFile(path.id, { returnFullEntity: false });
-	file = await fileModel.loadWithContent(file.id);
-	if (!file) throw new ErrorNotFound();
-	return respondWithFileContent(ctx.response, file);
+	const file: File = await fileModel.pathToFile(path.id, { returnFullEntity: false });
+	const fileWithContent = await fileModel.loadWithContent(file.id);
+	if (!fileWithContent) throw new ErrorNotFound();
+	return respondWithFileContent(ctx.response, fileWithContent.file, fileWithContent.content);
 });
 
 router.post('files', async (_path: SubPath, ctx: AppContext) => {

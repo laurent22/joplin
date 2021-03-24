@@ -1,16 +1,44 @@
 import BaseModel, { ValidateOptions, SaveOptions, DeleteOptions } from './BaseModel';
-import { File, ItemType, databaseSchema, Uuid } from '../db';
+import { File, ItemType, databaseSchema, Uuid, FileContentType } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import { splitItemPath, filePathInfo } from '../utils/routeUtils';
 import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { setQueryParameters } from '../utils/urlUtils';
+import { Models } from './factory';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
 const removeTrailingColonsRegex = /^(:|)(.*?)(:|)$/;
+
+export type FileContent = any;
+
+export interface LoadContentHandlerEvent {
+	models: Models;
+	file: File;
+	content: FileContent;
+	options: LoadOptions;
+}
+
+export interface SaveContentHandlerEvent {
+	// We pass the models to the handler so that any db call is executed within
+	// the same context. It matters in particular for transactions, which needs
+	// to be executed with the same `db` connection.
+	models: Models;
+	file: File;
+	content: FileContent;
+	options: SaveOptions;
+}
+
+export interface FileWithContent {
+	file: File;
+	content: FileContent;
+}
+
+export type LoadContentHandler = (event: LoadContentHandlerEvent)=> Promise<any> | null;
+export type SaveContentHandler = (event: SaveContentHandlerEvent)=> Promise<File> | null;
 
 export interface PaginatedFiles extends PaginatedResults {
 	items: File[];
@@ -28,6 +56,8 @@ export interface LoadOptions {
 export default class FileModel extends BaseModel<File> {
 
 	private readonly reservedCharacters = ['/', '\\', '*', '<', '>', '?', ':', '|', '#', '%'];
+	private static loadContentHandlers_: LoadContentHandler[] = [];
+	private static saveContentHandlers_: SaveContentHandler[] = [];
 
 	protected get tableName(): string {
 		return 'files';
@@ -397,11 +427,44 @@ export default class FileModel extends BaseModel<File> {
 		return file;
 	}
 
-	public async loadWithContent(id: string, options: LoadOptions = {}): Promise<any> {
+	public async content(file: string | File, serialized: boolean = true): Promise<FileContent> {
+		if (typeof file === 'string') {
+			file = (await this.db<File>(this.tableName).select(['content_id', 'content_type', 'content']).where({ id: file }).first()) as File;
+		}
+
+		if (file.content_type === FileContentType.Any) {
+			return file.content;
+		} else if (file.content_type === FileContentType.JoplinItem) {
+			const content = await this.models().joplinFileContent().load(file.content_id);
+
+			if (serialized) {
+				const unserialized = await FileModel.processLoadContentHandlers({
+					models: this.models(),
+					file: file,
+					content: content,
+					options: {},
+				});
+
+				if (unserialized === null) throw new Error(`No handler to unserialize content for file ${file.id}`);
+
+				return unserialized;
+			} else {
+				return content;
+			}
+		} else {
+			throw new Error(`Unsupported content type: ${file.content_type}`);
+		}
+	}
+
+	public async loadWithContent(id: string, options: LoadOptions = {}): Promise<FileWithContent | null> {
 		const file: File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
 		if (!file) return null;
 		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
-		return file;
+
+		return {
+			file,
+			content: await this.content(file),
+		};
 	}
 
 	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<File[]> {
@@ -416,6 +479,30 @@ export default class FileModel extends BaseModel<File> {
 		if (!file) return null;
 		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
 		return file;
+	}
+
+	public static registerSaveContentHandler(handler: SaveContentHandler) {
+		this.saveContentHandlers_.push(handler);
+	}
+
+	public static registerLoadContentHandler(handler: LoadContentHandler) {
+		this.loadContentHandlers_.push(handler);
+	}
+
+	private static async processSaveContentHandlers(event: SaveContentHandlerEvent): Promise<File> | null {
+		for (const handler of this.saveContentHandlers_) {
+			const result = await handler(event);
+			if (result) return result;
+		}
+		return null;
+	}
+
+	private static async processLoadContentHandlers(event: LoadContentHandlerEvent): Promise<any> | null {
+		for (const handler of this.loadContentHandlers_) {
+			const result = await handler(event);
+			if (result) return result;
+		}
+		return null;
 	}
 
 	public async save(object: File, options: SaveOptions = {}): Promise<File> {
@@ -435,6 +522,17 @@ export default class FileModel extends BaseModel<File> {
 			if (!file.mime_type) file.mime_type = '';
 
 			file.owner_id = this.userId;
+		}
+
+		if ('content' in file) {
+			const processedFile = await FileModel.processSaveContentHandlers({
+				models: this.models(),
+				file,
+				content: file.content,
+				options,
+			});
+
+			if (processedFile) return processedFile;
 		}
 
 		return super.save(file, options);
