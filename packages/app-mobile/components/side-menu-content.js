@@ -9,7 +9,6 @@ const NavService = require('@joplin/lib/services/NavService').default;
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('./global-style.js');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
-const { default: Setting } = require('@joplin/lib/models/Setting');
 
 Icon.loadFont();
 
@@ -346,7 +345,7 @@ class SideMenuContentComponent extends Component {
 			);
 		}
 
-		if (this.props.isOnMobileData && Setting.value('sync.mobileWifiOnly')) {
+		if (this.props.mobileDataWarning.settingOn && this.props.mobileDataWarning.isOnMobileData) {
 			items.push(
 				<Text key="net_info" style={this.styles().syncStatus}>
 					{ _('Mobile data - auto-sync disabled') }
@@ -413,7 +412,7 @@ const SideMenuContent = connect(state => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
-		isOnMobileData: state.isOnMobileData,
+		mobileDataWarning: state.mobileDataWarning,
 	};
 })(SideMenuContentComponent);
 

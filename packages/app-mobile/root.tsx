@@ -131,6 +131,15 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		reg.setupRecurrentSync();
 	}
 
+	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.mobileWifiOnly' || action.type == 'SETTING_UPDATE_ALL') {
+		if (Setting.value('sync.mobileWifiOnly') !== newState.mobileDataWarning.settingOn) {
+			storeDispatch({
+				type: 'UPDATE_MOBILE_DATA_WARNING',
+				settingOn: Setting.value('sync.mobileWifiOnly'),
+			});
+		}
+	}
+
 	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
@@ -195,7 +204,10 @@ const appDefaultState = Object.assign({}, defaultState, {
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
-	isOnMobileData: false,
+	mobileDataWarning: {
+		isOnMobileData: false,
+		settingOn: false,
+	},
 });
 
 const appReducer = (state = appDefaultState, action: any) => {
@@ -361,10 +373,16 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.noteSideMenuOptions = action.options;
 			break;
 
-		case 'NETWORK_TYPE_CHANGE':
+		case 'UPDATE_MOBILE_DATA_WARNING':
 
 			newState = Object.assign({}, state);
-			newState.isOnMobileData = action.isOnMobileData;
+			newState.mobileDataWarning = Object.assign({}, state.mobileDataWarning);
+			if (action.isOnMobileData !== undefined) {
+				newState.mobileDataWarning.isOnMobileData = action.isOnMobileData;
+			}
+			if (action.settingOn !== undefined) {
+				newState.mobileDataWarning.settingOn = action.settingOn;
+			}
 			break;
 
 		}
@@ -659,7 +677,7 @@ class AppComponent extends React.Component {
 					const isMobile = details.isConnectionExpensive || type === 'cellular';
 					reg.setIsOnMobileData(isMobile);
 					this.props.dispatch({
-						type: 'NETWORK_TYPE_CHANGE',
+						type: 'UPDATE_MOBILE_DATA_WARNING',
 						isOnMobileData: isMobile,
 					});
 				});
