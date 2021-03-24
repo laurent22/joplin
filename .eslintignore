@@ -121,6 +121,9 @@ packages/app-cli/tests/models_Note.js.map
 packages/app-cli/tests/models_Setting.d.ts
 packages/app-cli/tests/models_Setting.js
 packages/app-cli/tests/models_Setting.js.map
+packages/app-cli/tests/registry.d.ts
+packages/app-cli/tests/registry.js
+packages/app-cli/tests/registry.js.map
 packages/app-cli/tests/services/plugins/RepositoryApi.d.ts
 packages/app-cli/tests/services/plugins/RepositoryApi.js
 packages/app-cli/tests/services/plugins/RepositoryApi.js.map
