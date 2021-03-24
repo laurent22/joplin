@@ -939,7 +939,7 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 			'sync.mobileWifiOnly': {
-				value: true,
+				value: false,
 				type: SettingItemType.Bool,
 				section: 'sync',
 				public: true,
