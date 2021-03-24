@@ -113,6 +113,7 @@ class Registry {
 
 					if (!overrideNetworkCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
 						this.logger().info('Sync cancelled because we\'re on mobile data');
+						promiseResolve();
 						return;
 					}
 
