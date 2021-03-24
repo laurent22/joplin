@@ -657,7 +657,7 @@ class AppComponent extends React.Component {
 			try {
 				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
 					const isMobile = details.isConnectionExpensive || type === 'cellular';
-					reg.setNetworkState(isMobile);
+					reg.setIsOnMobileData(isMobile);
 					this.props.dispatch({
 						type: 'NETWORK_TYPE_CHANGE',
 						isOnMobileData: isMobile,

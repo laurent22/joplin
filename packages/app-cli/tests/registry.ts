@@ -4,10 +4,6 @@ import { reg } from '@joplin/lib/registry';
 const sync = {
 	start: jest.fn().mockReturnValue({}),
 };
-const syncIntervalOff = () => {
-	Setting.setValue('sync.interval', 0);
-	reg.setupRecurrentSync();
-};
 
 describe('Registry', function() {
 	let originalSyncTarget: typeof reg.syncTarget;
@@ -31,13 +27,16 @@ describe('Registry', function() {
 		Setting.setValue('sync.interval', 300);
 	});
 
-	afterEach(syncIntervalOff);
+	afterEach(() => {
+		Setting.setValue('sync.interval', 0);
+		reg.setupRecurrentSync();
+	});
 
 	describe('when on mobile data', () => {
 
 		beforeEach(() => {
 			Setting.setValue('sync.mobileWifiOnly', true);
-			reg.setNetworkState(true);
+			reg.setIsOnMobileData(true);
 		});
 
 		it('should not sync automatically', () => {
@@ -71,7 +70,7 @@ describe('Registry', function() {
 
 		beforeEach(() => {
 			Setting.setValue('sync.mobileWifiOnly', true);
-			reg.setNetworkState(false);
+			reg.setIsOnMobileData(false);
 		});
 
 		it('should sync automatically', () => {

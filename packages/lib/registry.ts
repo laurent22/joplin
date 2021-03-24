@@ -41,7 +41,7 @@ class Registry {
 
 	// If isOnMobileData is true, the overrideNetworkCheck is not set
 	// and the sync.mobileWifiOnly setting is true it will cancel the sync.
-	setNetworkState(isOnMobileData: boolean) {
+	setIsOnMobileData(isOnMobileData: boolean) {
 		this.isOnMobileData_ = isOnMobileData;
 	}
 
