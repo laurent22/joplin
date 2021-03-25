@@ -15,7 +15,7 @@ class Registry {
 	private scheduleSyncId_: any;
 	private recurrentSyncId_: any;
 	private db_: any;
-	private isOnMobileData_ = true;
+	private isOnMobileData_ = false;
 
 	logger() {
 		if (!this.logger_) {
