@@ -657,6 +657,8 @@ class AppComponent extends React.Component {
 			});
 
 			try {
+				// This will be called right after adding the event listener
+				// so there's no need to check netinfo on startup
 				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
 					const isMobile = details.isConnectionExpensive || type === 'cellular';
 					reg.setIsOnMobileData(isMobile);
