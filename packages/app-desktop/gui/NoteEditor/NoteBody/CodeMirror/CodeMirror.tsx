@@ -377,6 +377,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			`.CodeMirror-selected {
 				background: #6b6b6b !important;
 			}` : '';
+		const monospaceFonts = [];
+		if (Setting.value('style.editor.monospaceFontFamily')) monospaceFonts.push(`"${Setting.value('style.editor.monospaceFontFamily')}"`);
+		monospaceFonts.push('monospace');
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
@@ -410,6 +413,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				/* Add a fixed right padding to account for the appearance (and disappearance) */
 				/* of the sidebar */
 				padding-right: 10px !important;
+			}
+
+			/* This enforces monospace for certain elements (code, tables, etc.) */
+			.cm-jn-monospace {
+				font-family: ${monospaceFonts.join(', ')} !important;
 			}
 
 			.cm-header-1 {

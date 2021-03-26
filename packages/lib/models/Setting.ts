@@ -867,10 +867,21 @@ class Setting extends BaseModel {
 						section: 'appearance',
 						label: () => _('Editor font family'),
 						description: () =>
-							_('This should be a *monospace* font or some elements will render incorrectly. If the font ' +
-						'is incorrect or empty, it will default to a generic monospace font.'),
+							_('If the font is incorrect or empty, it will default to a generic monospace font.'),
 						storage: SettingStorage.File,
 					},
+			'style.editor.monospaceFontFamily': {
+				value: '',
+				type: SettingItemType.String,
+				public: true,
+				appTypes: ['desktop'],
+				section: 'appearance',
+				label: () => _('Editor monospace font family'),
+				description: () =>
+					_('This should be a *monospace* font or some elements will render incorrectly. If the font ' +
+				'is incorrect or empty, it will default to a generic monospace font.'),
+				storage: SettingStorage.File,
+			},
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, public: false, appTypes: ['desktop'] },
 

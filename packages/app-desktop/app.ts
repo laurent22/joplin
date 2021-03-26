@@ -478,7 +478,7 @@ class Application extends BaseApplication {
 	updateEditorFont() {
 		const fontFamilies = [];
 		if (Setting.value('style.editor.fontFamily')) fontFamilies.push(`"${Setting.value('style.editor.fontFamily')}"`);
-		fontFamilies.push('monospace');
+		fontFamilies.push('Avenir, Arial, sans-serif');
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
