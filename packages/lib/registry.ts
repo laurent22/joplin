@@ -39,7 +39,7 @@ class Registry {
 		this.showErrorMessageBoxHandler_(message);
 	}
 
-	// If isOnMobileData is true, the overrideNetworkCheck is not set
+	// If isOnMobileData is true, the doWifiConnectionCheck is not set
 	// and the sync.mobileWifiOnly setting is true it will cancel the sync.
 	setIsOnMobileData(isOnMobileData: boolean) {
 		this.isOnMobileData_ = isOnMobileData;
@@ -81,7 +81,7 @@ class Registry {
 		}
 	};
 
-	scheduleSync = async (delay: number = null, syncOptions: any = null, overrideNetworkCheck: boolean = false) => {
+	scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck: boolean = false) => {
 		this.schedSyncCalls_.push(true);
 
 		try {
@@ -111,7 +111,7 @@ class Registry {
 					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
 
-					if (!overrideNetworkCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
+					if (doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
 						this.logger().info('Sync cancelled because we\'re on mobile data');
 						promiseResolve();
 						return;
@@ -204,7 +204,7 @@ class Registry {
 
 				this.recurrentSyncId_ = shim.setInterval(() => {
 					this.logger().info('Running background sync on timer...');
-					void this.scheduleSync(0);
+					void this.scheduleSync(0, null, true);
 				}, 1000 * Setting.value('sync.interval'));
 			}
 		} finally {

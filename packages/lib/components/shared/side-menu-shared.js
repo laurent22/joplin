@@ -107,9 +107,7 @@ shared.synchronize_press = async function(comp) {
 		sync.cancel();
 		return 'cancel';
 	} else {
-		// true sets the manual override so that manual sync works on mobile
-		// when on mobile data
-		reg.scheduleSync(0, null, true);
+		reg.scheduleSync(0);
 		return 'sync';
 	}
 };
