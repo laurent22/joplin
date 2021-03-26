@@ -399,7 +399,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				padding-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
 				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
 			}
-
+			
 			.tox .tox-toolbar,
 			.tox .tox-toolbar__overflow,
 			.tox .tox-toolbar__primary,
@@ -414,11 +414,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox .tox-dialog__footer {
 				background-color: ${theme.backgroundColor} !important;
 			}
-
 			.tox .tox-editor-header {
 				border: none;
 			}
-
 			.tox .tox-tbtn,
 			.tox .tox-tbtn svg,
 			.tox .tox-dialog__header,
@@ -431,7 +429,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				color: ${theme.color3} !important;
 				fill: ${theme.color3} !important;
 			}
-
 			.tox .tox-statusbar a,
 			.tox .tox-statusbar__path-item,
 			.tox .tox-statusbar__wordcount,
@@ -440,27 +437,24 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				fill: ${theme.color};
 				opacity: 0.7;
 			}
-
 			.tox .tox-tbtn--enabled,
 			.tox .tox-tbtn--enabled:hover {
 				background-color: ${theme.selectedColor};
 			}
-
 			.tox .tox-button--naked:hover:not(:disabled) {
 				background-color: ${theme.backgroundColor} !important;
 			}
-
+			
 			.tox .tox-tbtn:focus {
 				background-color: ${theme.backgroundColor3}
 			}
-
+			
 			.tox .tox-tbtn:hover {
 				color: ${theme.colorHover3} !important;
 				fill: ${theme.colorHover3} !important;
 				background-color: ${theme.backgroundColorHover3}
-			}
-
-
+			}			
+			
 			.tox .tox-tbtn {
 				width: ${theme.toolbarHeight}px;
 				height: ${theme.toolbarHeight}px;
@@ -468,36 +462,29 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				min-height: ${theme.toolbarHeight}px;
 				margin: 0;
 			}
-
-
 			.tox .tox-tbtn[aria-haspopup=true] {
 				width: ${theme.toolbarHeight + 15}px;
 				min-width: ${theme.toolbarHeight + 15}px;
 			}
-
 			.tox .tox-tbtn > span,
 			.tox .tox-tbtn:active > span,
 			.tox .tox-tbtn:hover > span {
 				transform: scale(0.8);
 			}
-
 			.tox .tox-toolbar__primary,
 			.tox .tox-toolbar__overflow {
 				background: none;
 				background-color: ${theme.backgroundColor3} !important;
 			}
-
 			.tox-tinymce,
 			.tox .tox-toolbar__group,
 			.tox.tox-tinymce-aux .tox-toolbar__overflow,
 			.tox .tox-dialog__footer {
 				border: none !important;
 			}
-
 			.tox-tinymce {
 				border-top: none !important;
 			}
-
 			.joplin-tinymce .tox-toolbar__group {
 				background-color: ${theme.backgroundColor3};
 				padding-top: ${theme.toolbarPadding}px;
@@ -1041,18 +1028,18 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
 
-			// We need to remove timestamps from the image URLs while copying
+			// We need to remove extra url params from the image URLs while copying
 			// because some offline edtors do not show the image if there is
-			// an extra ?t= in it's path.
+			// an extra parameter in it's path.
 			// Related to - https://github.com/laurent22/joplin/issues/4602
-			const removeTimestampFromUrl = (url: string) => {
-				const index = url.lastIndexOf('?t=');
-				return index === -1 ? url : url.substr(0, index);
+			const removeParametersFromUrl = (url: string) => {
+				const imageSrc = new URL(url);
+				return imageSrc.protocol === 'file:' ? imageSrc.origin + imageSrc.pathname : imageSrc.toString();
 			};
 
-			const updatedContent = HtmlUtils.replaceImageUrls(copiedContent, removeTimestampFromUrl);
+			const updatedContent = HtmlUtils.replaceImageUrls(copiedContent, removeParametersFromUrl);
 			clipboard.writeHTML(updatedContent);
-			if (event) event.preventDefault();
+			event.preventDefault();
 		}
 
 		function onKeyDown(event: any) {
