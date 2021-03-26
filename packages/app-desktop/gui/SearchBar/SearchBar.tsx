@@ -80,6 +80,11 @@ function SearchBar(props: Props) {
 	}, [props.selectedNoteId]);
 
 	function onChange(event: any) {
+		if (event.value.length === 0) {
+			// Revert to previous state if query string becomes empty
+			void onExitSearch();
+			return;
+		}
 		setSearchStarted(true);
 		setQuery(event.value);
 	}
