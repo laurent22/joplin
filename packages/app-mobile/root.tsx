@@ -119,7 +119,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -152,7 +152,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 		// Schedule a sync operation so that items that need to be encrypted
 		// are sent to sync target.
-		void reg.scheduleSync();
+		void reg.scheduleSync(null, null, true);
 	}
 
 	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
@@ -591,7 +591,9 @@ async function initialize(dispatch: Function) {
 
 	// When the app starts we want the full sync to
 	// start almost immediately to get the latest data.
-	void reg.scheduleSync(1000).then(() => {
+	// doWifiConnectionCheck set to true so initial sync
+	// doesn't happen on mobile data
+	void reg.scheduleSync(1000, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
