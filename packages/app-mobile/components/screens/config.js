@@ -1,4 +1,5 @@
 import Slider from '@react-native-community/slider';
+import { NativeModules } from 'react-native';
 const React = require('react');
 const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
@@ -50,7 +51,15 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				Alert.alert(_('Warning'), _('In order to use file system synchronisation your permission to write to external storage is required.'));
 				// Save settings anyway, even if permission has not been granted
 			}
-			return shared.saveSettings(this);
+
+			// changedSettingKeys is cleared in shared.saveSettings so reading it now
+			const setIgnoreTlsErrors = this.state.changedSettingKeys.includes('net.ignoreTlsErrors');
+
+			await shared.saveSettings(this);
+
+			if (setIgnoreTlsErrors) {
+				await NativeModules.SslModule.setIgnoreTlsErrors(Setting.value('net.ignoreTlsErrors'));
+			}
 		};
 
 		this.syncStatusButtonPress_ = () => {

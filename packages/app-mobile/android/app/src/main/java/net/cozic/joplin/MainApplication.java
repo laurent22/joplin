@@ -3,18 +3,23 @@ package net.cozic.joplin;
 import android.app.Application;
 import android.content.Context;
 import android.database.CursorWindow;
+import android.webkit.WebView;
+
 import androidx.multidex.MultiDex;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+
+import net.cozic.joplin.share.SharePackage;
+import net.cozic.joplin.ssl.SslPackage;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import net.cozic.joplin.share.SharePackage;
-import android.webkit.WebView;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -38,6 +43,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           packages.add(new SharePackage());
+          packages.add(new SslPackage());
           return packages;
         }
 

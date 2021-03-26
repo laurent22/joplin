@@ -27,7 +27,7 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Platform } = require('react-native');
 
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
@@ -499,6 +499,11 @@ async function initialize(dispatch: Function) {
 		reg.logger().info(`Sync target: ${Setting.value('sync.target')}`);
 
 		setLocale(Setting.value('locale'));
+
+		if (Platform.OS === 'android') {
+			const ignoreTlsErrors = Setting.value('net.ignoreTlsErrors');
+			await NativeModules.SslModule.setIgnoreTlsErrors(ignoreTlsErrors);
+		}
 
 		// ----------------------------------------------------------------
 		// E2EE SETUP
