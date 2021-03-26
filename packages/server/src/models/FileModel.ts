@@ -478,6 +478,12 @@ export default class FileModel extends BaseModel<File> {
 			file = (await this.db<File>(this.tableName).select(['content_id', 'content_type', 'content']).where({ id: file }).first()) as File;
 		}
 
+		if (!('source_file_id' in file)) throw new Error('Cannot process file links without a "source_file_id" property');
+
+		if (file.source_file_id) {
+			file = await this.loadAllFields(file.source_file_id);
+		}
+
 		if (file.content_type === FileContentType.Any) {
 			return file.content;
 		} else if (file.content_type === FileContentType.JoplinItem) {
@@ -502,8 +508,12 @@ export default class FileModel extends BaseModel<File> {
 		}
 	}
 
+	private async loadAllFields(id: string): Promise<File> {
+		return this.db<File>(this.tableName).select('*').where({ id: id }).first();
+	}
+
 	public async loadWithContent(id: string, options: LoadOptions = {}): Promise<FileWithContent | null> {
-		const file: File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
+		const file: File = await this.loadAllFields(id);
 		if (!file) return null;
 		if (!options.skipPermissionCheck) await this.checkCanReadPermissions(file);
 
@@ -592,17 +602,26 @@ export default class FileModel extends BaseModel<File> {
 		}
 
 		return this.withTransaction<File>(async () => {
-			if ('content' in sourceFile) {
-				/* const processedFile = */ await FileModel.processSaveContentHandlers({
+			const fileToProcess = sourceFile || file;
+
+			if ('content' in fileToProcess) {
+				const processedFile = await FileModel.processSaveContentHandlers({
 					models: this.models(),
-					file: sourceFile,
-					content: sourceFile.content,
+					file: fileToProcess,
+					content: fileToProcess.content,
 					options,
 				});
 
-				// if (processedFile) return processedFile;
+				if (processedFile) {
+					if (sourceFile) {
+						return super.save(file, options);
+					} else {
+						return processedFile;
+					}
+				}
 			}
 
+			if (sourceFile) await super.save(sourceFile, options);
 			return super.save(file, options);
 		});
 	}

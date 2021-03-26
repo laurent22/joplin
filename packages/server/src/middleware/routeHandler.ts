@@ -38,6 +38,9 @@ export default async function(ctx: AppContext) {
 			ctx.appLogger().error(error);
 		}
 
+		// Uncomment this when getting HTML blobs as errors while running tests.
+		// console.error(error);
+
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
 		const responseFormat = routeResponseFormat(ctx);

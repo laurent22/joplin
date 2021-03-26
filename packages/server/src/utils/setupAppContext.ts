@@ -9,8 +9,8 @@ import routes from '../routes/routes';
 export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper) {
 	appContext.env = env;
 	appContext.db = dbConnection;
-	appContext.apps = new Applications(appContext.models);
 	appContext.models = newModelFactory(appContext.db, config().baseUrl);
+	appContext.apps = new Applications(appContext.models);
 	appContext.appLogger = appLogger;
 	appContext.routes = routes;
 }
