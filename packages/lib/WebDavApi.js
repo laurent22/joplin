@@ -369,6 +369,7 @@ class WebDavApi {
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
+		fetchOptions.ignoreTlsErrors = this.options_.ignoreTlsErrors();
 		const url = `${this.baseUrl()}/${path}`;
 
 		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
