@@ -33,6 +33,7 @@ export interface PaginatedResults {
 	items: any[];
 	has_more: boolean;
 	cursor?: string;
+	page_count?: number;
 }
 
 export const pageMaxSize = 100;
@@ -135,11 +136,28 @@ export function paginationToQueryParams(pagination: Pagination): PaginationQuery
 	return output;
 }
 
+export function queryParamsToPagination(query: PaginationQueryParams): Pagination {
+	const limit = Number(query.limit) || pageMaxSize;
+	const order: PaginationOrder[] = requestPaginationOrder(query);
+	const page: number = 'page' in query ? Number(query.page) : 1;
+	const output: Pagination = { limit, order, page };
+	validatePagination(output);
+	return output;
+}
+
 export interface PageLink {
 	page?: number;
 	isEllipsis?: boolean;
 	isCurrent?: boolean;
 	url?: string;
+}
+
+export function filterPaginationQueryParams(query: any): PaginationQueryParams {
+	const baseUrlQuery: PaginationQueryParams = {};
+	if (query.limit) baseUrlQuery.limit = query.limit;
+	if (query.order_by) baseUrlQuery.order_by = query.order_by;
+	if (query.order_dir) baseUrlQuery.order_dir = query.order_dir;
+	return baseUrlQuery;
 }
 
 export function createPaginationLinks(page: number, pageCount: number, urlTemplate: string = null): PageLink[] {

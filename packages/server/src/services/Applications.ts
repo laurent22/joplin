@@ -1,6 +1,5 @@
 import ApplicationJoplin from '../apps/joplin/Application';
 import config from '../config';
-import { File } from '../db';
 import { Models } from '../models/factory';
 
 export default class Applications {
@@ -20,11 +19,6 @@ export default class Applications {
 		}
 
 		return this.joplin_;
-	}
-
-	public async processSharedContentForSave(file:File):Promise<File> {
-		const app = await this.joplin();
-		return app.processSharedContentForSave(file);
 	}
 
 	public async localFileFromUrl(url: string): Promise<string> {

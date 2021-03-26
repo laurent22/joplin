@@ -6,6 +6,35 @@ import { Pagination, PaginationOrderDir } from '../../models/utils/pagination';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorNotFound, ErrorConflict } from '../../utils/errors';
 import { msleep } from '../../utils/time';
 
+// const joplinSerializedNote = `Item title
+
+// Item body
+
+// id: d2a73b249d9e4e3da491ad991fbacd87
+// parent_id: c403e0672da5446e8e50927d9ab085a6
+// created_time: 2021-03-07T15:59:35.691Z
+// updated_time: 2021-03-11T19:28:20.929Z
+// is_conflict: 0
+// latitude: 0.00000000
+// longitude: 0.00000000
+// altitude: 0.0000
+// author:
+// source_url:
+// is_todo: 0
+// todo_due: 0
+// todo_completed: 0
+// source: joplin-desktop
+// source_application: net.cozic.joplin-desktop
+// application_data:
+// order: 0
+// user_created_time: 2021-03-07T15:59:35.691Z
+// user_updated_time: 2021-03-11T19:28:20.929Z
+// encryption_cipher_text:
+// encryption_applied: 0
+// markup_language: 1
+// is_shared: 0
+// type_: 1`;
+
 async function makeTempFileWithContent(content: string): Promise<string> {
 	const d = await tempDir();
 	const filePath = `${d}/${randomHash()}`;
@@ -415,5 +444,14 @@ describe('api_files', function() {
 		const context = await putFileContentContext('', 'root:/photo.jpg:', testFilePath());
 		expect(context.response.status).toBe(ErrorForbidden.httpCode);
 	});
+
+	// TODO: test that MD file format is the same after having been unserialized and serialized again
+
+	// test('should save Joplin item to its own special table', async function() {
+	// 	const { user, session } = await createUserAndSession(1);
+
+	// 	const file = await createFile(user.id, 'root:/d2a73b249d9e4e3da491ad991fbacd87.md:', joplinSerializedNote);
+	// 	// const content = await
+	// });
 
 });

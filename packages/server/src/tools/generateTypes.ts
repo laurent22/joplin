@@ -37,9 +37,12 @@ const config = {
 const propertyTypes: Record<string, string> = {
 	'*.item_type': 'ItemType',
 	'files.content': 'Buffer',
+	'files.content_type': 'FileContentType',
 	'changes.type': 'ChangeType',
 	'notifications.level': 'NotificationLevel',
 	'shares.type': 'ShareType',
+	'joplin_items.id': 'string',
+	'joplin_items.parent_id': 'string',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {
@@ -74,9 +77,9 @@ function createTypeString(table: any) {
 			if (['id'].includes(name)) continue;
 		}
 
+		if ((name === 'id' || name.endsWith('_id') || name === 'uuid') && type === 'string') type = 'Uuid';
 		if (propertyTypes[`*.${name}`]) type = propertyTypes[`*.${name}`];
 		if (propertyTypes[`${table.name}.${name}`]) type = propertyTypes[`${table.name}.${name}`];
-		if ((name === 'id' || name.endsWith('_id') || name === 'uuid') && type === 'string') type = 'Uuid';
 
 		colStrings.push(`\t${name}?: ${type};`);
 	}

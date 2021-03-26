@@ -131,6 +131,9 @@ const declarations: CommandDeclaration[] = [
 	{
 		name: 'editor.focus',
 	},
+	{
+		name: 'editor.execCommand',
+	},
 ];
 
 export default declarations;

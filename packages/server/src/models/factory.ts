@@ -65,22 +65,20 @@ import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
 import ShareUserModel from './ShareUserModel';
-import Applications from '../services/Applications';
+import JoplinFileContentModel from '../apps/joplin/JoplinFileContentModel';
 
 export class Models {
 
 	private db_: DbConnection;
 	private baseUrl_: string;
-	private apps_:Applications;
 
-	public constructor(db: DbConnection, baseUrl: string, apps:Applications) {
+	public constructor(db: DbConnection, baseUrl: string) {
 		this.db_ = db;
 		this.baseUrl_ = baseUrl;
-		this.apps_ = apps;
 	}
 
 	public file(options: ModelOptions = null) {
-		return new FileModel(this.db_, newModelFactory, this.baseUrl_, { ...options, apps: this.apps_ });
+		return new FileModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public user(options: ModelOptions = null) {
@@ -113,6 +111,10 @@ export class Models {
 
 	public shareUser(options: ModelOptions = null) {
 		return new ShareUserModel(this.db_, newModelFactory, this.baseUrl_, options);
+	}
+
+	public joplinFileContent(options: ModelOptions = null) {
+		return new JoplinFileContentModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 }

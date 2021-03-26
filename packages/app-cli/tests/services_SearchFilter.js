@@ -742,4 +742,52 @@ describe('services_SearchFilter', function() {
 
 	}));
 
+	it('should support negating notebooks', (async () => {
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		let n1 = await Note.save({ title: 'task1', body: 'foo', parent_id: folder1.id });
+		let n2 = await Note.save({ title: 'task2', body: 'bar', parent_id: folder1.id });
+
+
+		const folder2 = await Folder.save({ title: 'folder2' });
+		let n3 = await Note.save({ title: 'task3', body: 'baz', parent_id: folder2.id });
+		let n4 = await Note.save({ title: 'task4', body: 'blah', parent_id: folder2.id });
+
+
+		await engine.syncTables();
+
+		let rows = await engine.search('-notebook:folder1');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n3.id);
+		expect(ids(rows)).toContain(n4.id);
+
+
+		rows = await engine.search('-notebook:folder2');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+
+	}));
+
+	it('should support both inclusion and exclusion of notebooks together', (async () => {
+
+		const parentFolder = await Folder.save({ title: 'parent' });
+		let n1 = await Note.save({ title: 'task1', body: 'foo', parent_id: parentFolder.id });
+		let n2 = await Note.save({ title: 'task2', body: 'bar', parent_id: parentFolder.id });
+
+
+		const subFolder = await Folder.save({ title: 'child', parent_id: parentFolder.id });
+		let n3 = await Note.save({ title: 'task3', body: 'baz', parent_id: subFolder.id });
+		let n4 = await Note.save({ title: 'task4', body: 'blah', parent_id: subFolder.id });
+
+
+		await engine.syncTables();
+
+		let rows = await engine.search('notebook:parent -notebook:child');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+
+	}));
+
 });

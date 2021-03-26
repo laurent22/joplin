@@ -103,7 +103,7 @@ export default class AsyncActionQueue {
 
 				if (!this.queue_.length) {
 					shim.clearInterval(iid);
-					resolve();
+					resolve(null);
 				}
 			}, 100);
 		});

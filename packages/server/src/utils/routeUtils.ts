@@ -1,5 +1,6 @@
 import { File, ItemAddressingType } from '../db';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
+import { FileContent } from '../models/FileModel';
 import Router from './Router';
 import { AppContext, HttpMethod } from './types';
 
@@ -162,9 +163,7 @@ export function routeResponseFormat(context: AppContext): RouteResponseFormat {
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
-export async function execRequest(routes:Routers, ctx:AppContext, path:string = null) {
-	path = path || ctx.path;
-	
+export async function execRequest(routes: Routers, ctx: AppContext) {
 	const match = findMatchingRoute(ctx.path, routes);
 	if (!match) throw new ErrorNotFound();
 
@@ -236,8 +235,8 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	throw new Error('Unreachable');
 }
 
-export function respondWithFileContent(koaResponse: any, file: File): Response {
-	koaResponse.body = file.content;
+export function respondWithFileContent(koaResponse: any, file: File, content: FileContent): Response {
+	koaResponse.body = content;
 	koaResponse.set('Content-Type', file.mime_type);
 	koaResponse.set('Content-Length', file.size.toString());
 	return new Response(ResponseType.KoaResponse, koaResponse);

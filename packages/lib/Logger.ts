@@ -58,17 +58,26 @@ class Logger {
 	private targets_: Target[] = [];
 	private level_: LogLevel = LogLevel.Info;
 	private lastDbCleanup_: number = time.unixMs();
+	private enabled_: boolean = true;
 
 	static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = new FsDriverDummy();
 		return Logger.fsDriver_;
 	}
 
+	public get enabled(): boolean {
+		return this.enabled_;
+	}
+
+	public set enabled(v: boolean) {
+		this.enabled_ = v;
+	}
+
 	public static initializeGlobalLogger(logger: Logger) {
 		this.globalLogger_ = logger;
 	}
 
-	private static get globalLogger(): Logger {
+	public static get globalLogger(): Logger {
 		if (!this.globalLogger_) throw new Error('Global logger has not been initialized!!');
 		return this.globalLogger_;
 	}
@@ -169,7 +178,7 @@ class Logger {
 	}
 
 	public log(level: LogLevel, prefix: string, ...object: any[]) {
-		if (!this.targets_.length) return;
+		if (!this.targets_.length || !this.enabled) return;
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];

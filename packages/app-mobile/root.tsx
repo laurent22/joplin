@@ -556,8 +556,6 @@ async function initialize(dispatch: Function) {
 				folderId: folder.id,
 			});
 		}
-
-		setUpQuickActions(dispatch, folderId);
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
@@ -675,6 +673,8 @@ class AppComponent extends React.Component {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
 		}
+
+		setUpQuickActions(this.props.dispatch, this.props.selectedFolderId);
 	}
 
 	componentWillUnmount() {

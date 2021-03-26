@@ -29,7 +29,7 @@ export default async function(ctx: AppContext) {
 			});
 		} else {
 			ctx.response.status = 200;
-			ctx.response.body = responseObject;
+			ctx.response.body = [undefined, null].includes(responseObject) ? '' : responseObject;
 		}
 	} catch (error) {
 		if (error.httpCode >= 400 && error.httpCode < 500) {

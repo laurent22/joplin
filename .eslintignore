@@ -67,6 +67,9 @@ readme/
 packages/app-cli/app/LinkSelector.d.ts
 packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/LinkSelector.js.map
+packages/app-cli/app/command-settingschema.d.ts
+packages/app-cli/app/command-settingschema.js
+packages/app-cli/app/command-settingschema.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
@@ -139,6 +142,9 @@ packages/app-cli/tests/services_CommandService.js.map
 packages/app-cli/tests/services_InteropService.d.ts
 packages/app-cli/tests/services_InteropService.js
 packages/app-cli/tests/services_InteropService.js.map
+packages/app-cli/tests/services_InteropService_Exporter_Html.d.ts
+packages/app-cli/tests/services_InteropService_Exporter_Html.js
+packages/app-cli/tests/services_InteropService_Exporter_Html.js.map
 packages/app-cli/tests/services_PluginService.d.ts
 packages/app-cli/tests/services_PluginService.js
 packages/app-cli/tests/services_PluginService.js.map
@@ -190,6 +196,9 @@ packages/app-desktop/commands/focusElement.js.map
 packages/app-desktop/commands/openProfileDirectory.d.ts
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/openProfileDirectory.js.map
+packages/app-desktop/commands/replaceMisspelling.d.ts
+packages/app-desktop/commands/replaceMisspelling.js
+packages/app-desktop/commands/replaceMisspelling.js.map
 packages/app-desktop/commands/startExternalEditing.d.ts
 packages/app-desktop/commands/startExternalEditing.js
 packages/app-desktop/commands/startExternalEditing.js.map
@@ -388,6 +397,9 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js.map
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.d.ts
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js.map
@@ -913,6 +925,9 @@ packages/lib/models/SmartFilter.js.map
 packages/lib/models/Tag.d.ts
 packages/lib/models/Tag.js
 packages/lib/models/Tag.js.map
+packages/lib/models/settings/FileHandler.d.ts
+packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/FileHandler.js.map
 packages/lib/models/utils/paginatedFeed.d.ts
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginatedFeed.js.map

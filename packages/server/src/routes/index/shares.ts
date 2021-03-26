@@ -2,18 +2,21 @@ import { SubPath, ResponseType, Response } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
-import { File, Share } from '../../db';
+import { Share } from '../../db';
 import { FileViewerResponse } from '../../apps/joplin/Application';
+import { FileWithContent } from '../../models/FileModel';
 
-async function renderFile(context: AppContext, file: File, share: Share): Promise<FileViewerResponse> {
+async function renderFile(context: AppContext, fileWithContent: FileWithContent, share: Share): Promise<FileViewerResponse> {
 	const joplinApp = await context.apps.joplin();
 
-	if (await joplinApp.isItemFile(file)) {
-		return joplinApp.renderFile(file, share, context.query);
+	if (await joplinApp.fileToJoplinItem(fileWithContent)) {
+		return joplinApp.renderFile(fileWithContent, share, context.query);
 	}
 
+	const { file, content } = fileWithContent;
+
 	return {
-		body: file.content,
+		body: content,
 		mime: file.mime_type,
 		size: file.size,
 	};
@@ -30,10 +33,10 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 	const share = await shareModel.load(path.id);
 	if (!share) throw new ErrorNotFound();
 
-	const file = await fileModel.loadWithContent(share.file_id, { skipPermissionCheck: true });
-	if (!file) throw new ErrorNotFound();
+	const fileWithContent = await fileModel.loadWithContent(share.file_id, { skipPermissionCheck: true });
+	if (!fileWithContent) throw new ErrorNotFound();
 
-	const result = await renderFile(ctx, file, share);
+	const result = await renderFile(ctx, fileWithContent, share);
 
 	ctx.response.body = result.body;
 	ctx.response.set('Content-Type', result.mime);

@@ -215,6 +215,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 		display: table-cell;
 		display: flex;
 		width: 100%;
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -315,15 +317,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 		<ul>
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
-			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2021/index/" title="Google Summer of Code 2021">GSoC 2021</a></li>
 		</ul>
 		<div class="nav-right">
-			<!--
-				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
-			-->
-			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="115px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -383,10 +380,11 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 </ul>
 </li>
 <li>
-<p>Google Summer of Code 2020</p>
+<p>Google Summer of Code 2021</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2020/index/">Google Summer of Code 2020</a></li>
-<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/ideas/">Project Ideas</a></li>
 </ul>
 </li>
 <li>
@@ -403,6 +401,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 </div>
 
 	<div class="main">
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+<hr>
 <h1>About the Rich Text editor<a name="about-the-rich-text-editor" href="#about-the-rich-text-editor" class="heading-anchor">🔗</a></h1>
 <p><strong>TLDR:</strong> Avoid using Markdown plugins if you primarily intend to use the Rich Text editor, and be aware of the editor's limitations.</p>
 <p>At its core, Joplin stores notes in <a href="https://joplinapp.org/markdown/">Markdown format</a>. Markdown is a simple way to format text that looks great on any device and, while it's formatted text, it still looks perfectly readable in a plain text editor.</p>
@@ -419,13 +419,13 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 <p>Tables must have a header, because this is a requirement in Markdown. When you create a table, it will let you create it without a header, but under the hood it will add an empty one. And next time you open the note, this empty header will be present.</p>
 </li>
 <li>
-<p>All items in a list must be of the same type, so for example all checkboxes, or all bullet points. If you require two different types, you should create two different lists separated by an horizontal rule or similar.</p>
+<p>All items in a list must be of the same type, so for example all checkboxes, or all bullet points. If you require two different types, you should create two different lists separated by a horizontal rule or similar.</p>
 </li>
 <li>
 <p>Special keyboard modes &quot;vim&quot; and &quot;emacs&quot; are not supported.</p>
 </li>
 <li>
-<p>If a note is of 'Markup - Markdown' and contains HTML formatting, this may be lost when editing in the Rich Text editor as it cannot be converted to Markdown. Notes of 'Markup - HTML' are not affected by edits in the Rich Rext editor as this conversion does not take place.</p>
+<p>If a note is of 'Markup - Markdown' and contains HTML formatting, this may be lost when editing in the Rich Text editor as it cannot be converted to Markdown. Notes of 'Markup - HTML' are not affected by edits in the Rich Text editor as this conversion does not take place.</p>
 </li>
 </ul>
 <p>Those are the known limitations but if you notice any other issue not listed here, please let us know <a href="https://discourse.joplinapp.org/">in the forum</a>.</p>
@@ -445,13 +445,6 @@ https://github.com/laurent22/joplin/blob/dev/readme/rich_text_editor.md
 			$('.nav').removeClass('sticky');
 		}
 	}
-
-	$('#toc').hide();
-
-	$('.help').click(function(event) {
-		event.preventDefault();
-		$('#toc').show();
-	});
 
 	$(window).scroll(function() {
 		stickyHeader();

@@ -4,7 +4,7 @@
 	"name": "joplin-match-highlighter",
 	"description": "Adds support for the Codemirror match highlighter to the Joplin CodeView editor.",
 	"version": "1.0.0",
-	"author": "CalebJohn",
-	"app_min_version": "1.4",
+	"author": "JoplinTeam",
+	"app_min_version": "1.7",
 	"homepage_url": "joplinapp.org"
 }

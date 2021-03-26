@@ -166,6 +166,8 @@ describe('shares.joplin', function() {
 			await createFile(user.id, `root:/${noteId}.md:`, makeNoteSerializedBody({
 				body: '[missing too](:/531a2a839a2c493a88c45e39c6cb9ed4)',
 			}));
+
+			// Was commented out:
 			const share = await postShare(session.id, ShareType.Link, `root:/${noteId}.md:`);
 			await expectNotThrow(async () => getShareContent(share.id));
 		}

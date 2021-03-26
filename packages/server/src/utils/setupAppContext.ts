@@ -10,7 +10,7 @@ export default async function(appContext: AppContext, env: Env, dbConnection: Db
 	appContext.env = env;
 	appContext.db = dbConnection;
 	appContext.apps = new Applications(appContext.models);
-	appContext.models = newModelFactory(appContext.db, config().baseUrl, appContext.apps);
+	appContext.models = newModelFactory(appContext.db, config().baseUrl);
 	appContext.appLogger = appLogger;
 	appContext.routes = routes;
 }

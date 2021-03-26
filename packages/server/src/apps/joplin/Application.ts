@@ -3,12 +3,12 @@ import Logger from '@joplin/lib/Logger';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
-import { File, Share, Uuid } from '../../db';
+import { File, JoplinFileContent, Share, Uuid } from '../../db';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupToHtml } from '@joplin/renderer';
 import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
-import FileModel from '../../models/FileModel';
+import FileModel, { FileContent, FileWithContent, LoadContentHandlerEvent, SaveContentHandlerEvent } from '../../models/FileModel';
 import { ErrorNotFound } from '../../utils/errors';
 import BaseApplication from '../../services/BaseApplication';
 import { formatDateTime } from '../../utils/time';
@@ -63,6 +63,24 @@ export default class Application extends BaseApplication {
 		// resources.
 		BaseItem.loadClass('Note', Note);
 		BaseItem.loadClass('Resource', Resource);
+
+		this.fileModel_saveContentHandler = this.fileModel_saveContentHandler.bind(this);
+		this.fileModel_loadContentHandler = this.fileModel_loadContentHandler.bind(this);
+		FileModel.registerSaveContentHandler(this.fileModel_saveContentHandler);
+		FileModel.registerLoadContentHandler(this.fileModel_loadContentHandler);
+	}
+
+	// TODO: also do loadContentHandler
+
+	private async fileModel_saveContentHandler(event: SaveContentHandlerEvent): Promise<File> | null {
+		const fileContent = await this.fileToJoplinItem({ file: event.file, content: event.content });
+		if (!fileContent) return null;
+		const result = await event.models.joplinFileContent({ userId: event.file.owner_id }).saveFileAndContent(event.file, fileContent, event.options);
+		return result;
+	}
+
+	private async fileModel_loadContentHandler(event: LoadContentHandlerEvent): Promise<any> | null {
+		return this.joplinItemToFile(event.content);
 	}
 
 	public async localFileFromUrl(url: string): Promise<string> {
@@ -79,7 +97,7 @@ export default class Application extends BaseApplication {
 		return `${itemId}.md`;
 	}
 
-	private async itemMetadataFile(parentId: Uuid, itemId: string): Promise<File | null> {
+	private async itemMetadataFile(parentId: Uuid, itemId: string): Promise<FileWithContent | null> {
 		const file = await this.models.file().fileByName(parentId, this.itemIdFilename(itemId), { skipPermissionCheck: true });
 		if (!file) {
 			// We don't throw an error because it can happen if the note
@@ -90,9 +108,8 @@ export default class Application extends BaseApplication {
 		return this.models.file().loadWithContent(file.id, { skipPermissionCheck: true });
 	}
 
-	private async unserializeItem(file: File): Promise<any> {
-		const content = file.content.toString();
-		return BaseItem.unserialize(content);
+	private async unserializeItem(fileContent: FileContent): Promise<any> {
+		return BaseItem.unserialize(fileContent.toString());
 	}
 
 	private async resourceInfos(linkedItemInfos: LinkedItemInfos): Promise<ResourceInfos> {
@@ -119,12 +136,12 @@ export default class Application extends BaseApplication {
 		const output: LinkedItemInfos = {};
 
 		for (const itemId of itemIds) {
-			const itemFile = await this.itemMetadataFile(noteFileParentId, itemId);
-			if (!itemFile) continue;
+			const itemFileWithContent = await this.itemMetadataFile(noteFileParentId, itemId);
+			if (!itemFileWithContent) continue;
 
 			output[itemId] = {
-				item: await this.unserializeItem(itemFile),
-				file: itemFile,
+				item: await this.unserializeItem(itemFileWithContent.content),
+				file: itemFileWithContent.file,
 			};
 		}
 
@@ -138,7 +155,7 @@ export default class Application extends BaseApplication {
 		return fileModel.pathToFile(dirPath);
 	}
 
-	private async itemFile(fileModel: FileModel, parentId: Uuid, itemType: ModelType, itemId: string): Promise<File> {
+	private async itemFile(fileModel: FileModel, parentId: Uuid, itemType: ModelType, itemId: string): Promise<FileWithContent> {
 		let output: File = null;
 
 		if (itemType === ModelType.Resource) {
@@ -153,9 +170,9 @@ export default class Application extends BaseApplication {
 		return fileModel.loadWithContent(output.id);
 	}
 
-	private async renderResource(file: File): Promise<FileViewerResponse> {
+	private async renderResource(file: File, content: FileContent): Promise<FileViewerResponse> {
 		return {
-			body: file.content,
+			body: content,
 			mime: file.mime_type,
 			size: file.size,
 		};
@@ -221,29 +238,27 @@ export default class Application extends BaseApplication {
 		};
 	}
 
-	public async renderFile(file: File, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
+	public async renderFile(fileWithContent: FileWithContent, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
+		const { file, content } = fileWithContent;
+
 		const fileModel = this.models.file({ userId: file.owner_id });
 
-		const rootNote: NoteEntity = await this.unserializeItem(file);
+		const rootNote: NoteEntity = await this.unserializeItem(content);
 		const linkedItemInfos = await this.noteLinkedItemInfos(file.parent_id, rootNote);
 		const resourceInfos = await this.resourceInfos(linkedItemInfos);
 
 		const fileToRender = {
 			file: file,
+			content: null as any,
 			itemId: rootNote.id,
 		};
 
 		if (query.resource_id) {
-			fileToRender.file = await this.itemFile(fileModel, file.parent_id, ModelType.Resource, query.resource_id);
+			const withContent = await this.itemFile(fileModel, file.parent_id, ModelType.Resource, query.resource_id);
+			fileToRender.file = withContent.file;
+			fileToRender.content = withContent.content;
 			fileToRender.itemId = query.resource_id;
 		}
-
-		// No longer supported - need to decide what to do about note links.
-
-		// if (query.note_id) {
-		// 	fileToRender.file = await this.itemFile(fileModel, file.parent_id, ModelType.Note, query.note_id);
-		// 	fileToRender.itemId = query.note_id;
-		// }
 
 		if (fileToRender.file !== file && !linkedItemInfos[fileToRender.itemId]) {
 			throw new ErrorNotFound(`Item "${fileToRender.itemId}" does not belong to this note`);
@@ -253,7 +268,7 @@ export default class Application extends BaseApplication {
 		const itemType: ModelType = itemToRender.type_;
 
 		if (itemType === ModelType.Resource) {
-			return this.renderResource(fileToRender.file);
+			return this.renderResource(fileToRender.file, fileToRender.content);
 		} else if (itemType === ModelType.Note) {
 			return this.renderNote(share, itemToRender, resourceInfos, linkedItemInfos);
 		} else {
@@ -261,21 +276,49 @@ export default class Application extends BaseApplication {
 		}
 	}
 
-	public async isItemFile(file: File): Promise<boolean> {
-		if (file.mime_type !== 'text/markdown') return false;
+	public async fileToJoplinItem(fileWithContent: FileWithContent): Promise<JoplinFileContent> | null {
+		if (fileWithContent.file.mime_type !== 'text/markdown') return null;
 
 		try {
-			await this.unserializeItem(file);
+			const rawItem: any = await this.unserializeItem(fileWithContent.content);
+
+			const dbItem: JoplinFileContent = {
+				id: rawItem.id,
+				parent_id: rawItem.parent_id || '',
+				encryption_applied: rawItem.encryption_applied || 0,
+				type: rawItem.type_,
+				updated_time: rawItem.updated_time,
+				created_time: rawItem.created_time,
+				owner_id: fileWithContent.file.owner_id,
+			};
+
+			delete rawItem.id;
+			delete rawItem.parent_id;
+			delete rawItem.encryption_applied;
+			delete rawItem.type_;
+			delete rawItem.updated_time;
+			delete rawItem.created_time;
+
+			dbItem.content = JSON.stringify(rawItem);
+
+			return dbItem;
 		} catch (error) {
 			// No need to log - it means it's not a note file
-			return false;
+			return null;
 		}
-
-		return true;
 	}
 
-	public async processSharedContentForSave(file:File):Promise<File> {
-		// console.info('
+	public async joplinItemToFile(fileContent: JoplinFileContent): Promise<string> {
+		const item = JSON.parse(fileContent.content);
+		item.id = fileContent.id;
+		item.type_ = fileContent.type;
+		item.parent_id = fileContent.parent_id;
+		item.encryption_applied = fileContent.encryption_applied;
+		item.updated_time = fileContent.updated_time;
+		item.created_time = fileContent.created_time;
+
+		const ItemClass = BaseItem.itemClass(item);
+		return ItemClass.serialize(item);
 	}
 
 }

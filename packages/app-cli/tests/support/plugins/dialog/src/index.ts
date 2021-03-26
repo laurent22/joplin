@@ -5,9 +5,9 @@ joplin.plugins.register({
 		const dialogs = joplin.views.dialogs;
 
 		const handle = await dialogs.create('myDialog1');
-		await dialogs.setHtml(handle, '<p>Testing dialog with default buttons</p><p>Second line</p><p>Third line</p>');
+		await dialogs.setHtml(handle, '<p>Testing dialog with default buttons</p><p>Second line</p><p>Third linexxx</p>');
 		const result = await dialogs.open(handle);
-		alert('Got result: ' + JSON.stringify(result));
+		console.info('Got result: ' + JSON.stringify(result));
 
 		const handle2 = await dialogs.create('myDialog2');
 		await dialogs.setHtml(handle2, '<p>Testing dialog with custom buttons</p><p>Second line</p><p>Third line</p>');
@@ -25,7 +25,7 @@ joplin.plugins.register({
 		]);
 
 		const result2 = await dialogs.open(handle2);
-		alert('Got result: ' + JSON.stringify(result2));
+		console.info('Got result: ' + JSON.stringify(result2));
 
 		const handle3 = await dialogs.create('myDialog3');
 		await dialogs.setHtml(handle3, `
@@ -38,7 +38,7 @@ joplin.plugins.register({
 		`);
 
 		const result3 = await dialogs.open(handle3);
-		alert('Got result: ' + JSON.stringify(result3));		
+		console.info('Got result: ' + JSON.stringify(result3));		
 	},
 
 });

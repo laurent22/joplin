@@ -10,7 +10,7 @@ const { NoteItem } = require('../note-item.js');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
-const SearchEngineUtils = require('@joplin/lib/services/searchengine/SearchEngineUtils');
+const SearchEngineUtils = require('@joplin/lib/services/searchengine/SearchEngineUtils').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
 
 Icon.loadFont();

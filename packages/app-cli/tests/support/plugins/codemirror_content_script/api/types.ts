@@ -330,57 +330,16 @@ export enum SettingItemType {
 export interface SettingItem {
 	value: any;
 	type: SettingItemType;
-
-	label: string;
-	description?: string;
-
-	/**
-	 * A public setting will appear in the Configuration screen and will be
-	 * modifiable by the user. A private setting however will not appear there,
-	 * and can only be changed programmatically. You may use this to store some
-	 * values that you do not want to directly expose.
-	 */
 	public: boolean;
+	label: string;
 
-	/**
-	 * You would usually set this to a section you would have created
-	 * specifically for the plugin.
-	 */
-	section?: string;
-
-	/**
-	 * To create a setting with multiple options, set this property to `true`.
-	 * That setting will render as a dropdown list in the configuration screen.
-	 */
+	description?: string;
 	isEnum?: boolean;
-
-	/**
-	 * This property is required when `isEnum` is `true`. In which case, it
-	 * should contain a map of value => label.
-	 */
-	options?: Record<any, any>;
-
-	/**
-	 * Reserved property. Not used at the moment.
-	 */
+	section?: string;
+	options?: any;
 	appTypes?: string[];
-
-	/**
-	 * Set this to `true` to store secure data, such as passwords. Any such
-	 * setting will be stored in the system keychain if one is available.
-	 */
 	secure?: boolean;
-
-	/**
-	 * An advanced setting will be moved under the "Advanced" button in the
-	 * config screen.
-	 */
 	advanced?: boolean;
-
-	/**
-	 * Set the min, max and step values if you want to restrict an int setting
-	 * to a particular range.
-	 */
 	minimum?: number;
 	maximum?: number;
 	step?: number;

@@ -481,7 +481,7 @@ function shimInit(sharp = null, keytar = null, React = null) {
 	shim.httpAgent_ = null;
 
 	shim.httpAgent = url => {
-		if (shim.isLinux() && !shim.httpAgent) {
+		if (shim.isLinux() && !shim.httpAgent_) {
 			const AgentSettings = {
 				keepAlive: true,
 				maxSockets: 1,

@@ -6,9 +6,9 @@ function plugin(CodeMirror) {
 	// Once created here it can be called by any other codemirror command
 	// using cm.execCommand(stringName) or register a joplin command called 'editor.printSomething'
 	// through the joplin.commands api
-	CodeMirror.commands.printSomething = function(cm) {
-		console.log("Something");
-	}
+	CodeMirror.defineExtension('printSomething', function(something) {
+		console.log(something);
+	});
 }
 
 module.exports = {
