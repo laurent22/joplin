@@ -88,7 +88,7 @@ function shimInit() {
 		const doFetchBlob = () => {
 			return RNFetchBlob.config({
 				path: localFilePath,
-				trusty: options.ignoreTlsErrors(),
+				trusty: options.ignoreTlsErrors,
 			}).fetch(method, url, headers);
 		};
 
@@ -125,7 +125,7 @@ function shimInit() {
 
 		try {
 			const response = await RNFetchBlob.config({
-				trusty: options.ignoreTlsErrors(),
+				trusty: options.ignoreTlsErrors,
 			}).fetch(method, url, headers, RNFetchBlob.wrap(options.path));
 
 			// Returns an object that's roughtly compatible with a standard Response object
