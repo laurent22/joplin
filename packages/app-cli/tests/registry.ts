@@ -46,8 +46,8 @@ describe('Registry', function() {
 			expect(sync.start).toHaveBeenCalledTimes(0);
 		});
 
-		it('should sync if manual override is true', done => {
-			void reg.scheduleSync(1, null, true)
+		it('should sync if do wifi check is false', done => {
+			void reg.scheduleSync(1, null, false)
 				.then(() =>{
 					expect(sync.start).toHaveBeenCalled();
 					done();
