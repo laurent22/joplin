@@ -1041,6 +1041,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
 
+			// We need to remove timestamps from the image URLs while copying
+			// because some offline edtors do not show the image if there is
+			// an extra ?t= in it's path.
+			// Related to - https://github.com/laurent22/joplin/issues/4602
 			const removeTimestampFromUrl = (url: string) => {
 				const index = url.lastIndexOf('?t=');
 				return index === -1 ? url : url.substr(0, index);
