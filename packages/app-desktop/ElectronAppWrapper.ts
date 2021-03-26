@@ -224,14 +224,7 @@ export default class ElectronAppWrapper {
 	async waitForElectronAppReady() {
 		if (this.electronApp().isReady()) return Promise.resolve();
 
-		return new Promise((resolve) => {
-			const iid = setInterval(() => {
-				if (this.electronApp().isReady()) {
-					clearInterval(iid);
-					resolve();
-				}
-			}, 10);
-		});
+		return this.electronApp().whenReady();
 	}
 
 	async quit() {
