@@ -9,13 +9,7 @@ const DIR_NAME = 'sharedFiles';
  * Copy a file to be shared to cache, renaming it to its orignal name
  */
 export async function copyToCache(resource: ResourceEntity): Promise<string> {
-	let filename = resource.filename ?
-		`${resource.filename}.${resource.file_extension}` :
-		resource.title;
-
-	if (!filename) {
-		filename = ['untitled', resource.file_extension].join('.');
-	}
+	const filename = Resource.friendlySafeFilename(resource);
 
 	const targetDir = `${CachesDirectoryPath}/${DIR_NAME}`;
 	await shim.fsDriver().mkdir(targetDir);
