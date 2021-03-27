@@ -4,7 +4,7 @@ Due to our limited resources and in order to give everyone a chance to submit a 
 
 1. Pull requests must be based on an issue that existed **before GSoC was started**, or based on an issue created by a moderator. 
 
-2. Each contributor **may only create one pull request at a time**. In some rare cases, once your pull request has been merged, you may be allowed to post a second one, in which case we will let you know. We have this rule in place due to our limited resources - if everyone was allowed to post multiple pull requests we will not be able to review them properly. It is also better for you because you only need to care about one PR - so spend time making sure it is as good as it can be - make sure it works well, has test units, documentation and screenshots (if relevant).
+2. Each contributor **may only create one pull request at a time**. Once your pull request has been merged, you can post a second one. We have this rule in place due to our limited resources - if everyone was allowed to post multiple pull requests we will not be able to review them properly. It is also better for you because you only need to care about one PR - so spend time making sure it is as good as it can be - make sure it works well, has test units, documentation and screenshots (if relevant).
 
 3. If the pull request has serious issues, or would require a significant rewrite to be acceptable, we might closed it and you will not be allowed to open a new one. So **please be careful when posting a PR**.
 
