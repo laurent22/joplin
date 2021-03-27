@@ -39,7 +39,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		shared.init(this);
 
 		this.checkSyncConfig_ = async () => {
-			await shared.checkSyncConfig(this, this.state.settings);
+			// to ignore TLS erros we need to chage the global state of the app, if the check fails we need to restore the original state
+			// this call sets the new value and returns the previous one which we can use later to revert the change
+			const prevIgnoreTlsErrors = await NativeModules.SslModule.setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
+			const result = await shared.checkSyncConfig(this, this.state.settings);
+			if (!result || !result.ok) {
+				await NativeModules.SslModule.setIgnoreTlsErrors(prevIgnoreTlsErrors);
+			}
 		};
 
 		this.e2eeConfig_ = () => {
