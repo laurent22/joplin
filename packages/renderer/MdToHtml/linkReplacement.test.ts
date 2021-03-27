@@ -1,4 +1,6 @@
 import linkReplacement from './linkReplacement';
+const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 describe('linkReplacement', () => {
 
@@ -48,6 +50,26 @@ describe('linkReplacement', () => {
 		// Since the icon is embedded as SVG, we only check for the prefix
 		const expectedPrefix = `<a class="not-loaded-resource resource-status-notDownloaded" data-resource-id="${resourceId}"><img src="data:image/svg+xml;utf8`;
 		expect(r.indexOf(expectedPrefix)).toBe(0);
+	});
+
+	test('should handle the external files with file:/// or file:// protocol', () => {
+		const externalFileResources = [
+			'file:///user/some/path/to/a/pdf/file.pdf',
+			'file://user/path/to/a/pdf/file.pdf',
+			'file:///user/some/path/to/video/file.mp4',
+			'file://user/some/path/to/video/file.mp4',
+			'file:///user/some/path/to/audio/file.mp3',
+			'file://user/some/path/to/audio/file.mp3',
+		];
+
+		for (const fileResource of externalFileResources) {
+			const r = linkReplacement(fileResource).html;
+
+			const mimeType = mimeUtils.fromFilename(fileResource);
+
+			const expectedPrefix = `<a data-from-md type='${mimeType}' href='${fileResource}' onclick='postMessage("${fileResource}", { resourceId: "" }); return false;'><span class="resource-icon ${getClassNameForMimeType(mimeType)}"></span>`;
+			expect(r.indexOf(expectedPrefix)).toBe(0);
+		}
 	});
 
 });

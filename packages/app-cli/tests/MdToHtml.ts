@@ -160,7 +160,7 @@ describe('MdToHtml', function() {
 			[
 				'file://C:\\AUTOEXEC.BAT',
 				'file://C:\\AUTOEXEC.BAT',
-				'<a data-from-md title=\'file://C:%5CAUTOEXEC.BAT\' href=\'file://C:%5CAUTOEXEC.BAT\'>file://C:\\AUTOEXEC.BAT</a>',
+				'<a data-from-md title=\'file://C:%5CAUTOEXEC.BAT\' type=\'application/x-msdownload\' href=\'file://C:%5CAUTOEXEC.BAT\'>file://C:\\AUTOEXEC.BAT</a>',
 			],
 			[
 				'example.com',
@@ -189,8 +189,8 @@ describe('MdToHtml', function() {
 			],
 			[
 				'[bla.pdf](file:///Users/tessus/Downloads/bla.pdf)',
-				'<a data-from-md title=\'file:///Users/tessus/Downloads/bla.pdf\' href=\'file:///Users/tessus/Downloads/bla.pdf\'>bla.pdf</a>',
-				'<a data-from-md title=\'file:///Users/tessus/Downloads/bla.pdf\' href=\'file:///Users/tessus/Downloads/bla.pdf\'>bla.pdf</a>',
+				'<a data-from-md title=\'file:///Users/tessus/Downloads/bla.pdf\' type=\'application/pdf\' href=\'file:///Users/tessus/Downloads/bla.pdf\'>bla.pdf</a>',
+				'<a data-from-md title=\'file:///Users/tessus/Downloads/bla.pdf\' type=\'application/pdf\' href=\'file:///Users/tessus/Downloads/bla.pdf\'>bla.pdf</a>',
 			],
 		];
 

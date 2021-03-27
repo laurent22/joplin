@@ -3,6 +3,7 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');
+const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 export interface Options {
 	title?: string;
@@ -36,14 +37,15 @@ export default function(href: string, options: Options = null): LinkReplacementR
 
 	const resourceHrefInfo = urlUtils.parseResourceUrl(href);
 	const isResourceUrl = options.resources && !!resourceHrefInfo;
+	const isExternalFile = href.startsWith('file:///') || href.startsWith('file://');
 	let title = options.title;
 
 	let resourceIdAttr = '';
-	let icon = '';
 	let hrefAttr = '#';
-	let mime = '';
+	let mime = isExternalFile ? mimeUtils.fromFilename(href) : '';
+	let icon = mime ? `<span class="resource-icon ${getClassNameForMimeType(mime)}"></span>` : '';
 	let resourceId = '';
-	let resource = null;
+	let resource = (isExternalFile && mime) ? { mime } : null;
 	if (isResourceUrl) {
 		resourceId = resourceHrefInfo.itemId;
 
@@ -112,7 +114,14 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	if (title) attrHtml.push(`title='${htmlentities(title)}'`);
 	if (mime) attrHtml.push(`type='${htmlentities(mime)}'`);
 
-	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
+	let resourceFullPath;
+	if (isExternalFile) {
+		resourceFullPath = href;
+	} else if (resource && options?.ResourceModel?.fullPath) {
+		resourceFullPath = options.ResourceModel.fullPath(resource);
+	} else {
+		resourceFullPath = null;
+	}
 
 	if (resourceId && options.itemIdToUrl) {
 		const url = options.itemIdToUrl(resourceId);
