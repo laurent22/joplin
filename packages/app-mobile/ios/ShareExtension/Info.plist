@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSExtension</key>
@@ -28,13 +28,13 @@
 			<dict>
 				<key>NSExtensionActivationDictionaryVersion</key>
 				<integer>2</integer>
-				<key>NSExtensionActivationSupportsMovieWithMaxCount</key>
-				<integer>10</integer>
 				<key>NSExtensionActivationSupportsImageWithMaxCount</key>
 				<integer>10</integer>
-				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
-				<integer>1</integer>
+				<key>NSExtensionActivationSupportsMovieWithMaxCount</key>
+				<integer>10</integer>
 				<key>NSExtensionActivationSupportsText</key>
+				<integer>1</integer>
+				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
 				<integer>1</integer>
 			</dict>
 		</dict>

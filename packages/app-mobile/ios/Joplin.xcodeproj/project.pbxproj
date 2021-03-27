@@ -11,13 +11,9 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		46E31F54C547C341F605BB66 /* libPods-Joplin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */; };
+		5E556FC75AECECB13464A724 /* libPods-ShareExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC957496DFD2368FFE3C360 /* libPods-ShareExtension.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		AE2908B025CE91F00046344A /* ShareData.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2908AF25CE91F00046344A /* ShareData.m */; };
-		AE290A3025CEA6580046344A /* ShareExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = AE290A2F25CEA6580046344A /* ShareExtension.m */; };
-		AE290AF725CEB9A90046344A /* ShareData.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2908AF25CE91F00046344A /* ShareData.m */; };
-		AE290CBE25CEE6710046344A /* ShareExtensionConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = AE290CBD25CEE6710046344A /* ShareExtensionConstants.m */; };
-		AE290CBF25CEE6710046344A /* ShareExtensionConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = AE290CBD25CEE6710046344A /* ShareExtensionConstants.m */; };
-		AE82E4AC2599FA3A0013551B /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE82E4AB2599FA3A0013551B /* ShareViewController.m */; };
+		AE152142260F770400217DCB /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE152141260F770400217DCB /* ShareViewController.m */; };
 		AE82E4AF2599FA3A0013551B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE82E4AD2599FA3A0013551B /* MainInterface.storyboard */; };
 		AE82E4B32599FA3A0013551B /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AE82E4A82599FA3A0013551B /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -50,6 +46,7 @@
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* JoplinTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JoplinTests.m; sourceTree = "<group>"; };
+		0473A2D469A3555053E69327 /* Pods-ShareExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.release.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.release.xcconfig"; sourceTree = "<group>"; };
 		09056573D4C040FBD5FEB93A /* Pods-Joplin-JoplinTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-JoplinTests.debug.xcconfig"; path = "Target Support Files/Pods-Joplin-JoplinTests/Pods-Joplin-JoplinTests.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Joplin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Joplin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Joplin/AppDelegate.h; sourceTree = "<group>"; };
@@ -64,25 +61,22 @@
 		2DA44D9A347489A29B995F73 /* Pods-Joplin-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOSTests/Pods-Joplin-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		37DBC181C4AD99CBE0D07EEB /* Pods-Joplin-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOSTests/Pods-Joplin-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		505CB61090817F4453631957 /* Pods-Joplin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin.debug.xcconfig"; path = "Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig"; sourceTree = "<group>"; };
+		5DE39012F71F18423C665C57 /* Pods-ShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.debug.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Joplin/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A3FEB746EE7F1B0FF28528E1 /* Pods-Joplin-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOS/Pods-Joplin-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE2908AE25CE91F00046344A /* ShareData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareData.h; sourceTree = "<group>"; };
-		AE2908AF25CE91F00046344A /* ShareData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareData.m; sourceTree = "<group>"; };
-		AE290A2F25CEA6580046344A /* ShareExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ShareExtension.m; path = Joplin/ShareExtension.m; sourceTree = "<group>"; };
-		AE290CBC25CEE5BA0046344A /* ShareExtensionConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareExtensionConstants.h; sourceTree = "<group>"; };
-		AE290CBD25CEE6710046344A /* ShareExtensionConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareExtensionConstants.m; sourceTree = "<group>"; };
+		AE152140260F770400217DCB /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Source/ShareExtension/ShareViewController.h; sourceTree = "<group>"; };
+		AE152141260F770400217DCB /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Source/ShareExtension/ShareViewController.m; sourceTree = "<group>"; };
 		AE7945DB259C9A2500051BE2 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		AE7945E6259C9AEE00051BE2 /* Joplin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Joplin.entitlements; path = Joplin/Joplin.entitlements; sourceTree = "<group>"; };
 		AE82E4A82599FA3A0013551B /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE82E4AA2599FA3A0013551B /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
-		AE82E4AB2599FA3A0013551B /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
 		AE82E4AE2599FA3A0013551B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		AE82E4B02599FA3A0013551B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B61798F36B3BC123BF8EA4D9 /* libPods-Joplin-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F69B873C692CE22F1C4C9264 /* libPods-Joplin-JoplinTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin-JoplinTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAC957496DFD2368FFE3C360 /* libPods-ShareExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ShareExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E556FC75AECECB13464A724 /* libPods-ShareExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +127,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				AE290A2F25CEA6580046344A /* ShareExtension.m */,
 			);
 			name = Joplin;
 			sourceTree = "<group>";
@@ -146,6 +140,7 @@
 				258F823D616BE3D6A52BC900 /* libPods-Joplin-tvOSTests.a */,
 				A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */,
 				F69B873C692CE22F1C4C9264 /* libPods-Joplin-JoplinTests.a */,
+				FAC957496DFD2368FFE3C360 /* libPods-ShareExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -193,6 +188,8 @@
 				245A6EBAE2E874DB706B16DB /* Pods-Joplin-tvOS.release.xcconfig */,
 				2DA44D9A347489A29B995F73 /* Pods-Joplin-tvOSTests.debug.xcconfig */,
 				37DBC181C4AD99CBE0D07EEB /* Pods-Joplin-tvOSTests.release.xcconfig */,
+				5DE39012F71F18423C665C57 /* Pods-ShareExtension.debug.xcconfig */,
+				0473A2D469A3555053E69327 /* Pods-ShareExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -200,15 +197,11 @@
 		AE82E4A92599FA3A0013551B /* ShareExtension */ = {
 			isa = PBXGroup;
 			children = (
+				AE152140260F770400217DCB /* ShareViewController.h */,
+				AE152141260F770400217DCB /* ShareViewController.m */,
 				AE7945DB259C9A2500051BE2 /* ShareExtension.entitlements */,
-				AE290CBC25CEE5BA0046344A /* ShareExtensionConstants.h */,
-				AE290CBD25CEE6710046344A /* ShareExtensionConstants.m */,
-				AE82E4AA2599FA3A0013551B /* ShareViewController.h */,
-				AE82E4AB2599FA3A0013551B /* ShareViewController.m */,
 				AE82E4AD2599FA3A0013551B /* MainInterface.storyboard */,
 				AE82E4B02599FA3A0013551B /* Info.plist */,
-				AE2908AE25CE91F00046344A /* ShareData.h */,
-				AE2908AF25CE91F00046344A /* ShareData.m */,
 			);
 			path = ShareExtension;
 			sourceTree = "<group>";
@@ -243,6 +236,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AE82E4B72599FA3A0013551B /* Build configuration list for PBXNativeTarget "ShareExtension" */;
 			buildPhases = (
+				027E2AA6B101F8CFCA582EC1 /* [CP] Check Pods Manifest.lock */,
 				AE82E4A42599FA3A0013551B /* Sources */,
 				AE82E4A52599FA3A0013551B /* Frameworks */,
 				AE82E4A62599FA3A0013551B /* Resources */,
@@ -328,6 +322,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=/usr/local/opt/node@12/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+		};
+		027E2AA6B101F8CFCA582EC1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ShareExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 		335ACF4DE85695BEBB18D8A3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -429,9 +445,6 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				AE290CBE25CEE6710046344A /* ShareExtensionConstants.m in Sources */,
-				AE290A3025CEA6580046344A /* ShareExtension.m in Sources */,
-				AE290AF725CEB9A90046344A /* ShareData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,9 +452,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE290CBF25CEE6710046344A /* ShareExtensionConstants.m in Sources */,
-				AE82E4AC2599FA3A0013551B /* ShareViewController.m in Sources */,
-				AE2908B025CE91F00046344A /* ShareData.m in Sources */,
+				AE152142260F770400217DCB /* ShareViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,6 +647,7 @@
 		};
 		AE82E4B52599FA3A0013551B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DE39012F71F18423C665C57 /* Pods-ShareExtension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -663,6 +675,7 @@
 		};
 		AE82E4B62599FA3A0013551B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0473A2D469A3555053E69327 /* Pods-ShareExtension.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;

@@ -11,6 +11,7 @@ target 'Joplin' do
   use_react_native!(:path => config["reactNativePath"])
   
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  pod 'JoplinRNShareExtension', :path => 'ShareExtension'
 
   # Enables Flipper.
   #
@@ -20,4 +21,8 @@ target 'Joplin' do
   post_install do |installer|
     flipper_post_install(installer)
   end
+end
+
+target 'ShareExtension' do
+  pod 'JoplinCommonShareExtension', :path => 'ShareExtension'
 end
