@@ -1,5 +1,9 @@
 # Joplin changelog
 
+## [v1.7.11](https://github.com/laurent22/joplin/releases/tag/v1.7.11) - 2021-02-03T12:50:01Z
+
+- Fixed: Regression: Fixed network request repeat mechanism
+
 ## [v1.7.10](https://github.com/laurent22/joplin/releases/tag/v1.7.10) - 2021-01-30T13:25:29Z
 
 - New: Added button to browse plugins

@@ -140,8 +140,6 @@ export default class JoplinDatabase extends Database {
 
 	constructor(driver: any) {
 		super(driver);
-
-		// this.extensionToLoad = './build/lib/sql-extensions/spellfix';
 	}
 
 	initialized() {
@@ -932,15 +930,6 @@ export default class JoplinDatabase extends Database {
 
 	async initialize() {
 		this.logger().info('Checking for database schema update...');
-
-		// try {
-		// 	// Note that the only extension that can be loaded as of now is spellfix.
-		// 	// If it fails here, it will fail on the fuzzySearchEnabled() check above
-		// 	// too, thus disabling spellfix for the app.
-		// 	await this.loadExtension(this.extensionToLoad);
-		// } catch (error) {
-		// 	this.logger().error(error);
-		// }
 
 		let versionRow = null;
 		try {

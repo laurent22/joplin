@@ -1,4 +1,4 @@
-import { useRef, useMemo, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 
 import Setting from '@joplin/lib/models/Setting';
 import useSource from './hooks/useSource';
@@ -27,12 +27,12 @@ interface Props {
 	onLoadEnd?: Function;
 }
 
+const webViewStyle = {
+	backgroundColor: 'transparent',
+};
+
 export default function NoteBodyViewer(props: Props) {
 	const theme = themeStyle(props.themeId);
-
-	const webViewStyle: any = useMemo(() => {
-		return { backgroundColor: theme.backgroundColor };
-	}, [theme.backgroundColor]);
 
 	const dialogBoxRef = useRef(null);
 

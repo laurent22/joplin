@@ -1,6 +1,11 @@
 import Setting, { SettingSectionSource } from '@joplin/lib/models/Setting';
+import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from './test-utils';
+import * as fs from 'fs-extra';
+import Logger from '@joplin/lib/Logger';
 
-const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
+async function loadSettingsFromFile(): Promise<any> {
+	return JSON.parse(await fs.readFile(Setting.settingFilePath, 'utf8'));
+}
 
 describe('models_Setting', function() {
 
@@ -127,4 +132,70 @@ describe('models_Setting', function() {
 
 		expect(Setting.sectionNameToLabel('mySection')).toBe('My section');
 	}));
+
+	it('should save and load settings from file', (async () => {
+		Setting.setValue('sync.target', 9); // Saved to file
+		Setting.setValue('encryption.passwordCache', {}); // Saved to keychain or db
+		Setting.setValue('plugins.states', { test: true }); // Always saved to db
+		await Setting.saveAll();
+
+		{
+			const settings = await loadSettingsFromFile();
+			expect(settings['sync.target']).toBe(9);
+			expect(settings).not.toContain('encryption.passwordCache');
+			expect(settings).not.toContain('plugins.states');
+		}
+
+		Setting.setValue('sync.target', 8);
+		await Setting.saveAll();
+
+		{
+			const settings = await loadSettingsFromFile();
+			expect(settings['sync.target']).toBe(8);
+		}
+	}));
+
+	it('should not save to file if nothing has changed', (async () => {
+		Setting.setValue('sync.target', 9);
+		await Setting.saveAll();
+
+		{
+			// Double-check that timestamp is indeed changed when the content is
+			// changed.
+			const beforeStat = await fs.stat(Setting.settingFilePath);
+			await msleep(1001);
+			Setting.setValue('sync.target', 8);
+			await Setting.saveAll();
+			const afterStat = await fs.stat(Setting.settingFilePath);
+			expect(afterStat.mtime.getTime()).toBeGreaterThan(beforeStat.mtime.getTime());
+		}
+
+		{
+			const beforeStat = await fs.stat(Setting.settingFilePath);
+			await msleep(1001);
+			Setting.setValue('sync.target', 8);
+			const afterStat = await fs.stat(Setting.settingFilePath);
+			await Setting.saveAll();
+			expect(afterStat.mtime.getTime()).toBe(beforeStat.mtime.getTime());
+		}
+	}));
+
+	it('should handle invalid JSON', (async () => {
+		const badContent = '{ oopsIforgotTheQuotes: true}';
+		await fs.writeFile(Setting.settingFilePath, badContent, 'utf8');
+		await Setting.reset();
+
+		Logger.globalLogger.enabled = false;
+		await Setting.load();
+		Logger.globalLogger.enabled = true;
+
+		// Invalid JSON file has been moved to .bak file
+		expect(await fs.pathExists(Setting.settingFilePath)).toBe(false);
+
+		const files = await fs.readdir(Setting.value('profileDir'));
+		expect(files.length).toBe(1);
+		expect(files[0].endsWith('.bak')).toBe(true);
+		expect(await fs.readFile(`${Setting.value('profileDir')}/${files[0]}`, 'utf8')).toBe(badContent);
+	}));
+
 });

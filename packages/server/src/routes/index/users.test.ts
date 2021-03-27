@@ -92,6 +92,15 @@ describe('index_users', function() {
 		expect(!!rootFile.id).toBe(true);
 	});
 
+	test('new user should be able to login', async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		await postUser(session.id, 'test@example.com', '123456');
+		const loggedInUser = await models().user().login('test@example.com', '123456');
+		expect(!!loggedInUser).toBe(true);
+		expect(loggedInUser.email).toBe('test@example.com');
+	});
+
 	test('should not create anything, neither user, root file nor permissions, if user creation fail', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 

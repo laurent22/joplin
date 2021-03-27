@@ -44,5 +44,5 @@ No
 ## TODO
 
 - [ ] Handle encrypted notes (shared notes will be unencrypted on server)
-- [ ] Move Joplin note rendererer to separate package and re-use it to render notes in the Nextcloud app
+- [ ] Move Joplin note renderer to separate package and re-use it to render notes in the Nextcloud app
 - [ ] Allow editing note in browser

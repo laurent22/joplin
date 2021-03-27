@@ -2,3 +2,5 @@
 github_username_cache.json
 patreon_oauth_token.txt
 *.po~
+*.mo
+*.mo~

@@ -215,6 +215,8 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 		display: table-cell;
 		display: flex;
 		width: 100%;
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -315,15 +317,10 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 		<ul>
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
-			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2021/index/" title="Google Summer of Code 2021">GSoC 2021</a></li>
 		</ul>
 		<div class="nav-right">
-			<!--
-				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
-			-->
-			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="115px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -383,10 +380,11 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 </ul>
 </li>
 <li>
-<p>Google Summer of Code 2020</p>
+<p>Google Summer of Code 2021</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2020/index/">Google Summer of Code 2020</a></li>
-<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/ideas/">Project Ideas</a></li>
 </ul>
 </li>
 <li>
@@ -403,7 +401,9 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 </div>
 
 	<div class="main">
-<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a></p>
+<!-- DONATELINKS -->
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+<!-- DONATELINKS -->
 <hr>
 <p><img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" /> <strong>Joplin</strong> is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="#markdown">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
@@ -423,19 +423,19 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.7.10/Joplin-Setup-1.7.10.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.7.11/Joplin-Setup-1.7.11.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.7.10/Joplin-1.7.10.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.7.11/Joplin-1.7.11.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.7.10/Joplin-1.7.10.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.7.11/Joplin-1.7.11.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
-<p><strong>On Windows</strong>, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v1.7.10/JoplinPortable.exe'>Portable version</a>. The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</p>
+<p><strong>On Windows</strong>, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v1.7.11/JoplinPortable.exe'>Portable version</a>. The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</p>
 <p><strong>On Linux</strong>, the recommended way is to use the following installation script as it will handle the desktop icon too:</p>
 <pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash</code></pre>
 <h2>Mobile applications<a name="mobile-applications" href="#mobile-applications" class="heading-anchor">🔗</a></h2>
@@ -451,7 +451,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a></td>
-<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.7.2/joplin-v1.7.2.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.7.2/joplin-v1.7.2-32bit.apk">32-bit</a></td>
+<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.7.5/joplin-v1.7.5.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.7.5/joplin-v1.7.5-32bit.apk">32-bit</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -533,7 +533,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 </tr>
 <tr>
 <td style="text-align:center"><img width="50" src="https://avatars.githubusercontent.com/u/5782817?s=96&v=4"/></br><a href="https://github.com/piccobit">piccobit</a></td>
-<td style="text-align:center"></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/37297218?s=96&v=4"/></br><a href="https://github.com/jesssullivan">Jess Sullivan</a></td>
 <td style="text-align:center"></td>
 </tr>
 </tbody>
@@ -639,6 +639,37 @@ Joplin is also capable of exporting to a number of other formats including HTML 
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
 <p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;OneDrive&quot; as the synchronisation target in the Configuration screen. Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
 <p>In the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).</p>
+<h2>AWS S3 synchronisation<a name="aws-s3-synchronisation" href="#aws-s3-synchronisation" class="heading-anchor">🔗</a></h2>
+<p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;AWS S3 (Beta)&quot; as the synchronisation target in the Configuration screen.</p>
+<ul>
+<li><strong>AWS S3 Bucket:</strong> The name of your Bucket, such as <code>joplin-bucket</code></li>
+<li><strong>AWS S3 URL:</strong> Fully qualified URL; By default this should be <code>https://s3.amazonaws.com/</code></li>
+<li><strong>AWS key &amp; AWS secret:</strong>  IAM user's programmatic access key.  To create a new key &amp; secret, visit <a href="https://console.aws.amazon.com/iam/home#/security_credentials">IAM Security Credentials</a>.</li>
+</ul>
+<p>While creating a new Bucket for Joplin, disable <strong>Bucket Versioning</strong>, enable <strong>Block all public access</strong> and enable <strong>Default encryption</strong> with <code>Amazon S3 key (SSE-S3)</code>.</p>
+<p>To add a <strong>Bucket Policy</strong> from the AWS S3 Web Console, navigate to the <strong>Permissions</strong> tab. Temporarily disable <strong>Block all public access</strong>  to edit the Bucket policy, something along the lines of:</p>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;VisualEditor0&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Principal&quot;: &quot;*&quot;,
+            &quot;Action&quot;: [
+                  &quot;s3:ListBucket&quot;,
+                  &quot;s3:GetBucketLocation&quot;,
+                  &quot;s3:DeleteObject&quot;,
+                  &quot;s3:DeleteObjectVersion&quot;,
+                  &quot;s3:PutObject&quot;
+            ]
+            &quot;Resource&quot;: [
+                &quot;arn:aws:s3:::joplin-bucket&quot;,
+                &quot;arn:aws:s3:::joplin-bucket/*&quot;
+            ]
+        }
+    ]
+}
+</code></pre>
 <h1>Encryption<a name="encryption" href="#encryption" class="heading-anchor">🔗</a></h1>
 <p>Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the <a href="https://joplinapp.org/e2ee/">End-To-End Encryption Tutorial</a> for more information about this feature and how to enable it.</p>
 <p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="https://joplinapp.org/spec/e2ee/">Encryption specification</a>.</p>
@@ -804,7 +835,7 @@ Details:
 </tr>
 <tr>
 <td><strong>notebook:</strong></td>
-<td>Restrict the search to the specified notebook(s). It cannot be negated.</td>
+<td>Restrict the search to the specified notebook(s).</td>
 <td><code>notebook:books</code> limits the search scope within <code>books</code> and all its subnotebooks.<br><code>notebook:wheel*time</code> does a wildcard search.</td>
 </tr>
 <tr>
@@ -951,8 +982,8 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/arableague.png" alt=""></td>
 <td>Arabic</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ar.po">ar</a></td>
-<td><a href="mailto:fi_ahmed_bacha@esi.dz">أحمد باشا إبراهيم</a></td>
-<td>73%</td>
+<td><a href="mailto:Whaell@protonmail.com">Whaell</a></td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/basque_country.png" alt=""></td>
@@ -966,14 +997,14 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Bosnian (Bosna i Hercegovina)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bs_BA.po">bs_BA</a></td>
 <td><a href="mailto:dervis.t@pm.me">Derviš T.</a></td>
-<td>75%</td>
+<td>76%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/bg.png" alt=""></td>
 <td>Bulgarian (България)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bg_BG.po">bg_BG</a></td>
 <td></td>
-<td>60%</td>
+<td>61%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/catalonia.png" alt=""></td>
@@ -986,15 +1017,15 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/hr.png" alt=""></td>
 <td>Croatian (Hrvatska)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hr_HR.po">hr_HR</a></td>
-<td><a href="mailto:trbuhom@net.hr">Hrvoje Mandić</a></td>
-<td>25%</td>
+<td><a href="mailto:mail@milotype.de">Milo Ivir</a></td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cz.png" alt=""></td>
 <td>Czech (Česká republika)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/cs_CZ.po">cs_CZ</a></td>
 <td><a href="mailto:lukas@aiya.cz">Lukas Helebrandt</a></td>
-<td>91%</td>
+<td>90%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/dk.png" alt=""></td>
@@ -1036,7 +1067,7 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Español (España)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/es_ES.po">es_ES</a></td>
 <td><a href="mailto:mario.campo@gmail.com">Mario Campo</a></td>
-<td>96%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/esperanto.png" alt=""></td>
@@ -1064,7 +1095,7 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Galician (España)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/gl_ES.po">gl_ES</a></td>
 <td><a href="mailto:marcoslansgarza@gmail.com">Marcos Lans</a></td>
-<td>39%</td>
+<td>40%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/id.png" alt=""></td>
@@ -1081,11 +1112,18 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>94%</td>
 </tr>
 <tr>
+<td><img src="https://joplinapp.org/images/flags/country-4x3/hu.png" alt=""></td>
+<td>Magyar (Magyarország)</td>
+<td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hu_HU.po">hu_HU</a></td>
+<td><a href="mailto:mail@szokesandor.hu">Szőke Sándor</a></td>
+<td>93%</td>
+</tr>
+<tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/be.png" alt=""></td>
 <td>Nederlands (België, Belgique, Belgien)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>31%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/nl.png" alt=""></td>
@@ -1112,22 +1150,22 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pl.png" alt=""></td>
 <td>Polski (Polska)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pl_PL.po">pl_PL</a></td>
-<td></td>
-<td>90%</td>
+<td><a href="mailto:hello.konhi@gmail.com">konhi</a></td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_BR.po">pt_BR</a></td>
-<td><a href="mailto:rnbastos@gmail.com">Renato Nunes Bastos</a></td>
-<td>97%</td>
+<td><a href="mailto:nicolas.suzuki@pm.me">Nicolas Suzuki</a></td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pt.png" alt=""></td>
 <td>Português (Portugal)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_PT.po">pt_PT</a></td>
-<td><a href="mailto:jduar@protonmail.com">João Duarte</a></td>
-<td>90%</td>
+<td><a href="mailto:dcaveiro@yahoo.com">Diogo Caveiro</a></td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ro.png" alt=""></td>
@@ -1148,7 +1186,7 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Svenska</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sv.po">sv</a></td>
 <td><a href="mailto:jonatan@autistici.org">Jonatan Nyberg</a></td>
-<td>64%</td>
+<td>65%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/th.png" alt=""></td>
@@ -1169,7 +1207,14 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Türkçe (Türkiye)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/tr_TR.po">tr_TR</a></td>
 <td><a href="mailto:arda@kilicdagi.com">Arda Kılıçdağı</a></td>
-<td>97%</td>
+<td>99%</td>
+</tr>
+<tr>
+<td><img src="https://joplinapp.org/images/flags/country-4x3/ua.png" alt=""></td>
+<td>Ukrainian (Україна)</td>
+<td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/uk_UA.po">uk_UA</a></td>
+<td><a href="mailto:vandreykiv@gmail.com">Vyacheslav Andreykiv</a></td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gr.png" alt=""></td>
@@ -1183,21 +1228,21 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Русский (Россия)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ru_RU.po">ru_RU</a></td>
 <td><a href="mailto:thesermanarm@gmail.com">Sergey Segeda</a></td>
-<td>94%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/rs.png" alt=""></td>
 <td>српски језик (Србија)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sr_RS.po">sr_RS</a></td>
 <td></td>
-<td>67%</td>
+<td>75%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_CN.po">zh_CN</a></td>
-<td><a href="mailto:fungdaat31@outlook.com">WhiredPlanck</a></td>
-<td>97%</td>
+<td><a href="mailto:zyangmath@gmail.com">Yang Zhang</a></td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tw.png" alt=""></td>
@@ -1211,14 +1256,14 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>日本語 (日本)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ja_JP.po">ja_JP</a></td>
 <td><a href="mailto:genneko217@gmail.com">genneko</a></td>
-<td>97%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/kr.png" alt=""></td>
 <td>한국어</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ko.po">ko</a></td>
 <td><a href="mailto:potatogim@potatogim.net">Ji-Hyeon Gim</a></td>
-<td>97%</td>
+<td>100%</td>
 </tr>
 </tbody>
 </table>
@@ -1589,13 +1634,6 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 			$('.nav').removeClass('sticky');
 		}
 	}
-
-	$('#toc').hide();
-
-	$('.help').click(function(event) {
-		event.preventDefault();
-		$('#toc').show();
-	});
 
 	$(window).scroll(function() {
 		stickyHeader();

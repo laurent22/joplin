@@ -76,11 +76,12 @@ export default class JoplinWorkspace {
 	}
 
 	/**
-	 * Called when the content of a note changes.
+	 * Called when the content of the current note changes.
 	 */
 	public async onNoteChange(handler: ItemChangeHandler): Promise<Disposable> {
 		const wrapperHandler = (event: any) => {
 			if (event.itemType !== ModelType.Note) return;
+			if (!this.store.getState().selectedNoteIds.includes(event.itemId)) return;
 
 			handler({
 				id: event.itemId,

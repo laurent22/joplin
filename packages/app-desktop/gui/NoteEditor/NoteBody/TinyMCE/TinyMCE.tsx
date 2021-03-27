@@ -18,6 +18,7 @@ const { MarkupToHtml } = require('@joplin/renderer');
 const taboverride = require('taboverride');
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
+import setupToolbarButtons from './utils/setupToolbarButtons';
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -447,12 +448,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox .tox-button--naked:hover:not(:disabled) {
 				background-color: ${theme.backgroundColor} !important;
 			}
-
+			
+			.tox .tox-tbtn:focus {
+				background-color: ${theme.backgroundColor3}
+			}
+			
 			.tox .tox-tbtn:hover {
 				color: ${theme.colorHover3} !important;
 				fill: ${theme.colorHover3} !important;
 				background-color: ${theme.backgroundColorHover3}
-			}
+			}			
+			
 
 			.tox .tox-tbtn {
 				width: ${theme.toolbarHeight}px;
@@ -538,7 +544,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			const toolbarPluginButtons = pluginCommandNames.length ? ` | ${pluginCommandNames.join(' ')}` : '';
 
 			const toolbar = [
-				'bold', 'italic', '|',
+				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
 				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
@@ -566,6 +572,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				localization_function: _,
 				contextmenu: false,
 				browser_spellcheck: true,
+				formats: {
+					joplinHighlight: { inline: 'mark', remove: 'all' },
+					joplinStrikethrough: { inline: 's', remove: 'all' },
+					joplinInsert: { inline: 'ins', remove: 'all' },
+					joplinSub: { inline: 'sub', remove: 'all' },
+					joplinSup: { inline: 'sup', remove: 'all' },
+				},
 				setup: (editor: any) => {
 
 					function openEditDialog(editable: any) {
@@ -638,6 +651,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 							insertResourcesIntoContentRef.current();
 						},
 					});
+
+					setupToolbarButtons(editor);
 
 					editor.ui.registry.addButton('joplinCodeBlock', {
 						tooltip: _('Code Block'),

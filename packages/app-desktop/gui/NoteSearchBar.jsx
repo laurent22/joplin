@@ -111,6 +111,7 @@ class NoteSearchBarComponent extends React.Component {
 
 	focus() {
 		this.refs.searchInput.focus();
+		this.refs.searchInput.select();
 	}
 
 	render() {

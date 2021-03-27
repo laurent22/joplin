@@ -91,12 +91,12 @@ class Registry {
 				this.scheduleSyncId_ = null;
 			}
 
-			this.logger().debug('Scheduling sync operation...', delay);
-
 			if (Setting.value('env') === 'dev' && delay !== 0) {
 				this.logger().info('Schedule sync DISABLED!!!');
 				return;
 			}
+
+			this.logger().debug('Scheduling sync operation...', delay);
 
 			const timeoutCallback = async () => {
 				this.timerCallbackCalls_.push(true);

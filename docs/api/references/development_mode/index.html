@@ -215,6 +215,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 		display: table-cell;
 		display: flex;
 		width: 100%;
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -315,15 +317,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 		<ul>
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
-			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2021/index/" title="Google Summer of Code 2021">GSoC 2021</a></li>
 		</ul>
 		<div class="nav-right">
-			<!--
-				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
-			-->
-			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="115px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -383,10 +380,11 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 </ul>
 </li>
 <li>
-<p>Google Summer of Code 2020</p>
+<p>Google Summer of Code 2021</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2020/index/">Google Summer of Code 2020</a></li>
-<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/ideas/">Project Ideas</a></li>
 </ul>
 </li>
 <li>
@@ -403,9 +401,11 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 </div>
 
 	<div class="main">
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+<hr>
 <h1>Development mode<a name="development-mode" href="#development-mode" class="heading-anchor">🔗</a></h1>
-<p>When experimenting with Joplin, for example when developing a plugin or trying a theme, you might want to run Joplin in development mode. Doing so means that Joplin will run using a different profile, so you can experiment without risking to accidentally change or delete your data.</p>
-<p>To enable Development Mode, open Joplin as normal, then go to <strong>Help =&gt; Copy dev mode command to clipboard</strong>. This will copy a command to the clipboard. Now close Joplin, and start it again in dev mode using the command you've just copied.</p>
+<p>When experimenting with Joplin, for example when <a href="https://joplinapp.org/api/get_started/plugins/">developing a plugin</a> or trying a theme, you might want to run Joplin in development mode. Doing this will open a second copy of Joplin using a different profile with test notes and notebooks, so you can experiment without risking changing or deleting your data.</p>
+<p>To enable Development Mode, go to <strong>Help &gt; Copy dev mode command to clipboard</strong>. This will copy a command to your clipboard. Paste this command in a shell / terminal to run a development version of the app.</p>
 
 		<div class="bottom-links">
 			<a href="https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_mode.md">
@@ -422,13 +422,6 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_m
 			$('.nav').removeClass('sticky');
 		}
 	}
-
-	$('#toc').hide();
-
-	$('.help').click(function(event) {
-		event.preventDefault();
-		$('#toc').show();
-	});
 
 	$(window).scroll(function() {
 		stickyHeader();

@@ -220,6 +220,8 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		display: table-cell;
 		display: flex;
 		width: 100%;
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -320,15 +322,10 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		<ul>
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
-			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2021/index/" title="Google Summer of Code 2021">GSoC 2021</a></li>
 		</ul>
 		<div class="nav-right">
-			<!--
-				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
-			-->
-			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="115px" height="20px"></iframe>
 		</div>
 	</div>
 </div>
@@ -397,13 +394,6 @@ const scriptHtml = `
 			$('.nav').removeClass('sticky');
 		}
 	}
-
-	$('#toc').hide();
-
-	$('.help').click(function(event) {
-		event.preventDefault();
-		$('#toc').show();
-	});
 
 	$(window).scroll(function() {
 		stickyHeader();
@@ -539,6 +529,16 @@ function tocMd() {
 	return tocMd_;
 }
 
+const donateLinksRegex_ = /<!-- DONATELINKS -->([^]*)<!-- DONATELINKS -->/;
+async function getDonateLinks() {
+	const md = await fs.readFile(`${rootDir}/README.md`, 'utf8');
+	const matches = md.match(donateLinksRegex_, '');
+
+	if (!matches) throw new Error('Cannot fetch donate links');
+
+	return matches[1].trim();
+}
+
 function replaceGitHubByJoplinAppLinks(md) {
 	// let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
 	return md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
@@ -574,6 +574,10 @@ function renderMdToHtml(md, targetPath, templateParams) {
 	}
 
 	md = replaceGitHubByJoplinAppLinks(md);
+
+	if (templateParams.donateLinksMd) {
+		md = `${templateParams.donateLinksMd}\n\n* * *\n\n${md}`;
+	}
 
 	templateParams.pageTitle = title.join(' | ');
 	const html = markdownToHtml(md, templateParams);
@@ -624,11 +628,15 @@ async function main() {
 	}).map(f => f.substr(rootDir.length + 1));
 
 	const sources = [];
+	const donateLinksMd = await getDonateLinks();
 
 	for (const mdFile of mdFiles) {
 		const title = await readmeFileTitle(`${rootDir}/${mdFile}`);
 		const targetFilePath = `${mdFile.replace(/\.md/, '').replace(/readme\//, 'docs/')}/index.html`;
-		sources.push([mdFile, targetFilePath, { title: title }]);
+		sources.push([mdFile, targetFilePath, {
+			title: title,
+			donateLinksMd: donateLinksMd,
+		}]);
 	}
 
 	const path = require('path');
