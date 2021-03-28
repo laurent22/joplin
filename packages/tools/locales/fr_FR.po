@@ -1,5 +1,4 @@
- 
-# SOME DESCRIPTIVE TITLE.
+ # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -78,7 +77,7 @@ msgstr ""
 #: packages/app-desktop/plugins/GotoAnything.js:456
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
-msgstr "aller n'importe ou... "
+msgstr "Aller n'importe ou..."
 
 #: packages/app-desktop/plugins/GotoAnything.js:463
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
@@ -113,12 +112,12 @@ msgstr ""
 #: packages/app-desktop/checkForUpdates.js:153
 #, javascript-format
 msgid "Your version: %s"
-msgstr "Votre version : %s"
+msgstr "Votre version: %s"
 
 #: packages/app-desktop/checkForUpdates.js:153
 #, javascript-format
 msgid "New version: %s"
-msgstr "Nouvelle version : %s"
+msgstr "Nouvelle version: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Download"
@@ -141,7 +140,7 @@ msgstr "Cette note n'a pas d'historique"
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:122
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "Lien ou message non supporté : %s"
+msgstr "Lien ou message non supporté: %s"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
@@ -195,11 +194,11 @@ msgstr "Supprimer"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:184
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Retirer l’étiquette \"%s\" de toutes les notes ?"
+msgstr "Retirer l’étiquette \"%s\" de toutes les notes?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:187
 msgid "Remove this search from the sidebar?"
-msgstr "Enlever cette recherche de la barre latérale ?"
+msgstr "Enlever cette recherche de la barre latérale?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:238
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
@@ -236,13 +235,13 @@ msgstr "Étiquettes"
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Déchiffrement des objets : %d/%d"
+msgstr "Déchiffrement des objets: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:482
 #: packages/app-mobile/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Rapporter les ressources : %d/%d"
+msgstr "Rapporter les ressources: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:17
 msgid "Sidebar"
@@ -254,7 +253,7 @@ msgstr "Barre latérale"
 #: packages/app-desktop/gui/MenuBar.js:614
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
 msgid "Focus"
-msgstr "Concentrer "
+msgstr "Concentrer"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
 msgid "Please select where the sync status should be exported to"
@@ -281,7 +280,7 @@ msgstr "texte en italique"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:181
 msgid "Insert Hyperlink"
-msgstr "Insérer hyperlien "
+msgstr "Insérer hyperlien"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:215
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:217
@@ -329,7 +328,7 @@ msgstr "Liste de cases à cocher"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1013
 msgid "Edit"
-msgstr "Modifier "
+msgstr "Modifier"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
@@ -356,7 +355,7 @@ msgstr "Déposez des notes ou fichiers ici"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 msgid "Code View"
-msgstr "Vu du code "
+msgstr "Vu du code"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
 #, javascript-format
@@ -370,12 +369,12 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
 msgid "There was an error downloading this attachment:"
-msgstr "Il y a eu une erreur lors du téléchargement de ce fichier :"
+msgstr "Il y a eu une erreur lors du téléchargement de ce fichier:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:77
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Ce fichier n'a pas encore été téléchargé ou déchiffré "
+msgstr "Ce fichier n'a pas encore été téléchargé ou déchiffré"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:55
 msgid "Open..."
@@ -428,7 +427,7 @@ msgstr "En savoir plus"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr "Rejeter "
+msgstr "Rejeter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
@@ -588,7 +587,7 @@ msgstr "Propriétés de la note"
 #: packages/lib/services/KeymapService.js:176
 #, javascript-format
 msgid "Error: %s"
-msgstr "Erreur : %s"
+msgstr "Erreur: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -747,7 +746,7 @@ msgstr "Renommer"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
 msgid "Rename notebook:"
-msgstr "Renommer le carnet :"
+msgstr "Renommer le carnet:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
 #: packages/app-mobile/components/action-button.js:77
@@ -771,7 +770,7 @@ msgstr "Régler l'alarme"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
 msgid "Set alarm:"
-msgstr "Régler l' alarme :"
+msgstr "Régler l'alarme :"
 
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
@@ -790,7 +789,7 @@ msgstr "Déplacer vers le carnet"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
 msgid "Move to notebook:"
-msgstr "Déplacer vers le carnet :"
+msgstr "Déplacer vers le carnet:"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
@@ -806,7 +805,7 @@ msgstr "Changer la disposition de l'interface"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
-msgstr "Renommer l'étiquette :"
+msgstr "Renommer l'étiquette:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
 msgid "New notebook"
@@ -814,7 +813,7 @@ msgstr "Nouveau carnet"
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
 msgid "Notebook title:"
-msgstr "Titre du carnet :"
+msgstr "Titre du carnet:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -831,11 +830,11 @@ msgstr "Nouveau sous-carnet"
 
 #: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
 msgid "Template file:"
-msgstr "Fichier de modèle :"
+msgstr "Fichier de modèle:"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:45
 msgid "Add or remove tags:"
-msgstr "Ajouter ou supprimer les étiquettes :"
+msgstr "Ajouter ou supprimer les étiquettes:"
 
 #: packages/app-desktop/gui/MainScreen/commands/print.js:17
 msgid "Print"
@@ -866,7 +865,7 @@ msgstr ""
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 #: packages/app-cli/app/command-sync.js:93
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "Étape 2 : Entrez le code fourni par Dropbox :"
+msgstr "Étape 2 : Entrez le code fourni par Dropbox:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:35
 #: packages/app-mobile/components/screens/dropbox-login.js:68
@@ -875,7 +874,7 @@ msgstr "Envoyer"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
-msgstr "Le jeton a été copié dans le presse-papiers !"
+msgstr "Le jeton a été copié dans le presse-papiers!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:71
 msgid "The web clipper service is enabled and set to auto-start."
@@ -913,7 +912,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:129
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "Pour utiliser le Web Clipper, veuillez suivre ces instructions :"
+msgstr "Pour utiliser le Web Clipper, veuillez suivre ces instructions:"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 msgid "Step 1: Enable the clipper service"
@@ -1084,7 +1083,7 @@ msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr "L'obtenir maintenant :"
+msgstr "L'obtenir maintenant:"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:61
 #, javascript-format
@@ -1110,7 +1109,7 @@ msgstr "Créés : %d."
 #: packages/app-cli/app/command-import.js:49
 #, javascript-format
 msgid "Updated: %d."
-msgstr "Mis à jour : %d."
+msgstr "Mis à jour: %d."
 
 #: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-cli/app/command-import.js:50
@@ -1122,19 +1121,19 @@ msgstr "Ignorés : %d."
 #: packages/app-cli/app/command-import.js:51
 #, javascript-format
 msgid "Resources: %d."
-msgstr "Ressources : %d."
+msgstr "Ressources: %d."
 
 #: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-cli/app/command-import.js:52
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Étiquettes : %d."
+msgstr "Étiquettes: %d."
 
 #: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-cli/app/command-import.js:70
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr "Les notes ont été importées : %s"
+msgstr "Les notes ont été importées: %s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:44
 msgid "Duplicate"
@@ -1170,7 +1169,7 @@ msgstr "Supprimer note \"%s\" ?"
 #: packages/app-desktop/gui/utils/NoteListUtils.js:166
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Supprimer ces %d notes ?"
+msgstr "Supprimer ces %d notes?"
 
 #: packages/app-desktop/gui/OneDriveLoginScreen.js:46
 #: packages/app-cli/app/command-sync.js:81
@@ -1178,7 +1177,7 @@ msgstr "Supprimer ces %d notes ?"
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr ""
-"L'identification n'a pas été terminée  (jeton d'identification non-reçu)."
+"L'identification n'a pas été terminée (jeton d'identification non-reçu)."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
@@ -1267,7 +1266,7 @@ msgid ""
 msgstr ""
 "Désactiver le chiffrement signifie que *toutes* les notes et fichiers vont "
 "être resynchronisés et envoyés déchiffrés sur la cible de  synchronisation. "
-"Souhaitez vous continuer ?"
+"Souhaitez vous continuer?"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
@@ -1338,7 +1337,7 @@ msgid ""
 msgstr ""
 "Les clefs maître et leurs  identifiants sont utilisées pour chiffrer "
 "certains de vos objets, cependant l'application  n'y a pour l'instant pas "
-"accès. Il est probable qu'elle vont être prochainement téléchargées  via la "
+"accès. Il est probable qu'elle vont être prochainement téléchargées via la "
 "synchronisation."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
@@ -1348,7 +1347,7 @@ msgid ""
 "enable it please check the documentation:"
 msgstr ""
 "Pour plus d'informations sur le chiffrement de bout en bout, ainsi que des "
-"conseils pour l'activer, veuillez consulter la documentation :"
+"conseils pour l'activer, veuillez consulter la documentation:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-mobile/components/screens/encryption-config.js:279
@@ -1358,7 +1357,7 @@ msgstr "État"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
 msgid "Encryption is:"
-msgstr "Le chiffrement est :"
+msgstr "Le chiffrement est:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
@@ -1438,17 +1437,16 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Supprimer plugin \"%s\" ?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
-#, fuzzy
 msgid "Browse all plugins"
 msgstr "Installer un plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr "Installer à partir du fichier "
+msgstr "Installer à partir du fichier"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr "Vous n'avez aucun module installé"
+msgstr "Vous n'avez aucun module installé."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
 msgid "Plugin tools"
@@ -1456,11 +1454,11 @@ msgstr "Outils de modules"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr "Gérer vos modules "
+msgstr "Gérer vos modules"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 msgid "No results"
-msgstr "Aucun résultat "
+msgstr "Aucun résultat"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 msgid "Search for plugins..."
@@ -1479,7 +1477,6 @@ msgid "Installed"
 msgstr "Installé"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
-#, fuzzy
 msgid "Update"
 msgstr "Mis à jour"
 
@@ -1531,7 +1528,7 @@ msgstr "Éditeur"
 #: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
 #: packages/lib/models/Setting.js:487
 msgid "Viewer"
-msgstr "Téléspectateur "
+msgstr "Téléspectateur"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
@@ -1676,7 +1673,7 @@ msgstr "Basculer l'édition externe"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr "Arrêter "
+msgstr "Arrêter"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
 msgid "Copy dev mode command to clipboard"
@@ -1814,7 +1811,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
-msgstr "Nouvelles étiquettes :"
+msgstr "Nouvelles étiquettes:"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:178
 msgid "Type new tags or select from list"
@@ -1842,7 +1839,7 @@ msgstr "Créé : %s"
 #: packages/app-mobile/components/screens/encryption-config.js:122
 #: packages/app-mobile/components/screens/encryption-config.js:151
 msgid "Password:"
-msgstr "Mot de passe :"
+msgstr "Mot de passe:"
 
 #: packages/app-mobile/components/screens/encryption-config.js:137
 msgid "Password cannot be empty"
@@ -1855,12 +1852,12 @@ msgstr "Le mot de passe de confirmation ne peut être vide"
 #: packages/app-mobile/components/screens/encryption-config.js:140
 #: packages/app-cli/app/command-e2ee.js:85
 msgid "Passwords do not match!"
-msgstr "Les mots de passe ne correspondent pas !"
+msgstr "Les mots de passe ne correspondent pas!"
 
 #: packages/app-mobile/components/screens/encryption-config.js:163
 #: packages/app-cli/app/command-e2ee.js:79
 msgid "Confirm password:"
-msgstr "Confirmer le mot de passe :"
+msgstr "Confirmer le mot de passe:"
 
 #: packages/app-mobile/components/screens/encryption-config.js:177
 msgid "Enable"
@@ -1875,7 +1872,7 @@ msgstr "Config chiffrement"
 #: packages/app-cli/app/command-e2ee.js:110
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr "Le chiffrement est : %s"
+msgstr "Le chiffrement est: %s"
 
 #: packages/app-mobile/components/screens/config.js:50
 msgid "Warning"
@@ -2001,13 +1998,13 @@ msgstr "Aucun objet avec identifiant %s"
 
 #: packages/app-mobile/components/screens/Note.js:168
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Cette pièce jointe n'a pas  encore été  téléchargé ou déchiffré"
+msgstr "Cette pièce jointe n'a pas encore été  téléchargé ou déchiffré."
 
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
-"L'application mobile Joplin ne soutient pas pour l'instant ce type de lien : "
+"L'application mobile Joplin ne soutient pas pour l'instant ce type de lien: "
 "%s"
 
 #: packages/app-mobile/components/screens/Note.js:178
@@ -2033,7 +2030,7 @@ msgstr "Permission requise"
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
 msgid "Delete note?"
-msgstr "Supprimer la note ?"
+msgstr "Supprimer la note?"
 
 #: packages/app-mobile/components/screens/Note.js:503
 #: packages/lib/shim-init-node.js:147
@@ -2048,12 +2045,12 @@ msgstr ""
 #: packages/app-mobile/components/screens/Note.js:585
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr "Type d'image non soutenu : %s"
+msgstr "Type d'image non soutenu: %s"
 
 #: packages/app-mobile/components/screens/Note.js:725
 #, javascript-format
 msgid "Updated: %s"
-msgstr "Mis à jour : %s"
+msgstr "Mis à jour: %s"
 
 #: packages/app-mobile/components/screens/Note.js:728
 msgid "View on map"
@@ -2126,7 +2123,7 @@ msgstr "Le logiciel a été autorisé. Vous pouvez maintenant fermer cet onglet.
 
 #: packages/lib/onedrive-api-node-utils.js:88
 msgid "The application has been successfully authorised."
-msgstr "L'application a été autorisé avec succès ."
+msgstr "L'application a été autorisé avec succès."
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2140,7 +2137,7 @@ msgstr ""
 "le logiciel. Joplin va créer un dossier \"Apps/Joplin\" et lire/écrira des "
 "fichiers uniquement dans ce répertoire. Le logiciel n'aura  accès à aucun "
 "fichier en dehors de ce dossier , ni à d'autres données personnelles. Aucune "
-"donnée ne sera partagé avec une tiers  partie ."
+"donnée ne sera partagé avec une tiers  partie."
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
@@ -2295,7 +2292,7 @@ msgstr "AWS : Secret"
 
 #: packages/lib/models/Setting.js:293
 msgid "Joplin Server URL"
-msgstr "Serveur Joplin   URL"
+msgstr "Serveur Joplin URL"
 
 #: packages/lib/models/Setting.js:308
 msgid "Joplin Server Directory"
@@ -2307,7 +2304,7 @@ msgstr "Serveur Joplin  non d' utilisateur"
 
 #: packages/lib/models/Setting.js:330
 msgid "Joplin Server password"
-msgstr "Serveur Joplin   Mot de passe"
+msgstr "Serveur Joplin Mot de passe"
 
 #: packages/lib/models/Setting.js:342
 msgid "Attachment download behaviour"
@@ -2354,7 +2351,7 @@ msgstr "Format de l'heure"
 
 #: packages/lib/models/Setting.js:429
 msgid "Theme"
-msgstr "Thème  "
+msgstr "Thème"
 
 #: packages/lib/models/Setting.js:440
 msgid "Automatically switch theme to match system theme"
@@ -2414,7 +2411,7 @@ msgstr "Enregistrer les informations de géolocalisation des notes"
 
 #: packages/lib/models/Setting.js:563
 msgid "When creating a new to-do:"
-msgstr "Lors de la création d'une tâche :"
+msgstr "Lors de la création d'une tâche:"
 
 #: packages/lib/models/Setting.js:566 packages/lib/models/Setting.js:582
 msgid "Focus title"
@@ -2426,11 +2423,11 @@ msgstr "Curseur sur corps du message"
 
 #: packages/lib/models/Setting.js:579
 msgid "When creating a new note:"
-msgstr "Lors de la création d'une nouvelle  note :"
+msgstr "Lors de la création d'une nouvelle note :"
 
 #: packages/lib/models/Setting.js:612
 msgid "Enable soft breaks"
-msgstr "Activer le  retour à la ligne "
+msgstr "Activer le retour à la ligne"
 
 #: packages/lib/models/Setting.js:613
 msgid "Enable typographer support"
@@ -2747,7 +2744,7 @@ msgstr "Facteur de croissance de la zone de la note"
 #: packages/lib/models/Setting.js:1115
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Valeur de l'option invalide: \"%s\". Les valeurs possibles sont : %s."
+msgstr "Valeur de l'option invalide: \"%s\". Les valeurs possibles sont: %s."
 
 #: packages/lib/models/Setting.js:1514
 msgid "General"
@@ -2808,7 +2805,7 @@ msgstr ""
 #: packages/lib/models/Setting.js:1543
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr "Les notes et paramètres se trouve dans : %s"
+msgstr "Les notes et paramètres se trouve dans: %s"
 
 #: packages/lib/models/Resource.js:352
 msgid "Not downloaded"
@@ -2829,7 +2826,7 @@ msgstr "Erreur"
 #: packages/lib/models/Resource.js:403
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "Conflit de fichier joint : \"%s\""
+msgstr "Conflit de fichier joint: \"%s\""
 
 #: packages/lib/models/Resource.js:404
 #, javascript-format
@@ -2881,12 +2878,12 @@ msgstr "Les objets chiffrés ne peuvent être modifiés"
 #: packages/lib/BaseApplication.js:193
 #, javascript-format
 msgid "Usage: %s"
-msgstr "Utilisation : %s"
+msgstr "Utilisation: %s"
 
 #: packages/lib/BaseApplication.js:228
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr "Paramètre inconnu : %s"
+msgstr "Paramètre inconnu: %s"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -2907,11 +2904,11 @@ msgid ""
 msgstr ""
 "Erreur. Veuillez vérifier que l'URL, le nom, le mot de passe, etc. sont "
 "corrects et que la cible de synchronisation  est accessible. L'erreur "
-"reportée est :"
+"reportée est:"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
-msgstr "Le logiciel a été autorisé !"
+msgstr "Le logiciel a été autorisé!"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 #, javascript-format
@@ -2922,7 +2919,7 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
-"Impossible d'autoriser le logiciel :\n"
+"Impossible d'autoriser le logiciel:\n"
 "\n"
 "%s\n"
 "\n"
@@ -2949,12 +2946,12 @@ msgstr ""
 
 #: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
-msgstr "La clef maître a été mise à niveau avec succès !"
+msgstr "La clef maître a été mise à niveau avec succès!"
 
 #: packages/lib/components/shared/encryption-config-shared.js:60
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "Impossible de mettre la clef à niveau : %s"
+msgstr "Impossible de mettre la clef à niveau: %s"
 
 #: packages/lib/components/shared/encryption-config-shared.js:116
 #, javascript-format
@@ -2973,7 +2970,7 @@ msgstr ""
 #: packages/lib/Synchronizer.js:119
 #, javascript-format
 msgid "Created local items: %d."
-msgstr "Objets créés localement : %d."
+msgstr "Objets créés localement: %d."
 
 #: packages/lib/Synchronizer.js:121
 #, javascript-format
@@ -2993,17 +2990,17 @@ msgstr "Objets distants mis à jour : %d."
 #: packages/lib/Synchronizer.js:127
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr "Objets supprimés localement : %d."
+msgstr "Objets supprimés localement: %d."
 
 #: packages/lib/Synchronizer.js:129
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr "Objets distants supprimés : %d."
+msgstr "Objets distants supprimés: %d."
 
 #: packages/lib/Synchronizer.js:131
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr "Eléments récupérés  : %d/%d."
+msgstr "Eléments récupérés: %d/%d."
 
 #: packages/lib/Synchronizer.js:133
 msgid "Cancelling..."
@@ -3012,16 +3009,16 @@ msgstr "Annulation..."
 #: packages/lib/Synchronizer.js:135
 #, javascript-format
 msgid "Completed: %s"
-msgstr "Terminé : %s"
+msgstr "Terminé: %s"
 
 #: packages/lib/Synchronizer.js:137
 #, javascript-format
 msgid "Last error: %s"
-msgstr "Dernière erreur : %s"
+msgstr "Dernière erreur: %s"
 
 #: packages/lib/Synchronizer.js:244
 msgid "Idle"
-msgstr "Inactif "
+msgstr "Inactif"
 
 #: packages/lib/Synchronizer.js:246
 msgid "In progress"
@@ -3041,7 +3038,7 @@ msgid ""
 "%s"
 msgstr ""
 "Impossible de se connecter au serveur de Joplin . Veuillez vérifier la "
-"synchronisation  L'erreur complète était :\n"
+"synchronisation  L'erreur complète était:\n"
 "\n"
 "%s"
 
@@ -3064,7 +3061,7 @@ msgstr "Vers l'avant"
 #: packages/lib/versionInfo.js:10
 #, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "Révision : %s (%s)"
+msgstr "Révision: %s (%s)"
 
 #: packages/lib/versionInfo.js:20
 #, javascript-format
@@ -3074,22 +3071,22 @@ msgstr "%s %s (%s, %s)"
 #: packages/lib/versionInfo.js:22
 #, javascript-format
 msgid "Client ID: %s"
-msgstr "Identifiant du  client : %s"
+msgstr "Identifiant du  client: %s"
 
 #: packages/lib/versionInfo.js:23
 #, javascript-format
 msgid "Sync Version: %s"
-msgstr "Version de Synchronisation : %s"
+msgstr "Version de Synchronisation: %s"
 
 #: packages/lib/versionInfo.js:24
 #, javascript-format
 msgid "Profile Version: %s"
-msgstr "Version du profil : %s"
+msgstr "Version du profil: %s"
 
 #: packages/lib/versionInfo.js:25
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr "Trousseau supporté : %s"
+msgstr "Trousseau supporté: %s"
 
 #: packages/lib/services/RevisionService.js:217
 msgid "Restored Notes"
@@ -3135,7 +3132,7 @@ msgstr "Fichier HTML"
 
 #: packages/lib/services/interop/InteropService.js:61
 msgid "HTML Directory"
-msgstr "Dossier   HTML"
+msgstr "Dossier HTML"
 
 #: packages/lib/services/interop/InteropService.js:127
 #, javascript-format
@@ -3236,12 +3233,12 @@ msgstr ""
 #: packages/lib/services/ReportService.js:129
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) n'a pas pu être téléversé : %s"
+msgstr "%s (%s) n'a pas pu être téléversé: %s"
 
 #: packages/lib/services/ReportService.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "L'objet \"%s\" n'a pas pu être téléchargé : %s"
+msgstr "L'objet \"%s\" n'a pas pu être téléchargé: %s"
 
 #: packages/lib/services/ReportService.js:139
 msgid "Items that cannot be decrypted"
@@ -3294,7 +3291,7 @@ msgstr "Fichiers qui n'ont pas pu être téléchargé"
 #: packages/lib/services/ReportService.js:195
 #, javascript-format
 msgid "%s (%s): %s"
-msgstr "%s (%s) : %s"
+msgstr "%s (%s): %s"
 
 #: packages/lib/services/ReportService.js:206
 msgid "Sync status (synced items / total items)"
@@ -3327,7 +3324,7 @@ msgstr "Carnets"
 #: packages/lib/services/ReportService.js:223
 #, javascript-format
 msgid "%s: %d notes"
-msgstr "%s : %d notes"
+msgstr "%s: %d notes"
 
 #: packages/lib/services/ReportService.js:228
 msgid "Coming alarms"
@@ -3336,7 +3333,7 @@ msgstr "Alarmes à venir"
 #: packages/lib/services/ReportService.js:232
 #, javascript-format
 msgid "On %s: %s"
-msgstr "Le %s  : %s"
+msgstr "Le %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
@@ -3360,7 +3357,7 @@ msgid ""
 "specified the note is duplicated in the current notebook."
 msgstr ""
 "Copier les notes correspondantes  à <nom> vers [carnet]. Si aucun carnet "
-"n'est spécifié, la note est dupliquée dans le carnet actuel ."
+"n'est spécifié, la note est dupliquée dans le carnet actuel."
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
@@ -3381,7 +3378,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-ls.js:29
 msgid "Reverses the sorting order."
-msgstr "Inverser l'ordre du tri ."
+msgstr "Inverser l'ordre du tri."
 
 #: packages/app-cli/app/command-ls.js:30
 msgid ""
@@ -3416,7 +3413,7 @@ msgstr "Importer des données dans Joplin."
 #: packages/app-cli/app/command-import.js:25
 #, javascript-format
 msgid "Source format: %s"
-msgstr "Format de la source : %s"
+msgstr "Format de la source: %s"
 
 #: packages/app-cli/app/command-import.js:26
 msgid "Do not ask for confirmation."
@@ -3425,7 +3422,7 @@ msgstr "Ne pas demander de confirmation."
 #: packages/app-cli/app/command-import.js:27
 #, javascript-format
 msgid "Output format: %s"
-msgstr "Format de  sortie : %s"
+msgstr "Format de  sortie: %s"
 
 #: packages/app-cli/app/command-import.js:65
 msgid "Importing notes..."
@@ -3452,7 +3449,7 @@ msgstr "Défaut : %s"
 
 #: packages/app-cli/app/help-utils.js:77
 msgid "Possible keys/values:"
-msgstr "Clefs/Valeurs possibles :"
+msgstr "Clefs/Valeurs possibles:"
 
 #: packages/app-cli/app/command-server.js:14
 #, javascript-format
@@ -3477,7 +3474,7 @@ msgstr "Le serveur tourne sur le port %d"
 #: packages/app-cli/app/command-server.js:44
 #: packages/app-cli/app/command-server.js:47
 msgid "Server is not running."
-msgstr "Le serveur ne fonctionne pas ."
+msgstr "Le serveur ne fonctionne pas."
 
 #: packages/app-cli/app/command-e2ee.js:18
 msgid ""
@@ -3491,7 +3488,7 @@ msgstr ""
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
 msgid "Enter master password:"
-msgstr "Entrer le mot de passe maître :"
+msgstr "Entrer le mot de passe maître:"
 
 #: packages/app-cli/app/command-e2ee.js:38
 #: packages/app-cli/app/command-e2ee.js:76
@@ -3601,7 +3598,7 @@ msgstr ""
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "Cible de la synchronisation : %s (%s)"
+msgstr "Cible de la synchronisation: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:177
 msgid "Cannot initialise synchroniser."
@@ -3673,7 +3670,7 @@ msgstr "Aucun carnet actif."
 #: packages/app-cli/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Cette note n'existe pas : \"%s\". La créer ?"
+msgstr "Cette note n'existe pas : \"%s\". La créer?"
 
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
@@ -3708,7 +3705,7 @@ msgstr "Supprimer les notes sans demander la confirmation."
 #: packages/app-cli/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d notes correspondent à ce modéle. Les supprimer ?"
+msgstr "%d notes correspondent à ce modéle. Les supprimer?"
 
 #: packages/app-cli/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -3739,7 +3736,7 @@ msgstr ""
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
 msgid "Destination format: %s"
-msgstr "Format de la destination : %s"
+msgstr "Format de la destination: %s"
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given note."
@@ -3751,15 +3748,15 @@ msgstr "Exporter uniquement le carnet spécifié."
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
-msgstr "Créer une nouvelle  note."
+msgstr "Créer une nouvelle note."
 
 #: packages/app-cli/app/main.js:87
 msgid "Type `joplin help` for usage information."
-msgstr "Tapez `Joplin help` pour  plus d'information sur l'utilisation ."
+msgstr "Tapez `Joplin help` pour  plus d'information sur l'utilisation."
 
 #: packages/app-cli/app/main.js:89
 msgid "Fatal error:"
-msgstr "Erreur fatale :"
+msgstr "Erreur fatale:"
 
 #: packages/app-cli/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
@@ -3822,11 +3819,11 @@ msgstr ""
 #: packages/app-cli/app/cli-utils.js:109
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "Paramètre requis manquant : %s"
+msgstr "Paramètre requis manquant: %s"
 
 #: packages/app-cli/app/cli-utils.js:144
 msgid "Your choice: "
-msgstr "Votre choix : "
+msgstr "Votre choix: "
 
 #: packages/app-cli/app/cli-utils.js:151
 #, javascript-format
@@ -3869,7 +3866,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
-msgstr "Les commandes possibles sont :"
+msgstr "Les commandes possibles sont:"
 
 #: packages/app-cli/app/command-help.js:77
 msgid ""
@@ -3925,7 +3922,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
-msgstr "Quitter l'application ."
+msgstr "Quitter l'application."
 
 #: packages/app-cli/app/app.js:62
 #, javascript-format
@@ -3972,8 +3969,8 @@ msgstr "Afficher un résumé des notes et carnets."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Exécutez `e2ee decrypt --retry-failed-items` pour tenter à nouveau le "
-"déchiffrage des objets ."
+"Pour tenter à nouveau le déchiffrage des objets. Exécutez `e2ee decrypt --"
+"retry-failed-items`"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -4129,7 +4126,7 @@ msgstr "La note n'est pas une tâche : \"%s\""
 
 #, fuzzy
 #~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-#~ msgstr "Enlever l’étiquette \"%s\" de toutes les notes ?"
+#~ msgstr "Enlever l’étiquette \"%s\" de toutes les notes?"
 
 #, fuzzy
 #~ msgid ""
@@ -4194,7 +4191,7 @@ msgstr "La note n'est pas une tâche : \"%s\""
 
 #, fuzzy
 #~ msgid "Missing required argument: note"
-#~ msgstr "Paramètre requis manquant : %s"
+#~ msgstr "Paramètre requis manquant: %s"
 
 #~ msgid "Synchronisation status"
 #~ msgstr "État de la synchronisation"
@@ -4266,7 +4263,7 @@ msgstr "La note n'est pas une tâche : \"%s\""
 #~ msgstr "État : %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "Un carnet avec ce titre existe déjà : \"%s\""
+#~ msgstr "Un carnet avec ce titre existe déjà: \"%s\""
 
 #~ msgid ""
 #~ "For more information about End-To-End Encryption (E2EE) and advices on "
@@ -4292,7 +4289,7 @@ msgstr "La note n'est pas une tâche : \"%s\""
 #~ "it. Continue?"
 #~ msgstr ""
 #~ "Un nouveau carnet \"%s\" va être créé et le fichier \"%s\" va être "
-#~ "importé dedans. Continuer ?"
+#~ "importé dedans. Continuer?"
 
 #~ msgid "Import Evernote notes"
 #~ msgstr "Importer notes d'Evernote"
@@ -4508,11 +4505,11 @@ msgstr "La note n'est pas une tâche : \"%s\""
 #~ msgstr "Nouveau <carnet>"
 
 #~ msgid "Synchronizing with directory \"%s\""
-#~ msgstr "Synchronisation avec le dossier \"%s\""
+#~ msgstr "Synchronisation avec dossier \"%s\""
 
 #, fuzzy
 #~ msgid "Invalid command. Showing help:"
-#~ msgstr "Commande invalide : \"%s\""
+#~ msgstr "Commande invalide: \"%s\""
 
  
  
