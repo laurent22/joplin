@@ -3351,7 +3351,7 @@ msgid ""
 msgstr ""
 "Näyttää vain tietyn tyyppisen kohteen (kohteet). Voi olla `n` "
 "muistiinpanoja, `t` tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. `-"
-"tt` näyttäisi vain tehtävät, kun taas `-ttd` näyttää muistiinpanoja ja "
+"tt` näyttäisi vain tehtävät, kun taas `-tnt` näyttää muistiinpanoja ja "
 "tehtäviä."
 
 #: packages/app-cli/app/command-ls.js:31
