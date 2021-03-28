@@ -12,8 +12,8 @@ import usePluginServiceRegistration from '../../utils/usePluginServiceRegistrati
 import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import useContextMenu from './utils/useContextMenu';
+import getCopyableContent from './utils/getCopyableContent';
 import shim from '@joplin/lib/shim';
-import HtmlUtils from '@joplin/lib/htmlUtils';
 
 const { MarkupToHtml } = require('@joplin/renderer');
 const taboverride = require('taboverride');
@@ -1040,18 +1040,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
-
-			// We need to remove extra url params from the image URLs while copying
-			// because some offline edtors do not show the image if there is
-			// an extra parameter in it's path.
-			// Related to - https://github.com/laurent22/joplin/issues/4602
-			const removeParametersFromUrl = (url: string) => {
-				const imageSrc = new URL(url);
-				return imageSrc.protocol === 'file:' ? imageSrc.origin + imageSrc.pathname : imageSrc.toString();
-			};
-
-			const updatedContent = HtmlUtils.replaceImageUrls(copiedContent, removeParametersFromUrl);
-			clipboard.writeHTML(updatedContent);
+			const copyableContent = getCopyableContent(copiedContent);
+			clipboard.writeHTML(copyableContent);
 			event.preventDefault();
 		}
 
