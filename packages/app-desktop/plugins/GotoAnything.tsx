@@ -16,6 +16,7 @@ const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 
 const PLUGIN_NAME = 'gotoAnything';
@@ -36,6 +37,8 @@ interface Props {
 	folders: any[];
 	showCompletedTodos: boolean;
 	userData: any;
+	selectedSmartFilterId: string;
+	notesParentType: string;
 }
 
 interface State {
@@ -394,7 +397,14 @@ class Dialog extends React.PureComponent<Props, State> {
 			}
 		}
 
-		if (this.state.listType === BaseModel.TYPE_NOTE) {
+		if (this.state.listType === BaseModel.TYPE_NOTE && this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID) {
+			this.props.dispatch({
+				type: 'NOTE_SELECT',
+				id: item.id,
+			});
+
+			CommandService.instance().scheduleExecute('focusElement', 'noteBody');
+		} else if (this.state.listType === BaseModel.TYPE_NOTE) {
 			this.props.dispatch({
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
@@ -543,6 +553,8 @@ const mapStateToProps = (state: AppState) => {
 		themeId: state.settings.theme,
 		showCompletedTodos: state.settings.showCompletedTodos,
 		highlightedWords: state.highlightedWords,
+		notesParentType: state.notesParentType,
+		selectedSmartFilterId: state.selectedSmartFilterId,
 	};
 };
 
