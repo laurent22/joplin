@@ -4,6 +4,18 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 <img src="https://joplinapp.org/images/WebExtensionScreenshot.png" style="max-width: 50%; border: 1px solid gray;">
 
+# Installing the extension
+
+## In Chrome
+
+- Open https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek
+- Click on "Add to Chrome"
+
+## In Firefox
+
+- Open https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/
+- Click on "Add to Firefox"
+
 # Troubleshooting the web clipper service
 
 The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.
