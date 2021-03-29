@@ -22,7 +22,7 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 - Install node 10+ - https://nodejs.org/en/
 - macOS: Install Cocoapods - `brew install cocoapods`
-- Windows: Install Windows Build Tools - `npm install -g windows-build-tools`
+- Windows: Install Windows Build Tools - `npm install -g windows-build-tools --vs2015`
 - Linux: Install dependencies - `sudo apt install libnss3 libsecret-1-dev python rsync`
 
 ## Building
