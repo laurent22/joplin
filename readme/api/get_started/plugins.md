@@ -49,7 +49,7 @@ To try this basic plugin, compile the app by running the following from the root
 Doing so should compile all the files into the `dist/` directory. This is where Joplin will load the plugin.
 
 ## Install the plugin
-Open Joplin **Configuration > Plugins** section. Under Advanced Settings, add the plugin path in the **Development plugins** text field. 
+Open Joplin **Tools > Options > Plugins > Show Advanced Settings** section. Under Advanced Settings, add the plugin path in the **Development plugins** text field. 
 This should be the path to your main plugin directory, i.e. `path/to/your/root/plugin/directory`.
 
 ## Test the Plugin, Hello World!
