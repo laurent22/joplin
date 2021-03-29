@@ -29,6 +29,7 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 
+import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
@@ -118,7 +119,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -151,7 +152,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 		// Schedule a sync operation so that items that need to be encrypted
 		// are sent to sync target.
-		void reg.scheduleSync();
+		void reg.scheduleSync(null, null, true);
 	}
 
 	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
@@ -194,6 +195,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
+	isOnMobileData: false,
 });
 
 const appReducer = (state = appDefaultState, action: any) => {
@@ -357,6 +359,12 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 			newState = Object.assign({}, state);
 			newState.noteSideMenuOptions = action.options;
+			break;
+
+		case 'MOBILE_DATA_WARNING_UPDATE':
+
+			newState = Object.assign({}, state);
+			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
 		}
@@ -583,7 +591,9 @@ async function initialize(dispatch: Function) {
 
 	// When the app starts we want the full sync to
 	// start almost immediately to get the latest data.
-	void reg.scheduleSync(1000).then(() => {
+	// doWifiConnectionCheck set to true so initial sync
+	// doesn't happen on mobile data
+	void reg.scheduleSync(1000, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
@@ -646,6 +656,22 @@ class AppComponent extends React.Component {
 				state: 'initializing',
 			});
 
+			try {
+				// This will be called right after adding the event listener
+				// so there's no need to check netinfo on startup
+				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
+					const isMobile = details.isConnectionExpensive || type === 'cellular';
+					reg.setIsOnMobileData(isMobile);
+					this.props.dispatch({
+						type: 'MOBILE_DATA_WARNING_UPDATE',
+						isOnMobileData: isMobile,
+					});
+				});
+			} catch (error) {
+				reg.logger().warn('Something went wrong while checking network info');
+				reg.logger().info(error);
+			}
+
 			await initialize(this.props.dispatch);
 
 			this.props.dispatch({
@@ -679,6 +705,7 @@ class AppComponent extends React.Component {
 
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
+		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
 	componentDidUpdate(prevProps: any) {
