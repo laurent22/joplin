@@ -638,6 +638,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	// It might be buggy, refer to the below issue
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
+
+		function isDialogModalOpen() {
+			const dialogModal = document.getElementsByClassName('dialog-modal');
+			return dialogModal.length > 0;
+		}
+
 		function pointerInsideEditor(x: number, y: number) {
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 			if (!elements.length) return null;
@@ -647,6 +653,26 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 		function onContextMenu(_event: any, params: any) {
 			if (!pointerInsideEditor(params.x, params.y)) return;
+
+			if (isDialogModalOpen()) {
+				const selection = document.getSelection().toString();
+
+				if (selection.length > 0) {
+					const menu = new Menu();
+					menu.append(
+						new MenuItem({
+							label: _('Copy'),
+							enabled: true,
+							click: async () => {
+								await clipboard.writeText(selection);
+							},
+						})
+					);
+
+					menu.popup();
+				}
+				return;
+			}
 
 			const menu = new Menu();
 

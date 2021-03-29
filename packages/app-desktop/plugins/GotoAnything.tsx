@@ -522,7 +522,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
 
 		return (
-			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
+			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer} className="dialog-modal">
 				<div style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>

@@ -371,7 +371,7 @@ class NotePropertiesDialog extends React.Component {
 		}
 
 		return (
-			<div style={theme.dialogModalLayer}>
+			<div style={theme.dialogModalLayer} className="dialog-modal">
 				<div style={theme.dialogBox}>
 					<div style={theme.dialogTitle}>{_('Note properties')}</div>
 					<div>{noteComps}</div>

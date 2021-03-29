@@ -153,7 +153,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 	const readTimeLabel = _('Read time: %s min', formatReadTime(strippedReadTime));
 
 	return (
-		<div style={theme.dialogModalLayer}>
+		<div style={theme.dialogModalLayer} className="dialog-modal">
 			<div style={theme.dialogBox}>
 				<div style={dialogBoxHeadingStyle}>{_('Statistics')}</div>
 				<table>

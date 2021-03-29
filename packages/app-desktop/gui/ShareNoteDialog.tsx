@@ -210,7 +210,7 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 	rootStyle.width = '50%';
 
 	return (
-		<div style={theme.dialogModalLayer}>
+		<div style={theme.dialogModalLayer} className="dialog-modal">
 			<div style={rootStyle}>
 				<div style={theme.dialogTitle}>{_('Share Notes')}</div>
 				{renderNoteList(notes)}
