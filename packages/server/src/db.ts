@@ -226,6 +226,7 @@ export function changeTypeToString(t: ChangeType): string {
 export enum ShareType {
 	Link = 1, // When a note is shared via a public link
 	App = 2, // When a note is shared with another user on the same server instance
+	JoplinApp = 3,
 }
 
 export interface WithDates {
