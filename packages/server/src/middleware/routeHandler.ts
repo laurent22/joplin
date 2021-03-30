@@ -44,7 +44,7 @@ export default async function(ctx: AppContext) {
 				});
 			} else {
 				ctx.response.status = 200;
-				ctx.response.body = responseObject;
+				ctx.response.body = [undefined, null].includes(responseObject) ? '' : responseObject;
 			}
 		} else {
 			throw new ErrorNotFound();

@@ -18,14 +18,14 @@ const onPluginSettingsChange = jest.fn();
 const itemEvent = ({
 	item: { manifest: { id: pluginId } },
 } as ItemEvent);
-const callHook = (isUpdate: boolean, pluginEnabled = true) => () => useOnInstallHandler(
+const callHook = (isUpdate: boolean, pluginEnabled = true, pluginInstalledViaGUI = true) => () => useOnInstallHandler(
 	setInstallingPluginIds,
 	{
-		[pluginId]: {
+		[pluginId]: pluginInstalledViaGUI ? {
 			enabled: pluginEnabled,
 			deleted: false,
 			hasBeenUpdated: false,
-		},
+		} : undefined,
 	},
 	repoApi,
 	onPluginSettingsChange,
@@ -82,5 +82,10 @@ describe('useOnInstallHandler', () => {
 
 		const newSettings = onPluginSettingsChange.mock.calls[0][0].value;
 		expect(newSettings[pluginId].hasBeenUpdated).toBe(true);
+	});
+
+	test('should not fail when plugin was not installed through the GUI', async () => {
+		const { result: { current: onUpdate } } = renderHook(callHook(true, true, false));
+		await onUpdate(itemEvent);
 	});
 });

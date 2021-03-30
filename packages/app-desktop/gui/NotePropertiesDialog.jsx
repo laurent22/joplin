@@ -327,6 +327,12 @@ class NotePropertiesDialog extends React.Component {
 				};
 				editCompIcon = 'fa-edit';
 			}
+
+			// Add the copy icon and the 'copy on click' event
+			if (key === 'id') {
+				editCompIcon = 'fa-copy';
+				editCompHandler = () => clipboard.writeText(value);
+			}
 		}
 
 		if (editCompHandler) {

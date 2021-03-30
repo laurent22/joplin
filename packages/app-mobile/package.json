@@ -18,6 +18,7 @@
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/geolocation": "^2.0.2",
+    "@react-native-community/netinfo": "^6.0.0",
     "@react-native-community/push-notification-ios": "^1.6.0",
     "@react-native-community/slider": "^3.0.3",
     "buffer": "^5.0.8",

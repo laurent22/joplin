@@ -12,6 +12,7 @@ import usePluginServiceRegistration from '../../utils/usePluginServiceRegistrati
 import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import useContextMenu from './utils/useContextMenu';
+import getCopyableContent from './utils/getCopyableContent';
 import shim from '@joplin/lib/shim';
 
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -1037,6 +1038,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		async function onCopy(event: any) {
+			const copiedContent = editor.selection.getContent();
+			const copyableContent = getCopyableContent(copiedContent);
+			clipboard.writeHTML(copyableContent);
+			event.preventDefault();
+		}
+
 		function onKeyDown(event: any) {
 			// It seems "paste as text" is handled automatically by
 			// on Windows so the code below so we need to run the below
@@ -1059,6 +1067,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		editor.on('keydown', onKeyDown);
 		editor.on('keypress', onKeypress);
 		editor.on('paste', onPaste);
+		editor.on('copy', onCopy);
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
 		editor.on('compositionend', onChangeHandler);
@@ -1074,6 +1083,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off('keydown', onKeyDown);
 				editor.off('keypress', onKeypress);
 				editor.off('paste', onPaste);
+				editor.off('copy', onCopy);
 				editor.off('compositionend', onChangeHandler);
 				editor.off('cut', onChangeHandler);
 				editor.off('joplinChange', onChangeHandler);

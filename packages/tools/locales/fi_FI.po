@@ -7,7 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: mrkaato\n"
 "Language-Team: \n"
 "Language: fi_FI\n"
 "MIME-Version: 1.0\n"
@@ -211,7 +213,7 @@ msgstr "Kaikki muistiinpanot"
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/lib/commands/synchronize.js:18
 msgid "Synchronise"
-msgstr "Synkronoida"
+msgstr "Synkronoi"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
 #: packages/app-mobile/components/side-menu-content.js:364
@@ -403,23 +405,24 @@ msgid "Creating new %s..."
 msgstr "Luodaan uusi %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "Tarkista päivitykset..."
+msgstr "Klikkaa lisätäksesi tunnisteita..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"Tällä Rich Text -editorilla on useita rajoituksia, on suositeltavaa olla "
+"tietoinen niistä ennen sen käyttöä."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
-msgstr ""
+msgstr "Lue lisää siitä"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr ""
+msgstr "Hylkää"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
@@ -477,42 +480,40 @@ msgid "Horizontal Rule"
 msgstr "Vaakaviiva"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "Poistetaanko merkintä?"
+msgstr "Poista rivi"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "Kumoa"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "Tee uudelleen"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "Sisennä vähemmän"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "Sisennä lisää"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
-msgstr "Muistiinpanoluettelon vaihtaminen"
+msgstr "Vaihda kommentti"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "Lajittele valitut rivit"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "Vaihda viiva ylös"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "Vaihda viiva alas"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -648,9 +649,8 @@ msgid "Options"
 msgstr "Vaihtoehdot"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Virheellinen vastaus %s: %s."
+msgstr "Virheellinen"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -723,7 +723,7 @@ msgstr "Lisätietoja"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:559
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
+msgstr "Siirrä asettelukohteita nuolilla. Paina \"Esc\" poistuaksesi."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -792,7 +792,7 @@ msgstr "Vaihda editoria"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "Sovelluksen asettelun muuttaminen"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -809,7 +809,7 @@ msgstr "Muistikirjan otsikko:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Oikeinkirjoituksen tarkistus"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -1033,7 +1033,7 @@ msgstr "Loitonna"
 
 #: packages/app-desktop/gui/MenuBar.js:608
 msgid "&Go"
-msgstr ""
+msgstr "&Mene"
 
 #: packages/app-desktop/gui/MenuBar.js:620
 msgid "&Note"
@@ -1234,13 +1234,12 @@ msgstr ""
 "Tärkeää: sinun tarvitsee suorittaa tämä kerran vain yhdellä laitteella."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "Salaus"
+msgstr "Uudelleen salaus"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "Ohita"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1375,7 +1374,7 @@ msgstr "Näytä lisäasetukset"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Path:"
-msgstr ""
+msgstr "Polku:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
 msgid "Browse..."
@@ -1383,11 +1382,12 @@ msgstr "Selaa..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
-msgstr ""
+msgstr "Väitteet:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
+"Sovellus on käynnistettävä uudelleen, jotta nämä muutokset tulevat voimaan."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1396,12 +1396,11 @@ msgstr "Hae se nyt"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 msgid "Later"
-msgstr ""
+msgstr "Myöhemmin"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
-#, fuzzy
 msgid "Restart now"
-msgstr "Hae se nyt:"
+msgstr "Käynnistä uudelleen nyt"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
 #: packages/lib/models/Setting.js:1524
@@ -1413,77 +1412,71 @@ msgid "Apply"
 msgstr "Käytä"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Poista muistiinpano \"%s\"?"
+msgstr "Poista laajennus \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
 msgid "Browse all plugins"
-msgstr ""
+msgstr "Selaa kaikkia laajennuksia"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "Asenna tiedostosta"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "Sinulla ei ole asennettua laajennusta."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
-#, fuzzy
 msgid "Plugin tools"
-msgstr "Laajennukset"
+msgstr "Laajennustyökalut"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "Hallitse laajennuksia"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-#, fuzzy
 msgid "No results"
-msgstr "Ei resursseja!"
+msgstr "Ei tuloksia"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
-msgstr "Etsi..."
+msgstr "Etsi laajennuksia..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
 msgid "Install"
-msgstr ""
+msgstr "Asenna"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
-#, fuzzy
 msgid "Installing..."
-msgstr "Peruutetaan..."
+msgstr "Asentaa..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
 msgid "Installed"
-msgstr ""
+msgstr "Asennettu"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
-#, fuzzy
 msgid "Update"
-msgstr "Päivitetty"
+msgstr "Päivitä"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
-#, fuzzy
 msgid "Updating..."
-msgstr "Katsomassa..."
+msgstr "Päivittää..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "Päivitä Joplin käyttääksesi tätä laajennusta"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "Muistiinpanoja ei voitu viedä: %s"
+msgstr "Laajennuksen asentaminen epäonnistui: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1958,7 +1951,7 @@ msgstr "Joplin verkkosivusto"
 
 #: packages/app-mobile/components/screens/config.js:523
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Tietosuojakäytäntö"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2087,11 +2080,14 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"Järjestelmänvalvojan oletussalasana on epävarma, eikä sitä ole muutettu "
+"[Vaihda se nyt] (%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
+"Kaikki mahdolliset portit ovat käytössä - ilmoita ongelmasta osoitteessa %s"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2125,9 +2121,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Joplin verkkosivusto"
+msgstr "Joplin Palvelin"
 
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
@@ -2221,7 +2216,8 @@ msgid ""
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Kohde, johon synkronoidaan. Jokaisella synkronointikohteella voi olla muita "
-"parametreja, joiden nimi on `sync.NUM.NAME` (kaikki dokumentoitu jäljempänä)."
+"parametreja, jotka on nimetty `sync.NUM.NAME` (kaikki dokumentoitu "
+"jäljempänä)."
 
 #: packages/lib/models/Setting.js:160
 msgid "Directory to synchronise with (absolute path)"
@@ -2269,21 +2265,19 @@ msgstr "AWS secret"
 
 #: packages/lib/models/Setting.js:293
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "Joplin palvelimen URL-osoite"
 
 #: packages/lib/models/Setting.js:308
-#, fuzzy
 msgid "Joplin Server Directory"
-msgstr "Joplin Vie hakemisto"
+msgstr "Joplin palvelimen hakemisto"
 
 #: packages/lib/models/Setting.js:319
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Joplin palvelimen käyttäjänimi"
 
 #: packages/lib/models/Setting.js:330
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "Syötä pääsalasana:"
+msgstr "Joplin palvelimen salasana"
 
 #: packages/lib/models/Setting.js:342
 msgid "Attachment download behaviour"
@@ -2412,9 +2406,8 @@ msgid "Enable typographer support"
 msgstr "Ota typografiatuki käyttöön"
 
 #: packages/lib/models/Setting.js:614
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "Muistiinpanohistorian ottaminen käyttöön"
+msgstr "Ota käyttöön Linkify"
 
 #: packages/lib/models/Setting.js:615
 msgid "Enable math expressions"
@@ -2429,17 +2422,16 @@ msgid "Enable Mermaid diagrams support"
 msgstr "Ota Mermaid kaavioiden tuki käyttöön"
 
 #: packages/lib/models/Setting.js:618
-#, fuzzy
 msgid "Enable audio player"
-msgstr "Ota merkinnän hymiö käyttöön"
+msgstr "Ota käyttöön audiosoitin"
 
 #: packages/lib/models/Setting.js:619
 msgid "Enable video player"
-msgstr ""
+msgstr "Ota käyttöön videosoitin"
 
 #: packages/lib/models/Setting.js:620
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "Ota käyttöön PDF katseluohjelma"
 
 #: packages/lib/models/Setting.js:621
 msgid "Enable ==mark== syntax"
@@ -2530,9 +2522,8 @@ msgstr ""
 "on väärä tai tyhjä, se on oletusarvoisesti yleinen monospace fontti."
 
 #: packages/lib/models/Setting.js:717
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Mukautettu tyylitaulukko Joplinin sovellustyyleille"
+msgstr "Mukautettu tyylitaulukko mukautetuille Markdown tyyleille"
 
 #: packages/lib/models/Setting.js:733
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -3001,18 +2992,18 @@ msgstr "Käynnissä"
 #: packages/lib/Synchronizer.js:844
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
+msgstr "Tuntematon kohdetyyppi ladattu - päivitä Joplin uusimpaan versioon"
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Yhteyden muodostaminen Joplinin Nextcloud -sovellukseen epäonnistui. "
-"Tarkista kokoonpano Synkronointiasetukset-näytössä. Koko virhe oli:\n"
+"Yhteyden muodostaminen Joplinin palvelimelle epäonnistui. Tarkista "
+"vaihtoehdot Synkronointiasetukset-näytössä. Koko virhe oli:\n"
 "\n"
 "%s"
 
@@ -3251,9 +3242,8 @@ msgid "Downloaded and encrypted"
 msgstr "Ladattu ja salattu"
 
 #: packages/lib/services/ReportService.js:180
-#, fuzzy
 msgid "Created locally"
-msgstr "Luodut paikalliset kohteet: %d."
+msgstr "Luotu paikallisesti"
 
 #: packages/lib/services/ReportService.js:191
 msgid "Attachments that could not be downloaded"
@@ -3308,20 +3298,19 @@ msgstr "Päällä %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Ei ehdotuksia"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Lisää sanakirjaan"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Käytä oikolukua"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Kieli"
+msgstr "Vaihda kieltä"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3360,9 +3349,10 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"Näyttää vain tietyn tyyppiset kohteet. Voi olla `n` muistiinpanoja, `t` "
-"tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. `-tt` näyttäisi vain "
-"tehtävät, kun taas `-tnt` näyttää muistiinpanoja ja tehtäviä."
+"Näyttää vain tietyn tyyppisen kohteen (kohteet). Voi olla `n` "
+"muistiinpanoja, `t` tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. `-"
+"tt` näyttäisi vain tehtävät, kun taas `-tnt` näyttää muistiinpanoja ja "
+"tehtäviä."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -3583,9 +3573,9 @@ msgid "Downloading resources..."
 msgstr "Ladataan resursseja..."
 
 #: packages/app-cli/app/command-sync.js:242
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr "Synkronointitavoite on päivitettävä. Jatka painamalla tätä banneria."
+msgstr "Synkronointikohde on päivitettävä! Suorita `%s` jatkaaksesi."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
@@ -3643,11 +3633,11 @@ msgstr "Huomautusta ei ole: \"%s\". Luodaanko se?"
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
+"Aloitetaan muokkauksen tekeminen. Palaa kehotteeseen sulkemalla editori."
 
 #: packages/app-cli/app/command-edit.js:97
-#, fuzzy
 msgid "Note has been saved."
-msgstr "Muistikirjaa ei ole luokiteltu."
+msgstr "Huomautus on tallennettu."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -4005,7 +3995,6 @@ msgstr "Huomautus ei ole tehtävä: \"%s\""
 #~ msgid "Notebook properties"
 #~ msgstr "Muistikirjan ominaisuudet"
 
-#, javascript-format
 #~ msgid "This file could not be opened: %s"
 #~ msgstr "Tätä tiedostoa ei voitu avata: %s"
 
@@ -4030,7 +4019,6 @@ msgstr "Huomautus ei ole tehtävä: \"%s\""
 #~ msgid "Move to notebook..."
 #~ msgstr "Siirry muistikirjaan..."
 
-#, javascript-format
 #~ msgid "Move %d notes to notebook \"%s\"?"
 #~ msgstr "Siirrä %d muistiinpanot muistikirjaan \"%s\"?"
 
@@ -4047,11 +4035,9 @@ msgstr "Huomautus ei ole tehtävä: \"%s\""
 #~ msgid "Errors only"
 #~ msgstr "Vain virheet"
 
-#, javascript-format
 #~ msgid "Database v%s"
 #~ msgstr "Tietokanta v%s"
 
-#, javascript-format
 #~ msgid "FTS enabled: %d"
 #~ msgstr "Koko tekstin haku (FTS) Käytössä: %d"
 
@@ -4064,11 +4050,9 @@ msgstr "Huomautus ei ole tehtävä: \"%s\""
 #~ msgid "Add or remove tags"
 #~ msgstr "Lisää tai poista tunnisteita"
 
-#, javascript-format
 #~ msgid "Unknown log level: %s"
 #~ msgstr "Tuntematon kirjaus taso: %s"
 
-#, javascript-format
 #~ msgid "Unknown level ID: %s"
 #~ msgstr "Tuntematon tason tunnus: %s"
 
@@ -4090,7 +4074,6 @@ msgstr "Huomautus ei ole tehtävä: \"%s\""
 #~ msgid "Json Export Directory"
 #~ msgstr "Json Vie hakemisto"
 
-#, javascript-format
 #~ msgid ""
 #~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
 #~ "be decrypted and try again."

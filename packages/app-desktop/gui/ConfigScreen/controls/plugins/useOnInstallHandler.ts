@@ -40,7 +40,9 @@ export default function(setInstallingPluginIds: Function, pluginSettings: Plugin
 			const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
 				draft[pluginId] = defaultPluginSetting();
 				if (isUpdate) {
-					draft[pluginId].enabled = pluginSettings[pluginId].enabled;
+					if (pluginSettings[pluginId]) {
+						draft[pluginId].enabled = pluginSettings[pluginId].enabled;
+					}
 					draft[pluginId].hasBeenUpdated = true;
 				}
 			});
