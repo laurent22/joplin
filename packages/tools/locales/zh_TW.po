@@ -710,7 +710,7 @@ msgstr "更多資訊"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:559
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr "使用箭頭移動佈局項。點擊"Esc"退出。"
+msgstr "使用箭頭移動佈局項。點擊“Esc”退出。"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
