@@ -3083,7 +3083,7 @@ msgstr "命令"
 #: packages/lib/services/KeymapService.js:278
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr "“%s”缺少必須的屬性“%s”"
+msgstr "%s缺少必須的屬性%s"
 
 #: packages/lib/services/KeymapService.js:278
 #: packages/lib/services/KeymapService.js:285
@@ -3100,12 +3100,12 @@ msgstr "無效的答案: %s"
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
-msgstr "加速鍵"%s"被用於"%s"和"%s"命令。這可能導致未期待的行為。"
+msgstr "加速鍵%s被用於%s和%s命令。這可能導致未期待的行為。"
 
 #: packages/lib/services/KeymapService.js:328
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr "加速鍵"%s"無效。"
+msgstr "加速鍵%s無效。"
 
 #: packages/lib/services/ReportService.js:123
 msgid "Items that cannot be synchronised"
