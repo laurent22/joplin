@@ -8,14 +8,22 @@ const Note = require('@joplin/lib/models/Note').default;
 const formatcoords = require('formatcoords');
 const bridge = require('electron').remote.require('./bridge').default;
 const shim = require('@joplin/lib/shim').default;
+const { clipboard } = require('electron');
+const convertToScreenCoordinates = require('./utils/convertToScreenCoordinates').default;
+const Setting = require('@joplin/lib/models/Setting').default;
+
+
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
 
 class NotePropertiesDialog extends React.Component {
 	constructor() {
 		super();
-
+		this.dialogRef = React.createRef();
 		this.revisionsLink_click = this.revisionsLink_click.bind(this);
 		this.buttonRow_click = this.buttonRow_click.bind(this);
 		this.okButton = React.createRef();
+		this.onContextMenu = this.onContextMenu.bind(this);
 
 		this.state = {
 			formNote: null,
@@ -328,8 +336,12 @@ class NotePropertiesDialog extends React.Component {
 			);
 		}
 
+		let isEditable = false;
+		if (['user_updated_time','user_created_time','source_url','location'].indexOf(key) >= 0) {
+			isEditable = true;
+		}
 		return (
-			<div key={key} style={theme.controlBox} className="note-property-box">
+			<div key={key} style={theme.controlBox} className="note-property-box" iscontenteditable={isEditable.toString()}>
 				{labelComp}
 				{controlComp}
 				{editComp}
@@ -356,6 +368,86 @@ class NotePropertiesDialog extends React.Component {
 		return note[key];
 	}
 
+	dialogCutText() {
+		if (this.dialogRef.current) {
+			const selection = window.getSelection().toString();
+			if (selection) {
+				clipboard.writeText(selection);
+				this.setState({ editedValue: '' });
+				this.saveProperty();
+			}
+		}
+	}
+
+	dialogCopyText() {
+		if (this.dialogRef.current) {
+			const selection = window.getSelection().toString();
+			if (selection) {
+				clipboard.writeText(selection);
+			}
+		}
+	}
+	dialogPasteText() {
+		if (this.dialogRef.current) {
+			const clipboardText = clipboard.readText();
+			if (clipboardText) {
+				this.setState({ editedValue: clipboardText });
+				this.saveProperty();
+			}
+		}
+	}
+
+	pointerInsideDialogBox(x, y) {
+		const elements = document.getElementsByClassName('note-properties-dialog');
+		if (!elements.length) return null;
+		const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
+		return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
+	}
+
+	onContextMenu(e) {
+		e.preventDefault();
+		if (!this.pointerInsideDialogBox(e.clientX, e.clientY)) return;
+
+		const menu = new Menu();
+		const selectionObject = window.getSelection();
+		const hasSelectedText = this.dialogRef.current && !!selectionObject.toString();
+		const isEditable = (selectionObject.anchorNode.parentNode.getAttribute('iscontenteditable') === 'true' ||
+		selectionObject.anchorNode.getAttribute('iscontenteditable') === 'true') ? true : false;
+
+		menu.append(
+			// Allow Cut functionality only for editable fields
+			new MenuItem({
+				label: _('Cut'),
+				enabled: hasSelectedText && isEditable,
+				click: async () => {
+					this.dialogCutText(e);
+				},
+			})
+		);
+
+		menu.append(
+			new MenuItem({
+				label: _('Copy'),
+				enabled: hasSelectedText,
+				click: async () => {
+					this.dialogCopyText();
+				},
+			})
+		);
+
+		// Allow Paste functionality only for editable fields
+		menu.append(
+			new MenuItem({
+				label: _('Paste'),
+				enabled: isEditable,
+				click: async () => {
+					this.dialogPasteText(e);
+				},
+			})
+		);
+		menu.popup();
+	}
+
 	render() {
 		const theme = themeStyle(this.props.themeId);
 		const formNote = this.state.formNote;
@@ -372,7 +464,7 @@ class NotePropertiesDialog extends React.Component {
 
 		return (
 			<div style={theme.dialogModalLayer}>
-				<div style={theme.dialogBox}>
+				<div ref={this.dialogRef} className='note-properties-dialog' style={theme.dialogBox} onContextMenu={this.onContextMenu}>
 					<div style={theme.dialogTitle}>{_('Note properties')}</div>
 					<div>{noteComps}</div>
 					<DialogButtonRow themeId={this.props.themeId} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
