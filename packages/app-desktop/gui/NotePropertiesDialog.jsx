@@ -44,6 +44,7 @@ class NotePropertiesDialog extends React.Component {
 	}
 
 	componentDidMount() {
+		this.dialogRef.current.focus();
 		this.loadNote(this.props.noteId);
 	}
 
@@ -398,7 +399,7 @@ class NotePropertiesDialog extends React.Component {
 	}
 
 	pointerInsideDialogBox(x, y) {
-		const elements = document.getElementsByClassName('note-properties-dialog');
+		const elements = document.getElementsByClassName('note-properties-overlay');
 		if (!elements.length) return null;
 		const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 		return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
@@ -411,9 +412,15 @@ class NotePropertiesDialog extends React.Component {
 		const menu = new Menu();
 		const selectionObject = window.getSelection();
 		const hasSelectedText = this.dialogRef.current && !!selectionObject.toString();
-		const isEditable = (selectionObject.anchorNode.parentNode.getAttribute('iscontenteditable') === 'true' ||
-		selectionObject.anchorNode.getAttribute('iscontenteditable') === 'true') ? true : false;
 
+		let isEditable;
+		if (selectionObject.anchorNode.nodeType === 3) {
+			// For text only divs
+			isEditable = false;
+		} else {
+			isEditable = (selectionObject.anchorNode.parentNode.getAttribute('iscontenteditable') === 'true' ||
+		selectionObject.anchorNode.getAttribute('iscontenteditable') === 'true') ? true : false;
+		}
 		menu.append(
 			// Allow Cut functionality only for editable fields
 			new MenuItem({
@@ -463,8 +470,8 @@ class NotePropertiesDialog extends React.Component {
 		}
 
 		return (
-			<div style={theme.dialogModalLayer}>
-				<div ref={this.dialogRef} className='note-properties-dialog' style={theme.dialogBox} onContextMenu={this.onContextMenu}>
+			<div className='note-properties-overlay' ref={this.dialogRef} style={theme.dialogModalLayer} onContextMenu={this.onContextMenu}>
+				<div className='note-properties-dialog' style={theme.dialogBox} >
 					<div style={theme.dialogTitle}>{_('Note properties')}</div>
 					<div>{noteComps}</div>
 					<DialogButtonRow themeId={this.props.themeId} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
