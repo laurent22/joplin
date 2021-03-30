@@ -6,6 +6,7 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
 import htmlUtils from '@joplin/lib/htmlUtils';
+import { nativeImage } from 'electron';
 const fs = require('fs-extra');
 const { clipboard } = require('electron');
 const { toSystemSlashes } = require('@joplin/lib/path-utils');
@@ -89,6 +90,15 @@ export function menuItems(): ContextMenuItems {
 			onAction: async (options: ContextMenuOptions) => {
 				const { resourcePath } = await resourceInfo(options);
 				bridge().showItemInFolder(resourcePath);
+			},
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+		},
+		copyImage: {
+			label: _('Copy Image'),
+			onAction: async (options: ContextMenuOptions) => {
+				const { resourcePath } = await resourceInfo(options);
+				const image = nativeImage.createFromPath(toSystemSlashes(resourcePath));
+				clipboard.writeImage(image);
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
