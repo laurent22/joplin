@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEventHandler } from 'react';
 import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
@@ -16,6 +16,7 @@ interface ShareNoteDialogProps {
 	themeId: number;
 	noteIds: Array<string>;
 	onClose: Function;
+	onContextMenu: MouseEventHandler;
 }
 
 interface SharesMap {
@@ -210,7 +211,7 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 	rootStyle.width = '50%';
 
 	return (
-		<div style={theme.dialogModalLayer}>
+		<div style={theme.dialogModalLayer} onContextMenu={props.onContextMenu}>
 			<div style={rootStyle}>
 				<div style={theme.dialogTitle}>{_('Share Notes')}</div>
 				{renderNoteList(notes)}

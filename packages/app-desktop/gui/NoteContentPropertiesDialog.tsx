@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEventHandler } from 'react';
 import { _ } from '@joplin/lib/locale';
 const { themeStyle } = require('@joplin/lib/theme');
 const DialogButtonRow = require('./DialogButtonRow.min');
@@ -11,6 +11,7 @@ interface NoteContentPropertiesDialogProps {
 	text: string;
 	markupLanguage: number;
 	onClose: Function;
+	onContextMenu: MouseEventHandler;
 }
 
 interface TextPropertiesMap {
@@ -153,7 +154,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 	const readTimeLabel = _('Read time: %s min', formatReadTime(strippedReadTime));
 
 	return (
-		<div style={theme.dialogModalLayer}>
+		<div style={theme.dialogModalLayer} onContextMenu={props.onContextMenu}>
 			<div style={theme.dialogBox}>
 				<div style={dialogBoxHeadingStyle}>{_('Statistics')}</div>
 				<table>

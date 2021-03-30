@@ -31,11 +31,14 @@ import iterateItems from '../ResizableLayout/utils/iterateItems';
 import removeItem from '../ResizableLayout/utils/removeItem';
 
 const { connect } = require('react-redux');
+const { clipboard } = require('electron');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import EncryptionService from '@joplin/lib/services/EncryptionService';
 const ipcRenderer = require('electron').ipcRenderer;
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
 
 interface LayerModalState {
 	visible: boolean;
@@ -160,6 +163,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.window_resize = this.window_resize.bind(this);
 		this.rowHeight = this.rowHeight.bind(this);
 		this.layoutModeListenerKeyDown = this.layoutModeListenerKeyDown.bind(this);
+		this.handleContextMenu = this.handleContextMenu.bind(this);
 
 		window.addEventListener('resize', this.window_resize);
 	}
@@ -694,6 +698,27 @@ class MainScreenComponent extends React.Component<Props, State> {
 		);
 	}
 
+	handleContextMenu(event: any) {
+		console.log(event);
+		event.preventDefault();
+		const selection = document.getSelection().toString();
+
+		if (selection.length > 0) {
+			const menu = new Menu();
+			menu.append(
+				new MenuItem({
+					label: _('Copy'),
+					enabled: true,
+					click: async () => {
+						await clipboard.writeText(selection);
+					},
+				})
+			);
+
+			menu.popup();
+		}
+	}
+
 	render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = Object.assign(
@@ -739,9 +764,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 				{this.renderPluginDialogs()}
-				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
-				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
-				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
+				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog onContextMenu={this.handleContextMenu} markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
+				{notePropertiesDialogOptions.visible && <NotePropertiesDialog onContextMenu={this.handleContextMenu} themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
+				{shareNoteDialogOptions.visible && <ShareNoteDialog onContextMenu={this.handleContextMenu} themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
