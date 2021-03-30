@@ -39,6 +39,18 @@ joplin.plugins.register({
 
 		const result3 = await dialogs.open(handle3);
 		console.info('Got result: ' + JSON.stringify(result3));		
+		
+		
+		const handle4 = await dialogs.create('myDialog4');
+		await dialogs.setHtml(handle4, `
+		<p>Testing dialog with textarea element</p>
+		<form name="user">
+			Text: <textarea name="text"></textarea>
+		</form>
+		`);
+
+		const result4 = await dialogs.open(handle4);
+		console.info('Got result: ' + JSON.stringify(result4));		
 	},
 
 });
