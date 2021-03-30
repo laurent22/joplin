@@ -42,7 +42,7 @@ const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const BaseSyncTarget = require('@joplin/lib/BaseSyncTarget.js');
+import BaseSyncTarget from '@joplin/lib/BaseSyncTarget';
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Resource from '@joplin/lib/models/Resource';
 import Tag from '@joplin/lib/models/Tag';
