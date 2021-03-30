@@ -3083,7 +3083,7 @@ msgstr "命令"
 #: packages/lib/services/KeymapService.js:278
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""%s"缺少必須的屬性"%s"。"
+msgstr "“%s”缺少必須的屬性“%s”"
 
 #: packages/lib/services/KeymapService.js:278
 #: packages/lib/services/KeymapService.js:285
