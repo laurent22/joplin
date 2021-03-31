@@ -59,7 +59,7 @@ msgstr "取消"
 #: packages/app-desktop/bridge.js:188
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
-msgstr ""
+msgstr "應用將要關閉。請重新啟動它以完成此過程。"
 
 #: packages/app-desktop/plugins/GotoAnything.js:431
 msgid ""
@@ -171,7 +171,7 @@ msgid ""
 msgstr ""
 "確定刪除記事本 \"%s\"?\n"
 "\n"
-"此記事本中的所有記事和子筆記本也將被刪除。"
+"此記事本中的所有記事和子記事本也將被刪除。"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:180
 #: packages/app-desktop/gui/utils/NoteListUtils.js:140
@@ -405,25 +405,25 @@ msgstr "檢查更新..."
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
-msgstr ""
+msgstr "此富文本編輯器有許多限制，建議在使用它之前注意它們"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
-msgstr ""
+msgstr "進一步了解"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr ""
+msgstr "忽略"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "下列附件將被監控變化："
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr ""
+msgstr "當切換到其他記事時，這些附件將不再被監控。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
 #, javascript-format
@@ -480,7 +480,7 @@ msgstr "復原"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "恢復"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
@@ -493,7 +493,7 @@ msgstr "增加縮排"
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 #, fuzzy
 msgid "Toggle comment"
-msgstr "切換記事清單"
+msgstr "添加/刪除注釋"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
@@ -596,7 +596,7 @@ msgstr "匯入"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "命令"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
 msgid "Keyboard Shortcut"
@@ -646,13 +646,13 @@ msgstr "無效"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "點擊快速鍵"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
-msgstr ""
+msgstr "點擊快速鍵後點擊回車。或者點擊退格以清除快速鍵"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -665,7 +665,8 @@ msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
-msgstr ""
+msgstr "需要更新同步目標以啟動Joplin同步。這個操作可能需要幾分鐘時間完成，應用也需要"
+"重新啟動。點擊鏈接繼續。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
@@ -709,7 +710,7 @@ msgstr "更多資訊"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:559
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
+msgstr "使用箭頭移動佈局項。點擊“Esc”退出。"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -865,7 +866,7 @@ msgstr "狀態: %s"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:90
 msgid "Disable Web Clipper Service"
-msgstr "停用網頁剪輯 服務"
+msgstr "停用網頁剪輯服務"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:96
 msgid "The web clipper service is not enabled."
@@ -1012,7 +1013,7 @@ msgstr "縮小"
 
 #: packages/app-desktop/gui/MenuBar.js:608
 msgid "&Go"
-msgstr ""
+msgstr "跳轉 (&N)"
 
 #: packages/app-desktop/gui/MenuBar.js:620
 msgid "&Note"
@@ -1212,7 +1213,7 @@ msgstr "重新加密"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "忽略"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1340,7 +1341,7 @@ msgstr "顯示進階選項"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Path:"
-msgstr ""
+msgstr "路徑："
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
 msgid "Browse..."
@@ -1348,7 +1349,7 @@ msgstr "瀏覽..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
-msgstr ""
+msgstr "參數："
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
@@ -1361,7 +1362,7 @@ msgstr "立即去完成"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 msgid "Later"
-msgstr ""
+msgstr "稍後"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
 msgid "Restart now"
@@ -1388,11 +1389,11 @@ msgstr "安裝延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "從文件安裝"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "您尚未安裝任何延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
 #, fuzzy
@@ -1401,7 +1402,7 @@ msgstr "延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "管理您的延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 #, fuzzy
@@ -1421,12 +1422,12 @@ msgstr "安裝延伸模組"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
 #, fuzzy
 msgid "Installing..."
-msgstr "正在取消中..."
+msgstr "正在安裝中..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
 #, fuzzy
 msgid "Installed"
-msgstr "安裝延伸模組"
+msgstr "已安裝延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
 #, fuzzy
@@ -1440,17 +1441,17 @@ msgstr "觀察中..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "請升級Joplin以使用此延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
 #, fuzzy, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "無法匯出記事: %s"
+msgstr "無法安裝延伸模組: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1735,7 +1736,7 @@ msgstr "重新整理"
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "同步目標升級"
 
 #: packages/app-mobile/components/screens/notes.js:154
 #: packages/app-cli/app/command-rmbook.js:26
@@ -1904,7 +1905,7 @@ msgstr "Joplin 官方網站"
 
 #: packages/app-mobile/components/screens/config.js:523
 msgid "Privacy Policy"
-msgstr ""
+msgstr "隱私政策"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2030,12 +2031,12 @@ msgstr "搜尋"
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
-msgstr ""
+msgstr "默認管理員密碼不安全並且尚未更改！[現在更改](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgstr "所有默認端口都已經被使用中-請在%s反饋這個問題"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2209,7 +2210,7 @@ msgstr "AWS secret"
 
 #: packages/lib/models/Setting.js:293
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "Joplin 主機 URL"
 
 #: packages/lib/models/Setting.js:308
 msgid "Joplin Server Directory"
@@ -2217,7 +2218,7 @@ msgstr "Joplin 主機目錄"
 
 #: packages/lib/models/Setting.js:319
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Joplin 主機 用戶名"
 
 #: packages/lib/models/Setting.js:330
 msgid "Joplin Server password"
@@ -2371,11 +2372,11 @@ msgstr "啟用音效播放器"
 
 #: packages/lib/models/Setting.js:619
 msgid "Enable video player"
-msgstr ""
+msgstr "啟用視頻播放器"
 
 #: packages/lib/models/Setting.js:620
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "啟用PDF查看器"
 
 #: packages/lib/models/Setting.js:621
 msgid "Enable ==mark== syntax"
@@ -2923,7 +2924,7 @@ msgstr "進行中"
 #: packages/lib/Synchronizer.js:844
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
+msgstr "已下載項目為未知類型，請將Joplin升級至最新版本"
 
 #: packages/lib/JoplinServerApi.js:63
 #, fuzzy, javascript-format
@@ -3016,11 +3017,11 @@ msgstr "Joplin 匯出目錄"
 
 #: packages/lib/services/interop/InteropService.js:51
 msgid "Evernote Export File (as Markdown)"
-msgstr "匯出 Evernote 檔案 (Markdown)"
+msgstr "Evernote 匯出檔案 (Markdown)"
 
 #: packages/lib/services/interop/InteropService.js:52
 msgid "Evernote Export File (as HTML)"
-msgstr "匯出 Evernote 檔案 (HTML)"
+msgstr "Evernote 匯出檔案 (HTML)"
 
 #: packages/lib/services/interop/InteropService.js:60
 msgid "HTML File"
@@ -3076,18 +3077,18 @@ msgstr "請為 %s 指定匯入格式"
 
 #: packages/lib/services/KeymapService.js:273
 msgid "command"
-msgstr ""
+msgstr "命令"
 
 #: packages/lib/services/KeymapService.js:273
 #: packages/lib/services/KeymapService.js:278
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "%s缺少必須的屬性%s"
 
 #: packages/lib/services/KeymapService.js:278
 #: packages/lib/services/KeymapService.js:285
 msgid "accelerator"
-msgstr ""
+msgstr "加速鍵"
 
 #: packages/lib/services/KeymapService.js:285
 #, fuzzy, javascript-format
@@ -3099,12 +3100,12 @@ msgstr "無效的答案: %s"
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
-msgstr ""
+msgstr "加速鍵%s被用於%s和%s命令。這可能導致未期待的行為。"
 
 #: packages/lib/services/KeymapService.js:328
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "加速鍵%s無效。"
 
 #: packages/lib/services/ReportService.js:123
 msgid "Items that cannot be synchronised"
@@ -3226,15 +3227,15 @@ msgstr "在 %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "沒有建議"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "添加到字典"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "使用拼寫檢查器"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
 msgid "Change language"
@@ -3447,7 +3448,7 @@ msgstr "同步到已指明的目標 (預設是 sync.target 的設置值)"
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "升級同步目標到最新版本"
 
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
@@ -3488,7 +3489,7 @@ msgstr "正在下載資源檔案..."
 #: packages/app-cli/app/command-sync.js:242
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr ""
+msgstr "需要升級同步目標!運行`%s`以繼續。"
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
