@@ -20,6 +20,8 @@ const taboverride = require('taboverride');
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
+import { nativeImage } from 'electron';
+import getImagePath from './utils/getImagePath';
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -1041,7 +1043,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
 			const copyableContent = getCopyableContent(copiedContent);
-			clipboard.writeHTML(copyableContent);
+			if (copyableContent.startsWith('<img')) {
+				const imagePath = getImagePath(copyableContent);
+				const image = nativeImage.createFromPath(imagePath);
+				clipboard.writeImage(image);
+			} else {
+				clipboard.writeHTML(copyableContent);
+			}
 			event.preventDefault();
 		}
 

@@ -100,7 +100,7 @@ export function menuItems(): ContextMenuItems {
 				const image = nativeImage.createFromPath(toSystemSlashes(resourcePath));
 				clipboard.writeImage(image);
 			},
-			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image,
 		},
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),
