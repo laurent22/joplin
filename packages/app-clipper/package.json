@@ -21,6 +21,14 @@
     "watch_clipper": "npm-watch build_clipper",
     "build_clipper": "node ../tools/build-clipper-dev.js"
   },
+  "scriptsComments": {
+    "//": "The goal is to let developers run only one simple script `npm start` at the start of their working session. This script will take care of three important tasks: creating a development build of the popup, generating a directory that will be used to install the extension in development mode, and remove keys in manifests that are considered invalid by either Chrome or Firefox",
+    "start": "Run two scripts concurrently. The first script writes the development build of popup to popup/build. The second script creates a directory at app-clipper/dev that holds the content of the unpacked extension. This directory can then be loaded into either Chrome or Firefox Extension Management page to install the extension in development mode",
+    "start:clipper": "Initially, this script waits until file index.html file is available in popup/build and a waiting time of 9000ms has passed before running the command `npm run watch_clipper`. The first option ensures that popup folder in the unpacked extension directory won't be empty. The second option ensures that start:popup script has completed its initial build.",
+    "start:popup": "Changed into the popup directory and run cra-build-watch to generate everything into popup/build",
+    "watch_clipper": "Define `build_clipper` as the script to be run when there are changes to the following files and directories: manifest.json, background.js, content_scripts, icons, popup/build",
+    "build_clipper": "Copies all the required extension files into dedicated subfolders for Chrome and Firefox into app-clipper/dev. Then it removes invalid keys in the manifest that will be cause rejection errors from either browser. After the first run, it is delayed for 6000 milliseconds before checking for file changes."
+  },
   "version": "1.0.8",
   "description": "Joplin Web Clipper",
   "main": "main.js",
