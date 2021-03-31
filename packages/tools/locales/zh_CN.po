@@ -478,7 +478,7 @@ msgstr "撤销"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr "重做"
+msgstr "恢复"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
@@ -490,7 +490,7 @@ msgstr "增加缩进"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 msgid "Toggle comment"
-msgstr "切换注释"
+msgstr "添加/删除注释"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
@@ -732,11 +732,11 @@ msgstr "新建待办事项"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
 msgid "Toggle note list"
-msgstr "切换笔记列表"
+msgstr "显示/隐藏笔记列表"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
 msgid "Toggle sidebar"
-msgstr "切换边栏"
+msgstr "显示/隐藏边栏"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -1032,11 +1032,11 @@ msgstr "Joplin 论坛"
 #: packages/app-desktop/gui/MenuBar.js:643
 #: packages/app-mobile/components/screens/config.js:495
 msgid "Make a donation"
-msgstr "捐赠"
+msgstr "捐助"
 
 #: packages/app-desktop/gui/MenuBar.js:655
 msgid "Toggle development tools"
-msgstr "切换开发者工具"
+msgstr "打开/关闭开发者工具"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1202,7 +1202,7 @@ msgstr ""
 "3.让它运行完成。 在运行时，请避免在其他设备上更改任何笔记，以免发生冲突。\n"
 "4.在此设备上完成同步后，同步其他所有设备，并使其同步完成。\n"
 "\n"
-"重要: 在一台设备上只需要运行一次。"
+"重要提醒: 在一台设备上只需要运行一次。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
 msgid "Re-encryption"
@@ -1667,7 +1667,7 @@ msgstr "使用相机的权限"
 
 #: packages/app-mobile/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
-msgstr "您须要授予相机权限。"
+msgstr "您需要授予相机权限。"
 
 #: packages/app-mobile/components/screen-header.js:185
 msgid "Delete these notes?"
@@ -2793,7 +2793,7 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"发生错误。请检查 URL 、用户名、密码等是否正确一级同步目标是否可访问。报告的错"
+"发生错误。请检查 URL 、用户名、密码等是否正确以及同步目标是否可访问。报告的错"
 "误为："
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
