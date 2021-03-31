@@ -2,7 +2,9 @@
   "name": "@joplin/app-clipper",
   "private": true,
   "scripts": {
-    "postinstall": "cd popup && npm install"
+    "postinstall": "cd popup && npm install",
+    "watch_clipper": "npm-watch build_clipper",
+    "build_clipper": "node ../tools/build-clipper-dev.js"
   },
   "version": "1.0.8",
   "description": "Joplin Web Clipper",
