@@ -15,6 +15,7 @@
   },
   "scripts": {
     "postinstall": "cd popup && npm install",
+    "start": "npm run start:popup & npm run start:clipper",
     "start:clipper": "wait-on popup/build/index.html --delay 9000 && npm run watch_clipper",
     "start:popup": "cd popup && npm run watch",
     "watch_clipper": "npm-watch build_clipper",
