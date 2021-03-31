@@ -1,6 +1,18 @@
 {
   "name": "@joplin/app-clipper",
   "private": true,
+  "watch": {
+    "build_clipper": {
+      "patterns": [
+        "content_scripts",
+        "popup/build",
+        "icons",
+        "background.js",
+        "manifest.json"
+      ],
+      "delay": 6000
+    }
+  },
   "scripts": {
     "postinstall": "cd popup && npm install",
     "watch_clipper": "npm-watch build_clipper",
