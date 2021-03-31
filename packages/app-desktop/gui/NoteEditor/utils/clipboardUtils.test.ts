@@ -1,7 +1,7 @@
 import { getCopyableContent } from './clipboardUtils';
 
-describe('copyHtmlToClipboard', () => {
-	test('should have remove parameters from local images', () => {
+describe('getCopyableContent', () => {
+	test('should remove parameters from local images', () => {
 		const localImage = 'file:///home/some/path/test.jpg';
 
 		const content = `<div><img src="${localImage}?a=1&b=2"></div>`;
