@@ -12,8 +12,7 @@ import usePluginServiceRegistration from '../../utils/usePluginServiceRegistrati
 import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import useContextMenu from './utils/useContextMenu';
-import getCopyableContent from './utils/getCopyableContent';
-import htmlUtils from '@joplin/lib/htmlUtils';
+import { copyHtmlToClipboard } from '../../utils/clipboardUtils';
 import shim from '@joplin/lib/shim';
 
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -1041,15 +1040,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
-			const copyableContent = getCopyableContent(copiedContent);
-
-			// In that case we need to set both HTML and Text context, otherwise it
-			// won't be possible to paste the text in, for example, a text editor.
-			// https://github.com/laurent22/joplin/issues/4788
-			clipboard.write({
-				text: htmlUtils.stripHtml(copiedContent),
-				html: copyableContent,
-			});
+			copyHtmlToClipboard(copiedContent);
 			event.preventDefault();
 		}
 
