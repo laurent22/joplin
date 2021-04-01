@@ -1142,6 +1142,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					placeholder={_('Add body')}
 					placeholderTextColor={theme.colorFaded}
 					// need some extra padding for iOS so that the keyboard won't cover last line of the note
+					// see https://github.com/laurent22/joplin/issues/3607
 					paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
 				/>
 			);
