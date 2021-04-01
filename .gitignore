@@ -21,6 +21,7 @@ _vieux/
 /app/config/parameters_prod.yml
 /app/config/parameters.yml
 /build/
+.idea
 /phpunit.xml
 /var/*
 /var/cache/*
