@@ -458,7 +458,7 @@ joplin.plugins.register({
 
 		// This event will be triggered when the content of the note changes
 		// as you also want to update the TOC in this case.
-		await joplin.workspace.onNoteContentChange(() =&gt; {
+		await joplin.workspace.onNoteChange(() =&gt; {
 			updateTocView();
 		});
 
