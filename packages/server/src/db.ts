@@ -314,6 +314,7 @@ export interface Share extends WithDates, WithUuid {
 	owner_id?: Uuid;
 	file_id?: Uuid;
 	type?: ShareType;
+	folder_id?: Uuid;
 }
 
 export interface ShareUser extends WithDates, WithUuid {
@@ -325,6 +326,7 @@ export interface ShareUser extends WithDates, WithUuid {
 export interface JoplinFileContent {
 	id?: Uuid;
 	owner_id?: Uuid;
+	item_id?: Uuid;
 	parent_id?: Uuid;
 	type?: number;
 	updated_time?: string;
@@ -413,6 +415,7 @@ export const databaseSchema: DatabaseTables = {
 		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		folder_id: { type: 'string' },
 	},
 	share_users: {
 		id: { type: 'string' },
@@ -425,6 +428,7 @@ export const databaseSchema: DatabaseTables = {
 	joplin_file_contents: {
 		id: { type: 'string' },
 		owner_id: { type: 'string' },
+		item_id: { type: 'string' },
 		parent_id: { type: 'string' },
 		type: { type: 'number' },
 		updated_time: { type: 'string' },

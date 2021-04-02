@@ -18,6 +18,7 @@ packages/turndown-plugin-gfm/
 node_modules/
 packages/lib/lib/lib.js
 packages/lib/locales/index.js
+packages/lib/services/database/types.ts
 packages/app-cli/build
 packages/app-cli/build/
 packages/app-cli/locales

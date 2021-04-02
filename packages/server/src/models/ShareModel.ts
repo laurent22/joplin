@@ -10,7 +10,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	protected async validate(share: Share, _options: ValidateOptions = {}): Promise<Share> {
-		if ('type' in share && ![ShareType.Link, ShareType.App].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
+		if ('type' in share && ![ShareType.Link, ShareType.App, ShareType.JoplinApp].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
 
 		return share;
 	}
@@ -29,8 +29,23 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.save(toSave);
 	}
 
+	public async createJoplinFolderShare(folderId: string): Promise<Share> {
+		const toSave: Share = {
+			type: ShareType.JoplinApp,
+			folder_id: folderId,
+			file_id: '',
+			owner_id: this.userId,
+		};
+
+		return this.save(toSave);
+	}
+
 	public shareUrl(id: Uuid, query: any = null): string {
 		return setQueryParameters(`${this.baseUrl}/shares/${id}`, query);
+	}
+
+	public async sharesByFileId(fileId: string): Promise<Share[]> {
+		return this.db(this.tableName).select(this.defaultFields).where('file_id', '=', fileId);
 	}
 
 }

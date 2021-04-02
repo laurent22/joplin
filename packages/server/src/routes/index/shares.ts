@@ -7,10 +7,8 @@ import { FileViewerResponse } from '../../apps/joplin/Application';
 import { FileWithContent } from '../../models/FileModel';
 
 async function renderFile(context: AppContext, fileWithContent: FileWithContent, share: Share): Promise<FileViewerResponse> {
-	const joplinApp = await context.apps.joplin();
-
-	if (await joplinApp.fileToJoplinItem(fileWithContent)) {
-		return joplinApp.renderFile(fileWithContent, share, context.query);
+	if (await context.apps.joplin.fileToJoplinItem(fileWithContent)) {
+		return context.apps.joplin.renderFile(fileWithContent, share, context.query);
 	}
 
 	const { file, content } = fileWithContent;

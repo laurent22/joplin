@@ -3,6 +3,7 @@ import Logger from '@joplin/lib/Logger';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 import { File, JoplinFileContent, Share, Uuid } from '../../db';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupToHtml } from '@joplin/renderer';
@@ -61,6 +62,7 @@ export default class Application extends BaseApplication {
 
 		// Only load the classes that will be needed to render the notes and
 		// resources.
+		BaseItem.loadClass('Folder', Folder);
 		BaseItem.loadClass('Note', Note);
 		BaseItem.loadClass('Resource', Resource);
 
@@ -69,8 +71,6 @@ export default class Application extends BaseApplication {
 		FileModel.registerSaveContentHandler(this.fileModel_saveContentHandler);
 		FileModel.registerLoadContentHandler(this.fileModel_loadContentHandler);
 	}
-
-	// TODO: also do loadContentHandler
 
 	private async fileModel_saveContentHandler(event: SaveContentHandlerEvent): Promise<File> | null {
 		const fileContent = await this.fileToJoplinItem({ file: event.file, content: event.content });
@@ -283,7 +283,7 @@ export default class Application extends BaseApplication {
 			const rawItem: any = await this.unserializeItem(fileWithContent.content);
 
 			const dbItem: JoplinFileContent = {
-				id: rawItem.id,
+				item_id: rawItem.id,
 				parent_id: rawItem.parent_id || '',
 				encryption_applied: rawItem.encryption_applied || 0,
 				type: rawItem.type_,
@@ -310,7 +310,7 @@ export default class Application extends BaseApplication {
 
 	public async joplinItemToFile(fileContent: JoplinFileContent): Promise<string> {
 		const item = JSON.parse(fileContent.content);
-		item.id = fileContent.id;
+		item.id = fileContent.item_id;
 		item.type_ = fileContent.type;
 		item.parent_id = fileContent.parent_id;
 		item.encryption_applied = fileContent.encryption_applied;

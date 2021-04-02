@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createFile } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createFile, createFile2 } from '../utils/testing/testUtils';
 import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
 
 describe('ShareUserModel', function() {
@@ -34,6 +34,23 @@ describe('ShareUserModel', function() {
 		expectedUserIds.sort();
 
 		expect(userIds).toEqual(expectedUserIds);
+	});
+
+	test('should get the user shares associated with a file', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const { user: user3, session: session3 } = await createUserAndSession(3);
+
+		const file = await createFile2(session1.id, 'root:/test.txt:', 'test');
+
+		await shareWithUserAndAccept(session1.id, user1, session2.id, user2, file);
+		await shareWithUserAndAccept(session1.id, user1, session3.id, user3, file);
+
+		const userShares = await models().shareUser({ userId: user1.id }).loadByFileId(file.id);
+
+		expect(userShares.length).toBe(2);
+		expect(!!userShares.find(s => s.user_id === user2.id)).toBe(true);
+		expect(!!userShares.find(s => s.user_id === user3.id)).toBe(true);
 	});
 
 });

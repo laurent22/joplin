@@ -15,9 +15,7 @@ export default class JoplinFileContentModel extends BaseModel<JoplinFileContent>
 		let modFile: File = { ...file };
 
 		await this.withTransaction(async () => {
-			// For now will always overwrite the complete content with the new one
-			await this.delete(joplinFileContent.id, { allowNoOp: true });
-			await this.save(joplinFileContent, { isNew: true });
+			joplinFileContent = await this.save(joplinFileContent);
 			delete modFile.content;
 			modFile.content_id = joplinFileContent.id;
 			modFile.content_type = FileContentType.JoplinItem;
@@ -26,5 +24,42 @@ export default class JoplinFileContentModel extends BaseModel<JoplinFileContent>
 
 		return modFile;
 	}
+
+	public async fileIdFromItemId(ownerId: string, itemId: string): Promise<string> {
+		const f = await this.db('files')
+			.leftJoin(this.tableName, 'files.content_id', 'joplin_file_contents.id')
+			.select('files.id')
+			.where('joplin_file_contents.item_id', '=', itemId)
+			.andWhere('files.owner_id', '=', ownerId)
+			.first();
+
+		return f && f.id ? f.id : null;
+	}
+
+	public async fileFromItemId(ownerId: string, itemId: string): Promise<File> {
+		const fileId = await this.fileIdFromItemId(ownerId, itemId);
+		return this.models().file({ userId: ownerId }).load(fileId);
+	}
+
+	// public async loadFromItemId(ownerId:string, itemId:string):Promise<JoplinFileContent> {
+
+	// }
+
+	// public async createLinkedFolder(sourceOwnerId:string, sourceFolderId:string):Promise<FolderEntity> {
+	// 	const file = await this.fileFromItemId(sourceOwnerId, sourceFolderId);
+
+	// 	const newFile:File = {...file};
+	// 	delete newFile.id;
+	// 	newFile.owner_id = this.userId;
+	// 	// newFile.parent_id
+
+	// 	const content = await this.load(file.content_id);
+
+	// 	console.info('FILE', file);
+	// 	console.info('CONTENT', content);
+
+	// 	// Makje content table ID globally unique
+	// 	// Add column item_id
+	// }
 
 }

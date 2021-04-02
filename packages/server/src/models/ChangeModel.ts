@@ -61,6 +61,15 @@ export default class ChangeModel extends BaseModel<Change> {
 		return `${this.baseUrl}/changes`;
 	}
 
+	public async allFromId(id: string): Promise<Change[]> {
+		const startChange: Change = id ? await this.load(id) : null;
+		const query = this.db(this.tableName).select(...this.defaultFields);
+		if (startChange) void query.where('counter', '>', startChange.counter);
+		void query.limit(1000);
+		const results = await query;
+		return results;
+	}
+
 	public async allWithPagination(pagination: Pagination): Promise<PaginatedChanges> {
 		const results = await paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('owner_id', '=', this.userId), pagination);
 		const changeWithItems = await this.loadChangeItems(results.items);

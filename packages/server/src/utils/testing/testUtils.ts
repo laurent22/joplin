@@ -14,6 +14,7 @@ import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
 import { ApiError } from '../errors';
+import { putApi } from './apiUtils';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -33,6 +34,13 @@ export async function tempDir(): Promise<string> {
 	tempDir_ = `${packageRootDir}/temp/${randomHash()}`;
 	await fs.mkdirp(tempDir_);
 	return tempDir_;
+}
+
+export async function makeTempFileWithContent(content: string): Promise<string> {
+	const d = await tempDir();
+	const filePath = `${d}/${randomHash()}`;
+	await fs.writeFile(filePath, content, 'utf8');
+	return filePath;
 }
 
 let createdDbName_: string = null;
@@ -236,6 +244,13 @@ export async function createFile(userId: string, path: string, content: string):
 	file.content = Buffer.from(content);
 	const savedFile = await fileModel.save(file);
 	return fileModel.load(savedFile.id);
+}
+
+export async function createFile2(sessionId: string, path: string, content: string): Promise<File> {
+	const tempFilePath = await makeTempFileWithContent(content);
+	const file = await putApi(sessionId, `files/${path}/content`, null, { filePath: tempFilePath });
+	await fs.remove(tempFilePath);
+	return file;
 }
 
 export async function updateFile(userId: string, path: string, content: string): Promise<File> {

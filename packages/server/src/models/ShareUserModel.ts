@@ -8,6 +8,12 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return 'share_users';
 	}
 
+	public async loadByFileId(fileId: Uuid): Promise<ShareUser[]> {
+		const shares = await this.models().share({ userId: this.userId }).sharesByFileId(fileId);
+		const shareIds = shares.map(s => s.id);
+		return this.db(this.tableName).select(...this.defaultFields).whereIn('share_id', shareIds);
+	}
+
 	public async loadByShareIdAndUser(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
 		const link: ShareUser = {
 			share_id: shareId,

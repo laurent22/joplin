@@ -11,13 +11,13 @@ export default class Applications {
 		this.models_ = models;
 	}
 
-	public async joplin(): Promise<ApplicationJoplin> {
-		if (!this.joplin_) {
-			this.joplin_ = new ApplicationJoplin();
-			this.joplin_.initBase_('joplin', config(), this.models_);
-			await this.joplin_.initialize();
-		}
+	public async initializeApps() {
+		this.joplin_ = new ApplicationJoplin();
+		this.joplin_.initBase_('joplin', config(), this.models_);
+		await this.joplin_.initialize();
+	}
 
+	public get joplin(): ApplicationJoplin {
 		return this.joplin_;
 	}
 
@@ -27,12 +27,10 @@ export default class Applications {
 		// The below is roughtly hard-coded for the Joplin app but could be
 		// generalised if multiple apps are supported.
 
-		const joplinApp = await this.joplin();
-
-		const fromAppUrl = await joplinApp.localFileFromUrl(url);
+		const fromAppUrl = await this.joplin.localFileFromUrl(url);
 		if (fromAppUrl) return fromAppUrl;
 
-		const rootDir = joplinApp.rootDir;
+		const rootDir = this.joplin.rootDir;
 
 		const defaultPaths = [
 			'apps/joplin',
