@@ -27,8 +27,18 @@ export default function useOnMessage(onCheckboxChange: Function, noteBody: strin
 		} else {
 			// msg is broken at this point if it contained special characters
 			// see: https://github.com/laurent22/joplin/issues/4494
-			const decodedURI = decodeURI(event.nativeEvent.data);
-			onJoplinLinkClick(decodedURI);
+
+			// Had to encode URI before decoding it, since `decodeURI` only decodes URI encoded by `encodeURI`
+			// or by a similar routine. Thus, `decodeURI` is not able to correctly handle special characters
+			// in `event.nativeEvent.data`.
+			const encodedURI = encodeURI(event.nativeEvent.data);
+			try {
+				const decodedURI = decodeURI(encodedURI);
+				onJoplinLinkClick(decodedURI);
+			} catch (error) {
+				// catches a malformed URI
+				console.error('unable to decode URI', error);
+			}
 		}
 	}, [onCheckboxChange, noteBody, onMarkForDownload, onJoplinLinkClick, onResourceLongPress]);
 }
