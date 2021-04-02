@@ -873,6 +873,9 @@ packages/lib/locale.js.map
 packages/lib/markdownUtils.d.ts
 packages/lib/markdownUtils.js
 packages/lib/markdownUtils.js.map
+packages/lib/markdownUtils.test.d.ts
+packages/lib/markdownUtils.test.js
+packages/lib/markdownUtils.test.js.map
 packages/lib/markupLanguageUtils.d.ts
 packages/lib/markupLanguageUtils.js
 packages/lib/markupLanguageUtils.js.map
