@@ -481,6 +481,7 @@ class NoteListComponent extends React.Component {
 				style={style}
 				itemRenderer={this.renderItem}
 				onKeyDown={this.onKeyDown}
+				visible={this.props.visible}
 			/>
 		);
 	}
