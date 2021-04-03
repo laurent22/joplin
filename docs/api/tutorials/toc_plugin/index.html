@@ -458,7 +458,7 @@ joplin.plugins.register({
 
 		// This event will be triggered when the content of the note changes
 		// as you also want to update the TOC in this case.
-		await joplin.workspace.onNoteContentChange(() =&gt; {
+		await joplin.workspace.onNoteChange(() =&gt; {
 			updateTocView();
 		});
 
@@ -541,7 +541,7 @@ function escapeHtml(unsafe:string) {
 
 	onStart: async function() {
 		// Create the panel object
-		const panel = await joplin.views.panels.create();
+		const panel = await joplin.views.panels.create('panel_1');
 
 		// Set some initial content while the TOC is being created
 		await joplin.views.panels.setHtml(panel, 'Loading...');
@@ -593,7 +593,7 @@ function escapeHtml(unsafe:string) {
 <p>Now run the plugin again and you should see the TOC dynamically updating as you change notes.</p>
 <h2>Styling the view<a name="styling-the-view" href="#styling-the-view" class="heading-anchor">🔗</a></h2>
 <p>In order to better integrate the TOC to Joplin, you might want to style it using CSS. To do so, first add a <code>webview.css</code> file next to <code>index.ts</code>, then you will need to let Joplin know about this file. This is done using the <code>addScript()</code> function (which is also used to add JavaScript files as we'll see later), like so:</p>
-<pre><code class="language-typescript">const panel = await joplin.views.panels.create();
+<pre><code class="language-typescript">const panel = await joplin.views.panels.create('panel_1');
  // Add the CSS file to the view, right after it has been created:
 await joplin.views.panels.addScript(panel, './webview.css');
 </code></pre>
@@ -617,8 +617,7 @@ await joplin.views.panels.addScript(panel, './webview.css');
 <h2>Making the webview interactive<a name="making-the-webview-interactive" href="#making-the-webview-interactive" class="heading-anchor">🔗</a></h2>
 <p>The next step is to make the TOC interactive so that when the user clicks on a link, the note is scrolled to right header. This can be done using an external JavaScript file that will handle the click events. As for the CSS file, create a <code>webview.js</code> file next to <code>index.ts</code>, then add the script to the webview:</p>
 <pre><code class="language-typescript">// In index.ts
-
-const panel = joplin.views.createWebviewPanel();
+const panel = await joplin.views.panels.create('panel_1');
 await joplin.views.panels.addScript(panel, './webview.css');
 await joplin.views.panels.addScript(panel, './webview.js'); // Add the JS file
 </code></pre>
@@ -657,7 +656,7 @@ document.addEventListener('click', event =&gt; {
 <p>Then from the plugin, in <code>src/index.ts</code>, you can listen to this message using the <code>onMessage()</code> handler. Then from this handler, you can call the <code>scrollToHash</code> command and pass it the slug (or hash).</p>
 <pre><code class="language-typescript">joplin.plugins.register({
 	onStart: async function() {
-		const panel = await joplin.views.panels.create();
+		const panel = await joplin.views.panels.create('panel_1');
 
 		// ...
 
