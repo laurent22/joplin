@@ -90,6 +90,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	const addListItem = useCallback((string1, defaultText = '') => {
 		if (editorRef.current) {
+			editorRef.current.focus();
 			if (editorRef.current.somethingSelected()) {
 				editorRef.current.wrapSelectionsByLine(string1);
 			} else if (editorRef.current.getCursor('anchor').ch !== 0) {
@@ -325,7 +326,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		let cancelled = false;
 
 		async function loadScripts() {
-			const scriptsToLoad: {src: string; id: string; loaded: boolean}[] = [
+			const scriptsToLoad: { src: string; id: string; loaded: boolean }[] = [
 				{
 					src: 'node_modules/codemirror/addon/dialog/dialog.css',
 					id: 'codemirrorDialogStyle',
@@ -650,7 +651,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 			const menu = new Menu();
 
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection();
 
 			menu.append(
 				new MenuItem({
