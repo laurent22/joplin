@@ -10,9 +10,12 @@
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "clean": "node tools/clean.js",
-    "postinstall": "jetify && npm run build"
+    "postinstall": "jetify && npm run build",
+    "test": "jest",
+    "test-ci": "npm run test"
   },
   "dependencies": {
+    "@babel/runtime": "^7.13.10",
     "@joplin/lib": "^1.0.9",
     "@joplin/renderer": "^1.0.17",
     "@react-native-community/clipboard": "^1.5.0",
@@ -21,6 +24,8 @@
     "@react-native-community/netinfo": "^6.0.0",
     "@react-native-community/push-notification-ios": "^1.6.0",
     "@react-native-community/slider": "^3.0.3",
+    "@testing-library/react-hooks": "^5.1.1",
+    "@types/jest": "^26.0.22",
     "buffer": "^5.0.8",
     "events": "^3.2.0",
     "jsc-android": "241213.1.0",
@@ -51,6 +56,7 @@
     "react-native-version-info": "^1.1.0",
     "react-native-webview": "^10.9.2",
     "react-redux": "5.0.7",
+    "react-test-renderer": "^17.0.2",
     "redux": "4.0.0",
     "rn-fetch-blob": "^0.12.0",
     "stream": "0.0.2",
@@ -61,7 +67,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
-    "@babel/runtime": "^7.11.2",
+    "@babel/runtime": "^7.13.10",
     "@joplin/tools": "^1.0.9",
     "@types/node": "^14.14.6",
     "@types/react": "^16.9.55",

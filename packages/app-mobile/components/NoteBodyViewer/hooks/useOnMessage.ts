@@ -4,7 +4,7 @@ const shared = require('@joplin/lib/components/shared/note-screen-shared');
 export default function useOnMessage(onCheckboxChange: Function, noteBody: string, onMarkForDownload: Function, onJoplinLinkClick: Function, onResourceLongPress: Function) {
 	return useCallback((event: any) => {
 		// Since RN 58 (or 59) messages are now escaped twice???
-		const msg = unescape(unescape(event.nativeEvent.data));
+		let msg = unescape(unescape(event.nativeEvent.data));
 		// Maybe we can use this line instead?
 		// const msg = decodeURI(event.nativeEvent.data);
 		// This doc mentioned that unescape shouldn't be used in most cases, but I'm not sure about the context:
@@ -33,12 +33,14 @@ export default function useOnMessage(onCheckboxChange: Function, noteBody: strin
 			// in `event.nativeEvent.data`.
 			const encodedURI = encodeURI(event.nativeEvent.data);
 			try {
-				const decodedURI = decodeURI(encodedURI);
-				onJoplinLinkClick(decodedURI);
+				msg = decodeURI(encodedURI);
+				onJoplinLinkClick(msg);
 			} catch (error) {
 				// catches a malformed URI
 				console.error('unable to decode URI', error);
 			}
 		}
+
+		return { msg };
 	}, [onCheckboxChange, noteBody, onMarkForDownload, onJoplinLinkClick, onResourceLongPress]);
 }
