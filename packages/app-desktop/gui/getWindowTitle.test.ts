@@ -41,7 +41,7 @@ describe('Get Window Title', () => {
 		expect(title).toBe('Joplin (DEV)');
 	});
 	test('When not on main screen (dropbox login)', () => {
-		const title = getWindowTitle(props.notes, props.selectedNoteIds, props.selectedFolderId, props.folders, props.screens, { 'type': 'NAV_GO', 'routeName': 'DropboxLogin', 'props': {}  });
+		const title = getWindowTitle(props.notes, props.selectedNoteIds, props.selectedFolderId, props.folders, props.screens, { 'type': 'NAV_GO', 'routeName': 'DropboxLogin', 'props': {} });
 		expect(title).toBe('Dropbox Login - Joplin (DEV)');
 	});
 });
