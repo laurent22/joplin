@@ -70,6 +70,10 @@ class ClipperConfigScreenComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 		};
 
+		const tokenStyle = {
+			fontFamily: 'monospace',
+		};
+
 		const webClipperStatusComps = [];
 
 		if (this.props.clipperServerAutoStart) {
@@ -142,7 +146,7 @@ class ClipperConfigScreenComponent extends React.Component {
 							<p style={theme.h1Style}>{_('Advanced options')}</p>
 							<p style={theme.textStyle}>{_('Authorisation token:')}</p>
 							<p style={apiTokenStyle}>
-								{this.props.apiToken}{' '}
+								<span style={tokenStyle}>{this.props.apiToken}{' '}</span>
 								<a style={theme.urlStyle} href="#" onClick={this.copyToken_click}>
 									{_('Copy token')}
 								</a>
