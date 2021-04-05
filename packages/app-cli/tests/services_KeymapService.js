@@ -242,7 +242,7 @@ describe('services_KeymapService', () => {
 		it('should throw when the required properties are missing', () => {
 			const customKeymaps = [
 				[
-					{ command: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
+					{ commmmmand: 'gotoAnything', accelerator: 'Ctrl+Shift+G' },
 					{ command: 'showLocalSearch', accelerator: 'Ctrl+Alt+L' },
 					{ command: 'print', accelerator: 'Alt+P' },
 				],
