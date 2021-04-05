@@ -40,7 +40,7 @@ type_: 1`;
 function makeFolderSerializedBody(folder: FolderEntity = {}): string {
 	return `${'title' in folder ? folder.title : 'Title'}
 
-id: ${defaultFolderId}
+id: ${folder.id || defaultFolderId}
 created_time: 2020-11-11T18:44:14.534Z
 updated_time: 2020-11-11T18:44:14.534Z
 user_created_time: 2020-11-11T18:44:14.534Z
@@ -104,7 +104,7 @@ describe('shares.joplin-app', function() {
 		const noteId1 = '00000000000000000000000000000001';
 		const noteId2 = '00000000000000000000000000000002';
 
-		await createFile2(session1.id, `root:/${folderId}.md:`, makeFolderSerializedBody());
+		await createFile2(session1.id, `root:/${folderId}.md:`, makeFolderSerializedBody({ id: folderId }));
 
 		await shareFolder(session1.id, session2.id, user2.email, `root:/${folderId}.md:`);
 
@@ -112,7 +112,10 @@ describe('shares.joplin-app', function() {
 		await createFile2(session1.id, `root:/${noteId2}.md:`, makeNoteSerializedBody({ id: noteId2, parent_id: folderId }));
 
 		const results = await getApi<PaginatedFiles>(session2.id, 'files/root/children');
-		console.info(results);
+		expect(results.items.length).toBe(3);
+		expect(!!results.items.find(f => f.name === `${folderId}.md`)).toBe(true);
+		expect(!!results.items.find(f => f.name === `${noteId1}.md`)).toBe(true);
+		expect(!!results.items.find(f => f.name === `${noteId2}.md`)).toBe(true);
 	});
 
 });

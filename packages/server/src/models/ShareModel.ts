@@ -15,7 +15,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return share;
 	}
 
-	public async createShare(shareType: ShareType, path: string): Promise<Share> {
+	public async createShare(shareType: ShareType, path: string, isAuto: boolean = false): Promise<Share> {
 		const file: File = await this.models().file({ userId: this.userId }).pathToFile(path);
 
 		if (file.source_file_id) throw new ErrorBadRequest('A shared file cannot be shared again');
@@ -24,6 +24,7 @@ export default class ShareModel extends BaseModel<Share> {
 			type: shareType,
 			file_id: file.id,
 			owner_id: this.userId,
+			is_auto: isAuto ? 1 : 0,
 		};
 
 		return this.save(toSave);

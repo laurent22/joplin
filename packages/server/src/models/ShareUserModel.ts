@@ -23,6 +23,11 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return this.db(this.tableName).where(link).first();
 	}
 
+	public async addById(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
+		const user = await this.models().user({ userId }).load(userId);
+		return this.addByEmail(shareId, user.email);
+	}
+
 	public async addByEmail(shareId: Uuid, userEmail: string): Promise<ShareUser> {
 		// TODO: check that user can access this share
 		const share = await this.models().share({ userId: this.userId }).load(shareId);

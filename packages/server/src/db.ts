@@ -315,6 +315,7 @@ export interface Share extends WithDates, WithUuid {
 	file_id?: Uuid;
 	type?: ShareType;
 	folder_id?: Uuid;
+	is_auto?: number;
 }
 
 export interface ShareUser extends WithDates, WithUuid {
@@ -416,6 +417,7 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 		folder_id: { type: 'string' },
+		is_auto: { type: 'number' },
 	},
 	share_users: {
 		id: { type: 'string' },

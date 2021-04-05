@@ -1,4 +1,4 @@
-import BaseModel, { ValidateOptions, SaveOptions, DeleteOptions } from './BaseModel';
+import BaseModel, { ValidateOptions, SaveOptions as BaseSaveOptions, DeleteOptions } from './BaseModel';
 import { File, ItemType, databaseSchema, Uuid, FileContentType } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
@@ -22,13 +22,24 @@ export interface LoadContentHandlerEvent {
 	options: LoadOptions;
 }
 
+export interface SaveOptions extends BaseSaveOptions {
+	skipPermissionCheck?: boolean;
+}
+
 export interface SaveContentHandlerEvent {
 	// We pass the models to the handler so that any db call is executed within
 	// the same context. It matters in particular for transactions, which needs
 	// to be executed with the same `db` connection.
 	models: Models;
+
+	// If the file being saved, is a link to another file, this `file` property
+	// is a link to the **source file**.
 	file: File;
-	content: FileContent;
+
+	// This is the raw content, without any serialisation, and it also takes
+	// into account file links.
+	content: Buffer;
+	isNew: boolean;
 	options: SaveOptions;
 }
 
@@ -508,6 +519,13 @@ export default class FileModel extends BaseModel<File> {
 		}
 	}
 
+	public async contentTypeInfo(fileId: string): Promise<File> {
+		const file: File = await this.db<File>(this.tableName).select(['source_file_id', 'content_type', 'content_id']).where({ id: fileId }).first();
+		if (!file) throw new ErrorNotFound(`No such file: ${fileId}`);
+		if (file.source_file_id) return this.contentTypeInfo(file.source_file_id);
+		return file;
+	}
+
 	private async loadAllFields(id: string): Promise<File> {
 		return this.db<File>(this.tableName).select('*').where({ id: id }).first();
 	}
@@ -609,6 +627,7 @@ export default class FileModel extends BaseModel<File> {
 					models: this.models(),
 					file: fileToProcess,
 					content: fileToProcess.content,
+					isNew,
 					options,
 				});
 

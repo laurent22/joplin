@@ -73,9 +73,9 @@ export default class Application extends BaseApplication {
 	}
 
 	private async fileModel_saveContentHandler(event: SaveContentHandlerEvent): Promise<File> | null {
-		const fileContent = await this.fileToJoplinItem({ file: event.file, content: event.content });
+		const fileContent = await this.fileToJoplinItem({ file: event.file, content: event.content.toString() });
 		if (!fileContent) return null;
-		const result = await event.models.joplinFileContent({ userId: event.file.owner_id }).saveFileAndContent(event.file, fileContent, event.options);
+		const result = await event.models.joplinFileContent({ userId: event.file.owner_id }).saveFileAndContent(event.file, fileContent, event.isNew, event.options);
 		return result;
 	}
 
