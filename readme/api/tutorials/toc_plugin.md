@@ -66,7 +66,7 @@ joplin.plugins.register({
 
 		// This event will be triggered when the content of the note changes
 		// as you also want to update the TOC in this case.
-		await joplin.workspace.onNoteContentChange(() => {
+		await joplin.workspace.onNoteChange(() => {
 			updateTocView();
 		});
 
@@ -171,7 +171,7 @@ joplin.plugins.register({
 
 	onStart: async function() {
 		// Create the panel object
-		const panel = await joplin.views.panels.create();
+		const panel = await joplin.views.panels.create('panel_1');
 
 		// Set some initial content while the TOC is being created
 		await joplin.views.panels.setHtml(panel, 'Loading...');
@@ -228,7 +228,7 @@ Now run the plugin again and you should see the TOC dynamically updating as you 
 In order to better integrate the TOC to Joplin, you might want to style it using CSS. To do so, first add a `webview.css` file next to `index.ts`, then you will need to let Joplin know about this file. This is done using the `addScript()` function (which is also used to add JavaScript files as we'll see later), like so:
 
 ```typescript
-const panel = await joplin.views.panels.create();
+const panel = await joplin.views.panels.create('panel_1');
  // Add the CSS file to the view, right after it has been created:
 await joplin.views.panels.addScript(panel, './webview.css');
 ```
@@ -261,8 +261,7 @@ The next step is to make the TOC interactive so that when the user clicks on a l
 
 ```typescript
 // In index.ts
-
-const panel = joplin.views.createWebviewPanel();
+const panel = await joplin.views.panels.create('panel_1');
 await joplin.views.panels.addScript(panel, './webview.css');
 await joplin.views.panels.addScript(panel, './webview.js'); // Add the JS file
 ```
@@ -314,7 +313,7 @@ Then from the plugin, in `src/index.ts`, you can listen to this message using th
 ```typescript
 joplin.plugins.register({
 	onStart: async function() {
-		const panel = await joplin.views.panels.create();
+		const panel = await joplin.views.panels.create('panel_1');
 
 		// ...
 

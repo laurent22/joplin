@@ -39,7 +39,12 @@ export default function(setInstallingPluginIds: Function, pluginSettings: Plugin
 		if (!installError) {
 			const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
 				draft[pluginId] = defaultPluginSetting();
-				if (isUpdate) draft[pluginId].hasBeenUpdated = true;
+				if (isUpdate) {
+					if (pluginSettings[pluginId]) {
+						draft[pluginId].enabled = pluginSettings[pluginId].enabled;
+					}
+					draft[pluginId].hasBeenUpdated = true;
+				}
 			});
 
 			onPluginSettingsChange({ value: newSettings });

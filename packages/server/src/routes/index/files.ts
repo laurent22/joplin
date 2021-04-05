@@ -4,7 +4,7 @@ import { AppContext, HttpMethod } from '../../utils/types';
 import { contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorNotFound } from '../../utils/errors';
 import { File } from '../../db';
-import { createPaginationLinks, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
+import { createPaginationLinks, filterPaginationQueryParams, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
 import { setQueryParameters } from '../../utils/urlUtils';
 import config from '../../config';
 import { formatDateTime } from '../../utils/time';
@@ -28,15 +28,11 @@ router.alias(HttpMethod.GET, 'files', 'files/:id');
 
 router.get('files/:id', async (path: SubPath, ctx: AppContext) => {
 	const dirId = path.id;
-	const query = ctx.query;
 
 	// Query parameters that should be appended to pagination-related URLs
-	const baseUrlQuery: any = {};
-	if (query.limit) baseUrlQuery.limit = query.limit;
-	if (query.order_by) baseUrlQuery.order_by = query.order_by;
-	if (query.order_dir) baseUrlQuery.order_dir = query.order_dir;
+	const baseUrlQuery = filterPaginationQueryParams(ctx.query);
 
-	const pagination = makeFilePagination(query);
+	const pagination = makeFilePagination(ctx.query);
 	const owner = ctx.owner;
 	const fileModel = ctx.models.file({ userId: owner.id });
 	const root = await fileModel.userRootFile();

@@ -62,7 +62,7 @@ msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 
-#: packages/app-desktop/plugins/GotoAnything.js:431
+#: packages/app-desktop/plugins/GotoAnything.js:430
 #, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
@@ -72,12 +72,12 @@ msgstr ""
 "Unesite naziv bilješke ili neke riječi koje ona sadržava da je otvorite. Ili "
 "kucajte # i naziv oznake, odnosno @ i naziv bilježnice."
 
-#: packages/app-desktop/plugins/GotoAnything.js:456
+#: packages/app-desktop/plugins/GotoAnything.js:455
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
 msgstr "Pronađite bilo šta..."
 
-#: packages/app-desktop/plugins/GotoAnything.js:463
+#: packages/app-desktop/plugins/GotoAnything.js:462
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
 msgstr ""
@@ -181,7 +181,7 @@ msgstr ""
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:180
 #: packages/app-desktop/gui/utils/NoteListUtils.js:140
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:122
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:125
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-mobile/components/side-menu-content.js:146
@@ -205,7 +205,7 @@ msgid "Export"
 msgstr "Iznesi"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:301
-#: packages/app-mobile/components/side-menu-content.js:360
+#: packages/app-mobile/components/side-menu-content.js:368
 #: packages/app-mobile/components/screens/notes.js:188
 msgid "All notes"
 msgstr "Sve bilješke"
@@ -217,7 +217,7 @@ msgid "Synchronise"
 msgstr "Sinhronizuj"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-mobile/components/side-menu-content.js:364
+#: packages/app-mobile/components/side-menu-content.js:372
 msgid "Notebooks"
 msgstr "Bilježnice"
 
@@ -268,30 +268,30 @@ msgstr "Ponovi sve"
 msgid "Retry"
 msgstr "Ponovi"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:178
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
 msgstr "podebljani tekst"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:179
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
 #, fuzzy
 msgid "emphasised text"
 msgstr "naglašeni tekst"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:181
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:186
 msgid "Insert Hyperlink"
 msgstr "Unesi poveznicu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:215
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:217
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:218
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:220
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:222
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:223
 msgid "List item"
 msgstr "Stavka nabrajanja"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:510
 msgid "Layout"
 msgstr "Prikaz"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:510
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -300,20 +300,20 @@ msgstr ""
 "Bilješka je prazna. Pritisnite na \"%s\" da otvorite program za rad s "
 "tekstom i uredite bilješku."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:605
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Izreži"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:612
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:626
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:373
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:633
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
@@ -324,41 +324,61 @@ msgstr "Zalijepi"
 msgid "Checkbox list"
 msgstr "Polje za kvačicu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:530
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
+msgid "Highlight"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
+msgid "Strikethrough"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
+msgid "Insert"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
+msgid "Superscript"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
+msgid "Subscript"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
-#: packages/app-mobile/components/screens/Note.js:1013
+#: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
 msgstr "Uredi"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:600
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "Priloži datoteku"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
 msgid "Code Block"
 msgstr "Kōd (izdvojen)"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:619
 msgid "Inline Code"
 msgstr "Kōd (unutar teksta)"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:619
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:634
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "Unesi datum i vrijeme"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1038
 msgid "Drop notes or files here"
 msgstr "Ispustite bilješke ili datoteke ovdje"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1038
 #, fuzzy
 msgid "Code View"
 msgstr "Kōd"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1038
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -536,7 +556,7 @@ msgstr "Potraži u trenutnoj bilješci"
 msgid "Note body"
 msgstr "Sadržaj bilješke"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:27
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
@@ -544,45 +564,45 @@ msgstr "Sadržaj bilješke"
 msgid "ID"
 msgstr "ID"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:319
 msgid "Created"
 msgstr "Kreirano"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:141
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:143
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:144
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:146
 msgid "Updated"
 msgstr "Ažurirano"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #, fuzzy
 msgid "Completed"
 msgstr "Završeno"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 msgid "Location"
 msgstr "Lokacija"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 msgid "URL"
 msgstr "URL"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
-#: packages/lib/models/Setting.js:1528
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
+#: packages/lib/models/Setting.js:1547
 msgid "Note History"
 msgstr "Historija bilješke"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 msgid "Markup"
 msgstr "Markup"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:306
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 msgid "Previous versions of this note"
 msgstr "Ranije verzije ove bilješke"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:383
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
 msgid "Note properties"
 msgstr "Svojstva bilješke"
@@ -596,7 +616,7 @@ msgstr "Greška"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:750 packages/app-cli/app/command-e2ee.js:110
+#: packages/lib/models/Setting.js:760 packages/app-cli/app/command-e2ee.js:110
 msgid "Disabled"
 msgstr "Isključeno"
 
@@ -1436,7 +1456,7 @@ msgid "Restart now"
 msgstr "Preuzmite sada:"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1524
+#: packages/lib/models/Setting.js:1543
 msgid "Plugins"
 msgstr "Dodaci"
 
@@ -1480,39 +1500,39 @@ msgstr "Nema resursa!"
 msgid "Search for plugins..."
 msgstr "Pretraživanje..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
 msgid "Install"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
 #, fuzzy
 msgid "Installing..."
 msgstr "Prekidam..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
 msgid "Installed"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
 #, fuzzy
 msgid "Update"
 msgstr "Ažurirano"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
 #, fuzzy
 msgid "Updating..."
 msgstr "Pratim..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
 msgid "(%s)"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
 #, fuzzy, javascript-format
 msgid "Could not install plugin: %s"
 msgstr "Neuspjelo prenošenje bilješki: %s"
@@ -1739,13 +1759,13 @@ msgstr "Otvori %s"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:504
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:25
+#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "Da"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
 #: packages/app-mobile/components/screens/Note.js:505
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:25
+#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "Ne"
 
@@ -1795,6 +1815,10 @@ msgstr "Nova bilježnica"
 #: packages/app-mobile/components/side-menu-content.js:316
 msgid "Configuration"
 msgstr "Konfiguracija"
+
+#: packages/app-mobile/components/side-menu-content.js:351
+msgid "Mobile data - auto-sync disabled"
+msgstr ""
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2127,7 +2151,7 @@ msgstr "Svojstva"
 msgid "Add body"
 msgstr "Dodaj tekst"
 
-#: packages/app-mobile/components/screens/Note.js:1034
+#: packages/app-mobile/components/screens/Note.js:1037
 msgid "Add title"
 msgstr "Dodaj naziv"
 
@@ -2577,7 +2601,7 @@ msgid "Editor font"
 msgstr "Pismo u uređivaču"
 
 #: packages/lib/models/Setting.js:676 packages/lib/models/Setting.js:683
-#: packages/lib/models/Setting.js:791
+#: packages/lib/models/Setting.js:810
 #, fuzzy
 msgid "Default"
 msgstr "Obični"
@@ -2589,6 +2613,21 @@ msgstr "Familija pisama u uređivaču"
 #: packages/lib/models/Setting.js:695
 #, fuzzy
 msgid ""
+"If the font is incorrect or empty, it will default to a generic monospace "
+"font."
+msgstr ""
+"Ovo mora biti *monospace* pismo inače neće funkcionisati kako treba. Ako je "
+"pismo pogrešno navedeno ili prazno, koristit će se prekonfigurisani "
+"monospace font."
+
+#: packages/lib/models/Setting.js:704
+#, fuzzy
+msgid "Editor monospace font family"
+msgstr "Familija pisama u uređivaču"
+
+#: packages/lib/models/Setting.js:705
+#, fuzzy
+msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
@@ -2597,54 +2636,58 @@ msgstr ""
 "pismo pogrešno navedeno ili prazno, koristit će se prekonfigurisani "
 "monospace font."
 
-#: packages/lib/models/Setting.js:717
+#: packages/lib/models/Setting.js:727
 #, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Glavni korisnički stil za aplikaciju"
 
-#: packages/lib/models/Setting.js:733
+#: packages/lib/models/Setting.js:743
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Glavni korisnički stil za aplikaciju"
 
-#: packages/lib/models/Setting.js:738
+#: packages/lib/models/Setting.js:748
 msgid "Automatically update the application"
 msgstr "Automatski ažuriraj aplikaciju"
 
-#: packages/lib/models/Setting.js:739
+#: packages/lib/models/Setting.js:749
 msgid "Get pre-releases when checking for updates"
 msgstr "Preuzmi i verzije pred objavljivanje prilikom provjere novosti"
 
-#: packages/lib/models/Setting.js:739
+#: packages/lib/models/Setting.js:749
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 "Za više informacija vidjeti stranicu sa verzijama pred objavljivanje: %s"
 
-#: packages/lib/models/Setting.js:747
+#: packages/lib/models/Setting.js:757
 msgid "Synchronisation interval"
 msgstr "Interval za sinhronizaciju"
 
-#: packages/lib/models/Setting.js:751 packages/lib/models/Setting.js:752
-#: packages/lib/models/Setting.js:753
+#: packages/lib/models/Setting.js:761 packages/lib/models/Setting.js:762
+#: packages/lib/models/Setting.js:763
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minuta"
 
-#: packages/lib/models/Setting.js:754
+#: packages/lib/models/Setting.js:764
 #, javascript-format
 msgid "%d hour"
 msgstr "%d sat"
 
-#: packages/lib/models/Setting.js:755 packages/lib/models/Setting.js:756
+#: packages/lib/models/Setting.js:765 packages/lib/models/Setting.js:766
 #, javascript-format
 msgid "%d hours"
 msgstr "%d sati"
 
-#: packages/lib/models/Setting.js:764
+#: packages/lib/models/Setting.js:776
+msgid "Synchronise only over WiFi connection"
+msgstr ""
+
+#: packages/lib/models/Setting.js:783
 msgid "Text editor command"
 msgstr "Komanda za uređivača teksta"
 
-#: packages/lib/models/Setting.js:764
+#: packages/lib/models/Setting.js:783
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2653,63 +2696,63 @@ msgstr ""
 "za otvaranje bilješke. Ako nije navedena, pokušat će se utvrditi "
 "prekonfigurisani uređivač teksta."
 
-#: packages/lib/models/Setting.js:765
+#: packages/lib/models/Setting.js:784
 msgid "Page size for PDF export"
 msgstr "Veličina stranice za pohranjivanje u PDF"
 
-#: packages/lib/models/Setting.js:767
+#: packages/lib/models/Setting.js:786
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:768
+#: packages/lib/models/Setting.js:787
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.js:769
+#: packages/lib/models/Setting.js:788
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:770
+#: packages/lib/models/Setting.js:789
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:771
+#: packages/lib/models/Setting.js:790
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/lib/models/Setting.js:772
+#: packages/lib/models/Setting.js:791
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.js:775
+#: packages/lib/models/Setting.js:794
 msgid "Page orientation for PDF export"
 msgstr "Položaj stranice za pohranjivanje u PDF"
 
-#: packages/lib/models/Setting.js:777
+#: packages/lib/models/Setting.js:796
 msgid "Portrait"
 msgstr "Uspravno"
 
-#: packages/lib/models/Setting.js:778
+#: packages/lib/models/Setting.js:797
 msgid "Landscape"
 msgstr "Vodoravno"
 
-#: packages/lib/models/Setting.js:788
+#: packages/lib/models/Setting.js:807
 msgid "Keyboard Mode"
 msgstr "Način rada tastature"
 
-#: packages/lib/models/Setting.js:792
+#: packages/lib/models/Setting.js:811
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:793
+#: packages/lib/models/Setting.js:812
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:816
+#: packages/lib/models/Setting.js:835
 msgid "Custom TLS certificates"
 msgstr "TLS certifikati"
 
-#: packages/lib/models/Setting.js:817
+#: packages/lib/models/Setting.js:836
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2722,15 +2765,15 @@ msgstr ""
 "bilo kakve izmjene u TLS postavkama, načinjene izmjene memorisati prije "
 "pritiska na \"Provjeri konfiguraciju sinhronizovanja\"."
 
-#: packages/lib/models/Setting.js:830
+#: packages/lib/models/Setting.js:849
 msgid "Ignore TLS certificate errors"
 msgstr "Zanemari greške u vezi sa TLS certifikatima"
 
-#: packages/lib/models/Setting.js:839
+#: packages/lib/models/Setting.js:858
 msgid "Fail-safe"
 msgstr "Sigurnosni mehanizam"
 
-#: packages/lib/models/Setting.js:840
+#: packages/lib/models/Setting.js:859
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2738,7 +2781,7 @@ msgstr ""
 "Sigurnosni mehanizam: ne briši lokalne podatke kad je odredište za "
 "sinhronizaciju prazno (često usljed pogrešne konfiguracije ili propusta)"
 
-#: packages/lib/models/Setting.js:844
+#: packages/lib/models/Setting.js:863
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2746,29 +2789,29 @@ msgstr ""
 "Navedite koji će port API server koristiti. Ako port nije preciziran, "
 "koristit će se prekonfigurisani."
 
-#: packages/lib/models/Setting.js:849
+#: packages/lib/models/Setting.js:868
 msgid "Enable note history"
 msgstr "Aktiviraj historiju bilješki"
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:878
 msgid "days"
 msgstr "dana"
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:878
 #, javascript-format
 msgid "%d days"
 msgstr "%d dana"
 
-#: packages/lib/models/Setting.js:861
+#: packages/lib/models/Setting.js:880
 msgid "Keep note history for"
 msgstr "Čuvaj historiju bilješki"
 
-#: packages/lib/models/Setting.js:888
+#: packages/lib/models/Setting.js:907
 msgid "Notebook list growth factor"
 msgstr "Faktor rasta popisa bilježnica"
 
-#: packages/lib/models/Setting.js:889 packages/lib/models/Setting.js:902
-#: packages/lib/models/Setting.js:915
+#: packages/lib/models/Setting.js:908 packages/lib/models/Setting.js:921
+#: packages/lib/models/Setting.js:934
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2780,59 +2823,59 @@ msgstr ""
 "2 zauzimati dvostruko više prostora od stavke s faktorom 1. Ponovo pokrenite "
 "aplikaciju da primijenite izmjene."
 
-#: packages/lib/models/Setting.js:901
+#: packages/lib/models/Setting.js:920
 msgid "Note list growth factor"
 msgstr "Faktor rasta popisa bilješki"
 
-#: packages/lib/models/Setting.js:914
+#: packages/lib/models/Setting.js:933
 msgid "Note area growth factor"
 msgstr "Faktor rasta prostora bilješki"
 
-#: packages/lib/models/Setting.js:1115
+#: packages/lib/models/Setting.js:1134
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Pogrešna vrijednost: \"%s\". Moguće su sljedeće vrijednosti: %s"
 
-#: packages/lib/models/Setting.js:1514
+#: packages/lib/models/Setting.js:1533
 msgid "General"
 msgstr "Opće"
 
-#: packages/lib/models/Setting.js:1516
+#: packages/lib/models/Setting.js:1535
 msgid "Synchronisation"
 msgstr "Sinhronizacija"
 
-#: packages/lib/models/Setting.js:1518
+#: packages/lib/models/Setting.js:1537
 msgid "Appearance"
 msgstr "Izgled"
 
-#: packages/lib/models/Setting.js:1520
+#: packages/lib/models/Setting.js:1539
 msgid "Note"
 msgstr "Bilješka"
 
-#: packages/lib/models/Setting.js:1522
+#: packages/lib/models/Setting.js:1541
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1526
+#: packages/lib/models/Setting.js:1545
 msgid "Application"
 msgstr "Aplikacija"
 
-#: packages/lib/models/Setting.js:1530
+#: packages/lib/models/Setting.js:1549
 msgid "Encryption"
 msgstr "Šifriranje"
 
-#: packages/lib/models/Setting.js:1532
+#: packages/lib/models/Setting.js:1551
 msgid "Web Clipper"
 msgstr "Web clipper"
 
-#: packages/lib/models/Setting.js:1534
+#: packages/lib/models/Setting.js:1553
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "Način rada tastature"
 
-#: packages/lib/models/Setting.js:1541
+#: packages/lib/models/Setting.js:1560
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2849,7 +2892,7 @@ msgstr ""
 "uređivaču, izgubit će se oblikovanje teksta karakteristično za dodatak. "
 "Ispod je ukazano na to koji su dodaci kompatibilni sa WYSIWYG uređivačem."
 
-#: packages/lib/models/Setting.js:1543
+#: packages/lib/models/Setting.js:1562
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Bilješke i postavke pohranjene su u: %s"
@@ -3109,27 +3152,27 @@ msgstr "Proslijedi"
 msgid "Revision: %s (%s)"
 msgstr "Revizija: %s (%s)"
 
-#: packages/lib/versionInfo.js:20
+#: packages/lib/versionInfo.js:22
 #, fuzzy, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: packages/lib/versionInfo.js:22
+#: packages/lib/versionInfo.js:24
 #, fuzzy, javascript-format
 msgid "Client ID: %s"
 msgstr "ID klijenta: %s"
 
-#: packages/lib/versionInfo.js:23
+#: packages/lib/versionInfo.js:25
 #, fuzzy, javascript-format
 msgid "Sync Version: %s"
 msgstr "Verzija sinhronizacije: %s"
 
-#: packages/lib/versionInfo.js:24
+#: packages/lib/versionInfo.js:26
 #, fuzzy, javascript-format
 msgid "Profile Version: %s"
 msgstr "Verzija profila: %s"
 
-#: packages/lib/versionInfo.js:25
+#: packages/lib/versionInfo.js:27
 #, javascript-format
 msgid "Keychain Supported: %s"
 msgstr "Podržani privjesak: %s"

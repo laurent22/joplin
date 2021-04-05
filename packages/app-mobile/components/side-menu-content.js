@@ -345,6 +345,14 @@ class SideMenuContentComponent extends Component {
 			);
 		}
 
+		if (this.props.syncOnlyOverWifi && this.props.isOnMobileData) {
+			items.push(
+				<Text key="net_info" style={this.styles().syncStatus}>
+					{ _('Mobile data - auto-sync disabled') }
+				</Text>
+			);
+		}
+
 		return <View style={{ flex: 0, flexDirection: 'column', paddingBottom: theme.marginBottom }}>{items}</View>;
 	}
 
@@ -404,6 +412,8 @@ const SideMenuContent = connect(state => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
+		isOnMobileData: state.isOnMobileData,
+		syncOnlyOverWifi: state.settings['sync.mobileWifiOnly'],
 	};
 })(SideMenuContentComponent);
 

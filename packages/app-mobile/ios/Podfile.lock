@@ -254,6 +254,8 @@ PODS:
     - React-Core
   - react-native-image-resizer (1.3.0):
     - React-Core
+  - react-native-netinfo (6.0.0):
+    - React-Core
   - react-native-slider (3.0.3):
     - React
   - react-native-sqlite-storage (5.0.0):
@@ -338,7 +340,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.0-rc.0):
     - React
-  - RNShare (4.0.2):
+  - RNShare (5.1.3):
     - React-Core
   - RNVectorIcons (7.1.0):
     - React
@@ -389,6 +391,7 @@ DEPENDENCIES:
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-version-info (from `../node_modules/react-native-version-info`)
@@ -473,6 +476,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-image-resizer:
     :path: "../node_modules/react-native-image-resizer"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-sqlite-storage:
@@ -557,6 +562,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
   react-native-image-resizer: b53bf95ad880100e20262687e41f76fdbc9df255
+  react-native-netinfo: 34f4d7a42f49157f3b45c14217d256bce7dc9682
   react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
   react-native-sqlite-storage: ce71689c5a73b79390a1ab213555ae80979a5dc7
   react-native-version-info: 64f0f0bf3da6316298f9cd6085d50ba3a992d0c7
@@ -579,7 +585,7 @@ SPEC CHECKSUMS:
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 1f19ad1492f7ed416b8fc79e92216a1f73f13a4c
-  RNShare: 7a7277f3c313652422d9de072ac50714dff5e8a4
+  RNShare: d98667ee0277d9cd068041e5f316a5fe67aa8536
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

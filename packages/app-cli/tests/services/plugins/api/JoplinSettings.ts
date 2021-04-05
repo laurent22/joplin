@@ -18,22 +18,23 @@ describe('JoplinSettings', () => {
 	test('should listen to setting change event', async () => {
 		const service = new newPluginService() as PluginService;
 
-		const pluginScript = newPluginScript(`			
+		const pluginScript = newPluginScript(`
 			joplin.plugins.register({
 				onStart: async function() {
-					await joplin.settings.registerSetting('myCustomSetting1', {
-						value: 1,
-						type: 1,
-						public: true,
-						label: 'My Custom Setting 1',
-					});
-
-					await joplin.settings.registerSetting('myCustomSetting2', {
-						value: 2,
-						type: 1,
-						public: true,
-						label: 'My Custom Setting 2',
-					});
+					await joplin.settings.registerSettings({
+						'myCustomSetting1': {
+							value: 1,
+							type: 1,
+							public: true,
+							label: 'My Custom Setting 1',
+						},
+						'myCustomSetting2': {
+							value: 2,
+							type: 1,
+							public: true,
+							label: 'My Custom Setting 2',
+						}
+					})
 
 					joplin.settings.onChange((event) => {
 						joplin.data.post(['folders'], null, { title: JSON.stringify(event.keys) });
@@ -66,4 +67,35 @@ describe('JoplinSettings', () => {
 		await service.destroy();
 	});
 
+	test('should allow registering multiple settings', async () => {
+		const service = new newPluginService() as PluginService;
+
+		const pluginScript = newPluginScript(`
+			joplin.plugins.register({
+				onStart: async function() {
+					await joplin.settings.registerSettings({
+						'myCustomSetting1': {
+							value: 1,
+							type: 1,
+							public: true,
+							label: 'My Custom Setting 1',
+						},
+						'myCustomSetting2': {
+							value: 2,
+							type: 1,
+							public: true,
+							label: 'My Custom Setting 2',
+						}
+					})
+				},
+			});
+		`);
+		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		await service.runPlugin(plugin);
+
+		expect(Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting1')).toBe(1);
+		expect(Setting.value('plugin-org.joplinapp.plugins.PluginTest.myCustomSetting2')).toBe(2);
+
+		await service.destroy();
+	});
 });
