@@ -7,6 +7,7 @@ const ClipperServer = require('@joplin/lib/ClipperServer');
 const Setting = require('@joplin/lib/models/Setting').default;
 const { clipboard } = require('electron');
 const ExtensionBadge = require('./ExtensionBadge.min');
+const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
 
 class ClipperConfigScreenComponent extends React.Component {
 	constructor() {
@@ -37,6 +38,16 @@ class ClipperConfigScreenComponent extends React.Component {
 		clipboard.writeText(this.props.apiToken);
 
 		alert(_('Token has been copied to the clipboard!'));
+	}
+
+	renewToken_click() {
+		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
+			void EncryptionService.instance()
+				.randomHexString(64)
+				.then((token: string) => {
+					Setting.setValue('api.token', token);
+				});
+		}
 	}
 
 	render() {
@@ -137,6 +148,11 @@ class ClipperConfigScreenComponent extends React.Component {
 								</a>
 							</p>
 							<p style={theme.textStyle}>{_('This authorisation token is only needed to allow third-party applications to access Joplin.')}</p>
+							<div>
+								<button key="renew_button" style={buttonStyle} onClick={this.renewToken_click}>
+									{_('Renew token')}
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
