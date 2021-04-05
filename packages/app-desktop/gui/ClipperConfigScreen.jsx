@@ -43,7 +43,7 @@ class ClipperConfigScreenComponent extends React.Component {
 	renewToken_click() {
 		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
 			void EncryptionService.instance()
-				.randomHexString(64)
+				.generateApiToken()
 				.then((token: string) => {
 					Setting.setValue('api.token', token);
 				});
