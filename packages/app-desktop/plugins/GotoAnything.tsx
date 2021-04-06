@@ -379,8 +379,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
-			focusEditorIfEditorCommand(item.id, CommandService.instance());
 			void CommandService.instance().execute(item.id);
+			focusEditorIfEditorCommand(item.id, CommandService.instance());
 			return;
 		}
 
