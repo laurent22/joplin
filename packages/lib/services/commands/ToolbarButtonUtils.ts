@@ -1,6 +1,6 @@
 import CommandService from '../CommandService';
 import { stateUtils } from '../../reducer';
-import { focusEditorIfEditorCommand } from './EditorFocusUtil';
+import focusEditorIfEditorCommand from './focusEditorIfEditorCommand';
 
 const separatorItem = { type: 'separator' };
 
@@ -55,7 +55,7 @@ export default class ToolbarButtonUtils {
 			enabled: newEnabled,
 			onClick: async () => {
 				void this.service.execute(commandName);
-				focusEditorIfEditorCommand(commandName, this.service);
+				void focusEditorIfEditorCommand(commandName, this.service);
 			},
 			title: newTitle,
 		};

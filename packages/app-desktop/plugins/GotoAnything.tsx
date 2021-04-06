@@ -17,7 +17,7 @@ const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
-import { focusEditorIfEditorCommand } from '@joplin/lib/services/commands/EditorFocusUtil';
+import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 
 const PLUGIN_NAME = 'gotoAnything';
 
@@ -380,7 +380,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
 			void CommandService.instance().execute(item.id);
-			focusEditorIfEditorCommand(item.id, CommandService.instance());
+			void focusEditorIfEditorCommand(item.id, CommandService.instance());
 			return;
 		}
 
