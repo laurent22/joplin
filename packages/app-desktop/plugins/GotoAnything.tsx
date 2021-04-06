@@ -17,6 +17,7 @@ const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
+import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 
 const PLUGIN_NAME = 'gotoAnything';
 
@@ -379,6 +380,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
 			void CommandService.instance().execute(item.id);
+			void focusEditorIfEditorCommand(item.id, CommandService.instance());
 			return;
 		}
 
@@ -526,8 +528,8 @@ class Dialog extends React.PureComponent<Props, State> {
 				<div style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>
-						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown}/>
-						<HelpButton onClick={this.helpButton_onClick}/>
+						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
+						<HelpButton onClick={this.helpButton_onClick} />
 					</div>
 					{this.renderList()}
 				</div>

@@ -1032,6 +1032,9 @@ packages/lib/services/UndoRedoService.js.map
 packages/lib/services/WhenClause.d.ts
 packages/lib/services/WhenClause.js
 packages/lib/services/WhenClause.js.map
+packages/lib/services/commands/EditorFocusUtil.d.ts
+packages/lib/services/commands/EditorFocusUtil.js
+packages/lib/services/commands/EditorFocusUtil.js.map
 packages/lib/services/commands/MenuUtils.d.ts
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/MenuUtils.js.map
