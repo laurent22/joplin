@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -322,23 +324,23 @@ msgstr "チェックボックスリスト"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "ハイライト"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "取消線"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "挿入線"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "上付き文字"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "下付き文字"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
@@ -1752,7 +1754,7 @@ msgstr "設定"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "モバイルデータ通信 - 自動同期無効"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2522,19 +2524,16 @@ msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
 
 #: packages/lib/models/Setting.js:695
-#, fuzzy
 msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"ここは *monospace* (等幅)フォントを指定しないと内容によっては正しく表示されな"
-"い場合があります。指定したフォントが誤っているか空の場合は、一般的な等幅フォ"
-"ントが使用されます。"
+"指定したフォントが誤っているか空の場合は、一般的な等幅フォントが使用されま"
+"す。"
 
 #: packages/lib/models/Setting.js:704
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "エディターのフォントファミリー"
+msgstr "エディターの等幅フォントファミリー"
 
 #: packages/lib/models/Setting.js:705
 msgid ""
@@ -2589,7 +2588,7 @@ msgstr "%d 時間"
 
 #: packages/lib/models/Setting.js:776
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "WiFi経由でのみ同期する"
 
 #: packages/lib/models/Setting.js:783
 msgid "Text editor command"
@@ -3022,15 +3021,15 @@ msgstr ""
 "ださい"
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Joplin Nextcloudアプリに接続できませんでした。同期設定を確認してください。発"
-"生したエラーの内容は次のとおりです:\n"
+"Joplinサーバーに接続できませんでした。同期設定を確認してください。発生したエ"
+"ラーの内容は次のとおりです:\n"
 "\n"
 "%s"
 
