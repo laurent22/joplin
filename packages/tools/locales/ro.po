@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2021-04-08 13:10+0000\n"
-"Last-Translator: Simona Iacob <s@zp1.net>\n"
+"Last-Translator: Christian Eichert <c@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/joplin/joplin/"
 "ro/>\n"
 "Language: ro\n"
@@ -63,6 +63,8 @@ msgstr "Anulați"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"Aplicația se va închide acum. Vă rugăm să o relansați pentru a finaliza "
+"procesul."
 
 #: packages/app-desktop/plugins/GotoAnything.js:430
 msgid ""
@@ -82,7 +84,7 @@ msgstr "Mergeți la..."
 #: packages/app-desktop/plugins/GotoAnything.js:462
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "Paletă de comandă"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -119,7 +121,7 @@ msgstr "Versiune nouă: %s"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Download"
-msgstr ""
+msgstr "Descărcați"
 
 #: packages/app-desktop/checkForUpdates.js:154
 msgid "Full Release Notes"
@@ -322,7 +324,7 @@ msgstr "Lista casetelor de selectare"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Evidențiați"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
