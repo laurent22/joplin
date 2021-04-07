@@ -1032,9 +1032,6 @@ packages/lib/services/UndoRedoService.js.map
 packages/lib/services/WhenClause.d.ts
 packages/lib/services/WhenClause.js
 packages/lib/services/WhenClause.js.map
-packages/lib/services/commands/EditorFocusUtil.d.ts
-packages/lib/services/commands/EditorFocusUtil.js
-packages/lib/services/commands/EditorFocusUtil.js.map
 packages/lib/services/commands/MenuUtils.d.ts
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/MenuUtils.js.map
@@ -1044,6 +1041,12 @@ packages/lib/services/commands/ToolbarButtonUtils.js.map
 packages/lib/services/commands/commandsToMarkdownTable.d.ts
 packages/lib/services/commands/commandsToMarkdownTable.js
 packages/lib/services/commands/commandsToMarkdownTable.js.map
+packages/lib/services/commands/focusEditorIfEditorCommand.d.ts
+packages/lib/services/commands/focusEditorIfEditorCommand.js
+packages/lib/services/commands/focusEditorIfEditorCommand.js.map
+packages/lib/services/commands/isEditorCommand.d.ts
+packages/lib/services/commands/isEditorCommand.js
+packages/lib/services/commands/isEditorCommand.js.map
 packages/lib/services/commands/propsHaveChanged.d.ts
 packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/propsHaveChanged.js.map
