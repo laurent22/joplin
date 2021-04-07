@@ -748,6 +748,9 @@ packages/app-mobile/setUpQuickActions.js.map
 packages/app-mobile/utils/ShareExtension.d.ts
 packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareExtension.js.map
+packages/app-mobile/utils/ShareUtils.d.ts
+packages/app-mobile/utils/ShareUtils.js
+packages/app-mobile/utils/ShareUtils.js.map
 packages/app-mobile/utils/checkPermissions.d.ts
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/checkPermissions.js.map
