@@ -833,21 +833,22 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					draft.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 
-				let newProvisionalNoteIds = draft.provisionalNoteIds;
+				if (!action.ignoreProvisionalFlag) {
+					let newProvisionalNoteIds = draft.provisionalNoteIds;
 
-				if (action.provisional) {
-					newProvisionalNoteIds = newProvisionalNoteIds.slice();
-					newProvisionalNoteIds.push(modNote.id);
-				} else {
-					const idx = newProvisionalNoteIds.indexOf(modNote.id);
-					if (idx >= 0) {
+					if (action.provisional) {
 						newProvisionalNoteIds = newProvisionalNoteIds.slice();
-						newProvisionalNoteIds.splice(idx, 1);
-
+						newProvisionalNoteIds.push(modNote.id);
+					} else {
+						const idx = newProvisionalNoteIds.indexOf(modNote.id);
+						if (idx >= 0) {
+							newProvisionalNoteIds = newProvisionalNoteIds.slice();
+							newProvisionalNoteIds.splice(idx, 1);
+						}
 					}
-				}
 
-				draft.provisionalNoteIds = newProvisionalNoteIds;
+					draft.provisionalNoteIds = newProvisionalNoteIds;
+				}
 			}
 			break;
 
