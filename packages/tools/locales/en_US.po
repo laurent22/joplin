@@ -863,7 +863,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Are you sure you want to renew the authorization token?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -2931,15 +2931,15 @@ msgid ""
 msgstr ""
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronization config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronization options "
+"in the config screen. Full error was:\n"
 "\n"
 "%s"
 
