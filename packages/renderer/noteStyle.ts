@@ -117,7 +117,7 @@ export default function(theme: any) {
 		}
 		ul, ol {
 			padding-left: 0;
-			margin-left: 1.7em;
+			margin-left: 2.7em;
 		}
 		li {
 			margin-bottom: .4em;
