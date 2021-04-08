@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Jonatan Nyberg <jonatan@autistici.org>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:28+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/joplin/joplin/sv/"
+">\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -879,8 +881,7 @@ msgstr ""
 #: packages/app-cli/app/command-sync.js:90
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr ""
-"För att tillåta Joplin att synkronisera med Dropbox, följ stegen nedan:"
+msgstr "För att tillåta Joplin att synkronisera med Dropbox, följ stegen nedan:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
@@ -1280,7 +1281,8 @@ msgstr ""
 "\n"
 "För att starta processen, följ dessa instruktioner:\n"
 "\n"
-"1. Synkronisera alla dina enheter.\\n\n"
+"1. Synkronisera alla dina enheter.\\n"
+"\n"
 "2. Klicka \\\"%s\\\"\n"
 "3. Låt den köra färdigt. Medan den kör, undvik att göra ändringar i några "
 "anteckningar på dina andra enheter för att undvika konflikter.\n"
@@ -1678,8 +1680,7 @@ msgstr "Inga resurser!"
 #: packages/app-desktop/gui/ResourceScreen.js:146
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
-"Varning: alla resurser visas inte för förbättrad prestanda (limit: %s)."
+msgstr "Varning: alla resurser visas inte för förbättrad prestanda (limit: %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:159
 #, fuzzy
@@ -1835,8 +1836,8 @@ msgstr "Skapar en ny anteckningsbok."
 #: packages/app-mobile/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
-"Det finns för närvarande inga anteckningar. Skapa en genom att klicka på (+)-"
-"knappen."
+"Det finns för närvarande inga anteckningar. Skapa en genom att klicka på "
+"(+)-knappen."
 
 #: packages/app-mobile/components/screens/folder.js:87
 #, javascript-format
@@ -3480,8 +3481,8 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Visar endast objekt av den specifika typen/typerna. Kan vara `n` för "
-"anteckningar, `t` för att-göra eller `nt` för anteckningar och att-göra (t."
-"ex. `-tt` skulle bara visa att-göra, medan `-tnt` skulle visa anteckningar "
+"anteckningar, `t` för att-göra eller `nt` för anteckningar och att-göra ("
+"t.ex. `-tt` skulle bara visa att-göra, medan `-tnt` skulle visa anteckningar "
 "och att-göra."
 
 #: packages/app-cli/app/command-ls.js:31
@@ -3951,8 +3952,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Skriv `help [command]` för mer information om ett kommando; eller skriv "
-"`help all` för fullständig användningsinformation."
+"Skriv `help [command]` för mer information om ett kommando; eller skriv `"
+"help all` för fullständig användningsinformation."
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -3979,8 +3980,8 @@ msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Använd pilarna och sid upp/ner för att bläddra i listorna och textområdena "
-"(inklusive den här konsolen)."
+"Använd pilarna och sid upp/ner för att bläddra i listorna och textområdena ("
+"inklusive den här konsolen)."
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
