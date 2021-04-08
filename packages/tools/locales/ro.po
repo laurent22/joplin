@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2021-04-08 13:14+0000\n"
-"Last-Translator: Christian Eichert <c@zp1.net>\n"
+"PO-Revision-Date: 2021-04-08 13:22+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/joplin/joplin/"
 "ro/>\n"
 "Language: ro\n"
@@ -1106,8 +1106,7 @@ msgstr "Obține acum:"
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
-"Noua agendă \"%s\" va fi creată și fișierul \"%s\" va fi importat in ea"
+msgstr "Noua agendă \"%s\" va fi creată și fișierul \"%s\" va fi importat in ea"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-cli/app/command-import.js:47
@@ -3438,8 +3437,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"Utilizați formatul listei lungi. Formatul este ID, NOTE_COUNT (pentru "
-"agendă), DATE, TODO_CHECKED (pentru todos), TITLE"
+"Utilizați formatul listei lungi. Formatul este ID, NOTE_COUNT (pentru agendă)"
+", DATE, TODO_CHECKED (pentru todos), TITLE"
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3520,8 +3519,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Gestionarea configurația E2EE. Comenzile sunt „enable\", „disable\", „decrypt"
-"\", „status\", „decrypt-file\" și „target-status\"."
+"Gestionarea configurația E2EE. Comenzile sunt „enable\", „disable\", „"
+"decrypt\", „status\", „decrypt-file\" și „target-status\"."
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3603,8 +3602,8 @@ msgstr "Sincronizarea cu stocarea de la distanță."
 #: packages/app-cli/app/command-sync.js:34
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Sincronizarea cu o ținta specificată (presetat la valoare de configurare "
-"sync.target)"
+"Sincronizarea cu o ținta specificată (presetat la valoare de configurare sync"
+".target)"
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
@@ -3696,8 +3695,8 @@ msgstr "Editează notiță."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Nu este specificat niciun editor de text. Vă rugăm să setați folosind "
-"`editorul de configurare <editor-path>`"
+"Nu este specificat niciun editor de text. Vă rugăm să setați folosind `"
+"editorul de configurare <editor-path>`"
 
 #: packages/app-cli/app/command-edit.js:40
 msgid "No active notebook."
@@ -4006,8 +4005,8 @@ msgstr "Afișează rezumatul despre notițe și agende."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Pentru a reîncerca decriptarea acestor elemente. Rulați `e2ee decrypt --"
-"retry-failed-items`"
+"Pentru a reîncerca decriptarea acestor elemente. Rulați `e2ee decrypt "
+"--retry-failed-items`"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
