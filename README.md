@@ -449,7 +449,7 @@ Notes are sorted by "relevance". Currently it means the notes that contain the r
 
 # Goto Anything
 
-In the desktop application, press <kbd>Ctrl+G</kbd> or <kbd>Cmd+G</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.
+In the desktop application, press <kbd>Ctrl+P</kbd> or <kbd>Cmd+P</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.
 
 # Privacy
 
