@@ -69,7 +69,7 @@ export function friendlySafeFilename(e: string, maxLength: number = null) {
 	// Although Windows supports paths up to 255 characters, but that includes the filename and its
 	// parent directory path. Also there's generally no good reason for dir or file names
 	// to be so long, so keep it at 50, which should prevent various errors.
-	if (maxLength === null) maxLength = 50;
+	if (maxLength === null) maxLength = 100;
 	if (!e || !e.replace) return _('Untitled');
 
 	let output = '';
