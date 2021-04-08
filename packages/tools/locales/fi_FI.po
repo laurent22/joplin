@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: mrkaato\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:24+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/joplin/joplin/fi/"
+">\n"
 "Language: fi_FI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -1770,8 +1772,8 @@ msgstr "Luo muistikirja"
 #: packages/app-mobile/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
-"Tällä hetkellä ei ole muistiinpanoja. Luo sellainen napsauttamalla (+) -"
-"painiketta."
+"Tällä hetkellä ei ole muistiinpanoja. Luo sellainen napsauttamalla (+) "
+"-painiketta."
 
 #: packages/app-mobile/components/screens/folder.js:87
 #, javascript-format
@@ -2102,8 +2104,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
-"Järjestelmänvalvojan oletussalasana on epävarma, eikä sitä ole muutettu "
-"[Vaihda se nyt] (%s)"
+"Järjestelmänvalvojan oletussalasana on epävarma, eikä sitä ole muutettu ["
+"Vaihda se nyt] (%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -3390,8 +3392,8 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Näyttää vain tietyn tyyppisen kohteen (kohteet). Voi olla `n` "
-"muistiinpanoja, `t` tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. `-"
-"tt` näyttäisi vain tehtävät, kun taas `-tnt` näyttää muistiinpanoja ja "
+"muistiinpanoja, `t` tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. "
+"`-tt` näyttäisi vain tehtävät, kun taas `-tnt` näyttää muistiinpanoja ja "
 "tehtäviä."
 
 #: packages/app-cli/app/command-ls.js:31
@@ -3569,8 +3571,7 @@ msgstr "Synkronoi etätallennustilan."
 
 #: packages/app-cli/app/command-sync.js:34
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr ""
-"Synkronoi annettuun kohteeseen (oletusarvo on sync.target config value)"
+msgstr "Synkronoi annettuun kohteeseen (oletusarvo on sync.target config value)"
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
@@ -3853,8 +3854,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Kirjoita `help [command]` saadaksesi lisätietoja komennosta; tai kirjoita "
-"`help all` saadaksesi täydelliset käyttötiedot."
+"Kirjoita `help [command]` saadaksesi lisätietoja komennosta; tai kirjoita `"
+"help all` saadaksesi täydelliset käyttötiedot."
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -3880,8 +3881,8 @@ msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Käytä nuolia ja page up/down vierittämällä luetteloita ja tekstialueita "
-"(mukaan lukien tämä konsoli)."
+"Käytä nuolia ja page up/down vierittämällä luetteloita ja tekstialueita ("
+"mukaan lukien tämä konsoli)."
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
