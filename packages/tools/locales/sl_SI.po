@@ -2,16 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: sl\n"
+"PO-Revision-Date: 2021-04-08 13:27+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/joplin/joplin/"
+"sl/>\n"
+"Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-Basepath: .\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3);\n"
 "X-Poedit-SourceCharset: https://raw.githubusercontent.com/laurent22/joplin/"
 "master/CliClient/locales/joplin.pot\n"
 
@@ -1105,8 +1107,7 @@ msgstr ""
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
-"Nova beležnica \"%s\" bo ustvarjena in datoteka \"%s\" bo uvožena v njo"
+msgstr "Nova beležnica \"%s\" bo ustvarjena in datoteka \"%s\" bo uvožena v njo"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-cli/app/command-import.js:47
@@ -1571,15 +1572,15 @@ msgstr ""
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
-"Trenutno ni tukaj nobene zabeležke. Ustvarite jo z klikom na \"Nova zabeležka"
-"\"."
+"Trenutno ni tukaj nobene zabeležke. Ustvarite jo z klikom na \"Nova "
+"zabeležka\"."
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"Trenutno ni tukaj nobene beležnice. Ustvarite jo z klikom na \"Nova beležnica"
-"\"."
+"Trenutno ni tukaj nobene beležnice. Ustvarite jo z klikom na \"Nova "
+"beležnica\"."
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
 #, fuzzy
@@ -3405,8 +3406,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"V uporabi je format dolgi seznam in je formata ID, NOTE_COUNT (za "
-"beležnice), DATE, TODO_CHECKED (seznam opravil), TITLE"
+"V uporabi je format dolgi seznam in je formata ID, NOTE_COUNT (za beležnice)"
+", DATE, TODO_CHECKED (seznam opravil), TITLE"
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3685,8 +3686,7 @@ msgstr "Za izbris dane oznake, odoznačite zabeležke s to oznako."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-"Prosim izberite zabeležko ali beležnico, ki jo želite najprej zbrisati."
+msgstr "Prosim izberite zabeležko ali beležnico, ki jo želite najprej zbrisati."
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -3879,16 +3879,16 @@ msgstr ""
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr ""
-"Če se želite premakniti iz enega sklopa v drugega, pritisnite Tab ali Shift"
-"+Tab."
+"Če se želite premakniti iz enega sklopa v drugega, pritisnite Tab ali "
+"Shift+Tab."
 
 #: packages/app-cli/app/command-help.js:80
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Uporabite puščice in page up/down tipke za listanje strani in "
-"besedila(vključno s to konzolo)."
+"Uporabite puščice in page up/down tipke za listanje strani in besedila("
+"vključno s to konzolo)."
 
 #: packages/app-cli/app/command-help.js:81
 #, fuzzy
@@ -3980,8 +3980,8 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> je lahko \"dodaj\", \"odstrani\" ali \"naštej\", da dodeliš "
-"ali odstraniš [tag] from [note] ali našteje zabeležke povezane z oznako "
-"[tag]. Ukaz `tag list` je lahko uporabljen da prikaže vse oznake."
+"ali odstraniš [tag] from [note] ali našteje zabeležke povezane z oznako [tag]"
+". Ukaz `tag list` je lahko uporabljen da prikaže vse oznake."
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format
