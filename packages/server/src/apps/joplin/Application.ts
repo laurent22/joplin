@@ -13,6 +13,7 @@ import FileModel, { FileContent, FileWithContent, LoadContentHandlerEvent, SaveC
 import { ErrorNotFound } from '../../utils/errors';
 import BaseApplication from '../../services/BaseApplication';
 import { formatDateTime } from '../../utils/time';
+// import ShareUserModel, { ShareAcceptedHandlerEvent } from '../../models/ShareUserModel';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -68,20 +69,28 @@ export default class Application extends BaseApplication {
 
 		this.fileModel_saveContentHandler = this.fileModel_saveContentHandler.bind(this);
 		this.fileModel_loadContentHandler = this.fileModel_loadContentHandler.bind(this);
+		// this.shareUser_shareAcceptedHandler = this.shareUser_shareAcceptedHandler.bind(this);
 		FileModel.registerSaveContentHandler(this.fileModel_saveContentHandler);
 		FileModel.registerLoadContentHandler(this.fileModel_loadContentHandler);
+		// ShareUserModel.registerShareAcceptedHandler(this.shareUser_shareAcceptedHandler);
 	}
 
 	private async fileModel_saveContentHandler(event: SaveContentHandlerEvent): Promise<File> | null {
 		const fileContent = await this.fileToJoplinItem({ file: event.file, content: event.content.toString() });
 		if (!fileContent) return null;
-		const result = await event.models.joplinFileContent({ userId: event.file.owner_id }).saveFileAndContent(event.file, fileContent, event.isNew, event.options);
+		const result = await event.models.joplinFileContent({ userId: event.file.owner_id }).saveFileAndContent(event.file, fileContent, event.options);
 		return result;
 	}
 
 	private async fileModel_loadContentHandler(event: LoadContentHandlerEvent): Promise<any> | null {
 		return this.joplinItemToFile(event.content);
 	}
+
+	// private async shareUser_shareAcceptedHandler(event:ShareAcceptedHandlerEvent) {
+	// 	if (event.share.type !== ShareType.JoplinRootFolder) return;
+	// 	const sourceFile = await event.models.file({ userId: event.linkedFile.owner_id }).load(event.linkedFile.source_file_id, { skipPermissionCheck: true });
+	// 	await event.models.joplinFileContent({ userId: event.linkedFile.owner_id }).shareFolderContent(sourceFile);
+	// }
 
 	public async localFileFromUrl(url: string): Promise<string> {
 		const pluginAssetPrefix = 'apps/joplin/pluginAssets/';

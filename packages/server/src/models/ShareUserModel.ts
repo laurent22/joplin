@@ -1,8 +1,19 @@
-import { File, ShareUser, Uuid } from '../db';
+import { File, Share, ShareType, ShareUser, Uuid } from '../db';
 import { ErrorNotFound } from '../utils/errors';
 import BaseModel from './BaseModel';
+import { Models } from './factory';
+
+export interface ShareAcceptedHandlerEvent {
+	linkedFile: File;
+	share: Share;
+	models: Models;
+}
+
+export type ShareAcceptedHandler = (event: ShareAcceptedHandlerEvent)=> void;
 
 export default class ShareUserModel extends BaseModel<ShareUser> {
+
+	private static shareAcceptedHandlers_: ShareAcceptedHandler[] = [];
 
 	public get tableName(): string {
 		return 'share_users';
@@ -14,6 +25,22 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return this.db(this.tableName).select(...this.defaultFields).whereIn('share_id', shareIds);
 	}
 
+	public static registerShareAcceptedHandler(handler: ShareAcceptedHandler) {
+		this.shareAcceptedHandlers_.push(handler);
+	}
+
+	public async byShareIds(shareIds: Uuid[]): Promise<Record<Uuid, ShareUser[]>> {
+		const rows: ShareUser[] = await this.db(this.tableName).select(this.defaultFields).whereIn('share_id', shareIds);
+		const output: Record<Uuid, ShareUser[]> = {};
+
+		for (const row of rows) {
+			if (!(row.share_id in output)) output[row.share_id] = [];
+			output[row.share_id].push(row);
+		}
+
+		return output;
+	}
+
 	public async loadByShareIdAndUser(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
 		const link: ShareUser = {
 			share_id: shareId,
@@ -21,6 +48,29 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		};
 
 		return this.db(this.tableName).where(link).first();
+	}
+
+	public async shareWithUserAndAccept(share: Share, shareeId: Uuid) {
+		// if (await this.fileIsShared(share.type, share.file_id, shareeId)) return; // Already shared with user
+
+		await this.models().shareUser({ userId: share.owner_id }).addById(share.id, shareeId);
+		await this.models().shareUser({ userId: shareeId }).accept(share.id, shareeId, true);
+	}
+
+	public async fileIsShared(shareType: ShareType, fileId: Uuid, userId: Uuid, isAccepted: boolean = null): Promise<boolean> {
+		const query = this
+			.db('share_users')
+			.select('share_users.id')
+			.leftJoin('shares', 'share_users.share_id', 'shares.id')
+			.where('shares.file_id', '=', fileId)
+			.andWhere('shares.type', '=', shareType)
+			.andWhere('share_users.user_id', '=', userId);
+
+		if (isAccepted !== null) {
+			void query.andWhere('share_users.is_accepted', '=', isAccepted ? 1 : 0);
+		}
+
+		return !!(await query.first());
 	}
 
 	public async addById(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
@@ -40,6 +90,12 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			share_id: shareId,
 			user_id: user.id,
 		});
+	}
+
+	private static async processShareAcceptedHandlers(event: ShareAcceptedHandlerEvent) {
+		for (const handler of this.shareAcceptedHandlers_) {
+			await handler(event);
+		}
 	}
 
 	public async accept(shareId: Uuid, userId: Uuid, accept: boolean = true): Promise<File> {
@@ -62,7 +118,15 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 				name: sourceFile.name,
 			};
 
-			return this.models().file({ userId }).save(file);
+			const savedFile = await this.models().file({ userId }).save(file);
+
+			await ShareUserModel.processShareAcceptedHandlers({
+				linkedFile: savedFile,
+				share: share,
+				models: this.models(),
+			});
+
+			return savedFile;
 		});
 	}
 

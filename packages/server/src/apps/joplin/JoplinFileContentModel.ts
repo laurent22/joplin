@@ -1,5 +1,14 @@
-import { File, FileContentType, JoplinFileContent, ShareType } from '../../db';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import { File, FileContentType, JoplinFileContent } from '../../db';
 import BaseModel, { SaveOptions } from '../../models/BaseModel';
+
+type FolderTreeEntity = NoteEntity | FolderEntity;
+
+// interface FolderTreeElement {
+// 	item: NoteEntity | FolderEntity,
+// 	children?: FolderTreeElement[],
+// }
 
 export default class JoplinFileContentModel extends BaseModel<JoplinFileContent> {
 
@@ -11,7 +20,15 @@ export default class JoplinFileContentModel extends BaseModel<JoplinFileContent>
 		return false;
 	}
 
-	public async saveFileAndContent(file: File, joplinFileContent: JoplinFileContent, fileIsNew: boolean, options: SaveOptions): Promise<File> {
+	// private async shareWithUserAndAccept(sharerId:Uuid, shareeId:Uuid, fileId:Uuid) {
+	// 	const newShare = await this.models().share({ userId: modFile.owner_id }).createShare(ShareType.App, modFile.id, true);
+	// 	for (const userShare of userShares) {
+	// 		await this.models().shareUser({ userId: modFile.owner_id }).addById(newShare.id, userShare.user_id);
+	// 		await this.models().shareUser({ userId: userShare.user_id }).accept(newShare.id, userShare.user_id, true);
+	// 	}
+	// }
+
+	public async saveFileAndContent(file: File, joplinFileContent: JoplinFileContent, options: SaveOptions): Promise<File> {
 		let modFile: File = { ...file };
 
 		await this.withTransaction(async () => {
@@ -21,20 +38,80 @@ export default class JoplinFileContentModel extends BaseModel<JoplinFileContent>
 			modFile.content_type = FileContentType.JoplinItem;
 			modFile = await this.models().file({ userId: modFile.owner_id }).save(modFile, options);
 
-			if (fileIsNew && joplinFileContent.parent_id) {
-				const parentItemFile = await this.fileFromItemId(modFile.owner_id, joplinFileContent.parent_id);
-				const userShares = await this.models().shareUser({ userId: this.userId }).loadByFileId(parentItemFile.id);
-				const newShare = await this.models().share({ userId: modFile.owner_id }).createShare(ShareType.App, modFile.id, true);
+			// if (fileIsNew && joplinFileContent.parent_id) {
+			// 	const parentItemFile = await this.fileFromItemId(modFile.owner_id, joplinFileContent.parent_id);
+			// 	const userShares = await this.models().shareUser({ userId: this.userId }).loadByFileId(parentItemFile.id);
 
-				for (const userShare of userShares) {
-					await this.models().shareUser({ userId: modFile.owner_id }).addById(newShare.id, userShare.user_id);
-					await this.models().shareUser({ userId: userShare.user_id }).accept(newShare.id, userShare.user_id, true);
-				}
-			}
+			// 	if (userShares.length) {
+			// 		const newShare = await this.models().share({ userId: modFile.owner_id }).createShare(ShareType.App, modFile.id, true);
+			// 		for (const userShare of userShares) {
+			// 			await this.models().shareUser({ userId: modFile.owner_id }).addById(newShare.id, userShare.user_id);
+			// 			await this.models().shareUser({ userId: userShare.user_id }).accept(newShare.id, userShare.user_id, true);
+			// 		}
+			// 	}
+			// }
 		}, 'saveJoplinFileContent');
 
 		return modFile;
 	}
+
+	// public async shareFolderContent(file:File) {
+	// 	const content:JoplinFileContent = await this.models().file({ userId: file.owner_id }).content(file, false);
+	// 	if (!content || content.parent_id || content.type !== ModelType.Folder) throw new Error('Can only share a root folder');
+
+	// 	const userShares = await this.models().shareUser({ userId: file.owner_id }).loadByFileId(file.id);
+
+	// 	const children = await this.allChildren(content.owner_id, content.item_id);
+
+	// 	await this.withTransaction(() => {
+	// 		for (const child of children) {
+
+	// 		}
+	// 	});
+	// }
+
+	public async allChildren(ownerId: string, folderId: string): Promise<FolderTreeEntity[]> {
+		const children = await this.db(this.tableName)
+			.select(['id', 'owner_id', 'item_id', 'parent_id', 'type'])
+			.where('parent_id', '=', folderId)
+			.andWhere('owner_id', '=', ownerId);
+
+		let output: FolderTreeEntity[] = [];
+
+		for (const child of children) {
+			output.push(child);
+
+			if (child.type === ModelType.Folder) {
+				const subChildren = await this.allChildren(ownerId, child.id);
+				output = output.concat(subChildren);
+			}
+		}
+
+		return output;
+	}
+
+	// private async folderTree(ownerId:string, folderId:string):Promise<FolderTreeElement[]> {
+	// 	const children = await this.db(this.tableName)
+	// 		.select(['id', 'owner_id', 'item_id', 'parent_id', 'type'])
+	// 		.where('parent_id', '=', folderId)
+	// 		.andWhere('owner_id', '=', ownerId);
+
+	// 	const output = [];
+
+	// 	for (const child of children) {
+	// 		const element:FolderTreeElement = {
+	// 			item: child,
+	// 		};
+
+	// 		if (child.type === ModelType.Folder) {
+	// 			element.children = await this.folderTree(ownerId, child.id);
+	// 		}
+
+	// 		output.push(element);
+	// 	}
+
+	// 	return output;
+	// }
 
 	// private async handleSharing(file: File, joplinFileContent: JoplinFileContent, fileIsNew:boolean) {
 

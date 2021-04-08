@@ -1,4 +1,4 @@
-import { File, Share, ShareType, Uuid } from '../db';
+import { File, JoplinFileContent, Share, ShareType, ShareUser, Uuid } from '../db';
 import { ErrorBadRequest } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { ValidateOptions } from './BaseModel';
@@ -10,7 +10,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	protected async validate(share: Share, _options: ValidateOptions = {}): Promise<Share> {
-		if ('type' in share && ![ShareType.Link, ShareType.App, ShareType.JoplinApp].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
+		if ('type' in share && ![ShareType.Link, ShareType.App, ShareType.JoplinRootFolder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
 
 		return share;
 	}
@@ -32,7 +32,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 	public async createJoplinFolderShare(folderId: string): Promise<Share> {
 		const toSave: Share = {
-			type: ShareType.JoplinApp,
+			type: ShareType.JoplinRootFolder,
 			folder_id: folderId,
 			file_id: '',
 			owner_id: this.userId,
@@ -47,6 +47,48 @@ export default class ShareModel extends BaseModel<Share> {
 
 	public async sharesByFileId(fileId: string): Promise<Share[]> {
 		return this.db(this.tableName).select(this.defaultFields).where('file_id', '=', fileId);
+	}
+
+	public async sharesByUser(userId: Uuid, type: ShareType): Promise<Share[]> {
+		return this.db(this.tableName)
+			.select(this.defaultFields)
+			.where('owner_id', '=', userId)
+			.andWhere('type', '=', type);
+	}
+
+	public async updateSharedJoplinFolderChildren(userId: Uuid) {
+		const shares = await this.models().share().sharesByUser(userId, ShareType.JoplinRootFolder);
+		const rootShareUsers = await this.models().shareUser().byShareIds(shares.map(s => s.id));
+
+		// TODO: Unlink files that have been moved out of shared folder
+
+		await this.withTransaction(async () => {
+			for (const share of shares) {
+				const shareUsers: ShareUser[] = rootShareUsers[share.id];
+				if (!shareUsers) {
+					// User has created a new share but it has not been accepted
+					// or sent to any other user.
+					continue;
+				}
+
+				const folderContent: JoplinFileContent = await this.models().file().content(share.file_id, false);
+				const children = await this.models().joplinFileContent().allChildren(userId, folderContent.item_id);
+				const files = await this.models().file().fileIdsByContentIds(children.map(c => c.id));
+				const linkedFiles: File[] = await this.db('files').select(['id', 'source_file_id', 'owner_id']).whereIn('source_file_id', files.map(f => f.id));
+
+				for (const child of children) {
+					const file = files.find(f => f.content_id === child.id);
+					if (!file) throw new Error(`No file for content: ${child.id}`);
+
+					for (const shareUser of shareUsers) {
+						const existingLinkedFile = linkedFiles.find(f => f.source_file_id === file.id && f.owner_id === shareUser.user_id);
+						if (existingLinkedFile) continue; // Already linked
+
+						await this.models().file({ userId: shareUser.user_id }).createLink(file);
+					}
+				}
+			}
+		});
 	}
 
 }

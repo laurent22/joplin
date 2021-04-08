@@ -18,7 +18,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	if (share.folder_id) {
 		const fileId = await ctx.models.joplinFileContent().fileIdFromItemId(ctx.owner.id, share.folder_id);
 		if (!fileId) throw new ErrorNotFound(`No such folder: ${share.folder_id}`);
-		return shareModel.createShare(ShareType.JoplinApp, fileId);
+		return shareModel.createShare(ShareType.JoplinRootFolder, fileId);
 	} else {
 		return shareModel.createShare(share.type, share.file_id);
 	}

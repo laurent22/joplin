@@ -39,7 +39,6 @@ export interface SaveContentHandlerEvent {
 	// This is the raw content, without any serialisation, and it also takes
 	// into account file links.
 	content: Buffer;
-	isNew: boolean;
 	options: SaveOptions;
 }
 
@@ -484,9 +483,13 @@ export default class FileModel extends BaseModel<File> {
 		return modFiles;
 	}
 
+	public async fileIdsByContentIds(contentIds: Uuid[]): Promise<File[]> {
+		return this.db(this.tableName).select(['id', 'content_id', 'name']).whereIn('content_id', contentIds);
+	}
+
 	public async content(file: string | File, serialized: boolean = true): Promise<FileContent> {
 		if (typeof file === 'string') {
-			file = (await this.db<File>(this.tableName).select(['content_id', 'content_type', 'content']).where({ id: file }).first()) as File;
+			file = (await this.db<File>(this.tableName).select(['content_id', 'source_file_id', 'content_type', 'content']).where({ id: file }).first()) as File;
 		}
 
 		if (!('source_file_id' in file)) throw new Error('Cannot process file links without a "source_file_id" property');
@@ -577,6 +580,17 @@ export default class FileModel extends BaseModel<File> {
 		return null;
 	}
 
+	public async createLink(sourceFile: File): Promise<File> {
+		const rootId = await this.models().file({ userId: this.userId }).userRootFileId();
+
+		return this.save({
+			owner_id: this.userId,
+			source_file_id: sourceFile.id,
+			parent_id: rootId,
+			name: sourceFile.name,
+		});
+	}
+
 	public async save(object: File, options: SaveOptions = {}): Promise<File> {
 		const isNew = await this.isNew(object, options);
 
@@ -623,24 +637,41 @@ export default class FileModel extends BaseModel<File> {
 			const fileToProcess = sourceFile || file;
 
 			if ('content' in fileToProcess) {
+				const fileToProcessSaveOptions = { ...options };
+
+				// If what we are processing is the source file, then we need to
+				// remove the "isNew" flag, because that source file already
+				// exists.
+				if (sourceFile) delete fileToProcessSaveOptions.isNew;
+
 				const processedFile = await FileModel.processSaveContentHandlers({
 					models: this.models(),
 					file: fileToProcess,
 					content: fileToProcess.content,
-					isNew,
-					options,
+					options: fileToProcessSaveOptions,
 				});
 
 				if (processedFile) {
 					if (sourceFile) {
+						// If we passed the source file to the processor, then
+						// we still need to save the linked file.
+						// console.info('PROCESSED SOURCE', isNew, file);
 						return super.save(file, options);
 					} else {
+						// If we passed the actual file (not the source) to the
+						// processor, then it has already been saved and we can
+						// exit.
 						return processedFile;
 					}
 				}
 			}
 
-			if (sourceFile) await super.save(sourceFile, options);
+			if (sourceFile) {
+				// console.info('NONPROCESSED SOURCE', isNew, sourceFile);
+				await super.save(sourceFile, options);
+			}
+
+			// console.info('NORMAL', isNew, file);
 			return super.save(file, options);
 		});
 	}

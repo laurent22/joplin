@@ -1,5 +1,6 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createFile, createFile2 } from '../utils/testing/testUtils';
 import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
+import { ShareType } from '../db';
 
 describe('ShareUserModel', function() {
 
@@ -51,6 +52,21 @@ describe('ShareUserModel', function() {
 		expect(userShares.length).toBe(2);
 		expect(!!userShares.find(s => s.user_id === user2.id)).toBe(true);
 		expect(!!userShares.find(s => s.user_id === user3.id)).toBe(true);
+	});
+
+	test('should tell if a file has been shared and accepted by a recipient', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+
+		const file = await createFile2(session1.id, 'root:/test.txt:', 'test');
+
+		const share = await models().share({ userId: user1.id }).createShare(ShareType.App, file.id);
+		await models().shareUser({ userId: user1.id }).shareWithUserAndAccept(share, user2.id);
+
+		expect(await models().shareUser({ userId: user1.id }).fileIsShared(ShareType.App, file.id, user2.id, true)).toBe(true);
+		expect(await models().shareUser({ userId: user1.id }).fileIsShared(ShareType.Link, file.id, user2.id, true)).toBe(false);
+		expect(await models().shareUser({ userId: user1.id }).fileIsShared(ShareType.App, file.id, user3.id, true)).toBe(false);
 	});
 
 });
