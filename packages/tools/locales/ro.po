@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2021-04-08 13:10+0000\n"
+"PO-Revision-Date: 2021-04-08 13:14+0000\n"
 "Last-Translator: Christian Eichert <c@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/joplin/joplin/"
 "ro/>\n"
@@ -252,7 +252,7 @@ msgstr "Bara laterală"
 #: packages/app-desktop/gui/MenuBar.js:614
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
 msgid "Focus"
-msgstr "Focus"
+msgstr "focus"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
 msgid "Please select where the sync status should be exported to"
@@ -467,7 +467,7 @@ msgstr "Selectează tot"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:33
 msgid "Bold"
-msgstr "Bold"
+msgstr "Gros"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:38
 msgid "Italic"
@@ -1582,7 +1582,7 @@ msgid ""
 "menu \"%s\" > \"%s\""
 msgstr ""
 "Pentru a sorta manual notele, ordinea de sortare trebuie schimbată la \"%s\" "
-"în meniul \"%s\" > \"%s\"."
+"în meniul \"%s\" > \"%s\""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -2417,7 +2417,7 @@ msgstr "Arătați sarcinile terminate"
 
 #: packages/lib/models/Setting.js:518
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "Auto-perechere de paranteze, paranteze, ghilimele etc."
+msgstr "Auto-perechere de paranteze, ghilimele etc."
 
 #: packages/lib/models/Setting.js:521 packages/lib/models/Setting.js:540
 msgid "Reverse sort order"
@@ -2485,7 +2485,7 @@ msgstr "Activați vizualizatorul PDF"
 
 #: packages/lib/models/Setting.js:621
 msgid "Enable ==mark== syntax"
-msgstr "Enable ==mark== syntax"
+msgstr "Activați sintaxa ==mark=="
 
 #: packages/lib/models/Setting.js:622
 msgid "Enable footnotes"
@@ -2497,11 +2497,11 @@ msgstr "Activați extensia tabelului de conținut"
 
 #: packages/lib/models/Setting.js:624
 msgid "Enable ~sub~ syntax"
-msgstr "Enable ~sub~ syntax"
+msgstr "Activați sintaxa ~sub~"
 
 #: packages/lib/models/Setting.js:625
 msgid "Enable ^sup^ syntax"
-msgstr "Enable ^sup^ syntax"
+msgstr "Activați sintaxa ^sup^"
 
 #: packages/lib/models/Setting.js:626
 msgid "Enable deflist syntax"
@@ -2517,7 +2517,7 @@ msgstr "Activați emoji markdown"
 
 #: packages/lib/models/Setting.js:629
 msgid "Enable ++insert++ syntax"
-msgstr "Enable ++insert++ syntax"
+msgstr "Activați sintaxa ++insert++"
 
 #: packages/lib/models/Setting.js:630
 msgid "Enable multimarkdown table extension"
