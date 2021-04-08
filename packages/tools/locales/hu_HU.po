@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator:  Szőke Sándor <mail@szokesandor.hu>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:25+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/joplin/joplin/"
+"hu/>\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -1325,10 +1327,10 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Megjegyzés: A titkosításhoz, csak egy mester kulcs lesz felhasználva "
-"(amelyik \"aktív\"-ként van jelölve). Elvileg bármelyik kulcsa "
-"felhasználható dekódolásra, függően attól, hogy jegyzetei vagy "
-"jegyzetfüzetei hogyan voltak eredetileg titkosítva."
+"Megjegyzés: A titkosításhoz, csak egy mester kulcs lesz felhasználva ("
+"amelyik \"aktív\"-ként van jelölve). Elvileg bármelyik kulcsa felhasználható "
+"dekódolásra, függően attól, hogy jegyzetei vagy jegyzetfüzetei hogyan voltak "
+"eredetileg titkosítva."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
@@ -3055,8 +3057,7 @@ msgstr "Könyvtár"
 
 #: packages/lib/services/interop/InteropService_Importer_Md.js:41
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr ""
-"Kérem adja meg a jegyzetfüzet nevét, ahova a jegyzetek kell importálni."
+msgstr "Kérem adja meg a jegyzetfüzet nevét, ahova a jegyzetek kell importálni."
 
 #: packages/lib/services/interop/InteropService.js:48
 #: packages/lib/services/interop/InteropService.js:57
@@ -3610,8 +3611,7 @@ msgstr "Tag törléséhez, törölje a taget a hivatkozott jegyzetekből."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-"A törléshez, először kérem válasszon egy jegyzetet vagy jegyzetfüzetet."
+msgstr "A törléshez, először kérem válasszon egy jegyzetet vagy jegyzetfüzetet."
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
