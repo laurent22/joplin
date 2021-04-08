@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2021-04-08 13:15+0000\n"
-"Last-Translator: Christian Eichert <c@zp1.net>\n"
+"PO-Revision-Date: 2021-04-08 13:22+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/joplin/joplin/de/>"
 "\n"
 "Language: de_DE\n"
@@ -1618,8 +1618,8 @@ msgstr ""
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"Momentan existieren noch keine Notizbücher. Erstelle eines, indem du auf "
-"„Neues Notizbuch“ klickst."
+"Momentan existieren noch keine Notizbücher. Erstelle eines, indem du auf „"
+"Neues Notizbuch“ klickst."
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
 msgid "Note list"
@@ -2757,8 +2757,8 @@ msgstr ""
 "Kommagetrennte Liste von Pfaden zu Verzeichnissen, aus denen die Zertifikate "
 "geladen werden, oder Pfad zu einzelnen Zertifikatsdateien. Zum Beispiel: /my/"
 "cert_dir, /other/custom.pem. Wenn du Änderungen an den TLS-Einstellungen "
-"vornimmst, musst du deine Änderungen speichern, bevor du auf "
-"„Synchronisierungskonfiguration prüfen“ klickst."
+"vornimmst, musst du deine Änderungen speichern, bevor du auf „"
+"Synchronisierungskonfiguration prüfen“ klickst."
 
 #: packages/lib/models/Setting.js:849
 msgid "Ignore TLS certificate errors"
@@ -2931,8 +2931,7 @@ msgstr ""
 #: packages/lib/models/Tag.js:223
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
-"Das Schlagwort „%s“ existiert bereits. Bitte wähle einen anderen Namen."
+msgstr "Das Schlagwort „%s“ existiert bereits. Bitte wähle einen anderen Namen."
 
 #: packages/lib/models/Note.js:37
 msgid "created date"
@@ -3195,8 +3194,7 @@ msgstr "Verzeichnis"
 
 #: packages/lib/services/interop/InteropService_Importer_Md.js:41
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr ""
-"Bitte wähle das Notizbuch, in das die Notizen importiert werden sollen."
+msgstr "Bitte wähle das Notizbuch, in das die Notizen importiert werden sollen."
 
 #: packages/lib/services/interop/InteropService.js:48
 #: packages/lib/services/interop/InteropService.js:57
@@ -3481,8 +3479,8 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Zeigt nur die Elemente eines bestimmten Typs oder bestimmter Typen an. Kann "
-"`n` für Notizen sein, `t` für Aufgaben, oder `nt` für Notizen und Aufgaben "
-"(z. B. zeigt `-tt` nur Aufgaben an, während `-tnt` Notizen und Aufgaben "
+"`n` für Notizen sein, `t` für Aufgaben, oder `nt` für Notizen und Aufgaben ("
+"z. B. zeigt `-tt` nur Aufgaben an, während `-tnt` Notizen und Aufgaben "
 "anzeigt)."
 
 #: packages/app-cli/app/command-ls.js:31
@@ -3983,8 +3981,8 @@ msgstr ""
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr ""
-"Um von einem Bereich zu einem anderen zu wechseln, drücke Tab oder Umschalt"
-"+Tab."
+"Um von einem Bereich zu einem anderen zu wechseln, drücke Tab oder "
+"Umschalt+Tab."
 
 #: packages/app-cli/app/command-help.js:80
 msgid ""
