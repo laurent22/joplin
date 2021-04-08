@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:24+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/joplin/joplin/"
+"et/>\n"
 "Language: et_EE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -3425,8 +3427,8 @@ msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
-"Kuvab märkmed praeguses märkmikus. Kasutage märkmike loendi kuvamiseks ' "
-"ls /'."
+"Kuvab märkmed praeguses märkmikus. Kasutage märkmike loendi kuvamiseks ' ls "
+"/'."
 
 #: packages/app-cli/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
@@ -3985,8 +3987,7 @@ msgstr "Väljub rakendusest."
 #: packages/app-cli/app/app.js:62
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
+msgstr "\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
 
 #: packages/app-cli/app/app.js:92
 msgid "No notebook selected."
