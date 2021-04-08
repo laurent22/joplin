@@ -10,14 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: jmontane, 2019\n"
-"Language-Team: jmontane@softcatala.org\n"
+"PO-Revision-Date: 2021-04-08 13:22+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/joplin/joplin/ca/"
+">\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -2707,8 +2709,8 @@ msgstr ""
 "Una llista separada per comes de camins a directoris d'on carregar els "
 "certificats, o el camí a fitxers de certificats concrets. Per exemple, "
 "el_meu/dir_cert, /altres/personalitzat.pem. Tingueu en compte que si feu "
-"canvis en la configuració TLS, cal que els deseu abans de fer clic a "
-"«Comprova la configuració de la sincronització»."
+"canvis en la configuració TLS, cal que els deseu abans de fer clic a «"
+"Comprova la configuració de la sincronització»."
 
 #: packages/lib/models/Setting.js:849
 msgid "Ignore TLS certificate errors"
@@ -2732,8 +2734,8 @@ msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
-"Especifiqueu el port que hauria de fer servir el servidor API. Si no "
-"s’estableix, s’utilitzarà un valor per defecte."
+"Especifiqueu el port que hauria de fer servir el servidor API. Si no s’"
+"estableix, s’utilitzarà un valor per defecte."
 
 #: packages/lib/models/Setting.js:868
 msgid "Enable note history"
@@ -3416,9 +3418,9 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Només mostra els elements dels tipus específics. Pot ser «n» per a les "
-"notes, «t» per les tasques pendents, o «nt» per a notes i tasques pendents "
-"(p. ex. «-tt» mostrarà només les tasques pendents, mentre que «-tnt» "
-"mostrarà notes i tasques pendents)."
+"notes, «t» per les tasques pendents, o «nt» per a notes i tasques pendents ("
+"p. ex. «-tt» mostrarà només les tasques pendents, mentre que «-tnt» mostrarà "
+"notes i tasques pendents)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -3510,8 +3512,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Gestiona la configuració E2EE. Les ordres són «enable», «disable», "
-"«decrypt», «status» i «target-status»."
+"Gestiona la configuració E2EE. Les ordres són «enable», «disable», «decrypt»"
+", «status» i «target-status»."
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3709,8 +3711,7 @@ msgstr "S'ha desat la nota."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
-msgstr ""
-"Per a suprimir una etiqueta, traieu l'etiqueta en les notes associades."
+msgstr "Per a suprimir una etiqueta, traieu l'etiqueta en les notes associades."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
@@ -3933,8 +3934,8 @@ msgstr "Per a sortir del mode en línia d'ordres, premeu la tecla Escapada"
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Per a llistar les dreceres de teclat i opcions de configuració, escriviu "
-"«help keymap»"
+"Per a llistar les dreceres de teclat i opcions de configuració, escriviu «"
+"help keymap»"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -3945,9 +3946,9 @@ msgid ""
 msgstr ""
 "<todo-command> pot ser «toggle» o «clear». Useu «toggle» per a canviar el "
 "llistats de tasques entre l'estat de finalitzat i no finalitzat (si "
-"l'objectiu és una nota normal es convertirà a un llistat de tasques "
-"pendents). Useu «clear» per a convertir un llistat de tasques pendents a una "
-"nota normal."
+"l'objectiu és una nota normal es convertirà a un llistat de tasques pendents)"
+". Useu «clear» per a convertir un llistat de tasques pendents a una nota "
+"normal."
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
@@ -3956,8 +3957,7 @@ msgstr "Surt de l'aplicació."
 #: packages/app-cli/app/app.js:62
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"Hi ha més d'un element que coincideix amb «%s». Restringiu la consulta."
+msgstr "Hi ha més d'un element que coincideix amb «%s». Restringiu la consulta."
 
 #: packages/app-cli/app/app.js:92
 msgid "No notebook selected."
@@ -3997,8 +3997,8 @@ msgstr "Mostra un resum sobre les notes i blocs de notes."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Per a reintentar el desxifratge d'aquests elements. Executa `e2ee decrypt --"
-"retry-failed-items`"
+"Per a reintentar el desxifratge d'aquests elements. Executa `e2ee decrypt "
+"--retry-failed-items`"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
