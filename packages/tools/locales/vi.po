@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:28+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/joplin/joplin/"
+"vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -2508,8 +2510,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:647
 msgid "Start application minimised in the tray icon"
-msgstr ""
-"Chạy chương trình trong nền, hiển thị icon trong tray khi máy khởi động"
+msgstr "Chạy chương trình trong nền, hiển thị icon trong tray khi máy khởi động"
 
 #: packages/lib/models/Setting.js:662
 msgid "Editor font size"
@@ -2692,8 +2693,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Thiết kế an toàn: Không xóa dữ liệu cục bộ khi điểm đến đồng bộ hóa trống "
-"(thường là kết quả của bug hoặc cấu hình sai)"
+"Thiết kế an toàn: Không xóa dữ liệu cục bộ khi điểm đến đồng bộ hóa trống ("
+"thường là kết quả của bug hoặc cấu hình sai)"
 
 #: packages/lib/models/Setting.js:863
 msgid ""
@@ -3890,8 +3891,8 @@ msgid ""
 msgstr ""
 "<todo-command> có thể là \"toggle\" hoặc là \"clear\". Sử dụng \"toggle\" để "
 "lưu chuyển giữa các to-do đã hoàn thành và chưa hoàn thành (nếu mục tiêu là "
-"một note bình thường, note sẽ được chuyển đổi thành to-do). Sử dụng \"clear"
-"\" dể chuyển đổi to-do trở lại một note bình thường."
+"một note bình thường, note sẽ được chuyển đổi thành to-do). Sử dụng \"clear\""
+" dể chuyển đổi to-do trở lại một note bình thường."
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
