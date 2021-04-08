@@ -1,11 +1,11 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import { _ } from '@joplin/lib/locale';
+import { copyHtmlToClipboard } from './clipboardUtils';
 
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
-import htmlUtils from '@joplin/lib/htmlUtils';
 const fs = require('fs-extra');
 const { clipboard } = require('electron');
 const { toSystemSlashes } = require('@joplin/lib/path-utils');
@@ -48,13 +48,7 @@ function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {
 		clipboard.writeText(options.textToCopy);
 	} else if (options.htmlToCopy) {
-		// In that case we need to set both HTML and Text context, otherwise it
-		// won't be possible to paste the text in, for example, a text editor.
-		// https://github.com/laurent22/joplin/issues/4441
-		clipboard.write({
-			text: htmlUtils.stripHtml(options.htmlToCopy),
-			html: options.htmlToCopy,
-		});
+		copyHtmlToClipboard(options.htmlToCopy);
 	}
 }
 

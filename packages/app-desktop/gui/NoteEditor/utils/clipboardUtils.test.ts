@@ -1,4 +1,4 @@
-import getCopyableContent from './getCopyableContent';
+import { getCopyableContent } from './clipboardUtils';
 
 describe('getCopyableContent', () => {
 	test('should remove parameters from local images', () => {
