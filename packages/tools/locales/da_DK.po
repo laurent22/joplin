@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Mustafa Al-Dailemi <dailemi@hotmail.com>Language-Team:\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:22+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/joplin/joplin/da/>"
+"\n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -1643,8 +1645,8 @@ msgstr "Ingen ressourcer!"
 #, fuzzy, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
-"Advarsel: alle ressourcer kan ikke vises, grundet \"Performance"
-"\" (Begrænsning: %s)."
+"Advarsel: alle ressourcer kan ikke vises, grundet \"Performance\" "
+"(Begrænsning: %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:159
 #, fuzzy
@@ -2028,8 +2030,8 @@ msgstr "Denne vedhæftning er ikke downloaded eller er ikke dekrypteret endnu."
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
-"Joplin mobil-app'en understøtter på nuværende tidspunkt ikke denne type "
-"link: %s"
+"Joplin mobil-app'en understøtter på nuværende tidspunkt ikke denne type link:"
+" %s"
 
 #: packages/app-mobile/components/screens/Note.js:178
 #, javascript-format
@@ -2730,8 +2732,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Sikring: Fjern ikke den lokale data når målet for synkroniseringen er tom "
-"(ofte et resultat af fejlkonfigurering eller bugs)"
+"Sikring: Fjern ikke den lokale data når målet for synkroniseringen er tom ("
+"ofte et resultat af fejlkonfigurering eller bugs)"
 
 #: packages/lib/models/Setting.js:863
 msgid ""
@@ -3881,8 +3883,8 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "I enhver kommando kan en note eller notesbog refereres med titel eller ID, "
-"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. `"
-"$c` kan bruges som reference til aktuel/valgt emne."
+"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. "
+"`$c` kan bruges som reference til aktuel/valgt emne."
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -3924,8 +3926,8 @@ msgid ""
 msgstr ""
 "<todo-command> (Opgave-kommando) kan enten være \"toggle\" eller \"clear\". "
 "Brug \"toggle\" for at skrifte opgavens status mellem udført og ikke udført  "
-"(Hvis resultatet er en almindelig note, bliver den konverteret til en "
-"opgave). Brug \"clear\" til at konvertere en opgave til en alm. note."
+"(Hvis resultatet er en almindelig note, bliver den konverteret til en opgave)"
+". Brug \"clear\" til at konvertere en opgave til en alm. note."
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
@@ -3984,10 +3986,10 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> (mærke-kommando) kan enten være \"add\" (tilføj), \"remove"
-"\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra "
-"[note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` "
-"kan bruges til at vise alle mærker (brug -l for at vise den lange udgave)."
+"<tag-command> (mærke-kommando) kan enten være \"add\" (tilføj), \"remove\" "
+"(slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra [note], "
+"eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` kan "
+"bruges til at vise alle mærker (brug -l for at vise den lange udgave)."
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format
