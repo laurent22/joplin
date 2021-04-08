@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2021-04-08 13:15+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"PO-Revision-Date: 2021-04-08 13:28+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/joplin/joplin/tr/"
 ">\n"
 "Language: tr_TR\n"
@@ -976,8 +976,7 @@ msgstr ""
 #: packages/app-desktop/gui/MenuBar.js:166
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
-"\"%s\" kaynağından \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
+msgstr "\"%s\" kaynağından \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
 
 #: packages/app-desktop/gui/MenuBar.js:287 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
@@ -1293,8 +1292,8 @@ msgid ""
 msgstr ""
 "Şifrelemeyi aktif etmek *tüm* notlarınızın ve eklerinizin yeniden senkronize "
 "edileceği ve senkronizasyon hedefine şifrelenmiş olarak gönderileceği "
-"anlamına gelir. Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin "
-"\"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için "
+"anlamına gelir. Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin \"*"
+"tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için "
 "lütfen parolanızı aşağıya girin."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
@@ -2009,8 +2008,7 @@ msgstr "Bu ek henüz indirilmedi veya şifrelenmedi."
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
-"Joplin mobil uygulaması şu anda bu tür bir bağlantıyı desteklemiyor: %s"
+msgstr "Joplin mobil uygulaması şu anda bu tür bir bağlantıyı desteklemiyor: %s"
 
 #: packages/app-mobile/components/screens/Note.js:178
 #, javascript-format
@@ -2118,8 +2116,7 @@ msgstr ""
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-"Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
+msgstr "Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -3492,8 +3489,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Uçtan Uca Şifreleme ayarını yönetir. Komutlar `enable`, `disable`, "
-"`decrypt`, `status`, `decrypt-file` and `target-status`."
+"Uçtan Uca Şifreleme ayarını yönetir. Komutlar `enable`, `disable`, `decrypt`"
+", `status`, `decrypt-file` and `target-status`."
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3885,10 +3882,9 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"Herhangi bir komutta, bir not veya note defteri başlık veya ID ile, veya `"
-"$n` `$b` kestirmelerini kullanılarak atfedilebilinir. Sırasıyla, güncel "
-"seçili not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf "
-"yapılabilinir."
+"Herhangi bir komutta, bir not veya note defteri başlık veya ID ile, veya `$n`"
+" `$b` kestirmelerini kullanılarak atfedilebilinir. Sırasıyla, güncel seçili "
+"not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf yapılabilinir."
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
