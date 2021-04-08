@@ -14,14 +14,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Mario Campo <mario.campo@gmail.com>\n"
-"Language-Team: Spanish <lucas.vieites@gmail.com>\n"
+"PO-Revision-Date: 2021-04-08 13:23+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/joplin/joplin/es/"
+">\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
@@ -1419,8 +1421,7 @@ msgstr "Argumentos:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
-"La aplicación debe ser reiniciada para que estos cambios tengan efecto."
+msgstr "La aplicación debe ser reiniciada para que estos cambios tengan efecto."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -2257,8 +2258,8 @@ msgid ""
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "El objetivo de la sincronización. Cada objetivo de sincronización puede "
-"tener parámetros adicionales los cuales se nombran como `sync.NUM.NAME` "
-"(todos documentados a continuación)."
+"tener parámetros adicionales los cuales se nombran como `sync.NUM.NAME` ("
+"todos documentados a continuación)."
 
 #: packages/lib/models/Setting.js:160
 msgid "Directory to synchronise with (absolute path)"
@@ -2702,9 +2703,9 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Lista de rutas de directorios separados por comas de dónde cargar los "
-"certificados, o ruta a certificados individuales. Por ejemplo: /mi/"
-"cert_dir, /otro/personalizado.pem. Tenga en cuenta que si realiza cambios en "
-"la configuración de los certificados TLS, debe guardar los cambios antes de "
+"certificados, o ruta a certificados individuales. Por ejemplo: /mi/cert_dir, "
+"/otro/personalizado.pem. Tenga en cuenta que si realiza cambios en la "
+"configuración de los certificados TLS, debe guardar los cambios antes de "
 "hacer clic en «Comprobar la configuración de sincronización»."
 
 #: packages/lib/models/Setting.js:849
@@ -3919,8 +3920,8 @@ msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Utilice las flechas y re/avpág para desplazar las listas y áreas de textos "
-"(incluyendo esta consola)."
+"Utilice las flechas y re/avpág para desplazar las listas y áreas de textos ("
+"incluyendo esta consola)."
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -4000,8 +4001,8 @@ msgstr "Muestra un resumen acerca de las notas y las libretas."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Para reintentar el descifrado de estos elementos ejecute 'e2ee decrypt --"
-"retry-failed-items'"
+"Para reintentar el descifrado de estos elementos ejecute 'e2ee decrypt "
+"--retry-failed-items'"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
