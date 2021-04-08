@@ -732,9 +732,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				changeSelectedFolder(draft, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				changeSelectedNotes(draft, noteSelectAction);
+
+				if (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID) {
+					// we don't want to change folder when 'All Notes' filter is on
+					changeSelectedNotes(draft, noteSelectAction);
+				} else {
+					changeSelectedFolder(draft, action);
+					changeSelectedNotes(draft, noteSelectAction);
+				}
 			}
 			break;
 
