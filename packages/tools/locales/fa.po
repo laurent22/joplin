@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Kourosh Firoozbakht <kourox@protonmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:24+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Persian <https://hosted.weblate.org/projects/joplin/joplin/fa/"
+">\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -872,8 +874,8 @@ msgstr "هر دفعه فقط یک یادداشت می‌تواند پرینت گ
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
-"برای اینکه به Joplin اجازه همگام‌سازی با Dropbox را بدهید، مراحل زیر را دنبال "
-"کنید:"
+"برای اینکه به Joplin اجازه همگام‌سازی با Dropbox را بدهید، مراحل زیر را "
+"دنبال کنید:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
@@ -1210,8 +1212,8 @@ msgid ""
 "decrypt and encrypt your data as usual."
 msgstr ""
 "این کلید‌های اصلی از یک الگوریتم رمزنگاری تاریخ گذشته استفاده می‌کنند و "
-"پیشنهاد می‌شود که آن‌ها رو ارتقا دهید. کلید اصلی ارتقا یافته همچنان طبق معمول "
-"قادر به رمزگشایی و رمزنگاری داده شما خواهد بود."
+"پیشنهاد می‌شود که آن‌ها رو ارتقا دهید. کلید اصلی ارتقا یافته همچنان طبق "
+"معمول قادر به رمزگشایی و رمزنگاری داده شما خواهد بود."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
@@ -1334,9 +1336,9 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"کلید‌های اصلی با این شناسه‌ها برای رمزنگاری بعضی از موارد شما استفاده شده‌اند، "
-"به هر حال برنامه در حال حاضر به آن‌ها دسترسی ندارد. احتمال دارد در نهایت با "
-"یک همگام‌سازی بارگیری شوند."
+"کلید‌های اصلی با این شناسه‌ها برای رمزنگاری بعضی از موارد شما استفاده "
+"شده‌اند، به هر حال برنامه در حال حاضر به آن‌ها دسترسی ندارد. احتمال دارد در "
+"نهایت با یک همگام‌سازی بارگیری شوند."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
 #: packages/app-mobile/components/screens/encryption-config.js:268
@@ -1944,16 +1946,16 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"برای کارکرد صحیح، برنامه به این دسترسی‌ها نیاز دارد. لطفا آن‌ها را در تنظیمات "
-"گوشی خود در برنامه‌ها > Joplin > دسترسی‌ها فعال کنید"
+"برای کارکرد صحیح، برنامه به این دسترسی‌ها نیاز دارد. لطفا آن‌ها را در "
+"تنظیمات گوشی خود در برنامه‌ها > Joplin > دسترسی‌ها فعال کنید"
 
 #: packages/app-mobile/components/screens/config.js:474
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- فضای ذخیره‌سازی: برای پیوست کردن فایل‌ها به یادداشت‌ها و فعال کردن همگام‌سازی "
-"filesystem."
+"- فضای ذخیره‌سازی: برای پیوست کردن فایل‌ها به یادداشت‌ها و فعال کردن همگام‌"
+"سازی filesystem."
 
 #: packages/app-mobile/components/screens/config.js:477
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -2896,8 +2898,7 @@ msgstr "داده شما دوباره رمزگذاری و همگام‌سازی �
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
-"لطفا قبل از ارتقای کلید گذرواژه خود را در لیست کلید اصلی زیر وارد کنید."
+msgstr "لطفا قبل از ارتقای کلید گذرواژه خود را در لیست کلید اصلی زیر وارد کنید."
 
 #: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
@@ -3172,9 +3173,9 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"این موارد بر روی دستگاه باقی می‌مانند اما به هدف همگام‌سازی بارگذاری نمی‌شوند. "
-"این پیدا کردن این موارد، عنوان و یا شناسه (که در براکت‌های بالا نمایش داده "
-"شده‌اند) را جستجو کنید."
+"این موارد بر روی دستگاه باقی می‌مانند اما به هدف همگام‌سازی بارگذاری نمی‌"
+"شوند. این پیدا کردن این موارد، عنوان و یا شناسه (که در براکت‌های بالا نمایش "
+"داده شده‌اند) را جستجو کنید."
 
 #: packages/lib/services/ReportService.js:129
 #, javascript-format
@@ -3322,8 +3323,8 @@ msgstr "فقط <num> یادداشت اول را نمایش می‌دهد."
 #: packages/app-cli/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"مورد را بر‌ اساس <field> مرتب می‌کند (به عنوان مثال: عنوان، زمان به‌روزرسانی، "
-"زمان ایجاد)."
+"مورد را بر‌ اساس <field> مرتب می‌کند (به عنوان مثال: عنوان، زمان به‌روزرسانی،"
+" زمان ایجاد)."
 
 #: packages/app-cli/app/command-ls.js:29
 msgid "Reverses the sorting order."
@@ -3337,8 +3338,8 @@ msgid ""
 msgstr ""
 "تنها موارد نوع/انواع مشخص شده را نمایش می‌دهد. می‌تواند برای یادداشت‌ها `n`، "
 "برای فهرست کار‌ها `t` یا برای یادداشت‌ها و فهرست کار‌ها `nt` باشد. (به عنوان "
-"مثال: `-tt` تنها فهرست کار‌ها را نمایش خواهد داد در حالی که `-tnt` یادداشت‌ها "
-"و فهرست کار‌ها را نمایش خواهد داد.)"
+"مثال: `-tt` تنها فهرست کار‌ها را نمایش خواهد داد در حالی که `-tnt` یادداشت‌"
+"ها و فهرست کار‌ها را نمایش خواهد داد.)"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -3350,8 +3351,8 @@ msgid ""
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 "استفاده از فرمت لیست طولانی. فرمت به صورت ID (شناسه)، NOTE_COUNT (تعداد "
-"یادداشت (برای دفترچه))، DATE (تاریخ)، TODO_CHECKED (فهرست کار بررسی شده "
-"(برای فهرست کار‌ها))، TITLE (عنوان) می‌باشد"
+"یادداشت (برای دفترچه))، DATE (تاریخ)، TODO_CHECKED (فهرست کار بررسی شده ("
+"برای فهرست کار‌ها))، TITLE (عنوان) می‌باشد"
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3504,7 +3505,8 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"به [notebook] تغییر می‌کند - تمامی فعالیت های آتی در این دفترچه انجام می‌گیرد."
+"به [notebook] تغییر می‌کند - تمامی فعالیت های آتی در این دفترچه انجام "
+"می‌گیرد."
 
 #: packages/app-cli/app/command-sync.js:29
 msgid "Synchronises with remote storage."
@@ -3599,8 +3601,8 @@ msgstr "ویرایش یادداشت."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"هیچ ویرایشگر متنی مشخص نشده. لطفا با استفاده از `config editor <editor-"
-"path>` آن را مشخص کنید"
+"هیچ ویرایشگر متنی مشخص نشده. لطفا با استفاده از `config editor <editor-path>`"
+" آن را مشخص کنید"
 
 #: packages/app-cli/app/command-edit.js:40
 msgid "No active notebook."
@@ -3666,8 +3668,8 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"داده Joplin را در محل مورد نظر استخراج می‌کند. به طور پیش‌فرض، تمام پایگاه‌داده "
-"شامل دفترچه‌ها، یادداشت‌ها، برچسب‌ها و منابع را استخراج می‌کند."
+"داده Joplin را در محل مورد نظر استخراج می‌کند. به طور پیش‌فرض، تمام پایگاه‌"
+"داده شامل دفترچه‌ها، یادداشت‌ها، برچسب‌ها و منابع را استخراج می‌کند."
 
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format

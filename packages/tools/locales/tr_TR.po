@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
-"Language-Team: Turkish (Turkey)\n"
+"PO-Revision-Date: 2021-04-08 13:28+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/joplin/joplin/tr/"
+">\n"
 "Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -213,7 +215,7 @@ msgstr "Tüm notlar"
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/lib/commands/synchronize.js:18
 msgid "Synchronise"
-msgstr "Senkroniza Et"
+msgstr "Senkronize Et"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
 #: packages/app-mobile/components/side-menu-content.js:372
@@ -322,23 +324,23 @@ msgstr "Onay Kutusu listesi"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Vurgula"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Üzerini çiz"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Ekle"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Üst simge"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Alt simge"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
@@ -982,8 +984,7 @@ msgstr ""
 #: packages/app-desktop/gui/MenuBar.js:166
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
-"\"%s\" kaynağından \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
+msgstr "\"%s\" kaynağından \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
 
 #: packages/app-desktop/gui/MenuBar.js:287 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
@@ -1198,7 +1199,7 @@ msgstr "Bu %d not silinsin mi?"
 #: packages/app-cli/app/command-sync.js:95
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "Yetkilendirme tamamlanmadı (yetkilendirme anahtarı karşılanmadı)"
+msgstr "Kimlik doğrulama tamamlanmadı (kimlik doğrulama anahtarı alınmadı)."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
@@ -1299,8 +1300,8 @@ msgid ""
 msgstr ""
 "Şifrelemeyi aktif etmek *tüm* notlarınızın ve eklerinizin yeniden senkronize "
 "edileceği ve senkronizasyon hedefine şifrelenmiş olarak gönderileceği "
-"anlamına gelir. Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin "
-"\"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için "
+"anlamına gelir. Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin \"*"
+"tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için "
 "lütfen parolanızı aşağıya girin."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
@@ -1775,11 +1776,11 @@ msgstr "Yapılandırma"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Mobil veri - otomatik senkronizasyon devre dışı"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
-msgstr "Şuan bir note defteriniz yok."
+msgstr "Şu an bir not defteriniz yok."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -2016,8 +2017,7 @@ msgstr "Bu ek henüz indirilmedi veya şifrelenmedi."
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
-"Joplin mobil uygulaması şu anda bu tür bir bağlantıyı desteklemiyor: %s"
+msgstr "Joplin mobil uygulaması şu anda bu tür bir bağlantıyı desteklemiyor: %s"
 
 #: packages/app-mobile/components/screens/Note.js:178
 #, javascript-format
@@ -2125,8 +2125,7 @@ msgstr ""
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-"Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
+msgstr "Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2146,8 +2145,8 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"Lütfen uygulamayı doğrulamak için tarayıcınızda aşağıdaki URL'yi açın. "
-"Uygulama \"Uygulamalar/Joplin\" de bir dizin oluşturacak ve sadece bu "
+"Lütfen uygulama kimliğini doğrulamak için tarayıcınızda aşağıdaki URL'yi "
+"açın. Uygulama \"Uygulamalar/Joplin\" de bir dizin oluşturacak ve sadece bu "
 "dizindeki dosyaları okuyacak ve yazacaktır. Bu dizin dışındaki hiçbir "
 "dosyaya veya diğer kişisel verilere erişemeyecektir. Hiçbir veri üçüncü "
 "şahıslarla paylaşılmayacaktır."
@@ -2240,11 +2239,11 @@ msgstr "Nord"
 
 #: packages/lib/models/Setting.js:107
 msgid "Aritim Dark"
-msgstr "Aritim Dark"
+msgstr "Aritim Koyu"
 
 #: packages/lib/models/Setting.js:108
 msgid "OLED Dark"
-msgstr "OLED Karanlık"
+msgstr "OLED Koyu"
 
 #: packages/lib/models/Setting.js:130
 msgid "Synchronisation target"
@@ -2264,7 +2263,7 @@ msgstr "Eşitlenecek dizin (tam yol)"
 
 #: packages/lib/models/Setting.js:172
 msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL'si"
 
 #: packages/lib/models/Setting.js:184
 msgid "Nextcloud username"
@@ -2540,7 +2539,7 @@ msgstr "Editör yazı boyutu"
 
 #: packages/lib/models/Setting.js:669
 msgid "Editor font"
-msgstr "Editör fontu"
+msgstr "Editör yazı tipi"
 
 #: packages/lib/models/Setting.js:676 packages/lib/models/Setting.js:683
 #: packages/lib/models/Setting.js:810
@@ -2549,22 +2548,19 @@ msgstr "Varsayılan"
 
 #: packages/lib/models/Setting.js:694
 msgid "Editor font family"
-msgstr "Editör yazı tipi"
+msgstr "Editör yazı tipi ailesi"
 
 #: packages/lib/models/Setting.js:695
-#, fuzzy
 msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Bu yazı tipi *monospace* olmalıdır, aksi halde bazı karakterler düzgün "
-"çıkmayacak. Yazı tipi yanlış seçilmiş veya boş bırakılmışsa, varsayılan "
-"monospace yazı tipi kullanılacaktır."
+"Yazı tipi yanlış seçilmiş veya boş bırakılmışsa, varsayılan monospace yazı "
+"tipi kullanılacaktır."
 
 #: packages/lib/models/Setting.js:704
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Editör yazı tipi"
+msgstr "Editör monospace yazı tipi ailesi"
 
 #: packages/lib/models/Setting.js:705
 msgid ""
@@ -2619,7 +2615,7 @@ msgstr "%d saat"
 
 #: packages/lib/models/Setting.js:776
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Yalnızca WiFi bağlantısı üzerinden senkronize et"
 
 #: packages/lib/models/Setting.js:783
 msgid "Text editor command"
@@ -2771,7 +2767,7 @@ msgstr "Not alanı büyüme faktörü"
 #: packages/lib/models/Setting.js:1134
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Geçersiz seçenek değeri:  \"%s\". Mümkün değerler: %s."
+msgstr "Geçersiz seçenek değeri: \"%s\". Olası değerler: %s."
 
 #: packages/lib/models/Setting.js:1533
 msgid "General"
@@ -3054,15 +3050,15 @@ msgstr ""
 "güncelleyin"
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Joplin Nextcloud uygulamasına bağlanılamadı. Lütfen senkronizasyon "
-"yapılandırması ekranını kontrol edin. Hatanın tamamı:\n"
+"Joplin Sunucusuna bağlanılamadı. Lütfen yapılandırma ekranındaki "
+"senkronizasyon seçeneklerini kontrol edin. Hatanın tamamı:\n"
 "\n"
 "%s"
 
@@ -3407,10 +3403,10 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"Sadece belirli tip öğeleri gösterir. Notlar için `n`,  yapılacaklar "
-"listeleri için `t` veya not ve yapılacaklar listesi için `nt` (örnek: `-tt` "
-"sadece yapılacaklar listesini gösterirken, `-tnt` not ve yapılacaklar "
-"listesini gösterir)"
+"Yalnızca belirli tür(ler)deki ögeleri gösterir. Notlar için `n`, "
+"yapılacaklar listeleri için `t` veya notlar ve yapılacaklar listeleri için "
+"`nt` olabilir (örneğin `-tt` yalnızca yapılacaklar listelerini gösterirken, "
+"`-tnt` notlar ve yapılacaklar listelerini gösterir)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -3502,8 +3498,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Uçtan Uca Şifreleme ayarını yönetir. Komutlar `enable`, `disable`, "
-"`decrypt`, `status`, `decrypt-file` and `target-status`."
+"Uçtan Uca Şifreleme ayarını yönetir. Komutlar `enable`, `disable`, `decrypt`"
+", `status`, `decrypt-file` and `target-status`."
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3895,10 +3891,9 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"Herhangi bir komutta, bir not veya note defteri başlık veya ID ile, veya `"
-"$n` `$b` kestirmelerini kullanılarak atfedilebilinir. Sırasıyla, güncel "
-"seçili not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf "
-"yapılabilinir."
+"Herhangi bir komutta, bir not veya note defteri başlık veya ID ile, veya `$n`"
+" `$b` kestirmelerini kullanılarak atfedilebilinir. Sırasıyla, güncel seçili "
+"not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf yapılabilinir."
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."

@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Ji-Hyeon Gim <potatogim@potatogim.net>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:26+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/joplin/joplin/ko/>"
+"\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -67,9 +69,8 @@ msgid ""
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"노트 제목이나 내용의 일부를 입력하여 바로 이동하세요. 혹은 #으로 시작하는 태"
-"그 이름이나 @로 시작하는 노트북 이름을 입력하거나, :을 입력하여 명령을 검색하"
-"세요."
+"노트 제목이나 내용의 일부를 입력하여 바로 이동하세요. 혹은 #으로 시작하는 태그 이름이나 @로 시작하는 노트북 이름을 입력하거나, :을 "
+"입력하여 명령을 검색하세요."
 
 #: packages/app-desktop/plugins/GotoAnything.js:457
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -148,8 +149,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"\"%s\"를 클릭하여 노트를 복구하세요. 노트는 \"%s\" 이름을 가진 노트북에 복사"
-"될 것입니다. 현재 버전의 노트는 이동하거나 수정되지 않습니다."
+"\"%s\"를 클릭하여 노트를 복구하세요. 노트는 \"%s\" 이름을 가진 노트북에 복사될 것입니다. 현재 버전의 노트는 이동하거나 "
+"수정되지 않습니다."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
@@ -290,9 +291,7 @@ msgstr "배치"
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr ""
-"비어있는 노트입니다. \"%s\" 항목을 선택해서 편집기를 전환하고 노트를 편집하세"
-"요."
+msgstr "비어있는 노트입니다. \"%s\" 항목을 선택해서 편집기를 전환하고 노트를 편집하세요."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
@@ -375,9 +374,7 @@ msgstr "코드 보기"
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
-msgstr ""
-"모든 첨부 파일들이 다운로드 및 복호화될 때까지 기다려주세요. %s를 통해 이 노"
-"트를 편집하도록 전환할 수 있습니다."
+msgstr "모든 첨부 파일들이 다운로드 및 복호화될 때까지 기다려주세요. %s를 통해 이 노트를 편집하도록 전환할 수 있습니다."
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
 msgid "There was an error downloading this attachment:"
@@ -429,9 +426,7 @@ msgstr "태그를 추가하려면 클릭하세요..."
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
-msgstr ""
-"서식 있는 텍스트 편집기에는 몇가지의 제한 사항들이 있으며, 사용하기 전에 이러"
-"한 제약 사항들을 미리 알고 있는 것이 좋습니다."
+msgstr "서식 있는 텍스트 편집기에는 몇가지의 제한 사항들이 있으며, 사용하기 전에 이러한 제약 사항들을 미리 알고 있는 것이 좋습니다."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
@@ -677,9 +672,7 @@ msgstr "바로가기를 입력하세요"
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
-msgstr ""
-"바로가기를 입력한 후 엔터 키를 누르세요. 바로가기를 지우려면 백스페이스 키를 "
-"누릅니다."
+msgstr "바로가기를 입력한 후 엔터 키를 누르세요. 바로가기를 지우려면 백스페이스 키를 누릅니다."
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -693,9 +686,8 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
-"Joplin이 동기화를 하기에 앞서 동기화 대상의 업그레이드가 필요합니다. 작업이 "
-"완료되기 위해서 몇 분 정도 걸릴 수 있으며, 앱을 다시 시작해야 합니다. 계속하"
-"려면 링크를 눌러주세요."
+"Joplin이 동기화를 하기에 앞서 동기화 대상의 업그레이드가 필요합니다. 작업이 완료되기 위해서 몇 분 정도 걸릴 수 있으며, 앱을 "
+"다시 시작해야 합니다. 계속하려면 링크를 눌러주세요."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
@@ -739,8 +731,7 @@ msgstr "더 많은 정보"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:559
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
-"레이아웃 항목을 옮기려면 화살표를 사용하세요. \"ESC\"키를 눌러 종료합니다."
+msgstr "레이아웃 항목을 옮기려면 화살표를 사용하세요. \"ESC\"키를 눌러 종료합니다."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -914,9 +905,7 @@ msgstr "웹 수집기 서비스 사용"
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
-msgstr ""
-"Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있"
-"게 해줍니다."
+msgstr "Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있게 해줍니다."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 msgid "In order to use the web clipper, you need to do the following:"
@@ -932,8 +921,8 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성"
-"화시 방화벽에서 Joplin에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
+"이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성화시 방화벽에서 Joplin에게 특정 포트 접근을 "
+"허가할 것인지 물어볼 수 있습니다."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 msgid "Step 2: Install the extension"
@@ -959,9 +948,7 @@ msgstr "토큰 복사"
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
-msgstr ""
-"이 인증 토큰은 오직 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니"
-"다."
+msgstr "이 인증 토큰은 오직 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니다."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
@@ -1195,9 +1182,8 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
-"다음 마스터 키들이 오래된 암호화 알고리즘을 사용하고 있기 때문에 업그레이드"
-"를 권장합니다. 업그레이드된 마스터 키는 기존 데이터의 암호화 및 복호화에 그대"
-"로 사용될 수 있습니다."
+"다음 마스터 키들이 오래된 암호화 알고리즘을 사용하고 있기 때문에 업그레이드를 권장합니다. 업그레이드된 마스터 키는 기존 데이터의 암호화 "
+"및 복호화에 그대로 사용될 수 있습니다."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
@@ -1218,8 +1204,8 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"아래 도구를 사용하여 데이터를 다시 암호화할 수 있습니다. 일부 노트가 오래된 "
-"암호화 방법으로 암호화된 것을 알고 있는 경우가 이에 해당합니다."
+"아래 도구를 사용하여 데이터를 다시 암호화할 수 있습니다. 일부 노트가 오래된 암호화 방법으로 암호화된 것을 알고 있는 경우가 이에 "
+"해당합니다."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1238,16 +1224,13 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"전체 데이터가 암호 및 동기화되므로, 충분한 시간을 가지고 실행하는게 좋습니"
-"다.\n"
+"전체 데이터가 암호 및 동기화되므로, 충분한 시간을 가지고 실행하는게 좋습니다.\n"
 "시작하기 위해 아래 방법으로 할 수 있습니다.\n"
 "\n"
 "1. 모든 디바이스를 동기화.\n"
 "2. Click \"%s\".\n"
-"3. 충돌을 방지하기 위해, 암호화가 진행되는 동안 다른 장치에서 노트를 변경하"
-"지 말아주세요.\n"
-"4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동기화하세"
-"요.\n"
+"3. 충돌을 방지하기 위해, 암호화가 진행되는 동안 다른 장치에서 노트를 변경하지 말아주세요.\n"
+"4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동기화하세요.\n"
 "\n"
 "중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
 
@@ -1266,8 +1249,7 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"암호화를 해제하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 되지 "
-"않은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
+"암호화를 해제하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 되지 않은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
@@ -1277,10 +1259,8 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"암호화를 사용하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화된 상태"
-"로 동기화 대상에게 전달됩니다. 비밀번호는 데이터를 복구할 수 있는 유일한 수단"
-"으로, *절대로* 비밀번호를 잃어버리지 마세요. 암호화를 사용하려면 아래에 비밀"
-"번호를 넣어주세요."
+"암호화를 사용하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화된 상태로 동기화 대상에게 전달됩니다. 비밀번호는 데이터를 복구할 "
+"수 있는 유일한 수단으로, *절대로* 비밀번호를 잃어버리지 마세요. 암호화를 사용하려면 아래에 비밀번호를 넣어주세요."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-mobile/components/screens/encryption-config.js:258
@@ -1318,9 +1298,8 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"참고: \"활성\"로 표시된 단 하나의 마스터 키만 암호화에 사용됩니다. 모든 키는 "
-"노트나 노트북이 기존에 어떻게 암호화되었는지에 따라서 복호화에 사용될 수 있습"
-"니다."
+"참고: \"활성\"로 표시된 단 하나의 마스터 키만 암호화에 사용됩니다. 모든 키는 노트나 노트북이 기존에 어떻게 암호화되었는지에 따라서 "
+"복호화에 사용될 수 있습니다."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
@@ -1334,17 +1313,15 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"이 ID와 연관된 마스터 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플"
-"리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 다운로드"
-"될 가능성이 있습니다."
+"이 ID와 연관된 마스터 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 "
+"동기화를 통해 다운로드될 가능성이 있습니다."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
 #: packages/app-mobile/components/screens/encryption-config.js:268
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
-msgstr ""
-"종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인해주세요:"
+msgstr "종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인해주세요:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-mobile/components/screens/encryption-config.js:279
@@ -1557,9 +1534,7 @@ msgstr "노트를 다음 기준으로 정렬"
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
-msgstr ""
-"노트들을 수동으로 정렬하려면 정렬 옵션이 \"%s\"로 변경되어야만 합니다.(\"%s"
-"\" > \"%s\" 메뉴)"
+msgstr "노트들을 수동으로 정렬하려면 정렬 옵션이 \"%s\"로 변경되어야만 합니다.(\"%s\" > \"%s\" 메뉴)"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1607,8 +1582,8 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
-"노트에 링크된 첨부 파일을 보여주는 고급 도구입니다. 여기에서 보여지는 항목을 "
-"삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 바랍니다."
+"노트에 링크된 첨부 파일을 보여주는 고급 도구입니다. 여기에서 보여지는 항목을 삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 "
+"바랍니다."
 
 #: packages/app-desktop/gui/ResourceScreen.js:142
 msgid "Please wait..."
@@ -1791,9 +1766,7 @@ msgstr "동기화 대상 업그레이드"
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
-msgstr ""
-"이 노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들"
-"도 함께 삭제됩니다."
+msgstr "이 노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 삭제됩니다."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -1908,8 +1881,7 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"검색에 오류가 있는 경우, 이를 이용하여 검색 색인을 다시 만들 수 있습니다. 이"
-"는 노트의 수에 따라 시간이 오래 걸릴수 있습니다."
+"검색에 오류가 있는 경우, 이를 이용하여 검색 색인을 다시 만들 수 있습니다. 이는 노트의 수에 따라 시간이 오래 걸릴수 있습니다."
 
 #: packages/app-mobile/components/screens/config.js:446
 msgid "Exporting profile..."
@@ -1931,17 +1903,13 @@ msgstr "더 많은 정보"
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-"앱이 정상적으로 작동하기 위해서는 다음 권한이 있어야 합니다. '설정 > 애플리케"
-"이션 > Joplin > 권한'에서 허가해주세요"
+msgstr "앱이 정상적으로 작동하기 위해서는 다음 권한이 있어야 합니다. '설정 > 애플리케이션 > Joplin > 권한'에서 허가해주세요"
 
 #: packages/app-mobile/components/screens/config.js:474
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr ""
-"- 저장소: 노트에 파일을 첨부하고 파일 시스템 동기화를 활성화하기 위해 필요합"
-"니다."
+msgstr "- 저장소: 노트에 파일을 첨부하고 파일 시스템 동기화를 활성화하기 위해 필요합니다."
 
 #: packages/app-mobile/components/screens/config.js:477
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1997,8 +1965,7 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
-"노트에 지리적 위치 정보를 포함하기 위해서는 위치 정보에 접근이 필요하고, 이"
-"를 위해선 권한이 요구됩니다.\n"
+"노트에 지리적 위치 정보를 포함하기 위해서는 위치 정보에 접근이 필요하고, 이를 위해선 권한이 요구됩니다.\n"
 "\n"
 "설정 화면에서 언제든지 이 설정을 끌 수 있습니다."
 
@@ -2017,9 +1984,7 @@ msgstr "이 노트를 삭제할까요?"
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
-msgstr ""
-"크기가 큰 이미지(%dx%d 픽셀)를 첨부하려고 합니다. 첨부하기 전에 크기를 %d 픽"
-"셀로 줄이시겠습니까?"
+msgstr "크기가 큰 이미지(%dx%d 픽셀)를 첨부하려고 합니다. 첨부하기 전에 크기를 %d 픽셀로 줄이시겠습니까?"
 
 #: packages/app-mobile/components/screens/Note.js:585
 #, javascript-format
@@ -2084,9 +2049,7 @@ msgstr "검색"
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
-msgstr ""
-"기본 관리자 암호는가 변경되지 않았으며, 이는 보안상 안전하지 않습니다! [지금 "
-"바꾸기](%s)"
+msgstr "기본 관리자 암호는가 변경되지 않았으며, 이는 보안상 안전하지 않습니다! [지금 바꾸기](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2110,10 +2073,9 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"다음의 URL을 브라우저에서 열어 애플리케이션을 허가해주세요. 애플리케이션은 "
-"\"Apps/Joplin\" 경로에 폴더를 만들게 되며 이 폴더 안에 있는 파일만 읽고 쓸 것"
-"입니다. 다른 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없으며, 이 "
-"데이터는 제3자와 공유되지 않습니다."
+"다음의 URL을 브라우저에서 열어 애플리케이션을 허가해주세요. 애플리케이션은 \"Apps/Joplin\" 경로에 폴더를 만들게 되며 이 "
+"폴더 안에 있는 파일만 읽고 쓸 것입니다. 다른 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없으며, 이 데이터는 제3자와 "
+"공유되지 않습니다."
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
@@ -2173,8 +2135,8 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주"
-"세요. 변경 중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
+"주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주세요. 변경 중에 모든 파일이 삭제 됩니다! 자세한 정보는 "
+"FAQ를 참조해주세요: %s"
 
 #: packages/lib/models/Setting.js:101
 msgid "Light"
@@ -2217,8 +2179,8 @@ msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
-"된 추가적인 매개 변수를 포함할 수 있습니다. (아래에 문서화되어 있습니다)."
+"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 된 추가적인 매개 변수를 포함할 수 있습니다. "
+"(아래에 문서화되어 있습니다)."
 
 #: packages/lib/models/Setting.js:160
 msgid "Directory to synchronise with (absolute path)"
@@ -2290,9 +2252,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"\\“수동\\” 모드에서, 첨부 파일은 클릭 시에만 다운로드되며, \\“자동\\” 모드에"
-"서는 노트를 열 때만 다운로드됩니다. \\“항상\\” 모드에서는 노트를 열지 않아도 "
-"첨부 파일이 다운로드됩니다."
+"\\“수동\\” 모드에서, 첨부 파일은 클릭 시에만 다운로드되며, \\“자동\\” 모드에서는 노트를 열 때만 다운로드됩니다. \\“항상\\"
+"” 모드에서는 노트를 열지 않아도 첨부 파일이 다운로드됩니다."
 
 #: packages/lib/models/Setting.js:346
 msgid "Always"
@@ -2488,8 +2449,8 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화되어 충돌 횟수를 "
-"줄일 수 있기 때문에 이 옵션을 활성화하는 것을 추천합니다."
+"Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화되어 충돌 횟수를 줄일 수 있기 때문에 이 옵션을 활성화하는 것을 "
+"추천합니다."
 
 #: packages/lib/models/Setting.js:647
 msgid "Start application minimised in the tray icon"
@@ -2518,8 +2479,8 @@ msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"반드시 *고정폭* 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 "
-"올바르지 않을 경우, 일반 고정폭 글꼴을 기본값으로 사용합니다."
+"반드시 *고정폭* 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 올바르지 않을 경우, 일반 고정폭 글꼴을 기본값으로 "
+"사용합니다."
 
 #: packages/lib/models/Setting.js:704
 #, fuzzy
@@ -2532,8 +2493,8 @@ msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"반드시 *고정폭* 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 "
-"올바르지 않을 경우, 일반 고정폭 글꼴을 기본값으로 사용합니다."
+"반드시 *고정폭* 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 올바르지 않을 경우, 일반 고정폭 글꼴을 기본값으로 "
+"사용합니다."
 
 #: packages/lib/models/Setting.js:727
 msgid "Custom stylesheet for rendered Markdown"
@@ -2589,8 +2550,8 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"노트를 여는데 사용할 텍스트 편집기 명령어(인자를 포함할 수 있습니다)를 지정합"
-"니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 찾을 것입니다."
+"노트를 여는데 사용할 텍스트 편집기 명령어(인자를 포함할 수 있습니다)를 지정합니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 "
+"찾을 것입니다."
 
 #: packages/lib/models/Setting.js:784
 msgid "Page size for PDF export"
@@ -2655,10 +2616,9 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"인증서를 불러올 (쉼표로 구분되어 있는) 경로들의 목록, 또는 개별적인 인증서 파"
-"일들의 경로입니다. 예를 들면 다음과 같은 형식입니다: /my/cert_dir, /other/"
-"custom.pem. 참고사항: 만약 TLS 설정을 변경했다면 \"동기화 설정 확인\"을 진행"
-"하기 전에 반드시 변경 사항을 저장해야 합니다."
+"인증서를 불러올 (쉼표로 구분되어 있는) 경로들의 목록, 또는 개별적인 인증서 파일들의 경로입니다. 예를 들면 다음과 같은 형식입니다: /"
+"my/cert_dir, /other/custom.pem. 참고사항: 만약 TLS 설정을 변경했다면 \"동기화 설정 확인\"을 진행하기 "
+"전에 반드시 변경 사항을 저장해야 합니다."
 
 #: packages/lib/models/Setting.js:849
 msgid "Ignore TLS certificate errors"
@@ -2672,17 +2632,13 @@ msgstr "안전 장치"
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
-msgstr ""
-"안전 장치: 동기화할 대상이 비어 있다면, 로컬 데이터를 지우지 않습니다. (종종 "
-"잘못된 설정이나 버그로 인해 발생됩니다)"
+msgstr "안전 장치: 동기화할 대상이 비어 있다면, 로컬 데이터를 지우지 않습니다. (종종 잘못된 설정이나 버그로 인해 발생됩니다)"
 
 #: packages/lib/models/Setting.js:863
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
-msgstr ""
-"API 서버가 사용할 포트를 선택해주세요. 선택되지 않으면, 기본 포트를 선택합니"
-"다."
+msgstr "API 서버가 사용할 포트를 선택해주세요. 선택되지 않으면, 기본 포트를 선택합니다."
 
 #: packages/lib/models/Setting.js:868
 msgid "Enable note history"
@@ -2713,10 +2669,8 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"이 인수는 각 항목들이 컨테이너 상에서 가용 공간에 적합하게 증가 혹은 감소되"
-"는 방식을 설정합니다. 따라서 인수가 2인 항목은 인수가 1인 항목보다 약 2배 더 "
-"많은 공간을 차지하게 될 것입니다. 변경은 애플리케이션을 재시작한 후에 적용됩"
-"니다."
+"이 인수는 각 항목들이 컨테이너 상에서 가용 공간에 적합하게 증가 혹은 감소되는 방식을 설정합니다. 따라서 인수가 2인 항목은 인수가 "
+"1인 항목보다 약 2배 더 많은 공간을 차지하게 될 것입니다. 변경은 애플리케이션을 재시작한 후에 적용됩니다."
 
 #: packages/lib/models/Setting.js:920
 msgid "Note list growth factor"
@@ -2779,12 +2733,9 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"이 플러그인들은 마크다운 렌더러에 부가적인 기능들을 추가합니다. 일부 기능들"
-"은 표준 마크다운에서 지원하지 않기 때문에 Jpolin에서만 동작할 수도 있음을 참"
-"고하세요. 추가로, 일부 기능들은 위지윅 편집기에 *호환되지 않습니다*. 편집기에"
-"서 이 플러그인을 사용하는 노트를 열게 된다면, 플러그인의 편집 내용이 유실될 "
-"수도 있습니다. 아래에 어떤 플러그인들이 위지윅 편집기와의 호환되는지 표시됩니"
-"다."
+"이 플러그인들은 마크다운 렌더러에 부가적인 기능들을 추가합니다. 일부 기능들은 표준 마크다운에서 지원하지 않기 때문에 Jpolin에서만 "
+"동작할 수도 있음을 참고하세요. 추가로, 일부 기능들은 위지윅 편집기에 *호환되지 않습니다*. 편집기에서 이 플러그인을 사용하는 노트를 "
+"열게 된다면, 플러그인의 편집 내용이 유실될 수도 있습니다. 아래에 어떤 플러그인들이 위지윅 편집기와의 호환되는지 표시됩니다."
 
 #: packages/lib/models/Setting.js:1562
 #, javascript-format
@@ -2886,9 +2837,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"오류. URL을 확인하시거나, 혹은 사용자명이나 비밀번호를 확인해주세요, 또한 목"
-"표하는 동기화 장소가 접근 가능한지 확인해주세요. 보고된 오류는 다음과 같습니"
-"다:"
+"오류. URL을 확인하시거나, 혹은 사용자명이나 비밀번호를 확인해주세요, 또한 목표하는 동기화 장소가 접근 가능한지 확인해주세요. 보고된 "
+"오류는 다음과 같습니다:"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -2922,8 +2872,7 @@ msgstr "데이터가 재 암호화 되고, 다시 동기화 될 것입니다."
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
-"키를 업그레이드하기 전에 마스터 키 목록에 있는 비밀번호를 입력하십시오."
+msgstr "키를 업그레이드하기 전에 마스터 키 목록에 있는 비밀번호를 입력하십시오."
 
 #: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
@@ -2943,9 +2892,7 @@ msgstr "복호화된 항목: %s / %s"
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr ""
-"인증 데이터를 찾을 수 없어서 토큰을 새로고침 할 수 없습니다. 동기화를 다시 시"
-"도하면 문제가 해결될 수 있습니다."
+msgstr "인증 데이터를 찾을 수 없어서 토큰을 새로고침 할 수 없습니다. 동기화를 다시 시도하면 문제가 해결될 수 있습니다."
 
 #: packages/lib/Synchronizer.js:119
 #, javascript-format
@@ -3007,9 +2954,7 @@ msgstr "진행 중"
 #: packages/lib/Synchronizer.js:844
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
-"알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 해주"
-"세요"
+msgstr "알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 해주세요"
 
 #: packages/lib/JoplinServerApi.js:63
 #, javascript-format
@@ -3019,8 +2964,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Joplin 서버에 연결할 수 없습니다. 동기화 설정 화면에서 설정을 확인해주세요. "
-"전체 오류 메시지:\n"
+"Joplin 서버에 연결할 수 없습니다. 동기화 설정 화면에서 설정을 확인해주세요. 전체 오류 메시지:\n"
 "\n"
 "%s"
 
@@ -3185,9 +3129,7 @@ msgstr "유효하지 않은 %s: %s."
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
-msgstr ""
-"단축키 \"%s\"는 \"%s\"와 \"%s\" 명령으로 사용 중입니다. 이러한 설정은 예기치 "
-"못한 동작을 할 수도 있습니다."
+msgstr "단축키 \"%s\"는 \"%s\"와 \"%s\" 명령으로 사용 중입니다. 이러한 설정은 예기치 못한 동작을 할 수도 있습니다."
 
 #: packages/lib/services/KeymapService.js:328
 #, javascript-format
@@ -3204,9 +3146,8 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이"
-"런 항목을 찾길 원하신다면 제목 또는 ID로 검색하세요. (상단 괄호 안에 표시되"
-"어 있습니다)"
+"해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이런 항목을 찾길 원하신다면 제목 또는 ID로 검색하세요. ("
+"상단 괄호 안에 표시되어 있습니다)"
 
 #: packages/lib/services/ReportService.js:129
 #, javascript-format
@@ -3228,9 +3169,8 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin이 여러 항목에 대해서 복호화를 실패했습니다. 아마도 너무 크거나 혹은 손"
-"상되었기 때문일 것입니다. 이 파일들은 기기에 남지만, Joplin은 더이상 이 항목"
-"들을 복호화 할 수 없습니다."
+"Joplin이 여러 항목에 대해서 복호화를 실패했습니다. 아마도 너무 크거나 혹은 손상되었기 때문일 것입니다. 이 파일들은 기기에 "
+"남지만, Joplin은 더이상 이 항목들을 복호화 할 수 없습니다."
 
 #: packages/lib/services/ReportService.js:145
 #: packages/app-cli/app/cli-utils.js:140
@@ -3333,17 +3273,13 @@ msgstr "언어 전환"
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
-msgstr ""
-"<note>와 일치하는 노트를 [노트북]에 복제합니다. 노트북이 특정되지 않았다면 노"
-"트는 현재의 노트북에 복제됩니다."
+msgstr "<note>와 일치하는 노트를 [노트북]에 복제합니다. 노트북이 특정되지 않았다면 노트는 현재의 노트북에 복제됩니다."
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
-msgstr ""
-"현재 노트북에 있는 노트를 표시합니다. `ls /`로 노트북의 목록을 확인하실 수 있"
-"습니다."
+msgstr "현재 노트북에 있는 노트를 표시합니다. `ls /`로 노트북의 목록을 확인하실 수 있습니다."
 
 #: packages/app-cli/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
@@ -3351,8 +3287,7 @@ msgstr "맨 처음 <num> 노트만 표시합니다."
 
 #: packages/app-cli/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr ""
-"항목을 <field>별로 정렬합니다 (예시: title, updated_time, created_time)."
+msgstr "항목을 <field>별로 정렬합니다 (예시: title, updated_time, created_time)."
 
 #: packages/app-cli/app/command-ls.js:29
 msgid "Reverses the sorting order."
@@ -3364,8 +3299,8 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"특정 형식의 항목만 표시합니다. 노트의 경우 `n`, 할 일의 경우 `t`, 노트와 할 "
-"일 모두는 `nt` 입니다. (예시: 할 일은 `-tt`, 노트와 할 일은 `-tnt`)."
+"특정 형식의 항목만 표시합니다. 노트의 경우 `n`, 할 일의 경우 `t`, 노트와 할 일 모두는 `nt` 입니다. (예시: 할 일은 "
+"`-tt`, 노트와 할 일은 `-tnt`)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -3376,8 +3311,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, "
-"TODO_CHECKED (할 일에 해당), TITLE 입니다"
+"긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, TODO_CHECKED (할 일에 해당), "
+"TITLE 입니다"
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3434,8 +3369,8 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
-"API 서버를 시작, 중지 혹은 확인할수 있습니다. 실행할 포트를 지정하실려면, "
-"api.port 변수 설정을 변경해주세요. 명령어는 (%s) 입니다."
+"API 서버를 시작, 중지 혹은 확인할수 있습니다. 실행할 포트를 지정하실려면, api.port 변수 설정을 변경해주세요. 명령어는 "
+"(%s) 입니다."
 
 #: packages/app-cli/app/command-server.js:38
 #, javascript-format
@@ -3457,8 +3392,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"E2EE(종단간 암호화) 설정을 관리합니다. `enable`, `disable`, `decrypt`, "
-"`status`, `target-status`와 같은 명령들이 있습니다."
+"E2EE(종단간 암호화) 설정을 관리합니다. `enable`, `disable`, `decrypt`, `status`, `target-"
+"status`와 같은 명령들이 있습니다."
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3475,9 +3410,7 @@ msgstr "작업이 중지되었습니다"
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
-msgstr ""
-"복호화를 시작합니다... 복호화 양에 따라서 몇 분 정도 걸릴수 있으니 잠시 기다"
-"러주세요."
+msgstr "복호화를 시작합니다... 복호화 양에 따라서 몇 분 정도 걸릴수 있으니 잠시 기다러주세요."
 
 #: packages/app-cli/app/command-e2ee.js:55
 #, javascript-format
@@ -3507,9 +3440,8 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 "
-"값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 "
-"표시할 것입니다."
+"설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 값을 표시할 것입니다. [name] 과 "
+"[value] 모두 제공되지 않았다면, 현재 설정을 표시할 것입니다."
 
 #: packages/app-cli/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
@@ -3529,8 +3461,7 @@ msgstr "%s = %s"
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
-msgstr ""
-"[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
+msgstr "[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
 
 #: packages/app-cli/app/command-sync.js:29
 msgid "Synchronises with remote storage."
@@ -3560,8 +3491,7 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"잠금 파일이 이미 대기중입니다. 만약 동기화가 시작되지 않는다면 \"%s\"에서 잠"
-"금 파일을 삭제하고 작업을 재개하실 수 있습니다."
+"잠금 파일이 이미 대기중입니다. 만약 동기화가 시작되지 않는다면 \"%s\"에서 잠금 파일을 삭제하고 작업을 재개하실 수 있습니다."
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
@@ -3625,9 +3555,7 @@ msgstr "노트를 편집합니다."
 #: packages/app-cli/app/command-edit.js:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr ""
-"텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 "
-"지정해주세요"
+msgstr "텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 지정해주세요"
 
 #: packages/app-cli/app/command-edit.js:40
 msgid "No active notebook."
@@ -3693,8 +3621,8 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Joplin의 데이터를 주어진 경로로 내보냅니다. 기본적으로 노트북, 노트, 태그, 기"
-"타 자원을 포함한 완전한 데이터베이스를 내보내게 됩니다."
+"Joplin의 데이터를 주어진 경로로 내보냅니다. 기본적으로 노트북, 노트, 태그, 기타 자원을 포함한 완전한 데이터베이스를 내보내게 "
+"됩니다."
 
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
@@ -3736,11 +3664,10 @@ msgid ""
 msgstr ""
 "Joplin에 오신 것을 환영합니다!\n"
 "\n"
-"`:help shortcuts`를 입력하면 키보드 단축키 목록을 확인할 수 있습니다. `:help`"
-"를 입력하시면 사용 방법을 확인하실 수 있습니다.\n"
+"`:help shortcuts`를 입력하면 키보드 단축키 목록을 확인할 수 있습니다. `:help`를 입력하시면 사용 방법을 확인하실 수 "
+"있습니다.\n"
 "\n"
-"예를 들어 새 노트북을 만들려면 `mb`를, 새 노트를 만들려면 `mn`을 입력해보세"
-"요."
+"예를 들어 새 노트북을 만들려면 `mb`를, 새 노트를 만들려면 `mn`을 입력해보세요."
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
@@ -3749,9 +3676,8 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"현재 하나 또는 여러개의 항목이 암호화되어 있으며, 해당 마스터 키의 비밀번호"
-"를 입력하셔야 합니다. `e2ee decrypt`를 입력하셔서 암호화를 해제해주세요. 비밀"
-"번호를 입력하셨다면 백그라운드에서 복호화가 될 것입니다."
+"현재 하나 또는 여러개의 항목이 암호화되어 있으며, 해당 마스터 키의 비밀번호를 입력하셔야 합니다. `e2ee decrypt`를 "
+"입력하셔서 암호화를 해제해주세요. 비밀번호를 입력하셨다면 백그라운드에서 복호화가 될 것입니다."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
@@ -3773,8 +3699,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"주어진 <note>의 <name> 속성을 주어진 [value]로 설정합니다. 가능한 속성은 다음"
-"과 같습니다:\n"
+"주어진 <note>의 <name> 속성을 주어진 [value]로 설정합니다. 가능한 속성은 다음과 같습니다:\n"
 "\n"
 "%s"
 
@@ -3822,8 +3747,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"명령어에 관한 정보는 `help [command]`를 입력하시면 찾으실 수 있습니다. 'help "
-"all'을 입력하시면 완전한 명령어 용법에 대한 정보를 보실 수 있습니다."
+"명령어에 관한 정보는 `help [command]`를 입력하시면 찾으실 수 있습니다. 'help all'을 입력하시면 완전한 명령어 "
+"용법에 대한 정보를 보실 수 있습니다."
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -3835,9 +3760,8 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"어느 명령어에서든, 노트 또는 노트북에서 제목이나 ID를 통해 참조할 수 있습니"
-"다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 "
-"선택된 항목의 경우 `$c`로 참조할 수 있습니다."
+"어느 명령어에서든, 노트 또는 노트북에서 제목이나 ID를 통해 참조할 수 있습니다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 "
+"`$b`같은 바로가기로, 현재 선택된 항목의 경우 `$c`로 참조할 수 있습니다."
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -3847,9 +3771,7 @@ msgstr "한 패널에서 다른 패널로 옮기려면 Tab키 또는 Shift+Tab �
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
-msgstr ""
-"화살표 키와 Page Up/Down 키를 눌러 목록이나 텍스트 영역을 스크롤 하세요 (현"
-"재 콘솔 포함)."
+msgstr "화살표 키와 Page Up/Down 키를 눌러 목록이나 텍스트 영역을 스크롤 하세요 (현재 콘솔 포함)."
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -3875,10 +3797,9 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle"
-"\"은 주어진 '할 일'의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용"
-"됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). \"clear"
-"\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
+"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle\"은 주어진 '할 일'의 "
+"상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). "
+"\"clear\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
@@ -3887,8 +3808,7 @@ msgstr "애플리케이션을 종료합니다."
 #: packages/app-cli/app/app.js:62
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
+msgstr "\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
 
 #: packages/app-cli/app/app.js:92
 msgid "No notebook selected."
@@ -3927,8 +3847,7 @@ msgstr "노트와 노트북에 관한 요약 정보를 표시합니다."
 #: packages/app-cli/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr ""
-"항목들을 다시 복호화하라면 `e2ee decrypt --retry-failed-items`를 실행합니다"
+msgstr "항목들을 다시 복호화하라면 `e2ee decrypt --retry-failed-items`를 실행합니다"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -3937,10 +3856,9 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"[노트]로부터 [태그]를 지우거나 지정할 때, 아니면 [태그]와 관련된 노트의 목록"
-"을 확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" "
-"를 사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 "
-"수 있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
+"[노트]로부터 [태그]를 지우거나 지정할 때, 아니면 [태그]와 관련된 노트의 목록을 확인할 때 <tag-command>로 \"add\""
+", \"remove\", \"list\" 또는 \"notetags\" 를 사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 "
+"태그의 목록을 확인할 수 있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format

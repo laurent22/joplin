@@ -6,14 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Marcos Lans <marcoslansgarza@gmail.com>\n"
-"Language-Team: galego\n"
-"Language: gl\n"
+"PO-Revision-Date: 2021-04-08 13:25+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Galician <https://hosted.weblate.org/projects/joplin/joplin/"
+"gl/>\n"
+"Language: gl_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -3876,8 +3878,8 @@ msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Usar as frechas arriba/abaixo para desprazar as listas e as áreas de texto "
-"(incluída esta consola)."
+"Usar as frechas arriba/abaixo para desprazar as listas e as áreas de texto ("
+"incluída esta consola)."
 
 #: packages/app-cli/app/command-help.js:81
 #, fuzzy

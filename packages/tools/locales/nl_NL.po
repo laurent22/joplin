@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: MetBril <metbril@users.noreply.github.com>\n"
-"Language-Team: Dutch / Nederlands\n"
+"PO-Revision-Date: 2021-04-08 13:26+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/joplin/joplin/nl/>"
+"\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -1657,8 +1659,8 @@ msgstr "Geen resources!"
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
-"Waarschuwing: niet alle resources getoond om redenen van performance "
-"(limiet: %s)."
+"Waarschuwing: niet alle resources getoond om redenen van performance (limiet:"
+" %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:159
 msgid "Synchronising..."
@@ -3416,8 +3418,7 @@ msgstr "Toont alleen de eerste <num> notities."
 
 #: packages/app-cli/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr ""
-"Sorteert de items op <field> (bijv. title, updated_time, created_time)."
+msgstr "Sorteert de items op <field> (bijv. title, updated_time, created_time)."
 
 #: packages/app-cli/app/command-ls.js:29
 msgid "Reverses the sorting order."
@@ -3524,8 +3525,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Beheert de E2EE-configuratie. Opdrachten zijn: `enable`, `disable`, "
-"`decrypt`, `status`, `decrypt-file` en `target-status`."
+"Beheert de E2EE-configuratie. Opdrachten zijn: `enable`, `disable`, `decrypt`"
+", `status`, `decrypt-file` en `target-status`."
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3722,8 +3723,7 @@ msgstr "Notitie is opgeslagen."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
-msgstr ""
-"Om een label te verwijderen, verwijder alle associaties naar dat label."
+msgstr "Om een label te verwijderen, verwijder alle associaties naar dat label."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."

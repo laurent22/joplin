@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Diogo Caveiro <dcaveiro@yahoo.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:27+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
+"joplin/joplin/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -747,8 +749,7 @@ msgstr "Mais informação"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:559
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
-"Utilize as setas para mover os itens do esquema. Prima 'Esc' para sair."
+msgstr "Utilize as setas para mover os itens do esquema. Prima 'Esc' para sair."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -2198,8 +2199,7 @@ msgstr "Não é possível mover caderno para esta localização"
 #: packages/lib/models/Folder.js:445
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
-"Cadernos não podem ser nomeados \"%s\", dado que é um título reservado."
+msgstr "Cadernos não podem ser nomeados \"%s\", dado que é um título reservado."
 
 #: packages/lib/models/Setting.js:92
 msgid "yes"
@@ -3190,8 +3190,8 @@ msgstr ""
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
-"Não é possível carregar o módulo \"%s\" para o formato \"%s\" e o alvo \"%s"
-"\"."
+"Não é possível carregar o módulo \"%s\" para o formato \"%s\" e o alvo \"%s\""
+"."
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3444,8 +3444,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"Utilize o formato de lista longa. O formato é ID, NOTE_COUNT (para "
-"cadernos), DATE, TODO_CHECKED (para tarefas), TITLE"
+"Utilize o formato de lista longa. O formato é ID, NOTE_COUNT (para cadernos)"
+", DATE, TODO_CHECKED (para tarefas), TITLE"
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3635,8 +3635,8 @@ msgid ""
 "operation."
 msgstr ""
 "O ficheiro de bloqueio já está em espera. Se tiver conhecido de que não está "
-"a ocorrer qualquer sincronização, pode eliminar o ficheiro de bloqueio em "
-"\"%s\" e prosseguir a operação."
+"a ocorrer qualquer sincronização, pode eliminar o ficheiro de bloqueio em \"%"
+"s\" e prosseguir a operação."
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
@@ -3948,8 +3948,8 @@ msgstr "Para sair do modo de linha de comandos, prima ESC"
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Para obter a lista de atalhos de teclado e opções de configuração, digite "
-"`help keymap`"
+"Para obter a lista de atalhos de teclado e opções de configuração, digite `"
+"help keymap`"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -4013,8 +4013,8 @@ msgstr "Exibe um resumo sobre as notas e os cadernos."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Para tentar desencriptar estes itens novamente. Execute `e2ee decrypt --"
-"retry-failed-items`"
+"Para tentar desencriptar estes itens novamente. Execute `e2ee decrypt "
+"--retry-failed-items`"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""

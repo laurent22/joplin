@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: genneko <genneko217@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:25+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/joplin/joplin/"
+"ja/>\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -59,9 +61,7 @@ msgstr "キャンセル"
 #: packages/app-desktop/bridge.js:188
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
-msgstr ""
-"まもなくアプリケーションは終了します。もう一度起動して処理を完了させてくださ"
-"い。"
+msgstr "まもなくアプリケーションは終了します。もう一度起動して処理を完了させてください。"
 
 #: packages/app-desktop/plugins/GotoAnything.js:432
 msgid ""
@@ -69,9 +69,8 @@ msgid ""
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、「#"
-"タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに"
-"移動できます。あるいは「:」でコマンドを検索して実行できます。"
+"題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、「#タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブック"
+"に移動できます。あるいは「:」でコマンドを検索して実行できます。"
 
 #: packages/app-desktop/plugins/GotoAnything.js:457
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -86,8 +85,7 @@ msgstr "コマンドパレット"
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
-"\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
+msgstr "\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
 
 #: packages/app-desktop/InteropServiceHelper.js:174
 #, javascript-format
@@ -151,8 +149,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"\"%s\"をクリックすると復元を行います。復元されるノートは\"%s\"というノート"
-"ブックにコピーされます。現在のバージョンのノートの置換や変更は行われません。"
+"\"%s\"をクリックすると復元を行います。復元されるノートは\"%s\"というノートブックにコピーされます"
+"。現在のバージョンのノートの置換や変更は行われません。"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
@@ -293,9 +291,7 @@ msgstr "レイアウト"
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr ""
-"このノートには中身がありません。 \"%s\" をクリックしてエディターを表示し、"
-"ノートを編集してください。"
+msgstr "このノートには中身がありません。 \"%s\" をクリックしてエディターを表示し、ノートを編集してください。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
@@ -378,9 +374,7 @@ msgstr "コードビュー"
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
-msgstr ""
-"すべての添付ファイルのダウンロードと復号が終わるまでお待ちください。%sに切り"
-"替えてノートを編集することはできます。"
+msgstr "すべての添付ファイルのダウンロードと復号が終わるまでお待ちください。%sに切り替えてノートを編集することはできます。"
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
 msgid "There was an error downloading this attachment:"
@@ -432,9 +426,7 @@ msgstr "クリックしてタグを追加..."
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
-msgstr ""
-"リッチテキストエディターには多くの制限がありますので、それらをご承知の上でご"
-"使用ください。"
+msgstr "リッチテキストエディターには多くの制限がありますので、それらをご承知の上でご使用ください。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
@@ -680,9 +672,7 @@ msgstr "ショートカットキーを押してください"
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
-msgstr ""
-"ショートカットキーに続けてENTERを押すことで設定します。ショートカットを削除す"
-"るにはBACKSPACEを押してください。"
+msgstr "ショートカットキーに続けてENTERを押すことで設定します。ショートカットを削除するにはBACKSPACEを押してください。"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -696,9 +686,8 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
-"同期するには同期先をアップグレードする必要があります。アップグレードには数分"
-"かかるかもしれません。またアプリケーションの再起動が必要です。アップグレード"
-"するにはリンクをクリックしてください。"
+"同期するには同期先をアップグレードする必要があります。アップグレードには数分かかるかもしれません。またアプリケーションの再起動が必要です。アップグレードす"
+"るにはリンクをクリックしてください。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
@@ -734,9 +723,7 @@ msgstr "古い暗号化方式を使っているマスターキーがあります
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr ""
-"デフォルトの暗号化方式が変更されています。既存データを暗号化しなおすことをお"
-"すすめします。"
+msgstr "デフォルトの暗号化方式が変更されています。既存データを暗号化しなおすことをおすすめします。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:437
 msgid "More info"
@@ -744,8 +731,7 @@ msgstr "詳細情報"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:559
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
-"矢印を使ってレイアウトアイテムを移動してください。\"Esc\" で終了します。"
+msgstr "矢印を使ってレイアウトアイテムを移動してください。\"Esc\" で終了します。"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -919,9 +905,7 @@ msgstr "Webクリッパーサービスを有効にする"
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
-msgstr ""
-"Joplin WebクリッパーはブラウザーからWebページとスクリーンショットをJoplinへ保"
-"存します。"
+msgstr "Joplin WebクリッパーはブラウザーからWebページとスクリーンショットをJoplinへ保存します。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 msgid "In order to use the web clipper, you need to do the following:"
@@ -937,9 +921,8 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"このサービスはブラウザー拡張機能からJoplinへのアクセスを可能にします。本サー"
-"ビスを有効化する際には、Joplinが特定のポートで接続を待ち受けることについて、"
-"お使いのファイアーウォールから許可を求められる場合があります。"
+"このサービスはブラウザー拡張機能からJoplinへのアクセスを可能にします。本サービスを有効化する際には、Joplinが特定のポートで接続を待ち受けること"
+"について、お使いのファイアーウォールから許可を求められる場合があります。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 msgid "Step 2: Install the extension"
@@ -965,9 +948,7 @@ msgstr "トークンのコピー"
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
-msgstr ""
-"この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可"
-"するときにだけ使用します。"
+msgstr "この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可するときにだけ使用します。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
@@ -976,8 +957,7 @@ msgstr ""
 #: packages/app-desktop/gui/MenuBar.js:166
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
-"\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
+msgstr "\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
 
 #: packages/app-desktop/gui/MenuBar.js:287 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
@@ -1105,9 +1085,7 @@ msgstr "今すぐ取得:"
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr ""
-"\"%s\" という名前の新しいノートブックが作成され、ファイル \"%s\" がインポート"
-"されます"
+msgstr "\"%s\" という名前の新しいノートブックが作成され、ファイル \"%s\" がインポートされます"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-cli/app/command-import.js:47
@@ -1204,9 +1182,8 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
-"以下のマスターキーは旧式の暗号化アルゴリズムを使用しているため、アップグレー"
-"ドをおすすめします。マスターキーをアップグレードしても既存データはこれまでど"
-"おり復号化/暗号化が可能です。"
+"以下のマスターキーは旧式の暗号化アルゴリズムを使用しているため、アップグレードをおすすめします。マスターキーをアップグレードしても既存データはこれまでどお"
+"り復号化/暗号化が可能です。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
@@ -1220,18 +1197,15 @@ msgstr "データを再暗号化する"
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
-msgstr ""
-"デフォルトの暗号化方式がより安全なものに変更されました。既存データにも新方式"
-"を適用することをおすすめします。"
+msgstr "デフォルトの暗号化方式がより安全なものに変更されました。既存データにも新方式を適用することをおすすめします。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"ここでは既存データの再暗号化を行えます。たとえば、旧式のアルゴリズムで暗号化"
-"されたノートがあるとわかっているような場合に新しいアルゴリズムで暗号化しなお"
-"すことが可能です。"
+"ここでは既存データの再暗号化を行えます。たとえば、旧式のアルゴリズムで暗号化されたノートがあるとわかっているような場合に新しいアルゴリズムで暗号化しなおす"
+"ことが可能です。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1250,15 +1224,13 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"この処理では、既存データをすべて再暗号化し、同期しなおす必要がありますので、"
-"夜間等の実行をおすすめします。\n"
+"この処理では、既存データをすべて再暗号化し、同期しなおす必要がありますので、夜間等の実行をおすすめします。\n"
 "\n"
 "データを再暗号化するには以下の手順にしたがってください。\n"
 "\n"
 "1. すべてのデバイスで同期を取ります。\n"
 "2. \"%s\" をクリックします。\n"
-"3. 再暗号化処理が完了するまでお待ちください。不整合を避けるため、処理中に他の"
-"デバイスでノートを変更しないように気をつけてください。\n"
+"3. 再暗号化処理が完了するまでお待ちください。不整合を避けるため、処理中に他のデバイスでノートを変更しないように気をつけてください。\n"
 "4. 本デバイスの同期が完了したら、他のデバイスをすべて同期してください。\n"
 "\n"
 "重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
@@ -1278,8 +1250,7 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"暗号化を無効にするとは、*すべて*のノートや添付ファイルを再同期し、同期ター"
-"ゲットに暗号化を解除した状態で送ることを意味します。本当に継続しますか？"
+"暗号化を無効にするとは、*すべて*のノートや添付ファイルを再同期し、同期ターゲットに暗号化を解除した状態で送ることを意味します。本当に継続しますか？"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
@@ -1289,10 +1260,8 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗"
-"号化した状態で送ることを意味します。パスワードはなくさないようにしてくださ"
-"い。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためで"
-"す！ 暗号化を有効にするには、下にパスワードを入力してください。"
+"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗号化した状態で送ることを意味します。パスワードはなくさないようにしてください"
+"。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためです！ 暗号化を有効にするには、下にパスワードを入力してください。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-mobile/components/screens/encryption-config.js:258
@@ -1330,9 +1299,8 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"注意：暗号化に使用されるのはその時点で\"アクティブ\"なマスターキーのみです。"
-"なお、復号時には対象のノートやノートブックを暗号化するときに使ったキーが使用"
-"されます。"
+"注意：暗号化に使用されるのはその時点で\"アクティブ\"なマスターキーのみです"
+"。なお、復号時には対象のノートやノートブックを暗号化するときに使ったキーが使用されます。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
@@ -1346,8 +1314,7 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"これらのIDを持つマスターキーはアイテムを暗号化するのに使われていますが、現在"
-"このキーで暗号化されたアイテムにはアクセスできません。おそらくこれらのアイテ"
+"これらのIDを持つマスターキーはアイテムを暗号化するのに使われていますが、現在このキーで暗号化されたアイテムにはアクセスできません。おそらくこれらのアイテ"
 "ムはまだ同期（ダウンロード）されていないものと考えられます。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
@@ -1355,9 +1322,7 @@ msgstr ""
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
-msgstr ""
-"エンドツーエンド暗号化(E2EE)に関する詳細な情報と有効化の手順については、次の"
-"ドキュメントをご覧ください:"
+msgstr "エンドツーエンド暗号化(E2EE)に関する詳細な情報と有効化の手順については、次のドキュメントをご覧ください:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-mobile/components/screens/encryption-config.js:279
@@ -1571,8 +1536,8 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"ドラッグ＆ドロップでノートを任意の順に並び替えるには、ソート順を \"%s\" に切"
-"り替えてください (メニューバーの \"%s\" > \"%s\" から選択)。"
+"ドラッグ＆ドロップでノートを任意の順に並び替えるには、ソート順を \"%s\" に切り替えてください (メニューバーの \"%s\" > \"%s\" "
+"から選択)。"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1619,9 +1584,7 @@ msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
-msgstr ""
-"ここではノートに添付されているファイルの一覧を見ることができます。添付ファイ"
-"ルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
+msgstr "ここではノートに添付されているファイルの一覧を見ることができます。添付ファイルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
 
 #: packages/app-desktop/gui/ResourceScreen.js:142
 msgid "Please wait..."
@@ -1653,8 +1616,7 @@ msgstr[0] "リンクをクリップボードにコピーしました！"
 #: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
-"注意: ノートを共有すると、該当ノートはサーバー上で暗号化されなくなります。"
+msgstr "注意: ノートを共有すると、該当ノートはサーバー上で暗号化されなくなります。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:180
 msgid "Share Notes"
@@ -1806,9 +1768,7 @@ msgstr "同期先のアップグレード"
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
-msgstr ""
-"ノートブックを削除しますか？　このノートブックにあるノートとサブノートはすべ"
-"て消えてしまいます。"
+msgstr "ノートブックを削除しますか？　このノートブックにあるノートとサブノートはすべて消えてしまいます。"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
@@ -1884,8 +1844,7 @@ msgstr "警告"
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
-msgstr ""
-"ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
+msgstr "ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
 
 #: packages/app-mobile/components/screens/config.js:146
 msgid "Information"
@@ -1923,9 +1882,7 @@ msgstr "検索インデックスの修正"
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
-msgstr ""
-"検索に問題がある場合は、これを利用して検索インデックスの再構築を行います。"
-"ノートの数に依存して、時間がかかる場合があります。"
+msgstr "検索に問題がある場合は、これを利用して検索インデックスの再構築を行います。ノートの数に依存して、時間がかかる場合があります。"
 
 #: packages/app-mobile/components/screens/config.js:446
 msgid "Exporting profile..."
@@ -1947,17 +1904,13 @@ msgstr "詳細情報"
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-"正しく動作するには、次の権限が必要です。スマートフォンのアプリ情報 > Joplin "
-"> 権限 で有効にしてください"
+msgstr "正しく動作するには、次の権限が必要です。スマートフォンのアプリ情報 > Joplin > 権限 で有効にしてください"
 
 #: packages/app-mobile/components/screens/config.js:474
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr ""
-"- ストレージ: ノートにファイルを添付するのとファイルシステムの同期に必要で"
-"す。"
+msgstr "- ストレージ: ノートにファイルを添付するのとファイルシステムの同期に必要です。"
 
 #: packages/app-mobile/components/screens/config.js:477
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -2032,9 +1985,7 @@ msgstr "ノートを削除しますか？"
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
-msgstr ""
-"大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小"
-"してから添付しますか？"
+msgstr "大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小してから添付しますか？"
 
 #: packages/app-mobile/components/screens/Note.js:585
 #, javascript-format
@@ -2099,9 +2050,7 @@ msgstr "検索"
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
-msgstr ""
-"デフォルトの管理者パスワードが変更されておらず危険な状態です! [今すぐ変更]"
-"(%s)"
+msgstr "デフォルトの管理者パスワードが変更されておらず危険な状態です! [今すぐ変更](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2125,10 +2074,8 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"このアプリケーションを認証するためには下記のURLをブラウザで開いてください。ア"
-"プリケーションは\"Apps/Joplin\"フォルダを作成し、その中のファイルのみを読み書"
-"きします。あなたの個人的なファイルや、ディレクトリ外のファイルにはアクセスし"
-"ません。第三者にデータが共有されることもありません。"
+"このアプリケーションを認証するためには下記のURLをブラウザで開いてください。アプリケーションは\"Apps/Joplin\"フォルダを作成し、その中のフ"
+"ァイルのみを読み書きします。あなたの個人的なファイルや、ディレクトリ外のファイルにはアクセスしません。第三者にデータが共有されることもありません。"
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
@@ -2166,9 +2113,7 @@ msgstr "ノートをノートブック \"%s\" に移動できません"
 #: packages/lib/models/Folder.js:445
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
-"\"%s\" というノートブックの名称はシステムで使用するために予約済みです。名称の"
-"変更はできません。"
+msgstr "\"%s\" というノートブックの名称はシステムで使用するために予約済みです。名称の変更はできません。"
 
 #: packages/lib/models/Setting.js:92
 msgid "yes"
@@ -2190,9 +2135,8 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"注意: この場所を変更する際は、同期する前に新しい場所にすべての内容をコピーし"
-"ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
-"次のFAQをご覧ください: %s"
+"注意: この場所を変更する際は、同期する前に新しい場所にすべての内容をコピーしておきましょう。そうしないとすべてのファイルが削除されていまいます！ "
+"詳しくは次のFAQをご覧ください: %s"
 
 #: packages/lib/models/Setting.js:101
 msgid "Light"
@@ -2235,8 +2179,8 @@ msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
-"持つことができるでしょう（すべてのドキュメントは下にあります）。"
+"同期する先です。いずれの同期先も `sync.NUM.NAME` "
+"のように追加のパラメーターを持つことができるでしょう（すべてのドキュメントは下にあります）。"
 
 #: packages/lib/models/Setting.js:160
 msgid "Directory to synchronise with (absolute path)"
@@ -2308,9 +2252,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"\"手動\"モードは添付ファイルをクリックしたときのみダウンロードをします。\"自"
-"動\"はノートを開いたときにダウンロードをします。\"いつも\"はノートを開いてい"
-"るか閉じているかにかかわらずダウンロードをします。"
+"\"手動\"モードは添付ファイルをクリックしたときのみダウンロードをします。\"自動\"はノートを開いたときにダウンロードをします。\"いつも"
+"\"はノートを開いているか閉じているかにかかわらずダウンロードをします。"
 
 #: packages/lib/models/Setting.js:346
 msgid "Always"
@@ -2505,9 +2448,7 @@ msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
-msgstr ""
-"有効にすると、Joplinがバックグラウンドで動作するようになります。ノートを定期"
-"的に同期し、衝突を減らすために強くおすすめする設定です。"
+msgstr "有効にすると、Joplinがバックグラウンドで動作するようになります。ノートを定期的に同期し、衝突を減らすために強くおすすめする設定です。"
 
 #: packages/lib/models/Setting.js:647
 msgid "Start application minimised in the tray icon"
@@ -2535,8 +2476,13 @@ msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
+<<<<<<< HEAD
 "指定したフォントが誤っているか空の場合は、一般的な等幅フォントが使用されま"
 "す。"
+=======
+"ここは *monospace* (等幅)フォントを指定しないと内容によっては正しく表示されない場合があります。指定したフォントが誤っているか空の場合は、一"
+"般的な等幅フォントが使用されます。"
+>>>>>>> weblate/dev
 
 #: packages/lib/models/Setting.js:704
 msgid "Editor monospace font family"
@@ -2548,9 +2494,8 @@ msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"ここは *monospace* (等幅)フォントを指定しないと内容によっては正しく表示されな"
-"い場合があります。指定したフォントが誤っているか空の場合は、一般的な等幅フォ"
-"ントが使用されます。"
+"ここは *monospace* (等幅)フォントを指定しないと内容によっては正しく表示されない場合があります。指定したフォントが誤っているか空の場合は、一"
+"般的な等幅フォントが使用されます。"
 
 #: packages/lib/models/Setting.js:727
 msgid "Custom stylesheet for rendered Markdown"
@@ -2605,9 +2550,7 @@ msgstr "テキストエディターのコマンド"
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
-msgstr ""
-"このエディターコマンド（と引数）はノートを開く際に使用されます。空欄の場合は"
-"既定のエディターを自動的に検出します。"
+msgstr "このエディターコマンド（と引数）はノートを開く際に使用されます。空欄の場合は既定のエディターを自動的に検出します。"
 
 #: packages/lib/models/Setting.js:784
 msgid "Page size for PDF export"
@@ -2672,10 +2615,8 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"証明書を読み込むディレクトリ、または個々の証明書ファイルのパスのリストをコン"
-"マで区切って記述します。例は次のとおりです: /my/cert_dir, /other/custom.pem "
-"注意点として、TLSの設定を変更する場合は\"同期の設定を確認\"をクリックする前に"
-"保存する必要があります。"
+"証明書を読み込むディレクトリ、または個々の証明書ファイルのパスのリストをコンマで区切って記述します。例は次のとおりです: /my/cert_dir, /"
+"other/custom.pem 注意点として、TLSの設定を変更する場合は\"同期の設定を確認\"をクリックする前に保存する必要があります。"
 
 #: packages/lib/models/Setting.js:849
 msgid "Ignore TLS certificate errors"
@@ -2689,17 +2630,13 @@ msgstr "フェイルセーフ"
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
-msgstr ""
-"フェイルセーフ: 同期先が空の場合、設定ミスやバグによる可能性を考慮して、ロー"
-"カルデータを消去しないようにする"
+msgstr "フェイルセーフ: 同期先が空の場合、設定ミスやバグによる可能性を考慮して、ローカルデータを消去しないようにする"
 
 #: packages/lib/models/Setting.js:863
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
-msgstr ""
-"APIサーバーが使用するポートを指定してください。未設定時はデフォルトのポートが"
-"使用されます。"
+msgstr "APIサーバーが使用するポートを指定してください。未設定時はデフォルトのポートが使用されます。"
 
 #: packages/lib/models/Setting.js:868
 msgid "Enable note history"
@@ -2730,9 +2667,8 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"ストレッチ係数プロパティは表示項目間のサイズ比を指定するために使います。たと"
-"えば、係数が2の表示項目は、係数が1の項目の2倍の大きさで表示されます。係数の変"
-"更はアプリケーションの再起動後に反映されます。"
+"ストレッチ係数プロパティは表示項目間のサイズ比を指定するために使います。たとえば、係数が2の表示項目は、係数が1の項目の2倍の大きさで表示されます。係数の"
+"変更はアプリケーションの再起動後に反映されます。"
 
 #: packages/lib/models/Setting.js:920
 msgid "Note list growth factor"
@@ -2795,12 +2731,9 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Markdownレンダラーの機能を拡張する拡張書式プラグインの一覧です。これらの拡張"
-"書式は有用ですが、Markdown標準ではないため、Joplin上でしか動作しないことにご"
-"注意ください。また、一部の拡張書式はWYSIWYGエディターと互換性がありません。非"
-"互換の拡張書式を使用しているノートをWYSIWYGエディターで開いた場合、該当書式は"
-"失われてしまいます。どのプラグインがWYSIWYGに対応しているかは下記の一覧でご確"
-"認ください。"
+"Markdownレンダラーの機能を拡張する拡張書式プラグインの一覧です。これらの拡張書式は有用ですが、Markdown標準ではないため、Joplin上でし"
+"か動作しないことにご注意ください。また、一部の拡張書式はWYSIWYGエディターと互換性がありません。非互換の拡張書式を使用しているノートをWYSIWYG"
+"エディターで開いた場合、該当書式は失われてしまいます。どのプラグインがWYSIWYGに対応しているかは下記の一覧でご確認ください。"
 
 #: packages/lib/models/Setting.js:1562
 #, javascript-format
@@ -2901,9 +2834,7 @@ msgstr "成功です！ 同期の設定は正しいようです。"
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
-msgstr ""
-"エラーです。URL、ユーザー名、パスワードなどを修正し、同期先にアクセスできるか"
-"を確認してください。次が報告されたエラーです:"
+msgstr "エラーです。URL、ユーザー名、パスワードなどを修正し、同期先にアクセスできるかを確認してください。次が報告されたエラーです:"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -2937,9 +2868,7 @@ msgstr "既存データを暗号化しなおし、再同期します。"
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
-"下記マスターキーをアップグレードするには、マスターキーのパスワードを入力して"
-"ください。"
+msgstr "下記マスターキーをアップグレードするには、マスターキーのパスワードを入力してください。"
 
 #: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
@@ -2959,9 +2888,7 @@ msgstr "復号済み（非暗号化）アイテム: %s/%s"
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr ""
-"トークンの更新ができませんでした。認証データがありません。同期を再度行うこと"
-"で解決することがあります。"
+msgstr "トークンの更新ができませんでした。認証データがありません。同期を再度行うことで解決することがあります。"
 
 #: packages/lib/Synchronizer.js:119
 #, javascript-format
@@ -3023,9 +2950,7 @@ msgstr "実行中"
 #: packages/lib/Synchronizer.js:844
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
-"不明なアイテムタイプをダウンロードしました - 最新のJoplinにアップデートしてく"
-"ださい"
+msgstr "不明なアイテムタイプをダウンロードしました - 最新のJoplinにアップデートしてください"
 
 #: packages/lib/JoplinServerApi.js:63
 #, javascript-format
@@ -3035,8 +2960,12 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+<<<<<<< HEAD
 "Joplinサーバーに接続できませんでした。同期設定を確認してください。発生したエ"
 "ラーの内容は次のとおりです:\n"
+=======
+"Joplin Nextcloudアプリに接続できませんでした。同期設定を確認してください。発生したエラーの内容は次のとおりです:\n"
+>>>>>>> weblate/dev
 "\n"
 "%s"
 
@@ -3202,8 +3131,7 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
-"ショートカットキー \"%s\" は \"%s\" コマンドと \"%s\" コマンドで使われていま"
-"す。これにより予想外の動作が起こる可能性があります。"
+"ショートカットキー \"%s\" は \"%s\" コマンドと \"%s\" コマンドで使われています。これにより予想外の動作が起こる可能性があります。"
 
 #: packages/lib/services/KeymapService.js:328
 #, javascript-format
@@ -3220,9 +3148,8 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そ"
-"のようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索"
-"してください。"
+"これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そのようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検"
+"索してください。"
 
 #: packages/lib/services/ReportService.js:129
 #, javascript-format
@@ -3244,9 +3171,8 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplinはアイテムが破損もしくは大きすぎるため、これらのアイテムの復号化に複数"
-"回失敗しました。これらのアイテムはデバイス上に残りますが、Joplinはこれらの復"
-"号化は行いません。"
+"Joplinはアイテムが破損もしくは大きすぎるため、これらのアイテムの復号化に複数回失敗しました。これらのアイテムはデバイス上に残りますが、Joplinは"
+"これらの復号化は行いません。"
 
 #: packages/lib/services/ReportService.js:145
 #: packages/app-cli/app/cli-utils.js:140
@@ -3350,16 +3276,13 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"<note>に一致するノートを[notebook]に複製します。[notebook]が指定されていない"
-"場合は、現在のノートブックに複製を行います。"
+"<note>に一致するノートを[notebook]に複製します。[notebook]が指定されていない場合は、現在のノートブックに複製を行います。"
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
-msgstr ""
-"現在のノートブック中のノートを表示します。ノートブックのリストを表示するに"
-"は、`ls /`と入力してください。"
+msgstr "現在のノートブック中のノートを表示します。ノートブックのリストを表示するには、`ls /`と入力してください。"
 
 #: packages/app-cli/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
@@ -3379,9 +3302,8 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"選択した種類の項目のみ表示します。`n`でノートを、`t`でToDoを、`nt`でその両方"
-"を指定できます。 (例： `-tt` ではToDoのみを表示し、`-tnt`ではノートとToDoを表"
-"示します。)"
+"選択した種類の項目のみ表示します。`n`でノートを、`t`でToDoを、`nt`でその両方を指定できます。 (例： `-tt` "
+"ではToDoのみを表示し、`-tnt`ではノートとToDoを表示します。)"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -3392,8 +3314,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"長い形式のリストフォーマットを使用します。フォーマットは：ID, NOTE_COUNT "
-"(ノートブックのみ), DATE, TODO_CHECKED (ToDoのみ), TITLE"
+"長い形式のリストフォーマットを使用します。フォーマットは：ID, NOTE_COUNT (ノートブックのみ), DATE, TODO_CHECKED "
+"(ToDoのみ), TITLE"
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3449,9 +3371,7 @@ msgstr "取り得るキー/値:"
 msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
-msgstr ""
-"APIサーバーの起動、停止、状況確認を行います。APIサーバーが使用するポートは "
-"api.port で変更できます。コマンドは (%s)。"
+msgstr "APIサーバーの起動、停止、状況確認を行います。APIサーバーが使用するポートは api.port で変更できます。コマンドは (%s)。"
 
 #: packages/app-cli/app/command-server.js:38
 #, javascript-format
@@ -3473,8 +3393,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"エンドツーエンド暗号化(E2EE)の設定コマンドです。<command>には `enable`, "
-"`disable`, `decrypt`, `status`, `target-status` があります。"
+"エンドツーエンド暗号化(E2EE)の設定コマンドです。<command>には `enable`, `disable`, `decrypt`, "
+"`status`, `target-status` があります。"
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3491,9 +3411,7 @@ msgstr "操作をキャンセルしました"
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
-msgstr ""
-"復号を開始しました... どのぐらいの数を復号するかによりますが、数分かかります"
-"のでお待ちください。"
+msgstr "復号を開始しました... どのぐらいの数を復号するかによりますが、数分かかりますのでお待ちください。"
 
 #: packages/app-cli/app/command-e2ee.js:55
 #, javascript-format
@@ -3503,9 +3421,7 @@ msgstr "復号済み（非暗号化）アイテム: %d"
 #: packages/app-cli/app/command-e2ee.js:56
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr ""
-"スキップされたアイテム: %d (再度復号化を試みるには--retry-failed-itemsオプ"
-"ションを使用してください)"
+msgstr "スキップされたアイテム: %d (再度復号化を試みるには--retry-failed-itemsオプションを使用してください)"
 
 #: packages/app-cli/app/command-e2ee.js:70
 msgid "Completed decryption."
@@ -3525,8 +3441,8 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"設定を行います。[value]がない場合は、[name]で示された設定項目の値を表示しま"
-"す。両方とも指定されていない場合は、現在の設定のリストを表示します。"
+"設定を行います。[value]がない場合は、[name]で示された設定項目の値を表示します。両方とも指定されていない場合は、現在の設定のリストを表示します"
+"。"
 
 #: packages/app-cli/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
@@ -3546,9 +3462,7 @@ msgstr "%s = %s"
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
-msgstr ""
-"ノートブック [notebook]に切り替え - これ以降の作業は、指定のノートブック内で"
-"行われます。"
+msgstr "ノートブック [notebook]に切り替え - これ以降の作業は、指定のノートブック内で行われます。"
 
 #: packages/app-cli/app/command-sync.js:29
 msgid "Synchronises with remote storage."
@@ -3577,9 +3491,7 @@ msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
-msgstr ""
-"ロックファイルがすでに保持されています。同期作業が行われていない場合は、\"%s"
-"\"にあるロックファイルを削除して、作業を再度行ってください。"
+msgstr "ロックファイルがすでに保持されています。同期作業が行われていない場合は、\"%s\"にあるロックファイルを削除して、作業を再度行ってください。"
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
@@ -3601,8 +3513,7 @@ msgstr "リソースをダウンロード中..."
 #: packages/app-cli/app/command-sync.js:242
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr ""
-"同期先のアップグレードが必要です。続行するには `%s` を実行してください。"
+msgstr "同期先のアップグレードが必要です。続行するには `%s` を実行してください。"
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
@@ -3644,9 +3555,7 @@ msgstr "ノートを編集する。"
 #: packages/app-cli/app/command-edit.js:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr ""
-"テキストエディターが定義されていません。`config editor <editor-path>`で設定を"
-"行ってください"
+msgstr "テキストエディターが定義されていません。`config editor <editor-path>`で設定を行ってください"
 
 #: packages/app-cli/app/command-edit.js:40
 msgid "No active notebook."
@@ -3659,8 +3568,7 @@ msgstr "\"%s\"というノートはありません。作成しますか？"
 
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"ノートの編集を開始します。エディターを閉じると元の画面に戻ることができます。"
+msgstr "ノートの編集を開始します。エディターを閉じると元の画面に戻ることができます。"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -3713,8 +3621,7 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Joplinのデータを選択されたパスにエクスポートします。既定ではノートブック・"
-"ノート・タグ・添付データを含むすべてのデータベースを出力します。"
+"Joplinのデータを選択されたパスにエクスポートします。既定ではノートブック・ノート・タグ・添付データを含むすべてのデータベースを出力します。"
 
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
@@ -3756,8 +3663,7 @@ msgid ""
 msgstr ""
 "Joplinへようこそ！\n"
 "\n"
-"`:help shortcuts`と入力することで、キーボードショートカットのリストを見ること"
-"ができます。また、`:help`で使い方を確認できます。\n"
+"`:help shortcuts`と入力することで、キーボードショートカットのリストを見ることができます。また、`:help`で使い方を確認できます。\n"
 "\n"
 "例えば、ノートブックの作成は`mb`で、ノートの作成は`mn`で行うことができます。"
 
@@ -3768,10 +3674,8 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"現在一つ以上のアイテムが暗号化されており、マスターパスワードを提供する必要が"
-"あります。その場合は`e2ee decrypt`を入力してください。もしパスワードを提供し"
-"てある場合は、暗号化したアイテムは復号中で、間もなく使用できるようになるで"
-"しょう。"
+"現在一つ以上のアイテムが暗号化されており、マスターパスワードを提供する必要があります。その場合は`e2ee "
+"decrypt`を入力してください。もしパスワードを提供してある場合は、暗号化したアイテムは復号中で、間もなく使用できるようになるでしょう。"
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
@@ -3793,8 +3697,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"<note>のプロパティ<name> を、指示された[value]に設定します。有効なプロパティ"
-"は：\n"
+"<note>のプロパティ<name> を、指示された[value]に設定します。有効なプロパティは：\n"
 "\n"
 "%s"
 
@@ -3842,8 +3745,7 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"コマンドのさらなる情報は、`help [command]`で見ることができます；または、"
-"`help all`ですべての使用方法の情報を表示できます。"
+"コマンドのさらなる情報は、`help [command]`で見ることができます；または、`help all`ですべての使用方法の情報を表示できます。"
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -3855,9 +3757,8 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"すべてのコマンドで、ノートまたはノートブックは、題名またはID、または選択中の"
-"物はそれぞれショートカット`$n`または`$b`で指定できます。`$c`で選択中のアイテ"
-"ムを参照できます。"
+"すべてのコマンドで、ノートまたはノートブックは、題名またはID、または選択中の物はそれぞれショートカット`$n`または`$b`で指定できます。`$c`で選"
+"択中のアイテムを参照できます。"
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -3884,9 +3785,7 @@ msgstr "コマンドラインモードを終了するには、ESCキーを押し
 #: packages/app-cli/app/command-help.js:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
-"キーボードショートカットと設定オプションを表示するには、`help shortcuts`と入"
-"力してください"
+msgstr "キーボードショートカットと設定オプションを表示するには、`help shortcuts`と入力してください"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -3895,10 +3794,9 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command>は、\"toggle\"または\"clear\"を指定できます。\"toggle\"を指定す"
-"ると、指定したToDoの完了済み/未完を反転できます。指定したノートが通常のノート"
-"であれば、ToDoに変換されます。\"clear\"を指定すると、ToDoを通常のノートに変換"
-"できます。"
+"<todo-command>は、\"toggle\"または\"clear\"を指定できます。\"toggle\"を指定すると"
+"、指定したToDoの完了済み/未完を反転できます。指定したノートが通常のノートであれば、ToDoに変換されます。\"clear\"を指定すると"
+"、ToDoを通常のノートに変換できます。"
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
@@ -3907,8 +3805,7 @@ msgstr "アプリケーションの終了。"
 #: packages/app-cli/app/app.js:62
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
+msgstr "一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
 
 #: packages/app-cli/app/app.js:92
 msgid "No notebook selected."
@@ -3947,9 +3844,7 @@ msgstr "ノートとノートブックのサマリを表示します。"
 #: packages/app-cli/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr ""
-"これらのアイテムの復号化を再試行するには、`e2ee decrypt --retry-failed-items`"
-"を実行してください"
+msgstr "これらのアイテムの復号化を再試行するには、`e2ee decrypt --retry-failed-items`を実行してください"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -3958,10 +3853,9 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> は\"add\", \"remove\", \"list\", \"notetags\"のいずれかで、それ"
-"ぞれ、[note]に[tag]を追加、[note]から[tag]を削除、[tag]のついたノートを一覧表"
-"示 (-lオプションでより多くの情報を表示)、[note]についているタグを一覧表示しま"
-"す。単に`tag list`とした場合はすべてのタグを一覧表示します。"
+"<tag-command> は\"add\", \"remove\", \"list\", \"notetags\"のいずれかで"
+"、それぞれ、[note]に[tag]を追加、[note]から[tag]を削除、[tag]のついたノートを一覧表示 "
+"(-lオプションでより多くの情報を表示)、[note]についているタグを一覧表示します。単に`tag list`とした場合はすべてのタグを一覧表示します。"
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format

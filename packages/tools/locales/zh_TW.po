@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Yaoze Ye <yaozeye@yahoo.co.jp>\n"
-"Language-Team: yaozeye <yaozeye@yaozeye.onmicrosoft.com>\n"
+"PO-Revision-Date: 2021-04-08 13:29+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
+"joplin/joplin/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -66,9 +68,7 @@ msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
-msgstr ""
-"輸入記事標題、部分記事內容、# 後輸入標籤名稱、@ 後輸入筆記本名稱等方式，可前"
-"往相應搜尋結果。或者可輸入 : 以搜尋其他指令。"
+msgstr "輸入記事標題、部分記事內容、# 後輸入標籤名稱、@ 後輸入筆記本名稱等方式，可前往相應搜尋結果。或者可輸入 : 以搜尋其他指令。"
 
 #: packages/app-desktop/plugins/GotoAnything.js:457
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -146,9 +146,7 @@ msgstr "還原"
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-"點選 \"%s\" 來還原記事。它將被複製到名為 \"%s\"的記事本中。目前記事的版本將不"
-"會被取代或修改。"
+msgstr "點選 \"%s\" 來還原記事。它將被複製到名為 \"%s\"的記事本中。目前記事的版本將不會被取代或修改。"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
@@ -685,9 +683,7 @@ msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
-msgstr ""
-"需要更新同步目標以啟動Joplin同步。這個操作可能需要幾分鐘時間完成，應用也需要"
-"重新啟動。點擊鏈接繼續。"
+msgstr "需要更新同步目標以啟動Joplin同步。這個操作可能需要幾分鐘時間完成，應用也需要重新啟動。點擊鏈接繼續。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
@@ -920,9 +916,7 @@ msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
-msgstr ""
-"此服務允許瀏覽器外掛與 Joplin 溝通。當啟用它時，您的防火牆可能要求您授予 "
-"Joplin 偵聽特定埠的許可權。"
+msgstr "此服務允許瀏覽器外掛與 Joplin 溝通。當啟用它時，您的防火牆可能要求您授予 Joplin 偵聽特定埠的許可權。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 msgid "Step 2: Install the extension"
@@ -1181,9 +1175,7 @@ msgid ""
 "The following master keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
-msgstr ""
-"以下主密鑰使用了過時的加密演算法，建議對其進行升級。 升級後的主密鑰仍將能夠照"
-"常解密和加密您的資料。"
+msgstr "以下主密鑰使用了過時的加密演算法，建議對其進行升級。 升級後的主密鑰仍將能夠照常解密和加密您的資料。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
@@ -1203,9 +1195,7 @@ msgstr "預設的加密方法已更改為一種更安全的方法，建議您將
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
-msgstr ""
-"您可以使用下面的工具重新加密您的資料，例如:如果您知道某些記事已使用過時的加密"
-"方法進行了加密。"
+msgstr "您可以使用下面的工具重新加密您的資料，例如:如果您知道某些記事已使用過時的加密方法進行了加密。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1230,8 +1220,7 @@ msgstr ""
 "\n"
 "1. 同步您的所有設備。\n"
 "2. 點選 \"%s\"。\n"
-"3. 等待執行完成。 在執行過程中，請避免在其他設備上更改任何記事，以免發生衝"
-"突。\n"
+"3. 等待執行完成。 在執行過程中，請避免在其他設備上更改任何記事，以免發生衝突。\n"
 "4. 在此設備上完成同步後，同步所有其他設備，並等待其執行完成。\n"
 "\n"
 "重要提示：您只需要在一台設備上執行此操作一次。"
@@ -1250,9 +1239,7 @@ msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
-msgstr ""
-"禁用加密意味著*所有*您的筆記和附件將被重新同步並且在未加密的情況下發送到同步"
-"目標。您想繼續嗎？"
+msgstr "禁用加密意味著*所有*您的筆記和附件將被重新同步並且在未加密的情況下發送到同步目標。您想繼續嗎？"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
@@ -1262,8 +1249,7 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"啟用加密意味著*所有*您的記事和附件將被重新同步並在已加密的情況下發送到同步目"
-"標。為了安全起見，不要丟失密碼，這將是解密數據的唯一方式！要啟用加密，請在下"
+"啟用加密意味著*所有*您的記事和附件將被重新同步並在已加密的情況下發送到同步目標。為了安全起見，不要丟失密碼，這將是解密數據的唯一方式！要啟用加密，請在下"
 "面輸入您的密碼。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
@@ -1301,9 +1287,7 @@ msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
-msgstr ""
-"注意: 只有一個主密碼將用於加密 (標記為 \"使用中\" 的那個)。根據記事或記事本最"
-"初加密的方式，任何密碼都可能用於解密。"
+msgstr "注意: 只有一個主密碼將用於加密 (標記為 \"使用中\" 的那個)。根據記事或記事本最初加密的方式，任何密碼都可能用於解密。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
@@ -1316,9 +1300,7 @@ msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
-msgstr ""
-"某些項目使用這些 ID 的主密碼進行加密，但應用程式目前焦法訪問它們。這些許可權"
-"可能最終會通過同步下載。"
+msgstr "某些項目使用這些 ID 的主密碼進行加密，但應用程式目前焦法訪問它們。這些許可權可能最終會通過同步下載。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
 #: packages/app-mobile/components/screens/encryption-config.js:268
@@ -1891,9 +1873,7 @@ msgstr "修正搜尋索引"
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
-msgstr ""
-"如果搜尋出現問題，請使用它來重新建立搜尋索引。 根據記事的數量，可能會花費很長"
-"時間。"
+msgstr "如果搜尋出現問題，請使用它來重新建立搜尋索引。 根據記事的數量，可能會花費很長時間。"
 
 #: packages/app-mobile/components/screens/config.js:446
 msgid "Exporting profile..."
@@ -1915,9 +1895,7 @@ msgstr "更多資訊"
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-"應用程式需要以下權限才能正常運作。請在您的電話設定中啟用它們。(應用程式 > "
-"Joplin > 權限)"
+msgstr "應用程式需要以下權限才能正常運作。請在您的電話設定中啟用它們。(應用程式 > Joplin > 權限)"
 
 #: packages/app-mobile/components/screens/config.js:474
 msgid ""
@@ -1998,9 +1976,7 @@ msgstr "刪除記事？"
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
-msgstr ""
-"您將要附加較大的圖片 (%dx%d pixels)。您要在附加之前將其尺寸縮小為 %d pixels "
-"嗎？"
+msgstr "您將要附加較大的圖片 (%dx%d pixels)。您要在附加之前將其尺寸縮小為 %d pixels 嗎？"
 
 #: packages/app-mobile/components/screens/Note.js:585
 #, javascript-format
@@ -2089,9 +2065,8 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"請在瀏覽器開啟以下 URL 去驗證應用程式。應用程式將在 \"Apps/Joplin\" 中建立一"
-"個目錄，並只會在該目錄中進行讀取和寫入。應用程式將無法訪問此目錄之外的任何檔"
-"案，同時也無法使用任何其他個人資料。我們不會與任何第三方廠商共用任何資料。"
+"請在瀏覽器開啟以下 URL 去驗證應用程式。應用程式將在 \"Apps/Joplin\" 中建立一個目錄，並只會在該目錄中進行讀取和寫入。應用程式將無法訪"
+"問此目錄之外的任何檔案，同時也無法使用任何其他個人資料。我們不會與任何第三方廠商共用任何資料。"
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
@@ -2150,9 +2125,7 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
-msgstr ""
-"注意：如果更改此位置，請確保在同步之前將所有內容複製到該位置，否則將刪除所有"
-"文件！ 有關更多詳細資訊，請閱讀FAQ: %s"
+msgstr "注意：如果更改此位置，請確保在同步之前將所有內容複製到該位置，否則將刪除所有文件！ 有關更多詳細資訊，請閱讀FAQ: %s"
 
 #: packages/lib/models/Setting.js:101
 msgid "Light"
@@ -2194,9 +2167,7 @@ msgstr "同步目標"
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"要同步的目標。每個同步目標可能有附加的參數，它們被命名為 `sync.NUM.NAME` (全"
-"部記錄如下)。"
+msgstr "要同步的目標。每個同步目標可能有附加的參數，它們被命名為 `sync.NUM.NAME` (全部記錄如下)。"
 
 #: packages/lib/models/Setting.js:160
 msgid "Directory to synchronise with (absolute path)"
@@ -2268,8 +2239,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"在\"手動\"模式下，僅會在當您點選附件時才下載附件。 而\"自動\"模式，則是打開記"
-"事時即會開始下載。若是\"總是\"模式，無論您是否打開記事，都會下載所有附件。"
+"在\"手動\"模式下，僅會在當您點選附件時才下載附件。 而\"自動\"模式，則是打開記事時即會開始下載。若是\"總是\"模式"
+"，無論您是否打開記事，都會下載所有附件。"
 
 #: packages/lib/models/Setting.js:346
 msgid "Always"
@@ -2465,9 +2436,7 @@ msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
-msgstr ""
-"這將會允許 Joplin 在背景執行。建議啟用此設定，以便不斷同步您的記事，從而減少"
-"衝突次數。"
+msgstr "這將會允許 Joplin 在背景執行。建議啟用此設定，以便不斷同步您的記事，從而減少衝突次數。"
 
 #: packages/lib/models/Setting.js:647
 msgid "Start application minimised in the tray icon"
@@ -2495,9 +2464,7 @@ msgstr "編輯器字型系列"
 msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
-msgstr ""
-"必須是 *等距 (monospace)* 字型，否則程式將無法正常運作。如果字型不正確或沒有"
-"填寫，則預設為通用等距字型。"
+msgstr "必須是 *等距 (monospace)* 字型，否則程式將無法正常運作。如果字型不正確或沒有填寫，則預設為通用等距字型。"
 
 #: packages/lib/models/Setting.js:704
 #, fuzzy
@@ -2509,9 +2476,7 @@ msgid ""
 "This should be a *monospace* font or some elements will render incorrectly. "
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
-msgstr ""
-"必須是 *等距 (monospace)* 字型，否則程式將無法正常運作。如果字型不正確或沒有"
-"填寫，則預設為通用等距字型。"
+msgstr "必須是 *等距 (monospace)* 字型，否則程式將無法正常運作。如果字型不正確或沒有填寫，則預設為通用等距字型。"
 
 #: packages/lib/models/Setting.js:727
 msgid "Custom stylesheet for rendered Markdown"
@@ -2566,9 +2531,7 @@ msgstr "文字編輯器命令"
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
-msgstr ""
-"用於開啟記事的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設"
-"的編輯器。"
+msgstr "用於開啟記事的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設的編輯器。"
 
 #: packages/lib/models/Setting.js:784
 msgid "Page size for PDF export"
@@ -2633,9 +2596,8 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"要載入證書，可用逗號分隔的目錄路徑清單，或指明特定證書的路徑。例如: /my/"
-"cert_dir, /other/custom.pem。請注意，如果修改了 TLS 的設置，您必須先儲存變"
-"更，然後再按一下 \"檢測同步設置\"。"
+"要載入證書，可用逗號分隔的目錄路徑清單，或指明特定證書的路徑。例如: /my/cert_dir, /other/custom.pem。請注意，如果修改了 "
+"TLS 的設置，您必須先儲存變更，然後再按一下 \"檢測同步設置\"。"
 
 #: packages/lib/models/Setting.js:849
 msgid "Ignore TLS certificate errors"
@@ -2649,9 +2611,7 @@ msgstr "故障保護"
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
-msgstr ""
-"故障保護 (Fail-safe): 當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本"
-"機資料"
+msgstr "故障保護 (Fail-safe): 當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本機資料"
 
 #: packages/lib/models/Setting.js:863
 msgid ""
@@ -2688,9 +2648,8 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"因數屬性決定了清單上的一項如何增長或縮小，以適應其容器中相對於其他項目的可用"
-"空間。因此因數為 2 的的一項是因數為 1 的一項的佔用空間的兩倍。重啟程式以查看"
-"變化。"
+"因數屬性決定了清單上的一項如何增長或縮小，以適應其容器中相對於其他項目的可用空間。因此因數為 2 的的一項是因數為 1 "
+"的一項的佔用空間的兩倍。重啟程式以查看變化。"
 
 #: packages/lib/models/Setting.js:920
 msgid "Note list growth factor"
@@ -2753,11 +2712,10 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"這些延伸模組為 Markdown 渲染器提供額外特性。請注意，儘管這些額外特性可能是可"
-"用的，但它們並非標準 Markdown 語法，因此這些功能基本只能在 Joplin 內運行。此"
-"外，其中的一些功能與所見即所得 (WYSIWYG) 編輯器是*不相容*的。如果你在上述編輯"
-"器中打開使用了這些延伸模組的記事，就將會丟失延伸模組格式。下面已表明延伸模組"
-"與所見即所得 (WYSIWYG) 編輯器相容與否。"
+"這些延伸模組為 Markdown 渲染器提供額外特性。請注意，儘管這些額外特性可能是可用的，但它們並非標準 Markdown 語法，"
+"因此這些功能基本只能在 Joplin 內運行。此外，其中的一些功能與所見即所得 (WYSIWYG) "
+"編輯器是*不相容*的。如果你在上述編輯器中打開使用了這些延伸模組的記事，就將會丟失延伸模組格式。下面已表明延伸模組與所見即所得 (WYSIWYG) "
+"編輯器相容與否。"
 
 #: packages/lib/models/Setting.js:1562
 #, javascript-format
@@ -2858,9 +2816,7 @@ msgstr "成功! 同步設定看起來正確。"
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
-msgstr ""
-"錯誤。 請檢查網址、使用者名稱、密碼等是否正確以及同步目標是否可以被存取。 錯"
-"誤回報訊息為: "
+msgstr "錯誤。 請檢查網址、使用者名稱、密碼等是否正確以及同步目標是否可以被存取。 錯誤回報訊息為: "
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -2986,8 +2942,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"無法連接到 Joplin Nextcloud 應用程式。 請在檢查同步設定畫面中的設定項目。完整"
-"錯誤訊息為:\n"
+"無法連接到 Joplin Nextcloud 應用程式。 請在檢查同步設定畫面中的設定項目。完整錯誤訊息為:\n"
 "\n"
 "%s"
 
@@ -3168,9 +3123,7 @@ msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
-msgstr ""
-"這些頊目將保留在設備上，但不會上載到同步目標。要尋找這些項目，請以標題或 ID "
-"(在上面的括弧中顯示) 搜索。"
+msgstr "這些頊目將保留在設備上，但不會上載到同步目標。要尋找這些項目，請以標題或 ID (在上面的括弧中顯示) 搜索。"
 
 #: packages/lib/services/ReportService.js:129
 #, javascript-format
@@ -3191,9 +3144,7 @@ msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
-msgstr ""
-"Joplin 多次未能解密這些項目，可能是因為它們已損壞或太大。 這些項目將保留在設"
-"備上，但 Joplin 將不再嘗試對其進行解密。"
+msgstr "Joplin 多次未能解密這些項目，可能是因為它們已損壞或太大。 這些項目將保留在設備上，但 Joplin 將不再嘗試對其進行解密。"
 
 #: packages/lib/services/ReportService.js:145
 #: packages/app-cli/app/cli-utils.js:140
@@ -3297,9 +3248,7 @@ msgstr "更換語言"
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
-msgstr ""
-"將匹配 <note> 的記事複製到 [notebook]。如果未指定筆記本，則預設複製到當前筆記"
-"本中。"
+msgstr "將匹配 <note> 的記事複製到 [notebook]。如果未指定筆記本，則預設複製到當前筆記本中。"
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
@@ -3325,9 +3274,8 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"僅顯示特定類型的項目。您可用 `n` 來顯示記事，`t` 來顯示待辦事項，或者 `nt` 一"
-"併顯示記事及待辦事項。又例如，用 `-tt` 僅顯示待辦事項，而 `-tnt` 則一併顯示記"
-"事及待辦事項。"
+"僅顯示特定類型的項目。您可用 `n` 來顯示記事，`t` 來顯示待辦事項，或者 `nt` 一併顯示記事及待辦事項。又例如，用 `-tt` 僅顯示待辦事項，"
+"而 `-tnt` 則一併顯示記事及待辦事項。"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -3337,9 +3285,7 @@ msgstr "\"text\" 或 \"json\" 二者之一"
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
-msgstr ""
-"使用長清單格式。格式為 ID, NOTE_COUNT (用於記事本), DATE, TODO_CHECKED (用於"
-"待辦事項), TITLE"
+msgstr "使用長清單格式。格式為 ID, NOTE_COUNT (用於記事本), DATE, TODO_CHECKED (用於待辦事項), TITLE"
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3395,9 +3341,7 @@ msgstr "可能的鍵/值: "
 msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
-msgstr ""
-"開始、停止或檢查API伺服器。若要指定在哪個連接埠上執行，請設定api.port設定變"
-"數。指令為 (%s)"
+msgstr "開始、停止或檢查API伺服器。若要指定在哪個連接埠上執行，請設定api.port設定變數。指令為 (%s)"
 
 #: packages/app-cli/app/command-server.js:38
 #, javascript-format
@@ -3418,9 +3362,7 @@ msgstr "伺服器尚未運作。"
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
-msgstr ""
-"管理 E2EE 設定。指令為 `enable`，`disable`，`decrypt`，`status` 和 `target-"
-"status`。"
+msgstr "管理 E2EE 設定。指令為 `enable`，`disable`，`decrypt`，`status` 和 `target-status`。"
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3467,8 +3409,8 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"取得或設定一個設置值。如果沒有指明 [value]，則會顯示 [name] 的值。如果 "
-"[name] 和 [vallue] 兩者均沒有指明，則會列出當前設置。"
+"取得或設定一個設置值。如果沒有指明 [value]，則會顯示 [name] 的值。如果 [name] 和 [vallue] "
+"兩者均沒有指明，則會列出當前設置。"
 
 #: packages/app-cli/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
@@ -3517,9 +3459,7 @@ msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
-msgstr ""
-"鎖定檔已被保留。如果您知道沒有正在同步，您可刪除 \"%s\" 上的鎖定檔並繼續操"
-"作。"
+msgstr "鎖定檔已被保留。如果您知道沒有正在同步，您可刪除 \"%s\" 上的鎖定檔並繼續操作。"
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
@@ -3648,9 +3588,7 @@ msgstr "標記待辦事項為未完成。"
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
-msgstr ""
-"將 Joplin 資料匯出到特定路徑。程式將預設匯出完整的資料庫，包括記事本、記事、"
-"標籤以及資源。"
+msgstr "將 Joplin 資料匯出到特定路徑。程式將預設匯出完整的資料庫，包括記事本、記事、標籤以及資源。"
 
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
@@ -3773,9 +3711,7 @@ msgstr "在 CLI 模式下無法使用快捷鍵。"
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
-msgstr ""
-"輸入 `help [command]` 查看關於命令的更多資訊; 或者輸入 `help all` 獲取完整的"
-"使用說明。"
+msgstr "輸入 `help [command]` 查看關於命令的更多資訊; 或者輸入 `help all` 獲取完整的使用說明。"
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -3787,8 +3723,8 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"在任何一個命令中，可以通過標題或 ID 去引用記事或記事本，或使用快捷鍵 `$n` or "
-"`$b` 分別選定記事或記事本的。您亦可以用 `$ c` 來引用當前選擇的項目。"
+"在任何一個命令中，可以通過標題或 ID 去引用記事或記事本，或使用快捷鍵 `$n` or `$b` 分別選定記事或記事本的。您亦可以用 `$ c` "
+"來引用當前選擇的項目。"
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -3825,8 +3761,7 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> 可以是 \"toggle\" (切換) 或 \"clear\" (清除)。使用 \"toggle\" "
-"在已完成和未完成的待辦事項之間互相切換 (如果目標是一般記事，則會轉換為待辦事"
-"項)。使用 \"clear\" 將待辦事項轉換為一般記事。"
+"在已完成和未完成的待辦事項之間互相切換 (如果目標是一般記事，則會轉換為待辦事項)。使用 \"clear\" 將待辦事項轉換為一般記事。"
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
@@ -3883,9 +3818,9 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是 \"add\" (新增)，\"remove\" (刪除) 或\" notetags\" (記事"
-"標籤)，來從[note]中分配或刪除[tag]，列出與[tag]相關聯的記事，或列出與[note]相"
-"關聯的標籤。 `tag list` 命令可用於列出所有標籤(使用-l作為長選項)。"
+"<tag-command> 可以是 \"add\" (新增)，\"remove\" (刪除) 或\" notetags\" "
+"(記事標籤)，來從[note]中分配或刪除[tag]，列出與[tag]相關聯的記事，或列出與[note]相關聯的標籤。 `tag list` "
+"命令可用於列出所有標籤(使用-l作為長選項)。"
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format

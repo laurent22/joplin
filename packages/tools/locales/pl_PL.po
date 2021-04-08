@@ -7,15 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: konhi <hello.konhi@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:26+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/joplin/joplin/pl/>"
+"\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
-"|| n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -70,8 +72,8 @@ msgid ""
 "commands."
 msgstr ""
 "Wpisz tytuł notatki lub jej fragment, aby do niej przejść. Możesz także "
-"wpisać #, a po nim nazwę tagu lub @, a następnie nazwę notatnika. Lub "
-"wpisz : aby wyszukać polecenia."
+"wpisać #, a po nim nazwę tagu lub @, a następnie nazwę notatnika. Lub wpisz :"
+" aby wyszukać polecenia."
 
 #: packages/app-desktop/plugins/GotoAnything.js:457
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -1338,8 +1340,8 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Informacja: Jedynie jeden klucz główny będzie używany do szyfrowania "
-"(oznaczony jako \"aktywny\"). Każdy z kluczy może zostać użyty do "
+"Informacja: Jedynie jeden klucz główny będzie używany do szyfrowania ("
+"oznaczony jako \"aktywny\"). Każdy z kluczy może zostać użyty do "
 "deszyfrowania, w zależności od sposobu zaszyfrowania notatek lub notatników."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
@@ -2021,8 +2023,7 @@ msgstr "Załącznik nie został jeszcze pobrany lub odszyfrowany."
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
-"Aplikacja mobilna Joplin nie wspiera aktualnie odnośników tego typu: %s"
+msgstr "Aplikacja mobilna Joplin nie wspiera aktualnie odnośników tego typu: %s"
 
 #: packages/app-mobile/components/screens/Note.js:178
 #, javascript-format
@@ -2124,8 +2125,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
-"Domyślne hasło administratora jest niebezpiecznie i nie zostało zmienione! "
-"[Zmień je teraz](%s)"
+"Domyślne hasło administratora jest niebezpiecznie i nie zostało zmienione! ["
+"Zmień je teraz](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2725,8 +2726,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Bezpieczny: nie usuwaj lokalnych danych kiedy cel synchronizacji jest pusty "
-"(często w wyniku nieprawidłowej konfiguracji lub błędu)"
+"Bezpieczny: nie usuwaj lokalnych danych kiedy cel synchronizacji jest pusty ("
+"często w wyniku nieprawidłowej konfiguracji lub błędu)"
 
 #: packages/lib/models/Setting.js:863
 msgid ""
@@ -2973,8 +2974,7 @@ msgstr "Twoje dane zostaną ponownie zaszyfrowane i zsynchronizowane."
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
-"Podaj hasło w liście kluczy głównych poniżej przed aktualizacją klucza."
+msgstr "Podaj hasło w liście kluczy głównych poniżej przed aktualizacją klucza."
 
 #: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
@@ -3813,8 +3813,8 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 "Jeden lub więcej obiektów jest aktualnie zaszyfrowane, w związku z czym "
-"zachodzi potrzeba podania hasła głównego. Aby to wykonać, proszę wpisać "
-"`e2ee decrypt`. Jeżeli hasło zostało już podane, zaszyfrowane obiekty są "
+"zachodzi potrzeba podania hasła głównego. Aby to wykonać, proszę wpisać `"
+"e2ee decrypt`. Jeżeli hasło zostało już podane, zaszyfrowane obiekty są "
 "deszyfrowane w tle i będą dostępne wkrótce."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
@@ -3888,8 +3888,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Wpisz `help [komenda]` aby uzyskać więcej informacji o komendzie; lub wpisz "
-"`help all` aby uzyskać wszystkie  informacje na temat funkcji programu."
+"Wpisz `help [komenda]` aby uzyskać więcej informacji o komendzie; lub wpisz `"
+"help all` aby uzyskać wszystkie  informacje na temat funkcji programu."
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -3934,8 +3934,8 @@ msgstr "Aby wyjść z wiersza poleceń, naciśnij ESCAPE"
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Aby zobaczyć listę ze skrótami klawiaturowymi i opcjami konfiguracji, wpisz "
-"`help keymap`"
+"Aby zobaczyć listę ze skrótami klawiaturowymi i opcjami konfiguracji, wpisz `"
+"help keymap`"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -3945,8 +3945,8 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> może zarówno być \"toggle\" lub \"clear\". Użyj \"toggle\" "
-"aby przełączyć wskazane zadanie pomiędzy stanem ukończonym a nieukończonym "
-"(Jeżeli celem jest regularna notatka, zostanie ona przekonwertowana na "
+"aby przełączyć wskazane zadanie pomiędzy stanem ukończonym a nieukończonym ("
+"Jeżeli celem jest regularna notatka, zostanie ona przekonwertowana na "
 "zadanie. Użyj \"clear\" aby przekonwertować zadanie z powrotem do regularnej "
 "notatki."
 
@@ -3999,8 +3999,8 @@ msgstr "Wyświetla podsumowanie o notatkach i notatnikach."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Żeby spróbować ponownie odszyfrować te obiekty, uruchom `e2ee decrypt --"
-"retry-failed-items`"
+"Żeby spróbować ponownie odszyfrować te obiekty, uruchom `e2ee decrypt "
+"--retry-failed-items`"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""

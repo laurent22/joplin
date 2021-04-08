@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:26+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Dutch (Belgium) <https://hosted.weblate.org/projects/joplin/"
+"joplin/nl_BE/>\n"
 "Language: nl_BE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -962,8 +964,7 @@ msgstr "Step 2: installeer de extensie"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 msgid "Download and install the relevant extension for your browser:"
-msgstr ""
-"Ophalen en installeren van de overeenkomstige extensie voor je browser:"
+msgstr "Ophalen en installeren van de overeenkomstige extensie voor je browser:"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 msgid "Advanced options"
@@ -1352,8 +1353,8 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Opmerking: Slechts één hoofdsleutel zal gebruikt worden voor versleuteling "
-"(aangeduid met \"active\"). Alle sleutels kunnen gebruikt worden voor "
+"Opmerking: Slechts één hoofdsleutel zal gebruikt worden voor versleuteling ("
+"aangeduid met \"active\"). Alle sleutels kunnen gebruikt worden voor "
 "decodering, afhankelijk van hoe de notitieboeken initieel versleuteld zijn."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
@@ -2042,8 +2043,7 @@ msgstr "Deze bijlage is nog niet opgehaald of nog niet gedecrypteerd."
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
-"De mobiele Joplin app ondersteunt momenteel dit type koppeling niet: %s"
+msgstr "De mobiele Joplin app ondersteunt momenteel dit type koppeling niet: %s"
 
 #: packages/app-mobile/components/screens/Note.js:178
 #, javascript-format
@@ -2285,8 +2285,8 @@ msgid ""
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Het doel waarnaartoe gesynchroniseerd wordt. Elk synchronisatiedoel kan "
-"bijkomende parameters hebben die benoemd worden als 'sync.NUM."
-"NAME' (hieronder gedocumenteerd)."
+"bijkomende parameters hebben die benoemd worden als 'sync.NUM.NAME' ("
+"hieronder gedocumenteerd)."
 
 #: packages/lib/models/Setting.js:160
 msgid "Directory to synchronise with (absolute path)"
@@ -3660,8 +3660,8 @@ msgid ""
 "operation."
 msgstr ""
 "Vergrendelingsbestand is al bezet. Als u zeker bent dat er geen "
-"synchronisatie bezig is, mag u het vergrendelingsbestand verwijderen op \"%s"
-"\" en de synchronisatie hervatten."
+"synchronisatie bezig is, mag u het vergrendelingsbestand verwijderen op \"%"
+"s\" en de synchronisatie hervatten."
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format

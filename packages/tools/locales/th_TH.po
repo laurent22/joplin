@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-04-08 13:28+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Thai <https://hosted.weblate.org/projects/joplin/joplin/th/>\n"
 "Language: th_TH\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -941,8 +942,9 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"บริการนี้จะอนุญาตให้เว็บเบราว์เซอร์ติดต่อกับ Joplin ได้ และเมื่อเปิดใช้งานแล้ว "
-"ไฟล์วอลล์ของคุณอาจจะต้องการให้คุณอนุญาตสิทธิ์ Joplin ในการเข้าถึงพอร์ตบางพอร์ต"
+"บริการนี้จะอนุญาตให้เว็บเบราว์เซอร์ติดต่อกับ Joplin ได้ และเมื่อเปิดใช้งานแล้"
+"ว ไฟล์วอลล์ของคุณอาจจะต้องการให้คุณอนุญาตสิทธิ์ Joplin "
+"ในการเข้าถึงพอร์ตบางพอร์ต"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 msgid "Step 2: Install the extension"
@@ -968,7 +970,9 @@ msgstr "คัดลอก Token"
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
-msgstr "Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party เพื่อเข้าถึง Joplin"
+msgstr ""
+"Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party "
+"เพื่อเข้าถึง Joplin"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
@@ -1628,7 +1632,8 @@ msgstr "ไม่มีทรัพยากร"
 #: packages/app-desktop/gui/ResourceScreen.js:146
 #, fuzzy, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr "คำเตือน: ทรัพยากรทั้งหมดไม่ได้ถูกแสดง ด้วยเห็นผลเรื่องสมรรถภาพ (จำกัด: %s)"
+msgstr ""
+"คำเตือน: ทรัพยากรทั้งหมดไม่ได้ถูกแสดง ด้วยเห็นผลเรื่องสมรรถภาพ (จำกัด: %s)"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:159
 msgid "Synchronising..."
@@ -1954,7 +1959,9 @@ msgstr ""
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr "- แหล่งเก็บข้อมูล: สำหรับการแนบไฟล์กับบันทึกและการเปิดใช้งานการซิงโครไนซ์กับไฟล์ระบบ"
+msgstr ""
+"- แหล่งเก็บข้อมูล: "
+"สำหรับการแนบไฟล์กับบันทึกและการเปิดใช้งานการซิงโครไนซ์กับไฟล์ระบบ"
 
 #: packages/app-mobile/components/screens/config.js:477
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -2104,7 +2111,8 @@ msgstr ""
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr "แอปพลิเคชั่นนี้ได้รับการอนุมัติแล้ว - คุณสามารถปิดแท็ปเว็บเบราว์เซอร์นี้ได้"
+msgstr ""
+"แอปพลิเคชั่นนี้ได้รับการอนุมัติแล้ว - คุณสามารถปิดแท็ปเว็บเบราว์เซอร์นี้ได้"
 
 #: packages/lib/onedrive-api-node-utils.js:88
 msgid "The application has been successfully authorised."
@@ -3444,8 +3452,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"จัดการการตั้งค่า E2EE คำสั่งคือ `enable`, `disable`, `decrypt`, `status`, `decrypt-"
-"file` และ `target-status`"
+"จัดการการตั้งค่า E2EE คำสั่งคือ `enable`, `disable`, `decrypt`, `status`, "
+"`decrypt-file` และ `target-status`"
 
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
@@ -3720,7 +3728,8 @@ msgid ""
 msgstr ""
 "ยินดีต้อนรับสู่ Joplin!\n"
 "\n"
-"พิมพ์ `:help shortcuts` สำหรับรายการคีย์ลัด หรือพิมพ์ `:help` สำหรับข้อมูลการใช้งาน\n"
+"พิมพ์ `:help shortcuts` สำหรับรายการคีย์ลัด หรือพิมพ์ `:help` "
+"สำหรับข้อมูลการใช้งาน\n"
 "\n"
 "ตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`."
 
@@ -3801,8 +3810,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` "
-"สำหรับข้อมูลการใช้งานทั้งหมด"
+"พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help "
+"all` สำหรับข้อมูลการใช้งานทั้งหมด"
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
