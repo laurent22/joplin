@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Alessandro Bernardello <mailfilledwithspam@gmail.com>\n"
-"Language-Team: \n"
-"Language: it\n"
+"PO-Revision-Date: 2021-04-08 13:25+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/joplin/joplin/it/"
+">\n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -896,8 +898,7 @@ msgstr "Il token è stato copiato negli appunti!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:71
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr ""
-"Il servizio Web clipper è abilitato e impostato per l'avvio automatico."
+msgstr "Il servizio Web clipper è abilitato e impostato per l'avvio automatico."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:78
 #, javascript-format
@@ -1587,8 +1588,8 @@ msgstr "Non è presente nessuna nota. Creane una cliccando \"Nuova nota\"."
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"Al momento non ci sono Taccuini. Creane uno facendo clic su \"Nuovo Taccuino"
-"\"."
+"Al momento non ci sono Taccuini. Creane uno facendo clic su \"Nuovo "
+"Taccuino\"."
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
 msgid "Note list"
@@ -3169,8 +3170,8 @@ msgstr "Cartella HTML"
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr ""
-"Impossibile caricare il modulo \"%s\" per il formato \"%s\" e per l'output "
-"\"%s\""
+"Impossibile caricare il modulo \"%s\" per il formato \"%s\" e per l'output \""
+"%s\""
 
 # Target potrebbe significare destinazione
 #: packages/lib/services/interop/InteropService.js:150
@@ -3425,8 +3426,8 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Mostra solo gli elementi del tipo specificato. Possono essere `n` per le "
-"note, `t` per le \"Cose-da-fare\" o `nt` per note e \"Cose-da-fare\". (es. `-"
-"tt` mostrerà solo le \"Cose-da-fare\", mentre `-tnt` mostrerà sia note che "
+"note, `t` per le \"Cose-da-fare\" o `nt` per note e \"Cose-da-fare\". (es. "
+"`-tt` mostrerà solo le \"Cose-da-fare\", mentre `-tnt` mostrerà sia note che "
 "\"Cose-da-fare\"."
 
 #: packages/app-cli/app/command-ls.js:31
@@ -3924,8 +3925,8 @@ msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Usa le frecce e pagina su/giù per scorrere le liste e le aree di testo "
-"(compresa questa console)."
+"Usa le frecce e pagina su/giù per scorrere le liste e le aree di testo ("
+"compresa questa console)."
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -4018,9 +4019,9 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> può essere \"add\", \"remove\", \"list\", or \"notetags\" per "
-"assegnare o rimuovere [tag] da [note], per mostrare le note associate a "
-"[tag], oppure mostrare i tag associati a [note]. Il comando `tag list` può "
-"essere usato per mostrare tutte le etichette (usa -l per l’opzione lunga)."
+"assegnare o rimuovere [tag] da [note], per mostrare le note associate a [tag]"
+", oppure mostrare i tag associati a [note]. Il comando `tag list` può essere "
+"usato per mostrare tutte le etichette (usa -l per l’opzione lunga)."
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format
