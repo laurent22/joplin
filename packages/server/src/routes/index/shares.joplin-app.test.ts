@@ -1,5 +1,5 @@
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
-import { Share, ShareType, ShareUser } from '../../db';
+import { Share, ShareType, ShareUser, Uuid } from '../../db';
 import { PaginatedFiles } from '../../models/FileModel';
 // import ShareService from '../../services/ShareService';
 import { getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
@@ -52,6 +52,7 @@ parent_id:
 is_shared: 0
 type_: 2`;
 }
+
 async function shareFolder(sharerSessionId: string, shareeSessionId: string, shareeEmail: string, folderFilePath: string): Promise<Share> {
 	const share = await postApi<Share>(sharerSessionId, 'shares', {
 		type: ShareType.JoplinRootFolder,
@@ -65,7 +66,18 @@ async function shareFolder(sharerSessionId: string, shareeSessionId: string, sha
 	await patchApi<ShareUser>(shareeSessionId, `share_users/${shareUser.id}`, { is_accepted: 1 });
 
 	return share;
+}
 
+async function createFoldersAndNotes(sessionId: Uuid) {
+	const folderId = '000000000000000000000000000000F1';
+	const noteId1 = '00000000000000000000000000000001';
+	const noteId2 = '00000000000000000000000000000002';
+
+	await createFile2(sessionId, `root:/${folderId}.md:`, makeFolderSerializedBody({ id: folderId }));
+	await createFile2(sessionId, `root:/${noteId1}.md:`, makeNoteSerializedBody({ id: noteId1, parent_id: folderId }));
+	await createFile2(sessionId, `root:/${noteId2}.md:`, makeNoteSerializedBody({ id: noteId2, parent_id: folderId }));
+
+	return { folderId, noteId1, noteId2 };
 }
 
 describe('shares.joplin-app', function() {
@@ -101,16 +113,9 @@ describe('shares.joplin-app', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		const folderId = '000000000000000000000000000000F1';
-		const noteId1 = '00000000000000000000000000000001';
-		const noteId2 = '00000000000000000000000000000002';
-
-		await createFile2(session1.id, `root:/${folderId}.md:`, makeFolderSerializedBody({ id: folderId }));
+		const { folderId, noteId1, noteId2 } = await createFoldersAndNotes(session1.id);
 
 		await shareFolder(session1.id, session2.id, user2.email, `root:/${folderId}.md:`);
-
-		await createFile2(session1.id, `root:/${noteId1}.md:`, makeNoteSerializedBody({ id: noteId1, parent_id: folderId }));
-		await createFile2(session1.id, `root:/${noteId2}.md:`, makeNoteSerializedBody({ id: noteId2, parent_id: folderId }));
 
 		await models().share().updateSharedJoplinFolderChildren(user1.id);
 
@@ -126,13 +131,7 @@ describe('shares.joplin-app', function() {
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3, session: session3 } = await createUserAndSession(3);
 
-		const folderId = '000000000000000000000000000000F1';
-		const noteId1 = '00000000000000000000000000000001';
-		const noteId2 = '00000000000000000000000000000002';
-
-		await createFile2(session1.id, `root:/${folderId}.md:`, makeFolderSerializedBody({ id: folderId }));
-		await createFile2(session1.id, `root:/${noteId1}.md:`, makeNoteSerializedBody({ id: noteId1, parent_id: folderId }));
-		await createFile2(session1.id, `root:/${noteId2}.md:`, makeNoteSerializedBody({ id: noteId2, parent_id: folderId }));
+		const { folderId, noteId1, noteId2 } = await createFoldersAndNotes(session1.id);
 
 		await shareFolder(session1.id, session2.id, user2.email, `root:/${folderId}.md:`);
 
@@ -150,30 +149,5 @@ describe('shares.joplin-app', function() {
 			expect(!!results.items.find(f => f.name === `${noteId2}.md`)).toBe(true);
 		}
 	});
-
-	// test('should share notes already inside a shared folder', async function() {
-	// 	const { user: user1, session: session1 } = await createUserAndSession(1);
-	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
-
-	// 	const folderId = '000000000000000000000000000000F1';
-	// 	const noteId1 = '00000000000000000000000000000001';
-	// 	const noteId2 = '00000000000000000000000000000002';
-
-	// 	await createFile2(session1.id, `root:/${folderId}.md:`, makeFolderSerializedBody({ id: folderId }));
-	// 	await createFile2(session1.id, `root:/${noteId1}.md:`, makeNoteSerializedBody({ id: noteId1, parent_id: folderId }));
-	// 	await createFile2(session1.id, `root:/${noteId2}.md:`, makeNoteSerializedBody({ id: noteId2, parent_id: folderId }));
-
-	// 	await shareFolder(session1.id, session2.id, user2.email, `root:/${folderId}.md:`);
-
-	// 	await models().share().updateSharedJoplinFolderChildren(user1.id);
-
-	// 	const results = await getApi<PaginatedFiles>(session2.id, 'files/root/children');
-	// 	expect(results.items.length).toBe(3);
-	// 	expect(!!results.items.find(f => f.name === `${folderId}.md`)).toBe(true);
-	// 	expect(!!results.items.find(f => f.name === `${noteId1}.md`)).toBe(true);
-	// 	expect(!!results.items.find(f => f.name === `${noteId2}.md`)).toBe(true);
-	// });
-
-	// TODO: When note is added to shared folder by another user, added note belongs to folder owner
 
 });
