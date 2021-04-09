@@ -739,9 +739,6 @@ packages/app-mobile/utils/fs-driver-rn.js.map
 packages/app-mobile/utils/shareHandler.d.ts
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shareHandler.js.map
-packages/app-mobile/utils/useOnMessage.test.d.ts
-packages/app-mobile/utils/useOnMessage.test.js
-packages/app-mobile/utils/useOnMessage.test.js.map
 packages/fork-htmlparser2/src/CollectingHandler.d.ts
 packages/fork-htmlparser2/src/CollectingHandler.js
 packages/fork-htmlparser2/src/CollectingHandler.js.map
