@@ -776,7 +776,7 @@ export default class BaseApplication {
 
 		if (!Setting.value('api.token')) {
 			void EncryptionService.instance()
-				.randomHexString(64)
+				.generateApiToken()
 				.then((token: string) => {
 					Setting.setValue('api.token', token);
 				});
