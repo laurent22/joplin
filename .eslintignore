@@ -826,6 +826,9 @@ packages/lib/BaseModel.js.map
 packages/lib/BaseSyncTarget.d.ts
 packages/lib/BaseSyncTarget.js
 packages/lib/BaseSyncTarget.js.map
+packages/lib/HtmlToMd.d.ts
+packages/lib/HtmlToMd.js
+packages/lib/HtmlToMd.js.map
 packages/lib/InMemoryCache.d.ts
 packages/lib/InMemoryCache.js
 packages/lib/InMemoryCache.js.map
