@@ -256,11 +256,12 @@ export async function createFile2(sessionId: string, path: string, content: stri
 export async function updateFile(userId: string, path: string, content: string): Promise<File> {
 	const fileModel = models().file({ userId });
 	const file: File = await fileModel.pathToFile(path, { returnFullEntity: true });
+
 	await fileModel.save({
-		id: file.id,
+		...file,
 		content: Buffer.from(content),
-		source_file_id: file.source_file_id,
 	});
+
 	return fileModel.load(file.id);
 }
 

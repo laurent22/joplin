@@ -188,7 +188,7 @@ export default abstract class BaseModel<T> {
 		return { ...object };
 	}
 
-	protected async validate(object: T, options: ValidateOptions = {}): Promise<T> {
+	protected async validate(object: T, options: ValidateOptions = {}, _saveOptions: SaveOptions = {}): Promise<T> {
 		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;
 	}
@@ -241,7 +241,7 @@ export default abstract class BaseModel<T> {
 			(toSave as WithDates).updated_time = timestamp;
 		}
 
-		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} });
+		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} }, options);
 
 		await this.withTransaction(async () => {
 			if (isNew) {

@@ -1,5 +1,10 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createFileTree } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createFileTree, createFile2 } from '../utils/testing/testUtils';
 import { File } from '../db';
+
+async function totalFileCount() {
+	const r = await models().file().all();
+	return r.length;
+}
 
 describe('FileModel', function() {
 
@@ -93,6 +98,38 @@ describe('FileModel', function() {
 			const actual = fileModel.resolve(...input);
 			expect(actual).toBe(expected);
 		}
+	});
+
+	test('deleting a file should delete its linked files', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+		const fileCountBefore = await totalFileCount();
+		const file = await createFile2(session1.id, 'root:/test.txt:', 'testing');
+		await models().file({ userId: user2.id }).createLink(file);
+		await models().file({ userId: user3.id }).createLink(file);
+
+		expect((await totalFileCount())).toBe(fileCountBefore + 3);
+
+		await models().file({ userId: user1.id }).delete(file.id);
+
+		expect((await totalFileCount())).toBe(fileCountBefore);
+	});
+
+	test('deleting a linked file should delete its source file', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+		const fileCountBefore = await totalFileCount();
+		const file = await createFile2(session1.id, 'root:/test.txt:', 'testing');
+		const fileLink2 = await models().file({ userId: user2.id }).createLink(file);
+		await models().file({ userId: user3.id }).createLink(file);
+
+		expect((await totalFileCount())).toBe(fileCountBefore + 3);
+
+		await models().file({ userId: user2.id }).delete(fileLink2.id);
+
+		expect((await totalFileCount())).toBe(fileCountBefore);
 	});
 
 });

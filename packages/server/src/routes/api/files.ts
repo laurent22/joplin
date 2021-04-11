@@ -64,14 +64,14 @@ router.put('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
 
 	const isNewFile = !parsedFile.id;
 
-	const file: File = {
+	let file: File = {
 		name: parsedFile.name,
 		content: buffer,
 		source_file_id: 'source_file_id' in parsedFile ? parsedFile.source_file_id : '',
 	};
 
 	if (!isNewFile) {
-		file.id = parsedFile.id;
+		file = { ...parsedFile, ...file };
 	} else {
 		file.name = parsedFile.name;
 		if ('parent_id' in parsedFile) file.parent_id = parsedFile.parent_id;
@@ -83,13 +83,12 @@ router.put('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
 router.del('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const fileModel = ctx.models.file({ userId: ctx.owner.id });
 	const fileId = path.id;
-	const file: File = await fileModel.pathToFile(fileId, { mustExist: false, returnFullEntity: false });
+	const file: File = await fileModel.pathToFile(fileId, { mustExist: false, returnFullEntity: true });
 	if (!file) return;
 
 	await fileModel.save({
-		id: file.id,
+		...file,
 		content: Buffer.alloc(0),
-		source_file_id: file.source_file_id,
 	}, { validationRules: { mustBeFile: true } });
 });
 

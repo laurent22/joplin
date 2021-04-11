@@ -1,7 +1,6 @@
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { Share, ShareType, ShareUser, Uuid } from '../../db';
 import { PaginatedFiles } from '../../models/FileModel';
-// import ShareService from '../../services/ShareService';
 import { getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, createFile2, models } from '../../utils/testing/testUtils';
 
@@ -149,5 +148,52 @@ describe('shares.joplin-app', function() {
 			expect(!!results.items.find(f => f.name === `${noteId2}.md`)).toBe(true);
 		}
 	});
+
+	test('should unshare notes that have been deleted', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const folderId2 = '000000000000000000000000000000F2';
+
+		const { folderId: folderId1, noteId1, noteId2 } = await createFoldersAndNotes(session1.id);
+		await createFile2(session1.id, `root:/${folderId2}.md:`, makeFolderSerializedBody({ id: folderId2 }));
+
+		await shareFolder(session1.id, session2.id, user2.email, `root:/${folderId1}.md:`);
+		await models().share().updateSharedJoplinFolderChildren(user1.id);
+
+		const file2 = await models().joplinFileContent().fileFromItemId(user1.id, noteId2);
+
+		// Now we have this:
+
+		// - Folder 1 [SHARED]
+		//     - Note 1
+		//     - Note 2
+		// - Folder 2
+
+		await models().file({ userId: user1.id }).delete(file2.id);
+
+		await models().share().updateSharedJoplinFolderChildren(user1.id);
+
+		const results = await getApi<PaginatedFiles>(session2.id, 'files/root/children');
+
+		// After deleting note 2, we have:
+
+		// - Folder 1 [SHARED]
+		//     - Note 1
+		// - Folder 2
+
+		// Since only Folder 1 is shared, the user should only see Folder 1 and
+		// Note 1 (should no longer see Note 2)
+
+		expect(results.items.length).toBe(2);
+		expect(!!results.items.find(f => f.name === `${folderId1}.md`)).toBe(true);
+		expect(!!results.items.find(f => f.name === `${noteId1}.md`)).toBe(true);
+	});
+
+	// TODO: If user 2 adds a note to folder shared by user 1, note should belong to user 1
+
+	// TODO: If trying to change parent of item witin shared folder, to folder outside of it, it should fail
+
+	// TODO: Moving a note or folder to/from a shared folder should be a delete, followed by a copy
 
 });

@@ -1,4 +1,4 @@
-import BaseModel, { ValidateOptions, SaveOptions as BaseSaveOptions, DeleteOptions } from './BaseModel';
+import BaseModel, { ValidateOptions, SaveOptions as BaseSaveOptions, DeleteOptions as BaseDeleteOptions } from './BaseModel';
 import { File, ItemType, databaseSchema, Uuid, FileContentType } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
@@ -63,6 +63,11 @@ export interface LoadOptions {
 	skipPermissionCheck?: boolean;
 	fields?: string[];
 	skipFollowLinks?: boolean;
+}
+
+export interface DeleteOptions extends BaseDeleteOptions {
+	skipPermissionCheck?: boolean;
+	deleteSource?: boolean;
 }
 
 export default class FileModel extends BaseModel<File> {
@@ -269,7 +274,7 @@ export default class FileModel extends BaseModel<File> {
 		return this.processFileLink(file);
 	}
 
-	protected async validate(object: File, options: ValidateOptions = {}): Promise<File> {
+	protected async validate(object: File, options: ValidateOptions = {}, saveOptions: SaveOptions = {}): Promise<File> {
 		const file: File = object;
 
 		const mustBeFile = options.rules.mustBeFile === true;
@@ -279,7 +284,9 @@ export default class FileModel extends BaseModel<File> {
 			if (file.is_directory && mustBeFile) throw new ErrorUnprocessableEntity('item must not be a directory');
 		} else {
 			if ('name' in file && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
-			if ('is_directory' in file) throw new ErrorUnprocessableEntity('cannot turn a file into a directory or vice-versa');
+
+			// Checking this requires loading the previous version of the file, so disable it for now
+			// if ('is_directory' in file) throw new ErrorUnprocessableEntity('cannot turn a file into a directory or vice-versa');
 
 			if (mustBeFile && !('is_directory' in file)) {
 				const existingFile = await this.load(file.id);
@@ -302,10 +309,10 @@ export default class FileModel extends BaseModel<File> {
 			if (!parentId) throw invalidParentError('No parent ID');
 
 			try {
-				const parentFile: File = await this.load(parentId);
+				const parentFile: File = await this.load(parentId, { skipPermissionCheck: saveOptions.skipPermissionCheck });
 				if (!parentFile) throw invalidParentError('Cannot load parent file');
 				if (!parentFile.is_directory) throw invalidParentError('Specified parent is not a directory');
-				await this.checkCanWritePermission(parentFile);
+				if (!saveOptions.skipPermissionCheck) await this.checkCanWritePermission(parentFile);
 			} catch (error) {
 				if (error.message.indexOf('Invalid parent') === 0) throw error;
 				throw invalidParentError(`Unknown: ${error.message}`);
@@ -313,7 +320,7 @@ export default class FileModel extends BaseModel<File> {
 		}
 
 		if ('name' in file && !file.is_root) {
-			const existingFile = await this.fileByName(parentId, file.name);
+			const existingFile = await this.fileByName(parentId, file.name, { skipPermissionCheck: saveOptions.skipPermissionCheck });
 			if (existingFile && options.isNew) throw new ErrorConflict(`Already a file with name "${file.name}" (1)`);
 			if (existingFile && file.id !== existingFile.id) throw new ErrorConflict(`Already a file with name "${file.name}" (2)`);
 		}
@@ -382,7 +389,7 @@ export default class FileModel extends BaseModel<File> {
 		}
 
 		for (const fileId in permissionGrantedMap) {
-			if (!permissionGrantedMap[fileId]) throw new ErrorForbidden(`No "${methodName}" access to: ${fileId}`);
+			if (!permissionGrantedMap[fileId]) throw new ErrorForbidden(`User ${this.userId} has no "${methodName}" access to: ${fileId}`);
 		}
 	}
 
@@ -501,6 +508,7 @@ export default class FileModel extends BaseModel<File> {
 		if (file.content_type === FileContentType.Any) {
 			return file.content;
 		} else if (file.content_type === FileContentType.JoplinItem) {
+			if (!file.content_id) throw new Error('file.content_id not set');
 			const content = await this.models().joplinFileContent().load(file.content_id);
 
 			if (serialized) {
@@ -608,12 +616,9 @@ export default class FileModel extends BaseModel<File> {
 			const fileSize = file.content ? file.content.byteLength : 0;
 
 			if (sourceFileId) {
-				sourceFile = {
-					id: sourceFileId,
-					content: file.content,
-					size: fileSize,
-					source_file_id: '',
-				};
+				sourceFile = await this.load(sourceFileId, { skipPermissionCheck: true });
+				sourceFile.content = file.content;
+				sourceFile.size = fileSize;
 
 				delete file.content;
 			} else {
@@ -631,6 +636,8 @@ export default class FileModel extends BaseModel<File> {
 			if (!file.mime_type) file.mime_type = '';
 
 			file.owner_id = this.userId;
+
+			if (!file.content_id) file.content_id = '';
 		}
 
 		return this.withTransaction<File>(async () => {
@@ -655,7 +662,6 @@ export default class FileModel extends BaseModel<File> {
 					if (sourceFile) {
 						// If we passed the source file to the processor, then
 						// we still need to save the linked file.
-						// console.info('PROCESSED SOURCE', isNew, file);
 						return super.save(file, options);
 					} else {
 						// If we passed the actual file (not the source) to the
@@ -667,11 +673,9 @@ export default class FileModel extends BaseModel<File> {
 			}
 
 			if (sourceFile) {
-				// console.info('NONPROCESSED SOURCE', isNew, sourceFile);
-				await super.save(sourceFile, options);
+				await this.save(sourceFile, { ...options, skipPermissionCheck: true });
 			}
 
-			// console.info('NORMAL', isNew, file);
 			return super.save(file, options);
 		});
 	}
@@ -710,14 +714,36 @@ export default class FileModel extends BaseModel<File> {
 		}, 'FileModel::deleteChildren');
 	}
 
+	private async linkedFileIds(sourceFileId: Uuid): Promise<Uuid[]> {
+		const files: File[] = await this.db(this.tableName).select('id').where('source_file_id', '=', sourceFileId);
+		return files.map(f => f.id);
+	}
+
+	// Note that unlike in a filesystem, when a link to a file is deleted, the
+	// source file is deleted too. And when a source file is deleted, all its
+	// links are deleted too. This makes sense for notebooks and notes because
+	// if a note is deleted in a shared notebooks, we want it to be deleted for
+	// all users.
 	public async delete(id: string, options: DeleteOptions = {}): Promise<void> {
-		const file: File = await this.load(id);
+		options = {
+			deleteSource: true,
+			...options,
+		};
+
+		const file: File = await this.load(id, { skipPermissionCheck: !!options.skipPermissionCheck });
 		if (!file) return;
-		await this.checkCanWritePermission(file);
+		if (!options.skipPermissionCheck) await this.checkCanWritePermission(file);
 
 		const canDeleteRoot = !!options.validationRules && !!options.validationRules.canDeleteRoot;
 
 		if (id === await this.userRootFileId() && !canDeleteRoot) throw new ErrorForbidden('the root directory may not be deleted');
+
+		if (file.source_file_id && options.deleteSource) {
+			await this.delete(file.source_file_id, { skipPermissionCheck: true });
+			return;
+		}
+
+		const linkedFileIds = await this.linkedFileIds(id);
 
 		await this.withTransaction(async () => {
 			await this.models().permission().deleteByFileId(id);
@@ -726,6 +752,16 @@ export default class FileModel extends BaseModel<File> {
 				const childrenIds = await this.childrenIds(file.id);
 				for (const childId of childrenIds) {
 					await this.delete(childId);
+				}
+			}
+
+			if (file.content_id) {
+				await this.models().joplinFileContent().delete(file.content_id);
+			}
+
+			if (linkedFileIds.length) {
+				for (const linkedFileId of linkedFileIds) {
+					await this.delete(linkedFileId, { skipPermissionCheck: true, deleteSource: false });
 				}
 			}
 

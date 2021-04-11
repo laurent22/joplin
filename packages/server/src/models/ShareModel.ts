@@ -60,9 +60,15 @@ export default class ShareModel extends BaseModel<Share> {
 		const shares = await this.models().share().sharesByUser(userId, ShareType.JoplinRootFolder);
 		const rootShareUsers = await this.models().shareUser().byShareIds(shares.map(s => s.id));
 
-		// TODO: Unlink files that have been moved out of shared folder
-
 		await this.withTransaction(async () => {
+			// ===================================================================
+			// First, loop through all the folders that have been shared by this
+			// user (represented by a "share" object), then loop through all the
+			// children (notes and folders) of the folder. Then for each of
+			// these, for each sharee, create a link for the associated file.
+			// ===================================================================
+
+			let allChildrenFileIds: Uuid[] = [];
 			for (const share of shares) {
 				const shareUsers: ShareUser[] = rootShareUsers[share.id];
 				if (!shareUsers) {
@@ -71,14 +77,21 @@ export default class ShareModel extends BaseModel<Share> {
 					continue;
 				}
 
+				allChildrenFileIds.push(share.file_id);
+
 				const folderContent: JoplinFileContent = await this.models().file().content(share.file_id, false);
 				const children = await this.models().joplinFileContent().allChildren(userId, folderContent.item_id);
 				const files = await this.models().file().fileIdsByContentIds(children.map(c => c.id));
-				const linkedFiles: File[] = await this.db('files').select(['id', 'source_file_id', 'owner_id']).whereIn('source_file_id', files.map(f => f.id));
+				const childrenFileIds = files.map(f => f.id);
+				const linkedFiles: File[] = await this.db('files').select(['id', 'source_file_id', 'owner_id']).whereIn('source_file_id', childrenFileIds);
+
+				allChildrenFileIds = allChildrenFileIds.concat(childrenFileIds);
 
 				for (const child of children) {
 					const file = files.find(f => f.content_id === child.id);
-					if (!file) throw new Error(`No file for content: ${child.id}`);
+					if (!file) {
+						throw new Error(`No file for content: ${child.id}`);
+					}
 
 					for (const shareUser of shareUsers) {
 						const existingLinkedFile = linkedFiles.find(f => f.source_file_id === file.id && f.owner_id === shareUser.user_id);
@@ -87,6 +100,30 @@ export default class ShareModel extends BaseModel<Share> {
 						await this.models().file({ userId: shareUser.user_id }).createLink(file);
 					}
 				}
+			}
+
+			// ===================================================================
+			// Now that all shared folders and children have been shared, delete
+			// the orphaned links. Those can happen for example if the sharer
+			// moves a note outside a shared folder. In that case, existing
+			// links point to a note that is no longer part of the shared
+			// folder.
+			//
+			// These orphaned links are:
+			// - All the links that point to files owned by userId (source_files)
+			// - Excluding the source_files we've just processed
+			// ===================================================================
+
+			const orphanedFileLinks: File[] = await this
+				.db('files AS dest_files')
+				.select(['dest_files.id', 'dest_files.owner_id'])
+				.leftJoin('files AS source_files', 'dest_files.source_file_id', 'source_files.id')
+				.where('dest_files.source_file_id', '!=', '')
+				.where('source_files.owner_id', '=', userId)
+				.whereNotIn('source_files.id', allChildrenFileIds);
+
+			for (const orphanedFileLink of orphanedFileLinks) {
+				await this.models().file({ userId: orphanedFileLink.owner_id }).delete(orphanedFileLink.id);
 			}
 		});
 	}

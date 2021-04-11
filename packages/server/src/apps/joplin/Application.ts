@@ -286,6 +286,8 @@ export default class Application extends BaseApplication {
 	}
 
 	public async fileToJoplinItem(fileWithContent: FileWithContent): Promise<JoplinFileContent> | null {
+		if (!('mime_type' in fileWithContent.file)) throw new Error('mime_type is required');
+
 		if (fileWithContent.file.mime_type !== 'text/markdown') return null;
 
 		try {
