@@ -9,7 +9,7 @@ export const declaration: CommandDeclaration = {
 export const runtime = (searchBarRef: any): CommandRuntime => {
 	return {
 		execute: async () => {
-			if (searchBarRef.current) searchBarRef.current.focus();
+			if (searchBarRef.current) searchBarRef.current.select();
 		},
 	};
 };

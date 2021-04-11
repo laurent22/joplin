@@ -42,7 +42,7 @@ const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const BaseSyncTarget = require('@joplin/lib/BaseSyncTarget.js');
+import BaseSyncTarget from '@joplin/lib/BaseSyncTarget';
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Resource from '@joplin/lib/models/Resource';
 import Tag from '@joplin/lib/models/Tag';
@@ -95,6 +95,7 @@ import FsDriverRN from './utils/fs-driver-rn';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
+import { clearSharedFilesCache } from './utils/ShareUtils';
 
 let storeDispatch = function(_action: any) {};
 
@@ -564,6 +565,8 @@ async function initialize(dispatch: Function) {
 				folderId: folder.id,
 			});
 		}
+
+		await clearSharedFilesCache();
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);

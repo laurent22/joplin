@@ -87,7 +87,12 @@ try {
 	keytar = null;
 }
 
-shimInit(null, keytar, React);
+function appVersion() {
+	const p = require('./packageInfo.js');
+	return p.version;
+}
+
+shimInit(null, keytar, React, appVersion);
 
 // Disable drag and drop of links inside application (which would
 // open it as if the whole app was a browser)

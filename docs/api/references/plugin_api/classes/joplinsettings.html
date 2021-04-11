@@ -99,6 +99,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#onchange" class="tsd-kind-icon">on<wbr>Change</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#registersection" class="tsd-kind-icon">register<wbr>Section</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#registersetting" class="tsd-kind-icon">register<wbr>Setting</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#registersettings" class="tsd-kind-icon">register<wbr>Settings</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#setvalue" class="tsd-kind-icon">set<wbr>Value</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinsettings.html#value" class="tsd-kind-icon">value</a></li>
 							</ul>
@@ -217,12 +218,12 @@
 							<aside class="tsd-sources">
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Registers a new setting. Note that registering a setting item is dynamic and will be gone next time Joplin starts.
-										What it means is that you need to register the setting every time the plugin starts (for example in the onStart event).
-										The setting value however will be preserved from one launch to the next so there is no risk that it will be lost even if for some
-									reason the plugin fails to start at some point.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>Use joplin.settings.registerSettings()</p>
+										<p>Registers a new setting.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -231,6 +232,39 @@
 								</li>
 								<li>
 									<h5>settingItem: <a href="../interfaces/settingitem.html" class="tsd-signature-type">SettingItem</a></h5>
+								</li>
+							</ul>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="registersettings" class="tsd-anchor"></a>
+					<h3>register<wbr>Settings</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Settings<span class="tsd-signature-symbol">(</span>settings<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/settingitem.html" class="tsd-signature-type">SettingItem</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Registers new settings.
+										Note that registering a setting item is dynamic and will be gone next time Joplin starts.
+										What it means is that you need to register the setting every time the plugin starts (for example in the onStart event).
+										The setting value however will be preserved from one launch to the next so there is no risk that it will be lost even if for some
+									reason the plugin fails to start at some point.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>settings: <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/settingitem.html" class="tsd-signature-type">SettingItem</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<!-- JOPLINCHANGE
@@ -335,6 +369,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinsettings.html#registersetting" class="tsd-kind-icon">register<wbr>Setting</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinsettings.html#registersettings" class="tsd-kind-icon">register<wbr>Settings</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinsettings.html#setvalue" class="tsd-kind-icon">set<wbr>Value</a>

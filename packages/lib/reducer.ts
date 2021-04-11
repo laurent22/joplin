@@ -732,9 +732,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				changeSelectedFolder(draft, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				changeSelectedNotes(draft, noteSelectAction);
+
+				if (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID) {
+					// we don't want to change folder when 'All Notes' filter is on
+					changeSelectedNotes(draft, noteSelectAction);
+				} else {
+					changeSelectedFolder(draft, action);
+					changeSelectedNotes(draft, noteSelectAction);
+				}
 			}
 			break;
 
@@ -833,21 +839,22 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					draft.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 
-				let newProvisionalNoteIds = draft.provisionalNoteIds;
+				if (!action.ignoreProvisionalFlag) {
+					let newProvisionalNoteIds = draft.provisionalNoteIds;
 
-				if (action.provisional) {
-					newProvisionalNoteIds = newProvisionalNoteIds.slice();
-					newProvisionalNoteIds.push(modNote.id);
-				} else {
-					const idx = newProvisionalNoteIds.indexOf(modNote.id);
-					if (idx >= 0) {
+					if (action.provisional) {
 						newProvisionalNoteIds = newProvisionalNoteIds.slice();
-						newProvisionalNoteIds.splice(idx, 1);
-
+						newProvisionalNoteIds.push(modNote.id);
+					} else {
+						const idx = newProvisionalNoteIds.indexOf(modNote.id);
+						if (idx >= 0) {
+							newProvisionalNoteIds = newProvisionalNoteIds.slice();
+							newProvisionalNoteIds.splice(idx, 1);
+						}
 					}
-				}
 
-				draft.provisionalNoteIds = newProvisionalNoteIds;
+					draft.provisionalNoteIds = newProvisionalNoteIds;
+				}
 			}
 			break;
 

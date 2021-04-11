@@ -254,6 +254,10 @@ export default class EncryptionService {
 	// 	sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
 	// }
 
+	async generateApiToken() {
+		return await this.randomHexString(64);
+	}
+
 	async randomHexString(byteCount: number) {
 		const bytes: any[] = await shim.randomBytes(byteCount);
 		return bytes

@@ -390,12 +390,6 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js.map
-packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/getCopyableContent.d.ts
-packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/getCopyableContent.js
-packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/getCopyableContent.js.map
-packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/getCopyableContent.test.d.ts
-packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/getCopyableContent.test.js
-packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/getCopyableContent.test.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js.map
@@ -429,6 +423,12 @@ packages/app-desktop/gui/NoteEditor/commands/showRevisions.js.map
 packages/app-desktop/gui/NoteEditor/styles/index.d.ts
 packages/app-desktop/gui/NoteEditor/styles/index.js
 packages/app-desktop/gui/NoteEditor/styles/index.js.map
+packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.d.ts
+packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js
+packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js.map
+packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.test.d.ts
+packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.test.js
+packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.test.js.map
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.d.ts
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js.map
@@ -597,6 +597,12 @@ packages/app-desktop/gui/ToolbarButton/styles/index.js.map
 packages/app-desktop/gui/dialogs.d.ts
 packages/app-desktop/gui/dialogs.js
 packages/app-desktop/gui/dialogs.js.map
+packages/app-desktop/gui/getWindowTitle.d.ts
+packages/app-desktop/gui/getWindowTitle.js
+packages/app-desktop/gui/getWindowTitle.js.map
+packages/app-desktop/gui/getWindowTitle.test.d.ts
+packages/app-desktop/gui/getWindowTitle.test.js
+packages/app-desktop/gui/getWindowTitle.test.js.map
 packages/app-desktop/gui/hooks/useEffectDebugger.d.ts
 packages/app-desktop/gui/hooks/useEffectDebugger.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js.map
@@ -729,6 +735,9 @@ packages/app-mobile/setUpQuickActions.js.map
 packages/app-mobile/utils/ShareExtension.d.ts
 packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareExtension.js.map
+packages/app-mobile/utils/ShareUtils.d.ts
+packages/app-mobile/utils/ShareUtils.js
+packages/app-mobile/utils/ShareUtils.js.map
 packages/app-mobile/utils/checkPermissions.d.ts
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/checkPermissions.js.map
@@ -873,6 +882,9 @@ packages/lib/locale.js.map
 packages/lib/markdownUtils.d.ts
 packages/lib/markdownUtils.js
 packages/lib/markdownUtils.js.map
+packages/lib/markdownUtils.test.d.ts
+packages/lib/markdownUtils.test.js
+packages/lib/markdownUtils.test.js.map
 packages/lib/markupLanguageUtils.d.ts
 packages/lib/markupLanguageUtils.js
 packages/lib/markupLanguageUtils.js.map
@@ -1032,6 +1044,12 @@ packages/lib/services/commands/ToolbarButtonUtils.js.map
 packages/lib/services/commands/commandsToMarkdownTable.d.ts
 packages/lib/services/commands/commandsToMarkdownTable.js
 packages/lib/services/commands/commandsToMarkdownTable.js.map
+packages/lib/services/commands/focusEditorIfEditorCommand.d.ts
+packages/lib/services/commands/focusEditorIfEditorCommand.js
+packages/lib/services/commands/focusEditorIfEditorCommand.js.map
+packages/lib/services/commands/isEditorCommand.d.ts
+packages/lib/services/commands/isEditorCommand.js
+packages/lib/services/commands/isEditorCommand.js.map
 packages/lib/services/commands/propsHaveChanged.d.ts
 packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/propsHaveChanged.js.map
@@ -1489,3 +1507,5 @@ packages/tools/tool-utils.d.ts
 packages/tools/tool-utils.js
 packages/tools/tool-utils.js.map
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+packages/app-desktop/gui/getWindowTitle.js
+packages/app-desktop/gui/getWindowTitle.test.js

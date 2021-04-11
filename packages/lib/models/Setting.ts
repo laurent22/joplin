@@ -867,7 +867,7 @@ class Setting extends BaseModel {
 						section: 'appearance',
 						label: () => _('Editor font family'),
 						description: () =>
-							_('If the font is incorrect or empty, it will default to a generic monospace font.'),
+							_('Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.'),
 						storage: SettingStorage.File,
 					},
 			'style.editor.monospaceFontFamily': {
@@ -878,8 +878,7 @@ class Setting extends BaseModel {
 				section: 'appearance',
 				label: () => _('Editor monospace font family'),
 				description: () =>
-					_('This should be a *monospace* font or some elements will render incorrectly. If the font ' +
-				'is incorrect or empty, it will default to a generic monospace font.'),
+					_('Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.'),
 				storage: SettingStorage.File,
 			},
 
