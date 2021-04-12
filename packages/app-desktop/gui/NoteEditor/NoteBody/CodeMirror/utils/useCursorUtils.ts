@@ -89,6 +89,7 @@ export default function useCursorUtils(CodeMirror: any) {
 
 				for (let j = 0; j < lines.length; j++) {
 					const line = lines[j];
+					if (!line) continue;
 					// Only add the list token if it's not already there
 					// if it is, remove it
 					if (!line.startsWith(string1)) {
