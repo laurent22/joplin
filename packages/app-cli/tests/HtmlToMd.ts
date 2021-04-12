@@ -1,7 +1,7 @@
 import shim from '@joplin/lib/shim';
 const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
-const HtmlToMd = require('@joplin/lib/HtmlToMd');
+import HtmlToMd from '@joplin/lib/HtmlToMd';
 
 describe('HtmlToMd', function() {
 

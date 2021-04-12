@@ -1,6 +1,6 @@
 import { FormNote } from './types';
 
-const HtmlToMd = require('@joplin/lib/HtmlToMd');
+import HtmlToMd from '@joplin/lib/HtmlToMd';
 import Note from '@joplin/lib/models/Note';
 const { MarkupToHtml } = require('@joplin/renderer');
 

@@ -1147,6 +1147,8 @@ class Setting extends BaseModel {
 	}
 
 	static async registerSetting(key: string, metadataItem: SettingItem) {
+		if (metadataItem.isEnum && !metadataItem.options) throw new Error('The `options` property is required for enum types');
+
 		this.validateKey(key);
 
 		this.customMetadata_[key] = metadataItem;
