@@ -23,7 +23,7 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	protected get itemType(): ItemType {
-		return ItemType.File;
+		return ItemType.Item;
 	}
 
 	protected get hasParentId(): boolean {

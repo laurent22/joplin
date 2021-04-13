@@ -3,7 +3,7 @@ import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync } from '../../utils/testing/testUtils';
 import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedFiles } from '../../models/FileModel';
-import { PaginatedChanges } from '../../models/ChangeModel';
+import { PaginatedChangesOld } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorBadRequest } from '../../utils/errors';
@@ -145,13 +145,13 @@ describe('api_shares', function() {
 		let cursor2: string = null;
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, `files/${rootDirId1}/delta`);
+			const page1 = await getApi<PaginatedChangesOld>(session1.id, `files/${rootDirId1}/delta`);
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item.id).toBe(sharerFile.id);
 			expect(page1.items[0].type).toBe(ChangeType.Create);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, `files/${rootDirId2}/delta`);
+			const page2 = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`);
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item.id).toBe(shareeFile.id);
 			expect(page2.items[0].type).toBe(ChangeType.Create);
@@ -166,13 +166,13 @@ describe('api_shares', function() {
 		await updateFile(user1.id, sharerFile.id, 'from sharer');
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, `files/${rootDirId1}/delta`, { query: { cursor: cursor1 } });
+			const page1 = await getApi<PaginatedChangesOld>(session1.id, `files/${rootDirId1}/delta`, { query: { cursor: cursor1 } });
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item.id).toBe(sharerFile.id);
 			expect(page1.items[0].type).toBe(ChangeType.Update);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor: cursor2 } });
+			const page2 = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor: cursor2 } });
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item.id).toBe(shareeFile.id);
 			expect(page2.items[0].type).toBe(ChangeType.Update);
@@ -188,13 +188,13 @@ describe('api_shares', function() {
 		await updateFile(user2.id, shareeFile.id, 'from sharee');
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, `files/${rootDirId1}/delta`, { query: { cursor: cursor1 } });
+			const page1 = await getApi<PaginatedChangesOld>(session1.id, `files/${rootDirId1}/delta`, { query: { cursor: cursor1 } });
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item.id).toBe(sharerFile.id);
 			expect(page1.items[0].type).toBe(ChangeType.Update);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor: cursor2 } });
+			const page2 = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor: cursor2 } });
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item.id).toBe(shareeFile.id);
 			expect(page2.items[0].type).toBe(ChangeType.Update);
@@ -224,7 +224,7 @@ describe('api_shares', function() {
 		let cursor = null;
 
 		{
-			const page = await getApi<PaginatedChanges>(session2.id, `files/${rootDirId2}/delta`);
+			const page = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`);
 			cursor = page.cursor;
 		}
 
@@ -232,7 +232,7 @@ describe('api_shares', function() {
 		const { shareeFile } = await shareWithUserAndAccept(session3.id, user3, session2.id, user2, file3);
 
 		{
-			const page = await getApi<PaginatedChanges>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor } });
+			const page = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor } });
 			cursor = page.cursor;
 			expect(page.items.length).toBe(1);
 			expect(page.items[0].type).toBe(ChangeType.Create);

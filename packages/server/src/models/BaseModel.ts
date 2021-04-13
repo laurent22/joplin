@@ -286,7 +286,11 @@ export default abstract class BaseModel<T> {
 
 		let itemsWithParentIds: T[] = null;
 		if (trackChanges) {
-			itemsWithParentIds = await this.db(this.tableName).select(['id', 'parent_id', 'name']).whereIn('id', ids);
+			if (this.hasParentId) {
+				itemsWithParentIds = await this.db(this.tableName).select(['id', 'parent_id', 'name']).whereIn('id', ids);
+			} else {
+				itemsWithParentIds = await this.db(this.tableName).select(['id', 'name']).whereIn('id', ids);
+			}
 		}
 
 		await this.withTransaction(async () => {

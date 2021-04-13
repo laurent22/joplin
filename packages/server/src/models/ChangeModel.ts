@@ -1,10 +1,16 @@
-import { Change, ChangeType, File, ItemType, Uuid } from '../db';
+import { Change, ChangeType, File, Item, ItemType, Uuid } from '../db';
 import { ErrorResyncRequired, ErrorUnprocessableEntity } from '../utils/errors';
 import BaseModel from './BaseModel';
 import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 
-export interface ChangeWithItem {
+export interface ChangeWithItemOld {
 	item: File;
+	updated_time: number;
+	type: ChangeType;
+}
+
+export interface ChangeWithItem {
+	item: Item;
 	updated_time: number;
 	type: ChangeType;
 }
@@ -13,8 +19,12 @@ export interface ChangeWithDestFile extends Change {
 	dest_file_id: Uuid;
 }
 
+export interface PaginatedChangesOld extends PaginatedResults {
+	items: ChangeWithItemOld[];
+}
+
 export interface PaginatedChanges extends PaginatedResults {
-	items: ChangeWithItem[];
+	items: Change[];
 }
 
 export interface ChangePagination {
@@ -70,9 +80,9 @@ export default class ChangeModel extends BaseModel<Change> {
 		return results;
 	}
 
-	public async allWithPagination(pagination: Pagination): Promise<PaginatedChanges> {
+	public async allWithPagination(pagination: Pagination): Promise<PaginatedChangesOld> {
 		const results = await paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('owner_id', '=', this.userId), pagination);
-		const changeWithItems = await this.loadChangeItems(results.items);
+		const changeWithItems = await this.loadChangeItemsOld(results.items);
 		return {
 			...results,
 			items: changeWithItems,
@@ -80,9 +90,59 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
+	public async allForUser(pagination: ChangePagination = null): Promise<PaginatedChanges> {
+		pagination = {
+			...defaultChangePagination(),
+			...pagination,
+		};
+
+		let changeAtCursor: Change = null;
+
+		if (pagination.cursor) {
+			changeAtCursor = await this.load(pagination.cursor) as Change;
+			if (!changeAtCursor) throw new ErrorResyncRequired();
+		}
+
+		const query = this
+			.db('user_items')
+			.leftJoin('changes', 'changes.item_id', 'user_items.item_id')
+			.select([
+				// 'changes.counter',
+				'changes.id',
+				'changes.item_id',
+				'changes.item_name',
+				'changes.type',
+				'changes.updated_time',
+			])
+			.where('user_items.user_id', this.userId);
+
+		// If a cursor was provided, apply it to both queries.
+		if (changeAtCursor) {
+			void query.where('counter', '>', changeAtCursor.counter);
+		}
+
+		void query
+			.orderBy('counter', 'asc')
+			.limit(pagination.limit) as any[];
+
+		const changes = await query;
+
+		const compressedChanges = await this.removeDeletedItems(this.compressChanges(changes));
+
+		// const changeWithItems = await this.loadChangeItems(compressedChanges);
+
+		return {
+			items: compressedChanges,
+			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
+			// If there's no change, we return the previous cursor.
+			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
+			has_more: changes.length >= pagination.limit,
+		};
+	}
+
 	// Note: doesn't currently support checking for changes recursively but this
 	// is not needed for Joplin synchronisation.
-	public async byDirectoryId(dirId: string, pagination: ChangePagination = null): Promise<PaginatedChanges> {
+	public async byDirectoryId(dirId: string, pagination: ChangePagination = null): Promise<PaginatedChangesOld> {
 		pagination = {
 			...defaultChangePagination(),
 			...pagination,
@@ -177,7 +237,7 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const compressedChanges = this.compressChanges(changes);
 
-		const changeWithItems = await this.loadChangeItems(compressedChanges);
+		const changeWithItems = await this.loadChangeItemsOld(compressedChanges);
 
 		return {
 			items: changeWithItems,
@@ -188,7 +248,38 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	private async loadChangeItems(changes: Change[]): Promise<ChangeWithItem[]> {
+	private async removeDeletedItems(changes: Change[]): Promise<Change[]> {
+		const itemIds = changes.map(c => c.item_id);
+
+		// We skip permission check here because, when an item is shared, we need
+		// to fetch files that don't belong to the current user. This check
+		// would not be needed anyway because the change items are generated in
+		// a context where permissions have already been checked.
+		const items: Item[] = await this.db('items').select('id').whereIn('items.id', itemIds);
+		// await this.models().item().loadByIds(itemIds);
+
+		const output: Change[] = [];
+
+		for (const change of changes) {
+			const item = items.find(f => f.id === change.item_id);
+
+			// If the item associated with this change has been deleted, we have
+			// two cases:
+			// - If it's a "delete" change, add it to the list.
+			// - If it's anything else, skip it. The "delete" change will be
+			//   sent on one of the next pages.
+
+			if (!item && change.type !== ChangeType.Delete) {
+				continue;
+			}
+
+			output.push(change);
+		}
+
+		return output;
+	}
+
+	private async loadChangeItemsOld(changes: Change[]): Promise<ChangeWithItemOld[]> {
 		const itemIds = changes.map(c => c.item_id);
 
 		// We skip permission check here because, when a file is shared, we need
@@ -197,7 +288,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		// a context where permissions have already been checked.
 		const items: File[] = await this.models().file().loadByIds(itemIds, { skipPermissionCheck: true });
 
-		const output: ChangeWithItem[] = [];
+		const output: ChangeWithItemOld[] = [];
 
 		for (const change of changes) {
 			let item = items.find(f => f.id === change.item_id);

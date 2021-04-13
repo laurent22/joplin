@@ -85,7 +85,7 @@ export default class FileModel extends BaseModel<File> {
 	}
 
 	protected get itemType(): ItemType {
-		return ItemType.File;
+		return ItemType.Item;
 	}
 
 	protected get hasParentId(): boolean {

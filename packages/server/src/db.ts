@@ -201,7 +201,7 @@ export enum NotificationLevel {
 }
 
 export enum ItemType {
-    File = 1,
+    Item = 1,
     User,
 }
 

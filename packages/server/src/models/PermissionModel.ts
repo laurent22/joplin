@@ -25,7 +25,7 @@ export default class PermissionModel extends BaseModel<Permission> {
 
 	private async filesPermissions(fileIds: string[], userId: string = null): Promise<PermissionMap> {
 		const p: Permission = {
-			item_type: ItemType.File,
+			item_type: ItemType.Item,
 		};
 
 		if (userId) p.user_id = userId;
