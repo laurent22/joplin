@@ -1,4 +1,4 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables, sqliteFilePath } from '../../db';
+import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables, sqliteFilePath, Item } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
@@ -251,6 +251,13 @@ export async function createFile2(sessionId: string, path: string, content: stri
 	const file = await putApi(sessionId, `files/${path}/content`, null, { filePath: tempFilePath });
 	await fs.remove(tempFilePath);
 	return file;
+}
+
+export async function createItem(sessionId: string, path: string, content: string): Promise<Item> {
+	const tempFilePath = await makeTempFileWithContent(content);
+	const item: Item = await putApi(sessionId, `items/${path}/content`, null, { filePath: tempFilePath });
+	await fs.remove(tempFilePath);
+	return models().item().load(item.id);
 }
 
 export async function updateFile(userId: string, path: string, content: string): Promise<File> {

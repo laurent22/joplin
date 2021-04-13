@@ -14,6 +14,7 @@ import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
+import { initializeJoplinUtils } from './apps/joplin/joplinUtils';
 
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -125,6 +126,7 @@ async function main() {
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const appContext = app.context as AppContext;
 
+		await initializeJoplinUtils(config());
 		await setupAppContext(appContext, env, connectionCheck.connection, appLogger);
 
 		appLogger().info('Migrating database...');

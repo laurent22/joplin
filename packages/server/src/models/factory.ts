@@ -58,7 +58,9 @@ import { DbConnection } from '../db';
 import ApiClientModel from './ApiClientModel';
 import { ModelOptions } from './BaseModel';
 import FileModel from './FileModel';
+import ItemModel from './ItemModel';
 import UserModel from './UserModel';
+import UserItemModel from './UserItemModel';
 import PermissionModel from './PermissionModel';
 import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
@@ -81,8 +83,16 @@ export class Models {
 		return new FileModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
+	public item(options: ModelOptions = null) {
+		return new ItemModel(this.db_, newModelFactory, this.baseUrl_, options);
+	}
+
 	public user(options: ModelOptions = null) {
 		return new UserModel(this.db_, newModelFactory, this.baseUrl_, options);
+	}
+
+	public userItem(options: ModelOptions = null) {
+		return new UserItemModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public apiClient(options: ModelOptions = null) {

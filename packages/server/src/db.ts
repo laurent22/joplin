@@ -336,6 +336,24 @@ export interface JoplinFileContent {
 	content?: any;
 }
 
+export interface Item extends WithDates, WithUuid {
+	owner_id?: Uuid;
+	name?: string;
+	mime_type?: string;
+	content?: Buffer;
+	content_size?: number;
+	jop_id?: Uuid;
+	jop_parent_id?: Uuid;
+	jop_type?: number;
+	jop_encryption_applied?: number;
+}
+
+export interface UserItem extends WithDates {
+	id?: number;
+	user_id?: Uuid;
+	item_id?: Uuid;
+}
+
 export const databaseSchema: DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -437,6 +455,27 @@ export const databaseSchema: DatabaseTables = {
 		created_time: { type: 'string' },
 		encryption_applied: { type: 'number' },
 		content: { type: 'any' },
+	},
+	items: {
+		id: { type: 'string' },
+		owner_id: { type: 'string' },
+		name: { type: 'string' },
+		mime_type: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+		content: { type: 'any' },
+		content_size: { type: 'number' },
+		jop_id: { type: 'string' },
+		jop_parent_id: { type: 'string' },
+		jop_type: { type: 'number' },
+		jop_encryption_applied: { type: 'number' },
+	},
+	user_items: {
+		id: { type: 'number' },
+		user_id: { type: 'string' },
+		item_id: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

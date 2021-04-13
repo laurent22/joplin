@@ -26,11 +26,13 @@ const config = {
 		'main.users': 'WithDates, WithUuid',
 		'main.permissions': 'WithDates, WithUuid',
 		'main.files': 'WithDates, WithUuid',
+		'main.items': 'WithDates, WithUuid',
 		'main.api_clients': 'WithDates, WithUuid',
 		'main.changes': 'WithDates, WithUuid',
 		'main.notifications': 'WithDates, WithUuid',
 		'main.shares': 'WithDates, WithUuid',
 		'main.share_users': 'WithDates, WithUuid',
+		'main.user_items': 'WithDates',
 	},
 };
 
@@ -43,6 +45,7 @@ const propertyTypes: Record<string, string> = {
 	'shares.type': 'ShareType',
 	'joplin_items.id': 'string',
 	'joplin_items.parent_id': 'string',
+	'items.content': 'Buffer',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

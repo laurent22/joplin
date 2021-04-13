@@ -1,4 +1,4 @@
-import { File, ItemAddressingType } from '../db';
+import { File, Item, ItemAddressingType } from '../db';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import { FileContent } from '../models/FileModel';
 import Router from './Router';
@@ -239,5 +239,12 @@ export function respondWithFileContent(koaResponse: any, file: File, content: Fi
 	koaResponse.body = content;
 	koaResponse.set('Content-Type', file.mime_type);
 	koaResponse.set('Content-Length', file.size.toString());
+	return new Response(ResponseType.KoaResponse, koaResponse);
+}
+
+export function respondWithItemContent(koaResponse: any, item: Item, content: Buffer): Response {
+	koaResponse.body = item.jop_type > 0 ? content.toString() : content;
+	koaResponse.set('Content-Type', item.mime_type);
+	koaResponse.set('Content-Length', content.byteLength);
 	return new Response(ResponseType.KoaResponse, koaResponse);
 }

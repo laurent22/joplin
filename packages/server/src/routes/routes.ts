@@ -3,6 +3,7 @@ import { Routers } from '../utils/routeUtils';
 import apiSessions from './api/sessions';
 import apiPing from './api/ping';
 import apiFiles from './api/files';
+import apiItems from './api/items';
 import apiShares from './api/shares';
 import apiShareUsers from './api/share_users';
 
@@ -21,6 +22,7 @@ const routes: Routers = {
 	'api/ping': apiPing,
 	'api/sessions': apiSessions,
 	'api/files': apiFiles,
+	'api/items': apiItems,
 	'api/shares': apiShares,
 	'api/share_users': apiShareUsers,
 

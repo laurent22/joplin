@@ -229,7 +229,7 @@ export default abstract class BaseModel<T> {
 
 		const isNew = await this.isNew(object, options);
 
-		if (isNew && !(toSave as WithUuid).id) {
+		if (this.hasUuid() && isNew && !(toSave as WithUuid).id) {
 			(toSave as WithUuid).id = uuidgen();
 		}
 

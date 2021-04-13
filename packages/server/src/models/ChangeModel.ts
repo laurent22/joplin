@@ -36,7 +36,7 @@ export default class ChangeModel extends BaseModel<Change> {
 	}
 
 	protected hasUuid(): boolean {
-		return false;
+		return true;
 	}
 
 	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType): Promise<Change> {

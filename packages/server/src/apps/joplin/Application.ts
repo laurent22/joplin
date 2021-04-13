@@ -285,6 +285,14 @@ export default class Application extends BaseApplication {
 		}
 	}
 
+	public isJoplinItemName(name: string): boolean {
+		return !!name.match(/^[0-9a-zA-Z]{32}\.md$/);
+	}
+
+	public async parseJoplinItem(body: string): Promise<any> {
+		return BaseItem.unserialize(body);
+	}
+
 	public async fileToJoplinItem(fileWithContent: FileWithContent): Promise<JoplinFileContent> | null {
 		if (!('mime_type' in fileWithContent.file)) throw new Error('mime_type is required');
 
