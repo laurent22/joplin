@@ -1,9 +1,16 @@
 const TurndownService = require('@joplin/turndown');
 const turndownPluginGfm = require('@joplin/turndown-plugin-gfm').gfm;
-const markdownUtils = require('./markdownUtils').default;
+import markdownUtils from './markdownUtils';
 
-class HtmlToMd {
-	parse(html, options = {}) {
+export interface ParseOptions {
+	anchorNames?: string[];
+	preserveImageTagsWithSize?: boolean;
+	baseUrl?: string;
+}
+
+export default class HtmlToMd {
+
+	public parse(html: string, options: ParseOptions = {}) {
 		const turndown = new TurndownService({
 			headingStyle: 'atx',
 			anchorNames: options.anchorNames ? options.anchorNames.map(n => n.trim().toLowerCase()) : [],
@@ -21,6 +28,5 @@ class HtmlToMd {
 		if (options.baseUrl) md = markdownUtils.prependBaseUrl(md, options.baseUrl);
 		return md;
 	}
-}
 
-module.exports = HtmlToMd;
+}

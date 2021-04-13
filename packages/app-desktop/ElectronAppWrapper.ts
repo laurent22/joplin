@@ -189,18 +189,27 @@ export default class ElectronAppWrapper {
 		// This handler receives IPC messages from a plugin or from the main window,
 		// and forwards it to the main window or the plugin window.
 		ipcMain.on('pluginMessage', (_event: any, message: PluginMessage) => {
-			if (message.target === 'mainWindow') {
-				this.win_.webContents.send('pluginMessage', message);
-			}
-
-			if (message.target === 'plugin') {
-				const win = this.pluginWindows_[message.pluginId];
-				if (!win) {
-					this.logger().error(`Trying to send IPC message to non-existing plugin window: ${message.pluginId}`);
-					return;
+			try {
+				if (message.target === 'mainWindow') {
+					this.win_.webContents.send('pluginMessage', message);
 				}
 
-				win.webContents.send('pluginMessage', message);
+				if (message.target === 'plugin') {
+					const win = this.pluginWindows_[message.pluginId];
+					if (!win) {
+						this.logger().error(`Trying to send IPC message to non-existing plugin window: ${message.pluginId}`);
+						return;
+					}
+
+					win.webContents.send('pluginMessage', message);
+				}
+			} catch (error) {
+				// An error might happen when the app is closing and a plugin
+				// sends a message. In which case, the above code would try to
+				// access a destroyed webview.
+				// https://github.com/laurent22/joplin/issues/4570
+				console.error('Could not process plugin message:', message);
+				console.error(error);
 			}
 		});
 
