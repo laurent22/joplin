@@ -177,8 +177,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
 		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
-		editor.insertContent(result.html);
 		// editor.fire('joplinChange');
+		editor.selection.setContent(result.html);
+		editor.focus();
 		// dispatchDidUpdate(editor);
 	}, [props.markupToHtml, editor]);
 
@@ -916,7 +917,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	async function execOnChangeEvent() {
 		const info = nextOnChangeEventInfo.current;
 		if (!info) return;
-
 		nextOnChangeEventInfo.current = null;
 
 		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, info.editor.getContent(), info.contentOriginalCss);
@@ -929,6 +929,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		});
 
 		dispatchDidUpdate(info.editor);
+		editor.focus();
 	}
 
 	// When the component unmount, we dispatch the change event
