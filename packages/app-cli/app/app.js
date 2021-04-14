@@ -328,7 +328,7 @@ class Application extends BaseApplication {
 			{ keys: ['n'], type: 'function', command: 'next_link' },
 			{ keys: ['b'], type: 'function', command: 'previous_link' },
 			{ keys: ['o'], type: 'function', command: 'open_link' },
-			{ keys: [' '], command: 'todo toggle $n' },
+			{ keys: [' '], command: 'todo toggleToDO $n' },
 			{ keys: ['tc'], type: 'function', command: 'toggle_console' },
 			{ keys: ['tm'], type: 'function', command: 'toggle_metadata' },
 			{ keys: ['/'], type: 'prompt', command: 'search ""', cursorPosition: -2 },

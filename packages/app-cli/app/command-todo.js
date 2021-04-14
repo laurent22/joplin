@@ -37,6 +37,10 @@ class Command extends BaseCommand {
 				}
 			} else if (action == 'clear') {
 				toSave.is_todo = 0;
+			} else if (action == 'toggleToDO') {
+				if (note.is_todo) {
+					toSave.todo_completed = note.todo_completed ? 0 : time.unixMs();
+				} else { return; }
 			}
 
 			await Note.save(toSave);
