@@ -17,6 +17,8 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -322,23 +324,23 @@ msgstr "Označiv popis"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Isticanje"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Precrtano"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Umetni"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Eksponent"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Indeks"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
@@ -885,7 +887,7 @@ msgstr "Token je kopiran u međuspremnik!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Stvarno želiš obnoviti token autorizacije?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -970,7 +972,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Obnovi token"
 
 #: packages/app-desktop/gui/MenuBar.js:166
 #, javascript-format
@@ -1767,7 +1769,7 @@ msgstr "Konfiguracija"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Podaci mobitela – automatska sinkronizacija je deaktivirana"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2540,19 +2542,16 @@ msgid "Editor font family"
 msgstr "Obitelj fontova uređivača"
 
 #: packages/lib/models/Setting.js:695
-#, fuzzy
 msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Ovo bi trebao biti font *fiksne širine*, jer će se inače neki elementi "
-"prikazati pogrešno. Ako je polje fonta netočno ili prazno, postavit će se "
-"opći font fiksne širine."
+"Ako je polje fonta netočno ili prazno, postavit će se opći font fiksne "
+"širine."
 
 #: packages/lib/models/Setting.js:704
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Obitelj fontova uređivača"
+msgstr "Obitelj fontova fiksne širine uređivača"
 
 #: packages/lib/models/Setting.js:705
 msgid ""
@@ -2607,7 +2606,7 @@ msgstr "%d h"
 
 #: packages/lib/models/Setting.js:776
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Sinkroniziraj samo putem WiFi veze"
 
 #: packages/lib/models/Setting.js:783
 msgid "Text editor command"
@@ -2660,7 +2659,7 @@ msgstr "Uspravno"
 
 #: packages/lib/models/Setting.js:797
 msgid "Landscape"
-msgstr "Polegnuto"
+msgstr "Ležeće"
 
 #: packages/lib/models/Setting.js:807
 msgid "Keyboard Mode"
