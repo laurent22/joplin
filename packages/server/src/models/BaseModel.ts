@@ -86,6 +86,23 @@ export default abstract class BaseModel<T> {
 		return this.defaultFields_.slice();
 	}
 
+	protected selectFields(options:LoadOptions, defaultFields:string[] = null, mainTable:string = ''):string[] {
+		let output:string[] = [];
+		if (options && options.fields) {
+			output = options.fields;
+		} else if (defaultFields) {
+			output = defaultFields;
+		} else {
+			output = this.defaultFields;
+		}
+
+		if (mainTable) {
+			output = output.map(f => mainTable + '.' + f);
+		}
+
+		return output;
+	}
+
 	protected get tableName(): string {
 		throw new Error('Not implemented');
 	}

@@ -1,7 +1,9 @@
-import BaseModel, { SaveOptions } from './BaseModel';
+import BaseModel, { SaveOptions, LoadOptions } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item } from '../db';
 import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { ErrorNotFound } from '../utils/errors';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -59,15 +61,32 @@ export default class ItemModel extends BaseModel<Item> {
 
 	// Remove first and last colon from a path element
 	public pathToName(path: string): string {
+		if (path === 'root') return '';
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public async loadByName(name: string): Promise<Item> {
-		return this.db(this.tableName).select(this.defaultFields).where('owner_id', '=', this.userId).where('name', '=', name).first();
+	public async loadByJopId(jopId: string, options:LoadOptions = {}):Promise<Item> {
+		return this.db(this.tableName).select(this.selectFields(options)).where('owner_id', '=', this.userId).where('jop_id', '=', jopId).first();
 	}
 
-	public async loadWithContent(id: Uuid): Promise<Item> {
-		return this.db(this.tableName).select('*').where('owner_id', '=', this.userId).where('id', '=', id).first();
+	public async loadByName(name: string, options:LoadOptions = {}): Promise<Item> {
+		return this
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.select(this.selectFields(options, null, 'items'))
+			.where('user_items.user_id', '=', this.userId)
+			.where('name', '=', name)
+			.first();
+	}
+
+	public async loadWithContent(id: Uuid, options:LoadOptions = {}): Promise<Item> {
+		return this
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.select(this.selectFields(options, ['*'], 'items'))
+			.where('user_items.user_id', '=', this.userId)
+			.where('items.id', '=', id)
+			.first();
 	}
 
 	public async loadAsSerializedJoplinItem(id: Uuid): Promise<string> {
@@ -82,6 +101,47 @@ export default class ItemModel extends BaseModel<Item> {
 		} else {
 			return item.content;
 		}
+	}
+
+	public async folderChildrenItemIds(folderId:string):Promise<Uuid[]> {
+		let output:Uuid[] = [];
+
+		const rows:Item[] = await this
+			.db(this.tableName)
+			.where('jop_parent_id', '=', folderId)
+			.where('owner_id', '=', this.userId)
+			.select('id', 'jop_type');
+
+		for (const row of rows) {
+			output.push(row.id);
+
+			if (row.jop_type === ModelType.Folder) {
+				const childrenIds = await this.folderChildrenItemIds(row.id);
+				output = output.concat(childrenIds);
+			}
+		}
+
+		return output;
+	}
+
+	public async shareJoplinFolderAndContent(withUserId:Uuid, folderId:string) {
+		const folderItem = await this.loadByJopId(folderId, { fields: ['id'] });
+		if (!folderItem) throw new ErrorNotFound('No such folder: ' + folderId);
+
+		const itemIds = [folderItem.id].concat(await this.folderChildrenItemIds(folderId));
+
+		const alreadySharedItemIds:string[] = await this
+			.db('user_items')
+			.pluck('item_id')
+			.whereIn('item_id', itemIds)
+			.where('user_id', '=', withUserId);
+
+		await this.withTransaction(async () => {
+			for (const itemId of itemIds) {
+				if (alreadySharedItemIds.includes(itemId)) continue;
+				await this.models().userItem({ userId: withUserId }).add(withUserId, itemId);
+			}
+		});
 	}
 
 	public itemToJoplinItem(itemRow: Item): any {

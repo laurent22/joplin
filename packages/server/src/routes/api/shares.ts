@@ -16,11 +16,11 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	const share: Share = shareModel.fromApiInput(await bodyFields(ctx.req)) as Share;
 
 	if (share.folder_id) {
-		const fileId = await ctx.models.joplinFileContent().fileIdFromItemId(ctx.owner.id, share.folder_id);
-		if (!fileId) throw new ErrorNotFound(`No such folder: ${share.folder_id}`);
-		return shareModel.createShare(ShareType.JoplinRootFolder, fileId);
+		const folderItem = await ctx.models.item({ userId: ctx.owner.id }).loadByJopId(share.folder_id);
+		if (!folderItem) throw new ErrorNotFound(`No such folder: ${share.folder_id}`);
+		return shareModel.createShare(ShareType.JoplinRootFolder, folderItem.id);
 	} else {
-		return shareModel.createShare(share.type, share.file_id);
+		return shareModel.createShare(share.type, share.item_id);
 	}
 });
 

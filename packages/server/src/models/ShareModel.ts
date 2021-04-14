@@ -15,19 +15,27 @@ export default class ShareModel extends BaseModel<Share> {
 		return share;
 	}
 
-	public async createShare(shareType: ShareType, path: string, isAuto: boolean = false): Promise<Share> {
-		const file: File = await this.models().file({ userId: this.userId }).pathToFile(path);
-
-		if (file.source_file_id) throw new ErrorBadRequest('A shared file cannot be shared again');
+	public async createShare(shareType: ShareType, itemId: Uuid, isAuto: boolean = false): Promise<Share> {
+		if (await this.itemIsShared(shareType, itemId)) throw new ErrorBadRequest('A shared item cannot be shared again');
 
 		const toSave: Share = {
 			type: shareType,
-			file_id: file.id,
+			item_id: itemId,
 			owner_id: this.userId,
-			is_auto: isAuto ? 1 : 0,
+			// is_auto: isAuto ? 1 : 0,
 		};
 
 		return this.save(toSave);
+	}
+
+	public async itemIsShared(shareType:ShareType, itemId:string):Promise<boolean> {
+		const r = await this
+			.db(this.tableName)
+			.select('id')
+			.where('item_id', '=', itemId)
+			.where('type', '=', shareType)
+			.first();
+		return !!r;
 	}
 
 	public async createJoplinFolderShare(folderId: string): Promise<Share> {

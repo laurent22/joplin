@@ -5,7 +5,7 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.createTable('shares', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('owner_id', 32).notNullable();
-		table.string('file_id', 32).notNullable();
+		table.string('item_id', 32).notNullable();
 		table.integer('type').notNullable();
 		table.bigInteger('updated_time').notNullable();
 		table.bigInteger('created_time').notNullable();

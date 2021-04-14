@@ -312,7 +312,7 @@ export interface Notification extends WithDates, WithUuid {
 
 export interface Share extends WithDates, WithUuid {
 	owner_id?: Uuid;
-	file_id?: Uuid;
+	item_id?: Uuid;
 	type?: ShareType;
 	folder_id?: Uuid;
 	is_auto?: number;
@@ -430,7 +430,7 @@ export const databaseSchema: DatabaseTables = {
 	shares: {
 		id: { type: 'string' },
 		owner_id: { type: 'string' },
-		file_id: { type: 'string' },
+		item_id: { type: 'string' },
 		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },

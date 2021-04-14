@@ -1,40 +1,9 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody } from '../../utils/testing/testUtils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { getApi, putApi } from '../../utils/testing/apiUtils';
 import { Item } from '../../db';
 import { PaginatedItems } from '../../models/ItemModel';
-
-function makeNoteSerializedBody(note: NoteEntity = {}): string {
-	return `${'title' in note ? note.title : 'Title'}
-
-${'body' in note ? note.body : 'Body'}
-
-id: ${'id' in note ? note.id : 'b39dadd7a63742bebf3125fd2a9286d4'}
-parent_id: ${'parent_id' in note ? note.parent_id : '000000000000000000000000000000F1'}
-created_time: 2020-10-15T10:34:16.044Z
-updated_time: 2021-01-28T23:10:30.054Z
-is_conflict: 0
-latitude: 0.00000000
-longitude: 0.00000000
-altitude: 0.0000
-author: 
-source_url: 
-is_todo: 1
-todo_due: 1602760405000
-todo_completed: 0
-source: joplindev-desktop
-source_application: net.cozic.joplindev-desktop
-application_data: 
-order: 0
-user_created_time: 2020-10-15T10:34:16.044Z
-user_updated_time: 2020-10-19T17:21:03.394Z
-encryption_cipher_text: 
-encryption_applied: 0
-markup_language: 1
-is_shared: 1
-type_: 1`;
-}
 
 describe('api_items', function() {
 

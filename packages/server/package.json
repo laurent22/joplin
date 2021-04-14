@@ -5,7 +5,7 @@
   "scripts": {
     "start-dev": "nodemon --config nodemon.json dist/app.js --env dev",
     "start": "node dist/app.js",
-    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && rm -f db-buildTypes.sqlite",
+    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",
     "test": "jest --verbose=false",
     "test-ci": "npm run test",

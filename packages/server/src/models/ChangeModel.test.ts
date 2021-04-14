@@ -1,6 +1,5 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createItem } from '../utils/testing/testUtils';
-import { ChangeType, File, Item } from '../db';
-import FileModel from './FileModel';
+import { ChangeType, Item } from '../db';
 import { msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
 import ItemModel from './ItemModel';
@@ -91,27 +90,16 @@ describe('ChangeModel', function() {
 		}
 	});
 
-	// test('should throw an error if cursor is invalid', async function() {
-	// 	const { user } = await createUserAndSession(1, true);
-	// 	const fileModel = models().item({ userId: user.id });
-	// 	const changeModel = models().change({ userId: user.id });
+	test('should throw an error if cursor is invalid', async function() {
+		const { user } = await createUserAndSession(1, true);
+		const itemModel = models().item({ userId: user.id });
+		const changeModel = models().change({ userId: user.id });
 
-	// 	const dirId = await fileModel.userRootFileId();
+		let i = 1;
+		await msleep(1); const item1 = await makeTestItem(itemModel); // CREATE 1
+		await msleep(1); await itemModel.save({ id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
 
-	// 	let i = 1;
-	// 	await msleep(1); const file1 = await makeTestFile(fileModel); // CREATE 1
-	// 	await msleep(1); await fileModel.save({ id: file1.id, name: `test_mod${i++}` }); // UPDATE 1
-
-	// 	await expectThrow(async () => changeModel.byDirectoryId(dirId, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
-	// });
-
-	// test('should throw an error if trying to do get changes for a file', async function() {
-	// 	const { user } = await createUserAndSession(1, true);
-	// 	const fileModel = models().item({ userId: user.id });
-	// 	const changeModel = models().change({ userId: user.id });
-	// 	const file1 = await makeTestFile(fileModel);
-
-	// 	await expectThrow(async () => changeModel.byDirectoryId(file1.id));
-	// });
+		await expectThrow(async () => changeModel.allForUser({ limit: 1, cursor: 'invalid' }), 'resyncRequired');
+	});
 
 });

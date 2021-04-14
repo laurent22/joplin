@@ -105,28 +105,12 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
-		const sourceFile = await this.models().file({ userId: share.owner_id }).load(share.file_id);
-		const rootId = await this.models().file({ userId: this.userId }).userRootFileId();
+		const item = await this.models().item({ userId: share.owner_id }).load(share.item_id);
 
 		return this.withTransaction<File>(async () => {
 			await this.save({ ...shareUser, is_accepted: accept ? 1 : 0 });
 
-			const file: File = {
-				owner_id: userId,
-				source_file_id: share.file_id,
-				parent_id: rootId,
-				name: sourceFile.name,
-			};
-
-			const savedFile = await this.models().file({ userId }).save(file);
-
-			await ShareUserModel.processShareAcceptedHandlers({
-				linkedFile: savedFile,
-				share: share,
-				models: this.models(),
-			});
-
-			return savedFile;
+			await this.models().item({ userId: share.owner_id }).shareJoplinFolderAndContent(userId, item.jop_id);
 		});
 	}
 
