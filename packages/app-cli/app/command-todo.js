@@ -11,7 +11,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('<todo-command> can either be "toggle" or "clear". Use "toggle" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use "clear" to convert the to-do back to a regular note.');
+		return _('<todo-command> can either be "toggle" or "clear" or toggleTodo. Use "toggle" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use "clear" to convert the to-do back to a regular note. "toggleTodo" is same as toggle but it only acts on to-do ');
 	}
 
 	async action(args) {
@@ -37,7 +37,7 @@ class Command extends BaseCommand {
 				}
 			} else if (action == 'clear') {
 				toSave.is_todo = 0;
-			} else if (action == 'toggleToDO') {
+			} else if (action == 'toggleTodo') {
 				if (note.is_todo) {
 					toSave.todo_completed = note.todo_completed ? 0 : time.unixMs();
 				} else { return; }
