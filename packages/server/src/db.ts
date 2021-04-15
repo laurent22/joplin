@@ -307,6 +307,7 @@ export interface Change extends WithDates, WithUuid {
 	item_id?: Uuid;
 	item_name?: string;
 	type?: ChangeType;
+	previous_item?: string;
 }
 
 export interface ApiClient extends WithDates, WithUuid {
@@ -428,6 +429,7 @@ export const databaseSchema: DatabaseTables = {
 		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		previous_item: { type: 'string' },
 	},
 	api_clients: {
 		id: { type: 'string' },

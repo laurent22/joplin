@@ -15,6 +15,7 @@ export interface SaveOptions {
 	skipValidation?: boolean;
 	validationRules?: any;
 	trackChanges?: boolean;
+	previousItem?: any,
 }
 
 export interface LoadOptions {
@@ -236,7 +237,7 @@ export default abstract class BaseModel<T> {
 		if (this.hasParentId && !parentId && parentId !== '') throw new Error(`Could not find parent ID for item: ${(item as WithUuid).id}`);
 
 		const changeModel = this.models().change({ userId: this.userId });
-		await changeModel.add(this.itemType, parentId, (item as WithUuid).id, (item as any).name || '', changeType);
+		await changeModel.add(this.itemType, parentId, (item as WithUuid).id, (item as any).name || '', changeType, options.previousItem);
 	}
 
 	public async save(object: T, options: SaveOptions = {}): Promise<T> {

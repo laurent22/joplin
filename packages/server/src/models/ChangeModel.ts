@@ -49,7 +49,16 @@ export default class ChangeModel extends BaseModel<Change> {
 		return true;
 	}
 
-	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType): Promise<Change> {
+	public serializePreviousItem(item:any):string {
+		return JSON.stringify(item);
+	}
+
+	public unserializePreviousItem(item:string):any {
+		if (!item) return null;
+		return JSON.parse(item);
+	}
+
+	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType, previousItem:any): Promise<Change> {
 		const change: Change = {
 			item_type: itemType,
 			parent_id: parentId || '',
@@ -57,6 +66,7 @@ export default class ChangeModel extends BaseModel<Change> {
 			item_name: itemName,
 			type: changeType,
 			owner_id: this.userId,
+			previous_item: previousItem ? this.serializePreviousItem(previousItem) : '',
 		};
 
 		return this.save(change) as Change;

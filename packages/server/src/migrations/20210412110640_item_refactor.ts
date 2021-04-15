@@ -64,6 +64,10 @@ export async function up(db: DbConnection): Promise<any> {
 		table.index(['key']);
 	});
 
+	await db.schema.alterTable('changes', function(table: Knex.CreateTableBuilder) {
+		table.text('previous_item').defaultTo('').notNullable();
+	});
+
 	// TODO: add indexes
 
 	// TODO: add owner_id/name constraint - only one name per owner

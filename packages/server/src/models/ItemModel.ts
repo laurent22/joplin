@@ -15,7 +15,7 @@ export interface PaginatedItems extends PaginatedResults {
 	items: Item[];
 }
 
-interface SharedRootInfo {
+export interface SharedRootInfo {
 	item: Item,
 	share: Share,
 }
@@ -72,7 +72,15 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async loadByJopId(jopId: string, options:LoadOptions = {}):Promise<Item> {
-		return this.db(this.tableName).select(this.selectFields(options)).where('owner_id', '=', this.userId).where('jop_id', '=', jopId).first();
+		return this
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.select(this.selectFields(options, null, 'items'))
+			.where('user_items.user_id', '=', this.userId)
+			.where('jop_id', '=', jopId)
+			.first();
+
+		// return this.db(this.tableName).select(this.selectFields(options)).where('owner_id', '=', this.userId).where('jop_id', '=', jopId).first();
 	}
 
 	public async loadByName(name: string, options:LoadOptions = {}): Promise<Item> {
@@ -266,6 +274,8 @@ export default class ItemModel extends BaseModel<Item> {
 			item.content_size = item.content.byteLength;
 		}
 
+		let previousItem:Item = null;
+
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
 
@@ -277,10 +287,15 @@ export default class ItemModel extends BaseModel<Item> {
 			// 	// Create new user_items for each user
 			// 	// Do it by processing Change table
 			// }
+		} else {
+			previousItem = await this.load(item.id, { fields: ['jop_parent_id'] });
 		}
 
 		return this.withTransaction(async () => {
-			item = await super.save(item, options);
+			item = await super.save(item, {
+				...options,
+				previousItem,
+			});
 
 			if (isNew) await this.models().userItem().add(this.userId, item.id);
 

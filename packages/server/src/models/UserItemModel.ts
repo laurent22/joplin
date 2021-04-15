@@ -28,4 +28,12 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		});
 	}
 
+	public async remove(userId: Uuid, itemId: Uuid): Promise<void> {
+		await this
+			.db(this.tableName)
+			.where('user_id', '=', userId)
+			.where('item_id', '=', itemId)
+			.del();
+	}
+
 }

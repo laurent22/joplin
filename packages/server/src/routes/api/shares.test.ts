@@ -180,6 +180,109 @@ describe('api_shares', function() {
 		expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000002.md')).toBe(true);
 	});
 
+	test('should update share status when note parent changes', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const tree: any = {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+				'000000000000000000000000000000F2': {},
+			},
+			'000000000000000000000000000000F3': {},
+			'000000000000000000000000000000F4': {},
+			'000000000000000000000000000000F5': {},
+		};
+
+		const itemModel = models().item({ userId: user1.id });
+
+		await createItemTree(itemModel, '', tree);
+
+		const folderItem1 = await itemModel.loadByJopId('000000000000000000000000000000F1');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
+
+		const folderItem5 = await itemModel.loadByJopId('000000000000000000000000000000F5');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem5);
+		
+		await models().share().updateSharedItems();
+
+		const noteItem = await itemModel.loadByJopId('00000000000000000000000000000001');
+		
+		// Note is moved to another folder, but still within shared folder
+
+		{
+			await itemModel.save({
+				id: noteItem.id,
+				jop_parent_id: '000000000000000000000000000000F2',
+			});
+
+			await models().share().updateSharedItems();
+
+			const newChildren = await models().item({ userId: user2.id }).children();
+			expect(newChildren.items.length).toBe(4);
+		}
+
+		// Note is moved to another folder, outside of shared folder
+
+		{
+			await itemModel.save({
+				id: noteItem.id,
+				jop_parent_id: '000000000000000000000000000000F3',
+			});
+
+			await models().share().updateSharedItems();
+
+			const newChildren = await models().item({ userId: user2.id }).children();
+			expect(newChildren.items.length).toBe(3);
+			expect(newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(undefined);
+		}
+
+		// Note is moved from a non-shared folder to another non-shared folder
+
+		{
+			await itemModel.save({
+				id: noteItem.id,
+				jop_parent_id: '000000000000000000000000000000F4',
+			});
+
+			await models().share().updateSharedItems();
+
+			const newChildren = await models().item({ userId: user2.id }).children();
+			expect(newChildren.items.length).toBe(3);
+			expect(newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(undefined);
+		}
+
+		// Note is moved from a non-shared folder, back to a shared folder
+
+		{
+			await itemModel.save({
+				id: noteItem.id,
+				jop_parent_id: '000000000000000000000000000000F1',
+			});
+
+			await models().share().updateSharedItems();
+
+			const newChildren = await models().item({ userId: user2.id }).children();
+			expect(newChildren.items.length).toBe(4);
+			expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(true);
+		}
+
+		// Note is moved from a shared folder to a different shared folder
+
+		{
+			await itemModel.save({
+				id: noteItem.id,
+				jop_parent_id: '000000000000000000000000000000F5',
+			});
+
+			await models().share().updateSharedItems();
+
+			const newChildren = await models().item({ userId: user2.id }).children();
+			expect(newChildren.items.length).toBe(4);
+			expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(true);
+		}
+	});
+
 	test('should not share an already shared file', async function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
