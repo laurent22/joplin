@@ -1,9 +1,10 @@
 import BaseModel, { SaveOptions, LoadOptions } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item } from '../db';
-import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, Share } from '../db';
+import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ErrorNotFound } from '../utils/errors';
+import Knex = require('knex');
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -12,6 +13,11 @@ const extractNameRegex = /^root:\/(.*):$/;
 
 export interface PaginatedItems extends PaginatedResults {
 	items: Item[];
+}
+
+interface SharedRootInfo {
+	item: Item,
+	share: Share,
 }
 
 export default class ItemModel extends BaseModel<Item> {
@@ -110,13 +116,13 @@ export default class ItemModel extends BaseModel<Item> {
 			.db(this.tableName)
 			.where('jop_parent_id', '=', folderId)
 			.where('owner_id', '=', this.userId)
-			.select('id', 'jop_type');
+			.select('id', 'jop_id', 'jop_type');
 
 		for (const row of rows) {
 			output.push(row.id);
 
 			if (row.jop_type === ModelType.Folder) {
-				const childrenIds = await this.folderChildrenItemIds(row.id);
+				const childrenIds = await this.folderChildrenItemIds(row.jop_id);
 				output = output.concat(childrenIds);
 			}
 		}
@@ -191,7 +197,9 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.save(item);
 	}
 
-	public async children(pathQuery: string, pagination: Pagination): Promise<PaginatedItems> {
+	public async children(pathQuery: string = '', pagination: Pagination = null): Promise<PaginatedItems> {
+		pagination = pagination || defaultPagination();
+
 		const query = this
 			.db('user_items')
 			.leftJoin('items', 'user_items.item_id', 'items.id')
@@ -208,6 +216,48 @@ export default class ItemModel extends BaseModel<Item> {
 		return paginateDbQuery(query, pagination, 'items');
 	}
 
+	private async joplinItemPath(jopId:string):Promise<Item[]> {
+		// Use Recursive Common Table Expression to find path to given item
+		// https://www.sqlite.org/lang_with.html#recursivecte
+
+		// with recursive paths(id, jop_id, jop_parent_id) as (
+		//     select id, jop_id, jop_parent_id from items where jop_id = '000000000000000000000000000000F1'
+		//     union
+		//     select items.id, items.jop_id, items.jop_parent_id
+		//     from items join paths where items.jop_id = paths.jop_parent_id 
+		// )
+		// select id, jop_id, jop_parent_id from paths;
+
+		const query = this.db.withRecursive('paths', (qb:Knex.QueryBuilder) => {
+			qb.select('id', 'jop_id', 'jop_parent_id')
+				.from('items')
+				.where('jop_id', '=', jopId)
+			
+			.union((qb:Knex.QueryBuilder) => {
+				qb.select('items.id', 'items.jop_id', 'items.jop_parent_id')
+					.from('items')
+					.join('paths', 'items.jop_id', 'paths.jop_parent_id')
+			});
+		}).select('id', 'jop_id', 'jop_parent_id').from('paths');
+
+		return query;
+	}
+
+	// If the note or folder is within a shared folder, this function returns
+	// that shared folder. It returns null otherwise.
+	public async joplinItemSharedRootInfo(jopId:string):Promise<SharedRootInfo | null> {
+		const path = await this.joplinItemPath(jopId);
+		if (!path.length) throw new Error('Cannot retrieve path for item: ' + jopId);
+		const rootFolderItem = path[path.length - 1];
+		const share = await this.models().share().itemShare(ShareType.JoplinRootFolder, rootFolderItem.id);
+		if (!share) return null;
+
+		return {
+			item: await this.load(rootFolderItem.id),
+			share,
+		}
+	}
+
 	public async save(item: Item, options: SaveOptions = {}): Promise<Item> {
 		item = { ... item };
 		const isNew = await this.isNew(item, options);
@@ -220,6 +270,13 @@ export default class ItemModel extends BaseModel<Item> {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
 
 			item.owner_id = this.userId;
+
+			// if (item.jop_parent_id) {
+			// 	const rootIsShared = await this.joplinRootFolderIsShared(item.jop_parent_id);
+			// 	// Get all share_users associated with root ID
+			// 	// Create new user_items for each user
+			// 	// Do it by processing Change table
+			// }
 		}
 
 		return this.withTransaction(async () => {

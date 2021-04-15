@@ -76,7 +76,9 @@ export default class ChangeModel extends BaseModel<Change> {
 		const query = this.db(this.tableName).select(...this.defaultFields);
 		if (startChange) void query.where('counter', '>', startChange.counter);
 		void query.limit(1000);
-		const results = await query;
+		let results = await query;
+		results = await this.removeDeletedItems(results);
+		results = await this.compressChanges(results);
 		return results;
 	}
 
@@ -128,8 +130,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		const changes = await query;
 
 		const compressedChanges = await this.removeDeletedItems(this.compressChanges(changes));
-
-		// const changeWithItems = await this.loadChangeItems(compressedChanges);
 
 		return {
 			items: compressedChanges,
@@ -256,7 +256,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		// would not be needed anyway because the change items are generated in
 		// a context where permissions have already been checked.
 		const items: Item[] = await this.db('items').select('id').whereIn('items.id', itemIds);
-		// await this.models().item().loadByIds(itemIds);
 
 		const output: Change[] = [];
 

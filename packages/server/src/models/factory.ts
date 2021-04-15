@@ -67,6 +67,7 @@ import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
 import ShareUserModel from './ShareUserModel';
+import KeyValueModel from './KeyValueModel';
 import JoplinFileContentModel from '../apps/joplin/JoplinFileContentModel';
 
 export class Models {
@@ -121,6 +122,10 @@ export class Models {
 
 	public shareUser(options: ModelOptions = null) {
 		return new ShareUserModel(this.db_, newModelFactory, this.baseUrl_, options);
+	}
+
+	public keyValue(options: ModelOptions = null) {
+		return new KeyValueModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public joplinFileContent(options: ModelOptions = null) {

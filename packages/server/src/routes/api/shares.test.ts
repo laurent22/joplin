@@ -1,6 +1,6 @@
 import { ChangeType, File, Share, ShareType, ShareUser } from '../../db';
 import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync, createNote, createFolder, updateItem } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync, createNote, createFolder, updateItem, createItemTree } from '../../utils/testing/testUtils';
 import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedFiles } from '../../models/FileModel';
 import { PaginatedChangesOld } from '../../models/ChangeModel';
@@ -8,6 +8,7 @@ import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorBadRequest } from '../../utils/errors';
 import { serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/joplinUtils';
+import { PaginatedItems } from '../../models/ItemModel';
 
 describe('api_shares', function() {
 
@@ -105,13 +106,87 @@ describe('api_shares', function() {
 		}
 	});
 
+	test('should share a folder and all its children', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const tree: any = {
+			'000000000000000000000000000000F1': {},
+			'000000000000000000000000000000F2': {
+				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
+			},
+			'000000000000000000000000000000F3': {
+				'00000000000000000000000000000003': null,
+				'000000000000000000000000000000F4': {
+					'00000000000000000000000000000004': null,
+					'00000000000000000000000000000005': null,
+				},
+			},
+			'00000000000000000000000000000006': null,
+			'00000000000000000000000000000007': null,
+		};
+
+		const itemModel = models().item({ userId: user1.id });
+
+		await createItemTree(itemModel, '', tree);
+
+		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F3');
+
+		const childrenBefore = await getApi<PaginatedItems>(session2.id, 'items/root/children');
+		expect(childrenBefore.items.length).toBe(0);
+
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+		const childrenAfter = await getApi<PaginatedItems>(session2.id, 'items/root/children');
+		expect(childrenAfter.items.length).toBe(5);
+
+		const expectedNames = [
+			'000000000000000000000000000000F3.md',
+			'00000000000000000000000000000003.md',
+			'000000000000000000000000000000F4.md',
+			'00000000000000000000000000000004.md',
+			'00000000000000000000000000000005.md',
+		];
+
+		expect(childrenAfter.items.map(i => i.name).sort().join(',')).toBe(expectedNames.sort().join(','));
+	});
+
+	test('should share when a note that is added to a shared folder', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const tree: any = {
+			'000000000000000000000000000000F2': {
+				'00000000000000000000000000000001': null,
+			},
+		};
+
+		const itemModel = models().item({ userId: user1.id });
+
+		await createItemTree(itemModel, '', tree);
+
+		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F2');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+		
+		await createNote(session1.id, {
+			id: '00000000000000000000000000000002',
+			parent_id: '000000000000000000000000000000F2',
+		});
+
+		await models().share().updateSharedItems();
+
+		const newChildren = await models().item({ userId: user2.id }).children();
+		expect(newChildren.items.length).toBe(3);
+		expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000002.md')).toBe(true);
+	});
+
 	test('should not share an already shared file', async function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3, session: session3 } = await createUserAndSession(3);
 
 		const sharedItem = await shareWithUserAndAccept(session1.id, session2.id, user2);
-		const error = await checkThrowAsync(async () => shareWithUserAndAccept(session2.id, session3.id, user3, sharedItem));
+		const error = await checkThrowAsync(async () => shareWithUserAndAccept(session2.id, session3.id, user3, ShareType.App, sharedItem));
 		expect(error.httpCode).toBe(ErrorBadRequest.httpCode);
 	});
 

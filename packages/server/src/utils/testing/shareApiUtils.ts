@@ -12,12 +12,13 @@ import { checkContextError, createFile, createItem, koaAppContext, models } from
 // - User 2 accepts the share
 //
 // The result is that user 2 will have a file linked to user 1's file.
-export async function shareWithUserAndAccept(sharerSessionId:string, shareeSessionId:string, sharee:User, item:Item = null):Promise<Item> {
+export async function shareWithUserAndAccept(sharerSessionId:string, shareeSessionId:string, sharee:User, shareType:ShareType = ShareType.App, item:Item = null):Promise<Item> {
 	item = item || await createItem(sharerSessionId, 'root:/test.txt:', 'testing share');
 
 	const share = await postApi<Share>(sharerSessionId, 'shares', {
-		type: ShareType.App,
-		item_id: item.id,
+		type: shareType,
+		item_id: shareType === ShareType.App ? item.id : undefined,
+		folder_id: shareType === ShareType.JoplinRootFolder ? item.jop_id : undefined,
 	});
 
 	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {

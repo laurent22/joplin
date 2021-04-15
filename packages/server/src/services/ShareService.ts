@@ -16,6 +16,19 @@ export default class ShareService {
 		return this.models_;
 	}
 
+	// public async updateSharedItems() {
+	// 	while (true) {
+	// 		const latestProcessedChange = await this.models.keyValue().value<string>('ShareService::latestProcessedChange');
+
+	// 		const changes = await this.models.change().allFromId(latestProcessedChange || '');
+	// 		if (!changes.length) break;
+
+	// 		for (const change of changes) {
+
+	// 		}
+	// 	}
+	// }
+
 	// public async processUserAutoShare(userId:Uuid) {
 	// 	const shares = await this.models.share().sharesByUser(userId, ShareType.JoplinApp);
 	// 	console.info(shares);

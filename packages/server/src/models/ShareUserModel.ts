@@ -29,6 +29,10 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		this.shareAcceptedHandlers_.push(handler);
 	}
 
+	public async byShareId(shareId: Uuid): Promise<ShareUser[]> {
+		return this.db(this.tableName).select(this.defaultFields).where('share_id', '=', shareId);
+	}
+
 	public async byShareIds(shareIds: Uuid[]): Promise<Record<Uuid, ShareUser[]>> {
 		const rows: ShareUser[] = await this.db(this.tableName).select(this.defaultFields).whereIn('share_id', shareIds);
 		const output: Record<Uuid, ShareUser[]> = {};

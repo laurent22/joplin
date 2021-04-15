@@ -154,6 +154,19 @@ function isNoSuchTableError(error: any): boolean {
 	return false;
 }
 
+export function isUniqueConstraintError(error:any):boolean {
+	if (error) {
+		// Postgres error: 23505: unique_violation
+		if (error.code === '23505') return true;
+
+		// Sqlite3 error
+		if (error.code === 'SQLITE_CONSTRAINT' && error.message.includes('UNIQUE constraint')) return true;
+	}
+
+	return false;
+}
+}
+
 export async function latestMigration(db: DbConnection): Promise<any> {
 	try {
 		const result = await db('knex_migrations').select('name').orderBy('id', 'asc').first();
@@ -354,6 +367,13 @@ export interface UserItem extends WithDates {
 	item_id?: Uuid;
 }
 
+export interface KeyValue {
+	id?: number;
+	key?: string;
+	type?: number;
+	value?: string;
+}
+
 export const databaseSchema: DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -476,6 +496,12 @@ export const databaseSchema: DatabaseTables = {
 		item_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+	},
+	key_values: {
+		id: { type: 'number' },
+		key: { type: 'string' },
+		type: { type: 'number' },
+		value: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

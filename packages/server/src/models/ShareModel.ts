@@ -1,4 +1,4 @@
-import { File, JoplinFileContent, Share, ShareType, ShareUser, Uuid } from '../db';
+import { Change, ChangeType, File, isUniqueConstraintError, Item, JoplinFileContent, Share, ShareType, ShareUser, Uuid } from '../db';
 import { ErrorBadRequest } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { ValidateOptions } from './BaseModel';
@@ -28,13 +28,17 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.save(toSave);
 	}
 
-	public async itemIsShared(shareType:ShareType, itemId:string):Promise<boolean> {
-		const r = await this
+	public async itemShare(shareType:ShareType, itemId:string):Promise<Share> {
+		return this
 			.db(this.tableName)
-			.select('id')
+			.select(this.defaultFields)
 			.where('item_id', '=', itemId)
 			.where('type', '=', shareType)
 			.first();
+	}
+
+	public async itemIsShared(shareType:ShareType, itemId:string):Promise<boolean> {
+		const r = await this.itemShare(shareType, itemId);
 		return !!r;
 	}
 
@@ -62,6 +66,47 @@ export default class ShareModel extends BaseModel<Share> {
 			.select(this.defaultFields)
 			.where('owner_id', '=', userId)
 			.andWhere('type', '=', type);
+	}
+
+	public async updateSharedItems() {
+
+		const handleCreatedItem = async (change:Change, item:Item) => {
+			if (!item.jop_parent_id) return;
+			const shareInfo = await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id);
+			if (!shareInfo) return;
+			const shareUsers = await this.models().shareUser().byShareId(shareInfo.share.id);
+
+			for (const shareUser of shareUsers) {
+				try {
+					await this.models().userItem({ userId: shareInfo.share.owner_id }).add(shareUser.user_id, item.id);
+				} catch (error) {
+					if (isUniqueConstraintError(error)) {
+						// Ignore - it means this user already has this item
+					} else {
+						throw error;
+					}
+				}
+			}
+		}
+
+		while (true) {
+			const latestProcessedChange = await this.models().keyValue().value<string>('ShareService::latestProcessedChange');
+
+			const changes = await this.models().change().allFromId(latestProcessedChange || '');
+			if (!changes.length) break;
+
+			const items = await this.models().item().loadByIds(changes.map(c => c.item_id));
+
+			await this.withTransaction(async () => {
+				for (const change of changes) {
+					if (change.type === ChangeType.Create) {
+						await handleCreatedItem(change, items.find(i => i.id === change.item_id));
+					}
+				}
+
+				await this.models().keyValue().setValue('ShareService::latestProcessedChange', changes[changes.length - 1].id);
+			});
+		}
 	}
 
 	public async updateSharedJoplinFolderChildren(userId: Uuid) {

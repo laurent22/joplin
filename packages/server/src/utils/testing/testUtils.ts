@@ -16,6 +16,8 @@ import setupAppContext from '../setupAppContext';
 import { ApiError } from '../errors';
 import { putApi } from './apiUtils';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import ItemModel from '../../models/ItemModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -236,6 +238,22 @@ export async function createFileTree(fileModel: FileModel, parentId: string, tre
 		});
 
 		if (isDir && Object.keys(children).length) await createFileTree(fileModel, newFile.id, children);
+	}
+}
+
+export async function createItemTree(itemModel: ItemModel, parentFolderId: string, tree: any): Promise<void> {
+	for (const jopId in tree) {
+		const children: any = tree[jopId];
+		const isFolder = children !== null;
+
+		const newItem: Item = await itemModel.save({
+			jop_parent_id: parentFolderId,
+			jop_id: jopId,
+			jop_type: isFolder ? ModelType.Folder : ModelType.Note,
+			name: jopId + '.md',
+		});
+
+		if (isFolder && Object.keys(children).length) await createItemTree(itemModel, newItem.jop_id, children);
 	}
 }
 

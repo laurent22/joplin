@@ -49,6 +49,21 @@ export async function up(db: DbConnection): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
+	await db.schema.alterTable('user_items', function(table: Knex.CreateTableBuilder) {
+		table.unique(['user_id', 'item_id']);
+	});
+
+	await db.schema.createTable('key_values', function(table: Knex.CreateTableBuilder) {
+		table.increments('id').unique().primary().notNullable();
+		table.text('key').notNullable();
+		table.integer('type').notNullable();
+		table.text('value').notNullable();
+	});
+
+	await db.schema.alterTable('key_values', function(table: Knex.CreateTableBuilder) {
+		table.index(['key']);
+	});
+
 	// TODO: add indexes
 
 	// TODO: add owner_id/name constraint - only one name per owner
