@@ -6,6 +6,7 @@ const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
+import { processPastedHtml } from './resourceHandling';
 const fs = require('fs-extra');
 const { clipboard } = require('electron');
 const { toSystemSlashes } = require('@joplin/lib/path-utils');
@@ -112,7 +113,12 @@ export function menuItems(): ContextMenuItems {
 		paste: {
 			label: _('Paste'),
 			onAction: async (options: ContextMenuOptions) => {
-				const content = clipboard.readHTML() ? clipboard.readHTML() : clipboard.readText();
+				let content = clipboard.readHTML() ? clipboard.readHTML() : clipboard.readText();
+
+				if (clipboard.readHTML()) {
+					content = await processPastedHtml(clipboard.readHTML());
+				}
+
 				options.insertContent(content);
 			},
 			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),

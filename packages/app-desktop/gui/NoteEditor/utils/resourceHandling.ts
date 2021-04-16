@@ -6,6 +6,7 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('electron').remote.require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
+import htmlUtils from '@joplin/lib/htmlUtils';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -124,4 +125,18 @@ export async function handlePasteEvent(event: any) {
 		}
 	}
 	return output;
+}
+
+export async function processPastedHtml(html: string) {
+	return await htmlUtils.replaceImageUrlsAsync(html, async (imageSrc: string) => {
+		if (imageSrc.startsWith('file')) {
+			const createdResource = await shim.createResourceFromPath(imageSrc.substr(7));
+			return `file://${Resource.fullPath(createdResource)}`;
+		} else {
+			const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}`;
+			await shim.fetchBlob(imageSrc, { path: filePath });
+			const createdResource = await shim.createResourceFromPath(filePath);
+			return `file://${Resource.fullPath(createdResource)}`;
+		}
+	});
 }

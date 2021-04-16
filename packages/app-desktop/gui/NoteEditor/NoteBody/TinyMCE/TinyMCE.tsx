@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
-import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
+import { resourcesStatus, commandAttachFileToBody, handlePasteEvent, processPastedHtml } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -1032,6 +1032,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					// HACK: TinyMCE doesn't add an undo step when pasting, for unclear reasons
 					// so we manually add it here. We also can't do it immediately it seems, or
 					// else nothing is added to the stack, so do it on the next frame.
+
+					const pastedHtml = clipboard.readHTML();
+					if (pastedHtml) {
+						event.preventDefault();
+						const modifiedHtml = await processPastedHtml(pastedHtml);
+						editor.insertContent(modifiedHtml);
+					}
+
 					window.requestAnimationFrame(() => editor.undoManager.add());
 					onChangeHandler();
 				}
