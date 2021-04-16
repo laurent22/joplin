@@ -1,4 +1,4 @@
-import BaseModel, { SaveOptions, LoadOptions } from './BaseModel';
+import BaseModel, { SaveOptions, LoadOptions, DeleteOptions } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
@@ -16,8 +16,8 @@ export interface PaginatedItems extends PaginatedResults {
 }
 
 export interface SharedRootInfo {
-	item: Item,
-	share: Share,
+	item: Item;
+	share: Share;
 }
 
 export default class ItemModel extends BaseModel<Item> {
@@ -71,7 +71,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public async loadByJopId(jopId: string, options:LoadOptions = {}):Promise<Item> {
+	public async loadByJopId(jopId: string, options: LoadOptions = {}): Promise<Item> {
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
@@ -83,7 +83,7 @@ export default class ItemModel extends BaseModel<Item> {
 		// return this.db(this.tableName).select(this.selectFields(options)).where('owner_id', '=', this.userId).where('jop_id', '=', jopId).first();
 	}
 
-	public async loadByName(name: string, options:LoadOptions = {}): Promise<Item> {
+	public async loadByName(name: string, options: LoadOptions = {}): Promise<Item> {
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
@@ -93,7 +93,7 @@ export default class ItemModel extends BaseModel<Item> {
 			.first();
 	}
 
-	public async loadWithContent(id: Uuid, options:LoadOptions = {}): Promise<Item> {
+	public async loadWithContent(id: Uuid, options: LoadOptions = {}): Promise<Item> {
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
@@ -117,10 +117,10 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	public async folderChildrenItemIds(folderId:string):Promise<Uuid[]> {
-		let output:Uuid[] = [];
+	public async folderChildrenItemIds(folderId: string): Promise<Uuid[]> {
+		let output: Uuid[] = [];
 
-		const rows:Item[] = await this
+		const rows: Item[] = await this
 			.db(this.tableName)
 			.where('jop_parent_id', '=', folderId)
 			.where('owner_id', '=', this.userId)
@@ -138,13 +138,13 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	public async shareJoplinFolderAndContent(withUserId:Uuid, folderId:string) {
+	public async shareJoplinFolderAndContent(shareId: Uuid, withUserId: Uuid, folderId: string) {
 		const folderItem = await this.loadByJopId(folderId, { fields: ['id'] });
-		if (!folderItem) throw new ErrorNotFound('No such folder: ' + folderId);
+		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
 		const itemIds = [folderItem.id].concat(await this.folderChildrenItemIds(folderId));
 
-		const alreadySharedItemIds:string[] = await this
+		const alreadySharedItemIds: string[] = await this
 			.db('user_items')
 			.pluck('item_id')
 			.whereIn('item_id', itemIds)
@@ -153,7 +153,7 @@ export default class ItemModel extends BaseModel<Item> {
 		await this.withTransaction(async () => {
 			for (const itemId of itemIds) {
 				if (alreadySharedItemIds.includes(itemId)) continue;
-				await this.models().userItem({ userId: withUserId }).add(withUserId, itemId);
+				await this.models().userItem({ userId: withUserId }).add(withUserId, itemId, shareId);
 			}
 		});
 	}
@@ -224,7 +224,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return paginateDbQuery(query, pagination, 'items');
 	}
 
-	private async joplinItemPath(jopId:string):Promise<Item[]> {
+	private async joplinItemPath(jopId: string): Promise<Item[]> {
 		// Use Recursive Common Table Expression to find path to given item
 		// https://www.sqlite.org/lang_with.html#recursivecte
 
@@ -232,30 +232,28 @@ export default class ItemModel extends BaseModel<Item> {
 		//     select id, jop_id, jop_parent_id from items where jop_id = '000000000000000000000000000000F1'
 		//     union
 		//     select items.id, items.jop_id, items.jop_parent_id
-		//     from items join paths where items.jop_id = paths.jop_parent_id 
+		//     from items join paths where items.jop_id = paths.jop_parent_id
 		// )
 		// select id, jop_id, jop_parent_id from paths;
 
-		const query = this.db.withRecursive('paths', (qb:Knex.QueryBuilder) => {
-			qb.select('id', 'jop_id', 'jop_parent_id')
+		return this.db.withRecursive('paths', (qb: Knex.QueryBuilder) => {
+			void qb.select('id', 'jop_id', 'jop_parent_id')
 				.from('items')
 				.where('jop_id', '=', jopId)
-			
-			.union((qb:Knex.QueryBuilder) => {
-				qb.select('items.id', 'items.jop_id', 'items.jop_parent_id')
-					.from('items')
-					.join('paths', 'items.jop_id', 'paths.jop_parent_id')
-			});
-		}).select('id', 'jop_id', 'jop_parent_id').from('paths');
 
-		return query;
+				.union((qb: Knex.QueryBuilder) => {
+					qb.select('items.id', 'items.jop_id', 'items.jop_parent_id')
+						.from('items')
+						.join('paths', 'items.jop_id', 'paths.jop_parent_id');
+				});
+		}).select('id', 'jop_id', 'jop_parent_id').from('paths');
 	}
 
 	// If the note or folder is within a shared folder, this function returns
 	// that shared folder. It returns null otherwise.
-	public async joplinItemSharedRootInfo(jopId:string):Promise<SharedRootInfo | null> {
+	public async joplinItemSharedRootInfo(jopId: string): Promise<SharedRootInfo | null> {
 		const path = await this.joplinItemPath(jopId);
-		if (!path.length) throw new Error('Cannot retrieve path for item: ' + jopId);
+		if (!path.length) throw new Error(`Cannot retrieve path for item: ${jopId}`);
 		const rootFolderItem = path[path.length - 1];
 		const share = await this.models().share().itemShare(ShareType.JoplinRootFolder, rootFolderItem.id);
 		if (!share) return null;
@@ -263,7 +261,19 @@ export default class ItemModel extends BaseModel<Item> {
 		return {
 			item: await this.load(rootFolderItem.id),
 			share,
-		}
+		};
+	}
+
+	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
+		const ids = typeof id === 'string' ? [id] : id;
+
+		const shares = await this.models().share().byItemIds(ids);
+
+		await this.withTransaction(async () => {
+			await this.models().share().delete(shares.map(s => s.id));
+			await this.models().userItem().deleteByItemIds(ids);
+			await super.delete(ids, options);
+		}, 'ItemModel::delete');
 	}
 
 	public async save(item: Item, options: SaveOptions = {}): Promise<Item> {
@@ -274,19 +284,12 @@ export default class ItemModel extends BaseModel<Item> {
 			item.content_size = item.content.byteLength;
 		}
 
-		let previousItem:Item = null;
+		let previousItem: Item = null;
 
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
 
 			item.owner_id = this.userId;
-
-			// if (item.jop_parent_id) {
-			// 	const rootIsShared = await this.joplinRootFolderIsShared(item.jop_parent_id);
-			// 	// Get all share_users associated with root ID
-			// 	// Create new user_items for each user
-			// 	// Do it by processing Change table
-			// }
 		} else {
 			previousItem = await this.load(item.id, { fields: ['jop_parent_id'] });
 		}

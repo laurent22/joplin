@@ -16,7 +16,7 @@ describe('KeyValueModel', function() {
 
 	test('should set and get value', async function() {
 		const m = models().keyValue();
-		
+
 		await m.setValue('testing1', 'something');
 		await m.setValue('testing2', 1234);
 
@@ -29,10 +29,10 @@ describe('KeyValueModel', function() {
 
 	test('should delete value', async function() {
 		const m = models().keyValue();
-		
+
 		await m.setValue('testing1', 'something');
 		await m.deleteValue('testing1');
-		
+
 		expect(await m.value('testing1')).toBe(null);
 	});
 

@@ -87,7 +87,7 @@ describe('api_shares', function() {
 		expect(results.items.length).toBe(1);
 		expect(results.items[0].name).toBe(folderItem.name);
 
-		const itemContent = await getApi<Buffer>(session2.id, 'items/root:/' + folderItem.name + ':/content');
+		const itemContent = await getApi<Buffer>(session2.id, `items/root:/${folderItem.name}:/content`);
 		expect(itemContent.toString().includes('created by sharer')).toBe(true);
 
 		// ----------------------------------------------------------------
@@ -96,12 +96,12 @@ describe('api_shares', function() {
 		{
 			const folder = await unserializeJoplinItem(itemContent.toString());
 			folder.title = 'modified by recipient';
-			await updateItem(session2.id, 'root:/' + folderItem.name + ':', await serializeJoplinItem(folder));
+			await updateItem(session2.id, `root:/${folderItem.name}:`, await serializeJoplinItem(folder));
 
 			// Double check that it didn't create a new item instead of updating it
 			expect((await models().item().all()).length).toBe(1);
 
-			const modContent = await getApi<Buffer>(session1.id, 'items/root:/' + folderItem.name + ':/content');
+			const modContent = await getApi<Buffer>(session1.id, `items/root:/${folderItem.name}:/content`);
 			expect(modContent.toString().includes('modified by recipient')).toBe(true);
 		}
 	});
@@ -167,7 +167,7 @@ describe('api_shares', function() {
 
 		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F2');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
-		
+
 		await createNote(session1.id, {
 			id: '00000000000000000000000000000002',
 			parent_id: '000000000000000000000000000000F2',
@@ -203,11 +203,11 @@ describe('api_shares', function() {
 
 		const folderItem5 = await itemModel.loadByJopId('000000000000000000000000000000F5');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem5);
-		
+
 		await models().share().updateSharedItems();
 
 		const noteItem = await itemModel.loadByJopId('00000000000000000000000000000001');
-		
+
 		// Note is moved to another folder, but still within shared folder
 
 		{
@@ -281,6 +281,111 @@ describe('api_shares', function() {
 			expect(newChildren.items.length).toBe(4);
 			expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(true);
 		}
+	});
+
+	test('should unshare a deleted item', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const tree: any = {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		};
+
+		const itemModel = models().item({ userId: user1.id });
+
+		await createItemTree(itemModel, '', tree);
+
+		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F1');
+
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+
+		const itemModel2 = models().item({ userId: user2.id });
+		expect((await itemModel2.children()).items.length).toBe(2);
+
+		const noteModel = await itemModel.loadByJopId('00000000000000000000000000000001');
+
+		await itemModel.delete(noteModel.id);
+
+		expect((await itemModel2.children()).items.length).toBe(1);
+
+		// expect((await models().share().all()).length).toBe(1);
+
+		// await itemModel.delete(folderItem.id);
+
+		// expect((await models().share().all()).length).toBe(0);
+
+		// Check that Share object is deleted
+		// Check that userShare are deleted
+		// Check that children gives right number
+
+
+	});
+
+	test('should unshare a deleted shared root folder', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const tree: any = {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		};
+
+		const itemModel = models().item({ userId: user1.id });
+
+		await createItemTree(itemModel, '', tree);
+
+		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F1');
+
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+
+		await itemModel.delete(folderItem.id);
+
+		// Once the root folder has been deleted, it is unshared, so the
+		// recipient user should no longer see any item
+		const itemModel2 = models().item({ userId: user2.id });
+		expect((await itemModel2.children()).items.length).toBe(0);
+
+		// Even though the root folder has been deleted, its children have not
+		// been (they are deleted by the client), so the owner should still see
+		// one child.
+		expect((await itemModel.children()).items.length).toBe(1);
+
+		// Also check that Share and UserShare objects are deleted
+		expect((await models().share().all()).length).toBe(0);
+		expect((await models().shareUser().all()).length).toBe(0);
+
+		// Test deleting the share, but not the root folder
+	});
+
+	test('should unshare when the share object is deleted', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const tree: any = {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		};
+
+		const itemModel1 = models().item({ userId: user1.id });
+		const itemModel2 = models().item({ userId: user2.id });
+
+		await createItemTree(itemModel1, '', tree);
+
+		const folderItem = await itemModel1.loadByJopId('000000000000000000000000000000F1');
+
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+
+		expect((await itemModel2.children()).items.length).toBe(2);
+
+		const share = (await models().share({ userId: user1.id }).all())[0];
+		await models().share({ userId: user1.id }).delete(share.id);
+
+		expect((await itemModel1.children()).items.length).toBe(2);
+		expect((await itemModel2.children()).items.length).toBe(0);
 	});
 
 	test('should not share an already shared file', async function() {

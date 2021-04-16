@@ -154,7 +154,7 @@ function isNoSuchTableError(error: any): boolean {
 	return false;
 }
 
-export function isUniqueConstraintError(error:any):boolean {
+export function isUniqueConstraintError(error: any): boolean {
 	if (error) {
 		// Postgres error: 23505: unique_violation
 		if (error.code === '23505') return true;
@@ -164,7 +164,6 @@ export function isUniqueConstraintError(error:any):boolean {
 	}
 
 	return false;
-}
 }
 
 export async function latestMigration(db: DbConnection): Promise<any> {
@@ -366,6 +365,7 @@ export interface UserItem extends WithDates {
 	id?: number;
 	user_id?: Uuid;
 	item_id?: Uuid;
+	share_id?: Uuid;
 }
 
 export interface KeyValue {
@@ -496,6 +496,7 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'number' },
 		user_id: { type: 'string' },
 		item_id: { type: 'string' },
+		share_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

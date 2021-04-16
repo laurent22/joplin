@@ -250,7 +250,7 @@ export async function createItemTree(itemModel: ItemModel, parentFolderId: strin
 			jop_parent_id: parentFolderId,
 			jop_id: jopId,
 			jop_type: isFolder ? ModelType.Folder : ModelType.Note,
-			name: jopId + '.md',
+			name: `${jopId}.md`,
 		});
 
 		if (isFolder && Object.keys(children).length) await createItemTree(itemModel, newItem.jop_id, children);
@@ -286,7 +286,7 @@ export async function updateItem(sessionId: string, path: string, content: strin
 	return models().item().load(item.id);
 }
 
-export async function createNote(sessionId:string, note:NoteEntity):Promise<Item> {
+export async function createNote(sessionId: string, note: NoteEntity): Promise<Item> {
 	note = {
 		id: '00000000000000000000000000000001',
 		title: 'Note title',
@@ -297,7 +297,7 @@ export async function createNote(sessionId:string, note:NoteEntity):Promise<Item
 	return createItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
 }
 
-export async function createFolder(sessionId:string, folder:NoteEntity):Promise<Item> {
+export async function createFolder(sessionId: string, folder: NoteEntity): Promise<Item> {
 	folder = {
 		id: '000000000000000000000000000000F1',
 		title: 'Folder title',

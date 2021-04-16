@@ -15,7 +15,7 @@ export interface SaveOptions {
 	skipValidation?: boolean;
 	validationRules?: any;
 	trackChanges?: boolean;
-	previousItem?: any,
+	previousItem?: any;
 }
 
 export interface LoadOptions {
@@ -87,8 +87,8 @@ export default abstract class BaseModel<T> {
 		return this.defaultFields_.slice();
 	}
 
-	protected selectFields(options:LoadOptions, defaultFields:string[] = null, mainTable:string = ''):string[] {
-		let output:string[] = [];
+	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = ''): string[] {
+		let output: string[] = [];
 		if (options && options.fields) {
 			output = options.fields;
 		} else if (defaultFields) {
@@ -98,7 +98,7 @@ export default abstract class BaseModel<T> {
 		}
 
 		if (mainTable) {
-			output = output.map(f => mainTable + '.' + f);
+			output = output.map(f => `${mainTable}.${f}`);
 		}
 
 		return output;

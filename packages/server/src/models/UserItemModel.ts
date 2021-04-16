@@ -11,20 +11,11 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return false;
 	}
 
-	private async userHasItem(userId:Uuid, itemId:Uuid):Promise<boolean> {
-		const r = await this
-			.db(this.tableName)
-			.select('id')
-			.where('user_id', '=', userId)
-			.where('item_id', '=', itemId)
-			.first();
-		return !!r;
-	}
-
-	public async add(userId: Uuid, itemId: Uuid): Promise<UserItem> {
+	public async add(userId: Uuid, itemId: Uuid, shareId: Uuid = ''): Promise<UserItem> {
 		return this.save({
 			user_id: userId,
 			item_id: itemId,
+			share_id: shareId,
 		});
 	}
 
@@ -34,6 +25,14 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			.where('user_id', '=', userId)
 			.where('item_id', '=', itemId)
 			.del();
+	}
+
+	public async deleteByItemIds(itemIds: Uuid[]): Promise<void> {
+		await this.db(this.tableName).whereIn('item_id', itemIds).delete();
+	}
+
+	public async deleteByShareId(shareId: Uuid): Promise<void> {
+		await this.db(this.tableName).where('share_id', '=', shareId).delete();
 	}
 
 }

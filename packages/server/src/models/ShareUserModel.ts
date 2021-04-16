@@ -96,12 +96,6 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		});
 	}
 
-	private static async processShareAcceptedHandlers(event: ShareAcceptedHandlerEvent) {
-		for (const handler of this.shareAcceptedHandlers_) {
-			await handler(event);
-		}
-	}
-
 	public async accept(shareId: Uuid, userId: Uuid, accept: boolean = true): Promise<File> {
 		const shareUser = await this.loadByShareIdAndUser(shareId, userId);
 		if (!shareUser) throw new ErrorNotFound(`File has not been shared with this user: ${shareId} / ${userId}`);
@@ -114,12 +108,20 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return this.withTransaction<File>(async () => {
 			await this.save({ ...shareUser, is_accepted: accept ? 1 : 0 });
 
-			await this.models().item({ userId: share.owner_id }).shareJoplinFolderAndContent(userId, item.jop_id);
+			await this.models().item({ userId: share.owner_id }).shareJoplinFolderAndContent(share.id, userId, item.jop_id);
 		});
 	}
 
 	public async reject(shareId: Uuid, userId: Uuid) {
 		await this.accept(shareId, userId, false);
+	}
+
+	public async deleteByShare(share: Share): Promise<void> {
+		const shareUsers = await this.byShareId(share.id);
+
+		await this.withTransaction(async () => {
+			await this.delete(shareUsers.map(s => s.id));
+		}, 'ShareUserModel::delete');
 	}
 
 	// Returns the users who have shared files with the current user
