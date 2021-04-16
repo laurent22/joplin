@@ -4,7 +4,7 @@ import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { File, JoplinFileContent, Share, Uuid } from '../../db';
+import { File, Item, JoplinFileContent, Share, Uuid } from '../../db';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupToHtml } from '@joplin/renderer';
 import Setting from '@joplin/lib/models/Setting';
@@ -13,6 +13,7 @@ import FileModel, { FileContent, FileWithContent, LoadContentHandlerEvent, SaveC
 import { ErrorNotFound } from '../../utils/errors';
 import BaseApplication from '../../services/BaseApplication';
 import { formatDateTime } from '../../utils/time';
+import ItemModel from '../../models/ItemModel';
 // import ShareUserModel, { ShareAcceptedHandlerEvent } from '../../models/ShareUserModel';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -140,17 +141,17 @@ export default class Application extends BaseApplication {
 		return output;
 	}
 
-	private async noteLinkedItemInfos(noteFileParentId: string, note: NoteEntity): Promise<LinkedItemInfos> {
-		const itemIds = await Note.linkedItemIds(note.body);
+	private async noteLinkedItemInfos(itemModel: ItemModel, note: NoteEntity): Promise<LinkedItemInfos> {
+		const jopIds = await Note.linkedItemIds(note.body);
 		const output: LinkedItemInfos = {};
 
-		for (const itemId of itemIds) {
-			const itemFileWithContent = await this.itemMetadataFile(noteFileParentId, itemId);
-			if (!itemFileWithContent) continue;
+		for (const jopId of jopIds) {
+			const item = await itemModel.loadByJopId(jopId, { fields: ['*'] });
+			if (!item) continue;
 
-			output[itemId] = {
-				item: await this.unserializeItem(itemFileWithContent.content),
-				file: itemFileWithContent.file,
+			output[jopId] = {
+				item: itemModel.itemToJoplinItem(item),
+				file: null,// itemFileWithContent.file,
 			};
 		}
 
@@ -179,11 +180,11 @@ export default class Application extends BaseApplication {
 		return fileModel.loadWithContent(output.id);
 	}
 
-	private async renderResource(file: File, content: FileContent): Promise<FileViewerResponse> {
+	private async renderResource(item: Item, content: FileContent): Promise<FileViewerResponse> {
 		return {
 			body: content,
-			mime: file.mime_type,
-			size: file.size,
+			mime: item.mime_type,
+			size: item.content_size,
 		};
 	}
 
@@ -247,37 +248,35 @@ export default class Application extends BaseApplication {
 		};
 	}
 
-	public async renderFile(fileWithContent: FileWithContent, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
-		const { file, content } = fileWithContent;
+	public async renderItem(item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
+		const itemModel = this.models.item({ userId: item.owner_id });
 
-		const fileModel = this.models.file({ userId: file.owner_id });
-
-		const rootNote: NoteEntity = await this.unserializeItem(content);
-		const linkedItemInfos = await this.noteLinkedItemInfos(file.parent_id, rootNote);
+		const rootNote: NoteEntity = itemModel.itemToJoplinItem(item); // await this.unserializeItem(content);
+		const linkedItemInfos: LinkedItemInfos = await this.noteLinkedItemInfos(itemModel, rootNote);
 		const resourceInfos = await this.resourceInfos(linkedItemInfos);
 
 		const fileToRender = {
-			file: file,
+			item: item,
 			content: null as any,
 			itemId: rootNote.id,
 		};
 
 		if (query.resource_id) {
-			const withContent = await this.itemFile(fileModel, file.parent_id, ModelType.Resource, query.resource_id);
-			fileToRender.file = withContent.file;
-			fileToRender.content = withContent.content;
+			const resourceItem = await itemModel.loadByName(`.resource/${query.resource_id}`, { fields: ['*'] });
+			fileToRender.item = resourceItem;
+			fileToRender.content = resourceItem.content;
 			fileToRender.itemId = query.resource_id;
 		}
 
-		if (fileToRender.file !== file && !linkedItemInfos[fileToRender.itemId]) {
+		if (fileToRender.item !== item && !linkedItemInfos[fileToRender.itemId]) {
 			throw new ErrorNotFound(`Item "${fileToRender.itemId}" does not belong to this note`);
 		}
 
-		const itemToRender = fileToRender.file === file ? rootNote : linkedItemInfos[fileToRender.itemId].item;
+		const itemToRender = fileToRender.item === item ? rootNote : linkedItemInfos[fileToRender.itemId].item;
 		const itemType: ModelType = itemToRender.type_;
 
 		if (itemType === ModelType.Resource) {
-			return this.renderResource(fileToRender.file, fileToRender.content);
+			return this.renderResource(fileToRender.item, fileToRender.content);
 		} else if (itemType === ModelType.Note) {
 			return this.renderNote(share, itemToRender, resourceInfos, linkedItemInfos);
 		} else {

@@ -160,6 +160,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public itemToJoplinItem(itemRow: Item): any {
 		if (itemRow.jop_type <= 0) throw new Error(`Not a Joplin item: ${itemRow.id}`);
+		if (!itemRow.content) throw new Error('Item content is missing');
 		const item = JSON.parse(itemRow.content.toString());
 
 		item.id = itemRow.jop_id;
@@ -198,6 +199,8 @@ export default class ItemModel extends BaseModel<Item> {
 			delete joplinItem.encryption_applied;
 
 			item.content = Buffer.from(JSON.stringify(joplinItem));
+		} else {
+			item.content = buffer;
 		}
 
 		if (existingItem) item.id = existingItem.id;

@@ -39,10 +39,14 @@ export async function tempDir(): Promise<string> {
 	return tempDir_;
 }
 
-export async function makeTempFileWithContent(content: string): Promise<string> {
+export async function makeTempFileWithContent(content: string | Buffer): Promise<string> {
 	const d = await tempDir();
 	const filePath = `${d}/${randomHash()}`;
-	await fs.writeFile(filePath, content, 'utf8');
+	if (typeof content === 'string') {
+		await fs.writeFile(filePath, content, 'utf8');
+	} else {
+		await fs.writeFile(filePath, content);
+	}
 	return filePath;
 }
 
@@ -251,7 +255,7 @@ export async function createItemTree(itemModel: ItemModel, parentFolderId: strin
 			jop_id: jopId,
 			jop_type: isFolder ? ModelType.Folder : ModelType.Note,
 			name: `${jopId}.md`,
-			content: Buffer.from('{"title":"Item ' + jopId + '"}'),
+			content: Buffer.from(`{"title":"Item ${jopId}"}`),
 		});
 
 		if (isFolder && Object.keys(children).length) await createItemTree(itemModel, newItem.jop_id, children);
@@ -273,7 +277,7 @@ export async function createFile2(sessionId: string, path: string, content: stri
 	return file;
 }
 
-export async function createItem(sessionId: string, path: string, content: string): Promise<Item> {
+export async function createItem(sessionId: string, path: string, content: string | Buffer): Promise<Item> {
 	const tempFilePath = await makeTempFileWithContent(content);
 	const item: Item = await putApi(sessionId, `items/${path}/content`, null, { filePath: tempFilePath });
 	await fs.remove(tempFilePath);

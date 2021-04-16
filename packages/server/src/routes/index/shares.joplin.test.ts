@@ -1,40 +1,8 @@
-import { NoteEntity } from '@joplin/lib/services/database/types';
-import { ShareType } from '../../db';
+import { Share, ShareType } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
-import { putFileContent, testFilePath, postDirectory } from '../../utils/testing/fileApiUtils';
-import { postShare } from '../../utils/testing/shareApiUtils';
-import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, createFile, koaAppContext, checkContextError, expectNotThrow } from '../../utils/testing/testUtils';
-
-function makeNoteSerializedBody(note: NoteEntity): string {
-	return `${'title' in note ? note.title : 'Title'}
-
-${'body' in note ? note.body : 'Body'}
-
-id: ${'id' in note ? note.id : 'b39dadd7a63742bebf3125fd2a9286d4'}
-parent_id: e98f305dde8b47b793f031cf883324ff
-created_time: 2020-10-15T10:34:16.044Z
-updated_time: 2021-01-28T23:10:30.054Z
-is_conflict: 0
-latitude: 0.00000000
-longitude: 0.00000000
-altitude: 0.0000
-author: 
-source_url: 
-is_todo: 1
-todo_due: 1602760405000
-todo_completed: 0
-source: joplindev-desktop
-source_application: net.cozic.joplindev-desktop
-application_data: 
-order: 0
-user_created_time: 2020-10-15T10:34:16.044Z
-user_updated_time: 2020-10-19T17:21:03.394Z
-encryption_cipher_text: 
-encryption_applied: 0
-markup_language: 1
-is_shared: 1
-type_: 1`;
-}
+import { postApi } from '../../utils/testing/apiUtils';
+import { testImageBuffer } from '../../utils/testing/fileApiUtils';
+import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem } from '../../utils/testing/testUtils';
 
 const resourceSize = 2720;
 
@@ -86,14 +54,17 @@ describe('shares.joplin', function() {
 	});
 
 	test('should display a simple note', async function() {
-		const { user, session } = await createUserAndSession();
+		const { session } = await createUserAndSession();
 
-		await createFile(user.id, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:', makeNoteSerializedBody({
+		const noteItem = await createNote(session.id, {
 			title: 'Testing title',
 			body: 'Testing body',
-		}));
+		});
 
-		const share = await postShare(session.id, ShareType.Link, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Link,
+			item_id: noteItem.id,
+		});
 
 		const bodyHtml = await getShareContent(share.id);
 
@@ -104,13 +75,16 @@ describe('shares.joplin', function() {
 	});
 
 	test('should load plugins', async function() {
-		const { user, session } = await createUserAndSession();
+		const { session } = await createUserAndSession();
 
-		await createFile(user.id, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:', makeNoteSerializedBody({
+		const noteItem = await createNote(session.id, {
 			body: '$\\sqrt{3x-1}+(1+x)^2$',
-		}));
+		});
 
-		const share = await postShare(session.id, ShareType.Link, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Link,
+			item_id: noteItem.id,
+		});
 
 		const bodyHtml = await getShareContent(share.id);
 
@@ -118,16 +92,20 @@ describe('shares.joplin', function() {
 	});
 
 	test('should render attached images', async function() {
-		const { user, session } = await createUserAndSession();
+		const { session } = await createUserAndSession();
 
-		await createFile(user.id, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:', makeNoteSerializedBody({
+		const noteItem = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
 			body: '![my image](:/96765a68655f4446b3dbad7d41b6566e)',
-		}));
-		await postDirectory(session.id, 'root', '.resource');
-		await putFileContent(session.id, 'root:/.resource/96765a68655f4446b3dbad7d41b6566e:', testFilePath());
-		await createFile(user.id, 'root:/96765a68655f4446b3dbad7d41b6566e.md:', resourceContents.image);
+		});
 
-		const share = await postShare(session.id, ShareType.Link, 'root:/b39dadd7a63742bebf3125fd2a9286d4.md:');
+		await createItem(session.id, 'root:/96765a68655f4446b3dbad7d41b6566e.md:', resourceContents.image);
+		await createItem(session.id, 'root:/.resource/96765a68655f4446b3dbad7d41b6566e:', await testImageBuffer());
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Link,
+			item_id: noteItem.id,
+		});
 
 		const bodyHtml = await getShareContent(share.id) as string;
 
@@ -139,8 +117,8 @@ describe('shares.joplin', function() {
 		const image = doc.querySelector('img[data-resource-id="96765a68655f4446b3dbad7d41b6566e"]');
 		expect(image.getAttribute('src')).toBe(`http://localhost:22300/shares/${share.id}?resource_id=96765a68655f4446b3dbad7d41b6566e&t=1602758278090`);
 
-		// If we try to get the resource, via the share link, we should get full
-		// image.
+		// If we try to get the resource, via the share link, we should get the
+		// full image.
 		const resourceContent = await getShareContent(share.id, {
 			resource_id: '96765a68655f4446b3dbad7d41b6566e',
 			t: '1602758278090',
@@ -150,25 +128,33 @@ describe('shares.joplin', function() {
 	});
 
 	test('should not throw an error if the note contains links to non-existing items', async function() {
-		const { user, session } = await createUserAndSession();
+		const { session } = await createUserAndSession();
 
 		{
-			const noteId = 'b39dadd7a63742bebf3125fd2a9286d4';
-			await createFile(user.id, `root:/${noteId}.md:`, makeNoteSerializedBody({
-				body: '![missing](:/531a2a839a2c493a88c45e39c6cb9ed4)',
-			}));
-			const share = await postShare(session.id, ShareType.Link, `root:/${noteId}.md:`);
+			const noteItem = await createNote(session.id, {
+				id: '00000000000000000000000000000001',
+				body: '![my image](:/96765a68655f4446b3dbad7d41b6566e)',
+			});
+
+			const share = await postApi<Share>(session.id, 'shares', {
+				type: ShareType.Link,
+				item_id: noteItem.id,
+			});
+
 			await expectNotThrow(async () => getShareContent(share.id));
 		}
 
 		{
-			const noteId = 'b39dadd7a63742bebf3125fd2a9286d5';
-			await createFile(user.id, `root:/${noteId}.md:`, makeNoteSerializedBody({
+			const noteItem = await createNote(session.id, {
+				id: '00000000000000000000000000000002',
 				body: '[missing too](:/531a2a839a2c493a88c45e39c6cb9ed4)',
-			}));
+			});
 
-			// Was commented out:
-			const share = await postShare(session.id, ShareType.Link, `root:/${noteId}.md:`);
+			const share = await postApi<Share>(session.id, 'shares', {
+				type: ShareType.Link,
+				item_id: noteItem.id,
+			});
+
 			await expectNotThrow(async () => getShareContent(share.id));
 		}
 	});

@@ -37,7 +37,7 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const shareModel = ctx.models.share();
 	const share = await shareModel.load(path.id);
-	if (!share) throw new ErrorNotFound();
+	if (!share || share.type !== ShareType.Link) throw new ErrorNotFound();
 	return shareModel.toApiOutput(share);
 });
 

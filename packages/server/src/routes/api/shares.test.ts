@@ -1,6 +1,6 @@
 import { ChangeType, File, Share, ShareType, ShareUser } from '../../db';
 import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem } from '../../utils/testing/testUtils';
 import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedFiles } from '../../models/FileModel';
 import { PaginatedChanges, PaginatedChangesOld } from '../../models/ChangeModel';
@@ -24,26 +24,6 @@ describe('api_shares', function() {
 	beforeEach(async () => {
 		await beforeEachDb();
 	});
-
-	// test('should share a file by link', async function() {
-	// 	const { session } = await createUserAndSession(1);
-	// 	const file = await putFileContent(session.id, 'root:/photo.jpg:', testFilePath());
-
-	// 	const context = await postApiC(session.id, 'shares', {
-	// 		type: ShareType.Link,
-	// 		file_id: 'root:/photo.jpg:',
-	// 	});
-
-	// 	expect(context.response.status).toBe(200);
-	// 	const shareId = context.response.body.id;
-
-	// 	{
-	// 		const context = await getApiC(session.id, `shares/${shareId}`);
-	// 		expect(context.response.body.id).toBe(shareId);
-	// 		expect(context.response.body.file_id).toBe(file.id);
-	// 		expect(context.response.body.type).toBe(ShareType.Link);
-	// 	}
-	// });
 
 	test('should share a folder with another user', async function() {
 		const { session: session1 } = await createUserAndSession(1);
@@ -394,8 +374,10 @@ describe('api_shares', function() {
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3, session: session3 } = await createUserAndSession(3);
 
-		const sharedItem = await shareWithUserAndAccept(session1.id, session2.id, user2);
-		const error = await checkThrowAsync(async () => shareWithUserAndAccept(session2.id, session3.id, user3, ShareType.App, sharedItem));
+		const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
+
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.App, item);
+		const error = await checkThrowAsync(async () => shareWithUserAndAccept(session2.id, session3.id, user3, ShareType.App, item));
 		expect(error.httpCode).toBe(ErrorBadRequest.httpCode);
 	});
 
@@ -421,11 +403,11 @@ describe('api_shares', function() {
 		{
 			const names = ['000000000000000000000000000000F1.md', '00000000000000000000000000000001.md'].sort();
 
-			const page1 = await getApi<PaginatedChanges>(session1.id, `items/root/delta`);
+			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta');
 			expect(page1.items.map(i => i.item_name).sort()).toEqual(names);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, `items/root/delta`);
+			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta');
 			expect(page2.items.map(i => i.item_name).sort()).toEqual(names);
 			cursor2 = page2.cursor;
 		}
@@ -435,7 +417,7 @@ describe('api_shares', function() {
 		// --------------------------------------------------------------------
 
 		const noteItem = await itemModel1.loadByJopId('00000000000000000000000000000001');
-		const note:NoteEntity = await itemModel1.loadAsJoplinItem(noteItem.id);
+		const note: NoteEntity = await itemModel1.loadAsJoplinItem(noteItem.id);
 		await msleep(1);
 		await updateItem(session1.id, 'root:/00000000000000000000000000000001.md:', makeNoteSerializedBody({
 			...note,
@@ -443,13 +425,13 @@ describe('api_shares', function() {
 		}));
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, `items/root/delta`, { query: { cursor: cursor1 } });
+			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page1.items[0].type).toBe(ChangeType.Update);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, `items/root/delta`, { query: { cursor: cursor2 } });
+			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page2.items[0].type).toBe(ChangeType.Update);
@@ -468,60 +450,18 @@ describe('api_shares', function() {
 		}));
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, `items/root/delta`, { query: { cursor: cursor1 } });
+			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page1.items[0].type).toBe(ChangeType.Update);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, `items/root/delta`, { query: { cursor: cursor2 } });
+			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page2.items[0].type).toBe(ChangeType.Update);
 			cursor2 = page2.cursor;
 		}
 	});
-
-	// test('should see delta changes when a third user joins in', async function() {
-	// 	// - User 1 shares a file with User 2
-	// 	// - User 2 syncs and get a new delta cursor C2
-	// 	// - User 3 shares a file with User 2
-	// 	// - User 2 syncs **starting from C2**
-	// 	// => The new changes from User 3 share should be visible
-
-	// 	const { user: user1, session: session1 } = await createUserAndSession(1);
-	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
-	// 	const { user: user3, session: session3 } = await createUserAndSession(3);
-
-	// 	const tree: any = {
-	// 		'000000000000000000000000000000F1': {
-	// 			'00000000000000000000000000000001': null,
-	// 		},
-	// 	};
-
-	// 	const itemModel1 = models().item({ userId: user1.id });
-
-	// 	await createItemTree(itemModel1, '', tree);
-	// 	const folderItem = await itemModel1.loadByJopId('000000000000000000000000000000F1');
-	// 	await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
-
-	// 	let cursor = null;
-
-	// 	{
-	// 		const page = await getApi<PaginatedChanges>(session2.id, `files/root/delta`);
-	// 		cursor = page.cursor;
-	// 	}
-
-	// 	const file3 = await createFile(user3.id, 'root:/test3.txt:', 'from user 3');
-	// 	const { shareeFile } = await shareWithUserAndAccept(session3.id, user3, session2.id, user2, file3);
-
-	// 	{
-	// 		const page = await getApi<PaginatedChanges>(session2.id, `files/root/delta`, { query: { cursor } });
-	// 		cursor = page.cursor;
-	// 		expect(page.items.length).toBe(1);
-	// 		expect(page.items[0].type).toBe(ChangeType.Create);
-	// 		expect(page.items[0].item.id).toBe(shareeFile.id);
-	// 	}
-	// });
 
 });

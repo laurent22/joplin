@@ -2,21 +2,20 @@ import { SubPath, ResponseType, Response } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
-import { Share } from '../../db';
+import { Item, Share } from '../../db';
 import { FileViewerResponse } from '../../apps/joplin/Application';
 import { FileWithContent } from '../../models/FileModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 
-async function renderFile(context: AppContext, fileWithContent: FileWithContent, share: Share): Promise<FileViewerResponse> {
-	if (await context.apps.joplin.fileToJoplinItem(fileWithContent)) {
-		return context.apps.joplin.renderFile(fileWithContent, share, context.query);
+async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
+	if (item.jop_type === ModelType.Note) {
+		return context.apps.joplin.renderItem(item, share, context.query);
 	}
 
-	const { file, content } = fileWithContent;
-
 	return {
-		body: content,
-		mime: file.mime_type,
-		size: file.size,
+		body: item.content,
+		mime: item.mime_type,
+		size: item.content_size,
 	};
 }
 
@@ -25,16 +24,17 @@ const router: Router = new Router();
 router.public = true;
 
 router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
-	const fileModel = ctx.models.file();
 	const shareModel = ctx.models.share();
 
 	const share = await shareModel.load(path.id);
 	if (!share) throw new ErrorNotFound();
 
-	const fileWithContent = await fileModel.loadWithContent(share.file_id, { skipPermissionCheck: true });
-	if (!fileWithContent) throw new ErrorNotFound();
+	const itemModel = ctx.models.item({ userId: share.owner_id });
 
-	const result = await renderFile(ctx, fileWithContent, share);
+	const item = await itemModel.loadWithContent(share.item_id);
+	if (!item) throw new ErrorNotFound();
+
+	const result = await renderItem(ctx, item, share);
 
 	ctx.response.body = result.body;
 	ctx.response.set('Content-Type', result.mime);
