@@ -251,6 +251,7 @@ export async function createItemTree(itemModel: ItemModel, parentFolderId: strin
 			jop_id: jopId,
 			jop_type: isFolder ? ModelType.Folder : ModelType.Note,
 			name: `${jopId}.md`,
+			content: Buffer.from('{"title":"Item ' + jopId + '"}'),
 		});
 
 		if (isFolder && Object.keys(children).length) await createItemTree(itemModel, newItem.jop_id, children);

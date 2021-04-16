@@ -6,7 +6,7 @@ import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { ErrorNotFound } from '../../utils/errors';
 import ItemModel from '../../models/ItemModel';
-import { requestPagination } from '../../models/utils/pagination';
+import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
 
 const router = new Router();
 
@@ -76,12 +76,10 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 // 	}, { validationRules: { mustBeFile: true } });
 // });
 
-// router.get('api/files/:id/delta', async (path: SubPath, ctx: AppContext) => {
-// 	const fileModel = ctx.models.file({ userId: ctx.owner.id });
-// 	const dirId: Uuid = await fileModel.pathToFileId(path.id);
-// 	const changeModel = ctx.models.change({ userId: ctx.owner.id });
-// 	return changeModel.byDirectoryId(dirId, requestChangePagination(ctx.query));
-// });
+router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
+	const changeModel = ctx.models.change({ userId: ctx.owner.id });
+	return changeModel.allForUser(requestChangePagination(ctx.query));
+});
 
 router.get('api/items/:id/children', async (path: SubPath, ctx: AppContext) => {
 	const itemModel = ctx.models.item({ userId: ctx.owner.id });

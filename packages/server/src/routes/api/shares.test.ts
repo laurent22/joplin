@@ -1,14 +1,15 @@
 import { ChangeType, File, Share, ShareType, ShareUser } from '../../db';
 import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync, createNote, createFolder, updateItem, createItemTree } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody } from '../../utils/testing/testUtils';
 import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedFiles } from '../../models/FileModel';
-import { PaginatedChangesOld } from '../../models/ChangeModel';
+import { PaginatedChanges, PaginatedChangesOld } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorBadRequest } from '../../utils/errors';
 import { serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 describe('api_shares', function() {
 
@@ -388,7 +389,7 @@ describe('api_shares', function() {
 		expect((await itemModel2.children()).items.length).toBe(0);
 	});
 
-	test('should not share an already shared file', async function() {
+	test('should not share an already shared item', async function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3, session: session3 } = await createUserAndSession(3);
@@ -398,80 +399,88 @@ describe('api_shares', function() {
 		expect(error.httpCode).toBe(ErrorBadRequest.httpCode);
 	});
 
-	// test('should see delta changes for linked files', async function() {
-	// 	const { user: user1, session: session1 } = await createUserAndSession(1);
-	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
-	// 	const rootDirId1 = await models().file({ userId: user1.id }).userRootFileId();
-	// 	const rootDirId2 = await models().file({ userId: user2.id }).userRootFileId();
+	test('should see delta changes for linked items', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-	// 	const { sharerFile, shareeFile } = await shareWithUserAndAccept(session1.id, user1, session2.id, user2);
+		const tree: any = {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		};
 
-	// 	let cursor1: string = null;
-	// 	let cursor2: string = null;
+		const itemModel1 = models().item({ userId: user1.id });
 
-	// 	{
-	// 		const page1 = await getApi<PaginatedChangesOld>(session1.id, `files/${rootDirId1}/delta`);
-	// 		expect(page1.items.length).toBe(1);
-	// 		expect(page1.items[0].item.id).toBe(sharerFile.id);
-	// 		expect(page1.items[0].type).toBe(ChangeType.Create);
-	// 		cursor1 = page1.cursor;
+		await createItemTree(itemModel1, '', tree);
+		const folderItem = await itemModel1.loadByJopId('000000000000000000000000000000F1');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
-	// 		const page2 = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`);
-	// 		expect(page2.items.length).toBe(1);
-	// 		expect(page2.items[0].item.id).toBe(shareeFile.id);
-	// 		expect(page2.items[0].type).toBe(ChangeType.Create);
-	// 		cursor2 = page2.cursor;
-	// 	}
+		let cursor1: string = null;
+		let cursor2: string = null;
 
-	// 	// --------------------------------------------------------------------
-	// 	// If file is changed on sharer side, sharee should see the changes
-	// 	// --------------------------------------------------------------------
+		{
+			const names = ['000000000000000000000000000000F1.md', '00000000000000000000000000000001.md'].sort();
 
-	// 	await msleep(1);
-	// 	await updateFile(user1.id, sharerFile.id, 'from sharer');
+			const page1 = await getApi<PaginatedChanges>(session1.id, `items/root/delta`);
+			expect(page1.items.map(i => i.item_name).sort()).toEqual(names);
+			cursor1 = page1.cursor;
 
-	// 	{
-	// 		const page1 = await getApi<PaginatedChangesOld>(session1.id, `files/${rootDirId1}/delta`, { query: { cursor: cursor1 } });
-	// 		expect(page1.items.length).toBe(1);
-	// 		expect(page1.items[0].item.id).toBe(sharerFile.id);
-	// 		expect(page1.items[0].type).toBe(ChangeType.Update);
-	// 		cursor1 = page1.cursor;
+			const page2 = await getApi<PaginatedChanges>(session2.id, `items/root/delta`);
+			expect(page2.items.map(i => i.item_name).sort()).toEqual(names);
+			cursor2 = page2.cursor;
+		}
 
-	// 		const page2 = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor: cursor2 } });
-	// 		expect(page2.items.length).toBe(1);
-	// 		expect(page2.items[0].item.id).toBe(shareeFile.id);
-	// 		expect(page2.items[0].type).toBe(ChangeType.Update);
-	// 		expect(page2.items[0].item.updated_time).toBe(page1.items[0].item.updated_time);
-	// 		cursor2 = page2.cursor;
-	// 	}
+		// --------------------------------------------------------------------
+		// If item is changed on sharer side, sharee should see the changes
+		// --------------------------------------------------------------------
 
-	// 	// --------------------------------------------------------------------
-	// 	// If file is changed on sharee side, sharer should see the changes
-	// 	// --------------------------------------------------------------------
+		const noteItem = await itemModel1.loadByJopId('00000000000000000000000000000001');
+		const note:NoteEntity = await itemModel1.loadAsJoplinItem(noteItem.id);
+		await msleep(1);
+		await updateItem(session1.id, 'root:/00000000000000000000000000000001.md:', makeNoteSerializedBody({
+			...note,
+			title: 'modified by user 1',
+		}));
 
-	// 	await msleep(1);
-	// 	await updateFile(user2.id, shareeFile.id, 'from sharee');
+		{
+			const page1 = await getApi<PaginatedChanges>(session1.id, `items/root/delta`, { query: { cursor: cursor1 } });
+			expect(page1.items.length).toBe(1);
+			expect(page1.items[0].item_name).toBe('00000000000000000000000000000001.md');
+			expect(page1.items[0].type).toBe(ChangeType.Update);
+			cursor1 = page1.cursor;
 
-	// 	{
-	// 		const page1 = await getApi<PaginatedChangesOld>(session1.id, `files/${rootDirId1}/delta`, { query: { cursor: cursor1 } });
-	// 		expect(page1.items.length).toBe(1);
-	// 		expect(page1.items[0].item.id).toBe(sharerFile.id);
-	// 		expect(page1.items[0].type).toBe(ChangeType.Update);
-	// 		cursor1 = page1.cursor;
+			const page2 = await getApi<PaginatedChanges>(session2.id, `items/root/delta`, { query: { cursor: cursor2 } });
+			expect(page2.items.length).toBe(1);
+			expect(page2.items[0].item_name).toBe('00000000000000000000000000000001.md');
+			expect(page2.items[0].type).toBe(ChangeType.Update);
+			expect(page2.items[0].updated_time).toBe(page1.items[0].updated_time);
+			cursor2 = page2.cursor;
+		}
 
-	// 		const page2 = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor: cursor2 } });
-	// 		expect(page2.items.length).toBe(1);
-	// 		expect(page2.items[0].item.id).toBe(shareeFile.id);
-	// 		expect(page2.items[0].type).toBe(ChangeType.Update);
-	// 		cursor2 = page2.cursor;
+		// --------------------------------------------------------------------
+		// If item is changed on sharee side, sharer should see the changes
+		// --------------------------------------------------------------------
 
-	// 		// The updated_time properties don't necessarily match because first
-	// 		// the sharer's file content is updated, and then the sharee's file
-	// 		// metadata may be updated too.
+		await msleep(1);
+		await updateItem(session2.id, 'root:/00000000000000000000000000000001.md:', makeNoteSerializedBody({
+			...note,
+			title: 'modified by user 2',
+		}));
 
-	// 		// expect(page1.items[0].item.updated_time).toBe(page2.items[0].item.updated_time);
-	// 	}
-	// });
+		{
+			const page1 = await getApi<PaginatedChanges>(session1.id, `items/root/delta`, { query: { cursor: cursor1 } });
+			expect(page1.items.length).toBe(1);
+			expect(page1.items[0].item_name).toBe('00000000000000000000000000000001.md');
+			expect(page1.items[0].type).toBe(ChangeType.Update);
+			cursor1 = page1.cursor;
+
+			const page2 = await getApi<PaginatedChanges>(session2.id, `items/root/delta`, { query: { cursor: cursor2 } });
+			expect(page2.items.length).toBe(1);
+			expect(page2.items[0].item_name).toBe('00000000000000000000000000000001.md');
+			expect(page2.items[0].type).toBe(ChangeType.Update);
+			cursor2 = page2.cursor;
+		}
+	});
 
 	// test('should see delta changes when a third user joins in', async function() {
 	// 	// - User 1 shares a file with User 2
@@ -483,13 +492,23 @@ describe('api_shares', function() {
 	// 	const { user: user1, session: session1 } = await createUserAndSession(1);
 	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
 	// 	const { user: user3, session: session3 } = await createUserAndSession(3);
-	// 	const rootDirId2 = await models().file({ userId: user2.id }).userRootFileId();
 
-	// 	await shareWithUserAndAccept(session1.id, user1, session2.id, user2);
+	// 	const tree: any = {
+	// 		'000000000000000000000000000000F1': {
+	// 			'00000000000000000000000000000001': null,
+	// 		},
+	// 	};
+
+	// 	const itemModel1 = models().item({ userId: user1.id });
+
+	// 	await createItemTree(itemModel1, '', tree);
+	// 	const folderItem = await itemModel1.loadByJopId('000000000000000000000000000000F1');
+	// 	await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+
 	// 	let cursor = null;
 
 	// 	{
-	// 		const page = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`);
+	// 		const page = await getApi<PaginatedChanges>(session2.id, `files/root/delta`);
 	// 		cursor = page.cursor;
 	// 	}
 
@@ -497,7 +516,7 @@ describe('api_shares', function() {
 	// 	const { shareeFile } = await shareWithUserAndAccept(session3.id, user3, session2.id, user2, file3);
 
 	// 	{
-	// 		const page = await getApi<PaginatedChangesOld>(session2.id, `files/${rootDirId2}/delta`, { query: { cursor } });
+	// 		const page = await getApi<PaginatedChanges>(session2.id, `files/root/delta`, { query: { cursor } });
 	// 		cursor = page.cursor;
 	// 		expect(page.items.length).toBe(1);
 	// 		expect(page.items[0].type).toBe(ChangeType.Create);
