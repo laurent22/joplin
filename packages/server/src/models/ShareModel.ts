@@ -1,5 +1,5 @@
 import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, Uuid } from '../db';
-import { ErrorBadRequest } from '../utils/errors';
+import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { DeleteOptions, ValidateOptions } from './BaseModel';
 import { SharedRootInfo } from './ItemModel';
@@ -12,13 +12,15 @@ export default class ShareModel extends BaseModel<Share> {
 
 	protected async validate(share: Share, _options: ValidateOptions = {}): Promise<Share> {
 		if ('type' in share && ![ShareType.Link, ShareType.App, ShareType.JoplinRootFolder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
+		if (await this.itemIsShared(share.type, share.item_id)) throw new ErrorBadRequest('A shared item cannot be shared again');
+
+		const item = await this.models().item().load(share.item_id);
+		if (!item) throw new ErrorNotFound('Could not find item: ' + share.item_id);
 
 		return share;
 	}
 
 	public async createShare(shareType: ShareType, itemId: Uuid): Promise<Share> {
-		if (await this.itemIsShared(shareType, itemId)) throw new ErrorBadRequest('A shared item cannot be shared again');
-
 		const toSave: Share = {
 			type: shareType,
 			item_id: itemId,

@@ -58,7 +58,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return JSON.parse(item);
 	}
 
-	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType, previousItem: any, userId:Uuid): Promise<Change> {
+	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType, previousItem: any, userId: Uuid): Promise<Change> {
 		const change: Change = {
 			item_type: itemType,
 			parent_id: parentId || '',
@@ -130,8 +130,8 @@ export default class ChangeModel extends BaseModel<Change> {
 			])
 			.where(function() {
 				this.where('user_items.user_id', userId)
-				.orWhere('changes.user_id', userId)
-			})
+					.orWhere('changes.user_id', userId);
+			});
 
 		// If a cursor was provided, apply it to both queries.
 		if (changeAtCursor) {

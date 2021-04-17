@@ -45,14 +45,14 @@ describe('ChangeModel', function() {
 		const itemModel = models().item({ userId: user.id });
 		const changeModel = models().change({ userId: user.id });
 
-		let i = 1;
+		const i = 1;
 		await msleep(1); const item1 = await makeTestItem(itemModel); // CREATE 1
-		await msleep(1); await itemModel.save({ id: item1.id, name: `test_mod_1a` }); // UPDATE 1a
-		await msleep(1); await itemModel.save({ id: item1.id, name: `test_mod_1b` }); // UPDATE 1b
+		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1a' }); // UPDATE 1a
+		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1b' }); // UPDATE 1b
 		await msleep(1); const item2 = await makeTestItem(itemModel); // CREATE 2
-		await msleep(1); await itemModel.save({ id: item2.id, name: `test_mod_2a` }); // UPDATE 2a
+		await msleep(1); await itemModel.save({ id: item2.id, name: 'test_mod_2a' }); // UPDATE 2a
 		await msleep(1); await itemModel.delete(item1.id); // DELETE 1
-		await msleep(1); await itemModel.save({ id: item2.id, name: `test_mod_2b` }); // UPDATE 2b
+		await msleep(1); await itemModel.save({ id: item2.id, name: 'test_mod_2b' }); // UPDATE 2b
 		await msleep(1); const item3 = await makeTestItem(itemModel); // CREATE 3
 
 		{

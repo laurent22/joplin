@@ -27,9 +27,9 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			.del();
 	}
 
-	public async userIdsByItemIds(itemIds:Uuid[]):Promise<Record<Uuid, Uuid[]>> {
-		const rows:UserItem[] = await this.db(this.tableName).select('item_id', 'user_id').whereIn('item_id', itemIds);
-		const output:Record<Uuid, Uuid[]> = {};
+	public async userIdsByItemIds(itemIds: Uuid[]): Promise<Record<Uuid, Uuid[]>> {
+		const rows: UserItem[] = await this.db(this.tableName).select('item_id', 'user_id').whereIn('item_id', itemIds);
+		const output: Record<Uuid, Uuid[]> = {};
 		for (const row of rows) {
 			if (!output[row.item_id]) output[row.item_id] = [];
 			output[row.item_id].push(row.user_id);

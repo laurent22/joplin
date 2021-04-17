@@ -93,9 +93,9 @@ export default class UserModel extends BaseModel<User> {
 		await this.checkIsOwnerOrAdmin(id);
 
 		await this.withTransaction(async () => {
-			const fileModel = this.models().file({ userId: id });
-			const rootFile = await fileModel.userRootFile();
-			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
+			// const fileModel = this.models().file({ userId: id });
+			// const rootFile = await fileModel.userRootFile();
+			// await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
 			await super.delete(id);
 		}, 'UserModel::delete');
 	}

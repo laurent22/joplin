@@ -219,7 +219,7 @@ export default abstract class BaseModel<T> {
 		return !(object as WithUuid).id;
 	}
 
-	private async handleChangeTracking(options: SaveOptions, item: T, changeType: ChangeType, deletedItemUserIds:Uuid[] = []): Promise<void> {
+	private async handleChangeTracking(options: SaveOptions, item: T, changeType: ChangeType, deletedItemUserIds: Uuid[] = []): Promise<void> {
 		const trackChanges = this.trackChanges && options.trackChanges !== false;
 		if (!trackChanges) return;
 
