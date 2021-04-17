@@ -56,11 +56,14 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
-	public async sharesByUser(userId: Uuid, type: ShareType): Promise<Share[]> {
-		return this.db(this.tableName)
+	public async sharesByUser(userId: Uuid, type: ShareType = null): Promise<Share[]> {
+		const query = this.db(this.tableName)
 			.select(this.defaultFields)
-			.where('owner_id', '=', userId)
-			.andWhere('type', '=', type);
+			.where('owner_id', '=', userId);
+		
+		if (type) void query.andWhere('type', '=', type);
+
+		return query;
 	}
 
 	public async updateSharedItems() {

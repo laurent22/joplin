@@ -92,10 +92,14 @@ export default class UserModel extends BaseModel<User> {
 	public async delete(id: string): Promise<void> {
 		await this.checkIsOwnerOrAdmin(id);
 
+		const shares = await this.models().share().sharesByUser(id);
+
 		await this.withTransaction(async () => {
-			// const fileModel = this.models().file({ userId: id });
-			// const rootFile = await fileModel.userRootFile();
-			// await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
+			await this.models().item({ userId: this.userId }).deleteExclusivelyOwnedItems(id);
+			await this.models().share().delete(shares.map(s => s.id));
+			await this.models().userItem().deleteByUserId(id);
+			await this.models().session().deleteByUserId(id);
+			await this.models().notification().deleteByUserId(id);
 			await super.delete(id);
 		}, 'UserModel::delete');
 	}
@@ -108,22 +112,9 @@ export default class UserModel extends BaseModel<User> {
 	//
 	// Because the password would be hashed twice.
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
-		const isNew = await this.isNew(object, options);
-
-		let newUser = { ...object };
-
-		if (newUser.password) newUser.password = auth.hashPassword(newUser.password);
-
-		await this.withTransaction(async () => {
-			newUser = await super.save(newUser, options);
-
-			if (isNew) {
-				const fileModel = this.models().file({ userId: newUser.id });
-				await fileModel.createRootFile();
-			}
-		}, 'UserModel::save');
-
-		return newUser;
+		const user = { ...object };
+		if (user.password) user.password = auth.hashPassword(user.password);
+		return super.save(user, options);
 	}
 
 }

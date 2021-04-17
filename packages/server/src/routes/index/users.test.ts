@@ -68,7 +68,7 @@ describe('index_users', function() {
 		await beforeEachDb();
 	});
 
-	test('should create a new user along with his root file', async function() {
+	test('should create a new user', async function() {
 		const { user: admin, session } = await createUserAndSession(1, true);
 
 		await postUser(session.id, 'test@example.com', '123456');
@@ -85,11 +85,11 @@ describe('index_users', function() {
 		expect(!!userFromModel.password).toBe(true);
 		expect(userFromModel.password === '123456').toBe(false); // Password has been hashed
 
-		const fileModel = models().file({ userId: newUser.id });
-		const rootFile: File = await fileModel.userRootFile();
+		// const fileModel = models().file({ userId: newUser.id });
+		// const rootFile: File = await fileModel.userRootFile();
 
-		expect(!!rootFile).toBe(true);
-		expect(!!rootFile.id).toBe(true);
+		// expect(!!rootFile).toBe(true);
+		// expect(!!rootFile.id).toBe(true);
 	});
 
 	test('new user should be able to login', async function() {
@@ -101,31 +101,31 @@ describe('index_users', function() {
 		expect(loggedInUser.email).toBe('test@example.com');
 	});
 
-	test('should not create anything, neither user, root file nor permissions, if user creation fail', async function() {
+	test('should not create anything if user creation fail', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const fileModel = models().file({ userId: user.id });
-		const permissionModel = models().permission();
+		// const fileModel = models().file({ userId: user.id });
+		// const permissionModel = models().permission();
 		const userModel = models().user({ userId: user.id });
 
 		await postUser(session.id, 'test@example.com', '123456');
 
-		const beforeFileCount = (await fileModel.all()).length;
+		// const beforeFileCount = (await fileModel.all()).length;
 		const beforeUserCount = (await userModel.all()).length;
-		const beforePermissionCount = (await permissionModel.all()).length;
+		// const beforePermissionCount = (await permissionModel.all()).length;
 
-		expect(beforeFileCount).toBe(2);
+		// expect(beforeFileCount).toBe(2);
 		expect(beforeUserCount).toBe(2);
 
 		await postUser(session.id, 'test@example.com', '123456');
 
-		const afterFileCount = (await fileModel.all()).length;
+		// const afterFileCount = (await fileModel.all()).length;
 		const afterUserCount = (await userModel.all()).length;
-		const afterPermissionCount = (await permissionModel.all()).length;
+		// const afterPermissionCount = (await permissionModel.all()).length;
 
-		expect(beforeFileCount).toBe(afterFileCount);
+		// expect(beforeFileCount).toBe(afterFileCount);
 		expect(beforeUserCount).toBe(afterUserCount);
-		expect(beforePermissionCount).toBe(afterPermissionCount);
+		// expect(beforePermissionCount).toBe(afterPermissionCount);
 	});
 
 	test('should change user properties', async function() {

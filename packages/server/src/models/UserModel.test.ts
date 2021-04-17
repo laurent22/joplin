@@ -1,5 +1,5 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync } from '../utils/testing/testUtils';
-import { File } from '../db';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem } from '../utils/testing/testUtils';
+import { File, User } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 
 describe('UserModel', function() {
@@ -66,13 +66,15 @@ describe('UserModel', function() {
 
 	test('should delete a user', async function() {
 		const { user: admin } = await createUserAndSession(1, true);
-		const { user: user1 } = await createUserAndSession(2, false);
+		const { session: session1, user: user1 } = await createUserAndSession(2, false);
 		const { user: user2 } = await createUserAndSession(3, false);
 
 		const userModel = models().user({ userId: admin.id });
 
-		const allUsers: File[] = await userModel.all();
+		const allUsers: User[] = await userModel.all();
 		const beforeCount: number = allUsers.length;
+
+		await createItem(session1.id, 'root:/test.txt:', 'testing');
 
 		// Can't delete someone else user
 		const error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).delete(user2.id));
@@ -80,19 +82,18 @@ describe('UserModel', function() {
 		expect((await userModel.all()).length).toBe(beforeCount);
 
 		// Admin can delete any user
+		expect(!!(await models().session().load(session1.id))).toBe(true);
+		expect((await models().item().all()).length).toBe(1);
+		expect((await models().userItem().all()).length).toBe(1);
 		await models().user({ userId: admin.id }).delete(user1.id);
 		expect((await userModel.all()).length).toBe(beforeCount - 1);
-		const allFiles = await models().file().all() as File[];
-		expect(allFiles.length).toBe(2);
-		expect(!!allFiles.find(f => f.owner_id === admin.id)).toBe(true);
-		expect(!!allFiles.find(f => f.owner_id === user2.id)).toBe(true);
+		expect(!!(await models().session().load(session1.id))).toBe(false);
+		expect((await models().item().all()).length).toBe(0);
+		expect((await models().userItem().all()).length).toBe(0);
 
 		// Can delete own user
-		const fileModel = models().file({ userId: user2.id });
-		expect(!!(await fileModel.userRootFile())).toBe(true);
 		await models().user({ userId: user2.id }).delete(user2.id);
 		expect((await userModel.all()).length).toBe(beforeCount - 2);
-		expect(!!(await fileModel.userRootFile())).toBe(false);
 	});
 
 });

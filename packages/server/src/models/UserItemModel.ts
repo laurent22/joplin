@@ -37,12 +37,20 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return output;
 	}
 
+	public async byUserId(userId:Uuid):Promise<UserItem[]> {
+		return this.db(this.tableName).where('user_id', '=', userId);
+	}
+
 	public async deleteByItemIds(itemIds: Uuid[]): Promise<void> {
 		await this.db(this.tableName).whereIn('item_id', itemIds).delete();
 	}
 
 	public async deleteByShareId(shareId: Uuid): Promise<void> {
 		await this.db(this.tableName).where('share_id', '=', shareId).delete();
+	}
+
+	public async deleteByUserId(userId: Uuid): Promise<void> {
+		await this.db(this.tableName).where('user_id', '=', userId).delete();
 	}
 
 }

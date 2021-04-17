@@ -45,7 +45,6 @@ describe('ChangeModel', function() {
 		const itemModel = models().item({ userId: user.id });
 		const changeModel = models().change({ userId: user.id });
 
-		const i = 1;
 		await msleep(1); const item1 = await makeTestItem(itemModel); // CREATE 1
 		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1a' }); // UPDATE 1a
 		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1b' }); // UPDATE 1b
