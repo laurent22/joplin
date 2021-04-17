@@ -271,11 +271,12 @@ export default class ItemModel extends BaseModel<Item> {
 		const ids = typeof id === 'string' ? [id] : id;
 
 		const shares = await this.models().share().byItemIds(ids);
+		const deletedItemUserIds = await this.models().userItem().userIdsByItemIds(ids);
 
 		await this.withTransaction(async () => {
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids);
-			await super.delete(ids, options);
+			await super.delete(ids, { ...options, deletedItemUserIds });
 		}, 'ItemModel::delete');
 	}
 

@@ -290,18 +290,6 @@ describe('api_shares', function() {
 		await itemModel.delete(noteModel.id);
 
 		expect((await itemModel2.children()).items.length).toBe(1);
-
-		// expect((await models().share().all()).length).toBe(1);
-
-		// await itemModel.delete(folderItem.id);
-
-		// expect((await models().share().all()).length).toBe(0);
-
-		// Check that Share object is deleted
-		// Check that userShare are deleted
-		// Check that children gives right number
-
-
 	});
 
 	test('should unshare a deleted shared root folder', async function() {

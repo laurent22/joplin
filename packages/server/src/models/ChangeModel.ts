@@ -58,7 +58,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return JSON.parse(item);
 	}
 
-	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType, previousItem: any): Promise<Change> {
+	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType, previousItem: any, userId:Uuid): Promise<Change> {
 		const change: Change = {
 			item_type: itemType,
 			parent_id: parentId || '',
@@ -67,6 +67,7 @@ export default class ChangeModel extends BaseModel<Change> {
 			type: changeType,
 			owner_id: this.userId,
 			previous_item: previousItem ? this.serializePreviousItem(previousItem) : '',
+			user_id: userId,
 		};
 
 		return this.save(change) as Change;
@@ -115,18 +116,22 @@ export default class ChangeModel extends BaseModel<Change> {
 			if (!changeAtCursor) throw new ErrorResyncRequired();
 		}
 
+		const userId = this.userId;
+
 		const query = this
-			.db('user_items')
-			.leftJoin('changes', 'changes.item_id', 'user_items.item_id')
+			.db('changes')
+			.leftJoin('user_items', 'changes.item_id', 'user_items.item_id')
 			.select([
-				// 'changes.counter',
 				'changes.id',
 				'changes.item_id',
 				'changes.item_name',
 				'changes.type',
 				'changes.updated_time',
 			])
-			.where('user_items.user_id', this.userId);
+			.where(function() {
+				this.where('user_items.user_id', userId)
+				.orWhere('changes.user_id', userId)
+			})
 
 		// If a cursor was provided, apply it to both queries.
 		if (changeAtCursor) {

@@ -1,4 +1,4 @@
-import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, ChangeType } from '../db';
+import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, ChangeType, Uuid } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
@@ -25,6 +25,7 @@ export interface LoadOptions {
 export interface DeleteOptions {
 	validationRules?: any;
 	allowNoOp?: boolean;
+	deletedItemUserIds?: Record<Uuid, Uuid[]>;
 }
 
 export interface ValidateOptions {
@@ -218,7 +219,7 @@ export default abstract class BaseModel<T> {
 		return !(object as WithUuid).id;
 	}
 
-	private async handleChangeTracking(options: SaveOptions, item: T, changeType: ChangeType): Promise<void> {
+	private async handleChangeTracking(options: SaveOptions, item: T, changeType: ChangeType, deletedItemUserIds:Uuid[] = []): Promise<void> {
 		const trackChanges = this.trackChanges && options.trackChanges !== false;
 		if (!trackChanges) return;
 
@@ -237,7 +238,12 @@ export default abstract class BaseModel<T> {
 		if (this.hasParentId && !parentId && parentId !== '') throw new Error(`Could not find parent ID for item: ${(item as WithUuid).id}`);
 
 		const changeModel = this.models().change({ userId: this.userId });
-		await changeModel.add(this.itemType, parentId, (item as WithUuid).id, (item as any).name || '', changeType, options.previousItem);
+
+		const userIds = deletedItemUserIds.length ? deletedItemUserIds : [''];
+
+		for (const userId of userIds) {
+			await changeModel.add(this.itemType, parentId, (item as WithUuid).id, (item as any).name || '', changeType, options.previousItem, userId);
+		}
 	}
 
 	public async save(object: T, options: SaveOptions = {}): Promise<T> {
@@ -305,6 +311,7 @@ export default abstract class BaseModel<T> {
 		let itemsWithParentIds: T[] = null;
 		if (trackChanges) {
 			if (this.hasParentId) {
+				// TODO: Not needed anymore - remove
 				itemsWithParentIds = await this.db(this.tableName).select(['id', 'parent_id', 'name']).whereIn('id', ids);
 			} else {
 				itemsWithParentIds = await this.db(this.tableName).select(['id', 'name']).whereIn('id', ids);
@@ -321,7 +328,11 @@ export default abstract class BaseModel<T> {
 			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
 
 			if (trackChanges) {
-				for (const item of itemsWithParentIds) await this.handleChangeTracking({}, item, ChangeType.Delete);
+				// - Add an extra parameter - itemUserIds
+				// - Create one change item for each itemUserId
+				for (const item of itemsWithParentIds) {
+					await this.handleChangeTracking({}, item, ChangeType.Delete, options.deletedItemUserIds[(item as WithUuid).id]);
+				}
 			}
 		}, 'BaseModel::delete');
 	}
