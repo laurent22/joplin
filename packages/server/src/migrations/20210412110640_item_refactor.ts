@@ -70,6 +70,8 @@ export async function up(db: DbConnection): Promise<any> {
 		table.string('user_id', 32).defaultTo('').notNullable();
 	});
 
+	await db.schema.dropTable('permissions');
+
 	// TODO: add indexes
 
 	// TODO: add owner_id/name constraint - only one name per owner

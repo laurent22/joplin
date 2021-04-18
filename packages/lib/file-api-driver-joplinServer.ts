@@ -1,5 +1,5 @@
 import JoplinServerApi from './JoplinServerApi';
-import { trimSlashes, dirname, basename } from './path-utils';
+import { trimSlashes } from './path-utils';
 
 // All input paths should be in the format: "path/to/file". This is converted to
 // "root:/path/to/file:" when doing the API call.
@@ -138,28 +138,9 @@ export default class FileApiDriverJoplinServer {
 		}
 	}
 
-	// private parentPath_(path: string) {
-	// 	return dirname(path);
-	// }
-
-	// private basename_(path: string) {
-	// 	return basename(path);
-	// }
-
 	public async mkdir(_path: string) {
-		// const parentPath = this.parentPath_(path);
-		// const filename = this.basename_(path);
-
-		// try {
-		// 	const response = await this.api().exec('POST', `${this.apiFilePath_(parentPath)}/children`, null, {
-		// 		name: filename,
-		// 		is_directory: 1,
-		// 	});
-		// 	return response;
-		// } catch (error) {
-		// 	// 409 is OK - directory already exists
-		// 	if (error.code !== 409) throw error;
-		// }
+		// This is a no-op because all items technically are at the root, but
+		// they can have names such as ".resources/xxxxxxxxxx'
 	}
 
 	public async put(path: string, content: any, options: any = null) {
@@ -178,6 +159,5 @@ export default class FileApiDriverJoplinServer {
 
 	public async clearRoot(path: string) {
 		await this.delete(path);
-		// await this.mkdir(path);
 	}
 }

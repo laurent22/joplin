@@ -148,7 +148,7 @@ function isNoSuchTableError(error: any): boolean {
 		if (error.code === '42P01') return true;
 
 		// Sqlite3 error
-		if (error.message && error.message.includes('no such table: knex_migrations')) return true;
+		if (error.message && error.message.includes('SQLITE_ERROR: no such table:')) return true;
 	}
 
 	return false;

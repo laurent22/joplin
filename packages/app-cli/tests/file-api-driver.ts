@@ -1,12 +1,4 @@
-import Setting from '@joplin/lib/models/Setting';
-import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from './test-utils-synchronizer';
-
-const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('./test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import BaseItem from '@joplin/lib/models/BaseItem';
-import { fileApi } from './test-utils';
-const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, fileApi } from './test-utils';
 
 describe('file-api-driver', function() {
 

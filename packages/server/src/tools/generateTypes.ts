@@ -24,8 +24,6 @@ const config = {
 	'extends': {
 		'main.sessions': 'WithDates, WithUuid',
 		'main.users': 'WithDates, WithUuid',
-		'main.permissions': 'WithDates, WithUuid',
-		'main.files': 'WithDates, WithUuid',
 		'main.items': 'WithDates, WithUuid',
 		'main.api_clients': 'WithDates, WithUuid',
 		'main.changes': 'WithDates, WithUuid',
@@ -38,13 +36,9 @@ const config = {
 
 const propertyTypes: Record<string, string> = {
 	'*.item_type': 'ItemType',
-	'files.content': 'Buffer',
-	'files.content_type': 'FileContentType',
 	'changes.type': 'ChangeType',
 	'notifications.level': 'NotificationLevel',
 	'shares.type': 'ShareType',
-	'joplin_items.id': 'string',
-	'joplin_items.parent_id': 'string',
 	'items.content': 'Buffer',
 };
 

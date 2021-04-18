@@ -60,7 +60,6 @@ import { ModelOptions } from './BaseModel';
 import ItemModel from './ItemModel';
 import UserModel from './UserModel';
 import UserItemModel from './UserItemModel';
-import PermissionModel from './PermissionModel';
 import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
@@ -92,10 +91,6 @@ export class Models {
 
 	public apiClient(options: ModelOptions = null) {
 		return new ApiClientModel(this.db_, newModelFactory, this.baseUrl_, options);
-	}
-
-	public permission(options: ModelOptions = null) {
-		return new PermissionModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public session(options: ModelOptions = null) {
