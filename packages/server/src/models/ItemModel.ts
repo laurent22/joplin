@@ -208,13 +208,11 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.save(item);
 	}
 
-	public async children(pathQuery: string = '', pagination: Pagination = null): Promise<PaginatedItems> {
-		pagination = pagination || defaultPagination();
-
+	private childrenQuery(pathQuery: string = '', options:LoadOptions = {}):Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.leftJoin('items', 'user_items.item_id', 'items.id')
-			.select('items.name', 'items.updated_time')
+			.select(this.selectFields(options, ['id', 'name', 'updated_time'], 'items'))
 			.where('user_items.user_id', '=', this.userId);
 
 		if (pathQuery) {
@@ -224,7 +222,26 @@ export default class ItemModel extends BaseModel<Item> {
 			void query.where('name', 'like', sqlLike);
 		}
 
+		return query;
+	}
+
+	public itemUrl():string {
+		return this.baseUrl + '/items';
+	}
+
+	public itemContentUrl(itemId:Uuid):string {
+		return this.baseUrl + '/items/' + itemId + '/content';
+	}
+
+	public async children(pathQuery: string = '', pagination: Pagination = null, options:LoadOptions = {}): Promise<PaginatedItems> {
+		pagination = pagination || defaultPagination();
+		const query = this.childrenQuery(pathQuery, options);
 		return paginateDbQuery(query, pagination, 'items');
+	}
+
+	public async childrenCount(pathQuery: string = ''): Promise<number> {
+		const query = this.childrenQuery(pathQuery);
+		return query.count();
 	}
 
 	private async joplinItemPath(jopId: string): Promise<Item[]> {
@@ -285,6 +302,14 @@ export default class ItemModel extends BaseModel<Item> {
 	public async deleteExclusivelyOwnedItems(userId:Uuid) {
 		const itemIds = await this.exclusivelyOwnedItemIds(userId);
 		await this.delete(itemIds);		
+	}
+
+	public async deleteAll():Promise<void> {
+		while (true) {
+			const page = await this.children('', { ...defaultPagination(), limit: 1000 });
+			await this.delete(page.items.map(c => c.id));
+			if (!page.has_more) break;
+		}
 	}
 
 	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {

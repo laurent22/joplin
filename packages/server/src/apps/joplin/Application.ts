@@ -67,31 +67,7 @@ export default class Application extends BaseApplication {
 		BaseItem.loadClass('Folder', Folder);
 		BaseItem.loadClass('Note', Note);
 		BaseItem.loadClass('Resource', Resource);
-
-		this.fileModel_saveContentHandler = this.fileModel_saveContentHandler.bind(this);
-		this.fileModel_loadContentHandler = this.fileModel_loadContentHandler.bind(this);
-		// this.shareUser_shareAcceptedHandler = this.shareUser_shareAcceptedHandler.bind(this);
-		FileModel.registerSaveContentHandler(this.fileModel_saveContentHandler);
-		FileModel.registerLoadContentHandler(this.fileModel_loadContentHandler);
-		// ShareUserModel.registerShareAcceptedHandler(this.shareUser_shareAcceptedHandler);
 	}
-
-	private async fileModel_saveContentHandler(event: SaveContentHandlerEvent): Promise<File> | null {
-		const fileContent = await this.fileToJoplinItem({ file: event.file, content: event.content.toString() });
-		if (!fileContent) return null;
-		const result = await event.models.joplinFileContent({ userId: event.file.owner_id }).saveFileAndContent(event.file, fileContent, event.options);
-		return result;
-	}
-
-	private async fileModel_loadContentHandler(event: LoadContentHandlerEvent): Promise<any> | null {
-		return this.joplinItemToFile(event.content);
-	}
-
-	// private async shareUser_shareAcceptedHandler(event:ShareAcceptedHandlerEvent) {
-	// 	if (event.share.type !== ShareType.JoplinRootFolder) return;
-	// 	const sourceFile = await event.models.file({ userId: event.linkedFile.owner_id }).load(event.linkedFile.source_file_id, { skipPermissionCheck: true });
-	// 	await event.models.joplinFileContent({ userId: event.linkedFile.owner_id }).shareFolderContent(sourceFile);
-	// }
 
 	public async localFileFromUrl(url: string): Promise<string> {
 		const pluginAssetPrefix = 'apps/joplin/pluginAssets/';
@@ -105,17 +81,6 @@ export default class Application extends BaseApplication {
 
 	private itemIdFilename(itemId: string): string {
 		return `${itemId}.md`;
-	}
-
-	private async itemMetadataFile(parentId: Uuid, itemId: string): Promise<FileWithContent | null> {
-		const file = await this.models.file().fileByName(parentId, this.itemIdFilename(itemId), { skipPermissionCheck: true });
-		if (!file) {
-			// We don't throw an error because it can happen if the note
-			// contains an invalid link to a resource or note.
-			logger.error(`Could not find item with ID "${itemId}" on parent "${parentId}"`);
-			return null;
-		}
-		return this.models.file().loadWithContent(file.id, { skipPermissionCheck: true });
 	}
 
 	private async unserializeItem(fileContent: FileContent): Promise<any> {

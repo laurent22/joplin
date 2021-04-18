@@ -10,7 +10,6 @@ import { View } from '../../services/MustacheService';
 
 interface ItemToDisplay {
 	name: string;
-	type: string;
 	changeType: string;
 	timestamp: string;
 	url: string;
@@ -20,7 +19,7 @@ const router = new Router();
 
 router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	const changeModel = ctx.models.change({ userId: ctx.owner.id });
-	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+	const itemModel = ctx.models.item({ userId: ctx.owner.id });
 
 	const pagination = queryParamsToPagination(ctx.query);
 
@@ -51,16 +50,15 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	// 	]
 	// }
 
-	const paginatedChanges = await changeModel.allWithPagination(pagination);
+	const paginatedChanges = await changeModel.allForUser(pagination);
 	const itemsToDisplay: ItemToDisplay[] = [];
 
 	for (const item of paginatedChanges.items) {
 		itemsToDisplay.push({
-			name: await fileModel.itemDisplayPath(item.item),
-			type: item.item.is_directory ? 'd' : 'f',
+			name: item.item_name,
 			changeType: changeTypeToString(item.type),
 			timestamp: formatDateTime(item.updated_time),
-			url: item.type !== ChangeType.Delete ? await fileModel.fileUrl(item.item.id) : '',
+			url: item.type !== ChangeType.Delete ? await itemModel.itemContentUrl(item.item_id) : '',
 		});
 	}
 
@@ -81,6 +79,8 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	view.cssFiles = ['index/changes'];
 	view.partials.push('pagination');
 	return view;
+
+	return '';
 });
 
 export default router;

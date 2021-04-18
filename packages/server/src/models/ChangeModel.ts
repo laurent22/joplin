@@ -3,24 +3,10 @@ import { ErrorResyncRequired, ErrorUnprocessableEntity } from '../utils/errors';
 import BaseModel from './BaseModel';
 import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 
-export interface ChangeWithItemOld {
-	item: File;
-	updated_time: number;
-	type: ChangeType;
-}
-
 export interface ChangeWithItem {
 	item: Item;
 	updated_time: number;
 	type: ChangeType;
-}
-
-export interface ChangeWithDestFile extends Change {
-	dest_file_id: Uuid;
-}
-
-export interface PaginatedChangesOld extends PaginatedResults {
-	items: ChangeWithItemOld[];
 }
 
 export interface PaginatedChanges extends PaginatedResults {
@@ -93,15 +79,15 @@ export default class ChangeModel extends BaseModel<Change> {
 		return results;
 	}
 
-	public async allWithPagination(pagination: Pagination): Promise<PaginatedChangesOld> {
-		const results = await paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('owner_id', '=', this.userId), pagination);
-		const changeWithItems = await this.loadChangeItemsOld(results.items);
-		return {
-			...results,
-			items: changeWithItems,
-			page_count: Math.ceil(await this.countByUser(this.userId) / pagination.limit),
-		};
-	}
+	// public async allWithPagination(pagination: Pagination): Promise<PaginatedChanges> {
+	// 	const results = await paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('owner_id', '=', this.userId), pagination);
+	// 	const changeWithItems = {}; //await this.loadChangeItemsOld(results.items);
+	// 	return {
+	// 		...results,
+	// 		items: changeWithItems,
+	// 		page_count: Math.ceil(await this.countByUser(this.userId) / pagination.limit),
+	// 	};
+	// }
 
 	public async allForUser(pagination: ChangePagination = null): Promise<PaginatedChanges> {
 		pagination = {
@@ -155,114 +141,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	// Note: doesn't currently support checking for changes recursively but this
-	// is not needed for Joplin synchronisation.
-	public async byDirectoryId(dirId: string, pagination: ChangePagination = null): Promise<PaginatedChangesOld> {
-		pagination = {
-			...defaultChangePagination(),
-			...pagination,
-		};
-
-		let changeAtCursor: Change = null;
-
-		if (pagination.cursor) {
-			changeAtCursor = await this.load(pagination.cursor) as Change;
-			if (!changeAtCursor) throw new ErrorResyncRequired();
-		}
-
-		// Load the directory object to check that it exists and that we have
-		// the right permissions (loading will check permissions)
-		const fileModel = this.models().file({ userId: this.userId });
-		const directory = await fileModel.load(dirId);
-		if (!directory.is_directory) throw new ErrorUnprocessableEntity(`Item with id "${dirId}" is not a directory.`);
-
-		// Retrieves the IDs of all the files that have been shared with the
-		// current user.
-		const linkedFilesQuery = this
-			.db('files')
-			.select('source_file_id')
-			.where('source_file_id', '!=', '')
-			.andWhere('parent_id', '=', dirId)
-			.andWhere('owner_id', '=', this.userId);
-
-		// Retrieves all the changes for the files that belong to the current
-		// user.
-		const ownChangesQuery = this.db(this.tableName)
-			.select([
-				'counter',
-				'id',
-				'item_id',
-				'item_name',
-				'type',
-				this.db.raw('"" as dest_file_id'),
-			])
-			.where('parent_id', dirId);
-
-		// Retrieves all the changes for the files that have been shared with
-		// this user.
-		//
-		// Each row will have an additional "dest_file_id" property that points
-		// to the destination of the link. For example:
-		//
-		// - User 1 shares a file with ID 123 with user 2.
-		// - User 2 get a new file with ID 456 that links to file 123.
-		// - User 1 changes file 123
-		// - When user 2 retrieves all the changes, they'll get a change for
-		//   item_id = 123, and dest_file_id = 456
-		//
-		// We need this dest_file_id because when sending the list of files, we
-		// want to send back metadata for file 456, and not 123, as that belongs
-		// to a different user.
-		const sharedChangesQuery = this.db(this.tableName)
-			.select([
-				'counter',
-				'changes.id',
-				'item_id',
-				'item_name',
-				'type',
-				'files.id as dest_file_id',
-			])
-			.join('files', 'changes.item_id', 'files.source_file_id')
-			.whereIn('changes.item_id', linkedFilesQuery);
-
-		// If a cursor was provided, apply it to both queries.
-		if (changeAtCursor) {
-			void ownChangesQuery.where('counter', '>', changeAtCursor.counter);
-			void sharedChangesQuery.where('counter', '>', changeAtCursor.counter);
-		}
-
-		// This will give the list of all changes for shared and not shared
-		// files for the provided directory ID. Knexjs TypeScript support seems
-		// to be buggy here as it reports that will return `any[][]` so we fix
-		// that by forcing `any[]`
-		const changesWithDestFile: ChangeWithDestFile[] = await ownChangesQuery
-			.union(sharedChangesQuery)
-			.orderBy('counter', 'asc')
-			.limit(pagination.limit) as any[];
-
-		// Maps dest_file_id to item_id and then the rest of the code can just
-		// work without having to check if it's a shared file or not.
-		const changes = changesWithDestFile.map(c => {
-			if (c.dest_file_id) {
-				return { ...c, item_id: c.dest_file_id };
-			} else {
-				return c;
-			}
-		});
-
-		const compressedChanges = this.compressChanges(changes);
-
-		const changeWithItems = await this.loadChangeItemsOld(compressedChanges);
-
-		return {
-			items: changeWithItems,
-			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
-			// If there's no change, we return the previous cursor.
-			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
-			has_more: changes.length >= pagination.limit,
-		};
-	}
-
 	private async removeDeletedItems(changes: Change[]): Promise<Change[]> {
 		const itemIds = changes.map(c => c.item_id);
 
@@ -288,47 +166,6 @@ export default class ChangeModel extends BaseModel<Change> {
 			}
 
 			output.push(change);
-		}
-
-		return output;
-	}
-
-	private async loadChangeItemsOld(changes: Change[]): Promise<ChangeWithItemOld[]> {
-		const itemIds = changes.map(c => c.item_id);
-
-		// We skip permission check here because, when a file is shared, we need
-		// to fetch files that don't belong to the current user. This check
-		// would not be needed anyway because the change items are generated in
-		// a context where permissions have already been checked.
-		const items: File[] = await this.models().file().loadByIds(itemIds, { skipPermissionCheck: true });
-
-		const output: ChangeWithItemOld[] = [];
-
-		for (const change of changes) {
-			let item = items.find(f => f.id === change.item_id);
-
-			// If the item associated with this change has been deleted, we have
-			// two cases:
-			// - If it's a "delete" change, add it to the list.
-			// - If it's anything else, skip it. The "delete" change will be
-			//   sent on one of the next pages.
-
-			if (!item) {
-				if (change.type === ChangeType.Delete) {
-					item = {
-						id: change.item_id,
-						name: change.item_name,
-					};
-				} else {
-					continue;
-				}
-			}
-
-			output.push({
-				type: change.type,
-				updated_time: change.updated_time,
-				item: item,
-			});
 		}
 
 		return output;

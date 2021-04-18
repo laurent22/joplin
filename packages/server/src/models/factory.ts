@@ -57,7 +57,6 @@
 import { DbConnection } from '../db';
 import ApiClientModel from './ApiClientModel';
 import { ModelOptions } from './BaseModel';
-import FileModel from './FileModel';
 import ItemModel from './ItemModel';
 import UserModel from './UserModel';
 import UserItemModel from './UserItemModel';
@@ -68,7 +67,6 @@ import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
 import ShareUserModel from './ShareUserModel';
 import KeyValueModel from './KeyValueModel';
-import JoplinFileContentModel from '../apps/joplin/JoplinFileContentModel';
 
 export class Models {
 
@@ -78,10 +76,6 @@ export class Models {
 	public constructor(db: DbConnection, baseUrl: string) {
 		this.db_ = db;
 		this.baseUrl_ = baseUrl;
-	}
-
-	public file(options: ModelOptions = null) {
-		return new FileModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 	public item(options: ModelOptions = null) {
@@ -126,10 +120,6 @@ export class Models {
 
 	public keyValue(options: ModelOptions = null) {
 		return new KeyValueModel(this.db_, newModelFactory, this.baseUrl_, options);
-	}
-
-	public joplinFileContent(options: ModelOptions = null) {
-		return new JoplinFileContentModel(this.db_, newModelFactory, this.baseUrl_, options);
 	}
 
 }

@@ -231,19 +231,19 @@ export const createUser = async function(index: number = 1, isAdmin: boolean = f
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
 
-export async function createFileTree(fileModel: FileModel, parentId: string, tree: any): Promise<void> {
-	for (const name in tree) {
-		const children: any = tree[name];
-		const isDir = children !== null;
-		const newFile: File = await fileModel.save({
-			parent_id: parentId,
-			name: name,
-			is_directory: isDir ? 1 : 0,
-		});
+// export async function createFileTree(fileModel: FileModel, parentId: string, tree: any): Promise<void> {
+// 	for (const name in tree) {
+// 		const children: any = tree[name];
+// 		const isDir = children !== null;
+// 		const newFile: File = await fileModel.save({
+// 			parent_id: parentId,
+// 			name: name,
+// 			is_directory: isDir ? 1 : 0,
+// 		});
 
-		if (isDir && Object.keys(children).length) await createFileTree(fileModel, newFile.id, children);
-	}
-}
+// 		if (isDir && Object.keys(children).length) await createFileTree(fileModel, newFile.id, children);
+// 	}
+// }
 
 export async function createItemTree(itemModel: ItemModel, parentFolderId: string, tree: any): Promise<void> {
 	for (const jopId in tree) {
@@ -262,20 +262,20 @@ export async function createItemTree(itemModel: ItemModel, parentFolderId: strin
 	}
 }
 
-export async function createFile(userId: string, path: string, content: string): Promise<File> {
-	const fileModel = models().file({ userId });
-	const file: File = await fileModel.pathToFile(path, { mustExist: false, returnFullEntity: false });
-	file.content = Buffer.from(content);
-	const savedFile = await fileModel.save(file);
-	return fileModel.load(savedFile.id);
-}
+// export async function createFile(userId: string, path: string, content: string): Promise<File> {
+// 	const fileModel = models().file({ userId });
+// 	const file: File = await fileModel.pathToFile(path, { mustExist: false, returnFullEntity: false });
+// 	file.content = Buffer.from(content);
+// 	const savedFile = await fileModel.save(file);
+// 	return fileModel.load(savedFile.id);
+// }
 
-export async function createFile2(sessionId: string, path: string, content: string): Promise<File> {
-	const tempFilePath = await makeTempFileWithContent(content);
-	const file = await putApi(sessionId, `files/${path}/content`, null, { filePath: tempFilePath });
-	await fs.remove(tempFilePath);
-	return file;
-}
+// export async function createFile2(sessionId: string, path: string, content: string): Promise<File> {
+// 	const tempFilePath = await makeTempFileWithContent(content);
+// 	const file = await putApi(sessionId, `files/${path}/content`, null, { filePath: tempFilePath });
+// 	await fs.remove(tempFilePath);
+// 	return file;
+// }
 
 export async function createItem(sessionId: string, path: string, content: string | Buffer): Promise<Item> {
 	const tempFilePath = await makeTempFileWithContent(content);
