@@ -13,30 +13,37 @@ function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: Layout
 	}
 
 	// If all children of a container have a fixed width, the
-	// latest child should have a flexible width (i.e. no "width"
+	// latest visible child should have a flexible width (i.e. no "width"
 	// property), so that it fills up the remaining space
-	if (itemIndex === parent.children.length - 1) {
-		let allChildrenAreSized = true;
-		for (const child of parent.children) {
-			if (parent.direction === LayoutItemDirection.Row) {
-				if (!child.width) {
-					allChildrenAreSized = false;
-					break;
-				}
-			} else {
-				if (!child.height) {
-					allChildrenAreSized = false;
-					break;
-				}
-			}
+	let allChildrenAreSized = true;
+	let isThisTheLastVisible;
+	for (let i = parent.children.length - 1; i >= 0; i--) {
+		const child = parent.children[i];
+		if (!child || !child.visible) continue;
+
+		if (isThisTheLastVisible === undefined) {
+			isThisTheLastVisible = i === itemIndex;
+			if (!isThisTheLastVisible) break;
 		}
 
-		if (allChildrenAreSized) {
-			if (parent.direction === LayoutItemDirection.Row) {
-				delete itemDraft.width;
-			} else {
-				delete itemDraft.height;
+		if (parent.direction === LayoutItemDirection.Row) {
+			if (!child.width) {
+				allChildrenAreSized = false;
+				break;
 			}
+		} else {
+			if (!child.height) {
+				allChildrenAreSized = false;
+				break;
+			}
+		}
+	}
+
+	if (isThisTheLastVisible && allChildrenAreSized) {
+		if (parent.direction === LayoutItemDirection.Row) {
+			delete itemDraft.width;
+		} else {
+			delete itemDraft.height;
 		}
 	}
 }
