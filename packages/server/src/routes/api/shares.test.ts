@@ -1,5 +1,5 @@
 import { ChangeType, Share, ShareType, ShareUser } from '../../db';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, initGlobalLogger } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
@@ -154,7 +154,7 @@ describe('api_shares', function() {
 
 		await models().share().updateSharedItems();
 
-		const newChildren = await models().item({ userId: user2.id }).children();
+		const newChildren = await models().item({ userId: user2.id }).children(user2.id);
 		expect(newChildren.items.length).toBe(3);
 		expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000002.md')).toBe(true);
 	});
@@ -197,7 +197,7 @@ describe('api_shares', function() {
 
 			await models().share().updateSharedItems();
 
-			const newChildren = await models().item({ userId: user2.id }).children();
+			const newChildren = await models().item({ userId: user2.id }).children(user2.id);
 			expect(newChildren.items.length).toBe(4);
 		}
 
@@ -211,7 +211,7 @@ describe('api_shares', function() {
 
 			await models().share().updateSharedItems();
 
-			const newChildren = await models().item({ userId: user2.id }).children();
+			const newChildren = await models().item({ userId: user2.id }).children(user2.id);
 			expect(newChildren.items.length).toBe(3);
 			expect(newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(undefined);
 		}
@@ -226,7 +226,7 @@ describe('api_shares', function() {
 
 			await models().share().updateSharedItems();
 
-			const newChildren = await models().item({ userId: user2.id }).children();
+			const newChildren = await models().item({ userId: user2.id }).children(user2.id);
 			expect(newChildren.items.length).toBe(3);
 			expect(newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(undefined);
 		}
@@ -241,7 +241,7 @@ describe('api_shares', function() {
 
 			await models().share().updateSharedItems();
 
-			const newChildren = await models().item({ userId: user2.id }).children();
+			const newChildren = await models().item({ userId: user2.id }).children(user2.id);
 			expect(newChildren.items.length).toBe(4);
 			expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(true);
 		}
@@ -256,7 +256,7 @@ describe('api_shares', function() {
 
 			await models().share().updateSharedItems();
 
-			const newChildren = await models().item({ userId: user2.id }).children();
+			const newChildren = await models().item({ userId: user2.id }).children(user2.id);
 			expect(newChildren.items.length).toBe(4);
 			expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(true);
 		}
@@ -281,13 +281,13 @@ describe('api_shares', function() {
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
 		const itemModel2 = models().item({ userId: user2.id });
-		expect((await itemModel2.children()).items.length).toBe(2);
+		expect((await itemModel2.children(user2.id)).items.length).toBe(2);
 
 		const noteModel = await itemModel.loadByJopId(user1.id, '00000000000000000000000000000001');
 
 		await itemModel.delete(noteModel.id);
 
-		expect((await itemModel2.children()).items.length).toBe(1);
+		expect((await itemModel2.children(user2.id)).items.length).toBe(1);
 	});
 
 	test('should unshare a deleted shared root folder', async function() {
@@ -313,12 +313,12 @@ describe('api_shares', function() {
 		// Once the root folder has been deleted, it is unshared, so the
 		// recipient user should no longer see any item
 		const itemModel2 = models().item({ userId: user2.id });
-		expect((await itemModel2.children()).items.length).toBe(0);
+		expect((await itemModel2.children(user2.id)).items.length).toBe(0);
 
 		// Even though the root folder has been deleted, its children have not
 		// been (they are deleted by the client), so the owner should still see
 		// one child.
-		expect((await itemModel.children()).items.length).toBe(1);
+		expect((await itemModel.children(user1.id)).items.length).toBe(1);
 
 		// Also check that Share and UserShare objects are deleted
 		expect((await models().share().all()).length).toBe(0);
@@ -346,13 +346,13 @@ describe('api_shares', function() {
 
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
-		expect((await itemModel2.children()).items.length).toBe(2);
+		expect((await itemModel2.children(user2.id)).items.length).toBe(2);
 
 		const share = (await models().share({ userId: user1.id }).all())[0];
 		await models().share({ userId: user1.id }).delete(share.id);
 
-		expect((await itemModel1.children()).items.length).toBe(2);
-		expect((await itemModel2.children()).items.length).toBe(0);
+		expect((await itemModel1.children(user1.id)).items.length).toBe(2);
+		expect((await itemModel2.children(user2.id)).items.length).toBe(0);
 	});
 
 	test('should not share an already shared item', async function() {

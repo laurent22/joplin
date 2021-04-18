@@ -205,12 +205,12 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.save(item);
 	}
 
-	private childrenQuery(pathQuery: string = '', options: LoadOptions = {}): Knex.QueryBuilder {
+	private childrenQuery(userId:Uuid, pathQuery: string = '', options: LoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.leftJoin('items', 'user_items.item_id', 'items.id')
 			.select(this.selectFields(options, ['id', 'name', 'updated_time'], 'items'))
-			.where('user_items.user_id', '=', this.userId);
+			.where('user_items.user_id', '=', userId);
 
 		if (pathQuery) {
 			// We support /* as a prefix only. Anywhere else would have
@@ -230,14 +230,14 @@ export default class ItemModel extends BaseModel<Item> {
 		return `${this.baseUrl}/items/${itemId}/content`;
 	}
 
-	public async children(pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
+	public async children(userId:Uuid, pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
-		const query = this.childrenQuery(pathQuery, options);
+		const query = this.childrenQuery(userId, pathQuery, options);
 		return paginateDbQuery(query, pagination, 'items');
 	}
 
-	public async childrenCount(pathQuery: string = ''): Promise<number> {
-		const query = this.childrenQuery(pathQuery);
+	public async childrenCount(userId:Uuid, pathQuery: string = ''): Promise<number> {
+		const query = this.childrenQuery(userId, pathQuery);
 		return query.count();
 	}
 
@@ -302,9 +302,9 @@ export default class ItemModel extends BaseModel<Item> {
 		await this.delete(itemIds);
 	}
 
-	public async deleteAll(): Promise<void> {
+	public async deleteAll(userId:Uuid): Promise<void> {
 		while (true) {
-			const page = await this.children('', { ...defaultPagination(), limit: 1000 });
+			const page = await this.children(userId, '', { ...defaultPagination(), limit: 1000 });
 			await this.delete(page.items.map(c => c.id));
 			if (!page.has_more) break;
 		}

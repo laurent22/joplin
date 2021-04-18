@@ -7,7 +7,6 @@ import * as fs from 'fs-extra';
 import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
 import ItemModel from '../../models/ItemModel';
 import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
-import config from '../../config';
 
 const router = new Router();
 
@@ -41,7 +40,7 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 			// We use this for testing only and for safety reasons it's probably
 			// best to disable it on production.
 			if (ctx.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
-			await itemModel.deleteAll();
+			await itemModel.deleteAll(ctx.owner.id);
 		} else {
 			const item = await itemFromPath(ctx.owner.id, itemModel, path);
 			await itemModel.delete(item.id);
@@ -91,7 +90,7 @@ router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
 router.get('api/items/:id/children', async (path: SubPath, ctx: AppContext) => {
 	const itemModel = ctx.models.item({ userId: ctx.owner.id });
 	const parentName = itemModel.pathToName(path.id);
-	const result = await itemModel.children(parentName, requestPagination(ctx.query));
+	const result = await itemModel.children(ctx.owner.id, parentName, requestPagination(ctx.query));
 	return result;
 });
 

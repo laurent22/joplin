@@ -60,7 +60,6 @@ import { ModelOptions } from './BaseModel';
 import ItemModel from './ItemModel';
 import UserModel from './UserModel';
 import UserItemModel from './UserItemModel';
-import PermissionModel from './PermissionModel';
 import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';

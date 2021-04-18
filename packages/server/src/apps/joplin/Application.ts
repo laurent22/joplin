@@ -1,5 +1,4 @@
 import { ModelType } from '@joplin/lib/BaseModel';
-import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
 import { File, Item, Share, Uuid } from '../../db';
 import { NoteEntity } from '@joplin/lib/services/database/types';

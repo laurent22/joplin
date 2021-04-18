@@ -33,8 +33,8 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	const pagination = makeFilePagination(ctx.query);
 	const owner = ctx.owner;
 	const itemModel = ctx.models.item({ userId: owner.id });
-	const paginatedItems = await itemModel.children('', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type'] });
-	const pageCount = Math.ceil((await itemModel.childrenCount('')) / pagination.limit);
+	const paginatedItems = await itemModel.children(owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type'] });
+	const pageCount = Math.ceil((await itemModel.childrenCount(owner.id, '')) / pagination.limit);
 	const parentBaseUrl = itemModel.itemUrl();
 	const paginationLinks = createPaginationLinks(pagination.page, pageCount, setQueryParameters(parentBaseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));
 
@@ -80,7 +80,7 @@ router.post('items', async (_path: SubPath, ctx: AppContext) => {
 
 	if (fields.delete_all_button) {
 		const itemModel = ctx.models.item({ userId: ctx.owner.id });
-		await itemModel.deleteAll();
+		await itemModel.deleteAll(ctx.owner.id);
 	} else {
 		throw new Error('Invalid form button');
 	}
