@@ -109,7 +109,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			await this.save({ ...shareUser, is_accepted: accept ? 1 : 0 });
 
 			if (share.type === ShareType.JoplinRootFolder) {
-				await this.models().item({ userId: share.owner_id }).shareJoplinFolderAndContent(share.id, userId, item.jop_id);
+				await this.models().item({ userId: share.owner_id }).shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
 			}
 		});
 	}

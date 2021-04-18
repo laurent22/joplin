@@ -8,7 +8,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 
 async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
 	if (item.jop_type === ModelType.Note) {
-		return context.apps.joplin.renderItem(item, share, context.query);
+		return context.apps.joplin.renderItem(share.owner_id, item, share, context.query);
 	}
 
 	return {

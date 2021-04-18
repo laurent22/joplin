@@ -71,16 +71,14 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public async loadByJopId(jopId: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByJopId(userId:Uuid, jopId: string, options: LoadOptions = {}): Promise<Item> {
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.select(this.selectFields(options, null, 'items'))
-			.where('user_items.user_id', '=', this.userId)
+			.where('user_items.user_id', '=', userId)
 			.where('jop_id', '=', jopId)
 			.first();
-
-		// return this.db(this.tableName).select(this.selectFields(options)).where('owner_id', '=', this.userId).where('jop_id', '=', jopId).first();
 	}
 
 	public async loadByName(name: string, options: LoadOptions = {}): Promise<Item> {
@@ -138,8 +136,8 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	public async shareJoplinFolderAndContent(shareId: Uuid, withUserId: Uuid, folderId: string) {
-		const folderItem = await this.loadByJopId(folderId, { fields: ['id'] });
+	public async shareJoplinFolderAndContent(shareId: Uuid, fromUserId:Uuid, toUserId: Uuid, folderId: string) {
+		const folderItem = await this.loadByJopId(fromUserId, folderId, { fields: ['id'] });
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
 		const itemIds = [folderItem.id].concat(await this.folderChildrenItemIds(folderId));
@@ -148,12 +146,12 @@ export default class ItemModel extends BaseModel<Item> {
 			.db('user_items')
 			.pluck('item_id')
 			.whereIn('item_id', itemIds)
-			.where('user_id', '=', withUserId);
+			.where('user_id', '=', toUserId);
 
 		await this.withTransaction(async () => {
 			for (const itemId of itemIds) {
 				if (alreadySharedItemIds.includes(itemId)) continue;
-				await this.models().userItem({ userId: withUserId }).add(withUserId, itemId, shareId);
+				await this.models().userItem({ userId: toUserId }).add(toUserId, itemId, shareId);
 			}
 		});
 	}

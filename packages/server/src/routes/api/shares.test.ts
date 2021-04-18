@@ -110,7 +110,7 @@ describe('api_shares', function() {
 
 		await createItemTree(itemModel, '', tree);
 
-		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F3');
+		const folderItem = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F3');
 
 		const childrenBefore = await getApi<PaginatedItems>(session2.id, 'items/root/children');
 		expect(childrenBefore.items.length).toBe(0);
@@ -144,7 +144,7 @@ describe('api_shares', function() {
 
 		await createItemTree(itemModel, '', tree);
 
-		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F2');
+		const folderItem = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F2');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
 		await createNote(session1.id, {
@@ -177,15 +177,15 @@ describe('api_shares', function() {
 
 		await createItemTree(itemModel, '', tree);
 
-		const folderItem1 = await itemModel.loadByJopId('000000000000000000000000000000F1');
+		const folderItem1 = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
 
-		const folderItem5 = await itemModel.loadByJopId('000000000000000000000000000000F5');
+		const folderItem5 = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F5');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem5);
 
 		await models().share().updateSharedItems();
 
-		const noteItem = await itemModel.loadByJopId('00000000000000000000000000000001');
+		const noteItem = await itemModel.loadByJopId(user1.id, '00000000000000000000000000000001');
 
 		// Note is moved to another folder, but still within shared folder
 
@@ -276,14 +276,14 @@ describe('api_shares', function() {
 
 		await createItemTree(itemModel, '', tree);
 
-		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F1');
+		const folderItem = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F1');
 
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
 		const itemModel2 = models().item({ userId: user2.id });
 		expect((await itemModel2.children()).items.length).toBe(2);
 
-		const noteModel = await itemModel.loadByJopId('00000000000000000000000000000001');
+		const noteModel = await itemModel.loadByJopId(user1.id, '00000000000000000000000000000001');
 
 		await itemModel.delete(noteModel.id);
 
@@ -304,7 +304,7 @@ describe('api_shares', function() {
 
 		await createItemTree(itemModel, '', tree);
 
-		const folderItem = await itemModel.loadByJopId('000000000000000000000000000000F1');
+		const folderItem = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F1');
 
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
@@ -342,7 +342,7 @@ describe('api_shares', function() {
 
 		await createItemTree(itemModel1, '', tree);
 
-		const folderItem = await itemModel1.loadByJopId('000000000000000000000000000000F1');
+		const folderItem = await itemModel1.loadByJopId(user1.id, '000000000000000000000000000000F1');
 
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
@@ -380,7 +380,7 @@ describe('api_shares', function() {
 		const itemModel1 = models().item({ userId: user1.id });
 
 		await createItemTree(itemModel1, '', tree);
-		const folderItem = await itemModel1.loadByJopId('000000000000000000000000000000F1');
+		const folderItem = await itemModel1.loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
 		let cursor1: string = null;
@@ -402,7 +402,7 @@ describe('api_shares', function() {
 		// If item is changed on sharer side, sharee should see the changes
 		// --------------------------------------------------------------------
 
-		const noteItem = await itemModel1.loadByJopId('00000000000000000000000000000001');
+		const noteItem = await itemModel1.loadByJopId(user1.id, '00000000000000000000000000000001');
 		const note: NoteEntity = await itemModel1.loadAsJoplinItem(noteItem.id);
 		await msleep(1);
 		await updateItem(session1.id, 'root:/00000000000000000000000000000001.md:', makeNoteSerializedBody({

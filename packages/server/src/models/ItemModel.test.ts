@@ -46,7 +46,7 @@ describe('ItemModel', function() {
 			expect(itemIds.length).toBe(1);
 		}
 
-		const folderItem = await itemModel1.loadByJopId('000000000000000000000000000000F1');
+		const folderItem = await itemModel1.loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
 		{

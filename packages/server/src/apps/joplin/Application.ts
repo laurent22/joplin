@@ -70,12 +70,12 @@ export default class Application extends BaseApplication {
 		return output;
 	}
 
-	private async noteLinkedItemInfos(itemModel: ItemModel, note: NoteEntity): Promise<LinkedItemInfos> {
+	private async noteLinkedItemInfos(userId:Uuid, itemModel: ItemModel, note: NoteEntity): Promise<LinkedItemInfos> {
 		const jopIds = await Note.linkedItemIds(note.body);
 		const output: LinkedItemInfos = {};
 
 		for (const jopId of jopIds) {
-			const item = await itemModel.loadByJopId(jopId, { fields: ['*'] });
+			const item = await itemModel.loadByJopId(userId, jopId, { fields: ['*'] });
 			if (!item) continue;
 
 			output[jopId] = {
@@ -155,11 +155,11 @@ export default class Application extends BaseApplication {
 		};
 	}
 
-	public async renderItem(item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
-		const itemModel = this.models.item({ userId: item.owner_id });
+	public async renderItem(userId:Uuid, item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
+		const itemModel = this.models.item({ userId });
 
 		const rootNote: NoteEntity = itemModel.itemToJoplinItem(item); // await this.unserializeItem(content);
-		const linkedItemInfos: LinkedItemInfos = await this.noteLinkedItemInfos(itemModel, rootNote);
+		const linkedItemInfos: LinkedItemInfos = await this.noteLinkedItemInfos(userId, itemModel, rootNote);
 		const resourceInfos = await this.resourceInfos(linkedItemInfos);
 
 		const fileToRender = {
