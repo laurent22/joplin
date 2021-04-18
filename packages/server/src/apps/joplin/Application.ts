@@ -1,12 +1,6 @@
-import JoplinDatabase from '@joplin/lib/JoplinDatabase';
-import Logger from '@joplin/lib/Logger';
-import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
-import Folder from '@joplin/lib/models/Folder';
-import Tag from '@joplin/lib/models/Tag';
-import MasterKey from '@joplin/lib/models/MasterKey';
-import Revision from '@joplin/lib/models/Revision';
 import { File, Item, Share, Uuid } from '../../db';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupToHtml } from '@joplin/renderer';
@@ -16,11 +10,7 @@ import { ErrorNotFound } from '../../utils/errors';
 import BaseApplication from '../../services/BaseApplication';
 import { formatDateTime } from '../../utils/time';
 import ItemModel from '../../models/ItemModel';
-import NoteTag from '@joplin/lib/models/NoteTag';
-const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 const { themeStyle } = require('@joplin/lib/theme');
-
-const logger = Logger.create('JoplinApp');
 
 export interface FileViewerResponse {
 	body: any;
@@ -44,35 +34,11 @@ type ResourceInfos = Record<Uuid, ResourceInfo>;
 
 export default class Application extends BaseApplication {
 
-	// Although we don't use the database to store data, we still need to setup
-	// so that its schema can be accessed. This is needed for example by
-	// Note.unserialize to know what fields are valid for a note, and to format
-	// the field values correctly.
-	private db_: JoplinDatabase;
-
 	private pluginAssetRootDir_: string;
 
 	public async initialize() {
 		this.mustache.prefersDarkEnabled = false;
 		this.pluginAssetRootDir_ = require('path').resolve(__dirname, '../../..', 'node_modules/@joplin/renderer/assets');
-
-		const filePath = `${this.config.tempDir}/joplin.sqlite`;
-
-		this.db_ = new JoplinDatabase(new DatabaseDriverNode());
-		this.db_.setLogger(logger as Logger);
-		await this.db_.open({ name: filePath });
-
-		BaseModel.setDb(this.db_);
-
-		// Only load the classes that will be needed to render the notes and
-		// resources.
-		BaseItem.loadClass('Folder', Folder);
-		BaseItem.loadClass('Note', Note);
-		BaseItem.loadClass('Resource', Resource);
-		BaseItem.loadClass('Tag', Tag);
-		BaseItem.loadClass('NoteTag', NoteTag);
-		BaseItem.loadClass('MasterKey', MasterKey);
-		BaseItem.loadClass('Revision', Revision);
 	}
 
 	public async localFileFromUrl(url: string): Promise<string> {
@@ -223,14 +189,6 @@ export default class Application extends BaseApplication {
 		} else {
 			throw new Error(`Cannot render item with type "${itemType}"`);
 		}
-	}
-
-	public isJoplinItemName(name: string): boolean {
-		return !!name.match(/^[0-9a-zA-Z]{32}\.md$/);
-	}
-
-	public async parseJoplinItem(body: string): Promise<any> {
-		return BaseItem.unserialize(body);
 	}
 
 }

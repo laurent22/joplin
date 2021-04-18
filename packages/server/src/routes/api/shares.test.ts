@@ -1,5 +1,5 @@
 import { ChangeType, Share, ShareType, ShareUser } from '../../db';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, initGlobalLogger } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';

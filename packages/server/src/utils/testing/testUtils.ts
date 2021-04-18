@@ -17,6 +17,7 @@ import { putApi } from './apiUtils';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import ItemModel from '../../models/ItemModel';
 import { ModelType } from '@joplin/lib/BaseModel';
+import { initializeJoplinUtils } from '../../apps/joplin/joplinUtils';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -49,6 +50,11 @@ export async function makeTempFileWithContent(content: string | Buffer): Promise
 	return filePath;
 }
 
+function initGlobalLogger() {
+	const globalLogger = new Logger();
+	Logger.initializeGlobalLogger(globalLogger);
+}
+
 let createdDbName_: string = null;
 export async function beforeAllDb(unitName: string) {
 	createdDbName_ = unitName;
@@ -56,6 +62,9 @@ export async function beforeAllDb(unitName: string) {
 	initConfig({
 		SQLITE_DATABASE: createdDbName_,
 	});
+
+	initGlobalLogger();
+	await initializeJoplinUtils(config());
 
 	await createDb(config().database, { dropIfExists: true });
 	db_ = await connectDb(config().database);
@@ -87,11 +96,6 @@ export interface AppContextTestOptions {
 	// owner?: User;
 	sessionId?: string;
 	request?: any;
-}
-
-function initGlobalLogger() {
-	const globalLogger = new Logger();
-	Logger.initializeGlobalLogger(globalLogger);
 }
 
 export function msleep(ms: number) {
