@@ -248,7 +248,7 @@ export const createUser = async function(index: number = 1, isAdmin: boolean = f
 // 	}
 // }
 
-export async function createItemTree(userId:Uuid, parentFolderId: string, tree: any): Promise<void> {
+export async function createItemTree(userId: Uuid, parentFolderId: string, tree: any): Promise<void> {
 	const itemModel = models().item({ userId });
 
 	for (const jopId in tree) {

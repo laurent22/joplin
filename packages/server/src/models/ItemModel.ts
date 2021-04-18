@@ -71,7 +71,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public async loadByJopId(userId:Uuid, jopId: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByJopId(userId: Uuid, jopId: string, options: LoadOptions = {}): Promise<Item> {
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
@@ -81,7 +81,7 @@ export default class ItemModel extends BaseModel<Item> {
 			.first();
 	}
 
-	public async loadByName(userId:Uuid, name: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByName(userId: Uuid, name: string, options: LoadOptions = {}): Promise<Item> {
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
@@ -114,7 +114,7 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	public async folderChildrenItemIds(userId:Uuid, folderId: string): Promise<Uuid[]> {
+	public async folderChildrenItemIds(userId: Uuid, folderId: string): Promise<Uuid[]> {
 		let output: Uuid[] = [];
 
 		const rows: Item[] = await this
@@ -135,7 +135,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	public async shareJoplinFolderAndContent(shareId: Uuid, fromUserId:Uuid, toUserId: Uuid, folderId: string) {
+	public async shareJoplinFolderAndContent(shareId: Uuid, fromUserId: Uuid, toUserId: Uuid, folderId: string) {
 		const folderItem = await this.loadByJopId(fromUserId, folderId, { fields: ['id'] });
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
@@ -173,7 +173,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(userId:Uuid, name: string, buffer: Buffer) {
+	public async saveFromRawContent(userId: Uuid, name: string, buffer: Buffer) {
 		const existingItem = await this.loadByName(userId, name);
 
 		const isJoplinItem = isJoplinItemName(name);
@@ -218,7 +218,7 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 
-	private childrenQuery(userId:Uuid, pathQuery: string = '', options: LoadOptions = {}): Knex.QueryBuilder {
+	private childrenQuery(userId: Uuid, pathQuery: string = '', options: LoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.leftJoin('items', 'user_items.item_id', 'items.id')
@@ -243,13 +243,13 @@ export default class ItemModel extends BaseModel<Item> {
 		return `${this.baseUrl}/items/${itemId}/content`;
 	}
 
-	public async children(userId:Uuid, pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
+	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
 		const query = this.childrenQuery(userId, pathQuery, options);
 		return paginateDbQuery(query, pagination, 'items');
 	}
 
-	public async childrenCount(userId:Uuid, pathQuery: string = ''): Promise<number> {
+	public async childrenCount(userId: Uuid, pathQuery: string = ''): Promise<number> {
 		const query = this.childrenQuery(userId, pathQuery);
 		return query.count();
 	}
@@ -315,7 +315,7 @@ export default class ItemModel extends BaseModel<Item> {
 		await this.delete(itemIds);
 	}
 
-	public async deleteAll(userId:Uuid): Promise<void> {
+	public async deleteAll(userId: Uuid): Promise<void> {
 		while (true) {
 			const page = await this.children(userId, '', { ...defaultPagination(), limit: 1000 });
 			await this.delete(page.items.map(c => c.id));
