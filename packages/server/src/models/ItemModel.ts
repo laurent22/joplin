@@ -96,7 +96,6 @@ export default class ItemModel extends BaseModel<Item> {
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.select(this.selectFields(options, ['*'], 'items'))
-			.where('user_items.user_id', '=', this.userId)
 			.where('items.id', '=', id)
 			.first();
 	}
@@ -115,20 +114,20 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	public async folderChildrenItemIds(folderId: string): Promise<Uuid[]> {
+	public async folderChildrenItemIds(userId:Uuid, folderId: string): Promise<Uuid[]> {
 		let output: Uuid[] = [];
 
 		const rows: Item[] = await this
 			.db(this.tableName)
 			.where('jop_parent_id', '=', folderId)
-			.where('owner_id', '=', this.userId)
+			.where('owner_id', '=', userId)
 			.select('id', 'jop_id', 'jop_type');
 
 		for (const row of rows) {
 			output.push(row.id);
 
 			if (row.jop_type === ModelType.Folder) {
-				const childrenIds = await this.folderChildrenItemIds(row.jop_id);
+				const childrenIds = await this.folderChildrenItemIds(userId, row.jop_id);
 				output = output.concat(childrenIds);
 			}
 		}
@@ -140,7 +139,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const folderItem = await this.loadByJopId(fromUserId, folderId, { fields: ['id'] });
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
-		const itemIds = [folderItem.id].concat(await this.folderChildrenItemIds(folderId));
+		const itemIds = [folderItem.id].concat(await this.folderChildrenItemIds(fromUserId, folderId));
 
 		const alreadySharedItemIds: string[] = await this
 			.db('user_items')
