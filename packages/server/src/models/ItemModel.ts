@@ -191,7 +191,7 @@ export default class ItemModel extends BaseModel<Item> {
 			item.jop_id = joplinItem.id;
 			item.jop_parent_id = joplinItem.parent_id || '';
 			item.jop_type = joplinItem.type_;
-			item.jop_encryption_applied = joplinItem.encryption_applied;
+			item.jop_encryption_applied = joplinItem.encryption_applied || 0;
 
 			delete joplinItem.id;
 			delete joplinItem.parent_id;

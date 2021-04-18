@@ -5,6 +5,11 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import Resource from '@joplin/lib/models/Resource';
+import NoteTag from '@joplin/lib/models/NoteTag';
+import Tag from '@joplin/lib/models/Tag';
+import MasterKey from '@joplin/lib/models/MasterKey';
+import Revision from '@joplin/lib/models/Revision';
+
 import { Config } from '../../utils/types';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 
@@ -26,6 +31,10 @@ export async function initializeJoplinUtils(config: Config) {
 	BaseItem.loadClass('Folder', Folder);
 	BaseItem.loadClass('Note', Note);
 	BaseItem.loadClass('Resource', Resource);
+	BaseItem.loadClass('Tag', Tag);
+	BaseItem.loadClass('NoteTag', NoteTag);
+	BaseItem.loadClass('MasterKey', MasterKey);
+	BaseItem.loadClass('Revision', Revision);
 }
 
 export function isJoplinItemName(name: string): boolean {

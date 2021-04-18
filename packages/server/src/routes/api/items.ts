@@ -4,9 +4,10 @@ import { respondWithItemContent, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorNotFound } from '../../utils/errors';
+import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
 import ItemModel from '../../models/ItemModel';
 import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
+import config from '../../config';
 
 const router = new Router();
 
@@ -32,13 +33,19 @@ router.get('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 // 	return itemModel.toApiOutput(await itemModel.save(newItem));
 // });
 
-// TODO: add tests
-router.del('api/files/:id', async (path: SubPath, ctx: AppContext) => {
+router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 	const itemModel = ctx.models.item({ userId: ctx.owner.id });
 
 	try {
-		const item = await itemFromPath(itemModel, path);
-		await itemModel.delete(item.id);
+		if (path.id === 'root' || path.id === 'root:/:') {
+			// We use this for testing only and for safety reasons it's probably
+			// best to disable it on production.
+			if (ctx.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
+			await itemModel.deleteAll();
+		} else {
+			const item = await itemFromPath(itemModel, path);
+			await itemModel.delete(item.id);
+		}
 	} catch (error) {
 		if (error instanceof ErrorNotFound) {
 			// That's ok - a no-op

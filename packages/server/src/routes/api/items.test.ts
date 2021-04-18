@@ -1,7 +1,7 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree } from '../../utils/testing/testUtils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { getApi, putApi } from '../../utils/testing/apiUtils';
+import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
 import { Item } from '../../db';
 import { PaginatedItems } from '../../models/ItemModel';
 
@@ -73,6 +73,53 @@ describe('api_items', function() {
 		const note: NoteEntity = await models().item({ userId: user.id }).loadAsJoplinItem(item.id);
 		expect(note.parent_id).toBe(newParentId);
 		expect(note.title).toBe('new title');
+	});
+
+	test('should delete an item', async function() {
+		const { user, session } = await createUserAndSession(1, true);
+
+		const tree: any = {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		};
+
+		const itemModel = models().item({ userId: user.id });
+
+		await createItemTree(itemModel, '', tree);
+
+		await deleteApi(session.id, 'items/root:/00000000000000000000000000000001.md:');
+
+		expect((await itemModel.all()).length).toBe(1);
+		expect((await itemModel.all())[0].jop_id).toBe('000000000000000000000000000000F1');
+	});
+
+	test('should delete all items', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1, true);
+		const { user: user2 } = await createUserAndSession(2, true);
+
+		const itemModel1 = models().item({ userId: user1.id });
+
+		await createItemTree(itemModel1, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const itemModel2 = models().item({ userId: user2.id });
+
+		await createItemTree(itemModel2, '', {
+			'000000000000000000000000000000F2': {
+				'00000000000000000000000000000002': null,
+			},
+		});
+
+		await deleteApi(session1.id, 'items/root');
+
+		const allItems = await itemModel2.all();
+		expect(allItems.length).toBe(2);
+		const ids = allItems.map(i => i.jop_id);
+		expect(ids.sort()).toEqual(['000000000000000000000000000000F2', '00000000000000000000000000000002'].sort());
 	});
 
 	test('should get back the serialized note', async function() {

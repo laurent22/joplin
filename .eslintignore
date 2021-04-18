@@ -107,6 +107,9 @@ packages/app-cli/tests/Synchronizer.sharing.js.map
 packages/app-cli/tests/Synchronizer.tags.d.ts
 packages/app-cli/tests/Synchronizer.tags.js
 packages/app-cli/tests/Synchronizer.tags.js.map
+packages/app-cli/tests/file-api-driver.d.ts
+packages/app-cli/tests/file-api-driver.js
+packages/app-cli/tests/file-api-driver.js.map
 packages/app-cli/tests/fsDriver.d.ts
 packages/app-cli/tests/fsDriver.js
 packages/app-cli/tests/fsDriver.js.map

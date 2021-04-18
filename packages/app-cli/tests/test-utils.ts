@@ -555,7 +555,8 @@ async function initFileApi(suiteName: string) {
 			username: () => 'admin@localhost',
 			password: () => 'admin',
 		});
-		fileApi = new FileApi(`Apps/Joplin-${suiteName}`, new FileApiDriverJoplinServer(api));
+		// fileApi = new FileApi(`Apps/Joplin-${suiteName}`, new FileApiDriverJoplinServer(api));
+		fileApi = new FileApi('', new FileApiDriverJoplinServer(api));
 	}
 
 	fileApi.setLogger(logger);

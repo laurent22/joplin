@@ -31,6 +31,14 @@ export async function getApi<T>(sessionId: string, path: string, options: ExecRe
 	return execApi<T>(sessionId, 'GET', path, null, options);
 }
 
+export async function deleteApiC(sessionId: string, path: string, options: ExecRequestOptions = null): Promise<AppContext> {
+	return execApiC(sessionId, 'DELETE', path, null, options);
+}
+
+export async function deleteApi<T>(sessionId: string, path: string, options: ExecRequestOptions = null): Promise<T> {
+	return execApi<T>(sessionId, 'DELETE', path, null, options);
+}
+
 export async function postApiC(sessionId: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
 	return execApiC(sessionId, 'POST', path, body, options);
 }
