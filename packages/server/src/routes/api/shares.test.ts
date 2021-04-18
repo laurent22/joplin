@@ -108,7 +108,7 @@ describe('api_shares', function() {
 
 		const itemModel = models().item({ userId: user1.id });
 
-		await createItemTree(itemModel, '', tree);
+		await createItemTree(user1.id, '', tree);
 
 		const folderItem = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F3');
 
@@ -142,7 +142,7 @@ describe('api_shares', function() {
 
 		const itemModel = models().item({ userId: user1.id });
 
-		await createItemTree(itemModel, '', tree);
+		await createItemTree(user1.id, '', tree);
 
 		const folderItem = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F2');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
@@ -175,7 +175,7 @@ describe('api_shares', function() {
 
 		const itemModel = models().item({ userId: user1.id });
 
-		await createItemTree(itemModel, '', tree);
+		await createItemTree(user1.id, '', tree);
 
 		const folderItem1 = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
@@ -274,7 +274,7 @@ describe('api_shares', function() {
 
 		const itemModel = models().item({ userId: user1.id });
 
-		await createItemTree(itemModel, '', tree);
+		await createItemTree(user1.id, '', tree);
 
 		const folderItem = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F1');
 
@@ -302,7 +302,7 @@ describe('api_shares', function() {
 
 		const itemModel = models().item({ userId: user1.id });
 
-		await createItemTree(itemModel, '', tree);
+		await createItemTree(user1.id, '', tree);
 
 		const folderItem = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F1');
 
@@ -340,7 +340,7 @@ describe('api_shares', function() {
 		const itemModel1 = models().item({ userId: user1.id });
 		const itemModel2 = models().item({ userId: user2.id });
 
-		await createItemTree(itemModel1, '', tree);
+		await createItemTree(user1.id, '', tree);
 
 		const folderItem = await itemModel1.loadByJopId(user1.id, '000000000000000000000000000000F1');
 
@@ -379,7 +379,7 @@ describe('api_shares', function() {
 
 		const itemModel1 = models().item({ userId: user1.id });
 
-		await createItemTree(itemModel1, '', tree);
+		await createItemTree(user1.id, '', tree);
 		const folderItem = await itemModel1.loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 

@@ -1,14 +1,14 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createItem } from '../utils/testing/testUtils';
-import { ChangeType, Item } from '../db';
+import { ChangeType, Item, Uuid } from '../db';
 import { msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
-import ItemModel from './ItemModel';
 
 let itemCounter_ = 0;
-async function makeTestItem(itemModel: ItemModel): Promise<Item> {
+async function makeTestItem(userId: Uuid): Promise<Item> {
 	itemCounter_++;
-	return itemModel.save({
+	return models().item({ userId }).save({
 		name: `item${itemCounter_}`,
+		owner_id: userId,
 	});
 }
 
@@ -45,14 +45,14 @@ describe('ChangeModel', function() {
 		const itemModel = models().item({ userId: user.id });
 		const changeModel = models().change({ userId: user.id });
 
-		await msleep(1); const item1 = await makeTestItem(itemModel); // CREATE 1
+		await msleep(1); const item1 = await makeTestItem(user.id); // CREATE 1
 		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1a' }); // UPDATE 1a
 		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1b' }); // UPDATE 1b
-		await msleep(1); const item2 = await makeTestItem(itemModel); // CREATE 2
+		await msleep(1); const item2 = await makeTestItem(user.id); // CREATE 2
 		await msleep(1); await itemModel.save({ id: item2.id, name: 'test_mod_2a' }); // UPDATE 2a
 		await msleep(1); await itemModel.delete(item1.id); // DELETE 1
 		await msleep(1); await itemModel.save({ id: item2.id, name: 'test_mod_2b' }); // UPDATE 2b
-		await msleep(1); const item3 = await makeTestItem(itemModel); // CREATE 3
+		await msleep(1); const item3 = await makeTestItem(user.id); // CREATE 3
 
 		{
 			// When we get all the changes, we get a CREATE event for item 2 and
@@ -114,7 +114,7 @@ describe('ChangeModel', function() {
 		const changeModel = models().change({ userId: user.id });
 
 		let i = 1;
-		await msleep(1); const item1 = await makeTestItem(itemModel); // CREATE 1
+		await msleep(1); const item1 = await makeTestItem(user.id); // CREATE 1
 		await msleep(1); await itemModel.save({ id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
 
 		await expectThrow(async () => changeModel.allForUser({ limit: 1, cursor: 'invalid' }), 'resyncRequired');

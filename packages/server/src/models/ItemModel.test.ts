@@ -28,7 +28,7 @@ describe('ItemModel', function() {
 
 		const itemModel1 = models().item({ userId: user1.id });
 
-		await createItemTree(itemModel1, '', tree);
+		await createItemTree(user1.id, '', tree);
 		await createItem(session2.id, 'root:/test.txt:', 'testing');
 
 		{

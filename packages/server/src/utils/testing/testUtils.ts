@@ -1,4 +1,4 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, sqliteFilePath, Item } from '../../db';
+import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, sqliteFilePath, Item, Uuid } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
@@ -248,7 +248,9 @@ export const createUser = async function(index: number = 1, isAdmin: boolean = f
 // 	}
 // }
 
-export async function createItemTree(itemModel: ItemModel, parentFolderId: string, tree: any): Promise<void> {
+export async function createItemTree(userId:Uuid, parentFolderId: string, tree: any): Promise<void> {
+	const itemModel = models().item({ userId });
+
 	for (const jopId in tree) {
 		const children: any = tree[jopId];
 		const isFolder = children !== null;
@@ -259,9 +261,10 @@ export async function createItemTree(itemModel: ItemModel, parentFolderId: strin
 			jop_type: isFolder ? ModelType.Folder : ModelType.Note,
 			name: `${jopId}.md`,
 			content: Buffer.from(`{"title":"Item ${jopId}"}`),
+			owner_id: userId,
 		});
 
-		if (isFolder && Object.keys(children).length) await createItemTree(itemModel, newItem.jop_id, children);
+		if (isFolder && Object.keys(children).length) await createItemTree(userId, newItem.jop_id, children);
 	}
 }
 

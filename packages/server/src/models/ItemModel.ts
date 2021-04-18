@@ -180,6 +180,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		const item: Item = {
 			name,
+			owner_id: userId,
 		};
 
 		if (isJoplinItem) {
@@ -348,8 +349,6 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
-
-			item.owner_id = this.userId;
 		} else {
 			previousItem = await this.load(item.id, { fields: ['jop_parent_id'] });
 		}
@@ -360,7 +359,7 @@ export default class ItemModel extends BaseModel<Item> {
 				previousItem,
 			});
 
-			if (isNew) await this.models().userItem().add(this.userId, item.id);
+			if (isNew) await this.models().userItem().add(item.owner_id, item.id);
 
 			return item;
 		});

@@ -86,7 +86,7 @@ describe('api_items', function() {
 
 		const itemModel = models().item({ userId: user.id });
 
-		await createItemTree(itemModel, '', tree);
+		await createItemTree(user.id, '', tree);
 
 		await deleteApi(session.id, 'items/root:/00000000000000000000000000000001.md:');
 
@@ -100,7 +100,7 @@ describe('api_items', function() {
 
 		const itemModel1 = models().item({ userId: user1.id });
 
-		await createItemTree(itemModel1, '', {
+		await createItemTree(user1.id, '', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -108,7 +108,7 @@ describe('api_items', function() {
 
 		const itemModel2 = models().item({ userId: user2.id });
 
-		await createItemTree(itemModel2, '', {
+		await createItemTree(user2.id, '', {
 			'000000000000000000000000000000F2': {
 				'00000000000000000000000000000002': null,
 			},
