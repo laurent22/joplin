@@ -1,9 +1,9 @@
-import { SubPath, respondWithFileContent, redirect, respondWithItemContent } from '../../utils/routeUtils';
+import { SubPath, redirect, respondWithItemContent } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
-import { AppContext, HttpMethod } from '../../utils/types';
+import { AppContext } from '../../utils/types';
 import { contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorNotFound } from '../../utils/errors';
-import { File, Item } from '../../db';
+import { Item } from '../../db';
 import { createPaginationLinks, filterPaginationQueryParams, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
 import { setQueryParameters } from '../../utils/urlUtils';
 import config from '../../config';
@@ -41,7 +41,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	async function itemToViewItem(item: Item): Promise<any> {
 		return {
 			name: item.name,
-			url: config().baseUrl + '/items/' + item.id + '/content',
+			url: `${config().baseUrl}/items/${item.id}/content`,
 			type: 'file',
 			icon: 'far fa-file',
 			timestamp: formatDateTime(item.updated_time),

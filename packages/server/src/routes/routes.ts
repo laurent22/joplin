@@ -10,7 +10,6 @@ import indexLogin from './index/login';
 import indexLogout from './index/logout';
 import indexHome from './index/home';
 import indexUsers from './index/users';
-import indexFiles from './index/files';
 import indexItems from './index/items';
 import indexNotifications from './index/notifications';
 import indexShares from './index/shares';
@@ -29,7 +28,6 @@ const routes: Routers = {
 	'logout': indexLogout,
 	'home': indexHome,
 	'users': indexUsers,
-	'files': indexFiles,
 	'items': indexItems,
 	'notifications': indexNotifications,
 	'shares': indexShares,

@@ -1,5 +1,5 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem } from '../utils/testing/testUtils';
-import { File, User } from '../db';
+import { User } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 
 describe('UserModel', function() {

@@ -4,7 +4,6 @@ import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { Item, Share } from '../../db';
 import { FileViewerResponse } from '../../apps/joplin/Application';
-import { FileWithContent } from '../../models/FileModel';
 import { ModelType } from '@joplin/lib/BaseModel';
 
 async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {

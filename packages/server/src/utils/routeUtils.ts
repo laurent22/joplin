@@ -1,6 +1,5 @@
-import { File, Item, ItemAddressingType } from '../db';
+import { Item, ItemAddressingType } from '../db';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
-import { FileContent } from '../models/FileModel';
 import Router from './Router';
 import { AppContext, HttpMethod } from './types';
 
@@ -233,13 +232,6 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	}
 
 	throw new Error('Unreachable');
-}
-
-export function respondWithFileContent(koaResponse: any, file: File, content: FileContent): Response {
-	koaResponse.body = content;
-	koaResponse.set('Content-Type', file.mime_type);
-	koaResponse.set('Content-Length', file.size.toString());
-	return new Response(ResponseType.KoaResponse, koaResponse);
 }
 
 export function respondWithItemContent(koaResponse: any, item: Item, content: Buffer): Response {

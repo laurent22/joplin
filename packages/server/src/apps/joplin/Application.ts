@@ -4,17 +4,15 @@ import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { File, Item, JoplinFileContent, Share, Uuid } from '../../db';
+import { File, Item, Share, Uuid } from '../../db';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupToHtml } from '@joplin/renderer';
 import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
-import FileModel, { FileContent, FileWithContent, LoadContentHandlerEvent, SaveContentHandlerEvent } from '../../models/FileModel';
 import { ErrorNotFound } from '../../utils/errors';
 import BaseApplication from '../../services/BaseApplication';
 import { formatDateTime } from '../../utils/time';
 import ItemModel from '../../models/ItemModel';
-// import ShareUserModel, { ShareAcceptedHandlerEvent } from '../../models/ShareUserModel';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -79,14 +77,6 @@ export default class Application extends BaseApplication {
 		return null;
 	}
 
-	private itemIdFilename(itemId: string): string {
-		return `${itemId}.md`;
-	}
-
-	private async unserializeItem(fileContent: FileContent): Promise<any> {
-		return BaseItem.unserialize(fileContent.toString());
-	}
-
 	private async resourceInfos(linkedItemInfos: LinkedItemInfos): Promise<ResourceInfos> {
 		const output: Record<string, any> = {};
 
@@ -123,29 +113,7 @@ export default class Application extends BaseApplication {
 		return output;
 	}
 
-	private async resourceDir(fileModel: FileModel, parentId: Uuid): Promise<File> {
-		const parent = await fileModel.load(parentId);
-		const parentFullPath = await fileModel.itemFullPath(parent);
-		const dirPath = fileModel.resolve(parentFullPath, '.resource');
-		return fileModel.pathToFile(dirPath);
-	}
-
-	private async itemFile(fileModel: FileModel, parentId: Uuid, itemType: ModelType, itemId: string): Promise<FileWithContent> {
-		let output: File = null;
-
-		if (itemType === ModelType.Resource) {
-			const resourceDir = await this.resourceDir(fileModel, parentId);
-			output = await fileModel.fileByName(resourceDir.id, itemId);
-		} else if (itemType === ModelType.Note) {
-			output = await fileModel.fileByName(parentId, this.itemIdFilename(itemId));
-		} else {
-			throw new Error(`Unsupported type: ${itemType}`);
-		}
-
-		return fileModel.loadWithContent(output.id);
-	}
-
-	private async renderResource(item: Item, content: FileContent): Promise<FileViewerResponse> {
+	private async renderResource(item: Item, content: any): Promise<FileViewerResponse> {
 		return {
 			body: content,
 			mime: item.mime_type,
@@ -255,53 +223,6 @@ export default class Application extends BaseApplication {
 
 	public async parseJoplinItem(body: string): Promise<any> {
 		return BaseItem.unserialize(body);
-	}
-
-	public async fileToJoplinItem(fileWithContent: FileWithContent): Promise<JoplinFileContent> | null {
-		if (!('mime_type' in fileWithContent.file)) throw new Error('mime_type is required');
-
-		if (fileWithContent.file.mime_type !== 'text/markdown') return null;
-
-		try {
-			const rawItem: any = await this.unserializeItem(fileWithContent.content);
-
-			const dbItem: JoplinFileContent = {
-				item_id: rawItem.id,
-				parent_id: rawItem.parent_id || '',
-				encryption_applied: rawItem.encryption_applied || 0,
-				type: rawItem.type_,
-				updated_time: rawItem.updated_time,
-				created_time: rawItem.created_time,
-				owner_id: fileWithContent.file.owner_id,
-			};
-
-			delete rawItem.id;
-			delete rawItem.parent_id;
-			delete rawItem.encryption_applied;
-			delete rawItem.type_;
-			delete rawItem.updated_time;
-			delete rawItem.created_time;
-
-			dbItem.content = JSON.stringify(rawItem);
-
-			return dbItem;
-		} catch (error) {
-			// No need to log - it means it's not a note file
-			return null;
-		}
-	}
-
-	public async joplinItemToFile(fileContent: JoplinFileContent): Promise<string> {
-		const item = JSON.parse(fileContent.content);
-		item.id = fileContent.item_id;
-		item.type_ = fileContent.type;
-		item.parent_id = fileContent.parent_id;
-		item.encryption_applied = fileContent.encryption_applied;
-		item.updated_time = fileContent.updated_time;
-		item.created_time = fileContent.created_time;
-
-		const ItemClass = BaseItem.itemClass(item);
-		return ItemClass.serialize(item);
 	}
 
 }

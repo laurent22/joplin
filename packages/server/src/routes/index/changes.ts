@@ -79,8 +79,6 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	view.cssFiles = ['index/changes'];
 	view.partials.push('pagination');
 	return view;
-
-	return '';
 });
 
 export default router;

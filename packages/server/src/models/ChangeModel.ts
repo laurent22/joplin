@@ -1,7 +1,7 @@
-import { Change, ChangeType, File, Item, ItemType, Uuid } from '../db';
-import { ErrorResyncRequired, ErrorUnprocessableEntity } from '../utils/errors';
+import { Change, ChangeType, Item, ItemType, Uuid } from '../db';
+import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel from './BaseModel';
-import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
+import { PaginatedResults } from './utils/pagination';
 
 export interface ChangeWithItem {
 	item: Item;
@@ -59,11 +59,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		return this.save(change) as Change;
 	}
 
-	private async countByUser(userId: string): Promise<number> {
-		const r: any = await this.db(this.tableName).where('owner_id', userId).count('id', { as: 'total' }).first();
-		return r.total;
-	}
-
 	public changeUrl(): string {
 		return `${this.baseUrl}/changes`;
 	}
@@ -115,7 +110,8 @@ export default class ChangeModel extends BaseModel<Change> {
 				'changes.updated_time',
 			])
 			.where(function() {
-				this.where('user_items.user_id', userId)
+				void this
+					.where('user_items.user_id', userId)
 					.orWhere('changes.user_id', userId);
 			});
 

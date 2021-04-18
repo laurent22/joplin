@@ -1,4 +1,4 @@
-import { File, User } from '../../db';
+import { User } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError } from '../../utils/testing/testUtils';
 
@@ -97,7 +97,7 @@ describe('index_users', function() {
 
 	test('should not create anything if user creation fail', async function() {
 		const { user, session } = await createUserAndSession(1, true);
-		
+
 		const userModel = models().user({ userId: user.id });
 
 		await postUser(session.id, 'test@example.com', '123456');

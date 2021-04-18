@@ -208,7 +208,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.save(item);
 	}
 
-	private childrenQuery(pathQuery: string = '', options:LoadOptions = {}):Knex.QueryBuilder {
+	private childrenQuery(pathQuery: string = '', options: LoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.leftJoin('items', 'user_items.item_id', 'items.id')
@@ -225,15 +225,15 @@ export default class ItemModel extends BaseModel<Item> {
 		return query;
 	}
 
-	public itemUrl():string {
-		return this.baseUrl + '/items';
+	public itemUrl(): string {
+		return `${this.baseUrl}/items`;
 	}
 
-	public itemContentUrl(itemId:Uuid):string {
-		return this.baseUrl + '/items/' + itemId + '/content';
+	public itemContentUrl(itemId: Uuid): string {
+		return `${this.baseUrl}/items/${itemId}/content`;
 	}
 
-	public async children(pathQuery: string = '', pagination: Pagination = null, options:LoadOptions = {}): Promise<PaginatedItems> {
+	public async children(pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
 		const query = this.childrenQuery(pathQuery, options);
 		return paginateDbQuery(query, pagination, 'items');
@@ -262,7 +262,8 @@ export default class ItemModel extends BaseModel<Item> {
 				.where('jop_id', '=', jopId)
 
 				.union((qb: Knex.QueryBuilder) => {
-					qb.select('items.id', 'items.jop_id', 'items.jop_parent_id')
+					void qb
+						.select('items.id', 'items.jop_id', 'items.jop_parent_id')
 						.from('items')
 						.join('paths', 'items.jop_id', 'paths.jop_parent_id');
 				});
@@ -287,7 +288,7 @@ export default class ItemModel extends BaseModel<Item> {
 	// Returns the item IDs that are owned only by the given user. In other
 	// words, the items that are not shared with anyone else. Such items
 	// can be safely deleted when the user is deleted.
-	public async exclusivelyOwnedItemIds(userId:Uuid):Promise<Uuid[]> {
+	public async exclusivelyOwnedItemIds(userId: Uuid): Promise<Uuid[]> {
 		const query = this
 			.db('items')
 			.select(this.db.raw('items.id, count(user_items.item_id) as user_item_count'))
@@ -295,16 +296,16 @@ export default class ItemModel extends BaseModel<Item> {
 			.whereIn('items.id', this.db('user_items').select('user_items.item_id').where('user_id', '=', userId))
 			.groupBy('items.id');
 
-		const rows:any[] = await query;
+		const rows: any[] = await query;
 		return rows.filter(r => r.user_item_count === 1).map(r => r.id);
 	}
 
-	public async deleteExclusivelyOwnedItems(userId:Uuid) {
+	public async deleteExclusivelyOwnedItems(userId: Uuid) {
 		const itemIds = await this.exclusivelyOwnedItemIds(userId);
-		await this.delete(itemIds);		
+		await this.delete(itemIds);
 	}
 
-	public async deleteAll():Promise<void> {
+	public async deleteAll(): Promise<void> {
 		while (true) {
 			const page = await this.children('', { ...defaultPagination(), limit: 1000 });
 			await this.delete(page.items.map(c => c.id));

@@ -1,9 +1,7 @@
-import { ChangeType, File, Share, ShareType, ShareUser } from '../../db';
-import { putFileContent, testFilePath } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createFile, updateFile, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem } from '../../utils/testing/testUtils';
-import { postApiC, postApi, getApiC, patchApi, getApi } from '../../utils/testing/apiUtils';
-import { PaginatedFiles } from '../../models/FileModel';
-import { PaginatedChanges, PaginatedChangesOld } from '../../models/ChangeModel';
+import { ChangeType, Share, ShareType, ShareUser } from '../../db';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem } from '../../utils/testing/testUtils';
+import { postApi, patchApi, getApi } from '../../utils/testing/apiUtils';
+import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorBadRequest } from '../../utils/errors';
@@ -64,7 +62,7 @@ describe('api_shares', function() {
 		// On the sharee side, check that the file is present
 		// and with the right content.
 		// ----------------------------------------------------------------
-		const results = await getApi<PaginatedFiles>(session2.id, 'items/root/children');
+		const results = await getApi<PaginatedItems>(session2.id, 'items/root/children');
 		expect(results.items.length).toBe(1);
 		expect(results.items[0].name).toBe(folderItem.name);
 

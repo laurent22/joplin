@@ -15,7 +15,7 @@ import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './apps/joplin/joplinUtils';
-import { createItemTree } from './utils/testing/testUtils';
+// import { createItemTree } from './utils/testing/testUtils';
 
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');

@@ -18,7 +18,7 @@ describe('ShareModel', function() {
 
 	test('should validate share objects', async function() {
 		const { user, session } = await createUserAndSession(1, true);
-		
+
 		const item = await createItem(session.id, 'root:/test.txt:', 'testing');
 
 		let error = null;

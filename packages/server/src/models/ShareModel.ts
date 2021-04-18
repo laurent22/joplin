@@ -15,7 +15,7 @@ export default class ShareModel extends BaseModel<Share> {
 		if (await this.itemIsShared(share.type, share.item_id)) throw new ErrorBadRequest('A shared item cannot be shared again');
 
 		const item = await this.models().item().load(share.item_id);
-		if (!item) throw new ErrorNotFound('Could not find item: ' + share.item_id);
+		if (!item) throw new ErrorNotFound(`Could not find item: ${share.item_id}`);
 
 		return share;
 	}
@@ -60,7 +60,7 @@ export default class ShareModel extends BaseModel<Share> {
 		const query = this.db(this.tableName)
 			.select(this.defaultFields)
 			.where('owner_id', '=', userId);
-		
+
 		if (type) void query.andWhere('type', '=', type);
 
 		return query;

@@ -37,7 +37,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return output;
 	}
 
-	public async byUserId(userId:Uuid):Promise<UserItem[]> {
+	public async byUserId(userId: Uuid): Promise<UserItem[]> {
 		return this.db(this.tableName).where('user_id', '=', userId);
 	}
 

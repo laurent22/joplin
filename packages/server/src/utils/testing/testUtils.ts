@@ -1,9 +1,8 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, File, truncateTables, sqliteFilePath, Item } from '../../db';
+import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, sqliteFilePath, Item } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
 import config, { initConfig } from '../../config';
-import FileModel from '../../models/FileModel';
 import Logger from '@joplin/lib/Logger';
 import FakeCookies from './koa/FakeCookies';
 import FakeRequest from './koa/FakeRequest';
@@ -312,17 +311,17 @@ export async function createFolder(sessionId: string, folder: NoteEntity): Promi
 	return createItem(sessionId, `root:/${folder.id}.md:`, makeFolderSerializedBody(folder));
 }
 
-export async function updateFile(userId: string, path: string, content: string): Promise<File> {
-	const fileModel = models().file({ userId });
-	const file: File = await fileModel.pathToFile(path, { returnFullEntity: true });
+// export async function updateFile(userId: string, path: string, content: string): Promise<File> {
+// 	const fileModel = models().file({ userId });
+// 	const file: File = await fileModel.pathToFile(path, { returnFullEntity: true });
 
-	await fileModel.save({
-		...file,
-		content: Buffer.from(content),
-	});
+// 	await fileModel.save({
+// 		...file,
+// 		content: Buffer.from(content),
+// 	});
 
-	return fileModel.load(file.id);
-}
+// 	return fileModel.load(file.id);
+// }
 
 export function checkContextError(context: AppContext) {
 	if (context.response.status >= 400) {

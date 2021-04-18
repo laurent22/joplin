@@ -1,8 +1,5 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createItem, createItemTree } from '../utils/testing/testUtils';
-import { ChangeType, Item, ShareType } from '../db';
-import { msleep } from '../utils/time';
-import { ChangePagination } from './ChangeModel';
-import ItemModel from './ItemModel';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree } from '../utils/testing/testUtils';
+import { ShareType } from '../db';
 import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
 
 describe('ItemModel', function() {

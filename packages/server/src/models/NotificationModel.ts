@@ -51,7 +51,7 @@ export default class NotificationModel extends BaseModel<Notification> {
 			.first();
 	}
 
-	public async deleteByUserId(userId:Uuid) {
+	public async deleteByUserId(userId: Uuid) {
 		await this.db(this.tableName).where('owner_id', '=', userId).delete();
 	}
 
