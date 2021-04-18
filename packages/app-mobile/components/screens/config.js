@@ -1,6 +1,6 @@
 import Slider from '@react-native-community/slider';
 const React = require('react');
-const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert, PermissionsAndroid } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert, PermissionsAndroid, TouchableNativeFeedback } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
 const { _ } = require('@joplin/lib/locale');
@@ -19,6 +19,7 @@ const shim = require('@joplin/lib/shim').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
 const RNFS = require('react-native-fs');
 const checkPermissions = require('../../utils/checkPermissions.js').default;
+import DirectoryPicker from '../../utils/DirectoryPicker';
 import setIgnoreTlsErrors from '../../utils/TlsUtils';
 
 class ConfigScreenComponent extends BaseScreenComponent {
@@ -34,6 +35,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			creatingReport: false,
 			profileExportStatus: 'idle',
 			profileExportPath: '',
+			fileSystemSyncPath: Setting.value('sync.2.path'),
 		};
 
 		shared.init(this);
@@ -70,6 +72,16 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		this.syncStatusButtonPress_ = () => {
 			NavService.go('Status');
+		};
+
+		this.selectDirectoryButtonPress = async () => {
+			try {
+				const dir = await DirectoryPicker.pick();
+				this.setState({ fileSystemSyncPath: dir.path });
+				shared.updateSettingValue(this, 'sync.2.path', dir.path);
+			} catch (e) {
+				reg.logger().info(`Didn't pick sync dir: ${e}`);
+			}
 		};
 
 		this.exportDebugButtonPress_ = async () => {
@@ -426,14 +438,29 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_STRING) {
-			return (
-				<View key={key} style={this.styles().settingContainer}>
-					<Text key="label" style={this.styles().settingText}>
-						{md.label()}
-					</Text>
-					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={value => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
-				</View>
-			);
+			if (md.key === 'sync.2.path' && DirectoryPicker.isAvailable()) {
+				return (
+					<TouchableNativeFeedback key={key} onPress={this.selectDirectoryButtonPress} style={this.styles().settingContainer}>
+						<View style={this.styles().settingContainer}>
+							<Text key="label" style={this.styles().settingText}>
+								{md.label()}
+							</Text>
+							<Text style={this.styles().settingControl}>
+								{this.state.fileSystemSyncPath}
+							</Text>
+						</View>
+					</TouchableNativeFeedback>
+				);
+			} else {
+				return (
+					<View key={key} style={this.styles().settingContainer}>
+						<Text key="label" style={this.styles().settingText}>
+							{md.label()}
+						</Text>
+						<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={value => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					</View>
+				);
+			}
 		} else {
 			// throw new Error('Unsupported setting type: ' + md.type);
 		}
