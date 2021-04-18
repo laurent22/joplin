@@ -1,9 +1,9 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item, ShareType, Share } from '../db';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ErrorConflict, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import Knex = require('knex');
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -24,10 +24,6 @@ export default class ItemModel extends BaseModel<Item> {
 
 	protected get tableName(): string {
 		return 'items';
-	}
-
-	protected get trackChanges(): boolean {
-		return true;
 	}
 
 	protected get itemType(): ItemType {
@@ -206,7 +202,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.save(item);
 	}
 
-	protected async validate(item: Item, options: ValidateOptions = {}, saveOptions: SaveOptions = {}): Promise<Item> {
+	protected async validate(item: Item, options: ValidateOptions = {}, _saveOptions: SaveOptions = {}): Promise<Item> {
 		if (options.isNew) {
 			if (!item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 			if (!item.owner_id) throw new ErrorUnprocessableEntity('owner_id is required');
@@ -329,11 +325,31 @@ export default class ItemModel extends BaseModel<Item> {
 
 		const shares = await this.models().share().byItemIds(ids);
 		const deletedItemUserIds = await this.models().userItem().userIdsByItemIds(ids);
+		const items = await this.db(this.tableName).select('id', 'name').whereIn('id', ids);
 
 		await this.withTransaction(async () => {
+
+			const changeModel = this.models().change({ userId: this.userId });
+
+			for (const item of items) {
+				const userIds = deletedItemUserIds[item.id];
+				for (const userId of userIds) {		
+					await changeModel.save({
+						item_type: this.itemType,
+						parent_id: '',
+						item_id: item.id,
+						item_name: item.name,
+						type: ChangeType.Delete,
+						owner_id: this.userId,
+						previous_item: '',
+						user_id: userId,
+					});
+				}
+			}
+
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids);
-			await super.delete(ids, { ...options, deletedItemUserIds });
+			await super.delete(ids, options);
 		}, 'ItemModel::delete');
 	}
 
@@ -350,16 +366,26 @@ export default class ItemModel extends BaseModel<Item> {
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
 		} else {
-			previousItem = await this.load(item.id, { fields: ['jop_parent_id'] });
+			previousItem = await this.load(item.id, { fields: ['name', 'jop_parent_id'] });
 		}
 
 		return this.withTransaction(async () => {
-			item = await super.save(item, {
-				...options,
-				previousItem,
-			});
+			item = await super.save(item, options);
 
 			if (isNew) await this.models().userItem().add(item.owner_id, item.id);
+
+			const changeModel = this.models().change({ userId: this.userId });
+
+			await changeModel.save({
+				item_type: this.itemType,
+				parent_id: '',
+				item_id: item.id,
+				item_name: item.name || previousItem.name,
+				type: isNew ? ChangeType.Create : ChangeType.Update,
+				owner_id: this.userId,
+				previous_item: previousItem ? changeModel.serializePreviousItem(previousItem) : '',
+				user_id: '',
+			});
 
 			return item;
 		});

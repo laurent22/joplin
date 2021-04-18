@@ -15,7 +15,6 @@ import setupAppContext from '../setupAppContext';
 import { ApiError } from '../errors';
 import { putApi } from './apiUtils';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
-import ItemModel from '../../models/ItemModel';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../../apps/joplin/joplinUtils';
 

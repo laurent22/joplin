@@ -98,8 +98,6 @@ describe('api_items', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1, true);
 		const { user: user2 } = await createUserAndSession(2, true);
 
-		const itemModel1 = models().item({ userId: user1.id });
-
 		await createItemTree(user1.id, '', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,

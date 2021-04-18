@@ -1,4 +1,4 @@
-import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, ChangeType, Uuid } from '../db';
+import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, Uuid } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
@@ -14,7 +14,6 @@ export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
 	validationRules?: any;
-	trackChanges?: boolean;
 	previousItem?: any;
 }
 
@@ -111,10 +110,6 @@ export default abstract class BaseModel<T> {
 
 	protected get itemType(): ItemType {
 		throw new Error('Not implemented');
-	}
-
-	protected get trackChanges(): boolean {
-		return false;
 	}
 
 	protected hasUuid(): boolean {
@@ -219,33 +214,6 @@ export default abstract class BaseModel<T> {
 		return !(object as WithUuid).id;
 	}
 
-	private async handleChangeTracking(options: SaveOptions, item: T, changeType: ChangeType, deletedItemUserIds: Uuid[] = []): Promise<void> {
-		const trackChanges = this.trackChanges && options.trackChanges !== false;
-		if (!trackChanges) return;
-
-		let parentId = null;
-		if (this.hasParentId) {
-			if (!('parent_id' in item)) {
-				const temp: any = await this.db(this.tableName).select(['parent_id']).where('id', '=', (item as WithUuid).id).first();
-				parentId = temp.parent_id;
-			} else {
-				parentId = (item as any).parent_id;
-			}
-		}
-
-		// Sanity check - shouldn't happen
-		// Parent ID can be an empty string for root folders, but it shouldn't be null or undefined
-		if (this.hasParentId && !parentId && parentId !== '') throw new Error(`Could not find parent ID for item: ${(item as WithUuid).id}`);
-
-		const changeModel = this.models().change({ userId: this.userId });
-
-		const userIds = deletedItemUserIds.length ? deletedItemUserIds : [''];
-
-		for (const userId of userIds) {
-			await changeModel.add(this.itemType, parentId, (item as WithUuid).id, (item as any).name || '', changeType, options.previousItem, userId);
-		}
-	}
-
 	public async save(object: T, options: SaveOptions = {}): Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
 
@@ -270,15 +238,12 @@ export default abstract class BaseModel<T> {
 		await this.withTransaction(async () => {
 			if (isNew) {
 				await this.db(this.tableName).insert(toSave);
-				await this.handleChangeTracking(options, toSave, ChangeType.Create);
 			} else {
 				const objectId: string = (toSave as WithUuid).id;
 				if (!objectId) throw new Error('Missing "id" property');
 				delete (toSave as WithUuid).id;
 				const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId });
 				(toSave as WithUuid).id = objectId;
-
-				await this.handleChangeTracking(options, toSave, ChangeType.Update);
 
 				// Sanity check:
 				if (updatedCount !== 1) throw new ErrorBadRequest(`one row should have been updated, but ${updatedCount} row(s) were updated`);
@@ -306,18 +271,6 @@ export default abstract class BaseModel<T> {
 
 		if (!ids.length) throw new Error('no id provided');
 
-		const trackChanges = this.trackChanges;
-
-		let itemsWithParentIds: T[] = null;
-		if (trackChanges) {
-			if (this.hasParentId) {
-				// TODO: Not needed anymore - remove
-				itemsWithParentIds = await this.db(this.tableName).select(['id', 'parent_id', 'name']).whereIn('id', ids);
-			} else {
-				itemsWithParentIds = await this.db(this.tableName).select(['id', 'name']).whereIn('id', ids);
-			}
-		}
-
 		await this.withTransaction(async () => {
 			const query = this.db(this.tableName).where({ id: ids[0] });
 			for (let i = 1; i < ids.length; i++) {
@@ -326,14 +279,6 @@ export default abstract class BaseModel<T> {
 
 			const deletedCount = await query.del();
 			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
-
-			if (trackChanges) {
-				// - Add an extra parameter - itemUserIds
-				// - Create one change item for each itemUserId
-				for (const item of itemsWithParentIds) {
-					await this.handleChangeTracking({}, item, ChangeType.Delete, options.deletedItemUserIds[(item as WithUuid).id]);
-				}
-			}
 		}, 'BaseModel::delete');
 	}
 
