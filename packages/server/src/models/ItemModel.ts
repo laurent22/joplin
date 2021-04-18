@@ -1,9 +1,9 @@
-import BaseModel, { SaveOptions, LoadOptions, DeleteOptions } from './BaseModel';
+import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ErrorNotFound } from '../utils/errors';
+import { ErrorConflict, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import Knex = require('knex');
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -204,6 +204,18 @@ export default class ItemModel extends BaseModel<Item> {
 
 		return this.save(item);
 	}
+
+	protected async validate(item: Item, options: ValidateOptions = {}, saveOptions: SaveOptions = {}): Promise<Item> {
+		if (options.isNew) {
+			if (!item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
+			if (!item.owner_id) throw new ErrorUnprocessableEntity('owner_id is required');
+		} else {
+			if ('name' in item && !item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
+		}
+
+		return item;
+	}
+
 
 	private childrenQuery(userId:Uuid, pathQuery: string = '', options: LoadOptions = {}): Knex.QueryBuilder {
 		const query = this
