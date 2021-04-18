@@ -33,7 +33,7 @@ describe('api_items', function() {
 			body: noteBody,
 		}));
 
-		item = await models().item({ userId: user.id }).loadByName(filename);
+		item = await models().item({ userId: user.id }).loadByName(user.id, filename);
 		const itemId = item.id;
 
 		expect(!!item.id).toBe(true);

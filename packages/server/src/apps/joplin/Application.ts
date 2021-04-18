@@ -156,7 +156,7 @@ export default class Application extends BaseApplication {
 	}
 
 	public async renderItem(userId:Uuid, item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
-		const itemModel = this.models.item({ userId });
+		const itemModel = this.models.item();
 
 		const rootNote: NoteEntity = itemModel.itemToJoplinItem(item); // await this.unserializeItem(content);
 		const linkedItemInfos: LinkedItemInfos = await this.noteLinkedItemInfos(userId, itemModel, rootNote);
@@ -169,7 +169,7 @@ export default class Application extends BaseApplication {
 		};
 
 		if (query.resource_id) {
-			const resourceItem = await itemModel.loadByName(`.resource/${query.resource_id}`, { fields: ['*'] });
+			const resourceItem = await itemModel.loadByName(userId, `.resource/${query.resource_id}`, { fields: ['*'] });
 			fileToRender.item = resourceItem;
 			fileToRender.content = resourceItem.content;
 			fileToRender.itemId = query.resource_id;

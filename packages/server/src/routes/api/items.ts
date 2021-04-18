@@ -1,4 +1,4 @@
-import { Item } from '../../db';
+import { Item, Uuid } from '../../db';
 import { formParse } from '../../utils/requestUtils';
 import { respondWithItemContent, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
@@ -11,16 +11,16 @@ import config from '../../config';
 
 const router = new Router();
 
-async function itemFromPath(itemModel: ItemModel, path: SubPath, mustExists: boolean = true): Promise<Item> {
+async function itemFromPath(userId:Uuid, itemModel: ItemModel, path: SubPath, mustExists: boolean = true): Promise<Item> {
 	const name = itemModel.pathToName(path.id);
-	const item = await itemModel.loadByName(name);
+	const item = await itemModel.loadByName(userId, name);
 	if (mustExists && !item) throw new ErrorNotFound(`Not found: ${path.id}`);
 	return item;
 }
 
 router.get('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 	const itemModel = ctx.models.item({ userId: ctx.owner.id });
-	const item = await itemFromPath(itemModel, path);
+	const item = await itemFromPath(ctx.owner.id, itemModel, path);
 	return itemModel.toApiOutput(item);
 });
 
@@ -43,7 +43,7 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 			if (ctx.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
 			await itemModel.deleteAll();
 		} else {
-			const item = await itemFromPath(itemModel, path);
+			const item = await itemFromPath(ctx.owner.id, itemModel, path);
 			await itemModel.delete(item.id);
 		}
 	} catch (error) {
@@ -57,7 +57,7 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 
 router.get('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const itemModel = ctx.models.item({ userId: ctx.owner.id });
-	const item = await itemFromPath(itemModel, path);
+	const item = await itemFromPath(ctx.owner.id, itemModel, path);
 	const serializedContent = await itemModel.serializedContent(item.id);
 	return respondWithItemContent(ctx.response, item, serializedContent);
 });
@@ -67,7 +67,7 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const name = itemModel.pathToName(path.id);
 	const parsedBody = await formParse(ctx.req);
 	const buffer = parsedBody?.files?.file ? await fs.readFile(parsedBody.files.file.path) : Buffer.alloc(0);
-	const item = await itemModel.saveFromRawContent(name, buffer);
+	const item = await itemModel.saveFromRawContent(ctx.owner.id, name, buffer);
 	return itemModel.toApiOutput(item);
 });
 

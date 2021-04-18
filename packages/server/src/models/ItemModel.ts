@@ -81,12 +81,12 @@ export default class ItemModel extends BaseModel<Item> {
 			.first();
 	}
 
-	public async loadByName(name: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByName(userId:Uuid, name: string, options: LoadOptions = {}): Promise<Item> {
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.select(this.selectFields(options, null, 'items'))
-			.where('user_items.user_id', '=', this.userId)
+			.where('user_items.user_id', '=', userId)
 			.where('name', '=', name)
 			.first();
 	}
@@ -174,8 +174,8 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(name: string, buffer: Buffer) {
-		const existingItem = await this.loadByName(name);
+	public async saveFromRawContent(userId:Uuid, name: string, buffer: Buffer) {
+		const existingItem = await this.loadByName(userId, name);
 
 		const isJoplinItem = isJoplinItemName(name);
 
