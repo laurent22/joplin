@@ -18,7 +18,9 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
 	const shareModel = ctx.models.share();
-	const shareInput: ShareApiInput = shareModel.fromApiInput(await bodyFields(ctx.req)) as ShareApiInput;
+	const fields = await bodyFields(ctx.req);
+	const shareInput: ShareApiInput = shareModel.fromApiInput(fields) as ShareApiInput;
+	if (fields.folder_id) shareInput.folder_id = fields.folder_id;
 
 	let shareToSave: Share = {};
 
