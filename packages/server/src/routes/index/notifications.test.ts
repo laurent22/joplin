@@ -21,9 +21,9 @@ describe('index_notification', function() {
 
 		const model = models().notification({ userId: user.id });
 
-		await model.add('my_notification', NotificationLevel.Normal, 'testing notification');
+		await model.add(user.id, 'my_notification', NotificationLevel.Normal, 'testing notification');
 
-		const notification = await model.loadByKey('my_notification');
+		const notification = await model.loadByKey(user.id, 'my_notification');
 
 		expect(notification.read).toBe(0);
 
@@ -40,7 +40,7 @@ describe('index_notification', function() {
 
 		await routeHandler(context);
 
-		expect((await model.loadByKey('my_notification')).read).toBe(1);
+		expect((await model.loadByKey(user.id, 'my_notification')).read).toBe(1);
 	});
 
 });

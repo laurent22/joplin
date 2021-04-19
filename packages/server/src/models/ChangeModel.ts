@@ -73,16 +73,6 @@ export default class ChangeModel extends BaseModel<Change> {
 		return results;
 	}
 
-	// public async allWithPagination(pagination: Pagination): Promise<PaginatedChanges> {
-	// 	const results = await paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('owner_id', '=', this.userId), pagination);
-	// 	const changeWithItems = {}; //await this.loadChangeItemsOld(results.items);
-	// 	return {
-	// 		...results,
-	// 		items: changeWithItems,
-	// 		page_count: Math.ceil(await this.countByUser(this.userId) / pagination.limit),
-	// 	};
-	// }
-
 	public async allForUser(userId:Uuid, pagination: ChangePagination = null): Promise<PaginatedChanges> {
 		pagination = {
 			...defaultChangePagination(),
