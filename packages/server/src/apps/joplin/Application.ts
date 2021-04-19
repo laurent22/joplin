@@ -69,7 +69,7 @@ export default class Application extends BaseApplication {
 		return output;
 	}
 
-	private async noteLinkedItemInfos(userId:Uuid, itemModel: ItemModel, note: NoteEntity): Promise<LinkedItemInfos> {
+	private async noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, note: NoteEntity): Promise<LinkedItemInfos> {
 		const jopIds = await Note.linkedItemIds(note.body);
 		const output: LinkedItemInfos = {};
 
@@ -154,7 +154,7 @@ export default class Application extends BaseApplication {
 		};
 	}
 
-	public async renderItem(userId:Uuid, item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
+	public async renderItem(userId: Uuid, item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
 		const itemModel = this.models.item();
 
 		const rootNote: NoteEntity = itemModel.itemToJoplinItem(item); // await this.unserializeItem(content);

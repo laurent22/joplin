@@ -73,7 +73,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return results;
 	}
 
-	public async allForUser(userId:Uuid, pagination: ChangePagination = null): Promise<PaginatedChanges> {
+	public async allForUser(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedChanges> {
 		pagination = {
 			...defaultChangePagination(),
 			...pagination,

@@ -34,18 +34,18 @@ export default class FileApiDriverJoplinServer {
 		return 3;
 	}
 
-	private metadataToStat_(md: any, path: string, isDeleted: boolean = false, rootPath:string) {
+	private metadataToStat_(md: any, path: string, isDeleted: boolean = false, rootPath: string) {
 		const output = {
 			path: rootPath ? path.substr(rootPath.length + 1) : path,
 			updated_time: md.updated_time,
-			isDir: false, //!!md.is_directory,
+			isDir: false, // !!md.is_directory,
 			isDeleted: isDeleted,
 		};
 
 		return output;
 	}
 
-	private metadataToStats_(mds: any[], rootPath:string) {
+	private metadataToStats_(mds: any[], rootPath: string) {
 		const output = [];
 		for (let i = 0; i < mds.length; i++) {
 			output.push(this.metadataToStat_(mds[i], mds[i].name, false, rootPath));

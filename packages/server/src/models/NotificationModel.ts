@@ -13,13 +13,13 @@ export default class NotificationModel extends BaseModel<Notification> {
 		return super.validate(notification, options, saveOptions);
 	}
 
-	public async add(userId:Uuid, key: string, level: NotificationLevel, message: string): Promise<Notification> {
+	public async add(userId: Uuid, key: string, level: NotificationLevel, message: string): Promise<Notification> {
 		const n: Notification = await this.loadByKey(userId, key);
 		if (n) return n;
 		return this.save({ key, message, level, owner_id: userId });
 	}
 
-	public async markAsRead(userId:Uuid, key: string): Promise<void> {
+	public async markAsRead(userId: Uuid, key: string): Promise<void> {
 		const n = await this.loadByKey(userId, key);
 		if (!n) return;
 
@@ -29,7 +29,7 @@ export default class NotificationModel extends BaseModel<Notification> {
 			.andWhere('owner_id', '=', userId);
 	}
 
-	public loadByKey(userId:Uuid, key: string): Promise<Notification> {
+	public loadByKey(userId: Uuid, key: string): Promise<Notification> {
 		return this.db(this.tableName)
 			.select(this.defaultFields)
 			.where('key', '=', key)

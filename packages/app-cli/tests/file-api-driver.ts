@@ -56,7 +56,7 @@ describe('file-api-driver', function() {
 		await fileApi().put('subdir/test2.txt', 'testing2');
 		const files = await fileApi().list('subdir');
 		expect(files.items.length).toBe(2);
-		expect(files.items.map((f:any) => f.path).sort()).toEqual(['test1.txt', 'test2.txt'].sort());
+		expect(files.items.map((f: any) => f.path).sort()).toEqual(['test1.txt', 'test2.txt'].sort());
 	}));
 
 	it('should delete a file', (async () => {
@@ -65,5 +65,5 @@ describe('file-api-driver', function() {
 		const files = await fileApi().list('');
 		expect(files.items.length).toBe(0);
 	}));
-	
+
 });
