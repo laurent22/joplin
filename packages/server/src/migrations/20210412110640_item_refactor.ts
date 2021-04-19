@@ -64,6 +64,10 @@ export async function up(db: DbConnection): Promise<any> {
 		table.index(['key']);
 	});
 
+	await db.schema.alterTable('shares', function(table: Knex.CreateTableBuilder) {
+		table.dropColumn('is_auto');
+	});
+
 	await db.schema.alterTable('changes', function(table: Knex.CreateTableBuilder) {
 		table.text('previous_item').defaultTo('').notNullable();
 		table.string('user_id', 32).defaultTo('').notNullable();
@@ -72,10 +76,6 @@ export async function up(db: DbConnection): Promise<any> {
 
 	await db.schema.dropTable('permissions');
 	await db.schema.dropTable('joplin_file_contents');
-
-	// TODO: add indexes
-
-	// TODO: add owner_id/name constraint - only one name per owner
 }
 
 export async function down(db: DbConnection): Promise<any> {

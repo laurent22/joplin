@@ -307,14 +307,6 @@ export interface Notification extends WithDates, WithUuid {
 	canBeDismissed?: number;
 }
 
-export interface Share extends WithDates, WithUuid {
-	owner_id?: Uuid;
-	item_id?: Uuid;
-	type?: ShareType;
-	folder_id?: Uuid;
-	is_auto?: number;
-}
-
 export interface ShareUser extends WithDates, WithUuid {
 	share_id?: Uuid;
 	user_id?: Uuid;
@@ -344,6 +336,13 @@ export interface KeyValue {
 	key?: string;
 	type?: number;
 	value?: string;
+}
+
+export interface Share extends WithDates, WithUuid {
+	owner_id?: Uuid;
+	item_id?: Uuid;
+	type?: ShareType;
+	folder_id?: Uuid;
 }
 
 export interface Change extends WithDates, WithUuid {
@@ -408,16 +407,6 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},
-	shares: {
-		id: { type: 'string' },
-		owner_id: { type: 'string' },
-		item_id: { type: 'string' },
-		type: { type: 'number' },
-		updated_time: { type: 'string' },
-		created_time: { type: 'string' },
-		folder_id: { type: 'string' },
-		is_auto: { type: 'number' },
-	},
 	share_users: {
 		id: { type: 'string' },
 		share_id: { type: 'string' },
@@ -452,6 +441,15 @@ export const databaseSchema: DatabaseTables = {
 		key: { type: 'string' },
 		type: { type: 'number' },
 		value: { type: 'string' },
+	},
+	shares: {
+		id: { type: 'string' },
+		owner_id: { type: 'string' },
+		item_id: { type: 'string' },
+		type: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+		folder_id: { type: 'string' },
 	},
 	changes: {
 		counter: { type: 'number' },
