@@ -57,6 +57,7 @@ export default class UserModel extends BaseModel<User> {
 
 		if (action === AclAction.Delete) {
 			if (!user.is_admin) throw new ErrorForbidden('only admins can delete users');
+			if (user.id === resource.id) throw new ErrorForbidden('cannot delete own user');
 		}
 
 		if (action === AclAction.List) {
