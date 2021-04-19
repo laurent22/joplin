@@ -1,19 +1,8 @@
-import { File, Share, ShareType, ShareUser, Uuid } from '../db';
+import { Item, Share, ShareType, ShareUser, Uuid } from '../db';
 import { ErrorNotFound } from '../utils/errors';
 import BaseModel from './BaseModel';
-import { Models } from './factory';
-
-export interface ShareAcceptedHandlerEvent {
-	linkedFile: File;
-	share: Share;
-	models: Models;
-}
-
-export type ShareAcceptedHandler = (event: ShareAcceptedHandlerEvent)=> void;
 
 export default class ShareUserModel extends BaseModel<ShareUser> {
-
-	private static shareAcceptedHandlers_: ShareAcceptedHandler[] = [];
 
 	public get tableName(): string {
 		return 'share_users';
@@ -23,10 +12,6 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		const shares = await this.models().share().sharesByFileId(fileId);
 		const shareIds = shares.map(s => s.id);
 		return this.db(this.tableName).select(...this.defaultFields).whereIn('share_id', shareIds);
-	}
-
-	public static registerShareAcceptedHandler(handler: ShareAcceptedHandler) {
-		this.shareAcceptedHandlers_.push(handler);
 	}
 
 	public async byShareId(shareId: Uuid): Promise<ShareUser[]> {
@@ -96,20 +81,22 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		});
 	}
 
-	public async accept(shareId: Uuid, userId: Uuid, accept: boolean = true): Promise<File> {
+	public async accept(shareId: Uuid, userId: Uuid, accept: boolean = true): Promise<Item> {
 		const shareUser = await this.loadByShareIdAndUser(shareId, userId);
-		if (!shareUser) throw new ErrorNotFound(`File has not been shared with this user: ${shareId} / ${userId}`);
+		if (!shareUser) throw new ErrorNotFound(`Item has not been shared with this user: ${shareId} / ${userId}`);
 
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
 		const item = await this.models().item().load(share.item_id);
 
-		return this.withTransaction<File>(async () => {
+		return this.withTransaction<Item>(async () => {
 			await this.save({ ...shareUser, is_accepted: accept ? 1 : 0 });
 
 			if (share.type === ShareType.JoplinRootFolder) {
 				await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
+			} else if (share.type === ShareType.App) {
+				await this.models().userItem().add(userId, share.item_id, share.id);
 			}
 		});
 	}

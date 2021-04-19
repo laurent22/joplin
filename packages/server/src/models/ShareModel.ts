@@ -1,13 +1,19 @@
-import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, Uuid } from '../db';
-import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
+import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, User, Uuid } from '../db';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
-import BaseModel, { DeleteOptions, ValidateOptions } from './BaseModel';
+import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
 import { SharedRootInfo } from './ItemModel';
 
 export default class ShareModel extends BaseModel<Share> {
 
 	public get tableName(): string {
 		return 'shares';
+	}
+
+	public async checkIfAllowed(user: User, action: AclAction, resource: Share = null): Promise<void> {
+		if (action === AclAction.Create) {
+			if (!await this.models().item().userHasItem(user.id, resource.item_id)) throw new ErrorForbidden('cannot share an item not owned by the user');
+		}
 	}
 
 	protected async validate(share: Share, options: ValidateOptions = {}): Promise<Share> {

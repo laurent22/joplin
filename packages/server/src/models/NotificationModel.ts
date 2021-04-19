@@ -1,6 +1,6 @@
 import { Notification, NotificationLevel, Uuid } from '../db';
 import { ErrorUnprocessableEntity } from '../utils/errors';
-import BaseModel, { SaveOptions, ValidateOptions } from './BaseModel';
+import BaseModel, { ValidateOptions } from './BaseModel';
 
 export default class NotificationModel extends BaseModel<Notification> {
 

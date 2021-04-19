@@ -1,5 +1,5 @@
-import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions, AclAction } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User } from '../db';
+import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions } from './BaseModel';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -84,6 +84,16 @@ export default class ItemModel extends BaseModel<Item> {
 			}
 			return output;
 		}
+	}
+
+	public async userHasItem(userId:Uuid, itemId:Uuid):Promise<boolean> {
+		const r = await this
+			.db('user_items')
+			.select('user_items.id')
+			.where('user_items.user_id', '=', userId)
+			.where('user_items.item_id', '=', itemId)
+			.first();
+		return !!r;
 	}
 
 	// Remove first and last colon from a path element

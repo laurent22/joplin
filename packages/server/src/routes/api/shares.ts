@@ -4,6 +4,7 @@ import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
+import { AclAction } from '../../models/BaseModel';
 
 const router = new Router();
 
@@ -15,13 +16,28 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	const shareModel = ctx.models.share();
 	const share: Share = shareModel.fromApiInput(await bodyFields(ctx.req)) as Share;
 
+	let shareToSave:Share = {};
+
 	if (share.folder_id) {
 		const folderItem = await ctx.models.item().loadByJopId(ctx.owner.id, share.folder_id);
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${share.folder_id}`);
-		return shareModel.createShare(ctx.owner.id, ShareType.JoplinRootFolder, folderItem.id);
+
+		shareToSave = {
+			type: ShareType.JoplinRootFolder,
+			item_id: folderItem.id,
+			owner_id: ctx.owner.id,
+		};
 	} else {
-		return shareModel.createShare(ctx.owner.id, share.type, share.item_id);
+		shareToSave = {
+			type: share.type,
+			item_id: share.item_id,
+			owner_id: ctx.owner.id,
+		};
 	}
+
+	await shareModel.checkIfAllowed(ctx.owner, AclAction.Create, shareToSave);
+	
+	return shareModel.save(shareToSave);
 });
 
 router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {

@@ -16,7 +16,7 @@ describe('api_shares', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllTests();
+		// await afterAllTests();
 	});
 
 	beforeEach(async () => {
@@ -353,6 +353,18 @@ describe('api_shares', function() {
 
 		expect((await itemModel1.children(user1.id)).items.length).toBe(2);
 		expect((await itemModel2.children(user2.id)).items.length).toBe(0);
+	});
+
+	test('should associate a user with the item after sharing', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
+
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.App, item);
+
+		expect((await models().userItem().all()).length).toBe(2);
+		expect(!!(await models().userItem().all()).find(ui => ui.user_id === user2.id)).toBe(true);
 	});
 
 	test('should not share an already shared item', async function() {

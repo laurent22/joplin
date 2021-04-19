@@ -10,6 +10,14 @@ import { requestChangePagination, requestPagination } from '../../models/utils/p
 
 const router = new Router();
 
+// Note about access control:
+//
+// - All these calls are scoped to a user, which is derived from the session
+// - All items are accessed by userId/itemName
+// - In other words, it is not possible for a user to access another user's
+//   items, thus the lack of checkIfAllowed() calls as that would not be
+//   necessary, and would be slower.
+
 async function itemFromPath(userId: Uuid, itemModel: ItemModel, path: SubPath, mustExists: boolean = true): Promise<Item> {
 	const name = itemModel.pathToName(path.id);
 	const item = await itemModel.loadByName(userId, name);

@@ -224,7 +224,7 @@ export default abstract class BaseModel<T> {
 			(toSave as WithDates).updated_time = timestamp;
 		}
 
-		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} }, options);
+		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} });
 
 		await this.withTransaction(async () => {
 			if (isNew) {
