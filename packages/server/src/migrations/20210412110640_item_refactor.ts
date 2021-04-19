@@ -66,6 +66,7 @@ export async function up(db: DbConnection): Promise<any> {
 
 	await db.schema.alterTable('shares', function(table: Knex.CreateTableBuilder) {
 		table.dropColumn('is_auto');
+		table.dropColumn('folder_id');
 	});
 
 	await db.schema.alterTable('changes', function(table: Knex.CreateTableBuilder) {
