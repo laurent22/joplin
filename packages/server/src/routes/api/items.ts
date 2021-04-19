@@ -23,15 +23,6 @@ router.get('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 	return itemModel.toApiOutput(item);
 });
 
-// router.patch('api/files/:id', async (path: SubPath, ctx: AppContext) => {
-// 	const itemModel = ctx.models.item();
-// 	const item = await itemFromPath(itemModel, path);
-// 	const inputItem: Item = await bodyFields(ctx.req);
-// 	const newItem = itemModel.fromApiInput(inputItem);
-// 	newItem.id = item.id;
-// 	return itemModel.toApiOutput(await itemModel.save(newItem));
-// });
-
 router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 	const itemModel = ctx.models.item();
 
@@ -70,18 +61,6 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	return itemModel.toApiOutput(item);
 });
 
-// router.del('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
-// 	const fileModel = ctx.models.file();
-// 	const fileId = path.id;
-// 	const file: File = await fileModel.pathToFile(fileId, { mustExist: false, returnFullEntity: true });
-// 	if (!file) return;
-
-// 	await fileModel.save({
-// 		...file,
-// 		content: Buffer.alloc(0),
-// 	}, { validationRules: { mustBeFile: true } });
-// });
-
 router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
 	const changeModel = ctx.models.change();
 	return changeModel.allForUser(ctx.owner.id, requestChangePagination(ctx.query));
@@ -93,19 +72,5 @@ router.get('api/items/:id/children', async (path: SubPath, ctx: AppContext) => {
 	const result = await itemModel.children(ctx.owner.id, parentName, requestPagination(ctx.query));
 	return result;
 });
-
-// router.get('api/files/:id/children', async (path: SubPath, ctx: AppContext) => {
-// 	const fileModel = ctx.models.file();
-// 	const parentId: Uuid = await fileModel.pathToFileId(path.id);
-// 	return fileModel.toApiOutput(await fileModel.childrens(parentId, requestPagination(ctx.query)));
-// });
-
-// router.post('api/files/:id/children', async (path: SubPath, ctx: AppContext) => {
-// 	const fileModel = ctx.models.file();
-// 	const child: File = fileModel.fromApiInput(await bodyFields(ctx.req));
-// 	const parentId: Uuid = await fileModel.pathToFileId(path.id);
-// 	child.parent_id = parentId;
-// 	return fileModel.toApiOutput(await fileModel.save(child));
-// });
 
 export default router;

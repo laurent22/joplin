@@ -254,13 +254,12 @@ export async function createItemTree(userId: Uuid, parentFolderId: string, tree:
 		const children: any = tree[jopId];
 		const isFolder = children !== null;
 
-		const newItem: Item = await itemModel.save({
+		const newItem: Item = await itemModel.saveForUser(userId, {
 			jop_parent_id: parentFolderId,
 			jop_id: jopId,
 			jop_type: isFolder ? ModelType.Folder : ModelType.Note,
 			name: `${jopId}.md`,
 			content: Buffer.from(`{"title":"Item ${jopId}"}`),
-			owner_id: userId,
 		});
 
 		if (isFolder && Object.keys(children).length) await createItemTree(userId, newItem.jop_id, children);

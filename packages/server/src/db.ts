@@ -322,7 +322,6 @@ export interface ShareUser extends WithDates, WithUuid {
 }
 
 export interface Item extends WithDates, WithUuid {
-	owner_id?: Uuid;
 	name?: string;
 	mime_type?: string;
 	content?: Buffer;
@@ -429,7 +428,6 @@ export const databaseSchema: DatabaseTables = {
 	},
 	items: {
 		id: { type: 'string' },
-		owner_id: { type: 'string' },
 		name: { type: 'string' },
 		mime_type: { type: 'string' },
 		updated_time: { type: 'string' },

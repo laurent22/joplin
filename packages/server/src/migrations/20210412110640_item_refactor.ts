@@ -28,7 +28,6 @@ import { DbConnection } from '../db';
 export async function up(db: DbConnection): Promise<any> {
 	await db.schema.createTable('items', function(table: Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
-		table.string('owner_id', 32).notNullable();
 		table.text('name').notNullable();
 		table.string('mime_type', 128).defaultTo('application/octet-stream').notNullable();
 		table.bigInteger('updated_time').notNullable();

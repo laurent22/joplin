@@ -6,9 +6,8 @@ import { ChangePagination } from './ChangeModel';
 let itemCounter_ = 0;
 async function makeTestItem(userId: Uuid): Promise<Item> {
 	itemCounter_++;
-	return models().item().save({
+	return models().item().saveForUser(userId, {
 		name: `item${itemCounter_}`,
-		owner_id: userId,
 	});
 }
 

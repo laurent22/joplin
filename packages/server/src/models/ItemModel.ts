@@ -1,5 +1,5 @@
-import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType } from '../db';
+import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions, AclAction } from './BaseModel';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -37,6 +37,31 @@ export default class ItemModel extends BaseModel<Item> {
 	protected get defaultFields(): string[] {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
 	}
+
+	// public async checkIfAllowed(user: User, action: AclAction, resource: Item = null): Promise<void> {
+	// 	if (action === AclAction.Create) {
+
+	// 	}
+
+	// 	if (action === AclAction.Read) {
+	// 		if (user.is_admin) return;
+	// 		if (user.id !== resource.id) throw new ErrorForbidden('cannot view other users');
+	// 	}
+
+	// 	if (action === AclAction.Update) {
+	// 		if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
+	// 		if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
+	// 		if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
+	// 	}
+
+	// 	if (action === AclAction.Delete) {
+	// 		if (!user.is_admin) throw new ErrorForbidden('only admins can delete users');
+	// 	}
+
+	// 	if (action === AclAction.List) {
+	// 		if (!user.is_admin) throw new ErrorForbidden('non-admin cannot list users');
+	// 	}
+	// }
 
 	public fromApiInput(item: Item): Item {
 		const output: Item = {};
@@ -114,10 +139,11 @@ export default class ItemModel extends BaseModel<Item> {
 		let output: Uuid[] = [];
 
 		const rows: Item[] = await this
-			.db(this.tableName)
-			.where('jop_parent_id', '=', folderId)
-			.where('owner_id', '=', userId)
-			.select('id', 'jop_id', 'jop_type');
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.select('items.id', 'items.jop_id', 'items.jop_type')
+			.where('items.jop_parent_id', '=', folderId)
+			.where('user_items.user_id', '=', userId);
 
 		for (const row of rows) {
 			output.push(row.id);
@@ -176,7 +202,6 @@ export default class ItemModel extends BaseModel<Item> {
 
 		const item: Item = {
 			name,
-			owner_id: userId,
 		};
 
 		if (isJoplinItem) {
@@ -199,13 +224,12 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (existingItem) item.id = existingItem.id;
 
-		return this.save(item);
+		return this.saveForUser(userId, item);
 	}
 
 	protected async validate(item: Item, options: ValidateOptions = {}, _saveOptions: SaveOptions = {}): Promise<Item> {
 		if (options.isNew) {
 			if (!item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
-			if (!item.owner_id) throw new ErrorUnprocessableEntity('owner_id is required');
 		} else {
 			if ('name' in item && !item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 		}
@@ -352,13 +376,15 @@ export default class ItemModel extends BaseModel<Item> {
 		}, 'ItemModel::delete');
 	}
 
-	public async save(item: Item, options: SaveOptions = {}): Promise<Item> {
+	public async saveForUser(userId: Uuid, item: Item, options: SaveOptions = {}): Promise<Item> {
 		item = { ... item };
 		const isNew = await this.isNew(item, options);
 
 		if (item.content) {
 			item.content_size = item.content.byteLength;
 		}
+
+		if (isNew && !userId) throw new Error('userId is required when saving a new item');
 
 		let previousItem: Item = null;
 
@@ -371,7 +397,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.withTransaction(async () => {
 			item = await super.save(item, options);
 
-			if (isNew) await this.models().userItem().add(item.owner_id, item.id);
+			if (isNew) await this.models().userItem().add(userId, item.id);
 
 			const changeModel = this.models().change();
 
@@ -387,6 +413,10 @@ export default class ItemModel extends BaseModel<Item> {
 
 			return item;
 		});
+	}
+
+	public async save(item: Item, options: SaveOptions = {}): Promise<Item> {
+		return this.saveForUser('', item, options);
 	}
 
 }
