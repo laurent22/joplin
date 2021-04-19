@@ -18,7 +18,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 	protected async validate(share: Share, options: ValidateOptions = {}): Promise<Share> {
 		if ('type' in share && ![ShareType.Link, ShareType.App, ShareType.JoplinRootFolder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
-		if (await this.itemIsShared(share.type, share.item_id)) throw new ErrorBadRequest('A shared item cannot be shared again');
+		if (share.type !== ShareType.Link && await this.itemIsShared(share.type, share.item_id)) throw new ErrorBadRequest('A shared item cannot be shared again');
 
 		const item = await this.models().item().load(share.item_id);
 		if (!item) throw new ErrorNotFound(`Could not find item: ${share.item_id}`);
