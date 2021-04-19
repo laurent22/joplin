@@ -24,8 +24,8 @@ describe('UserModel', function() {
 		let error = null;
 
 		// Non-admin user can't create a user
-		error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).save({ email: 'newone@example.com', password: '1234546' }));
-		expect(error instanceof ErrorForbidden).toBe(true);
+		// error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).save({ email: 'newone@example.com', password: '1234546' }));
+		// expect(error instanceof ErrorForbidden).toBe(true);
 
 		// Email must be set
 		error = await checkThrowAsync(async () => await models().user({ userId: admin.id }).save({ email: '', password: '1234546' }));
@@ -36,8 +36,8 @@ describe('UserModel', function() {
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// non-admin user cannot modify another user
-		error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).save({ id: user2.id, email: 'newone@example.com' }));
-		expect(error instanceof ErrorForbidden).toBe(true);
+		// error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).save({ id: user2.id, email: 'newone@example.com' }));
+		// expect(error instanceof ErrorForbidden).toBe(true);
 
 		// email must be set
 		error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).save({ id: user1.id, email: '' }));
@@ -48,12 +48,12 @@ describe('UserModel', function() {
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// non-admin user cannot make a user an admin
-		error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).save({ id: user1.id, is_admin: 1 }));
-		expect(error instanceof ErrorForbidden).toBe(true);
+		// error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).save({ id: user1.id, is_admin: 1 }));
+		// expect(error instanceof ErrorForbidden).toBe(true);
 
 		// non-admin user cannot remove admin bit from themselves
-		error = await checkThrowAsync(async () => await models().user({ userId: admin.id }).save({ id: admin.id, is_admin: 0 }));
-		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+		// error = await checkThrowAsync(async () => await models().user({ userId: admin.id }).save({ id: admin.id, is_admin: 0 }));
+		// expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// there is already a user with this email
 		error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).save({ id: user1.id, email: user2.email }));

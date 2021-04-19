@@ -367,6 +367,22 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	return thrownError;
 }
 
+export async function expectHttpError(asyncFn: Function, expectedHttpCode: number): Promise<void> {
+	let thrownError = null;
+	
+	try {
+		await asyncFn();
+	} catch (error) {
+		thrownError = error;
+	}
+
+	if (!thrownError) {
+		expect('not throw').toBe('throw');
+	} else {
+		expect(thrownError.httpCode).toBe(expectedHttpCode);
+	}
+}
+
 export function makeNoteSerializedBody(note: NoteEntity = {}): string {
 	return `${'title' in note ? note.title : 'Title'}
 

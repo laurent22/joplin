@@ -1,6 +1,7 @@
 import { AppContext } from '../types';
 import routeHandler from '../../middleware/routeHandler';
-import { AppContextTestOptions, checkContextError, koaAppContext } from './testUtils';
+import { AppContextTestOptions, checkContextError, koaAppContext, koaNext } from './testUtils';
+import aclHandler from '../../middleware/aclHandler';
 
 interface ExecRequestOptions {
 	filePath?: string;
@@ -47,14 +48,14 @@ export async function postApi<T>(sessionId: string, path: string, body: Record<s
 	return execApi<T>(sessionId, 'POST', path, body, options);
 }
 
-export async function execApiC(sessionId: string, method: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
+export async function execRequestC(sessionId: string, method: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
 	options = options || {};
 
 	const appContextOptions: AppContextTestOptions = {
 		sessionId,
 		request: {
 			method,
-			url: `/api/${path}`,
+			url: `/${path}`,
 		},
 	};
 
@@ -66,6 +67,16 @@ export async function execApiC(sessionId: string, method: string, path: string, 
 	const context = await koaAppContext(appContextOptions);
 	await routeHandler(context);
 	return context;
+}
+
+export async function execRequest<T>(sessionId: string, method: string, url: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<T> {
+	const context = await execRequestC(sessionId, method, url, body, options);
+	await checkContextError(context);
+	return context.response.body as T;
+}
+
+export async function execApiC(sessionId: string, method: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
+	return execRequestC(sessionId, method, 'api/' + path, body, options);
 }
 
 export async function execApi<T>(sessionId: string, method: string, url: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<T> {

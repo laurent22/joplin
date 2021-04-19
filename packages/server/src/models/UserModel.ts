@@ -1,5 +1,5 @@
-import BaseModel, { SaveOptions, ValidateOptions } from './BaseModel';
-import { User } from '../db';
+import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
+import { User, Uuid } from '../db';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
 
@@ -39,21 +39,46 @@ export default class UserModel extends BaseModel<User> {
 		return output;
 	}
 
+	public async checkIfAllowed(user:User, action:AclAction, resource:User = null):Promise<void> {		
+		if (action === AclAction.Create) {
+			if (!user.is_admin) throw new ErrorForbidden('non-admin user cannot create a new user');
+		}
+
+		if (action === AclAction.Read) {
+			if (user.is_admin) return;
+			if (user.id !== resource.id) throw new ErrorForbidden('cannot view other users');
+		}
+
+		if (action === AclAction.Update) {
+			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
+			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
+			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
+		}
+
+		if (action === AclAction.Delete) {
+			if (!user.is_admin) throw new ErrorForbidden('only admins can delete users');
+		}
+
+		if (action === AclAction.List) {
+			if (!user.is_admin) throw new ErrorForbidden('non-admin cannot list users');
+		}
+	}
+
 	protected async validate(object: User, options: ValidateOptions = {}): Promise<User> {
 		const user: User = await super.validate(object, options);
 
-		const owner: User = await this.load(this.userId);
+		// const owner: User = await this.load(this.userId);
 
 		if (options.isNew) {
-			if (!owner.is_admin) throw new ErrorForbidden('non-admin user cannot create a new user');
+			// if (!owner.is_admin) throw new ErrorForbidden('non-admin user cannot create a new user');
 			if (!user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if (!user.password) throw new ErrorUnprocessableEntity('password must be set');
 		} else {
-			if (!owner.is_admin && user.id !== owner.id) throw new ErrorForbidden('non-admin user cannot modify another user');
+			// if (!owner.is_admin && user.id !== owner.id) throw new ErrorForbidden('non-admin user cannot modify another user');
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');
-			if (!owner.is_admin && 'is_admin' in user) throw new ErrorForbidden('non-admin user cannot make a user an admin');
-			if (owner.is_admin && owner.id === user.id && 'is_admin' in user && !user.is_admin) throw new ErrorUnprocessableEntity('non-admin user cannot remove admin bit from themselves');
+			// if (!owner.is_admin && 'is_admin' in user) throw new ErrorForbidden('non-admin user cannot make a user an admin');
+			// if (owner.is_admin && owner.id === user.id && 'is_admin' in user && !user.is_admin) throw new ErrorUnprocessableEntity('non-admin user cannot remove admin bit from themselves');
 		}
 
 		if ('email' in user) {

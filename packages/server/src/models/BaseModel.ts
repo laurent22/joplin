@@ -1,4 +1,4 @@
-import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, Uuid } from '../db';
+import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, Uuid, User } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
@@ -30,6 +30,14 @@ export interface DeleteOptions {
 export interface ValidateOptions {
 	isNew?: boolean;
 	rules?: any;
+}
+
+export enum AclAction {
+	Create = 1,
+	Read = 2,
+	Update = 3,
+	Delete = 4,
+	List = 5,
 }
 
 export default abstract class BaseModel<T> {
@@ -85,6 +93,10 @@ export default abstract class BaseModel<T> {
 			this.defaultFields_ = Object.keys(databaseSchema[this.tableName]);
 		}
 		return this.defaultFields_.slice();
+	}
+
+	public async checkIfAllowed(_user:User, _action:AclAction, _resource:T = null):Promise<void> {
+		throw new Error('Must be overriden');
 	}
 
 	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = ''): string[] {

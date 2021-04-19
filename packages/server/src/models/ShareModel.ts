@@ -20,11 +20,11 @@ export default class ShareModel extends BaseModel<Share> {
 		return share;
 	}
 
-	public async createShare(shareType: ShareType, itemId: Uuid): Promise<Share> {
+	public async createShare(userId:Uuid, shareType: ShareType, itemId: Uuid): Promise<Share> {
 		const toSave: Share = {
 			type: shareType,
 			item_id: itemId,
-			owner_id: this.userId,
+			owner_id: userId,
 		};
 
 		return this.save(toSave);

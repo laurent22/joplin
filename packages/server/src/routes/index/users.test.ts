@@ -1,6 +1,9 @@
 import { User } from '../../db';
+import aclHandler from '../../middleware/aclHandler';
 import routeHandler from '../../middleware/routeHandler';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError } from '../../utils/testing/testUtils';
+import { ErrorForbidden } from '../../utils/errors';
+import { execRequest } from '../../utils/testing/apiUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, koaNext, expectThrow, expectHttpError } from '../../utils/testing/testUtils';
 
 export async function postUser(sessionId: string, email: string, password: string): Promise<User> {
 	const context = await koaAppContext({
@@ -141,5 +144,41 @@ describe('index_users', function() {
 		// <input class="input" type="email" name="email" value="user1@localhost"/>
 		expect((doc.querySelector('input[name=email]') as any).value).toBe('user1@localhost');
 	});
+
+	test('should list users', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1, true);
+		const { user: user2, session: session2 } = await createUserAndSession(2, false);
+
+		const result = await execRequest(session1.id, 'GET', 'users');
+		expect(result).toContain(user1.email);
+		expect(result).toContain(user2.email);
+	});
+
+	test('should apply ACL', async function() {
+		const { user: admin, session: adminSession } = await createUserAndSession(1, true);
+		const { user: user1, session: session1 } = await createUserAndSession(2, false);
+
+		// non-admin cannot list users
+		await expectHttpError(async () => execRequest(session1.id, 'GET', 'users'), ErrorForbidden.httpCode);
+
+		// non-admin user cannot view another user
+		await expectHttpError(async () => execRequest(session1.id, 'GET', 'users/' + admin.id), ErrorForbidden.httpCode);
+
+		// non-admin user cannot create a new user
+		await expectHttpError(async () => postUser(session1.id, 'cantdothat@example.com', '123456'), ErrorForbidden.httpCode);
+
+		// non-admin user cannot update another user
+		await expectHttpError(async () => patchUser(session1.id, { id: admin.id, email: 'cantdothateither@example.com' }), ErrorForbidden.httpCode);
+
+		// non-admin user cannot make themself an admin
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, is_admin: 1 }), ErrorForbidden.httpCode);
+
+		// admin user cannot make themselves a non-admin
+		await expectHttpError(async () => patchUser(adminSession.id, { id: admin.id, is_admin: 0 }), ErrorForbidden.httpCode);
+
+		// only admins can delete users
+		await expectHttpError(async () => execRequest(session1.id, 'POST', 'users', { delete_button: true }), ErrorForbidden.httpCode);
+	});
+
 
 });
