@@ -1,6 +1,5 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
-import { ltrimSlashes } from '../path-utils';
 import eventManager from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
@@ -439,20 +438,20 @@ class Setting extends BaseModel {
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
-			'sync.9.directory': {
-				value: 'Apps/Joplin',
-				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
-				},
-				filter: value => {
-					return value ? ltrimSlashes(rtrimSlashes(value)) : '';
-				},
-				public: true,
-				label: () => _('Joplin Server Directory'),
-				storage: SettingStorage.File,
-			},
+			// 'sync.9.directory': {
+			// 	value: 'Apps/Joplin',
+			// 	type: SettingItemType.String,
+			// 	section: 'sync',
+			// 	show: (settings: any) => {
+			// 		return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+			// 	},
+			// 	filter: value => {
+			// 		return value ? ltrimSlashes(rtrimSlashes(value)) : '';
+			// 	},
+			// 	public: true,
+			// 	label: () => _('Joplin Server Directory'),
+			// 	storage: SettingStorage.File,
+			// },
 			'sync.9.username': {
 				value: '',
 				type: SettingItemType.String,

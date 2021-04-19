@@ -8,6 +8,7 @@ import { AclAction } from '../../models/BaseModel';
 
 interface ShareApiInput extends Share {
 	folder_id?: string;
+	item_name?: string;
 }
 
 const router = new Router();
@@ -21,6 +22,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	const fields = await bodyFields(ctx.req);
 	const shareInput: ShareApiInput = shareModel.fromApiInput(fields) as ShareApiInput;
 	if (fields.folder_id) shareInput.folder_id = fields.folder_id;
+	if (fields.item_name) shareInput.item_name = fields.item_name;
 
 	let shareToSave: Share = {};
 
@@ -34,9 +36,19 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 			owner_id: ctx.owner.id,
 		};
 	} else {
+		let itemId = null;
+
+		if (shareInput.item_name) {
+			const item = await ctx.models.item().loadByName(ctx.owner.id, shareInput.item_name);
+			if (!item) throw new ErrorNotFound(`No such item: ${shareInput.item_name}`);
+			itemId = item.id;
+		} else {
+			itemId = shareInput.item_id;
+		}
+
 		shareToSave = {
 			type: shareInput.type,
-			item_id: shareInput.item_id,
+			item_id: itemId,
 			owner_id: ctx.owner.id,
 		};
 	}

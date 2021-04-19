@@ -55,7 +55,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 		items.push(await itemToViewItem(item));
 	}
 
-	const view: View = defaultView('files');
+	const view: View = defaultView('items');
 	view.content.paginatedFiles = { ...paginatedItems, items: items };
 	view.content.paginationLinks = paginationLinks;
 	view.content.postUrl = `${config().baseUrl}/items`;

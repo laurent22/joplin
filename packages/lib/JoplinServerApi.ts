@@ -58,9 +58,9 @@ export default class JoplinServerApi {
 		return session ? session.id : '';
 	}
 
-	public async shareFile(pathOrId: string) {
+	public async shareItem(itemName: string) {
 		return this.exec('POST', 'api/shares', null, {
-			file_id: pathOrId,
+			item_name: itemName,
 			type: 1, // ShareType.Link
 		});
 	}

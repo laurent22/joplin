@@ -123,7 +123,7 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 
 				for (const note of notes) {
 					const fullPath = (await fileApi()).fullPath(BaseItem.systemPath(note.id));
-					const share = await api.shareFile(fullPath);
+					const share = await api.shareItem(fullPath);
 					newShares[note.id] = share;
 
 					const changed = await BaseItem.updateShareStatus(note, true);
