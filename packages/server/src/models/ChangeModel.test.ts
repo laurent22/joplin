@@ -33,7 +33,7 @@ describe('ChangeModel', function() {
 		const item1 = await createItem(session.id, 'test.txt', 'testing');
 
 		{
-			const changes = (await changeModel.allForUser()).items;
+			const changes = (await changeModel.allForUser(user.id)).items;
 			expect(changes.length).toBe(1);
 			expect(changes[0].item_id).toBe(item1.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
@@ -62,7 +62,7 @@ describe('ChangeModel', function() {
 			// the userId. The DELETE event however has a userId associated with
 			// it, so we get it back. On the client side, since item 1 won't be
 			// present, this DELETE event simply means a no-op.
-			const changes = (await changeModel.allForUser()).items;
+			const changes = (await changeModel.allForUser(user.id)).items;
 			expect(changes.length).toBe(3);
 			expect(changes[0].item_id).toBe(item2.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
@@ -80,7 +80,7 @@ describe('ChangeModel', function() {
 			//
 			// So only CREATE 2 and UPDATE 2a are processed, and then
 			// compressed down to just one CREATE event.
-			const page1 = (await changeModel.allForUser(pagination));
+			const page1 = (await changeModel.allForUser(user.id, pagination));
 			let changes = page1.items;
 			expect(changes.length).toBe(1);
 			expect(page1.has_more).toBe(true);
@@ -89,7 +89,7 @@ describe('ChangeModel', function() {
 
 			// In the second page, we get DELETE 1 and UPDATE 2b. Again for the
 			// client DELETE 1 would be a no-op since they didn't get the item.
-			const page2 = (await changeModel.allForUser({ ...pagination, cursor: page1.cursor }));
+			const page2 = (await changeModel.allForUser(user.id, { ...pagination, cursor: page1.cursor }));
 			changes = page2.items;
 			expect(changes.length).toBe(2);
 			expect(page2.has_more).toBe(true);
@@ -99,7 +99,7 @@ describe('ChangeModel', function() {
 			expect(changes[1].type).toBe(ChangeType.Update);
 
 			// In the third page, we get the last event - CREATE 3
-			const page3 = (await changeModel.allForUser({ ...pagination, cursor: page2.cursor }));
+			const page3 = (await changeModel.allForUser(user.id, { ...pagination, cursor: page2.cursor }));
 			changes = page3.items;
 			expect(changes.length).toBe(1);
 			expect(page3.has_more).toBe(false);
@@ -117,7 +117,7 @@ describe('ChangeModel', function() {
 		await msleep(1); const item1 = await makeTestItem(user.id); // CREATE 1
 		await msleep(1); await itemModel.save({ id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
 
-		await expectThrow(async () => changeModel.allForUser({ limit: 1, cursor: 'invalid' }), 'resyncRequired');
+		await expectThrow(async () => changeModel.allForUser(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
 	});
 
 });

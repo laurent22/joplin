@@ -51,7 +51,6 @@ export default class ChangeModel extends BaseModel<Change> {
 			item_id: itemId,
 			item_name: itemName,
 			type: changeType,
-			owner_id: this.userId,
 			previous_item: previousItem ? this.serializePreviousItem(previousItem) : '',
 			user_id: userId,
 		};
@@ -84,7 +83,7 @@ export default class ChangeModel extends BaseModel<Change> {
 	// 	};
 	// }
 
-	public async allForUser(pagination: ChangePagination = null): Promise<PaginatedChanges> {
+	public async allForUser(userId:Uuid, pagination: ChangePagination = null): Promise<PaginatedChanges> {
 		pagination = {
 			...defaultChangePagination(),
 			...pagination,
@@ -96,8 +95,6 @@ export default class ChangeModel extends BaseModel<Change> {
 			changeAtCursor = await this.load(pagination.cursor) as Change;
 			if (!changeAtCursor) throw new ErrorResyncRequired();
 		}
-
-		const userId = this.userId;
 
 		const query = this
 			.db('changes')

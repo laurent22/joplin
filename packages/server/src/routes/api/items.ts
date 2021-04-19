@@ -84,7 +84,7 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 
 router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
 	const changeModel = ctx.models.change({ userId: ctx.owner.id });
-	return changeModel.allForUser(requestChangePagination(ctx.query));
+	return changeModel.allForUser(ctx.owner.id, requestChangePagination(ctx.query));
 });
 
 router.get('api/items/:id/children', async (path: SubPath, ctx: AppContext) => {

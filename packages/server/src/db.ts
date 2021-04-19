@@ -276,38 +276,21 @@ export interface Session extends WithDates, WithUuid {
 	auth_code?: string;
 }
 
-export interface Permission extends WithDates, WithUuid {
-	user_id?: Uuid;
-	item_type?: ItemType;
-	item_id?: Uuid;
-	can_read?: number;
-	can_write?: number;
-}
-
-export interface File extends WithDates, WithUuid {
+export interface File {
+	id?: Uuid;
 	owner_id?: Uuid;
 	name?: string;
-	content?: Buffer;
+	content?: any;
 	mime_type?: string;
 	size?: number;
 	is_directory?: number;
 	is_root?: number;
 	parent_id?: Uuid;
+	updated_time?: string;
+	created_time?: string;
 	source_file_id?: Uuid;
-	content_type?: FileContentType;
+	content_type?: number;
 	content_id?: Uuid;
-}
-
-export interface Change extends WithDates, WithUuid {
-	counter?: number;
-	owner_id?: Uuid;
-	item_type?: ItemType;
-	parent_id?: Uuid;
-	item_id?: Uuid;
-	item_name?: string;
-	type?: ChangeType;
-	previous_item?: string;
-	user_id?: Uuid;
 }
 
 export interface ApiClient extends WithDates, WithUuid {
@@ -338,18 +321,6 @@ export interface ShareUser extends WithDates, WithUuid {
 	is_accepted?: number;
 }
 
-export interface JoplinFileContent {
-	id?: Uuid;
-	owner_id?: Uuid;
-	item_id?: Uuid;
-	parent_id?: Uuid;
-	type?: number;
-	updated_time?: string;
-	created_time?: string;
-	encryption_applied?: number;
-	content?: any;
-}
-
 export interface Item extends WithDates, WithUuid {
 	owner_id?: Uuid;
 	name?: string;
@@ -376,6 +347,17 @@ export interface KeyValue {
 	value?: string;
 }
 
+export interface Change extends WithDates, WithUuid {
+	counter?: number;
+	item_type?: ItemType;
+	parent_id?: Uuid;
+	item_id?: Uuid;
+	item_name?: string;
+	type?: ChangeType;
+	previous_item?: string;
+	user_id?: Uuid;
+}
+
 export const databaseSchema: DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -390,16 +372,6 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'string' },
 		user_id: { type: 'string' },
 		auth_code: { type: 'string' },
-		updated_time: { type: 'string' },
-		created_time: { type: 'string' },
-	},
-	permissions: {
-		id: { type: 'string' },
-		user_id: { type: 'string' },
-		item_type: { type: 'number' },
-		item_id: { type: 'string' },
-		can_read: { type: 'number' },
-		can_write: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},
@@ -418,20 +390,6 @@ export const databaseSchema: DatabaseTables = {
 		source_file_id: { type: 'string' },
 		content_type: { type: 'number' },
 		content_id: { type: 'string' },
-	},
-	changes: {
-		counter: { type: 'number' },
-		id: { type: 'string' },
-		owner_id: { type: 'string' },
-		item_type: { type: 'number' },
-		parent_id: { type: 'string' },
-		item_id: { type: 'string' },
-		item_name: { type: 'string' },
-		type: { type: 'number' },
-		updated_time: { type: 'string' },
-		created_time: { type: 'string' },
-		previous_item: { type: 'string' },
-		user_id: { type: 'string' },
 	},
 	api_clients: {
 		id: { type: 'string' },
@@ -469,17 +427,6 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},
-	joplin_file_contents: {
-		id: { type: 'string' },
-		owner_id: { type: 'string' },
-		item_id: { type: 'string' },
-		parent_id: { type: 'string' },
-		type: { type: 'number' },
-		updated_time: { type: 'string' },
-		created_time: { type: 'string' },
-		encryption_applied: { type: 'number' },
-		content: { type: 'any' },
-	},
 	items: {
 		id: { type: 'string' },
 		owner_id: { type: 'string' },
@@ -507,6 +454,19 @@ export const databaseSchema: DatabaseTables = {
 		key: { type: 'string' },
 		type: { type: 'number' },
 		value: { type: 'string' },
+	},
+	changes: {
+		counter: { type: 'number' },
+		id: { type: 'string' },
+		item_type: { type: 'number' },
+		parent_id: { type: 'string' },
+		item_id: { type: 'string' },
+		item_name: { type: 'string' },
+		type: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+		previous_item: { type: 'string' },
+		user_id: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

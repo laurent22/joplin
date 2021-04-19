@@ -329,7 +329,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		await this.withTransaction(async () => {
 
-			const changeModel = this.models().change({ userId: this.userId });
+			const changeModel = this.models().change();
 
 			for (const item of items) {
 				const userIds = deletedItemUserIds[item.id];
@@ -340,7 +340,6 @@ export default class ItemModel extends BaseModel<Item> {
 						item_id: item.id,
 						item_name: item.name,
 						type: ChangeType.Delete,
-						owner_id: this.userId,
 						previous_item: '',
 						user_id: userId,
 					});
@@ -374,7 +373,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 			if (isNew) await this.models().userItem().add(item.owner_id, item.id);
 
-			const changeModel = this.models().change({ userId: this.userId });
+			const changeModel = this.models().change();
 
 			await changeModel.save({
 				item_type: this.itemType,
@@ -382,7 +381,6 @@ export default class ItemModel extends BaseModel<Item> {
 				item_id: item.id,
 				item_name: item.name || previousItem.name,
 				type: isNew ? ChangeType.Create : ChangeType.Update,
-				owner_id: this.userId,
 				previous_item: previousItem ? changeModel.serializePreviousItem(previousItem) : '',
 				user_id: '',
 			});

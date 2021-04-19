@@ -68,9 +68,11 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.alterTable('changes', function(table: Knex.CreateTableBuilder) {
 		table.text('previous_item').defaultTo('').notNullable();
 		table.string('user_id', 32).defaultTo('').notNullable();
+		table.dropColumn('owner_id');
 	});
 
 	await db.schema.dropTable('permissions');
+	await db.schema.dropTable('joplin_file_contents');
 
 	// TODO: add indexes
 

@@ -50,7 +50,7 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	// 	]
 	// }
 
-	const paginatedChanges = await changeModel.allForUser(pagination);
+	const paginatedChanges = await changeModel.allForUser(ctx.owner.id, pagination);
 	const itemsToDisplay: ItemToDisplay[] = [];
 
 	for (const item of paginatedChanges.items) {
