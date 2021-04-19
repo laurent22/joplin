@@ -20,7 +20,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async loadByFileId(fileId: Uuid): Promise<ShareUser[]> {
-		const shares = await this.models().share({ userId: this.userId }).sharesByFileId(fileId);
+		const shares = await this.models().share().sharesByFileId(fileId);
 		const shareIds = shares.map(s => s.id);
 		return this.db(this.tableName).select(...this.defaultFields).whereIn('share_id', shareIds);
 	}
@@ -84,7 +84,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 	public async addByEmail(shareId: Uuid, userEmail: string): Promise<ShareUser> {
 		// TODO: check that user can access this share
-		const share = await this.models().share({ userId: this.userId }).load(shareId);
+		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
 		const user = await this.models().user().loadByEmail(userEmail);
@@ -127,18 +127,18 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	// Returns the users who have shared files with the current user
-	public async linkedUserIds(): Promise<Uuid[]> {
-		const fileSubQuery = this
-			.db('files')
-			.select('source_file_id')
-			.where('source_file_id', '!=', '')
-			.andWhere('owner_id', '=', this.userId);
+	// public async linkedUserIds(userId:Uuid): Promise<Uuid[]> {
+	// 	const fileSubQuery = this
+	// 		.db('files')
+	// 		.select('source_file_id')
+	// 		.where('source_file_id', '!=', '')
+	// 		.andWhere('owner_id', '=', userId);
 
-		return this
-			.db('files')
-			.distinct('owner_id')
-			.whereIn('files.id', fileSubQuery)
-			.pluck('owner_id');
-	}
+	// 	return this
+	// 		.db('files')
+	// 		.distinct('owner_id')
+	// 		.whereIn('files.id', fileSubQuery)
+	// 		.pluck('owner_id');
+	// }
 
 }
