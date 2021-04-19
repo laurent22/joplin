@@ -40,6 +40,13 @@ export async function up(db: DbConnection): Promise<any> {
 		table.integer('jop_encryption_applied', 1).defaultTo(0).notNullable();
 	});
 
+	await db.schema.alterTable('items', function(table: Knex.CreateTableBuilder) {
+		table.index('name');
+		table.index('jop_id');
+		table.index('jop_parent_id');
+		table.index('jop_type');
+	});
+
 	await db.schema.createTable('user_items', function(table: Knex.CreateTableBuilder) {
 		table.increments('id').unique().primary().notNullable();
 		table.string('user_id', 32).notNullable();
@@ -51,6 +58,9 @@ export async function up(db: DbConnection): Promise<any> {
 
 	await db.schema.alterTable('user_items', function(table: Knex.CreateTableBuilder) {
 		table.unique(['user_id', 'item_id']);
+		table.index('user_id');
+		table.index('item_id');
+		table.index('share_id');
 	});
 
 	await db.schema.createTable('key_values', function(table: Knex.CreateTableBuilder) {
@@ -73,6 +83,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.text('previous_item').defaultTo('').notNullable();
 		table.string('user_id', 32).defaultTo('').notNullable();
 		table.dropColumn('owner_id');
+		table.index('user_id');
 	});
 
 	await db.schema.dropTable('permissions');
