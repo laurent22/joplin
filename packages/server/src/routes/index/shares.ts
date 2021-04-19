@@ -28,7 +28,7 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 	const share = await shareModel.load(path.id);
 	if (!share) throw new ErrorNotFound();
 
-	const itemModel = ctx.models.item({ userId: share.owner_id });
+	const itemModel = ctx.models.item();
 
 	const item = await itemModel.loadWithContent(share.item_id);
 	if (!item) throw new ErrorNotFound();

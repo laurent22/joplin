@@ -248,7 +248,7 @@ export const createUser = async function(index: number = 1, isAdmin: boolean = f
 // }
 
 export async function createItemTree(userId: Uuid, parentFolderId: string, tree: any): Promise<void> {
-	const itemModel = models().item({ userId });
+	const itemModel = models().item();
 
 	for (const jopId in tree) {
 		const children: any = tree[jopId];
@@ -369,7 +369,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 
 export async function expectHttpError(asyncFn: Function, expectedHttpCode: number): Promise<void> {
 	let thrownError = null;
-	
+
 	try {
 		await asyncFn();
 	} catch (error) {

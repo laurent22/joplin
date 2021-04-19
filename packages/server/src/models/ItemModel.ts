@@ -146,7 +146,7 @@ export default class ItemModel extends BaseModel<Item> {
 		await this.withTransaction(async () => {
 			for (const itemId of itemIds) {
 				if (alreadySharedItemIds.includes(itemId)) continue;
-				await this.models().userItem({ userId: toUserId }).add(toUserId, itemId, shareId);
+				await this.models().userItem().add(toUserId, itemId, shareId);
 			}
 		});
 	}
@@ -333,7 +333,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 			for (const item of items) {
 				const userIds = deletedItemUserIds[item.id];
-				for (const userId of userIds) {		
+				for (const userId of userIds) {
 					await changeModel.save({
 						item_type: this.itemType,
 						parent_id: '',

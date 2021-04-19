@@ -37,7 +37,7 @@ function userIsMe(path: SubPath): boolean {
 const router = new Router();
 
 router.get('users', async (_path: SubPath, ctx: AppContext) => {
-	const userModel = ctx.models.user({ userId: ctx.owner.id });
+	const userModel = ctx.models.user();
 	await userModel.checkIfAllowed(ctx.owner, AclAction.List);
 
 	const users = await userModel.all();
@@ -51,7 +51,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	const owner = ctx.owner;
 	const isMe = userIsMe(path);
 	const isNew = userIsNew(path);
-	const userModel = ctx.models.user({ userId: owner.id });
+	const userModel = ctx.models.user();
 	const userId = userIsMe(path) ? owner.id : path.id;
 
 	user = !isNew ? user || await userModel.load(userId) : null;
@@ -93,10 +93,10 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 		if (userIsMe(path)) fields.id = userId;
 		user = makeUser(isNew, fields);
 
-		const userModel = ctx.models.user({ userId: ctx.owner.id });
+		const userModel = ctx.models.user();
 
 		if (fields.post_button) {
-			const userToSave:User = userModel.fromApiInput(user);
+			const userToSave: User = userModel.fromApiInput(user);
 			await userModel.checkIfAllowed(ctx.owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
 
 			if (isNew) {

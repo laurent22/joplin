@@ -3,12 +3,6 @@ import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models } from './factory';
-import Applications from '../services/Applications';
-
-export interface ModelOptions {
-	userId?: string;
-	apps?: Applications;
-}
 
 export interface SaveOptions {
 	isNew?: boolean;
@@ -42,22 +36,18 @@ export enum AclAction {
 
 export default abstract class BaseModel<T> {
 
-	private options_: ModelOptions = null;
 	private defaultFields_: string[] = [];
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
 	private modelFactory_: Function;
 	private baseUrl_: string;
 
-	public constructor(db: DbConnection, modelFactory: Function, baseUrl: string, options: ModelOptions = null) {
+	public constructor(db: DbConnection, modelFactory: Function, baseUrl: string) {
 		this.db_ = db;
 		this.modelFactory_ = modelFactory;
 		this.baseUrl_ = baseUrl;
-		this.options_ = Object.assign({}, options);
 
 		this.transactionHandler_ = new TransactionHandler(db);
-
-		if ('userId' in this.options && !this.options.userId) throw new Error('If userId is set, it cannot be null');
 	}
 
 	// When a model create an instance of another model, the active
@@ -69,18 +59,6 @@ export default abstract class BaseModel<T> {
 
 	protected get baseUrl(): string {
 		return this.baseUrl_;
-	}
-
-	protected get options(): ModelOptions {
-		return this.options_;
-	}
-
-	protected get userId(): string {
-		return this.options.userId;
-	}
-
-	protected get apps(): Applications {
-		return this.options.apps;
 	}
 
 	protected get db(): DbConnection {
@@ -95,7 +73,7 @@ export default abstract class BaseModel<T> {
 		return this.defaultFields_.slice();
 	}
 
-	public async checkIfAllowed(_user:User, _action:AclAction, _resource:T = null):Promise<void> {
+	public async checkIfAllowed(_user: User, _action: AclAction, _resource: T = null): Promise<void> {
 		throw new Error('Must be overriden');
 	}
 
@@ -194,7 +172,7 @@ export default abstract class BaseModel<T> {
 	}
 
 	public async all(): Promise<T[]> {
-		const rows:any[] = await this.db(this.tableName).select(...this.defaultFields);
+		const rows: any[] = await this.db(this.tableName).select(...this.defaultFields);
 		return rows as T[];
 	}
 

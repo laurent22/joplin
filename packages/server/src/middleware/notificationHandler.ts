@@ -12,7 +12,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 	if (!ctx.owner.is_admin) return;
 
 	const defaultAdmin = await ctx.models.user().login(defaultAdminEmail, defaultAdminPassword);
-	const notificationModel = ctx.models.notification({ userId: ctx.owner.id });
+	const notificationModel = ctx.models.notification();
 
 	if (defaultAdmin) {
 		await notificationModel.add(
@@ -38,7 +38,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 async function handleSqliteInProdNotification(ctx: AppContext) {
 	if (!ctx.owner.is_admin) return;
 
-	const notificationModel = ctx.models.notification({ userId: ctx.owner.id });
+	const notificationModel = ctx.models.notification();
 
 	if (config().database.client === 'sqlite3' && ctx.env === 'prod') {
 		await notificationModel.add(
@@ -53,7 +53,7 @@ async function handleSqliteInProdNotification(ctx: AppContext) {
 async function makeNotificationViews(ctx: AppContext): Promise<NotificationView[]> {
 	const markdownIt = new MarkdownIt();
 
-	const notificationModel = ctx.models.notification({ userId: ctx.owner.id });
+	const notificationModel = ctx.models.notification();
 	const notifications = await notificationModel.allUnreadByUserId(ctx.owner.id);
 	const views: NotificationView[] = [];
 	for (const n of notifications) {

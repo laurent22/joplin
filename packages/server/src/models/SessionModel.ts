@@ -12,7 +12,7 @@ export default class SessionModel extends BaseModel<Session> {
 	public async sessionUser(sessionId: string): Promise<User> {
 		const session: Session = await this.load(sessionId);
 		if (!session) return null;
-		const userModel = this.models().user({ userId: session.user_id });
+		const userModel = this.models().user();
 		return userModel.load(session.user_id);
 	}
 

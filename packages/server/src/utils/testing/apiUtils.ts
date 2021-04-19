@@ -1,7 +1,6 @@
 import { AppContext } from '../types';
 import routeHandler from '../../middleware/routeHandler';
-import { AppContextTestOptions, checkContextError, koaAppContext, koaNext } from './testUtils';
-import aclHandler from '../../middleware/aclHandler';
+import { AppContextTestOptions, checkContextError, koaAppContext } from './testUtils';
 
 interface ExecRequestOptions {
 	filePath?: string;
@@ -76,7 +75,7 @@ export async function execRequest<T>(sessionId: string, method: string, url: str
 }
 
 export async function execApiC(sessionId: string, method: string, path: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<AppContext> {
-	return execRequestC(sessionId, method, 'api/' + path, body, options);
+	return execRequestC(sessionId, method, `api/${path}`, body, options);
 }
 
 export async function execApi<T>(sessionId: string, method: string, url: string, body: Record<string, any> = null, options: ExecRequestOptions = null): Promise<T> {

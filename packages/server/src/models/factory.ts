@@ -56,7 +56,6 @@
 
 import { DbConnection } from '../db';
 import ApiClientModel from './ApiClientModel';
-import { ModelOptions } from './BaseModel';
 import ItemModel from './ItemModel';
 import UserModel from './UserModel';
 import UserItemModel from './UserItemModel';
@@ -77,44 +76,44 @@ export class Models {
 		this.baseUrl_ = baseUrl;
 	}
 
-	public item(options: ModelOptions = null) {
-		return new ItemModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public item() {
+		return new ItemModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public user(options: ModelOptions = null) {
-		return new UserModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public user() {
+		return new UserModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public userItem(options: ModelOptions = null) {
-		return new UserItemModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public userItem() {
+		return new UserItemModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public apiClient(options: ModelOptions = null) {
-		return new ApiClientModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public apiClient() {
+		return new ApiClientModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public session(options: ModelOptions = null) {
-		return new SessionModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public session() {
+		return new SessionModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public change(options: ModelOptions = null) {
-		return new ChangeModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public change() {
+		return new ChangeModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public notification(options: ModelOptions = null) {
-		return new NotificationModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public notification() {
+		return new NotificationModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public share(options: ModelOptions = null) {
-		return new ShareModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public share() {
+		return new ShareModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public shareUser(options: ModelOptions = null) {
-		return new ShareUserModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public shareUser() {
+		return new ShareUserModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public keyValue(options: ModelOptions = null) {
-		return new KeyValueModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public keyValue() {
+		return new KeyValueModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
 }

@@ -20,7 +20,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return share;
 	}
 
-	public async createShare(userId:Uuid, shareType: ShareType, itemId: Uuid): Promise<Share> {
+	public async createShare(userId: Uuid, shareType: ShareType, itemId: Uuid): Promise<Share> {
 		const toSave: Share = {
 			type: shareType,
 			item_id: itemId,
@@ -73,7 +73,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 			for (const shareUser of shareUsers) {
 				try {
-					await this.models().userItem({ userId: shareInfo.share.owner_id }).add(shareUser.user_id, item.id);
+					await this.models().userItem().add(shareUser.user_id, item.id);
 				} catch (error) {
 					if (isUniqueConstraintError(error)) {
 						// Ignore - it means this user already has this item
@@ -88,7 +88,7 @@ export default class ShareModel extends BaseModel<Share> {
 			const shareUsers = await this.models().shareUser().byShareId(shareInfo.share.id);
 
 			for (const shareUser of shareUsers) {
-				await this.models().userItem({ userId: shareInfo.share.owner_id }).remove(shareUser.user_id, item.id);
+				await this.models().userItem().remove(shareUser.user_id, item.id);
 			}
 		};
 
@@ -212,7 +212,7 @@ export default class ShareModel extends BaseModel<Share> {
 	// 					const existingLinkedFile = linkedFiles.find(f => f.source_file_id === file.id && f.owner_id === shareUser.user_id);
 	// 					if (existingLinkedFile) continue; // Already linked
 
-	// 					await this.models().file({ userId: shareUser.user_id }).createLink(file);
+	// 					await this.models().file().createLink(file);
 	// 				}
 	// 			}
 	// 		}
@@ -238,7 +238,7 @@ export default class ShareModel extends BaseModel<Share> {
 	// 			.whereNotIn('source_files.id', allChildrenFileIds);
 
 	// 		for (const orphanedFileLink of orphanedFileLinks) {
-	// 			await this.models().file({ userId: orphanedFileLink.owner_id }).delete(orphanedFileLink.id);
+	// 			await this.models().file().delete(orphanedFileLink.id);
 	// 		}
 	// 	});
 	// }

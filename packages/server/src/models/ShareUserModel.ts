@@ -57,8 +57,8 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	public async shareWithUserAndAccept(share: Share, shareeId: Uuid) {
 		// if (await this.fileIsShared(share.type, share.file_id, shareeId)) return; // Already shared with user
 
-		await this.models().shareUser({ userId: share.owner_id }).addById(share.id, shareeId);
-		await this.models().shareUser({ userId: shareeId }).accept(share.id, shareeId, true);
+		await this.models().shareUser().addById(share.id, shareeId);
+		await this.models().shareUser().accept(share.id, shareeId, true);
 	}
 
 	public async fileIsShared(shareType: ShareType, fileId: Uuid, userId: Uuid, isAccepted: boolean = null): Promise<boolean> {
@@ -78,7 +78,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async addById(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
-		const user = await this.models().user({ userId }).load(userId);
+		const user = await this.models().user().load(userId);
 		return this.addByEmail(shareId, user.email);
 	}
 
@@ -103,13 +103,13 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
-		const item = await this.models().item({ userId: share.owner_id }).load(share.item_id);
+		const item = await this.models().item().load(share.item_id);
 
 		return this.withTransaction<File>(async () => {
 			await this.save({ ...shareUser, is_accepted: accept ? 1 : 0 });
 
 			if (share.type === ShareType.JoplinRootFolder) {
-				await this.models().item({ userId: share.owner_id }).shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
+				await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
 			}
 		});
 	}

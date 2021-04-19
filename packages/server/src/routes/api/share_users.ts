@@ -8,7 +8,7 @@ const router = new Router();
 
 router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 	// TODO: check permissions
-	const shareUserModel = ctx.models.shareUser({ userId: ctx.owner.id });
+	const shareUserModel = ctx.models.shareUser();
 	const shareUser = await shareUserModel.load(path.id);
 	if (!shareUser) throw new ErrorNotFound();
 

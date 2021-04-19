@@ -1,9 +1,8 @@
 import { User } from '../../db';
-import aclHandler from '../../middleware/aclHandler';
 import routeHandler from '../../middleware/routeHandler';
 import { ErrorForbidden } from '../../utils/errors';
 import { execRequest } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, koaNext, expectThrow, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
 
 export async function postUser(sessionId: string, email: string, password: string): Promise<User> {
 	const context = await koaAppContext({
@@ -72,17 +71,17 @@ describe('index_users', function() {
 	});
 
 	test('should create a new user', async function() {
-		const { user: admin, session } = await createUserAndSession(1, true);
+		const { session } = await createUserAndSession(1, true);
 
 		await postUser(session.id, 'test@example.com', '123456');
-		const newUser = await models().user({ userId: admin.id }).loadByEmail('test@example.com');
+		const newUser = await models().user().loadByEmail('test@example.com');
 
 		expect(!!newUser).toBe(true);
 		expect(!!newUser.id).toBe(true);
 		expect(!!newUser.is_admin).toBe(false);
 		expect(!!newUser.email).toBe(true);
 
-		const userModel = models().user({ userId: newUser.id });
+		const userModel = models().user();
 		const userFromModel: User = await userModel.load(newUser.id);
 
 		expect(!!userFromModel.password).toBe(true);
@@ -99,9 +98,9 @@ describe('index_users', function() {
 	});
 
 	test('should not create anything if user creation fail', async function() {
-		const { user, session } = await createUserAndSession(1, true);
+		const { session } = await createUserAndSession(1, true);
 
-		const userModel = models().user({ userId: user.id });
+		const userModel = models().user();
 
 		await postUser(session.id, 'test@example.com', '123456');
 
@@ -117,7 +116,7 @@ describe('index_users', function() {
 	test('should change user properties', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const userModel = models().user({ userId: user.id });
+		const userModel = models().user();
 
 		await patchUser(session.id, { id: user.id, email: 'test2@example.com' });
 		const modUser: User = await userModel.load(user.id);
@@ -127,7 +126,7 @@ describe('index_users', function() {
 	test('should change the password', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const userModel = models().user({ userId: user.id });
+		const userModel = models().user();
 
 		await patchUser(session.id, { id: user.id, password: 'abcdefgh', password2: 'abcdefgh' });
 		const modUser = await userModel.login('user1@localhost', 'abcdefgh');
@@ -147,7 +146,7 @@ describe('index_users', function() {
 
 	test('should list users', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1, true);
-		const { user: user2, session: session2 } = await createUserAndSession(2, false);
+		const { user: user2 } = await createUserAndSession(2, false);
 
 		const result = await execRequest(session1.id, 'GET', 'users');
 		expect(result).toContain(user1.email);
@@ -162,7 +161,7 @@ describe('index_users', function() {
 		await expectHttpError(async () => execRequest(session1.id, 'GET', 'users'), ErrorForbidden.httpCode);
 
 		// non-admin user cannot view another user
-		await expectHttpError(async () => execRequest(session1.id, 'GET', 'users/' + admin.id), ErrorForbidden.httpCode);
+		await expectHttpError(async () => execRequest(session1.id, 'GET', `users/${admin.id}`), ErrorForbidden.httpCode);
 
 		// non-admin user cannot create a new user
 		await expectHttpError(async () => postUser(session1.id, 'cantdothat@example.com', '123456'), ErrorForbidden.httpCode);

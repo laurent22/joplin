@@ -106,7 +106,7 @@ describe('api_shares', function() {
 			'00000000000000000000000000000007': null,
 		};
 
-		const itemModel = models().item({ userId: user1.id });
+		const itemModel = models().item();
 
 		await createItemTree(user1.id, '', tree);
 
@@ -140,7 +140,7 @@ describe('api_shares', function() {
 			},
 		};
 
-		const itemModel = models().item({ userId: user1.id });
+		const itemModel = models().item();
 
 		await createItemTree(user1.id, '', tree);
 
@@ -154,7 +154,7 @@ describe('api_shares', function() {
 
 		await models().share().updateSharedItems();
 
-		const newChildren = await models().item({ userId: user2.id }).children(user2.id);
+		const newChildren = await models().item().children(user2.id);
 		expect(newChildren.items.length).toBe(3);
 		expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000002.md')).toBe(true);
 	});
@@ -173,7 +173,7 @@ describe('api_shares', function() {
 			'000000000000000000000000000000F5': {},
 		};
 
-		const itemModel = models().item({ userId: user1.id });
+		const itemModel = models().item();
 
 		await createItemTree(user1.id, '', tree);
 
@@ -197,7 +197,7 @@ describe('api_shares', function() {
 
 			await models().share().updateSharedItems();
 
-			const newChildren = await models().item({ userId: user2.id }).children(user2.id);
+			const newChildren = await models().item().children(user2.id);
 			expect(newChildren.items.length).toBe(4);
 		}
 
@@ -211,7 +211,7 @@ describe('api_shares', function() {
 
 		// 	await models().share().updateSharedItems();
 
-		// 	const newChildren = await models().item({ userId: user2.id }).children(user2.id);
+		// 	const newChildren = await models().item().children(user2.id);
 		// 	expect(newChildren.items.length).toBe(3);
 		// 	expect(newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(undefined);
 		// }
@@ -226,7 +226,7 @@ describe('api_shares', function() {
 
 		// 	await models().share().updateSharedItems();
 
-		// 	const newChildren = await models().item({ userId: user2.id }).children(user2.id);
+		// 	const newChildren = await models().item().children(user2.id);
 		// 	expect(newChildren.items.length).toBe(3);
 		// 	expect(newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(undefined);
 		// }
@@ -241,7 +241,7 @@ describe('api_shares', function() {
 
 		// 	await models().share().updateSharedItems();
 
-		// 	const newChildren = await models().item({ userId: user2.id }).children(user2.id);
+		// 	const newChildren = await models().item().children(user2.id);
 		// 	expect(newChildren.items.length).toBe(4);
 		// 	expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(true);
 		// }
@@ -256,7 +256,7 @@ describe('api_shares', function() {
 
 		// 	await models().share().updateSharedItems();
 
-		// 	const newChildren = await models().item({ userId: user2.id }).children(user2.id);
+		// 	const newChildren = await models().item().children(user2.id);
 		// 	expect(newChildren.items.length).toBe(4);
 		// 	expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(true);
 		// }
@@ -272,7 +272,7 @@ describe('api_shares', function() {
 			},
 		};
 
-		const itemModel = models().item({ userId: user1.id });
+		const itemModel = models().item();
 
 		await createItemTree(user1.id, '', tree);
 
@@ -280,7 +280,7 @@ describe('api_shares', function() {
 
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
-		const itemModel2 = models().item({ userId: user2.id });
+		const itemModel2 = models().item();
 		expect((await itemModel2.children(user2.id)).items.length).toBe(2);
 
 		const noteModel = await itemModel.loadByJopId(user1.id, '00000000000000000000000000000001');
@@ -300,7 +300,7 @@ describe('api_shares', function() {
 			},
 		};
 
-		const itemModel = models().item({ userId: user1.id });
+		const itemModel = models().item();
 
 		await createItemTree(user1.id, '', tree);
 
@@ -312,7 +312,7 @@ describe('api_shares', function() {
 
 		// Once the root folder has been deleted, it is unshared, so the
 		// recipient user should no longer see any item
-		const itemModel2 = models().item({ userId: user2.id });
+		const itemModel2 = models().item();
 		expect((await itemModel2.children(user2.id)).items.length).toBe(0);
 
 		// Even though the root folder has been deleted, its children have not
@@ -337,8 +337,8 @@ describe('api_shares', function() {
 			},
 		};
 
-		const itemModel1 = models().item({ userId: user1.id });
-		const itemModel2 = models().item({ userId: user2.id });
+		const itemModel1 = models().item();
+		const itemModel2 = models().item();
 
 		await createItemTree(user1.id, '', tree);
 
@@ -348,8 +348,8 @@ describe('api_shares', function() {
 
 		expect((await itemModel2.children(user2.id)).items.length).toBe(2);
 
-		const share = (await models().share({ userId: user1.id }).all())[0];
-		await models().share({ userId: user1.id }).delete(share.id);
+		const share = (await models().share().all())[0];
+		await models().share().delete(share.id);
 
 		expect((await itemModel1.children(user1.id)).items.length).toBe(2);
 		expect((await itemModel2.children(user2.id)).items.length).toBe(0);
@@ -377,7 +377,7 @@ describe('api_shares', function() {
 			},
 		};
 
-		const itemModel1 = models().item({ userId: user1.id });
+		const itemModel1 = models().item();
 
 		await createItemTree(user1.id, '', tree);
 		const folderItem = await itemModel1.loadByJopId(user1.id, '000000000000000000000000000000F1');

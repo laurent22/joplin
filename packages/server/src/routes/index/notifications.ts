@@ -10,7 +10,7 @@ const router = new Router();
 router.patch('notifications/:id', async (path: SubPath, ctx: AppContext) => {
 	const fields: Notification = await bodyFields(ctx.req);
 	const notificationId = path.id;
-	const model = ctx.models.notification({ userId: ctx.owner.id });
+	const model = ctx.models.notification();
 	const existingNotification = await model.load(notificationId);
 	if (!existingNotification) throw new ErrorNotFound();
 

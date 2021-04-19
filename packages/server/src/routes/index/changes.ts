@@ -18,8 +18,8 @@ interface ItemToDisplay {
 const router = new Router();
 
 router.get('changes', async (_path: SubPath, ctx: AppContext) => {
-	const changeModel = ctx.models.change({ userId: ctx.owner.id });
-	const itemModel = ctx.models.item({ userId: ctx.owner.id });
+	const changeModel = ctx.models.change();
+	const itemModel = ctx.models.item();
 
 	const pagination = queryParamsToPagination(ctx.query);
 

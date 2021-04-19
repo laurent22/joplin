@@ -19,7 +19,7 @@ describe('index_notification', function() {
 	test('should update notification', async function() {
 		const { user, session } = await createUserAndSession();
 
-		const model = models().notification({ userId: user.id });
+		const model = models().notification();
 
 		await model.add(user.id, 'my_notification', NotificationLevel.Normal, 'testing notification');
 

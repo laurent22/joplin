@@ -1,7 +1,7 @@
 import { SubPath, redirect, respondWithItemContent } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
-import { contextSessionId, formParse } from '../../utils/requestUtils';
+import { formParse } from '../../utils/requestUtils';
 import { ErrorNotFound } from '../../utils/errors';
 import { Item } from '../../db';
 import { createPaginationLinks, filterPaginationQueryParams, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
@@ -32,7 +32,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 
 	const pagination = makeFilePagination(ctx.query);
 	const owner = ctx.owner;
-	const itemModel = ctx.models.item({ userId: owner.id });
+	const itemModel = ctx.models.item();
 	const paginatedItems = await itemModel.children(owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type'] });
 	const pageCount = Math.ceil((await itemModel.childrenCount(owner.id, '')) / pagination.limit);
 	const parentBaseUrl = itemModel.itemUrl();
@@ -65,27 +65,24 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.get('items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item({ userId: ctx.owner.id });
+	const itemModel = ctx.models.item();
 	const item = await itemModel.loadWithContent(path.id);
 	if (!item) throw new ErrorNotFound();
 	return respondWithItemContent(ctx.response, item, item.content);
 });
 
 router.post('items', async (_path: SubPath, ctx: AppContext) => {
-	const sessionId = contextSessionId(ctx);
-
 	const body = await formParse(ctx.req);
 	const fields = body.fields;
-	const user = await ctx.models.session().sessionUser(sessionId);
 
 	if (fields.delete_all_button) {
-		const itemModel = ctx.models.item({ userId: ctx.owner.id });
+		const itemModel = ctx.models.item();
 		await itemModel.deleteAll(ctx.owner.id);
 	} else {
 		throw new Error('Invalid form button');
 	}
 
-	return redirect(ctx, await ctx.models.item({ userId: user.id }).itemUrl());
+	return redirect(ctx, await ctx.models.item().itemUrl());
 });
 
 export default router;

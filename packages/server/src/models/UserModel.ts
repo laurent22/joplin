@@ -1,5 +1,5 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { User, Uuid } from '../db';
+import { User } from '../db';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
 
@@ -39,7 +39,7 @@ export default class UserModel extends BaseModel<User> {
 		return output;
 	}
 
-	public async checkIfAllowed(user:User, action:AclAction, resource:User = null):Promise<void> {		
+	public async checkIfAllowed(user: User, action: AclAction, resource: User = null): Promise<void> {
 		if (action === AclAction.Create) {
 			if (!user.is_admin) throw new ErrorForbidden('non-admin user cannot create a new user');
 		}

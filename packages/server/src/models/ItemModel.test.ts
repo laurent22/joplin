@@ -26,7 +26,7 @@ describe('ItemModel', function() {
 			},
 		};
 
-		const itemModel1 = models().item({ userId: user1.id });
+		const itemModel1 = models().item();
 
 		await createItemTree(user1.id, '', tree);
 		await createItem(session2.id, 'root:/test.txt:', 'testing');
@@ -59,7 +59,7 @@ describe('ItemModel', function() {
 			expect(itemIds.length).toBe(1);
 		}
 
-		await models().user({ userId: user1.id }).delete(user2.id);
+		await models().user().delete(user2.id);
 
 		{
 			const itemIds = await models().item().exclusivelyOwnedItemIds(user1.id);

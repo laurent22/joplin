@@ -6,7 +6,7 @@ import { ChangePagination } from './ChangeModel';
 let itemCounter_ = 0;
 async function makeTestItem(userId: Uuid): Promise<Item> {
 	itemCounter_++;
-	return models().item({ userId }).save({
+	return models().item().save({
 		name: `item${itemCounter_}`,
 		owner_id: userId,
 	});
@@ -28,7 +28,7 @@ describe('ChangeModel', function() {
 
 	test('should track changes - create', async function() {
 		const { session, user } = await createUserAndSession(1, true);
-		const changeModel = models().change({ userId: user.id });
+		const changeModel = models().change();
 
 		const item1 = await createItem(session.id, 'test.txt', 'testing');
 
@@ -42,8 +42,8 @@ describe('ChangeModel', function() {
 
 	test('should track changes - create, then update', async function() {
 		const { user } = await createUserAndSession(1, true);
-		const itemModel = models().item({ userId: user.id });
-		const changeModel = models().change({ userId: user.id });
+		const itemModel = models().item();
+		const changeModel = models().change();
 
 		await msleep(1); const item1 = await makeTestItem(user.id); // CREATE 1
 		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1a' }); // UPDATE 1a
@@ -110,8 +110,8 @@ describe('ChangeModel', function() {
 
 	test('should throw an error if cursor is invalid', async function() {
 		const { user } = await createUserAndSession(1, true);
-		const itemModel = models().item({ userId: user.id });
-		const changeModel = models().change({ userId: user.id });
+		const itemModel = models().item();
+		const changeModel = models().change();
 
 		let i = 1;
 		await msleep(1); const item1 = await makeTestItem(user.id); // CREATE 1

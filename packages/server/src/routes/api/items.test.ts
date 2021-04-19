@@ -33,7 +33,7 @@ describe('api_items', function() {
 			body: noteBody,
 		}));
 
-		item = await models().item({ userId: user.id }).loadByName(user.id, filename);
+		item = await models().item().loadByName(user.id, filename);
 		const itemId = item.id;
 
 		expect(!!item.id).toBe(true);
@@ -47,14 +47,14 @@ describe('api_items', function() {
 		expect(item.content_size).toBeGreaterThan(0);
 
 		{
-			const item: NoteEntity = await models().item({ userId: user.id }).loadAsJoplinItem(itemId);
+			const item: NoteEntity = await models().item().loadAsJoplinItem(itemId);
 			expect(item.title).toBe(noteTitle);
 			expect(item.body).toBe(noteBody);
 		}
 	});
 
 	test('should modify an item', async function() {
-		const { user, session } = await createUserAndSession(1, true);
+		const { session } = await createUserAndSession(1, true);
 
 		const noteId = '00000000000000000000000000000001';
 		const filename = `${noteId}.md`;
@@ -70,7 +70,7 @@ describe('api_items', function() {
 
 		await putApi(session.id, `items/root:/${filename}:/content`, null, { filePath: tempFilePath });
 
-		const note: NoteEntity = await models().item({ userId: user.id }).loadAsJoplinItem(item.id);
+		const note: NoteEntity = await models().item().loadAsJoplinItem(item.id);
 		expect(note.parent_id).toBe(newParentId);
 		expect(note.title).toBe('new title');
 	});
@@ -84,7 +84,7 @@ describe('api_items', function() {
 			},
 		};
 
-		const itemModel = models().item({ userId: user.id });
+		const itemModel = models().item();
 
 		await createItemTree(user.id, '', tree);
 
@@ -104,7 +104,7 @@ describe('api_items', function() {
 			},
 		});
 
-		const itemModel2 = models().item({ userId: user2.id });
+		const itemModel2 = models().item();
 
 		await createItemTree(user2.id, '', {
 			'000000000000000000000000000000F2': {

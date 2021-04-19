@@ -10,7 +10,7 @@ import { requestChangePagination, requestPagination } from '../../models/utils/p
 
 const router = new Router();
 
-async function itemFromPath(userId:Uuid, itemModel: ItemModel, path: SubPath, mustExists: boolean = true): Promise<Item> {
+async function itemFromPath(userId: Uuid, itemModel: ItemModel, path: SubPath, mustExists: boolean = true): Promise<Item> {
 	const name = itemModel.pathToName(path.id);
 	const item = await itemModel.loadByName(userId, name);
 	if (mustExists && !item) throw new ErrorNotFound(`Not found: ${path.id}`);
@@ -18,13 +18,13 @@ async function itemFromPath(userId:Uuid, itemModel: ItemModel, path: SubPath, mu
 }
 
 router.get('api/items/:id', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item({ userId: ctx.owner.id });
+	const itemModel = ctx.models.item();
 	const item = await itemFromPath(ctx.owner.id, itemModel, path);
 	return itemModel.toApiOutput(item);
 });
 
 // router.patch('api/files/:id', async (path: SubPath, ctx: AppContext) => {
-// 	const itemModel = ctx.models.item({ userId: ctx.owner.id });
+// 	const itemModel = ctx.models.item();
 // 	const item = await itemFromPath(itemModel, path);
 // 	const inputItem: Item = await bodyFields(ctx.req);
 // 	const newItem = itemModel.fromApiInput(inputItem);
@@ -33,7 +33,7 @@ router.get('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 // });
 
 router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item({ userId: ctx.owner.id });
+	const itemModel = ctx.models.item();
 
 	try {
 		if (path.id === 'root' || path.id === 'root:/:') {
@@ -55,14 +55,14 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item({ userId: ctx.owner.id });
+	const itemModel = ctx.models.item();
 	const item = await itemFromPath(ctx.owner.id, itemModel, path);
 	const serializedContent = await itemModel.serializedContent(item.id);
 	return respondWithItemContent(ctx.response, item, serializedContent);
 });
 
 router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item({ userId: ctx.owner.id });
+	const itemModel = ctx.models.item();
 	const name = itemModel.pathToName(path.id);
 	const parsedBody = await formParse(ctx.req);
 	const buffer = parsedBody?.files?.file ? await fs.readFile(parsedBody.files.file.path) : Buffer.alloc(0);
@@ -71,7 +71,7 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 });
 
 // router.del('api/files/:id/content', async (path: SubPath, ctx: AppContext) => {
-// 	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+// 	const fileModel = ctx.models.file();
 // 	const fileId = path.id;
 // 	const file: File = await fileModel.pathToFile(fileId, { mustExist: false, returnFullEntity: true });
 // 	if (!file) return;
@@ -83,25 +83,25 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 // });
 
 router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
-	const changeModel = ctx.models.change({ userId: ctx.owner.id });
+	const changeModel = ctx.models.change();
 	return changeModel.allForUser(ctx.owner.id, requestChangePagination(ctx.query));
 });
 
 router.get('api/items/:id/children', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item({ userId: ctx.owner.id });
+	const itemModel = ctx.models.item();
 	const parentName = itemModel.pathToName(path.id);
 	const result = await itemModel.children(ctx.owner.id, parentName, requestPagination(ctx.query));
 	return result;
 });
 
 // router.get('api/files/:id/children', async (path: SubPath, ctx: AppContext) => {
-// 	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+// 	const fileModel = ctx.models.file();
 // 	const parentId: Uuid = await fileModel.pathToFileId(path.id);
 // 	return fileModel.toApiOutput(await fileModel.childrens(parentId, requestPagination(ctx.query)));
 // });
 
 // router.post('api/files/:id/children', async (path: SubPath, ctx: AppContext) => {
-// 	const fileModel = ctx.models.file({ userId: ctx.owner.id });
+// 	const fileModel = ctx.models.file();
 // 	const child: File = fileModel.fromApiInput(await bodyFields(ctx.req));
 // 	const parentId: Uuid = await fileModel.pathToFileId(path.id);
 // 	child.parent_id = parentId;
