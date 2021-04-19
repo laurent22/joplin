@@ -8,9 +8,9 @@ export default class NotificationModel extends BaseModel<Notification> {
 		return 'notifications';
 	}
 
-	protected async validate(notification: Notification, options: ValidateOptions = {}, saveOptions: SaveOptions = {}): Promise<Notification> {
+	protected async validate(notification: Notification, options: ValidateOptions = {}): Promise<Notification> {
 		if ('owner_id' in notification && !notification.owner_id) throw new ErrorUnprocessableEntity('Missing owner_id');
-		return super.validate(notification, options, saveOptions);
+		return super.validate(notification, options);
 	}
 
 	public async add(userId: Uuid, key: string, level: NotificationLevel, message: string): Promise<Notification> {

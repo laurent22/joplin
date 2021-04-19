@@ -81,7 +81,7 @@ export default class UserModel extends BaseModel<User> {
 			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
 		}
 
-		return user;
+		return super.validate(user, options);
 	}
 
 	private validateEmail(email: string): boolean {

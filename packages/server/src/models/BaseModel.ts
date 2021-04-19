@@ -193,7 +193,7 @@ export default abstract class BaseModel<T> {
 		return { ...object };
 	}
 
-	protected async validate(object: T, options: ValidateOptions = {}, _saveOptions: SaveOptions = {}): Promise<T> {
+	protected async validate(object: T, options: ValidateOptions = {}): Promise<T> {
 		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;
 	}

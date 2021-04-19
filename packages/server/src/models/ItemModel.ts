@@ -227,14 +227,14 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.saveForUser(userId, item);
 	}
 
-	protected async validate(item: Item, options: ValidateOptions = {}, _saveOptions: SaveOptions = {}): Promise<Item> {
+	protected async validate(item: Item, options: ValidateOptions = {}): Promise<Item> {
 		if (options.isNew) {
 			if (!item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 		} else {
 			if ('name' in item && !item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 		}
 
-		return item;
+		return super.validate(item, options);
 	}
 
 
