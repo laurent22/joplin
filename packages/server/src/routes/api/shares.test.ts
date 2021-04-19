@@ -1,10 +1,10 @@
 import { ChangeType, Share, ShareType, ShareUser } from '../../db';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, expectHttpError } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
-import { ErrorBadRequest } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
 import { serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -16,7 +16,7 @@ describe('api_shares', function() {
 	});
 
 	afterAll(async () => {
-		// await afterAllTests();
+		await afterAllTests();
 	});
 
 	beforeEach(async () => {
@@ -460,6 +460,29 @@ describe('api_shares', function() {
 			expect(page2.items[0].type).toBe(ChangeType.Update);
 			cursor2 = page2.cursor;
 		}
+	});
+
+	test('should apply ACL', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+
+		const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
+
+		// cannot share an item not owned by the user
+		await expectHttpError(async () => postApi<Share>(session2.id, 'shares', {
+			type: ShareType.App,
+			item_id: item.id,
+		}), ErrorForbidden.httpCode);
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			type: ShareType.App,
+			item_id: item.id,
+		});
+
+		await expectHttpError(async () => postApi(session2.id, `shares/${share.id}/users`, {
+			email: user3.email,
+		}), ErrorForbidden.httpCode);
 	});
 
 });

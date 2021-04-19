@@ -1,11 +1,18 @@
-import { Item, Share, ShareType, ShareUser, Uuid } from '../db';
-import { ErrorNotFound } from '../utils/errors';
-import BaseModel from './BaseModel';
+import { Item, Share, ShareType, ShareUser, User, Uuid } from '../db';
+import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
+import BaseModel, { AclAction } from './BaseModel';
 
 export default class ShareUserModel extends BaseModel<ShareUser> {
 
 	public get tableName(): string {
 		return 'share_users';
+	}
+
+	public async checkIfAllowed(user: User, action: AclAction, resource: ShareUser = null): Promise<void> {
+		if (action === AclAction.Create) {
+			const share = await this.models().share().load(resource.share_id);
+			if (share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
+		}
 	}
 
 	public async loadByFileId(fileId: Uuid): Promise<ShareUser[]> {

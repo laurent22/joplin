@@ -16,7 +16,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	const shareModel = ctx.models.share();
 	const share: Share = shareModel.fromApiInput(await bodyFields(ctx.req)) as Share;
 
-	let shareToSave:Share = {};
+	let shareToSave: Share = {};
 
 	if (share.folder_id) {
 		const folderItem = await ctx.models.item().loadByJopId(ctx.owner.id, share.folder_id);
@@ -36,7 +36,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	}
 
 	await shareModel.checkIfAllowed(ctx.owner, AclAction.Create, shareToSave);
-	
+
 	return shareModel.save(shareToSave);
 });
 
@@ -44,6 +44,13 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
 	const user: User = await bodyFields(ctx.req) as User;
+	if (!user) throw new ErrorNotFound('User not found');
+
+	await ctx.models.shareUser().checkIfAllowed(ctx.owner, AclAction.Create, {
+		share_id: path.id,
+		user_id: user.id,
+	});
+
 	return ctx.models.shareUser().addByEmail(path.id, user.email);
 });
 
