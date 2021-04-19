@@ -67,7 +67,7 @@ describe('UserModel', function() {
 	test('should delete a user', async function() {
 		const { user: admin } = await createUserAndSession(1, true);
 		const { session: session1, user: user1 } = await createUserAndSession(2, false);
-		const { user: user2 } = await createUserAndSession(3, false);
+		// const { user: user2 } = await createUserAndSession(3, false);
 
 		const userModel = models().user({ userId: admin.id });
 
@@ -76,10 +76,10 @@ describe('UserModel', function() {
 
 		await createItem(session1.id, 'root:/test.txt:', 'testing');
 
-		// Can't delete someone else user
-		const error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).delete(user2.id));
-		expect(error instanceof ErrorForbidden).toBe(true);
-		expect((await userModel.all()).length).toBe(beforeCount);
+		// // Can't delete someone else user
+		// const error = await checkThrowAsync(async () => await models().user({ userId: user1.id }).delete(user2.id));
+		// expect(error instanceof ErrorForbidden).toBe(true);
+		// expect((await userModel.all()).length).toBe(beforeCount);
 
 		// Admin can delete any user
 		expect(!!(await models().session().load(session1.id))).toBe(true);
@@ -91,9 +91,9 @@ describe('UserModel', function() {
 		expect((await models().item().all()).length).toBe(0);
 		expect((await models().userItem().all()).length).toBe(0);
 
-		// Can delete own user
-		await models().user({ userId: user2.id }).delete(user2.id);
-		expect((await userModel.all()).length).toBe(beforeCount - 2);
+		// // Can delete own user
+		// await models().user({ userId: user2.id }).delete(user2.id);
+		// expect((await userModel.all()).length).toBe(beforeCount - 2);
 	});
 
 });

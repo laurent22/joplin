@@ -67,18 +67,12 @@ export default class UserModel extends BaseModel<User> {
 	protected async validate(object: User, options: ValidateOptions = {}): Promise<User> {
 		const user: User = await super.validate(object, options);
 
-		// const owner: User = await this.load(this.userId);
-
 		if (options.isNew) {
-			// if (!owner.is_admin) throw new ErrorForbidden('non-admin user cannot create a new user');
 			if (!user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if (!user.password) throw new ErrorUnprocessableEntity('password must be set');
 		} else {
-			// if (!owner.is_admin && user.id !== owner.id) throw new ErrorForbidden('non-admin user cannot modify another user');
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');
-			// if (!owner.is_admin && 'is_admin' in user) throw new ErrorForbidden('non-admin user cannot make a user an admin');
-			// if (owner.is_admin && owner.id === user.id && 'is_admin' in user && !user.is_admin) throw new ErrorUnprocessableEntity('non-admin user cannot remove admin bit from themselves');
 		}
 
 		if ('email' in user) {
@@ -100,27 +94,11 @@ export default class UserModel extends BaseModel<User> {
 		return `${this.baseUrl}/users/me`;
 	}
 
-	private async checkIsOwnerOrAdmin(userId: string): Promise<void> {
-		if (!this.userId) throw new ErrorForbidden('no user is active');
-
-		if (userId === this.userId) return;
-
-		const owner = await this.load(this.userId);
-		if (!owner.is_admin) throw new ErrorForbidden();
-	}
-
-	public async load(id: string): Promise<User> {
-		await this.checkIsOwnerOrAdmin(id);
-		return super.load(id);
-	}
-
 	public async delete(id: string): Promise<void> {
-		await this.checkIsOwnerOrAdmin(id);
-
 		const shares = await this.models().share().sharesByUser(id);
 
 		await this.withTransaction(async () => {
-			await this.models().item({ userId: this.userId }).deleteExclusivelyOwnedItems(id);
+			await this.models().item().deleteExclusivelyOwnedItems(id);
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByUserId(id);
 			await this.models().session().deleteByUserId(id);
