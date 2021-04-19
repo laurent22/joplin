@@ -1,4 +1,4 @@
-import * as Knex from 'knex';
+import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
 // parent_id: ${'parent_id' in note ? note.parent_id : defaultFolderId}

@@ -4,7 +4,7 @@ import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from
 import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
-import Knex = require('knex');
+import { Knex } from 'knex';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 

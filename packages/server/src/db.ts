@@ -1,4 +1,4 @@
-import * as Knex from 'knex';
+import { knex, Knex } from 'knex';
 import { DatabaseConfig } from './utils/types';
 import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
@@ -98,7 +98,7 @@ export async function waitForConnection(dbConfig: DatabaseConfig): Promise<Conne
 }
 
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
-	return require('knex')(makeKnexConfig(dbConfig));
+	return knex(makeKnexConfig(dbConfig));
 }
 
 export async function disconnectDb(db: DbConnection) {

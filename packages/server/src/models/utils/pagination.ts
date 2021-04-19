@@ -1,7 +1,7 @@
 import { ErrorBadRequest } from '../../utils/errors';
 import { decodeBase64, encodeBase64 } from '../../utils/base64';
 import { ChangePagination, defaultChangePagination } from '../ChangeModel';
-import Knex = require('knex');
+import { Knex } from 'knex';
 
 export enum PaginationOrderDir {
 	ASC = 'asc',

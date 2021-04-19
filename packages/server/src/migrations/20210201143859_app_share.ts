@@ -1,4 +1,4 @@
-import * as Knex from 'knex';
+import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
 export async function up(db: DbConnection): Promise<any> {
@@ -15,7 +15,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.unique(['share_id', 'user_id']);
 	});
 
-	await db.schema.table('files', function(table: Knex.CreateTableBuilder) {
+	await db.schema.alterTable('files', function(table: Knex.CreateTableBuilder) {
 		table.string('source_file_id', 32).defaultTo('').notNullable();
 	});
 
