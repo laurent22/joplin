@@ -257,7 +257,9 @@ export async function createItemTree2(userId: Uuid, parentFolderId: string, tree
 
 	for (const jopItem of tree) {
 		const isFolder = !!jopItem.children;
-		const serializedBody = isFolder ? makeFolderSerializedBody(jopItem) : makeNoteSerializedBody(jopItem);
+		const serializedBody = isFolder ?
+			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId }) :
+			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId });
 		const newItem = await itemModel.saveFromRawContent(userId, jopItem.id + '.md', Buffer.from(serializedBody));
 		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
 	}
@@ -286,6 +288,10 @@ export async function createNote(sessionId: string, note: NoteEntity): Promise<I
 	};
 
 	return createItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
+}
+
+export async function updateNote(sessionId: string, note: NoteEntity):Promise<Item> {
+	return updateItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
 }
 
 export async function createFolder(sessionId: string, folder: FolderEntity): Promise<Item> {

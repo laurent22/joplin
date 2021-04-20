@@ -9,6 +9,7 @@ import { ErrorNotFound } from '../../utils/errors';
 import BaseApplication from '../../services/BaseApplication';
 import { formatDateTime } from '../../utils/time';
 import ItemModel from '../../models/ItemModel';
+import { resourceBlobPath } from './joplinUtils';
 const { themeStyle } = require('@joplin/lib/theme');
 
 export interface FileViewerResponse {
@@ -168,7 +169,7 @@ export default class Application extends BaseApplication {
 		};
 
 		if (query.resource_id) {
-			const resourceItem = await itemModel.loadByName(userId, `.resource/${query.resource_id}`, { fields: ['*'] });
+			const resourceItem = await itemModel.loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'] });
 			fileToRender.item = resourceItem;
 			fileToRender.content = resourceItem.content;
 			fileToRender.itemId = query.resource_id;

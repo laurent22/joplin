@@ -130,7 +130,7 @@ describe('shares.folder', function() {
 		expect(childrenAfter.items.map(i => i.name).sort().join(',')).toBe(expectedNames.sort().join(','));
 	});
 
-	test('should share when a note that is added to a shared folder', async function() {
+	test('should share when a note is added to a shared folder', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 

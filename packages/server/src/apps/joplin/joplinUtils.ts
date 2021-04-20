@@ -52,3 +52,7 @@ export async function serializeJoplinItem(item: any): Promise<string> {
 	const ModelClass = BaseItem.itemClass(item);
 	return ModelClass.serialize(item);
 }
+
+export function resourceBlobPath(resourceId:string):string {
+	return '.resource/' + resourceId;
+}

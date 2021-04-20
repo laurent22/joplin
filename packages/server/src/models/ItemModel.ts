@@ -1,7 +1,7 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
-import { isJoplinItemName, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
+import { isJoplinItemName, linkedResourceIds, resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
@@ -117,23 +117,22 @@ export default class ItemModel extends BaseModel<Item> {
 	public async loadByJopId(userId: Uuid, jopId: string, options: LoadOptions = {}): Promise<Item> {
 		const items = await this.loadByJopIds(userId, [jopId], options);
 		return items.length ? items[0] : null;
-		// return this
-		// 	.db('user_items')
-		// 	.leftJoin('items', 'items.id', 'user_items.item_id')
-		// 	.select(this.selectFields(options, null, 'items'))
-		// 	.where('user_items.user_id', '=', userId)
-		// 	.where('jop_id', '=', jopId)
-		// 	.first();
 	}
 
-	public async loadByName(userId: Uuid, name: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByNames(userId: Uuid, names: string[], options: LoadOptions = {}): Promise<Item[]> {
+		if (!names.length) return [];
+		
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.select(this.selectFields(options, null, 'items'))
 			.where('user_items.user_id', '=', userId)
-			.where('name', '=', name)
-			.first();
+			.whereIn('name', names);
+	}
+
+	public async loadByName(userId: Uuid, name: string, options: LoadOptions = {}): Promise<Item> {
+		const items = await this.loadByNames(userId, [name], options);
+		return items.length ? items[0] : null;
 	}
 
 	public async loadWithContent(id: Uuid, options: LoadOptions = {}): Promise<Item> {
@@ -198,12 +197,18 @@ export default class ItemModel extends BaseModel<Item> {
 				if (alreadySharedItemIds.includes(item.id)) continue;
 				await this.models().userItem().add(toUserId, item.id, shareId);
 
-				// const resourceIds = item.jop_resource_ids ? JSON.parse(item.jop_resource_ids) : [];
-				// // const resourceItems = await this.loadByJopId
+				const resourceIds:string[] = item.jop_resource_ids ? JSON.parse(item.jop_resource_ids) : [];
+				const resourceItems = await this.loadByJopIds(fromUserId, resourceIds);
+				const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
+				const resourceBlobItems = await this.loadByNames(fromUserId, resourceBlobNames);
 
-				// for (const resourceId of resourceIds) {
-				// 	await this.models().userItem().add(toUserId, item.id, shareId);
-				// }
+				for (const resourceItem of resourceItems) {
+					await this.models().userItem().add(toUserId, resourceItem.id, shareId);
+				}
+
+				for (const resourceBlobItem of resourceBlobItems) {
+					await this.models().userItem().add(toUserId, resourceBlobItem.id, shareId);
+				}
 			}
 		});
 	}
@@ -243,7 +248,7 @@ export default class ItemModel extends BaseModel<Item> {
 			item.jop_parent_id = joplinItem.parent_id || '';
 			item.jop_type = joplinItem.type_;
 			item.jop_encryption_applied = joplinItem.encryption_applied || 0;
-			item.jop_resource_ids = JSON.stringify(resourceIds);
+			item.jop_resource_ids = joplinItem.type_ === ModelType.Note ? JSON.stringify(resourceIds) : '';
 
 			delete joplinItem.id;
 			delete joplinItem.parent_id;
@@ -323,12 +328,14 @@ export default class ItemModel extends BaseModel<Item> {
 			void qb.select('id', 'jop_id', 'jop_parent_id')
 				.from('items')
 				.where('jop_id', '=', jopId)
+				.whereIn('jop_type', [ModelType.Note, ModelType.Folder])
 
 				.union((qb: Knex.QueryBuilder) => {
 					void qb
 						.select('items.id', 'items.jop_id', 'items.jop_parent_id')
 						.from('items')
-						.join('paths', 'items.jop_id', 'paths.jop_parent_id');
+						.join('paths', 'items.jop_id', 'paths.jop_parent_id')
+						.whereIn('jop_type', [ModelType.Note, ModelType.Folder]);
 				});
 		}).select('id', 'jop_id', 'jop_parent_id').from('paths');
 	}
