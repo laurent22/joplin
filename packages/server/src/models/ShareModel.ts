@@ -106,7 +106,7 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleUpdatedItem = async (change: Change, item: Item) => {
-			const previousItem: Item = this.models().change().unserializePreviousItem(change.previous_item);
+			const previousItem = this.models().change().unserializePreviousItem(change.previous_item);
 
 			const previousShareInfo = previousItem?.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(previousItem.jop_parent_id) : null;
 			const currentShareInfo = item.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id) : null;

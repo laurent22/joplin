@@ -262,6 +262,47 @@ describe('api_shares', function() {
 		}
 	});
 
+	test('should update share status when note parent changes more than once between updates', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const tree: any = {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+			'000000000000000000000000000000F2': {},
+			'000000000000000000000000000000F3': {},
+		};
+
+		const itemModel = models().item();
+
+		await createItemTree(user1.id, '', tree);
+
+		const folderItem1 = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F1');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
+		await models().share().updateSharedItems();
+
+		const noteItem = await itemModel.loadByJopId(user1.id, '00000000000000000000000000000001');
+
+		// Note is changed twice, but the parent ID doesn't change
+
+		await itemModel.save({
+			id: noteItem.id,
+			jop_parent_id: '000000000000000000000000000000F2',
+		});
+
+		await itemModel.save({
+			id: noteItem.id,
+			jop_parent_id: '000000000000000000000000000000F2',
+		});
+
+		await models().share().updateSharedItems();
+
+		const newChildren = await models().item().children(user2.id);
+		expect(newChildren.items.length).toBe(1);
+		expect(newChildren.items[0].id).toBe(folderItem1.id);
+	});
+
 	test('should unshare a deleted item', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);

@@ -1,4 +1,5 @@
 import { Change, ChangeType, Item, ItemType, Uuid } from '../db';
+import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel from './BaseModel';
 import { PaginatedResults } from './utils/pagination';
@@ -18,6 +19,11 @@ export interface ChangePagination {
 	cursor?: string;
 }
 
+export interface ChangePreviousItem {
+	name: string;
+	jop_parent_id: string;
+}
+
 export function defaultChangePagination(): ChangePagination {
 	return {
 		limit: 100,
@@ -35,11 +41,11 @@ export default class ChangeModel extends BaseModel<Change> {
 		return true;
 	}
 
-	public serializePreviousItem(item: any): string {
+	public serializePreviousItem(item: ChangePreviousItem): string {
 		return JSON.stringify(item);
 	}
 
-	public unserializePreviousItem(item: string): any {
+	public unserializePreviousItem(item: string): ChangePreviousItem {
 		if (!item) return null;
 		return JSON.parse(item);
 	}
@@ -154,19 +160,37 @@ export default class ChangeModel extends BaseModel<Change> {
 		return output;
 	}
 
+	// Compresses the changes so that, for example, multiple updates on the same
+	// item are reduced down to one, because calling code usually only needs to
+	// know that the item has changed at least once. The reduction is basically:
+	//
+	//     create - update => create
+	//     create - delete => NOOP
+	//     update - update => update
+	//     update - delete => delete
+	//
+	// There's one exception for changes that include a "previous_item". This is
+	// used to save specific properties about the previous state of the item,
+	// such as "jop_parent_id" or "name", which is used by the share mechanism
+	// to know if an item has been moved from one folder to another. In that
+	// case, we need to know about each individual change, so they are not
+	// compressed.
 	private compressChanges(changes: Change[]): Change[] {
 		const itemChanges: Record<Uuid, Change> = {};
+
+		const uniqueUpdateChanges: Record<Uuid, Record<string, Change>> = {};
 
 		for (const change of changes) {
 			const itemId = change.item_id;
 			const previous = itemChanges[itemId];
 
-			if (previous) {
-				// create - update => create
-				// create - delete => NOOP
-				// update - update => update
-				// update - delete => delete
+			if (change.type === ChangeType.Update) {
+				const key = md5(itemId + change.previous_item);
+				if (!uniqueUpdateChanges[itemId]) uniqueUpdateChanges[itemId] = {};
+				uniqueUpdateChanges[itemId][key] = change;
+			}
 
+			if (previous) {
 				if (previous.type === ChangeType.Create && change.type === ChangeType.Update) {
 					continue;
 				}
@@ -190,7 +214,14 @@ export default class ChangeModel extends BaseModel<Change> {
 		const output: Change[] = [];
 
 		for (const itemId in itemChanges) {
-			output.push(itemChanges[itemId]);
+			const change = itemChanges[itemId];
+			if (change.type === ChangeType.Update) {
+				for (const key of Object.keys(uniqueUpdateChanges[itemId])) {
+					output.push(uniqueUpdateChanges[itemId][key]);
+				}
+			} else {
+				output.push(change);
+			}
 		}
 
 		output.sort((a: Change, b: Change) => a.counter < b.counter ? -1 : +1);
