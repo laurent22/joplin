@@ -40,7 +40,7 @@ export interface DatabaseConfig {
 	user?: string;
 	password?: string;
 	asyncStackTraces?: boolean;
-	ssl?: boolean;
+	ssl?: object;
 }
 
 export interface Config {

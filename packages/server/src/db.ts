@@ -31,7 +31,7 @@ export interface DbConfigConnection {
 	database?: string;
 	filename?: string;
 	password?: string;
-        ssl?: boolean;
+        ssl?: object;
 }
 
 export interface KnexDatabaseConfig {
