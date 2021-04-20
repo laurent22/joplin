@@ -138,6 +138,7 @@ export default function useKeymap(CodeMirror: any) {
 		CodeMirror.keyMap.default = {
 			// Windows / Linux
 			'Ctrl-Z': 'undo',
+			'Shift-Ctrl-D': 'duplicateLine',
 			'Shift-Ctrl-Z': 'redo',
 			'Ctrl-Y': 'redo',
 			'Ctrl-Up': 'goLineUpSmart',
