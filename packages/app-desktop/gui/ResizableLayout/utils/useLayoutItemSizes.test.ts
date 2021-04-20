@@ -20,6 +20,22 @@ describe('useLayoutItemSizes', () => {
 		expect(layout.isRoot).toBe(true);
 	});
 
+	test('should strecth the last visible child item if all siblings have fixed size', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'col1', width: 50 },
+				{ key: 'col2', width: 50 },
+				{ key: 'col3', width: 70, visible: false },
+			],
+		});
+
+		expect(layout.children[1]).not.toHaveProperty('width');
+	});
+
 	test('should give item sizes', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',
