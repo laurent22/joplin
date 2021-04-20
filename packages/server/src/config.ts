@@ -13,6 +13,7 @@ export interface EnvVariables {
 	POSTGRES_USER?: string;
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
+        POSTGRES_SSL_REQUIRE?: boolean;
 
 	SQLITE_DATABASE?: string;
 }
@@ -47,6 +48,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 			password: env.POSTGRES_PASSWORD || 'joplin',
 			port: env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432,
 			host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
+                        ssl: env.POSTGRES_SSL_REQUIRE || false,
 		};
 	}
 
