@@ -38,6 +38,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.string('jop_parent_id', 32).defaultTo('').notNullable();
 		table.integer('jop_type', 2).defaultTo(0).notNullable();
 		table.integer('jop_encryption_applied', 1).defaultTo(0).notNullable();
+		table.text('jop_resource_ids').defaultTo('').notNullable();
 	});
 
 	await db.schema.alterTable('items', function(table: Knex.CreateTableBuilder) {

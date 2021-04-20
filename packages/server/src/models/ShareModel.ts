@@ -157,6 +157,10 @@ export default class ShareModel extends BaseModel<Share> {
 					if (change.type === ChangeType.Update) {
 						await handleUpdatedItem(change, items.find(i => i.id === change.item_id));
 					}
+
+					// We don't need to handle ChangeType.Delete because when an
+					// item is deleted, all its associated userItems are deleted
+					// too.
 				}
 
 				await this.models().keyValue().setValue('ShareService::latestProcessedChange', changes[changes.length - 1].id);

@@ -322,6 +322,7 @@ export interface Item extends WithDates, WithUuid {
 	jop_parent_id?: Uuid;
 	jop_type?: number;
 	jop_encryption_applied?: number;
+	jop_resource_ids?: string;
 }
 
 export interface UserItem extends WithDates {
@@ -426,6 +427,7 @@ export const databaseSchema: DatabaseTables = {
 		jop_parent_id: { type: 'string' },
 		jop_type: { type: 'number' },
 		jop_encryption_applied: { type: 'number' },
+		jop_resource_ids: { type: 'string' },
 	},
 	user_items: {
 		id: { type: 'number' },

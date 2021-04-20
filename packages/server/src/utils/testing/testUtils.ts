@@ -14,7 +14,7 @@ import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
 import { ApiError } from '../errors';
 import { putApi } from './apiUtils';
-import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../../apps/joplin/joplinUtils';
 
@@ -231,21 +231,7 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 
 export const createUser = async function(index: number = 1, isAdmin: boolean = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
-};
-
-// export async function createFileTree(fileModel: FileModel, parentId: string, tree: any): Promise<void> {
-// 	for (const name in tree) {
-// 		const children: any = tree[name];
-// 		const isDir = children !== null;
-// 		const newFile: File = await fileModel.save({
-// 			parent_id: parentId,
-// 			name: name,
-// 			is_directory: isDir ? 1 : 0,
-// 		});
-
-// 		if (isDir && Object.keys(children).length) await createFileTree(fileModel, newFile.id, children);
-// 	}
-// }
+}
 
 export async function createItemTree(userId: Uuid, parentFolderId: string, tree: any): Promise<void> {
 	const itemModel = models().item();
@@ -266,20 +252,16 @@ export async function createItemTree(userId: Uuid, parentFolderId: string, tree:
 	}
 }
 
-// export async function createFile(userId: string, path: string, content: string): Promise<File> {
-// 	const fileModel = models().file({ userId });
-// 	const file: File = await fileModel.pathToFile(path, { mustExist: false, returnFullEntity: false });
-// 	file.content = Buffer.from(content);
-// 	const savedFile = await fileModel.save(file);
-// 	return fileModel.load(savedFile.id);
-// }
+export async function createItemTree2(userId: Uuid, parentFolderId: string, tree: any[]): Promise<void> {
+	const itemModel = models().item();
 
-// export async function createFile2(sessionId: string, path: string, content: string): Promise<File> {
-// 	const tempFilePath = await makeTempFileWithContent(content);
-// 	const file = await putApi(sessionId, `files/${path}/content`, null, { filePath: tempFilePath });
-// 	await fs.remove(tempFilePath);
-// 	return file;
-// }
+	for (const jopItem of tree) {
+		const isFolder = !!jopItem.children;
+		const serializedBody = isFolder ? makeFolderSerializedBody(jopItem) : makeNoteSerializedBody(jopItem);
+		const newItem = await itemModel.saveFromRawContent(userId, jopItem.id + '.md', Buffer.from(serializedBody));
+		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
+	}
+}
 
 export async function createItem(sessionId: string, path: string, content: string | Buffer): Promise<Item> {
 	const tempFilePath = await makeTempFileWithContent(content);
@@ -306,7 +288,7 @@ export async function createNote(sessionId: string, note: NoteEntity): Promise<I
 	return createItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
 }
 
-export async function createFolder(sessionId: string, folder: NoteEntity): Promise<Item> {
+export async function createFolder(sessionId: string, folder: FolderEntity): Promise<Item> {
 	folder = {
 		id: '000000000000000000000000000000F1',
 		title: 'Folder title',
@@ -316,17 +298,21 @@ export async function createFolder(sessionId: string, folder: NoteEntity): Promi
 	return createItem(sessionId, `root:/${folder.id}.md:`, makeFolderSerializedBody(folder));
 }
 
-// export async function updateFile(userId: string, path: string, content: string): Promise<File> {
-// 	const fileModel = models().file({ userId });
-// 	const file: File = await fileModel.pathToFile(path, { returnFullEntity: true });
+export async function createResource(sessionId: string, resource:ResourceEntity, content:string): Promise<Item> {
+	resource = {
+		id: '000000000000000000000000000000E1',
+		mime: 'plain/text',
+		file_extension: 'txt',
+		size: content.length,
+		...resource,
+	} 
 
-// 	await fileModel.save({
-// 		...file,
-// 		content: Buffer.from(content),
-// 	});
+	const serializedBody = makeResourceSerializedBody(resource);
 
-// 	return fileModel.load(file.id);
-// }
+	const resourceItem = await createItem(sessionId, 'root:/' + resource.id + '.md:', serializedBody);
+	await createItem(sessionId, 'root:/.resource/' + resource.id + ':', content);
+	return resourceItem;
+}
 
 export function checkContextError(context: AppContext) {
 	if (context.response.status >= 400) {
@@ -423,9 +409,28 @@ user_created_time: 2020-11-11T18:44:14.534Z
 user_updated_time: 2020-11-11T18:44:14.534Z
 encryption_cipher_text:
 encryption_applied: 0
-parent_id:
+parent_id: ${folder.parent_id || ''}
 is_shared: 0
 type_: 2`;
+}
+
+function makeResourceSerializedBody(resource: ResourceEntity = {}): string {
+	return `Test Resource
+
+id: ${resource.id}
+mime: ${resource.mime}
+filename: 
+created_time: 2020-10-15T10:37:58.090Z
+updated_time: 2020-10-15T10:37:58.090Z
+user_created_time: 2020-10-15T10:37:58.090Z
+user_updated_time: 2020-10-15T10:37:58.090Z
+file_extension: ${resource.file_extension}
+encryption_cipher_text: 
+encryption_applied: 0
+encryption_blob_encrypted: 0
+size: ${resource.size}
+is_shared: 0
+type_: 4`;
 }
 
 export async function expectNotThrow(asyncFn: Function) {

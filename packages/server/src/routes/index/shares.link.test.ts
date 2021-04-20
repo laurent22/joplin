@@ -39,10 +39,10 @@ async function getShareContent(shareId: string, query: any = {}): Promise<string
 	return context.response.body;
 }
 
-describe('shares.joplin', function() {
+describe('shares.link', function() {
 
 	beforeAll(async () => {
-		await beforeAllDb('shares.joplin');
+		await beforeAllDb('shares.link');
 	});
 
 	afterAll(async () => {

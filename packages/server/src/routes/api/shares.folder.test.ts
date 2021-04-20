@@ -9,10 +9,10 @@ import { serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/jo
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
-describe('api_shares', function() {
+describe('shares.folder', function() {
 
 	beforeAll(async () => {
-		await beforeAllDb('api_shares');
+		await beforeAllDb('shares.folder');
 	});
 
 	afterAll(async () => {

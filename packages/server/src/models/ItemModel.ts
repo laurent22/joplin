@@ -1,10 +1,11 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
-import { isJoplinItemName, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
+import { isJoplinItemName, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
+import { ChangePreviousItem } from './ChangeModel';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -102,14 +103,27 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public async loadByJopId(userId: Uuid, jopId: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByJopIds(userId: Uuid, jopIds:string[],  options: LoadOptions = {}): Promise<Item[]> {
+		if (!jopIds.length) return [];
+
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.select(this.selectFields(options, null, 'items'))
 			.where('user_items.user_id', '=', userId)
-			.where('jop_id', '=', jopId)
-			.first();
+			.whereIn('jop_id', jopIds);
+	}
+
+	public async loadByJopId(userId: Uuid, jopId: string, options: LoadOptions = {}): Promise<Item> {
+		const items = await this.loadByJopIds(userId, [jopId], options);
+		return items.length ? items[0] : null;
+		// return this
+		// 	.db('user_items')
+		// 	.leftJoin('items', 'items.id', 'user_items.item_id')
+		// 	.select(this.selectFields(options, null, 'items'))
+		// 	.where('user_items.user_id', '=', userId)
+		// 	.where('jop_id', '=', jopId)
+		// 	.first();
 	}
 
 	public async loadByName(userId: Uuid, name: string, options: LoadOptions = {}): Promise<Item> {
@@ -145,22 +159,22 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	public async folderChildrenItemIds(userId: Uuid, folderId: string): Promise<Uuid[]> {
-		let output: Uuid[] = [];
+	private async folderChildrenItems(userId: Uuid, folderId: string): Promise<Item[]> {
+		let output: Item[] = [];
 
 		const rows: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select('items.id', 'items.jop_id', 'items.jop_type')
+			.select('items.id', 'items.jop_id', 'items.jop_type', 'items.jop_resource_ids')
 			.where('items.jop_parent_id', '=', folderId)
 			.where('user_items.user_id', '=', userId);
 
 		for (const row of rows) {
-			output.push(row.id);
+			output.push(row);
 
 			if (row.jop_type === ModelType.Folder) {
-				const childrenIds = await this.folderChildrenItemIds(userId, row.jop_id);
-				output = output.concat(childrenIds);
+				const children = await this.folderChildrenItems(userId, row.jop_id);
+				output = output.concat(children);
 			}
 		}
 
@@ -171,18 +185,25 @@ export default class ItemModel extends BaseModel<Item> {
 		const folderItem = await this.loadByJopId(fromUserId, folderId, { fields: ['id'] });
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
-		const itemIds = [folderItem.id].concat(await this.folderChildrenItemIds(fromUserId, folderId));
+		const items = [folderItem].concat(await this.folderChildrenItems(fromUserId, folderId));
 
 		const alreadySharedItemIds: string[] = await this
 			.db('user_items')
 			.pluck('item_id')
-			.whereIn('item_id', itemIds)
+			.whereIn('item_id', items.map(i => i.id))
 			.where('user_id', '=', toUserId);
 
 		await this.withTransaction(async () => {
-			for (const itemId of itemIds) {
-				if (alreadySharedItemIds.includes(itemId)) continue;
-				await this.models().userItem().add(toUserId, itemId, shareId);
+			for (const item of items) {
+				if (alreadySharedItemIds.includes(item.id)) continue;
+				await this.models().userItem().add(toUserId, item.id, shareId);
+
+				// const resourceIds = item.jop_resource_ids ? JSON.parse(item.jop_resource_ids) : [];
+				// // const resourceItems = await this.loadByJopId
+
+				// for (const resourceId of resourceIds) {
+				// 	await this.models().userItem().add(toUserId, item.id, shareId);
+				// }
 			}
 		});
 	}
@@ -216,11 +237,13 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (isJoplinItem) {
 			const joplinItem = await unserializeJoplinItem(buffer.toString());
+			const resourceIds = joplinItem.type_ === ModelType.Note ? linkedResourceIds(joplinItem.body) : '';
 
 			item.jop_id = joplinItem.id;
 			item.jop_parent_id = joplinItem.parent_id || '';
 			item.jop_type = joplinItem.type_;
 			item.jop_encryption_applied = joplinItem.encryption_applied || 0;
+			item.jop_resource_ids = JSON.stringify(resourceIds);
 
 			delete joplinItem.id;
 			delete joplinItem.parent_id;
@@ -396,12 +419,12 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (isNew && !userId) throw new Error('userId is required when saving a new item');
 
-		let previousItem: Item = null;
+		let previousItem: ChangePreviousItem = null;
 
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
 		} else {
-			previousItem = await this.load(item.id, { fields: ['name', 'jop_parent_id'] });
+			previousItem = (await this.load(item.id, { fields: ['name', 'jop_parent_id', 'jop_resource_ids'] })) as ChangePreviousItem;
 		}
 
 		return this.withTransaction(async () => {
