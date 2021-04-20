@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -81,7 +83,7 @@ msgstr "Ga naar Alles..."
 #: packages/app-desktop/plugins/GotoAnything.js:464
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "Opdrachtpalet"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -323,23 +325,23 @@ msgstr "Checkboxlijst"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Arceren"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Doorstrepen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Invoegen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Superscript"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Onderschrift"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
@@ -426,23 +428,24 @@ msgid "Creating new %s..."
 msgstr "Bezig met creëren van nieuw(e) %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "Controleren op updates..."
+msgstr "Klik om labels toe te voegen…"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"Deze Rich Text-editor heeft een aantal beperkingen en het wordt aanbevolen "
+"om hiervan op de hoogte te zijn voordat u deze gebruikt."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
-msgstr ""
+msgstr "Lees meer"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr ""
+msgstr "Afwijzen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
@@ -502,42 +505,40 @@ msgid "Horizontal Rule"
 msgstr "Horizontale regel"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "Notitie verwijderen?"
+msgstr "Regel verwijderen"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Undo"
-msgstr ""
+msgstr "Ongedaan maken"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Redo"
-msgstr ""
+msgstr "Herhalen"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Indent less"
-msgstr ""
+msgstr "Minder inspringen"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent more"
-msgstr ""
+msgstr "Meer inspringen"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Toggle comment"
 msgstr "Notitielijst tonen/verbergen"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Sort selected lines"
-msgstr ""
+msgstr "Sorteer geselecteerde regels"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Swap line up"
-msgstr ""
+msgstr "Verplaats omhoog"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line down"
-msgstr ""
+msgstr "Verplaats omlaag"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -673,9 +674,8 @@ msgid "Options"
 msgstr "Opties"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Ongeldig %s: %s."
+msgstr "Ongeldig"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -696,7 +696,6 @@ msgid "Save"
 msgstr "Opslaan"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:405
-#, fuzzy
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -751,6 +750,8 @@ msgstr "Meer informatie"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:559
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"Gebruik de pijlen om de layout-items te verplaatsen. Druk op \"Escape\" om "
+"af te sluiten."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -814,13 +815,12 @@ msgid "Toggle editor layout"
 msgstr "Bewerkindeling tonen/verbergen"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Bewerkindeling tonen/verbergen"
+msgstr "Schakel tussen editors"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "Wijzig de layout van de applicatie"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -837,7 +837,7 @@ msgstr "Titel van notitieboek:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Spellingscontrole"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -893,7 +893,7 @@ msgstr "Token is naar het klembord gekopieerd!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Weet u zeker dat u het autorisatietoken wilt vernieuwen?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -978,7 +978,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Vernieuw token"
 
 #: packages/app-desktop/gui/MenuBar.js:166
 #, javascript-format
@@ -1037,9 +1037,8 @@ msgstr "Sjablonen"
 
 #: packages/app-desktop/gui/MenuBar.js:433
 #: packages/app-desktop/gui/MenuBar.js:479
-#, fuzzy
 msgid "Export all"
-msgstr "Exporteren"
+msgstr "Alles exporteren"
 
 #: packages/app-desktop/gui/MenuBar.js:445
 #, javascript-format
@@ -1070,7 +1069,7 @@ msgstr "Uitzoemen"
 
 #: packages/app-desktop/gui/MenuBar.js:608
 msgid "&Go"
-msgstr ""
+msgstr "&Gaan"
 
 #: packages/app-desktop/gui/MenuBar.js:620
 msgid "&Note"
@@ -1273,11 +1272,11 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
 #, fuzzy
 msgid "Re-encryption"
-msgstr "Encryptie"
+msgstr "Opnieuw versleutelen"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "Negeren"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1412,7 +1411,7 @@ msgstr "Geavanceerde opties"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
 msgid "Path:"
-msgstr ""
+msgstr "Pad:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
 msgid "Browse..."
@@ -1420,11 +1419,12 @@ msgstr "Bladeren..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
-msgstr ""
+msgstr "Argumenten:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
+"De applicatie moet opnieuw worden gestart om deze wijzigingen door te voeren."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1433,12 +1433,11 @@ msgstr "Doe het nu"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 msgid "Later"
-msgstr ""
+msgstr "Later"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
-#, fuzzy
 msgid "Restart now"
-msgstr "Download nu:"
+msgstr "Nu opnieuw opstarten"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
 #: packages/lib/models/Setting.js:1543
@@ -1450,77 +1449,72 @@ msgid "Apply"
 msgstr "Toepassen"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Notitie “%s” verwijderen?"
+msgstr "Plugin “%s” verwijderen?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
 msgid "Browse all plugins"
-msgstr ""
+msgstr "Blader door alle plugins"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "Installeren van bestand"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "U heeft geen geïnstalleerde plugins."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
 #, fuzzy
 msgid "Plugin tools"
-msgstr "Plugins"
+msgstr "Plugin tools"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "Beheer plugins"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-#, fuzzy
 msgid "No results"
-msgstr "Geen resources!"
+msgstr "Geen resultaten"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
-msgstr "Zoeken..."
+msgstr "Zoek naar plugins…"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
 msgid "Install"
-msgstr ""
+msgstr "Installeren"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
-#, fuzzy
 msgid "Installing..."
-msgstr "Bezig met annuleren..."
+msgstr "Installeren…"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
 msgid "Installed"
-msgstr ""
+msgstr "Geinstalleerd"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
-#, fuzzy
 msgid "Update"
 msgstr "Bijgewerkt"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
-#, fuzzy
 msgid "Updating..."
-msgstr "Bezig met in de gaten houden..."
+msgstr "Bezig met updaten…"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "Upgrade Joplin om deze plug-in te gebruiken"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "Kon geen notities exporteren: %s"
+msgstr "Kon plugin niet installeren: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1788,7 +1782,7 @@ msgstr "Configuratie"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Mobiele data - automatische synchronisatie uitgeschakeld"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2005,7 +1999,7 @@ msgstr "Joplin-website"
 
 #: packages/app-mobile/components/screens/config.js:523
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Privacy Policy"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2133,6 +2127,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"Het standaard admin-wachtwoord is onveilig en is niet gewijzigd! [Nu "
+"wijzigen] (% s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2171,9 +2167,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Joplin-website"
+msgstr "Joplin Server"
 
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
@@ -2316,21 +2311,19 @@ msgstr "AWS secret"
 
 #: packages/lib/models/Setting.js:293
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "Joplin Server URL"
 
 #: packages/lib/models/Setting.js:308
-#, fuzzy
 msgid "Joplin Server Directory"
-msgstr "Joplin-exportmap"
+msgstr "Jopling Server Map"
 
 #: packages/lib/models/Setting.js:319
 msgid "Joplin Server username"
-msgstr ""
+msgstr "Joplin Server Gebruikersnaam"
 
 #: packages/lib/models/Setting.js:330
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "Voer het hoofdwachtwoord in:"
+msgstr "Joplin Server Wachtwoord"
 
 #: packages/lib/models/Setting.js:342
 msgid "Attachment download behaviour"
@@ -2459,13 +2452,12 @@ msgid "Enable typographer support"
 msgstr "Ondersteuning voor typografie inschakelen"
 
 #: packages/lib/models/Setting.js:614
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "Inschakelen geschiedenis van notities"
+msgstr "Ondersteuning voor Linkify inschakelen"
 
 #: packages/lib/models/Setting.js:615
 msgid "Enable math expressions"
-msgstr "Wiskundige expressies inschakelen"
+msgstr "Ondersteuning voor wiskundige expressies inschakelen"
 
 #: packages/lib/models/Setting.js:616
 msgid "Enable Fountain syntax support"
@@ -2476,17 +2468,16 @@ msgid "Enable Mermaid diagrams support"
 msgstr "Ondersteuning voor Mermaid diagrammen Inschakelen"
 
 #: packages/lib/models/Setting.js:618
-#, fuzzy
 msgid "Enable audio player"
-msgstr "Markdown emoji inschakelen"
+msgstr "Ondersteuning voor muziekspeler inschakelen"
 
 #: packages/lib/models/Setting.js:619
 msgid "Enable video player"
-msgstr ""
+msgstr "Ondersteuning voor videospeler inschakelen"
 
 #: packages/lib/models/Setting.js:620
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "Ondersteuning voor PDF weergave inschakelen"
 
 #: packages/lib/models/Setting.js:621
 msgid "Enable ==mark== syntax"
@@ -2568,19 +2559,17 @@ msgid "Editor font family"
 msgstr "Lettertype van editor"
 
 #: packages/lib/models/Setting.js:695
-#, fuzzy
 msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Dit moet een *monospace*-lettertype zijn om alle elementen correct om te "
-"zetten. Als het lettertype onjuist of leeg is, wordt teruggevallen op een "
-"algemeen monospace-lettertype."
+"Als het lettertype onjuist of leeg is, wordt standaard een algemeen "
+"monospace-lettertype gebruikt."
 
 #: packages/lib/models/Setting.js:704
 #, fuzzy
 msgid "Editor monospace font family"
-msgstr "Lettertype van editor"
+msgstr "Editor monospace lettertypefamilie"
 
 #: packages/lib/models/Setting.js:705
 msgid ""
@@ -2636,7 +2625,7 @@ msgstr "%d uur"
 
 #: packages/lib/models/Setting.js:776
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Synchroniseer alleen via wifi-verbinding"
 
 #: packages/lib/models/Setting.js:783
 msgid "Text editor command"
@@ -2801,7 +2790,7 @@ msgstr "Synchronisatie"
 
 #: packages/lib/models/Setting.js:1537
 msgid "Appearance"
-msgstr "Verschijningsvorm"
+msgstr "Weergave"
 
 #: packages/lib/models/Setting.js:1539
 msgid "Note"
@@ -3072,15 +3061,15 @@ msgstr ""
 "Onbekend type item gedownload - graag Joplin upgraden naar de laatste versie"
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Kon niet verbinden met de Joplin Nextcloud app. Controleer uw instellingen "
-"in het Synchronisatie configuratiescherm. Volledige foutmelding was:\n"
+"Kon niet verbinden met de Joplin Server. Controleer uw instellingen in het "
+"Synchronisatie configuratiescherm. Volledige foutmelding was:\n"
 "\n"
 "%s"
 
@@ -3183,7 +3172,7 @@ msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "Kan module \"%s\" niet laden voor formaat \"%s\" en uitvoer \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Kan module \"%s\" niet laden voor formaat \"%s\" en uitvoer \"%s\""
 
@@ -3320,9 +3309,8 @@ msgid "Downloaded and encrypted"
 msgstr "Gedownload en versleuteld"
 
 #: packages/lib/services/ReportService.js:180
-#, fuzzy
 msgid "Created locally"
-msgstr "Lokale items gecreëerd: %d."
+msgstr "Lokale items gecreëerd"
 
 #: packages/lib/services/ReportService.js:191
 msgid "Attachments that could not be downloaded"
@@ -3378,20 +3366,19 @@ msgstr "Op %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Geen suggesties"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Toevoegen aan woordenboek"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Gebruik spellingscontrole"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Taal"
+msgstr "Taal veranderen"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3611,9 +3598,8 @@ msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "Synchroniseren naar opgegeven doel (standaard is dit sync.target)"
 
 #: packages/app-cli/app/command-sync.js:35
-#, fuzzy
 msgid "Upgrade the sync target to the latest version."
-msgstr "Sync target updaten naar de nieuwste versie."
+msgstr "Upgrade het synchronisatiedoel naar de nieuwste versie."
 
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
@@ -3653,9 +3639,11 @@ msgid "Downloading resources..."
 msgstr "Bronnen downloaden..."
 
 #: packages/app-cli/app/command-sync.js:242
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr "De sync target moet worden geüpdatet. Druk hier om door te gaan."
+msgstr ""
+"Het synchronisatiedoel moet worden geüpgraded! Voer `% s` uit om door te "
+"gaan."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
