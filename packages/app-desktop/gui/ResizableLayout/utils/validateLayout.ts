@@ -2,6 +2,17 @@ import produce from 'immer';
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 
+function isLastVisible(itemIndex: number, item: LayoutItem, parent: LayoutItem) {
+	if (!item.visible) return false;
+
+	for (let i = parent.children.length - 1; i >= 0; i--) {
+		const child = parent.children[i];
+		if (child && child.visible) return i === itemIndex;
+	}
+
+	return false;
+}
+
 function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: LayoutItem) {
 	if (!parent) return;
 
@@ -15,46 +26,41 @@ function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: Layout
 	// If all children of a container have a fixed width, the
 	// latest visible child should have a flexible width (i.e. no "width"
 	// property), so that it fills up the remaining space
-	let allChildrenAreSized = true;
-	let isThisTheLastVisible;
-	for (let i = parent.children.length - 1; i >= 0; i--) {
-		const child = parent.children[i];
-		if (!child || !child.visible) continue;
+	if (isLastVisible(itemIndex, itemDraft, parent)) {
+		let allChildrenAreSized = true;
+		for (const child of parent.children) {
+			if (!child.visible) continue;
 
-		if (isThisTheLastVisible === undefined) {
-			isThisTheLastVisible = i === itemIndex;
-			if (!isThisTheLastVisible) break;
-		}
-
-		if (parent.direction === LayoutItemDirection.Row) {
-			if (!child.width) {
-				allChildrenAreSized = false;
-				break;
-			}
-		} else {
-			if (!child.height) {
-				allChildrenAreSized = false;
-				break;
+			if (parent.direction === LayoutItemDirection.Row) {
+				if (!child.width) {
+					allChildrenAreSized = false;
+					break;
+				}
+			} else {
+				if (!child.height) {
+					allChildrenAreSized = false;
+					break;
+				}
 			}
 		}
-	}
 
-	if (isThisTheLastVisible && allChildrenAreSized) {
-		if (parent.direction === LayoutItemDirection.Row) {
-			delete itemDraft.width;
-		} else {
-			delete itemDraft.height;
+		if (allChildrenAreSized) {
+			if (parent.direction === LayoutItemDirection.Row) {
+				delete itemDraft.width;
+			} else {
+				delete itemDraft.height;
+			}
 		}
 	}
 }
 
-// All items should be resizable, except for the root and the latest child
+// All items should be resizable, except for the root and the latest visible child
 // of a container.
 function updateResizeRules(itemIndex: number, itemDraft: LayoutItem, parent: LayoutItem) {
 	if (!parent) return;
-	const isLastChild = itemIndex === parent.children.length - 1;
-	itemDraft.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastChild;
-	itemDraft.resizableBottom = parent.direction === LayoutItemDirection.Column && !isLastChild;
+	const isLastVisibleChild = isLastVisible(itemIndex, itemDraft, parent);
+	itemDraft.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastVisibleChild;
+	itemDraft.resizableBottom = parent.direction === LayoutItemDirection.Column && !isLastVisibleChild;
 }
 
 // Container direction should alternate between row (for the root) and
