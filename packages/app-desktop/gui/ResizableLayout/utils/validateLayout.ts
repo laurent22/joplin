@@ -3,11 +3,11 @@ import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 
 function isLastVisible(itemIndex: number, item: LayoutItem, parent: LayoutItem) {
-	if (!item.visible) return false;
+	if (item.visible === false) return false;
 
 	for (let i = parent.children.length - 1; i >= 0; i--) {
 		const child = parent.children[i];
-		if (child && child.visible) return i === itemIndex;
+		if (child && child.visible !== false) return i === itemIndex;
 	}
 
 	return false;
@@ -29,7 +29,7 @@ function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: Layout
 	if (isLastVisible(itemIndex, itemDraft, parent)) {
 		let allChildrenAreSized = true;
 		for (const child of parent.children) {
-			if (!child.visible) continue;
+			if (child.visible === false) continue;
 
 			if (parent.direction === LayoutItemDirection.Row) {
 				if (!child.width) {
