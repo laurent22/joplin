@@ -13,8 +13,8 @@ export interface EnvVariables {
 	POSTGRES_USER?: string;
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
-        POSTGRES_SSL_ENABLE?: boolean;
-        POSTGRES_SSL_VERIFY?: boolean;
+	POSTGRES_SSL_ENABLE?: boolean;
+	POSTGRES_SSL_VERIFY?: boolean;
 
 	SQLITE_DATABASE?: string;
 }
@@ -41,14 +41,14 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 }
 
 function databaseSSLConfigFromEnv(env: EnvVariables): object {
-        if (env.POSTGRES_SSL_ENABLE || false) {
-            if (env.POSTGRES_SSL_VERIFY === true) {
-                return { rejectUnauthorized: true }
-            } else {
-                return { rejectUnauthorized: false }
-            }
-        }
-        return null;
+	if (env.POSTGRES_SSL_ENABLE || false) {
+		if (env.POSTGRES_SSL_VERIFY === true) {
+			return { rejectUnauthorized: true };
+		} else {
+			return { rejectUnauthorized: false };
+		}
+	}
+	return null;
 }
 
 function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
@@ -60,7 +60,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 			password: env.POSTGRES_PASSWORD || 'joplin',
 			port: env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432,
 			host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
-                        ssl: databaseSSLConfigFromEnv(env),
+			ssl: databaseSSLConfigFromEnv(env),
 		};
 	}
 
