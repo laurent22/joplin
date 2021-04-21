@@ -73,14 +73,9 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public async updateSharedItems() {
-
-		const resourceChanges = {
-			added: [],
-			removed: [],
-		};
-
-		// TODO: For each event, in handleUpdatedItem, compare previosu and current resource IDs and add to the correct array
-		// Then share/unshare as needed.
+		const itemResourceIds = (item: Item) => {
+			return item && item.jop_resource_ids ? JSON.parse(item.jop_resource_ids) : [];
+		}
 
 		const handleAddedToSharedFolder = async (item: Item, shareInfo: SharedRootInfo) => {
 			const shareUsers = await this.models().shareUser().byShareId(shareInfo.share.id);

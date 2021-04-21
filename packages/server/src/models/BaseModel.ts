@@ -171,8 +171,8 @@ export default abstract class BaseModel<T> {
 		return output;
 	}
 
-	public async all(): Promise<T[]> {
-		const rows: any[] = await this.db(this.tableName).select(...this.defaultFields);
+	public async all(options: LoadOptions = {}): Promise<T[]> {
+		const rows: any[] = await this.db(this.tableName).select(this.selectFields(options));
 		return rows as T[];
 	}
 

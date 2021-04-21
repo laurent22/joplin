@@ -88,19 +88,16 @@ describe('shares.resource', function() {
 		// Note is moved to another folder, outside of shared folder
 
 		{
-			// await models().item().save({
-			// 	id: noteItem.id,
-			// 	jop_parent_id: '000000000000000000000000000000F2',
-			// });
-
-			await updateNote(session1.id, { id: noteItem.jop_id, parent_id: '000000000000000000000000000000F2' });
+			const note = await models().item().loadAsJoplinItem(noteItem.id);
+			
+			await updateNote(session1.id, { ...note, parent_id: '000000000000000000000000000000F2' });
 
 			await models().share().updateSharedItems();
 
 			const newChildren = await models().item().children(user2.id);
 			console.info(newChildren);
 
-			console.info(await models().item().all());
+			console.info(await models().item().allForDebug());
 			// expect(newChildren.items.length).toBe(3);
 			// expect(newChildren.items.find(i => i.name === '00000000000000000000000000000001.md')).toBe(undefined);
 		}

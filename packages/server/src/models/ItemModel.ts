@@ -355,6 +355,15 @@ export default class ItemModel extends BaseModel<Item> {
 		};
 	}
 
+	public async allForDebug():Promise<any[]> {
+		const items = await this.all({ fields: ['*'] });
+		return items.map(i => {
+			if (!i.content) return i;
+			i.content = i.content.toString() as any;
+			return i;
+		});
+	}
+
 	// Returns the item IDs that are owned only by the given user. In other
 	// words, the items that are not shared with anyone else. Such items
 	// can be safely deleted when the user is deleted.
