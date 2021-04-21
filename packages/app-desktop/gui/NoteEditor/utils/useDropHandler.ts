@@ -12,7 +12,7 @@ export default function useDropHandler(dependencies: HookDependencies) {
 		const dt = event.dataTransfer;
 		const createFileURL = event.altKey;
 
-		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
+		if (dt && dt.types.indexOf('text/x-jop-note-ids') >= 0) {
 			const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 			const noteMarkdownTags = [];
 			for (let i = 0; i < noteIds.length; i++) {
