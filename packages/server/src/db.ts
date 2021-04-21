@@ -353,7 +353,6 @@ export interface Share extends WithDates, WithUuid {
 export interface Change extends WithDates, WithUuid {
 	counter?: number;
 	item_type?: ItemType;
-	parent_id?: Uuid;
 	item_id?: Uuid;
 	item_name?: string;
 	type?: ChangeType;
@@ -464,7 +463,6 @@ export const databaseSchema: DatabaseTables = {
 		counter: { type: 'number' },
 		id: { type: 'string' },
 		item_type: { type: 'number' },
-		parent_id: { type: 'string' },
 		item_id: { type: 'string' },
 		item_name: { type: 'string' },
 		type: { type: 'number' },

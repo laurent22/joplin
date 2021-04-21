@@ -412,7 +412,6 @@ export default class ItemModel extends BaseModel<Item> {
 				for (const userId of userIds) {
 					await changeModel.save({
 						item_type: this.itemType,
-						parent_id: '',
 						item_id: item.id,
 						item_name: item.name,
 						type: ChangeType.Delete,
@@ -464,7 +463,6 @@ export default class ItemModel extends BaseModel<Item> {
 
 			await changeModel.save({
 				item_type: this.itemType,
-				parent_id: '',
 				item_id: item.id,
 				item_name: item.name || previousItem.name,
 				type: isNew ? ChangeType.Create : ChangeType.Update,

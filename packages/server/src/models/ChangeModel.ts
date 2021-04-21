@@ -1,4 +1,4 @@
-import { Change, ChangeType, Item, ItemType, Uuid } from '../db';
+import { Change, ChangeType, Item, Uuid } from '../db';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel from './BaseModel';
@@ -49,20 +49,6 @@ export default class ChangeModel extends BaseModel<Change> {
 	public unserializePreviousItem(item: string): ChangePreviousItem {
 		if (!item) return null;
 		return JSON.parse(item);
-	}
-
-	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType, previousItem: any, userId: Uuid): Promise<Change> {
-		const change: Change = {
-			item_type: itemType,
-			parent_id: parentId || '',
-			item_id: itemId,
-			item_name: itemName,
-			type: changeType,
-			previous_item: previousItem ? this.serializePreviousItem(previousItem) : '',
-			user_id: userId,
-		};
-
-		return this.save(change) as Change;
 	}
 
 	public changeUrl(): string {
