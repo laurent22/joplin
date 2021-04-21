@@ -231,7 +231,7 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 
 export const createUser = async function(index: number = 1, isAdmin: boolean = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
-}
+};
 
 export async function createItemTree(userId: Uuid, parentFolderId: string, tree: any): Promise<void> {
 	const itemModel = models().item();
@@ -260,7 +260,7 @@ export async function createItemTree2(userId: Uuid, parentFolderId: string, tree
 		const serializedBody = isFolder ?
 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId }) :
 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId });
-		const newItem = await itemModel.saveFromRawContent(userId, jopItem.id + '.md', Buffer.from(serializedBody));
+		const newItem = await itemModel.saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
 		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
 	}
 }
@@ -290,7 +290,7 @@ export async function createNote(sessionId: string, note: NoteEntity): Promise<I
 	return createItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
 }
 
-export async function updateNote(sessionId: string, note: NoteEntity):Promise<Item> {
+export async function updateNote(sessionId: string, note: NoteEntity): Promise<Item> {
 	return updateItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
 }
 
@@ -304,19 +304,19 @@ export async function createFolder(sessionId: string, folder: FolderEntity): Pro
 	return createItem(sessionId, `root:/${folder.id}.md:`, makeFolderSerializedBody(folder));
 }
 
-export async function createResource(sessionId: string, resource:ResourceEntity, content:string): Promise<Item> {
+export async function createResource(sessionId: string, resource: ResourceEntity, content: string): Promise<Item> {
 	resource = {
 		id: '000000000000000000000000000000E1',
 		mime: 'plain/text',
 		file_extension: 'txt',
 		size: content.length,
 		...resource,
-	} 
+	};
 
 	const serializedBody = makeResourceSerializedBody(resource);
 
-	const resourceItem = await createItem(sessionId, 'root:/' + resource.id + '.md:', serializedBody);
-	await createItem(sessionId, 'root:/.resource/' + resource.id + ':', content);
+	const resourceItem = await createItem(sessionId, `root:/${resource.id}.md:`, serializedBody);
+	await createItem(sessionId, `root:/.resource/${resource.id}:`, content);
 	return resourceItem;
 }
 

@@ -63,6 +63,7 @@ import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
+import ItemResourceModel from './ItemResourceModel';
 import ShareUserModel from './ShareUserModel';
 import KeyValueModel from './KeyValueModel';
 
@@ -86,6 +87,10 @@ export class Models {
 
 	public userItem() {
 		return new UserItemModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
+	public itemResource() {
+		return new ItemResourceModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
 	public apiClient() {

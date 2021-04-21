@@ -1,7 +1,7 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
-import { isJoplinItemName, linkedResourceIds, resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
+import { isJoplinItemName, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
@@ -87,7 +87,7 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	public async userHasItem(userId:Uuid, itemId:Uuid):Promise<boolean> {
+	public async userHasItem(userId: Uuid, itemId: Uuid): Promise<boolean> {
 		const r = await this
 			.db('user_items')
 			.select('user_items.id')
@@ -103,7 +103,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public async loadByJopIds(userId: Uuid, jopIds:string[],  options: LoadOptions = {}): Promise<Item[]> {
+	public async loadByJopIds(userId: Uuid, jopIds: string[], options: LoadOptions = {}): Promise<Item[]> {
 		if (!jopIds.length) return [];
 
 		return this
@@ -121,7 +121,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public async loadByNames(userId: Uuid, names: string[], options: LoadOptions = {}): Promise<Item[]> {
 		if (!names.length) return [];
-		
+
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
@@ -164,7 +164,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const rows: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select('items.id', 'items.jop_id', 'items.jop_type', 'items.jop_resource_ids')
+			.select('items.id', 'items.jop_id', 'items.jop_type')
 			.where('items.jop_parent_id', '=', folderId)
 			.where('user_items.user_id', '=', userId);
 
@@ -197,17 +197,9 @@ export default class ItemModel extends BaseModel<Item> {
 				if (alreadySharedItemIds.includes(item.id)) continue;
 				await this.models().userItem().add(toUserId, item.id, shareId);
 
-				const resourceIds:string[] = item.jop_resource_ids ? JSON.parse(item.jop_resource_ids) : [];
-				const resourceItems = await this.loadByJopIds(fromUserId, resourceIds);
-				const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
-				const resourceBlobItems = await this.loadByNames(fromUserId, resourceBlobNames);
-
-				for (const resourceItem of resourceItems) {
-					await this.models().userItem().add(toUserId, resourceItem.id, shareId);
-				}
-
-				for (const resourceBlobItem of resourceBlobItems) {
-					await this.models().userItem().add(toUserId, resourceBlobItem.id, shareId);
+				if (item.jop_type === ModelType.Note) {
+					const resourceIds = await this.models().itemResource().byItemId(item.id);
+					await this.models().share().updateResourceShareStatus(true, shareId, fromUserId, toUserId, resourceIds);
 				}
 			}
 		});
@@ -231,24 +223,27 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(userId: Uuid, name: string, buffer: Buffer) {
+	public async saveFromRawContent(userId: Uuid, name: string, buffer: Buffer): Promise<Item> {
 		const existingItem = await this.loadByName(userId, name);
 
 		const isJoplinItem = isJoplinItemName(name);
+		let isNote = false;
 
 		const item: Item = {
 			name,
 		};
 
+		let resourceIds: string[] = [];
+
 		if (isJoplinItem) {
 			const joplinItem = await unserializeJoplinItem(buffer.toString());
-			const resourceIds = joplinItem.type_ === ModelType.Note ? linkedResourceIds(joplinItem.body) : '';
+			isNote = joplinItem.type_ === ModelType.Note;
+			resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
 
 			item.jop_id = joplinItem.id;
 			item.jop_parent_id = joplinItem.parent_id || '';
 			item.jop_type = joplinItem.type_;
 			item.jop_encryption_applied = joplinItem.encryption_applied || 0;
-			item.jop_resource_ids = joplinItem.type_ === ModelType.Note ? JSON.stringify(resourceIds) : '';
 
 			delete joplinItem.id;
 			delete joplinItem.parent_id;
@@ -262,7 +257,16 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (existingItem) item.id = existingItem.id;
 
-		return this.saveForUser(userId, item);
+		return this.withTransaction<Item>(async () => {
+			const savedItem = await this.saveForUser(userId, item);
+
+			if (isNote) {
+				await this.models().itemResource().deleteByItemId(savedItem.id);
+				await this.models().itemResource().addResourceIds(savedItem.id, resourceIds);
+			}
+
+			return savedItem;
+		});
 	}
 
 	protected async validate(item: Item, options: ValidateOptions = {}): Promise<Item> {
@@ -355,7 +359,7 @@ export default class ItemModel extends BaseModel<Item> {
 		};
 	}
 
-	public async allForDebug():Promise<any[]> {
+	public async allForDebug(): Promise<any[]> {
 		const items = await this.all({ fields: ['*'] });
 		return items.map(i => {
 			if (!i.content) return i;
@@ -440,7 +444,14 @@ export default class ItemModel extends BaseModel<Item> {
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
 		} else {
-			previousItem = (await this.load(item.id, { fields: ['name', 'jop_parent_id', 'jop_resource_ids'] })) as ChangePreviousItem;
+			const beforeSaveItem = (await this.load(item.id, { fields: ['name', 'jop_type', 'jop_parent_id'] }));
+			const resourceIds = beforeSaveItem.jop_type === ModelType.Note ? await this.models().itemResource().byItemId(item.id) : [];
+
+			previousItem = {
+				jop_parent_id: beforeSaveItem.jop_parent_id,
+				name: beforeSaveItem.name,
+				jop_resource_ids: resourceIds,
+			};
 		}
 
 		return this.withTransaction(async () => {

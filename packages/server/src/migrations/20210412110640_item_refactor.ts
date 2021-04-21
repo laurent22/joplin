@@ -38,7 +38,6 @@ export async function up(db: DbConnection): Promise<any> {
 		table.string('jop_parent_id', 32).defaultTo('').notNullable();
 		table.integer('jop_type', 2).defaultTo(0).notNullable();
 		table.integer('jop_encryption_applied', 1).defaultTo(0).notNullable();
-		table.text('jop_resource_ids').defaultTo('').notNullable();
 	});
 
 	await db.schema.alterTable('items', function(table: Knex.CreateTableBuilder) {
@@ -62,6 +61,17 @@ export async function up(db: DbConnection): Promise<any> {
 		table.index('user_id');
 		table.index('item_id');
 		table.index('share_id');
+	});
+
+	await db.schema.createTable('item_resources', function(table: Knex.CreateTableBuilder) {
+		table.increments('id').unique().primary().notNullable();
+		table.string('item_id', 32).notNullable();
+		table.string('resource_id', 32).notNullable();
+	});
+
+	await db.schema.alterTable('item_resources', function(table: Knex.CreateTableBuilder) {
+		table.unique(['item_id', 'resource_id']);
+		table.index(['item_id', 'resource_id']);
 	});
 
 	await db.schema.createTable('key_values', function(table: Knex.CreateTableBuilder) {

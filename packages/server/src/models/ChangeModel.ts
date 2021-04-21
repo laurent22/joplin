@@ -22,7 +22,7 @@ export interface ChangePagination {
 export interface ChangePreviousItem {
 	name: string;
 	jop_parent_id: string;
-	jop_resource_ids: string;
+	jop_resource_ids: string[];
 }
 
 export function defaultChangePagination(): ChangePagination {

@@ -120,19 +120,4 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		}, 'ShareUserModel::delete');
 	}
 
-	// Returns the users who have shared files with the current user
-	// public async linkedUserIds(userId:Uuid): Promise<Uuid[]> {
-	// 	const fileSubQuery = this
-	// 		.db('files')
-	// 		.select('source_file_id')
-	// 		.where('source_file_id', '!=', '')
-	// 		.andWhere('owner_id', '=', userId);
-
-	// 	return this
-	// 		.db('files')
-	// 		.distinct('owner_id')
-	// 		.whereIn('files.id', fileSubQuery)
-	// 		.pluck('owner_id');
-	// }
-
 }

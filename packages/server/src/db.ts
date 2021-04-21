@@ -322,7 +322,6 @@ export interface Item extends WithDates, WithUuid {
 	jop_parent_id?: Uuid;
 	jop_type?: number;
 	jop_encryption_applied?: number;
-	jop_resource_ids?: string;
 }
 
 export interface UserItem extends WithDates {
@@ -330,6 +329,12 @@ export interface UserItem extends WithDates {
 	user_id?: Uuid;
 	item_id?: Uuid;
 	share_id?: Uuid;
+}
+
+export interface ItemResource {
+	id?: number;
+	item_id?: Uuid;
+	resource_id?: Uuid;
 }
 
 export interface KeyValue {
@@ -427,7 +432,6 @@ export const databaseSchema: DatabaseTables = {
 		jop_parent_id: { type: 'string' },
 		jop_type: { type: 'number' },
 		jop_encryption_applied: { type: 'number' },
-		jop_resource_ids: { type: 'string' },
 	},
 	user_items: {
 		id: { type: 'number' },
@@ -436,6 +440,11 @@ export const databaseSchema: DatabaseTables = {
 		share_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+	},
+	item_resources: {
+		id: { type: 'number' },
+		item_id: { type: 'string' },
+		resource_id: { type: 'string' },
 	},
 	key_values: {
 		id: { type: 'number' },

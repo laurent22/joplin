@@ -1,7 +1,11 @@
+import { ModelType } from '@joplin/lib/BaseModel';
+import { resourceBlobPath } from '../apps/joplin/joplinUtils';
 import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, User, Uuid } from '../db';
+import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
+import { ChangePreviousItem } from './ChangeModel';
 import { SharedRootInfo } from './ItemModel';
 
 export default class ShareModel extends BaseModel<Share> {
@@ -73,9 +77,15 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public async updateSharedItems() {
-		const itemResourceIds = (item: Item) => {
-			return item && item.jop_resource_ids ? JSON.parse(item.jop_resource_ids) : [];
+		interface ResourceChanges {
+			share: Share;
+			added: string[];
+			removed: string[];
 		}
+
+		type ResourceChangesPerShareId = Record<Uuid, ResourceChanges>;
+
+		const resourceChanges: ResourceChangesPerShareId = {};
 
 		const handleAddedToSharedFolder = async (item: Item, shareInfo: SharedRootInfo) => {
 			const shareUsers = await this.models().shareUser().byShareId(shareInfo.share.id);
@@ -101,6 +111,57 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
+		const handleResourceSharing = async (previousItem: ChangePreviousItem, item: Item, previousShareInfo: SharedRootInfo, currentShareInfo: SharedRootInfo) => {
+			// Not a note - we can exit
+			if (item.jop_type !== ModelType.Note) return;
+
+			// Item was not in a shared folder and is still not in one - nothing to do
+			if (!previousShareInfo && !currentShareInfo) return;
+
+			if (currentShareInfo && !resourceChanges[currentShareInfo.share.id]) {
+				resourceChanges[currentShareInfo.share.id] = {
+					share: currentShareInfo.share,
+					added: [],
+					removed: [],
+				};
+			}
+
+			if (previousShareInfo && !resourceChanges[previousShareInfo.share.id]) {
+				resourceChanges[previousShareInfo.share.id] = {
+					share: previousShareInfo.share,
+					added: [],
+					removed: [],
+				};
+			}
+
+			// Item was moved out of a shared folder to a non-shared folder - unshare all resources
+			if (previousShareInfo && !currentShareInfo) {
+				resourceChanges[previousShareInfo.share.id].removed = resourceChanges[previousShareInfo.share.id].removed.concat(previousItem.jop_resource_ids);
+				return;
+			}
+
+			// Item was moved from a non-shared folder to a shared one - share all resources
+			if (!previousShareInfo && currentShareInfo) {
+				resourceChanges[currentShareInfo.share.id].added = resourceChanges[currentShareInfo.share.id].added.concat(await this.models().itemResource().byItemId(item.id));
+				return;
+			}
+
+			// Note either stayed in the same shared folder, or moved to another
+			// shared folder. In that case, we check the note content before and
+			// after and see if resources have been added or removed from it,
+			// then we share/unshare resources based on this.
+
+			const previousResourceIds = previousItem ? previousItem.jop_resource_ids : [];
+			const currentResourceIds = await this.models().itemResource().byItemId(item.id);
+			for (const resourceId of previousResourceIds) {
+				if (!currentResourceIds.includes(resourceId)) resourceChanges[currentShareInfo.share.id].removed.push(resourceId);
+			}
+
+			for (const resourceId of currentResourceIds) {
+				if (!previousResourceIds.includes(resourceId)) resourceChanges[currentShareInfo.share.id].added.push(resourceId);
+			}
+		};
+
 		const handleCreatedItem = async (_change: Change, item: Item) => {
 			if (!item.jop_parent_id) return;
 			const shareInfo = await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id);
@@ -113,6 +174,8 @@ export default class ShareModel extends BaseModel<Share> {
 
 			const previousShareInfo = previousItem?.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(previousItem.jop_parent_id) : null;
 			const currentShareInfo = item.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id) : null;
+
+			await handleResourceSharing(previousItem, item, previousShareInfo, currentShareInfo);
 
 			// Item was not in a shared folder and is still not in one
 			if (!previousShareInfo && !currentShareInfo) return;
@@ -166,8 +229,46 @@ export default class ShareModel extends BaseModel<Share> {
 					// too.
 				}
 
+				for (const shareId in resourceChanges) {
+					const rc = resourceChanges[shareId];
+					rc.added = unique(rc.added);
+					rc.removed = unique(rc.removed);
+
+					const shareUsers = await this.models().shareUser().byShareId(rc.share.id);
+
+					for (const shareUser of shareUsers) {
+						await this.updateResourceShareStatus(true, rc.share.id, rc.share.owner_id, shareUser.user_id, rc.added);
+					}
+
+					for (const shareUser of shareUsers) {
+						await this.updateResourceShareStatus(false, rc.share.id, rc.share.owner_id, shareUser.user_id, rc.removed);
+					}
+				}
+
 				await this.models().keyValue().setValue('ShareService::latestProcessedChange', changes[changes.length - 1].id);
 			});
+		}
+	}
+
+	public async updateResourceShareStatus(doShare: boolean, shareId: Uuid, fromUserId: Uuid, toUserId: Uuid, resourceIds: string[]) {
+		const resourceItems = await this.models().item().loadByJopIds(fromUserId, resourceIds);
+		const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
+		const resourceBlobItems = await this.models().item().loadByNames(fromUserId, resourceBlobNames);
+
+		for (const resourceItem of resourceItems) {
+			if (doShare) {
+				await this.models().userItem().add(toUserId, resourceItem.id, shareId);
+			} else {
+				await this.models().userItem().remove(toUserId, resourceItem.id);
+			}
+		}
+
+		for (const resourceBlobItem of resourceBlobItems) {
+			if (doShare) {
+				await this.models().userItem().add(toUserId, resourceBlobItem.id, shareId);
+			} else {
+				await this.models().userItem().remove(toUserId, resourceBlobItem.id);
+			}
 		}
 	}
 

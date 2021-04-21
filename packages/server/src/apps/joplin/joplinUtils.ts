@@ -36,7 +36,7 @@ export async function initializeJoplinUtils(config: Config) {
 	BaseItem.loadClass('Revision', Revision);
 }
 
-export function linkedResourceIds(body:string):string[] {
+export function linkedResourceIds(body: string): string[] {
 	return Note.linkedItemIds(body);
 }
 
@@ -53,6 +53,6 @@ export async function serializeJoplinItem(item: any): Promise<string> {
 	return ModelClass.serialize(item);
 }
 
-export function resourceBlobPath(resourceId:string):string {
-	return '.resource/' + resourceId;
+export function resourceBlobPath(resourceId: string): string {
+	return `.resource/${resourceId}`;
 }
