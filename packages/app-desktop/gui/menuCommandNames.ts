@@ -35,6 +35,7 @@ export default function() {
 		'toggleSideBar',
 		'toggleVisiblePanes',
 		'editor.deleteLine',
+		'editor.duplicateLine',
 		'editor.undo',
 		'editor.redo',
 		'editor.indentLess',
