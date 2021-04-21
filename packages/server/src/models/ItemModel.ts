@@ -405,7 +405,6 @@ export default class ItemModel extends BaseModel<Item> {
 		const items = await this.db(this.tableName).select('id', 'name').whereIn('id', ids);
 
 		await this.withTransaction(async () => {
-
 			const changeModel = this.models().change();
 
 			for (const item of items) {
@@ -425,6 +424,8 @@ export default class ItemModel extends BaseModel<Item> {
 
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids);
+			await this.models().itemResource().deleteByItemIds(ids);
+
 			await super.delete(ids, options);
 		}, 'ItemModel::delete');
 	}

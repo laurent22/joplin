@@ -15,8 +15,12 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 		return false;
 	}
 
+	public async deleteByItemIds(itemIds: Uuid[]): Promise<void> {
+		await this.db(this.tableName).whereIn('item_id', itemIds).delete();
+	}
+
 	public async deleteByItemId(itemId: Uuid): Promise<void> {
-		await this.db(this.tableName).where('item_id', '=', itemId).delete();
+		await this.deleteByItemIds([itemId]);
 	}
 
 	public async addResourceIds(itemId: Uuid, resourceIds: string[]): Promise<void> {
