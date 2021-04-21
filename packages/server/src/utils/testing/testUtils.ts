@@ -58,8 +58,13 @@ let createdDbName_: string = null;
 export async function beforeAllDb(unitName: string) {
 	createdDbName_ = unitName;
 
+	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
+	await fs.mkdirp(tempDir);
+
 	initConfig({
 		SQLITE_DATABASE: createdDbName_,
+	}, {
+		tempDir: tempDir,
 	});
 
 	initGlobalLogger();
