@@ -193,7 +193,7 @@ msgstr "Izbriši"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:184
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Izbrisati oznaku „%s” iz svih bilješki?"
+msgstr "Ukloniti oznaku „%s” iz svih bilježaka?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:187
 msgid "Remove this search from the sidebar?"
@@ -234,7 +234,7 @@ msgstr "Oznake"
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Dešifrirane stavke: %d/%d"
+msgstr "Dešifrirani elementi: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:482
 #: packages/app-mobile/components/side-menu-content.js:330
@@ -284,7 +284,7 @@ msgstr "Umetni poveznicu"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:222
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:223
 msgid "List item"
-msgstr "Stavka popisa"
+msgstr "Element popisa"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:510
 msgid "Layout"
@@ -316,7 +316,7 @@ msgstr "Kopiraj"
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
-msgstr "Zalijepi"
+msgstr "Umetni"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
 msgid "Checkbox list"
@@ -324,7 +324,7 @@ msgstr "Označiv popis"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr "Isticanje"
+msgstr "Istaknuto"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
@@ -332,7 +332,7 @@ msgstr "Precrtano"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr "Umetni"
+msgstr "Umetnuto"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
@@ -381,7 +381,7 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
-"Pričekaj da se svi privitci preuzmu i dešifriraju. Za uređivanje bilješke "
+"Pričekaj da se svi privici preuzmu i dešifriraju. Za uređivanje bilješke "
 "možeš prijeći i na %s."
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
@@ -444,17 +444,17 @@ msgstr "Saznaj više"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr "Zanemari"
+msgstr "Prekini"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
-msgstr "Sljedeći se privitci prate zbog promjena:"
+msgstr "Promjene se prate za sljedeće privitke:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr "Privitci se više neće pratiti kad se prebaciš na jednu drugu bilješku."
+msgstr "Privici se više neće pratiti kad se prebaciš na jednu drugu bilješku."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
 #, javascript-format
@@ -571,7 +571,7 @@ msgstr "Aktualizirano"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 msgid "Completed"
-msgstr "Dovršeno"
+msgstr "Završeno"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 msgid "Location"
@@ -700,7 +700,7 @@ msgid ""
 msgstr ""
 "Da bi Joplin mogao sinkronizirati, najprije se mora nadograditi cilj "
 "sinkronizacije. Postupak može potrajati nekoliko minuta, a nakon toga se "
-"program mora ponovo pokrenuti. Za nastavak klikni poveznicu."
+"program mora ponovo pokrenuti. Za nastavak pritisni poveznicu."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
@@ -708,7 +708,7 @@ msgstr "Pokreni ponovo i nadogradi"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:411
 msgid "Some items cannot be synchronised."
-msgstr "Neke se stavke ne mogu sinkronizirati."
+msgstr "Neki se elementi ne mogu sinkronizirati."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:413
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:419
@@ -718,7 +718,7 @@ msgstr "Pogledaj ih sada"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:417
 msgid "Some items cannot be decrypted."
-msgstr "Neke se stavke ne mogu dešifrirati."
+msgstr "Neki se elementi ne mogu dešifrirati."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:423
 msgid "One or more master keys need a password."
@@ -737,7 +737,8 @@ msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
-"Standardna metoda šifriranja je promijenjena. Šifriraj tvoje podatke ponovo."
+"Standardna metoda šifriranja je promijenjena. Preporučujemo da ponovo "
+"šifriraš tvoje podatke."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:437
 msgid "More info"
@@ -806,7 +807,7 @@ msgstr "Premjesti u bilježnicu:"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
-msgstr "Uključi/Isključi raspored uređivača"
+msgstr "Uključi/Isključi izgled uređivača"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
 msgid "Toggle editors"
@@ -883,11 +884,11 @@ msgstr "Pošalji"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 msgid "Token has been copied to the clipboard!"
-msgstr "Token je kopiran u međuspremnik!"
+msgstr "Ključ je kopiran u međuspremnik!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "Stvarno želiš obnoviti token autorizacije?"
+msgstr "Stvarno želiš obnoviti ključ za autorizaciju?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -939,8 +940,8 @@ msgid ""
 "to a particular port."
 msgstr ""
 "Ova usluga omogućuje komunikaciju proširenja preglednika s Joplinom. Kad je "
-"aktiviraš, možda ćeš u vatrozidu morati dozvoliti Joplinu da osluškuje "
-"određeni priključak."
+"aktiviraš, možda ćeš u vatrozidu morati dozvoliti Joplinu pristup određenom "
+"priključku."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 msgid "Step 2: Install the extension"
@@ -956,23 +957,23 @@ msgstr "Napredne opcije"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 msgid "Authorisation token:"
-msgstr "Token autorizacije:"
+msgstr "Ključ za autorizaciju:"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 msgid "Copy token"
-msgstr "Kopiraj token"
+msgstr "Kopiraj ključ"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"Ovaj token autorizacije potreban je samo, da bi drugi programi mogli "
-"pristupiti Joplinu."
+"Ovaj ključ za autorizaciju potreban je samo za dozvoljavanje drugim "
+"programima pristupiti Joplinu."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr "Obnovi token"
+msgstr "Obnovi ključ"
 
 #: packages/app-desktop/gui/MenuBar.js:166
 #, javascript-format
@@ -1049,7 +1050,7 @@ msgstr "&Prikaz"
 
 #: packages/app-desktop/gui/MenuBar.js:541
 msgid "Layout button sequence"
-msgstr "Redoslijed gumbova rasporeda"
+msgstr "Slijed gumbova rasporeda"
 
 #: packages/app-desktop/gui/MenuBar.js:586
 #: packages/app-desktop/gui/MenuBar.js:592
@@ -1160,15 +1161,15 @@ msgstr "%s – Kopiraj"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:60
 msgid "Switch between note and to-do type"
-msgstr "Prebaci između vrste bilješke i zadatka"
+msgstr "Mijenjaj između bilješke i zadatka"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:88
 msgid "Switch to note type"
-msgstr "Prebaci na vrstu bilješke"
+msgstr "Promijeni u bilješku"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:94
 msgid "Switch to to-do type"
-msgstr "Prebaci na vrstu zadatka"
+msgstr "Promijeni u zadatak"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:101
 #: packages/app-mobile/components/screens/Note.js:817
@@ -1190,7 +1191,7 @@ msgstr "Izbrisati ove %d bilješke?"
 #: packages/app-cli/app/command-sync.js:95
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "Autentifikacija nije dovršena (nije dobiven token autentifikacije)."
+msgstr "Autentifikacija nije završena (nije dobiven ključ za autentifikaciju)."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
@@ -1310,7 +1311,7 @@ msgstr "Glavni ključevi"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
 msgid "Active"
-msgstr "Aktivan"
+msgstr "Aktivno"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:314
 msgid "Source"
@@ -1346,9 +1347,9 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"Glavni ključevi s tim ID-ovima koriste se za šifriranje nekih tvojih stavki, "
-"ali program im trenutačno ne može pristupiti. Vjerojatno će se na kraju "
-"preuzeti putem sinkronizacije."
+"Glavni ključevi s tim ID-ovima koriste se za šifriranje nekih tvojih "
+"elemenata, ali program im trenutačno ne može pristupiti. Vjerojatno će se na "
+"kraju preuzeti putem sinkronizacije."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
 #: packages/app-mobile/components/screens/encryption-config.js:268
@@ -1428,7 +1429,7 @@ msgstr "Kasnije"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
 msgid "Restart now"
-msgstr "Pokreni sada ponovo"
+msgstr "Pokreni ponovo"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
 #: packages/lib/models/Setting.js:1543
@@ -1512,19 +1513,19 @@ msgstr "Poništi"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
-msgstr "Riječi"
+msgstr "Broj riječi"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
-msgstr "Znakovi"
+msgstr "Broj znakova"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
-msgstr "Znakovi bez razmaka"
+msgstr "Broj znakova bez razmaka"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:79
 msgid "Lines"
-msgstr "Redci"
+msgstr "Broj redaka"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
 #: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
@@ -1572,12 +1573,12 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"Za ručno razvrstavanje bilješki, redoslijed se mora promijeniti u „%s” u "
+"Za ručno razvrstavanje bilježaka, redoslijed se mora promijeniti u „%s” u "
 "izborniku „%s” > „%s”"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Ovdje nema bilješki. Stvori novu pritiskom na „Nova bilješka”."
+msgstr "Ovdje nema bilježaka. Stvori bilješku pritiskom na „Nova bilješka”."
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid ""
@@ -1744,7 +1745,7 @@ msgstr "Dozvola za korištenje kamere"
 
 #: packages/app-mobile/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
-msgstr "Potrebna je tvoja dozvola za korištenje kamere."
+msgstr "Za korištenje kamere potrebna je tvoja dozvola."
 
 #: packages/app-mobile/components/screen-header.js:185
 msgid "Delete these notes?"
@@ -1781,7 +1782,7 @@ msgstr "Stvori bilježnicu"
 
 #: packages/app-mobile/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Trenutačno nema bilješki. Stvori novu pritiskom na gumb (+)."
+msgstr "Trenutačno nema bilježaka. Stvori bilješku pritiskom na gumb (+)."
 
 #: packages/app-mobile/components/screens/folder.js:87
 #, javascript-format
@@ -1934,7 +1935,7 @@ msgid ""
 "may take a long time depending on the number of notes."
 msgstr ""
 "Koristi ovo za ponovnu izgradnju popisa rezultata pretrage, ako postoji "
-"problem s pretragom. Ovisno o broju bilješki, može potrajati."
+"problem s pretragom. Ovisno o broju bilježaka, može potrajati."
 
 #: packages/app-mobile/components/screens/config.js:446
 msgid "Exporting profile..."
@@ -1999,7 +2000,7 @@ msgstr "Odbaci promjene"
 #: packages/app-mobile/components/screens/Note.js:150
 #, javascript-format
 msgid "No item with ID %s"
-msgstr "Nema stavke s ID oznakom %s"
+msgstr "Nema elementa s ID oznakom %s"
 
 #: packages/app-mobile/components/screens/Note.js:168
 msgid "This attachment is not downloaded or not decrypted yet."
@@ -2226,7 +2227,7 @@ msgstr "Solarno tamna"
 
 #: packages/lib/models/Setting.js:106
 msgid "Nord"
-msgstr "Nordijski"
+msgstr "Nord"
 
 #: packages/lib/models/Setting.js:107
 msgid "Aritim Dark"
@@ -2356,7 +2357,7 @@ msgstr "Tema"
 
 #: packages/lib/models/Setting.js:440
 msgid "Automatically switch theme to match system theme"
-msgstr "Automatski prebaci temu na temu sustava"
+msgstr "Automatski promijeni temu na temu sustava"
 
 #: packages/lib/models/Setting.js:452
 msgid "Preferred light theme"
@@ -2373,7 +2374,7 @@ msgstr "Prikaži broj bilježaka"
 #: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:486
 #: packages/lib/models/Setting.js:487
 msgid "Split View"
-msgstr "Podijeljeni prikaz"
+msgstr "Podijeljen prikaz"
 
 #: packages/lib/models/Setting.js:484
 #, javascript-format
@@ -2388,7 +2389,7 @@ msgstr "%s / %s"
 
 #: packages/lib/models/Setting.js:491
 msgid "Uncompleted to-dos on top"
-msgstr "Najprije nedovršeni zadaci"
+msgstr "Najprije nezavršeni zadaci"
 
 #: packages/lib/models/Setting.js:492
 msgid "Show completed to-dos"
@@ -2464,7 +2465,7 @@ msgstr "Aktiviraj PDF-preglednik"
 
 #: packages/lib/models/Setting.js:621
 msgid "Enable ==mark== syntax"
-msgstr "Aktiviraj sintaksu ==mark=="
+msgstr "Aktiviraj sintaksu za isticanje ==mark=="
 
 #: packages/lib/models/Setting.js:622
 msgid "Enable footnotes"
@@ -2476,31 +2477,31 @@ msgstr "Aktiviraj proširenje za kazalo"
 
 #: packages/lib/models/Setting.js:624
 msgid "Enable ~sub~ syntax"
-msgstr "Aktiviraj sintaksu ~sub~"
+msgstr "Aktiviraj sintaksu za indeks ~sub~"
 
 #: packages/lib/models/Setting.js:625
 msgid "Enable ^sup^ syntax"
-msgstr "Aktiviraj sintaksu ^sup^"
+msgstr "Aktiviraj sintaksu za eksponent ^sup^"
 
 #: packages/lib/models/Setting.js:626
 msgid "Enable deflist syntax"
-msgstr "Aktiviraj sintaksu deflist"
+msgstr "Aktiviraj sintaksu za pojmovni popis deflist"
 
 #: packages/lib/models/Setting.js:627
 msgid "Enable abbreviation syntax"
-msgstr "Aktiviraj sintaksu kratica"
+msgstr "Aktiviraj sintaksu za kratice"
 
 #: packages/lib/models/Setting.js:628
 msgid "Enable markdown emoji"
-msgstr "Aktiviraj markdown za emoji"
+msgstr "Aktiviraj markdown označavanje za emoji"
 
 #: packages/lib/models/Setting.js:629
 msgid "Enable ++insert++ syntax"
-msgstr "Aktiviraj sintaksu ++insert++"
+msgstr "Aktiviraj sintaksu za umetanje ++insert++"
 
 #: packages/lib/models/Setting.js:630
 msgid "Enable multimarkdown table extension"
-msgstr "Aktiviraj proširenje za multimarkdown tablice"
+msgstr "Aktiviraj multimarkdown proširenje za tablice"
 
 #: packages/lib/models/Setting.js:641
 msgid "Show tray icon"
@@ -2610,16 +2611,16 @@ msgstr "Sinkroniziraj samo putem WiFi veze"
 
 #: packages/lib/models/Setting.js:783
 msgid "Text editor command"
-msgstr "Naredba uređivača teksta"
+msgstr "Naredba za uređivača teksta"
 
 #: packages/lib/models/Setting.js:783
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Naredba uređivača (može koristiti argumente) koja će se koristiti za "
-"otvaranje bilješke. Ako nijedna nije odabrana, pokušat će automatski otkriti "
-"standardni uređivač."
+"Naredba za uređivača teksta (može sadržati argumente) koji će se koristiti "
+"za otvaranje bilješke. Ako se ne zada, program će pokušati automatski "
+"otkriti standardni uređivač."
 
 #: packages/lib/models/Setting.js:784
 msgid "Page size for PDF export"
@@ -2655,11 +2656,11 @@ msgstr "Položaj stranice za izvoz u PDF"
 
 #: packages/lib/models/Setting.js:796
 msgid "Portrait"
-msgstr "Uspravno"
+msgstr "Uspravni"
 
 #: packages/lib/models/Setting.js:797
 msgid "Landscape"
-msgstr "Ležeće"
+msgstr "Ležeći"
 
 #: packages/lib/models/Setting.js:807
 msgid "Keyboard Mode"
@@ -2715,7 +2716,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:868
 msgid "Enable note history"
-msgstr "Aktiviraj povijest bilježaka"
+msgstr "Aktiviraj povijest bilješke"
 
 #: packages/lib/models/Setting.js:878
 msgid "days"
@@ -2728,11 +2729,11 @@ msgstr "%d dana"
 
 #: packages/lib/models/Setting.js:880
 msgid "Keep note history for"
-msgstr "Čuvaj povijest bilježaka za"
+msgstr "Čuvaj povijest bilješke"
 
 #: packages/lib/models/Setting.js:907
 msgid "Notebook list growth factor"
-msgstr "Faktor širenja popisa bilježnice"
+msgstr "Faktor povećanja popisa bilježnice"
 
 #: packages/lib/models/Setting.js:908 packages/lib/models/Setting.js:921
 #: packages/lib/models/Setting.js:934
@@ -2742,18 +2743,18 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"Svojstvo faktora postavlja način širenja ili sažimanja stavke, kako bi se "
-"smjestila u raspoloživ prostor kontejnera u odnosu na ostale stavke. To "
-"znači, da će stavka s faktorom 2 zauzeti dvostruko više prostora od stavke s "
-"faktorom 1. Za prikaz promjena ponovo pokreni program."
+"Faktorom se određuje povećanje ili smanjenje elementa, kako bi se smjestio u "
+"raspoloživ prostor kontejnera u odnosu na ostale elemente. To znači, da će "
+"element s faktorom 2 zauzeti dvostruko više prostora od elementa s faktorom "
+"1. Za prikaz promjena ponovo pokreni program."
 
 #: packages/lib/models/Setting.js:920
 msgid "Note list growth factor"
-msgstr "Faktor širenja popisa bilježaka"
+msgstr "Faktor povećanja popisa bilježaka"
 
 #: packages/lib/models/Setting.js:933
 msgid "Note area growth factor"
-msgstr "Faktor širenja područja bilješke"
+msgstr "Faktor povećanja područja bilježaka"
 
 #: packages/lib/models/Setting.js:1134
 #, javascript-format
@@ -2813,8 +2814,8 @@ msgstr ""
 "standardnog Markdown označavanja i stoga će većina njih raditi samo u "
 "Joplinu. Uz to, neki od njih su *nekompatibilni* s WYSIWYG uređivačem. Ako u "
 "tom uređivaču otvoriš bilješku koja koristi jedan od ovih dodataka, izgubit "
-"ćeš formatiranje dodatka. Kompatibilnost s WYSIWYG uređivačem je naznačena "
-"dolje."
+"ćeš formatiranje dodatka. Kompatibilnost dodataka s WYSIWYG uređivačem je "
+"naznačena dolje."
 
 #: packages/lib/models/Setting.js:1562
 #, javascript-format
@@ -2886,7 +2887,7 @@ msgstr "Šifrirano"
 
 #: packages/lib/models/BaseItem.js:768
 msgid "Encrypted items cannot be modified"
-msgstr "Šifrirane stavke se ne mogu promijeniti"
+msgstr "Šifrirani elementi se ne mogu promijeniti"
 
 #: packages/lib/BaseApplication.js:149 packages/lib/BaseApplication.js:161
 #: packages/lib/BaseApplication.js:193
@@ -2966,59 +2967,59 @@ msgstr "Neuspjela nadogradnja glavnog ključa: %s"
 #: packages/lib/components/shared/encryption-config-shared.js:116
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Dešifrirane stavke: %s / %s"
+msgstr "Dešifrirani elementi: %s / %s"
 
 #: packages/lib/onedrive-api.js:392
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Nije moguće aktualizirati token: nedostaju podaci za ovjeru. Ponovno "
-"pokretanje sinkronizacije može popraviti problem."
+"Nije moguće aktualizirati ključ: nedostaju podaci za autentifikaciju. "
+"Ponovno pokretanje sinkronizacije može ispraviti problem."
 
 #: packages/lib/Synchronizer.js:119
 #, javascript-format
 msgid "Created local items: %d."
-msgstr "Stvorene lokalne stavke: %d."
+msgstr "Stvoreni lokalni elementi: %d."
 
 #: packages/lib/Synchronizer.js:121
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr "Aktualizirane lokalne stavke: %d."
+msgstr "Aktualizirani lokalni elementi: %d."
 
 #: packages/lib/Synchronizer.js:123
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr "Stvorene udaljene stavke: %d."
+msgstr "Stvoreni udaljeni elementi: %d."
 
 #: packages/lib/Synchronizer.js:125
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr "Aktualizirane udaljene stavke: %d."
+msgstr "Aktualizirani udaljeni elementi: %d."
 
 #: packages/lib/Synchronizer.js:127
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr "Izbrisane lokalne stavke: %d."
+msgstr "Izbrisani lokalni elementi: %d."
 
 #: packages/lib/Synchronizer.js:129
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr "Izbrisane udaljene stavke: %d."
+msgstr "Izbrisani udaljeni elementi: %d."
 
 #: packages/lib/Synchronizer.js:131
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr "Dohvaćene stavke: %d/%d."
+msgstr "Dohvaćeni elementi: %d/%d."
 
 #: packages/lib/Synchronizer.js:133
 msgid "Cancelling..."
-msgstr "Prekid …"
+msgstr "Prekida se …"
 
 #: packages/lib/Synchronizer.js:135
 #, javascript-format
 msgid "Completed: %s"
-msgstr "Dovršeno: %s"
+msgstr "Završeno: %s"
 
 #: packages/lib/Synchronizer.js:137
 #, javascript-format
@@ -3037,7 +3038,7 @@ msgstr "U tijeku"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
-"Preuzeta je nepoznata vrsta stavke – nadogradi Joplin na najnoviju verziju"
+"Preuzeta je nepoznata vrsta elementa – nadogradi Joplin na najnoviju verziju"
 
 #: packages/lib/JoplinServerApi.js:63
 #, javascript-format
@@ -3225,7 +3226,7 @@ msgstr "Pokretač prečaca „%s” nije ispravan."
 
 #: packages/lib/services/ReportService.js:123
 msgid "Items that cannot be synchronised"
-msgstr "Stavke koje se ne mogu sinkronizirati"
+msgstr "Elementi koje se ne mogu sinkronizirati"
 
 #: packages/lib/services/ReportService.js:124
 msgid ""
@@ -3233,8 +3234,8 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Ove će stavke ostati na uređaju, ali se neće prenijeti na cilj "
-"sinkronizacije. Za pronalaženje ovih stavki, traži naslov ili ID (gore "
+"Ovi će elementi ostati na uređaju, ali se neće prenijeti na cilj "
+"sinkronizacije. Za pronalaženje ovih elemenata, traži naslov ili ID (gore "
 "prikazan u zagradama)."
 
 #: packages/lib/services/ReportService.js:129
@@ -3245,11 +3246,11 @@ msgstr "Nije bilo moguće prenijeti %s (%s): %s"
 #: packages/lib/services/ReportService.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Nije bilo moguće preuzeti stavku „%s”: %s"
+msgstr "Nije bilo moguće preuzeti element „%s”: %s"
 
 #: packages/lib/services/ReportService.js:139
 msgid "Items that cannot be decrypted"
-msgstr "Stavke koje se ne mogu dešifrirati"
+msgstr "Elementi koji se ne mogu dešifrirati"
 
 #: packages/lib/services/ReportService.js:140
 msgid ""
@@ -3257,8 +3258,8 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin nije uspio višestruko dešifrirati ove stavke jer su vjerojatno "
-"oštećene ili prevelike. Te će stavke ostati na uređaju, ali ih Joplin više "
+"Joplin nije uspio višestruko dešifrirati ove elemente jer su vjerojatno "
+"oštećeni ili preveliki. Ti će elementi ostati na uređaju, ali ih Joplin više "
 "neće pokušati dešifrirati."
 
 #: packages/lib/services/ReportService.js:145
@@ -3269,7 +3270,7 @@ msgstr "%s: %s"
 
 #: packages/lib/services/ReportService.js:171
 msgid "Attachments"
-msgstr "Privitci"
+msgstr "Privici"
 
 #: packages/lib/services/ReportService.js:178
 msgid "Downloaded and decrypted"
@@ -3293,7 +3294,7 @@ msgstr "Stvoreno lokalno"
 
 #: packages/lib/services/ReportService.js:191
 msgid "Attachments that could not be downloaded"
-msgstr "Privitci koji se nisu mogli preuzeti"
+msgstr "Privici koji se nisu mogli preuzeti"
 
 #: packages/lib/services/ReportService.js:195
 #, javascript-format
@@ -3302,7 +3303,7 @@ msgstr "%s (%s): %s"
 
 #: packages/lib/services/ReportService.js:206
 msgid "Sync status (synced items / total items)"
-msgstr "Stanje sinkronizacije (sinkronizirane stavke/ukupni broj stavki)"
+msgstr "Stanje sinkronizacije (sinkronizirani elementi/ukupni broj elemenata)"
 
 #: packages/lib/services/ReportService.js:210
 #, javascript-format
@@ -3363,7 +3364,7 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Duplicira bilješke koje se podudaraju s bilješkom <note> u bilježnicu "
+"Duplicira bilješke koje se poklapaju s bilješkom <note> u bilježnicu "
 "[notebook]. Ako nijedna bilježnica nije zadana, bilješka se duplicira u "
 "trenutačnu bilježnicu."
 
@@ -3377,12 +3378,13 @@ msgstr ""
 
 #: packages/app-cli/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
-msgstr "Prikazuje samo prve <num> bilješke."
+msgstr "Prikazuje samo određen broj <num> bilježaka."
 
 #: packages/app-cli/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Razrstava stavke po polju <field> (npr. title, updated_time, created_time)."
+"Razrstava element po polju <field>, npr. naslov (title), vrijeme "
+"aktualiziranja (updated_time), vrijeme stvaranja (created_time)."
 
 #: packages/app-cli/app/command-ls.js:29
 msgid "Reverses the sorting order."
@@ -3394,7 +3396,7 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"Prikazuje samo stavke određene vrste. Može biti `n` za bilješke,`t` za "
+"Prikazuje samo elemente određene vrste. Može biti `n` za bilješke,`t` za "
 "zadatke ili `nt` za bilješke i zadatke (npr.`-tt` prikazuje samo zadatke, `-"
 "ttd` prikazuje bilješke i zadatke."
 
@@ -3517,14 +3519,14 @@ msgstr ""
 #: packages/app-cli/app/command-e2ee.js:55
 #, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Dešifrirane stavke: %d"
+msgstr "Dešifrirani elementi: %d"
 
 #: packages/app-cli/app/command-e2ee.js:56
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
-"Preskočene stavke: %d (koristi --retry-failed-items za dešifriranje tih "
-"stavki)"
+"Preskočeni elementi: %d (koristi --retry-failed-items za ponovno "
+"dešifriranje)"
 
 #: packages/app-cli/app/command-e2ee.js:70
 msgid "Completed decryption."
@@ -3569,8 +3571,8 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Prebacuje se na bilježnicu [notebook] – sve daljnje operacije izvode se u "
-"toj bilježnici."
+"Prebacuje na bilježnicu [notebook] – sve daljnje operacije izvode se u toj "
+"bilježnici."
 
 #: packages/app-cli/app/command-sync.js:29
 msgid "Synchronises with remote storage."
@@ -3630,12 +3632,12 @@ msgstr "Cilj sinkronizacije se mora nadograditi! Nastavi, pokretanjem `%s`."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
-msgstr "Prekid … Pričekaj."
+msgstr "Prekida se … Pričekaj."
 
 #: packages/app-cli/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr ""
-"Preimenuje zadanu stavku <item> (bilješka ili bilježnica) u ime <name>."
+"Preimenuje zadani element <item> (bilješka ili bilježnica) u ime <name>."
 
 #: packages/app-cli/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
@@ -3671,7 +3673,7 @@ msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 "Program za uređivanje teksta nije određen. Postavi ga pomoću `config editor "
-"<editor-path>`"
+"<editor-path>` (gdje je editor-path putanja do programa)"
 
 #: packages/app-cli/app/command-edit.js:40
 msgid "No active notebook."
@@ -3692,11 +3694,11 @@ msgstr "Bilješka je spremljena."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
-msgstr "Za brisanje oznake, ukloni oznaku s povezanih bilješki."
+msgstr "Za brisanje oznake, ukloni oznaku s povezanih bilježaka."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
-msgstr "Odaberi bilješku ili bilježnicu za brisanje."
+msgstr "Najprije odaberi bilješku ili bilježnicu za brisanje."
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -3705,7 +3707,7 @@ msgstr "Zatvori program pomoću prečaca Ctrl+D ili upiši „exit”"
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
 msgstr ""
-"Briše bilješke koje se poklapaju sa znakovni nizom bilješke <note-pattern>."
+"Briše bilješke koje se poklapaju sa znakovnim nizom bilješke <note-pattern>."
 
 #: packages/app-cli/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
@@ -3795,10 +3797,10 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Jedna ili više stavki su trenutačno šifrirane i možda ćeš morati upisati "
+"Jedan ili više elemenata trenutačno su šifrirani i možda ćeš morati upisati "
 "glavnu lozinku. Upiši `e2ee decrypt` (obostrano dešifriranje). Ako si već "
-"upisao/la lozinku, šifrirane se stavke dešifriraju u pozadini i uskoro će "
-"biti dostupne."
+"upisao/la lozinku, šifrirani se elementi dešifriraju u pozadini i uskoro će "
+"biti dostupni."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
@@ -3849,7 +3851,7 @@ msgstr "n"
 
 #: packages/app-cli/app/base-command.js:15
 msgid "Cannot change encrypted item"
-msgstr "Nije moguće promijeniti šifriranu stavku"
+msgstr "Nije moguće promijeniti šifriran element"
 
 #: packages/app-cli/app/command-help.js:13
 msgid "Displays usage information."
@@ -3858,7 +3860,7 @@ msgstr "Prikazuje podatke o korištenju."
 #: packages/app-cli/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "Za informacije o prilagođavanju prečaca posjeti %s"
+msgstr "Za informacije o prilagođavanju prečaca pogledaj %s"
 
 #: packages/app-cli/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
@@ -3869,7 +3871,7 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Upiši `help [command]` za daljnje informacije o naredbi ili `help all` za "
+"Upiši `help [naredba]` za daljnje informacije o naredbi ili `help all` za "
 "sve informacije o korištenju naredbi."
 
 #: packages/app-cli/app/command-help.js:73
@@ -3885,7 +3887,7 @@ msgstr ""
 "U bilo kojoj naredbi, na bilješku ili bilježnicu može se uputiti pomoću "
 "naslova ili ID oznake ili pomoću prečaca `$n` ili `$b` za trenutačno "
 "odabranu bilješku ili bilježnicu. `$c` se može koristiti za upućivanje na "
-"trenutačno odabranu stavku."
+"trenutačno odabrani element."
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -3897,7 +3899,7 @@ msgid ""
 "(including this console)."
 msgstr ""
 "Prelistaj popis i tekstna područja (uključujući ovu konzolu) pomoću strelica "
-"i tipke za micanje stranice prema gore/dolje."
+"i tipki za micanje stranice prema gore/dolje."
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -3924,7 +3926,7 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "Naredba za zadatak <todo-command> može biti „toggle” ili „clear”. Koristi "
-"„toggle” za prebacivanje zadanog zadatka između dovršenog i nedovršenog "
+"„toggle” za prebacivanje zadanog zadatka između završenog i nezavršenog "
 "stanja (ako je cilj uobičajena bilješka, pretvorit će se u zadatak). Koristi "
 "„clear” za pretvaranje zadatka u uobičajenu bilješku."
 
@@ -3935,7 +3937,7 @@ msgstr "Zatvara program."
 #: packages/app-cli/app/app.js:62
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "Više stavki se poklapaju s „%s”. Ograniči pretragu."
+msgstr "Više elemenata se poklapaju s „%s”. Ograniči pretragu."
 
 #: packages/app-cli/app/app.js:92
 msgid "No notebook selected."
@@ -3955,12 +3957,12 @@ msgstr "d"
 
 #: packages/app-cli/app/app.js:170
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Prekid sinkronizacije u pozadini … Pričekaj."
+msgstr "Prekidanje sinkronizacije u pozadini … Pričekaj."
 
 #: packages/app-cli/app/app.js:255
 #, javascript-format
 msgid "No such command: %s"
-msgstr "Ne postoji naredba: %s"
+msgstr "Naredba ne postoji: %s"
 
 #: packages/app-cli/app/app.js:303
 #, javascript-format
@@ -3975,7 +3977,7 @@ msgstr "Prikazuje sažetak o bilješkama i bilježnicama."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Za ponovno dešifriranje ovih stavki pokreni `e2ee decrypt --retry-failed-"
+"Za ponovno dešifriranje ovih elemenata, pokreni `e2ee decrypt --retry-failed-"
 "items`"
 
 #: packages/app-cli/app/command-tag.js:14
@@ -3986,8 +3988,8 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "Naredba za oznaku <tag-command> može biti „add”, „remove”, „list” ili "
-"„notetags” za dodavanje ili uklanjanje oznake [tag] u bilješci [note], za "
-"popis bilješki povezanih s oznakom [tag] ili za popis oznaka povezanih s "
+"„notetags” za dodavanje ili uklanjanje oznake [tag] bilješci [note], za "
+"popis bilježaka povezanih s oznakom [tag] ili za popis oznaka povezanih s "
 "bilješkom [note]. Naredba `tag list` može se koristiti za popis svih oznaka "
 "(koristi -l za dugačku opciju)."
 
