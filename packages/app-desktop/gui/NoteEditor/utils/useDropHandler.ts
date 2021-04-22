@@ -9,10 +9,12 @@ export default function useDropHandler(dependencies: HookDependencies) {
 	const { editorRef } = dependencies;
 
 	return useCallback(async (event: any) => {
+		if (!event.dataTransfer) return;
+
 		const dt = event.dataTransfer;
 		const createFileURL = event.altKey;
 
-		if (dt && dt.types.indexOf('text/x-jop-note-ids') >= 0) {
+		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
 			const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 			const noteMarkdownTags = [];
 			for (let i = 0; i < noteIds.length; i++) {
