@@ -139,6 +139,7 @@ describe('models_Note', function() {
 
 		expect(duplicatedNoteTags.find(o => o.id === tag1.id)).toBeDefined();
 		expect(duplicatedNoteTags.find(o => o.id === tag2.id)).toBeDefined();
+		expect(duplicatedNoteTags.length).toBe(2);
 	}));
 
 	it('should delete a set of notes', (async () => {
