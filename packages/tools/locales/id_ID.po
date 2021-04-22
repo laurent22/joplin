@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Fathy AR <16875937+fathyar@users.noreply.github.com>\n"
+"Last-Translator: eresytter <42007357+eresytter@users.noreply.github.com>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -369,9 +371,8 @@ msgid "Drop notes or files here"
 msgstr "Taruh catatan atau file di sini"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1038
-#, fuzzy
 msgid "Code View"
-msgstr "Kode"
+msgstr "Tampilan Kode"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1038
 #, javascript-format
@@ -425,9 +426,8 @@ msgid "Creating new %s..."
 msgstr "Membuat %s baru..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "Periksa pembaruan..."
+msgstr "Klik untuk menambahkan label..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
@@ -1419,7 +1419,7 @@ msgstr "Telusuri..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
 msgid "Arguments:"
-msgstr ""
+msgstr "Argumen:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
@@ -1453,75 +1453,66 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Hapus plugin \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
-#, fuzzy
 msgid "Browse all plugins"
-msgstr "Pasang plugin"
+msgstr "Lihat semua plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "Pasang dari file"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "Anda tidak punya plugin yang dipasang."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
-#, fuzzy
 msgid "Plugin tools"
-msgstr "Plugin"
+msgstr "Setelan plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "Kelola plugin Anda"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-#, fuzzy
 msgid "No results"
-msgstr "Tidak ada sumber daya!"
+msgstr "Tidak ada hasil"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
-msgstr "Pencarian…."
+msgstr "Cari plugin..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
-#, fuzzy
 msgid "Install"
-msgstr "Pasang plugin"
+msgstr "Pasang"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
-#, fuzzy
 msgid "Installing..."
-msgstr "Membatalkan..."
+msgstr "Memasang..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
-#, fuzzy
 msgid "Installed"
-msgstr "Pasang plugin"
+msgstr "Dipasang"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
-#, fuzzy
 msgid "Update"
-msgstr "Diubah"
+msgstr "Perbarui"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
-#, fuzzy
 msgid "Updating..."
-msgstr "Mengamati..."
+msgstr "Memperbarui..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "Silakan upgrade Joplin untuk menggunakan plugin ini"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "Tidak dapat mengekspor catatan: %s"
+msgstr "Tidak dapat memasang plugin: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1822,9 +1813,8 @@ msgid "Refresh"
 msgstr "Segarkan"
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
-#, fuzzy
 msgid "Sync Target Upgrade"
-msgstr "Sinkronisasi Target Peningkatan"
+msgstr "Sinkronisasi Target Upgrade"
 
 #: packages/app-mobile/components/screens/notes.js:154
 #: packages/app-cli/app/command-rmbook.js:26
@@ -2567,19 +2557,16 @@ msgid "Editor font family"
 msgstr "Keluarga font pada editor"
 
 #: packages/lib/models/Setting.js:695
-#, fuzzy
 msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Ini harus font *monospace* atau beberapa elemen tidak akan berfungsi "
-"sebagaimana mestinya. Jika font tidak benar atau kosong, font akan disetel "
-"secara otomatis ke font monospace generik."
+"Jika font salah atau kosong, aplikasi akan menggunakan font default generic "
+"monospace."
 
 #: packages/lib/models/Setting.js:704
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Keluarga font pada editor"
+msgstr "Keluarga font editor"
 
 #: packages/lib/models/Setting.js:705
 msgid ""
@@ -3073,16 +3060,15 @@ msgstr ""
 "Tipe item tidak dikenal diunduh - silakan perbarui Joplin ke versi terbaru"
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Tidak dapat terhubung ke aplikasi Nextcloud Joplin. Silakan periksa "
-"konfigurasinya di layar konfigurasi Sinkronisasi. Kesalahan lengkapnya "
-"adalah:\n"
+"Tidak dapat terhubung ke server Joplin. Silakan periksa konfigurasinya di "
+"layar konfigurasi Sinkronisasi. Eror lengkapnya adalah:\n"
 "\n"
 "%s"
 
@@ -4097,7 +4083,6 @@ msgstr "Catatan bukan sebuah tugas: \"%s\""
 #~ msgid "Notebook properties"
 #~ msgstr "Properti buku catatan"
 
-#, javascript-format
 #~ msgid "This file could not be opened: %s"
 #~ msgstr "Berkas ini tidak dapat dibuka: %s"
 
@@ -4122,7 +4107,6 @@ msgstr "Catatan bukan sebuah tugas: \"%s\""
 #~ msgid "Move to notebook..."
 #~ msgstr "Pindahkan ke buku catatan..."
 
-#, javascript-format
 #~ msgid "Move %d notes to notebook \"%s\"?"
 #~ msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
 
@@ -4139,11 +4123,9 @@ msgstr "Catatan bukan sebuah tugas: \"%s\""
 #~ msgid "Errors only"
 #~ msgstr "Hanya kesalahan"
 
-#, javascript-format
 #~ msgid "Database v%s"
 #~ msgstr "Basis data v%s"
 
-#, javascript-format
 #~ msgid "FTS enabled: %d"
 #~ msgstr "FTS diaktifkan: %d"
 
