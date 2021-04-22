@@ -58,6 +58,7 @@ const commands = [
 	require('./gui/MainScreen/commands/openTag'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
+	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/renameTag'),
 	require('./gui/MainScreen/commands/search'),
 	require('./gui/MainScreen/commands/selectTemplate'),

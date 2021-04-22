@@ -294,6 +294,8 @@ class SidebarComponent extends React.Component<Props, State> {
 				);
 			}
 
+			menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
+
 			menu.append(
 				new MenuItem({
 					label: _('Export'),
