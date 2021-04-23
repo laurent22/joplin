@@ -31,6 +31,7 @@ import iterateItems from '../ResizableLayout/utils/iterateItems';
 import removeItem from '../ResizableLayout/utils/removeItem';
 import EncryptionService from '@joplin/lib/services/EncryptionService';
 import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
+import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -64,6 +65,7 @@ interface Props {
 	settingEditorCodeView: boolean;
 	pluginsLegacy: any;
 	startupPluginsLoaded: boolean;
+	shareInvitations: ShareInvitation[];
 }
 
 interface ShareFolderDialogOptions {
@@ -214,6 +216,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}
 
 		return newLayout !== layout ? validateLayout(newLayout) : layout;
+	}
+
+	private get showShareInvitationNotification():boolean {
+		return !!this.props.shareInvitations.find(i => !i.is_accepted);
 	}
 
 	private buildLayout(plugins: PluginStates): LayoutItem {
@@ -568,6 +574,21 @@ class MainScreenComponent extends React.Component<Props, State> {
 					</a>
 				</span>
 			);
+		} else if (this.showShareInvitationNotification) {
+			const sharer = this.props.shareInvitations[0].share.user;
+
+			msg = (
+				<span>
+					{_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email)}{' '}
+					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
+						{_('Accept')}
+					</a>
+					{' / '}
+					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
+						{_('Reject')}
+					</a>
+				</span>
+			);
 		}
 
 		return (
@@ -579,7 +600,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	messageBoxVisible(props: any = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || this.showShareInvitationNotification;
 	}
 
 	registerCommands() {
@@ -803,6 +824,7 @@ const mapStateToProps = (state: AppState) => {
 		layoutMoveMode: state.layoutMoveMode,
 		mainLayout: state.mainLayout,
 		startupPluginsLoaded: state.startupPluginsLoaded,
+		shareInvitations: state.shareService.shareInvitations,
 	};
 };
 

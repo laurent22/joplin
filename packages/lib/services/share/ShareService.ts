@@ -1,11 +1,17 @@
 import JoplinServerApi from "../../JoplinServerApi";
+import Logger from "../../Logger";
 import Setting from "../../models/Setting";
+import shim from "../../shim";
+import SyncTargetJoplinServer from "../../SyncTargetJoplinServer";
+
+const logger = Logger.create('ShareService');
 
 export default class ShareService {
 
 	private static instance_: ShareService;
 	private api_:JoplinServerApi = null;
 	private dispatch_:Function = null;
+	private isRunningInBackground_:boolean = false;
 
 	public static instance(): ShareService {
 		if (this.instance_) return this.instance_;
@@ -15,6 +21,10 @@ export default class ShareService {
 
 	public initialize(dispatch:Function) {
 		this.dispatch_ = dispatch;
+	}
+
+	public get enabled():boolean {
+		return Setting.value('sync.target') === SyncTargetJoplinServer.id();
 	}
 
 	private get dispatch():Function {
@@ -54,6 +64,19 @@ export default class ShareService {
 		return this.api().exec('GET', 'api/shares/' + shareId + '/users');
 	}
 
+	public async shareInvitations() {
+		return this.api().exec('GET', 'api/share_users');
+	}
+
+	public async refreshShareInvitations() {
+		const result = await this.shareInvitations();
+
+		this.dispatch({
+			type: 'SHARE_INVITATION_SET',
+			shareInvitations: result.items,
+		});
+	}
+
 	public async refreshShares() {
 		const result = await this.shares();
 
@@ -71,6 +94,22 @@ export default class ShareService {
 			shareId: shareId,
 			shareUsers: result.items,
 		});
+	}
+
+	public async runInBackground() {
+		if (this.isRunningInBackground_) return;
+		this.isRunningInBackground_ = true;
+
+		logger.info(`Starting background service...`);
+
+		if (this.enabled) {
+			await this.refreshShareInvitations();
+			await this.refreshShares();
+		}
+
+		shim.setTimeout(() => {
+			if (this.enabled) void this.refreshShareInvitations();
+		}, 1000 * 60);
 	}
 
 }

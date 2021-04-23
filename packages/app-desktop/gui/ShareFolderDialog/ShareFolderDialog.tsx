@@ -41,8 +41,16 @@ const StyledAddRecipient = styled.div`
 `;
 
 const StyledRecipients = styled.div`
-
+	
 `;
+
+const StyledRecipientList = styled.div`
+	border: 1px solid ${(props: any) => props.theme.dividerColor};
+	border-radius: 3px;
+	height: 300px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+`
 
 const StyledError = styled(StyledMessage)`
 	word-break: break-all;
@@ -80,7 +88,7 @@ function ShareFolderDialog(props: Props) {
 	const [recipientEmail, setRecipientEmail] = useState<string>('');
 	const [latestError, setLatestError] = useState<Error>(null);
 	const [share, setShare] = useState<StateShare>(null);
-	const [shareUsers, setShareUsers] = useState<StateShareUser[]>(null);
+	const [shareUsers, setShareUsers] = useState<StateShareUser[]>([]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const f = await Folder.load(props.folderId);
@@ -148,10 +156,23 @@ function ShareFolderDialog(props: Props) {
 		);
 	}
 
+	function renderRecipient(shareUser:StateShareUser) {
+		return (
+			<StyledMessage key={shareUser.user.email}>
+				{shareUser.user.email}
+			</StyledMessage>
+		);
+	}
+
 	function renderRecipients() {
+		const listItems = shareUsers.map(su => renderRecipient(su));
+
 		return (
 			<StyledRecipients>
 				<StyledFormLabel>{_('Recipients:')}</StyledFormLabel>
+				<StyledRecipientList>
+					{listItems}
+				</StyledRecipientList>
 			</StyledRecipients>
 		);
 	}

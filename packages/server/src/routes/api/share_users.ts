@@ -24,8 +24,28 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
+	const shareUsers = await ctx.models.shareUser().byUserId(ctx.owner.id)
+
+	const items:any[] = [];
+	for (const su of shareUsers) {
+		const share = await ctx.models.share().load(su.share_id);
+		const sharer = await ctx.models.user().load(share.owner_id);
+
+		items.push({
+			is_accepted: su.is_accepted,
+			share: {
+				id: share.id,
+				folder_id: share.folder_id,
+				user: {
+					full_name: sharer.full_name,
+					email: sharer.email,	
+				},
+			},
+		});
+	}
+
 	return {
-		items: await ctx.models.shareUser().byUserId(ctx.owner.id),
+		items: items,
 		has_more: false,
 	}
 });

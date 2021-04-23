@@ -781,7 +781,9 @@ class Application extends BaseApplication {
 		this.setupContextMenu();
 
 		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
+
 		await ShareService.instance().initialize(this.store().dispatch);
+		void ShareService.instance().runInBackground();
 
 		// await populateDatabase(reg.db());
 

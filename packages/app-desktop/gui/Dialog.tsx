@@ -11,6 +11,7 @@ const DialogModalLayer = styled.div`
 	background-color: rgba(0,0,0,0.6);
 	align-items: flex-start;
 	justify-content: center;
+	overflow: hidden;
 `;
 
 const DialogRoot = styled.div`
@@ -18,7 +19,7 @@ const DialogRoot = styled.div`
 	padding: 16px;
 	box-shadow: 6px 6px 20px rgba(0,0,0,0.5);
 	margin-top: 20px;
-	max-height: 80%;
+	min-height: fit-content;
 	display: flex;
 	flex-direction: column;
 	width: 50%;
