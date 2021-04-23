@@ -83,6 +83,8 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
+	ownerRequired(ctx);
+
 	const shareId = path.id;
 	const share = await ctx.models.share().load(shareId);
 	await ctx.models.share().checkIfAllowed(ctx.owner, AclAction.Read, share);
@@ -122,6 +124,7 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
+	
 	const items = ctx.models.share().toApiOutput(await ctx.models.share().sharesByUser(ctx.owner.id));
 	// Fake paginated results so that it can be added later on, if needed.
 	return {

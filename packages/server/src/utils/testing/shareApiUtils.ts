@@ -7,6 +7,7 @@ import { checkContextError, createItem, koaAppContext, models } from './testUtil
 interface ShareResult {
 	share: Share,
 	item: Item,
+	shareUser: ShareUser;
 }
 
 // Handles the whole process of:
@@ -46,7 +47,7 @@ export async function shareWithUserAndAccept(sharerSessionId: string, shareeSess
 
 	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { is_accepted: 1 });
 
-	return { share, item };
+	return { share, item, shareUser };
 }
 
 export async function postShareContext(sessionId: string, shareType: ShareType, itemId: Uuid): Promise<AppContext> {

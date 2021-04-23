@@ -13,6 +13,14 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			const share = await this.models().share().load(resource.share_id);
 			if (share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
 		}
+
+		if (action === AclAction.Update) {
+			if (user.id !== resource.user_id) throw new ErrorForbidden('cannot change share user');
+		}
+	}
+
+	public async byUserId(userId:Uuid):Promise<ShareUser[]> {
+		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId);
 	}
 
 	public async byShareId(shareId: Uuid): Promise<ShareUser[]> {
