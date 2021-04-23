@@ -33,7 +33,7 @@ export default class UserModel extends BaseModel<User> {
 		return user;
 	}
 
-	public toApiOutput(object: User): User {
+	protected objectToApiOutput(object: User): User {
 		const output: User = { ...object };
 		delete output.password;
 		return output;

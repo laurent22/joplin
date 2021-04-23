@@ -16,7 +16,9 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async byShareId(shareId: Uuid): Promise<ShareUser[]> {
-		return this.db(this.tableName).select(this.defaultFields).where('share_id', '=', shareId);
+		const r = await this.byShareIds([shareId]);
+		return Object.keys(r).length > 0 ? r[shareId] : null;
+		// return this.db(this.tableName).select(this.defaultFields).where('share_id', '=', shareId);
 	}
 
 	public async byShareIds(shareIds: Uuid[]): Promise<Record<Uuid, ShareUser[]>> {
@@ -41,31 +43,23 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async shareWithUserAndAccept(share: Share, shareeId: Uuid) {
-		// if (await this.fileIsShared(share.type, share.file_id, shareeId)) return; // Already shared with user
-
 		await this.models().shareUser().addById(share.id, shareeId);
 		await this.models().shareUser().accept(share.id, shareeId, true);
-	}
-
-	public async fileIsShared(shareType: ShareType, fileId: Uuid, userId: Uuid, isAccepted: boolean = null): Promise<boolean> {
-		const query = this
-			.db('share_users')
-			.select('share_users.id')
-			.leftJoin('shares', 'share_users.share_id', 'shares.id')
-			.where('shares.file_id', '=', fileId)
-			.andWhere('shares.type', '=', shareType)
-			.andWhere('share_users.user_id', '=', userId);
-
-		if (isAccepted !== null) {
-			void query.andWhere('share_users.is_accepted', '=', isAccepted ? 1 : 0);
-		}
-
-		return !!(await query.first());
 	}
 
 	public async addById(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
 		const user = await this.models().user().load(userId);
 		return this.addByEmail(shareId, user.email);
+	}
+
+	public async byShareAndEmail(shareId: Uuid, userEmail: string): Promise<ShareUser> {
+		const user = await this.models().user().loadByEmail(userEmail);
+		if (!user) throw new ErrorNotFound(`No such user: ${userEmail}`);
+		
+		return this.db(this.tableName).select(this.defaultFields)
+			.where('share_id', '=', shareId)
+			.where('user_id', '=', user.id)
+			.first();
 	}
 
 	public async addByEmail(shareId: Uuid, userEmail: string): Promise<ShareUser> {

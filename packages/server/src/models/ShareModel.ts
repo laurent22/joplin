@@ -18,6 +18,21 @@ export default class ShareModel extends BaseModel<Share> {
 		if (action === AclAction.Create) {
 			if (!await this.models().item().userHasItem(user.id, resource.item_id)) throw new ErrorForbidden('cannot share an item not owned by the user');
 		}
+
+		if (action === AclAction.Read) {
+			if (user.id !== resource.owner_id) throw new ErrorForbidden('no access to this share');
+		}
+	}
+
+	protected objectToApiOutput(object: Share): Share {
+		const output: Share = {};
+
+		if (object.id) output.id = object.id;
+		if (object.type) output.type = object.type;
+		if (object.folder_id) output.folder_id = object.folder_id;
+		if (object.note_id) output.note_id = object.note_id;
+
+		return output;
 	}
 
 	protected async validate(share: Share, options: ValidateOptions = {}): Promise<Share> {

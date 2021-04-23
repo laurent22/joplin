@@ -1,5 +1,5 @@
-import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
-import { Share, ShareType, User } from '../../db';
+import { ErrorBadRequest, ErrorConflict, ErrorNotFound } from '../../utils/errors';
+import { isUniqueConstraintError, Share, ShareType, User } from '../../db';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
@@ -42,6 +42,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 			type: ShareType.JoplinRootFolder,
 			item_id: folderItem.id,
 			owner_id: ctx.owner.id,
+			folder_id: shareInput.folder_id,
 		};
 	} else if (shareInput.note_id) {
 		const noteItem = await ctx.models.item().loadByJopId(ctx.owner.id, shareInput.note_id);
@@ -51,6 +52,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 			type: ShareType.Link,
 			item_id: noteItem.id,
 			owner_id: ctx.owner.id,
+			note_id: shareInput.note_id,
 		};
 	} else {
 		throw new ErrorBadRequest('Either folder_id or note_id must be provided');
@@ -67,22 +69,66 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	const user: User = await bodyFields(ctx.req) as User;
 	if (!user) throw new ErrorNotFound('User not found');
 
+	const shareId = path.id;
+
 	await ctx.models.shareUser().checkIfAllowed(ctx.owner, AclAction.Create, {
-		share_id: path.id,
+		share_id: shareId,
 		user_id: user.id,
 	});
 
-	return ctx.models.shareUser().addByEmail(path.id, user.email);
+	const existingShareUser = await ctx.models.shareUser().byShareAndEmail(shareId, user.email);
+	if (existingShareUser) throw new ErrorConflict('Already shared with user: ' + user.email);
+
+	return ctx.models.shareUser().addByEmail(shareId, user.email);
+});
+
+router.get('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
+	const shareId = path.id;
+	const share = await ctx.models.share().load(shareId);
+	await ctx.models.share().checkIfAllowed(ctx.owner, AclAction.Read, share);
+
+	const shareUsers = await ctx.models.shareUser().byShareId(shareId);
+	const users = await ctx.models.user().loadByIds(shareUsers.map(su => su.user_id));
+
+	const items = shareUsers.map(su => {
+		const user = users.find(u => u.id === su.user_id);
+		
+		return {
+			is_accepted: su.is_accepted,
+			user: {
+				email: user.email,
+			},
+		}
+	});
+
+	return {
+		items,
+		has_more: false,
+	}
 });
 
 router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
-	// No authentication is necessary - anyone who knows the share ID is allowed
-	// to access the file. It is essentially public.
-
 	const shareModel = ctx.models.share();
 	const share = await shareModel.load(path.id);
-	if (!share || share.type !== ShareType.Link) throw new ErrorNotFound();
-	return shareModel.toApiOutput(share);
+
+	if (share && share.type === ShareType.Link) {
+		// No authentication is necessary - anyone who knows the share ID is allowed
+		// to access the file. It is essentially public.
+		return shareModel.toApiOutput(share);
+	}	
+
+	throw new ErrorNotFound();
 });
+
+router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
+	ownerRequired(ctx);
+	const items = ctx.models.share().toApiOutput(await ctx.models.share().sharesByUser(ctx.owner.id));
+	// Fake paginated results so that it can be added later on, if needed.
+	return {
+		items,
+		has_more: false,
+	}
+});
+
 
 export default router;

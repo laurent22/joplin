@@ -74,17 +74,13 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	public toApiOutput(object: any): any {
-		if (Array.isArray(object)) {
-			return object.map(f => this.toApiOutput(f));
-		} else {
-			const output: Item = {};
-			const propNames = ['id', 'name', 'updated_time', 'created_time'];
-			for (const k of Object.keys(object)) {
-				if (propNames.includes(k)) (output as any)[k] = object[k];
-			}
-			return output;
+	protected objectToApiOutput(object: Item): Item {
+		const output: Item = {};
+		const propNames = ['id', 'name', 'updated_time', 'created_time'];
+		for (const k of Object.keys(object)) {
+			if (propNames.includes(k)) (output as any)[k] = object[k];
 		}
+		return output;
 	}
 
 	public async userHasItem(userId: Uuid, itemId: Uuid): Promise<boolean> {

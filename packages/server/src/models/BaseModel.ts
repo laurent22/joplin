@@ -189,8 +189,16 @@ export default abstract class BaseModel<T> {
 		return output;
 	}
 
-	public toApiOutput(object: any): any {
+	protected objectToApiOutput(object:T):T {
 		return { ...object };
+	}
+
+	public toApiOutput(object: T | T[]): T | T[] {
+		if (Array.isArray(object)) {
+			return object.map(f => this.objectToApiOutput(f));
+		} else {
+			return this.objectToApiOutput(object);
+		}
 	}
 
 	protected async validate(object: T, options: ValidateOptions = {}): Promise<T> {

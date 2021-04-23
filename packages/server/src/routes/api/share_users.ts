@@ -14,8 +14,6 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const body = await bodyFields(ctx.req);
 
-	// TODO: Created LinkedFolder
-
 	if ('is_accepted' in body) {
 		return shareUserModel.accept(shareUser.share_id, shareUser.user_id, !!body.is_accepted);
 	} else {

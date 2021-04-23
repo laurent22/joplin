@@ -348,6 +348,8 @@ export interface Share extends WithDates, WithUuid {
 	owner_id?: Uuid;
 	item_id?: Uuid;
 	type?: ShareType;
+	folder_id?: Uuid;
+	note_id?: Uuid;
 }
 
 export interface Change extends WithDates, WithUuid {
@@ -458,6 +460,8 @@ export const databaseSchema: DatabaseTables = {
 		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		folder_id: { type: 'string' },
+		note_id: { type: 'string' },
 	},
 	changes: {
 		counter: { type: 'number' },

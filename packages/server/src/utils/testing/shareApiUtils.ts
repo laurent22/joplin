@@ -4,6 +4,11 @@ import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
 import { checkContextError, createItem, koaAppContext, models } from './testUtils';
 
+interface ShareResult {
+	share: Share,
+	item: Item,
+}
+
 // Handles the whole process of:
 //
 // - User 1 creates a file (optionally)
@@ -12,7 +17,7 @@ import { checkContextError, createItem, koaAppContext, models } from './testUtil
 // - User 2 accepts the share
 //
 // The result is that user 2 will have a file linked to user 1's file.
-export async function shareWithUserAndAccept(sharerSessionId: string, shareeSessionId: string, sharee: User, shareType: ShareType = ShareType.App, item: Item = null): Promise<Item> {
+export async function shareWithUserAndAccept(sharerSessionId: string, shareeSessionId: string, sharee: User, shareType: ShareType = ShareType.App, item: Item = null): Promise<ShareResult> {
 	item = item || await createItem(sharerSessionId, 'root:/test.txt:', 'testing share');
 
 	let share:Share = null;
@@ -41,7 +46,7 @@ export async function shareWithUserAndAccept(sharerSessionId: string, shareeSess
 
 	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { is_accepted: 1 });
 
-	return item;
+	return { share, item };
 }
 
 export async function postShareContext(sessionId: string, shareType: ShareType, itemId: Uuid): Promise<AppContext> {
