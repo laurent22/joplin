@@ -63,7 +63,7 @@ describe('shares.link', function() {
 
 		const share = await postApi<Share>(session.id, 'shares', {
 			type: ShareType.Link,
-			item_id: noteItem.id,
+			note_id: noteItem.jop_id,
 		});
 
 		const bodyHtml = await getShareContent(share.id);
@@ -83,7 +83,7 @@ describe('shares.link', function() {
 
 		const share = await postApi<Share>(session.id, 'shares', {
 			type: ShareType.Link,
-			item_id: noteItem.id,
+			note_id: noteItem.jop_id,
 		});
 
 		const bodyHtml = await getShareContent(share.id);
@@ -104,7 +104,7 @@ describe('shares.link', function() {
 
 		const share = await postApi<Share>(session.id, 'shares', {
 			type: ShareType.Link,
-			item_id: noteItem.id,
+			note_id: noteItem.jop_id,
 		});
 
 		const bodyHtml = await getShareContent(share.id) as string;
@@ -138,7 +138,7 @@ describe('shares.link', function() {
 
 			const share = await postApi<Share>(session.id, 'shares', {
 				type: ShareType.Link,
-				item_id: noteItem.id,
+				note_id: noteItem.jop_id,
 			});
 
 			await expectNotThrow(async () => getShareContent(share.id));
@@ -152,7 +152,7 @@ describe('shares.link', function() {
 
 			const share = await postApi<Share>(session.id, 'shares', {
 				type: ShareType.Link,
-				item_id: noteItem.id,
+				note_id: noteItem.jop_id,
 			});
 
 			await expectNotThrow(async () => getShareContent(share.id));

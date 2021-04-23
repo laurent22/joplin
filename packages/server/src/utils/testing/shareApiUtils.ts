@@ -15,11 +15,23 @@ import { checkContextError, createItem, koaAppContext, models } from './testUtil
 export async function shareWithUserAndAccept(sharerSessionId: string, shareeSessionId: string, sharee: User, shareType: ShareType = ShareType.App, item: Item = null): Promise<Item> {
 	item = item || await createItem(sharerSessionId, 'root:/test.txt:', 'testing share');
 
-	const share = await postApi<Share>(sharerSessionId, 'shares', {
-		type: shareType,
-		item_id: shareType === ShareType.App ? item.id : undefined,
-		folder_id: shareType === ShareType.JoplinRootFolder ? item.jop_id : undefined,
-	});
+	let share:Share = null;
+
+	if ([ShareType.JoplinRootFolder, ShareType.Link].includes(shareType)) {
+		share = await postApi<Share>(sharerSessionId, 'shares', {
+			type: shareType,
+			note_id: shareType === ShareType.Link ? item.jop_id : undefined,
+			folder_id: shareType === ShareType.JoplinRootFolder ? item.jop_id : undefined,
+		});
+	} else {
+		const sharer = await models().session().sessionUser(sharerSessionId);	
+
+		share = await models().share().save({
+			owner_id: sharer.id,
+			type: shareType,
+			item_id: item.id,
+		});	
+	}
 
 	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
 		email: sharee.email,

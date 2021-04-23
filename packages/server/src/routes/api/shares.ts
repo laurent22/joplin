@@ -1,4 +1,4 @@
-import { ErrorNotFound } from '../../utils/errors';
+import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
 import { Share, ShareType, User } from '../../db';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
@@ -8,7 +8,7 @@ import { AclAction } from '../../models/BaseModel';
 
 interface ShareApiInput extends Share {
 	folder_id?: string;
-	item_name?: string;
+	note_id?: string;
 }
 
 const router = new Router();
@@ -22,35 +22,38 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	const fields = await bodyFields(ctx.req);
 	const shareInput: ShareApiInput = shareModel.fromApiInput(fields) as ShareApiInput;
 	if (fields.folder_id) shareInput.folder_id = fields.folder_id;
-	if (fields.item_name) shareInput.item_name = fields.item_name;
+	if (fields.note_id) shareInput.note_id = fields.note_id;
 
 	let shareToSave: Share = {};
+
+	// - The API end point should only expose two ways of sharing:
+	//     - By folder_id (JoplinRootFolder)
+	//     - By note_id (Link)
+	// - Additionally, the App method is available, but not exposed via the API.
 
 	if (shareInput.folder_id) {
 		const folderItem = await ctx.models.item().loadByJopId(ctx.owner.id, shareInput.folder_id);
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${shareInput.folder_id}`);
+
+		const share = await ctx.models.share().byUserAndItemId(ctx.owner.id, folderItem.id);
+		if (share) return share;
 
 		shareToSave = {
 			type: ShareType.JoplinRootFolder,
 			item_id: folderItem.id,
 			owner_id: ctx.owner.id,
 		};
-	} else {
-		let itemId = null;
-
-		if (shareInput.item_name) {
-			const item = await ctx.models.item().loadByName(ctx.owner.id, shareInput.item_name);
-			if (!item) throw new ErrorNotFound(`No such item: ${shareInput.item_name}`);
-			itemId = item.id;
-		} else {
-			itemId = shareInput.item_id;
-		}
+	} else if (shareInput.note_id) {
+		const noteItem = await ctx.models.item().loadByJopId(ctx.owner.id, shareInput.note_id);
+		if (!noteItem) throw new ErrorNotFound(`No such note: ${shareInput.note_id}`);
 
 		shareToSave = {
-			type: shareInput.type,
-			item_id: itemId,
+			type: ShareType.Link,
+			item_id: noteItem.id,
 			owner_id: ctx.owner.id,
 		};
+	} else {
+		throw new ErrorBadRequest('Either folder_id or note_id must be provided');
 	}
 
 	await shareModel.checkIfAllowed(ctx.owner, AclAction.Create, shareToSave);

@@ -58,12 +58,15 @@ export default class ShareModel extends BaseModel<Share> {
 		return setQueryParameters(`${this.baseUrl}/shares/${id}`, query);
 	}
 
-	public async sharesByFileId(fileId: string): Promise<Share[]> {
-		return this.db(this.tableName).select(this.defaultFields).where('file_id', '=', fileId);
-	}
-
 	public async byItemIds(itemIds: Uuid[]): Promise<Share[]> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
+	}
+
+	public async byUserAndItemId(userId:Uuid, itemId:Uuid):Promise<Share> {
+		return this.db(this.tableName).select(this.defaultFields)
+			.where('owner_id', '=', userId)
+			.where('item_id', '=', itemId)
+			.first();
 	}
 
 	public async sharesByUser(userId: Uuid, type: ShareType = null): Promise<Share[]> {
