@@ -3,7 +3,7 @@ import { RevisionEntity } from '../services/database/types';
 import BaseItem from './BaseItem';
 const DiffMatchPatch = require('diff-match-patch');
 const ArrayUtils = require('../ArrayUtils.js');
-const JoplinError = require('../JoplinError');
+import JoplinError from '../JoplinError';
 const { sprintf } = require('sprintf-js');
 
 const dmp = new DiffMatchPatch();

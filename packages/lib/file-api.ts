@@ -4,7 +4,7 @@ import BaseItem from './models/BaseItem';
 import time from './time';
 
 const { isHidden } = require('./path-utils');
-const JoplinError = require('./JoplinError');
+import JoplinError from './JoplinError';
 const ArrayUtils = require('./ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;

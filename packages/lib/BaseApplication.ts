@@ -26,7 +26,7 @@ import BaseSyncTarget from './BaseSyncTarget';
 const reduxSharedMiddleware = require('./components/shared/reduxSharedMiddleware');
 const os = require('os');
 const fs = require('fs-extra');
-const JoplinError = require('./JoplinError');
+import JoplinError from './JoplinError';
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
 const SyncTargetRegistry = require('./SyncTargetRegistry.js');

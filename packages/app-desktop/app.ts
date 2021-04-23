@@ -100,6 +100,7 @@ const globalCommands = [
 ];
 
 import editorCommandDeclarations from './gui/NoteEditor/commands/editorCommandDeclarations';
+import ShareService from '@joplin/lib/services/share/ShareService';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -780,6 +781,7 @@ class Application extends BaseApplication {
 		this.setupContextMenu();
 
 		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
+		await ShareService.instance().initialize(this.store().dispatch);
 
 		// await populateDatabase(reg.db());
 

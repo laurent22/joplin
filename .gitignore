@@ -648,6 +648,9 @@ packages/app-desktop/gui/style/StyledFormLabel.js.map
 packages/app-desktop/gui/style/StyledInput.d.ts
 packages/app-desktop/gui/style/StyledInput.js
 packages/app-desktop/gui/style/StyledInput.js.map
+packages/app-desktop/gui/style/StyledMessage.d.ts
+packages/app-desktop/gui/style/StyledMessage.js
+packages/app-desktop/gui/style/StyledMessage.js.map
 packages/app-desktop/gui/style/StyledTextInput.d.ts
 packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/style/StyledTextInput.js.map
@@ -843,6 +846,9 @@ packages/lib/InMemoryCache.js.map
 packages/lib/JoplinDatabase.d.ts
 packages/lib/JoplinDatabase.js
 packages/lib/JoplinDatabase.js.map
+packages/lib/JoplinError.d.ts
+packages/lib/JoplinError.js
+packages/lib/JoplinError.js.map
 packages/lib/JoplinServerApi.d.ts
 packages/lib/JoplinServerApi.js
 packages/lib/JoplinServerApi.js.map
@@ -1329,6 +1335,12 @@ packages/lib/services/searchengine/filterParser.js.map
 packages/lib/services/searchengine/queryBuilder.d.ts
 packages/lib/services/searchengine/queryBuilder.js
 packages/lib/services/searchengine/queryBuilder.js.map
+packages/lib/services/share/ShareService.d.ts
+packages/lib/services/share/ShareService.js
+packages/lib/services/share/ShareService.js.map
+packages/lib/services/share/reducer.d.ts
+packages/lib/services/share/reducer.js
+packages/lib/services/share/reducer.js.map
 packages/lib/services/spellChecker/SpellCheckerService.d.ts
 packages/lib/services/spellChecker/SpellCheckerService.js
 packages/lib/services/spellChecker/SpellCheckerService.js.map

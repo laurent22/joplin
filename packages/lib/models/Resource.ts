@@ -11,7 +11,7 @@ const pathUtils = require('../path-utils');
 const { mime } = require('../mime-utils.js');
 const { filename, safeFilename } = require('../path-utils');
 const { FsDriverDummy } = require('../fs-driver-dummy.js');
-const JoplinError = require('../JoplinError');
+import JoplinError from '../JoplinError';
 
 export default class Resource extends BaseItem {
 

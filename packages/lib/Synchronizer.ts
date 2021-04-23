@@ -19,7 +19,7 @@ import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
 import NoteResource from './models/NoteResource';
-const JoplinError = require('./JoplinError');
+import JoplinError from './JoplinError';
 const TaskQueue = require('./TaskQueue');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 

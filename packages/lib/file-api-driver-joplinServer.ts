@@ -77,9 +77,13 @@ export default class FileApiDriverJoplinServer {
 			try {
 				const query = cursor ? { cursor } : {};
 				const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/delta`, query);
-				const stats = response.items.map((item: any) => {
-					return this.metadataToStat_(item, item.item_name, item.type === 3, '');
-				});
+				const stats = response.items
+					.filter((item:any) => {
+						return item.item_name.indexOf('locks/') !== 0 && item.item_name.indexOf('temp/') !== 0;
+					})
+					.map((item: any) => {
+						return this.metadataToStat_(item, item.item_name, item.type === 3, '');
+					});
 
 				const output = {
 					items: stats,

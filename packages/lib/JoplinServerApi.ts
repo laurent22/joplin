@@ -1,7 +1,7 @@
 import shim from './shim';
 import { _ } from './locale';
 const { rtrimSlashes } = require('./path-utils.js');
-const JoplinError = require('./JoplinError');
+import JoplinError from './JoplinError';
 const { stringify } = require('query-string');
 
 interface Options {
@@ -31,7 +31,7 @@ export default class JoplinServerApi {
 
 	private options_: Options;
 	private session_: any;
-	private debugRequests_: boolean = false;
+	private debugRequests_: boolean = true;
 
 	public constructor(options: Options) {
 		this.options_ = options;
@@ -85,8 +85,11 @@ export default class JoplinServerApi {
 				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
 			}
 		}
-		if (options.body) output.push(`${'--data ' + '\''}${JSON.stringify(options.body)}'`);
-		output.push(url);
+		if (options.body) {
+			const serialized = typeof options.body !== 'string' ? JSON.stringify(options.body) : options.body;
+			output.push(`${'--data ' + '\''}${serialized}'`);
+		}
+		output.push("'" + url + "'");
 
 		return output.join(' ');
 	}
@@ -157,7 +160,8 @@ export default class JoplinServerApi {
 			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 			const shortResponseText = (`${responseText}`).substr(0, 1024);
-			return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
+			// return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
+			return new JoplinError(message, code, `${method} ${path}: ${message} (${code}): ${shortResponseText}`);
 		};
 
 		let responseJson_: any = null;
