@@ -5,6 +5,7 @@ import markdownUtils from '@joplin/lib/markdownUtils';
 const { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
 const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
 
 async function allItems() {
@@ -123,6 +124,22 @@ describe('models_Note', function() {
 		expect(duplicatedNote.updated_time !== note1.updated_time).toBe(true);
 		expect(duplicatedNote.user_created_time !== note1.user_created_time).toBe(true);
 		expect(duplicatedNote.user_updated_time !== note1.user_updated_time).toBe(true);
+	}));
+
+	it('should duplicate a note with tags', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const tag1 = await Tag.save({ title: 'tag1' });
+		const tag2 = await Tag.save({ title: 'tag2' });
+		const originalNote = await Note.save({ title: 'originalNote', parent_id: folder1.id });
+		await Tag.addNote(tag1.id, originalNote.id);
+		await Tag.addNote(tag2.id, originalNote.id);
+
+		const duplicatedNote = await Note.duplicate(originalNote.id);
+		const duplicatedNoteTags = await Tag.tagsByNoteId(duplicatedNote.id);
+
+		expect(duplicatedNoteTags.find(o => o.id === tag1.id)).toBeDefined();
+		expect(duplicatedNoteTags.find(o => o.id === tag2.id)).toBeDefined();
+		expect(duplicatedNoteTags.length).toBe(2);
 	}));
 
 	it('should delete a set of notes', (async () => {

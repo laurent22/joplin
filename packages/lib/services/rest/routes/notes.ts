@@ -20,7 +20,7 @@ import htmlUtils from '../../../htmlUtils';
 import markupLanguageUtils from '../../../markupLanguageUtils';
 const mimeUtils = require('../../../mime-utils.js').mime;
 const md5 = require('md5');
-const HtmlToMd = require('../../../HtmlToMd');
+import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
 const ArrayUtils = require('../../../ArrayUtils.js');
 const { netUtils } = require('../../../net-utils');

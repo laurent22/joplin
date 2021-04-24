@@ -34,11 +34,14 @@ joplin.plugins.register({
 			Name: <input type="text" name="name"/>
 			<br/>
 			Email: <input type="text" name="email"/>
+			<br/>
+			Description: <textarea name="desc"></textarea>
 		</form>
 		`);
 
 		const result3 = await dialogs.open(handle3);
 		console.info('Got result: ' + JSON.stringify(result3));		
+		
 	},
 
 });
