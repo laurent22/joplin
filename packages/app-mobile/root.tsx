@@ -96,6 +96,7 @@ import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { clearSharedFilesCache } from './utils/ShareUtils';
+import setIgnoreTlsErrors from './utils/TlsUtils';
 
 let storeDispatch = function(_action: any) {};
 
@@ -512,7 +513,7 @@ async function initialize(dispatch: Function) {
 		if (Platform.OS === 'android') {
 			const ignoreTlsErrors = Setting.value('net.ignoreTlsErrors');
 			if (ignoreTlsErrors) {
-				await NativeModules.SslModule.setIgnoreTlsErrors(ignoreTlsErrors);
+				await setIgnoreTlsErrors(ignoreTlsErrors);
 			}
 		}
 

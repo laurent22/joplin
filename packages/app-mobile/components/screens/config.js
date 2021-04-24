@@ -1,5 +1,4 @@
 import Slider from '@react-native-community/slider';
-import { NativeModules } from 'react-native';
 const React = require('react');
 const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
@@ -20,6 +19,7 @@ const shim = require('@joplin/lib/shim').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
 const RNFS = require('react-native-fs');
 const checkPermissions = require('../../utils/checkPermissions.js').default;
+import setIgnoreTlsErrors from '../../utils/TlsUtils';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -41,10 +41,10 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		this.checkSyncConfig_ = async () => {
 			// to ignore TLS erros we need to chage the global state of the app, if the check fails we need to restore the original state
 			// this call sets the new value and returns the previous one which we can use later to revert the change
-			const prevIgnoreTlsErrors = await NativeModules.SslModule.setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
+			const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
 			const result = await shared.checkSyncConfig(this, this.state.settings);
 			if (!result || !result.ok) {
-				await NativeModules.SslModule.setIgnoreTlsErrors(prevIgnoreTlsErrors);
+				await setIgnoreTlsErrors(prevIgnoreTlsErrors);
 			}
 		};
 
@@ -64,7 +64,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			await shared.saveSettings(this);
 
 			if (setIgnoreTlsErrors) {
-				await NativeModules.SslModule.setIgnoreTlsErrors(Setting.value('net.ignoreTlsErrors'));
+				await setIgnoreTlsErrors(Setting.value('net.ignoreTlsErrors'));
 			}
 		};
 
