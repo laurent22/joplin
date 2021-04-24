@@ -89,7 +89,7 @@ const declarations: CommandDeclaration[] = [
 	},
 	{
 		name: 'editor.duplicateLine',
-		label: () => _('Duplicate Line'),
+		label: () => _('Duplicate line'),
 	},
 	{
 		name: 'editor.undo',
