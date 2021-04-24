@@ -613,7 +613,12 @@
 		"style.editor.fontFamily": {
 			"type": "string",
 			"default": "",
-			"description": "Editor font family. This should be a *monospace* font or some elements will render incorrectly. If the font is incorrect or empty, it will default to a generic monospace font."
+			"description": "Editor font family. If the font is incorrect or empty, it will default to a generic monospace font."
+		},
+		"style.editor.monospaceFontFamily": {
+			"type": "string",
+			"default": "",
+			"description": "Editor monospace font family. This should be a *monospace* font or some elements will render incorrectly. If the font is incorrect or empty, it will default to a generic monospace font."
 		},
 		"ui.layout": {
 			"type": "object",
@@ -648,6 +653,11 @@
 				43200,
 				86400
 			]
+		},
+		"sync.mobileWifiOnly": {
+			"type": "boolean",
+			"default": false,
+			"description": "Synchronise only over WiFi connection"
 		},
 		"noteVisiblePanes": {
 			"type": "array",

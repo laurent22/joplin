@@ -6,6 +6,7 @@ import shim from '../shim';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { NoteEntity } from '../services/database/types';
+import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
@@ -502,7 +503,7 @@ export default class Note extends BaseItem {
 		note.longitude = geoData.coords.longitude;
 		note.latitude = geoData.coords.latitude;
 		note.altitude = geoData.coords.altitude;
-		return Note.save(note);
+		return Note.save(note, { ignoreProvisionalFlag: true });
 	}
 
 	static filter(note: NoteEntity) {
@@ -615,7 +616,13 @@ export default class Note extends BaseItem {
 			newNote.title = title;
 		}
 
-		return this.save(newNote);
+		const newNoteSaved = await this.save(newNote);
+		const originalTags = await Tag.tagsByNoteId(noteId);
+		for (const tagToAdd of originalTags) {
+			await Tag.addNote(tagToAdd.id, newNoteSaved.id);
+		}
+
+		return this.save(newNoteSaved);
 	}
 
 	static async noteIsOlderThan(noteId: string, date: number) {
@@ -626,7 +633,16 @@ export default class Note extends BaseItem {
 
 	static async save(o: NoteEntity, options: any = null) {
 		const isNew = this.isNew(o, options);
+
+		// If true, this is a provisional note - it will be saved permanently
+		// only if the user makes changes to it.
 		const isProvisional = options && !!options.provisional;
+
+		// If true, saving the note will not change the provisional flag of the
+		// note. This is used for background processing that it not initiated by
+		// the user. For example when setting the geolocation of a note.
+		const ignoreProvisionalFlag = options && !!options.ignoreProvisionalFlag;
+
 		const dispatchUpdateAction = options ? options.dispatchUpdateAction !== false : true;
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
@@ -672,6 +688,7 @@ export default class Note extends BaseItem {
 				type: 'NOTE_UPDATE_ONE',
 				note: note,
 				provisional: isProvisional,
+				ignoreProvisionalFlag: ignoreProvisionalFlag,
 				changedFields: changedFields,
 			});
 		}

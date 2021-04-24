@@ -7,6 +7,7 @@ const ClipperServer = require('@joplin/lib/ClipperServer');
 const Setting = require('@joplin/lib/models/Setting').default;
 const { clipboard } = require('electron');
 const ExtensionBadge = require('./ExtensionBadge.min');
+const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
 
 class ClipperConfigScreenComponent extends React.Component {
 	constructor() {
@@ -39,6 +40,16 @@ class ClipperConfigScreenComponent extends React.Component {
 		alert(_('Token has been copied to the clipboard!'));
 	}
 
+	renewToken_click() {
+		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
+			void EncryptionService.instance()
+				.generateApiToken()
+				.then((token: string) => {
+					Setting.setValue('api.token', token);
+				});
+		}
+	}
+
 	render() {
 		const theme = themeStyle(this.props.themeId);
 
@@ -57,6 +68,10 @@ class ClipperConfigScreenComponent extends React.Component {
 			paddingTop: 0,
 			marginBottom: 15,
 			backgroundColor: theme.backgroundColor,
+		};
+
+		const tokenStyle = {
+			fontFamily: 'monospace',
 		};
 
 		const webClipperStatusComps = [];
@@ -131,12 +146,17 @@ class ClipperConfigScreenComponent extends React.Component {
 							<p style={theme.h1Style}>{_('Advanced options')}</p>
 							<p style={theme.textStyle}>{_('Authorisation token:')}</p>
 							<p style={apiTokenStyle}>
-								{this.props.apiToken}{' '}
+								<span style={tokenStyle}>{this.props.apiToken}{' '}</span>
 								<a style={theme.urlStyle} href="#" onClick={this.copyToken_click}>
 									{_('Copy token')}
 								</a>
 							</p>
 							<p style={theme.textStyle}>{_('This authorisation token is only needed to allow third-party applications to access Joplin.')}</p>
+							<div>
+								<button key="renew_button" style={buttonStyle} onClick={this.renewToken_click}>
+									{_('Renew token')}
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>

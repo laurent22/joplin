@@ -15,6 +15,7 @@ class Registry {
 	private scheduleSyncId_: any;
 	private recurrentSyncId_: any;
 	private db_: any;
+	private isOnMobileData_ = false;
 
 	logger() {
 		if (!this.logger_) {
@@ -36,6 +37,12 @@ class Registry {
 	showErrorMessageBox(message: string) {
 		if (!this.showErrorMessageBoxHandler_) return;
 		this.showErrorMessageBoxHandler_(message);
+	}
+
+	// If isOnMobileData is true, the doWifiConnectionCheck is not set
+	// and the sync.mobileWifiOnly setting is true it will cancel the sync.
+	setIsOnMobileData(isOnMobileData: boolean) {
+		this.isOnMobileData_ = isOnMobileData;
 	}
 
 	resetSyncTarget(syncTargetId: number = null) {
@@ -74,7 +81,7 @@ class Registry {
 		}
 	};
 
-	scheduleSync = async (delay: number = null, syncOptions: any = null) => {
+	scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck: boolean = false) => {
 		this.schedSyncCalls_.push(true);
 
 		try {
@@ -103,6 +110,12 @@ class Registry {
 				try {
 					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
+
+					if (doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
+						this.logger().info('Sync cancelled because we\'re on mobile data');
+						promiseResolve();
+						return;
+					}
 
 					const syncTargetId = Setting.value('sync.target');
 
@@ -191,7 +204,7 @@ class Registry {
 
 				this.recurrentSyncId_ = shim.setInterval(() => {
 					this.logger().info('Running background sync on timer...');
-					void this.scheduleSync(0);
+					void this.scheduleSync(0, null, true);
 				}, 1000 * Setting.value('sync.interval'));
 			}
 		} finally {

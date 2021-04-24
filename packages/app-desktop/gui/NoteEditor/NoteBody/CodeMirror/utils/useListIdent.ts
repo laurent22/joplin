@@ -155,14 +155,18 @@ export default function useListIdent(CodeMirror: any) {
 		// otherwise fallback on the default codemirror behavior
 		if (ranges.length === 1) {
 			const line = cm.getLine(anchor.line);
+			// if cursor on 0th line set previousLine=''
+			const previousLine = anchor.line ? cm.getLine(anchor.line - 1) : '';
 
 			if (markdownUtils.isEmptyListItem(line)) {
 				const tokens = cm.getLineTokens(anchor.line);
 				//  A empty list item with an indent will have whitespace as the first token
 				if (tokens.length > 1 && tokens[0].string.match(/^\s/)) {
 					cm.execCommand('smartListUnindent');
-				} else {
+				} else if (markdownUtils.isListItem(previousLine)) {
 					cm.replaceRange('', { line: anchor.line, ch: 0 }, anchor);
+				} else { // perform normal enter key operation
+					cm.replaceRange('\n', anchor);
 				}
 				return;
 			}

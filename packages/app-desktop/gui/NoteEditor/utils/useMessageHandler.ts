@@ -85,8 +85,8 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 			}
 		} else if (urlUtils.urlProtocol(msg)) {
 			if (msg.indexOf('file://') === 0) {
-				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
-				require('electron').shell.openExternal(urlDecode(msg));
+				// When using the file:// protocol, openPath doesn't work (does nothing) with URL-encoded paths
+				require('electron').shell.openPath(urlDecode(msg));
 			} else {
 				require('electron').shell.openExternal(msg);
 			}

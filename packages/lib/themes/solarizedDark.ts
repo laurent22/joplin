@@ -7,7 +7,7 @@ const theme: Theme = {
 	backgroundColor: '#002b36',
 	backgroundColorTransparent: 'rgba(0, 43, 54, 0.9)',
 	oddBackgroundColor: '#073642',
-	color: '#93a1a1', // For regular text
+	color: '#839496', // For regular text
 	colorError: '#dc322f',
 	colorWarn: '#cb4b16',
 	colorFaded: '#657b83', // For less important text;
@@ -18,8 +18,15 @@ const theme: Theme = {
 
 	backgroundColor2: '#073642',
 	color2: '#eee8d5',
-	selectedColor2: '#6c71c4',
+	selectedColor2: '#586e75',
 	colorError2: '#cb4b16',
+
+	backgroundColor3: '#012732',
+	backgroundColorHover3: '#2aa19870',
+	color3: '#93a1a1',
+
+	backgroundColor4: '#073642',
+	color4: '#93a1a1',
 
 	raisedBackgroundColor: '#073642',
 	raisedColor: '#839496',
@@ -29,7 +36,7 @@ const theme: Theme = {
 	tableBackgroundColor: '#002b36',
 	codeBackgroundColor: '#002b36',
 	codeBorderColor: '#696969',
-	codeColor: '#fdf6e3',
+	codeColor: '#839496',
 
 	codeMirrorTheme: 'solarized dark',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
