@@ -9,6 +9,8 @@ export default function useDropHandler(dependencies: HookDependencies) {
 	const { editorRef } = dependencies;
 
 	return useCallback(async (event: any) => {
+		if (!event.dataTransfer) return;
+
 		const dt = event.dataTransfer;
 		const createFileURL = event.altKey;
 
