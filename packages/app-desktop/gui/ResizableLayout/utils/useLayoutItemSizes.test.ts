@@ -20,7 +20,7 @@ describe('useLayoutItemSizes', () => {
 		expect(layout.isRoot).toBe(true);
 	});
 
-	test('should strecth the last visible child item if all siblings have fixed size', () => {
+	test('should strecth the last visible child item if all siblings have fixed size and the last child is not visible', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 200,
@@ -33,7 +33,31 @@ describe('useLayoutItemSizes', () => {
 			],
 		});
 
-		expect(layout.children[1]).not.toHaveProperty('width');
+		expect(layout.children).toEqual([
+			{ key: 'col1', width: 50 },
+			{ key: 'col2' },
+			{ key: 'col3', width: 70, visible: false },
+		]);
+	});
+
+	test('should strecth the last child item if all siblings have fixed size', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'col1', width: 50 },
+				{ key: 'col2', width: 50 },
+				{ key: 'col3', width: 70 },
+			],
+		});
+
+		expect(layout.children).toEqual([
+			{ key: 'col1', width: 50 },
+			{ key: 'col2', width: 50 },
+			{ key: 'col3' },
+		]);
 	});
 
 	test('should give item sizes', () => {
