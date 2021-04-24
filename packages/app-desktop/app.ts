@@ -89,10 +89,11 @@ const globalCommands = [
 	require('./commands/exportNotes'),
 	require('./commands/focusElement'),
 	require('./commands/openProfileDirectory'),
+	require('./commands/replaceMisspelling'),
 	require('./commands/startExternalEditing'),
 	require('./commands/stopExternalEditing'),
 	require('./commands/toggleExternalEditing'),
-	require('./commands/replaceMisspelling'),
+	require('./commands/toggleSafeMode'),
 	require('@joplin/lib/commands/historyBackward'),
 	require('@joplin/lib/commands/historyForward'),
 	require('@joplin/lib/commands/synchronize'),
@@ -539,6 +540,7 @@ class Application extends BaseApplication {
 
 		const pluginRunner = new PluginRunner();
 		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
+		service.isSafeMode = Setting.value('isSafeMode');
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 

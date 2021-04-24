@@ -1133,6 +1133,14 @@ class Setting extends BaseModel {
 				'Restart app to see changes.'),
 				storage: SettingStorage.File,
 			},
+
+			isSafeMode: {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: ['desktop'],
+				storage: SettingStorage.Database,
+			},
 		};
 
 		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);

@@ -2,6 +2,7 @@ import * as React from 'react';
 import versionInfo from '@joplin/lib/versionInfo';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
+import bridge from '../services/bridge';
 const packageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -62,6 +63,12 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
 	render() {
 		if (this.state.error) {
+			const safeMode_click = async () => {
+				Setting.setValue('isSafeMode', true);
+				await Setting.saveAll();
+				bridge().restart();
+			};
+
 			try {
 				const output = [];
 
@@ -112,6 +119,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 					<div style={{ overflow: 'auto', fontFamily: 'sans-serif', padding: '5px 20px' }}>
 						<h1>Error</h1>
 						<p>Joplin encountered a fatal error and could not continue. To report the error, please copy the *entire content* of this page and post it on Joplin forum or GitHub.</p>
+						<p>To continue you may close the app. Alternatively, if the error persists you may try to <a href="#" onClick={safeMode_click}>restart in safe mode</a>, which will temporarily disable all plugins.</p>
 						{output}
 					</div>
 				);

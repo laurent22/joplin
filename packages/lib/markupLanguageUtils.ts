@@ -7,6 +7,7 @@ import htmlUtils from './htmlUtils';
 import Resource from './models/Resource';
 
 export class MarkupLanguageUtils {
+
 	private lib_(language: MarkupLanguage) {
 		if (language === MarkupLanguage.Html) return htmlUtils;
 		if (language === MarkupLanguage.Markdown) return markdownUtils;
@@ -31,6 +32,7 @@ export class MarkupLanguageUtils {
 			pluginOptions: pluginOptions,
 			tempDir: Setting.value('tempDir'),
 			fsDriver: shim.fsDriver(),
+			isSafeMode: Setting.value('isSafeMode'),
 		}, options);
 
 		return new MarkupToHtml(options);

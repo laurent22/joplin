@@ -198,6 +198,9 @@ packages/app-desktop/commands/stopExternalEditing.js.map
 packages/app-desktop/commands/toggleExternalEditing.d.ts
 packages/app-desktop/commands/toggleExternalEditing.js
 packages/app-desktop/commands/toggleExternalEditing.js.map
+packages/app-desktop/commands/toggleSafeMode.d.ts
+packages/app-desktop/commands/toggleSafeMode.js
+packages/app-desktop/commands/toggleSafeMode.js.map
 packages/app-desktop/gui/Button/Button.d.ts
 packages/app-desktop/gui/Button/Button.js
 packages/app-desktop/gui/Button/Button.js.map

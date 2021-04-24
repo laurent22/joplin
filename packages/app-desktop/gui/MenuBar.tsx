@@ -737,6 +737,7 @@ function useMenu(props: Props) {
 						},
 					},
 
+					menuItemDic.toggleSafeMode,
 					menuItemDic.openProfileDirectory,
 					menuItemDic.copyDevCommand,
 
