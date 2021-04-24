@@ -502,7 +502,9 @@ async function initialize(dispatch: Function) {
 
 		if (Platform.OS === 'android') {
 			const ignoreTlsErrors = Setting.value('net.ignoreTlsErrors');
-			await NativeModules.SslModule.setIgnoreTlsErrors(ignoreTlsErrors);
+			if (ignoreTlsErrors) {
+				await NativeModules.SslModule.setIgnoreTlsErrors(ignoreTlsErrors);
+			}
 		}
 
 		// ----------------------------------------------------------------
