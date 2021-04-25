@@ -113,10 +113,11 @@ export function menuItems(): ContextMenuItems {
 		paste: {
 			label: _('Paste'),
 			onAction: async (options: ContextMenuOptions) => {
-				let content = clipboard.readHTML() ? clipboard.readHTML() : clipboard.readText();
+				const pastedHtml = clipboard.readHTML();
+				let content = pastedHtml ? pastedHtml : clipboard.readText();
 
-				if (clipboard.readHTML()) {
-					content = await processPastedHtml(clipboard.readHTML());
+				if (pastedHtml) {
+					content = await processPastedHtml(pastedHtml);
 				}
 
 				options.insertContent(content);

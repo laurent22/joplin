@@ -30,17 +30,6 @@ const selfClosingElements = [
 	'wbr',
 ];
 
-async function replaceAsync(str: string, regex: RegExp, asyncFn: Function) {
-	const promises: Promise<any>[] = [];
-	str.replace(regex, (match: string, ...args) => {
-		const promise = asyncFn(match, ...args);
-		promises.push(promise);
-		return null;
-	});
-	const data = await Promise.all(promises);
-	return str.replace(regex, () => data.shift());
-}
-
 class HtmlUtils {
 
 	public headAndBodyHtml(doc: any) {
@@ -74,15 +63,6 @@ class HtmlUtils {
 				type: 'replaceSource',
 				src: newSrc,
 			};
-		});
-	}
-
-	public async replaceImageUrlsAsync(html: string, callback: Function) {
-		if (!html) return '';
-
-		return await replaceAsync(html, imageRegex, async (_v: string, before: string, src: string, after: string) => {
-			const newSrc = await callback(src);
-			return `<img${before}src="${newSrc}"${after}>`;
 		});
 	}
 

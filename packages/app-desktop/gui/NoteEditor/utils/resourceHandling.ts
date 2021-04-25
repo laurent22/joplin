@@ -128,15 +128,40 @@ export async function handlePasteEvent(event: any) {
 }
 
 export async function processPastedHtml(html: string) {
-	return await htmlUtils.replaceImageUrlsAsync(html, async (imageSrc: string) => {
-		if (imageSrc.startsWith('file')) {
-			const createdResource = await shim.createResourceFromPath(imageSrc.substr(7));
-			return `file://${Resource.fullPath(createdResource)}`;
-		} else {
-			const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}`;
-			await shim.fetchBlob(imageSrc, { path: filePath });
-			const createdResource = await shim.createResourceFromPath(filePath);
-			return `file://${Resource.fullPath(createdResource)}`;
+	const allImageUrls: string[] = [];
+	const mappedResources: Record<string, string> = {};
+
+	htmlUtils.replaceImageUrls(html, (src: string) => {
+		allImageUrls.push(src);
+	});
+
+	for (const imageSrc of allImageUrls) {
+		if (!mappedResources[imageSrc]) {
+			try {
+				if (imageSrc.startsWith('file')) {
+					const imageFilePath = imageSrc.substr(7);
+
+					if (imageFilePath.startsWith(Setting.value('resourceDir'))) {
+						mappedResources[imageSrc] = imageSrc;
+					} else {
+						const createdResource = await shim.createResourceFromPath(imageFilePath);
+						mappedResources[imageSrc] = `file://${Resource.fullPath(createdResource)}`;
+					}
+				} else {
+					const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}`;
+					await shim.fetchBlob(imageSrc, { path: filePath });
+					const createdResource = await shim.createResourceFromPath(filePath);
+					mappedResources[imageSrc] = `file://${Resource.fullPath(createdResource)}`;
+				}
+			} catch (err) {
+				// Ensures that if there's some error while creating a resource for some image
+				// it doesn't disturb the order of other images.
+				mappedResources[imageSrc] = imageSrc;
+			}
 		}
+	}
+
+	return htmlUtils.replaceImageUrls(html, (src: string) => {
+		return mappedResources[src];
 	});
 }
