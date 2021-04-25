@@ -10,6 +10,7 @@ import BaseApplication from '../../services/BaseApplication';
 import { formatDateTime } from '../../utils/time';
 import ItemModel from '../../models/ItemModel';
 import { resourceBlobPath } from './joplinUtils';
+import { OptionsResourceModel } from '@joplin/renderer/MarkupToHtml';
 const { themeStyle } = require('@joplin/lib/theme');
 
 export interface FileViewerResponse {
@@ -97,7 +98,7 @@ export default class Application extends BaseApplication {
 
 	private async renderNote(share: Share, note: NoteEntity, resourceInfos: ResourceInfos, linkedItemInfos: LinkedItemInfos): Promise<FileViewerResponse> {
 		const markupToHtml = new MarkupToHtml({
-			ResourceModel: Resource,
+			ResourceModel: Resource as OptionsResourceModel,
 		});
 
 		const renderOptions: any = {

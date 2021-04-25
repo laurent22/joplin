@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Whaell <Whaell@protonmail.com>\n"
+"Last-Translator: Whaell O <Whaell@protonmail.com>\n"
 "Language-Team: \n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,8 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 "X-Generator: Poedit 2.4.2\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -64,8 +66,8 @@ msgstr "سيتم إغلاق التطبيق الآن. يرجى إعادة تشغ�
 
 #: packages/app-desktop/plugins/GotoAnything.js:432
 msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name. Or type : to search for "
+"Type a note title or part of its content to jump to it. Or type # followed by "
+"a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
 "اكتب عنوان ملاحظة أو جزء من محتواه للانتقال إليه. أو اكتب # متبوعاً بإسم وسم، "
@@ -145,8 +147,8 @@ msgstr "استعادة"
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
 msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
+"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s"
+"\". The current version of the note will not be replaced or modified."
 msgstr ""
 "انقر \"%s\" لاستعادة الملاحظة. سيتم نسخه في دفتر الملاحظات المسمى \"%s\". لن "
 "يتم استبدال أو تعديل الإصدار الحالي من الملاحظة."
@@ -318,23 +320,23 @@ msgstr "قائمة خانات اختيار"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "تَمييز النَص"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "توسيط خط في النص"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "إدخال"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "أحرف فوقية"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "حرف تحتي"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
@@ -375,8 +377,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
-"يرجى الانتظار حتى يتم تنزيل جميع المرفقات وفك تشفيرها. يمكنك أيضًا التبديل "
-"إلى %s لتحرير الملاحظة."
+"يرجى الانتظار حتى يتم تنزيل جميع المرفقات وفك تشفيرها. يمكنك أيضًا التبديل إلى "
+"%s لتحرير الملاحظة."
 
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
 msgid "There was an error downloading this attachment:"
@@ -426,8 +428,8 @@ msgstr "اضغط لإدراج سمات..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
-"This Rich Text editor has a number of limitations and it is recommended to "
-"be aware of them before using it."
+"This Rich Text editor has a number of limitations and it is recommended to be "
+"aware of them before using it."
 msgstr ""
 "يحتوي محرر النص المنسق هذا على عدد من القيود ومن المستحسن أن تكون على دراية "
 "بها قبل استخدامه."
@@ -446,8 +448,7 @@ msgstr "تتم مراقبة المرفقات التالية للتغييرات:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
 msgid ""
-"The attachments will no longer be watched when you switch to a different "
-"note."
+"The attachments will no longer be watched when you switch to a different note."
 msgstr "لن تتم مشاهدة المرفقات بعد الآن عند التبديل إلى ملاحظة مختلفة."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
@@ -692,9 +693,9 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
-"يجب ترقية هدف المزامنة قبل أن يتمكن Joplin من المزامنة. قد تستغرق العملية "
-"بضع دقائق حتى تكتمل ويحتاج التطبيق إلى إعادة التشغيل. للمتابعة الرجاء الضغط "
-"على الرابط."
+"يجب ترقية هدف المزامنة قبل أن يتمكن Joplin من المزامنة. قد تستغرق العملية بضع "
+"دقائق حتى تكتمل ويحتاج التطبيق إلى إعادة التشغيل. للمتابعة الرجاء الضغط على "
+"الرابط."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:407
 msgid "Restart and upgrade"
@@ -880,7 +881,7 @@ msgstr "تم نسخ الرمز المميز إلى الحافظة!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "هل أنت متأكد أنك تريد تجديد الرمز المميز للتصريح?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -957,12 +958,11 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"هذا الرمز المميز للتصريح مطلوب فقط للسماح لتطبيقات طرف ثالث للوصول إلى "
-"Joplin."
+"هذا الرمز المميز للتصريح مطلوب فقط للسماح لتطبيقات طرف ثالث للوصول إلى Joplin."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "تجديد الرمز المميز"
 
 #: packages/app-desktop/gui/MenuBar.js:166
 #, javascript-format
@@ -1205,8 +1205,8 @@ msgstr "إعادة تشفير البيانات"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
-"The default encryption method has been changed to a more secure one and it "
-"is recommended that you apply it to your data."
+"The default encryption method has been changed to a more secure one and it is "
+"recommended that you apply it to your data."
 msgstr ""
 "تم تغيير طريقة التشفير الافتراضية إلى طريقة أكثر أمانًا ويوصى بتطبيقها على "
 "بياناتك."
@@ -1216,8 +1216,8 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"يمكنك استخدام الأداة أدناه لإعادة تشفير بياناتك، على سبيل المثال إذا كنت "
-"تعلم أن بعض ملاحظاتك مشفرة بطريقة تشفير قديمة."
+"يمكنك استخدام الأداة أدناه لإعادة تشفير بياناتك، على سبيل المثال إذا كنت تعلم "
+"أن بعض ملاحظاتك مشفرة بطريقة تشفير قديمة."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1245,8 +1245,8 @@ msgstr ""
 "2. انقر فوق \"%s\" \n"
 "3. دعها تعمل حتى الاكتمال. أثناء تشغيله، تجنب تغيير أي ملاحظة على أجهزتك "
 "الأخرى، لتجنب التعارضات.\n"
-"4. بمجرد إتمام المزامنة على هذا الجهاز، قم بمزامنة جميع أجهزتك الأخرى "
-"واتركها تعمل حتى الاكتمال.\n"
+"4. بمجرد إتمام المزامنة على هذا الجهاز، قم بمزامنة جميع أجهزتك الأخرى واتركها "
+"تعمل حتى الاكتمال.\n"
 "\n"
 "هام: ما عليك سوى تشغيل هذا مرة واحدة على جهاز واحد."
 
@@ -1271,14 +1271,14 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
+"Enabling encryption means *all* your notes and attachments are going to be re-"
+"synchronised and sent encrypted to the sync target. Do not lose the password "
+"as, for security purposes, this will be the *only* way to decrypt the data! "
+"To enable encryption, please enter your password below."
 msgstr ""
 "تفعيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل "
-"مشفرة إلى وجهة المزامنة. لمصلحة أمن معلوماتك ، لا تضِع كلمة المرور ، فستكون "
-"هي الطريقة *الوحيدة* لفك تشفير البيانات! فضلاً أدخل كلمة مرور خاصة بك أدناه "
+"مشفرة إلى وجهة المزامنة. لمصلحة أمن معلوماتك ، لا تضِع كلمة المرور ، فستكون هي "
+"الطريقة *الوحيدة* لفك تشفير البيانات! فضلاً أدخل كلمة مرور خاصة بك أدناه "
 "لتفعيل التشفير."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
@@ -1317,9 +1317,9 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"لاحِظ: سيجري استخدام مفتاح رئيس واحد فقط للتشفير (المفتاح المعلَّم أنه \"نشط"
-"\"). يمكن استخدام أي من المفاتيح لفك التشفير ، وهذا بحسب الطريقة التي شفرت "
-"بها سابقاً الملاحظة أو دفتر الملاحظات."
+"لاحِظ: سيجري استخدام مفتاح رئيس واحد فقط للتشفير (المفتاح المعلَّم أنه \"نشط\"). "
+"يمكن استخدام أي من المفاتيح لفك التشفير ، وهذا بحسب الطريقة التي شفرت بها "
+"سابقاً الملاحظة أو دفتر الملاحظات."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
@@ -1605,8 +1605,8 @@ msgstr "هل تريد حذف المرفقات \"%s\"؟"
 #: packages/app-desktop/gui/ResourceScreen.js:141
 msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
-"notes. Please be careful when deleting one of them as they cannot be "
-"restored afterwards."
+"notes. Please be careful when deleting one of them as they cannot be restored "
+"afterwards."
 msgstr ""
 "هذه أداة متقدمة لإظهار المرفقات المرتبطة بملاحظاتك. يرجى توخّي الحذر عند حذف "
 "أحدها حيث لا يمكن استعادتها بعد ذلك."
@@ -1762,7 +1762,7 @@ msgstr "الضبط"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "بيانات الجوال - تم تعطيل المزامنة التلقائية"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2124,8 +2124,8 @@ msgid ""
 "Please open the following URL in your browser to authenticate the "
 "application. The application will create a directory in \"Apps/Joplin\" and "
 "will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
+"any files outside this directory nor to any other personal data. No data will "
+"be shared with any third party."
 msgstr ""
 "فضلاً افتح عنوان URL التالي في المستعرض لديك لتمكين التطبيق من المصادقة سينشئ "
 "التطبيق دليلاً في \"Apps/Joplin\" ثم يقوم فقط بقراءة وكتابة الملفات في هذا "
@@ -2231,8 +2231,8 @@ msgstr "وجهة المزامنة"
 
 #: packages/lib/models/Setting.js:132
 msgid ""
-"The target to synchronise to. Each sync target may have additional "
-"parameters which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "الوجهة المستهدفة المزامنة إليها. كل وجهة مزامنة مستهدفة قد يكون لها معلمات "
 "إضافية تكون مسماة بـ `sync.NUM.NAME` (جميعها موثقة أدناه)."
@@ -2307,9 +2307,9 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"في الوضع \"يدوي\"، يتم تنزيل المرفقات فقط عند النقر عليها. في \"تلقائي\"، "
-"يتم تنزيلها عند فتح الملاحظة. في \"دائمًا\"، يتم تنزيل جميع المرفقات سواء قمت "
-"بفتح الملاحظة أم لا."
+"في الوضع \"يدوي\"، يتم تنزيل المرفقات فقط عند النقر عليها. في \"تلقائي\"، يتم "
+"تنزيلها عند فتح الملاحظة. في \"دائمًا\"، يتم تنزيل جميع المرفقات سواء قمت بفتح "
+"الملاحظة أم لا."
 
 #: packages/lib/models/Setting.js:346
 msgid "Always"
@@ -2530,18 +2530,15 @@ msgid "Editor font family"
 msgstr "نوع خط المحرّر"
 
 #: packages/lib/models/Setting.js:695
-#, fuzzy
 msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"لابد أن يكون نوع الخط أحادي المسافة وإلا فلن تظهر جميع الملاحظات بشكل صحيح. "
-"إذا كان الخط غير صحيح أو فارغاً فسيستخدم خط أحادي المسافة عام تلقائياً."
+"إذا كان نوع الخط غير صحيح أو فارغاً فسيستخدم خط أحادي المسافة عام تلقائياً."
 
 #: packages/lib/models/Setting.js:704
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "نوع خط المحرّر"
+msgstr "نوع خط المحرّر ذَو الأحرُف أحاديَة التفريق"
 
 #: packages/lib/models/Setting.js:705
 msgid ""
@@ -2595,7 +2592,7 @@ msgstr "%d ساعات"
 
 #: packages/lib/models/Setting.js:776
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "مزامنة فقط عبر اتصال واي فاي"
 
 #: packages/lib/models/Setting.js:783
 msgid "Text editor command"
@@ -2695,11 +2692,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:863
 msgid ""
-"Specify the port that should be used by the API server. If not set, a "
-"default will be used."
+"Specify the port that should be used by the API server. If not set, a default "
+"will be used."
 msgstr ""
-"حدد المنفذ الذي يجب استخدامه بواسطة خادم API. إذا لم يتم تعيينه، سيتم "
-"استخدام تلقائي."
+"حدد المنفذ الذي يجب استخدامه بواسطة خادم API. إذا لم يتم تعيينه، سيتم استخدام "
+"تلقائي."
 
 #: packages/lib/models/Setting.js:868
 msgid "Enable note history"
@@ -2796,12 +2793,12 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"تعمل هذه المكونات الإضافية على تحسين عارض Markdown بميّزات إضافية. يرجى "
-"ملاحظة أنه على الرغم من أن هذه الميزات قد تكون مفيدة، إلا أنها ليست Markdown "
-"قياسية وبالتالي فإن معظمها سيعمل فقط في Joplin. بالإضافة إلى ذلك، بعضها *غير "
-"متوافق* مع محرّر WYSIWYG. إذا فتحت ملاحظة تستخدم أحد هذه المكونات الإضافية في "
-"ذلك المحرر، فستفقد تنسيق المكون الإضافي. تمت الإشارة أدناه إلى المكونات "
-"الإضافية المتوافقة مع محرر WYSIWYG و الغير متوافقة."
+"تعمل هذه المكونات الإضافية على تحسين عارض Markdown بميّزات إضافية. يرجى ملاحظة "
+"أنه على الرغم من أن هذه الميزات قد تكون مفيدة، إلا أنها ليست Markdown قياسية "
+"وبالتالي فإن معظمها سيعمل فقط في Joplin. بالإضافة إلى ذلك، بعضها *غير متوافق* "
+"مع محرّر WYSIWYG. إذا فتحت ملاحظة تستخدم أحد هذه المكونات الإضافية في ذلك "
+"المحرر، فستفقد تنسيق المكون الإضافي. تمت الإشارة أدناه إلى المكونات الإضافية "
+"المتوافقة مع محرر WYSIWYG و الغير متوافقة."
 
 #: packages/lib/models/Setting.js:1562
 #, javascript-format
@@ -2924,8 +2921,7 @@ msgstr ""
 "فضلاً حاول ثانية."
 
 #: packages/lib/components/shared/encryption-config-shared.js:33
-msgid ""
-"Please confirm that you would like to re-encrypt your complete database."
+msgid "Please confirm that you would like to re-encrypt your complete database."
 msgstr "يرجى تأكيد رغبتك في إعادة تشفير قاعدة البيانات الكاملة الخاصة بك."
 
 #: packages/lib/components/shared/encryption-config-shared.js:39
@@ -2937,8 +2933,8 @@ msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
-"الرجاء إدخال كلمة المرور الخاصة بك في قائمة المفاتيح الرئيسية أدناه قبل "
-"ترقية المفتاح."
+"الرجاء إدخال كلمة المرور الخاصة بك في قائمة المفاتيح الرئيسية أدناه قبل ترقية "
+"المفتاح."
 
 #: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
@@ -2959,8 +2955,8 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"لا يمكن تحديث الرمز المميز: بيانات المصادقة مفقودة. بدء المزامنة مرة ثانية "
-"قد يحل المشكلة."
+"لا يمكن تحديث الرمز المميز: بيانات المصادقة مفقودة. بدء المزامنة مرة ثانية قد "
+"يحل المشكلة."
 
 #: packages/lib/Synchronizer.js:119
 #, javascript-format
@@ -3025,17 +3021,17 @@ msgid ""
 msgstr "تم تنزيل نوع عنصر غير معروف - يرجى ترقية Joplin إلى أحدث إصدار"
 
 #: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"لا يمكن الاتصال بتطبيق Joplin Nextcloud. يرجى التحقق من التكوين في شاشة "
-"تكوين التزامن. الخطأ الكامل كان:\n"
+"لا يمكن الاتصال بخادم Joplin. يرجى التحقق من الإعدادات في شاشة تكوين التزامن. "
+"الخطأ الكامل كان:\n"
 "\n"
-"%s"
+"%sس"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -3144,8 +3140,7 @@ msgstr "لا يمكن تحميل الوحدة النمطية \"%s\" للتنسي
 #: packages/app-cli/app/command-cp.js:24 packages/app-cli/app/command-cp.js:27
 #: packages/app-cli/app/command-import.js:34
 #: packages/app-cli/app/command-mv.js:22 packages/app-cli/app/command-mv.js:25
-#: packages/app-cli/app/command-use.js:21
-#: packages/app-cli/app/command-ren.js:23
+#: packages/app-cli/app/command-use.js:21 packages/app-cli/app/command-ren.js:23
 #: packages/app-cli/app/command-rmbook.js:25
 #: packages/app-cli/app/command-cat.js:25
 #: packages/app-cli/app/command-rmnote.js:25
@@ -3157,12 +3152,9 @@ msgstr "لا يمكن تحميل الوحدة النمطية \"%s\" للتنسي
 #: packages/app-cli/app/command-set.js:32
 #: packages/app-cli/app/command-help.js:66
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-tag.js:33
-#: packages/app-cli/app/command-tag.js:36
-#: packages/app-cli/app/command-tag.js:42
-#: packages/app-cli/app/command-tag.js:43
-#: packages/app-cli/app/command-tag.js:81
-#: packages/app-cli/app/command-tag.js:87
+#: packages/app-cli/app/command-tag.js:33 packages/app-cli/app/command-tag.js:36
+#: packages/app-cli/app/command-tag.js:42 packages/app-cli/app/command-tag.js:43
+#: packages/app-cli/app/command-tag.js:81 packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-done.js:20
 #, javascript-format
 msgid "Cannot find \"%s\"."
@@ -3351,8 +3343,8 @@ msgstr ""
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list of "
+"notebooks."
 msgstr ""
 "يعرض الملاحظات في الدفتر الحالي. استخدم `ls /` لعرض قائمة دفاتر الملاحظات."
 
@@ -3373,8 +3365,8 @@ msgstr "يعكس طريقة الترتيب."
 #: packages/app-cli/app/command-ls.js:30
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-tnt` would display notes and to-dos."
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-"
+"dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "يعرض العناصر من النوع/الأنواع المحددة فقط. يمكن أن يكون `n` للملاحظات ، أو "
 "`t` لقوائم المهام أو `nt` للملاحظات و قوائم المهام (مثلاً ، `-tt` ستعرض قوائم "
@@ -3490,8 +3482,8 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"بدء فك التشفير جارٍ... يرجى الانتظار حيث قد تستغرق العملية عدة دقائق بحسب "
-"كمية البيانات المطلوب فك تشفيرها."
+"بدء فك التشفير جارٍ... يرجى الانتظار حيث قد تستغرق العملية عدة دقائق بحسب كمية "
+"البيانات المطلوب فك تشفيرها."
 
 #: packages/app-cli/app/command-e2ee.js:55
 #, javascript-format
@@ -3574,8 +3566,7 @@ msgstr "المزامنة قيد التقدم بالفعل."
 #, javascript-format
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
+"taking place, you may delete the lock file at \"%s\" and resume the operation."
 msgstr ""
 "ملف القفل هو قيد الحجز بالفعل. بإمكانك حذف ملف القفل في \"%s\" واستئناف "
 "العملية إن كنت تعلم أنه لا توجد مزامنة تجري حالياً."
@@ -3759,10 +3750,10 @@ msgstr ""
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
+"One or more items are currently encrypted and you may need to supply a master "
+"password. To do so please type `e2ee decrypt`. If you have already supplied "
+"the password, the encrypted items are being decrypted in the background and "
+"will be available soon."
 msgstr ""
 "عنصر أو أكثر هو مشفّر حالياً وقد تحتاج إلى إدخال كلمة مرور رئيسة. فضلاً أكتب "
 "`e2ee decrypt` لفعل هذا. إن كنت قد أدخلت كلمة المرور فعلاً فإن فك تشفير "
@@ -3860,8 +3851,8 @@ msgstr "للتنقل من جزء إلى آخر اضغط Tab أو Shift+Tab."
 
 #: packages/app-cli/app/command-help.js:80
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
+"Use the arrows and page up/down to scroll the lists and text areas (including "
+"this console)."
 msgstr ""
 "استخدم أزرار الأسهم و Page Up/Page Down للتمرير في القوائم ومناطق النص (بما "
 "فيها وحدة التحكم هذه)."
@@ -3887,9 +3878,9 @@ msgstr ""
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
+"toggle the given to-do between completed and uncompleted state (If the target "
+"is a regular note it will be converted to a to-do). Use \"clear\" to convert "
+"the to-do back to a regular note."
 msgstr ""
 "يمكن أن يكون <todo-command> (أمر قائمة المهام) \"toggle\" (تبديل) أو \"clear"
 "\" (مسح) فقط. استخدم \"toggle\" لتبديل حال قائمة المهام المعطاة بين مكتملة و "
@@ -3947,10 +3938,10 @@ msgstr ""
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign "
+"or remove [tag] from [note], to list notes associated with [tag], or to list "
+"tags associated with [note]. The command `tag list` can be used to list all "
+"the tags (use -l for long option)."
 msgstr ""
 "<tag-command> (أمر-وسم) يمكن أن يكون \"add\" (أضف) ، \"remove\" (أزل) أو "
 "\"list\" (أسرد) ، وذلك لإضافة [وسم] أو إزالته من [ملاحظة] أو لسرد الملاحظات "
@@ -4001,8 +3992,8 @@ msgstr "الملاحظة: \"%s\" ليست قائمة مهام"
 
 #, fuzzy
 #~ msgid ""
-#~ "Type a note title or part of its content to jump to it. Or type # "
-#~ "followed by a tag name, or @ followed by a notebook name."
+#~ "Type a note title or part of its content to jump to it. Or type # followed "
+#~ "by a tag name, or @ followed by a notebook name."
 #~ msgstr ""
 #~ "اكتب عنوان الملاحظة للانتقال إليها. أو اكتب # متبوعًا باسم الوسم، أو @ "
 #~ "متبوعًا باسم دفتر الملاحظات."
@@ -4091,8 +4082,8 @@ msgstr "الملاحظة: \"%s\" ليست قائمة مهام"
 #~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
 #~ "be decrypted and try again."
 #~ msgstr ""
-#~ "هذا العنصر مشفَّر حالياً: %s \"%s\". فضلاً انتظر فك تشفير العناصر كلها ثم "
-#~ "حاول ثانية."
+#~ "هذا العنصر مشفَّر حالياً: %s \"%s\". فضلاً انتظر فك تشفير العناصر كلها ثم حاول "
+#~ "ثانية."
 
 #, fuzzy
 #~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
@@ -4109,8 +4100,8 @@ msgstr "الملاحظة: \"%s\" ليست قائمة مهام"
 #~ msgstr ""
 #~ "لم تتم المزامنة مع OneDrive.\n"
 #~ "\n"
-#~ "هذا الخطأ يحدث كثيراً عند استخدام OneDrive for Business والذي للأسف لا "
-#~ "يمكن دعمه.\n"
+#~ "هذا الخطأ يحدث كثيراً عند استخدام OneDrive for Business والذي للأسف لا يمكن "
+#~ "دعمه.\n"
 #~ "\n"
 #~ "يرجى النظر في استخدام حساب OneDrive العادي."
 
@@ -4196,8 +4187,7 @@ msgstr "الملاحظة: \"%s\" ليست قائمة مهام"
 #~ "اضغط على زر (+) لتنشئ ملاحظة أو دفتر ملاحظات جديداً. اضغط على القائمة "
 #~ "الجانبية للوصول إلى دفاتر ملاحظاتك القائمة."
 
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgid "You currently have no notebook. Create one by clicking on (+) button."
 #~ msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واحدة بالضغط على زر (+)."
 
 #~ msgid "Welcome"

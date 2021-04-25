@@ -6,6 +6,7 @@ import shim from '../shim';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { NoteEntity } from '../services/database/types';
+import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
@@ -615,7 +616,13 @@ export default class Note extends BaseItem {
 			newNote.title = title;
 		}
 
-		return this.save(newNote);
+		const newNoteSaved = await this.save(newNote);
+		const originalTags = await Tag.tagsByNoteId(noteId);
+		for (const tagToAdd of originalTags) {
+			await Tag.addNote(tagToAdd.id, newNoteSaved.id);
+		}
+
+		return this.save(newNoteSaved);
 	}
 
 	static async noteIsOlderThan(noteId: string, date: number) {

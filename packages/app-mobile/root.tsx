@@ -27,7 +27,7 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking } = require('react-native');
 
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -631,6 +631,12 @@ class AppComponent extends React.Component {
 		this.onAppStateChange_ = () => {
 			PoorManIntervals.update();
 		};
+
+		this.handleOpenURL_ = (event: any) => {
+			if (event.url == ShareExtension.shareURL) {
+				void this.handleShareData();
+			}
+		};
 	}
 
 	// 2020-10-08: It seems the initialisation code is quite fragile in general and should be kept simple.
@@ -683,6 +689,8 @@ class AppComponent extends React.Component {
 			});
 		}
 
+		Linking.addEventListener('url', this.handleOpenURL_);
+
 		BackButtonService.initialize(this.backButtonHandler_);
 
 		AlarmService.setInAppNotificationHandler(async (alarmId: string) => {
@@ -693,21 +701,14 @@ class AppComponent extends React.Component {
 
 		AppState.addEventListener('change', this.onAppStateChange_);
 
-		const sharedData = await ShareExtension.data();
-		if (sharedData) {
-			reg.logger().info('Received shared data');
-			if (this.props.selectedFolderId) {
-				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
-			} else {
-				reg.logger().info('Cannot handle share - default folder id is not set');
-			}
-		}
+		await this.handleShareData();
 
 		setUpQuickActions(this.props.dispatch, this.props.selectedFolderId);
 	}
 
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
+		Linking.removeEventListener('url', this.handleOpenURL_);
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
@@ -739,6 +740,18 @@ class AppComponent extends React.Component {
 		BackHandler.exitApp();
 
 		return false;
+	}
+
+	async handleShareData() {
+		const sharedData = await ShareExtension.data();
+		if (sharedData) {
+			reg.logger().info('Received shared data');
+			if (this.props.selectedFolderId) {
+				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+			} else {
+				reg.logger().info('Cannot handle share - default folder id is not set');
+			}
+		}
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps: any) {
