@@ -41,11 +41,10 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 }
 
 function databaseSSLConfigFromEnv(env: EnvVariables): object {
-	if (env.POSTGRES_SSL_ENABLE === "true") {
-		if (env.POSTGRES_SSL_VERIFY === "false") {
+	if (env.POSTGRES_SSL_ENABLE === 'true') {
+		if (env.POSTGRES_SSL_VERIFY === 'false') {
 			return { rejectUnauthorized: false };
-		}
-		else {
+		} else {
 			return { rejectUnauthorized: true };
 		}
 	}
