@@ -13,8 +13,8 @@ export interface EnvVariables {
 	POSTGRES_USER?: string;
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
-	POSTGRES_SSL_ENABLE?: boolean;
-	POSTGRES_SSL_VERIFY?: boolean;
+	POSTGRES_SSL_ENABLE?: string;
+	POSTGRES_SSL_VERIFY?: string;
 
 	SQLITE_DATABASE?: string;
 }
@@ -41,11 +41,12 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 }
 
 function databaseSSLConfigFromEnv(env: EnvVariables): object {
-	if (env.POSTGRES_SSL_ENABLE || false) {
-		if (env.POSTGRES_SSL_VERIFY === true) {
-			return { rejectUnauthorized: true };
-		} else {
+	if (env.POSTGRES_SSL_ENABLE === "true") {
+		if (env.POSTGRES_SSL_VERIFY === "false") {
 			return { rejectUnauthorized: false };
+		}
+		else {
+			return { rejectUnauthorized: true };
 		}
 	}
 	return null;
