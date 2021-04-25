@@ -1,5 +1,5 @@
 import { ErrorBadRequest, ErrorConflict, ErrorNotFound } from '../../utils/errors';
-import { isUniqueConstraintError, Share, ShareType, User } from '../../db';
+import { Share, ShareType, User } from '../../db';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
@@ -77,7 +77,7 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	});
 
 	const existingShareUser = await ctx.models.shareUser().byShareAndEmail(shareId, user.email);
-	if (existingShareUser) throw new ErrorConflict('Already shared with user: ' + user.email);
+	if (existingShareUser) throw new ErrorConflict(`Already shared with user: ${user.email}`);
 
 	return ctx.models.shareUser().addByEmail(shareId, user.email);
 });
@@ -94,19 +94,19 @@ router.get('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 
 	const items = shareUsers.map(su => {
 		const user = users.find(u => u.id === su.user_id);
-		
+
 		return {
-			is_accepted: su.is_accepted,
+			status: su.status,
 			user: {
 				email: user.email,
 			},
-		}
+		};
 	});
 
 	return {
 		items,
 		has_more: false,
-	}
+	};
 });
 
 router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
@@ -117,20 +117,20 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 		// No authentication is necessary - anyone who knows the share ID is allowed
 		// to access the file. It is essentially public.
 		return shareModel.toApiOutput(share);
-	}	
+	}
 
 	throw new ErrorNotFound();
 });
 
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
-	
+
 	const items = ctx.models.share().toApiOutput(await ctx.models.share().sharesByUser(ctx.owner.id));
 	// Fake paginated results so that it can be added later on, if needed.
 	return {
 		items,
 		has_more: false,
-	}
+	};
 });
 
 

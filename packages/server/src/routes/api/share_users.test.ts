@@ -1,4 +1,4 @@
-import { ShareType } from '../../db';
+import { ShareType, ShareUserStatus } from '../../db';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItemTree, expectHttpError } from '../../utils/testing/testUtils';
 import { getApi, patchApi } from '../../utils/testing/apiUtils';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
@@ -34,11 +34,11 @@ describe('share_users', function() {
 
 		const shareUsers = await getApi<PaginatedResults>(session2.id, 'share_users');
 		expect(shareUsers.items.length).toBe(2);
-		expect(shareUsers.items.find(su => su.share_id === share1.id)).toBeTruthy();
-		expect(shareUsers.items.find(su => su.share_id === share2.id)).toBeTruthy();
+		expect(shareUsers.items.find(su => su.share.id === share1.id)).toBeTruthy();
+		expect(shareUsers.items.find(su => su.share.id === share2.id)).toBeTruthy();
 	});
 
-	test('should not chnage someone else shareUser object', async function() {
+	test('should not change someone else shareUser object', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -47,10 +47,10 @@ describe('share_users', function() {
 		const { shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
 		// User can modify own UserShare object
-		await patchApi(session2.id, `share_users/${shareUser.id}`, { is_accepted: 0 });
-		
+		await patchApi(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Rejected });
+
 		// User cannot modify someone else UserShare object
-		await expectHttpError(async () => patchApi(session1.id, `share_users/${shareUser.id}`, { is_accepted: 1 }), ErrorForbidden.httpCode);
+		await expectHttpError(async () => patchApi(session1.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted }), ErrorForbidden.httpCode);
 	});
 
 });

@@ -16,29 +16,30 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const body = await bodyFields(ctx.req);
 
-	if ('is_accepted' in body) {
-		return shareUserModel.accept(shareUser.share_id, shareUser.user_id, !!body.is_accepted);
+	if ('status' in body) {
+		return shareUserModel.setStatus(shareUser.share_id, shareUser.user_id, body.status);
 	} else {
-		throw new ErrorBadRequest('Only setting is_accepted is supported');
+		throw new ErrorBadRequest('Only setting status is supported');
 	}
 });
 
 router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
-	const shareUsers = await ctx.models.shareUser().byUserId(ctx.owner.id)
+	const shareUsers = await ctx.models.shareUser().byUserId(ctx.owner.id);
 
-	const items:any[] = [];
+	const items: any[] = [];
 	for (const su of shareUsers) {
 		const share = await ctx.models.share().load(su.share_id);
 		const sharer = await ctx.models.user().load(share.owner_id);
 
 		items.push({
-			is_accepted: su.is_accepted,
+			id: su.id,
+			status: su.status,
 			share: {
 				id: share.id,
 				folder_id: share.folder_id,
 				user: {
 					full_name: sharer.full_name,
-					email: sharer.email,	
+					email: sharer.email,
 				},
 			},
 		});
@@ -47,7 +48,7 @@ router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
 	return {
 		items: items,
 		has_more: false,
-	}
+	};
 });
 
 export default router;

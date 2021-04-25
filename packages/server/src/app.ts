@@ -15,7 +15,7 @@ import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './apps/joplin/joplinUtils';
-import { createTestUsers, handleDebugCommands } from './tools/debugTools';
+import { handleDebugCommands } from './tools/debugTools';
 // import { createItemTree } from './utils/testing/testUtils';
 
 const nodeEnvFile = require('node-env-file');
@@ -103,7 +103,7 @@ async function main() {
 		const done = await handleDebugCommands(argv, config());
 		if (done) {
 			appLogger().info('Debug command has been executed');
-			return;	
+			return;
 		}
 	}
 

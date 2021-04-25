@@ -1,10 +1,10 @@
-import { ChangeType, Share, ShareType, ShareUser } from '../../db';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, expectHttpError } from '../../utils/testing/testUtils';
+import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
-import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
+import { ErrorBadRequest } from '../../utils/errors';
 import { serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -46,16 +46,16 @@ describe('shares.folder', function() {
 		shareUser = await models().shareUser().load(shareUser.id);
 		expect(shareUser.share_id).toBe(share.id);
 		expect(shareUser.user_id).toBe(user2.id);
-		expect(shareUser.is_accepted).toBe(0);
+		expect(shareUser.status).toBe(ShareUserStatus.Waiting);
 
 		// ----------------------------------------------------------------
 		// On the sharee side, accept the share
 		// ----------------------------------------------------------------
-		await patchApi<ShareUser>(session2.id, `share_users/${shareUser.id}`, { is_accepted: 1 });
+		await patchApi<ShareUser>(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
 
 		{
 			shareUser = await models().shareUser().load(shareUser.id);
-			expect(shareUser.is_accepted).toBe(1);
+			expect(shareUser.status).toBe(ShareUserStatus.Accepted);
 		}
 
 		// ----------------------------------------------------------------

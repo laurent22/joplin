@@ -40,6 +40,7 @@ const propertyTypes: Record<string, string> = {
 	'notifications.level': 'NotificationLevel',
 	'shares.type': 'ShareType',
 	'items.content': 'Buffer',
+	'share_users.status': 'ShareUserStatus',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

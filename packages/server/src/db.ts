@@ -241,6 +241,12 @@ export enum ShareType {
 	JoplinRootFolder = 3,
 }
 
+export enum ShareUserStatus {
+	Waiting = 0,
+	Accepted = 1,
+	Rejected = 2,
+}
+
 export interface WithDates {
 	updated_time?: number;
 	created_time?: number;
@@ -310,7 +316,7 @@ export interface Notification extends WithDates, WithUuid {
 export interface ShareUser extends WithDates, WithUuid {
 	share_id?: Uuid;
 	user_id?: Uuid;
-	is_accepted?: number;
+	status?: ShareUserStatus;
 }
 
 export interface Item extends WithDates, WithUuid {
@@ -417,7 +423,7 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'string' },
 		share_id: { type: 'string' },
 		user_id: { type: 'string' },
-		is_accepted: { type: 'number' },
+		status: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

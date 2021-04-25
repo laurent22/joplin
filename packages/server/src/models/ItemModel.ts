@@ -78,7 +78,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const output: Item = {};
 		const propNames = ['id', 'name', 'updated_time', 'created_time'];
 		for (const k of Object.keys(object)) {
-			if (propNames.includes(k)) (output as any)[k] = object[k];
+			if (propNames.includes(k)) (output as any)[k] = (object as any)[k];
 		}
 		return output;
 	}

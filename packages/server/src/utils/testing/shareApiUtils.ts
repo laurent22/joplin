@@ -1,12 +1,12 @@
-import { Item, Share, ShareType, ShareUser, User, Uuid } from '../../db';
+import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
 import { checkContextError, createItem, koaAppContext, models } from './testUtils';
 
 interface ShareResult {
-	share: Share,
-	item: Item,
+	share: Share;
+	item: Item;
 	shareUser: ShareUser;
 }
 
@@ -21,7 +21,7 @@ interface ShareResult {
 export async function shareWithUserAndAccept(sharerSessionId: string, shareeSessionId: string, sharee: User, shareType: ShareType = ShareType.App, item: Item = null): Promise<ShareResult> {
 	item = item || await createItem(sharerSessionId, 'root:/test.txt:', 'testing share');
 
-	let share:Share = null;
+	let share: Share = null;
 
 	if ([ShareType.JoplinRootFolder, ShareType.Link].includes(shareType)) {
 		share = await postApi<Share>(sharerSessionId, 'shares', {
@@ -30,13 +30,13 @@ export async function shareWithUserAndAccept(sharerSessionId: string, shareeSess
 			folder_id: shareType === ShareType.JoplinRootFolder ? item.jop_id : undefined,
 		});
 	} else {
-		const sharer = await models().session().sessionUser(sharerSessionId);	
+		const sharer = await models().session().sessionUser(sharerSessionId);
 
 		share = await models().share().save({
 			owner_id: sharer.id,
 			type: shareType,
 			item_id: item.id,
-		});	
+		});
 	}
 
 	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
@@ -45,7 +45,7 @@ export async function shareWithUserAndAccept(sharerSessionId: string, shareeSess
 
 	shareUser = await models().shareUser().load(shareUser.id);
 
-	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { is_accepted: 1 });
+	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
 
 	return { share, item, shareUser };
 }

@@ -6,7 +6,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('share_id', 32).notNullable();
 		table.string('user_id', 32).notNullable();
-		table.integer('is_accepted').defaultTo(0).notNullable();
+		table.integer('status').defaultTo(0).notNullable();
 		table.bigInteger('updated_time').notNullable();
 		table.bigInteger('created_time').notNullable();
 	});
