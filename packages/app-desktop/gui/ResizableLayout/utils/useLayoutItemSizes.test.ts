@@ -34,9 +34,29 @@ describe('useLayoutItemSizes', () => {
 		});
 
 		expect(layout.children).toEqual([
-			{ key: 'col1', width: 50 },
-			{ key: 'col2' },
-			{ key: 'col3', width: 70, visible: false },
+			{
+				key: 'col1',
+				width: 50,
+				resizableRight: true,
+				resizableBottom: false,
+				direction: 'column',
+				visible: true,
+			},
+			{
+				key: 'col2',
+				resizableRight: false,
+				resizableBottom: false,
+				direction: 'column',
+				visible: true,
+			},
+			{
+				key: 'col3',
+				width: 70,
+				resizableRight: true,
+				resizableBottom: false,
+				direction: 'column',
+				visible: false,
+			},
 		]);
 	});
 
@@ -54,9 +74,29 @@ describe('useLayoutItemSizes', () => {
 		});
 
 		expect(layout.children).toEqual([
-			{ key: 'col1', width: 50 },
-			{ key: 'col2', width: 50 },
-			{ key: 'col3' },
+			{
+				key: 'col1',
+				width: 50,
+				resizableRight: true,
+				resizableBottom: false,
+				direction: 'column',
+				visible: true,
+			},
+			{
+				key: 'col2',
+				width: 50,
+				resizableRight: true,
+				resizableBottom: false,
+				direction: 'column',
+				visible: true,
+			},
+			{
+				key: 'col3',
+				resizableRight: false,
+				resizableBottom: false,
+				direction: 'column',
+				visible: true,
+			},
 		]);
 	});
 
