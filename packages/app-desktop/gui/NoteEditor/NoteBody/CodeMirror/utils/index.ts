@@ -70,8 +70,13 @@ export function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Func
 
 		if (editorRef.current) {
 			const percent = editorRef.current.getScrollPercent();
-
-			setViewerPercentScroll(percent);
+			if (!isNaN(percent)) {
+				// when switching to another note, the percent can sometimes be NaN
+				// this is coming from `gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.ts`
+				// when CodeMirror returns scroll info with heigth == clientHeigth
+				// https://github.com/laurent22/joplin/issues/4797
+				setViewerPercentScroll(percent);
+			}
 		}
 	}, [setViewerPercentScroll]);
 
