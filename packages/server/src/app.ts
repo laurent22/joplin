@@ -15,6 +15,7 @@ import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './apps/joplin/joplinUtils';
+import { createTestUsers, handleDebugCommands } from './tools/debugTools';
 // import { createItemTree } from './utils/testing/testUtils';
 
 const nodeEnvFile = require('node-env-file');
@@ -96,6 +97,14 @@ async function main() {
 		appLogger().info(`Writing PID to ${pidFile}...`);
 		fs.removeSync(pidFile as string);
 		fs.writeFileSync(pidFile, `${process.pid}`);
+	}
+
+	if (env !== Env.Prod) {
+		const done = await handleDebugCommands(argv, config());
+		if (done) {
+			appLogger().info('Debug command has been executed');
+			return;	
+		}
 	}
 
 	if (argv.migrateDb) {

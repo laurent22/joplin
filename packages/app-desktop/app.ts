@@ -13,6 +13,7 @@ import Logger, { TargetType } from '@joplin/lib/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
+import DebugService from '@joplin/lib/debug/DebugService';
 import { _, setLocale } from '@joplin/lib/locale';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
@@ -766,15 +767,16 @@ class Application extends BaseApplication {
 		RevisionService.instance().runInBackground();
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
-		(window as any).joplin = () => {
-			return {
+		if (Setting.value('env') === 'dev') {
+			(window as any).joplin = {
 				revisionService: RevisionService.instance(),
 				migrationService: MigrationService.instance(),
 				decryptionWorker: DecryptionWorker.instance(),
 				commandService: CommandService.instance(),
 				bridge: bridge(),
+				debug: new DebugService(reg.db()),
 			};
-		};
+		}
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 

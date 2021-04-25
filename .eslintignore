@@ -899,6 +899,9 @@ packages/lib/commands/synchronize.js.map
 packages/lib/database.d.ts
 packages/lib/database.js
 packages/lib/database.js.map
+packages/lib/debug/DebugService.d.ts
+packages/lib/debug/DebugService.js
+packages/lib/debug/DebugService.js.map
 packages/lib/dummy.test.d.ts
 packages/lib/dummy.test.js
 packages/lib/dummy.test.js.map
