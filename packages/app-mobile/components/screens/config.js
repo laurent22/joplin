@@ -19,6 +19,7 @@ const shim = require('@joplin/lib/shim').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
 const RNFS = require('react-native-fs');
 const checkPermissions = require('../../utils/checkPermissions.js').default;
+import setIgnoreTlsErrors from '../../utils/TlsUtils';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -38,7 +39,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		shared.init(this);
 
 		this.checkSyncConfig_ = async () => {
-			await shared.checkSyncConfig(this, this.state.settings);
+			// to ignore TLS erros we need to chage the global state of the app, if the check fails we need to restore the original state
+			// this call sets the new value and returns the previous one which we can use later to revert the change
+			const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
+			const result = await shared.checkSyncConfig(this, this.state.settings);
+			if (!result || !result.ok) {
+				await setIgnoreTlsErrors(prevIgnoreTlsErrors);
+			}
 		};
 
 		this.e2eeConfig_ = () => {
@@ -50,7 +57,15 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				Alert.alert(_('Warning'), _('In order to use file system synchronisation your permission to write to external storage is required.'));
 				// Save settings anyway, even if permission has not been granted
 			}
-			return shared.saveSettings(this);
+
+			// changedSettingKeys is cleared in shared.saveSettings so reading it now
+			const setIgnoreTlsErrors = this.state.changedSettingKeys.includes('net.ignoreTlsErrors');
+
+			await shared.saveSettings(this);
+
+			if (setIgnoreTlsErrors) {
+				await setIgnoreTlsErrors(Setting.value('net.ignoreTlsErrors'));
+			}
 		};
 
 		this.syncStatusButtonPress_ = () => {

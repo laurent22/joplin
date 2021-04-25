@@ -1025,10 +1025,11 @@ class Setting extends BaseModel {
 				advanced: true,
 				section: 'sync',
 				show: (settings: any) => {
-					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
+					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
+						[SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
-				appTypes: ['desktop', 'cli'],
+				appTypes: ['desktop', 'cli', 'mobile'],
 				label: () => _('Ignore TLS certificate errors'),
 				storage: SettingStorage.File,
 			},

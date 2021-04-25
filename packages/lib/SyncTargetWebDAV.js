@@ -32,6 +32,7 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 			baseUrl: () => options.path(),
 			username: () => options.username(),
 			password: () => options.password(),
+			ignoreTlsErrors: () => options.ignoreTlsErrors(),
 		};
 
 		const api = new WebDavApi(apiOptions);
@@ -67,6 +68,7 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 			path: () => Setting.value('sync.6.path'),
 			username: () => Setting.value('sync.6.username'),
 			password: () => Setting.value('sync.6.password'),
+			ignoreTlsErrors: () => Setting.value('net.ignoreTlsErrors'),
 		});
 
 		fileApi.setLogger(this.logger());
