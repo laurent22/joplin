@@ -124,7 +124,7 @@ function filterLogs(logs, platform) {
 	return output;
 }
 
-function formatCommitMessage(msg, author, options) {
+function formatCommitMessage(commit, msg, author, options) {
 	options = Object.assign({}, { publishFormat: 'full' }, options);
 
 	let output = '';
@@ -234,6 +234,8 @@ function formatCommitMessage(msg, author, options) {
 
 	output = messagePieces.join(': ');
 
+	const issueRegex = /\((#[0-9]+)\)$/;
+
 	if (options.publishFormat === 'full') {
 		if (commitMessage.issueNumber) {
 			const formattedIssueNum = `(#${commitMessage.issueNumber})`;
@@ -251,13 +253,19 @@ function formatCommitMessage(msg, author, options) {
 			}
 		}
 
-		if (authorMd) {
-			output = output.replace(/\((#[0-9]+)\)$/, `($1 by ${authorMd})`);
+		if (output.match(issueRegex)) {
+			if (authorMd) {
+				output = output.replace(issueRegex, `($1 by ${authorMd})`);
+			}
+		} else {
+			const commitStrings = [commit.substr(0, 7)];
+			if (authorMd) commitStrings.push(`by ${authorMd}`);
+			output += ` (${commitStrings.join(' ')})`;
 		}
 	}
 
 	if (options.publishFormat !== 'full') {
-		output = output.replace(/\((#[0-9]+)\)$/, '');
+		output = output.replace(issueRegex, '');
 	}
 
 	return escapeHtml(output);
@@ -267,7 +275,7 @@ function createChangeLog(logs, options) {
 	const output = [];
 
 	for (const log of logs) {
-		output.push(formatCommitMessage(log.message, log.author, options));
+		output.push(formatCommitMessage(log.commit, log.message, log.author, options));
 	}
 
 	return output;
