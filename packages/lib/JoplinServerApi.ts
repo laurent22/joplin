@@ -89,7 +89,7 @@ export default class JoplinServerApi {
 			const serialized = typeof options.body !== 'string' ? JSON.stringify(options.body) : options.body;
 			output.push(`${'--data ' + '\''}${serialized}'`);
 		}
-		output.push("'" + url + "'");
+		output.push(`'${url}'`);
 
 		return output.join(' ');
 	}

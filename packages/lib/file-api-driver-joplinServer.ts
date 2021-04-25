@@ -78,7 +78,7 @@ export default class FileApiDriverJoplinServer {
 				const query = cursor ? { cursor } : {};
 				const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/delta`, query);
 				const stats = response.items
-					.filter((item:any) => {
+					.filter((item: any) => {
 						return item.item_name.indexOf('locks/') !== 0 && item.item_name.indexOf('temp/') !== 0;
 					})
 					.map((item: any) => {

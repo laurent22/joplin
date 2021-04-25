@@ -189,7 +189,7 @@ export default abstract class BaseModel<T> {
 		return output;
 	}
 
-	protected objectToApiOutput(object:T):T {
+	protected objectToApiOutput(object: T): T {
 		return { ...object };
 	}
 

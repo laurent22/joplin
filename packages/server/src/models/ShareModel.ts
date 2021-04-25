@@ -77,7 +77,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
-	public async byUserAndItemId(userId:Uuid, itemId:Uuid):Promise<Share> {
+	public async byUserAndItemId(userId: Uuid, itemId: Uuid): Promise<Share> {
 		return this.db(this.tableName).select(this.defaultFields)
 			.where('owner_id', '=', userId)
 			.where('item_id', '=', itemId)
