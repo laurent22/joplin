@@ -20,7 +20,7 @@ describe('useLayoutItemSizes', () => {
 		expect(layout.isRoot).toBe(true);
 	});
 
-	test('should strecth the last visible child item if all siblings have fixed size and the last child is not visible', () => {
+	test('should stretch the last visible child item if all siblings have fixed size and the last child is not visible', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 200,
@@ -60,7 +60,7 @@ describe('useLayoutItemSizes', () => {
 		]);
 	});
 
-	test('should strecth the last child item if all siblings have fixed size', () => {
+	test('should stretch the last child item if all siblings have fixed size', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 200,
