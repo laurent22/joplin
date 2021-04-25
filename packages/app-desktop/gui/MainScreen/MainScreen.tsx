@@ -32,6 +32,7 @@ import removeItem from '../ResizableLayout/utils/removeItem';
 import EncryptionService from '@joplin/lib/services/EncryptionService';
 import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
+import ShareService from '@joplin/lib/services/share/ShareService';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -220,7 +221,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private get showShareInvitationNotification(): boolean {
-		return !!this.props.shareInvitations.find(i => !i.is_accepted);
+		return !!this.props.shareInvitations.find(i => i.status === 0);
 	}
 
 	private buildLayout(plugins: PluginStates): LayoutItem {
@@ -526,6 +527,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 			bridge().restart();
 		};
 
+		const onInvitationRespond = async (shareUserId: string, accept: boolean) => {
+			await ShareService.instance().respondInvitation(shareUserId, accept);
+			await ShareService.instance().refreshShareInvitations();
+		};
+
 		let msg = null;
 
 		if (this.props.isSafeMode) {
@@ -546,30 +552,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 					</a>
 				</span>
 			);
-		} else if (this.props.hasDisabledSyncItems) {
-			msg = (
-				<span>
-					{_('Some items cannot be synchronised.')}{' '}
-					<a href="#" onClick={() => onViewStatusScreen()}>
-						{_('View them now')}
-					</a>
-				</span>
-			);
 		} else if (this.props.hasDisabledEncryptionItems) {
 			msg = (
 				<span>
 					{_('Some items cannot be decrypted.')}{' '}
 					<a href="#" onClick={() => onViewStatusScreen()}>
 						{_('View them now')}
-					</a>
-				</span>
-			);
-		} else if (this.props.showMissingMasterKeyMessage) {
-			msg = (
-				<span>
-					{_('One or more master keys need a password.')}{' '}
-					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
-						{_('Set the password')}
 					</a>
 				</span>
 			);
@@ -592,17 +580,36 @@ class MainScreenComponent extends React.Component<Props, State> {
 				</span>
 			);
 		} else if (this.showShareInvitationNotification) {
-			const sharer = this.props.shareInvitations[0].share.user;
+			const invitation = this.props.shareInvitations[0];
+			const sharer = invitation.share.user;
 
 			msg = (
 				<span>
 					{_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email)}{' '}
-					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
+					<a href="#" onClick={() => onInvitationRespond(invitation.id, true)}>
 						{_('Accept')}
 					</a>
 					{' / '}
-					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
+					<a href="#" onClick={() => onInvitationRespond(invitation.id,true)}>
 						{_('Reject')}
+					</a>
+				</span>
+			);
+		} else if (this.props.hasDisabledSyncItems) {
+			msg = (
+				<span>
+					{_('Some items cannot be synchronised.')}{' '}
+					<a href="#" onClick={() => onViewStatusScreen()}>
+						{_('View them now')}
+					</a>
+				</span>
+			);
+		} else if (this.props.showMissingMasterKeyMessage) {
+			msg = (
+				<span>
+					{_('One or more master keys need a password.')}{' '}
+					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
+						{_('Set the password')}
 					</a>
 				</span>
 			);

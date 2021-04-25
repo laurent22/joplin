@@ -1,17 +1,17 @@
-import JoplinServerApi from "../../JoplinServerApi";
-import Logger from "../../Logger";
-import Setting from "../../models/Setting";
-import shim from "../../shim";
-import SyncTargetJoplinServer from "../../SyncTargetJoplinServer";
+import JoplinServerApi from '../../JoplinServerApi';
+import Logger from '../../Logger';
+import Setting from '../../models/Setting';
+import shim from '../../shim';
+import SyncTargetJoplinServer from '../../SyncTargetJoplinServer';
 
 const logger = Logger.create('ShareService');
 
 export default class ShareService {
 
 	private static instance_: ShareService;
-	private api_:JoplinServerApi = null;
-	private dispatch_:Function = null;
-	private isRunningInBackground_:boolean = false;
+	private api_: JoplinServerApi = null;
+	private dispatch_: Function = null;
+	private isRunningInBackground_: boolean = false;
 
 	public static instance(): ShareService {
 		if (this.instance_) return this.instance_;
@@ -19,19 +19,19 @@ export default class ShareService {
 		return this.instance_;
 	}
 
-	public initialize(dispatch:Function) {
+	public initialize(dispatch: Function) {
 		this.dispatch_ = dispatch;
 	}
 
-	public get enabled():boolean {
+	public get enabled(): boolean {
 		return Setting.value('sync.target') === SyncTargetJoplinServer.id();
 	}
 
-	private get dispatch():Function {
+	private get dispatch(): Function {
 		return this.dispatch_;
 	}
 
-	private api():JoplinServerApi {
+	private api(): JoplinServerApi {
 		if (this.api_) return this.api_;
 
 		this.api_ = new JoplinServerApi({
@@ -43,29 +43,37 @@ export default class ShareService {
 		return this.api_;
 	}
 
-	public async shareFolder(folderId:string) {
+	public async shareFolder(folderId: string) {
 		return this.api().exec('POST', 'api/shares', {}, {
 			folder_id: folderId,
 			type: 3, // JoplinRootFolder
-		})
+		});
 	}
 
-	public async addShareRecipient(shareId:string, recipientEmail:string) {
-		return this.api().exec('POST', 'api/shares/' + shareId + '/users', {}, {
+	public async addShareRecipient(shareId: string, recipientEmail: string) {
+		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
-		})
+		});
 	}
 
 	public async shares() {
 		return this.api().exec('GET', 'api/shares');
 	}
 
-	public async shareUsers(shareId:string) {
-		return this.api().exec('GET', 'api/shares/' + shareId + '/users');
+	public async shareUsers(shareId: string) {
+		return this.api().exec('GET', `api/shares/${shareId}/users`);
 	}
 
 	public async shareInvitations() {
 		return this.api().exec('GET', 'api/share_users');
+	}
+
+	public async respondInvitation(shareUserId: string, accept: boolean) {
+		if (accept) {
+			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 1 });
+		} else {
+			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 2 });
+		}
 	}
 
 	public async refreshShareInvitations() {
@@ -86,7 +94,7 @@ export default class ShareService {
 		});
 	}
 
-	public async refreshShareUsers(shareId:string) {
+	public async refreshShareUsers(shareId: string) {
 		const result = await this.shareUsers(shareId);
 
 		this.dispatch({
@@ -100,7 +108,7 @@ export default class ShareService {
 		if (this.isRunningInBackground_) return;
 		this.isRunningInBackground_ = true;
 
-		logger.info(`Starting background service...`);
+		logger.info('Starting background service... Enabled:', this.enabled);
 
 		if (this.enabled) {
 			await this.refreshShareInvitations();

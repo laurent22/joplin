@@ -7,7 +7,7 @@ interface StateShareUserUser {
 }
 
 export interface StateShareUser {
-	is_accepted: number;
+	status: number;
 	user: StateShareUserUser;
 }
 
@@ -16,12 +16,13 @@ export interface StateShare {
 	type: number;
 	folder_id: string;
 	note_id: string;
-	user?: StateShareUserUser,
+	user?: StateShareUserUser;
 }
 
 export interface ShareInvitation {
+	id: string;
 	share: StateShare;
-	is_accepted: number;
+	status: number;
 }
 
 export interface State {

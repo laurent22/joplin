@@ -50,12 +50,12 @@ const StyledRecipientList = styled.div`
 	height: 300px;
 	overflow-x: hidden;
 	overflow-y: scroll;
-`
+`;
 
 const StyledError = styled(StyledMessage)`
 	word-break: break-all;
 	margin-bottom: 1em;
-`
+`;
 
 const StyledIcon = styled.i`
 	margin-right: 8px;
@@ -65,8 +65,8 @@ interface Props {
 	themeId: number;
 	folderId: string;
 	onClose(): void;
-	shares: StateShare[],
-	shareUsers: Record<string, StateShareUser[]>,
+	shares: StateShare[];
+	shareUsers: Record<string, StateShareUser[]>;
 }
 
 interface AsyncEffectEvent {
@@ -132,7 +132,7 @@ function ShareFolderDialog(props: Props) {
 		}
 	}
 
-	async function recipientEmail_change(event:any) {
+	async function recipientEmail_change(event: any) {
 		setRecipientEmail(event.target.value);
 	}
 
@@ -156,7 +156,7 @@ function ShareFolderDialog(props: Props) {
 		);
 	}
 
-	function renderRecipient(shareUser:StateShareUser) {
+	function renderRecipient(shareUser: StateShareUser) {
 		return (
 			<StyledMessage key={shareUser.user.email}>
 				{shareUser.user.email}
@@ -179,7 +179,7 @@ function ShareFolderDialog(props: Props) {
 
 	function renderError() {
 		if (!latestError) return null;
-		
+
 		return (
 			<StyledError type="error">
 				{latestError.message}
@@ -216,4 +216,4 @@ const mapStateToProps = (state: State) => {
 	};
 };
 
-export default connect(mapStateToProps)(ShareFolderDialog);
+export default connect(mapStateToProps)(ShareFolderDialog as any);
