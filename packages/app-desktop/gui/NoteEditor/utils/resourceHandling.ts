@@ -154,8 +154,6 @@ export async function processPastedHtml(html: string) {
 					mappedResources[imageSrc] = `file://${Resource.fullPath(createdResource)}`;
 				}
 			} catch (err) {
-				// Ensures that if there's some error while creating a resource for some image
-				// it doesn't disturb the order of other images.
 				mappedResources[imageSrc] = imageSrc;
 			}
 		}
