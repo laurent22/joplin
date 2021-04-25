@@ -27,7 +27,7 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
 
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -96,6 +96,7 @@ import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { clearSharedFilesCache } from './utils/ShareUtils';
+import setIgnoreTlsErrors from './utils/TlsUtils';
 
 let storeDispatch = function(_action: any) {};
 
@@ -508,6 +509,13 @@ async function initialize(dispatch: Function) {
 		reg.logger().info(`Sync target: ${Setting.value('sync.target')}`);
 
 		setLocale(Setting.value('locale'));
+
+		if (Platform.OS === 'android') {
+			const ignoreTlsErrors = Setting.value('net.ignoreTlsErrors');
+			if (ignoreTlsErrors) {
+				await setIgnoreTlsErrors(ignoreTlsErrors);
+			}
+		}
 
 		// ----------------------------------------------------------------
 		// E2EE SETUP

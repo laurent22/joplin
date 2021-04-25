@@ -38,6 +38,7 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 			path: () => Setting.value('sync.5.path'),
 			username: () => Setting.value('sync.5.username'),
 			password: () => Setting.value('sync.5.password'),
+			ignoreTlsErrors: () => Setting.value('net.ignoreTlsErrors'),
 		});
 
 		fileApi.setLogger(this.logger());
