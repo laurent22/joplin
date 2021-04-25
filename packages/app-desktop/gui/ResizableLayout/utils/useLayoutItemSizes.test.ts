@@ -33,31 +33,17 @@ describe('useLayoutItemSizes', () => {
 			],
 		});
 
-		expect(layout.children).toEqual([
-			{
-				key: 'col1',
-				width: 50,
-				resizableRight: true,
-				resizableBottom: false,
-				direction: 'column',
-				visible: true,
-			},
-			{
-				key: 'col2',
-				resizableRight: false,
-				resizableBottom: false,
-				direction: 'column',
-				visible: true,
-			},
-			{
-				key: 'col3',
-				width: 70,
-				resizableRight: true,
-				resizableBottom: false,
-				direction: 'column',
-				visible: false,
-			},
-		]);
+		const col1 = layout.children.find(c => c.key === 'col1');
+		expect(col1.width).toBe(50);
+		expect(col1.visible).toBe(true);
+
+		const col2 = layout.children.find(c => c.key === 'col2');
+		expect(col2).not.toHaveProperty('width');
+		expect(col2.visible).toBe(true);
+
+		const col3 = layout.children.find(c => c.key === 'col3');
+		expect(col3.width).toBe(70);
+		expect(col3.visible).toBe(false);
 	});
 
 	test('should stretch the last child item if all siblings have fixed size', () => {
@@ -73,31 +59,17 @@ describe('useLayoutItemSizes', () => {
 			],
 		});
 
-		expect(layout.children).toEqual([
-			{
-				key: 'col1',
-				width: 50,
-				resizableRight: true,
-				resizableBottom: false,
-				direction: 'column',
-				visible: true,
-			},
-			{
-				key: 'col2',
-				width: 50,
-				resizableRight: true,
-				resizableBottom: false,
-				direction: 'column',
-				visible: true,
-			},
-			{
-				key: 'col3',
-				resizableRight: false,
-				resizableBottom: false,
-				direction: 'column',
-				visible: true,
-			},
-		]);
+		const col1 = layout.children.find(c => c.key === 'col1');
+		expect(col1.width).toBe(50);
+		expect(col1.visible).toBe(true);
+
+		const col2 = layout.children.find(c => c.key === 'col2');
+		expect(col2.width).toBe(50);
+		expect(col2.visible).toBe(true);
+
+		const col3 = layout.children.find(c => c.key === 'col3');
+		expect(col3).not.toHaveProperty('width');
+		expect(col3.visible).toBe(true);
 	});
 
 	test('should give item sizes', () => {
