@@ -1,7 +1,7 @@
 import { Change, ChangeType, Item, Uuid } from '../db';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
-import BaseModel from './BaseModel';
+import BaseModel, { SaveOptions } from './BaseModel';
 import { PaginatedResults } from './utils/pagination';
 
 export interface ChangeWithItem {
@@ -214,6 +214,12 @@ export default class ChangeModel extends BaseModel<Change> {
 		output.sort((a: Change, b: Change) => a.counter < b.counter ? -1 : +1);
 
 		return output;
+	}
+
+	public async save(change: Change, options: SaveOptions = {}): Promise<Change> {
+		const savedChange = await super.save(change, options);
+		ChangeModel.eventEmitter.emit('saved');
+		return savedChange;
 	}
 
 }

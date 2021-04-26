@@ -16,6 +16,7 @@ import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './apps/joplin/joplinUtils';
 import { handleDebugCommands } from './tools/debugTools';
+import startServices from './utils/startServices';
 // import { createItemTree } from './utils/testing/testUtils';
 
 const nodeEnvFile = require('node-env-file');
@@ -141,6 +142,9 @@ async function main() {
 
 		appLogger().info('Migrating database...');
 		await migrateDb(appContext.db);
+
+		appLogger().info('Starting services...');
+		await startServices(appContext);
 
 		appLogger().info(`Call this for testing: \`curl ${config().baseUrl}/api/ping\``);
 

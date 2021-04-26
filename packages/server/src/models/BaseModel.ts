@@ -3,6 +3,7 @@ import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models } from './factory';
+import * as EventEmitter from 'events';
 
 export interface SaveOptions {
 	isNew?: boolean;
@@ -41,6 +42,7 @@ export default abstract class BaseModel<T> {
 	private transactionHandler_: TransactionHandler;
 	private modelFactory_: Function;
 	private baseUrl_: string;
+	private static eventEmitter_: EventEmitter = null;
 
 	public constructor(db: DbConnection, modelFactory: Function, baseUrl: string) {
 		this.db_ = db;
@@ -71,6 +73,13 @@ export default abstract class BaseModel<T> {
 			this.defaultFields_ = Object.keys(databaseSchema[this.tableName]);
 		}
 		return this.defaultFields_.slice();
+	}
+
+	public static get eventEmitter(): EventEmitter {
+		if (!this.eventEmitter_) {
+			this.eventEmitter_ = new EventEmitter();
+		}
+		return this.eventEmitter_;
 	}
 
 	public async checkIfAllowed(_user: User, _action: AclAction, _resource: T = null): Promise<void> {

@@ -1,59 +1,50 @@
-// import Logger from '@joplin/lib/Logger';
-// import { File, FileContentType, ShareType } from '../db';
+import Logger from '@joplin/lib/Logger';
+import ChangeModel from '../models/ChangeModel';
 import { Models } from '../models/factory';
 
-// const logger = Logger.create('ShareService');
+const logger = Logger.create('ShareService');
 
 export default class ShareService {
 
 	private models_: Models;
+	private maintenanceScheduled_: boolean = false;
+	private maintenanceInProgress_: boolean = false;
 
 	public constructor(models: Models) {
 		this.models_ = models;
+		this.scheduleMaintenance = this.scheduleMaintenance.bind(this);
 	}
 
 	public get models(): Models {
 		return this.models_;
 	}
 
-	// public async updateSharedItems() {
-	// 	while (true) {
-	// 		const latestProcessedChange = await this.models.keyValue().value<string>('ShareService::latestProcessedChange');
+	private async scheduleMaintenance() {
+		if (this.maintenanceScheduled_) return;
+		this.maintenanceScheduled_ = true;
 
-	// 		const changes = await this.models.change().allFromId(latestProcessedChange || '');
-	// 		if (!changes.length) break;
+		setTimeout(() => {
+			this.maintenanceScheduled_ = false;
+			void this.maintenance();
+		}, 10000);
+	}
 
-	// 		for (const change of changes) {
+	private async maintenance() {
+		if (this.maintenanceInProgress_) return;
 
-	// 		}
-	// 	}
-	// }
+		logger.info('Starting maintenance...');
+		const startTime = Date.now();
 
-	// public async processUserAutoShare(userId:Uuid) {
-	// 	const shares = await this.models.share().sharesByUser(userId, ShareType.JoplinApp);
-	// 	console.info(shares);
-	// }
+		this.maintenanceInProgress_ = true;
+		await this.models.share().updateSharedItems();
+		this.maintenanceInProgress_ = false;
 
-	// public async processAutoShare() {
-	// 	const changes = await this.models.change().allFromId('');
-	// 	const fileIds = [...new Set(changes.map(c => c.item_id))];
-	// 	const files = await this.models.file().loadByIds(fileIds, { skipPermissionCheck: true });
-	// 	const filesById = files.reduce<Record<string, File>>((previous, current) => {
-	// 		previous[current.id] = current;
-	// 		return previous;
-	// 	}, {});
+		logger.info(`Maintenance completed in ${Date.now() - startTime}ms`);
+	}
 
-	// 	for (const change of changes) {
-	// 		const file = filesById[change.item_id];
-	// 		if (!file) {
-	// 			logger.warn(`Change without a file: ${change.id}`);
-	// 			continue;
-	// 		}
-
-	// 		if (file.content_type !== FileContentType.JoplinItem) continue;
-
-
-	// 	}
-	// }
+	public async runInBackground() {
+		ChangeModel.eventEmitter.on('saved', this.scheduleMaintenance);
+		void this.maintenance();
+	}
 
 }
