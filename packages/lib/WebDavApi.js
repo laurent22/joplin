@@ -383,7 +383,7 @@ class WebDavApi {
 
 		let response = null;
 
-		console.info('WebDAV Call', `${method} ${url}`, headers, options);
+		// console.info('WebDAV Call', `${method} ${url}`, headers, options);
 		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
@@ -404,7 +404,7 @@ class WebDavApi {
 
 		this.logRequest_({ url: url, options: fetchOptions }, responseText);
 
-		console.info('WebDAV Response', responseText);
+		// console.info('WebDAV Response', responseText);
 
 		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
 		const newError = (message, code = 0) => {
