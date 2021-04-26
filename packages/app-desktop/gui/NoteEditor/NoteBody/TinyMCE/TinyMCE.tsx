@@ -396,7 +396,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(`
 			.joplin-tinymce .tox-editor-header {
-				padding-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
+				padding-left: ${document.getElementById('leftExtraToolbarContainer').offsetWidth}px;
 				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
 			}
 			
@@ -508,7 +508,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [editorReady, props.themeId]);
+	}, [editorReady, props.themeId, props.noteToolbarButtonInfos]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
@@ -1133,7 +1133,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		return (
-			<div style={styles.leftExtraToolbarContainer}>
+			<div style={styles.leftExtraToolbarContainer} id='leftExtraToolbarContainer'>
 				{buttons}
 			</div>
 		);
