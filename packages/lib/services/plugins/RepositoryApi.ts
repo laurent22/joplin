@@ -119,10 +119,13 @@ export default class RepositoryApi {
 		return output;
 	}
 
-	public async pluginCanBeUpdated(pluginId: string, installedVersion: string): Promise<boolean> {
+	public async pluginCanBeUpdated(pluginId: string, installedVersion: string, currentJoplinVersion: string = undefined): Promise<boolean> {
 		const manifest = (await this.manifests()).find(m => m.id === pluginId);
 		if (!manifest) return false;
-		return compareVersions(installedVersion, manifest.version) < 0;
+		const appVersion = currentJoplinVersion ?? process.env.npm_package_version;
+		const newVersionExists = compareVersions(installedVersion, manifest.version) == -1;
+		const joplinVersionIsCompatible = compareVersions(manifest.app_min_version, appVersion) == -1;
+		return newVersionExists && joplinVersionIsCompatible;
 	}
 
 }
