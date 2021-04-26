@@ -352,6 +352,9 @@ class WebDavApi {
 			if (method === 'PUT') headers['Content-Type'] = 'text/plain';
 		}
 
+		// React-native has caching enabled by at least on Android (see https://github.com/laurent22/joplin/issues/4706 and the related PR).
+		// The below header disables caching for all versions, including desktop.
+		// This can potentially also help with misconfigured caching on WebDAV server.
 		if (!headers['Cache-Control']) {
 			headers['Cache-Control'] = 'no-store';
 		}
@@ -380,7 +383,7 @@ class WebDavApi {
 
 		let response = null;
 
-		// console.info('WebDAV Call', `${method} ${url}`, headers, options);
+		console.info('WebDAV Call', `${method} ${url}`, headers, options);
 		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
@@ -401,7 +404,7 @@ class WebDavApi {
 
 		this.logRequest_({ url: url, options: fetchOptions }, responseText);
 
-		// console.info('WebDAV Response', responseText);
+		console.info('WebDAV Response', responseText);
 
 		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
 		const newError = (message, code = 0) => {
