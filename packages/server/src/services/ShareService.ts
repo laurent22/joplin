@@ -19,6 +19,10 @@ export default class ShareService {
 		return this.models_;
 	}
 
+	public get maintenanceInProgress(): boolean {
+		return this.maintenanceInProgress_;
+	}
+
 	private async scheduleMaintenance() {
 		if (this.maintenanceScheduled_) return;
 		this.maintenanceScheduled_ = true;
@@ -44,7 +48,7 @@ export default class ShareService {
 
 	public async runInBackground() {
 		ChangeModel.eventEmitter.on('saved', this.scheduleMaintenance);
-		void this.maintenance();
+		await this.maintenance();
 	}
 
 }
