@@ -64,7 +64,23 @@ Normally the **bundler** should start automatically with the application. If it 
 	npm install
 	npm run watch # To watch for changes
 
-To test the extension please refer to the relevant pages for each browser: [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Trying_it_out) / [Chrome](https://developer.chrome.com/extensions/faq#faq-dev-01). Please note that the extension in dev mode will only connect to a dev instance of the desktop app (and vice-versa).
+Then depending on your browser, continue with the following steps.
+
+### Chrome
+1. Navigate to `chrome://extensions` and enabled “Developer Mode”.
+2. Click the “Load unpacked extension” button.
+3. Select the `app-clipper` directory.
+
+**Note** that every time you make changes to the extension codes, click the “Reload” button in the Chrome Extension Management page to see the changes.
+
+### Firefox
+1. Navigate to `about:debugging`.
+2. Click the “Load Temporary Add-on” button.
+3. Select the `manifest.json` file in the `app-clipper` directory.
+
+**Note** that in Firefox, the add-on needs to be manually loaded again when the browser starts.
+
+For more information, please refer to the relevant pages for each browser: [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Trying_it_out) / [Chrome](https://developer.chrome.com/extensions/faq#faq-dev-01). Please note that the extension in dev mode will only connect to a dev instance of the desktop app (and vice-versa).
 
 ## Watching files
 
