@@ -219,7 +219,7 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 	}
 
 	const getCondition = (term: Term) => {
-		if (fieldName === 'sourceurl') { return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`; } else { return `notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`; }
+		if (fieldName === 'sourceurl') { return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`; } else { return `notes_normalized.${fieldName === 'date' && term.name !== 'todo_due' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`; }
 	};
 
 	terms.forEach(term => {
