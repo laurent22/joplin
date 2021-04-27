@@ -219,7 +219,7 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 	}
 
 	const getCondition = (term: Term) => {
-		if (fieldName === 'sourceurl') { return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`; } else if (fieldName === 'date' && term.name === 'tododue') { return `todo_due ${term.negated ? '<' : '>='} ?`; } else { return `notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`; }
+		if (fieldName === 'sourceurl') { return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`; } else if (fieldName === 'date' && term.name === 'tododue') { return `todo_due ${term.negated ? '<' : '>='} ?`; } else if (fieldName === 'noteid') { return `id ${term.negated ? 'NOT' : 'LIKE'} ?`; } else { return `notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`; }
 	};
 
 	terms.forEach(term => {
@@ -263,6 +263,12 @@ const biConditionalFilter = (terms: Term[], conditions: string[], relation: Rela
 		}
 	});
 };
+
+const noteIdFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation) => {
+	const noteIdTerms = terms.filter(x => x.name === 'noteid');
+	genericFilter(noteIdTerms, conditions, params, relation, 'noteid');
+};
+
 
 const typeFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation) => {
 	const typeTerms = terms.filter(x => x.name === 'type');
@@ -412,6 +418,7 @@ export default function queryBuilder(terms: Term[]) {
 	FROM notes_fts
 	WHERE ${getConnective(terms, relation)}`);
 
+	noteIdFilter(terms, queryParts, params, relation);
 
 	notebookFilter(terms, queryParts, params, withs);
 

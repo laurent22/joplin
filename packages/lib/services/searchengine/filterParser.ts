@@ -69,7 +69,7 @@ const parseQuery = (query: string): Term[] => {
 	const validFilters = new Set(['any', 'title', 'body', 'tag',
 		'notebook', 'created', 'updated', 'type',
 		'iscompleted', 'tododue', 'latitude', 'longitude',
-		'altitude', 'resource', 'sourceurl']);
+		'altitude', 'resource', 'sourceurl', 'noteid']);
 
 	const terms = getTerms(query);
 
