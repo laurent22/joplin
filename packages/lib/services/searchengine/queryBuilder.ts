@@ -224,11 +224,11 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 
 	terms.forEach(term => {
 		conditions.push(`
-		${relation} ROWID IN (
+		${relation} ( ${term.name === 'todo_due' ? 'is_todo IS 1 AND ' : ''} ROWID IN (
 			SELECT ROWID
 			FROM notes_normalized
 			WHERE ${getCondition(term)}
-		)`);
+		))`);
 		params.push(term.value);
 	});
 };
