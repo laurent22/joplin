@@ -848,4 +848,24 @@ describe('services_SearchFilter', function() {
 
 	}));
 
+	it('should support filtering by noteid', (async () => {
+		let rows;
+		const note1 = await Note.save({ title: 'Note 1', body: 'body' });
+		const note2 = await Note.save({ title: 'Note 2', body: 'body' });
+		const note3 = await Note.save({ title: 'Note 3', body: 'body' });
+		await engine.syncTables();
+
+		rows = await engine.search(`noteid:${note1.id}`);
+		expect(rows.length).toBe(1);
+		expect(rows.map(r=>r.id)).toContain(note1.id);
+
+		rows = await engine.search(`any:1 noteid:${note1.id} noteid:${note2.id}`);
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(note1.id);
+		expect(rows.map(r=>r.id)).toContain(note2.id);
+
+		rows = await engine.search(`any:0 noteid:${note1.id} noteid:${note2.id}`);
+		expect(rows.length).toBe(0);
+	}));
+
 });
