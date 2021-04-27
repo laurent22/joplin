@@ -588,11 +588,11 @@ describe('services_SearchFilter', function() {
 
 		await engine.syncTables();
 
-		rows = await engine.search('todo_due:20210425');
+		rows = await engine.search('tododue:20210425');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(toDo1.id);
 
-		rows = await engine.search('-todo_due:20210425');
+		rows = await engine.search('-tododue:20210425');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(toDo2.id);
 	}));
