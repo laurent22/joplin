@@ -285,7 +285,7 @@ const dateFilter = (terms: Term[], conditons: string[], params: string[], relati
 		const yyyymmdd = /^[0-9]{8}$/;
 		const yyyymm = /^[0-9]{6}$/;
 		const yyyy = /^[0-9]{4}$/;
-		const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
+		const smartValue = /^(day|week|month|year)(\+|-)([0-9]+)$/i;
 
 		if (yyyymmdd.test(date)) {
 			return time.formatLocalToMs(date, 'YYYYMMDD').toString();
@@ -296,8 +296,10 @@ const dateFilter = (terms: Term[], conditons: string[], params: string[], relati
 		} else if (smartValue.test(date)) {
 			const match = smartValue.exec(date);
 			const timeUnit = match[1]; // eg. day, week, month, year
-			const num = Number(match[2]); // eg. 1, 12, 15
-			return time.goBackInTime(Date.now(), num, timeUnit);
+			const timeDirection = match[2]; // + or -
+			const num = Number(match[3]); // eg. 1, 12, 15
+
+			if (timeDirection === '+') { return time.goForwardInTime(Date.now(), num, timeUnit); } else { return time.goBackInTime(Date.now(), num, timeUnit); }
 		} else {
 			throw new Error('Invalid date format!');
 		}
