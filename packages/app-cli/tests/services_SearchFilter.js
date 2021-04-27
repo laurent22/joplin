@@ -580,6 +580,23 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(t3.id);
 	}));
 
+	it('should support filtering by todo_due date', (async () => {
+		let rows;
+		const toDo1 = await Note.save({ title: 'ToDo 1', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-04-27') });
+		const toDo2 = await Note.save({ title: 'ToDo 2', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-03-17') });
+		const note1 = await Note.save({ title: 'Note 1', body: 'Note' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('todo_due:20210425');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(toDo1.id);
+
+		rows = await engine.search('-todo_due:20210425');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(toDo2.id);
+	}));
+
 	it('should support filtering by latitude, longitude, altitude', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this week', latitude: 12.97, longitude: 88.88, altitude: 69.96 });
