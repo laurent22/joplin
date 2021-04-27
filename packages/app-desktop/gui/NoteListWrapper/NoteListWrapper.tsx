@@ -32,7 +32,7 @@ export default function NoteListWrapper(props: Props) {
 	}, [props.size, controlHeight]);
 
 	return (
-		<StyledRoot>
+		<StyledRoot className="note-list-wrapper">
 			<NoteListControls showNewNoteButtons={props.focusedField !== 'globalSearch'} height={controlHeight} />
 			<NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 		</StyledRoot>

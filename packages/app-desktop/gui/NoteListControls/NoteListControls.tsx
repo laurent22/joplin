@@ -52,14 +52,16 @@ export default function NoteListControls(props: Props) {
 		if (!props.showNewNoteButtons) return null;
 
 		return (
-			<ButtonContainer>
+			<ButtonContainer className="note-list-controls__button-container">
 				<StyledButton
+					className="note-list-controls__new-todo button"
 					tooltip={CommandService.instance().label('newTodo')}
 					iconName="far fa-check-square"
 					level={ButtonLevel.Primary}
 					onClick={onNewTodoButtonClick}
 				/>
 				<StyledButton
+					className="note-list-controls__new-note button"
 					tooltip={CommandService.instance().label('newNote')}
 					iconName="icon-note"
 					level={ButtonLevel.Primary}
@@ -70,8 +72,8 @@ export default function NoteListControls(props: Props) {
 	}
 
 	return (
-		<StyledRoot height={props.height}>
-			<SearchBar inputRef={searchBarRef}/>
+		<StyledRoot height={props.height} className={`note-list-controls ${!props.showNewNoteButtons ? 'note-list-controls--search-focused' : ''}`}>
+			<SearchBar inputRef={searchBarRef} className="note-list-controls__search-bar" />
 			{renderNewNoteButtons()}
 		</StyledRoot>
 	);

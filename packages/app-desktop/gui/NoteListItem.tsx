@@ -148,13 +148,13 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 		paddingRight: 4,
 		color: theme.color,
 	};
-	const watchedIcon = props.isWatched ? null : <i style={watchedIconStyle} className={'fa fa-share-square'}></i>;
+	const watchedIcon = props.isWatched ? null : <i style={watchedIconStyle} className={'note-list__watched-icon  fa fa-share-square'}></i>;
 
 	// Need to include "todo_completed" in key so that checkbox is updated when
 	// item is changed via sync.
 	return (
 		<StyledRoot
-			className="list-item-container"
+			className={`note-list-item ${(props.index + 1) % 2 === 0 ? 'note-list-item--even' : 'note-list-item--odd'} ${item.is_todo ? 'note-list-item--todo' : ''}`}
 			onDragOver={props.onNoteDragOver}
 			onDrop={props.onNoteDrop}
 			width={props.width}
@@ -165,6 +165,7 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 		>
 			{renderCheckbox()}
 			<a
+				className="note-list-item__anchor"
 				ref={anchorRef}
 				onContextMenu={props.onContextMenu}
 				href="#"
