@@ -137,6 +137,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
 	const [draggingStarted, setDraggingStarted] = useState(false);
+	const [leftExtraToolbarWidth, setLeftExtraToolbarWidth] = useState(null);
 
 	const props_onMessage = useRef(null);
 	props_onMessage.current = props.onMessage;
@@ -172,6 +173,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			if (editor && editor.getDoc()) editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
 		}, 10);
 	};
+
+	useEffect(() => {
+		setLeftExtraToolbarWidth(document.getElementById('leftExtraToolbarContainer').offsetWidth);
+	}, [props.noteToolbarButtonInfos]);
 
 	const insertResourcesIntoContent = useCallback(async (filePaths: string[] = null, options: any = null) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
@@ -396,7 +401,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(`
 			.joplin-tinymce .tox-editor-header {
-				padding-left: ${document.getElementById('leftExtraToolbarContainer').offsetWidth}px;
+				padding-left: ${leftExtraToolbarWidth}px;
 				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
 			}
 			
@@ -508,7 +513,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [editorReady, props.themeId, props.noteToolbarButtonInfos]);
+	}, [editorReady, props.themeId, leftExtraToolbarWidth]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
