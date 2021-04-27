@@ -343,7 +343,7 @@ export default class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -862,6 +862,48 @@ export default class JoplinDatabase extends Database {
 			if (targetVersion == 34) {
 				queries.push('CREATE VIRTUAL TABLE search_aux USING fts4aux(notes_fts)');
 				queries.push('CREATE VIRTUAL TABLE notes_spellfix USING spellfix1');
+			}
+
+			if (targetVersion == 35) {
+				queries.push('DROP TRIGGER notes_after_update');
+				queries.push('DROP TRIGGER notes_after_insert');
+				queries.push('DROP TABLE notes_fts');
+
+				queries.push('ALTER TABLE notes_normalized ADD COLUMN todo_due INT NOT NULL DEFAULT 0');
+
+				queries.push('CREATE INDEX notes_normalized_todo_due ON notes_normalized (todo_due)');
+
+				// recreate virtual table, because ALTER table not possible
+				const tableFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
+				const newVirtualTableSql = `
+					CREATE VIRTUAL TABLE notes_fts USING fts4(
+						content="notes_normalized",
+						notindexed="id",
+						notindexed="user_created_time",
+						notindexed="user_updated_time",
+						notindexed="is_todo",
+						notindexed="todo_completed",
+						notindexed="todo_due",
+						notindexed="parent_id",
+						notindexed="latitude",
+						notindexed="longitude",
+						notindexed="altitude",
+						notindexed="source_url",
+						${tableFields}
+					);`
+				;
+
+				queries.push(this.sqlStringToLines(newVirtualTableSql)[0]);
+
+				queries.push(`
+					CREATE TRIGGER notes_after_update AFTER UPDATE ON notes_normalized BEGIN
+						INSERT INTO notes_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
+						INSERT INTO notes_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
+					END;`);
+				queries.push(this.addMigrationFile(35));
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };
