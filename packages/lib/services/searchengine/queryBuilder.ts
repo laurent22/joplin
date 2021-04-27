@@ -303,7 +303,7 @@ const dateFilter = (terms: Term[], conditons: string[], params: string[], relati
 		}
 	};
 
-	const dateTerms = terms.filter(x => x.name === 'created' || x.name === 'updated');
+	const dateTerms = terms.filter(x => x.name === 'created' || x.name === 'updated' || x.name === 'todo_due');
 	const unixDateTerms = dateTerms.map(term => { return { ...term, value: getUnixMs(term.value) }; });
 	genericFilter(unixDateTerms, conditons, params, relation, 'date');
 };
@@ -405,6 +405,7 @@ export default function queryBuilder(terms: Term[]) {
 	notes_fts.user_updated_time,
 	notes_fts.is_todo,
 	notes_fts.todo_completed,
+	notes_fts.todo_due,
 	notes_fts.parent_id
 	FROM notes_fts
 	WHERE ${getConnective(terms, relation)}`);
