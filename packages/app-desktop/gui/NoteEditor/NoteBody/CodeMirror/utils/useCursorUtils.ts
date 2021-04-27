@@ -3,7 +3,7 @@ import Setting from '@joplin/lib/models/Setting';
 export function modifyListLines(lines: string[],num: number,string1: string) {
 	for (let j = 0; j < lines.length; j++) {
 		const line = lines[j];
-		if (!line) continue;
+		if (!line && j == lines.length - 1) continue;
 		// Only add the list token if it's not already there
 		// if it is, remove it
 		if (!line.startsWith(string1)) {
