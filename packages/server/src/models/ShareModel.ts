@@ -94,6 +94,15 @@ export default class ShareModel extends BaseModel<Share> {
 		return query;
 	}
 
+	// Returns all user IDs concerned by the share. That includes all the users
+	// the folder has been shared with, as well as the folder owner.
+	private async allShareUserIds(share:Share) {
+		const shareUsers = await this.models().shareUser().byShareId(share.id);
+		const userIds = shareUsers.map(su => su.user_id);
+		userIds.push(share.owner_id);
+		return userIds;
+	}
+
 	public async updateSharedItems() {
 		interface ResourceChanges {
 			share: Share;
@@ -106,11 +115,11 @@ export default class ShareModel extends BaseModel<Share> {
 		let resourceChanges: ResourceChangesPerShareId = {};
 
 		const handleAddedToSharedFolder = async (item: Item, shareInfo: SharedRootInfo) => {
-			const shareUsers = await this.models().shareUser().byShareId(shareInfo.share.id);
+			const userIds = await this.allShareUserIds(shareInfo.share);
 
-			for (const shareUser of shareUsers) {
+			for (const userId of userIds) {
 				try {
-					await this.models().userItem().add(shareUser.user_id, item.id);
+					await this.models().userItem().add(userId, item.id);
 				} catch (error) {
 					if (isUniqueConstraintError(error)) {
 						// Ignore - it means this user already has this item
@@ -122,6 +131,7 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleRemovedFromSharedFolder = async (item: Item, shareInfo: SharedRootInfo) => {
+			// TODO: Also apply allShareUserId logic
 			const shareUsers = await this.models().shareUser().byShareId(shareInfo.share.id);
 
 			for (const shareUser of shareUsers) {
@@ -183,6 +193,7 @@ export default class ShareModel extends BaseModel<Share> {
 		const handleCreatedItem = async (_change: Change, item: Item) => {
 			if (!item.jop_parent_id) return;
 			const shareInfo = await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id);
+
 			if (!shareInfo) return;
 			await handleAddedToSharedFolder(item, shareInfo);
 		};
@@ -292,6 +303,41 @@ export default class ShareModel extends BaseModel<Share> {
 				await this.models().userItem().remove(toUserId, resourceBlobItem.id);
 			}
 		}
+	}
+
+	public async shareFolder(owner:User, folderId:string):Promise<Share> {
+		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
+		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
+
+		const share = await this.models().share().byUserAndItemId(owner.id, folderItem.id);
+		if (share) return share;
+
+		const shareToSave = {
+			type: ShareType.JoplinRootFolder,
+			item_id: folderItem.id,
+			owner_id: owner.id,
+			folder_id: folderId,
+		};
+
+		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
+
+		return super.save(shareToSave);
+	}
+
+	public async shareNote(owner:User, noteId:string):Promise<Share> {
+		const noteItem = await this.models().item().loadByJopId(owner.id, noteId);
+		if (!noteItem) throw new ErrorNotFound(`No such note: ${noteId}`);
+
+		const shareToSave = {
+			type: ShareType.Link,
+			item_id: noteItem.id,
+			owner_id: owner.id,
+			note_id: noteId,
+		};
+
+		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
+
+		return this.save(shareToSave);
 	}
 
 	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {

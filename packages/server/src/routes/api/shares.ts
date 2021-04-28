@@ -24,43 +24,18 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	if (fields.folder_id) shareInput.folder_id = fields.folder_id;
 	if (fields.note_id) shareInput.note_id = fields.note_id;
 
-	let shareToSave: Share = {};
-
 	// - The API end point should only expose two ways of sharing:
 	//     - By folder_id (JoplinRootFolder)
 	//     - By note_id (Link)
 	// - Additionally, the App method is available, but not exposed via the API.
 
 	if (shareInput.folder_id) {
-		const folderItem = await ctx.models.item().loadByJopId(ctx.owner.id, shareInput.folder_id);
-		if (!folderItem) throw new ErrorNotFound(`No such folder: ${shareInput.folder_id}`);
-
-		const share = await ctx.models.share().byUserAndItemId(ctx.owner.id, folderItem.id);
-		if (share) return share;
-
-		shareToSave = {
-			type: ShareType.JoplinRootFolder,
-			item_id: folderItem.id,
-			owner_id: ctx.owner.id,
-			folder_id: shareInput.folder_id,
-		};
+		return ctx.models.share().shareFolder(ctx.owner, shareInput.folder_id);
 	} else if (shareInput.note_id) {
-		const noteItem = await ctx.models.item().loadByJopId(ctx.owner.id, shareInput.note_id);
-		if (!noteItem) throw new ErrorNotFound(`No such note: ${shareInput.note_id}`);
-
-		shareToSave = {
-			type: ShareType.Link,
-			item_id: noteItem.id,
-			owner_id: ctx.owner.id,
-			note_id: shareInput.note_id,
-		};
+		return ctx.models.share().shareNote(ctx.owner, shareInput.note_id);
 	} else {
 		throw new ErrorBadRequest('Either folder_id or note_id must be provided');
-	}
-
-	await shareModel.checkIfAllowed(ctx.owner, AclAction.Create, shareToSave);
-
-	return shareModel.save(shareToSave);
+	}	
 });
 
 router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {

@@ -1,3 +1,4 @@
+import { Knex } from 'knex';
 import { Change, ChangeType, Item, Uuid } from '../db';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
@@ -79,9 +80,17 @@ export default class ChangeModel extends BaseModel<Change> {
 			if (!changeAtCursor) throw new ErrorResyncRequired();
 		}
 
+		// When need to get:
+		//
+		// - All the CREATE and DELETE changes associated with the user
+		// - All the UPDATE changes that applies to items associated with the
+		//   user.
+		//
+		// UPDATE changes do not have the user_id set because they are specific
+		// to the item, not to a particular user.
+
 		const query = this
 			.db('changes')
-			.leftJoin('user_items', 'changes.item_id', 'user_items.item_id')
 			.select([
 				'changes.id',
 				'changes.item_id',
@@ -89,10 +98,14 @@ export default class ChangeModel extends BaseModel<Change> {
 				'changes.type',
 				'changes.updated_time',
 			])
-			.where(function() {
-				void this
-					.where('user_items.user_id', userId)
-					.orWhere('changes.user_id', userId);
+			.where(function () {
+				void this.where('changes.user_id', userId)
+					// Need to use a RAW query here because Knex has a "not a
+					// bug" bug that makes it go into infinite loop in some
+					// contexts, possibly only when running inside Jest (didn't
+					// test outside).
+					// https://github.com/knex/knex/issues/1851
+					.orWhereRaw('changes.type = ? AND changes.item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
 			});
 
 		// If a cursor was provided, apply it to both queries.

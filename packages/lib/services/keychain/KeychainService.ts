@@ -18,11 +18,12 @@ export default class KeychainService extends BaseService {
 		this.driver = driver;
 	}
 
-	// This is to programatically disable the keychain service, regardless whether keychain
-	// is supported or not in the system (In other word, this might "enabled" but nothing
-	// will be saved to the keychain if there isn't one).
+	// This is to programatically disable the keychain service, whether keychain
+	// is supported or not in the system (In other word, this be might "enabled"
+	// but nothing will be saved to the keychain if there isn't one).
 	public get enabled(): boolean {
-		return this.enabled_;
+		if (!this.enabled_) return false;
+		return Setting.value('keychain.supported') === 1;
 	}
 
 	public set enabled(v: boolean) {

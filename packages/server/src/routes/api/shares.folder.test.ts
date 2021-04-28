@@ -16,7 +16,7 @@ describe('shares.folder', function() {
 	});
 
 	afterAll(async () => {
-		await afterAllTests();
+		// await afterAllTests();
 	});
 
 	beforeEach(async () => {
@@ -537,6 +537,36 @@ describe('shares.folder', function() {
 		latestChanges2 = await models().change().allForUser(user2.id, { cursor: cursor2 });
 		expect(latestChanges2.items.length).toBe(2);
 	});
+
+	test('should get delta changes - user 1 and 2 are in sync, user 2 adds a note to share folder', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		let latestChanges1 = await models().change().allForUser(user1.id);
+		const cursor1 = latestChanges1.cursor;
+
+		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
+		await models().share().updateSharedItems();
+		
+		await createNote(session2.id, { id: '00000000000000000000000000000002', title: 'from user 2', parent_id: folderItem1.jop_id });
+		await models().share().updateSharedItems();
+
+		latestChanges1 = await models().change().allForUser(user1.id, { cursor: cursor1 });
+		expect(latestChanges1.items.length).toBe(1);
+		expect(latestChanges1.items[0].item_name).toBe('00000000000000000000000000000002.md');
+	});
+
+
+
+
+
 
 	// test('should apply ACL', async function() {
 	// 	const { session: session1 } = await createUserAndSession(1);
