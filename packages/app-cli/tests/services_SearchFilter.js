@@ -866,6 +866,11 @@ describe('services_SearchFilter', function() {
 
 		rows = await engine.search(`any:0 noteid:${note1.id} noteid:${note2.id}`);
 		expect(rows.length).toBe(0);
+
+		rows = await engine.search(`-noteid:${note2.id}`);
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(note1.id);
+		expect(rows.map(r=>r.id)).toContain(note3.id);
 	}));
 
 });
