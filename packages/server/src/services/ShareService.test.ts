@@ -1,6 +1,7 @@
 import { ShareType } from '../db';
 import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItemTree, updateNote, msleep } from '../utils/testing/testUtils';
+import { Env } from '../utils/types';
 import ShareService from './ShareService';
 
 describe('ShareService', function() {
@@ -23,7 +24,7 @@ describe('ShareService', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		const service = new ShareService(models());
+		const service = new ShareService(Env.Dev, models());
 		void service.runInBackground();
 
 		await createItemTree(user1.id, '', {

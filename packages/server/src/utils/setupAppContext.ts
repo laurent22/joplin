@@ -8,9 +8,9 @@ import routes from '../routes/routes';
 import ShareService from '../services/ShareService';
 import { Services } from '../services/types';
 
-function setupServices(models: Models): Services {
+function setupServices(env: Env, models: Models): Services {
 	return {
-		share: new ShareService(models),
+		share: new ShareService(env, models),
 	};
 }
 
@@ -19,7 +19,7 @@ export default async function(appContext: AppContext, env: Env, dbConnection: Db
 	appContext.db = dbConnection;
 	appContext.models = newModelFactory(appContext.db, config().baseUrl);
 	appContext.apps = new Applications(appContext.models);
-	appContext.services = setupServices(appContext.models);
+	appContext.services = setupServices(env, appContext.models);
 	await appContext.apps.initializeApps();
 	appContext.appLogger = appLogger;
 	appContext.routes = { ...routes };

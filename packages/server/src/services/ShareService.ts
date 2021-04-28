@@ -1,22 +1,29 @@
 import Logger from '@joplin/lib/Logger';
 import ChangeModel from '../models/ChangeModel';
 import { Models } from '../models/factory';
+import { Env } from '../utils/types';
 
 const logger = Logger.create('ShareService');
 
 export default class ShareService {
 
+	private env_: Env;
 	private models_: Models;
 	private maintenanceScheduled_: boolean = false;
 	private maintenanceInProgress_: boolean = false;
 
-	public constructor(models: Models) {
+	public constructor(env:Env, models: Models) {
+		this.env_ = env;
 		this.models_ = models;
 		this.scheduleMaintenance = this.scheduleMaintenance.bind(this);
 	}
 
 	public get models(): Models {
 		return this.models_;
+	}
+
+	public get env(): Env {
+		return this.env_;
 	}
 
 	public get maintenanceInProgress(): boolean {
@@ -30,7 +37,7 @@ export default class ShareService {
 		setTimeout(() => {
 			this.maintenanceScheduled_ = false;
 			void this.maintenance();
-		}, 10000);
+		}, this.env === Env.Dev ? 2000 : 10000);
 	}
 
 	private async maintenance() {
