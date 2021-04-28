@@ -1,14 +1,14 @@
-import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient } from './test-utils';
+import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient, joplinServerApi } from './test-utils';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
+import Folder from '@joplin/lib/models/Folder';
 
 describe('Synchronizer.sharing', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
-		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 		done();
 	});
@@ -34,6 +34,29 @@ describe('Synchronizer.sharing', function() {
 		const sharedResourceIds = await Resource.sharedResourceIds();
 		expect(sharedResourceIds.length).toBe(1);
 		expect(sharedResourceIds[0]).toBe(resourceId1);
+	}));
+
+	it('should share items', (async () => {
+		await setupDatabaseAndSynchronizer(1, { userEmail: 'user1@example.com' });
+		await switchClient(1);
+
+		const api = joplinServerApi();
+		await api.exec('POST', 'api/debug', null, { action: 'createTestUsers' });
+		await api.clearSession();
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+
+		await synchronizerStart();
+
+		await setupDatabaseAndSynchronizer(2, { userEmail: 'user2@example.com' });
+		await switchClient(2);
+
+		await synchronizerStart();
+
+		await switchClient(1);
+		
+		console.info(await Note.all());
 	}));
 
 });

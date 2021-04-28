@@ -2,6 +2,7 @@ import { Routers } from '../utils/routeUtils';
 
 import apiSessions from './api/sessions';
 import apiPing from './api/ping';
+import apiDebug from './api/debug';
 import apiItems from './api/items';
 import apiShares from './api/shares';
 import apiShareUsers from './api/share_users';
@@ -20,6 +21,7 @@ import defaultRoute from './default';
 const routes: Routers = {
 	'api/ping': apiPing,
 	'api/sessions': apiSessions,
+	'api/debug': apiDebug,
 	'api/items': apiItems,
 	'api/shares': apiShares,
 	'api/share_users': apiShareUsers,

@@ -1,11 +1,12 @@
-import { connectDb, disconnectDb } from '../db';
+import config from '../config';
+import { connectDb, DbConnection, disconnectDb, dropTables, migrateDb } from '../db';
 import newModelFactory from '../models/factory';
 import { Config } from '../utils/types';
 import { createDb, dropDb } from './dbTools';
 
-export async function handleDebugCommands(argv: any, config: Config): Promise<boolean> {
+export async function handleDebugCommands(argv: any, db:DbConnection, config: Config): Promise<boolean> {
 	if (argv.debugCreateTestUsers) {
-		await createTestUsers(config);
+		await createTestUsers(db, config);
 	} else {
 		return false;
 	}
@@ -13,11 +14,9 @@ export async function handleDebugCommands(argv: any, config: Config): Promise<bo
 	return true;
 }
 
-export async function createTestUsers(config: Config) {
-	await dropDb(config.database, { ignoreIfNotExists: true });
-	await createDb(config.database);
-
-	const db = await connectDb(config.database);
+export async function createTestUsers(db:DbConnection, config: Config) {
+	await dropTables(db);
+	await migrateDb(db);
 
 	const models = newModelFactory(db, config.baseUrl);
 
@@ -28,6 +27,4 @@ export async function createTestUsers(config: Config) {
 			full_name: `User ${userNum}`,
 		});
 	}
-
-	await disconnectDb(db);
 }

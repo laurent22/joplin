@@ -103,7 +103,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 		type ResourceChangesPerShareId = Record<Uuid, ResourceChanges>;
 
-		const resourceChanges: ResourceChangesPerShareId = {};
+		let resourceChanges: ResourceChangesPerShareId = {};
 
 		const handleAddedToSharedFolder = async (item: Item, shareInfo: SharedRootInfo) => {
 			const shareUsers = await this.models().shareUser().byShareId(shareInfo.share.id);
@@ -188,6 +188,8 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleUpdatedItem = async (change: Change, item: Item) => {
+			if (![ModelType.Note, ModelType.Folder].includes(item.jop_type)) return;
+
 			const previousItem = this.models().change().unserializePreviousItem(change.previous_item);
 
 			const previousShareInfo = previousItem?.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(previousItem.jop_parent_id) : null;
@@ -262,6 +264,8 @@ export default class ShareModel extends BaseModel<Share> {
 						await this.updateResourceShareStatus(false, rc.share.id, rc.share.owner_id, shareUser.user_id, rc.removed);
 					}
 				}
+
+				resourceChanges = {};
 
 				await this.models().keyValue().setValue('ShareService::latestProcessedChange', changes[changes.length - 1].id);
 			});

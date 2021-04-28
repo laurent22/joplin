@@ -53,7 +53,7 @@ describe('ShareService', function() {
 		}
 
 		// Since the note has been moved to a different folder, the maintenance
-		// task should have updated the shared item and remove note 1 from user
+		// task should have updated the shared items and removed note 1 from user
 		// 2's children.
 		const children = await models().item().children(user2.id);
 		expect(children.items.length).toBe(1);

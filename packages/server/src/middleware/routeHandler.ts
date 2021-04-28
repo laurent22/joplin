@@ -1,4 +1,3 @@
-import routes from '../routes/routes';
 import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from '../utils/routeUtils';
 import { AppContext, Env } from '../utils/types';
 import MustacheService, { isView, View } from '../services/MustacheService';
@@ -16,7 +15,7 @@ export default async function(ctx: AppContext) {
 	ctx.appLogger().info(`${ctx.request.method} ${ctx.path}`);
 
 	try {
-		const responseObject = await execRequest(routes, ctx);
+		const responseObject = await execRequest(ctx.routes, ctx);
 
 		if (responseObject instanceof Response) {
 			ctx.response = responseObject.response;

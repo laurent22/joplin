@@ -214,7 +214,8 @@ export enum NotificationLevel {
 
 export enum ItemType {
     Item = 1,
-    User,
+	UserItem = 2,
+	User,
 }
 
 export enum ChangeType {

@@ -397,26 +397,8 @@ export default class ItemModel extends BaseModel<Item> {
 		if (!ids.length) return;
 
 		const shares = await this.models().share().byItemIds(ids);
-		const deletedItemUserIds = await this.models().userItem().userIdsByItemIds(ids);
-		const items = await this.db(this.tableName).select('id', 'name').whereIn('id', ids);
 
 		await this.withTransaction(async () => {
-			const changeModel = this.models().change();
-
-			for (const item of items) {
-				const userIds = deletedItemUserIds[item.id];
-				for (const userId of userIds) {
-					await changeModel.save({
-						item_type: this.itemType,
-						item_id: item.id,
-						item_name: item.name,
-						type: ChangeType.Delete,
-						previous_item: '',
-						user_id: userId,
-					});
-				}
-			}
-
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids);
 			await this.models().itemResource().deleteByItemIds(ids);
@@ -455,16 +437,20 @@ export default class ItemModel extends BaseModel<Item> {
 
 			if (isNew) await this.models().userItem().add(userId, item.id);
 
-			const changeModel = this.models().change();
+			// We only record updates. This because Create and Update events are
+			// per user, whenever a user_item is created or deleted.
+			if (!isNew) {
+				const changeModel = this.models().change();
 
-			await changeModel.save({
-				item_type: this.itemType,
-				item_id: item.id,
-				item_name: item.name || previousItem.name,
-				type: isNew ? ChangeType.Create : ChangeType.Update,
-				previous_item: previousItem ? changeModel.serializePreviousItem(previousItem) : '',
-				user_id: '',
-			});
+				await changeModel.save({
+					item_type: this.itemType,
+					item_id: item.id,
+					item_name: item.name || previousItem.name,
+					type: isNew ? ChangeType.Create : ChangeType.Update,
+					previous_item: previousItem ? changeModel.serializePreviousItem(previousItem) : '',
+					user_id: '',
+				});
+			}
 
 			return item;
 		});

@@ -503,6 +503,41 @@ describe('shares.folder', function() {
 		}
 	});
 
+	test('should get delta changes - user 2 sync, user 1 share and sync, user 2 sync', async function() {
+		// - User 1 sync
+		// - User 2 sync - and keep delta2
+		// - User 1 share a folder with user 2
+		// - User 2 accepts
+		// - User 2 sync from delta2
+		// => Should get shared folder and its content
+
+		// When fetching changes - should add all user_items that have been created since delta2
+		// And emit Create event for associated item ID
+
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		await createItemTree(user2.id, '', {
+			'200000000000000000000000000000F2': {},
+		});
+
+		let latestChanges2 = await models().change().allForUser(user2.id);
+		const cursor2 = latestChanges2.cursor;
+
+		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
+		await models().share().updateSharedItems();
+
+		latestChanges2 = await models().change().allForUser(user2.id, { cursor: cursor2 });
+		expect(latestChanges2.items.length).toBe(2);
+	});
+
 	// test('should apply ACL', async function() {
 	// 	const { session: session1 } = await createUserAndSession(1);
 	// 	const { session: session2 } = await createUserAndSession(2);

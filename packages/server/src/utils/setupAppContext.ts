@@ -22,5 +22,7 @@ export default async function(appContext: AppContext, env: Env, dbConnection: Db
 	appContext.services = setupServices(appContext.models);
 	await appContext.apps.initializeApps();
 	appContext.appLogger = appLogger;
-	appContext.routes = routes;
+	appContext.routes = { ...routes };
+
+	if (env === Env.Prod) delete appContext.routes['api/debug'];
 }

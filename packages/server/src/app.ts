@@ -100,14 +100,6 @@ async function main() {
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
 
-	if (env !== Env.Prod) {
-		const done = await handleDebugCommands(argv, config());
-		if (done) {
-			appLogger().info('Debug command has been executed');
-			return;
-		}
-	}
-
 	if (argv.migrateDb) {
 		const db = await connectDb(config().database);
 		await migrateDb(db);
@@ -145,6 +137,13 @@ async function main() {
 
 		appLogger().info('Starting services...');
 		await startServices(appContext);
+
+		// if (env !== Env.Prod) {
+		// 	const done = await handleDebugCommands(argv, appContext.db, config());
+		// 	if (done) {
+		// 		appLogger().info('Debug command has been executed. Now starting server...');
+		// 	}
+		// }
 
 		appLogger().info(`Call this for testing: \`curl ${config().baseUrl}/api/ping\``);
 
