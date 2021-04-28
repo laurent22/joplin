@@ -130,12 +130,22 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
-		const handleRemovedFromSharedFolder = async (item: Item, shareInfo: SharedRootInfo) => {
-			// TODO: Also apply allShareUserId logic
-			const shareUsers = await this.models().shareUser().byShareId(shareInfo.share.id);
+		const handleRemovedFromSharedFolder = async (change:Change, item: Item, shareInfo: SharedRootInfo) => {
+			// This is called when a note parent ID changes and is moved out of
+			// the shared folder. In that case, we need to unshare the item from
+			// all users, except the one who did the action.
+			//
+			// - User 1 shares a folder with user 2
+			// - User 2 moves a note out of the shared folder
+			// - User 1 should no longer see the note. User 2 still sees it
+			//   since they have moved it to one of their own folders.
 
-			for (const shareUser of shareUsers) {
-				await this.models().userItem().remove(shareUser.user_id, item.id);
+			const userIds = await this.allShareUserIds(shareInfo.share);
+
+			for (const userId of userIds) {
+				if (change.user_id !== userId) {
+					await this.models().userItem().remove(userId, item.id);
+				}
 			}
 		};
 
@@ -222,13 +232,13 @@ export default class ShareModel extends BaseModel<Share> {
 
 			// Item was in a shared folder and is no longer in one
 			if (previousShareInfo && !currentShareInfo) {
-				await handleRemovedFromSharedFolder(item, previousShareInfo);
+				await handleRemovedFromSharedFolder(change, item, previousShareInfo);
 				return;
 			}
 
 			// Item was in a shared folder and has been moved to a different shared folder
 			if (previousShareInfo && currentShareInfo && previousShareInfo.item.jop_parent_id !== currentShareInfo.item.jop_parent_id) {
-				await handleRemovedFromSharedFolder(item, previousShareInfo);
+				await handleRemovedFromSharedFolder(change, item, previousShareInfo);
 				await handleAddedToSharedFolder(item, currentShareInfo);
 				return;
 			}

@@ -1,11 +1,13 @@
 import { ChangeType, ItemType, UserItem, Uuid } from '../db';
 import BaseModel, { DeleteOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
+import { ErrorNotFound } from '../utils/errors';
 
 export interface UserItemDeleteOptions extends DeleteOptions {
 	byItemIds?: string[],
 	byShareId?: string,
 	byUserId?: string;
+	byUserItem?: UserItem,
 }
 
 export default class UserItemModel extends BaseModel<UserItem> {
@@ -27,11 +29,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	}
 
 	public async remove(userId: Uuid, itemId: Uuid): Promise<void> {
-		await this
-			.db(this.tableName)
-			.where('user_id', '=', userId)
-			.where('item_id', '=', itemId)
-			.del();
+		await this.deleteByUserItem(userId, itemId);
 	}
 
 	public async userIdsByItemIds(itemIds: Uuid[]): Promise<Record<Uuid, Uuid[]>> {
@@ -56,19 +54,26 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return this.db(this.tableName).where('user_id', '=', userId);
 	}
 
+	public async byUserAndItemId(userId: Uuid, itemId:Uuid): Promise<UserItem> {
+		return this.db(this.tableName).where('user_id', '=', userId).where('item_id', '=', itemId).first();
+	}
+
+	public async deleteByUserItem(userId: Uuid, itemId: Uuid): Promise<void> {
+		const userItem = await this.byUserAndItemId(userId, itemId);
+		if (!userItem) throw new ErrorNotFound('No such user_item: ' + userId + ' / ' + itemId);
+		await this.deleteBy({ byUserItem: userItem });
+	}
+
 	public async deleteByItemIds(itemIds: Uuid[]): Promise<void> {
 		await this.deleteBy({ byItemIds: itemIds });
-		//await this.db(this.tableName).whereIn('item_id', itemIds).delete();
 	}
 
 	public async deleteByShareId(shareId: Uuid): Promise<void> {
 		await this.deleteBy({ byShareId: shareId });
-		// await this.db(this.tableName).where('share_id', '=', shareId).delete();
 	}
 
 	public async deleteByUserId(userId: Uuid): Promise<void> {
 		await this.deleteBy({ byUserId: userId });
-		// await this.db(this.tableName).where('user_id', '=', userId).delete();
 	}
 
 	public async save(userItem: UserItem, options: SaveOptions = {}): Promise<UserItem> {
@@ -103,6 +108,8 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			userItems = await this.byShareId(options.byShareId);
 		} else if (options.byUserId) {
 			userItems = await this.byUserId(options.byUserId);
+		} else if (options.byUserItem) {
+			userItems = [options.byUserItem];
 		} else {
 			throw new Error('Invalid options');
 		}

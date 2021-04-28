@@ -116,6 +116,7 @@ describe('shares.resource', function() {
 		}
 
 		// One resource is added to the note
+		
 		{
 			const note = await models().item().loadAsJoplinItem(noteItem.id);
 			await updateNote(session1.id, { ...note, body: `[testing](:/${resourceItem1.jop_id}) [testing](:/${resourceItem2.jop_id})` });

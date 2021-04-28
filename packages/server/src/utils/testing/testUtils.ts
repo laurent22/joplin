@@ -327,7 +327,6 @@ export async function createResource(sessionId: string, resource: ResourceEntity
 
 export function checkContextError(context: AppContext) {
 	if (context.response.status >= 400) {
-		// console.info(context.response.body);
 		throw new ApiError(`${context.method} ${context.path} ${JSON.stringify(context.response)}`, context.response.status);
 	}
 }

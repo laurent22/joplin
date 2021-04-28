@@ -408,14 +408,14 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async saveForUser(userId: Uuid, item: Item, options: SaveOptions = {}): Promise<Item> {
+		if (!userId) throw new Error('userId is required');
+
 		item = { ... item };
 		const isNew = await this.isNew(item, options);
 
 		if (item.content) {
 			item.content_size = item.content.byteLength;
 		}
-
-		if (isNew && !userId) throw new Error('userId is required when saving a new item');
 
 		let previousItem: ChangePreviousItem = null;
 
@@ -448,7 +448,7 @@ export default class ItemModel extends BaseModel<Item> {
 					item_name: item.name || previousItem.name,
 					type: isNew ? ChangeType.Create : ChangeType.Update,
 					previous_item: previousItem ? changeModel.serializePreviousItem(previousItem) : '',
-					user_id: '',
+					user_id: userId,
 				});
 			}
 
@@ -456,8 +456,9 @@ export default class ItemModel extends BaseModel<Item> {
 		});
 	}
 
-	public async save(item: Item, options: SaveOptions = {}): Promise<Item> {
-		return this.saveForUser('', item, options);
+	public async save(_item: Item, _options: SaveOptions = {}): Promise<Item> {
+		throw new Error('Use saveForUser()');
+		// return this.saveForUser('', item, options);
 	}
 
 }

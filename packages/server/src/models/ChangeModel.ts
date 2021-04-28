@@ -1,4 +1,3 @@
-import { Knex } from 'knex';
 import { Change, ChangeType, Item, Uuid } from '../db';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
@@ -92,20 +91,20 @@ export default class ChangeModel extends BaseModel<Change> {
 		const query = this
 			.db('changes')
 			.select([
-				'changes.id',
-				'changes.item_id',
-				'changes.item_name',
-				'changes.type',
-				'changes.updated_time',
+				'id',
+				'item_id',
+				'item_name',
+				'type',
+				'updated_time',
 			])
 			.where(function () {
-				void this.where('changes.user_id', userId)
+				void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
 					// Need to use a RAW query here because Knex has a "not a
 					// bug" bug that makes it go into infinite loop in some
 					// contexts, possibly only when running inside Jest (didn't
 					// test outside).
 					// https://github.com/knex/knex/issues/1851
-					.orWhereRaw('changes.type = ? AND changes.item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
+					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
 			});
 
 		// If a cursor was provided, apply it to both queries.

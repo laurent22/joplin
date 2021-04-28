@@ -45,12 +45,12 @@ describe('ChangeModel', function() {
 		const changeModel = models().change();
 
 		await msleep(1); const item1 = await makeTestItem(user.id); // [1] CREATE 1
-		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1a' }); // [2] UPDATE 1a
-		await msleep(1); await itemModel.save({ id: item1.id, name: 'test_mod_1b' }); // [3] UPDATE 1b
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: 'test_mod_1a' }); // [2] UPDATE 1a
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: 'test_mod_1b' }); // [3] UPDATE 1b
 		await msleep(1); const item2 = await makeTestItem(user.id); // [4] CREATE 2
-		await msleep(1); await itemModel.save({ id: item2.id, name: 'test_mod_2a' }); // [5] UPDATE 2a
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: 'test_mod_2a' }); // [5] UPDATE 2a
 		await msleep(1); await itemModel.delete(item1.id); // [6] DELETE 1
-		await msleep(1); await itemModel.save({ id: item2.id, name: 'test_mod_2b' }); // [7] UPDATE 2b
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: 'test_mod_2b' }); // [7] UPDATE 2b
 		await msleep(1); const item3 = await makeTestItem(user.id); // [8] CREATE 3
 
 		// Check that the 8 changes were created
@@ -127,7 +127,7 @@ describe('ChangeModel', function() {
 
 		let i = 1;
 		await msleep(1); const item1 = await makeTestItem(user.id); // CREATE 1
-		await msleep(1); await itemModel.save({ id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
 
 		await expectThrow(async () => changeModel.allForUser(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
 	});
