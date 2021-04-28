@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.storage.StorageManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -52,6 +54,7 @@ public class DirectoryPickerModule extends ReactContextBaseJavaModule implements
     public void pick(Promise promise) {
         try {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
@@ -84,9 +87,14 @@ public class DirectoryPickerModule extends ReactContextBaseJavaModule implements
         reactContext.getContentResolver().takePersistableUriPermission(uri,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION & Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        map.putString("uri", uri.toString());
-        map.putString("path", getFileName(uri));
-        promise.resolve(map);
+        String fileName = getFileName(uri);
+        if (fileName != null) {
+            map.putString("uri", uri.toString());
+            map.putString("path", fileName);
+            promise.resolve(map);
+        } else {
+            promise.reject("3", "Failed to resolve file name for URI " + uri.toString());
+        }
     }
 
     @Override
@@ -109,7 +117,12 @@ public class DirectoryPickerModule extends ReactContextBaseJavaModule implements
                 if (parts[0].equalsIgnoreCase("primary")) {
                     name = new File(Environment.getExternalStorageDirectory(), parts[1]).getAbsolutePath();
                 } else {
-                    name = "/storage/" + parts[0] + "/" + parts[1];
+                    Toast.makeText(reactContext,
+                            "Working with external SD card is not currently supported",
+                            Toast.LENGTH_LONG)
+                            .show();
+                    return null;
+//                    name = "/storage/" + parts[0] + "/" + parts[1];
                 }
             }
             Log.i(TAG, "Resolved content URI " + uri + " to path " + name);
