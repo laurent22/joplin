@@ -1,12 +1,9 @@
-import Logger from '@joplin/lib/Logger';
 import config from '../../config';
 import { createTestUsers } from '../../tools/debugTools';
 import { bodyFields } from '../../utils/requestUtils';
 import Router from '../../utils/Router';
 import { SubPath } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
-
-const logger = Logger.create('ApiDebug');
 
 const router = new Router();
 

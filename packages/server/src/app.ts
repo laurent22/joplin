@@ -15,7 +15,6 @@ import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './apps/joplin/joplinUtils';
-import { handleDebugCommands } from './tools/debugTools';
 import startServices from './utils/startServices';
 // import { createItemTree } from './utils/testing/testUtils';
 

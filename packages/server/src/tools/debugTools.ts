@@ -1,8 +1,6 @@
-import config from '../config';
-import { connectDb, DbConnection, disconnectDb, dropTables, migrateDb } from '../db';
+import { DbConnection, dropTables, migrateDb } from '../db';
 import newModelFactory from '../models/factory';
 import { Config } from '../utils/types';
-import { createDb, dropDb } from './dbTools';
 
 export async function handleDebugCommands(argv: any, db:DbConnection, config: Config): Promise<boolean> {
 	if (argv.debugCreateTestUsers) {
