@@ -198,6 +198,9 @@ packages/app-desktop/commands/stopExternalEditing.js.map
 packages/app-desktop/commands/toggleExternalEditing.d.ts
 packages/app-desktop/commands/toggleExternalEditing.js
 packages/app-desktop/commands/toggleExternalEditing.js.map
+packages/app-desktop/commands/toggleSafeMode.d.ts
+packages/app-desktop/commands/toggleSafeMode.js
+packages/app-desktop/commands/toggleSafeMode.js.map
 packages/app-desktop/gui/Button/Button.d.ts
 packages/app-desktop/gui/Button/Button.js
 packages/app-desktop/gui/Button/Button.js.map
@@ -738,6 +741,9 @@ packages/app-mobile/utils/ShareExtension.js.map
 packages/app-mobile/utils/ShareUtils.d.ts
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/ShareUtils.js.map
+packages/app-mobile/utils/TlsUtils.d.ts
+packages/app-mobile/utils/TlsUtils.js
+packages/app-mobile/utils/TlsUtils.js.map
 packages/app-mobile/utils/checkPermissions.d.ts
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/checkPermissions.js.map

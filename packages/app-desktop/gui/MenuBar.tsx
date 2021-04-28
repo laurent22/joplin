@@ -596,6 +596,7 @@ function useMenu(props: Props) {
 						menuItemDic.attachFile,
 						separator(),
 						menuItemDic['editor.deleteLine'],
+						menuItemDic['editor.duplicateLine'],
 						menuItemDic['editor.toggleComment'],
 						menuItemDic['editor.sortSelectedLines'],
 						menuItemDic['editor.indentLess'],
@@ -737,6 +738,7 @@ function useMenu(props: Props) {
 						},
 					},
 
+					menuItemDic.toggleSafeMode,
 					menuItemDic.openProfileDirectory,
 					menuItemDic.copyDevCommand,
 

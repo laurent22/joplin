@@ -74,6 +74,7 @@ export default class PluginService extends BaseService {
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
+	private isSafeMode_: boolean = false;
 
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.appVersion_ = appVersion;
@@ -84,6 +85,14 @@ export default class PluginService extends BaseService {
 
 	public get plugins(): Plugins {
 		return this.plugins_;
+	}
+
+	public get isSafeMode(): boolean {
+		return this.isSafeMode_;
+	}
+
+	public set isSafeMode(v: boolean) {
+		this.isSafeMode_ = v;
 	}
 
 	private setPluginAt(pluginId: string, plugin: Plugin) {
@@ -346,6 +355,8 @@ export default class PluginService extends BaseService {
 	}
 
 	public async runPlugin(plugin: Plugin) {
+		if (this.isSafeMode) throw new Error(`Plugin was not started due to safe mode: ${plugin.manifest.id}`);
+
 		if (!this.isCompatible(plugin.manifest.app_min_version)) {
 			throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
 		} else {

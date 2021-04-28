@@ -63,6 +63,7 @@ interface Props {
 	settingEditorCodeView: boolean;
 	pluginsLegacy: any;
 	startupPluginsLoaded: boolean;
+	isSafeMode: boolean;
 }
 
 interface State {
@@ -237,7 +238,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		// For example, it cannot be closed right away if a note is being saved.
 		// If a note is being saved, we wait till it is saved and then call
 		// "appCloseReply" again.
-		ipcRenderer.on('appClose', () => {
+		ipcRenderer.on('appClose', async () => {
 			if (this.waitForNotesSavedIID_) shim.clearInterval(this.waitForNotesSavedIID_);
 			this.waitForNotesSavedIID_ = null;
 
@@ -489,8 +490,24 @@ class MainScreenComponent extends React.Component<Props, State> {
 			bridge().restart();
 		};
 
+		const onDisableSafeModeAndRestart = async () => {
+			Setting.setValue('isSafeMode', false);
+			await Setting.saveAll();
+			bridge().restart();
+		};
+
 		let msg = null;
-		if (this.props.shouldUpgradeSyncTarget) {
+
+		if (this.props.isSafeMode) {
+			msg = (
+				<span>
+					{_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.')}{' '}
+					<a href="#" onClick={() => onDisableSafeModeAndRestart()}>
+						{_('Disable safe mode and restart')}
+					</a>
+				</span>
+			);
+		} else if (this.props.shouldUpgradeSyncTarget) {
 			msg = (
 				<span>
 					{_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.')}{' '}
@@ -553,9 +570,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 		);
 	}
 
-	messageBoxVisible(props: any = null) {
+	messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode;
 	}
 
 	registerCommands() {
@@ -777,6 +794,7 @@ const mapStateToProps = (state: AppState) => {
 		layoutMoveMode: state.layoutMoveMode,
 		mainLayout: state.mainLayout,
 		startupPluginsLoaded: state.startupPluginsLoaded,
+		isSafeMode: state.settings.isSafeMode,
 	};
 };
 

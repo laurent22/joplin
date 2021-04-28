@@ -12,6 +12,7 @@ import FileModel from '../../models/FileModel';
 import { ErrorNotFound } from '../../utils/errors';
 import BaseApplication from '../../services/BaseApplication';
 import { formatDateTime } from '../../utils/time';
+import { OptionsResourceModel } from '@joplin/renderer/MarkupToHtml';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -163,7 +164,7 @@ export default class Application extends BaseApplication {
 
 	private async renderNote(share: Share, note: NoteEntity, resourceInfos: ResourceInfos, linkedItemInfos: LinkedItemInfos): Promise<FileViewerResponse> {
 		const markupToHtml = new MarkupToHtml({
-			ResourceModel: Resource,
+			ResourceModel: Resource as OptionsResourceModel,
 		});
 
 		const renderOptions: any = {

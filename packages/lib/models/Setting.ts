@@ -1025,10 +1025,11 @@ class Setting extends BaseModel {
 				advanced: true,
 				section: 'sync',
 				show: (settings: any) => {
-					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
+					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
+						[SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
-				appTypes: ['desktop', 'cli'],
+				appTypes: ['desktop', 'cli', 'mobile'],
 				label: () => _('Ignore TLS certificate errors'),
 				storage: SettingStorage.File,
 			},
@@ -1132,6 +1133,14 @@ class Setting extends BaseModel {
 				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
 				'Restart app to see changes.'),
 				storage: SettingStorage.File,
+			},
+
+			isSafeMode: {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: ['desktop'],
+				storage: SettingStorage.Database,
 			},
 		};
 
