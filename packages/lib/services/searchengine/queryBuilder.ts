@@ -223,7 +223,7 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 			return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`;
 		} else if (fieldName === 'date' && term.name === 'tododue') {
 			return `todo_due ${term.negated ? '<' : '>='} ?`;
-		} else if (fieldName === 'noteid') {
+		} else if (fieldName === 'id') {
 			return `id ${term.negated ? 'NOT' : ''} LIKE ?`;
 		} else {
 			return `notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`;
@@ -273,8 +273,8 @@ const biConditionalFilter = (terms: Term[], conditions: string[], relation: Rela
 };
 
 const noteIdFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation) => {
-	const noteIdTerms = terms.filter(x => x.name === 'noteid');
-	genericFilter(noteIdTerms, conditions, params, relation, 'noteid');
+	const noteIdTerms = terms.filter(x => x.name === 'id');
+	genericFilter(noteIdTerms, conditions, params, relation, 'id');
 };
 
 
