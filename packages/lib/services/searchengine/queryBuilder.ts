@@ -221,7 +221,7 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 	const getCondition = (term: Term) => {
 		if (fieldName === 'sourceurl') {
 			return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`;
-		} else if (fieldName === 'date' && term.name === 'tododue') {
+		} else if (fieldName === 'date' && term.name === 'due') {
 			return `todo_due ${term.negated ? '<' : '>='} ?`;
 		} else if (fieldName === 'id') {
 			return `id ${term.negated ? 'NOT' : ''} LIKE ?`;
@@ -232,7 +232,7 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 
 	terms.forEach(term => {
 		conditions.push(`
-		${relation} ( ${term.name === 'tododue' ? 'is_todo IS 1 AND ' : ''} ROWID IN (
+		${relation} ( ${term.name === 'due' ? 'is_todo IS 1 AND ' : ''} ROWID IN (
 			SELECT ROWID
 			FROM notes_normalized
 			WHERE ${getCondition(term)}
@@ -319,7 +319,7 @@ const dateFilter = (terms: Term[], conditons: string[], params: string[], relati
 		}
 	};
 
-	const dateTerms = terms.filter(x => x.name === 'created' || x.name === 'updated' || x.name === 'tododue');
+	const dateTerms = terms.filter(x => x.name === 'created' || x.name === 'updated' || x.name === 'due');
 	const unixDateTerms = dateTerms.map(term => { return { ...term, value: getUnixMs(term.value) }; });
 	genericFilter(unixDateTerms, conditons, params, relation, 'date');
 };

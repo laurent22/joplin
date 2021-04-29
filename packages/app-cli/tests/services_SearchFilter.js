@@ -580,7 +580,7 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(t3.id);
 	}));
 
-	it('should support filtering by tododue date', (async () => {
+	it('should support filtering by due date', (async () => {
 		let rows;
 		const toDo1 = await Note.save({ title: 'ToDo 1', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-04-27') });
 		const toDo2 = await Note.save({ title: 'ToDo 2', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-03-17') });
@@ -588,16 +588,16 @@ describe('services_SearchFilter', function() {
 
 		await engine.syncTables();
 
-		rows = await engine.search('tododue:20210425');
+		rows = await engine.search('due:20210425');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(toDo1.id);
 
-		rows = await engine.search('-tododue:20210425');
+		rows = await engine.search('-due:20210425');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(toDo2.id);
 	}));
 
-	it('should support filtering by tododue with smart value: day', (async () => {
+	it('should support filtering by due with smart value: day', (async () => {
 		let rows;
 
 		const inThreeDays = parseInt(time.goForwardInTime(Date.now(), 3, 'day'), 10);
@@ -612,27 +612,27 @@ describe('services_SearchFilter', function() {
 
 		await engine.syncTables();
 
-		rows = await engine.search('tododue:day-4');
+		rows = await engine.search('due:day-4');
 		expect(rows.length).toBe(3);
 		expect(ids(rows)).toContain(toDo1.id);
 		expect(ids(rows)).toContain(toDo2.id);
 		expect(ids(rows)).toContain(toDo3.id);
 
-		rows = await engine.search('-tododue:day-4');
+		rows = await engine.search('-due:day-4');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(toDo4.id);
 
-		rows = await engine.search('-tododue:day+4');
+		rows = await engine.search('-due:day+4');
 		expect(rows.length).toBe(3);
 		expect(ids(rows)).toContain(toDo1.id);
 		expect(ids(rows)).toContain(toDo3.id);
 		expect(ids(rows)).toContain(toDo4.id);
 
-		rows = await engine.search('tododue:day+4');
+		rows = await engine.search('due:day+4');
 		expect(rows.length).toBe(1);
 		expect(ids(rows)).toContain(toDo2.id);
 
-		rows = await engine.search('tododue:day-4 -tododue:day+4');
+		rows = await engine.search('due:day-4 -due:day+4');
 		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(toDo1.id);
 		expect(ids(rows)).toContain(toDo3.id);
