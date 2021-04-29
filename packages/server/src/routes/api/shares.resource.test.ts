@@ -116,7 +116,7 @@ describe('shares.resource', function() {
 		}
 
 		// One resource is added to the note
-		
+
 		{
 			const note = await models().item().loadAsJoplinItem(noteItem.id);
 			await updateNote(session1.id, { ...note, body: `[testing](:/${resourceItem1.jop_id}) [testing](:/${resourceItem2.jop_id})` });
@@ -129,5 +129,50 @@ describe('shares.resource', function() {
 			expect(!!children.items.find(i => i.name === '.resource/000000000000000000000000000000E2')).toBe(true);
 		}
 	});
+
+	// test('should update resources share status - user 1 adds resource to note, user 2 moves note out of shared folder', async function() {
+	// 	const { user: user1, session: session1 } = await createUserAndSession(1);
+	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
+
+	// 	const resourceItem1 = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'testing1');
+	// 	const resourceItem2 = await createResource(session1.id, { id: '000000000000000000000000000000E2' }, 'testing2');
+
+	// 	await createItemTree2(user1.id, '', [
+	// 		{
+	// 			id: '000000000000000000000000000000F1',
+	// 			children: [
+	// 				{
+	// 					id: '00000000000000000000000000000001',
+	// 					title: 'note test',
+	// 					body: `[testing](:/${resourceItem1.jop_id})`,
+	// 				},
+	// 			],
+	// 		},
+	// 	]);
+
+	// 	await createItemTree2(user2.id, '', [
+	// 		{
+	// 			id: '000000000000000000000000000000F2',
+	// 			children: [],
+	// 		},
+	// 	]);
+
+	// 	const folderItem = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+	// 	const noteItem = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+
+	// 	await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+
+	// 	// Note is moved by user 2 to another folder
+
+	// 	{
+	// 		const note = await models().item().loadAsJoplinItem(noteItem.id);
+	// 		await updateNote(session2.id, { ...note, parent_id: '000000000000000000000000000000F2' });
+	// 		await models().share().updateSharedItems();
+	// 		const children = await models().item().children(user1.id);
+	// 		console.info('CHILDREN', children);
+	// 		// expect(newChildren.items.length).toBe(1);
+	// 		// expect(!!newChildren.items.find(i => i.name === '000000000000000000000000000000F1.md')).toBe(true);
+	// 	}
+	// });
 
 });

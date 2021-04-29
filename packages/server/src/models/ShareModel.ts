@@ -96,7 +96,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 	// Returns all user IDs concerned by the share. That includes all the users
 	// the folder has been shared with, as well as the folder owner.
-	private async allShareUserIds(share:Share) {
+	private async allShareUserIds(share: Share) {
 		const shareUsers = await this.models().shareUser().byShareId(share.id);
 		const userIds = shareUsers.map(su => su.user_id);
 		userIds.push(share.owner_id);
@@ -104,15 +104,19 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public async updateSharedItems() {
-		interface ResourceChanges {
-			share: Share;
-			added: string[];
-			removed: string[];
+		enum ResourceChangeAction {
+			Added = 1,
+			Removed = 2,
 		}
 
-		type ResourceChangesPerShareId = Record<Uuid, ResourceChanges>;
+		interface ResourceChange {
+			resourceIds: string[];
+			share: Share;
+			change: Change;
+			action: ResourceChangeAction;
+		}
 
-		let resourceChanges: ResourceChangesPerShareId = {};
+		let resourceChanges: ResourceChange[] = [];
 
 		const handleAddedToSharedFolder = async (item: Item, shareInfo: SharedRootInfo) => {
 			const userIds = await this.allShareUserIds(shareInfo.share);
@@ -130,7 +134,7 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
-		const handleRemovedFromSharedFolder = async (change:Change, item: Item, shareInfo: SharedRootInfo) => {
+		const handleRemovedFromSharedFolder = async (change: Change, item: Item, shareInfo: SharedRootInfo) => {
 			// This is called when a note parent ID changes and is moved out of
 			// the shared folder. In that case, we need to unshare the item from
 			// all users, except the one who did the action.
@@ -149,38 +153,50 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
-		const handleResourceSharing = async (previousItem: ChangePreviousItem, item: Item, previousShareInfo: SharedRootInfo, currentShareInfo: SharedRootInfo) => {
+		const handleResourceSharing = async (change: Change, previousItem: ChangePreviousItem, item: Item, previousShareInfo: SharedRootInfo, currentShareInfo: SharedRootInfo) => {
 			// Not a note - we can exit
 			if (item.jop_type !== ModelType.Note) return;
 
 			// Item was not in a shared folder and is still not in one - nothing to do
 			if (!previousShareInfo && !currentShareInfo) return;
 
-			if (currentShareInfo && !resourceChanges[currentShareInfo.share.id]) {
-				resourceChanges[currentShareInfo.share.id] = {
-					share: currentShareInfo.share,
-					added: [],
-					removed: [],
-				};
-			}
+			// if (currentShareInfo && !resourceChanges[currentShareInfo.share.id]) {
+			// 	resourceChanges[currentShareInfo.share.id] = {
+			// 		share: currentShareInfo.share,
+			// 		added: [],
+			// 		removed: [],
+			// 	};
+			// }
 
-			if (previousShareInfo && !resourceChanges[previousShareInfo.share.id]) {
-				resourceChanges[previousShareInfo.share.id] = {
-					share: previousShareInfo.share,
-					added: [],
-					removed: [],
-				};
-			}
+			// if (previousShareInfo && !resourceChanges[previousShareInfo.share.id]) {
+			// 	resourceChanges[previousShareInfo.share.id] = {
+			// 		share: previousShareInfo.share,
+			// 		added: [],
+			// 		removed: [],
+			// 	};
+			// }
 
 			// Item was moved out of a shared folder to a non-shared folder - unshare all resources
 			if (previousShareInfo && !currentShareInfo) {
-				resourceChanges[previousShareInfo.share.id].removed = resourceChanges[previousShareInfo.share.id].removed.concat(previousItem.jop_resource_ids);
+				// resourceChanges[previousShareInfo.share.id].removed = resourceChanges[previousShareInfo.share.id].removed.concat(previousItem.jop_resource_ids);
+				resourceChanges.push({
+					action: ResourceChangeAction.Removed,
+					change,
+					share: previousShareInfo.share,
+					resourceIds: await this.models().itemResource().byItemId(item.id),
+				});
 				return;
 			}
 
 			// Item was moved from a non-shared folder to a shared one - share all resources
 			if (!previousShareInfo && currentShareInfo) {
-				resourceChanges[currentShareInfo.share.id].added = resourceChanges[currentShareInfo.share.id].added.concat(await this.models().itemResource().byItemId(item.id));
+				resourceChanges.push({
+					action: ResourceChangeAction.Added,
+					change,
+					share: currentShareInfo.share,
+					resourceIds: await this.models().itemResource().byItemId(item.id),
+				});
+				// resourceChanges[currentShareInfo.share.id].added = resourceChanges[currentShareInfo.share.id].added.concat(await this.models().itemResource().byItemId(item.id));
 				return;
 			}
 
@@ -192,11 +208,26 @@ export default class ShareModel extends BaseModel<Share> {
 			const previousResourceIds = previousItem ? previousItem.jop_resource_ids : [];
 			const currentResourceIds = await this.models().itemResource().byItemId(item.id);
 			for (const resourceId of previousResourceIds) {
-				if (!currentResourceIds.includes(resourceId)) resourceChanges[currentShareInfo.share.id].removed.push(resourceId);
+				if (!currentResourceIds.includes(resourceId)) {
+					resourceChanges.push({
+						action: ResourceChangeAction.Removed,
+						change,
+						share: currentShareInfo.share,
+						resourceIds: [resourceId],
+					});
+				}// resourceChanges[currentShareInfo.share.id].removed.push(resourceId);
 			}
 
 			for (const resourceId of currentResourceIds) {
-				if (!previousResourceIds.includes(resourceId)) resourceChanges[currentShareInfo.share.id].added.push(resourceId);
+				if (!previousResourceIds.includes(resourceId)) {
+					resourceChanges.push({
+						action: ResourceChangeAction.Added,
+						change,
+						share: currentShareInfo.share,
+						resourceIds: [resourceId],
+					});
+					// resourceChanges[currentShareInfo.share.id].added.push(resourceId);
+				}
 			}
 		};
 
@@ -216,7 +247,7 @@ export default class ShareModel extends BaseModel<Share> {
 			const previousShareInfo = previousItem?.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(previousItem.jop_parent_id) : null;
 			const currentShareInfo = item.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id) : null;
 
-			await handleResourceSharing(previousItem, item, previousShareInfo, currentShareInfo);
+			await handleResourceSharing(change, previousItem, item, previousShareInfo, currentShareInfo);
 
 			// Item was not in a shared folder and is still not in one
 			if (!previousShareInfo && !currentShareInfo) return;
@@ -270,23 +301,16 @@ export default class ShareModel extends BaseModel<Share> {
 					// too.
 				}
 
-				for (const shareId in resourceChanges) {
-					const rc = resourceChanges[shareId];
-					rc.added = unique(rc.added);
-					rc.removed = unique(rc.removed);
-
+				for (const rc of resourceChanges) {
 					const shareUsers = await this.models().shareUser().byShareId(rc.share.id);
+					const doShare = rc.action === ResourceChangeAction.Added;
 
 					for (const shareUser of shareUsers) {
-						await this.updateResourceShareStatus(true, rc.share.id, rc.share.owner_id, shareUser.user_id, rc.added);
-					}
-
-					for (const shareUser of shareUsers) {
-						await this.updateResourceShareStatus(false, rc.share.id, rc.share.owner_id, shareUser.user_id, rc.removed);
+						await this.updateResourceShareStatus(doShare, rc.share.id, rc.share.owner_id, shareUser.user_id, rc.resourceIds);
 					}
 				}
 
-				resourceChanges = {};
+				resourceChanges = [];
 
 				await this.models().keyValue().setValue('ShareService::latestProcessedChange', changes[changes.length - 1].id);
 			});
@@ -315,7 +339,7 @@ export default class ShareModel extends BaseModel<Share> {
 		}
 	}
 
-	public async shareFolder(owner:User, folderId:string):Promise<Share> {
+	public async shareFolder(owner: User, folderId: string): Promise<Share> {
 		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
@@ -334,7 +358,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return super.save(shareToSave);
 	}
 
-	public async shareNote(owner:User, noteId:string):Promise<Share> {
+	public async shareNote(owner: User, noteId: string): Promise<Share> {
 		const noteItem = await this.models().item().loadByJopId(owner.id, noteId);
 		if (!noteItem) throw new ErrorNotFound(`No such note: ${noteId}`);
 
