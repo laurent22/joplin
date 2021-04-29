@@ -421,7 +421,6 @@ export default function queryBuilder(terms: Term[]) {
 	notes_fts.user_updated_time,
 	notes_fts.is_todo,
 	notes_fts.todo_completed,
-	notes_fts.todo_due,
 	notes_fts.parent_id
 	FROM notes_fts
 	WHERE ${getConnective(terms, relation)}`);
