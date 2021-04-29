@@ -1,3 +1,4 @@
+import { Knex } from 'knex';
 import { Change, ChangeType, Item, Uuid } from '../db';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
@@ -97,14 +98,58 @@ export default class ChangeModel extends BaseModel<Change> {
 				'type',
 				'updated_time',
 			])
-			.where(function () {
-				void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
-					// Need to use a RAW query here because Knex has a "not a
-					// bug" bug that makes it go into infinite loop in some
-					// contexts, possibly only when running inside Jest (didn't
-					// test outside).
-					// https://github.com/knex/knex/issues/1851
-					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
+
+			
+
+			// -----------------------------------------------------------
+			// WORKS:
+			// -----------------------------------------------------------
+
+			// .where(function () {
+			// 	void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
+			// 		.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
+			// });
+
+
+
+
+
+			// -----------------------------------------------------------
+			// Using "this" - Infinite loop
+			// -----------------------------------------------------------
+
+			// .where(function () {
+			// 	void this.where(function() {
+			// 		void this.where(function() {
+			// 			void this
+			// 				.where('type', '=', ChangeType.Create)
+			// 				.orWhere('type', '=', ChangeType.Delete)
+			// 		}).where('user_id', userId)
+			// 	}).orWhere(function() {
+			// 		void this
+			// 			.where('type', ChangeType.Update)
+			// 			.whereIn('item_id', this.select('item_id').from('user_items').where('user_id', userId))
+			// 	});
+			// });
+
+
+
+			// -----------------------------------------------------------
+			// Using "QueryBuilder" - Infinite loop
+			// -----------------------------------------------------------
+
+			.where(function (qb:Knex.QueryBuilder) {
+				void qb.where(function(qb:Knex.QueryBuilder) {
+					void qb.where(function() {
+						void qb
+							.where('type', '=', ChangeType.Create)
+							.orWhere('type', '=', ChangeType.Delete)
+					}).where('user_id', userId)
+				}).orWhere(function(qb:Knex.QueryBuilder) {
+					void qb
+						.where('type', ChangeType.Update)
+						.whereIn('item_id', qb.select('item_id').from('user_items').where('user_id', userId))
+				});
 			});
 
 		// If a cursor was provided, apply it to both queries.
