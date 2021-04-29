@@ -2,7 +2,7 @@ import { DbConnection, dropTables, migrateDb } from '../db';
 import newModelFactory from '../models/factory';
 import { Config } from '../utils/types';
 
-export async function handleDebugCommands(argv: any, db:DbConnection, config: Config): Promise<boolean> {
+export async function handleDebugCommands(argv: any, db: DbConnection, config: Config): Promise<boolean> {
 	if (argv.debugCreateTestUsers) {
 		await createTestUsers(db, config);
 	} else {
@@ -12,7 +12,7 @@ export async function handleDebugCommands(argv: any, db:DbConnection, config: Co
 	return true;
 }
 
-export async function createTestUsers(db:DbConnection, config: Config) {
+export async function createTestUsers(db: DbConnection, config: Config) {
 	await dropTables(db);
 	await migrateDb(db);
 

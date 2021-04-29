@@ -1,7 +1,6 @@
 import { ModelType } from '@joplin/lib/BaseModel';
 import { resourceBlobPath } from '../apps/joplin/joplinUtils';
 import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, User, Uuid } from '../db';
-import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
@@ -160,25 +159,8 @@ export default class ShareModel extends BaseModel<Share> {
 			// Item was not in a shared folder and is still not in one - nothing to do
 			if (!previousShareInfo && !currentShareInfo) return;
 
-			// if (currentShareInfo && !resourceChanges[currentShareInfo.share.id]) {
-			// 	resourceChanges[currentShareInfo.share.id] = {
-			// 		share: currentShareInfo.share,
-			// 		added: [],
-			// 		removed: [],
-			// 	};
-			// }
-
-			// if (previousShareInfo && !resourceChanges[previousShareInfo.share.id]) {
-			// 	resourceChanges[previousShareInfo.share.id] = {
-			// 		share: previousShareInfo.share,
-			// 		added: [],
-			// 		removed: [],
-			// 	};
-			// }
-
 			// Item was moved out of a shared folder to a non-shared folder - unshare all resources
 			if (previousShareInfo && !currentShareInfo) {
-				// resourceChanges[previousShareInfo.share.id].removed = resourceChanges[previousShareInfo.share.id].removed.concat(previousItem.jop_resource_ids);
 				resourceChanges.push({
 					action: ResourceChangeAction.Removed,
 					change,
@@ -196,7 +178,6 @@ export default class ShareModel extends BaseModel<Share> {
 					share: currentShareInfo.share,
 					resourceIds: await this.models().itemResource().byItemId(item.id),
 				});
-				// resourceChanges[currentShareInfo.share.id].added = resourceChanges[currentShareInfo.share.id].added.concat(await this.models().itemResource().byItemId(item.id));
 				return;
 			}
 
@@ -215,7 +196,7 @@ export default class ShareModel extends BaseModel<Share> {
 						share: currentShareInfo.share,
 						resourceIds: [resourceId],
 					});
-				}// resourceChanges[currentShareInfo.share.id].removed.push(resourceId);
+				}
 			}
 
 			for (const resourceId of currentResourceIds) {
@@ -226,16 +207,17 @@ export default class ShareModel extends BaseModel<Share> {
 						share: currentShareInfo.share,
 						resourceIds: [resourceId],
 					});
-					// resourceChanges[currentShareInfo.share.id].added.push(resourceId);
 				}
 			}
 		};
 
-		const handleCreatedItem = async (_change: Change, item: Item) => {
+		const handleCreatedItem = async (change: Change, item: Item) => {
 			if (!item.jop_parent_id) return;
 			const shareInfo = await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id);
 
 			if (!shareInfo) return;
+
+			await handleResourceSharing(change, null, item, null, shareInfo);
 			await handleAddedToSharedFolder(item, shareInfo);
 		};
 
@@ -277,6 +259,21 @@ export default class ShareModel extends BaseModel<Share> {
 			// Sanity check - because normally all cases are covered above
 			throw new Error('Unreachable');
 		};
+
+		// This loop essentially applies the change made by one user to all the
+		// other users in the share.
+		//
+		// While it's processing changes, it's going to create new user_item
+		// objects, which in turn generate more Change items, which are processed
+		// again. However there are guards to ensure that it doesn't result in
+		// an infinite loop - in particular once a user_item has been added,
+		// adding it again will result in a UNIQUE constraint error and thus it
+		// won't generate a Change object the second time.
+		//
+		// Rather than checking if the user_item exists before creating it, we
+		// create it directly and let it fail, while catching the Unique error.
+		// This is probably safer in terms of avoiding race conditions and
+		// possibly faster.
 
 		while (true) {
 			const latestProcessedChange = await this.models().keyValue().value<string>('ShareService::latestProcessedChange');
@@ -329,7 +326,14 @@ export default class ShareModel extends BaseModel<Share> {
 
 		for (const resourceItem of resourceItems) {
 			if (doShare) {
-				await this.models().userItem().add(toUserId, resourceItem.id, shareId);
+				try {
+					await this.models().userItem().add(toUserId, resourceItem.id, shareId);
+				} catch (error) {
+					if (isUniqueConstraintError(error)) {
+						continue;
+					}
+					throw error;
+				}
 			} else {
 				await this.models().userItem().remove(toUserId, resourceItem.id);
 			}
@@ -337,7 +341,14 @@ export default class ShareModel extends BaseModel<Share> {
 
 		for (const resourceBlobItem of resourceBlobItems) {
 			if (doShare) {
-				await this.models().userItem().add(toUserId, resourceBlobItem.id, shareId);
+				try {
+					await this.models().userItem().add(toUserId, resourceBlobItem.id, shareId);
+				} catch (error) {
+					if (isUniqueConstraintError(error)) {
+						continue;
+					}
+					throw error;
+				}
 			} else {
 				await this.models().userItem().remove(toUserId, resourceBlobItem.id);
 			}

@@ -1,5 +1,5 @@
 import { ShareType } from '../../db';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createResource, createItemTree2, updateNote } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createResource, createItemTree2, updateNote, createNote } from '../../utils/testing/testUtils';
 import { getApi } from '../../utils/testing/apiUtils';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { PaginatedItems } from '../../models/ItemModel';
@@ -167,6 +167,7 @@ describe('shares.resource', function() {
 			const note = await models().item().loadAsJoplinItem(noteItem.id);
 			await updateNote(session2.id, { ...note, parent_id: '000000000000000000000000000000F2' });
 			await models().share().updateSharedItems();
+
 			const children1 = await models().item().children(user1.id);
 			expect(children1.items.length).toBe(1);
 			expect(children1.items[0].name).toBe('000000000000000000000000000000F1.md');
@@ -175,6 +176,35 @@ describe('shares.resource', function() {
 			expect(children2.items.length).toBe(5);
 			expect(children2.items.find(c => c.name === '000000000000000000000000000000E1.md')).toBeTruthy();
 			expect(children2.items.find(c => c.name === '.resource/000000000000000000000000000000E1')).toBeTruthy();
+		}
+	});
+
+	test('should update resources share status - user 2 adds a note and a resource', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createItemTree2(user1.id, '', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		const folderItem = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+
+		// User 2 adds a note and a resource
+
+		{
+			const resourceItem1 = await createResource(session2.id, { id: '000000000000000000000000000000E1' }, 'testing1');
+			await createNote(session2.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', body: `[testing](:/${resourceItem1.jop_id})` });
+			await models().share().updateSharedItems();
+
+			const children1 = await models().item().children(user1.id);
+			expect(children1.items.length).toBe(4);
+			expect(children1.items.find(c => c.name === '00000000000000000000000000000001.md')).toBeTruthy();
+			expect(children1.items.find(c => c.name === '000000000000000000000000000000E1.md')).toBeTruthy();
+			expect(children1.items.find(c => c.name === '.resource/000000000000000000000000000000E1')).toBeTruthy();
 		}
 	});
 

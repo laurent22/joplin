@@ -35,7 +35,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 		return ctx.models.share().shareNote(ctx.owner, shareInput.note_id);
 	} else {
 		throw new ErrorBadRequest('Either folder_id or note_id must be provided');
-	}	
+	}
 });
 
 router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {

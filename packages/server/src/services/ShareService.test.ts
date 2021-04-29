@@ -59,6 +59,8 @@ describe('ShareService', function() {
 		const children = await models().item().children(user2.id);
 		expect(children.items.length).toBe(1);
 		expect(children.items[0].id).toBe(folderItem.id);
+
+		await service.destroy();
 	});
 
 });

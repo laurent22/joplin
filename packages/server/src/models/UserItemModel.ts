@@ -4,10 +4,10 @@ import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
 
 export interface UserItemDeleteOptions extends DeleteOptions {
-	byItemIds?: string[],
-	byShareId?: string,
+	byItemIds?: string[];
+	byShareId?: string;
 	byUserId?: string;
-	byUserItem?: UserItem,
+	byUserItem?: UserItem;
 }
 
 export default class UserItemModel extends BaseModel<UserItem> {
@@ -54,13 +54,13 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return this.db(this.tableName).where('user_id', '=', userId);
 	}
 
-	public async byUserAndItemId(userId: Uuid, itemId:Uuid): Promise<UserItem> {
+	public async byUserAndItemId(userId: Uuid, itemId: Uuid): Promise<UserItem> {
 		return this.db(this.tableName).where('user_id', '=', userId).where('item_id', '=', itemId).first();
 	}
 
 	public async deleteByUserItem(userId: Uuid, itemId: Uuid): Promise<void> {
 		const userItem = await this.byUserAndItemId(userId, itemId);
-		if (!userItem) throw new ErrorNotFound('No such user_item: ' + userId + ' / ' + itemId);
+		if (!userItem) throw new ErrorNotFound(`No such user_item: ${userId} / ${itemId}`);
 		await this.deleteBy({ byUserItem: userItem });
 	}
 
@@ -80,7 +80,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		if (userItem.id) throw new Error('User items cannot be modified (only created or deleted)'); // Sanity check - shouldn't happen
 
 		const item = await this.models().item().load(userItem.item_id, { fields: ['id', 'name'] });
-		
+
 		return this.withTransaction(async () => {
 			await this.models().change().save({
 				item_type: ItemType.UserItem,
@@ -100,7 +100,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	}
 
 	private async deleteBy(options: UserItemDeleteOptions = {}): Promise<void> {
-		let userItems:UserItem[] = []
+		let userItems: UserItem[] = [];
 
 		if (options.byItemIds) {
 			userItems = await this.byItemIds(options.byItemIds);
@@ -130,7 +130,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 					user_id: userItem.user_id,
 				});
 			}
-		
+
 			await this.db(this.tableName).whereIn('id', userItems.map(ui => ui.id)).delete();
 		}, 'ItemModel::delete');
 	}

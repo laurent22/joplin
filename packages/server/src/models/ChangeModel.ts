@@ -97,7 +97,7 @@ export default class ChangeModel extends BaseModel<Change> {
 				'type',
 				'updated_time',
 			])
-			.where(function () {
+			.where(function() {
 				void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
 					// Need to use a RAW query here because Knex has a "not a
 					// bug" bug that makes it go into infinite loop in some

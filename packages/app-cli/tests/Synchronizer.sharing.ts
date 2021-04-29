@@ -45,7 +45,7 @@ describe('Synchronizer.sharing', function() {
 		await api.clearSession();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
-		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Note.save({ title: 'note1', parent_id: folder1.id });
 
 		await synchronizerStart();
 
@@ -55,7 +55,7 @@ describe('Synchronizer.sharing', function() {
 		await synchronizerStart();
 
 		await switchClient(1);
-		
+
 		console.info(await Note.all());
 	}));
 

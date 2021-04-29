@@ -11,11 +11,19 @@ export default class ShareService {
 	private models_: Models;
 	private maintenanceScheduled_: boolean = false;
 	private maintenanceInProgress_: boolean = false;
+	private scheduleMaintenanceTimeout_: any = null;
 
-	public constructor(env:Env, models: Models) {
+	public constructor(env: Env, models: Models) {
 		this.env_ = env;
 		this.models_ = models;
 		this.scheduleMaintenance = this.scheduleMaintenance.bind(this);
+	}
+
+	public async destroy() {
+		if (this.scheduleMaintenanceTimeout_) {
+			clearTimeout(this.scheduleMaintenanceTimeout_);
+			this.scheduleMaintenanceTimeout_ = null;
+		}
 	}
 
 	public get models(): Models {
@@ -34,7 +42,7 @@ export default class ShareService {
 		if (this.maintenanceScheduled_) return;
 		this.maintenanceScheduled_ = true;
 
-		setTimeout(() => {
+		this.scheduleMaintenanceTimeout_ = setTimeout(() => {
 			this.maintenanceScheduled_ = false;
 			void this.maintenance();
 		}, this.env === Env.Dev ? 2000 : 10000);

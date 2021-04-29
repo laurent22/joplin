@@ -13,10 +13,10 @@ interface Query {
 	action: string;
 }
 
-router.post('api/debug', async (_path: SubPath, ctx:AppContext) => {
+router.post('api/debug', async (_path: SubPath, ctx: AppContext) => {
 	const query: Query = (await bodyFields(ctx.req)) as Query;
 
-	console.info('Action: ' + query.action);
+	console.info(`Action: ${query.action}`);
 
 	if (query.action === 'createTestUsers') {
 		await createTestUsers(ctx.db, config());
