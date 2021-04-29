@@ -434,7 +434,7 @@ You can also use search filters to further restrict the search.
 |**latitude:** <br> **longitude:** <br> **altitude:**|Filter by location|`latitude:40 -latitude:50` to return notes with latitude >= 40 and < 50  |
 |**resource:**|Filter by attachment MIME type|`resource:image/jpeg` to return notes with a jpeg attachment.<br>`-resource:application/pdf` to return notes without a pdf attachment.<br>`resource:image/*` to return notes with any images.|
 |**sourceurl:**|Filter by source URL|`sourceurl:https://www.google.com`<br>`sourceurl:*joplinapp.org` to perform a wildcard search.|
-|**id:**|Filter by note ID|`noteid:9cbc1b4f242043a9b8a50627508bccd5` return a note with the specified id |
+|**id:**|Filter by note ID|`id:9cbc1b4f242043a9b8a50627508bccd5` return a note with the specified id |
 
 Note: In the CLI client you have to escape the query using `--` when using negated filters.
 Eg. `:search -- "-tag:tag1"`.
