@@ -302,11 +302,16 @@ export default class ShareModel extends BaseModel<Share> {
 				}
 
 				for (const rc of resourceChanges) {
-					const shareUsers = await this.models().shareUser().byShareId(rc.share.id);
+					const shareUserIds = await this.allShareUserIds(rc.share);
 					const doShare = rc.action === ResourceChangeAction.Added;
+					const changerUserId = rc.change.user_id;
 
-					for (const shareUser of shareUsers) {
-						await this.updateResourceShareStatus(doShare, rc.share.id, rc.share.owner_id, shareUser.user_id, rc.resourceIds);
+					for (const shareUserId of shareUserIds) {
+						// We apply the updates to all the users, except the one
+						// who made the change, since they already have the
+						// change.
+						if (shareUserId === changerUserId) continue;
+						await this.updateResourceShareStatus(doShare, rc.share.id, changerUserId, shareUserId, rc.resourceIds);
 					}
 				}
 
@@ -317,10 +322,10 @@ export default class ShareModel extends BaseModel<Share> {
 		}
 	}
 
-	public async updateResourceShareStatus(doShare: boolean, shareId: Uuid, fromUserId: Uuid, toUserId: Uuid, resourceIds: string[]) {
-		const resourceItems = await this.models().item().loadByJopIds(fromUserId, resourceIds);
+	public async updateResourceShareStatus(doShare: boolean, shareId: Uuid, changerUserId: Uuid, toUserId: Uuid, resourceIds: string[]) {
+		const resourceItems = await this.models().item().loadByJopIds(changerUserId, resourceIds);
 		const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
-		const resourceBlobItems = await this.models().item().loadByNames(fromUserId, resourceBlobNames);
+		const resourceBlobItems = await this.models().item().loadByNames(changerUserId, resourceBlobNames);
 
 		for (const resourceItem of resourceItems) {
 			if (doShare) {
