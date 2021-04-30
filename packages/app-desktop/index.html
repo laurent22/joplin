@@ -30,6 +30,14 @@
 				background: #CF3F00;
 				color: white;
 			}
+			
+			/*
+				Adds support for RTL text in the note body. It automatically detects the direction using the content.
+				Issue: https://github.com/laurent22/joplin/issues/3991
+			*/
+			.CodeMirror-line  {
+				unicode-bidi: plaintext;
+			}
 		</style>
 	</head>
 	<body>
