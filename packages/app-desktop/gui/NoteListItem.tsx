@@ -149,12 +149,21 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 		color: theme.color,
 	};
 	const watchedIcon = props.isWatched ? null : <i style={watchedIconStyle} className={'fa fa-share-square'}></i>;
+	const classNames = [
+		'list-item-container',
+		props.isSelected && 'selected',
+		item.todo_completed && 'todo-completed',
+		item.is_todo ? 'todo' : 'note',
+		(props.index + 1) % 2 === 0 ? 'even' : 'odd',
+	]
+		.filter(e => !!e)
+		.join(' ');
 
 	// Need to include "todo_completed" in key so that checkbox is updated when
 	// item is changed via sync.
 	return (
 		<StyledRoot
-			className={`list-item-container ${item.is_todo ? 'todo' : 'note'} ${item.todo_completed ? 'todo-completed' : ''} ${(props.index + 1) % 2 === 0 ? 'even' : 'odd'}`}
+			className={classNames}
 			onDragOver={props.onNoteDragOver}
 			onDrop={props.onNoteDrop}
 			width={props.width}
