@@ -72,10 +72,10 @@ function ExpandLink(props: any) {
 function FolderItem(props: any) {
 	const { hasChildren, isExpanded, depth, selected, folderId, folderTitle, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_ } = props;
 
-	const noteCountComp = noteCount ? <StyledNoteCount>{noteCount}</StyledNoteCount> : null;
+	const noteCountComp = noteCount ? <StyledNoteCount className="note-count">{noteCount}</StyledNoteCount> : null;
 
 	return (
-		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
+		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
 			<ExpandLink themeId={props.themeId} hasChildren={hasChildren} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
 				ref={anchorRef}
@@ -92,7 +92,8 @@ function FolderItem(props: any) {
 				}}
 				onDoubleClick={onFolderToggleClick_}
 			>
-				{folderTitle} {noteCountComp}
+				<span className="title">{folderTitle}</span>
+				{noteCountComp}
 			</StyledListItemAnchor>
 		</StyledListItem>
 	);
@@ -359,7 +360,7 @@ class SidebarComponent extends React.Component<Props, State> {
 	}
 
 	renderNoteCount(count: number) {
-		return count ? <StyledNoteCount>{count}</StyledNoteCount> : null;
+		return count ? <StyledNoteCount className="note-count">{count}</StyledNoteCount> : null;
 	}
 
 	renderExpandIcon(isExpanded: boolean, isVisible: boolean = true) {
@@ -371,7 +372,7 @@ class SidebarComponent extends React.Component<Props, State> {
 
 	renderAllNotesItem(selected: boolean) {
 		return (
-			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0'} isSpecialItem={true}>
+			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
 				<StyledAllNotesIcon className="icon-notes"/>
 				<StyledListItemAnchor
@@ -426,7 +427,12 @@ class SidebarComponent extends React.Component<Props, State> {
 		const noteCount = Setting.value('showNoteCounts') ? this.renderNoteCount(tag.note_count) : '';
 
 		return (
-			<StyledListItem selected={selected} className={'list-item-container'} key={tag.id} onDrop={this.onTagDrop_} data-tag-id={tag.id}>
+			<StyledListItem selected={selected}
+				className={`list-item-container ${selected ? 'selected' : ''}`}
+				key={tag.id}
+				onDrop={this.onTagDrop_}
+				data-tag-id={tag.id}
+			>
 				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
 				<StyledListItemAnchor
 					ref={anchorRef}
@@ -440,7 +446,8 @@ class SidebarComponent extends React.Component<Props, State> {
 						this.tagItem_click(tag);
 					}}
 				>
-					{Tag.displayTitle(tag)} {noteCount}
+					<span className="title">{Tag.displayTitle(tag)}</span>
+					{noteCount}
 				</StyledListItemAnchor>
 			</StyledListItem>
 		);
@@ -632,7 +639,11 @@ class SidebarComponent extends React.Component<Props, State> {
 			const folderItems = [this.renderAllNotesItem(allNotesSelected)].concat(result.items);
 			this.folderItemsOrder_ = result.order;
 			items.push(
-				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 }}>
+				<div
+					className={`folders ${this.state.folderHeaderIsExpanded ? 'expanded' : ''}`}
+					key="folder_items"
+					style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 }}
+				>
 					{folderItems}
 				</div>
 			);

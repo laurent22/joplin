@@ -154,7 +154,7 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 	// item is changed via sync.
 	return (
 		<StyledRoot
-			className="list-item-container"
+			className={`list-item-container ${item.is_todo ? 'todo' : 'note'} ${item.todo_completed ? 'todo-completed' : ''} ${(props.index + 1) % 2 === 0 ? 'even' : 'odd'}`}
 			onDragOver={props.onNoteDragOver}
 			onDrop={props.onNoteDrop}
 			width={props.width}
