@@ -158,7 +158,7 @@ class NoteSearchBarComponent extends React.Component {
 		);
 
 		return (
-			<div style={this.props.style}>
+			<div className="note-search-bar" style={this.props.style}>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{closeButton}
 					<input
