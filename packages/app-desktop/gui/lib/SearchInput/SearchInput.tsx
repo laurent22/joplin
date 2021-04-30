@@ -33,7 +33,6 @@ export const SearchInput = styled(StyledInput)`
 `;
 
 interface Props {
-	className?: string;
 	inputRef?: any;
 	value: string;
 	onChange(event: OnChangeEvent): void;
@@ -58,9 +57,8 @@ export default function(props: Props) {
 	}, [props.onChange]);
 
 	return (
-		<Root className={`${props.className || ''} search-input`}>
+		<Root>
 			<SearchInput
-				className="search-input__element"
 				ref={props.inputRef}
 				value={props.value}
 				type="text"
@@ -72,8 +70,8 @@ export default function(props: Props) {
 				spellCheck={false}
 				disabled={props.disabled}
 			/>
-			<SearchButton onClick={props.onSearchButtonClick} className={`search-input__button ${!props.searchStarted ? 'search-input__button--search' : 'search-input__button--reset'}`}>
-				<SearchButtonIcon className={`search-input__icon  ${iconName}`}/>
+			<SearchButton onClick={props.onSearchButtonClick}>
+				<SearchButtonIcon className={iconName}/>
 			</SearchButton>
 		</Root>
 	);

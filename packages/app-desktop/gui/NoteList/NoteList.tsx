@@ -473,10 +473,10 @@ class NoteListComponent extends React.Component {
 
 		return (
 			<ItemList
-				className={'note-list__item-list'}
 				ref={this.itemListRef}
 				disabled={this.props.isInsertingNotes}
 				itemHeight={this.style().listItem.height}
+				className={'note-list'}
 				items={this.props.notes}
 				style={style}
 				itemRenderer={this.renderItem}
@@ -489,10 +489,7 @@ class NoteListComponent extends React.Component {
 		if (!this.props.size) throw new Error('props.size is required');
 
 		return (
-			<StyledRoot
-				className={`note-list ${!this.props.notes.length ? 'note-list--empty' : ''}`}
-				ref={this.noteListRef}
-			>
+			<StyledRoot ref={this.noteListRef}>
 				{this.renderEmptyList()}
 				{this.renderItemList(this.props.size)}
 			</StyledRoot>

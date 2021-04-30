@@ -17,7 +17,6 @@ export const Root = styled.div`
 `;
 
 interface Props {
-	className?: string;
 	inputRef?: any;
 	notesParentType: string;
 	dispatch?: Function;
@@ -127,9 +126,8 @@ function SearchBar(props: Props) {
 	}, [props.notesParentType, onExitSearch]);
 
 	return (
-		<Root className={`${props.className || ''} search-bar`}>
+		<Root>
 			<SearchInput
-				className="notelist-controls__search-input"
 				inputRef={props.inputRef}
 				value={query}
 				onChange={onChange}
