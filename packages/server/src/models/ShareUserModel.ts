@@ -12,6 +12,10 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		if (action === AclAction.Create) {
 			const share = await this.models().share().load(resource.share_id);
 			if (share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
+			if (share.owner_id === resource.user_id) throw new ErrorForbidden('cannot share an item with yourself');
+
+			const existingShareUser = await this.byShareAndUserId(share.id, resource.user_id);
+			if (existingShareUser) throw new ErrorForbidden('already shared with this user');
 		}
 
 		if (action === AclAction.Update) {
@@ -40,7 +44,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return output;
 	}
 
-	public async loadByShareIdAndUser(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
+	public async byShareAndUserId(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
 		const link: ShareUser = {
 			share_id: shareId,
 			user_id: userId,
@@ -84,7 +88,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async setStatus(shareId: Uuid, userId: Uuid, status: ShareUserStatus): Promise<Item> {
-		const shareUser = await this.loadByShareIdAndUser(shareId, userId);
+		const shareUser = await this.byShareAndUserId(shareId, userId);
 		if (!shareUser) throw new ErrorNotFound(`Item has not been shared with this user: ${shareId} / ${userId}`);
 
 		const share = await this.models().share().load(shareId);

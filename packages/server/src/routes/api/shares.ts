@@ -1,5 +1,5 @@
-import { ErrorBadRequest, ErrorConflict, ErrorNotFound } from '../../utils/errors';
-import { Share, ShareType, User } from '../../db';
+import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
+import { Share, ShareType } from '../../db';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
@@ -41,7 +41,12 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const user: User = await bodyFields(ctx.req) as User;
+	interface UserInput {
+		email: string;
+	}
+
+	const fields = await bodyFields(ctx.req) as UserInput;
+	const user = await ctx.models.user().loadByEmail(fields.email);
 	if (!user) throw new ErrorNotFound('User not found');
 
 	const shareId = path.id;
@@ -50,9 +55,6 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 		share_id: shareId,
 		user_id: user.id,
 	});
-
-	const existingShareUser = await ctx.models.shareUser().byShareAndEmail(shareId, user.email);
-	if (existingShareUser) throw new ErrorConflict(`Already shared with user: ${user.email}`);
 
 	return ctx.models.shareUser().addByEmail(shareId, user.email);
 });

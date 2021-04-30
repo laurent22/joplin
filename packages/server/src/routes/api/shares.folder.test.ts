@@ -1,10 +1,10 @@
 import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, updateNote } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, updateNote, expectHttpError } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
-import { ErrorBadRequest } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
 import { serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -593,32 +593,22 @@ describe('shares.folder', function() {
 		expect(latestChanges1.items[0].item_id).toBe(noteItem.id);
 	});
 
+	test('should apply ACL - cannot share a folder with yourself', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
 
+		await createItemTree(user1.id, '', { '000000000000000000000000000000F1': {} });
+		const share = await postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F1' });
+		await expectHttpError(async () => postApi(session1.id, `shares/${share.id}/users`, { email: user1.email }), ErrorForbidden.httpCode);
+	});
 
+	test('should apply ACL - cannot share a folder twice with a user', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
 
-
-
-	// test('should apply ACL', async function() {
-	// 	const { session: session1 } = await createUserAndSession(1);
-	// 	const { session: session2 } = await createUserAndSession(2);
-	// 	const { user: user3 } = await createUserAndSession(3);
-
-	// 	const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
-
-	// 	// cannot share an item not owned by the user
-	// 	await expectHttpError(async () => postApi<Share>(session2.id, 'shares', {
-	// 		type: ShareType.App,
-	// 		item_name: item.name,
-	// 	}), ErrorForbidden.httpCode);
-
-	// 	// const share = await postApi<Share>(session1.id, 'shares', {
-	// 	// 	type: ShareType.App,
-	// 	// 	item_name: item.name,
-	// 	// });
-
-	// 	// await expectHttpError(async () => postApi(session2.id, `shares/${share.id}/users`, {
-	// 	// 	email: user3.email,
-	// 	// }), ErrorForbidden.httpCode);
-	// });
+		await createItemTree(user1.id, '', { '000000000000000000000000000000F1': {} });
+		const share = await postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F1' });
+		await postApi(session1.id, `shares/${share.id}/users`, { email: user2.email });
+		await expectHttpError(async () => postApi(session1.id, `shares/${share.id}/users`, { email: user2.email }), ErrorForbidden.httpCode);
+	});
 
 });
