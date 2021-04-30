@@ -16,6 +16,11 @@ export default class ShareModel extends BaseModel<Share> {
 	public async checkIfAllowed(user: User, action: AclAction, resource: Share = null): Promise<void> {
 		if (action === AclAction.Create) {
 			if (!await this.models().item().userHasItem(user.id, resource.item_id)) throw new ErrorForbidden('cannot share an item not owned by the user');
+
+			if (resource.type === ShareType.JoplinRootFolder) {
+				const item = await this.models().item().loadByJopId(user.id, resource.folder_id);
+				if (item.jop_parent_id) throw new ErrorForbidden('A shared notebook must be at the root');
+			}
 		}
 
 		if (action === AclAction.Read) {
@@ -70,6 +75,11 @@ export default class ShareModel extends BaseModel<Share> {
 
 	public shareUrl(id: Uuid, query: any = null): string {
 		return setQueryParameters(`${this.baseUrl}/shares/${id}`, query);
+	}
+
+	public async byItemId(itemId: Uuid): Promise<Share | null> {
+		const r = await this.byItemIds([itemId]);
+		return r.length ? r[0] : null;
 	}
 
 	public async byItemIds(itemIds: Uuid[]): Promise<Share[]> {

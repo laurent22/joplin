@@ -1,6 +1,6 @@
 import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, updateNote, expectHttpError } from '../../utils/testing/testUtils';
-import { postApi, patchApi, getApi } from '../../utils/testing/apiUtils';
+import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
@@ -593,7 +593,7 @@ describe('shares.folder', function() {
 		expect(latestChanges1.items[0].item_id).toBe(noteItem.id);
 	});
 
-	test('should apply ACL - cannot share a folder with yourself', async function() {
+	test('should check permissions - cannot share a folder with yourself', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 
 		await createItemTree(user1.id, '', { '000000000000000000000000000000F1': {} });
@@ -601,7 +601,7 @@ describe('shares.folder', function() {
 		await expectHttpError(async () => postApi(session1.id, `shares/${share.id}/users`, { email: user1.email }), ErrorForbidden.httpCode);
 	});
 
-	test('should apply ACL - cannot share a folder twice with a user', async function() {
+	test('should check permissions - cannot share a folder twice with a user', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 
@@ -609,6 +609,28 @@ describe('shares.folder', function() {
 		const share = await postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F1' });
 		await postApi(session1.id, `shares/${share.id}/users`, { email: user2.email });
 		await expectHttpError(async () => postApi(session1.id, `shares/${share.id}/users`, { email: user2.email }), ErrorForbidden.httpCode);
+	});
+
+	test('should check permissions - cannot share a non-root folder', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'000000000000000000000000000000F2': {},
+			},
+		});
+
+		await expectHttpError(async () => postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F2' }), ErrorForbidden.httpCode);
+	});
+
+	test('should check permissions - only owner of share can deleted associated folder', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await createItemTree(user1.id, '', { '000000000000000000000000000000F1': {}	});
+		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
+		await expectHttpError(async () => deleteApi(session2.id, 'items/000000000000000000000000000000F1.md'), ErrorForbidden.httpCode);
 	});
 
 });

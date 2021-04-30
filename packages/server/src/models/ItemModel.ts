@@ -1,9 +1,9 @@
-import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType } from '../db';
+import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions, AclAction } from './BaseModel';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 
@@ -39,30 +39,14 @@ export default class ItemModel extends BaseModel<Item> {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
 	}
 
-	// public async checkIfAllowed(user: User, action: AclAction, resource: Item = null): Promise<void> {
-	// 	if (action === AclAction.Create) {
-
-	// 	}
-
-	// 	if (action === AclAction.Read) {
-	// 		if (user.is_admin) return;
-	// 		if (user.id !== resource.id) throw new ErrorForbidden('cannot view other users');
-	// 	}
-
-	// 	if (action === AclAction.Update) {
-	// 		if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
-	// 		if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
-	// 		if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
-	// 	}
-
-	// 	if (action === AclAction.Delete) {
-	// 		if (!user.is_admin) throw new ErrorForbidden('only admins can delete users');
-	// 	}
-
-	// 	if (action === AclAction.List) {
-	// 		if (!user.is_admin) throw new ErrorForbidden('non-admin cannot list users');
-	// 	}
-	// }
+	public async checkIfAllowed(user: User, action: AclAction, resource: Item = null): Promise<void> {
+		if (action === AclAction.Delete) {
+			const share = await this.models().share().byItemId(resource.id);
+			if (share && share.type === ShareType.JoplinRootFolder) {
+				if (user.id !== share.owner_id) throw new ErrorForbidden('only the owner of the shared notebook can delete it');
+			}
+		}
+	}
 
 	public fromApiInput(item: Item): Item {
 		const output: Item = {};

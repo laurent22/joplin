@@ -7,6 +7,7 @@ import * as fs from 'fs-extra';
 import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
 import ItemModel from '../../models/ItemModel';
 import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
+import { AclAction } from '../../models/BaseModel';
 
 const router = new Router();
 
@@ -17,6 +18,9 @@ const router = new Router();
 // - In other words, it is not possible for a user to access another user's
 //   items, thus the lack of checkIfAllowed() calls as that would not be
 //   necessary, and would be slower.
+// - For now, users who are shared a folder with have full access to all items
+//   within that folder. Except that they cannot delete the root folder if they
+//   are not the owner, so there's a check in this case.
 
 async function itemFromPath(userId: Uuid, itemModel: ItemModel, path: SubPath, mustExists: boolean = true): Promise<Item> {
 	const name = itemModel.pathToName(path.id);
@@ -42,6 +46,7 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 			await itemModel.deleteAll(ctx.owner.id);
 		} else {
 			const item = await itemFromPath(ctx.owner.id, itemModel, path);
+			await ctx.models.item().checkIfAllowed(ctx.owner, AclAction.Delete, item);
 			await itemModel.delete(item.id);
 		}
 	} catch (error) {
