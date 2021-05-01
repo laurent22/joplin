@@ -139,6 +139,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const [draggingStarted, setDraggingStarted] = useState(false);
 	const [leftExtraToolbarWidth, setLeftExtraToolbarWidth] = useState(null);
 
+	const widthObserver = useRef(
+		new ResizeObserver((entries: ResizeObserverEntry[]) => {
+			entries.forEach((entry: ResizeObserverEntry) => {
+				if (entry.target.id === 'leftExtraToolbarContainer') {
+					setLeftExtraToolbarWidth((entry.target as HTMLElement).offsetWidth);
+				}
+			});
+		})
+	);
+
 	const props_onMessage = useRef(null);
 	props_onMessage.current = props.onMessage;
 
@@ -175,8 +185,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	};
 
 	useEffect(() => {
-		setLeftExtraToolbarWidth(document.getElementById('leftExtraToolbarContainer').offsetWidth);
-	}, [props.noteToolbarButtonInfos]);
+		const leftExtraToolbarContaier = document.getElementById('leftExtraToolbarContainer');
+		widthObserver.current.observe(leftExtraToolbarContaier);
+
+		return () => {
+			widthObserver.current.unobserve(leftExtraToolbarContaier);
+		};
+	}, [widthObserver]);
 
 	const insertResourcesIntoContent = useCallback(async (filePaths: string[] = null, options: any = null) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
