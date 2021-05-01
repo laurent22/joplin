@@ -20,11 +20,9 @@ const taboverride = require('taboverride');
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
-import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
-const CssUtils = require('@joplin/lib/CssUtils');
 
 function markupRenderOptions(override: any = null) {
 	return {
@@ -553,7 +551,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
-			const cssString = await CssUtils.loadCustomCss(`${Setting.value('profileDir')}/tinymce.css`);
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -561,7 +558,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				height: '100%',
 				resize: false,
 				icons: 'Joplin',
-				content_style: cssString,
 				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
 				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
