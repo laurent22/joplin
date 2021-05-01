@@ -14,9 +14,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -504,9 +506,8 @@ msgid "Delete line"
 msgstr "Izbriši redak"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Dupliciraj"
+msgstr "Dupliciraj redak"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -700,10 +701,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"Trenutačno je aktivan siguran način. Prikaz bilježaka i svi dodaci "
+"privremeno su deaktivirani."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:412
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Deaktiviraj sigurni modus i pokreni program ponovo"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:416
 msgid ""
@@ -1689,9 +1692,8 @@ msgstr[1] "Kopiraj poveznice za dijeljenje"
 msgstr[2] "Kopiraj poveznice za dijeljenje"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "Uključi/Isključi bočnu traku"
+msgstr "Uključi/Isključi sigurni modus"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -2565,6 +2567,8 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Koristi se za većinu teksta u markdown uređivaču. Ako se ne pronađe, koristi "
+"se generički font proporcijalne širine."
 
 #: packages/lib/models/Setting.js:704
 msgid "Editor monospace font family"
@@ -2576,6 +2580,8 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Koristi se za tekst fiksne širine (npr. tablice, potvrdni okivi, programski "
+"kod). Ako se ne pronađe, koristi se generički font fiksne širine."
 
 #: packages/lib/models/Setting.js:726
 msgid "Custom stylesheet for rendered Markdown"
