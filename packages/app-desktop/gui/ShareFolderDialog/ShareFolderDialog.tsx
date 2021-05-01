@@ -15,6 +15,7 @@ import StyledMessage from '../style/StyledMessage';
 import { StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
 import { State } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
+import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('ShareFolderDialog');
 
@@ -57,6 +58,11 @@ const StyledError = styled(StyledMessage)`
 	margin-bottom: 1em;
 `;
 
+const StyledShareState = styled(StyledMessage)`
+	word-break: break-all;
+	margin-bottom: 1em;
+`;
+
 const StyledIcon = styled.i`
 	margin-right: 8px;
 `;
@@ -83,12 +89,21 @@ function useAsyncEffect(effect: Function, dependencies: any[]) {
 	}, dependencies);
 }
 
+enum ShareState {
+	Idle = 0,
+	Synchronizing = 1,
+	Creating = 2,
+}
+
 function ShareFolderDialog(props: Props) {
 	const [folder, setFolder] = useState<FolderEntity>(null);
 	const [recipientEmail, setRecipientEmail] = useState<string>('');
 	const [latestError, setLatestError] = useState<Error>(null);
 	const [share, setShare] = useState<StateShare>(null);
 	const [shareUsers, setShareUsers] = useState<StateShareUser[]>([]);
+	const [shareState, setShareState] = useState<ShareState>(ShareState.Idle);
+
+	console.info('UUUUUUUUUUU', props.shareUsers);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const f = await Folder.load(props.folderId);
@@ -98,6 +113,13 @@ function ShareFolderDialog(props: Props) {
 
 	useEffect(() => {
 		void ShareService.instance().refreshShares();
+	}, []);
+
+	useAsyncEffect(async (event: AsyncEffectEvent) => {
+		setShareState(ShareState.Synchronizing);
+		await reg.waitForSyncFinishedThenSync();
+		if (event.cancelled) return;
+		setShareState(ShareState.Idle);
 	}, []);
 
 	useEffect(() => {
@@ -122,13 +144,18 @@ function ShareFolderDialog(props: Props) {
 	}, [props.folderId]);
 
 	async function shareRecipient_click() {
+		setShareState(ShareState.Creating);
+
 		try {
 			setLatestError(null);
 			const share = await ShareService.instance().shareFolder(props.folderId);
 			await ShareService.instance().addShareRecipient(share.id, recipientEmail);
+			await ShareService.instance().refreshShareUsers(share.id);
 		} catch (error) {
 			logger.error(error);
 			setLatestError(error);
+		} finally {
+			setShareState(ShareState.Idle);
 		}
 	}
 
@@ -145,12 +172,13 @@ function ShareFolderDialog(props: Props) {
 	}
 
 	function renderAddRecipient() {
+		const disabled = shareState !== ShareState.Idle;
 		return (
 			<StyledAddRecipient>
 				<StyledFormLabel>{_('Add recipient:')}</StyledFormLabel>
 				<StyledRecipientControls>
-					<StyledRecipientInput type="email" placeholder="example@domain.com" value={recipientEmail} onChange={recipientEmail_change} />
-					<Button title={_('Share')} onClick={shareRecipient_click}></Button>
+					<StyledRecipientInput disabled={disabled} type="email" placeholder="example@domain.com" value={recipientEmail} onChange={recipientEmail_change} />
+					<Button disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
 			</StyledAddRecipient>
 		);
@@ -187,6 +215,24 @@ function ShareFolderDialog(props: Props) {
 		);
 	}
 
+	function renderShareState() {
+		if (shareState === ShareState.Idle) return null;
+
+		const messages = {
+			[ShareState.Synchronizing]: _('Synchronizing...'),
+			[ShareState.Creating]: _('Sharing notebook...'),
+		};
+
+		const message = messages[shareState];
+		if (!message) throw new Error('Unsupported state: ' + shareState);
+
+		return (
+			<StyledShareState>
+				{message}
+			</StyledShareState>
+		);
+	}
+
 	function buttonRow_click() {
 		props.onClose();
 	}
@@ -197,6 +243,7 @@ function ShareFolderDialog(props: Props) {
 				<DialogTitle title={_('Share Notebook')}/>
 				{renderFolder()}
 				{renderAddRecipient()}
+				{renderShareState()}
 				{renderError()}
 				{renderRecipients()}
 				<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
