@@ -6,7 +6,7 @@ const StyledMessage = styled.div`
 	font-size: ${props => props.theme.fontSize}px;
 	color: ${props => props.theme.color};
 	font-family: ${props => props.theme.fontFamily};
-	padding: ${props => props.theme.mainPadding}px;
+	padding: ${props => props.type === 'error' ? props.theme.mainPadding : '0' }px;
 `;
 
 export default StyledMessage;

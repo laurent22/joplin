@@ -1,5 +1,6 @@
 import JoplinServerApi from '../../JoplinServerApi';
 import Logger from '../../Logger';
+import Folder from '../../models/Folder';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
 import SyncTargetJoplinServer from '../../SyncTargetJoplinServer';
@@ -44,10 +45,14 @@ export default class ShareService {
 	}
 
 	public async shareFolder(folderId: string) {
-		return this.api().exec('POST', 'api/shares', {}, {
-			folder_id: folderId,
-			type: 3, // JoplinRootFolder
-		});
+		const folder = await Folder.load(folderId);
+		if (!folder) throw new Error('No such folder: ' + folderId);
+
+		if (folder.parent_id) {
+			await Folder.save({ id: folder.id, parent_id: '' })
+		}
+
+		return this.api().exec('POST', 'api/shares', {}, { folder_id: folderId });
 	}
 
 	public async addShareRecipient(shareId: string, recipientEmail: string) {
