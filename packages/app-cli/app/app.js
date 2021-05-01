@@ -9,6 +9,7 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { fileExtension } = require('@joplin/lib/path-utils');
+const { splitCommandString } = require('@joplin/lib/string-utils');
 const { _ } = require('@joplin/lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
@@ -386,6 +387,21 @@ class Application extends BaseApplication {
 		return output;
 	}
 
+	async commandList(argv) {
+		if (argv.length && argv[0] === 'batch') {
+			const commands = [];
+			const commandLines = (await fs.readFile(argv[1], 'utf-8')).split('\n');
+			for (const commandLine of commandLines) {
+				if (!commandLine.trim()) continue;
+				const splitted = splitCommandString(commandLine.trim());
+				commands.push(splitted);
+			}
+			return commands;
+		} else {
+			return [argv];
+		}
+	}
+
 	async start(argv) {
 		argv = await super.start(argv);
 
@@ -403,7 +419,10 @@ class Application extends BaseApplication {
 			await this.applySettingsSideEffects();
 
 			try {
-				await this.execCommand(argv);
+				const commands = await this.commandList(argv);
+				for (const command of commands) {
+					await this.execCommand(command);
+				}
 			} catch (error) {
 				if (this.showStackTraces_) {
 					console.error(error);

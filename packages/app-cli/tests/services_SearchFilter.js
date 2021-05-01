@@ -580,6 +580,64 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(t3.id);
 	}));
 
+	it('should support filtering by due date', (async () => {
+		let rows;
+		const toDo1 = await Note.save({ title: 'ToDo 1', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-04-27') });
+		const toDo2 = await Note.save({ title: 'ToDo 2', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-03-17') });
+		const note1 = await Note.save({ title: 'Note 1', body: 'Note' });
+
+		await engine.syncTables();
+
+		rows = await engine.search('due:20210425');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(toDo1.id);
+
+		rows = await engine.search('-due:20210425');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(toDo2.id);
+	}));
+
+	it('should support filtering by due with smart value: day', (async () => {
+		let rows;
+
+		const inThreeDays = parseInt(time.goForwardInTime(Date.now(), 3, 'day'), 10);
+		const inSevenDays = parseInt(time.goForwardInTime(Date.now(), 7, 'day'), 10);
+		const threeDaysAgo = parseInt(time.goBackInTime(Date.now(), 3, 'day'), 10);
+		const sevenDaysAgo = parseInt(time.goBackInTime(Date.now(), 7, 'day'), 10);
+
+		const toDo1 = await Note.save({ title: 'ToDo + 3 day', body: 'toto', is_todo: 1, todo_due: inThreeDays });
+		const toDo2 = await Note.save({ title: 'ToDo + 7 day', body: 'toto', is_todo: 1, todo_due: inSevenDays });
+		const toDo3 = await Note.save({ title: 'ToDo - 3 day', body: 'toto', is_todo: 1, todo_due: threeDaysAgo });
+		const toDo4 = await Note.save({ title: 'ToDo - 7 day', body: 'toto', is_todo: 1, todo_due: sevenDaysAgo });
+
+		await engine.syncTables();
+
+		rows = await engine.search('due:day-4');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(toDo1.id);
+		expect(ids(rows)).toContain(toDo2.id);
+		expect(ids(rows)).toContain(toDo3.id);
+
+		rows = await engine.search('-due:day-4');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(toDo4.id);
+
+		rows = await engine.search('-due:day+4');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(toDo1.id);
+		expect(ids(rows)).toContain(toDo3.id);
+		expect(ids(rows)).toContain(toDo4.id);
+
+		rows = await engine.search('due:day+4');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(toDo2.id);
+
+		rows = await engine.search('due:day-4 -due:day+4');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(toDo1.id);
+		expect(ids(rows)).toContain(toDo3.id);
+	}));
+
 	it('should support filtering by latitude, longitude, altitude', (async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'I made this', body: 'this week', latitude: 12.97, longitude: 88.88, altitude: 69.96 });
@@ -788,6 +846,31 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n1.id);
 		expect(ids(rows)).toContain(n2.id);
 
+	}));
+
+	it('should support filtering by note id', (async () => {
+		let rows;
+		const note1 = await Note.save({ title: 'Note 1', body: 'body' });
+		const note2 = await Note.save({ title: 'Note 2', body: 'body' });
+		const note3 = await Note.save({ title: 'Note 3', body: 'body' });
+		await engine.syncTables();
+
+		rows = await engine.search(`id:${note1.id}`);
+		expect(rows.length).toBe(1);
+		expect(rows.map(r=>r.id)).toContain(note1.id);
+
+		rows = await engine.search(`any:1 id:${note1.id} id:${note2.id}`);
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(note1.id);
+		expect(rows.map(r=>r.id)).toContain(note2.id);
+
+		rows = await engine.search(`any:0 id:${note1.id} id:${note2.id}`);
+		expect(rows.length).toBe(0);
+
+		rows = await engine.search(`-id:${note2.id}`);
+		expect(rows.length).toBe(2);
+		expect(rows.map(r=>r.id)).toContain(note1.id);
+		expect(rows.map(r=>r.id)).toContain(note3.id);
 	}));
 
 });

@@ -219,16 +219,24 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 	}
 
 	const getCondition = (term: Term) => {
-		if (fieldName === 'sourceurl') { return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`; } else { return `notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`; }
+		if (fieldName === 'sourceurl') {
+			return `notes_normalized.source_url ${term.negated ? 'NOT' : ''} LIKE ?`;
+		} else if (fieldName === 'date' && term.name === 'due') {
+			return `todo_due ${term.negated ? '<' : '>='} ?`;
+		} else if (fieldName === 'id') {
+			return `id ${term.negated ? 'NOT' : ''} LIKE ?`;
+		} else {
+			return `notes_normalized.${fieldName === 'date' ? `user_${term.name}_time` : `${term.name}`} ${term.negated ? '<' : '>='} ?`;
+		}
 	};
 
 	terms.forEach(term => {
 		conditions.push(`
-		${relation} ROWID IN (
+		${relation} ( ${term.name === 'due' ? 'is_todo IS 1 AND ' : ''} ROWID IN (
 			SELECT ROWID
 			FROM notes_normalized
 			WHERE ${getCondition(term)}
-		)`);
+		))`);
 		params.push(term.value);
 	});
 };
@@ -264,6 +272,12 @@ const biConditionalFilter = (terms: Term[], conditions: string[], relation: Rela
 	});
 };
 
+const noteIdFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation) => {
+	const noteIdTerms = terms.filter(x => x.name === 'id');
+	genericFilter(noteIdTerms, conditions, params, relation, 'id');
+};
+
+
 const typeFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation) => {
 	const typeTerms = terms.filter(x => x.name === 'type');
 	genericFilter(typeTerms, conditions, params, relation, 'type');
@@ -285,7 +299,7 @@ const dateFilter = (terms: Term[], conditons: string[], params: string[], relati
 		const yyyymmdd = /^[0-9]{8}$/;
 		const yyyymm = /^[0-9]{6}$/;
 		const yyyy = /^[0-9]{4}$/;
-		const smartValue = /^(day|week|month|year)-([0-9]+)$/i;
+		const smartValue = /^(day|week|month|year)(\+|-)([0-9]+)$/i;
 
 		if (yyyymmdd.test(date)) {
 			return time.formatLocalToMs(date, 'YYYYMMDD').toString();
@@ -296,14 +310,16 @@ const dateFilter = (terms: Term[], conditons: string[], params: string[], relati
 		} else if (smartValue.test(date)) {
 			const match = smartValue.exec(date);
 			const timeUnit = match[1]; // eg. day, week, month, year
-			const num = Number(match[2]); // eg. 1, 12, 15
-			return time.goBackInTime(Date.now(), num, timeUnit);
+			const timeDirection = match[2]; // + or -
+			const num = Number(match[3]); // eg. 1, 12, 15
+
+			if (timeDirection === '+') { return time.goForwardInTime(Date.now(), num, timeUnit); } else { return time.goBackInTime(Date.now(), num, timeUnit); }
 		} else {
 			throw new Error('Invalid date format!');
 		}
 	};
 
-	const dateTerms = terms.filter(x => x.name === 'created' || x.name === 'updated');
+	const dateTerms = terms.filter(x => x.name === 'created' || x.name === 'updated' || x.name === 'due');
 	const unixDateTerms = dateTerms.map(term => { return { ...term, value: getUnixMs(term.value) }; });
 	genericFilter(unixDateTerms, conditons, params, relation, 'date');
 };
@@ -409,6 +425,7 @@ export default function queryBuilder(terms: Term[]) {
 	FROM notes_fts
 	WHERE ${getConnective(terms, relation)}`);
 
+	noteIdFilter(terms, queryParts, params, relation);
 
 	notebookFilter(terms, queryParts, params, withs);
 

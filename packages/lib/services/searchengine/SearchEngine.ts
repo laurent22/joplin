@@ -14,7 +14,7 @@ const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.
 export default class SearchEngine {
 
 	public static instance_: SearchEngine = null;
-	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, parent_id, latitude, longitude, altitude, source_url';
+	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
 	public static SEARCH_TYPE_AUTO = 'auto';
 	public static SEARCH_TYPE_BASIC = 'basic';
 	public static SEARCH_TYPE_FTS = 'fts';
@@ -82,8 +82,8 @@ export default class SearchEngine {
 				const n = this.normalizeNote_(note);
 				queries.push({ sql: `
 				INSERT INTO notes_normalized(${SearchEngine.relevantFields})
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] }
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] }
 				);
 			}
 
@@ -171,8 +171,8 @@ export default class SearchEngine {
 							const n = this.normalizeNote_(note);
 							queries.push({ sql: `
 							INSERT INTO notes_normalized(${SearchEngine.relevantFields})
-							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] });
+							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] });
 							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {

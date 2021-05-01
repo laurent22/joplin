@@ -352,6 +352,13 @@ class WebDavApi {
 			if (method === 'PUT') headers['Content-Type'] = 'text/plain';
 		}
 
+		// React-native has caching enabled by at least on Android (see https://github.com/laurent22/joplin/issues/4706 and the related PR).
+		// The below header disables caching for all versions, including desktop.
+		// This can potentially also help with misconfigured caching on WebDAV server.
+		if (!headers['Cache-Control']) {
+			headers['Cache-Control'] = 'no-store';
+		}
+
 		// On iOS, the network lib appends a If-None-Match header to PROPFIND calls, which is kind of correct because
 		// the call is idempotent and thus could be cached. According to RFC-7232 though only GET and HEAD should have
 		// this header for caching purposes. It makes no mention of PROPFIND.
