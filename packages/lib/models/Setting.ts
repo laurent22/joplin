@@ -140,6 +140,7 @@ class Setting extends BaseModel {
 	public static custom_css_files = {
 		JOPLIN_APP: 'userchrome.css',
 		RENDERED_MARKDOWN: 'userstyle.css',
+		TINYMCE: 'tinymce.css',
 	};
 
 	// Contains constants that are set by the application and
@@ -903,6 +904,23 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: ['desktop'],
 				label: () => _('Custom stylesheet for rendered Markdown'),
+				section: 'appearance',
+				advanced: true,
+			},
+			'style.customCss.tinyMCE': {
+				value: null,
+				onClick: () => {
+					const dir = Setting.value('profileDir');
+					const filename = Setting.custom_css_files.TINYMCE;
+					const filepath = `${dir}/${filename}`;
+					const defaultContents = '/* For styling the tinyMCE-editor content */';
+
+					shim.openOrCreateFile(filepath, defaultContents);
+				},
+				type: SettingItemType.Button,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Custom stylesheet for the tinyMCE-editor'),
 				section: 'appearance',
 				advanced: true,
 			},
