@@ -1,6 +1,7 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
 import { Config, DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import * as pathUtils from 'path';
+import PgQueryParser = require('pg-connection-string');
 
 export interface EnvVariables {
 	APP_BASE_URL?: string;
@@ -13,8 +14,7 @@ export interface EnvVariables {
 	POSTGRES_USER?: string;
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
-	POSTGRES_SSL_ENABLE?: string;
-	POSTGRES_SSL_VERIFY?: string;
+	POSTGRES_CONNECTION_STRING?: string;
 
 	SQLITE_DATABASE?: string;
 }
@@ -40,15 +40,10 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 	return null;
 }
 
-function databaseSSLConfigFromEnv(env: EnvVariables): object {
-	if (env.POSTGRES_SSL_ENABLE === 'true') {
-		if (env.POSTGRES_SSL_VERIFY === 'false') {
-			return { rejectUnauthorized: false };
-		} else {
-			return { rejectUnauthorized: true };
-		}
-	}
-	return null;
+function parsePgQueryString(env: EnvVariables): object {
+	const config = PgQueryParser.parse('postgres://fakeuser@fakehost/fakedb?' + env.POSTGRES_CONNECTION_STRING);
+	console.log(config);
+	return config;
 }
 
 function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
@@ -60,7 +55,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 			password: env.POSTGRES_PASSWORD || 'joplin',
 			port: env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432,
 			host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
-			ssl: databaseSSLConfigFromEnv(env),
+			ssl: parsePgQueryString(env) || null,
 		};
 	}
 
