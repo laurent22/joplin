@@ -1,7 +1,7 @@
 /* eslint-disable require-atomic-updates */
 import BaseApplication from '@joplin/lib/BaseApplication';
 import BaseModel from '@joplin/lib/BaseModel';
-import Logger, { TargetType, LoggerWrapper } from '@joplin/lib/Logger';
+import Logger, { TargetType, LoggerWrapper, LogLevel } from '@joplin/lib/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import BaseService from '@joplin/lib/services/BaseService';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
@@ -69,7 +69,6 @@ const suiteName_ = uuid.createNano();
 
 const databases_: any[] = [];
 let synchronizers_: any[] = [];
-const synchronizerContexts_: any = {};
 const fileApis_: any = {};
 const encryptionServices_: any[] = [];
 const revisionServices_: any[] = [];
@@ -168,7 +167,7 @@ dbLogger.setLevel(Logger.LEVEL_WARN);
 
 const logger = new Logger();
 logger.addTarget(TargetType.Console);
-logger.setLevel(Logger.LEVEL_WARN); // Set to DEBUG to display sync process in console
+logger.setLevel(LogLevel.Warn); // Set to DEBUG to display sync process in console
 
 Logger.initializeGlobalLogger(logger);
 
@@ -390,7 +389,6 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
-		synchronizerContexts_[id] = null;
 	}
 
 	encryptionServices_[id] = new EncryptionService();
@@ -420,11 +418,16 @@ function synchronizer(id: number = null) {
 // the client.
 async function synchronizerStart(id: number = null, extraOptions: any = null) {
 	if (id === null) id = currentClient_;
-	const context = synchronizerContexts_[id];
+
+	const contextKey = `sync.${syncTargetId()}.context`;
+	const context = Setting.value(contextKey);
+
 	const options = Object.assign({}, extraOptions);
 	if (context) options.context = context;
 	const newContext = await synchronizer(id).start(options);
-	synchronizerContexts_[id] = newContext;
+
+	Setting.setValue(contextKey, JSON.stringify(newContext));
+
 	return newContext;
 }
 

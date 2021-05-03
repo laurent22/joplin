@@ -107,6 +107,9 @@ packages/app-cli/tests/Synchronizer.sharing.js.map
 packages/app-cli/tests/Synchronizer.tags.d.ts
 packages/app-cli/tests/Synchronizer.tags.js
 packages/app-cli/tests/Synchronizer.tags.js.map
+packages/app-cli/tests/Synchronizer.tools.d.ts
+packages/app-cli/tests/Synchronizer.tools.js
+packages/app-cli/tests/Synchronizer.tools.js.map
 packages/app-cli/tests/file-api-driver.d.ts
 packages/app-cli/tests/file-api-driver.js
 packages/app-cli/tests/file-api-driver.js.map
@@ -1385,6 +1388,9 @@ packages/lib/services/synchronizer/migrations/1.js.map
 packages/lib/services/synchronizer/migrations/2.d.ts
 packages/lib/services/synchronizer/migrations/2.js
 packages/lib/services/synchronizer/migrations/2.js.map
+packages/lib/services/synchronizer/tools.d.ts
+packages/lib/services/synchronizer/tools.js
+packages/lib/services/synchronizer/tools.js.map
 packages/lib/services/synchronizer/utils/types.d.ts
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/services/synchronizer/utils/types.js.map
