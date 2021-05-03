@@ -221,8 +221,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 		return newLayout !== layout ? validateLayout(newLayout) : layout;
 	}
 
-	private get showShareInvitationNotification(): boolean {
-		return !!this.props.shareInvitations.find(i => i.status === 0);
+	private showShareInvitationNotification(props: Props): boolean {
+		return !!props.shareInvitations.find(i => i.status === 0);
 	}
 
 	private buildLayout(plugins: PluginStates): LayoutItem {
@@ -581,7 +581,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					</a>
 				</span>
 			);
-		} else if (this.showShareInvitationNotification) {
+		} else if (this.showShareInvitationNotification(this.props)) {
 			const invitation = this.props.shareInvitations[0];
 			const sharer = invitation.share.user;
 
@@ -626,7 +626,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props);
 	}
 
 	registerCommands() {
