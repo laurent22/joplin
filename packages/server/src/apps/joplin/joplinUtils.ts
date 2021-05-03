@@ -10,6 +10,7 @@ import Tag from '@joplin/lib/models/Tag';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
 import { Config } from '../../utils/types';
+import * as fs from 'fs-extra';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 
 const logger = Logger.create('JoplinUtils');
@@ -18,6 +19,7 @@ let db_: JoplinDatabase = null;
 
 export async function initializeJoplinUtils(config: Config) {
 	const filePath = `${config.tempDir}/joplin.sqlite`;
+	await fs.remove(filePath);
 
 	db_ = new JoplinDatabase(new DatabaseDriverNode());
 	db_.setLogger(logger as Logger);
