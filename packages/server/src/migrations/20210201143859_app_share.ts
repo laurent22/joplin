@@ -27,6 +27,11 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.alterTable('changes', function(table: Knex.CreateTableBuilder) {
 		table.index(['item_id']);
 	});
+
+	await db.schema.alterTable('shares', function(table: Knex.CreateTableBuilder) {
+		table.dropColumn('file_id');
+		table.string('item_id', 32).notNullable();
+	});
 }
 
 export async function down(db: DbConnection): Promise<any> {
