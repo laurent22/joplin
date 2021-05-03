@@ -88,6 +88,9 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.alterTable('shares', function(table: Knex.CreateTableBuilder) {
 		table.dropColumn('is_auto');
 		table.string('note_id', 32).defaultTo('').notNullable();
+		table.index(['note_id']);
+		table.index(['folder_id']);
+		table.index(['item_id']);
 	});
 
 	await db.schema.alterTable('changes', function(table: Knex.CreateTableBuilder) {
