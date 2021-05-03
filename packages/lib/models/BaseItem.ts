@@ -681,7 +681,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	static syncItemTypes() {
+	public static syncItemTypes(): ModelType[] {
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.type;
 		});

@@ -12,7 +12,7 @@ export enum TargetType {
 	Console = 'console',
 }
 
-enum LogLevel {
+export enum LogLevel {
 	None = 0,
 	Error = 10,
 	Warn = 20,
