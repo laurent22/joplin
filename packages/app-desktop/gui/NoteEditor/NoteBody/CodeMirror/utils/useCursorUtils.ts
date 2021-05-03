@@ -1,7 +1,6 @@
 import markdownUtils from '@joplin/lib/markdownUtils';
 import Setting from '@joplin/lib/models/Setting';
 export function modifyListLines(lines: string[],num: number,listSymbol: string) {
-	console.log(listSymbol,':string');
 	for (let j = 0; j < lines.length; j++) {
 		const line = lines[j];
 		if (!line && j === lines.length - 1) continue;
