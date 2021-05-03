@@ -17,6 +17,8 @@ const logger = Logger.create('JoplinUtils');
 
 let db_: JoplinDatabase = null;
 
+export const resourceDirName = '.resource';
+
 export async function initializeJoplinUtils(config: Config) {
 	const filePath = `${config.tempDir}/joplin.sqlite`;
 	await fs.remove(filePath);
@@ -56,5 +58,9 @@ export async function serializeJoplinItem(item: any): Promise<string> {
 }
 
 export function resourceBlobPath(resourceId: string): string {
-	return `.resource/${resourceId}`;
+	return `${resourceDirName}/${resourceId}`;
+}
+
+export function isJoplinResourceBlobPath(path: string): boolean {
+	return path.indexOf(resourceDirName) === 0;
 }

@@ -8,7 +8,7 @@ const theme: Theme = {
 	// content. It's basically dark gray text on white background
 	backgroundColor: '#ffffff',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
-	oddBackgroundColor: '#dddddd',
+	oddBackgroundColor: '#eeeeee',
 	color: '#32373F', // For regular text
 	colorError: 'red',
 	colorWarn: '#9A5B00',

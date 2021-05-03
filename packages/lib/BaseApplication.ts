@@ -45,6 +45,7 @@ import DecryptionWorker from './services/DecryptionWorker';
 const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
 import MigrationService from './services/MigrationService';
 import { clearLocalDataForRedownload, clearLocalSyncStateForReupload } from './services/synchronizer/tools';
+import ShareService from './services/share/ShareService';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -609,6 +610,7 @@ export default class BaseApplication {
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
+		ShareService.instance().initialize(this.store().dispatch);
 	}
 
 	deinitRedux() {

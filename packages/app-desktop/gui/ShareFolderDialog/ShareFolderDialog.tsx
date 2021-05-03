@@ -12,7 +12,7 @@ import StyledInput from '../style/StyledInput';
 import Button from '../Button/Button';
 import Logger from '@joplin/lib/Logger';
 import StyledMessage from '../style/StyledMessage';
-import { StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
+import { ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
 import { State } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
@@ -39,6 +39,23 @@ const StyledRecipientInput = styled(StyledInput)`
 
 const StyledAddRecipient = styled.div`
 	margin-bottom: 1em;
+`;
+
+const StyledRecipient = styled(StyledMessage)`
+	display: flex;
+	flex-direction: row;
+	padding: .6em 1em;
+	background-color: ${props => props.index % 2 === 0 ? props.theme.backgroundColor : props.theme.oddBackgroundColor};
+	align-items: center;
+`;
+
+const StyledRecipientName = styled.div`
+	display: flex;
+	flex: 1;
+`;
+
+const StyledRecipientStatusIcon = styled.i`
+	margin-right: .6em;
 `;
 
 const StyledRecipients = styled.div`
@@ -75,6 +92,10 @@ interface Props {
 	shareUsers: Record<string, StateShareUser[]>;
 }
 
+interface RecipientDeleteEvent {
+	shareUserId: string;
+}
+
 interface AsyncEffectEvent {
 	cancelled: boolean;
 }
@@ -102,8 +123,6 @@ function ShareFolderDialog(props: Props) {
 	const [share, setShare] = useState<StateShare>(null);
 	const [shareUsers, setShareUsers] = useState<StateShareUser[]>([]);
 	const [shareState, setShareState] = useState<ShareState>(ShareState.Idle);
-
-	console.info('UUUUUUUUUUU', props.shareUsers);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const f = await Folder.load(props.folderId);
@@ -150,7 +169,11 @@ function ShareFolderDialog(props: Props) {
 			setLatestError(null);
 			const share = await ShareService.instance().shareFolder(props.folderId);
 			await ShareService.instance().addShareRecipient(share.id, recipientEmail);
-			await ShareService.instance().refreshShareUsers(share.id);
+			await Promise.all([
+				ShareService.instance().refreshShares(),
+				ShareService.instance().refreshShareUsers(share.id),
+			]);
+			setRecipientEmail('');
 		} catch (error) {
 			logger.error(error);
 			setLatestError(error);
@@ -159,8 +182,15 @@ function ShareFolderDialog(props: Props) {
 		}
 	}
 
-	async function recipientEmail_change(event: any) {
+	function recipientEmail_change(event: any) {
 		setRecipientEmail(event.target.value);
+	}
+
+	async function recipient_delete(event: RecipientDeleteEvent) {
+		if (!confirm(_('Delete this invitation? The recipient will no longer have access to this shared notebook.'))) return;
+
+		await ShareService.instance().deleteShareRecipient(event.shareUserId);
+		await ShareService.instance().refreshShareUsers(share.id);
 	}
 
 	function renderFolder() {
@@ -184,16 +214,30 @@ function ShareFolderDialog(props: Props) {
 		);
 	}
 
-	function renderRecipient(shareUser: StateShareUser) {
+	function renderRecipient(index: number, shareUser: StateShareUser) {
+		const statusToIcon = {
+			[ShareUserStatus.Waiting]: 'fas fa-question',
+			[ShareUserStatus.Rejected]: 'fas fa-times',
+			[ShareUserStatus.Accepted]: 'fas fa-check',
+		};
+
+		const statusToMessage = {
+			[ShareUserStatus.Waiting]: _('Recipient has not yet accepted the invitation'),
+			[ShareUserStatus.Rejected]: _('Recipient has rejected the invitation'),
+			[ShareUserStatus.Accepted]: _('Recipient has accepted the invitation'),
+		};
+
 		return (
-			<StyledMessage key={shareUser.user.email}>
-				{shareUser.user.email}
-			</StyledMessage>
+			<StyledRecipient key={shareUser.user.email} index={index}>
+				<StyledRecipientName>{shareUser.user.email}</StyledRecipientName>
+				<StyledRecipientStatusIcon title={statusToMessage[shareUser.status]} className={statusToIcon[shareUser.status]}></StyledRecipientStatusIcon>
+				<Button iconName="far fa-times-circle" onClick={() => recipient_delete({ shareUserId: shareUser.id })}/>
+			</StyledRecipient>
 		);
 	}
 
 	function renderRecipients() {
-		const listItems = shareUsers.map(su => renderRecipient(su));
+		const listItems = shareUsers.map((su: StateShareUser, index: number) => renderRecipient(index, su));
 
 		return (
 			<StyledRecipients>
@@ -224,7 +268,7 @@ function ShareFolderDialog(props: Props) {
 		};
 
 		const message = messages[shareState];
-		if (!message) throw new Error('Unsupported state: ' + shareState);
+		if (!message) throw new Error(`Unsupported state: ${shareState}`);
 
 		return (
 			<StyledShareState>

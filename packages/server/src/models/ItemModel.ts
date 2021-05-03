@@ -1,7 +1,7 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions, AclAction } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
-import { isJoplinItemName, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
+import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
@@ -348,6 +348,12 @@ export default class ItemModel extends BaseModel<Item> {
 		});
 	}
 
+	public shouldRecordChange(itemName: string): boolean {
+		if (isJoplinItemName(itemName)) return true;
+		if (isJoplinResourceBlobPath(itemName)) return true;
+		return false;
+	}
+
 	// Returns the item IDs that are owned only by the given user. In other
 	// words, the items that are not shared with anyone else. Such items
 	// can be safely deleted when the user is deleted.
@@ -423,15 +429,15 @@ export default class ItemModel extends BaseModel<Item> {
 
 			// We only record updates. This because Create and Update events are
 			// per user, whenever a user_item is created or deleted.
-			if (!isNew) {
-				const changeModel = this.models().change();
+			const changeItemName = item.name || previousItem.name;
 
-				await changeModel.save({
+			if (!isNew && this.shouldRecordChange(changeItemName)) {
+				await this.models().change().save({
 					item_type: this.itemType,
 					item_id: item.id,
-					item_name: item.name || previousItem.name,
+					item_name: changeItemName,
 					type: isNew ? ChangeType.Create : ChangeType.Update,
-					previous_item: previousItem ? changeModel.serializePreviousItem(previousItem) : '',
+					previous_item: previousItem ? this.models().change().serializePreviousItem(previousItem) : '',
 					user_id: userId,
 				});
 			}

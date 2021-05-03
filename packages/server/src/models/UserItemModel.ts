@@ -50,6 +50,12 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return await this.db(this.tableName).select(this.defaultFields).where('share_id', '=', shareId);
 	}
 
+	public async byShareAndUserId(shareId: Uuid, userId: Uuid): Promise<UserItem[]> {
+		return await this.db(this.tableName).select(this.defaultFields)
+			.where('share_id', '=', shareId)
+			.where('user_id', '=', userId);
+	}
+
 	public async byUserId(userId: Uuid): Promise<UserItem[]> {
 		return this.db(this.tableName).where('user_id', '=', userId);
 	}
@@ -76,20 +82,26 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byUserId: userId });
 	}
 
+	public async deleteByShareAndUserId(shareId: Uuid, userId: Uuid): Promise<void> {
+		await this.deleteBy({ byShareId: shareId, byUserId: userId });
+	}
+
 	public async save(userItem: UserItem, options: SaveOptions = {}): Promise<UserItem> {
 		if (userItem.id) throw new Error('User items cannot be modified (only created or deleted)'); // Sanity check - shouldn't happen
 
 		const item = await this.models().item().load(userItem.item_id, { fields: ['id', 'name'] });
 
 		return this.withTransaction(async () => {
-			await this.models().change().save({
-				item_type: ItemType.UserItem,
-				item_id: userItem.item_id,
-				item_name: item.name,
-				type: ChangeType.Create,
-				previous_item: '',
-				user_id: userItem.user_id,
-			});
+			if (this.models().item().shouldRecordChange(item.name)) {
+				await this.models().change().save({
+					item_type: ItemType.UserItem,
+					item_id: userItem.item_id,
+					item_name: item.name,
+					type: ChangeType.Create,
+					previous_item: '',
+					user_id: userItem.user_id,
+				});
+			}
 
 			return super.save(userItem, options);
 		});
@@ -102,7 +114,9 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	private async deleteBy(options: UserItemDeleteOptions = {}): Promise<void> {
 		let userItems: UserItem[] = [];
 
-		if (options.byItemIds) {
+		if (options.byShareId && options.byUserId) {
+			userItems = await this.byShareAndUserId(options.byShareId, options.byUserId);
+		} else if (options.byItemIds) {
 			userItems = await this.byItemIds(options.byItemIds);
 		} else if (options.byShareId) {
 			userItems = await this.byShareId(options.byShareId);
@@ -121,14 +135,16 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			for (const userItem of userItems) {
 				const item = items.find(i => i.id === userItem.item_id);
 
-				await this.models().change().save({
-					item_type: ItemType.UserItem,
-					item_id: userItem.item_id,
-					item_name: item.name,
-					type: ChangeType.Delete,
-					previous_item: '',
-					user_id: userItem.user_id,
-				});
+				if (this.models().item().shouldRecordChange(item.name)) {
+					await this.models().change().save({
+						item_type: ItemType.UserItem,
+						item_id: userItem.item_id,
+						item_name: item.name,
+						type: ChangeType.Delete,
+						previous_item: '',
+						user_id: userItem.user_id,
+					});
+				}
 			}
 
 			await this.db(this.tableName).whereIn('id', userItems.map(ui => ui.id)).delete();

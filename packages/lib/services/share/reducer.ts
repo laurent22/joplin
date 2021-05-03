@@ -6,8 +6,15 @@ interface StateShareUserUser {
 	full_name?: string;
 }
 
+export enum ShareUserStatus {
+	Waiting = 0,
+	Accepted = 1,
+	Rejected = 2,
+}
+
 export interface StateShareUser {
-	status: number;
+	id: string;
+	status: ShareUserStatus;
 	user: StateShareUserUser;
 }
 
@@ -22,7 +29,7 @@ export interface StateShare {
 export interface ShareInvitation {
 	id: string;
 	share: StateShare;
-	status: number;
+	status: ShareUserStatus;
 }
 
 export interface State {

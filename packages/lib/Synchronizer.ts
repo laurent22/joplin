@@ -20,6 +20,7 @@ import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
 import NoteResource from './models/NoteResource';
 import JoplinError from './JoplinError';
+import ShareService from './services/share/ShareService';
 const TaskQueue = require('./TaskQueue');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -45,6 +46,7 @@ export default class Synchronizer {
 	private encryptionService_: EncryptionService = null;
 	private resourceService_: ResourceService = null;
 	private syncTargetIsLocked_: boolean = false;
+	private shareService_: ShareService = null;
 
 	// Debug flags are used to test certain hard-to-test conditions
 	// such as cancelling in the middle of a loop.
@@ -106,6 +108,10 @@ export default class Synchronizer {
 	maxResourceSize() {
 		if (this.maxResourceSize_ !== null) return this.maxResourceSize_;
 		return this.appType_ === 'mobile' ? 100 * 1000 * 1000 : Infinity;
+	}
+
+	public setShareService(v: ShareService) {
+		this.shareService_ = v;
 	}
 
 	public setEncryptionService(v: any) {
@@ -923,6 +929,8 @@ export default class Synchronizer {
 			this.logger().info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
 		}
+
+		if (this.shareService_) await this.shareService_.maintenance();
 
 		this.progressReport_.completedTime = time.unixMs();
 

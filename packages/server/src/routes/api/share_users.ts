@@ -23,6 +23,14 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 	}
 });
 
+router.del('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
+	const shareUser = await ctx.models.shareUser().load(path.id);
+	if (!shareUser) throw new ErrorNotFound();
+
+	await ctx.models.shareUser().checkIfAllowed(ctx.owner, AclAction.Delete, shareUser);
+	await ctx.models.shareUser().delete(shareUser.id);
+});
+
 router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
 	const shareUsers = await ctx.models.shareUser().byUserId(ctx.owner.id);
 

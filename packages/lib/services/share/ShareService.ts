@@ -1,18 +1,15 @@
 import JoplinServerApi from '../../JoplinServerApi';
-import Logger from '../../Logger';
 import Folder from '../../models/Folder';
 import Setting from '../../models/Setting';
-import shim from '../../shim';
 import SyncTargetJoplinServer from '../../SyncTargetJoplinServer';
 
-const logger = Logger.create('ShareService');
+// const logger = Logger.create('ShareService');
 
 export default class ShareService {
 
 	private static instance_: ShareService;
 	private api_: JoplinServerApi = null;
 	private dispatch_: Function = null;
-	private isRunningInBackground_: boolean = false;
 
 	public static instance(): ShareService {
 		if (this.instance_) return this.instance_;
@@ -46,10 +43,10 @@ export default class ShareService {
 
 	public async shareFolder(folderId: string) {
 		const folder = await Folder.load(folderId);
-		if (!folder) throw new Error('No such folder: ' + folderId);
+		if (!folder) throw new Error(`No such folder: ${folderId}`);
 
 		if (folder.parent_id) {
-			await Folder.save({ id: folder.id, parent_id: '' })
+			await Folder.save({ id: folder.id, parent_id: '' });
 		}
 
 		return this.api().exec('POST', 'api/shares', {}, { folder_id: folderId });
@@ -59,6 +56,10 @@ export default class ShareService {
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
 		});
+	}
+
+	public async deleteShareRecipient(shareUserId: string) {
+		await this.api().exec('DELETE', `api/share_users/${shareUserId}`);
 	}
 
 	public async shares() {
@@ -109,20 +110,11 @@ export default class ShareService {
 		});
 	}
 
-	public async runInBackground() {
-		if (this.isRunningInBackground_) return;
-		this.isRunningInBackground_ = true;
-
-		logger.info('Starting background service... Enabled:', this.enabled);
-
+	public async maintenance() {
 		if (this.enabled) {
 			await this.refreshShareInvitations();
 			await this.refreshShares();
 		}
-
-		shim.setTimeout(() => {
-			if (this.enabled) void this.refreshShareInvitations();
-		}, 1000 * 60);
 	}
 
 }

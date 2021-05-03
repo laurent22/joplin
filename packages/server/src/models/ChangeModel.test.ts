@@ -1,13 +1,11 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createItem } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder } from '../utils/testing/testUtils';
 import { ChangeType, Item, Uuid } from '../db';
 import { msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
 
-let itemCounter_ = 0;
-async function makeTestItem(userId: Uuid): Promise<Item> {
-	itemCounter_++;
+async function makeTestItem(userId: Uuid, num: number): Promise<Item> {
 	return models().item().saveForUser(userId, {
-		name: `item${itemCounter_}`,
+		name: `0000000000000000000000000000000${num}.md`,
 	});
 }
 
@@ -25,11 +23,11 @@ describe('ChangeModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should track changes - create', async function() {
+	test('should track changes - create only', async function() {
 		const { session, user } = await createUserAndSession(1, true);
 		const changeModel = models().change();
 
-		const item1 = await createItem(session.id, 'test.txt', 'testing');
+		const item1 = await createFolder(session.id, { title: 'folder' });
 
 		{
 			const changes = (await changeModel.allForUser(user.id)).items;
@@ -44,14 +42,14 @@ describe('ChangeModel', function() {
 		const itemModel = models().item();
 		const changeModel = models().change();
 
-		await msleep(1); const item1 = await makeTestItem(user.id); // [1] CREATE 1
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: 'test_mod_1a' }); // [2] UPDATE 1a
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: 'test_mod_1b' }); // [3] UPDATE 1b
-		await msleep(1); const item2 = await makeTestItem(user.id); // [4] CREATE 2
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: 'test_mod_2a' }); // [5] UPDATE 2a
+		await msleep(1); const item1 = await makeTestItem(user.id, 1); // [1] CREATE 1
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: '0000000000000000000000000000001A.md' }); // [2] UPDATE 1a
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: '0000000000000000000000000000001B.md' }); // [3] UPDATE 1b
+		await msleep(1); const item2 = await makeTestItem(user.id, 2); // [4] CREATE 2
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: '0000000000000000000000000000002A.md' }); // [5] UPDATE 2a
 		await msleep(1); await itemModel.delete(item1.id); // [6] DELETE 1
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: 'test_mod_2b' }); // [7] UPDATE 2b
-		await msleep(1); const item3 = await makeTestItem(user.id); // [8] CREATE 3
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: '0000000000000000000000000000002B.md' }); // [7] UPDATE 2b
+		await msleep(1); const item3 = await makeTestItem(user.id, 3); // [8] CREATE 3
 
 		// Check that the 8 changes were created
 		const allUncompressedChanges = await changeModel.all();
@@ -126,7 +124,7 @@ describe('ChangeModel', function() {
 		const changeModel = models().change();
 
 		let i = 1;
-		await msleep(1); const item1 = await makeTestItem(user.id); // CREATE 1
+		await msleep(1); const item1 = await makeTestItem(user.id, 1); // CREATE 1
 		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
 
 		await expectThrow(async () => changeModel.allForUser(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');

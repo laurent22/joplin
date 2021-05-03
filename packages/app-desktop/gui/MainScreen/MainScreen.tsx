@@ -33,6 +33,7 @@ import EncryptionService from '@joplin/lib/services/EncryptionService';
 import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import { reg } from '@joplin/lib/registry';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -530,6 +531,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const onInvitationRespond = async (shareUserId: string, accept: boolean) => {
 			await ShareService.instance().respondInvitation(shareUserId, accept);
 			await ShareService.instance().refreshShareInvitations();
+			void reg.scheduleSync(1000);
 		};
 
 		let msg = null;

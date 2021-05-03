@@ -1,6 +1,6 @@
 import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../db';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
-import BaseModel, { AclAction } from './BaseModel';
+import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 
 export default class ShareUserModel extends BaseModel<ShareUser> {
 
@@ -21,6 +21,13 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		if (action === AclAction.Update) {
 			if (user.id !== resource.user_id) throw new ErrorForbidden('cannot change share user');
 		}
+
+		if (action === AclAction.Delete) {
+			const share = await this.models().share().load(resource.share_id);
+			// Recipient can accept or reject a share, but only the owner can
+			// actually delete the invitation.
+			if (share.owner_id !== user.id) throw new ErrorForbidden('only the owner of a share can add or remove recipients');
+		}
 	}
 
 	public async byUserId(userId: Uuid): Promise<ShareUser[]> {
@@ -29,7 +36,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 	public async byShareId(shareId: Uuid): Promise<ShareUser[]> {
 		const r = await this.byShareIds([shareId]);
-		return Object.keys(r).length > 0 ? r[shareId] : null;
+		return Object.keys(r).length > 0 ? r[shareId] : [];
 	}
 
 	public async byShareIds(shareIds: Uuid[]): Promise<Record<Uuid, ShareUser[]>> {
@@ -114,6 +121,21 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 		await this.withTransaction(async () => {
 			await this.delete(shareUsers.map(s => s.id));
+		}, 'ShareUserModel::delete');
+	}
+
+	public async delete(id: string | string[], _options: DeleteOptions = {}): Promise<void> {
+		const ids = typeof id === 'string' ? [id] : id;
+		if (!ids.length) throw new Error('no id provided');
+
+		const shareUsers = await this.loadByIds(ids, { fields: ['user_id', 'share_id'] });
+
+		await this.withTransaction(async () => {
+			for (const shareUser of shareUsers) {
+				await this.models().userItem().deleteByShareAndUserId(shareUser.share_id, shareUser.user_id);
+			}
+
+			await this.db(this.tableName).whereIn('id', ids).delete();
 		}, 'ShareUserModel::delete');
 	}
 

@@ -1,5 +1,5 @@
 import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, updateNote, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, updateNote, expectHttpError, createResource, createItemTree2 } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
@@ -591,6 +591,34 @@ describe('shares.folder', function() {
 		expect(latestChanges1.items.length).toBe(1);
 		expect(latestChanges1.items[0].type).toBe(ChangeType.Delete);
 		expect(latestChanges1.items[0].item_id).toBe(noteItem.id);
+	});
+
+	test('should get delta changes - user 1 and 2 are in sync, user 1 deletes invitation', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const resourceItem1 = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'testing1');
+
+		await createItemTree2(user1.id, '', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+						title: 'note test',
+						body: `[testing](:/${resourceItem1.jop_id})`,
+					},
+				],
+			},
+		]);
+
+		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		const { shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
+		await models().share().updateSharedItems();
+
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(4);
+		await deleteApi(session1.id, `share_users/${shareUser.id}`);
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
 	});
 
 	test('should check permissions - cannot share a folder with yourself', async function() {

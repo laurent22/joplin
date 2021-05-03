@@ -73,6 +73,7 @@ router.get('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 		const user = users.find(u => u.id === su.user_id);
 
 		return {
+			id: su.id,
 			status: su.status,
 			user: {
 				email: user.email,

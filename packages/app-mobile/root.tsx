@@ -97,6 +97,7 @@ import EncryptionService from '@joplin/lib/services/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { clearSharedFilesCache } from './utils/ShareUtils';
 import setIgnoreTlsErrors from './utils/TlsUtils';
+import ShareService from '@joplin/lib/services/share/ShareService';
 
 let storeDispatch = function(_action: any) {};
 
@@ -535,6 +536,8 @@ async function initialize(dispatch: Function) {
 		// ----------------------------------------------------------------
 		// / E2EE SETUP
 		// ----------------------------------------------------------------
+
+		await ShareService.instance().initialize(this.store().dispatch);
 
 		reg.logger().info('Loading folders...');
 
