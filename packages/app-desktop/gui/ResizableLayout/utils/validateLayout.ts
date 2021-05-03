@@ -2,6 +2,17 @@ import produce from 'immer';
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 
+function isLastVisible(itemIndex: number, item: LayoutItem, parent: LayoutItem) {
+	if (item.visible === false) return false;
+
+	for (let i = parent.children.length - 1; i >= 0; i--) {
+		const child = parent.children[i];
+		if (child && child.visible !== false) return i === itemIndex;
+	}
+
+	return false;
+}
+
 function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: LayoutItem) {
 	if (!parent) return;
 
@@ -13,11 +24,13 @@ function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: Layout
 	}
 
 	// If all children of a container have a fixed width, the
-	// latest child should have a flexible width (i.e. no "width"
+	// latest visible child should have a flexible width (i.e. no "width"
 	// property), so that it fills up the remaining space
-	if (itemIndex === parent.children.length - 1) {
+	if (isLastVisible(itemIndex, itemDraft, parent)) {
 		let allChildrenAreSized = true;
 		for (const child of parent.children) {
+			if (child.visible === false) continue;
+
 			if (parent.direction === LayoutItemDirection.Row) {
 				if (!child.width) {
 					allChildrenAreSized = false;
@@ -41,13 +54,13 @@ function updateItemSize(itemIndex: number, itemDraft: LayoutItem, parent: Layout
 	}
 }
 
-// All items should be resizable, except for the root and the latest child
+// All items should be resizable, except for the root and the latest visible child
 // of a container.
 function updateResizeRules(itemIndex: number, itemDraft: LayoutItem, parent: LayoutItem) {
 	if (!parent) return;
-	const isLastChild = itemIndex === parent.children.length - 1;
-	itemDraft.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastChild;
-	itemDraft.resizableBottom = parent.direction === LayoutItemDirection.Column && !isLastChild;
+	const isLastVisibleChild = isLastVisible(itemIndex, itemDraft, parent);
+	itemDraft.resizableRight = parent.direction === LayoutItemDirection.Row && !isLastVisibleChild;
+	itemDraft.resizableBottom = parent.direction === LayoutItemDirection.Column && !isLastVisibleChild;
 }
 
 // Container direction should alternate between row (for the root) and

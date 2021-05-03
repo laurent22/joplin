@@ -20,6 +20,58 @@ describe('useLayoutItemSizes', () => {
 		expect(layout.isRoot).toBe(true);
 	});
 
+	test('should stretch the last visible child item if all siblings have fixed size and the last child is not visible', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'col1', width: 50 },
+				{ key: 'col2', width: 50 },
+				{ key: 'col3', width: 70, visible: false },
+			],
+		});
+
+		const col1 = layout.children.find(c => c.key === 'col1');
+		expect(col1.width).toBe(50);
+		expect(col1.visible).toBe(true);
+
+		const col2 = layout.children.find(c => c.key === 'col2');
+		expect(col2).not.toHaveProperty('width');
+		expect(col2.visible).toBe(true);
+
+		const col3 = layout.children.find(c => c.key === 'col3');
+		expect(col3.width).toBe(70);
+		expect(col3.visible).toBe(false);
+	});
+
+	test('should stretch the last child item if all siblings have fixed size', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'col1', width: 50 },
+				{ key: 'col2', width: 50 },
+				{ key: 'col3', width: 70 },
+			],
+		});
+
+		const col1 = layout.children.find(c => c.key === 'col1');
+		expect(col1.width).toBe(50);
+		expect(col1.visible).toBe(true);
+
+		const col2 = layout.children.find(c => c.key === 'col2');
+		expect(col2.width).toBe(50);
+		expect(col2.visible).toBe(true);
+
+		const col3 = layout.children.find(c => c.key === 'col3');
+		expect(col3).not.toHaveProperty('width');
+		expect(col3.visible).toBe(true);
+	});
+
 	test('should give item sizes', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',

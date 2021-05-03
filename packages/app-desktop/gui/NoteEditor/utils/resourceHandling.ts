@@ -6,10 +6,13 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('electron').remote.require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
+import htmlUtils from '@joplin/lib/htmlUtils';
+import Logger from '@joplin/lib/Logger';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const md5 = require('md5');
+const path = require('path');
 
 export async function handleResourceDownloadMode(noteBody: string) {
 	if (noteBody && Setting.value('sync.resourceDownloadMode') === 'auto') {
@@ -124,4 +127,45 @@ export async function handlePasteEvent(event: any) {
 		}
 	}
 	return output;
+}
+
+export async function processPastedHtml(html: string) {
+	const allImageUrls: string[] = [];
+	const mappedResources: Record<string, string> = {};
+
+	htmlUtils.replaceImageUrls(html, (src: string) => {
+		allImageUrls.push(src);
+	});
+
+	for (const imageSrc of allImageUrls) {
+		if (!mappedResources[imageSrc]) {
+			try {
+				if (imageSrc.startsWith('file')) {
+					const imageFilePath = path.normalize(imageSrc.substr(7));
+					const resourceDirPath = path.normalize(Setting.value('resourceDir'));
+
+					if (imageFilePath.startsWith(resourceDirPath)) {
+						mappedResources[imageSrc] = imageSrc;
+					} else {
+						const createdResource = await shim.createResourceFromPath(imageFilePath);
+						mappedResources[imageSrc] = `file://${Resource.fullPath(createdResource)}`;
+					}
+				} else {
+					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
+					await shim.fetchBlob(imageSrc, { path: filePath });
+					const createdResource = await shim.createResourceFromPath(filePath);
+					await shim.fsDriver().remove(filePath);
+					mappedResources[imageSrc] = `file://${Resource.fullPath(createdResource)}`;
+				}
+			} catch (err) {
+				const logger = Logger.create('resourceHandling');
+				logger.warn(`Error creating a resource for ${imageSrc}.`, err);
+				mappedResources[imageSrc] = imageSrc;
+			}
+		}
+	}
+
+	return htmlUtils.replaceImageUrls(html, (src: string) => {
+		return mappedResources[src];
+	});
 }

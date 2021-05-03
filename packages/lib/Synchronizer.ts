@@ -297,7 +297,7 @@ export default class Synchronizer {
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
-	async start(options: any = null) {
+	public async start(options: any = null) {
 		if (!options) options = {};
 
 		if (this.state() != 'idle') {

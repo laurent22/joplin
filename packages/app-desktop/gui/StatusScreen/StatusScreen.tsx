@@ -5,16 +5,22 @@ import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
-const bridge = require('electron').remote.require('./bridge').default;
 const { themeStyle } = require('@joplin/lib/theme');
 import ReportService from '@joplin/lib/services/ReportService';
+import Button, { ButtonLevel } from '../Button/Button';
+import bridge from '../../services/bridge';
 const fs = require('fs-extra');
+import styled from 'styled-components';
 
 interface Props {
 	themeId: string;
 	style: any;
 	dispatch: Function;
 }
+
+const StyledAdvancedToolItem = styled.div`
+	margin-bottom: 1em;
+`;
 
 async function exportDebugReportClick() {
 	const filename = `syncReport-${new Date().getTime()}.csv`;
@@ -134,14 +140,25 @@ function StatusScreen(props: Props) {
 		return <div>{sectionsHtml}</div>;
 	}
 
+	function renderTools() {
+		return (
+			<div>
+				<h2 key="section_tools" style={theme.h2Style}>
+					{_('Advanced tools')}
+				</h2>
+				<StyledAdvancedToolItem>
+					<Button level={ButtonLevel.Primary} title={_('Export debug report')} onClick={() => exportDebugReportClick()}/>
+				</StyledAdvancedToolItem>
+			</div>
+		);
+	}
+
 	const body = renderBodyHtml(report);
 
 	return (
 		<div style={style}>
 			<div style={containerStyle}>
-				<a style={theme.textStyle} onClick={() => exportDebugReportClick()} href="#">
-					Export debug report
-				</a>
+				{renderTools()}
 				{body}
 			</div>
 			<ButtonBar
