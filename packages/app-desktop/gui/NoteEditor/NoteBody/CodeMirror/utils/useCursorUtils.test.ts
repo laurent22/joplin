@@ -1,21 +1,20 @@
 import { modifyListLines } from './useCursorUtils';
 
 describe('useCursorUtils', () => {
-	const num = 0;
-	let lineInitial = `- item1
+		
+	let listWithDashes = `- item1
 - item2
 - item3`;
-	let lineFinal = `item1
+	
+	let listNoDashes = `item1
 item2
 item3`;
-	test('should remove "- " from beggining  of each line of input string', () => {
-		expect(JSON.stringify(modifyListLines(lineInitial.split('\n'), num, '- '))).toBe(JSON.stringify(lineFinal.split('\n')));
+	
+	test('should remove "- " from beggining of each line of input string', () => {
+		expect(JSON.stringify(modifyListLines(listWithDashes.split('\n'), 0, '- '))).toBe(JSON.stringify(listNoDashes.split('\n')));
 	});
+	
 	test('should add "- " at the beggining of each line of the input string', () => {
-		// swap input and expected output
-		const temp = lineInitial;
-		lineInitial = lineFinal;
-		lineFinal = temp;
-		expect(JSON.stringify(modifyListLines(lineInitial.split('\n'), num, '- '))).toBe(JSON.stringify(lineFinal.split('\n')));
+		expect(JSON.stringify(modifyListLines(listNoDashes.split('\n'), 0, '- '))).toBe(JSON.stringify(listWithDashes.split('\n')));
 	});
 });
