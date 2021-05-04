@@ -248,6 +248,8 @@ encryption_cipher_text | text |
 encryption_applied | int |    
 parent_id | text |    
 is_shared | int |    
+is_linked_folder | int |    
+source_folder_owner_id | text |    
 
 ## GET /folders
 

@@ -29,41 +29,61 @@ function onCheckEnded() {
 	isCheckingForUpdate_ = false;
 }
 
+function getMajorMinorTagName(tagName) {
+	const s = tagName.split('.');
+	s.pop();
+	return s.join('.');
+}
+
 async function fetchLatestRelease(options) {
 	options = Object.assign({}, { includePreReleases: false }, options);
 
-	let json = null;
+	const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases');
 
-	if (options.includePreReleases) {
-		// This end-point will include all releases, including pre-releases (but not draft), so we take
-		// whatever is the latest release. It might be the same as releases/latest, or it might be
-		// a pre-release.
-		const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases');
-
-		if (!response.ok) {
-			const responseText = await response.text();
-			throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
-		}
-
-		json = await response.json();
-		if (!json.length) throw new Error('Cannot get latest release info (JSON)');
-		json = json[0];
-	} else {
-		const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases/latest');
-
-		if (!response.ok) {
-			const responseText = await response.text();
-			throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
-		}
-
-		json = await response.json();
+	if (!response.ok) {
+		const responseText = await response.text();
+		throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
 	}
 
-	const version = json.tag_name.substr(1);
+	const releases = await response.json();
+	if (!releases.length) throw new Error('Cannot get latest release info (JSON)');
+
+	let release = null;
+
+	if (options.includePreReleases) {
+		release = releases[0];
+	} else {
+		for (const r of releases) {
+			if (!r.prerelease) {
+				release = r;
+				break;
+			}
+		}
+	}
+
+	if (!release) throw new Error('Could not get tag name');
+
+	const version = release.tag_name.substr(1);
+
+	// We concatenate all the release notes of the major/minor versions
+	// corresponding to the latest version. For example, if the latest version
+	// is 1.8.3, we concatenate all the 1.8.x versions. This is so that no
+	// matter from which version you upgrade, you always see the full changes,
+	// with the latest changes being on top.
+
+	const fullReleaseNotes = [];
+	const majorMinorTagName = getMajorMinorTagName(release.tag_name);
+
+	for (const release of releases) {
+		if (getMajorMinorTagName(release.tag_name) === majorMinorTagName) {
+			fullReleaseNotes.push(release.body.trim());
+		}
+	}
+
 	let downloadUrl = null;
 	const platform = process.platform;
-	for (let i = 0; i < json.assets.length; i++) {
-		const asset = json.assets[i];
+	for (let i = 0; i < release.assets.length; i++) {
+		const asset = release.assets[i];
 		let found = false;
 		const ext = fileExtension(asset.name);
 		if (platform === 'win32' && ext === 'exe') {
@@ -84,12 +104,28 @@ async function fetchLatestRelease(options) {
 		}
 	}
 
+	function cleanUpReleaseNotes(releaseNotes) {
+		const lines = releaseNotes.join('\n\n* * *\n\n').split('\n');
+		const output = [];
+		for (const line of lines) {
+			const r = line
+				.replace(/\(#.* by .*\)/g, '') // Removes issue numbers and names - (#3157 by [@user](https://github.com/user))
+				.replace(/\([0-9a-z]{7}\)/g, '') // Removes commits - "sync state or data (a6caa35)"
+				.replace(/\(#[0-9]+\)/g, '') // Removes issue numbers - "(#4727)"
+				.replace(/ {2}/g, ' ')
+				.trim();
+
+			output.push(r);
+		}
+		return output.join('\n');
+	}
+
 	return {
 		version: version,
 		downloadUrl: downloadUrl,
-		notes: json.body,
-		pageUrl: json.html_url,
-		prerelease: json.prerelease,
+		notes: cleanUpReleaseNotes(fullReleaseNotes),
+		pageUrl: release.html_url,
+		prerelease: release.prerelease,
 	};
 }
 
@@ -151,13 +187,13 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 				type: 'info',
 				message: `${_('An update is available, do you want to download it now?')}`,
 				detail: `${_('Your version: %s', packageInfo.version)}\n${_('New version: %s', newVersionString)}${releaseNotes}`,
-				buttons: [_('Download'), _('Cancel')].concat(truncateReleaseNotes ? [_('Full Release Notes')] : []),
+				buttons: [_('Download'), _('Cancel'), _('Full changelog')],
 				cancelId: 1,
 			});
 
 			const buttonIndex = result.response;
 			if (buttonIndex === 0) require('electron').shell.openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
-			if (buttonIndex === 2) require('electron').shell.openExternal(release.pageUrl);
+			if (buttonIndex === 2) require('electron').shell.openExternal('https://joplinapp.org/changelog/');
 		}
 	}).catch(error => {
 		autoUpdateLogger_.error(error);
