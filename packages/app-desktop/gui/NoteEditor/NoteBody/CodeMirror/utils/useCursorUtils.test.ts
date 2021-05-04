@@ -1,6 +1,6 @@
 import { modifyListLines } from './useCursorUtils';
 
-describe('Check list item modification', () => {
+describe('useCursorUtils', () => {
 	const num = 0;
 	let lineInitial = `- item1
 - item2
