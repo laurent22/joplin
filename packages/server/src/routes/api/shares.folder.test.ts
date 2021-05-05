@@ -635,10 +635,10 @@ describe('shares.folder', function() {
 		const folderItem1 = await createFolder(session1.id, { id: '000000000000000000000000000000F1' });
 		const noteItem1 = await createFolder(session1.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F2' });
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
-		await models().share().updateSharedItems();
+		// await models().share().updateSharedItems2();
 
 		await createFolder(session1.id, { id: '000000000000000000000000000000F2', parent_id: folderItem1.jop_id });
-		await models().share().updateSharedItems();
+		await models().share().updateSharedItems2(user2.id);
 
 		const children = await models().item().children(user2.id);
 		expect(children.items.length).toBe(3);

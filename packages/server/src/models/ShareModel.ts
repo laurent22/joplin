@@ -219,9 +219,9 @@ export default class ShareModel extends BaseModel<Share> {
 				// If it's a folder we share its content. This is to ensure
 				// that children that were synced before their parents get their
 				// share status updated.
-				if (item.jop_type === ModelType.Folder) {
-					await this.models().item().shareJoplinFolderAndContent(shareInfo.share.id, shareInfo.share.owner_id, userId, item.jop_id);
-				}
+				// if (item.jop_type === ModelType.Folder) {
+				// 	await this.models().item().shareJoplinFolderAndContent(shareInfo.share.id, shareInfo.share.owner_id, userId, item.jop_id);
+				// }
 
 				try {
 					await this.models().userItem().add(userId, item.id);
@@ -456,29 +456,6 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		}
 	}
-
-	// public async shareItemIds(share:Share) {
-	// 	const items = [folderItem].concat(await this.folderChildrenItems(fromUserId, folderId));
-
-	// 	const alreadySharedItemIds: string[] = await this
-	// 		.db('user_items')
-	// 		.pluck('item_id')
-	// 		.whereIn('item_id', items.map(i => i.id))
-	// 		.where('user_id', '=', toUserId)
-	// 		// .where('share_id', '!=', '');
-
-	// 	await this.withTransaction(async () => {
-	// 		for (const item of items) {
-	// 			if (alreadySharedItemIds.includes(item.id)) continue;
-	// 			await this.models().userItem().add(toUserId, item.id, shareId);
-
-	// 			if (item.jop_type === ModelType.Note) {
-	// 				const resourceIds = await this.models().itemResource().byItemId(item.id);
-	// 				await this.models().share().updateResourceShareStatus(true, shareId, fromUserId, toUserId, resourceIds);
-	// 			}
-	// 		}
-	// 	});
-	// }
 
 	public async shareFolder(owner: User, folderId: string): Promise<Share> {
 		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
