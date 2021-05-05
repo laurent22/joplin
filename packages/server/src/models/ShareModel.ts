@@ -86,7 +86,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
-	public async byUserId(userId: Uuid): Promise<Share[]> {
+	public async byUserId(userId: Uuid, type:ShareType): Promise<Share[]> {
 		const query1 = this
 			.db(this.tableName)
 			.select(this.defaultFields)
@@ -130,9 +130,15 @@ export default class ShareModel extends BaseModel<Share> {
 		return userIds;
 	}
 
-	// public async updateSharedItems2(userId:Uuid) {
+	public async updateSharedItems2(userId:Uuid) {
+		const shares = await this.models().share().byUserId(userId, ShareType.JoplinRootFolder);
 
-	// }
+		for (const share of shares) {
+			// const folderItem = await this.models().item().loadByJopId(share.owner_id, share.folder_id);
+			// if (!folderItem) throw new Error('Could not find folder ' + share.folder_id + ' for share ' + share.id);
+			await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, share.folder_id);
+		}
+	}
 
 	public async updateSharedItems() {
 		enum ResourceChangeAction {
@@ -429,6 +435,11 @@ export default class ShareModel extends BaseModel<Share> {
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 
 		return super.save(shareToSave);
+		// return this.withTransaction(async () => {
+		// 	const share = await super.save(shareToSave);
+		// 	await this.models().item().shareJoplinFolderAndContent(share.id, owner.id, owner.id, folderId);			
+		// 	return share;
+		// });
 	}
 
 	public async shareNote(owner: User, noteId: string): Promise<Share> {

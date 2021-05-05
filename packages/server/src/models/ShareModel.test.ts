@@ -54,9 +54,9 @@ describe('ShareModel', function() {
 		const folderItem2 = await models().item().loadByJopId(user2.id, '000000000000000000000000000000F2');
 		await shareWithUserAndAccept(session2.id, session1.id, user1, ShareType.JoplinRootFolder, folderItem2);
 
-		const shares1 = await models().share().byUserId(user1.id);
-		const shares2 = await models().share().byUserId(user2.id);
-		const shares3 = await models().share().byUserId(user3.id);
+		const shares1 = await models().share().byUserId(user1.id, ShareType.JoplinRootFolder);
+		const shares2 = await models().share().byUserId(user2.id, ShareType.JoplinRootFolder);
+		const shares3 = await models().share().byUserId(user3.id, ShareType.JoplinRootFolder);
 
 		expect(shares1.length).toBe(2);
 		expect(shares1.find(s => s.folder_id === '000000000000000000000000000000F1')).toBeTruthy();

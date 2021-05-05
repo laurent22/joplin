@@ -162,7 +162,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public async shareJoplinFolderAndContent(shareId: Uuid, fromUserId: Uuid, toUserId: Uuid, folderId: string) {
 		const folderItem = await this.loadByJopId(fromUserId, folderId, { fields: ['id'] });
-		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
+		if (!folderItem) throw new ErrorNotFound(`Could not find folder "${folderId}" for share "${shareId}"`);
 
 		const items = [folderItem].concat(await this.folderChildrenItems(fromUserId, folderId));
 
@@ -170,7 +170,8 @@ export default class ItemModel extends BaseModel<Item> {
 			.db('user_items')
 			.pluck('item_id')
 			.whereIn('item_id', items.map(i => i.id))
-			.where('user_id', '=', toUserId);
+			.where('user_id', '=', toUserId)
+			// .where('share_id', '!=', '');
 
 		await this.withTransaction(async () => {
 			for (const item of items) {
