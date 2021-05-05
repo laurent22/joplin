@@ -86,6 +86,24 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
+	public async byUserId(userId: Uuid): Promise<Share[]> {
+		const query1 = this
+			.db(this.tableName)
+			.select(this.defaultFields)
+			.whereIn('id', this
+				.db('share_users')
+				.select('share_id')
+				.where('user_id', '=', userId)
+			);
+
+		const query2 = this
+			.db(this.tableName)
+			.select(this.defaultFields)
+			.where('owner_id', '=', userId);
+
+		return query1.union(query2);
+	}
+
 	public async byUserAndItemId(userId: Uuid, itemId: Uuid): Promise<Share> {
 		return this.db(this.tableName).select(this.defaultFields)
 			.where('owner_id', '=', userId)
@@ -111,6 +129,10 @@ export default class ShareModel extends BaseModel<Share> {
 		userIds.push(share.owner_id);
 		return userIds;
 	}
+
+	// public async updateSharedItems2(userId:Uuid) {
+
+	// }
 
 	public async updateSharedItems() {
 		enum ResourceChangeAction {
