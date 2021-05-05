@@ -37,7 +37,18 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 	}
 
 	public async byItemId(itemId: Uuid): Promise<string[]> {
-		return this.db(this.tableName).pluck('resource_id').where('item_id', '=', itemId);
+		const r = await this.byItemIds([itemId]);
+		return Object.keys(r).length ? r[itemId] : [];
+	}
+
+	public async byItemIds(itemIds: Uuid[]): Promise<Record<Uuid, string[]>> {
+		const rows:ItemResource[] = await this.db(this.tableName).select('item_id', 'resource_id').whereIn('item_id', itemIds);
+		const output:Record<Uuid, string[]> = {};
+		for (const row of rows) {
+			if (!output[row.item_id]) output[row.item_id] = [];
+			output[row.item_id].push(row.resource_id);
+		}
+		return output;
 	}
 
 }

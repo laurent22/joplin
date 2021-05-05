@@ -254,7 +254,7 @@ export interface WithDates {
 }
 
 export interface WithUuid {
-	id?: string;
+	id?: Uuid;
 }
 
 interface DatabaseTableColumn {

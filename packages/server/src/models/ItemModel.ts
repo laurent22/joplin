@@ -138,6 +138,43 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
+	private async folderChildrenItems2(userId: Uuid, folderId: string, includeResources:boolean = true): Promise<Item[]> {
+		let output: Item[] = [];
+
+		const folderAndNotes: Item[] = await this
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.select('items.id', 'items.jop_id', 'items.jop_type')
+			.where('items.jop_parent_id', '=', folderId)
+			.where('user_items.user_id', '=', userId)
+			.whereIn('jop_type', [ModelType.Folder, ModelType.Note]);
+
+		for (const item of folderAndNotes) {
+			output.push(item);
+
+			if (item.jop_type === ModelType.Folder) {
+				const children = await this.folderChildrenItems2(userId, item.jop_id, false);
+				output = output.concat(children);
+			}
+		}
+
+		const noteItemIds = output.filter(i => i.jop_type === ModelType.Note).map(i => i.id);
+		const resourceItemIds = await this.models().itemResource().byItemIds(noteItemIds);
+
+		for (const itemId in resourceItemIds) {
+			const resourceIds = resourceItemIds[itemId];
+			for (const resourceId of resourceIds) {
+				output.push({
+					id: itemId,
+					jop_id: resourceId,
+					jop_type: ModelType.Resource,
+				});
+			}
+		}		
+
+		return output;
+	}
+
 	private async folderChildrenItems(userId: Uuid, folderId: string): Promise<Item[]> {
 		let output: Item[] = [];
 
