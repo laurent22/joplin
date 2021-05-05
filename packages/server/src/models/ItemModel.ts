@@ -138,7 +138,7 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	private async folderChildrenItems2(userId: Uuid, folderId: string, includeResources:boolean = true): Promise<Item[]> {
+	public async folderChildrenItems2(userId: Uuid, folderId: string, includeResources:boolean = true): Promise<Item[]> {
 		let output: Item[] = [];
 
 		const folderAndNotes: Item[] = await this
@@ -158,19 +158,35 @@ export default class ItemModel extends BaseModel<Item> {
 			}
 		}
 
-		const noteItemIds = output.filter(i => i.jop_type === ModelType.Note).map(i => i.id);
-		const resourceItemIds = await this.models().itemResource().byItemIds(noteItemIds);
+		if (includeResources) {
+			const noteItemIds = output.filter(i => i.jop_type === ModelType.Note).map(i => i.id);
 
-		for (const itemId in resourceItemIds) {
-			const resourceIds = resourceItemIds[itemId];
-			for (const resourceId of resourceIds) {
+			const itemResourceIds = await this.models().itemResource().byItemIds(noteItemIds);
+
+			for (const itemId in itemResourceIds) {
+				const resourceItems = await this.models().item().loadByJopIds(userId, itemResourceIds[itemId]);
+
+				for (const resourceItem of resourceItems) {
+					output.push({
+						id: resourceItem.id,
+						jop_id: resourceItem.jop_id,
+						jop_type: ModelType.Resource,
+					});
+				}
+			}		
+
+			let allResourceIds:string[] = [];
+			for (const itemId in itemResourceIds) {
+				allResourceIds = allResourceIds.concat(itemResourceIds[itemId]);
+			}
+			const blobItems = await this.models().itemResource().blobItemsByResourceIds(userId, allResourceIds);
+			for (const blobItem of blobItems) {
 				output.push({
-					id: itemId,
-					jop_id: resourceId,
-					jop_type: ModelType.Resource,
+					id: blobItem.id,
+					name: blobItem.name,
 				});
 			}
-		}		
+		}
 
 		return output;
 	}

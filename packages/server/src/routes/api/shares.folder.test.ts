@@ -58,6 +58,8 @@ describe('shares.folder', function() {
 			expect(shareUser.status).toBe(ShareUserStatus.Accepted);
 		}
 
+		await models().share().updateSharedItems2(user2.id);
+
 		// ----------------------------------------------------------------
 		// On the sharee side, check that the file is present
 		// and with the right content.
@@ -116,6 +118,7 @@ describe('shares.folder', function() {
 		expect(childrenBefore.items.length).toBe(0);
 
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+
 		const childrenAfter = await getApi<PaginatedItems>(session2.id, 'items/root/children');
 		expect(childrenAfter.items.length).toBe(5);
 
@@ -614,7 +617,6 @@ describe('shares.folder', function() {
 
 		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
 		const { shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
-		await models().share().updateSharedItems();
 
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(4);
 		await deleteApi(session1.id, `share_users/${shareUser.id}`);

@@ -47,6 +47,8 @@ export async function shareWithUserAndAccept(sharerSessionId: string, shareeSess
 
 	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
 
+	await models().share().updateSharedItems2(sharee.id);
+
 	return { share, item, shareUser };
 }
 

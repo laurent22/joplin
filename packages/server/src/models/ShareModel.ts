@@ -1,6 +1,6 @@
 import { ModelType } from '@joplin/lib/BaseModel';
 import { resourceBlobPath } from '../apps/joplin/joplinUtils';
-import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, User, Uuid } from '../db';
+import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, User, UserItem, Uuid } from '../db';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
@@ -133,11 +133,50 @@ export default class ShareModel extends BaseModel<Share> {
 	public async updateSharedItems2(userId:Uuid) {
 		const shares = await this.models().share().byUserId(userId, ShareType.JoplinRootFolder);
 
+		const existingShareUserItems:UserItem[] = await this.models().userItem().itemsInShare(userId);
+
+		const allShareUserItems:UserItem[] = [];
+
 		for (const share of shares) {
-			// const folderItem = await this.models().item().loadByJopId(share.owner_id, share.folder_id);
-			// if (!folderItem) throw new Error('Could not find folder ' + share.folder_id + ' for share ' + share.id);
-			await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, share.folder_id);
+			allShareUserItems.push({
+				item_id: share.item_id,
+				share_id: share.id,
+			});
+
+			const shareItems = await this.models().item().folderChildrenItems2(share.owner_id, share.folder_id);
+			for (const item of shareItems) {
+				allShareUserItems.push({
+					item_id: item.id,
+					share_id: share.id,
+				});
+			}
 		}
+
+		const userItemsToDelete:UserItem[] = [];
+		for (const userItem of existingShareUserItems) {
+			if (!allShareUserItems.find(ui => ui.item_id === userItem.item_id && ui.share_id === userItem.share_id)) {
+				userItemsToDelete.push(userItem);
+			}
+		}
+
+		const userItemsToCreate:UserItem[] = [];
+		for (const userItem of allShareUserItems) {
+			if (!existingShareUserItems.find(ui => ui.item_id === userItem.item_id && ui.share_id === userItem.share_id)) {
+				userItemsToCreate.push(userItem);
+			}
+		}
+
+		// console.info('ALL', allShareUserItems);
+		// console.info('EXISTING', existingShareUserItems);
+		// console.info('USER ITEMS TO CREATE', userItemsToCreate);
+
+		await this.withTransaction(async () => {
+			await this.models().userItem().deleteByUserItemIds(userItemsToDelete.map(ui => ui.id));
+
+			for (const userItem of userItemsToCreate) {
+				await this.models().userItem().add(userId, userItem.item_id, userItem.share_id);
+			}
+		});
 	}
 
 	public async updateSharedItems() {
@@ -457,12 +496,21 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 
-		return super.save(shareToSave);
-		// return this.withTransaction(async () => {
-		// 	const share = await super.save(shareToSave);
-		// 	await this.models().item().shareJoplinFolderAndContent(share.id, owner.id, owner.id, folderId);			
-		// 	return share;
-		// });
+		const shareItems = await this.models().item().folderChildrenItems2(owner.id, folderId);
+		const userItems = await this.models().userItem().byItemIds(shareItems.map(s => s.id));
+		const userItemIds = userItems.map(u => u.id);
+
+		return this.withTransaction(async () => {
+			const savedShare = await super.save(shareToSave);
+			
+			await this
+				.db('user_items')
+				.whereIn('id', userItemIds)
+				.orWhere('item_id', '=', shareToSave.item_id)
+				.update({ share_id: savedShare.id });
+			
+			return savedShare;
+		});
 	}
 
 	public async shareNote(owner: User, noteId: string): Promise<Share> {
@@ -488,7 +536,7 @@ export default class ShareModel extends BaseModel<Share> {
 		await this.withTransaction(async () => {
 			for (const share of shares) {
 				await this.models().shareUser().deleteByShare(share);
-				await this.models().userItem().deleteByShareId(share.id);
+				await this.models().userItem().deleteByShare({ id: share.id, owner_id: share.owner_id });
 				await super.delete(share.id, options);
 			}
 		}, 'ShareModel::delete');

@@ -1,4 +1,5 @@
-import { ItemResource, Uuid } from '../db';
+import { resourceBlobPath } from '../apps/joplin/joplinUtils';
+import { Item, ItemResource, Uuid } from '../db';
 import BaseModel from './BaseModel';
 
 export default class ItemResourceModel extends BaseModel<ItemResource> {
@@ -49,6 +50,11 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 			output[row.item_id].push(row.resource_id);
 		}
 		return output;
+	}
+
+	public async blobItemsByResourceIds(userId:Uuid, resourceIds:string[]):Promise<Item[]> {
+		const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
+		return this.models().item().loadByNames(userId, resourceBlobNames);
 	}
 
 }

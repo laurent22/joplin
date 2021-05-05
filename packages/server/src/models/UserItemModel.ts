@@ -3,11 +3,18 @@ import BaseModel, { DeleteOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
 
+interface DeleteByShare {
+	id: Uuid;
+	owner_id: Uuid;
+}
+
 export interface UserItemDeleteOptions extends DeleteOptions {
 	byItemIds?: string[];
 	byShareId?: string;
 	byUserId?: string;
 	byUserItem?: UserItem;
+	byUserItemIds?: number[];
+	byShare?: DeleteByShare;
 }
 
 export default class UserItemModel extends BaseModel<UserItem> {
@@ -64,6 +71,11 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return this.db(this.tableName).where('user_id', '=', userId).where('item_id', '=', itemId).first();
 	}
 
+	// Returns any user item that is part of a share
+	public async itemsInShare(userId:Uuid):Promise<UserItem[]> {
+		return this.db(this.tableName).select(this.defaultFields).where('share_id', '!=', '').where('user_id', '=', userId);
+	}
+
 	public async deleteByUserItem(userId: Uuid, itemId: Uuid): Promise<void> {
 		const userItem = await this.byUserAndItemId(userId, itemId);
 		if (!userItem) throw new ErrorNotFound(`No such user_item: ${userId} / ${itemId}`);
@@ -78,8 +90,16 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId });
 	}
 
+	public async deleteByShare(share: DeleteByShare):Promise<void> {
+		await this.deleteBy({ byShare: share });
+	}
+
 	public async deleteByUserId(userId: Uuid): Promise<void> {
 		await this.deleteBy({ byUserId: userId });
+	}
+
+	public async deleteByUserItemIds(userItemIds: number[]): Promise<void> {
+		await this.deleteBy({ byUserItemIds: userItemIds });
 	}
 
 	public async deleteByShareAndUserId(shareId: Uuid, userId: Uuid): Promise<void> {
@@ -120,10 +140,15 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			userItems = await this.byItemIds(options.byItemIds);
 		} else if (options.byShareId) {
 			userItems = await this.byShareId(options.byShareId);
+		} else if (options.byShare) {
+			userItems = await this.byShareId(options.byShare.id);
+			userItems = userItems.filter(u => u.user_id !== options.byShare.owner_id);
 		} else if (options.byUserId) {
 			userItems = await this.byUserId(options.byUserId);
 		} else if (options.byUserItem) {
 			userItems = [options.byUserItem];
+		} else if (options.byUserItemIds) {
+			userItems = await this.loadByIds(options.byUserItemIds as any);
 		} else {
 			throw new Error('Invalid options');
 		}

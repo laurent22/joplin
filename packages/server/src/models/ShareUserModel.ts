@@ -108,7 +108,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 			if (status === ShareUserStatus.Accepted) {
 				if (share.type === ShareType.JoplinRootFolder) {
-					await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
+					// await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
 				} else if (share.type === ShareType.App) {
 					await this.models().userItem().add(userId, share.item_id, share.id);
 				}
