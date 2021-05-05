@@ -103,6 +103,10 @@ export async function up(db: DbConnection): Promise<any> {
 		table.index('user_id');
 	});
 
+	// Previous changes aren't relevant anymore since they relate to a "files"
+	// table that is no longer used.
+	await db('changes').truncate();
+
 	await db.schema.dropTable('permissions');
 	await db.schema.dropTable('joplin_file_contents');
 }

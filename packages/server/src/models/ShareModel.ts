@@ -127,10 +127,35 @@ export default class ShareModel extends BaseModel<Share> {
 
 		let resourceChanges: ResourceChange[] = [];
 
+		const getSharedRootInfo = async (jopId: string) => {
+			try {
+				const output = await this.models().item().joplinItemSharedRootInfo(jopId);
+				return output;
+			} catch (error) {
+				// "noPathForItem" means that the note or folder doesn't have a
+				// parent yet. It can happen because items are synchronized in
+				// random order, sometimes the children before the parents. In
+				// that case we simply ignore the error, which means that for
+				// now the share status of the item is unknown. The situation
+				// will be resolved when the parent is received because in this
+				// case, if the folder is within a shared folder, all its
+				// children will be shared.
+				if (error.code === 'noPathForItem') return null;
+				throw error;
+			}
+		};
+
 		const handleAddedToSharedFolder = async (item: Item, shareInfo: SharedRootInfo) => {
 			const userIds = await this.allShareUserIds(shareInfo.share);
 
 			for (const userId of userIds) {
+				// If it's a folder we share its content. This is to ensure
+				// that children that were synced before their parents get their
+				// share status updated.
+				if (item.jop_type === ModelType.Folder) {
+					await this.models().item().shareJoplinFolderAndContent(shareInfo.share.id, shareInfo.share.owner_id, userId, item.jop_id);
+				}
+
 				try {
 					await this.models().userItem().add(userId, item.id);
 				} catch (error) {
@@ -223,7 +248,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 		const handleCreatedItem = async (change: Change, item: Item) => {
 			if (!item.jop_parent_id) return;
-			const shareInfo = await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id);
+			const shareInfo = await getSharedRootInfo(item.jop_parent_id);
 
 			if (!shareInfo) return;
 
@@ -236,8 +261,8 @@ export default class ShareModel extends BaseModel<Share> {
 
 			const previousItem = this.models().change().unserializePreviousItem(change.previous_item);
 
-			const previousShareInfo = previousItem?.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(previousItem.jop_parent_id) : null;
-			const currentShareInfo = item.jop_parent_id ? await this.models().item().joplinItemSharedRootInfo(item.jop_parent_id) : null;
+			const previousShareInfo = previousItem?.jop_parent_id ? await getSharedRootInfo(previousItem.jop_parent_id) : null;
+			const currentShareInfo = item.jop_parent_id ? await getSharedRootInfo(item.jop_parent_id) : null;
 
 			await handleResourceSharing(change, previousItem, item, previousShareInfo, currentShareInfo);
 

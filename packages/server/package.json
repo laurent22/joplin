@@ -9,6 +9,7 @@
     "tsc": "tsc --project tsconfig.json",
     "test": "jest --verbose=false",
     "test-ci": "npm run test",
+    "test-debug": "node --inspect node_modules/.bin/jest -- --verbose=false",
     "clean": "rm -rf dist/",
     "watch": "tsc --watch --project tsconfig.json"
   },

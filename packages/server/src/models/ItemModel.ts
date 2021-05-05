@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 
@@ -328,7 +328,7 @@ export default class ItemModel extends BaseModel<Item> {
 	// that shared folder. It returns null otherwise.
 	public async joplinItemSharedRootInfo(jopId: string): Promise<SharedRootInfo | null> {
 		const path = await this.joplinItemPath(jopId);
-		if (!path.length) throw new Error(`Cannot retrieve path for item: ${jopId}`);
+		if (!path.length) throw new ApiError(`Cannot retrieve path for item: ${jopId}`, null, 'noPathForItem');
 		const rootFolderItem = path[path.length - 1];
 		const share = await this.models().share().itemShare(ShareType.JoplinRootFolder, rootFolderItem.id);
 		if (!share) return null;

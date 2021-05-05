@@ -621,6 +621,28 @@ describe('shares.folder', function() {
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
 	});
 
+	test('should handle incomplete sync - orphan note is moved out of shared folder', async function() {
+		// - A note and its folder are moved to a shared folder.
+		// - However when data is synchronised, only the note is synced (not the folder).
+		// - Then later the note is synchronised.
+		// In that case, we need to make sure that both folder and note are eventually shared.
+
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const folderItem1 = await createFolder(session1.id, { id: '000000000000000000000000000000F1' });
+		const noteItem1 = await createFolder(session1.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F2' });
+		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
+		await models().share().updateSharedItems();
+
+		await createFolder(session1.id, { id: '000000000000000000000000000000F2', parent_id: folderItem1.jop_id });
+		await models().share().updateSharedItems();
+
+		const children = await models().item().children(user2.id);
+		expect(children.items.length).toBe(3);
+		expect(children.items.find(c => c.id === noteItem1.id)).toBeTruthy();
+	});
+
 	test('should check permissions - cannot share a folder with yourself', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 

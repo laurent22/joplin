@@ -930,7 +930,13 @@ export default class Synchronizer {
 			this.cancelling_ = false;
 		}
 
-		if (this.shareService_) await this.shareService_.maintenance();
+		if (this.shareService_) {
+			try {
+				await this.shareService_.maintenance();
+			} catch (error) {
+				this.logger().error('Could not run share service maintenance:', error);
+			}
+		}
 
 		this.progressReport_.completedTime = time.unixMs();
 

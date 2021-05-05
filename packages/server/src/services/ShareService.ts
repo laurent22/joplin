@@ -55,7 +55,11 @@ export default class ShareService {
 		const startTime = Date.now();
 
 		this.maintenanceInProgress_ = true;
-		await this.models.share().updateSharedItems();
+		try {
+			await this.models.share().updateSharedItems();
+		} catch (error) {
+			logger.error('Could not update share items:', error);
+		}
 		this.maintenanceInProgress_ = false;
 
 		logger.info(`Maintenance completed in ${Date.now() - startTime}ms`);
