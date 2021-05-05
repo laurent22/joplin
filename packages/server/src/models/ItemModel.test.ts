@@ -1,6 +1,7 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createItemTree2 } from '../utils/testing/testUtils';
 import { ShareType } from '../db';
 import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
+import { resourceBlobPath } from '../apps/joplin/joplinUtils';
 
 describe('ItemModel', function() {
 
@@ -98,11 +99,17 @@ describe('ItemModel', function() {
 
 		{
 			const children = await models().item().folderChildrenItems2(user1.id, '000000000000000000000000000000F1');
-			expect(children.map(c => c.jop_id).sort()).toEqual([
+
+			expect(children.filter(c => !!c.jop_id).map(c => c.jop_id).sort()).toEqual([
 				'00000000000000000000000000000001',
 				'00000000000000000000000000000002',
 				'000000000000000000000000000000E1',
 				'000000000000000000000000000000E2',
+			].sort());
+
+			expect(children.filter(c => !c.jop_id).map(c => c.name).sort()).toEqual([
+				resourceBlobPath('000000000000000000000000000000E1'),
+				resourceBlobPath('000000000000000000000000000000E2'),
 			].sort());
 		}
 
