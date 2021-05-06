@@ -85,7 +85,7 @@ describe('shares.resource', function() {
 		{
 			const note = await models().item().loadAsJoplinItem(noteItem.id);
 			await updateNote(session1.id, { ...note, parent_id: '000000000000000000000000000000F2' });
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 			const newChildren = await models().item().children(user2.id);
 			expect(newChildren.items.length).toBe(1);
 			expect(!!newChildren.items.find(i => i.name === '000000000000000000000000000000F1.md')).toBe(true);
@@ -96,7 +96,7 @@ describe('shares.resource', function() {
 		{
 			const note = await models().item().loadAsJoplinItem(noteItem.id);
 			await updateNote(session1.id, { ...note, parent_id: '000000000000000000000000000000F1' });
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 			const newChildren = await models().item().children(user2.id);
 			expect(newChildren.items.length).toBe(6);
 		}
@@ -106,7 +106,7 @@ describe('shares.resource', function() {
 		{
 			const note = await models().item().loadAsJoplinItem(noteItem.id);
 			await updateNote(session1.id, { ...note, body: `[testing](:/${resourceItem1.jop_id})` });
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 			const children = await models().item().children(user2.id);
 			expect(children.items.length).toBe(4);
 			expect(!!children.items.find(i => i.name === '000000000000000000000000000000E1.md')).toBe(true);
@@ -120,7 +120,7 @@ describe('shares.resource', function() {
 		{
 			const note = await models().item().loadAsJoplinItem(noteItem.id);
 			await updateNote(session1.id, { ...note, body: `[testing](:/${resourceItem1.jop_id}) [testing](:/${resourceItem2.jop_id})` });
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 			const children = await models().item().children(user2.id);
 			expect(children.items.length).toBe(6);
 			expect(!!children.items.find(i => i.name === '000000000000000000000000000000E1.md')).toBe(true);
@@ -166,7 +166,7 @@ describe('shares.resource', function() {
 		{
 			const note = await models().item().loadAsJoplinItem(noteItem.id);
 			await updateNote(session2.id, { ...note, parent_id: '000000000000000000000000000000F2' });
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user1.id);
 
 			const children1 = await models().item().children(user1.id);
 			expect(children1.items.length).toBe(1);
@@ -198,7 +198,7 @@ describe('shares.resource', function() {
 		{
 			const resourceItem1 = await createResource(session2.id, { id: '000000000000000000000000000000E1' }, 'testing1');
 			await createNote(session2.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F1', body: `[testing](:/${resourceItem1.jop_id})` });
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user1.id);
 
 			const children1 = await models().item().children(user1.id);
 			expect(children1.items.length).toBe(4);
