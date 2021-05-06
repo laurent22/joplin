@@ -108,6 +108,9 @@ packages/app-cli/tests/htmlUtils.js.map
 packages/app-cli/tests/models_Folder.d.ts
 packages/app-cli/tests/models_Folder.js
 packages/app-cli/tests/models_Folder.js.map
+packages/app-cli/tests/models_Folder.sharing.d.ts
+packages/app-cli/tests/models_Folder.sharing.js
+packages/app-cli/tests/models_Folder.sharing.js.map
 packages/app-cli/tests/models_Note.d.ts
 packages/app-cli/tests/models_Note.js
 packages/app-cli/tests/models_Note.js.map

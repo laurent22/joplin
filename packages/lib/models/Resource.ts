@@ -48,7 +48,7 @@ export default class Resource extends BaseItem {
 	}
 
 	public static sharedResourceIds(): Promise<string[]> {
-		return this.db().selectAllFields('SELECT id FROM resources WHERE is_shared = 1', {}, 'id');
+		return this.db().selectAllFields('SELECT id FROM resources WHERE is_shared = 1', [], 'id');
 	}
 
 	static errorFetchStatuses() {

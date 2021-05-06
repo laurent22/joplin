@@ -270,6 +270,19 @@ export async function createItemTree2(userId: Uuid, parentFolderId: string, tree
 	}
 }
 
+export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
+	const itemModel = models().item();
+
+	for (const jopItem of tree) {
+		const isFolder = !!jopItem.children;
+		const serializedBody = isFolder ?
+			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId }) :
+			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId });
+		const newItem = await itemModel.saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		if (isFolder && jopItem.children.length) await createItemTree3(userId, newItem.jop_id, shareId, jopItem.children);
+	}
+}
+
 export async function createItem(sessionId: string, path: string, content: string | Buffer): Promise<Item> {
 	const tempFilePath = await makeTempFileWithContent(content);
 	const item: Item = await putApi(sessionId, `items/${path}/content`, null, { filePath: tempFilePath });
@@ -297,6 +310,10 @@ export async function createNote(sessionId: string, note: NoteEntity): Promise<I
 
 export async function updateNote(sessionId: string, note: NoteEntity): Promise<Item> {
 	return updateItem(sessionId, `root:/${note.id}.md:`, makeNoteSerializedBody(note));
+}
+
+export async function updateFolder(sessionId: string, folder: FolderEntity): Promise<Item> {
+	return updateItem(sessionId, `root:/${folder.id}.md:`, makeFolderSerializedBody(folder));
 }
 
 export async function createFolder(sessionId: string, folder: FolderEntity): Promise<Item> {
@@ -406,10 +423,11 @@ encryption_cipher_text:
 encryption_applied: 0
 markup_language: 1
 is_shared: 1
+share_id: ${note.share_id || ''}
 type_: 1`;
 }
 
-function makeFolderSerializedBody(folder: FolderEntity = {}): string {
+export function makeFolderSerializedBody(folder: FolderEntity = {}): string {
 	return `${'title' in folder ? folder.title : 'Title'}
 
 id: ${folder.id || '000000000000000000000000000000F1'}
@@ -421,10 +439,11 @@ encryption_cipher_text:
 encryption_applied: 0
 parent_id: ${folder.parent_id || ''}
 is_shared: 0
+share_id: ${folder.share_id || ''}
 type_: 2`;
 }
 
-function makeResourceSerializedBody(resource: ResourceEntity = {}): string {
+export function makeResourceSerializedBody(resource: ResourceEntity = {}): string {
 	return `Test Resource
 
 id: ${resource.id}
@@ -439,6 +458,7 @@ encryption_cipher_text:
 encryption_applied: 0
 encryption_blob_encrypted: 0
 size: ${resource.size}
+share_id: ${resource.share_id || ''}
 is_shared: 0
 type_: 4`;
 }

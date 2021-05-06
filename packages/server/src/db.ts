@@ -327,6 +327,7 @@ export interface Item extends WithDates, WithUuid {
 	content_size?: number;
 	jop_id?: Uuid;
 	jop_parent_id?: Uuid;
+	jop_share_id?: Uuid;
 	jop_type?: number;
 	jop_encryption_applied?: number;
 }
@@ -438,6 +439,7 @@ export const databaseSchema: DatabaseTables = {
 		content_size: { type: 'number' },
 		jop_id: { type: 'string' },
 		jop_parent_id: { type: 'string' },
+		jop_share_id: { type: 'string' },
 		jop_type: { type: 'number' },
 		jop_encryption_applied: { type: 'number' },
 	},

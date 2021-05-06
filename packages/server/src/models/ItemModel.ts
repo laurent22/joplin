@@ -287,9 +287,11 @@ export default class ItemModel extends BaseModel<Item> {
 			item.jop_parent_id = joplinItem.parent_id || '';
 			item.jop_type = joplinItem.type_;
 			item.jop_encryption_applied = joplinItem.encryption_applied || 0;
+			item.jop_share_id = joplinItem.share_id || '';
 
 			delete joplinItem.id;
 			delete joplinItem.parent_id;
+			delete joplinItem.share_id;
 			delete joplinItem.type_;
 			delete joplinItem.encryption_applied;
 
@@ -475,13 +477,14 @@ export default class ItemModel extends BaseModel<Item> {
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
 		} else {
-			const beforeSaveItem = (await this.load(item.id, { fields: ['name', 'jop_type', 'jop_parent_id'] }));
+			const beforeSaveItem = (await this.load(item.id, { fields: ['name', 'jop_type', 'jop_parent_id', 'jop_share_id'] }));
 			const resourceIds = beforeSaveItem.jop_type === ModelType.Note ? await this.models().itemResource().byItemId(item.id) : [];
 
 			previousItem = {
 				jop_parent_id: beforeSaveItem.jop_parent_id,
 				name: beforeSaveItem.name,
 				jop_resource_ids: resourceIds,
+				jop_share_id: beforeSaveItem.jop_share_id,
 			};
 		}
 

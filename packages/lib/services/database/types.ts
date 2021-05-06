@@ -31,6 +31,7 @@ export interface FolderEntity {
   "is_shared"?: number 
   "is_linked_folder"?: number 
   "source_folder_owner_id"?: string 
+  "share_id"?: string 
   "type_"?: number 
 }
 export interface ItemChangeEntity {
@@ -115,6 +116,7 @@ export interface NoteEntity {
   "encryption_applied"?: number 
   "markup_language"?: number 
   "is_shared"?: number 
+  "share_id"?: string 
   "type_"?: number 
 }
 export interface NotesNormalizedEntity {
@@ -130,6 +132,7 @@ export interface NotesNormalizedEntity {
   "longitude"?: number 
   "altitude"?: number 
   "source_url"?: string 
+  "todo_due"?: number 
   "type_"?: number 
 }
 export interface ResourceLocalStateEntity {
@@ -154,6 +157,7 @@ export interface ResourceEntity {
   "encryption_blob_encrypted"?: number 
   "size"?: number 
   "is_shared"?: number 
+  "share_id"?: string 
   "type_"?: number 
 }
 export interface ResourcesToDownloadEntity {

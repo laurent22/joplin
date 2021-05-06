@@ -53,6 +53,7 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const WebDavApi = require('@joplin/lib/WebDavApi');
 const DropboxApi = require('@joplin/lib/DropboxApi');
 import JoplinServerApi from '@joplin/lib/JoplinServerApi';
+import { FolderEntity } from '@joplin/lib/services/database/types';
 const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
@@ -344,6 +345,29 @@ async function setupDatabase(id: number = null, options: any = null) {
 
 	BaseModel.setDb(databases_[id]);
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+}
+
+export async function createFolderTree(parentId: string, tree: any[], num: number = 0): Promise<FolderEntity> {
+	let rootFolder: FolderEntity = null;
+
+	for (const item of tree) {
+		const isFolder = !!item.children;
+
+		num++;
+
+		const data = { ...item };
+		delete data.children;
+
+		if (isFolder) {
+			const folder = await Folder.save({ title: `Folder ${num}`, parent_id: parentId, ...data });
+			if (!rootFolder) rootFolder = folder;
+			if (item.children.length) await createFolderTree(folder.id, item.children, num);
+		} else {
+			await Note.save({ title: `Note ${num}`, parent_id: parentId, ...data });
+		}
+	}
+
+	return rootFolder;
 }
 
 function exportDir(id: number = null) {

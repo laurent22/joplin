@@ -49,7 +49,11 @@ export default class ShareService {
 			await Folder.save({ id: folder.id, parent_id: '' });
 		}
 
-		return this.api().exec('POST', 'api/shares', {}, { folder_id: folderId });
+		const share = await this.api().exec('POST', 'api/shares', {}, { folder_id: folderId });
+
+		await Folder.setShareStatus(folderId, share.id);
+
+		return share;
 	}
 
 	public async addShareRecipient(shareId: string, recipientEmail: string) {

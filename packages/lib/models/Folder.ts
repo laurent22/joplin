@@ -4,7 +4,7 @@ import time from '../time';
 import { _ } from '../locale';
 
 import Note from './Note';
-import Database from '../database';
+import Database, { SqlQuery } from '../database';
 import BaseItem from './BaseItem';
 const { substrWithEllipsis } = require('../string-utils.js');
 
@@ -420,6 +420,52 @@ export default class Folder extends BaseItem {
 		};
 
 		return Folder.save(modifiedFolder, { autoTimestamp: false });
+	}
+
+	public static async setShareStatus(folderId: string, shareId: string) {
+		const folder = await this.load(folderId);
+		if (!folder) throw new Error(`Folder not found: ${folderId}`);
+
+		// TODO: It should be possible to retrieve all the children IDs in one
+		// go using a recursive SQL query.
+
+		const queries: SqlQuery[] = [];
+
+		queries.push({
+			sql: `
+				UPDATE folders
+				SET share_id = ?
+				WHERE id = ?`,
+			params: [shareId, folderId],
+		});
+
+		const processChildren = async (folderId: string, shareId: string) => {
+			const childrenFolders: FolderEntity[] = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [folderId]);
+
+			queries.push({
+				sql: `
+					UPDATE notes
+					SET share_id = ?
+					WHERE parent_id = ?`,
+				params: [shareId, folderId],
+			});
+
+			queries.push({
+				sql: `
+					UPDATE folders
+					SET share_id = ?
+					WHERE parent_id = ?`,
+				params: [shareId, folderId],
+			});
+
+			for (const folder of childrenFolders) {
+				await processChildren(folder.id, shareId);
+			}
+		};
+
+		await processChildren(folderId, shareId);
+
+		await this.db().transactionExecBatch(queries);
 	}
 
 	// These "duplicateCheck" and "reservedTitleCheck" should only be done when a user is

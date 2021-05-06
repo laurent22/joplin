@@ -1,6 +1,7 @@
 import { ModelType } from '@joplin/lib/BaseModel';
 import { resourceBlobPath } from '../apps/joplin/joplinUtils';
 import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, User, UserItem, Uuid } from '../db';
+import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
@@ -130,6 +131,93 @@ export default class ShareModel extends BaseModel<Share> {
 		const userIds = shareUsers.map(su => su.user_id);
 		userIds.push(share.owner_id);
 		return userIds;
+	}
+
+	public async updateSharedItems3() {
+
+		const handleCreated = async (change: Change, item: Item, share: Share) => {
+			// console.info('CREATE ITEM', item);
+			// console.info('CHANGE', change);
+
+			// if (![ModelType.Note, ModelType.Folder, ModelType.Resource].includes(item.jop_type)) return;
+			if (!item.jop_share_id) return;
+
+			const shareUserIds = await this.allShareUserIds(share);
+			for (const shareUserId of shareUserIds) {
+				if (shareUserId === change.user_id) continue;
+				try {
+					await this.models().userItem().add(shareUserId, item.id, share.id);
+				} catch (error) {
+					if (!isUniqueConstraintError(error)) throw error;
+				}
+			}
+		};
+
+		const handleUpdated = async (change: Change, item: Item, share: Share) => {
+			// console.info('UPDATE ITEM', item);
+			// console.info('change', change);
+			// console.info('share', share);
+
+			// if (![ModelType.Note, ModelType.Folder, ModelType.Resource].includes(item.jop_type)) return;
+
+			const previousItem = this.models().change().unserializePreviousItem(change.previous_item);
+			const previousShareId = previousItem.jop_share_id;
+			const newShareId = share ? share.id : '';
+
+			if (previousShareId === newShareId) return;
+
+			if (previousShareId) {
+				const previousShare = await this.models().share().load(previousShareId);
+				const shareUserIds = await this.allShareUserIds(previousShare);
+				for (const shareUserId of shareUserIds) {
+					if (shareUserId === change.user_id) continue;
+					await this.models().userItem().remove(shareUserId, item.id);
+				}
+			}
+
+			if (newShareId) {
+				const shareUserIds = await this.allShareUserIds(share);
+				for (const shareUserId of shareUserIds) {
+					if (shareUserId === change.user_id) continue;
+					try {
+						await this.models().userItem().add(shareUserId, item.id, share.id);
+					} catch (error) {
+						if (!isUniqueConstraintError(error)) throw error;
+					}
+				}
+			}
+		};
+
+		while (true) {
+			const latestProcessedChange = await this.models().keyValue().value<string>('ShareService::latestProcessedChange');
+
+			const changes = await this.models().change().allFromId(latestProcessedChange || '');
+			if (!changes.length) break;
+
+			const items = await this.models().item().loadByIds(changes.map(c => c.item_id));
+			const shareIds = unique(items.filter(i => !!i.jop_share_id).map(i => i.jop_share_id));
+			const shares = await this.models().share().loadByIds(shareIds);
+
+			await this.withTransaction(async () => {
+				for (const change of changes) {
+					const item = items.find(i => i.id === change.item_id);
+
+					if (change.type === ChangeType.Create) {
+						await handleCreated(change, item, shares.find(s => s.id === item.jop_share_id));
+					}
+
+					if (change.type === ChangeType.Update) {
+						await handleUpdated(change, item, shares.find(s => s.id === item.jop_share_id));
+					}
+
+					// We don't need to handle ChangeType.Delete because when an
+					// item is deleted, all its associated userItems are deleted
+					// too.
+				}
+
+				await this.models().keyValue().setValue('ShareService::latestProcessedChange', changes[changes.length - 1].id);
+			});
+		}
 	}
 
 	public async updateSharedItems2(userId: Uuid) {
