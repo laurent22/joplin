@@ -577,14 +577,13 @@ describe('shares.folder', function() {
 
 		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
-		await models().share().updateSharedItems();
 
 		const folderItem2 = await createFolder(session2.id, { id: '000000000000000000000000000000F2', title: 'folder2' });
 		const noteItem = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
 		const note: NoteEntity = await models().item().loadAsJoplinItem(noteItem.id);
 
 		await updateNote(session2.id, { ...note, parent_id: folderItem2.jop_id });
-		await models().share().updateSharedItems();
+		await models().share().updateSharedItems2(user1.id);
 
 		latestChanges1 = await models().change().allForUser(user1.id, { cursor: cursor1 });
 		expect(latestChanges1.items.length).toBe(1);
