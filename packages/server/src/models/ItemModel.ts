@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 
@@ -83,14 +83,17 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public async loadByJopIds(userId: Uuid, jopIds: string[], options: LoadOptions = {}): Promise<Item[]> {
+	public async loadByJopIds(userId: Uuid | Uuid[], jopIds: string[], options: LoadOptions = {}): Promise<Item[]> {
 		if (!jopIds.length) return [];
+
+		const userIds = Array.isArray(userId) ? userId : [userId];
+		if (!userIds.length) return [];
 
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select(this.selectFields(options, null, 'items'))
-			.where('user_items.user_id', '=', userId)
+			.distinct(this.selectFields(options, null, 'items'))
+			.whereIn('user_items.user_id', userIds)
 			.whereIn('jop_id', jopIds);
 	}
 
@@ -99,14 +102,16 @@ export default class ItemModel extends BaseModel<Item> {
 		return items.length ? items[0] : null;
 	}
 
-	public async loadByNames(userId: Uuid, names: string[], options: LoadOptions = {}): Promise<Item[]> {
+	public async loadByNames(userId: Uuid | Uuid[], names: string[], options: LoadOptions = {}): Promise<Item[]> {
 		if (!names.length) return [];
+
+		const userIds = Array.isArray(userId) ? userId : [userId];
 
 		return this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select(this.selectFields(options, null, 'items'))
-			.where('user_items.user_id', '=', userId)
+			.distinct(this.selectFields(options, null, 'items'))
+			.whereIn('user_items.user_id', userIds)
 			.whereIn('name', names);
 	}
 
@@ -138,22 +143,24 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	public async folderChildrenItems2(userId: Uuid, folderId: string, includeResources:boolean = true): Promise<Item[]> {
+	public async sharedFolderChildrenItems(shareUserIds: Uuid[], folderId: string, includeResources: boolean = true): Promise<Item[]> {
+		if (!shareUserIds.length) throw new Error('User IDs must be specified');
+
 		let output: Item[] = [];
 
 		const folderAndNotes: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select('items.id', 'items.jop_id', 'items.jop_type')
+			.distinct('items.id', 'items.jop_id', 'items.jop_type')
 			.where('items.jop_parent_id', '=', folderId)
-			.where('user_items.user_id', '=', userId)
+			.whereIn('user_items.user_id', shareUserIds)
 			.whereIn('jop_type', [ModelType.Folder, ModelType.Note]);
 
 		for (const item of folderAndNotes) {
 			output.push(item);
 
 			if (item.jop_type === ModelType.Folder) {
-				const children = await this.folderChildrenItems2(userId, item.jop_id, false);
+				const children = await this.sharedFolderChildrenItems(shareUserIds, item.jop_id, false);
 				output = output.concat(children);
 			}
 		}
@@ -164,7 +171,8 @@ export default class ItemModel extends BaseModel<Item> {
 			const itemResourceIds = await this.models().itemResource().byItemIds(noteItemIds);
 
 			for (const itemId in itemResourceIds) {
-				const resourceItems = await this.models().item().loadByJopIds(userId, itemResourceIds[itemId]);
+				// TODO: should be resources with that path, that belong to any of the share users
+				const resourceItems = await this.models().item().loadByJopIds(shareUserIds, itemResourceIds[itemId]);
 
 				for (const resourceItem of resourceItems) {
 					output.push({
@@ -173,13 +181,14 @@ export default class ItemModel extends BaseModel<Item> {
 						jop_type: ModelType.Resource,
 					});
 				}
-			}		
+			}
 
-			let allResourceIds:string[] = [];
+			let allResourceIds: string[] = [];
 			for (const itemId in itemResourceIds) {
 				allResourceIds = allResourceIds.concat(itemResourceIds[itemId]);
 			}
-			const blobItems = await this.models().itemResource().blobItemsByResourceIds(userId, allResourceIds);
+			// TODO: should be resources with that path, that belong to any of the share users
+			const blobItems = await this.models().itemResource().blobItemsByResourceIds(shareUserIds, allResourceIds);
 			for (const blobItem of blobItems) {
 				output.push({
 					id: blobItem.id,

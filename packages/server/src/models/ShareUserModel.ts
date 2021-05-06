@@ -1,4 +1,4 @@
-import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../db';
+import { Item, Share, ShareUser, ShareUserStatus, User, Uuid } from '../db';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 
@@ -101,19 +101,21 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
-		const item = await this.models().item().load(share.item_id);
+		return this.save({ ...shareUser, status });
 
-		return this.withTransaction<Item>(async () => {
-			await this.save({ ...shareUser, status });
+		// const item = await this.models().item().load(share.item_id);
 
-			if (status === ShareUserStatus.Accepted) {
-				if (share.type === ShareType.JoplinRootFolder) {
-					// await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
-				} else if (share.type === ShareType.App) {
-					await this.models().userItem().add(userId, share.item_id, share.id);
-				}
-			}
-		});
+		// return this.withTransaction<Item>(async () => {
+		// 	await this.save({ ...shareUser, status });
+
+		// 	if (status === ShareUserStatus.Accepted) {
+		// 		if (share.type === ShareType.JoplinRootFolder) {
+		// 			// await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
+		// 		} else if (share.type === ShareType.App) {
+		// 			await this.models().userItem().add(userId, share.item_id, share.id);
+		// 		}
+		// 	}
+		// });
 	}
 
 	public async deleteByShare(share: Share): Promise<void> {

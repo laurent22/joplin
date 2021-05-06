@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createItemTree2 } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createItemTree2, createNote } from '../utils/testing/testUtils';
 import { ShareType } from '../db';
 import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../apps/joplin/joplinUtils';
@@ -68,9 +68,9 @@ describe('ItemModel', function() {
 		}
 	});
 
-	test('should find all items within a folder', async function() {
+	test('should find all items within a shared folder', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
-		const { user: user2 } = await createUserAndSession(2);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
 
 		const resourceItem1 = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'testing1');
 		const resourceItem2 = await createResource(session1.id, { id: '000000000000000000000000000000E2' }, 'testing2');
@@ -87,7 +87,7 @@ describe('ItemModel', function() {
 					{
 						id: '00000000000000000000000000000002',
 						title: 'note test 2',
-						body: ``,
+						body: '',
 					},
 				],
 			},
@@ -97,12 +97,19 @@ describe('ItemModel', function() {
 			},
 		]);
 
+		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		const { share } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
+
+		await createNote(session2.id, { id: '00000000000000000000000000000003', parent_id: '000000000000000000000000000000F1' });
+
 		{
-			const children = await models().item().folderChildrenItems2(user1.id, '000000000000000000000000000000F1');
+			const shareUserIds = await models().share().allShareUserIds(share);
+			const children = await models().item().sharedFolderChildrenItems(shareUserIds, '000000000000000000000000000000F1');
 
 			expect(children.filter(c => !!c.jop_id).map(c => c.jop_id).sort()).toEqual([
 				'00000000000000000000000000000001',
 				'00000000000000000000000000000002',
+				'00000000000000000000000000000003',
 				'000000000000000000000000000000E1',
 				'000000000000000000000000000000E2',
 			].sort());
@@ -114,12 +121,7 @@ describe('ItemModel', function() {
 		}
 
 		{
-			const children = await models().item().folderChildrenItems2(user1.id, '000000000000000000000000000000F2');
-			expect(children.map(c => c.jop_id).sort()).toEqual([].sort());
-		}
-
-		{
-			const children = await models().item().folderChildrenItems2(user2.id, '000000000000000000000000000000F1');
+			const children = await models().item().sharedFolderChildrenItems([user1.id], '000000000000000000000000000000F2');
 			expect(children.map(c => c.jop_id).sort()).toEqual([].sort());
 		}
 	});

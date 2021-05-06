@@ -72,7 +72,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	}
 
 	// Returns any user item that is part of a share
-	public async itemsInShare(userId:Uuid):Promise<UserItem[]> {
+	public async itemsInShare(userId: Uuid): Promise<UserItem[]> {
 		return this.db(this.tableName).select(this.defaultFields).where('share_id', '!=', '').where('user_id', '=', userId);
 	}
 
@@ -90,7 +90,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId });
 	}
 
-	public async deleteByShare(share: DeleteByShare):Promise<void> {
+	public async deleteByShare(share: DeleteByShare): Promise<void> {
 		await this.deleteBy({ byShare: share });
 	}
 

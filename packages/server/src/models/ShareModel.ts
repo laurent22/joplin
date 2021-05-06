@@ -86,10 +86,11 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
-	public async byUserId(userId: Uuid, type:ShareType): Promise<Share[]> {
+	public async byUserId(userId: Uuid, type: ShareType): Promise<Share[]> {
 		const query1 = this
 			.db(this.tableName)
 			.select(this.defaultFields)
+			.where('type', '=', type)
 			.whereIn('id', this
 				.db('share_users')
 				.select('share_id')
@@ -99,6 +100,7 @@ export default class ShareModel extends BaseModel<Share> {
 		const query2 = this
 			.db(this.tableName)
 			.select(this.defaultFields)
+			.where('type', '=', type)
 			.where('owner_id', '=', userId);
 
 		return query1.union(query2);
@@ -123,19 +125,20 @@ export default class ShareModel extends BaseModel<Share> {
 
 	// Returns all user IDs concerned by the share. That includes all the users
 	// the folder has been shared with, as well as the folder owner.
-	private async allShareUserIds(share: Share) {
+	public async allShareUserIds(share: Share): Promise<Uuid[]> {
 		const shareUsers = await this.models().shareUser().byShareId(share.id);
 		const userIds = shareUsers.map(su => su.user_id);
 		userIds.push(share.owner_id);
 		return userIds;
 	}
 
-	public async updateSharedItems2(userId:Uuid) {
+	public async updateSharedItems2(userId: Uuid) {
 		const shares = await this.models().share().byUserId(userId, ShareType.JoplinRootFolder);
+		if (!shares.length) return;
 
-		const existingShareUserItems:UserItem[] = await this.models().userItem().itemsInShare(userId);
+		const existingShareUserItems: UserItem[] = await this.models().userItem().itemsInShare(userId);
 
-		const allShareUserItems:UserItem[] = [];
+		const allShareUserItems: UserItem[] = [];
 
 		for (const share of shares) {
 			allShareUserItems.push({
@@ -143,7 +146,8 @@ export default class ShareModel extends BaseModel<Share> {
 				share_id: share.id,
 			});
 
-			const shareItems = await this.models().item().folderChildrenItems2(share.owner_id, share.folder_id);
+			const shareUserIds = await this.models().share().allShareUserIds(share);
+			const shareItems = await this.models().item().sharedFolderChildrenItems(shareUserIds, share.folder_id);
 			for (const item of shareItems) {
 				allShareUserItems.push({
 					item_id: item.id,
@@ -152,14 +156,14 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		}
 
-		const userItemsToDelete:UserItem[] = [];
+		const userItemsToDelete: UserItem[] = [];
 		for (const userItem of existingShareUserItems) {
 			if (!allShareUserItems.find(ui => ui.item_id === userItem.item_id && ui.share_id === userItem.share_id)) {
 				userItemsToDelete.push(userItem);
 			}
 		}
 
-		const userItemsToCreate:UserItem[] = [];
+		const userItemsToCreate: UserItem[] = [];
 		for (const userItem of allShareUserItems) {
 			if (!existingShareUserItems.find(ui => ui.item_id === userItem.item_id && ui.share_id === userItem.share_id)) {
 				userItemsToCreate.push(userItem);
@@ -473,19 +477,19 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 
-		const shareItems = await this.models().item().folderChildrenItems2(owner.id, folderId);
+		const shareItems = await this.models().item().sharedFolderChildrenItems([owner.id], folderId);
 		const userItems = await this.models().userItem().byItemIds(shareItems.map(s => s.id));
 		const userItemIds = userItems.map(u => u.id);
 
 		return this.withTransaction(async () => {
 			const savedShare = await super.save(shareToSave);
-			
+
 			await this
 				.db('user_items')
 				.whereIn('id', userItemIds)
 				.orWhere('item_id', '=', shareToSave.item_id)
 				.update({ share_id: savedShare.id });
-			
+
 			return savedShare;
 		});
 	}

@@ -1,10 +1,10 @@
 import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, checkThrowAsync, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, createItem, updateNote, expectHttpError, createResource, createItemTree2 } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource, createItemTree2 } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
-import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
+import { ErrorForbidden } from '../../utils/errors';
 import { serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -155,7 +155,7 @@ describe('shares.folder', function() {
 			parent_id: '000000000000000000000000000000F2',
 		});
 
-		await models().share().updateSharedItems();
+		await models().share().updateSharedItems2(user2.id);
 
 		const newChildren = await models().item().children(user2.id);
 		expect(newChildren.items.length).toBe(3);
@@ -186,8 +186,6 @@ describe('shares.folder', function() {
 		const folderItem5 = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F5');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem5);
 
-		await models().share().updateSharedItems();
-
 		const noteItem = await itemModel.loadByJopId(user1.id, '00000000000000000000000000000001');
 
 		// Note is moved to another folder, but still within shared folder
@@ -198,7 +196,7 @@ describe('shares.folder', function() {
 				jop_parent_id: '000000000000000000000000000000F2',
 			});
 
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 
 			const newChildren = await models().item().children(user2.id);
 			expect(newChildren.items.length).toBe(4);
@@ -212,7 +210,7 @@ describe('shares.folder', function() {
 				jop_parent_id: '000000000000000000000000000000F3',
 			});
 
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 
 			const newChildren = await models().item().children(user2.id);
 			expect(newChildren.items.length).toBe(3);
@@ -227,7 +225,7 @@ describe('shares.folder', function() {
 				jop_parent_id: '000000000000000000000000000000F4',
 			});
 
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 
 			const newChildren = await models().item().children(user2.id);
 			expect(newChildren.items.length).toBe(3);
@@ -242,7 +240,7 @@ describe('shares.folder', function() {
 				jop_parent_id: '000000000000000000000000000000F1',
 			});
 
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 
 			const newChildren = await models().item().children(user2.id);
 			expect(newChildren.items.length).toBe(4);
@@ -257,7 +255,7 @@ describe('shares.folder', function() {
 				jop_parent_id: '000000000000000000000000000000F5',
 			});
 
-			await models().share().updateSharedItems();
+			await models().share().updateSharedItems2(user2.id);
 
 			const newChildren = await models().item().children(user2.id);
 			expect(newChildren.items.length).toBe(4);
@@ -283,7 +281,6 @@ describe('shares.folder', function() {
 
 		const folderItem1 = await itemModel.loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
-		await models().share().updateSharedItems();
 
 		const noteItem = await itemModel.loadByJopId(user1.id, '00000000000000000000000000000001');
 
@@ -299,7 +296,7 @@ describe('shares.folder', function() {
 			jop_parent_id: '000000000000000000000000000000F2',
 		});
 
-		await models().share().updateSharedItems();
+		await models().share().updateSharedItems2(user2.id);
 
 		const newChildren = await models().item().children(user2.id);
 		expect(newChildren.items.length).toBe(1);
@@ -399,29 +396,29 @@ describe('shares.folder', function() {
 		expect((await itemModel2.children(user2.id)).items.length).toBe(0);
 	});
 
-	test('should associate a user with the item after sharing', async function() {
-		const { session: session1 } = await createUserAndSession(1);
-		const { user: user2, session: session2 } = await createUserAndSession(2);
+	// test('should associate a user with the item after sharing', async function() {
+	// 	const { session: session1 } = await createUserAndSession(1);
+	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
+	// 	const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
 
-		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.App, item);
+	// 	await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.App, item);
 
-		expect((await models().userItem().all()).length).toBe(2);
-		expect(!!(await models().userItem().all()).find(ui => ui.user_id === user2.id)).toBe(true);
-	});
+	// 	expect((await models().userItem().all()).length).toBe(2);
+	// 	expect(!!(await models().userItem().all()).find(ui => ui.user_id === user2.id)).toBe(true);
+	// });
 
-	test('should not share an already shared item', async function() {
-		const { session: session1 } = await createUserAndSession(1);
-		const { user: user2, session: session2 } = await createUserAndSession(2);
-		const { user: user3, session: session3 } = await createUserAndSession(3);
+	// test('should not share an already shared item', async function() {
+	// 	const { session: session1 } = await createUserAndSession(1);
+	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
+	// 	const { user: user3, session: session3 } = await createUserAndSession(3);
 
-		const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
+	// 	const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
 
-		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.App, item);
-		const error = await checkThrowAsync(async () => shareWithUserAndAccept(session2.id, session3.id, user3, ShareType.App, item));
-		expect(error.httpCode).toBe(ErrorBadRequest.httpCode);
-	});
+	// 	await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.App, item);
+	// 	const error = await checkThrowAsync(async () => shareWithUserAndAccept(session2.id, session3.id, user3, ShareType.App, item));
+	// 	expect(error.httpCode).toBe(ErrorBadRequest.httpCode);
+	// });
 
 	test('should see delta changes for linked items', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
@@ -535,7 +532,6 @@ describe('shares.folder', function() {
 
 		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
-		await models().share().updateSharedItems();
 
 		latestChanges2 = await models().change().allForUser(user2.id, { cursor: cursor2 });
 		expect(latestChanges2.items.length).toBe(2);
@@ -556,10 +552,10 @@ describe('shares.folder', function() {
 
 		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
 		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
-		await models().share().updateSharedItems();
 
 		await createNote(session2.id, { id: '00000000000000000000000000000002', title: 'from user 2', parent_id: folderItem1.jop_id });
-		await models().share().updateSharedItems();
+
+		await models().share().updateSharedItems2(user1.id);
 
 		latestChanges1 = await models().change().allForUser(user1.id, { cursor: cursor1 });
 		expect(latestChanges1.items.length).toBe(1);

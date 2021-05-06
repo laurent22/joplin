@@ -43,8 +43,8 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 	}
 
 	public async byItemIds(itemIds: Uuid[]): Promise<Record<Uuid, string[]>> {
-		const rows:ItemResource[] = await this.db(this.tableName).select('item_id', 'resource_id').whereIn('item_id', itemIds);
-		const output:Record<Uuid, string[]> = {};
+		const rows: ItemResource[] = await this.db(this.tableName).select('item_id', 'resource_id').whereIn('item_id', itemIds);
+		const output: Record<Uuid, string[]> = {};
 		for (const row of rows) {
 			if (!output[row.item_id]) output[row.item_id] = [];
 			output[row.item_id].push(row.resource_id);
@@ -52,9 +52,9 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 		return output;
 	}
 
-	public async blobItemsByResourceIds(userId:Uuid, resourceIds:string[]):Promise<Item[]> {
+	public async blobItemsByResourceIds(userIds: Uuid[], resourceIds: string[]): Promise<Item[]> {
 		const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
-		return this.models().item().loadByNames(userId, resourceBlobNames);
+		return this.models().item().loadByNames(userIds, resourceBlobNames);
 	}
 
 }
