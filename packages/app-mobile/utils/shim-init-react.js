@@ -11,6 +11,7 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('@joplin/lib/path-utils');
 const uuid = require('@joplin/lib/uuid').default;
 const Resource = require('@joplin/lib/models/Resource').default;
+import { AppState } from 'react-native';
 
 const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
@@ -217,10 +218,22 @@ function shimInit() {
 	};
 
 	shim.setTimeout = (fn, interval) => {
+		// setTimeout callbacks do not run when the app is in the background, so
+		// if the interval is short enough we will just run the function, otherwise
+		// the callback will be available to run the next time the app comes to foreground.
+		if (AppState.currentState === 'background' && interval <= 1000) {
+			fn();
+			return null;
+		}
 		return PoorManIntervals.setTimeout(fn, interval);
 	};
 
 	shim.setInterval = (fn, interval) => {
+		// same approach and reasoning as setTimeout
+		if (AppState.currentState === 'background' && interval <= 1000) {
+			fn();
+			return null;
+		}
 		return PoorManIntervals.setInterval(fn, interval);
 	};
 

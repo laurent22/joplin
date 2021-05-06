@@ -97,6 +97,7 @@ import EncryptionService from '@joplin/lib/services/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { clearSharedFilesCache } from './utils/ShareUtils';
 import setIgnoreTlsErrors from './utils/TlsUtils';
+import BackgroundFetch from 'react-native-background-fetch';
 
 let storeDispatch = function(_action: any) {};
 
@@ -107,6 +108,23 @@ const logReducerAction = function(action: any) {
 	if (action.routeName) msg.push(action.routeName);
 
 	// reg.logger().debug('Reducer action', msg.join(', '));
+};
+
+const setupBackgroundSync = async function() {
+	const syncInterval = Setting.value('sync.interval');
+	// set up background sync jobs
+	const syncHandler = async (taskId: string) => {
+		console.log('HIT');
+		reg.logger().debug('Starting background sync');
+		await reg.scheduleSync(0, null, true, false);
+		BackgroundFetch.finish(taskId);
+	};
+	const onTimeout = async (taskId: string) => {
+		reg.logger().error('Background sync was unable to finish in time');
+		BackgroundFetch.finish(taskId);
+		// Do we need to clean up anything here?
+	};
+	await BackgroundFetch.configure({ minimumFetchInterval: syncInterval }, syncHandler, onTimeout);
 };
 
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
@@ -130,7 +148,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	}
 
 	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
-		reg.setupRecurrentSync();
+		void setupBackgroundSync();
 	}
 
 	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
@@ -580,7 +598,7 @@ async function initialize(dispatch: Function) {
 		reg.logger().error('Initialization error:', error);
 	}
 
-	reg.setupRecurrentSync();
+	void setupBackgroundSync();
 
 	PoorManIntervals.setTimeout(() => {
 		void AlarmService.garbageCollect();

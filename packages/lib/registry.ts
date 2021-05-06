@@ -81,7 +81,7 @@ class Registry {
 		}
 	};
 
-	scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck: boolean = false) => {
+	scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck: boolean = false, setupRecurrentAfter: boolean = true) => {
 		this.schedSyncCalls_.push(true);
 
 		try {
@@ -163,7 +163,7 @@ class Registry {
 						this.logger().info('Could not run background sync:');
 						this.logger().info(error);
 					}
-					this.setupRecurrentSync();
+					if (setupRecurrentAfter) this.setupRecurrentSync();
 					promiseResolve();
 
 				} finally {
