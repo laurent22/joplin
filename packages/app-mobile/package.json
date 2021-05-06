@@ -13,7 +13,7 @@
     "postinstall": "jetify && npm run build"
   },
   "dependencies": {
-    "@joplin/lib": "file:../lib",
+    "@joplin/lib": "^1.8.2",
     "@joplin/renderer": "^1.0.17",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",
