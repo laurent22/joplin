@@ -111,7 +111,8 @@ const logReducerAction = function(action: any) {
 };
 
 const setupBackgroundSync = async function() {
-	const syncInterval = Setting.value('sync.interval');
+	// BackgroundFetch has a minimum fetch interval of 15 mins due to OS constraints
+	const syncInterval = Math.max(Setting.value('sync.interval'), 15);
 	// set up background sync jobs
 	const syncHandler = async (taskId: string) => {
 		console.log('HIT');
@@ -124,7 +125,11 @@ const setupBackgroundSync = async function() {
 		BackgroundFetch.finish(taskId);
 		// Do we need to clean up anything here?
 	};
-	await BackgroundFetch.configure({ minimumFetchInterval: syncInterval }, syncHandler, onTimeout);
+	await BackgroundFetch.configure({
+		minimumFetchInterval: syncInterval,
+		stopOnTerminate: false,
+		startOnBoot: true,
+	}, syncHandler, onTimeout);
 };
 
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
