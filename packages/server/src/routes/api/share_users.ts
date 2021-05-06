@@ -14,7 +14,7 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 
 	await shareUserModel.checkIfAllowed(ctx.owner, AclAction.Update, shareUser);
 
-	const body = await bodyFields(ctx.req);
+	const body = await bodyFields<any>(ctx.req);
 
 	if ('status' in body) {
 		return shareUserModel.setStatus(shareUser.share_id, shareUser.user_id, body.status);

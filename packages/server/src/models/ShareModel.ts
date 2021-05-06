@@ -170,10 +170,6 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		}
 
-		// console.info('ALL', allShareUserItems);
-		// console.info('EXISTING', existingShareUserItems);
-		// console.info('USER ITEMS TO CREATE', userItemsToCreate);
-
 		await this.withTransaction(async () => {
 			await this.models().userItem().deleteByUserItemIds(userItemsToDelete.map(ui => ui.id));
 

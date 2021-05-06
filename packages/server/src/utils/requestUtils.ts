@@ -35,7 +35,7 @@ export async function formParse(req: any): Promise<FormParseResult> {
 	});
 }
 
-export async function bodyFields(req: any/* , filter:string[] = null*/): Promise<BodyFields> {
+export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Promise<T> {
 	// Formidable needs the content-type to be 'application/json' so on our side
 	// we explicitely set it to that. However save the previous value so that it
 	// can be restored.
@@ -48,7 +48,7 @@ export async function bodyFields(req: any/* , filter:string[] = null*/): Promise
 	const form = await formParse(req);
 	if (previousContentType) req.headers['content-type'] = previousContentType;
 
-	return form.fields;
+	return form.fields as T;
 
 	// if (filter) {
 	// 	const output:BodyFields = {};
