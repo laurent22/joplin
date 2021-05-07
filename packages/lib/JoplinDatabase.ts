@@ -216,6 +216,7 @@ export default class JoplinDatabase extends Database {
 		queries.push('DELETE FROM settings WHERE key="revisionService.lastProcessedChangeId"');
 		queries.push('DELETE FROM settings WHERE key="resourceService.lastProcessedChangeId"');
 		queries.push('DELETE FROM settings WHERE key="searchEngine.lastProcessedChangeId"');
+		queries.push('DELETE FROM settings WHERE key="shareService.lastProcessedChangeId"');
 
 		await this.transactionExecBatch(queries);
 	}

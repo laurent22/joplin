@@ -37,7 +37,6 @@ describe('shares.resource', function() {
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(4);
 	});
 
-
 });
 
 // import { ShareType } from '../../db';

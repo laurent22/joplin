@@ -256,6 +256,62 @@ export default class Folder extends BaseItem {
 		}
 	}
 
+	public static async allChildrenFolders(folderId: string): Promise<FolderEntity[]> {
+		const sql = `
+			WITH RECURSIVE
+				folders_cte(id, parent_id, share_id) AS (
+					SELECT id, parent_id, share_id
+						FROM folders
+						WHERE parent_id = ?
+					UNION ALL
+						SELECT folders.id, folders.parent_id, folders.share_id
+							FROM folders
+							INNER JOIN folders_cte AS folders_cte ON (folders.parent_id = folders_cte.id)
+				)
+				SELECT id, parent_id, share_id FROM folders_cte;
+		`;
+
+		return this.db().selectAll(sql, [folderId]);
+	}
+
+	private static async rootSharedFolders(): Promise<FolderEntity[]> {
+		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = "" AND share_id != ""');
+	}
+
+	public static async updateFolderShareIds() {
+		// Get all the sub-folders of the shared folders, and set the share_id
+		// property.
+		const rootFolders = await this.rootSharedFolders();
+
+		let processedFolderIds: string[] = [];
+
+		for (const rootFolder of rootFolders) {
+			const children = await this.allChildrenFolders(rootFolder.id);
+
+			for (const child of children) {
+				if (child.share_id !== rootFolder.share_id) {
+					await this.save({ id: child.id, share_id: rootFolder.share_id });
+				}
+			}
+
+			processedFolderIds.push(rootFolder.id);
+			processedFolderIds = processedFolderIds.concat(children.map(c => c.id));
+		}
+
+		// Now that we've set the share ID on all the sub-folders of the shared
+		// folders, those that remain should not be shared anymore. For example,
+		// if they've been moved out of a shared folder.
+		const sql = ['SELECT id FROM folders WHERE share_id != ""'];
+		if (processedFolderIds.length) {
+			sql.push(` AND id NOT IN ("${processedFolderIds.join('","')}")`);
+		}
+
+		const foldersToUnshare = await this.db().selectAll(sql.join(' '));
+		for (const folder of foldersToUnshare) {
+			await this.save({ id: folder.id, share_id: '' });
+		}
+	}
+
 	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
 		const all = folders ? folders : await this.all(options);
 

@@ -72,6 +72,11 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const buffer = parsedBody?.files?.file ? await fs.readFile(parsedBody.files.file.path) : Buffer.alloc(0);
 	const saveOptions: ItemSaveOption = {};
 
+	// This end point can optionally set the associated jop_share_id field. It
+	// is only useful when uploading resource blob (under .resource folder)
+	// since they can't have metadata. Note, Folder and Resource items all
+	// include the "share_id" field property so it doesn't need to be set via
+	// query parameter.
 	if (ctx.query['share_id']) {
 		saveOptions.shareId = ctx.query['share_id'];
 		await itemModel.checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });

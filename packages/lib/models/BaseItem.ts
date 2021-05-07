@@ -415,7 +415,7 @@ export default class BaseItem extends BaseModel {
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
-		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'updated_time', 'type_'];
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'type_'];
 		const reducedItem: any = {};
 
 		for (let i = 0; i < keepKeys.length; i++) {
