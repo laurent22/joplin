@@ -53,7 +53,6 @@ export async function up(db: DbConnection): Promise<any> {
 		table.increments('id').unique().primary().notNullable();
 		table.string('user_id', 32).notNullable();
 		table.string('item_id', 32).notNullable();
-		table.string('share_id', 32).defaultTo('').notNullable();
 		table.bigInteger('updated_time').notNullable();
 		table.bigInteger('created_time').notNullable();
 	});
@@ -62,7 +61,6 @@ export async function up(db: DbConnection): Promise<any> {
 		table.unique(['user_id', 'item_id']);
 		table.index('user_id');
 		table.index('item_id');
-		table.index('share_id'); // TODO: remove
 	});
 
 	await db.schema.createTable('item_resources', function(table: Knex.CreateTableBuilder) {

@@ -1,6 +1,5 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createItemTree2, createNote } from '../utils/testing/testUtils';
-import { ShareType } from '../db';
-import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder } from '../utils/testing/testUtils';
+import { shareWithUserAndAccept2 } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../apps/joplin/joplinUtils';
 
 describe('ItemModel', function() {
@@ -17,8 +16,8 @@ describe('ItemModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should find exclusively owned items', async function() {
-		const { session: session1, user: user1 } = await createUserAndSession(1, true);
+	test('should find exclusively owned items 1', async function() {
+		const { user: user1 } = await createUserAndSession(1, true);
 		const { session: session2, user: user2 } = await createUserAndSession(2);
 
 		const tree: any = {
@@ -26,8 +25,6 @@ describe('ItemModel', function() {
 				'00000000000000000000000000000001': null,
 			},
 		};
-
-		const itemModel1 = models().item();
 
 		await createItemTree(user1.id, '', tree);
 		await createItem(session2.id, 'root:/test.txt:', 'testing');
@@ -46,9 +43,19 @@ describe('ItemModel', function() {
 			const itemIds = await models().item().exclusivelyOwnedItemIds(user2.id);
 			expect(itemIds.length).toBe(1);
 		}
+	});
 
-		const folderItem = await itemModel1.loadByJopId(user1.id, '000000000000000000000000000000F1');
-		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+	test('should find exclusively owned items 2', async function() {
+		const { session: session1, user: user1 } = await createUserAndSession(1, true);
+		const { session: session2, user: user2 } = await createUserAndSession(2);
+
+		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		await createFolder(session2.id, { id: '000000000000000000000000000000F2' });
 
 		{
 			const itemIds = await models().item().exclusivelyOwnedItemIds(user1.id);
@@ -70,12 +77,12 @@ describe('ItemModel', function() {
 
 	test('should find all items within a shared folder', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
-		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const { session: session2 } = await createUserAndSession(2);
 
 		const resourceItem1 = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'testing1');
 		const resourceItem2 = await createResource(session1.id, { id: '000000000000000000000000000000E2' }, 'testing2');
 
-		await createItemTree2(user1.id, '', [
+		const { share } = await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', [
 			{
 				id: '000000000000000000000000000000F1',
 				children: [
@@ -96,9 +103,6 @@ describe('ItemModel', function() {
 				children: [],
 			},
 		]);
-
-		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
-		const { share } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
 
 		await createNote(session2.id, { id: '00000000000000000000000000000003', parent_id: '000000000000000000000000000000F1' });
 

@@ -1,5 +1,5 @@
 import { ChangeType, ItemType, UserItem, Uuid } from '../db';
-import BaseModel, { DeleteOptions, SaveOptions } from './BaseModel';
+import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
 
@@ -27,11 +27,11 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return false;
 	}
 
-	public async add(userId: Uuid, itemId: Uuid, shareId: Uuid = ''): Promise<UserItem> {
+	public async add(userId: Uuid, itemId: Uuid, _shareId: Uuid = ''): Promise<UserItem> {
 		return this.save({
 			user_id: userId,
 			item_id: itemId,
-			share_id: shareId,
+			// share_id: shareId,
 		});
 	}
 
@@ -50,17 +50,29 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	}
 
 	public async byItemIds(itemIds: Uuid[]): Promise<UserItem[]> {
-		return await this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
+		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
-	public async byShareId(shareId: Uuid): Promise<UserItem[]> {
-		return await this.db(this.tableName).select(this.defaultFields).where('share_id', '=', shareId);
+	public async byShareId(shareId: Uuid, options: LoadOptions = {}): Promise<UserItem[]> {
+		return this
+			.db(this.tableName)
+			.leftJoin('items', 'user_items.item_id', 'items.id')
+			.select(this.selectFields(options, this.defaultFields, 'user_items'))
+			.where('items.jop_share_id', '=', shareId);
+		// return this.db(this.tableName).select(this.defaultFields).where('share_id', '=', shareId);
 	}
 
-	public async byShareAndUserId(shareId: Uuid, userId: Uuid): Promise<UserItem[]> {
-		return await this.db(this.tableName).select(this.defaultFields)
-			.where('share_id', '=', shareId)
-			.where('user_id', '=', userId);
+	public async byShareAndUserId(shareId: Uuid, userId: Uuid, options: LoadOptions = {}): Promise<UserItem[]> {
+		return this
+			.db(this.tableName)
+			.leftJoin('items', 'user_items.item_id', 'items.id')
+			.select(this.selectFields(options, this.defaultFields, 'user_items'))
+			.where('items.jop_share_id', '=', shareId)
+			.where('user_items.user_id', '=', userId);
+
+		// return this.db(this.tableName).select(this.defaultFields)
+		// 	.where('share_id', '=', shareId)
+		// 	.where('user_id', '=', userId);
 	}
 
 	public async byUserId(userId: Uuid): Promise<UserItem[]> {
@@ -72,8 +84,14 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	}
 
 	// Returns any user item that is part of a share
-	public async itemsInShare(userId: Uuid): Promise<UserItem[]> {
-		return this.db(this.tableName).select(this.defaultFields).where('share_id', '!=', '').where('user_id', '=', userId);
+	public async itemsInShare(userId: Uuid, options: LoadOptions = {}): Promise<UserItem[]> {
+		return this
+			.db(this.tableName)
+			.leftJoin('items', 'user_items.item_id', 'items.id')
+			.select(this.selectFields(options, this.defaultFields, 'user_items'))
+			.where('items.jop_share_id', '!=', '')
+			.where('user_items.user_id', '=', userId);
+		// return this.db(this.tableName).select(this.defaultFields).where('share_id', '!=', '').where('user_id', '=', userId);
 	}
 
 	public async deleteByUserItem(userId: Uuid, itemId: Uuid): Promise<void> {

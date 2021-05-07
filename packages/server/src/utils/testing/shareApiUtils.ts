@@ -1,9 +1,10 @@
 import { FolderEntity } from '@joplin/lib/services/database/types';
+import { linkedResourceIds } from '../../apps/joplin/joplinUtils';
 import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
-import { checkContextError, createFolder, createItem, koaAppContext, models, makeFolderSerializedBody, makeNoteSerializedBody, updateFolder } from './testUtils';
+import { checkContextError, createFolder, createItem, koaAppContext, models, makeFolderSerializedBody, makeNoteSerializedBody, updateFolder, createResource } from './testUtils';
 
 interface ShareResult {
 	share: Share;
@@ -43,17 +44,22 @@ function convertTree(tree: any): any[] {
 	return output;
 }
 
-async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
-	const itemModel = models().item();
-
+async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
 	for (const jopItem of tree) {
 		const isFolder = !!jopItem.children;
 		const serializedBody = isFolder ?
 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId }) :
 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId });
 
-		const newItem = await itemModel.saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
-		if (isFolder && jopItem.children.length) await createItemTree3(userId, newItem.jop_id, shareId, jopItem.children);
+		if (!isFolder) {
+			const resourceIds = linkedResourceIds(jopItem.body || '');
+			for (const resourceId of resourceIds) {
+				await createResource(sessionId, { id: resourceId }, `testing-${resourceId}`);
+			}
+		}
+
+		const newItem = await models().item().saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		if (isFolder && jopItem.children.length) await createItemTree3(sessionId, userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }
 
@@ -78,9 +84,9 @@ export async function shareWithUserAndAccept2(sharerSessionId: string, shareeSes
 
 	for (const jopItem of itemTree) {
 		if (jopItem.id === sharedFolderId) {
-			await createItemTree3(sharer.id, sharedFolderId, share.id, jopItem.children);
+			await createItemTree3(sharerSessionId, sharer.id, sharedFolderId, share.id, jopItem.children);
 		} else {
-			await createItemTree3(sharer.id, '', '', [jopItem]);
+			await createItemTree3(sharerSessionId, sharer.id, '', '', [jopItem]);
 		}
 	}
 

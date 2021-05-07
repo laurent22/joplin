@@ -5,12 +5,12 @@ import newModelFactory, { Models } from '../models/factory';
 import Applications from '../services/Applications';
 import { AppContext, Env } from './types';
 import routes from '../routes/routes';
-// import ShareService from '../services/ShareService';
+import ShareService from '../services/ShareService';
 import { Services } from '../services/types';
 
-function setupServices(_env: Env, _models: Models): Services {
+function setupServices(env: Env, models: Models): Services {
 	return {
-		share: null,// new ShareService(env, models),
+		share: new ShareService(env, models),
 	};
 }
 

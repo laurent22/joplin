@@ -1,6 +1,5 @@
-import { ShareType } from '../db';
-import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItemTree, updateNote, msleep } from '../utils/testing/testUtils';
+import { shareWithUserAndAccept2 } from '../utils/testing/shareApiUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, updateNote, msleep } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
 import ShareService from './ShareService';
 
@@ -27,7 +26,7 @@ describe('ShareService', function() {
 		const service = new ShareService(Env.Dev, models());
 		void service.runInBackground();
 
-		await createItemTree(user1.id, '', {
+		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F2', {
 			'000000000000000000000000000000F1': {},
 			'000000000000000000000000000000F2': {
 				'00000000000000000000000000000001': null,
@@ -36,12 +35,12 @@ describe('ShareService', function() {
 
 		const folderItem = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F2');
 		const noteItem = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
-		await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+		// await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
 
 		// Modify the note parent, which should trigger a maintenance in x
 		// seconds.
 		const note = await models().item().loadAsJoplinItem(noteItem.id);
-		await updateNote(session1.id, { ...note, parent_id: '000000000000000000000000000000F1' });
+		await updateNote(session1.id, { ...note, parent_id: '000000000000000000000000000000F1', share_id: '' });
 
 		// Force the maintenance to run now
 		jest.runOnlyPendingTimers();

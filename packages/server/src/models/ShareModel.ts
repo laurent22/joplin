@@ -573,21 +573,23 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 
-		const shareItems = await this.models().item().sharedFolderChildrenItems([owner.id], folderId);
-		const userItems = await this.models().userItem().byItemIds(shareItems.map(s => s.id));
-		const userItemIds = userItems.map(u => u.id);
+		// const shareItems = await this.models().item().sharedFolderChildrenItems([owner.id], folderId);
+		// const userItems = await this.models().userItem().byItemIds(shareItems.map(s => s.id));
+		// const userItemIds = userItems.map(u => u.id);
 
-		return this.withTransaction(async () => {
-			const savedShare = await super.save(shareToSave);
+		return super.save(shareToSave);
 
-			await this
-				.db('user_items')
-				.whereIn('id', userItemIds)
-				.orWhere('item_id', '=', shareToSave.item_id)
-				.update({ share_id: savedShare.id });
+		// return this.withTransaction(async () => {
+		// 	const savedShare = await super.save(shareToSave);
 
-			return savedShare;
-		});
+		// 	await this
+		// 		.db('user_items')
+		// 		.whereIn('id', userItemIds)
+		// 		.orWhere('item_id', '=', shareToSave.item_id)
+		// 		.update({ share_id: savedShare.id });
+
+		// 	return savedShare;
+		// });
 	}
 
 	public async shareNote(owner: User, noteId: string): Promise<Share> {

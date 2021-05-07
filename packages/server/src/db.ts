@@ -336,7 +336,6 @@ export interface UserItem extends WithDates {
 	id?: number;
 	user_id?: Uuid;
 	item_id?: Uuid;
-	share_id?: Uuid;
 }
 
 export interface ItemResource {
@@ -447,7 +446,6 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'number' },
 		user_id: { type: 'string' },
 		item_id: { type: 'string' },
-		share_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},
