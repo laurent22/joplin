@@ -115,7 +115,6 @@ const setupBackgroundSync = async function() {
 	const syncInterval = Math.max(Setting.value('sync.interval'), 15);
 	// set up background sync jobs
 	const syncHandler = async (taskId: string) => {
-		console.log('HIT');
 		reg.logger().debug('Starting background sync');
 		await reg.scheduleSync(0, null, true, false);
 		BackgroundFetch.finish(taskId);
