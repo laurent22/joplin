@@ -1,4 +1,4 @@
-import { shareWithUserAndAccept2 } from '../utils/testing/shareApiUtils';
+import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, updateNote, msleep } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
 import ShareService from './ShareService';
@@ -26,7 +26,7 @@ describe('ShareService', function() {
 		const service = new ShareService(Env.Dev, models());
 		void service.runInBackground();
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F2', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', {
 			'000000000000000000000000000000F1': {},
 			'000000000000000000000000000000F2': {
 				'00000000000000000000000000000001': null,

@@ -63,7 +63,7 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 	}
 }
 
-export async function shareWithUserAndAccept2(sharerSessionId: string, shareeSessionId: string, sharedFolderId: string, itemTree: any): Promise<ShareResult> {
+export async function shareFolderWithUser(sharerSessionId: string, shareeSessionId: string, sharedFolderId: string, itemTree: any, acceptShare: boolean = true): Promise<ShareResult> {
 	itemTree = Array.isArray(itemTree) ? itemTree : convertTree(itemTree);
 
 	const sharee = await models().session().sessionUser(shareeSessionId);
@@ -96,7 +96,9 @@ export async function shareWithUserAndAccept2(sharerSessionId: string, shareeSes
 
 	shareUser = await models().shareUser().load(shareUser.id);
 
-	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+	if (acceptShare) {
+		await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+	}
 
 	await models().share().updateSharedItems3();
 

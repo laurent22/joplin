@@ -1,5 +1,5 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder } from '../utils/testing/testUtils';
-import { shareWithUserAndAccept2 } from '../utils/testing/shareApiUtils';
+import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../apps/joplin/joplinUtils';
 
 describe('ItemModel', function() {
@@ -49,7 +49,7 @@ describe('ItemModel', function() {
 		const { session: session1, user: user1 } = await createUserAndSession(1, true);
 		const { session: session2, user: user2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -82,7 +82,7 @@ describe('ItemModel', function() {
 		const resourceItem1 = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'testing1');
 		const resourceItem2 = await createResource(session1.id, { id: '000000000000000000000000000000E2' }, 'testing2');
 
-		const { share } = await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', [
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
 			{
 				id: '000000000000000000000000000000F1',
 				children: [

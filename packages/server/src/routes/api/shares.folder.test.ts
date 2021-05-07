@@ -2,7 +2,7 @@ import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedChanges } from '../../models/ChangeModel';
-import { shareWithUserAndAccept2 } from '../../utils/testing/shareApiUtils';
+import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorForbidden } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/joplinUtils';
@@ -101,7 +101,7 @@ describe('shares.folder', function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F3', [
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F3', [
 			{
 				id: '000000000000000000000000000000F1',
 				children: [],
@@ -152,11 +152,44 @@ describe('shares.folder', function() {
 		expect(children2.items.map(i => i.name).sort().join(',')).toBe(expectedNames.sort().join(','));
 	});
 
+	test('should received shared items only once invitation accepted', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { shareUser } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		], false);
+
+		// The invitation has not been accepted yet, so user 2 should not see any item
+
+		{
+			const children2 = await getApi<PaginatedItems>(session2.id, 'items/root/children');
+			expect(children2.items.length).toBe(0);
+		}
+
+		await patchApi(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+
+		// As soon as the invitation is accepted, all items should be available,
+		// without having to wait for the share service.
+
+		{
+			const children2 = await getApi<PaginatedItems>(session2.id, 'items/root/children');
+			expect(children2.items.length).toBe(2);
+		}
+	});
+
 	test('should share when a note is added to a shared folder', async function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		const { share } = await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F2', [
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', [
 			{
 				id: '000000000000000000000000000000F2',
 				children: [
@@ -184,7 +217,7 @@ describe('shares.folder', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		const { share: share1 } = await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', [
+		const { share: share1 } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
 			{
 				id: '000000000000000000000000000000F1',
 				children: [
@@ -199,7 +232,7 @@ describe('shares.folder', function() {
 			},
 		]);
 
-		const { share: share2 } = await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F5', [
+		const { share: share2 } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F5', [
 			{
 				id: '000000000000000000000000000000F3',
 				children: [],
@@ -300,7 +333,7 @@ describe('shares.folder', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -338,7 +371,7 @@ describe('shares.folder', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -357,7 +390,7 @@ describe('shares.folder', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -389,7 +422,7 @@ describe('shares.folder', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -432,7 +465,7 @@ describe('shares.folder', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -526,7 +559,7 @@ describe('shares.folder', function() {
 		let latestChanges2 = await models().change().allForUser(user2.id);
 		const cursor2 = latestChanges2.cursor;
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -540,7 +573,7 @@ describe('shares.folder', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		const { share } = await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -569,7 +602,7 @@ describe('shares.folder', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', {
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -597,7 +630,7 @@ describe('shares.folder', function() {
 
 		const resourceItem1 = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'testing1');
 
-		const { shareUser, share } = await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', [
+		const { shareUser, share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
 			{
 				id: '000000000000000000000000000000F1',
 				children: [
@@ -635,7 +668,7 @@ describe('shares.folder', function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', [
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
 			{
 				id: '000000000000000000000000000000F1',
 				children: [],
@@ -699,7 +732,7 @@ describe('shares.folder', function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		await shareWithUserAndAccept2(session1.id, session2.id, '000000000000000000000000000000F1', [
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
 			{
 				id: '000000000000000000000000000000F1',
 				children: [

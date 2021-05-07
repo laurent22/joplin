@@ -27,11 +27,10 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		return false;
 	}
 
-	public async add(userId: Uuid, itemId: Uuid, _shareId: Uuid = ''): Promise<UserItem> {
+	public async add(userId: Uuid, itemId: Uuid): Promise<UserItem> {
 		return this.save({
 			user_id: userId,
 			item_id: itemId,
-			// share_id: shareId,
 		});
 	}
 

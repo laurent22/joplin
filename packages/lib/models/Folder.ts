@@ -429,14 +429,16 @@ export default class Folder extends BaseItem {
 		// TODO: It should be possible to retrieve all the children IDs in one
 		// go using a recursive SQL query.
 
+		const updatedTime = Date.now();
+
 		const queries: SqlQuery[] = [];
 
 		queries.push({
 			sql: `
 				UPDATE folders
-				SET share_id = ?
+				SET share_id = ?, updated_time = ?
 				WHERE id = ?`,
-			params: [shareId, folderId],
+			params: [shareId, updatedTime, folderId],
 		});
 
 		const processChildren = async (folderId: string, shareId: string) => {
@@ -445,17 +447,17 @@ export default class Folder extends BaseItem {
 			queries.push({
 				sql: `
 					UPDATE notes
-					SET share_id = ?
+					SET share_id = ?, updated_time = ?
 					WHERE parent_id = ?`,
-				params: [shareId, folderId],
+				params: [shareId, updatedTime, folderId],
 			});
 
 			queries.push({
 				sql: `
 					UPDATE folders
-					SET share_id = ?
+					SET share_id = ?, updated_time = ?
 					WHERE parent_id = ?`,
-				params: [shareId, folderId],
+				params: [shareId, updatedTime, folderId],
 			});
 
 			for (const folder of childrenFolders) {

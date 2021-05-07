@@ -66,7 +66,7 @@ router.get('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	const share = await ctx.models.share().load(shareId);
 	await ctx.models.share().checkIfAllowed(ctx.owner, AclAction.Read, share);
 
-	const shareUsers = await ctx.models.shareUser().byShareId(shareId);
+	const shareUsers = await ctx.models.shareUser().byShareId(shareId, null);
 	const users = await ctx.models.user().loadByIds(shareUsers.map(su => su.user_id));
 
 	const items = shareUsers.map(su => {

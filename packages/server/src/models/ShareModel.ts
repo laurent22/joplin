@@ -1,5 +1,5 @@
 import { resourceBlobPath } from '../apps/joplin/joplinUtils';
-import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, User, Uuid } from '../db';
+import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../db';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
@@ -124,7 +124,7 @@ export default class ShareModel extends BaseModel<Share> {
 	// Returns all user IDs concerned by the share. That includes all the users
 	// the folder has been shared with, as well as the folder owner.
 	public async allShareUserIds(share: Share): Promise<Uuid[]> {
-		const shareUsers = await this.models().shareUser().byShareId(share.id);
+		const shareUsers = await this.models().shareUser().byShareId(share.id, ShareUserStatus.Accepted);
 		const userIds = shareUsers.map(su => su.user_id);
 		userIds.push(share.owner_id);
 		return userIds;
@@ -143,7 +143,7 @@ export default class ShareModel extends BaseModel<Share> {
 			for (const shareUserId of shareUserIds) {
 				if (shareUserId === change.user_id) continue;
 				try {
-					await this.models().userItem().add(shareUserId, item.id, share.id);
+					await this.models().userItem().add(shareUserId, item.id);
 				} catch (error) {
 					if (!isUniqueConstraintError(error)) throw error;
 				}
@@ -177,7 +177,7 @@ export default class ShareModel extends BaseModel<Share> {
 				for (const shareUserId of shareUserIds) {
 					if (shareUserId === change.user_id) continue;
 					try {
-						await this.models().userItem().add(shareUserId, item.id, share.id);
+						await this.models().userItem().add(shareUserId, item.id);
 					} catch (error) {
 						if (!isUniqueConstraintError(error)) throw error;
 					}
@@ -521,7 +521,7 @@ export default class ShareModel extends BaseModel<Share> {
 	// 	}
 	// }
 
-	public async updateResourceShareStatus(doShare: boolean, shareId: Uuid, changerUserId: Uuid, toUserId: Uuid, resourceIds: string[]) {
+	public async updateResourceShareStatus(doShare: boolean, _shareId: Uuid, changerUserId: Uuid, toUserId: Uuid, resourceIds: string[]) {
 		const resourceItems = await this.models().item().loadByJopIds(changerUserId, resourceIds);
 		const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
 		const resourceBlobItems = await this.models().item().loadByNames(changerUserId, resourceBlobNames);
@@ -529,7 +529,7 @@ export default class ShareModel extends BaseModel<Share> {
 		for (const resourceItem of resourceItems) {
 			if (doShare) {
 				try {
-					await this.models().userItem().add(toUserId, resourceItem.id, shareId);
+					await this.models().userItem().add(toUserId, resourceItem.id);
 				} catch (error) {
 					if (isUniqueConstraintError(error)) {
 						continue;
@@ -544,7 +544,7 @@ export default class ShareModel extends BaseModel<Share> {
 		for (const resourceBlobItem of resourceBlobItems) {
 			if (doShare) {
 				try {
-					await this.models().userItem().add(toUserId, resourceBlobItem.id, shareId);
+					await this.models().userItem().add(toUserId, resourceBlobItem.id);
 				} catch (error) {
 					if (isUniqueConstraintError(error)) {
 						continue;
@@ -555,6 +555,20 @@ export default class ShareModel extends BaseModel<Share> {
 				await this.models().userItem().remove(toUserId, resourceBlobItem.id);
 			}
 		}
+	}
+
+	// That should probably only be called when a user accepts the share
+	// invitation. At this point, we want to share all the items immediately.
+	// Afterwards, items that are added or removed are processed by the share
+	// service.
+	public async createSharedFolderUserItems(shareId: Uuid, userId: Uuid) {
+		const items = await this.models().item().byShareId(shareId, { fields: ['id'] });
+
+		await this.withTransaction(async () => {
+			for (const item of items) {
+				await this.models().userItem().add(userId, item.id);
+			}
+		});
 	}
 
 	public async shareFolder(owner: User, folderId: string): Promise<Share> {

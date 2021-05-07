@@ -34,13 +34,21 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId);
 	}
 
-	public async byShareId(shareId: Uuid): Promise<ShareUser[]> {
-		const r = await this.byShareIds([shareId]);
+	public async byShareId(shareId: Uuid, status: ShareUserStatus): Promise<ShareUser[]> {
+		const r = await this.byShareIds([shareId], status);
 		return Object.keys(r).length > 0 ? r[shareId] : [];
 	}
 
-	public async byShareIds(shareIds: Uuid[]): Promise<Record<Uuid, ShareUser[]>> {
-		const rows: ShareUser[] = await this.db(this.tableName).select(this.defaultFields).whereIn('share_id', shareIds);
+	public async byShareIds(shareIds: Uuid[], status: ShareUserStatus): Promise<Record<Uuid, ShareUser[]>> {
+		const query = this
+			.db(this.tableName)
+			.select(this.defaultFields)
+			.whereIn('share_id', shareIds);
+
+		if (status !== null) query.where('status', status);
+
+		const rows: ShareUser[] = await query;
+
 		const output: Record<Uuid, ShareUser[]> = {};
 
 		for (const row of rows) {
@@ -101,7 +109,13 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
-		return this.save({ ...shareUser, status });
+		return this.withTransaction<Item>(async () => {
+			if (status === ShareUserStatus.Accepted) {
+				await this.models().share().createSharedFolderUserItems(shareId, userId);
+			}
+
+			return this.save({ ...shareUser, status });
+		});
 
 		// const item = await this.models().item().load(share.item_id);
 
@@ -119,7 +133,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async deleteByShare(share: Share): Promise<void> {
-		const shareUsers = await this.byShareId(share.id);
+		const shareUsers = await this.byShareId(share.id, null);
 
 		await this.withTransaction(async () => {
 			await this.delete(shareUsers.map(s => s.id));

@@ -83,6 +83,13 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
+	public async byShareId(shareId: Uuid, options: LoadOptions = {}): Promise<Item[]> {
+		return this
+			.db('items')
+			.select(this.selectFields(options, null, 'items'))
+			.where('jop_share_id', '=', shareId);
+	}
+
 	public async loadByJopIds(userId: Uuid | Uuid[], jopIds: string[], options: LoadOptions = {}): Promise<Item[]> {
 		if (!jopIds.length) return [];
 
