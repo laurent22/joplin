@@ -358,6 +358,7 @@ export default class Synchronizer {
 				this.logger().info('Indexing resources...');
 				await this.resourceService().indexNoteResources();
 				await NoteResource.applySharedStatusToLinkedResources();
+				await NoteResource.updateResourceShareIds();
 			}
 		} catch (error) {
 			this.logger().error('Error indexing resources:', error);

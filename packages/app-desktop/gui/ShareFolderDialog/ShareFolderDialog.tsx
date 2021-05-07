@@ -124,6 +124,13 @@ function ShareFolderDialog(props: Props) {
 	const [shareUsers, setShareUsers] = useState<StateShareUser[]>([]);
 	const [shareState, setShareState] = useState<ShareState>(ShareState.Idle);
 
+	async function synchronize(event: AsyncEffectEvent = null) {
+		setShareState(ShareState.Synchronizing);
+		await reg.waitForSyncFinishedThenSync();
+		if (event && event.cancelled) return;
+		setShareState(ShareState.Idle);
+	}
+
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const f = await Folder.load(props.folderId);
 		if (event.cancelled) return;
@@ -135,10 +142,7 @@ function ShareFolderDialog(props: Props) {
 	}, []);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		setShareState(ShareState.Synchronizing);
-		await reg.waitForSyncFinishedThenSync();
-		if (event.cancelled) return;
-		setShareState(ShareState.Idle);
+		await synchronize(event);
 	}, []);
 
 	useEffect(() => {
@@ -174,6 +178,8 @@ function ShareFolderDialog(props: Props) {
 				ShareService.instance().refreshShareUsers(share.id),
 			]);
 			setRecipientEmail('');
+
+			await synchronize();
 		} catch (error) {
 			logger.error(error);
 			setLatestError(error);

@@ -262,6 +262,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		item.id = itemRow.jop_id;
 		item.parent_id = itemRow.jop_parent_id;
+		item.share_id = itemRow.jop_share_id;
 		item.type_ = itemRow.jop_type;
 		item.encryption_applied = itemRow.jop_encryption_applied;
 
