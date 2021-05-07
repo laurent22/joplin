@@ -21,6 +21,10 @@ export interface SharedRootInfo {
 	share: Share;
 }
 
+export interface ItemSaveOption extends SaveOptions {
+	shareId?: Uuid;
+}
+
 export default class ItemModel extends BaseModel<Item> {
 
 	protected get tableName(): string {
@@ -40,6 +44,10 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: Item = null): Promise<void> {
+		if (action === AclAction.Create) {
+			if (!(await this.models().shareUser().isShareParticipant(resource.jop_share_id, user.id))) throw new ErrorForbidden('user has no access to this share');
+		}
+
 		if (action === AclAction.Delete) {
 			const share = await this.models().share().byItemId(resource.id);
 			if (share && share.type === ShareType.JoplinRootFolder) {
@@ -274,7 +282,9 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(userId: Uuid, name: string, buffer: Buffer): Promise<Item> {
+	public async saveFromRawContent(userId: Uuid, name: string, buffer: Buffer, options: ItemSaveOption = null): Promise<Item> {
+		options = options || {};
+
 		const existingItem = await this.loadByName(userId, name);
 
 		const isJoplinItem = isJoplinItemName(name);
@@ -309,6 +319,8 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 
 		if (existingItem) item.id = existingItem.id;
+
+		if (options.shareId) item.jop_share_id = options.shareId;
 
 		return this.withTransaction<Item>(async () => {
 			const savedItem = await this.saveForUser(userId, item);

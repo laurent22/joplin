@@ -1,9 +1,12 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree, expectHttpError } from '../../utils/testing/testUtils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
 import { Item } from '../../db';
 import { PaginatedItems } from '../../models/ItemModel';
+import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
+import { resourceBlobPath } from '../../apps/joplin/joplinUtils';
+import { ErrorForbidden } from '../../utils/errors';
 
 describe('api_items', function() {
 
@@ -199,6 +202,41 @@ describe('api_items', function() {
 			expect(!!result.items.find(it => it.name === 'locks/1.json')).toBe(true);
 			expect(!!result.items.find(it => it.name === 'locks/2.json')).toBe(true);
 		}
+	});
+
+	test('should associate a resource blob with a share', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		await putApi(session1.id, 'items/root:/.resource/000000000000000000000000000000E1:/content', {}, { query: { share_id: share.id } });
+
+		const item = await models().item().loadByName(user1.id, resourceBlobPath('000000000000000000000000000000E1'));
+		expect(item.jop_share_id).toBe(share.id);
+	});
+
+	test('should check permissions - only share participants can associate an item with a share', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		const { session: session3 } = await createUserAndSession(3);
+
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		await expectHttpError(
+			async () => putApi(session3.id, 'items/root:/.resource/000000000000000000000000000000E1:/content', {}, { query: { share_id: share.id } }),
+			ErrorForbidden.httpCode
+		);
 	});
 
 });

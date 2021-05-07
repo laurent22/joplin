@@ -1,8 +1,42 @@
+import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, createResource, createUserAndSession, models } from '../../utils/testing/testUtils';
+
 describe('shares.resource', function() {
 
-	test('should skip', async function() {
-		expect(true).toBe(true);
+	beforeAll(async () => {
+		await beforeAllDb('shares.resource');
 	});
+
+	afterAll(async () => {
+		await afterAllTests();
+	});
+
+	beforeEach(async () => {
+		await beforeEachDb();
+	});
+
+	test('should share both resource and blob', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const resourceItem1 = await createResource(session1.id, { id: '000000000000000000000000000000E1' }, 'testing1');
+
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+						title: 'note test',
+						body: `[testing](:/${resourceItem1.jop_id})`,
+					},
+				],
+			},
+		]);
+
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(4);
+	});
+
 
 });
 

@@ -5,7 +5,7 @@ import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
-import ItemModel from '../../models/ItemModel';
+import ItemModel, { ItemSaveOption } from '../../models/ItemModel';
 import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 
@@ -70,7 +70,14 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const name = itemModel.pathToName(path.id);
 	const parsedBody = await formParse(ctx.req);
 	const buffer = parsedBody?.files?.file ? await fs.readFile(parsedBody.files.file.path) : Buffer.alloc(0);
-	const item = await itemModel.saveFromRawContent(ctx.owner.id, name, buffer);
+	const saveOptions: ItemSaveOption = {};
+
+	if (ctx.query['share_id']) {
+		saveOptions.shareId = ctx.query['share_id'];
+		await itemModel.checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
+	}
+
+	const item = await itemModel.saveFromRawContent(ctx.owner.id, name, buffer, saveOptions);
 	return itemModel.toApiOutput(item);
 });
 

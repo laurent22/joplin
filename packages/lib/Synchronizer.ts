@@ -512,7 +512,7 @@ export default class Synchronizer {
 										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${local.size} bytes) which may tie up the sync process.`);
 									}
 
-									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
+									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', query: { share_id: local.share_id } });
 								} catch (error) {
 									if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);

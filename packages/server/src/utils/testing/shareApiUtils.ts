@@ -54,7 +54,7 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 		if (!isFolder) {
 			const resourceIds = linkedResourceIds(jopItem.body || '');
 			for (const resourceId of resourceIds) {
-				await createResource(sessionId, { id: resourceId }, `testing-${resourceId}`);
+				await createResource(sessionId, { id: resourceId, share_id: shareId }, `testing-${resourceId}`);
 			}
 		}
 

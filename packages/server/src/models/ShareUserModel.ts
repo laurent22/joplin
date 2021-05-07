@@ -59,6 +59,13 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return output;
 	}
 
+	public async isShareParticipant(shareId: Uuid, userId: Uuid): Promise<boolean> {
+		const r = await this.byShareAndUserId(shareId, userId);
+		if (r) return true;
+		const share = await this.models().share().load(shareId, { fields: ['owner_id'] });
+		return share && share.owner_id === userId;
+	}
+
 	public async byShareAndUserId(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
 		const link: ShareUser = {
 			share_id: shareId,
