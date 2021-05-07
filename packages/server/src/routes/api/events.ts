@@ -9,8 +9,8 @@ interface Event {
 }
 
 const supportedEvents: Record<string, Function> = {
-	syncStart: async (ctx: AppContext) => {
-		await ctx.models.share().updateSharedItems2(ctx.owner.id);
+	syncStart: async (_ctx: AppContext) => {
+		// await ctx.models.share().updateSharedItems2(ctx.owner.id);
 	},
 };
 

@@ -24,7 +24,7 @@ describe('shares.folder', function() {
 	});
 
 	test('should share a folder with another user', async function() {
-		const { session: session1 } = await createUserAndSession(1);
+		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const folderItem = await createFolder(session1.id, { title: 'created by sharer' });
 
@@ -34,6 +34,16 @@ describe('shares.folder', function() {
 		const share = await postApi<Share>(session1.id, 'shares', {
 			type: ShareType.JoplinRootFolder,
 			folder_id: folderItem.jop_id,
+		});
+
+		// ----------------------------------------------------------------
+		// Once the share object has been created, the client can add folders
+		// and notes to it. This is done by setting the share_id property,
+		// which we simulate here.
+		// ----------------------------------------------------------------
+		await models().item().saveForUser(user1.id, {
+			id: folderItem.id,
+			jop_share_id: share.id,
 		});
 
 		// ----------------------------------------------------------------
@@ -58,7 +68,7 @@ describe('shares.folder', function() {
 			expect(shareUser.status).toBe(ShareUserStatus.Accepted);
 		}
 
-		await models().share().updateSharedItems2(user2.id);
+		await models().share().updateSharedItems3();
 
 		// ----------------------------------------------------------------
 		// On the sharee side, check that the file is present
