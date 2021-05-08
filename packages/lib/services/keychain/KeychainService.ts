@@ -23,7 +23,12 @@ export default class KeychainService extends BaseService {
 	// but nothing will be saved to the keychain if there isn't one).
 	public get enabled(): boolean {
 		if (!this.enabled_) return false;
-		return Setting.value('keychain.supported') === 1;
+
+		// Otherwise we assume it's enabled if "keychain.supported" is either -1
+		// (undetermined) or 1 (working). We make it work for -1 too because the
+		// setPassword() and password() functions need to work to test if the
+		// keychain is supported (in detectIfKeychainSupported).
+		return Setting.value('keychain.supported') !== 0;
 	}
 
 	public set enabled(v: boolean) {

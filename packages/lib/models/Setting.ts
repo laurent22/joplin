@@ -1085,7 +1085,6 @@ class Setting extends BaseModel {
 			'resourceService.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
 			'searchEngine.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
 			'revisionService.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
-			'shareService.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
 
 			'searchEngine.initialIndexingDone': { value: false, type: SettingItemType.Bool, public: false },
 
