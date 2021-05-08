@@ -1,5 +1,84 @@
 # Joplin changelog
 
+## [v1.8.3](https://github.com/laurent22/joplin/releases/tag/v1.8.3) (Pre-release) - 2021-05-04T10:38:16Z
+
+- New: Add "id" and "due" search filters ([#4898](https://github.com/laurent22/joplin/issues/4898) by [@JackGruber](https://github.com/JackGruber))
+- New: Add synchronization tools to clear local sync state or data (a6caa35)
+- Improved: Bump KaTeX to 0.13.3 ([#4902](https://github.com/laurent22/joplin/issues/4902) by Roman Musin)
+- Improved: Skip empty lines while converting selection to list ([#4832](https://github.com/laurent22/joplin/issues/4832)) ([#4813](https://github.com/laurent22/joplin/issues/4813) by Adarsh Singh)
+- Fixed: Added RTL support for Markdown editor and Preview. ([#4822](https://github.com/laurent22/joplin/issues/4822)) ([#3991](https://github.com/laurent22/joplin/issues/3991) by Ahmad Mamdouh)
+- Fixed: Create own copy of images while pasting ([#4852](https://github.com/laurent22/joplin/issues/4852)) ([#4767](https://github.com/laurent22/joplin/issues/4767) by Nishant Mittal)
+- Fixed: Disable WebDAV response caching ([#4887](https://github.com/laurent22/joplin/issues/4887)) ([#4706](https://github.com/laurent22/joplin/issues/4706) by Roman Musin)
+- Fixed: Plugin ghost panel and resizing issues ([#4865](https://github.com/laurent22/joplin/issues/4865)) ([#4529](https://github.com/laurent22/joplin/issues/4529) by [@mablin7](https://github.com/mablin7))
+
+## [v1.8.2](https://github.com/laurent22/joplin/releases/tag/v1.8.2) (Pre-release) - 2021-04-25T10:50:51Z
+
+- New: Add "duplicate line" command in Markdown editor ([#4873](https://github.com/laurent22/joplin/issues/4873) by [@CalebJohn](https://github.com/CalebJohn))
+- New: Add an option to renew the API token ([#4811](https://github.com/laurent22/joplin/issues/4811) by Helmut K. C. Tessarek)
+- New: Add button to copy note ID in Note Properties dialog ([#4749](https://github.com/laurent22/joplin/issues/4749) by Abdallah Ahmed)
+- New: Add plugin info when the app crashes
+- New: Add support for safe mode, which temporarily disables note rendering and plugins ([#4727](https://github.com/laurent22/joplin/issues/4727))
+- Improved: Also duplicate the tags when the note is duplicated ([#4876](https://github.com/laurent22/joplin/issues/4876)) ([#3157](https://github.com/laurent22/joplin/issues/3157) by [@JackGruber](https://github.com/JackGruber))
+- Improved: ENTER key no longer submits dialogs when a textarea is focused. ([#4777](https://github.com/laurent22/joplin/issues/4777)) ([#4766](https://github.com/laurent22/joplin/issues/4766) by [@Ahmad45123](https://github.com/Ahmad45123))
+- Improved: Fixed editor focus issue when running command from palette ([#4812](https://github.com/laurent22/joplin/issues/4812)) ([#4759](https://github.com/laurent22/joplin/issues/4759) by [@Aksh-Konda](https://github.com/Aksh-Konda))
+- Improved: Note list is empty if search field is cleared ([#4739](https://github.com/laurent22/joplin/issues/4739)) ([#4736](https://github.com/laurent22/joplin/issues/4736) by Apoorva Shukla)
+- Improved: Show notebook and note title in the title bar ([#4390](https://github.com/laurent22/joplin/issues/4390)) ([#3695](https://github.com/laurent22/joplin/issues/3695) by [@asrient](https://github.com/asrient))
+- Improved: Disappearing text in markdown editor ([#4750](https://github.com/laurent22/joplin/issues/4750)) ([#4781](https://github.com/laurent22/joplin/issues/4781) by Adarsh Singh)
+- Fixed: Copying code block from Rich Text editor results in two copies of the text ([#4669](https://github.com/laurent22/joplin/issues/4669))
+- Fixed: Ensure that invalid plugin settings do not crash the application ([#4562](https://github.com/laurent22/joplin/issues/4562))
+- Fixed: File-Links with German Umlauts don't work ([#4804](https://github.com/laurent22/joplin/issues/4804)) ([#4043](https://github.com/laurent22/joplin/issues/4043) by [@Subhra264](https://github.com/Subhra264))
+- Fixed: Fixed cursor moved to the top issue in Markdown editor ([#4870](https://github.com/laurent22/joplin/issues/4870) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Highlight existing text in global search field ([#4773](https://github.com/laurent22/joplin/issues/4773)) ([#4769](https://github.com/laurent22/joplin/issues/4769) by Siddhant Sehgal)
+- Fixed: Prevent Goto anything from changing folders when all notes filter is on ([#4751](https://github.com/laurent22/joplin/issues/4751)) ([#4697](https://github.com/laurent22/joplin/issues/4697) by [@jalajcodes](https://github.com/jalajcodes))
+- Fixed: Prevents plugin from causing an error when the app closes ([#4570](https://github.com/laurent22/joplin/issues/4570))
+- Fixed: Regression: Fixed handling of provisional status of note
+- Fixed: Roboto font in plugins ([#4755](https://github.com/laurent22/joplin/issues/4755)) ([#4754](https://github.com/laurent22/joplin/issues/4754) by Brett Bender)
+- Fixed: Scroll position is not remembered in Markdown editor ([#4806](https://github.com/laurent22/joplin/issues/4806)) ([#4797](https://github.com/laurent22/joplin/issues/4797) by Roman Musin)
+- Fixed: Set plain/text clipboard while copying ([#4791](https://github.com/laurent22/joplin/issues/4791)) ([#4788](https://github.com/laurent22/joplin/issues/4788) by Nishant Mittal)
+
+## [v1.8.1](https://github.com/laurent22/joplin/releases/tag/v1.8.1) (Pre-release) - 2021-03-29T10:46:41Z
+
+- New: Add monospace enforcement for certain elements in Markdown editor ([#4689](https://github.com/laurent22/joplin/issues/4689) by [@CalebJohn](https://github.com/CalebJohn))
+- New: Add support for higlighting text from Rich Text editor
+- New: Add support for strikethrough, sub, sup and insert formatting on Rich Text editor
+- New: Save user settings to JSON file
+- Improved: Allow registering multiple settings in one call ([#4627](https://github.com/laurent22/joplin/issues/4627)) ([#4614](https://github.com/laurent22/joplin/issues/4614) by [@jalajcodes](https://github.com/jalajcodes))
+- Improved: Api: Don't compress image when resource is added through api ([#4660](https://github.com/laurent22/joplin/issues/4660)) ([#4655](https://github.com/laurent22/joplin/issues/4655) by Nishant Mittal)
+- Improved: Bring editor katex highlight in line with renderer ([#4632](https://github.com/laurent22/joplin/issues/4632) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Ctrl+Shift+B to viewer when editor invisible ([#4537](https://github.com/laurent22/joplin/issues/4537)) ([#2810](https://github.com/laurent22/joplin/issues/2810) by Neeraj Kashyap)
+- Improved: Enforce utf-8 charset for plugin scripts ([#4509](https://github.com/laurent22/joplin/issues/4509) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Filter "notebook" can now be negated ([#4651](https://github.com/laurent22/joplin/issues/4651) by Naveen M V)
+- Improved: Give plugin config section without an icon, a default icon
+- Improved: Improve mathmode syntax highlighting ([#4580](https://github.com/laurent22/joplin/issues/4580)) ([#4554](https://github.com/laurent22/joplin/issues/4554) by James Wright)
+- Improved: Improved solarized dark theme ([#4748](https://github.com/laurent22/joplin/issues/4748)) ([#3887](https://github.com/laurent22/joplin/issues/3887) by Anakai Richards)
+- Improved: Improved spell checking support in dialogs and text input fields ([#4458](https://github.com/laurent22/joplin/issues/4458))
+- Improved: Plugins: Focus dialog when it is opened so that ENTER/ESC shortcuts work ([#4474](https://github.com/laurent22/joplin/issues/4474))
+- Improved: Plugins: Only call onNoteChange for the current note
+- Improved: Remove branch name in detached head state ([#4636](https://github.com/laurent22/joplin/issues/4636) by Helmut K. C. Tessarek)
+- Improved: Reset window hash to allow clicking an anchor multiple times ([#4538](https://github.com/laurent22/joplin/issues/4538) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Save geo-location when saving note
+- Improved: Select search text input when focusing it ([#4586](https://github.com/laurent22/joplin/issues/4586) by António Ramadas)
+- Improved: Set keep-alive for WebDAV/Nextcloud sync ([#4668](https://github.com/laurent22/joplin/issues/4668) by Roman Musin)
+- Improved: Set keep-alive on http(s) requests ([#4625](https://github.com/laurent22/joplin/issues/4625) by Roman Musin)
+- Improved: Sort plugin config sections alphabetically
+- Improved: Toggle math highlighting in editor with markdown options ([#4631](https://github.com/laurent22/joplin/issues/4631) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Allow copying images from Joplin to external editors ([#4724](https://github.com/laurent22/joplin/issues/4724)) ([#4602](https://github.com/laurent22/joplin/issues/4602) by Nishant Mittal)
+- Fixed: Fix mermaid diagrams in WYSIWYG editor ([#4670](https://github.com/laurent22/joplin/issues/4670)) ([#4612](https://github.com/laurent22/joplin/issues/4612) by [@mablin7](https://github.com/mablin7))
+- Fixed: Fixed calendar styling ([#4703](https://github.com/laurent22/joplin/issues/4703)) ([#4397](https://github.com/laurent22/joplin/issues/4397) by Harshit Kathuria)
+- Fixed: Fixed exporting as HTML or PDF when a plugin is active, and make sure plugin assets are also exported ([#4452](https://github.com/laurent22/joplin/issues/4452))
+- Fixed: Fixed formatting of consecutive code blocks ([#4416](https://github.com/laurent22/joplin/issues/4416))
+- Fixed: Fixed issue which could cause plugin views to be orphaned
+- Fixed: Fixed rendering of note and resource links
+- Fixed: Improved enabling/disabling commands depending on application state ([#4473](https://github.com/laurent22/joplin/issues/4473))
+- Fixed: Improved handling of empty paths for Joplin Server sync target ([#4426](https://github.com/laurent22/joplin/issues/4426))
+- Fixed: Make config sidebar vertically scrollable, and make it grow horizontally depending on menu items ([#4491](https://github.com/laurent22/joplin/issues/4491))
+- Fixed: Make plugin links clickable from search ([#4548](https://github.com/laurent22/joplin/issues/4548)) ([#4505](https://github.com/laurent22/joplin/issues/4505) by Roman Musin)
+- Fixed: Plugin Update error when plugin was installed manually ([#4725](https://github.com/laurent22/joplin/issues/4725)) ([#4723](https://github.com/laurent22/joplin/issues/4723) by [@mablin7](https://github.com/mablin7))
+- Fixed: Plugins: Apply "fields" query parameter when requesting data from data API ([#4407](https://github.com/laurent22/joplin/issues/4407))
+- Fixed: Refresh note tags when a note is moved to another folder ([#4574](https://github.com/laurent22/joplin/issues/4574)) ([#4369](https://github.com/laurent22/joplin/issues/4369) by Roman Musin)
+- Fixed: Updating a disabled plugin enables it ([#4711](https://github.com/laurent22/joplin/issues/4711)) ([#4683](https://github.com/laurent22/joplin/issues/4683) by [@mablin7](https://github.com/mablin7))
+- Fixed: Wrong background color for the table button in the toolbar ([#4681](https://github.com/laurent22/joplin/issues/4681)) ([#4398](https://github.com/laurent22/joplin/issues/4398) by [@zozolina123](https://github.com/zozolina123))
+
 ## [v1.7.11](https://github.com/laurent22/joplin/releases/tag/v1.7.11) - 2021-02-03T12:50:01Z
 
 - Fixed: Regression: Fixed network request repeat mechanism
@@ -26,9 +105,60 @@
 - Improved: Move plugin settings under separate section in config menu
 - Improved: Some imported ENEX files incorrectly had invisible sections
 
+## [v1.7.9](https://github.com/laurent22/joplin/releases/tag/v1.7.9) (Pre-release) - 2021-01-28T09:50:21Z
+
+- New: Plugins: Add support for `joplin.plugins.installationDir` to allow accessing external files packaged with the plugin
+
+## [v1.7.6](https://github.com/laurent22/joplin/releases/tag/v1.7.6) (Pre-release) - 2021-01-27T10:36:05Z
+
+- Fixed: Fixed installing plugins
+
+## [v1.7.5](https://github.com/laurent22/joplin/releases/tag/v1.7.5) (Pre-release) - 2021-01-26T09:53:05Z
+
+- New: Plugins: Add support for `joplin.plugins.require` API to allow using sqlite3 or fs-extra from a plugin
+- New: Plugins: Add support for `plugins.dataDir` function, to provide a path for plugin to store its own data
+- Improved: Do not allow installing plugins incompatible with current app version
+- Improved: Improved error handling when importing ENEX
+- Improved: In config screen, click on a plugin name to open its home page
+- Improved: Localise "Click to add tags" button
+- Improved: Some imported ENEX files incorrectly had invisible sections
+
+* * *
+
+- New: Added button to browse plugins
+- New: Plugins: Add support for "keywords" manifest field
+- New: Plugins: Added support for bi-directional messages in content scripts and webview scripts using postMessage
+- New: Allow updating a plugin
+- Improved: Enable TLS options for Joplin Server
+- Improved: Move plugin settings under separate section in config menu
+- Fixed: Added missing translations ([#4363](https://github.com/laurent22/joplin/issues/4363))
+- Fixed: Make sure note is automatically saved when format is set via keyboard shortcut in Rich Text editor ([#4337](https://github.com/laurent22/joplin/issues/4337))
+- Fixed: Plugins: Fixed dropdown settings
+- Fixed: Some commands were no longer working ([#4343](https://github.com/laurent22/joplin/issues/4343)) ([#4338](https://github.com/laurent22/joplin/issues/4338) by [@CalebJohn](https://github.com/CalebJohn))
+
+## [v1.7.4](https://github.com/laurent22/joplin/releases/tag/v1.7.4) (Pre-release) - 2021-01-22T17:58:38Z
+
+- New: Added button to browse plugins
+- New: Plugins: Add support for "keywords" manifest field
+- New: Plugins: Added support for bi-directional messages in content scripts and webview scripts using postMessage
+- New: Allow updating a plugin
+- Improved: Enable TLS options for Joplin Server
+- Improved: Move plugin settings under separate section in config menu
+- Fixed: Added missing translations ([#4363](https://github.com/laurent22/joplin/issues/4363))
+- Fixed: Make sure note is automatically saved when format is set via keyboard shortcut in Rich Text editor ([#4337](https://github.com/laurent22/joplin/issues/4337))
+- Fixed: Plugins: Fixed dropdown settings
+- Fixed: Some commands were no longer working ([#4343](https://github.com/laurent22/joplin/issues/4343)) ([#4338](https://github.com/laurent22/joplin/issues/4338) by [@CalebJohn](https://github.com/CalebJohn))
+
 ## [v1.6.8](https://github.com/laurent22/joplin/releases/tag/v1.6.8) - 2021-01-20T18:11:34Z
 
 - Fixed: Fixed infinite sync issue with OneDrive ([#4305](https://github.com/laurent22/joplin/issues/4305))
+
+## [v1.7.3](https://github.com/laurent22/joplin/releases/tag/v1.7.3) (Pre-release) - 2021-01-20T11:23:50Z
+
+- New: Plugins: Add support for "keywords" manifest field
+- New: Plugins: Added support for bi-directional messages in content scripts and webview scripts using postMessage
+- New: Allow updating a plugin
+- Fixed: Some commands were no longer working ([#4343](https://github.com/laurent22/joplin/issues/4343)) ([#4338](https://github.com/laurent22/joplin/issues/4338) by [@CalebJohn](https://github.com/CalebJohn))
 
 ## [v1.6.7](https://github.com/laurent22/joplin/releases/tag/v1.6.7) - 2021-01-11T23:20:33Z
 
@@ -38,9 +168,45 @@
 
 - New: Add way to install plugin from file
 
+## [v1.6.5](https://github.com/laurent22/joplin/releases/tag/v1.6.5) (Pre-release) - 2021-01-09T01:24:32Z
+
+- New: Plugins: Added joplin.settings.onChange event
+- Improved: Do not display error message when fixing ENEX resource mime type ([#4310](https://github.com/laurent22/joplin/issues/4310))
+- Improved: Handle case where a command is sent to an editor that is gone
+- Improved: Improved support for bold and italic format when importing ENEX file ([#4316](https://github.com/laurent22/joplin/issues/4316))
+- Fixed: Fix issue that was preventing editor context menu from being refreshed ([#4303](https://github.com/laurent22/joplin/issues/4303) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed OneDrive issue that would require a full resync every time ([#4324](https://github.com/laurent22/joplin/issues/4324)) ([#4313](https://github.com/laurent22/joplin/issues/4313) by Jonathan Heard)
+- Fixed: Fixed attaching local files that contain spaces in path
+- Fixed: Fixed context menu not being displayed on high DPI screens
+- Fixed: Plugins: Fixed "exportFolders" command when exporting JEX file ([#4308](https://github.com/laurent22/joplin/issues/4308))
+
+## [v1.6.4](https://github.com/laurent22/joplin/releases/tag/v1.6.4) (Pre-release) - 2021-01-07T19:11:32Z
+
+- New: Add support for searching and installing plugins from repository
+- Improved: Support natural sorting by title ([#4272](https://github.com/laurent22/joplin/issues/4272) by [@volatilevar](https://github.com/volatilevar))
+- Fixed: [#4317](https://github.com/laurent22/joplin/issues/4317): Spell checker inserts correction at wrong location ([#4318](https://github.com/laurent22/joplin/issues/4318)) ([#4317](https://github.com/laurent22/joplin/issues/4317) by [@CalebJohn](https://github.com/CalebJohn))
+
+## [v1.6.2](https://github.com/laurent22/joplin/releases/tag/v1.6.2) (Pre-release) - 2021-01-04T22:34:55Z
+
+- New: Add more log info when a revision cannot be deleted due to still-encrypted item
+- New: Plugins: Add support for hiding and showing panels
+- New: Plugins: Added joplin.workspace.selectedFolder()
+- Improved: Add extra macOS keys ([#4259](https://github.com/laurent22/joplin/issues/4259)) ([#4257](https://github.com/laurent22/joplin/issues/4257) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Made editor padding more consistent and ensure it is present even when sidebars are gone
+- Improved: Plugins: Allow loading external JS or CSS from dialog
+- Improved: Sort attachments in a case insensitive way in Attachments screen ([#4273](https://github.com/laurent22/joplin/issues/4273) by [@Daeraxa](https://github.com/Daeraxa))
+- Improved: Upload Big Notes to Onedrive ([#4120](https://github.com/laurent22/joplin/issues/4120)) ([#3528](https://github.com/laurent22/joplin/issues/3528) by Jonathan Heard)
+- Fixed: `file://` URLs would not be rendered correctly
+- Fixed: MacOS: Fixed paste as text in Rich Text editor
+- Fixed: Plugins: Allow API paths that contain 4 elements ([#4285](https://github.com/laurent22/joplin/issues/4285))
+
 ## [v1.5.14](https://github.com/laurent22/joplin/releases/tag/v1.5.14) - 2020-12-30T01:48:46Z
 
 - Fixed: Fixed importing ENEX files that contain hidden sections
+
+## [v1.6.1](https://github.com/laurent22/joplin/releases/tag/v1.6.1) (Pre-release) - 2020-12-29T19:37:45Z
+
+At this point, this release is only to allow using Joplin Server as a sync target.
 
 ## [v1.5.13](https://github.com/laurent22/joplin/releases/tag/v1.5.13) - 2020-12-29T18:29:15Z
 
@@ -127,6 +293,68 @@ Fixed ENEX import regression: Fix issue when importing ENEX file that contains i
 - Improved: Update macOS icon for macOS Big Sur
 - Improved: Update Mermaid: 8.8.1 -&gt; 8.8.4 ([#4193](https://github.com/laurent22/joplin/issues/4193) by Helmut K. C. Tessarek)
 - Improved: Use plugins whenever printing or exporting notes
+
+## [v1.5.10](https://github.com/laurent22/joplin/releases/tag/v1.5.10) (Pre-release) - 2020-12-26T12:35:36Z
+
+- New: Add table captions when importing ENEX files
+- Improved: Display Katex parsing errors
+- Improved: Removed warning for Markdown editor spell checking
+- Improved: Update macOS icon for macOS Big Sur
+- Fixed: Fixed context menu when the UI is zoomed in or out ([#4201](https://github.com/laurent22/joplin/issues/4201))
+- Fixed: Fixed issues when importing hidden tables within hidden sections in Enex files
+- Fixed: Prevent double paste when using Shift+Ctrl+V ([#4243](https://github.com/laurent22/joplin/issues/4243))
+
+## [v1.5.9](https://github.com/laurent22/joplin/releases/tag/v1.5.9) (Pre-release) - 2020-12-23T18:01:08Z
+
+- Improved: Improved error handling when importing ENEX files
+
+## [v1.5.8](https://github.com/laurent22/joplin/releases/tag/v1.5.8) (Pre-release) - 2020-12-20T09:45:19Z
+
+- New: Plugins: Add support for content script asset files, for Markdown-it plugins
+- New: Plugins: Add support for context menu items on notebooks and tags
+- New: Plugins: Added a way to execute commands from Markdown-it content scripts
+- Improved: Use plugins whenever printing or exporting notes
+- Fixed: Fix End key behavior with Codemirror spellcheck ([#4215](https://github.com/laurent22/joplin/issues/4215) by Caleb John)
+- Fixed: Fixed importing ENEX files that contain resources with invalid mime type
+- Fixed: Fixed importing certain code blocks from ENEX
+- Fixed: Plugins: Fixed disabling plugin files that start with "_"
+- Fixed: Register Markdown editor commands with the Keyboard Shortcut editor ([#4136](https://github.com/laurent22/joplin/issues/4136)) ([#4130](https://github.com/laurent22/joplin/issues/4130) by Caleb John)
+
+## [v1.5.7](https://github.com/laurent22/joplin/releases/tag/v1.5.7) (Pre-release) - 2020-12-10T12:58:33Z
+
+- New: MacOS: Notarize application
+- New: Add support for media players (video, audio and PDF)
+- New: Added doc about Rich Text editor and added way to dismiss warning banner
+- New: Plugins: Add support for workspace.onSyncStart event
+- Improved: Improved warning banner colors
+- Improved: Plugins: Commands would not show up in keymap editor when no shortcut was associated with them
+- Improved: Restrict auto-detection of links, and added option to toggle linkify ([#4205](https://github.com/laurent22/joplin/issues/4205))
+- Improved: Rich Text: Do not converts to markdown links URLs that would be linkified
+- Improved: Translation: Update zh_CN ([#4195](https://github.com/laurent22/joplin/issues/4195) by Zhang YANG)
+- Improved: Update Mermaid: 8.8.1 -&gt; 8.8.4 ([#4193](https://github.com/laurent22/joplin/issues/4193) by Helmut K. C. Tessarek)
+- Improved: Plugins: Improved note change event handling.
+- Fixed: Fixed basic search when executing a query in Chinese ([#4034](https://github.com/laurent22/joplin/issues/4034) by Naveen M V)
+- Fixed: Fixed importing ENEX files that contain empty resources
+- Fixed: Fixed issue with note not being saved when a column is added or remove from Rich Text editor
+- Fixed: Fixed numbered list bug in markdown editor ([#4116](https://github.com/laurent22/joplin/issues/4116)) ([#3917](https://github.com/laurent22/joplin/issues/3917) by [@MichBoi](https://github.com/MichBoi))
+- Fixed: Fixed potential crash when watching note files or resources
+- Fixed: Focus editor after pressing toolbar buttons ([#4037](https://github.com/laurent22/joplin/issues/4037)) ([#4036](https://github.com/laurent22/joplin/issues/4036) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Prevents crash when invalid spell checker language is selected, and provide fallback for invalid language codes ([#4146](https://github.com/laurent22/joplin/issues/4146))
+- Fixed: Fixed issue when searching for text that contains diacritic ([#4152](https://github.com/laurent22/joplin/issues/4152)) ([#4025](https://github.com/laurent22/joplin/issues/4025) by Roman Musin)
+- Fixed: Fixed issue with attachment paths being invalid when user has spaces in home directory path.
+- Fixed: Fixed title input field width on small windows
+
+## [v1.5.4](https://github.com/laurent22/joplin/releases/tag/v1.5.4) (Pre-release) - 2020-12-05T12:07:49Z
+
+- New: MacOS: Notarize application
+- Improved: Plugins: Improved note change event handling.
+- Fixed: Fixed basic search when executing a query in Chinese ([#4034](https://github.com/laurent22/joplin/issues/4034) by Naveen M V)
+- Fixed: Fixed importing ENEX files that contain empty resources
+- Fixed: Fixed issue with note not being saved when a column is added or remove from Rich Text editor
+- Fixed: Fixed numbered list bug in markdown editor ([#4116](https://github.com/laurent22/joplin/issues/4116)) ([#3917](https://github.com/laurent22/joplin/issues/3917) by [@MichBoi](https://github.com/MichBoi))
+- Fixed: Fixed potential crash when watching note files or resources
+- Fixed: Focus editor after pressing toolbar buttons ([#4037](https://github.com/laurent22/joplin/issues/4037)) ([#4036](https://github.com/laurent22/joplin/issues/4036) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Prevents crash when invalid spell checker language is selected, and provide fallback for invalid language codes ([#4146](https://github.com/laurent22/joplin/issues/4146))
 
 ## [v1.4.19](https://github.com/laurent22/joplin/releases/tag/v1.4.19) - 2020-12-01T11:11:16Z
 
@@ -228,6 +456,163 @@ Plugin doc has been updated with some info about the [development process](https
 - Improved: Refresh sidebar and notes when moving note outside of conflict folder
 - Improved: Upgrade to Electron 10
 
+## [v1.4.11](https://github.com/laurent22/joplin/releases/tag/v1.4.11) (Pre-release) - 2020-11-19T23:06:51Z
+
+**Breaking Changes:**
+
+- If you use the Clipper API, please note that there are a few breaking changes in this version. See this link for more information: https://github.com/laurent22/joplin/pull/3983
+- Plugins: `joplin.views.dialogs.open()` now returns an object instead of the button ID that was clicked. So for example instead of getting just `"ok"`, you will get `{ "id": "ok" }`. This is to allow adding form data to that object.
+
+**Deprecated:**
+
+The following features are deprecated. It will still work for now but please update your code:
+
+- Plugins: All `create()` functions under `joplin.views` now take a `viewId` as a first parameter.
+- Plugins: `MenuItemLocation.Context` is deprecated and is now an alias for `MenuItemLocation.NoteListContextMenu`
+- Plugins: The `app_min_version` manifest property is now required. If not provided it will assume v14.
+- Plugins: The `id` manifest property is now required. If not set, it will be the plugin filename or directory.
+
+Plugin doc has been updated with some info about the [development process](https://joplinapp.org/api/references/plugin_api/classes/joplin.html).
+
+* * * 
+
+- New: Add config screen to add, remove or enable, disable plugins
+- New: Add option to toggle spellchecking for the markdown editor ([#4109](https://github.com/laurent22/joplin/issues/4109) by [@CalebJohn](https://github.com/CalebJohn))
+- New: Plugins: Add command "editorSetText" for desktop app
+- New: Plugins: Add support for JPL archive format
+- New: Plugins: Add support for external CodeMirror plugins ([#4015](https://github.com/laurent22/joplin/issues/4015) by [@CalebJohn](https://github.com/CalebJohn))
+- New: Plugins: Added command to export folders and notes
+- New: Plugins: Added support app_min_version property and made it required
+- Improved: Upgrade to Electron 10
+- Improved: Allow exporting conflict notes ([#4095](https://github.com/laurent22/joplin/issues/4095))
+- Improved: Api: Always include 'has_more' field for paginated data
+- Improved: Api: Make sure pagination sort options are respected for search and other requests
+- Improved: Attempt to fix Outlook drag and drop on Markdown editor ([#4093](https://github.com/laurent22/joplin/issues/4093) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Disable spell checker on config and search input fields
+- Improved: Disabled the auto update option in linux ([#4102](https://github.com/laurent22/joplin/issues/4102)) ([#4096](https://github.com/laurent22/joplin/issues/4096) by Anshuman Pandey)
+- Improved: Optimized resizing window
+- Improved: Plugins: Make sure "replaceSelection" command can be undone in Rich Text editor
+- Improved: Plugins: Rename command "editorSetText" to "editor.setText"
+- Improved: Prevent lines from shifting in Markdown Editor when Scrollbar appears ([#4110](https://github.com/laurent22/joplin/issues/4110) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Put title bar and toolbar button over two lines when window size is below 800px
+- Improved: Refresh sidebar and notes when moving note outside of conflict folder
+- Fixed: Display note count for conflict folder, and display notes even if they are completed to-dos ([#3997](https://github.com/laurent22/joplin/issues/3997))
+- Fixed: Fix crash due to React when trying to upgrade sync target ([#4098](https://github.com/laurent22/joplin/issues/4098))
+- Fixed: Fix size of search bar area when notebook is empty
+- Fixed: Fixed issue when a newly created note would be automatically moved to the wrong folder on save ([#4038](https://github.com/laurent22/joplin/issues/4038))
+- Fixed: Fixed note list overflow when resized very small
+- Fixed: Plugins: Fixed issue with dialog being empty in some cases
+- Fixed: Prevent log from filling up when certain external editors trigger many watch events ([#4011](https://github.com/laurent22/joplin/issues/4011))
+- Fixed: Regression: Fixed external edit file watching
+- Fixed: Resource links could not be opened from Rich Text editor on Linux ([#4073](https://github.com/laurent22/joplin/issues/4073))
+
+* * *
+
+- Fixed: Api: Fix note and resource association end points
+- Fixed: Fix drag and drop behaviour to "copy" instead of "move" ([#4031](https://github.com/laurent22/joplin/issues/4031) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fix handling of certain keys in shortcut editor ([#4022](https://github.com/laurent22/joplin/issues/4022) by Helmut K. C. Tessarek)
+- Fixed: Fixed inconsistent note list state when using search ([#3904](https://github.com/laurent22/joplin/issues/3904))
+- Fixed: Fixed issue with note being saved after word has been replaced by spell checker
+- Fixed: Fixed text editor button tooltips
+- Fixed: Plugins: Fix crash when path includes trailing slash
+- Fixed: Regression: Fix application name
+- Fixed: Regression: Fix exporting to HTML and PDF
+- Fixed: Tags could not be selected in some cases ([#3876](https://github.com/laurent22/joplin/issues/3876))
+- Improved: Allow lowercase filters when doing search
+- Improved: Change Markdown rendering to align with CommonMark spec ([#3839](https://github.com/laurent22/joplin/issues/3839))
+- Improved: Make Markdown editor selection more visible in Dark mode
+- Improved: Plugins: Allow retrieving form values from dialogs
+- Improved: Plugins: Force plugin devtool dialog to be detached
+- New: Add {{bowm}} and {{bows}} - Beginning Of Week (Monday/Sunday) ([#4023](https://github.com/laurent22/joplin/issues/4023) by Helmut K. C. Tessarek)
+- New: Added toolbar button to switch spell checker language
+- New: Adds spell checker support for Rich Text editor ([#3974](https://github.com/laurent22/joplin/issues/3974))
+- New: Allow customising application layout
+- New: Api: Added ability to watch resource file
+- New: Api: Added way to get the notes associated with a resource
+- New: API: Adds ability to paginate data ([#3983](https://github.com/laurent22/joplin/issues/3983))
+- New: Plugins: Add support for editor context menu
+
+## [v1.4.10](https://github.com/laurent22/joplin/releases/tag/v1.4.10) (Pre-release) - 2020-11-14T09:53:15Z
+
+**Breaking Changes:**
+
+- If you use the Clipper API, please note that there are a few breaking changes in this version. See this link for more information: https://github.com/laurent22/joplin/pull/3983
+- Plugins: `joplin.views.dialogs.open()` now returns an object instead of the button ID that was clicked. So for example instead of getting just `"ok"`, you will get `{ "id": "ok" }`. This is to allow adding form data to that object.
+
+**Deprecated:**
+
+- Plugins: All `create()` functions under `joplin.views` now take a `viewId` as a first parameter. It will still work for now if you don't provide one, but please update your plugins.
+- Plugins: `MenuItemLocation.Context` is deprecated and is now an alias for `MenuItemLocation.NoteListContextMenu`
+
+Plugin doc has been updated with some info about the [development process](https://joplinapp.org/api/references/plugin_api/classes/joplin.html).
+
+* * * 
+
+- New: Add {{bowm}} and {{bows}} - Beginning Of Week (Monday/Sunday) ([#4023](https://github.com/laurent22/joplin/issues/4023) by Helmut K. C. Tessarek)
+- New: Plugins: Add support for editor context menu
+- New: Allow customising application layout
+- Improved: Allow lowercase filters when doing search
+- Improved: Make Markdown editor selection more visible in Dark mode
+- Improved: Plugins: Allow retrieving form values from dialogs
+- Fixed: Api: Fix note and resource association end points
+- Fixed: Fix drag and drop behaviour to "copy" instead of "move" ([#4031](https://github.com/laurent22/joplin/issues/4031) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fix handling of certain keys in shortcut editor ([#4022](https://github.com/laurent22/joplin/issues/4022) by Helmut K. C. Tessarek)
+- Fixed: Fixed issue with note being saved after word has been replaced by spell checker
+- Fixed: Plugins: Fix crash when path includes trailing slash
+- Fixed: Regression: Fix application name
+
+* * *
+
+- New: Added toolbar button to switch spell checker language
+- New: Api: Added way to get the notes associated with a resource
+- New: Api: Added ability to watch resource file
+- New: API: Adds ability to paginate data ([#3983](https://github.com/laurent22/joplin/issues/3983))
+- New: Adds spell checker support for Rich Text editor ([#3974](https://github.com/laurent22/joplin/issues/3974))
+- Fixed: Fixed inconsistent note list state when using search ([#3904](https://github.com/laurent22/joplin/issues/3904))
+- Fixed: Fixed text editor button tooltips
+- Fixed: Regression: Fix exporting to HTML and PDF
+- Fixed: Tags could not be selected in some cases ([#3876](https://github.com/laurent22/joplin/issues/3876))
+- Improved: Change Markdown rendering to align with CommonMark spec ([#3839](https://github.com/laurent22/joplin/issues/3839))
+- Improved: Plugins: Force plugin devtool dialog to be detached
+
+## [v1.4.9](https://github.com/laurent22/joplin/releases/tag/v1.4.9) (Pre-release) - 2020-11-11T14:23:17Z
+
+IMPORTANT: If you use the Clipper API, please note that there are a few breaking changes in this version. See this link for more information: https://github.com/laurent22/joplin/pull/3983
+
+* * * 
+
+- New: Added toolbar button to switch spell checker language
+- Improved: Api: Change pagination to has_more model
+- Fixed: Fixed inconsistent note list state when using search ([#3904](https://github.com/laurent22/joplin/issues/3904))
+- Fixed: Fixed text editor button tooltips
+- Fixed: Regression: Fix exporting to HTML and PDF
+- Fixed: Tags could not be selected in some cases ([#3876](https://github.com/laurent22/joplin/issues/3876))
+
+* * *
+
+- New: Api: Added way to get the notes associated with a resource
+- New: Api: Added ability to watch resource file
+- New: API: Adds ability to paginate data ([#3983](https://github.com/laurent22/joplin/issues/3983))
+- New: Adds spell checker support for Rich Text editor ([#3974](https://github.com/laurent22/joplin/issues/3974))
+- Improved: Change Markdown rendering to align with CommonMark spec ([#3839](https://github.com/laurent22/joplin/issues/3839))
+- Improved: Plugins: Force plugin devtool dialog to be detached
+
+## [v1.4.7](https://github.com/laurent22/joplin/releases/tag/v1.4.7) (Pre-release) - 2020-11-07T18:23:29Z
+
+IMPORTANT: If you use the Clipper API, please note that there are a few breaking changes in this version. See this link for more information: https://github.com/laurent22/joplin/pull/3983
+
+* * * 
+
+- New: Api: Added ability to watch resource file
+- New: Api: Added way to get the notes associated with a resource
+- Improved: Plugins: Force plugin devtool dialog to be detached
+
+* * *
+
+- New: API: Adds ability to paginate data ([#3983](https://github.com/laurent22/joplin/issues/3983))
+- New: Adds spell checker support for Rich Text editor ([#3974](https://github.com/laurent22/joplin/issues/3974))
+- Improved: Change Markdown rendering to align with CommonMark spec ([#3839](https://github.com/laurent22/joplin/issues/3839))
+
 ## [v1.3.18](https://github.com/laurent22/joplin/releases/tag/v1.3.18) - 2020-11-06T12:07:02Z
 
 - Regression: Random crash when syncing due to undefined tags ([#4051](https://github.com/laurent22/joplin/issues/4051))
@@ -277,6 +662,62 @@ Plugin doc has been updated with some info about the [development process](https
 - Fixed: Fixed toggleNoteList and toggleSidebar commands
 - Fixed: Fixed Toggle Editor button tooltip and icon
 
+## [v1.3.17](https://github.com/laurent22/joplin/releases/tag/v1.3.17) (Pre-release) - 2020-11-06T11:35:15Z
+
+- Regression: Random crash when syncing due to undefined tags ([#4051](https://github.com/laurent22/joplin/issues/4051))
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- New: Added `openProfileDirectory` command and menu item
+- New: Api: Added service to access resource external editing
+- New: Plugins: Add the openNote, openFolder and openTag commands
+- Security: Remove &quot;link&quot; and &quot;meta&quot; tags from notes to prevent XSS (Discovered by [Phil Holbrook](https://twitter.com/fhlipZero))
+- Improved: Make “update is available” dialog box easier to use ([#3877](https://github.com/laurent22/joplin/issues/3877) by [@roryokane](https://github.com/roryokane))
+- Improved: Sort tags in a case-insensitive way
+- Improved: Display more info while an ENEX file is being imported
+- Improved: Made toolbar buttons bigger and swap order of bullet and number lists
+- Improved: Api: Allow preserving timestamps when updating a note
+- Improved: Added support for a custom S3 URL ([#3921](https://github.com/laurent22/joplin/issues/3921)) ([#3691](https://github.com/laurent22/joplin/issues/3691) by [@aaron](https://github.com/aaron))
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Simplified and improve command service, and added command palette
+- Improved: Tray: Exit -> Quit ([#3945](https://github.com/laurent22/joplin/issues/3945) by Helmut K. C. Tessarek)
+- Improved: Import `<strike>`, `<s>` tags (strikethrough) from Evernote ([#3936](https://github.com/laurent22/joplin/issues/3936) by Ian Slinger)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Improved: Make sure all commands appear in keymap editor
+- Fixed: Add history backward and forward commands to keymap and menus ([#4010](https://github.com/laurent22/joplin/issues/4010))
+- Fixed: Fixed handling of Option key for shortcuts in macOS
+- Fixed: Fix slow Katex rendering when there are many global definitions ([#3993](https://github.com/laurent22/joplin/issues/3993))
+- Fixed: Fix syntax of imported resources when importing ENEX as HTML
+- Fixed: Fixed OneDrive authentication
+- Fixed: Fixed sync issue when importing ENEX files that contain new line characters in the source URL attribute ([#3955](https://github.com/laurent22/joplin/issues/3955))
+- Fixed: Handle gzipped CSS files when importing from clipper ([#3986](https://github.com/laurent22/joplin/issues/3986))
+- Fixed: Update highlight.js to fix freeze for certain code blocks ([#3992](https://github.com/laurent22/joplin/issues/3992))
+- Fixed: Fix search filters when language is in Korean or with accents ([#3947](https://github.com/laurent22/joplin/issues/3947) by Naveen M V)
+- Fixed: Fixed freeze when importing ENEX as HTML, and fixed potential error when importing resources ([#3958](https://github.com/laurent22/joplin/issues/3958))
+- Fixed: Fixed setting issue that would cause a password to be saved in plain text in the database, even when the keychain is working
+- Fixed: Fixed sidebar performance issue when there are many notebooks or tags ([#3893](https://github.com/laurent22/joplin/issues/3893))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button tooltip and icon
+
+## [v1.4.6](https://github.com/laurent22/joplin/releases/tag/v1.4.6) (Pre-release) - 2020-11-05T22:44:12Z
+
+IMPORTANT: If you use the Clipper API, please note that there are a few breaking changes in this version. See this link for more information: https://github.com/laurent22/joplin/pull/3983
+
+- New: API: Adds ability to paginate data ([#3983](https://github.com/laurent22/joplin/issues/3983))
+- New: Adds spell checker support for Rich Text editor ([#3974](https://github.com/laurent22/joplin/issues/3974))
+- Improved: Change Markdown rendering to align with CommonMark spec ([#3839](https://github.com/laurent22/joplin/issues/3839))
+
 ## [v1.3.15](https://github.com/laurent22/joplin/releases/tag/v1.3.15) - 2020-11-04T12:22:50Z
 
 - New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
@@ -321,6 +762,276 @@ Plugin doc has been updated with some info about the [development process](https
 - Fixed: Fixed toggleNoteList and toggleSidebar commands
 - Fixed: Fixed Toggle Editor button tooltip and icon
 
+## [v1.3.11](https://github.com/laurent22/joplin/releases/tag/v1.3.11) (Pre-release) - 2020-10-31T13:22:20Z
+
+- Improved: Make sure all commands appear in keymap editor
+- Fixed: Add history backward and forward commands to keymap and menus ([#4010](https://github.com/laurent22/joplin/issues/4010))
+- Fixed: Fixed handling of Option key for shortcuts in macOS
+- Security: Remove &quot;link&quot; and &quot;meta&quot; tags from notes to prevent XSS
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- New: Added `openProfileDirectory` command and menu item
+- New: Api: Added service to access resource external editing
+- New: Plugins: Add the openNote, openFolder and openTag commands
+- Improved: Make “update is available” dialog box easier to use ([#3877](https://github.com/laurent22/joplin/issues/3877) by [@roryokane](https://github.com/roryokane))
+- Improved: Sort tags in a case-insensitive way
+- Improved: Display more info while an ENEX file is being imported
+- Improved: Made toolbar buttons bigger and swap order of bullet and number lists
+- Improved: Api: Allow preserving timestamps when updating a note
+- Improved: Added support for a custom S3 URL ([#3921](https://github.com/laurent22/joplin/issues/3921)) ([#3691](https://github.com/laurent22/joplin/issues/3691) by [@aaron](https://github.com/aaron))
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Simplified and improve command service, and added command palette
+- Improved: Tray: Exit -> Quit ([#3945](https://github.com/laurent22/joplin/issues/3945) by Helmut K. C. Tessarek)
+- Improved: Import `<strike>`, `<s>` tags (strikethrough) from Evernote ([#3936](https://github.com/laurent22/joplin/issues/3936) by Ian Slinger)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Fix slow Katex rendering when there are many global definitions ([#3993](https://github.com/laurent22/joplin/issues/3993))
+- Fixed: Fix syntax of imported resources when importing ENEX as HTML
+- Fixed: Fixed OneDrive authentication
+- Fixed: Fixed sync issue when importing ENEX files that contain new line characters in the source URL attribute ([#3955](https://github.com/laurent22/joplin/issues/3955))
+- Fixed: Handle gzipped CSS files when importing from clipper ([#3986](https://github.com/laurent22/joplin/issues/3986))
+- Fixed: Update highlight.js to fix freeze for certain code blocks ([#3992](https://github.com/laurent22/joplin/issues/3992))
+- Fixed: Fix search filters when language is in Korean or with accents ([#3947](https://github.com/laurent22/joplin/issues/3947) by Naveen M V)
+- Fixed: Fixed freeze when importing ENEX as HTML, and fixed potential error when importing resources ([#3958](https://github.com/laurent22/joplin/issues/3958))
+- Fixed: Fixed setting issue that would cause a password to be saved in plain text in the database, even when the keychain is working
+- Fixed: Fixed sidebar performance issue when there are many notebooks or tags ([#3893](https://github.com/laurent22/joplin/issues/3893))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button toolip and icon
+
+## [v1.3.10](https://github.com/laurent22/joplin/releases/tag/v1.3.10) (Pre-release) - 2020-10-29T13:27:14Z
+
+- New: Api: Added service to access resource external editing
+- New: Plugins: Add the openNote, openFolder and openTag commands
+- Fixed: Regression: Keyboard shortcut would not save in some cases
+- Fixed: Regression: Restore &quot;New sub-notebook&quot; command
+- Fixed: Command Palette click did not work
+- Fixed: Fix slow Katex rendering when there are many global definitions ([#3993](https://github.com/laurent22/joplin/issues/3993))
+- Fixed: Fix syntax of imported resources when importing ENEX as HTML
+- Fixed: Fixed OneDrive authentication
+- Fixed: Fixed sync issue when importing ENEX files that contain new line characters in the source URL attribute ([#3955](https://github.com/laurent22/joplin/issues/3955))
+- Fixed: Handle gzipped CSS files when importing from clipper ([#3986](https://github.com/laurent22/joplin/issues/3986))
+- Fixed: Update highlight.js to fix freeze for certain code blocks ([#3992](https://github.com/laurent22/joplin/issues/3992))
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- New: Added `openProfileDirectory` command and menu item
+- Improved: Make “update is available” dialog box easier to use ([#3877](https://github.com/laurent22/joplin/issues/3877) by [@roryokane](https://github.com/roryokane))
+- Improved: Sort tags in a case-insensitive way
+- Improved: Display more info while an ENEX file is being imported
+- Improved: Made toolbar buttons bigger and swap order of bullet and number lists
+- Improved: Api: Allow preserving timestamps when updating a note
+- Improved: Added support for a custom S3 URL ([#3921](https://github.com/laurent22/joplin/issues/3921)) ([#3691](https://github.com/laurent22/joplin/issues/3691) by [@aaron](https://github.com/aaron))
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Simplified and improve command service, and added command palette
+- Improved: Tray: Exit -> Quit ([#3945](https://github.com/laurent22/joplin/issues/3945) by Helmut K. C. Tessarek)
+- Improved: Import `<strike>`, `<s>` tags (strikethrough) from Evernote ([#3936](https://github.com/laurent22/joplin/issues/3936) by Ian Slinger)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Fix search filters when language is in Korean or with accents ([#3947](https://github.com/laurent22/joplin/issues/3947) by Naveen M V)
+- Fixed: Fixed freeze when importing ENEX as HTML, and fixed potential error when importing resources ([#3958](https://github.com/laurent22/joplin/issues/3958))
+- Fixed: Fixed setting issue that would cause a password to be saved in plain text in the database, even when the keychain is working
+- Fixed: Fixed sidebar performance issue when there are many notebooks or tags ([#3893](https://github.com/laurent22/joplin/issues/3893))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button toolip and icon
+
+## [v1.3.9](https://github.com/laurent22/joplin/releases/tag/v1.3.9) (Pre-release) - 2020-10-23T16:04:26Z
+
+- New: Added `openProfileDirectory` command and menu item
+- Improved: Make “update is available” dialog box easier to use ([#3877](https://github.com/laurent22/joplin/issues/3877) by [@roryokane](https://github.com/roryokane))
+- Improved: Sort tags in a case-insensitive way
+- Fixed: Fix invalid tag state issue when importing notes or syncing
+- Fixed: Fix search filters when language is in Korean or with accents ([#3947](https://github.com/laurent22/joplin/issues/3947) by Naveen M V)
+- Fixed: Fixed Cut menu item
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- Improved: Display more info while an ENEX file is being imported
+- Improved: Made toolbar buttons bigger and swap order of bullet and number lists
+- Improved: Api: Allow preserving timestamps when updating a note
+- Improved: Added support for a custom S3 URL ([#3921](https://github.com/laurent22/joplin/issues/3921)) ([#3691](https://github.com/laurent22/joplin/issues/3691) by [@aaron](https://github.com/aaron))
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Simplified and improve command service, and added command palette
+- Improved: Tray: Exit -> Quit ([#3945](https://github.com/laurent22/joplin/issues/3945) by Helmut K. C. Tessarek)
+- Improved: Import `<strike>`, `<s>` tags (strikethrough) from Evernote ([#3936](https://github.com/laurent22/joplin/issues/3936) by Ian Slinger)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Fixed freeze when importing ENEX as HTML, and fixed potential error when importing resources ([#3958](https://github.com/laurent22/joplin/issues/3958))
+- Fixed: Fixed setting issue that would cause a password to be saved in plain text in the database, even when the keychain is working
+- Fixed: Fixed sidebar performance issue when there are many notebooks or tags ([#3893](https://github.com/laurent22/joplin/issues/3893))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button toolip and icon
+
+## [v1.3.8](https://github.com/laurent22/joplin/releases/tag/v1.3.8) (Pre-release) - 2020-10-21T18:46:29Z
+
+- New: Plugins: Added support for content scripts
+- Improved: Api: Allow preserving timestamps when updating a note
+- Improved: Display more info while an ENEX file is being imported
+- Improved: Made toolbar buttons bigger and swap order of bullet and number lists
+- Improved: Plugins: Allow custom commands to return a result
+- Fixed: Certain commands no longer worked. ([#3962](https://github.com/laurent22/joplin/issues/3962))
+- Fixed: Fixed freeze when importing ENEX as HTML, and fixed potential error when importing resources ([#3958](https://github.com/laurent22/joplin/issues/3958))
+- Fixed: Fixed setting issue that would cause a password to be saved in plain text in the database, even when the keychain is working
+- Fixed: Regression: Fixed format of copied version info
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- Improved: Added support for a custom S3 URL ([#3921](https://github.com/laurent22/joplin/issues/3921)) ([#3691](https://github.com/laurent22/joplin/issues/3691) by [@aaron](https://github.com/aaron))
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Simplified and improve command service, and added command palette
+- Improved: Tray: Exit -> Quit ([#3945](https://github.com/laurent22/joplin/issues/3945) by Helmut K. C. Tessarek)
+- Improved: Import `<strike>`, `<s>` tags (strikethrough) from Evernote ([#3936](https://github.com/laurent22/joplin/issues/3936) by Ian Slinger)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Fixed sidebar performance issue when there are many notebooks or tags ([#3893](https://github.com/laurent22/joplin/issues/3893))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button toolip and icon
+
+## [v1.3.7](https://github.com/laurent22/joplin/releases/tag/v1.3.7) (Pre-release) - 2020-10-20T11:35:55Z
+
+- Improved: Added support for a custom S3 URL ([#3921](https://github.com/laurent22/joplin/issues/3921)) ([#3691](https://github.com/laurent22/joplin/issues/3691) by [@aaron](https://github.com/aaron))
+- Improved: Import `<strike>`, `<s>` tags (strikethrough) from Evernote ([#3936](https://github.com/laurent22/joplin/issues/3936) by Ian Slinger)
+- Improved: Simplified and improve command service, and added command palette
+- Improved: Tray: Exit -> Quit ([#3945](https://github.com/laurent22/joplin/issues/3945) by Helmut K. C. Tessarek)
+- Fixed: Trying to fix sidebar performance issue when there are many notebooks or tags ([#3893](https://github.com/laurent22/joplin/issues/3893))
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button toolip and icon
+
+## [v1.3.5](https://github.com/laurent22/joplin/releases/tag/v1.3.5) (Pre-release) - 2020-10-17T14:26:35Z
+
+- Fixed: Regression: Remove Hide Joplin menu item on Linux too
+- Fixed: Regression: Editor toolbar was disabled when importing note from MD file ([#3915](https://github.com/laurent22/joplin/issues/3915))
+- Fixed: Regression: Header links with special characters were no longer working ([#3903](https://github.com/laurent22/joplin/issues/3903))
+- Fixed: Regression: Importing ENEX as HTML was importing as Markdown ([#3923](https://github.com/laurent22/joplin/issues/3923))
+- Fixed: Regression - Layout Button Sequence menu items were disabled ([#3899](https://github.com/laurent22/joplin/issues/3899))
+- Fixed: Regression: Fix export of pluginAssets when exporting to html/pdf ([#3927](https://github.com/laurent22/joplin/issues/3927) by Caleb John)
+- Fixed: Regression: Fixed check for update
+- Fixed: Regression: Fixed move to notebook from context menu
+- Fixed: Regression: Fixed opening links
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button toolip and icon
+
+## [v1.3.3](https://github.com/laurent22/joplin/releases/tag/v1.3.3) (Pre-release) - 2020-10-17T10:56:57Z
+
+- Fixed: Regression: Remove Hide Joplin menu item on Linux too
+- Fixed: Regression: Editor toolbar was disabled when importing note from MD file ([#3915](https://github.com/laurent22/joplin/issues/3915))
+- Fixed: Regression: Header links with special characters were no longer working ([#3903](https://github.com/laurent22/joplin/issues/3903))
+- Fixed: Regression: Importing ENEX as HTML was importing as Markdown ([#3923](https://github.com/laurent22/joplin/issues/3923))
+- Fixed: Regression - Layout Button Sequence menu items were disabled ([#3899](https://github.com/laurent22/joplin/issues/3899))
+- Fixed: Regression: Fix export of pluginAssets when exporting to html/pdf ([#3927](https://github.com/laurent22/joplin/issues/3927) by Caleb John)
+- Fixed: Regression: Fixed check for update
+- Fixed: Regression: Fixed move to notebook from context menu
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button toolip and icon
+
+## [v1.3.2](https://github.com/laurent22/joplin/releases/tag/v1.3.2) (Pre-release) - 2020-10-11T20:39:49Z
+
+- Fixed: Regression: Context menu in sidebar could point to wrong item
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+
+## [v1.3.1](https://github.com/laurent22/joplin/releases/tag/v1.3.1) (Pre-release) - 2020-10-11T15:10:18Z
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+
 ## [v1.2.6](https://github.com/laurent22/joplin/releases/tag/v1.2.6) - 2020-10-09T13:56:59Z
 
 - New: Updated UI ([#3586](https://github.com/laurent22/joplin/issues/3586))
@@ -346,6 +1057,44 @@ Plugin doc has been updated with some info about the [development process](https
 - Fixed: Prevent crash in rare case when opening the config screen ([#3835](https://github.com/laurent22/joplin/issues/3835))
 - Fixed: Refresh search results when searching by tag and when a tag is changed ([#3754](https://github.com/laurent22/joplin/issues/3754))
 
+## [v1.2.4](https://github.com/laurent22/joplin/releases/tag/v1.2.4) (Pre-release) - 2020-09-30T07:34:29Z
+
+- Improved: Regression: Context menu on sidebar did not work anymore
+- Improved: Regression: Sidebar toggle button did not work anymore
+
+## [v1.2.3](https://github.com/laurent22/joplin/releases/tag/v1.2.3) (Pre-release) - 2020-09-29T15:13:02Z
+
+- Improved: Adjust the codemirror code block colors for the dark theme ([#3794](https://github.com/laurent22/joplin/issues/3794) by Caleb John)
+- Improved: Always label "Click to add tags"
+- Improved: Disable fuzzy search for now due to performance issues
+- Improved: Extend functionality of codemirror vim ([#3823](https://github.com/laurent22/joplin/issues/3823) by Caleb John)
+- Improved: Improved rendering of All Notes item in sidebar
+- Improved: Keep search fuzzy scores between 0 and 2 ([#3812](https://github.com/laurent22/joplin/issues/3812) by Naveen M V)
+- Improved: Make global search field wider when it has focus
+- Improved: Optimised sidebar rendering speed
+- Fixed: Fade out checked items in Rich Text editor too
+- Fixed: Fix issue with highlighted search terms in CodeMirror viewer
+- Fixed: Fixed editor font size ([#3801](https://github.com/laurent22/joplin/issues/3801))
+- Fixed: Only disable relevant toolbar buttons when editor is read-only ([#3810](https://github.com/laurent22/joplin/issues/3810))
+- Fixed: Prevent crash in rare case when opening the config screen ([#3835](https://github.com/laurent22/joplin/issues/3835))
+- Fixed: Refresh search results when searching by tag and when a tag is changed ([#3754](https://github.com/laurent22/joplin/issues/3754))
+
+## [v1.2.2](https://github.com/laurent22/joplin/releases/tag/v1.2.2) (Pre-release) - 2020-09-22T20:31:55Z
+
+- New: Add frequently used languages to markdown editor ([#3786](https://github.com/laurent22/joplin/issues/3786) by Carlos Eduardo)
+- Improved: Disable auto-update by default
+- Improved: Improved menu enabled states when not in main screen
+- Improved: UI update ([#3586](https://github.com/laurent22/joplin/issues/3586))
+- Improved: Upgrade Mermaid to v8.8.0 ([#3745](https://github.com/laurent22/joplin/issues/3745)) ([#3740](https://github.com/laurent22/joplin/issues/3740) by Caleb John)
+- Fixed: Add stricter rules for katex blocks ([#3795](https://github.com/laurent22/joplin/issues/3795)) ([#3791](https://github.com/laurent22/joplin/issues/3791) by Caleb John)
+- Fixed: Allow Read Time label to be translated ([#3684](https://github.com/laurent22/joplin/issues/3684))
+- Fixed: Always use light theme for notes in HTML mode ([#3698](https://github.com/laurent22/joplin/issues/3698))
+- Fixed: Disable editor shortcuts when a dialog, such as GotoAnything, is visible ([#3700](https://github.com/laurent22/joplin/issues/3700))
+- Fixed: Fix bug where editor would scroll to focus global search ([#3787](https://github.com/laurent22/joplin/issues/3787) by Caleb John)
+- Fixed: Fix missed highlighting when using the global search ([#3717](https://github.com/laurent22/joplin/issues/3717) by Caleb John)
+- Fixed: Fixed issue when switching from search to "All notes" ([#3748](https://github.com/laurent22/joplin/issues/3748))
+- Fixed: Improved handling of special characters when exporting to Markdown ([#3760](https://github.com/laurent22/joplin/issues/3760))
+
 ## [v1.1.4](https://github.com/laurent22/joplin/releases/tag/v1.1.4) - 2020-09-21T11:20:09Z
 
 - New: Add keyboard shortcut editor ([#3525](https://github.com/laurent22/joplin/issues/3525) by Anjula Karunarathne)
@@ -369,6 +1118,34 @@ Plugin doc has been updated with some info about the [development process](https
 - Fixed: Fixed viewer font size, in particular for inline code ([#3553](https://github.com/laurent22/joplin/issues/3553))
 - Fixed: Increased file extension limit to 20 to prevent issue when using external editors ([#3696](https://github.com/laurent22/joplin/issues/3696))
 - Fixed: Use joplin list handling in emacs mode ([#3758](https://github.com/laurent22/joplin/issues/3758)) ([#3749](https://github.com/laurent22/joplin/issues/3749) by Caleb John)
+
+## [v1.1.3](https://github.com/laurent22/joplin/releases/tag/v1.1.3) (Pre-release) - 2020-09-17T10:30:37Z
+
+- Improved: Do not prevent export when one item is still encrypted
+- Fixed: Creating a note after backward redirection places it in a wrong notebook ([#3759](https://github.com/laurent22/joplin/issues/3759) by Naveen M V)
+- Fixed: Increased file extension limit to 20 to prevent issue when using external editors ([#3696](https://github.com/laurent22/joplin/issues/3696))
+- Fixed: Use joplin list handling in emacs mode ([#3758](https://github.com/laurent22/joplin/issues/3758)) ([#3749](https://github.com/laurent22/joplin/issues/3749) by Caleb John)
+
+## [v1.1.2](https://github.com/laurent22/joplin/releases/tag/v1.1.2) (Pre-release) - 2020-09-15T12:58:38Z
+
+- Improved: Clarifies labels of certain actions, and added shortcut for note list toggle
+- Security: Upgrade packages to fix vulnerabilities
+
+## [v1.1.1](https://github.com/laurent22/joplin/releases/tag/v1.1.1) (Pre-release) - 2020-09-11T23:32:47Z
+
+- New: Add keyboard shortcut editor ([#3525](https://github.com/laurent22/joplin/issues/3525) by Anjula Karunarathne)
+- Improved: Change CodeMirror default home and end to be visual line based ([#3672](https://github.com/laurent22/joplin/issues/3672) by Caleb John)
+- Improved: Added support for fuzzy search ([#3632](https://github.com/laurent22/joplin/issues/3632) by Naveen M V)
+- Improved: Make CodeMirror the default code editor ([#3703](https://github.com/laurent22/joplin/issues/3703)) ([#3560](https://github.com/laurent22/joplin/issues/3560) by Caleb John)
+- Improved: Rename menu item from "Export" to "Export all" to clarify what it does
+- Improved: Sync immediately on startup
+- Security: Disallow EMBED tags to prevent XSS vulnerability (CVE-2020-15930, vulnerability found by Ademar Nowasky Junior)
+- Fixed: Fix applying tags to multiple notes ([#3710](https://github.com/laurent22/joplin/issues/3710))
+- Fixed: Fix bug with quotes when searching ([#3735](https://github.com/laurent22/joplin/issues/3735) by Naveen M V)
+- Fixed: Fix wildcard search ([#3713](https://github.com/laurent22/joplin/issues/3713) by Naveen M V)
+- Fixed: Fixed copying link in Rich Text editor ([#3697](https://github.com/laurent22/joplin/issues/3697))
+- Fixed: Fixed note export when there are folders with non-existing parents. Also fixed long path issue on Windows. ([#3689](https://github.com/laurent22/joplin/issues/3689))
+- Fixed: Fixed viewer font size, in particular for inline code ([#3553](https://github.com/laurent22/joplin/issues/3553))
 
 ## [v1.0.245](https://github.com/laurent22/joplin/releases/tag/v1.0.245) - 2020-09-09T12:56:10Z
 
@@ -406,6 +1183,157 @@ This version also includes an update to the search engine and as a result starti
 - Fixed: Fixed Katex font rendering ([#3664](https://github.com/laurent22/joplin/issues/3664))
 - Fixed: Fix links within Mermaid documents ([#3618](https://github.com/laurent22/joplin/issues/3618))
 
+## [v1.0.239](https://github.com/laurent22/joplin/releases/tag/v1.0.239) (Pre-release) - 2020-09-01T21:56:36Z
+
+IMPORTANT: This pre-release will ask you to upgrade your sync target and, once it is done, only the latest clients will be able to sync with this sync target. Currently that includes the desktop app (v1.0.234+) and Android app (v1.0.337+). It means if you are using these two clients you'll be fine. However if you are using the iOS or CLI clients you might want to wait till these clients are updated. Any issue with the sync target upgrade, please post on the forum.
+
+This version also includes an update to the search engine and as a result starting the app the first might be SLOW, as the search engine indexes all your notes. It might take from a few seconds to several minutes depending on how large your note collection is.
+
+Regression fixes:
+
+- Fixes [#3645](https://github.com/laurent22/joplin/issues/3645): Improved handling of startup errors, and prevent window from being invisible when upgrading sync target
+- Fixed OneDrive synchronisation ([#3674](https://github.com/laurent22/joplin/issues/3674))
+
+Main changes:
+
+- New: Add mechanism to lock and upgrade sync targets ([#3524](https://github.com/laurent22/joplin/issues/3524))
+- New: Add version info to error screen
+- New: Added KeymapService to manage keyboard shortcuts ([#3252](https://github.com/laurent22/joplin/issues/3252) by Anjula Karunarathne)
+- New: Added attach file to menu bar ([#3540](https://github.com/laurent22/joplin/issues/3540) by [@R3dError](https://github.com/R3dError))
+- New: Add search filters ([#3213](https://github.com/laurent22/joplin/issues/3213)) ([#1877](https://github.com/laurent22/joplin/issues/1877) by Naveen M V)
+- Security: Apply latest package security updates
+- Improved: Add support for OneDrive for Business ([#3433](https://github.com/laurent22/joplin/issues/3433)) ([#1266](https://github.com/laurent22/joplin/issues/1266) by [@jonath92](https://github.com/jonath92))
+- Improved: Codemirror: clean up list indent code ([#3581](https://github.com/laurent22/joplin/issues/3581) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Enable CodeMirror keybindings ([#3545](https://github.com/laurent22/joplin/issues/3545) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Fix AppImage Icon ([#3570](https://github.com/laurent22/joplin/issues/3570)) ([#3529](https://github.com/laurent22/joplin/issues/3529) by [@Jesssullivan](https://github.com/Jesssullivan))
+- Improved: Hide completed to-dos in GotoAnything ([#3580](https://github.com/laurent22/joplin/issues/3580))
+- Improved: Implement scroll-past-end on CodeMirror editor ([#3589](https://github.com/laurent22/joplin/issues/3589) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Show full folder name in mouse-over pop-up text ([#3590](https://github.com/laurent22/joplin/issues/3590)) ([#3569](https://github.com/laurent22/joplin/issues/3569) by Allan Jacquet-Cretides)
+- Improved: Toggle Editor rather than setting split mode on search ([#3561](https://github.com/laurent22/joplin/issues/3561) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed copy, cut and paste in Rich Text editor ([#3565](https://github.com/laurent22/joplin/issues/3565))
+- Fixed: Fixed scrolling issue when editing while searching in CodeMirror ([#3593](https://github.com/laurent22/joplin/issues/3593) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed sync fetching issue ([#3599](https://github.com/laurent22/joplin/issues/3599)) ([#3591](https://github.com/laurent22/joplin/issues/3591) by [@alexchee](https://github.com/alexchee))
+- Fixed: Fixed vim mode issue where status bar was not visible ([#3606](https://github.com/laurent22/joplin/issues/3606) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Modify the CodeMirror linter plugin to fix katex ([#3582](https://github.com/laurent22/joplin/issues/3582)) ([#3560](https://github.com/laurent22/joplin/issues/3560) by [@CalebJohn](https://github.com/CalebJohn))
+
+## [v1.0.237](https://github.com/laurent22/joplin/releases/tag/v1.0.237) (Pre-release) - 2020-08-29T15:38:04Z
+
+IMPORTANT: This pre-release will ask you to upgrade your sync target and, once it is done, only the latest clients will be able to sync with this sync target. Currently that includes the desktop app (v1.0.234+) and Android app (v1.0.337+). It means if you are using these two clients you'll be fine. However if you are using the iOS or CLI clients you might want to wait till these clients are updated. Any issue with the sync target upgrade, please post on the forum.
+
+This version also includes an update to the search engine and as a result starting the app the first might be SLOW, as the search engine indexes all your notes. It might take from a few seconds to several minutes depending on how large your note collection is.
+
+Regression fixes:
+
+- Linux: Fixes [#3645](https://github.com/laurent22/joplin/issues/3645): Prevent lock when restarting app
+- Fixed OneDrive synchronisation ([#3674](https://github.com/laurent22/joplin/issues/3674))
+
+Main changes:
+
+- New: Add mechanism to lock and upgrade sync targets ([#3524](https://github.com/laurent22/joplin/issues/3524))
+- New: Add version info to error screen
+- New: Added KeymapService to manage keyboard shortcuts ([#3252](https://github.com/laurent22/joplin/issues/3252) by Anjula Karunarathne)
+- New: Added attach file to menu bar ([#3540](https://github.com/laurent22/joplin/issues/3540) by [@R3dError](https://github.com/R3dError))
+- New: Add search filters ([#3213](https://github.com/laurent22/joplin/issues/3213)) ([#1877](https://github.com/laurent22/joplin/issues/1877) by Naveen M V)
+- Security: Apply latest package security updates
+- Improved: Add support for OneDrive for Business ([#3433](https://github.com/laurent22/joplin/issues/3433)) ([#1266](https://github.com/laurent22/joplin/issues/1266) by [@jonath92](https://github.com/jonath92))
+- Improved: Codemirror: clean up list indent code ([#3581](https://github.com/laurent22/joplin/issues/3581) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Enable CodeMirror keybindings ([#3545](https://github.com/laurent22/joplin/issues/3545) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Fix AppImage Icon ([#3570](https://github.com/laurent22/joplin/issues/3570)) ([#3529](https://github.com/laurent22/joplin/issues/3529) by [@Jesssullivan](https://github.com/Jesssullivan))
+- Improved: Hide completed to-dos in GotoAnything ([#3580](https://github.com/laurent22/joplin/issues/3580))
+- Improved: Implement scroll-past-end on CodeMirror editor ([#3589](https://github.com/laurent22/joplin/issues/3589) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Show full folder name in mouse-over pop-up text ([#3590](https://github.com/laurent22/joplin/issues/3590)) ([#3569](https://github.com/laurent22/joplin/issues/3569) by Allan Jacquet-Cretides)
+- Improved: Toggle Editor rather than setting split mode on search ([#3561](https://github.com/laurent22/joplin/issues/3561) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed copy, cut and paste in Rich Text editor ([#3565](https://github.com/laurent22/joplin/issues/3565))
+- Fixed: Fixed scrolling issue when editing while searching in CodeMirror ([#3593](https://github.com/laurent22/joplin/issues/3593) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed sync fetching issue ([#3599](https://github.com/laurent22/joplin/issues/3599)) ([#3591](https://github.com/laurent22/joplin/issues/3591) by [@alexchee](https://github.com/alexchee))
+- Fixed: Fixed vim mode issue where status bar was not visible ([#3606](https://github.com/laurent22/joplin/issues/3606) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Modify the CodeMirror linter plugin to fix katex ([#3582](https://github.com/laurent22/joplin/issues/3582)) ([#3560](https://github.com/laurent22/joplin/issues/3560) by [@CalebJohn](https://github.com/CalebJohn))
+
+## [v1.0.236](https://github.com/laurent22/joplin/releases/tag/v1.0.236) (Pre-release) - 2020-08-28T09:16:54Z
+
+IMPORTANT: This pre-release will ask you to upgrade your sync target and, once it is done, only the latest clients will be able to sync with this sync target. Currently that includes the desktop app (v1.0.234+) and Android app (v1.0.337+). It means if you are using these two clients you'll be fine. However if you are using the iOS or CLI clients you might want to wait till these clients are updated. Any issue with the sync target upgrade, please post on the forum.
+
+This version also includes an update to the search engine and as a result starting the app the first might be SLOW, as the search engine indexes all your notes. It might take from a few seconds to several minutes depending on how large your note collection is.
+
+Regression fixes:
+
+- Fixed OneDrive synchronisation ([#3674](https://github.com/laurent22/joplin/issues/3674))
+
+Main changes:
+
+- New: Add mechanism to lock and upgrade sync targets ([#3524](https://github.com/laurent22/joplin/issues/3524))
+- New: Add version info to error screen
+- New: Added KeymapService to manage keyboard shortcuts ([#3252](https://github.com/laurent22/joplin/issues/3252) by Anjula Karunarathne)
+- New: Added attach file to menu bar ([#3540](https://github.com/laurent22/joplin/issues/3540) by [@R3dError](https://github.com/R3dError))
+- New: Add search filters ([#3213](https://github.com/laurent22/joplin/issues/3213)) ([#1877](https://github.com/laurent22/joplin/issues/1877) by Naveen M V)
+- Security: Apply latest package security updates
+- Improved: Add support for OneDrive for Business ([#3433](https://github.com/laurent22/joplin/issues/3433)) ([#1266](https://github.com/laurent22/joplin/issues/1266) by [@jonath92](https://github.com/jonath92))
+- Improved: Codemirror: clean up list indent code ([#3581](https://github.com/laurent22/joplin/issues/3581) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Enable CodeMirror keybindings ([#3545](https://github.com/laurent22/joplin/issues/3545) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Fix AppImage Icon ([#3570](https://github.com/laurent22/joplin/issues/3570)) ([#3529](https://github.com/laurent22/joplin/issues/3529) by [@Jesssullivan](https://github.com/Jesssullivan))
+- Improved: Hide completed to-dos in GotoAnything ([#3580](https://github.com/laurent22/joplin/issues/3580))
+- Improved: Implement scroll-past-end on CodeMirror editor ([#3589](https://github.com/laurent22/joplin/issues/3589) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Show full folder name in mouse-over pop-up text ([#3590](https://github.com/laurent22/joplin/issues/3590)) ([#3569](https://github.com/laurent22/joplin/issues/3569) by Allan Jacquet-Cretides)
+- Improved: Toggle Editor rather than setting split mode on search ([#3561](https://github.com/laurent22/joplin/issues/3561) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed copy, cut and paste in Rich Text editor ([#3565](https://github.com/laurent22/joplin/issues/3565))
+- Fixed: Fixed scrolling issue when editing while searching in CodeMirror ([#3593](https://github.com/laurent22/joplin/issues/3593) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed sync fetching issue ([#3599](https://github.com/laurent22/joplin/issues/3599)) ([#3591](https://github.com/laurent22/joplin/issues/3591) by [@alexchee](https://github.com/alexchee))
+- Fixed: Fixed vim mode issue where status bar was not visible ([#3606](https://github.com/laurent22/joplin/issues/3606) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Modify the CodeMirror linter plugin to fix katex ([#3582](https://github.com/laurent22/joplin/issues/3582)) ([#3560](https://github.com/laurent22/joplin/issues/3560) by [@CalebJohn](https://github.com/CalebJohn))
+
+## [v1.0.235](https://github.com/laurent22/joplin/releases/tag/v1.0.235) (Pre-release) - 2020-08-18T22:08:01Z
+
+Important: This pre-release will ask you to upgrade your sync target and, once it is done, only the latest clients will be able to sync with this sync target. Currently that includes the desktop app (v1.0.234+) and Android app (v1.0.337+). It means if you are using these two clients you'll be fine. However if you are using the iOS or CLI clients you might want to wait till these clients are updated. Any issue with the sync target upgrade, please post on the forum.
+
+This version also includes an update to the search engine and as a result starting the app the first might be SLOW, as the search engine indexes all your notes. It might take from a few seconds to several minutes depending on how large your note collection is
+
+- New: Add mechanism to lock and upgrade sync targets ([#3524](https://github.com/laurent22/joplin/issues/3524))
+- New: Add version info to error screen
+- New: Added KeymapService to manage keyboard shortcuts ([#3252](https://github.com/laurent22/joplin/issues/3252) by Anjula Karunarathne)
+- New: Added attach file to menu bar ([#3540](https://github.com/laurent22/joplin/issues/3540) by [@R3dError](https://github.com/R3dError))
+- New: Add search filters ([#3213](https://github.com/laurent22/joplin/issues/3213)) ([#1877](https://github.com/laurent22/joplin/issues/1877) by Naveen M V)
+- Security: Apply latest package security updates
+- Improved: Add support for OneDrive for Business ([#3433](https://github.com/laurent22/joplin/issues/3433)) ([#1266](https://github.com/laurent22/joplin/issues/1266) by [@jonath92](https://github.com/jonath92))
+- Improved: Codemirror: clean up list indent code ([#3581](https://github.com/laurent22/joplin/issues/3581) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Enable CodeMirror keybindings ([#3545](https://github.com/laurent22/joplin/issues/3545) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Fix AppImage Icon ([#3570](https://github.com/laurent22/joplin/issues/3570)) ([#3529](https://github.com/laurent22/joplin/issues/3529) by [@Jesssullivan](https://github.com/Jesssullivan))
+- Improved: Hide completed to-dos in GotoAnything ([#3580](https://github.com/laurent22/joplin/issues/3580))
+- Improved: Implement scroll-past-end on CodeMirror editor ([#3589](https://github.com/laurent22/joplin/issues/3589) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Show full folder name in mouse-over pop-up text ([#3590](https://github.com/laurent22/joplin/issues/3590)) ([#3569](https://github.com/laurent22/joplin/issues/3569) by Allan Jacquet-Cretides)
+- Improved: Toggle Editor rather than setting split mode on search ([#3561](https://github.com/laurent22/joplin/issues/3561) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed copy, cut and paste in Rich Text editor ([#3565](https://github.com/laurent22/joplin/issues/3565))
+- Fixed: Fixed scrolling issue when editing while searching in CodeMirror ([#3593](https://github.com/laurent22/joplin/issues/3593) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed sync fetching issue ([#3599](https://github.com/laurent22/joplin/issues/3599)) ([#3591](https://github.com/laurent22/joplin/issues/3591) by [@alexchee](https://github.com/alexchee))
+- Fixed: Fixed vim mode issue where status bar was not visible ([#3606](https://github.com/laurent22/joplin/issues/3606) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Modify the CodeMirror linter plugin to fix katex ([#3582](https://github.com/laurent22/joplin/issues/3582)) ([#3560](https://github.com/laurent22/joplin/issues/3560) by [@CalebJohn](https://github.com/CalebJohn))
+
+## [v1.0.234](https://github.com/laurent22/joplin/releases/tag/v1.0.234) (Pre-release) - 2020-08-17T23:13:02Z
+
+Important: This pre-release will ask you to upgrade your sync target and, once it is done, only the latest clients will be able to sync with this sync target. Currently that includes the desktop app (v1.0.234+) and Android app (v1.0.337+). It means if you are using these two clients you'll be fine. However if you are using the iOS or CLI clients you might want to wait till these clients are updated. Any issue with the sync target upgrade, please post on the forum.
+
+This version also includes an update to the search engine and as a result starting the app the first might be SLOW, as the search engine indexes all your notes. It might take from a few seconds to several minutes depending on how large your note collection is.
+
+- New: Add mechanism to lock and upgrade sync targets ([#3524](https://github.com/laurent22/joplin/issues/3524))
+- New: Add support for media player for video and audio files
+- New: Add version info to error screen
+- New: Added KeymapService to manage keyboard shortcuts ([#3252](https://github.com/laurent22/joplin/issues/3252) by Anjula Karunarathne)
+- New: Added attach file to menu bar ([#3540](https://github.com/laurent22/joplin/issues/3540) by [@R3dError](https://github.com/R3dError))
+- New: Add search filters ([#3213](https://github.com/laurent22/joplin/issues/3213)) ([#1877](https://github.com/laurent22/joplin/issues/1877) by Naveen M V)
+- Security: Apply latest package security updates
+- Improved: Add support for OneDrive for Business ([#3433](https://github.com/laurent22/joplin/issues/3433)) ([#1266](https://github.com/laurent22/joplin/issues/1266) by [@jonath92](https://github.com/jonath92))
+- Improved: Codemirror: clean up list indent code ([#3581](https://github.com/laurent22/joplin/issues/3581) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Enable CodeMirror keybindings ([#3545](https://github.com/laurent22/joplin/issues/3545) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Fix AppImage Icon ([#3570](https://github.com/laurent22/joplin/issues/3570)) ([#3529](https://github.com/laurent22/joplin/issues/3529) by [@Jesssullivan](https://github.com/Jesssullivan))
+- Improved: Hide completed to-dos in GotoAnything ([#3580](https://github.com/laurent22/joplin/issues/3580))
+- Improved: Implement scroll-past-end on CodeMirror editor ([#3589](https://github.com/laurent22/joplin/issues/3589) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Show full folder name in mouse-over pop-up text ([#3590](https://github.com/laurent22/joplin/issues/3590)) ([#3569](https://github.com/laurent22/joplin/issues/3569) by Allan Jacquet-Cretides)
+- Improved: Toggle Editor rather than setting split mode on search ([#3561](https://github.com/laurent22/joplin/issues/3561) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed copy, cut and paste in Rich Text editor ([#3565](https://github.com/laurent22/joplin/issues/3565))
+- Fixed: Fixed scrolling issue when editing while searching in CodeMirror ([#3593](https://github.com/laurent22/joplin/issues/3593) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed sync fetching issue ([#3599](https://github.com/laurent22/joplin/issues/3599)) ([#3591](https://github.com/laurent22/joplin/issues/3591) by [@alexchee](https://github.com/alexchee))
+- Fixed: Fixed vim mode issue where status bar was not visible ([#3606](https://github.com/laurent22/joplin/issues/3606) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Modify the CodeMirror linter plugin to fix katex ([#3582](https://github.com/laurent22/joplin/issues/3582)) ([#3560](https://github.com/laurent22/joplin/issues/3560) by [@CalebJohn](https://github.com/CalebJohn))
+
 ## [v1.0.233](https://github.com/laurent22/joplin/releases/tag/v1.0.233) - 2020-08-01T14:51:15Z
 
 - New: Add support for AWS S3 synchronisation (Beta) ([#2815](https://github.com/laurent22/joplin/issues/2815) by [@alexchee](https://github.com/alexchee))
@@ -433,6 +1361,34 @@ This version also includes an update to the search engine and as a result starti
 - Fixed: Fixed potential crash when notebook does not have a title
 - Fixed: Fixed toolbar button state when going from setting screen to main screen
 
+## [v1.0.232](https://github.com/laurent22/joplin/releases/tag/v1.0.232) (Pre-release) - 2020-07-28T22:34:40Z
+
+This release is to remove the hierarchical/nested tags feature for now, as it has a performance issue.
+
+- New: Add support for AWS S3 synchronisation (Beta) ([#2815](https://github.com/laurent22/joplin/issues/2815) by [@alexchee](https://github.com/alexchee))
+- Security: Fixed a path traversal vulnerability in clipper server API that could allow an attacker to read or write an arbitrary file (CVE-2020-15844). Vulnerability found by [Benjamin Harris](mailto:ben@mayhem.sg).
+- Improved: Improved GotoAnything speed and made it safer
+- Improved: Enable searching in editor rather than the viewer for CodeMirror ([#3360](https://github.com/laurent22/joplin/issues/3360) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Enforce that whitespace check for unindent checks the begining of a ([#3515](https://github.com/laurent22/joplin/issues/3515) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Load more CodeMirror modes for syntax highlighting ([#3401](https://github.com/laurent22/joplin/issues/3401) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Split Codemirror setOptions into different effects ([#3522](https://github.com/laurent22/joplin/issues/3522) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fix filename when exporting notebook as Markdown ([#3473](https://github.com/laurent22/joplin/issues/3473))
+- Fixed: Fixed alarms on macOS
+- Fixed: Improve Markdown rendering in CodeMirror, in particular for math expressions ([#3448](https://github.com/laurent22/joplin/issues/3448)) ([#3440](https://github.com/laurent22/joplin/issues/3440) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Crash when applying tags to multiple notes from within another tag ([#3481](https://github.com/laurent22/joplin/issues/3481))
+- Fixed: Fixed regression when moving note to notebook from menu ([#3482](https://github.com/laurent22/joplin/issues/3482))
+- Fixed: Api: Fixes nested tag API to handle calls with no 'fields' query key ([#3539](https://github.com/laurent22/joplin/issues/3539) by Vaidotas Šimkus)
+- Fixed: Editor window was no longer being resized with the main window ([#3503](https://github.com/laurent22/joplin/issues/3503))
+- Fixed: Fixed attachments being out of order when importing Enex file
+- Fixed: Fixed save issue in Rich Text editor when making a change to a note and quickly switching to a different notebook
+- Fixed: Fixed style caching ([#3449](https://github.com/laurent22/joplin/issues/3449))
+- Fixed: In some cases, changes made to an attachment would not be saved. Also added banner to show that an attachment is being edited ([#3407](https://github.com/laurent22/joplin/issues/3407))
+- Fixed: Note links would be broken after saving a note in Rich Text editor ([#3510](https://github.com/laurent22/joplin/issues/3510))
+- Fixed: Regression: Fix sort tags alphabetically in side-menu ([#3489](https://github.com/laurent22/joplin/issues/3489) by Vaidotas Šimkus)
+- Fixed: Regression: Fixed adding a new sub-notebook to a notebook
+- Fixed: Revealing file in Windows did not work ([#3366](https://github.com/laurent22/joplin/issues/3366))
+- Fixed: Undoing changes multiple time on an existing note could result in a blank note ([#3534](https://github.com/laurent22/joplin/issues/3534))
+
 ## [v1.0.227](https://github.com/laurent22/joplin/releases/tag/v1.0.227) - 2020-07-07T20:44:54Z
 
 - New: Add approximate reading time to note statistics ([#3373](https://github.com/laurent22/joplin/issues/3373) by [@cadolphs](https://github.com/cadolphs))
@@ -449,9 +1405,38 @@ This version also includes an update to the search engine and as a result starti
 - Fixed: Fixed regression which could cause a crash after deleting a notebook ([#3461](https://github.com/laurent22/joplin/issues/3461))
 - Fixed: WYSIWYG: Fixed inserting date time and other content inside header
 
+## [v1.0.226](https://github.com/laurent22/joplin/releases/tag/v1.0.226) (Pre-release) - 2020-07-04T10:21:26Z
+
+- Improved: Codemirror: Remove cancelled keys in favour of explicit keymaps ([#3417](https://github.com/laurent22/joplin/issues/3417) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Manually refresh codemirror whenever the window size changes ([#3388](https://github.com/laurent22/joplin/issues/3388) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Refactored command system
+- Fixed: Fix link color for dark theme ([#3391](https://github.com/laurent22/joplin/issues/3391) by Helmut K. C. Tessarek)
+- Fixed: Fixed custom order when note title is changed ([#3412](https://github.com/laurent22/joplin/issues/3412))
+- Fixed: Fixed import of checkboxes in ENEX files ([#3402](https://github.com/laurent22/joplin/issues/3402))
+- Fixed: Only de-duplicate imported notebook titles when needed ([#2331](https://github.com/laurent22/joplin/issues/2331))
+- Fixed: Prevent code highlighting from freezing the app in some cases ([#3281](https://github.com/laurent22/joplin/issues/3281))
+- Fixed: WYSIWYG: Fix undo issue
+
 ## [v1.0.224](https://github.com/laurent22/joplin/releases/tag/v1.0.224) - 2020-06-20T22:26:08Z
 
 - Fixed regression in v1.0.223
+
+## [v1.0.223](https://github.com/laurent22/joplin/releases/tag/v1.0.223) (Pre-release) - 2020-06-20T11:51:27Z
+
+- Improved: API: Improved error handling on service end-point
+- Fixed: API: Fixed externalEditWatcher/noteIsWatched call, fixed tests
+
+## [v1.0.221](https://github.com/laurent22/joplin/releases/tag/v1.0.221) (Pre-release) - 2020-06-20T01:44:20Z
+
+- New: API: Add support for external editing from API
+- New: Add default filename for jex export ([#3034](https://github.com/laurent22/joplin/issues/3034) by [@CalebJohn](https://github.com/CalebJohn))
+- New: Add swapLineUp and swapLineDown keys to Code Mirror editor ([#3363](https://github.com/laurent22/joplin/issues/3363) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Do not expand the left notebook when following a link to a note
+- Improved: Reduce database logging statements
+- Improved: Remove auto-indent for in note html/xml for Code Mirror ([#3374](https://github.com/laurent22/joplin/issues/3374) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fix getLineSpan logic and list token regex logic ([#3365](https://github.com/laurent22/joplin/issues/3365) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed various bugs related to the import of ENEX files as HTML
+- Fixed: Prevent desktop.ini file from breaking sync lock ([#3381](https://github.com/laurent22/joplin/issues/3381))
 
 ## [v1.0.220](https://github.com/laurent22/joplin/releases/tag/v1.0.220) - 2020-06-13T18:26:22Z
 
@@ -464,6 +1449,31 @@ This version also includes an update to the search engine and as a result starti
 
 - Fixed: Fixed regression when applying theme for Ace Editor ([#3338](https://github.com/laurent22/joplin/issues/3338)) ([#3337](https://github.com/laurent22/joplin/issues/3337) by [@CalebJohn](https://github.com/CalebJohn))
 - Fixed: Regression: Fixed issue with note being needlessly reloaded in WYSIWYG editor
+
+## [v1.0.217](https://github.com/laurent22/joplin/releases/tag/v1.0.217) (Pre-release) - 2020-06-06T15:17:27Z
+
+- New: Add option to choose Code Mirror as code editor ([#3284](https://github.com/laurent22/joplin/issues/3284) by [@CalebJohn](https://github.com/CalebJohn))
+- New: Translation: Add bahasa indonesia (id_ID.po) ([#3246](https://github.com/laurent22/joplin/issues/3246) by [@ffadilaputra](https://github.com/ffadilaputra))
+- Improved: Add support for editable resources ([#3305](https://github.com/laurent22/joplin/issues/3305)) ([#279](https://github.com/laurent22/joplin/issues/279))
+- Improved: Add support for system keychain to save sensitive settings ([#3207](https://github.com/laurent22/joplin/issues/3207)) ([#2773](https://github.com/laurent22/joplin/issues/2773))
+- Improved: Add way to manually order notes by dragging them ([#3235](https://github.com/laurent22/joplin/issues/3235)) ([#51](https://github.com/laurent22/joplin/issues/51))
+- Improved: Create new notes with minimum set of properties to prevent a few minor bugs
+- Improved: Dev fix: Only disable editor toolbar in preview mode
+- Improved: Unindent empty list markup on Enter ([#2772](https://github.com/laurent22/joplin/issues/2772)) ([#2614](https://github.com/laurent22/joplin/issues/2614) by Shotaro Yamada)
+- Improved: Upload attachments > 4 MB when using OneDrive ([#3195](https://github.com/laurent22/joplin/issues/3195)) ([#173](https://github.com/laurent22/joplin/issues/173) by [@TheOnlyTrueJonathanHeard](https://github.com/TheOnlyTrueJonathanHeard))
+- Fixed: Always make the first item selected in Goto Anything ([#3181](https://github.com/laurent22/joplin/issues/3181)) ([#3170](https://github.com/laurent22/joplin/issues/3170) by 叡山电车)
+- Fixed: Attaching an image, then cancelling the resize dialog, would crash the app ([#3324](https://github.com/laurent22/joplin/issues/3324))
+- Fixed: Disable editor toolbar when editor is not in focus ([#3286](https://github.com/laurent22/joplin/issues/3286))
+- Fixed: Disable middle-clicking external URLs, as they would open inside the application ([#3287](https://github.com/laurent22/joplin/issues/3287))
+- Fixed: Fix styling of note title in exported PDF and print ([#3227](https://github.com/laurent22/joplin/issues/3227))
+- Fixed: Fixed date popup dialog overflow issue inside info dialog
+- Fixed: Fixed issue with accentuated letters in GotoAnything  ([#3183](https://github.com/laurent22/joplin/issues/3183)) ([#3171](https://github.com/laurent22/joplin/issues/3171) by 叡山电车)
+- Fixed: Fixed issue with invalid image paths when config path contains spaces ([#3267](https://github.com/laurent22/joplin/issues/3267))
+- Fixed: Fixed note list context menu ([#3331](https://github.com/laurent22/joplin/issues/3331))
+- Fixed: Fixed portable app issue with resource paths
+- Fixed: Fixed shortcut to focus Note List when editor is in focus ([#3298](https://github.com/laurent22/joplin/issues/3298))
+- Fixed: Make GotoAnyting work with East Asian charactors ([#3180](https://github.com/laurent22/joplin/issues/3180)) ([#3153](https://github.com/laurent22/joplin/issues/3153) by 叡山电车)
+- Fixed: Prevent drag and dropping of text in editor as it can lead to data loss ([#3302](https://github.com/laurent22/joplin/issues/3302))
 
 ## [v1.0.216](https://github.com/laurent22/joplin/releases/tag/v1.0.216) - 2020-05-24T14:21:01Z
 
@@ -528,6 +1538,285 @@ Finally, the tag bar has been moved to the top of the note editor pane. Again th
 - Fixed: Make sidebar resizable when note list is not displayed ([#2895](https://github.com/laurent22/joplin/issues/2895)) ([#2865](https://github.com/laurent22/joplin/issues/2865) by anirudh murali)
 - Fixed: WYSIWYG: Fixed UI translation issue for certain languages
 - Fixed: Word/character counter includes Markdown syntax and HTML tags ([#3037](https://github.com/laurent22/joplin/issues/3037)) ([#3009](https://github.com/laurent22/joplin/issues/3009) by [@RedDocMD](https://github.com/RedDocMD))
+
+## [v1.0.214](https://github.com/laurent22/joplin/releases/tag/v1.0.214) (Pre-release) - 2020-05-21T17:15:15Z
+
+This release includes a rewrite of the note editor component in order to allow further improvements (which were no longer possible) and to make it easier to maintain both WYSIWYG editors and regular editor.
+
+A new button "Code View" has been added to switch between the WYSIWYG editor and the Markdown editor.
+
+The note-specific toolbar has also been moved next to the title field for now because it wasn't practical to leave it with the editor-specific toolbar (and also not logical). It might be tweaked or moved later on once we have a clearer idea of what we want to do.
+
+Finally, the tag bar has been moved to the top of the note editor pane. Again this was in part necessary after the refactoring, but also more logical since the tags are relevant to the note, but not to the note content. So it makes more sense to have the editor toolbar right next to the editor content, without the tag bar in between, as before.
+
+- New: Add + to access 'Zoom In', allows to use the numpad ([#2630](https://github.com/laurent22/joplin/issues/2630) by Helmut K. C. Tessarek)
+- New: Add option to "Reveal file in folder" when right-clicking on image
+- New: Added support for basic search
+- New: WYSIWYG: Added localisation support
+- New: WYSIWYG: Added support for scroll restore
+- New: Added more info on how to switch to Markdown editor
+- New: Add support for system theme auto-switching ([#2665](https://github.com/laurent22/joplin/issues/2665))
+- Security: Filter SVG element event attributes to prevent XSS vulnerability ([#3143](https://github.com/laurent22/joplin/issues/3143))
+- Improved: Made sidebar chevrons consistent
+- Improved: Add note history (back/forward buttons) ([#2819](https://github.com/laurent22/joplin/issues/2819)) ([#2409](https://github.com/laurent22/joplin/issues/2409) by Naveen M V)
+- Improved: Moved note-related toolbar button next to tag bar
+- Improved: Switch to Font Awesome as icon library ([#3137](https://github.com/laurent22/joplin/issues/3137))
+- Improved: Upgraded to Electron 8.2.5
+- Improved: WYSIWYG: Allow pasting images in editor
+- Improved: Handle compositionend event in TinyMCE ([#3164](https://github.com/laurent22/joplin/issues/3164) by Shotaro Yamada)
+- Improved: Improve automatic title generation ([#2955](https://github.com/laurent22/joplin/issues/2955)) ([#2915](https://github.com/laurent22/joplin/issues/2915) by anirudh murali)
+- Improved: Remove colour gradient from sidebar and replaced expand icons with chrevrons
+- Improved: Started resource fetcher service when a note has been decrypted
+- Improved: Support Windows tiles ([#3063](https://github.com/laurent22/joplin/issues/3063) by Giacomo Rossetto)
+- Improved: WYSIWYG: Enable context menu on resources, links and text
+- Improved: WYSIWYG: Handle "Paste as text" when pressing Ctrl+Shift+V
+- Improved: WYSIWYG: Handle drag and drop of notes and files
+- Improved: Themes switched for more appealing text highlighting ([#3192](https://github.com/laurent22/joplin/issues/3192)) ([#2883](https://github.com/laurent22/joplin/issues/2883) by [@infinity052](https://github.com/infinity052))
+- Fixed: Fixed issue with the editor showing previous note when it should show nothing
+- Fixed: Fixed two way scrolling issue in Markdown editor
+- Fixed: Fixed infinite rendering loop, which would cause the app to crash (white window) ([#3200](https://github.com/laurent22/joplin/issues/3200))
+- Fixed: Markdown editor would not scroll in sync with viewer in some cases ([#3228](https://github.com/laurent22/joplin/issues/3228))
+- Fixed: Sync would fail in some cases due to a database error ([#3234](https://github.com/laurent22/joplin/issues/3234))
+- Fixed: Better handling of missing table field bug on Linux ([#3088](https://github.com/laurent22/joplin/issues/3088))
+- Fixed: Disable or enable menu items depending on the current view ([#2467](https://github.com/laurent22/joplin/issues/2467))
+- Fixed: Fix focus after exiting GotoAnything ([#3075](https://github.com/laurent22/joplin/issues/3075)) ([#3066](https://github.com/laurent22/joplin/issues/3066) by Mohammed Rabeeh)
+- Fixed: Fix format of geolocation data ([#2673](https://github.com/laurent22/joplin/issues/2673) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fix issue where last used filename was displayed when exporting directory
+- Fixed: Fixed KaTeX font issue in exported PDF and HTML ([#3089](https://github.com/laurent22/joplin/issues/3089) by [@kowalskidev](https://github.com/kowalskidev))
+- Fixed: Fixed background color on large Mermaid graphs ([#3111](https://github.com/laurent22/joplin/issues/3111)) ([#3109](https://github.com/laurent22/joplin/issues/3109) by Rahul Mohata)
+- Fixed: Fixed note toolbar layout
+- Fixed: Fixed order of notebooks in "Move to notebook" dialog ([#3084](https://github.com/laurent22/joplin/issues/3084)) ([#3052](https://github.com/laurent22/joplin/issues/3052) by Siddhant Sehgal)
+- Fixed: Fixed regression with Ace Editor (switching layout had bugs)
+- Fixed: Fixed regression with Ace Editor list indentation, and cleaned up code
+- Fixed: Fixed regression with local search (could not be closed anymore)
+- Fixed: Fixed the Goto Anything item list overflow ([#3096](https://github.com/laurent22/joplin/issues/3096)) ([#3095](https://github.com/laurent22/joplin/issues/3095) by Rahul Mohata)
+- Fixed: Fixed various bugs and regressions following note editor refactoring
+- Fixed: Long URIs break Note Info dialog ([#3136](https://github.com/laurent22/joplin/issues/3136)) ([#3131](https://github.com/laurent22/joplin/issues/3131) by Mohammed Rabeeh)
+- Fixed: Prevent Goto Anything from freezing when inputting special characters ([#3093](https://github.com/laurent22/joplin/issues/3093))
+- Fixed: WYSIWYG: Fix CODE element style
+- Fixed: WYSIWYG: Fixed clicking a link within a checkbox label
+- Fixed: WYSIWYG: Fixed undo issue when pasting text
+- Fixed: Fix notebook associated with note  when doing search, and expand correct notebook ([#3219](https://github.com/laurent22/joplin/issues/3219))
+- Fixed: Make sidebar resizable when note list is not displayed ([#2895](https://github.com/laurent22/joplin/issues/2895)) ([#2865](https://github.com/laurent22/joplin/issues/2865) by anirudh murali)
+- Fixed: WYSIWYG: Fixed UI translation issue for certain languages
+- Fixed: Word/character counter includes Markdown syntax and HTML tags ([#3037](https://github.com/laurent22/joplin/issues/3037)) ([#3009](https://github.com/laurent22/joplin/issues/3009) by [@RedDocMD](https://github.com/RedDocMD))
+
+## [v1.0.212](https://github.com/laurent22/joplin/releases/tag/v1.0.212) (Pre-release) - 2020-05-21T07:48:39Z
+
+This release includes a rewrite of the note editor component in order to allow further improvements (which were no longer possible) and to make it easier to maintain both WYSIWYG editors and regular editor.
+
+A new button "Code View" has been added to switch between the WYSIWYG editor and the Markdown editor.
+
+The note-specific toolbar has also been moved next to the title field for now because it wasn't practical to leave it with the editor-specific toolbar (and also not logical). It might be tweaked or moved later on once we have a clearer idea of what we want to do.
+
+Finally, the tag bar has been moved to the top of the note editor pane. Again this was in part necessary after the refactoring, but also more logical since the tags are relevant to the note, but not to the note content. So it makes more sense to have the editor toolbar right next to the editor content, without the tag bar in between, as before.
+
+- New: Add + to access 'Zoom In', allows to use the numpad ([#2630](https://github.com/laurent22/joplin/issues/2630) by Helmut K. C. Tessarek)
+- New: Add option to "Reveal file in folder" when right-clicking on image
+- New: Added support for basic search
+- New: WYSIWYG: Added localisation support
+- New: WYSIWYG: Added support for scroll restore
+- New: Added more info on how to switch to Markdown editor
+- Security: Filter SVG element event attributes to prevent XSS vulnerability ([#3143](https://github.com/laurent22/joplin/issues/3143))
+- Improved: Made sidebar chevrons consistent
+- Improved: Add note history (back/forward buttons) ([#2819](https://github.com/laurent22/joplin/issues/2819)) ([#2409](https://github.com/laurent22/joplin/issues/2409) by Naveen M V)
+- Improved: Moved note-related toolbar button next to tag bar
+- Improved: Switch to Font Awesome as icon library ([#3137](https://github.com/laurent22/joplin/issues/3137))
+- Improved: Upgraded to Electron 8.2.5
+- Improved: WYSIWYG: Allow pasting images in editor
+- Improved: Handle compositionend event in TinyMCE ([#3164](https://github.com/laurent22/joplin/issues/3164) by Shotaro Yamada)
+- Improved: Improve automatic title generation ([#2955](https://github.com/laurent22/joplin/issues/2955)) ([#2915](https://github.com/laurent22/joplin/issues/2915) by anirudh murali)
+- Improved: Remove colour gradient from sidebar and replaced expand icons with chrevrons
+- Improved: Started resource fetcher service when a note has been decrypted
+- Improved: Support Windows tiles ([#3063](https://github.com/laurent22/joplin/issues/3063) by Giacomo Rossetto)
+- Improved: WYSIWYG: Enable context menu on resources, links and text
+- Improved: WYSIWYG: Handle "Paste as text" when pressing Ctrl+Shift+V
+- Improved: WYSIWYG: Handle drag and drop of notes and files
+- Improved: Themes switched for more appealing text highlighting ([#3192](https://github.com/laurent22/joplin/issues/3192)) ([#2883](https://github.com/laurent22/joplin/issues/2883) by [@infinity052](https://github.com/infinity052))
+- Fixed: Fixed issue with the editor showing previous note when it should show nothing
+- Fixed: Fixed two way scrolling issue in Markdown editor
+- Fixed: Fixed infinite rendering loop, which would cause the app to crash (white window) ([#3200](https://github.com/laurent22/joplin/issues/3200))
+- Fixed: Markdown editor would not scroll in sync with viewer in some cases ([#3228](https://github.com/laurent22/joplin/issues/3228))
+- Fixed: Sync would fail in some cases due to a database error ([#3234](https://github.com/laurent22/joplin/issues/3234))
+- Fixed: Better handling of missing table field bug on Linux ([#3088](https://github.com/laurent22/joplin/issues/3088))
+- Fixed: Disable or enable menu items depending on the current view ([#2467](https://github.com/laurent22/joplin/issues/2467))
+- Fixed: Fix focus after exiting GotoAnything ([#3075](https://github.com/laurent22/joplin/issues/3075)) ([#3066](https://github.com/laurent22/joplin/issues/3066) by Mohammed Rabeeh)
+- Fixed: Fix format of geolocation data ([#2673](https://github.com/laurent22/joplin/issues/2673) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fix issue where last used filename was displayed when exporting directory
+- Fixed: Fixed KaTeX font issue in exported PDF and HTML ([#3089](https://github.com/laurent22/joplin/issues/3089) by [@kowalskidev](https://github.com/kowalskidev))
+- Fixed: Fixed background color on large Mermaid graphs ([#3111](https://github.com/laurent22/joplin/issues/3111)) ([#3109](https://github.com/laurent22/joplin/issues/3109) by Rahul Mohata)
+- Fixed: Fixed note toolbar layout
+- Fixed: Fixed order of notebooks in "Move to notebook" dialog ([#3084](https://github.com/laurent22/joplin/issues/3084)) ([#3052](https://github.com/laurent22/joplin/issues/3052) by Siddhant Sehgal)
+- Fixed: Fixed regression with Ace Editor (switching layout had bugs)
+- Fixed: Fixed regression with Ace Editor list indentation, and cleaned up code
+- Fixed: Fixed regression with local search (could not be closed anymore)
+- Fixed: Fixed the Goto Anything item list overflow ([#3096](https://github.com/laurent22/joplin/issues/3096)) ([#3095](https://github.com/laurent22/joplin/issues/3095) by Rahul Mohata)
+- Fixed: Fixed various bugs and regressions following note editor refactoring
+- Fixed: Long URIs break Note Info dialog ([#3136](https://github.com/laurent22/joplin/issues/3136)) ([#3131](https://github.com/laurent22/joplin/issues/3131) by Mohammed Rabeeh)
+- Fixed: Prevent Goto Anything from freezing when inputting special characters ([#3093](https://github.com/laurent22/joplin/issues/3093))
+- Fixed: WYSIWYG: Fix CODE element style
+- Fixed: WYSIWYG: Fixed clicking a link within a checkbox label
+- Fixed: WYSIWYG: Fixed undo issue when pasting text
+- Fixed: Fix notebook associated with note  when doing search, and expand correct notebook ([#3219](https://github.com/laurent22/joplin/issues/3219))
+- Fixed: Make sidebar resizable when note list is not displayed ([#2895](https://github.com/laurent22/joplin/issues/2895)) ([#2865](https://github.com/laurent22/joplin/issues/2865) by anirudh murali)
+- Fixed: WYSIWYG: Fixed UI translation issue for certain languages
+- Fixed: Word/character counter includes Markdown syntax and HTML tags ([#3037](https://github.com/laurent22/joplin/issues/3037)) ([#3009](https://github.com/laurent22/joplin/issues/3009) by [@RedDocMD](https://github.com/RedDocMD))
+
+## [v1.0.211](https://github.com/laurent22/joplin/releases/tag/v1.0.211) (Pre-release) - 2020-05-20T08:59:16Z
+
+This release includes a rewrite of the note editor component in order to allow further improvements (which were no longer possible) and to make it easier to maintain both WYSIWYG editors and regular editor.
+
+A new button "Code View" has been added to switch between the WYSIWYG editor and the Markdown editor.
+
+The note-specific toolbar has also been moved next to the title field for now because it wasn't practical to leave it with the editor-specific toolbar (and also not logical). It might be tweaked or moved later on once we have a clearer idea of what we want to do.
+
+Finally, the tag bar has been moved to the top of the note editor pane. Again this was in part necessary after the refactoring, but also more logical since the tags are relevant to the note, but not to the note content. So it makes more sense to have the editor toolbar right next to the editor content, without the tag bar in between, as before.
+
+- New: Add + to access 'Zoom In', allows to use the numpad ([#2630](https://github.com/laurent22/joplin/issues/2630) by Helmut K. C. Tessarek)
+- New: Add option to "Reveal file in folder" when right-clicking on image
+- New: Added support for basic search
+- New: WYSIWYG: Added localisation support
+- New: WYSIWYG: Added support for scroll restore
+- New: Added more info on how to switch to Markdown editor
+- Security: Filter SVG element event attributes to prevent XSS vulnerability ([#3143](https://github.com/laurent22/joplin/issues/3143))
+- Improved: Add note history (back/forward buttons) ([#2819](https://github.com/laurent22/joplin/issues/2819)) ([#2409](https://github.com/laurent22/joplin/issues/2409) by Naveen M V)
+- Improved: Moved note-related toolbar button next to tag bar
+- Improved: Switch to Font Awesome as icon library ([#3137](https://github.com/laurent22/joplin/issues/3137))
+- Improved: Upgraded to Electron 8.2.5
+- Improved: WYSIWYG: Allow pasting images in editor
+- Improved: Handle compositionend event in TinyMCE ([#3164](https://github.com/laurent22/joplin/issues/3164) by Shotaro Yamada)
+- Improved: Improve automatic title generation ([#2955](https://github.com/laurent22/joplin/issues/2955)) ([#2915](https://github.com/laurent22/joplin/issues/2915) by anirudh murali)
+- Improved: Remove colour gradient from sidebar and replaced expand icons with chrevrons
+- Improved: Started resource fetcher service when a note has been decrypted
+- Improved: Support Windows tiles ([#3063](https://github.com/laurent22/joplin/issues/3063) by Giacomo Rossetto)
+- Improved: WYSIWYG: Enable context menu on resources, links and text
+- Improved: WYSIWYG: Handle "Paste as text" when pressing Ctrl+Shift+V
+- Improved: WYSIWYG: Handle drag and drop of notes and files
+- Improved: Themes switched for more appealing text highlighting ([#3192](https://github.com/laurent22/joplin/issues/3192)) ([#2883](https://github.com/laurent22/joplin/issues/2883) by [@infinity052](https://github.com/infinity052))
+- Fixed: Fixed infinite rendering loop, which would cause the app to crash (white window) ([#3200](https://github.com/laurent22/joplin/issues/3200))
+- Fixed: Markdown editor would not scroll in sync with viewer in some cases ([#3228](https://github.com/laurent22/joplin/issues/3228))
+- Fixed: Sync would fail in some cases due to a database error ([#3234](https://github.com/laurent22/joplin/issues/3234))
+- Fixed: Better handling of missing table field bug on Linux ([#3088](https://github.com/laurent22/joplin/issues/3088))
+- Fixed: Disable or enable menu items depending on the current view ([#2467](https://github.com/laurent22/joplin/issues/2467))
+- Fixed: Fix focus after exiting GotoAnything ([#3075](https://github.com/laurent22/joplin/issues/3075)) ([#3066](https://github.com/laurent22/joplin/issues/3066) by Mohammed Rabeeh)
+- Fixed: Fix format of geolocation data ([#2673](https://github.com/laurent22/joplin/issues/2673) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fix issue where last used filename was displayed when exporting directory
+- Fixed: Fixed KaTeX font issue in exported PDF and HTML ([#3089](https://github.com/laurent22/joplin/issues/3089) by [@kowalskidev](https://github.com/kowalskidev))
+- Fixed: Fixed background color on large Mermaid graphs ([#3111](https://github.com/laurent22/joplin/issues/3111)) ([#3109](https://github.com/laurent22/joplin/issues/3109) by Rahul Mohata)
+- Fixed: Fixed note toolbar layout
+- Fixed: Fixed order of notebooks in "Move to notebook" dialog ([#3084](https://github.com/laurent22/joplin/issues/3084)) ([#3052](https://github.com/laurent22/joplin/issues/3052) by Siddhant Sehgal)
+- Fixed: Fixed regression with Ace Editor (switching layout had bugs)
+- Fixed: Fixed regression with Ace Editor list indentation, and cleaned up code
+- Fixed: Fixed regression with local search (could not be closed anymore)
+- Fixed: Fixed the Goto Anything item list overflow ([#3096](https://github.com/laurent22/joplin/issues/3096)) ([#3095](https://github.com/laurent22/joplin/issues/3095) by Rahul Mohata)
+- Fixed: Fixed various bugs and regressions following note editor refactoring
+- Fixed: Long URIs break Note Info dialog ([#3136](https://github.com/laurent22/joplin/issues/3136)) ([#3131](https://github.com/laurent22/joplin/issues/3131) by Mohammed Rabeeh)
+- Fixed: Prevent Goto Anything from freezing when inputting special characters ([#3093](https://github.com/laurent22/joplin/issues/3093))
+- Fixed: WYSIWYG: Fix CODE element style
+- Fixed: WYSIWYG: Fixed clicking a link within a checkbox label
+- Fixed: WYSIWYG: Fixed undo issue when pasting text
+- Fixed: Fix notebook associated with note  when doing search, and expand correct notebook ([#3219](https://github.com/laurent22/joplin/issues/3219))
+- Fixed: Make sidebar resizable when note list is not displayed ([#2895](https://github.com/laurent22/joplin/issues/2895)) ([#2865](https://github.com/laurent22/joplin/issues/2865) by anirudh murali)
+- Fixed: WYSIWYG: Fixed UI translation issue for certain languages
+- Fixed: Word/character counter includes Markdown syntax and HTML tags ([#3037](https://github.com/laurent22/joplin/issues/3037)) ([#3009](https://github.com/laurent22/joplin/issues/3009) by [@RedDocMD](https://github.com/RedDocMD))
+
+## [v1.0.209](https://github.com/laurent22/joplin/releases/tag/v1.0.209) (Pre-release) - 2020-05-17T18:32:51Z
+
+This release includes a rewrite of the note editor component in order to allow further improvements (which were no longer possible) and to make it easier to maintain both WYSIWYG editors and regular editor.
+
+A new button "Code View" has been added to switch between the WYSIWYG editor and the Markdown editor.
+
+The note-specific toolbar has also been moved next to the title field for now because it wasn't practical to leave it with the editor-specific toolbar (and also not logical). It might be tweaked or moved later on once we have a clearer idea of what we want to do.
+
+Finally, the tag bar has been moved to the top of the note editor pane. Again this was in part necessary after the refactoring, but also more logical since the tags are relevant to the note, but not to the note content. So it makes more sense to have the editor toolbar right next to the editor content, without the tag bar in between, as before.
+
+- New: Add + to access 'Zoom In', allows to use the numpad ([#2630](https://github.com/laurent22/joplin/issues/2630) by Helmut K. C. Tessarek)
+- New: Add option to "Reveal file in folder" when right-clicking on image
+- New: Added support for basic search
+- New: WYSIWYG: Added localisation support
+- New: WYSIWYG: Added support for scroll restore
+- New: Added more info on how to switch to Markdown editor
+- Security: Filter SVG element event attributes to prevent XSS vulnerability ([#3143](https://github.com/laurent22/joplin/issues/3143))
+- Improved: Add note history (back/forward buttons) ([#2819](https://github.com/laurent22/joplin/issues/2819)) ([#2409](https://github.com/laurent22/joplin/issues/2409) by Naveen M V)
+- Improved: Moved note-related toolbar button next to tag bar
+- Improved: Switch to Font Awesome as icon library ([#3137](https://github.com/laurent22/joplin/issues/3137))
+- Improved: Upgraded to Electron 8.2.5
+- Improved: WYSIWYG: Allow pasting images in editor
+- Improved: Handle compositionend event in TinyMCE ([#3164](https://github.com/laurent22/joplin/issues/3164) by Shotaro Yamada)
+- Improved: Improve automatic title generation ([#2955](https://github.com/laurent22/joplin/issues/2955)) ([#2915](https://github.com/laurent22/joplin/issues/2915) by anirudh murali)
+- Improved: Remove colour gradient from sidebar and replaced expand icons with chrevrons
+- Improved: Started resource fetcher service when a note has been decrypted
+- Improved: Support Windows tiles ([#3063](https://github.com/laurent22/joplin/issues/3063) by Giacomo Rossetto)
+- Improved: WYSIWYG: Enable context menu on resources, links and text
+- Improved: WYSIWYG: Handle "Paste as text" when pressing Ctrl+Shift+V
+- Improved: WYSIWYG: Handle drag and drop of notes and files
+- Fixed: Better handling of missing table field bug on Linux ([#3088](https://github.com/laurent22/joplin/issues/3088))
+- Fixed: Disable or enable menu items depending on the current view ([#2467](https://github.com/laurent22/joplin/issues/2467))
+- Fixed: Fix focus after exiting GotoAnything ([#3075](https://github.com/laurent22/joplin/issues/3075)) ([#3066](https://github.com/laurent22/joplin/issues/3066) by Mohammed Rabeeh)
+- Fixed: Fix format of geolocation data ([#2673](https://github.com/laurent22/joplin/issues/2673) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fix issue where last used filename was displayed when exporting directory
+- Fixed: Fixed KaTeX font issue in exported PDF and HTML ([#3089](https://github.com/laurent22/joplin/issues/3089) by [@kowalskidev](https://github.com/kowalskidev))
+- Fixed: Fixed background color on large Mermaid graphs ([#3111](https://github.com/laurent22/joplin/issues/3111)) ([#3109](https://github.com/laurent22/joplin/issues/3109) by Rahul Mohata)
+- Fixed: Fixed note toolbar layout
+- Fixed: Fixed order of notebooks in "Move to notebook" dialog ([#3084](https://github.com/laurent22/joplin/issues/3084)) ([#3052](https://github.com/laurent22/joplin/issues/3052) by Siddhant Sehgal)
+- Fixed: Fixed regression with Ace Editor (switching layout had bugs)
+- Fixed: Fixed regression with Ace Editor list indentation, and cleaned up code
+- Fixed: Fixed regression with local search (could not be closed anymore)
+- Fixed: Fixed the Goto Anything item list overflow ([#3096](https://github.com/laurent22/joplin/issues/3096)) ([#3095](https://github.com/laurent22/joplin/issues/3095) by Rahul Mohata)
+- Fixed: Fixed various bugs and regressions following note editor refactoring
+- Fixed: Long URIs break Note Info dialog ([#3136](https://github.com/laurent22/joplin/issues/3136)) ([#3131](https://github.com/laurent22/joplin/issues/3131) by Mohammed Rabeeh)
+- Fixed: Prevent Goto Anything from freezing when inputting special characters ([#3093](https://github.com/laurent22/joplin/issues/3093))
+- Fixed: WYSIWYG: Fix CODE element style
+- Fixed: WYSIWYG: Fixed clicking a link within a checkbox label
+- Fixed: WYSIWYG: Fixed undo issue when pasting text
+- Fixed: Fix notebook associated with note  when doing search, and expand correct notebook ([#3219](https://github.com/laurent22/joplin/issues/3219))
+- Fixed: Make sidebar resizable when note list is not displayed ([#2895](https://github.com/laurent22/joplin/issues/2895)) ([#2865](https://github.com/laurent22/joplin/issues/2865) by anirudh murali)
+- Fixed: WYSIWYG: Fixed UI translation issue for certain languages
+- Fixed: Word/character counter includes Markdown syntax and HTML tags ([#3037](https://github.com/laurent22/joplin/issues/3037)) ([#3009](https://github.com/laurent22/joplin/issues/3009) by [@RedDocMD](https://github.com/RedDocMD))
+
+## [v1.0.207](https://github.com/laurent22/joplin/releases/tag/v1.0.207) (Pre-release) - 2020-05-10T16:37:35Z
+
+This release includes a rewrite of the note editor component in order to allow further improvements (which were no longer possible) and to make it easier to maintain both WYSIWYG editors and regular editor.
+
+A new button "Code View" has been added to switch between the WYSIWYG editor and the Markdown editor.
+
+The note-specific toolbar has also been moved next to the title field for now because it wasn't practical to leave it with the editor-specific toolbar (and also not logical). It might be tweaked or moved later on once we have a clearer idea of what we want to do.
+
+Finally, the tag bar has been moved to the top of the note editor pane. Again this was in part necessary after the refactoring, but also more logical since the tags are relevant to the note, but not to the note content. So it makes more sense to have the editor toolbar right next to the editor content, without the tag bar in between, as before.
+
+- New: Add + to access 'Zoom In', allows to use the numpad ([#2630](https://github.com/laurent22/joplin/issues/2630) by Helmut K. C. Tessarek)
+- New: Add option to "Reveal file in folder" when right-clicking on image
+- New: Added support for basic search
+- New: WYSIWYG: Added localisation support
+- New: WYSIWYG: Added support for scroll restore
+- Improved: Handle compositionend event in TinyMCE ([#3164](https://github.com/laurent22/joplin/issues/3164) by Shotaro Yamada)
+- Improved: Improve automatic title generation ([#2955](https://github.com/laurent22/joplin/issues/2955)) ([#2915](https://github.com/laurent22/joplin/issues/2915) by anirudh murali)
+- Improved: Remove colour gradient from sidebar and replaced expand icons with chrevrons
+- Improved: Started resource fetcher service when a note has been decrypted
+- Improved: Support Windows tiles ([#3063](https://github.com/laurent22/joplin/issues/3063) by Giacomo Rossetto)
+- Improved: WYSIWYG: Enable context menu on resources, links and text
+- Improved: WYSIWYG: Handle "Paste as text" when pressing Ctrl+Shift+V
+- Improved: WYSIWYG: Handle drag and drop of notes and files
+- Fixed: Better handling of missing table field bug on Linux ([#3088](https://github.com/laurent22/joplin/issues/3088))
+- Fixed: Disable or enable menu items depending on the current view ([#2467](https://github.com/laurent22/joplin/issues/2467))
+- Fixed: Fix focus after exiting GotoAnything ([#3075](https://github.com/laurent22/joplin/issues/3075)) ([#3066](https://github.com/laurent22/joplin/issues/3066) by Mohammed Rabeeh)
+- Fixed: Fix format of geolocation data ([#2673](https://github.com/laurent22/joplin/issues/2673) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fix issue where last used filename was displayed when exporting directory
+- Fixed: Fixed KaTeX font issue in exported PDF and HTML ([#3089](https://github.com/laurent22/joplin/issues/3089) by [@kowalskidev](https://github.com/kowalskidev))
+- Fixed: Fixed background color on large Mermaid graphs ([#3111](https://github.com/laurent22/joplin/issues/3111)) ([#3109](https://github.com/laurent22/joplin/issues/3109) by Rahul Mohata)
+- Fixed: Fixed note toolbar layout
+- Fixed: Fixed order of notebooks in "Move to notebook" dialog ([#3084](https://github.com/laurent22/joplin/issues/3084)) ([#3052](https://github.com/laurent22/joplin/issues/3052) by Siddhant Sehgal)
+- Fixed: Fixed regression with Ace Editor (switching layout had bugs)
+- Fixed: Fixed regression with Ace Editor list indentation, and cleaned up code
+- Fixed: Fixed regression with local search (could not be closed anymore)
+- Fixed: Fixed the Goto Anything item list overflow ([#3096](https://github.com/laurent22/joplin/issues/3096)) ([#3095](https://github.com/laurent22/joplin/issues/3095) by Rahul Mohata)
+- Fixed: Fixed various bugs and regressions following note editor refactoring
+- Fixed: Long URIs break Note Info dialog ([#3136](https://github.com/laurent22/joplin/issues/3136)) ([#3131](https://github.com/laurent22/joplin/issues/3131) by Mohammed Rabeeh)
+- Fixed: Prevent Goto Anything from freezing when inputting special characters ([#3093](https://github.com/laurent22/joplin/issues/3093))
+- Fixed: WYSIWYG: Fix CODE element style
+- Fixed: WYSIWYG: Fixed clicking a link within a checkbox label
+- Fixed: WYSIWYG: Fixed undo issue when pasting text
+- Security: Filter SVG element event attributes to prevent XSS vulnerability ([#3143](https://github.com/laurent22/joplin/issues/3143))
 
 ## [v1.0.201](https://github.com/laurent22/joplin/releases/tag/v1.0.201) - 2020-04-15T22:55:13Z
 
@@ -613,6 +1902,18 @@ This is to fix a few regressions in previous release.
 - Fixed: Fix button label wrapping in toolbar ([#2708](https://github.com/laurent22/joplin/issues/2708)) ([#2700](https://github.com/laurent22/joplin/issues/2700) by Anjula Karunarathne)
 - Fixed: Fixed renaming tag issue ([#2618](https://github.com/laurent22/joplin/issues/2618))
 
+## [v1.0.194](https://github.com/laurent22/joplin/releases/tag/v1.0.194) (Pre-release) - 2020-03-14T00:00:32Z
+
+The main purpose of this pre-release is to allow evaluating the WYSIWYG editor.
+
+- New: Added experimental WYSIWYG editor ([#2556](https://github.com/laurent22/joplin/issues/2556)) ([#176](https://github.com/laurent22/joplin/issues/176))
+- New: Added way to upgrade master key encryption and sync target encryption
+- New: Add button to About box to copy Joplin's information to the clipboard ([#2711](https://github.com/laurent22/joplin/issues/2711) by Helmut K. C. Tessarek)
+- New: Api: Add support for "tags" property for note PUT request ([#2649](https://github.com/laurent22/joplin/issues/2649)) ([#941](https://github.com/laurent22/joplin/issues/941) by [@jyuvaraj03](https://github.com/jyuvaraj03))
+- Improved: Enhance notelist focus behaviour ([#2520](https://github.com/laurent22/joplin/issues/2520) by [@mic704b](https://github.com/mic704b))
+- Improved: Indent lists by pressing tab when caret is after bullet ([#2713](https://github.com/laurent22/joplin/issues/2713)) ([#498](https://github.com/laurent22/joplin/issues/498) by Shotaro Yamada)
+- Fixed: Expand notebook tree when clicking on notebook in search results ([#2620](https://github.com/laurent22/joplin/issues/2620)) ([#2616](https://github.com/laurent22/joplin/issues/2616) by Mohammed Rabeeh)
+
 ## [v1.0.193](https://github.com/laurent22/joplin/releases/tag/v1.0.193) - 2020-03-08T08:58:53Z
 
 - New: Added concept of provisional note to simplify creation and handling of newly created notes
@@ -629,6 +1930,96 @@ This is to fix a few regressions in previous release.
 - Security: Change geolocation service to freegeoip.app to improve privacy ([#2503](https://github.com/laurent22/joplin/issues/2503) by Helmut K. C. Tessarek)
 - Improved: Improve code css for Solarized Dark ([#2626](https://github.com/laurent22/joplin/issues/2626) by [@rajprakash](https://github.com/rajprakash))
 - Improved: Empty note body has 0 line count ([#2623](https://github.com/laurent22/joplin/issues/2623) by [@jdrobertso](https://github.com/jdrobertso))
+- Improved: Use asar packing to improve performances ([#2531](https://github.com/laurent22/joplin/issues/2531) by [@R-L-T-Y](https://github.com/R-L-T-Y))
+- Improved: Implement "show all notes" ([#2472](https://github.com/laurent22/joplin/issues/2472)) ([#262](https://github.com/laurent22/joplin/issues/262) by [@mic704b](https://github.com/mic704b))
+- Improved: Create a screen that list all the resouces ([#2189](https://github.com/laurent22/joplin/issues/2189)) ([#592](https://github.com/laurent22/joplin/issues/592) by Georg Grab)
+- Improved: Ensure tabs act like tabs and spaces act like spaces in editor. ([#2508](https://github.com/laurent22/joplin/issues/2508) by [@mic704b](https://github.com/mic704b))
+- Improved: Update Electron to 7.1.12 ([#2500](https://github.com/laurent22/joplin/issues/2500) by Helmut K. C. Tessarek)
+- Improved: Support export of multiple notes to PDF files. ([#2468](https://github.com/laurent22/joplin/issues/2468) by [@mic704b](https://github.com/mic704b))
+- Improved: Use current year in About box (in the copyright text) ([#2466](https://github.com/laurent22/joplin/issues/2466) by Helmut K. C. Tessarek)
+- Improved: Show master instead of HEAD as branch in about box ([#2465](https://github.com/laurent22/joplin/issues/2465) by Helmut K. C. Tessarek)
+- Improved: Sort tags in drop-down list (when adding tags) ([#2453](https://github.com/laurent22/joplin/issues/2453) by Helmut K. C. Tessarek)
+- Improved: Support scrolling in the note list using keys (eg page up, page down) ([#2404](https://github.com/laurent22/joplin/issues/2404) by [@mic704b](https://github.com/mic704b))
+- Improved: Do not select pasted text no matter the paste method ([#2431](https://github.com/laurent22/joplin/issues/2431) by [@mic704b](https://github.com/mic704b))
+- Improved: Support list creation on multi-line selections ([#2408](https://github.com/laurent22/joplin/issues/2408)) ([#1014](https://github.com/laurent22/joplin/issues/1014) by [@mic704b](https://github.com/mic704b))
+- Improved: Allow --no-sandbox flag to go around AppImage limitation ([#2436](https://github.com/laurent22/joplin/issues/2436) by Vaidotas Simkus)
+- Improved: Reset time fields when duplicating a note ([#2428](https://github.com/laurent22/joplin/issues/2428) by Andrey Dolgov)
+- Improved: Improved Note search bar UI ([#2329](https://github.com/laurent22/joplin/issues/2329) by [@mic704b](https://github.com/mic704b))
+- Improved: Emphasise note title ([#2311](https://github.com/laurent22/joplin/issues/2311) by [@mic704b](https://github.com/mic704b))
+- Improved: Support "select all" in the note list ([#2403](https://github.com/laurent22/joplin/issues/2403) by [@mic704b](https://github.com/mic704b))
+- Improved: More info for "unknown profile version" error message ([#2361](https://github.com/laurent22/joplin/issues/2361) by [@mic704b](https://github.com/mic704b))
+- Improved: Handle Thai language in search ([#2387](https://github.com/laurent22/joplin/issues/2387)) ([#2279](https://github.com/laurent22/joplin/issues/2279) by Kirtan Purohit)
+- Improved: Improve appearance of note Info dialog
+- Fixed: Fix issue with disappearing button labels in toolbar ([#2619](https://github.com/laurent22/joplin/issues/2619)) ([#2615](https://github.com/laurent22/joplin/issues/2615) by [@anjulalk](https://github.com/anjulalk))
+- Fixed: Fix window dimensions and position when the application starts ([#2514](https://github.com/laurent22/joplin/issues/2514)) ([#2476](https://github.com/laurent22/joplin/issues/2476) by Daulet Amirkhanov)
+- Fixed: Improved detection of selected text when applying formatting ([#2582](https://github.com/laurent22/joplin/issues/2582)) ([#2573](https://github.com/laurent22/joplin/issues/2573) by [@Rishgod](https://github.com/Rishgod))
+- Fixed: Speed up WebDAV and Nextcloud Sync on Linux ([#2577](https://github.com/laurent22/joplin/issues/2577)) ([#1023](https://github.com/laurent22/joplin/issues/1023) by [@WisdomCode](https://github.com/WisdomCode))
+- Fixed: Fix to update tag list when note is deleted. ([#2554](https://github.com/laurent22/joplin/issues/2554) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fix Resources menu item on macOS ([#2530](https://github.com/laurent22/joplin/issues/2530) by Helmut K. C. Tessarek)
+- Fixed: Fixed search bar text not visible in dark mode
+- Fixed: Better handling of rare error in WebDAV server ([#2485](https://github.com/laurent22/joplin/issues/2485))
+- Fixed: Fixed note renderer asset caching issue
+- Fixed: Add new Katex fonts to improve rendering ([#2478](https://github.com/laurent22/joplin/issues/2478)) ([#2477](https://github.com/laurent22/joplin/issues/2477) by Helmut K. C. Tessarek)
+- Fixed: Fix `.desktop` file & force refresh ([#2479](https://github.com/laurent22/joplin/issues/2479) by Brandon Wulf)
+- Fixed: Fixed incorect location format ([#2480](https://github.com/laurent22/joplin/issues/2480) by [@anjulalk](https://github.com/anjulalk))
+- Fixed: Fix importing of very large attachments (150MB+) from Evernote ENEX files
+- Fixed: Fix to update the note list if the selected tag is deleted. ([#2398](https://github.com/laurent22/joplin/issues/2398) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fix alignment of checkboxes and other list items in rendered note ([#2277](https://github.com/laurent22/joplin/issues/2277))
+- Fixed: Fix slow rendering and memory leak issues with Katex notes ([#2357](https://github.com/laurent22/joplin/issues/2357))
+- Fixed: Fix rendering of certain letters in Katex. Fixed printing when note contains Katex code ([#2374](https://github.com/laurent22/joplin/issues/2374))
+- Fixed: Fix markdown export ([#2463](https://github.com/laurent22/joplin/issues/2463)) ([#2455](https://github.com/laurent22/joplin/issues/2455) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fix escaping of title when generating a markdown link ([#2456](https://github.com/laurent22/joplin/issues/2456)) ([#2085](https://github.com/laurent22/joplin/issues/2085) by Helmut K. C. Tessarek)
+- Fixed: Fix rendering of tabs in code blocks ([#2446](https://github.com/laurent22/joplin/issues/2446)) ([#2330](https://github.com/laurent22/joplin/issues/2330) by [@mic704b](https://github.com/mic704b))
+- Fixed: Do not show "could not print" warning dialog after cancelling print. ([#2410](https://github.com/laurent22/joplin/issues/2410)) ([#2407](https://github.com/laurent22/joplin/issues/2407) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fixes long lines warpped ([#2447](https://github.com/laurent22/joplin/issues/2447) by Amit singh)
+- Fixed: Ensure the main window is hidden when Joplin starts ([#2432](https://github.com/laurent22/joplin/issues/2432)) ([#2365](https://github.com/laurent22/joplin/issues/2365) by 0xCLOVER)
+- Fixed: Fix hang when selecting tag when multiple notes are selected (also for search) ([#2372](https://github.com/laurent22/joplin/issues/2372) by [@mic704b](https://github.com/mic704b))
+- Fixed: Apply userstyle again when exporting to PDF or printing ([#2324](https://github.com/laurent22/joplin/issues/2324))
+- Fixed: Fixed update message box
+- Fixed: Fix identification of note in pdf export from main menu. ([#2323](https://github.com/laurent22/joplin/issues/2323) by [@mic704b](https://github.com/mic704b))
+- Fixed: Fixed bad table rendering with multitable ([#2352](https://github.com/laurent22/joplin/issues/2352))
+- Fixed: Fixed issues with Katex and MultiMd table plugin ([#2339](https://github.com/laurent22/joplin/issues/2339))
+- Fixed: Fix Linux installation script ([#2333](https://github.com/laurent22/joplin/issues/2333) by Carl Bordum Hansen)
+
+## [v1.0.192](https://github.com/laurent22/joplin/releases/tag/v1.0.192) (Pre-release) - 2020-03-06T23:27:52Z
+
+More fixes following latest pre-release.
+
+- Security: Changed default encryption method to CCM
+- Fixed: Handle invalid UTF-8 data when encrypting ([#2591](https://github.com/laurent22/joplin/issues/2591))
+- Fixed: Fixed top margin issue on note rendering
+- Fixed: Fixed issue with style embeded in notes
+
+## [v1.0.190](https://github.com/laurent22/joplin/releases/tag/v1.0.190) (Pre-release) - 2020-03-06T01:22:22Z
+
+Fix more regressions from previous pre-release.
+
+- Fixed: Fixed sanitize function so that it does not break HTML ([#2667](https://github.com/laurent22/joplin/issues/2667))
+- Fixed: Templates when creating note were broken ([#2660](https://github.com/laurent22/joplin/issues/2660))
+
+## [v1.0.189](https://github.com/laurent22/joplin/releases/tag/v1.0.189) (Pre-release) - 2020-03-04T17:27:15Z
+
+Fixed issue from previous pre-release 1.0.187.
+
+- New: Add more context to encryption errors
+- Improved: Improve code css for Solarized Dark ([#2626](https://github.com/laurent22/joplin/issues/2626) by [@rajprakash](https://github.com/rajprakash))
+- Improved: Empty note body has 0 line count ([#2623](https://github.com/laurent22/joplin/issues/2623) by [@jdrobertso](https://github.com/jdrobertso))
+- Fixed: Fix creation of new notes ([#2656](https://github.com/laurent22/joplin/issues/2656))
+- Fixed: Improved Mermaid rendering on small viewports ([#2638](https://github.com/laurent22/joplin/issues/2638))
+- Fixed: Fixed auto-title feature ([#2652](https://github.com/laurent22/joplin/issues/2652))
+- Fixed: HTML code within Markdown was rendered incorrectly in some cases ([#2640](https://github.com/laurent22/joplin/issues/2640))
+
+## [v1.0.187](https://github.com/laurent22/joplin/releases/tag/v1.0.187) (Pre-release) - 2020-03-01T12:31:06Z
+
+- New: Added concept of provisional note to simplify creation and handling of newly created notes
+- New: Add word counter feature to notes ([#2444](https://github.com/laurent22/joplin/issues/2444)) ([#160](https://github.com/laurent22/joplin/issues/160) by [@jdrobertso](https://github.com/jdrobertso))
+- New: Added zoom controls to the application menu ([#2162](https://github.com/laurent22/joplin/issues/2162))
+- New: Added Mermaid diagrams support ([#2001](https://github.com/laurent22/joplin/issues/2001))
+- New: Add "add or remove tags" for multiple notes. ([#2386](https://github.com/laurent22/joplin/issues/2386)) ([#539](https://github.com/laurent22/joplin/issues/539) by [@mic704b](https://github.com/mic704b))
+- New: Added new date format YYYY.MM.DD ([#2318](https://github.com/laurent22/joplin/issues/2318) by XSAkos)
+- New: Added new, more secure encryption methods, so that they can be switched to at a later time
+- Security: Fixed potential Arbitrary File Read via XSS (Reported by [Javier Olmedo](https://github.com/JavierOlmedo), fixed by Laurent Cozic)
+- Improved: Change geolocation service to freegeoip.app to improve privacy ([#2503](https://github.com/laurent22/joplin/issues/2503) by Helmut K. C. Tessarek)
 - Improved: Use asar packing to improve performances ([#2531](https://github.com/laurent22/joplin/issues/2531) by [@R-L-T-Y](https://github.com/R-L-T-Y))
 - Improved: Implement "show all notes" ([#2472](https://github.com/laurent22/joplin/issues/2472)) ([#262](https://github.com/laurent22/joplin/issues/262) by [@mic704b](https://github.com/mic704b))
 - Improved: Create a screen that list all the resouces ([#2189](https://github.com/laurent22/joplin/issues/2189)) ([#592](https://github.com/laurent22/joplin/issues/592) by Georg Grab)
@@ -706,6 +2097,30 @@ This is to fix a few regressions in previous release.
 - Fixed: Fix pdf export when mouse over non-selected note in notelist. ([#2255](https://github.com/laurent22/joplin/issues/2255)) ([#2254](https://github.com/laurent22/joplin/issues/2254))
 - Fixed: Fixed regression in HTML note rendering
 - Fixed: Fixed export to HTML, PDF and printing
+
+## [v1.0.177](https://github.com/laurent22/joplin/releases/tag/v1.0.177) (Pre-release) - 2019-12-30T14:40:40Z
+
+This is to test the Electron framework upgrade and the switch to a separate note renderer. If you find any bug please report on the forum or GitHub tracker.
+
+- New: Allow exporting a note as HTML
+- Improved: Extract note renderer to separate package ([#2206](https://github.com/laurent22/joplin/issues/2206))
+- Improved: Better handling of resource download errors, and added resource info to sync status screen
+- Improved: Update Katex to 0.11.1 ([#2201](https://github.com/laurent22/joplin/issues/2201))
+- Improved: Improved Nextcloud API error handling
+- Improved: Updated OneDrive login to remove webview dependency
+- Improved: Decrypt notes that are meant to be shared
+- Improved: Make it easier to view early errors when the app starts
+- Improved: Upgrade to Electron 7
+- Improved: Render note using iframe instead of deprecated webview
+- Fixed: Fix Goto Anything scrolling issue ([#2199](https://github.com/laurent22/joplin/issues/2199)) ([#2122](https://github.com/laurent22/joplin/issues/2122))
+- Fixed: Prevent app from crashing when pressing focus shortcut from search bar ([#2157](https://github.com/laurent22/joplin/issues/2157))
+- Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) ([#2091](https://github.com/laurent22/joplin/issues/2091))
+- Fixed: Fix notifications on Windows 7 ([#2144](https://github.com/laurent22/joplin/issues/2144))
+
+## [v1.0.176](https://github.com/laurent22/joplin/releases/tag/v1.0.176) (Pre-release) - 2019-12-14T10:36:44Z
+
+- New: Add ability to share a note publicly using Nextcloud ([#2173](https://github.com/laurent22/joplin/issues/2173))
+- Improved: Allow for custom Joplin theme and Ace editor styles ([#2099](https://github.com/laurent22/joplin/issues/2099))
 
 ## [v1.0.175](https://github.com/laurent22/joplin/releases/tag/v1.0.175) - 2019-12-08T11:48:47Z
 
@@ -898,6 +2313,10 @@ Note that on Windows the code signing certificate has been renewed, which some t
 - Fixed: Added backticks to auto-wrapping quotes. ([#1534](https://github.com/laurent22/joplin/issues/1534)) ([#1426](https://github.com/laurent22/joplin/issues/1426))
 - Fixed: Prevent app from trying to upload resource it has not downloaded yet
 
+## [v1.0.153](https://github.com/laurent22/joplin/releases/tag/v1.0.153) (Pre-release) - 2019-05-15T06:27:29Z
+
+This release only adds additional logging for the note history feature.
+
 ## [v1.0.152](https://github.com/laurent22/joplin/releases/tag/v1.0.152) - 2019-05-13T09:08:07Z
 
 Same as v1.0.151 but with a fix to the migration issue, that was in turns affecting synchronisation.
@@ -934,6 +2353,16 @@ Same as v1.0.150 but with a small fix to set the resources file size.
 - Fixed: Some images were not being displayed
 - Fixed: Resets the undo manager when creating new notes ([#1495](https://github.com/laurent22/joplin/issues/1495)) ([#355](https://github.com/laurent22/joplin/issues/355))
 - Fixed: Prevents notes with no title to break after synchronize ([#1472](https://github.com/laurent22/joplin/issues/1472))
+
+## [v1.0.148](https://github.com/laurent22/joplin/releases/tag/v1.0.148) (Pre-release) - 2019-05-08T19:12:24Z
+
+This is to test the revision service. It is not yet recommended to upgrade as the corresponding mobile apps have not been released to the stores yet (the Android APK is available though).
+
+- Improved: Make sure a revision is saved if a note has not been modified for over a week
+- Improved: Do not save a revision if there is already a recent one that exists
+- Improved: Make sure user timestamp is preserved with revision information
+- Fixed: Fixed note history sort order.
+- Fixed: Make sure a revision is not empty before saving it
 
 ## [v1.0.145](https://github.com/laurent22/joplin/releases/tag/v1.0.145) - 2019-05-03T09:16:53Z
 
@@ -978,6 +2407,18 @@ Same as v1.0.150 but with a small fix to set the resources file size.
 - Resolves [#206](https://github.com/laurent22/joplin/issues/206): Added support for sorting notebooks by title or last modified
 - Fixed: Windows 32-bit version should now work again.
 - Improved: Rewritten Markdown rendering system to make it easier to add new features. Fixed a few minor rendering bugs doing so.
+
+## [v1.0.139](https://github.com/laurent22/joplin/releases/tag/v1.0.139) (Pre-release) - 2019-03-09T10:06:48Z
+
+This pre-release is mainly for testing the new rendering engine.
+
+## [v1.0.138](https://github.com/laurent22/joplin/releases/tag/v1.0.138) (Pre-release) - 2019-03-03T17:23:00Z
+
+This is only for testing the Arabic translation.
+
+## [v1.0.137](https://github.com/laurent22/joplin/releases/tag/v1.0.137) (Pre-release) - 2019-03-03T01:12:51Z
+
+To test Windows 32-bit build.
 
 ## [v1.0.135](https://github.com/laurent22/joplin/releases/tag/v1.0.135) - 2019-02-27T23:36:57Z
 
@@ -1062,6 +2503,37 @@ This big release aims at improving the overall usability of the application and 
 - Improved: Printing page - checkboxes and background colours and images are now printed correctly
 - Improved: Add styling to the scrollbars in text editor and viewer ([#1204](https://github.com/laurent22/joplin/issues/1204))
 - Updated translations and added Turkish language (thanks Zorbey Doğangüneş)
+- API: Allow specifying item ID for any item
+
+## [v1.0.126](https://github.com/laurent22/joplin/releases/tag/v1.0.126) (Pre-release) - 2019-02-09T19:46:16Z
+
+- New: Added Welcome notes the first time the app is launched to give an overview of Joplin and its features.
+- New: Allow selecting editor path with dialog window
+- New: Record last selected note IDs and restore it when opening notebook
+- New: Resolves [#1041](https://github.com/laurent22/joplin/issues/1041): Added button to go back to previous note after clicking link
+- New: Restore scroll position when switching notes
+- New: When selecting multiple notes, display possible actions as buttons
+- Fixed importing ENEX file when note incorrectly contains a reminder tag
+- Fixes [#1142](https://github.com/laurent22/joplin/issues/1142): Disallow dropping notes on sidebar Notebook header
+- Fixes [#1161](https://github.com/laurent22/joplin/issues/1161): Display highlighted text and other background colours and images when exporting to PDF or printing
+- Improved: Added 'Insert date time' option to menu
+- Improved: Added a few more shortcuts for macOS and other platforms
+- Improved: Added Usage link next to search box
+- Improved: Allow using macOS App bundle as external editor, and improved error handling
+- Improved: Better handle search queries that include dashes
+- Improved: Delete note using keyboard
+- Improved: Fixes [#1196](https://github.com/laurent22/joplin/issues/1196): Optimised loading speed of notes when switching from one to another (2-3 times faster)
+- Improved: Group config options into sections
+- Improved: Improve how new notes are created to make it more reliable
+- Improved: Improve styling and layout of notes in note viewer
+- Improved: Keep synchronise button and status at bottom of side bar
+- Improved: Made confirmation buttons sticky on Config screen
+- Improved: Move up and down in note list using arrow keys
+- Improved: Toggle todo checkbox using SPACE key
+- Improved: Use arrow to move between sidebar items, and added shortcuts to focus different elements
+- Improved: Use ENTER and ESCAPE to go to next search result or to close search bar
+- Improved: Use SPACE to collapse or expand a folder in sidebar
+- Improved: When deleting note, display title or number of notes
 - API: Allow specifying item ID for any item
 
 ## [v1.0.125](https://github.com/laurent22/joplin/releases/tag/v1.0.125) - 2019-01-26T18:14:33Z
@@ -1193,6 +2665,10 @@ This is a release only to get the new API out. If you do not need the functional
 - Clipper: Fixes [#817](https://github.com/laurent22/joplin/issues/817): Added support for PICTURE tags, which will fix issues with certain pages from which images were not being imported
 - Clipper: Fixed importing certain images with sources that contain brackets
 - Improved: Mostly an invisible change at this point, but the REST API has been refactored to allow adding more calls and to support third-party applications.
+
+## [v1.0.108](https://github.com/laurent22/joplin/releases/tag/v1.0.108) (Pre-release) - 2018-09-29T18:49:29Z
+
+To test the latest security fix only. Won't be released officially.
 
 ## [v1.0.107](https://github.com/laurent22/joplin/releases/tag/v1.0.107) - 2018-09-16T19:51:07Z
 

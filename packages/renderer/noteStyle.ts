@@ -80,6 +80,12 @@ export default function(theme: any) {
 		p, h1, h2, h3, h4, h5, h6, ul, table {
 			margin-top: .6em;
 			margin-bottom: .65em;
+
+			/*
+				Adds support for RTL text in the note body. It automatically detects the direction using the content.
+				Issue: https://github.com/laurent22/joplin/issues/3991
+			*/
+			unicode-bidi: plaintext;
 		}
 		h1, h2, h3, h4, h5, h6 {
 			line-height: 1.5em;

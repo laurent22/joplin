@@ -1,4 +1,4 @@
-import Setting from './models/Setting';
+import Setting, { SyncStartupOperation } from './models/Setting';
 import Logger, { TargetType, LoggerWrapper } from './Logger';
 import shim from './shim';
 import BaseService from './services/BaseService';
@@ -44,6 +44,7 @@ import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
 const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
 import MigrationService from './services/MigrationService';
+import { clearLocalDataForRedownload, clearLocalSyncStateForReupload } from './services/synchronizer/tools';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -650,6 +651,18 @@ export default class BaseApplication {
 		return toSystemSlashes(output, 'linux');
 	}
 
+	private async handleSyncToolActions() {
+		if (Setting.value('sync.startupOperation') === SyncStartupOperation.ClearLocalSyncState) {
+			await clearLocalSyncStateForReupload(reg.db());
+		} else if (Setting.value('sync.startupOperation') === SyncStartupOperation.ClearLocalData) {
+			await clearLocalDataForRedownload(reg.db());
+		} else if (Setting.value('sync.startupOperation') === SyncStartupOperation.None) {
+			// Nothing
+		} else {
+			throw new Error(`Invalid sync.startupOperation value: ${Setting.value('sync.startupOperation')}`);
+		}
+	}
+
 	async start(argv: string[]): Promise<any> {
 		const startFlags = await this.handleStartFlags_(argv);
 
@@ -740,6 +753,7 @@ export default class BaseApplication {
 		BaseModel.setDb(this.database_);
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriver);
+		await this.handleSyncToolActions();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
