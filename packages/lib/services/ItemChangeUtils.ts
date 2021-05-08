@@ -7,7 +7,6 @@ export default class ItemChangeUtils {
 			Setting.value('resourceService.lastProcessedChangeId'),
 			Setting.value('searchEngine.lastProcessedChangeId'),
 			Setting.value('revisionService.lastProcessedChangeId'),
-			Setting.value('shareService.lastProcessedChangeId'),
 		];
 
 		const lowestChangeId = Math.min(...lastProcessedChangeIds);
