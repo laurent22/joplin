@@ -15,6 +15,10 @@ class SyncTargetRegistry {
 		};
 	}
 
+	static allIds() {
+		return Object.keys(this.reg_);
+	}
+
 	static nameToId(name) {
 		for (const n in this.reg_) {
 			if (!this.reg_.hasOwnProperty(n)) continue;

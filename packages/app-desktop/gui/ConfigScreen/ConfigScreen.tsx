@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
 
 const { connect } = require('react-redux');
@@ -51,6 +51,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.renderLabel = this.renderLabel.bind(this);
 		this.renderDescription = this.renderDescription.bind(this);
 		this.renderHeader = this.renderHeader.bind(this);
+		this.handleSettingButton = this.handleSettingButton.bind(this);
 	}
 
 	async checkSyncConfig_() {
@@ -79,6 +80,22 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
 				this.switchSection(this.props.defaultSection);
 			});
+		}
+	}
+
+	private async handleSettingButton(key: string) {
+		if (key === 'sync.clearLocalSyncStateButton') {
+			if (!confirm('This cannot be undone. Do you want to continue?')) return;
+			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
+			await Setting.saveAll();
+			bridge().restart();
+		} else if (key === 'sync.clearLocalDataButton') {
+			if (!confirm('This cannot be undone. Do you want to continue?')) return;
+			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
+			await Setting.saveAll();
+			bridge().restart();
+		} else {
+			throw new Error(`Unhandled key: ${key}`);
 		}
 	}
 
@@ -202,49 +219,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				);
 			}
-
-			// if (syncTargetMd.name === 'nextcloud') {
-			// 	const syncTarget = settings['sync.5.syncTargets'][settings['sync.5.path']];
-
-			// 	let status = _('Unknown');
-			// 	let errorMessage = null;
-
-			// 	if (this.state.checkNextcloudAppResult === 'checking') {
-			// 		status = _('Checking...');
-			// 	} else if (syncTarget) {
-			// 		if (syncTarget.uuid) status = _('OK');
-			// 		if (syncTarget.error) {
-			// 			status = _('Error');
-			// 			errorMessage = syncTarget.error;
-			// 		}
-			// 	}
-
-			// 	const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' || !this.state.showNextcloudAppLog ? null : (
-			// 		<div style={statusStyle}>
-			// 			<p style={theme.textStyle}>{_('The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:')}</p>
-			// 			<pre>{errorMessage}</pre>
-			// 		</div>
-			// 	);
-
-			// 	const showLogButton = !errorMessage || this.state.showNextcloudAppLog ? null : (
-			// 		<a style={theme.urlStyle} href="#" onClick={this.showLogButton_click}>[{_('Show Log')}]</a>
-			// 	);
-
-			// 	const appStatusStyle = Object.assign({}, theme.textStyle, { fontWeight: 'bold' });
-
-			// 	settingComps.push(
-			// 		<div key="nextcloud_app_check" style={this.rowStyle_}>
-			// 			<span style={theme.textStyle}>Beta: {_('Joplin Nextcloud App status:')} </span><span style={appStatusStyle}>{status}</span>
-			// 			&nbsp;&nbsp;
-			// 			{showLogButton}
-			// 			&nbsp;&nbsp;
-			// 			<Button level={ButtonLevel.Secondary} style={{ display: 'inline-block' }} title={_('Check Status')} disabled={this.state.checkNextcloudAppResult === 'checking'} onClick={this.checkNextcloudAppButton_click}/>
-			// 			&nbsp;&nbsp;
-			// 			<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
-			// 			{statusComp}
-			// 		</div>
-			// 	);
-			// }
 		}
 
 		let advancedSettingsButton = null;
@@ -637,7 +611,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					<div style={labelStyle}>
 						<label>{md.label()}</label>
 					</div>
-					<Button level={ButtonLevel.Secondary} title={_('Edit')} onClick={md.onClick}/>
+					<Button level={ButtonLevel.Secondary} title={md.label()} onClick={md.onClick ? md.onClick : () => this.handleSettingButton(key)}/>
 					{descriptionComp}
 				</div>
 			);
