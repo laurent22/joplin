@@ -142,21 +142,21 @@ export async function processPastedHtml(html: string) {
 		if (!mappedResources[imageSrc]) {
 			try {
 				if (imageSrc.startsWith('file')) {
-					const imageFilePath = path.normalize(imageSrc.substr(7));
+					const imageFilePath = path.normalize(unescape(imageSrc).substr(7));
 					const resourceDirPath = path.normalize(Setting.value('resourceDir'));
 
 					if (imageFilePath.startsWith(resourceDirPath)) {
 						mappedResources[imageSrc] = imageSrc;
 					} else {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
-						mappedResources[imageSrc] = `file://${Resource.fullPath(createdResource)}`;
+						mappedResources[imageSrc] = `file://${escape(Resource.fullPath(createdResource))}`;
 					}
 				} else {
 					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
 					await shim.fetchBlob(imageSrc, { path: filePath });
 					const createdResource = await shim.createResourceFromPath(filePath);
 					await shim.fsDriver().remove(filePath);
-					mappedResources[imageSrc] = `file://${Resource.fullPath(createdResource)}`;
+					mappedResources[imageSrc] = `file://${escape(Resource.fullPath(createdResource))}`;
 				}
 			} catch (error) {
 				logger.warn(`Error creating a resource for ${imageSrc}.`, error);

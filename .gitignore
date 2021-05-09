@@ -1338,6 +1338,9 @@ packages/lib/services/synchronizer/migrations/2.js.map
 packages/lib/services/synchronizer/tools.d.ts
 packages/lib/services/synchronizer/tools.js
 packages/lib/services/synchronizer/tools.js.map
+packages/lib/services/synchronizer/utils/handleSyncStartupOperation.d.ts
+packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
+packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js.map
 packages/lib/services/synchronizer/utils/types.d.ts
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/services/synchronizer/utils/types.js.map
