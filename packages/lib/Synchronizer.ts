@@ -350,6 +350,24 @@ export default class Synchronizer {
 			return `${Dirnames.Resources}/${resourceId}`;
 		};
 
+		// Before synchronising make sure all share_id properties are set
+		// correctly so as to share/unshare the right items.
+		await Folder.updateAllShareIds();
+
+		// TODO: Update for note link sharing
+
+		// try {
+		// 	await Folder.updateAllShareIds();
+		// 	// if (this.shareService_) {
+		// 	// 	this.logger().info('Indexing resources...');
+		// 	// 	await this.resourceService().indexNoteResources();
+		// 	// 	await NoteResource.applySharedStatusToLinkedResources();
+		// 	// 	await NoteResource.updateResourceShareIds();
+		// 	// }
+		// } catch (error) {
+		// 	this.logger().error('Error indexing resources:', error);
+		// }
+
 		// We index resources and apply the "is_shared" flag before syncing
 		// because it's going to affect what's sent encrypted, and what's sent
 		// plain text.
@@ -931,6 +949,8 @@ export default class Synchronizer {
 			this.cancelling_ = false;
 		}
 
+		// After syncing, we run the share service maintenance, which is going
+		// to fetch share invitations, if any.
 		if (this.shareService_) {
 			try {
 				await this.shareService_.maintenance();
