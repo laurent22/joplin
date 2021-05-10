@@ -501,7 +501,7 @@ export default class Folder extends BaseItem {
 		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
 	}
 
-	private static isRootSharedFolder(folder: FolderEntity): boolean {
+	public static isRootSharedFolder(folder: FolderEntity): boolean {
 		return folder.share_id && !folder.parent_id;
 	}
 

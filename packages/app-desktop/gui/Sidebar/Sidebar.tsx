@@ -306,7 +306,13 @@ class SidebarComponent extends React.Component<Props, State> {
 				);
 			}
 
-			menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
+			// We don't display the "Share notebook" menu item for sub-notebooks
+			// that are within a shared notebook. If user wants to do this,
+			// they'd have to move the notebook out of the shared notebook
+			// first.
+			if (Folder.isRootSharedFolder(item) || !item.share_id) {
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
+			}
 
 			menu.append(
 				new MenuItem({
