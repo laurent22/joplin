@@ -61,6 +61,7 @@ msgstr "Otkaži"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"Aplikacija ce se zatvoriti. Molimo ponovo otvorite da bi se radnja potpuno zavrsila."
 
 #: packages/app-desktop/plugins/GotoAnything.js:432
 #, fuzzy
@@ -326,7 +327,7 @@ msgstr "Polje za kvačicu"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Oznaci"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
@@ -440,14 +441,16 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"Ovaj Text editor ima par ogranicenja i preporucujemo da "
+"budete upoznati sa njima prije koristenja."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
-msgstr ""
+msgstr "Saznajte vise"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr ""
+msgstr "Odbaci"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
@@ -537,7 +540,7 @@ msgstr "Popis bilješki"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Sort selected lines"
-msgstr ""
+msgstr "Poredaj oznacene linije"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line up"
@@ -712,11 +715,11 @@ msgstr "Pohrani"
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
-msgstr ""
+msgstr " "
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:412
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr " "
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:416
 msgid ""
@@ -724,6 +727,7 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:418
 #, fuzzy
@@ -1011,7 +1015,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Preuzmi token"
 
 #: packages/app-desktop/gui/MenuBar.js:166
 #, fuzzy, javascript-format
@@ -1461,7 +1465,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "Potrebno je restartovati aplikaciju da bi promjene bile primjenjene."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1471,7 +1475,7 @@ msgstr "Učini sad"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
 msgid "Later"
-msgstr ""
+msgstr "Poslije"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
 #, fuzzy
@@ -1490,11 +1494,11 @@ msgstr "Primijeni"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
 #, fuzzy, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Izbrisati bilješku \"%s\"?"
+msgstr "Izbrisati dodatke \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
 msgid "Browse all plugins"
-msgstr ""
+msgstr "Pogledaj dodatke"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
@@ -1502,7 +1506,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "Nemate instaliranih dodataka."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
 #, fuzzy
@@ -1525,16 +1529,16 @@ msgstr "Pretraživanje..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
 msgid "Install"
-msgstr ""
+msgstr "Instalirati"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
 #, fuzzy
 msgid "Installing..."
-msgstr "Prekidam..."
+msgstr "Instaliram..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
 msgid "Installed"
-msgstr ""
+msgstr "Instalirano"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
 #, fuzzy
@@ -1548,7 +1552,7 @@ msgstr "Pratim..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "Molimo dogradite Joplin da bi koristili ovaj dodatak"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
@@ -1814,7 +1818,7 @@ msgstr "Otvori..."
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
 #: packages/app-mobile/components/screens/Note.js:796
 msgid "Share"
-msgstr "Dijeli"
+msgstr "Podijeli"
 
 #: packages/app-mobile/components/CameraView.js:158
 msgid "Permission to use camera"
@@ -1847,7 +1851,7 @@ msgstr "Konfiguracija"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Mobilna mreza - auto-sinhronacija iskljucena"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2109,6 +2113,10 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Da bi dodali geo-lokaciju vasoj biljesci, aplikaciji je potrebna "
+"dozvola pristupu vasoj lokacij.\n"
+"\n"
+"Ovu opciju je moguce promijeniti bilo kada u podesavanjima."
 
 #: packages/app-mobile/components/screens/Note.js:343
 #, fuzzy
@@ -2547,15 +2555,15 @@ msgstr "Omogući podršku za Mermaid dijagrame"
 #: packages/lib/models/Setting.js:618
 #, fuzzy
 msgid "Enable audio player"
-msgstr "Omogući pisanje emoji sličica"
+msgstr "Omogući zvuk"
 
 #: packages/lib/models/Setting.js:619
 msgid "Enable video player"
-msgstr ""
+msgstr "Omogući video"
 
 #: packages/lib/models/Setting.js:620
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "Omogući PDF"
 
 #: packages/lib/models/Setting.js:621
 msgid "Enable ==mark== syntax"
