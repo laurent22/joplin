@@ -1,5 +1,5 @@
 import { FolderEntity } from '../services/database/types';
-import BaseModel from '../BaseModel';
+import BaseModel, { ModelType } from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
 
@@ -278,38 +278,86 @@ export default class Folder extends BaseItem {
 		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = "" AND share_id != ""');
 	}
 
-	public static async updateFolderShareIds() {
+	// Unshare everything except the provided item IDs
+	private static async unshareItems(itemType: ModelType, excludedItemIds: string[]): Promise<void> {
+		const tableName = itemType === ModelType.Folder ? 'folders' : 'notes';
+		const ModelClass = BaseItem.getClassByItemType(itemType);
+
+		const sql = [`SELECT id FROM ${tableName} WHERE share_id != ""`];
+		if (excludedItemIds.length) {
+			sql.push(` AND id NOT IN ("${excludedItemIds.join('","')}")`);
+		}
+
+		const itemsToUnshare = await this.db().selectAll(sql.join(' '));
+		for (const item of itemsToUnshare) {
+			await ModelClass.save({
+				id: item.id,
+				share_id: '',
+				updated_time: Date.now(),
+			}, { autoTimestamp: false });
+		}
+	}
+
+	public static async updateFolderShareIds(): Promise<string[]> {
 		// Get all the sub-folders of the shared folders, and set the share_id
 		// property.
 		const rootFolders = await this.rootSharedFolders();
 
-		let processedFolderIds: string[] = [];
+		let sharedFolderIds: string[] = [];
 
 		for (const rootFolder of rootFolders) {
 			const children = await this.allChildrenFolders(rootFolder.id);
 
 			for (const child of children) {
 				if (child.share_id !== rootFolder.share_id) {
-					await this.save({ id: child.id, share_id: rootFolder.share_id });
+					await this.save({
+						id: child.id,
+						share_id: rootFolder.share_id,
+						updated_time: Date.now(),
+					}, { autoTimestamp: false });
 				}
 			}
 
-			processedFolderIds.push(rootFolder.id);
-			processedFolderIds = processedFolderIds.concat(children.map(c => c.id));
+			sharedFolderIds.push(rootFolder.id);
+			sharedFolderIds = sharedFolderIds.concat(children.map(c => c.id));
 		}
 
 		// Now that we've set the share ID on all the sub-folders of the shared
 		// folders, those that remain should not be shared anymore. For example,
 		// if they've been moved out of a shared folder.
-		const sql = ['SELECT id FROM folders WHERE share_id != ""'];
-		if (processedFolderIds.length) {
-			sql.push(` AND id NOT IN ("${processedFolderIds.join('","')}")`);
+		await this.unshareItems(ModelType.Folder, sharedFolderIds);
+
+		return sharedFolderIds;
+	}
+
+	// "folderIds" must be all the folders that are current shared. All the
+	// notes from all folders not in that group will be unshared.
+	public static async updateNoteShareIds(folderIds: string[]) {
+		const sharedNoteIds: string[] = [];
+
+		if (folderIds.length) {
+			// Find all the notes where the share_id is not the same as the
+			// parent share_id because we only need to update those.
+			const rows = await this.db().selectAll(`
+				SELECT notes.id, folders.share_id
+				FROM notes
+				LEFT JOIN folders ON notes.parent_id = folders.id
+				WHERE notes.parent_id IN ("${folderIds.join('","')}")
+				AND notes.share_id != folders.share_id
+			`);
+
+			for (const row of rows) {
+				sharedNoteIds.push(row.id);
+
+				await Note.save({
+					id: row.id,
+					share_id: row.share_id || '',
+					updated_time: Date.now(),
+				}, { autoTimestamp: false });
+			}
 		}
 
-		const foldersToUnshare = await this.db().selectAll(sql.join(' '));
-		for (const folder of foldersToUnshare) {
-			await this.save({ id: folder.id, share_id: '' });
-		}
+		await this.unshareItems(ModelType.Note, sharedNoteIds);
 	}
 
 	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {

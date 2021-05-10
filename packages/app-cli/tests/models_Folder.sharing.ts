@@ -4,7 +4,7 @@ import { allNotesFolders } from './test-utils-synchronizer';
 import Note from '@joplin/lib/models/Note';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
-import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import NoteResource from '@joplin/lib/models/NoteResource';
 import ResourceService from '@joplin/lib/services/ResourceService';
 
@@ -102,7 +102,7 @@ describe('models_Folder.sharing', function() {
 		expect(folder5.share_id).toBe('');
 	}));
 
-	it('should remove the share ID if a folder is moved out', (async () => {
+	it('should update the share ID when a folder is moved in or out of shared folder', (async () => {
 		let folder1 = await createFolderTree('', [
 			{
 				title: 'folder 1',
@@ -130,14 +130,112 @@ describe('models_Folder.sharing', function() {
 		expect(folder1.share_id).toBe('abcd1234');
 		expect(folder2.share_id).toBe('abcd1234');
 
+		// Move the folder outside the shared folder
+
 		await Folder.save({ id: folder2.id, parent_id: folder3.id });
-
 		await Folder.updateFolderShareIds();
-
 		folder2 = await Folder.loadByTitle('folder 2');
 		expect(folder2.share_id).toBe('');
+
+		// Move the folder inside the shared folder
+
+		{
+			await Folder.save({ id: folder2.id, parent_id: folder1.id });
+			await Folder.updateFolderShareIds();
+			folder2 = await Folder.loadByTitle('folder 2');
+			expect(folder2.share_id).toBe('abcd1234');
+		}
 	}));
 
+	it('should apply the share ID to all notes', (async () => {
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'note 1',
+					},
+					{
+						title: 'note 2',
+					},
+					{
+						title: 'folder 2',
+						children: [
+							{
+								title: 'note 3',
+							},
+						],
+					},
+				],
+			},
+			{
+				title: 'folder 5',
+				children: [
+					{
+						title: 'note 4',
+					},
+				],
+			},
+		]);
+
+		await Folder.save({ id: folder1.id, share_id: 'abcd1234' });
+
+		const sharedFolderIds = await Folder.updateFolderShareIds();
+		await Folder.updateNoteShareIds(sharedFolderIds);
+
+		const note1: NoteEntity = await Note.loadByTitle('note 1');
+		const note2: NoteEntity = await Note.loadByTitle('note 2');
+		const note3: NoteEntity = await Note.loadByTitle('note 3');
+		const note4: NoteEntity = await Note.loadByTitle('note 4');
+
+		expect(note1.share_id).toBe('abcd1234');
+		expect(note2.share_id).toBe('abcd1234');
+		expect(note3.share_id).toBe('abcd1234');
+		expect(note4.share_id).toBe('');
+	}));
+
+	it('should remove the share ID when a note is moved in or out of shared folder', (async () => {
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'note 1',
+					},
+				],
+			},
+			{
+				title: 'folder 2',
+				children: [],
+			},
+		]);
+
+		await Folder.save({ id: folder1.id, share_id: 'abcd1234' });
+		await Folder.updateNoteShareIds(await Folder.updateFolderShareIds());
+		const note1: NoteEntity = await Note.loadByTitle('note 1');
+		const folder2: FolderEntity = await Folder.loadByTitle('folder 2');
+		expect(note1.share_id).toBe('abcd1234');
+
+		// Move the note outside of the shared folder
+
+		await Note.save({ id: note1.id, parent_id: folder2.id });
+		await Folder.updateNoteShareIds(await Folder.updateFolderShareIds());
+
+		{
+			const note1: NoteEntity = await Note.loadByTitle('note 1');
+			expect(note1.share_id).toBe('');
+		}
+
+		// Move the note back inside the shared folder
+
+		await Note.save({ id: note1.id, parent_id: folder1.id });
+		await Folder.updateNoteShareIds(await Folder.updateFolderShareIds());
+
+		{
+			const note1: NoteEntity = await Note.loadByTitle('note 1');
+			expect(note1.share_id).toBe('abcd1234');
+		}
+	}));
 
 	it('should apply the note share ID to its resources', async () => {
 		const resourceService = new ResourceService();
