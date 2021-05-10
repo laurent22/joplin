@@ -46,8 +46,8 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 
 			menu.popup(bridge().window());
 		} else if (msg.indexOf('joplin://') === 0) {
-			const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
-			await openItemById(resourceUrlInfo, dispatch);
+			const { itemId, hash } = urlUtils.parseResourceUrl(msg);
+			await openItemById(itemId, dispatch, hash);
 
 		} else if (urlUtils.urlProtocol(msg)) {
 			if (msg.indexOf('file://') === 0) {
