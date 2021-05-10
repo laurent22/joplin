@@ -501,8 +501,15 @@ export default class Folder extends BaseItem {
 		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
 	}
 
+	private static isRootSharedFolder(folder: FolderEntity): boolean {
+		return folder.share_id && !folder.parent_id;
+	}
+
 	static async canNestUnder(folderId: string, targetFolderId: string) {
 		if (folderId === targetFolderId) return false;
+
+		const folder = await Folder.load(folderId);
+		if (this.isRootSharedFolder(folder)) return false;
 
 		const conflictFolderId = Folder.conflictFolderId();
 		if (folderId == conflictFolderId || targetFolderId == conflictFolderId) return false;

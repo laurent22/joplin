@@ -26,6 +26,7 @@ export interface Theme {
 	color2: string;
 	selectedColor2: string;
 	colorError2: string;
+	colorWarn2: string;
 
 	// Color scheme "3" is used for the config screens for example/
 	// It's dark text over gray background.
