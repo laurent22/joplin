@@ -3,7 +3,7 @@ import { Disposable } from './types';
 declare enum ItemChangeEventType {
     Create = 1,
     Update = 2,
-    Delete = 3,
+    Delete = 3
 }
 interface ItemChangeEvent {
     id: string;
@@ -12,8 +12,8 @@ interface ItemChangeEvent {
 interface SyncStartEvent {
     withErrors: boolean;
 }
-declare type ItemChangeHandler = (event: ItemChangeEvent)=> void;
-declare type SyncStartHandler = (event: SyncStartEvent)=> void;
+declare type ItemChangeHandler = (event: ItemChangeEvent) => void;
+declare type SyncStartHandler = (event: SyncStartEvent) => void;
 /**
  * The workspace service provides access to all the parts of Joplin that
  * are being worked on - i.e. the currently selected notes or notebooks as
@@ -35,7 +35,7 @@ export default class JoplinWorkspace {
      */
     onNoteContentChange(callback: Function): Promise<void>;
     /**
-     * Called when the content of a note changes.
+     * Called when the content of the current note changes.
      */
     onNoteChange(handler: ItemChangeHandler): Promise<Disposable>;
     /**
