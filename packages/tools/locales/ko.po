@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -319,23 +321,23 @@ msgstr "선택상자 목록"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "하이라이트"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "취소선"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "삽입"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "윗첨자"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "아랫 첨자"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
@@ -501,9 +503,8 @@ msgid "Delete line"
 msgstr "줄 삭제"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "복제"
+msgstr "줄 복제"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -697,10 +698,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"안전 모드가 현재 활성화 되어 있습니다. 노트 렌더링과 더불어 모든 플러그인이 "
+"일시적으로 꺼집니다."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:412
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "안전모드를 끄고 다시 시작"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:416
 msgid ""
@@ -897,7 +900,7 @@ msgstr "토큰이 클립보드로 복사되었습니다!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "정말로 인증 토큰을 새로 고치시겠습니까?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -980,7 +983,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "인증 토큰 새로 고침"
 
 #: packages/app-desktop/gui/MenuBar.js:166
 #, javascript-format
@@ -1667,9 +1670,8 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "공유 링크 복사"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "사이드바 표시 전환"
+msgstr "안전 모드 전환"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1766,7 +1768,7 @@ msgstr "설정"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "모바일 데이터 - 자동 동기화 비활성화"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2537,11 +2539,12 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"마크다운 편집기에서 대부분의 텍스트에 사용할 글꼴입니다. 찾지 못한 경우 일반"
+"적으로 균형잡힌 (가변폭) 글꼴이 사용됩니다."
 
 #: packages/lib/models/Setting.js:704
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "편집기 글꼴 모음"
+msgstr "편집기 모노스페이스 글꼴 모음"
 
 #: packages/lib/models/Setting.js:705
 msgid ""
@@ -2549,10 +2552,12 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"텍스트를 읽기 쉽게 폭이 변경될 글꼴을 선택합니다 (표, 체크박스, 코드 등). 글"
+"꼴을 찾지 못할 경우, 기본 모노스페이스 (폭이 변경된) 글꼴이 사용됩니다."
 
 #: packages/lib/models/Setting.js:726
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "렌더된 마크다운에 적용할 사용자 정의 스타일시트"
+msgstr "렌더링된 마크다운에 적용할 사용자 정의 스타일시트"
 
 #: packages/lib/models/Setting.js:742
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2593,7 +2598,7 @@ msgstr "%d 시간"
 
 #: packages/lib/models/Setting.js:775
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "WiFi 상에서만 동기화"
 
 #: packages/lib/models/Setting.js:782
 msgid "Text editor command"

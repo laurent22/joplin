@@ -387,6 +387,9 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.js.map
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.test.d.ts
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.test.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.test.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js.map
@@ -624,12 +627,6 @@ packages/app-desktop/gui/ToolbarButton/styles/index.js.map
 packages/app-desktop/gui/dialogs.d.ts
 packages/app-desktop/gui/dialogs.js
 packages/app-desktop/gui/dialogs.js.map
-packages/app-desktop/gui/getWindowTitle.d.ts
-packages/app-desktop/gui/getWindowTitle.js
-packages/app-desktop/gui/getWindowTitle.js.map
-packages/app-desktop/gui/getWindowTitle.test.d.ts
-packages/app-desktop/gui/getWindowTitle.test.js
-packages/app-desktop/gui/getWindowTitle.test.js.map
 packages/app-desktop/gui/hooks/useEffectDebugger.d.ts
 packages/app-desktop/gui/hooks/useEffectDebugger.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js.map
@@ -1380,6 +1377,9 @@ packages/lib/services/synchronizer/migrations/2.js.map
 packages/lib/services/synchronizer/tools.d.ts
 packages/lib/services/synchronizer/tools.js
 packages/lib/services/synchronizer/tools.js.map
+packages/lib/services/synchronizer/utils/handleSyncStartupOperation.d.ts
+packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
+packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js.map
 packages/lib/services/synchronizer/utils/types.d.ts
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/services/synchronizer/utils/types.js.map

@@ -66,6 +66,11 @@ class HtmlUtils {
 		});
 	}
 
+	// Note that the URLs provided by this function are URL-encoded, which is
+	// usually what you want for web URLs. But if they are file:// URLs and the
+	// file path is going to be used, it will need to be unescaped first. The
+	// transformed SRC, must also be escaped before being sent back to this
+	// function.
 	public processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 

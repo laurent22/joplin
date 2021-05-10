@@ -119,7 +119,7 @@ CREATE TABLE version (
 INSERT INTO version (version) VALUES (1);
 `;
 
-interface TableField {
+export interface TableField {
 	name: string;
 	type: number;
 	default: any;

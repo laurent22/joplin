@@ -363,6 +363,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <li><a href="https://joplinapp.org/api/references/rest_api/">Data API</a></li>
 <li><a href="https://joplinapp.org/api/references/plugin_manifest/">Plugin manifest</a></li>
 <li><a href="https://joplinapp.org/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="https://joplinapp.org/api/references/plugin_theming/">Plugin theming</a></li>
 </ul>
 </li>
 <li>
@@ -839,9 +840,9 @@ Details:
 <td><code>notebook:books</code> limits the search scope within <code>books</code> and all its subnotebooks.<br><code>notebook:wheel*time</code> does a wildcard search.</td>
 </tr>
 <tr>
-<td><strong>created:</strong> <br> <strong>updated:</strong></td>
+<td><strong>created:</strong> <br> <strong>updated:</strong> <br> <strong>due:</strong></td>
 <td>Searches for notes created/updated on dates specified using YYYYMMDD format. You can also search relative to the current day, week, month, or year.</td>
-<td><code>created:20201218</code> will return notes created on or after December 18, 2020.<br><code>-updated:20201218</code> will return notes updated before December 18, 2020.<br><code>created:20200118 -created:20201215</code> will return notes created between January 18, 2020, and before December 15, 2020.<br><code>created:202001 -created:202003</code> will return notes created on or after January and before March 2020.<br><code>updated:1997 -updated:2020</code> will return all notes updated between the years 1997 and 2019.<br><code>created:day-2</code> searches for all notes created in the past two days.<br><code>updated:year-0</code> searches all notes updated in the current year.</td>
+<td><code>created:20201218</code> will return notes created on or after December 18, 2020.<br><code>-updated:20201218</code> will return notes updated before December 18, 2020.<br><code>created:20200118 -created:20201215</code> will return notes created between January 18, 2020, and before December 15, 2020.<br><code>created:202001 -created:202003</code> will return notes created on or after January and before March 2020.<br><code>updated:1997 -updated:2020</code> will return all notes updated between the years 1997 and 2019.<br><code>created:day-2</code> searches for all notes created in the past two days.<br><code>updated:year-0</code> searches all notes updated in the current year.<br><code>-due:day+7</code> will return all todos which are due or will be due in the next seven days.<br><code>-due:day-5</code> searches all todos that are overdue for more than 5 days.</td>
 </tr>
 <tr>
 <td><strong>type:</strong></td>
@@ -868,6 +869,11 @@ Details:
 <td>Filter by source URL</td>
 <td><code>sourceurl:https://www.google.com</code><br><code>sourceurl:*joplinapp.org</code> to perform a wildcard search.</td>
 </tr>
+<tr>
+<td><strong>id:</strong></td>
+<td>Filter by note ID</td>
+<td><code>id:9cbc1b4f242043a9b8a50627508bccd5</code> return a note with the specified id</td>
+</tr>
 </tbody>
 </table>
 <p>Note: In the CLI client you have to escape the query using <code>--</code> when using negated filters.<br>
@@ -881,7 +887,7 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <h2>Search order<a name="search-order" href="#search-order" class="heading-anchor">🔗</a></h2>
 <p>Notes are sorted by &quot;relevance&quot;. Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matters how close to each other the terms are. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as many details as possible to replicate the issue.</p>
 <h1>Goto Anything<a name="goto-anything" href="#goto-anything" class="heading-anchor">🔗</a></h1>
-<p>In the desktop application, press <kbd>Ctrl+G</kbd> or <kbd>Cmd+G</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.</p>
+<p>In the desktop application, press <kbd>Ctrl+P</kbd> or <kbd>Cmd+P</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.</p>
 <h1>Privacy<a name="privacy" href="#privacy" class="heading-anchor">🔗</a></h1>
 <p>Joplin values your privacy and security by giving you complete control over your information and digital footprint.</p>
 <p>Joplin applications do not send any data to any service without your authorisation. Any data that Joplin saves, such as notes or images, are saved to your own device and you are free to delete this data at any time.</p>
@@ -982,7 +988,7 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/arableague.png" alt=""></td>
 <td>Arabic</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ar.po">ar</a></td>
-<td><a href="mailto:Whaell@protonmail.com">Whaell</a></td>
+<td><a href="mailto:Whaell@protonmail.com">Whaell O</a></td>
 <td>99%</td>
 </tr>
 <tr>
@@ -997,56 +1003,56 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Bosnian (Bosna i Hercegovina)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bs_BA.po">bs_BA</a></td>
 <td><a href="mailto:dervis.t@pm.me">Derviš T.</a></td>
-<td>76%</td>
+<td>74%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/bg.png" alt=""></td>
 <td>Bulgarian (България)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bg_BG.po">bg_BG</a></td>
 <td></td>
-<td>61%</td>
+<td>60%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/catalonia.png" alt=""></td>
 <td>Catalan</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ca.po">ca</a></td>
 <td>jmontane, 2019</td>
-<td>87%</td>
+<td>85%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/hr.png" alt=""></td>
 <td>Croatian (Hrvatska)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hr_HR.po">hr_HR</a></td>
 <td><a href="mailto:mail@milotype.de">Milo Ivir</a></td>
-<td>100%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cz.png" alt=""></td>
 <td>Czech (Česká republika)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/cs_CZ.po">cs_CZ</a></td>
 <td><a href="mailto:lukas@aiya.cz">Lukas Helebrandt</a></td>
-<td>90%</td>
+<td>89%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/dk.png" alt=""></td>
 <td>Dansk (Danmark)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/da_DK.po">da_DK</a></td>
 <td>Mustafa Al-Dailemi (<a href="mailto:dailemi@hotmail.com">dailemi@hotmail.com</a>)Language-Team:</td>
-<td>75%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/de.png" alt=""></td>
 <td>Deutsch (Deutschland)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/de_DE.po">de_DE</a></td>
-<td><a href="mailto:atalanttore@users.noreply.github.com">Ettore Atalan</a></td>
-<td>93%</td>
+<td><a href="mailto:atalanttore@googlemail.com">Atalanttore</a></td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ee.png" alt=""></td>
 <td>Eesti Keel (Eesti)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/et_EE.po">et_EE</a></td>
 <td></td>
-<td>60%</td>
+<td>58%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gb.png" alt=""></td>
@@ -1067,7 +1073,7 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Español (España)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/es_ES.po">es_ES</a></td>
 <td><a href="mailto:mario.campo@gmail.com">Mario Campo</a></td>
-<td>99%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/esperanto.png" alt=""></td>
@@ -1080,190 +1086,190 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fi.png" alt=""></td>
 <td>Finnish (Suomi)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fi_FI.po">fi_FI</a></td>
-<td></td>
-<td>91%</td>
+<td>mrkaato</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fr.png" alt=""></td>
 <td>Français (France)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fr_FR.po">fr_FR</a></td>
 <td>Laurent Cozic</td>
-<td>97%</td>
+<td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/galicia.png" alt=""></td>
 <td>Galician (España)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/gl_ES.po">gl_ES</a></td>
 <td><a href="mailto:marcoslansgarza@gmail.com">Marcos Lans</a></td>
-<td>40%</td>
+<td>39%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/id.png" alt=""></td>
 <td>Indonesian (Indonesia)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/id_ID.po">id_ID</a></td>
-<td><a href="mailto:16875937+fathyar@users.noreply.github.com">Fathy AR</a></td>
-<td>95%</td>
+<td><a href="mailto:42007357+eresytter@users.noreply.github.com">eresytter</a></td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/it.png" alt=""></td>
 <td>Italiano (Italia)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/it_IT.po">it_IT</a></td>
 <td><a href="mailto:mailfilledwithspam@gmail.com">Alessandro Bernardello</a></td>
-<td>94%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/hu.png" alt=""></td>
 <td>Magyar (Magyarország)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hu_HU.po">hu_HU</a></td>
 <td><a href="mailto:mail@szokesandor.hu">Szőke Sándor</a></td>
-<td>93%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/be.png" alt=""></td>
 <td>Nederlands (België, Belgique, Belgien)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>97%</td>
+<td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/nl.png" alt=""></td>
 <td>Nederlands (Nederland)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_NL.po">nl_NL</a></td>
 <td><a href="mailto:metbril@users.noreply.github.com">MetBril</a></td>
-<td>91%</td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/no.png" alt=""></td>
 <td>Norwegian (Norge, Noreg)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nb_NO.po">nb_NO</a></td>
 <td><a href="mailto:code@mxe.no">Mats Estensen</a></td>
-<td>80%</td>
+<td>78%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ir.png" alt=""></td>
 <td>Persian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fa.po">fa</a></td>
 <td><a href="mailto:kourox@protonmail.com">Kourosh Firoozbakht</a></td>
-<td>75%</td>
+<td>74%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pl.png" alt=""></td>
 <td>Polski (Polska)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pl_PL.po">pl_PL</a></td>
 <td><a href="mailto:hello.konhi@gmail.com">konhi</a></td>
-<td>100%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_BR.po">pt_BR</a></td>
 <td><a href="mailto:nicolas.suzuki@pm.me">Nicolas Suzuki</a></td>
-<td>100%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pt.png" alt=""></td>
 <td>Português (Portugal)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_PT.po">pt_PT</a></td>
 <td><a href="mailto:dcaveiro@yahoo.com">Diogo Caveiro</a></td>
-<td>100%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ro.png" alt=""></td>
 <td>Română</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ro.po">ro</a></td>
 <td><a href="mailto:cristi.duluta@gmail.com">Cristi Duluta</a></td>
-<td>70%</td>
+<td>68%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/si.png" alt=""></td>
 <td>Slovenian (Slovenija)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sl_SI.po">sl_SI</a></td>
-<td></td>
-<td>39%</td>
+<td><a href="mailto:martin.korelic@protonmail.com">Martin Korelič</a></td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/se.png" alt=""></td>
 <td>Svenska</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sv.po">sv</a></td>
 <td><a href="mailto:jonatan@autistici.org">Jonatan Nyberg</a></td>
-<td>65%</td>
+<td>63%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/th.png" alt=""></td>
 <td>Thai (ประเทศไทย)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/th_TH.po">th_TH</a></td>
 <td></td>
-<td>48%</td>
+<td>47%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/vi.png" alt=""></td>
 <td>Tiếng Việt</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/vi.po">vi</a></td>
 <td></td>
-<td>77%</td>
+<td>75%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tr.png" alt=""></td>
 <td>Türkçe (Türkiye)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/tr_TR.po">tr_TR</a></td>
 <td><a href="mailto:arda@kilicdagi.com">Arda Kılıçdağı</a></td>
-<td>99%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ua.png" alt=""></td>
 <td>Ukrainian (Україна)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/uk_UA.po">uk_UA</a></td>
 <td><a href="mailto:vandreykiv@gmail.com">Vyacheslav Andreykiv</a></td>
-<td>100%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gr.png" alt=""></td>
 <td>Ελληνικά (Ελλάδα)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/el_GR.po">el_GR</a></td>
 <td><a href="mailto:xaris@tuta.io">Harris Arvanitis</a></td>
-<td>87%</td>
+<td>85%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ru.png" alt=""></td>
 <td>Русский (Россия)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ru_RU.po">ru_RU</a></td>
 <td><a href="mailto:thesermanarm@gmail.com">Sergey Segeda</a></td>
-<td>99%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/rs.png" alt=""></td>
 <td>српски језик (Србија)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sr_RS.po">sr_RS</a></td>
 <td></td>
-<td>75%</td>
+<td>73%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_CN.po">zh_CN</a></td>
 <td><a href="mailto:zyangmath@gmail.com">Yang Zhang</a></td>
-<td>99%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tw.png" alt=""></td>
 <td>中文 (繁體)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_TW.po">zh_TW</a></td>
 <td><a href="mailto:yaozeye@yahoo.co.jp">Yaoze Ye</a></td>
-<td>92%</td>
+<td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/jp.png" alt=""></td>
 <td>日本語 (日本)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ja_JP.po">ja_JP</a></td>
 <td><a href="mailto:genneko217@gmail.com">genneko</a></td>
-<td>99%</td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/kr.png" alt=""></td>
 <td>한국어</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ko.po">ko</a></td>
 <td><a href="mailto:potatogim@potatogim.net">Ji-Hyeon Gim</a></td>
-<td>100%</td>
+<td>97%</td>
 </tr>
 </tbody>
 </table>
