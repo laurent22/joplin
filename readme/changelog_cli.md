@@ -1,5 +1,21 @@
 # Joplin terminal app changelog
 
+## [cli-v1.8.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.8.1) - 2021-05-10T09:38:05Z
+
+- New: Add "id" and "due" search filters (#4898 by [@JackGruber](https://github.com/JackGruber))
+- New: Add support for "batch" command (eef86d6)
+- Improved: Also duplicate the tags when the note is duplicated (#4876) (#3157 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Bump KaTeX to 0.13.3 (#4902 by Roman Musin)
+- Improved: Filter "notebook" can now be negated (#4651 by Naveen M V)
+- Improved: Improved error handling when importing ENEX (257cde4)
+- Improved: Save user settings to JSON file (71f976f)
+- Improved: Some imported ENEX files incorrectly had invisible sections (f7a457f)
+- Fixed: Disable WebDAV response caching (#4887) (#4706 by Roman Musin)
+- Fixed: Fixed issue when getting version info (54884d6)
+- Fixed: Fixed rendering of note and resource links (61399ce)
+- Fixed: Regression: Fixed network request repeat mechanism (ede6004)
+- Security: Apply npm audit security fixes (0b67446)
+
 ## [cli-v1.6.4](https://github.com/laurent22/joplin/releases/tag/cli-v1.6.4) - 2021-01-21T10:01:15Z
 
 - Fixed: Fixed infinite sync issue with OneDrive (#4305)
