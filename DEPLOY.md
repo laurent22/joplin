@@ -54,6 +54,12 @@ Finally, to release the actual app, run:
 
 	npm run releaseCli
 
+## Joplin Server
+
+Run:
+
+	npm run releaseServer
+
 ## Web clipper
 
 Run:
@@ -64,7 +70,7 @@ Run:
 
 First the types should generally be updated, using `./updateTypes.sh`. Then run:
 
-	npm run releaseGenerator
+	npm run releasePluginGenerator
 
 ## Plugin Repo Cli
 
