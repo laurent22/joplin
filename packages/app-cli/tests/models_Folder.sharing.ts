@@ -41,7 +41,8 @@ describe('models_Folder.sharing', function() {
 			},
 		]);
 
-		await Folder.setShareStatus(folder.id, 'abcd1234');
+		await Folder.save({ id: folder.id, share_id: 'abcd1234' });
+		await Folder.updateAllShareIds();
 
 		const allItems = await allNotesFolders();
 		for (const item of allItems) {
@@ -291,7 +292,8 @@ describe('models_Folder.sharing', function() {
 			},
 		]);
 
-		await Folder.setShareStatus(folder.id, 'abcd1234');
+		await Folder.save({ id: folder.id, share_id: 'abcd1234' });
+		await Folder.updateFolderShareIds();
 
 		const note1: NoteEntity = await Note.loadByTitle('note 1');
 		await shim.attachFileToNote(note1, testImagePath);
@@ -323,13 +325,5 @@ describe('models_Folder.sharing', function() {
 			expect(resource.share_id).toBe('');
 		}
 	});
-
-	// it('should add the share ID when an item is moved to a shared folder', async () => {
-	// 	const folder = await Folder.save({ title: 'shared folder' });
-	// 	await Folder.setShareStatus(folder.id, 'abcd');
-
-	// 	const note = await Note.save({ parent_id: folder.id });
-
-	// });
 
 });
