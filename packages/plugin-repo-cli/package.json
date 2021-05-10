@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -18,8 +18,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@joplin/lib": "^1.8.1",
-    "@joplin/tools": "^1.8.1",
+    "@joplin/lib": "^1.8.2",
+    "@joplin/tools": "^1.8.2",
     "fs-extra": "^9.0.1",
     "yargs": "^16.0.3"
   },

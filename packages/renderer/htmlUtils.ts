@@ -133,7 +133,7 @@ class HtmlUtils {
 		return output.join('').replace(/\s+/g, ' ');
 	}
 
-	sanitizeHtml(html: string, options: any = null) {
+	public sanitizeHtml(html: string, options: any = null) {
 		options = Object.assign({}, {
 			// If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
@@ -158,7 +158,7 @@ class HtmlUtils {
 		// "link" can be used to escape the parser and inject JavaScript.
 		// Adding "meta" too for the same reason as it shouldn't be used in
 		// notes anyway.
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed', 'link', 'meta'];
+		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed', 'link', 'meta', 'noscript'];
 
 		const parser = new htmlparser2.Parser({
 
