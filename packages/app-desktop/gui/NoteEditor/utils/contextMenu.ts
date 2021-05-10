@@ -6,6 +6,8 @@ const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import BaseModel from '@joplin/lib/BaseModel';
 import { processPastedHtml } from './resourceHandling';
 const fs = require('fs-extra');
 const { clipboard } = require('electron');
@@ -53,17 +55,52 @@ function handleCopyToClipboard(options: ContextMenuOptions) {
 	}
 }
 
-export function menuItems(): ContextMenuItems {
+export async function openItemById(options: any, dispatch: Function) {
+	const itemId = options.resourceId || options.itemId;
+	const item = await BaseItem.loadItemById(itemId);
+
+	if (!item) throw new Error(`No item with ID ${itemId}`);
+
+	if (item.type_ === BaseModel.TYPE_RESOURCE) {
+		const localState = await Resource.localState(item);
+		if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
+			if (localState.fetch_status === Resource.FETCH_STATUS_ERROR) {
+				bridge().showErrorMessageBox(`${_('There was an error downloading this attachment:')}\n\n${localState.fetch_error}`);
+			} else {
+				bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet'));
+			}
+			return;
+		}
+
+		try {
+			await ResourceEditWatcher.instance().openAndWatch(item.id);
+		} catch (error) {
+			console.error(error);
+			bridge().showErrorMessageBox(error.message);
+		}
+	} else if (item.type_ === BaseModel.TYPE_NOTE) {
+		let noteItem: any = {
+			type: 'FOLDER_AND_NOTE_SELECT',
+			folderId: item.parent_id,
+			noteId: item.id,
+		};
+
+		if (options.hash) {
+			noteItem = { ...noteItem, hash: options.hash };
+		}
+
+		dispatch(noteItem);
+	} else {
+		throw new Error(`Unsupported item type: ${item.type_}`);
+	}
+}
+
+export function menuItems(dispatch: Function): ContextMenuItems {
 	return {
 		open: {
 			label: _('Open...'),
 			onAction: async (options: ContextMenuOptions) => {
-				try {
-					await ResourceEditWatcher.instance().openAndWatch(options.resourceId);
-				} catch (error) {
-					console.error(error);
-					bridge().showErrorMessageBox(error.message);
-				}
+				await openItemById(options, dispatch);
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
@@ -134,10 +171,10 @@ export function menuItems(): ContextMenuItems {
 	};
 }
 
-export default async function contextMenu(options: ContextMenuOptions) {
+export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
 	const menu = new Menu();
 
-	const items = menuItems();
+	const items = menuItems(dispatch);
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;
 
