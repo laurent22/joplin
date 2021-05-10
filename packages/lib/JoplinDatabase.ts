@@ -871,14 +871,20 @@ export default class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion == 36) {
-				queries.push('ALTER TABLE folders ADD COLUMN is_linked_folder INT NOT NULL DEFAULT "0"');
-				queries.push('ALTER TABLE folders ADD COLUMN source_folder_owner_id TEXT NOT NULL DEFAULT ""');
-			}
-
-			if (targetVersion == 37) {
 				queries.push('ALTER TABLE folders ADD COLUMN share_id TEXT NOT NULL DEFAULT ""');
 				queries.push('ALTER TABLE notes ADD COLUMN share_id TEXT NOT NULL DEFAULT ""');
 				queries.push('ALTER TABLE resources ADD COLUMN share_id TEXT NOT NULL DEFAULT ""');
+
+				// const newTableSql = `
+				// 	CREATE TABLE shares (
+				// 		id TEXT PRIMARY KEY,
+				// 		type INTEGER NOT NULL,
+				// 		note_id TEXT NOT NULL DEFAULT "",
+				// 		folder_id TEXT NOT NULL DEFAULT ""
+				// 	);
+				// `;
+
+				// queries.push(this.sqlStringToLines(newTableSql)[0]);
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };

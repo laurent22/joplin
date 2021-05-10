@@ -1,7 +1,9 @@
+import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
 import Folder from '../../models/Folder';
 import Setting from '../../models/Setting';
 import SyncTargetJoplinServer from '../../SyncTargetJoplinServer';
+// import { State, stateRootKey } from './reducer';
 
 // const logger = Logger.create('ShareService');
 
@@ -9,7 +11,7 @@ export default class ShareService {
 
 	private static instance_: ShareService;
 	private api_: JoplinServerApi = null;
-	private dispatch_: Function = null;
+	private store_: Store<any> = null;
 	// private applyingShareId_:boolean = false;
 
 	public static instance(): ShareService {
@@ -18,17 +20,21 @@ export default class ShareService {
 		return this.instance_;
 	}
 
-	public initialize(dispatch: Function) {
-		this.dispatch_ = dispatch;
+	public initialize(store: Store<any>) {
+		this.store_ = store;
 	}
 
 	public get enabled(): boolean {
 		return Setting.value('sync.target') === SyncTargetJoplinServer.id();
 	}
 
-	private get dispatch(): Function {
-		return this.dispatch_;
+	private get store(): Store<any> {
+		return this.store_;
 	}
+
+	// private get state():State {
+	// 	return this.store_.getState()[stateRootKey];
+	// }
 
 	private api(): JoplinServerApi {
 		if (this.api_) return this.api_;
@@ -90,7 +96,7 @@ export default class ShareService {
 	public async refreshShareInvitations() {
 		const result = await this.shareInvitations();
 
-		this.dispatch({
+		this.store.dispatch({
 			type: 'SHARE_INVITATION_SET',
 			shareInvitations: result.items,
 		});
@@ -99,7 +105,7 @@ export default class ShareService {
 	public async refreshShares() {
 		const result = await this.shares();
 
-		this.dispatch({
+		this.store.dispatch({
 			type: 'SHARE_SET',
 			shares: result.items,
 		});
@@ -108,7 +114,7 @@ export default class ShareService {
 	public async refreshShareUsers(shareId: string) {
 		const result = await this.shareUsers(shareId);
 
-		this.dispatch({
+		this.store.dispatch({
 			type: 'SHARE_USER_SET',
 			shareId: shareId,
 			shareUsers: result.items,
@@ -205,5 +211,10 @@ export default class ShareService {
 			await this.refreshShares();
 		}
 	}
+
+	// public async updateShareIds() {
+	// 	const sharedFolderIds =  await Folder.updateFolderShareIds();
+	// 	await Folder.updateNoteShareIds(sharedFolderIds);
+	// }
 
 }

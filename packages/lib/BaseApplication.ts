@@ -9,7 +9,7 @@ import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
 import SyncTargetOneDrive from './SyncTargetOneDrive';
 
-const { createStore, applyMiddleware } = require('redux');
+import { createStore, applyMiddleware, Store } from 'redux';
 const { defaultState, stateUtils } = require('./reducer');
 import JoplinDatabase from './JoplinDatabase';
 const { FoldersScreenUtils } = require('./folders-screen-utils.js');
@@ -68,7 +68,7 @@ export default class BaseApplication {
 	// state and UI out of sync.
 	private currentFolder_: any = null;
 
-	protected store_: any = null;
+	protected store_: Store<any> = null;
 
 	constructor() {
 		this.eventEmitter_ = new EventEmitter();
@@ -603,14 +603,14 @@ export default class BaseApplication {
 	}
 
 	initRedux() {
-		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn()));
+		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn() as any));
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 		// reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
-		ShareService.instance().initialize(this.store().dispatch);
+		ShareService.instance().initialize(this.store());
 	}
 
 	deinitRedux() {
