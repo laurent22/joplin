@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 
@@ -48,12 +48,12 @@ export default class ItemModel extends BaseModel<Item> {
 			if (!(await this.models().shareUser().isShareParticipant(resource.jop_share_id, user.id))) throw new ErrorForbidden('user has no access to this share');
 		}
 
-		if (action === AclAction.Delete) {
-			const share = await this.models().share().byItemId(resource.id);
-			if (share && share.type === ShareType.JoplinRootFolder) {
-				if (user.id !== share.owner_id) throw new ErrorForbidden('only the owner of the shared notebook can delete it');
-			}
-		}
+		// if (action === AclAction.Delete) {
+		// 	const share = await this.models().share().byItemId(resource.id);
+		// 	if (share && share.type === ShareType.JoplinRootFolder) {
+		// 		if (user.id !== share.owner_id) throw new ErrorForbidden('only the owner of the shared notebook can delete it');
+		// 	}
+		// }
 	}
 
 	public fromApiInput(item: Item): Item {
@@ -439,6 +439,10 @@ export default class ItemModel extends BaseModel<Item> {
 		return false;
 	}
 
+	public isRootSharedFolder(item:Item):boolean {
+		return item.jop_type === ModelType.Folder && item.jop_parent_id === '' && !!item.jop_share_id;
+	}
+
 	// Returns the item IDs that are owned only by the given user. In other
 	// words, the items that are not shared with anyone else. Such items
 	// can be safely deleted when the user is deleted.
@@ -480,6 +484,18 @@ export default class ItemModel extends BaseModel<Item> {
 
 			await super.delete(ids, options);
 		}, 'ItemModel::delete');
+	}
+
+	public async deleteForUser(userId:Uuid, item:Item):Promise<void> {
+		if (this.isRootSharedFolder(item)) {
+			const share = await this.models().share().byItemId(item.id);
+			if (!share) throw new ErrorNotFound('Cannot find share associated with item ' + item.id);
+			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
+			if (!userShare) return;
+			await this.models().shareUser().delete(userShare.id);				
+		} else {
+			await this.delete(item.id);
+		}
 	}
 
 	public async saveForUser(userId: Uuid, item: Item, options: SaveOptions = {}): Promise<Item> {

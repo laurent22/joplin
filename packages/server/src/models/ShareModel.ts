@@ -33,6 +33,7 @@ export default class ShareModel extends BaseModel<Share> {
 		if (object.id) output.id = object.id;
 		if (object.type) output.type = object.type;
 		if (object.folder_id) output.folder_id = object.folder_id;
+		if (object.owner_id) output.owner_id = object.owner_id;
 		if (object.note_id) output.note_id = object.note_id;
 
 		return output;

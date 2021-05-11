@@ -102,6 +102,7 @@ const globalCommands = [
 ];
 
 import editorCommandDeclarations from './gui/NoteEditor/commands/editorCommandDeclarations';
+import ShareService from '@joplin/lib/services/share/ShareService';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -731,6 +732,8 @@ class Application extends BaseApplication {
 		} else {
 			bridge().window().show();
 		}
+
+		void ShareService.instance().maintenance();
 
 		ResourceService.runInBackground();
 

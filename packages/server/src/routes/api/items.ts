@@ -36,18 +36,16 @@ router.get('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
-
 	try {
 		if (path.id === 'root' || path.id === 'root:/:') {
 			// We use this for testing only and for safety reasons it's probably
 			// best to disable it on production.
 			if (ctx.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
-			await itemModel.deleteAll(ctx.owner.id);
+			await ctx.models.item().deleteAll(ctx.owner.id);
 		} else {
-			const item = await itemFromPath(ctx.owner.id, itemModel, path);
+			const item = await itemFromPath(ctx.owner.id, ctx.models.item(), path);
 			await ctx.models.item().checkIfAllowed(ctx.owner, AclAction.Delete, item);
-			await itemModel.delete(item.id);
+			await ctx.models.item().deleteForUser(ctx.owner.id, item);
 		}
 	} catch (error) {
 		if (error instanceof ErrorNotFound) {

@@ -676,6 +676,32 @@ describe('shares.folder', function() {
 		]);
 	});
 
+	test('should unshare from a non-owner user who has deleted the root folder', async function() {
+		const { user:user1, session: session1 } = await createUserAndSession(1);
+		const { user:user2, session: session2 } = await createUserAndSession(2);
+
+		const { item } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		await models().share().updateSharedItems3();
+
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(2);
+
+		await deleteApi(session2.id, 'items/root:/' + item.name + ':');
+
+		expect((await models().userItem().byUserId(user1.id)).length).toBe(2);
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
+	});
+
+
 	// test('should handle incomplete sync - orphan note is moved out of shared folder', async function() {
 	// 	// - A note and its folder are moved to a shared folder.
 	// 	// - However when data is synchronised, only the note is synced (not the folder).
@@ -728,21 +754,21 @@ describe('shares.folder', function() {
 		await expectHttpError(async () => postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F2' }), ErrorForbidden.httpCode);
 	});
 
-	test('should check permissions - only owner of share can deleted associated folder', async function() {
-		const { session: session1 } = await createUserAndSession(1);
-		const { session: session2 } = await createUserAndSession(2);
+	// test('should check permissions - only owner of share can deleted associated folder', async function() {
+	// 	const { session: session1 } = await createUserAndSession(1);
+	// 	const { session: session2 } = await createUserAndSession(2);
 
-		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
-			{
-				id: '000000000000000000000000000000F1',
-				children: [
-					{
-						id: '00000000000000000000000000000001',
-					},
-				],
-			},
-		]);
-		await expectHttpError(async () => deleteApi(session2.id, 'items/000000000000000000000000000000F1.md'), ErrorForbidden.httpCode);
-	});
+	// 	await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+	// 		{
+	// 			id: '000000000000000000000000000000F1',
+	// 			children: [
+	// 				{
+	// 					id: '00000000000000000000000000000001',
+	// 				},
+	// 			],
+	// 		},
+	// 	]);
+	// 	await expectHttpError(async () => deleteApi(session2.id, 'items/root:/000000000000000000000000000000F1.md:'), ErrorForbidden.httpCode);
+	// });
 
 });
