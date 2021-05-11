@@ -12,15 +12,14 @@ import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import { AppState } from '../../app';
 import { ModelType } from '@joplin/lib/BaseModel';
-
-const { connect } = require('react-redux');
-const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import Logger from '@joplin/lib/Logger';
 import { FolderEntity } from '@joplin/lib/services/database/types';
+const { connect } = require('react-redux');
+const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
@@ -235,11 +234,11 @@ class SidebarComponent extends React.Component<Props, State> {
 		if (!itemId || !itemType) throw new Error('No data on element');
 
 		let deleteMessage = '';
-		let buttonLabel = _('Remove');
+		let deleteButtonLabel = _('Remove');
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			const folder = await Folder.load(itemId);
 			deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
-			buttonLabel = _('Delete');
+			deleteButtonLabel = _('Delete');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
 			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
@@ -262,10 +261,10 @@ class SidebarComponent extends React.Component<Props, State> {
 
 		menu.append(
 			new MenuItem({
-				label: buttonLabel,
+				label: deleteButtonLabel,
 				click: async () => {
 					const ok = bridge().showConfirmMessageBox(deleteMessage, {
-						buttons: [buttonLabel, _('Cancel')],
+						buttons: [deleteButtonLabel, _('Cancel')],
 						defaultId: 1,
 					});
 					if (!ok) return;

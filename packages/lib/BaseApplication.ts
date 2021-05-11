@@ -795,6 +795,7 @@ export default class BaseApplication {
 
 		EncryptionService.instance().setLogger(globalLogger);
 		BaseItem.encryptionService_ = EncryptionService.instance();
+		BaseItem.shareService_ = ShareService.instance();
 		DecryptionWorker.instance().setLogger(globalLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		DecryptionWorker.instance().setKvStore(KvStore.instance());

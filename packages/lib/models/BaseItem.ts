@@ -8,6 +8,7 @@ import { _ } from '../locale';
 
 import Database from '../database';
 import ItemChange from './ItemChange';
+import ShareService from '../services/share/ShareService';
 const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -29,6 +30,7 @@ export default class BaseItem extends BaseModel {
 
 	public static encryptionService_: any = null;
 	public static revisionService_: any = null;
+	public static shareService_: ShareService = null;
 
 	// Also update:
 	// - itemsThatNeedSync()
@@ -388,6 +390,11 @@ export default class BaseItem extends BaseModel {
 	static revisionService() {
 		if (!this.revisionService_) throw new Error('BaseItem.revisionService_ is not set!!');
 		return this.revisionService_;
+	}
+
+	protected static shareService() {
+		if (!this.shareService_) throw new Error('BaseItem.shareService_ is not set!!');
+		return this.shareService_;
 	}
 
 	public static async serializeForSync(item: BaseItemEntity) {

@@ -33,6 +33,13 @@ export default class ShareService {
 		return this.store.getState()[stateRootKey] as State;
 	}
 
+	public isSharedFolderOwner(folderId: string): boolean {
+		const userId = this.api().userId;
+		const share = this.shares.find(s => s.folder_id === folderId);
+		if (!share) return false;
+		return share.user.id === userId;
+	}
+
 	private api(): JoplinServerApi {
 		if (this.api_) return this.api_;
 

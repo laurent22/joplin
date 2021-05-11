@@ -2,6 +2,7 @@ import { State as RootState } from '../../reducer';
 import { Draft } from 'immer';
 
 interface StateShareUserUser {
+	id: string;
 	email: string;
 	full_name?: string;
 }

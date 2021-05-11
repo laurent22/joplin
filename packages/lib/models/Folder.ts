@@ -75,11 +75,20 @@ export default class Folder extends BaseItem {
 	}
 
 	static async delete(folderId: string, options: any = null) {
-		if (!options) options = {};
-		if (!('deleteChildren' in options)) options.deleteChildren = true;
+		options = {
+			deleteChildren: true,
+			...options,
+		};
 
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
+
+		// When deleting a non-owner deletes a shared folder, we simply unshare
+		// the folder but don't delete any sub-item. Server-side the folder will
+		// be unshared as well as all its children.
+		if (this.isRootSharedFolder(folder) && !this.shareService().isSharedFolderOwner(folder.id)) {
+			options.deleteChildren = false;
+		}
 
 		if (options.deleteChildren) {
 			const noteIds = await Folder.noteIds(folderId);

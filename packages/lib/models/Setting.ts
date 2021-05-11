@@ -87,6 +87,31 @@ export enum SyncStartupOperation {
 	ClearLocalData = 2,
 }
 
+export enum Env {
+	Undefined = 'SET_ME',
+	Dev = 'dev',
+	Prod = 'prod',
+}
+
+export interface Constants {
+	env: Env;
+	isDemo: boolean;
+	appName: string;
+	appId: string;
+	appType: string;
+	resourceDirName: string;
+	resourceDir: string;
+	profileDir: string;
+	templateDir: string;
+	tempDir: string;
+	pluginDataDir: string;
+	cacheDir: string;
+	pluginDir: string;
+	flagOpenDevTools: boolean;
+	syncVersion: number;
+	startupDevPlugins: string[];
+}
+
 interface SettingSections {
 	[key: string]: SettingSection;
 }
@@ -149,8 +174,8 @@ class Setting extends BaseModel {
 
 	// Contains constants that are set by the application and
 	// cannot be modified by the user:
-	public static constants_: any = {
-		env: 'SET_ME',
+	public static constants_: Constants = {
+		env: Env.Undefined,
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
@@ -1380,7 +1405,7 @@ class Setting extends BaseModel {
 
 	static setConstant(key: string, value: any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
-		this.constants_[key] = value;
+		(this.constants_ as any)[key] = value;
 	}
 
 	public static setValue(key: string, value: any) {
@@ -1543,7 +1568,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
-			const v = this.constants_[key];
+			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
 			if (output == 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;

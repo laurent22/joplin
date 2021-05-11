@@ -43,6 +43,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 			baseUrl: () => options.path(),
 			username: () => options.username(),
 			password: () => options.password(),
+			env: Setting.value('env'),
 		};
 
 		const api = new JoplinServerApi(apiOptions);
