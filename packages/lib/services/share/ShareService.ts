@@ -3,7 +3,6 @@ import JoplinServerApi from '../../JoplinServerApi';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
-import SyncTargetJoplinServer from '../../SyncTargetJoplinServer';
 import { State, stateRootKey, StateShare } from './reducer';
 
 export default class ShareService {
@@ -23,7 +22,7 @@ export default class ShareService {
 	}
 
 	public get enabled(): boolean {
-		return Setting.value('sync.target') === SyncTargetJoplinServer.id();
+		return Setting.value('sync.target') === 9; // Joplin Server target
 	}
 
 	private get store(): Store<any> {

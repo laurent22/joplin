@@ -36,7 +36,7 @@ const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
-const { createStore, applyMiddleware } = require('redux');
+import { createStore, applyMiddleware } from 'redux';
 const reduxSharedMiddleware = require('@joplin/lib/components/shared/reduxSharedMiddleware');
 const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
@@ -537,7 +537,7 @@ async function initialize(dispatch: Function) {
 		// / E2EE SETUP
 		// ----------------------------------------------------------------
 
-		await ShareService.instance().initialize(this.store().dispatch);
+		await ShareService.instance().initialize(store);
 
 		reg.logger().info('Loading folders...');
 
