@@ -37,7 +37,7 @@ export default class JoplinServerApi {
 		this.options_ = options;
 	}
 
-	private baseUrl() {
+	public baseUrl() {
 		return rtrimSlashes(this.options_.baseUrl());
 	}
 
@@ -58,21 +58,21 @@ export default class JoplinServerApi {
 		return session ? session.id : '';
 	}
 
-	public async shareItem(itemName: string) {
-		return this.exec('POST', 'api/shares', null, {
-			item_name: itemName,
-			type: 1, // ShareType.Link
-		});
-	}
+	// public async shareItem(itemName: string) {
+	// 	return this.exec('POST', 'api/shares', null, {
+	// 		item_name: itemName,
+	// 		type: 1, // ShareType.Link
+	// 	});
+	// }
 
 	public static connectionErrorMessage(error: any) {
 		const msg = error && error.message ? error.message : 'Unknown error';
 		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
 	}
 
-	public shareUrl(share: any): string {
-		return `${this.baseUrl()}/shares/${share.id}`;
-	}
+	// public shareUrl(share: any): string {
+	// 	return `${this.baseUrl()}/shares/${share.id}`;
+	// }
 
 	private requestToCurl_(url: string, options: any) {
 		const output = [];

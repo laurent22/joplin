@@ -4,14 +4,12 @@ import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-import BaseItem from '@joplin/lib/models/BaseItem';
-import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import DialogButtonRow from './DialogButtonRow';
-
-const { themeStyle, buildStyle } = require('@joplin/lib/theme');
+import { themeStyle, buildStyle } from '@joplin/lib/theme';
 import { reg } from '@joplin/lib/registry';
 import Dialog from './Dialog';
 import DialogTitle from './DialogTitle';
+import ShareService from '@joplin/lib/services/share/ShareService';
 const { clipboard } = require('electron');
 
 interface ShareNoteDialogProps {
@@ -85,26 +83,19 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 		void fetchNotes();
 	}, [props.noteIds]);
 
-	const fileApi = async () => {
-		const syncTarget = reg.syncTarget() as SyncTargetJoplinServer;
-		return syncTarget.fileApi();
-	};
-
-	const joplinServerApi = async (): Promise<JoplinServerApi> => {
-		return (await fileApi()).driver().api();
-	};
-
 	const buttonRow_click = () => {
 		props.onClose();
 	};
 
-	const copyLinksToClipboard = (api: JoplinServerApi, shares: SharesMap) => {
+	const copyLinksToClipboard = (shares: SharesMap) => {
 		const links = [];
-		for (const n in shares) links.push(api.shareUrl(shares[n]));
+		for (const n in shares) links.push(ShareService.instance().shareUrl(shares[n]));
 		clipboard.writeText(links.join('\n'));
 	};
 
 	const shareLinkButton_click = async () => {
+		const service = ShareService.instance();
+
 		let hasSynced = false;
 		let tryToSync = false;
 		while (true) {
@@ -118,29 +109,20 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 
 				setSharesState('creating');
 
-				const api = await joplinServerApi();
-
 				const newShares = Object.assign({}, shares);
-				let sharedStatusChanged = false;
 
 				for (const note of notes) {
-					const fullPath = (await fileApi()).fullPath(BaseItem.systemPath(note.id));
-					const share = await api.shareItem(fullPath);
+					const share = await service.shareNote(note.id);
 					newShares[note.id] = share;
-
-					const changed = await BaseItem.updateShareStatus(note, true);
-					if (changed) sharedStatusChanged = true;
 				}
 
 				setShares(newShares);
 
-				if (sharedStatusChanged) {
-					setSharesState('synchronizing');
-					await reg.waitForSyncFinishedThenSync();
-					setSharesState('creating');
-				}
+				setSharesState('synchronizing');
+				await reg.waitForSyncFinishedThenSync();
+				setSharesState('creating');
 
-				copyLinksToClipboard(api, newShares);
+				copyLinksToClipboard(newShares);
 
 				setSharesState('created');
 			} catch (error) {

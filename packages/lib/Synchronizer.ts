@@ -5,7 +5,6 @@ import shim from './shim';
 import MigrationHandler from './services/synchronizer/MigrationHandler';
 import eventManager from './eventManager';
 import { _ } from './locale';
-
 import BaseItem from './models/BaseItem';
 import Folder from './models/Folder';
 import Note from './models/Note';
@@ -14,13 +13,12 @@ import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
 import MasterKey from './models/MasterKey';
 import BaseModel from './BaseModel';
-const { sprintf } = require('sprintf-js');
 import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
-import NoteResource from './models/NoteResource';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
+const { sprintf } = require('sprintf-js');
 const TaskQueue = require('./TaskQueue');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -350,24 +348,6 @@ export default class Synchronizer {
 			return `${Dirnames.Resources}/${resourceId}`;
 		};
 
-		// Before synchronising make sure all share_id properties are set
-		// correctly so as to share/unshare the right items.
-		await Folder.updateAllShareIds();
-
-		// TODO: Update for note link sharing
-
-		// try {
-		// 	await Folder.updateAllShareIds();
-		// 	// if (this.shareService_) {
-		// 	// 	this.logger().info('Indexing resources...');
-		// 	// 	await this.resourceService().indexNoteResources();
-		// 	// 	await NoteResource.applySharedStatusToLinkedResources();
-		// 	// 	await NoteResource.updateResourceShareIds();
-		// 	// }
-		// } catch (error) {
-		// 	this.logger().error('Error indexing resources:', error);
-		// }
-
 		// We index resources and apply the "is_shared" flag before syncing
 		// because it's going to affect what's sent encrypted, and what's sent
 		// plain text.
@@ -375,12 +355,14 @@ export default class Synchronizer {
 			if (this.resourceService()) {
 				this.logger().info('Indexing resources...');
 				await this.resourceService().indexNoteResources();
-				await NoteResource.applySharedStatusToLinkedResources();
-				await NoteResource.updateResourceShareIds();
 			}
 		} catch (error) {
 			this.logger().error('Error indexing resources:', error);
 		}
+
+		// Before synchronising make sure all share_id properties are set
+		// correctly so as to share/unshare the right items.
+		await Folder.updateAllShareIds();
 
 		let errorToThrow = null;
 		let syncLock = null;

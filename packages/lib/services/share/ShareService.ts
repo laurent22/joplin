@@ -1,8 +1,10 @@
 import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
 import Folder from '../../models/Folder';
+import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import SyncTargetJoplinServer from '../../SyncTargetJoplinServer';
+import { State, stateRootKey, StateShare } from './reducer';
 
 export default class ShareService {
 
@@ -26,6 +28,10 @@ export default class ShareService {
 
 	private get store(): Store<any> {
 		return this.store_;
+	}
+
+	private get state(): State {
+		return this.store.getState()[stateRootKey] as State;
 	}
 
 	private api(): JoplinServerApi {
@@ -56,6 +62,29 @@ export default class ShareService {
 		return share;
 	}
 
+	public async shareNote(noteId: string) {
+		const note = await Note.load(noteId);
+		if (!note) throw new Error(`No such note: ${noteId}`);
+
+		const share = await this.api().exec('POST', 'api/shares', {}, { note_id: noteId });
+
+		await Note.save({ id: note.id, is_shared: 1 });
+
+		return share;
+	}
+
+	public shareUrl(share: StateShare): string {
+		return `${this.api().baseUrl()}/shares/${share.id}`;
+	}
+
+	public get shares() {
+		return this.state.shares;
+	}
+
+	public get shareLinkNoteIds(): string[] {
+		return this.shares.filter(s => !!s.note_id).map(s => s.note_id);
+	}
+
 	public async addShareRecipient(shareId: string, recipientEmail: string) {
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
@@ -66,15 +95,15 @@ export default class ShareService {
 		await this.api().exec('DELETE', `api/share_users/${shareUserId}`);
 	}
 
-	public async shares() {
+	private async loadShares() {
 		return this.api().exec('GET', 'api/shares');
 	}
 
-	public async shareUsers(shareId: string) {
+	private async loadShareUsers(shareId: string) {
 		return this.api().exec('GET', `api/shares/${shareId}/users`);
 	}
 
-	public async shareInvitations() {
+	private async loadShareInvitations() {
 		return this.api().exec('GET', 'api/share_users');
 	}
 
@@ -87,7 +116,7 @@ export default class ShareService {
 	}
 
 	public async refreshShareInvitations() {
-		const result = await this.shareInvitations();
+		const result = await this.loadShareInvitations();
 
 		this.store.dispatch({
 			type: 'SHARE_INVITATION_SET',
@@ -96,7 +125,7 @@ export default class ShareService {
 	}
 
 	public async refreshShares() {
-		const result = await this.shares();
+		const result = await this.loadShares();
 
 		this.store.dispatch({
 			type: 'SHARE_SET',
@@ -105,7 +134,7 @@ export default class ShareService {
 	}
 
 	public async refreshShareUsers(shareId: string) {
-		const result = await this.shareUsers(shareId);
+		const result = await this.loadShareUsers(shareId);
 
 		this.store.dispatch({
 			type: 'SHARE_USER_SET',

@@ -9,6 +9,7 @@ import Resource from '@joplin/lib/models/Resource';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import BaseItem from '@joplin/lib/models/BaseItem';
+import { createFolderTree } from './test-utils';
 
 let insideBeforeEach = false;
 
@@ -361,13 +362,26 @@ describe('Synchronizer.e2ee', function() {
 		expect((await decryptionWorker().decryptionDisabledItems()).length).toBe(0);
 	}));
 
-	it('should not encrypt notes that are shared', (async () => {
+	it('should not encrypt notes that are shared by link', (async () => {
 		Setting.setValue('encryption.enabled', true);
 		await loadEncryptionMasterKey();
 
-		const folder1 = await Folder.save({ title: 'folder1' });
-		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'deux', parent_id: folder1.id });
+		await createFolderTree('', [
+			{
+				title: 'folder1',
+				children: [
+					{
+						title: 'un',
+					},
+					{
+						title: 'deux',
+					},
+				],
+			},
+		]);
+
+		const note1 = await Note.loadByTitle('un');
+		let note2 = await Note.loadByTitle('deux');
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -398,6 +412,63 @@ describe('Synchronizer.e2ee', function() {
 		// The non-shared note should be encrypted
 		const note1_2 = await Note.load(note1.id);
 		expect(note1_2.title).toBe('');
+	}));
+
+	it('should not encrypt items that are shared by folder', (async () => {
+		Setting.setValue('encryption.enabled', true);
+		await loadEncryptionMasterKey();
+
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder1',
+				children: [
+					{
+						title: 'note1',
+					},
+				],
+			},
+			{
+				title: 'folder2',
+				children: [
+					{
+						title: 'note2',
+					},
+				],
+			},
+		]);
+
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+
+		await switchClient(1);
+
+		// Simulate that the folder has been shared
+		await Folder.save({ id: folder1.id, share_id: 'abcd' });
+
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+
+		// The shared items should be decrypted
+		{
+			const folder1 = await Folder.loadByTitle('folder1');
+			const note1 = await Note.loadByTitle('note1');
+			expect(folder1.title).toBe('folder1');
+			expect(note1.title).toBe('note1');
+		}
+
+		// The non-shared items should be encrypted
+		{
+			const folder2 = await Folder.loadByTitle('folder2');
+			const note2 = await Note.loadByTitle('note2');
+			expect(folder2).toBeFalsy();
+			expect(note2).toBeFalsy();
+		}
 	}));
 
 });

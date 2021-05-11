@@ -346,17 +346,19 @@ export default class Folder extends BaseItem {
 		// share_id. Then update share_id on all these resources. Essentially it
 		// makes it match the resource share_id to the note share_id.
 		const rows = await this.db().selectAll(`
-			SELECT r.id, n.share_id
+			SELECT r.id, n.share_id, n.is_shared
 			FROM note_resources nr
 			LEFT JOIN resources r ON nr.resource_id = r.id
 			LEFT JOIN notes n ON nr.note_id = n.id
 			WHERE n.share_id != r.share_id
+			OR n.is_shared != r.is_shared
 		`);
 
 		for (const row of rows) {
 			await Resource.save({
 				id: row.id,
 				share_id: row.share_id || '',
+				is_shared: row.is_shared,
 				updated_time: Date.now(),
 			}, { autoTimestamp: false });
 		}

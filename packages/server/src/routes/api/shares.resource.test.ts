@@ -1,5 +1,8 @@
 import { afterAllTests, beforeAllDb, beforeEachDb } from '../../utils/testing/testUtils';
 
+// What resources should be shared is now handled on the client so these tests
+// probably aren't necessary anymore.
+
 describe('shares.resource', function() {
 
 	beforeAll(async () => {

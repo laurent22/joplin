@@ -5,7 +5,6 @@ import Note from '@joplin/lib/models/Note';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
-import NoteResource from '@joplin/lib/models/NoteResource';
 import ResourceService from '@joplin/lib/services/ResourceService';
 
 const testImagePath = `${__dirname}/../tests/support/photo.jpg`;
@@ -290,11 +289,16 @@ describe('models_Folder.sharing', function() {
 					},
 				],
 			},
+			{
+				title: 'folder 2',
+				children: [],
+			},
 		]);
 
 		await Folder.save({ id: folder.id, share_id: 'abcd1234' });
-		await Folder.updateFolderShareIds();
+		await Folder.updateAllShareIds();
 
+		const folder2: FolderEntity = await Folder.loadByTitle('folder 2');
 		const note1: NoteEntity = await Note.loadByTitle('note 1');
 		await shim.attachFileToNote(note1, testImagePath);
 
@@ -308,17 +312,21 @@ describe('models_Folder.sharing', function() {
 			expect(resource.share_id).toBe('');
 		}
 
-		await NoteResource.updateResourceShareIds();
+		await Folder.updateAllShareIds();
+
+		// await NoteResource.updateResourceShareIds();
 
 		{
 			const resource: ResourceEntity = await Resource.load(resourceId);
 			expect(resource.share_id).toBe(note1.share_id);
 		}
 
-		await Note.save({ id: note1.id, share_id: '' });
+		await Note.save({ id: note1.id, parent_id: folder2.id });
 		await resourceService.indexNoteResources();
 
-		await NoteResource.updateResourceShareIds();
+		await Folder.updateAllShareIds();
+
+		// await NoteResource.updateResourceShareIds();
 
 		{
 			const resource: ResourceEntity = await Resource.load(resourceId);

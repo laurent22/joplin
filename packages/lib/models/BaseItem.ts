@@ -12,6 +12,14 @@ const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
 
+export interface BaseItemEntity {
+	id?: string;
+	encryption_applied?: boolean;
+	is_shared?: number;
+	share_id?: string;
+	type_?: ModelType;
+}
+
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
 	items: any[];
@@ -382,14 +390,14 @@ export default class BaseItem extends BaseModel {
 		return this.revisionService_;
 	}
 
-	static async serializeForSync(item: any) {
+	public static async serializeForSync(item: BaseItemEntity) {
 		const ItemClass = this.itemClass(item);
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared) {
+		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared || item.share_id) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
@@ -421,7 +429,7 @@ export default class BaseItem extends BaseModel {
 		for (let i = 0; i < keepKeys.length; i++) {
 			const n = keepKeys[i];
 			if (!item.hasOwnProperty(n)) continue;
-			reducedItem[n] = item[n];
+			reducedItem[n] = (item as any)[n];
 		}
 
 		reducedItem.encryption_applied = 1;
@@ -792,7 +800,7 @@ export default class BaseItem extends BaseModel {
 		}
 	}
 
-	static async updateShareStatus(item: any, isShared: boolean) {
+	static async updateShareStatus(item: BaseItemEntity, isShared: boolean) {
 		if (!item.id || !item.type_) throw new Error('Item must have an ID and a type');
 		if (!!item.is_shared === !!isShared) return false;
 		const ItemClass = this.getClassByItemType(item.type_);
