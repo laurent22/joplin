@@ -1,12 +1,49 @@
 import { State, stateUtils } from '../../reducer';
-
 import BaseModel from '../../BaseModel';
 import Folder from '../../models/Folder';
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
+import { isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
+import { FolderEntity, NoteEntity } from '../database/types';
 
-export default function stateToWhenClauseContext(state: State) {
-	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
-	const note = noteId ? BaseModel.byId(state.notes, noteId) : null;
+export interface WhenClauseContextOptions {
+	commandFolderId?: string;
+	commandNoteId?: string;
+}
+
+export interface WhenClauseContext {
+	notesAreBeingSaved: boolean;
+	syncStarted: boolean;
+	inConflictFolder: boolean;
+	oneNoteSelected: boolean;
+	someNotesSelected: boolean;
+	multipleNotesSelected: boolean;
+	noNotesSelected: boolean;
+	historyhasBackwardNotes: boolean;
+	historyhasForwardNotes: boolean;
+	oneFolderSelected: boolean;
+	noteIsTodo: boolean;
+	noteTodoCompleted: boolean;
+	noteIsMarkdown: boolean;
+	noteIsHtml: boolean;
+	folderIsShareRootAndOwnedByUser: boolean;
+	folderIsShared: boolean;
+}
+
+export default function stateToWhenClauseContext(state: State, options: WhenClauseContextOptions = null): WhenClauseContext {
+	options = {
+		commandFolderId: '',
+		commandNoteId: '',
+		...options,
+	};
+
+	const selectedNoteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+	const selectedNote: NoteEntity = selectedNoteId ? BaseModel.byId(state.notes, selectedNoteId) : null;
+
+	// const commandNoteId = options.commandNoteId || selectedNoteId;
+	// const commandNote:NoteEntity = commandNoteId ? BaseModel.byId(state.notes, commandNoteId) : null;
+
+	const commandFolderId = options.commandFolderId;
+	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
 
 	return {
 		// Application state
@@ -17,7 +54,7 @@ export default function stateToWhenClauseContext(state: State) {
 		inConflictFolder: state.selectedFolderId === Folder.conflictFolderId(),
 
 		// Note selection
-		oneNoteSelected: !!note,
+		oneNoteSelected: !!selectedNote,
 		someNotesSelected: state.selectedNoteIds.length > 0,
 		multipleNotesSelected: state.selectedNoteIds.length > 1,
 		noNotesSelected: !state.selectedNoteIds.length,
@@ -30,9 +67,13 @@ export default function stateToWhenClauseContext(state: State) {
 		oneFolderSelected: !!state.selectedFolderId,
 
 		// Current note properties
-		noteIsTodo: note ? !!note.is_todo : false,
-		noteTodoCompleted: note ? !!note.todo_completed : false,
-		noteIsMarkdown: note ? note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
-		noteIsHtml: note ? note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
+		noteIsTodo: selectedNote ? !!selectedNote.is_todo : false,
+		noteTodoCompleted: selectedNote ? !!selectedNote.todo_completed : false,
+		noteIsMarkdown: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
+		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
+
+		// Current context folder
+		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,
+		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
 	};
 }

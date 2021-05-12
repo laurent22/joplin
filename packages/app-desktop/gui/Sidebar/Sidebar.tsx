@@ -18,6 +18,8 @@ import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import Logger from '@joplin/lib/Logger';
 import { FolderEntity } from '@joplin/lib/services/database/types';
+import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
+import { store } from '@joplin/lib/reducer';
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -233,6 +235,8 @@ class SidebarComponent extends React.Component<Props, State> {
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');
 
+		const state: AppState = store().getState();
+
 		let deleteMessage = '';
 		let deleteButtonLabel = _('Remove');
 		if (itemType === BaseModel.TYPE_FOLDER) {
@@ -309,7 +313,7 @@ class SidebarComponent extends React.Component<Props, State> {
 			// that are within a shared notebook. If user wants to do this,
 			// they'd have to move the notebook out of the shared notebook
 			// first.
-			if (Folder.isRootSharedFolder(item) || !item.share_id) {
+			if (CommandService.instance().isEnabled('showShareFolderDialog', stateToWhenClauseContext(state, { commandFolderId: itemId }))) {
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
 			}
 

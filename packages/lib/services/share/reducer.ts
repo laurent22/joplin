@@ -1,5 +1,6 @@
 import { State as RootState } from '../../reducer';
 import { Draft } from 'immer';
+import { FolderEntity } from '../database/types';
 
 interface StateShareUserUser {
 	id: string;
@@ -46,6 +47,17 @@ export const defaultState: State = {
 	shareUsers: {},
 	shareInvitations: [],
 };
+
+export function isSharedFolderOwner(state: RootState, folderId: string): boolean {
+	const userId = state.settings['sync.userId'];
+	const share = state[stateRootKey].shares.find(s => s.folder_id === folderId);
+	if (!share) return false;
+	return share.user.id === userId;
+}
+
+export function isRootSharedFolder(folder: FolderEntity): boolean {
+	return !!folder.share_id && !folder.parent_id;
+}
 
 const reducer = (draftRoot: Draft<RootState>, action: any) => {
 	if (action.type.indexOf('SHARE_') !== 0) return;

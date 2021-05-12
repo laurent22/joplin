@@ -865,6 +865,12 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			'sync.userId': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+			},
+
 			// Deprecated in favour of windowContentZoomFactor
 			'style.zoom': { value: 100, type: SettingItemType.Int, public: false, storage: SettingStorage.File, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
 

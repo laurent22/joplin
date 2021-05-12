@@ -6,6 +6,8 @@ import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
+import { isRootSharedFolder, isSharedFolderOwner } from '../services/share/reducer';
+import { store } from '../reducer';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 interface FolderEntityWithChildren extends FolderEntity {
@@ -86,7 +88,7 @@ export default class Folder extends BaseItem {
 		// When deleting a non-owner deletes a shared folder, we simply unshare
 		// the folder but don't delete any sub-item. Server-side the folder will
 		// be unshared as well as all its children.
-		if (this.isRootSharedFolder(folder) && !this.shareService().isSharedFolderOwner(folder.id)) {
+		if (isRootSharedFolder(folder) && !isSharedFolderOwner(store().getState(), folder.id)) {
 			options.deleteChildren = false;
 		}
 
@@ -512,15 +514,11 @@ export default class Folder extends BaseItem {
 		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
 	}
 
-	public static isRootSharedFolder(folder: FolderEntity): boolean {
-		return folder.share_id && !folder.parent_id;
-	}
-
 	static async canNestUnder(folderId: string, targetFolderId: string) {
 		if (folderId === targetFolderId) return false;
 
 		const folder = await Folder.load(folderId);
-		if (this.isRootSharedFolder(folder)) return false;
+		if (isRootSharedFolder(folder)) return false;
 
 		const conflictFolderId = Folder.conflictFolderId();
 		if (folderId == conflictFolderId || targetFolderId == conflictFolderId) return false;

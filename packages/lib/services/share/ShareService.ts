@@ -29,15 +29,8 @@ export default class ShareService {
 		return this.store_;
 	}
 
-	private get state(): State {
+	public get state(): State {
 		return this.store.getState()[stateRootKey] as State;
-	}
-
-	public isSharedFolderOwner(folderId: string): boolean {
-		const userId = this.api().userId;
-		const share = this.shares.find(s => s.folder_id === folderId);
-		if (!share) return false;
-		return share.user.id === userId;
 	}
 
 	private api(): JoplinServerApi {
@@ -200,6 +193,7 @@ export default class ShareService {
 		if (this.enabled) {
 			await this.refreshShareInvitations();
 			await this.refreshShares();
+			Setting.setValue('sync.userId', this.api().userId);
 		}
 	}
 

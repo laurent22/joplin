@@ -4,6 +4,7 @@ import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultS
 import Note from './models/Note';
 import Folder from './models/Folder';
 import BaseModel from './BaseModel';
+import { Store } from 'redux';
 const ArrayUtils = require('./ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -166,6 +167,16 @@ export const defaultState: State = {
 
 for (const additionalReducer of additionalReducers) {
 	(defaultState as any)[additionalReducer.stateRootKey] = additionalReducer.defaultState;
+}
+
+let store_: Store<any> = null;
+
+export function setStore(v: Store<any>) {
+	store_ = v;
+}
+
+export function store(): Store<any> {
+	return store_;
 }
 
 export const MAX_HISTORY = 200;

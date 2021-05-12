@@ -2,7 +2,7 @@ import Setting from './models/Setting';
 import Logger, { TargetType, LoggerWrapper } from './Logger';
 import shim from './shim';
 import BaseService from './services/BaseService';
-import reducer from './reducer';
+import reducer, { setStore } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
 import { _, setLocale } from './locale';
 import KvStore from './services/KvStore';
@@ -604,6 +604,7 @@ export default class BaseApplication {
 
 	initRedux() {
 		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn() as any));
+		setStore(this.store_);
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 		// reg.dispatch = this.store().dispatch;
