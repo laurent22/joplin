@@ -6,8 +6,7 @@ import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
-import { isRootSharedFolder, isSharedFolderOwner } from '../services/share/reducer';
-import { store } from '../reducer';
+import { isRootSharedFolder } from '../services/share/reducer';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 interface FolderEntityWithChildren extends FolderEntity {
@@ -84,13 +83,6 @@ export default class Folder extends BaseItem {
 
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
-
-		// When deleting a non-owner deletes a shared folder, we simply unshare
-		// the folder but don't delete any sub-item. Server-side the folder will
-		// be unshared as well as all its children.
-		if (isRootSharedFolder(folder) && !isSharedFolderOwner(store().getState(), folder.id)) {
-			options.deleteChildren = false;
-		}
 
 		if (options.deleteChildren) {
 			const noteIds = await Folder.noteIds(folderId);
