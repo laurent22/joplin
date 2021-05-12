@@ -75,7 +75,7 @@ Whenever importing a large number of notes, for example from Evernote, it may ta
 
 ## Not all notes, folders or tags are displayed on Mobile App
 
-Joplin does not have a background sync on Mobile devices. When Joplin is closed or the device is put into sleep (display off), the sync is interrupted.
+Joplin does not have a background sync on Mobile devices. When Joplin is closed, send in background or the device is put into sleep (display off), the sync is interrupted.
 
 ## How can I check the sync status?
 
