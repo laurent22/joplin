@@ -8,15 +8,14 @@ version: '3'
 
 services:
     db:
-        image: postgres:13.1
-        ports:
-            - "5432:5432"
+        image: postgres:13
         restart: unless-stopped
         environment:
-            - APP_PORT=22300
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_DB=${POSTGRES_DATABASE}
+        volumes:
+            - ./postgres-data:/var/lib/postgresql/data
     app:
         image: joplin/server:latest
         depends_on:
