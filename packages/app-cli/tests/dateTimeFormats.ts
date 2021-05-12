@@ -31,4 +31,16 @@ describe('dateFormats', function() {
 
 	}));
 
+	it('should format time according to TIME_FORMAT', (async () => {
+
+		const now = new Date('2017-01-30T20:30:00').getTime();
+
+		// TIME_FORMAT_1 = 'HH:mm';
+		// TIME_FORMAT_2 = 'h:mm A';
+
+		expect(time.formatMsToLocal(now, Setting.TIME_FORMAT_1)).toBe('20:30');
+		expect(time.formatMsToLocal(now, Setting.TIME_FORMAT_2)).toBe('8:30 PM');
+
+	}));
+
 });
