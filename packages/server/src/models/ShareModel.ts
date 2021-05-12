@@ -25,6 +25,10 @@ export default class ShareModel extends BaseModel<Share> {
 		if (action === AclAction.Read) {
 			if (user.id !== resource.owner_id) throw new ErrorForbidden('no access to this share');
 		}
+
+		if (action === AclAction.Delete) {
+			if (user.id !== resource.owner_id) throw new ErrorForbidden('no access to this share');
+		}
 	}
 
 	protected objectToApiOutput(object: Share): Share {
@@ -165,20 +169,15 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleUpdated = async (change: Change, item: Item, share: Share) => {
-			// console.info('UPDATE ITEM', item);
-			// console.info('change', change);
-			// console.info('share', share);
-
-			// if (![ModelType.Note, ModelType.Folder, ModelType.Resource].includes(item.jop_type)) return;
-
 			const previousItem = this.models().change().unserializePreviousItem(change.previous_item);
 			const previousShareId = previousItem.jop_share_id;
-			const newShareId = share ? share.id : '';
+			const shareId = share ? share.id : '';
 
-			if (previousShareId === newShareId) return;
+			if (previousShareId === shareId) return;
 
-			if (previousShareId) {
-				const previousShare = await this.models().share().load(previousShareId);
+			const previousShare = previousShareId ? await this.models().share().load(previousShareId) : null;
+
+			if (previousShare) {
 				const shareUserIds = await this.allShareUserIds(previousShare);
 				for (const shareUserId of shareUserIds) {
 					if (shareUserId === change.user_id) continue;
@@ -186,7 +185,7 @@ export default class ShareModel extends BaseModel<Share> {
 				}
 			}
 
-			if (newShareId) {
+			if (share) {
 				const shareUserIds = await this.allShareUserIds(share);
 				for (const shareUserId of shareUserIds) {
 					if (shareUserId === change.user_id) continue;

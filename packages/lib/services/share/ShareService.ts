@@ -62,10 +62,53 @@ export default class ShareService {
 
 		const share = await this.api().exec('POST', 'api/shares', {}, { folder_id: folderId });
 
+		// Note: race condition if the share is created but the app crashes
+		// before setting share_id on the folder. See unshareFolder() for info.
 		await Folder.save({ id: folder.id, share_id: share.id });
 		await Folder.updateAllShareIds();
 
 		return share;
+	}
+
+	public async unshareFolder(folderId: string) {
+		const folder = await Folder.load(folderId);
+		if (!folder) throw new Error(`No such folder: ${folderId}`);
+
+		const share = this.shares.find(s => s.folder_id === folderId);
+		if (!share) throw new Error(`No share for folder: ${folderId}`);
+
+		// First, delete the share - which in turns is going to remove the items
+		// for all users, except the owner.
+		await this.deleteShare(share.id);
+
+		// Then reset the "share_id" field for the folder and all sub-items.
+		// This could potentially be done server-side, when deleting the share,
+		// but since clients are normally responsible for maintaining the
+		// share_id property, we do it here for consistency. It will also avoid
+		// conflicts because changes will come only from the clients.
+		//
+		// Note that there could be a race condition here if the share is
+		// deleted, but the app crashes just before setting share_id to "". It's
+		// very unlikely to happen so we leave like this for now.
+		//
+		// We could potentially have a clean up process at some point:
+		//
+		// - It would download all share objects
+		// - Then look for all items where the share_id is not in any of these
+		//   shares objects
+		// - And set those to ""
+		//
+		// Likewise, it could apply the share_id to folders based on
+		// share.folder_id
+		//
+		// Setting the share_id is not critical - what matters is that when the
+		// share is deleted, other users no longer have access to the item, so
+		// can't change or read them.
+		await Folder.save({ id: folder.id, share_id: '' });
+
+		// It's ok if updateAllShareIds() doesn't run because it's executed on
+		// each sync too.
+		await Folder.updateAllShareIds();
 	}
 
 	public async shareNote(noteId: string) {
@@ -99,6 +142,10 @@ export default class ShareService {
 
 	public async deleteShareRecipient(shareUserId: string) {
 		await this.api().exec('DELETE', `api/share_users/${shareUserId}`);
+	}
+
+	public async deleteShare(shareId: string) {
+		await this.api().exec('DELETE', `api/shares/${shareId}`);
 	}
 
 	private async loadShares() {

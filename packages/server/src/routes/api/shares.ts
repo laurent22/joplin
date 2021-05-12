@@ -119,5 +119,12 @@ router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	};
 });
 
+router.del('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
+	ownerRequired(ctx);
+
+	const share = await ctx.models.share().load(path.id);
+	await ctx.models.share().checkIfAllowed(ctx.owner, AclAction.Delete, share);
+	await ctx.models.share().delete(share.id);
+});
 
 export default router;

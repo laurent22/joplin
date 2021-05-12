@@ -677,8 +677,8 @@ describe('shares.folder', function() {
 	});
 
 	test('should unshare from a non-owner user who has deleted the root folder', async function() {
-		const { user:user1, session: session1 } = await createUserAndSession(1);
-		const { user:user2, session: session2 } = await createUserAndSession(2);
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
 
 		const { item } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
 			{
@@ -695,12 +695,51 @@ describe('shares.folder', function() {
 
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(2);
 
-		await deleteApi(session2.id, 'items/root:/' + item.name + ':');
+		await deleteApi(session2.id, `items/root:/${item.name}:`);
 
 		expect((await models().userItem().byUserId(user1.id)).length).toBe(2);
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
 	});
 
+	test('should unshare a folder', async function() {
+		// The process to unshare a folder is as follow:
+		//
+		// - Client call DELETE /api/share/:id
+		// - Client sets the share_id of the folder and all sub-items to ""
+		//
+		// After doing this, when running updateSharedItems() on the server, it
+		// will process a share that no longer exists. This is expected and
+		// should not crash the process.
+
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const { item, share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		await models().share().updateSharedItems3();
+
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(2);
+
+		const noteItem = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+
+		// Simulate unsharing by setting the share ID to "" and deleting the share object
+		await deleteApi(session1.id, `shares/${share.id}`);
+		await models().item().saveForUser(user1.id, { id: item.id, jop_share_id: '' });
+		await models().item().saveForUser(user1.id, { id: noteItem.id, jop_share_id: '' });
+
+		await models().share().updateSharedItems3();
+
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
+	});
 
 	// test('should handle incomplete sync - orphan note is moved out of shared folder', async function() {
 	// 	// - A note and its folder are moved to a shared folder.

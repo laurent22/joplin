@@ -2,13 +2,23 @@ const React = require('react');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 
+export interface ButtonSpec {
+	name: string;
+	label: string;
+}
+
+export interface ClickEvent {
+	buttonName: string;
+}
+
 interface Props {
 	themeId: number;
-	onClick?: Function;
+	onClick?: (event: ClickEvent)=> void;
 	okButtonShow?: boolean;
 	cancelButtonShow?: boolean;
 	cancelButtonLabel?: string;
 	okButtonRef?: any;
+	customButtons?: ButtonSpec[];
 }
 
 export default function DialogButtonRow(props: Props) {
@@ -22,6 +32,10 @@ export default function DialogButtonRow(props: Props) {
 		if (props.onClick) props.onClick({ buttonName: 'cancel' });
 	};
 
+	const customButton_click = (event: ClickEvent) => {
+		if (props.onClick) props.onClick(event);
+	};
+
 	const onKeyDown = (event: any) => {
 		if (event.keyCode === 13) {
 			okButton_click();
@@ -31,6 +45,16 @@ export default function DialogButtonRow(props: Props) {
 	};
 
 	const buttonComps = [];
+
+	if (props.customButtons) {
+		for (const b of props.customButtons) {
+			buttonComps.push(
+				<button key={b.name} style={theme.buttonStyle} onClick={() => customButton_click({ buttonName: b.name })} onKeyDown={onKeyDown}>
+					{b.label}
+				</button>
+			);
+		}
+	}
 
 	if (props.okButtonShow !== false) {
 		buttonComps.push(

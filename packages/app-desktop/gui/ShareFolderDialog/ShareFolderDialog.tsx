@@ -1,5 +1,5 @@
 import Dialog from '../Dialog';
-import DialogButtonRow from '../DialogButtonRow';
+import DialogButtonRow, { ClickEvent, ButtonSpec } from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import { _ } from '@joplin/lib/locale';
 import { useEffect, useState } from 'react';
@@ -123,6 +123,7 @@ function ShareFolderDialog(props: Props) {
 	const [share, setShare] = useState<StateShare>(null);
 	const [shareUsers, setShareUsers] = useState<StateShareUser[]>([]);
 	const [shareState, setShareState] = useState<ShareState>(ShareState.Idle);
+	const [customButtons, setCustomButtons] = useState<ButtonSpec[]>([]);
 
 	async function synchronize(event: AsyncEffectEvent = null) {
 		setShareState(ShareState.Synchronizing);
@@ -153,6 +154,13 @@ function ShareFolderDialog(props: Props) {
 	useEffect(() => {
 		if (!share) return;
 		void ShareService.instance().refreshShareUsers(share.id);
+	}, [share]);
+
+	useEffect(() => {
+		setCustomButtons(share ? [{
+			name: 'unshare',
+			label: _('Unshare'),
+		}] : []);
 	}, [share]);
 
 	useEffect(() => {
@@ -283,7 +291,13 @@ function ShareFolderDialog(props: Props) {
 		);
 	}
 
-	function buttonRow_click() {
+	async function buttonRow_click(event: ClickEvent) {
+		if (event.buttonName === 'unshare') {
+			if (!confirm(_('Unshare this notebook? The recipients will no longer have access to its content.'))) return;
+			await ShareService.instance().unshareFolder(props.folderId);
+			void synchronize();
+		}
+
 		props.onClose();
 	}
 
@@ -296,7 +310,13 @@ function ShareFolderDialog(props: Props) {
 				{renderShareState()}
 				{renderError()}
 				{renderRecipients()}
-				<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
+				<DialogButtonRow
+					themeId={props.themeId}
+					onClick={buttonRow_click}
+					okButtonShow={false}
+					cancelButtonLabel={_('Close')}
+					customButtons={customButtons}
+				/>
 			</div>
 		);
 	}
