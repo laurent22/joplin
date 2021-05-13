@@ -1,6 +1,5 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
-import { ltrimSlashes } from '../path-utils';
 import eventManager from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
@@ -88,6 +87,31 @@ export enum SyncStartupOperation {
 	ClearLocalData = 2,
 }
 
+export enum Env {
+	Undefined = 'SET_ME',
+	Dev = 'dev',
+	Prod = 'prod',
+}
+
+export interface Constants {
+	env: Env;
+	isDemo: boolean;
+	appName: string;
+	appId: string;
+	appType: string;
+	resourceDirName: string;
+	resourceDir: string;
+	profileDir: string;
+	templateDir: string;
+	tempDir: string;
+	pluginDataDir: string;
+	cacheDir: string;
+	pluginDir: string;
+	flagOpenDevTools: boolean;
+	syncVersion: number;
+	startupDevPlugins: string[];
+}
+
 interface SettingSections {
 	[key: string]: SettingSection;
 }
@@ -151,8 +175,8 @@ class Setting extends BaseModel {
 
 	// Contains constants that are set by the application and
 	// cannot be modified by the user:
-	public static constants_: any = {
-		env: 'SET_ME',
+	public static constants_: Constants = {
+		env: Env.Undefined,
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
@@ -452,20 +476,20 @@ class Setting extends BaseModel {
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
-			'sync.9.directory': {
-				value: 'Apps/Joplin',
-				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
-				},
-				filter: value => {
-					return value ? ltrimSlashes(rtrimSlashes(value)) : '';
-				},
-				public: true,
-				label: () => _('Joplin Server Directory'),
-				storage: SettingStorage.File,
-			},
+			// 'sync.9.directory': {
+			// 	value: 'Apps/Joplin',
+			// 	type: SettingItemType.String,
+			// 	section: 'sync',
+			// 	show: (settings: any) => {
+			// 		return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+			// 	},
+			// 	filter: value => {
+			// 		return value ? ltrimSlashes(rtrimSlashes(value)) : '';
+			// 	},
+			// 	public: true,
+			// 	label: () => _('Joplin Server Directory'),
+			// 	storage: SettingStorage.File,
+			// },
 			'sync.9.username': {
 				value: '',
 				type: SettingItemType.String,
@@ -474,7 +498,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
-				label: () => _('Joplin Server username'),
+				label: () => _('Joplin Server email'),
 				storage: SettingStorage.File,
 			},
 			'sync.9.password': {
@@ -840,6 +864,12 @@ class Setting extends BaseModel {
 			'encryption.shouldReencrypt': {
 				value: -1, // will be set on app startup
 				type: SettingItemType.Int,
+				public: false,
+			},
+
+			'sync.userId': {
+				value: '',
+				type: SettingItemType.String,
 				public: false,
 			},
 
@@ -1383,7 +1413,7 @@ class Setting extends BaseModel {
 
 	static setConstant(key: string, value: any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
-		this.constants_[key] = value;
+		(this.constants_ as any)[key] = value;
 	}
 
 	public static setValue(key: string, value: any) {
@@ -1546,7 +1576,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
-			const v = this.constants_[key];
+			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
 			if (output == 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;

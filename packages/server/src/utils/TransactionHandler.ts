@@ -1,4 +1,4 @@
-import * as Knex from 'knex';
+import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
 // This transaction handler allows abstracting away the complexity of managing nested transactions

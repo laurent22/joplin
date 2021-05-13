@@ -1,5 +1,5 @@
 import JoplinServerApi from './JoplinServerApi';
-import { trimSlashes, dirname, basename } from './path-utils';
+import { trimSlashes } from './path-utils';
 
 // All input paths should be in the format: "path/to/file". This is converted to
 // "root:/path/to/file:" when doing the API call.
@@ -34,38 +34,35 @@ export default class FileApiDriverJoplinServer {
 		return 3;
 	}
 
-	private metadataToStat_(md: any, path: string, isDeleted: boolean = false) {
+	private metadataToStat_(md: any, path: string, isDeleted: boolean = false, rootPath: string) {
 		const output = {
-			path: path,
+			path: rootPath ? path.substr(rootPath.length + 1) : path,
 			updated_time: md.updated_time,
-			isDir: !!md.is_directory,
+			isDir: false, // !!md.is_directory,
 			isDeleted: isDeleted,
 		};
-
-		// TODO - HANDLE DELETED
-		// if (md['.tag'] === 'deleted') output.isDeleted = true;
 
 		return output;
 	}
 
-	private metadataToStats_(mds: any[]) {
+	private metadataToStats_(mds: any[], rootPath: string) {
 		const output = [];
 		for (let i = 0; i < mds.length; i++) {
-			output.push(this.metadataToStat_(mds[i], mds[i].name));
+			output.push(this.metadataToStat_(mds[i], mds[i].name, false, rootPath));
 		}
 		return output;
 	}
 
 	// Transforms a path such as "Apps/Joplin/file.txt" to a complete a complete
-	// API URL path: "api/files/root:/Apps/Joplin/file.txt:"
+	// API URL path: "api/items/root:/Apps/Joplin/file.txt:"
 	private apiFilePath_(p: string) {
-		return `api/files/root:/${trimSlashes(p)}:`;
+		return `api/items/root:/${trimSlashes(p)}:`;
 	}
 
 	public async stat(path: string) {
 		try {
 			const response = await this.api().exec('GET', this.apiFilePath_(path));
-			return this.metadataToStat_(response, path);
+			return this.metadataToStat_(response, path, false, '');
 		} catch (error) {
 			if (error.code === 404) return null;
 			throw error;
@@ -80,9 +77,13 @@ export default class FileApiDriverJoplinServer {
 			try {
 				const query = cursor ? { cursor } : {};
 				const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/delta`, query);
-				const stats = response.items.map((item: any) => {
-					return this.metadataToStat_(item.item, item.item.name, item.type === 3);
-				});
+				const stats = response.items
+					.filter((item: any) => {
+						return item.item_name.indexOf('locks/') !== 0 && item.item_name.indexOf('temp/') !== 0;
+					})
+					.map((item: any) => {
+						return this.metadataToStat_(item, item.item_name, item.type === 3, '');
+					});
 
 				const output = {
 					items: stats,
@@ -108,15 +109,22 @@ export default class FileApiDriverJoplinServer {
 			...options,
 		};
 
+		let isUsingWildcard = false;
+		let searchPath = path;
+		if (searchPath) {
+			searchPath += '/*';
+			isUsingWildcard = true;
+		}
+
 		const query = options.context?.cursor ? { cursor: options.context.cursor } : null;
 
-		const results = await this.api().exec('GET', `${this.apiFilePath_(path)}/children`, query);
+		const results = await this.api().exec('GET', `${this.apiFilePath_(searchPath)}/children`, query);
 
 		const newContext: any = {};
 		if (results.cursor) newContext.cursor = results.cursor;
 
 		return {
-			items: this.metadataToStats_(results.items),
+			items: this.metadataToStats_(results.items, isUsingWildcard ? path : ''),
 			hasMore: results.has_more,
 			context: newContext,
 		} as any;
@@ -134,32 +142,13 @@ export default class FileApiDriverJoplinServer {
 		}
 	}
 
-	private parentPath_(path: string) {
-		return dirname(path);
-	}
-
-	private basename_(path: string) {
-		return basename(path);
-	}
-
-	public async mkdir(path: string) {
-		const parentPath = this.parentPath_(path);
-		const filename = this.basename_(path);
-
-		try {
-			const response = await this.api().exec('POST', `${this.apiFilePath_(parentPath)}/children`, null, {
-				name: filename,
-				is_directory: 1,
-			});
-			return response;
-		} catch (error) {
-			// 409 is OK - directory already exists
-			if (error.code !== 409) throw error;
-		}
+	public async mkdir(_path: string) {
+		// This is a no-op because all items technically are at the root, but
+		// they can have names such as ".resources/xxxxxxxxxx'
 	}
 
 	public async put(path: string, content: any, options: any = null) {
-		return this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, null, content, {
+		return this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, options && options.shareId ? { share_id: options.shareId } : null, content, {
 			'Content-Type': 'application/octet-stream',
 		}, options);
 	}
@@ -174,6 +163,5 @@ export default class FileApiDriverJoplinServer {
 
 	public async clearRoot(path: string) {
 		await this.delete(path);
-		await this.mkdir(path);
 	}
 }

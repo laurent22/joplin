@@ -1,6 +1,6 @@
 const { basicDelta } = require('./file-api');
 const { rtrimSlashes, ltrimSlashes } = require('./path-utils');
-const JoplinError = require('./JoplinError');
+const JoplinError = require('./JoplinError').default;
 
 class FileApiDriverWebDav {
 	constructor(api) {

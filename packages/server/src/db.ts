@@ -1,4 +1,4 @@
-import * as Knex from 'knex';
+import { knex, Knex } from 'knex';
 import { DatabaseConfig } from './utils/types';
 import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
@@ -98,7 +98,7 @@ export async function waitForConnection(dbConfig: DatabaseConfig): Promise<Conne
 }
 
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
-	return require('knex')(makeKnexConfig(dbConfig));
+	return knex(makeKnexConfig(dbConfig));
 }
 
 export async function disconnectDb(db: DbConnection) {
@@ -148,7 +148,19 @@ function isNoSuchTableError(error: any): boolean {
 		if (error.code === '42P01') return true;
 
 		// Sqlite3 error
-		if (error.message && error.message.includes('no such table: knex_migrations')) return true;
+		if (error.message && error.message.includes('SQLITE_ERROR: no such table:')) return true;
+	}
+
+	return false;
+}
+
+export function isUniqueConstraintError(error: any): boolean {
+	if (error) {
+		// Postgres error: 23505: unique_violation
+		if (error.code === '23505') return true;
+
+		// Sqlite3 error
+		if (error.code === 'SQLITE_CONSTRAINT' && error.message.includes('UNIQUE constraint')) return true;
 	}
 
 	return false;
@@ -201,14 +213,20 @@ export enum NotificationLevel {
 }
 
 export enum ItemType {
-    File = 1,
-    User,
+    Item = 1,
+	UserItem = 2,
+	User,
 }
 
 export enum ChangeType {
 	Create = 1,
 	Update = 2,
 	Delete = 3,
+}
+
+export enum FileContentType {
+	Any = 1,
+	JoplinItem = 2,
 }
 
 export function changeTypeToString(t: ChangeType): string {
@@ -221,6 +239,13 @@ export function changeTypeToString(t: ChangeType): string {
 export enum ShareType {
 	Link = 1, // When a note is shared via a public link
 	App = 2, // When a note is shared with another user on the same server instance
+	JoplinRootFolder = 3,
+}
+
+export enum ShareUserStatus {
+	Waiting = 0,
+	Accepted = 1,
+	Rejected = 2,
 }
 
 export interface WithDates {
@@ -229,7 +254,7 @@ export interface WithDates {
 }
 
 export interface WithUuid {
-	id?: string;
+	id?: Uuid;
 }
 
 interface DatabaseTableColumn {
@@ -258,33 +283,21 @@ export interface Session extends WithDates, WithUuid {
 	auth_code?: string;
 }
 
-export interface Permission extends WithDates, WithUuid {
-	user_id?: Uuid;
-	item_type?: ItemType;
-	item_id?: Uuid;
-	can_read?: number;
-	can_write?: number;
-}
-
-export interface File extends WithDates, WithUuid {
+export interface File {
+	id?: Uuid;
 	owner_id?: Uuid;
 	name?: string;
-	content?: Buffer;
+	content?: any;
 	mime_type?: string;
 	size?: number;
 	is_directory?: number;
 	is_root?: number;
 	parent_id?: Uuid;
-}
-
-export interface Change extends WithDates, WithUuid {
-	counter?: number;
-	owner_id?: Uuid;
-	item_type?: ItemType;
-	parent_id?: Uuid;
-	item_id?: Uuid;
-	item_name?: string;
-	type?: ChangeType;
+	updated_time?: string;
+	created_time?: string;
+	source_file_id?: Uuid;
+	content_type?: number;
+	content_id?: Uuid;
 }
 
 export interface ApiClient extends WithDates, WithUuid {
@@ -301,10 +314,59 @@ export interface Notification extends WithDates, WithUuid {
 	canBeDismissed?: number;
 }
 
+export interface ShareUser extends WithDates, WithUuid {
+	share_id?: Uuid;
+	user_id?: Uuid;
+	status?: ShareUserStatus;
+}
+
+export interface Item extends WithDates, WithUuid {
+	name?: string;
+	mime_type?: string;
+	content?: Buffer;
+	content_size?: number;
+	jop_id?: Uuid;
+	jop_parent_id?: Uuid;
+	jop_share_id?: Uuid;
+	jop_type?: number;
+	jop_encryption_applied?: number;
+}
+
+export interface UserItem extends WithDates {
+	id?: number;
+	user_id?: Uuid;
+	item_id?: Uuid;
+}
+
+export interface ItemResource {
+	id?: number;
+	item_id?: Uuid;
+	resource_id?: Uuid;
+}
+
+export interface KeyValue {
+	id?: number;
+	key?: string;
+	type?: number;
+	value?: string;
+}
+
 export interface Share extends WithDates, WithUuid {
 	owner_id?: Uuid;
-	file_id?: Uuid;
+	item_id?: Uuid;
 	type?: ShareType;
+	folder_id?: Uuid;
+	note_id?: Uuid;
+}
+
+export interface Change extends WithDates, WithUuid {
+	counter?: number;
+	item_type?: ItemType;
+	item_id?: Uuid;
+	item_name?: string;
+	type?: ChangeType;
+	previous_item?: string;
+	user_id?: Uuid;
 }
 
 export const databaseSchema: DatabaseTables = {
@@ -324,16 +386,6 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},
-	permissions: {
-		id: { type: 'string' },
-		user_id: { type: 'string' },
-		item_type: { type: 'number' },
-		item_id: { type: 'string' },
-		can_read: { type: 'number' },
-		can_write: { type: 'number' },
-		updated_time: { type: 'string' },
-		created_time: { type: 'string' },
-	},
 	files: {
 		id: { type: 'string' },
 		owner_id: { type: 'string' },
@@ -346,18 +398,9 @@ export const databaseSchema: DatabaseTables = {
 		parent_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
-	},
-	changes: {
-		counter: { type: 'number' },
-		id: { type: 'string' },
-		owner_id: { type: 'string' },
-		item_type: { type: 'number' },
-		parent_id: { type: 'string' },
-		item_id: { type: 'string' },
-		item_name: { type: 'string' },
-		type: { type: 'number' },
-		updated_time: { type: 'string' },
-		created_time: { type: 'string' },
+		source_file_id: { type: 'string' },
+		content_type: { type: 'number' },
+		content_id: { type: 'string' },
 	},
 	api_clients: {
 		id: { type: 'string' },
@@ -377,13 +420,67 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},
+	share_users: {
+		id: { type: 'string' },
+		share_id: { type: 'string' },
+		user_id: { type: 'string' },
+		status: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	items: {
+		id: { type: 'string' },
+		name: { type: 'string' },
+		mime_type: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+		content: { type: 'any' },
+		content_size: { type: 'number' },
+		jop_id: { type: 'string' },
+		jop_parent_id: { type: 'string' },
+		jop_share_id: { type: 'string' },
+		jop_type: { type: 'number' },
+		jop_encryption_applied: { type: 'number' },
+	},
+	user_items: {
+		id: { type: 'number' },
+		user_id: { type: 'string' },
+		item_id: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	item_resources: {
+		id: { type: 'number' },
+		item_id: { type: 'string' },
+		resource_id: { type: 'string' },
+	},
+	key_values: {
+		id: { type: 'number' },
+		key: { type: 'string' },
+		type: { type: 'number' },
+		value: { type: 'string' },
+	},
 	shares: {
 		id: { type: 'string' },
 		owner_id: { type: 'string' },
-		file_id: { type: 'string' },
+		item_id: { type: 'string' },
 		type: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		folder_id: { type: 'string' },
+		note_id: { type: 'string' },
+	},
+	changes: {
+		counter: { type: 'number' },
+		id: { type: 'string' },
+		item_type: { type: 'number' },
+		item_id: { type: 'string' },
+		item_name: { type: 'string' },
+		type: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+		previous_item: { type: 'string' },
+		user_id: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

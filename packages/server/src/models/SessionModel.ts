@@ -1,5 +1,5 @@
 import BaseModel from './BaseModel';
-import { User, Session } from '../db';
+import { User, Session, Uuid } from '../db';
 import uuidgen from '../utils/uuidgen';
 import { ErrorForbidden } from '../utils/errors';
 
@@ -12,7 +12,7 @@ export default class SessionModel extends BaseModel<Session> {
 	public async sessionUser(sessionId: string): Promise<User> {
 		const session: Session = await this.load(sessionId);
 		if (!session) return null;
-		const userModel = this.models().user({ userId: session.user_id });
+		const userModel = this.models().user();
 		return userModel.load(session.user_id);
 	}
 
@@ -32,6 +32,10 @@ export default class SessionModel extends BaseModel<Session> {
 	public async logout(sessionId: string) {
 		if (!sessionId) return;
 		await this.delete(sessionId);
+	}
+
+	public async deleteByUserId(userId: Uuid) {
+		await this.db(this.tableName).where('user_id', '=', userId).delete();
 	}
 
 }

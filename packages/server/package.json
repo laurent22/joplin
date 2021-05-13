@@ -5,10 +5,12 @@
   "scripts": {
     "start-dev": "nodemon --config nodemon.json dist/app.js --env dev",
     "start": "node dist/app.js",
-    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && rm -f db-buildTypes.sqlite",
+    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",
-    "test": "jest",
+    "test": "jest --verbose=false",
     "test-ci": "npm run test",
+    "test-debug": "node --inspect node_modules/.bin/jest -- --verbose=false",
+    "clean": "rm -rf dist/",
     "watch": "tsc --watch --project tsconfig.json"
   },
   "dependencies": {
@@ -22,7 +24,7 @@
     "formidable": "^1.2.2",
     "fs-extra": "^8.1.0",
     "html-entities": "^1.3.1",
-    "knex": "^0.19.4",
+    "knex": "0.95.4",
     "koa": "^2.8.1",
     "markdown-it": "^12.0.4",
     "mustache": "^3.1.0",

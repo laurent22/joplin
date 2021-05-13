@@ -13,6 +13,7 @@ import Logger, { TargetType } from '@joplin/lib/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
+import DebugService from '@joplin/lib/debug/DebugService';
 import { _, setLocale } from '@joplin/lib/locale';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
@@ -58,6 +59,7 @@ const commands = [
 	require('./gui/MainScreen/commands/openTag'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
+	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/renameTag'),
 	require('./gui/MainScreen/commands/search'),
 	require('./gui/MainScreen/commands/selectTemplate'),
@@ -100,6 +102,7 @@ const globalCommands = [
 ];
 
 import editorCommandDeclarations from './gui/NoteEditor/commands/editorCommandDeclarations';
+import ShareService from '@joplin/lib/services/share/ShareService';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -730,6 +733,8 @@ class Application extends BaseApplication {
 			bridge().window().show();
 		}
 
+		void ShareService.instance().maintenance();
+
 		ResourceService.runInBackground();
 
 		if (Setting.value('env') === 'dev') {
@@ -764,15 +769,16 @@ class Application extends BaseApplication {
 		RevisionService.instance().runInBackground();
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
-		(window as any).joplin = () => {
-			return {
+		if (Setting.value('env') === 'dev') {
+			(window as any).joplin = {
 				revisionService: RevisionService.instance(),
 				migrationService: MigrationService.instance(),
 				decryptionWorker: DecryptionWorker.instance(),
 				commandService: CommandService.instance(),
 				bridge: bridge(),
+				debug: new DebugService(reg.db()),
 			};
-		};
+		}
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 
