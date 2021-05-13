@@ -49,9 +49,9 @@ export default class SearchEngineUtils {
 		}
 
 		// Filter completed todos
-		let filterdNotes = [...sortedNotes];
+		let filteredNotes = [...sortedNotes];
 		if (!Setting.value('showCompletedTodos')) {
-			filterdNotes = sortedNotes.filter(note => note.is_todo === 0 || (note.is_todo === 1 && note.todo_completed === 0));
+			filteredNotes = sortedNotes.filter(note => note.is_todo === 0 || (note.is_todo === 1 && note.todo_completed === 0));
 		}
 
 		// Note that when the search engine index is somehow corrupted, it might contain
@@ -60,9 +60,9 @@ export default class SearchEngineUtils {
 		// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
 		if (noteIds.length !== notes.length) {
 			// remove null objects
-			return filterdNotes.filter(n => n);
+			return filteredNotes.filter(n => n);
 		} else {
-			return filterdNotes;
+			return filteredNotes;
 		}
 
 	}
