@@ -147,6 +147,9 @@ packages/app-cli/tests/services_PluginService.js.map
 packages/app-cli/tests/services_ResourceService.d.ts
 packages/app-cli/tests/services_ResourceService.js
 packages/app-cli/tests/services_ResourceService.js.map
+packages/app-cli/tests/services_SearchEngineUtils.d.ts
+packages/app-cli/tests/services_SearchEngineUtils.js
+packages/app-cli/tests/services_SearchEngineUtils.js.map
 packages/app-cli/tests/services_keychainService.d.ts
 packages/app-cli/tests/services_keychainService.js
 packages/app-cli/tests/services_keychainService.js.map
