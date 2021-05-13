@@ -117,8 +117,6 @@ export default class ChangeModel extends BaseModel<Change> {
 					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
 			});
 
-		console.info('QQQQQQQQQQQQ', (query).toString());
-
 		// If a cursor was provided, apply it to both queries.
 		if (changeAtCursor) {
 			void query.where('counter', '>', changeAtCursor.counter);

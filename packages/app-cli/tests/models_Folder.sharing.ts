@@ -6,7 +6,6 @@ import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import ResourceService from '@joplin/lib/services/ResourceService';
-import BaseItem from '@joplin/lib/models/BaseItem';
 
 const testImagePath = `${__dirname}/../tests/support/photo.jpg`;
 
@@ -335,29 +334,29 @@ describe('models_Folder.sharing', function() {
 		}
 	});
 
-	it('should not recursively delete when non-owner deletes a shared folder', async () => {
-		const folder = await createFolderTree('', [
-			{
-				title: 'folder 1',
-				children: [
-					{
-						title: 'note 1',
-					},
-				],
-			},
-		]);
+	// it('should not recursively delete when non-owner deletes a shared folder', async () => {
+	// 	const folder = await createFolderTree('', [
+	// 		{
+	// 			title: 'folder 1',
+	// 			children: [
+	// 				{
+	// 					title: 'note 1',
+	// 				},
+	// 			],
+	// 		},
+	// 	]);
 
-		BaseItem.shareService_ = {
-			isSharedFolderOwner: (_folderId: string) => false,
-		} as any;
+	// 	BaseItem.shareService_ = {
+	// 		isSharedFolderOwner: (_folderId: string) => false,
+	// 	} as any;
 
-		await Folder.save({ id: folder.id, share_id: 'abcd1234' });
-		await Folder.updateAllShareIds();
+	// 	await Folder.save({ id: folder.id, share_id: 'abcd1234' });
+	// 	await Folder.updateAllShareIds();
 
-		await Folder.delete(folder.id);
+	// 	await Folder.delete(folder.id);
 
-		expect((await Folder.all()).length).toBe(0);
-		expect((await Note.all()).length).toBe(1);
-	});
+	// 	expect((await Folder.all()).length).toBe(0);
+	// 	expect((await Note.all()).length).toBe(1);
+	// });
 
 });
