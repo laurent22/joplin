@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -79,7 +81,7 @@ msgstr "Gå til tilfældig..."
 #: packages/app-desktop/plugins/GotoAnything.js:464
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr "Kommando-oversigt"
+msgstr "Kommando-palet"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -342,7 +344,7 @@ msgstr "Sænket skrift"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
-msgstr "Ret"
+msgstr "Rediger"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:600
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
@@ -504,9 +506,8 @@ msgid "Delete line"
 msgstr "Slet linje"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Dupliker"
+msgstr "Dupliker linje"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -700,10 +701,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"Fejlsikret tilstand er aktiv i øjeblikket. Notegengivelse og alle plugins er "
+"midlertidigt deaktiveret."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:412
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Deaktiver fejlsikret tilstand og genstart"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:416
 msgid ""
@@ -753,7 +756,6 @@ msgstr ""
 "Standard-krypteringsmetoden er blevet ændret, du bør genkryptere dine data."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:448
-#, fuzzy
 msgid "More info"
 msgstr "Mere information"
 
@@ -1066,9 +1068,8 @@ msgid "&View"
 msgstr "&Vis"
 
 #: packages/app-desktop/gui/MenuBar.js:542
-#, fuzzy
 msgid "Layout button sequence"
-msgstr "Layout-knap rækkefølge"
+msgstr "Indstil knap-rækkefølge"
 
 #: packages/app-desktop/gui/MenuBar.js:587
 #: packages/app-desktop/gui/MenuBar.js:593
@@ -1453,9 +1454,8 @@ msgid "Plugins"
 msgstr "Udvidelser"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
-#, fuzzy
 msgid "Apply"
-msgstr "Udfør"
+msgstr "Anvend"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
 #, javascript-format
@@ -1554,9 +1554,8 @@ msgstr "Editor"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
 #: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
 #: packages/lib/models/Setting.js:487
-#, fuzzy
 msgid "Viewer"
-msgstr "Visning"
+msgstr "Fremviser"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
@@ -1695,9 +1694,8 @@ msgstr[0] "Kopier link til deling"
 msgstr[1] "Kopier links til deling"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "Slå sidebar til eller fra"
+msgstr "Slå fejlsikret tilstand til eller fra"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1708,9 +1706,8 @@ msgid "Stop"
 msgstr "Stop"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Kopier dev mode kommando til udklipsholderen"
+msgstr "Kopier udviklertilstand-kommando til udklipsholderen"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1832,7 +1829,6 @@ msgid "Refresh"
 msgstr "Opfrisk"
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
-#, fuzzy
 msgid "Sync Target Upgrade"
 msgstr "Synk-mål opgadering"
 
@@ -1981,7 +1977,6 @@ msgstr "Mere information"
 
 # Hvad kaldes "Apps" indstillingskategorien på dansk?
 #: packages/app-mobile/components/screens/config.js:486
-#, fuzzy
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -2072,13 +2067,13 @@ msgstr "Slet note?"
 
 #: packages/app-mobile/components/screens/Note.js:503
 #: packages/lib/shim-init-node.js:147
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
-"Du er ved at vedhæfte et stort billede (%dx%d pixel). Ønsker du at "
-"nedskalere det til %d pixel før vedhæftning?"
+"Du er ved at vedhæfte et stort billede (%dx%d pixels). Ønsker du at "
+"nedskalere det til %d pixels før vedhæftning?"
 
 #: packages/app-mobile/components/screens/Note.js:585
 #, javascript-format
@@ -2149,9 +2144,9 @@ msgstr ""
 "nu](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr "Alle tilgængelige porte er i brug - rapportér venligst problemet på %s"
+msgstr "Alle mulige porte er i brug - rapportér venligst problemet på %s"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2198,7 +2193,7 @@ msgstr "titel"
 
 #: packages/lib/models/Folder.js:35 packages/lib/models/Note.js:37
 msgid "updated date"
-msgstr "opdateret den"
+msgstr "opdateringsdato"
 
 #: packages/lib/models/Folder.js:102
 msgid "Conflicts"
@@ -2342,9 +2337,8 @@ msgid "Joplin Server password"
 msgstr "Joplin Server kodeord"
 
 #: packages/lib/models/Setting.js:342
-#, fuzzy
 msgid "Attachment download behaviour"
-msgstr "Håndtering ved download af vedhæftninger"
+msgstr "Download af vedhæftninger"
 
 #: packages/lib/models/Setting.js:343
 msgid ""
@@ -2352,8 +2346,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"I \"Manuel\" tilstand downloades vedhæftninger når du klikker på dem. I "
-"\"Auto\" tilstand downloades de når du åbner noten. I \"Altid\" tilstand "
+"I \"Manuel\" tilstand downloades vedhæftninger, når du klikker på dem. I "
+"\"Auto\" tilstand downloades de, når du åbner noten. I \"Altid\" tilstand "
 "downloades alle dine noter ligegyldigt om du åbner noten eller ej."
 
 #: packages/lib/models/Setting.js:346
@@ -2401,9 +2395,8 @@ msgid "Preferred dark theme"
 msgstr "Foretrukket mørkt tema"
 
 #: packages/lib/models/Setting.js:476
-#, fuzzy
 msgid "Show note counts"
-msgstr "Vis note optælling"
+msgstr "Vis noteantal"
 
 #: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:486
 #: packages/lib/models/Setting.js:487
@@ -2466,7 +2459,6 @@ msgid "Enable soft breaks"
 msgstr "Slå bløde ombrydninger til"
 
 #: packages/lib/models/Setting.js:613
-#, fuzzy
 msgid "Enable typographer support"
 msgstr "Slå typografunderstøttelse til"
 
@@ -2483,7 +2475,6 @@ msgid "Enable Fountain syntax support"
 msgstr "Slå understøttelse af Fountain syntaks til"
 
 #: packages/lib/models/Setting.js:617
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
 msgstr "Slå understøttelse af Mermaid diagrammer til"
 
@@ -2557,9 +2548,8 @@ msgstr ""
 "til for at holde dine noter synkroniserede og dermed undgå konflikter."
 
 #: packages/lib/models/Setting.js:647
-#, fuzzy
 msgid "Start application minimised in the tray icon"
-msgstr "Start programmet minimeret i bakkeikonet"
+msgstr "Start programmet minimeret i systembakkeikonet"
 
 #: packages/lib/models/Setting.js:662
 msgid "Editor font size"
@@ -2583,6 +2573,8 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Bruges til det meste tekst i markdown-editoren. Hvis ikke fundet, bruges en "
+"proportional (variabel bredde) font."
 
 #: packages/lib/models/Setting.js:704
 msgid "Editor monospace font family"
@@ -2594,9 +2586,11 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Bruges hvor en font med fast bredde er nødvendig for at vise læsbar tekst (f."
+"eks. tabeller, afkrydsningsfelter, kode). Hvis ikke fundet, bruges en "
+"generisk monospatieret (fast bredde) font."
 
 #: packages/lib/models/Setting.js:726
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Brugerdefineret stylesheet til fortolket Markdown"
 
@@ -2647,14 +2641,13 @@ msgid "Text editor command"
 msgstr "Tekstredigeringskomando"
 
 #: packages/lib/models/Setting.js:782
-#, fuzzy
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 "Editorkommandoen (kan inkludere argumenter) der bruges til at åbne noter. "
-"Hvis der ikke angives nogen, vil det prøve at autodetektere standard "
-"redigeringsprogrammet."
+"Hvis der ikke er angivet nogen, vil den prøve at autodetektere "
+"standardeditoren."
 
 #: packages/lib/models/Setting.js:783
 msgid "Page size for PDF export"
@@ -2843,8 +2836,8 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Disse udvidelser forbedre Markdown renderer med yderligere funktioner. Vær "
-"opmærksom på, at selvom disse funktioner kan være nyttige, er de ikke "
+"Disse udvidelser forbedrer Markdown-fortolkeren med yderligere funktioner. "
+"Vær opmærksom på, at selvom disse funktioner kan være nyttige, er de ikke "
 "standard Markdown og derfor vil de fleste kun virke i Joplin. Derudover er "
 "nogle af dem ikke kompatible med WYSIWYG editoren. Hvis du åbner en note, "
 "som bruger en af disse udvidelser i den editor, vil du miste "
@@ -2878,7 +2871,7 @@ msgid "Attachment conflict: \"%s\""
 msgstr "Vedhæftningskonflikt: \"%s\""
 
 #: packages/lib/models/Resource.js:404
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
@@ -3387,7 +3380,7 @@ msgstr "Tilføj til ordbog"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr "Bruge stavekontrol"
+msgstr "Brug stavekontrol"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
 msgid "Change language"
@@ -3637,9 +3630,8 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Synkroniserings mål: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:177
-#, fuzzy
 msgid "Cannot initialise synchroniser."
-msgstr "Kan ikke initialisere synkroniseringen."
+msgstr "Kan ikke starte synkroniseringen."
 
 #: packages/app-cli/app/command-sync.js:207
 msgid "Starting synchronisation..."
