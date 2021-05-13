@@ -51,10 +51,19 @@ describe('models_Tag', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
+		const todo1 = await Note.save({ title: 'todo 1', parent_id: folder1.id, is_todo: 1, todo_completed: 1590085027710 });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
 		await Tag.setNoteTagsByTitles(note2.id, ['un']);
+		await Tag.setNoteTagsByTitles(todo1.id, ['un']);
 
 		let tags = await Tag.allWithNotes();
+		expect(tags.length).toBe(1);
+		expect(tags[0].note_count).toBe(3);
+		expect(tags[0].todo_completed_count).toBe(1);
+
+		await Note.delete(todo1.id);
+
+		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(1);
 		expect(tags[0].note_count).toBe(2);
 
