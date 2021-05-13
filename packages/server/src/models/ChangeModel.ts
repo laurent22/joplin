@@ -33,6 +33,10 @@ export function defaultChangePagination(): ChangePagination {
 	};
 }
 
+interface AllForUserOptions {
+	compressChanges?: boolean;
+}
+
 export default class ChangeModel extends BaseModel<Change> {
 
 	public get tableName(): string {
@@ -67,7 +71,12 @@ export default class ChangeModel extends BaseModel<Change> {
 		return results;
 	}
 
-	public async allForUser(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedChanges> {
+	public async allForUser(userId: Uuid, pagination: ChangePagination = null, options: AllForUserOptions = null): Promise<PaginatedChanges> {
+		options = {
+			compressChanges: true,
+			...options,
+		};
+
 		pagination = {
 			...defaultChangePagination(),
 			...pagination,
@@ -108,6 +117,8 @@ export default class ChangeModel extends BaseModel<Change> {
 					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
 			});
 
+		console.info('QQQQQQQQQQQQ', (query).toString());
+
 		// If a cursor was provided, apply it to both queries.
 		if (changeAtCursor) {
 			void query.where('counter', '>', changeAtCursor.counter);
@@ -119,10 +130,10 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const changes = await query;
 
-		const compressedChanges = await this.removeDeletedItems(this.compressChanges(changes));
+		const finalChanges = options.compressChanges ? await this.removeDeletedItems(this.compressChanges(changes)) : changes;
 
 		return {
-			items: compressedChanges,
+			items: finalChanges,
 			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
 			// If there's no change, we return the previous cursor.
 			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,

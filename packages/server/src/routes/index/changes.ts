@@ -1,7 +1,7 @@
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
-import { changeTypeToString, ChangeType } from '../../db';
+import { changeTypeToString } from '../../db';
 import { createPaginationLinks, filterPaginationQueryParams, queryParamsToPagination } from '../../models/utils/pagination';
 import { setQueryParameters } from '../../utils/urlUtils';
 import { formatDateTime } from '../../utils/time';
@@ -50,15 +50,19 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	// 	]
 	// }
 
-	const paginatedChanges = await changeModel.allForUser(ctx.owner.id, pagination);
+	const paginatedChanges = await changeModel.allForUser(ctx.owner.id, pagination, { compressChanges: false });
 	const itemsToDisplay: ItemToDisplay[] = [];
+	const items = await ctx.models.item().loadByIds(paginatedChanges.items.map(i => i.item_id), { fields: ['id'] });
 
 	for (const item of paginatedChanges.items) {
 		itemsToDisplay.push({
 			name: item.item_name,
 			changeType: changeTypeToString(item.type),
 			timestamp: formatDateTime(item.updated_time),
-			url: item.type !== ChangeType.Delete ? await itemModel.itemContentUrl(item.item_id) : '',
+
+			// The item associated with the change may have been deleted, and we
+			// only display a link for existing items.
+			url: items.find(i => i.id === item.item_id) ? await itemModel.itemContentUrl(item.item_id) : '',
 		});
 	}
 
