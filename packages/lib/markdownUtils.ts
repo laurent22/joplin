@@ -56,6 +56,47 @@ const markdownUtils = {
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
+	extractFileUrls(md: string, onlyImage: boolean = false) {
+		const markdownIt = new MarkdownIt();
+		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
+
+		const env = {};
+		const tokens = markdownIt.parse(md, env);
+		const output: string[] = [];
+
+		const searchUrls = (tokens: any[]) => {
+			for (let i = 0; i < tokens.length; i++) {
+				const token = tokens[i];
+				if ((onlyImage === true && token.type === 'image') || (onlyImage === false && (token.type === 'image' || token.type === 'link_open'))) {
+					for (let j = 0; j < token.attrs.length; j++) {
+						const a = token.attrs[j];
+						if ((a[0] === 'src' || a[0] === 'href') && a.length >= 2 && a[1]) {
+							// match files like
+							// some.pdf
+							// \some.docx
+							// .some.docx
+							// /uploads/some.png
+							// ../some.pdf
+							// ./uploads/some.docx
+							//
+							if (a[1].match(/^(\/|\w+\.\w+|\\|\.)/)) {
+								output.push(a[1]);
+							}
+						}
+					}
+				}
+
+				if (token.children && token.children.length) {
+					searchUrls(token.children);
+				}
+			}
+		};
+
+		searchUrls(tokens);
+
+		return output;
+	},
+
 	extractImageUrls(md: string) {
 		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
