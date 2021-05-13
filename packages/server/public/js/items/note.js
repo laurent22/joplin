@@ -10,12 +10,12 @@ function addPluginAssets(appBaseUrl, assets) {
 
 		if (asset.mime === 'application/javascript') {
 			const script = document.createElement('script');
-			script.src = `${appBaseUrl}/${asset.path}`;
+			script.src = `${appBaseUrl}/js/${asset.path}`;
 			pluginAssetsContainer.appendChild(script);
 		} else if (asset.mime === 'text/css') {
 			const link = document.createElement('link');
 			link.rel = 'stylesheet';
-			link.href = `${appBaseUrl}/${asset.path}`;
+			link.href = `${appBaseUrl}/css/${asset.path}`;
 			pluginAssetsContainer.appendChild(link);
 		}
 	}

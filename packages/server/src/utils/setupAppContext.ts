@@ -2,7 +2,6 @@ import { LoggerWrapper } from '@joplin/lib/Logger';
 import config from '../config';
 import { DbConnection } from '../db';
 import newModelFactory, { Models } from '../models/factory';
-import Applications from '../services/Applications';
 import { AppContext, Env } from './types';
 import routes from '../routes/routes';
 import ShareService from '../services/ShareService';
@@ -18,9 +17,7 @@ export default async function(appContext: AppContext, env: Env, dbConnection: Db
 	appContext.env = env;
 	appContext.db = dbConnection;
 	appContext.models = newModelFactory(appContext.db, config().baseUrl);
-	appContext.apps = new Applications(appContext.models);
 	appContext.services = setupServices(env, appContext.models);
-	await appContext.apps.initializeApps();
 	appContext.appLogger = appLogger;
 	appContext.routes = { ...routes };
 

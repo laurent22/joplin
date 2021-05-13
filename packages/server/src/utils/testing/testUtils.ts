@@ -68,10 +68,11 @@ export async function beforeAllDb(unitName: string) {
 	});
 
 	initGlobalLogger();
-	await initializeJoplinUtils(config());
 
 	await createDb(config().database, { dropIfExists: true });
 	db_ = await connectDb(config().database);
+
+	await initializeJoplinUtils(config(), models());
 }
 
 export async function afterAllTests() {

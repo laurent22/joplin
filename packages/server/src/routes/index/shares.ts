@@ -3,12 +3,12 @@ import Router from '../../utils/Router';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { Item, Share } from '../../db';
-import { FileViewerResponse } from '../../apps/joplin/Application';
 import { ModelType } from '@joplin/lib/BaseModel';
+import { FileViewerResponse, renderItem as renderJoplinItem } from '../../apps/joplin/joplinUtils';
 
 async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
 	if (item.jop_type === ModelType.Note) {
-		return context.apps.joplin.renderItem(share.owner_id, item, share, context.query);
+		return renderJoplinItem(share.owner_id, item, share, context.query);
 	}
 
 	return {

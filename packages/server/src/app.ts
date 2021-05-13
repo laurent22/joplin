@@ -128,8 +128,8 @@ async function main() {
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const appContext = app.context as AppContext;
 
-		await initializeJoplinUtils(config());
 		await setupAppContext(appContext, env, connectionCheck.connection, appLogger);
+		await initializeJoplinUtils(config(), appContext.models);
 
 		appLogger().info('Migrating database...');
 		await migrateDb(appContext.db);
