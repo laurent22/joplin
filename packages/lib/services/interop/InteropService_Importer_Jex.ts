@@ -19,10 +19,8 @@ export default class InteropService_Importer_Jex extends InteropService_Importer
 				cwd: tempDir,
 			});
 		} catch (error) {
-			const msg = [`Cannot untar file ${this.sourcePath_}`, error.message];
-			if (error.data) msg.push(JSON.stringify(error.data));
-			const e = new Error(msg.join(': '));
-			throw e;
+			error.message = `Could not decompress "${this.sourcePath_}". The file may be corrupted. Error was: ${error.message}`;
+			throw error;
 		}
 
 		if (!('defaultFolderTitle' in this.options_)) this.options_.defaultFolderTitle = filename(this.sourcePath_);
