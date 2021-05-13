@@ -15,12 +15,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
-#: packages/app-desktop/checkForUpdates.js:139
+#: packages/app-desktop/checkForUpdates.js:175
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/MenuBar.js:373
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
@@ -34,13 +32,13 @@ msgid "OK"
 msgstr "OK"
 
 #: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:190
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:430
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -93,36 +91,36 @@ msgstr "Eksporterer til \"%s\" som \"%s\"-format. Vent venligst..."
 msgid "Could not export notes: %s"
 msgstr "Kunne ikke eksportere noterne: %s"
 
-#: packages/app-desktop/checkForUpdates.js:138
+#: packages/app-desktop/checkForUpdates.js:174
 msgid "Current version is up-to-date."
 msgstr "Aktuel version er den nyeste."
 
-#: packages/app-desktop/checkForUpdates.js:148
+#: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
 msgstr "%s (pre-release)"
 
-#: packages/app-desktop/checkForUpdates.js:152
+#: packages/app-desktop/checkForUpdates.js:188
 msgid "An update is available, do you want to download it now?"
 msgstr "Opdatering er tilgængelig, vil du hente den nu?"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:189
 #, javascript-format
 msgid "Your version: %s"
 msgstr "Din version: %s"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:189
 #, javascript-format
 msgid "New version: %s"
 msgstr "Ny version: %s"
 
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:190
 msgid "Download"
 msgstr "Download"
 
-#: packages/app-desktop/checkForUpdates.js:154
-msgid "Full Release Notes"
-msgstr "Fulde udgivelsesnoter"
+#: packages/app-desktop/checkForUpdates.js:190
+msgid "Full changelog"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -134,7 +132,7 @@ msgid "This note has no history"
 msgstr "Denne note har ingen historie"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:122
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:85
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Ugyldigt link eller besked: %s"
@@ -154,7 +152,7 @@ msgstr ""
 "\"%s\". Den nuværende version af noten vil ikke blive erstattet eller ændret."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
@@ -251,19 +249,29 @@ msgstr "Sidebjælke"
 msgid "Focus"
 msgstr "Fokuser"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:31
 msgid "Please select where the sync status should be exported to"
 msgstr "Vælg hvor synk-status skal eksporteres til"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:66
 #: packages/app-mobile/components/screens/status.js:112
 msgid "Retry All"
 msgstr "Prøv Alle"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:83
 #: packages/app-mobile/components/screens/status.js:118
 msgid "Retry"
 msgstr "Prøv igen"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:113
+#, fuzzy
+msgid "Advanced tools"
+msgstr "Avancerede indstillinger"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:115
+#, fuzzy
+msgid "Export debug report"
+msgstr "Eksporter fejlrapport"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -297,20 +305,20 @@ msgstr ""
 "redigere noten."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:91
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Klip"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:626
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:373
 msgid "Copy"
 msgstr "Kopier"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:633
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:106
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "Indsæt"
@@ -341,7 +349,6 @@ msgid "Subscript"
 msgstr "Sænket skrift"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
 msgstr "Rediger"
@@ -365,15 +372,15 @@ msgstr "Inline-kode"
 msgid "Insert Date Time"
 msgstr "Indsæt dato og tid"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 msgid "Drop notes or files here"
 msgstr "Slip noter eller filer her"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 msgid "Code View"
 msgstr "Kodevisning"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -382,32 +389,32 @@ msgstr ""
 "Vent venligst på at alle vedhæftninger downloades og dekrypteres. Du kan "
 "også skifte til %s for at redigere noten."
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
 msgstr "Der opstod en fejl ved download af denne vedhæftning:"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:77
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Denne vedhæftning er ikke downloadet eller ikke dekrypteret endnu"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:49
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
 msgstr "Åbn..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
 msgid "Save as..."
 msgstr "Gem som..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:75
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 msgid "Reveal file in folder"
 msgstr "Vis fil i mappe"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:83
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy path to clipboard"
 msgstr "Kopier sti til udklipsholder"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:114
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:155
 msgid "Copy Link Address"
 msgstr "Kopier linkadresse"
 
@@ -586,7 +593,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1556
+#: packages/lib/models/Setting.js:1593
 msgid "Note History"
 msgstr "Notehistore"
 
@@ -612,7 +619,7 @@ msgstr "Fejl: %s"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:759 packages/app-cli/app/command-e2ee.js:110
+#: packages/lib/models/Setting.js:791 packages/app-cli/app/command-e2ee.js:110
 msgid "Disabled"
 msgstr "Deaktiveret"
 
@@ -1406,50 +1413,50 @@ msgstr "Dropbox login"
 msgid "Note attachments"
 msgstr "Note vedhæftninger"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Dette åbner i et nyt vindue. Vil du gemme dine ændringer?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
 #: packages/app-mobile/components/screens/config.js:322
 msgid "Check synchronisation configuration"
 msgstr "Tjek synkroniseringskonfiguration"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
 msgid "Show Advanced Settings"
 msgstr "Vis avancerede indstillinger"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
 msgid "Path:"
 msgstr "Sti:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
 msgid "Browse..."
 msgstr "Gennemse..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
 msgid "Arguments:"
 msgstr "Argumenter:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Applikationen skal genstartes før disse ændringer kan træde i kraft."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Do it now"
 msgstr "Gør det nu"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
 msgstr "Senere"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
 msgid "Restart now"
 msgstr "Genstart nu"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1552
+#: packages/lib/models/Setting.js:1589
 msgid "Plugins"
 msgstr "Udvidelser"
 
@@ -1546,14 +1553,14 @@ msgid "Lines"
 msgstr "Linjer"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
-#: packages/lib/models/Setting.js:486
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:497
+#: packages/lib/models/Setting.js:498
 msgid "Editor"
 msgstr "Editor"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:497
+#: packages/lib/models/Setting.js:499
 msgid "Viewer"
 msgstr "Fremviser"
 
@@ -1581,7 +1588,7 @@ msgid "View"
 msgstr "Vis"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:162
-#: packages/lib/models/Setting.js:500
+#: packages/lib/models/Setting.js:512
 msgid "Sort notes by"
 msgstr "Sorter noter efter"
 
@@ -1607,12 +1614,6 @@ msgstr "Der er ingen notesbog. Opret en ved at klikke på \"Ny Notesbog\"."
 msgid "Note list"
 msgstr "Noteliste"
 
-#: packages/app-desktop/gui/getWindowTitle.js:19
-#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
-msgid "Untitled"
-msgstr "Uden titel"
-
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
 msgstr "Søg i alle noterne"
@@ -1628,6 +1629,11 @@ msgstr "Størrelse"
 #: packages/app-desktop/gui/ResourceScreen.js:40
 msgid "Action"
 msgstr "Handling"
+
+#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
+msgid "Untitled"
+msgstr "Uden titel"
 
 #: packages/app-desktop/gui/ResourceScreen.js:95
 #, javascript-format
@@ -2208,20 +2214,20 @@ msgstr "Kan ikke flytte notesbogen til denne placering"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notesbøger kan ikke navngives \"%s\", da det er en reserveret titel."
 
-#: packages/lib/models/Setting.js:92
+#: packages/lib/models/Setting.js:98
 msgid "yes"
 msgstr "ja"
 
-#: packages/lib/models/Setting.js:92 packages/lib/models/Setting.js:93
+#: packages/lib/models/Setting.js:98 packages/lib/models/Setting.js:99
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/lib/models/Setting.js:93
+#: packages/lib/models/Setting.js:99
 msgid "no"
 msgstr "nej"
 
-#: packages/lib/models/Setting.js:95
+#: packages/lib/models/Setting.js:101
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2232,43 +2238,43 @@ msgstr ""
 "dit indhold til den før du synkroniserer, ellers vil alle filer blive "
 "slettet! Læs FAQ'en for flere detaljer: %s"
 
-#: packages/lib/models/Setting.js:101
+#: packages/lib/models/Setting.js:107
 msgid "Light"
 msgstr "Lyst"
 
-#: packages/lib/models/Setting.js:102
+#: packages/lib/models/Setting.js:108
 msgid "Dark"
 msgstr "Mørkt"
 
-#: packages/lib/models/Setting.js:103
+#: packages/lib/models/Setting.js:109
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/lib/models/Setting.js:104
+#: packages/lib/models/Setting.js:110
 msgid "Solarised Light"
 msgstr "Solarised Lys"
 
-#: packages/lib/models/Setting.js:105
+#: packages/lib/models/Setting.js:111
 msgid "Solarised Dark"
 msgstr "Solarised Mørk"
 
-#: packages/lib/models/Setting.js:106
+#: packages/lib/models/Setting.js:112
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/lib/models/Setting.js:107
+#: packages/lib/models/Setting.js:113
 msgid "Aritim Dark"
 msgstr "Aritim Mørk"
 
-#: packages/lib/models/Setting.js:108
+#: packages/lib/models/Setting.js:114
 msgid "OLED Dark"
 msgstr "OLED Mørkt"
 
-#: packages/lib/models/Setting.js:130
+#: packages/lib/models/Setting.js:136
 msgid "Synchronisation target"
 msgstr "Synkroniseringsmål"
 
-#: packages/lib/models/Setting.js:132
+#: packages/lib/models/Setting.js:138
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -2276,71 +2282,71 @@ msgstr ""
 "Synkroniseringsmålet. Hver synk. mål kan have ekstra parametre der  "
 "navngives som `sync.NUM.NAME` (se dokumentation herunder)."
 
-#: packages/lib/models/Setting.js:160
+#: packages/lib/models/Setting.js:171
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Mappe der skal synkroniseres med (absolut sti)"
 
-#: packages/lib/models/Setting.js:172
+#: packages/lib/models/Setting.js:183
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: packages/lib/models/Setting.js:184
+#: packages/lib/models/Setting.js:195
 msgid "Nextcloud username"
 msgstr "Nextcloud brugernavn"
 
-#: packages/lib/models/Setting.js:195
+#: packages/lib/models/Setting.js:206
 msgid "Nextcloud password"
 msgstr "Nextcloud kodeord"
 
-#: packages/lib/models/Setting.js:206
+#: packages/lib/models/Setting.js:217
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: packages/lib/models/Setting.js:218
+#: packages/lib/models/Setting.js:229
 msgid "WebDAV username"
 msgstr "WebDAV brugernavn"
 
-#: packages/lib/models/Setting.js:229
+#: packages/lib/models/Setting.js:240
 msgid "WebDAV password"
 msgstr "WebDAV kodeord"
 
-#: packages/lib/models/Setting.js:248
+#: packages/lib/models/Setting.js:259
 msgid "AWS S3 bucket"
 msgstr "AWS S3 bucket"
 
-#: packages/lib/models/Setting.js:260
+#: packages/lib/models/Setting.js:271
 msgid "AWS S3 URL"
 msgstr "AWS S3 URL"
 
-#: packages/lib/models/Setting.js:271
+#: packages/lib/models/Setting.js:282
 msgid "AWS key"
 msgstr "AWS nøgle"
 
-#: packages/lib/models/Setting.js:282
+#: packages/lib/models/Setting.js:293
 msgid "AWS secret"
 msgstr "AWS hemmelighed"
 
-#: packages/lib/models/Setting.js:293
+#: packages/lib/models/Setting.js:304
 msgid "Joplin Server URL"
 msgstr "Joplin Server URL"
 
-#: packages/lib/models/Setting.js:308
+#: packages/lib/models/Setting.js:319
 msgid "Joplin Server Directory"
 msgstr "Joplin server mappe"
 
-#: packages/lib/models/Setting.js:319
+#: packages/lib/models/Setting.js:330
 msgid "Joplin Server username"
 msgstr "Joplin Server brugernavn"
 
-#: packages/lib/models/Setting.js:330
+#: packages/lib/models/Setting.js:341
 msgid "Joplin Server password"
 msgstr "Joplin Server kodeord"
 
-#: packages/lib/models/Setting.js:342
+#: packages/lib/models/Setting.js:353
 msgid "Attachment download behaviour"
 msgstr "Download af vedhæftninger"
 
-#: packages/lib/models/Setting.js:343
+#: packages/lib/models/Setting.js:354
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2350,195 +2356,195 @@ msgstr ""
 "\"Auto\" tilstand downloades de, når du åbner noten. I \"Altid\" tilstand "
 "downloades alle dine noter ligegyldigt om du åbner noten eller ej."
 
-#: packages/lib/models/Setting.js:346
+#: packages/lib/models/Setting.js:357
 msgid "Always"
 msgstr "Altid"
 
-#: packages/lib/models/Setting.js:347
+#: packages/lib/models/Setting.js:358
 msgid "Manual"
 msgstr "Manuel"
 
-#: packages/lib/models/Setting.js:348
+#: packages/lib/models/Setting.js:359
 msgid "Auto"
 msgstr "Auto"
 
-#: packages/lib/models/Setting.js:366
+#: packages/lib/models/Setting.js:377
 msgid "Max concurrent connections"
 msgstr "Maksimale samtidige forbindelser"
 
-#: packages/lib/models/Setting.js:379
+#: packages/lib/models/Setting.js:390
 msgid "Language"
 msgstr "Sprog"
 
-#: packages/lib/models/Setting.js:390
+#: packages/lib/models/Setting.js:401
 msgid "Date format"
 msgstr "Datoformat"
 
-#: packages/lib/models/Setting.js:410
+#: packages/lib/models/Setting.js:422
 msgid "Time format"
 msgstr "Tidsformat"
 
-#: packages/lib/models/Setting.js:429
+#: packages/lib/models/Setting.js:441
 msgid "Theme"
 msgstr "Tema"
 
-#: packages/lib/models/Setting.js:440
+#: packages/lib/models/Setting.js:452
 msgid "Automatically switch theme to match system theme"
 msgstr "Skifter automatisk tema så det matcher systemets tema"
 
-#: packages/lib/models/Setting.js:452
+#: packages/lib/models/Setting.js:464
 msgid "Preferred light theme"
 msgstr "Foretrukket lyst tema"
 
-#: packages/lib/models/Setting.js:466
+#: packages/lib/models/Setting.js:478
 msgid "Preferred dark theme"
 msgstr "Foretrukket mørkt tema"
 
-#: packages/lib/models/Setting.js:476
+#: packages/lib/models/Setting.js:488
 msgid "Show note counts"
 msgstr "Vis noteantal"
 
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:486
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:498
+#: packages/lib/models/Setting.js:499
 msgid "Split View"
 msgstr "Opdelt visning"
 
-#: packages/lib/models/Setting.js:484
+#: packages/lib/models/Setting.js:496
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/models/Setting.js:485 packages/lib/models/Setting.js:486
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:497 packages/lib/models/Setting.js:498
+#: packages/lib/models/Setting.js:499
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.js:491
+#: packages/lib/models/Setting.js:503
 msgid "Uncompleted to-dos on top"
 msgstr "Ufærdige opgaver øverst"
 
-#: packages/lib/models/Setting.js:492
+#: packages/lib/models/Setting.js:504
 msgid "Show completed to-dos"
 msgstr "Vis færdige opgaver"
 
-#: packages/lib/models/Setting.js:518
+#: packages/lib/models/Setting.js:530
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto-par klammer, parenteser, citater, etc."
 
-#: packages/lib/models/Setting.js:521 packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:552
 msgid "Reverse sort order"
 msgstr "Omvendt sorteringsorden"
 
-#: packages/lib/models/Setting.js:528
+#: packages/lib/models/Setting.js:540
 msgid "Sort notebooks by"
 msgstr "Sorter notesbøger efter"
 
-#: packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:553
 msgid "Save geo-location with notes"
 msgstr "Gem geo-lokation i noter"
 
-#: packages/lib/models/Setting.js:563
+#: packages/lib/models/Setting.js:575
 msgid "When creating a new to-do:"
 msgstr "Ved oprettelse af ny opgave:"
 
-#: packages/lib/models/Setting.js:566 packages/lib/models/Setting.js:582
+#: packages/lib/models/Setting.js:578 packages/lib/models/Setting.js:594
 msgid "Focus title"
 msgstr "Fokuser på titel"
 
-#: packages/lib/models/Setting.js:567 packages/lib/models/Setting.js:583
+#: packages/lib/models/Setting.js:579 packages/lib/models/Setting.js:595
 msgid "Focus body"
 msgstr "Fokuser på brødtekst"
 
-#: packages/lib/models/Setting.js:579
+#: packages/lib/models/Setting.js:591
 msgid "When creating a new note:"
 msgstr "Ved oprettelse af ny note:"
 
-#: packages/lib/models/Setting.js:612
+#: packages/lib/models/Setting.js:624
 msgid "Enable soft breaks"
 msgstr "Slå bløde ombrydninger til"
 
-#: packages/lib/models/Setting.js:613
+#: packages/lib/models/Setting.js:625
 msgid "Enable typographer support"
 msgstr "Slå typografunderstøttelse til"
 
-#: packages/lib/models/Setting.js:614
+#: packages/lib/models/Setting.js:626
 msgid "Enable Linkify"
 msgstr "Aktivér Linkify"
 
-#: packages/lib/models/Setting.js:615
+#: packages/lib/models/Setting.js:627
 msgid "Enable math expressions"
 msgstr "Slå matematiske udtryk til"
 
-#: packages/lib/models/Setting.js:616
+#: packages/lib/models/Setting.js:628
 msgid "Enable Fountain syntax support"
 msgstr "Slå understøttelse af Fountain syntaks til"
 
-#: packages/lib/models/Setting.js:617
+#: packages/lib/models/Setting.js:629
 msgid "Enable Mermaid diagrams support"
 msgstr "Slå understøttelse af Mermaid diagrammer til"
 
-#: packages/lib/models/Setting.js:618
+#: packages/lib/models/Setting.js:630
 msgid "Enable audio player"
 msgstr "Aktivér lydafspiller"
 
-#: packages/lib/models/Setting.js:619
+#: packages/lib/models/Setting.js:631
 msgid "Enable video player"
 msgstr "Aktivér videoafspiller"
 
-#: packages/lib/models/Setting.js:620
+#: packages/lib/models/Setting.js:632
 msgid "Enable PDF viewer"
 msgstr "Aktivér PDF-viser"
 
-#: packages/lib/models/Setting.js:621
+#: packages/lib/models/Setting.js:633
 msgid "Enable ==mark== syntax"
 msgstr "Aktivér ==mark== syntaks"
 
-#: packages/lib/models/Setting.js:622
+#: packages/lib/models/Setting.js:634
 msgid "Enable footnotes"
 msgstr "Aktivér fodnoter"
 
-#: packages/lib/models/Setting.js:623
+#: packages/lib/models/Setting.js:635
 msgid "Enable table of contents extension"
 msgstr "Aktivér indholdsfortegnelsesudvidelsen"
 
-#: packages/lib/models/Setting.js:624
+#: packages/lib/models/Setting.js:636
 msgid "Enable ~sub~ syntax"
 msgstr "Aktivér ~sub~ syntaks"
 
-#: packages/lib/models/Setting.js:625
+#: packages/lib/models/Setting.js:637
 msgid "Enable ^sup^ syntax"
 msgstr "Aktivér ^sup^ syntaks"
 
-#: packages/lib/models/Setting.js:626
+#: packages/lib/models/Setting.js:638
 msgid "Enable deflist syntax"
 msgstr "Aktivér deflist syntaks"
 
-#: packages/lib/models/Setting.js:627
+#: packages/lib/models/Setting.js:639
 msgid "Enable abbreviation syntax"
 msgstr "Aktivér forkortelsessyntaks"
 
-#: packages/lib/models/Setting.js:628
+#: packages/lib/models/Setting.js:640
 msgid "Enable markdown emoji"
 msgstr "Aktivér markdown emojies"
 
-#: packages/lib/models/Setting.js:629
+#: packages/lib/models/Setting.js:641
 msgid "Enable ++insert++ syntax"
 msgstr "Aktivér ++insert++ syntaks"
 
-#: packages/lib/models/Setting.js:630
+#: packages/lib/models/Setting.js:642
 msgid "Enable multimarkdown table extension"
 msgstr "Aktivér multimarkdown-tabeludvidelsen"
 
-#: packages/lib/models/Setting.js:641
+#: packages/lib/models/Setting.js:653
 msgid "Show tray icon"
 msgstr "Vis ikon på bundbjælke"
 
-#: packages/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:655
 msgid "Note: Does not work in all desktop environments."
 msgstr "OBS: Virker ikke i alle skrivebordsmiljøer."
 
-#: packages/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:655
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2547,28 +2553,28 @@ msgstr ""
 "Dette tillader Joplin at køre i baggrunden. Det er anbefalet at slå dette "
 "til for at holde dine noter synkroniserede og dermed undgå konflikter."
 
-#: packages/lib/models/Setting.js:647
+#: packages/lib/models/Setting.js:659
 msgid "Start application minimised in the tray icon"
 msgstr "Start programmet minimeret i systembakkeikonet"
 
-#: packages/lib/models/Setting.js:662
+#: packages/lib/models/Setting.js:674
 msgid "Editor font size"
 msgstr "Tekstredigeringsskriftstørrelse"
 
-#: packages/lib/models/Setting.js:669
+#: packages/lib/models/Setting.js:681
 msgid "Editor font"
 msgstr "Tekstredigeringsskrifttype"
 
-#: packages/lib/models/Setting.js:676 packages/lib/models/Setting.js:683
-#: packages/lib/models/Setting.js:809
+#: packages/lib/models/Setting.js:688 packages/lib/models/Setting.js:695
+#: packages/lib/models/Setting.js:841
 msgid "Default"
 msgstr "Standard"
 
-#: packages/lib/models/Setting.js:694
+#: packages/lib/models/Setting.js:706
 msgid "Editor font family"
 msgstr "Rediger skrifttypefamilie"
 
-#: packages/lib/models/Setting.js:695
+#: packages/lib/models/Setting.js:707
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -2576,11 +2582,11 @@ msgstr ""
 "Bruges til det meste tekst i markdown-editoren. Hvis ikke fundet, bruges en "
 "proportional (variabel bredde) font."
 
-#: packages/lib/models/Setting.js:704
+#: packages/lib/models/Setting.js:716
 msgid "Editor monospace font family"
 msgstr "Editor monospace skrifttypefamilie"
 
-#: packages/lib/models/Setting.js:705
+#: packages/lib/models/Setting.js:717
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -2590,57 +2596,65 @@ msgstr ""
 "eks. tabeller, afkrydsningsfelter, kode). Hvis ikke fundet, bruges en "
 "generisk monospatieret (fast bredde) font."
 
-#: packages/lib/models/Setting.js:726
+#: packages/lib/models/Setting.js:738
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Brugerdefineret stylesheet til fortolket Markdown"
 
-#: packages/lib/models/Setting.js:742
+#: packages/lib/models/Setting.js:754
 #, fuzzy
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Brugerdefineret stylesheet til Joplin app-stil"
 
-#: packages/lib/models/Setting.js:747
+#: packages/lib/models/Setting.js:764
+msgid "Re-upload local data to sync target"
+msgstr ""
+
+#: packages/lib/models/Setting.js:774
+msgid "Delete local data and re-download from sync target"
+msgstr ""
+
+#: packages/lib/models/Setting.js:779
 msgid "Automatically update the application"
 msgstr "Opdater automatisk applikationen"
 
-#: packages/lib/models/Setting.js:748
+#: packages/lib/models/Setting.js:780
 msgid "Get pre-releases when checking for updates"
 msgstr "Hent for-udgivelser når der tjekkes efter opdateringer"
 
-#: packages/lib/models/Setting.js:748
+#: packages/lib/models/Setting.js:780
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Se for-udgivelsessiden for yderligere information: %s"
 
-#: packages/lib/models/Setting.js:756
+#: packages/lib/models/Setting.js:788
 msgid "Synchronisation interval"
 msgstr "Synkroniseringsinterval"
 
-#: packages/lib/models/Setting.js:760 packages/lib/models/Setting.js:761
-#: packages/lib/models/Setting.js:762
+#: packages/lib/models/Setting.js:792 packages/lib/models/Setting.js:793
+#: packages/lib/models/Setting.js:794
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minutter"
 
-#: packages/lib/models/Setting.js:763
+#: packages/lib/models/Setting.js:795
 #, javascript-format
 msgid "%d hour"
 msgstr "%d time"
 
-#: packages/lib/models/Setting.js:764 packages/lib/models/Setting.js:765
+#: packages/lib/models/Setting.js:796 packages/lib/models/Setting.js:797
 #, javascript-format
 msgid "%d hours"
 msgstr "%d timer"
 
-#: packages/lib/models/Setting.js:775
+#: packages/lib/models/Setting.js:807
 msgid "Synchronise only over WiFi connection"
 msgstr "Synkroniser kun over WiFi-forbindelse"
 
-#: packages/lib/models/Setting.js:782
+#: packages/lib/models/Setting.js:814
 msgid "Text editor command"
 msgstr "Tekstredigeringskomando"
 
-#: packages/lib/models/Setting.js:782
+#: packages/lib/models/Setting.js:814
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2649,63 +2663,63 @@ msgstr ""
 "Hvis der ikke er angivet nogen, vil den prøve at autodetektere "
 "standardeditoren."
 
-#: packages/lib/models/Setting.js:783
+#: packages/lib/models/Setting.js:815
 msgid "Page size for PDF export"
 msgstr "Sidestørrelse for PDF eksport"
 
-#: packages/lib/models/Setting.js:785
+#: packages/lib/models/Setting.js:817
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:786
+#: packages/lib/models/Setting.js:818
 msgid "Letter"
 msgstr "US Letter"
 
-#: packages/lib/models/Setting.js:787
+#: packages/lib/models/Setting.js:819
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:788
+#: packages/lib/models/Setting.js:820
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:789
+#: packages/lib/models/Setting.js:821
 msgid "Tabloid"
 msgstr "US Tabloid"
 
-#: packages/lib/models/Setting.js:790
+#: packages/lib/models/Setting.js:822
 msgid "Legal"
 msgstr "US Legal"
 
-#: packages/lib/models/Setting.js:793
+#: packages/lib/models/Setting.js:825
 msgid "Page orientation for PDF export"
 msgstr "Sideretning for PDF eksport"
 
-#: packages/lib/models/Setting.js:795
+#: packages/lib/models/Setting.js:827
 msgid "Portrait"
 msgstr "Portræt"
 
-#: packages/lib/models/Setting.js:796
+#: packages/lib/models/Setting.js:828
 msgid "Landscape"
 msgstr "Landskab"
 
-#: packages/lib/models/Setting.js:806
+#: packages/lib/models/Setting.js:838
 msgid "Keyboard Mode"
 msgstr "Tastaturtilstand"
 
-#: packages/lib/models/Setting.js:810
+#: packages/lib/models/Setting.js:842
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:811
+#: packages/lib/models/Setting.js:843
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:834
+#: packages/lib/models/Setting.js:866
 msgid "Custom TLS certificates"
 msgstr "Brugerdefinerede TLS certifikater"
 
-#: packages/lib/models/Setting.js:835
+#: packages/lib/models/Setting.js:867
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2718,15 +2732,15 @@ msgstr ""
 "så skal du gemme dine ændringer før du klikker på \"Tjek "
 "synkroniseringskonfiguration\"."
 
-#: packages/lib/models/Setting.js:849
+#: packages/lib/models/Setting.js:881
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer TLS certifikat-fejl"
 
-#: packages/lib/models/Setting.js:858
+#: packages/lib/models/Setting.js:890
 msgid "Fail-safe"
 msgstr "Fejlsikring"
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:891
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2734,36 +2748,36 @@ msgstr ""
 "Sikring: Fjern ikke lokal data når målet for synkroniseringen er tom (ofte "
 "et resultat af fejlkonfigurering eller bugs)"
 
-#: packages/lib/models/Setting.js:863
+#: packages/lib/models/Setting.js:895
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
 "Angiv hvilken port API-serveren skal bruge. Ellers bruges standardporten."
 
-#: packages/lib/models/Setting.js:868
+#: packages/lib/models/Setting.js:900
 msgid "Enable note history"
 msgstr "Slå note-historie til"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:910
 msgid "days"
 msgstr "dage"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:910
 #, javascript-format
 msgid "%d days"
 msgstr "%d dage"
 
-#: packages/lib/models/Setting.js:880
+#: packages/lib/models/Setting.js:912
 msgid "Keep note history for"
 msgstr "Behold note-historie i"
 
-#: packages/lib/models/Setting.js:907
+#: packages/lib/models/Setting.js:939
 msgid "Notebook list growth factor"
 msgstr "Notesbogsliste-vækstfaktor"
 
-#: packages/lib/models/Setting.js:908 packages/lib/models/Setting.js:921
-#: packages/lib/models/Setting.js:934
+#: packages/lib/models/Setting.js:940 packages/lib/models/Setting.js:953
+#: packages/lib/models/Setting.js:966
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2775,58 +2789,58 @@ msgstr ""
 "Således vil et element med en faktor 2 optage dobbelt så meget plads som et "
 "element med en faktor 1. Genstart app'en for at se ændringer."
 
-#: packages/lib/models/Setting.js:920
+#: packages/lib/models/Setting.js:952
 msgid "Note list growth factor"
 msgstr "Noteliste-vækstfaktor"
 
-#: packages/lib/models/Setting.js:933
+#: packages/lib/models/Setting.js:965
 msgid "Note area growth factor"
 msgstr "Noteområde-vækstfaktor"
 
-#: packages/lib/models/Setting.js:1143
+#: packages/lib/models/Setting.js:1180
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ulovlig indstillingsværdi: \"%s\".  Mulige valg er: %s."
 
-#: packages/lib/models/Setting.js:1542
+#: packages/lib/models/Setting.js:1579
 msgid "General"
 msgstr "Generelt"
 
-#: packages/lib/models/Setting.js:1544
+#: packages/lib/models/Setting.js:1581
 msgid "Synchronisation"
 msgstr "Synkronisering"
 
-#: packages/lib/models/Setting.js:1546
+#: packages/lib/models/Setting.js:1583
 msgid "Appearance"
 msgstr "Udseende"
 
-#: packages/lib/models/Setting.js:1548
+#: packages/lib/models/Setting.js:1585
 msgid "Note"
 msgstr "Note"
 
-#: packages/lib/models/Setting.js:1550
+#: packages/lib/models/Setting.js:1587
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1554
+#: packages/lib/models/Setting.js:1591
 msgid "Application"
 msgstr "Program"
 
-#: packages/lib/models/Setting.js:1558
+#: packages/lib/models/Setting.js:1595
 msgid "Encryption"
 msgstr "Kryptering"
 
-#: packages/lib/models/Setting.js:1560
+#: packages/lib/models/Setting.js:1597
 msgid "Web Clipper"
 msgstr "Web-clipper"
 
-#: packages/lib/models/Setting.js:1562
+#: packages/lib/models/Setting.js:1599
 msgid "Keyboard Shortcuts"
 msgstr "Tastaturgenveje"
 
-#: packages/lib/models/Setting.js:1569
+#: packages/lib/models/Setting.js:1606
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2844,7 +2858,7 @@ msgstr ""
 "udvidelsesformatteringen. Det angives nedenfor, hvilke udvidelser der er "
 "kompatible eller ikke med WYSIWYG editoren."
 
-#: packages/lib/models/Setting.js:1571
+#: packages/lib/models/Setting.js:1608
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Noter og indstillinger er gemt i: %s"
@@ -2916,13 +2930,13 @@ msgstr "Krypteret"
 msgid "Encrypted items cannot be modified"
 msgstr "Krypteret emner kan ikke rettes"
 
-#: packages/lib/BaseApplication.js:149 packages/lib/BaseApplication.js:161
-#: packages/lib/BaseApplication.js:193
+#: packages/lib/BaseApplication.js:150 packages/lib/BaseApplication.js:162
+#: packages/lib/BaseApplication.js:194
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Forbrug: %s"
 
-#: packages/lib/BaseApplication.js:228
+#: packages/lib/BaseApplication.js:229
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Ukendt markering: %s"
@@ -3738,6 +3752,12 @@ msgstr "%d noter der matcher dette mønster. Slet dem?"
 msgid "Attaches the given file to the note."
 msgstr "Vedhæfter valgt fil til noten."
 
+#: packages/app-cli/app/command-batch.js:10
+msgid ""
+"Runs the commands contained in the text file. There should be one command "
+"per line."
+msgstr ""
+
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
 msgstr "Viser versions info"
@@ -3855,11 +3875,11 @@ msgstr "Dit valg: "
 msgid "Invalid answer: %s"
 msgstr "Forkert svar: %s"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
 msgstr "J"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "n"
 msgstr "n"
 
@@ -3949,37 +3969,37 @@ msgstr ""
 msgid "Exits the application."
 msgstr "Forlad/luk program."
 
-#: packages/app-cli/app/app.js:62
+#: packages/app-cli/app/app.js:63
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Mere end et emne matcher \"%s\".  Præciser din søgning."
 
-#: packages/app-cli/app/app.js:92
+#: packages/app-cli/app/app.js:93
 msgid "No notebook selected."
 msgstr "Ingen notesbog er valgt."
 
-#: packages/app-cli/app/app.js:98
+#: packages/app-cli/app/app.js:99
 msgid "No notebook has been specified."
 msgstr "Ingen notesbog er specificeret."
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "N"
 msgstr "N"
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "y"
 msgstr "j"
 
-#: packages/app-cli/app/app.js:170
+#: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Annullerer baggrunds synkronisering...  Vent venligst."
 
-#: packages/app-cli/app/app.js:255
+#: packages/app-cli/app/app.js:256
 #, javascript-format
 msgid "No such command: %s"
 msgstr "Kommando findes ikke: %s"
 
-#: packages/app-cli/app/app.js:303
+#: packages/app-cli/app/app.js:304
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Kommando \"%s\" er kun til rådighed i GUI tilstand"
@@ -4020,6 +4040,17 @@ msgstr "Markerer en opgave som udført."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Noten er ikke en opgave: \"%s\""
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "fremhævet tekst"
+
+#, fuzzy
+#~ msgid "Mark"
+#~ msgstr "Markup"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "Fulde udgivelsesnoter"
 
 #~ msgid ""
 #~ "If the font is incorrect or empty, it will default to a generic monospace "
@@ -4200,10 +4231,6 @@ msgstr "Noten er ikke en opgave: \"%s\""
 #, fuzzy
 #~ msgid "Resources"
 #~ msgstr "Ressourcer: %d."
-
-#, fuzzy
-#~ msgid "marked text"
-#~ msgstr "fremhævet tekst"
 
 #~ msgid "Global zoom percentage"
 #~ msgstr "Global zoom procent"

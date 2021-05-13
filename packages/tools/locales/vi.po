@@ -18,7 +18,7 @@ msgstr ""
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
-#: packages/app-desktop/checkForUpdates.js:139
+#: packages/app-desktop/checkForUpdates.js:175
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/MenuBar.js:373
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
@@ -32,13 +32,13 @@ msgid "OK"
 msgstr "OK"
 
 #: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:190
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:430
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -91,37 +91,37 @@ msgstr "Đang import từ \"%s\" dưới định dạng \"%s\". Vui lòng chờ.
 msgid "Could not export notes: %s"
 msgstr ""
 
-#: packages/app-desktop/checkForUpdates.js:138
+#: packages/app-desktop/checkForUpdates.js:174
 msgid "Current version is up-to-date."
 msgstr "Phiên bản hiện tại đã được cập nhật mới nhất."
 
-#: packages/app-desktop/checkForUpdates.js:148
+#: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
 msgstr "%s (chưa xuất bản)"
 
-#: packages/app-desktop/checkForUpdates.js:152
+#: packages/app-desktop/checkForUpdates.js:188
 msgid "An update is available, do you want to download it now?"
 msgstr "Có bản cập nhật mới, bạn có muốn cập nhật không?"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:189
 #, javascript-format
 msgid "Your version: %s"
 msgstr "Phiên bản hiện tại: %s"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:189
 #, javascript-format
 msgid "New version: %s"
 msgstr "Phiên bản mới: %s"
 
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:190
 #, fuzzy
 msgid "Download"
 msgstr "Đã tải"
 
-#: packages/app-desktop/checkForUpdates.js:154
-msgid "Full Release Notes"
-msgstr "Thông báo phiên bản mới"
+#: packages/app-desktop/checkForUpdates.js:190
+msgid "Full changelog"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -133,7 +133,7 @@ msgid "This note has no history"
 msgstr "Note này không có lịch sử"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:122
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:85
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Đường dẫn hoặc tin nhắn không được hỗ trợ: %s"
@@ -153,7 +153,7 @@ msgstr ""
 "Phiên bản hiện tại của note sẽ không bị mất đi hay thay đổi."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
@@ -250,20 +250,30 @@ msgstr "Thanh bên"
 msgid "Focus"
 msgstr "Đặt con trỏ tới"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:31
 msgid "Please select where the sync status should be exported to"
 msgstr "Vui lòng chọn điểm đến mà trạng thái đồng bộ sẽ được export tới"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:66
 #: packages/app-mobile/components/screens/status.js:112
 #, fuzzy
 msgid "Retry All"
 msgstr "Thử lại"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:83
 #: packages/app-mobile/components/screens/status.js:118
 msgid "Retry"
 msgstr "Thử lại"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:113
+#, fuzzy
+msgid "Advanced tools"
+msgstr "Chức năng nâng cao"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:115
+#, fuzzy
+msgid "Export debug report"
+msgstr "Export báo cáo debug"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -298,20 +308,20 @@ msgstr ""
 "và chỉnh sửa note."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:91
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Cắt"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:626
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:373
 msgid "Copy"
 msgstr "Sao chép"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:633
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:106
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "Dán"
@@ -342,7 +352,6 @@ msgid "Subscript"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
 msgstr "Chỉnh sửa"
@@ -366,48 +375,48 @@ msgstr ""
 msgid "Insert Date Time"
 msgstr "Chèn ngày tháng"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 msgid "Drop notes or files here"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 #, fuzzy
 msgid "Code View"
 msgstr "Mã"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
 msgstr "Chương trình gặp phải lỗi khi tải về đính kèm:"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:77
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Đính kèm này chưa được tải về hoặc chưa được giải mã"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:49
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
 msgstr "Mở..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
 msgid "Save as..."
 msgstr "Lưu lại thành..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:75
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 msgid "Reveal file in folder"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:83
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy path to clipboard"
 msgstr "Sao chép đường dẫn tới clipboard"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:114
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:155
 msgid "Copy Link Address"
 msgstr "Sao chép địa chỉ đường dẫn"
 
@@ -586,7 +595,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1556
+#: packages/lib/models/Setting.js:1593
 msgid "Note History"
 msgstr "Lịch sử của note"
 
@@ -612,7 +621,7 @@ msgstr "Lỗi"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:759 packages/app-cli/app/command-e2ee.js:110
+#: packages/lib/models/Setting.js:791 packages/app-cli/app/command-e2ee.js:110
 msgid "Disabled"
 msgstr "Đã tắt"
 
@@ -1394,52 +1403,52 @@ msgstr "Đăng nhập Dropbox"
 msgid "Note attachments"
 msgstr "Đính kèm"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Cửa sổ mới sẽ được mở. Lưu lại những thay đổi gần nhất?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
 #: packages/app-mobile/components/screens/config.js:322
 msgid "Check synchronisation configuration"
 msgstr "Kiểm tra cài đặt đồng bộ hóa"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
 msgid "Show Advanced Settings"
 msgstr "Hiển thị cài đặt nâng cao"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
 msgid "Path:"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
 msgid "Browse..."
 msgstr "Xem thêm..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
 msgid "Arguments:"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #, fuzzy
 msgid "Do it now"
 msgstr "Đặt mua ngay bây giờ:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
 #, fuzzy
 msgid "Restart now"
 msgstr "Đặt mua ngay bây giờ:"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1552
+#: packages/lib/models/Setting.js:1589
 msgid "Plugins"
 msgstr "Phần mềm mở rộng"
 
@@ -1541,14 +1550,14 @@ msgid "Lines"
 msgstr "Số dòng"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
-#: packages/lib/models/Setting.js:486
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:497
+#: packages/lib/models/Setting.js:498
 msgid "Editor"
 msgstr "Trình chỉnh sửa văn bản"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:497
+#: packages/lib/models/Setting.js:499
 msgid "Viewer"
 msgstr "Viewer"
 
@@ -1578,7 +1587,7 @@ msgid "View"
 msgstr "&Giao diện"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:162
-#: packages/lib/models/Setting.js:500
+#: packages/lib/models/Setting.js:512
 msgid "Sort notes by"
 msgstr "Sắp xếp notes theo"
 
@@ -1603,12 +1612,6 @@ msgstr ""
 msgid "Note list"
 msgstr "Danh mục note"
 
-#: packages/app-desktop/gui/getWindowTitle.js:19
-#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
-msgid "Untitled"
-msgstr "Chưa có tên"
-
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
 msgstr "Tìm kiếm trong tất cả các notes"
@@ -1624,6 +1627,11 @@ msgstr "Kích thước"
 #: packages/app-desktop/gui/ResourceScreen.js:40
 msgid "Action"
 msgstr "Hành động"
+
+#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
+msgid "Untitled"
+msgstr "Chưa có tên"
 
 #: packages/app-desktop/gui/ResourceScreen.js:95
 #, fuzzy, javascript-format
@@ -2189,22 +2197,22 @@ msgstr "Không thể di chuyển notebook tới vị trí này"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notesbook không thể đặt tên \"%s\", tên này đã được dành riêng."
 
-#: packages/lib/models/Setting.js:92
+#: packages/lib/models/Setting.js:98
 #, fuzzy
 msgid "yes"
 msgstr "Có"
 
-#: packages/lib/models/Setting.js:92 packages/lib/models/Setting.js:93
+#: packages/lib/models/Setting.js:98 packages/lib/models/Setting.js:99
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr ""
 
-#: packages/lib/models/Setting.js:93
+#: packages/lib/models/Setting.js:99
 #, fuzzy
 msgid "no"
 msgstr "note"
 
-#: packages/lib/models/Setting.js:95
+#: packages/lib/models/Setting.js:101
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2215,43 +2223,43 @@ msgstr ""
 "cả nội dung của mình trước khi đồng bộ, nếu không tất cả các files sẽ bị "
 "xóa! Xem chi tiết tại FAQ: %s"
 
-#: packages/lib/models/Setting.js:101
+#: packages/lib/models/Setting.js:107
 msgid "Light"
 msgstr "Light"
 
-#: packages/lib/models/Setting.js:102
+#: packages/lib/models/Setting.js:108
 msgid "Dark"
 msgstr "Dark"
 
-#: packages/lib/models/Setting.js:103
+#: packages/lib/models/Setting.js:109
 msgid "Dracula"
 msgstr "Dracul"
 
-#: packages/lib/models/Setting.js:104
+#: packages/lib/models/Setting.js:110
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
-#: packages/lib/models/Setting.js:105
+#: packages/lib/models/Setting.js:111
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: packages/lib/models/Setting.js:106
+#: packages/lib/models/Setting.js:112
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/lib/models/Setting.js:107
+#: packages/lib/models/Setting.js:113
 msgid "Aritim Dark"
 msgstr ""
 
-#: packages/lib/models/Setting.js:108
+#: packages/lib/models/Setting.js:114
 msgid "OLED Dark"
 msgstr "OLED Dark"
 
-#: packages/lib/models/Setting.js:130
+#: packages/lib/models/Setting.js:136
 msgid "Synchronisation target"
 msgstr "Điểm đến của quá trình đồng bộ"
 
-#: packages/lib/models/Setting.js:132
+#: packages/lib/models/Setting.js:138
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -2259,73 +2267,73 @@ msgstr ""
 "Điểm đến của quá trình đông bộ. Mỗi điểm đến có thể có tham số tên `sync.NUM."
 "NAME` (xem bên dưới)."
 
-#: packages/lib/models/Setting.js:160
+#: packages/lib/models/Setting.js:171
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Đường dẫn để đồng bộ tới (absolute path)"
 
-#: packages/lib/models/Setting.js:172
+#: packages/lib/models/Setting.js:183
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: packages/lib/models/Setting.js:184
+#: packages/lib/models/Setting.js:195
 msgid "Nextcloud username"
 msgstr "Tên sử dụng Nextcloud"
 
-#: packages/lib/models/Setting.js:195
+#: packages/lib/models/Setting.js:206
 msgid "Nextcloud password"
 msgstr "Mật khẩu Nextcloud"
 
-#: packages/lib/models/Setting.js:206
+#: packages/lib/models/Setting.js:217
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: packages/lib/models/Setting.js:218
+#: packages/lib/models/Setting.js:229
 msgid "WebDAV username"
 msgstr "Tên sử dụng WebDAV"
 
-#: packages/lib/models/Setting.js:229
+#: packages/lib/models/Setting.js:240
 msgid "WebDAV password"
 msgstr "Mật khẩu WebDAV"
 
-#: packages/lib/models/Setting.js:248
+#: packages/lib/models/Setting.js:259
 msgid "AWS S3 bucket"
 msgstr ""
 
-#: packages/lib/models/Setting.js:260
+#: packages/lib/models/Setting.js:271
 msgid "AWS S3 URL"
 msgstr ""
 
-#: packages/lib/models/Setting.js:271
+#: packages/lib/models/Setting.js:282
 msgid "AWS key"
 msgstr ""
 
-#: packages/lib/models/Setting.js:282
+#: packages/lib/models/Setting.js:293
 msgid "AWS secret"
 msgstr ""
 
-#: packages/lib/models/Setting.js:293
+#: packages/lib/models/Setting.js:304
 msgid "Joplin Server URL"
 msgstr ""
 
-#: packages/lib/models/Setting.js:308
+#: packages/lib/models/Setting.js:319
 #, fuzzy
 msgid "Joplin Server Directory"
 msgstr "Joplin Export Directory"
 
-#: packages/lib/models/Setting.js:319
+#: packages/lib/models/Setting.js:330
 msgid "Joplin Server username"
 msgstr ""
 
-#: packages/lib/models/Setting.js:330
+#: packages/lib/models/Setting.js:341
 #, fuzzy
 msgid "Joplin Server password"
 msgstr "Điền mật khẩu master:"
 
-#: packages/lib/models/Setting.js:342
+#: packages/lib/models/Setting.js:353
 msgid "Attachment download behaviour"
 msgstr "Hành vi tải về đính kèm"
 
-#: packages/lib/models/Setting.js:343
+#: packages/lib/models/Setting.js:354
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2336,197 +2344,197 @@ msgstr ""
 "độ \"Always\", tất cả đính kèm luôn được tải về bất kể bạn có mở note hay "
 "không."
 
-#: packages/lib/models/Setting.js:346
+#: packages/lib/models/Setting.js:357
 msgid "Always"
 msgstr "Always"
 
-#: packages/lib/models/Setting.js:347
+#: packages/lib/models/Setting.js:358
 msgid "Manual"
 msgstr "Manual"
 
-#: packages/lib/models/Setting.js:348
+#: packages/lib/models/Setting.js:359
 msgid "Auto"
 msgstr "Auto"
 
-#: packages/lib/models/Setting.js:366
+#: packages/lib/models/Setting.js:377
 msgid "Max concurrent connections"
 msgstr "Số lượng kết nối tối đa"
 
-#: packages/lib/models/Setting.js:379
+#: packages/lib/models/Setting.js:390
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: packages/lib/models/Setting.js:390
+#: packages/lib/models/Setting.js:401
 msgid "Date format"
 msgstr "Định dạng ngày"
 
-#: packages/lib/models/Setting.js:410
+#: packages/lib/models/Setting.js:422
 msgid "Time format"
 msgstr "Định dạng thời gian"
 
-#: packages/lib/models/Setting.js:429
+#: packages/lib/models/Setting.js:441
 msgid "Theme"
 msgstr "Thême"
 
-#: packages/lib/models/Setting.js:440
+#: packages/lib/models/Setting.js:452
 msgid "Automatically switch theme to match system theme"
 msgstr ""
 
-#: packages/lib/models/Setting.js:452
+#: packages/lib/models/Setting.js:464
 msgid "Preferred light theme"
 msgstr ""
 
-#: packages/lib/models/Setting.js:466
+#: packages/lib/models/Setting.js:478
 msgid "Preferred dark theme"
 msgstr ""
 
-#: packages/lib/models/Setting.js:476
+#: packages/lib/models/Setting.js:488
 msgid "Show note counts"
 msgstr "Hiển thị số lượng note"
 
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:486
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:498
+#: packages/lib/models/Setting.js:499
 msgid "Split View"
 msgstr "Chia đôi màn hình"
 
-#: packages/lib/models/Setting.js:484
+#: packages/lib/models/Setting.js:496
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/models/Setting.js:485 packages/lib/models/Setting.js:486
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:497 packages/lib/models/Setting.js:498
+#: packages/lib/models/Setting.js:499
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.js:491
+#: packages/lib/models/Setting.js:503
 msgid "Uncompleted to-dos on top"
 msgstr "HIển thị to-dos chưa hoàn thành lên đầu"
 
-#: packages/lib/models/Setting.js:492
+#: packages/lib/models/Setting.js:504
 msgid "Show completed to-dos"
 msgstr "Hiển thị to-dos đã hoàn thành"
 
-#: packages/lib/models/Setting.js:518
+#: packages/lib/models/Setting.js:530
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
 
-#: packages/lib/models/Setting.js:521 packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:552
 msgid "Reverse sort order"
 msgstr "Đảo ngược thứ tự sắp xếp"
 
-#: packages/lib/models/Setting.js:528
+#: packages/lib/models/Setting.js:540
 msgid "Sort notebooks by"
 msgstr "Sắp xếp notebooks theo"
 
-#: packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:553
 msgid "Save geo-location with notes"
 msgstr "Lưu dữ liệu định vị của notes này"
 
-#: packages/lib/models/Setting.js:563
+#: packages/lib/models/Setting.js:575
 msgid "When creating a new to-do:"
 msgstr "Khi tạo một to-do mới:"
 
-#: packages/lib/models/Setting.js:566 packages/lib/models/Setting.js:582
+#: packages/lib/models/Setting.js:578 packages/lib/models/Setting.js:594
 msgid "Focus title"
 msgstr "Đặt dấu trỏ tại tiêu đề"
 
-#: packages/lib/models/Setting.js:567 packages/lib/models/Setting.js:583
+#: packages/lib/models/Setting.js:579 packages/lib/models/Setting.js:595
 msgid "Focus body"
 msgstr "Đặt dấu trỏ tại phần thân"
 
-#: packages/lib/models/Setting.js:579
+#: packages/lib/models/Setting.js:591
 msgid "When creating a new note:"
 msgstr "Khi tạo note mới:"
 
-#: packages/lib/models/Setting.js:612
+#: packages/lib/models/Setting.js:624
 msgid "Enable soft breaks"
 msgstr "Bật tự động xuống trang"
 
-#: packages/lib/models/Setting.js:613
+#: packages/lib/models/Setting.js:625
 msgid "Enable typographer support"
 msgstr "Bật hỗ trợ cá nhân làm thuật in máy"
 
-#: packages/lib/models/Setting.js:614
+#: packages/lib/models/Setting.js:626
 #, fuzzy
 msgid "Enable Linkify"
 msgstr "Bật lịch sử note"
 
-#: packages/lib/models/Setting.js:615
+#: packages/lib/models/Setting.js:627
 msgid "Enable math expressions"
 msgstr "Bật hỗ trợ toán học"
 
-#: packages/lib/models/Setting.js:616
+#: packages/lib/models/Setting.js:628
 msgid "Enable Fountain syntax support"
 msgstr "Bật hỗ trợ Fountain syntax"
 
-#: packages/lib/models/Setting.js:617
+#: packages/lib/models/Setting.js:629
 msgid "Enable Mermaid diagrams support"
 msgstr "Bật Mermaid diagrams support"
 
-#: packages/lib/models/Setting.js:618
+#: packages/lib/models/Setting.js:630
 #, fuzzy
 msgid "Enable audio player"
 msgstr "Bật markdown emoji"
 
-#: packages/lib/models/Setting.js:619
+#: packages/lib/models/Setting.js:631
 msgid "Enable video player"
 msgstr ""
 
-#: packages/lib/models/Setting.js:620
+#: packages/lib/models/Setting.js:632
 msgid "Enable PDF viewer"
 msgstr ""
 
-#: packages/lib/models/Setting.js:621
+#: packages/lib/models/Setting.js:633
 msgid "Enable ==mark== syntax"
 msgstr "Bật ==mark== syntax"
 
-#: packages/lib/models/Setting.js:622
+#: packages/lib/models/Setting.js:634
 msgid "Enable footnotes"
 msgstr "Bật footnotes"
 
-#: packages/lib/models/Setting.js:623
+#: packages/lib/models/Setting.js:635
 msgid "Enable table of contents extension"
 msgstr "Bật ứng dụng mở rộng mục lục"
 
-#: packages/lib/models/Setting.js:624
+#: packages/lib/models/Setting.js:636
 msgid "Enable ~sub~ syntax"
 msgstr "Bật ~sub~ syntax"
 
-#: packages/lib/models/Setting.js:625
+#: packages/lib/models/Setting.js:637
 msgid "Enable ^sup^ syntax"
 msgstr "Bật ^sup^ syntax"
 
-#: packages/lib/models/Setting.js:626
+#: packages/lib/models/Setting.js:638
 msgid "Enable deflist syntax"
 msgstr "Bật deflist syntax"
 
-#: packages/lib/models/Setting.js:627
+#: packages/lib/models/Setting.js:639
 msgid "Enable abbreviation syntax"
 msgstr "Bật abbreviation syntax"
 
-#: packages/lib/models/Setting.js:628
+#: packages/lib/models/Setting.js:640
 msgid "Enable markdown emoji"
 msgstr "Bật markdown emoji"
 
-#: packages/lib/models/Setting.js:629
+#: packages/lib/models/Setting.js:641
 msgid "Enable ++insert++ syntax"
 msgstr "Bật ++insert++ syntax"
 
-#: packages/lib/models/Setting.js:630
+#: packages/lib/models/Setting.js:642
 msgid "Enable multimarkdown table extension"
 msgstr "Bật multimarkdown table extension"
 
-#: packages/lib/models/Setting.js:641
+#: packages/lib/models/Setting.js:653
 msgid "Show tray icon"
 msgstr "Hiển thị biểu tượng ở tray"
 
-#: packages/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:655
 msgid "Note: Does not work in all desktop environments."
 msgstr "Lưu ý: Không hoạt động trong tất cả môi trường desktop."
 
-#: packages/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:655
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2535,97 +2543,105 @@ msgstr ""
 "Điều này cho phép Joplin chạy trong nền. Khuyến cáo sử dụng chức năng này để "
 "notes có thể liên tục đồng bộ hóa, giảm thiểu số lần xung đột."
 
-#: packages/lib/models/Setting.js:647
+#: packages/lib/models/Setting.js:659
 msgid "Start application minimised in the tray icon"
 msgstr ""
 "Chạy chương trình trong nền, hiển thị icon trong tray khi máy khởi động"
 
-#: packages/lib/models/Setting.js:662
+#: packages/lib/models/Setting.js:674
 msgid "Editor font size"
 msgstr "Kích thước font của trình chỉnh sửa văn bản"
 
-#: packages/lib/models/Setting.js:669
+#: packages/lib/models/Setting.js:681
 msgid "Editor font"
 msgstr "Font của trình chỉnh sửa văn bản"
 
-#: packages/lib/models/Setting.js:676 packages/lib/models/Setting.js:683
-#: packages/lib/models/Setting.js:809
+#: packages/lib/models/Setting.js:688 packages/lib/models/Setting.js:695
+#: packages/lib/models/Setting.js:841
 msgid "Default"
 msgstr "Mặc định"
 
-#: packages/lib/models/Setting.js:694
+#: packages/lib/models/Setting.js:706
 msgid "Editor font family"
 msgstr "Font family của trình chỉnh sửa văn bản"
 
-#: packages/lib/models/Setting.js:695
+#: packages/lib/models/Setting.js:707
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.js:704
+#: packages/lib/models/Setting.js:716
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "Font family của trình chỉnh sửa văn bản"
 
-#: packages/lib/models/Setting.js:705
+#: packages/lib/models/Setting.js:717
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.js:726
+#: packages/lib/models/Setting.js:738
 #, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Tùy chọn stylesheet cho nhưng ứng dụng Joplin-wide"
 
-#: packages/lib/models/Setting.js:742
+#: packages/lib/models/Setting.js:754
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Tùy chọn stylesheet cho nhưng ứng dụng Joplin-wide"
 
-#: packages/lib/models/Setting.js:747
+#: packages/lib/models/Setting.js:764
+msgid "Re-upload local data to sync target"
+msgstr ""
+
+#: packages/lib/models/Setting.js:774
+msgid "Delete local data and re-download from sync target"
+msgstr ""
+
+#: packages/lib/models/Setting.js:779
 msgid "Automatically update the application"
 msgstr "Tự động cập nhật ứng dụng"
 
-#: packages/lib/models/Setting.js:748
+#: packages/lib/models/Setting.js:780
 msgid "Get pre-releases when checking for updates"
 msgstr "Cập nhật bản trước phát hành khi kiểm tra cập nhật"
 
-#: packages/lib/models/Setting.js:748
+#: packages/lib/models/Setting.js:780
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Xem trang phát hành trước để có thêm thông tin chi tiết: %s"
 
-#: packages/lib/models/Setting.js:756
+#: packages/lib/models/Setting.js:788
 msgid "Synchronisation interval"
 msgstr "Tần suất đồng bộ hóa"
 
-#: packages/lib/models/Setting.js:760 packages/lib/models/Setting.js:761
-#: packages/lib/models/Setting.js:762
+#: packages/lib/models/Setting.js:792 packages/lib/models/Setting.js:793
+#: packages/lib/models/Setting.js:794
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d phút"
 
-#: packages/lib/models/Setting.js:763
+#: packages/lib/models/Setting.js:795
 #, javascript-format
 msgid "%d hour"
 msgstr "%d giờ"
 
-#: packages/lib/models/Setting.js:764 packages/lib/models/Setting.js:765
+#: packages/lib/models/Setting.js:796 packages/lib/models/Setting.js:797
 #, javascript-format
 msgid "%d hours"
 msgstr "%d giờ"
 
-#: packages/lib/models/Setting.js:775
+#: packages/lib/models/Setting.js:807
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
-#: packages/lib/models/Setting.js:782
+#: packages/lib/models/Setting.js:814
 msgid "Text editor command"
 msgstr "Câu lệnh trình duyệt chỉnh sửa văn bản"
 
-#: packages/lib/models/Setting.js:782
+#: packages/lib/models/Setting.js:814
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2634,63 +2650,63 @@ msgstr ""
 "note. Nếu không được cung cấp, câu lệnh trình duyệt văn bản sẽ tự động tìm "
 "trình duyệt chỉnh sửa văn bản mặc định."
 
-#: packages/lib/models/Setting.js:783
+#: packages/lib/models/Setting.js:815
 msgid "Page size for PDF export"
 msgstr "Kích thước của trang để export dạng PDF"
 
-#: packages/lib/models/Setting.js:785
+#: packages/lib/models/Setting.js:817
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:786
+#: packages/lib/models/Setting.js:818
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.js:787
+#: packages/lib/models/Setting.js:819
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:788
+#: packages/lib/models/Setting.js:820
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:789
+#: packages/lib/models/Setting.js:821
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/lib/models/Setting.js:790
+#: packages/lib/models/Setting.js:822
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.js:793
+#: packages/lib/models/Setting.js:825
 msgid "Page orientation for PDF export"
 msgstr "Định hướng trang để export PDF"
 
-#: packages/lib/models/Setting.js:795
+#: packages/lib/models/Setting.js:827
 msgid "Portrait"
 msgstr "Portrait"
 
-#: packages/lib/models/Setting.js:796
+#: packages/lib/models/Setting.js:828
 msgid "Landscape"
 msgstr "Landscape"
 
-#: packages/lib/models/Setting.js:806
+#: packages/lib/models/Setting.js:838
 msgid "Keyboard Mode"
 msgstr "Ché độ bàn phím"
 
-#: packages/lib/models/Setting.js:810
+#: packages/lib/models/Setting.js:842
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:811
+#: packages/lib/models/Setting.js:843
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:834
+#: packages/lib/models/Setting.js:866
 msgid "Custom TLS certificates"
 msgstr "Tùy chỉnh TLS certicates"
 
-#: packages/lib/models/Setting.js:835
+#: packages/lib/models/Setting.js:867
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2702,15 +2718,15 @@ msgstr ""
 "other/custom.pem. Lưu ý, nếu bnaj thay đổi cấu hình TLS, bnaj phải lưu những "
 "thay đổi đó trước khi ấn \"Kiểm tra cấu hình đồng bộ hóa\"."
 
-#: packages/lib/models/Setting.js:849
+#: packages/lib/models/Setting.js:881
 msgid "Ignore TLS certificate errors"
 msgstr "Bỏ qua các lỗi TLS certificate"
 
-#: packages/lib/models/Setting.js:858
+#: packages/lib/models/Setting.js:890
 msgid "Fail-safe"
 msgstr ""
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:891
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2718,7 +2734,7 @@ msgstr ""
 "Thiết kế an toàn: Không xóa dữ liệu cục bộ khi điểm đến đồng bộ hóa trống "
 "(thường là kết quả của bug hoặc cấu hình sai)"
 
-#: packages/lib/models/Setting.js:863
+#: packages/lib/models/Setting.js:895
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2726,29 +2742,29 @@ msgstr ""
 "Chỉ định port nên được sử dụng bởi server API. Nếu không được chỉ định, cấu "
 "hình mặc định sẽ được sử dụng."
 
-#: packages/lib/models/Setting.js:868
+#: packages/lib/models/Setting.js:900
 msgid "Enable note history"
 msgstr "Bật lịch sử note"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:910
 msgid "days"
 msgstr "ngày"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:910
 #, javascript-format
 msgid "%d days"
 msgstr "%d ngày"
 
-#: packages/lib/models/Setting.js:880
+#: packages/lib/models/Setting.js:912
 msgid "Keep note history for"
 msgstr "Lưu giữ lịch sử note để"
 
-#: packages/lib/models/Setting.js:907
+#: packages/lib/models/Setting.js:939
 msgid "Notebook list growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:908 packages/lib/models/Setting.js:921
-#: packages/lib/models/Setting.js:934
+#: packages/lib/models/Setting.js:940 packages/lib/models/Setting.js:953
+#: packages/lib/models/Setting.js:966
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2756,59 +2772,59 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/lib/models/Setting.js:920
+#: packages/lib/models/Setting.js:952
 msgid "Note list growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:933
+#: packages/lib/models/Setting.js:965
 msgid "Note area growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:1143
+#: packages/lib/models/Setting.js:1180
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Giá trị lựa chọn lỗi: \"%s\". Các giá trị có thể sử dụng là: %s."
 
-#: packages/lib/models/Setting.js:1542
+#: packages/lib/models/Setting.js:1579
 msgid "General"
 msgstr "Chung"
 
-#: packages/lib/models/Setting.js:1544
+#: packages/lib/models/Setting.js:1581
 msgid "Synchronisation"
 msgstr "Đồng bộ hóa"
 
-#: packages/lib/models/Setting.js:1546
+#: packages/lib/models/Setting.js:1583
 msgid "Appearance"
 msgstr "Bề ngoài"
 
-#: packages/lib/models/Setting.js:1548
+#: packages/lib/models/Setting.js:1585
 msgid "Note"
 msgstr "Note"
 
-#: packages/lib/models/Setting.js:1550
+#: packages/lib/models/Setting.js:1587
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1554
+#: packages/lib/models/Setting.js:1591
 msgid "Application"
 msgstr "Ứng dụng"
 
-#: packages/lib/models/Setting.js:1558
+#: packages/lib/models/Setting.js:1595
 msgid "Encryption"
 msgstr "Mã hóa"
 
-#: packages/lib/models/Setting.js:1560
+#: packages/lib/models/Setting.js:1597
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: packages/lib/models/Setting.js:1562
+#: packages/lib/models/Setting.js:1599
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "Ché độ bàn phím"
 
-#: packages/lib/models/Setting.js:1569
+#: packages/lib/models/Setting.js:1606
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2819,7 +2835,7 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: packages/lib/models/Setting.js:1571
+#: packages/lib/models/Setting.js:1608
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notes và cài đặt sẽ được lưu lại tại: %s"
@@ -2888,13 +2904,13 @@ msgstr "Đã mã hóa"
 msgid "Encrypted items cannot be modified"
 msgstr "Các mục đã mã hóa không thể chỉnh sửa"
 
-#: packages/lib/BaseApplication.js:149 packages/lib/BaseApplication.js:161
-#: packages/lib/BaseApplication.js:193
+#: packages/lib/BaseApplication.js:150 packages/lib/BaseApplication.js:162
+#: packages/lib/BaseApplication.js:194
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Sử dụng: %s"
 
-#: packages/lib/BaseApplication.js:228
+#: packages/lib/BaseApplication.js:229
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Không tìm thấy flag này: %s"
@@ -3708,6 +3724,12 @@ msgstr "Có %d notes trùng với chuỗi này. Xóa chúng?"
 msgid "Attaches the given file to the note."
 msgstr "Đính kèm file được lựa chọn vào note."
 
+#: packages/app-cli/app/command-batch.js:10
+msgid ""
+"Runs the commands contained in the text file. There should be one command "
+"per line."
+msgstr ""
+
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
 msgstr "Hiện thị thông tin phiên bản"
@@ -3826,11 +3848,11 @@ msgstr "Lựa chọn của bạn "
 msgid "Invalid answer: %s"
 msgstr "Câu trả lời không hợp lệ: %s"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
 msgstr ""
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "n"
 msgstr ""
 
@@ -3920,38 +3942,38 @@ msgstr ""
 msgid "Exits the application."
 msgstr "Thoát ứng dụng."
 
-#: packages/app-cli/app/app.js:62
+#: packages/app-cli/app/app.js:63
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "Nhiều hơn một mục được tìm thấy với \"%s\". Hãy truy vấn chính xác hơn nữa."
 
-#: packages/app-cli/app/app.js:92
+#: packages/app-cli/app/app.js:93
 msgid "No notebook selected."
 msgstr "Chưa có notebook nào được lựa chọn."
 
-#: packages/app-cli/app/app.js:98
+#: packages/app-cli/app/app.js:99
 msgid "No notebook has been specified."
 msgstr "Chưa có notebook nào được chỉ định."
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "N"
 msgstr ""
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "y"
 msgstr ""
 
-#: packages/app-cli/app/app.js:170
+#: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Hủy đồng bộ hóa đang chạy dưới nền… Vui lòng chờ."
 
-#: packages/app-cli/app/app.js:255
+#: packages/app-cli/app/app.js:256
 #, javascript-format
 msgid "No such command: %s"
 msgstr "Không có lệnh: %s"
 
-#: packages/app-cli/app/app.js:303
+#: packages/app-cli/app/app.js:304
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Lệnh \"%s\" chỉ có thể sử dụng trong chế độ GUI"
@@ -3990,6 +4012,17 @@ msgstr "Đánh dấu to-do đã hoàn thành."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Note này không phải là to-do: \"%s\""
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "emphasized text"
+
+#, fuzzy
+#~ msgid "Mark"
+#~ msgstr "Đánh dấu"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "Thông báo phiên bản mới"
 
 #, fuzzy
 #~ msgid ""
