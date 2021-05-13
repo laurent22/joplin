@@ -96,6 +96,9 @@ packages/app-cli/tests/Synchronizer.tags.js.map
 packages/app-cli/tests/Synchronizer.tools.d.ts
 packages/app-cli/tests/Synchronizer.tools.js
 packages/app-cli/tests/Synchronizer.tools.js.map
+packages/app-cli/tests/dateTimeFormats.d.ts
+packages/app-cli/tests/dateTimeFormats.js
+packages/app-cli/tests/dateTimeFormats.js.map
 packages/app-cli/tests/file-api-driver.d.ts
 packages/app-cli/tests/file-api-driver.js
 packages/app-cli/tests/file-api-driver.js.map
@@ -150,6 +153,9 @@ packages/app-cli/tests/services_PluginService.js.map
 packages/app-cli/tests/services_ResourceService.d.ts
 packages/app-cli/tests/services_ResourceService.js
 packages/app-cli/tests/services_ResourceService.js.map
+packages/app-cli/tests/services_SearchEngineUtils.d.ts
+packages/app-cli/tests/services_SearchEngineUtils.js
+packages/app-cli/tests/services_SearchEngineUtils.js.map
 packages/app-cli/tests/services_keychainService.d.ts
 packages/app-cli/tests/services_keychainService.js
 packages/app-cli/tests/services_keychainService.js.map

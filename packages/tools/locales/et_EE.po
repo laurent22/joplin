@@ -18,7 +18,7 @@ msgstr ""
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
-#: packages/app-desktop/checkForUpdates.js:139
+#: packages/app-desktop/checkForUpdates.js:175
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/MenuBar.js:373
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
@@ -32,13 +32,13 @@ msgid "OK"
 msgstr "OK"
 
 #: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:190
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:430
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #: packages/app-desktop/gui/ResourceScreen.js:96
@@ -92,37 +92,37 @@ msgstr ""
 msgid "Could not export notes: %s"
 msgstr ""
 
-#: packages/app-desktop/checkForUpdates.js:138
+#: packages/app-desktop/checkForUpdates.js:174
 msgid "Current version is up-to-date."
 msgstr "Praegune versioon on ajakohane."
 
-#: packages/app-desktop/checkForUpdates.js:148
+#: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
 msgstr "%s (väljalaske-eelne)"
 
-#: packages/app-desktop/checkForUpdates.js:152
+#: packages/app-desktop/checkForUpdates.js:188
 msgid "An update is available, do you want to download it now?"
 msgstr "Saadaval on värskendus, kas soovite selle kohe alla laadida?"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:189
 #, javascript-format
 msgid "Your version: %s"
 msgstr "Teie versioon: %s"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:189
 #, javascript-format
 msgid "New version: %s"
 msgstr "Uus versioon: %s"
 
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:190
 #, fuzzy
 msgid "Download"
 msgstr "Allalaetud"
 
-#: packages/app-desktop/checkForUpdates.js:154
-msgid "Full Release Notes"
-msgstr "Täielikud väljalaskemärkmed"
+#: packages/app-desktop/checkForUpdates.js:190
+msgid "Full changelog"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -134,7 +134,7 @@ msgid "This note has no history"
 msgstr "Sellel märkel pole ajalugu"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:122
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:85
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Toetuseta link või sõnum: %s"
@@ -154,7 +154,7 @@ msgstr ""
 "\"%s\". Märkme praegust versiooni ei asendata ega muudeta."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
@@ -251,20 +251,30 @@ msgstr ""
 msgid "Focus"
 msgstr "Fookus"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:31
 msgid "Please select where the sync status should be exported to"
 msgstr "Palun valige, kus sünkroonimise olekut tuleks eksportida"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:66
 #: packages/app-mobile/components/screens/status.js:112
 #, fuzzy
 msgid "Retry All"
 msgstr "Uuesti"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:83
 #: packages/app-mobile/components/screens/status.js:118
 msgid "Retry"
 msgstr "Uuesti"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:113
+#, fuzzy
+msgid "Advanced tools"
+msgstr "Täpsemad suvandid"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:115
+#, fuzzy
+msgid "Export debug report"
+msgstr "Ekspordi Silumisaruanne"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 #, fuzzy
@@ -301,20 +311,20 @@ msgstr ""
 "redigeerimiseks."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:91
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Lõika"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:626
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:373
 msgid "Copy"
 msgstr "Kopeeri"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:633
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:106
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "Kleebi"
@@ -345,7 +355,6 @@ msgid "Subscript"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
 #: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
 msgstr "Muuda"
@@ -369,48 +378,48 @@ msgstr ""
 msgid "Insert Date Time"
 msgstr "Lisa kuupäev kellaaeg"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 msgid "Drop notes or files here"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 #, fuzzy
 msgid "Code View"
 msgstr "Kood"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1046
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1052
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
 msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:77
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Seda manust ei laadita alla või pole veel dekrüpteeritud"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:49
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
 msgstr "Avatud..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
 msgid "Save as..."
 msgstr "Salvesta kui..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:75
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 msgid "Reveal file in folder"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:83
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy path to clipboard"
 msgstr "Kopeeri tee lõikelauale"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:114
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:155
 msgid "Copy Link Address"
 msgstr "Kopeeri lingi aadress"
 
@@ -592,7 +601,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1556
+#: packages/lib/models/Setting.js:1593
 msgid "Note History"
 msgstr "Märkmete ajalugu"
 
@@ -619,7 +628,7 @@ msgstr "Viga"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:759 packages/app-cli/app/command-e2ee.js:110
+#: packages/lib/models/Setting.js:791 packages/app-cli/app/command-e2ee.js:110
 msgid "Disabled"
 msgstr "Keelatud"
 
@@ -1411,52 +1420,52 @@ msgstr "Dropbox-i sisselogimine"
 msgid "Note attachments"
 msgstr "Manused"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
 msgid "This will open a new screen. Save your current changes?"
 msgstr "See avab uue ekraani. Kas salvestada praegused muudatused?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
 #: packages/app-mobile/components/screens/config.js:322
 msgid "Check synchronisation configuration"
 msgstr "Kontrolli sünkroniseerimise konfiguratsiooni"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
 msgid "Show Advanced Settings"
 msgstr "Kuva täpsemad sätted"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
 msgid "Path:"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
 msgid "Browse..."
 msgstr "Sirvi..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
 msgid "Arguments:"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #, fuzzy
 msgid "Do it now"
 msgstr "Võta nüüd:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
 #, fuzzy
 msgid "Restart now"
 msgstr "Võta nüüd:"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1552
+#: packages/lib/models/Setting.js:1589
 msgid "Plugins"
 msgstr "Pluginad"
 
@@ -1557,14 +1566,14 @@ msgid "Lines"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
-#: packages/lib/models/Setting.js:486
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:497
+#: packages/lib/models/Setting.js:498
 msgid "Editor"
 msgstr "Redigeerija"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:497
+#: packages/lib/models/Setting.js:499
 #, fuzzy
 msgid "Viewer"
 msgstr "Viewer"
@@ -1595,7 +1604,7 @@ msgid "View"
 msgstr "&Vaade"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:162
-#: packages/lib/models/Setting.js:500
+#: packages/lib/models/Setting.js:512
 msgid "Sort notes by"
 msgstr "Märkmete sortimine"
 
@@ -1620,12 +1629,6 @@ msgstr "Praegu pole märkmikku. Loo üks klõpsates \"New notebook\"."
 msgid "Note list"
 msgstr "Märkmete ajalugu"
 
-#: packages/app-desktop/gui/getWindowTitle.js:19
-#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
-msgid "Untitled"
-msgstr "Pealkirjata"
-
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
 msgstr "Otsi kõigist märkmetest"
@@ -1643,6 +1646,11 @@ msgstr ""
 #, fuzzy
 msgid "Action"
 msgstr "Asukoht"
+
+#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
+msgid "Untitled"
+msgstr "Pealkirjata"
 
 #: packages/app-desktop/gui/ResourceScreen.js:95
 #, fuzzy, javascript-format
@@ -2223,22 +2231,22 @@ msgstr "Märkmiku ei saa sellesse asukohta teisaldada"
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel."
 
-#: packages/lib/models/Setting.js:92
+#: packages/lib/models/Setting.js:98
 #, fuzzy
 msgid "yes"
 msgstr "Jah"
 
-#: packages/lib/models/Setting.js:92 packages/lib/models/Setting.js:93
+#: packages/lib/models/Setting.js:98 packages/lib/models/Setting.js:99
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr ""
 
-#: packages/lib/models/Setting.js:93
+#: packages/lib/models/Setting.js:99
 #, fuzzy
 msgid "no"
 msgstr "n"
 
-#: packages/lib/models/Setting.js:95
+#: packages/lib/models/Setting.js:101
 #, fuzzy, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2249,45 +2257,45 @@ msgstr ""
 "sünkroonimist kõik oma sisu, vastasel juhul eemaldatakse kõik failid! "
 "Lisateavet leiate KKK-st: %s"
 
-#: packages/lib/models/Setting.js:101
+#: packages/lib/models/Setting.js:107
 msgid "Light"
 msgstr "Hele"
 
-#: packages/lib/models/Setting.js:102
+#: packages/lib/models/Setting.js:108
 msgid "Dark"
 msgstr "Tume"
 
-#: packages/lib/models/Setting.js:103
+#: packages/lib/models/Setting.js:109
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/lib/models/Setting.js:104
+#: packages/lib/models/Setting.js:110
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
-#: packages/lib/models/Setting.js:105
+#: packages/lib/models/Setting.js:111
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: packages/lib/models/Setting.js:106
+#: packages/lib/models/Setting.js:112
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/lib/models/Setting.js:107
+#: packages/lib/models/Setting.js:113
 msgid "Aritim Dark"
 msgstr ""
 
-#: packages/lib/models/Setting.js:108
+#: packages/lib/models/Setting.js:114
 #, fuzzy
 msgid "OLED Dark"
 msgstr "Tume"
 
-#: packages/lib/models/Setting.js:130
+#: packages/lib/models/Setting.js:136
 #, fuzzy
 msgid "Synchronisation target"
 msgstr "Sünkroniseerimine eesmärk"
 
-#: packages/lib/models/Setting.js:132
+#: packages/lib/models/Setting.js:138
 #, fuzzy
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
@@ -2296,74 +2304,74 @@ msgstr ""
 "Sihtmärk, kuhu sünteesitakse. Iga sünkroonimise Target võib olla täiendavaid "
 "parameetreid, mis on nimega `sync.NUM.NAME` (kõik dokumenteeritud allpool)."
 
-#: packages/lib/models/Setting.js:160
+#: packages/lib/models/Setting.js:171
 #, fuzzy
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Kataloog, millega sünkroonitakse (absoluutne tee)"
 
-#: packages/lib/models/Setting.js:172
+#: packages/lib/models/Setting.js:183
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV-i URL"
 
-#: packages/lib/models/Setting.js:184
+#: packages/lib/models/Setting.js:195
 msgid "Nextcloud username"
 msgstr "Nextcloud-i kasutajanimi"
 
-#: packages/lib/models/Setting.js:195
+#: packages/lib/models/Setting.js:206
 msgid "Nextcloud password"
 msgstr "Nextcloud-i parool"
 
-#: packages/lib/models/Setting.js:206
+#: packages/lib/models/Setting.js:217
 msgid "WebDAV URL"
 msgstr "WebDAV-i URL"
 
-#: packages/lib/models/Setting.js:218
+#: packages/lib/models/Setting.js:229
 msgid "WebDAV username"
 msgstr "WebDAV-i kasutajanimi"
 
-#: packages/lib/models/Setting.js:229
+#: packages/lib/models/Setting.js:240
 msgid "WebDAV password"
 msgstr "WebDAV-i parool"
 
-#: packages/lib/models/Setting.js:248
+#: packages/lib/models/Setting.js:259
 msgid "AWS S3 bucket"
 msgstr ""
 
-#: packages/lib/models/Setting.js:260
+#: packages/lib/models/Setting.js:271
 msgid "AWS S3 URL"
 msgstr ""
 
-#: packages/lib/models/Setting.js:271
+#: packages/lib/models/Setting.js:282
 msgid "AWS key"
 msgstr ""
 
-#: packages/lib/models/Setting.js:282
+#: packages/lib/models/Setting.js:293
 msgid "AWS secret"
 msgstr ""
 
-#: packages/lib/models/Setting.js:293
+#: packages/lib/models/Setting.js:304
 msgid "Joplin Server URL"
 msgstr ""
 
-#: packages/lib/models/Setting.js:308
+#: packages/lib/models/Setting.js:319
 #, fuzzy
 msgid "Joplin Server Directory"
 msgstr "Joplin Export kataloog"
 
-#: packages/lib/models/Setting.js:319
+#: packages/lib/models/Setting.js:330
 msgid "Joplin Server username"
 msgstr ""
 
-#: packages/lib/models/Setting.js:330
+#: packages/lib/models/Setting.js:341
 #, fuzzy
 msgid "Joplin Server password"
 msgstr "Sisestage põhiparool:"
 
-#: packages/lib/models/Setting.js:342
+#: packages/lib/models/Setting.js:353
 msgid "Attachment download behaviour"
 msgstr "Manuse allalaadimise käitumine"
 
-#: packages/lib/models/Setting.js:343
+#: packages/lib/models/Setting.js:354
 #, fuzzy
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
@@ -2374,215 +2382,215 @@ msgstr ""
 "\"Auto\", nad laaditakse, kui avate märkme. \"Always\", laaditakse kõik "
 "manused, kas avate märkme või mitte."
 
-#: packages/lib/models/Setting.js:346
+#: packages/lib/models/Setting.js:357
 msgid "Always"
 msgstr "Alati"
 
-#: packages/lib/models/Setting.js:347
+#: packages/lib/models/Setting.js:358
 msgid "Manual"
 msgstr "Manuaal"
 
-#: packages/lib/models/Setting.js:348
+#: packages/lib/models/Setting.js:359
 msgid "Auto"
 msgstr "Automaatne"
 
-#: packages/lib/models/Setting.js:366
+#: packages/lib/models/Setting.js:377
 msgid "Max concurrent connections"
 msgstr "Maksimaalsed samaaegsed ühendused"
 
-#: packages/lib/models/Setting.js:379
+#: packages/lib/models/Setting.js:390
 msgid "Language"
 msgstr "Keel"
 
-#: packages/lib/models/Setting.js:390
+#: packages/lib/models/Setting.js:401
 msgid "Date format"
 msgstr "Kuupäeva formaat"
 
-#: packages/lib/models/Setting.js:410
+#: packages/lib/models/Setting.js:422
 msgid "Time format"
 msgstr "Kellaaja Formaat"
 
-#: packages/lib/models/Setting.js:429
+#: packages/lib/models/Setting.js:441
 msgid "Theme"
 msgstr "Teema"
 
-#: packages/lib/models/Setting.js:440
+#: packages/lib/models/Setting.js:452
 msgid "Automatically switch theme to match system theme"
 msgstr ""
 
-#: packages/lib/models/Setting.js:452
+#: packages/lib/models/Setting.js:464
 msgid "Preferred light theme"
 msgstr ""
 
-#: packages/lib/models/Setting.js:466
+#: packages/lib/models/Setting.js:478
 msgid "Preferred dark theme"
 msgstr ""
 
-#: packages/lib/models/Setting.js:476
+#: packages/lib/models/Setting.js:488
 msgid "Show note counts"
 msgstr "Kuva märkmete arv"
 
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:486
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:498
+#: packages/lib/models/Setting.js:499
 msgid "Split View"
 msgstr "Tükelda vaade"
 
-#: packages/lib/models/Setting.js:484
+#: packages/lib/models/Setting.js:496
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/models/Setting.js:485 packages/lib/models/Setting.js:486
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:497 packages/lib/models/Setting.js:498
+#: packages/lib/models/Setting.js:499
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.js:491
+#: packages/lib/models/Setting.js:503
 msgid "Uncompleted to-dos on top"
 msgstr "Lõpetamata ülesanded üleval"
 
-#: packages/lib/models/Setting.js:492
+#: packages/lib/models/Setting.js:504
 msgid "Show completed to-dos"
 msgstr "Näita lõpuleviidud ülesandeid"
 
-#: packages/lib/models/Setting.js:518
+#: packages/lib/models/Setting.js:530
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Automaatne sidumine traksid, sulg, noteeringud jne."
 
-#: packages/lib/models/Setting.js:521 packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:552
 msgid "Reverse sort order"
 msgstr "Pööra sortimisjärjestus ümber"
 
-#: packages/lib/models/Setting.js:528
+#: packages/lib/models/Setting.js:540
 msgid "Sort notebooks by"
 msgstr "Sorteeri märkmikud"
 
-#: packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:553
 msgid "Save geo-location with notes"
 msgstr "Salvesta geograafilise asukoha märkmed"
 
-#: packages/lib/models/Setting.js:563
+#: packages/lib/models/Setting.js:575
 #, fuzzy
 msgid "When creating a new to-do:"
 msgstr "Uue tee loomisel:"
 
-#: packages/lib/models/Setting.js:566 packages/lib/models/Setting.js:582
+#: packages/lib/models/Setting.js:578 packages/lib/models/Setting.js:594
 #, fuzzy
 msgid "Focus title"
 msgstr "Fookuse tiitel"
 
-#: packages/lib/models/Setting.js:567 packages/lib/models/Setting.js:583
+#: packages/lib/models/Setting.js:579 packages/lib/models/Setting.js:595
 #, fuzzy
 msgid "Focus body"
 msgstr "Fookuse keha"
 
-#: packages/lib/models/Setting.js:579
+#: packages/lib/models/Setting.js:591
 msgid "When creating a new note:"
 msgstr "Uue märkme loomisel:"
 
-#: packages/lib/models/Setting.js:612
+#: packages/lib/models/Setting.js:624
 #, fuzzy
 msgid "Enable soft breaks"
 msgstr "Luba pehmed katkestused"
 
-#: packages/lib/models/Setting.js:613
+#: packages/lib/models/Setting.js:625
 #, fuzzy
 msgid "Enable typographer support"
 msgstr "Luba typographer tugi"
 
-#: packages/lib/models/Setting.js:614
+#: packages/lib/models/Setting.js:626
 #, fuzzy
 msgid "Enable Linkify"
 msgstr "Luba märkmete ajalugu"
 
-#: packages/lib/models/Setting.js:615
+#: packages/lib/models/Setting.js:627
 #, fuzzy
 msgid "Enable math expressions"
 msgstr "Luba matemaatika avaldised"
 
-#: packages/lib/models/Setting.js:616
+#: packages/lib/models/Setting.js:628
 #, fuzzy
 msgid "Enable Fountain syntax support"
 msgstr "Luba purskkaevu süntaks toetust"
 
-#: packages/lib/models/Setting.js:617
+#: packages/lib/models/Setting.js:629
 #, fuzzy
 msgid "Enable Mermaid diagrams support"
 msgstr "Luba typographer tugi"
 
-#: packages/lib/models/Setting.js:618
+#: packages/lib/models/Setting.js:630
 #, fuzzy
 msgid "Enable audio player"
 msgstr "Luba allahindlusest emotikonide"
 
-#: packages/lib/models/Setting.js:619
+#: packages/lib/models/Setting.js:631
 msgid "Enable video player"
 msgstr ""
 
-#: packages/lib/models/Setting.js:620
+#: packages/lib/models/Setting.js:632
 msgid "Enable PDF viewer"
 msgstr ""
 
-#: packages/lib/models/Setting.js:621
+#: packages/lib/models/Setting.js:633
 #, fuzzy
 msgid "Enable ==mark== syntax"
 msgstr "Luba = = Mark = = süntaks"
 
-#: packages/lib/models/Setting.js:622
+#: packages/lib/models/Setting.js:634
 #, fuzzy
 msgid "Enable footnotes"
 msgstr "Luba allmärkused"
 
-#: packages/lib/models/Setting.js:623
+#: packages/lib/models/Setting.js:635
 #, fuzzy
 msgid "Enable table of contents extension"
 msgstr "Luba sisukorra laiend"
 
-#: packages/lib/models/Setting.js:624
+#: packages/lib/models/Setting.js:636
 #, fuzzy
 msgid "Enable ~sub~ syntax"
 msgstr "Luba ~ sub ~ süntaks"
 
-#: packages/lib/models/Setting.js:625
+#: packages/lib/models/Setting.js:637
 #, fuzzy
 msgid "Enable ^sup^ syntax"
 msgstr "Luba ^ SUP ^ Süntaks"
 
-#: packages/lib/models/Setting.js:626
+#: packages/lib/models/Setting.js:638
 #, fuzzy
 msgid "Enable deflist syntax"
 msgstr "Luba deflailosüntaks"
 
-#: packages/lib/models/Setting.js:627
+#: packages/lib/models/Setting.js:639
 #, fuzzy
 msgid "Enable abbreviation syntax"
 msgstr "Luba lühendi süntaks"
 
-#: packages/lib/models/Setting.js:628
+#: packages/lib/models/Setting.js:640
 #, fuzzy
 msgid "Enable markdown emoji"
 msgstr "Luba allahindlusest emotikonide"
 
-#: packages/lib/models/Setting.js:629
+#: packages/lib/models/Setting.js:641
 #, fuzzy
 msgid "Enable ++insert++ syntax"
 msgstr "Luba + + lisa + + süntaks"
 
-#: packages/lib/models/Setting.js:630
+#: packages/lib/models/Setting.js:642
 #, fuzzy
 msgid "Enable multimarkdown table extension"
 msgstr "Luba mitmemarkdown tabeli laiend"
 
-#: packages/lib/models/Setting.js:641
+#: packages/lib/models/Setting.js:653
 msgid "Show tray icon"
 msgstr "Kuva salve ikoon"
 
-#: packages/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:655
 msgid "Note: Does not work in all desktop environments."
 msgstr "Märkus: ei tööta kõigil töölaua keskkondades."
 
-#: packages/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:655
 #, fuzzy
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
@@ -2592,102 +2600,110 @@ msgstr ""
 "See võimaldab Joplini taustal töötada. Soovitatav on seda sätet lubada, et "
 "teie märkmed pidevalt sünkroonitakse, vähendades seega konfliktide arvu."
 
-#: packages/lib/models/Setting.js:647
+#: packages/lib/models/Setting.js:659
 #, fuzzy
 msgid "Start application minimised in the tray icon"
 msgstr "Alusta rakenduse minimeerimise salve ikoonil"
 
-#: packages/lib/models/Setting.js:662
+#: packages/lib/models/Setting.js:674
 msgid "Editor font size"
 msgstr "Redaktori fondi suurus"
 
-#: packages/lib/models/Setting.js:669
+#: packages/lib/models/Setting.js:681
 msgid "Editor font"
 msgstr "Redaktori font"
 
-#: packages/lib/models/Setting.js:676 packages/lib/models/Setting.js:683
-#: packages/lib/models/Setting.js:809
+#: packages/lib/models/Setting.js:688 packages/lib/models/Setting.js:695
+#: packages/lib/models/Setting.js:841
 msgid "Default"
 msgstr "Vaikimisi"
 
-#: packages/lib/models/Setting.js:694
+#: packages/lib/models/Setting.js:706
 msgid "Editor font family"
 msgstr "Redaktori font pere"
 
-#: packages/lib/models/Setting.js:695
+#: packages/lib/models/Setting.js:707
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.js:704
+#: packages/lib/models/Setting.js:716
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "Redaktori font pere"
 
-#: packages/lib/models/Setting.js:705
+#: packages/lib/models/Setting.js:717
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.js:726
+#: packages/lib/models/Setting.js:738
 #, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Kohandatud Stylesheet Joplin Wide app stiilid"
 
-#: packages/lib/models/Setting.js:742
+#: packages/lib/models/Setting.js:754
 #, fuzzy
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Kohandatud Stylesheet Joplin Wide app stiilid"
 
-#: packages/lib/models/Setting.js:747
+#: packages/lib/models/Setting.js:764
+msgid "Re-upload local data to sync target"
+msgstr ""
+
+#: packages/lib/models/Setting.js:774
+msgid "Delete local data and re-download from sync target"
+msgstr ""
+
+#: packages/lib/models/Setting.js:779
 #, fuzzy
 msgid "Automatically update the application"
 msgstr "Värskenda rakendus automaatselt"
 
-#: packages/lib/models/Setting.js:748
+#: packages/lib/models/Setting.js:780
 #, fuzzy
 msgid "Get pre-releases when checking for updates"
 msgstr "Hankige eelväljaanded värskenduste kontrollimisel"
 
-#: packages/lib/models/Setting.js:748
+#: packages/lib/models/Setting.js:780
 #, fuzzy, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Lisateavet väljalaske-eelse lehe kohta leiate teemast: %s"
 
-#: packages/lib/models/Setting.js:756
+#: packages/lib/models/Setting.js:788
 #, fuzzy
 msgid "Synchronisation interval"
 msgstr "Sünkroniseerimisintervall"
 
-#: packages/lib/models/Setting.js:760 packages/lib/models/Setting.js:761
-#: packages/lib/models/Setting.js:762
+#: packages/lib/models/Setting.js:792 packages/lib/models/Setting.js:793
+#: packages/lib/models/Setting.js:794
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minutit"
 
-#: packages/lib/models/Setting.js:763
+#: packages/lib/models/Setting.js:795
 #, javascript-format
 msgid "%d hour"
 msgstr "%d tund"
 
-#: packages/lib/models/Setting.js:764 packages/lib/models/Setting.js:765
+#: packages/lib/models/Setting.js:796 packages/lib/models/Setting.js:797
 #, javascript-format
 msgid "%d hours"
 msgstr "%d tundi"
 
-#: packages/lib/models/Setting.js:775
+#: packages/lib/models/Setting.js:807
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
-#: packages/lib/models/Setting.js:782
+#: packages/lib/models/Setting.js:814
 #, fuzzy
 msgid "Text editor command"
 msgstr "Tekstiredaktori käsk"
 
-#: packages/lib/models/Setting.js:782
+#: packages/lib/models/Setting.js:814
 #, fuzzy
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
@@ -2697,65 +2713,65 @@ msgstr ""
 "avamiseks. Kui ühtegi pole ette nähtud, proovib see automaatselt tuvastada "
 "vaikeredaktorit."
 
-#: packages/lib/models/Setting.js:783
+#: packages/lib/models/Setting.js:815
 #, fuzzy
 msgid "Page size for PDF export"
 msgstr "Lehekülje suurus PDF-i eksportimiseks"
 
-#: packages/lib/models/Setting.js:785
+#: packages/lib/models/Setting.js:817
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:786
+#: packages/lib/models/Setting.js:818
 msgid "Letter"
 msgstr "Kaaskiri"
 
-#: packages/lib/models/Setting.js:787
+#: packages/lib/models/Setting.js:819
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:788
+#: packages/lib/models/Setting.js:820
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:789
+#: packages/lib/models/Setting.js:821
 #, fuzzy
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/lib/models/Setting.js:790
+#: packages/lib/models/Setting.js:822
 msgid "Legal"
 msgstr "Õiguslik"
 
-#: packages/lib/models/Setting.js:793
+#: packages/lib/models/Setting.js:825
 msgid "Page orientation for PDF export"
 msgstr "Lehekülje suund PDF-i eksportimiseks"
 
-#: packages/lib/models/Setting.js:795
+#: packages/lib/models/Setting.js:827
 msgid "Portrait"
 msgstr "Portree"
 
-#: packages/lib/models/Setting.js:796
+#: packages/lib/models/Setting.js:828
 msgid "Landscape"
 msgstr "Maastik"
 
-#: packages/lib/models/Setting.js:806
+#: packages/lib/models/Setting.js:838
 msgid "Keyboard Mode"
 msgstr "Klaviatuuri režiim"
 
-#: packages/lib/models/Setting.js:810
+#: packages/lib/models/Setting.js:842
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:811
+#: packages/lib/models/Setting.js:843
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:834
+#: packages/lib/models/Setting.js:866
 msgid "Custom TLS certificates"
 msgstr "Kohandatud TLS-i serdid"
 
-#: packages/lib/models/Setting.js:835
+#: packages/lib/models/Setting.js:867
 #, fuzzy
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -2768,15 +2784,15 @@ msgstr ""
 "sätteid, peate enne nupu \"Check synchronisation configuration\" klõpsamist "
 "oma muudatused salvestama."
 
-#: packages/lib/models/Setting.js:849
+#: packages/lib/models/Setting.js:881
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoreeri TLS-i serdi tõrked"
 
-#: packages/lib/models/Setting.js:858
+#: packages/lib/models/Setting.js:890
 msgid "Fail-safe"
 msgstr ""
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:891
 #, fuzzy
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
@@ -2785,7 +2801,7 @@ msgstr ""
 "Fail-Safe: Ärge pühkige kohalikke andmeid, kui sünkroonimise eesmärk on tühi "
 "(sageli tulemus vale konfiguratsioon või viga)"
 
-#: packages/lib/models/Setting.js:863
+#: packages/lib/models/Setting.js:895
 #, fuzzy
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
@@ -2794,30 +2810,30 @@ msgstr ""
 "Määrake Port, mida peaks kasutama API-server. Kui seda ei määrata, "
 "kasutatakse vaikeväärtust."
 
-#: packages/lib/models/Setting.js:868
+#: packages/lib/models/Setting.js:900
 #, fuzzy
 msgid "Enable note history"
 msgstr "Luba märkmete ajalugu"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:910
 msgid "days"
 msgstr "päeva"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:910
 #, javascript-format
 msgid "%d days"
 msgstr "%d päeva"
 
-#: packages/lib/models/Setting.js:880
+#: packages/lib/models/Setting.js:912
 msgid "Keep note history for"
 msgstr "Säilita märkmete ajalugu"
 
-#: packages/lib/models/Setting.js:907
+#: packages/lib/models/Setting.js:939
 msgid "Notebook list growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:908 packages/lib/models/Setting.js:921
-#: packages/lib/models/Setting.js:934
+#: packages/lib/models/Setting.js:940 packages/lib/models/Setting.js:953
+#: packages/lib/models/Setting.js:966
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2825,59 +2841,59 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/lib/models/Setting.js:920
+#: packages/lib/models/Setting.js:952
 msgid "Note list growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:933
+#: packages/lib/models/Setting.js:965
 msgid "Note area growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:1143
+#: packages/lib/models/Setting.js:1180
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Sobimatu suvandiväärtus: %s. Võimalikud väärtused on: %s."
 
-#: packages/lib/models/Setting.js:1542
+#: packages/lib/models/Setting.js:1579
 msgid "General"
 msgstr "Üldine"
 
-#: packages/lib/models/Setting.js:1544
+#: packages/lib/models/Setting.js:1581
 msgid "Synchronisation"
 msgstr "Sünkroonimine"
 
-#: packages/lib/models/Setting.js:1546
+#: packages/lib/models/Setting.js:1583
 msgid "Appearance"
 msgstr "Välimus"
 
-#: packages/lib/models/Setting.js:1548
+#: packages/lib/models/Setting.js:1585
 msgid "Note"
 msgstr "Märge"
 
-#: packages/lib/models/Setting.js:1550
+#: packages/lib/models/Setting.js:1587
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1554
+#: packages/lib/models/Setting.js:1591
 msgid "Application"
 msgstr "Rakendus"
 
-#: packages/lib/models/Setting.js:1558
+#: packages/lib/models/Setting.js:1595
 msgid "Encryption"
 msgstr "Krüpteerimine"
 
-#: packages/lib/models/Setting.js:1560
+#: packages/lib/models/Setting.js:1597
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: packages/lib/models/Setting.js:1562
+#: packages/lib/models/Setting.js:1599
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "Klaviatuuri režiim"
 
-#: packages/lib/models/Setting.js:1569
+#: packages/lib/models/Setting.js:1606
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2888,7 +2904,7 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: packages/lib/models/Setting.js:1571
+#: packages/lib/models/Setting.js:1608
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Märkmed ja sätted talletatakse: %s"
@@ -2958,13 +2974,13 @@ msgstr "Krüpteeritud"
 msgid "Encrypted items cannot be modified"
 msgstr "Krüpteeritud üksusi ei saa muuta"
 
-#: packages/lib/BaseApplication.js:149 packages/lib/BaseApplication.js:161
-#: packages/lib/BaseApplication.js:193
+#: packages/lib/BaseApplication.js:150 packages/lib/BaseApplication.js:162
+#: packages/lib/BaseApplication.js:194
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Kasutus: %s"
 
-#: packages/lib/BaseApplication.js:228
+#: packages/lib/BaseApplication.js:229
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Tundmatu lipp: %s"
@@ -3789,6 +3805,12 @@ msgstr "%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
 msgid "Attaches the given file to the note."
 msgstr "Manustab antud faili märkmele."
 
+#: packages/app-cli/app/command-batch.js:10
+msgid ""
+"Runs the commands contained in the text file. There should be one command "
+"per line."
+msgstr ""
+
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
 msgstr "Kuvab versiooniteabe"
@@ -3909,11 +3931,11 @@ msgstr "Sinu valik: "
 msgid "Invalid answer: %s"
 msgstr "Sobimatu vastus: %s"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
 msgstr "Y"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "n"
 msgstr "n"
 
@@ -4005,38 +4027,38 @@ msgstr ""
 msgid "Exits the application."
 msgstr "Väljub rakendusest."
 
-#: packages/app-cli/app/app.js:62
+#: packages/app-cli/app/app.js:63
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
 
-#: packages/app-cli/app/app.js:92
+#: packages/app-cli/app/app.js:93
 msgid "No notebook selected."
 msgstr "Ühtegi märkmikku pole valitud."
 
-#: packages/app-cli/app/app.js:98
+#: packages/app-cli/app/app.js:99
 msgid "No notebook has been specified."
 msgstr "Ühtegi märkmikku pole määratud."
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "N"
 msgstr "N"
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "y"
 msgstr "y"
 
-#: packages/app-cli/app/app.js:170
+#: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Tausta sünkroniseerimise tühistamine... Oota."
 
-#: packages/app-cli/app/app.js:255
+#: packages/app-cli/app/app.js:256
 #, javascript-format
 msgid "No such command: %s"
 msgstr "Sellist käsku pole: %s"
 
-#: packages/app-cli/app/app.js:303
+#: packages/app-cli/app/app.js:304
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Käsk %s on saadaval ainult graafilises kasutajaliideses"
@@ -4077,6 +4099,17 @@ msgstr "Märgib, et ülesannete loetelu on tehtud ."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Märkus ei ole ülesannete loetelu: %s"
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "toonitud tekst"
+
+#, fuzzy
+#~ msgid "Mark"
+#~ msgstr "Märgistus"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "Täielikud väljalaskemärkmed"
 
 #, fuzzy
 #~ msgid ""
@@ -4261,10 +4294,6 @@ msgstr "Märkus ei ole ülesannete loetelu: %s"
 #, fuzzy
 #~ msgid "Resources"
 #~ msgstr "Ressursid: %d."
-
-#, fuzzy
-#~ msgid "marked text"
-#~ msgstr "toonitud tekst"
 
 #, fuzzy
 #~ msgid "Global zoom percentage"

@@ -1,9 +1,14 @@
 import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
+import Setting from '../../models/Setting';
 
 export default class SearchEngineUtils {
-	static async notesForQuery(query: string, options: any = null) {
+	static async notesForQuery(query: string, options: any = null, searchEngine: SearchEngine = null) {
 		if (!options) options = {};
+
+		if (!searchEngine) {
+			searchEngine = SearchEngine.instance();
+		}
 
 		let searchType = SearchEngine.SEARCH_TYPE_FTS;
 		if (query.length && query[0] === '/') {
@@ -11,7 +16,8 @@ export default class SearchEngineUtils {
 			searchType = SearchEngine.SEARCH_TYPE_BASIC;
 		}
 
-		const results = await SearchEngine.instance().search(query, { searchType });
+		const results = await searchEngine.search(query, { searchType });
+
 		const noteIds = results.map((n: any) => n.id);
 
 		// We need at least the note ID to be able to sort them below so if not
@@ -42,6 +48,11 @@ export default class SearchEngineUtils {
 			if (idWasAutoAdded) delete sortedNotes[idx].id;
 		}
 
+		// Filter completed todos
+		let filteredNotes = [...sortedNotes];
+		if (!Setting.value('showCompletedTodos')) {
+			filteredNotes = sortedNotes.filter(note => note.is_todo === 0 || (note.is_todo === 1 && note.todo_completed === 0));
+		}
 
 		// Note that when the search engine index is somehow corrupted, it might contain
 		// references to notes that don't exist. Not clear how it can happen, but anyway
@@ -49,9 +60,9 @@ export default class SearchEngineUtils {
 		// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
 		if (noteIds.length !== notes.length) {
 			// remove null objects
-			return sortedNotes.filter(n => n);
+			return filteredNotes.filter(n => n);
 		} else {
-			return sortedNotes;
+			return filteredNotes;
 		}
 
 	}
