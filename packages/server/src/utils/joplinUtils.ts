@@ -46,7 +46,7 @@ type LinkedItemInfos = Record<Uuid, LinkedItemInfo>;
 
 type ResourceInfos = Record<Uuid, ResourceInfo>;
 
-const pluginAssetRootDir_ = require('path').resolve(__dirname, '../../..', 'node_modules/@joplin/renderer/assets');
+const pluginAssetRootDir_ = require('path').resolve(__dirname, '../..', 'node_modules/@joplin/renderer/assets');
 
 let db_: JoplinDatabase = null;
 let models_: Models = null;
@@ -108,8 +108,8 @@ export function isJoplinResourceBlobPath(path: string): boolean {
 }
 
 export async function localFileFromUrl(url: string): Promise<string> {
-	const cssPluginAssets = 'css/pluginAssets';
-	const jsPluginAssets = 'js/pluginAssets';
+	const cssPluginAssets = 'css/pluginAssets/';
+	const jsPluginAssets = 'js/pluginAssets/';
 	if (url.indexOf(cssPluginAssets) === 0) return `${pluginAssetRootDir_}/${url.substr(cssPluginAssets.length)}`;
 	if (url.indexOf(jsPluginAssets) === 0) return `${pluginAssetRootDir_}/${url.substr(jsPluginAssets.length)}`;
 	return null;
