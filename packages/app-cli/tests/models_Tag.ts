@@ -74,6 +74,8 @@ describe('models_Tag', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
+		const todo1 = await Note.save({ title: 'todo 2', parent_id: folder1.id, is_todo: 1, todo_completed: 1590085027710 });
+		const todo2 = await Note.save({ title: 'todo 2', parent_id: folder1.id, is_todo: 1 });
 		const tag = await Tag.save({ title: 'mytag' });
 		await Tag.addNote(tag.id, note1.id);
 
@@ -83,6 +85,12 @@ describe('models_Tag', function() {
 		await Tag.addNote(tag.id, note2.id);
 		tagWithCount = await Tag.loadWithCount(tag.id);
 		expect(tagWithCount.note_count).toBe(2);
+
+		await Tag.addNote(tag.id, todo1.id);
+		await Tag.addNote(tag.id, todo2.id);
+		tagWithCount = await Tag.loadWithCount(tag.id);
+		expect(tagWithCount.note_count).toBe(4);
+		expect(tagWithCount.todo_completed_count).toBe(1);
 	}));
 
 	it('should get common tags for set of notes', (async () => {
