@@ -112,14 +112,14 @@ export function isPathBasedAddressing(fileId: string): boolean {
 //
 // root:/Documents/MyFile.md:/content
 // ABCDEFG/content
-export function parseSubPath(basePath: string, p: string): SubPath {
+export function parseSubPath(basePath: string, p: string, rawPath: string = null): SubPath {
 	p = rtrimSlashes(ltrimSlashes(p));
 
 	const output: SubPath = {
 		id: '',
 		link: '',
 		addressingType: ItemAddressingType.Id,
-		raw: p,
+		raw: rawPath === null ? p : ltrimSlashes(rawPath),
 		schema: '',
 	};
 
@@ -227,7 +227,7 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 		return {
 			route: routes[''],
 			basePath: '',
-			subPath: parseSubPath('', `/${splittedPath.join('/')}`),
+			subPath: parseSubPath('', `/${splittedPath.join('/')}`, path),
 		};
 	}
 

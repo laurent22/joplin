@@ -186,10 +186,6 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 		return <div style={theme.textStyle}>{_('Note: When a note is shared, it will no longer be encrypted on the server.')}<hr/></div>;
 	}
 
-	function renderBetaWarningMessage() {
-		return <div style={theme.textStyle}>{'Sharing notes via Joplin Server is a Beta feature and the API might change later on. What it means is that if you share a note, the link might become invalid after an upgrade, and you will have to share it again.'}</div>;
-	}
-
 	function renderContent() {
 		return (
 			<div>
@@ -198,7 +194,6 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
 				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>
 				{renderEncryptionWarningMessage()}
-				{renderBetaWarningMessage()}
 				<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		);
