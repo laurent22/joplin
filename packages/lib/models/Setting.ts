@@ -131,6 +131,7 @@ class Setting extends BaseModel {
 	public static DATE_FORMAT_5 = 'YYYY-MM-DD';
 	public static DATE_FORMAT_6 = 'DD.MM.YYYY';
 	public static DATE_FORMAT_7 = 'YYYY.MM.DD';
+	public static DATE_FORMAT_8 = 'YYMMDD';
 
 	public static TIME_FORMAT_1 = 'HH:mm';
 	public static TIME_FORMAT_2 = 'h:mm A';
@@ -562,6 +563,7 @@ class Setting extends BaseModel {
 					options[Setting.DATE_FORMAT_5] = time.formatMsToLocal(now, Setting.DATE_FORMAT_5);
 					options[Setting.DATE_FORMAT_6] = time.formatMsToLocal(now, Setting.DATE_FORMAT_6);
 					options[Setting.DATE_FORMAT_7] = time.formatMsToLocal(now, Setting.DATE_FORMAT_7);
+					options[Setting.DATE_FORMAT_8] = time.formatMsToLocal(now, Setting.DATE_FORMAT_8);
 					return options;
 				},
 				storage: SettingStorage.File,

@@ -378,7 +378,8 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                                   DD/MM/YY (30/01/17), MM/DD/YYYY
 	                                   (01/30/2017), MM/DD/YY (01/30/17),
 	                                   YYYY-MM-DD (2017-01-30), DD.MM.YYYY
-	                                   (30.01.2017), YYYY.MM.DD (2017.01.30).
+	                                   (30.01.2017), YYYY.MM.DD (2017.01.30),
+	                                   YYMMDD (170130).
 	                                   Default: "DD/MM/YYYY"
 
 	    timeFormat                     Time format.
