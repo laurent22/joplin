@@ -1,6 +1,6 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder } from '../utils/testing/testUtils';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
-import { resourceBlobPath } from '../apps/joplin/joplinUtils';
+import { resourceBlobPath } from '../utils/joplinUtils';
 
 describe('ItemModel', function() {
 

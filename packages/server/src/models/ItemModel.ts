@@ -1,7 +1,7 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions, AclAction } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
-import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../apps/joplin/joplinUtils';
+import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ApiError, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
@@ -439,7 +439,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return false;
 	}
 
-	public isRootSharedFolder(item:Item):boolean {
+	public isRootSharedFolder(item: Item): boolean {
 		return item.jop_type === ModelType.Folder && item.jop_parent_id === '' && !!item.jop_share_id;
 	}
 
@@ -486,13 +486,13 @@ export default class ItemModel extends BaseModel<Item> {
 		}, 'ItemModel::delete');
 	}
 
-	public async deleteForUser(userId:Uuid, item:Item):Promise<void> {
+	public async deleteForUser(userId: Uuid, item: Item): Promise<void> {
 		if (this.isRootSharedFolder(item)) {
 			const share = await this.models().share().byItemId(item.id);
-			if (!share) throw new ErrorNotFound('Cannot find share associated with item ' + item.id);
+			if (!share) throw new ErrorNotFound(`Cannot find share associated with item ${item.id}`);
 			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
 			if (!userShare) return;
-			await this.models().shareUser().delete(userShare.id);				
+			await this.models().shareUser().delete(userShare.id);
 		} else {
 			await this.delete(item.id);
 		}

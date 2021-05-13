@@ -1,5 +1,5 @@
 import { ModelType } from '@joplin/lib/BaseModel';
-import { resourceBlobPath } from '../apps/joplin/joplinUtils';
+import { resourceBlobPath } from '../utils/joplinUtils';
 import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../db';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';

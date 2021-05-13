@@ -9,20 +9,20 @@ import NoteTag from '@joplin/lib/models/NoteTag';
 import Tag from '@joplin/lib/models/Tag';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
-import { Config } from '../../utils/types';
+import { Config } from './types';
 import * as fs from 'fs-extra';
-import { Item, Share, Uuid } from '../../db';
-import ItemModel from '../../models/ItemModel';
+import { Item, Share, Uuid } from '../db';
+import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-import { formatDateTime } from '../../utils/time';
-import { ErrorNotFound } from '../../utils/errors';
+import { formatDateTime } from './time';
+import { ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel } from '@joplin/renderer/MarkupToHtml';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
-import { Models } from '../../models/factory';
-import MustacheService from '../../services/MustacheService';
+import { Models } from '../models/factory';
+import MustacheService from '../services/MustacheService';
 
 const logger = Logger.create('JoplinUtils');
 

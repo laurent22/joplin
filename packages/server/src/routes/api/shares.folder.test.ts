@@ -5,7 +5,7 @@ import { PaginatedChanges } from '../../models/ChangeModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorForbidden } from '../../utils/errors';
-import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../apps/joplin/joplinUtils';
+import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 

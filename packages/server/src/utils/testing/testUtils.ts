@@ -16,7 +16,7 @@ import { ApiError } from '../errors';
 import { putApi } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { initializeJoplinUtils } from '../../apps/joplin/joplinUtils';
+import { initializeJoplinUtils } from '../joplinUtils';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.

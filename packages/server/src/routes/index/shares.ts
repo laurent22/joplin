@@ -4,7 +4,7 @@ import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { Item, Share } from '../../db';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { FileViewerResponse, renderItem as renderJoplinItem } from '../../apps/joplin/joplinUtils';
+import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
 
 async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
 	if (item.jop_type === ModelType.Note) {

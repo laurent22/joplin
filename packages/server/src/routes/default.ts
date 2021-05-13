@@ -5,7 +5,7 @@ import { dirname, normalize } from 'path';
 import { pathExists } from 'fs-extra';
 import * as fs from 'fs-extra';
 import { AppContext } from '../utils/types';
-import { localFileFromUrl } from '../apps/joplin/joplinUtils';
+import { localFileFromUrl } from '../utils/joplinUtils';
 const { mime } = require('@joplin/lib/mime-utils.js');
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;

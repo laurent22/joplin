@@ -5,7 +5,7 @@ import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
 import { Item } from '../../db';
 import { PaginatedItems } from '../../models/ItemModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
-import { resourceBlobPath } from '../../apps/joplin/joplinUtils';
+import { resourceBlobPath } from '../../utils/joplinUtils';
 import { ErrorForbidden } from '../../utils/errors';
 
 describe('api_items', function() {

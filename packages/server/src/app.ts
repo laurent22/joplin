@@ -14,7 +14,7 @@ import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
-import { initializeJoplinUtils } from './apps/joplin/joplinUtils';
+import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
 // import { createItemTree } from './utils/testing/testUtils';
 

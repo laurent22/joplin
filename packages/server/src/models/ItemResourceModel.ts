@@ -1,4 +1,4 @@
-import { resourceBlobPath } from '../apps/joplin/joplinUtils';
+import { resourceBlobPath } from '../utils/joplinUtils';
 import { Item, ItemResource, Uuid } from '../db';
 import BaseModel from './BaseModel';
 
