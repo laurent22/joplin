@@ -49,9 +49,8 @@ export default class SearchEngineUtils {
 		}
 
 		// Filter completed todos
-		const showCompletedTodos = Setting.value('showCompletedTodos');
 		let filterdNotes = [...sortedNotes];
-		if (!showCompletedTodos) {
+		if (!Setting.value('showCompletedTodos')) {
 			filterdNotes = sortedNotes.filter(note => note.is_todo === 0 || (note.is_todo === 1 && note.todo_completed === 0));
 		}
 
