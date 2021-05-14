@@ -33,6 +33,14 @@ describe('markdownUtils', function() {
 			['![something](http://test.com/img.png "Some description")', ['http://test.com/img.png']],
 			['![something](https://test.com/ohoh_(123).png)', ['https://test.com/ohoh_(123).png']],
 			['![nothing]() ![something](http://test.com/img.png)', ['http://test.com/img.png']],
+			['![something](img.png)', ['img.png']],
+			['![something](/img.png)', ['/img.png']],
+			['![something](../img.png)', ['../img.png']],
+			['![something](../upload/img.png)', ['../upload/img.png']],
+			['![something](./upload/img.png)', ['./upload/img.png']],
+			['[something](testing.html)', ['']],
+			['[something](img.png)', ['']],
+			['![something](file://img.png)', ['file://img.png']],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
