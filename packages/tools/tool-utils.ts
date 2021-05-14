@@ -22,7 +22,7 @@ function commandToString(commandName: string, args: string[] = []) {
 	return output.join(' ');
 }
 
-async function insertChangelog(tag: string, changelogPath: string, changelog: string) {
+async function insertChangelog(tag: string, changelogPath: string, changelog: string, isPrerelease: boolean) {
 	const currentText = await fs.readFile(changelogPath, 'UTF-8');
 	const lines = currentText.split('\n');
 
@@ -46,10 +46,11 @@ async function insertChangelog(tag: string, changelogPath: string, changelog: st
 	const header = [
 		'##',
 		`[${tag}](https://github.com/laurent22/joplin/releases/tag/${tag})`,
-		'-',
-		// eslint-disable-next-line no-useless-escape
-		`${moment.utc().format('YYYY-MM-DD\THH:mm:ss')}Z`,
 	];
+	if (isPrerelease) header.push('(Pre-release)');
+	header.push('-');
+	// eslint-disable-next-line no-useless-escape
+	header.push(`${moment.utc().format('YYYY-MM-DD\THH:mm:ss')}Z`);
 
 	let newLines = [];
 	newLines.push(header.join(' '));
@@ -62,10 +63,10 @@ async function insertChangelog(tag: string, changelogPath: string, changelog: st
 	return output.join('\n');
 }
 
-export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string) {
+export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean) {
 	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag}`, { })).trim();
 
-	const newChangelog = await insertChangelog(newTag, changelogPath, changelog);
+	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease);
 
 	await fs.writeFile(changelogPath, newChangelog);
 
