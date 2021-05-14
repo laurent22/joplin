@@ -200,6 +200,9 @@ packages/app-desktop/app.js.map
 packages/app-desktop/bridge.d.ts
 packages/app-desktop/bridge.js
 packages/app-desktop/bridge.js.map
+packages/app-desktop/checkForUpdates.d.ts
+packages/app-desktop/checkForUpdates.js
+packages/app-desktop/checkForUpdates.js.map
 packages/app-desktop/commands/copyDevCommand.d.ts
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/copyDevCommand.js.map

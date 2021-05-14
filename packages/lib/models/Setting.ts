@@ -992,7 +992,7 @@ class Setting extends BaseModel {
 			},
 
 
-			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, public: false },
 			'sync.interval': {
