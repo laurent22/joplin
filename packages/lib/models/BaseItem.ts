@@ -8,9 +8,18 @@ import { _ } from '../locale';
 
 import Database from '../database';
 import ItemChange from './ItemChange';
+import ShareService from '../services/share/ShareService';
 const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
+
+export interface BaseItemEntity {
+	id?: string;
+	encryption_applied?: boolean;
+	is_shared?: number;
+	share_id?: string;
+	type_?: ModelType;
+}
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
@@ -21,6 +30,7 @@ export default class BaseItem extends BaseModel {
 
 	public static encryptionService_: any = null;
 	public static revisionService_: any = null;
+	public static shareService_: ShareService = null;
 
 	// Also update:
 	// - itemsThatNeedSync()
@@ -382,14 +392,19 @@ export default class BaseItem extends BaseModel {
 		return this.revisionService_;
 	}
 
-	static async serializeForSync(item: any) {
+	protected static shareService() {
+		if (!this.shareService_) throw new Error('BaseItem.shareService_ is not set!!');
+		return this.shareService_;
+	}
+
+	public static async serializeForSync(item: BaseItemEntity) {
 		const ItemClass = this.itemClass(item);
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared) {
+		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared || item.share_id) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
@@ -415,13 +430,13 @@ export default class BaseItem extends BaseModel {
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
-		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'updated_time', 'type_'];
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'type_'];
 		const reducedItem: any = {};
 
 		for (let i = 0; i < keepKeys.length; i++) {
 			const n = keepKeys[i];
 			if (!item.hasOwnProperty(n)) continue;
-			reducedItem[n] = item[n];
+			reducedItem[n] = (item as any)[n];
 		}
 
 		reducedItem.encryption_applied = 1;
@@ -792,7 +807,7 @@ export default class BaseItem extends BaseModel {
 		}
 	}
 
-	static async updateShareStatus(item: any, isShared: boolean) {
+	static async updateShareStatus(item: BaseItemEntity, isShared: boolean) {
 		if (!item.id || !item.type_) throw new Error('Item must have an ID and a type');
 		if (!!item.is_shared === !!isShared) return false;
 		const ItemClass = this.getClassByItemType(item.type_);

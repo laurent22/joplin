@@ -36,6 +36,40 @@ export default class NoteResource extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
+	// public static async updateResourceShareIds() {
+	// 	// Find all resources where share_id is different from parent note
+	// 	// share_id. Then update share_id on all these resources. Essentially it
+	// 	// makes it match the resource share_id to the note share_id.
+
+	// 	const sql = `
+	// 		SELECT r.id, n.share_id
+	// 		FROM note_resources nr
+	// 		LEFT JOIN resources r ON nr.resource_id = r.id
+	// 		LEFT JOIN notes n ON nr.note_id = n.id
+	// 		WHERE n.share_id != r.share_id`;
+
+	// 	const rows = await this.db().selectAll(sql);
+
+	// 	const updatedTime = Date.now();
+	// 	const queries: SqlQuery[] = [];
+
+	// 	for (const row of rows) {
+	// 		queries.push({
+	// 			sql: `
+	// 				UPDATE resources
+	// 				SET share_id = ?, updated_time = ?
+	// 				WHERE id = ?`,
+	// 			params: [
+	// 				row.share_id || '',
+	// 				updatedTime,
+	// 				row.id,
+	// 			],
+	// 		});
+	// 	}
+
+	// 	await this.db().transactionExecBatch(queries);
+	// }
+
 	static async associatedNoteIds(resourceId: string): Promise<string[]> {
 		const rows = await this.modelSelectAll('SELECT note_id FROM note_resources WHERE resource_id = ? AND is_associated = 1', [resourceId]);
 		return rows.map((r: any) => r.note_id);

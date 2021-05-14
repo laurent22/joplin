@@ -11,7 +11,7 @@ async function main() {
 	const sqlTsConfig = {
 		'client': 'sqlite3',
 		'connection': {
-			'filename': `${require('os').homedir()}/.config/joplindev-desktop/database.sqlite`,
+			'filename': `${require('os').homedir()}/.config/joplindev/database.sqlite`,
 		},
 		'tableNameCasing': 'pascal',
 		'singularTableNames': true,

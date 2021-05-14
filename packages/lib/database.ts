@@ -4,7 +4,7 @@ import shim from './shim';
 
 const Mutex = require('async-mutex').Mutex;
 
-type SqlParams = Record<string, any>;
+type SqlParams = any[];
 
 export interface SqlQuery {
 	sql: string;

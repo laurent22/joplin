@@ -99,8 +99,8 @@ class Registry {
 			}
 
 			if (Setting.value('env') === 'dev' && delay !== 0) {
-				this.logger().info('Schedule sync DISABLED!!!');
-				return;
+				// this.logger().info('Schedule sync DISABLED!!!');
+				// return;
 			}
 
 			this.logger().debug('Scheduling sync operation...', delay);

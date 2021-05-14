@@ -5,7 +5,6 @@ import shim from './shim';
 import MigrationHandler from './services/synchronizer/MigrationHandler';
 import eventManager from './eventManager';
 import { _ } from './locale';
-
 import BaseItem from './models/BaseItem';
 import Folder from './models/Folder';
 import Note from './models/Note';
@@ -14,12 +13,12 @@ import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
 import MasterKey from './models/MasterKey';
 import BaseModel from './BaseModel';
-const { sprintf } = require('sprintf-js');
 import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
-import NoteResource from './models/NoteResource';
-const JoplinError = require('./JoplinError');
+import JoplinError from './JoplinError';
+import ShareService from './services/share/ShareService';
+const { sprintf } = require('sprintf-js');
 const TaskQueue = require('./TaskQueue');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -45,6 +44,7 @@ export default class Synchronizer {
 	private encryptionService_: EncryptionService = null;
 	private resourceService_: ResourceService = null;
 	private syncTargetIsLocked_: boolean = false;
+	private shareService_: ShareService = null;
 
 	// Debug flags are used to test certain hard-to-test conditions
 	// such as cancelling in the middle of a loop.
@@ -106,6 +106,10 @@ export default class Synchronizer {
 	maxResourceSize() {
 		if (this.maxResourceSize_ !== null) return this.maxResourceSize_;
 		return this.appType_ === 'mobile' ? 100 * 1000 * 1000 : Infinity;
+	}
+
+	public setShareService(v: ShareService) {
+		this.shareService_ = v;
 	}
 
 	public setEncryptionService(v: any) {
@@ -351,11 +355,14 @@ export default class Synchronizer {
 			if (this.resourceService()) {
 				this.logger().info('Indexing resources...');
 				await this.resourceService().indexNoteResources();
-				await NoteResource.applySharedStatusToLinkedResources();
 			}
 		} catch (error) {
 			this.logger().error('Error indexing resources:', error);
 		}
+
+		// Before synchronising make sure all share_id properties are set
+		// correctly so as to share/unshare the right items.
+		await Folder.updateAllShareIds();
 
 		let errorToThrow = null;
 		let syncLock = null;
@@ -505,7 +512,7 @@ export default class Synchronizer {
 										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${local.size} bytes) which may tie up the sync process.`);
 									}
 
-									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
+									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: local.share_id });
 								} catch (error) {
 									if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
@@ -922,6 +929,16 @@ export default class Synchronizer {
 		if (this.cancelling()) {
 			this.logger().info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
+		}
+
+		// After syncing, we run the share service maintenance, which is going
+		// to fetch share invitations, if any.
+		if (this.shareService_) {
+			try {
+				await this.shareService_.maintenance();
+			} catch (error) {
+				this.logger().error('Could not run share service maintenance:', error);
+			}
 		}
 
 		this.progressReport_.completedTime = time.unixMs();

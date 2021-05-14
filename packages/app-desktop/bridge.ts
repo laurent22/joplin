@@ -1,6 +1,5 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
-
 import { _, setLocale } from '@joplin/lib/locale';
 const { dirname, toSystemSlashes } = require('@joplin/lib/path-utils');
 const { BrowserWindow, nativeTheme } = require('electron');
@@ -172,11 +171,6 @@ export class Bridge {
 
 	async openItem(fullPath: string) {
 		return require('electron').shell.openPath(fullPath);
-	}
-
-	checkForUpdates(inBackground: boolean, window: any, logFilePath: string, options: any) {
-		const { checkForUpdates } = require('./checkForUpdates.js');
-		checkForUpdates(inBackground, window, logFilePath, options);
 	}
 
 	buildDir() {

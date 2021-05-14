@@ -1,13 +1,15 @@
 import shim from './shim';
 import { _ } from './locale';
 const { rtrimSlashes } = require('./path-utils.js');
-const JoplinError = require('./JoplinError');
+import JoplinError from './JoplinError';
+import { Env } from './models/Setting';
 const { stringify } = require('query-string');
 
 interface Options {
 	baseUrl(): string;
 	username(): string;
 	password(): string;
+	env?: Env;
 }
 
 enum ExecOptionsResponseFormat {
@@ -27,22 +29,30 @@ interface ExecOptions {
 	source?: string;
 }
 
+interface Session {
+	id: string;
+	user_id: string;
+}
+
 export default class JoplinServerApi {
 
 	private options_: Options;
-	private session_: any;
+	private session_: Session;
 	private debugRequests_: boolean = false;
 
 	public constructor(options: Options) {
 		this.options_ = options;
+
+		if (options.env === Env.Dev) {
+			this.debugRequests_ = true;
+		}
 	}
 
-	private baseUrl() {
+	public baseUrl() {
 		return rtrimSlashes(this.options_.baseUrl());
 	}
 
 	private async session() {
-		// TODO: handle invalid session
 		if (this.session_) return this.session_;
 
 		this.session_ = await this.exec('POST', 'api/sessions', null, {
@@ -58,20 +68,13 @@ export default class JoplinServerApi {
 		return session ? session.id : '';
 	}
 
-	public async shareFile(pathOrId: string) {
-		return this.exec('POST', 'api/shares', null, {
-			file_id: pathOrId,
-			type: 1, // ShareType.Link
-		});
+	public get userId(): string {
+		return this.session_ ? this.session_.user_id : '';
 	}
 
 	public static connectionErrorMessage(error: any) {
 		const msg = error && error.message ? error.message : 'Unknown error';
 		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
-	}
-
-	public shareUrl(share: any): string {
-		return `${this.baseUrl()}/shares/${share.id}`;
 	}
 
 	private requestToCurl_(url: string, options: any) {
@@ -85,8 +88,11 @@ export default class JoplinServerApi {
 				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
 			}
 		}
-		if (options.body) output.push(`${'--data ' + '\''}${JSON.stringify(options.body)}'`);
-		output.push(url);
+		if (options.body) {
+			const serialized = typeof options.body !== 'string' ? JSON.stringify(options.body) : options.body;
+			output.push(`${'--data ' + '\''}${serialized}'`);
+		}
+		output.push(`'${url}'`);
 
 		return output.join(' ');
 	}
@@ -150,14 +156,17 @@ export default class JoplinServerApi {
 
 		const responseText = await response.text();
 
-		// console.info('Joplin API Response', responseText);
+		if (this.debugRequests_) {
+			console.info('Joplin API Response', responseText);
+		}
 
 		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
 		const newError = (message: string, code: number = 0) => {
 			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 			const shortResponseText = (`${responseText}`).substr(0, 1024);
-			return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
+			// return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
+			return new JoplinError(message, code, `${method} ${path}: ${message} (${code}): ${shortResponseText}`);
 		};
 
 		let responseJson_: any = null;

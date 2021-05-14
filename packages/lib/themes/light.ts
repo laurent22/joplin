@@ -8,7 +8,7 @@ const theme: Theme = {
 	// content. It's basically dark gray text on white background
 	backgroundColor: '#ffffff',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
-	oddBackgroundColor: '#dddddd',
+	oddBackgroundColor: '#eeeeee',
 	color: '#32373F', // For regular text
 	colorError: 'red',
 	colorWarn: '#9A5B00',
@@ -24,6 +24,7 @@ const theme: Theme = {
 	color2: '#ffffff',
 	selectedColor2: '#131313',
 	colorError2: '#ff6c6c',
+	colorWarn2: '#ffcb81',
 
 	// Color scheme "3" is used for the config screens for example/
 	// It's dark text over gray background.

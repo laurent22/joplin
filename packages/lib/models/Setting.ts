@@ -1,6 +1,5 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
-import { ltrimSlashes } from '../path-utils';
 import eventManager from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
@@ -88,6 +87,31 @@ export enum SyncStartupOperation {
 	ClearLocalData = 2,
 }
 
+export enum Env {
+	Undefined = 'SET_ME',
+	Dev = 'dev',
+	Prod = 'prod',
+}
+
+export interface Constants {
+	env: Env;
+	isDemo: boolean;
+	appName: string;
+	appId: string;
+	appType: string;
+	resourceDirName: string;
+	resourceDir: string;
+	profileDir: string;
+	templateDir: string;
+	tempDir: string;
+	pluginDataDir: string;
+	cacheDir: string;
+	pluginDir: string;
+	flagOpenDevTools: boolean;
+	syncVersion: number;
+	startupDevPlugins: string[];
+}
+
 interface SettingSections {
 	[key: string]: SettingSection;
 }
@@ -131,6 +155,7 @@ class Setting extends BaseModel {
 	public static DATE_FORMAT_5 = 'YYYY-MM-DD';
 	public static DATE_FORMAT_6 = 'DD.MM.YYYY';
 	public static DATE_FORMAT_7 = 'YYYY.MM.DD';
+	public static DATE_FORMAT_8 = 'YYMMDD';
 
 	public static TIME_FORMAT_1 = 'HH:mm';
 	public static TIME_FORMAT_2 = 'h:mm A';
@@ -150,8 +175,8 @@ class Setting extends BaseModel {
 
 	// Contains constants that are set by the application and
 	// cannot be modified by the user:
-	public static constants_: any = {
-		env: 'SET_ME',
+	public static constants_: Constants = {
+		env: Env.Undefined,
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
@@ -451,20 +476,20 @@ class Setting extends BaseModel {
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
-			'sync.9.directory': {
-				value: 'Apps/Joplin',
-				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
-				},
-				filter: value => {
-					return value ? ltrimSlashes(rtrimSlashes(value)) : '';
-				},
-				public: true,
-				label: () => _('Joplin Server Directory'),
-				storage: SettingStorage.File,
-			},
+			// 'sync.9.directory': {
+			// 	value: 'Apps/Joplin',
+			// 	type: SettingItemType.String,
+			// 	section: 'sync',
+			// 	show: (settings: any) => {
+			// 		return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+			// 	},
+			// 	filter: value => {
+			// 		return value ? ltrimSlashes(rtrimSlashes(value)) : '';
+			// 	},
+			// 	public: true,
+			// 	label: () => _('Joplin Server Directory'),
+			// 	storage: SettingStorage.File,
+			// },
 			'sync.9.username': {
 				value: '',
 				type: SettingItemType.String,
@@ -473,7 +498,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
-				label: () => _('Joplin Server username'),
+				label: () => _('Joplin Server email'),
 				storage: SettingStorage.File,
 			},
 			'sync.9.password': {
@@ -562,6 +587,7 @@ class Setting extends BaseModel {
 					options[Setting.DATE_FORMAT_5] = time.formatMsToLocal(now, Setting.DATE_FORMAT_5);
 					options[Setting.DATE_FORMAT_6] = time.formatMsToLocal(now, Setting.DATE_FORMAT_6);
 					options[Setting.DATE_FORMAT_7] = time.formatMsToLocal(now, Setting.DATE_FORMAT_7);
+					options[Setting.DATE_FORMAT_8] = time.formatMsToLocal(now, Setting.DATE_FORMAT_8);
 					return options;
 				},
 				storage: SettingStorage.File,
@@ -841,6 +867,12 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			'sync.userId': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+			},
+
 			// Deprecated in favour of windowContentZoomFactor
 			'style.zoom': { value: 100, type: SettingItemType.Int, public: false, storage: SettingStorage.File, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
 
@@ -960,7 +992,7 @@ class Setting extends BaseModel {
 			},
 
 
-			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, public: false },
 			'sync.interval': {
@@ -1381,7 +1413,7 @@ class Setting extends BaseModel {
 
 	static setConstant(key: string, value: any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
-		this.constants_[key] = value;
+		(this.constants_ as any)[key] = value;
 	}
 
 	public static setValue(key: string, value: any) {
@@ -1544,7 +1576,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
-			const v = this.constants_[key];
+			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
 			if (output == 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;

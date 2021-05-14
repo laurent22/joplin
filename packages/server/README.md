@@ -91,3 +91,13 @@ From `packages/server`, run `npm run start-dev`
 # Changelog
 
 [View the changelog](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
+
+# License
+
+Copyright (c) 2017-2021 Laurent Cozic
+
+Personal Use License
+
+Joplin Server is available for personal use only. For example you may host the software on your own server for non-commercial activity.
+
+To obtain a license for commercial purposes, please contact us.

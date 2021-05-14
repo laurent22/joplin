@@ -372,7 +372,7 @@ class SideMenuContentComponent extends Component {
 		items.push(this.renderSidebarButton('folder_header', _('Notebooks'), 'md-folder'));
 
 		if (this.props.folders.length) {
-			const result = shared.renderFolders(this.props, this.renderFolderItem);
+			const result = shared.renderFolders(this.props, this.renderFolderItem, false);
 			const folderItems = result.items;
 			items = items.concat(folderItems);
 		}

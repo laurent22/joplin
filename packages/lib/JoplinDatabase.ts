@@ -138,20 +138,20 @@ export default class JoplinDatabase extends Database {
 	private tableFieldNames_: Record<string, string[]> = {};
 	private tableDescriptions_: any;
 
-	constructor(driver: any) {
+	public constructor(driver: any) {
 		super(driver);
 	}
 
-	initialized() {
+	public initialized() {
 		return this.initialized_;
 	}
 
-	async open(options: any) {
+	public async open(options: any) {
 		await super.open(options);
 		return this.initialize();
 	}
 
-	tableFieldNames(tableName: string) {
+	public tableFieldNames(tableName: string) {
 		if (this.tableFieldNames_[tableName]) return this.tableFieldNames_[tableName].slice();
 
 		const tf = this.tableFields(tableName);
@@ -164,7 +164,7 @@ export default class JoplinDatabase extends Database {
 		return output.slice();
 	}
 
-	tableFields(tableName: string, options: any = null) {
+	public tableFields(tableName: string, options: any = null) {
 		if (options === null) options = {};
 
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
@@ -180,7 +180,7 @@ export default class JoplinDatabase extends Database {
 		return output;
 	}
 
-	async clearForTesting() {
+	public async clearForTesting() {
 		const tableNames = [
 			'notes',
 			'folders',
@@ -220,7 +220,7 @@ export default class JoplinDatabase extends Database {
 		await this.transactionExecBatch(queries);
 	}
 
-	createDefaultRow(tableName: string) {
+	public createDefaultRow(tableName: string) {
 		const row: any = {};
 		const fields = this.tableFields(tableName);
 		for (let i = 0; i < fields.length; i++) {
@@ -230,7 +230,7 @@ export default class JoplinDatabase extends Database {
 		return row;
 	}
 
-	fieldByName(tableName: string, fieldName: string) {
+	public fieldByName(tableName: string, fieldName: string) {
 		const fields = this.tableFields(tableName);
 		for (const field of fields) {
 			if (field.name === fieldName) return field;
@@ -238,11 +238,11 @@ export default class JoplinDatabase extends Database {
 		throw new Error(`No such field: ${tableName}: ${fieldName}`);
 	}
 
-	fieldDefaultValue(tableName: string, fieldName: string) {
+	public fieldDefaultValue(tableName: string, fieldName: string) {
 		return this.fieldByName(tableName, fieldName).default;
 	}
 
-	fieldDescription(tableName: string, fieldName: string) {
+	public fieldDescription(tableName: string, fieldName: string) {
 		const sp = sprintf;
 
 		if (!this.tableDescriptions_) {
@@ -278,7 +278,7 @@ export default class JoplinDatabase extends Database {
 		return d && d[fieldName] ? d[fieldName] : '';
 	}
 
-	refreshTableFields(newVersion: number) {
+	public refreshTableFields(newVersion: number) {
 		this.logger().info('Initializing tables...');
 		const queries: SqlQuery[] = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
@@ -323,12 +323,12 @@ export default class JoplinDatabase extends Database {
 			});
 	}
 
-	addMigrationFile(num: number) {
+	public addMigrationFile(num: number) {
 		const timestamp = Date.now();
 		return { sql: 'INSERT INTO migrations (number, created_time, updated_time) VALUES (?, ?, ?)', params: [num, timestamp, timestamp] };
 	}
 
-	async upgradeDatabase(fromVersion: number) {
+	public async upgradeDatabase(fromVersion: number) {
 		// INSTRUCTIONS TO UPGRADE THE DATABASE:
 		//
 		// 1. Add the new version number to the existingDatabaseVersions array
@@ -343,7 +343,7 @@ export default class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -870,6 +870,12 @@ export default class JoplinDatabase extends Database {
 				queries.push(this.addMigrationFile(35));
 			}
 
+			if (targetVersion == 36) {
+				queries.push('ALTER TABLE folders ADD COLUMN share_id TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE notes ADD COLUMN share_id TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE resources ADD COLUMN share_id TEXT NOT NULL DEFAULT ""');
+			}
+
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };
 
 			queries.push(updateVersionQuery);
@@ -906,7 +912,7 @@ export default class JoplinDatabase extends Database {
 		return latestVersion;
 	}
 
-	async ftsEnabled() {
+	public async ftsEnabled() {
 		try {
 			await this.selectOne('SELECT count(*) FROM notes_fts');
 		} catch (error) {
@@ -919,7 +925,7 @@ export default class JoplinDatabase extends Database {
 		return true;
 	}
 
-	async fuzzySearchEnabled() {
+	public async fuzzySearchEnabled() {
 		try {
 			await this.selectOne('SELECT count(*) FROM notes_spellfix');
 		} catch (error) {
@@ -930,11 +936,11 @@ export default class JoplinDatabase extends Database {
 		return true;
 	}
 
-	version() {
+	public version() {
 		return this.version_;
 	}
 
-	async initialize() {
+	public async initialize() {
 		this.logger().info('Checking for database schema update...');
 
 		let versionRow = null;
