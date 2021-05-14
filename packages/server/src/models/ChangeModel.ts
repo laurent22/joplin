@@ -1,21 +1,29 @@
-import { Change, ChangeType, File, ItemType, Uuid } from '../db';
-import { ErrorResyncRequired, ErrorUnprocessableEntity } from '../utils/errors';
-import BaseModel from './BaseModel';
-import { paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
+import { Change, ChangeType, Item, Uuid } from '../db';
+import { md5 } from '../utils/crypto';
+import { ErrorResyncRequired } from '../utils/errors';
+import BaseModel, { SaveOptions } from './BaseModel';
+import { PaginatedResults } from './utils/pagination';
 
 export interface ChangeWithItem {
-	item: File;
+	item: Item;
 	updated_time: number;
 	type: ChangeType;
 }
 
 export interface PaginatedChanges extends PaginatedResults {
-	items: ChangeWithItem[];
+	items: Change[];
 }
 
 export interface ChangePagination {
 	limit?: number;
 	cursor?: string;
+}
+
+export interface ChangePreviousItem {
+	name: string;
+	jop_parent_id: string;
+	jop_resource_ids: string[];
+	jop_share_id: string;
 }
 
 export function defaultChangePagination(): ChangePagination {
@@ -25,6 +33,10 @@ export function defaultChangePagination(): ChangePagination {
 	};
 }
 
+interface AllForUserOptions {
+	compressChanges?: boolean;
+}
+
 export default class ChangeModel extends BaseModel<Change> {
 
 	public get tableName(): string {
@@ -32,44 +44,39 @@ export default class ChangeModel extends BaseModel<Change> {
 	}
 
 	protected hasUuid(): boolean {
-		return false;
+		return true;
 	}
 
-	public async add(itemType: ItemType, parentId: Uuid, itemId: Uuid, itemName: string, changeType: ChangeType): Promise<Change> {
-		const change: Change = {
-			item_type: itemType,
-			parent_id: parentId || '',
-			item_id: itemId,
-			item_name: itemName,
-			type: changeType,
-			owner_id: this.userId,
-		};
-
-		return this.save(change) as Change;
+	public serializePreviousItem(item: ChangePreviousItem): string {
+		return JSON.stringify(item);
 	}
 
-	private async countByUser(userId: string): Promise<number> {
-		const r: any = await this.db(this.tableName).where('owner_id', userId).count('id', { as: 'total' }).first();
-		return r.total;
+	public unserializePreviousItem(item: string): ChangePreviousItem {
+		if (!item) return null;
+		return JSON.parse(item);
 	}
 
 	public changeUrl(): string {
 		return `${this.baseUrl}/changes`;
 	}
 
-	public async allWithPagination(pagination: Pagination): Promise<PaginatedChanges> {
-		const results = await paginateDbQuery(this.db(this.tableName).select(...this.defaultFields).where('owner_id', '=', this.userId), pagination);
-		const changeWithItems = await this.loadChangeItems(results.items);
-		return {
-			...results,
-			items: changeWithItems,
-			page_count: Math.ceil(await this.countByUser(this.userId) / pagination.limit),
-		};
+	public async allFromId(id: string): Promise<Change[]> {
+		const startChange: Change = id ? await this.load(id) : null;
+		const query = this.db(this.tableName).select(...this.defaultFields);
+		if (startChange) void query.where('counter', '>', startChange.counter);
+		void query.limit(1000);
+		let results = await query;
+		results = await this.removeDeletedItems(results);
+		results = await this.compressChanges(results);
+		return results;
 	}
 
-	// Note: doesn't currently support checking for changes recursively but this
-	// is not needed for Joplin synchronisation.
-	public async byDirectoryId(dirId: string, pagination: ChangePagination = null): Promise<PaginatedChanges> {
+	public async allForUser(userId: Uuid, pagination: ChangePagination = null, options: AllForUserOptions = null): Promise<PaginatedChanges> {
+		options = {
+			compressChanges: true,
+			...options,
+		};
+
 		pagination = {
 			...defaultChangePagination(),
 			...pagination,
@@ -82,37 +89,49 @@ export default class ChangeModel extends BaseModel<Change> {
 			if (!changeAtCursor) throw new ErrorResyncRequired();
 		}
 
-		// Load the directory object to check that it exists and that we have
-		// the right permissions (loading will check permissions)
-		const fileModel = this.models().file({ userId: this.userId });
-		const directory = await fileModel.load(dirId);
-		if (!directory.is_directory) throw new ErrorUnprocessableEntity(`Item with id "${dirId}" is not a directory.`);
+		// When need to get:
+		//
+		// - All the CREATE and DELETE changes associated with the user
+		// - All the UPDATE changes that applies to items associated with the
+		//   user.
+		//
+		// UPDATE changes do not have the user_id set because they are specific
+		// to the item, not to a particular user.
 
-		// Rather than query the changes, then use JS to compress them, it might
-		// be possible to do both in one query.
-		// https://stackoverflow.com/questions/65348794
-		const query = this.db(this.tableName)
+		const query = this
+			.db('changes')
 			.select([
-				'counter',
 				'id',
 				'item_id',
 				'item_name',
 				'type',
+				'updated_time',
 			])
-			.where('parent_id', dirId)
-			.orderBy('counter', 'asc')
-			.limit(pagination.limit);
+			.where(function() {
+				void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
+					// Need to use a RAW query here because Knex has a "not a
+					// bug" bug that makes it go into infinite loop in some
+					// contexts, possibly only when running inside Jest (didn't
+					// test outside).
+					// https://github.com/knex/knex/issues/1851
+					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
+			});
 
+		// If a cursor was provided, apply it to both queries.
 		if (changeAtCursor) {
 			void query.where('counter', '>', changeAtCursor.counter);
 		}
 
-		const changes: Change[] = await query;
-		const compressedChanges = this.compressChanges(changes);
-		const changeWithItems = await this.loadChangeItems(compressedChanges);
+		void query
+			.orderBy('counter', 'asc')
+			.limit(pagination.limit) as any[];
+
+		const changes = await query;
+
+		const finalChanges = options.compressChanges ? await this.removeDeletedItems(this.compressChanges(changes)) : changes;
 
 		return {
-			items: changeWithItems,
+			items: finalChanges,
 			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
 			// If there's no change, we return the previous cursor.
 			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
@@ -120,15 +139,19 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	private async loadChangeItems(changes: Change[]): Promise<ChangeWithItem[]> {
+	private async removeDeletedItems(changes: Change[]): Promise<Change[]> {
 		const itemIds = changes.map(c => c.item_id);
-		const fileModel = this.models().file({ userId: this.userId });
-		const items: File[] = await fileModel.loadByIds(itemIds);
 
-		const output: ChangeWithItem[] = [];
+		// We skip permission check here because, when an item is shared, we need
+		// to fetch files that don't belong to the current user. This check
+		// would not be needed anyway because the change items are generated in
+		// a context where permissions have already been checked.
+		const items: Item[] = await this.db('items').select('id').whereIn('items.id', itemIds);
+
+		const output: Change[] = [];
 
 		for (const change of changes) {
-			let item = items.find(f => f.id === change.item_id);
+			const item = items.find(f => f.id === change.item_id);
 
 			// If the item associated with this change has been deleted, we have
 			// two cases:
@@ -136,68 +159,89 @@ export default class ChangeModel extends BaseModel<Change> {
 			// - If it's anything else, skip it. The "delete" change will be
 			//   sent on one of the next pages.
 
-			if (!item) {
-				if (change.type === ChangeType.Delete) {
-					item = {
-						id: change.item_id,
-						name: change.item_name,
-					};
-				} else {
-					continue;
-				}
+			if (!item && change.type !== ChangeType.Delete) {
+				continue;
 			}
 
-			output.push({
-				type: change.type,
-				updated_time: change.updated_time,
-				item: item,
-			});
+			output.push(change);
 		}
 
 		return output;
 	}
 
+	// Compresses the changes so that, for example, multiple updates on the same
+	// item are reduced down to one, because calling code usually only needs to
+	// know that the item has changed at least once. The reduction is basically:
+	//
+	//     create - update => create
+	//     create - delete => NOOP
+	//     update - update => update
+	//     update - delete => delete
+	//
+	// There's one exception for changes that include a "previous_item". This is
+	// used to save specific properties about the previous state of the item,
+	// such as "jop_parent_id" or "name", which is used by the share mechanism
+	// to know if an item has been moved from one folder to another. In that
+	// case, we need to know about each individual change, so they are not
+	// compressed.
 	private compressChanges(changes: Change[]): Change[] {
 		const itemChanges: Record<Uuid, Change> = {};
 
+		const uniqueUpdateChanges: Record<Uuid, Record<string, Change>> = {};
+
 		for (const change of changes) {
-			const previous = itemChanges[change.item_id];
+			const itemId = change.item_id;
+			const previous = itemChanges[itemId];
+
+			if (change.type === ChangeType.Update) {
+				const key = md5(itemId + change.previous_item);
+				if (!uniqueUpdateChanges[itemId]) uniqueUpdateChanges[itemId] = {};
+				uniqueUpdateChanges[itemId][key] = change;
+			}
 
 			if (previous) {
-				// create - update => create
-				// create - delete => NOOP
-				// update - update => update
-				// update - delete => delete
-
 				if (previous.type === ChangeType.Create && change.type === ChangeType.Update) {
 					continue;
 				}
 
 				if (previous.type === ChangeType.Create && change.type === ChangeType.Delete) {
-					delete itemChanges[change.item_id];
+					delete itemChanges[itemId];
 				}
 
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Update) {
-					itemChanges[change.item_id] = change;
+					itemChanges[itemId] = change;
 				}
 
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Delete) {
-					itemChanges[change.item_id] = change;
+					itemChanges[itemId] = change;
 				}
 			} else {
-				itemChanges[change.item_id] = change;
+				itemChanges[itemId] = change;
 			}
 		}
 
-		const output = [];
+		const output: Change[] = [];
 
 		for (const itemId in itemChanges) {
-			output.push(itemChanges[itemId]);
+			const change = itemChanges[itemId];
+			if (change.type === ChangeType.Update) {
+				for (const key of Object.keys(uniqueUpdateChanges[itemId])) {
+					output.push(uniqueUpdateChanges[itemId][key]);
+				}
+			} else {
+				output.push(change);
+			}
 		}
 
 		output.sort((a: Change, b: Change) => a.counter < b.counter ? -1 : +1);
 
 		return output;
+	}
+
+	public async save(change: Change, options: SaveOptions = {}): Promise<Change> {
+		const savedChange = await super.save(change, options);
+		ChangeModel.eventEmitter.emit('saved');
+		return savedChange;
 	}
 
 }

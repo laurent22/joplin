@@ -13,16 +13,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
-#: packages/app-desktop/checkForUpdates.js:175
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/MenuBar.js:373
+#: packages/app-desktop/gui/MenuBar.js:374
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/gui/DialogButtonRow.js:35
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/CameraView.js:160
@@ -32,16 +32,17 @@ msgid "OK"
 msgstr "Εντάξει"
 
 #: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
-#: packages/app-desktop/checkForUpdates.js:190
+#: packages/app-desktop/checkForUpdates.js:189
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:201
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:430
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:215
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:451
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #: packages/app-desktop/gui/ResourceScreen.js:96
+#: packages/app-desktop/gui/DialogButtonRow.js:38
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
@@ -56,21 +57,23 @@ msgstr "Εντάξει"
 msgid "Cancel"
 msgstr "Άκυρο"
 
-#: packages/app-desktop/bridge.js:188
+#: packages/app-desktop/bridge.js:184
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
+"Η εφαρμογή θα κλείσει τώρα. Παρακαλώ ανοίξτε την ξανά για να ολοκληρώσετε τη "
+"διαδικασία."
 
 #: packages/app-desktop/plugins/GotoAnything.js:432
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Πληκτρολογήστε έναν τίτλο σημείωσης ή μέρος του περιεχομένου του  για να "
+"Πληκτρολογήστε έναν τίτλο σημείωσης ή μέρος του περιεχομένου του για να "
 "μεταβείτε σε αυτόν. Ή πληκτρολογήστε # ακολουθούμενο από ένα όνομα ετικέτας "
-"ή @ ακολουθούμενο από ένα σημειωματάριο."
+"ή @ ακολουθούμενο από ένα σημειωματάριο. Ή πληκτρολογίστε : για να ψάξετε "
+"για εντολές."
 
 #: packages/app-desktop/plugins/GotoAnything.js:457
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -80,7 +83,7 @@ msgstr "Γρήγορη Μετακίνηση..."
 #: packages/app-desktop/plugins/GotoAnything.js:464
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
-msgstr ""
+msgstr "Παλέτα εντολών"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -92,7 +95,7 @@ msgstr "Γίνεται εξαγωγή στο \"%s\" με μορφή \"%s\". Πα
 msgid "Could not export notes: %s"
 msgstr "Δεν ήταν δυνατή η εξαγωγή σημειώσεων: %s"
 
-#: packages/app-desktop/checkForUpdates.js:174
+#: packages/app-desktop/checkForUpdates.js:171
 msgid "Current version is up-to-date."
 msgstr "Η τρέχουσα έκδοση είναι ενημερωμένη."
 
@@ -101,28 +104,31 @@ msgstr "Η τρέχουσα έκδοση είναι ενημερωμένη."
 msgid "%s (pre-release)"
 msgstr "%s (pre-release)"
 
-#: packages/app-desktop/checkForUpdates.js:188
+#: packages/app-desktop/checkForUpdates.js:187
 msgid "An update is available, do you want to download it now?"
 msgstr "Υπάρχει διαθέσιμη μια ενημέρωση, θέλετε να την κατεβάσετε τώρα;"
 
-#: packages/app-desktop/checkForUpdates.js:189
+#: packages/app-desktop/checkForUpdates.js:188
 #, javascript-format
 msgid "Your version: %s"
 msgstr "Η έκδοσή σου: %s"
 
-#: packages/app-desktop/checkForUpdates.js:189
+#: packages/app-desktop/checkForUpdates.js:188
 #, javascript-format
 msgid "New version: %s"
 msgstr "Νέα έκδοση: %s"
 
-#: packages/app-desktop/checkForUpdates.js:190
-#, fuzzy
+#: packages/app-desktop/checkForUpdates.js:189
 msgid "Download"
-msgstr "Έχουν ληφθεί"
+msgstr "Λήψη"
 
-#: packages/app-desktop/checkForUpdates.js:190
-msgid "Full changelog"
+#: packages/app-desktop/checkForUpdates.js:189
+msgid "Skip this version"
 msgstr ""
+
+#: packages/app-desktop/checkForUpdates.js:189
+msgid "Full changelog"
+msgstr "Πλήρες αρχείο αλλαγών"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -162,11 +168,11 @@ msgstr ""
 msgid "Back"
 msgstr "Πίσω"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:176
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:190
 msgid "Remove"
 msgstr "Κατάργηση"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:179
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:193
 #: packages/app-mobile/components/side-menu-content.js:148
 #, javascript-format
 msgid ""
@@ -179,7 +185,7 @@ msgstr ""
 "Όλες οι σημειώσεις και τα υπο-σημειωματάρια που περιέχει θα διαγραφούν "
 "επίσης."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:180
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:194
 #: packages/app-desktop/gui/utils/NoteListUtils.js:140
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:125
@@ -190,39 +196,39 @@ msgstr ""
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:184
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:198
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:187
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 msgid "Remove this search from the sidebar?"
 msgstr "Κατάργηση αυτής της αναζήτησης από την πλευρική μπάρα;"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:238
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:259
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
 #: packages/app-desktop/gui/utils/NoteListUtils.js:136
 msgid "Export"
 msgstr "Εξαγωγή"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:301
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:322
 #: packages/app-mobile/components/side-menu-content.js:368
 #: packages/app-mobile/components/screens/notes.js:188
 msgid "All notes"
 msgstr "Όλες οι σημειώσεις"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:430
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:451
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/lib/commands/synchronize.js:18
 msgid "Synchronise"
 msgstr "Συγχρονισμός"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:476
 #: packages/app-mobile/components/side-menu-content.js:372
 msgid "Notebooks"
 msgstr "Σημειωματάρια"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:467
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:488
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-mobile/components/side-menu-content.js:314
 #: packages/app-mobile/components/screens/tags.js:101
@@ -230,13 +236,13 @@ msgstr "Σημειωματάρια"
 msgid "Tags"
 msgstr "Ετικέτες"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:478
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:499
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Αποκρυπτογράφηση αντικειμένων: %d/%d"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:482
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:503
 #: packages/app-mobile/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
@@ -249,7 +255,7 @@ msgstr "Πλευρική μπάρα"
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:18
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
-#: packages/app-desktop/gui/MenuBar.js:615
+#: packages/app-desktop/gui/MenuBar.js:616
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
 msgid "Focus"
 msgstr "Εστίαση σε"
@@ -270,14 +276,12 @@ msgid "Retry"
 msgstr "Δοκιμή ξανά"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:113
-#, fuzzy
 msgid "Advanced tools"
-msgstr "Επιλογές για προχωρημένους"
+msgstr "Προηγμένα εργαλεία"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:115
-#, fuzzy
 msgid "Export debug report"
-msgstr "Εξαγωγή Aναφοράς Debug"
+msgstr "Εξαγωγή Debug report"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -319,7 +323,7 @@ msgstr "Αποκοπή"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:626
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
-#: packages/app-desktop/gui/MenuBar.js:373
+#: packages/app-desktop/gui/MenuBar.js:374
 msgid "Copy"
 msgstr "Αντιγραφή"
 
@@ -335,23 +339,23 @@ msgstr "Λίστα πλαισίων ελέγχου"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Επισήμανση"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Διακριτή διαγραφή"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Εισαγωγή"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Εκθέτης"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Δείκτης"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-mobile/components/screens/Note.js:1016
@@ -437,33 +441,36 @@ msgid "Creating new %s..."
 msgstr "Δημιουργία νεου %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "Ελεγχος για ενημερώσεις..."
+msgstr "Κάντε κλικ για να προσθέσετε ετικέτες..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"Αυτός ο επεξεργαστής εμπλουτισμένου κειμένου έχει ορισμένους περιορισμούς "
+"και συνιστάται να τους γνωρίζετε πριν το χρησιμοποιήσετε."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
-msgstr ""
+msgstr "Διαβάστε περισσότερα σχετικά με αυτό"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Dismiss"
-msgstr ""
+msgstr "Κλείσιμο"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
-msgstr ""
+msgstr "Τα ακόλουθα συνημμένα παρακολουθούνται για αλλαγές:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
+"Τα συνημμένα δεν θα παρακολουθούνται πλέον όταν μεταβαίνετε σε διαφορετική "
+"σημείωση."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
 #, javascript-format
@@ -511,47 +518,44 @@ msgid "Horizontal Rule"
 msgstr "Οριζόντια Διαγράμμιση"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "Να διαγραφεί η σημείωση;"
+msgstr "Διαγραφή γραμμής"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Δημιουργία αντιγράφου"
+msgstr "Διπλασιασμός γραμμής"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
-msgstr ""
+msgstr "Αναίρεση"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Redo"
-msgstr ""
+msgstr "Επανάληψη"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent less"
-msgstr ""
+msgstr "Μείωση εσοχής"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 msgid "Indent more"
-msgstr ""
+msgstr "Αύξηση εσοχής"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
-#, fuzzy
 msgid "Toggle comment"
-msgstr "Εναλλαγή λίστας σημειώσεων"
+msgstr "Εναλλαγή σχολίου"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Sort selected lines"
-msgstr ""
+msgstr "Ταξινόμηση επιλεγμένων γραμμών"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line up"
-msgstr ""
+msgstr "Αλλαγή γραμμής με την πανω"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:124
 msgid "Swap line down"
-msgstr ""
+msgstr "Αλλαγή γραμμής με την κάτω"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -598,7 +602,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1593
+#: packages/lib/models/Setting.js:1603
 msgid "Note History"
 msgstr "Ιστορικό Σημειώσεων"
 
@@ -617,14 +621,14 @@ msgstr "Ιδιότητες σημείωσης"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: packages/lib/services/KeymapService.js:178
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Error: %s"
-msgstr "Σφάλμα"
+msgstr "Σφάλμα: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:791 packages/app-cli/app/command-e2ee.js:110
+#: packages/lib/models/Setting.js:801 packages/app-cli/app/command-e2ee.js:110
 msgid "Disabled"
 msgstr "Απενεργοποιημένη"
 
@@ -635,74 +639,72 @@ msgid "Search..."
 msgstr "Αναζήτηση..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: packages/app-desktop/gui/MenuBar.js:429
-#: packages/app-desktop/gui/MenuBar.js:476 packages/app-desktop/gui/Root.js:99
+#: packages/app-desktop/gui/MenuBar.js:430
+#: packages/app-desktop/gui/MenuBar.js:477 packages/app-desktop/gui/Root.js:99
 msgid "Import"
 msgstr "Εισαγωγή"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
-msgstr ""
+msgstr "Εντολή"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
 msgid "Keyboard Shortcut"
-msgstr "Λειτουργία πληκτρολογίου"
+msgstr "Συντόμευση πληκτρολογίου"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:212 packages/app-desktop/app.js:368
+#: packages/app-desktop/gui/MenuBar.js:213 packages/app-desktop/app.js:369
 msgid "Quit"
 msgstr "Έξοδος"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
-#: packages/app-desktop/gui/MenuBar.js:316
+#: packages/app-desktop/gui/MenuBar.js:317
 msgid "Insert template"
 msgstr "Εισαγωγή προτύπου"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
-#: packages/app-desktop/gui/MenuBar.js:576
+#: packages/app-desktop/gui/MenuBar.js:577
 msgid "Actual Size"
 msgstr "Πραγματικό μέγεθος"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
-#: packages/app-desktop/gui/MenuBar.js:637
+#: packages/app-desktop/gui/MenuBar.js:638
 msgid "Website and documentation"
 msgstr "Ιστοσελίδα και εγχειρίδια"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
 msgid "Hide Joplin"
-msgstr "Σχετικά με το Joplin"
+msgstr "Κρύψε το Joplin"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
-#: packages/app-desktop/gui/MenuBar.js:464
+#: packages/app-desktop/gui/MenuBar.js:465
 msgid "Close Window"
 msgstr "Κλείσιμο παραθύρου"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "Προτιμήσεις..."
+msgstr "Προτιμήσεις"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:340 packages/app-desktop/gui/Root.js:100
+#: packages/app-desktop/gui/MenuBar.js:341 packages/app-desktop/gui/Root.js:100
 msgid "Options"
 msgstr "Επιλογές"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Μη έγκυρη απάντηση: %s"
+msgstr "Μη έγκυρo"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
-msgstr ""
+msgstr "Πατήστε τη συντόμευση"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
+"Πατήστε τη συντόμευση και, στη συνέχεια, πατήστε το πλήκτρο ENTER. "
+"Εναλλακτικά, πατήστε το πλήκτρο BACKSPACE για να καταργήσετε τη συντόμευση."
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -710,56 +712,48 @@ msgstr ""
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:410
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:436
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"Η ασφαλής λειτουργία είναι ενεργή αυτήν τη στιγμή. Σημειώστε ότι η απόδοση "
+"και όλα τα πρόσθετα απενεργοποιούνται προσωρινά."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:412
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:438
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Απενεργοποίηση ασφαλούς λειτουργίας και επανεκκίνηση"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:416
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
+"Ο στόχος συγχρονισμού πρέπει να αναβαθμιστεί πριν από το συγχρονισμό του "
+"Joplin. Η λειτουργία μπορεί να διαρκέσει λίγα λεπτά για να ολοκληρωθεί και η "
+"εφαρμογή πρέπει να επανεκκινηθεί. Για να προχωρήσετε κάντε κλικ στο σύνδεσμο."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:418
-#, fuzzy
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:444
 msgid "Restart and upgrade"
-msgstr "Κύρια κλειδιά που χρειάζονται αναβάθμιση"
+msgstr "Επανεκκίνηση και αναβάθμιση"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:422
-msgid "Some items cannot be synchronised."
-msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:424
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:430
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:442
-msgid "View them now"
-msgstr "Προβολή τώρα"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:428
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:448
 msgid "Some items cannot be decrypted."
 msgstr "Δεν είναι δυνατή η αποκρυπτογράφηση ορισμένων στοιχείων."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:434
-msgid "One or more master keys need a password."
-msgstr "Ένα ή περισσότερα κύρια κλειδιά χρειάζονται έναν κωδικό πρόσβασης."
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:450
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:456
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+msgid "View them now"
+msgstr "Προβολή τώρα"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:436
-msgid "Set the password"
-msgstr "Ορισμός κωδικού πρόσβασης"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:440
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:454
 msgid "One of your master keys use an obsolete encryption method."
 msgstr ""
 "Ένα από τα κύρια κλειδιά σας χρησιμοποιεί μια παλιά μέθοδο κρυπτογράφησης."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:446
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:460
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -767,13 +761,40 @@ msgstr ""
 "Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει, θα πρέπει να "
 "κρυπτογραφήσετε εκ νέου τα δεδομένα σας."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:448
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "More info"
 msgstr "Περισσότερες πληροφορίες"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:570
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#, javascript-format
+msgid "%s (%s) would like to share a notebook with you."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:470
+msgid "Accept"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
+msgid "Reject"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+msgid "Some items cannot be synchronised."
+msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
+msgid "One or more master keys need a password."
+msgstr "Ένα ή περισσότερα κύρια κλειδιά χρειάζονται έναν κωδικό πρόσβασης."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:484
+msgid "Set the password"
+msgstr "Ορισμός κωδικού πρόσβασης"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:607
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"Χρησιμοποιήστε τα βέλη για να μετακινήσετε τα στοιχεία διάταξης. Πατήστε "
+"\"Escape\" για έξοδο."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -837,13 +858,17 @@ msgid "Toggle editor layout"
 msgstr "Εναλλαγή διάταξης editor"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
 msgid "Toggle editors"
-msgstr "Εναλλαγή διάταξης editor"
+msgstr "Εναλλαγή επεξεργαστών κειμένου"
+
+#: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
+#, fuzzy
+msgid "Share notebook..."
+msgstr "Κοινοποίηση σημείωσης..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "Αλλαγή διάταξης εφαρμογής"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -860,7 +885,7 @@ msgstr "Τίτλος σημειωματάριου:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Ορθογράφος"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -920,7 +945,7 @@ msgstr "Το Token έχει αντιγραφεί στο πρόχειρο!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Είστε βέβαιοι ότι θέλετε να ανανεώσετε το διακριτικό εξουσιοδότησης;"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -1009,121 +1034,120 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Ανανέωση token"
 
-#: packages/app-desktop/gui/MenuBar.js:166
+#: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
 
-#: packages/app-desktop/gui/MenuBar.js:287 packages/app-desktop/gui/Root.js:102
+#: packages/app-desktop/gui/MenuBar.js:288 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
 msgstr "Κατάσταση Συγχρονισμού"
 
-#: packages/app-desktop/gui/MenuBar.js:306
+#: packages/app-desktop/gui/MenuBar.js:307
 msgid "Create note from template"
 msgstr "Δημιουργία σημείωσης από πρότυπο"
 
-#: packages/app-desktop/gui/MenuBar.js:311
+#: packages/app-desktop/gui/MenuBar.js:312
 msgid "Create to-do from template"
 msgstr "Δημιουργία to-do από πρότυπο"
 
-#: packages/app-desktop/gui/MenuBar.js:322
+#: packages/app-desktop/gui/MenuBar.js:323
 msgid "Open template directory"
 msgstr "Άνοιγμα φακέλου προτύπου"
 
-#: packages/app-desktop/gui/MenuBar.js:327
+#: packages/app-desktop/gui/MenuBar.js:328
 msgid "Refresh templates"
 msgstr "Ανανέωση προτύπων"
 
-#: packages/app-desktop/gui/MenuBar.js:353
+#: packages/app-desktop/gui/MenuBar.js:354
 msgid "Note attachments..."
 msgstr "Επισυναπτόμενα..."
 
-#: packages/app-desktop/gui/MenuBar.js:384
-#: packages/app-desktop/gui/MenuBar.js:456
-#: packages/app-desktop/gui/MenuBar.js:748
+#: packages/app-desktop/gui/MenuBar.js:385
+#: packages/app-desktop/gui/MenuBar.js:457
+#: packages/app-desktop/gui/MenuBar.js:749
 msgid "&File"
 msgstr "&Αρχείο"
 
-#: packages/app-desktop/gui/MenuBar.js:390
-#: packages/app-desktop/gui/MenuBar.js:670
+#: packages/app-desktop/gui/MenuBar.js:391
+#: packages/app-desktop/gui/MenuBar.js:671
 msgid "About Joplin"
 msgstr "Σχετικά με το Joplin"
 
-#: packages/app-desktop/gui/MenuBar.js:397
+#: packages/app-desktop/gui/MenuBar.js:398
 msgid "Preferences..."
 msgstr "Προτιμήσεις..."
 
-#: packages/app-desktop/gui/MenuBar.js:407
-#: packages/app-desktop/gui/MenuBar.js:647
+#: packages/app-desktop/gui/MenuBar.js:408
+#: packages/app-desktop/gui/MenuBar.js:648
 msgid "Check for updates..."
 msgstr "Ελεγχος για ενημερώσεις..."
 
-#: packages/app-desktop/gui/MenuBar.js:422
-#: packages/app-desktop/gui/MenuBar.js:471
+#: packages/app-desktop/gui/MenuBar.js:423
+#: packages/app-desktop/gui/MenuBar.js:472
 msgid "Templates"
 msgstr "Πρότυπα"
 
-#: packages/app-desktop/gui/MenuBar.js:433
-#: packages/app-desktop/gui/MenuBar.js:479
-#, fuzzy
+#: packages/app-desktop/gui/MenuBar.js:434
+#: packages/app-desktop/gui/MenuBar.js:480
 msgid "Export all"
-msgstr "Εξαγωγή"
+msgstr "Εξαγωγή όλων"
 
-#: packages/app-desktop/gui/MenuBar.js:445
+#: packages/app-desktop/gui/MenuBar.js:446
 #, javascript-format
 msgid "Hide %s"
 msgstr "Απόκρυψη %s"
 
-#: packages/app-desktop/gui/MenuBar.js:502
-#: packages/app-desktop/gui/MenuBar.js:752
+#: packages/app-desktop/gui/MenuBar.js:503
+#: packages/app-desktop/gui/MenuBar.js:753
 msgid "&Edit"
 msgstr "&Επεξεργασία"
 
-#: packages/app-desktop/gui/MenuBar.js:534
+#: packages/app-desktop/gui/MenuBar.js:535
 msgid "&View"
 msgstr "&Εμφάνιση"
 
-#: packages/app-desktop/gui/MenuBar.js:542
+#: packages/app-desktop/gui/MenuBar.js:543
 msgid "Layout button sequence"
 msgstr "Ακολουθία κουμπιών διάταξης"
 
-#: packages/app-desktop/gui/MenuBar.js:587
-#: packages/app-desktop/gui/MenuBar.js:593
+#: packages/app-desktop/gui/MenuBar.js:588
+#: packages/app-desktop/gui/MenuBar.js:594
 msgid "Zoom In"
 msgstr "Μεγέθυνση"
 
-#: packages/app-desktop/gui/MenuBar.js:600
+#: packages/app-desktop/gui/MenuBar.js:601
 msgid "Zoom Out"
 msgstr "Σμίκρινση"
 
-#: packages/app-desktop/gui/MenuBar.js:609
+#: packages/app-desktop/gui/MenuBar.js:610
 msgid "&Go"
-msgstr ""
+msgstr "&Μετάβαση"
 
-#: packages/app-desktop/gui/MenuBar.js:621
+#: packages/app-desktop/gui/MenuBar.js:622
 msgid "&Note"
 msgstr "&Σημείωση"
 
-#: packages/app-desktop/gui/MenuBar.js:630
+#: packages/app-desktop/gui/MenuBar.js:631
 msgid "&Tools"
 msgstr "&Εργαλεία"
 
-#: packages/app-desktop/gui/MenuBar.js:634
+#: packages/app-desktop/gui/MenuBar.js:635
 msgid "&Help"
 msgstr "&Βοήθεια"
 
-#: packages/app-desktop/gui/MenuBar.js:641
+#: packages/app-desktop/gui/MenuBar.js:642
 msgid "Joplin Forum"
 msgstr "Joplin φόρουμ"
 
-#: packages/app-desktop/gui/MenuBar.js:644
+#: packages/app-desktop/gui/MenuBar.js:645
 #: packages/app-mobile/components/screens/config.js:510
 msgid "Make a donation"
 msgstr "Κάντε μια δωρεά"
 
-#: packages/app-desktop/gui/MenuBar.js:656
+#: packages/app-desktop/gui/MenuBar.js:657
 msgid "Toggle development tools"
 msgstr "Εναλλαγή εργαλείων προγραμματισμού"
 
@@ -1308,13 +1332,12 @@ msgstr ""
 "Σημαντικό: χρειάζεται να τρέξει ΜΟΝΟ μία φορά σε μια συσκευή."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "Κρυπτογράφηση"
+msgstr "Επανα-κρυπτογράφηση"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "Παράβλεψη"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1451,7 +1474,7 @@ msgstr "Εμφάνιση επιλογών για προχωρημένους"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
 msgid "Path:"
-msgstr ""
+msgstr "Διαδρομή:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
 msgid "Browse..."
@@ -1459,11 +1482,12 @@ msgstr "Αναζήτηση..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
 msgid "Arguments:"
-msgstr ""
+msgstr "Παράμετροι:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
+"Η εφαρμογή πρέπει να επανεκκινηθεί για να τεθούν σε ισχύ αυτές οι αλλαγές."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1472,15 +1496,14 @@ msgstr "Κάνε το τώρα"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
-msgstr ""
+msgstr "Αργότερα"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
-#, fuzzy
 msgid "Restart now"
-msgstr "Λήψη τώρα:"
+msgstr "Επανεκίνηση τώρα"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1589
+#: packages/lib/models/Setting.js:1599
 msgid "Plugins"
 msgstr "Πρόσθετα"
 
@@ -1489,77 +1512,71 @@ msgid "Apply"
 msgstr "Εφαρμογή"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Διαγραφή σημείωσης \"%s\";"
+msgstr "Διαγραφή plugin \"%s\";"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
 msgid "Browse all plugins"
-msgstr ""
+msgstr "Αναζήτηση όλων των plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
 msgid "Install from file"
-msgstr ""
+msgstr "Εγκατάσταση από αρχείο"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "Δεν έχετε κανένα plugin εγκατεστημένο."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
-#, fuzzy
 msgid "Plugin tools"
-msgstr "Πρόσθετα"
+msgstr "Πρόσθετα εργαλεία"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
 msgid "Manage your plugins"
-msgstr ""
+msgstr "Διαχείριση των επεκτάσεων"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-#, fuzzy
 msgid "No results"
-msgstr "Χωρίς πόρους!"
+msgstr "Χωρίς αποτελέσματα"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
-msgstr "Αναζήτηση..."
+msgstr "Αναζήτηση για plugins..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
 msgid "Install"
-msgstr ""
+msgstr "Εγκατάσταση"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
-#, fuzzy
 msgid "Installing..."
-msgstr "Ακύρωση..."
+msgstr "Εγκατάσταση..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
 msgid "Installed"
-msgstr ""
+msgstr "Εγκαταστάθηκε"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
-#, fuzzy
 msgid "Update"
-msgstr "Ενημερώθηκε"
+msgstr "Ενημέρωση"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
-#, fuzzy
 msgid "Updating..."
-msgstr "Παρακολούθηση..."
+msgstr "Ενημέρωση..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "Παρακαλώ αναβαθμίστε το Joplin για να χρησιμοποιήσετε αυτό το plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "Δεν ήταν δυνατή η εξαγωγή σημειώσεων: %s"
+msgstr "Δεν ήταν δυνατή η εγκατάσταση του plugin: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1582,14 +1599,14 @@ msgid "Lines"
 msgstr "Γραμμές"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
-#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:497
-#: packages/lib/models/Setting.js:498
+#: packages/lib/models/Setting.js:501 packages/lib/models/Setting.js:502
+#: packages/lib/models/Setting.js:503
 msgid "Editor"
 msgstr "Επεξεργασία"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
-#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:497
-#: packages/lib/models/Setting.js:499
+#: packages/lib/models/Setting.js:501 packages/lib/models/Setting.js:502
+#: packages/lib/models/Setting.js:504
 msgid "Viewer"
 msgstr "Εμφάνιση"
 
@@ -1603,7 +1620,8 @@ msgid "Statistics"
 msgstr "Στατιστικά"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:186
+#: packages/app-desktop/gui/ShareNoteDialog.js:168
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:257
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "Κλείσιμο"
@@ -1617,7 +1635,7 @@ msgid "View"
 msgstr "Προβολή"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:162
-#: packages/lib/models/Setting.js:512
+#: packages/lib/models/Setting.js:517
 msgid "Sort notes by"
 msgstr "Ταξινόμηση σημειώσεων κατά"
 
@@ -1664,7 +1682,7 @@ msgid "Action"
 msgstr "Ενέργεια"
 
 #: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:713
 msgid "Untitled"
 msgstr "Χωρίς τίτλο"
 
@@ -1697,57 +1715,112 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 "Προειδοποίηση: δεν εμφανίζονται όλοι οι πόροι για λόγους απόδοσης (όριο:% s)."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:159
+#: packages/app-desktop/gui/ShareNoteDialog.js:147
 msgid "Synchronising..."
 msgstr "Συγχρονισμός..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:161
+#: packages/app-desktop/gui/ShareNoteDialog.js:149
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Δημιουργία συνδέσμου..."
 msgstr[1] "Δημιουργία νεου %s..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:163
+#: packages/app-desktop/gui/ShareNoteDialog.js:151
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Ο σύνδεσμος έχει αντιγραφεί στο πρόχειρο!"
 msgstr[1] "Ο σύνδεσμοι έχει αντιγραφεί στο πρόχειρο!"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:158
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 "Σημείωση: Όταν μια σημείωση είναι κοινόχρηστη, δεν θα κρυπτογραφείται πλέον "
 "στο διακομιστή."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:180
+#: packages/app-desktop/gui/ShareNoteDialog.js:163
 msgid "Share Notes"
 msgstr "Κοινοποίηση Σημειώσεων"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:182
+#: packages/app-desktop/gui/ShareNoteDialog.js:165
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Αντιγραφή Συνδέσμου Κοινοποίησης"
 msgstr[1] "Αντιγραφή Συνδέσμων Κοινοποίησης"
 
-#: packages/app-desktop/commands/toggleSafeMode.js:18
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
 #, fuzzy
+msgid "Unshare"
+msgstr "Κοινοποίηση"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
+msgid ""
+"Delete this invitation? The recipient will no longer have access to this "
+"shared notebook."
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
+msgid "Add recipient:"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+#: packages/app-mobile/components/screens/Note.js:796
+msgid "Share"
+msgstr "Κοινοποίηση"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
+msgid "Recipient has not yet accepted the invitation"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
+msgid "Recipient has rejected the invitation"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
+msgid "Recipient has accepted the invitation"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
+msgid "Recipients:"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
+#, fuzzy
+msgid "Synchronizing..."
+msgstr "Συγχρονισμός..."
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
+#, fuzzy
+msgid "Sharing notebook..."
+msgstr "Κοινοποίηση σημείωσης..."
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
+msgid ""
+"Unshare this notebook? The recipients will no longer have access to its "
+"content."
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
+#, fuzzy
+msgid "Share Notebook"
+msgstr "Κοινοποίηση Σημειώσεων"
+
+#: packages/app-desktop/commands/toggleSafeMode.js:18
 msgid "Toggle safe mode"
-msgstr "Εναλλαγή πλευρικής μπάρας"
+msgstr "Εναλλαγή ασφαλούς λειτουργίας"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
-#, fuzzy
 msgid "Toggle external editing"
-msgstr "Διακοπή εξωτερικής επεξεργασίας"
+msgstr "Εναλλαγή εξωτερικής επεξεργασίας"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
-msgstr ""
+msgstr "Σταμάτημα"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
 msgid "Copy dev mode command to clipboard"
-msgstr "Αντιγραφή διαδρομής στο πρόχειρο"
+msgstr "Αντιγραφή dev mode εντολής στο πρόχειρο"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -1764,11 +1837,10 @@ msgid "Error opening note in editor: %s"
 msgstr "Σφάλμα κατά το άνοιγμα της σημείωσης στον editor: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "Άνοιγμα φακέλου προτύπου"
+msgstr "Άνοιγμα φακέλου προφίλ"
 
-#: packages/app-desktop/app.js:366
+#: packages/app-desktop/app.js:367
 #, javascript-format
 msgid "Open %s"
 msgstr "Άνοιγμα %s"
@@ -1794,14 +1866,8 @@ msgid "Save alarm"
 msgstr "Αποθήκευση ειδοποίησης"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
-#, fuzzy
 msgid "Open"
-msgstr "Άνοιγμα..."
-
-#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#: packages/app-mobile/components/screens/Note.js:796
-msgid "Share"
-msgstr "Κοινοποίηση"
+msgstr "Άνοιγμα"
 
 #: packages/app-mobile/components/CameraView.js:158
 msgid "Permission to use camera"
@@ -1835,6 +1901,7 @@ msgstr "Ρυθμίσεις"
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
 msgstr ""
+"Δεδομένα κινητής τηλεφωνίας - ο αυτόματος συγχρονισμός απενεργοποιήθηκε"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -1874,7 +1941,7 @@ msgstr "Ανανέωση"
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
 msgid "Sync Target Upgrade"
-msgstr ""
+msgstr "Συγχρονισμός αναβάθμισης προορισμού"
 
 #: packages/app-mobile/components/screens/notes.js:154
 #: packages/app-cli/app/command-rmbook.js:26
@@ -2057,7 +2124,7 @@ msgstr "Joplin website"
 
 #: packages/app-mobile/components/screens/config.js:538
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Πολιτική Προστασίας Προσωπικών Δεδομένων"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2099,11 +2166,15 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Για να συσχετίσετε μια γεωγραφική τοποθεσία με τη σημείωση, η εφαρμογή "
+"χρειάζεται την άδειά σας για να αποκτήσει πρόσβαση στην τοποθεσία σας.\n"
+"\n"
+"Μπορείτε να απενεργοποιήσετε αυτήν την επιλογή ανά πάσα στιγμή στην οθόνη "
+"Ρύθμιση παραμέτρων."
 
 #: packages/app-mobile/components/screens/Note.js:343
-#, fuzzy
 msgid "Permission needed"
-msgstr "Άδεια χρήσης κάμερας"
+msgstr "Απαιτείται άδεια"
 
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
@@ -2184,11 +2255,13 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"Ο προεπιλεγμένος κωδικός πρόσβασης διαχειριστή δεν είναι ασφαλής και δεν "
+"έχει αλλάξει! [Αλλάξτε τον τώρα] (%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgstr "Όλες οι πιθανές θύρες χρησιμοποιούνται - αναφέρετε το ζήτημα στο %s"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2224,52 +2297,51 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:30
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Joplin website"
+msgstr "Joplin Server"
 
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "Δεν είναι δυνατή η πρόσβαση στο %s"
 
-#: packages/lib/models/Folder.js:34 packages/lib/models/Note.js:36
+#: packages/lib/models/Folder.js:36 packages/lib/models/Note.js:36
 msgid "title"
 msgstr "τίτλος"
 
-#: packages/lib/models/Folder.js:35 packages/lib/models/Note.js:37
+#: packages/lib/models/Folder.js:37 packages/lib/models/Note.js:37
 msgid "updated date"
 msgstr "ημερομηνία ενημέρωσης"
 
-#: packages/lib/models/Folder.js:102
+#: packages/lib/models/Folder.js:101
 msgid "Conflicts"
 msgstr "Διενέξεις"
 
-#: packages/lib/models/Folder.js:393
+#: packages/lib/models/Folder.js:505
 msgid "Cannot move notebook to this location"
 msgstr "Δεν είναι δυνατή η μετακίνηση του σημειωματάριου σε αυτήν τη θέση"
 
-#: packages/lib/models/Folder.js:445
+#: packages/lib/models/Folder.js:557
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Τα σημειωματάρια δεν μπορούν να ονομαστούν  \"%s\", που είναι δεσμευμένος "
 "τίτλος."
 
-#: packages/lib/models/Setting.js:98
+#: packages/lib/models/Setting.js:103
 msgid "yes"
 msgstr "ναι"
 
-#: packages/lib/models/Setting.js:98 packages/lib/models/Setting.js:99
+#: packages/lib/models/Setting.js:103 packages/lib/models/Setting.js:104
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/lib/models/Setting.js:99
+#: packages/lib/models/Setting.js:104
 msgid "no"
 msgstr "όχι"
 
-#: packages/lib/models/Setting.js:101
+#: packages/lib/models/Setting.js:106
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2280,43 +2352,43 @@ msgstr ""
 "περιεχόμενό σας πριν από το συγχρονισμό, διαφορετικά θα καταργηθούν όλα τα "
 "αρχεία! Δείτε τις συνήθεις ερωτήσεις για περισσότερες λεπτομέρειες: %s"
 
-#: packages/lib/models/Setting.js:107
+#: packages/lib/models/Setting.js:112
 msgid "Light"
 msgstr "Light"
 
-#: packages/lib/models/Setting.js:108
+#: packages/lib/models/Setting.js:113
 msgid "Dark"
 msgstr "Dark"
 
-#: packages/lib/models/Setting.js:109
+#: packages/lib/models/Setting.js:114
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/lib/models/Setting.js:110
+#: packages/lib/models/Setting.js:115
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
-#: packages/lib/models/Setting.js:111
+#: packages/lib/models/Setting.js:116
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: packages/lib/models/Setting.js:112
+#: packages/lib/models/Setting.js:117
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/lib/models/Setting.js:113
+#: packages/lib/models/Setting.js:118
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
-#: packages/lib/models/Setting.js:114
+#: packages/lib/models/Setting.js:119
 msgid "OLED Dark"
 msgstr "OLED Dark"
 
-#: packages/lib/models/Setting.js:136
+#: packages/lib/models/Setting.js:141
 msgid "Synchronisation target"
 msgstr "Στόχος συγχρονισμού"
 
-#: packages/lib/models/Setting.js:138
+#: packages/lib/models/Setting.js:143
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -2325,74 +2397,68 @@ msgstr ""
 "πρόσθετες παραμέτρους οι οποίες ονομάζονται ως `sync.NUM.NAME` (οι οποίες "
 "αναφέρονται παρακάτω)."
 
-#: packages/lib/models/Setting.js:171
+#: packages/lib/models/Setting.js:176
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Φάκελος για συγχρονισμό (absolute path)"
 
-#: packages/lib/models/Setting.js:183
+#: packages/lib/models/Setting.js:188
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: packages/lib/models/Setting.js:195
+#: packages/lib/models/Setting.js:200
 msgid "Nextcloud username"
 msgstr "Nextcloud username"
 
-#: packages/lib/models/Setting.js:206
+#: packages/lib/models/Setting.js:211
 msgid "Nextcloud password"
 msgstr "Nextcloud password"
 
-#: packages/lib/models/Setting.js:217
+#: packages/lib/models/Setting.js:222
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: packages/lib/models/Setting.js:229
+#: packages/lib/models/Setting.js:234
 msgid "WebDAV username"
 msgstr "WebDAV username"
 
-#: packages/lib/models/Setting.js:240
+#: packages/lib/models/Setting.js:245
 msgid "WebDAV password"
 msgstr "WebDAV password"
 
-#: packages/lib/models/Setting.js:259
+#: packages/lib/models/Setting.js:264
 msgid "AWS S3 bucket"
 msgstr "AWS S3 bucket"
 
-#: packages/lib/models/Setting.js:271
-#, fuzzy
+#: packages/lib/models/Setting.js:276
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "AWS S3 URL"
 
-#: packages/lib/models/Setting.js:282
+#: packages/lib/models/Setting.js:287
 msgid "AWS key"
 msgstr "AWS key"
 
-#: packages/lib/models/Setting.js:293
+#: packages/lib/models/Setting.js:298
 msgid "AWS secret"
 msgstr "AWS secret"
 
-#: packages/lib/models/Setting.js:304
+#: packages/lib/models/Setting.js:309
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "Joplin Server URL"
 
-#: packages/lib/models/Setting.js:319
+#: packages/lib/models/Setting.js:335
 #, fuzzy
-msgid "Joplin Server Directory"
-msgstr "Φάκελος εξαγωγής Joplin"
+msgid "Joplin Server email"
+msgstr "Joplin Server"
 
-#: packages/lib/models/Setting.js:330
-msgid "Joplin Server username"
-msgstr ""
-
-#: packages/lib/models/Setting.js:341
-#, fuzzy
+#: packages/lib/models/Setting.js:346
 msgid "Joplin Server password"
-msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
+msgstr "Joplin Server password"
 
-#: packages/lib/models/Setting.js:353
+#: packages/lib/models/Setting.js:358
 msgid "Attachment download behaviour"
 msgstr "Συμπεριφορά λήψης συνημμένων"
 
-#: packages/lib/models/Setting.js:354
+#: packages/lib/models/Setting.js:359
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2403,197 +2469,195 @@ msgstr ""
 "σημείωση. Στην λειτουργία \"Πάντα\", όλα τα συνημμένα λαμβάνονται είτε "
 "ανοίγετε τη σημείωση είτε όχι."
 
-#: packages/lib/models/Setting.js:357
+#: packages/lib/models/Setting.js:362
 msgid "Always"
 msgstr "Πάντα"
 
-#: packages/lib/models/Setting.js:358
+#: packages/lib/models/Setting.js:363
 msgid "Manual"
 msgstr "Χειροκίνητα"
 
-#: packages/lib/models/Setting.js:359
+#: packages/lib/models/Setting.js:364
 msgid "Auto"
 msgstr "Αυτόματα"
 
-#: packages/lib/models/Setting.js:377
+#: packages/lib/models/Setting.js:382
 msgid "Max concurrent connections"
 msgstr "Μέγιστος αριθμός ταυτόχρονων συνδέσεων"
 
-#: packages/lib/models/Setting.js:390
+#: packages/lib/models/Setting.js:395
 msgid "Language"
 msgstr "Γλώσσα"
 
-#: packages/lib/models/Setting.js:401
+#: packages/lib/models/Setting.js:406
 msgid "Date format"
 msgstr "Μορφή ημερομηνίας"
 
-#: packages/lib/models/Setting.js:422
+#: packages/lib/models/Setting.js:427
 msgid "Time format"
 msgstr "Μορφή ώρας"
 
-#: packages/lib/models/Setting.js:441
+#: packages/lib/models/Setting.js:446
 msgid "Theme"
 msgstr "Θέμα"
 
-#: packages/lib/models/Setting.js:452
+#: packages/lib/models/Setting.js:457
 msgid "Automatically switch theme to match system theme"
 msgstr "Αυτόματη εναλλαγή θέματος ώστε να ταιριάζει με το θέμα συστήματος"
 
-#: packages/lib/models/Setting.js:464
+#: packages/lib/models/Setting.js:469
 msgid "Preferred light theme"
 msgstr "Προτιμώμενο φωτεινό θέμα"
 
-#: packages/lib/models/Setting.js:478
+#: packages/lib/models/Setting.js:483
 msgid "Preferred dark theme"
 msgstr "Προτιμώμενο σκοτεινό θέμα"
 
-#: packages/lib/models/Setting.js:488
+#: packages/lib/models/Setting.js:493
 msgid "Show note counts"
 msgstr "Εμφάνιση πλήθους σημειώσεων"
 
-#: packages/lib/models/Setting.js:496 packages/lib/models/Setting.js:498
-#: packages/lib/models/Setting.js:499
+#: packages/lib/models/Setting.js:501 packages/lib/models/Setting.js:503
+#: packages/lib/models/Setting.js:504
 msgid "Split View"
 msgstr "Διαίρεση προβολής"
 
-#: packages/lib/models/Setting.js:496
+#: packages/lib/models/Setting.js:501
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/models/Setting.js:497 packages/lib/models/Setting.js:498
-#: packages/lib/models/Setting.js:499
+#: packages/lib/models/Setting.js:502 packages/lib/models/Setting.js:503
+#: packages/lib/models/Setting.js:504
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.js:503
+#: packages/lib/models/Setting.js:508
 msgid "Uncompleted to-dos on top"
 msgstr "Μη ολοκληρωμένα to-dos στην κορυφή"
 
-#: packages/lib/models/Setting.js:504
+#: packages/lib/models/Setting.js:509
 msgid "Show completed to-dos"
 msgstr "Εμφάνιση ολοκληρωμένων to-dos"
 
-#: packages/lib/models/Setting.js:530
+#: packages/lib/models/Setting.js:535
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Αυτόματη-σύζευξη αγκίστρων, παρενθέσεων, εισαγωγικών, κ.λπ."
 
-#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:552
+#: packages/lib/models/Setting.js:538 packages/lib/models/Setting.js:557
 msgid "Reverse sort order"
 msgstr "Αντίστροφη σειρά ταξινόμησης"
 
-#: packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:545
 msgid "Sort notebooks by"
 msgstr "Ταξινόμηση σημειωματάριων κατά"
 
-#: packages/lib/models/Setting.js:553
+#: packages/lib/models/Setting.js:558
 msgid "Save geo-location with notes"
 msgstr "Αποθήκευση της γεωγραφικής τοποθεσίας μαζί με της σημειώσεις"
 
-#: packages/lib/models/Setting.js:575
+#: packages/lib/models/Setting.js:580
 msgid "When creating a new to-do:"
 msgstr "Κατά τη δημιουργία ενός νέου to-do:"
 
-#: packages/lib/models/Setting.js:578 packages/lib/models/Setting.js:594
+#: packages/lib/models/Setting.js:583 packages/lib/models/Setting.js:599
 msgid "Focus title"
 msgstr "Eστίαση στον τίτλο"
 
-#: packages/lib/models/Setting.js:579 packages/lib/models/Setting.js:595
+#: packages/lib/models/Setting.js:584 packages/lib/models/Setting.js:600
 msgid "Focus body"
 msgstr "Eστίαση στο σώμα"
 
-#: packages/lib/models/Setting.js:591
+#: packages/lib/models/Setting.js:596
 msgid "When creating a new note:"
 msgstr "Κατά τη δημιουργία μιας νέας σημείωσης:"
 
-#: packages/lib/models/Setting.js:624
+#: packages/lib/models/Setting.js:629
 msgid "Enable soft breaks"
 msgstr "Ενεργοποίηση soft breaks"
 
-#: packages/lib/models/Setting.js:625
+#: packages/lib/models/Setting.js:630
 msgid "Enable typographer support"
 msgstr "Ενεργοποίηση υποστήριξης typographer"
 
-#: packages/lib/models/Setting.js:626
-#, fuzzy
+#: packages/lib/models/Setting.js:631
 msgid "Enable Linkify"
-msgstr "Ενεργοποίηση ιστορικού σημειώσεων"
+msgstr "Ενεργοποίηση Linkify"
 
-#: packages/lib/models/Setting.js:627
+#: packages/lib/models/Setting.js:632
 msgid "Enable math expressions"
 msgstr "Ενεργοποίηση math expressions"
 
-#: packages/lib/models/Setting.js:628
+#: packages/lib/models/Setting.js:633
 msgid "Enable Fountain syntax support"
 msgstr "Ενεργοποίηση υποστήριξης Fountain syntax"
 
-#: packages/lib/models/Setting.js:629
+#: packages/lib/models/Setting.js:634
 msgid "Enable Mermaid diagrams support"
 msgstr "Ενεργοποίηση υποστήριξης διαγραμμάτων Mermaid"
 
-#: packages/lib/models/Setting.js:630
-#, fuzzy
+#: packages/lib/models/Setting.js:635
 msgid "Enable audio player"
-msgstr "Ενεργοποίηση markdown emoji"
+msgstr "Ενεργοποίηση προγράμματος αναπαραγωγής ήχου"
 
-#: packages/lib/models/Setting.js:631
+#: packages/lib/models/Setting.js:636
 msgid "Enable video player"
-msgstr ""
+msgstr "Ενεργοποίηση προγράμματος αναπαραγωγής βίντεο"
 
-#: packages/lib/models/Setting.js:632
+#: packages/lib/models/Setting.js:637
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "Ενεργοποίηση προβολής PDF"
 
-#: packages/lib/models/Setting.js:633
+#: packages/lib/models/Setting.js:638
 msgid "Enable ==mark== syntax"
 msgstr "Ενεργοποίηση ==mark== syntax"
 
-#: packages/lib/models/Setting.js:634
+#: packages/lib/models/Setting.js:639
 msgid "Enable footnotes"
 msgstr "Ενεργοποίηση footnotes"
 
-#: packages/lib/models/Setting.js:635
+#: packages/lib/models/Setting.js:640
 msgid "Enable table of contents extension"
 msgstr "Ενεργοποίηση επέκτασης table of contents"
 
-#: packages/lib/models/Setting.js:636
+#: packages/lib/models/Setting.js:641
 msgid "Enable ~sub~ syntax"
 msgstr "Ενεργοποίηση ~sub~ syntax"
 
-#: packages/lib/models/Setting.js:637
+#: packages/lib/models/Setting.js:642
 msgid "Enable ^sup^ syntax"
 msgstr "Ενεργοποίηση ^sup^ syntax"
 
-#: packages/lib/models/Setting.js:638
+#: packages/lib/models/Setting.js:643
 msgid "Enable deflist syntax"
 msgstr "Ενεργοποίηση deflist syntax"
 
-#: packages/lib/models/Setting.js:639
+#: packages/lib/models/Setting.js:644
 msgid "Enable abbreviation syntax"
 msgstr "Ενεργοποίηση abbreviation syntax"
 
-#: packages/lib/models/Setting.js:640
+#: packages/lib/models/Setting.js:645
 msgid "Enable markdown emoji"
 msgstr "Ενεργοποίηση markdown emoji"
 
-#: packages/lib/models/Setting.js:641
+#: packages/lib/models/Setting.js:646
 msgid "Enable ++insert++ syntax"
 msgstr "Ενεργοποίηση ++insert++ syntax"
 
-#: packages/lib/models/Setting.js:642
+#: packages/lib/models/Setting.js:647
 msgid "Enable multimarkdown table extension"
 msgstr "Ενεργοποίηση επέκτασης multimarkdown table"
 
-#: packages/lib/models/Setting.js:653
+#: packages/lib/models/Setting.js:658
 msgid "Show tray icon"
 msgstr "Εμφάνιση εικονιδίου στη γραμμή εργασιών"
 
-#: packages/lib/models/Setting.js:655
+#: packages/lib/models/Setting.js:660
 msgid "Note: Does not work in all desktop environments."
 msgstr "Σημείωση: Δεν λειτουργεί σε όλα τα γραφικά περιβάλλοντα."
 
-#: packages/lib/models/Setting.js:655
+#: packages/lib/models/Setting.js:660
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2603,104 +2667,108 @@ msgstr ""
 "ενεργοποιήσετε αυτήν τη ρύθμιση έτσι ώστε οι σημειώσεις σας να "
 "συγχρονίζονται συνεχώς, μειώνοντας έτσι τον αριθμό των διενέξεων."
 
-#: packages/lib/models/Setting.js:659
+#: packages/lib/models/Setting.js:664
 msgid "Start application minimised in the tray icon"
 msgstr "Έναρξη εφαρμογής ελαχιστοποιημένη στη γραμμή εργασιών"
 
-#: packages/lib/models/Setting.js:674
+#: packages/lib/models/Setting.js:684
 msgid "Editor font size"
 msgstr "Μέγεθος γραμματοσειράς editor"
 
-#: packages/lib/models/Setting.js:681
+#: packages/lib/models/Setting.js:691
 msgid "Editor font"
 msgstr "Γραμματοσειρά editor"
 
-#: packages/lib/models/Setting.js:688 packages/lib/models/Setting.js:695
-#: packages/lib/models/Setting.js:841
+#: packages/lib/models/Setting.js:698 packages/lib/models/Setting.js:705
+#: packages/lib/models/Setting.js:851
 msgid "Default"
 msgstr "Προεπιλογή"
 
-#: packages/lib/models/Setting.js:706
+#: packages/lib/models/Setting.js:716
 msgid "Editor font family"
 msgstr "Οικογένεια γραμματοσειράς editor"
 
-#: packages/lib/models/Setting.js:707
+#: packages/lib/models/Setting.js:717
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Χρησιμοποιείται για το μεγαλύτερο μέρος του κειμένου στο πρόγραμμα "
+"επεξεργασίας σημειώσεων. Εάν δεν βρεθεί, χρησιμοποιείται μια γενική "
+"αναλογική γραμματοσειρά (μεταβλητού πλάτους)."
 
-#: packages/lib/models/Setting.js:716
-#, fuzzy
+#: packages/lib/models/Setting.js:726
 msgid "Editor monospace font family"
-msgstr "Οικογένεια γραμματοσειράς editor"
+msgstr "Οικογένεια μονοδιαστημικών γραμματοσειρών επεξεργαστή"
 
-#: packages/lib/models/Setting.js:717
+#: packages/lib/models/Setting.js:727
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Χρησιμοποιείται όταν απαιτείται γραμματοσειρά σταθερού πλάτους για την "
+"ευανάκριβη δημιουργία κειμένου (π.χ. πίνακες, πλαίσια ελέγχου, κωδικός). Εάν "
+"δεν βρεθεί, χρησιμοποιείται μια γενική μονοδιάστημα (σταθερού πλάτους)."
 
-#: packages/lib/models/Setting.js:738
-#, fuzzy
+#: packages/lib/models/Setting.js:748
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Προσαρμοσμένο stylesheet για όλες τις εφαρμογές Joplin"
+msgstr "Προσαρμοσμένο stylesheet για rendered Markdown"
 
-#: packages/lib/models/Setting.js:754
+#: packages/lib/models/Setting.js:764
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Προσαρμοσμένο stylesheet για όλες τις εφαρμογές Joplin"
 
-#: packages/lib/models/Setting.js:764
-msgid "Re-upload local data to sync target"
-msgstr ""
-
 #: packages/lib/models/Setting.js:774
-msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgid "Re-upload local data to sync target"
+msgstr "Εκ νέου αποστολή τοπικών δεδομένων στον προορισμό για συγχρονισμό"
 
-#: packages/lib/models/Setting.js:779
+#: packages/lib/models/Setting.js:784
+msgid "Delete local data and re-download from sync target"
+msgstr "Διαγραφή τοπικών δεδομένων και εκ νέου λήψη από τον προορισμό"
+
+#: packages/lib/models/Setting.js:789
 msgid "Automatically update the application"
 msgstr "Αυτόματη ενημέρωση της εφαρμογής"
 
-#: packages/lib/models/Setting.js:780
+#: packages/lib/models/Setting.js:790
 msgid "Get pre-releases when checking for updates"
 msgstr "Λήψη προεκδόσεων κατά τον έλεγχο για ενημερώσεις"
 
-#: packages/lib/models/Setting.js:780
+#: packages/lib/models/Setting.js:790
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Δείτε τη σελίδα προέκδοσης για περισσότερες λεπτομέρειες: %s"
 
-#: packages/lib/models/Setting.js:788
+#: packages/lib/models/Setting.js:798
 msgid "Synchronisation interval"
 msgstr "Διάστημα συγχρονισμού"
 
-#: packages/lib/models/Setting.js:792 packages/lib/models/Setting.js:793
-#: packages/lib/models/Setting.js:794
+#: packages/lib/models/Setting.js:802 packages/lib/models/Setting.js:803
+#: packages/lib/models/Setting.js:804
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d΄λεπτά"
 
-#: packages/lib/models/Setting.js:795
+#: packages/lib/models/Setting.js:805
 #, javascript-format
 msgid "%d hour"
 msgstr "%d ώρα"
 
-#: packages/lib/models/Setting.js:796 packages/lib/models/Setting.js:797
+#: packages/lib/models/Setting.js:806 packages/lib/models/Setting.js:807
 #, javascript-format
 msgid "%d hours"
 msgstr "%d ώρες"
 
-#: packages/lib/models/Setting.js:807
+#: packages/lib/models/Setting.js:817
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Συγχρονισμός μόνο μέσω σύνδεσης WiFi"
 
-#: packages/lib/models/Setting.js:814
+#: packages/lib/models/Setting.js:824
 msgid "Text editor command"
 msgstr "Εντολή \"Επεξεργαστή κειμένου\""
 
-#: packages/lib/models/Setting.js:814
+#: packages/lib/models/Setting.js:824
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2709,63 +2777,63 @@ msgstr ""
 "για το άνοιγμα μιας σημείωσης. Εάν δεν δωθεί καμία, θα προσπαθήσει να "
 "ανιχνεύσει αυτόματα το προεπιλεγμένο πρόγραμμα επεξεργασίας."
 
-#: packages/lib/models/Setting.js:815
+#: packages/lib/models/Setting.js:825
 msgid "Page size for PDF export"
 msgstr "Μέγεθος σελίδας για εξαγωγή PDF"
 
-#: packages/lib/models/Setting.js:817
+#: packages/lib/models/Setting.js:827
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:818
+#: packages/lib/models/Setting.js:828
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.js:819
+#: packages/lib/models/Setting.js:829
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:820
+#: packages/lib/models/Setting.js:830
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:821
+#: packages/lib/models/Setting.js:831
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/lib/models/Setting.js:822
+#: packages/lib/models/Setting.js:832
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.js:825
+#: packages/lib/models/Setting.js:835
 msgid "Page orientation for PDF export"
 msgstr "Προσανατολισμός σελίδας για εξαγωγή PDF"
 
-#: packages/lib/models/Setting.js:827
+#: packages/lib/models/Setting.js:837
 msgid "Portrait"
 msgstr "Κάθετη"
 
-#: packages/lib/models/Setting.js:828
+#: packages/lib/models/Setting.js:838
 msgid "Landscape"
 msgstr "Οριζόντια"
 
-#: packages/lib/models/Setting.js:838
+#: packages/lib/models/Setting.js:848
 msgid "Keyboard Mode"
 msgstr "Λειτουργία πληκτρολογίου"
 
-#: packages/lib/models/Setting.js:842
+#: packages/lib/models/Setting.js:852
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:843
+#: packages/lib/models/Setting.js:853
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:866
+#: packages/lib/models/Setting.js:876
 msgid "Custom TLS certificates"
 msgstr "Custom πιστοποιητικά TLS"
 
-#: packages/lib/models/Setting.js:867
+#: packages/lib/models/Setting.js:877
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2778,15 +2846,15 @@ msgstr ""
 "στις ρυθμίσεις TLS, πρέπει να αποθηκεύσετε τις αλλαγές σας πριν κάνετε κλικ "
 "στο \"Έλεγχος ρύθμισης παραμέτρων συγχρονισμού\"."
 
-#: packages/lib/models/Setting.js:881
+#: packages/lib/models/Setting.js:891
 msgid "Ignore TLS certificate errors"
 msgstr "Παράβλεψη σφαλμάτων πιστοποιητικού TLS"
 
-#: packages/lib/models/Setting.js:890
+#: packages/lib/models/Setting.js:900
 msgid "Fail-safe"
 msgstr "Ασφαλής"
 
-#: packages/lib/models/Setting.js:891
+#: packages/lib/models/Setting.js:901
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2795,7 +2863,7 @@ msgstr ""
 "είναι κενός (συχνά το αποτέλεσμα μιας εσφαλμένης ρύθμισης παραμέτρων ή ενός "
 "σφάλματος)"
 
-#: packages/lib/models/Setting.js:895
+#: packages/lib/models/Setting.js:905
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2803,29 +2871,29 @@ msgstr ""
 "Καθορίστε τη πόρτα που πρέπει να χρησιμοποιείται από το διακομιστή API. Εάν "
 "δεν οριστεί, θα χρησιμοποιηθεί μια προεπιλογή."
 
-#: packages/lib/models/Setting.js:900
+#: packages/lib/models/Setting.js:910
 msgid "Enable note history"
 msgstr "Ενεργοποίηση ιστορικού σημειώσεων"
 
-#: packages/lib/models/Setting.js:910
+#: packages/lib/models/Setting.js:920
 msgid "days"
 msgstr "ημέρες"
 
-#: packages/lib/models/Setting.js:910
+#: packages/lib/models/Setting.js:920
 #, javascript-format
 msgid "%d days"
 msgstr "%d ημέρες"
 
-#: packages/lib/models/Setting.js:912
+#: packages/lib/models/Setting.js:922
 msgid "Keep note history for"
 msgstr "Διατήρηση ιστορικού σημειώσεων για"
 
-#: packages/lib/models/Setting.js:939
+#: packages/lib/models/Setting.js:949
 msgid "Notebook list growth factor"
 msgstr "Συντελεστής ανάπτυξης λίστας σημειωματάριων"
 
-#: packages/lib/models/Setting.js:940 packages/lib/models/Setting.js:953
-#: packages/lib/models/Setting.js:966
+#: packages/lib/models/Setting.js:950 packages/lib/models/Setting.js:963
+#: packages/lib/models/Setting.js:976
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2838,59 +2906,58 @@ msgstr ""
 "ένα στοιχείο με συντελεστή 1. Επανεκκινήστε την εφαρμογή για να δείτε "
 "αλλαγές."
 
-#: packages/lib/models/Setting.js:952
+#: packages/lib/models/Setting.js:962
 msgid "Note list growth factor"
 msgstr "Συντελεστής ανάπτυξης λίστας σημειώσεων"
 
-#: packages/lib/models/Setting.js:965
+#: packages/lib/models/Setting.js:975
 msgid "Note area growth factor"
 msgstr "Συντελεστής ανάπτυξης περιοχής σημειώσεων"
 
-#: packages/lib/models/Setting.js:1180
+#: packages/lib/models/Setting.js:1190
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Άκυρη τιμή: \" %s\". Οι πιθανές τιμές είναι: %s."
 
-#: packages/lib/models/Setting.js:1579
+#: packages/lib/models/Setting.js:1589
 msgid "General"
 msgstr "Γενικά"
 
-#: packages/lib/models/Setting.js:1581
+#: packages/lib/models/Setting.js:1591
 msgid "Synchronisation"
 msgstr "Συγχρονισμός"
 
-#: packages/lib/models/Setting.js:1583
+#: packages/lib/models/Setting.js:1593
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
-#: packages/lib/models/Setting.js:1585
+#: packages/lib/models/Setting.js:1595
 msgid "Note"
 msgstr "Σημείωση"
 
-#: packages/lib/models/Setting.js:1587
+#: packages/lib/models/Setting.js:1597
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1591
+#: packages/lib/models/Setting.js:1601
 msgid "Application"
 msgstr "Εφαρμογή"
 
-#: packages/lib/models/Setting.js:1595
+#: packages/lib/models/Setting.js:1605
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
-#: packages/lib/models/Setting.js:1597
+#: packages/lib/models/Setting.js:1607
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: packages/lib/models/Setting.js:1599
-#, fuzzy
+#: packages/lib/models/Setting.js:1609
 msgid "Keyboard Shortcuts"
-msgstr "Λειτουργία πληκτρολογίου"
+msgstr "Συντομεύσεις πληκτρολογίου"
 
-#: packages/lib/models/Setting.js:1606
+#: packages/lib/models/Setting.js:1616
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2909,7 +2976,7 @@ msgstr ""
 "μορφοποίηση της προσθήκης. Υποδεικνύεται παρακάτω ποια πρόσθετα είναι "
 "συμβατά ή όχι με τον επεξεργαστή WYSIWYG."
 
-#: packages/lib/models/Setting.js:1608
+#: packages/lib/models/Setting.js:1618
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Οι σημειώσεις και οι ρυθμίσεις αποθηκεύονται στο: %s"
@@ -2973,21 +3040,21 @@ msgstr "Δεν είναι δυνατή η αντιγραφή της σημείω
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Δεν είναι δυνατή η μετακίνηση της σημείωσης στο σημειωματάριο \"%s\""
 
-#: packages/lib/models/BaseItem.js:707
+#: packages/lib/models/BaseItem.js:712
 msgid "Encrypted"
 msgstr "Κρυπτογραφημένο"
 
-#: packages/lib/models/BaseItem.js:768
+#: packages/lib/models/BaseItem.js:773
 msgid "Encrypted items cannot be modified"
 msgstr "Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένων στοιχείων"
 
-#: packages/lib/BaseApplication.js:150 packages/lib/BaseApplication.js:162
-#: packages/lib/BaseApplication.js:194
+#: packages/lib/BaseApplication.js:151 packages/lib/BaseApplication.js:163
+#: packages/lib/BaseApplication.js:195
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Χρήση: %s"
 
-#: packages/lib/BaseApplication.js:229
+#: packages/lib/BaseApplication.js:230
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Άγνωστο flag: %s"
@@ -3072,78 +3139,80 @@ msgstr ""
 "Δεν είναι δυνατή η ανανέωση του token: δεν υπάρχουν δεδομένα ελέγχου "
 "ταυτότητας. Η επανεκκίνηση του συγχρονισμού, μπορεί να διορθώσει το πρόβλημα."
 
-#: packages/lib/Synchronizer.js:119
+#: packages/lib/Synchronizer.js:122
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Δημιουργημένα τοπικά στοιχεία: %d."
 
-#: packages/lib/Synchronizer.js:121
+#: packages/lib/Synchronizer.js:124
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Ενημερωμένα τοπικά στοιχεία: %d."
 
-#: packages/lib/Synchronizer.js:123
+#: packages/lib/Synchronizer.js:126
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "Δημιουργημένα απομακρυσμένα στοιχεία: %d."
 
-#: packages/lib/Synchronizer.js:125
+#: packages/lib/Synchronizer.js:128
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "Ενημερωμένα απομακρυσμένα στοιχεία: %d."
 
-#: packages/lib/Synchronizer.js:127
+#: packages/lib/Synchronizer.js:130
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Διαγραμμένα τοπικά στοιχεία: %d."
 
-#: packages/lib/Synchronizer.js:129
+#: packages/lib/Synchronizer.js:132
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Διαγραμμένα απομακρυσμένα στοιχεία: %d."
 
-#: packages/lib/Synchronizer.js:131
+#: packages/lib/Synchronizer.js:134
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Ληφθέντα στοιχεία: %d/%d."
 
-#: packages/lib/Synchronizer.js:133
+#: packages/lib/Synchronizer.js:136
 msgid "Cancelling..."
 msgstr "Ακύρωση..."
 
-#: packages/lib/Synchronizer.js:135
+#: packages/lib/Synchronizer.js:138
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Ολοκληρώθηκε: %s"
 
-#: packages/lib/Synchronizer.js:137
+#: packages/lib/Synchronizer.js:140
 #, javascript-format
 msgid "Last error: %s"
 msgstr "Τελευταίο σφάλμα: %s"
 
-#: packages/lib/Synchronizer.js:244
+#: packages/lib/Synchronizer.js:247
 msgid "Idle"
 msgstr "Αδρανής"
 
-#: packages/lib/Synchronizer.js:246
+#: packages/lib/Synchronizer.js:249
 msgid "In progress"
 msgstr "Σε εξέλιξη"
 
-#: packages/lib/Synchronizer.js:844
+#: packages/lib/Synchronizer.js:849
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
+"Λήψη άγνωστου τύπου στοιχείου - αναβαθμίστε το Joplin στην πιο πρόσφατη "
+"έκδοση"
 
-#: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#: packages/lib/JoplinServerApi.js:61
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Δεν ήταν δυνατή η σύνδεση στην εφαρμογή Joplin. Ελέγξτε τις παραμέτρους στην "
-"οθόνη ρυθμίσεων συγχρονισμού. Το πλήρες σφάλμα ήταν:\n"
+"Δεν ήταν δυνατή η σύνδεση με το διακομιστή Joplin. Ελέγξτε τις επιλογές "
+"συγχρονισμού στην οθόνη ρύθμισης παραμέτρων. Το πλήρες σφάλμα ήταν:\n"
 "\n"
 "%s"
 
@@ -3247,10 +3316,11 @@ msgstr ""
 "Δεν είναι δυνατή η φόρτωση του \"%s\" module με μορφή \"%s\" και έξοδο \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
-"Δεν είναι δυνατή η φόρτωση του \"%s\" module με μορφή \"%s\" και έξοδο \"%s\""
+"Δεν είναι δυνατή η φόρτωση του module \"%s\" για τη μορφοποίηση σε \"%s\" "
+"και την εξαγωγή σε \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3288,23 +3358,23 @@ msgstr "Παρακαλώ καθορίστε τη μορφή εισαγωγής �
 
 #: packages/lib/services/KeymapService.js:275
 msgid "command"
-msgstr ""
+msgstr "εντολή"
 
 #: packages/lib/services/KeymapService.js:275
 #: packages/lib/services/KeymapService.js:280
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr ""
+msgstr "Το \"%s\" δεν διαθέτει την απαιτούμενη ιδιότητα \"%s\"."
 
 #: packages/lib/services/KeymapService.js:280
 #: packages/lib/services/KeymapService.js:287
 msgid "accelerator"
-msgstr ""
+msgstr "επιταχυντής"
 
 #: packages/lib/services/KeymapService.js:287
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Μη έγκυρη απάντηση: %s"
+msgstr "Μη έγκυρo %s: %s."
 
 #: packages/lib/services/KeymapService.js:305
 #, javascript-format
@@ -3312,11 +3382,13 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
+"Ο επιταχυντής \"%s\" χρησιμοποιείται για εντολές \"%s\" και \"%s\". Αυτό "
+"μπορεί να οδηγήσει σε απροσδόκητη συμπεριφορά."
 
 #: packages/lib/services/KeymapService.js:330
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr ""
+msgstr "Ο επιταχυντής \"%s\" δεν είναι έγκυρος."
 
 #: packages/lib/services/ReportService.js:123
 msgid "Items that cannot be synchronised"
@@ -3384,9 +3456,8 @@ msgid "Downloaded and encrypted"
 msgstr "Μεταφορτωμένα και κρυπτογραφημένα"
 
 #: packages/lib/services/ReportService.js:180
-#, fuzzy
 msgid "Created locally"
-msgstr "Δημιουργημένα τοπικά στοιχεία: %d."
+msgstr "Δημιουργήθηκε τοπικά"
 
 #: packages/lib/services/ReportService.js:191
 msgid "Attachments that could not be downloaded"
@@ -3441,20 +3512,19 @@ msgstr "Στο %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Χωρίς προτάσεις"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Add to dictionary"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Χρήση ορθογραφικού ελέγχου"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Γλώσσα"
+msgstr "Αλλαγή γλώσσας"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3678,7 +3748,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr ""
+msgstr "Αναβαθμίστε το στόχο συγχρονισμού στην πιο πρόσφατη έκδοση."
 
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
@@ -3723,6 +3793,8 @@ msgstr "Λήψη πόρων.."
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
+"Ο προορισμός συγχρονισμού πρέπει να αναβαθμιστεί! Εκτελέστε το `%s` για να "
+"συνεχίσετε."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
@@ -3781,11 +3853,12 @@ msgstr "Δεν υπάρχει η σημείωση : \"%s\". Να δημιουρ�
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
+"Αρχή επεξεργασίας της σημείωσης. Κλείστε τον επεξεργαστή για να επιστρέψετε "
+"στην ερώτηση."
 
 #: packages/app-cli/app/command-edit.js:97
-#, fuzzy
 msgid "Note has been saved."
-msgstr "Κανένα σημειωματάριο δεν έχει καθοριστεί."
+msgstr "Η σημείωση έχει αποθηκευτεί."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -3826,6 +3899,8 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Εκτελεί τις εντολές που περιέχονται στο αρχείο κειμένου. Θα πρέπει να "
+"υπάρχει μία εντολή ανά γραμμή."
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
@@ -4122,6 +4197,12 @@ msgstr "Επισημαίνει μία σημείωση to-do ως ολοκληρ
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Η σημείωση δεν είναι  to-do: \"%s\""
+
+#~ msgid "Joplin Server Directory"
+#~ msgstr "Joplin Server Directory"
+
+#~ msgid "Joplin Server username"
+#~ msgstr "Joplin Server username"
 
 #, fuzzy
 #~ msgid "marked text"

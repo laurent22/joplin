@@ -1,3 +1,15 @@
+All code in this repository is licensed under the MIT License **unless a
+directory contains a LICENSE file**, in which case that LICENSE file applies to
+the code in that sub-directory.
+
+For example, packages/fork-sax contains a ISC LICENSE file, thus all files
+under the packages/fork-sax directory are licensed under ISC.
+
+For example, packages/app-cli does NOT contain a LICENSE file, thus all files
+under that directory are licensed under the default license, which is MIT.
+
+* * *
+
 MIT License
 
 Copyright (c) 2016-2020 Laurent Cozic
