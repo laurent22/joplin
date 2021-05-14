@@ -56,7 +56,7 @@ const markdownUtils = {
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractFileUrls(md: string, onlyImage: boolean = false) {
+	extractFileUrls(md: string, onlyImage: boolean = false): Array<string> {
 		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
