@@ -8,9 +8,8 @@
   "license": "MIT",
   "scripts": {
     "audit": "lerna-audit",
-    "bootstrap": "lerna bootstrap --no-ci",
-    "bootstrapIgnoreScripts": "lerna bootstrap --ignore-scripts --no-ci",
-    "bootstrapServerOnly": "lerna bootstrap --no-ci --include-dependents --include-dependencies --scope @joplin/server",
+    "bootstrap": "lerna bootstrap --force-local --no-ci",
+    "bootstrapServerOnly": "lerna bootstrap --force-local --no-ci --include-dependents --include-dependencies --scope @joplin/server",
     "build": "lerna run build && npm run tsc",
     "buildApiDoc": "npm start --prefix=packages/app-cli -- apidoc ../../readme/api/references/rest_api.md",
     "buildDoc": "./packages/tools/build-all.sh",
