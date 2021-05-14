@@ -88,35 +88,7 @@ const markdownUtils = {
 	},
 
 	extractImageUrls(md: string) {
-		const markdownIt = new MarkdownIt();
-		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
-
-		const env = {};
-		const tokens = markdownIt.parse(md, env);
-		const output: string[] = [];
-
-		const searchUrls = (tokens: any[]) => {
-			for (let i = 0; i < tokens.length; i++) {
-				const token = tokens[i];
-
-				if (token.type === 'image') {
-					for (let j = 0; j < token.attrs.length; j++) {
-						const a = token.attrs[j];
-						if (a[0] === 'src' && a.length >= 2 && a[1]) {
-							output.push(a[1]);
-						}
-					}
-				}
-
-				if (token.children && token.children.length) {
-					searchUrls(token.children);
-				}
-			}
-		};
-
-		searchUrls(tokens);
-
-		return output;
+		return markdownUtils.extractFileUrls(md,true);
 	},
 
 	// The match results has 5 items
