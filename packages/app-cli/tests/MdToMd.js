@@ -43,4 +43,9 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(1);
 	});
+	it('should import resources for files', async function() {
+		const note = await importer.importFile(`${__dirname}/md_to_md/sample-files.md`, 'notebook');
+		const items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(4);
+	});
 });
