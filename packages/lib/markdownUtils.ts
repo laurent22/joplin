@@ -71,17 +71,7 @@ const markdownUtils = {
 					for (let j = 0; j < token.attrs.length; j++) {
 						const a = token.attrs[j];
 						if ((a[0] === 'src' || a[0] === 'href') && a.length >= 2 && a[1]) {
-							// match files like
-							// some.pdf
-							// \some.docx
-							// .some.docx
-							// /uploads/some.png
-							// ../some.pdf
-							// ./uploads/some.docx
-							//
-							if (a[1].match(/^(\/|\w+\.\w+|\\|\.)/)) {
-								output.push(a[1]);
-							}
+							output.push(a[1]);
 						}
 					}
 				}
