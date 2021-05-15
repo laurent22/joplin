@@ -1450,34 +1450,48 @@ msgstr "插件"
 msgid "Apply"
 msgstr "应用"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
 #, javascript-format
 msgid "Delete plugin \"%s\"?"
 msgstr "删除插件“%s”吗？"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 msgid "Browse all plugins"
 msgstr "浏览所有插件"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
 msgstr "从文件安装"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
 msgstr "您尚未安装任何插件。"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
+#, fuzzy
+msgid "Could not connect to plugin repository"
+msgstr "无法安装插件：%s"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
+msgid "Try again"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
 msgstr "插件工具"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
 msgid "Manage your plugins"
 msgstr "管理您的插件"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 msgid "No results"
 msgstr "无结果"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ResourceScreen.js:142
+msgid "Please wait..."
+msgstr "请稍候..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 msgid "Search for plugins..."
@@ -1631,10 +1645,6 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr "这是用于展示与笔记相关联的附件的高级工具。需要小心，删除后无法恢复。"
-
-#: packages/app-desktop/gui/ResourceScreen.js:142
-msgid "Please wait..."
-msgstr "请稍候..."
 
 #: packages/app-desktop/gui/ResourceScreen.js:144
 msgid "No resources!"

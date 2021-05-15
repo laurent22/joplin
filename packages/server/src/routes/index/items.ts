@@ -14,7 +14,6 @@ import { View } from '../../services/MustacheService';
 function makeFilePagination(query: any): Pagination {
 	const limit = Number(query.limit) || pageMaxSize;
 	const order: PaginationOrder[] = requestPaginationOrder(query, 'name', PaginationOrderDir.ASC);
-	// order.splice(0, 0, { by: 'is_directory', dir: PaginationOrderDir.DESC });
 	const page: number = 'page' in query ? Number(query.page) : 1;
 
 	const output: Pagination = { limit, order, page };
@@ -23,8 +22,6 @@ function makeFilePagination(query: any): Pagination {
 }
 
 const router = new Router();
-
-// router.alias(HttpMethod.GET, 'items', 'items/:id');
 
 router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	// Query parameters that should be appended to pagination-related URLs

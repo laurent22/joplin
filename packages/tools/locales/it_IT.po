@@ -1498,34 +1498,48 @@ msgstr "Plugins"
 msgid "Apply"
 msgstr "Applica"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
 #, javascript-format
 msgid "Delete plugin \"%s\"?"
 msgstr "Eliminare il plugin \"%s\"?"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 msgid "Browse all plugins"
 msgstr "Sfoglia tutti i plugins"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
 msgstr "Installa da file"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
 msgstr "Non hai installato nessun plugin."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
+#, fuzzy
+msgid "Could not connect to plugin repository"
+msgstr "Non è possibile installare il plugin: %s"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
+msgid "Try again"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
 msgstr "Strumenti plugin"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
 msgid "Manage your plugins"
 msgstr "Gestisci plugins"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 msgid "No results"
 msgstr "Nessun risultato"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ResourceScreen.js:142
+msgid "Please wait..."
+msgstr "Attendere per favore...."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 msgid "Search for plugins..."
@@ -1685,10 +1699,6 @@ msgstr ""
 "Questo è uno strumento avanzato che mostra gli allegati delle tue note. "
 "Presta attenzione quando ne cancelli uno perché non possono essere "
 "recuperati."
-
-#: packages/app-desktop/gui/ResourceScreen.js:142
-msgid "Please wait..."
-msgstr "Attendere per favore...."
 
 #: packages/app-desktop/gui/ResourceScreen.js:144
 msgid "No resources!"

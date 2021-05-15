@@ -101,7 +101,7 @@ export default function(props: Props) {
 					onChange={onChange}
 					onSearchButtonClick={onSearchButtonClick}
 					searchStarted={searchStarted}
-					placeholder={_('Search for plugins...')}
+					placeholder={props.disabled ? _('Please wait...') : _('Search for plugins...')}
 					disabled={props.disabled}
 				/>
 			</div>

@@ -8,6 +8,7 @@ import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
 import ItemModel, { ItemSaveOption } from '../../models/ItemModel';
 import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
+import { safeRemove } from '../../utils/fileUtils';
 
 const router = new Router();
 
@@ -67,21 +68,31 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const itemModel = ctx.models.item();
 	const name = itemModel.pathToName(path.id);
 	const parsedBody = await formParse(ctx.req);
-	const buffer = parsedBody?.files?.file ? await fs.readFile(parsedBody.files.file.path) : Buffer.alloc(0);
-	const saveOptions: ItemSaveOption = {};
+	const filePath = parsedBody?.files?.file ? parsedBody.files.file.path : null;
 
-	// This end point can optionally set the associated jop_share_id field. It
-	// is only useful when uploading resource blob (under .resource folder)
-	// since they can't have metadata. Note, Folder and Resource items all
-	// include the "share_id" field property so it doesn't need to be set via
-	// query parameter.
-	if (ctx.query['share_id']) {
-		saveOptions.shareId = ctx.query['share_id'];
-		await itemModel.checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
+	let outputItem: Item = null;
+
+	try {
+		const buffer = filePath ? await fs.readFile(filePath) : Buffer.alloc(0);
+		const saveOptions: ItemSaveOption = {};
+
+		// This end point can optionally set the associated jop_share_id field. It
+		// is only useful when uploading resource blob (under .resource folder)
+		// since they can't have metadata. Note, Folder and Resource items all
+		// include the "share_id" field property so it doesn't need to be set via
+		// query parameter.
+		if (ctx.query['share_id']) {
+			saveOptions.shareId = ctx.query['share_id'];
+			await itemModel.checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
+		}
+
+		const item = await itemModel.saveFromRawContent(ctx.owner.id, name, buffer, saveOptions);
+		outputItem = itemModel.toApiOutput(item) as Item;
+	} finally {
+		if (filePath) await safeRemove(filePath);
 	}
 
-	const item = await itemModel.saveFromRawContent(ctx.owner.id, name, buffer, saveOptions);
-	return itemModel.toApiOutput(item);
+	return outputItem;
 });
 
 router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {

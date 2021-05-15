@@ -1473,34 +1473,48 @@ msgstr "플러그인"
 msgid "Apply"
 msgstr "적용"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
 #, javascript-format
 msgid "Delete plugin \"%s\"?"
 msgstr "\"%s\" 플러그인을 삭제할까요?"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 msgid "Browse all plugins"
 msgstr "모든 플러그인 보기"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
 msgstr "플러그인 파일로 설치"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
 msgstr "설치된 플러그인이 없습니다."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
+#, fuzzy
+msgid "Could not connect to plugin repository"
+msgstr "플러그인을 설치할 수 없습니다: %s"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
+msgid "Try again"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
 msgstr "플러그인 도구"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
 msgid "Manage your plugins"
 msgstr "플러그인 관리"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 msgid "No results"
 msgstr "결과 없음"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ResourceScreen.js:142
+msgid "Please wait..."
+msgstr "잠시만 기다려주세요..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 msgid "Search for plugins..."
@@ -1657,10 +1671,6 @@ msgid ""
 msgstr ""
 "노트에 링크된 첨부 파일을 보여주는 고급 도구입니다. 여기에서 보여지는 항목을 "
 "삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 바랍니다."
-
-#: packages/app-desktop/gui/ResourceScreen.js:142
-msgid "Please wait..."
-msgstr "잠시만 기다려주세요..."
 
 #: packages/app-desktop/gui/ResourceScreen.js:144
 msgid "No resources!"

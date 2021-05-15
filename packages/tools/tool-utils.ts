@@ -108,11 +108,13 @@ async function saveGitHubUsernameCache(cache: any) {
 // Returns the project root dir
 export const rootDir = require('path').dirname(require('path').dirname(__dirname));
 
-export function execCommand(command: string) {
+export function execCommand(command: string, options: any = null) {
+	options = options || {};
+
 	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
-		exec(command, (error: any, stdout: any, stderr: any) => {
+		exec(command, options, (error: any, stdout: any, stderr: any) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');

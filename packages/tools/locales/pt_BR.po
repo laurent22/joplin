@@ -1492,34 +1492,48 @@ msgstr "Plugins"
 msgid "Apply"
 msgstr "Aplicar"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
 #, javascript-format
 msgid "Delete plugin \"%s\"?"
 msgstr "Excluir o plugin \"%s\"?"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 msgid "Browse all plugins"
 msgstr "Procurar todos os plugins"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
 msgstr "Instale pelo arquivo"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
 msgstr "Você não tem nenhum plugin instalado."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
+#, fuzzy
+msgid "Could not connect to plugin repository"
+msgstr "Não foi possível instalar o plugin: %s"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
+msgid "Try again"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
 msgstr "Ferramentas de plugins"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
 msgid "Manage your plugins"
 msgstr "Gerencie seus plugins"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 msgid "No results"
 msgstr "Sem resultados"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ResourceScreen.js:142
+msgid "Please wait..."
+msgstr "Por favor aguarde..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 msgid "Search for plugins..."
@@ -1676,10 +1690,6 @@ msgid ""
 msgstr ""
 "Essa é uma ferramenta avançada para exibir os anexos vinculados à sua nota. "
 "Por favor tenha cuidado ao apagá-los pois não poderão ser recuperados depois."
-
-#: packages/app-desktop/gui/ResourceScreen.js:142
-msgid "Please wait..."
-msgstr "Por favor aguarde..."
 
 #: packages/app-desktop/gui/ResourceScreen.js:144
 msgid "No resources!"
