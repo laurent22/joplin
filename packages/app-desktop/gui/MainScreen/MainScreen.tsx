@@ -34,6 +34,7 @@ import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
+import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -233,6 +234,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		try {
 			output = loadLayout(Object.keys(userLayout).length ? userLayout : null, defaultLayout, rootLayoutSize);
+
+			// For unclear reasons, layout items sometimes end up witout a key.
+			// In that case, we can't do anything with them, so remove them
+			// here. It could be due to the deprecated plugin API, which allowed
+			// creating panel without a key, although in this case it should
+			// have been set automatically.
+			// https://github.com/laurent22/joplin/issues/4926
+			output = removeKeylessItems(output);
 
 			if (!findItemByKey(output, 'sideBar') || !findItemByKey(output, 'noteList') || !findItemByKey(output, 'editor')) {
 				throw new Error('"sideBar", "noteList" and "editor" must be present in the layout');
