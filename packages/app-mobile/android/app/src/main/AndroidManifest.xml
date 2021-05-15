@@ -41,35 +41,6 @@
 		android:resizeableActivity="true"
 		android:theme="@style/AppTheme">
 
-		<!-- RN-NOTIFICATION -->
-		<receiver
-			android:name="com.emekalites.react.alarm.notification.AlarmReceiver"
-			android:enabled="true"
-			android:exported="true">
-			<intent-filter>
-				<action android:name="ACTION_DISMISS" />
-				<action android:name="ACTION_SNOOZE" />
-			</intent-filter>
-		</receiver>
-
-		<receiver
-			android:name="com.emekalites.react.alarm.notification.AlarmDismissReceiver"
-			android:enabled="true"
-			android:exported="true" />
-			<receiver
-				android:name="com.emekalites.react.alarm.notification.AlarmBootReceiver"
-				android:directBootAware="true"
-				android:enabled="false"
-				android:exported="true">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-				<action android:name="android.intent.action.QUICKBOOT_POWERON" />
-				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-				<action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-			</intent-filter>
-		</receiver>
-		<!-- /RN-NOTIFICATION -->
-
 		<!--
 		2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification
 					Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed.

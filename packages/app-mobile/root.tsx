@@ -27,7 +27,7 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, NativeEventEmitter } = require('react-native');
 
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -716,6 +716,60 @@ class AppComponent extends React.Component {
 		await this.handleShareData();
 
 		setUpQuickActions(this.props.dispatch, this.props.selectedFolderId);
+
+		const { RNAlarmNotification } = NativeModules;
+		const RNAlarmEmitter = new NativeEventEmitter(RNAlarmNotification);
+
+		RNAlarmEmitter.addListener(
+			'OnNotificationOpened', async (payload: any) => {
+				console.log(`on alarm ${JSON.stringify(payload)}`);
+				const alarm = await Alarm.load(payload.joplinNotificationId);
+				console.log(`loaded alarm: ${JSON.stringify(alarm)}`);
+
+				if (!alarm) {
+					const allAlarms = await Alarm.all();
+					console.log(`all alarms: ${JSON.stringify(allAlarms)}`);
+				}
+
+				// TODO await?
+				this.props.dispatch({ type: 'NAV_BACK' });
+				this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+				this.props.dispatch({
+					type: 'NAV_GO',
+					noteId: alarm.note_id,
+					routeName: 'Note',
+				});
+			});
+		if (Platform.OS === 'android') {
+			const notification = await NativeModules.RNAlarmNotification.getAlarmInfo();
+			console.log(`got notification: ${JSON.stringify(notification)}`);
+			if (notification) {
+				const noteId = notification.noteId;
+				if (noteId) {
+					this.props.dispatch({ type: 'NAV_BACK' });
+					this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+					this.props.dispatch({
+						type: 'NAV_GO',
+						noteId: noteId,
+						routeName: 'Note',
+					});
+				}
+				// const alarm = await Alarm.load(notification.joplinNotificationId);
+				// console.log(`loaded alarm: ${JSON.stringify(alarm)}`);
+				// if (!!alarm) {
+				// 	this.props.dispatch({ type: 'NAV_BACK' });
+				// 	this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+				// 	this.props.dispatch({
+				// 		type: 'NAV_GO',
+				// 		noteId: alarm.note_id,
+				// 		routeName: 'Note',
+				// 	});
+				// } else {
+				// 	const allAlarms = await Alarm.all();
+				// 	console.log(`all alarms: ${JSON.stringify(allAlarms)}`);
+				// }
+			}
+		}
 	}
 
 	componentWillUnmount() {
