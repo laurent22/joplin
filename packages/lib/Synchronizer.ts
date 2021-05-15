@@ -28,6 +28,22 @@ interface RemoteItem {
 	type_?: number;
 }
 
+function isCannotSyncError(error: any): boolean {
+	if (!error) return false;
+	if (['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) return true;
+
+	// If the request times out we give up too because sometimes it's due to the
+	// file being large or some other connection issues, and we don't want that
+	// file to block the sync process. The user can choose to retry later on.
+	//
+	// message: "network timeout at: .....
+	// name: "FetchError"
+	// type: "request-timeout"
+	if (error.type === 'request-timeout' || error.message.includes('network timeout')) return true;
+
+	return false;
+}
+
 export default class Synchronizer {
 
 	private db_: any;
@@ -514,7 +530,7 @@ export default class Synchronizer {
 
 									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: local.share_id });
 								} catch (error) {
-									if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
+									if (isCannotSyncError(error)) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
 										action = null;
 									} else {
