@@ -1,4 +1,4 @@
- [![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
+[![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
 
 # Building the applications
 
@@ -6,17 +6,17 @@ The Joplin source code is hosted on a [monorepo](https://en.wikipedia.org/wiki/M
 
 The list of the main sub-packages is below:
 
-Package name | Description
---- | ---
-app-cli | The CLI application
-app-clipper | The web clipper
-app-desktop | The desktop application
-app-mobile | The mobile application
-lib | The core library, shared by all applications. It deals with things like synchronisation, encryption, import/export, database and pretty much all the app business logic
-renderer | The Joplin Markdown and HTML renderer
-tools | Tools used to build the apps and other tasks
+| Package name | Description                                                                                                                                                             |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| app-cli      | The CLI application                                                                                                                                                     |
+| app-clipper  | The web clipper                                                                                                                                                         |
+| app-desktop  | The desktop application                                                                                                                                                 |
+| app-mobile   | The mobile application                                                                                                                                                  |
+| lib          | The core library, shared by all applications. It deals with things like synchronisation, encryption, import/export, database and pretty much all the app business logic |
+| renderer     | The Joplin Markdown and HTML renderer                                                                                                                                   |
+| tools        | Tools used to build the apps and other tasks                                                                                                                            |
 
-There are also a few forks of existing packages under the "fork-*" name.
+There are also a few forks of existing packages under the "fork-\*" name.
 
 ## Required dependencies
 
@@ -29,21 +29,21 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 Before doing anything else, from the root of the project, run:
 
-	npm install
+    npm install
 
 Then you can test the various applications:
 
 ## Testing the desktop application
 
-	cd packages/app-desktop
-	npm start
+    cd packages/app-desktop
+    npm start
 
 You can also run it under WSL 2. To do so, [follow these instructions](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2) to setup your environment.
 
 ## Testing the Terminal application
 
-	cd packages/app-cli
-	npm start
+    cd packages/app-cli
+    npm start
 
 ## Testing the Mobile application
 
@@ -51,8 +51,8 @@ First you need to setup React Native to build projects with native code. For thi
 
 Then, for **Android**:
 
-	cd packages/app-mobile/android
-	./gradlew installDebug # or gradlew.bat installDebug on Windows
+    cd packages/app-mobile/android
+    ./gradlew installDebug # or gradlew.bat installDebug on Windows
 
 On **iOS**, open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
@@ -60,33 +60,25 @@ Normally the **bundler** should start automatically with the application. If it 
 
 ## Building the clipper
 
-	cd packages/app-clipper/popup
-	npm install
-	npm run watch # To watch for changes
+    cd packages/app-clipper/popup
+    npm install
+    npm run watch # To watch for changes
 
 Then depending on your browser, continue with the following steps.
 
 ### Chrome
+
 1. Navigate to `chrome://extensions` and enabled “Developer Mode”.
 2. Click the “Load unpacked extension” button.
 3. Select the `app-clipper` directory.
 
-**Note** that every time you make changes to the extension codes, click the “Reload” button in the Chrome Extension Management page to see the changes.
-
-### Firefox
-1. Navigate to `about:debugging`.
-2. Click the “Load Temporary Add-on” button.
-3. Select the `manifest.json` file in the `app-clipper` directory.
-
-**Note** that in Firefox, the add-on needs to be manually loaded again when the browser starts.
-
-For more information, please refer to the relevant pages for each browser: [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Trying_it_out) / [Chrome](https://developer.chrome.com/extensions/faq#faq-dev-01). Please note that the extension in dev mode will only connect to a dev instance of the desktop app (and vice-versa).
+To test the extension please refer to the relevant pages for each browser: [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Trying_it_out) / [Chrome](https://developer.chrome.com/docs/extensions/mv3/getstarted/). Please note that the extension in dev mode will only connect to a dev instance of the desktop app (and vice-versa).
 
 ## Watching files
 
 To make changes to the application, you'll need to rebuild any TypeScript file you've changed. The simplest way to do this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
 
-	npm run watch
+    npm run watch
 
 Running `npm run tsc` would have the same effect, but without watching.
 
@@ -94,13 +86,13 @@ Running `npm run tsc` would have the same effect, but without watching.
 
 You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `npm start` command, followed by your flags. For example:
 
-	npm start -- --debug
+    npm start -- --debug
 
 ## Adding a new dependency
 
 Since Joplin uses Lerna, adding a new dependency should not be done using `npm i -s ...`. Instead you should use the `lerna add` command, which will take care of adding the package while handling the linked packages correctly. For example, to add the package "leftpad" to the "app-desktop" sub-package, you would run:
 
-	npx lerna add leftpad --scope=@joplin/app-desktop
+    npx lerna add leftpad --scope=@joplin/app-desktop
 
 Note that you should most likely always specify a scope because otherwise it will add the package to all the sub-packages.
 
