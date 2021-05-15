@@ -299,7 +299,7 @@ export default function(props: Props) {
 	function renderRepoApiError() {
 		if (!repoApiError) return null;
 
-		return <RepoApiErrorMessage maxWidth={maxWidth} type="error">{_('Could not connect to plugin repository')} - <StyledLink href="#" onClick={() => { setFetchManifestTime(Date.now); }}>{_('Try again')}</StyledLink></RepoApiErrorMessage>;
+		return <RepoApiErrorMessage maxWidth={maxWidth} type="error">{_('Could not connect to plugin repository')} - <StyledLink href="#" onClick={() => { setFetchManifestTime(Date.now()); }}>{_('Try again')}</StyledLink></RepoApiErrorMessage>;
 	}
 
 	function renderBottomArea() {
