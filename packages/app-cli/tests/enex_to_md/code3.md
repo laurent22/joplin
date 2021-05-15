@@ -1,1 +1,1 @@
-	jq -r '.[]|[.index, .name, .section, .award, .industry]|join("\t")' raw.json |pbcopy
+`jq -r '.[]|[.index, .name, .section, .award, .industry]|join("\t")' raw.json |pbcopy`

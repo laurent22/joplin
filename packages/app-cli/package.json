@@ -5,7 +5,7 @@
   "author": "Laurent Cozic",
   "private": true,
   "scripts": {
-    "test": "jest --config=jest.config.js --bail --forceExit",
+    "test": "jest --verbose=false --config=jest.config.js --bail --forceExit",
     "test-one": "jest --verbose=false --config=jest.config.js --bail --forceExit",
     "test-ci": "jest --config=jest.config.js --forceExit",
     "build": "gulp build",
