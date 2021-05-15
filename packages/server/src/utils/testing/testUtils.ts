@@ -61,6 +61,18 @@ export async function beforeAllDb(unitName: string) {
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
 
+	// Uncomment the code below to run the test units with Postgres. Run first
+	// `docker-compose -f docker-compose.db-dev.yml` to get a dev db.
+
+	// initConfig({
+	// 	DB_CLIENT: 'pg',
+	// 	POSTGRES_DATABASE: createdDbName_,
+	// 	POSTGRES_USER: 'joplin',
+	// 	POSTGRES_PASSWORD: 'joplin',
+	// }, {
+	// 	tempDir: tempDir,
+	// });
+
 	initConfig({
 		SQLITE_DATABASE: createdDbName_,
 	}, {
