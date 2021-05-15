@@ -12,6 +12,7 @@ const imageMimeTypes = [
 	'image/png',
 	'image/prs.btif',
 	'image/prs.pti',
+	'image/svg+xml',
 	'image/t38',
 	'image/tiff',
 	'image/tiff-fx',
