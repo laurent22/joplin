@@ -663,6 +663,9 @@ packages/app-desktop/gui/style/StyledFormLabel.js.map
 packages/app-desktop/gui/style/StyledInput.d.ts
 packages/app-desktop/gui/style/StyledInput.js
 packages/app-desktop/gui/style/StyledInput.js.map
+packages/app-desktop/gui/style/StyledLink.d.ts
+packages/app-desktop/gui/style/StyledLink.js
+packages/app-desktop/gui/style/StyledLink.js.map
 packages/app-desktop/gui/style/StyledMessage.d.ts
 packages/app-desktop/gui/style/StyledMessage.js
 packages/app-desktop/gui/style/StyledMessage.js.map

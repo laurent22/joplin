@@ -7,6 +7,7 @@ const StyledMessage = styled.div`
 	color: ${props => props.theme.color};
 	font-family: ${props => props.theme.fontFamily};
 	padding: ${props => props.type === 'error' ? props.theme.mainPadding : '0'}px;
+	word-break: break-all;
 `;
 
 export default StyledMessage;
