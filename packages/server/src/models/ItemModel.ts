@@ -416,7 +416,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const path = await this.joplinItemPath(jopId);
 		if (!path.length) throw new ApiError(`Cannot retrieve path for item: ${jopId}`, null, 'noPathForItem');
 		const rootFolderItem = path[path.length - 1];
-		const share = await this.models().share().itemShare(ShareType.JoplinRootFolder, rootFolderItem.id);
+		const share = await this.models().share().itemShare(ShareType.Folder, rootFolderItem.id);
 		if (!share) return null;
 
 		return {

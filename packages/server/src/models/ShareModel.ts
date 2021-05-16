@@ -16,7 +16,7 @@ export default class ShareModel extends BaseModel<Share> {
 		if (action === AclAction.Create) {
 			if (!await this.models().item().userHasItem(user.id, resource.item_id)) throw new ErrorForbidden('cannot share an item not owned by the user');
 
-			if (resource.type === ShareType.JoplinRootFolder) {
+			if (resource.type === ShareType.Folder) {
 				const item = await this.models().item().loadByJopId(user.id, resource.folder_id);
 				if (item.jop_parent_id) throw new ErrorForbidden('A shared notebook must be at the root');
 			}
@@ -44,8 +44,8 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	protected async validate(share: Share, options: ValidateOptions = {}): Promise<Share> {
-		if ('type' in share && ![ShareType.Link, ShareType.App, ShareType.JoplinRootFolder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
-		if (share.type !== ShareType.Link && await this.itemIsShared(share.type, share.item_id)) throw new ErrorBadRequest('A shared item cannot be shared again');
+		if ('type' in share && ![ShareType.Note, ShareType.Folder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
+		if (share.type !== ShareType.Note && await this.itemIsShared(share.type, share.item_id)) throw new ErrorBadRequest('A shared item cannot be shared again');
 
 		const item = await this.models().item().load(share.item_id);
 		if (!item) throw new ErrorNotFound(`Could not find item: ${share.item_id}`);
@@ -299,7 +299,7 @@ export default class ShareModel extends BaseModel<Share> {
 		if (share) return share;
 
 		const shareToSave = {
-			type: ShareType.JoplinRootFolder,
+			type: ShareType.Folder,
 			item_id: folderItem.id,
 			owner_id: owner.id,
 			folder_id: folderId,
@@ -317,7 +317,7 @@ export default class ShareModel extends BaseModel<Share> {
 		if (existingShare) return existingShare;
 
 		const shareToSave = {
-			type: ShareType.Link,
+			type: ShareType.Note,
 			item_id: noteItem.id,
 			owner_id: owner.id,
 			note_id: noteId,

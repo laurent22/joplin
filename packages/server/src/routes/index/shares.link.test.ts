@@ -62,7 +62,7 @@ describe('shares.link', function() {
 		});
 
 		const share = await postApi<Share>(session.id, 'shares', {
-			type: ShareType.Link,
+			type: ShareType.Note,
 			note_id: noteItem.jop_id,
 		});
 
@@ -82,7 +82,7 @@ describe('shares.link', function() {
 		});
 
 		const share = await postApi<Share>(session.id, 'shares', {
-			type: ShareType.Link,
+			type: ShareType.Note,
 			note_id: noteItem.jop_id,
 		});
 
@@ -103,7 +103,7 @@ describe('shares.link', function() {
 		await createItem(session.id, 'root:/.resource/96765a68655f4446b3dbad7d41b6566e:', await testImageBuffer());
 
 		const share = await postApi<Share>(session.id, 'shares', {
-			type: ShareType.Link,
+			type: ShareType.Note,
 			note_id: noteItem.jop_id,
 		});
 
@@ -137,7 +137,7 @@ describe('shares.link', function() {
 			});
 
 			const share = await postApi<Share>(session.id, 'shares', {
-				type: ShareType.Link,
+				type: ShareType.Note,
 				note_id: noteItem.jop_id,
 			});
 
@@ -151,7 +151,7 @@ describe('shares.link', function() {
 			});
 
 			const share = await postApi<Share>(session.id, 'shares', {
-				type: ShareType.Link,
+				type: ShareType.Note,
 				note_id: noteItem.jop_id,
 			});
 

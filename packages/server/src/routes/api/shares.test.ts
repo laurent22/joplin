@@ -37,7 +37,7 @@ describe('shares', function() {
 		await createItemTree(user1.id, '', tree);
 		const folderItem = await itemModel1.loadByJopId(user1.id, '000000000000000000000000000000F1');
 		const noteItem2 = await itemModel1.loadByJopId(user1.id, '00000000000000000000000000000002');
-		const { share } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+		const { share } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderItem);
 
 		// Only share with user 3, without accepting it
 		await postApi(session1.id, `shares/${share.id}/users`, {
@@ -54,11 +54,11 @@ describe('shares', function() {
 
 			const share1: Share = shares.items.find(it => it.folder_id === '000000000000000000000000000000F1');
 			expect(share1).toBeTruthy();
-			expect(share1.type).toBe(ShareType.JoplinRootFolder);
+			expect(share1.type).toBe(ShareType.Folder);
 
 			const share2: Share = shares.items.find(it => it.note_id === '00000000000000000000000000000002');
 			expect(share2).toBeTruthy();
-			expect(share2.type).toBe(ShareType.Link);
+			expect(share2.type).toBe(ShareType.Note);
 
 			const shareUsers = await getApi<PaginatedResults>(session1.id, `shares/${share1.id}/users`);
 			expect(shareUsers.items.length).toBe(2);

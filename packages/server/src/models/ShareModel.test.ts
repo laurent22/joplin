@@ -27,7 +27,7 @@ describe('ShareModel', function() {
 		error = await checkThrowAsync(async () => await models().share().createShare(user.id, 20 as ShareType, item.id));
 		expect(error instanceof ErrorBadRequest).toBe(true);
 
-		error = await checkThrowAsync(async () => await models().share().createShare(user.id, ShareType.Link, 'doesntexist'));
+		error = await checkThrowAsync(async () => await models().share().createShare(user.id, ShareType.Note, 'doesntexist'));
 		expect(error instanceof ErrorNotFound).toBe(true);
 	});
 
@@ -49,14 +49,14 @@ describe('ShareModel', function() {
 		});
 
 		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
-		await shareWithUserAndAccept(session1.id, session3.id, user3, ShareType.JoplinRootFolder, folderItem1);
+		await shareWithUserAndAccept(session1.id, session3.id, user3, ShareType.Folder, folderItem1);
 
 		const folderItem2 = await models().item().loadByJopId(user2.id, '000000000000000000000000000000F2');
-		await shareWithUserAndAccept(session2.id, session1.id, user1, ShareType.JoplinRootFolder, folderItem2);
+		await shareWithUserAndAccept(session2.id, session1.id, user1, ShareType.Folder, folderItem2);
 
-		const shares1 = await models().share().byUserId(user1.id, ShareType.JoplinRootFolder);
-		const shares2 = await models().share().byUserId(user2.id, ShareType.JoplinRootFolder);
-		const shares3 = await models().share().byUserId(user3.id, ShareType.JoplinRootFolder);
+		const shares1 = await models().share().byUserId(user1.id, ShareType.Folder);
+		const shares2 = await models().share().byUserId(user2.id, ShareType.Folder);
+		const shares3 = await models().share().byUserId(user3.id, ShareType.Folder);
 
 		expect(shares1.length).toBe(2);
 		expect(shares1.find(s => s.folder_id === '000000000000000000000000000000F1')).toBeTruthy();

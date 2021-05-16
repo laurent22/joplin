@@ -92,7 +92,7 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	const shareModel = ctx.models.share();
 	const share = await shareModel.load(path.id);
 
-	if (share && share.type === ShareType.Link) {
+	if (share && share.type === ShareType.Note) {
 		// No authentication is necessary - anyone who knows the share ID is allowed
 		// to access the file. It is essentially public.
 		return shareModel.toApiOutput(share);

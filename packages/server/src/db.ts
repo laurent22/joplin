@@ -237,9 +237,8 @@ export function changeTypeToString(t: ChangeType): string {
 }
 
 export enum ShareType {
-	Link = 1, // When a note is shared via a public link
-	App = 2, // When a note is shared with another user on the same server instance
-	JoplinRootFolder = 3,
+	Note = 1, // When a note is shared via a public link
+	Folder = 3, // When a complete folder is shared with another Joplin Server user
 }
 
 export enum ShareUserStatus {

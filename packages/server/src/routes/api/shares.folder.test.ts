@@ -32,7 +32,7 @@ describe('shares.folder', function() {
 		// Create the file share object
 		// ----------------------------------------------------------------
 		const share = await postApi<Share>(session1.id, 'shares', {
-			type: ShareType.JoplinRootFolder,
+			type: ShareType.Folder,
 			folder_id: folderItem.jop_id,
 		});
 

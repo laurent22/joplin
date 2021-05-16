@@ -128,7 +128,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	public async deleteByShare(share: Share): Promise<void> {
 		// Notes that are shared by link do not have associated ShareUser items,
 		// so there's nothing to do.
-		if (share.type !== ShareType.JoplinRootFolder) return;
+		if (share.type !== ShareType.Folder) return;
 
 		const shareUsers = await this.byShareId(share.id, null);
 
