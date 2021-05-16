@@ -52,6 +52,7 @@ export default async function(ctx: AppContext) {
 				content: {
 					error,
 					stack: ctx.env === Env.Dev ? error.stack : '',
+					owner: ctx.owner,
 				},
 			};
 			ctx.response.body = await mustache().renderView(view);
