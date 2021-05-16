@@ -131,6 +131,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		if (share.type !== ShareType.Folder) return;
 
 		const shareUsers = await this.byShareId(share.id, null);
+		if (!shareUsers.length) return;
 
 		await this.withTransaction(async () => {
 			await this.delete(shareUsers.map(s => s.id));
