@@ -1,10 +1,10 @@
 import { beforeAllDb, afterAllTests, beforeEachDb, createItemTree, createUserAndSession } from '../../utils/testing/testUtils';
 import { execRequest } from '../../utils/testing/apiUtils';
 
-describe('index_items', function() {
+describe('index_changes', function() {
 
 	beforeAll(async () => {
-		await beforeAllDb('index_items');
+		await beforeAllDb('index_changes');
 	});
 
 	afterAll(async () => {
