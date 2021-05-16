@@ -32,7 +32,11 @@ Data    |  ("Length" bytes) (ASCII)
 
 ## Master Keys
 
+<<<<<<< HEAD
 The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a [strong encryption method](https://github.com/laurent22/joplin/blob/f21199a7f38b43d1f350ee81f84d4f335cb285b3/packages/lib/services/EncryptionService.js#L374).
+=======
+The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a [strong encryption method](https://github.com/laurent22/joplin/blob/fb6dee32ac035b00153106273135fb16be4b4fa5/ReactNativeClient/lib/services/EncryptionService.js#L263).
+>>>>>>> e720c91f7259727ea9479c3a5ab1bedb65567bed
 
 These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.
 
