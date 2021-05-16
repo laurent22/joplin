@@ -10,47 +10,47 @@ const declarations: CommandDeclaration[] = [
 	},
 	{
 		name: 'textCopy',
-		label: () => _('Copy'),
+		label: () => _('Copy(Ctrl+C)'),
 		role: 'copy',
 	},
 	{
 		name: 'textCut',
-		label: () => _('Cut'),
+		label: () => _('Cut(Ctrl+X)'),
 		role: 'cut',
 	},
 	{
 		name: 'textPaste',
-		label: () => _('Paste'),
+		label: () => _('Paste(Ctrl+V)'),
 		role: 'paste',
 	},
 	{
 		name: 'textSelectAll',
-		label: () => _('Select all'),
+		label: () => _('Select all(Ctrl+A)'),
 		role: 'selectAll',
 	},
 	{
 		name: 'textBold',
-		label: () => _('Bold'),
+		label: () => _('Bold(Ctrl+B)'),
 		iconName: 'icon-bold',
 	},
 	{
 		name: 'textItalic',
-		label: () => _('Italic'),
+		label: () => _('Italic(Ctrl+I)'),
 		iconName: 'icon-italic',
 	},
 	{
 		name: 'textLink',
-		label: () => _('Hyperlink'),
+		label: () => _('Hyperlink(Ctrl+K)'),
 		iconName: 'icon-link',
 	},
 	{
 		name: 'textCode',
-		label: () => _('Code'),
+		label: () => _('Code(Ctrl+`)'),
 		iconName: 'icon-code',
 	},
 	{
 		name: 'attachFile',
-		label: () => _('Attach file'),
+		label: () => _('Attach file(Ctrl+Shift+A)'),
 		iconName: 'icon-attachment',
 	},
 	{
@@ -80,7 +80,7 @@ const declarations: CommandDeclaration[] = [
 	},
 	{
 		name: 'insertDateTime',
-		label: () => _('Insert Date Time'),
+		label: () => _('Insert Date Time(Ctrl+Shift+T)'),
 		iconName: 'icon-add-date',
 	},
 	{
