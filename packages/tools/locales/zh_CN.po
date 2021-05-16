@@ -2616,11 +2616,11 @@ msgstr "适用于 Joplin 全域应用样式的自定义样式表"
 
 #: packages/lib/models/Setting.js:774
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "重新上传本地数据到同步目标"
 
 #: packages/lib/models/Setting.js:784
 msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgstr "删除本地数据并从同步目标导入数据"
 
 #: packages/lib/models/Setting.js:789
 msgid "Automatically update the application"

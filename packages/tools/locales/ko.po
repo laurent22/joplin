@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -121,11 +123,11 @@ msgstr "다운로드"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "이 버전 넘기기"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "전체 바뀐내용 보기"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -269,14 +271,12 @@ msgid "Retry"
 msgstr "재시도"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:113
-#, fuzzy
 msgid "Advanced tools"
-msgstr "고급 옵션"
+msgstr "고급 도구"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:115
-#, fuzzy
 msgid "Export debug report"
-msgstr "디버그 보고서 내보내기"
+msgstr "디버그 보거 내보내기"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -758,15 +758,15 @@ msgstr "더 많은 정보"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:468
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) 님이 당신과 노트북을 공유하길 원합니다."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:470
 msgid "Accept"
-msgstr ""
+msgstr "확인"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:472
 msgid "Reject"
-msgstr ""
+msgstr "거절"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 msgid "Some items cannot be synchronised."
@@ -851,9 +851,8 @@ msgid "Toggle editors"
 msgstr "편집기 전환"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "노트 공유..."
+msgstr "노트북 공유…"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -1491,13 +1490,12 @@ msgid "You do not have any installed plugin."
 msgstr "설치된 플러그인이 없습니다."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "플러그인을 설치할 수 없습니다: %s"
+msgstr "플러그인 저장소에 접속할 수 없습니다"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "다시 시도"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1710,19 +1708,20 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "공유 링크 복사"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "공유"
+msgstr "공유하지 않기"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"초대하신 분을 제거하시겠습니까? 제거하게 된다면 더 이상 공유 노트북에 접근할"
+"수 없게 됩니다."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr " 추가"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1732,40 +1731,39 @@ msgstr "공유"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "공유 수신자가 아직 초대를 수락하지 않았습니다"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "공유 수신자가 초대를 거부했습니다"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "공유 수신자가 초대를 승락하였습니다"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "공유 수신자:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
-msgstr "동기화 중..."
+msgstr "동기화 중…"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "노트 공유..."
+msgstr "노트북을 공유하는 중…"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"현재 노트북을 공유하지 많으시겠습니까? 공유자는 더 이상 해당 노트북에 접근이 "
+"불가능합니다."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "공유된 노트들"
+msgstr "노트북 공유"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
 msgid "Toggle safe mode"
@@ -2384,9 +2382,8 @@ msgid "Joplin Server URL"
 msgstr "Joplin 서버 URL"
 
 #: packages/lib/models/Setting.js:335
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplin 서버"
+msgstr "Joplin 서버 email"
 
 #: packages/lib/models/Setting.js:346
 msgid "Joplin Server password"
@@ -2655,11 +2652,11 @@ msgstr "Joplin 앱에 전역적으로 적용되는 사용자 정의 스타일시
 
 #: packages/lib/models/Setting.js:774
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "동기화 서버에 로컬 데이터 재 업로드"
 
 #: packages/lib/models/Setting.js:784
 msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgstr "로컬 데이터를 지우고 동기화 서버의 데이터를 받아오기"
 
 #: packages/lib/models/Setting.js:789
 msgid "Automatically update the application"
@@ -3798,6 +3795,7 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"텍스트 파일에 포함된 명령들을 실행합니다. 한 줄에 하나씩 명령이 실행됩니다."
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
