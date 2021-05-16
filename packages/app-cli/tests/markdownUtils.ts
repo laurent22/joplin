@@ -47,8 +47,7 @@ describe('markdownUtils', function() {
 			const md = testCases[i][0];
 			const actual = markdownUtils.extractImageUrls(md);
 			const expected = testCases[i][1];
-
-			expect(actual.join(' ')).toBe(expected.join(' '));
+			expect(actual.join(' ')).toBe((expected as string[]).join(' '));
 		}
 	}));
 
@@ -75,7 +74,7 @@ describe('markdownUtils', function() {
 			const actual = markdownUtils.extractFileUrls(md);
 			const expected = testCases[i][1];
 
-			expect(actual.join(' ')).toBe(expected.join(' '));
+			expect(actual.join(' ')).toBe((expected as string[]).join(' '));
 		}
 	}));
 
