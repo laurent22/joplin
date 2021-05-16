@@ -84,4 +84,20 @@ describe('ShareModel', function() {
 		expect(share1.id).toBe(share2.id);
 	});
 
+	test('should delete a note that has been shared', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		await models().share().shareNote(user1, '00000000000000000000000000000001');
+		const noteItem = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+		await models().item().delete(noteItem.id);
+		expect(await models().item().load(noteItem.id)).toBeFalsy();
+	});
+
+
 });

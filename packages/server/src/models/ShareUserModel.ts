@@ -1,4 +1,4 @@
-import { Item, Share, ShareUser, ShareUserStatus, User, Uuid } from '../db';
+import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../db';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 
@@ -123,23 +123,13 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 			return this.save({ ...shareUser, status });
 		});
-
-		// const item = await this.models().item().load(share.item_id);
-
-		// return this.withTransaction<Item>(async () => {
-		// 	await this.save({ ...shareUser, status });
-
-		// 	if (status === ShareUserStatus.Accepted) {
-		// 		if (share.type === ShareType.JoplinRootFolder) {
-		// 			// await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
-		// 		} else if (share.type === ShareType.App) {
-		// 			await this.models().userItem().add(userId, share.item_id, share.id);
-		// 		}
-		// 	}
-		// });
 	}
 
 	public async deleteByShare(share: Share): Promise<void> {
+		// Notes that are shared by link do not have associated ShareUser items,
+		// so there's nothing to do.
+		if (share.type !== ShareType.JoplinRootFolder) return;
+
 		const shareUsers = await this.byShareId(share.id, null);
 
 		await this.withTransaction(async () => {
