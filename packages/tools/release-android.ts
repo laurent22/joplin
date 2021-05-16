@@ -1,5 +1,5 @@
-const fs = require('fs-extra');
-const { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists } = require('./tool-utils.js');
+import * as fs from 'fs-extra';
+import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, completeReleaseWithChangelog } from './tool-utils';
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -9,8 +9,14 @@ const rootDir = path.dirname(path.dirname(__dirname));
 const rnDir = `${rootDir}/packages/app-mobile`;
 const releaseDir = `${rnDir}/dist`;
 
-function increaseGradleVersionCode(content) {
-	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode) {
+interface Release {
+	downloadUrl: string;
+	apkFilename: string;
+	apkFilePath: string;
+}
+
+function increaseGradleVersionCode(content: string) {
+	const newContent = content.replace(/versionCode\s+(\d+)/, function(_a, versionCode: string) {
 		const n = Number(versionCode);
 		if (isNaN(n) || !n) throw new Error(`Invalid version code: ${versionCode}`);
 		return `versionCode ${n + 1}`;
@@ -21,8 +27,8 @@ function increaseGradleVersionCode(content) {
 	return newContent;
 }
 
-function increaseGradleVersionName(content) {
-	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, function(match, prefix, buildNum) {
+function increaseGradleVersionName(content: string) {
+	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, function(_match, prefix: string, buildNum: string) {
 		const n = Number(buildNum);
 		if (isNaN(n)) throw new Error(`Invalid version code: ${buildNum}`);
 		return `${prefix + (n + 1)}"`;
@@ -41,14 +47,14 @@ function updateGradleConfig() {
 	return content;
 }
 
-function gradleVersionName(content) {
+function gradleVersionName(content: string) {
 	const matches = content.match(/versionName\s+"(\d+?\.\d+?\.\d+)"/);
 	if (!matches || matches.length < 1) throw new Error('Cannot get gradle version name');
 	return matches[1];
 }
 
-async function createRelease(name, tagName, version) {
-	const originalContents = {};
+async function createRelease(name: string, tagName: string, version: string): Promise<Release> {
+	const originalContents: Record<string, string> = {};
 	const suffix = version + (name === 'main' ? '' : `-${name}`);
 
 	console.info(`Creating release: ${suffix}`);
@@ -150,7 +156,7 @@ async function main() {
 	const version = gradleVersionName(newContent);
 	const tagName = `android-v${version}`;
 	const releaseNames = ['main', '32bit'];
-	const releaseFiles = {};
+	const releaseFiles: Record<string, Release> = {};
 
 	for (const releaseName of releaseNames) {
 		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
@@ -204,6 +210,9 @@ async function main() {
 	}
 
 	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
+
+	const changelogPath = `${rootDir}/readme/changelog_android.md`;
+	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Android', isPreRelease);
 }
 
 main().catch((error) => {

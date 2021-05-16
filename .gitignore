@@ -1563,6 +1563,9 @@ packages/tools/generate-database-types.js.map
 packages/tools/lerna-add.d.ts
 packages/tools/lerna-add.js
 packages/tools/lerna-add.js.map
+packages/tools/release-android.d.ts
+packages/tools/release-android.js
+packages/tools/release-android.js.map
 packages/tools/release-cli.d.ts
 packages/tools/release-cli.js
 packages/tools/release-cli.js.map
