@@ -69,4 +69,19 @@ describe('ShareModel', function() {
 		expect(shares3.find(s => s.folder_id === '000000000000000000000000000000F1')).toBeTruthy();
 	});
 
+	test('should generate only one link per shared note', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const share1 = await models().share().shareNote(user1, '00000000000000000000000000000001');
+		const share2 = await models().share().shareNote(user1, '00000000000000000000000000000001');
+
+		expect(share1.id).toBe(share2.id);
+	});
+
 });
