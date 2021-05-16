@@ -695,11 +695,18 @@ function useMenu(props: Props) {
 						},
 					],
 				},
+				folder: {
+					label: _('Note&book'),
+					submenu: [
+						menuItemDic.showShareFolderDialog,
+					],
+				},
 				note: {
 					label: _('&Note'),
 					submenu: [
 						menuItemDic.toggleExternalEditing,
 						menuItemDic.setTags,
+						menuItemDic.showShareNoteDialog,
 						separator(),
 						menuItemDic.showNoteContentProperties,
 					],
@@ -818,6 +825,7 @@ function useMenu(props: Props) {
 				rootMenus.edit,
 				rootMenus.view,
 				rootMenus.go,
+				rootMenus.folder,
 				rootMenus.note,
 				rootMenus.tools,
 				rootMenus.help,

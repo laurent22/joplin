@@ -1106,6 +1106,9 @@ packages/lib/services/UndoRedoService.js.map
 packages/lib/services/WhenClause.d.ts
 packages/lib/services/WhenClause.js
 packages/lib/services/WhenClause.js.map
+packages/lib/services/WhenClause.test.d.ts
+packages/lib/services/WhenClause.test.js
+packages/lib/services/WhenClause.test.js.map
 packages/lib/services/commands/MenuUtils.d.ts
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/MenuUtils.js.map

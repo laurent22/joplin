@@ -18,6 +18,6 @@ export const runtime = (comp: any): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: 'folderIsShareRootAndOwnedByUser || !folderIsShared',
+		enabledCondition: 'joplinServerConnected && (folderIsShareRootAndOwnedByUser || !folderIsShared)',
 	};
 };
