@@ -6,7 +6,7 @@ import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
 import ItemModel, { ItemSaveOption } from '../../models/ItemModel';
-import { requestChangePagination, requestPagination } from '../../models/utils/pagination';
+import { requestDeltaPagination, requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 
@@ -97,7 +97,7 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 
 router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
 	const changeModel = ctx.models.change();
-	return changeModel.allForUser(ctx.owner.id, requestChangePagination(ctx.query));
+	return changeModel.delta(ctx.owner.id, requestDeltaPagination(ctx.query));
 });
 
 router.get('api/items/:id/children', async (path: SubPath, ctx: AppContext) => {

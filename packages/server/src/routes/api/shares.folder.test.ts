@@ -556,7 +556,7 @@ describe('shares.folder', function() {
 			'200000000000000000000000000000F2': {},
 		});
 
-		let latestChanges2 = await models().change().allForUser(user2.id);
+		let latestChanges2 = await models().change().delta(user2.id);
 		const cursor2 = latestChanges2.cursor;
 
 		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
@@ -565,7 +565,7 @@ describe('shares.folder', function() {
 			},
 		});
 
-		latestChanges2 = await models().change().allForUser(user2.id, { cursor: cursor2 });
+		latestChanges2 = await models().change().delta(user2.id, { cursor: cursor2 });
 		expect(latestChanges2.items.length).toBe(2);
 	});
 
@@ -579,7 +579,7 @@ describe('shares.folder', function() {
 			},
 		});
 
-		let latestChanges1 = await models().change().allForUser(user1.id);
+		let latestChanges1 = await models().change().delta(user1.id);
 		const cursor1 = latestChanges1.cursor;
 
 		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
@@ -593,7 +593,7 @@ describe('shares.folder', function() {
 
 		await models().share().updateSharedItems3();
 
-		latestChanges1 = await models().change().allForUser(user1.id, { cursor: cursor1 });
+		latestChanges1 = await models().change().delta(user1.id, { cursor: cursor1 });
 		expect(latestChanges1.items.length).toBe(1);
 		expect(latestChanges1.items[0].item_name).toBe('00000000000000000000000000000002.md');
 	});
@@ -608,7 +608,7 @@ describe('shares.folder', function() {
 			},
 		});
 
-		let latestChanges1 = await models().change().allForUser(user1.id);
+		let latestChanges1 = await models().change().delta(user1.id);
 		const cursor1 = latestChanges1.cursor;
 
 		const folderItem2 = await createFolder(session2.id, { id: '000000000000000000000000000000F2', title: 'folder2' });
@@ -618,7 +618,7 @@ describe('shares.folder', function() {
 		await updateNote(session2.id, { ...note, parent_id: folderItem2.jop_id, share_id: '' });
 		await models().share().updateSharedItems3();
 
-		latestChanges1 = await models().change().allForUser(user1.id, { cursor: cursor1 });
+		latestChanges1 = await models().change().delta(user1.id, { cursor: cursor1 });
 		expect(latestChanges1.items.length).toBe(1);
 		expect(latestChanges1.items[0].type).toBe(ChangeType.Delete);
 		expect(latestChanges1.items[0].item_id).toBe(noteItem.id);

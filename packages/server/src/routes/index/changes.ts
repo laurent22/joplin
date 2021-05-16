@@ -50,7 +50,7 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	// 	]
 	// }
 
-	const paginatedChanges = await changeModel.allForUser(ctx.owner.id, pagination, { compressChanges: false });
+	const paginatedChanges = await changeModel.allByUser(ctx.owner.id, pagination);
 	const itemsToDisplay: ItemToDisplay[] = [];
 	const items = await ctx.models.item().loadByIds(paginatedChanges.items.map(i => i.item_id), { fields: ['id'] });
 

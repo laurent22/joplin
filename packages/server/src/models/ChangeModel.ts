@@ -1,8 +1,9 @@
+import { Knex } from 'knex';
 import { Change, ChangeType, Item, Uuid } from '../db';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel, { SaveOptions } from './BaseModel';
-import { PaginatedResults } from './utils/pagination';
+import { PaginatedResults, Pagination, PaginationOrderDir } from './utils/pagination';
 
 export interface ChangeWithItem {
 	item: Item;
@@ -26,15 +27,11 @@ export interface ChangePreviousItem {
 	jop_share_id: string;
 }
 
-export function defaultChangePagination(): ChangePagination {
+export function defaultDeltaPagination(): ChangePagination {
 	return {
 		limit: 100,
 		cursor: '',
 	};
-}
-
-interface AllForUserOptions {
-	compressChanges?: boolean;
 }
 
 export default class ChangeModel extends BaseModel<Change> {
@@ -71,24 +68,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return results;
 	}
 
-	public async allForUser(userId: Uuid, pagination: ChangePagination = null, options: AllForUserOptions = null): Promise<PaginatedChanges> {
-		options = {
-			compressChanges: true,
-			...options,
-		};
-
-		pagination = {
-			...defaultChangePagination(),
-			...pagination,
-		};
-
-		let changeAtCursor: Change = null;
-
-		if (pagination.cursor) {
-			changeAtCursor = await this.load(pagination.cursor) as Change;
-			if (!changeAtCursor) throw new ErrorResyncRequired();
-		}
-
+	private changesForUserQuery(userId: Uuid): Knex.QueryBuilder {
 		// When need to get:
 		//
 		// - All the CREATE and DELETE changes associated with the user
@@ -98,7 +78,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		// UPDATE changes do not have the user_id set because they are specific
 		// to the item, not to a particular user.
 
-		const query = this
+		return this
 			.db('changes')
 			.select([
 				'id',
@@ -116,8 +96,53 @@ export default class ChangeModel extends BaseModel<Change> {
 					// https://github.com/knex/knex/issues/1851
 					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
 			});
+	}
 
-		// If a cursor was provided, apply it to both queries.
+	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedChanges> {
+		pagination = {
+			page: 1,
+			limit: 100,
+			order: [{ by: 'counter', dir: PaginationOrderDir.ASC }],
+			...pagination,
+		};
+
+		const query = this.changesForUserQuery(userId);
+		const countQuery = query.clone();
+		const itemCount = (await countQuery.count('id', { as: 'total' }))[0].total;
+
+		void query
+			.orderBy(pagination.order[0].by, pagination.order[0].dir)
+			.offset((pagination.page - 1) * pagination.limit)
+			.limit(pagination.limit) as any[];
+
+		const changes = await query;
+
+		return {
+			items: changes,
+			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
+			// If there's no change, we return the previous cursor.
+			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
+			has_more: changes.length >= pagination.limit,
+			page_count: itemCount !== null ? Math.ceil(itemCount / pagination.limit) : undefined,
+		};
+	}
+
+	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedChanges> {
+		pagination = {
+			...defaultDeltaPagination(),
+			...pagination,
+		};
+
+		let changeAtCursor: Change = null;
+
+		if (pagination.cursor) {
+			changeAtCursor = await this.load(pagination.cursor) as Change;
+			if (!changeAtCursor) throw new ErrorResyncRequired();
+		}
+
+		const query = this.changesForUserQuery(userId);
+
+		// If a cursor was provided, apply it to the query.
 		if (changeAtCursor) {
 			void query.where('counter', '>', changeAtCursor.counter);
 		}
@@ -128,7 +153,7 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const changes = await query;
 
-		const finalChanges = options.compressChanges ? await this.removeDeletedItems(this.compressChanges(changes)) : changes;
+		const finalChanges = await this.removeDeletedItems(this.compressChanges(changes));
 
 		return {
 			items: finalChanges,
