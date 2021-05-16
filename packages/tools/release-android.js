@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists } = require('./tool-utils.js');
+const { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -140,6 +140,8 @@ async function main() {
 	const argv = require('yargs').argv;
 
 	if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
+
+	await gitPullTry(false);
 
 	const isPreRelease = argv.type === 'prerelease';
 
