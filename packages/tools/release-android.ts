@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, completeReleaseWithChangelog } from './tool-utils';
+import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -146,6 +146,8 @@ async function main() {
 	const argv = require('yargs').argv;
 
 	if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
+
+	await gitPullTry(false);
 
 	const isPreRelease = argv.type === 'prerelease';
 
