@@ -1,8 +1,10 @@
 import produce, { Draft } from 'immer';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
+import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultState as shareServiceDefaultState, State as ShareServiceState } from './services/share/reducer';
 import Note from './models/Note';
 import Folder from './models/Folder';
 import BaseModel from './BaseModel';
+import { Store } from 'redux';
 const ArrayUtils = require('./ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -14,6 +16,12 @@ additionalReducers.push({
 	stateRootKey: pluginServiceStateRootKey,
 	defaultState: pluginServiceDefaultState,
 	reducer: pluginServiceReducer,
+});
+
+additionalReducers.push({
+	stateRootKey: shareServiceStateRootKey,
+	defaultState: shareServiceDefaultState,
+	reducer: shareServiceReducer,
 });
 
 interface StateLastSelectedNotesIds {
@@ -86,6 +94,7 @@ export interface State {
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
+	shareService: ShareServiceState;
 }
 
 export const defaultState: State = {
@@ -153,10 +162,21 @@ export const defaultState: State = {
 	hasEncryptedItems: false,
 
 	pluginService: pluginServiceDefaultState,
+	shareService: shareServiceDefaultState,
 };
 
 for (const additionalReducer of additionalReducers) {
 	(defaultState as any)[additionalReducer.stateRootKey] = additionalReducer.defaultState;
+}
+
+let store_: Store<any> = null;
+
+export function setStore(v: Store<any>) {
+	store_ = v;
+}
+
+export function store(): Store<any> {
+	return store_;
 }
 
 export const MAX_HISTORY = 200;

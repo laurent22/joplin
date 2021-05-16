@@ -1,7 +1,7 @@
-import { File, ItemAddressingType } from '../db';
-import { ErrorBadRequest } from './errors';
+import { Item, ItemAddressingType } from '../db';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
-import { AppContext } from './types';
+import { AppContext, HttpMethod } from './types';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -112,14 +112,14 @@ export function isPathBasedAddressing(fileId: string): boolean {
 //
 // root:/Documents/MyFile.md:/content
 // ABCDEFG/content
-export function parseSubPath(basePath: string, p: string): SubPath {
+export function parseSubPath(basePath: string, p: string, rawPath: string = null): SubPath {
 	p = rtrimSlashes(ltrimSlashes(p));
 
 	const output: SubPath = {
 		id: '',
 		link: '',
 		addressingType: ItemAddressingType.Id,
-		raw: p,
+		raw: rawPath === null ? p : ltrimSlashes(rawPath),
 		schema: '',
 	};
 
@@ -151,14 +151,29 @@ export function parseSubPath(basePath: string, p: string): SubPath {
 	return output;
 }
 
-export function routeResponseFormat(match: MatchedRoute, context: AppContext): RouteResponseFormat {
-	const rawPath = context.path;
-	if (match && match.route.responseFormat) return match.route.responseFormat;
+export function routeResponseFormat(context: AppContext): RouteResponseFormat {
+	// const rawPath = context.path;
+	// if (match && match.route.responseFormat) return match.route.responseFormat;
 
-	let path = rawPath;
-	if (match) path = match.basePath ? match.basePath : match.subPath.raw;
+	// let path = rawPath;
+	// if (match) path = match.basePath ? match.basePath : match.subPath.raw;
 
+	const path = context.path;
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
+}
+
+export async function execRequest(routes: Routers, ctx: AppContext) {
+	const match = findMatchingRoute(ctx.path, routes);
+	if (!match) throw new ErrorNotFound();
+
+	const routeHandler = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+
+	// This is a generic catch-all for all private end points - if we
+	// couldn't get a valid session, we exit now. Individual end points
+	// might have additional permission checks depending on the action.
+	if (!match.route.public && !ctx.owner) throw new ErrorForbidden();
+
+	return routeHandler(match.subPath, ctx);
 }
 
 // In a path such as "/api/files/SOME_ID/content" we want to find:
@@ -172,10 +187,16 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	// an empty string. So for example we now have ['api', 'files', 'SOME_ID', 'content'].
 	splittedPath.splice(0, 1);
 
+	let namespace = '';
+	if (splittedPath[0] === 'apps') {
+		namespace = splittedPath.splice(0, 2).join('/');
+	}
+
+	// Paths such as "/api/files/:id" will be processed here
 	if (splittedPath.length >= 2) {
 		// Create the base path, eg. "api/files", to match it to one of the
-		// routes.s
-		const basePath = `${splittedPath[0]}/${splittedPath[1]}`;
+		// routes.
+		const basePath = `${namespace ? `${namespace}/` : ''}${splittedPath[0]}/${splittedPath[1]}`;
 		if (routes[basePath]) {
 			// Remove the base path from the array so that parseSubPath() can
 			// extract the ID and link from the URL. So the array will contain
@@ -189,30 +210,33 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 		}
 	}
 
+	// Paths such as "/users/:id" or "/apps/joplin/notes/:id" will get here
 	const basePath = splittedPath[0];
-	if (routes[basePath]) {
+	const basePathNS = (namespace ? `${namespace}/` : '') + basePath;
+	if (routes[basePathNS]) {
 		splittedPath.splice(0, 1);
 		return {
-			route: routes[basePath],
+			route: routes[basePathNS],
 			basePath: basePath,
 			subPath: parseSubPath(basePath, `/${splittedPath.join('/')}`),
 		};
 	}
 
+	// Default routes - to process CSS or JS files for example
 	if (routes['']) {
 		return {
 			route: routes[''],
 			basePath: '',
-			subPath: parseSubPath('', `/${splittedPath.join('/')}`),
+			subPath: parseSubPath('', `/${splittedPath.join('/')}`, path),
 		};
 	}
 
 	throw new Error('Unreachable');
 }
 
-export function respondWithFileContent(koaResponse: any, file: File): Response {
-	koaResponse.body = file.content;
-	koaResponse.set('Content-Type', file.mime_type);
-	koaResponse.set('Content-Length', file.size.toString());
+export function respondWithItemContent(koaResponse: any, item: Item, content: Buffer): Response {
+	koaResponse.body = item.jop_type > 0 ? content.toString() : content;
+	koaResponse.set('Content-Type', item.mime_type);
+	koaResponse.set('Content-Length', content.byteLength);
 	return new Response(ResponseType.KoaResponse, koaResponse);
 }

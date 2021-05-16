@@ -163,7 +163,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
 	usePluginServiceRegistration(ref);
-	useContextMenu(editor, props.plugins);
+	useContextMenu(editor, props.plugins, props.dispatch);
 
 	const dispatchDidUpdate = (editor: any) => {
 		if (dispatchDidUpdateIID_) shim.clearTimeout(dispatchDidUpdateIID_);

@@ -1,6 +1,8 @@
-import { File, User } from '../../db';
+import { User } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError } from '../../utils/testing/testUtils';
+import { ErrorForbidden } from '../../utils/errors';
+import { execRequest } from '../../utils/testing/apiUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
 
 export async function postUser(sessionId: string, email: string, password: string): Promise<User> {
 	const context = await koaAppContext({
@@ -68,28 +70,22 @@ describe('index_users', function() {
 		await beforeEachDb();
 	});
 
-	test('should create a new user along with his root file', async function() {
-		const { user: admin, session } = await createUserAndSession(1, true);
+	test('should create a new user', async function() {
+		const { session } = await createUserAndSession(1, true);
 
 		await postUser(session.id, 'test@example.com', '123456');
-		const newUser = await models().user({ userId: admin.id }).loadByEmail('test@example.com');
+		const newUser = await models().user().loadByEmail('test@example.com');
 
 		expect(!!newUser).toBe(true);
 		expect(!!newUser.id).toBe(true);
 		expect(!!newUser.is_admin).toBe(false);
 		expect(!!newUser.email).toBe(true);
 
-		const userModel = models().user({ userId: newUser.id });
+		const userModel = models().user();
 		const userFromModel: User = await userModel.load(newUser.id);
 
 		expect(!!userFromModel.password).toBe(true);
 		expect(userFromModel.password === '123456').toBe(false); // Password has been hashed
-
-		const fileModel = models().file({ userId: newUser.id });
-		const rootFile: File = await fileModel.userRootFile();
-
-		expect(!!rootFile).toBe(true);
-		expect(!!rootFile.id).toBe(true);
 	});
 
 	test('new user should be able to login', async function() {
@@ -101,37 +97,26 @@ describe('index_users', function() {
 		expect(loggedInUser.email).toBe('test@example.com');
 	});
 
-	test('should not create anything, neither user, root file nor permissions, if user creation fail', async function() {
-		const { user, session } = await createUserAndSession(1, true);
+	test('should not create anything if user creation fail', async function() {
+		const { session } = await createUserAndSession(1, true);
 
-		const fileModel = models().file({ userId: user.id });
-		const permissionModel = models().permission();
-		const userModel = models().user({ userId: user.id });
+		const userModel = models().user();
 
 		await postUser(session.id, 'test@example.com', '123456');
 
-		const beforeFileCount = (await fileModel.all()).length;
 		const beforeUserCount = (await userModel.all()).length;
-		const beforePermissionCount = (await permissionModel.all()).length;
-
-		expect(beforeFileCount).toBe(2);
 		expect(beforeUserCount).toBe(2);
 
 		await postUser(session.id, 'test@example.com', '123456');
 
-		const afterFileCount = (await fileModel.all()).length;
 		const afterUserCount = (await userModel.all()).length;
-		const afterPermissionCount = (await permissionModel.all()).length;
-
-		expect(beforeFileCount).toBe(afterFileCount);
 		expect(beforeUserCount).toBe(afterUserCount);
-		expect(beforePermissionCount).toBe(afterPermissionCount);
 	});
 
 	test('should change user properties', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const userModel = models().user({ userId: user.id });
+		const userModel = models().user();
 
 		await patchUser(session.id, { id: user.id, email: 'test2@example.com' });
 		const modUser: User = await userModel.load(user.id);
@@ -141,7 +126,7 @@ describe('index_users', function() {
 	test('should change the password', async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const userModel = models().user({ userId: user.id });
+		const userModel = models().user();
 
 		await patchUser(session.id, { id: user.id, password: 'abcdefgh', password2: 'abcdefgh' });
 		const modUser = await userModel.login('user1@localhost', 'abcdefgh');
@@ -158,5 +143,44 @@ describe('index_users', function() {
 		// <input class="input" type="email" name="email" value="user1@localhost"/>
 		expect((doc.querySelector('input[name=email]') as any).value).toBe('user1@localhost');
 	});
+
+	test('should list users', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1, true);
+		const { user: user2 } = await createUserAndSession(2, false);
+
+		const result = await execRequest(session1.id, 'GET', 'users');
+		expect(result).toContain(user1.email);
+		expect(result).toContain(user2.email);
+	});
+
+	test('should apply ACL', async function() {
+		const { user: admin, session: adminSession } = await createUserAndSession(1, true);
+		const { user: user1, session: session1 } = await createUserAndSession(2, false);
+
+		// non-admin cannot list users
+		await expectHttpError(async () => execRequest(session1.id, 'GET', 'users'), ErrorForbidden.httpCode);
+
+		// non-admin user cannot view another user
+		await expectHttpError(async () => execRequest(session1.id, 'GET', `users/${admin.id}`), ErrorForbidden.httpCode);
+
+		// non-admin user cannot create a new user
+		await expectHttpError(async () => postUser(session1.id, 'cantdothat@example.com', '123456'), ErrorForbidden.httpCode);
+
+		// non-admin user cannot update another user
+		await expectHttpError(async () => patchUser(session1.id, { id: admin.id, email: 'cantdothateither@example.com' }), ErrorForbidden.httpCode);
+
+		// non-admin user cannot make themself an admin
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, is_admin: 1 }), ErrorForbidden.httpCode);
+
+		// admin user cannot make themselves a non-admin
+		await expectHttpError(async () => patchUser(adminSession.id, { id: admin.id, is_admin: 0 }), ErrorForbidden.httpCode);
+
+		// only admins can delete users
+		await expectHttpError(async () => execRequest(session1.id, 'POST', `users/${admin.id}`, { delete_button: true }), ErrorForbidden.httpCode);
+
+		// cannot delete own user
+		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `users/${admin.id}`, { delete_button: true }), ErrorForbidden.httpCode);
+	});
+
 
 });

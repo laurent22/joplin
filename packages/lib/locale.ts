@@ -578,7 +578,7 @@ function localesFromLanguageCode(languageCode: string, locales: string[]): strin
 	});
 }
 
-function _(s: string, ...args: any[]) {
+function _(s: string, ...args: any[]): string {
 	const strings = localeStrings(currentLocale_);
 	let result = strings[s];
 	if (result === '' || result === undefined) result = s;

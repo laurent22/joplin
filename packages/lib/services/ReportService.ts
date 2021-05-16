@@ -10,6 +10,36 @@ import Resource from '../models/Resource';
 import { _ } from '../locale';
 const { toTitleCase } = require('../string-utils.js');
 
+enum CanRetryType {
+	E2EE = 'e2ee',
+	ResourceDownload = 'resourceDownload',
+	ItemSync = 'itemSync',
+}
+
+enum ReportItemType {
+	OpenList = 'openList',
+	CloseList = 'closeList',
+}
+
+type RerportItemOrString = ReportItem | string;
+
+interface ReportSection {
+	title: string;
+	body: RerportItemOrString[];
+	name?: string;
+	canRetryAll?: boolean;
+	retryAllHandler?: ()=> void;
+}
+
+interface ReportItem {
+	type?: ReportItemType;
+	key?: string;
+	text?: string;
+	canRetry?: boolean;
+	canRetryType?: CanRetryType;
+	retryHandler?: ()=> void;
+}
+
 export default class ReportService {
 	csvEscapeCell(cell: string) {
 		cell = this.csvValueToString(cell);
@@ -110,10 +140,10 @@ export default class ReportService {
 		return output;
 	}
 
-	async status(syncTarget: number) {
+	async status(syncTarget: number): Promise<ReportSection[]> {
 		const r = await this.syncStatus(syncTarget);
-		const sections = [];
-		let section: any = null;
+		const sections: ReportSection[] = [];
+		let section: ReportSection = null;
 
 		const disabledItems = await BaseItem.syncDisabledItems(syncTarget);
 
@@ -122,16 +152,28 @@ export default class ReportService {
 
 			section.body.push(_('These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).'));
 
-			section.body.push('');
+			section.body.push({ type: ReportItemType.OpenList, key: 'disabledSyncItems' });
 
 			for (let i = 0; i < disabledItems.length; i++) {
 				const row = disabledItems[i];
+				let msg: string = '';
 				if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
-					section.body.push(_('%s (%s) could not be uploaded: %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason));
+					msg = _('%s (%s) could not be uploaded: %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason);
 				} else {
-					section.body.push(_('Item "%s" could not be downloaded: %s', row.syncInfo.item_id, row.syncInfo.sync_disabled_reason));
+					msg = _('Item "%s" could not be downloaded: %s', row.syncInfo.item_id, row.syncInfo.sync_disabled_reason);
 				}
+
+				section.body.push({
+					text: msg,
+					canRetry: true,
+					canRetryType: CanRetryType.ItemSync,
+					retryHandler: async () => {
+						await BaseItem.saveSyncEnabled(row.item.type_, row.item.id);
+					},
+				});
 			}
+
+			section.body.push({ type: ReportItemType.CloseList });
 
 			sections.push(section);
 		}
@@ -150,7 +192,7 @@ export default class ReportService {
 				section.body.push({
 					text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id),
 					canRetry: true,
-					canRetryType: 'e2ee',
+					canRetryType: CanRetryType.E2EE,
 					retryHandler: async () => {
 						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
 						void DecryptionWorker.instance().scheduleStart();
@@ -158,11 +200,12 @@ export default class ReportService {
 				});
 			}
 
-			const retryHandlers: any[] = [];
+			const retryHandlers: Function[] = [];
 
 			for (let i = 0; i < section.body.length; i++) {
-				if (section.body[i].canRetry) {
-					retryHandlers.push(section.body[i].retryHandler);
+				const item: RerportItemOrString = section.body[i];
+				if (typeof item !== 'string' && item.canRetry) {
+					retryHandlers.push(item.retryHandler);
 				}
 			}
 
@@ -210,7 +253,7 @@ export default class ReportService {
 				section.body.push({
 					text: _('%s (%s): %s', row.resource_title, row.resource_id, row.fetch_error),
 					canRetry: true,
-					canRetryType: 'resourceDownload',
+					canRetryType: CanRetryType.ResourceDownload,
 					retryHandler: async () => {
 						await Resource.resetErrorStatus(row.resource_id);
 						void ResourceFetcher.instance().autoAddResources();

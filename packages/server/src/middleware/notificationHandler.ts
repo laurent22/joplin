@@ -12,20 +12,22 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 	if (!ctx.owner.is_admin) return;
 
 	const defaultAdmin = await ctx.models.user().login(defaultAdminEmail, defaultAdminPassword);
-	const notificationModel = ctx.models.notification({ userId: ctx.owner.id });
+	const notificationModel = ctx.models.notification();
 
 	if (defaultAdmin) {
 		await notificationModel.add(
+			ctx.owner.id,
 			'change_admin_password',
 			NotificationLevel.Important,
 			_('The default admin password is insecure and has not been changed! [Change it now](%s)', await ctx.models.user().profileUrl())
 		);
 	} else {
-		await notificationModel.markAsRead('change_admin_password');
+		await notificationModel.markAsRead(ctx.owner.id, 'change_admin_password');
 	}
 
 	if (config().database.client === 'sqlite3' && ctx.env === 'prod') {
 		await notificationModel.add(
+			ctx.owner.id,
 			'using_sqlite_in_prod',
 			NotificationLevel.Important,
 			'The server is currently using SQLite3 as a database. It is not recommended in production as it is slow and can cause locking issues. Please see the README for information on how to change it.'
@@ -36,10 +38,11 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 async function handleSqliteInProdNotification(ctx: AppContext) {
 	if (!ctx.owner.is_admin) return;
 
-	const notificationModel = ctx.models.notification({ userId: ctx.owner.id });
+	const notificationModel = ctx.models.notification();
 
 	if (config().database.client === 'sqlite3' && ctx.env === 'prod') {
 		await notificationModel.add(
+			ctx.owner.id,
 			'using_sqlite_in_prod',
 			NotificationLevel.Important,
 			'The server is currently using SQLite3 as a database. It is not recommended in production as it is slow and can cause locking issues. Please see the README for information on how to change it.'
@@ -50,7 +53,7 @@ async function handleSqliteInProdNotification(ctx: AppContext) {
 async function makeNotificationViews(ctx: AppContext): Promise<NotificationView[]> {
 	const markdownIt = new MarkdownIt();
 
-	const notificationModel = ctx.models.notification({ userId: ctx.owner.id });
+	const notificationModel = ctx.models.notification();
 	const notifications = await notificationModel.allUnreadByUserId(ctx.owner.id);
 	const views: NotificationView[] = [];
 	for (const n of notifications) {

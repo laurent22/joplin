@@ -87,12 +87,15 @@ function StatusScreen(props: Props) {
 
 		itemsHtml.push(renderSectionTitleHtml(section.title, section.title));
 
+		let currentListKey = '';
+		let listItems: any[] = [];
 		for (const n in section.body) {
 			if (!section.body.hasOwnProperty(n)) continue;
 			const item = section.body[n];
 			let text = '';
 
 			let retryLink = null;
+			let itemType = null;
 			if (typeof item === 'object') {
 				if (item.canRetry) {
 					const onClick = async () => {
@@ -107,18 +110,40 @@ function StatusScreen(props: Props) {
 					);
 				}
 				text = item.text;
+				itemType = item.type;
 			} else {
 				text = item;
 			}
 
+			if (itemType === 'openList') {
+				currentListKey = item.key;
+				continue;
+			}
+
+			if (itemType === 'closeList') {
+				itemsHtml.push(<ul key={currentListKey}>{listItems}</ul>);
+				currentListKey = '';
+				listItems = [];
+				continue;
+			}
+
 			if (!text) text = '\xa0';
 
-			itemsHtml.push(
-				<div style={theme.textStyle} key={`item_${n}`}>
-					<span>{text}</span>
-					{retryLink}
-				</div>
-			);
+			if (currentListKey) {
+				listItems.push(
+					<li style={theme.textStyle} key={`item_${n}`}>
+						<span>{text}</span>
+						{retryLink}
+					</li>
+				);
+			} else {
+				itemsHtml.push(
+					<div style={theme.textStyle} key={`item_${n}`}>
+						<span>{text}</span>
+						{retryLink}
+					</div>
+				);
+			}
 		}
 
 		if (section.canRetryAll) {

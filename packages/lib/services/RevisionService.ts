@@ -264,6 +264,8 @@ export default class RevisionService extends BaseService {
 
 				this.logger().info(`RevisionService::maintenance: Done in ${Date.now() - startTime}ms`);
 			}
+		} catch (error) {
+			this.logger().error('RevisionService::maintenance:', error);
 		} finally {
 			this.maintenanceCalls_.pop();
 		}

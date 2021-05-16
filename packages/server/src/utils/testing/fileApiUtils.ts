@@ -13,10 +13,16 @@ import routeHandler from '../../middleware/routeHandler';
 import { PaginatedResults, Pagination, paginationToQueryParams } from '../../models/utils/pagination';
 import { AppContext } from '../types';
 import { checkContextError, koaAppContext, testAssetDir } from './testUtils';
+import * as fs from 'fs-extra';
 
 export function testFilePath(ext: string = 'jpg') {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';
 	return `${testAssetDir}/${basename}.${ext}`;
+}
+
+export async function testImageBuffer() {
+	const path = testFilePath('jpg');
+	return fs.readFile(path);
 }
 
 export async function getFileMetadataContext(sessionId: string, path: string): Promise<AppContext> {

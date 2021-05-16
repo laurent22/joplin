@@ -31,6 +31,7 @@ interface Section {
 interface ParserStateTag {
 	name: string;
 	visible: boolean;
+	isCodeBlock: boolean;
 }
 
 interface ParserStateList {
@@ -443,6 +444,20 @@ function isInvisibleBlock(context: any, attributes: any) {
 	return display && display.indexOf('none') === 0;
 }
 
+function trimBlockOpenAndClose(lines: string[]): string[] {
+	const output = lines.slice();
+
+	while (output.length && [BLOCK_OPEN, BLOCK_CLOSE, ''].includes(output[0])) {
+		output.splice(0, 1);
+	}
+
+	while (output.length && [BLOCK_OPEN, BLOCK_CLOSE, ''].includes(output[output.length - 1])) {
+		output.pop();
+	}
+
+	return output;
+}
+
 function isSpanWithStyle(attributes: any) {
 	if (attributes != undefined) {
 		if ('style' in attributes) {
@@ -482,6 +497,16 @@ function displaySaxWarning(context: any, message: string) {
 	}
 	line.push(message);
 	console.warn(line.join(': '));
+}
+
+function isCodeBlock(context: any, nodeName: string, attributes: any) {
+	if (nodeName === 'code') return true;
+
+	if (attributes && attributes.style) {
+		const enCodeBlock = cssValue(context, attributes.style, '-en-codeblock');
+		if (enCodeBlock && enCodeBlock.toLowerCase() === 'true') return true;
+	}
+	return false;
 }
 
 // function removeSectionParent(section:Section | string) {
@@ -575,11 +600,13 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			const nodeAttributes = attributeToLowerCase(node);
 			const n = node.name.toLowerCase();
 			const isVisible = !isInvisibleBlock(this, nodeAttributes);
-
-			state.tags.push({
+			const tagInfo: ParserStateTag = {
 				name: n,
 				visible: isVisible,
-			});
+				isCodeBlock: isCodeBlock(this, n, nodeAttributes),
+			};
+
+			state.tags.push(tagInfo);
 
 			const currentList = state.lists && state.lists.length ? state.lists[state.lists.length - 1] : null;
 
@@ -675,6 +702,25 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				};
 				section.lines.push(newSection);
 				section = newSection;
+			} else if (tagInfo.isCodeBlock) {
+				// state.inPre = false;
+
+				// const previousIsPre = state.tags.length ? state.tags[state.tags.length - 1].name === 'pre' : false;
+				// if (previousIsPre) {
+				// 	section.lines.pop();
+				// }
+
+				state.inCode.push(true);
+				state.currentCode = '';
+
+				const newSection: Section = {
+					type: SectionType.Code,
+					lines: [],
+					parent: section,
+				};
+
+				section.lines.push(newSection);
+				section = newSection;
 			} else if (isBlockTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 			} else if (isListTag(n)) {
@@ -750,18 +796,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (n == 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = true;
-			} else if (n === 'code') {
-				state.inCode.push(true);
-				state.currentCode = '';
-
-				const newSection: Section = {
-					type: SectionType.Code,
-					lines: [],
-					parent: section,
-				};
-
-				section.lines.push(newSection);
-				section = newSection;
 			} else if (n === 'pre') {
 				section.lines.push(BLOCK_OPEN);
 				state.inPre = true;
@@ -871,6 +905,28 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				// End of note
 			} else if (!poppedTag.visible) {
 				if (section && section.parent) section = section.parent;
+			} else if (poppedTag.isCodeBlock) {
+				state.inCode.pop();
+
+				if (!state.inCode.length) {
+					// When a codeblock is wrapped in <pre><code>, it will have
+					// extra empty lines added by the "pre" logic, but since we
+					// are in a codeblock we should actually trim those.
+					const codeLines = trimBlockOpenAndClose(processMdArrayNewLines(section.lines).split('\n'));
+					section.lines = [];
+					if (codeLines.length > 1) {
+						section.lines.push('\n\n```\n');
+						for (let i = 0; i < codeLines.length; i++) {
+							if (i > 0) section.lines.push('\n');
+							section.lines.push(codeLines[i]);
+						}
+						section.lines.push('\n```\n\n');
+					} else {
+						section.lines.push(`\`${markdownUtils.escapeInlineCode(codeLines.join(''))}\``);
+					}
+
+					if (section && section.parent) section = section.parent;
+				}
 			} else if (isNewLineOnlyEndTag(n)) {
 				section.lines.push(BLOCK_CLOSE);
 			} else if (n == 'td' || n == 'th') {
@@ -897,23 +953,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (n == 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = false;
-			} else if (n === 'code') {
-				state.inCode.pop();
-
-				if (!state.inCode.length) {
-					const codeLines = processMdArrayNewLines(section.lines).split('\n');
-					section.lines = [];
-					if (codeLines.length > 1) {
-						for (let i = 0; i < codeLines.length; i++) {
-							if (i > 0) section.lines.push('\n');
-							section.lines.push(`\t${codeLines[i]}`);
-						}
-					} else {
-						section.lines.push(`\`${codeLines.join('')}\``);
-					}
-
-					if (section && section.parent) section = section.parent;
-				}
 			} else if (n === 'pre') {
 				state.inPre = false;
 				section.lines.push(BLOCK_CLOSE);
