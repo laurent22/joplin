@@ -6,7 +6,9 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import { ApiError, ErrorForbidden, ErrorNotFound, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
+import { _ } from '@joplin/lib/locale';
 
+const prettyBytes = require('pretty-bytes');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
@@ -289,6 +291,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		const isJoplinItem = isJoplinItemName(name);
 		let isNote = false;
+		let itemTitle = '';
 
 		const item: Item = {
 			name,
@@ -313,6 +316,8 @@ export default class ItemModel extends BaseModel<Item> {
 			delete joplinItem.type_;
 			delete joplinItem.encryption_applied;
 
+			itemTitle = joplinItem.title || '';
+
 			item.content = Buffer.from(JSON.stringify(joplinItem));
 		} else {
 			item.content = buffer;
@@ -326,7 +331,13 @@ export default class ItemModel extends BaseModel<Item> {
 		// items can be much larger (seems to be up to twice the size but for
 		// safety let's go with 2.2).
 		const maxSize = user.item_max_size * (item.jop_encryption_applied ? 2.2 : 1);
-		if (maxSize && buffer.byteLength > maxSize) throw new ErrorPayloadTooLarge();
+		if (maxSize && buffer.byteLength > maxSize) {
+			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
+				isNote ? _('note') : _('attachment'),
+				itemTitle ? itemTitle : name,
+				prettyBytes(user.item_max_size)
+			));
+		}
 
 		return this.withTransaction<Item>(async () => {
 			const savedItem = await this.saveForUser(user.id, item);

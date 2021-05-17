@@ -14,32 +14,35 @@ if [ "$1" == "" ]; then
 fi
 
 USER_NUM=$1
-
-CMD_FILE="$SCRIPT_DIR/runForSharingCommands-$USER_NUM.txt"
-rm -f "$CMD_FILE"
-
-USER_EMAIL="user$USER_NUM@example.com"
+RESET_ALL=$2
 PROFILE_DIR=~/.config/joplindev-desktop-$USER_NUM
-rm -rf "$PROFILE_DIR"
 
-echo "config keychain.supported 0" >> "$CMD_FILE" 
-echo "config sync.target 9" >> "$CMD_FILE" 
-echo "config sync.9.path http://localhost:22300" >> "$CMD_FILE" 
-echo "config sync.9.username $USER_EMAIL" >> "$CMD_FILE" 
-echo "config sync.9.password 123456" >> "$CMD_FILE" 
+if [ "$RESET_ALL" == "1" ]; then
+	CMD_FILE="$SCRIPT_DIR/runForSharingCommands-$USER_NUM.txt"
+	rm -f "$CMD_FILE"
 
-if [ "$1" == "1" ]; then
-	curl --data '{"action": "createTestUsers"}' http://localhost:22300/api/debug
+	USER_EMAIL="user$USER_NUM@example.com"
+	rm -rf "$PROFILE_DIR"
 
-	echo 'mkbook "shared"' >> "$CMD_FILE"
-	echo 'mkbook "other"' >> "$CMD_FILE"
-	echo 'use "shared"' >> "$CMD_FILE"
-	echo 'mknote "note 1"' >> "$CMD_FILE"
-	echo 'mknote "note 2"' >> "$CMD_FILE"
+	echo "config keychain.supported 0" >> "$CMD_FILE" 
+	echo "config sync.target 9" >> "$CMD_FILE" 
+	echo "config sync.9.path http://localhost:22300" >> "$CMD_FILE" 
+	echo "config sync.9.username $USER_EMAIL" >> "$CMD_FILE" 
+	echo "config sync.9.password 123456" >> "$CMD_FILE" 
+
+	if [ "$1" == "1" ]; then
+		curl --data '{"action": "createTestUsers"}' http://localhost:22300/api/debug
+
+		echo 'mkbook "shared"' >> "$CMD_FILE"
+		echo 'mkbook "other"' >> "$CMD_FILE"
+		echo 'use "shared"' >> "$CMD_FILE"
+		echo 'mknote "note 1"' >> "$CMD_FILE"
+		echo 'mknote "note 2"' >> "$CMD_FILE"
+	fi
+
+	cd "$ROOT_DIR/packages/app-cli"
+	npm start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
 fi
-
-cd "$ROOT_DIR/packages/app-cli"
-npm start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
 
 cd "$ROOT_DIR/packages/app-desktop"
 npm start -- --profile "$PROFILE_DIR"

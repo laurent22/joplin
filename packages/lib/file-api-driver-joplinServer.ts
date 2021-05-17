@@ -1,3 +1,4 @@
+import JoplinError from './JoplinError';
 import JoplinServerApi from './JoplinServerApi';
 import { trimSlashes } from './path-utils';
 
@@ -148,9 +149,17 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	public async put(path: string, content: any, options: any = null) {
-		return this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, options && options.shareId ? { share_id: options.shareId } : null, content, {
-			'Content-Type': 'application/octet-stream',
-		}, options);
+		try {
+			const output = await this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, options && options.shareId ? { share_id: options.shareId } : null, content, {
+				'Content-Type': 'application/octet-stream',
+			}, options);
+			return output;
+		} catch (error) {
+			if (error.code === 413) {
+				throw new JoplinError(error.message, 'rejectedByTarget');
+			}
+			throw error;
+		}
 	}
 
 	public async delete(path: string) {
