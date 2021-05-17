@@ -792,6 +792,9 @@ packages/app-mobile/utils/checkPermissions.js.map
 packages/app-mobile/utils/fs-driver-rn.d.ts
 packages/app-mobile/utils/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver-rn.js.map
+packages/app-mobile/utils/setUpNotifications.d.ts
+packages/app-mobile/utils/setUpNotifications.js
+packages/app-mobile/utils/setUpNotifications.js.map
 packages/app-mobile/utils/shareHandler.d.ts
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shareHandler.js.map
