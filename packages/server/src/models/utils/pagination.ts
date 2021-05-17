@@ -1,7 +1,7 @@
 import { ErrorBadRequest } from '../../utils/errors';
 import { decodeBase64, encodeBase64 } from '../../utils/base64';
-import { ChangePagination, defaultChangePagination } from '../ChangeModel';
-import Knex = require('knex');
+import { ChangePagination as DeltaPagination, defaultDeltaPagination } from '../ChangeModel';
+import { Knex } from 'knex';
 
 export enum PaginationOrderDir {
 	ASC = 'asc',
@@ -20,8 +20,7 @@ export interface Pagination {
 	cursor?: string;
 }
 
-
-interface PaginationQueryParams {
+export interface PaginationQueryParams {
 	limit?: number;
 	order_by?: string;
 	order_dir?: string;
@@ -108,10 +107,10 @@ export function requestPagination(query: any): Pagination {
 	return validatePagination({ limit, order, page });
 }
 
-export function requestChangePagination(query: any): ChangePagination {
-	if (!query) return defaultChangePagination();
+export function requestDeltaPagination(query: any): DeltaPagination {
+	if (!query) return defaultDeltaPagination();
 
-	const output: ChangePagination = {};
+	const output: DeltaPagination = {};
 	if ('limit' in query) output.limit = query.limit;
 	if ('cursor' in query) output.cursor = query.cursor;
 	return output;
@@ -209,12 +208,25 @@ export function createPaginationLinks(page: number, pageCount: number, urlTempla
 	return output;
 }
 
-export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination): Promise<PaginatedResults> {
+// function applyMainTablePrefix(pagination:Pagination, mainTable:string):Pagination {
+// 	if (!mainTable) return pagination;
+
+// 	const output:Pagination = JSON.parse(JSON.stringify(pagination));
+
+// 	output.order = output.order.map(o => {
+// 		o.by = mainTable + '.' + o.by;
+// 		return o;
+// 	});
+
+// 	return output;
+// }
+
+export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination, mainTable: string = ''): Promise<PaginatedResults> {
 	pagination = processCursor(pagination);
 
 	const orderSql: any[] = pagination.order.map(o => {
 		return {
-			column: o.by,
+			column: (mainTable ? `${mainTable}.` : '') + o.by,
 			order: o.dir,
 		};
 	});

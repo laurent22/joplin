@@ -41,6 +41,11 @@ const markdownUtils = {
 		return text;
 	},
 
+	escapeInlineCode(text: string): string {
+		// https://github.com/github/markup/issues/363#issuecomment-55499909
+		return text.replace(/`/g, '``');
+	},
+
 	unescapeLinkUrl(url: string) {
 		url = url.replace(/%28/g, '(');
 		url = url.replace(/%29/g, ')');

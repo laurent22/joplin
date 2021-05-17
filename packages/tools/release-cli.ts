@@ -21,7 +21,7 @@ async function main() {
 
 	await execCommand2('npm publish');
 
-	await completeReleaseWithChangelog(changelogPath, newVersion, newTag, 'CLI');
+	await completeReleaseWithChangelog(changelogPath, newVersion, newTag, 'CLI', false);
 }
 
 main().catch((error) => {

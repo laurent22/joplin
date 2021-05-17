@@ -6,6 +6,11 @@
 				<pre>{{.}}</pre>
 			{{/stack}}
 		</div>
-		<p><a href="{{{global.baseUrl}}}/login">Back to the login page</a></p>
+		{{#owner}}
+			<p><a href="{{{global.baseUrl}}}/home">Back to home page</a></p>
+		{{/owner}}
+		{{^owner}}
+			<p><a href="{{{global.baseUrl}}}/login">Back to login page</a></p>
+		{{/owner}}
 	</div>
 </div>

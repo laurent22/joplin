@@ -1,7 +1,7 @@
 const { basicDelta } = require('./file-api');
 const { basename } = require('./path-utils');
 const shim = require('./shim').default;
-const JoplinError = require('./JoplinError');
+const JoplinError = require('./JoplinError').default;
 const { Buffer } = require('buffer');
 
 const S3_MAX_DELETES = 1000;

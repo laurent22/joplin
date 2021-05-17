@@ -5,7 +5,7 @@ import { dirname, normalize } from 'path';
 import { pathExists } from 'fs-extra';
 import * as fs from 'fs-extra';
 import { AppContext } from '../utils/types';
-import Applications from '../services/Applications';
+import { localFileFromUrl } from '../utils/joplinUtils';
 const { mime } = require('@joplin/lib/mime-utils.js');
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
@@ -25,8 +25,8 @@ const pathToFileMap: PathToFileMap = {
 	// 'apps/joplin/css/note.css': 'src/apps/joplin/css/note.css',
 };
 
-async function findLocalFile(path: string, apps: Applications): Promise<string> {
-	const appFilePath = await apps.localFileFromUrl(path);
+async function findLocalFile(path: string): Promise<string> {
+	const appFilePath = await localFileFromUrl(path);
 	if (appFilePath) return appFilePath;
 
 	if (path in pathToFileMap) return pathToFileMap[path];
@@ -51,7 +51,7 @@ router.public = true;
 // Used to serve static files, so it needs to be public because for example the
 // login page, which is public, needs access to the CSS files.
 router.get('', async (path: SubPath, ctx: AppContext) => {
-	const localPath = await findLocalFile(path.raw, ctx.apps);
+	const localPath = await findLocalFile(path.raw);
 
 	let mimeType: string = mime.fromFilename(localPath);
 	if (!mimeType) mimeType = 'application/octet-stream';
