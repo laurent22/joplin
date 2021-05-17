@@ -1,4 +1,4 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree, expectHttpError, createNote, expectNoHttpError } from '../../utils/testing/testUtils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
@@ -6,7 +6,7 @@ import { Item } from '../../db';
 import { PaginatedItems } from '../../models/ItemModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
 
 describe('api_items', function() {
 
@@ -237,6 +237,43 @@ describe('api_items', function() {
 			async () => putApi(session3.id, 'items/root:/.resource/000000000000000000000000000000E1:/content', {}, { query: { share_id: share.id } }),
 			ErrorForbidden.httpCode
 		);
+	});
+
+	test('should check permissions - uploaded item should be below the allowed limit', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+
+		{
+			await models().user().save({ id: user1.id, item_max_size: 4 });
+
+			await expectHttpError(
+				async () => createNote(session1.id, {
+					id: '00000000000000000000000000000001',
+					body: '12345',
+				}),
+				ErrorPayloadTooLarge.httpCode);
+		}
+
+		{
+			await models().user().save({ id: user1.id, item_max_size: 1000 });
+
+			await expectNoHttpError(
+				async () => createNote(session1.id, {
+					id: '00000000000000000000000000000002',
+					body: '12345',
+				})
+			);
+		}
+
+		{
+			await models().user().save({ id: user1.id, item_max_size: 0 });
+
+			await expectNoHttpError(
+				async () => createNote(session1.id, {
+					id: '00000000000000000000000000000003',
+					body: '12345',
+				})
+			);
+		}
 	});
 
 });

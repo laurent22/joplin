@@ -45,6 +45,8 @@ function convertTree(tree: any): any[] {
 }
 
 async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
+	const user = await models().user().load(userId);
+
 	for (const jopItem of tree) {
 		const isFolder = !!jopItem.children;
 		const serializedBody = isFolder ?
@@ -58,7 +60,7 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 			}
 		}
 
-		const newItem = await models().item().saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const newItem = await models().item().saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
 		if (isFolder && jopItem.children.length) await createItemTree3(sessionId, userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }

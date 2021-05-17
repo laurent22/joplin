@@ -77,3 +77,12 @@ export class ErrorResyncRequired extends ApiError {
 		Object.setPrototypeOf(this, ErrorResyncRequired.prototype);
 	}
 }
+
+export class ErrorPayloadTooLarge extends ApiError {
+	public static httpCode: number = 413;
+
+	public constructor(message: string = 'Payload Too Large') {
+		super(message, ErrorPayloadTooLarge.httpCode);
+		Object.setPrototypeOf(this, ErrorPayloadTooLarge.prototype);
+	}
+}

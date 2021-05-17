@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorForbidden, ErrorNotFound, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 
@@ -282,10 +282,10 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(userId: Uuid, name: string, buffer: Buffer, options: ItemSaveOption = null): Promise<Item> {
+	public async saveFromRawContent(user: User, name: string, buffer: Buffer, options: ItemSaveOption = null): Promise<Item> {
 		options = options || {};
 
-		const existingItem = await this.loadByName(userId, name);
+		const existingItem = await this.loadByName(user.id, name);
 
 		const isJoplinItem = isJoplinItemName(name);
 		let isNote = false;
@@ -322,8 +322,14 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (options.shareId) item.jop_share_id = options.shareId;
 
+		// If the item is encrypted, we apply a multipler because encrypted
+		// items can be much larger (seems to be up to twice the size but for
+		// safety let's go with 2.2).
+		const maxSize = user.item_max_size * (item.jop_encryption_applied ? 2.2 : 1);
+		if (maxSize && buffer.byteLength > maxSize) throw new ErrorPayloadTooLarge();
+
 		return this.withTransaction<Item>(async () => {
-			const savedItem = await this.saveForUser(userId, item);
+			const savedItem = await this.saveForUser(user.id, item);
 
 			if (isNote) {
 				await this.models().itemResource().deleteByItemId(savedItem.id);
