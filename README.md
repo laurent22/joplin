@@ -292,7 +292,7 @@ To add a **Bucket Policy** from the AWS S3 Web Console, navigate to the **Permis
                   "s3:DeleteObject",
                   "s3:DeleteObjectVersion",
                   "s3:PutObject"
-            ]
+            ],
             "Resource": [
                 "arn:aws:s3:::joplin-bucket",
                 "arn:aws:s3:::joplin-bucket/*"
