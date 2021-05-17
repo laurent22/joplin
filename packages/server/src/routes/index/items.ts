@@ -8,18 +8,19 @@ import { formatDateTime } from '../../utils/time';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import { makeTablePagination, makeTableView, Row, Table, tablePartials } from '../../utils/views/table';
+import { PaginationOrderDir } from '../../models/utils/pagination';
 const prettyBytes = require('pretty-bytes');
 
 const router = new Router();
 
 router.get('items', async (_path: SubPath, ctx: AppContext) => {
-	const pagination = makeTablePagination(ctx.query);
+	const pagination = makeTablePagination(ctx.query, 'name', PaginationOrderDir.ASC);
 	const paginatedItems = await ctx.models.item().children(ctx.owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type', 'content_size'] });
 
 	const table: Table = {
 		baseUrl: ctx.models.item().itemUrl(),
 		requestQuery: ctx.query,
-		totalItemCount: await ctx.models.item().childrenCount(ctx.owner.id, ''),
+		pageCount: Math.ceil((await ctx.models.item().childrenCount(ctx.owner.id, '')) / pagination.limit),
 		pagination,
 		headers: [
 			{

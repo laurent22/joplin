@@ -54,7 +54,7 @@ export interface Table {
 	rows: Row[];
 	baseUrl: string;
 	requestQuery: any;
-	totalItemCount: number;
+	pageCount: number;
 	pagination: Pagination;
 }
 
@@ -64,9 +64,9 @@ export interface TableView {
 	paginationLinks: PageLink[];
 }
 
-export function makeTablePagination(query: any): Pagination {
+export function makeTablePagination(query: any, defaultOrderField: string, defaultOrderDir: PaginationOrderDir): Pagination {
 	const limit = Number(query.limit) || pageMaxSize;
-	const order: PaginationOrder[] = requestPaginationOrder(query, 'name', PaginationOrderDir.ASC);
+	const order: PaginationOrder[] = requestPaginationOrder(query, defaultOrderField, defaultOrderDir);
 	const page: number = 'page' in query ? Number(query.page) : 1;
 
 	const output: Pagination = { limit, order, page };
@@ -96,8 +96,7 @@ function makeRowView(row: Row): RowView {
 export function makeTableView(table: Table): TableView {
 	const baseUrlQuery = filterPaginationQueryParams(table.requestQuery);
 	const pagination = table.pagination;
-	const pageCount = Math.ceil(table.totalItemCount / pagination.limit);
-	const paginationLinks = createPaginationLinks(pagination.page, pageCount, setQueryParameters(table.baseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));
+	const paginationLinks = createPaginationLinks(pagination.page, table.pageCount, setQueryParameters(table.baseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));
 
 	return {
 		headers: table.headers.map(h => makeHeaderView(h, table.baseUrl, baseUrlQuery, pagination)),
