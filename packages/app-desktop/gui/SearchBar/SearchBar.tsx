@@ -126,7 +126,7 @@ function SearchBar(props: Props) {
 	}, [props.notesParentType, onExitSearch]);
 
 	return (
-		<Root>
+		<Root className="search-bar">
 			<SearchInput
 				inputRef={props.inputRef}
 				value={query}

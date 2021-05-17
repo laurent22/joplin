@@ -432,7 +432,8 @@ class Dialog extends React.PureComponent<Props, State> {
 	renderItem(item: SearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
-		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
+		const isSelected = item.id === this.state.selectedItemId;
+		const rowStyle = isSelected ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
 			? `<span style="font-weight: bold; color: ${theme.colorBright};">${item.title}</span>`
 			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>', { escapeHtml: true });
@@ -444,7 +445,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
-			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
+			<div key={item.id} className={isSelected ? 'selected' : null} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}
@@ -521,11 +522,11 @@ class Dialog extends React.PureComponent<Props, State> {
 	render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
-		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
+		const helpComp = !this.state.showHelp ? null : <div className="help-text" style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
 
 		return (
-			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
-				<div style={style.dialogBox}>
+			<div className="modal-layer" onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
+				<div className="modal-dialog" style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>
 						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
