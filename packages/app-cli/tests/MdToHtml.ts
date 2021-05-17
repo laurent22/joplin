@@ -137,6 +137,14 @@ describe('MdToHtml', function() {
 		}
 	}));
 
+	it('should render an empty string', (async () => {
+		const mdToHtml = newTestMdToHtml();
+		const result = await mdToHtml.render('', null, { splitted: true });
+		// The TinyMCE component checks for this exact string to apply a hack,
+		// so make sure it doesn't change from version to version.
+		expect(result.html).toBe('<div id="rendered-md"></div>');
+	}));
+
 	it('should split HTML and CSS', (async () => {
 		const mdToHtml = newTestMdToHtml();
 

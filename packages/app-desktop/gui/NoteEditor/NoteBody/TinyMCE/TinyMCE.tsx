@@ -66,6 +66,26 @@ function newBlockSource(language: string = '', content: string = ''): any {
 	};
 }
 
+// In TinyMCE 5.2, when setting the body to '<div id="rendered-md"></div>',
+// it would end up as '<div id="rendered-md"><br/></div>' once rendered
+// (an additional <br/> was inserted).
+//
+// This behaviour was "fixed" later on, possibly in 5.6, which has this change:
+//
+// - Fixed getContent with text format returning a new line when the editor is empty #TINY-6281
+//
+// The problem is that the list plugin was, unknown to me, relying on this <br/>
+// being present. Without it, trying to add a bullet point or checkbox on an
+// empty document, does nothing. The exact reason for this is unclear
+// so as a workaround we manually add this <br> for empty documents,
+// which fixes the issue.
+//
+// Perhaps upgrading the list plugin (which is a fork of TinyMCE own list plugin)
+// would help?
+function awfulBrHack(html: string): string {
+	return html === '<div id="rendered-md"></div>' ? '<div id="rendered-md"><br/></div>' : html;
+}
+
 function findEditableContainer(node: any): any {
 	while (node) {
 		if (node.classList && node.classList.contains('joplin-editable')) return node;
@@ -822,7 +842,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
 				if (cancelled) return;
 
-				editor.setContent(result.html);
+				editor.setContent(awfulBrHack(result.html));
 
 				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
 					// Need to clear UndoManager to avoid this problem:
