@@ -8,6 +8,7 @@ import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
+const prettyBytes = require('pretty-bytes');
 
 function makeUser(isNew: boolean, fields: any): User {
 	const user: User = {};
@@ -15,6 +16,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('email' in fields) user.email = fields.email;
 	if ('full_name' in fields) user.full_name = fields.full_name;
 	if ('is_admin' in fields) user.is_admin = fields.is_admin;
+	if ('item_max_size' in fields) user.item_max_size = fields.item_max_size;
 
 	if (fields.password) {
 		if (fields.password !== fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
@@ -43,7 +45,12 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	const users = await userModel.all();
 
 	const view: View = defaultView('users');
-	view.content.users = users;
+	view.content.users = users.map(user => {
+		return {
+			...user,
+			formattedItemMaxSize: user.item_max_size ? prettyBytes(user.item_max_size) : '∞',
+		};
+	});
 	return view;
 });
 

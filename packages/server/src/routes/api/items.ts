@@ -86,7 +86,7 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 			await itemModel.checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
 		}
 
-		const item = await itemModel.saveFromRawContent(ctx.owner.id, name, buffer, saveOptions);
+		const item = await itemModel.saveFromRawContent(ctx.owner, name, buffer, saveOptions);
 		outputItem = itemModel.toApiOutput(item) as Item;
 	} finally {
 		if (filePath) await safeRemove(filePath);
