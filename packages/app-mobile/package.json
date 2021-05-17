@@ -23,7 +23,7 @@
     "@react-native-community/slider": "^3.0.3",
     "buffer": "^5.0.8",
     "events": "^3.2.0",
-    "joplin-rn-alarm-notification": "^1.0.2",
+    "joplin-rn-alarm-notification": "^1.0.3",
     "jsc-android": "241213.1.0",
     "md5": "^2.2.1",
     "prop-types": "^15.6.0",
