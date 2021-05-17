@@ -72,7 +72,7 @@ function ExpandLink(props: any) {
 function FolderItem(props: any) {
 	const { hasChildren, isExpanded, depth, selected, folderId, folderTitle, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_ } = props;
 
-	const noteCountComp = noteCount ? <StyledNoteCount className="note-count">{noteCount}</StyledNoteCount> : null;
+	const noteCountComp = noteCount ? <StyledNoteCount className="note-count-label">{noteCount}</StyledNoteCount> : null;
 
 	return (
 		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
@@ -360,7 +360,7 @@ class SidebarComponent extends React.Component<Props, State> {
 	}
 
 	renderNoteCount(count: number) {
-		return count ? <StyledNoteCount className="note-count">{count}</StyledNoteCount> : null;
+		return count ? <StyledNoteCount className="note-count-label">{count}</StyledNoteCount> : null;
 	}
 
 	renderExpandIcon(isExpanded: boolean, isVisible: boolean = true) {
@@ -446,7 +446,7 @@ class SidebarComponent extends React.Component<Props, State> {
 						this.tagItem_click(tag);
 					}}
 				>
-					<span className="title">{Tag.displayTitle(tag)}</span>
+					<span className="tag-label">{Tag.displayTitle(tag)}</span>
 					{noteCount}
 				</StyledListItemAnchor>
 			</StyledListItem>

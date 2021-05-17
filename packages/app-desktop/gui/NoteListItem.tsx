@@ -153,7 +153,7 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 		'list-item-container',
 		props.isSelected && 'selected',
 		item.todo_completed && 'todo-completed',
-		item.is_todo ? 'todo' : 'note',
+		item.is_todo ? 'todo-list-item' : 'note-list-item',
 		(props.index + 1) % 2 === 0 ? 'even' : 'odd',
 	]
 		.filter(e => !!e)

@@ -91,7 +91,7 @@ export default function NoteTitleBar(props: Props) {
 	}, []);
 
 	function renderTitleBarDate() {
-		return <span className="user-updated-time" style={styles.titleDate}>{time.formatMsToLocal(props.noteUserUpdatedTime)}</span>;
+		return <span className="updated-time-label" style={styles.titleDate}>{time.formatMsToLocal(props.noteUserUpdatedTime)}</span>;
 	}
 
 	function renderNoteToolbar() {
