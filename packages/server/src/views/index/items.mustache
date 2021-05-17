@@ -2,28 +2,9 @@
 	<input type="submit" name="delete_all_button" class="button is-danger" value="Delete all" />
 </form>
 
-<table class="table is-fullwidth is-hoverable">
-	<thead>
-		<tr>
-			<th class="stretch">Name</th>
-			<th class="nowrap">Mime</th>
-			<th class="nowrap">Timestamp</th>
-		</tr>
-	</thead>
-	<tbody>
-		{{#paginatedFiles.items}}
-			<tr>
-				<td class="stretch item-{{type}}">
-					<a href="{{url}}"><span class="icon"><i class="{{icon}}"></i></span>{{name}}</a>
-				</td>
-				<td class="nowrap">{{mime}}</td>
-				<td class="nowrap">{{timestamp}}</td>
-			</tr>
-		{{/paginatedFiles.items}}
-	</tbody>
-</table>
-
-{{>pagination}}
+{{#itemTable}}
+	{{>table}}
+{{/itemTable}}
 
 <script>
 	onDocumentReady(function() {

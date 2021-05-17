@@ -378,8 +378,8 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public async childrenCount(userId: Uuid, pathQuery: string = ''): Promise<number> {
 		const query = this.childrenQuery(userId, pathQuery);
-		query.groupBy('items.id');
-		return query.count();
+		const r = await query.countDistinct('items.id', { as: 'total' });
+		return r[0].total;
 	}
 
 	private async joplinItemPath(jopId: string): Promise<Item[]> {

@@ -108,7 +108,7 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const query = this.changesForUserQuery(userId);
 		const countQuery = query.clone();
-		const itemCount = (await countQuery.count('id', { as: 'total' }))[0].total;
+		const itemCount = (await countQuery.countDistinct('id', { as: 'total' }))[0].total;
 
 		void query
 			.orderBy(pagination.order[0].by, pagination.order[0].dir)

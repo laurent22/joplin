@@ -20,8 +20,7 @@ export interface Pagination {
 	cursor?: string;
 }
 
-
-interface PaginationQueryParams {
+export interface PaginationQueryParams {
 	limit?: number;
 	order_by?: string;
 	order_dir?: string;
