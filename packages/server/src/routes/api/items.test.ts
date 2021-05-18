@@ -243,7 +243,7 @@ describe('api_items', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 
 		{
-			await models().user().save({ id: user1.id, item_max_size: 4 });
+			await models().user().save({ id: user1.id, max_item_size: 4 });
 
 			await expectHttpError(
 				async () => createNote(session1.id, {
@@ -254,7 +254,7 @@ describe('api_items', function() {
 		}
 
 		{
-			await models().user().save({ id: user1.id, item_max_size: 1000 });
+			await models().user().save({ id: user1.id, max_item_size: 1000 });
 
 			await expectNoHttpError(
 				async () => createNote(session1.id, {
@@ -265,7 +265,7 @@ describe('api_items', function() {
 		}
 
 		{
-			await models().user().save({ id: user1.id, item_max_size: 0 });
+			await models().user().save({ id: user1.id, max_item_size: 0 });
 
 			await expectNoHttpError(
 				async () => createNote(session1.id, {

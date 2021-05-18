@@ -181,8 +181,8 @@ describe('index_users', function() {
 		// cannot delete own user
 		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `users/${admin.id}`, { delete_button: true }), ErrorForbidden.httpCode);
 
-		// non-admin cannot change item_max_size
-		await expectHttpError(async () => patchUser(session1.id, { id: admin.id, item_max_size: 1000 }), ErrorForbidden.httpCode);
+		// non-admin cannot change max_item_size
+		await expectHttpError(async () => patchUser(session1.id, { id: admin.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
 	});
 
 

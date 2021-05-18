@@ -29,7 +29,7 @@ export default class UserModel extends BaseModel<User> {
 		if ('password' in object) user.password = object.password;
 		if ('is_admin' in object) user.is_admin = object.is_admin;
 		if ('full_name' in object) user.full_name = object.full_name;
-		if ('item_max_size' in object) user.item_max_size = object.item_max_size;
+		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
 
 		return user;
 	}
@@ -56,7 +56,7 @@ export default class UserModel extends BaseModel<User> {
 			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
 			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
 			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
-			if (!user.is_admin && resource.item_max_size !== previousResource.item_max_size) throw new ErrorForbidden('non-admin user cannot change item_max_size');
+			if (!user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
 		}
 
 		if (action === AclAction.Delete) {
