@@ -718,7 +718,7 @@ class AppComponent extends React.Component {
 
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
-		setupNotifications(this.props.dispatch);
+		await setupNotifications(this.props.dispatch);
 	}
 
 	componentWillUnmount() {
