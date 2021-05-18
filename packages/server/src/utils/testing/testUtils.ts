@@ -242,7 +242,7 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 	const session = await models().session().authenticate(options.email, options.password);
 
 	return {
-		user: user,
+		user: await models().user().load(user.id),
 		session: session,
 	};
 };

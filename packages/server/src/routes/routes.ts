@@ -5,6 +5,7 @@ import apiEvents from './api/events';
 import apiItems from './api/items';
 import apiPing from './api/ping';
 import apiSessions from './api/sessions';
+import apiUsers from './api/users';
 import apiShares from './api/shares';
 import apiShareUsers from './api/share_users';
 
@@ -27,6 +28,7 @@ const routes: Routers = {
 	'api/sessions': apiSessions,
 	'api/share_users': apiShareUsers,
 	'api/shares': apiShares,
+	'api/users': apiUsers,
 
 	'changes': indexChanges,
 	'home': indexHome,

@@ -277,7 +277,6 @@ export interface User extends WithDates, WithUuid {
 	is_admin?: number;
 	max_item_size?: number;
 	can_share?: number;
-	max_share_recipients?: number;
 }
 
 export interface Session extends WithDates, WithUuid {
@@ -382,7 +381,6 @@ export const databaseSchema: DatabaseTables = {
 		created_time: { type: 'string' },
 		max_item_size: { type: 'number' },
 		can_share: { type: 'number' },
-		max_share_recipients: { type: 'number' },
 	},
 	sessions: {
 		id: { type: 'string' },
