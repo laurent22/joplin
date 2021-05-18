@@ -14,7 +14,6 @@ import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import useContextMenu from './utils/useContextMenu';
 import { copyHtmlToClipboard } from '../../utils/clipboardUtils';
 import shim from '@joplin/lib/shim';
-import Setting from '@joplin/lib/models/Setting';
 
 const { MarkupToHtml } = require('@joplin/renderer');
 const taboverride = require('taboverride');
@@ -763,7 +762,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const cssFiles = [
 			'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
-			`${Setting.value('profileDir')}/userstyle.css`,
 		].concat(
 			pluginAssets
 				.filter((a: any) => a.mime === 'text/css')
