@@ -10,6 +10,9 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: ShareUser = null): Promise<void> {
 		if (action === AclAction.Create) {
+			const recipient = await this.models().user().load(resource.user_id, { fields: ['can_share'] });
+			if (!recipient.can_share) throw new ErrorForbidden('The sharing feature is not enabled for the recipient account');
+
 			const share = await this.models().share().load(resource.share_id);
 			if (share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
 			if (share.owner_id === resource.user_id) throw new ErrorForbidden('cannot share an item with yourself');
@@ -96,7 +99,6 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async addByEmail(shareId: Uuid, userEmail: string): Promise<ShareUser> {
-		// TODO: check that user can access this share
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 

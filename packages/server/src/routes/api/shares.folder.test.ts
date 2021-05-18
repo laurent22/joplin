@@ -793,21 +793,36 @@ describe('shares.folder', function() {
 		await expectHttpError(async () => postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F2' }), ErrorForbidden.httpCode);
 	});
 
-	// test('should check permissions - only owner of share can deleted associated folder', async function() {
-	// 	const { session: session1 } = await createUserAndSession(1);
-	// 	const { session: session2 } = await createUserAndSession(2);
+	test('should check permissions - cannot share if share feature not enabled', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		await models().user().save({ id: user1.id, can_share: 0 });
 
-	// 	await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
-	// 		{
-	// 			id: '000000000000000000000000000000F1',
-	// 			children: [
-	// 				{
-	// 					id: '00000000000000000000000000000001',
-	// 				},
-	// 			],
-	// 		},
-	// 	]);
-	// 	await expectHttpError(async () => deleteApi(session2.id, 'items/root:/000000000000000000000000000000F1.md:'), ErrorForbidden.httpCode);
-	// });
+		await expectHttpError(async () =>
+			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+				{
+					id: '000000000000000000000000000000F1',
+					children: [],
+				},
+			]),
+		ErrorForbidden.httpCode
+		);
+	});
+
+	test('should check permissions - cannot share if share feature not enabled for recipient', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		await models().user().save({ id: user2.id, can_share: 0 });
+
+		await expectHttpError(async () =>
+			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+				{
+					id: '000000000000000000000000000000F1',
+					children: [],
+				},
+			]),
+		ErrorForbidden.httpCode
+		);
+	});
 
 });

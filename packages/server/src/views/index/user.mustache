@@ -21,6 +21,12 @@
 				<input class="input" type="number" name="max_item_size" value="{{user.max_item_size}}"/>
 			</div>
 		</div>
+
+		<div class="field">
+			<label class="checkbox">
+				<input type="checkbox" name="can_share" {{#user.can_share}}checked{{/user.can_share}} value="1"> Can share
+			</label>
+		</div>
 	{{/global.owner.is_admin}}
 	<div class="field">
 		<label class="label">Password</label>
