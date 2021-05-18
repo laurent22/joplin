@@ -1,5 +1,5 @@
 import { FolderEntity } from '@joplin/lib/services/database/types';
-import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync } from './test-utils';
+import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree } from './test-utils';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 
@@ -224,5 +224,62 @@ describe('models_Folder', function() {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const hasThrown = await checkThrowAsync(() => Folder.save({ id: f1.id, parent_id: f1.id }, { userSideValidation: true }));
 		expect(hasThrown).toBe(true);
+	}));
+
+	it('should get all the children of a folder', (async () => {
+		const folder = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'note 1',
+					},
+					{
+						title: 'note 2',
+					},
+					{
+						title: 'folder 2',
+						children: [
+							{
+								title: 'note 3',
+							},
+						],
+					},
+					{
+						title: 'folder 3',
+						children: [],
+					},
+				],
+			},
+			{
+				title: 'folder 4',
+				children: [
+					{
+						title: 'folder 5',
+						children: [],
+					},
+				],
+			},
+		]);
+
+		const folder2 = await Folder.loadByTitle('folder 2');
+		const folder3 = await Folder.loadByTitle('folder 3');
+		const folder4 = await Folder.loadByTitle('folder 4');
+		const folder5 = await Folder.loadByTitle('folder 5');
+
+		{
+			const children = await Folder.allChildrenFolders(folder.id);
+			expect(children.map(c => c.id).sort()).toEqual([folder2.id, folder3.id].sort());
+		}
+
+		{
+			const children = await Folder.allChildrenFolders(folder4.id);
+			expect(children.map(c => c.id).sort()).toEqual([folder5.id].sort());
+		}
+
+		{
+			const children = await Folder.allChildrenFolders(folder5.id);
+			expect(children.map(c => c.id).sort()).toEqual([].sort());
+		}
 	}));
 });

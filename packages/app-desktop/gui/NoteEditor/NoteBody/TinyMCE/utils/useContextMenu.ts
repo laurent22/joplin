@@ -39,11 +39,11 @@ interface ContextMenuActionOptions {
 
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
-export default function(editor: any, plugins: PluginStates) {
+export default function(editor: any, plugins: PluginStates, dispatch: Function) {
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		const contextMenuItems = menuItems();
+		const contextMenuItems = menuItems(dispatch);
 
 		function onContextMenu(_event: any, params: any) {
 			const element = contextMenuElement(editor, params.x, params.y);
@@ -110,5 +110,5 @@ export default function(editor: any, plugins: PluginStates) {
 				bridge().window().webContents.off('context-menu', onContextMenu);
 			}
 		};
-	}, [editor, plugins]);
+	}, [editor, plugins, dispatch]);
 }

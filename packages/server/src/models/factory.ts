@@ -56,14 +56,16 @@
 
 import { DbConnection } from '../db';
 import ApiClientModel from './ApiClientModel';
-import { ModelOptions } from './BaseModel';
-import FileModel from './FileModel';
+import ItemModel from './ItemModel';
 import UserModel from './UserModel';
-import PermissionModel from './PermissionModel';
+import UserItemModel from './UserItemModel';
 import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
+import ItemResourceModel from './ItemResourceModel';
+import ShareUserModel from './ShareUserModel';
+import KeyValueModel from './KeyValueModel';
 
 export class Models {
 
@@ -75,36 +77,48 @@ export class Models {
 		this.baseUrl_ = baseUrl;
 	}
 
-	public file(options: ModelOptions = null) {
-		return new FileModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public item() {
+		return new ItemModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public user(options: ModelOptions = null) {
-		return new UserModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public user() {
+		return new UserModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public apiClient(options: ModelOptions = null) {
-		return new ApiClientModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public userItem() {
+		return new UserItemModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public permission(options: ModelOptions = null) {
-		return new PermissionModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public itemResource() {
+		return new ItemResourceModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public session(options: ModelOptions = null) {
-		return new SessionModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public apiClient() {
+		return new ApiClientModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public change(options: ModelOptions = null) {
-		return new ChangeModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public session() {
+		return new SessionModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public notification(options: ModelOptions = null) {
-		return new NotificationModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public change() {
+		return new ChangeModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
-	public share(options: ModelOptions = null) {
-		return new ShareModel(this.db_, newModelFactory, this.baseUrl_, options);
+	public notification() {
+		return new NotificationModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
+	public share() {
+		return new ShareModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
+	public shareUser() {
+		return new ShareUserModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
+	public keyValue() {
+		return new KeyValueModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
 }

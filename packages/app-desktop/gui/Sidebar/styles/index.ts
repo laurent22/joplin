@@ -63,22 +63,26 @@ export const StyledListItem = styled.div`
 function listItemTextColor(props: any) {
 	if (props.isConflictFolder) return props.theme.colorError2;
 	if (props.isSpecialItem) return props.theme.colorFaded2;
+	if (props.shareId) return props.theme.colorWarn2;
 	return props.theme.color2;
 }
 
 export const StyledListItemAnchor = styled.a`
 	font-size: ${(props: any) => Math.round(props.theme.fontSize * 1.0833333)}px;
-	// font-weight: 500;
 	text-decoration: none;
 	color: ${(props: any) => listItemTextColor(props)};
 	cursor: default;
-	opacity: ${(props: any) => props.selected ? 1 : 0.8};
+	opacity: ${(props: any) => props.selected || props.shareId ? 1 : 0.8};
 	white-space: nowrap;
 	display: flex;
 	flex: 1;
 	align-items: center;
 	user-select: none;
 	height: 100%;
+`;
+
+export const StyledShareIcon = styled.i`
+	margin-left: 8px;
 `;
 
 export const StyledExpandLink = styled.a`

@@ -14,6 +14,14 @@
 			<input class="input" type="email" name="email" value="{{user.email}}"/>
 		</div>
 	</div>
+	{{#global.owner.is_admin}}
+		<div class="field">
+			<label class="label">Max item size</label>
+			<div class="control">
+				<input class="input" type="number" name="item_max_size" value="{{user.item_max_size}}"/>
+			</div>
+		</div>
+	{{/global.owner.is_admin}}
 	<div class="field">
 		<label class="label">Password</label>
 		<div class="control">

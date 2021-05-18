@@ -1,0 +1,18 @@
+<form id="item_form" action="{{{postUrl}}}" method="POST" class="block">
+	<input type="submit" name="delete_all_button" class="button is-danger" value="Delete all" />
+</form>
+
+{{#itemTable}}
+	{{>table}}
+{{/itemTable}}
+
+<script>
+	onDocumentReady(function() {
+		document.getElementById("item_form").addEventListener('submit', function(event) {
+			if (event.submitter.getAttribute('name') === 'delete_all_button') {
+				const ok = confirm('Delete all items?');
+				if (!ok) event.preventDefault();
+			}
+		});
+	});
+</script>

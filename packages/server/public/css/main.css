@@ -44,3 +44,7 @@ table.table .nowrap {
 table.table .stretch {
 	width: 100%;
 }
+
+table.table th .sort-button i {
+	margin-left: 0.5rem;
+}

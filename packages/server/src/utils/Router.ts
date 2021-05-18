@@ -4,7 +4,12 @@ import { RouteResponseFormat, RouteHandler } from './routeUtils';
 
 export default class Router {
 
+	// When the router is public, we do not check that a valid session is
+	// available (that ctx.owner is defined). It means by default any user, even
+	// not logged in, can access any route of this router. End points that
+	// should not be publicly available should call ownerRequired(ctx);
 	public public: boolean = false;
+
 	public responseFormat: RouteResponseFormat = null;
 
 	private routes_: Record<string, Record<string, RouteHandler>> = {};

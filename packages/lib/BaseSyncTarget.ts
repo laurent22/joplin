@@ -3,6 +3,7 @@ import Synchronizer from './Synchronizer';
 import EncryptionService from './services/EncryptionService';
 import shim from './shim';
 import ResourceService from './services/ResourceService';
+import ShareService from './services/share/ShareService';
 
 export default class BaseSyncTarget {
 
@@ -113,6 +114,7 @@ export default class BaseSyncTarget {
 				this.synchronizer_.setLogger(this.logger());
 				this.synchronizer_.setEncryptionService(EncryptionService.instance());
 				this.synchronizer_.setResourceService(ResourceService.instance());
+				this.synchronizer_.setShareService(ShareService.instance());
 				this.synchronizer_.dispatch = BaseSyncTarget.dispatch;
 				this.initState_ = 'ready';
 				return this.synchronizer_;

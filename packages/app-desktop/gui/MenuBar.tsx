@@ -17,6 +17,7 @@ import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerS
 import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import bridge from '../services/bridge';
+import checkForUpdates from '../checkForUpdates';
 
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
@@ -430,7 +431,7 @@ function useMenu(props: Props) {
 			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.language'], props['spellChecker.enabled']));
 
 			function _checkForUpdates() {
-				bridge().checkForUpdates(false, bridge().window(), `${Setting.value('profileDir')}/log-autoupdater.txt`, { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+				void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 			}
 
 			function _showAbout() {
@@ -694,11 +695,18 @@ function useMenu(props: Props) {
 						},
 					],
 				},
+				folder: {
+					label: _('Note&book'),
+					submenu: [
+						menuItemDic.showShareFolderDialog,
+					],
+				},
 				note: {
 					label: _('&Note'),
 					submenu: [
 						menuItemDic.toggleExternalEditing,
 						menuItemDic.setTags,
+						menuItemDic.showShareNoteDialog,
 						separator(),
 						menuItemDic.showNoteContentProperties,
 					],
@@ -817,6 +825,7 @@ function useMenu(props: Props) {
 				rootMenus.edit,
 				rootMenus.view,
 				rootMenus.go,
+				rootMenus.folder,
 				rootMenus.note,
 				rootMenus.tools,
 				rootMenus.help,

@@ -76,7 +76,7 @@ module.exports = {
 
 		// Warn only for now because fixing everything would take too much
 		// refactoring, but new code should try to stick to it.
-		'complexity': ['warn', { max: 10 }],
+		// 'complexity': ['warn', { max: 10 }],
 
 		// Checks rules of Hooks
 		'react-hooks/rules-of-hooks': 'error',

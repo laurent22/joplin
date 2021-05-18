@@ -111,7 +111,7 @@ export default class Note extends BaseItem {
 		return BaseModel.TYPE_NOTE;
 	}
 
-	static linkedItemIds(body: string): string[] {
+	public static linkedItemIds(body: string): string[] {
 		if (!body || body.length <= 32) return [];
 
 		const links = urlUtils.extractResourceUrls(body);
@@ -307,7 +307,7 @@ export default class Note extends BaseItem {
 			includeTimestamps: true,
 		}, options);
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
