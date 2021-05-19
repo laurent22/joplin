@@ -266,11 +266,27 @@ class StateUtils {
 
 	public parentItem(state: State) {
 		const t = state.notesParentType;
+		if (!t) return null;
+
 		let id = null;
-		if (t === 'Folder') id = state.selectedFolderId;
-		if (t === 'Tag') id = state.selectedTagId;
-		if (t === 'Search') id = state.selectedSearchId;
-		if (!t || !id) return null;
+
+		switch (t) {
+		case 'Folder':
+			id = state.selectedFolderId;
+			break;
+		case 'Tag':
+			id = state.selectedTagId;
+			break;
+		case 'Search':
+			id = state.selectedSearchId;
+			break;
+		case 'SmartFilter':
+			id = state.selectedSmartFilterId;
+			break;
+		default:
+			return null;
+		}
+
 		return { type: t, id: id };
 	}
 
