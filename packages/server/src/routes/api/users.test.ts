@@ -73,7 +73,6 @@ describe('api_users', function() {
 		await createUserAndSession(3);
 
 		const results: any = await getApi(adminSession.id, 'users');
-		console.info(results);
 		expect(results.items.length).toBe(3);
 	});
 

@@ -138,6 +138,10 @@ export default class UserModel extends BaseModel<User> {
 		return `${this.baseUrl}/users/me`;
 	}
 
+	public async emailsNeedToBeSentUsers():Promise<User[]> {
+		return this.db(this.tableName).select(['id', 'email']).where('email_confirmation_sent', '=', 0);
+	}
+
 	public async delete(id: string): Promise<void> {
 		const shares = await this.models().share().sharesByUser(id);
 
@@ -160,7 +164,12 @@ export default class UserModel extends BaseModel<User> {
 	// Because the password would be hashed twice.
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const user = { ...object };
+		
 		if (user.password) user.password = auth.hashPassword(user.password);
+		if (await this.isNew(object, options)) {
+			UserModel.eventEmitter.emit('created');
+		}
+		
 		return super.save(user, options);
 	}
 
