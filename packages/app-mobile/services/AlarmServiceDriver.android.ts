@@ -1,7 +1,7 @@
 import Logger from '@joplin/lib/Logger';
 import { Notification } from '@joplin/lib/models/Alarm';
 
-const ReactNativeAN = require('react-native-alarm-notification').default;
+const ReactNativeAN = require('joplin-rn-alarm-notification').default;
 
 export default class AlarmServiceDriver {
 
@@ -30,9 +30,11 @@ export default class AlarmServiceDriver {
 
 	// Returns -1 if could not be found
 	private alarmJoplinAlarmId(alarm: any): number {
-		if (!alarm.data) return -1;
-		const m = alarm.data.match(/joplinNotificationId==>(\d+)/);
-		return m ? Number(m[1]) : -1;
+		if (!alarm.data || !alarm.data.joplinNotificationId) {
+			return -1;
+		} else {
+			return alarm.data.joplinNotificationId;
+		}
 	}
 
 	private async alarmByJoplinNotificationId(joplinNotificationId: number) {
@@ -51,9 +53,12 @@ export default class AlarmServiceDriver {
 			title: notification.title,
 			message: notification.body ? notification.body : '-', // Required
 			channel: 'net.cozic.joplin.notification',
-			small_icon: 'ic_launcher',
-			color: 'white',
-			data: { joplinNotificationId: `${notification.id}` },
+			small_icon: 'ic_launcher_foreground', // Android requires the icon to be transparent
+			color: 'blue',
+			data: {
+				joplinNotificationId: `${notification.id}`,
+				noteId: notification.noteId,
+			},
 		};
 
 		// ReactNativeAN expects a string as a date and it seems this utility

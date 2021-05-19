@@ -794,9 +794,9 @@ packages/app-mobile/services/AlarmServiceDriver.android.js.map
 packages/app-mobile/services/AlarmServiceDriver.ios.d.ts
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js.map
-packages/app-mobile/setUpQuickActions.d.ts
-packages/app-mobile/setUpQuickActions.js
-packages/app-mobile/setUpQuickActions.js.map
+packages/app-mobile/setupQuickActions.d.ts
+packages/app-mobile/setupQuickActions.js
+packages/app-mobile/setupQuickActions.js.map
 packages/app-mobile/utils/ShareExtension.d.ts
 packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareExtension.js.map
@@ -812,6 +812,9 @@ packages/app-mobile/utils/checkPermissions.js.map
 packages/app-mobile/utils/fs-driver-rn.d.ts
 packages/app-mobile/utils/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver-rn.js.map
+packages/app-mobile/utils/setupNotifications.d.ts
+packages/app-mobile/utils/setupNotifications.js
+packages/app-mobile/utils/setupNotifications.js.map
 packages/app-mobile/utils/shareHandler.d.ts
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shareHandler.js.map
