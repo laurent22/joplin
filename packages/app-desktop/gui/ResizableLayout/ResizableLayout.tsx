@@ -11,9 +11,6 @@ import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootWrapper, MoveModeRoot
 import { Resizable } from 're-resizable';
 const EventEmitter = require('events');
 
-const itemMinWidth = 20;
-const itemMinHeight = 20;
-
 interface onResizeEvent {
 	layout: LayoutItem;
 }
@@ -66,8 +63,10 @@ function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: Lay
 				onResize={onResize as any}
 				onResizeStop={onResizeStop as any}
 				enable={enable}
-				minWidth={'minWidth' in item ? item.minWidth : itemMinWidth}
-				minHeight={'minHeight' in item ? item.minHeight : itemMinHeight}
+				minWidth={sizes[item.key].min.width}
+				minHeight={sizes[item.key].min.height}
+				maxWidth={sizes[item.key].max.width}
+				maxHeight={sizes[item.key].max.height}
 			>
 				{children}
 			</Resizable>
@@ -112,14 +111,18 @@ function ResizableLayout(props: Props) {
 		function onResizeStart() {
 			setResizedItem({
 				key: item.key,
-				initialWidth: sizes[item.key].width,
-				initialHeight: sizes[item.key].height,
+				initialSize: sizes[item.key].current,
+				maxSize: sizes[item.key].max,
+				minSize: sizes[item.key].min,
 			});
 		}
 
 		function onResize(_event: any, direction: string, _refToElement: any, delta: any) {
-			const newWidth = Math.max(itemMinWidth, resizedItem.initialWidth + delta.width);
-			const newHeight = Math.max(itemMinHeight, resizedItem.initialHeight + delta.height);
+			let newWidth = Math.max(resizedItem.minSize.width, resizedItem.initialSize.width + delta.width);
+			let newHeight = Math.max(resizedItem.minSize.height, resizedItem.initialSize.height + delta.height);
+
+			newWidth = Math.min(newWidth, resizedItem.maxSize.width);
+			newHeight = Math.min(newHeight, resizedItem.maxSize.height);
 
 			const newSize: any = {};
 
