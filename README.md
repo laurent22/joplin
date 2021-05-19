@@ -342,7 +342,7 @@ In the desktop and mobile apps, an alarm can be associated with any to-do. It wi
 
 - **Windows**: >= 8. Make sure the Action Center is enabled on Windows. Task bar balloon for Windows < 8. Growl as fallback. Growl takes precedence over Windows balloons.
 - **macOS**: >= 10.8 or Growl if earlier.
-- **Linux**: `notify-osd` or `libnotify-bin` installed (Ubuntu should have this by default). Growl otherwise
+- **Linux**: `notify-send` tool, delivered through packages `notify-osd`, `libnotify-bin` or `libnotify-tools`. GNOME should have this by default, but install `libnotify-tools` if using KDE Plasma.
 
 See [documentation and flow chart for reporter choice](https://github.com/mikaelbr/node-notifier/blob/master/DECISION_FLOW.md)
 
