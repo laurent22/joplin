@@ -90,6 +90,7 @@ interface Props {
 	['spellChecker.enabled']: boolean;
 	['spellChecker.language']: string;
 	plugins: PluginStates;
+	customCss: string;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -313,7 +314,10 @@ function useMenu(props: Props) {
 								await InteropServiceHelper.export(
 									(action: any) => props.dispatch(action),
 									module,
-									{ plugins: props.plugins }
+									{
+										plugins: props.plugins,
+										customCss: props.customCss,
+									}
 								);
 							},
 						});
@@ -860,7 +864,7 @@ function useMenu(props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins]);
+	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins, props.customCss]);
 
 	useMenuStates(menu, props);
 
@@ -917,6 +921,7 @@ const mapStateToProps = (state: AppState) => {
 		['spellChecker.language']: state.settings['spellChecker.language'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 		plugins: state.pluginService.plugins,
+		customCss: state.customCss,
 	};
 };
 

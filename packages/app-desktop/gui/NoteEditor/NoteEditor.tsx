@@ -156,10 +156,11 @@ function NoteEditor(props: NoteEditorProps) {
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			customCss: props.customCss,
 		});
 
 		return markupToHtml.allAssets(markupLanguage, theme);
-	}, [props.themeId]);
+	}, [props.themeId, props.customCss]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -458,6 +459,7 @@ function NoteEditor(props: NoteEditorProps) {
 			watchedNoteFiles={props.watchedNoteFiles}
 			plugins={props.plugins}
 			inConflictFolder={props.selectedFolderId === Folder.conflictFolderId()}
+			customCss={props.customCss}
 		/>;
 	}
 

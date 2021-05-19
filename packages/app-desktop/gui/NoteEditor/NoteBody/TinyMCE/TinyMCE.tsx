@@ -358,7 +358,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			element.id = script.id;
 
 			element.onload = () => {
-				resolve();
+				resolve(null);
 			};
 
 			document.getElementsByTagName('head')[0].appendChild(element);

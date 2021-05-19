@@ -246,7 +246,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 	markupToHtml() {
 		if (this.markupToHtml_) return this.markupToHtml_;
-		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml({});
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 		return this.markupToHtml_;
 	}
 

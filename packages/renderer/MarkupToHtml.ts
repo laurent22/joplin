@@ -24,7 +24,7 @@ export interface RenderResultPluginAsset {
 export interface RenderResult {
 	html: string;
 	pluginAssets: RenderResultPluginAsset[];
-	cssStrings: string[];
+	cssStrings?: string[];
 }
 
 export interface OptionsResourceModel {
@@ -33,7 +33,10 @@ export interface OptionsResourceModel {
 
 export interface Options {
 	isSafeMode?: boolean;
-	ResourceModel: OptionsResourceModel;
+	ResourceModel?: OptionsResourceModel;
+	customCss?: string;
+	extraRendererRules?: any[];
+	resourceBaseUrl?: string;
 }
 
 export default class MarkupToHtml {
@@ -68,7 +71,7 @@ export default class MarkupToHtml {
 			throw new Error(`Invalid markup language: ${markupLanguage}`);
 		}
 
-		this.renderers_[markupLanguage] = new RendererClass(this.options_);
+		this.renderers_[markupLanguage] = new RendererClass(this.options_ as any);
 		return this.renderers_[markupLanguage];
 	}
 
