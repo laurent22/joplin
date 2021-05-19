@@ -33,14 +33,48 @@ describe('markdownUtils', function() {
 			['![something](http://test.com/img.png "Some description")', ['http://test.com/img.png']],
 			['![something](https://test.com/ohoh_(123).png)', ['https://test.com/ohoh_(123).png']],
 			['![nothing]() ![something](http://test.com/img.png)', ['http://test.com/img.png']],
+			['![something](img.png)', ['img.png']],
+			['![something](/img.png)', ['/img.png']],
+			['![something](../img.png)', ['../img.png']],
+			['![something](../upload/img.png)', ['../upload/img.png']],
+			['![something](./upload/img.png)', ['./upload/img.png']],
+			['[something](testing.html)', ['']],
+			['[something](img.png)', ['']],
+			['![something](file://img.png)', ['file://img.png']],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
 			const md = testCases[i][0];
 			const actual = markdownUtils.extractImageUrls(md);
 			const expected = testCases[i][1];
+			expect(actual.join(' ')).toBe((expected as string[]).join(' '));
+		}
+	}));
 
-			expect(actual.join(' ')).toBe(expected.join(' '));
+	it('should extract files URLs', (async () => {
+		const testCases = [
+			['[something](http://test.com/img.png)', ['http://test.com/img.png']],
+			['[something](http://test.com/test.txt)', ['http://test.com/test.txt']],
+			['[something](http://test.com/img.png) ![something2](http://test.com/img2.png)', ['http://test.com/img.png', 'http://test.com/img2.png']],
+			['[something](http://test.com/img.png "Some description")', ['http://test.com/img.png']],
+			['[something](https://test.com/ohoh_(123).png)', ['https://test.com/ohoh_(123).png']],
+			['[nothing]() ![something](http://test.com/img.png)', ['http://test.com/img.png']],
+			['[something](test.txt)', ['test.txt']],
+			['[something](/test.txt)', ['/test.txt']],
+			['[something](../test.txt)', ['../test.txt']],
+			['[something](../upload/test.txt)', ['../upload/test.txt']],
+			['[something](./upload/test.txt)', ['./upload/test.txt']],
+			['[something](testing.html)', ['testing.html']],
+			['[something](img.png)', ['img.png']],
+			['[something](file://img.png)', ['file://img.png']],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const actual = markdownUtils.extractFileUrls(md);
+			const expected = testCases[i][1];
+
+			expect(actual.join(' ')).toBe((expected as string[]).join(' '));
 		}
 	}));
 
