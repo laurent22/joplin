@@ -63,6 +63,7 @@ import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
+import EmailModel from './EmailModel';
 import ItemResourceModel from './ItemResourceModel';
 import ShareUserModel from './ShareUserModel';
 import KeyValueModel from './KeyValueModel';
@@ -83,6 +84,10 @@ export class Models {
 
 	public user() {
 		return new UserModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
+	public email() {
+		return new EmailModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
 	public userItem() {

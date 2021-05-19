@@ -86,3 +86,10 @@ export class ErrorPayloadTooLarge extends ApiError {
 		Object.setPrototypeOf(this, ErrorPayloadTooLarge.prototype);
 	}
 }
+
+export function errorToString(error: Error): string {
+	const msg: string[] = [];
+	msg.push(error.message ? error.message : 'Unknown error');
+	if (error.stack) msg.push(error.stack);
+	return msg.join(': ');
+}

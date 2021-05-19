@@ -67,10 +67,21 @@ function markPasswords(o: Record<string, any>): Record<string, any> {
 	return output;
 }
 
-async function main() {
-	if (argv.envFile) {
-		nodeEnvFile(argv.envFile);
+async function getEnvFilePath(env: Env, argv: any): Promise<string> {
+	if (argv.envFile) return argv.envFile;
+
+	if (env === Env.Dev) {
+		const envFilePath = `${require('os').homedir()}/joplin-credentials/server.env`;
+		if (await fs.pathExists(envFilePath)) return envFilePath;
 	}
+
+	return '';
+}
+
+async function main() {
+	const envFilePath = await getEnvFilePath(env, argv);
+
+	if (envFilePath) nodeEnvFile(envFilePath);
 
 	if (!envVariables[env]) throw new Error(`Invalid env: ${env}`);
 
@@ -90,6 +101,8 @@ async function main() {
 		formatInfo: '%(date_time)s: %(prefix)s: %(message)s',
 	});
 	Logger.initializeGlobalLogger(globalLogger);
+
+	if (envFilePath) appLogger().info(`Env variables were loaded from: ${envFilePath}`);
 
 	const pidFile = argv.pidfile as string;
 

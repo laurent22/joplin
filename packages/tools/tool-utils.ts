@@ -246,10 +246,14 @@ export async function credentialFile(filename: string) {
 	return output;
 }
 
-export async function readCredentialFile(filename: string) {
-	const filePath = await credentialFile(filename);
-	const r = await fs.readFile(filePath);
-	return r.toString();
+export async function readCredentialFile(filename: string, defaultValue: string = '') {
+	try {
+		const filePath = await credentialFile(filename);
+		const r = await fs.readFile(filePath);
+		return r.toString();
+	} catch (error) {
+		return defaultValue;
+	}
 }
 
 export async function downloadFile(url: string, targetPath: string) {

@@ -1,18 +1,22 @@
+import Logger from '@joplin/lib/Logger';
 import { Models } from '../models/factory';
+import { msleep } from '../utils/time';
 import { Config, Env } from '../utils/types';
+
+const logger = Logger.create('BaseService');
 
 export default class BaseService {
 
 	private env_: Env;
 	private models_: Models;
-	private config_:Config;
-	private maintenanceScheduled_: boolean = false;
+	private config_: Config;
+	protected enabled_: boolean = true;
+	private destroyed_: boolean = false;
+	protected maintenanceInterval_: number = 10000;
+	private scheduledMaintenances_: boolean[] = [];
 	private maintenanceInProgress_: boolean = false;
-	private scheduleMaintenanceTimeout_: any = null;
-	protected enabled_:boolean = true;
-	protected maintenanceInterval_:number = 10000;
 
-	public constructor(env: Env, models: Models, config:Config) {
+	public constructor(env: Env, models: Models, config: Config) {
 		this.env_ = env;
 		this.models_ = models;
 		this.config_ = config;
@@ -20,9 +24,12 @@ export default class BaseService {
 	}
 
 	public async destroy() {
-		if (this.scheduleMaintenanceTimeout_) {
-			clearTimeout(this.scheduleMaintenanceTimeout_);
-			this.scheduleMaintenanceTimeout_ = null;
+		if (this.destroyed_) throw new Error('Already destroyed');
+		this.destroyed_ = true;
+		this.scheduledMaintenances_ = [];
+
+		while (this.maintenanceInProgress_) {
+			await msleep(500);
 		}
 	}
 
@@ -34,35 +41,47 @@ export default class BaseService {
 		return this.env_;
 	}
 
-	protected get config():Config {
+	protected get config(): Config {
 		return this.config_;
 	}
 
-	public get enabled():boolean {
+	public get enabled(): boolean {
 		return this.enabled_;
 	}
 
 	public get maintenanceInProgress(): boolean {
-		return this.maintenanceInProgress_;
+		return !!this.scheduledMaintenances_.length;
 	}
 
 	protected async scheduleMaintenance() {
-		if (!this.enabled) return;
-		if (this.maintenanceScheduled_) return;
-		this.maintenanceScheduled_ = true;
+		if (this.destroyed_) return;
 
-		this.scheduleMaintenanceTimeout_ = setTimeout(() => {
-			this.maintenanceScheduled_ = false;
-			void this.runMaintenance();
-		}, this.env === Env.Dev ? 2000 : this.maintenanceInterval_);
+		// Every time a maintenance is scheduled we push a task to this array.
+		// Whenever the maintenance actually runs, that array is cleared. So it
+		// means, that if new tasks are pushed to the array while the
+		// maintenance is runing, it will run again once it's finished, so as to
+		// process any item that might have been added.
+
+		this.scheduledMaintenances_.push(true);
+
+		if (this.scheduledMaintenances_.length !== 1) return;
+
+		while (this.scheduledMaintenances_.length) {
+			await msleep(this.env === Env.Dev ? 2000 : this.maintenanceInterval_);
+			if (this.destroyed_) return;
+			const itemCount = this.scheduledMaintenances_.length;
+			await this.runMaintenance();
+			this.scheduledMaintenances_.splice(0, itemCount);
+		}
 	}
 
 	private async runMaintenance() {
-		if (!this.enabled) return;
-		if (this.maintenanceInProgress_) return;
-
 		this.maintenanceInProgress_ = true;
-		await this.maintenance();
+		try {
+			await this.maintenance();
+		} catch (error) {
+			logger.error('Could not run maintenance', error);
+		}
 		this.maintenanceInProgress_ = false;
 	}
 
