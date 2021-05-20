@@ -1042,7 +1042,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
 				editor.insertContent(result.html);
 			} else {
-				const pastedText = event.clipboardData.getData('text');
+				const pastedText = event.clipboardData.getData('text/plain');
 
 				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
 					event.preventDefault();
@@ -1053,7 +1053,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					// so we manually add it here. We also can't do it immediately it seems, or
 					// else nothing is added to the stack, so do it on the next frame.
 
-					const pastedHtml = clipboard.readHTML();
+					const pastedHtml = event.clipboardData.getData('text/html');
 					if (pastedHtml) {
 						event.preventDefault();
 						const modifiedHtml = await processPastedHtml(pastedHtml);
