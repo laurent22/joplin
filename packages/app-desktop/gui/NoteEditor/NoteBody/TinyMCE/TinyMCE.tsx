@@ -20,6 +20,7 @@ const taboverride = require('taboverride');
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
+import { plainTextToHtml } from '@joplin/lib/htmlUtils';
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -1037,6 +1038,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		async function onPaste(event: any) {
+			// We do not use the default pasting behaviour because the input has
+			// to be processed in various ways.
+			event.preventDefault();
+
 			const resourceMds = await handlePasteEvent(event);
 			if (resourceMds.length) {
 				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
@@ -1045,23 +1050,25 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				const pastedText = event.clipboardData.getData('text/plain');
 
 				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
-					event.preventDefault();
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
 				} else { // Paste regular text
-					// HACK: TinyMCE doesn't add an undo step when pasting, for unclear reasons
-					// so we manually add it here. We also can't do it immediately it seems, or
-					// else nothing is added to the stack, so do it on the next frame.
-
 					const pastedHtml = event.clipboardData.getData('text/html');
-					if (pastedHtml) {
-						event.preventDefault();
+					if (pastedHtml) { // Handles HTML
 						const modifiedHtml = await processPastedHtml(pastedHtml);
 						editor.insertContent(modifiedHtml);
+					} else { // Handles plain text
+						pasteAsPlainText(pastedText);
 					}
 
-					window.requestAnimationFrame(() => editor.undoManager.add());
-					onChangeHandler();
+					// This code before was necessary to get undo working after
+					// pasting but it seems it's no longer necessary, so
+					// removing it for now. We also couldn't do it immediately
+					// it seems, or else nothing is added to the stack, so do it
+					// on the next frame.
+					//
+					// window.requestAnimationFrame(() =>
+					// editor.undoManager.add()); onChangeHandler();
 				}
 			}
 		}
@@ -1080,6 +1087,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			onChangeHandler();
 		}
 
+		function pasteAsPlainText(text: string = null) {
+			const pastedText = text === null ? clipboard.readText() : text;
+			if (pastedText) {
+				editor.insertContent(plainTextToHtml(pastedText));
+			}
+		}
+
 		function onKeyDown(event: any) {
 			// It seems "paste as text" is handled automatically by
 			// on Windows so the code below so we need to run the below
@@ -1092,8 +1106,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// it here and we don't need to do anything special in onPaste
 			if (!shim.isWindows()) {
 				if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
-					const pastedText = clipboard.readText();
-					if (pastedText) editor.insertContent(pastedText);
+					pasteAsPlainText();
 				}
 			}
 		}

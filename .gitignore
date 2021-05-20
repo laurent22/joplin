@@ -939,6 +939,9 @@ packages/lib/fs-driver-node.js.map
 packages/lib/htmlUtils.d.ts
 packages/lib/htmlUtils.js
 packages/lib/htmlUtils.js.map
+packages/lib/htmlUtils.test.d.ts
+packages/lib/htmlUtils.test.js
+packages/lib/htmlUtils.test.js.map
 packages/lib/import-enex-md-gen.d.ts
 packages/lib/import-enex-md-gen.js
 packages/lib/import-enex-md-gen.js.map
