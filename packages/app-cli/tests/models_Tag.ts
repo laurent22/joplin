@@ -133,18 +133,15 @@ describe('models_Tag', function() {
 		expect(commonTags.length).toBe(0);
 
 		commonTags = await Tag.commonTagsByNoteIds([note0.id, note1.id, note2.id, note3.id]);
-
 		let commonTagIds = commonTags.map(t => t.id);
 		expect(commonTagIds.length).toBe(0);
 
 		commonTags = await Tag.commonTagsByNoteIds([note1.id, note2.id, note3.id]);
-
 		commonTagIds = commonTags.map(t => t.id);
 		expect(commonTagIds.length).toBe(1);
 		expect(commonTagIds.includes(taga.id)).toBe(true);
 
 		commonTags = await Tag.commonTagsByNoteIds([note2.id, note3.id]);
-
 		commonTagIds = commonTags.map(t => t.id);
 		expect(commonTagIds.length).toBe(2);
 		expect(commonTagIds.includes(taga.id)).toBe(true);
