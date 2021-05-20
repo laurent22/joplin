@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
-import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
-import { resourcesStatus, commandAttachFileToBody, handlePasteEvent, processPastedHtml } from '../../utils/resourceHandling';
+import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos } from '../../utils/types';
+import { resourcesStatus, commandAttachFileToBody, handlePasteEvent, processPastedHtml, attachedResources } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -148,6 +148,12 @@ const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {
 	'search': { name: 'SearchReplace' },
 };
 
+interface LastOnChangeEventInfo {
+	content: string;
+	resourceInfos: ResourceInfos;
+	contentKey: string;
+}
+
 let loadedCssFiles_: string[] = [];
 let loadedJsFiles_: string[] = [];
 let dispatchDidUpdateIID_: any = null;
@@ -168,7 +174,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
 
-	const lastOnChangeEventInfo = useRef<any>({
+	const lastOnChangeEventInfo = useRef<LastOnChangeEventInfo>({
 		content: null,
 		resourceInfos: null,
 		contentKey: null,
@@ -828,6 +834,25 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 	};
 
+	function resourceInfosEqual(ri1: ResourceInfos, ri2: ResourceInfos): boolean {
+		if (ri1 && !ri2 || !ri1 && ri2) return false;
+		if (!ri1 && !ri2) return true;
+
+		const keys1 = Object.keys(ri1);
+		const keys2 = Object.keys(ri2);
+
+		if (keys1.length !== keys2.length) return false;
+
+		// The attachedResources() call that generates the ResourceInfos object
+		// uses cache for the resource objects, so we can use strict equality
+		// for comparison.
+		for (const k of keys1) {
+			if (ri1[k] !== ri2[k]) return false;
+		}
+
+		return true;
+	}
+
 	useEffect(() => {
 		if (!editor) return () => {};
 
@@ -839,7 +864,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			if (lastOnChangeEventInfo.current.content !== props.content || lastOnChangeEventInfo.current.resourceInfos !== props.resourceInfos) {
+			const resourcesEqual = resourceInfosEqual(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
+
+			if (lastOnChangeEventInfo.current.content !== props.content || !resourcesEqual) {
 				const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
 				if (cancelled) return;
 
@@ -943,6 +970,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, info.editor.getContent(), info.contentOriginalCss);
 
 		lastOnChangeEventInfo.current.content = contentMd;
+		lastOnChangeEventInfo.current.resourceInfos = await attachedResources(contentMd);
 
 		props_onChangeRef.current({
 			changeId: info.changeId,
