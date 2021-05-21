@@ -1,7 +1,7 @@
-import Setting, { SettingSectionSource } from '@joplin/lib/models/Setting';
-import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '@joplin/lib/testing/test-utils';
+import Setting, { SettingSectionSource } from '../models/Setting';
+import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
 import * as fs from 'fs-extra';
-import Logger from '@joplin/lib/Logger';
+import Logger from '../Logger';
 
 async function loadSettingsFromFile(): Promise<any> {
 	return JSON.parse(await fs.readFile(Setting.settingFilePath, 'utf8'));

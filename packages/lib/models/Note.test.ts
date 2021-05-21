@@ -1,12 +1,12 @@
-import Setting from '@joplin/lib/models/Setting';
-import BaseModel from '@joplin/lib/BaseModel';
-import shim from '@joplin/lib/shim';
-import markdownUtils from '@joplin/lib/markdownUtils';
-const { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import Tag from '@joplin/lib/models/Tag';
-const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
+import Setting from './Setting';
+import BaseModel from '../BaseModel';
+import shim from '../shim';
+import markdownUtils from '../markdownUtils';
+import { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir } from '../testing/test-utils';
+import Folder from './Folder';
+import Note from './Note';
+import Tag from './Tag';
+const ArrayUtils = require('../ArrayUtils.js');
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -30,15 +30,15 @@ describe('models_Note', function() {
 		expect(items.length).toBe(1);
 		expect(items[0].id).toBe(note1.id);
 
-		await shim.attachFileToNote(note2, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note2, `${supportDir}/photo.jpg`);
 		note2 = await Note.load(note2.id);
 		items = await Note.linkedItems(note2.body);
 		expect(items.length).toBe(2);
 		expect(items[0].type_).toBe(BaseModel.TYPE_NOTE);
 		expect(items[1].type_).toBe(BaseModel.TYPE_RESOURCE);
 
-		const resource2 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
-		const resource3 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		const resource2 = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const resource3 = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
 		note2.body += `<img alt="bla" src=":/${resource2.id}"/>`;
 		note2.body += `<img src=':/${resource3.id}' />`;
 		items = await Note.linkedItems(note2.body);
@@ -228,9 +228,9 @@ describe('models_Note', function() {
 	it('should convert resource paths from internal to external paths', (async () => {
 		const resourceDirName = Setting.value('resourceDirName');
 		const resourceDir = Setting.value('resourceDir');
-		const r1 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
-		const r2 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
-		const r3 = await shim.createResourceFromPath(`${__dirname}/../tests/support/welcome.pdf`);
+		const r1 = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const r2 = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const r3 = await shim.createResourceFromPath(`${supportDir}/welcome.pdf`);
 		const note1 = await Note.save({ title: 'note1' });
 		const t1 = r1.updated_time;
 		const t2 = r2.updated_time;

@@ -1,7 +1,7 @@
-import { FolderEntity } from '@joplin/lib/services/database/types';
-import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree } from '@joplin/lib/testing/test-utils';
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
+import { FolderEntity } from '../services/database/types';
+import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree } from '../testing/test-utils';
+import Folder from './Folder';
+import Note from './Note';
 
 async function allItems() {
 	const folders = await Folder.all();
