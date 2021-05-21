@@ -1,10 +1,10 @@
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { setupDatabaseAndSynchronizer, switchClient, exportDir } from './test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, exportDir } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import * as fs from 'fs-extra';
-import { tempFilePath } from './test-utils';
+import { tempFilePath } from '@joplin/lib/testing/test-utils';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 
 async function recreateExportDir() {

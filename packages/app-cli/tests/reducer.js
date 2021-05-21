@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-const { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } = require('@joplin/lib/testing/test-utils.js');
 const Folder = require('@joplin/lib/models/Folder').default;
 const Note = require('@joplin/lib/models/Note').default;
 const Tag = require('@joplin/lib/models/Tag').default;

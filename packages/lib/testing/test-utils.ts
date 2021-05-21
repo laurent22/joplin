@@ -1,65 +1,65 @@
 /* eslint-disable require-atomic-updates */
-import BaseApplication from '@joplin/lib/BaseApplication';
-import BaseModel from '@joplin/lib/BaseModel';
-import Logger, { TargetType, LoggerWrapper, LogLevel } from '@joplin/lib/Logger';
-import Setting from '@joplin/lib/models/Setting';
-import BaseService from '@joplin/lib/services/BaseService';
-import FsDriverNode from '@joplin/lib/fs-driver-node';
-import time from '@joplin/lib/time';
-import shim from '@joplin/lib/shim';
-import uuid from '@joplin/lib/uuid';
-import ResourceService from '@joplin/lib/services/ResourceService';
-import KeymapService from '@joplin/lib/services/KeymapService';
-import KvStore from '@joplin/lib/services/KvStore';
-import KeychainServiceDriver from '@joplin/lib/services/keychain/KeychainServiceDriver.node';
-import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainServiceDriver.dummy';
-import PluginRunner from '../app/services/plugins/PluginRunner';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
-import FileApiDriverJoplinServer from '@joplin/lib/file-api-driver-joplinServer';
-import OneDriveApi from '@joplin/lib/onedrive-api';
-import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
-import JoplinDatabase from '@joplin/lib/JoplinDatabase';
+import BaseApplication from '../BaseApplication';
+import BaseModel from '../BaseModel';
+import Logger, { TargetType, LoggerWrapper, LogLevel } from '../Logger';
+import Setting from '../models/Setting';
+import BaseService from '../services/BaseService';
+import FsDriverNode from '../fs-driver-node';
+import time from '../time';
+import shim from '../shim';
+import uuid from '../uuid';
+import ResourceService from '../services/ResourceService';
+import KeymapService from '../services/KeymapService';
+import KvStore from '../services/KvStore';
+import KeychainServiceDriver from '../services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverDummy from '../services/keychain/KeychainServiceDriver.dummy';
+import PluginRunner from '../../app-cli/app/services/plugins/PluginRunner';
+import PluginService from '../services/plugins/PluginService';
+import FileApiDriverJoplinServer from '../file-api-driver-joplinServer';
+import OneDriveApi from '../onedrive-api';
+import SyncTargetOneDrive from '../SyncTargetOneDrive';
+import JoplinDatabase from '../JoplinDatabase';
 
 const fs = require('fs-extra');
-const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import ItemChange from '@joplin/lib/models/ItemChange';
-import Resource from '@joplin/lib/models/Resource';
-import Tag from '@joplin/lib/models/Tag';
-import NoteTag from '@joplin/lib/models/NoteTag';
-import Revision from '@joplin/lib/models/Revision';
-import MasterKey from '@joplin/lib/models/MasterKey';
-import BaseItem from '@joplin/lib/models/BaseItem';
-const { FileApi } = require('@joplin/lib/file-api.js');
-const { FileApiDriverMemory } = require('@joplin/lib/file-api-driver-memory.js');
-const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
-const { FileApiDriverWebDav } = require('@joplin/lib/file-api-driver-webdav.js');
-const { FileApiDriverDropbox } = require('@joplin/lib/file-api-driver-dropbox.js');
-const { FileApiDriverOneDrive } = require('@joplin/lib/file-api-driver-onedrive.js');
-const { FileApiDriverAmazonS3 } = require('@joplin/lib/file-api-driver-amazon-s3.js');
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
-const SyncTargetMemory = require('@joplin/lib/SyncTargetMemory.js');
-const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
-const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
-import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
-import EncryptionService from '@joplin/lib/services/EncryptionService';
-import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-import RevisionService from '@joplin/lib/services/RevisionService';
-import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-const WebDavApi = require('@joplin/lib/WebDavApi');
-const DropboxApi = require('@joplin/lib/DropboxApi');
-import JoplinServerApi from '@joplin/lib/JoplinServerApi';
-import { FolderEntity } from '@joplin/lib/services/database/types';
-const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
+const { DatabaseDriverNode } = require('../database-driver-node.js');
+import Folder from '../models/Folder';
+import Note from '../models/Note';
+import ItemChange from '../models/ItemChange';
+import Resource from '../models/Resource';
+import Tag from '../models/Tag';
+import NoteTag from '../models/NoteTag';
+import Revision from '../models/Revision';
+import MasterKey from '../models/MasterKey';
+import BaseItem from '../models/BaseItem';
+const { FileApi } = require('../file-api.js');
+const { FileApiDriverMemory } = require('../file-api-driver-memory.js');
+const { FileApiDriverLocal } = require('../file-api-driver-local.js');
+const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
+const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
+const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
+const { FileApiDriverAmazonS3 } = require('../file-api-driver-amazon-s3.js');
+const { shimInit } = require('../shim-init-node.js');
+const SyncTargetRegistry = require('../SyncTargetRegistry.js');
+const SyncTargetMemory = require('../SyncTargetMemory.js');
+const SyncTargetFilesystem = require('../SyncTargetFilesystem.js');
+const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
+const SyncTargetDropbox = require('../SyncTargetDropbox.js');
+const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
+import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
+import EncryptionService from '../services/EncryptionService';
+import DecryptionWorker from '../services/DecryptionWorker';
+import RevisionService from '../services/RevisionService';
+import ResourceFetcher from '../services/ResourceFetcher';
+const WebDavApi = require('../WebDavApi');
+const DropboxApi = require('../DropboxApi');
+import JoplinServerApi from '../JoplinServerApi';
+import { FolderEntity } from '../services/database/types';
+import { credentialFile } from '../utils/credentialFiles';
+const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
-const { Dirnames } = require('@joplin/lib/services/synchronizer/utils/types');
+const { Dirnames } = require('../services/synchronizer/utils/types');
 const sharp = require('sharp');
-const { credentialFile } = require('@joplin/tools/tool-utils');
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -102,13 +102,14 @@ Resource.fsDriver_ = fsDriver;
 EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
-const logDir = `${__dirname}/../tests/logs`;
-const baseTempDir = `${__dirname}/../tests/tmp/${suiteName_}`;
-const supportDir = `${__dirname}/support`;
+const oldTestDir = `${__dirname}/../../app-cli/tests`;
+const logDir = `${oldTestDir}/logs`;
+const baseTempDir = `${oldTestDir}/tmp/${suiteName_}`;
+const supportDir = `${oldTestDir}/support`;
 
 // We add a space in the data directory path as that will help uncover
 // various space-in-path issues.
-const dataDir = `${__dirname}/test data/${suiteName_}`;
+const dataDir = `${oldTestDir}/test data/${suiteName_}`;
 const profileDir = `${dataDir}/profile`;
 
 fs.mkdirpSync(logDir, 0o755);
@@ -153,7 +154,7 @@ setSyncTargetName('memory');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
-const syncDir = `${__dirname}/../tests/sync/${suiteName_}`;
+const syncDir = `${oldTestDir}/sync/${suiteName_}`;
 
 // 90 seconds now that the tests are running in parallel and have been
 // split into smaller suites might not be necessary but for now leave it
@@ -525,7 +526,7 @@ async function initFileApi() {
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
 		fileApi = new FileApi('/root', new FileApiDriverMemory());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('nextcloud')) {
-		const options = require(`${__dirname}/../tests/support/nextcloud-auth.json`);
+		const options = require(`${oldTestDir}/support/nextcloud-auth.json`);
 		const api = new WebDavApi({
 			baseUrl: () => options.baseUrl,
 			username: () => options.username,
@@ -537,7 +538,7 @@ async function initFileApi() {
 		// https://www.dropbox.com/developers/apps/
 		// Then select "JoplinTest" and click "Generated access token"
 		const api = new DropboxApi();
-		const authTokenPath = `${__dirname}/support/dropbox-auth.txt`;
+		const authTokenPath = `${oldTestDir}/support/dropbox-auth.txt`;
 		const authToken = fs.readFileSync(authTokenPath, 'utf8');
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
@@ -556,7 +557,7 @@ async function initFileApi() {
 
 		mustRunInBand();
 
-		const { parameters, setEnvOverride } = require('@joplin/lib/parameters.js');
+		const { parameters, setEnvOverride } = require('../parameters.js');
 		Setting.setConstant('env', 'dev');
 		setEnvOverride('test');
 		const config = parameters().oneDriveTest;
@@ -572,7 +573,7 @@ async function initFileApi() {
 		const appDir = await api.appDirectory();
 		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
-		const amazonS3CredsPath = `${__dirname}/support/amazon-s3-auth.json`;
+		const amazonS3CredsPath = `${oldTestDir}/support/amazon-s3-auth.json`;
 		const amazonS3Creds = require(amazonS3CredsPath);
 		if (!amazonS3Creds || !amazonS3Creds.accessKeyId) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "accessKeyId": "", "secretAccessKey": "", "bucket": "mybucket"}`);
 		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });

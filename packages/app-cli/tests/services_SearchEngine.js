@@ -3,7 +3,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, restoreDate } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, restoreDate } = require('@joplin/lib/testing/test-utils.js');
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
 const Note = require('@joplin/lib/models/Note').default;
 const ItemChange = require('@joplin/lib/models/ItemChange').default;

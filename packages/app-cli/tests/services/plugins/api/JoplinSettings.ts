@@ -1,6 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-const { waitForFolderCount, newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('../../../test-utils');
+const { waitForFolderCount, newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('@joplin/lib/testing/test-utils');
 import Folder from '@joplin/lib/models/Folder';
 
 describe('JoplinSettings', () => {

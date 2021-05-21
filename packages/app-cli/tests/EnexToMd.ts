@@ -4,7 +4,7 @@ import shim from '@joplin/lib/shim';
 const fs = require('fs-extra');
 const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
-const { setupDatabaseAndSynchronizer, switchClient, expectNotThrow } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, expectNotThrow } = require('@joplin/lib/testing/test-utils.js');
 const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 const { importEnex } = require('@joplin/lib/import-enex');
 import Note from '@joplin/lib/models/Note';

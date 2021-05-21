@@ -1,5 +1,5 @@
 import { FolderEntity } from '@joplin/lib/services/database/types';
-import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree } from './test-utils';
+import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 

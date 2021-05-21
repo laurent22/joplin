@@ -3,7 +3,7 @@ import NoteResource from '@joplin/lib/models/NoteResource';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import shim from '@joplin/lib/shim';
 
-const { resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('./test-utils.js');
+const { resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('@joplin/lib/testing/test-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';

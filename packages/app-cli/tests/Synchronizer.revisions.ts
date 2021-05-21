@@ -1,7 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
 import BaseModel from '@joplin/lib/BaseModel';
 
-const { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } = require('./test-utils.js');
+const { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } = require('@joplin/lib/testing/test-utils.js');
 import Note from '@joplin/lib/models/Note';
 import Revision from '@joplin/lib/models/Revision';
 

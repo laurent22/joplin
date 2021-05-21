@@ -174,12 +174,6 @@ packages/app-cli/tests/synchronizer_LockHandler.js.map
 packages/app-cli/tests/synchronizer_MigrationHandler.d.ts
 packages/app-cli/tests/synchronizer_MigrationHandler.js
 packages/app-cli/tests/synchronizer_MigrationHandler.js.map
-packages/app-cli/tests/test-utils-synchronizer.d.ts
-packages/app-cli/tests/test-utils-synchronizer.js
-packages/app-cli/tests/test-utils-synchronizer.js.map
-packages/app-cli/tests/test-utils.d.ts
-packages/app-cli/tests/test-utils.js
-packages/app-cli/tests/test-utils.js.map
 packages/app-desktop/ElectronAppWrapper.d.ts
 packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/ElectronAppWrapper.js.map
@@ -1416,6 +1410,12 @@ packages/lib/services/synchronizer/utils/types.js.map
 packages/lib/shim.d.ts
 packages/lib/shim.js
 packages/lib/shim.js.map
+packages/lib/testing/test-utils-synchronizer.d.ts
+packages/lib/testing/test-utils-synchronizer.js
+packages/lib/testing/test-utils-synchronizer.js.map
+packages/lib/testing/test-utils.d.ts
+packages/lib/testing/test-utils.js
+packages/lib/testing/test-utils.js.map
 packages/lib/theme.d.ts
 packages/lib/theme.js
 packages/lib/theme.js.map
@@ -1449,6 +1449,9 @@ packages/lib/themes/type.js.map
 packages/lib/time.d.ts
 packages/lib/time.js
 packages/lib/time.js.map
+packages/lib/utils/credentialFiles.d.ts
+packages/lib/utils/credentialFiles.js
+packages/lib/utils/credentialFiles.js.map
 packages/lib/uuid.d.ts
 packages/lib/uuid.js
 packages/lib/uuid.js.map

@@ -1,7 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
-import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from './test-utils-synchronizer';
+import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '@joplin/lib/testing/test-utils-synchronizer';
 
-const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('./test-utils.js');
+const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('@joplin/lib/testing/test-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';

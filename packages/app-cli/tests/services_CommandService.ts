@@ -4,7 +4,7 @@ import CommandService, { CommandDeclaration, CommandRuntime } from '@joplin/lib/
 import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import KeymapService from '@joplin/lib/services/KeymapService';
 
-const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('@joplin/lib/testing/test-utils.js');
 
 interface TestCommand {
 	declaration: CommandDeclaration;

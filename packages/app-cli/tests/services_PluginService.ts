@@ -7,8 +7,8 @@ import Setting from '@joplin/lib/models/Setting';
 import * as fs from 'fs-extra';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { newPluginScript } from './test-utils';
-import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } from './test-utils.js';
+import { newPluginScript } from '@joplin/lib/testing/test-utils';
+import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir } from '@joplin/lib/testing/test-utils.js';
 
 const testPluginDir = `${__dirname}/../tests/support/plugins`;
 

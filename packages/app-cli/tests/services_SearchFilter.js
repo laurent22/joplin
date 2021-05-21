@@ -3,7 +3,7 @@
 
 
 const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('./test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('@joplin/lib/testing/test-utils.js');
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
 const Note = require('@joplin/lib/models/Note').default;
 const Folder = require('@joplin/lib/models/Folder').default;

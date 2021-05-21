@@ -6,7 +6,7 @@ describe('Synchronizer.sharing', function() {
 
 });
 
-// import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient, joplinServerApi } from './test-utils';
+// import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient, joplinServerApi } from '@joplin/lib/testing/test-utils';
 // import Note from '@joplin/lib/models/Note';
 // import BaseItem from '@joplin/lib/models/BaseItem';
 // import shim from '@joplin/lib/shim';

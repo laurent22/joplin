@@ -1,4 +1,4 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, fileApi } from './test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, fileApi } from '@joplin/lib/testing/test-utils';
 
 describe('file-api-driver', function() {
 

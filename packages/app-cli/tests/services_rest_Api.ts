@@ -2,7 +2,7 @@ import { PaginationOrderDir } from '@joplin/lib/models/utils/types';
 import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
 import shim from '@joplin/lib/shim';
 
-const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep } = require('@joplin/lib/testing/test-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Resource from '@joplin/lib/models/Resource';
 import Note from '@joplin/lib/models/Note';

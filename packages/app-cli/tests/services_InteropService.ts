@@ -2,7 +2,7 @@ import InteropService from '@joplin/lib/services/interop/InteropService';
 import { CustomExportContext, CustomImportContext, Module, ModuleType } from '@joplin/lib/services/interop/types';
 import shim from '@joplin/lib/shim';
 
-const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir } = require('./test-utils.js');
+const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir } = require('@joplin/lib/testing/test-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';

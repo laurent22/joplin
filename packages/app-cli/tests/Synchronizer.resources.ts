@@ -2,9 +2,9 @@ import time from '@joplin/lib/time';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-import { remoteNotesFoldersResources, remoteResources } from './test-utils-synchronizer';
+import { remoteNotesFoldersResources, remoteResources } from '@joplin/lib/testing/test-utils-synchronizer';
 
-const { synchronizerStart, tempFilePath, resourceFetcher, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync } = require('./test-utils.js');
+const { synchronizerStart, tempFilePath, resourceFetcher, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';

@@ -10,8 +10,8 @@ const __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, g
 };
 Object.defineProperty(exports, '__esModule', { value: true });
 const Setting_1 = require('@joplin/lib/models/Setting');
-const test_utils_synchronizer_1 = require('./test-utils-synchronizer');
-const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('./test-utils.js');
+const test_utils_synchronizer_1 = require('@joplin/lib/testing/test-utils-synchronizer');
+const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('@joplin/lib/testing/test-utils.js');
 const Folder_1 = require('@joplin/lib/models/Folder');
 const Note_1 = require('@joplin/lib/models/Note');
 const BaseItem_1 = require('@joplin/lib/models/BaseItem');

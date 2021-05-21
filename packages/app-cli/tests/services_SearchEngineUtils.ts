@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, db, switchClient } from './test-utils.js';
+import { setupDatabaseAndSynchronizer, db, switchClient } from '@joplin/lib/testing/test-utils.js';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
 import Setting from '@joplin/lib/models/Setting';

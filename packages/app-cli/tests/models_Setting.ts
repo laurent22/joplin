@@ -1,5 +1,5 @@
 import Setting, { SettingSectionSource } from '@joplin/lib/models/Setting';
-import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from './test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '@joplin/lib/testing/test-utils';
 import * as fs from 'fs-extra';
 import Logger from '@joplin/lib/Logger';
 

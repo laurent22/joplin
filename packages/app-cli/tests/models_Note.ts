@@ -2,7 +2,7 @@ import Setting from '@joplin/lib/models/Setting';
 import BaseModel from '@joplin/lib/BaseModel';
 import shim from '@joplin/lib/shim';
 import markdownUtils from '@joplin/lib/markdownUtils';
-const { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('./test-utils.js');
+const { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';

@@ -1,6 +1,6 @@
-import { setupDatabaseAndSynchronizer, switchClient, createFolderTree } from './test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, createFolderTree } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
-import { allNotesFolders } from './test-utils-synchronizer';
+import { allNotesFolders } from '@joplin/lib/testing/test-utils-synchronizer';
 import Note from '@joplin/lib/models/Note';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';

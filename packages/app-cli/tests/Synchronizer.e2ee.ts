@@ -2,14 +2,14 @@ import time from '@joplin/lib/time';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 
-const { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } = require('./test-utils.js');
+const { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import BaseItem from '@joplin/lib/models/BaseItem';
-import { createFolderTree } from './test-utils';
+import { createFolderTree } from '@joplin/lib/testing/test-utils';
 
 let insideBeforeEach = false;
 

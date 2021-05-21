@@ -1,5 +1,5 @@
-import { allNotesFolders, remoteNotesAndFolders } from './test-utils-synchronizer';
-import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient, fileApi, db } from './test-utils';
+import { allNotesFolders, remoteNotesAndFolders } from '@joplin/lib/testing/test-utils-synchronizer';
+import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient, fileApi, db } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import { clearLocalDataForRedownload, clearLocalSyncStateForReupload } from '@joplin/lib/services/synchronizer/tools';
