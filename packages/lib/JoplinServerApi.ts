@@ -3,7 +3,10 @@ import { _ } from './locale';
 const { rtrimSlashes } = require('./path-utils.js');
 import JoplinError from './JoplinError';
 import { Env } from './models/Setting';
+import Logger from './Logger';
 const { stringify } = require('query-string');
+
+const logger = Logger.create('JoplinServerApi');
 
 interface Options {
 	baseUrl(): string;
@@ -133,71 +136,78 @@ export default class JoplinServerApi {
 			url += stringify(query);
 		}
 
-		let response: any = null;
-
-		if (this.debugRequests_) {
-			console.info('Joplin API Call', `${method} ${url}`, headers, options);
-			console.info(this.requestToCurl_(url, fetchOptions));
-		}
-
-		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
-			if (fetchOptions.path) {
-				const fileStat = await shim.fsDriver().stat(fetchOptions.path);
-				if (fileStat) fetchOptions.headers['Content-Length'] = `${fileStat.size}`;
-			}
-			response = await shim.uploadBlob(url, fetchOptions);
-		} else if (options.target == 'string') {
-			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
-			response = await shim.fetch(url, fetchOptions);
-		} else {
-			// file
-			response = await shim.fetchBlob(url, fetchOptions);
-		}
-
-		const responseText = await response.text();
-
-		if (this.debugRequests_) {
-			console.info('Joplin API Response', responseText);
-		}
-
-		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
-		const newError = (message: string, code: number = 0) => {
-			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
-			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
-			const shortResponseText = (`${responseText}`).substr(0, 1024);
-			// return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
-			return new JoplinError(message, code, `${method} ${path}: ${message} (${code}): ${shortResponseText}`);
-		};
-
-		let responseJson_: any = null;
-		const loadResponseJson = async () => {
-			if (!responseText) return null;
-			if (responseJson_) return responseJson_;
-			responseJson_ = JSON.parse(responseText);
-			if (!responseJson_) throw newError('Cannot parse JSON response', response.status);
-			return responseJson_;
-		};
-
-		if (!response.ok) {
-			if (options.target === 'file') throw newError('fetchBlob error', response.status);
-
-			let json = null;
-			try {
-				json = await loadResponseJson();
-			} catch (error) {
-				// Just send back the plain text in newErro()
+		try {
+			if (this.debugRequests_) {
+				logger.debug(this.requestToCurl_(url, fetchOptions));
 			}
 
-			if (json && json.error) {
-				throw newError(`${json.error}`, json.code ? json.code : response.status);
+			let response: any = null;
+
+			if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+				if (fetchOptions.path) {
+					const fileStat = await shim.fsDriver().stat(fetchOptions.path);
+					if (fileStat) fetchOptions.headers['Content-Length'] = `${fileStat.size}`;
+				}
+				response = await shim.uploadBlob(url, fetchOptions);
+			} else if (options.target == 'string') {
+				if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
+				response = await shim.fetch(url, fetchOptions);
+			} else {
+				// file
+				response = await shim.fetchBlob(url, fetchOptions);
 			}
 
-			throw newError('Unknown error', response.status);
+			const responseText = await response.text();
+
+			if (this.debugRequests_) {
+				logger.debug('Response', responseText);
+			}
+
+			// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
+			const newError = (message: string, code: number = 0) => {
+				// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
+				// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
+				const shortResponseText = (`${responseText}`).substr(0, 1024);
+				// return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
+				return new JoplinError(message, code, `${method} ${path}: ${message} (${code}): ${shortResponseText}`);
+			};
+
+			let responseJson_: any = null;
+			const loadResponseJson = async () => {
+				if (!responseText) return null;
+				if (responseJson_) return responseJson_;
+				responseJson_ = JSON.parse(responseText);
+				if (!responseJson_) throw newError('Cannot parse JSON response', response.status);
+				return responseJson_;
+			};
+
+			if (!response.ok) {
+				if (options.target === 'file') throw newError('fetchBlob error', response.status);
+
+				let json = null;
+				try {
+					json = await loadResponseJson();
+				} catch (error) {
+					// Just send back the plain text in newErro()
+				}
+
+				if (json && json.error) {
+					throw newError(`${json.error}`, json.code ? json.code : response.status);
+				}
+
+				throw newError('Unknown error', response.status);
+			}
+
+			if (options.responseFormat === 'text') return responseText;
+
+			const output = await loadResponseJson();
+			return output;
+		} catch (error) {
+			if (error.code !== 404) {
+				logger.warn(this.requestToCurl_(url, fetchOptions));
+				logger.warn(error);
+			}
+			throw error;
 		}
-
-		if (options.responseFormat === 'text') return responseText;
-
-		const output = await loadResponseJson();
-		return output;
 	}
 }
