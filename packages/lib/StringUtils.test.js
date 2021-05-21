@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-const StringUtils = require('@joplin/lib/string-utils');
+const StringUtils = require('./string-utils');
 
 describe('StringUtils', function() {
 

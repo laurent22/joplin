@@ -1,6 +1,6 @@
-import LockHandler from '@joplin/lib/services/synchronizer/LockHandler';
-import MigrationHandler from '@joplin/lib/services/synchronizer/MigrationHandler';
-import { Dirnames } from '@joplin/lib/services/synchronizer/utils/types';
+import LockHandler from '../../services/synchronizer/LockHandler';
+import MigrationHandler from '../../services/synchronizer/MigrationHandler';
+import { Dirnames } from '../../services/synchronizer/utils/types';
 
 // To create a sync target snapshot for the current syncVersion:
 // - In test-utils, set syncTargetName_ to "filesystem"
@@ -8,10 +8,10 @@ import { Dirnames } from '@joplin/lib/services/synchronizer/utils/types';
 // gulp buildTests -L && node tests-build/support/createSyncTargetSnapshot.js normal && node tests-build/support/createSyncTargetSnapshot.js e2ee
 
 
-const { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('@joplin/lib/testing/test-utils.js');
-const { deploySyncTargetSnapshot, testData, checkTestData } = require('./support/syncTargetUtils');
-import Setting from '@joplin/lib/models/Setting';
-import MasterKey from '@joplin/lib/models/MasterKey';
+const { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../../testing/test-utils.js');
+const { deploySyncTargetSnapshot, testData, checkTestData } = require('../../testing/syncTargetUtils');
+import Setting from '../../models/Setting';
+import MasterKey from '../../models/MasterKey';
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 

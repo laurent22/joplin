@@ -1,5 +1,5 @@
 
-const urlUtils = require('@joplin/lib/urlUtils.js');
+const urlUtils = require('./urlUtils.js');
 
 describe('urlUtils', function() {
 

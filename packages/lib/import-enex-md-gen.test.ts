@@ -1,17 +1,17 @@
-import { NoteEntity, ResourceEntity, TagEntity } from '@joplin/lib/services/database/types';
-import shim from '@joplin/lib/shim';
+import { NoteEntity, ResourceEntity, TagEntity } from './services/database/types';
+import shim from './shim';
 
 const fs = require('fs-extra');
 const os = require('os');
-const { filename } = require('@joplin/lib/path-utils');
-const { setupDatabaseAndSynchronizer, switchClient, expectNotThrow } = require('@joplin/lib/testing/test-utils.js');
-const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
-const { importEnex } = require('@joplin/lib/import-enex');
-import Note from '@joplin/lib/models/Note';
-import Tag from '@joplin/lib/models/Tag';
-import Resource from '@joplin/lib/models/Resource';
+const { filename } = require('./path-utils');
+const { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir } = require('./testing/test-utils.js');
+const { enexXmlToMd } = require('./import-enex-md-gen.js');
+const { importEnex } = require('./import-enex');
+import Note from './models/Note';
+import Tag from './models/Tag';
+import Resource from './models/Resource';
 
-const enexSampleBaseDir = `${__dirname}/enex_to_md`;
+const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
 
 describe('EnexToMd', function() {
 

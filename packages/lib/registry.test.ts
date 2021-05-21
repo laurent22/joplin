@@ -1,5 +1,5 @@
-import Setting from '@joplin/lib/models/Setting';
-import { reg } from '@joplin/lib/registry';
+import Setting from './models/Setting';
+import { reg } from './registry';
 
 const sync = {
 	start: jest.fn().mockReturnValue({}),

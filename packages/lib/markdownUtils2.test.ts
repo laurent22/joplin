@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-const markdownUtils = require('@joplin/lib/markdownUtils').default;
+const markdownUtils = require('./markdownUtils').default;
 
 describe('markdownUtils', function() {
 

@@ -1,12 +1,7 @@
-/* eslint-disable no-unused-vars */
-
-const { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } = require('@joplin/lib/testing/test-utils.js');
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const reducer = require('@joplin/lib/reducer').default;
-const { defaultState, stateUtils, MAX_HISTORY } = require('@joplin/lib/reducer');
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+const { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } = require('./testing/test-utils.js');
+const reducer = require('./reducer').default;
+const { defaultState, MAX_HISTORY } = require('./reducer');
+const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
 function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
 	let state = defaultState;
@@ -86,19 +81,13 @@ function getIds(items, indexes = null) {
 	return ids;
 }
 
-let insideBeforeEach = false;
-
 describe('reducer', function() {
 
 	beforeEach(async (done) => {
-		insideBeforeEach = true;
-
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 
 		done();
-
-		insideBeforeEach = false;
 	});
 
 	// tests for NOTE_DELETE
@@ -560,7 +549,6 @@ describe('reducer', function() {
 		// select the 1st folder and the 1st note
 		let state = initTestState(folders, 0, notes, [0]);
 
-		const idx = 0;
 		for (let i = 0; i < 2 * MAX_HISTORY; i++) {
 			state = goToNote(notes, [i % 5], state);
 		}

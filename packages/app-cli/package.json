@@ -43,7 +43,6 @@
     "@joplin/renderer": "1.8",
     "aws-sdk": "^2.588.0",
     "chalk": "^4.1.0",
-    "clean-html": "^1.5.0",
     "compare-version": "^0.1.2",
     "fs-extra": "^5.0.0",
     "html-entities": "^1.2.1",

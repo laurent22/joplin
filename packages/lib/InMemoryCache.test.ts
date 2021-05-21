@@ -1,5 +1,5 @@
-import InMemoryCache from '@joplin/lib/InMemoryCache';
-import time from '@joplin/lib/time';
+import InMemoryCache from './InMemoryCache';
+import time from './time';
 
 describe('InMemoryCache', function() {
 

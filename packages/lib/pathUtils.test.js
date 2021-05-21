@@ -1,8 +1,4 @@
-/* eslint-disable no-unused-vars */
-
-
-const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath } = require('@joplin/lib/path-utils');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
+const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath } = require('./path-utils');
 
 describe('pathUtils', function() {
 

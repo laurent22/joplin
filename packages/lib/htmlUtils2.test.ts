@@ -1,4 +1,4 @@
-import htmlUtils from '@joplin/lib/htmlUtils';
+import htmlUtils from './htmlUtils';
 
 describe('htmlUtils', function() {
 

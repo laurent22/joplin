@@ -1,8 +1,8 @@
 'use strict';
 
 
-const { checkThrow } = require('@joplin/lib/testing/test-utils.js');
-const eventManager = require('@joplin/lib/eventManager').default;
+const { checkThrow } = require('./testing/test-utils.js');
+const eventManager = require('./eventManager').default;
 
 describe('eventManager', function() {
 

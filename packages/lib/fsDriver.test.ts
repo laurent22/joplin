@@ -1,6 +1,6 @@
-import FsDriverNode from '@joplin/lib/fs-driver-node';
-import shim from '@joplin/lib/shim';
-const { expectThrow } = require('@joplin/lib/testing/test-utils.js');
+import FsDriverNode from './fs-driver-node';
+import shim from './shim';
+const { expectThrow } = require('./testing/test-utils.js');
 
 // On Windows, path.resolve is going to convert a path such as
 // /tmp/file.txt to c:\tmp\file.txt

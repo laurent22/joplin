@@ -1,5 +1,5 @@
-import Setting from '@joplin/lib/models/Setting';
-import time from '@joplin/lib/time';
+import Setting from '../models/Setting';
+import time from '../time';
 
 describe('dateFormats', function() {
 

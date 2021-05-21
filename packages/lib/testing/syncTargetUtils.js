@@ -1,14 +1,14 @@
-const { syncDir, fileApi, synchronizer, createSyncTargetSnapshot, loadEncryptionMasterKey, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('@joplin/lib/testing/test-utils.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const Resource = require('@joplin/lib/models/Resource').default;
-const markdownUtils = require('@joplin/lib/markdownUtils').default;;
-const shim = require('@joplin/lib/shim').default;
+const { syncDir, synchronizer, supportDir, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-utils.js');
+const Setting = require('../models/Setting').default;
+const Folder = require('../models/Folder').default;
+const Note = require('../models/Note').default;
+const Tag = require('../models/Tag').default;
+const Resource = require('../models/Resource').default;
+const markdownUtils = require('../markdownUtils').default;
+const shim = require('../shim').default;
 const fs = require('fs-extra');
 
-const snapshotBaseDir = `${__dirname}/../../tests/support/syncTargetSnapshots`;
+const snapshotBaseDir = `${supportDir}/syncTargetSnapshots`;
 
 const testData = {
 	folder1: {
@@ -45,7 +45,7 @@ async function createTestData(data) {
 			} else {
 				const note = await Note.save({ title: n, parent_id: parentId });
 				if (s[n].resource) {
-					await shim.attachFileToNote(note, `${__dirname}/../../tests/support/photo.jpg`);
+					await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
 				}
 
 				if (s[n].tags) {
@@ -106,7 +106,7 @@ async function deploySyncTargetSnapshot(syncTargetType, syncVersion) {
 
 async function main(syncTargetType) {
 	const validSyncTargetTypes = ['normal', 'e2ee'];
-	if (!validSyncTargetTypes.includes(syncTargetType)) throw new Error('Sync target type must be: ' + validSyncTargetTypes.join(', '));
+	if (!validSyncTargetTypes.includes(syncTargetType)) throw new Error(`Sync target type must be: ${validSyncTargetTypes.join(', ')}`);
 
 	await setupDatabaseAndSynchronizer(1);
 	await switchClient(1);
@@ -126,7 +126,7 @@ async function main(syncTargetType) {
 	await fs.mkdirp(destDir);
 	await fs.copy(syncDir, destDir);
 
-	console.info('Sync target snapshot created in: ' + destDir);
+	console.info(`Sync target snapshot created in: ${destDir}`);
 }
 
 module.exports = {

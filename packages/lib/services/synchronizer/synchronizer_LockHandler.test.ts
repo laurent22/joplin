@@ -1,7 +1,7 @@
-import LockHandler, { LockType, LockHandlerOptions, Lock } from '@joplin/lib/services/synchronizer/LockHandler';
+import LockHandler, { LockType, LockHandlerOptions, Lock } from '../../services/synchronizer/LockHandler';
 
 
-const { isNetworkSyncTarget, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('@joplin/lib/testing/test-utils.js');
+const { isNetworkSyncTarget, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('../../testing/test-utils.js');
 
 // For tests with memory of file system we can use low intervals to make the tests faster.
 // However if we use such low values with network sync targets, some calls might randomly fail with

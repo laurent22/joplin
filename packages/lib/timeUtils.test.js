@@ -1,9 +1,4 @@
-/* eslint-disable no-unused-vars */
-
-
-const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-const timeUtils = require('@joplin/lib/time');
+const time = require('./time').default;
 
 describe('timeUtils', function() {
 
