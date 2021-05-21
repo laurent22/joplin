@@ -109,9 +109,9 @@ export default class EmailService extends BaseService {
 	}
 
 	public async runInBackground() {
-		if (!this.config.mailer.host) {
+		if (!this.config.mailer.host || !this.config.mailer.enabled) {
 			this.enabled_ = false;
-			logger.info('Service will be disabled because mailer config is not set');
+			logger.info('Service will be disabled because mailer config is not set or is explicitly disabled');
 			return;
 		}
 

@@ -1,7 +1,7 @@
 import { User } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
-import { ErrorForbidden } from '../../utils/errors';
-import { execRequest } from '../../utils/testing/apiUtils';
+import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
+import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
 
 export async function postUser(sessionId: string, email: string, password: string): Promise<User> {
@@ -151,6 +151,37 @@ describe('index_users', function() {
 		const result = await execRequest(session1.id, 'GET', 'users');
 		expect(result).toContain(user1.email);
 		expect(result).toContain(user2.email);
+	});
+
+	test('should validate a user email', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+		const email = (await models().email().all())[0];
+		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+		const path = matches[1];
+		const token = matches[3];
+
+		// Check that the email has been validated
+		const context = await execRequestC(null, 'GET', path, null, { query: { token } });
+		expect(context.response.body).toContain('email has been validated');
+
+		// Check that after the that the user has been logged in
+		const sessionId = context.cookies.get('sessionId');
+		const session = await models().session().load(sessionId);
+		expect(session.user_id).toBe(user1.id);
+	});
+
+	test('should handle invalid email validation', async function() {
+		await createUserAndSession(1);
+		const email = (await models().email().all())[0];
+		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+		const path = matches[1];
+		const token = matches[3];
+
+		// Valid path but invalid token
+		await expectHttpError(async () => execRequest(null, 'GET', path, null, { query: { token: 'invalid' } }), ErrorNotFound.httpCode);
+
+		// Valid token but invalid path
+		await expectHttpError(async () => execRequest(null, 'GET', 'users/abcd1234/validate', null, { query: { token } }), ErrorNotFound.httpCode);
 	});
 
 	test('should apply ACL', async function() {

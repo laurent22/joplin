@@ -389,6 +389,12 @@ export interface Email extends WithDates {
 	error?: string;
 }
 
+export interface Token extends WithDates {
+	id?: number;
+	value?: string;
+	user_id?: Uuid;
+}
+
 export const databaseSchema: DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -516,6 +522,13 @@ export const databaseSchema: DatabaseTables = {
 		sent_time: { type: 'string' },
 		sent_success: { type: 'number' },
 		error: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	tokens: {
+		id: { type: 'number' },
+		value: { type: 'string' },
+		user_id: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

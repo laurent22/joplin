@@ -32,6 +32,7 @@ const config = {
 		'main.share_users': 'WithDates, WithUuid',
 		'main.user_items': 'WithDates',
 		'main.emails': 'WithDates',
+		'main.tokens': 'WithDates',
 	},
 };
 

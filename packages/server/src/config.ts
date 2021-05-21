@@ -14,6 +14,7 @@ export interface EnvVariables {
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
 
+	MAILER_ENABLED?: string;
 	MAILER_HOST?: string;
 	MAILER_PORT?: string;
 	MAILER_SECURE?: string;
@@ -67,6 +68,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 
 function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 	return {
+		enabled: env.MAILER_ENABLED !== '0',
 		host: env.MAILER_HOST || '',
 		port: Number(env.MAILER_PORT || 587),
 		secure: !!Number(env.MAILER_SECURE) || true,

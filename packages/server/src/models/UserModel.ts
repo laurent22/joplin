@@ -1,7 +1,7 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { EmailSender, Item, User } from '../db';
+import { EmailSender, Item, User, Uuid } from '../db';
 import * as auth from '../utils/auth';
-import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge } from '../utils/errors';
+import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import prettyBytes = require('pretty-bytes');
@@ -151,6 +151,14 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::delete');
 	}
 
+	public async confirmEmail(userId: Uuid, token: string) {
+		const isValid = await this.models().token().isValid(userId, token);
+		if (!isValid) throw new ErrorNotFound('Invalid token');
+		const user = await this.models().user().load(userId);
+		if (!user) throw new ErrorNotFound('No such user');
+		await this.save({ id: user.id, email_confirmed: 1 });
+	}
+
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//
@@ -169,13 +177,16 @@ export default class UserModel extends BaseModel<User> {
 			const savedUser = await super.save(user, options);
 
 			if (isNew) {
+				const validationToken = await this.models().token().generate(savedUser.id);
+				const validationUrl = encodeURI(`${this.baseUrl}/users/${savedUser.id}/validate?token=${validationToken}`);
+
 				await this.models().email().push({
 					sender_id: EmailSender.NoReply,
 					recipient_id: savedUser.id,
 					recipient_email: savedUser.email,
 					recipient_name: savedUser.full_name || '',
-					subject: 'Welcome',
-					body: 'Click this: https://joplinapp.org',
+					subject: 'Verify your email',
+					body: `Click this: ${validationUrl}`,
 				});
 			}
 

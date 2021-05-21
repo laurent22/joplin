@@ -88,6 +88,19 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	return view;
 });
 
+router.publicSchemas.push('users/:id/validate');
+
+router.get('users/:id/validate', async (path: SubPath, ctx: AppContext) => {
+	const userId = path.id;
+	await ctx.models.user().confirmEmail(userId, ctx.query.token);
+
+	const session = await ctx.models.session().createUserSession(userId);
+	ctx.cookies.set('sessionId', session.id);
+
+	const view: View = defaultView('users/validate');
+	return view;
+});
+
 router.alias(HttpMethod.POST, 'users/:id', 'users');
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {

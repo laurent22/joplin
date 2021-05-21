@@ -45,6 +45,7 @@ export interface DatabaseConfig {
 }
 
 export interface MailerConfig {
+	enabled: boolean;
 	host: string;
 	port: number;
 	secure: boolean;

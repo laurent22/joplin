@@ -67,6 +67,7 @@ import EmailModel from './EmailModel';
 import ItemResourceModel from './ItemResourceModel';
 import ShareUserModel from './ShareUserModel';
 import KeyValueModel from './KeyValueModel';
+import TokenModel from './TokenModel';
 
 export class Models {
 
@@ -92,6 +93,10 @@ export class Models {
 
 	public userItem() {
 		return new UserItemModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
+	public token() {
+		return new TokenModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
 	public itemResource() {
