@@ -1,5 +1,5 @@
 import Setting from '@joplin/lib/models/Setting';
-import { newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } from '../../../test-utils';
+import { newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import ItemChange from '@joplin/lib/models/ItemChange';

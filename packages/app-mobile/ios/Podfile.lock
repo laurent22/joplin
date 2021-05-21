@@ -240,7 +240,7 @@ PODS:
     - React-cxxreact (= 0.63.3)
     - React-jsi (= 0.63.3)
   - React-jsinspector (0.63.3)
-  - react-native-alarm-notification (1.7.1):
+  - react-native-alarm-notification (1.0.3):
     - React
   - react-native-camera (3.40.0):
     - React-Core
@@ -391,7 +391,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-alarm-notification (from `../node_modules/react-native-alarm-notification`)
+  - react-native-alarm-notification (from `../node_modules/joplin-rn-alarm-notification`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
@@ -475,7 +475,7 @@ EXTERNAL SOURCES:
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-alarm-notification:
-    :path: "../node_modules/react-native-alarm-notification"
+    :path: "../node_modules/joplin-rn-alarm-notification"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
   react-native-document-picker:
@@ -568,7 +568,7 @@ SPEC CHECKSUMS:
   React-jsi: df07aa95b39c5be3e41199921509bfa929ed2b9d
   React-jsiexecutor: b56c03e61c0dd5f5801255f2160a815f4a53d451
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
-  react-native-alarm-notification: 8f2adb4521bf7ca867278d4c236553e154dbbbc6
+  react-native-alarm-notification: 466e4ad56fbd948ecac26e657f292dca8bf483d5
   react-native-camera: 5c1fbfecf63b802b8ca4a71c60d30a71550fb348
   react-native-document-picker: b3e78a8f7fef98b5cb069f20fc35797d55e68e28
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8

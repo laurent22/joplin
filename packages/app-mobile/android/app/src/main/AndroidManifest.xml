@@ -8,12 +8,6 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-	<!-- RN-NOTIFICATION -->
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<!-- /RN-NOTIFICATION -->
-
     <!-- Make these features optional to enable Chromebooks -->
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
@@ -40,35 +34,6 @@
 		android:requestLegacyExternalStorage="true"
 		android:resizeableActivity="true"
 		android:theme="@style/AppTheme">
-
-		<!-- RN-NOTIFICATION -->
-		<receiver
-			android:name="com.emekalites.react.alarm.notification.AlarmReceiver"
-			android:enabled="true"
-			android:exported="true">
-			<intent-filter>
-				<action android:name="ACTION_DISMISS" />
-				<action android:name="ACTION_SNOOZE" />
-			</intent-filter>
-		</receiver>
-
-		<receiver
-			android:name="com.emekalites.react.alarm.notification.AlarmDismissReceiver"
-			android:enabled="true"
-			android:exported="true" />
-			<receiver
-				android:name="com.emekalites.react.alarm.notification.AlarmBootReceiver"
-				android:directBootAware="true"
-				android:enabled="false"
-				android:exported="true">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-				<action android:name="android.intent.action.QUICKBOOT_POWERON" />
-				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-				<action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-			</intent-filter>
-		</receiver>
-		<!-- /RN-NOTIFICATION -->
 
 		<!--
 		2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification

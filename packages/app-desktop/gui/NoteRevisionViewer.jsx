@@ -118,11 +118,11 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			customCss: this.props.customCss ? this.props.customCss : '',
 		});
 
 		const result = await markupToHtml.render(markupLanguage, noteBody, theme, {
 			codeTheme: theme.codeThemeCss,
-			userCss: this.props.customCss ? this.props.customCss : '',
 			resources: await shared.attachedResources(noteBody),
 			postMessageSyntax: 'ipcProxySendToHost',
 		});

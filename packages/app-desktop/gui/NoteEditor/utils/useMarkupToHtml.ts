@@ -24,6 +24,7 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 	const markupToHtml = useMemo(() => {
 		return markupLanguageUtils.newMarkupToHtml(deps.plugins, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			customCss: customCss || '',
 		});
 	}, [plugins]);
 
@@ -49,7 +50,6 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 
 		const result = await markupToHtml.render(markupLanguage, md, theme, Object.assign({}, {
 			codeTheme: theme.codeThemeCss,
-			userCss: customCss || '',
 			resources: resources,
 			postMessageSyntax: 'ipcProxySendToHost',
 			splitted: true,

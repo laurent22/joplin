@@ -135,6 +135,13 @@ export async function processPastedHtml(html: string) {
 	const allImageUrls: string[] = [];
 	const mappedResources: Record<string, string> = {};
 
+	// When copying text from eg. GitHub, the HTML might contain non-breaking
+	// spaces instead of regular spaces. If these non-breaking spaces are
+	// inserted into the TinyMCE editor (using insertContent), they will be
+	// dropped. So here we convert them to regular spaces.
+	// https://stackoverflow.com/a/31790544/561309
+	html = html.replace(/[\u202F\u00A0]/g, ' ');
+
 	htmlUtils.replaceImageUrls(html, (src: string) => {
 		allImageUrls.push(src);
 	});

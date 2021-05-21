@@ -1,6 +1,6 @@
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import shim from '@joplin/lib/shim';
-import { setupDatabaseAndSynchronizer, switchClient, supportDir, createTempDir } from '../../test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, supportDir, createTempDir } from '@joplin/lib/testing/test-utils';
 
 async function newRepoApi(): Promise<RepositoryApi> {
 	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, await createTempDir());
