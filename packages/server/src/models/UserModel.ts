@@ -153,7 +153,7 @@ export default class UserModel extends BaseModel<User> {
 
 	public async confirmEmail(userId: Uuid, token: string) {
 		const isValid = await this.models().token().isValid(userId, token);
-		if (!isValid) throw new ErrorNotFound('Invalid token');
+		if (!isValid) throw new ErrorNotFound('Invalid or expired token');
 		const user = await this.models().user().load(userId);
 		if (!user) throw new ErrorNotFound('No such user');
 		await this.save({ id: user.id, email_confirmed: 1 });

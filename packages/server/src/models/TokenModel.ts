@@ -4,6 +4,8 @@ import BaseModel from './BaseModel';
 
 export default class TokenModel extends BaseModel<Token> {
 
+	private tokenTtl_: number = 7 * 24 * 60 * 1000;
+
 	public get tableName(): string {
 		return 'tokens';
 	}
@@ -30,6 +32,11 @@ export default class TokenModel extends BaseModel<Token> {
 			.first();
 
 		return !!token;
+	}
+
+	public async deleteExpiredTokens() {
+		const cutOffDate = Date.now() - this.tokenTtl_;
+		await this.db(this.tableName).where('created_time', '<', cutOffDate).delete();
 	}
 
 }
