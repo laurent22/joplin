@@ -128,9 +128,6 @@ packages/app-cli/tests/htmlUtils.js.map
 packages/app-cli/tests/markdownUtils.d.ts
 packages/app-cli/tests/markdownUtils.js
 packages/app-cli/tests/markdownUtils.js.map
-packages/app-cli/tests/models_Folder.sharing.d.ts
-packages/app-cli/tests/models_Folder.sharing.js
-packages/app-cli/tests/models_Folder.sharing.js.map
 packages/app-cli/tests/registry.d.ts
 packages/app-cli/tests/registry.js
 packages/app-cli/tests/registry.js.map
@@ -965,6 +962,9 @@ packages/lib/models/BaseItem.js.map
 packages/lib/models/Folder.d.ts
 packages/lib/models/Folder.js
 packages/lib/models/Folder.js.map
+packages/lib/models/Folder.sharing.test.d.ts
+packages/lib/models/Folder.sharing.test.js
+packages/lib/models/Folder.sharing.test.js.map
 packages/lib/models/Folder.test.d.ts
 packages/lib/models/Folder.test.js
 packages/lib/models/Folder.test.js.map

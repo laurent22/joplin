@@ -1,14 +1,7 @@
-/* eslint-disable no-unused-vars */
-
-
-const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
-const NoteTag = require('@joplin/lib/models/NoteTag').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const shim = require('@joplin/lib/shim').default;
+const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('../testing/test-utils.js');
+const Folder = require('../models/Folder').default;
+const Note = require('../models/Note').default;
+const Tag = require('../models/Tag').default;
 
 describe('models_Tag', function() {
 
@@ -97,7 +90,7 @@ describe('models_Tag', function() {
 		const taga = await Tag.save({ title: 'mytaga' });
 		const tagb = await Tag.save({ title: 'mytagb' });
 		const tagc = await Tag.save({ title: 'mytagc' });
-		const tagd = await Tag.save({ title: 'mytagd' });
+		await Tag.save({ title: 'mytagd' });
 
 		const note0 = await Note.save({ title: 'ma note 0', parent_id: folder1.id });
 		const note1 = await Note.save({ title: 'ma note 1', parent_id: folder1.id });

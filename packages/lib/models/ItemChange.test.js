@@ -1,14 +1,9 @@
-/* eslint-disable no-unused-vars */
-
-
-const time = require('@joplin/lib/time').default;
-const { fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
-const ResourceService = require('@joplin/lib/services/ResourceService').default;
-const ItemChangeUtils = require('@joplin/lib/services/ItemChangeUtils').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const ItemChange = require('@joplin/lib/models/ItemChange').default;
+const { revisionService, setupDatabaseAndSynchronizer, db, switchClient } = require('../testing/test-utils.js');
+const SearchEngine = require('../services/searchengine/SearchEngine').default;
+const ResourceService = require('../services/ResourceService').default;
+const ItemChangeUtils = require('../services/ItemChangeUtils').default;
+const Note = require('../models/Note').default;
+const ItemChange = require('../models/ItemChange').default;
 
 let searchEngine = null;
 
@@ -23,7 +18,7 @@ describe('models_ItemChange', function() {
 	});
 
 	it('should delete old changes that have been processed', (async () => {
-		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
+		await Note.save({ title: 'abcd efgh' });
 
 		await ItemChange.waitForAllSaved();
 

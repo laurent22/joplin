@@ -1,13 +1,13 @@
-import { setupDatabaseAndSynchronizer, switchClient, createFolderTree } from '@joplin/lib/testing/test-utils';
-import Folder from '@joplin/lib/models/Folder';
-import { allNotesFolders } from '@joplin/lib/testing/test-utils-synchronizer';
-import Note from '@joplin/lib/models/Note';
-import shim from '@joplin/lib/shim';
-import Resource from '@joplin/lib/models/Resource';
-import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
-import ResourceService from '@joplin/lib/services/ResourceService';
+import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir } from '../testing/test-utils';
+import Folder from '../models/Folder';
+import { allNotesFolders } from '../testing/test-utils-synchronizer';
+import Note from '../models/Note';
+import shim from '../shim';
+import Resource from '../models/Resource';
+import { FolderEntity, NoteEntity, ResourceEntity } from '../services/database/types';
+import ResourceService from '../services/ResourceService';
 
-const testImagePath = `${__dirname}/../tests/support/photo.jpg`;
+const testImagePath = `${supportDir}/photo.jpg`;
 
 describe('models_Folder.sharing', function() {
 

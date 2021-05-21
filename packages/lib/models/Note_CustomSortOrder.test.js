@@ -1,20 +1,7 @@
-/* eslint-disable no-unused-vars */
-
-
-const time = require('@joplin/lib/time').default;
-const { sortedIds, createNTestNotes, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const ArrayUtils = require('@joplin/lib/ArrayUtils.js');
-const shim = require('@joplin/lib/shim').default;
-
-async function allItems() {
-	const folders = await Folder.all();
-	const notes = await Note.all();
-	return folders.concat(notes);
-}
+const time = require('../time').default;
+const { setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-utils.js');
+const Folder = require('../models/Folder').default;
+const Note = require('../models/Note').default;
 
 describe('models_Note_CustomSortOrder', function() {
 	beforeEach(async (done) => {
