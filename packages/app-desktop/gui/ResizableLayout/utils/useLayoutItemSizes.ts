@@ -2,15 +2,12 @@ import { useMemo } from 'react';
 import { LayoutItem, Size } from './types';
 
 const dragBarThickness = 5;
-const itemMinWidth = 40;
-const itemMinHeight = 40;
+
+export const itemMinWidth = 40;
+export const itemMinHeight = 40;
 
 export interface LayoutItemSizes {
-	[key: string]: {
-		min: Size;
-		max: Size;
-		current: Size;
-	};
+	[key: string]: Size;
 }
 
 // Container always take the full space while the items within it need to
@@ -23,8 +20,8 @@ export function itemSize(item: LayoutItem, parent: LayoutItem | null, sizes: Lay
 	const bottomGap = !isContainer && (item.resizableBottom || parentResizableBottom) ? dragBarThickness : 0;
 
 	return {
-		width: sizes[item.key].current.width - rightGap,
-		height: sizes[item.key].current.height - bottomGap,
+		width: sizes[item.key].width - rightGap,
+		height: sizes[item.key].height - bottomGap,
 	};
 }
 
@@ -56,14 +53,7 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 			h = 0;
 		}
 
-		sizes[child.key] = {
-			min: {
-				width: child.minWidth || itemMinWidth,
-				height: child.minHeight || itemMinHeight,
-			},
-			max: { width: w, height: h },
-			current: { width: w, height: h },
-		};
+		sizes[child.key] = { width: w, height: h };
 
 		if (w !== null) remainingSize.width -= w;
 		if (h !== null) remainingSize.height -= h;
@@ -77,30 +67,29 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 		}
 	}
 
-	if (remainingSize.width < noWidthChildrenMinWidth) {
-		// There is not enough space, the largest item will be made smaller
+	while (remainingSize.width < noWidthChildrenMinWidth) {
+		// There is not enough space, the widest item will be made smaller
 		let widestChild = item.children[0].key;
 		for (const child of item.children) {
 			if (!child.visible) continue;
-			if (sizes[child.key].current.width > sizes[widestChild].current.width) widestChild = child.key;
+			if (sizes[child.key].width > sizes[widestChild].width) widestChild = child.key;
 		}
 
 		const dw = Math.abs(remainingSize.width - noWidthChildrenMinWidth);
-		sizes[widestChild].current.width -= dw;
-		sizes[widestChild].max.width -= dw;
+		sizes[widestChild].width -= dw;
 		remainingSize.width += dw;
 	}
 
-	if (remainingSize.height < noHeightChildrenMinHeight) {
+	while (remainingSize.height < noHeightChildrenMinHeight) {
+		// There is not enough space, the tallest item will be made smaller
 		let tallestChild = item.children[0].key;
 		for (const child of item.children) {
 			if (!child.visible) continue;
-			if (sizes[child.key].current.height > sizes[tallestChild].current.height) tallestChild = child.key;
+			if (sizes[child.key].height > sizes[tallestChild].height) tallestChild = child.key;
 		}
 
 		const dh = Math.abs(remainingSize.height - noHeightChildrenMinHeight);
-		sizes[tallestChild].current.height -= dh;
-		sizes[tallestChild].max.height -= dh;
+		sizes[tallestChild].height -= dh;
 		remainingSize.height += dh;
 	}
 
@@ -108,7 +97,7 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 		const w = item.direction === 'row' ? Math.floor(remainingSize.width / noWidthChildren.length) : parentSize.width;
 		for (const child of noWidthChildren) {
 			const finalWidth = w;
-			sizes[child.item.key].current.width = finalWidth;
+			sizes[child.item.key].width = finalWidth;
 		}
 	}
 
@@ -116,20 +105,33 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 		const h = item.direction === 'column' ? Math.floor(remainingSize.height / noHeightChildren.length) : parentSize.height;
 		for (const child of noHeightChildren) {
 			const finalHeight = h;
-			sizes[child.item.key].current.height = finalHeight;
+			sizes[child.item.key].height = finalHeight;
 		}
 	}
 
 	for (const child of item.children) {
-		// This will be used by Resizable to limit the item sizes while resizing
-		sizes[child.key].max.width += remainingSize.width - noWidthChildrenMinWidth;
-		sizes[child.key].max.height += remainingSize.height - noHeightChildrenMinHeight;
-
 		const childrenSizes = calculateChildrenSizes(child, parent, sizes, makeAllVisible);
 		sizes = { ...sizes, ...childrenSizes };
 	}
 
 	return sizes;
+}
+
+// Gives the maximum available space for this item that it can take up during resizing
+export function calculateMaxSizeAvailableForItem(item: LayoutItem, parent: LayoutItem, sizes: LayoutItemSizes): Size {
+	const availableSize: Size = { ...sizes[parent.key] };
+
+	for (const sibling of parent.children) {
+		if (!sibling.visible) continue;
+
+		availableSize.width -= 'width' in sibling ? sizes[sibling.key].width : (sibling.minWidth || itemMinWidth);
+		availableSize.height -= 'height' in sibling ? sizes[sibling.key].height : (sibling.minHeight || itemMinHeight);
+	}
+
+	availableSize.width += sizes[item.key].width;
+	availableSize.height += sizes[item.key].height;
+
+	return availableSize;
 }
 
 export default function useLayoutItemSizes(layout: LayoutItem, makeAllVisible: boolean = false) {
@@ -139,9 +141,8 @@ export default function useLayoutItemSizes(layout: LayoutItem, makeAllVisible: b
 		if (!('width' in layout) || !('height' in layout)) throw new Error('width and height are required on layout root');
 
 		sizes[layout.key] = {
-			min: { width: layout.width, height: layout.height },
-			max: { width: layout.width, height: layout.height },
-			current: { width: layout.width, height: layout.height },
+			width: layout.width,
+			height: layout.height,
 		};
 
 		sizes = calculateChildrenSizes(layout, null, sizes, makeAllVisible);

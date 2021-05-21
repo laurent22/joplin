@@ -1,4 +1,4 @@
-import useLayoutItemSizes, { itemSize } from './useLayoutItemSizes';
+import useLayoutItemSizes, { itemSize, calculateMaxSizeAvailableForItem } from './useLayoutItemSizes';
 import { LayoutItem, LayoutItemDirection } from './types';
 import { renderHook } from '@testing-library/react-hooks';
 import validateLayout from './validateLayout';
@@ -92,9 +92,9 @@ describe('useLayoutItemSizes', () => {
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
 
-		expect(sizes.root.current).toEqual({ width: 200, height: 100 });
-		expect(sizes.col1.current).toEqual({ width: 50, height: 100 });
-		expect(sizes.col2.current).toEqual({ width: 150, height: 100 });
+		expect(sizes.root).toEqual({ width: 200, height: 100 });
+		expect(sizes.col1).toEqual({ width: 50, height: 100 });
+		expect(sizes.col2).toEqual({ width: 150, height: 100 });
 	});
 
 	test('should leave room for the resizer controls', () => {
@@ -123,74 +123,19 @@ describe('useLayoutItemSizes', () => {
 
 		const sizes = result.current;
 
-		expect(sizes.root.current).toEqual({ width: 200, height: 100 });
-		expect(sizes.col1.current).toEqual({ width: 100, height: 100 });
-		expect(sizes.col2.current).toEqual({ width: 100, height: 100 });
-		expect(sizes.row1.current).toEqual({ width: 100, height: 50 });
-		expect(sizes.row2.current).toEqual({ width: 100, height: 50 });
+		expect(sizes).toEqual({
+			root: { width: 200, height: 100 },
+			col1: { width: 100, height: 100 },
+			col2: { width: 100, height: 100 },
+			row1: { width: 100, height: 50 },
+			row2: { width: 100, height: 50 },
+		});
 
 		expect(itemSize(layout.children[0], layout, sizes, true)).toEqual({ width: 100, height: 100 });
 
 		const parent = layout.children[0];
 		expect(itemSize(parent.children[0], parent, sizes, false)).toEqual({ width: 95, height: 45 });
 		expect(itemSize(parent.children[1], parent, sizes, false)).toEqual({ width: 95, height: 50 });
-	});
-
-	test('should set maximum sizes', () => {
-		const layout: LayoutItem = validateLayout({
-			key: 'root',
-			width: 200,
-			height: 100,
-			direction: LayoutItemDirection.Row,
-			children: [
-				{
-					key: 'col1',
-					width: 50,
-				},
-				{
-					key: 'col2',
-					width: 70,
-				},
-				{
-					key: 'col3',
-				},
-			],
-		});
-
-		const { result } = renderHook(() => useLayoutItemSizes(layout));
-		const sizes = result.current;
-
-		expect(sizes.col1.max.width).toBe(90);
-		expect(sizes.col2.max.width).toBe(110);
-	});
-
-	test('should set maximum sizes and respect minimum sizes', () => {
-		const layout: LayoutItem = validateLayout({
-			key: 'root',
-			width: 200,
-			height: 100,
-			direction: LayoutItemDirection.Row,
-			children: [
-				{
-					key: 'col1',
-					width: 50,
-				},
-				{
-					key: 'col2',
-					width: 70,
-				},
-				{
-					key: 'col3',
-					minWidth: 60,
-				},
-			],
-		});
-
-		const { result } = renderHook(() => useLayoutItemSizes(layout));
-		const sizes = result.current;
-
-		expect(sizes.col1.max.width).toBe(70);
-		expect(sizes.col2.max.width).toBe(90);
 	});
 
 	test('should decrease size of the largest item if the total size would be larger than the container', () => {
@@ -218,10 +163,8 @@ describe('useLayoutItemSizes', () => {
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
 
-		expect(sizes.col1.current.width).toBe(50);
-		expect(sizes.col1.max.width).toBe(50);
-		expect(sizes.col2.current.width).toBe(100);
-		expect(sizes.col2.max.width).toBe(100);
+		expect(sizes.col1.width).toBe(50);
+		expect(sizes.col2.width).toBe(100);
 	});
 
 	test('should ignore invisible items when counting remaining size', () => {
@@ -250,8 +193,7 @@ describe('useLayoutItemSizes', () => {
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
 
-		expect(sizes.col2.current.width).toBe(100);
-		expect(sizes.col2.max.width).toBe(150);
+		expect(sizes.col2.width).toBe(100);
 	});
 
 	test('should ignore invisible items when selecting largest child', () => {
@@ -284,13 +226,15 @@ describe('useLayoutItemSizes', () => {
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
 
-		expect(sizes.col2.current.width).toBe(100);
-		expect(sizes.col2.max.width).toBe(100);
-		expect(sizes.col3.current.width).toBe(50);
-		expect(sizes.col3.max.width).toBe(50);
+		expect(sizes.col2.width).toBe(100);
+		expect(sizes.col3.width).toBe(50);
 	});
 
-	test('should set minimum size', () => {
+});
+
+describe('calculateMaxSizeAvailableForItem', () => {
+
+	test('should give maximum available space this item can take up during resizing', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 200,
@@ -299,24 +243,52 @@ describe('useLayoutItemSizes', () => {
 			children: [
 				{
 					key: 'col1',
-					width: 40,
+					width: 50,
 				},
 				{
 					key: 'col2',
-					width: 100,
+					width: 70,
 				},
 				{
 					key: 'col3',
-					minWidth: 50,
 				},
 			],
 		});
 
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
+		const maxSize = calculateMaxSizeAvailableForItem(layout.children[0], layout, sizes);
 
-		expect(sizes.col1.min.width).toBe(40);
-		expect(sizes.col2.min.width).toBe(40);
-		expect(sizes.col3.min.width).toBe(50);
+		expect(maxSize.width).toBe(90);
 	});
+
+	test('should respect minimum sizes', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{
+					key: 'col1',
+					width: 50,
+				},
+				{
+					key: 'col2',
+					width: 70,
+				},
+				{
+					key: 'col3',
+					minWidth: 60,
+				},
+			],
+		});
+
+		const { result } = renderHook(() => useLayoutItemSizes(layout));
+		const sizes = result.current;
+		const maxSize = calculateMaxSizeAvailableForItem(layout.children[0], layout, sizes);
+
+		expect(maxSize.width).toBe(70);
+	});
+
 });
