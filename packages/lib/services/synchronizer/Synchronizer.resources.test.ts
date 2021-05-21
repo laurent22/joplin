@@ -1,15 +1,15 @@
-import time from '@joplin/lib/time';
-import shim from '@joplin/lib/shim';
-import Setting from '@joplin/lib/models/Setting';
-import { NoteEntity } from '@joplin/lib/services/database/types';
-import { remoteNotesFoldersResources, remoteResources } from '@joplin/lib/testing/test-utils-synchronizer';
+import time from '../../time';
+import shim from '../../shim';
+import Setting from '../../models/Setting';
+import { NoteEntity } from '../../services/database/types';
+import { remoteNotesFoldersResources, remoteResources } from '../../testing/test-utils-synchronizer';
 
-const { synchronizerStart, tempFilePath, resourceFetcher, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import Resource from '@joplin/lib/models/Resource';
-import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import BaseItem from '@joplin/lib/models/BaseItem';
+const { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync } = require('../../testing/test-utils.js');
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import Resource from '../../models/Resource';
+import ResourceFetcher from '../../services/ResourceFetcher';
+import BaseItem from '../../models/BaseItem';
 
 let insideBeforeEach = false;
 
@@ -31,7 +31,7 @@ describe('Synchronizer.resources', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const resource1 = (await Resource.all())[0];
 		const resourcePath1 = Resource.fullPath(resource1);
 		await synchronizerStart();
@@ -64,7 +64,7 @@ describe('Synchronizer.resources', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		await synchronizerStart();
 
@@ -92,7 +92,7 @@ describe('Synchronizer.resources', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -115,7 +115,7 @@ describe('Synchronizer.resources', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const resource1 = (await Resource.all())[0];
 		const resourcePath1 = Resource.fullPath(resource1);
 		await synchronizerStart();
@@ -148,7 +148,7 @@ describe('Synchronizer.resources', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const resource1 = (await Resource.all())[0];
 		const resourcePath1 = Resource.fullPath(resource1);
 		await synchronizerStart();
@@ -323,7 +323,7 @@ describe('Synchronizer.resources', function() {
 		// does get uploaded.
 
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const resource = (await Resource.all())[0];
 		await Resource.setLocalState(resource.id, { fetch_status: Resource.FETCH_STATUS_IDLE });
 		await synchronizerStart();
@@ -338,7 +338,7 @@ describe('Synchronizer.resources', function() {
 
 	it('should not download resources over the limit', (async () => {
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		await synchronizer().start();
 
 		await switchClient(2);

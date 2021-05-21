@@ -1,15 +1,15 @@
-import time from '@joplin/lib/time';
-import shim from '@joplin/lib/shim';
-import Setting from '@joplin/lib/models/Setting';
+import time from '../../time';
+import shim from '../../shim';
+import Setting from '../../models/Setting';
 
-const { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import Resource from '@joplin/lib/models/Resource';
-import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import MasterKey from '@joplin/lib/models/MasterKey';
-import BaseItem from '@joplin/lib/models/BaseItem';
-import { createFolderTree } from '@joplin/lib/testing/test-utils';
+const { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } = require('../../testing/test-utils.js');
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import Resource from '../../models/Resource';
+import ResourceFetcher from '../../services/ResourceFetcher';
+import MasterKey from '../../models/MasterKey';
+import BaseItem from '../../models/BaseItem';
+import { createFolderTree } from '../../testing/test-utils';
 
 let insideBeforeEach = false;
 
@@ -213,7 +213,7 @@ describe('Synchronizer.e2ee', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const resource1 = (await Resource.all())[0];
 		await Resource.setFileSizeOnly(resource1.id, -1);
 		Resource.fullPath(resource1);
@@ -239,7 +239,7 @@ describe('Synchronizer.e2ee', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		await synchronizerStart();
 
 		expect(await allSyncTargetItemsEncrypted()).toBe(false);
@@ -258,7 +258,7 @@ describe('Synchronizer.e2ee', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
@@ -270,7 +270,7 @@ describe('Synchronizer.e2ee', function() {
 
 	it('should decrypt the resource metadata, but not try to decrypt the file, if it is not present', (async () => {
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();

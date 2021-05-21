@@ -6,12 +6,12 @@ describe('Synchronizer.sharing', function() {
 
 });
 
-// import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient, joplinServerApi } from '@joplin/lib/testing/test-utils';
-// import Note from '@joplin/lib/models/Note';
-// import BaseItem from '@joplin/lib/models/BaseItem';
-// import shim from '@joplin/lib/shim';
-// import Resource from '@joplin/lib/models/Resource';
-// import Folder from '@joplin/lib/models/Folder';
+// import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient, joplinServerApi } from '../../testing/test-utils';
+// import Note from '../../models/Note';
+// import BaseItem from '../../models/BaseItem';
+// import shim from '../../shim';
+// import Resource from '../../models/Resource';
+// import Folder from '../../models/Folder';
 
 // describe('Synchronizer.sharing', function() {
 

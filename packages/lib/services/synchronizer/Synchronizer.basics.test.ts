@@ -1,11 +1,11 @@
-import Setting from '@joplin/lib/models/Setting';
-import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '@joplin/lib/testing/test-utils-synchronizer';
+import Setting from '../../models/Setting';
+import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
 
-const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import BaseItem from '@joplin/lib/models/BaseItem';
-const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
+const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('../../testing/test-utils.js');
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import BaseItem from '../../models/BaseItem';
+const WelcomeUtils = require('../../WelcomeUtils');
 
 describe('Synchronizer.basics', function() {
 

@@ -1,10 +1,10 @@
-import Setting from '@joplin/lib/models/Setting';
+import Setting from '../../models/Setting';
 
-const { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, encryptionService, loadEncryptionMasterKey } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import Tag from '@joplin/lib/models/Tag';
-import MasterKey from '@joplin/lib/models/MasterKey';
+const { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, encryptionService, loadEncryptionMasterKey } = require('../../testing/test-utils.js');
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import Tag from '../../models/Tag';
+import MasterKey from '../../models/MasterKey';
 
 describe('Synchronizer.tags', function() {
 

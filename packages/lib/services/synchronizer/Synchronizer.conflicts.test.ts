@@ -1,11 +1,11 @@
-import time from '@joplin/lib/time';
-import Setting from '@joplin/lib/models/Setting';
-import { allNotesFolders, localNotesFoldersSameAsRemote } from '@joplin/lib/testing/test-utils-synchronizer';
+import time from '../../time';
+import Setting from '../../models/Setting';
+import { allNotesFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
 
-const { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import BaseItem from '@joplin/lib/models/BaseItem';
+const { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } = require('../../testing/test-utils.js');
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import BaseItem from '../../models/BaseItem';
 
 describe('Synchronizer.conflicts', function() {
 

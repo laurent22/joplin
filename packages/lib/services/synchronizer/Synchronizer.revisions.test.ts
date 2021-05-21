@@ -1,9 +1,9 @@
-import Setting from '@joplin/lib/models/Setting';
-import BaseModel from '@joplin/lib/BaseModel';
+import Setting from '../../models/Setting';
+import BaseModel from '../../BaseModel';
 
-const { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } = require('@joplin/lib/testing/test-utils.js');
-import Note from '@joplin/lib/models/Note';
-import Revision from '@joplin/lib/models/Revision';
+const { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } = require('../../testing/test-utils.js');
+import Note from '../../models/Note';
+import Revision from '../../models/Revision';
 
 describe('Synchronizer.revisions', function() {
 
