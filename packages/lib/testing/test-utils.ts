@@ -19,7 +19,6 @@ import FileApiDriverJoplinServer from '../file-api-driver-joplinServer';
 import OneDriveApi from '../onedrive-api';
 import SyncTargetOneDrive from '../SyncTargetOneDrive';
 import JoplinDatabase from '../JoplinDatabase';
-
 const fs = require('fs-extra');
 const { DatabaseDriverNode } = require('../database-driver-node.js');
 import Folder from '../models/Folder';
@@ -38,7 +37,6 @@ const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
 const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
 const { FileApiDriverAmazonS3 } = require('../file-api-driver-amazon-s3.js');
-const { shimInit } = require('../shim-init-node.js');
 const SyncTargetRegistry = require('../SyncTargetRegistry.js');
 const SyncTargetMemory = require('../SyncTargetMemory.js');
 const SyncTargetFilesystem = require('../SyncTargetFilesystem.js');
@@ -59,7 +57,6 @@ const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
-const sharp = require('sharp');
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -84,16 +81,6 @@ let currentClient_ = 1;
 // https://stackoverflow.com/questions/9768444/possible-eventemitter-memory-leak-detected
 process.setMaxListeners(0);
 
-let keytar;
-try {
-	keytar = shim.platformSupportsKeyChain() ? require('keytar') : null;
-} catch (error) {
-	console.error('Cannot load keytar - keychain support will be disabled', error);
-	keytar = null;
-}
-
-shimInit(sharp, keytar);
-
 shim.setIsTestingEnv(true);
 
 const fsDriver = new FsDriverNode();
@@ -102,6 +89,9 @@ Resource.fsDriver_ = fsDriver;
 EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
+// Most test units were historically under /app-cli so most test-related
+// directories are there but that should be moved eventually under the right
+// packages, or even out of the monorepo for temp files, logs, etc.
 const oldTestDir = `${__dirname}/../../app-cli/tests`;
 const logDir = `${oldTestDir}/logs`;
 const baseTempDir = `${oldTestDir}/tmp/${suiteName_}`;
