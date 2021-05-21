@@ -1,8 +1,7 @@
-import KeychainService from '../../services/keychain/KeychainService';
-import shim from '../../shim';
-import Setting from '../../models/Setting';
-
-const { db, setupDatabaseAndSynchronizer, switchClient } = require('../../testing/test-utils.js');
+import KeychainService from '@joplin/lib/services/keychain/KeychainService';
+import shim from '@joplin/lib/shim';
+import Setting from '@joplin/lib/models/Setting';
+import { db, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
 function describeIfCompatible(name: string, fn: any, elseFn: any) {
 	if (['win32', 'darwin'].includes(shim.platformName())) {

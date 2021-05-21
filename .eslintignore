@@ -83,6 +83,9 @@ packages/app-cli/tests/MdToHtml.js.map
 packages/app-cli/tests/MdToMd.d.ts
 packages/app-cli/tests/MdToMd.js
 packages/app-cli/tests/MdToMd.js.map
+packages/app-cli/tests/services/keychain/KeychainService.d.ts
+packages/app-cli/tests/services/keychain/KeychainService.js
+packages/app-cli/tests/services/keychain/KeychainService.js.map
 packages/app-cli/tests/services/plugins/PluginService.d.ts
 packages/app-cli/tests/services/plugins/PluginService.js
 packages/app-cli/tests/services/plugins/PluginService.js.map
@@ -1166,9 +1169,6 @@ packages/lib/services/keychain/KeychainServiceDriver.node.js.map
 packages/lib/services/keychain/KeychainServiceDriverBase.d.ts
 packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js.map
-packages/lib/services/keychain/keychainService.test.d.ts
-packages/lib/services/keychain/keychainService.test.js
-packages/lib/services/keychain/keychainService.test.js.map
 packages/lib/services/plugins/BasePluginRunner.d.ts
 packages/lib/services/plugins/BasePluginRunner.js
 packages/lib/services/plugins/BasePluginRunner.js.map
