@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Yang Zhang <zyangmath@gmail.com>\n"
-"Language-Team: zh_CN <yaozeye@yaozeye.onmicrosoft.com>\n"
+"Last-Translator: 南宫小骏 <jackytsu@vip.qq.com>\n"
+"Language-Team: zh_CN <jackytsu.vip.qq.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
@@ -119,11 +119,11 @@ msgstr "下载"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "跳过该版本"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "完整更新记录"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -267,12 +267,10 @@ msgid "Retry"
 msgstr "重试"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:113
-#, fuzzy
 msgid "Advanced tools"
-msgstr "高级选项"
+msgstr "高级工具"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:115
-#, fuzzy
 msgid "Export debug report"
 msgstr "导出调试报告"
 
@@ -330,23 +328,23 @@ msgstr "复选框列表"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "突出显示"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "删除线"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "插入"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "上标"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "订阅"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-mobile/components/screens/Note.js:1016
@@ -507,9 +505,8 @@ msgid "Delete line"
 msgstr "删除行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "创建副本"
+msgstr "复制行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -700,11 +697,11 @@ msgstr "保存"
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
-msgstr ""
+msgstr "安全模式当前已被激活。笔记渲染和所有的插件被临时禁用。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:438
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "禁用安全模式并重启"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid ""
@@ -746,15 +743,15 @@ msgstr "更多信息"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:468
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) 想要分享笔记本给你。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:470
 msgid "Accept"
-msgstr ""
+msgstr "接受"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:472
 msgid "Reject"
-msgstr ""
+msgstr "拒绝"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 msgid "Some items cannot be synchronised."
@@ -794,11 +791,11 @@ msgstr "新建待办事项"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
 msgid "Toggle note list"
-msgstr "显示/隐藏笔记列表"
+msgstr "切换笔记列表"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
 msgid "Toggle sidebar"
-msgstr "显示/隐藏边栏"
+msgstr "切换边栏"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -838,9 +835,8 @@ msgid "Toggle editors"
 msgstr "切换编辑器"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "分享笔记..."
+msgstr "分享笔记本..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -917,7 +913,7 @@ msgstr "令牌已复制到剪贴板！"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "确定要更新授权令牌吗？"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -996,7 +992,7 @@ msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "更新令牌"
 
 #: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
@@ -1175,7 +1171,7 @@ msgstr "以下笔记已被导入: %s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:44
 msgid "Duplicate"
-msgstr "创建副本"
+msgstr "复制"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:49
 #, javascript-format
@@ -1468,13 +1464,12 @@ msgid "You do not have any installed plugin."
 msgstr "您尚未安装任何插件。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "无法安装插件：%s"
+msgstr "无法连接到插件库"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "重试"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1684,19 +1679,18 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "复制分享链接"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "分享"
+msgstr "取消分享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
-msgstr ""
+msgstr "删除这个邀请？接受者将无法再访问到这个共享的笔记本。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr "添加接受者："
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1706,45 +1700,41 @@ msgstr "分享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "接受者还没有接受邀请"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "接受者拒绝了邀请"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "接受者接受了邀请"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "接受者："
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "正在同步..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "分享笔记..."
+msgstr "分享笔记本..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
-msgstr ""
+msgstr "取消分享这个笔记本？接受者将无法再访问到它的内容。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "分享笔记"
+msgstr "分享笔记本"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "显示/隐藏边栏"
+msgstr "切换安全模式"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1836,7 +1826,7 @@ msgstr "配置"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "手机数据自动同步被禁用"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2349,9 +2339,8 @@ msgid "Joplin Server URL"
 msgstr "Joplin 服务器 URL"
 
 #: packages/lib/models/Setting.js:335
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplin 服务器"
+msgstr "Joplin Server 邮箱"
 
 #: packages/lib/models/Setting.js:346
 msgid "Joplin Server password"
@@ -2593,11 +2582,11 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"用于 markdown 编辑器中的大多数文本。如果没找到，会使用默认（非等宽）字体。"
 
 #: packages/lib/models/Setting.js:726
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "编辑器字体族"
+msgstr "编辑器等宽字体族"
 
 #: packages/lib/models/Setting.js:727
 msgid ""
@@ -2605,6 +2594,8 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"用于那些需要使用固定宽度的字体来清晰地布局文本的场景（例如：表格、多选框和代"
+"码块）。如果没有找到，会使用默认（等宽）字体。"
 
 #: packages/lib/models/Setting.js:748
 msgid "Custom stylesheet for rendered Markdown"
@@ -2657,7 +2648,7 @@ msgstr "%d 小时"
 
 #: packages/lib/models/Setting.js:817
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "只通过 WiFi 网络同步数据"
 
 #: packages/lib/models/Setting.js:824
 msgid "Text editor command"
@@ -3734,7 +3725,7 @@ msgstr "将选定文件添加到笔记中。"
 msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
-msgstr ""
+msgstr "执行文本文件中包含的命令。每个命令占一行。"
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
