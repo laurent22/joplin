@@ -1,18 +1,13 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
 
-
-const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-const Folder = require('@joplin/lib/models/Folder').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const Note = require('@joplin/lib/models/Note').default;
-const NoteTag = require('@joplin/lib/models/NoteTag').default;
-const ItemChange = require('@joplin/lib/models/ItemChange').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const Revision = require('@joplin/lib/models/Revision').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const RevisionService = require('@joplin/lib/services/RevisionService').default;
-const shim = require('@joplin/lib/shim').default;
+const time = require('../time').default;
+const { revisionService, setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-utils.js');
+const Setting = require('../models/Setting').default;
+const Note = require('../models/Note').default;
+const ItemChange = require('../models/ItemChange').default;
+const Revision = require('../models/Revision').default;
+const BaseModel = require('../BaseModel').default;
+const RevisionService = require('../services/RevisionService').default;
 
 describe('services_Revision', function() {
 

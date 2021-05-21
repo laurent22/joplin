@@ -1,14 +1,14 @@
-import InteropService from '@joplin/lib/services/interop/InteropService';
-import { CustomExportContext, CustomImportContext, Module, ModuleType } from '@joplin/lib/services/interop/types';
-import shim from '@joplin/lib/shim';
+import InteropService from '../../services/interop/InteropService';
+import { CustomExportContext, CustomImportContext, Module, ModuleType } from '../../services/interop/types';
+import shim from '../../shim';
 
-const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import Tag from '@joplin/lib/models/Tag';
-import Resource from '@joplin/lib/models/Resource';
+const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir } = require('../../testing/test-utils.js');
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import Tag from '../../models/Tag';
+import Resource from '../../models/Resource';
 const fs = require('fs-extra');
-const ArrayUtils = require('@joplin/lib/ArrayUtils');
+const ArrayUtils = require('../../ArrayUtils');
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -209,7 +209,7 @@ describe('services_InteropService', function() {
 		const filePath = `${exportDir()}/test.jex`;
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		note1 = await Note.load(note1.id);
 		let resourceIds = await Note.linkedResourceIds(note1.body);
 		const resource1 = await Resource.load(resourceIds[0]);
@@ -499,7 +499,7 @@ describe('services_InteropService', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		await Note.save({ title: 'note2', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 
 		const filePath = `${exportDir()}/example.test`;
 

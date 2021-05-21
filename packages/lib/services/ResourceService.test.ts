@@ -1,13 +1,13 @@
-import time from '@joplin/lib/time';
-import NoteResource from '@joplin/lib/models/NoteResource';
-import ResourceService from '@joplin/lib/services/ResourceService';
-import shim from '@joplin/lib/shim';
+import time from '../time';
+import NoteResource from '../models/NoteResource';
+import ResourceService from '../services/ResourceService';
+import shim from '../shim';
 
-const { resourceService, decryptionWorker, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import Resource from '@joplin/lib/models/Resource';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+const { resourceService, decryptionWorker, supportDir, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('../testing/test-utils.js');
+import Folder from '../models/Folder';
+import Note from '../models/Note';
+import Resource from '../models/Resource';
+import SearchEngine from '../services/searchengine/SearchEngine';
 
 describe('services_ResourceService', function() {
 
@@ -23,7 +23,7 @@ describe('services_ResourceService', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		note1 = await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		note1 = await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const resource1 = (await Resource.all())[0];
 		const resourcePath = Resource.fullPath(resource1);
 
@@ -55,7 +55,7 @@ describe('services_ResourceService', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'ma deuxième note', parent_id: folder1.id });
-		note1 = await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		note1 = await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const resource1 = (await Resource.all())[0];
 
 		await service.indexNoteResources();
@@ -75,7 +75,7 @@ describe('services_ResourceService', function() {
 
 	it('should not delete a resource that has never been associated with any note, because it probably means the resource came via sync, and associated note has not arrived yet', (async () => {
 		const service = new ResourceService();
-		await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
 
 		await service.indexNoteResources();
 		await service.deleteOrphanResources(0);
@@ -88,7 +88,7 @@ describe('services_ResourceService', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		note1 = await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		note1 = await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const resource1 = (await Resource.all())[0];
 
 		await service.indexNoteResources();
@@ -107,7 +107,7 @@ describe('services_ResourceService', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 
 		await service.indexNoteResources();
 
@@ -143,7 +143,7 @@ describe('services_ResourceService', function() {
 		await encryptionService().loadMasterKeysFromSettings();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`); // R1
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`); // R1
 		await resourceService().indexNoteResources();
 		await synchronizer().start();
 		expect(await allSyncTargetItemsEncrypted()).toBe(true);
@@ -156,7 +156,7 @@ describe('services_ResourceService', function() {
 		await decryptionWorker().start();
 		{
 			const n1 = await Note.load(note1.id);
-			await shim.attachFileToNote(n1, `${__dirname}/../tests/support/photo.jpg`); // R2
+			await shim.attachFileToNote(n1, `${supportDir}/photo.jpg`); // R2
 		}
 		await synchronizer().start();
 
@@ -173,7 +173,7 @@ describe('services_ResourceService', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		note1 = await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		note1 = await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		await resourceService().indexNoteResources();
 		const bodyWithResource = note1.body;
 		await Note.save({ id: note1.id, body: '' });
@@ -198,7 +198,7 @@ describe('services_ResourceService', function() {
 	// 	const service = new ResourceService();
 
 	// 	let note = await Note.save({});
-	// 	note = await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
+	// 	note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
 	// 	const resource = (await Resource.all())[0];
 
 	// 	const noteIds = await NoteResource.associatedNoteIds(resource.id);

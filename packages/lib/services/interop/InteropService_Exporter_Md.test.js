@@ -2,13 +2,13 @@
 
 
 const fs = require('fs-extra');
-const { setupDatabaseAndSynchronizer, switchClient, exportDir } = require('@joplin/lib/testing/test-utils.js');
-const InteropService_Exporter_Md = require('@joplin/lib/services/interop/InteropService_Exporter_Md').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Resource = require('@joplin/lib/models/Resource').default;
-const Note = require('@joplin/lib/models/Note').default;
-const shim = require('@joplin/lib/shim').default;
+const { setupDatabaseAndSynchronizer, switchClient, exportDir, supportDir } = require('../../testing/test-utils.js');
+const InteropService_Exporter_Md = require('../../services/interop/InteropService_Exporter_Md').default;
+const BaseModel = require('../../BaseModel').default;
+const Folder = require('../../models/Folder').default;
+const Resource = require('../../models/Resource').default;
+const Note = require('../../models/Note').default;
+const shim = require('../../shim').default;
 
 describe('services_InteropService_Exporter_Md', function() {
 
@@ -43,7 +43,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		note1 = await Note.load(note1.id);
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
@@ -52,7 +52,7 @@ describe('services_InteropService_Exporter_Md', function() {
 
 		const folder2 = await Folder.save({ title: 'folder2' });
 		let note3 = await Note.save({ title: 'note3', parent_id: folder2.id });
-		await shim.attachFileToNote(note3, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note3, `${supportDir}/photo.jpg`);
 		note3 = await Note.load(note3.id);
 		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note3);
@@ -138,7 +138,7 @@ describe('services_InteropService_Exporter_Md', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		note1 = await Note.load(note1.id);
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
@@ -147,7 +147,7 @@ describe('services_InteropService_Exporter_Md', function() {
 
 		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
-		await shim.attachFileToNote(note2, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note2, `${supportDir}/photo.jpg`);
 		note2 = await Note.load(note2.id);
 		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
@@ -243,14 +243,14 @@ describe('services_InteropService_Exporter_Md', function() {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		note1 = await Note.load(note1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 		const resource1 = await Resource.load((await Note.linkedResourceIds(note1.body))[0]);
 
 		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
-		await shim.attachFileToNote(note2, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note2, `${supportDir}/photo.jpg`);
 		note2 = await Note.load(note2.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 		const resource2 = await Resource.load((await Note.linkedResourceIds(note2.body))[0]);

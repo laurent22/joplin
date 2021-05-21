@@ -1,13 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint prefer-const: 0*/
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
 
-
-const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, restoreDate } = require('@joplin/lib/testing/test-utils.js');
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
-const Note = require('@joplin/lib/models/Note').default;
-const ItemChange = require('@joplin/lib/models/ItemChange').default;
-const Setting = require('@joplin/lib/models/Setting').default;
+const { setupDatabaseAndSynchronizer, db, sleep, switchClient } = require('../../testing/test-utils.js');
+const SearchEngine = require('../../services/searchengine/SearchEngine').default;
+const Note = require('../../models/Note').default;
+const ItemChange = require('../../models/ItemChange').default;
+const Setting = require('../../models/Setting').default;
 
 let engine = null;
 

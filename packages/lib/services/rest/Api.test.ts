@@ -1,15 +1,15 @@
-import { PaginationOrderDir } from '@joplin/lib/models/utils/types';
-import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
-import shim from '@joplin/lib/shim';
+import { PaginationOrderDir } from '../../models/utils/types';
+import Api, { RequestMethod } from '../../services/rest/Api';
+import shim from '../../shim';
 
-const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep } = require('@joplin/lib/testing/test-utils.js');
-import Folder from '@joplin/lib/models/Folder';
-import Resource from '@joplin/lib/models/Resource';
-import Note from '@joplin/lib/models/Note';
-import Tag from '@joplin/lib/models/Tag';
-import NoteTag from '@joplin/lib/models/NoteTag';
-import ResourceService from '@joplin/lib/services/ResourceService';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep, supportDir } = require('../../testing/test-utils.js');
+import Folder from '../../models/Folder';
+import Resource from '../../models/Resource';
+import Note from '../../models/Note';
+import Tag from '../../models/Tag';
+import NoteTag from '../../models/NoteTag';
+import ResourceService from '../../services/ResourceService';
+import SearchEngine from '../../services/searchengine/SearchEngine';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -327,7 +327,7 @@ describe('services_rest_Api', function() {
 	}));
 
 	it('should not compress images uploaded through resource api', (async () => {
-		const originalImagePath = `${__dirname}/../tests/support/photo-large.png`;
+		const originalImagePath = `${supportDir}/photo-large.png`;
 		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
 			title: 'testing resource',
 		}), [
@@ -764,7 +764,7 @@ describe('services_rest_Api', function() {
 
 	it('should return the notes associated with a resource', (async () => {
 		const note = await Note.save({});
-		await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
 		const resource = (await Resource.all())[0];
 
 		const resourceService = new ResourceService();
@@ -778,7 +778,7 @@ describe('services_rest_Api', function() {
 
 	it('should return the resources associated with a note', (async () => {
 		const note = await Note.save({});
-		await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
 		const resource = (await Resource.all())[0];
 
 		const r = await api.route(RequestMethod.GET, `notes/${note.id}/resources`);

@@ -1,8 +1,8 @@
-import { setupDatabaseAndSynchronizer, db, switchClient } from '@joplin/lib/testing/test-utils.js';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
-import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
-import Setting from '@joplin/lib/models/Setting';
-const Note = require('@joplin/lib/models/Note').default;
+import { setupDatabaseAndSynchronizer, db, switchClient } from '../../testing/test-utils.js';
+import SearchEngine from '../../services/searchengine/SearchEngine';
+import SearchEngineUtils from '../../services/searchengine/SearchEngineUtils';
+import Setting from '../../models/Setting';
+const Note = require('../../models/Note').default;
 
 
 let searchEngine: any = null;

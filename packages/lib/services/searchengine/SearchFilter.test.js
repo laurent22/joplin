@@ -1,18 +1,13 @@
-/* eslint-disable no-unused-vars */
-/* eslint prefer-const: 0*/
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
 
-
-const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, createNTestNotes, switchClient, createNTestFolders } = require('@joplin/lib/testing/test-utils.js');
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const ItemChange = require('@joplin/lib/models/ItemChange').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const Resource = require('@joplin/lib/models/Resource').default;
-const shim = require('@joplin/lib/shim').default;
-const ResourceService = require('@joplin/lib/services/ResourceService').default;
+const time = require('../../time').default;
+const { setupDatabaseAndSynchronizer, supportDir, db, createNTestNotes, switchClient } = require('../../testing/test-utils.js');
+const SearchEngine = require('../../services/searchengine/SearchEngine').default;
+const Note = require('../../models/Note').default;
+const Folder = require('../../models/Folder').default;
+const Tag = require('../../models/Tag').default;
+const shim = require('../../shim').default;
+const ResourceService = require('../../services/ResourceService').default;
 
 
 let engine = null;
@@ -697,10 +692,10 @@ describe('services_SearchFilter', function() {
 		await engine.syncTables();
 
 		// let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		n1 = await shim.attachFileToNote(n1, `${__dirname}/../tests/support/photo.jpg`);
+		n1 = await shim.attachFileToNote(n1, `${supportDir}/photo.jpg`);
 		// const resource1 = (await Resource.all())[0];
 
-		n4 = await shim.attachFileToNote(n4, `${__dirname}/../tests/support/welcome.pdf`);
+		n4 = await shim.attachFileToNote(n4, `${supportDir}/welcome.pdf`);
 
 		await service.indexNoteResources();
 
@@ -803,13 +798,13 @@ describe('services_SearchFilter', function() {
 	it('should support negating notebooks', (async () => {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
-		let n1 = await Note.save({ title: 'task1', body: 'foo', parent_id: folder1.id });
-		let n2 = await Note.save({ title: 'task2', body: 'bar', parent_id: folder1.id });
+		const n1 = await Note.save({ title: 'task1', body: 'foo', parent_id: folder1.id });
+		const n2 = await Note.save({ title: 'task2', body: 'bar', parent_id: folder1.id });
 
 
 		const folder2 = await Folder.save({ title: 'folder2' });
-		let n3 = await Note.save({ title: 'task3', body: 'baz', parent_id: folder2.id });
-		let n4 = await Note.save({ title: 'task4', body: 'blah', parent_id: folder2.id });
+		const n3 = await Note.save({ title: 'task3', body: 'baz', parent_id: folder2.id });
+		const n4 = await Note.save({ title: 'task4', body: 'blah', parent_id: folder2.id });
 
 
 		await engine.syncTables();
@@ -830,18 +825,18 @@ describe('services_SearchFilter', function() {
 	it('should support both inclusion and exclusion of notebooks together', (async () => {
 
 		const parentFolder = await Folder.save({ title: 'parent' });
-		let n1 = await Note.save({ title: 'task1', body: 'foo', parent_id: parentFolder.id });
-		let n2 = await Note.save({ title: 'task2', body: 'bar', parent_id: parentFolder.id });
+		const n1 = await Note.save({ title: 'task1', body: 'foo', parent_id: parentFolder.id });
+		const n2 = await Note.save({ title: 'task2', body: 'bar', parent_id: parentFolder.id });
 
 
 		const subFolder = await Folder.save({ title: 'child', parent_id: parentFolder.id });
-		let n3 = await Note.save({ title: 'task3', body: 'baz', parent_id: subFolder.id });
-		let n4 = await Note.save({ title: 'task4', body: 'blah', parent_id: subFolder.id });
+		const n3 = await Note.save({ title: 'task3', body: 'baz', parent_id: subFolder.id });
+		const n4 = await Note.save({ title: 'task4', body: 'blah', parent_id: subFolder.id });
 
 
 		await engine.syncTables();
 
-		let rows = await engine.search('notebook:parent -notebook:child');
+		const rows = await engine.search('notebook:parent -notebook:child');
 		expect(rows.length).toBe(2);
 		expect(ids(rows)).toContain(n1.id);
 		expect(ids(rows)).toContain(n2.id);

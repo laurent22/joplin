@@ -1,10 +1,10 @@
-import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
-import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
-import CommandService, { CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
-import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
-import KeymapService from '@joplin/lib/services/KeymapService';
+import MenuUtils from '../services/commands/MenuUtils';
+import ToolbarButtonUtils from '../services/commands/ToolbarButtonUtils';
+import CommandService, { CommandDeclaration, CommandRuntime } from '../services/CommandService';
+import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
+import KeymapService from '../services/KeymapService';
 
-const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('@joplin/lib/testing/test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../testing/test-utils.js');
 
 interface TestCommand {
 	declaration: CommandDeclaration;

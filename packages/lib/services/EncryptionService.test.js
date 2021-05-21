@@ -1,18 +1,12 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
 
-
-const time = require('@joplin/lib/time').default;
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const Database = require('@joplin/lib/database').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const BaseItem = require('@joplin/lib/models/BaseItem').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const MasterKey = require('@joplin/lib/models/MasterKey').default;
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
-const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
+const { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync } = require('../testing/test-utils.js');
+const Folder = require('../models/Folder').default;
+const Note = require('../models/Note').default;
+const Setting = require('../models/Setting').default;
+const BaseItem = require('../models/BaseItem').default;
+const MasterKey = require('../models/MasterKey').default;
+const EncryptionService = require('../services/EncryptionService').default;
 
 let service = null;
 
@@ -256,7 +250,7 @@ describe('services_EncryptionService', function() {
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey_(masterKey, '123456', true);
 
-		const sourcePath = `${__dirname}/../tests/support/photo.jpg`;
+		const sourcePath = `${supportDir}/photo.jpg`;
 		const encryptedPath = `${Setting.value('tempDir')}/photo.crypted`;
 		const decryptedPath = `${Setting.value('tempDir')}/photo.jpg`;
 

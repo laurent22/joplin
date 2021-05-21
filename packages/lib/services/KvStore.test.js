@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-vars */
-
-
-const { fileContentEqual, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('@joplin/lib/testing/test-utils.js');
-const KvStore = require('@joplin/lib/services/KvStore').default;
+const { setupDatabaseAndSynchronizer, db, switchClient } = require('../testing/test-utils.js');
+const KvStore = require('../services/KvStore').default;
 
 function setupStore() {
 	const store = KvStore.instance();
