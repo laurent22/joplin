@@ -165,6 +165,32 @@ describe('useLayoutItemSizes', () => {
 
 		expect(sizes.col1.width).toBe(50);
 		expect(sizes.col2.width).toBe(100);
+		expect(sizes.col3.width).toBe(50);
+	});
+
+	test('should not allow a minWidth of 0, should still make space for the item', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{
+					key: 'col1',
+					width: 210,
+				},
+				{
+					key: 'col2',
+					minWidth: 0,
+				},
+			],
+		});
+
+		const { result } = renderHook(() => useLayoutItemSizes(layout));
+		const sizes = result.current;
+
+		expect(sizes.col1.width).toBe(160);
+		expect(sizes.col2.width).toBe(40); // default minWidth is 40
 	});
 
 	test('should ignore invisible items when counting remaining size', () => {
@@ -193,7 +219,9 @@ describe('useLayoutItemSizes', () => {
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
 
+		expect(sizes.col1.width).toBe(0);
 		expect(sizes.col2.width).toBe(100);
+		expect(sizes.col3.width).toBe(100);
 	});
 
 	test('should ignore invisible items when selecting largest child', () => {
@@ -226,8 +254,10 @@ describe('useLayoutItemSizes', () => {
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
 
+		expect(sizes.col1.width).toBe(0);
 		expect(sizes.col2.width).toBe(100);
 		expect(sizes.col3.width).toBe(50);
+		expect(sizes.col4.width).toBe(50);
 	});
 
 });
@@ -257,9 +287,12 @@ describe('calculateMaxSizeAvailableForItem', () => {
 
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
-		const maxSize = calculateMaxSizeAvailableForItem(layout.children[0], layout, sizes);
+		const maxSize1 = calculateMaxSizeAvailableForItem(layout.children[0], layout, sizes);
+		const maxSize2 = calculateMaxSizeAvailableForItem(layout.children[1], layout, sizes);
 
-		expect(maxSize.width).toBe(90);
+		// maxSize = totalSize - ( [size of items with set size, except for the current item] + [minimum size of items with no set size] )
+		expect(maxSize1.width).toBe(90); // 90 = layout.width - (col2.width + col3.minWidth(=40) )
+		expect(maxSize2.width).toBe(110); // 110 = layout.width - (col1.width + col3.minWidth(=40) )
 	});
 
 	test('should respect minimum sizes', () => {
@@ -286,9 +319,38 @@ describe('calculateMaxSizeAvailableForItem', () => {
 
 		const { result } = renderHook(() => useLayoutItemSizes(layout));
 		const sizes = result.current;
-		const maxSize = calculateMaxSizeAvailableForItem(layout.children[0], layout, sizes);
+		const maxSize1 = calculateMaxSizeAvailableForItem(layout.children[0], layout, sizes);
+		const maxSize2 = calculateMaxSizeAvailableForItem(layout.children[1], layout, sizes);
 
-		expect(maxSize.width).toBe(70);
+		// maxSize = totalSize - ( [size of items with set size, except for the current item] + [minimum size of items with no set size] )
+		expect(maxSize1.width).toBe(70); // 70 = layout.width - (col2.width + col3.minWidth)
+		expect(maxSize2.width).toBe(90); // 90 = layout.width - (col1.width + col3.minWidth)
+	});
+
+	test('should not allow a minWidth of 0, should still leave space for the item', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{
+					key: 'col1',
+					width: 50,
+				},
+				{
+					key: 'col2',
+					minWidth: 0,
+				},
+			],
+		});
+
+		const { result } = renderHook(() => useLayoutItemSizes(layout));
+		const sizes = result.current;
+		const maxSize1 = calculateMaxSizeAvailableForItem(layout.children[0], layout, sizes);
+
+		// maxSize = totalSize - ( [size of items with set size, except for the current item] + [minimum size of items with no set size] )
+		expect(maxSize1.width).toBe(160); // 160 = layout.width - col2.minWidth(=40)
 	});
 
 });

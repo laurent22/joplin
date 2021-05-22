@@ -118,6 +118,7 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 }
 
 // Gives the maximum available space for this item that it can take up during resizing
+// availableSize = totalSize - ( [size of items with set size, except for the current item] + [minimum size of items with no set size] )
 export function calculateMaxSizeAvailableForItem(item: LayoutItem, parent: LayoutItem, sizes: LayoutItemSizes): Size {
 	const availableSize: Size = { ...sizes[parent.key] };
 
