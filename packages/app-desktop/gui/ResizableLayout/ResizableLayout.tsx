@@ -32,7 +32,7 @@ function itemVisible(item: LayoutItem, moveMode: boolean) {
 	return item.visible !== false;
 }
 
-function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, resizeMaxSize: Size | null, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean, moveMode: boolean): any {
+function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, resizedItemMaxSize: Size | null, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean, moveMode: boolean): any {
 	const style: any = {
 		display: itemVisible(item, moveMode) ? 'flex' : 'none',
 		flexDirection: item.direction,
@@ -65,8 +65,8 @@ function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: Lay
 				enable={enable}
 				minWidth={'minWidth' in item ? item.minWidth : itemMinWidth}
 				minHeight={'minHeight' in item ? item.minHeight : itemMinHeight}
-				maxWidth={resizeMaxSize?.width}
-				maxHeight={resizeMaxSize?.height}
+				maxWidth={resizedItemMaxSize?.width}
+				maxHeight={resizedItemMaxSize?.height}
 			>
 				{children}
 			</Resizable>
@@ -143,7 +143,7 @@ function ResizableLayout(props: Props) {
 			setResizedItem(null);
 		}
 
-		const resizeMaxSize = item.key === resizedItem?.key ? resizedItem.maxSize : null;
+		const resizedItemMaxSize = item.key === resizedItem?.key ? resizedItem.maxSize : null;
 		if (!item.children) {
 			const size = itemSize(item, parent, sizes, false);
 
@@ -156,7 +156,7 @@ function ResizableLayout(props: Props) {
 
 			const wrapper = renderItemWrapper(comp, item, parent, size, props.moveMode);
 
-			return renderContainer(item, parent, sizes, resizeMaxSize, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild, props.moveMode);
+			return renderContainer(item, parent, sizes, resizedItemMaxSize, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild, props.moveMode);
 		} else {
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
@@ -164,7 +164,7 @@ function ResizableLayout(props: Props) {
 				childrenComponents.push(renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === item.children.length - 1));
 			}
 
-			return renderContainer(item, parent, sizes, resizeMaxSize, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild, props.moveMode);
+			return renderContainer(item, parent, sizes, resizedItemMaxSize, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild, props.moveMode);
 		}
 	}
 
