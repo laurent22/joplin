@@ -1,0 +1,1 @@
+# Joplin Android app changelog
