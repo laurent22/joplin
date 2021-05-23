@@ -101,15 +101,10 @@
 			"default": "",
 			"description": "Joplin Server URL. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
-		"sync.9.directory": {
-			"type": "string",
-			"default": "Apps/Joplin",
-			"description": "Joplin Server Directory"
-		},
 		"sync.9.username": {
 			"type": "string",
 			"default": "",
-			"description": "Joplin Server username"
+			"description": "Joplin Server email"
 		},
 		"sync.9.password": {
 			"type": "string",
@@ -602,6 +597,11 @@
 			"default": -1,
 			"$comment": "private"
 		},
+		"sync.userId": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
 		"style.zoom": {
 			"type": "integer",
 			"default": 100,
@@ -633,7 +633,7 @@
 		},
 		"autoUpdateEnabled": {
 			"type": "boolean",
-			"default": false,
+			"default": true,
 			"description": "Automatically update the application"
 		},
 		"autoUpdate.includePreReleases": {
@@ -724,12 +724,6 @@
 			"type": "boolean",
 			"default": false,
 			"description": "Enable spell checking in Markdown editor? (WARNING BETA feature). Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)",
-			"$comment": "private"
-		},
-		"image.noresizing": {
-			"type": "boolean",
-			"default": false,
-			"description": "Do not resize images",
 			"$comment": "private"
 		},
 		"net.customCertificates": {
