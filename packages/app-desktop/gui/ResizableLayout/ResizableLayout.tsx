@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import useWindowResizeEvent from './utils/useWindowResizeEvent';
 import setLayoutItemProps from './utils/setLayoutItemProps';
-import useLayoutItemSizes, { LayoutItemSizes, itemSize } from './utils/useLayoutItemSizes';
+import useLayoutItemSizes, { LayoutItemSizes, itemSize, calculateMaxSizeAvailableForItem, itemMinWidth, itemMinHeight } from './utils/useLayoutItemSizes';
 import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem } from './utils/types';
 import { canMove, MoveDirection } from './utils/movements';
@@ -10,9 +10,6 @@ import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootWrapper, MoveModeRootMessage } from './utils/style';
 import { Resizable } from 're-resizable';
 const EventEmitter = require('events');
-
-const itemMinWidth = 20;
-const itemMinHeight = 20;
 
 interface onResizeEvent {
 	layout: LayoutItem;
@@ -35,7 +32,7 @@ function itemVisible(item: LayoutItem, moveMode: boolean) {
 	return item.visible !== false;
 }
 
-function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean, moveMode: boolean): any {
+function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, resizedItemMaxSize: Size | null, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean, moveMode: boolean): any {
 	const style: any = {
 		display: itemVisible(item, moveMode) ? 'flex' : 'none',
 		flexDirection: item.direction,
@@ -68,6 +65,8 @@ function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: Lay
 				enable={enable}
 				minWidth={'minWidth' in item ? item.minWidth : itemMinWidth}
 				minHeight={'minHeight' in item ? item.minHeight : itemMinHeight}
+				maxWidth={resizedItemMaxSize?.width}
+				maxHeight={resizedItemMaxSize?.height}
 			>
 				{children}
 			</Resizable>
@@ -114,6 +113,7 @@ function ResizableLayout(props: Props) {
 				key: item.key,
 				initialWidth: sizes[item.key].width,
 				initialHeight: sizes[item.key].height,
+				maxSize: calculateMaxSizeAvailableForItem(item, parent, sizes),
 			});
 		}
 
@@ -143,6 +143,7 @@ function ResizableLayout(props: Props) {
 			setResizedItem(null);
 		}
 
+		const resizedItemMaxSize = item.key === resizedItem?.key ? resizedItem.maxSize : null;
 		if (!item.children) {
 			const size = itemSize(item, parent, sizes, false);
 
@@ -155,7 +156,7 @@ function ResizableLayout(props: Props) {
 
 			const wrapper = renderItemWrapper(comp, item, parent, size, props.moveMode);
 
-			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild, props.moveMode);
+			return renderContainer(item, parent, sizes, resizedItemMaxSize, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild, props.moveMode);
 		} else {
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
@@ -163,7 +164,7 @@ function ResizableLayout(props: Props) {
 				childrenComponents.push(renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === item.children.length - 1));
 			}
 
-			return renderContainer(item, parent, sizes, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild, props.moveMode);
+			return renderContainer(item, parent, sizes, resizedItemMaxSize, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild, props.moveMode);
 		}
 	}
 

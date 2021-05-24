@@ -108,11 +108,12 @@
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Defines whether the command should be enabled or disabled, which in turns affects
-							the enabled state of any associated button or menu item.</p>
+							<p>Defines whether the command should be enabled or disabled, which in turns
+							affects the enabled state of any associated button or menu item.</p>
 						</div>
-						<p>The condition should be expressed as a &quot;when-clause&quot; (as in Visual Studio Code). It&#39;s a simple boolean expression that evaluates to
-						<code>true</code> or <code>false</code>. It supports the following operators:</p>
+						<p>The condition should be expressed as a &quot;when-clause&quot; (as in Visual Studio
+							Code). It&#39;s a simple boolean expression that evaluates to <code>true</code> or
+						<code>false</code>. It supports the following operators:</p>
 						<table>
 							<thead>
 								<tr>
@@ -142,7 +143,17 @@
 									<td>&quot;oneNoteSelected &amp;&amp; !inConflictFolder&quot;</td>
 								</tr>
 						</tbody></table>
-						<p>Currently the supported context variables aren&#39;t documented, but you can <a href="https://github.com/laurent22/joplin/blob/dev/packages/lib/services/commands/stateToWhenClauseContext.ts">find the list here</a>.</p>
+						<p>Joplin, unlike VSCode, also supports parenthesis, which allows creating
+							more complex expressions such as <code>cond1 || (cond2 &amp;&amp; cond3)</code>. Only one
+						level of parenthesis is possible (nested ones aren&#39;t supported).</p>
+						<p>Currently the supported context variables aren&#39;t documented, but you can
+						find the list below:</p>
+						<ul>
+							<li>[Global When
+							Clauses](<a href="https://github.com/laurent22/joplin/blob/dev/packages/lib/services/commands/stateToWhenClauseContext.ts">https://github.com/laurent22/joplin/blob/dev/packages/lib/services/commands/stateToWhenClauseContext.ts</a>).</li>
+							<li>[Desktop app When
+							Clauses](<a href="https://github.com/laurent22/joplin/blob/dev/packages/app-desktop/services/commands/stateToWhenClauseContext.ts">https://github.com/laurent22/joplin/blob/dev/packages/app-desktop/services/commands/stateToWhenClauseContext.ts</a>).</li>
+						</ul>
 						<p>Note: Commands are enabled by default unless you use this property.</p>
 					</div>
 				</section>
