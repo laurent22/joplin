@@ -142,7 +142,7 @@ async function main() {
 		const appContext = app.context as AppContext;
 
 		await setupAppContext(appContext, env, connectionCheck.connection, appLogger);
-		await initializeJoplinUtils(config(), appContext.models);
+		await initializeJoplinUtils(config(), appContext.models, appContext.services.mustache);
 
 		appLogger().info('Migrating database...');
 		await migrateDb(appContext.db);

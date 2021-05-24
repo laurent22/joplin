@@ -31,7 +31,7 @@ if [ "$RESET_ALL" == "1" ]; then
 	echo "config sync.9.password 123456" >> "$CMD_FILE" 
 
 	if [ "$1" == "1" ]; then
-		curl --data '{"action": "createTestUsers"}' http://localhost:22300/api/debug
+		curl --data '{"action": "createTestUsers"}' -H 'Content-Type: application/json' http://localhost:22300/api/debug
 
 		echo 'mkbook "shared"' >> "$CMD_FILE"
 		echo 'mkbook "other"' >> "$CMD_FILE"

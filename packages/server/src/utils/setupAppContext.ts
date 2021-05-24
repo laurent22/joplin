@@ -7,11 +7,15 @@ import routes from '../routes/routes';
 import ShareService from '../services/ShareService';
 import { Services } from '../services/types';
 import EmailService from '../services/EmailService';
+import CronService from '../services/CronService';
+import MustacheService from '../services/MustacheService';
 
-function setupServices(env: Env, models: Models, config:Config): Services {
+function setupServices(env: Env, models: Models, config: Config): Services {
 	return {
 		share: new ShareService(env, models, config),
 		email: new EmailService(env, models, config),
+		cron: new CronService(env, models, config),
+		mustache: new MustacheService(config.viewDir, config.baseUrl),
 	};
 }
 

@@ -283,6 +283,7 @@ export interface User extends WithDates, WithUuid {
 	max_item_size?: number;
 	can_share?: number;
 	email_confirmed?: number;
+	must_set_password?: number;
 }
 
 export interface Session extends WithDates, WithUuid {
@@ -407,6 +408,7 @@ export const databaseSchema: DatabaseTables = {
 		max_item_size: { type: 'number' },
 		can_share: { type: 'number' },
 		email_confirmed: { type: 'number' },
+		must_set_password: { type: 'number' },
 	},
 	sessions: {
 		id: { type: 'string' },

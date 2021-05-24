@@ -153,21 +153,37 @@ describe('index_users', function() {
 		expect(result).toContain(user2.email);
 	});
 
-	test('should validate a user email', async function() {
+	test('should allow user to set a password for new accounts', async function() {
 		const { user: user1 } = await createUserAndSession(1);
 		const email = (await models().email().all())[0];
 		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
 		const path = matches[1];
 		const token = matches[3];
 
-		// Check that the email has been validated
-		const context = await execRequestC(null, 'GET', path, null, { query: { token } });
-		expect(context.response.body).toContain('email has been validated');
+		// Check that the token is valid
+		expect(await models().token().isValid(user1.id, token)).toBe(true);
 
-		// Check that after the that the user has been logged in
+		const context = await execRequestC('', 'POST', path, {
+			password: 'newpassword',
+			password2: 'newpassword',
+			token: token,
+		});
+
+		// Check that the user has been logged in
 		const sessionId = context.cookies.get('sessionId');
 		const session = await models().session().load(sessionId);
 		expect(session.user_id).toBe(user1.id);
+
+		// Check that the password has been set
+		const loggedInUser = await models().user().login(user1.email, 'newpassword');
+		expect(loggedInUser.id).toBe(user1.id);
+
+		// Check that the token has been cleared
+		expect(await models().token().isValid(user1.id, token)).toBe(false);
+
+		// Check that a notification has been created
+		const notification = (await models().notification().all())[0];
+		expect(notification.key).toBe('passwordSet');
 	});
 
 	test('should handle invalid email validation', async function() {
@@ -181,7 +197,7 @@ describe('index_users', function() {
 		await expectHttpError(async () => execRequest(null, 'GET', path, null, { query: { token: 'invalid' } }), ErrorNotFound.httpCode);
 
 		// Valid token but invalid path
-		await expectHttpError(async () => execRequest(null, 'GET', 'users/abcd1234/validate', null, { query: { token } }), ErrorNotFound.httpCode);
+		await expectHttpError(async () => execRequest(null, 'GET', 'users/abcd1234/confirm', null, { query: { token } }), ErrorNotFound.httpCode);
 	});
 
 	test('should apply ACL', async function() {

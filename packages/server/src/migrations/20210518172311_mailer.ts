@@ -4,6 +4,7 @@ import { DbConnection } from '../db';
 export async function up(db: DbConnection): Promise<any> {
 	await db.schema.alterTable('users', function(table: Knex.CreateTableBuilder) {
 		table.integer('email_confirmed').defaultTo(0).notNullable();
+		table.integer('must_set_password').defaultTo(0).notNullable();
 	});
 
 	await db.schema.createTable('emails', function(table: Knex.CreateTableBuilder) {
@@ -29,16 +30,12 @@ export async function up(db: DbConnection): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	await db('users').update({ email_confirmed: 1 });
-
 	await db.schema.alterTable('emails', function(table: Knex.CreateTableBuilder) {
 		table.index(['sent_time']);
 		table.index(['sent_success']);
 	});
 
-	await db.schema.alterTable('users', function(table: Knex.CreateTableBuilder) {
-		table.index(['email_confirmed']);
-	});
+	await db('users').update({ email_confirmed: 1 });
 
 	await db.schema.alterTable('tokens', function(table: Knex.CreateTableBuilder) {
 		table.index(['value', 'user_id']);

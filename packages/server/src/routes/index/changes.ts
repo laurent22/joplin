@@ -6,7 +6,7 @@ import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatDateTime } from '../../utils/time';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
-import { makeTablePagination, Table, Row, makeTableView, tablePartials } from '../../utils/views/table';
+import { makeTablePagination, Table, Row, makeTableView } from '../../utils/views/table';
 
 const router = new Router();
 
@@ -57,7 +57,6 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	const view: View = defaultView('changes');
 	view.content.changeTable = makeTableView(table),
 	view.cssFiles = ['index/changes'];
-	view.partials = view.partials.concat(tablePartials());
 	return view;
 });
 

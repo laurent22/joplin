@@ -3,7 +3,7 @@
   "version": "2.0.1",
   "private": true,
   "scripts": {
-    "start-dev": "nodemon --config nodemon.json dist/app.js --env dev",
+    "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
     "start": "node dist/app.js",
     "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",
@@ -23,6 +23,7 @@
     "dayjs": "^1.9.8",
     "formidable": "^1.2.2",
     "fs-extra": "^8.1.0",
+    "handlebars": "^4.7.7",
     "html-entities": "^1.3.1",
     "knex": "0.95.4",
     "koa": "^2.8.1",
@@ -36,6 +37,7 @@
     "pretty-bytes": "^5.6.0",
     "query-string": "^6.8.3",
     "sqlite3": "^4.1.0",
+    "node-cron": "^3.0.0", 
     "yargs": "^14.0.0"
   },
   "devDependencies": {

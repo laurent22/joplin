@@ -9,7 +9,7 @@ import { View } from '../../services/MustacheService';
 function makeView(error: any = null): View {
 	const view = defaultView('login');
 	view.content.error = error;
-	view.partials = ['errorBanner'];
+	view.navbar = false;
 	return view;
 }
 

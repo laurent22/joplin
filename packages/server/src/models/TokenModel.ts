@@ -1,4 +1,5 @@
 import { Token, Uuid } from '../db';
+import { ErrorForbidden } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import BaseModel from './BaseModel';
 
@@ -23,20 +24,32 @@ export default class TokenModel extends BaseModel<Token> {
 		return token.value;
 	}
 
-	public async isValid(userId: string, tokenValue: string): Promise<boolean> {
-		const token = await this
+	public async checkToken(userId: string, tokenValue: string): Promise<void> {
+		if (!(await this.isValid(userId, tokenValue))) throw new ErrorForbidden('Invalid or expired token');
+	}
+
+	private async byUser(userId: string, tokenValue: string): Promise<Token> {
+		return this
 			.db(this.tableName)
 			.select(['id'])
 			.where('user_id', '=', userId)
 			.where('value', '=', tokenValue)
 			.first();
+	}
 
+	public async isValid(userId: string, tokenValue: string): Promise<boolean> {
+		const token = await this.byUser(userId, tokenValue);
 		return !!token;
 	}
 
 	public async deleteExpiredTokens() {
 		const cutOffDate = Date.now() - this.tokenTtl_;
 		await this.db(this.tableName).where('created_time', '<', cutOffDate).delete();
+	}
+
+	public async deleteByValue(userId: Uuid, value: string) {
+		const token = await this.byUser(userId, value);
+		if (token) await this.delete(token.id);
 	}
 
 }

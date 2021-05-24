@@ -134,8 +134,12 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public async profileUrl(): Promise<string> {
+	public profileUrl(): string {
 		return `${this.baseUrl}/users/me`;
+	}
+
+	public confirmUrl(userId: Uuid, validationToken: string): string {
+		return `${this.baseUrl}/users/${userId}/confirm?token=${validationToken}`;
 	}
 
 	public async delete(id: string): Promise<void> {
@@ -152,8 +156,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async confirmEmail(userId: Uuid, token: string) {
-		const isValid = await this.models().token().isValid(userId, token);
-		if (!isValid) throw new ErrorNotFound('Invalid or expired token');
+		await this.models().token().checkToken(userId, token);
 		const user = await this.models().user().load(userId);
 		if (!user) throw new ErrorNotFound('No such user');
 		await this.save({ id: user.id, email_confirmed: 1 });
@@ -178,7 +181,7 @@ export default class UserModel extends BaseModel<User> {
 
 			if (isNew) {
 				const validationToken = await this.models().token().generate(savedUser.id);
-				const validationUrl = encodeURI(`${this.baseUrl}/users/${savedUser.id}/validate?token=${validationToken}`);
+				const validationUrl = encodeURI(this.confirmUrl(savedUser.id, validationToken));
 
 				await this.models().email().push({
 					sender_id: EmailSender.NoReply,

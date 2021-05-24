@@ -1,6 +1,11 @@
 import { AppContext } from './types';
 
-export default function startServices(appContext: AppContext) {
-	void appContext.services.share.runInBackground();
-	void appContext.services.email.runInBackground();
+export default async function startServices(appContext: AppContext) {
+	const services = appContext.services;
+
+	void services.share.runInBackground();
+	void services.email.runInBackground();
+	void services.cron.runInBackground();
+
+	await services.mustache.loadPartials();
 }

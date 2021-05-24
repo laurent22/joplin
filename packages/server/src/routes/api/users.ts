@@ -30,8 +30,9 @@ router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
 	const user = await postedUserFromContext(ctx);
 
 	// We set a random password because it's required, but user will have to
-	// set it by clicking on the confirmation link.
+	// set it after clicking on the confirmation link.
 	user.password = uuidgen();
+	user.must_set_password = 1;
 	const output = await ctx.models.user().save(user);
 	return ctx.models.user().toApiOutput(output);
 });

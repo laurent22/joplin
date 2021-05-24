@@ -1,6 +1,9 @@
 import * as Mustache from 'mustache';
 import * as fs from 'fs-extra';
 import config from '../config';
+import { filename } from '@joplin/lib/path-utils';
+import { NotificationView } from '../utils/types';
+import { User } from '../db';
 
 export interface RenderOptions {
 	partials?: any;
@@ -11,10 +14,19 @@ export interface RenderOptions {
 export interface View {
 	name: string;
 	path: string;
+	navbar?: boolean;
 	content?: any;
 	partials?: string[];
 	cssFiles?: string[];
 	jsFiles?: string[];
+}
+
+interface GlobalParams {
+	baseUrl?: string;
+	prefersDarkEnabled?: boolean;
+	notifications?: NotificationView[];
+	hasNotifications?: boolean;
+	owner?: User;
 }
 
 export function isView(o: any): boolean {
@@ -27,10 +39,25 @@ export default class MustacheService {
 	private viewDir_: string;
 	private baseAssetUrl_: string;
 	private prefersDarkEnabled_: boolean = true;
+	private partials_: Record<string, string> = {};
 
 	public constructor(viewDir: string, baseAssetUrl: string) {
 		this.viewDir_ = viewDir;
 		this.baseAssetUrl_ = baseAssetUrl;
+	}
+
+	public async loadPartials() {
+
+		const files = await fs.readdir(this.partialDir);
+		for (const f of files) {
+			const name = filename(f);
+			const templateContent = await this.loadTemplateContent(`${this.partialDir}/${f}`);
+			this.partials_[name] = templateContent;
+		}
+	}
+
+	public get partialDir(): string {
+		return `${this.viewDir_}/partials`;
 	}
 
 	public get prefersDarkEnabled(): boolean {
@@ -45,7 +72,7 @@ export default class MustacheService {
 		return `${config().layoutDir}/default.mustache`;
 	}
 
-	private get defaultLayoutOptions(): any {
+	private get defaultLayoutOptions(): GlobalParams {
 		return {
 			baseUrl: config().baseUrl,
 			prefersDarkEnabled: this.prefersDarkEnabled_,
@@ -64,17 +91,9 @@ export default class MustacheService {
 		return output;
 	}
 
-	public async renderView(view: View, globalParams: any = null): Promise<string> {
-		const partials = view.partials || [];
+	public async renderView(view: View, globalParams: GlobalParams = null): Promise<string> {
 		const cssFiles = this.resolvesFilePaths('css', view.cssFiles || []);
 		const jsFiles = this.resolvesFilePaths('js', view.jsFiles || []);
-
-		const partialContents: any = {};
-		for (const partialName of partials) {
-			const filePath = `${this.viewDir_}/partials/${partialName}.mustache`;
-			partialContents[partialName] = await this.loadTemplateContent(filePath);
-		}
-
 		const filePath = `${this.viewDir_}/${view.path}.mustache`;
 
 		globalParams = {
@@ -88,19 +107,20 @@ export default class MustacheService {
 				...view.content,
 				global: globalParams,
 			},
-			partialContents
+			this.partials_
 		);
 
-		const layoutView: any = Object.assign({}, {
+		const layoutView: any = {
 			global: globalParams,
 			pageName: view.name,
 			contentHtml: contentHtml,
 			cssFiles: cssFiles,
 			jsFiles: jsFiles,
+			navbar: view.navbar,
 			...view.content,
-		});
+		};
 
-		return Mustache.render(await this.loadTemplateContent(this.defaultLayoutPath), layoutView, partialContents);
+		return Mustache.render(await this.loadTemplateContent(this.defaultLayoutPath), layoutView, this.partials_);
 	}
 
 }
