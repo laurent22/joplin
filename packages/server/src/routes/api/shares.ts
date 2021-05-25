@@ -3,6 +3,7 @@ import { Share, ShareType } from '../../db';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
 
@@ -11,7 +12,7 @@ interface ShareApiInput extends Share {
 	note_id?: string;
 }
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 router.public = true;
 

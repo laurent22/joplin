@@ -1,5 +1,6 @@
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
@@ -52,7 +53,7 @@ function userIsMe(path: SubPath): boolean {
 	return path.id === 'me';
 }
 
-const router = new Router();
+const router = new Router(RouteType.Web);
 
 router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	const userModel = ctx.models.user();
@@ -152,7 +153,7 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {
 		const endPoint = router.findEndPoint(HttpMethod.GET, 'users/:id/confirm');
-		return endPoint(path, ctx, error);
+		return endPoint.handler(path, ctx, error);
 	}
 });
 
@@ -192,7 +193,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 	} catch (error) {
 		if (error instanceof ErrorForbidden) throw error;
 		const endPoint = router.findEndPoint(HttpMethod.GET, 'users/:id');
-		return endPoint(path, ctx, user, error);
+		return endPoint.handler(path, ctx, user, error);
 	}
 });
 

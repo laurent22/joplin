@@ -2,6 +2,7 @@ import { Item, Uuid } from '../../db';
 import { formParse } from '../../utils/requestUtils';
 import { respondWithItemContent, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
@@ -10,7 +11,7 @@ import { requestDeltaPagination, requestPagination } from '../../models/utils/pa
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 // Note about access control:
 //

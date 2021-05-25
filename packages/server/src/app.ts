@@ -130,6 +130,8 @@ async function main() {
 		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
 		appLogger().info('Running in Docker:', runningInDocker());
 		appLogger().info('Public base URL:', config().baseUrl);
+		appLogger().info('API base URL:', config().apiBaseUrl);
+		appLogger().info('User content base URL:', config().userContentBaseUrl);
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
 
@@ -158,7 +160,7 @@ async function main() {
 		// 	}
 		// }
 
-		appLogger().info(`Call this for testing: \`curl ${config().baseUrl}/api/ping\``);
+		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 
 		// const tree: any = {
 		// 	'000000000000000000000000000000F1': {},

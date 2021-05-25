@@ -1,6 +1,11 @@
 import { ErrorMethodNotAllowed, ErrorNotFound } from './errors';
-import { HttpMethod } from './types';
+import { HttpMethod, RouteType } from './types';
 import { RouteResponseFormat, RouteHandler } from './routeUtils';
+
+interface RouteInfo {
+	handler: RouteHandler;
+	type?: RouteType;
+}
 
 export default class Router {
 
@@ -13,22 +18,29 @@ export default class Router {
 
 	public responseFormat: RouteResponseFormat = null;
 
-	private routes_: Record<string, Record<string, RouteHandler>> = {};
+	private routes_: Record<string, Record<string, RouteInfo>> = {};
 	private aliases_: Record<string, Record<string, string>> = {};
+	private type_: RouteType;
 
-	public findEndPoint(method: HttpMethod, schema: string): RouteHandler {
+	public constructor(type: RouteType) {
+		this.type_ = type;
+	}
+
+	public findEndPoint(method: HttpMethod, schema: string): RouteInfo {
 		if (this.aliases_[method]?.[schema]) { return this.findEndPoint(method, this.aliases_[method]?.[schema]); }
 
 		if (!this.routes_[method]) { throw new ErrorMethodNotAllowed(`Not allowed: ${method} ${schema}`); }
 		const endPoint = this.routes_[method][schema];
 		if (!endPoint) { throw new ErrorNotFound(`Not found: ${method} ${schema}`); }
 
-		let endPointFn = endPoint;
+		let endPointInfo = endPoint;
 		for (let i = 0; i < 1000; i++) {
-			if (typeof endPointFn === 'string') {
-				endPointFn = this.routes_[method]?.[endPointFn];
+			if (typeof endPointInfo === 'string') {
+				endPointInfo = this.routes_[method]?.[endPointInfo];
 			} else {
-				return endPointFn;
+				const output = { ...endPointInfo };
+				if (!output.type) output.type = this.type_;
+				return output;
 			}
 		}
 
@@ -44,29 +56,29 @@ export default class Router {
 		this.aliases_[method][path] = target;
 	}
 
-	public get(path: string, handler: RouteHandler) {
+	public get(path: string, handler: RouteHandler, type: RouteType = null) {
 		if (!this.routes_.GET) { this.routes_.GET = {}; }
-		this.routes_.GET[path] = handler;
+		this.routes_.GET[path] = { handler, type };
 	}
 
-	public post(path: string, handler: RouteHandler) {
+	public post(path: string, handler: RouteHandler, type: RouteType = null) {
 		if (!this.routes_.POST) { this.routes_.POST = {}; }
-		this.routes_.POST[path] = handler;
+		this.routes_.POST[path] = { handler, type };
 	}
 
-	public patch(path: string, handler: RouteHandler) {
+	public patch(path: string, handler: RouteHandler, type: RouteType = null) {
 		if (!this.routes_.PATCH) { this.routes_.PATCH = {}; }
-		this.routes_.PATCH[path] = handler;
+		this.routes_.PATCH[path] = { handler, type };
 	}
 
-	public del(path: string, handler: RouteHandler) {
+	public del(path: string, handler: RouteHandler, type: RouteType = null) {
 		if (!this.routes_.DELETE) { this.routes_.DELETE = {}; }
-		this.routes_.DELETE[path] = handler;
+		this.routes_.DELETE[path] = { handler, type };
 	}
 
-	public put(path: string, handler: RouteHandler) {
+	public put(path: string, handler: RouteHandler, type: RouteType = null) {
 		if (!this.routes_.PUT) { this.routes_.PUT = {}; }
-		this.routes_.PUT[path] = handler;
+		this.routes_.PUT[path] = { handler, type };
 	}
 
 }

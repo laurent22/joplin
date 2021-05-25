@@ -4,7 +4,7 @@ import { ErrorNotFound, ErrorForbidden } from '../utils/errors';
 import { dirname, normalize } from 'path';
 import { pathExists } from 'fs-extra';
 import * as fs from 'fs-extra';
-import { AppContext } from '../utils/types';
+import { AppContext, RouteType } from '../utils/types';
 import { localFileFromUrl } from '../utils/joplinUtils';
 const { mime } = require('@joplin/lib/mime-utils.js');
 
@@ -44,7 +44,7 @@ async function findLocalFile(path: string): Promise<string> {
 	return localPath;
 }
 
-const router = new Router();
+const router = new Router(RouteType.Web);
 
 router.public = true;
 
