@@ -19,7 +19,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 			ctx.owner.id,
 			'change_admin_password',
 			NotificationLevel.Important,
-			_('The default admin password is insecure and has not been changed! [Change it now](%s)', await ctx.models.user().profileUrl())
+			_('The default admin password is insecure and has not been changed! [Change it now](%s)', ctx.models.user().profileUrl())
 		);
 	} else {
 		await notificationModel.markAsRead(ctx.owner.id, 'change_admin_password');

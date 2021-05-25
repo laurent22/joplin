@@ -63,9 +63,11 @@ import SessionModel from './SessionModel';
 import ChangeModel from './ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
+import EmailModel from './EmailModel';
 import ItemResourceModel from './ItemResourceModel';
 import ShareUserModel from './ShareUserModel';
 import KeyValueModel from './KeyValueModel';
+import TokenModel from './TokenModel';
 
 export class Models {
 
@@ -85,8 +87,16 @@ export class Models {
 		return new UserModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
+	public email() {
+		return new EmailModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
 	public userItem() {
 		return new UserItemModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
+	public token() {
+		return new TokenModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
 	public itemResource() {

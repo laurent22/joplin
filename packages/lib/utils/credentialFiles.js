@@ -38,11 +38,16 @@ function credentialFile(filename) {
     });
 }
 exports.credentialFile = credentialFile;
-function readCredentialFile(filename) {
+function readCredentialFile(filename, defaultValue = '') {
     return __awaiter(this, void 0, void 0, function* () {
-        const filePath = yield credentialFile(filename);
-        const r = yield fs.readFile(filePath);
-        return r.toString();
+        try {
+            const filePath = yield credentialFile(filename);
+            const r = yield fs.readFile(filePath);
+            return r.toString();
+        }
+        catch (error) {
+            return defaultValue;
+        }
     });
 }
 exports.readCredentialFile = readCredentialFile;

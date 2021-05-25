@@ -3,7 +3,7 @@
   "version": "2.0.1",
   "private": true,
   "scripts": {
-    "start-dev": "nodemon --config nodemon.json dist/app.js --env dev",
+    "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
     "start": "node dist/app.js",
     "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",
@@ -30,11 +30,13 @@
     "mustache": "^3.1.0",
     "nanoid": "^2.1.1",
     "node-env-file": "^0.1.8",
+    "nodemailer": "^6.6.0",
     "nodemon": "^2.0.6",
     "pg": "^8.5.1",
     "pretty-bytes": "^5.6.0",
     "query-string": "^6.8.3",
     "sqlite3": "^4.1.0",
+    "node-cron": "^3.0.0", 
     "yargs": "^14.0.0"
   },
   "devDependencies": {
@@ -46,6 +48,7 @@
     "@types/koa": "^2.0.49",
     "@types/markdown-it": "^12.0.0",
     "@types/mustache": "^0.8.32",
+    "@types/nodemailer": "^6.4.1",
     "@types/yargs": "^13.0.2",
     "jest": "^26.6.3",
     "jsdom": "^16.4.0",

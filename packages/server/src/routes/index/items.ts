@@ -7,7 +7,7 @@ import config from '../../config';
 import { formatDateTime } from '../../utils/time';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
-import { makeTablePagination, makeTableView, Row, Table, tablePartials } from '../../utils/views/table';
+import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 const prettyBytes = require('pretty-bytes');
 
@@ -67,7 +67,6 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	view.content.itemTable = makeTableView(table),
 	view.content.postUrl = `${config().baseUrl}/items`;
 	view.cssFiles = ['index/items'];
-	view.partials = view.partials.concat(tablePartials());
 	return view;
 });
 

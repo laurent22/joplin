@@ -48,10 +48,8 @@ export interface Command {
 	 * Currently the supported context variables aren't documented, but you can
 	 * find the list below:
 	 *
-	 * - [Global When
-	 *   Clauses](https://github.com/laurent22/joplin/blob/dev/packages/lib/services/commands/stateToWhenClauseContext.ts).
-	 * - [Desktop app When
-	 *   Clauses](https://github.com/laurent22/joplin/blob/dev/packages/app-desktop/services/commands/stateToWhenClauseContext.ts).
+	 * - [Global When Clauses](https://github.com/laurent22/joplin/blob/dev/packages/lib/services/commands/stateToWhenClauseContext.ts)
+	 * - [Desktop app When Clauses](https://github.com/laurent22/joplin/blob/dev/packages/app-desktop/services/commands/stateToWhenClauseContext.ts)
 	 *
 	 * Note: Commands are enabled by default unless you use this property.
 	 */
