@@ -38,6 +38,12 @@ function makeUser(isNew: boolean, fields: any): User {
 	return user;
 }
 
+function defaultUser(): User {
+	return {
+		can_share: 1,
+	};
+}
+
 function userIsNew(path: SubPath): boolean {
 	return path.id === 'new';
 }
@@ -72,6 +78,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	const userId = userIsMe(path) ? owner.id : path.id;
 
 	user = !isNew ? user || await userModel.load(userId) : null;
+	if (isNew && !user) user = defaultUser();
 
 	await userModel.checkIfAllowed(ctx.owner, AclAction.Read, user);
 

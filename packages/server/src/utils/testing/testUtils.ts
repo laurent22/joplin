@@ -60,8 +60,6 @@ let createdDbPath_: string = null;
 export async function beforeAllDb(unitName: string) {
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
 
-	console.info('PPPPPPPPPPPP', createdDbPath_);
-
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
 
