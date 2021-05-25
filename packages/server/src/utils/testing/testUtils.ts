@@ -17,6 +17,7 @@ import { putApi } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
+import MustacheService from '../../services/MustacheService';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -84,7 +85,10 @@ export async function beforeAllDb(unitName: string) {
 	await createDb(config().database, { dropIfExists: true });
 	db_ = await connectDb(config().database);
 
-	await initializeJoplinUtils(config(), models());
+	const mustache = new MustacheService(config().viewDir, config().baseUrl);
+	await mustache.loadPartials();
+
+	await initializeJoplinUtils(config(), models(), mustache);
 }
 
 export async function afterAllTests() {

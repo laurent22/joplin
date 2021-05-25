@@ -22,6 +22,8 @@ export async function formParse(req: any): Promise<FormParseResult> {
 		return output;
 	}
 
+	// Note that for Formidable to work, the content-type must be set in the
+	// headers
 	return new Promise((resolve: Function, reject: Function) => {
 		const form = formidable({ multiples: true });
 		form.parse(req, (error: any, fields: any, files: any) => {
@@ -36,29 +38,8 @@ export async function formParse(req: any): Promise<FormParseResult> {
 }
 
 export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Promise<T> {
-	// Formidable needs the content-type to be 'application/json' so on our side
-	// we explicitely set it to that. However save the previous value so that it
-	// can be restored.
-	let previousContentType = null;
-	if (req.headers['content-type'] !== 'application/json') {
-		previousContentType = req.headers['content-type'];
-		req.headers['content-type'] = 'application/json';
-	}
-
 	const form = await formParse(req);
-	if (previousContentType) req.headers['content-type'] = previousContentType;
-
 	return form.fields as T;
-
-	// if (filter) {
-	// 	const output:BodyFields = {};
-	// 	Object.keys(form.fields).forEach(f => {
-	// 		if (filter.includes(f)) output[f] = form.fields[f];
-	// 	});
-	// 	return output;
-	// } else {
-	// 	return form.fields;
-	// }
 }
 
 export function ownerRequired(ctx: AppContext) {

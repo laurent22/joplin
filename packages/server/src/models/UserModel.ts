@@ -1,7 +1,7 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { Item, User } from '../db';
+import { EmailSender, Item, User, Uuid } from '../db';
 import * as auth from '../utils/auth';
-import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge } from '../utils/errors';
+import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import prettyBytes = require('pretty-bytes');
@@ -134,8 +134,12 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public async profileUrl(): Promise<string> {
+	public profileUrl(): string {
 		return `${this.baseUrl}/users/me`;
+	}
+
+	public confirmUrl(userId: Uuid, validationToken: string): string {
+		return `${this.baseUrl}/users/${userId}/confirm?token=${validationToken}`;
 	}
 
 	public async delete(id: string): Promise<void> {
@@ -151,6 +155,13 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::delete');
 	}
 
+	public async confirmEmail(userId: Uuid, token: string) {
+		await this.models().token().checkToken(userId, token);
+		const user = await this.models().user().load(userId);
+		if (!user) throw new ErrorNotFound('No such user');
+		await this.save({ id: user.id, email_confirmed: 1 });
+	}
+
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//
@@ -160,8 +171,30 @@ export default class UserModel extends BaseModel<User> {
 	// Because the password would be hashed twice.
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const user = { ...object };
+
 		if (user.password) user.password = auth.hashPassword(user.password);
-		return super.save(user, options);
+
+		const isNew = await this.isNew(object, options);
+
+		return this.withTransaction(async () => {
+			const savedUser = await super.save(user, options);
+
+			if (isNew) {
+				const validationToken = await this.models().token().generate(savedUser.id);
+				const validationUrl = encodeURI(this.confirmUrl(savedUser.id, validationToken));
+
+				await this.models().email().push({
+					sender_id: EmailSender.NoReply,
+					recipient_id: savedUser.id,
+					recipient_email: savedUser.email,
+					recipient_name: savedUser.full_name || '',
+					subject: 'Verify your email',
+					body: `Click this: ${validationUrl}`,
+				});
+			}
+
+			return savedUser;
+		});
 	}
 
 }

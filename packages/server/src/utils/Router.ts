@@ -9,6 +9,7 @@ export default class Router {
 	// not logged in, can access any route of this router. End points that
 	// should not be publicly available should call ownerRequired(ctx);
 	public public: boolean = false;
+	public publicSchemas: string[] = [];
 
 	public responseFormat: RouteResponseFormat = null;
 
@@ -32,6 +33,10 @@ export default class Router {
 		}
 
 		throw new ErrorNotFound(`Could not resolve: ${method} ${schema}`);
+	}
+
+	public isPublic(schema: string): boolean {
+		return this.public || this.publicSchemas.includes(schema);
 	}
 
 	public alias(method: HttpMethod, path: string, target: string) {

@@ -218,6 +218,11 @@ export enum ItemType {
 	User,
 }
 
+export enum EmailSender {
+	NoReply = 1,
+	Support = 2,
+}
+
 export enum ChangeType {
 	Create = 1,
 	Update = 2,
@@ -277,6 +282,8 @@ export interface User extends WithDates, WithUuid {
 	is_admin?: number;
 	max_item_size?: number;
 	can_share?: number;
+	email_confirmed?: number;
+	must_set_password?: number;
 }
 
 export interface Session extends WithDates, WithUuid {
@@ -370,6 +377,25 @@ export interface Change extends WithDates, WithUuid {
 	user_id?: Uuid;
 }
 
+export interface Email extends WithDates {
+	id?: number;
+	recipient_name?: string;
+	recipient_email?: string;
+	recipient_id?: Uuid;
+	sender_id?: EmailSender;
+	subject?: string;
+	body?: string;
+	sent_time?: number;
+	sent_success?: number;
+	error?: string;
+}
+
+export interface Token extends WithDates {
+	id?: number;
+	value?: string;
+	user_id?: Uuid;
+}
+
 export const databaseSchema: DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -381,6 +407,8 @@ export const databaseSchema: DatabaseTables = {
 		created_time: { type: 'string' },
 		max_item_size: { type: 'number' },
 		can_share: { type: 'number' },
+		email_confirmed: { type: 'number' },
+		must_set_password: { type: 'number' },
 	},
 	sessions: {
 		id: { type: 'string' },
@@ -484,6 +512,27 @@ export const databaseSchema: DatabaseTables = {
 		created_time: { type: 'string' },
 		previous_item: { type: 'string' },
 		user_id: { type: 'string' },
+	},
+	emails: {
+		id: { type: 'number' },
+		recipient_name: { type: 'string' },
+		recipient_email: { type: 'string' },
+		recipient_id: { type: 'string' },
+		sender_id: { type: 'number' },
+		subject: { type: 'string' },
+		body: { type: 'string' },
+		sent_time: { type: 'string' },
+		sent_success: { type: 'number' },
+		error: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	tokens: {
+		id: { type: 'number' },
+		value: { type: 'string' },
+		user_id: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

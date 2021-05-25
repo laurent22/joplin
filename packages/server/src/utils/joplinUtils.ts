@@ -1,5 +1,5 @@
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
-import Logger from '@joplin/lib/Logger';
+// import Logger from '@joplin/lib/Logger';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
@@ -24,7 +24,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';
 import MustacheService from '../services/MustacheService';
 
-const logger = Logger.create('JoplinUtils');
+// const logger = Logger.create('JoplinUtils');
 
 export interface FileViewerResponse {
 	body: any;
@@ -55,15 +55,16 @@ let baseUrl_: string = null;
 
 export const resourceDirName = '.resource';
 
-export async function initializeJoplinUtils(config: Config, models: Models) {
+export async function initializeJoplinUtils(config: Config, models: Models, mustache: MustacheService) {
 	models_ = models;
 	baseUrl_ = config.baseUrl;
+	mustache_ = mustache;
 
 	const filePath = `${config.tempDir}/joplin.sqlite`;
 	await fs.remove(filePath);
 
 	db_ = new JoplinDatabase(new DatabaseDriverNode());
-	db_.setLogger(logger as Logger);
+	// db_.setLogger(logger as Logger);
 	await db_.open({ name: filePath });
 
 	BaseModel.setDb(db_);
@@ -78,8 +79,8 @@ export async function initializeJoplinUtils(config: Config, models: Models) {
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
-	mustache_ = new MustacheService(config.viewDir, config.baseUrl);
-	mustache_.prefersDarkEnabled = false;
+	// mustache_ = new MustacheService(config.viewDir, config.baseUrl);
+	// mustache_.prefersDarkEnabled = false;
 }
 
 export function linkedResourceIds(body: string): string[] {
@@ -210,7 +211,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 				};
 			`,
 		},
-	});
+	}, { prefersDarkEnabled: false });
 
 	return {
 		body: bodyHtml,

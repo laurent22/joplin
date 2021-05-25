@@ -1,5 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, MailerConfig } from './utils/types';
 import * as pathUtils from 'path';
 
 export interface EnvVariables {
@@ -13,6 +13,15 @@ export interface EnvVariables {
 	POSTGRES_USER?: string;
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
+
+	MAILER_ENABLED?: string;
+	MAILER_HOST?: string;
+	MAILER_PORT?: string;
+	MAILER_SECURE?: string;
+	MAILER_AUTH_USER?: string;
+	MAILER_AUTH_PASSWORD?: string;
+	MAILER_NOREPLY_NAME?: string;
+	MAILER_NOREPLY_EMAIL?: string;
 
 	SQLITE_DATABASE?: string;
 }
@@ -57,6 +66,19 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 	};
 }
 
+function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
+	return {
+		enabled: env.MAILER_ENABLED !== '0',
+		host: env.MAILER_HOST || '',
+		port: Number(env.MAILER_PORT || 587),
+		secure: !!Number(env.MAILER_SECURE) || true,
+		authUser: env.MAILER_AUTH_USER || '',
+		authPassword: env.MAILER_AUTH_PASSWORD || '',
+		noReplyName: env.MAILER_NOREPLY_NAME || '',
+		noReplyEmail: env.MAILER_NOREPLY_EMAIL || '',
+	};
+}
+
 function baseUrlFromEnv(env: any, appPort: number): string {
 	if (env.APP_BASE_URL) {
 		return rtrimSlashes(env.APP_BASE_URL);
@@ -81,6 +103,7 @@ export function initConfig(env: EnvVariables, overrides: any = null) {
 		tempDir: `${rootDir}/temp`,
 		logDir: `${rootDir}/logs`,
 		database: databaseConfigFromEnv(runningInDocker_, env),
+		mailer: mailerConfigFromEnv(env),
 		port: appPort,
 		baseUrl: baseUrlFromEnv(env, appPort),
 		...overrides,
