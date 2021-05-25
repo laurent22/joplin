@@ -1,7 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
-const { waitForFolderCount, newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('@joplin/lib/testing/test-utils');
+import { waitForFolderCount, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
+import { newPluginScript, newPluginService } from '../../../testUtils';
 
 describe('JoplinSettings', () => {
 
@@ -16,7 +16,7 @@ describe('JoplinSettings', () => {
 	});
 
 	test('should listen to setting change event', async () => {
-		const service = new newPluginService() as PluginService;
+		const service = newPluginService();
 
 		const pluginScript = newPluginScript(`
 			joplin.plugins.register({
@@ -68,7 +68,7 @@ describe('JoplinSettings', () => {
 	});
 
 	test('should allow registering multiple settings', async () => {
-		const service = new newPluginService() as PluginService;
+		const service = newPluginService();
 
 		const pluginScript = newPluginScript(`
 			joplin.plugins.register({

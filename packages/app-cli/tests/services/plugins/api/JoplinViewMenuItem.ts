@@ -1,6 +1,6 @@
 import KeymapService from '@joplin/lib/services/KeymapService';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
-const { newPluginService, newPluginScript, setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } = require('@joplin/lib/testing/test-utils');
+import { setupDatabaseAndSynchronizer, switchClient, afterEachCleanUp } from '@joplin/lib/testing/test-utils';
+import { newPluginScript, newPluginService } from '../../../testUtils';
 
 describe('JoplinViewMenuItem', () => {
 
@@ -15,7 +15,7 @@ describe('JoplinViewMenuItem', () => {
 	});
 
 	test('should register commands with the keymap service', async () => {
-		const service = new newPluginService() as PluginService;
+		const service = newPluginService();
 
 		KeymapService.instance().initialize();
 
