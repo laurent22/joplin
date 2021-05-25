@@ -97,7 +97,10 @@ export default abstract class BaseModel<T> {
 		}
 
 		if (mainTable) {
-			output = output.map(f => `${mainTable}.${f}`);
+			output = output.map(f => {
+				if (f.includes(`${mainTable}.`)) return f;
+				return `${mainTable}.${f}`;
+			});
 		}
 
 		return output;

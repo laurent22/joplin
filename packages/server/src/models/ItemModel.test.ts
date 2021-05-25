@@ -130,4 +130,16 @@ describe('ItemModel', function() {
 		}
 	});
 
+	test('should count items', async function() {
+		const { user: user1 } = await createUserAndSession(1, true);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		expect(await models().item().childrenCount(user1.id)).toBe(2);
+	});
+
 });

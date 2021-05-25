@@ -349,12 +349,17 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 
-	private childrenQuery(userId: Uuid, pathQuery: string = '', options: LoadOptions = {}): Knex.QueryBuilder {
+	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: LoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.leftJoin('items', 'user_items.item_id', 'items.id')
-			.select(this.selectFields(options, ['id', 'name', 'updated_time'], 'items'))
 			.where('user_items.user_id', '=', userId);
+
+		if (count) {
+			void query.countDistinct('items.id', { as: 'total' });
+		} else {
+			void query.select(this.selectFields(options, ['id', 'name', 'updated_time'], 'items'));
+		}
 
 		if (pathQuery) {
 			// We support /* as a prefix only. Anywhere else would have
@@ -376,14 +381,14 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
-		const query = this.childrenQuery(userId, pathQuery, options);
+		const query = this.childrenQuery(userId, pathQuery, false, options);
 		return paginateDbQuery(query, pagination, 'items');
 	}
 
 	public async childrenCount(userId: Uuid, pathQuery: string = ''): Promise<number> {
-		const query = this.childrenQuery(userId, pathQuery);
-		const r = await query.countDistinct('items.id', { as: 'total' });
-		return r[0].total;
+		const query = this.childrenQuery(userId, pathQuery, true);
+		const r = await query.first();
+		return r ? r.total : 0;
 	}
 
 	private async joplinItemPath(jopId: string): Promise<Item[]> {

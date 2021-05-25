@@ -68,7 +68,7 @@ export async function beforeAllDb(unitName: string) {
 
 	// initConfig({
 	// 	DB_CLIENT: 'pg',
-	// 	POSTGRES_DATABASE: createdDbPath_,
+	// 	POSTGRES_DATABASE: unitName,
 	// 	POSTGRES_USER: 'joplin',
 	// 	POSTGRES_PASSWORD: 'joplin',
 	// }, {
