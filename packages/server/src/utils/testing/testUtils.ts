@@ -86,6 +86,7 @@ export async function beforeAllDb(unitName: string) {
 	db_ = await connectDb(config().database);
 
 	const mustache = new MustacheService(config().viewDir, config().baseUrl);
+	await mustache.loadPartials();
 
 	await initializeJoplinUtils(config(), models(), mustache);
 }

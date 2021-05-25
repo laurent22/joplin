@@ -6,6 +6,4 @@ export default async function startServices(appContext: AppContext) {
 	void services.share.runInBackground();
 	void services.email.runInBackground();
 	void services.cron.runInBackground();
-
-	await services.mustache.loadPartials();
 }

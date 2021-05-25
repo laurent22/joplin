@@ -52,4 +52,11 @@ export default class TokenModel extends BaseModel<Token> {
 		if (token) await this.delete(token.id);
 	}
 
+	public async allByUserId(userId: Uuid): Promise<Token[]> {
+		return this
+			.db(this.tableName)
+			.select(this.defaultFields)
+			.where('user_id', '=', userId);
+	}
+
 }

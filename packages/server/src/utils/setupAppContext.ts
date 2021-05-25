@@ -10,20 +10,24 @@ import EmailService from '../services/EmailService';
 import CronService from '../services/CronService';
 import MustacheService from '../services/MustacheService';
 
-function setupServices(env: Env, models: Models, config: Config): Services {
-	return {
+async function setupServices(env: Env, models: Models, config: Config): Promise<Services> {
+	const output: Services = {
 		share: new ShareService(env, models, config),
 		email: new EmailService(env, models, config),
 		cron: new CronService(env, models, config),
 		mustache: new MustacheService(config.viewDir, config.baseUrl),
 	};
+
+	await output.mustache.loadPartials();
+
+	return output;
 }
 
 export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper) {
 	appContext.env = env;
 	appContext.db = dbConnection;
 	appContext.models = newModelFactory(appContext.db, config().baseUrl);
-	appContext.services = setupServices(env, appContext.models, config());
+	appContext.services = await setupServices(env, appContext.models, config());
 	appContext.appLogger = appLogger;
 	appContext.routes = { ...routes };
 

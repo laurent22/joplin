@@ -79,7 +79,7 @@ describe('UserModel', function() {
 
 		const email = emails[0];
 		expect(email.subject.trim()).toBeTruthy();
-		expect(email.body.includes('/validate?token=')).toBeTruthy();
+		expect(email.body.includes('/confirm?token=')).toBeTruthy();
 		expect(email.sender_id).toBe(EmailSender.NoReply);
 		expect(email.sent_success).toBe(0);
 		expect(email.sent_time).toBe(0);

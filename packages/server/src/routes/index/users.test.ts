@@ -1,6 +1,6 @@
 import { User } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
-import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
+import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
 
@@ -155,13 +155,36 @@ describe('index_users', function() {
 
 	test('should allow user to set a password for new accounts', async function() {
 		const { user: user1 } = await createUserAndSession(1);
-		const email = (await models().email().all())[0];
+		const { user: user2 } = await createUserAndSession(2);
+		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
 		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
 		const path = matches[1];
 		const token = matches[3];
 
 		// Check that the token is valid
 		expect(await models().token().isValid(user1.id, token)).toBe(true);
+
+		// Check that we can't set the password without the token
+		{
+			const context = await execRequestC('', 'POST', path, {
+				password: 'newpassword',
+				password2: 'newpassword',
+			});
+			const sessionId = context.cookies.get('sessionId');
+			expect(sessionId).toBeFalsy();
+		}
+
+		// Check that we can't set the password with someone else's token
+		{
+			const token2 = (await models().token().allByUserId(user2.id))[0].value;
+			const context = await execRequestC('', 'POST', path, {
+				password: 'newpassword',
+				password2: 'newpassword',
+				token: token2,
+			});
+			const sessionId = context.cookies.get('sessionId');
+			expect(sessionId).toBeFalsy();
+		}
 
 		const context = await execRequestC('', 'POST', path, {
 			password: 'newpassword',
@@ -186,19 +209,19 @@ describe('index_users', function() {
 		expect(notification.key).toBe('passwordSet');
 	});
 
-	test('should handle invalid email validation', async function() {
-		await createUserAndSession(1);
-		const email = (await models().email().all())[0];
-		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
-		const path = matches[1];
-		const token = matches[3];
+	// test('should handle invalid email validation', async function() {
+	// 	await createUserAndSession(1);
+	// 	const email = (await models().email().all())[0];
+	// 	const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+	// 	const path = matches[1];
+	// 	const token = matches[3];
 
-		// Valid path but invalid token
-		await expectHttpError(async () => execRequest(null, 'GET', path, null, { query: { token: 'invalid' } }), ErrorNotFound.httpCode);
+	// 	// Valid path but invalid token
+	// 	await expectHttpError(async () => execRequest(null, 'GET', path, null, { query: { token: 'invalid' } }), ErrorNotFound.httpCode);
 
-		// Valid token but invalid path
-		await expectHttpError(async () => execRequest(null, 'GET', 'users/abcd1234/confirm', null, { query: { token } }), ErrorNotFound.httpCode);
-	});
+	// 	// Valid token but invalid path
+	// 	await expectHttpError(async () => execRequest(null, 'GET', 'users/abcd1234/confirm', null, { query: { token } }), ErrorNotFound.httpCode);
+	// });
 
 	test('should apply ACL', async function() {
 		const { user: admin, session: adminSession } = await createUserAndSession(1, true);
