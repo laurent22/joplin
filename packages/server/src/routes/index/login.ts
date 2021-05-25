@@ -1,5 +1,6 @@
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
 import config from '../../config';
@@ -13,7 +14,7 @@ function makeView(error: any = null): View {
 	return view;
 }
 
-const router: Router = new Router();
+const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 

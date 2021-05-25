@@ -1,15 +1,6 @@
 import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from '../utils/routeUtils';
 import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
-// import config from '../config';
-
-// let mustache_: MustacheService = null;
-// function mustache(): MustacheService {
-// 	if (!mustache_) {
-// 		mustache_ = new MustacheService(config().viewDir, config().baseUrl);
-// 	}
-// 	return mustache_;
-// }
 
 export default async function(ctx: AppContext) {
 	ctx.appLogger().info(`${ctx.request.method} ${ctx.path}`);
@@ -44,7 +35,9 @@ export default async function(ctx: AppContext) {
 
 		const responseFormat = routeResponseFormat(ctx);
 
-		if (responseFormat === RouteResponseFormat.Html) {
+		if (error.code === 'invalidOrigin') {
+			ctx.response.body = error.message;
+		} else if (responseFormat === RouteResponseFormat.Html) {
 			ctx.response.set('Content-Type', 'text/html');
 			const view: View = {
 				name: 'error',

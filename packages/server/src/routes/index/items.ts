@@ -1,9 +1,10 @@
 import { SubPath, redirect, respondWithItemContent } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
 import { ErrorNotFound } from '../../utils/errors';
-import config from '../../config';
+import config, { showItemUrls } from '../../config';
 import { formatDateTime } from '../../utils/time';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
@@ -11,7 +12,7 @@ import { makeTablePagination, makeTableView, Row, Table } from '../../utils/view
 import { PaginationOrderDir } from '../../models/utils/pagination';
 const prettyBytes = require('pretty-bytes');
 
-const router = new Router();
+const router = new Router(RouteType.Web);
 
 router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	const pagination = makeTablePagination(ctx.query, 'name', PaginationOrderDir.ASC);
@@ -46,7 +47,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 				{
 					value: item.name,
 					stretch: true,
-					url: `${config().baseUrl}/items/${item.id}/content`,
+					url: showItemUrls(config()) ? `${config().userContentBaseUrl}/items/${item.id}/content` : null,
 				},
 				{
 					value: prettyBytes(item.content_size),
@@ -75,7 +76,7 @@ router.get('items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const item = await itemModel.loadWithContent(path.id);
 	if (!item) throw new ErrorNotFound();
 	return respondWithItemContent(ctx.response, item, item.content);
-});
+}, RouteType.UserContent);
 
 router.post('items', async (_path: SubPath, ctx: AppContext) => {
 	const body = await formParse(ctx.req);

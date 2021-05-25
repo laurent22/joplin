@@ -1,9 +1,12 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, MailerConfig } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, MailerConfig, RouteType } from './utils/types';
 import * as pathUtils from 'path';
 
 export interface EnvVariables {
 	APP_BASE_URL?: string;
+	USER_CONTENT_BASE_URL?: string;
+	API_BASE_URL?: string;
+
 	APP_PORT?: string;
 	DB_CLIENT?: string;
 	RUNNING_IN_DOCKER?: string;
@@ -96,6 +99,7 @@ export function initConfig(env: EnvVariables, overrides: any = null) {
 	const rootDir = pathUtils.dirname(__dirname);
 	const viewDir = `${pathUtils.dirname(__dirname)}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
+	const baseUrl = baseUrlFromEnv(env, appPort);
 
 	config_ = {
 		rootDir: rootDir,
@@ -106,9 +110,25 @@ export function initConfig(env: EnvVariables, overrides: any = null) {
 		database: databaseConfigFromEnv(runningInDocker_, env),
 		mailer: mailerConfigFromEnv(env),
 		port: appPort,
-		baseUrl: baseUrlFromEnv(env, appPort),
+		baseUrl,
+		apiBaseUrl: env.API_BASE_URL ? env.API_BASE_URL : baseUrl,
+		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
 		...overrides,
 	};
+}
+
+export function baseUrl(type: RouteType): string {
+	if (type === RouteType.Web) return config().baseUrl;
+	if (type === RouteType.Api) return config().apiBaseUrl;
+	if (type === RouteType.UserContent) return config().userContentBaseUrl;
+	throw new Error(`Unknown type: ${type}`);
+}
+
+// User content URL is not supported for now so only show the URL if the
+// user content is hosted on the same domain. Needs to get cookie working
+// across domains to get user content url working.
+export function showItemUrls(config: Config): boolean {
+	return config.userContentBaseUrl === config.baseUrl;
 }
 
 function config(): Config {

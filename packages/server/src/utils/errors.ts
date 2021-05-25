@@ -26,8 +26,8 @@ export class ErrorMethodNotAllowed extends ApiError {
 export class ErrorNotFound extends ApiError {
 	public static httpCode: number = 404;
 
-	public constructor(message: string = 'Not Found') {
-		super(message, ErrorNotFound.httpCode);
+	public constructor(message: string = 'Not Found', code: string = undefined) {
+		super(message, ErrorNotFound.httpCode, code);
 		Object.setPrototypeOf(this, ErrorNotFound.prototype);
 	}
 }

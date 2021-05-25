@@ -1,10 +1,11 @@
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import config from '../../config';
 import { contextSessionId } from '../../utils/requestUtils';
 
-const router = new Router();
+const router = new Router(RouteType.Web);
 
 router.post('logout', async (_path: SubPath, ctx: AppContext) => {
 	const sessionId = contextSessionId(ctx, false);

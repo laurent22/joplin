@@ -67,6 +67,8 @@ export interface Config {
 	logDir: string;
 	tempDir: string;
 	baseUrl: string;
+	apiBaseUrl: string;
+	userContentBaseUrl: string;
 	database: DatabaseConfig;
 	mailer: MailerConfig;
 }
@@ -77,6 +79,12 @@ export enum HttpMethod {
 	DELETE = 'DELETE',
 	PATCH = 'PATCH',
 	HEAD = 'HEAD',
+}
+
+export enum RouteType {
+	Web = 1,
+	Api = 2,
+	UserContent = 3,
 }
 
 export type KoaNext = ()=> Promise<void>;

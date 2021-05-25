@@ -2,10 +2,11 @@ import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
 import { bodyFields } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 	const shareUserModel = ctx.models.shareUser();

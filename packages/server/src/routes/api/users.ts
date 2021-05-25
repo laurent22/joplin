@@ -2,12 +2,13 @@ import { User } from '../../db';
 import { bodyFields } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { AclAction } from '../../models/BaseModel';
 import uuidgen from '../../utils/uuidgen';
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 async function fetchUser(path: SubPath, ctx: AppContext): Promise<User> {
 	const user = await ctx.models.user().load(path.id);

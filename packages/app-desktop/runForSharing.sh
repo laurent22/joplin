@@ -26,12 +26,12 @@ if [ "$RESET_ALL" == "1" ]; then
 
 	echo "config keychain.supported 0" >> "$CMD_FILE" 
 	echo "config sync.target 9" >> "$CMD_FILE" 
-	echo "config sync.9.path http://localhost:22300" >> "$CMD_FILE" 
+	echo "config sync.9.path http://api-joplincloud.local:22300" >> "$CMD_FILE" 
 	echo "config sync.9.username $USER_EMAIL" >> "$CMD_FILE" 
 	echo "config sync.9.password 123456" >> "$CMD_FILE" 
 
 	if [ "$1" == "1" ]; then
-		curl --data '{"action": "createTestUsers"}' -H 'Content-Type: application/json' http://localhost:22300/api/debug
+		curl --data '{"action": "createTestUsers"}' -H 'Content-Type: application/json' http://api-joplincloud.local:22300/api/debug
 
 		echo 'mkbook "shared"' >> "$CMD_FILE"
 		echo 'mkbook "other"' >> "$CMD_FILE"

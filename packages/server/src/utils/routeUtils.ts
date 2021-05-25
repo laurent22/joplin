@@ -1,3 +1,4 @@
+import { baseUrl } from '../config';
 import { Item, ItemAddressingType } from '../db';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
@@ -166,14 +167,15 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	const match = findMatchingRoute(ctx.path, routes);
 	if (!match) throw new ErrorNotFound();
 
-	const routeHandler = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+	if (ctx.URL.origin !== baseUrl(endPoint.type)) throw new ErrorNotFound('Invalid origin', 'invalidOrigin');
 
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points
 	// might have additional permission checks depending on the action.
 	if (!match.route.isPublic(match.subPath.schema) && !ctx.owner) throw new ErrorForbidden();
 
-	return routeHandler(match.subPath, ctx);
+	return endPoint.handler(match.subPath, ctx);
 }
 
 // In a path such as "/api/files/SOME_ID/content" we want to find:

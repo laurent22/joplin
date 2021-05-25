@@ -1,6 +1,7 @@
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 router.public = true;
 

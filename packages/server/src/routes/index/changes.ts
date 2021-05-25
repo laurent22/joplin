@@ -1,5 +1,6 @@
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { changeTypeToString } from '../../db';
 import { PaginationOrderDir } from '../../models/utils/pagination';
@@ -7,8 +8,9 @@ import { formatDateTime } from '../../utils/time';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import { makeTablePagination, Table, Row, makeTableView } from '../../utils/views/table';
+import config, { showItemUrls } from '../../config';
 
-const router = new Router();
+const router = new Router(RouteType.Web);
 
 router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	const pagination = makeTablePagination(ctx.query, 'updated_time', PaginationOrderDir.DESC);
@@ -40,7 +42,7 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 				{
 					value: change.item_name,
 					stretch: true,
-					url: items.find(i => i.id === change.item_id) ? ctx.models.item().itemContentUrl(change.item_id) : '',
+					url: showItemUrls(config()) ? (items.find(i => i.id === change.item_id) ? ctx.models.item().itemContentUrl(change.item_id) : '') : null,
 				},
 				{
 					value: changeTypeToString(change.type),
