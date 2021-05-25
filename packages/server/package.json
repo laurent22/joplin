@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "private": true,
   "scripts": {
     "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
@@ -36,7 +36,7 @@
     "pretty-bytes": "^5.6.0",
     "query-string": "^6.8.3",
     "sqlite3": "^4.1.0",
-    "node-cron": "^3.0.0", 
+    "node-cron": "^3.0.0",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
