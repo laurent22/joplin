@@ -1038,7 +1038,7 @@ msgstr "Importazione da \"%s\" come formato \"%s\". Si prega di attendere..."
 
 #: packages/app-desktop/gui/MenuBar.js:288 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
-msgstr "Stato della Sincronizzazione"
+msgstr "Stato della sincronizzazione"
 
 #: packages/app-desktop/gui/MenuBar.js:307
 msgid "Create note from template"
