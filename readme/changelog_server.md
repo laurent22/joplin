@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.0.4](https://github.com/laurent22/joplin/releases/tag/server-v2.0.4) (Pre-release) - 2021-05-25T18:33:11Z
+
+- Fixed: Fixed Item and Log page when using Postgres (ee0f237)
+
 ## [server-v2.0.3](https://github.com/laurent22/joplin/releases/tag/server-v2.0.3) (Pre-release) - 2021-05-25T18:08:46Z
 
 - Fixed: Fixed handling of request origin (12a6634)
