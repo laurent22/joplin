@@ -13,8 +13,6 @@ import KeymapService from '../services/KeymapService';
 import KvStore from '../services/KvStore';
 import KeychainServiceDriver from '../services/keychain/KeychainServiceDriver.node';
 import KeychainServiceDriverDummy from '../services/keychain/KeychainServiceDriver.dummy';
-import PluginRunner from '../../app-cli/app/services/plugins/PluginRunner';
-import PluginService from '../services/plugins/PluginService';
 import FileApiDriverJoplinServer from '../file-api-driver-joplinServer';
 import OneDriveApi from '../onedrive-api';
 import SyncTargetOneDrive from '../SyncTargetOneDrive';
@@ -766,45 +764,6 @@ async function createTempDir() {
 	return tempDirPath;
 }
 
-interface PluginServiceOptions {
-	getState?(): Record<string, any>;
-}
-
-function newPluginService(appVersion = '1.4', options: PluginServiceOptions = null): PluginService {
-	options = options || {};
-
-	const runner = new PluginRunner();
-	const service = new PluginService();
-	service.initialize(
-		appVersion,
-		{
-			joplin: {},
-		},
-		runner,
-		{
-			dispatch: () => {},
-			getState: options.getState ? options.getState : () => {},
-		}
-	);
-	return service;
-}
-
-function newPluginScript(script: string) {
-	return `
-		/* joplin-manifest:
-		{
-			"id": "org.joplinapp.plugins.PluginTest",
-			"manifest_version": 1,
-			"app_min_version": "1.4",
-			"name": "JS Bundle test",
-			"version": "1.0.0"
-		}
-		*/
-		
-		${script}
-	`;
-}
-
 async function waitForFolderCount(count: number) {
 	const timeout = 2000;
 	const startTime = Date.now();
@@ -901,4 +860,4 @@ class TestApp extends BaseApplication {
 	}
 }
 
-export { supportDir, waitForFolderCount, afterAllCleanUp, exportDir, newPluginService, newPluginScript, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+export { supportDir, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

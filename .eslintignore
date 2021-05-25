@@ -104,6 +104,9 @@ packages/app-cli/tests/services/plugins/api/JoplinWorkspace.js.map
 packages/app-cli/tests/services/plugins/sandboxProxy.d.ts
 packages/app-cli/tests/services/plugins/sandboxProxy.js
 packages/app-cli/tests/services/plugins/sandboxProxy.js.map
+packages/app-cli/tests/testUtils.d.ts
+packages/app-cli/tests/testUtils.js
+packages/app-cli/tests/testUtils.js.map
 packages/app-desktop/ElectronAppWrapper.d.ts
 packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/ElectronAppWrapper.js.map
