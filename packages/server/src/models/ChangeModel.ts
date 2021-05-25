@@ -68,7 +68,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return results;
 	}
 
-	private changesForUserQuery(userId: Uuid): Knex.QueryBuilder {
+	private changesForUserQuery(userId: Uuid, count: boolean): Knex.QueryBuilder {
 		// When need to get:
 		//
 		// - All the CREATE and DELETE changes associated with the user
@@ -78,15 +78,8 @@ export default class ChangeModel extends BaseModel<Change> {
 		// UPDATE changes do not have the user_id set because they are specific
 		// to the item, not to a particular user.
 
-		return this
+		const query = this
 			.db('changes')
-			.select([
-				'id',
-				'item_id',
-				'item_name',
-				'type',
-				'updated_time',
-			])
 			.where(function() {
 				void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
 					// Need to use a RAW query here because Knex has a "not a
@@ -96,6 +89,20 @@ export default class ChangeModel extends BaseModel<Change> {
 					// https://github.com/knex/knex/issues/1851
 					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
 			});
+
+		if (count) {
+			void query.countDistinct('id', { as: 'total' });
+		} else {
+			void query.select([
+				'id',
+				'item_id',
+				'item_name',
+				'type',
+				'updated_time',
+			]);
+		}
+
+		return query;
 	}
 
 	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedChanges> {
@@ -106,9 +113,9 @@ export default class ChangeModel extends BaseModel<Change> {
 			...pagination,
 		};
 
-		const query = this.changesForUserQuery(userId);
-		const countQuery = query.clone();
-		const itemCount = (await countQuery.countDistinct('id', { as: 'total' }))[0].total;
+		const query = this.changesForUserQuery(userId, false);
+		const countQuery = this.changesForUserQuery(userId, true);
+		const itemCount = (await countQuery.first()).total;
 
 		void query
 			.orderBy(pagination.order[0].by, pagination.order[0].dir)
@@ -140,7 +147,7 @@ export default class ChangeModel extends BaseModel<Change> {
 			if (!changeAtCursor) throw new ErrorResyncRequired();
 		}
 
-		const query = this.changesForUserQuery(userId);
+		const query = this.changesForUserQuery(userId, false);
 
 		// If a cursor was provided, apply it to the query.
 		if (changeAtCursor) {
