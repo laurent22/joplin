@@ -1,4 +1,4 @@
-import { parseSubPath, splitItemPath } from './routeUtils';
+import { isValidOrigin, parseSubPath, splitItemPath } from './routeUtils';
 import { ItemAddressingType } from '../db';
 
 describe('routeUtils', function() {
@@ -38,6 +38,48 @@ describe('routeUtils', function() {
 			const splitted = splitItemPath(path);
 
 			expect(JSON.stringify(splitted)).toBe(JSON.stringify(expected));
+		}
+	});
+
+	it('should check the request origin', async function() {
+		const testCases: any[] = [
+			[
+				'https://example.com', // Request origin
+				'https://example.com', // Config base URL
+				true,
+			],
+			[
+				// Apache ProxyPreserveHost somehow converts https:// to http://
+				// but in this context it's valid as only the domain matters.
+				'http://example.com',
+				'https://example.com',
+				true,
+			],
+			[
+				// With Apache ProxyPreserveHost, the request might be eg
+				// https://example.com/joplin/api/ping but the origin part, as
+				// forwarded by Apache will be https://example.com/api/ping
+				// (without /joplin). In that case the request is valid anyway
+				// since we only care about the domain.
+				'https://example.com',
+				'https://example.com/joplin',
+				true,
+			],
+			[
+				'https://bad.com',
+				'https://example.com',
+				false,
+			],
+			[
+				'http://bad.com',
+				'https://example.com',
+				false,
+			],
+		];
+
+		for (const testCase of testCases) {
+			const [requestOrigin, configBaseUrl, expected] = testCase;
+			expect(isValidOrigin(requestOrigin, configBaseUrl)).toBe(expected);
 		}
 	});
 
