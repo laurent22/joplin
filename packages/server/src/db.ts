@@ -17,7 +17,7 @@ require('pg').types.setTypeParser(20, function(val: any) {
 const logger = Logger.create('db');
 
 const migrationDir = `${__dirname}/migrations`;
-const sqliteDbDir = pathUtils.dirname(__dirname);
+export const sqliteDefaultDir = pathUtils.dirname(__dirname);
 
 export const defaultAdminEmail = 'admin@localhost';
 export const defaultAdminPassword = 'admin';
@@ -47,15 +47,11 @@ export interface ConnectionCheckResult {
 	connection: DbConnection;
 }
 
-export function sqliteFilePath(name: string): string {
-	return `${sqliteDbDir}/db-${name}.sqlite`;
-}
-
 export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	const connection: DbConfigConnection = {};
 
 	if (dbConfig.client === 'sqlite3') {
-		connection.filename = sqliteFilePath(dbConfig.name);
+		connection.filename = dbConfig.name;
 	} else {
 		connection.database = dbConfig.name;
 		connection.host = dbConfig.host;

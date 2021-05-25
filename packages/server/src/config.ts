@@ -23,6 +23,7 @@ export interface EnvVariables {
 	MAILER_NOREPLY_NAME?: string;
 	MAILER_NOREPLY_EMAIL?: string;
 
+	// This must be the full path to the database file
 	SQLITE_DATABASE?: string;
 }
 
@@ -61,7 +62,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 
 	return {
 		client: DatabaseConfigClient.SQLite,
-		name: env.SQLITE_DATABASE || 'prod',
+		name: env.SQLITE_DATABASE,
 		asyncStackTraces: true,
 	};
 }

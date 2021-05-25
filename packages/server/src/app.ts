@@ -7,7 +7,7 @@ import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker, EnvVariables } from './config';
 import { createDb, dropDb } from './tools/dbTools';
-import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection, sqliteFilePath } from './db';
+import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection, sqliteDefaultDir } from './db';
 import { AppContext, Env } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -26,12 +26,14 @@ const env: Env = argv.env as Env || Env.Prod;
 
 const envVariables: Record<Env, EnvVariables> = {
 	dev: {
-		SQLITE_DATABASE: 'dev',
+		SQLITE_DATABASE: `${sqliteDefaultDir}/db-dev.sqlite`,
 	},
 	buildTypes: {
-		SQLITE_DATABASE: 'buildTypes',
+		SQLITE_DATABASE: `${sqliteDefaultDir}/db-buildTypes.sqlite`,
 	},
-	prod: {}, // Actually get the env variables from the environment
+	prod: {
+		SQLITE_DATABASE: `${sqliteDefaultDir}/db-prod.sqlite`,
+	},
 };
 
 let appLogger_: LoggerWrapper = null;
@@ -130,7 +132,6 @@ async function main() {
 		appLogger().info('Public base URL:', config().baseUrl);
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
-		if (config().database.client === 'sqlite3') appLogger().info('DB file:', sqliteFilePath(config().database.name));
 
 		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);

@@ -36,6 +36,8 @@ export enum DatabaseConfigClient {
 
 export interface DatabaseConfig {
 	client: DatabaseConfigClient;
+	// For Postgres, this is the actual database name. For SQLite, this is the
+	// path to the SQLite file.
 	name: string;
 	host?: string;
 	port?: number;
