@@ -481,7 +481,10 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	shim.httpAgent_ = null;
 
 	shim.httpAgent = url => {
-		if (!shim.httpAgent_) {
+		const needNewAgent = !shim.httpAgent_ ||
+			!url.startsWith(shim.httpAgent_.protocol);
+
+		if (needNewAgent) {
 			const AgentSettings = {
 				keepAlive: true,
 				maxSockets: 1,
