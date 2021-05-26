@@ -58,6 +58,8 @@ export interface MailerConfig {
 }
 
 export interface Config {
+	appVersion: string;
+	appName: string;
 	port: number;
 	rootDir: string;
 	viewDir: string;

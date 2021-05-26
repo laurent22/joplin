@@ -10,10 +10,6 @@ input.form-control {
 	margin-bottom: 0.5rem;
 }
 
-.navbar {
-	padding: 1rem 3rem;
-}
-
 .navbar .logo-container {
 	align-items: center;
 }
@@ -34,7 +30,7 @@ input.form-control {
 }
 
 .main {
-	padding: 0 3rem;
+	padding: 2rem 3rem;
 }
 
 table.table .nowrap {
@@ -47,4 +43,14 @@ table.table .stretch {
 
 table.table th .sort-button i {
 	margin-left: 0.5rem;
+}
+
+.footer {
+	background-color: transparent;
+}
+
+.footer .container {
+	display: flex;
+	justify-content: flex-end;
+	opacity: 0.5;
 }

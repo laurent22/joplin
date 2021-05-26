@@ -1,6 +1,7 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
 import { Config, DatabaseConfig, DatabaseConfigClient, MailerConfig, RouteType } from './utils/types';
 import * as pathUtils from 'path';
+import { readFile } from 'fs-extra';
 
 export interface EnvVariables {
 	APP_BASE_URL?: string;
@@ -91,17 +92,31 @@ function baseUrlFromEnv(env: any, appPort: number): string {
 	}
 }
 
+interface PackageJson {
+	version: string;
+}
+
+async function readPackageJson(filePath: string): Promise<PackageJson> {
+	const text = await readFile(filePath, 'utf8');
+	return JSON.parse(text);
+}
+
 let config_: Config = null;
 
-export function initConfig(env: EnvVariables, overrides: any = null) {
+export async function initConfig(env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 
 	const rootDir = pathUtils.dirname(__dirname);
-	const viewDir = `${pathUtils.dirname(__dirname)}/src/views`;
+
+	const packageJson = await readPackageJson(`${rootDir}/package.json`);
+
+	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
 	const baseUrl = baseUrlFromEnv(env, appPort);
 
 	config_ = {
+		appVersion: packageJson.version,
+		appName: 'Joplin Server',
 		rootDir: rootDir,
 		viewDir: viewDir,
 		layoutDir: `${viewDir}/layouts`,

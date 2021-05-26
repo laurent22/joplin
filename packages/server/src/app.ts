@@ -16,7 +16,6 @@ import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
-// import { createItemTree } from './utils/testing/testUtils';
 
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -87,7 +86,7 @@ async function main() {
 
 	if (!envVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	initConfig({
+	await initConfig({
 		...envVariables[env],
 		...process.env,
 	});
@@ -127,7 +126,7 @@ async function main() {
 	} else if (argv.createDb) {
 		await createDb(config().database);
 	} else {
-		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
+		appLogger().info(`Starting server v${config().appVersion} (${env}) on port ${config().port} and PID ${process.pid}...`);
 		appLogger().info('Running in Docker:', runningInDocker());
 		appLogger().info('Public base URL:', config().baseUrl);
 		appLogger().info('API base URL:', config().apiBaseUrl);
@@ -153,37 +152,7 @@ async function main() {
 		appLogger().info('Starting services...');
 		await startServices(appContext);
 
-		// if (env !== Env.Prod) {
-		// 	const done = await handleDebugCommands(argv, appContext.db, config());
-		// 	if (done) {
-		// 		appLogger().info('Debug command has been executed. Now starting server...');
-		// 	}
-		// }
-
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
-
-		// const tree: any = {
-		// 	'000000000000000000000000000000F1': {},
-		// 	'000000000000000000000000000000F2': {
-		// 		'00000000000000000000000000000001': null,
-		// 		'00000000000000000000000000000002': null,
-		// 	},
-		// 	'000000000000000000000000000000F3': {
-		// 		'00000000000000000000000000000003': null,
-		// 		'000000000000000000000000000000F4': {
-		// 			'00000000000000000000000000000004': null,
-		// 			'00000000000000000000000000000005': null,
-		// 		},
-		// 	},
-		// 	'00000000000000000000000000000006': null,
-		// 	'00000000000000000000000000000007': null,
-		// };
-
-		// const users = await appContext.models.user().all();
-
-		// const itemModel = appContext.models.item({ userId: users[0].id });
-
-		// await createItemTree(itemModel, '', tree);
 
 		app.listen(config().port);
 	}

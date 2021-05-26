@@ -27,6 +27,8 @@ interface GlobalParams {
 	notifications?: NotificationView[];
 	hasNotifications?: boolean;
 	owner?: User;
+	appVersion?: string;
+	appName?: string;
 }
 
 export function isView(o: any): boolean {
@@ -76,6 +78,8 @@ export default class MustacheService {
 		return {
 			baseUrl: config().baseUrl,
 			prefersDarkEnabled: this.prefersDarkEnabled_,
+			appVersion: config().appVersion,
+			appName: config().appName,
 		};
 	}
 
