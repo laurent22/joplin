@@ -33,6 +33,8 @@ describe('api_users', function() {
 		expect(savedUser.email).toBe('toto@example.com');
 		expect(savedUser.can_share).toBe(0);
 		expect(savedUser.max_item_size).toBe(1000);
+		expect(savedUser.email_confirmed).toBe(0);
+		expect(savedUser.must_set_password).toBe(1);
 	});
 
 	test('should patch a user', async function() {

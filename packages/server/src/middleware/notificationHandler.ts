@@ -5,6 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
 import * as MarkdownIt from 'markdown-it';
 import config from '../config';
+import { NotificationKey } from '../models/NotificationModel';
 
 const logger = Logger.create('notificationHandler');
 
@@ -17,21 +18,12 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 	if (defaultAdmin) {
 		await notificationModel.add(
 			ctx.owner.id,
-			'change_admin_password',
+			NotificationKey.ChangeAdminPassword,
 			NotificationLevel.Important,
 			_('The default admin password is insecure and has not been changed! [Change it now](%s)', ctx.models.user().profileUrl())
 		);
 	} else {
-		await notificationModel.markAsRead(ctx.owner.id, 'change_admin_password');
-	}
-
-	if (config().database.client === 'sqlite3' && ctx.env === 'prod') {
-		await notificationModel.add(
-			ctx.owner.id,
-			'using_sqlite_in_prod',
-			NotificationLevel.Important,
-			'The server is currently using SQLite3 as a database. It is not recommended in production as it is slow and can cause locking issues. Please see the README for information on how to change it.'
-		);
+		await notificationModel.markAsRead(ctx.owner.id, NotificationKey.ChangeAdminPassword);
 	}
 }
 
@@ -43,9 +35,7 @@ async function handleSqliteInProdNotification(ctx: AppContext) {
 	if (config().database.client === 'sqlite3' && ctx.env === 'prod') {
 		await notificationModel.add(
 			ctx.owner.id,
-			'using_sqlite_in_prod',
-			NotificationLevel.Important,
-			'The server is currently using SQLite3 as a database. It is not recommended in production as it is slow and can cause locking issues. Please see the README for information on how to change it.'
+			NotificationKey.UsingSqliteInProd
 		);
 	}
 }

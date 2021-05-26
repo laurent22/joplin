@@ -34,6 +34,7 @@ router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
 	// set it after clicking on the confirmation link.
 	user.password = uuidgen();
 	user.must_set_password = 1;
+	user.email_confirmed = 0;
 	const output = await ctx.models.user().save(user);
 	return ctx.models.user().toApiOutput(output);
 });

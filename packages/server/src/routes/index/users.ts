@@ -4,14 +4,20 @@ import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
-import { NotificationLevel, User } from '../../db';
+import { User } from '../../db';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
+import { NotificationKey } from '../../models/NotificationModel';
 const prettyBytes = require('pretty-bytes');
 
-function checkPassword(fields: SetPasswordFormData, required: boolean): string {
+interface CheckPasswordInput {
+	password: string;
+	password2: string;
+}
+
+export function checkPassword(fields: CheckPasswordInput, required: boolean): string {
 	if (fields.password) {
 		if (fields.password !== fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
 		return fields.password;
@@ -113,18 +119,29 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 
 	const user = await ctx.models.user().load(userId);
 
-	const view: View = {
-		...defaultView('users/confirm'),
-		content: {
-			user,
-			error,
-			token,
-			postUrl: ctx.models.user().confirmUrl(userId, token),
-		},
-		navbar: false,
-	};
+	if (user.must_set_password) {
+		const view: View = {
+			...defaultView('users/confirm'),
+			content: {
+				user,
+				error,
+				token,
+				postUrl: ctx.models.user().confirmUrl(userId, token),
+			},
+			navbar: false,
+		};
 
-	return view;
+		return view;
+	} else {
+		await ctx.models.token().deleteByValue(userId, token);
+		await ctx.models.notification().add(userId, NotificationKey.EmailConfirmed);
+
+		if (ctx.owner) {
+			return redirect(ctx, `${config().baseUrl}/home`);
+		} else {
+			return redirect(ctx, `${config().baseUrl}/login`);
+		}
+	}
 });
 
 interface SetPasswordFormData {
@@ -142,13 +159,13 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 		const password = checkPassword(fields, true);
 
-		await ctx.models.user().save({ id: userId, password });
+		await ctx.models.user().save({ id: userId, password, must_set_password: 0 });
 		await ctx.models.token().deleteByValue(userId, fields.token);
 
 		const session = await ctx.models.session().createUserSession(userId);
 		ctx.cookies.set('sessionId', session.id);
 
-		await ctx.models.notification().add(userId, 'passwordSet', NotificationLevel.Normal, 'Welcome to Joplin Cloud! Your password has been set successfully.');
+		await ctx.models.notification().add(userId, NotificationKey.PasswordSet);
 
 		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {

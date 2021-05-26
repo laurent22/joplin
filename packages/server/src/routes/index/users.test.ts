@@ -1,5 +1,6 @@
 import { User } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
+import { NotificationKey } from '../../models/NotificationModel';
 import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
@@ -154,12 +155,28 @@ describe('index_users', function() {
 	});
 
 	test('should allow user to set a password for new accounts', async function() {
-		const { user: user1 } = await createUserAndSession(1);
+		let user1 = await models().user().save({
+			email: 'user1@localhost',
+			must_set_password: 1,
+			email_confirmed: 0,
+			password: '123456',
+		});
+
 		const { user: user2 } = await createUserAndSession(2);
 		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
 		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
 		const path = matches[1];
 		const token = matches[3];
+
+		// Check that the email at first is not confirmed
+		// expect(user1.email_confirmed).toBe(0);
+		// expect(user1.must_set_password).toBe(1);
+
+		await execRequest('', 'GET', path, null, { query: { token } });
+
+		// As soon as the confirmation page is opened, we know the email is valid
+		user1 = await models().user().load(user1.id);
+		expect(user1.email_confirmed).toBe(1);
 
 		// Check that the token is valid
 		expect(await models().token().isValid(user1.id, token)).toBe(true);
@@ -201,6 +218,9 @@ describe('index_users', function() {
 		const loggedInUser = await models().user().login(user1.email, 'newpassword');
 		expect(loggedInUser.id).toBe(user1.id);
 
+		// Check that the email has been verified
+		expect(user1.email_confirmed).toBe(1);
+
 		// Check that the token has been cleared
 		expect(await models().token().isValid(user1.id, token)).toBe(false);
 
@@ -209,19 +229,37 @@ describe('index_users', function() {
 		expect(notification.key).toBe('passwordSet');
 	});
 
-	// test('should handle invalid email validation', async function() {
-	// 	await createUserAndSession(1);
-	// 	const email = (await models().email().all())[0];
-	// 	const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
-	// 	const path = matches[1];
-	// 	const token = matches[3];
+	test('should allow user to verify their email', async function() {
+		let user1 = await models().user().save({
+			email: 'user1@localhost',
+			must_set_password: 0,
+			email_confirmed: 0,
+			password: '123456',
+		});
 
-	// 	// Valid path but invalid token
-	// 	await expectHttpError(async () => execRequest(null, 'GET', path, null, { query: { token: 'invalid' } }), ErrorNotFound.httpCode);
+		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
+		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+		const path = matches[1];
+		const token = matches[3];
 
-	// 	// Valid token but invalid path
-	// 	await expectHttpError(async () => execRequest(null, 'GET', 'users/abcd1234/confirm', null, { query: { token } }), ErrorNotFound.httpCode);
-	// });
+		const context = await execRequestC('', 'GET', path, null, { query: { token } });
+
+		user1 = await models().user().load(user1.id);
+
+		// Check that the user has been logged in
+		const sessionId = context.cookies.get('sessionId');
+		expect(sessionId).toBeFalsy();
+
+		// Check that the email has been verified
+		expect(user1.email_confirmed).toBe(1);
+
+		// Check that the token has been cleared
+		expect(await models().token().isValid(user1.id, token)).toBe(false);
+
+		// Check that a notification has been created
+		const notification = (await models().notification().all())[0];
+		expect(notification.key).toBe(NotificationKey.EmailConfirmed);
+	});
 
 	test('should apply ACL', async function() {
 		const { user: admin, session: adminSession } = await createUserAndSession(1, true);

@@ -30,7 +30,7 @@ if [ "$RESET_ALL" == "1" ]; then
 	echo "config sync.9.username $USER_EMAIL" >> "$CMD_FILE" 
 	echo "config sync.9.password 123456" >> "$CMD_FILE" 
 
-	if [ "$1" == "1" ]; then
+	if [ "$USER_NUM" == "1" ]; then
 		curl --data '{"action": "createTestUsers"}' -H 'Content-Type: application/json' http://api-joplincloud.local:22300/api/debug
 
 		echo 'mkbook "shared"' >> "$CMD_FILE"

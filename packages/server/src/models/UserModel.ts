@@ -181,15 +181,15 @@ export default class UserModel extends BaseModel<User> {
 
 			if (isNew) {
 				const validationToken = await this.models().token().generate(savedUser.id);
-				const validationUrl = encodeURI(this.confirmUrl(savedUser.id, validationToken));
+				const confirmUrl = encodeURI(this.confirmUrl(savedUser.id, validationToken));
 
 				await this.models().email().push({
 					sender_id: EmailSender.NoReply,
 					recipient_id: savedUser.id,
 					recipient_email: savedUser.email,
 					recipient_name: savedUser.full_name || '',
-					subject: 'Verify your email',
-					body: `Click this: ${validationUrl}`,
+					subject: 'Please setup your Joplin account',
+					body: `Your new Joplin account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n${confirmUrl}`,
 				});
 			}
 
