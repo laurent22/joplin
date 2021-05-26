@@ -20,6 +20,7 @@ import useEditorSearch from './utils/useEditorSearch';
 import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
 import useExternalPlugins from './utils/useExternalPlugins';
+import useJoplinCommands from './utils/useJoplinCommands';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -107,6 +108,7 @@ function Editor(props: EditorProps, ref: any) {
 	useJoplinMode(CodeMirror);
 	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
 	useKeymap(CodeMirror);
+	useJoplinCommands(CodeMirror);
 
 	useImperativeHandle(ref, () => {
 		return editor;
