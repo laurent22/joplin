@@ -6,6 +6,8 @@ export default class SearchEngineUtils {
 	static async notesForQuery(query: string, options: any = null, searchEngine: SearchEngine = null) {
 		if (!options) options = {};
 
+		if (options.applyUserSettings === undefined) options.applyUserSettings = true;
+
 		if (!searchEngine) {
 			searchEngine = SearchEngine.instance();
 		}
@@ -50,7 +52,7 @@ export default class SearchEngineUtils {
 
 		// Filter completed todos
 		let filteredNotes = [...sortedNotes];
-		if (!Setting.value('showCompletedTodos')) {
+		if (options.applyUserSettings && !Setting.value('showCompletedTodos')) {
 			filteredNotes = sortedNotes.filter(note => note.is_todo === 0 || (note.is_todo === 1 && note.todo_completed === 0));
 		}
 
