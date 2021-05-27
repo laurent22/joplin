@@ -350,7 +350,7 @@ const textFilter = (terms: Term[], conditions: string[], params: string[], relat
 			${(term.name === 'text' || term.name === 'title') ? 'notes.title LIKE ? ' : ''})`;
 
 		conditions.push(query);
-		const param = `%${trimQuotes(term.value)}%`;
+		const param = `%${trimQuotes(term.value).replace(/\*/, '%')}%`;
 		params.push(param);
 		if (term.name === 'text') params.push(param);
 	};

@@ -515,7 +515,9 @@ export default class SearchEngine {
 		return n;
 	}
 
-	async basicSearch(parsedQuery: any) {
+	async basicSearch(query: string) {
+		query = query.replace(/\*/, '');
+		const parsedQuery = await this.parseQuery(query);
 		const searchOptions: any = {};
 
 		for (const key of parsedQuery.keys) {
@@ -583,7 +585,6 @@ export default class SearchEngine {
 			}
 		} else {
 			searchString = this.normalizeText_(searchString);
-			searchString = searchString.replace(/\*/, '');
 			const parsedQuery = await this.parseQuery(searchString);
 
 			let rows: any;
@@ -596,7 +597,7 @@ export default class SearchEngine {
 					return [];
 				}
 			} else {
-				rows = await this.basicSearch(parsedQuery);
+				rows = await this.basicSearch(searchString);
 			}
 
 			this.processResults_(rows, parsedQuery, true);
