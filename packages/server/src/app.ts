@@ -16,6 +16,7 @@ import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
+import { credentialFile } from './utils/testing/testUtils';
 
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -72,8 +73,7 @@ async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 	if (argv.envFile) return argv.envFile;
 
 	if (env === Env.Dev) {
-		const envFilePath = `${require('os').homedir()}/joplin-credentials/server.env`;
-		if (await fs.pathExists(envFilePath)) return envFilePath;
+		return credentialFile('server.env');
 	}
 
 	return '';

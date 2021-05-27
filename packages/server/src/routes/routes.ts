@@ -18,6 +18,7 @@ import indexNotifications from './index/notifications';
 import indexSignup from './index/signup';
 import indexShares from './index/shares';
 import indexUsers from './index/users';
+import indexStripe from './index/stripe';
 
 import defaultRoute from './default';
 
@@ -40,6 +41,7 @@ const routes: Routers = {
 	'signup': indexSignup,
 	'shares': indexShares,
 	'users': indexUsers,
+	'stripe': indexStripe,
 
 	'': defaultRoute,
 };
