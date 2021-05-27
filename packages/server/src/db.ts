@@ -280,6 +280,8 @@ export interface User extends WithDates, WithUuid {
 	can_share?: number;
 	email_confirmed?: number;
 	must_set_password?: number;
+	account_type?: number;
+	can_upload?: number;
 }
 
 export interface Session extends WithDates, WithUuid {
@@ -405,6 +407,8 @@ export const databaseSchema: DatabaseTables = {
 		can_share: { type: 'number' },
 		email_confirmed: { type: 'number' },
 		must_set_password: { type: 'number' },
+		account_type: { type: 'number' },
+		can_upload: { type: 'number' },
 	},
 	sessions: {
 		id: { type: 'string' },

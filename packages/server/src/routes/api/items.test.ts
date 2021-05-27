@@ -276,4 +276,18 @@ describe('api_items', function() {
 		}
 	});
 
+	test('should check permissions - should not allow uploading items if disabled', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+
+		await models().user().save({ id: user1.id, can_upload: 0 });
+
+		await expectHttpError(
+			async () => createNote(session1.id, {
+				id: '00000000000000000000000000000001',
+				body: '12345',
+			}),
+			ErrorForbidden.httpCode
+		);
+	});
+
 });
