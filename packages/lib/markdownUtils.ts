@@ -7,10 +7,18 @@ const MarkdownIt = require('markdown-it');
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
 const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s+)$/;
 
+export enum MarkdownTableJustify {
+	Left = 'left',
+	Center = 'center',
+	Right = 'right,',
+}
+
 export interface MarkdownTableHeader {
 	name: string;
 	label: string;
 	filter?: Function;
+	disableEscape?: boolean;
+	justify?: MarkdownTableJustify;
 }
 
 export interface MarkdownTableRow {
@@ -120,26 +128,38 @@ const markdownUtils = {
 	createMarkdownTable(headers: MarkdownTableHeader[], rows: MarkdownTableRow[]): string {
 		const output = [];
 
+		const minCellWidth = 5;
+
 		const headersMd = [];
 		const lineMd = [];
 		for (let i = 0; i < headers.length; i++) {
 			const h = headers[i];
-			headersMd.push(stringPadding(h.label, 3, ' ', stringPadding.RIGHT));
-			lineMd.push('---');
+			headersMd.push(stringPadding(h.label, minCellWidth, ' ', stringPadding.RIGHT));
+
+			const justify = h.justify ? h.justify : MarkdownTableJustify.Left;
+
+			if (justify === MarkdownTableJustify.Left) {
+				lineMd.push('-----');
+			} else if (justify === MarkdownTableJustify.Center) {
+				lineMd.push(':---:');
+			} else {
+				lineMd.push('----:');
+			}
 		}
 
-		output.push(headersMd.join(' | '));
-		output.push(lineMd.join(' | '));
+		output.push(`| ${headersMd.join(' | ')} |`);
+		output.push(`| ${lineMd.join(' | ')} |`);
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const rowMd = [];
 			for (let j = 0; j < headers.length; j++) {
 				const h = headers[j];
-				const valueMd = markdownUtils.escapeTableCell(h.filter ? h.filter(row[h.name]) : row[h.name]);
-				rowMd.push(stringPadding(valueMd, 3, ' ', stringPadding.RIGHT));
+				const value = (h.filter ? h.filter(row[h.name]) : row[h.name]) || '';
+				const valueMd = h.disableEscape ? value : markdownUtils.escapeTableCell(value);
+				rowMd.push(stringPadding(valueMd, minCellWidth, ' ', stringPadding.RIGHT));
 			}
-			output.push(rowMd.join(' | '));
+			output.push(`| ${rowMd.join(' | ')} |`);
 		}
 
 		return output.join('\n');

@@ -1599,4 +1599,7 @@ packages/tools/release-server.js.map
 packages/tools/tool-utils.d.ts
 packages/tools/tool-utils.js
 packages/tools/tool-utils.js.map
+packages/tools/update-readme-sponsors.d.ts
+packages/tools/update-readme-sponsors.js
+packages/tools/update-readme-sponsors.js.map
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
