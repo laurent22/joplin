@@ -4,7 +4,6 @@ interface Term {
 	name: string;
 	value: string;
 	negated: boolean;
-	quoted?: boolean;
 }
 
 enum Relation {
@@ -345,8 +344,8 @@ const trimQuotes = (str: string) => str.startsWith('"') && str.endsWith('"') ? s
 const textFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, useFTS: boolean) => {
 	const createLikeMatch = (term: Term, negate: boolean) => {
 		const query = `${relation} ${negate ? 'NOT' : ''} (
-			${(term.name === 'text' || term.name === 'body') ? 'notes.body LIKE ? ' : ''} 
-			${term.name === 'text' ? 'OR' : ''} 
+			${(term.name === 'text' || term.name === 'body') ? 'notes.body LIKE ? ' : ''}
+			${term.name === 'text' ? 'OR' : ''}
 			${(term.name === 'text' || term.name === 'title') ? 'notes.title LIKE ? ' : ''})`;
 
 		conditions.push(query);
@@ -445,33 +444,23 @@ export default function queryBuilder(terms: Term[], useFTS: boolean) {
 
 	const relation: Relation = getDefaultRelation(terms);
 
-	if (useFTS) {
-		queryParts.push(`
-		SELECT
-		notes_fts.id,
-		notes_fts.title,
-		offsets(notes_fts) AS offsets,
-		matchinfo(notes_fts, 'pcnalx') AS matchinfo,
-		notes_fts.user_created_time,
-		notes_fts.user_updated_time,
-		notes_fts.is_todo,
-		notes_fts.todo_completed,
-		notes_fts.parent_id
-		FROM notes_fts
-		WHERE ${getConnective(terms, relation)}`);
-	} else {
-		queryParts.push(`
-		SELECT
-		notes.id,
-		notes.title,
-		notes.user_created_time,
-		notes.user_updated_time,
-		notes.is_todo,
-		notes.todo_completed,
-		notes.parent_id
-		FROM notes
-		WHERE ${getConnective(terms, relation)}`);
-	}
+	const tableName = useFTS ? 'notes_fts' : 'notes';
+
+	queryParts.push(`
+	SELECT
+	${tableName}.id,
+	${tableName}.title,
+	${useFTS
+		? 'offsets(notes_fts) AS offsets, matchinfo(notes_fts, \'pcnalx\') AS matchinfo,'
+		: ''
+}
+	${tableName}.user_created_time,
+	${tableName}.user_updated_time,
+	${tableName}.is_todo,
+	${tableName}.todo_completed,
+	${tableName}.parent_id
+	FROM ${tableName}
+	WHERE ${getConnective(terms, relation)}`);
 
 	noteIdFilter(terms, queryParts, params, relation, useFTS);
 

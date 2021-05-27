@@ -564,6 +564,7 @@ export default class SearchEngine {
 		}, options);
 
 		const searchType = this.determineSearchType_(searchString, options.searchType);
+		const parsedQuery = await this.parseQuery(searchString);
 
 		if (searchType === SearchEngine.SEARCH_TYPE_FTS) {
 			// SEARCH_TYPE_FTS
@@ -573,7 +574,6 @@ export default class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
-			const parsedQuery = await this.parseQuery(searchString);
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, true);
 				const rows = await this.db().selectAll(query, params);
@@ -585,7 +585,6 @@ export default class SearchEngine {
 			}
 		} else {
 			searchString = this.normalizeText_(searchString);
-			const parsedQuery = await this.parseQuery(searchString);
 
 			let rows: any;
 			if (searchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) {
