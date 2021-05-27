@@ -26,8 +26,8 @@ export class ErrorMethodNotAllowed extends ApiError {
 export class ErrorNotFound extends ApiError {
 	public static httpCode: number = 404;
 
-	public constructor(message: string = 'Not Found') {
-		super(message, ErrorNotFound.httpCode);
+	public constructor(message: string = 'Not Found', code: string = undefined) {
+		super(message, ErrorNotFound.httpCode, code);
 		Object.setPrototypeOf(this, ErrorNotFound.prototype);
 	}
 }
@@ -76,4 +76,20 @@ export class ErrorResyncRequired extends ApiError {
 		super(message, ErrorResyncRequired.httpCode, 'resyncRequired');
 		Object.setPrototypeOf(this, ErrorResyncRequired.prototype);
 	}
+}
+
+export class ErrorPayloadTooLarge extends ApiError {
+	public static httpCode: number = 413;
+
+	public constructor(message: string = 'Payload Too Large') {
+		super(message, ErrorPayloadTooLarge.httpCode);
+		Object.setPrototypeOf(this, ErrorPayloadTooLarge.prototype);
+	}
+}
+
+export function errorToString(error: Error): string {
+	const msg: string[] = [];
+	msg.push(error.message ? error.message : 'Unknown error');
+	if (error.stack) msg.push(error.stack);
+	return msg.join(': ');
 }

@@ -1,7 +1,7 @@
 import MdToHtml from '@joplin/renderer/MdToHtml';
 const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
-const { setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient } = require('@joplin/lib/testing/test-utils.js');
 import shim from '@joplin/lib/shim';
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -135,6 +135,14 @@ describe('MdToHtml', function() {
 			const result = await mdToHtml.render('one\n\ntwo', null, { bodyOnly: true });
 			expect(result.html.trim()).toBe('<p>one</p>\n<p>two</p>');
 		}
+	}));
+
+	it('should render an empty string', (async () => {
+		const mdToHtml = newTestMdToHtml();
+		const result = await mdToHtml.render('', null, { splitted: true });
+		// The TinyMCE component checks for this exact string to apply a hack,
+		// so make sure it doesn't change from version to version.
+		expect(result.html).toBe('<div id="rendered-md"></div>');
 	}));
 
 	it('should split HTML and CSS', (async () => {

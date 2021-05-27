@@ -1,5 +1,6 @@
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
 import config from '../../config';
@@ -9,11 +10,11 @@ import { View } from '../../services/MustacheService';
 function makeView(error: any = null): View {
 	const view = defaultView('login');
 	view.content.error = error;
-	view.partials = ['errorBanner'];
+	view.navbar = false;
 	return view;
 }
 
-const router: Router = new Router();
+const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 

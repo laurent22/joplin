@@ -29,8 +29,8 @@ describe('share_users', function() {
 		});
 		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
 		const folderItem2 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F2');
-		const { share: share1 } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
-		const { share: share2 } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem2);
+		const { share: share1 } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderItem1);
+		const { share: share2 } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderItem2);
 
 		const shareUsers = await getApi<PaginatedResults>(session2.id, 'share_users');
 		expect(shareUsers.items.length).toBe(2);
@@ -44,7 +44,7 @@ describe('share_users', function() {
 
 		await createItemTree(user1.id, '', { '000000000000000000000000000000F1': {} });
 		const folderItem = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
-		const { shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem);
+		const { shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderItem);
 
 		// User can modify own UserShare object
 		await patchApi(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Rejected });

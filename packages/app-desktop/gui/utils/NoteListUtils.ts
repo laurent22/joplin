@@ -22,6 +22,7 @@ interface ContextMenuProps {
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
 	inConflictFolder: boolean;
+	customCss: string;
 }
 
 export default class NoteListUtils {
@@ -158,6 +159,7 @@ export default class NoteListUtils {
 								sourceNoteIds: noteIds,
 								includeConflicts: props.inConflictFolder,
 								plugins: props.plugins,
+								customCss: props.customCss,
 							});
 						},
 					})

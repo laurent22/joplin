@@ -3,6 +3,7 @@ import { Share, ShareType } from '../../db';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
 
@@ -11,7 +12,7 @@ interface ShareApiInput extends Share {
 	note_id?: string;
 }
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 router.public = true;
 
@@ -92,7 +93,7 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	const shareModel = ctx.models.share();
 	const share = await shareModel.load(path.id);
 
-	if (share && share.type === ShareType.Link) {
+	if (share && share.type === ShareType.Note) {
 		// No authentication is necessary - anyone who knows the share ID is allowed
 		// to access the file. It is essentially public.
 		return shareModel.toApiOutput(share);

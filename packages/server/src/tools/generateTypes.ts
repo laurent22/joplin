@@ -31,6 +31,8 @@ const config = {
 		'main.shares': 'WithDates, WithUuid',
 		'main.share_users': 'WithDates, WithUuid',
 		'main.user_items': 'WithDates',
+		'main.emails': 'WithDates',
+		'main.tokens': 'WithDates',
 	},
 };
 
@@ -41,6 +43,8 @@ const propertyTypes: Record<string, string> = {
 	'shares.type': 'ShareType',
 	'items.content': 'Buffer',
 	'share_users.status': 'ShareUserStatus',
+	'emails.sender_id': 'EmailSender',
+	'emails.sent_time': 'number',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

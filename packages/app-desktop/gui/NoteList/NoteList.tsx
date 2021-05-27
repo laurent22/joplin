@@ -125,6 +125,7 @@ class NoteListComponent extends React.Component {
 			watchedNoteFiles: this.props.watchedNoteFiles,
 			plugins: this.props.plugins,
 			inConflictFolder: this.props.selectedFolderId === Folder.conflictFolderId(),
+			customCss: this.props.customCss,
 		});
 
 		menu.popup(bridge().window());
@@ -513,6 +514,7 @@ const mapStateToProps = (state: AppState) => {
 		noteSortOrder: state.settings['notes.sortOrder.field'],
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
+		customCss: state.customCss,
 	};
 };
 

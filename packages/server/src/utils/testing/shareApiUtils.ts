@@ -16,7 +16,7 @@ export async function createFolderShare(sessionId: string, folderId: string): Pr
 	// const item = await createFolder(sessionId, { id: '00000000 });
 
 	return postApi<Share>(sessionId, 'shares', {
-		type: ShareType.JoplinRootFolder,
+		type: ShareType.Folder,
 		folder_id: folderId,
 	});
 }
@@ -45,6 +45,8 @@ function convertTree(tree: any): any[] {
 }
 
 async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
+	const user = await models().user().load(userId);
+
 	for (const jopItem of tree) {
 		const isFolder = !!jopItem.children;
 		const serializedBody = isFolder ?
@@ -58,7 +60,7 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 			}
 		}
 
-		const newItem = await models().item().saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const newItem = await models().item().saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
 		if (isFolder && jopItem.children.length) await createItemTree3(sessionId, userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }
@@ -75,7 +77,7 @@ export async function shareFolderWithUser(sharerSessionId: string, shareeSession
 	});
 
 	const share: Share = await postApi<Share>(sharerSessionId, 'shares', {
-		type: ShareType.JoplinRootFolder,
+		type: ShareType.Folder,
 		folder_id: rootFolderItem.jop_id,
 	});
 
@@ -113,16 +115,16 @@ export async function shareFolderWithUser(sharerSessionId: string, shareeSession
 // - User 2 accepts the share
 //
 // The result is that user 2 will have a file linked to user 1's file.
-export async function shareWithUserAndAccept(sharerSessionId: string, shareeSessionId: string, sharee: User, shareType: ShareType = ShareType.App, item: Item = null): Promise<ShareResult> {
+export async function shareWithUserAndAccept(sharerSessionId: string, shareeSessionId: string, sharee: User, shareType: ShareType = ShareType.Folder, item: Item = null): Promise<ShareResult> {
 	item = item || await createItem(sharerSessionId, 'root:/test.txt:', 'testing share');
 
 	let share: Share = null;
 
-	if ([ShareType.JoplinRootFolder, ShareType.Link].includes(shareType)) {
+	if ([ShareType.Folder, ShareType.Note].includes(shareType)) {
 		share = await postApi<Share>(sharerSessionId, 'shares', {
 			type: shareType,
-			note_id: shareType === ShareType.Link ? item.jop_id : undefined,
-			folder_id: shareType === ShareType.JoplinRootFolder ? item.jop_id : undefined,
+			note_id: shareType === ShareType.Note ? item.jop_id : undefined,
+			folder_id: shareType === ShareType.Folder ? item.jop_id : undefined,
 		});
 	} else {
 		const sharer = await models().session().sessionUser(sharerSessionId);

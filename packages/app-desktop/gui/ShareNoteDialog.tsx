@@ -10,19 +10,21 @@ import { reg } from '@joplin/lib/registry';
 import Dialog from './Dialog';
 import DialogTitle from './DialogTitle';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import { StateShare } from '@joplin/lib/services/share/reducer';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import Button from './Button/Button';
+import { connect } from 'react-redux';
+import { AppState } from '../app';
 const { clipboard } = require('electron');
 
-interface ShareNoteDialogProps {
+interface Props {
 	themeId: number;
 	noteIds: Array<string>;
 	onClose: Function;
+	shares: StateShare[];
 }
 
-interface SharesMap {
-	[key: string]: any;
-}
-
-function styles_(props: ShareNoteDialogProps) {
+function styles_(props: Props) {
 	return buildStyle('ShareNoteDialog', props.themeId, (theme: any) => {
 		return {
 			noteList: {
@@ -60,16 +62,20 @@ function styles_(props: ShareNoteDialogProps) {
 	});
 }
 
-export default function ShareNoteDialog(props: ShareNoteDialogProps) {
+export function ShareNoteDialog(props: Props) {
 	console.info('Render ShareNoteDialog');
 
-	const [notes, setNotes] = useState<any[]>([]);
+	const [notes, setNotes] = useState<NoteEntity[]>([]);
 	const [sharesState, setSharesState] = useState<string>('unknown');
-	const [shares, setShares] = useState<SharesMap>({});
+	// const [shares, setShares] = useState<SharesMap>({});
 
 	const noteCount = notes.length;
 	const theme = themeStyle(props.themeId);
 	const styles = styles_(props);
+
+	useEffect(() => {
+		void ShareService.instance().refreshShares();
+	}, []);
 
 	useEffect(() => {
 		async function fetchNotes() {
@@ -87,9 +93,9 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 		props.onClose();
 	};
 
-	const copyLinksToClipboard = (shares: SharesMap) => {
+	const copyLinksToClipboard = (shares: StateShare[]) => {
 		const links = [];
-		for (const n in shares) links.push(ShareService.instance().shareUrl(shares[n]));
+		for (const share of shares) links.push(ShareService.instance().shareUrl(share));
 		clipboard.writeText(links.join('\n'));
 	};
 
@@ -109,14 +115,12 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 
 				setSharesState('creating');
 
-				const newShares = Object.assign({}, shares);
+				const newShares: StateShare[] = [];
 
 				for (const note of notes) {
 					const share = await service.shareNote(note.id);
-					newShares[note.id] = share;
+					newShares.push(share);
 				}
-
-				setShares(newShares);
 
 				setSharesState('synchronizing');
 				await reg.waitForSyncFinishedThenSync();
@@ -125,6 +129,8 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 				copyLinksToClipboard(newShares);
 
 				setSharesState('created');
+
+				await ShareService.instance().refreshShares();
 			} catch (error) {
 				if (error.code === 404 && !hasSynced) {
 					reg.logger().info('ShareNoteDialog: Note does not exist on server - trying to sync it.', error);
@@ -142,34 +148,53 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 		}
 	};
 
-	const removeNoteButton_click = (event: any) => {
-		const newNotes = [];
-		for (let i = 0; i < notes.length; i++) {
-			const n = notes[i];
-			if (n.id === event.noteId) continue;
-			newNotes.push(n);
-		}
-		setNotes(newNotes);
+	// const removeNoteButton_click = (event: any) => {
+	// 	const newNotes = [];
+	// 	for (let i = 0; i < notes.length; i++) {
+	// 		const n = notes[i];
+	// 		if (n.id === event.noteId) continue;
+	// 		newNotes.push(n);
+	// 	}
+	// 	setNotes(newNotes);
+	// };
+
+	const unshareNoteButton_click = async (event: any) => {
+		await ShareService.instance().unshareNote(event.noteId);
+		await ShareService.instance().refreshShares();
 	};
 
-	const renderNote = (note: any) => {
-		const removeButton = notes.length <= 1 ? null : (
-			<button onClick={() => removeNoteButton_click({ noteId: note.id })} style={styles.noteRemoveButton}>
-				<i style={styles.noteRemoveButtonIcon} className={'fa fa-times'}></i>
-			</button>
+	const renderNote = (note: NoteEntity) => {
+		const unshareButton = !props.shares.find(s => s.note_id === note.id) ? null : (
+			<Button tooltip={_('Unshare note')} iconName="fas fa-share-alt" onClick={() => unshareNoteButton_click({ noteId: note.id })}/>
 		);
+
+		// const removeButton = notes.length <= 1 ? null : (
+		// 	<Button iconName="fa fa-times" onClick={() => removeNoteButton_click({ noteId: note.id })}/>
+		// );
+
+		// const unshareButton = !shares[note.id] ? null : (
+		// 	<button onClick={() => unshareNoteButton_click({ noteId: note.id })} style={styles.noteRemoveButton}>
+		// 		<i style={styles.noteRemoveButtonIcon} className={'fas fa-share-alt'}></i>
+		// 	</button>
+		// );
+
+		// const removeButton = notes.length <= 1 ? null : (
+		// 	<button onClick={() => removeNoteButton_click({ noteId: note.id })} style={styles.noteRemoveButton}>
+		// 		<i style={styles.noteRemoveButtonIcon} className={'fa fa-times'}></i>
+		// 	</button>
+		// );
 
 		return (
 			<div key={note.id} style={styles.note}>
-				<span style={styles.noteTitle}>{note.title}</span>{removeButton}
+				<span style={styles.noteTitle}>{note.title}</span>{unshareButton}
 			</div>
 		);
 	};
 
 	const renderNoteList = (notes: any) => {
 		const noteComps = [];
-		for (const noteId of Object.keys(notes)) {
-			noteComps.push(renderNote(notes[noteId]));
+		for (const note of notes) {
+			noteComps.push(renderNote(note));
 		}
 		return <div style={styles.noteList}>{noteComps}</div>;
 	};
@@ -194,7 +219,12 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
 				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>
 				{renderEncryptionWarningMessage()}
-				<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
+				<DialogButtonRow
+					themeId={props.themeId}
+					onClick={buttonRow_click}
+					okButtonShow={false}
+					cancelButtonLabel={_('Close')}
+				/>
 			</div>
 		);
 	}
@@ -203,3 +233,11 @@ export default function ShareNoteDialog(props: ShareNoteDialogProps) {
 		<Dialog renderContent={renderContent}/>
 	);
 }
+
+const mapStateToProps = (state: AppState) => {
+	return {
+		shares: state.shareService.shares.filter(s => !!s.note_id),
+	};
+};
+
+export default connect(mapStateToProps)(ShareNoteDialog as any);

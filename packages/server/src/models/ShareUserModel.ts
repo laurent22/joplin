@@ -1,4 +1,4 @@
-import { Item, Share, ShareUser, ShareUserStatus, User, Uuid } from '../db';
+import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../db';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 
@@ -10,6 +10,9 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: ShareUser = null): Promise<void> {
 		if (action === AclAction.Create) {
+			const recipient = await this.models().user().load(resource.user_id, { fields: ['can_share'] });
+			if (!recipient.can_share) throw new ErrorForbidden('The sharing feature is not enabled for the recipient account');
+
 			const share = await this.models().share().load(resource.share_id);
 			if (share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
 			if (share.owner_id === resource.user_id) throw new ErrorForbidden('cannot share an item with yourself');
@@ -96,7 +99,6 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	}
 
 	public async addByEmail(shareId: Uuid, userEmail: string): Promise<ShareUser> {
-		// TODO: check that user can access this share
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
@@ -123,24 +125,15 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 			return this.save({ ...shareUser, status });
 		});
-
-		// const item = await this.models().item().load(share.item_id);
-
-		// return this.withTransaction<Item>(async () => {
-		// 	await this.save({ ...shareUser, status });
-
-		// 	if (status === ShareUserStatus.Accepted) {
-		// 		if (share.type === ShareType.JoplinRootFolder) {
-		// 			// await this.models().item().shareJoplinFolderAndContent(share.id, share.owner_id, userId, item.jop_id);
-		// 		} else if (share.type === ShareType.App) {
-		// 			await this.models().userItem().add(userId, share.item_id, share.id);
-		// 		}
-		// 	}
-		// });
 	}
 
 	public async deleteByShare(share: Share): Promise<void> {
+		// Notes that are shared by link do not have associated ShareUser items,
+		// so there's nothing to do.
+		if (share.type !== ShareType.Folder) return;
+
 		const shareUsers = await this.byShareId(share.id, null);
+		if (!shareUsers.length) return;
 
 		await this.withTransaction(async () => {
 			await this.delete(shareUsers.map(s => s.id));

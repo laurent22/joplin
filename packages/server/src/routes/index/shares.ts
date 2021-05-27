@@ -1,5 +1,6 @@
 import { SubPath, ResponseType, Response } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { Item, Share } from '../../db';
@@ -18,7 +19,7 @@ async function renderItem(context: AppContext, item: Item, share: Share): Promis
 	};
 }
 
-const router: Router = new Router();
+const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 

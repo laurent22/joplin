@@ -221,11 +221,11 @@ class PromptDialog extends React.Component {
 		let inputComp = null;
 
 		if (this.props.inputType === 'datetime') {
-			inputComp = <Datetime value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={momentObject => onDateTimeChange(momentObject)} />;
+			inputComp = <Datetime className="datetime-picker" value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={momentObject => onDateTimeChange(momentObject)} />;
 		} else if (this.props.inputType === 'tags') {
-			inputComp = <CreatableSelect styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <CreatableSelect className="tag-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}
@@ -254,8 +254,8 @@ class PromptDialog extends React.Component {
 		}
 
 		return (
-			<div style={styles.modalLayer}>
-				<div style={styles.promptDialog}>
+			<div className="modal-layer" style={styles.modalLayer}>
+				<div className="modal-dialog" style={styles.promptDialog}>
 					<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
 					<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
 						{inputComp}

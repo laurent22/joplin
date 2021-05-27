@@ -5,6 +5,7 @@ import apiEvents from './api/events';
 import apiItems from './api/items';
 import apiPing from './api/ping';
 import apiSessions from './api/sessions';
+import apiUsers from './api/users';
 import apiShares from './api/shares';
 import apiShareUsers from './api/share_users';
 
@@ -14,6 +15,7 @@ import indexItems from './index/items';
 import indexLogin from './index/login';
 import indexLogout from './index/logout';
 import indexNotifications from './index/notifications';
+import indexSignup from './index/signup';
 import indexShares from './index/shares';
 import indexUsers from './index/users';
 
@@ -27,6 +29,7 @@ const routes: Routers = {
 	'api/sessions': apiSessions,
 	'api/share_users': apiShareUsers,
 	'api/shares': apiShares,
+	'api/users': apiUsers,
 
 	'changes': indexChanges,
 	'home': indexHome,
@@ -34,6 +37,7 @@ const routes: Routers = {
 	'login': indexLogin,
 	'logout': indexLogout,
 	'notifications': indexNotifications,
+	'signup': indexSignup,
 	'shares': indexShares,
 	'users': indexUsers,
 

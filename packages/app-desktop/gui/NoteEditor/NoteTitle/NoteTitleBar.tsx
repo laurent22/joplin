@@ -91,7 +91,7 @@ export default function NoteTitleBar(props: Props) {
 	}, []);
 
 	function renderTitleBarDate() {
-		return <span style={styles.titleDate}>{time.formatMsToLocal(props.noteUserUpdatedTime)}</span>;
+		return <span className="updated-time-label" style={styles.titleDate}>{time.formatMsToLocal(props.noteUserUpdatedTime)}</span>;
 	}
 
 	function renderNoteToolbar() {
@@ -104,6 +104,7 @@ export default function NoteTitleBar(props: Props) {
 	return (
 		<StyledRoot>
 			<input
+				className="title-input"
 				type="text"
 				ref={props.titleInputRef}
 				placeholder={props.isProvisional ? _('Creating new %s...', props.noteIsTodo ? _('to-do') : _('note')) : ''}

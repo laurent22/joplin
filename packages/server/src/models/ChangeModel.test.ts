@@ -30,7 +30,7 @@ describe('ChangeModel', function() {
 		const item1 = await createFolder(session.id, { title: 'folder' });
 
 		{
-			const changes = (await changeModel.allForUser(user.id)).items;
+			const changes = (await changeModel.delta(user.id)).items;
 			expect(changes.length).toBe(1);
 			expect(changes[0].item_id).toBe(item1.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
@@ -60,7 +60,7 @@ describe('ChangeModel', function() {
 			// We don't get CREATE 1 because item 1 has been deleted. And we
 			// also don't get any UPDATE event since they've been compressed
 			// down to the CREATE events.
-			const changes = (await changeModel.allForUser(user.id)).items;
+			const changes = (await changeModel.delta(user.id)).items;
 			expect(changes.length).toBe(2);
 			expect(changes[0].item_id).toBe(item2.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
@@ -89,7 +89,7 @@ describe('ChangeModel', function() {
 			//
 			// Then CREATE 1 is removed since item 1 has been deleted and UPDATE
 			// 2a is compressed down to CREATE 2.
-			const page1 = (await changeModel.allForUser(user.id, pagination));
+			const page1 = (await changeModel.delta(user.id, pagination));
 			let changes = page1.items;
 			expect(changes.length).toBe(1);
 			expect(page1.has_more).toBe(true);
@@ -98,7 +98,7 @@ describe('ChangeModel', function() {
 
 			// In the second page, we get all the expected events since nothing
 			// has been compressed.
-			const page2 = (await changeModel.allForUser(user.id, { ...pagination, cursor: page1.cursor }));
+			const page2 = (await changeModel.delta(user.id, { ...pagination, cursor: page1.cursor }));
 			changes = page2.items;
 			expect(changes.length).toBe(3);
 			// Although there are no more changes, it's not possible to know
@@ -112,7 +112,7 @@ describe('ChangeModel', function() {
 			expect(changes[2].type).toBe(ChangeType.Create);
 
 			// Check that we indeed reached the end of the feed.
-			const page3 = (await changeModel.allForUser(user.id, { ...pagination, cursor: page2.cursor }));
+			const page3 = (await changeModel.delta(user.id, { ...pagination, cursor: page2.cursor }));
 			expect(page3.items.length).toBe(0);
 			expect(page3.has_more).toBe(false);
 		}
@@ -127,7 +127,7 @@ describe('ChangeModel', function() {
 		await msleep(1); const item1 = await makeTestItem(user.id, 1); // CREATE 1
 		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
 
-		await expectThrow(async () => changeModel.allForUser(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
+		await expectThrow(async () => changeModel.delta(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
 	});
 
 });

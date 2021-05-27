@@ -27,6 +27,7 @@ export interface WhenClauseContext {
 	noteIsHtml: boolean;
 	folderIsShareRootAndOwnedByUser: boolean;
 	folderIsShared: boolean;
+	joplinServerConnected: boolean;
 }
 
 export default function stateToWhenClauseContext(state: State, options: WhenClauseContextOptions = null): WhenClauseContext {
@@ -42,7 +43,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	// const commandNoteId = options.commandNoteId || selectedNoteId;
 	// const commandNote:NoteEntity = commandNoteId ? BaseModel.byId(state.notes, commandNoteId) : null;
 
-	const commandFolderId = options.commandFolderId;
+	const commandFolderId = options.commandFolderId || state.selectedFolderId;
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
 
 	return {
@@ -75,5 +76,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		// Current context folder
 		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
+
+		joplinServerConnected: state.settings['sync.target'] === 9,
 	};
 }

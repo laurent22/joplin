@@ -1,10 +1,11 @@
 import markdownUtils from './markdownUtils';
 import Setting from './models/Setting';
 import shim from './shim';
-import MarkupToHtml, { MarkupLanguage } from '@joplin/renderer/MarkupToHtml';
+import MarkupToHtml, { MarkupLanguage, Options } from '@joplin/renderer/MarkupToHtml';
 
 import htmlUtils from './htmlUtils';
 import Resource from './models/Resource';
+import { PluginStates } from './services/plugins/reducer';
 
 export class MarkupLanguageUtils {
 
@@ -20,7 +21,7 @@ export class MarkupLanguageUtils {
 
 	// Create a new MarkupToHtml instance while injecting options specific to Joplin
 	// desktop and mobile applications.
-	public newMarkupToHtml(options: any = null) {
+	public newMarkupToHtml(_plugins: PluginStates = null, options: Options = null) {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
 		const pluginOptions: any = {};
 		for (const n in subValues) {

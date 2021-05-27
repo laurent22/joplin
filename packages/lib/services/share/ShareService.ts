@@ -104,7 +104,7 @@ export default class ShareService {
 		await Folder.updateAllShareIds();
 	}
 
-	public async shareNote(noteId: string) {
+	public async shareNote(noteId: string): Promise<StateShare> {
 		const note = await Note.load(noteId);
 		if (!note) throw new Error(`No such note: ${noteId}`);
 
@@ -113,6 +113,24 @@ export default class ShareService {
 		await Note.save({ id: note.id, is_shared: 1 });
 
 		return share;
+	}
+
+	public async unshareNote(noteId: string) {
+		const note = await Note.load(noteId);
+		if (!note) throw new Error(`No such note: ${noteId}`);
+
+		const shares = await this.refreshShares();
+		const noteShares = shares.filter(s => s.note_id === noteId);
+
+		const promises: Promise<void>[] = [];
+
+		for (const share of noteShares) {
+			promises.push(this.deleteShare(share.id));
+		}
+
+		await Promise.all(promises);
+
+		await Note.save({ id: note.id, is_shared: 0 });
 	}
 
 	public shareUrl(share: StateShare): string {
@@ -170,13 +188,15 @@ export default class ShareService {
 		});
 	}
 
-	public async refreshShares() {
+	public async refreshShares(): Promise<StateShare[]> {
 		const result = await this.loadShares();
 
 		this.store.dispatch({
 			type: 'SHARE_SET',
 			shares: result.items,
 		});
+
+		return result.items;
 	}
 
 	public async refreshShareUsers(shareId: string) {

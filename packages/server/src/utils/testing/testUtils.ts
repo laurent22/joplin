@@ -1,4 +1,4 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, sqliteFilePath, Item, Uuid } from '../../db';
+import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, Item, Uuid } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
@@ -9,6 +9,7 @@ import FakeRequest from './koa/FakeRequest';
 import FakeResponse from './koa/FakeResponse';
 import * as httpMocks from 'node-mocks-http';
 import * as crypto from 'crypto';
+import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
@@ -17,10 +18,11 @@ import { putApi } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
+import MustacheService from '../../services/MustacheService';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
-const packageRootDir = `${__dirname}/../../..`;
+const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 
 let db_: DbConnection = null;
 
@@ -54,15 +56,27 @@ function initGlobalLogger() {
 	Logger.initializeGlobalLogger(globalLogger);
 }
 
-let createdDbName_: string = null;
+let createdDbPath_: string = null;
 export async function beforeAllDb(unitName: string) {
-	createdDbName_ = unitName;
+	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
 
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
 
-	initConfig({
-		SQLITE_DATABASE: createdDbName_,
+	// Uncomment the code below to run the test units with Postgres. Run first
+	// `docker-compose -f docker-compose.db-dev.yml` to get a dev db.
+
+	// await initConfig({
+	// 	DB_CLIENT: 'pg',
+	// 	POSTGRES_DATABASE: unitName,
+	// 	POSTGRES_USER: 'joplin',
+	// 	POSTGRES_PASSWORD: 'joplin',
+	// }, {
+	// 	tempDir: tempDir,
+	// });
+
+	await initConfig({
+		SQLITE_DATABASE: createdDbPath_,
 	}, {
 		tempDir: tempDir,
 	});
@@ -72,7 +86,10 @@ export async function beforeAllDb(unitName: string) {
 	await createDb(config().database, { dropIfExists: true });
 	db_ = await connectDb(config().database);
 
-	await initializeJoplinUtils(config(), models());
+	const mustache = new MustacheService(config().viewDir, config().baseUrl);
+	await mustache.loadPartials();
+
+	await initializeJoplinUtils(config(), models(), mustache);
 }
 
 export async function afterAllTests() {
@@ -86,10 +103,9 @@ export async function afterAllTests() {
 		tempDir_ = null;
 	}
 
-	if (createdDbName_) {
-		const filePath = sqliteFilePath(createdDbName_);
-		await fs.remove(filePath);
-		createdDbName_ = null;
+	if (createdDbPath_) {
+		await fs.remove(createdDbPath_);
+		createdDbPath_ = null;
 	}
 }
 
@@ -230,7 +246,7 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 	const session = await models().session().authenticate(options.email, options.password);
 
 	return {
-		user: user,
+		user: await models().user().load(user.id),
 		session: session,
 	};
 };
@@ -260,26 +276,28 @@ export async function createItemTree(userId: Uuid, parentFolderId: string, tree:
 
 export async function createItemTree2(userId: Uuid, parentFolderId: string, tree: any[]): Promise<void> {
 	const itemModel = models().item();
+	const user = await models().user().load(userId);
 
 	for (const jopItem of tree) {
 		const isFolder = !!jopItem.children;
 		const serializedBody = isFolder ?
 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId }) :
 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId });
-		const newItem = await itemModel.saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const newItem = await itemModel.saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
 		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
 	}
 }
 
 export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
 	const itemModel = models().item();
+	const user = await models().user().load(userId);
 
 	for (const jopItem of tree) {
 		const isFolder = !!jopItem.children;
 		const serializedBody = isFolder ?
 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId }) :
 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId });
-		const newItem = await itemModel.saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const newItem = await itemModel.saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
 		if (isFolder && jopItem.children.length) await createItemTree3(userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }
@@ -393,6 +411,22 @@ export async function expectHttpError(asyncFn: Function, expectedHttpCode: numbe
 		expect('not throw').toBe('throw');
 	} else {
 		expect(thrownError.httpCode).toBe(expectedHttpCode);
+	}
+}
+
+export async function expectNoHttpError(asyncFn: Function): Promise<void> {
+	let thrownError = null;
+
+	try {
+		await asyncFn();
+	} catch (error) {
+		thrownError = error;
+	}
+
+	if (thrownError) {
+		expect('throw').toBe('not throw');
+	} else {
+		expect(true).toBe(true);
 	}
 }
 

@@ -1,6 +1,6 @@
 import { ErrorBadRequest } from '../../utils/errors';
 import { decodeBase64, encodeBase64 } from '../../utils/base64';
-import { ChangePagination, defaultChangePagination } from '../ChangeModel';
+import { ChangePagination as DeltaPagination, defaultDeltaPagination } from '../ChangeModel';
 import { Knex } from 'knex';
 
 export enum PaginationOrderDir {
@@ -20,8 +20,7 @@ export interface Pagination {
 	cursor?: string;
 }
 
-
-interface PaginationQueryParams {
+export interface PaginationQueryParams {
 	limit?: number;
 	order_by?: string;
 	order_dir?: string;
@@ -108,10 +107,10 @@ export function requestPagination(query: any): Pagination {
 	return validatePagination({ limit, order, page });
 }
 
-export function requestChangePagination(query: any): ChangePagination {
-	if (!query) return defaultChangePagination();
+export function requestDeltaPagination(query: any): DeltaPagination {
+	if (!query) return defaultDeltaPagination();
 
-	const output: ChangePagination = {};
+	const output: DeltaPagination = {};
 	if ('limit' in query) output.limit = query.limit;
 	if ('cursor' in query) output.cursor = query.cursor;
 	return output;

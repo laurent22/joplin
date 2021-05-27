@@ -97,7 +97,10 @@ export default abstract class BaseModel<T> {
 		}
 
 		if (mainTable) {
-			output = output.map(f => `${mainTable}.${f}`);
+			output = output.map(f => {
+				if (f.includes(`${mainTable}.`)) return f;
+				return `${mainTable}.${f}`;
+			});
 		}
 
 		return output;
@@ -272,10 +275,10 @@ export default abstract class BaseModel<T> {
 		return this.db(this.tableName).select(options.fields || this.defaultFields).where({ id: id }).first();
 	}
 
-	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
+	public async delete(id: string | string[] | number | number[], options: DeleteOptions = {}): Promise<void> {
 		if (!id) throw new Error('id cannot be empty');
 
-		const ids = typeof id === 'string' ? [id] : id;
+		const ids = (typeof id === 'string' || typeof id === 'number') ? [id] : id;
 
 		if (!ids.length) throw new Error('no id provided');
 

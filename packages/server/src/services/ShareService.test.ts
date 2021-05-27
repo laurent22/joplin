@@ -1,3 +1,4 @@
+import config from '../config';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, updateNote, msleep } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
@@ -23,7 +24,7 @@ describe('ShareService', function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
-		const service = new ShareService(Env.Dev, models());
+		const service = new ShareService(Env.Dev, models(), config());
 		void service.runInBackground();
 
 		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', {

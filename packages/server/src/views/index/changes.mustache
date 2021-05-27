@@ -1,27 +1,3 @@
-<table class="table is-fullwidth is-hoverable">
-	<thead>
-		<tr>
-			<th class="stretch">Item</th>
-			<th class="nowrap">Change</th>
-			<th class="nowrap">Timestamp</th>
-		</tr>
-	</thead>
-	<tbody>
-		{{#paginatedChanges.items}}
-			<tr>
-				<td class="stretch item-{{type}}">
-					{{#url}}
-						<a href="{{url}}">{{name}}</a>
-					{{/url}}
-					{{^url}}
-						{{name}}
-					{{/url}}
-				</td>
-				<td class="nowrap">{{changeType}}</td>
-				<td class="nowrap">{{timestamp}}</td>
-			</tr>
-		{{/paginatedChanges.items}}
-	</tbody>
-</table>
-
-{{>pagination}}
+{{#changeTable}}
+	{{>table}}
+{{/changeTable}}

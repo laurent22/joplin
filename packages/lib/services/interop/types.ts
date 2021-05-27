@@ -96,6 +96,7 @@ export interface ExportOptions {
 	target?: FileSystemItem;
 	includeConflicts?: boolean;
 	plugins?: PluginStates;
+	customCss?: string;
 }
 
 export interface ImportExportResult {

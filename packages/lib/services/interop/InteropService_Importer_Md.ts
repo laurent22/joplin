@@ -63,10 +63,10 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	 * Parse text for links, attempt to find local file, if found create Joplin resource
 	 * and update link accordingly.
 	 */
-	async importLocalImages(filePath: string, md: string) {
+	async importLocalFiles(filePath: string, md: string) {
 		let updated = md;
-		const imageLinks = unique(markdownUtils.extractImageUrls(md));
-		await Promise.all(imageLinks.map(async (encodedLink: string) => {
+		const fileLinks = unique(markdownUtils.extractFileUrls(md));
+		await Promise.all(fileLinks.map(async (encodedLink: string) => {
 			const link = decodeURI(encodedLink);
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
 			const pathWithExtension = `${attachmentPath}.${fileExtension(link)}`;
@@ -90,7 +90,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const body = await shim.fsDriver().readFile(filePath);
 		let updatedBody;
 		try {
-			updatedBody = await this.importLocalImages(filePath, body);
+			updatedBody = await this.importLocalFiles(filePath, body);
 		} catch (error) {
 			// console.error(`Problem importing links for file ${filePath}, error:\n ${error}`);
 		}

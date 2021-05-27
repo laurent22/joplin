@@ -1,7 +1,10 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { User } from '../db';
+import { EmailSender, Item, User, Uuid } from '../db';
 import * as auth from '../utils/auth';
-import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
+import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { _ } from '@joplin/lib/locale';
+import prettyBytes = require('pretty-bytes');
 
 export default class UserModel extends BaseModel<User> {
 
@@ -29,6 +32,8 @@ export default class UserModel extends BaseModel<User> {
 		if ('password' in object) user.password = object.password;
 		if ('is_admin' in object) user.is_admin = object.is_admin;
 		if ('full_name' in object) user.full_name = object.full_name;
+		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
+		if ('can_share' in object) user.can_share = object.can_share;
 
 		return user;
 	}
@@ -50,9 +55,12 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		if (action === AclAction.Update) {
+			const previousResource = await this.load(resource.id);
+
 			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
 			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
 			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
+			if (!user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
 		}
 
 		if (action === AclAction.Delete) {
@@ -64,6 +72,41 @@ export default class UserModel extends BaseModel<User> {
 			if (!user.is_admin) throw new ErrorForbidden('non-admin cannot list users');
 		}
 	}
+
+	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
+		const itemTitle = joplinItem ? joplinItem.title || '' : '';
+		const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
+
+		// If the item is encrypted, we apply a multipler because encrypted
+		// items can be much larger (seems to be up to twice the size but for
+		// safety let's go with 2.2).
+		const maxSize = user.max_item_size * (item.jop_encryption_applied ? 2.2 : 1);
+		if (maxSize && buffer.byteLength > maxSize) {
+			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
+				isNote ? _('note') : _('attachment'),
+				itemTitle ? itemTitle : name,
+				prettyBytes(user.max_item_size)
+			));
+		}
+	}
+
+	// public async checkCanShare(share:Share) {
+
+	// 	// const itemTitle = joplinItem ? joplinItem.title || '' : '';
+	// 	// const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
+
+	// 	// // If the item is encrypted, we apply a multipler because encrypted
+	// 	// // items can be much larger (seems to be up to twice the size but for
+	// 	// // safety let's go with 2.2).
+	// 	// const maxSize = user.max_item_size * (item.jop_encryption_applied ? 2.2 : 1);
+	// 	// if (maxSize && buffer.byteLength > maxSize) {
+	// 	// 	throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
+	// 	// 		isNote ? _('note') : _('attachment'),
+	// 	// 		itemTitle ? itemTitle : name,
+	// 	// 		prettyBytes(user.max_item_size)
+	// 	// 	));
+	// 	// }
+	// }
 
 	protected async validate(object: User, options: ValidateOptions = {}): Promise<User> {
 		const user: User = await super.validate(object, options);
@@ -91,8 +134,12 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public async profileUrl(): Promise<string> {
+	public profileUrl(): string {
 		return `${this.baseUrl}/users/me`;
+	}
+
+	public confirmUrl(userId: Uuid, validationToken: string): string {
+		return `${this.baseUrl}/users/${userId}/confirm?token=${validationToken}`;
 	}
 
 	public async delete(id: string): Promise<void> {
@@ -108,6 +155,13 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::delete');
 	}
 
+	public async confirmEmail(userId: Uuid, token: string) {
+		await this.models().token().checkToken(userId, token);
+		const user = await this.models().user().load(userId);
+		if (!user) throw new ErrorNotFound('No such user');
+		await this.save({ id: user.id, email_confirmed: 1 });
+	}
+
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//
@@ -117,8 +171,30 @@ export default class UserModel extends BaseModel<User> {
 	// Because the password would be hashed twice.
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const user = { ...object };
+
 		if (user.password) user.password = auth.hashPassword(user.password);
-		return super.save(user, options);
+
+		const isNew = await this.isNew(object, options);
+
+		return this.withTransaction(async () => {
+			const savedUser = await super.save(user, options);
+
+			if (isNew) {
+				const validationToken = await this.models().token().generate(savedUser.id);
+				const confirmUrl = encodeURI(this.confirmUrl(savedUser.id, validationToken));
+
+				await this.models().email().push({
+					sender_id: EmailSender.NoReply,
+					recipient_id: savedUser.id,
+					recipient_email: savedUser.email,
+					recipient_name: savedUser.full_name || '',
+					subject: 'Please setup your Joplin account',
+					body: `Your new Joplin account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n${confirmUrl}`,
+				});
+			}
+
+			return savedUser;
+		});
 	}
 
 }

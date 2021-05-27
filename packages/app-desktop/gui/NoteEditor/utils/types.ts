@@ -2,6 +2,8 @@
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { MarkupLanguage } from '@joplin/renderer';
+import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
 
 export interface ToolbarButtonInfos {
 	[key: string]: ToolbarButtonInfo;
@@ -49,9 +51,9 @@ export interface NoteBodyEditorProps {
 	onWillChange(event: any): void;
 	onMessage(event: any): void;
 	onScroll(event: any): void;
-	markupToHtml: Function;
+	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: any)=> Promise<RenderResult>;
 	htmlToMarkdown: Function;
-	allAssets: Function;
+	allAssets: (markupLanguage: MarkupLanguage)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
 	dispatch: Function;
 	noteToolbar: any;

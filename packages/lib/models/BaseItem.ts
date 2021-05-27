@@ -756,6 +756,10 @@ export default class BaseItem extends BaseModel {
 		return this.db().transactionExecBatch(queries);
 	}
 
+	public static async saveSyncEnabled(itemType: ModelType, itemId: string) {
+		await this.db().exec('DELETE FROM sync_items WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
+	}
+
 	// When an item is deleted, its associated sync_items data is not immediately deleted for
 	// performance reason. So this function is used to look for these remaining sync_items and
 	// delete them.
