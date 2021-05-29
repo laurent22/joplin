@@ -359,27 +359,27 @@ const textFilter = (terms: Term[], conditions: string[], params: string[], relat
 			const type = excludedTerms[0].name === 'text' ? '' : `.${excludedTerms[0].name}`;
 			if (relation === 'AND') {
 				conditions.push(`
-												AND ROWID NOT IN (
-													SELECT ROWID
-													FROM notes_fts
-													WHERE notes_fts${type} MATCH ?
-												)`);
+				AND ROWID NOT IN (
+					SELECT ROWID
+					FROM notes_fts
+					WHERE notes_fts${type} MATCH ?
+				)`);
 				params.push(excludedTerms.map(x => x.value).join(' OR '));
 			}
 			if (relation === 'OR') {
 				excludedTerms.forEach(term => {
 					conditions.push(`
-													OR ROWID IN (
-														SELECT *
-															FROM (
-																SELECT ROWID
-																FROM notes_fts
-																EXCEPT
-																SELECT ROWID
-																FROM notes_fts
-																WHERE notes_fts${type} MATCH ?
-														)
-													)`);
+					OR ROWID IN (
+						SELECT *
+							FROM (
+								SELECT ROWID
+								FROM notes_fts
+								EXCEPT
+								SELECT ROWID
+								FROM notes_fts
+								WHERE notes_fts${type} MATCH ?
+						)
+					)`);
 					params.push(term.value);
 				});
 			}
@@ -450,10 +450,7 @@ export default function queryBuilder(terms: Term[], useFts: boolean) {
 	SELECT
 	${tableName}.id,
 	${tableName}.title,
-	${useFts
-		? 'offsets(notes_fts) AS offsets, matchinfo(notes_fts, \'pcnalx\') AS matchinfo,'
-		: ''
-}
+	${useFts ? 'offsets(notes_fts) AS offsets, matchinfo(notes_fts, \'pcnalx\') AS matchinfo,' : ''}
 	${tableName}.user_created_time,
 	${tableName}.user_updated_time,
 	${tableName}.is_todo,
