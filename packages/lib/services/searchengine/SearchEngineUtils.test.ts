@@ -50,7 +50,7 @@ describe('services_SearchEngineUtils', function() {
 			expect(rows.map(r=>r.id)).toContain(todo1.id);
 		}));
 
-		it('show completed (applyUserSettings)', (async () => {
+		it('show completed (!applyUserSettings)', (async () => {
 			const note1 = await Note.save({ title: 'abcd', body: 'body 1' });
 			const todo1 = await Note.save({ title: 'abcd', body: 'todo 1', is_todo: 1 });
 			await Note.save({ title: 'qwer', body: 'body 2' });
