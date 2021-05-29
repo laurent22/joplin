@@ -66,21 +66,5 @@ describe('services_SearchEngineUtils', function() {
 			expect(rows.map(r=>r.id)).toContain(todo1.id);
 			expect(rows.map(r=>r.id)).toContain(todo2.id);
 		}));
-
-		it('hide completed (applyUserSettings)', (async () => {
-			const note1 = await Note.save({ title: 'abcd', body: 'body 1' });
-			const todo1 = await Note.save({ title: 'abcd', body: 'todo 1', is_todo: 1 });
-			await Note.save({ title: 'qwer', body: 'body 2' });
-			await Note.save({ title: 'abcd', body: 'todo 2', is_todo: 1, todo_completed: 1590085027710 });
-			await searchEngine.syncTables();
-
-			Setting.setValue('showCompletedTodos', false);
-
-			const rows = await SearchEngineUtils.notesForQuery('abcd', false, null, searchEngine);
-
-			expect(rows.length).toBe(2);
-			expect(rows.map(r=>r.id)).toContain(note1.id);
-			expect(rows.map(r=>r.id)).toContain(todo1.id);
-		}));
 	});
 });
