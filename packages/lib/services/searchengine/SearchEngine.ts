@@ -548,8 +548,12 @@ export default class SearchEngine {
 		const textQuery = allTerms.filter(x => x.name === 'text' || x.name == 'title' || x.name == 'body').map(x => x.value).join(' ');
 		const st = scriptType(textQuery);
 
+		if (!Setting.value('db.ftsEnabled')) {
+			return SearchEngine.SEARCH_TYPE_BASIC;
+		}
+
 		// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
-		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
+		if (['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
 			return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
 		}
 
@@ -566,7 +570,13 @@ export default class SearchEngine {
 		const searchType = this.determineSearchType_(searchString, options.searchType);
 		const parsedQuery = await this.parseQuery(searchString);
 
-		if (searchType === SearchEngine.SEARCH_TYPE_FTS) {
+		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
+			searchString = this.normalizeText_(searchString);
+			const rows = await this.basicSearch(searchString);
+
+			this.processResults_(rows, parsedQuery, true);
+			return rows;
+		} else {
 			// SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
 			// we search for "this-phrase" it won't find it because it will only
@@ -574,33 +584,16 @@ export default class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
+			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
-				const { query, params } = queryBuilder(parsedQuery.allTerms, true);
+				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
 				const rows = await this.db().selectAll(query, params);
-				this.processResults_(rows, parsedQuery);
+				this.processResults_(rows, parsedQuery, !useFts);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
 				return [];
 			}
-		} else {
-			searchString = this.normalizeText_(searchString);
-
-			let rows: any;
-			if (searchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) {
-				try {
-					const { query, params } = queryBuilder(parsedQuery.allTerms, false);
-					rows = await this.db().selectAll(query, params);
-				} catch (error) {
-					this.logger().warn(`Cannot execute LIKE query: ${searchString}: ${error.message}`);
-					return [];
-				}
-			} else {
-				rows = await this.basicSearch(searchString);
-			}
-
-			this.processResults_(rows, parsedQuery, true);
-			return rows;
 		}
 	}
 
