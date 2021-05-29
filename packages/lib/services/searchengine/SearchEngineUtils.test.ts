@@ -26,7 +26,7 @@ describe('services_SearchEngineUtils', function() {
 
 			Setting.setValue('showCompletedTodos', true);
 
-			const rows = await SearchEngineUtils.notesForQuery('abcd', null, searchEngine);
+			const rows = await SearchEngineUtils.notesForQuery('abcd', true, null, searchEngine);
 
 			expect(rows.length).toBe(3);
 			expect(rows.map(r=>r.id)).toContain(note1.id);
@@ -43,7 +43,7 @@ describe('services_SearchEngineUtils', function() {
 
 			Setting.setValue('showCompletedTodos', false);
 
-			const rows = await SearchEngineUtils.notesForQuery('abcd', null, searchEngine);
+			const rows = await SearchEngineUtils.notesForQuery('abcd', true, null, searchEngine);
 
 			expect(rows.length).toBe(2);
 			expect(rows.map(r=>r.id)).toContain(note1.id);
@@ -59,9 +59,7 @@ describe('services_SearchEngineUtils', function() {
 
 			Setting.setValue('showCompletedTodos', false);
 
-			const options: any = {};
-			options.applyUserSettings = false;
-			const rows = await SearchEngineUtils.notesForQuery('abcd', options, searchEngine);
+			const rows = await SearchEngineUtils.notesForQuery('abcd', false, null, searchEngine);
 
 			expect(rows.length).toBe(3);
 			expect(rows.map(r=>r.id)).toContain(note1.id);
@@ -78,9 +76,7 @@ describe('services_SearchEngineUtils', function() {
 
 			Setting.setValue('showCompletedTodos', false);
 
-			const options: any = {};
-			options.applyUserSettings = true;
-			const rows = await SearchEngineUtils.notesForQuery('abcd', options, searchEngine);
+			const rows = await SearchEngineUtils.notesForQuery('abcd', false, null, searchEngine);
 
 			expect(rows.length).toBe(2);
 			expect(rows.map(r=>r.id)).toContain(note1.id);
