@@ -534,6 +534,7 @@ export default class SearchEngine {
 
 	determineSearchType_(query: string, preferredSearchType: any) {
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
+		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
