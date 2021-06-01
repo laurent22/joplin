@@ -1,5 +1,5 @@
 import { githubOauthToken } from '@joplin/tools/tool-utils';
-import { pathExists, readdir, readFile, writeFile } from 'fs-extra';
+import { pathExists, readdir, readFile, stat, writeFile } from 'fs-extra';
 const ghReleaseAssets = require('gh-release-assets');
 const fetch = require('node-fetch');
 
@@ -97,7 +97,7 @@ async function uploadAsset(oauthToken: string, uploadUrl: string, pluginInfo: Pl
 	});
 }
 
-async function saveStats(statFilePath: string, release: Release) {
+async function createStats(statFilePath: string, release: Release) {
 	const output: Record<string, any> = await pathExists(statFilePath) ? JSON.parse(await readFile(statFilePath, 'utf8')) : {};
 
 	if (release.assets) {
@@ -112,12 +112,39 @@ async function saveStats(statFilePath: string, release: Release) {
 		}
 	}
 
-	await writeFile(statFilePath, JSON.stringify(output, null, '\t'));
+	return output;
+}
+
+async function saveStats(statFilePath: string, stats: any) {
+	await writeFile(statFilePath, JSON.stringify(stats, null, '\t'));
 }
 
 export default async function(args: Args) {
 	const release = await getRelease();
-	await saveStats(`${args.pluginRepoDir}/stats.json`, release);
+	const statFilePath = `${args.pluginRepoDir}/stats.json`;
+	const stats = await createStats(statFilePath, release);
+
+	// We save the stats:
+	// - If the stat file doesn't exist
+	// - Or every x hours
+	// - Or before deleting an asset (so that we preserve the number of times a
+	//   particular version of a plugin has been downloaded).
+	let statSaved = false;
+	async function doSaveStats() {
+		if (statSaved) return;
+		console.info('Updating stats file...');
+		await saveStats(statFilePath, stats);
+		statSaved = true;
+	}
+
+	if (!(await pathExists(statFilePath))) {
+		await doSaveStats();
+	} else {
+		const fileInfo = await stat(statFilePath);
+		if (Date.now() - fileInfo.mtime.getTime() >= 24 * 60 * 60 * 1000) {
+			await doSaveStats();
+		}
+	}
 
 	const pluginInfos = await getPluginInfos(args.pluginRepoDir);
 	const oauthToken = await githubOauthToken();
@@ -132,6 +159,7 @@ export default async function(args: Args) {
 
 		for (const asset of otherVersionAssets) {
 			console.info(`Deleting old asset ${asset.name}...`);
+			await doSaveStats();
 			await deleteAsset(oauthToken, asset.id);
 		}
 
