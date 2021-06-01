@@ -1475,6 +1475,9 @@ packages/lib/uuid.js.map
 packages/lib/versionInfo.d.ts
 packages/lib/versionInfo.js
 packages/lib/versionInfo.js.map
+packages/plugin-repo-cli/commands/updateRelease.d.ts
+packages/plugin-repo-cli/commands/updateRelease.js
+packages/plugin-repo-cli/commands/updateRelease.js.map
 packages/plugin-repo-cli/index.d.ts
 packages/plugin-repo-cli/index.js
 packages/plugin-repo-cli/index.js.map

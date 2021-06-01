@@ -15,6 +15,7 @@ import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
 import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
+import commandUpdateRelease from './commands/updateRelease';
 
 function stripOffPackageOrg(name: string): string {
 	const n = name.split('/');
@@ -249,6 +250,14 @@ async function commandBuild(args: CommandBuildArgs) {
 		await processNpmPackage(npmPackage, repoDir);
 	}
 
+	if (!dryRun) {
+		await commandUpdateRelease(args);
+		if (!(await gitRepoClean())) {
+			await execCommand2('git add -A', { showOutput: true });
+			await execCommand2('git commit -m "Update stats"', { showOutput: true });
+		}
+	}
+
 	if (!dryRun) await execCommand2('git push');
 }
 
@@ -263,6 +272,7 @@ async function main() {
 	const commands: Record<string, Function> = {
 		build: commandBuild,
 		version: commandVersion,
+		updateRelease: commandUpdateRelease,
 	};
 
 	let selectedCommand: string = '';
@@ -285,6 +295,8 @@ async function main() {
 		}, (args: any) => setSelectedCommand('build', args))
 
 		.command('version', 'Gives version info', () => {}, (args: any) => setSelectedCommand('version', args))
+
+		.command('update-release <plugin-repo-dir>', 'Update GitHub release', () => {}, (args: any) => setSelectedCommand('updateRelease', args))
 
 		.help()
 		.argv;
