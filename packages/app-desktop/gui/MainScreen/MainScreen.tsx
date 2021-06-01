@@ -558,9 +558,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = (
 				<span>
 					{_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.')}{' '}
-					<a href="#" onClick={() => onRestartAndUpgrade()}>
+					<a href="#" style="color: theme.color" onClick={() => onRestartAndUpgrade()}>
 						{_('Restart and upgrade')}
-					style="color:white"
 					</a>
 				</span>
 			);
