@@ -60,7 +60,7 @@ msgstr "取消"
 #: packages/app-desktop/bridge.js:184
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
-msgstr "程式即將關閉，請重新啟動以完成此過程。"
+msgstr "應用將要關閉。請重新啟動它以完成此過程。"
 
 #: packages/app-desktop/plugins/GotoAnything.js:432
 msgid ""
@@ -84,7 +84,7 @@ msgstr "命令模式"
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "匯出到「%s」（格式：%s）。請稍候..."
+msgstr "匯出到 \"%s\" 為 \"%s\" 格式。請稍候..."
 
 #: packages/app-desktop/InteropServiceHelper.js:174
 #, javascript-format
@@ -93,16 +93,16 @@ msgstr "無法匯出記事: %s"
 
 #: packages/app-desktop/checkForUpdates.js:171
 msgid "Current version is up-to-date."
-msgstr "目前是最新版。"
+msgstr "此版本是最新的。"
 
 #: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (發行前測試版)"
+msgstr "%s (預發行)"
 
 #: packages/app-desktop/checkForUpdates.js:187
 msgid "An update is available, do you want to download it now?"
-msgstr "已有更新，您想立即下載嗎？"
+msgstr "有可用的更新，您需要立即下載嗎？"
 
 #: packages/app-desktop/checkForUpdates.js:188
 #, javascript-format
@@ -120,16 +120,16 @@ msgstr "下載"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr "這版不更新"
+msgstr ""
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr "完整更新內容"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "已成功將「%s」還原至「%s」筆記本中。"
+msgstr "記事 \"%s\" 已經被成功還原到筆記本 \"%s\"."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -139,7 +139,7 @@ msgstr "此記事沒有歷史紀錄"
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:85
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "未支援的鏈接或訊息: %s"
+msgstr "不支援的鏈接或訊息: %s"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
@@ -152,7 +152,7 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"點選「%s」將記事還原後複製到名為「%s」的記事本中。此記事當前的版本將保留，不"
+"點選 \"%s\" 來還原記事。它將被複製到名為 \"%s\"的記事本中。目前記事的版本將不"
 "會被取代或修改。"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
@@ -174,9 +174,9 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"確定刪除「%s」？\n"
+"確定刪除記事本 \"%s\"?\n"
 "\n"
-"此記事本中的所有記事和子記事本也將刪除。"
+"此記事本中的所有記事和子記事本也將被刪除。"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:194
 #: packages/app-desktop/gui/utils/NoteListUtils.js:140
@@ -192,7 +192,7 @@ msgstr "刪除"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:198
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "是否從所有記事中移除「%s」標籤？"
+msgstr "是否從所有記事中刪除此標籤 \"%s\"？"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 msgid "Remove this search from the sidebar?"
@@ -233,13 +233,13 @@ msgstr "標籤"
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "解密項目：%d/%d 項"
+msgstr "正在解密項目: %d/%d 項"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:503
 #: packages/app-mobile/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "擷取資源檔案：%d/%d"
+msgstr "擷取資源檔案: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:17
 msgid "Sidebar"
@@ -255,7 +255,7 @@ msgstr "焦點"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:31
 msgid "Please select where the sync status should be exported to"
-msgstr "請選擇同步狀態的匯出位置"
+msgstr "請選擇將同步狀態導出到的位置"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:66
 #: packages/app-mobile/components/screens/status.js:112
@@ -279,7 +279,7 @@ msgstr "匯出除錯報告"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
-msgstr "粗體文字"
+msgstr "重要文字"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
 msgid "emphasised text"
@@ -304,7 +304,7 @@ msgstr "頁面佈局"
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr "此記事沒有內容。點擊「%s」切換到編輯模式並編輯記事。"
+msgstr "此記事沒有內容。按一下 \"%s\" 切換到編輯模式並編輯記事。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
@@ -331,23 +331,23 @@ msgstr "核取方塊清單"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr "強調標記"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr "刪除線"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr "底線"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr "上標"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr "下標"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
 #: packages/app-mobile/components/screens/Note.js:1016
@@ -386,7 +386,7 @@ msgstr "程式碼檢視"
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
-msgstr "請等待所有附件下載並解密。您也可以切換到 %s 以編輯記事。"
+msgstr "請等待所有附件均被下載並解密。你還能在 %s 中編輯記事。"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
@@ -395,27 +395,27 @@ msgstr "下載此附件時出現錯誤: "
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "此附件尚未完成下載或解密"
+msgstr "此附件尚未被下載或是尚未解密完成"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
-msgstr "開啟舊檔..."
+msgstr "開啟..."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
 msgid "Save as..."
-msgstr "另存新檔..."
+msgstr "另存為..."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 msgid "Reveal file in folder"
-msgstr "在資料夾中顯示檔案"
+msgstr "在資料夾中展示檔案"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy path to clipboard"
-msgstr "複製路徑到剪貼簿"
+msgstr "複製路徑到剪貼板"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:155
 msgid "Copy Link Address"
-msgstr "複製鏈結位址"
+msgstr "複製鏈接位址"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
 msgid "to-do"
@@ -439,7 +439,7 @@ msgstr "檢查更新..."
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
-msgstr "這個編輯模式尚有許多限制，建議使用前先深入了解"
+msgstr "此富文本編輯器有許多限制，建議在使用它之前注意它們"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
@@ -451,13 +451,13 @@ msgstr "忽略"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
 msgid "The following attachments are being watched for changes:"
-msgstr "已監控下列附件的變動："
+msgstr "下列附件將被監控變化："
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr "切換到其他記事後，將不再監控這些附件的變動。"
+msgstr "當切換到其他記事時，這些附件將不再被監控。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
 #, javascript-format
@@ -482,7 +482,7 @@ msgstr "超連結"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:48
 msgid "Code"
-msgstr "程式碼"
+msgstr "引言"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
 msgid "Numbered List"
@@ -511,7 +511,7 @@ msgstr "刪除整行"
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 #, fuzzy
 msgid "Duplicate line"
-msgstr "複製本行"
+msgstr "新增複本"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -569,18 +569,18 @@ msgstr "ID"
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:319
 msgid "Created"
-msgstr "建立時間"
+msgstr "已建立"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:144
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:146
 msgid "Updated"
-msgstr "更新時間"
+msgstr "已更新"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 msgid "Completed"
-msgstr "完成"
+msgstr "已完成"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 msgid "Location"
@@ -597,7 +597,7 @@ msgstr "記事本歷史紀錄"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 msgid "Markup"
-msgstr "標記方式"
+msgstr "標記"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 msgid "Previous versions of this note"
@@ -612,7 +612,7 @@ msgstr "記事本屬性"
 #: packages/lib/services/KeymapService.js:178
 #, javascript-format
 msgid "Error: %s"
-msgstr "錯誤：%s"
+msgstr "錯誤: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -691,7 +691,7 @@ msgstr "點擊快速鍵"
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
-msgstr "按下快速鍵後按下 ENTER，或點擊 BACKSPACE 清除快速鍵。"
+msgstr "點擊快速鍵後點擊回車。或者點擊退格以清除快速鍵"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -703,11 +703,11 @@ msgstr "儲存"
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
-msgstr "安全模式啟用中，將暫時停用格式編排及所有延伸模組。"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:438
 msgid "Disable safe mode and restart"
-msgstr "停用安全模式並重新啟動"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid ""
@@ -715,8 +715,8 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
-"在 Joplin 同步前需先升級同步目標。更新時間大約耗時數分鐘，且程式也需要重新啟動。"
-"如願繼續，請點擊連結。"
+"需要更新同步目標以啟動Joplin同步。這個操作可能需要幾分鐘時間完成，應用也需要"
+"重新啟動。點擊鏈接繼續。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:444
 msgid "Restart and upgrade"
@@ -724,7 +724,7 @@ msgstr "重新啟動並升級"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:448
 msgid "Some items cannot be decrypted."
-msgstr "有些項目無法解密。"
+msgstr "有些項目不能解密。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:450
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
@@ -734,7 +734,7 @@ msgstr "立即檢視"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:454
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "您其中一組主密鑰使用了過時的加密方法。"
+msgstr "您的主密鑰有一組使用了過時的加密方法。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:460
 msgid ""
@@ -749,19 +749,19 @@ msgstr "更多資訊"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:468
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr "%s（%s）想與您分享記事本。"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:470
 msgid "Accept"
-msgstr "接受"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:472
 msgid "Reject"
-msgstr "拒絕"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 msgid "Some items cannot be synchronised."
-msgstr "有些項目無法同步。"
+msgstr "有些項目不能同步。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "One or more master keys need a password."
@@ -773,7 +773,7 @@ msgstr "設置密碼"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:607
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr "使用方向鍵移動佈局項，點擊「Esc」退出。"
+msgstr "使用箭頭移動佈局項。點擊“Esc”退出。"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -807,7 +807,7 @@ msgstr "顯示 / 隱藏側邊欄"
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
 #: packages/app-mobile/components/screens/Note.js:789
 msgid "Set alarm"
-msgstr "設定提醒"
+msgstr "設置提醒"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
 msgid "Set alarm:"
@@ -920,7 +920,7 @@ msgstr "Token 已經被複製到剪貼簿!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "您確定要更新授權 token 嗎？"
+msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -956,11 +956,11 @@ msgstr "Joplin 網頁剪輯可以讓您從瀏覽器保存網頁和螢幕截圖�
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "要使用網頁剪輯，您需要執行以下動作："
+msgstr "要使用網頁剪輯，您需要執行以下動作: "
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 msgid "Step 1: Enable the clipper service"
-msgstr "步驟 1：啟用剪輯服務"
+msgstr "步驟 1: 啟用剪輯服務"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 msgid ""
@@ -977,7 +977,7 @@ msgstr "步驟 2: 安裝外掛"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 msgid "Download and install the relevant extension for your browser:"
-msgstr "下載並安裝瀏覽器外掛："
+msgstr "下載並安裝瀏覽器外掛: "
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 msgid "Advanced options"
@@ -985,26 +985,26 @@ msgstr "顯示進階選項"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 msgid "Authorisation token:"
-msgstr "授權 Token："
+msgstr "Token 授權書: "
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 msgid "Copy token"
-msgstr "複製 Token"
+msgstr "複製 Token 授權書"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
-msgstr "此授權 Token 僅在需要允許第三方程式存取 Joplin 資料時才用得上。"
+msgstr "此 Token 授權書僅會被用來允許第三方應用程式訪問 Joplin。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr "換一組 token"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "從「%s」匯入（格式為 %s），請稍候..."
+msgstr "從 \"%s\" 匯入為 \"%s\" 格式。請稍候..."
 
 #: packages/app-desktop/gui/MenuBar.js:288 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
@@ -1122,17 +1122,17 @@ msgstr "Firefox 附加元件"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr "Chrome 線上應用程式商店"
+msgstr "Chrome 網上應用店"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr "立即取得："
+msgstr "立即取得: "
 
 #: packages/app-desktop/gui/ImportScreen.min.js:61
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "將建立新的記事本「%s」以匯入檔案「%s」"
+msgstr "將建立新的記事本 \"%s\"，檔案 \"%s\" 將會匯入其中"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-cli/app/command-import.js:47
@@ -1144,37 +1144,37 @@ msgstr "找到: %d。"
 #: packages/app-cli/app/command-import.js:48
 #, javascript-format
 msgid "Created: %d."
-msgstr "建立：%d。"
+msgstr "已建立: %d。"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-cli/app/command-import.js:49
 #, javascript-format
 msgid "Updated: %d."
-msgstr "更新：%d。"
+msgstr "已更新: %d。"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-cli/app/command-import.js:50
 #, javascript-format
 msgid "Skipped: %d."
-msgstr "略過：%d。"
+msgstr "已略過: %d。"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-cli/app/command-import.js:51
 #, javascript-format
 msgid "Resources: %d."
-msgstr "資源：%d。"
+msgstr "資源: %d。"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-cli/app/command-import.js:52
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "已標籤：%d。"
+msgstr "已標籤: %d。"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-cli/app/command-import.js:70
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr "已匯入記事：%s"
+msgstr "已匯入記事: %s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:44
 msgid "Duplicate"
@@ -1187,7 +1187,7 @@ msgstr "%s - 複本"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:60
 msgid "Switch between note and to-do type"
-msgstr "切換記事 / 待辦事項"
+msgstr "切換到記事 / 待辦事項"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:88
 msgid "Switch to note type"
@@ -1205,7 +1205,7 @@ msgstr "複製 Markdown 連結"
 #: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "刪除此記事「%s」？"
+msgstr "刪除此記事 \"%s\"?"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:166
 #, javascript-format
@@ -1217,7 +1217,7 @@ msgstr "刪除這些記事 %d ？"
 #: packages/app-cli/app/command-sync.js:95
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "尚未完成驗證 (未收到身份驗證的 token)。"
+msgstr "身份驗證未完成 (未收到身份驗證的 token)。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
@@ -1229,7 +1229,8 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
-"以下主密鑰使用了過時的加密演算法，建議升級。升級後的主密鑰仍可照常加解密您的資料。"
+"以下主密鑰使用了過時的加密演算法，建議對其進行升級。 升級後的主密鑰仍將能夠照"
+"常解密和加密您的資料。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
@@ -1243,14 +1244,15 @@ msgstr "重新加密資料"
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
-msgstr "已更換一種更安全的預設加密方案，建議您將資料以此方式加密。"
+msgstr "預設的加密方法已更改為一種更安全的方法，建議您將其使用於資料上。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"若您需要重新加密資料（例如：發現某些記事使用了過時的加密方式），可使用下面的工具。"
+"您可以使用下面的工具重新加密您的資料，例如:如果您知道某些記事已使用過時的加密"
+"方法進行了加密。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1269,14 +1271,15 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"由於必須對整個資料集進行加密和同步，所以最好在夜間睡覺的時候進行。\n"
+"因為必須對整個資料集進行加密和同步，所以最好在夜間睡覺的時候進行。\n"
 "\n"
 "首先，請依照以下說明進行操作：\n"
 "\n"
 "1. 同步您的所有設備。\n"
-"2. 點選「%s」。\n"
-"3. 等待執行完成。在執行過程中，請避免在其他設備上更改任何記事，以免發生衝突。\n"
-"4. 待此設備完成重新加密與同步後，同步所有其他設備，並等待其執行完成。\n"
+"2. 點選 \"%s\"。\n"
+"3. 等待執行完成。 在執行過程中，請避免在其他設備上更改任何記事，以免發生衝"
+"突。\n"
+"4. 在此設備上完成同步後，同步所有其他設備，並等待其執行完成。\n"
 "\n"
 "重要提示：您只需要在一台設備上執行此操作一次。"
 
@@ -1295,7 +1298,8 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"停用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送未加密的資料到同步目標。您要繼續嗎？"
+"禁用加密意味著*所有*您的筆記和附件將被重新同步並且在未加密的情況下發送到同步"
+"目標。您想繼續嗎？"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
@@ -1305,8 +1309,9 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"啟用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送加密後的資料到同步目標。"
-"千萬不要忘記密碼，因為這是解密的 *唯一* 方式！要啟用加密，請在下面輸入密碼。"
+"啟用加密意味著*所有*您的記事和附件將被重新同步並在已加密的情況下發送到同步目"
+"標。為了安全起見，不要丟失密碼，這將是解密數據的唯一方式！要啟用加密，請在下"
+"面輸入您的密碼。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-mobile/components/screens/encryption-config.js:258
@@ -1344,13 +1349,13 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"注意：加密時僅使用標記為「使用中」的那份密鑰；而解密時則根據記事或記事本最初加密的方式，"
-"可能採用此處列出的任一組密鑰。"
+"注意: 只有一個主密碼將用於加密 (標記為 \"使用中\" 的那個)。根據記事或記事本最"
+"初加密的方式，任何密碼都可能用於解密。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
 msgid "Missing Master Keys"
-msgstr "缺少主密鑰"
+msgstr "缺少主密碼"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
 #: packages/app-mobile/components/screens/encryption-config.js:249
@@ -1359,14 +1364,15 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"某些項目以下列 ID 的密鑰加密過，但目前程式無法存取密鑰來解密。也許很快就會透過同步下載完畢。"
+"某些項目使用這些 ID 的主密碼進行加密，但應用程式目前焦法訪問它們。這些許可權"
+"可能最終會通過同步下載。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
 #: packages/app-mobile/components/screens/encryption-config.js:268
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
-msgstr "有關端到端加密 (E2EE) 的詳細資訊以及該如何啟用，請參考文件："
+msgstr "有關端到端加密 (E2EE) 的詳細資訊以及該如何啟用它，請參考線上文檔: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-mobile/components/screens/encryption-config.js:279
@@ -1376,7 +1382,7 @@ msgstr "狀態"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
 msgid "Encryption is:"
-msgstr "加密："
+msgstr "加密: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
@@ -1398,12 +1404,12 @@ msgstr "記事附件"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
 msgid "This will open a new screen. Save your current changes?"
-msgstr "這將會開啟新視窗。儲存您目前的變更嗎？"
+msgstr "這將會開啟一個新視窗。儲存您目前的變更嗎?"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
 #: packages/app-mobile/components/screens/config.js:322
 msgid "Check synchronisation configuration"
-msgstr "檢查同步設定"
+msgstr "檢測同步設置"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
 msgid "Show Advanced Settings"
@@ -1428,7 +1434,7 @@ msgstr "程式必須重新啟動以便套用這些變動"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Do it now"
-msgstr "現在進行"
+msgstr "立即去完成"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
@@ -1450,7 +1456,7 @@ msgstr "套用"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
 #, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "刪除延伸模組「%s」？"
+msgstr "刪除延伸模組 \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 #, fuzzy
@@ -1459,7 +1465,7 @@ msgstr "安裝延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
-msgstr "以檔案安裝"
+msgstr "從文件安裝"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
@@ -1468,11 +1474,11 @@ msgstr "您尚未安裝任何延伸模組"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
 #, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "無法連上延伸模組中心"
+msgstr "無法安裝延伸模組: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr "再試一次"
+msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 #, fuzzy
@@ -1486,7 +1492,7 @@ msgstr "管理您的延伸模組"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 #, fuzzy
 msgid "No results"
-msgstr "查無資料"
+msgstr "沒有資源!"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 #: packages/app-desktop/gui/ResourceScreen.js:142
@@ -1496,7 +1502,7 @@ msgstr "請稍候..."
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 #, fuzzy
 msgid "Search for plugins..."
-msgstr "搜尋延伸模組..."
+msgstr "搜尋..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
 #, fuzzy
@@ -1521,11 +1527,11 @@ msgstr "已更新"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
 #, fuzzy
 msgid "Updating..."
-msgstr "更新中..."
+msgstr "觀察中..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
-msgstr "請升級 Joplin 以使用此延伸模組"
+msgstr "請升級Joplin以使用此延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
@@ -1535,7 +1541,7 @@ msgstr "(%s)"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
 #, fuzzy, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "無法安裝延伸模組：%s"
+msgstr "無法安裝延伸模組: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1543,11 +1549,11 @@ msgstr "清除"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
-msgstr "單字數"
+msgstr "單字"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:77
 msgid "Characters"
-msgstr "字元數"
+msgstr "字元"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:78
 msgid "Characters excluding spaces"
@@ -1572,7 +1578,7 @@ msgstr "閱讀器"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
 msgid "Read time: %s min"
-msgstr "閱讀時間：%s 分鐘"
+msgstr "閱讀時間: %s 分鐘"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
 msgid "Statistics"
@@ -1603,16 +1609,16 @@ msgstr "記事排序依據"
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
-msgstr "欲手動調整順序，應在選單「%s > %s」中將排序方式調整為「%s」"
+msgstr "欲手動調整順序，應在選單 \"%s\" > \"%s\" 中將排序方式調整為 \"%s\""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "目前沒有任何記事，請點選「新增記事」即可建立。"
+msgstr "當前沒有任何記事。通過按一下 \"新增記事\" 去建立。"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:414
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "目前沒有任何記事本，請點選「新增記事本」即可建立。"
+msgstr "您當前沒有任何記事本。通過按一下 \"新增記事本\" 去建立。"
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
 msgid "Note list"
@@ -1642,23 +1648,23 @@ msgstr "未命名"
 #: packages/app-desktop/gui/ResourceScreen.js:95
 #, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "刪除此附件「%s」？"
+msgstr "刪除此附件 \"%s\"?"
 
 #: packages/app-desktop/gui/ResourceScreen.js:141
 msgid ""
 "This is an advanced tool to show the attachments that are linked to your "
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
-msgstr "此為顯示記事相關附件的進階工具，刪除後將無法復原，請謹慎使用。"
+msgstr "這是用於展示與記事相關聯的附件的高級工具。請小心，刪除後無法復原。"
 
 #: packages/app-desktop/gui/ResourceScreen.js:144
 msgid "No resources!"
-msgstr "沒有任何附件！"
+msgstr "沒有資源!"
 
 #: packages/app-desktop/gui/ResourceScreen.js:146
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr "警告：為確保效能，將不會顯示所有資源（限制：%s）。"
+msgstr "警告:出於效能原因，將不會顯示所有資源(限制: %s)。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:147
 msgid "Synchronising..."
@@ -1672,12 +1678,12 @@ msgstr[0] "建立連結..."
 #: packages/app-desktop/gui/ShareNoteDialog.js:151
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "連結已複製到剪貼簿！"
+msgstr[0] "連結已被複製到剪貼簿!"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:158
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr "注意：分享記事後，該記事將不會在伺服器上加密。"
+msgstr "注意：當記事被分享時，他將不會在伺服器上被加密。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:163
 msgid "Share Notes"
@@ -1691,17 +1697,17 @@ msgstr[0] "複製分享連結"
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
 #, fuzzy
 msgid "Unshare"
-msgstr "停止分享"
+msgstr "分享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
-msgstr "刪除邀請後，共享對象將無法再存取這份共享記事本。確定要刪除這份邀請嗎？"
+msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr "新增共享對象："
+msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1711,19 +1717,19 @@ msgstr "分享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr "共享對象尚未接受邀請"
+msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr "共享對象已拒絕邀請"
+msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr "共享對象已接受邀請"
+msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr "共享對象："
+msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
 #, fuzzy
@@ -1739,17 +1745,17 @@ msgstr "分享記事..."
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
-msgstr "停止共享後，共享對象將無法再存取這份共享記事本。確定要停止共享嗎？"
+msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
 #, fuzzy
 msgid "Share Notebook"
-msgstr "分享記事本"
+msgstr "分享記事"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
 #, fuzzy
 msgid "Toggle safe mode"
-msgstr "切換安全模式"
+msgstr "顯示 / 隱藏側邊欄"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1775,7 +1781,7 @@ msgstr "使用外部編輯器編輯"
 #: packages/app-cli/app/command-edit.js:82
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr "在編輯器中開啟記事時出錯：%s"
+msgstr "在編輯器中開啟記事時出錯: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
 msgid "Open profile directory"
@@ -1816,7 +1822,7 @@ msgstr "允許使用相機"
 
 #: packages/app-mobile/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
-msgstr "您必須允許程式使用相機。"
+msgstr "必須獲得使用相機的權限。"
 
 #: packages/app-mobile/components/screen-header.js:185
 msgid "Delete these notes?"
@@ -1841,7 +1847,7 @@ msgstr "設置"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr "行動網路 - 停用自動同步"
+msgstr ""
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -1849,16 +1855,16 @@ msgstr "您目前尚未擁有記事本。"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
-msgstr "新增一份記事本"
+msgstr "新增一個記事本"
 
 #: packages/app-mobile/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "您當前沒有任何記事。點擊 (+) 鈕即可新增。"
+msgstr "您當前沒有任何記事。通過按一下 (+) 鍵去新增一則記事。"
 
 #: packages/app-mobile/components/screens/folder.js:87
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr "無法儲存記事本：%s"
+msgstr "無法儲存記事本: %s"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Edit notebook"
@@ -1886,11 +1892,11 @@ msgstr "同步目標升級"
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
-msgstr "刪除記事本時，其中的所有記事和子記事本也將被刪除。確定要刪除記事本？"
+msgstr "決定刪除記事本？此記事本中的所有記事和子記事本也將被刪除。"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
-msgstr "新增標籤："
+msgstr "新增標籤: "
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:178
 msgid "Type new tags or select from list"
@@ -1907,7 +1913,7 @@ msgstr "請在此輸入驗證碼"
 #: packages/app-mobile/components/screens/encryption-config.js:119
 #, javascript-format
 msgid "Master Key %s"
-msgstr "密鑰 %s"
+msgstr "主密碼 %s"
 
 #: packages/app-mobile/components/screens/encryption-config.js:120
 #: packages/app-mobile/components/screens/Note.js:724
@@ -2001,7 +2007,8 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"如果搜尋出現問題，請使用此功能重新建立搜尋索引。所需時間依記事數量而定，也可能會花費很長的時間。"
+"如果搜尋出現問題，請使用它來重新建立搜尋索引。 根據記事的數量，可能會花費很長"
+"時間。"
 
 #: packages/app-mobile/components/screens/config.js:461
 msgid "Exporting profile..."
@@ -2013,7 +2020,7 @@ msgstr "匯出設定檔"
 
 #: packages/app-mobile/components/screens/config.js:461
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr "僅用於除錯：將您的設定檔匯出至外部 SD 卡。"
+msgstr "僅用於除錯: 將您的設定檔匯出至外部 SD 卡。"
 
 #: packages/app-mobile/components/screens/config.js:476
 msgid "More information"
@@ -2024,21 +2031,22 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"為了正常運作，請在您的手機設定 (應用程式 > Joplin > 權限) 中啟用下列權限"
+"應用程式需要以下權限才能正常運作。請在您的電話設定中啟用它們。(應用程式 > "
+"Joplin > 權限)"
 
 #: packages/app-mobile/components/screens/config.js:489
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr "- 儲存：允許將檔案附加到記事並啟用檔案系統同步。"
+msgstr "- 儲存: 允許將檔案附加到記事並啟用檔案系統同步。"
 
 #: packages/app-mobile/components/screens/config.js:492
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- 相機：允許拍照並附加相片到記事。"
+msgstr "- 相機: 允許拍照並附加相片到記事。"
 
 #: packages/app-mobile/components/screens/config.js:495
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- 位置：允許將地理位置資訊附加到記事。"
+msgstr "- 位置: 允許將地理位置資訊附加到記事。"
 
 #: packages/app-mobile/components/screens/config.js:524
 msgid "Joplin website"
@@ -2050,7 +2058,7 @@ msgstr "隱私政策"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
-msgstr "此記事已被修改："
+msgstr "此記事已被修改: "
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "Save changes"
@@ -2067,17 +2075,17 @@ msgstr "沒有 ID 為 %s 的項目"
 
 #: packages/app-mobile/components/screens/Note.js:168
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "此附件尚未下載或解密完成。"
+msgstr "此附件尚未被下載或是尚未解密完成。"
 
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Joplin 行動 App 暫不支援此類型的鏈結：%s"
+msgstr "Joplin 移動應用程式暫時不支援此類型的連結: %s"
 
 #: packages/app-mobile/components/screens/Note.js:178
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "不支援「%s」協定的鏈結"
+msgstr "不支援 \"%s\" 通訊協定"
 
 #: packages/app-mobile/components/screens/Note.js:342
 msgid ""
@@ -2086,9 +2094,9 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
-"為了將地理位置資訊加入此筆記，您必須允許程式存取位置資料。\n"
+"為了將地理位置資訊加入此筆記，你必須允許程式存取位置資料。\n"
 "\n"
-"您隨時可以到設定畫面關閉此選項。"
+"你隨時可以到設定畫面關閉此選項。"
 
 #: packages/app-mobile/components/screens/Note.js:343
 msgid "Permission needed"
@@ -2106,17 +2114,18 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
-"您將附加大型圖片 (%dx%d pixels)，附加之前是否要把尺寸縮小為 %d pixels？"
+"您將要附加較大的圖片 (%dx%d pixels)。您要在附加之前將其尺寸縮小為 %d pixels "
+"嗎？"
 
 #: packages/app-mobile/components/screens/Note.js:585
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr "不支援的圖像類型：%s"
+msgstr "不支援的圖像類型: %s"
 
 #: packages/app-mobile/components/screens/Note.js:725
 #, javascript-format
 msgid "Updated: %s"
-msgstr "已更新：%s"
+msgstr "已更新: %s"
 
 #: packages/app-mobile/components/screens/Note.js:728
 msgid "View on map"
@@ -2171,21 +2180,21 @@ msgstr "搜尋"
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
-msgstr "預設的管理員密碼不安全並且尚未更改！[現在更改](%s)"
+msgstr "默認管理員密碼不安全並且尚未更改！[現在更改](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr "所有預設埠號都在使用中 - 請到%s回報此問題"
+msgstr "所有默認端口都已經被使用中-請在%s反饋這個問題"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr "程式已取得權限 - 您現在可以關閉此瀏覽器分頁。"
+msgstr "應用程式已取得權限 - 您現在可以關閉此瀏覽器分頁。"
 
 #: packages/lib/onedrive-api-node-utils.js:88
 msgid "The application has been successfully authorised."
-msgstr "程式已成功取得權限。"
+msgstr "應用程式已成功取得權限。"
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2195,7 +2204,7 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"請在瀏覽器開啟以下 URL 驗證應用程式。應用程式將在「Apps/Joplin」中建立一"
+"請在瀏覽器開啟以下 URL 去驗證應用程式。應用程式將在 \"Apps/Joplin\" 中建立一"
 "個目錄，並只會在該目錄中進行讀取和寫入。應用程式將無法訪問此目錄之外的任何檔"
 "案，同時也無法使用任何其他個人資料。我們不會與任何第三方廠商共用任何資料。"
 
@@ -2214,7 +2223,7 @@ msgstr "Joplin 主機"
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
 msgid "Cannot access %s"
-msgstr "無法存取 %s"
+msgstr "無法訪問 %s"
 
 #: packages/lib/models/Folder.js:36 packages/lib/models/Note.js:36
 msgid "title"
@@ -2235,7 +2244,7 @@ msgstr "無法移動記事本到此位置"
 #: packages/lib/models/Folder.js:557
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "此標題「%s」已被程式保留，無法使用。"
+msgstr "筆記本無法命名為 \"%s\"，這標題已被保留。"
 
 #: packages/lib/models/Setting.js:103
 msgid "yes"
@@ -2258,7 +2267,7 @@ msgid ""
 "more details: %s"
 msgstr ""
 "注意：如果更改此位置，請確保在同步之前將所有內容複製到該位置，否則將刪除所有"
-"文件！有關更多詳細資訊，請閱讀 FAQ: %s"
+"文件！ 有關更多詳細資訊，請閱讀FAQ: %s"
 
 #: packages/lib/models/Setting.js:112
 msgid "Light"
@@ -2301,11 +2310,12 @@ msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"要同步的目標。每個同步目標可能有額外參數命名為 `sync.NUM.NAME`（參考下方描述）。"
+"要同步的目標。每個同步目標可能有附加的參數，它們被命名為 `sync.NUM.NAME` (全"
+"部記錄如下)。"
 
 #: packages/lib/models/Setting.js:176
 msgid "Directory to synchronise with (absolute path)"
-msgstr "要同步的目錄（絕對路徑）"
+msgstr "要同步的目錄 (絕對路徑)"
 
 #: packages/lib/models/Setting.js:188
 msgid "Nextcloud WebDAV URL"
@@ -2370,12 +2380,12 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"在「手動」模式下，僅在您點選附件時才下載附件；「自動」模式會在打開記"
-"事時開始下載；「一律下載」模式則無論是否打開記事，都會下載所有附件。"
+"在\"手動\"模式下，僅會在當您點選附件時才下載附件。 而\"自動\"模式，則是打開記"
+"事時即會開始下載。若是\"總是\"模式，無論您是否打開記事，都會下載所有附件。"
 
 #: packages/lib/models/Setting.js:362
 msgid "Always"
-msgstr "一律下載"
+msgstr "總是"
 
 #: packages/lib/models/Setting.js:363
 msgid "Manual"
@@ -2407,15 +2417,15 @@ msgstr "界面主題"
 
 #: packages/lib/models/Setting.js:457
 msgid "Automatically switch theme to match system theme"
-msgstr "自動切換以配合系統主題"
+msgstr "自動切換主題以配合系統主題"
 
 #: packages/lib/models/Setting.js:469
 msgid "Preferred light theme"
-msgstr "偏好的亮色主題"
+msgstr "首選亮色主題"
 
 #: packages/lib/models/Setting.js:483
 msgid "Preferred dark theme"
-msgstr "偏好的暗色主題"
+msgstr "首選暗色主題"
 
 #: packages/lib/models/Setting.js:493
 msgid "Show note counts"
@@ -2447,15 +2457,15 @@ msgstr "顯示已完成的待辦事項"
 
 #: packages/lib/models/Setting.js:535
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "自動配對大括號、括號、引號等。"
+msgstr "自動配對大括號，括號，引號等。"
 
 #: packages/lib/models/Setting.js:538 packages/lib/models/Setting.js:557
 msgid "Reverse sort order"
-msgstr "顛倒排列順序"
+msgstr "顛倒排序順序"
 
 #: packages/lib/models/Setting.js:545
 msgid "Sort notebooks by"
-msgstr "記事本排序方式"
+msgstr "排序記事方式"
 
 #: packages/lib/models/Setting.js:558
 msgid "Save geo-location with notes"
@@ -2463,7 +2473,7 @@ msgstr "在記事中保存地理位置資訊"
 
 #: packages/lib/models/Setting.js:580
 msgid "When creating a new to-do:"
-msgstr "當新增待辦事項時："
+msgstr "當新增待辦事項時: "
 
 #: packages/lib/models/Setting.js:583 packages/lib/models/Setting.js:599
 msgid "Focus title"
@@ -2475,7 +2485,7 @@ msgstr "游標置於內文"
 
 #: packages/lib/models/Setting.js:596
 msgid "When creating a new note:"
-msgstr "當新增記事時："
+msgstr "當新增記事時: "
 
 #: packages/lib/models/Setting.js:629
 msgid "Enable soft breaks"
@@ -2512,7 +2522,7 @@ msgstr "啟用視頻播放器"
 
 #: packages/lib/models/Setting.js:637
 msgid "Enable PDF viewer"
-msgstr "啟用 PDF 查看器"
+msgstr "啟用PDF查看器"
 
 #: packages/lib/models/Setting.js:638
 msgid "Enable ==mark== syntax"
@@ -2560,7 +2570,7 @@ msgstr "顯示系統匣圖示"
 
 #: packages/lib/models/Setting.js:660
 msgid "Note: Does not work in all desktop environments."
-msgstr "注意：此功能並非所有桌面環境都有用。"
+msgstr "注意: 不是在全部桌面環境中都能發揮作用。"
 
 #: packages/lib/models/Setting.js:660
 msgid ""
@@ -2573,7 +2583,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:664
 msgid "Start application minimised in the tray icon"
-msgstr "啟動應用程式時最小化到系統匣"
+msgstr "啟動應用程式時最小化到任務欄"
 
 #: packages/lib/models/Setting.js:684
 msgid "Editor font size"
@@ -2596,7 +2606,7 @@ msgstr "編輯器字型系列"
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
-msgstr "用在編輯器中大部分的文字上。如果尋無此字體，將顯示為通用的變動寬度字體。"
+msgstr ""
 
 #: packages/lib/models/Setting.js:726
 #, fuzzy
@@ -2608,7 +2618,7 @@ msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
-msgstr "用在需要固定字寬的狀況（表格、待辦事項、程式碼等）。如果尋無此字體，將顯示為通用的固定寬度字體。"
+msgstr ""
 
 #: packages/lib/models/Setting.js:748
 msgid "Custom stylesheet for rendered Markdown"
@@ -2620,11 +2630,11 @@ msgstr "自訂 Joplin 全域樣式表"
 
 #: packages/lib/models/Setting.js:774
 msgid "Re-upload local data to sync target"
-msgstr "重新上傳本地資料到同步目標上"
+msgstr ""
 
 #: packages/lib/models/Setting.js:784
 msgid "Delete local data and re-download from sync target"
-msgstr "刪除本地資料，自同步目標重新下載所有檔案"
+msgstr ""
 
 #: packages/lib/models/Setting.js:789
 msgid "Automatically update the application"
@@ -2632,12 +2642,12 @@ msgstr "自動更新應用程式"
 
 #: packages/lib/models/Setting.js:790
 msgid "Get pre-releases when checking for updates"
-msgstr "檢查更新時，也更新到發行前測試版"
+msgstr "獲取預發行更新"
 
 #: packages/lib/models/Setting.js:790
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "詳細訊息請參考發行前測試版頁面: %s"
+msgstr "有關更多詳細訊息，請查閱預發行頁面: %s"
 
 #: packages/lib/models/Setting.js:798
 msgid "Synchronisation interval"
@@ -2661,7 +2671,7 @@ msgstr "%d 小時"
 
 #: packages/lib/models/Setting.js:817
 msgid "Synchronise only over WiFi connection"
-msgstr "僅在 WiFi 環境下同步資料"
+msgstr ""
 
 #: packages/lib/models/Setting.js:824
 msgid "Text editor command"
@@ -2672,7 +2682,8 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"用於開啟記事的外部編輯器命令 (可能包括參數)。如果不在此提供，程式將嘗試自動呼叫預設的編輯器。"
+"用於開啟記事的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設"
+"的編輯器。"
 
 #: packages/lib/models/Setting.js:825
 msgid "Page size for PDF export"
@@ -2684,7 +2695,7 @@ msgstr "A4"
 
 #: packages/lib/models/Setting.js:828
 msgid "Letter"
-msgstr "Letter"
+msgstr "信函 (Letter)"
 
 #: packages/lib/models/Setting.js:829
 msgid "A3"
@@ -2696,11 +2707,11 @@ msgstr "A5"
 
 #: packages/lib/models/Setting.js:831
 msgid "Tabloid"
-msgstr "Tabloid"
+msgstr "文摘 (Tabloid)"
 
 #: packages/lib/models/Setting.js:832
 msgid "Legal"
-msgstr "Legal"
+msgstr "法律規格紙 (Legal)"
 
 #: packages/lib/models/Setting.js:835
 msgid "Page orientation for PDF export"
@@ -2708,7 +2719,7 @@ msgstr "匯出至 PDF 的頁面方向"
 
 #: packages/lib/models/Setting.js:837
 msgid "Portrait"
-msgstr "直向"
+msgstr "豎直"
 
 #: packages/lib/models/Setting.js:838
 msgid "Landscape"
@@ -2739,7 +2750,7 @@ msgid ""
 msgstr ""
 "要載入證書，可用逗號分隔的目錄路徑清單，或指明特定證書的路徑。例如: /my/"
 "cert_dir, /other/custom.pem。請注意，如果修改了 TLS 的設置，您必須先儲存變"
-"更，然後再按一下「檢測同步設置」。"
+"更，然後再按一下 \"檢測同步設置\"。"
 
 #: packages/lib/models/Setting.js:891
 msgid "Ignore TLS certificate errors"
@@ -2754,14 +2765,14 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"故障保護 (Fail-safe)：當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本"
+"故障保護 (Fail-safe): 當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本"
 "機資料"
 
 #: packages/lib/models/Setting.js:905
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
-msgstr "指定 API 伺服器使用的連接埠。如果未設定，將使用預設值。"
+msgstr "指定 API 伺服器使用的連接埠。 如果未設定，將使用預設值。"
 
 #: packages/lib/models/Setting.js:910
 msgid "Enable note history"
@@ -2857,15 +2868,16 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"這些延伸模組提供額外的 Markdown 顯示功能。請注意：雖然這些額外功能個有用途，"
-"但並非標準 Markdown 語法，因此通常只能在 Joplin 內運行；另外，其中一些功能"
-"與所見即所得 (WYSIWYG) 編輯器 *不相容*，用此編輯器編輯記事時無法顯示使用。"
-"延伸模組後皆列出與所見即所得編輯器的相容狀況。"
+"這些延伸模組為 Markdown 渲染器提供額外特性。請注意，儘管這些額外特性可能是可"
+"用的，但它們並非標準 Markdown 語法，因此這些功能基本只能在 Joplin 內運行。此"
+"外，其中的一些功能與所見即所得 (WYSIWYG) 編輯器是*不相容*的。如果你在上述編輯"
+"器中打開使用了這些延伸模組的記事，就將會丟失延伸模組格式。下面已表明延伸模組"
+"與所見即所得 (WYSIWYG) 編輯器相容與否。"
 
 #: packages/lib/models/Setting.js:1618
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr "所有記事和設定均儲存於：%s"
+msgstr "所有記事和設定均儲存於: %s"
 
 #: packages/lib/models/Resource.js:352
 msgid "Not downloaded"
@@ -2886,7 +2898,7 @@ msgstr "錯誤"
 #: packages/lib/models/Resource.js:403
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "附加檔案衝突：「%s」"
+msgstr "附加檔案衝突: \"%s\""
 
 #: packages/lib/models/Resource.js:404
 #, javascript-format
@@ -2895,14 +2907,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"下載此附加檔案時出現[衝突] (%s)：\n"
+"下載此附加檔案時出現[衝突] (%s):\n"
 "\n"
 "%s"
 
 #: packages/lib/models/Tag.js:223
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "標籤「%s」已存在，請選擇其他名稱。"
+msgstr "標籤 \"%s\" 已存在。 請選擇其他名稱。"
 
 #: packages/lib/models/Note.js:38
 msgid "created date"
@@ -2919,12 +2931,12 @@ msgstr "此記事沒有地理位置定位資訊。"
 #: packages/lib/models/Note.js:525
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "無法將此記事複製到「%s」記事本"
+msgstr "無法複製此記事到 \"%s\" 記事本"
 
 #: packages/lib/models/Note.js:537
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "無法將此記事移動到「%s」記事本"
+msgstr "無法移動此記事到 \"%s\" 記事本"
 
 #: packages/lib/models/BaseItem.js:712
 msgid "Encrypted"
@@ -2938,12 +2950,12 @@ msgstr "無法修改已加密項目"
 #: packages/lib/BaseApplication.js:195
 #, javascript-format
 msgid "Usage: %s"
-msgstr "使用資訊：%s"
+msgstr "使用資訊: %s"
 
 #: packages/lib/BaseApplication.js:230
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr "未知的標誌：%s"
+msgstr "未知的標誌: %s"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -2955,19 +2967,19 @@ msgstr "檢查中...請稍候。"
 
 #: packages/lib/components/shared/config-shared.js:52
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "成功！同步設定看起來正確。"
+msgstr "成功! 同步設定看起來正確。"
 
 #: packages/lib/components/shared/config-shared.js:54
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"錯誤。請檢查網址、使用者名稱、密碼等是否正確，以及同步目標是否可以存取。錯"
-"誤回報訊息為："
+"錯誤。 請檢查網址、使用者名稱、密碼等是否正確以及同步目標是否可以被存取。 錯"
+"誤回報訊息為: "
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
-msgstr "此程式已被授權！"
+msgstr "此應用程式已被授權！"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 #, javascript-format
@@ -2978,7 +2990,7 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
-"無法授權:\n"
+"無法申請授權申請:\n"
 "\n"
 "%s\n"
 "\n"
@@ -2987,7 +2999,7 @@ msgstr ""
 #: packages/lib/components/shared/encryption-config-shared.js:33
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr "請確認您要重新加密完整資料庫。"
+msgstr "請確認您要重新加密的完整資料庫。"
 
 #: packages/lib/components/shared/encryption-config-shared.js:39
 msgid "Your data is going to be re-encrypted and synced again."
@@ -3001,23 +3013,23 @@ msgstr "在升級密鑰前，請在下面的主密鑰清單中輸入您的密碼
 
 #: packages/lib/components/shared/encryption-config-shared.js:58
 msgid "The master key has been upgraded successfully!"
-msgstr "主密鑰已成功升級!"
+msgstr "主密鑰已被成功升級!"
 
 #: packages/lib/components/shared/encryption-config-shared.js:60
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "無法升級主密鑰：%s"
+msgstr "無法升級主密鑰: %s"
 
 #: packages/lib/components/shared/encryption-config-shared.js:116
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "解密項目：%s / %s"
+msgstr "解密項目: %s / %s"
 
 #: packages/lib/onedrive-api.js:392
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr "缺少身份驗證資料，無法更新 Token。再次啟動同步可能會解決此問題。"
+msgstr "無法刷新 Token: 缺少身份驗證資料。再次啟動同步可能會解決此問題。"
 
 #: packages/lib/Synchronizer.js:122
 #, javascript-format
@@ -3056,7 +3068,7 @@ msgstr "已擷取的本地項目: %d/%d 項。"
 
 #: packages/lib/Synchronizer.js:136
 msgid "Cancelling..."
-msgstr "正在取消..."
+msgstr "正在取消中..."
 
 #: packages/lib/Synchronizer.js:138
 #, javascript-format
@@ -3079,7 +3091,7 @@ msgstr "進行中"
 #: packages/lib/Synchronizer.js:849
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr "已下載項目為未知類型，請將 Joplin 升級至最新版本"
+msgstr "已下載項目為未知類型，請將Joplin升級至最新版本"
 
 #: packages/lib/JoplinServerApi.js:61
 #, fuzzy, javascript-format
@@ -3089,7 +3101,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"無法連接到 Joplin 主機，請檢查同步設定。完整錯誤訊息為:\n"
+"無法連接到 Joplin Nextcloud 應用程式。 請在檢查同步設定畫面中的設定項目。完整"
+"錯誤訊息為:\n"
 "\n"
 "%s"
 
@@ -3112,7 +3125,7 @@ msgstr "向前"
 #: packages/lib/versionInfo.js:10
 #, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "修訂版：%s (%s)"
+msgstr "修訂版: %s (%s)"
 
 #: packages/lib/versionInfo.js:22
 #, javascript-format
@@ -3122,22 +3135,22 @@ msgstr "%s %s (%s, %s)"
 #: packages/lib/versionInfo.js:24
 #, javascript-format
 msgid "Client ID: %s"
-msgstr "用戶端 ID：%s"
+msgstr "用戶端 ID: %s"
 
 #: packages/lib/versionInfo.js:25
 #, javascript-format
 msgid "Sync Version: %s"
-msgstr "同步版本：%s"
+msgstr "同步版本: %s"
 
 #: packages/lib/versionInfo.js:26
 #, javascript-format
 msgid "Profile Version: %s"
-msgstr "設定檔版本：%s"
+msgstr "設定檔版本: %s"
 
 #: packages/lib/versionInfo.js:27
 #, javascript-format
 msgid "Keychain Supported: %s"
-msgstr "鑰匙圈支援：%s"
+msgstr "鑰匙圈支援: %s"
 
 #: packages/lib/services/RevisionService.js:217
 msgid "Restored Notes"
@@ -3157,7 +3170,7 @@ msgstr "目錄"
 
 #: packages/lib/services/interop/InteropService_Importer_Md.js:41
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr "請指定要匯入的記事本。"
+msgstr "請指定將記事匯入到的筆記本。"
 
 #: packages/lib/services/interop/InteropService.js:48
 #: packages/lib/services/interop/InteropService.js:57
@@ -3188,12 +3201,12 @@ msgstr "HTML 目錄"
 #: packages/lib/services/interop/InteropService.js:127
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "無法載入「%s」模組以讀取 %s 格式並匯出 %s"
+msgstr "無法載入\"%s\" 模組以讀取格式 \"%s\" 並匯出 \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
 #, fuzzy, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "無法載入「%s」模組以讀取 %s 格式並匯出 %s""
+msgstr "無法載入\"%s\" 模組以讀取格式 \"%s\" 並匯出 \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3222,7 +3235,7 @@ msgstr "無法載入「%s」模組以讀取 %s 格式並匯出 %s""
 #: packages/app-cli/app/command-done.js:20
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "找不到「%s」。"
+msgstr "找不到 \"%s\"。"
 
 #: packages/lib/services/interop/InteropService.js:199
 #, javascript-format
@@ -3237,29 +3250,29 @@ msgstr "命令"
 #: packages/lib/services/KeymapService.js:280
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr "%s 缺少必須的屬性 %s"
+msgstr "%s缺少必須的屬性%s"
 
 #: packages/lib/services/KeymapService.js:280
 #: packages/lib/services/KeymapService.js:287
 msgid "accelerator"
-msgstr "快速鍵"
+msgstr "加速鍵"
 
 #: packages/lib/services/KeymapService.js:287
 #, fuzzy, javascript-format
 msgid "Invalid %s: %s."
-msgstr "無效的 %s：%s"
+msgstr "無效的答案: %s"
 
 #: packages/lib/services/KeymapService.js:305
 #, javascript-format
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
-msgstr "快速鍵 %s 同時用在 %s 和 %s 命令上，這可能導致意外狀況。"
+msgstr "加速鍵%s被用於%s和%s命令。這可能導致未期待的行為。"
 
 #: packages/lib/services/KeymapService.js:330
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
-msgstr "快速鍵 %s 無效。"
+msgstr "加速鍵%s無效。"
 
 #: packages/lib/services/ReportService.js:123
 msgid "Items that cannot be synchronised"
@@ -3271,22 +3284,22 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"這些頊目將保留在設備上，但不會上傳到同步目標。要尋找這些項目，請以標題或 ID "
-"（在上面的括弧中顯示）搜尋。"
+"這些頊目將保留在設備上，但不會上載到同步目標。要尋找這些項目，請以標題或 ID "
+"(在上面的括弧中顯示) 搜索。"
 
 #: packages/lib/services/ReportService.js:129
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s)  無法上傳：%s"
+msgstr "%s (%s)  無法上傳: %s"
 
 #: packages/lib/services/ReportService.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "項目「%s」無法下載：%s"
+msgstr "項目 \"%s\" 無法被下載: %s"
 
 #: packages/lib/services/ReportService.js:139
 msgid "Items that cannot be decrypted"
-msgstr "項目無法解密"
+msgstr "項目無法被解密"
 
 #: packages/lib/services/ReportService.js:140
 msgid ""
@@ -3294,8 +3307,8 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin 多次未能解密這些項目，可能是因為它們已損壞或太大。這些項目將保留在設"
-"備上，但 Joplin 將不再嘗試解密。"
+"Joplin 多次未能解密這些項目，可能是因為它們已損壞或太大。 這些項目將保留在設"
+"備上，但 Joplin 將不再嘗試對其進行解密。"
 
 #: packages/lib/services/ReportService.js:145
 #: packages/app-cli/app/cli-utils.js:140
@@ -3326,7 +3339,7 @@ msgstr "已下載並加密"
 #: packages/lib/services/ReportService.js:180
 #, fuzzy
 msgid "Created locally"
-msgstr "已建立的本地項目"
+msgstr "已建立的本地項目: %d 項。"
 
 #: packages/lib/services/ReportService.js:191
 msgid "Attachments that could not be downloaded"
@@ -3344,22 +3357,22 @@ msgstr "同步狀態 (已同步項目 / 項目總數)"
 #: packages/lib/services/ReportService.js:210
 #, javascript-format
 msgid "%s: %d/%d"
-msgstr "%s：%d/%d"
+msgstr "%s: %d/%d"
 
 #: packages/lib/services/ReportService.js:212
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr "總數：%d/%d"
+msgstr "總數: %d/%d"
 
 #: packages/lib/services/ReportService.js:214
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr "衝突：%d"
+msgstr "有衝突: %d"
 
 #: packages/lib/services/ReportService.js:215
 #, javascript-format
 msgid "To delete: %d"
-msgstr "標示刪除：%d"
+msgstr "標示刪除: %d"
 
 #: packages/lib/services/ReportService.js:217
 msgid "Folders"
@@ -3368,16 +3381,16 @@ msgstr "資料夾"
 #: packages/lib/services/ReportService.js:223
 #, javascript-format
 msgid "%s: %d notes"
-msgstr "%s：%d 則記事"
+msgstr "%s:%d 則記事"
 
 #: packages/lib/services/ReportService.js:228
 msgid "Coming alarms"
-msgstr "未來提醒"
+msgstr "將會發生的提醒事項"
 
 #: packages/lib/services/ReportService.js:232
 #, javascript-format
 msgid "On %s: %s"
-msgstr "在 %s：%s"
+msgstr "在 %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
@@ -3389,7 +3402,7 @@ msgstr "添加到字典"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr "使用拼字檢查"
+msgstr "使用拼寫檢查器"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
 msgid "Change language"
@@ -3400,13 +3413,14 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"將符合 <note> 的記事複製到 [notebook]。如果未指定記事本，則預設複製到當前記事本中。"
+"將匹配 <note> 的記事複製到 [notebook]。如果未指定筆記本，則預設複製到當前筆記"
+"本中。"
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
-msgstr "顯示當前記事本中的記事。使用「ls /」顯示記事本清單。"
+msgstr "顯示當前記事本中的記事。使用 \"ls/\" 顯示記事本的清單。"
 
 #: packages/app-cli/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
@@ -3418,7 +3432,7 @@ msgstr "按 <field> 對項目進行排序 (例如: 標題、更新時間、建�
 
 #: packages/app-cli/app/command-ls.js:29
 msgid "Reverses the sorting order."
-msgstr "顛倒排序。"
+msgstr "顛倒排序順序。"
 
 #: packages/app-cli/app/command-ls.js:30
 msgid ""
@@ -3432,7 +3446,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
-msgstr "「text」或「json」二選一"
+msgstr "\"text\" 或 \"json\" 二者之一"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -3453,16 +3467,16 @@ msgstr "匯入資料至 Joplin。"
 #: packages/app-cli/app/command-import.js:25
 #, javascript-format
 msgid "Source format: %s"
-msgstr "來源格式：%s"
+msgstr "來源格式: %s"
 
 #: packages/app-cli/app/command-import.js:26
 msgid "Do not ask for confirmation."
-msgstr "不要求確認。"
+msgstr "不要要求確認。"
 
 #: packages/app-cli/app/command-import.js:27
 #, javascript-format
 msgid "Output format: %s"
-msgstr "匯出格式：%s"
+msgstr "匯出格式: %s"
 
 #: packages/app-cli/app/command-import.js:65
 msgid "Importing notes..."
@@ -3475,21 +3489,21 @@ msgstr "列舉 (Enum)"
 #: packages/app-cli/app/help-utils.js:56
 #, javascript-format
 msgid "Type: %s."
-msgstr "類型：%s。"
+msgstr "類型: %s。"
 
 #: packages/app-cli/app/help-utils.js:57
 #, javascript-format
 msgid "Possible values: %s."
-msgstr "可能的值：%s。"
+msgstr "可能的值: %s。"
 
 #: packages/app-cli/app/help-utils.js:71
 #, javascript-format
 msgid "Default: %s"
-msgstr "預設：%s"
+msgstr "預設: %s"
 
 #: packages/app-cli/app/help-utils.js:77
 msgid "Possible keys/values:"
-msgstr "可能的鍵/值："
+msgstr "可能的鍵/值: "
 
 #: packages/app-cli/app/command-server.js:14
 #, javascript-format
@@ -3497,7 +3511,7 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
-"開始、停止或檢查 API 伺服器。若要指定在哪個連接埠上執行，請設定 api.port 設定變"
+"開始、停止或檢查API伺服器。若要指定在哪個連接埠上執行，請設定api.port設定變"
 "數。指令為 (%s)"
 
 #: packages/app-cli/app/command-server.js:38
@@ -3508,7 +3522,7 @@ msgstr "伺服器已經在 %d 連接埠執行"
 #: packages/app-cli/app/command-server.js:44
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr "伺服器在 %d 連接埠執行"
+msgstr "伺服器在%d連接埠執行"
 
 #: packages/app-cli/app/command-server.js:44
 #: packages/app-cli/app/command-server.js:47
@@ -3526,7 +3540,7 @@ msgstr ""
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
 msgid "Enter master password:"
-msgstr "輸入主密碼："
+msgstr "輸入主密碼: "
 
 #: packages/app-cli/app/command-e2ee.js:38
 #: packages/app-cli/app/command-e2ee.js:76
@@ -3538,17 +3552,17 @@ msgstr "操作已取消"
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
-msgstr "正在開始解密... 視需要解密的資料多寡，可能會花幾分鐘時間，請稍候。"
+msgstr "正在開始解密...請稍候。這可能需要幾分鐘，取決於解密的程度。"
 
 #: packages/app-cli/app/command-e2ee.js:55
 #, javascript-format
 msgid "Decrypted items: %d"
-msgstr "解密項目：%d"
+msgstr "解密項目: %d"
 
 #: packages/app-cli/app/command-e2ee.js:56
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr "跳過項目：%d (使用 --retry-failed-items 來嘗試重新解密)"
+msgstr "跳過項目: %d (使用 —retry-failed-items 來嘗試重新解密)"
 
 #: packages/app-cli/app/command-e2ee.js:70
 msgid "Completed decryption."
@@ -3560,7 +3574,7 @@ msgstr "新增記事本。"
 
 #: packages/app-cli/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "將符合 <note> 的記事移動到 [notebook]。"
+msgstr "將匹配 <note> 的記事移動到 [notebook]。"
 
 #: packages/app-cli/app/command-config.js:13
 msgid ""
@@ -3568,8 +3582,8 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"取得或設定一個設定值。如果沒有指明 [value]，則會顯示 [name] 的值。如果 "
-"[name] 和 [vallue] 兩者均沒有指明，則會列出當前設定。"
+"取得或設定一個設置值。如果沒有指明 [value]，則會顯示 [name] 的值。如果 "
+"[name] 和 [vallue] 兩者均沒有指明，則會列出當前設置。"
 
 #: packages/app-cli/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
@@ -3589,7 +3603,7 @@ msgstr "%s = %s"
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
-msgstr "切換到 [notebook] - 所有進一步的操作將在此記事本中發生。"
+msgstr "切換到 [notebook] - 所有進一步的操作將在此筆記本中發生。"
 
 #: packages/app-cli/app/command-sync.js:29
 msgid "Synchronises with remote storage."
@@ -3597,7 +3611,7 @@ msgstr "與遠端儲存設備同步。"
 
 #: packages/app-cli/app/command-sync.js:34
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "同步到已指明的目標 (預設是 sync.target 的設定值)"
+msgstr "同步到已指明的目標 (預設是 sync.target 的設置值)"
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
@@ -3606,7 +3620,7 @@ msgstr "升級同步目標到最新版本"
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "與 %s 認證失敗，請提供完整的身份驗證資訊。"
+msgstr "與 %s 認證不成功。請提供任何缺少的身份驗證資訊。"
 
 #: packages/app-cli/app/command-sync.js:128
 msgid "Synchronisation is already in progress."
@@ -3619,12 +3633,13 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"鎖定中。如果您確知目前並非正在同步，可刪除「%s」上的鎖定檔並繼續操作。"
+"鎖定檔已被保留。如果您知道沒有正在同步，您可刪除 \"%s\" 上的鎖定檔並繼續操"
+"作。"
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "同步目標：%s (%s)"
+msgstr "同步目標: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:177
 msgid "Cannot initialise synchroniser."
@@ -3641,7 +3656,7 @@ msgstr "正在下載資源檔案..."
 #: packages/app-cli/app/command-sync.js:242
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr "需要升級同步目標！執行 `%s` 以升級。"
+msgstr "需要升級同步目標!運行`%s`以繼續。"
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
@@ -3666,7 +3681,7 @@ msgstr "新增待辦事項。"
 #: packages/app-cli/app/command-mktodo.js:16
 #: packages/app-cli/app/command-mknote.js:16
 msgid "Notes can only be created within a notebook."
-msgstr "記事只能在記事本中建立。"
+msgstr "記事只能在記事本中創建。"
 
 #: packages/app-cli/app/command-cat.js:14
 msgid "Displays the given note."
@@ -3683,7 +3698,7 @@ msgstr "編輯記事。"
 #: packages/app-cli/app/command-edit.js:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr "未設定文字編輯器。請用 `config editor <editor-path>` 來設定"
+msgstr "未設置文字編輯器。請用 `config editor <editor-path>` 去設置"
 
 #: packages/app-cli/app/command-edit.js:40
 msgid "No active notebook."
@@ -3692,7 +3707,7 @@ msgstr "無使用中的記事本。"
 #: packages/app-cli/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "沒有「%s」記事，要建立嗎？"
+msgstr "記事不存在: \"%s\"。要建立嗎？"
 
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
@@ -3700,11 +3715,11 @@ msgstr "開始編輯記事。如需返回命令行，請關閉編輯器。"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
-msgstr "記事已儲存完畢。"
+msgstr "記事已被儲存。"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
-msgstr "要刪除標籤，請清除相關記事的這個標籤。"
+msgstr "要刪除標籤，請取消關聯已被標籤的記事。"
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
@@ -3712,7 +3727,7 @@ msgstr "請先選擇要刪除的記事或記事本。"
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "按 Ctrl+D 或輸入「exit」以退出應用程式"
+msgstr "按 Ctrl+D 或輸入 \"exit\" 以退出應用程式"
 
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -3725,7 +3740,7 @@ msgstr "刪除記事時不要求確認。"
 #: packages/app-cli/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "相符的記事共有 %d 則，要刪除嗎？"
+msgstr "%d 則記事與此模式相符。要刪除它們？"
 
 #: packages/app-cli/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -3761,7 +3776,7 @@ msgstr ""
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
 msgid "Destination format: %s"
-msgstr "目標格式：%s"
+msgstr "目標格式: %s"
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given note."
@@ -3781,7 +3796,7 @@ msgstr "鍵入 `joplin help` 檢視使用說明。"
 
 #: packages/app-cli/app/main.js:94
 msgid "Fatal error:"
-msgstr "嚴重錯誤："
+msgstr "嚴重錯誤: "
 
 #: packages/app-cli/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
@@ -3798,9 +3813,9 @@ msgid ""
 msgstr ""
 "Joplin 歡迎您!\n"
 "\n"
-"鍵入: `:help shortcuts` 檢視鍵盤快速鍵清單，或輸入 `:help` 檢視使用說明。\n"
+"鍵入: `:help shortcuts` 檢視鍵盤快速鍵清單，或只輸入 `:help` 檢視使用說明。\n"
 "\n"
-"例如，您可輸入: `mb` 新增一本記事本; 輸入 `mn` 新增記事。"
+"例如，您可輸入: `mb` 去新增一本記事本; 輸入 `mn` 去新增記事。"
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
@@ -3809,8 +3824,8 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"有些資料已經過加密，您可能需要提供主密碼來解密。請鍵入 \"e2ee decrypt\" "
-"進行解密。如果您已經提供了密碼，那加密的項目將會在後臺解密，請耐心等候。"
+"當前已加密一個或多個一個項目，您可能需要提供主密碼。請鍵入 \"e2ee decrypt\" "
+"去解碼。如果您已經提供了密碼，那加密的項目將會在後臺解密，請耐心等候。"
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
@@ -3818,7 +3833,7 @@ msgstr "鍵入 `status` 可獲取更多訊息。"
 
 #: packages/app-cli/app/gui/FolderListWidget.js:31
 msgid "Search:"
-msgstr "搜尋："
+msgstr "搜尋: "
 
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
@@ -3839,16 +3854,16 @@ msgstr ""
 #: packages/app-cli/app/cli-utils.js:109
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "缺少必需參數：%s"
+msgstr "缺少必需參數: %s"
 
 #: packages/app-cli/app/cli-utils.js:144
 msgid "Your choice: "
-msgstr "您的選擇："
+msgstr "您的選擇: "
 
 #: packages/app-cli/app/cli-utils.js:151
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr "無效的答案：%s"
+msgstr "無效的答案: %s"
 
 #: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
@@ -3869,11 +3884,11 @@ msgstr "顯示使用資訊。"
 #: packages/app-cli/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "有關如何自訂快速鍵，請前往 %s"
+msgstr "有關如何自訂快捷鍵，請訪問 %s"
 
 #: packages/app-cli/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
-msgstr "在 CLI 模式下無法使用快速鍵。"
+msgstr "在 CLI 模式下無法使用快捷鍵。"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -3893,8 +3908,8 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"在任何一個命令中，可以通過標題或 ID 來指定記事或記事本，或使用快捷鍵 `$n`（選定記事）or "
-"`$b`（選定記事本）。您亦可以用 `$c` 代表當前選擇的項目。"
+"在任何一個命令中，可以通過標題或 ID 去引用記事或記事本，或使用快捷鍵 `$n` or "
+"`$b` 分別選定記事或記事本的。您亦可以用 `$ c` 來引用當前選擇的項目。"
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -3904,24 +3919,24 @@ msgstr "要從一個窗格移動到另一個窗格，請按 Tab 或 Shift+Tab。
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
-msgstr "使用方向鍵和上/下頁鍵以捲動清單和文件區域 (包括此主控台)。"
+msgstr "使用方向鍵和上/下頁鍵去捲動清單和文本區域 (包括此主控台)。"
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "要最大化/最小化主控台，請輸入 \"tc\"。"
+msgstr "要最大化/最小化主控台，請按 \"tc\"。"
 
 #: packages/app-cli/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
-msgstr "要進入命令列模式，請輸入「:」"
+msgstr "要進入命令行模式，請按 \":\""
 
 #: packages/app-cli/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
-msgstr "要退出命令列模式，請按 ESC 鍵"
+msgstr "要退出命令行模式，請按 ESC 鍵"
 
 #: packages/app-cli/app/command-help.js:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr "請輸入`help keymap` 查看鍵盤快速鍵與設定選項"
+msgstr "請輸入`help keymap` 查看有關鍵盤快捷鍵和設定選項"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -3930,8 +3945,9 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> 可以是 \"toggle\" (切換完成與否，或將記事轉換為待辦事項)"
-"或 \"clear\" (將待辦事項轉換為記事)。"
+"<todo-command> 可以是 \"toggle\" (切換) 或 \"clear\" (清除)。使用 \"toggle\" "
+"在已完成和未完成的待辦事項之間互相切換 (如果目標是一般記事，則會轉換為待辦事"
+"項)。使用 \"clear\" 將待辦事項轉換為一般記事。"
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
@@ -3940,7 +3956,7 @@ msgstr "離開本程式。"
 #: packages/app-cli/app/app.js:63
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "與 \"%s\" 相符的項目超過一個，請縮小查詢範圍。"
+msgstr "找到多過一個項目與 \"%s\" 相符。請縮窄查詢範圍。"
 
 #: packages/app-cli/app/app.js:93
 msgid "No notebook selected."
@@ -3965,7 +3981,7 @@ msgstr "正在取消同步...請稍等。"
 #: packages/app-cli/app/app.js:256
 #, javascript-format
 msgid "No such command: %s"
-msgstr "沒有該命令：%s"
+msgstr "沒有該命令: %s"
 
 #: packages/app-cli/app/app.js:304
 #, javascript-format
@@ -3988,13 +4004,14 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是 \"add\" (新增標籤)，\"remove\" (刪除標籤) 或 \"notetags\" (列出"
-"此標籤的相關記事)。`tag list` 命令可列出所有標籤 (加上 -l 可列出完整資訊)。"
+"<tag-command> 可以是 \"add\" (新增)，\"remove\" (刪除) 或\" notetags\" (記事"
+"標籤)，來從[note]中分配或刪除[tag]，列出與[tag]相關聯的記事，或列出與[note]相"
+"關聯的標籤。 `tag list` 命令可用於列出所有標籤(使用-l作為長選項)。"
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "無效的命令：\"%s\""
+msgstr "無效的命令: \"%s\""
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -4003,13 +4020,13 @@ msgstr "標記待辦事項為完成。"
 #: packages/app-cli/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "記事不等於待辨事項：\"%s\""
+msgstr "記事不等於待辨事項: \"%s\""
 
 #~ msgid "Joplin Server Directory"
 #~ msgstr "Joplin 主機目錄"
 
 #~ msgid "Joplin Server username"
-#~ msgstr "Joplin 主機用戶名"
+#~ msgstr "Joplin 主機 用戶名"
 
 #, fuzzy
 #~ msgid "marked text"
@@ -4020,14 +4037,15 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgstr "標記"
 
 #~ msgid "Full Release Notes"
-#~ msgstr "完整的版本資訊"
+#~ msgstr "完整的發行備註"
 
 #, fuzzy
 #~ msgid ""
 #~ "If the font is incorrect or empty, it will default to a generic monospace "
 #~ "font."
 #~ msgstr ""
-#~ "如果字型不正確或沒有填寫，則預設為通用等距字型。"
+#~ "必須是 *等距 (monospace)* 字型，否則程式將無法正常運作。如果字型不正確或沒"
+#~ "有填寫，則預設為通用等距字型。"
 
 #~ msgid ""
 #~ "This should be a *monospace* font or some elements will render "
@@ -4047,13 +4065,14 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 #~ "see the full error message below:"
 #~ msgstr ""
-#~ "尚未安裝 Joplin Nextcloud 程式或設定錯誤。請查看下面的完整錯誤訊息："
+#~ "尚未安裝 Joplin Nextcloud 應用程式或尚未進行設定。 請查看下面的完整錯誤訊"
+#~ "息："
 
 #~ msgid "Show Log"
 #~ msgstr "顯示日誌"
 
 #~ msgid "Joplin Nextcloud App status:"
-#~ msgstr "Joplin Nextcloud 程式狀態："
+#~ msgstr "Joplin Nextcloud 應用程式狀態: "
 
 #~ msgid "Check Status"
 #~ msgstr "檢查狀態"
@@ -4062,30 +4081,30 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgstr "說明"
 
 #~ msgid "OneDrive Dev (For testing only)"
-#~ msgstr "OneDrive Dev (測試用)"
+#~ msgstr "OneDrive Dev (僅測試使用)"
 
 #~ msgid ""
 #~ "Type a note title or part of its content to jump to it. Or type # "
 #~ "followed by a tag name, or @ followed by a notebook name."
-#~ msgstr "輸入記事標題、＃加上標籤名稱、@ 加上記事本名稱以開啟相應項目。"
+#~ msgstr "鍵入記事標題來跳轉, 鍵入＃與一個標籤名稱, @ 與一個筆記本名稱。"
 
 #~ msgid "Name"
 #~ msgstr "名稱"
 
 #~ msgid "Icon"
-#~ msgstr "圖示"
+#~ msgstr "圖案"
 
 #~ msgid "Notebook properties"
 #~ msgstr "記事本屬性"
 
 #~ msgid "This file could not be opened: %s"
-#~ msgstr "無法開啟檔案：%s"
+#~ msgstr "無法開啟檔案: %s"
 
 #~ msgid "emphasized text"
 #~ msgstr "強調文字 <em>"
 
 #~ msgid "Click to stop external editing"
-#~ msgstr "點擊以停止外部編輯"
+#~ msgstr "按下停止外部編輯"
 
 #~ msgid "Content Properties"
 #~ msgstr "內容屬性"
@@ -4103,10 +4122,10 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgstr "移動至記事本..."
 
 #~ msgid "Move %d notes to notebook \"%s\"?"
-#~ msgstr "要將 %d 移動到「%s」記事本嗎？"
+#~ msgstr "移動 %d 記事到記事本 \"%s\"？"
 
 #~ msgid "Press to set the decryption password."
-#~ msgstr "點擊設定解密密碼。"
+#~ msgstr "按下以設置解密密碼。"
 
 #~ msgid "Some items cannot be synchronised. Press for more info."
 #~ msgstr "有些項目不能同步。請按此查看更多資訊。"
@@ -4121,7 +4140,7 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgstr "資料庫 V%s"
 
 #~ msgid "FTS enabled: %d"
-#~ msgstr "FTS 已啟用：%d"
+#~ msgstr "FTS 已啟用: %d"
 
 #~ msgid "Exit"
 #~ msgstr "離開"
@@ -4151,11 +4170,11 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgid ""
 #~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
 #~ "be decrypted and try again."
-#~ msgstr "此項目當前已加密：%s \"%s\"。請等待所有項目解密後重試。"
+#~ msgstr "此項目當前已加密: %s \"%s\"。請等待所有專案被解密後重試。"
 
 #, fuzzy
 #~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-#~ msgstr "是否從所有記事中刪除「%s」及其下的子標籤？"
+#~ msgstr "是否從所有記事中刪除此標籤 \"%s\"？"
 
 #~ msgid ""
 #~ "Could not synchronise with OneDrive.\n"
@@ -4167,22 +4186,22 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgstr ""
 #~ "無法與 OneDrive 同步。\n"
 #~ "\n"
-#~ "此錯誤通常發生在 OneDrive for Business，Joplin 無法支援。\n"
+#~ "此錯誤通常發生在 OneDrive for Business，很遗憾它無法被支援。\n"
 #~ "\n"
 #~ "請考慮使用一般的 OneDrive 帳戶。"
 
 #~ msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-#~ msgstr "使用 CodeMirror 作為編輯器 (BETA)"
+#~ msgstr "使用 CodeMirror 作為代碼編輯器 (BETA)"
 
 #, fuzzy
 #~ msgid "Cannot move tag to this location."
-#~ msgstr "無法將記事本移動到此位置"
+#~ msgstr "無法移動記事本到此位置"
 
 #~ msgid "Add or remove tags"
 #~ msgstr "新增或移除標籤"
 
 #~ msgid "Link"
-#~ msgstr "鏈結"
+#~ msgstr "連結"
 
 #~ msgid "Front"
 #~ msgstr "前"
@@ -4200,17 +4219,17 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgstr "整體縮放比例 (%)"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
-#~ msgstr "同步已在進行中。狀態：%s"
+#~ msgstr "同步已在進行中。狀態: %s"
 
 #~ msgid "Confirm master password:"
-#~ msgstr "確認主密碼："
+#~ msgstr "確認主密碼: "
 
 #~ msgid "Confirm password"
-#~ msgstr "確認密碼："
+#~ msgstr "確認密碼: "
 
 #, fuzzy
 #~ msgid "Missing required argument: note"
-#~ msgstr "缺少必需參數：%s"
+#~ msgstr "缺少必需參數: %s"
 
 #~ msgid "Synchronisation status"
 #~ msgstr "顯示同步狀態"
@@ -4225,7 +4244,7 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgstr "加密選項"
 
 #~ msgid "Clipper Options"
-#~ msgstr "剪輯選項"
+#~ msgstr "Clipper 選項"
 
 #~ msgid "Cancel synchronisation"
 #~ msgstr "取消同步"
@@ -4242,11 +4261,11 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgid ""
 #~ "Click on the (+) button to create a new note or notebook. Click on the "
 #~ "side menu to access your existing notebooks."
-#~ msgstr "您可以點撃 (+) 鈕新增記事或記事本，點撃側邊欄可檢視現有的記事本。"
+#~ msgstr "您可以點撃 (+) 鍵去新增記事或記事本。點撃側邊欄去檢視現有的記事本。"
 
 #~ msgid ""
 #~ "You currently have no notebook. Create one by clicking on (+) button."
-#~ msgstr "您當前沒有任何記事本，點擊 (+) 鈕即可建立。"
+#~ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本筆記。"
 
 #~ msgid "Welcome"
 #~ msgstr "歡迎"
@@ -4260,7 +4279,7 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgstr "啟用檔案系統同步時要同步的路徑。請參閱 `sync.target`。"
 
 #~ msgid "State: %s."
-#~ msgstr "狀態：%s。"
+#~ msgstr "狀態: %s。"
 
 #~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "已有同樣名為「%s」的記事本"
+#~ msgstr "同名筆記本已經存在: \"%s\""
