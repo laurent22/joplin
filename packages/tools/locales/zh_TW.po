@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Yaoze Ye <yaozeye@yahoo.co.jp>\n"
+"Last-Translator: Po-Chiang Chao (BobChao) <bobchao@gmail.com>\n"
 "Language-Team: yaozeye <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -268,12 +270,10 @@ msgid "Retry"
 msgstr "重試"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:113
-#, fuzzy
 msgid "Advanced tools"
-msgstr "顯示進階選項"
+msgstr "進階工具"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:115
-#, fuzzy
 msgid "Export debug report"
 msgstr "匯出除錯報告"
 
@@ -390,7 +390,7 @@ msgstr "請等待所有附件下載並解密。您也可以切換到 %s 以編�
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
-msgstr "下載此附件時出現錯誤: "
+msgstr "下載此附件時出現錯誤："
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
@@ -431,15 +431,14 @@ msgid "Creating new %s..."
 msgstr "建立新 %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "檢查更新..."
+msgstr "新增標籤..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
-msgstr "這個編輯模式尚有許多限制，建議使用前先深入了解"
+msgstr "這個編輯模式尚有許多限制，建議使用前先深入了解。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
 msgid "Read more about it"
@@ -509,7 +508,6 @@ msgid "Delete line"
 msgstr "刪除整行"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
 msgstr "複製本行"
 
@@ -530,9 +528,8 @@ msgid "Indent more"
 msgstr "增加縮排"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
-#, fuzzy
 msgid "Toggle comment"
-msgstr "添加/刪除注釋"
+msgstr "切換注釋"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Sort selected lines"
@@ -715,8 +712,8 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
-"在 Joplin 同步前需先升級同步目標。更新時間大約耗時數分鐘，且程式也需要重新啟動。"
-"如願繼續，請點擊連結。"
+"在 Joplin 同步前需先升級同步目標。更新時間大約耗時數分鐘，且程式也需要重新啟"
+"動。如願繼續，請點擊連結。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:444
 msgid "Restart and upgrade"
@@ -787,7 +784,7 @@ msgstr "重新命名"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
 msgid "Rename notebook:"
-msgstr "重新命名記事本: "
+msgstr "重新命名記事本："
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
 #: packages/app-mobile/components/action-button.js:77
@@ -811,7 +808,7 @@ msgstr "設定提醒"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
 msgid "Set alarm:"
-msgstr "設定提醒: "
+msgstr "設定提醒："
 
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
@@ -830,7 +827,7 @@ msgstr "移動至記事本"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
 msgid "Move to notebook:"
-msgstr "移動至記事本: "
+msgstr "移動至記事本："
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
@@ -841,7 +838,6 @@ msgid "Toggle editors"
 msgstr "切換編輯器"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
 msgstr "分享記事..."
 
@@ -851,7 +847,7 @@ msgstr "調整介面佈局"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
-msgstr "重新命名標籤: "
+msgstr "重新命名標籤："
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
 msgid "New notebook"
@@ -859,7 +855,7 @@ msgstr "新增記事本"
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
 msgid "Notebook title:"
-msgstr "記事本標題: "
+msgstr "記事本標題："
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -876,7 +872,7 @@ msgstr "新增子記事本"
 
 #: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
 msgid "Template file:"
-msgstr "範本檔案: "
+msgstr "範本檔案："
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:45
 msgid "Add or remove tags:"
@@ -895,19 +891,19 @@ msgstr "一次只能列印一個記事。"
 #: packages/app-cli/app/command-sync.js:90
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "請按照以下步驟，設定 Joplin 與 Dropbox 同步所需的選項: "
+msgstr "請按照以下步驟，設定 Joplin 與 Dropbox 同步所需的選項："
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 #: packages/app-cli/app/command-sync.js:91
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "步驟 1: 在瀏覽器中打開此網址以授權應用程式: "
+msgstr "步驟 1: 在瀏覽器中打開此網址以授權應用程式："
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:32
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 #: packages/app-cli/app/command-sync.js:93
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "步驟 2: 輸入 Dropbox 提供給您的代碼: "
+msgstr "步驟 2: 輸入 Dropbox 提供給您的代碼："
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:35
 #: packages/app-mobile/components/screens/dropbox-login.js:68
@@ -1229,7 +1225,8 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
-"以下主密鑰使用了過時的加密演算法，建議升級。升級後的主密鑰仍可照常加解密您的資料。"
+"以下主密鑰使用了過時的加密演算法，建議升級。升級後的主密鑰仍可照常加解密您的"
+"資料。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
@@ -1250,7 +1247,8 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"若您需要重新加密資料（例如：發現某些記事使用了過時的加密方式），可使用下面的工具。"
+"若您需要重新加密資料（例如：發現某些記事使用了過時的加密方式），可使用下面的"
+"工具。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1275,7 +1273,8 @@ msgstr ""
 "\n"
 "1. 同步您的所有設備。\n"
 "2. 點選「%s」。\n"
-"3. 等待執行完成。在執行過程中，請避免在其他設備上更改任何記事，以免發生衝突。\n"
+"3. 等待執行完成。在執行過程中，請避免在其他設備上更改任何記事，以免發生衝"
+"突。\n"
 "4. 待此設備完成重新加密與同步後，同步所有其他設備，並等待其執行完成。\n"
 "\n"
 "重要提示：您只需要在一台設備上執行此操作一次。"
@@ -1295,7 +1294,8 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"停用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送未加密的資料到同步目標。您要繼續嗎？"
+"停用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送未加密的資料到同"
+"步目標。您要繼續嗎？"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
@@ -1305,8 +1305,9 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"啟用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送加密後的資料到同步目標。"
-"千萬不要忘記密碼，因為這是解密的 *唯一* 方式！要啟用加密，請在下面輸入密碼。"
+"啟用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送加密後的資料到同"
+"步目標。千萬不要忘記密碼，因為這是解密的 *唯一* 方式！要啟用加密，請在下面輸"
+"入密碼。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-mobile/components/screens/encryption-config.js:258
@@ -1344,8 +1345,8 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"注意：加密時僅使用標記為「使用中」的那份密鑰；而解密時則根據記事或記事本最初加密的方式，"
-"可能採用此處列出的任一組密鑰。"
+"注意：加密時僅使用標記為「使用中」的那份密鑰；而解密時則根據記事或記事本最初"
+"加密的方式，可能採用此處列出的任一組密鑰。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
@@ -1359,7 +1360,8 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"某些項目以下列 ID 的密鑰加密過，但目前程式無法存取密鑰來解密。也許很快就會透過同步下載完畢。"
+"某些項目以下列 ID 的密鑰加密過，但目前程式無法存取密鑰來解密。也許很快就會透"
+"過同步下載完畢。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
 #: packages/app-mobile/components/screens/encryption-config.js:268
@@ -1423,7 +1425,7 @@ msgstr "參數："
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
 msgid "The application must be restarted for these changes to take effect."
-msgstr "程式必須重新啟動以便套用這些變動"
+msgstr "程式必須重新啟動以便套用這些變動。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
@@ -1453,9 +1455,8 @@ msgid "Delete plugin \"%s\"?"
 msgstr "刪除延伸模組「%s」？"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
-#, fuzzy
 msgid "Browse all plugins"
-msgstr "安裝延伸模組"
+msgstr "瀏覽所有延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
@@ -1463,10 +1464,9 @@ msgstr "以檔案安裝"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
-msgstr "您尚未安裝任何延伸模組"
+msgstr "您尚未安裝任何延伸模組。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
 msgstr "無法連上延伸模組中心"
 
@@ -1475,7 +1475,6 @@ msgid "Try again"
 msgstr "再試一次"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
-#, fuzzy
 msgid "Plugin tools"
 msgstr "延伸模組"
 
@@ -1484,7 +1483,6 @@ msgid "Manage your plugins"
 msgstr "管理您的延伸模組"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-#, fuzzy
 msgid "No results"
 msgstr "查無資料"
 
@@ -1494,32 +1492,26 @@ msgid "Please wait..."
 msgstr "請稍候..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
 msgstr "搜尋延伸模組..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
-#, fuzzy
 msgid "Install"
-msgstr "安裝延伸模組"
+msgstr "安裝"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
-#, fuzzy
 msgid "Installing..."
-msgstr "正在安裝中..."
+msgstr "安裝中..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
-#, fuzzy
 msgid "Installed"
-msgstr "已安裝延伸模組"
+msgstr "已安裝"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
-#, fuzzy
 msgid "Update"
 msgstr "已更新"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
-#, fuzzy
 msgid "Updating..."
 msgstr "更新中..."
 
@@ -1533,7 +1525,7 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not install plugin: %s"
 msgstr "無法安裝延伸模組：%s"
 
@@ -1689,7 +1681,6 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "複製分享連結"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
 msgstr "停止分享"
 
@@ -1726,14 +1717,12 @@ msgid "Recipients:"
 msgstr "共享對象："
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "同步中..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "分享記事..."
+msgstr "分享記事本..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
@@ -1742,12 +1731,10 @@ msgid ""
 msgstr "停止共享後，共享對象將無法再存取這份共享記事本。確定要停止共享嗎？"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
 msgstr "分享記事本"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
 msgstr "切換安全模式"
 
@@ -1918,7 +1905,7 @@ msgstr "已建立: %s"
 #: packages/app-mobile/components/screens/encryption-config.js:122
 #: packages/app-mobile/components/screens/encryption-config.js:151
 msgid "Password:"
-msgstr "密碼: "
+msgstr "密碼："
 
 #: packages/app-mobile/components/screens/encryption-config.js:137
 msgid "Password cannot be empty"
@@ -1936,7 +1923,7 @@ msgstr "密碼不相符!"
 #: packages/app-mobile/components/screens/encryption-config.js:163
 #: packages/app-cli/app/command-e2ee.js:79
 msgid "Confirm password:"
-msgstr "確認密碼: "
+msgstr "確認密碼："
 
 #: packages/app-mobile/components/screens/encryption-config.js:177
 msgid "Enable"
@@ -2001,7 +1988,8 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"如果搜尋出現問題，請使用此功能重新建立搜尋索引。所需時間依記事數量而定，也可能會花費很長的時間。"
+"如果搜尋出現問題，請使用此功能重新建立搜尋索引。所需時間依記事數量而定，也可"
+"能會花費很長的時間。"
 
 #: packages/app-mobile/components/screens/config.js:461
 msgid "Exporting profile..."
@@ -2195,9 +2183,9 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"請在瀏覽器開啟以下 URL 驗證應用程式。應用程式將在「Apps/Joplin」中建立一"
-"個目錄，並只會在該目錄中進行讀取和寫入。應用程式將無法訪問此目錄之外的任何檔"
-"案，同時也無法使用任何其他個人資料。我們不會與任何第三方廠商共用任何資料。"
+"請在瀏覽器開啟以下 URL 驗證應用程式。應用程式將在「Apps/Joplin」中建立一個目"
+"錄，並只會在該目錄中進行讀取和寫入。應用程式將無法訪問此目錄之外的任何檔案，"
+"同時也無法使用任何其他個人資料。我們不會與任何第三方廠商共用任何資料。"
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
@@ -2301,7 +2289,8 @@ msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"要同步的目標。每個同步目標可能有額外參數命名為 `sync.NUM.NAME`（參考下方描述）。"
+"要同步的目標。每個同步目標可能有額外參數命名為 `sync.NUM.NAME`（參考下方描"
+"述）。"
 
 #: packages/lib/models/Setting.js:176
 msgid "Directory to synchronise with (absolute path)"
@@ -2352,9 +2341,8 @@ msgid "Joplin Server URL"
 msgstr "Joplin 主機 URL"
 
 #: packages/lib/models/Setting.js:335
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplin 主機"
+msgstr "Joplin 主機 email"
 
 #: packages/lib/models/Setting.js:346
 msgid "Joplin Server password"
@@ -2370,8 +2358,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"在「手動」模式下，僅在您點選附件時才下載附件；「自動」模式會在打開記"
-"事時開始下載；「一律下載」模式則無論是否打開記事，都會下載所有附件。"
+"在「手動」模式下，僅在您點選附件時才下載附件；「自動」模式會在打開記事時開始"
+"下載；「一律下載」模式則無論是否打開記事，都會下載所有附件。"
 
 #: packages/lib/models/Setting.js:362
 msgid "Always"
@@ -2486,9 +2474,8 @@ msgid "Enable typographer support"
 msgstr "啟用 Typographer 支援"
 
 #: packages/lib/models/Setting.js:631
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "啟用記事歷史紀錄"
+msgstr "啟用 Linkify"
 
 #: packages/lib/models/Setting.js:632
 msgid "Enable math expressions"
@@ -2577,7 +2564,7 @@ msgstr "啟動應用程式時最小化到系統匣"
 
 #: packages/lib/models/Setting.js:684
 msgid "Editor font size"
-msgstr "編輯器字體大小"
+msgstr "編輯器文字大小"
 
 #: packages/lib/models/Setting.js:691
 msgid "Editor font"
@@ -2596,10 +2583,10 @@ msgstr "編輯器字型系列"
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
-msgstr "用在編輯器中大部分的文字上。如果尋無此字體，將顯示為通用的變動寬度字體。"
+msgstr ""
+"用在編輯器中大部分的文字上。如果尋無此字型，將顯示為通用的變動寬度字型。"
 
 #: packages/lib/models/Setting.js:726
-#, fuzzy
 msgid "Editor monospace font family"
 msgstr "編輯器字型系列"
 
@@ -2608,7 +2595,9 @@ msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
-msgstr "用在需要固定字寬的狀況（表格、待辦事項、程式碼等）。如果尋無此字體，將顯示為通用的固定寬度字體。"
+msgstr ""
+"用在需要固定字寬的狀況（表格、待辦事項、程式碼等）。如果尋無此字型，將顯示為"
+"通用的固定寬度字型。"
 
 #: packages/lib/models/Setting.js:748
 msgid "Custom stylesheet for rendered Markdown"
@@ -2672,7 +2661,8 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"用於開啟記事的外部編輯器命令 (可能包括參數)。如果不在此提供，程式將嘗試自動呼叫預設的編輯器。"
+"用於開啟記事的外部編輯器命令 (可能包括參數)。如果不在此提供，程式將嘗試自動呼"
+"叫預設的編輯器。"
 
 #: packages/lib/models/Setting.js:825
 msgid "Page size for PDF export"
@@ -2858,9 +2848,9 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 "這些延伸模組提供額外的 Markdown 顯示功能。請注意：雖然這些額外功能個有用途，"
-"但並非標準 Markdown 語法，因此通常只能在 Joplin 內運行；另外，其中一些功能"
-"與所見即所得 (WYSIWYG) 編輯器 *不相容*，用此編輯器編輯記事時無法顯示使用。"
-"延伸模組後皆列出與所見即所得編輯器的相容狀況。"
+"但並非標準 Markdown 語法，因此通常只能在 Joplin 內運行；另外，其中一些功能與"
+"所見即所得 (WYSIWYG) 編輯器 *不相容*，用此編輯器編輯記事時無法顯示使用。延伸"
+"模組後皆列出與所見即所得編輯器的相容狀況。"
 
 #: packages/lib/models/Setting.js:1618
 #, javascript-format
@@ -2962,8 +2952,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"錯誤。請檢查網址、使用者名稱、密碼等是否正確，以及同步目標是否可以存取。錯"
-"誤回報訊息為："
+"錯誤。請檢查網址、使用者名稱、密碼等是否正確，以及同步目標是否可以存取。錯誤"
+"回報訊息為："
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -3082,7 +3072,7 @@ msgid ""
 msgstr "已下載項目為未知類型，請將 Joplin 升級至最新版本"
 
 #: packages/lib/JoplinServerApi.js:61
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
@@ -3191,9 +3181,9 @@ msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "無法載入「%s」模組以讀取 %s 格式並匯出 %s"
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "無法載入「%s」模組以讀取 %s 格式並匯出 %s""
+msgstr "無法載入「%s」模組以讀取 %s 格式並匯出 %s"
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3237,7 +3227,7 @@ msgstr "命令"
 #: packages/lib/services/KeymapService.js:280
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr "%s 缺少必須的屬性 %s"
+msgstr "%s 缺少必須的屬性 %s。"
 
 #: packages/lib/services/KeymapService.js:280
 #: packages/lib/services/KeymapService.js:287
@@ -3245,9 +3235,9 @@ msgid "accelerator"
 msgstr "快速鍵"
 
 #: packages/lib/services/KeymapService.js:287
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "無效的 %s：%s"
+msgstr "無效的 %s：%s。"
 
 #: packages/lib/services/KeymapService.js:305
 #, javascript-format
@@ -3294,8 +3284,8 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin 多次未能解密這些項目，可能是因為它們已損壞或太大。這些項目將保留在設"
-"備上，但 Joplin 將不再嘗試解密。"
+"Joplin 多次未能解密這些項目，可能是因為它們已損壞或太大。這些項目將保留在設備"
+"上，但 Joplin 將不再嘗試解密。"
 
 #: packages/lib/services/ReportService.js:145
 #: packages/app-cli/app/cli-utils.js:140
@@ -3324,7 +3314,6 @@ msgid "Downloaded and encrypted"
 msgstr "已下載並加密"
 
 #: packages/lib/services/ReportService.js:180
-#, fuzzy
 msgid "Created locally"
 msgstr "已建立的本地項目"
 
@@ -3400,7 +3389,8 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"將符合 <note> 的記事複製到 [notebook]。如果未指定記事本，則預設複製到當前記事本中。"
+"將符合 <note> 的記事複製到 [notebook]。如果未指定記事本，則預設複製到當前記事"
+"本中。"
 
 #: packages/app-cli/app/command-ls.js:18
 msgid ""
@@ -3497,8 +3487,8 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
-"開始、停止或檢查 API 伺服器。若要指定在哪個連接埠上執行，請設定 api.port 設定變"
-"數。指令為 (%s)"
+"開始、停止或檢查 API 伺服器。若要指定在哪個連接埠上執行，請設定 api.port 設定"
+"變數。指令為 (%s)"
 
 #: packages/app-cli/app/command-server.js:38
 #, javascript-format
@@ -3601,7 +3591,7 @@ msgstr "同步到已指明的目標 (預設是 sync.target 的設定值)"
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
-msgstr "升級同步目標到最新版本"
+msgstr "升級同步目標到最新版本。"
 
 #: packages/app-cli/app/command-sync.js:105
 #, javascript-format
@@ -3618,8 +3608,7 @@ msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
-msgstr ""
-"鎖定中。如果您確知目前並非正在同步，可刪除「%s」上的鎖定檔並繼續操作。"
+msgstr "鎖定中。如果您確知目前並非正在同步，可刪除「%s」上的鎖定檔並繼續操作。"
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
@@ -3735,7 +3724,7 @@ msgstr "將特定的檔案附加到記事。"
 msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
-msgstr ""
+msgstr "執行文字檔中的命令，每條命令各佔一行。"
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
@@ -3809,8 +3798,8 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"有些資料已經過加密，您可能需要提供主密碼來解密。請鍵入 \"e2ee decrypt\" "
-"進行解密。如果您已經提供了密碼，那加密的項目將會在後臺解密，請耐心等候。"
+"有些資料已經過加密，您可能需要提供主密碼來解密。請鍵入 \"e2ee decrypt\" 進行"
+"解密。如果您已經提供了密碼，那加密的項目將會在後臺解密，請耐心等候。"
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
@@ -3893,8 +3882,8 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"在任何一個命令中，可以通過標題或 ID 來指定記事或記事本，或使用快捷鍵 `$n`（選定記事）or "
-"`$b`（選定記事本）。您亦可以用 `$c` 代表當前選擇的項目。"
+"在任何一個命令中，可以通過標題或 ID 來指定記事或記事本，或使用快捷鍵 `$n`（選"
+"定記事）or `$b`（選定記事本）。您亦可以用 `$c` 代表當前選擇的項目。"
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -3930,8 +3919,8 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> 可以是 \"toggle\" (切換完成與否，或將記事轉換為待辦事項)"
-"或 \"clear\" (將待辦事項轉換為記事)。"
+"<todo-command> 可以是 \"toggle\" (切換完成與否，或將記事轉換為待辦事項)或 "
+"\"clear\" (將待辦事項轉換為記事)。"
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
@@ -3988,8 +3977,9 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是 \"add\" (新增標籤)，\"remove\" (刪除標籤) 或 \"notetags\" (列出"
-"此標籤的相關記事)。`tag list` 命令可列出所有標籤 (加上 -l 可列出完整資訊)。"
+"<tag-command> 可以是 \"add\" (新增標籤)，\"remove\" (刪除標籤) 或 \"notetags"
+"\" (列出此標籤的相關記事)。`tag list` 命令可列出所有標籤 (加上 -l 可列出完整"
+"資訊)。"
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format
@@ -4026,8 +4016,7 @@ msgstr "記事不等於待辨事項：\"%s\""
 #~ msgid ""
 #~ "If the font is incorrect or empty, it will default to a generic monospace "
 #~ "font."
-#~ msgstr ""
-#~ "如果字型不正確或沒有填寫，則預設為通用等距字型。"
+#~ msgstr "如果字型不正確或沒有填寫，則預設為通用等距字型。"
 
 #~ msgid ""
 #~ "This should be a *monospace* font or some elements will render "
