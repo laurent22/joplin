@@ -60,6 +60,7 @@ export interface MailerConfig {
 export interface Config {
 	appVersion: string;
 	appName: string;
+	env: Env;
 	port: number;
 	rootDir: string;
 	viewDir: string;

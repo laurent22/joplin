@@ -394,6 +394,17 @@ export interface Token extends WithDates {
 	user_id?: Uuid;
 }
 
+export interface Subscription {
+	id?: number;
+	user_id?: Uuid;
+	stripe_user_id?: Uuid;
+	stripe_subscription_id?: Uuid;
+	last_payment_time?: number;
+	last_payment_failed_time?: number;
+	updated_time?: string;
+	created_time?: string;
+}
+
 export const databaseSchema: DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -531,6 +542,16 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'number' },
 		value: { type: 'string' },
 		user_id: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	subscriptions: {
+		id: { type: 'number' },
+		user_id: { type: 'string' },
+		stripe_user_id: { type: 'string' },
+		stripe_subscription_id: { type: 'string' },
+		last_payment_time: { type: 'string' },
+		last_payment_failed_time: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

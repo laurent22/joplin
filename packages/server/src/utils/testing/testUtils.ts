@@ -66,7 +66,7 @@ export async function beforeAllDb(unitName: string) {
 	// Uncomment the code below to run the test units with Postgres. Run first
 	// `docker-compose -f docker-compose.db-dev.yml` to get a dev db.
 
-	// await initConfig({
+	// await initConfig(Env.Dev, {
 	// 	DB_CLIENT: 'pg',
 	// 	POSTGRES_DATABASE: unitName,
 	// 	POSTGRES_USER: 'joplin',
@@ -75,7 +75,7 @@ export async function beforeAllDb(unitName: string) {
 	// 	tempDir: tempDir,
 	// });
 
-	await initConfig({
+	await initConfig(Env.Dev, {
 		SQLITE_DATABASE: createdDbPath_,
 	}, {
 		tempDir: tempDir,

@@ -1,48 +1,61 @@
-import { SubPath, RouteHandler } from '../../utils/routeUtils';
+import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
-import config from '../../config';
-import { ErrorNotFound } from '../../utils/errors';
+import globalConfig from '../../config';
+import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { readCredentialFile } from '../../utils/testing/testUtils';
+import { Stripe } from 'stripe';
+import Logger from '@joplin/lib/Logger';
+import getRawBody = require('raw-body');
+
+const logger = Logger.create('/stripe');
 
 const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 
-let stripe_: any = null;
-
 interface StripeConfig {
 	secretKey: string;
 	publishableKey: string;
+	webhookSecret: string;
 }
 
-async function stripeConfig(): Promise<StripeConfig> {
+async function initStripe() {
 	const r = await readCredentialFile('stripe_test.json');
-	return JSON.parse(r);
+	const c:StripeConfig = JSON.parse(r);
+	const s:Stripe = require('stripe')(c.secretKey);
+
+	return {
+		stripe: s,
+		config: c,
+	};
 }
 
-async function initStripe(): Promise<any> {
-	if (stripe_) return stripe_;
+async function stripeEvent(stripe:Stripe, config:StripeConfig, req:any):Promise<Stripe.Event> {
+	if (!config.webhookSecret) throw new Error('webhookSecret is required');
 
-	const conf = await stripeConfig();
-	stripe_ = require('stripe')(conf.secretKey);
-	return stripe_;
+	const body = await getRawBody(req);
+
+	return stripe.webhooks.constructEvent(
+		body,
+		req.headers["stripe-signature"],
+		config.webhookSecret
+	);
 }
 
 interface CreateCheckoutSessionFields {
 	priceId: string;
 }
 
-// curl -F priceId=price_xxxxxxxxxxx http://joplincloud.local:22300/stripe/createCheckoutSession
+type StripeRouteHandler = (stripe:Stripe, config:StripeConfig, path: SubPath, ctx: AppContext) => Promise<any>;
 
-const postHandlers: Record<string, RouteHandler> = {
+const postHandlers: Record<string, StripeRouteHandler> = {
 
-	createCheckoutSession: async (_path: SubPath, ctx: AppContext) => {
+	createCheckoutSession: async (stripe:Stripe, _config:StripeConfig, _path: SubPath, ctx: AppContext) => {
 		const fields = await bodyFields<CreateCheckoutSessionFields>(ctx.req);
 		const priceId = fields.priceId;
-		const stripe = await initStripe();
 
 		// See https://stripe.com/docs/api/checkout/sessions/create
 		// for additional parameters to pass.
@@ -59,8 +72,8 @@ const postHandlers: Record<string, RouteHandler> = {
 			// {CHECKOUT_SESSION_ID} is a string literal; do not change it!
 			// the actual Session ID is returned in the query parameter when your customer
 			// is redirected to the success page.
-			success_url: `${config().baseUrl}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
-			cancel_url: `${config().baseUrl}/stripe/cancel`,
+			success_url: `${globalConfig().baseUrl}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
+			cancel_url: `${globalConfig().baseUrl}/stripe/cancel`,
 		});
 
 		return {
@@ -68,20 +81,155 @@ const postHandlers: Record<string, RouteHandler> = {
 		};
 	},
 
+	webhook: async (stripe:Stripe, config:StripeConfig, _path: SubPath, ctx: AppContext) => {
+		const event = await stripeEvent(stripe, config, ctx.req);
+		
+		const hooks:any = {
+		
+			'checkout.session.completed': async () => {
+				// Payment is successful and the subscription is created.
+				//
+				// For testing: `stripe trigger checkout.session.completed`
+				// Or use /checkoutTest URL.
+
+				// {
+				//   "object": {
+				//     "id": "cs_test_xxxxxxxxxxxxxxxxxx",
+				//     "object": "checkout.session",
+				//     "allow_promotion_codes": null,
+				//     "amount_subtotal": 499,
+				//     "amount_total": 499,
+				//     "billing_address_collection": null,
+				//     "cancel_url": "http://joplincloud.local:22300/stripe/cancel",
+				//     "client_reference_id": null,
+				//     "currency": "gbp",
+				//     "customer": "cus_xxxxxxxxxxxx",
+				//     "customer_details": {
+				//       "email": "toto@example.com",
+				//       "tax_exempt": "none",
+				//       "tax_ids": [
+				//       ]
+				//     },
+				//     "customer_email": null,
+				//     "livemode": false,
+				//     "locale": null,
+				//     "metadata": {
+				//     },
+				//     "mode": "subscription",
+				//     "payment_intent": null,
+				//     "payment_method_options": {
+				//     },
+				//     "payment_method_types": [
+				//       "card"
+				//     ],
+				//     "payment_status": "paid",
+				//     "setup_intent": null,
+				//     "shipping": null,
+				//     "shipping_address_collection": null,
+				//     "submit_type": null,
+				//     "subscription": "sub_xxxxxxxxxxxxxxxx",
+				//     "success_url": "http://joplincloud.local:22300/stripe/success?session_id={CHECKOUT_SESSION_ID}",
+				//     "total_details": {
+				//       "amount_discount": 0,
+				//       "amount_shipping": 0,
+				//       "amount_tax": 0
+				//     }
+				//   }
+				// }
+				
+				const checkoutSession:Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
+				
+				// The Stripe TypeScript object defines "customer" and
+				// "subscription" as various types but they are actually
+				// string according to the documentation.
+				const stripeUserId = checkoutSession.customer as string;
+				const stripeSubscriptionId = checkoutSession.subscription as string;
+
+				await ctx.models.subscription().saveUserAndSubscription(
+					checkoutSession.customer_details.email || checkoutSession.customer_email,
+					1,
+					stripeUserId,
+					stripeSubscriptionId,
+				);
+			},
+
+			'invoice.paid': async() => {
+				// Continue to provision the subscription as payments continue
+				// to be made. Store the status in your database and check when
+				// a user accesses your service. This approach helps you avoid
+				// hitting rate limits.
+				//
+				// Note that when the subscription is created, this event is
+				// going to be triggered before "checkout.session.completed" (at
+				// least in tests), which means it won't find the subscription
+				// at this point, but this is fine because the required data is
+				// saved in checkout.session.completed.
+
+				const invoice = event.data.object as Stripe.Invoice;
+				await ctx.models.subscription().handlePayment(invoice.subscription as string, true);
+			},
+
+			'invoice.payment_failed': async() => {
+				// The payment failed or the customer does not have a valid payment method.
+				// The subscription becomes past_due. Notify your customer and send them to the
+				// customer portal to update their payment information.
+				//
+				// For testing: `stripe trigger invoice.payment_failed`
+
+				const invoice = event.data.object as Stripe.Invoice;
+				const subId = invoice.subscription as string;
+				await ctx.models.subscription().handlePayment(subId, false);
+			},
+
+		};
+
+		if (hooks[event.type]) {
+			logger.info('Got Stripe event: ' + event.type + ' [Handled]');
+			await hooks[event.type]();
+		} else {
+			logger.info('Got Stripe event: ' + event.type + ' [Unhandled]');
+		}
+	},
+
 };
 
-const getHandlers: Record<string, RouteHandler> = {
+const getHandlers: Record<string, StripeRouteHandler> = {
 
-	checkoutTest: async (_path: SubPath, _ctx: AppContext) => {
-		const conf = await stripeConfig();
+	success: async (stripe:Stripe, config:StripeConfig, _path: SubPath, _ctx: AppContext) => {
+		return 'SUCCESS';
+	},
 
+	cancel: async (stripe:Stripe, config:StripeConfig, _path: SubPath, _ctx: AppContext) => {
+		return 'CANCEL';
+	},
+
+	portal: async (stripe:Stripe, config:StripeConfig, _path: SubPath, ctx: AppContext) => {
+		if (!ctx.owner) throw new ErrorForbidden('Please login to access the subscription portal');
+		
+		const sub = await ctx.models.subscription().byUserId(ctx.owner.id);
+		if (!sub) throw new ErrorNotFound('Could not find subscription');
+
+		const billingPortalSession = await stripe.billingPortal.sessions.create({ customer: sub.stripe_user_id as string });
+		return `
+			<html>
+				<head>
+				<meta http-equiv = "refresh" content = "1; url = ${billingPortalSession.url};" />
+				<script>setTimeout(() => { window.location.href = ${JSON.stringify(billingPortalSession.url)}; }, 2000)</script>
+				</head>
+				<body>
+					Redirecting to subscription portal...
+				</body>
+			</html>`;
+	},
+
+	checkoutTest: async (stripe:Stripe, config:StripeConfig, _path: SubPath, _ctx: AppContext) => {
 		return `
 			<head>
 				<title>Checkout</title>
 				<script src="https://js.stripe.com/v3/"></script>
 
 				<script>
-					var stripe = Stripe(${JSON.stringify(conf.publishableKey)});
+					var stripe = Stripe(${JSON.stringify(config.publishableKey)});
 
 					var createCheckoutSession = function(priceId) {
 						return fetch("/stripe/createCheckoutSession", {
@@ -102,6 +250,10 @@ const getHandlers: Record<string, RouteHandler> = {
 				<button id="checkout">Subscribe</button>
 				<script>
 					var PRICE_ID = 'price_1IvlmiLx4fybOTqJMKNZhLh2';
+
+					function handleResult() {
+						console.info('Redirected to checkout');
+					}
 
 					document
 						.getElementById("checkout")
@@ -128,12 +280,14 @@ const getHandlers: Record<string, RouteHandler> = {
 
 router.post('stripe/:id', async (path: SubPath, ctx: AppContext) => {
 	if (!postHandlers[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
-	return postHandlers[path.id](path, ctx);
+	const s = await initStripe();
+	return postHandlers[path.id](s.stripe, s.config, path, ctx);
 });
 
 router.get('stripe/:id', async (path: SubPath, ctx: AppContext) => {
 	if (!getHandlers[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
-	return getHandlers[path.id](path, ctx);
+	const s = await initStripe();
+	return getHandlers[path.id](s.stripe, s.config, path, ctx);
 });
 
 export default router;

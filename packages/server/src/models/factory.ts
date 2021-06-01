@@ -68,6 +68,7 @@ import ItemResourceModel from './ItemResourceModel';
 import ShareUserModel from './ShareUserModel';
 import KeyValueModel from './KeyValueModel';
 import TokenModel from './TokenModel';
+import SubscriptionModel from './SubscriptionModel';
 
 export class Models {
 
@@ -129,6 +130,10 @@ export class Models {
 
 	public keyValue() {
 		return new KeyValueModel(this.db_, newModelFactory, this.baseUrl_);
+	}
+
+	public subscription() {
+		return new SubscriptionModel(this.db_, newModelFactory, this.baseUrl_);
 	}
 
 }

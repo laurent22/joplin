@@ -86,7 +86,7 @@ async function main() {
 
 	if (!envVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	await initConfig({
+	await initConfig(env, {
 		...envVariables[env],
 		...process.env,
 	});

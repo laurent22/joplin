@@ -1,5 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, MailerConfig, RouteType } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType } from './utils/types';
 import * as pathUtils from 'path';
 import { readFile } from 'fs-extra';
 
@@ -103,7 +103,7 @@ async function readPackageJson(filePath: string): Promise<PackageJson> {
 
 let config_: Config = null;
 
-export async function initConfig(env: EnvVariables, overrides: any = null) {
+export async function initConfig(envType:Env, env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 
 	const rootDir = pathUtils.dirname(__dirname);
@@ -117,6 +117,7 @@ export async function initConfig(env: EnvVariables, overrides: any = null) {
 	config_ = {
 		appVersion: packageJson.version,
 		appName: 'Joplin Server',
+		env: envType,
 		rootDir: rootDir,
 		viewDir: viewDir,
 		layoutDir: `${viewDir}/layouts`,
