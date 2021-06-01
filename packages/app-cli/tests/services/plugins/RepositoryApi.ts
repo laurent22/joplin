@@ -4,7 +4,7 @@ import { setupDatabaseAndSynchronizer, switchClient, supportDir, createTempDir }
 
 async function newRepoApi(): Promise<RepositoryApi> {
 	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, await createTempDir());
-	await repo.loadManifests();
+	await repo.initialize();
 	return repo;
 }
 
