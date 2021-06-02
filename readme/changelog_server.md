@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v2.0.5](https://github.com/laurent22/joplin/releases/tag/server-v2.0.5) (Pre-release) - 2021-06-02T08:14:47Z
+
+- New: Add version number on website (0ef7e98)
+- New: Added signup pages (41ed66d)
+- Improved: Allow disabling item upload for a user (f8a26cf)
+
 ## [server-v2.0.4](https://github.com/laurent22/joplin/releases/tag/server-v2.0.4) (Pre-release) - 2021-05-25T18:33:11Z
 
 - Fixed: Fixed Item and Log page when using Postgres (ee0f237)
