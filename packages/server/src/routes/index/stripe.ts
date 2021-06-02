@@ -196,11 +196,17 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 const getHandlers: Record<string, StripeRouteHandler> = {
 
 	success: async (_stripe: Stripe, _config: StripeConfig, _path: SubPath, _ctx: AppContext) => {
-		return 'SUCCESS';
+		return `
+			<p>Thank you for signing up for Joplin Cloud Pro! You should receive an email shortly with instructions on how to connect to your account.</p>
+			<p><a href="https://joplinapp.org"></a>Go back to JoplinApp.org</p>
+		`;
 	},
 
 	cancel: async (_stripe: Stripe, _config: StripeConfig, _path: SubPath, _ctx: AppContext) => {
-		return 'CANCEL';
+		return `
+			<p>Your payment has been cancelled.</p>
+			<p><a href="https://joplinapp.org"></a>Go back to JoplinApp.org</p>
+		`;
 	},
 
 	portal: async (stripe: Stripe, _config: StripeConfig, _path: SubPath, ctx: AppContext) => {
