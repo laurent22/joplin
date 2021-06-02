@@ -633,19 +633,20 @@ class SidebarComponent extends React.Component<Props, State> {
 		void CommandService.instance().execute('newFolder');
 	}
 
-	// componentDidUpdate(prevProps:any, prevState:any) {
-	// 	for (const n in prevProps) {
-	// 		if (prevProps[n] !== (this.props as any)[n]) {
-	// 			console.info('CHANGED PROPS', n);
-	// 		}
-	// 	}
-
-	// 	for (const n in prevState) {
-	// 		if (prevState[n] !== (this.state as any)[n]) {
-	// 			console.info('CHANGED STATE', n);
-	// 		}
-	// 	}
-	// }
+	componentDidUpdate(prevProps: any) {
+		let ref = null;
+		if (prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType === 'Folder') {
+			ref = this.anchorItemRefs['folder'][this.props.selectedFolderId];
+		} else if (prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType === 'Tag') {
+			ref = this.anchorItemRefs['tag'][this.props.selectedTagId];
+		} else if (this.props.notesParentType === 'Folder' && prevProps.selectedFolderId !== this.props.selectedFolderId) {
+			// focus new folder
+			ref = this.anchorItemRefs['folder'][this.props.selectedFolderId];
+		} else if (this.props.notesParentType === 'Tag' && prevProps.selectedTagId !== this.props.selectedTagId) {
+			ref = this.anchorItemRefs['tag'][this.props.selectedTagId];
+		}
+		if (ref) ref.current.scrollIntoView({ block: 'center', behavior: 'smooth' });
+	}
 
 	render() {
 		this.pluginsRef.current = this.props.plugins;
