@@ -28,7 +28,10 @@ export async function readCredentialFile(filename: string, defaultValue: string 
 	try {
 		const filePath = await credentialFile(filename);
 		const r = await fs.readFile(filePath);
-		return r.toString();
+		// There's normally no reason to keep the last new line character and it
+		// can cause problems in certain scripts, so trim it. Any other white
+		// space should also not be relevant.
+		return r.toString().trim();
 	} catch (error) {
 		return defaultValue;
 	}
