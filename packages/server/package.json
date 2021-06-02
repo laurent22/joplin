@@ -17,6 +17,7 @@
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@joplin/lib": "^1.0.9",
     "@joplin/renderer": "^1.7.4",
+    "@koa/cors": "^3.1.0",
     "bcryptjs": "^2.4.3",
     "bulma": "^0.9.1",
     "bulma-prefers-dark": "^0.1.0-beta.0",

@@ -18,6 +18,7 @@ import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
 import { credentialFile } from './utils/testing/testUtils';
 
+const cors = require('@koa/cors');
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit();
@@ -51,6 +52,19 @@ const app = new Koa();
 // loads the user, which is then used by notificationHandler. And finally
 // routeHandler uses data from both previous middlewares. It would be good to
 // layout these dependencies in code but not clear how to do this.
+const allowedDomains = ['https://joplinapp.org'];
+app.use(cors({
+	origin: function (origin:string, callback:Function) {
+		// bypass the requests with no origin (like curl requests, mobile apps, etc )
+		if (!origin) return callback(null, true);
+
+		if (allowedDomains.indexOf(origin) < 0) {
+			return callback(new Error(`Domain "${origin}" not allowed. Only specific domains are allowed to access it.`), false);
+		}
+		
+		return callback(null, true);
+	}
+}));
 app.use(ownerHandler);
 app.use(notificationHandler);
 app.use(routeHandler);
