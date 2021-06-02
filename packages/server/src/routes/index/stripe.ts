@@ -189,14 +189,14 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	success: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
 		return `
 			<p>Thank you for signing up for Joplin Cloud Pro! You should receive an email shortly with instructions on how to connect to your account.</p>
-			<p><a href="https://joplinapp.org"></a>Go back to JoplinApp.org</p>
+			<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
 		`;
 	},
 
 	cancel: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
 		return `
 			<p>Your payment has been cancelled.</p>
-			<p><a href="https://joplinapp.org"></a>Go back to JoplinApp.org</p>
+			<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
 		`;
 	},
 

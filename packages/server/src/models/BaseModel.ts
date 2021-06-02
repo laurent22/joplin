@@ -56,7 +56,7 @@ export default abstract class BaseModel<T> {
 	// connection is passed to it. That connection can be the regular db
 	// connection, or the active transaction.
 	protected models(db: DbConnection = null): Models {
-		return this.modelFactory_(db || this.db);
+		return this.modelFactory_(db || this.db, this.baseUrl);
 	}
 
 	protected get baseUrl(): string {
