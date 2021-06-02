@@ -14,13 +14,13 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		return false;
 	}
 
-	public async handlePayment(subscriptionId:string, success:boolean) {
+	public async handlePayment(subscriptionId: string, success: boolean) {
 		const sub = await this.bySubscriptionId(subscriptionId);
-		if (!sub) throw new ErrorNotFound('No such subscription: ' + subscriptionId);
+		if (!sub) throw new ErrorNotFound(`No such subscription: ${subscriptionId}`);
 
 		const now = Date.now();
 
-		const toSave:Subscription = { id: sub.id };
+		const toSave: Subscription = { id: sub.id };
 
 		if (success) {
 			toSave.last_payment_time = now;
@@ -31,7 +31,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 
 			await this.models().email().push({
 				subject: 'Joplin Cloud subscription payment failed',
-				body: 'Your invoice payment has failed. Please follow this URL to update your payment details: \n\n' + this.baseUrl + '/portal',
+				body: `Your invoice payment has failed. Please follow this URL to update your payment details: \n\n[Manage your subscription](${this.baseUrl}/portal)`,
 				recipient_email: user.email,
 				sender_id: EmailSender.Support,
 			});
@@ -40,15 +40,15 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		await this.save(toSave);
 	}
 
-	public async bySubscriptionId(id:string):Promise<Subscription> {
+	public async bySubscriptionId(id: string): Promise<Subscription> {
 		return this.db(this.tableName).select(this.defaultFields).where('stripe_subscription_id', '=', id).first();
 	}
 
-	public async byUserId(userId:Uuid):Promise<Subscription> {
+	public async byUserId(userId: Uuid): Promise<Subscription> {
 		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).first();
 	}
 
-	public async saveUserAndSubscription(email:string, accountType:number, stripeUserId:string, stripeSubscriptionId:string) {
+	public async saveUserAndSubscription(email: string, accountType: number, stripeUserId: string, stripeSubscriptionId: string) {
 		return this.withTransaction(async () => {
 			const user = await this.models().user().save({
 				email,

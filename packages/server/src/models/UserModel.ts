@@ -189,9 +189,11 @@ export default class UserModel extends BaseModel<User> {
 					recipient_email: savedUser.email,
 					recipient_name: savedUser.full_name || '',
 					subject: 'Please setup your Joplin account',
-					body: `Your new Joplin account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n${confirmUrl}`,
+					body: `Your new Joplin account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n[Complete your account](${confirmUrl})`,
 				});
 			}
+
+			UserModel.eventEmitter.emit('created');
 
 			return savedUser;
 		});
