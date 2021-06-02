@@ -18,7 +18,7 @@ interface NotificationType {
 const notificationTypes: Record<string, NotificationType> = {
 	[NotificationKey.ConfirmEmail]: {
 		level: NotificationLevel.Normal,
-		message: 'Welcome to Joplin Cloud! An email has been sent to you containing an activation link to complete your registration.',
+		message: 'Welcome to Joplin Server! An email has been sent to you containing an activation link to complete your registration.',
 	},
 	[NotificationKey.EmailConfirmed]: {
 		level: NotificationLevel.Normal,
@@ -26,7 +26,7 @@ const notificationTypes: Record<string, NotificationType> = {
 	},
 	[NotificationKey.PasswordSet]: {
 		level: NotificationLevel.Normal,
-		message: 'Welcome to Joplin Cloud! Your password has been set successfully.',
+		message: 'Welcome to Joplin Server! Your password has been set successfully.',
 	},
 	[NotificationKey.UsingSqliteInProd]: {
 		level: NotificationLevel.Important,
