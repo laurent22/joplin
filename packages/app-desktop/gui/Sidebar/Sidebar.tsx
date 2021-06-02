@@ -640,7 +640,6 @@ class SidebarComponent extends React.Component<Props, State> {
 		} else if (prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType === 'Tag') {
 			ref = this.anchorItemRefs['tag'][this.props.selectedTagId];
 		} else if (this.props.notesParentType === 'Folder' && prevProps.selectedFolderId !== this.props.selectedFolderId) {
-			// focus new folder
 			ref = this.anchorItemRefs['folder'][this.props.selectedFolderId];
 		} else if (this.props.notesParentType === 'Tag' && prevProps.selectedTagId !== this.props.selectedTagId) {
 			ref = this.anchorItemRefs['tag'][this.props.selectedTagId];
