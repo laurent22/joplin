@@ -4,6 +4,8 @@ import * as pathUtils from 'path';
 import { readFile } from 'fs-extra';
 
 export interface EnvVariables {
+	APP_NAME?: string;
+
 	APP_BASE_URL?: string;
 	USER_CONTENT_BASE_URL?: string;
 	API_BASE_URL?: string;
@@ -128,7 +130,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 
 	config_ = {
 		appVersion: packageJson.version,
-		appName: 'Joplin Server',
+		appName: env.APP_NAME || 'Joplin Server',
 		env: envType,
 		rootDir: rootDir,
 		viewDir: viewDir,

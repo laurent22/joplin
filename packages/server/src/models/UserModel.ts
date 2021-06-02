@@ -4,7 +4,7 @@ import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
-import prettyBytes = require('pretty-bytes');
+import { formatBytes } from '../utils/bytes';
 
 export default class UserModel extends BaseModel<User> {
 
@@ -85,7 +85,7 @@ export default class UserModel extends BaseModel<User> {
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
 				itemTitle ? itemTitle : name,
-				prettyBytes(user.max_item_size)
+				formatBytes(user.max_item_size)
 			));
 		}
 	}
@@ -188,8 +188,8 @@ export default class UserModel extends BaseModel<User> {
 					recipient_id: savedUser.id,
 					recipient_email: savedUser.email,
 					recipient_name: savedUser.full_name || '',
-					subject: 'Please setup your Joplin account',
-					body: `Your new Joplin account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n[Complete your account](${confirmUrl})`,
+					subject: `Please setup your ${this.appName} account`,
+					body: `Your new ${this.appName} account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n[Complete your account](${confirmUrl})`,
 				});
 			}
 

@@ -217,12 +217,12 @@ export function db() {
 	return db_;
 }
 
-function baseUrl() {
-	return 'http://localhost:22300';
-}
+// function baseUrl() {
+// 	return 'http://localhost:22300';
+// }
 
 export function models() {
-	return modelFactory(db(), baseUrl());
+	return modelFactory(db(), config());
 }
 
 export function parseHtml(html: string): Document {

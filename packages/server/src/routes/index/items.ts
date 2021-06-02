@@ -10,7 +10,7 @@ import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
-const prettyBytes = require('pretty-bytes');
+import { formatBytes } from '../../utils/bytes';
 
 const router = new Router(RouteType.Web);
 
@@ -50,7 +50,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 					url: showItemUrls(config()) ? `${config().userContentBaseUrl}/items/${item.id}/content` : null,
 				},
 				{
-					value: prettyBytes(item.content_size),
+					value: formatBytes(item.content_size),
 				},
 				{
 					value: item.mime_type || 'binary',

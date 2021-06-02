@@ -30,7 +30,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			const user = await this.models().user().load(sub.user_id, { fields: ['email'] });
 
 			await this.models().email().push({
-				subject: 'Joplin Cloud subscription payment failed',
+				subject: `${this.appName} subscription payment failed`,
 				body: `Your invoice payment has failed. Please follow this URL to update your payment details: \n\n[Manage your subscription](${this.baseUrl}/portal)`,
 				recipient_email: user.email,
 				sender_id: EmailSender.Support,
