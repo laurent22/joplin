@@ -52,18 +52,17 @@ const app = new Koa();
 // loads the user, which is then used by notificationHandler. And finally
 // routeHandler uses data from both previous middlewares. It would be good to
 // layout these dependencies in code but not clear how to do this.
-const allowedDomains = ['https://joplinapp.org'];
-app.use(cors({
-	origin: function (origin:string, callback:Function) {
-		// bypass the requests with no origin (like curl requests, mobile apps, etc )
-		if (!origin) return callback(null, true);
+const corsAllowedDomains = ['https://joplinapp.org'];
 
-		if (allowedDomains.indexOf(origin) < 0) {
-			return callback(new Error(`Domain "${origin}" not allowed. Only specific domains are allowed to access it.`), false);
+app.use(cors({
+	// https://github.com/koajs/cors/issues/52#issuecomment-413887382
+	origin: (ctx: AppContext) => {
+		if (corsAllowedDomains.indexOf(ctx.request.header.origin) !== -1) {
+			return ctx.request.header.origin;
 		}
-		
-		return callback(null, true);
-	}
+		// we can't return void, so let's return one of the valid domains
+		return corsAllowedDomains[0];
+	},
 }));
 app.use(ownerHandler);
 app.use(notificationHandler);
