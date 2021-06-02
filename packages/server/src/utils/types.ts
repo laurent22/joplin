@@ -57,6 +57,12 @@ export interface MailerConfig {
 	noReplyEmail: string;
 }
 
+export interface StripeConfig {
+	secretKey: string;
+	publishableKey: string;
+	webhookSecret: string;
+}
+
 export interface Config {
 	appVersion: string;
 	appName: string;
@@ -74,6 +80,7 @@ export interface Config {
 	userContentBaseUrl: string;
 	database: DatabaseConfig;
 	mailer: MailerConfig;
+	stripe: StripeConfig;
 }
 
 export enum HttpMethod {

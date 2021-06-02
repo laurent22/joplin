@@ -1,5 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { readFile } from 'fs-extra';
 
@@ -29,6 +29,10 @@ export interface EnvVariables {
 
 	// This must be the full path to the database file
 	SQLITE_DATABASE?: string;
+
+	STRIPE_SECRET_KEY?: string;
+	STRIPE_PUBLISHABLE_KEY?: string;
+	STRIPE_WEBHOOK_SECRET?: string;
 }
 
 let runningInDocker_: boolean = false;
@@ -84,6 +88,14 @@ function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 	};
 }
 
+function stripeConfigFromEnv(env: EnvVariables): StripeConfig {
+	return {
+		secretKey: env.STRIPE_SECRET_KEY || '',
+		publishableKey: env.STRIPE_PUBLISHABLE_KEY || '',
+		webhookSecret: env.STRIPE_WEBHOOK_SECRET || '',
+	};
+}
+
 function baseUrlFromEnv(env: any, appPort: number): string {
 	if (env.APP_BASE_URL) {
 		return rtrimSlashes(env.APP_BASE_URL);
@@ -103,7 +115,7 @@ async function readPackageJson(filePath: string): Promise<PackageJson> {
 
 let config_: Config = null;
 
-export async function initConfig(envType:Env, env: EnvVariables, overrides: any = null) {
+export async function initConfig(envType: Env, env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 
 	const rootDir = pathUtils.dirname(__dirname);
@@ -125,6 +137,7 @@ export async function initConfig(envType:Env, env: EnvVariables, overrides: any 
 		logDir: `${rootDir}/logs`,
 		database: databaseConfigFromEnv(runningInDocker_, env),
 		mailer: mailerConfigFromEnv(env),
+		stripe: stripeConfigFromEnv(env),
 		port: appPort,
 		baseUrl,
 		apiBaseUrl: env.API_BASE_URL ? env.API_BASE_URL : baseUrl,

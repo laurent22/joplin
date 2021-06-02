@@ -1,14 +1,14 @@
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
-import { RouteType } from '../../utils/types';
+import { RouteType, StripeConfig } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
 import globalConfig from '../../config';
 import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
-import { readCredentialFile } from '../../utils/testing/testUtils';
 import { Stripe } from 'stripe';
 import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
+const stripeLib = require('stripe');
 
 const logger = Logger.create('/stripe');
 
@@ -16,32 +16,23 @@ const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 
-interface StripeConfig {
-	secretKey: string;
-	publishableKey: string;
-	webhookSecret: string;
+function stripeConfig(): StripeConfig {
+	return globalConfig().stripe;
 }
 
-async function initStripe() {
-	const r = await readCredentialFile('stripe_test.json');
-	const c: StripeConfig = JSON.parse(r);
-	const s: Stripe = require('stripe')(c.secretKey);
-
-	return {
-		stripe: s,
-		config: c,
-	};
+function initStripe(): Stripe {
+	return stripeLib(stripeConfig().secretKey);
 }
 
-async function stripeEvent(stripe: Stripe, config: StripeConfig, req: any): Promise<Stripe.Event> {
-	if (!config.webhookSecret) throw new Error('webhookSecret is required');
+async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
+	if (!stripeConfig().webhookSecret) throw new Error('webhookSecret is required');
 
 	const body = await getRawBody(req);
 
 	return stripe.webhooks.constructEvent(
 		body,
 		req.headers['stripe-signature'],
-		config.webhookSecret
+		stripeConfig().webhookSecret
 	);
 }
 
@@ -49,11 +40,11 @@ interface CreateCheckoutSessionFields {
 	priceId: string;
 }
 
-type StripeRouteHandler = (stripe: Stripe, config: StripeConfig, path: SubPath, ctx: AppContext)=> Promise<any>;
+type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
 
 const postHandlers: Record<string, StripeRouteHandler> = {
 
-	createCheckoutSession: async (stripe: Stripe, _config: StripeConfig, _path: SubPath, ctx: AppContext) => {
+	createCheckoutSession: async (stripe: Stripe, __path: SubPath, ctx: AppContext) => {
 		const fields = await bodyFields<CreateCheckoutSessionFields>(ctx.req);
 		const priceId = fields.priceId;
 
@@ -81,8 +72,8 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 		};
 	},
 
-	webhook: async (stripe: Stripe, config: StripeConfig, _path: SubPath, ctx: AppContext) => {
-		const event = await stripeEvent(stripe, config, ctx.req);
+	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
+		const event = await stripeEvent(stripe, ctx.req);
 
 		const hooks: any = {
 
@@ -195,21 +186,21 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 
 const getHandlers: Record<string, StripeRouteHandler> = {
 
-	success: async (_stripe: Stripe, _config: StripeConfig, _path: SubPath, _ctx: AppContext) => {
+	success: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
 		return `
 			<p>Thank you for signing up for Joplin Cloud Pro! You should receive an email shortly with instructions on how to connect to your account.</p>
 			<p><a href="https://joplinapp.org"></a>Go back to JoplinApp.org</p>
 		`;
 	},
 
-	cancel: async (_stripe: Stripe, _config: StripeConfig, _path: SubPath, _ctx: AppContext) => {
+	cancel: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
 		return `
 			<p>Your payment has been cancelled.</p>
 			<p><a href="https://joplinapp.org"></a>Go back to JoplinApp.org</p>
 		`;
 	},
 
-	portal: async (stripe: Stripe, _config: StripeConfig, _path: SubPath, ctx: AppContext) => {
+	portal: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
 		if (!ctx.owner) throw new ErrorForbidden('Please login to access the subscription portal');
 
 		const sub = await ctx.models.subscription().byUserId(ctx.owner.id);
@@ -228,14 +219,14 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			</html>`;
 	},
 
-	checkoutTest: async (_stripe: Stripe, config: StripeConfig, _path: SubPath, _ctx: AppContext) => {
+	checkoutTest: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
 		return `
 			<head>
 				<title>Checkout</title>
 				<script src="https://js.stripe.com/v3/"></script>
 
 				<script>
-					var stripe = Stripe(${JSON.stringify(config.publishableKey)});
+					var stripe = Stripe(${JSON.stringify(stripeConfig().publishableKey)});
 
 					var createCheckoutSession = function(priceId) {
 						return fetch("/stripe/createCheckoutSession", {
@@ -286,14 +277,12 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 
 router.post('stripe/:id', async (path: SubPath, ctx: AppContext) => {
 	if (!postHandlers[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
-	const s = await initStripe();
-	return postHandlers[path.id](s.stripe, s.config, path, ctx);
+	return postHandlers[path.id](initStripe(), path, ctx);
 });
 
 router.get('stripe/:id', async (path: SubPath, ctx: AppContext) => {
 	if (!getHandlers[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
-	const s = await initStripe();
-	return getHandlers[path.id](s.stripe, s.config, path, ctx);
+	return getHandlers[path.id](initStripe(), path, ctx);
 });
 
 export default router;
