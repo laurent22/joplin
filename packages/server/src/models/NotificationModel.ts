@@ -37,7 +37,7 @@ export default class NotificationModel extends BaseModel<Notification> {
 			},
 			[NotificationKey.EmailConfirmed]: {
 				level: NotificationLevel.Normal,
-				message: 'You email has been confirmed',
+				message: 'Your email has been confirmed',
 			},
 			[NotificationKey.PasswordSet]: {
 				level: NotificationLevel.Normal,

@@ -1,8 +1,8 @@
 import { EmailSender, Subscription, Uuid } from '../db';
-import { MB } from '../utils/bytes';
 import { ErrorNotFound } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import BaseModel from './BaseModel';
+import { AccountType, accountTypeProperties } from './UserModel';
 
 export default class SubscriptionModel extends BaseModel<Subscription> {
 
@@ -15,7 +15,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 	}
 
 	public async handlePayment(subscriptionId: string, success: boolean) {
-		const sub = await this.bySubscriptionId(subscriptionId);
+		const sub = await this.byStripeSubscriptionId(subscriptionId);
 		if (!sub) throw new ErrorNotFound(`No such subscription: ${subscriptionId}`);
 
 		const now = Date.now();
@@ -40,7 +40,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		await this.save(toSave);
 	}
 
-	public async bySubscriptionId(id: string): Promise<Subscription> {
+	public async byStripeSubscriptionId(id: string): Promise<Subscription> {
 		return this.db(this.tableName).select(this.defaultFields).where('stripe_subscription_id', '=', id).first();
 	}
 
@@ -48,15 +48,13 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).first();
 	}
 
-	public async saveUserAndSubscription(email: string, accountType: number, stripeUserId: string, stripeSubscriptionId: string) {
+	public async saveUserAndSubscription(email: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
 		return this.withTransaction(async () => {
 			const user = await this.models().user().save({
+				...accountTypeProperties(accountType),
 				email,
 				email_confirmed: 1,
-				can_share: 1,
-				max_item_size: 200 * MB,
 				password: uuidgen(),
-				account_type: accountType,
 				must_set_password: 1,
 			});
 

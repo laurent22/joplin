@@ -4,7 +4,41 @@ import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
-import { formatBytes } from '../utils/bytes';
+import { formatBytes, MB } from '../utils/bytes';
+
+export enum AccountType {
+	Default = 0,
+	Free = 1,
+	Pro = 2,
+}
+
+interface AccountTypeProperties {
+	account_type: number;
+	can_share: number;
+	max_item_size: number;
+}
+
+export function accountTypeProperties(accountType: AccountType): AccountTypeProperties {
+	const types: AccountTypeProperties[] = [
+		{
+			account_type: AccountType.Default,
+			can_share: 1,
+			max_item_size: 0,
+		},
+		{
+			account_type: AccountType.Free,
+			can_share: 0,
+			max_item_size: 10 * MB,
+		},
+		{
+			account_type: AccountType.Pro,
+			can_share: 1,
+			max_item_size: 200 * MB,
+		},
+	];
+
+	return types.find(a => a.account_type === accountType);
+}
 
 export default class UserModel extends BaseModel<User> {
 

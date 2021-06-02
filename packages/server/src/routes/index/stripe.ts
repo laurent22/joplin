@@ -8,6 +8,7 @@ import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Stripe } from 'stripe';
 import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
+import { AccountType } from '../../models/UserModel';
 const stripeLib = require('stripe');
 
 const logger = Logger.create('/stripe');
@@ -138,7 +139,7 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 
 				await ctx.models.subscription().saveUserAndSubscription(
 					checkoutSession.customer_details.email || checkoutSession.customer_email,
-					1,
+					AccountType.Pro,
 					stripeUserId,
 					stripeSubscriptionId
 				);
