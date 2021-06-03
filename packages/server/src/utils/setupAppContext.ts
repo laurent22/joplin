@@ -26,7 +26,7 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper) {
 	appContext.env = env;
 	appContext.db = dbConnection;
-	appContext.models = newModelFactory(appContext.db, config().baseUrl);
+	appContext.models = newModelFactory(appContext.db, config());
 	appContext.services = await setupServices(env, appContext.models, config());
 	appContext.appLogger = appLogger;
 	appContext.routes = { ...routes };

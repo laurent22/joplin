@@ -1,4 +1,4 @@
-import Setting from './models/Setting';
+import Setting, { Env } from './models/Setting';
 import Logger, { TargetType, LoggerWrapper } from './Logger';
 import shim from './shim';
 import BaseService from './services/BaseService';
@@ -46,6 +46,7 @@ const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
 import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
+import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -691,6 +692,7 @@ export default class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
 		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 		SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+		SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 		try {
 			await shim.fsDriver().remove(tempDir);
@@ -761,6 +763,10 @@ export default class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));
+		}
+
+		if (Setting.value('env') === Env.Dev) {
+			Setting.setValue('sync.10.path', 'http://api-joplincloud.local:22300');
 		}
 
 		// For now always disable fuzzy search due to performance issues:

@@ -66,7 +66,7 @@ export async function beforeAllDb(unitName: string) {
 	// Uncomment the code below to run the test units with Postgres. Run first
 	// `docker-compose -f docker-compose.db-dev.yml` to get a dev db.
 
-	// await initConfig({
+	// await initConfig(Env.Dev, {
 	// 	DB_CLIENT: 'pg',
 	// 	POSTGRES_DATABASE: unitName,
 	// 	POSTGRES_USER: 'joplin',
@@ -75,7 +75,7 @@ export async function beforeAllDb(unitName: string) {
 	// 	tempDir: tempDir,
 	// });
 
-	await initConfig({
+	await initConfig(Env.Dev, {
 		SQLITE_DATABASE: createdDbPath_,
 	}, {
 		tempDir: tempDir,
@@ -217,12 +217,12 @@ export function db() {
 	return db_;
 }
 
-function baseUrl() {
-	return 'http://localhost:22300';
-}
+// function baseUrl() {
+// 	return 'http://localhost:22300';
+// }
 
 export function models() {
-	return modelFactory(db(), baseUrl());
+	return modelFactory(db(), config());
 }
 
 export function parseHtml(html: string): Document {
@@ -365,6 +365,23 @@ export function checkContextError(context: AppContext) {
 	if (context.response.status >= 400) {
 		throw new ApiError(`${context.method} ${context.path} ${JSON.stringify(context.response)}`, context.response.status);
 	}
+}
+
+export async function credentialFile(filename: string): Promise<string> {
+	const filePath = `${require('os').homedir()}/joplin-credentials/${filename}`;
+	if (await fs.pathExists(filePath)) return filePath;
+	return '';
+}
+
+export async function readCredentialFile(filename: string, defaultValue: string = null) {
+	const filePath = await credentialFile(filename);
+	if (!filePath) {
+		if (defaultValue === null) throw new Error(`File not found: ${filename}`);
+		return defaultValue;
+	}
+
+	const r = await fs.readFile(filePath);
+	return r.toString();
 }
 
 export async function checkThrowAsync(asyncFn: Function): Promise<any> {

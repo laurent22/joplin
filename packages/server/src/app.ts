@@ -16,7 +16,9 @@ import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
+import { credentialFile } from './utils/testing/testUtils';
 
+const cors = require('@koa/cors');
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit();
@@ -50,6 +52,18 @@ const app = new Koa();
 // loads the user, which is then used by notificationHandler. And finally
 // routeHandler uses data from both previous middlewares. It would be good to
 // layout these dependencies in code but not clear how to do this.
+const corsAllowedDomains = ['https://joplinapp.org'];
+
+app.use(cors({
+	// https://github.com/koajs/cors/issues/52#issuecomment-413887382
+	origin: (ctx: AppContext) => {
+		if (corsAllowedDomains.indexOf(ctx.request.header.origin) !== -1) {
+			return ctx.request.header.origin;
+		}
+		// we can't return void, so let's return one of the valid domains
+		return corsAllowedDomains[0];
+	},
+}));
 app.use(ownerHandler);
 app.use(notificationHandler);
 app.use(routeHandler);
@@ -72,8 +86,7 @@ async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 	if (argv.envFile) return argv.envFile;
 
 	if (env === Env.Dev) {
-		const envFilePath = `${require('os').homedir()}/joplin-credentials/server.env`;
-		if (await fs.pathExists(envFilePath)) return envFilePath;
+		return credentialFile('server.env');
 	}
 
 	return '';
@@ -86,7 +99,7 @@ async function main() {
 
 	if (!envVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	await initConfig({
+	await initConfig(env, {
 		...envVariables[env],
 		...process.env,
 	});

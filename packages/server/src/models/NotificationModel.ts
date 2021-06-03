@@ -15,25 +15,6 @@ interface NotificationType {
 	message: string;
 }
 
-const notificationTypes: Record<string, NotificationType> = {
-	[NotificationKey.ConfirmEmail]: {
-		level: NotificationLevel.Normal,
-		message: 'Welcome to Joplin Server! An email has been sent to you containing an activation link to complete your registration.',
-	},
-	[NotificationKey.EmailConfirmed]: {
-		level: NotificationLevel.Normal,
-		message: 'You email has been confirmed',
-	},
-	[NotificationKey.PasswordSet]: {
-		level: NotificationLevel.Normal,
-		message: 'Welcome to Joplin Server! Your password has been set successfully.',
-	},
-	[NotificationKey.UsingSqliteInProd]: {
-		level: NotificationLevel.Important,
-		message: 'The server is currently using SQLite3 as a database. It is not recommended in production as it is slow and can cause locking issues. Please see the README for information on how to change it.',
-	},
-};
-
 export default class NotificationModel extends BaseModel<Notification> {
 
 	protected get tableName(): string {
@@ -48,6 +29,25 @@ export default class NotificationModel extends BaseModel<Notification> {
 	public async add(userId: Uuid, key: NotificationKey, level: NotificationLevel = null, message: string = null): Promise<Notification> {
 		const n: Notification = await this.loadByKey(userId, key);
 		if (n) return n;
+
+		const notificationTypes: Record<string, NotificationType> = {
+			[NotificationKey.ConfirmEmail]: {
+				level: NotificationLevel.Normal,
+				message: `Welcome to ${this.appName}! An email has been sent to you containing an activation link to complete your registration.`,
+			},
+			[NotificationKey.EmailConfirmed]: {
+				level: NotificationLevel.Normal,
+				message: 'Your email has been confirmed',
+			},
+			[NotificationKey.PasswordSet]: {
+				level: NotificationLevel.Normal,
+				message: `Welcome to ${this.appName}! Your password has been set successfully.`,
+			},
+			[NotificationKey.UsingSqliteInProd]: {
+				level: NotificationLevel.Important,
+				message: 'The server is currently using SQLite3 as a database. It is not recommended in production as it is slow and can cause locking issues. Please see the README for information on how to change it.',
+			},
+		};
 
 		const type = notificationTypes[key];
 

@@ -58,12 +58,17 @@ export default class JoplinServerApi {
 	private async session() {
 		if (this.session_) return this.session_;
 
-		this.session_ = await this.exec('POST', 'api/sessions', null, {
-			email: this.options_.username(),
-			password: this.options_.password(),
-		});
+		try {
+			this.session_ = await this.exec('POST', 'api/sessions', null, {
+				email: this.options_.username(),
+				password: this.options_.password(),
+			});
 
-		return this.session_;
+			return this.session_;
+		} catch (error) {
+			logger.error('Could not acquire session:', error);
+			throw error;
+		}
 	}
 
 	private async sessionId() {
