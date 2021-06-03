@@ -68,71 +68,77 @@ import ItemResourceModel from './ItemResourceModel';
 import ShareUserModel from './ShareUserModel';
 import KeyValueModel from './KeyValueModel';
 import TokenModel from './TokenModel';
+import SubscriptionModel from './SubscriptionModel';
+import { Config } from '../utils/types';
 
 export class Models {
 
 	private db_: DbConnection;
-	private baseUrl_: string;
+	private config_: Config;
 
-	public constructor(db: DbConnection, baseUrl: string) {
+	public constructor(db: DbConnection, config: Config) {
 		this.db_ = db;
-		this.baseUrl_ = baseUrl;
+		this.config_ = config;
 	}
 
 	public item() {
-		return new ItemModel(this.db_, newModelFactory, this.baseUrl_);
+		return new ItemModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public user() {
-		return new UserModel(this.db_, newModelFactory, this.baseUrl_);
+		return new UserModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public email() {
-		return new EmailModel(this.db_, newModelFactory, this.baseUrl_);
+		return new EmailModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public userItem() {
-		return new UserItemModel(this.db_, newModelFactory, this.baseUrl_);
+		return new UserItemModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public token() {
-		return new TokenModel(this.db_, newModelFactory, this.baseUrl_);
+		return new TokenModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public itemResource() {
-		return new ItemResourceModel(this.db_, newModelFactory, this.baseUrl_);
+		return new ItemResourceModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public apiClient() {
-		return new ApiClientModel(this.db_, newModelFactory, this.baseUrl_);
+		return new ApiClientModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public session() {
-		return new SessionModel(this.db_, newModelFactory, this.baseUrl_);
+		return new SessionModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public change() {
-		return new ChangeModel(this.db_, newModelFactory, this.baseUrl_);
+		return new ChangeModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public notification() {
-		return new NotificationModel(this.db_, newModelFactory, this.baseUrl_);
+		return new NotificationModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public share() {
-		return new ShareModel(this.db_, newModelFactory, this.baseUrl_);
+		return new ShareModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public shareUser() {
-		return new ShareUserModel(this.db_, newModelFactory, this.baseUrl_);
+		return new ShareUserModel(this.db_, newModelFactory, this.config_);
 	}
 
 	public keyValue() {
-		return new KeyValueModel(this.db_, newModelFactory, this.baseUrl_);
+		return new KeyValueModel(this.db_, newModelFactory, this.config_);
+	}
+
+	public subscription() {
+		return new SubscriptionModel(this.db_, newModelFactory, this.config_);
 	}
 
 }
 
-export default function newModelFactory(db: DbConnection, baseUrl: string): Models {
-	return new Models(db, baseUrl);
+export default function newModelFactory(db: DbConnection, config: Config): Models {
+	return new Models(db, config);
 }

@@ -5,6 +5,7 @@ import Mail = require('nodemailer/lib/mailer');
 import { createTransport } from 'nodemailer';
 import { Email, EmailSender } from '../db';
 import { errorToString } from '../utils/errors';
+import MarkdownIt = require('markdown-it');
 
 const logger = Logger.create('EmailService');
 
@@ -31,6 +32,7 @@ export default class EmailService extends BaseService {
 
 			try {
 				await this.transport_.verify();
+				logger.info('Transporter is operational - service will be enabled');
 			} catch (error) {
 				this.enabled_ = false;
 				this.transport_ = null;
@@ -51,6 +53,16 @@ export default class EmailService extends BaseService {
 		}
 
 		throw new Error(`Invalid sender ID: ${senderId}`);
+	}
+
+	private markdownBodyToPlainText(md: string): string {
+		// Just convert the links to plain URLs
+		return md.replace(/\[.*\]\((.*)\)/g, '$1');
+	}
+
+	private markdownBodyToHtml(md: string): string {
+		const markdownIt = new MarkdownIt();
+		return markdownIt.render(md);
 	}
 
 	private escapeEmailField(f: string): string {
@@ -82,7 +94,8 @@ export default class EmailService extends BaseService {
 					from: this.formatNameAndEmail(sender.email, sender.name),
 					to: this.formatNameAndEmail(email.recipient_email, email.recipient_name),
 					subject: email.subject,
-					text: email.body,
+					text: this.markdownBodyToPlainText(email.body),
+					html: this.markdownBodyToHtml(email.body),
 				};
 
 				const emailToSave: Email = {
@@ -115,7 +128,11 @@ export default class EmailService extends BaseService {
 			return;
 		}
 
-		UserModel.eventEmitter.on('created', this.scheduleMaintenance);
+		UserModel.eventEmitter.on('created', () => {
+			logger.info('User was created - scheduling maintenance');
+			void this.scheduleMaintenance();
+		});
+
 		await super.runInBackground();
 	}
 

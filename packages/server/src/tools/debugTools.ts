@@ -16,7 +16,7 @@ export async function createTestUsers(db: DbConnection, config: Config) {
 	await dropTables(db);
 	await migrateDb(db);
 
-	const models = newModelFactory(db, config.baseUrl);
+	const models = newModelFactory(db, config);
 
 	for (let userNum = 1; userNum <= 2; userNum++) {
 		await models.user().save({

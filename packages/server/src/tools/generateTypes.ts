@@ -45,6 +45,8 @@ const propertyTypes: Record<string, string> = {
 	'share_users.status': 'ShareUserStatus',
 	'emails.sender_id': 'EmailSender',
 	'emails.sent_time': 'number',
+	'subscriptions.last_payment_time': 'number',
+	'subscriptions.last_payment_failed_time': 'number',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

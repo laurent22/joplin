@@ -10,7 +10,7 @@ import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
-const prettyBytes = require('pretty-bytes');
+import { formatBytes } from '../../utils/bytes';
 
 interface CheckPasswordInput {
 	password: string;
@@ -71,7 +71,7 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	view.content.users = users.map(user => {
 		return {
 			...user,
-			formattedItemMaxSize: user.max_item_size ? prettyBytes(user.max_item_size) : '∞',
+			formattedItemMaxSize: user.max_item_size ? formatBytes(user.max_item_size) : '∞',
 		};
 	});
 	return view;

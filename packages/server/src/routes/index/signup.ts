@@ -8,6 +8,7 @@ import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import { checkPassword } from './users';
 import { NotificationKey } from '../../models/NotificationModel';
+import { AccountType, accountTypeProperties } from '../../models/UserModel';
 
 function makeView(error: Error = null): View {
 	const view = defaultView('signup');
@@ -38,6 +39,7 @@ router.post('signup', async (_path: SubPath, ctx: AppContext) => {
 		const password = checkPassword(formUser, true);
 
 		const user = await ctx.models.user().save({
+			...accountTypeProperties(AccountType.Free),
 			email: formUser.email,
 			full_name: formUser.full_name,
 			password,
