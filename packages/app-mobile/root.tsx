@@ -25,6 +25,7 @@ import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtil
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
 import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
+import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
@@ -90,6 +91,7 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 import FsDriverRN from './utils/fs-driver-rn';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';

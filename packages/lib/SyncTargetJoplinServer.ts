@@ -5,11 +5,34 @@ import { _ } from './locale.js';
 import JoplinServerApi from './JoplinServerApi';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
+import Logger from './Logger';
 
 interface FileApiOptions {
 	path(): string;
 	username(): string;
 	password(): string;
+}
+
+export async function newFileApi(id: number, options: FileApiOptions) {
+	const apiOptions = {
+		baseUrl: () => options.path(),
+		username: () => options.username(),
+		password: () => options.password(),
+		env: Setting.value('env'),
+	};
+
+	const api = new JoplinServerApi(apiOptions);
+	const driver = new FileApiDriverJoplinServer(api);
+	const fileApi = new FileApi('', driver);
+	fileApi.setSyncTargetId(id);
+	await fileApi.initialize();
+	return fileApi;
+}
+
+export async function initFileApi(logger: Logger, options: FileApiOptions) {
+	const fileApi = await newFileApi(SyncTargetJoplinServer.id(), options);
+	fileApi.setLogger(logger);
+	return fileApi;
 }
 
 export default class SyncTargetJoplinServer extends BaseSyncTarget {
@@ -38,22 +61,6 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return super.fileApi();
 	}
 
-	private static async newFileApi_(options: FileApiOptions) {
-		const apiOptions = {
-			baseUrl: () => options.path(),
-			username: () => options.username(),
-			password: () => options.password(),
-			env: Setting.value('env'),
-		};
-
-		const api = new JoplinServerApi(apiOptions);
-		const driver = new FileApiDriverJoplinServer(api);
-		const fileApi = new FileApi('', driver);
-		fileApi.setSyncTargetId(this.id());
-		await fileApi.initialize();
-		return fileApi;
-	}
-
 	public static async checkConfig(options: FileApiOptions) {
 		const output = {
 			ok: false,
@@ -61,7 +68,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		};
 
 		try {
-			const fileApi = await SyncTargetJoplinServer.newFileApi_(options);
+			const fileApi = await newFileApi(SyncTargetJoplinServer.id(), options);
 			fileApi.requestRepeatCount_ = 0;
 
 			await fileApi.put('testing.txt', 'testing');
@@ -78,15 +85,11 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	protected async initFileApi() {
-		const fileApi = await SyncTargetJoplinServer.newFileApi_({
+		return initFileApi(this.logger(), {
 			path: () => Setting.value('sync.9.path'),
 			username: () => Setting.value('sync.9.username'),
 			password: () => Setting.value('sync.9.password'),
 		});
-
-		fileApi.setLogger(this.logger());
-
-		return fileApi;
 	}
 
 	protected async initSynchronizer() {

@@ -51,6 +51,7 @@ const DropboxApi = require('../DropboxApi');
 import JoplinServerApi from '../JoplinServerApi';
 import { FolderEntity } from '../services/database/types';
 import { credentialFile } from '../utils/credentialFiles';
+import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
@@ -112,6 +113,7 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 let syncTargetName_ = '';
 let syncTargetId_: number = null;
