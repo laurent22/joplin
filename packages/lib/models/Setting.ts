@@ -472,24 +472,10 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
-				label: () => _('Joplin Cloud URL'),
+				label: () => _('Joplin Server URL'),
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
-			// 'sync.9.directory': {
-			// 	value: 'Apps/Joplin',
-			// 	type: SettingItemType.String,
-			// 	section: 'sync',
-			// 	show: (settings: any) => {
-			// 		return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
-			// 	},
-			// 	filter: value => {
-			// 		return value ? ltrimSlashes(rtrimSlashes(value)) : '';
-			// 	},
-			// 	public: true,
-			// 	label: () => _('Joplin Cloud Directory'),
-			// 	storage: SettingStorage.File,
-			// },
 			'sync.9.username': {
 				value: '',
 				type: SettingItemType.String,
@@ -498,7 +484,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
-				label: () => _('Joplin Cloud email'),
+				label: () => _('Joplin Server email'),
 				storage: SettingStorage.File,
 			},
 			'sync.9.password': {
@@ -509,7 +495,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
-				label: () => _('Joplin Cloud password'),
+				label: () => _('Joplin Server password'),
 				secure: true,
 			},
 

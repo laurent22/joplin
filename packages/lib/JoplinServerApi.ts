@@ -77,7 +77,7 @@ export default class JoplinServerApi {
 
 	public static connectionErrorMessage(error: any) {
 		const msg = error && error.message ? error.message : 'Unknown error';
-		return _('Could not connect to Joplin Cloud. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
+		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
 	}
 
 	private requestToCurl_(url: string, options: any) {

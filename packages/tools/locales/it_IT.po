@@ -7,8 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Alberto Pasqualetto <39854348+albertopasqualetto@users."
-"noreply.github.com>\n"
+"Last-Translator: Manuel Tassi <mannivuwiki@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -200,7 +199,7 @@ msgstr "Elimina"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:198
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Rimuovere l’etichetta \"%s\" da tutte le note?"
+msgstr "Rimuovere l'etichetta \"%s\" da tutte le note?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:201
 msgid "Remove this search from the sidebar?"
@@ -830,11 +829,11 @@ msgstr "Attiva / disattiva barra laterale"
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
 #: packages/app-mobile/components/screens/Note.js:789
 msgid "Set alarm"
-msgstr "Imposta Allarme"
+msgstr "Imposta avviso"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
 msgid "Set alarm:"
-msgstr "Imposta allarme:"
+msgstr "Imposta avviso:"
 
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
@@ -1039,7 +1038,7 @@ msgstr "Importazione da \"%s\" come formato \"%s\". Si prega di attendere..."
 
 #: packages/app-desktop/gui/MenuBar.js:288 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
-msgstr "Stato della Sincronizzazione"
+msgstr "Stato della sincronizzazione"
 
 #: packages/app-desktop/gui/MenuBar.js:307
 msgid "Create note from template"
@@ -1854,11 +1853,11 @@ msgstr "No"
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:78
 msgid "Clear alarm"
-msgstr "Rimuovi Allarme"
+msgstr "Rimuovi avviso"
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:80
 msgid "Save alarm"
-msgstr "Salva Allarme"
+msgstr "Salva avviso"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
 msgid "Open"
@@ -1870,7 +1869,7 @@ msgstr "Permesso per usare la fotocamera"
 
 #: packages/app-mobile/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
-msgstr "E’ richiesto il permesso di usare la fotocamera."
+msgstr "È richiesto il permesso per usare la fotocamera."
 
 #: packages/app-mobile/components/screen-header.js:185
 msgid "Delete these notes?"
@@ -2059,7 +2058,7 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"Usa questo per ricostruire l’indice di ricerca se c’è un problema con la "
+"Usa questo per ricostruire l'indice di ricerca se c'è un problema con la "
 "ricerca. Potrebbe richiedere molto tempo, dipende dal numero di note."
 
 #: packages/app-mobile/components/screens/config.js:461
@@ -2210,7 +2209,7 @@ msgstr "Scatta foto"
 
 #: packages/app-mobile/components/screens/Note.js:777
 msgid "Choose an option"
-msgstr "Scegli un’opzione"
+msgstr "Scegli un'opzione"
 
 #: packages/app-mobile/components/screens/Note.js:810
 msgid "Convert to note"
@@ -2602,7 +2601,7 @@ msgstr "Attiva note a piè pagina"
 
 #: packages/lib/models/Setting.js:640
 msgid "Enable table of contents extension"
-msgstr "Abilita l’estensione indice"
+msgstr "Abilita l'estensione indice"
 
 #: packages/lib/models/Setting.js:641
 msgid "Enable ~sub~ syntax"
@@ -2646,8 +2645,8 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"Questo consentirà a Joplin di essere in esecuzione in background. E’ "
-"raccomandata l’attivazione di questa impostazione per sincronizzare "
+"Questo consentirà a Joplin di essere in esecuzione in background. È "
+"raccomandata l'attivazione di questa impostazione per sincronizzare "
 "costantemente le tue note e quindi ridurre il numero di conflitti."
 
 #: packages/lib/models/Setting.js:664
@@ -2681,9 +2680,8 @@ msgstr ""
 "generico."
 
 #: packages/lib/models/Setting.js:726
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Editor famiglia caratteri monospace (larghezza fissa)"
+msgstr "Editor con carattere a larghezza fissa"
 
 #: packages/lib/models/Setting.js:727
 msgid ""
@@ -2765,7 +2763,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:825
 msgid "Page size for PDF export"
-msgstr "Dimensione pagina per l’esportazione in PDF"
+msgstr "Dimensione pagina per l'esportazione in PDF"
 
 #: packages/lib/models/Setting.js:827
 msgid "A4"
@@ -2793,7 +2791,7 @@ msgstr "Legale"
 
 #: packages/lib/models/Setting.js:835
 msgid "Page orientation for PDF export"
-msgstr "Orientamento pagina per l’esportazione in PDF"
+msgstr "Orientamento pagina per l'esportazione in PDF"
 
 #: packages/lib/models/Setting.js:837
 msgid "Portrait"
@@ -3062,7 +3060,7 @@ msgid ""
 "the sync target is accessible. The reported error was:"
 msgstr ""
 "Errore. Per favore controllare che URL, nome utente, password, etc. siano "
-"corretti e che la destinazione di sincronizzazione sia accessibile. L’errore "
+"corretti e che la destinazione di sincronizzazione sia accessibile. L'errore "
 "riportato era:"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
@@ -3078,7 +3076,7 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
-"Non è stato possibile autorizzare l’applicazione:\n"
+"Non è stato possibile autorizzare l'applicazione:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3185,7 +3183,7 @@ msgstr "In corso"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
-"Elemento scaricato sconosciuto - cortesemente aggiornare Joplin all’ultima "
+"Elemento scaricato sconosciuto - cortesemente aggiornare Joplin all'ultima "
 "versione"
 
 #: packages/lib/JoplinServerApi.js:61
@@ -3496,7 +3494,7 @@ msgstr "%s: %d note"
 
 #: packages/lib/services/ReportService.js:228
 msgid "Coming alarms"
-msgstr "Avviso imminente"
+msgstr "Prossimi avvisi"
 
 #: packages/lib/services/ReportService.js:232
 #, javascript-format
@@ -4155,7 +4153,7 @@ msgstr ""
 "<tag-command> può essere \"add\", \"remove\", \"list\", or \"notetags\" per "
 "assegnare o rimuovere [tag] da [note], per mostrare le note associate a "
 "[tag], oppure mostrare i tag associati a [note]. Il comando `tag list` può "
-"essere usato per mostrare tutte le etichette (usa -l per l’opzione lunga)."
+"essere usato per mostrare tutte le etichette (usa -l per l'opzione lunga)."
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format
@@ -4332,7 +4330,7 @@ msgstr "La nota non è un \"Cose-da-fare\": \"%s\""
 
 #, fuzzy
 #~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-#~ msgstr "Rimuovere l’etichetta \"%s\" da tutte le note?"
+#~ msgstr "Rimuovere l'etichetta \"%s\" da tutte le note?"
 
 #, fuzzy
 #~ msgid ""

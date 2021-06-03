@@ -27,7 +27,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	public static label() {
-		return `${_('Joplin Cloud')} (Beta)`;
+		return `${_('Joplin Server')} (Beta)`;
 	}
 
 	public async isAuthenticated() {
