@@ -47,6 +47,10 @@ describe('Synchronizer.conflicts', function() {
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n == 'id' || n == 'is_conflict') continue;
+			if (n == 'conflict_parent') {
+				expect(conflictedNote[n]).toBe(note2conf.id);
+				continue;
+			}
 			expect(conflictedNote[n]).toBe(note2conf[n]);
 		}
 
