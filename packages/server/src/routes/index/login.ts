@@ -1,4 +1,4 @@
-import { SubPath, redirect } from '../../utils/routeUtils';
+import { SubPath, redirect, makeUrl, UrlType } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
@@ -9,7 +9,10 @@ import { View } from '../../services/MustacheService';
 
 function makeView(error: any = null): View {
 	const view = defaultView('login');
-	view.content.error = error;
+	view.content = {
+		error,
+		signupUrl: config().signupEnabled ? makeUrl(UrlType.Signup) : '',
+	};
 	view.navbar = false;
 	return view;
 }

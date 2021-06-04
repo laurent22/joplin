@@ -78,6 +78,7 @@ export interface Config {
 	baseUrl: string;
 	apiBaseUrl: string;
 	userContentBaseUrl: string;
+	signupEnabled: boolean;
 	database: DatabaseConfig;
 	mailer: MailerConfig;
 	stripe: StripeConfig;

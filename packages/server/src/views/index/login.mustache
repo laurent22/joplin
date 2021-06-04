@@ -1,5 +1,5 @@
 <section class="section login-box">
-	<div class="container">
+	<div class="container block">
 		{{> errorBanner}}
 		<form action="{{{global.baseUrl}}}/login" method="POST">
 			<div class="field">
@@ -19,4 +19,9 @@
 			</div>
 		</form>
 	</div>
+	{{#signupUrl}}
+		<div class="container block">
+			Or <a href="{{signupUrl}}">sign up</a> to create a new account.
+		</div>
+	{{/signupUrl}}
 </section>

@@ -35,6 +35,8 @@ export interface EnvVariables {
 	STRIPE_SECRET_KEY?: string;
 	STRIPE_PUBLISHABLE_KEY?: string;
 	STRIPE_WEBHOOK_SECRET?: string;
+
+	SIGNUP_ENABLED?: string;
 }
 
 let runningInDocker_: boolean = false;
@@ -144,6 +146,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		baseUrl,
 		apiBaseUrl: env.API_BASE_URL ? env.API_BASE_URL : baseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
+		signupEnabled: env.SIGNUP_ENABLED === '1',
 		...overrides,
 	};
 }

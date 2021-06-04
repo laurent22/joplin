@@ -2,7 +2,7 @@ import { baseUrl } from '../config';
 import { Item, ItemAddressingType } from '../db';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
-import { AppContext, HttpMethod } from './types';
+import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
@@ -248,4 +248,13 @@ export function respondWithItemContent(koaResponse: any, item: Item, content: Bu
 	koaResponse.set('Content-Type', item.mime_type);
 	koaResponse.set('Content-Length', content.byteLength);
 	return new Response(ResponseType.KoaResponse, koaResponse);
+}
+
+export enum UrlType {
+	Signup = 'signup',
+	Login = 'login',
+}
+
+export function makeUrl(urlType: UrlType): string {
+	return `${baseUrl(RouteType.Web)}/${urlType}`;
 }
