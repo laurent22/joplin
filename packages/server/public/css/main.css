@@ -49,8 +49,6 @@ table.table th .sort-button i {
 	background-color: transparent;
 }
 
-.footer .container {
-	display: flex;
-	justify-content: flex-end;
+.footer .content {
 	opacity: 0.5;
 }

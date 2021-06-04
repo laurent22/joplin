@@ -19,6 +19,8 @@ import indexSignup from './index/signup';
 import indexShares from './index/shares';
 import indexUsers from './index/users';
 import indexStripe from './index/stripe';
+import indexTerms from './index/terms';
+import indexPrivacy from './index/privacy';
 
 import defaultRoute from './default';
 
@@ -42,6 +44,8 @@ const routes: Routers = {
 	'shares': indexShares,
 	'users': indexUsers,
 	'stripe': indexStripe,
+	'terms': indexTerms,
+	'privacy': indexPrivacy,
 
 	'': defaultRoute,
 };

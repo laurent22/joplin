@@ -253,6 +253,8 @@ export function respondWithItemContent(koaResponse: any, item: Item, content: Bu
 export enum UrlType {
 	Signup = 'signup',
 	Login = 'login',
+	Terms = 'terms',
+	Privacy = 'privacy',
 }
 
 export function makeUrl(urlType: UrlType): string {
