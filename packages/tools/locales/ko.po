@@ -101,7 +101,7 @@ msgstr "현재 최신 버전을 사용 중입니다."
 #: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (프리-릴리즈)"
+msgstr "%s (사전 출시)"
 
 #: packages/app-desktop/checkForUpdates.js:187
 msgid "An update is available, do you want to download it now?"
@@ -127,7 +127,7 @@ msgstr "이 버전 넘기기"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr "전체 바뀐내용 보기"
+msgstr "바뀐 내용을 모두 보기"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -136,7 +136,7 @@ msgstr "노트 “%s”가 노트북 “%s\"에 성공적으로 복구되었습�
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
-msgstr "이 노트엔 역사가 없습니다"
+msgstr "이 노트의 변경 내역이 없습니다"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:85
@@ -155,8 +155,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"\"%s\"를 클릭하여 노트를 복구하세요. 노트는 \"%s\" 이름을 가진 노트북에 복사"
-"될 것입니다. 현재 버전의 노트는 이동하거나 수정되지 않습니다."
+"\"%s\"를 클릭해서 노트를 복구하세요. 노트는 \"%s\" 이름을 가진 노트북에 복사"
+"됩니다. 노트의 현재 버전이 이동 혹은 수정되지는 않습니다."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
@@ -276,7 +276,7 @@ msgstr "고급 도구"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:115
 msgid "Export debug report"
-msgstr "디버그 보거 내보내기"
+msgstr "디버깅 보고서 내보내기"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -400,7 +400,7 @@ msgstr "첨부 파일을 내려 받는 중에 오류가 발생했습니다:"
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "이 첨부 파일은 아직 다운로드 또는 복호화 되지 않았습니다"
+msgstr "이 첨부 파일은 아직 다운로드 또는 복호화되지 않았습니다"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
@@ -444,7 +444,7 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
-"서식 있는 텍스트 편집기에는 몇가지의 제한 사항들이 있으며, 사용하기 전에 이러"
+"서식 있는 텍스트 편집기에는 몇가지의 제약 사항들이 있으며, 사용하기 전에 이러"
 "한 제약 사항들을 미리 알고 있는 것이 좋습니다."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
@@ -710,12 +710,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
-"안전 모드가 현재 활성화 되어 있습니다. 노트 렌더링과 더불어 모든 플러그인이 "
-"일시적으로 꺼집니다."
+"안전 모드가 현재 활성화되어 있습니다. 노트 렌더링과 더불어 모든 플러그인이 일"
+"시적으로 비활성화됩니다."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:438
 msgid "Disable safe mode and restart"
-msgstr "안전모드를 끄고 다시 시작"
+msgstr "안전 모드를 끄고 다시 시작"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid ""
@@ -1007,8 +1007,7 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"이 인증 토큰은 오직 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니"
-"다."
+"이 인증 토큰은 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니다."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
@@ -1423,7 +1422,8 @@ msgstr "노트 첨부"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
 msgid "This will open a new screen. Save your current changes?"
-msgstr "이는 새로운 스크린을 열 것입니다. 현재 변경 사안을 저장하시겠습니까?"
+msgstr ""
+"새로운 화면으로 전환됩니다. 현재 화면의 변경 사항들을 저장하시겠습니까?"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
 #: packages/app-mobile/components/screens/config.js:322
@@ -1721,7 +1721,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr " 추가"
+msgstr "받는 사람 추가:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -2198,8 +2198,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
-"기본 관리자 암호는가 변경되지 않았으며, 이는 보안상 안전하지 않습니다! [지금 "
-"바꾸기](%s)"
+"기본 관리자 암호가 변경되지 않았으며, 이는 보안상 안전하지 않습니다! [지금 바"
+"꾸기](%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2399,9 +2399,9 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"\\“수동\\” 모드에서, 첨부 파일은 클릭 시에만 다운로드되며, \\“자동\\” 모드에"
-"서는 노트를 열 때만 다운로드됩니다. \\“항상\\” 모드에서는 노트를 열지 않아도 "
-"첨부 파일이 다운로드됩니다."
+"\"수동\" 모드에서, 첨부 파일은 클릭 시에만 다운로드되며, \"자동\" 모드에서는 "
+"노트를 열 때만 다운로드됩니다. \"항상\" 모드에서는 노트를 열지 않아도 첨부 파"
+"일이 다운로드됩니다."
 
 #: packages/lib/models/Setting.js:362
 msgid "Always"
@@ -2454,7 +2454,7 @@ msgstr "노트 수 보이기"
 #: packages/lib/models/Setting.js:501 packages/lib/models/Setting.js:503
 #: packages/lib/models/Setting.js:504
 msgid "Split View"
-msgstr "뷰 나누기"
+msgstr "화면 나누기"
 
 #: packages/lib/models/Setting.js:501
 #, javascript-format
@@ -2493,7 +2493,7 @@ msgstr "노트에 지리적 위치 정보 포함시키기"
 
 #: packages/lib/models/Setting.js:580
 msgid "When creating a new to-do:"
-msgstr "새로운 '할 일'을 만들때:"
+msgstr "새로운 '할 일'을 만들 때:"
 
 #: packages/lib/models/Setting.js:583 packages/lib/models/Setting.js:599
 msgid "Focus title"
@@ -2513,7 +2513,7 @@ msgstr "소프트 브레이크 활성화"
 
 #: packages/lib/models/Setting.js:630
 msgid "Enable typographer support"
-msgstr "조판부호 지원 활성화"
+msgstr "조판 부호 지원 활성화"
 
 #: packages/lib/models/Setting.js:631
 msgid "Enable Linkify"
@@ -2602,7 +2602,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:664
 msgid "Start application minimised in the tray icon"
-msgstr "최소화된 채로 트레이 아이콘에서 Joplin 실행"
+msgstr "Joplin을 최소화된 상태로 트레이 아이콘에서 시작"
 
 #: packages/lib/models/Setting.js:684
 msgid "Editor font size"
@@ -3555,12 +3555,12 @@ msgstr ""
 #: packages/app-cli/app/command-server.js:38
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr "서버가 이미 포트 %d에서 동작하고 있습니다"
+msgstr "서버가 이미 %d 포트에서 동작하고 있습니다"
 
 #: packages/app-cli/app/command-server.js:44
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr "서버가 포트 %d에서 동작하고 있습니다"
+msgstr "서버가 %d 포트에서 동작하고 있습니다"
 
 #: packages/app-cli/app/command-server.js:44
 #: packages/app-cli/app/command-server.js:47
@@ -3675,8 +3675,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"잠금 파일이 이미 대기중입니다. 만약 동기화가 시작되지 않는다면 \"%s\"에서 잠"
-"금 파일을 삭제하고 작업을 재개하실 수 있습니다."
+"잠금 파일이 잠겨있습니다. 동기화가 시작되지 않는다면 \"%s\"에서 잠금 파일을 "
+"삭제하고 작업을 재개하실 수 있습니다."
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
@@ -3723,7 +3723,7 @@ msgstr "새 '할 일'을 만듭니다."
 #: packages/app-cli/app/command-mktodo.js:16
 #: packages/app-cli/app/command-mknote.js:16
 msgid "Notes can only be created within a notebook."
-msgstr "노트는 노트북 속에서만 만들 수 있습니다."
+msgstr "노트는 노트북 내에서만 만들 수 있습니다."
 
 #: packages/app-cli/app/command-cat.js:14
 msgid "Displays the given note."
@@ -3755,7 +3755,7 @@ msgstr "\"%s\" 노트가 존재하지 않습니다. 새로 만들까요?"
 
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr "노트 편집을 시작합니다. 프롬프트로 가시려면 편집기를 종료해주세요."
+msgstr "노트 편집을 시작합니다. 돌아가시려면 편집기를 종료해주세요."
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -3825,11 +3825,11 @@ msgstr "목표 포맷: %s"
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given note."
-msgstr "특정 노트만을 내보냅니다."
+msgstr "특정 노트를 내보냅니다."
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given notebook."
-msgstr "특정 노트북만을 내보냅니다."
+msgstr "특정 노트북을 내보냅니다."
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
@@ -3912,7 +3912,7 @@ msgstr "선택한 항목: "
 #: packages/app-cli/app/cli-utils.js:151
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr "잘못된 답: %s"
+msgstr "잘못된 응답: %s"
 
 #: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
