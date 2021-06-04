@@ -8,7 +8,7 @@ const time = require('@joplin/lib/time').default;
 const shim = require('@joplin/lib/shim').default;
 const dialogs = require('./dialogs').default;
 const shared = require('@joplin/lib/components/shared/encryption-config-shared.js');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 
 class EncryptionConfigScreenComponent extends React.Component {
 	constructor(props) {

@@ -21,6 +21,10 @@ let react_: any = null;
 const shim = {
 	Geolocation: null as any,
 
+	electronBridge: ():any => {
+		throw new Error('Not implemented');
+	},
+
 	msleep_: (ms: number) => {
 		return new Promise((resolve: Function) => {
 			shim.setTimeout(() => {

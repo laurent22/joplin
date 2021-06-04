@@ -103,6 +103,7 @@ export default class PluginRunner extends BasePluginRunner {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
+				contextIsolation: false,
 			},
 		});
 

@@ -5,7 +5,7 @@ import { ExportOptions, FileSystemItem, Module } from '@joplin/lib/services/inte
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 const { friendlySafeFilename } = require('@joplin/lib/path-utils');

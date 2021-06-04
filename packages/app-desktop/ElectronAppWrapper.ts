@@ -86,6 +86,7 @@ export default class ElectronAppWrapper {
 			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
 			webPreferences: {
 				nodeIntegration: true,
+				contextIsolation: false,
 				spellcheck: true,
 				enableRemoteModule: true,
 			},

@@ -30,12 +30,45 @@ export class Bridge {
 		return this.electronWrapper_;
 	}
 
+	electronIsDev() {
+		return true; //this.electronApp().electronApp().isPackaged; // require('electron-is-dev');
+	}
+
 	env() {
 		return this.electronWrapper_.env();
 	}
 
 	processArgv() {
 		return process.argv;
+	}
+
+	public setupContextMenu(spellCheckerMenuItemsHandler:Function) {
+		const MenuItem = this.MenuItem;
+
+		// The context menu must be setup in renderer process because that's where
+		// the spell checker service lives.
+		require('electron-context-menu')({
+			shouldShowMenu: (_event: any, params: any) => {
+				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
+				// case we don't want to use the built-in context menu but a custom one.
+				return params.isEditable && params.inputFieldType !== 'none';
+			},
+
+			menu: (actions: any, props: any) => {
+				const items = spellCheckerMenuItemsHandler(props.misspelledWord, props.dictionarySuggestions);
+				console.info('GOT ITEMS', items);
+				const spellCheckerMenuItems = items.map((item: any) => new MenuItem(item)); //SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
+
+				const output = [
+					actions.cut(),
+					actions.copy(),
+					actions.paste(),
+					...spellCheckerMenuItems,
+				];
+
+				return output;
+			},
+		});
 	}
 
 	window() {

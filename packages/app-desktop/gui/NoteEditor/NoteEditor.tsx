@@ -37,7 +37,7 @@ const NoteSearchBar = require('../NoteSearchBar.min.js');
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
 const commands = [

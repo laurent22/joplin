@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const { themeStyle } = require('@joplin/lib/theme');
 const { _ } = require('@joplin/lib/locale');
 const ClipperServer = require('@joplin/lib/ClipperServer');
