@@ -12,7 +12,7 @@ router.get('privacy', async (_path: SubPath, _ctx: AppContext) => {
 	return markdownIt.render(`# Joplin Cloud Privacy Policy
 
 ## Who are we?
-	
+
 The Joplin Cloud web service is owned by Cozid Ltd, registered in England and Wales.
 
 ## What information do we collect?
@@ -25,11 +25,11 @@ In order to operate this service, the following user data is stored:
 - Stripe user ID
 - Stripe subscription ID
 
-Financial information is processed by a Stripe. We do not store financial information.
+Financial information is processed by Stripe. We do not store financial information.
 
 ## How do we use personal information?
 
-We use the email to authentify the user and allow them to login to the service and synchronise data with it. We also use it to send important emails, such as email verification or to recover a lost password. Occasionally, we may send important notifications to our users.
+We use the email to authenticate the user and allow them to login to the service and synchronise data with it. We also use it to send important emails, such as email verification or to recover a lost password. Occasionally, we may send important notifications to our users.
 
 ## What legal basis do we have for processing your personal data?
 
