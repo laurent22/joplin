@@ -10,6 +10,7 @@ const logger = Logger.create('JoplinServerApi');
 
 interface Options {
 	baseUrl(): string;
+	userContentBaseUrl(): string;
 	username(): string;
 	password(): string;
 	env?: Env;
@@ -53,6 +54,10 @@ export default class JoplinServerApi {
 
 	public baseUrl() {
 		return rtrimSlashes(this.options_.baseUrl());
+	}
+
+	public userContentBaseUrl() {
+		return this.options_.userContentBaseUrl() || this.baseUrl();
 	}
 
 	private async session() {
@@ -165,7 +170,7 @@ export default class JoplinServerApi {
 			const responseText = await response.text();
 
 			if (this.debugRequests_) {
-				logger.debug('Response', responseText);
+				logger.debug('Response', options.responseFormat, responseText);
 			}
 
 			// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier

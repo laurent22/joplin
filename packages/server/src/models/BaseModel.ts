@@ -64,6 +64,10 @@ export default abstract class BaseModel<T> {
 		return this.config_.baseUrl;
 	}
 
+	protected get userContentUrl(): string {
+		return this.config_.userContentBaseUrl;
+	}
+
 	protected get appName(): string {
 		return this.config_.appName;
 	}

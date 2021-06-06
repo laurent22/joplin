@@ -7,6 +7,7 @@ import SyncTargetJoplinServer, { initFileApi } from './SyncTargetJoplinServer';
 
 interface FileApiOptions {
 	path(): string;
+	userContentPath(): string;
 	username(): string;
 	password(): string;
 }
@@ -46,6 +47,7 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 	protected async initFileApi() {
 		return initFileApi(this.logger(), {
 			path: () => Setting.value('sync.10.path'),
+			userContentPath: () => Setting.value('sync.10.userContentPath'),
 			username: () => Setting.value('sync.10.username'),
 			password: () => Setting.value('sync.10.password'),
 		});

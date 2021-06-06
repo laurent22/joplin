@@ -40,6 +40,6 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 	ctx.response.set('Content-Type', result.mime);
 	ctx.response.set('Content-Length', result.size.toString());
 	return new Response(ResponseType.KoaResponse, ctx.response);
-});
+}, RouteType.UserContent);
 
 export default router;

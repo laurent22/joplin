@@ -576,6 +576,7 @@ async function initFileApi() {
 		// read/write from multiple processes at the same time.
 		const api = new JoplinServerApi({
 			baseUrl: () => 'http://localhost:22300',
+			userContentBaseUrl: () => '',
 			username: () => 'admin@localhost',
 			password: () => 'admin',
 		});

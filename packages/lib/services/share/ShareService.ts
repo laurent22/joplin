@@ -40,6 +40,7 @@ export default class ShareService {
 
 		this.api_ = new JoplinServerApi({
 			baseUrl: () => Setting.value(`sync.${syncTargetId}.path`),
+			userContentBaseUrl: () => Setting.value(`sync.${syncTargetId}.userContentPath`),
 			username: () => Setting.value(`sync.${syncTargetId}.username`),
 			password: () => Setting.value(`sync.${syncTargetId}.password`),
 		});
@@ -136,7 +137,7 @@ export default class ShareService {
 	}
 
 	public shareUrl(share: StateShare): string {
-		return `${this.api().baseUrl()}/shares/${share.id}`;
+		return `${this.api().userContentBaseUrl()}/shares/${share.id}`;
 	}
 
 	public get shares() {

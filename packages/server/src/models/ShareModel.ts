@@ -80,7 +80,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public shareUrl(id: Uuid, query: any = null): string {
-		return setQueryParameters(`${this.baseUrl}/shares/${id}`, query);
+		return setQueryParameters(`${this.userContentUrl}/shares/${id}`, query);
 	}
 
 	public async byItemId(itemId: Uuid): Promise<Share | null> {

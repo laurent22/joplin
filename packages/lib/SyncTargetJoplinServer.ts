@@ -9,6 +9,7 @@ import Logger from './Logger';
 
 interface FileApiOptions {
 	path(): string;
+	userContentPath(): string;
 	username(): string;
 	password(): string;
 }
@@ -16,6 +17,7 @@ interface FileApiOptions {
 export async function newFileApi(id: number, options: FileApiOptions) {
 	const apiOptions = {
 		baseUrl: () => options.path(),
+		userContentBaseUrl: () => options.userContentPath(),
 		username: () => options.username(),
 		password: () => options.password(),
 		env: Setting.value('env'),
@@ -87,6 +89,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	protected async initFileApi() {
 		return initFileApi(this.logger(), {
 			path: () => Setting.value('sync.9.path'),
+			userContentPath: () => Setting.value('sync.9.userContentPath'),
 			username: () => Setting.value('sync.9.username'),
 			password: () => Setting.value('sync.9.password'),
 		});

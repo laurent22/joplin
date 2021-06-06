@@ -25,7 +25,7 @@ shimInit();
 
 const env: Env = argv.env as Env || Env.Prod;
 
-const envVariables: Record<Env, EnvVariables> = {
+const defaultEnvVariables: Record<Env, EnvVariables> = {
 	dev: {
 		SQLITE_DATABASE: `${sqliteDefaultDir}/db-dev.sqlite`,
 	},
@@ -45,28 +45,6 @@ function appLogger(): LoggerWrapper {
 	}
 	return appLogger_;
 }
-
-const app = new Koa();
-
-// Note: the order of middlewares is important. For example, ownerHandler
-// loads the user, which is then used by notificationHandler. And finally
-// routeHandler uses data from both previous middlewares. It would be good to
-// layout these dependencies in code but not clear how to do this.
-const corsAllowedDomains = ['https://joplinapp.org'];
-
-app.use(cors({
-	// https://github.com/koajs/cors/issues/52#issuecomment-413887382
-	origin: (ctx: AppContext) => {
-		if (corsAllowedDomains.indexOf(ctx.request.header.origin) !== -1) {
-			return ctx.request.header.origin;
-		}
-		// we can't return void, so let's return one of the valid domains
-		return corsAllowedDomains[0];
-	},
-}));
-app.use(ownerHandler);
-app.use(notificationHandler);
-app.use(routeHandler);
 
 function markPasswords(o: Record<string, any>): Record<string, any> {
 	const output: Record<string, any> = {};
@@ -97,12 +75,64 @@ async function main() {
 
 	if (envFilePath) nodeEnvFile(envFilePath);
 
-	if (!envVariables[env]) throw new Error(`Invalid env: ${env}`);
+	if (!defaultEnvVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	await initConfig(env, {
-		...envVariables[env],
+	const envVariables: EnvVariables = {
+		...defaultEnvVariables[env],
 		...process.env,
-	});
+	};
+
+	const app = new Koa();
+
+	// Note: the order of middlewares is important. For example, ownerHandler
+	// loads the user, which is then used by notificationHandler. And finally
+	// routeHandler uses data from both previous middlewares. It would be good to
+	// layout these dependencies in code but not clear how to do this.
+	const corsAllowedDomains = [
+		'https://joplinapp.org',
+	];
+
+	function acceptOrigin(origin: string): boolean {
+		const hostname = (new URL(origin)).hostname;
+		const userContentDomain = envVariables.USER_CONTENT_BASE_URL ? (new URL(envVariables.USER_CONTENT_BASE_URL)).hostname : '';
+
+		if (hostname === userContentDomain) return true;
+
+		const hostnameNoSub = hostname.split('.').slice(1).join('.');
+		if (hostnameNoSub === userContentDomain) return true;
+
+		if (corsAllowedDomains.indexOf(origin) === 0) return true;
+
+		return false;
+	}
+
+	app.use(cors({
+		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
+		origin: (ctx: AppContext) => {
+			const origin = ctx.request.header.origin;
+
+			if (acceptOrigin(origin)) {
+				return origin;
+			} else {
+				// we can't return void, so let's return one of the valid domains
+				return corsAllowedDomains[0];
+			}
+
+			// const requestOrigin = ctx.request.header.origin;
+
+			// if (hostname === envVariables.USER_CONTENT_BASE_URL) return
+
+			// if (corsAllowedDomains.indexOf(requestOrigin) === 0) {
+			// 	return requestOrigin;
+			// }
+
+		},
+	}));
+	app.use(ownerHandler);
+	app.use(notificationHandler);
+	app.use(routeHandler);
+
+	await initConfig(env, envVariables);
 
 	await fs.mkdirp(config().logDir);
 	await fs.mkdirp(config().tempDir);

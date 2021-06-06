@@ -80,7 +80,19 @@ export default class FileApiDriverJoplinServer {
 				const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/delta`, query);
 				const stats = response.items
 					.filter((item: any) => {
-						return item.item_name.indexOf('locks/') !== 0 && item.item_name.indexOf('temp/') !== 0;
+						// We don't need to know about lock changes, since this
+						// is handled by the LockHandler.
+						if (item.item_name.indexOf('locks/') === 0) return false;
+
+						// We don't need to sync what's in the temp folder
+						if (item.item_name.indexOf('temp/') === 0) return false;
+
+						// Although we sync the content of .resource, whether we
+						// fetch or upload data to it is driven by the
+						// associated resource item (.md) file. So at this point
+						// we don't want to automatically fetch from it.
+						if (item.item_name.indexOf('.resource/') === 0) return false;
+						return true;
 					})
 					.map((item: any) => {
 						return this.metadataToStat_(item, item.item_name, item.type === 3, '');
