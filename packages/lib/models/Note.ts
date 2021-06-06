@@ -523,6 +523,7 @@ export default class Note extends BaseItem {
 			changes: {
 				parent_id: folderId,
 				is_conflict: 0, // Also reset the conflict flag in case we're moving the note out of the conflict folder
+				conflict_parent_id: '', // Reset parent id as well.
 			},
 		});
 	}
@@ -537,6 +538,7 @@ export default class Note extends BaseItem {
 			id: noteId,
 			parent_id: folderId,
 			is_conflict: 0,
+			conflict_parent_id: '',
 			updated_time: time.unixMs(),
 		};
 
