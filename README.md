@@ -409,6 +409,12 @@ For more information see [Plugins](https://github.com/laurent22/joplin/blob/dev/
 
 Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both [Simple FTS Queries](https://www.sqlite.org/fts3.html#simple_fts_queries) and [Full-Text Index Queries](https://www.sqlite.org/fts3.html#full_text_index_queries) are supported. See below for the list of supported queries:
 
+One caveat of SQLite FTS is that it does not support languages which do not use Latin word boundaries (spaces, tabs, punctuation). To solve this issue, Joplin has a custom search mode, that does not use FTS, but still has all of its features (multi term search, filters, etc.). One of its drawbacks is that it can get slow on larger note collections. Also, the sorting of the results will be less accurate, as the ranking algorithm (BM25) is, for now, only implemented for FTS. Finally, in this mode there are no restrictions on using the `*` wildcard (`swim*`, `*swim` and `ast*rix` all work). This search mode is currently enabled if one of the following languages are detected:
+ - Chinese
+ - Japanese
+ - Korean
+ - Thai
+
 ## Supported queries
 
 Search type | Description | Example
