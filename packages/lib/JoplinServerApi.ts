@@ -71,7 +71,7 @@ export default class JoplinServerApi {
 
 			return this.session_;
 		} catch (error) {
-			logger.error('Could not acquire session:', error);
+			logger.error('Could not acquire session:', error.details, '\n', error);
 			throw error;
 		}
 	}
@@ -146,6 +146,8 @@ export default class JoplinServerApi {
 			url += stringify(query);
 		}
 
+		const startTime = Date.now();
+
 		try {
 			if (this.debugRequests_) {
 				logger.debug(this.requestToCurl_(url, fetchOptions));
@@ -170,7 +172,7 @@ export default class JoplinServerApi {
 			const responseText = await response.text();
 
 			if (this.debugRequests_) {
-				logger.debug('Response', options.responseFormat, responseText);
+				logger.debug('Response', Date.now() - startTime, options.responseFormat, responseText);
 			}
 
 			// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier

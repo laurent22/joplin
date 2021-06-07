@@ -117,15 +117,6 @@ async function main() {
 				// we can't return void, so let's return one of the valid domains
 				return corsAllowedDomains[0];
 			}
-
-			// const requestOrigin = ctx.request.header.origin;
-
-			// if (hostname === envVariables.USER_CONTENT_BASE_URL) return
-
-			// if (corsAllowedDomains.indexOf(requestOrigin) === 0) {
-			// 	return requestOrigin;
-			// }
-
 		},
 	}));
 	app.use(ownerHandler);

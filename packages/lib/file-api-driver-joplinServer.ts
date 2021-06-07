@@ -183,6 +183,12 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	public async clearRoot(path: string) {
-		await this.delete(path);
+		const response = await this.list(path);
+
+		for (const item of response.items) {
+			await this.delete(item.path);
+		}
+
+		if (response.has_more) throw new Error('has_more support not implemented');
 	}
 }

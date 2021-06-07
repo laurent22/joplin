@@ -50,7 +50,7 @@ const WebDavApi = require('../WebDavApi');
 const DropboxApi = require('../DropboxApi');
 import JoplinServerApi from '../JoplinServerApi';
 import { FolderEntity } from '../services/database/types';
-import { credentialFile } from '../utils/credentialFiles';
+import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
 const md5 = require('md5');
@@ -435,7 +435,8 @@ async function synchronizerStart(id: number = null, extraOptions: any = null) {
 	if (id === null) id = currentClient_;
 
 	const contextKey = `sync.${syncTargetId()}.context`;
-	const context = Setting.value(contextKey);
+	const contextString = Setting.value(contextKey);
+	const context = contextString ? JSON.parse(contextString) : {};
 
 	const options = Object.assign({}, extraOptions);
 	if (context) options.context = context;
@@ -571,14 +572,23 @@ async function initFileApi() {
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('joplinServer')) {
 		mustRunInBand();
 
+		const joplinServerAuth = JSON.parse(await readCredentialFile('joplin-server-test-units-2.json'));
+
+		// const joplinServerAuth = {
+		//     "email": "admin@localhost",
+		//     "password": "admin",
+		//     "baseUrl": "http://api-joplincloud.local:22300",
+		//     "userContentBaseUrl": ""
+		// }
+
 		// Note that to test the API in parallel mode, you need to use Postgres
 		// as database, as the SQLite database is not reliable when being
 		// read/write from multiple processes at the same time.
 		const api = new JoplinServerApi({
-			baseUrl: () => 'http://localhost:22300',
-			userContentBaseUrl: () => '',
-			username: () => 'admin@localhost',
-			password: () => 'admin',
+			baseUrl: () => joplinServerAuth.baseUrl,
+			userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
+			username: () => joplinServerAuth.email,
+			password: () => joplinServerAuth.password,
 		});
 
 		fileApi = new FileApi('', new FileApiDriverJoplinServer(api));

@@ -926,6 +926,7 @@ export default class Synchronizer {
 				this.logger().error(error);
 			} else {
 				this.logger().error(error);
+				if (error.details) this.logger().error('Details:', error.details);
 
 				// Don't save to the report errors that are due to things like temporary network errors or timeout.
 				if (!shim.fetchRequestCanBeRetried(error)) {
