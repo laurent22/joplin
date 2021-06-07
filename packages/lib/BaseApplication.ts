@@ -313,7 +313,7 @@ export default class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, true);
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
