@@ -224,10 +224,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textHeading: () => addListItem('## ', ''),
 						textHorizontalRule: () => addListItem('* * *'),
 						'editor.execCommand': (value: CommandValue) => {
-							if (editorRef.current[value.name]) {
-								if (!('args' in value)) value.args = [];
+							if (!('args' in value)) value.args = [];
 
+							if (editorRef.current[value.name]) {
 								editorRef.current[value.name](...value.args);
+							} else if (editorRef.current.commandExists(value.name)) {
+								editorRef.current.execCommand(value.name);
 							} else {
 								reg.logger().warn('CodeMirror execCommand: unsupported command: ', value.name);
 							}

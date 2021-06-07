@@ -338,6 +338,9 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearch.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useExternalPlugins.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useExternalPlugins.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useExternalPlugins.js.map
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinCommands.d.ts
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinCommands.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinCommands.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useJoplinMode.js.map
