@@ -405,6 +405,40 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 <hr>
 <h1>Joplin Server Changelog<a name="joplin-server-changelog" href="#joplin-server-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.5">server-v2.0.5</a> (Pre-release) - 2021-06-02T08:14:47Z<a name="server-v2-0-5-https-github-com-laurent22-joplin-releases-tag-server-v2-0-5-pre-release-2021-06-02t08-14-47z" href="#server-v2-0-5-https-github-com-laurent22-joplin-releases-tag-server-v2-0-5-pre-release-2021-06-02t08-14-47z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add version number on website (0ef7e98)</li>
+<li>New: Added signup pages (41ed66d)</li>
+<li>Improved: Allow disabling item upload for a user (f8a26cf)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.4">server-v2.0.4</a> (Pre-release) - 2021-05-25T18:33:11Z<a name="server-v2-0-4-https-github-com-laurent22-joplin-releases-tag-server-v2-0-4-pre-release-2021-05-25t18-33-11z" href="#server-v2-0-4-https-github-com-laurent22-joplin-releases-tag-server-v2-0-4-pre-release-2021-05-25t18-33-11z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixed: Fixed Item and Log page when using Postgres (ee0f237)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.3">server-v2.0.3</a> (Pre-release) - 2021-05-25T18:08:46Z<a name="server-v2-0-3-https-github-com-laurent22-joplin-releases-tag-server-v2-0-3-pre-release-2021-05-25t18-08-46z" href="#server-v2-0-3-https-github-com-laurent22-joplin-releases-tag-server-v2-0-3-pre-release-2021-05-25t18-08-46z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixed: Fixed handling of request origin (12a6634)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.2">server-v2.0.2</a> (Pre-release) - 2021-05-25T19:15:50Z<a name="server-v2-0-2-https-github-com-laurent22-joplin-releases-tag-server-v2-0-2-pre-release-2021-05-25t19-15-50z" href="#server-v2-0-2-https-github-com-laurent22-joplin-releases-tag-server-v2-0-2-pre-release-2021-05-25t19-15-50z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add mailer service (ed8ee67)</li>
+<li>New: Add support for item size limit (6afde54)</li>
+<li>New: Added API end points to manage users (77b284f)</li>
+<li>Improved: Allow enabling or disabling the sharing feature per user (daaaa13)</li>
+<li>Improved: Allow setting the path to the SQLite database using SQLITE_DATABASE env variable (68e79f1)</li>
+<li>Improved: Allow using a different domain for API, main website and user content (83cef7a)</li>
+<li>Improved: Generate only one share link per note (e156ee1)</li>
+<li>Improved: Go back to home page when there is an error and user is logged in (a24b009)</li>
+<li>Improved: Improved Items table and added item size to it (7f05420)</li>
+<li>Improved: Improved log table too and made it sortable (ec7f0f4)</li>
+<li>Improved: Make it more difficult to delete all data (b01aa7e)</li>
+<li>Improved: Redirect to correct page when trying to access the root (51051e0)</li>
+<li>Improved: Use external directory to store Postgres data in Docker-compose config (71a7fc0)</li>
+<li>Fixed: Fixed /items page when using Postgres (2d0580f)</li>
+<li>Fixed: Fixed bug when unsharing a notebook that has no recipients (6ddb69e)</li>
+<li>Fixed: Fixed deleting a note that has been shared (489995d)</li>
+<li>Fixed: Make sure temp files are deleted after upload is done (#4540)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.1">server-v2.0.1</a> (Pre-release) - 2021-05-14T13:55:45Z<a name="server-v2-0-1-https-github-com-laurent22-joplin-releases-tag-server-v2-0-1-pre-release-2021-05-14t13-55-45z" href="#server-v2-0-1-https-github-com-laurent22-joplin-releases-tag-server-v2-0-1-pre-release-2021-05-14t13-55-45z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support for sharing notes via a link (ccbc329)</li>

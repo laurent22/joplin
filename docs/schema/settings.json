@@ -99,17 +99,17 @@
 		"sync.9.path": {
 			"type": "string",
 			"default": "",
-			"description": "Joplin Server URL. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "Joplin Cloud URL. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
 		"sync.9.username": {
 			"type": "string",
 			"default": "",
-			"description": "Joplin Server email"
+			"description": "Joplin Cloud email"
 		},
 		"sync.9.password": {
 			"type": "string",
 			"default": "",
-			"description": "Joplin Server password",
+			"description": "Joplin Cloud password",
 			"$comment": "private"
 		},
 		"sync.5.syncTargets": {
