@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 
@@ -345,6 +345,10 @@ export default class ItemModel extends BaseModel<Item> {
 			if ('name' in item && !item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 		}
 
+		if (item.jop_share_id) {
+			if (!(await this.models().share().exists(item.jop_share_id))) throw new ErrorUnprocessableEntity(`share not found: ${item.jop_share_id}`);
+		}
+
 		return super.validate(item, options);
 	}
 
@@ -499,7 +503,7 @@ export default class ItemModel extends BaseModel<Item> {
 	public async deleteForUser(userId: Uuid, item: Item): Promise<void> {
 		if (this.isRootSharedFolder(item)) {
 			const share = await this.models().share().byItemId(item.id);
-			if (!share) throw new ErrorNotFound(`Cannot find share associated with item ${item.id}`);
+			if (!share) throw new Error(`Cannot find share associated with item ${item.id}`);
 			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
 			if (!userShare) return;
 			await this.models().shareUser().delete(userShare.id);
