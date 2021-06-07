@@ -3,7 +3,7 @@ import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
 
 export default async function(ctx: AppContext) {
-	ctx.appLogger().info(`${ctx.request.method} ${ctx.path}`);
+	const requestStartTime = Date.now();
 
 	try {
 		const responseObject = await execRequest(ctx.routes, ctx);
@@ -56,5 +56,10 @@ export default async function(ctx: AppContext) {
 			if (error.code) r.code = error.code;
 			ctx.response.body = r;
 		}
+	} finally {
+		// Technically this is not the total request duration because there are
+		// other middlewares but that should give a good approximation
+		const requestDuration = Date.now() - requestStartTime;
+		ctx.appLogger().info(`${ctx.request.method} ${ctx.path} (${requestDuration}ms)`);
 	}
 }

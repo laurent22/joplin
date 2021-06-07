@@ -84,6 +84,14 @@ async function main() {
 
 	const app = new Koa();
 
+	// app.use(async function responseTime(ctx:AppContext, next:Function) {
+	// 	const start = Date.now();
+	// 	await next();
+	// 	const ms = Date.now() - start;
+	// 	console.info('Response time', ms)
+	// 	//ctx.set('X-Response-Time', `${ms}ms`);
+	// });
+
 	// Note: the order of middlewares is important. For example, ownerHandler
 	// loads the user, which is then used by notificationHandler. And finally
 	// routeHandler uses data from both previous middlewares. It would be good to
