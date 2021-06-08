@@ -52,7 +52,7 @@ const globalStyle: any = {
 	disabledOpacity: 0.3,
 	buttonMinWidth: 50,
 	buttonMinHeight: 30,
-	editorFontSize: 12,
+	// editorFontSize: 12,
 	textAreaLineHeight: 17,
 	lineHeight: '1.6em',
 	headerButtonHPadding: 6,
@@ -368,23 +368,22 @@ const themeCache_: any = {};
 function themeStyle(themeId: number) {
 	if (!themeId) throw new Error('Theme must be specified');
 
-	const zoomRatio = 1;
-
-	const cacheKey = themeId;
+	const cacheKey = `${themeId}_${Setting.value('style.editor.fontSize')}`;
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
 	// Font size are not theme specific, but they must be referenced
 	// and computed here to allow them to respond to settings changes
 	// without the need to restart
 	const fontSizes: any = {
-		fontSize: Math.round(12 * zoomRatio),
+		fontSize: 12,
 		toolbarIconSize: 18,
 	};
 
-	fontSizes.noteViewerFontSize = Math.round(fontSizes.fontSize * 1.25);
+	// For consistency, and now that the Markdown editor can use non-monospace
+	// fonts, we use the same font size everywhere.
+	fontSizes.noteViewerFontSize = Setting.value('style.editor.fontSize'); // fontSizes.fontSize; //Math.round(fontSizes.fontSize * 1.25);
 
 	let output: any = {};
-	output.zoomRatio = zoomRatio;
 
 	// All theme are based on the light style, and just override the
 	// relevant properties
@@ -406,7 +405,7 @@ const cachedStyles_: any = {
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
 function buildStyle(cacheKey: any, themeId: number, callback: Function) {
-	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
+	cacheKey = `${Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey}_${Setting.value('style.editor.fontSize')}`;
 
 	// We clear the cache whenever switching themes
 	if (cachedStyles_.themeId !== themeId) {
