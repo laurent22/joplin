@@ -284,8 +284,20 @@ describe('models_Note', function() {
 			expect(externalToInternal).toBe(input);
 		}
 
-		const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
-		expect(result).toBe(`[](:/${note1.id})`);
+		{
+			const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
+			expect(result).toBe(`[](:/${note1.id})`);
+		}
+
+		{
+			// This is a regular file path that contains the resourceDirName
+			// inside but it shouldn't be changed.
+			//
+			// https://github.com/laurent22/joplin/issues/5034
+			const noChangeInput = `[docs](file:///c:/foo/${resourceDirName}/docs)`;
+			const result = await Note.replaceResourceExternalToInternalLinks(noChangeInput, { useAbsolutePaths: false });
+			expect(result).toBe(noChangeInput);
+		}
 	}));
 
 	it('should perform natural sorting', (async () => {

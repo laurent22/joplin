@@ -208,9 +208,9 @@ export default class Note extends BaseItem {
 		for (const basePath of pathsToTry) {
 			const reStrings = [
 				// Handles file://path/to/abcdefg.jpg?t=12345678
-				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+\\?t=[0-9]+`,
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9]{32}\\.[a-zA-Z0-9]+\\?t=[0-9]+`,
 				// Handles file://path/to/abcdefg.jpg
-				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`,
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9]{32}\\.[a-zA-Z0-9]+`,
 			];
 			for (const reString of reStrings) {
 				const re = new RegExp(reString, 'gi');
