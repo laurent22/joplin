@@ -18,7 +18,6 @@ function makeView(error: Error = null): View {
 		postUrl: makeUrl(UrlType.Signup),
 		loginUrl: makeUrl(UrlType.Login),
 	};
-	view.navbar = false;
 	return view;
 }
 
