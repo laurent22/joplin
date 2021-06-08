@@ -1,6 +1,7 @@
 import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from '../utils/routeUtils';
 import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
+import config from '../config';
 
 export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
@@ -44,7 +45,7 @@ export default async function(ctx: AppContext) {
 				path: 'index/error',
 				content: {
 					error,
-					stack: ctx.env === Env.Dev ? error.stack : '',
+					stack: config().showErrorStackTraces ? error.stack : '',
 					owner: ctx.owner,
 				},
 			};
