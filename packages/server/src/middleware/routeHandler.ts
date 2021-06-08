@@ -12,8 +12,9 @@ export default async function(ctx: AppContext) {
 		if (responseObject instanceof Response) {
 			ctx.response = responseObject.response;
 		} else if (isView(responseObject)) {
-			ctx.response.status = 200;
-			ctx.response.body = await ctx.services.mustache.renderView(responseObject, {
+			const view = responseObject as View;
+			ctx.response.status = view?.content?.error ? view?.content?.error?.httpCode || 500 : 200;
+			ctx.response.body = await ctx.services.mustache.renderView(view, {
 				notifications: ctx.notifications || [],
 				hasNotifications: !!ctx.notifications && !!ctx.notifications.length,
 				owner: ctx.owner,

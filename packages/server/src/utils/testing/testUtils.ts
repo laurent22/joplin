@@ -194,6 +194,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	appContext.req = req;
 	appContext.query = req.query;
 	appContext.method = req.method;
+	appContext.redirect = () => {};
 
 	if (options.sessionId) {
 		appContext.cookies.set('sessionId', options.sessionId);
