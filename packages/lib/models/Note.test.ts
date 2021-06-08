@@ -332,4 +332,39 @@ describe('models_Note', function() {
 		expect(sortedNotes3[4].id).toBe(note2.id);
 	}));
 
+	it('should copy the note to target folder and cancel conflict', (async () => {
+		const folder1 = await Folder.save({ title: 'Folder' });
+		const conflictFolder = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
+		const note1 = await Note.save({ title: 'note', parent_id: conflictFolder.id, is_conflict: 1, conflict_parent_id: folder1.id });
+		const note2 = await Note.copyToFolder(note1.id, folder1.id);
+
+		// Targed should be copied and have conflict removed.
+		expect(note2.id == note1.id).toBe(false); // ID must be different.
+		expect(note2.title).toBe(note1.title);
+		expect(note2.is_conflict).toBe(0);
+		expect(note2.conflict_parent_id).toBe('');
+		expect(note2.parent_id).toBe(folder1.id);
+
+		// Source should stay as is
+		expect(note1.is_conflict).toBe(1);
+		expect(note1.conflict_parent_id).toBe(folder1.id);
+		expect(note1.parent_id).toBe(conflictFolder.id);
+	}));
+
+	it('should move the note to target folder and cancel conflict', (async () => {
+		const folder1 = await Folder.save({ title: 'Folder' });
+		const conflictFolder = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
+		const note1 = await Note.save({ title: 'note', parent_id: conflictFolder.id, is_conflict: 1, conflict_parent_id: folder1.id });
+		const note2 = await Note.moveToFolder(note1.id, folder1.id);
+
+		// Note should be moved over.
+		expect(note2.id).toBe(note1.id);
+		expect(note2.parent_id).toBe(folder1.id);
+
+		// Note should have conflicts removed.
+		expect(note2.is_conflict).toBe(0);
+		expect(note2.conflict_parent_id).toBe('');
+
+	}));
+
 });
