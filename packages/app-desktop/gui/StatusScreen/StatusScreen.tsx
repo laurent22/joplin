@@ -147,7 +147,10 @@ function StatusScreen(props: Props) {
 		}
 
 		if (section.canRetryAll) {
-			itemsHtml.push(renderSectionRetryAllHtml(section.title, section.retryAllHandler));
+			itemsHtml.push(renderSectionRetryAllHtml(section.title, async () => {
+				await section.retryAllHandler();
+				void resfreshScreen();
+			}));
 		}
 
 		return <div key={key}>{itemsHtml}</div>;
