@@ -47,5 +47,6 @@ export default function() {
 		'toggleSafeMode',
 		'showShareNoteDialog',
 		'showShareFolderDialog',
+		'showPrompt',
 	];
 }
