@@ -4,9 +4,16 @@ export const declaration: CommandDeclaration = {
 	name: 'showPrompt',
 };
 
+enum PromptInputType {
+    Dropdown = 'dropdown',
+    Datetime = 'datetime',
+	Tags = 'tags',
+	Text = 'text',
+}
+
 interface PromptConfig {
 	label: string;
-	inputType?: 'dropdown' | 'datetime' | 'tags' | 'text';
+	inputType?: PromptInputType;
 	value?: any;
 	autocomplete?: any[];
 	buttons?: string[];
