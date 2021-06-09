@@ -15,6 +15,9 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
       - run: |
           # run script
           "${GITHUB_WORKSPACE}/scripts/run_tests.sh"
