@@ -83,4 +83,25 @@ describe('services_SearchEngineUtils', function() {
 			expect(rows.map(r=>r.id)).toContain(todo2.id);
 		}));
 	});
+
+	it('remove auto added fields', (async () => {
+		await Note.save({ title: 'abcd', body: 'body 1' });
+		await searchEngine.syncTables();
+
+		const testCases = [
+			['title', 'todo_due'],
+			['title', 'todo_completed'],
+			['title'],
+			['title', 'todo_completed', 'todo_due'],
+		];
+
+		for (const testCase of testCases) {
+			const rows = await SearchEngineUtils.notesForQuery('abcd', false, { fields: [...testCase] }, searchEngine);
+			testCase.push('type_');
+			expect(Object.keys(rows[0]).length).toBe(testCase.length);
+			for (const field of testCase) {
+				expect(rows[0]).toHaveProperty(field);
+			}
+		}
+	}));
 });
