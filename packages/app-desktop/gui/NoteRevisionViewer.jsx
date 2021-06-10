@@ -13,7 +13,7 @@ const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const { MarkupToHtml } = require('@joplin/renderer');
 const time = require('@joplin/lib/time').default;
 const ReactTooltip = require('react-tooltip');
-const { urlDecode, substrWithEllipsis } = require('@joplin/lib/string-utils');
+const { urlDecode } = require('@joplin/lib/string-utils');
 const bridge = require('electron').remote.require('./bridge').default;
 const markupLanguageUtils = require('../utils/markupLanguageUtils').default;
 
@@ -75,7 +75,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		this.setState({ restoring: true });
 		await RevisionService.instance().importRevisionNote(this.state.note);
 		this.setState({ restoring: false });
-		alert(_('The note "%s" has been successfully restored to the notebook "%s".', substrWithEllipsis(this.state.note.title, 0, 32), RevisionService.instance().restoreFolderTitle()));
+		alert(RevisionService.instance().restoreSuccessMessage(this.state.note));
 	}
 
 	backButton_click() {

@@ -9,6 +9,7 @@ import shim from '../shim';
 import BaseService from './BaseService';
 import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
+const { substrWithEllipsis } = require('../string-utils');
 const { sprintf } = require('sprintf-js');
 const { wrapError } = require('../errorUtils');
 
@@ -230,7 +231,23 @@ export default class RevisionService extends BaseService {
 		return folder;
 	}
 
-	async importRevisionNote(note: NoteEntity) {
+	// reverseRevIndex = 0 means restoring the latest version. reverseRevIndex =
+	// 1 means the version before that, etc.
+	public async restoreNoteById(noteId: string, reverseRevIndex: number): Promise<NoteEntity> {
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
+		if (!revisions.length) throw new Error(`No revision for note "${noteId}"`);
+
+		const revIndex = revisions.length - 1 - reverseRevIndex;
+
+		const note = await this.revisionNote(revisions, revIndex);
+		return this.importRevisionNote(note);
+	}
+
+	public restoreSuccessMessage(note: NoteEntity): string {
+		return _('The note "%s" has been successfully restored to the notebook "%s".', substrWithEllipsis(note.title, 0, 32), this.restoreFolderTitle());
+	}
+
+	async importRevisionNote(note: NoteEntity): Promise<NoteEntity> {
 		const toImport = Object.assign({}, note);
 		delete toImport.id;
 		delete toImport.updated_time;
@@ -242,7 +259,7 @@ export default class RevisionService extends BaseService {
 
 		toImport.parent_id = folder.id;
 
-		await Note.save(toImport);
+		return Note.save(toImport);
 	}
 
 	async maintenance() {
