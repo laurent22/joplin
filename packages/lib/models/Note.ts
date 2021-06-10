@@ -913,4 +913,12 @@ export default class Note extends BaseItem {
 		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
+
+	static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
+		const conflictNote = Object.assign({}, sourceNote);
+		delete conflictNote.id;
+		conflictNote.is_conflict = 1;
+		conflictNote.conflict_original_id = sourceNote.id;
+		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
+	}
 }

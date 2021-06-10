@@ -610,11 +610,7 @@ export default class Synchronizer {
 							// ------------------------------------------------------------------------------
 
 							if (mustHandleConflict) {
-								const conflictedNote = Object.assign({}, local);
-								delete conflictedNote.id;
-								conflictedNote.is_conflict = 1;
-								conflictedNote.conflict_original_id = local.id;
-								await Note.save(conflictedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC });
+								await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
 							}
 						} else if (action == 'resourceConflict') {
 							// ------------------------------------------------------------------------------

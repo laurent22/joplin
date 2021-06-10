@@ -6,6 +6,7 @@ import { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient
 import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
+import ItemChange from './ItemChange';
 const ArrayUtils = require('../ArrayUtils.js');
 
 async function allItems() {
@@ -339,11 +340,7 @@ describe('models_Note', function() {
 
 		const note1 = await Note.save({ title: 'note', parent_id: srcfolder.id });
 
-		const tmpConflictedNote = Object.assign({}, note1);
-		delete tmpConflictedNote.id;
-		tmpConflictedNote.is_conflict = 1;
-		tmpConflictedNote.conflict_original_id = note1.id;
-		const conflictedNote = await Note.save(tmpConflictedNote, { autoTimestamp: false });
+		const conflictedNote = await Note.createConflictNote(note1, ItemChange.SOURCE_SYNC);
 
 		// COPY File
 		const note2 = await Note.copyToFolder(conflictedNote.id, targetfolder.id);
@@ -367,11 +364,7 @@ describe('models_Note', function() {
 		const targetFolder = await Folder.save({ title: 'Target Folder' });
 		const note1 = await Note.save({ title: 'note', parent_id: srcFolder.id });
 
-		const tmpConflictedNote = Object.assign({}, note1);
-		delete tmpConflictedNote.id;
-		tmpConflictedNote.is_conflict = 1;
-		tmpConflictedNote.conflict_original_id = note1.id;
-		const conflictedNote = await Note.save(tmpConflictedNote, { autoTimestamp: false });
+		const conflictedNote = await Note.createConflictNote(note1, ItemChange.SOURCE_SYNC);
 
 		// Move
 		const movedNote = await Note.moveToFolder(conflictedNote.id, targetFolder.id);
