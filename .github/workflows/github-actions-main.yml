@@ -33,5 +33,6 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          IS_CONTINUOUS_INTEGRATION: 1
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
