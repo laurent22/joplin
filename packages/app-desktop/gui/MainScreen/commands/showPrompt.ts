@@ -5,8 +5,8 @@ export const declaration: CommandDeclaration = {
 };
 
 enum PromptInputType {
-    Dropdown = 'dropdown',
-    Datetime = 'datetime',
+	Dropdown = 'dropdown',
+	Datetime = 'datetime',
 	Tags = 'tags',
 	Text = 'text',
 }
