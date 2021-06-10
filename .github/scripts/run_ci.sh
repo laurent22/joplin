@@ -71,7 +71,6 @@ fi
 # release randomly fail.
 # =============================================================================
 
-
 if [ "$IS_PULL_REQUEST" != "1" ]; then
 	npm run linter-ci ./
 	testResult=$?
@@ -81,9 +80,9 @@ if [ "$IS_PULL_REQUEST" != "1" ]; then
 fi
 
 # =============================================================================
-# Validate translations - this is needed as some users manually
-# edit .po files (and often make mistakes) instead of using a proper
-# tool like poedit. Doing it for Linux only is sufficient.
+# Validate translations - this is needed as some users manually edit .po files
+# (and often make mistakes) instead of using a proper tool like poedit. Doing it
+# for Linux only is sufficient.
 # =============================================================================
 
 if [ "$IS_PULL_REQUEST" == "1" ]; then
