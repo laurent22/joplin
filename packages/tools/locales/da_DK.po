@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -121,11 +123,11 @@ msgstr "Download"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Spring denne version over"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Komplet ændringslog"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -274,7 +276,6 @@ msgid "Advanced tools"
 msgstr "Avancerede indstillinger"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:136
-#, fuzzy
 msgid "Export debug report"
 msgstr "Eksporter fejlrapport"
 
@@ -763,15 +764,15 @@ msgstr "Mere information"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) vil gerne dele en notesbog med dig."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid "Accept"
-msgstr ""
+msgstr "Acceptér"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:480
 msgid "Reject"
-msgstr ""
+msgstr "Afvis"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:484
 msgid "Some items cannot be synchronised."
@@ -857,9 +858,8 @@ msgid "Toggle editors"
 msgstr "Skift editorer"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Del note..."
+msgstr "Del notesbog..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -1511,13 +1511,12 @@ msgid "You do not have any installed plugin."
 msgstr "Du har ikke installeret nogen udvidelser."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "Kunne ikke installere plugin: %s"
+msgstr "Kunne ikke forbinde til plugin-lager"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "Prøv igen"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1706,9 +1705,8 @@ msgstr ""
 "(Begrænsning: %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:141
-#, fuzzy
 msgid "Unshare note"
-msgstr "Del"
+msgstr "Del ikke længere note"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
@@ -1745,19 +1743,20 @@ msgstr[0] "Kopier link til deling"
 msgstr[1] "Kopier links til deling"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "Del"
+msgstr "Del ikke længere"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"Vil du slette denne invitation? Modtageren vil ikke længere have adgang til "
+"denne delte notesbog."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr "Tilføj modtager:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1767,19 +1766,19 @@ msgstr "Del"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "Modtager har endnu ikke accepteret invitationen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "Modtageren har afslået invitationen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "Modtageren har accepteret invitationen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "Modtagere:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
 #, fuzzy
@@ -1787,20 +1786,20 @@ msgid "Synchronizing..."
 msgstr "Synkroniserer..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "Del note..."
+msgstr "Deler notesbog..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"Del ikke længere denne notesbog? Modtagerne vil ikke længere have adgang til "
+"dens indhold."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Del noter"
+msgstr "Del notesbog"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
 msgid "Toggle safe mode"
@@ -2248,15 +2247,14 @@ msgstr ""
 "nu](%s)"
 
 #: packages/server/dist/models/UserModel.js:134
-#, fuzzy
 msgid "attachment"
-msgstr "Vedhæftninger"
+msgstr "vedhæftning"
 
 #: packages/server/dist/models/UserModel.js:134
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
-msgstr ""
+msgstr "Kan ikke gemme %s \"%s\" da den er større end den tilladte grænse (%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2440,23 +2438,20 @@ msgid "Joplin Server URL"
 msgstr "Joplin Server URL"
 
 #: packages/lib/models/Setting.js:321
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplin server"
+msgstr "Joplin server e-mail"
 
 #: packages/lib/models/Setting.js:332
 msgid "Joplin Server password"
 msgstr "Joplin Server kodeord"
 
 #: packages/lib/models/Setting.js:353
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplin server"
+msgstr "Joplin Cloud e-mail"
 
 #: packages/lib/models/Setting.js:364
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplin Server kodeord"
+msgstr "Joplin Cloud adgangskode"
 
 #: packages/lib/models/Setting.js:376
 msgid "Attachment download behaviour"
@@ -2723,11 +2718,11 @@ msgstr "Brugerdefineret stylesheet til Joplin app-stil"
 
 #: packages/lib/models/Setting.js:794
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "Upload lokal data igen til synkroniseringsmål"
 
 #: packages/lib/models/Setting.js:804
 msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgstr "Slet lokal data og download igen fra synkroniseringsmål"
 
 #: packages/lib/models/Setting.js:809
 msgid "Automatically update the application"
@@ -3047,9 +3042,8 @@ msgid "Encrypted items cannot be modified"
 msgstr "Krypteret emner kan ikke rettes"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin-forum"
+msgstr "Joplin Cloud"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3309,14 +3303,14 @@ msgid "HTML Directory"
 msgstr "HTML Indeks"
 
 #: packages/lib/services/interop/InteropService.js:127
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Kan ikke indlæse \"%s\" modul for format \"%s\" og output \"%s\""
+msgstr "Kan ikke indlæse \"%s\" modul til format \"%s\" og output \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "Kan ikke indlæse \"%s\" modul for format \"%s\" og mål \"%s\""
+msgstr "Kan ikke indlæse \"%s\" modul til format \"%s\" og mål \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3878,6 +3872,7 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Afvikler kommandoerne i tekstfilen. Der skal være én kommando pr. linje."
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
