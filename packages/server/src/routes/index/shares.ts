@@ -36,6 +36,8 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const result = await renderItem(ctx, item, share);
 
+	ctx.models.share().checkShareUrl(share, ctx.URL.origin);
+
 	ctx.response.body = result.body;
 	ctx.response.set('Content-Type', result.mime);
 	ctx.response.set('Content-Length', result.size.toString());

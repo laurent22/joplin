@@ -33,6 +33,10 @@ export default class ShareService {
 		return this.store.getState()[stateRootKey] as State;
 	}
 
+	public get userId(): string {
+		return this.api() ? this.api().userId : '';
+	}
+
 	private api(): JoplinServerApi {
 		if (this.api_) return this.api_;
 
@@ -136,8 +140,8 @@ export default class ShareService {
 		await Note.save({ id: note.id, is_shared: 0 });
 	}
 
-	public shareUrl(share: StateShare): string {
-		return `${this.api().userContentBaseUrl()}/shares/${share.id}`;
+	public shareUrl(userId: string, share: StateShare): string {
+		return `${this.api().userContentBaseUrl(userId)}/shares/${share.id}`;
 	}
 
 	public get shares() {

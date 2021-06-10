@@ -56,8 +56,14 @@ export default class JoplinServerApi {
 		return rtrimSlashes(this.options_.baseUrl());
 	}
 
-	public userContentBaseUrl() {
-		return this.options_.userContentBaseUrl() || this.baseUrl();
+	public userContentBaseUrl(userId: string) {
+		if (this.options_.userContentBaseUrl()) {
+			if (!userId) throw new Error('User ID must be specified');
+			const url = new URL(this.options_.userContentBaseUrl());
+			return `${url.protocol}//${userId.substr(0, 10).toLowerCase()}.${url.host}`;
+		} else {
+			return this.baseUrl();
+		}
 	}
 
 	private async session() {

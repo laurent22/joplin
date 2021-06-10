@@ -577,7 +577,7 @@ async function initFileApi() {
 		// const joplinServerAuth = {
 		//     "email": "admin@localhost",
 		//     "password": "admin",
-		//     "baseUrl": "http://api-joplincloud.local:22300",
+		//     "baseUrl": "http://api.joplincloud.local:22300",
 		//     "userContentBaseUrl": ""
 		// }
 
