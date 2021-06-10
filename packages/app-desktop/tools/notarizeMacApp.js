@@ -25,8 +25,8 @@ module.exports = async function(params) {
 
 	console.info('Checking if notarization should be done...');
 
-	if (!process.env.TRAVIS || !process.env.TRAVIS_TAG) {
-		console.info(`Either not running in CI or not processing a tag - skipping notarization. process.env.TRAVIS = ${process.env.TRAVIS}; process.env.TRAVIS_TAG = ${process.env.TRAVIS}`);
+	if (!process.env.IS_CONTINUOUS_INTEGRATION || !process.env.GIT_TAG_NAME) {
+		console.info(`Either not running in CI or not processing a tag - skipping notarization. process.env.IS_CONTINUOUS_INTEGRATION = ${process.env.IS_CONTINUOUS_INTEGRATION}; process.env.GIT_TAG_NAME = ${process.env.GIT_TAG_NAME}`);
 		return;
 	}
 
@@ -45,9 +45,8 @@ module.exports = async function(params) {
 
 	console.log(`Notarizing ${appId} found at ${appPath}`);
 
-	// Every x seconds we print something to stdout, otherwise Travis will
-	// timeout the task after 10 minutes, and Apple notarization can take more
-	// time.
+	// Every x seconds we print something to stdout, otherwise CI may timeout
+	// the task after 10 minutes, and Apple notarization can take more time.
 	const waitingIntervalId = setInterval(() => {
 		console.log('.');
 	}, 60000);
