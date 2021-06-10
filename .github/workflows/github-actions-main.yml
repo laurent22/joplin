@@ -2,7 +2,10 @@ name: Joplin Continuous Integration
 on: [push, pull_request]
 jobs:
   Main:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: olegtarasov/get-tag@v2.1
