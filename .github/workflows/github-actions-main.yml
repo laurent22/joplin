@@ -1,5 +1,5 @@
 name: Joplin Continuous Integration
-on: [push]
+on: [push, pull_request]
 jobs:
   Main:
     runs-on: ${{ matrix.os }}
