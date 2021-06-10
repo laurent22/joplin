@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Derviš T. <dervis.t@pm.me>\n"
+"Last-Translator: dervist\n"
 "Language-Team: \n"
 "Language: bs\n"
 "MIME-Version: 1.0\n"
@@ -92,7 +92,7 @@ msgstr "Prvo odaberite bilježnicu."
 
 #: CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
-msgstr "Unosi podatke u Joplin"
+msgstr "Unosi podatke u Joplin."
 
 #: CliClient/app/command-import.js:25
 #, javascript-format
@@ -106,7 +106,7 @@ msgstr "Ne pitaj za potvrdu."
 #: CliClient/app/command-import.js:27
 #, fuzzy, javascript-format
 msgid "Output format: %s"
-msgstr "Izvorni format: %s"
+msgstr "Izlazni format: %s"
 
 #: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
@@ -164,7 +164,7 @@ msgstr "Moguće vrijednosti: %s."
 #: CliClient/app/help-utils.js:71
 #, javascript-format
 msgid "Default: %s"
-msgstr "Prekonfigurisano: %s"
+msgstr "Predefinisano: %s"
 
 #: CliClient/app/help-utils.js:77
 msgid "Possible keys/values:"
@@ -303,16 +303,18 @@ msgstr "%s = %s"
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
-msgstr "Prelazi u [notebook] – sve dalje radnje vršit će se u ovoj bilježnici."
+msgstr ""
+"Prelazi u [notebook] – sve dalje radnje vršit će se u ovoj "
+"bilježnici."
 
 #: CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
-msgstr "Sinhronizuje sa vanjskim medijem za pohranu podataka."
+msgstr "Sinhronizuje sa vanjskim medijem za pohranjivanje podataka."
 
 #: CliClient/app/command-sync.js:32
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Sinhronizuj sa datim odredištem (prekonfigurisano sync.target config value)"
+"Sinhronizuj sa datim odredištem (predefinisano sync.target config value)"
 
 #: CliClient/app/command-sync.js:77 CliClient/app/command-sync.js:91
 #: ElectronClient/gui/OneDriveLoginScreen.min.js:40
@@ -333,7 +335,7 @@ msgstr ""
 #: ReactNativeClient/lib/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
-"Korak 1: otvorite ovu adresu u Vašem internet pregledniku i ovjerite "
+"Korak 1: otvorite ovu adresu u Vašem internet-pregledniku i ovjerite "
 "aplikaciju:"
 
 #: CliClient/app/command-sync.js:89
@@ -444,7 +446,8 @@ msgstr "Bilješka ne postoji: \"%s\". Želite li je kreirati?"
 #: CliClient/app/app-gui.js:446
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Da izbrišete oznaku, prvo je uklonite iz bilješki kojima je dodijeljena."
+"Da izbrišete oznaku, prvo je uklonite iz bilješki kojima je "
+"dodijeljena."
 
 #: CliClient/app/app-gui.js:456
 msgid "Please select the note or notebook to be deleted first."
@@ -494,7 +497,7 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Prenosi kopiju Joplin podataka na datu lokaciju. Čitava će baza podataka "
+"Prenosi kopiju podataka iz Joplina na datu lokaciju. Čitava će baza podataka "
 "biti pohranjena, uključujući bilježnice, bilješke, oznake i resurse."
 
 #: CliClient/app/command-export.js:23
@@ -749,9 +752,9 @@ msgid ""
 msgstr ""
 "<tag-command> može biti \"add\", \"remove\", \"list\" ili \"notetags\", "
 "kojima se dodjeljuje ili uklanja [tag] iz [note], odnosno prikazuje popis "
-"bilješki kojima je dodijeljen [tag] ili oznake koje su dodijeljene [note]. "
-"Komanda `tag list` može se koristiti za prikazivanje svih oznaka (koristite -"
-"l za detaljni prikaz)."
+"bilješki kojima je dodijeljena [tag] ili popis oznaka koje su dodijeljene "
+"[note]. Komanda `tag list` može se koristiti za prikazivanje svih oznaka "
+"(koristite -l za detaljni prikaz)."
 
 #: CliClient/app/command-tag.js:90
 #, javascript-format
@@ -866,7 +869,7 @@ msgstr "Ne"
 #: ElectronClient/checkForUpdates.js:153
 #, fuzzy
 msgid "Full Release Notes"
-msgstr "Detaljne napomene o verziji"
+msgstr "Detaljne informacije o verziji"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -883,7 +886,7 @@ msgstr "Bilješka nema ranijih verzija"
 #: ElectronClient/gui/NoteText.min.js:865
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "Nepodržana veza ili poruka: %s"
+msgstr "Nepodržan link ili poruka: %s"
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:177
 msgid "Restore"
@@ -895,7 +898,7 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Pritisnite na \"%s\" da rekonstruišete bilješku. Rezultat će biti kopiran u "
+"Pritisnite \"%s\" da rekonstruišete bilješku. Rezultat će biti kopiran u "
 "bilježnicu \"%s\". Trenutna verzija bilješke ostat će netaknuta."
 
 #: ElectronClient/gui/NoteRevisionViewer.min.js:187
@@ -940,7 +943,8 @@ msgstr "Izbriši"
 #: ElectronClient/gui/SideBar/SideBar.min.js:276
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-msgstr "Ukloniti oznaku \"%s\" iz svih bilješki?"
+msgstr ""
+"Ukloniti oznaku \"%s\" i oznake koje joj pripadaju iz svih bilješki?"
 
 #: ElectronClient/gui/SideBar/SideBar.min.js:278
 #: ElectronClient/gui/SideBar.min.js:292
@@ -1018,7 +1022,7 @@ msgstr "naglašeni tekst"
 #: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
 #: ElectronClient/gui/NoteText.min.js:1616
 msgid "Insert Hyperlink"
-msgstr "Unesi poveznicu"
+msgstr "Unesi link"
 
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:180
 #: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:182
@@ -1066,7 +1070,7 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
-"Bilješka je prazna. Pritisnite na \"%s\" da otvorite program za rad s "
+"Bilješka je prazna. Pritisnite \"%s\" da otvorite program za rad s "
 "tekstom i uredite bilješku."
 
 #: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
@@ -1154,7 +1158,7 @@ msgstr "Kopiraj putanju u spremnik"
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
 #: ElectronClient/gui/NoteText.min.js:811
 msgid "Copy Link Address"
-msgstr "Kopiraj adresu veze"
+msgstr "Kopiraj adresu linka"
 
 #: ElectronClient/gui/NoteEditor/NoteEditor.js:283
 #: ElectronClient/gui/NoteText.min.js:2121
@@ -1170,7 +1174,7 @@ msgstr "bilješka"
 #: ElectronClient/gui/NoteText.min.js:2121
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "Kreiram: %s..."
+msgstr "Kreira se %s..."
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
 msgid "Select all"
@@ -1189,7 +1193,7 @@ msgstr "Kurziv"
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:40
 #: ElectronClient/gui/NoteText.min.js:1710
 msgid "Hyperlink"
-msgstr "Poveznica"
+msgstr "Link"
 
 #: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:45
 #: ElectronClient/gui/NoteText.min.js:1718
@@ -1316,8 +1320,8 @@ msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
-"Osnovni metod šifriranja promijenjen je u novi, sigurniji i preporučuje se "
-"da ga primijenite na svoje podatke."
+"Osnovni metod šifriranja promijenjen je u novi i preporučuje se da ponovite "
+"šifriranje svojih podataka."
 
 #: ElectronClient/gui/MainScreen/MainScreen.min.js:348
 #, fuzzy
@@ -1400,7 +1404,7 @@ msgstr "Premjestiti u bilježnicu:"
 
 #: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
 msgid "Toggle editor layout"
-msgstr "Prikaži uređivač"
+msgstr "Prikaži ili sakrij uređivač"
 
 #: ElectronClient/gui/MainScreen/commands/renameTag.js:26
 #: ElectronClient/gui/MainScreen.min.js:313
@@ -1494,7 +1498,7 @@ msgid ""
 "to Joplin."
 msgstr ""
 "Joplin Web clipper omogućava pohranjivanje internet stranica i slika ekrana "
-"iz Vašeg internet preglednika u Joplin."
+"iz Vašeg internet-preglednika u Joplin."
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:127
 msgid "In order to use the web clipper, you need to do the following:"
@@ -1510,7 +1514,7 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"Ovaj servis dopušta dodatku za internet preglednik da komunicira sa "
+"Ovaj servis dopušta dodatku za internet-preglednik da komunicira sa "
 "Joplinom. Kada ga aktivirate, Vaš firewall može od Vas tražiti dopuštenje da "
 "bi Joplin mogao slušati specificirani port."
 
@@ -1521,7 +1525,7 @@ msgstr "Korak 2: instalirajte dodatak"
 #: ElectronClient/gui/ClipperConfigScreen.min.js:159
 msgid "Download and install the relevant extension for your browser:"
 msgstr ""
-"Preuzmite i instalirajte odgovarajući dodatak za Vaš internet preglednik:"
+"Preuzmite i instalirajte odgovarajući dodatak za Vaš internet-preglednik:"
 
 #: ElectronClient/gui/ClipperConfigScreen.min.js:174
 msgid "Advanced options"
@@ -1563,7 +1567,7 @@ msgstr "Opcije"
 #: ElectronClient/gui/Root.min.js:93
 #, fuzzy
 msgid "Note attachments"
-msgstr "Priložene bilješke"
+msgstr "Prilozi bilješci"
 
 #: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:500
 msgid "Synchronisation Status"
@@ -1629,14 +1633,14 @@ msgstr "Učini sad"
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:425
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Nema bilješki. Kreirajte bilješku pritisnuvši na \"Nova bilješka\"."
+msgstr "Nema bilješki. Kreirajte bilješku pritisnuvši \"Nova bilješka\"."
 
 #: ElectronClient/gui/NoteList.min.js:452
 #: ElectronClient/gui/NoteList/NoteList.min.js:425
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
-"Nema bilježnica. Kreirajte bilježnicu pritisnuvši na \"Nova bilježnica\"."
+"Nema bilježnica. Kreirajte bilježnicu pritisnuvši \"Nova bilježnica\"."
 
 #: ElectronClient/gui/utils/NoteListUtils.js:37
 #: ReactNativeClient/lib/components/screen-header.js:362
@@ -1663,7 +1667,7 @@ msgstr "Preinači u zadatak"
 #: ElectronClient/gui/utils/NoteListUtils.js:110
 #: ReactNativeClient/lib/components/screens/note.js:855
 msgid "Copy Markdown link"
-msgstr "Kopiraj Markdown vezu"
+msgstr "Kopiraj Markdown link"
 
 #: ElectronClient/gui/utils/NoteListUtils.js:178
 #, javascript-format
@@ -1785,8 +1789,8 @@ msgstr ""
 "2. Pritisnite \"%s\".\n"
 "3. Sačekajte dok se proces ne okonča. Tokom rada, nemojte uređivati bilo "
 "koju bilješku na nekom od Vaših uređaja kako biste izbjegli konflikte.\n"
-"4. Kad je sinhronizacija završena na ovom uređaju, sinhronizujte i ostale "
-"uređaje.\n"
+"4. Kad je sinhronizacija završena na ovom uređaju, sinhronizujte u potpunosti "
+"i ostale uređaje.\n"
 "\n"
 "Važno: ovaj proces trebate pokrenuti samo JEDNOM i na samo jednom uređaju."
 
@@ -1867,7 +1871,7 @@ msgstr "Statistika"
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:111
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "Za čitanje potrebno: %s min"
 
 #: ElectronClient/gui/NoteContentPropertiesDialog.js:112
 #: ElectronClient/gui/ShareNoteDialog.js:175
@@ -1985,7 +1989,7 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
-"Ovo je napredna alatka za prikazivanje priloga koji se nalaze u Vašim "
+"Ovo je napredna alatka za prikazivanje priloga koji su povezani s Vašim "
 "bilješkama. Molimo budite oprezni prilikom brisanja priloga, jer se oni više "
 "neće moći rekonstruisati."
 
@@ -2012,17 +2016,17 @@ msgstr "Sinhronizujem..."
 #, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Kreiram veze: %s..."
-msgstr[1] "Kreiram veze: %s..."
-msgstr[2] "Kreiram veze: %s..."
+msgstr[0] "Kreiram link: %s..."
+msgstr[1] "Kreiram linkove: %s..."
+msgstr[2] "Kreiram linkove: %s..."
 
 #: ElectronClient/gui/ShareNoteDialog.js:162
 #, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Veza je kopirana u spremnik!"
-msgstr[1] "Veze su kopirane u spremnik!"
-msgstr[2] "Veze su kopirano u spremnik!"
+msgstr[0] "Link je kopiran u spremnik!"
+msgstr[1] "Linkovi su kopirani u spremnik!"
+msgstr[2] "Linkovi su kopirani u spremnik!"
 
 #: ElectronClient/gui/ShareNoteDialog.js:165
 msgid ""
@@ -2040,9 +2044,9 @@ msgstr "Podijeli bilješke"
 #, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Dijeli vezu"
-msgstr[1] "Dijeli veze"
-msgstr[2] "Dijeli veze"
+msgstr[0] "Kopiraj link za dijeljenje"
+msgstr[1] "Kopiraj linkove za dijeljenje"
+msgstr[2] "Kopiraj linkove za dijeljenje"
 
 #: ElectronClient/commands/stopExternalEditing.js:16
 #, fuzzy
@@ -2085,7 +2089,7 @@ msgstr "Osvježi šablone"
 #: ElectronClient/app.js:574
 #, fuzzy
 msgid "Note attachments..."
-msgstr "Prilozi bilješki..."
+msgstr "Prilozi bilješci..."
 
 #: ElectronClient/app.js:596
 #, fuzzy, javascript-format
@@ -2193,7 +2197,7 @@ msgstr "Pomoć"
 
 #: ElectronClient/app.js:877
 msgid "Website and documentation"
-msgstr "Internet stranica i dokumentacija"
+msgstr "Internet-stranica i dokumentacija"
 
 #: ElectronClient/app.js:881
 msgid "Joplin Forum"
@@ -2221,8 +2225,8 @@ msgstr "Izađi"
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
-"Aplikacija je ovjerena – možete zatvoriti ovaj odjeljak u internet "
-"pregledniku."
+"Aplikacija je ovjerena – možete zatvoriti ovaj odjeljak u "
+"internet-pregledniku."
 
 #: ReactNativeClient/lib/onedrive-api-node-utils.js:87
 msgid "The application has been successfully authorised."
@@ -2236,7 +2240,7 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"Otvorite sljedeću adresu u Vašem internet pregledniku da ovjerite "
+"Otvorite sljedeću adresu u Vašem internet-pregledniku da ovjerite "
 "aplikaciju. Ona će kreirati direktorij na lokaciji \"Apps/Joplin\" i imat će "
 "pristup samo datotekama koje se nalaze unutar tog direktorija. Onemogućen je "
 "pristup datotekama van navedenog direktorija ili bilo kakvom drugom obliku "
@@ -2267,11 +2271,11 @@ msgstr "Nepoznat nivo izvještaja: %s"
 #: ReactNativeClient/lib/logger.js:187
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "Nepoznat ID nivo: %s"
+msgstr "Nepoznat ID nivoa: %s"
 
 #: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
-msgstr ""
+msgstr "AWS S3"
 
 #: ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2417,15 +2421,15 @@ msgstr "WebDAV lozinka"
 
 #: ReactNativeClient/lib/models/Setting.js:189
 msgid "AWS S3 bucket"
-msgstr ""
+msgstr "AWS S3 kofa"
 
 #: ReactNativeClient/lib/models/Setting.js:200
 msgid "AWS key"
-msgstr ""
+msgstr "AWS ključ"
 
 #: ReactNativeClient/lib/models/Setting.js:210
 msgid "AWS secret"
-msgstr ""
+msgstr "AWS tajna"
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
@@ -2608,7 +2612,7 @@ msgstr "Omogući pisanje skraćenica"
 
 #: ReactNativeClient/lib/models/Setting.js:477
 msgid "Enable markdown emoji"
-msgstr "Omogući pisanje emoji sličica"
+msgstr "Omogući pisanje emoji-sličica"
 
 #: ReactNativeClient/lib/models/Setting.js:478
 msgid "Enable ++insert++ syntax"
@@ -2624,7 +2628,7 @@ msgstr "Prikaži sličicu na sistemskoj traci (tray)"
 
 #: ReactNativeClient/lib/models/Setting.js:493
 msgid "Note: Does not work in all desktop environments."
-msgstr "Napomena: neće raditi na svim sistemima."
+msgstr "Napomena: neće raditi na svim desktop okruženjima."
 
 #: ReactNativeClient/lib/models/Setting.js:493
 msgid ""
@@ -2661,13 +2665,13 @@ msgid ""
 "If the font is incorrect or empty, it will default to a generic monospace "
 "font."
 msgstr ""
-"Ovo mora biti *monospace* pismo inače neće funkcionisati kako treba. Ako je "
-"pismo pogrešno navedeno ili prazno, koristit će se prekonfigurisani "
-"monospace font."
+"Ovo mora biti *monospace* pismo inače neki elementi neće biti prikazani "
+"kako treba. Ako je pismo pogrešno navedeno ili prazno, koristit će se "
+"predefinisani monospace font."
 
 #: ReactNativeClient/lib/models/Setting.js:589
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "Glavni korisnički stil za aplikaciju"
+msgstr "Korisnički stil za aplikaciju"
 
 #: ReactNativeClient/lib/models/Setting.js:595
 msgid "Automatically update the application"
@@ -2675,7 +2679,7 @@ msgstr "Automatski ažuriraj aplikaciju"
 
 #: ReactNativeClient/lib/models/Setting.js:596
 msgid "Get pre-releases when checking for updates"
-msgstr "Preuzmi i verzije pred objavljivanje prilikom provjere novosti"
+msgstr "Prikaži i verzije pred objavljivanje prilikom provjere novosti"
 
 #: ReactNativeClient/lib/models/Setting.js:596
 #, javascript-format
@@ -2716,7 +2720,7 @@ msgid ""
 msgstr ""
 "Komanda za uređivača teksta (može obuhvatiti argumente) koja će se koristiti "
 "za otvaranje bilješke. Ako nije navedena, pokušat će se utvrditi "
-"prekonfigurisani uređivač teksta."
+"predefinisani uređivač teksta."
 
 #: ReactNativeClient/lib/models/Setting.js:623
 msgid "Page size for PDF export"
@@ -2790,7 +2794,7 @@ msgstr ""
 "certifikati ili putanja do pojedinačnih datoteka-certifikata. Naprimjer: /my/"
 "cert_dir, /other/custom.pem. Imajte na umu da ćete morati, ukoliko izvršite "
 "bilo kakve izmjene u TLS postavkama, načinjene izmjene memorisati prije "
-"pritiska na \"Provjeri konfiguraciju sinhronizovanja\"."
+"nego što pritisnete \"Provjeri konfiguraciju sinhronizovanja\"."
 
 #: ReactNativeClient/lib/models/Setting.js:680
 msgid "Ignore TLS certificate errors"
@@ -2814,7 +2818,7 @@ msgid ""
 "default will be used."
 msgstr ""
 "Navedite koji će port API server koristiti. Ako port nije preciziran, "
-"koristit će se prekonfigurisani."
+"koristit će se predefinisani."
 
 #: ReactNativeClient/lib/models/Setting.js:702
 msgid "Enable note history"
@@ -2925,7 +2929,7 @@ msgstr "Nije preuzeto"
 #: ReactNativeClient/lib/models/Resource.js:318
 #, fuzzy
 msgid "Downloading"
-msgstr "Preuzimam resurse..."
+msgstr "Preuzimam"
 
 #: ReactNativeClient/lib/models/Resource.js:319
 msgid "Downloaded"
@@ -2943,22 +2947,22 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Došlo je do [conflict](%s) u prilogu ispod.\n"
+"Nastao je [conflict](%s) u prilogu ispod.\n"
 "\n"
 "%s"
 
 #: ReactNativeClient/lib/models/Tag.js:384
 #, fuzzy
 msgid "Cannot move tag to this location."
-msgstr "Bilježnica se ne može premjestiti na ovu lokaciju"
+msgstr "Oznaka se ne može premjestiti na ovu lokaciju."
 
 #: ReactNativeClient/lib/models/Tag.js:429
 msgid "Tag name cannot start or end with a `/`."
-msgstr ""
+msgstr "Naziv oznake ne može početi ili završiti sa `/`."
 
 #: ReactNativeClient/lib/models/Tag.js:431
 msgid "Tag name cannot contain `//`."
-msgstr ""
+msgstr "Naziv oznake ne može sadržavati `//`."
 
 #: ReactNativeClient/lib/models/Tag.js:482
 #, javascript-format
@@ -3135,14 +3139,14 @@ msgstr ""
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Vaši podaci iznova će se šifrirati i sinhronizovati."
+msgstr "Vaši podaci ponovo će se šifrirati i sinhronizovati."
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
-"Unesite svoju lozinku u popis glavnog ključa naveden ispod prije nego što "
+"Unesite svoju lozinku u popis glavnih ključeva naveden ispod prije nego što "
 "izvršite nadogradnju ključa."
 
 #: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
@@ -3221,7 +3225,7 @@ msgstr "Lozinka ne može biti prazna"
 #: ReactNativeClient/lib/components/screens/encryption-config.js:139
 #, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "Lozinka ne može biti prazna"
+msgstr "Potvrda lozinke ne može biti prazna"
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:150
 msgid ""
@@ -3233,7 +3237,7 @@ msgstr ""
 "Po uključivanju šifriranja *sve* Vaše bilješke i prilozi bit će iznova "
 "sinhronizovani i poslani šifrirani na zadatu lokaciju. Nemojte izgubiti "
 "lozinku jer, iz sigurnosnih razloga, samo pomoću nje možete dešifrovati Vaše "
-"podatke! Da biste aktivirali šifriranje, unesite Vašu lozinku ispod."
+"podatke! Da biste aktivirali šifriranje, unesite svoju lozinku ispod."
 
 #: ReactNativeClient/lib/components/screens/encryption-config.js:177
 msgid "Enable"
@@ -3296,12 +3300,12 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Potrebno je Vaše dopuštenje za pristup eksternim uređajima za pohranu kako "
-"bi se mogla izvršiti sinhronizacija."
+"Potrebno je Vaše dopuštenje za pristup eksternim uređajima za pohranu "
+"podataka kako bi se mogla izvršiti sinhronizacija."
 
 #: ReactNativeClient/lib/components/screens/config.js:436
 msgid "Tools"
-msgstr "Alati"
+msgstr "Alatke"
 
 #: ReactNativeClient/lib/components/screens/config.js:438
 msgid "Sync Status"
@@ -3378,7 +3382,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/components/screens/config.js:509
 msgid "Joplin website"
-msgstr "Joplin internet stranica"
+msgstr "Joplin internet-stranica"
 
 #: ReactNativeClient/lib/components/screens/config.js:537
 #, javascript-format
@@ -3414,12 +3418,12 @@ msgstr "Prilog nije preuzet ili još nije dešifrovan."
 #: ReactNativeClient/lib/components/screens/note.js:184
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Mobilna Joplin aplikacija trenutno ne podržava ovu vrstu veze: %s"
+msgstr "Mobilna Joplin aplikacija trenutno ne podržava ovu vrstu linka: %s"
 
 #: ReactNativeClient/lib/components/screens/note.js:188
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "Veze sa protokolom \"%s\" nisu podržane"
+msgstr "Linkovi sa protokolom \"%s\" nisu podržani"
 
 #: ReactNativeClient/lib/components/screens/note.js:618
 #, javascript-format
@@ -3757,12 +3761,13 @@ msgstr "Direktorij"
 #: ReactNativeClient/lib/services/InteropService.js:174
 #, fuzzy, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Ne može se učitati modul \"%s\" za format \"%s\""
+msgstr ""
+"Ne može se učitati modul \"%s\" za format \"%s\" i izlaz \"%s\""
 
 #: ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
 msgid "Please specify import format for %s"
-msgstr "Precizirajte format za %s"
+msgstr "Precizirajte ulazni format za %s"
 
 #: ReactNativeClient/lib/services/InteropService.js:361
 #, javascript-format
@@ -3777,7 +3782,7 @@ msgstr ""
 #~ msgstr "Dodaj ili ukloni oznake"
 
 #~ msgid "Link"
-#~ msgstr "Veza"
+#~ msgstr "Link"
 
 #, fuzzy
 #~ msgid "Content properties"
