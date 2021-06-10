@@ -1,0 +1,37 @@
+name: Joplin Continuous Integration
+on: [push]
+jobs:
+  Main:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    steps:
+
+      # Silence apt-get update errors (for example when a module doesn't
+      # exist) since otherwise it will make the whole build fails, even though
+      # it might work without update. libsecret-1-dev is required for keytar -
+      # https://github.com/atom/node-keytar
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update || true
+          sudo apt-get install -y gettext
+          sudo apt-get install -y libsecret-1-dev
+
+      - uses: actions/checkout@v2
+      - uses: olegtarasov/get-tag@v2.1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+
+      - name: Run script...
+        env:
+          APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
