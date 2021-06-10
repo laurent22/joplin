@@ -27,6 +27,7 @@ echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
 echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
 echo "GITHUB_REF=$GITHUB_REF"
 echo "RUNNER_OS=$RUNNER_OS"
+echo "GIT_TAG_NAME=$GIT_TAG_NAME"
 
 echo "IS_PULL_REQUEST=$IS_PULL_REQUEST"
 echo "IS_DEV_BRANCH=$IS_DEV_BRANCH"
@@ -85,4 +86,20 @@ if [ "$IS_PULL_REQUEST" == "1" ]; then
 	if [ "$IS_MACOS" == "1" ]; then
 		exit 0
 	fi
+fi
+
+# Prepare the Electron app and build it
+#
+# If the current tag is a desktop release tag (starts with "v", such as
+# "v1.4.7"), we build and publish to github
+#
+# Otherwise we only build but don't publish to GitHub. It helps finding
+# out any issue in pull requests and dev branch.
+
+cd packages/app-desktop
+
+if [[ $TRAVIS_TAG = v* ]]; then
+	USE_HARD_LINKS=false npm run dist
+else
+	USE_HARD_LINKS=false npm run dist -- --publish=never
 fi
