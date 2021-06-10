@@ -177,24 +177,24 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
-	const appContext: any = {};
-
-	await setupAppContext(appContext, Env.Dev, db_, () => appLogger);
-
-	appContext.env = Env.Dev;
-	appContext.db = db_;
-	appContext.models = models();
-	appContext.appLogger = () => appLogger;
-	appContext.path = req.url;
-	appContext.owner = owner;
-	appContext.cookies = new FakeCookies();
-	appContext.request = new FakeRequest(req);
-	appContext.response = new FakeResponse();
-	appContext.headers = { ...reqOptions.headers };
-	appContext.req = req;
-	appContext.query = req.query;
-	appContext.method = req.method;
-	appContext.redirect = () => {};
+	const appContext: any = {
+		...await setupAppContext({} as any, Env.Dev, db_, () => appLogger),
+		env: Env.Dev,
+		db: db_,
+		models: models(),
+		appLogger: () => appLogger,
+		path: req.url,
+		owner: owner,
+		cookies: new FakeCookies(),
+		request: new FakeRequest(req),
+		response: new FakeResponse(),
+		headers: { ...reqOptions.headers },
+		req: req,
+		query: req.query,
+		method: req.method,
+		redirect: () => {},
+		URL: { origin: config().baseUrl },
+	};
 
 	if (options.sessionId) {
 		appContext.cookies.set('sessionId', options.sessionId);

@@ -158,8 +158,12 @@ export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, ro
 	const host2 = (new URL(endPointBaseUrl)).host;
 
 	if (routeType === RouteType.UserContent) {
+		// At this point we only check if eg usercontent.com has been accessed
+		// with origin usercontent.com, or something.usercontent.com. We don't
+		// check that the user ID is valid or is event present. This will be
+		// done by the /share end point, which will also check that the share
+		// owner ID matches the origin URL.
 		if (host1 === host2) return true;
-
 		const hostNoPrefix = host1.split('.').slice(1).join('.');
 		return hostNoPrefix === host2;
 	} else {

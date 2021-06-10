@@ -1,5 +1,6 @@
 import { isValidOrigin, parseSubPath, splitItemPath } from './routeUtils';
 import { ItemAddressingType } from '../db';
+import { RouteType } from './types';
 
 describe('routeUtils', function() {
 
@@ -41,7 +42,7 @@ describe('routeUtils', function() {
 		}
 	});
 
-	it('should check the request origin', async function() {
+	it('should check the request origin for API URLs', async function() {
 		const testCases: any[] = [
 			[
 				'https://example.com', // Request origin
@@ -79,7 +80,37 @@ describe('routeUtils', function() {
 
 		for (const testCase of testCases) {
 			const [requestOrigin, configBaseUrl, expected] = testCase;
-			expect(isValidOrigin(requestOrigin, configBaseUrl)).toBe(expected);
+			expect(isValidOrigin(requestOrigin, configBaseUrl, RouteType.Api)).toBe(expected);
+		}
+	});
+
+	it('should check the request origin for User Content URLs', async function() {
+		const testCases: any[] = [
+			[
+				'https://usercontent.local', // Request origin
+				'https://usercontent.local', // Config base URL
+				true,
+			],
+			[
+				'http://usercontent.local',
+				'https://usercontent.local',
+				true,
+			],
+			[
+				'https://abcd.usercontent.local',
+				'https://usercontent.local',
+				true,
+			],
+			[
+				'https://bad.local',
+				'https://usercontent.local',
+				false,
+			],
+		];
+
+		for (const testCase of testCases) {
+			const [requestOrigin, configBaseUrl, expected] = testCase;
+			expect(isValidOrigin(requestOrigin, configBaseUrl, RouteType.UserContent)).toBe(expected);
 		}
 	});
 
