@@ -278,6 +278,9 @@ packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js.map
 packages/app-desktop/gui/MainScreen/commands/showNoteProperties.d.ts
 packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js
 packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js.map
+packages/app-desktop/gui/MainScreen/commands/showPrompt.d.ts
+packages/app-desktop/gui/MainScreen/commands/showPrompt.js
+packages/app-desktop/gui/MainScreen/commands/showPrompt.js.map
 packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.d.ts
 packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js
 packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js.map
