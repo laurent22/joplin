@@ -1,5 +1,5 @@
 name: Joplin Continuous Integration
-on: [push, pull_request]
+on: [push]
 jobs:
   Main:
     runs-on: ${{ matrix.os }}
@@ -7,11 +7,24 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
     steps:
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update || true
+          sudo apt-get install -y gettext
+          sudo apt-get install -y libsecret-1-dev
       - uses: actions/checkout@v2
       - uses: olegtarasov/get-tag@v2.1
       - uses: actions/setup-node@v2
         with:
           node-version: '12'
       - name: Run script...
+        env:
+          APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
