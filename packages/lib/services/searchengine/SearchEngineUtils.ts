@@ -66,8 +66,8 @@ export default class SearchEngineUtils {
 			const idx = noteIds.indexOf(filteredNotes[i].id);
 			sortedNotes[idx] = filteredNotes[i];
 			if (idWasAutoAdded) delete sortedNotes[idx].id;
-			if (isTodoCompletedAutoAdded) delete sortedNotes[idx].is_todo;
-			if (isTodoAutoAdded) delete sortedNotes[idx].todo_completed;
+			if (isTodoCompletedAutoAdded) delete sortedNotes[idx].todo_completed;
+			if (isTodoAutoAdded) delete sortedNotes[idx].is_todo;
 		}
 
 		// Note that when the search engine index is somehow corrupted, it might contain
