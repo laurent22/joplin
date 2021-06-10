@@ -21,7 +21,7 @@ function makeView(error: Error = null): View {
 	return view;
 }
 
-interface FormUser {
+export interface FormUser {
 	full_name: string;
 	email: string;
 	password: string;

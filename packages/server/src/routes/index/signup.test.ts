@@ -1,8 +1,10 @@
+import config from '../../config';
 import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType } from '../../models/UserModel';
 import { MB } from '../../utils/bytes';
 import { execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../../utils/testing/testUtils';
+import { FormUser } from './signup';
 
 describe('index_signup', function() {
 
@@ -19,12 +21,22 @@ describe('index_signup', function() {
 	});
 
 	test('should create a new account', async function() {
-		const context = await execRequestC('', 'POST', 'signup', {
+		const formUser: FormUser = {
 			full_name: 'Toto',
 			email: 'toto@example.com',
 			password: 'testing',
 			password2: 'testing',
-		});
+		};
+
+		// First confirm that it doesn't work if sign up is disabled
+		{
+			config().signupEnabled = false;
+			await execRequestC('', 'POST', 'signup', formUser);
+			expect(await models().user().loadByEmail('toto@example.com')).toBeFalsy();
+		}
+
+		config().signupEnabled = true;
+		const context = await execRequestC('', 'POST', 'signup', formUser);
 
 		// Check that the user has been created
 		const user = await models().user().loadByEmail('toto@example.com');

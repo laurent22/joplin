@@ -112,7 +112,11 @@ describe('index_users', function() {
 		const beforeUserCount = (await userModel.all()).length;
 		expect(beforeUserCount).toBe(2);
 
-		await postUser(session.id, 'test@example.com', '123456');
+		try {
+			await postUser(session.id, 'test@example.com', '123456');
+		} catch {
+			// Ignore
+		}
 
 		const afterUserCount = (await userModel.all()).length;
 		expect(beforeUserCount).toBe(afterUserCount);
