@@ -5,7 +5,7 @@ import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
 
-export async function postUser(sessionId: string, email: string, password: string): Promise<User> {
+export async function postUser(sessionId: string, email: string, password: string, props: any = null): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
@@ -16,6 +16,7 @@ export async function postUser(sessionId: string, email: string, password: strin
 				password: password,
 				password2: password,
 				post_button: true,
+				...props,
 			},
 		},
 	});
@@ -74,13 +75,16 @@ describe('index_users', function() {
 	test('should create a new user', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		await postUser(session.id, 'test@example.com', '123456');
+		await postUser(session.id, 'test@example.com', '123456', {
+			max_item_size: '',
+		});
 		const newUser = await models().user().loadByEmail('test@example.com');
 
 		expect(!!newUser).toBe(true);
 		expect(!!newUser.id).toBe(true);
 		expect(!!newUser.is_admin).toBe(false);
 		expect(!!newUser.email).toBe(true);
+		expect(newUser.max_item_size).toBe(0);
 
 		const userModel = models().user();
 		const userFromModel: User = await userModel.load(newUser.id);
@@ -108,7 +112,11 @@ describe('index_users', function() {
 		const beforeUserCount = (await userModel.all()).length;
 		expect(beforeUserCount).toBe(2);
 
-		await postUser(session.id, 'test@example.com', '123456');
+		try {
+			await postUser(session.id, 'test@example.com', '123456');
+		} catch {
+			// Ignore
+		}
 
 		const afterUserCount = (await userModel.all()).length;
 		expect(beforeUserCount).toBe(afterUserCount);

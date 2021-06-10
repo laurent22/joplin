@@ -13,7 +13,6 @@ function makeView(error: any = null): View {
 		error,
 		signupUrl: config().signupEnabled ? makeUrl(UrlType.Signup) : '',
 	};
-	view.navbar = false;
 	return view;
 }
 

@@ -18,11 +18,10 @@ function makeView(error: Error = null): View {
 		postUrl: makeUrl(UrlType.Signup),
 		loginUrl: makeUrl(UrlType.Login),
 	};
-	view.navbar = false;
 	return view;
 }
 
-interface FormUser {
+export interface FormUser {
 	full_name: string;
 	email: string;
 	password: string;

@@ -32,6 +32,7 @@ interface GlobalParams {
 	appName?: string;
 	termsUrl?: string;
 	privacyUrl?: string;
+	showErrorStackTraces?: boolean;
 }
 
 export function isView(o: any): boolean {
@@ -85,6 +86,7 @@ export default class MustacheService {
 			appName: config().appName,
 			termsUrl: config().termsEnabled ? makeUrl(UrlType.Terms) : '',
 			privacyUrl: config().termsEnabled ? makeUrl(UrlType.Privacy) : '',
+			showErrorStackTraces: config().showErrorStackTraces,
 		};
 	}
 

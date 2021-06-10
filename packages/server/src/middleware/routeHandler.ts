@@ -1,6 +1,7 @@
 import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from '../utils/routeUtils';
 import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
+import config from '../config';
 
 export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
@@ -11,8 +12,9 @@ export default async function(ctx: AppContext) {
 		if (responseObject instanceof Response) {
 			ctx.response = responseObject.response;
 		} else if (isView(responseObject)) {
-			ctx.response.status = 200;
-			ctx.response.body = await ctx.services.mustache.renderView(responseObject, {
+			const view = responseObject as View;
+			ctx.response.status = view?.content?.error ? view?.content?.error?.httpCode || 500 : 200;
+			ctx.response.body = await ctx.services.mustache.renderView(view, {
 				notifications: ctx.notifications || [],
 				hasNotifications: !!ctx.notifications && !!ctx.notifications.length,
 				owner: ctx.owner,
@@ -44,7 +46,7 @@ export default async function(ctx: AppContext) {
 				path: 'index/error',
 				content: {
 					error,
-					stack: ctx.env === Env.Dev ? error.stack : '',
+					stack: config().showErrorStackTraces ? error.stack : '',
 					owner: ctx.owner,
 				},
 			};

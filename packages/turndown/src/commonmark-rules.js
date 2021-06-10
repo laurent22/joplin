@@ -608,6 +608,7 @@ function joplinEditableBlockInfo(node) {
   if (!node.classList.contains('joplin-editable')) return null;
 
   let sourceNode = null;
+  let isInline = false;
   for (const childNode of node.childNodes) {
     if (childNode.classList.contains('joplin-source')) {
       sourceNode = childNode;
@@ -616,11 +617,13 @@ function joplinEditableBlockInfo(node) {
   }
 
   if (!sourceNode) return null;
+  if (!node.isBlock) isInline = true;
 
   return {
     openCharacters: sourceNode.getAttribute('data-joplin-source-open'),
     closeCharacters: sourceNode.getAttribute('data-joplin-source-close'),
     content: sourceNode.textContent,
+    isInline
   };
 }
 
@@ -637,7 +640,8 @@ rules.joplinSourceBlock = {
     const info = joplinEditableBlockInfo(node);
     if (!info) return;
 
-    return '\n\n' + info.openCharacters + info.content + info.closeCharacters + '\n\n';
+    const surroundingCharacter = info.isInline? '' : '\n\n';
+    return surroundingCharacter + info.openCharacters + info.content + info.closeCharacters + surroundingCharacter;
   }
 }
 

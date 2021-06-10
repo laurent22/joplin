@@ -80,6 +80,7 @@ export interface Config {
 	userContentBaseUrl: string;
 	signupEnabled: boolean;
 	termsEnabled: boolean;
+	showErrorStackTraces: boolean;
 	database: DatabaseConfig;
 	mailer: MailerConfig;
 	stripe: StripeConfig;

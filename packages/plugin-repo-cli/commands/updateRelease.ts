@@ -141,7 +141,7 @@ export default async function(args: Args) {
 		await doSaveStats();
 	} else {
 		const fileInfo = await stat(statFilePath);
-		if (Date.now() - fileInfo.mtime.getTime() >= 24 * 60 * 60 * 1000) {
+		if (Date.now() - fileInfo.mtime.getTime() >= 7 * 24 * 60 * 60 * 1000) {
 			await doSaveStats();
 		}
 	}
