@@ -122,7 +122,13 @@ fi
 cd "$ROOT_DIR/packages/app-desktop"
 
 if [[ $GIT_TAG_NAME = v* ]]; then
+	echo "Building and publishing desktop application..."
 	USE_HARD_LINKS=false npm run dist
+elif [[ $GIT_TAG_NAME = server-v* ]] && [[ $IS_LINUX = 1 ]]; then
+	echo "Building Docker Image..."
+	cd "$ROOT_DIR"
+	npm run buildServerDocker -- --tag-name $GIT_TAG_NAME
 else
+	echo "Building but *not* publishing desktop application..."
 	USE_HARD_LINKS=false npm run dist -- --publish=never
 fi

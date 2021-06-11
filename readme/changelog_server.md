@@ -1,5 +1,12 @@
 # Joplin Server Changelog
 
+## [server-v2.0.7](https://github.com/laurent22/joplin/releases/tag/server-v2.0.7) (Pre-release) - 2021-06-11T15:34:30Z
+
+- New: Add navbar on login and sign up page (7a3a208)
+- New: Added option to enable or disable stack traces (5614eb9)
+- Improved: Handle custom user content URLs (a36b13d)
+- Fixed: Fixed error when creating user (594084e)
+
 ## [server-v2.0.6](https://github.com/laurent22/joplin/releases/tag/server-v2.0.6) (Pre-release) - 2021-06-07T17:27:27Z
 
 - New: Add Stripe integration (770af6a)
