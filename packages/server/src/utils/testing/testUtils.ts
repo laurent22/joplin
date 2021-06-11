@@ -458,6 +458,7 @@ parent_id: ${'parent_id' in note ? note.parent_id : '000000000000000000000000000
 created_time: 2020-10-15T10:34:16.044Z
 updated_time: 2021-01-28T23:10:30.054Z
 is_conflict: 0
+conflict_original_id: ${note.conflict_original_id}
 latitude: 0.00000000
 longitude: 0.00000000
 altitude: 0.0000
