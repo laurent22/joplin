@@ -333,49 +333,44 @@ describe('models_Note', function() {
 		expect(sortedNotes3[4].id).toBe(note2.id);
 	}));
 
+	it('should create a conflict note', async () => {
+		const folder = await Folder.save({ title: 'Source Folder' });
+		const origNote = await Note.save({ title: 'note', parent_id: folder.id });
+		const conflictedNote = await Note.createConflictNote(origNote, ItemChange.SOURCE_SYNC);
+
+		expect(conflictedNote.is_conflict).toBe(1);
+		expect(conflictedNote.conflict_original_id).toBe(origNote.id);
+		expect(conflictedNote.parent_id).toBe(folder.id);
+	});
+
 	it('should copy conflicted note to target folder and cancel conflict', (async () => {
-		// Prepare
 		const srcfolder = await Folder.save({ title: 'Source Folder' });
 		const targetfolder = await Folder.save({ title: 'Target Folder' });
 
 		const note1 = await Note.save({ title: 'note', parent_id: srcfolder.id });
-
 		const conflictedNote = await Note.createConflictNote(note1, ItemChange.SOURCE_SYNC);
 
-		// COPY File
 		const note2 = await Note.copyToFolder(conflictedNote.id, targetfolder.id);
 
-		// Targed should be copied and have conflict removed.
-		expect(note2.id === conflictedNote.id).toBe(false); // ID must be different.
+		expect(note2.id === conflictedNote.id).toBe(false);
 		expect(note2.title).toBe(conflictedNote.title);
 		expect(note2.is_conflict).toBe(0);
 		expect(note2.conflict_original_id).toBe('');
 		expect(note2.parent_id).toBe(targetfolder.id);
-
-		// Source conflict should stay as is
-		expect(conflictedNote.is_conflict).toBe(1);
-		expect(conflictedNote.conflict_original_id).toBe(note1.id);
-		expect(conflictedNote.parent_id).toBe(srcfolder.id);
 	}));
 
 	it('should move conflicted note to target folder and cancel conflict', (async () => {
-		// Prepare
 		const srcFolder = await Folder.save({ title: 'Source Folder' });
 		const targetFolder = await Folder.save({ title: 'Target Folder' });
 		const note1 = await Note.save({ title: 'note', parent_id: srcFolder.id });
 
 		const conflictedNote = await Note.createConflictNote(note1, ItemChange.SOURCE_SYNC);
 
-		// Move
 		const movedNote = await Note.moveToFolder(conflictedNote.id, targetFolder.id);
 
-		// Note should be moved over.
 		expect(movedNote.parent_id).toBe(targetFolder.id);
-
-		// Note should have conflicts removed.
 		expect(movedNote.is_conflict).toBe(0);
 		expect(movedNote.conflict_original_id).toBe('');
-
 	}));
 
 });
