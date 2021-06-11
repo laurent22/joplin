@@ -12,6 +12,26 @@ IS_DEV_BRANCH=0
 IS_LINUX=0
 IS_MACOS=0
 
+
+
+
+
+
+
+
+GIT_TAG_NAME=server-v2.0.7
+
+
+
+
+
+
+
+
+
+
+
+
 if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
 	IS_PULL_REQUEST=1
 fi
