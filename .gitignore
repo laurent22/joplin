@@ -1590,6 +1590,9 @@ packages/renderer/pathUtils.js.map
 packages/renderer/utils.d.ts
 packages/renderer/utils.js
 packages/renderer/utils.js.map
+packages/tools/buildServerDocker.d.ts
+packages/tools/buildServerDocker.js
+packages/tools/buildServerDocker.js.map
 packages/tools/generate-database-types.d.ts
 packages/tools/generate-database-types.js
 packages/tools/generate-database-types.js.map

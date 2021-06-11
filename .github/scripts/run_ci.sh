@@ -123,6 +123,9 @@ cd "$ROOT_DIR/packages/app-desktop"
 
 if [[ $GIT_TAG_NAME = v* ]]; then
 	USE_HARD_LINKS=false npm run dist
+elif [[ $GIT_TAG_NAME = server-v* ]]; then
+	cd "$ROOT_DIR"
+	npm run buildServerDocker -- $GIT_TAG_NAME
 else
 	USE_HARD_LINKS=false npm run dist -- --publish=never
 fi
