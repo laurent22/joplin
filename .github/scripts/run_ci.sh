@@ -79,26 +79,26 @@ npm install
 # want it to randomly fail when trying to create a desktop release.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
-	npm run test-ci
-	testResult=$?
-	if [ $testResult -ne 0 ]; then
-		exit $testResult
-	fi
-fi
+# if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+# 	npm run test-ci
+# 	testResult=$?
+# 	if [ $testResult -ne 0 ]; then
+# 		exit $testResult
+# 	fi
+# fi
 
 # =============================================================================
 # Run linter for pull requests only. We also don't want this to make the desktop
 # release randomly fail.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" != "1" ]; then
-	npm run linter-ci ./
-	testResult=$?
-	if [ $testResult -ne 0 ]; then
-		exit $testResult
-	fi
-fi
+# if [ "$IS_PULL_REQUEST" != "1" ]; then
+# 	npm run linter-ci ./
+# 	testResult=$?
+# 	if [ $testResult -ne 0 ]; then
+# 		exit $testResult
+# 	fi
+# fi
 
 # =============================================================================
 # Validate translations - this is needed as some users manually edit .po files
@@ -106,15 +106,15 @@ fi
 # for Linux only is sufficient.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		node packages/tools/validate-translation.js
-		testResult=$?
-		if [ $testResult -ne 0 ]; then
-			exit $testResult
-		fi
-	fi
-fi
+# if [ "$IS_PULL_REQUEST" == "1" ]; then
+# 	if [ "$IS_LINUX" == "1" ]; then
+# 		node packages/tools/validate-translation.js
+# 		testResult=$?
+# 		if [ $testResult -ne 0 ]; then
+# 			exit $testResult
+# 		fi
+# 	fi
+# fi
 
 # =============================================================================
 # Find out if we should run the build or not. Electron-builder gets stuck when
@@ -123,11 +123,11 @@ fi
 # https://github.com/electron-userland/electron-builder/issues/4263
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_MACOS" == "1" ]; then
-		exit 0
-	fi
-fi
+# if [ "$IS_PULL_REQUEST" == "1" ]; then
+# 	if [ "$IS_MACOS" == "1" ]; then
+# 		exit 0
+# 	fi
+# fi
 
 # =============================================================================
 # Prepare the Electron app and build it
@@ -144,7 +144,7 @@ cd "$ROOT_DIR/packages/app-desktop"
 if [[ $GIT_TAG_NAME = v* ]]; then
 	echo "Building and publishing desktop application..."
 	USE_HARD_LINKS=false npm run dist
-elif [[ $GIT_TAG_NAME = server-v* ]] && [[ $IS_LINUX = 1 ]; then
+elif [[ $GIT_TAG_NAME = server-v* ]] && [[ $IS_LINUX = 1 ]]; then
 	echo "Building Docker Image..."
 	cd "$ROOT_DIR"
 	npm run buildServerDocker -- $GIT_TAG_NAME
