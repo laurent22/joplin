@@ -12,26 +12,6 @@ IS_DEV_BRANCH=0
 IS_LINUX=0
 IS_MACOS=0
 
-
-
-
-
-
-
-
-GIT_TAG_NAME=server-v2.0.7
-
-
-
-
-
-
-
-
-
-
-
-
 if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
 	IS_PULL_REQUEST=1
 fi
@@ -79,26 +59,26 @@ npm install
 # want it to randomly fail when trying to create a desktop release.
 # =============================================================================
 
-# if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
-# 	npm run test-ci
-# 	testResult=$?
-# 	if [ $testResult -ne 0 ]; then
-# 		exit $testResult
-# 	fi
-# fi
+if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+	npm run test-ci
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
+	fi
+fi
 
 # =============================================================================
 # Run linter for pull requests only. We also don't want this to make the desktop
 # release randomly fail.
 # =============================================================================
 
-# if [ "$IS_PULL_REQUEST" != "1" ]; then
-# 	npm run linter-ci ./
-# 	testResult=$?
-# 	if [ $testResult -ne 0 ]; then
-# 		exit $testResult
-# 	fi
-# fi
+if [ "$IS_PULL_REQUEST" != "1" ]; then
+	npm run linter-ci ./
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
+	fi
+fi
 
 # =============================================================================
 # Validate translations - this is needed as some users manually edit .po files
@@ -106,15 +86,15 @@ npm install
 # for Linux only is sufficient.
 # =============================================================================
 
-# if [ "$IS_PULL_REQUEST" == "1" ]; then
-# 	if [ "$IS_LINUX" == "1" ]; then
-# 		node packages/tools/validate-translation.js
-# 		testResult=$?
-# 		if [ $testResult -ne 0 ]; then
-# 			exit $testResult
-# 		fi
-# 	fi
-# fi
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		node packages/tools/validate-translation.js
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
+fi
 
 # =============================================================================
 # Find out if we should run the build or not. Electron-builder gets stuck when
@@ -123,11 +103,11 @@ npm install
 # https://github.com/electron-userland/electron-builder/issues/4263
 # =============================================================================
 
-# if [ "$IS_PULL_REQUEST" == "1" ]; then
-# 	if [ "$IS_MACOS" == "1" ]; then
-# 		exit 0
-# 	fi
-# fi
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	if [ "$IS_MACOS" == "1" ]; then
+		exit 0
+	fi
+fi
 
 # =============================================================================
 # Prepare the Electron app and build it
