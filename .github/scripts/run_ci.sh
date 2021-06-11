@@ -147,7 +147,7 @@ if [[ $GIT_TAG_NAME = v* ]]; then
 elif [[ $GIT_TAG_NAME = server-v* ]] && [[ $IS_LINUX = 1 ]]; then
 	echo "Building Docker Image..."
 	cd "$ROOT_DIR"
-	npm run buildServerDocker -- $GIT_TAG_NAME
+	npm run buildServerDocker -- --tag-name $GIT_TAG_NAME
 else
 	echo "Building but *not* publishing desktop application..."
 	USE_HARD_LINKS=false npm run dist -- --publish=never
