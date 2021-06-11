@@ -12,7 +12,7 @@ jobs:
       # exist) since otherwise it will make the whole build fails, even though
       # it might work without update. libsecret-1-dev is required for keytar -
       # https://github.com/atom/node-keytar
-      
+
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
@@ -28,7 +28,11 @@ jobs:
           sudo apt-get install -y curl
           sudo apt-get install -y gnupg
           sudo apt-get install -y lsb-release
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg     
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+          echo \
+              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+              $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
       - uses: actions/checkout@v2
