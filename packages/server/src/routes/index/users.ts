@@ -34,7 +34,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('email' in fields) user.email = fields.email;
 	if ('full_name' in fields) user.full_name = fields.full_name;
 	if ('is_admin' in fields) user.is_admin = fields.is_admin;
-	if ('max_item_size' in fields) user.max_item_size = fields.max_item_size;
+	if ('max_item_size' in fields) user.max_item_size = fields.max_item_size || 0;
 	user.can_share = fields.can_share ? 1 : 0;
 
 	const password = checkPassword(fields, false);

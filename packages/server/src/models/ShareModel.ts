@@ -5,6 +5,7 @@ import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
+import { userIdFromUserContentUrl } from '../utils/routeUtils';
 
 export default class ShareModel extends BaseModel<Share> {
 
@@ -30,6 +31,19 @@ export default class ShareModel extends BaseModel<Share> {
 
 		if (action === AclAction.Delete) {
 			if (user.id !== resource.owner_id) throw new ErrorForbidden('no access to this share');
+		}
+	}
+
+	public checkShareUrl(share: Share, shareUrl: string) {
+		if (this.baseUrl === this.userContentUrl) return; // OK
+
+		const userId = userIdFromUserContentUrl(shareUrl);
+		const shareUserId = share.owner_id.toLowerCase();
+
+		if (userId.length >= 10 && shareUserId.indexOf(userId) === 0) {
+			// OK
+		} else {
+			throw new ErrorBadRequest('Invalid origin (User Content)');
 		}
 	}
 
@@ -80,7 +94,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public shareUrl(id: Uuid, query: any = null): string {
-		return setQueryParameters(`${this.baseUrl}/shares/${id}`, query);
+		return setQueryParameters(`${this.userContentUrl}/shares/${id}`, query);
 	}
 
 	public async byItemId(itemId: Uuid): Promise<Share | null> {

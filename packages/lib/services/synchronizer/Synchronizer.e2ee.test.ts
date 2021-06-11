@@ -1,15 +1,13 @@
 import time from '../../time';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
-
-const { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } = require('../../testing/test-utils.js');
+import { createFolderTree, syncTargetName, synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
-import { createFolderTree } from '../../testing/test-utils';
 
 let insideBeforeEach = false;
 
@@ -415,6 +413,13 @@ describe('Synchronizer.e2ee', function() {
 	}));
 
 	it('should not encrypt items that are shared by folder', (async () => {
+		// We skip this test for Joplin Server because it's going to check if
+		// the share_id refers to an existing share.
+		if (syncTargetName() === 'joplinServer') {
+			expect(true).toBe(true);
+			return;
+		}
+
 		Setting.setValue('encryption.enabled', true);
 		await loadEncryptionMasterKey();
 

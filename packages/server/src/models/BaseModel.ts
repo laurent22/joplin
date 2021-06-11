@@ -64,6 +64,10 @@ export default abstract class BaseModel<T> {
 		return this.config_.baseUrl;
 	}
 
+	protected get userContentUrl(): string {
+		return this.config_.userContentBaseUrl;
+	}
+
 	protected get appName(): string {
 		return this.config_.appName;
 	}
@@ -272,6 +276,11 @@ export default abstract class BaseModel<T> {
 	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<T[]> {
 		if (!ids.length) return [];
 		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
+	}
+
+	public async exists(id: string): Promise<boolean> {
+		const o = await this.load(id, { fields: ['id'] });
+		return !!o;
 	}
 
 	public async load(id: string, options: LoadOptions = {}): Promise<T> {

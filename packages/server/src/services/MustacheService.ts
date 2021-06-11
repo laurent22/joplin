@@ -4,6 +4,7 @@ import config from '../config';
 import { filename } from '@joplin/lib/path-utils';
 import { NotificationView } from '../utils/types';
 import { User } from '../db';
+import { makeUrl, UrlType } from '../utils/routeUtils';
 
 export interface RenderOptions {
 	partials?: any;
@@ -29,6 +30,9 @@ interface GlobalParams {
 	owner?: User;
 	appVersion?: string;
 	appName?: string;
+	termsUrl?: string;
+	privacyUrl?: string;
+	showErrorStackTraces?: boolean;
 }
 
 export function isView(o: any): boolean {
@@ -80,6 +84,9 @@ export default class MustacheService {
 			prefersDarkEnabled: this.prefersDarkEnabled_,
 			appVersion: config().appVersion,
 			appName: config().appName,
+			termsUrl: config().termsEnabled ? makeUrl(UrlType.Terms) : '',
+			privacyUrl: config().termsEnabled ? makeUrl(UrlType.Privacy) : '',
+			showErrorStackTraces: config().showErrorStackTraces,
 		};
 	}
 

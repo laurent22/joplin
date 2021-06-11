@@ -476,6 +476,12 @@ class Setting extends BaseModel {
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
+			'sync.9.userContentPath': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
 			'sync.9.username': {
 				value: '',
 				type: SettingItemType.String,
@@ -505,6 +511,12 @@ class Setting extends BaseModel {
 			// means it can be set to something else for development.
 			'sync.10.path': {
 				value: 'https://api.joplincloud.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
+			'sync.10.userContentPath': {
+				value: 'https://joplinusercontent.com',
 				type: SettingItemType.String,
 				public: false,
 				storage: SettingStorage.Database,

@@ -95,7 +95,7 @@ export function ShareNoteDialog(props: Props) {
 
 	const copyLinksToClipboard = (shares: StateShare[]) => {
 		const links = [];
-		for (const share of shares) links.push(ShareService.instance().shareUrl(share));
+		for (const share of shares) links.push(ShareService.instance().shareUrl(ShareService.instance().userId, share));
 		clipboard.writeText(links.join('\n'));
 	};
 

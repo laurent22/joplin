@@ -1,4 +1,4 @@
-import { SubPath, redirect } from '../../utils/routeUtils';
+import { SubPath, redirect, makeUrl, UrlType } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
@@ -9,16 +9,19 @@ import { View } from '../../services/MustacheService';
 import { checkPassword } from './users';
 import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType, accountTypeProperties } from '../../models/UserModel';
+import { ErrorForbidden } from '../../utils/errors';
 
 function makeView(error: Error = null): View {
 	const view = defaultView('signup');
-	view.content.error = error;
-	view.content.postUrl = `${config().baseUrl}/signup`;
-	view.navbar = false;
+	view.content = {
+		error,
+		postUrl: makeUrl(UrlType.Signup),
+		loginUrl: makeUrl(UrlType.Login),
+	};
 	return view;
 }
 
-interface FormUser {
+export interface FormUser {
 	full_name: string;
 	email: string;
 	password: string;
@@ -34,6 +37,8 @@ router.get('signup', async (_path: SubPath, _ctx: AppContext) => {
 });
 
 router.post('signup', async (_path: SubPath, ctx: AppContext) => {
+	if (!config().signupEnabled) throw new ErrorForbidden('Signup is not enabled');
+
 	try {
 		const formUser = await bodyFields<FormUser>(ctx.req);
 		const password = checkPassword(formUser, true);

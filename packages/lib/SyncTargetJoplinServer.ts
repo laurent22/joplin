@@ -9,6 +9,7 @@ import Logger from './Logger';
 
 interface FileApiOptions {
 	path(): string;
+	userContentPath(): string;
 	username(): string;
 	password(): string;
 }
@@ -16,6 +17,7 @@ interface FileApiOptions {
 export async function newFileApi(id: number, options: FileApiOptions) {
 	const apiOptions = {
 		baseUrl: () => options.path(),
+		userContentBaseUrl: () => options.userContentPath(),
 		username: () => options.username(),
 		password: () => options.password(),
 		env: Setting.value('env'),
@@ -29,8 +31,8 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 	return fileApi;
 }
 
-export async function initFileApi(logger: Logger, options: FileApiOptions) {
-	const fileApi = await newFileApi(SyncTargetJoplinServer.id(), options);
+export async function initFileApi(syncTargetId: number, logger: Logger, options: FileApiOptions) {
+	const fileApi = await newFileApi(syncTargetId, options);
 	fileApi.setLogger(logger);
 	return fileApi;
 }
@@ -61,14 +63,16 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return super.fileApi();
 	}
 
-	public static async checkConfig(options: FileApiOptions) {
+	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null) {
 		const output = {
 			ok: false,
 			errorMessage: '',
 		};
 
+		syncTargetId = syncTargetId === null ? SyncTargetJoplinServer.id() : syncTargetId;
+
 		try {
-			const fileApi = await newFileApi(SyncTargetJoplinServer.id(), options);
+			const fileApi = await newFileApi(syncTargetId, options);
 			fileApi.requestRepeatCount_ = 0;
 
 			await fileApi.put('testing.txt', 'testing');
@@ -85,8 +89,9 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	protected async initFileApi() {
-		return initFileApi(this.logger(), {
+		return initFileApi(SyncTargetJoplinServer.id(), this.logger(), {
 			path: () => Setting.value('sync.9.path'),
+			userContentPath: () => Setting.value('sync.9.userContentPath'),
 			username: () => Setting.value('sync.9.username'),
 			password: () => Setting.value('sync.9.password'),
 		});

@@ -148,38 +148,38 @@ command | 16
 
 ## Properties
 
-Name | Type | Description
---- | --- | ---
-id  | text |    
-parent_id | text | ID of the notebook that contains this note. Change this ID to move the note to a different notebook.
-title | text | The note title.
-body | text | The note body, in Markdown. May also contain HTML.
-created_time | int | When the note was created.
-updated_time | int | When the note was last updated.
-is_conflict | int | Tells whether the note is a conflict or not.
-latitude | numeric |    
-longitude | numeric |    
-altitude | numeric |    
-author | text |    
-source_url | text | The full URL where the note comes from.
-is_todo | int | Tells whether this note is a todo or not.
-todo_due | int | When the todo is due. An alarm will be triggered on that date.
-todo_completed | int | Tells whether todo is completed or not. This is a timestamp in milliseconds.
-source | text |    
-source_application | text |    
-application_data | text |    
-order | numeric |    
-user_created_time | int | When the note was created. It may differ from created_time as it can be manually set by the user.
-user_updated_time | int | When the note was last updated. It may differ from updated_time as it can be manually set by the user.
-encryption_cipher_text | text |    
-encryption_applied | int |    
-markup_language | int |    
-is_shared | int |    
-share_id | text |    
-body_html | text | Note body, in HTML format
-base_url | text | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`.
-image_data_url | text | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format.
-crop_rect | text | If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format `{ x: x, y: y, width: width, height: height }`
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| parent_id | text  | ID of the notebook that contains this note. Change this ID to move the note to a different notebook. |
+| title | text  | The note title. |
+| body  | text  | The note body, in Markdown. May also contain HTML. |
+| created_time | int   | When the note was created. |
+| updated_time | int   | When the note was last updated. |
+| is_conflict | int   | Tells whether the note is a conflict or not. |
+| latitude | numeric |       |
+| longitude | numeric |       |
+| altitude | numeric |       |
+| author | text  |       |
+| source_url | text  | The full URL where the note comes from. |
+| is_todo | int   | Tells whether this note is a todo or not. |
+| todo_due | int   | When the todo is due. An alarm will be triggered on that date. |
+| todo_completed | int   | Tells whether todo is completed or not. This is a timestamp in milliseconds. |
+| source | text  |       |
+| source_application | text  |       |
+| application_data | text  |       |
+| order | numeric |       |
+| user_created_time | int   | When the note was created. It may differ from created_time as it can be manually set by the user. |
+| user_updated_time | int   | When the note was last updated. It may differ from updated_time as it can be manually set by the user. |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| markup_language | int   |       |
+| is_shared | int   |       |
+| share_id | text  |       |
+| body_html | text  | Note body, in HTML format |
+| base_url | text  | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`. |
+| image_data_url | text  | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format. |
+| crop_rect | text  | If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format `{ x: x, y: y, width: width, height: height }` |
 
 ## GET /notes
 
@@ -237,19 +237,19 @@ This is actually a notebook. Internally notebooks are called "folders".
 
 ## Properties
 
-Name | Type | Description
---- | --- | ---
-id  | text |    
-title | text | The folder title.
-created_time | int | When the folder was created.
-updated_time | int | When the folder was last updated.
-user_created_time | int | When the folder was created. It may differ from created_time as it can be manually set by the user.
-user_updated_time | int | When the folder was last updated. It may differ from updated_time as it can be manually set by the user.
-encryption_cipher_text | text |    
-encryption_applied | int |    
-parent_id | text |    
-is_shared | int |    
-share_id | text |    
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| title | text  | The folder title. |
+| created_time | int   | When the folder was created. |
+| updated_time | int   | When the folder was last updated. |
+| user_created_time | int   | When the folder was created. It may differ from created_time as it can be manually set by the user. |
+| user_updated_time | int   | When the folder was last updated. It may differ from updated_time as it can be manually set by the user. |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| parent_id | text  |       |
+| is_shared | int   |       |
+| share_id | text  |       |
 
 ## GET /folders
 
@@ -281,23 +281,23 @@ Deletes the folder with ID :id
 
 ## Properties
 
-Name | Type | Description
---- | --- | ---
-id  | text |    
-title | text | The resource title.
-mime | text |    
-filename | text |    
-created_time | int | When the resource was created.
-updated_time | int | When the resource was last updated.
-user_created_time | int | When the resource was created. It may differ from created_time as it can be manually set by the user.
-user_updated_time | int | When the resource was last updated. It may differ from updated_time as it can be manually set by the user.
-file_extension | text |    
-encryption_cipher_text | text |    
-encryption_applied | int |    
-encryption_blob_encrypted | int |    
-size | int |    
-is_shared | int |    
-share_id | text |    
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| title | text  | The resource title. |
+| mime  | text  |       |
+| filename | text  |       |
+| created_time | int   | When the resource was created. |
+| updated_time | int   | When the resource was last updated. |
+| user_created_time | int   | When the resource was created. It may differ from created_time as it can be manually set by the user. |
+| user_updated_time | int   | When the resource was last updated. It may differ from updated_time as it can be manually set by the user. |
+| file_extension | text  |       |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| encryption_blob_encrypted | int   |       |
+| size  | int   |       |
+| is_shared | int   |       |
+| share_id | text  |       |
 
 ## GET /resources
 
@@ -351,18 +351,18 @@ Deletes the resource with ID :id
 
 ## Properties
 
-Name | Type | Description
---- | --- | ---
-id  | text |    
-title | text | The tag title.
-created_time | int | When the tag was created.
-updated_time | int | When the tag was last updated.
-user_created_time | int | When the tag was created. It may differ from created_time as it can be manually set by the user.
-user_updated_time | int | When the tag was last updated. It may differ from updated_time as it can be manually set by the user.
-encryption_cipher_text | text |    
-encryption_applied | int |    
-is_shared | int |    
-parent_id | text |    
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| title | text  | The tag title. |
+| created_time | int   | When the tag was created. |
+| updated_time | int   | When the tag was last updated. |
+| user_created_time | int   | When the tag was created. It may differ from created_time as it can be manually set by the user. |
+| user_updated_time | int   | When the tag was last updated. It may differ from updated_time as it can be manually set by the user. |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| is_shared | int   |       |
+| parent_id | text  |       |
 
 ## GET /tags
 

@@ -9,6 +9,7 @@ const { urlDecode } = require('@joplin/lib/string-utils');
 const urlUtils = require('@joplin/lib/urlUtils');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
+const uri2path = require('file-uri-to-path');
 
 export default function useMessageHandler(scrollWhenReady: any, setScrollWhenReady: Function, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote) {
 	return useCallback(async (event: any) => {
@@ -51,8 +52,14 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 
 		} else if (urlUtils.urlProtocol(msg)) {
 			if (msg.indexOf('file://') === 0) {
-				// When using the file:// protocol, openPath doesn't work (does nothing) with URL-encoded paths
-				require('electron').shell.openPath(urlDecode(msg));
+				// When using the file:// protocol, openPath doesn't work (does
+				// nothing) with URL-encoded paths.
+				//
+				// shell.openPath seems to work with file:// urls on Windows,
+				// but doesn't on macOS, so we need to convert it to a path
+				// before passing it to openPath.
+				const decodedPath = uri2path(urlDecode(msg));
+				require('electron').shell.openPath(decodedPath);
 			} else {
 				require('electron').shell.openExternal(msg);
 			}

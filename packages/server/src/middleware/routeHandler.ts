@@ -1,9 +1,10 @@
 import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from '../utils/routeUtils';
 import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
+import config from '../config';
 
 export default async function(ctx: AppContext) {
-	ctx.appLogger().info(`${ctx.request.method} ${ctx.path}`);
+	const requestStartTime = Date.now();
 
 	try {
 		const responseObject = await execRequest(ctx.routes, ctx);
@@ -11,8 +12,9 @@ export default async function(ctx: AppContext) {
 		if (responseObject instanceof Response) {
 			ctx.response = responseObject.response;
 		} else if (isView(responseObject)) {
-			ctx.response.status = 200;
-			ctx.response.body = await ctx.services.mustache.renderView(responseObject, {
+			const view = responseObject as View;
+			ctx.response.status = view?.content?.error ? view?.content?.error?.httpCode || 500 : 200;
+			ctx.response.body = await ctx.services.mustache.renderView(view, {
 				notifications: ctx.notifications || [],
 				hasNotifications: !!ctx.notifications && !!ctx.notifications.length,
 				owner: ctx.owner,
@@ -44,7 +46,7 @@ export default async function(ctx: AppContext) {
 				path: 'index/error',
 				content: {
 					error,
-					stack: ctx.env === Env.Dev ? error.stack : '',
+					stack: config().showErrorStackTraces ? error.stack : '',
 					owner: ctx.owner,
 				},
 			};
@@ -56,5 +58,10 @@ export default async function(ctx: AppContext) {
 			if (error.code) r.code = error.code;
 			ctx.response.body = r;
 		}
+	} finally {
+		// Technically this is not the total request duration because there are
+		// other middlewares but that should give a good approximation
+		const requestDuration = Date.now() - requestStartTime;
+		ctx.appLogger().info(`${ctx.request.method} ${ctx.path} (${requestDuration}ms)`);
 	}
 }

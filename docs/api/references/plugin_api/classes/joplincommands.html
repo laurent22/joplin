@@ -86,6 +86,28 @@
 					</ul>
 					<p>To view what arguments are supported, you can open any of these files
 					and look at the <code>execute()</code> command.</p>
+					<a href="#executing-editor-commands" id="executing-editor-commands" style="color: inherit; text-decoration: none;">
+						<h2>Executing editor commands</h2>
+					</a>
+					<p>There might be a situation where you want to invoke editor commands
+						without using a <a href="joplincontentscripts.html">contentScript</a>. For this
+					reason Joplin provides the built in <code>editor.execCommand</code> command.</p>
+					<p><code>editor.execCommand</code>  should work with any core command in both the
+						<a href="https://codemirror.net/doc/manual.html#execCommand">CodeMirror</a> and
+						<a href="https://www.tiny.cloud/docs/api/tinymce/tinymce.editorcommands/#execcommand">TinyMCE</a> editors,
+					as well as most functions calls directly on a CodeMirror editor object (extensions).</p>
+					<ul>
+						<li><a href="https://codemirror.net/doc/manual.html#commands">CodeMirror commands</a></li>
+						<li><a href="https://www.tiny.cloud/docs/advanced/editor-command-identifiers/#coreeditorcommands">TinyMCE core editor commands</a></li>
+					</ul>
+					<p><code>editor.execCommand</code> supports adding arguments for the commands.</p>
+					<pre><code class="language-typescript"><span class="hljs-keyword">await</span> joplin.commands.execute(<span class="hljs-string">&#x27;editor.execCommand&#x27;</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;madeUpCommand&#x27;</span>, <span class="hljs-comment">// CodeMirror and TinyMCE</span>
+    <span class="hljs-attr">args</span>: [], <span class="hljs-comment">// CodeMirror and TinyMCE</span>
+    <span class="hljs-attr">ui</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// TinyMCE only</span>
+    <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// TinyMCE only</span>
+});</code></pre>
+					<p><a href="https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/codemirror_content_script/src/index.ts">View the example using the CodeMirror editor</a></p>
 				</div>
 			</section>
 			<!--

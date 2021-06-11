@@ -313,7 +313,7 @@ export default class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, true);
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
@@ -766,7 +766,10 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('env') === Env.Dev) {
-			Setting.setValue('sync.10.path', 'http://api-joplincloud.local:22300');
+			Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
+			Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
+			// Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
+			// Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
 		}
 
 		// For now always disable fuzzy search due to performance issues:

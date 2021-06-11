@@ -35,6 +35,11 @@ export interface EnvVariables {
 	STRIPE_SECRET_KEY?: string;
 	STRIPE_PUBLISHABLE_KEY?: string;
 	STRIPE_WEBHOOK_SECRET?: string;
+
+	SIGNUP_ENABLED?: string;
+	TERMS_ENABLED?: string;
+
+	ERROR_STACK_TRACES?: string;
 }
 
 let runningInDocker_: boolean = false;
@@ -142,8 +147,11 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		stripe: stripeConfigFromEnv(env),
 		port: appPort,
 		baseUrl,
+		showErrorStackTraces: (env.ERROR_STACK_TRACES === undefined && envType === Env.Dev) || env.ERROR_STACK_TRACES === '1',
 		apiBaseUrl: env.API_BASE_URL ? env.API_BASE_URL : baseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
+		signupEnabled: env.SIGNUP_ENABLED === '1',
+		termsEnabled: env.TERMS_ENABLED === '1',
 		...overrides,
 	};
 }
