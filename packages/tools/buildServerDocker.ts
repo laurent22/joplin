@@ -3,7 +3,7 @@ import { execCommand2, rootDir } from './tool-utils';
 function getVersionFromTag(tagName: string): string {
 	if (tagName.indexOf('server-') !== 0) throw new Error(`Invalid tag: ${tagName}`);
 	const s = tagName.split('-');
-	return s[1];
+	return s[1].substr(1);
 }
 
 function getIsPreRelease(tagName: string): boolean {
