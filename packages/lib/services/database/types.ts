@@ -98,6 +98,7 @@ export interface NoteEntity {
   "created_time"?: number 
   "updated_time"?: number 
   "is_conflict"?: number 
+  "conflict_original_id"?: string
   "latitude"?: number 
   "longitude"?: number 
   "altitude"?: number 
