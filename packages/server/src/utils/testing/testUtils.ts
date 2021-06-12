@@ -477,7 +477,7 @@ encryption_applied: 0
 markup_language: 1
 is_shared: 1
 share_id: ${note.share_id || ''}
-conflict_original_id: ${'conflict_original_id' in note ? note.conflict_original_id : ''}
+conflict_original_id: 
 type_: 1`;
 }
 
