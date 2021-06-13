@@ -71,7 +71,7 @@ msgid ""
 "commands."
 msgstr ""
 "Zadejte název poznámky, na kterou chcete přeskočit, nebo část jejího obsahu. "
-"Nebo zadejte # následovaný názvem tagu, @ následovaný názvem poznámky, "
+"Nebo zadejte # následovaný názvem štítku, @ následovaný názvem poznámky, "
 "nebo : pro vyhledávání příkazů."
 
 #: packages/app-desktop/plugins/GotoAnything.js:458
@@ -196,7 +196,7 @@ msgstr "Odstranit"
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:197
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Odebrat tag \"%s\" ze všech poznámek?"
+msgstr "Odebrat štítek \"%s\" ze všech poznámek?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:200
 msgid "Remove this search from the sidebar?"
@@ -231,7 +231,7 @@ msgstr "Zápisníky"
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/screens/Note.js:803
 msgid "Tags"
-msgstr "Tagy"
+msgstr "Štítky"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:503
 #: packages/app-mobile/components/side-menu-content.js:325
@@ -437,7 +437,7 @@ msgstr "Vytvářím %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
 msgid "Click to add tags..."
-msgstr "Klepněte pro přidání tagů..."
+msgstr "Klepněte pro přidání štítku..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:338
 msgid ""
@@ -856,7 +856,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
-msgstr "Přejmenovat tag:"
+msgstr "Přejmenovat štítek:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
 msgid "New notebook"
@@ -885,7 +885,7 @@ msgstr "Soubor šablony:"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:45
 msgid "Add or remove tags:"
-msgstr "Přidat či odebrat tagy:"
+msgstr "Přidat či odebrat štítky:"
 
 #: packages/app-desktop/gui/MainScreen/commands/print.js:17
 msgid "Print"
@@ -1187,7 +1187,7 @@ msgstr "Zdroje: %d."
 #: packages/app-cli/app/command-import.js:52
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Otagováno: %d."
+msgstr "Označeno pomocí štítků: %d."
 
 #: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-cli/app/command-import.js:70
@@ -1928,11 +1928,11 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:163
 msgid "New tags:"
-msgstr "Nové tagy:"
+msgstr "Nové štítky:"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:178
 msgid "Type new tags or select from list"
-msgstr "Zadejte nové tagy, nebo vyberte existující ze seznamu"
+msgstr "Zadejte nové štítky, nebo vyberte existující ze seznamu"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
@@ -2974,7 +2974,7 @@ msgstr ""
 #: packages/lib/models/Tag.js:223
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "Tag \"%s\" již existuje. Zvolte jiný název."
+msgstr "Štítek \"%s\" už existuje. Zadejte jiný název."
 
 #: packages/lib/models/Note.js:38
 msgid "created date"
@@ -3804,7 +3804,7 @@ msgstr "Poznámka uložena."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
-msgstr "Pro smazání tagu jej odeberte od přiřazených poznámek."
+msgstr "Před smazáním štítku ho odeberte od přiřazených poznámek."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
@@ -3856,7 +3856,7 @@ msgid ""
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Exportuje data Joplinu do zadané cesty. Bez dalších voleb exportuje veškerý "
-"obsah databáze včetně zápisníků, poznámek, tagů a příloh."
+"obsah databáze včetně zápisníků, poznámek, štítků a příloh."
 
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
@@ -4103,7 +4103,7 @@ msgstr ""
 "<tag-command> může být \"add\", \"remove\", \"list\" nebo \"notetags\": "
 "přidat (\"add\") či odebrat (\"remove\") [tag] k [poznámce], vypsat (\"list"
 "\") seznam poznámek přiřazených k [tagu] nebo vypsat (\"notetags\") seznam "
-"tagů přiřazených k poznámce. Příkaz `tag list` vypíše všechny tagy (s "
+"štítků přiřazených k poznámce. Příkaz `tag list` vypíše všechny štítky (s "
 "parametrem -l pro dlouhý výpis)."
 
 #: packages/app-cli/app/command-tag.js:90
