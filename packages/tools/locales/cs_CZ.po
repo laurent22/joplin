@@ -3180,7 +3180,7 @@ msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 "Stažena položka zatím neznámého typu - aktualizujte prosím Joplin na "
-"nejnovější verzi."
+"nejnovější verzi"
 
 #: packages/lib/JoplinServerApi.js:69
 #, javascript-format
