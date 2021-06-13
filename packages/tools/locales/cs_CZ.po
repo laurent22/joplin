@@ -123,11 +123,11 @@ msgstr "Stáhnout"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Přeskočit tuto verzi"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Úplný seznam změn"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
@@ -332,23 +332,23 @@ msgstr "Zaškrtávací pole"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Zvýraznění"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Přeškrtnutí"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Vložit"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Horní index"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Dolní index"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:564
 #: packages/app-mobile/components/screens/Note.js:1016
@@ -443,14 +443,16 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
+"Tento editor formátovaného textu má řadu omezení a při jeho používání "
+"doporučujeme mít se na pozoru."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:342
 msgid "Read more about it"
-msgstr ""
+msgstr "Zjistit více"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:347
 msgid "Dismiss"
-msgstr ""
+msgstr "Zavřít"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:383
 msgid "The following attachments are being watched for changes:"
@@ -517,19 +519,19 @@ msgstr "Duplikovat řádek"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
-msgstr ""
+msgstr "Zpět"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Redo"
-msgstr ""
+msgstr "Provést znovu"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent less"
-msgstr ""
+msgstr "Zmenšit odsazení"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 msgid "Indent more"
-msgstr ""
+msgstr "Zvětšit odsazení"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Toggle comment"
@@ -537,15 +539,15 @@ msgstr "Přepnout komentář"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Sort selected lines"
-msgstr ""
+msgstr "Seřadit vybrané řádky"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line up"
-msgstr ""
+msgstr "Prohodit s řádkem výše"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:124
 msgid "Swap line down"
-msgstr ""
+msgstr "Prohodit s řádkem níže"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -707,10 +709,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"Aplikace je spuštěna v nouzovém režimu. Vykreslování poznámek a všechna "
+"rozšíření jsou dočasné vypnutá."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:446
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Vypnout nouzový režim a restartovat"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:450
 msgid ""
@@ -754,15 +758,15 @@ msgstr "Více informací"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "Uživatel %s (%s) by s vámi rád sdílel zápisník."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid "Accept"
-msgstr ""
+msgstr "Přijmout"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:480
 msgid "Reject"
-msgstr ""
+msgstr "Odmítnout"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:484
 msgid "Some items cannot be synchronised."
@@ -779,6 +783,8 @@ msgstr "Nastavit heslo"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:615
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
+"Pro přesun položek v rozložení použijte šipky. Pro ukončení změn stiskněte "
+"klávesu \"Escape\"."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -851,7 +857,7 @@ msgstr "Sdílet zápisník..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
-msgstr ""
+msgstr "Změnit rozložení aplikace"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
@@ -868,7 +874,7 @@ msgstr "Název zápisníku:"
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
 msgid "Spell checker"
-msgstr ""
+msgstr "Kontrola pravopisu"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Share note..."
@@ -928,7 +934,7 @@ msgstr "Token byl zkopírován do schránky!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Opravdu chcete obnovit autorizační token?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -1013,7 +1019,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Obnovit token"
 
 #: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
@@ -1103,7 +1109,7 @@ msgstr "Oddálit"
 
 #: packages/app-desktop/gui/MenuBar.js:613
 msgid "&Go"
-msgstr ""
+msgstr "&Přejít"
 
 #: packages/app-desktop/gui/MenuBar.js:625
 msgid "Note&book"
@@ -1313,7 +1319,7 @@ msgstr "Opětovné zašifrování"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorovat"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
@@ -1445,7 +1451,7 @@ msgstr "Ukázat pokročilá nastavení"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
 msgid "Path:"
-msgstr ""
+msgstr "Cesta:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
 msgid "Browse..."
@@ -1453,11 +1459,11 @@ msgstr "Procházet..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
 msgid "Arguments:"
-msgstr ""
+msgstr "Argumenty:"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
+msgstr "Pro provedení těchto změn je potřeba aplikaci restartovat."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
@@ -1466,7 +1472,7 @@ msgstr "Provést ihned"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
-msgstr ""
+msgstr "Později"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
 msgid "Restart now"
@@ -1488,15 +1494,15 @@ msgstr "Smazat rozšíření \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 msgid "Browse all plugins"
-msgstr ""
+msgstr "Procházet všechna rozšíření"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
-msgstr ""
+msgstr "Nainstalovat ze souboru"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
-msgstr ""
+msgstr "Nemáte nainstalovaná žádná rozšíření."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
 msgid "Could not connect to plugin repository"
@@ -1504,7 +1510,7 @@ msgstr "Nepodařilo se navázat spojení s repositářem rozšíření"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "Zkusit znovu"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1512,7 +1518,7 @@ msgstr "Nástroje rozšíření"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
 msgid "Manage your plugins"
-msgstr ""
+msgstr "Správa vašich rozšíření"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 msgid "No results"
@@ -1529,7 +1535,7 @@ msgstr "Hledat rozšíření..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
 msgid "Install"
-msgstr ""
+msgstr "Nainstalovat"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
 msgid "Installing..."
@@ -1537,7 +1543,7 @@ msgstr "Probíhá instalace..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
 msgid "Installed"
-msgstr ""
+msgstr "Nainstalováno"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
 msgid "Update"
@@ -1549,12 +1555,12 @@ msgstr "Probíhá aktualizace..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
-msgstr ""
+msgstr "Pro použití tohoto rozšíření prosím aktualizujte Joplin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
 #, javascript-format
@@ -1737,10 +1743,12 @@ msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"Opravdu chcete smazat tuto pozvánku? Příjemce už nebude mít přístup k tomuto "
+"sdílenému zápisníku."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr "Přidat příjemce:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1750,19 +1758,19 @@ msgstr "Sdílet"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "Příjemce ještě nepřijal vaše pozvání"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "Příjemce odmítl vaše pozvání"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "Příjemce přijal vaše pozvání"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "Příjemci:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
 msgid "Synchronizing..."
@@ -1777,6 +1785,8 @@ msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"Opravdu chcete přestat sdílet tento zápisník? Příjemci už pak nebudou mít "
+"přístup k jeho obsahu."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
 msgid "Share Notebook"
@@ -1876,7 +1886,7 @@ msgstr "Nastavení"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Mobilní data - automatická synchronizace vypnutá"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2091,7 +2101,7 @@ msgstr "Web Joplinu"
 
 #: packages/app-mobile/components/screens/config.js:538
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Zásady ochrany osobních údajů"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2215,6 +2225,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
+"Výchozí heslo správce není bezpečné a ještě nebylo změněno. [Změňte ho nyní!]"
+"(%s)"
 
 #: packages/server/dist/models/UserModel.js:134
 msgid "attachment"
@@ -2225,11 +2237,13 @@ msgstr "příloha"
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr ""
+"Nelze uložit %s \"%s\", protože je větší než maximální povolený limit (%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
+"Všechny dostupné porty jsou používané - nahlaste prosím tento problém na %s"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -2405,7 +2419,7 @@ msgstr "AWS secret"
 
 #: packages/lib/models/Setting.js:309
 msgid "Joplin Server URL"
-msgstr ""
+msgstr "URL Joplin serveru"
 
 #: packages/lib/models/Setting.js:321
 msgid "Joplin Server email"
@@ -2551,7 +2565,7 @@ msgstr "Povolit podporu pro typographer"
 
 #: packages/lib/models/Setting.js:651
 msgid "Enable Linkify"
-msgstr ""
+msgstr "Povolit Linkify"
 
 #: packages/lib/models/Setting.js:652
 msgid "Enable math expressions"
@@ -2571,11 +2585,11 @@ msgstr "Povolit přehrávač zvuků"
 
 #: packages/lib/models/Setting.js:656
 msgid "Enable video player"
-msgstr ""
+msgstr "Povolit přehrávač videí"
 
 #: packages/lib/models/Setting.js:657
 msgid "Enable PDF viewer"
-msgstr ""
+msgstr "Povolit zobrazení PDF"
 
 #: packages/lib/models/Setting.js:658
 msgid "Enable ==mark== syntax"
@@ -2660,6 +2674,8 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Používá se pro většinu textu v editoru Markdownu. Pokud nebude nalezeno, "
+"bude použito obecné proporcionální písmo s různou šířkou znaků."
 
 #: packages/lib/models/Setting.js:746
 msgid "Editor monospace font family"
@@ -2671,6 +2687,10 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Používá se, kdekoliv je potřeba znaky s jednotnou šířkou pro čitelné "
+"rozložení textu (např. tabulky, zaškrtávací tlačítka, ukázky kódu). Pokud "
+"nebude nalezeno, bude použito obecné neproporcionální písmo s jednotnou "
+"šířkou znaků."
 
 #: packages/lib/models/Setting.js:768
 msgid "Custom stylesheet for rendered Markdown"
@@ -2682,11 +2702,11 @@ msgstr "Vlastní styly pro aplikaci Joplin"
 
 #: packages/lib/models/Setting.js:794
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "Odeslat místní data do cíle synchronizace"
 
 #: packages/lib/models/Setting.js:804
 msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgstr "Smazat místní data a stáhnout je z cíle synchronizace"
 
 #: packages/lib/models/Setting.js:809
 msgid "Automatically update the application"
@@ -2723,7 +2743,7 @@ msgstr "%d hodin"
 
 #: packages/lib/models/Setting.js:837
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Synchronizovat pouze přes WiFi"
 
 #: packages/lib/models/Setting.js:844
 msgid "Text editor command"
@@ -3159,6 +3179,8 @@ msgstr "Probíhá"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
+"Stažena položka zatím neznámého typu - aktualizujte prosím Joplin na "
+"nejnovější verzi."
 
 #: packages/lib/JoplinServerApi.js:69
 #, javascript-format
@@ -3464,15 +3486,15 @@ msgstr "Na %s: %s"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
-msgstr ""
+msgstr "Žádné návrhy"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:114
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Přidat do slovníku"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:153
 msgid "Use spell checker"
-msgstr ""
+msgstr "Použít kontrolu pravopisu"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
 msgid "Change language"
@@ -3836,6 +3858,8 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Spustí příkazy z textového souboru. Každý příkaz by měl být na vlastním "
+"řádku."
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
