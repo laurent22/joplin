@@ -1860,11 +1860,11 @@ msgstr "Smazat tyto poznámky?"
 #: packages/app-mobile/components/side-menu-content.js:126
 #, javascript-format
 msgid "Notebook: %s"
-msgstr "Zápisník:  %s"
+msgstr "Zápisník: %s"
 
 #: packages/app-mobile/components/side-menu-content.js:132
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Nelze přejmenovat  zašifrovanou položku"
+msgstr "Nelze přejmenovat zašifrovanou položku"
 
 #: packages/app-mobile/components/side-menu-content.js:312
 msgid "New Notebook"
@@ -3715,12 +3715,12 @@ msgid ""
 "operation."
 msgstr ""
 "Již je držen soubor se zámkem (lock file). Pokud jste si jistí, že nyní "
-"neprobíhá synchronizace, smažte zámek v \"%s\"  a pokračujte v operaci."
+"neprobíhá synchronizace, smažte zámek v \"%s\" a pokračujte v operaci."
 
 #: packages/app-cli/app/command-sync.js:175
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "Cíl synchronizace:  %s (%s)"
+msgstr "Cíl synchronizace: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:177
 msgid "Cannot initialise synchroniser."
