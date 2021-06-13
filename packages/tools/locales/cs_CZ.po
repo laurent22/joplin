@@ -237,7 +237,7 @@ msgstr "Štítky"
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Rozšifrované položky: %d/%d"
+msgstr "Dešifrování položek: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:507
 #: packages/app-mobile/components/side-menu-content.js:330
@@ -729,7 +729,7 @@ msgstr "Restartovat a upgradovat"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 msgid "Some items cannot be decrypted."
-msgstr "Některé položky nelze rozšifrovat."
+msgstr "Některé položky nelze dešifrovat."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:458
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:464
@@ -1335,9 +1335,9 @@ msgid ""
 "the data! To enable encryption, please enter your password below."
 msgstr ""
 "Zapnutí šifrování znamená, že *všechny* vaše poznámky a přílohy budou "
-"synchronizovány na cílové úložiště šifrované. Neztraťte své heslo, za účelem "
-"zabezpečení je jeho zadání *jediným* způsobem jak vaše poznámky rozšifrovat! "
-"Pro zapnutí šifrování zadejte své heslo."
+"synchronizovány na cílové úložiště šifrované. Neztraťte své heslo. Z důvodu "
+"bezpečnosti je jeho zadání *jediným* způsobem jak poznámky dešifrovat! Pro "
+"zapnutí šifrování zadejte své heslo."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-mobile/components/screens/encryption-config.js:258
@@ -2113,7 +2113,7 @@ msgstr "Nenalezena položka s ID %s"
 
 #: packages/app-mobile/components/screens/Note.js:168
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Tato příloha není ještě stažena nebo rozšifrována."
+msgstr "Tato příloha není ještě stažena nebo dešifrována."
 
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
@@ -3089,7 +3089,7 @@ msgstr "Hlavní klíč nelze upgradovat: %s"
 #: packages/lib/components/shared/encryption-config-shared.js:116
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Rozšifrované položky: %s/%s"
+msgstr "Dešifrované položky: %s/%s"
 
 #: packages/lib/onedrive-api.js:392
 msgid ""
