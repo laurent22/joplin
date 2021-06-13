@@ -1132,7 +1132,7 @@ msgstr "Přispět"
 
 #: packages/app-desktop/gui/MenuBar.js:667
 msgid "Toggle development tools"
-msgstr "Otevřít developerské nástroje"
+msgstr "Přepnout zobrazení nástrojů pro vývojáře"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1253,7 +1253,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
-msgstr "Upgrade"
+msgstr "Upgradovat"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:182
 msgid "Re-encrypt data"
@@ -2025,7 +2025,7 @@ msgstr "Vytvářím report..."
 
 #: packages/app-mobile/components/screens/config.js:456
 msgid "Export Debug Report"
-msgstr "Exportovat Debug Report"
+msgstr "Exportovat ladicí hlášení"
 
 #: packages/app-mobile/components/screens/config.js:458
 msgid "Fixing search index..."
@@ -2191,7 +2191,7 @@ msgstr "Konvertovat na poznámku"
 
 #: packages/app-mobile/components/screens/Note.js:810
 msgid "Convert to todo"
-msgstr "Konvertovat na todo"
+msgstr "Převést na úkolexpr"
 
 #: packages/app-mobile/components/screens/Note.js:824
 msgid "Properties"
@@ -2649,7 +2649,7 @@ msgstr "Písmo editoru"
 #: packages/lib/models/Setting.js:718 packages/lib/models/Setting.js:725
 #: packages/lib/models/Setting.js:871
 msgid "Default"
-msgstr "Default"
+msgstr "Výchozí"
 
 #: packages/lib/models/Setting.js:736
 msgid "Editor font family"
@@ -2734,9 +2734,9 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Příkaz editoru (může obsahovat argumenty) ve kterém budou otvírány poznámky. "
-"Pokud není specifikováno, aplikace se pokusí o autodetekci defaultního "
-"editoru."
+"Příkaz editoru (může obsahovat argumenty) ve kterém budou otevírány "
+"poznámky. Pokud není určeno, aplikace se pokusí o automatické rozpoznání "
+"výchozího editoru."
 
 #: packages/lib/models/Setting.js:845
 msgid "Page size for PDF export"
@@ -3255,7 +3255,7 @@ msgstr "Soubor exportu Evernote (jako Markdown)"
 
 #: packages/lib/services/interop/InteropService.js:52
 msgid "Evernote Export File (as HTML)"
-msgstr "Soubor Evernote Exportu (jako HTML)"
+msgstr "Soubor exportu Evernote (jako HTML)"
 
 #: packages/lib/services/interop/InteropService.js:60
 msgid "HTML File"
@@ -3570,7 +3570,7 @@ msgstr "Možné hodnoty: %s."
 #: packages/app-cli/app/help-utils.js:71
 #, javascript-format
 msgid "Default: %s"
-msgstr "Default: %s"
+msgstr "Výchozí: %s"
 
 #: packages/app-cli/app/help-utils.js:77
 msgid "Possible keys/values:"
@@ -3691,7 +3691,8 @@ msgstr "Synchronizuje se vzdáleným úložištěm."
 #: packages/app-cli/app/command-sync.js:34
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Synchronizovat se specifikovanou destinací (defaultně hodnota sync.target)"
+"Synchronizovat do vybraného cíle (nebo výchozí hodnota sync.target z "
+"konfigurace)"
 
 #: packages/app-cli/app/command-sync.js:35
 msgid "Upgrade the sync target to the latest version."
@@ -3860,7 +3861,7 @@ msgstr ""
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
 msgid "Destination format: %s"
-msgstr "Formát destinace: %s"
+msgstr "Cílový formát: %s"
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given note."
