@@ -299,7 +299,7 @@ msgstr "Seznam položek"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:510
 msgid "Layout"
-msgstr "Rozvržení"
+msgstr "Rozložení"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:510
 #, javascript-format
@@ -1091,7 +1091,7 @@ msgstr "&Zobrazit"
 
 #: packages/app-desktop/gui/MenuBar.js:546
 msgid "Layout button sequence"
-msgstr "Posloupnost pro tlačítko Rozvržení"
+msgstr "Posloupnost pro tlačítko Rozložení"
 
 #: packages/app-desktop/gui/MenuBar.js:591
 #: packages/app-desktop/gui/MenuBar.js:597
