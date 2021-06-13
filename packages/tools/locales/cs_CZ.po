@@ -770,7 +770,7 @@ msgstr "Některé položky nelze synchronizovat."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:490
 msgid "One or more master keys need a password."
-msgstr "Jeden nebo více master klíčů potřebují heslo."
+msgstr "Jeden nebo více hlavních klíčů potřebují heslo."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:492
 msgid "Set the password"
@@ -1350,7 +1350,7 @@ msgstr "Zapnout šifrování"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
 msgid "Master Keys"
-msgstr "Master klíče"
+msgstr "Hlavní klíče"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
 msgid "Active"
@@ -1374,13 +1374,13 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Poznámka: Pouze jeden master klíč bude používán k šifrování (označen jako "
-"\"aktivní\"). Všechny další klíče jsou používány jen k dešifrování."
+"Poznámka: Pouze jeden hlavní klíč bude používán k šifrování (označen jako "
+"\"aktivní\"). Ostatní klíče jsou používány jen k dešifrování."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
 msgid "Missing Master Keys"
-msgstr "Chybějící Master klíče"
+msgstr "Chybí hlavní klíče"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
 #: packages/app-mobile/components/screens/encryption-config.js:249
@@ -1389,7 +1389,7 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"Master klíče s těmito ID byly použity k zašifrování položek, které "
+"Hlavní klíče s těmito ID byly použity k zašifrování položek, které "
 "momentálně nejsou k dispozici. Je pravděpodobné, že tyto položky budou "
 "staženy při synchronizaci."
 
@@ -1944,7 +1944,7 @@ msgstr "Zde vložte kód"
 #: packages/app-mobile/components/screens/encryption-config.js:119
 #, javascript-format
 msgid "Master Key %s"
-msgstr "Master heslo %s"
+msgstr "Hlavní klíč %s"
 
 #: packages/app-mobile/components/screens/encryption-config.js:120
 #: packages/app-mobile/components/screens/Note.js:724
@@ -3612,7 +3612,7 @@ msgstr ""
 #: packages/app-cli/app/command-e2ee.js:36
 #: packages/app-cli/app/command-e2ee.js:74
 msgid "Enter master password:"
-msgstr "Zadejte master heslo:"
+msgstr "Zadejte hlavní heslo:"
 
 #: packages/app-cli/app/command-e2ee.js:38
 #: packages/app-cli/app/command-e2ee.js:76
@@ -3910,9 +3910,9 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Jedna či více položek jsou šifrovány a je potřeba zadat master heslo. Učiňte "
-"tak zadáním  `e2ee decrypt`. Pokud jste heslo již zadali, zašifrované "
-"položky se nyní dešifrují na pozadí a budou brzy k dispozici."
+"Jedna či více položek jsou šifrovány a je potřeba zadat hlavní heslo. Učiňte "
+"tak zadáním `e2ee decrypt`. Pokud jste heslo již zadali, zašifrované položky "
+"se nyní dešifrují na pozadí a budou brzy k dispozici."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
