@@ -155,9 +155,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Klikněte na \"%s\" pro obnovení poznámky. Poznámka bude zkopírována do "
-"zápisníku s názvem \"%s\". Současná verze poznámky nebude nahrazena či "
-"změněna."
+"Pro obnovení poznámky klepněte na \"%s\". Poznámka bude zkopírována do "
+"zápisníku \"%s\". Současná verze poznámky nebude nahrazena ani změněna."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
@@ -306,7 +305,7 @@ msgstr "Rozložení"
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr "Tato poznámka je prázdný. Klikněte na  \"%s\" pro otevření editoru."
+msgstr "Tato poznámka je prázdná. pro otevření editoru klepněte na \"%s\"."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
@@ -719,9 +718,9 @@ msgid ""
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
-"Před synchronizací Joplin je třeba upgradovat cíl synchronizace. Dokončení "
-"operace může trvat několik minut a je třeba aplikaci restartovat. Chcete-li "
-"pokračovat, klikněte na odkaz."
+"Před synchronizací je třeba upgradovat její cíl. Dokončení operace může "
+"trvat několik minut a je třeba aplikaci restartovat. Chcete-li pokračovat, "
+"klepněte na odkaz."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:452
 msgid "Restart and upgrade"
@@ -1294,17 +1293,17 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"Aby to bylo možné, bude nutné zašifrovat a synchronizovat celou vaši datovou "
-"sadu, takže je nejlepší spustit to přes noc.\n"
+"Aby to bylo možné, bude nutné zašifrovat a synchronizovat všechna vaše data, "
+"takže je nejlepší celou akci spustit přes noc.\n"
 "\n"
-"Nejprve postupujte podle těchto pokynů:\n"
+"Postupujte podle těchto pokynů:\n"
 "\n"
-"1. Synchronizujte všechna svá zařízení.\n"
-"2. Klikněte na \"%s\".\n"
-"3. Nechte to běžet do konce. Zatímco operace běží, vyhněte se změnám "
-"jakékoli poznámky na ostatních zařízeních, aby nedocházelo ke konfliktům.\n"
-"4. Jakmile je synchronizace na tomto zařízení provedena, synchronizujte "
-"všechna ostatní zařízení a nechejte synchronizaci běžet až do konce.\n"
+"1. Proveďte synchronizaci všech svých zařízení.\n"
+"2. Klepněte na \"%s\".\n"
+"3. Nechte vše doběhnout do konce. Dokud operace poběži, vyhněte se změnám "
+"poznámek na ostatních zařízeních, aby nedocházelo ke konfliktům.\n"
+"4. Až bude synchronizace na tomto zařízení dokončena, synchronizujte všechna "
+"ostatní zařízení a nechejte na nich synchronizaci doběhnout do konce.\n"
 "\n"
 "Důležité: toto stačí spustit pouze JEDNOU a na jednom zařízení."
 
@@ -1634,12 +1633,12 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Žádné poznámky. Vytvořte jednu kliknutím na \"Nová poznámka\"."
+msgstr "Žádné poznámky. Novou vytvoříte klepnutím na \"Nová poznámka\"."
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na \"Nový zápisník\"."
+msgstr "Nemáte žádný zápisník. Nový vytvoříte klepnutím na \"Nový zápisník\"."
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
 msgid "Note list"
@@ -1889,7 +1888,7 @@ msgstr "Vytvořit nový zápisník"
 
 #: packages/app-mobile/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Nemáte žádné poznámky. Vytvořte jednu kliknutím na tlačítko (+)."
+msgstr "Žádné poznámky. Novou vytvořte klepnutím na tlačítko (+)."
 
 #: packages/app-mobile/components/screens/folder.js:87
 #, javascript-format
@@ -2434,7 +2433,7 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"V režimu \"Manuální\" se přílohy stahují pouze po kliknutí na ně. V režimu "
+"V režimu \"Manuální\" se přílohy stahují pouze po klepnutí na ně. V režimu "
 "\"Automaticky\" se stáhnou při otevření poznámky. V režimu \"Vždy\" se "
 "stáhnou všechny přílohy, ať už poznámku otevřete nebo ne."
 
@@ -2802,10 +2801,10 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"Čárkami oddělený seznam adresářů s certifikáty nebo cest k jednotlivým "
-"souborům s certifikáty. Například: /my/cert_dir, /other/custom.pem. Uvědomte "
-"si, že pokud provedete změny nastavení TLS, musíte změny uložit dříve, než "
-"kliknete na \"Zkontrolovat konfiguraci synchronizace\"."
+"Čárkami oddělený seznam adresářů s certifikáty nebo cestami k jednotlivým "
+"souborům s certifikáty. Například: /my/cert_dir, /other/custom.pem. "
+"Pamatujte, že pokud provedete změny nastavení TLS, musíte změny před "
+"klepnutím na \"Zkontrolovat konfiguraci synchronizace\" uložit."
 
 #: packages/lib/models/Setting.js:911
 msgid "Ignore TLS certificate errors"
