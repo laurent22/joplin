@@ -489,7 +489,7 @@ msgstr "Kód"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
 msgid "Numbered List"
-msgstr "Číslovanáý seznam"
+msgstr "Číslovaný seznam"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
 msgid "Bulleted List"
@@ -669,7 +669,7 @@ msgstr "Skrýt Joplin"
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
 #: packages/app-desktop/gui/MenuBar.js:468
 msgid "Close Window"
-msgstr "Zavřít akno"
+msgstr "Zavřít okno"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
 msgid "Preferences"
@@ -839,7 +839,7 @@ msgstr "Přesunout do zápisníku:"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
-msgstr "Změňit layout editoru"
+msgstr "Změnit rozložení editoru"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
 msgid "Toggle editors"
