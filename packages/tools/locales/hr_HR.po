@@ -14,9 +14,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -124,16 +126,16 @@ msgstr "Preuzmi"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Preskoči ovu verziju"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Potpuni dnevnik promjena"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "Bilješka „%s” je uspješno obnovljena za bilježnicu „%s”."
+msgstr "Bilješka „%s” je uspješno obnovljena u bilježnicu „%s”."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -272,12 +274,10 @@ msgid "Retry"
 msgstr "Pokušaj ponovo"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:134
-#, fuzzy
 msgid "Advanced tools"
-msgstr "Napredne opcije"
+msgstr "Napredni alati"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:136
-#, fuzzy
 msgid "Export debug report"
 msgstr "Izvezi izvještaj o otklanjanju grešaka"
 
@@ -764,15 +764,15 @@ msgstr "Daljnje informacije"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) želi s tobom dijeliti bilježnicu."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid "Accept"
-msgstr ""
+msgstr "Prihvati"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:480
 msgid "Reject"
-msgstr ""
+msgstr "Odbij"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:484
 msgid "Some items cannot be synchronised."
@@ -849,16 +849,15 @@ msgstr "Premjesti u bilježnicu:"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
-msgstr "Uključi/Isključi izgled uređivača"
+msgstr "Uključi/Isključi raspored uređivača"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
 msgid "Toggle editors"
 msgstr "Uključi/Isključi uređivače"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Dijeli bilješku …"
+msgstr "Dijeli bilježnicu …"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -903,14 +902,14 @@ msgstr "Ispiši"
 
 #: packages/app-desktop/gui/MainScreen/commands/print.js:26
 msgid "Only one note can be printed at a time."
-msgstr "Može se ispisati samo jedna bilješka."
+msgstr "Ispisati se može samo jedna bilješka najednom."
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:29
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 #: packages/app-cli/app/command-sync.js:90
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "Za sinkronizaciju Joplina s Dropboxom, slijedi sljedeće korake:"
+msgstr "Za sinkronizaciju Joplina s Dropboxom slijedi sljedeće korake:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
@@ -1113,9 +1112,8 @@ msgid "&Go"
 msgstr "&Idi"
 
 #: packages/app-desktop/gui/MenuBar.js:625
-#, fuzzy
 msgid "Note&book"
-msgstr "Bilježnice"
+msgstr "Biljež&nica"
 
 #: packages/app-desktop/gui/MenuBar.js:631
 msgid "&Note"
@@ -1209,7 +1207,7 @@ msgstr "Dupliciraj"
 #: packages/app-desktop/gui/utils/NoteListUtils.js:49
 #, javascript-format
 msgid "%s - Copy"
-msgstr "%s – Kopiraj"
+msgstr "%s – Kopija"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:60
 msgid "Switch between note and to-do type"
@@ -1507,16 +1505,15 @@ msgstr "Instaliraj iz datoteke"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
-msgstr "Nijedan dodatak nije instaliran."
+msgstr "Nemaš nijedan instalirani dodatak."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "Neuspjelo instaliranje dodatka: %s"
+msgstr "Neuspjelo povezivanje s repozitorijem dodataka"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "Pokušaj ponovo"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1703,9 +1700,8 @@ msgstr ""
 "Upozorenje: za brže izvođenje, ne prikazuju se svi resursi (ograničenje: %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:141
-#, fuzzy
 msgid "Unshare note"
-msgstr "Dijeli"
+msgstr "Prestani dijeliti bilješku"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
@@ -1743,19 +1739,20 @@ msgstr[1] "Kopiraj poveznice za dijeljenje"
 msgstr[2] "Kopiraj poveznice za dijeljenje"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "Dijeli"
+msgstr "Prestani dijeliti"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"Izbrisati ovu pozivnicu? Primalac više neće imati pristup ovoj dijeljenoj "
+"bilježnici."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr "Dodaj primaoca:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1765,40 +1762,39 @@ msgstr "Dijeli"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "Primalac još nije prihvatio pozivnicu"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "Primalac je odbio pozivnicu"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "Primalac je prihvatio pozivnicu"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "Primaoci:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "Sinkroniziranje …"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "Dijeli bilješku …"
+msgstr "Dijeljenje bilježnice …"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"Prestati dijeliti ovu bilježnicu? Primalac više neće imati pristup sadržaju "
+"bilježnice."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Dijeli bilješke"
+msgstr "Dijeli bilježnicu"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
 msgid "Toggle safe mode"
@@ -2241,15 +2237,14 @@ msgstr ""
 "[Promijeni je sada](%s)"
 
 #: packages/server/dist/models/UserModel.js:134
-#, fuzzy
 msgid "attachment"
-msgstr "Privici"
+msgstr "privitak"
 
 #: packages/server/dist/models/UserModel.js:134
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
-msgstr ""
+msgstr "Nije moguće spremiti %s \"%s\" jer je veći od dozvoljene granice (%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2430,26 +2425,23 @@ msgstr "AWS tajna"
 
 #: packages/lib/models/Setting.js:309
 msgid "Joplin Server URL"
-msgstr "Joplin poslužitelj URL"
+msgstr "Joplin Server URL"
 
 #: packages/lib/models/Setting.js:321
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplin poslužitelj"
+msgstr "Joplin Server email"
 
 #: packages/lib/models/Setting.js:332
 msgid "Joplin Server password"
-msgstr "Joplin poslužitelj lozinka"
+msgstr "Joplin Server lozinka"
 
 #: packages/lib/models/Setting.js:353
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplin poslužitelj"
+msgstr "Joplin Cloud email"
 
 #: packages/lib/models/Setting.js:364
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplin poslužitelj lozinka"
+msgstr "Joplin Cloud lozinka"
 
 #: packages/lib/models/Setting.js:376
 msgid "Attachment download behaviour"
@@ -2715,11 +2707,11 @@ msgstr "Prilagođeni stilovi za Joplinove programske stilove"
 
 #: packages/lib/models/Setting.js:794
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "Ponovo učitaj lokalne podatke u izvor sinronizacije"
 
 #: packages/lib/models/Setting.js:804
 msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgstr "Izbriši lokalne podatke i ponovo preuzmi iz izvora sinronizacije"
 
 #: packages/lib/models/Setting.js:809
 msgid "Automatically update the application"
@@ -3039,9 +3031,8 @@ msgid "Encrypted items cannot be modified"
 msgstr "Šifrirani elementi se ne mogu promijeniti"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin forum"
+msgstr "Joplin Cloud"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3076,7 +3067,7 @@ msgstr ""
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
-msgstr "Program je uspješno autoriziran!"
+msgstr "Program je autoriziran!"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 #, javascript-format
@@ -3860,8 +3851,7 @@ msgstr "Zatvori program pomoću prečaca Ctrl+D ili upiši „exit”"
 
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
-msgstr ""
-"Briše bilješke koje se poklapaju sa znakovnim nizom bilješke <note-pattern>."
+msgstr "Briše bilješke koje se poklapaju s uzorkom bilješke <note-pattern>."
 
 #: packages/app-cli/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
@@ -3870,8 +3860,7 @@ msgstr "Briše bilješke bez traženja potvrde."
 #: packages/app-cli/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr ""
-"%d bilješke se poklapaju s ovim znakovnim nizom. Želiš li ih izbrisati?"
+msgstr "%d bilješke se poklapaju s ovim uzorkom. Želiš li ih izbrisati?"
 
 #: packages/app-cli/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -3882,10 +3871,12 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Pokreće naredbe koje se nalaze u tekstualnoj datoteci. Naredbe se moraju "
+"zapisti pojedinačno u zasebne retke."
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
-msgstr "Prikazuje verziju"
+msgstr "Prikazuje podatke verzije"
 
 #: packages/app-cli/app/command-version.js:16
 #, javascript-format
@@ -3972,7 +3963,7 @@ msgstr "Traži:"
 
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "Pretražuje zadani znakovni niz <pattern> u svim bilješkama."
+msgstr "Pretražuje zadani uzorak <pattern> u svim bilješkama."
 
 #: packages/app-cli/app/command-set.js:22
 #, javascript-format
