@@ -142,7 +142,7 @@ msgstr "Tato poznámka nemá historii"
 #: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:85
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "Nepodporovaný link či zpráva: %s"
+msgstr "Nepodporovaný odkaz či zpráva: %s"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
