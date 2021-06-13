@@ -87,7 +87,7 @@ msgstr "Nabídka příkazů"
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Exportuji do \"%s\" jako formát \"%s\". Chvíli strpení..."
+msgstr "Probíhá export do \"%s\" ve formátu \"%s\". Počkejte prosím..."
 
 #: packages/app-desktop/InteropServiceHelper.js:175
 #, javascript-format
@@ -1019,7 +1019,7 @@ msgstr ""
 #: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Importuji z \"%s\" jako formát \"%s\". Chvíli strpení..."
+msgstr "Probíhá import z \"%s\" ve formátu \"%s\". Počkejte prosím..."
 
 #: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
@@ -1697,7 +1697,7 @@ msgstr "Přestat sdílet poznámku"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
-msgstr "Synchronizuji..."
+msgstr "Probíhá synchronizace..."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid "Generating link..."
@@ -2030,7 +2030,7 @@ msgstr "Exportovat Debug Report"
 
 #: packages/app-mobile/components/screens/config.js:458
 msgid "Fixing search index..."
-msgstr "Opravuji vyhledávací index..."
+msgstr "Probíhá oprava vyhledávacího indexu..."
 
 #: packages/app-mobile/components/screens/config.js:458
 msgid "Fix search index"
@@ -2047,7 +2047,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/config.js:461
 msgid "Exporting profile..."
-msgstr "Exportuji profil..."
+msgstr "Probíhá export profilu..."
 
 #: packages/app-mobile/components/screens/config.js:461
 msgid "Export profile"
@@ -3027,7 +3027,7 @@ msgstr "OneDrive"
 
 #: packages/lib/components/shared/config-shared.js:50
 msgid "Checking... Please wait."
-msgstr "Kontroluji... chvíli strpení."
+msgstr "Probíhá kontrola... Počkejte prosím."
 
 #: packages/lib/components/shared/config-shared.js:52
 msgid "Success! Synchronisation configuration appears to be correct."
@@ -3136,7 +3136,7 @@ msgstr "Získané položky: %d/%d."
 
 #: packages/lib/Synchronizer.js:152
 msgid "Cancelling..."
-msgstr "Zastavuji..."
+msgstr "Zastavování..."
 
 #: packages/lib/Synchronizer.js:154
 #, javascript-format
@@ -3552,7 +3552,7 @@ msgstr "Výstupní formát: %s"
 
 #: packages/app-cli/app/command-import.js:65
 msgid "Importing notes..."
-msgstr "Importuji poznámky..."
+msgstr "Probíhá import poznámky..."
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
@@ -3626,8 +3626,8 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Dešifruji... Chvíli strpení, podle množství dat k dešifrování to může zabrat "
-"i několik minut."
+"Probíhá dešifrování... Počkejte prosím na jeho dokončení. Podle množství dat "
+"může zabrat i několik minut."
 
 #: packages/app-cli/app/command-e2ee.js:55
 #, javascript-format
@@ -3728,7 +3728,7 @@ msgstr "Nelze inicializovat synchronizátor."
 
 #: packages/app-cli/app/command-sync.js:207
 msgid "Starting synchronisation..."
-msgstr "Zahajuji synchronizaci..."
+msgstr "Zahajování synchronizace..."
 
 #: packages/app-cli/app/command-sync.js:230
 msgid "Downloading resources..."
@@ -4070,7 +4070,7 @@ msgstr "y"
 
 #: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Zastavuji synchronizaci, chvíli strpení..."
+msgstr "Zastavování synchronizace, počkejte prosím..."
 
 #: packages/app-cli/app/app.js:256
 #, javascript-format
