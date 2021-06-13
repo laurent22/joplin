@@ -7,13 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Lukas Helebrandt <lukas@aiya.cz>\n"
 "Language-Team: \n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
@@ -63,15 +65,14 @@ msgid ""
 msgstr "Aplikace se nyní vypne. Pro dokončení procesu ji znovu spusťte."
 
 #: packages/app-desktop/plugins/GotoAnything.js:433
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Zadejte název poznámky (případně část jejího obsahu), na kterou chcete "
-"přeskočit. Nebo zadejte # následovaný názvem značky/tagu nebo @ následovaným "
-"názvem poznámkového bloku."
+"Zadejte název poznámky, na kterou chcete přeskočit, nebo část jejího obsahu. "
+"Nebo zadejte # následovaný názvem tagu, @ následovaný názvem poznámky, "
+"nebo : pro vyhledávání příkazů."
 
 #: packages/app-desktop/plugins/GotoAnything.js:458
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -80,9 +81,8 @@ msgstr "Přejít kamkoliv..."
 
 #: packages/app-desktop/plugins/GotoAnything.js:465
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
-#, fuzzy
 msgid "Command palette"
-msgstr "Příkaz"
+msgstr "Nabídka příkazů"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -118,9 +118,8 @@ msgid "New version: %s"
 msgstr "Nová verze: %s"
 
 #: packages/app-desktop/checkForUpdates.js:189
-#, fuzzy
 msgid "Download"
-msgstr "Staženo"
+msgstr "Stáhnout"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
@@ -273,14 +272,12 @@ msgid "Retry"
 msgstr "Znovu"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:134
-#, fuzzy
 msgid "Advanced tools"
-msgstr "Ukázat pokročilé volby"
+msgstr "Pokročilé volby"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:136
-#, fuzzy
 msgid "Export debug report"
-msgstr "Exportovat Debug Report"
+msgstr "Exportovat ladicí hlášení"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -439,9 +436,8 @@ msgid "Creating new %s..."
 msgstr "Vytvářím %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "Zkontrolovat updaty..."
+msgstr "Klepněte pro přidání tagů..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:338
 msgid ""
@@ -513,14 +509,12 @@ msgid "Horizontal Rule"
 msgstr "Horizontální čára"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "Smazat poznámku?"
+msgstr "Smazat řádek"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Duplikovat"
+msgstr "Duplikovat řádek"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -539,9 +533,8 @@ msgid "Indent more"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
-#, fuzzy
 msgid "Toggle comment"
-msgstr "Přepnout seznam poznámek"
+msgstr "Přepnout komentář"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Sort selected lines"
@@ -689,9 +682,8 @@ msgid "Options"
 msgstr "Nastavení"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Neplatné %s: %s."
+msgstr "Neplatné"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -855,9 +847,8 @@ msgid "Toggle editors"
 msgstr "Přepnout editory"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Sdílet poznámku..."
+msgstr "Sdílet zápisník..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -1116,9 +1107,8 @@ msgid "&Go"
 msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.js:625
-#, fuzzy
 msgid "Note&book"
-msgstr "Zápisníky"
+msgstr "&Zápisník"
 
 #: packages/app-desktop/gui/MenuBar.js:631
 msgid "&Note"
@@ -1319,9 +1309,8 @@ msgstr ""
 "Důležité: toto stačí spustit pouze JEDNOU a na jednom zařízení."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
-#, fuzzy
 msgid "Re-encryption"
-msgstr "Šifrování"
+msgstr "Opětovné zašifrování"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
@@ -1481,9 +1470,8 @@ msgid "Later"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
-#, fuzzy
 msgid "Restart now"
-msgstr "Získat hned:"
+msgstr "Restartovat"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
 #: packages/lib/models/Setting.js:1619
@@ -1495,9 +1483,9 @@ msgid "Apply"
 msgstr "Použít"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete plugin \"%s\"?"
-msgstr "Smazat poznámku \"%s\"?"
+msgstr "Smazat rozšíření \"%s\"?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 msgid "Browse all plugins"
@@ -1512,27 +1500,24 @@ msgid "You do not have any installed plugin."
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "Nelze exportovat poznámky: %s"
+msgstr "Nepodařilo se navázat spojení s repositářem rozšíření"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
-#, fuzzy
 msgid "Plugin tools"
-msgstr "Rozšíření"
+msgstr "Nástroje rozšíření"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
 msgid "Manage your plugins"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-#, fuzzy
 msgid "No results"
-msgstr "Žádné zdroje!"
+msgstr "Žádné výsledky"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 #: packages/app-desktop/gui/ResourceScreen.js:142
@@ -1540,32 +1525,28 @@ msgid "Please wait..."
 msgstr "Počkejte prosím..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
 msgid "Search for plugins..."
-msgstr "Hledat..."
+msgstr "Hledat rozšíření..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
 msgid "Install"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
-#, fuzzy
 msgid "Installing..."
-msgstr "Zastavuji..."
+msgstr "Probíhá instalace..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
 msgid "Installed"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
-#, fuzzy
 msgid "Update"
-msgstr "Upraveno"
+msgstr "Aktualizovat"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
-#, fuzzy
 msgid "Updating..."
-msgstr "Sleduji..."
+msgstr "Probíhá aktualizace..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
@@ -1577,9 +1558,9 @@ msgid "(%s)"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not install plugin: %s"
-msgstr "Nelze exportovat poznámky: %s"
+msgstr "Rozšíření se nepodařilo nainstalovat: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
@@ -1711,9 +1692,8 @@ msgstr ""
 "Upozornění: nejsou zobrazeny všechny prostředky z důvodů výkonu (limit: %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:141
-#, fuzzy
 msgid "Unshare note"
-msgstr "Sdílet"
+msgstr "Přestat sdílet poznámku"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
@@ -1750,9 +1730,8 @@ msgstr[1] "Kopírovat odkazy ke sdílení"
 msgstr[2] "Kopírovat odkazy ke sdílení"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "Sdílet"
+msgstr "Přestat sdílet"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
@@ -1787,14 +1766,12 @@ msgid "Recipients:"
 msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
-msgstr "Synchronizuji..."
+msgstr "Probíhá synchronizace..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "Sdílet poznámku..."
+msgstr "Sdílení zápisníku..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
@@ -1803,14 +1780,12 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Sdílet poznámky"
+msgstr "Sdílet zápisník"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "Přepnout postranní lištu"
+msgstr "Přepnout nouzový režim"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1839,9 +1814,8 @@ msgid "Error opening note in editor: %s"
 msgstr "Chyba při otevírání poznámky v editoru: %s"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
 msgid "Open profile directory"
-msgstr "Otevřít složku se šablonami"
+msgstr "Otevřít složku s profilem"
 
 #: packages/app-desktop/app.js:367
 #, javascript-format
@@ -1869,9 +1843,8 @@ msgid "Save alarm"
 msgstr "Nastavit alarm"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
-#, fuzzy
 msgid "Open"
-msgstr "Otevřít..."
+msgstr "Otevřít"
 
 #: packages/app-mobile/components/CameraView.js:158
 msgid "Permission to use camera"
@@ -2161,9 +2134,8 @@ msgid ""
 msgstr ""
 
 #: packages/app-mobile/components/screens/Note.js:343
-#, fuzzy
 msgid "Permission needed"
-msgstr "Oprávnění použít kameru"
+msgstr "Vyžadováno oprávnění"
 
 #: packages/app-mobile/components/screens/Note.js:449
 #: packages/app-cli/app/command-rmnote.js:27
@@ -2246,9 +2218,8 @@ msgid ""
 msgstr ""
 
 #: packages/server/dist/models/UserModel.js:134
-#, fuzzy
 msgid "attachment"
-msgstr "Přílohy"
+msgstr "příloha"
 
 #: packages/server/dist/models/UserModel.js:134
 #, javascript-format
@@ -2292,9 +2263,8 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:56
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Web Joplinu"
+msgstr "Joplin server"
 
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
@@ -2423,9 +2393,8 @@ msgid "AWS S3 bucket"
 msgstr "AWS S3 bucket"
 
 #: packages/lib/models/Setting.js:276
-#, fuzzy
 msgid "AWS S3 URL"
-msgstr "AWS S3"
+msgstr "AWS S3 URL"
 
 #: packages/lib/models/Setting.js:287
 msgid "AWS key"
@@ -2440,24 +2409,20 @@ msgid "Joplin Server URL"
 msgstr ""
 
 #: packages/lib/models/Setting.js:321
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Web Joplinu"
+msgstr "E-mailová adresa Joplin serveru"
 
 #: packages/lib/models/Setting.js:332
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "Zadejte master heslo:"
+msgstr "Heslo Joplin serveru"
 
 #: packages/lib/models/Setting.js:353
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Web Joplinu"
+msgstr "E-mailová adresa Joplin cloudu"
 
 #: packages/lib/models/Setting.js:364
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Zadejte master heslo:"
+msgstr "Heslo Joplin cloudu"
 
 #: packages/lib/models/Setting.js:376
 msgid "Attachment download behaviour"
@@ -2586,9 +2551,8 @@ msgid "Enable typographer support"
 msgstr "Povolit podporu pro typographer"
 
 #: packages/lib/models/Setting.js:651
-#, fuzzy
 msgid "Enable Linkify"
-msgstr "Povolit historii poznámky"
+msgstr ""
 
 #: packages/lib/models/Setting.js:652
 msgid "Enable math expressions"
@@ -2603,9 +2567,8 @@ msgid "Enable Mermaid diagrams support"
 msgstr "Povolit podporu pro Mermaid diagramy"
 
 #: packages/lib/models/Setting.js:655
-#, fuzzy
 msgid "Enable audio player"
-msgstr "Povolit markdown emoji"
+msgstr "Povolit přehrávač zvuků"
 
 #: packages/lib/models/Setting.js:656
 msgid "Enable video player"
@@ -2700,9 +2663,8 @@ msgid ""
 msgstr ""
 
 #: packages/lib/models/Setting.js:746
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Rodina písma v editoru"
+msgstr "Neproporcionální písmo editoru"
 
 #: packages/lib/models/Setting.js:747
 msgid ""
@@ -2712,9 +2674,8 @@ msgid ""
 msgstr ""
 
 #: packages/lib/models/Setting.js:768
-#, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Vlastní styly pro aplikaci Joplin"
+msgstr "Vlastní styly pro vykreslený Markdown"
 
 #: packages/lib/models/Setting.js:784
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -3046,9 +3007,8 @@ msgid "Encrypted items cannot be modified"
 msgstr "Nelze editovat zašifrovanou položku"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin Forum"
+msgstr "Joplin cloud"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3202,15 +3162,15 @@ msgid ""
 msgstr ""
 
 #: packages/lib/JoplinServerApi.js:69
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Nemohu se připojit k aplikaci Joplin Nextcloud. Prosím zkontrolujte "
-"nastavení synchronizace. Celá chyba:\n"
+"Nelze se připojit k Joplin serveru. Zkontrolujte prosím nastavení "
+"synchronizace na konfigurační obrazovce. Celá chyba:\n"
 "\n"
 "%s"
 
@@ -3449,9 +3409,8 @@ msgid "Downloaded and encrypted"
 msgstr "Staženo a zašifrováno"
 
 #: packages/lib/services/ReportService.js:202
-#, fuzzy
 msgid "Created locally"
-msgstr "Položky vytvořené lokálně: %d."
+msgstr "Vytvořené lokálně"
 
 #: packages/lib/services/ReportService.js:213
 msgid "Attachments that could not be downloaded"
@@ -3517,9 +3476,8 @@ msgid "Use spell checker"
 msgstr ""
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Jazyk"
+msgstr "Změnit jazyk"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3777,11 +3735,10 @@ msgid "Downloading resources..."
 msgstr "Stahování zdrojů..."
 
 #: packages/app-cli/app/command-sync.js:242
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
-"Je třeba upgradovat cíl synchronizace. Chcete-li pokračovat, stiskněte tento "
-"baner."
+"Je třeba upgradovat cíl synchronizace. Chcete-li pokračovat, spusťte `%s`."
 
 #: packages/app-cli/app/command-sync.js:260
 msgid "Cancelling... Please wait."
