@@ -101,11 +101,11 @@ msgstr "Současná verze je aktuální."
 #: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (pre-release)"
+msgstr "%s (nefinální vydání)"
 
 #: packages/app-desktop/checkForUpdates.js:187
 msgid "An update is available, do you want to download it now?"
-msgstr "Je k dispozici update, chcete jej stáhnout?"
+msgstr "Je k dispozici aktualizace, chcete ji stáhnout?"
 
 #: packages/app-desktop/checkForUpdates.js:188
 #, javascript-format
@@ -1063,7 +1063,7 @@ msgstr "Nastavení..."
 #: packages/app-desktop/gui/MenuBar.js:411
 #: packages/app-desktop/gui/MenuBar.js:658
 msgid "Check for updates..."
-msgstr "Zkontrolovat updaty..."
+msgstr "Zkontrolovat aktualizace..."
 
 #: packages/app-desktop/gui/MenuBar.js:426
 #: packages/app-desktop/gui/MenuBar.js:475
@@ -2691,7 +2691,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:809
 msgid "Automatically update the application"
-msgstr "Automaticky updatovat aplikaci"
+msgstr "Automaticky aktualizovat aplikaci"
 
 #: packages/lib/models/Setting.js:810
 msgid "Get pre-releases when checking for updates"
