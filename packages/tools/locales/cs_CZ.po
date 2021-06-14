@@ -1,15 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
-# This file is distributed under the same license as the Joplin-CLI package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the Joplin package.
+#
+# Lukas Helebrandt <lukas@aiya.cz>, 2018.
+# Ruzicka Pavel <ruza@ruza.eu>, 2019.
+# Alex Devero <deveroalex@gmail.com>, 2019.
+# Tomáš Bambas <tomas.bambas@gmail.com>, 2019, 2020.
+# Michal Stanke <michal@stanke.cz>, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin-CLI 1.0.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Joplin 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/laurent22/joplin/issues\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Lukas Helebrandt <lukas@aiya.cz>\n"
+"Last-Translator: Michal Stanke <michal@stanke.cz>\n"
 "Language-Team: \n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
