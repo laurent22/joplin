@@ -82,7 +82,7 @@ msgstr ""
 #: packages/app-desktop/plugins/GotoAnything.js:458
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
-msgstr "Přejít kamkoliv..."
+msgstr "Přejít na..."
 
 #: packages/app-desktop/plugins/GotoAnything.js:465
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
@@ -195,7 +195,7 @@ msgstr ""
 #: packages/app-mobile/components/side-menu-content.js:146
 #: packages/app-mobile/components/screens/Note.js:830
 msgid "Delete"
-msgstr "Odstranit"
+msgstr "Smazat"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:197
 #, javascript-format
@@ -210,7 +210,7 @@ msgstr "Smazat tento hledaný výraz z panelu?"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
 #: packages/app-desktop/gui/utils/NoteListUtils.js:137
 msgid "Export"
-msgstr "Export"
+msgstr "Exportovat"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:321
 #: packages/app-mobile/components/side-menu-content.js:368
@@ -427,17 +427,17 @@ msgstr "Kopírovat adresu odkazu"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
 msgid "to-do"
-msgstr "úkol"
+msgstr "Nový úkol"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
 #: packages/server/dist/models/UserModel.js:134
 msgid "note"
-msgstr "poznámka"
+msgstr "Nová poznámka"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "Vytvářím %s..."
+msgstr "%s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
 msgid "Click to add tags..."
@@ -592,7 +592,7 @@ msgstr "Dokončeno"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 msgid "Location"
-msgstr "Lokace"
+msgstr "Poloha"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 msgid "URL"
@@ -601,7 +601,7 @@ msgstr "URL"
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/lib/models/Setting.js:1623
 msgid "Note History"
-msgstr "Historie poznámky"
+msgstr "Historie poznámek"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 msgid "Markup"
@@ -614,7 +614,7 @@ msgstr "Předchozí verze poznámky"
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
 msgid "Note properties"
-msgstr "Nastavení poznámek"
+msgstr "Informace o poznámce"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
 #: packages/lib/services/KeymapService.js:178
@@ -639,7 +639,7 @@ msgstr "Hledat..."
 #: packages/app-desktop/gui/MenuBar.js:433
 #: packages/app-desktop/gui/MenuBar.js:480 packages/app-desktop/gui/Root.js:99
 msgid "Import"
-msgstr "Import"
+msgstr "Importovat"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
 msgid "Command"
@@ -793,7 +793,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
-msgstr "Statistika..."
+msgstr "Statistiky..."
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:18
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:18
@@ -813,11 +813,11 @@ msgstr "Nový úkol"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
 msgid "Toggle note list"
-msgstr "Přepnout seznam poznámek"
+msgstr "Zobrazit/skrýt seznam poznámek"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
 msgid "Toggle sidebar"
-msgstr "Přepnout postranní lištu"
+msgstr "Zobrazit/skrýt postranní lištu"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -911,16 +911,15 @@ msgstr "Naráz lze vytisknout pouze jednu poznámku."
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
-"Chcete-li povolit synchronizaci služby Joplin se službou Dropbox, postupujte "
-"podle následujících kroků:"
+"Pro povolení synchronizace Joplinu se službou Dropbox postupujte podle "
+"následujících kroků:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 #: packages/app-cli/app/command-sync.js:91
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
-"Krok 1: Chcete-li povolit aplikaci, otevřete tuto adresu URL ve svém "
-"prohlížeči:"
+"Krok 1: Pro ověření aplikace otevřete ve svém prohlížeči tuto URL adresu:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:32
 #: packages/app-mobile/components/screens/dropbox-login.js:65
@@ -943,12 +942,12 @@ msgstr "Opravdu chcete obnovit autorizační token?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "Služba Web clipper je povolena a nastavena pro spouštění při startu."
+msgstr "Služba Web clipper je povolena a nastavena pro zapnutí při spuštění."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "Stav: Nastartováno na portu %d"
+msgstr "Stav: běží na portu %d"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #, javascript-format
@@ -1064,7 +1063,7 @@ msgstr "&Soubor"
 #: packages/app-desktop/gui/MenuBar.js:394
 #: packages/app-desktop/gui/MenuBar.js:681
 msgid "About Joplin"
-msgstr "O aplikaci Joplin"
+msgstr "O Joplinu"
 
 #: packages/app-desktop/gui/MenuBar.js:401
 msgid "Preferences..."
@@ -1093,7 +1092,7 @@ msgstr "Schovat %s"
 #: packages/app-desktop/gui/MenuBar.js:506
 #: packages/app-desktop/gui/MenuBar.js:764
 msgid "&Edit"
-msgstr "Úp&ravy"
+msgstr "Úpr&avy"
 
 #: packages/app-desktop/gui/MenuBar.js:538
 msgid "&View"
@@ -1114,7 +1113,7 @@ msgstr "Oddálit"
 
 #: packages/app-desktop/gui/MenuBar.js:613
 msgid "&Go"
-msgstr "&Přejít"
+msgstr "Př&ejít"
 
 #: packages/app-desktop/gui/MenuBar.js:625
 msgid "Note&book"
@@ -1134,7 +1133,7 @@ msgstr "Nápo&věda"
 
 #: packages/app-desktop/gui/MenuBar.js:652
 msgid "Joplin Forum"
-msgstr "Joplin Forum"
+msgstr "Joplin fórum"
 
 #: packages/app-desktop/gui/MenuBar.js:655
 #: packages/app-mobile/components/screens/config.js:510
@@ -1143,7 +1142,7 @@ msgstr "Přispět"
 
 #: packages/app-desktop/gui/MenuBar.js:667
 msgid "Toggle development tools"
-msgstr "Přepnout zobrazení nástrojů pro vývojáře"
+msgstr "Zobrazit/skrýt nástroje pro vývojáře"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1410,14 +1409,14 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"Pro více informací o End-To-End šifrování (E2EE) a návod jak je povolit "
-"náhledněte do dokumentace:"
+"Více informací o koncovém šifrování (E2EE) a návod, jak ho povolit, najdete "
+"v dokumentaci:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-mobile/components/screens/encryption-config.js:279
 #: packages/app-mobile/components/screens/status.js:142
 msgid "Status"
-msgstr "Status"
+msgstr "Stav"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
 msgid "Encryption is:"
@@ -1448,11 +1447,11 @@ msgstr "Toto otevře nové okno. Chcete uložit současné změny?"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
 #: packages/app-mobile/components/screens/config.js:322
 msgid "Check synchronisation configuration"
-msgstr "Zkontrolujte nastavení synchronizace"
+msgstr "Zkontrolovat nastavení synchronizace"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
 msgid "Show Advanced Settings"
-msgstr "Ukázat pokročilá nastavení"
+msgstr "Pokročilá nastavení"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
 msgid "Path:"
@@ -1639,8 +1638,8 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"Chcete-li poznámky seřadit ručně, je třeba změnit pořadí řazení na \"%s\" v "
-"nabídce \"%s\"> \"%s\""
+"Po seřadit ručně, je třeba změnit pořadí řazení na \"%s\" v nabídce \"%s\" > "
+"\"%s\""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1679,7 +1678,7 @@ msgstr "Bez názvu"
 #: packages/app-desktop/gui/ResourceScreen.js:95
 #, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "Odstranit přílohu \"%s\"?"
+msgstr "Smazat přílohu \"%s\"?"
 
 #: packages/app-desktop/gui/ResourceScreen.js:141
 msgid ""
@@ -1712,9 +1711,9 @@ msgstr "Probíhá synchronizace..."
 #: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Vytvářím odkaz..."
-msgstr[1] "Vytvářím %s..."
-msgstr[2] "Vytvářím %s..."
+msgstr[0] "Vytváření odkazu..."
+msgstr[1] "Vytváření odkazů..."
+msgstr[2] "Vytváření odkazů..."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:172
 msgid "Link has been copied to clipboard!"
@@ -1803,7 +1802,7 @@ msgstr "Přepnout nouzový režim"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
-msgstr "Přepnout externí editaci"
+msgstr "Upravit v externím textovém editoru"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:37
 msgid "Stop"
@@ -1811,7 +1810,7 @@ msgstr "Zastavit"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
 msgid "Copy dev mode command to clipboard"
-msgstr "Zkopírovat příkaz pro vývojářský režim do schránky"
+msgstr "Zkopírovat příkaz režimu pro vývojáře vývojáře do schránky"
 
 #: packages/app-desktop/commands/stopExternalEditing.js:18
 msgid "Stop external editing"
@@ -2028,7 +2027,7 @@ msgstr "Nástroje"
 
 #: packages/app-mobile/components/screens/config.js:453
 msgid "Sync Status"
-msgstr "Status synchronizace"
+msgstr "Stav synchronizace"
 
 #: packages/app-mobile/components/screens/config.js:454
 msgid "Log"
@@ -2036,7 +2035,7 @@ msgstr "Log"
 
 #: packages/app-mobile/components/screens/config.js:456
 msgid "Creating report..."
-msgstr "Vytvářím report..."
+msgstr "Vytváření hlášení..."
 
 #: packages/app-mobile/components/screens/config.js:456
 msgid "Export Debug Report"
@@ -2098,7 +2097,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/config.js:495
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- Lokace: umožňuje k poznámce připojit informaci o zeměpisné poloze."
+msgstr "- Poloha: umožňuje k poznámce připojit informaci o zeměpisné poloze."
 
 #: packages/app-mobile/components/screens/config.js:524
 msgid "Joplin website"
@@ -2146,6 +2145,10 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
+"Pro přidání informací o zeměpisné poloze k poznámce potřebujte aplikace "
+"oprávnění pro přístupu k vaší poloze.\n"
+"\n"
+"Tuto možnost můžete kdykoliv vypnout v Nastavení."
 
 #: packages/app-mobile/components/screens/Note.js:343
 msgid "Permission needed"
@@ -2312,7 +2315,7 @@ msgstr "Zápisník se nemůže jmenovat \"%s\", tento název je rezervován."
 
 #: packages/lib/models/Setting.js:103
 msgid "yes"
-msgstr "ano"
+msgstr "kompatibilní"
 
 #: packages/lib/models/Setting.js:103 packages/lib/models/Setting.js:104
 #, javascript-format
@@ -2321,7 +2324,7 @@ msgstr "(wysiwyg: %s)"
 
 #: packages/lib/models/Setting.js:104
 msgid "no"
-msgstr "ne"
+msgstr "nekompatibilní"
 
 #: packages/lib/models/Setting.js:106
 #, javascript-format
@@ -2444,7 +2447,7 @@ msgstr "Heslo Joplin cloudu"
 
 #: packages/lib/models/Setting.js:376
 msgid "Attachment download behaviour"
-msgstr "Chování při stahování přílohy"
+msgstr "Stahovat přílohy"
 
 #: packages/lib/models/Setting.js:377
 msgid ""
@@ -2452,7 +2455,7 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"V režimu \"Manuální\" se přílohy stahují pouze po klepnutí na ně. V režimu "
+"V režimu \"Ručně\" se přílohy stahují pouze po klepnutí na ně. V režimu "
 "\"Automaticky\" se stáhnou při otevření poznámky. V režimu \"Vždy\" se "
 "stáhnou všechny přílohy, ať už poznámku otevřete nebo ne."
 
@@ -2462,15 +2465,15 @@ msgstr "Vždy"
 
 #: packages/lib/models/Setting.js:381
 msgid "Manual"
-msgstr "Manuální"
+msgstr "Ručně"
 
 #: packages/lib/models/Setting.js:382
 msgid "Auto"
-msgstr "Auto"
+msgstr "Automaticky"
 
 #: packages/lib/models/Setting.js:402
 msgid "Max concurrent connections"
-msgstr "Maximální souběžné připojení"
+msgstr "Maximální počet souběžných spojení"
 
 #: packages/lib/models/Setting.js:415
 msgid "Language"
@@ -2490,15 +2493,15 @@ msgstr "Vzhled"
 
 #: packages/lib/models/Setting.js:477
 msgid "Automatically switch theme to match system theme"
-msgstr "Automaticky přepnout téma tak, aby odpovídalo tématu systému"
+msgstr "Automaticky přepnout téma vzhledu podle nastavení systému"
 
 #: packages/lib/models/Setting.js:489
 msgid "Preferred light theme"
-msgstr "Preferované světelné téma"
+msgstr "Preferovaný světlý vzhled"
 
 #: packages/lib/models/Setting.js:503
 msgid "Preferred dark theme"
-msgstr "Preferované tmavé téma"
+msgstr "Preferovaný tmavý vzhled"
 
 #: packages/lib/models/Setting.js:513
 msgid "Show note counts"
@@ -2538,11 +2541,11 @@ msgstr "Řadit od konce"
 
 #: packages/lib/models/Setting.js:565
 msgid "Sort notebooks by"
-msgstr "Řadit poznámky podle"
+msgstr "Řadit zápisníky podle"
 
 #: packages/lib/models/Setting.js:578
 msgid "Save geo-location with notes"
-msgstr "Ukládat k poznámkám informace o poloze (geolokaci)"
+msgstr "Ukládat k poznámkám informace o zeměpisné poloze"
 
 #: packages/lib/models/Setting.js:600
 msgid "When creating a new to-do:"
@@ -2550,11 +2553,11 @@ msgstr "Při vytváření nového úkolu:"
 
 #: packages/lib/models/Setting.js:603 packages/lib/models/Setting.js:619
 msgid "Focus title"
-msgstr "Vybrat název poznámky"
+msgstr "Kurzor v názvu"
 
 #: packages/lib/models/Setting.js:604 packages/lib/models/Setting.js:620
 msgid "Focus body"
-msgstr "Vybrat text poznámky"
+msgstr "Kurzor v obsahu"
 
 #: packages/lib/models/Setting.js:616
 msgid "When creating a new note:"
@@ -2574,7 +2577,7 @@ msgstr "Povolit Linkify"
 
 #: packages/lib/models/Setting.js:652
 msgid "Enable math expressions"
-msgstr "Zapnout matematické výrazy"
+msgstr "Povolit matematické výrazy"
 
 #: packages/lib/models/Setting.js:653
 msgid "Enable Fountain syntax support"
@@ -2598,7 +2601,7 @@ msgstr "Povolit zobrazení PDF"
 
 #: packages/lib/models/Setting.js:658
 msgid "Enable ==mark== syntax"
-msgstr "Povolit ==mark== syntaxi"
+msgstr "Povolit syntaxi ==mark=="
 
 #: packages/lib/models/Setting.js:659
 msgid "Enable footnotes"
@@ -2610,15 +2613,15 @@ msgstr "Povolit rozšíření pro generování Obsahu"
 
 #: packages/lib/models/Setting.js:661
 msgid "Enable ~sub~ syntax"
-msgstr "Povolit ~sub~ syntaxi"
+msgstr "Povolit syntaxi ~sub~"
 
 #: packages/lib/models/Setting.js:662
 msgid "Enable ^sup^ syntax"
-msgstr "Povolit ~sub~ syntaxi"
+msgstr "Povolit syntaxi ^sup^"
 
 #: packages/lib/models/Setting.js:663
 msgid "Enable deflist syntax"
-msgstr "Povolit deflist syntaxi"
+msgstr "Povolit syntaxi deflist"
 
 #: packages/lib/models/Setting.js:664
 msgid "Enable abbreviation syntax"
@@ -2630,7 +2633,7 @@ msgstr "Povolit markdown emoji"
 
 #: packages/lib/models/Setting.js:666
 msgid "Enable ++insert++ syntax"
-msgstr "Povolit ++insert++ syntaxi"
+msgstr "Povolit syntaxi ++insert++"
 
 #: packages/lib/models/Setting.js:667
 msgid "Enable multimarkdown table extension"
@@ -2655,7 +2658,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:684
 msgid "Start application minimised in the tray icon"
-msgstr "Startovat aplikaci minimalizovanou do lišty ikon"
+msgstr "Spouštět aplikaci minimalizovanou do lišty ikon"
 
 #: packages/lib/models/Setting.js:704
 msgid "Editor font size"
@@ -2805,7 +2808,7 @@ msgstr "Na šířku"
 
 #: packages/lib/models/Setting.js:868
 msgid "Keyboard Mode"
-msgstr "Mód klávesnice"
+msgstr "Režim klávesnice"
 
 #: packages/lib/models/Setting.js:872
 msgid "Emacs"
@@ -2833,19 +2836,19 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:911
 msgid "Ignore TLS certificate errors"
-msgstr "Ignorovat chyby TLS certifikátu"
+msgstr "Ignorovat chyby TLS"
 
 #: packages/lib/models/Setting.js:920
 msgid "Fail-safe"
-msgstr "Zabezpečení proti selhání"
+msgstr "Ochrana proti ztrátě dat"
 
 #: packages/lib/models/Setting.js:921
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Zabezpečení proti selhání: Nevypírejte místní data, když je synchronizační "
-"cíl prázdný (často v důsledku nesprávné konfigurace nebo chyby)"
+"Zabezpečení proti selhání: Nemazat místní data, pokud je cíl synchronizace "
+"prázdný (často v důsledku nesprávné konfigurace nebo chyby)"
 
 #: packages/lib/models/Setting.js:925
 msgid ""
@@ -2886,8 +2889,8 @@ msgid ""
 msgstr ""
 "Vlastnost faktor určuje, jak se má položka zvětšit nebo zmenšit, aby se "
 "vešla na volné místo v kontejneru vzhledem k ostatním položkám. Položka s "
-"faktorem 2 tedy zabere dvakrát tolik místa než položka s faktorem 1. Chcete-"
-"li zobrazit změny, restartujte aplikaci."
+"faktorem 2 tedy zabere dvakrát tolik místa než položka s faktorem 1. Pro "
+"zobrazení změn restartujte aplikaci."
 
 #: packages/lib/models/Setting.js:982
 msgid "Note list growth factor"
@@ -3010,7 +3013,7 @@ msgstr "vlastní řazení"
 
 #: packages/lib/models/Note.js:117
 msgid "This note does not have geolocation information."
-msgstr "Tato poznámka nemá informace o poloze."
+msgstr "Tato poznámka nemá informace o zeměpisné poloze."
 
 #: packages/lib/models/Note.js:525
 #, javascript-format
@@ -3120,8 +3123,8 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Nelze obnovit token: chybí autentizační data. Restart synchronizace může "
-"tento problém vyřešit."
+"Nelze obnovit token: chybí autentizační data. Opětovné spuštění "
+"synchronizace může tento problém vyřešit."
 
 #: packages/lib/Synchronizer.js:138
 #, javascript-format
