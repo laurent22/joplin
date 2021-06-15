@@ -1,4 +1,4 @@
-import { connectDb, disconnectDb, migrateDb, sqliteFilePath } from '../db';
+import { connectDb, disconnectDb, migrateDb } from '../db';
 import * as fs from 'fs-extra';
 import { DatabaseConfig } from '../utils/types';
 
@@ -33,7 +33,7 @@ export async function createDb(config: DatabaseConfig, options: CreateDbOptions 
 
 		await execCommand(cmd.join(' '), { env: { PGPASSWORD: config.password } });
 	} else if (config.client === 'sqlite3') {
-		const filePath = sqliteFilePath(config.name);
+		const filePath = config.name;
 
 		if (await fs.pathExists(filePath)) {
 			if (options.dropIfExists) {
@@ -71,6 +71,6 @@ export async function dropDb(config: DatabaseConfig, options: DropDbOptions = nu
 			throw error;
 		}
 	} else if (config.client === 'sqlite3') {
-		await fs.remove(sqliteFilePath(config.name));
+		await fs.remove(config.name);
 	}
 }

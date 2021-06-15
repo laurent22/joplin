@@ -6,9 +6,6 @@ export default function(name: string): View {
 		name: name,
 		path: `index/${name}`,
 		content: {},
-		partials: [
-			'navbar',
-			'notifications',
-		],
+		navbar: true,
 	};
 }

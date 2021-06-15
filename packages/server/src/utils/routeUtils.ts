@@ -1,7 +1,9 @@
-import { Item, ItemAddressingType } from '../db';
+import { baseUrl } from '../config';
+import { Item, ItemAddressingType, Uuid } from '../db';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
-import { AppContext, HttpMethod } from './types';
+import { AppContext, HttpMethod, RouteType } from './types';
+import { URL } from 'url';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -151,13 +153,30 @@ export function parseSubPath(basePath: string, p: string, rawPath: string = null
 	return output;
 }
 
+export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType): boolean {
+	const host1 = (new URL(requestOrigin)).host;
+	const host2 = (new URL(endPointBaseUrl)).host;
+
+	if (routeType === RouteType.UserContent) {
+		// At this point we only check if eg usercontent.com has been accessed
+		// with origin usercontent.com, or something.usercontent.com. We don't
+		// check that the user ID is valid or is event present. This will be
+		// done by the /share end point, which will also check that the share
+		// owner ID matches the origin URL.
+		if (host1 === host2) return true;
+		const hostNoPrefix = host1.split('.').slice(1).join('.');
+		return hostNoPrefix === host2;
+	} else {
+		return host1 === host2;
+	}
+}
+
+export function userIdFromUserContentUrl(url: string): Uuid {
+	const s = (new URL(url)).hostname.split('.');
+	return s[0].toLowerCase();
+}
+
 export function routeResponseFormat(context: AppContext): RouteResponseFormat {
-	// const rawPath = context.path;
-	// if (match && match.route.responseFormat) return match.route.responseFormat;
-
-	// let path = rawPath;
-	// if (match) path = match.basePath ? match.basePath : match.subPath.raw;
-
 	const path = context.path;
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
@@ -166,14 +185,15 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	const match = findMatchingRoute(ctx.path, routes);
 	if (!match) throw new ErrorNotFound();
 
-	const routeHandler = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound('Invalid origin', 'invalidOrigin');
 
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points
 	// might have additional permission checks depending on the action.
-	if (!match.route.public && !ctx.owner) throw new ErrorForbidden();
+	if (!match.route.isPublic(match.subPath.schema) && !ctx.owner) throw new ErrorForbidden();
 
-	return routeHandler(match.subPath, ctx);
+	return endPoint.handler(match.subPath, ctx);
 }
 
 // In a path such as "/api/files/SOME_ID/content" we want to find:
@@ -239,4 +259,15 @@ export function respondWithItemContent(koaResponse: any, item: Item, content: Bu
 	koaResponse.set('Content-Type', item.mime_type);
 	koaResponse.set('Content-Length', content.byteLength);
 	return new Response(ResponseType.KoaResponse, koaResponse);
+}
+
+export enum UrlType {
+	Signup = 'signup',
+	Login = 'login',
+	Terms = 'terms',
+	Privacy = 'privacy',
+}
+
+export function makeUrl(urlType: UrlType): string {
+	return `${baseUrl(RouteType.Web)}/${urlType}`;
 }

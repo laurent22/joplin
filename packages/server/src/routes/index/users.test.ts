@@ -1,10 +1,11 @@
 import { User } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
+import { NotificationKey } from '../../models/NotificationModel';
 import { ErrorForbidden } from '../../utils/errors';
-import { execRequest } from '../../utils/testing/apiUtils';
+import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
 
-export async function postUser(sessionId: string, email: string, password: string): Promise<User> {
+export async function postUser(sessionId: string, email: string, password: string, props: any = null): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
@@ -15,6 +16,7 @@ export async function postUser(sessionId: string, email: string, password: strin
 				password: password,
 				password2: password,
 				post_button: true,
+				...props,
 			},
 		},
 	});
@@ -73,13 +75,16 @@ describe('index_users', function() {
 	test('should create a new user', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		await postUser(session.id, 'test@example.com', '123456');
+		await postUser(session.id, 'test@example.com', '123456', {
+			max_item_size: '',
+		});
 		const newUser = await models().user().loadByEmail('test@example.com');
 
 		expect(!!newUser).toBe(true);
 		expect(!!newUser.id).toBe(true);
 		expect(!!newUser.is_admin).toBe(false);
 		expect(!!newUser.email).toBe(true);
+		expect(newUser.max_item_size).toBe(0);
 
 		const userModel = models().user();
 		const userFromModel: User = await userModel.load(newUser.id);
@@ -107,7 +112,11 @@ describe('index_users', function() {
 		const beforeUserCount = (await userModel.all()).length;
 		expect(beforeUserCount).toBe(2);
 
-		await postUser(session.id, 'test@example.com', '123456');
+		try {
+			await postUser(session.id, 'test@example.com', '123456');
+		} catch {
+			// Ignore
+		}
 
 		const afterUserCount = (await userModel.all()).length;
 		expect(beforeUserCount).toBe(afterUserCount);
@@ -151,6 +160,113 @@ describe('index_users', function() {
 		const result = await execRequest(session1.id, 'GET', 'users');
 		expect(result).toContain(user1.email);
 		expect(result).toContain(user2.email);
+	});
+
+	test('should allow user to set a password for new accounts', async function() {
+		let user1 = await models().user().save({
+			email: 'user1@localhost',
+			must_set_password: 1,
+			email_confirmed: 0,
+			password: '123456',
+		});
+
+		const { user: user2 } = await createUserAndSession(2);
+		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
+		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+		const path = matches[1];
+		const token = matches[3];
+
+		// Check that the email at first is not confirmed
+		// expect(user1.email_confirmed).toBe(0);
+		// expect(user1.must_set_password).toBe(1);
+
+		await execRequest('', 'GET', path, null, { query: { token } });
+
+		// As soon as the confirmation page is opened, we know the email is valid
+		user1 = await models().user().load(user1.id);
+		expect(user1.email_confirmed).toBe(1);
+
+		// Check that the token is valid
+		expect(await models().token().isValid(user1.id, token)).toBe(true);
+
+		// Check that we can't set the password without the token
+		{
+			const context = await execRequestC('', 'POST', path, {
+				password: 'newpassword',
+				password2: 'newpassword',
+			});
+			const sessionId = context.cookies.get('sessionId');
+			expect(sessionId).toBeFalsy();
+		}
+
+		// Check that we can't set the password with someone else's token
+		{
+			const token2 = (await models().token().allByUserId(user2.id))[0].value;
+			const context = await execRequestC('', 'POST', path, {
+				password: 'newpassword',
+				password2: 'newpassword',
+				token: token2,
+			});
+			const sessionId = context.cookies.get('sessionId');
+			expect(sessionId).toBeFalsy();
+		}
+
+		const context = await execRequestC('', 'POST', path, {
+			password: 'newpassword',
+			password2: 'newpassword',
+			token: token,
+		});
+
+		// Check that the user has been logged in
+		const sessionId = context.cookies.get('sessionId');
+		const session = await models().session().load(sessionId);
+		expect(session.user_id).toBe(user1.id);
+
+		// Check that the password has been set
+		const loggedInUser = await models().user().login(user1.email, 'newpassword');
+		expect(loggedInUser.id).toBe(user1.id);
+
+		// Check that the email has been verified
+		expect(user1.email_confirmed).toBe(1);
+
+		// Check that the token has been cleared
+		expect(await models().token().isValid(user1.id, token)).toBe(false);
+
+		// Check that a notification has been created
+		const notification = (await models().notification().all())[0];
+		expect(notification.key).toBe('passwordSet');
+	});
+
+	test('should allow user to verify their email', async function() {
+		let user1 = await models().user().save({
+			email: 'user1@localhost',
+			must_set_password: 0,
+			email_confirmed: 0,
+			password: '123456',
+		});
+
+		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
+		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+		const path = matches[1];
+		const token = matches[3];
+
+		const context = await execRequestC('', 'GET', path, null, { query: { token } });
+
+		user1 = await models().user().load(user1.id);
+
+		// Check that the user has been logged in
+		const sessionId = context.cookies.get('sessionId');
+		expect(sessionId).toBeFalsy();
+
+		// Check that the email has been verified
+		expect(user1.email_confirmed).toBe(1);
+
+		// Check that the token has been cleared
+		expect(await models().token().isValid(user1.id, token)).toBe(false);
+
+		// Check that a notification has been created
+		const notification = (await models().notification().all())[0];
+		expect(notification.key).toBe(NotificationKey.EmailConfirmed);
 	});
 
 	test('should apply ACL', async function() {

@@ -2,10 +2,11 @@ import config from '../../config';
 import { createTestUsers } from '../../tools/debugTools';
 import { bodyFields } from '../../utils/requestUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { SubPath } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 router.public = true;
 

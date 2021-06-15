@@ -2,15 +2,16 @@ import { Item, Uuid } from '../../db';
 import { formParse } from '../../utils/requestUtils';
 import { respondWithItemContent, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
+import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
 import ItemModel, { ItemSaveOption } from '../../models/ItemModel';
 import { requestDeltaPagination, requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 // Note about access control:
 //
@@ -65,6 +66,8 @@ router.get('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
+	if (!ctx.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
+
 	const itemModel = ctx.models.item();
 	const name = itemModel.pathToName(path.id);
 	const parsedBody = await formParse(ctx.req);

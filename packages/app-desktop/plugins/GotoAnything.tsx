@@ -47,6 +47,12 @@ interface State {
 	listType: number;
 	showHelp: boolean;
 	resultsInBody: boolean;
+	commandArgs: string[];
+}
+
+interface CommandQuery {
+	name: string;
+	args: string[];
 }
 
 class GotoAnything {
@@ -87,6 +93,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			listType: BaseModel.TYPE_NOTE,
 			showHelp: false,
 			resultsInBody: false,
+			commandArgs: [],
 		};
 
 		this.styles_ = {};
@@ -250,6 +257,15 @@ class Dialog extends React.PureComponent<Props, State> {
 		return this.markupToHtml_;
 	}
 
+	private parseCommandQuery(query: string): CommandQuery {
+		const fullQuery = query;
+		const splitted = fullQuery.split(/\s+/);
+		return {
+			name: splitted.length ? splitted[0] : '',
+			args: splitted.slice(1),
+		};
+	}
+
 	async updateList() {
 		let resultsInBody = false;
 
@@ -260,13 +276,16 @@ class Dialog extends React.PureComponent<Props, State> {
 			let listType = null;
 			let searchQuery = '';
 			let keywords = null;
+			let commandArgs: string[] = [];
 
 			if (this.state.query.indexOf(':') === 0) { // COMMANDS
-				const query = this.state.query.substr(1);
-				listType = BaseModel.TYPE_COMMAND;
-				keywords = [query];
+				const commandQuery = this.parseCommandQuery(this.state.query.substr(1));
 
-				const commandResults = CommandService.instance().searchCommands(query, true);
+				listType = BaseModel.TYPE_COMMAND;
+				keywords = [commandQuery.name];
+				commandArgs = commandQuery.args;
+
+				const commandResults = CommandService.instance().searchCommands(commandQuery.name, true);
 
 				results = commandResults.map((result: CommandSearchResult) => {
 					return {
@@ -367,6 +386,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				keywords: keywords ? keywords : await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : results[0].id,
 				resultsInBody: resultsInBody,
+				commandArgs: commandArgs,
 			});
 		}
 	}
@@ -379,7 +399,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
-			void CommandService.instance().execute(item.id);
+			void CommandService.instance().execute(item.id, ...item.commandArgs);
 			void focusEditorIfEditorCommand(item.id, CommandService.instance());
 			return;
 		}
@@ -426,6 +446,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
+			commandArgs: this.state.commandArgs,
 		});
 	}
 
@@ -466,7 +487,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	selectedItem() {
 		const index = this.selectedItemIndex();
 		if (index < 0) return null;
-		return this.state.results[index];
+		return { ...this.state.results[index], commandArgs: this.state.commandArgs };
 	}
 
 	input_onKeyDown(event: any) {

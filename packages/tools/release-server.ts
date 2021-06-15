@@ -11,18 +11,8 @@ async function main() {
 
 	process.chdir(serverDir);
 	const version = (await execCommand2('npm version patch')).trim();
-	const versionShort = version.substr(1);
-	const imageVersion = versionShort + (isPreRelease ? '-beta' : '');
-	const tagName = `server-${version}`;
-
-	process.chdir(rootDir);
-	console.info(`Running from: ${process.cwd()}`);
-
-	await execCommand2(`docker build -t "joplin/server:${imageVersion}" -f Dockerfile.server .`);
-	await execCommand2(`docker tag "joplin/server:${imageVersion}" "joplin/server:latest"`);
-	await execCommand2(`docker push joplin/server:${imageVersion}`);
-
-	if (!isPreRelease) await execCommand2('docker push joplin/server:latest');
+	const versionSuffix = isPreRelease ? '-beta' : '';
+	const tagName = `server-${version}${versionSuffix}`;
 
 	const changelogPath = `${rootDir}/readme/changelog_server.md`;
 	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', isPreRelease);

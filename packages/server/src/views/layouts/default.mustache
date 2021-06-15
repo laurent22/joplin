@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/bulma.min.css" crossorigin="anonymous">
 	{{#global.prefersDarkEnabled}}
-		<link rel="stylesheet" href="{{{global.baseUrl}}}/css/bulma-prefers-dark.min.css" crossorigin="anonymous">
+		<!-- <link rel="stylesheet" href="{{{global.baseUrl}}}/css/bulma-prefers-dark.min.css" crossorigin="anonymous"> -->
 	{{/global.prefersDarkEnabled}}
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/main.css" crossorigin="anonymous">
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/fontawesome/css/all.min.css" crossorigin="anonymous">
@@ -19,8 +19,11 @@
 	<body class="page-{{{pageName}}}">
 		{{> navbar}}
 		<main class="main">
-			{{> notifications}}
-			{{{contentHtml}}}
+			<div class="container">
+				{{> notifications}}
+				{{{contentHtml}}}
+			</div>
 		</main>
+		{{> footer}}
 	</body>
 </html>

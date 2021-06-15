@@ -15,8 +15,12 @@ import indexItems from './index/items';
 import indexLogin from './index/login';
 import indexLogout from './index/logout';
 import indexNotifications from './index/notifications';
+import indexSignup from './index/signup';
 import indexShares from './index/shares';
 import indexUsers from './index/users';
+import indexStripe from './index/stripe';
+import indexTerms from './index/terms';
+import indexPrivacy from './index/privacy';
 
 import defaultRoute from './default';
 
@@ -36,8 +40,12 @@ const routes: Routers = {
 	'login': indexLogin,
 	'logout': indexLogout,
 	'notifications': indexNotifications,
+	'signup': indexSignup,
 	'shares': indexShares,
 	'users': indexUsers,
+	'stripe': indexStripe,
+	'terms': indexTerms,
+	'privacy': indexPrivacy,
 
 	'': defaultRoute,
 };

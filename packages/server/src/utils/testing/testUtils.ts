@@ -1,4 +1,4 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, sqliteFilePath, Item, Uuid } from '../../db';
+import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, Item, Uuid } from '../../db';
 import { createDb } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
@@ -9,6 +9,7 @@ import FakeRequest from './koa/FakeRequest';
 import FakeResponse from './koa/FakeResponse';
 import * as httpMocks from 'node-mocks-http';
 import * as crypto from 'crypto';
+import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
@@ -17,10 +18,11 @@ import { putApi } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
+import MustacheService from '../../services/MustacheService';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
-const packageRootDir = `${__dirname}/../../..`;
+const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 
 let db_: DbConnection = null;
 
@@ -54,9 +56,9 @@ function initGlobalLogger() {
 	Logger.initializeGlobalLogger(globalLogger);
 }
 
-let createdDbName_: string = null;
+let createdDbPath_: string = null;
 export async function beforeAllDb(unitName: string) {
-	createdDbName_ = unitName;
+	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
 
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
@@ -64,17 +66,17 @@ export async function beforeAllDb(unitName: string) {
 	// Uncomment the code below to run the test units with Postgres. Run first
 	// `docker-compose -f docker-compose.db-dev.yml` to get a dev db.
 
-	// initConfig({
+	// await initConfig(Env.Dev, {
 	// 	DB_CLIENT: 'pg',
-	// 	POSTGRES_DATABASE: createdDbName_,
+	// 	POSTGRES_DATABASE: unitName,
 	// 	POSTGRES_USER: 'joplin',
 	// 	POSTGRES_PASSWORD: 'joplin',
 	// }, {
 	// 	tempDir: tempDir,
 	// });
 
-	initConfig({
-		SQLITE_DATABASE: createdDbName_,
+	await initConfig(Env.Dev, {
+		SQLITE_DATABASE: createdDbPath_,
 	}, {
 		tempDir: tempDir,
 	});
@@ -84,7 +86,10 @@ export async function beforeAllDb(unitName: string) {
 	await createDb(config().database, { dropIfExists: true });
 	db_ = await connectDb(config().database);
 
-	await initializeJoplinUtils(config(), models());
+	const mustache = new MustacheService(config().viewDir, config().baseUrl);
+	await mustache.loadPartials();
+
+	await initializeJoplinUtils(config(), models(), mustache);
 }
 
 export async function afterAllTests() {
@@ -98,10 +103,9 @@ export async function afterAllTests() {
 		tempDir_ = null;
 	}
 
-	if (createdDbName_) {
-		const filePath = sqliteFilePath(createdDbName_);
-		await fs.remove(filePath);
-		createdDbName_ = null;
+	if (createdDbPath_) {
+		await fs.remove(createdDbPath_);
+		createdDbPath_ = null;
 	}
 }
 
@@ -173,23 +177,24 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
-	const appContext: any = {};
-
-	await setupAppContext(appContext, Env.Dev, db_, () => appLogger);
-
-	appContext.env = Env.Dev;
-	appContext.db = db_;
-	appContext.models = models();
-	appContext.appLogger = () => appLogger;
-	appContext.path = req.url;
-	appContext.owner = owner;
-	appContext.cookies = new FakeCookies();
-	appContext.request = new FakeRequest(req);
-	appContext.response = new FakeResponse();
-	appContext.headers = { ...reqOptions.headers };
-	appContext.req = req;
-	appContext.query = req.query;
-	appContext.method = req.method;
+	const appContext: any = {
+		...await setupAppContext({} as any, Env.Dev, db_, () => appLogger),
+		env: Env.Dev,
+		db: db_,
+		models: models(),
+		appLogger: () => appLogger,
+		path: req.url,
+		owner: owner,
+		cookies: new FakeCookies(),
+		request: new FakeRequest(req),
+		response: new FakeResponse(),
+		headers: { ...reqOptions.headers },
+		req: req,
+		query: req.query,
+		method: req.method,
+		redirect: () => {},
+		URL: { origin: config().baseUrl },
+	};
 
 	if (options.sessionId) {
 		appContext.cookies.set('sessionId', options.sessionId);
@@ -213,12 +218,12 @@ export function db() {
 	return db_;
 }
 
-function baseUrl() {
-	return 'http://localhost:22300';
-}
+// function baseUrl() {
+// 	return 'http://localhost:22300';
+// }
 
 export function models() {
-	return modelFactory(db(), baseUrl());
+	return modelFactory(db(), config());
 }
 
 export function parseHtml(html: string): Document {
@@ -363,6 +368,23 @@ export function checkContextError(context: AppContext) {
 	}
 }
 
+export async function credentialFile(filename: string): Promise<string> {
+	const filePath = `${require('os').homedir()}/joplin-credentials/${filename}`;
+	if (await fs.pathExists(filePath)) return filePath;
+	return '';
+}
+
+export async function readCredentialFile(filename: string, defaultValue: string = null) {
+	const filePath = await credentialFile(filename);
+	if (!filePath) {
+		if (defaultValue === null) throw new Error(`File not found: ${filename}`);
+		return defaultValue;
+	}
+
+	const r = await fs.readFile(filePath);
+	return r.toString();
+}
+
 export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	try {
 		await asyncFn();
@@ -455,6 +477,7 @@ encryption_applied: 0
 markup_language: 1
 is_shared: 1
 share_id: ${note.share_id || ''}
+conflict_original_id: 
 type_: 1`;
 }
 

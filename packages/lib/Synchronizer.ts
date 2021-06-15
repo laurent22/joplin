@@ -610,10 +610,7 @@ export default class Synchronizer {
 							// ------------------------------------------------------------------------------
 
 							if (mustHandleConflict) {
-								const conflictedNote = Object.assign({}, local);
-								delete conflictedNote.id;
-								conflictedNote.is_conflict = 1;
-								await Note.save(conflictedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC });
+								await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
 							}
 						} else if (action == 'resourceConflict') {
 							// ------------------------------------------------------------------------------
@@ -926,6 +923,7 @@ export default class Synchronizer {
 				this.logger().error(error);
 			} else {
 				this.logger().error(error);
+				if (error.details) this.logger().error('Details:', error.details);
 
 				// Don't save to the report errors that are due to things like temporary network errors or timeout.
 				if (!shim.fetchRequestCanBeRetried(error)) {

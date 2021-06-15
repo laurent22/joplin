@@ -1,10 +1,10 @@
-import { SubPath, Response, ResponseType } from '../utils/routeUtils';
+import { SubPath, Response, ResponseType, redirect } from '../utils/routeUtils';
 import Router from '../utils/Router';
 import { ErrorNotFound, ErrorForbidden } from '../utils/errors';
 import { dirname, normalize } from 'path';
 import { pathExists } from 'fs-extra';
 import * as fs from 'fs-extra';
-import { AppContext } from '../utils/types';
+import { AppContext, RouteType } from '../utils/types';
 import { localFileFromUrl } from '../utils/joplinUtils';
 const { mime } = require('@joplin/lib/mime-utils.js');
 
@@ -44,13 +44,22 @@ async function findLocalFile(path: string): Promise<string> {
 	return localPath;
 }
 
-const router = new Router();
+const router = new Router(RouteType.Web);
 
 router.public = true;
 
 // Used to serve static files, so it needs to be public because for example the
 // login page, which is public, needs access to the CSS files.
 router.get('', async (path: SubPath, ctx: AppContext) => {
+	// Redirect to either /login or /home when trying to access the root
+	if (!path.id && !path.link) {
+		if (ctx.owner) {
+			return redirect(ctx, 'home');
+		} else {
+			return redirect(ctx, 'login');
+		}
+	}
+
 	const localPath = await findLocalFile(path.raw);
 
 	let mimeType: string = mime.fromFilename(localPath);

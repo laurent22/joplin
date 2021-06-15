@@ -113,7 +113,7 @@ export default function(props: Props) {
 
 			let loadError: Error = null;
 			try {
-				await repoApi().loadManifests();
+				await repoApi().initialize();
 			} catch (error) {
 				logger.error(error);
 				loadError = error;

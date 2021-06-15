@@ -1,10 +1,44 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { Item, User } from '../db';
+import { EmailSender, Item, User, Uuid } from '../db';
 import * as auth from '../utils/auth';
-import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge } from '../utils/errors';
+import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
-import prettyBytes = require('pretty-bytes');
+import { formatBytes, MB } from '../utils/bytes';
+
+export enum AccountType {
+	Default = 0,
+	Free = 1,
+	Pro = 2,
+}
+
+interface AccountTypeProperties {
+	account_type: number;
+	can_share: number;
+	max_item_size: number;
+}
+
+export function accountTypeProperties(accountType: AccountType): AccountTypeProperties {
+	const types: AccountTypeProperties[] = [
+		{
+			account_type: AccountType.Default,
+			can_share: 1,
+			max_item_size: 0,
+		},
+		{
+			account_type: AccountType.Free,
+			can_share: 0,
+			max_item_size: 10 * MB,
+		},
+		{
+			account_type: AccountType.Pro,
+			can_share: 1,
+			max_item_size: 200 * MB,
+		},
+	];
+
+	return types.find(a => a.account_type === accountType);
+}
 
 export default class UserModel extends BaseModel<User> {
 
@@ -85,7 +119,7 @@ export default class UserModel extends BaseModel<User> {
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
 				itemTitle ? itemTitle : name,
-				prettyBytes(user.max_item_size)
+				formatBytes(user.max_item_size)
 			));
 		}
 	}
@@ -134,8 +168,12 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public async profileUrl(): Promise<string> {
+	public profileUrl(): string {
 		return `${this.baseUrl}/users/me`;
+	}
+
+	public confirmUrl(userId: Uuid, validationToken: string): string {
+		return `${this.baseUrl}/users/${userId}/confirm?token=${validationToken}`;
 	}
 
 	public async delete(id: string): Promise<void> {
@@ -151,6 +189,13 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::delete');
 	}
 
+	public async confirmEmail(userId: Uuid, token: string) {
+		await this.models().token().checkToken(userId, token);
+		const user = await this.models().user().load(userId);
+		if (!user) throw new ErrorNotFound('No such user');
+		await this.save({ id: user.id, email_confirmed: 1 });
+	}
+
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//
@@ -160,8 +205,32 @@ export default class UserModel extends BaseModel<User> {
 	// Because the password would be hashed twice.
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const user = { ...object };
+
 		if (user.password) user.password = auth.hashPassword(user.password);
-		return super.save(user, options);
+
+		const isNew = await this.isNew(object, options);
+
+		return this.withTransaction(async () => {
+			const savedUser = await super.save(user, options);
+
+			if (isNew) {
+				const validationToken = await this.models().token().generate(savedUser.id);
+				const confirmUrl = encodeURI(this.confirmUrl(savedUser.id, validationToken));
+
+				await this.models().email().push({
+					sender_id: EmailSender.NoReply,
+					recipient_id: savedUser.id,
+					recipient_email: savedUser.email,
+					recipient_name: savedUser.full_name || '',
+					subject: `Please setup your ${this.appName} account`,
+					body: `Your new ${this.appName} account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n[Complete your account](${confirmUrl})`,
+				});
+			}
+
+			UserModel.eventEmitter.emit('created');
+
+			return savedUser;
+		});
 	}
 
 }

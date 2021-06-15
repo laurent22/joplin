@@ -1,6 +1,7 @@
 import { ErrorNotFound } from '../../utils/errors';
 import { bodyFields } from '../../utils/requestUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { SubPath } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 
@@ -14,7 +15,7 @@ const supportedEvents: Record<string, Function> = {
 	},
 };
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 router.post('api/events', async (_path: SubPath, ctx: AppContext) => {
 	const event = await bodyFields<Event>(ctx.req);

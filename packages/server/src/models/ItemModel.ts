@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 
@@ -345,16 +345,25 @@ export default class ItemModel extends BaseModel<Item> {
 			if ('name' in item && !item.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 		}
 
+		if (item.jop_share_id) {
+			if (!(await this.models().share().exists(item.jop_share_id))) throw new ErrorUnprocessableEntity(`share not found: ${item.jop_share_id}`);
+		}
+
 		return super.validate(item, options);
 	}
 
 
-	private childrenQuery(userId: Uuid, pathQuery: string = '', options: LoadOptions = {}): Knex.QueryBuilder {
+	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: LoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.leftJoin('items', 'user_items.item_id', 'items.id')
-			.select(this.selectFields(options, ['id', 'name', 'updated_time'], 'items'))
 			.where('user_items.user_id', '=', userId);
+
+		if (count) {
+			void query.countDistinct('items.id', { as: 'total' });
+		} else {
+			void query.select(this.selectFields(options, ['id', 'name', 'updated_time'], 'items'));
+		}
 
 		if (pathQuery) {
 			// We support /* as a prefix only. Anywhere else would have
@@ -376,14 +385,14 @@ export default class ItemModel extends BaseModel<Item> {
 
 	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
-		const query = this.childrenQuery(userId, pathQuery, options);
+		const query = this.childrenQuery(userId, pathQuery, false, options);
 		return paginateDbQuery(query, pagination, 'items');
 	}
 
 	public async childrenCount(userId: Uuid, pathQuery: string = ''): Promise<number> {
-		const query = this.childrenQuery(userId, pathQuery);
-		const r = await query.countDistinct('items.id', { as: 'total' });
-		return r[0].total;
+		const query = this.childrenQuery(userId, pathQuery, true);
+		const r = await query.first();
+		return r ? r.total : 0;
 	}
 
 	private async joplinItemPath(jopId: string): Promise<Item[]> {
@@ -494,7 +503,7 @@ export default class ItemModel extends BaseModel<Item> {
 	public async deleteForUser(userId: Uuid, item: Item): Promise<void> {
 		if (this.isRootSharedFolder(item)) {
 			const share = await this.models().share().byItemId(item.id);
-			if (!share) throw new ErrorNotFound(`Cannot find share associated with item ${item.id}`);
+			if (!share) throw new Error(`Cannot find share associated with item ${item.id}`);
 			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
 			if (!userShare) return;
 			await this.models().shareUser().delete(userShare.id);

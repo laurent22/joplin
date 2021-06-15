@@ -476,20 +476,12 @@ class Setting extends BaseModel {
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
-			// 'sync.9.directory': {
-			// 	value: 'Apps/Joplin',
-			// 	type: SettingItemType.String,
-			// 	section: 'sync',
-			// 	show: (settings: any) => {
-			// 		return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
-			// 	},
-			// 	filter: value => {
-			// 		return value ? ltrimSlashes(rtrimSlashes(value)) : '';
-			// 	},
-			// 	public: true,
-			// 	label: () => _('Joplin Server Directory'),
-			// 	storage: SettingStorage.File,
-			// },
+			'sync.9.userContentPath': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
 			'sync.9.username': {
 				value: '',
 				type: SettingItemType.String,
@@ -510,6 +502,45 @@ class Setting extends BaseModel {
 				},
 				public: true,
 				label: () => _('Joplin Server password'),
+				secure: true,
+			},
+
+			// Although sync.10.path is essentially a constant, we still define
+			// it here so that both Joplin Server and Joplin Cloud can be
+			// handled in the same consistent way. Also having it a setting
+			// means it can be set to something else for development.
+			'sync.10.path': {
+				value: 'https://api.joplincloud.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
+			'sync.10.userContentPath': {
+				value: 'https://joplinusercontent.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
+			'sync.10.username': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+				},
+				public: true,
+				label: () => _('Joplin Cloud email'),
+				storage: SettingStorage.File,
+			},
+			'sync.10.password': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+				},
+				public: true,
+				label: () => _('Joplin Cloud password'),
 				secure: true,
 			},
 
@@ -539,6 +570,7 @@ class Setting extends BaseModel {
 			'sync.4.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.7.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.auth': { value: '', type: SettingItemType.String, public: false },
+			'sync.10.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.1.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.2.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.3.context': { value: '', type: SettingItemType.String, public: false },
@@ -548,6 +580,7 @@ class Setting extends BaseModel {
 			'sync.7.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.8.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.10.context': { value: '', type: SettingItemType.String, public: false },
 
 			'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, storage: SettingStorage.File, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 

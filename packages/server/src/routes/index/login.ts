@@ -1,5 +1,6 @@
-import { SubPath, redirect } from '../../utils/routeUtils';
+import { SubPath, redirect, makeUrl, UrlType } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { formParse } from '../../utils/requestUtils';
 import config from '../../config';
@@ -8,12 +9,14 @@ import { View } from '../../services/MustacheService';
 
 function makeView(error: any = null): View {
 	const view = defaultView('login');
-	view.content.error = error;
-	view.partials = ['errorBanner'];
+	view.content = {
+		error,
+		signupUrl: config().signupEnabled ? makeUrl(UrlType.Signup) : '',
+	};
 	return view;
 }
 
-const router: Router = new Router();
+const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 

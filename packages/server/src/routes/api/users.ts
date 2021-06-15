@@ -2,12 +2,13 @@ import { User } from '../../db';
 import { bodyFields } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { AclAction } from '../../models/BaseModel';
 import uuidgen from '../../utils/uuidgen';
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 async function fetchUser(path: SubPath, ctx: AppContext): Promise<User> {
 	const user = await ctx.models.user().load(path.id);
@@ -30,8 +31,10 @@ router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
 	const user = await postedUserFromContext(ctx);
 
 	// We set a random password because it's required, but user will have to
-	// set it by clicking on the confirmation link.
+	// set it after clicking on the confirmation link.
 	user.password = uuidgen();
+	user.must_set_password = 1;
+	user.email_confirmed = 0;
 	const output = await ctx.models.user().save(user);
 	return ctx.models.user().toApiOutput(output);
 });

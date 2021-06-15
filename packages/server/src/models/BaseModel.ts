@@ -4,6 +4,7 @@ import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models } from './factory';
 import * as EventEmitter from 'events';
+import { Config } from '../utils/types';
 
 export interface SaveOptions {
 	isNew?: boolean;
@@ -41,13 +42,13 @@ export default abstract class BaseModel<T> {
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
 	private modelFactory_: Function;
-	private baseUrl_: string;
 	private static eventEmitter_: EventEmitter = null;
+	private config_: Config;
 
-	public constructor(db: DbConnection, modelFactory: Function, baseUrl: string) {
+	public constructor(db: DbConnection, modelFactory: Function, config: Config) {
 		this.db_ = db;
 		this.modelFactory_ = modelFactory;
-		this.baseUrl_ = baseUrl;
+		this.config_ = config;
 
 		this.transactionHandler_ = new TransactionHandler(db);
 	}
@@ -56,11 +57,19 @@ export default abstract class BaseModel<T> {
 	// connection is passed to it. That connection can be the regular db
 	// connection, or the active transaction.
 	protected models(db: DbConnection = null): Models {
-		return this.modelFactory_(db || this.db);
+		return this.modelFactory_(db || this.db, this.config_);
 	}
 
 	protected get baseUrl(): string {
-		return this.baseUrl_;
+		return this.config_.baseUrl;
+	}
+
+	protected get userContentUrl(): string {
+		return this.config_.userContentBaseUrl;
+	}
+
+	protected get appName(): string {
+		return this.config_.appName;
 	}
 
 	protected get db(): DbConnection {
@@ -97,7 +106,10 @@ export default abstract class BaseModel<T> {
 		}
 
 		if (mainTable) {
-			output = output.map(f => `${mainTable}.${f}`);
+			output = output.map(f => {
+				if (f.includes(`${mainTable}.`)) return f;
+				return `${mainTable}.${f}`;
+			});
 		}
 
 		return output;
@@ -266,16 +278,21 @@ export default abstract class BaseModel<T> {
 		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
 	}
 
+	public async exists(id: string): Promise<boolean> {
+		const o = await this.load(id, { fields: ['id'] });
+		return !!o;
+	}
+
 	public async load(id: string, options: LoadOptions = {}): Promise<T> {
 		if (!id) throw new Error('id cannot be empty');
 
 		return this.db(this.tableName).select(options.fields || this.defaultFields).where({ id: id }).first();
 	}
 
-	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
+	public async delete(id: string | string[] | number | number[], options: DeleteOptions = {}): Promise<void> {
 		if (!id) throw new Error('id cannot be empty');
 
-		const ids = typeof id === 'string' ? [id] : id;
+		const ids = (typeof id === 'string' || typeof id === 'number') ? [id] : id;
 
 		if (!ids.length) throw new Error('no id provided');
 

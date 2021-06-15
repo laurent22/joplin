@@ -36,6 +36,8 @@ export enum DatabaseConfigClient {
 
 export interface DatabaseConfig {
 	client: DatabaseConfigClient;
+	// For Postgres, this is the actual database name. For SQLite, this is the
+	// path to the SQLite file.
 	name: string;
 	host?: string;
 	port?: number;
@@ -44,17 +46,44 @@ export interface DatabaseConfig {
 	asyncStackTraces?: boolean;
 }
 
+export interface MailerConfig {
+	enabled: boolean;
+	host: string;
+	port: number;
+	secure: boolean;
+	authUser: string;
+	authPassword: string;
+	noReplyName: string;
+	noReplyEmail: string;
+}
+
+export interface StripeConfig {
+	secretKey: string;
+	publishableKey: string;
+	webhookSecret: string;
+}
+
 export interface Config {
+	appVersion: string;
+	appName: string;
+	env: Env;
 	port: number;
 	rootDir: string;
 	viewDir: string;
 	layoutDir: string;
-	// Not that, for now, nothing is being logged to file. Log is just printed
+	// Note that, for now, nothing is being logged to file. Log is just printed
 	// to stdout, which is then handled by Docker own log mechanism
 	logDir: string;
 	tempDir: string;
-	database: DatabaseConfig;
 	baseUrl: string;
+	apiBaseUrl: string;
+	userContentBaseUrl: string;
+	signupEnabled: boolean;
+	termsEnabled: boolean;
+	showErrorStackTraces: boolean;
+	database: DatabaseConfig;
+	mailer: MailerConfig;
+	stripe: StripeConfig;
 }
 
 export enum HttpMethod {
@@ -63,6 +92,12 @@ export enum HttpMethod {
 	DELETE = 'DELETE',
 	PATCH = 'PATCH',
 	HEAD = 'HEAD',
+}
+
+export enum RouteType {
+	Web = 1,
+	Api = 2,
+	UserContent = 3,
 }
 
 export type KoaNext = ()=> Promise<void>;
