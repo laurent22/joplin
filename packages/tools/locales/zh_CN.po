@@ -6,13 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: 南宫小骏 <jackytsu@vip.qq.com>\n"
 "Language-Team: zh_CN <jackytsu.vip.qq.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
@@ -1087,9 +1089,8 @@ msgid "&Go"
 msgstr "跳转 (&G)"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "笔记本"
+msgstr "笔记本 (&B)"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -1658,9 +1659,8 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "警告: 由于性能原因无法显示所有资源 (最多：%s)。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:141
-#, fuzzy
 msgid "Unshare note"
-msgstr "取消分享"
+msgstr "取消分享笔记"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
@@ -2172,7 +2172,6 @@ msgid ""
 msgstr "默认管理员密码不安全且尚未更改！[现在更改](%s)"
 
 #: packages/server/dist/models/UserModel.js:134
-#, fuzzy
 msgid "attachment"
 msgstr "附件"
 
@@ -2180,7 +2179,7 @@ msgstr "附件"
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
-msgstr ""
+msgstr "无法保存 %s “%s”，因为超过了允许的限制大小（%s）。"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2370,14 +2369,12 @@ msgid "Joplin Server password"
 msgstr "Joplin 服务器密码"
 
 #: packages/lib/models/Setting.js:365
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplin Server 邮箱"
+msgstr "Joplin 论坛邮箱"
 
 #: packages/lib/models/Setting.js:376
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplin 服务器密码"
+msgstr "Joplin 论坛密码"
 
 #: packages/lib/models/Setting.js:388
 msgid "Attachment download behaviour"
@@ -2956,7 +2953,6 @@ msgid "Encrypted items cannot be modified"
 msgstr "无法修改已加密的条目"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
 msgstr "Joplin 论坛"
 
