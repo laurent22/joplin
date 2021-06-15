@@ -1169,6 +1169,9 @@ packages/lib/services/interop/InteropService_Importer_Raw.js.map
 packages/lib/services/interop/types.d.ts
 packages/lib/services/interop/types.js
 packages/lib/services/interop/types.js.map
+packages/lib/services/joplinServer/personalizedUserContentBaseUrl.d.ts
+packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
+packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js.map
 packages/lib/services/keychain/KeychainService.d.ts
 packages/lib/services/keychain/KeychainService.js
 packages/lib/services/keychain/KeychainService.js.map

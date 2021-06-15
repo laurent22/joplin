@@ -177,7 +177,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 			if (item.type_ === ModelType.Note) {
 				return '#';
 			} else if (item.type_ === ModelType.Resource) {
-				return `${models_.share().shareUrl(share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
+				return `${models_.share().shareUrl(share.owner_id, share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
 			}

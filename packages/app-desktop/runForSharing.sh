@@ -26,7 +26,7 @@ if [ "$RESET_ALL" == "1" ]; then
 
 	echo "config keychain.supported 0" >> "$CMD_FILE" 
 	echo "config sync.target 10" >> "$CMD_FILE" 
-	echo "config sync.10.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
+	# echo "config sync.10.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
 	echo "config sync.10.username $USER_EMAIL" >> "$CMD_FILE" 
 	echo "config sync.10.password 123456" >> "$CMD_FILE" 
 
@@ -45,4 +45,4 @@ if [ "$RESET_ALL" == "1" ]; then
 fi
 
 cd "$ROOT_DIR/packages/app-desktop"
-npm start -- --profile "$PROFILE_DIR"
+npm start -- --env dev --profile "$PROFILE_DIR"

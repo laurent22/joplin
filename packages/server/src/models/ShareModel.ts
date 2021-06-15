@@ -35,7 +35,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public checkShareUrl(share: Share, shareUrl: string) {
-		if (this.baseUrl === this.userContentUrl) return; // OK
+		if (this.baseUrl === this.userContentBaseUrl) return; // OK
 
 		const userId = userIdFromUserContentUrl(shareUrl);
 		const shareUserId = share.owner_id.toLowerCase();
@@ -93,8 +93,8 @@ export default class ShareModel extends BaseModel<Share> {
 		return !!r;
 	}
 
-	public shareUrl(id: Uuid, query: any = null): string {
-		return setQueryParameters(`${this.userContentUrl}/shares/${id}`, query);
+	public shareUrl(shareOwnerId: Uuid, id: Uuid, query: any = null): string {
+		return setQueryParameters(`${this.personalizedUserContentBaseUrl(shareOwnerId)}/shares/${id}`, query);
 	}
 
 	public async byItemId(itemId: Uuid): Promise<Share | null> {

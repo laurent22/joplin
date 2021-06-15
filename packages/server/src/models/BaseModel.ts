@@ -5,6 +5,7 @@ import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models } from './factory';
 import * as EventEmitter from 'events';
 import { Config } from '../utils/types';
+import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
 
 export interface SaveOptions {
 	isNew?: boolean;
@@ -64,8 +65,12 @@ export default abstract class BaseModel<T> {
 		return this.config_.baseUrl;
 	}
 
-	protected get userContentUrl(): string {
+	protected get userContentBaseUrl(): string {
 		return this.config_.userContentBaseUrl;
+	}
+
+	protected personalizedUserContentBaseUrl(userId: Uuid): string {
+		return personalizedUserContentBaseUrl(userId, this.baseUrl, this.userContentBaseUrl);
 	}
 
 	protected get appName(): string {
