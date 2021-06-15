@@ -141,7 +141,7 @@ export default class ShareService {
 	}
 
 	public shareUrl(userId: string, share: StateShare): string {
-		return `${this.api().userContentBaseUrl(userId)}/shares/${share.id}`;
+		return `${this.api().personalizedUserContentBaseUrl(userId)}/shares/${share.id}`;
 	}
 
 	public get shares() {
