@@ -980,6 +980,9 @@ packages/lib/models/dateTimeFormats.test.js.map
 packages/lib/models/settings/FileHandler.d.ts
 packages/lib/models/settings/FileHandler.js
 packages/lib/models/settings/FileHandler.js.map
+packages/lib/models/utils/itemCanBeEncrypted.d.ts
+packages/lib/models/utils/itemCanBeEncrypted.js
+packages/lib/models/utils/itemCanBeEncrypted.js.map
 packages/lib/models/utils/paginatedFeed.d.ts
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginatedFeed.js.map

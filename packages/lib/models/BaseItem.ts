@@ -1,25 +1,17 @@
 import { ModelType } from '../BaseModel';
-import { NoteEntity } from '../services/database/types';
+import { BaseItemEntity, NoteEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-
 import Database from '../database';
 import ItemChange from './ItemChange';
 import ShareService from '../services/share/ShareService';
+import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
-
-export interface BaseItemEntity {
-	id?: string;
-	encryption_applied?: boolean;
-	is_shared?: number;
-	share_id?: string;
-	type_?: ModelType;
-}
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
@@ -404,7 +396,7 @@ export default class BaseItem extends BaseModel {
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared || item.share_id) {
+		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;

@@ -8,8 +8,14 @@ import Resource from '../../models/Resource';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
+import { ResourceEntity } from '../database/types';
+import Synchronizer from '../../Synchronizer';
 
 let insideBeforeEach = false;
+
+function newResourceFetcher(synchronizer: Synchronizer) {
+	return new ResourceFetcher(() => { return synchronizer.api(); });
+}
 
 describe('Synchronizer.e2ee', function() {
 
@@ -223,7 +229,7 @@ describe('Synchronizer.e2ee', function() {
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 
-		const fetcher = new ResourceFetcher(() => { return synchronizer().api(); });
+		const fetcher = newResourceFetcher(synchronizer());
 		fetcher.queueDownload_(resource1.id);
 		await fetcher.waitForAllFinished();
 		await decryptionWorker().start();
@@ -287,7 +293,7 @@ describe('Synchronizer.e2ee', function() {
 		expect(!!resource.encryption_applied).toBe(false);
 		expect(!!resource.encryption_blob_encrypted).toBe(true);
 
-		const resourceFetcher = new ResourceFetcher(() => { return synchronizer().api(); });
+		const resourceFetcher = newResourceFetcher(synchronizer());
 		await resourceFetcher.start();
 		await resourceFetcher.waitForAllFinished();
 
@@ -378,8 +384,15 @@ describe('Synchronizer.e2ee', function() {
 			},
 		]);
 
-		const note1 = await Note.loadByTitle('un');
+		let note1 = await Note.loadByTitle('un');
 		let note2 = await Note.loadByTitle('deux');
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
+		await shim.attachFileToNote(note2, `${supportDir}/photo.jpg`);
+		note1 = await Note.loadByTitle('un');
+		note2 = await Note.loadByTitle('deux');
+		const resourceId1 = (await Note.linkedResourceIds(note1.body))[0];
+		const resourceId2 = (await Note.linkedResourceIds(note2.body))[0];
+
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -405,11 +418,37 @@ describe('Synchronizer.e2ee', function() {
 		// The shared note should be decrypted
 		const note2_2 = await Note.load(note2.id);
 		expect(note2_2.title).toBe('deux');
+		expect(note2_2.encryption_applied).toBe(0);
 		expect(note2_2.is_shared).toBe(1);
+
+		// The resource linked to the shared note should also be decrypted
+		const resource2: ResourceEntity = await Resource.load(resourceId2);
+		expect(resource2.is_shared).toBe(1);
+		expect(resource2.encryption_applied).toBe(0);
+
+		const fetcher = newResourceFetcher(synchronizer());
+		await fetcher.start();
+		await fetcher.waitForAllFinished();
+
+		// Because the resource is decrypted, the encrypted blob file should not
+		// exist, but the plain text one should.
+		expect(await shim.fsDriver().exists(Resource.fullPath(resource2, true))).toBe(false);
+		expect(await shim.fsDriver().exists(Resource.fullPath(resource2))).toBe(true);
 
 		// The non-shared note should be encrypted
 		const note1_2 = await Note.load(note1.id);
 		expect(note1_2.title).toBe('');
+
+		// The linked resource should also be encrypted
+		const resource1: ResourceEntity = await Resource.load(resourceId1);
+		expect(resource1.is_shared).toBe(0);
+		expect(resource1.encryption_applied).toBe(1);
+
+		// And the plain text blob should not be present. The encrypted one
+		// shouldn't either because it can only be downloaded once the metadata
+		// has been decrypted.
+		expect(await shim.fsDriver().exists(Resource.fullPath(resource1, true))).toBe(false);
+		expect(await shim.fsDriver().exists(Resource.fullPath(resource1))).toBe(false);
 	}));
 
 	it('should not encrypt items that are shared by folder', (async () => {
