@@ -8,7 +8,7 @@
 //
 // If the userContentBaseUrl is an empty string, the baseUrl is returned instead.
 export default function(userId: string, baseUrl: string, userContentBaseUrl: string) {
-	if (userContentBaseUrl) {
+	if (userContentBaseUrl && baseUrl !== userContentBaseUrl) {
 		if (!userId) throw new Error('User ID must be specified');
 		const url = new URL(userContentBaseUrl);
 		return `${url.protocol}//${userId.substr(0, 10).toLowerCase()}.${url.host}`;
