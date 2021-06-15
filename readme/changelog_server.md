@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.0.12](https://github.com/laurent22/joplin/releases/tag/server-v2.0.12) - 2021-06-15T16:24:42Z
+
+- Fixed: Fixed handling of user content URL (31121c8)
+
 ## [server-v2.0.11](https://github.com/laurent22/joplin/releases/tag/server-v2.0.11) - 2021-06-15T11:41:41Z
 
 - New: Add navbar on login and sign up page (7a3a208)
