@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.0.10](https://github.com/laurent22/joplin/releases/tag/server-v2.0.10) - 2021-06-15T11:27:29Z
+## [server-v2.0.11](https://github.com/laurent22/joplin/releases/tag/server-v2.0.11) - 2021-06-15T11:41:41Z
 
 - New: Add navbar on login and sign up page (7a3a208)
 - New: Added option to enable or disable stack traces (5614eb9)
