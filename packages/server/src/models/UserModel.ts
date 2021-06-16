@@ -93,6 +93,7 @@ export default class UserModel extends BaseModel<User> {
 		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
 		if ('can_share' in object) user.can_share = object.can_share;
 		if ('account_type' in object) user.account_type = object.account_type;
+		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
 
 		return user;
 	}
@@ -122,6 +123,7 @@ export default class UserModel extends BaseModel<User> {
 			if ('max_item_size' in resource && !user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
 			if ('can_share' in resource && !user.is_admin && resource.can_share !== previousResource.can_share) throw new ErrorForbidden('non-admin user cannot change can_share');
 			if ('account_type' in resource && !user.is_admin && resource.account_type !== previousResource.account_type) throw new ErrorForbidden('non-admin user cannot change account_type');
+			if ('must_set_password' in resource && !user.is_admin && resource.must_set_password !== previousResource.must_set_password) throw new ErrorForbidden('non-admin user cannot change must_set_password');
 		}
 
 		if (action === AclAction.Delete) {
@@ -174,7 +176,7 @@ export default class UserModel extends BaseModel<User> {
 
 		if (options.isNew) {
 			if (!user.email) throw new ErrorUnprocessableEntity('email must be set');
-			if (!user.password) throw new ErrorUnprocessableEntity('password must be set');
+			if (!user.password && !user.must_set_password) throw new ErrorUnprocessableEntity('password must be set');
 		} else {
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');

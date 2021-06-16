@@ -25,6 +25,7 @@
 						{{/accountTypes}}
 					</select>
 				</div>
+				<p class="help">If the account type is anything other than Default, the account-specific properties will be applied.</p>
 			</div>
 		{{/showAccountTypes}}
 
@@ -52,7 +53,10 @@
 		<div class="control">
 			<input class="input" type="password" name="password2" autocomplete="new-password"/>
 		</div>
-	</div>
+		{{#global.owner.is_admin}}
+		<p class="help">When creating a new user, if no password is specified the user will have to set it by following the link in their email.</p>
+		{{/global.owner.is_admin}}
+	</div>	
 	<div class="control">
 		<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
 		{{#showDeleteButton}}

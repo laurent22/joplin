@@ -12,6 +12,7 @@ import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
 import { formatBytes } from '../../utils/bytes';
 import { accountTypeOptions, accountTypeProperties } from '../../models/UserModel';
+import uuidgen from '../../utils/uuidgen';
 
 interface CheckPasswordInput {
 	password: string;
@@ -50,6 +51,11 @@ function makeUser(isNew: boolean, fields: any): User {
 	if (password) user.password = password;
 
 	if (!isNew) user.id = fields.id;
+
+	if (isNew) {
+		user.must_set_password = user.password ? 0 : 1;
+		user.password = user.password ? user.password : uuidgen();
+	}
 
 	return user;
 }
