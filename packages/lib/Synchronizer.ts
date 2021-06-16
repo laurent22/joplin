@@ -522,6 +522,40 @@ export default class Synchronizer {
 						if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || action === 'updateRemote' || (action == 'itemConflict' && remote))) {
 							const localState = await Resource.localState(local.id);
 							if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
+								// This condition normally shouldn't happen
+								// because the normal cases are as follow:
+								//
+								// - User creates a resource locally - in that
+								//   case the fetch status is DONE, so we cannot
+								//   end up here.
+								//
+								// - User fetches a new resource metadata, but
+								//   not the blob - in that case fetch status is
+								//   IDLE. However in that case, we cannot end
+								//   up in this place either, because the action
+								//   cannot be createRemote (because the
+								//   resource has not been created locally) or
+								//   updateRemote (because a resouce cannot be
+								//   modified locally unless the blob is present
+								//   too).
+								//
+								// Possibly the only case we can end up here is
+								// if a resource metadata has been downloaded,
+								// but not the blob yet. Then the sync target is
+								// switched to a different one. In that case, we
+								// can have a fetch status IDLE, with an
+								// "updateRemote" action, if the timestamp of
+								// the server resource is before the timestamp
+								// of the local resource.
+								//
+								// In that case we can't do much so we mark the
+								// resource as "cannot sync". Otherwise it will
+								// throw the error "Processing a path that has
+								// already been done" on the next loop, and sync
+								// will never finish because we'll always end up
+								// here.
+								this.logger().warn(`Need to upload a resource, but blob is not present: ${path}`);
+								await handleCannotSyncItem(ItemClass, syncTargetId, local, 'Trying to upload resource, but only metadata is present.');
 								action = null;
 							} else {
 								try {
