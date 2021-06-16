@@ -8,7 +8,7 @@ import { formatBytes, MB } from '../utils/bytes';
 
 export enum AccountType {
 	Default = 0,
-	Free = 1,
+	Basic = 1,
 	Pro = 2,
 }
 
@@ -16,6 +16,11 @@ interface AccountTypeProperties {
 	account_type: number;
 	can_share: number;
 	max_item_size: number;
+}
+
+interface AccountTypeSelectOptions {
+	value: number;
+	label: string;
 }
 
 export function accountTypeProperties(accountType: AccountType): AccountTypeProperties {
@@ -26,7 +31,7 @@ export function accountTypeProperties(accountType: AccountType): AccountTypeProp
 			max_item_size: 0,
 		},
 		{
-			account_type: AccountType.Free,
+			account_type: AccountType.Basic,
 			can_share: 0,
 			max_item_size: 10 * MB,
 		},
@@ -37,7 +42,26 @@ export function accountTypeProperties(accountType: AccountType): AccountTypeProp
 		},
 	];
 
-	return types.find(a => a.account_type === accountType);
+	const type = types.find(a => a.account_type === accountType);
+	if (!type) throw new Error(`Invalid account type: ${accountType}`);
+	return type;
+}
+
+export function accountTypeOptions(): AccountTypeSelectOptions[] {
+	return [
+		{
+			value: AccountType.Default,
+			label: 'Default',
+		},
+		{
+			value: AccountType.Basic,
+			label: 'Basic',
+		},
+		{
+			value: AccountType.Pro,
+			label: 'Pro',
+		},
+	];
 }
 
 export default class UserModel extends BaseModel<User> {
@@ -68,6 +92,7 @@ export default class UserModel extends BaseModel<User> {
 		if ('full_name' in object) user.full_name = object.full_name;
 		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
 		if ('can_share' in object) user.can_share = object.can_share;
+		if ('account_type' in object) user.account_type = object.account_type;
 
 		return user;
 	}
@@ -96,6 +121,7 @@ export default class UserModel extends BaseModel<User> {
 			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
 			if ('max_item_size' in resource && !user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
 			if ('can_share' in resource && !user.is_admin && resource.can_share !== previousResource.can_share) throw new ErrorForbidden('non-admin user cannot change can_share');
+			if ('account_type' in resource && !user.is_admin && resource.account_type !== previousResource.account_type) throw new ErrorForbidden('non-admin user cannot change account_type');
 		}
 
 		if (action === AclAction.Delete) {
@@ -196,6 +222,17 @@ export default class UserModel extends BaseModel<User> {
 		if (!user) throw new ErrorNotFound('No such user');
 		await this.save({ id: user.id, email_confirmed: 1 });
 	}
+
+	// public async saveWithAccountType(accountType:AccountType, user: User, options: SaveOptions = {}): Promise<User> {
+	// 	if (accountType !== AccountType.Default) {
+	// 		user = {
+	// 			...user,
+	// 			...accountTypeProperties(accountType),
+	// 		};
+	// 	}
+
+	// 	return this.save(user, options);
+	// }
 
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:

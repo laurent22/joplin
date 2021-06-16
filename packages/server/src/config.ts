@@ -38,6 +38,7 @@ export interface EnvVariables {
 
 	SIGNUP_ENABLED?: string;
 	TERMS_ENABLED?: string;
+	ACCOUNT_TYPES_ENABLED?: string;
 
 	ERROR_STACK_TRACES?: string;
 }
@@ -152,6 +153,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
 		signupEnabled: env.SIGNUP_ENABLED === '1',
 		termsEnabled: env.TERMS_ENABLED === '1',
+		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED === '1',
 		...overrides,
 	};
 }

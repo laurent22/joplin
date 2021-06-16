@@ -11,6 +11,7 @@ import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
 import { formatBytes } from '../../utils/bytes';
+import { accountTypeOptions, accountTypeProperties } from '../../models/UserModel';
 
 interface CheckPasswordInput {
 	password: string;
@@ -29,13 +30,21 @@ export function checkPassword(fields: CheckPasswordInput, required: boolean): st
 }
 
 function makeUser(isNew: boolean, fields: any): User {
-	const user: User = {};
+	let user: User = {};
 
 	if ('email' in fields) user.email = fields.email;
 	if ('full_name' in fields) user.full_name = fields.full_name;
 	if ('is_admin' in fields) user.is_admin = fields.is_admin;
 	if ('max_item_size' in fields) user.max_item_size = fields.max_item_size || 0;
 	if ('can_share' in fields) user.can_share = fields.can_share ? 1 : 0;
+
+	if ('account_type' in fields) {
+		user.account_type = Number(fields.account_type);
+		user = {
+			...user,
+			...accountTypeProperties(user.account_type),
+		};
+	}
 
 	const password = checkPassword(fields, false);
 	if (password) user.password = password;
@@ -107,6 +116,14 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
+
+	if (config().accountTypesEnabled) {
+		view.content.showAccountTypes = true;
+		view.content.accountTypes = accountTypeOptions().map((o: any) => {
+			o.selected = user.account_type === o.value;
+			return o;
+		});
+	}
 
 	return view;
 });

@@ -44,7 +44,7 @@ router.post('signup', async (_path: SubPath, ctx: AppContext) => {
 		const password = checkPassword(formUser, true);
 
 		const user = await ctx.models.user().save({
-			...accountTypeProperties(AccountType.Free),
+			...accountTypeProperties(AccountType.Basic),
 			email: formUser.email,
 			full_name: formUser.full_name,
 			password,

@@ -41,7 +41,7 @@ describe('index_signup', function() {
 		// Check that the user has been created
 		const user = await models().user().loadByEmail('toto@example.com');
 		expect(user).toBeTruthy();
-		expect(user.account_type).toBe(AccountType.Free);
+		expect(user.account_type).toBe(AccountType.Basic);
 		expect(user.email_confirmed).toBe(0);
 		expect(user.can_share).toBe(0);
 		expect(user.max_item_size).toBe(10 * MB);
