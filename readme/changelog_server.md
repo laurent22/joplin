@@ -1,5 +1,12 @@
 # Joplin Server Changelog
 
+## [server-v2.0.13](https://github.com/laurent22/joplin/releases/tag/server-v2.0.13) - 2021-06-16T14:28:20Z
+
+- Improved: Allow creating a new user with no password, which must be set via email confirmation (1896549)
+- Improved: Allow creating a user with a specific account type from admin UI (ecd1602)
+- Fixed: Fixed error message when item is over the limit (ea65313)
+- Fixed: Fixed issue with user not being able to modify own profile (3c18190)
+
 ## [server-v2.0.12](https://github.com/laurent22/joplin/releases/tag/server-v2.0.12) - 2021-06-15T16:24:42Z
 
 - Fixed: Fixed handling of user content URL (31121c8)
