@@ -232,7 +232,7 @@ class Setting extends BaseModel {
 		return `${this.value('profileDir')}/settings.json`;
 	}
 
-	private static get fileHandler(): FileHandler {
+	public static get fileHandler(): FileHandler {
 		if (!this.fileHandler_) {
 			this.fileHandler_ = new FileHandler(this.settingFilePath);
 		}
@@ -1405,7 +1405,7 @@ class Setting extends BaseModel {
 				for (const k of Object.keys(fromFile)) {
 					itemsFromFile.push({
 						key: k,
-						value: this.filterValue(k, this.formatValue(k, fromFile[k])),
+						value: fromFile[k],
 					});
 				}
 			}
