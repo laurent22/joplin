@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.0.4](https://github.com/laurent22/joplin/releases/tag/android-v2.0.4) - 2021-06-16T12:15:56Z
+
+- Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)
+
 ## [android-v2.0.3](https://github.com/laurent22/joplin/releases/tag/android-v2.0.3) (Pre-release) - 2021-06-16T09:48:58Z
 
 - Improved: Verbose mode for synchronizer (4bbb3d1)
