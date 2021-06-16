@@ -1,5 +1,19 @@
 # Joplin terminal app changelog
 
+## [cli-v2.0.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.0.1) - 2021-06-16T19:06:28Z
+
+- New: Add new date format YYMMDD (#4954 by Helmut K. C. Tessarek)
+- New: Add support for sharing notebooks with Joplin Server (#4772)
+- Improved: Allow setting up E2EE without having to confirm the password (c5b0529)
+- Improved: Conflict notes will now populate a new field with the ID of the conflict note. (#5049 by [@Ahmad45123](https://github.com/Ahmad45123))
+- Improved: Import SVG as images when importing ENEX files (#4968)
+- Improved: Improve search with Asian scripts (#5018) (#4613 by [@mablin7](https://github.com/mablin7))
+- Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)
+- Fixed: Fixed possible crash when trying to delete corrupted revision in revision service (#4845)
+- Fixed: Fixed user content URLs when sharing note via Joplin Server (2cf7067)
+- Fixed: Improved importing Evernote notes that contain codeblocks (#4965)
+- Fixed: Items are filtered in the API search (#5017) (#5007 by [@JackGruber](https://github.com/JackGruber))
+
 ## [cli-v1.8.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.8.1) - 2021-05-10T09:38:05Z
 
 - New: Add "id" and "due" search filters (#4898 by [@JackGruber](https://github.com/JackGruber))

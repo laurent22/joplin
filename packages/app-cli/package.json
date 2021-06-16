@@ -27,11 +27,12 @@
       2017,
       2018,
       2019,
-      2020
+      2020,
+      2021
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "2.0.0",
+  "version": "2.0.1",
   "bin": {
     "joplin": "./main.js"
   },
@@ -39,8 +40,8 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@joplin/lib": "1.8",
-    "@joplin/renderer": "1.8",
+    "@joplin/lib": "2.0",
+    "@joplin/renderer": "2.0",
     "aws-sdk": "^2.588.0",
     "chalk": "^4.1.0",
     "compare-version": "^0.1.2",
@@ -64,7 +65,7 @@
     "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
-    "@joplin/tools": "1.8",
+    "@joplin/tools": "2.0",
     "@types/fs-extra": "^9.0.6",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
