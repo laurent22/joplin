@@ -46,6 +46,8 @@ function isCannotSyncError(error: any): boolean {
 
 export default class Synchronizer {
 
+	public static verboseMode: boolean = true;
+
 	private db_: any;
 	private api_: any;
 	private appType_: string;
@@ -195,7 +197,11 @@ export default class Synchronizer {
 			line.push(`(Remote ${s.join(', ')})`);
 		}
 
-		this.logger().debug(line.join(': '));
+		if (Synchronizer.verboseMode) {
+			this.logger().info(line.join(': '));
+		} else {
+			this.logger().debug(line.join(': '));
+		}
 
 		if (!this.progressReport_[action]) this.progressReport_[action] = 0;
 		this.progressReport_[action] += actionCount;

@@ -65,4 +65,4 @@ if [[ $COMMANDS != "" ]]; then
 fi
 
 cd "$ROOT_DIR/packages/app-desktop"
-npm start -- --env dev --profile "$PROFILE_DIR"
+npm start -- --profile "$PROFILE_DIR"
