@@ -554,7 +554,7 @@ export default class Synchronizer {
 								// already been done" on the next loop, and sync
 								// will never finish because we'll always end up
 								// here.
-								this.logger().warn(`Need to upload a resource, but blob is not present: ${path}`);
+								this.logger().info(`Need to upload a resource, but blob is not present: ${path}`);
 								await handleCannotSyncItem(ItemClass, syncTargetId, local, 'Trying to upload resource, but only metadata is present.');
 								action = null;
 							} else {
