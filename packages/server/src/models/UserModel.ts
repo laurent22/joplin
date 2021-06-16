@@ -108,17 +108,17 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
-		const itemTitle = joplinItem ? joplinItem.title || '' : '';
-		const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
-
 		// If the item is encrypted, we apply a multipler because encrypted
 		// items can be much larger (seems to be up to twice the size but for
 		// safety let's go with 2.2).
 		const maxSize = user.max_item_size * (item.jop_encryption_applied ? 2.2 : 1);
 		if (maxSize && buffer.byteLength > maxSize) {
+			const itemTitle = joplinItem ? joplinItem.title || '' : '';
+			const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
+
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
-				itemTitle ? itemTitle : name,
+				itemTitle ? itemTitle : item.name,
 				formatBytes(user.max_item_size)
 			));
 		}

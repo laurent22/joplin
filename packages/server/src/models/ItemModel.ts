@@ -309,13 +309,15 @@ export default class ItemModel extends BaseModel<Item> {
 			item.jop_encryption_applied = joplinItem.encryption_applied || 0;
 			item.jop_share_id = joplinItem.share_id || '';
 
-			delete joplinItem.id;
-			delete joplinItem.parent_id;
-			delete joplinItem.share_id;
-			delete joplinItem.type_;
-			delete joplinItem.encryption_applied;
+			const joplinItemToSave = { ...joplinItem };
 
-			item.content = Buffer.from(JSON.stringify(joplinItem));
+			delete joplinItemToSave.id;
+			delete joplinItemToSave.parent_id;
+			delete joplinItemToSave.share_id;
+			delete joplinItemToSave.type_;
+			delete joplinItemToSave.encryption_applied;
+
+			item.content = Buffer.from(JSON.stringify(joplinItemToSave));
 		} else {
 			item.content = buffer;
 		}
