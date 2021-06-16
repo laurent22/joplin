@@ -123,7 +123,7 @@ describe('index_users', function() {
 	});
 
 	test('should change user properties', async function() {
-		const { user, session } = await createUserAndSession(1, true);
+		const { user, session } = await createUserAndSession(1, false);
 
 		const userModel = models().user();
 
@@ -298,7 +298,11 @@ describe('index_users', function() {
 		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `users/${admin.id}`, { delete_button: true }), ErrorForbidden.httpCode);
 
 		// non-admin cannot change max_item_size
-		await expectHttpError(async () => patchUser(session1.id, { id: admin.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
+
+		// non-admin cannot change can_share
+		await models().user().save({ id: user1.id, can_share: 0 });
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, can_share: 1 }), ErrorForbidden.httpCode);
 	});
 
 
