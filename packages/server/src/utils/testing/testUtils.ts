@@ -284,7 +284,8 @@ export async function createItemTree2(userId: Uuid, parentFolderId: string, tree
 		const serializedBody = isFolder ?
 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId }) :
 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId });
-		const newItem = await itemModel.saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const result = await itemModel.saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
 	}
 }
@@ -298,7 +299,8 @@ export async function createItemTree3(userId: Uuid, parentFolderId: string, shar
 		const serializedBody = isFolder ?
 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId }) :
 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId });
-		const newItem = await itemModel.saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const result = await itemModel.saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }

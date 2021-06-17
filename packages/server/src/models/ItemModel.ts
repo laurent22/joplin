@@ -12,6 +12,21 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
 
+export interface SaveFromRawContentItem {
+	name: string;
+	body: Buffer;
+}
+
+export interface SaveFromRawContentResultItem {
+	item: Item;
+	error: Error;
+	resourceIds?: string[];
+	isNote?: boolean;
+	joplinItem?: any;
+}
+
+export type SaveFromRawContentResult = Record<string, SaveFromRawContentResultItem>;
+
 export interface PaginatedItems extends PaginatedResults {
 	items: Item[];
 }
@@ -282,62 +297,105 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(user: User, name: string, buffer: Buffer, options: ItemSaveOption = null): Promise<Item> {
+	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[], options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
 		options = options || {};
 
-		const existingItem = await this.loadByName(user.id, name);
+		const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name));
+		const output: SaveFromRawContentResult = {};
 
-		const isJoplinItem = isJoplinItemName(name);
-		let isNote = false;
+		for (const rawItem of rawContentItems) {
+			try {
+				const isJoplinItem = isJoplinItemName(rawItem.name);
+				let isNote = false;
 
-		const item: Item = {
-			name,
-		};
+				const item: Item = {
+					name: rawItem.name,
+				};
 
-		let joplinItem: any = null;
+				let joplinItem: any = null;
 
-		let resourceIds: string[] = [];
+				let resourceIds: string[] = [];
 
-		if (isJoplinItem) {
-			joplinItem = await unserializeJoplinItem(buffer.toString());
-			isNote = joplinItem.type_ === ModelType.Note;
-			resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
+				if (isJoplinItem) {
+					joplinItem = await unserializeJoplinItem(rawItem.body.toString());
+					isNote = joplinItem.type_ === ModelType.Note;
+					resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
 
-			item.jop_id = joplinItem.id;
-			item.jop_parent_id = joplinItem.parent_id || '';
-			item.jop_type = joplinItem.type_;
-			item.jop_encryption_applied = joplinItem.encryption_applied || 0;
-			item.jop_share_id = joplinItem.share_id || '';
+					item.jop_id = joplinItem.id;
+					item.jop_parent_id = joplinItem.parent_id || '';
+					item.jop_type = joplinItem.type_;
+					item.jop_encryption_applied = joplinItem.encryption_applied || 0;
+					item.jop_share_id = joplinItem.share_id || '';
 
-			const joplinItemToSave = { ...joplinItem };
+					const joplinItemToSave = { ...joplinItem };
 
-			delete joplinItemToSave.id;
-			delete joplinItemToSave.parent_id;
-			delete joplinItemToSave.share_id;
-			delete joplinItemToSave.type_;
-			delete joplinItemToSave.encryption_applied;
+					delete joplinItemToSave.id;
+					delete joplinItemToSave.parent_id;
+					delete joplinItemToSave.share_id;
+					delete joplinItemToSave.type_;
+					delete joplinItemToSave.encryption_applied;
 
-			item.content = Buffer.from(JSON.stringify(joplinItemToSave));
-		} else {
-			item.content = buffer;
+					item.content = Buffer.from(JSON.stringify(joplinItemToSave));
+				} else {
+					item.content = rawItem.body;
+				}
+
+				const existingItem = existingItems.find(i => i.name === rawItem.name);
+				if (existingItem) item.id = existingItem.id;
+
+				if (options.shareId) item.jop_share_id = options.shareId;
+
+				await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
+
+				output[rawItem.name] = {
+					item: item,
+					error: null,
+					resourceIds,
+					isNote,
+					joplinItem,
+				};
+			} catch (error) {
+				output[rawItem.name] = {
+					item: null,
+					error: error,
+				};
+			}
 		}
 
-		if (existingItem) item.id = existingItem.id;
+		await this.withTransaction(async () => {
+			for (const name of Object.keys(output)) {
+				const o = output[name];
+				const itemToSave = o.item;
+				if (!itemToSave) continue;
 
-		if (options.shareId) item.jop_share_id = options.shareId;
+				try {
+					const savedItem = await this.saveForUser(user.id, itemToSave);
 
-		await this.models().user().checkMaxItemSizeLimit(user, buffer, item, joplinItem);
+					if (o.isNote) {
+						await this.models().itemResource().deleteByItemId(savedItem.id);
+						await this.models().itemResource().addResourceIds(savedItem.id, o.resourceIds);
+					}
 
-		return this.withTransaction<Item>(async () => {
-			const savedItem = await this.saveForUser(user.id, item);
-
-			if (isNote) {
-				await this.models().itemResource().deleteByItemId(savedItem.id);
-				await this.models().itemResource().addResourceIds(savedItem.id, resourceIds);
+					output[name].item = savedItem;
+				} catch (error) {
+					output[name].item = null;
+					output[name].error = error;
+				}
 			}
-
-			return savedItem;
 		});
+
+		return output;
+
+		// return this.withTransaction<Item>(async () => {
+		// 	const savedItem = await this.saveForUser(user.id, item);
+
+		// 	if (isNote) {
+		// 		await this.models().itemResource().deleteByItemId(savedItem.id);
+		// 		await this.models().itemResource().addResourceIds(savedItem.id, resourceIds);
+		// 	}
+
+		// 	return savedItem;
+		// });
 	}
 
 	protected async validate(item: Item, options: ValidateOptions = {}): Promise<Item> {
