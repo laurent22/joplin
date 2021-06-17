@@ -19,6 +19,7 @@ import EncryptionService from './services/EncryptionService';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
+import { preUploadItems, serializeAndUploadItem } from './services/synchronizer/uploadUtils';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -389,6 +390,12 @@ export default class Synchronizer {
 		// correctly so as to share/unshare the right items.
 		await Folder.updateAllShareIds();
 
+		const uploadQueue = new TaskQueue('syncUpload', this.logger());
+
+		const uploadItem = (path: string, content: any) => {
+			return this.apiCall('put', path, content);
+		};
+
 		let errorToThrow = null;
 		let syncLock = null;
 
@@ -439,6 +446,8 @@ export default class Synchronizer {
 
 					const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 					const locals = result.items;
+
+					await preUploadItems(uploadItem, uploadQueue, result.items.filter((it: any) => result.neverSyncedItemIds.includes(it.id)));
 
 					for (let i = 0; i < locals.length; i++) {
 						if (this.cancelling()) break;
@@ -588,8 +597,7 @@ export default class Synchronizer {
 							let canSync = true;
 							try {
 								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
-								const content = await ItemClass.serializeForSync(local);
-								await this.apiCall('put', path, content);
+								await serializeAndUploadItem(uploadItem, uploadQueue, ItemClass, path, local);
 							} catch (error) {
 								if (error && error.code === 'rejectedByTarget') {
 									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
