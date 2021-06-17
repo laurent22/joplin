@@ -119,7 +119,7 @@ export default class MustacheService {
 		globalParams = {
 			...this.defaultLayoutOptions,
 			...globalParams,
-			userDisplayName: this.userDisplayName(globalParams.owner),
+			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
 		};
 
 		const contentHtml = Mustache.render(
