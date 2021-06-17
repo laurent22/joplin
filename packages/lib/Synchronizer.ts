@@ -18,8 +18,8 @@ import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
+import TaskQueue from './TaskQueue';
 const { sprintf } = require('sprintf-js');
-const TaskQueue = require('./TaskQueue');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
 interface RemoteItem {
@@ -564,14 +564,15 @@ export default class Synchronizer {
 								try {
 									const remoteContentPath = resourceRemotePath(local.id);
 									const result = await Resource.fullPathForSyncUpload(local);
-									local = result.resource;
+									const resource = result.resource;
+									local = resource as any;
 									const localResourceContentPath = result.path;
 
-									if (local.size >= 10 * 1000 * 1000) {
-										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${local.size} bytes) which may tie up the sync process.`);
+									if (resource.size >= 10 * 1000 * 1000) {
+										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${resource.size} bytes) which may tie up the sync process.`);
 									}
 
-									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: local.share_id });
+									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
 								} catch (error) {
 									if (isCannotSyncError(error)) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
@@ -787,7 +788,7 @@ export default class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							const task = await this.downloadQueue_.waitForResult(path); // await this.apiCall('get', path);
+							const task = await this.downloadQueue_.waitForResult(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;
 							return await BaseItem.unserialize(task.result);

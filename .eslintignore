@@ -842,6 +842,9 @@ packages/lib/SyncTargetOneDrive.js.map
 packages/lib/Synchronizer.d.ts
 packages/lib/Synchronizer.js
 packages/lib/Synchronizer.js.map
+packages/lib/TaskQueue.d.ts
+packages/lib/TaskQueue.js
+packages/lib/TaskQueue.js.map
 packages/lib/commands/historyBackward.d.ts
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyBackward.js.map
@@ -1436,6 +1439,9 @@ packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js.map
 packages/lib/services/synchronizer/tools.d.ts
 packages/lib/services/synchronizer/tools.js
 packages/lib/services/synchronizer/tools.js.map
+packages/lib/services/synchronizer/uploadUtils.d.ts
+packages/lib/services/synchronizer/uploadUtils.js
+packages/lib/services/synchronizer/uploadUtils.js.map
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.d.ts
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js.map

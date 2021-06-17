@@ -18,9 +18,17 @@ export interface ItemsThatNeedDecryptionResult {
 	items: any[];
 }
 
+export interface ItemThatNeedSync {
+	id: string;
+	sync_time: number;
+	type_: ModelType;
+	updated_time: number;
+	encryption_applied: number;
+}
+
 export interface ItemsThatNeedSyncResult {
 	hasMore: boolean;
-	items: any[];
+	items: ItemThatNeedSync[];
 	neverSyncedItemIds: string[];
 }
 

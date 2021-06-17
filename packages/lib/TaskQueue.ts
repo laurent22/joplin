@@ -1,23 +1,38 @@
-const time = require('./time').default;
-const Setting = require('./models/Setting').default;
-const Logger = require('./Logger').default;
+import time from './time';
+import Setting from './models/Setting';
+import Logger from './Logger';
 
-class TaskQueue {
-	constructor(name) {
-		this.waitingTasks_ = [];
-		this.processingTasks_ = {};
-		this.processingQueue_ = false;
-		this.stopping_ = false;
-		this.results_ = {};
+interface Task {
+	id: string;
+	callback: Function;
+}
+
+interface TaskResult {
+	id: string;
+	result: any;
+	error?: Error;
+}
+
+export default class TaskQueue {
+
+	private waitingTasks_: Task[] = [];
+	private processingTasks_: Record<string, Task> = {};
+	private processingQueue_ = false;
+	private stopping_ = false;
+	private results_: Record<string, TaskResult> = {};
+	private name_: string;
+	private logger_: Logger;
+
+	constructor(name: string, logger: Logger = null) {
 		this.name_ = name;
-		this.logger_ = new Logger();
+		this.logger_ = logger ? logger : new Logger();
 	}
 
 	concurrency() {
 		return Setting.value('sync.maxConcurrentConnections');
 	}
 
-	push(id, callback) {
+	push(id: string, callback: Function) {
 		if (this.stopping_) throw new Error('Cannot push task when queue is stopping');
 
 		this.waitingTasks_.push({
@@ -32,10 +47,10 @@ class TaskQueue {
 
 		this.processingQueue_ = true;
 
-		const completeTask = (task, result, error) => {
+		const completeTask = (task: Task, result: any, error: Error) => {
 			delete this.processingTasks_[task.id];
 
-			const r = {
+			const r: TaskResult = {
 				id: task.id,
 				result: result,
 			};
@@ -55,10 +70,10 @@ class TaskQueue {
 
 			task
 				.callback()
-				.then(result => {
+				.then((result: any) => {
 					completeTask(task, result, null);
 				})
-				.catch(error => {
+				.catch((error: Error) => {
 					if (!error) error = new Error('Unknown error');
 					completeTask(task, null, error);
 				});
@@ -67,29 +82,42 @@ class TaskQueue {
 		this.processingQueue_ = false;
 	}
 
-	isWaiting(taskId) {
+	isWaiting(taskId: string) {
 		return this.waitingTasks_.find(task => task.id === taskId);
 	}
 
-	isProcessing(taskId) {
+	isProcessing(taskId: string) {
 		return taskId in this.processingTasks_;
 	}
 
-	isDone(taskId) {
+	isDone(taskId: string) {
 		return taskId in this.results_;
 	}
 
-	async waitForResult(taskId) {
-		if (!this.isWaiting(taskId) && !this.isProcessing(taskId) && !this.isDone(taskId)) throw new Error(`No such task: ${taskId}`);
+	async waitForAll() {
+		return new Promise((resolve) => {
+			const checkIID = setInterval(() => {
+				if (this.waitingTasks_.length) return;
+				if (this.processingTasks_.length) return;
+				clearInterval(checkIID);
+				resolve(null);
+			}, 100);
+		});
+	}
+
+	taskExists(taskId: string) {
+		return this.isWaiting(taskId) || this.isProcessing(taskId) || this.isDone(taskId);
+	}
+
+	taskResult(taskId: string) {
+		if (!this.taskExists(taskId)) throw new Error(`No such task: ${taskId}`);
+		return this.results_[taskId];
+	}
+
+	async waitForResult(taskId: string) {
+		if (!this.taskExists(taskId)) throw new Error(`No such task: ${taskId}`);
 
 		while (true) {
-			// if (this.stopping_) {
-			// 	return {
-			// 		id: taskId,
-			// 		error: new JoplinError('Queue has been destroyed', 'destroyedQueue'),
-			// 	};
-			// }
-
 			const task = this.results_[taskId];
 			if (task) return task;
 			await time.sleep(0.1);
@@ -120,7 +148,3 @@ class TaskQueue {
 		return this.stopping_;
 	}
 }
-
-TaskQueue.CONCURRENCY = 5;
-
-module.exports = TaskQueue;
