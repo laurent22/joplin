@@ -83,6 +83,13 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 
 	const users = await userModel.all();
 
+	users.sort((u1: User, u2: User) => {
+		if (u1.full_name && u2.full_name) return u1.full_name.toLowerCase() < u2.full_name.toLowerCase() ? -1 : +1;
+		if (u1.full_name && !u2.full_name) return +1;
+		if (!u1.full_name && u2.full_name) return -1;
+		return u1.email.toLowerCase() < u2.email.toLowerCase() ? -1 : +1;
+	});
+
 	const view: View = defaultView('users');
 	view.content.users = users.map(user => {
 		return {
