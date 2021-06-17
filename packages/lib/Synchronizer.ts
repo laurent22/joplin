@@ -169,7 +169,7 @@ export default class Synchronizer {
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
-		if (report.completedTime) lines.push(_('Completed: %s', time.formatMsToLocal(report.completedTime)));
+		if (report.completedTime) lines.push(_('Completed: %s (%s)', time.formatMsToLocal(report.completedTime), `${Math.round((report.completedTime - report.startTime) / 1000)}s`));
 		if (this.reportHasErrors(report)) lines.push(_('Last error: %s', report.errors[report.errors.length - 1].toString().substr(0, 500)));
 
 		return lines;
@@ -225,6 +225,7 @@ export default class Synchronizer {
 			if (n == 'starting') continue;
 			if (n == 'finished') continue;
 			if (n == 'state') continue;
+			if (n == 'startTime') continue;
 			if (n == 'completedTime') continue;
 			this.logger().info(`${n}: ${report[n] ? report[n] : '-'}`);
 		}
@@ -355,6 +356,8 @@ export default class Synchronizer {
 		const synchronizationId = time.unixMs().toString();
 
 		const outputContext = Object.assign({}, lastContext);
+
+		this.progressReport_.startTime = time.unixMs();
 
 		this.dispatch({ type: 'SYNC_STARTED' });
 		eventManager.emit('syncStart');

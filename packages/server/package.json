@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
+    "devCreateDb": "node dist/app.js --env dev --create-db",
+    "devDropTables": "node dist/app.js --env dev --drop-tables",
+    "devDropDb": "node dist/app.js --env dev --drop-db",
     "start": "node dist/app.js",
     "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",

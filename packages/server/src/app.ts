@@ -27,6 +27,11 @@ const env: Env = argv.env as Env || Env.Prod;
 
 const defaultEnvVariables: Record<Env, EnvVariables> = {
 	dev: {
+		// To test with the Postgres database, uncomment DB_CLIENT below and
+		// comment out SQLITE_DATABASE. Then start the Postgres server using
+		// `docker-compose --file docker-compose.db-dev.yml up`
+
+		// DB_CLIENT: 'pg',
 		SQLITE_DATABASE: `${sqliteDefaultDir}/db-dev.sqlite`,
 	},
 	buildTypes: {
