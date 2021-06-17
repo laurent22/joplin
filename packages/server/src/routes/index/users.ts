@@ -4,7 +4,7 @@ import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
-import { User } from '../../db';
+import { User, Uuid } from '../../db';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
@@ -200,13 +200,20 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 router.alias(HttpMethod.POST, 'users/:id', 'users');
 
+interface FormFields {
+	id: Uuid;
+	post_button: string;
+	delete_button: string;
+	send_reset_password_email: string;
+}
+
 router.post('users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
 	const userId = userIsMe(path) ? ctx.owner.id : path.id;
 
 	try {
 		const body = await formParse(ctx.req);
-		const fields = body.fields;
+		const fields = body.fields as FormFields;
 		const isNew = userIsNew(path);
 		if (userIsMe(path)) fields.id = userId;
 		user = makeUser(isNew, fields);
@@ -226,6 +233,10 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			const user = await userModel.load(path.id);
 			await userModel.checkIfAllowed(ctx.owner, AclAction.Delete, user);
 			await userModel.delete(path.id);
+		} else if (fields.send_reset_password_email) {
+			const user = await userModel.load(path.id);
+			await userModel.save({ id: user.id, must_set_password: 1 });
+			await userModel.sendAccountConfirmationEmail(user);
 		} else {
 			throw new Error('Invalid form button');
 		}

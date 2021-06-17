@@ -225,16 +225,19 @@ export default class UserModel extends BaseModel<User> {
 		await this.save({ id: user.id, email_confirmed: 1 });
 	}
 
-	// public async saveWithAccountType(accountType:AccountType, user: User, options: SaveOptions = {}): Promise<User> {
-	// 	if (accountType !== AccountType.Default) {
-	// 		user = {
-	// 			...user,
-	// 			...accountTypeProperties(accountType),
-	// 		};
-	// 	}
+	public async sendAccountConfirmationEmail(user: User) {
+		const validationToken = await this.models().token().generate(user.id);
+		const confirmUrl = encodeURI(this.confirmUrl(user.id, validationToken));
 
-	// 	return this.save(user, options);
-	// }
+		await this.models().email().push({
+			sender_id: EmailSender.NoReply,
+			recipient_id: user.id,
+			recipient_email: user.email,
+			recipient_name: user.full_name || '',
+			subject: `Please setup your ${this.appName} account`,
+			body: `Your new ${this.appName} account is almost ready to use!\n\nPlease click on the following link to finish setting up your account:\n\n[Complete your account](${confirmUrl})`,
+		});
+	}
 
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
@@ -254,17 +257,7 @@ export default class UserModel extends BaseModel<User> {
 			const savedUser = await super.save(user, options);
 
 			if (isNew) {
-				const validationToken = await this.models().token().generate(savedUser.id);
-				const confirmUrl = encodeURI(this.confirmUrl(savedUser.id, validationToken));
-
-				await this.models().email().push({
-					sender_id: EmailSender.NoReply,
-					recipient_id: savedUser.id,
-					recipient_email: savedUser.email,
-					recipient_name: savedUser.full_name || '',
-					subject: `Please setup your ${this.appName} account`,
-					body: `Your new ${this.appName} account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n[Complete your account](${confirmUrl})`,
-				});
+				await this.sendAccountConfirmationEmail(savedUser);
 			}
 
 			UserModel.eventEmitter.emit('created');
