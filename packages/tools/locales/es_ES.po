@@ -14,15 +14,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Mario Campo <mario.campo@gmail.com>\n"
+"Last-Translator: Francisco Mora <francisco.m.collao@gmail.com>\n"
 "Language-Team: Spanish <lucas.vieites@gmail.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -131,11 +133,11 @@ msgstr "Descargar"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Omitir esta versión"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Registro de cambios completo"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
 #: packages/lib/services/RevisionService.js:242
@@ -280,14 +282,12 @@ msgid "Retry"
 msgstr "Reintentar"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
-msgstr "Opciones avanzadas"
+msgstr "Herramientas avanzadas"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
-#, fuzzy
 msgid "Export debug report"
-msgstr "Exportar Informe de Depuración"
+msgstr "Exportar Informe de depuración"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -345,23 +345,23 @@ msgstr "Casillas"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Destacar"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Tachado"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Insertar"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Superindice"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Subíndice"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:564
 #: packages/app-mobile/components/screens/Note.js:1016
@@ -527,9 +527,8 @@ msgid "Delete line"
 msgstr "Borrar línea"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Duplicar"
+msgstr "Duplicar linea"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -722,10 +721,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"El modo seguro está activo actualmente. La representación de notas y todos "
+"los complementos están temporalmente deshabilitados."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:447
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Desactivar el modo seguro y reiniciar"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:451
 msgid ""
@@ -771,15 +772,15 @@ msgstr "Más información"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:477
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) le gustaría compartir una libreta contigo."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Accept"
-msgstr ""
+msgstr "Aceptar"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:481
 msgid "Reject"
-msgstr ""
+msgstr "Rechazar"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:485
 msgid "Some items cannot be synchronised."
@@ -865,9 +866,8 @@ msgid "Toggle editors"
 msgstr "Alternar editores"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Compartir nota..."
+msgstr "Compartir libreta..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -947,7 +947,7 @@ msgstr "¡El token ha sido copiado al portapapeles!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "¿Está seguro de que desea renovar el token de autorización?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -1031,7 +1031,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Renovar token"
 
 #: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
@@ -1124,9 +1124,8 @@ msgid "&Go"
 msgstr "&Ir"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "Libretas"
+msgstr "Libreta"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -1524,13 +1523,12 @@ msgid "You do not have any installed plugin."
 msgstr "No tiene ningún plugin instalado."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "No se pudo instalar el plugin: %s"
+msgstr "No se pudo conectar con el repositorio del plugin: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "Intenta nuevamente"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1718,9 +1716,8 @@ msgstr ""
 "(límite: %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:141
-#, fuzzy
 msgid "Unshare note"
-msgstr "Compartir"
+msgstr "Dejar de compartir nota"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
@@ -1755,19 +1752,20 @@ msgstr[0] "Copiar Enlace Compartible"
 msgstr[1] "Copiar Enlaces Compartible"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "Compartir"
+msgstr "Dejar de compartir"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"¿Eliminar esta invitación? El destinatario ya no tendrá acceso a esta "
+"libreta compartida."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr "Agregar destinatario:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1777,45 +1775,43 @@ msgstr "Compartir"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "El destinatario aún no ha aceptado la invitación"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "El destinatario ha rechazado la invitación"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "El destinatario ha aceptado la invitación"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "Destinatarios:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "Sincronizando..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "Compartir nota..."
+msgstr "Compartir libreta..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"¿Dejar de compartir esta libreta? Los destinatarios ya no tendrán acceso a "
+"su contenido."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Compartir Notas"
+msgstr "Compartir Libreta"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "Alternar la barra lateral"
+msgstr "Alternar modo seguro"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1907,7 +1903,7 @@ msgstr "Configuración"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Datos móviles: sincronización automática deshabilitada"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2257,15 +2253,15 @@ msgstr ""
 "cambiada! [Cambiarla ahora](%s)"
 
 #: packages/server/dist/models/UserModel.js:134
-#, fuzzy
 msgid "attachment"
-msgstr "Adjuntos"
+msgstr "adjunto"
 
 #: packages/server/dist/models/UserModel.js:134
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr ""
+"No se puede guardar %s \"%s\" porque es mayor que el límite permitido (%s)"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2456,23 +2452,20 @@ msgid "Joplin Server URL"
 msgstr "URL del Servidor de Joplin"
 
 #: packages/lib/models/Setting.js:327
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Servidor de Joplin"
+msgstr "Email del servidor Joplin"
 
 #: packages/lib/models/Setting.js:338
 msgid "Joplin Server password"
 msgstr "Contraseña del Servidor de Joplin"
 
 #: packages/lib/models/Setting.js:365
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Servidor de Joplin"
+msgstr "Email del servidor Joplin"
 
 #: packages/lib/models/Setting.js:376
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Contraseña del Servidor de Joplin"
+msgstr "Contraseña del servidor Joplin"
 
 #: packages/lib/models/Setting.js:388
 msgid "Attachment download behaviour"
@@ -2714,11 +2707,12 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Se utiliza para la mayor parte del texto en el editor markdown. Si no se "
+"encuentra, se utiliza una fuente genérica proporcional (ancho variable)."
 
 #: packages/lib/models/Setting.js:758
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Familia de fuente del editor"
+msgstr "Familia de fuente monoespaciada del editor"
 
 #: packages/lib/models/Setting.js:759
 msgid ""
@@ -2726,6 +2720,10 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Se utiliza cuando se necesita una fuente de ancho fijo para presentar el "
+"texto de manera legible (por ejemplo, tablas, casillas de verificación, "
+"código). Si no se encuentra, se utiliza una fuente genérica monoespaciada "
+"(ancho fijo)."
 
 #: packages/lib/models/Setting.js:780
 msgid "Custom stylesheet for rendered Markdown"
@@ -2737,11 +2735,13 @@ msgstr "Hoja de estilos para personalizar todo Joplin"
 
 #: packages/lib/models/Setting.js:806
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "Vuelva a cargar datos locales para sincronizar el destino"
 
 #: packages/lib/models/Setting.js:816
 msgid "Delete local data and re-download from sync target"
 msgstr ""
+"Elimine los datos locales y vuelva a descargarlos desde el destino de "
+"sincronización"
 
 #: packages/lib/models/Setting.js:821
 msgid "Automatically update the application"
@@ -2778,7 +2778,7 @@ msgstr "%d horas"
 
 #: packages/lib/models/Setting.js:849
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Sincronizar solo a través de una conexión WiFi"
 
 #: packages/lib/models/Setting.js:856
 msgid "Text editor command"
@@ -3064,9 +3064,8 @@ msgid "Encrypted items cannot be modified"
 msgstr "Los elementos cifrados no pueden ser modificados"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Foro de Joplin"
+msgstr "Nube de Joplin"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3224,16 +3223,15 @@ msgstr ""
 "Joplin a la última versión"
 
 #: packages/lib/JoplinServerApi.js:80
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"No se pudo conectar con la aplicación de Joplin de Nextcloud. Verifique la "
-"configuración en la pantalla de configuración de Sincronización. El error "
-"completo fue:\n"
+"No se pudo conectar al servidor Joplin. Compruebe las opciones de "
+"sincronización en la pantalla de configuración. El error completo fue:\n"
 "\n"
 "%s"
 
@@ -3908,6 +3906,8 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Ejecuta los comandos contenidos en el archivo de texto. Debe haber un "
+"comando por línea."
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
