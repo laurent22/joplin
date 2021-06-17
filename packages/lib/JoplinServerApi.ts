@@ -91,6 +91,23 @@ export default class JoplinServerApi {
 		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
 	}
 
+	private hidePassword(o: any): any {
+		if (typeof o === 'string') {
+			try {
+				const output = JSON.parse(o);
+				if (!output) return o;
+				if (output.password) output.password = '******';
+				return JSON.stringify(output);
+			} catch (error) {
+				return o;
+			}
+		} else {
+			const output = { ...o };
+			if (output.password) output.password = '******';
+			return output;
+		}
+	}
+
 	private requestToCurl_(url: string, options: any) {
 		const output = [];
 		output.push('curl');
@@ -99,11 +116,12 @@ export default class JoplinServerApi {
 		if (options.headers) {
 			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
-				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
+				const headerValue = n === 'X-API-AUTH' ? '******' : options.headers[n];
+				output.push(`${'-H ' + '"'}${n}: ${headerValue}"`);
 			}
 		}
 		if (options.body) {
-			const serialized = typeof options.body !== 'string' ? JSON.stringify(options.body) : options.body;
+			const serialized = typeof options.body !== 'string' ? JSON.stringify(this.hidePassword(options.body)) : this.hidePassword(options.body);
 			output.push(`${'--data ' + '\''}${serialized}'`);
 		}
 		output.push(`'${url}'`);
