@@ -18,6 +18,12 @@ export interface ItemsThatNeedDecryptionResult {
 	items: any[];
 }
 
+export interface ItemsThatNeedSyncResult {
+	hasMore: boolean;
+	items: any[];
+	neverSyncedItemIds: string[];
+}
+
 export default class BaseItem extends BaseModel {
 
 	public static encryptionService_: any = null;
@@ -583,7 +589,7 @@ export default class BaseItem extends BaseModel {
 		throw new Error('Unreachable');
 	}
 
-	static async itemsThatNeedSync(syncTarget: number, limit = 100) {
+	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
 		const classNames = this.syncItemClassNames();
 
 		for (let i = 0; i < classNames.length; i++) {
@@ -660,12 +666,13 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
+			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
-				return { hasMore: items.length >= limit, items: items };
+				return { hasMore: items.length >= limit, items: items, neverSyncedItemIds };
 			} else {
-				if (items.length) return { hasMore: true, items: items };
+				if (items.length) return { hasMore: true, items: items, neverSyncedItemIds };
 			}
 		}
 
