@@ -122,6 +122,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
+	view.content.showResetPasswordButton = !isNew && owner.is_admin;
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
