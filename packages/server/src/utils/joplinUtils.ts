@@ -196,6 +196,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		cssFiles: ['items/note'],
 		jsFiles: ['items/note'],
 		name: 'note',
+		title: 'Note',
 		path: 'index/items/note',
 		content: {
 			note: {

@@ -51,17 +51,24 @@ export function accountTypeOptions(): AccountTypeSelectOptions[] {
 	return [
 		{
 			value: AccountType.Default,
-			label: 'Default',
+			label: accountTypeToString(AccountType.Default),
 		},
 		{
 			value: AccountType.Basic,
-			label: 'Basic',
+			label: accountTypeToString(AccountType.Basic),
 		},
 		{
 			value: AccountType.Pro,
-			label: 'Pro',
+			label: accountTypeToString(AccountType.Pro),
 		},
 	];
+}
+
+export function accountTypeToString(accountType: AccountType): string {
+	if (accountType === AccountType.Default) return 'Default';
+	if (accountType === AccountType.Basic) return 'Basic';
+	if (accountType === AccountType.Pro) return 'Pro';
+	throw new Error(`Invalid type: ${accountType}`);
 }
 
 export default class UserModel extends BaseModel<User> {
