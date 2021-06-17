@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.0.14](https://github.com/laurent22/joplin/releases/tag/server-v2.0.14) - 2021-06-17T08:52:26Z
+
+- Improved: Allow sending reset password email from admin UI (479237d)
+- Improved: Tokens would expire too soon (6ae0e84)
+
 ## [server-v2.0.13](https://github.com/laurent22/joplin/releases/tag/server-v2.0.13) - 2021-06-16T14:28:20Z
 
 - Improved: Allow creating a new user with no password, which must be set via email confirmation (1896549)
