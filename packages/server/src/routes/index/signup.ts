@@ -12,7 +12,7 @@ import { AccountType, accountTypeProperties } from '../../models/UserModel';
 import { ErrorForbidden } from '../../utils/errors';
 
 function makeView(error: Error = null): View {
-	const view = defaultView('signup');
+	const view = defaultView('signup', 'Sign Up');
 	view.content = {
 		error,
 		postUrl: makeUrl(UrlType.Signup),

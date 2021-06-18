@@ -59,9 +59,9 @@
 	</div>	
 	<div class="control">
 		<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
-		{{#global.owner.is_admin}}
+		{{#showResetPasswordButton}}
 			<input type="submit" name="send_reset_password_email" class="button is-warning" value="Send reset password email" />
-		{{/global.owner.is_admin}}
+		{{/showResetPasswordButton}}
 		{{#showDeleteButton}}
 			<input type="submit" name="delete_button" class="button is-danger" value="Delete" />
 		{{/showDeleteButton}}

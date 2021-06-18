@@ -83,7 +83,14 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 
 	const users = await userModel.all();
 
-	const view: View = defaultView('users');
+	users.sort((u1: User, u2: User) => {
+		if (u1.full_name && u2.full_name) return u1.full_name.toLowerCase() < u2.full_name.toLowerCase() ? -1 : +1;
+		if (u1.full_name && !u2.full_name) return +1;
+		if (!u1.full_name && u2.full_name) return -1;
+		return u1.email.toLowerCase() < u2.email.toLowerCase() ? -1 : +1;
+	});
+
+	const view: View = defaultView('users', 'Users');
 	view.content.users = users.map(user => {
 		return {
 			...user,
@@ -115,13 +122,14 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		postUrl = `${config().baseUrl}/users/${user.id}`;
 	}
 
-	const view: View = defaultView('user');
+	const view: View = defaultView('user', 'Profile');
 	view.content.user = user;
 	view.content.isNew = isNew;
 	view.content.buttonTitle = isNew ? 'Create user' : 'Update profile';
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
+	view.content.showResetPasswordButton = !isNew && owner.is_admin;
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
@@ -145,7 +153,7 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 
 	if (user.must_set_password) {
 		const view: View = {
-			...defaultView('users/confirm'),
+			...defaultView('users/confirm', 'Confirmation'),
 			content: {
 				user,
 				error,

@@ -1,5 +1,13 @@
 # Joplin Server Changelog
 
+## [server-v2.1.1](https://github.com/laurent22/joplin/releases/tag/server-v2.1.1) - 2021-06-17T17:27:29Z
+
+- New: Added account info to dashboard and title to pages (7f0b3fd)
+- New: Added way to batch requests (currently disabled) (c682c88)
+- New: Added way to debug slow queries (e853244)
+- Improved: Hide Reset Password button when creating new users (ac03c08)
+- Improved: Sort users by name, then email (65c3d01)
+
 ## [server-v2.0.14](https://github.com/laurent22/joplin/releases/tag/server-v2.0.14) - 2021-06-17T08:52:26Z
 
 - Improved: Allow sending reset password email from admin UI (479237d)

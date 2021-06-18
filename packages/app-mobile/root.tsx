@@ -28,6 +28,7 @@ import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
+const VersionInfo = require('react-native-version-info').default;
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
 
 import NetInfo from '@react-native-community/netinfo';
@@ -426,7 +427,7 @@ async function initialize(dispatch: Function) {
 	// require('@joplin/lib/ntpDate').setLogger(reg.logger());
 
 	reg.logger().info('====================================');
-	reg.logger().info(`Starting application ${Setting.value('appId')} (${Setting.value('env')})`);
+	reg.logger().info(`Starting application ${Setting.value('appId')} v${VersionInfo.appVersion} (${Setting.value('env')})`);
 
 	const dbLogger = new Logger();
 	dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });

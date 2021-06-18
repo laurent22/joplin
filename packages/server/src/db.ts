@@ -94,7 +94,27 @@ export async function waitForConnection(dbConfig: DatabaseConfig): Promise<Conne
 }
 
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
-	return knex(makeKnexConfig(dbConfig));
+	const connection = knex(makeKnexConfig(dbConfig));
+
+	const debugSlowQueries = false;
+
+	if (debugSlowQueries) {
+		const startTimes: Record<string, number> = {};
+
+		const slowQueryDuration = 10;
+
+		connection.on('query', (data) => {
+			startTimes[data.__knexQueryUid] = Date.now();
+		});
+
+		connection.on('query-response', (_response, data) => {
+			const duration = Date.now() - startTimes[data.__knexQueryUid];
+			if (duration < slowQueryDuration) return;
+			console.info(`SQL: ${data.sql} (${duration}ms)`);
+		});
+	}
+
+	return connection;
 }
 
 export async function disconnectDb(db: DbConnection) {
