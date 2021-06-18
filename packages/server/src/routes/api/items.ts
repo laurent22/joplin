@@ -13,7 +13,7 @@ import { safeRemove } from '../../utils/fileUtils';
 
 const router = new Router(RouteType.Api);
 
-async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean) {
+export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean) {
 	if (!ctx.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
 
 	const parsedBody = await formParse(ctx.req);
@@ -26,7 +26,7 @@ async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean)
 		items = bodyFields.items.map((item: any) => {
 			return {
 				name: item.name,
-				body: Buffer.from(item.body, 'utf8'),
+				body: item.body ? Buffer.from(item.body, 'utf8') : Buffer.alloc(0),
 			};
 		});
 	} else {
@@ -56,7 +56,11 @@ async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean)
 		}
 	}
 
-	return ctx.models.item().saveFromRawContent(ctx.owner, items, saveOptions);
+	const output = await ctx.models.item().saveFromRawContent(ctx.owner, items, saveOptions);
+	for (const [name] of Object.entries(output)) {
+		if (output[name].item) output[name].item = ctx.models.item().toApiOutput(output[name].item) as Item;
+	}
+	return output;
 }
 
 // Note about access control:
@@ -110,10 +114,6 @@ router.get('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const serializedContent = await itemModel.serializedContent(item.id);
 	return respondWithItemContent(ctx.response, item, serializedContent);
 });
-
-// router.put('api/batch_items', async (path: SubPath, ctx: AppContext) => {
-
-// });
 
 router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const results = await putItemContents(path, ctx, false);

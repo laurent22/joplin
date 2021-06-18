@@ -3,10 +3,11 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
 import { Item } from '../../db';
-import { PaginatedItems } from '../../models/ItemModel';
+import { PaginatedItems, SaveFromRawContentResult } from '../../models/ItemModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
 import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
+import { PaginatedResults } from '../../models/utils/pagination';
 
 describe('api_items', function() {
 
@@ -147,6 +148,56 @@ describe('api_items', function() {
 
 		const result: Item = await getApi(session.id, `items/root:/${noteId}.md:`);
 		expect(result.name).toBe(`${noteId}.md`);
+	});
+
+	test('should batch upload items', async function() {
+		const { session: session1 } = await createUserAndSession(1, false);
+
+		const result: PaginatedResults = await putApi(session1.id, 'batch_items', {
+			items: [
+				{
+					name: '00000000000000000000000000000001.md',
+					body: makeNoteSerializedBody({ id: '00000000000000000000000000000001' }),
+				},
+				{
+					name: '00000000000000000000000000000002.md',
+					body: makeNoteSerializedBody({ id: '00000000000000000000000000000002' }),
+				},
+			],
+		});
+
+		expect(Object.keys(result.items).length).toBe(2);
+		expect(Object.keys(result.items).sort()).toEqual(['00000000000000000000000000000001.md', '00000000000000000000000000000002.md']);
+	});
+
+	test('should report errors when batch uploading', async function() {
+		const { user: user1,session: session1 } = await createUserAndSession(1, false);
+
+		const note1 = makeNoteSerializedBody({ id: '00000000000000000000000000000001' });
+		await models().user().save({ id: user1.id, max_item_size: note1.length });
+
+		const result: PaginatedResults = await putApi(session1.id, 'batch_items', {
+			items: [
+				{
+					name: '00000000000000000000000000000001.md',
+					body: note1,
+				},
+				{
+					name: '00000000000000000000000000000002.md',
+					body: makeNoteSerializedBody({ id: '00000000000000000000000000000002', body: 'too large' }),
+				},
+			],
+		});
+
+		const items: SaveFromRawContentResult = result.items as any;
+
+		expect(Object.keys(items).length).toBe(2);
+		expect(Object.keys(items).sort()).toEqual(['00000000000000000000000000000001.md', '00000000000000000000000000000002.md']);
+
+		expect(items['00000000000000000000000000000001.md'].item).toBeTruthy();
+		expect(items['00000000000000000000000000000001.md'].error).toBeFalsy();
+		expect(items['00000000000000000000000000000002.md'].item).toBeFalsy();
+		expect(items['00000000000000000000000000000002.md'].error.httpCode).toBe(ErrorPayloadTooLarge.httpCode);
 	});
 
 	test('should list children', async function() {

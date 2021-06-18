@@ -19,10 +19,7 @@ export interface SaveFromRawContentItem {
 
 export interface SaveFromRawContentResultItem {
 	item: Item;
-	error: Error;
-	resourceIds?: string[];
-	isNote?: boolean;
-	joplinItem?: any;
+	error: any;
 }
 
 export type SaveFromRawContentResult = Record<string, SaveFromRawContentResultItem>;
@@ -300,8 +297,21 @@ export default class ItemModel extends BaseModel<Item> {
 	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[], options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
 		options = options || {};
 
+		// In this function, first we process the input items, which may be
+		// serialized Joplin items or actual buffers (for resources) and convert
+		// them to database items. Once it's done those db items are saved in
+		// batch at the end.
+
+		interface ItemToProcess {
+			item: Item;
+			error: Error;
+			resourceIds?: string[];
+			isNote?: boolean;
+			joplinItem?: any;
+		}
+
 		const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name));
-		const output: SaveFromRawContentResult = {};
+		const itemsToProcess: Record<string, ItemToProcess> = {};
 
 		for (const rawItem of rawContentItems) {
 			try {
@@ -347,7 +357,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 				await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
 
-				output[rawItem.name] = {
+				itemsToProcess[rawItem.name] = {
 					item: item,
 					error: null,
 					resourceIds,
@@ -355,18 +365,28 @@ export default class ItemModel extends BaseModel<Item> {
 					joplinItem,
 				};
 			} catch (error) {
-				output[rawItem.name] = {
+				itemsToProcess[rawItem.name] = {
 					item: null,
 					error: error,
 				};
 			}
 		}
 
+		const output: SaveFromRawContentResult = {};
+
 		await this.withTransaction(async () => {
-			for (const name of Object.keys(output)) {
-				const o = output[name];
+			for (const name of Object.keys(itemsToProcess)) {
+				const o = itemsToProcess[name];
+
+				if (o.error) {
+					output[name] = {
+						item: null,
+						error: o.error,
+					};
+					continue;
+				}
+
 				const itemToSave = o.item;
-				if (!itemToSave) continue;
 
 				try {
 					const savedItem = await this.saveForUser(user.id, itemToSave);
@@ -376,10 +396,15 @@ export default class ItemModel extends BaseModel<Item> {
 						await this.models().itemResource().addResourceIds(savedItem.id, o.resourceIds);
 					}
 
-					output[name].item = savedItem;
+					output[name] = {
+						item: savedItem,
+						error: null,
+					};
 				} catch (error) {
-					output[name].item = null;
-					output[name].error = error;
+					output[name] = {
+						item: null,
+						error: error,
+					};
 				}
 			}
 		});
