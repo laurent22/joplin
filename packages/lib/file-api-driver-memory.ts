@@ -1,18 +1,18 @@
 import time from './time';
 const fs = require('fs-extra');
-import { basicDelta } from './file-api';
+import { basicDelta, MultiPutItem } from './file-api';
 
 export default class FileApiDriverMemory {
 
-	private items_:any[];
-	private deletedItems_:any[];
+	private items_: any[];
+	private deletedItems_: any[];
 
 	constructor() {
 		this.items_ = [];
 		this.deletedItems_ = [];
 	}
 
-	encodeContent_(content:any) {
+	encodeContent_(content: any) {
 		if (content instanceof Buffer) {
 			return content.toString('base64');
 		} else {
@@ -20,27 +20,27 @@ export default class FileApiDriverMemory {
 		}
 	}
 
-	// public get supportsMultiPut() {
-	// 	return true;
-	// }
+	public get supportsMultiPut() {
+		return true;
+	}
 
-	decodeContent_(content:any) {
+	decodeContent_(content: any) {
 		return Buffer.from(content, 'base64').toString('utf-8');
 	}
 
-	itemIndexByPath(path:string) {
+	itemIndexByPath(path: string) {
 		for (let i = 0; i < this.items_.length; i++) {
 			if (this.items_[i].path == path) return i;
 		}
 		return -1;
 	}
 
-	itemByPath(path:string) {
+	itemByPath(path: string) {
 		const index = this.itemIndexByPath(path);
 		return index < 0 ? null : this.items_[index];
 	}
 
-	newItem(path:string, isDir = false) {
+	newItem(path: string, isDir = false) {
 		const now = time.unixMs();
 		return {
 			path: path,
@@ -51,18 +51,18 @@ export default class FileApiDriverMemory {
 		};
 	}
 
-	stat(path:string) {
+	stat(path: string) {
 		const item = this.itemByPath(path);
 		return Promise.resolve(item ? Object.assign({}, item) : null);
 	}
 
-	async setTimestamp(path:string, timestampMs:number):Promise<any> {
+	async setTimestamp(path: string, timestampMs: number): Promise<any> {
 		const item = this.itemByPath(path);
 		if (!item) return Promise.reject(new Error(`File not found: ${path}`));
 		item.updated_time = timestampMs;
 	}
 
-	async list(path:string) {
+	async list(path: string) {
 		const output = [];
 
 		for (let i = 0; i < this.items_.length; i++) {
@@ -85,7 +85,7 @@ export default class FileApiDriverMemory {
 		});
 	}
 
-	async get(path:string, options:any) {
+	async get(path: string, options: any) {
 		const item = this.itemByPath(path);
 		if (!item) return Promise.resolve(null);
 		if (item.isDir) return Promise.reject(new Error(`${path} is a directory, not a file`));
@@ -101,13 +101,13 @@ export default class FileApiDriverMemory {
 		return output;
 	}
 
-	async mkdir(path:string) {
+	async mkdir(path: string) {
 		const index = this.itemIndexByPath(path);
 		if (index >= 0) return;
 		this.items_.push(this.newItem(path, true));
 	}
 
-	async put(path:string, content:any, options:any = null) {
+	async put(path: string, content: any, options: any = null) {
 		if (!options) options = {};
 
 		if (options.source === 'file') content = await fs.readFile(options.path);
@@ -117,13 +117,38 @@ export default class FileApiDriverMemory {
 			const item = this.newItem(path, false);
 			item.content = this.encodeContent_(content);
 			this.items_.push(item);
+			return item;
 		} else {
 			this.items_[index].content = this.encodeContent_(content);
 			this.items_[index].updated_time = time.unixMs();
+			return this.items_[index];
 		}
 	}
 
-	async delete(path:string) {
+	public async multiPut(items: MultiPutItem[], options: any = null) {
+		const output: any = {
+			items: {},
+		};
+
+		for (const item of items) {
+			try {
+				const processedItem = await this.put(`/root/${item.name}`, item.body, options);
+				output.items[item.name] = {
+					item: processedItem,
+					error: null,
+				};
+			} catch (error) {
+				output.items[item.name] = {
+					item: null,
+					error: error,
+				};
+			}
+		}
+
+		return output;
+	}
+
+	async delete(path: string) {
 		const index = this.itemIndexByPath(path);
 		if (index >= 0) {
 			const item = Object.assign({}, this.items_[index]);
@@ -134,10 +159,10 @@ export default class FileApiDriverMemory {
 		}
 	}
 
-	async move(oldPath:string, newPath:string):Promise<any> {
+	async move(oldPath: string, newPath: string): Promise<any> {
 		const sourceItem = this.itemByPath(oldPath);
 		if (!sourceItem) return Promise.reject(new Error(`Path not found: ${oldPath}`));
-		this.delete(newPath); // Overwrite if newPath already exists
+		await this.delete(newPath); // Overwrite if newPath already exists
 		sourceItem.path = newPath;
 	}
 
@@ -145,8 +170,8 @@ export default class FileApiDriverMemory {
 		this.items_ = [];
 	}
 
-	async delta(path:string, options:any = null) {
-		const getStatFn = async (path:string) => {
+	async delta(path: string, options: any = null) {
+		const getStatFn = async (path: string) => {
 			const output = this.items_.slice();
 			for (let i = 0; i < output.length; i++) {
 				const item = Object.assign({}, output[i]);

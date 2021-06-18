@@ -37,11 +37,12 @@ export default class ItemUploader {
 				// the regular upload.
 				logger.warn(`Pre-uploaded item updated_time has changed. It is going to be re-uploaded again: ${path} (From ${this.preUploadedItemUpdatedTimes_[path]} to ${local.updated_time})`);
 			} else {
-				return preUploadItem;
+				if (preUploadItem.error) throw new Error(preUploadItem.error.message ? preUploadItem.error.message : 'Unknown pre-upload error');
+				return;
 			}
 		}
 		const content = await ItemClass.serializeForSync(local);
-		return this.apiCall_('put', path, content);
+		await this.apiCall_('put', path, content);
 	}
 
 	public async preUploadItems(items: ItemThatNeedSync[]) {
