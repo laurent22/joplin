@@ -5,13 +5,16 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
+import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge } from '../../utils/errors';
 import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
 import { requestDeltaPagination, requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
+import { formatBytes, MB } from '../../utils/bytes';
 
 const router = new Router(RouteType.Api);
+
+const batchMaxSize = 1 * MB;
 
 export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean) {
 	if (!ctx.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
@@ -23,12 +26,16 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 	let items: SaveFromRawContentItem[] = [];
 
 	if (isBatch) {
+		let totalSize = 0;
 		items = bodyFields.items.map((item: any) => {
+			totalSize += item.name.length + (item.body ? item.body.length : 0);
 			return {
 				name: item.name,
 				body: item.body ? Buffer.from(item.body, 'utf8') : Buffer.alloc(0),
 			};
 		});
+
+		if (totalSize > batchMaxSize) throw new ErrorPayloadTooLarge(`Size of items (${formatBytes(totalSize)}) is over the limit (${formatBytes(batchMaxSize)})`);
 	} else {
 		const filePath = parsedBody?.files?.file ? parsedBody.files.file.path : null;
 
