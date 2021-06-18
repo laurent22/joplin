@@ -5,7 +5,7 @@ import BaseItem, { ItemThatNeedSync } from '../../models/BaseItem';
 
 const logger = Logger.create('ItemUploader');
 
-type ApiCallFunction = (fnName: string, ...args: any[])=> Promise<any>;
+export type ApiCallFunction = (fnName: string, ...args: any[])=> Promise<any>;
 
 interface BatchItem extends MultiPutItem {
 	localItemUpdatedTime: number;
