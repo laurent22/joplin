@@ -403,7 +403,7 @@ export default class BaseItem extends BaseModel {
 		return this.shareService_;
 	}
 
-	public static async serializeForSync(item: BaseItemEntity) {
+	public static async serializeForSync(item: BaseItemEntity): Promise<string> {
 		const ItemClass = this.itemClass(item);
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');

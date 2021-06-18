@@ -11,18 +11,25 @@ interface BatchItem extends MultiPutItem {
 	localItemUpdatedTime: number;
 }
 
-const maxBatchSize = 1 * 1024 * 1024; // 1MB
-
 export default class ItemUploader {
 
 	private api_: FileApi;
 	private apiCall_: ApiCallFunction;
 	private preUploadedItems_: Record<string, any> = {};
 	private preUploadedItemUpdatedTimes_: Record<string, number> = {};
+	private maxBatchSize_ = 1 * 1024 * 1024; // 1MB;
 
 	public constructor(api: FileApi, apiCall: ApiCallFunction) {
 		this.api_ = api;
 		this.apiCall_ = apiCall;
+	}
+
+	public get maxBatchSize() {
+		return this.maxBatchSize_;
+	}
+
+	public set maxBatchSize(v: number) {
+		this.maxBatchSize_ = v;
 	}
 
 	public async serializeAndUploadItem(ItemClass: any, path: string, local: ItemThatNeedSync) {
@@ -85,9 +92,9 @@ export default class ItemUploader {
 			// Although it should be rare, if the item itself is above the
 			// batch max size, we skip it. In that case it will be uploaded the
 			// regular way when the synchronizer calls `serializeAndUploadItem()`
-			if (itemSize > maxBatchSize) continue;
+			if (itemSize > this.maxBatchSize) continue;
 
-			if (batchSize + itemSize > maxBatchSize) {
+			if (batchSize + itemSize > this.maxBatchSize) {
 				await uploadBatch(currentBatch);
 				batchSize = itemSize;
 				currentBatch = [itemToUpload];
