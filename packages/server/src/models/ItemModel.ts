@@ -385,17 +385,6 @@ export default class ItemModel extends BaseModel<Item> {
 		});
 
 		return output;
-
-		// return this.withTransaction<Item>(async () => {
-		// 	const savedItem = await this.saveForUser(user.id, item);
-
-		// 	if (isNote) {
-		// 		await this.models().itemResource().deleteByItemId(savedItem.id);
-		// 		await this.models().itemResource().addResourceIds(savedItem.id, resourceIds);
-		// 	}
-
-		// 	return savedItem;
-		// });
 	}
 
 	protected async validate(item: Item, options: ValidateOptions = {}): Promise<Item> {

@@ -6,59 +6,58 @@ import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
-import ItemModel, { ItemSaveOption } from '../../models/ItemModel';
+import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
 import { requestDeltaPagination, requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 
 const router = new Router(RouteType.Api);
 
-// async function putItemContents(path: SubPath, ctx: AppContext, isBatch:boolean) {
-// 	if (!ctx.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
+async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean) {
+	if (!ctx.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
 
-// 	const parsedBody = await formParse(ctx.req);
-// 	const bodyFields = parsedBody.fields;
-// 	const saveOptions: ItemSaveOption = {};
+	const parsedBody = await formParse(ctx.req);
+	const bodyFields = parsedBody.fields;
+	const saveOptions: ItemSaveOption = {};
 
-// 	let items:SaveFromRawContentItem[] = []
+	let items: SaveFromRawContentItem[] = [];
 
-// 	if (isBatch) {
-// 		items = bodyFields.items.map((item:any) => {
-// 			return {
-// 				name: item.name,
-// 				body: Buffer.from(item.body, 'utf8'),
-// 			};
-// 		});
-// 	} else {
-// 		const filePath = parsedBody?.files?.file ? parsedBody.files.file.path : null;
+	if (isBatch) {
+		items = bodyFields.items.map((item: any) => {
+			return {
+				name: item.name,
+				body: Buffer.from(item.body, 'utf8'),
+			};
+		});
+	} else {
+		const filePath = parsedBody?.files?.file ? parsedBody.files.file.path : null;
 
-// 		try {
-// 			const buffer = filePath ? await fs.readFile(filePath) : Buffer.alloc(0);
+		try {
+			const buffer = filePath ? await fs.readFile(filePath) : Buffer.alloc(0);
 
-// 			// This end point can optionally set the associated jop_share_id field. It
-// 			// is only useful when uploading resource blob (under .resource folder)
-// 			// since they can't have metadata. Note, Folder and Resource items all
-// 			// include the "share_id" field property so it doesn't need to be set via
-// 			// query parameter.
-// 			if (ctx.query['share_id']) {
-// 				saveOptions.shareId = ctx.query['share_id'];
-// 				await ctx.models.item().checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
-// 			}
+			// This end point can optionally set the associated jop_share_id field. It
+			// is only useful when uploading resource blob (under .resource folder)
+			// since they can't have metadata. Note, Folder and Resource items all
+			// include the "share_id" field property so it doesn't need to be set via
+			// query parameter.
+			if (ctx.query['share_id']) {
+				saveOptions.shareId = ctx.query['share_id'];
+				await ctx.models.item().checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
+			}
 
-// 			items = [
-// 				{
-// 					name: ctx.models.item().pathToName(path.id),
-// 					body: buffer,
-// 				},
-// 			];
-// 		} finally {
-// 			if (filePath) await safeRemove(filePath);
-// 		}
-// 	}
+			items = [
+				{
+					name: ctx.models.item().pathToName(path.id),
+					body: buffer,
+				},
+			];
+		} finally {
+			if (filePath) await safeRemove(filePath);
+		}
+	}
 
-// 	const savedItems = await ctx.models.item().saveFromRawContent(ctx.owner, items, saveOptions);
-// 	return savedItems.map(item => ctx.models.item().toApiOutput(item));
-// }
+	return ctx.models.item().saveFromRawContent(ctx.owner, items, saveOptions);
+}
 
 // Note about access control:
 //
@@ -117,37 +116,10 @@ router.get('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 // });
 
 router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	if (!ctx.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
-
-	const itemModel = ctx.models.item();
-	const name = itemModel.pathToName(path.id);
-	const parsedBody = await formParse(ctx.req);
-	const filePath = parsedBody?.files?.file ? parsedBody.files.file.path : null;
-
-	let outputItem: Item = null;
-
-	try {
-		const buffer = filePath ? await fs.readFile(filePath) : Buffer.alloc(0);
-		const saveOptions: ItemSaveOption = {};
-
-		// This end point can optionally set the associated jop_share_id field. It
-		// is only useful when uploading resource blob (under .resource folder)
-		// since they can't have metadata. Note, Folder and Resource items all
-		// include the "share_id" field property so it doesn't need to be set via
-		// query parameter.
-		if (ctx.query['share_id']) {
-			saveOptions.shareId = ctx.query['share_id'];
-			await itemModel.checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
-		}
-
-		const result = await itemModel.saveFromRawContent(ctx.owner, [{ name, body: buffer }], saveOptions);
-		if (result[name].error) throw result[name].error;
-		outputItem = itemModel.toApiOutput(result[name].item) as Item;
-	} finally {
-		if (filePath) await safeRemove(filePath);
-	}
-
-	return outputItem;
+	const results = await putItemContents(path, ctx, false);
+	const result = results[Object.keys(results)[0]];
+	if (result.error) throw result.error;
+	return result.item;
 });
 
 router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
