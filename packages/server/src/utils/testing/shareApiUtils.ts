@@ -60,7 +60,8 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 			}
 		}
 
-		const newItem = await models().item().saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const result = await models().item().saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(sessionId, userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }
