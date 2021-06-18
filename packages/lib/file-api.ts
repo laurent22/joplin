@@ -11,6 +11,11 @@ const Mutex = require('async-mutex').Mutex;
 
 const logger = Logger.create('FileApi');
 
+export interface MultiPutItem {
+	name: string;
+	body: string;
+}
+
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
@@ -79,6 +84,10 @@ class FileApi {
 		if (this.initialized_) return;
 		this.initialized_ = true;
 		if (this.driver_.initialize) return this.driver_.initialize(this.fullPath(''));
+	}
+
+	public get supportsMultiPut(): boolean {
+		return !!this.driver().supportsMultiPut;
 	}
 
 	async fetchRemoteDateOffset_() {
@@ -251,12 +260,6 @@ class FileApi {
 		if (!output) return output;
 		output.path = path;
 		return output;
-
-		// return this.driver_.stat(this.fullPath(path)).then((output) => {
-		// 	if (!output) return output;
-		// 	output.path = path;
-		// 	return output;
-		// });
 	}
 
 	// Returns UTF-8 encoded string by default, or a Response if `options.target = 'file'`
@@ -275,6 +278,11 @@ class FileApi {
 		}
 
 		return tryAndRepeat(() => this.driver_.put(this.fullPath(path), content, options), this.requestRepeatCount());
+	}
+
+	public async multiPut(items: MultiPutItem[], options: any = null) {
+		if (!this.driver().supportsMultiPut) throw new Error('Multi PUT not supported');
+		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
 	}
 
 	delete(path: string) {

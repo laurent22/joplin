@@ -29,7 +29,7 @@ import Revision from '../models/Revision';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
 const { FileApi } = require('../file-api.js');
-const { FileApiDriverMemory } = require('../file-api-driver-memory.js');
+const FileApiDriverMemory = require('../file-api-driver-memory').default;
 const { FileApiDriverLocal } = require('../file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');

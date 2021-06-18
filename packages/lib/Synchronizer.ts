@@ -19,6 +19,7 @@ import EncryptionService from './services/EncryptionService';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
+import ItemUploader from './services/synchronizer/ItemUploader';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -73,7 +74,7 @@ export default class Synchronizer {
 
 	public dispatch: Function;
 
-	constructor(db: any, api: any, appType: string) {
+	public constructor(db: any, api: any, appType: string) {
 		this.db_ = db;
 		this.api_ = api;
 		this.appType_ = appType;
@@ -83,6 +84,8 @@ export default class Synchronizer {
 		this.progressReport_ = {};
 
 		this.dispatch = function() {};
+
+		this.apiCall = this.apiCall.bind(this);
 	}
 
 	state() {
@@ -300,7 +303,7 @@ export default class Synchronizer {
 		return '';
 	}
 
-	async apiCall(fnName: string, ...args: any[]) {
+	private async apiCall(fnName: string, ...args: any[]) {
 		if (this.syncTargetIsLocked_) throw new JoplinError('Sync target is locked - aborting API call', 'lockError');
 
 		try {
@@ -389,6 +392,8 @@ export default class Synchronizer {
 		// correctly so as to share/unshare the right items.
 		await Folder.updateAllShareIds();
 
+		const itemUploader = new ItemUploader(this.api(), this.apiCall);
+
 		let errorToThrow = null;
 		let syncLock = null;
 
@@ -439,6 +444,8 @@ export default class Synchronizer {
 
 					const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 					const locals = result.items;
+
+					await itemUploader.preUploadItems(result.items.filter((it: any) => result.neverSyncedItemIds.includes(it.id)));
 
 					for (let i = 0; i < locals.length; i++) {
 						if (this.cancelling()) break;
@@ -588,8 +595,7 @@ export default class Synchronizer {
 							let canSync = true;
 							try {
 								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
-								const content = await ItemClass.serializeForSync(local);
-								await this.apiCall('put', path, content);
+								await itemUploader.serializeAndUploadItem(ItemClass, path, local);
 							} catch (error) {
 								if (error && error.code === 'rejectedByTarget') {
 									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
@@ -619,7 +625,6 @@ export default class Synchronizer {
 								// above also doesn't use it because it fetches the whole remote object and read the
 								// more reliable 'updated_time' property. Basically remote.updated_time is deprecated.
 
-								// await this.api().setTimestamp(path, local.updated_time);
 								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
 							}
 						} else if (action == 'itemConflict') {

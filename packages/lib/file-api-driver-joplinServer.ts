@@ -1,3 +1,4 @@
+import { MultiPutItem } from './file-api';
 import JoplinError from './JoplinError';
 import JoplinServerApi from './JoplinServerApi';
 import { trimSlashes } from './path-utils';
@@ -29,6 +30,10 @@ export default class FileApiDriverJoplinServer {
 
 	public api() {
 		return this.api_;
+	}
+
+	public get supportsMultiPut() {
+		return true;
 	}
 
 	public requestRepeatCount() {
@@ -172,6 +177,10 @@ export default class FileApiDriverJoplinServer {
 			}
 			throw error;
 		}
+	}
+
+	public async multiPut(items: MultiPutItem[], options: any = null) {
+		return this.api().exec('PUT', 'api/batch_items', null, { items: items }, null, options);
 	}
 
 	public async delete(path: string) {

@@ -51,5 +51,6 @@ done
 cd "$ROOT_DIR/packages/app-cli"
 npm start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
 npm start -- --profile "$PROFILE_DIR" import ~/Desktop/Joplin_17_06_2021.jex
+# npm start -- --profile "$PROFILE_DIR" import ~/Desktop/Tout_18_06_2021.jex
 npm start -- --profile "$PROFILE_DIR" sync
 

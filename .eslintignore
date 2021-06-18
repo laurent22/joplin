@@ -872,6 +872,9 @@ packages/lib/eventManager.js.map
 packages/lib/file-api-driver-joplinServer.d.ts
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-joplinServer.js.map
+packages/lib/file-api-driver-memory.d.ts
+packages/lib/file-api-driver-memory.js
+packages/lib/file-api-driver-memory.js.map
 packages/lib/file-api-driver.test.d.ts
 packages/lib/file-api-driver.test.js
 packages/lib/file-api-driver.test.js.map
@@ -1391,6 +1394,12 @@ packages/lib/services/spellChecker/SpellCheckerService.js.map
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.d.ts
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.js
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.js.map
+packages/lib/services/synchronizer/ItemUploader.d.ts
+packages/lib/services/synchronizer/ItemUploader.js
+packages/lib/services/synchronizer/ItemUploader.js.map
+packages/lib/services/synchronizer/ItemUploader.test.d.ts
+packages/lib/services/synchronizer/ItemUploader.test.js
+packages/lib/services/synchronizer/ItemUploader.test.js.map
 packages/lib/services/synchronizer/LockHandler.d.ts
 packages/lib/services/synchronizer/LockHandler.js
 packages/lib/services/synchronizer/LockHandler.js.map
