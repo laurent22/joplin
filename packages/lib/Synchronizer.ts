@@ -20,6 +20,7 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
+import { FileApi } from './file-api';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -27,6 +28,18 @@ interface RemoteItem {
 	id: string;
 	path?: string;
 	type_?: number;
+	isDeleted?: boolean;
+
+	// This the time when the file was created on the server. It is used for
+	// example for the locking mechanim or any file that's not an actual Joplin
+	// item.
+	updated_time?: number;
+
+	// This is the time that corresponds to the actual Joplin item updated_time
+	// value. A note is always uploaded with a delay so the server updated_time
+	// value will always be ahead. However for synchronising we need to know the
+	// exact Joplin item updated_time value.
+	jop_updated_time?: number;
 }
 
 function isCannotSyncError(error: any): boolean {
@@ -50,7 +63,7 @@ export default class Synchronizer {
 	public static verboseMode: boolean = true;
 
 	private db_: any;
-	private api_: any;
+	private api_: FileApi;
 	private appType_: string;
 	private logger_: Logger = new Logger();
 	private state_: string = 'idle';
@@ -74,7 +87,7 @@ export default class Synchronizer {
 
 	public dispatch: Function;
 
-	public constructor(db: any, api: any, appType: string) {
+	public constructor(db: any, api: FileApi, appType: string) {
 		this.db_ = db;
 		this.api_ = api;
 		this.appType_ = appType;
@@ -307,7 +320,7 @@ export default class Synchronizer {
 		if (this.syncTargetIsLocked_) throw new JoplinError('Sync target is locked - aborting API call', 'lockError');
 
 		try {
-			const output = await this.api()[fnName](...args);
+			const output = await (this.api() as any)[fnName](...args);
 			return output;
 		} catch (error) {
 			const lockStatus = await this.lockErrorStatus_();
@@ -769,16 +782,27 @@ export default class Synchronizer {
 						logger: this.logger(),
 					});
 
-					const remotes = listResult.items;
+					const remotes: RemoteItem[] = listResult.items;
 
 					this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
+
+					const remoteIds = remotes.map(r => BaseItem.pathToId(r.path));
+					const locals = await BaseItem.loadItemsByIds(remoteIds);
 
 					for (const remote of remotes) {
 						if (this.cancelling()) break;
 
-						this.downloadQueue_.push(remote.path, async () => {
-							return this.apiCall('get', remote.path);
-						});
+						let needsToDownload = true;
+						if (this.api().supportsAccurateTimestamp) {
+							const local = locals.find(l => l.id === BaseItem.pathToId(remote.path));
+							if (local && local.updated_time === remote.jop_updated_time) needsToDownload = false;
+						}
+
+						if (needsToDownload) {
+							this.downloadQueue_.push(remote.path, async () => {
+								return this.apiCall('get', remote.path);
+							});
+						}
 					}
 
 					for (let i = 0; i < remotes.length; i++) {
@@ -800,9 +824,10 @@ export default class Synchronizer {
 						};
 
 						const path = remote.path;
+						const remoteId = BaseItem.pathToId(path);
 						let action = null;
 						let reason = '';
-						let local = await BaseItem.loadItemByPath(path);
+						let local = locals.find(l => l.id === remoteId);
 						let ItemClass = null;
 						let content = null;
 
@@ -821,10 +846,14 @@ export default class Synchronizer {
 									action = 'deleteLocal';
 									reason = 'remote has been deleted';
 								} else {
-									content = await loadContent();
-									if (content && content.updated_time > local.updated_time) {
-										action = 'updateLocal';
-										reason = 'remote is more recent than local';
+									if (this.api().supportsAccurateTimestamp && remote.jop_updated_time === local.updated_time) {
+										// Nothing to do, and no need to fetch the content
+									} else {
+										content = await loadContent();
+										if (content && content.updated_time > local.updated_time) {
+											action = 'updateLocal';
+											reason = 'remote is more recent than local';
+										}
 									}
 								}
 							}

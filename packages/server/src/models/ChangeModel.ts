@@ -5,14 +5,12 @@ import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel, { SaveOptions } from './BaseModel';
 import { PaginatedResults, Pagination, PaginationOrderDir } from './utils/pagination';
 
-export interface ChangeWithItem {
-	item: Item;
-	updated_time: number;
-	type: ChangeType;
+export interface DeltaChange extends Change {
+	jop_updated_time?: number;
 }
 
 export interface PaginatedChanges extends PaginatedResults {
-	items: Change[];
+	items: DeltaChange[];
 }
 
 export interface ChangePagination {
@@ -158,9 +156,20 @@ export default class ChangeModel extends BaseModel<Change> {
 			.orderBy('counter', 'asc')
 			.limit(pagination.limit) as any[];
 
-		const changes = await query;
+		const changes: Change[] = await query;
 
-		const finalChanges = await this.removeDeletedItems(this.compressChanges(changes));
+		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
+
+		let finalChanges: DeltaChange[] = this.compressChanges(changes);
+		finalChanges = await this.removeDeletedItems(finalChanges, items);
+		finalChanges = finalChanges.map(c => {
+			const item = items.find(item => item.id === c.item_id);
+			if (!item) return c;
+			return {
+				...c,
+				jop_updated_time: item.jop_updated_time,
+			};
+		});
 
 		return {
 			items: finalChanges,
@@ -171,14 +180,14 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	private async removeDeletedItems(changes: Change[]): Promise<Change[]> {
+	private async removeDeletedItems(changes: Change[], items: Item[] = null): Promise<Change[]> {
 		const itemIds = changes.map(c => c.item_id);
 
 		// We skip permission check here because, when an item is shared, we need
 		// to fetch files that don't belong to the current user. This check
 		// would not be needed anyway because the change items are generated in
 		// a context where permissions have already been checked.
-		const items: Item[] = await this.db('items').select('id').whereIn('items.id', itemIds);
+		items = items === null ? await this.db('items').select('id').whereIn('items.id', itemIds) : items;
 
 		const output: Change[] = [];
 

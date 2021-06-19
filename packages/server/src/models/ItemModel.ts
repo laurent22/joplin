@@ -285,6 +285,7 @@ export default class ItemModel extends BaseModel<Item> {
 		item.share_id = itemRow.jop_share_id;
 		item.type_ = itemRow.jop_type;
 		item.encryption_applied = itemRow.jop_encryption_applied;
+		item.updated_time = itemRow.jop_updated_time;
 
 		return item;
 	}
@@ -336,6 +337,7 @@ export default class ItemModel extends BaseModel<Item> {
 					item.jop_type = joplinItem.type_;
 					item.jop_encryption_applied = joplinItem.encryption_applied || 0;
 					item.jop_share_id = joplinItem.share_id || '';
+					item.jop_updated_time = joplinItem.updated_time;
 
 					const joplinItemToSave = { ...joplinItem };
 
@@ -344,6 +346,7 @@ export default class ItemModel extends BaseModel<Item> {
 					delete joplinItemToSave.share_id;
 					delete joplinItemToSave.type_;
 					delete joplinItemToSave.encryption_applied;
+					delete joplinItemToSave.updated_time;
 
 					item.content = Buffer.from(JSON.stringify(joplinItemToSave));
 				} else {

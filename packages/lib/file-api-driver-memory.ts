@@ -24,6 +24,10 @@ export default class FileApiDriverMemory {
 		return true;
 	}
 
+	public get supportsAccurateTimestamp() {
+		return true;
+	}
+
 	decodeContent_(content: any) {
 		return Buffer.from(content, 'base64').toString('utf-8');
 	}

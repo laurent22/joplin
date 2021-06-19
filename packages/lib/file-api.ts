@@ -86,8 +86,24 @@ class FileApi {
 		if (this.driver_.initialize) return this.driver_.initialize(this.fullPath(''));
 	}
 
+	// This can be true if the driver implements uploading items in batch. Will
+	// probably only be supported by Joplin Server.
 	public get supportsMultiPut(): boolean {
 		return !!this.driver().supportsMultiPut;
+	}
+
+	// This can be true when the sync target timestamps (updated_time) provided
+	// in the delta call are guaranteed to be accurate. That requires
+	// explicitely setting the timestamp, which is not done anymore on any sync
+	// target as it wasn't accurate (for example, the file system can't be
+	// relied on, and even OneDrive for some reason doesn't guarantee that the
+	// timestamp you set is what you get back).
+	//
+	// The only reliable one at the moment is Joplin Server since it reads the
+	// updated_time property directly from the item (it unserializes it
+	// server-side).
+	public get supportsAccurateTimestamp(): boolean {
+		return !!this.driver().supportsAccurateTimestamp;
 	}
 
 	async fetchRemoteDateOffset_() {

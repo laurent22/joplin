@@ -36,6 +36,10 @@ export default class FileApiDriverJoplinServer {
 		return true;
 	}
 
+	public get supportsAccurateTimestamp() {
+		return true;
+	}
+
 	public requestRepeatCount() {
 		return 3;
 	}
@@ -44,7 +48,8 @@ export default class FileApiDriverJoplinServer {
 		const output = {
 			path: rootPath ? path.substr(rootPath.length + 1) : path,
 			updated_time: md.updated_time,
-			isDir: false, // !!md.is_directory,
+			jop_updated_time: md.jop_updated_time,
+			isDir: false,
 			isDeleted: isDeleted,
 		};
 
