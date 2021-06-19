@@ -1,11 +1,8 @@
-/* eslint-disable no-unused-vars */
+import filterParser from './filterParser';
 
-const filterParser = require('../../services/searchengine/filterParser.js').default;
-// import filterParser from '../../services/searchengine/filterParser.js';
-
-const makeTerm = (name, value, negated, quoted = false, wildcard = false) => {
+const makeTerm = (name: string, value: string, negated: boolean, quoted: boolean = false, wildcard: boolean = false) => {
 	if (name === 'text') { return { name, value, negated, quoted, wildcard }; }
-	if (name === 'title' | name === 'body') { return { name, value, negated, wildcard }; }
+	if (name === 'title' || name === 'body') { return { name, value, negated, wildcard }; }
 	return { name, value, negated };
 };
 
