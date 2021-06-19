@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.1.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.2-beta) (Pre-release) - 2021-06-19T13:24:50Z
+
+- New: Add support for uploading multiple items in one request (3b9c02e)
+
 ## [server-v2.1.1](https://github.com/laurent22/joplin/releases/tag/server-v2.1.1) - 2021-06-17T17:27:29Z
 
 - New: Added account info to dashboard and title to pages (7f0b3fd)
