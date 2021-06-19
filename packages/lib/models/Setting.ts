@@ -1242,6 +1242,21 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				storage: SettingStorage.Database,
 			},
+
+			'featureFlag.syncAccurateTimestamps': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				storage: SettingStorage.File,
+			},
+
+			'featureFlag.syncMultiPut': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				storage: SettingStorage.File,
+			},
+
 		};
 
 		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);

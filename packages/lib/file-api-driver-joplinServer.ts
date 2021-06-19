@@ -1,6 +1,7 @@
 import { MultiPutItem } from './file-api';
 import JoplinError from './JoplinError';
 import JoplinServerApi from './JoplinServerApi';
+import Setting from './models/Setting';
 import { trimSlashes } from './path-utils';
 
 // All input paths should be in the format: "path/to/file". This is converted to
@@ -33,11 +34,11 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	public get supportsMultiPut() {
-		return true;
+		return Setting.value('featureFlag.syncMultiPut');
 	}
 
 	public get supportsAccurateTimestamp() {
-		return true;
+		return Setting.value('featureFlag.syncAccurateTimestamps');
 	}
 
 	public requestRepeatCount() {
