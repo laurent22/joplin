@@ -7,10 +7,18 @@ const MarkdownIt = require('markdown-it');
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
 const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s+)$/;
 
+export enum MarkdownTableJustify {
+	Left = 'left',
+	Center = 'center',
+	Right = 'right,',
+}
+
 export interface MarkdownTableHeader {
 	name: string;
 	label: string;
 	filter?: Function;
+	disableEscape?: boolean;
+	justify?: MarkdownTableJustify;
 }
 
 export interface MarkdownTableRow {
@@ -41,6 +49,11 @@ const markdownUtils = {
 		return text;
 	},
 
+	escapeInlineCode(text: string): string {
+		// https://github.com/github/markup/issues/363#issuecomment-55499909
+		return text.replace(/`/g, '``');
+	},
+
 	unescapeLinkUrl(url: string) {
 		url = url.replace(/%28/g, '(');
 		url = url.replace(/%29/g, ')');
@@ -56,7 +69,7 @@ const markdownUtils = {
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractImageUrls(md: string) {
+	extractFileUrls(md: string, onlyImage: boolean = false): Array<string> {
 		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
@@ -67,11 +80,10 @@ const markdownUtils = {
 		const searchUrls = (tokens: any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
-
-				if (token.type === 'image') {
+				if ((onlyImage === true && token.type === 'image') || (onlyImage === false && (token.type === 'image' || token.type === 'link_open'))) {
 					for (let j = 0; j < token.attrs.length; j++) {
 						const a = token.attrs[j];
-						if (a[0] === 'src' && a.length >= 2 && a[1]) {
+						if ((a[0] === 'src' || a[0] === 'href') && a.length >= 2 && a[1]) {
 							output.push(a[1]);
 						}
 					}
@@ -86,6 +98,10 @@ const markdownUtils = {
 		searchUrls(tokens);
 
 		return output;
+	},
+
+	extractImageUrls(md: string) {
+		return markdownUtils.extractFileUrls(md,true);
 	},
 
 	// The match results has 5 items
@@ -112,26 +128,38 @@ const markdownUtils = {
 	createMarkdownTable(headers: MarkdownTableHeader[], rows: MarkdownTableRow[]): string {
 		const output = [];
 
+		const minCellWidth = 5;
+
 		const headersMd = [];
 		const lineMd = [];
 		for (let i = 0; i < headers.length; i++) {
 			const h = headers[i];
-			headersMd.push(stringPadding(h.label, 3, ' ', stringPadding.RIGHT));
-			lineMd.push('---');
+			headersMd.push(stringPadding(h.label, minCellWidth, ' ', stringPadding.RIGHT));
+
+			const justify = h.justify ? h.justify : MarkdownTableJustify.Left;
+
+			if (justify === MarkdownTableJustify.Left) {
+				lineMd.push('-----');
+			} else if (justify === MarkdownTableJustify.Center) {
+				lineMd.push(':---:');
+			} else {
+				lineMd.push('----:');
+			}
 		}
 
-		output.push(headersMd.join(' | '));
-		output.push(lineMd.join(' | '));
+		output.push(`| ${headersMd.join(' | ')} |`);
+		output.push(`| ${lineMd.join(' | ')} |`);
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const rowMd = [];
 			for (let j = 0; j < headers.length; j++) {
 				const h = headers[j];
-				const valueMd = markdownUtils.escapeTableCell(h.filter ? h.filter(row[h.name]) : row[h.name]);
-				rowMd.push(stringPadding(valueMd, 3, ' ', stringPadding.RIGHT));
+				const value = (h.filter ? h.filter(row[h.name]) : row[h.name]) || '';
+				const valueMd = h.disableEscape ? value : markdownUtils.escapeTableCell(value);
+				rowMd.push(stringPadding(valueMd, minCellWidth, ' ', stringPadding.RIGHT));
 			}
-			output.push(rowMd.join(' | '));
+			output.push(`| ${rowMd.join(' | ')} |`);
 		}
 
 		return output.join('\n');

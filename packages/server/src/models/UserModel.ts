@@ -1,7 +1,75 @@
-import BaseModel, { SaveOptions, ValidateOptions } from './BaseModel';
-import { User } from '../db';
+import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
+import { EmailSender, Item, User, Uuid } from '../db';
 import * as auth from '../utils/auth';
-import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
+import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { _ } from '@joplin/lib/locale';
+import { formatBytes, MB } from '../utils/bytes';
+
+export enum AccountType {
+	Default = 0,
+	Basic = 1,
+	Pro = 2,
+}
+
+interface AccountTypeProperties {
+	account_type: number;
+	can_share: number;
+	max_item_size: number;
+}
+
+interface AccountTypeSelectOptions {
+	value: number;
+	label: string;
+}
+
+export function accountTypeProperties(accountType: AccountType): AccountTypeProperties {
+	const types: AccountTypeProperties[] = [
+		{
+			account_type: AccountType.Default,
+			can_share: 1,
+			max_item_size: 0,
+		},
+		{
+			account_type: AccountType.Basic,
+			can_share: 0,
+			max_item_size: 10 * MB,
+		},
+		{
+			account_type: AccountType.Pro,
+			can_share: 1,
+			max_item_size: 200 * MB,
+		},
+	];
+
+	const type = types.find(a => a.account_type === accountType);
+	if (!type) throw new Error(`Invalid account type: ${accountType}`);
+	return type;
+}
+
+export function accountTypeOptions(): AccountTypeSelectOptions[] {
+	return [
+		{
+			value: AccountType.Default,
+			label: accountTypeToString(AccountType.Default),
+		},
+		{
+			value: AccountType.Basic,
+			label: accountTypeToString(AccountType.Basic),
+		},
+		{
+			value: AccountType.Pro,
+			label: accountTypeToString(AccountType.Pro),
+		},
+	];
+}
+
+export function accountTypeToString(accountType: AccountType): string {
+	if (accountType === AccountType.Default) return 'Default';
+	if (accountType === AccountType.Basic) return 'Basic';
+	if (accountType === AccountType.Pro) return 'Pro';
+	throw new Error(`Invalid type: ${accountType}`);
+}
 
 export default class UserModel extends BaseModel<User> {
 
@@ -29,31 +97,96 @@ export default class UserModel extends BaseModel<User> {
 		if ('password' in object) user.password = object.password;
 		if ('is_admin' in object) user.is_admin = object.is_admin;
 		if ('full_name' in object) user.full_name = object.full_name;
+		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
+		if ('can_share' in object) user.can_share = object.can_share;
+		if ('account_type' in object) user.account_type = object.account_type;
+		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
 
 		return user;
 	}
 
-	public toApiOutput(object: User): User {
+	protected objectToApiOutput(object: User): User {
 		const output: User = { ...object };
 		delete output.password;
 		return output;
 	}
 
+	public async checkIfAllowed(user: User, action: AclAction, resource: User = null): Promise<void> {
+		if (action === AclAction.Create) {
+			if (!user.is_admin) throw new ErrorForbidden('non-admin user cannot create a new user');
+		}
+
+		if (action === AclAction.Read) {
+			if (user.is_admin) return;
+			if (user.id !== resource.id) throw new ErrorForbidden('cannot view other users');
+		}
+
+		if (action === AclAction.Update) {
+			const previousResource = await this.load(resource.id);
+
+			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
+			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
+			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
+			if ('max_item_size' in resource && !user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
+			if ('can_share' in resource && !user.is_admin && resource.can_share !== previousResource.can_share) throw new ErrorForbidden('non-admin user cannot change can_share');
+			if ('account_type' in resource && !user.is_admin && resource.account_type !== previousResource.account_type) throw new ErrorForbidden('non-admin user cannot change account_type');
+			if ('must_set_password' in resource && !user.is_admin && resource.must_set_password !== previousResource.must_set_password) throw new ErrorForbidden('non-admin user cannot change must_set_password');
+		}
+
+		if (action === AclAction.Delete) {
+			if (!user.is_admin) throw new ErrorForbidden('only admins can delete users');
+			if (user.id === resource.id) throw new ErrorForbidden('cannot delete own user');
+		}
+
+		if (action === AclAction.List) {
+			if (!user.is_admin) throw new ErrorForbidden('non-admin cannot list users');
+		}
+	}
+
+	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
+		// If the item is encrypted, we apply a multipler because encrypted
+		// items can be much larger (seems to be up to twice the size but for
+		// safety let's go with 2.2).
+		const maxSize = user.max_item_size * (item.jop_encryption_applied ? 2.2 : 1);
+		if (maxSize && buffer.byteLength > maxSize) {
+			const itemTitle = joplinItem ? joplinItem.title || '' : '';
+			const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
+
+			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
+				isNote ? _('note') : _('attachment'),
+				itemTitle ? itemTitle : item.name,
+				formatBytes(user.max_item_size)
+			));
+		}
+	}
+
+	// public async checkCanShare(share:Share) {
+
+	// 	// const itemTitle = joplinItem ? joplinItem.title || '' : '';
+	// 	// const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
+
+	// 	// // If the item is encrypted, we apply a multipler because encrypted
+	// 	// // items can be much larger (seems to be up to twice the size but for
+	// 	// // safety let's go with 2.2).
+	// 	// const maxSize = user.max_item_size * (item.jop_encryption_applied ? 2.2 : 1);
+	// 	// if (maxSize && buffer.byteLength > maxSize) {
+	// 	// 	throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
+	// 	// 		isNote ? _('note') : _('attachment'),
+	// 	// 		itemTitle ? itemTitle : name,
+	// 	// 		prettyBytes(user.max_item_size)
+	// 	// 	));
+	// 	// }
+	// }
+
 	protected async validate(object: User, options: ValidateOptions = {}): Promise<User> {
 		const user: User = await super.validate(object, options);
 
-		const owner: User = await this.load(this.userId);
-
 		if (options.isNew) {
-			if (!owner.is_admin) throw new ErrorForbidden('non-admin user cannot create a new user');
 			if (!user.email) throw new ErrorUnprocessableEntity('email must be set');
-			if (!user.password) throw new ErrorUnprocessableEntity('password must be set');
+			if (!user.password && !user.must_set_password) throw new ErrorUnprocessableEntity('password must be set');
 		} else {
-			if (!owner.is_admin && user.id !== owner.id) throw new ErrorForbidden('non-admin user cannot modify another user');
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');
-			if (!owner.is_admin && 'is_admin' in user) throw new ErrorForbidden('non-admin user cannot make a user an admin');
-			if (owner.is_admin && owner.id === user.id && 'is_admin' in user && !user.is_admin) throw new ErrorUnprocessableEntity('non-admin user cannot remove admin bit from themselves');
 		}
 
 		if ('email' in user) {
@@ -62,7 +195,7 @@ export default class UserModel extends BaseModel<User> {
 			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
 		}
 
-		return user;
+		return super.validate(user, options);
 	}
 
 	private validateEmail(email: string): boolean {
@@ -71,33 +204,46 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public async profileUrl(): Promise<string> {
+	public profileUrl(): string {
 		return `${this.baseUrl}/users/me`;
 	}
 
-	private async checkIsOwnerOrAdmin(userId: string): Promise<void> {
-		if (!this.userId) throw new ErrorForbidden('no user is active');
-
-		if (userId === this.userId) return;
-
-		const owner = await this.load(this.userId);
-		if (!owner.is_admin) throw new ErrorForbidden();
-	}
-
-	public async load(id: string): Promise<User> {
-		await this.checkIsOwnerOrAdmin(id);
-		return super.load(id);
+	public confirmUrl(userId: Uuid, validationToken: string): string {
+		return `${this.baseUrl}/users/${userId}/confirm?token=${validationToken}`;
 	}
 
 	public async delete(id: string): Promise<void> {
-		await this.checkIsOwnerOrAdmin(id);
+		const shares = await this.models().share().sharesByUser(id);
 
 		await this.withTransaction(async () => {
-			const fileModel = this.models().file({ userId: id });
-			const rootFile = await fileModel.userRootFile();
-			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true } });
+			await this.models().item().deleteExclusivelyOwnedItems(id);
+			await this.models().share().delete(shares.map(s => s.id));
+			await this.models().userItem().deleteByUserId(id);
+			await this.models().session().deleteByUserId(id);
+			await this.models().notification().deleteByUserId(id);
 			await super.delete(id);
 		}, 'UserModel::delete');
+	}
+
+	public async confirmEmail(userId: Uuid, token: string) {
+		await this.models().token().checkToken(userId, token);
+		const user = await this.models().user().load(userId);
+		if (!user) throw new ErrorNotFound('No such user');
+		await this.save({ id: user.id, email_confirmed: 1 });
+	}
+
+	public async sendAccountConfirmationEmail(user: User) {
+		const validationToken = await this.models().token().generate(user.id);
+		const confirmUrl = encodeURI(this.confirmUrl(user.id, validationToken));
+
+		await this.models().email().push({
+			sender_id: EmailSender.NoReply,
+			recipient_id: user.id,
+			recipient_email: user.email,
+			recipient_name: user.full_name || '',
+			subject: `Please setup your ${this.appName} account`,
+			body: `Your new ${this.appName} account is almost ready to use!\n\nPlease click on the following link to finish setting up your account:\n\n[Complete your account](${confirmUrl})`,
+		});
 	}
 
 	// Note that when the "password" property is provided, it is going to be
@@ -108,22 +254,23 @@ export default class UserModel extends BaseModel<User> {
 	//
 	// Because the password would be hashed twice.
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
+		const user = { ...object };
+
+		if (user.password) user.password = auth.hashPassword(user.password);
+
 		const isNew = await this.isNew(object, options);
 
-		let newUser = { ...object };
-
-		if (newUser.password) newUser.password = auth.hashPassword(newUser.password);
-
-		await this.withTransaction(async () => {
-			newUser = await super.save(newUser, options);
+		return this.withTransaction(async () => {
+			const savedUser = await super.save(user, options);
 
 			if (isNew) {
-				const fileModel = this.models().file({ userId: newUser.id });
-				await fileModel.createRootFile();
+				await this.sendAccountConfirmationEmail(savedUser);
 			}
-		}, 'UserModel::save');
 
-		return newUser;
+			UserModel.eventEmitter.emit('created');
+
+			return savedUser;
+		});
 	}
 
 }

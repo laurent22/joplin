@@ -19,30 +19,31 @@ msgstr ""
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
-#: packages/app-desktop/checkForUpdates.js:139
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/MenuBar.js:373
+#: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/gui/DialogButtonRow.js:35
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/CameraView.js:160
 #: packages/app-mobile/components/side-menu-content.js:150
-#: packages/app-mobile/components/screens/config.js:148
+#: packages/app-mobile/components/screens/config.js:163
 msgid "OK"
 msgstr "OK"
 
 #: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:189
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:201
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:430
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:214
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/PromptDialog.min.js:242
-#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/app-desktop/gui/NoteList/NoteList.js:164
 #: packages/app-desktop/gui/ResourceScreen.js:96
+#: packages/app-desktop/gui/DialogButtonRow.js:38
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
@@ -57,14 +58,14 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: packages/app-desktop/bridge.js:188
+#: packages/app-desktop/bridge.js:184
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 "Приложение будет закрыто. Пожалуйста, перезапустите его чтобы завершить "
 "установку."
 
-#: packages/app-desktop/plugins/GotoAnything.js:432
+#: packages/app-desktop/plugins/GotoAnything.js:446
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -73,12 +74,12 @@ msgstr ""
 "Введите название заметки, чтобы перейти к ней, либо введите #имя_метки или "
 "@имя_блокнота, либо введите : для поиска команд."
 
-#: packages/app-desktop/plugins/GotoAnything.js:457
+#: packages/app-desktop/plugins/GotoAnything.js:471
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
 msgstr "Перейти к чему-либо…"
 
-#: packages/app-desktop/plugins/GotoAnything.js:464
+#: packages/app-desktop/plugins/GotoAnything.js:478
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
 msgstr "Палитра команд"
@@ -88,43 +89,48 @@ msgstr "Палитра команд"
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 
-#: packages/app-desktop/InteropServiceHelper.js:174
+#: packages/app-desktop/InteropServiceHelper.js:175
 #, javascript-format
 msgid "Could not export notes: %s"
 msgstr "Не удалось экспортировать заметки: %s"
 
-#: packages/app-desktop/checkForUpdates.js:138
+#: packages/app-desktop/checkForUpdates.js:171
 msgid "Current version is up-to-date."
 msgstr "Установлена последняя версия."
 
-#: packages/app-desktop/checkForUpdates.js:148
+#: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
 msgstr "%s (предварительный выпуск)"
 
-#: packages/app-desktop/checkForUpdates.js:152
+#: packages/app-desktop/checkForUpdates.js:187
 msgid "An update is available, do you want to download it now?"
 msgstr "Доступно обновление, хотите загрузить его сейчас?"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:188
 #, javascript-format
 msgid "Your version: %s"
 msgstr "Ваша версия: %s"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:188
 #, javascript-format
 msgid "New version: %s"
 msgstr "Новая версия: %s"
 
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:189
 msgid "Download"
 msgstr "Загрузить"
 
-#: packages/app-desktop/checkForUpdates.js:154
-msgid "Full Release Notes"
-msgstr "Описание установленной версии"
+#: packages/app-desktop/checkForUpdates.js:189
+msgid "Skip this version"
+msgstr ""
+
+#: packages/app-desktop/checkForUpdates.js:189
+msgid "Full changelog"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
+#: packages/lib/services/RevisionService.js:242
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Заметка “%s” была успешно восстановлена в блокнот “%s”."
@@ -134,7 +140,7 @@ msgid "This note has no history"
 msgstr "Эта заметка не имеет предыдущих версий"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:122
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:92
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Неподдерживаемая ссылка или сообщение: %s"
@@ -154,17 +160,17 @@ msgstr ""
 "“%s”. Текущая версия заметки не будет заменена или изменена."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:535
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
 msgstr "Назад"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:176
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:189
 msgid "Remove"
 msgstr "Удалить"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:179
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:192
 #: packages/app-mobile/components/side-menu-content.js:148
 #, javascript-format
 msgid ""
@@ -176,7 +182,7 @@ msgstr ""
 "\n"
 "Все заметки и вложенные блокноты также будут удалены."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:180
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:193
 #: packages/app-desktop/gui/utils/NoteListUtils.js:140
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:125
@@ -187,39 +193,39 @@ msgstr ""
 msgid "Delete"
 msgstr "Удалить"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:184
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:197
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Удалить метку “%s” из всех заметок?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:187
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:200
 msgid "Remove this search from the sidebar?"
 msgstr "Удалить этот поиск из боковой панели?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:238
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:258
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
 #: packages/app-desktop/gui/utils/NoteListUtils.js:136
 msgid "Export"
 msgstr "Экспорт"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:301
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:321
 #: packages/app-mobile/components/side-menu-content.js:368
 #: packages/app-mobile/components/screens/notes.js:188
 msgid "All notes"
 msgstr "Все заметки"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:430
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/lib/commands/synchronize.js:18
 msgid "Synchronise"
 msgstr "Синхронизировать"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:480
 #: packages/app-mobile/components/side-menu-content.js:372
 msgid "Notebooks"
 msgstr "Блокноты"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:467
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:492
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-mobile/components/side-menu-content.js:314
 #: packages/app-mobile/components/screens/tags.js:101
@@ -227,13 +233,13 @@ msgstr "Блокноты"
 msgid "Tags"
 msgstr "Метки"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:478
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:503
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Расшифровка элементов: %d/%d"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:482
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:507
 #: packages/app-mobile/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
@@ -246,25 +252,35 @@ msgstr "Боковая панель"
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:18
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
-#: packages/app-desktop/gui/MenuBar.js:614
+#: packages/app-desktop/gui/MenuBar.js:625
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
 msgid "Focus"
 msgstr "Фокус"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:31
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 "Пожалуйста, выберите, куда должен быть экспортирован статус синхронизации"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:66
 #: packages/app-mobile/components/screens/status.js:112
 msgid "Retry All"
 msgstr "Повторить попытку для всех"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:86
 #: packages/app-mobile/components/screens/status.js:118
 msgid "Retry"
 msgstr "Повторить попытку"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
+#, fuzzy
+msgid "Advanced tools"
+msgstr "Расширенные настройки"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
+#, fuzzy
+msgid "Export debug report"
+msgstr "Экспортировать отладочный отчет"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -284,11 +300,11 @@ msgstr "Вставить гиперссылку"
 msgid "List item"
 msgstr "Элемент списка"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:510
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:513
 msgid "Layout"
 msgstr "Вид редактора"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:510
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:513
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -297,21 +313,21 @@ msgstr ""
 "Эта пустая заметка. Нажмите на \"%s\", чтобы переключиться в редактор и "
 "отредактировать ее."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:622
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Вырезать"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:626
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:629
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
-#: packages/app-desktop/gui/MenuBar.js:373
+#: packages/app-desktop/gui/MenuBar.js:377
 msgid "Copy"
 msgstr "Копировать"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:633
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:636
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "Вставить"
@@ -340,40 +356,39 @@ msgstr ""
 msgid "Subscript"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:564
 #: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
 msgstr "Правка"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:600
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:620
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "Прикрепить файл"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:610
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
 msgid "Code Block"
 msgstr "Блок кода"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:619
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:639
 msgid "Inline Code"
 msgstr "Инлайн код"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:634
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:654
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "Вставить дату и время"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1038
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
 msgid "Drop notes or files here"
 msgstr "Перетащите сюда заметки или файлы"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1038
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
 msgid "Code View"
 msgstr "Просмотр кода"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1038
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -382,32 +397,32 @@ msgstr ""
 "Пожалуйста, дождитесь окончания загрузки и расшифровки всех вложений. Вы "
 "можете переключиться на %s для редактирования заметки."
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
 msgstr "Произошла ошибка при загрузке вложения:"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:77
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Это вложение еще не загружено или еще не расшифровано"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:55
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
 msgstr "Открыть..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:68
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
 msgid "Save as..."
 msgstr "Сохранить как..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:81
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 msgid "Reveal file in folder"
 msgstr "Показать файл в папке"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:89
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy path to clipboard"
 msgstr "Скопировать путь в буфер обмена"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:155
 msgid "Copy Link Address"
 msgstr "Скопировать ссылку"
 
@@ -416,6 +431,7 @@ msgid "to-do"
 msgstr "задача"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
+#: packages/server/dist/models/UserModel.js:134
 msgid "note"
 msgstr "заметка"
 
@@ -424,11 +440,11 @@ msgstr "заметка"
 msgid "Creating new %s..."
 msgstr "Создание новой %s..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
 msgid "Click to add tags..."
 msgstr "Щелкните для добавления тегов..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:338
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -436,25 +452,25 @@ msgstr ""
 "Рекомендуется принять во внимание ряд ограничений, которые имеются у данного "
 "текстового редактора, перед его использованием."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:342
 msgid "Read more about it"
 msgstr "Узнать подробнее"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:347
 msgid "Dismiss"
 msgstr "Отклонить"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:383
 msgid "The following attachments are being watched for changes:"
 msgstr "Отслеживаются изменения следующих вложений:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:386
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr "Изменения не будут отслеживаться при переключении на другую заметку."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:392
 #, javascript-format
 msgid "In: %s"
 msgstr "В: %s"
@@ -504,34 +520,39 @@ msgid "Delete line"
 msgstr "Удалить строку"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
+#, fuzzy
+msgid "Duplicate line"
+msgstr "Создать дубликат"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
 msgstr "Отменить"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Redo"
 msgstr "Повторить"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent less"
 msgstr "Уменьшить отступ"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 msgid "Indent more"
 msgstr "Увеличить отступ"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Toggle comment"
 msgstr "Переключить комментарий"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Sort selected lines"
 msgstr "Отсортировать выбранные строки"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line up"
 msgstr "Поменять со строкой сверху"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:124
 msgid "Swap line down"
 msgstr "Поменять со строкой снизу"
 
@@ -580,7 +601,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1547
+#: packages/lib/models/Setting.js:1635
 msgid "Note History"
 msgstr "История заметок"
 
@@ -598,7 +619,7 @@ msgid "Note properties"
 msgstr "Свойства заметки"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
-#: packages/lib/services/KeymapService.js:176
+#: packages/lib/services/KeymapService.js:178
 #, javascript-format
 msgid "Error: %s"
 msgstr "Ошибка: %s"
@@ -606,7 +627,7 @@ msgstr "Ошибка: %s"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:760 packages/app-cli/app/command-e2ee.js:110
+#: packages/lib/models/Setting.js:833 packages/app-cli/app/command-e2ee.js:110
 msgid "Disabled"
 msgstr "Отключено"
 
@@ -617,8 +638,8 @@ msgid "Search..."
 msgstr "Поиск..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: packages/app-desktop/gui/MenuBar.js:429
-#: packages/app-desktop/gui/MenuBar.js:476 packages/app-desktop/gui/Root.js:99
+#: packages/app-desktop/gui/MenuBar.js:433
+#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:99
 msgid "Import"
 msgstr "Импорт"
 
@@ -631,22 +652,22 @@ msgid "Keyboard Shortcut"
 msgstr "Сочетание клавиш"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:212 packages/app-desktop/app.js:367
+#: packages/app-desktop/gui/MenuBar.js:213 packages/app-desktop/app.js:371
 msgid "Quit"
 msgstr "Выход"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
-#: packages/app-desktop/gui/MenuBar.js:316
+#: packages/app-desktop/gui/MenuBar.js:320
 msgid "Insert template"
 msgstr "Вставить шаблон"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
-#: packages/app-desktop/gui/MenuBar.js:575
+#: packages/app-desktop/gui/MenuBar.js:586
 msgid "Actual Size"
 msgstr "Фактический размер"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
-#: packages/app-desktop/gui/MenuBar.js:636
+#: packages/app-desktop/gui/MenuBar.js:654
 msgid "Website and documentation"
 msgstr "Сайт и документация"
 
@@ -655,7 +676,7 @@ msgid "Hide Joplin"
 msgstr "Скрыть Joplin"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
-#: packages/app-desktop/gui/MenuBar.js:464
+#: packages/app-desktop/gui/MenuBar.js:474
 msgid "Close Window"
 msgstr "Закрыть окно"
 
@@ -664,7 +685,7 @@ msgid "Preferences"
 msgstr "Настройки"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:340 packages/app-desktop/gui/Root.js:100
+#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:100
 msgid "Options"
 msgstr "Настройки"
 
@@ -690,7 +711,17 @@ msgstr ""
 msgid "Save"
 msgstr "Сохранить"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:445
+msgid ""
+"Safe mode is currently active. Note rendering and all plugins are "
+"temporarily disabled."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:447
+msgid "Disable safe mode and restart"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:451
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -700,37 +731,25 @@ msgstr ""
 "потребовать несколько минут для завершения и приложение нужно будет "
 "перезапустить. Чтобы продолжить нажмите на ссылку."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:453
 msgid "Restart and upgrade"
 msgstr "Перезапустить и обновить"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
-msgid "Some items cannot be synchronised."
-msgstr "Некоторые элементы не могут быть синхронизированы."
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:413
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
-msgid "View them now"
-msgstr "Просмотреть сейчас"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:457
 msgid "Some items cannot be decrypted."
 msgstr "Некоторые элементы не могут быть расшифрованы."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
-msgid "One or more master keys need a password."
-msgstr "Для одного или нескольких мастер-ключей требуется пароль."
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
+msgid "View them now"
+msgstr "Просмотреть сейчас"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
-msgid "Set the password"
-msgstr "Установить пароль"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Один из ваших мастер-ключей использует устаревший метод шифрования."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:435
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -738,11 +757,36 @@ msgstr ""
 "Метод шифрования по умолчанию был изменен, вы должны повторно зашифровать "
 "свои данные."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:437
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid "More info"
 msgstr "Дополнительная информация"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:559
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:477
+#, javascript-format
+msgid "%s (%s) would like to share a notebook with you."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
+msgid "Accept"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:481
+msgid "Reject"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:485
+msgid "Some items cannot be synchronised."
+msgstr "Некоторые элементы не могут быть синхронизированы."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:491
+msgid "One or more master keys need a password."
+msgstr "Для одного или нескольких мастер-ключей требуется пароль."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:493
+msgid "Set the password"
+msgstr "Установить пароль"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:616
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Используйте стрелки чтобы переместить элементы программы. Нажмите Esc для "
@@ -812,6 +856,11 @@ msgstr "Переключить вид редактора"
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
 msgid "Toggle editors"
 msgstr "Переключить редактор"
+
+#: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
+#, fuzzy
+msgid "Share notebook..."
+msgstr "Поделиться заметкой..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -977,118 +1026,123 @@ msgstr ""
 msgid "Renew token"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.js:166
+#: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Импорт из \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 
-#: packages/app-desktop/gui/MenuBar.js:287 packages/app-desktop/gui/Root.js:102
+#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
 msgstr "Статус синхронизации"
 
-#: packages/app-desktop/gui/MenuBar.js:306
+#: packages/app-desktop/gui/MenuBar.js:310
 msgid "Create note from template"
 msgstr "Создать заметку из шаблона"
 
-#: packages/app-desktop/gui/MenuBar.js:311
+#: packages/app-desktop/gui/MenuBar.js:315
 msgid "Create to-do from template"
 msgstr "Создать задачу из шаблона"
 
-#: packages/app-desktop/gui/MenuBar.js:322
+#: packages/app-desktop/gui/MenuBar.js:326
 msgid "Open template directory"
 msgstr "Открыть папку с шаблонами"
 
-#: packages/app-desktop/gui/MenuBar.js:327
+#: packages/app-desktop/gui/MenuBar.js:331
 msgid "Refresh templates"
 msgstr "Обновить шаблоны"
 
-#: packages/app-desktop/gui/MenuBar.js:353
+#: packages/app-desktop/gui/MenuBar.js:357
 msgid "Note attachments..."
 msgstr "Вложения..."
 
-#: packages/app-desktop/gui/MenuBar.js:384
-#: packages/app-desktop/gui/MenuBar.js:456
-#: packages/app-desktop/gui/MenuBar.js:746
+#: packages/app-desktop/gui/MenuBar.js:388
+#: packages/app-desktop/gui/MenuBar.js:466
+#: packages/app-desktop/gui/MenuBar.js:766
 msgid "&File"
 msgstr "&Файл"
 
-#: packages/app-desktop/gui/MenuBar.js:390
-#: packages/app-desktop/gui/MenuBar.js:668
+#: packages/app-desktop/gui/MenuBar.js:394
+#: packages/app-desktop/gui/MenuBar.js:687
 msgid "About Joplin"
 msgstr "О Joplin"
 
-#: packages/app-desktop/gui/MenuBar.js:397
+#: packages/app-desktop/gui/MenuBar.js:401
 msgid "Preferences..."
 msgstr "Настройки…"
 
-#: packages/app-desktop/gui/MenuBar.js:407
-#: packages/app-desktop/gui/MenuBar.js:646
+#: packages/app-desktop/gui/MenuBar.js:411
+#: packages/app-desktop/gui/MenuBar.js:664
 msgid "Check for updates..."
 msgstr "Проверить обновления..."
 
-#: packages/app-desktop/gui/MenuBar.js:422
-#: packages/app-desktop/gui/MenuBar.js:471
+#: packages/app-desktop/gui/MenuBar.js:426
+#: packages/app-desktop/gui/MenuBar.js:481
 msgid "Templates"
 msgstr "Шаблоны"
 
-#: packages/app-desktop/gui/MenuBar.js:433
-#: packages/app-desktop/gui/MenuBar.js:479
+#: packages/app-desktop/gui/MenuBar.js:437
+#: packages/app-desktop/gui/MenuBar.js:489
 msgid "Export all"
 msgstr "Экспорт"
 
-#: packages/app-desktop/gui/MenuBar.js:445
+#: packages/app-desktop/gui/MenuBar.js:449
 #, javascript-format
 msgid "Hide %s"
 msgstr "Скрыть %s"
 
-#: packages/app-desktop/gui/MenuBar.js:502
-#: packages/app-desktop/gui/MenuBar.js:750
+#: packages/app-desktop/gui/MenuBar.js:512
+#: packages/app-desktop/gui/MenuBar.js:770
 msgid "&Edit"
 msgstr "&Правка"
 
-#: packages/app-desktop/gui/MenuBar.js:533
+#: packages/app-desktop/gui/MenuBar.js:544
 msgid "&View"
 msgstr "&Вид"
 
-#: packages/app-desktop/gui/MenuBar.js:541
+#: packages/app-desktop/gui/MenuBar.js:552
 msgid "Layout button sequence"
 msgstr "Порядок переключения вида"
 
-#: packages/app-desktop/gui/MenuBar.js:586
-#: packages/app-desktop/gui/MenuBar.js:592
+#: packages/app-desktop/gui/MenuBar.js:597
+#: packages/app-desktop/gui/MenuBar.js:603
 msgid "Zoom In"
 msgstr "Приблизить"
 
-#: packages/app-desktop/gui/MenuBar.js:599
+#: packages/app-desktop/gui/MenuBar.js:610
 msgid "Zoom Out"
 msgstr "Отдалить"
 
-#: packages/app-desktop/gui/MenuBar.js:608
+#: packages/app-desktop/gui/MenuBar.js:619
 msgid "&Go"
 msgstr "Переход"
 
-#: packages/app-desktop/gui/MenuBar.js:620
+#: packages/app-desktop/gui/MenuBar.js:631
+#, fuzzy
+msgid "Note&book"
+msgstr "Блокноты"
+
+#: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
 msgstr "&Заметки"
 
-#: packages/app-desktop/gui/MenuBar.js:629
+#: packages/app-desktop/gui/MenuBar.js:647
 msgid "&Tools"
 msgstr "&Сервис"
 
-#: packages/app-desktop/gui/MenuBar.js:633
+#: packages/app-desktop/gui/MenuBar.js:651
 msgid "&Help"
 msgstr "&Помощь"
 
-#: packages/app-desktop/gui/MenuBar.js:640
+#: packages/app-desktop/gui/MenuBar.js:658
 msgid "Joplin Forum"
 msgstr "Форум Joplin"
 
-#: packages/app-desktop/gui/MenuBar.js:643
-#: packages/app-mobile/components/screens/config.js:495
+#: packages/app-desktop/gui/MenuBar.js:661
+#: packages/app-mobile/components/screens/config.js:510
 msgid "Make a donation"
 msgstr "Пожертвовать"
 
-#: packages/app-desktop/gui/MenuBar.js:655
+#: packages/app-desktop/gui/MenuBar.js:673
 msgid "Toggle development tools"
 msgstr "Включить инструменты разработки"
 
@@ -1153,28 +1207,28 @@ msgstr "С метками: %d."
 msgid "The notes have been imported: %s"
 msgstr "Импортировано заметок: %s"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:44
+#: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
 msgstr "Создать дубликат"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:49
+#: packages/app-desktop/gui/utils/NoteListUtils.js:48
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Копия"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:60
+#: packages/app-desktop/gui/utils/NoteListUtils.js:59
 msgid "Switch between note and to-do type"
 msgstr "Переключить между заметкой и задачей"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:88
+#: packages/app-desktop/gui/utils/NoteListUtils.js:87
 msgid "Switch to note type"
 msgstr "Конвертировать в заметку"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:94
+#: packages/app-desktop/gui/utils/NoteListUtils.js:93
 msgid "Switch to to-do type"
 msgstr "Конвертировать в задачу"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:101
+#: packages/app-desktop/gui/utils/NoteListUtils.js:100
 #: packages/app-mobile/components/screens/Note.js:817
 msgid "Copy Markdown link"
 msgstr "Копировать ссылку Markdown"
@@ -1393,50 +1447,50 @@ msgstr "Вход в Dropbox"
 msgid "Note attachments"
 msgstr "Вложения заметки"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Будет открыто новое окно. Сохранить текущие изменения?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
-#: packages/app-mobile/components/screens/config.js:307
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
+#: packages/app-mobile/components/screens/config.js:322
 msgid "Check synchronisation configuration"
 msgstr "Проверить настройки синхронизации"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
 msgid "Show Advanced Settings"
 msgstr "Показать расширенные настройки"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
 msgid "Path:"
 msgstr "Путь:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
 msgid "Browse..."
 msgstr "Обзор..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
 msgid "Arguments:"
 msgstr "Аргументы:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Необходимо перезапустить приложение, чтобы применились изменения."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
-#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
+#: packages/app-desktop/gui/NoteList/NoteList.js:164
 msgid "Do it now"
 msgstr "Загрузить сейчас"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
 msgstr "Позже"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
 msgid "Restart now"
 msgstr "Перезагрузить сейчас"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1543
+#: packages/lib/models/Setting.js:1631
 msgid "Plugins"
 msgstr "Плагины"
 
@@ -1444,35 +1498,49 @@ msgstr "Плагины"
 msgid "Apply"
 msgstr "Применить"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
 #, javascript-format
 msgid "Delete plugin \"%s\"?"
 msgstr "Удалить плагин \"%s\"?"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 msgid "Browse all plugins"
 msgstr "Просмотр всех плагинов"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
 msgstr "Установить из файла"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
 msgstr "У вас нет установленных плагинов."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
+#, fuzzy
+msgid "Could not connect to plugin repository"
+msgstr "Не удалось установить плагин: %s"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
+msgid "Try again"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 #, fuzzy
 msgid "Plugin tools"
 msgstr "Плагины"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
 msgid "Manage your plugins"
 msgstr "Управлять плагинами"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
 msgid "No results"
 msgstr "Нет данных"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ResourceScreen.js:142
+msgid "Please wait..."
+msgstr "Пожалуйста, подождите…"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 msgid "Search for plugins..."
@@ -1533,14 +1601,14 @@ msgid "Lines"
 msgstr "Строки"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
-#: packages/lib/models/Setting.js:486
+#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:534
+#: packages/lib/models/Setting.js:535
 msgid "Editor"
 msgstr "Редактор"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:485
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:534
+#: packages/lib/models/Setting.js:536
 msgid "Viewer"
 msgstr "Просмотрщик"
 
@@ -1554,25 +1622,26 @@ msgid "Statistics"
 msgstr "Статистика"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:186
+#: packages/app-desktop/gui/ShareNoteDialog.js:189
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:257
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "Закрыть"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Custom order"
 msgstr "Пользовательский порядок"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "View"
 msgstr "Вид"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:162
-#: packages/lib/models/Setting.js:500
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/lib/models/Setting.js:549
 msgid "Sort notes by"
 msgstr "Сортировать заметки по"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
 #, javascript-format
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
@@ -1581,11 +1650,11 @@ msgstr ""
 "Для сортировки заметок вручную порядок должен быть изменён на \"%s\" в меню "
 "\"%s\" > \"%s\""
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:414
+#: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Заметки отсутствуют. Создайте новую, нажав на \"Новая заметка\"."
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:414
+#: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Блокноты отсутствуют. Создайте новый, нажав на \"Новый блокнот\"."
@@ -1593,12 +1662,6 @@ msgstr "Блокноты отсутствуют. Создайте новый, н
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
 msgid "Note list"
 msgstr "Список заметок"
-
-#: packages/app-desktop/gui/getWindowTitle.js:19
-#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
-msgid "Untitled"
-msgstr "Без имени"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
@@ -1616,6 +1679,11 @@ msgstr "Размер"
 msgid "Action"
 msgstr "Действие"
 
+#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:718
+msgid "Untitled"
+msgstr "Без имени"
+
 #: packages/app-desktop/gui/ResourceScreen.js:95
 #, javascript-format
 msgid "Delete attachment \"%s\"?"
@@ -1631,10 +1699,6 @@ msgstr ""
 "заметкам. Удаляйте вложения с осторожностью - они не могут быть "
 "восстановлены."
 
-#: packages/app-desktop/gui/ResourceScreen.js:142
-msgid "Please wait..."
-msgstr "Пожалуйста, подождите…"
-
 #: packages/app-desktop/gui/ResourceScreen.js:144
 msgid "No resources!"
 msgstr "Нет данных!"
@@ -1646,41 +1710,109 @@ msgstr ""
 "Предупреждение: не все данные показаны по соображениям производительности "
 "(ограничение:%s)."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:159
+#: packages/app-desktop/gui/ShareNoteDialog.js:141
+#, fuzzy
+msgid "Unshare note"
+msgstr "Поделиться"
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
 msgstr "Синхронизация..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:161
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Создание ссылки..."
 msgstr[1] "Создание ссылок..."
 msgstr[2] "Создание ссылок..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:163
+#: packages/app-desktop/gui/ShareNoteDialog.js:172
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Ссылка скопирована в буфер обмена!"
 msgstr[1] "Ссылки скопированы в буфер обмена!"
 msgstr[2] "Ссылки скопированы в буфер обмена!"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:179
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 "Примечание: если вы поделились заметкой - она будет храниться на сервере в "
 "незашифрованном виде."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:180
+#: packages/app-desktop/gui/ShareNoteDialog.js:184
 msgid "Share Notes"
 msgstr "Поделиться заметками"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:182
+#: packages/app-desktop/gui/ShareNoteDialog.js:186
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Скопировать общедоступную ссылку"
 msgstr[1] "Скопировать общедоступные ссылки"
 msgstr[2] "Скопировать общедоступные ссылки"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
+#, fuzzy
+msgid "Unshare"
+msgstr "Поделиться"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
+msgid ""
+"Delete this invitation? The recipient will no longer have access to this "
+"shared notebook."
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
+msgid "Add recipient:"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+#: packages/app-mobile/components/screens/Note.js:796
+msgid "Share"
+msgstr "Поделиться"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
+msgid "Recipient has not yet accepted the invitation"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
+msgid "Recipient has rejected the invitation"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
+msgid "Recipient has accepted the invitation"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
+msgid "Recipients:"
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
+#, fuzzy
+msgid "Synchronizing..."
+msgstr "Синхронизация..."
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
+#, fuzzy
+msgid "Sharing notebook..."
+msgstr "Поделиться заметкой..."
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
+msgid ""
+"Unshare this notebook? The recipients will no longer have access to its "
+"content."
+msgstr ""
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
+#, fuzzy
+msgid "Share Notebook"
+msgstr "Поделиться заметками"
+
+#: packages/app-desktop/commands/toggleSafeMode.js:18
+#, fuzzy
+msgid "Toggle safe mode"
+msgstr "Переключить боковую панель"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1712,7 +1844,7 @@ msgstr "Ошибка при открытии заметки в редактор�
 msgid "Open profile directory"
 msgstr "Открыть директорию с настройками"
 
-#: packages/app-desktop/app.js:365
+#: packages/app-desktop/app.js:369
 #, javascript-format
 msgid "Open %s"
 msgstr "Открыть %s"
@@ -1740,11 +1872,6 @@ msgstr "Сохранить напоминание"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
 msgid "Open"
 msgstr "Открыть"
-
-#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#: packages/app-mobile/components/screens/Note.js:796
-msgid "Share"
-msgstr "Поделиться"
 
 #: packages/app-mobile/components/CameraView.js:158
 msgid "Permission to use camera"
@@ -1881,7 +2008,7 @@ msgid "Enable"
 msgstr "Включить"
 
 #: packages/app-mobile/components/screens/encryption-config.js:264
-#: packages/app-mobile/components/screens/config.js:316
+#: packages/app-mobile/components/screens/config.js:331
 msgid "Encryption Config"
 msgstr "Конфигурация шифрования"
 
@@ -1891,12 +2018,12 @@ msgstr "Конфигурация шифрования"
 msgid "Encryption is: %s"
 msgstr "Шифрование: %s"
 
-#: packages/app-mobile/components/screens/config.js:50
+#: packages/app-mobile/components/screens/config.js:57
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: packages/app-mobile/components/screens/config.js:50
-#: packages/app-mobile/components/screens/config.js:147
+#: packages/app-mobile/components/screens/config.js:57
+#: packages/app-mobile/components/screens/config.js:162
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
@@ -1904,39 +2031,39 @@ msgstr ""
 "Для использование синхронизации файловой системы необходимо дать разрешение "
 "на запись во внешнее хранилище."
 
-#: packages/app-mobile/components/screens/config.js:146
+#: packages/app-mobile/components/screens/config.js:161
 msgid "Information"
 msgstr "Информация"
 
-#: packages/app-mobile/components/screens/config.js:436
+#: packages/app-mobile/components/screens/config.js:451
 msgid "Tools"
 msgstr "Инструменты"
 
-#: packages/app-mobile/components/screens/config.js:438
+#: packages/app-mobile/components/screens/config.js:453
 msgid "Sync Status"
 msgstr "Статус синхронизации"
 
-#: packages/app-mobile/components/screens/config.js:439
+#: packages/app-mobile/components/screens/config.js:454
 msgid "Log"
 msgstr "Журнал"
 
-#: packages/app-mobile/components/screens/config.js:441
+#: packages/app-mobile/components/screens/config.js:456
 msgid "Creating report..."
 msgstr "Создание отчета…"
 
-#: packages/app-mobile/components/screens/config.js:441
+#: packages/app-mobile/components/screens/config.js:456
 msgid "Export Debug Report"
 msgstr "Экспортировать отладочный отчет"
 
-#: packages/app-mobile/components/screens/config.js:443
+#: packages/app-mobile/components/screens/config.js:458
 msgid "Fixing search index..."
 msgstr "Исправление индекса поиска..."
 
-#: packages/app-mobile/components/screens/config.js:443
+#: packages/app-mobile/components/screens/config.js:458
 msgid "Fix search index"
 msgstr "Исправить индекс поиска"
 
-#: packages/app-mobile/components/screens/config.js:443
+#: packages/app-mobile/components/screens/config.js:458
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -1945,23 +2072,23 @@ msgstr ""
 "возникли проблемы. Процесс перестроения индекса может занять много времени в "
 "зависимости от количества заметок."
 
-#: packages/app-mobile/components/screens/config.js:446
+#: packages/app-mobile/components/screens/config.js:461
 msgid "Exporting profile..."
 msgstr "Экспортирование профиля..."
 
-#: packages/app-mobile/components/screens/config.js:446
+#: packages/app-mobile/components/screens/config.js:461
 msgid "Export profile"
 msgstr "Экспорт профиля"
 
-#: packages/app-mobile/components/screens/config.js:446
+#: packages/app-mobile/components/screens/config.js:461
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Только для отладки: экспорт вашего профиля на внешнюю SD карту."
 
-#: packages/app-mobile/components/screens/config.js:461
+#: packages/app-mobile/components/screens/config.js:476
 msgid "More information"
 msgstr "Дополнительная информация"
 
-#: packages/app-mobile/components/screens/config.js:471
+#: packages/app-mobile/components/screens/config.js:486
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -1970,7 +2097,7 @@ msgstr ""
 "Пожалуйста, включите их в настройках телефона в разделе Приложения > Joplin "
 "> Разрешения"
 
-#: packages/app-mobile/components/screens/config.js:474
+#: packages/app-mobile/components/screens/config.js:489
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -1978,21 +2105,21 @@ msgstr ""
 "- Хранилище: чтобы разрешить прикрепление файлов к заметкам и включить "
 "синхронизацию файловой системы."
 
-#: packages/app-mobile/components/screens/config.js:477
+#: packages/app-mobile/components/screens/config.js:492
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Камера: позволяет сделать снимок и прикрепить его к заметке."
 
-#: packages/app-mobile/components/screens/config.js:480
+#: packages/app-mobile/components/screens/config.js:495
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Местоположение: позволяет прикрепить информацию о географическом "
 "местоположении к заметке."
 
-#: packages/app-mobile/components/screens/config.js:509
+#: packages/app-mobile/components/screens/config.js:524
 msgid "Joplin website"
 msgstr "Сайт Joplin"
 
-#: packages/app-mobile/components/screens/config.js:523
+#: packages/app-mobile/components/screens/config.js:538
 msgid "Privacy Policy"
 msgstr "Политика конфиденциальности"
 
@@ -2118,7 +2245,7 @@ msgstr "Добавить заголовок"
 msgid "Search"
 msgstr "Поиск"
 
-#: packages/server/dist/middleware/notificationHandler.js:26
+#: packages/server/dist/middleware/notificationHandler.js:27
 #, javascript-format
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
@@ -2126,6 +2253,17 @@ msgid ""
 msgstr ""
 "Пароль администратора по умолчанию небезопасен и не был изменен! [Поменять "
 "пароль](%s)"
+
+#: packages/server/dist/models/UserModel.js:134
+#, fuzzy
+msgid "attachment"
+msgstr "Вложения"
+
+#: packages/server/dist/models/UserModel.js:134
+#, javascript-format
+msgid ""
+"Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
+msgstr ""
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2163,7 +2301,7 @@ msgstr "AWS S3"
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: packages/lib/SyncTargetJoplinServer.js:30
+#: packages/lib/SyncTargetJoplinServer.js:57
 msgid "Joplin Server"
 msgstr "Сервер Joplin"
 
@@ -2172,42 +2310,42 @@ msgstr "Сервер Joplin"
 msgid "Cannot access %s"
 msgstr "Не удалось получить доступ к %s"
 
-#: packages/lib/models/Folder.js:34 packages/lib/models/Note.js:35
+#: packages/lib/models/Folder.js:36 packages/lib/models/Note.js:36
 msgid "title"
 msgstr "заголовок"
 
-#: packages/lib/models/Folder.js:35 packages/lib/models/Note.js:36
+#: packages/lib/models/Folder.js:37 packages/lib/models/Note.js:37
 msgid "updated date"
 msgstr "дата обновления"
 
-#: packages/lib/models/Folder.js:102
+#: packages/lib/models/Folder.js:101
 msgid "Conflicts"
 msgstr "Конфликты"
 
-#: packages/lib/models/Folder.js:393
+#: packages/lib/models/Folder.js:506
 msgid "Cannot move notebook to this location"
 msgstr "Не удается переместить блокнот в указанное расположение"
 
-#: packages/lib/models/Folder.js:445
+#: packages/lib/models/Folder.js:558
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Блокнот не может быть назван \"%s\", так как это зарезервированное название."
 
-#: packages/lib/models/Setting.js:92
+#: packages/lib/models/Setting.js:103
 msgid "yes"
 msgstr "да"
 
-#: packages/lib/models/Setting.js:92 packages/lib/models/Setting.js:93
+#: packages/lib/models/Setting.js:103 packages/lib/models/Setting.js:104
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/lib/models/Setting.js:93
+#: packages/lib/models/Setting.js:104
 msgid "no"
 msgstr "нет"
 
-#: packages/lib/models/Setting.js:95
+#: packages/lib/models/Setting.js:106
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2219,43 +2357,43 @@ msgstr ""
 "случае все файлы будут удалены! Смотрите FAQ для получения подробной "
 "информации: %s"
 
-#: packages/lib/models/Setting.js:101
+#: packages/lib/models/Setting.js:112
 msgid "Light"
 msgstr "Светлая"
 
-#: packages/lib/models/Setting.js:102
+#: packages/lib/models/Setting.js:113
 msgid "Dark"
 msgstr "Тёмная"
 
-#: packages/lib/models/Setting.js:103
+#: packages/lib/models/Setting.js:114
 msgid "Dracula"
 msgstr "Дракула"
 
-#: packages/lib/models/Setting.js:104
+#: packages/lib/models/Setting.js:115
 msgid "Solarised Light"
 msgstr "Солнечная светлая"
 
-#: packages/lib/models/Setting.js:105
+#: packages/lib/models/Setting.js:116
 msgid "Solarised Dark"
 msgstr "Солнечная тёмная"
 
-#: packages/lib/models/Setting.js:106
+#: packages/lib/models/Setting.js:117
 msgid "Nord"
 msgstr "Север"
 
-#: packages/lib/models/Setting.js:107
+#: packages/lib/models/Setting.js:118
 msgid "Aritim Dark"
 msgstr "Aritim тёмная"
 
-#: packages/lib/models/Setting.js:108
+#: packages/lib/models/Setting.js:119
 msgid "OLED Dark"
 msgstr "OLED Тёмная"
 
-#: packages/lib/models/Setting.js:130
+#: packages/lib/models/Setting.js:141
 msgid "Synchronisation target"
 msgstr "Цель синхронизации"
 
-#: packages/lib/models/Setting.js:132
+#: packages/lib/models/Setting.js:143
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -2263,71 +2401,78 @@ msgstr ""
 "Цель синхронизации. Каждая цель синхронизации может иметь дополнительные "
 "параметры, именованные как `sync.NUM.NAME` (все документировано ниже)."
 
-#: packages/lib/models/Setting.js:160
+#: packages/lib/models/Setting.js:176
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Каталог синхронизации (абсолютный путь)"
 
-#: packages/lib/models/Setting.js:172
+#: packages/lib/models/Setting.js:188
 msgid "Nextcloud WebDAV URL"
 msgstr "URL-адрес WebDAV-сервера Nextcloud"
 
-#: packages/lib/models/Setting.js:184
+#: packages/lib/models/Setting.js:200
 msgid "Nextcloud username"
 msgstr "Имя пользователя Nextcloud"
 
-#: packages/lib/models/Setting.js:195
+#: packages/lib/models/Setting.js:211
 msgid "Nextcloud password"
 msgstr "Пароль Nextcloud"
 
-#: packages/lib/models/Setting.js:206
+#: packages/lib/models/Setting.js:222
 msgid "WebDAV URL"
 msgstr "URL-адрес WebDAV"
 
-#: packages/lib/models/Setting.js:218
+#: packages/lib/models/Setting.js:234
 msgid "WebDAV username"
 msgstr "Имя пользователя WebDAV"
 
-#: packages/lib/models/Setting.js:229
+#: packages/lib/models/Setting.js:245
 msgid "WebDAV password"
 msgstr "Пароль WebDAV"
 
-#: packages/lib/models/Setting.js:248
+#: packages/lib/models/Setting.js:264
 msgid "AWS S3 bucket"
 msgstr "AWS S3 bucket"
 
-#: packages/lib/models/Setting.js:260
+#: packages/lib/models/Setting.js:276
 msgid "AWS S3 URL"
 msgstr "AWS S3 URL"
 
-#: packages/lib/models/Setting.js:271
+#: packages/lib/models/Setting.js:287
 msgid "AWS key"
 msgstr "Ключ AWS"
 
-#: packages/lib/models/Setting.js:282
+#: packages/lib/models/Setting.js:298
 msgid "AWS secret"
 msgstr "Секрет AWS"
 
-#: packages/lib/models/Setting.js:293
+#: packages/lib/models/Setting.js:309
 msgid "Joplin Server URL"
 msgstr "URL сервера Joplin"
 
-#: packages/lib/models/Setting.js:308
-msgid "Joplin Server Directory"
-msgstr "Каталог сервера Joplin"
+#: packages/lib/models/Setting.js:327
+#, fuzzy
+msgid "Joplin Server email"
+msgstr "Сервер Joplin"
 
-#: packages/lib/models/Setting.js:319
-msgid "Joplin Server username"
-msgstr "Имя пользователя Joplin Server"
-
-#: packages/lib/models/Setting.js:330
+#: packages/lib/models/Setting.js:338
 msgid "Joplin Server password"
 msgstr "Пароль сервера Joplin"
 
-#: packages/lib/models/Setting.js:342
+#: packages/lib/models/Setting.js:365
+#, fuzzy
+msgid "Joplin Cloud email"
+msgstr "Сервер Joplin"
+
+#: packages/lib/models/Setting.js:376
+#, fuzzy
+msgid "Joplin Cloud password"
+msgstr "Пароль сервера Joplin"
+
+#: packages/lib/models/Setting.js:388
 msgid "Attachment download behaviour"
 msgstr "Режим загрузки вложений"
 
-#: packages/lib/models/Setting.js:343
+#: packages/lib/models/Setting.js:389
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2338,195 +2483,195 @@ msgstr ""
 "“Всегда” вложения загружаются вне зависимости от того, была заметка открыта "
 "или нет."
 
-#: packages/lib/models/Setting.js:346
+#: packages/lib/models/Setting.js:392
 msgid "Always"
 msgstr "Всегда"
 
-#: packages/lib/models/Setting.js:347
+#: packages/lib/models/Setting.js:393
 msgid "Manual"
 msgstr "Ручной"
 
-#: packages/lib/models/Setting.js:348
+#: packages/lib/models/Setting.js:394
 msgid "Auto"
 msgstr "Автоматически"
 
-#: packages/lib/models/Setting.js:366
+#: packages/lib/models/Setting.js:414
 msgid "Max concurrent connections"
 msgstr "Максимальное число одновременных соединений"
 
-#: packages/lib/models/Setting.js:379
+#: packages/lib/models/Setting.js:427
 msgid "Language"
 msgstr "Язык"
 
-#: packages/lib/models/Setting.js:390
+#: packages/lib/models/Setting.js:438
 msgid "Date format"
 msgstr "Формат даты"
 
-#: packages/lib/models/Setting.js:410
+#: packages/lib/models/Setting.js:459
 msgid "Time format"
 msgstr "Формат времени"
 
-#: packages/lib/models/Setting.js:429
+#: packages/lib/models/Setting.js:478
 msgid "Theme"
 msgstr "Тема"
 
-#: packages/lib/models/Setting.js:440
+#: packages/lib/models/Setting.js:489
 msgid "Automatically switch theme to match system theme"
 msgstr "Автоматическая смена темы в соответствии с настройками системы"
 
-#: packages/lib/models/Setting.js:452
+#: packages/lib/models/Setting.js:501
 msgid "Preferred light theme"
 msgstr "Предпочитаемая светлая тема"
 
-#: packages/lib/models/Setting.js:466
+#: packages/lib/models/Setting.js:515
 msgid "Preferred dark theme"
 msgstr "Предпочитаемая тёмная тема"
 
-#: packages/lib/models/Setting.js:476
+#: packages/lib/models/Setting.js:525
 msgid "Show note counts"
 msgstr "Показывать число заметок"
 
-#: packages/lib/models/Setting.js:484 packages/lib/models/Setting.js:486
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:535
+#: packages/lib/models/Setting.js:536
 msgid "Split View"
 msgstr "Раздельный вид"
 
-#: packages/lib/models/Setting.js:484
+#: packages/lib/models/Setting.js:533
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/models/Setting.js:485 packages/lib/models/Setting.js:486
-#: packages/lib/models/Setting.js:487
+#: packages/lib/models/Setting.js:534 packages/lib/models/Setting.js:535
+#: packages/lib/models/Setting.js:536
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.js:491
+#: packages/lib/models/Setting.js:540
 msgid "Uncompleted to-dos on top"
 msgstr "Незавершенные задачи сверху"
 
-#: packages/lib/models/Setting.js:492
+#: packages/lib/models/Setting.js:541
 msgid "Show completed to-dos"
 msgstr "Показать завершенные задачи"
 
-#: packages/lib/models/Setting.js:518
+#: packages/lib/models/Setting.js:567
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Автоматическое закрытие скобок, кавычек и т. д."
 
-#: packages/lib/models/Setting.js:521 packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:570 packages/lib/models/Setting.js:589
 msgid "Reverse sort order"
 msgstr "Обратный порядок сортировки"
 
-#: packages/lib/models/Setting.js:528
+#: packages/lib/models/Setting.js:577
 msgid "Sort notebooks by"
 msgstr "Сортировать блокноты по"
 
-#: packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:590
 msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о географическом местоположении в заметках"
 
-#: packages/lib/models/Setting.js:563
+#: packages/lib/models/Setting.js:612
 msgid "When creating a new to-do:"
 msgstr "При создании новой задачи:"
 
-#: packages/lib/models/Setting.js:566 packages/lib/models/Setting.js:582
+#: packages/lib/models/Setting.js:615 packages/lib/models/Setting.js:631
 msgid "Focus title"
 msgstr "Фокус на названии"
 
-#: packages/lib/models/Setting.js:567 packages/lib/models/Setting.js:583
+#: packages/lib/models/Setting.js:616 packages/lib/models/Setting.js:632
 msgid "Focus body"
 msgstr "Фокус на содержимом"
 
-#: packages/lib/models/Setting.js:579
+#: packages/lib/models/Setting.js:628
 msgid "When creating a new note:"
 msgstr "При создании новой заметки:"
 
-#: packages/lib/models/Setting.js:612
+#: packages/lib/models/Setting.js:661
 msgid "Enable soft breaks"
 msgstr "Включить мягкие отступы"
 
-#: packages/lib/models/Setting.js:613
+#: packages/lib/models/Setting.js:662
 msgid "Enable typographer support"
 msgstr "Включить поддержку typographer"
 
-#: packages/lib/models/Setting.js:614
+#: packages/lib/models/Setting.js:663
 msgid "Enable Linkify"
 msgstr "Включить Linkify"
 
-#: packages/lib/models/Setting.js:615
+#: packages/lib/models/Setting.js:664
 msgid "Enable math expressions"
 msgstr "Включить математические выражения"
 
-#: packages/lib/models/Setting.js:616
+#: packages/lib/models/Setting.js:665
 msgid "Enable Fountain syntax support"
 msgstr "Включить поддержку синтаксиса Fountain"
 
-#: packages/lib/models/Setting.js:617
+#: packages/lib/models/Setting.js:666
 msgid "Enable Mermaid diagrams support"
 msgstr "Включить поддержку диаграмм Mermaid"
 
-#: packages/lib/models/Setting.js:618
+#: packages/lib/models/Setting.js:667
 msgid "Enable audio player"
 msgstr "Включить аудиоплеер"
 
-#: packages/lib/models/Setting.js:619
+#: packages/lib/models/Setting.js:668
 msgid "Enable video player"
 msgstr "Включить видеоплеер"
 
-#: packages/lib/models/Setting.js:620
+#: packages/lib/models/Setting.js:669
 msgid "Enable PDF viewer"
 msgstr "Включить программу для просмотра PDF файлов"
 
-#: packages/lib/models/Setting.js:621
+#: packages/lib/models/Setting.js:670
 msgid "Enable ==mark== syntax"
 msgstr "Включить синтаксис ==mark=="
 
-#: packages/lib/models/Setting.js:622
+#: packages/lib/models/Setting.js:671
 msgid "Enable footnotes"
 msgstr "Включить постраничные сноски"
 
-#: packages/lib/models/Setting.js:623
+#: packages/lib/models/Setting.js:672
 msgid "Enable table of contents extension"
 msgstr "Включить расширение поддержки оглавления"
 
-#: packages/lib/models/Setting.js:624
+#: packages/lib/models/Setting.js:673
 msgid "Enable ~sub~ syntax"
 msgstr "Включить синтаксис ~sub~"
 
-#: packages/lib/models/Setting.js:625
+#: packages/lib/models/Setting.js:674
 msgid "Enable ^sup^ syntax"
 msgstr "Включить синтаксис ^sup^"
 
-#: packages/lib/models/Setting.js:626
+#: packages/lib/models/Setting.js:675
 msgid "Enable deflist syntax"
 msgstr "Включить синтаксис deflist"
 
-#: packages/lib/models/Setting.js:627
+#: packages/lib/models/Setting.js:676
 msgid "Enable abbreviation syntax"
 msgstr "Включить синтаксис аббревиатур"
 
-#: packages/lib/models/Setting.js:628
+#: packages/lib/models/Setting.js:677
 msgid "Enable markdown emoji"
 msgstr "Включить эмодзи markdown"
 
-#: packages/lib/models/Setting.js:629
+#: packages/lib/models/Setting.js:678
 msgid "Enable ++insert++ syntax"
 msgstr "Включить синтаксис ++insert++"
 
-#: packages/lib/models/Setting.js:630
+#: packages/lib/models/Setting.js:679
 msgid "Enable multimarkdown table extension"
 msgstr "Включить расширение таблиц multimarkdown"
 
-#: packages/lib/models/Setting.js:641
+#: packages/lib/models/Setting.js:690
 msgid "Show tray icon"
 msgstr "Показывать иконку в трее"
 
-#: packages/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:692
 msgid "Note: Does not work in all desktop environments."
 msgstr "Примечание: работает не во всех окружениях рабочего стола."
 
-#: packages/lib/models/Setting.js:643
+#: packages/lib/models/Setting.js:692
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2536,104 +2681,105 @@ msgstr ""
 "параметр, чтобы ваши заметки синхронизировались постоянно, что уменьшит "
 "количество возможных конфликтов."
 
-#: packages/lib/models/Setting.js:647
+#: packages/lib/models/Setting.js:696
 msgid "Start application minimised in the tray icon"
 msgstr "Запускать приложение свернутым в трее"
 
-#: packages/lib/models/Setting.js:662
+#: packages/lib/models/Setting.js:716
 msgid "Editor font size"
 msgstr "Размер шрифта редактора"
 
-#: packages/lib/models/Setting.js:669
+#: packages/lib/models/Setting.js:723
 msgid "Editor font"
 msgstr "Шрифт редактора"
 
-#: packages/lib/models/Setting.js:676 packages/lib/models/Setting.js:683
-#: packages/lib/models/Setting.js:810
+#: packages/lib/models/Setting.js:730 packages/lib/models/Setting.js:737
+#: packages/lib/models/Setting.js:883
 msgid "Default"
 msgstr "По умолчанию: %s"
 
-#: packages/lib/models/Setting.js:694
+#: packages/lib/models/Setting.js:748
 msgid "Editor font family"
 msgstr "Семейство шрифтов редактора"
 
-#: packages/lib/models/Setting.js:695
-#, fuzzy
+#: packages/lib/models/Setting.js:749
 msgid ""
-"If the font is incorrect or empty, it will default to a generic monospace "
-"font."
+"Used for most text in the markdown editor. If not found, a generic "
+"proportional (variable width) font is used."
 msgstr ""
-"Для корректного отображения требуется задать *моноширинный* шрифт. Если "
-"шрифт не был задан или выбран некорректный шрифт, будет использован шрифт по "
-"умолчанию."
 
-#: packages/lib/models/Setting.js:704
+#: packages/lib/models/Setting.js:758
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "Семейство шрифтов редактора"
 
-#: packages/lib/models/Setting.js:705
+#: packages/lib/models/Setting.js:759
 msgid ""
-"This should be a *monospace* font or some elements will render incorrectly. "
-"If the font is incorrect or empty, it will default to a generic monospace "
-"font."
+"Used where a fixed width font is needed to lay out text legibly (e.g. "
+"tables, checkboxes, code). If not found, a generic monospace (fixed width) "
+"font is used."
 msgstr ""
-"Для корректного отображения требуется задать *моноширинный* шрифт. Если "
-"шрифт не был задан или выбран некорректный шрифт, будет использован шрифт по "
-"умолчанию."
 
-#: packages/lib/models/Setting.js:727
+#: packages/lib/models/Setting.js:780
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Пользовательская таблица стилей для отображаемых заметок"
 
-#: packages/lib/models/Setting.js:743
+#: packages/lib/models/Setting.js:796
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Пользовательская таблица стилей для приложения"
 
-#: packages/lib/models/Setting.js:748
+#: packages/lib/models/Setting.js:806
+msgid "Re-upload local data to sync target"
+msgstr ""
+
+#: packages/lib/models/Setting.js:816
+msgid "Delete local data and re-download from sync target"
+msgstr ""
+
+#: packages/lib/models/Setting.js:821
 msgid "Automatically update the application"
 msgstr "Автоматически обновлять приложение"
 
-#: packages/lib/models/Setting.js:749
+#: packages/lib/models/Setting.js:822
 msgid "Get pre-releases when checking for updates"
 msgstr "Получать предварительные выпуски при проверке обновлений"
 
-#: packages/lib/models/Setting.js:749
+#: packages/lib/models/Setting.js:822
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 "См. страницу предварительных выпусков для получения более подробной "
 "информации: %s"
 
-#: packages/lib/models/Setting.js:757
+#: packages/lib/models/Setting.js:830
 msgid "Synchronisation interval"
 msgstr "Период синхронизации"
 
-#: packages/lib/models/Setting.js:761 packages/lib/models/Setting.js:762
-#: packages/lib/models/Setting.js:763
+#: packages/lib/models/Setting.js:834 packages/lib/models/Setting.js:835
+#: packages/lib/models/Setting.js:836
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d минут"
 
-#: packages/lib/models/Setting.js:764
+#: packages/lib/models/Setting.js:837
 #, javascript-format
 msgid "%d hour"
 msgstr "%d час"
 
-#: packages/lib/models/Setting.js:765 packages/lib/models/Setting.js:766
+#: packages/lib/models/Setting.js:838 packages/lib/models/Setting.js:839
 #, javascript-format
 msgid "%d hours"
 msgstr "%d часов"
 
-#: packages/lib/models/Setting.js:776
+#: packages/lib/models/Setting.js:849
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
-#: packages/lib/models/Setting.js:783
+#: packages/lib/models/Setting.js:856
 msgid "Text editor command"
 msgstr "Команда текстового редактора"
 
-#: packages/lib/models/Setting.js:783
+#: packages/lib/models/Setting.js:856
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2642,63 +2788,63 @@ msgstr ""
 "командной строки). Если команда не задана, будет произведена попытка "
 "автоматического определения редактора по умолчанию."
 
-#: packages/lib/models/Setting.js:784
+#: packages/lib/models/Setting.js:857
 msgid "Page size for PDF export"
 msgstr "Размер страницы при экспорте в PDF"
 
-#: packages/lib/models/Setting.js:786
+#: packages/lib/models/Setting.js:859
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:787
+#: packages/lib/models/Setting.js:860
 msgid "Letter"
 msgstr "Письмо"
 
-#: packages/lib/models/Setting.js:788
+#: packages/lib/models/Setting.js:861
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:789
+#: packages/lib/models/Setting.js:862
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:790
+#: packages/lib/models/Setting.js:863
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/lib/models/Setting.js:791
+#: packages/lib/models/Setting.js:864
 msgid "Legal"
 msgstr "Юр. сведения"
 
-#: packages/lib/models/Setting.js:794
+#: packages/lib/models/Setting.js:867
 msgid "Page orientation for PDF export"
 msgstr "Ориентация страницы при экспорте в PDF"
 
-#: packages/lib/models/Setting.js:796
+#: packages/lib/models/Setting.js:869
 msgid "Portrait"
 msgstr "Вертикально"
 
-#: packages/lib/models/Setting.js:797
+#: packages/lib/models/Setting.js:870
 msgid "Landscape"
 msgstr "Горизонтально"
 
-#: packages/lib/models/Setting.js:807
+#: packages/lib/models/Setting.js:880
 msgid "Keyboard Mode"
 msgstr "Режим работы клавиатуры"
 
-#: packages/lib/models/Setting.js:811
+#: packages/lib/models/Setting.js:884
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:812
+#: packages/lib/models/Setting.js:885
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:835
+#: packages/lib/models/Setting.js:908
 msgid "Custom TLS certificates"
 msgstr "Пользовательские сертификаты TLS"
 
-#: packages/lib/models/Setting.js:836
+#: packages/lib/models/Setting.js:909
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2711,15 +2857,15 @@ msgstr ""
 "изменения в настройки TLS, вы должны сохранить внесенные изменения перед "
 "нажатием на \"Проверить настройки синхронизации\"."
 
-#: packages/lib/models/Setting.js:849
+#: packages/lib/models/Setting.js:923
 msgid "Ignore TLS certificate errors"
 msgstr "Игнорировать ошибки сертификата TLS"
 
-#: packages/lib/models/Setting.js:858
+#: packages/lib/models/Setting.js:932
 msgid "Fail-safe"
 msgstr "Режим защиты от сбоев"
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:933
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2727,7 +2873,7 @@ msgstr ""
 "Защита от сбоев: Не очищать локальные данные, когда цель синхронизации "
 "пустая (обычно случается из-за ошибки приложения или настроек)"
 
-#: packages/lib/models/Setting.js:863
+#: packages/lib/models/Setting.js:937
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2735,29 +2881,29 @@ msgstr ""
 "Укажите порт для использования сервером API. Если порт не указан - будет "
 "использовано значение по умолчанию."
 
-#: packages/lib/models/Setting.js:868
+#: packages/lib/models/Setting.js:942
 msgid "Enable note history"
 msgstr "Включить историю заметок"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:952
 msgid "days"
 msgstr "дни"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:952
 #, javascript-format
 msgid "%d days"
 msgstr "%d дней"
 
-#: packages/lib/models/Setting.js:880
+#: packages/lib/models/Setting.js:954
 msgid "Keep note history for"
 msgstr "Хранить историю заметки"
 
-#: packages/lib/models/Setting.js:907
+#: packages/lib/models/Setting.js:981
 msgid "Notebook list growth factor"
 msgstr "Фактор роста списка блокнотов"
 
-#: packages/lib/models/Setting.js:908 packages/lib/models/Setting.js:921
-#: packages/lib/models/Setting.js:934
+#: packages/lib/models/Setting.js:982 packages/lib/models/Setting.js:995
+#: packages/lib/models/Setting.js:1008
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2769,58 +2915,58 @@ msgstr ""
 "займёт в 2 раза больше места, чем элемент с фактором 1. Перезапустите "
 "приложение, чтобы изменения вступили в силу."
 
-#: packages/lib/models/Setting.js:920
+#: packages/lib/models/Setting.js:994
 msgid "Note list growth factor"
 msgstr "Фактор роста списка заметки"
 
-#: packages/lib/models/Setting.js:933
+#: packages/lib/models/Setting.js:1007
 msgid "Note area growth factor"
 msgstr "Фактор роста поля заметки"
 
-#: packages/lib/models/Setting.js:1134
+#: packages/lib/models/Setting.js:1222
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неверное значение параметра: \"%s\". Доступные значения: %s."
 
-#: packages/lib/models/Setting.js:1533
+#: packages/lib/models/Setting.js:1621
 msgid "General"
 msgstr "Основные"
 
-#: packages/lib/models/Setting.js:1535
+#: packages/lib/models/Setting.js:1623
 msgid "Synchronisation"
 msgstr "Синхронизация"
 
-#: packages/lib/models/Setting.js:1537
+#: packages/lib/models/Setting.js:1625
 msgid "Appearance"
 msgstr "Внешний вид"
 
-#: packages/lib/models/Setting.js:1539
+#: packages/lib/models/Setting.js:1627
 msgid "Note"
 msgstr "Заметки"
 
-#: packages/lib/models/Setting.js:1541
+#: packages/lib/models/Setting.js:1629
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1545
+#: packages/lib/models/Setting.js:1633
 msgid "Application"
 msgstr "Приложение"
 
-#: packages/lib/models/Setting.js:1549
+#: packages/lib/models/Setting.js:1637
 msgid "Encryption"
 msgstr "Шифрование"
 
-#: packages/lib/models/Setting.js:1551
+#: packages/lib/models/Setting.js:1639
 msgid "Web Clipper"
 msgstr "Настройки веб-клиппера"
 
-#: packages/lib/models/Setting.js:1553
+#: packages/lib/models/Setting.js:1641
 msgid "Keyboard Shortcuts"
 msgstr "Сочетания клавиш"
 
-#: packages/lib/models/Setting.js:1560
+#: packages/lib/models/Setting.js:1648
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2837,7 +2983,7 @@ msgstr ""
 "форматирование будет утеряно. Ниже отмечены плагины, совместимые с "
 "редактором WYSIWYG."
 
-#: packages/lib/models/Setting.js:1562
+#: packages/lib/models/Setting.js:1650
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
@@ -2879,43 +3025,48 @@ msgstr ""
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Метка \"%s\" уже существует. Пожалуйста, выберите другое имя."
 
-#: packages/lib/models/Note.js:37
+#: packages/lib/models/Note.js:38
 msgid "created date"
 msgstr "дата создания"
 
-#: packages/lib/models/Note.js:38
+#: packages/lib/models/Note.js:39
 msgid "custom order"
 msgstr "пользовательский порядок"
 
-#: packages/lib/models/Note.js:116
+#: packages/lib/models/Note.js:117
 msgid "This note does not have geolocation information."
 msgstr "Эта заметка не содержит информации о географическом местоположении."
 
-#: packages/lib/models/Note.js:524
+#: packages/lib/models/Note.js:525
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Не удалось скопировать заметку в блокнот \"%s\""
 
-#: packages/lib/models/Note.js:536
+#: packages/lib/models/Note.js:538
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Не удалось переместить заметку в блокнот \"%s\""
 
-#: packages/lib/models/BaseItem.js:707
+#: packages/lib/models/BaseItem.js:717
 msgid "Encrypted"
 msgstr "Зашифровано"
 
-#: packages/lib/models/BaseItem.js:768
+#: packages/lib/models/BaseItem.js:778
 msgid "Encrypted items cannot be modified"
 msgstr "Зашифрованные элементы не могут быть изменены"
 
-#: packages/lib/BaseApplication.js:149 packages/lib/BaseApplication.js:161
-#: packages/lib/BaseApplication.js:193
+#: packages/lib/SyncTargetJoplinCloud.js:28
+#, fuzzy
+msgid "Joplin Cloud"
+msgstr "Форум Joplin"
+
+#: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
+#: packages/lib/BaseApplication.js:196
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Использовано: %s"
 
-#: packages/lib/BaseApplication.js:228
+#: packages/lib/BaseApplication.js:231
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Неизвестный флаг: %s"
@@ -2924,15 +3075,15 @@ msgstr "Неизвестный флаг: %s"
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: packages/lib/components/shared/config-shared.js:45
+#: packages/lib/components/shared/config-shared.js:50
 msgid "Checking... Please wait."
 msgstr "Проверка... Пожалуйста, подождите."
 
-#: packages/lib/components/shared/config-shared.js:47
+#: packages/lib/components/shared/config-shared.js:52
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Успешно! Синхронизация настроена правильно."
 
-#: packages/lib/components/shared/config-shared.js:49
+#: packages/lib/components/shared/config-shared.js:54
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -3000,71 +3151,71 @@ msgstr ""
 "Невозможно обновить токен: отсутствуют данные аутентификации. Повторный "
 "запуск синхронизации может решить эту проблему."
 
-#: packages/lib/Synchronizer.js:119
+#: packages/lib/Synchronizer.js:138
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Создано локальных элементов: %d."
 
-#: packages/lib/Synchronizer.js:121
+#: packages/lib/Synchronizer.js:140
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Обновлено локальных элементов: %d."
 
-#: packages/lib/Synchronizer.js:123
+#: packages/lib/Synchronizer.js:142
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "Создано элементов в хранилище: %d."
 
-#: packages/lib/Synchronizer.js:125
+#: packages/lib/Synchronizer.js:144
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "Обновлено элементов в хранилище: %d."
 
-#: packages/lib/Synchronizer.js:127
+#: packages/lib/Synchronizer.js:146
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Удалено локальных элементов: %d."
 
-#: packages/lib/Synchronizer.js:129
+#: packages/lib/Synchronizer.js:148
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Удалено удаленных элементов: %d."
 
-#: packages/lib/Synchronizer.js:131
+#: packages/lib/Synchronizer.js:150
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Получено элементов: %d/%d."
 
-#: packages/lib/Synchronizer.js:133
+#: packages/lib/Synchronizer.js:152
 msgid "Cancelling..."
 msgstr "Отмена..."
 
-#: packages/lib/Synchronizer.js:135
+#: packages/lib/Synchronizer.js:154
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Завершено: %s"
 
-#: packages/lib/Synchronizer.js:137
+#: packages/lib/Synchronizer.js:156
 #, javascript-format
 msgid "Last error: %s"
 msgstr "Последняя ошибка: %s"
 
-#: packages/lib/Synchronizer.js:244
+#: packages/lib/Synchronizer.js:263
 msgid "Idle"
 msgstr "Простой"
 
-#: packages/lib/Synchronizer.js:246
+#: packages/lib/Synchronizer.js:265
 msgid "In progress"
 msgstr "Выполнение"
 
-#: packages/lib/Synchronizer.js:844
+#: packages/lib/Synchronizer.js:862
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 "Обнаружен неизвестный тип файла - пожалуйста, обновите Joplin до последней "
 "версии"
 
-#: packages/lib/JoplinServerApi.js:63
+#: packages/lib/JoplinServerApi.js:80
 #, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
@@ -3122,7 +3273,7 @@ msgstr "Версия профиля: %s"
 msgid "Keychain Supported: %s"
 msgstr "Поддерживаемая связка ключей: %s"
 
-#: packages/lib/services/RevisionService.js:217
+#: packages/lib/services/RevisionService.js:218
 msgid "Restored Notes"
 msgstr "Восстановленные заметки"
 
@@ -3214,27 +3365,27 @@ msgstr "Не удалось найти \"%s\"."
 msgid "Please specify import format for %s"
 msgstr "Пожалуйста, укажите формат импорта для %s"
 
-#: packages/lib/services/KeymapService.js:273
+#: packages/lib/services/KeymapService.js:275
 msgid "command"
 msgstr "команда"
 
-#: packages/lib/services/KeymapService.js:273
-#: packages/lib/services/KeymapService.js:278
+#: packages/lib/services/KeymapService.js:275
+#: packages/lib/services/KeymapService.js:280
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "В \"%s\" отсутствует необходимое свойство \"%s\"."
 
-#: packages/lib/services/KeymapService.js:278
-#: packages/lib/services/KeymapService.js:285
+#: packages/lib/services/KeymapService.js:280
+#: packages/lib/services/KeymapService.js:287
 msgid "accelerator"
 msgstr "сочетание клавиш"
 
-#: packages/lib/services/KeymapService.js:285
+#: packages/lib/services/KeymapService.js:287
 #, javascript-format
 msgid "Invalid %s: %s."
 msgstr "Недопустимое \"%s\": %s."
 
-#: packages/lib/services/KeymapService.js:303
+#: packages/lib/services/KeymapService.js:305
 #, javascript-format
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
@@ -3243,16 +3394,16 @@ msgstr ""
 "Сочетание клавиш \"%s\" используется для команд \"%s\" и \"%s\". Это может "
 "привести к неожиданному поведению."
 
-#: packages/lib/services/KeymapService.js:328
+#: packages/lib/services/KeymapService.js:330
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
 msgstr "Сочетание клавиш \"%s\" недопустимо."
 
-#: packages/lib/services/ReportService.js:123
+#: packages/lib/services/ReportService.js:152
 msgid "Items that cannot be synchronised"
 msgstr "Элементы, которые не могут быть синхронизированы"
 
-#: packages/lib/services/ReportService.js:124
+#: packages/lib/services/ReportService.js:153
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -3262,21 +3413,21 @@ msgstr ""
 "синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по названию "
 "или ID (указан в квадратных скобках выше)."
 
-#: packages/lib/services/ReportService.js:129
+#: packages/lib/services/ReportService.js:159
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Не удается выгрузить файл %s (%s): %s"
 
-#: packages/lib/services/ReportService.js:132
+#: packages/lib/services/ReportService.js:162
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Не удается загрузить файл “%s”: %s"
 
-#: packages/lib/services/ReportService.js:139
+#: packages/lib/services/ReportService.js:179
 msgid "Items that cannot be decrypted"
 msgstr "Элементы, которые не могут быть расшифрованы"
 
-#: packages/lib/services/ReportService.js:140
+#: packages/lib/services/ReportService.js:180
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
@@ -3286,83 +3437,83 @@ msgstr ""
 "Возможно они повреждены или слишком большие. Данные элементы останутся на "
 "устройстве без дальнейших попыток расшифровать их."
 
-#: packages/lib/services/ReportService.js:145
+#: packages/lib/services/ReportService.js:185
 #: packages/app-cli/app/cli-utils.js:140
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: packages/lib/services/ReportService.js:171
+#: packages/lib/services/ReportService.js:198
 msgid "Attachments"
 msgstr "Вложения"
 
-#: packages/lib/services/ReportService.js:178
+#: packages/lib/services/ReportService.js:205
 msgid "Downloaded and decrypted"
 msgstr "Загружено и расшифровано"
 
-#: packages/lib/services/ReportService.js:178
-#: packages/lib/services/ReportService.js:179
-#: packages/lib/services/ReportService.js:180
-#: packages/lib/services/ReportService.js:184
+#: packages/lib/services/ReportService.js:205
+#: packages/lib/services/ReportService.js:206
+#: packages/lib/services/ReportService.js:207
+#: packages/lib/services/ReportService.js:211
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/ReportService.js:179
+#: packages/lib/services/ReportService.js:206
 msgid "Downloaded and encrypted"
 msgstr "Загружено и зашифровано"
 
-#: packages/lib/services/ReportService.js:180
+#: packages/lib/services/ReportService.js:207
 msgid "Created locally"
 msgstr "Создано локально"
 
-#: packages/lib/services/ReportService.js:191
+#: packages/lib/services/ReportService.js:218
 msgid "Attachments that could not be downloaded"
 msgstr "Не удается загрузить следующие вложения"
 
-#: packages/lib/services/ReportService.js:195
+#: packages/lib/services/ReportService.js:222
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: packages/lib/services/ReportService.js:206
+#: packages/lib/services/ReportService.js:233
 msgid "Sync status (synced items / total items)"
 msgstr "Статус синхронизации элементов (синхронизировано / всего)"
 
-#: packages/lib/services/ReportService.js:210
+#: packages/lib/services/ReportService.js:237
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: packages/lib/services/ReportService.js:212
+#: packages/lib/services/ReportService.js:239
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "Всего: %d/%d"
 
-#: packages/lib/services/ReportService.js:214
+#: packages/lib/services/ReportService.js:241
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "Конфликтов: %d"
 
-#: packages/lib/services/ReportService.js:215
+#: packages/lib/services/ReportService.js:242
 #, javascript-format
 msgid "To delete: %d"
 msgstr "К удалению: %d"
 
-#: packages/lib/services/ReportService.js:217
+#: packages/lib/services/ReportService.js:244
 msgid "Folders"
 msgstr "Каталоги"
 
-#: packages/lib/services/ReportService.js:223
+#: packages/lib/services/ReportService.js:250
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d заметок"
 
-#: packages/lib/services/ReportService.js:228
+#: packages/lib/services/ReportService.js:255
 msgid "Coming alarms"
 msgstr "Ближайшие напоминания"
 
-#: packages/lib/services/ReportService.js:232
+#: packages/lib/services/ReportService.js:259
 #, javascript-format
 msgid "On %s: %s"
 msgstr "В %s: %s"
@@ -3742,6 +3893,12 @@ msgstr "%d заметок соответствуют указанному выр
 msgid "Attaches the given file to the note."
 msgstr "Прикрепляет заданный файл к заметке."
 
+#: packages/app-cli/app/command-batch.js:10
+msgid ""
+"Runs the commands contained in the text file. There should be one command "
+"per line."
+msgstr ""
+
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
 msgstr "Отображает информацию о версии"
@@ -3859,11 +4016,11 @@ msgstr "Ваш выбор: "
 msgid "Invalid answer: %s"
 msgstr "Неверный ответ: %s"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
 msgstr "Y"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "n"
 msgstr "n"
 
@@ -3954,39 +4111,39 @@ msgstr ""
 msgid "Exits the application."
 msgstr "Выйти из приложения."
 
-#: packages/app-cli/app/app.js:62
+#: packages/app-cli/app/app.js:63
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "Более одного элемента соответствуют выражению \"%s\". Пожалуйста, уточните "
 "ваш запрос."
 
-#: packages/app-cli/app/app.js:92
+#: packages/app-cli/app/app.js:93
 msgid "No notebook selected."
 msgstr "Блокнот не выбран."
 
-#: packages/app-cli/app/app.js:98
+#: packages/app-cli/app/app.js:99
 msgid "No notebook has been specified."
 msgstr "Блокнот не указан."
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "N"
 msgstr "N"
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "y"
 msgstr "y"
 
-#: packages/app-cli/app/app.js:170
+#: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Отмена фоновой синхронизации... Пожалуйста, подождите."
 
-#: packages/app-cli/app/app.js:255
+#: packages/app-cli/app/app.js:256
 #, javascript-format
 msgid "No such command: %s"
 msgstr "Нет такой команды: %s"
 
-#: packages/app-cli/app/app.js:303
+#: packages/app-cli/app/app.js:304
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Команда \"%s\" доступна только в режиме GUI"
@@ -4027,6 +4184,41 @@ msgstr "Отмечает задачу как выполненную."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Заметка не является задачей: \"%s\""
+
+#~ msgid "Joplin Server Directory"
+#~ msgstr "Каталог сервера Joplin"
+
+#~ msgid "Joplin Server username"
+#~ msgstr "Имя пользователя Joplin Server"
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "выделенный текст"
+
+#, fuzzy
+#~ msgid "Mark"
+#~ msgstr "Разметка"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "Описание установленной версии"
+
+#, fuzzy
+#~ msgid ""
+#~ "If the font is incorrect or empty, it will default to a generic monospace "
+#~ "font."
+#~ msgstr ""
+#~ "Для корректного отображения требуется задать *моноширинный* шрифт. Если "
+#~ "шрифт не был задан или выбран некорректный шрифт, будет использован шрифт "
+#~ "по умолчанию."
+
+#~ msgid ""
+#~ "This should be a *monospace* font or some elements will render "
+#~ "incorrectly. If the font is incorrect or empty, it will default to a "
+#~ "generic monospace font."
+#~ msgstr ""
+#~ "Для корректного отображения требуется задать *моноширинный* шрифт. Если "
+#~ "шрифт не был задан или выбран некорректный шрифт, будет использован шрифт "
+#~ "по умолчанию."
 
 #~ msgid "Unknown"
 #~ msgstr "Неизвестно"
@@ -4202,10 +4394,6 @@ msgstr "Заметка не является задачей: \"%s\""
 
 #~ msgid "Resources"
 #~ msgstr "Ресурсы: %d"
-
-#, fuzzy
-#~ msgid "marked text"
-#~ msgstr "выделенный текст"
 
 #~ msgid "Global zoom percentage"
 #~ msgstr "Глобальный масштаб в процентах"

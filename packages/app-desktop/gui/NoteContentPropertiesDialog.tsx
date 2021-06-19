@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
+import DialogButtonRow from './DialogButtonRow';
 const { themeStyle } = require('@joplin/lib/theme');
-const DialogButtonRow = require('./DialogButtonRow.min');
 const Countable = require('countable');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 
@@ -24,7 +24,7 @@ interface KeyToLabelMap {
 let markupToHtml_: any = null;
 function markupToHtml() {
 	if (markupToHtml_) return markupToHtml_;
-	markupToHtml_ = markupLanguageUtils.newMarkupToHtml({});
+	markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 	return markupToHtml_;
 }
 

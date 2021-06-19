@@ -5,11 +5,16 @@ import BaseModel from '@joplin/lib/BaseModel';
 import Resource from '@joplin/lib/models/Resource';
 const bridge = require('electron').remote.require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import { reg } from '@joplin/lib/registry';
+import htmlUtils from '@joplin/lib/htmlUtils';
+import Logger from '@joplin/lib/Logger';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const md5 = require('md5');
+const path = require('path');
+const uri2path = require('file-uri-to-path');
+
+const logger = Logger.create('resourceHandling');
 
 export async function handleResourceDownloadMode(noteBody: string) {
 	if (noteBody && Setting.value('sync.resourceDownloadMode') === 'auto') {
@@ -69,21 +74,21 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 	for (let i = 0; i < filePaths.length; i++) {
 		const filePath = filePaths[i];
 		try {
-			reg.logger().info(`Attaching ${filePath}`);
+			logger.info(`Attaching ${filePath}`);
 			const newBody = await shim.attachFileToNoteBody(body, filePath, options.position, {
 				createFileURL: options.createFileURL,
 				resizeLargeImages: 'ask',
 			});
 
 			if (!newBody) {
-				reg.logger().info('File attachment was cancelled');
+				logger.info('File attachment was cancelled');
 				return null;
 			}
 
 			body = newBody;
-			reg.logger().info('File was attached.');
+			logger.info('File was attached.');
 		} catch (error) {
-			reg.logger().error(error);
+			logger.error(error);
 			bridge().showErrorMessageBox(error.message);
 		}
 	}
@@ -124,4 +129,51 @@ export async function handlePasteEvent(event: any) {
 		}
 	}
 	return output;
+}
+
+export async function processPastedHtml(html: string) {
+	const allImageUrls: string[] = [];
+	const mappedResources: Record<string, string> = {};
+
+	// When copying text from eg. GitHub, the HTML might contain non-breaking
+	// spaces instead of regular spaces. If these non-breaking spaces are
+	// inserted into the TinyMCE editor (using insertContent), they will be
+	// dropped. So here we convert them to regular spaces.
+	// https://stackoverflow.com/a/31790544/561309
+	html = html.replace(/[\u202F\u00A0]/g, ' ');
+
+	htmlUtils.replaceImageUrls(html, (src: string) => {
+		allImageUrls.push(src);
+	});
+
+	for (const imageSrc of allImageUrls) {
+		if (!mappedResources[imageSrc]) {
+			try {
+				if (imageSrc.startsWith('file')) {
+					const imageFilePath = path.normalize(uri2path(imageSrc));
+					const resourceDirPath = path.normalize(Setting.value('resourceDir'));
+
+					if (imageFilePath.startsWith(resourceDirPath)) {
+						mappedResources[imageSrc] = imageSrc;
+					} else {
+						const createdResource = await shim.createResourceFromPath(imageFilePath);
+						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+					}
+				} else {
+					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
+					await shim.fetchBlob(imageSrc, { path: filePath });
+					const createdResource = await shim.createResourceFromPath(filePath);
+					await shim.fsDriver().remove(filePath);
+					mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+				}
+			} catch (error) {
+				logger.warn(`Error creating a resource for ${imageSrc}.`, error);
+				mappedResources[imageSrc] = imageSrc;
+			}
+		}
+	}
+
+	return htmlUtils.replaceImageUrls(html, (src: string) => {
+		return mappedResources[src];
+	});
 }

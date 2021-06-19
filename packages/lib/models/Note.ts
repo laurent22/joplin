@@ -111,7 +111,7 @@ export default class Note extends BaseItem {
 		return BaseModel.TYPE_NOTE;
 	}
 
-	static linkedItemIds(body: string): string[] {
+	public static linkedItemIds(body: string): string[] {
 		if (!body || body.length <= 32) return [];
 
 		const links = urlUtils.extractResourceUrls(body);
@@ -127,7 +127,7 @@ export default class Note extends BaseItem {
 
 	static async linkedItemIdsByType(type: ModelType, body: string) {
 		const items = await this.linkedItems(body);
-		const output = [];
+		const output: string[] = [];
 
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
@@ -208,9 +208,9 @@ export default class Note extends BaseItem {
 		for (const basePath of pathsToTry) {
 			const reStrings = [
 				// Handles file://path/to/abcdefg.jpg?t=12345678
-				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+\\?t=[0-9]+`,
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9]{32}\\.[a-zA-Z0-9]+\\?t=[0-9]+`,
 				// Handles file://path/to/abcdefg.jpg
-				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`,
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9]{32}\\.[a-zA-Z0-9]+`,
 			];
 			for (const reString of reStrings) {
 				const re = new RegExp(reString, 'gi');
@@ -307,7 +307,7 @@ export default class Note extends BaseItem {
 			includeTimestamps: true,
 		}, options);
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -523,6 +523,7 @@ export default class Note extends BaseItem {
 			changes: {
 				parent_id: folderId,
 				is_conflict: 0, // Also reset the conflict flag in case we're moving the note out of the conflict folder
+				conflict_original_id: '', // Reset parent id as well.
 			},
 		});
 	}
@@ -537,6 +538,7 @@ export default class Note extends BaseItem {
 			id: noteId,
 			parent_id: folderId,
 			is_conflict: 0,
+			conflict_original_id: '',
 			updated_time: time.unixMs(),
 		};
 
@@ -911,4 +913,12 @@ export default class Note extends BaseItem {
 		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
+
+	static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
+		const conflictNote = Object.assign({}, sourceNote);
+		delete conflictNote.id;
+		conflictNote.is_conflict = 1;
+		conflictNote.conflict_original_id = sourceNote.id;
+		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
+	}
 }

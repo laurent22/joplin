@@ -274,7 +274,7 @@ function translationStatusToMdTable(status) {
 	for (let i = 0; i < status.length; i++) {
 		const stat = status[i];
 		const flagUrl = flagImageUrl(stat.locale);
-		output.push([`![](${flagUrl})`, stat.languageName, `[${stat.locale}](${poFileUrl(stat.locale)})`, stat.translatorName, `${stat.percentDone}%`].join('  |  '));
+		output.push([`<img src="${flagUrl}" width="16px"/>`, stat.languageName, `[${stat.locale}](${poFileUrl(stat.locale)})`, stat.translatorName, `${stat.percentDone}%`].join('  |  '));
 	}
 	return output.join('\n');
 }

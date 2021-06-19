@@ -4,7 +4,7 @@ import shim from './shim';
 
 const Mutex = require('async-mutex').Mutex;
 
-type SqlParams = Record<string, any>;
+type SqlParams = any[];
 
 export interface SqlQuery {
 	sql: string;
@@ -68,7 +68,7 @@ export default class Database {
 		this.logger().info('Database was open successfully');
 	}
 
-	escapeField(field: string) {
+	public escapeField(field: string) {
 		if (field == '*') return '*';
 		const p = field.split('.');
 		if (p.length == 1) return `\`${field}\``;

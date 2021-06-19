@@ -1,11 +1,12 @@
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { ErrorForbidden } from '../../utils/errors';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
 import { User } from '../../db';
 
-const router = new Router();
+const router = new Router(RouteType.Api);
 
 router.public = true;
 
@@ -15,7 +16,7 @@ router.post('api/sessions', async (_path: SubPath, ctx: AppContext) => {
 	if (!user) throw new ErrorForbidden('Invalid username or password');
 
 	const session = await ctx.models.session().createUserSession(user.id);
-	return { id: session.id };
+	return { id: session.id, user_id: session.user_id };
 });
 
 export default router;

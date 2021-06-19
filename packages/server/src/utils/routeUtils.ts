@@ -1,7 +1,9 @@
-import { File, ItemAddressingType } from '../db';
-import { ErrorBadRequest } from './errors';
+import { baseUrl } from '../config';
+import { Item, ItemAddressingType, Uuid } from '../db';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
-import { AppContext } from './types';
+import { AppContext, HttpMethod, RouteType } from './types';
+import { URL } from 'url';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -112,14 +114,14 @@ export function isPathBasedAddressing(fileId: string): boolean {
 //
 // root:/Documents/MyFile.md:/content
 // ABCDEFG/content
-export function parseSubPath(basePath: string, p: string): SubPath {
+export function parseSubPath(basePath: string, p: string, rawPath: string = null): SubPath {
 	p = rtrimSlashes(ltrimSlashes(p));
 
 	const output: SubPath = {
 		id: '',
 		link: '',
 		addressingType: ItemAddressingType.Id,
-		raw: p,
+		raw: rawPath === null ? p : ltrimSlashes(rawPath),
 		schema: '',
 	};
 
@@ -151,14 +153,47 @@ export function parseSubPath(basePath: string, p: string): SubPath {
 	return output;
 }
 
-export function routeResponseFormat(match: MatchedRoute, context: AppContext): RouteResponseFormat {
-	const rawPath = context.path;
-	if (match && match.route.responseFormat) return match.route.responseFormat;
+export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType): boolean {
+	const host1 = (new URL(requestOrigin)).host;
+	const host2 = (new URL(endPointBaseUrl)).host;
 
-	let path = rawPath;
-	if (match) path = match.basePath ? match.basePath : match.subPath.raw;
+	if (routeType === RouteType.UserContent) {
+		// At this point we only check if eg usercontent.com has been accessed
+		// with origin usercontent.com, or something.usercontent.com. We don't
+		// check that the user ID is valid or is event present. This will be
+		// done by the /share end point, which will also check that the share
+		// owner ID matches the origin URL.
+		if (host1 === host2) return true;
+		const hostNoPrefix = host1.split('.').slice(1).join('.');
+		return hostNoPrefix === host2;
+	} else {
+		return host1 === host2;
+	}
+}
 
+export function userIdFromUserContentUrl(url: string): Uuid {
+	const s = (new URL(url)).hostname.split('.');
+	return s[0].toLowerCase();
+}
+
+export function routeResponseFormat(context: AppContext): RouteResponseFormat {
+	const path = context.path;
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
+}
+
+export async function execRequest(routes: Routers, ctx: AppContext) {
+	const match = findMatchingRoute(ctx.path, routes);
+	if (!match) throw new ErrorNotFound();
+
+	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
+	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, 'invalidOrigin');
+
+	// This is a generic catch-all for all private end points - if we
+	// couldn't get a valid session, we exit now. Individual end points
+	// might have additional permission checks depending on the action.
+	if (!match.route.isPublic(match.subPath.schema) && !ctx.owner) throw new ErrorForbidden();
+
+	return endPoint.handler(match.subPath, ctx);
 }
 
 // In a path such as "/api/files/SOME_ID/content" we want to find:
@@ -172,10 +207,16 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	// an empty string. So for example we now have ['api', 'files', 'SOME_ID', 'content'].
 	splittedPath.splice(0, 1);
 
+	let namespace = '';
+	if (splittedPath[0] === 'apps') {
+		namespace = splittedPath.splice(0, 2).join('/');
+	}
+
+	// Paths such as "/api/files/:id" will be processed here
 	if (splittedPath.length >= 2) {
 		// Create the base path, eg. "api/files", to match it to one of the
-		// routes.s
-		const basePath = `${splittedPath[0]}/${splittedPath[1]}`;
+		// routes.
+		const basePath = `${namespace ? `${namespace}/` : ''}${splittedPath[0]}/${splittedPath[1]}`;
 		if (routes[basePath]) {
 			// Remove the base path from the array so that parseSubPath() can
 			// extract the ID and link from the URL. So the array will contain
@@ -189,30 +230,44 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 		}
 	}
 
+	// Paths such as "/users/:id" or "/apps/joplin/notes/:id" will get here
 	const basePath = splittedPath[0];
-	if (routes[basePath]) {
+	const basePathNS = (namespace ? `${namespace}/` : '') + basePath;
+	if (routes[basePathNS]) {
 		splittedPath.splice(0, 1);
 		return {
-			route: routes[basePath],
+			route: routes[basePathNS],
 			basePath: basePath,
 			subPath: parseSubPath(basePath, `/${splittedPath.join('/')}`),
 		};
 	}
 
+	// Default routes - to process CSS or JS files for example
 	if (routes['']) {
 		return {
 			route: routes[''],
 			basePath: '',
-			subPath: parseSubPath('', `/${splittedPath.join('/')}`),
+			subPath: parseSubPath('', `/${splittedPath.join('/')}`, path),
 		};
 	}
 
 	throw new Error('Unreachable');
 }
 
-export function respondWithFileContent(koaResponse: any, file: File): Response {
-	koaResponse.body = file.content;
-	koaResponse.set('Content-Type', file.mime_type);
-	koaResponse.set('Content-Length', file.size.toString());
+export function respondWithItemContent(koaResponse: any, item: Item, content: Buffer): Response {
+	koaResponse.body = item.jop_type > 0 ? content.toString() : content;
+	koaResponse.set('Content-Type', item.mime_type);
+	koaResponse.set('Content-Length', content.byteLength);
 	return new Response(ResponseType.KoaResponse, koaResponse);
+}
+
+export enum UrlType {
+	Signup = 'signup',
+	Login = 'login',
+	Terms = 'terms',
+	Privacy = 'privacy',
+}
+
+export function makeUrl(urlType: UrlType): string {
+	return `${baseUrl(RouteType.Web)}/${urlType}`;
 }

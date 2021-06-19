@@ -7,9 +7,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "bootstrap": "lerna bootstrap --no-ci",
-    "bootstrapIgnoreScripts": "lerna bootstrap --ignore-scripts --no-ci",
-    "bootstrapServerOnly": "lerna bootstrap --no-ci --include-dependents --include-dependencies --scope @joplin/server",
+    "audit": "lerna-audit",
+    "bootstrap": "lerna bootstrap --force-local --no-ci",
+    "bootstrapServerOnly": "lerna bootstrap --force-local --no-ci --include-dependents --include-dependencies --scope @joplin/server",
     "build": "lerna run build && npm run tsc",
     "buildApiDoc": "npm start --prefix=packages/app-cli -- apidoc ../../readme/api/references/rest_api.md",
     "buildDoc": "./packages/tools/build-all.sh",
@@ -36,6 +36,7 @@
     "releaseIOS": "node packages/tools/release-ios.js",
     "releasePluginGenerator": "node packages/tools/release-plugin-generator.js",
     "releaseServer": "node packages/tools/release-server.js",
+    "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "test-ci": "lerna run test-ci --stream",
     "test": "lerna run test --stream",
@@ -62,8 +63,9 @@
     "gulp": "^4.0.2",
     "husky": "^3.0.2",
     "lerna": "^3.22.1",
+    "lerna-audit": "^1.3.2",
     "lint-staged": "^9.2.1",
-    "madge": "^4.0.0",
+    "madge": "^4.0.2",
     "typedoc": "^0.17.8",
     "typescript": "^4.0.5"
   }

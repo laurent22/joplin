@@ -15,7 +15,7 @@ const migrations = [
 
 import Setting from '../../models/Setting';
 const { sprintf } = require('sprintf-js');
-const JoplinError = require('../../JoplinError');
+import JoplinError from '../../JoplinError';
 
 interface SyncTargetInfo {
 	version: number;

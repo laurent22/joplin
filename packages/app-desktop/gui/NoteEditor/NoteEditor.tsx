@@ -156,10 +156,11 @@ function NoteEditor(props: NoteEditorProps) {
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			customCss: props.customCss,
 		});
 
 		return markupToHtml.allAssets(markupLanguage, theme);
-	}, [props.themeId]);
+	}, [props.themeId, props.customCss]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -458,6 +459,7 @@ function NoteEditor(props: NoteEditorProps) {
 			watchedNoteFiles={props.watchedNoteFiles}
 			plugins={props.plugins}
 			inConflictFolder={props.selectedFolderId === Folder.conflictFolderId()}
+			customCss={props.customCss}
 		/>;
 	}
 
@@ -549,7 +551,7 @@ function NoteEditor(props: NoteEditorProps) {
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				<div style={{ paddingLeft: theme.editorPaddingLeft, display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
+				<div className="tag-bar" style={{ paddingLeft: theme.editorPaddingLeft, display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
 					{renderTagButton()}
 					{renderTagBar()}
 				</div>

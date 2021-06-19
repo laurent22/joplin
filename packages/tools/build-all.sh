@@ -20,6 +20,11 @@ echo "$ROOT_DIR/build-welcome.js..."
 echo "---------------------------------------------------"
 node "$ROOT_DIR/build-welcome.js"
 
+echo "---------------------------------------------------"
+echo "$ROOT_DIR/update-readme-sponsors.js..."
+echo "---------------------------------------------------"
+node "$ROOT_DIR/update-readme-sponsors.js"
+
 cd "$ROOT_DIR/.."
 echo "---------------------------------------------------"
 echo "npm run buildWebsite..."

@@ -105,7 +105,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		if (query) {
 			if (this.props.settings['db.ftsEnabled']) {
-				notes = await SearchEngineUtils.notesForQuery(query);
+				notes = await SearchEngineUtils.notesForQuery(query, true);
 			} else {
 				const p = query.split(' ');
 				const temp = [];

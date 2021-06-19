@@ -86,6 +86,7 @@ export interface Options {
 	tempDir?: string;
 	fsDriver?: any;
 	extraRendererRules?: ExtraRendererRule[];
+	customCss?: string;
 }
 
 interface PluginAsset {
@@ -167,6 +168,7 @@ export default class MdToHtml {
 	private pluginOptions_: any = {};
 	private extraRendererRules_: RendererRules = {};
 	private allProcessedAssets_: any = {};
+	private customCss_: string = '';
 
 	public constructor(options: Options = null) {
 		if (!options) options = {};
@@ -195,6 +197,8 @@ export default class MdToHtml {
 				this.loadExtraRendererRule(rule.id, rule.assetPath, rule.module);
 			}
 		}
+
+		this.customCss_ = options.customCss || '';
 	}
 
 	private fsDriver() {
@@ -340,13 +344,15 @@ export default class MdToHtml {
 
 		const processedAssets = this.processPluginAssets(assets);
 		processedAssets.cssStrings.splice(0, 0, noteStyle(theme).join('\n'));
+		if (this.customCss_) processedAssets.cssStrings.push(this.customCss_);
 		const output = await this.outputAssetsToExternalAssets_(processedAssets);
 		return output.pluginAssets;
 	}
 
 	private async outputAssetsToExternalAssets_(output: any) {
 		for (const cssString of output.cssStrings) {
-			output.pluginAssets.push(await this.fsDriver().cacheCssToFile(cssString));
+			const filePath = await this.fsDriver().cacheCssToFile(cssString);
+			output.pluginAssets.push(filePath);
 		}
 		delete output.cssStrings;
 		return output;
@@ -524,7 +530,7 @@ export default class MdToHtml {
 		let output = { ...this.allProcessedAssets(allRules, options.theme, options.codeTheme) };
 		cssStrings = cssStrings.concat(output.cssStrings);
 
-		if (options.userCss) cssStrings.push(options.userCss);
+		if (this.customCss_) cssStrings.push(this.customCss_);
 
 		if (options.bodyOnly) {
 			// Markdown-it wraps any content in <p></p> by default. There's a function to parse without

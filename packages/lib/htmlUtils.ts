@@ -2,6 +2,7 @@ const urlUtils = require('./urlUtils.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const htmlparser2 = require('@joplin/fork-htmlparser2');
+const { escapeHtml } = require('./string-utils.js');
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
@@ -66,6 +67,11 @@ class HtmlUtils {
 		});
 	}
 
+	// Note that the URLs provided by this function are URL-encoded, which is
+	// usually what you want for web URLs. But if they are file:// URLs and the
+	// file path is going to be used, it will need to be unescaped first. The
+	// transformed SRC, must also be escaped before being sent back to this
+	// function.
 	public processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 
@@ -148,3 +154,16 @@ class HtmlUtils {
 }
 
 export default new HtmlUtils();
+
+export function plainTextToHtml(plainText: string): string {
+	const lines = plainText
+		.replace(/[\n\r]/g, '\n')
+		.split('\n');
+
+	const lineOpenTag = lines.length > 1 ? '<p>' : '';
+	const lineCloseTag = lines.length > 1 ? '</p>' : '';
+
+	return lines
+		.map(line => lineOpenTag + escapeHtml(line) + lineCloseTag)
+		.join('');
+}

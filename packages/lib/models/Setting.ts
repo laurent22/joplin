@@ -1,6 +1,5 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
-import { ltrimSlashes } from '../path-utils';
 import eventManager from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
@@ -82,6 +81,37 @@ export interface SettingSection {
 	source?: SettingSectionSource;
 }
 
+export enum SyncStartupOperation {
+	None = 0,
+	ClearLocalSyncState = 1,
+	ClearLocalData = 2,
+}
+
+export enum Env {
+	Undefined = 'SET_ME',
+	Dev = 'dev',
+	Prod = 'prod',
+}
+
+export interface Constants {
+	env: Env;
+	isDemo: boolean;
+	appName: string;
+	appId: string;
+	appType: string;
+	resourceDirName: string;
+	resourceDir: string;
+	profileDir: string;
+	templateDir: string;
+	tempDir: string;
+	pluginDataDir: string;
+	cacheDir: string;
+	pluginDir: string;
+	flagOpenDevTools: boolean;
+	syncVersion: number;
+	startupDevPlugins: string[];
+}
+
 interface SettingSections {
 	[key: string]: SettingSection;
 }
@@ -125,6 +155,7 @@ class Setting extends BaseModel {
 	public static DATE_FORMAT_5 = 'YYYY-MM-DD';
 	public static DATE_FORMAT_6 = 'DD.MM.YYYY';
 	public static DATE_FORMAT_7 = 'YYYY.MM.DD';
+	public static DATE_FORMAT_8 = 'YYMMDD';
 
 	public static TIME_FORMAT_1 = 'HH:mm';
 	public static TIME_FORMAT_2 = 'h:mm A';
@@ -144,8 +175,8 @@ class Setting extends BaseModel {
 
 	// Contains constants that are set by the application and
 	// cannot be modified by the user:
-	public static constants_: any = {
-		env: 'SET_ME',
+	public static constants_: Constants = {
+		env: Env.Undefined,
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
@@ -201,7 +232,7 @@ class Setting extends BaseModel {
 		return `${this.value('profileDir')}/settings.json`;
 	}
 
-	private static get fileHandler(): FileHandler {
+	public static get fileHandler(): FileHandler {
 		if (!this.fileHandler_) {
 			this.fileHandler_ = new FileHandler(this.settingFilePath);
 		}
@@ -280,6 +311,12 @@ class Setting extends BaseModel {
 
 			'sync.upgradeState': {
 				value: Setting.SYNC_UPGRADE_STATE_IDLE,
+				type: SettingItemType.Int,
+				public: false,
+			},
+
+			'sync.startupOperation': {
+				value: SyncStartupOperation.None,
 				type: SettingItemType.Int,
 				public: false,
 			},
@@ -439,19 +476,11 @@ class Setting extends BaseModel {
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
-			'sync.9.directory': {
-				value: 'Apps/Joplin',
+			'sync.9.userContentPath': {
+				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
-				},
-				filter: value => {
-					return value ? ltrimSlashes(rtrimSlashes(value)) : '';
-				},
-				public: true,
-				label: () => _('Joplin Server Directory'),
-				storage: SettingStorage.File,
+				public: false,
+				storage: SettingStorage.Database,
 			},
 			'sync.9.username': {
 				value: '',
@@ -461,7 +490,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
-				label: () => _('Joplin Server username'),
+				label: () => _('Joplin Server email'),
 				storage: SettingStorage.File,
 			},
 			'sync.9.password': {
@@ -473,6 +502,45 @@ class Setting extends BaseModel {
 				},
 				public: true,
 				label: () => _('Joplin Server password'),
+				secure: true,
+			},
+
+			// Although sync.10.path is essentially a constant, we still define
+			// it here so that both Joplin Server and Joplin Cloud can be
+			// handled in the same consistent way. Also having it a setting
+			// means it can be set to something else for development.
+			'sync.10.path': {
+				value: 'https://api.joplincloud.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
+			'sync.10.userContentPath': {
+				value: 'https://joplinusercontent.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
+			'sync.10.username': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+				},
+				public: true,
+				label: () => _('Joplin Cloud email'),
+				storage: SettingStorage.File,
+			},
+			'sync.10.password': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+				},
+				public: true,
+				label: () => _('Joplin Cloud password'),
 				secure: true,
 			},
 
@@ -502,6 +570,7 @@ class Setting extends BaseModel {
 			'sync.4.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.7.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.auth': { value: '', type: SettingItemType.String, public: false },
+			'sync.10.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.1.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.2.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.3.context': { value: '', type: SettingItemType.String, public: false },
@@ -511,6 +580,7 @@ class Setting extends BaseModel {
 			'sync.7.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.8.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.10.context': { value: '', type: SettingItemType.String, public: false },
 
 			'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, storage: SettingStorage.File, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
@@ -550,6 +620,7 @@ class Setting extends BaseModel {
 					options[Setting.DATE_FORMAT_5] = time.formatMsToLocal(now, Setting.DATE_FORMAT_5);
 					options[Setting.DATE_FORMAT_6] = time.formatMsToLocal(now, Setting.DATE_FORMAT_6);
 					options[Setting.DATE_FORMAT_7] = time.formatMsToLocal(now, Setting.DATE_FORMAT_7);
+					options[Setting.DATE_FORMAT_8] = time.formatMsToLocal(now, Setting.DATE_FORMAT_8);
 					return options;
 				},
 				storage: SettingStorage.File,
@@ -829,6 +900,12 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			'sync.userId': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+			},
+
 			// Deprecated in favour of windowContentZoomFactor
 			'style.zoom': { value: 100, type: SettingItemType.Int, public: false, storage: SettingStorage.File, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
 
@@ -925,7 +1002,30 @@ class Setting extends BaseModel {
 				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
 			},
 
-			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
+			'sync.clearLocalSyncStateButton': {
+				value: null,
+				type: SettingItemType.Button,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Re-upload local data to sync target'),
+				section: 'sync',
+				advanced: true,
+				description: () => 'If the data on the sync target is incorrect or empty, you can use this button to force a re-upload of your data to the sync target. Application will have to be restarted',
+			},
+
+			'sync.clearLocalDataButton': {
+				value: null,
+				type: SettingItemType.Button,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Delete local data and re-download from sync target'),
+				section: 'sync',
+				advanced: true,
+				description: () => 'If the data on the sync target is correct but your local data is not, you can use this button to clear your local data and force re-downloading everything from the sync target. As your local data will be deleted first, it is recommended to export your data as JEX first. Application will have to be restarted',
+			},
+
+
+			autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, public: false },
 			'sync.interval': {
@@ -1194,7 +1294,13 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static keyExists(key: string) {
+	// Resets the key to its default value.
+	public static resetKey(key: string) {
+		const md = this.settingMetadata(key);
+		this.setValue(key, md.value);
+	}
+
+	public static keyExists(key: string) {
 		return key in this.metadata();
 	}
 
@@ -1299,7 +1405,7 @@ class Setting extends BaseModel {
 				for (const k of Object.keys(fromFile)) {
 					itemsFromFile.push({
 						key: k,
-						value: this.filterValue(k, this.formatValue(k, fromFile[k])),
+						value: fromFile[k],
 					});
 				}
 			}
@@ -1340,10 +1446,10 @@ class Setting extends BaseModel {
 
 	static setConstant(key: string, value: any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
-		this.constants_[key] = value;
+		(this.constants_ as any)[key] = value;
 	}
 
-	static setValue(key: string, value: any) {
+	public static setValue(key: string, value: any) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		value = this.formatValue(key, value);
@@ -1503,7 +1609,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
-			const v = this.constants_[key];
+			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
 			if (output == 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;
@@ -1585,7 +1691,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static async saveAll() {
+	public static async saveAll() {
 		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
 
 		this.logger().debug('Saving settings...');

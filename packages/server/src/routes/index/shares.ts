@@ -1,45 +1,47 @@
 import { SubPath, ResponseType, Response } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
-import { File, Share } from '../../db';
-import { FileViewerResponse } from '../../apps/joplin/Application';
+import { Item, Share } from '../../db';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
 
-async function renderFile(context: AppContext, file: File, share: Share): Promise<FileViewerResponse> {
-	const joplinApp = await context.apps.joplin();
-
-	if (await joplinApp.isItemFile(file)) {
-		return joplinApp.renderFile(file, share, context.query);
+async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
+	if (item.jop_type === ModelType.Note) {
+		return renderJoplinItem(share.owner_id, item, share, context.query);
 	}
 
 	return {
-		body: file.content,
-		mime: file.mime_type,
-		size: file.size,
+		body: item.content,
+		mime: item.mime_type,
+		size: item.content_size,
 	};
 }
 
-const router: Router = new Router();
+const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 
 router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
-	const fileModel = ctx.models.file();
 	const shareModel = ctx.models.share();
 
 	const share = await shareModel.load(path.id);
 	if (!share) throw new ErrorNotFound();
 
-	const file = await fileModel.loadWithContent(share.file_id, { skipPermissionCheck: true });
-	if (!file) throw new ErrorNotFound();
+	const itemModel = ctx.models.item();
 
+	const item = await itemModel.loadWithContent(share.item_id);
+	if (!item) throw new ErrorNotFound();
 
-	const result = await renderFile(ctx, file, share);
+	const result = await renderItem(ctx, item, share);
+
+	ctx.models.share().checkShareUrl(share, ctx.URL.origin);
 
 	ctx.response.body = result.body;
 	ctx.response.set('Content-Type', result.mime);
 	ctx.response.set('Content-Length', result.size.toString());
 	return new Response(ResponseType.KoaResponse, ctx.response);
-});
+}, RouteType.UserContent);
 
 export default router;

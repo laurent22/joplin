@@ -19,6 +19,34 @@ import { Command } from './types';
  *
  * To view what arguments are supported, you can open any of these files
  * and look at the `execute()` command.
+ *
+ * ## Executing editor commands
+ *
+ * There might be a situation where you want to invoke editor commands
+ * without using a {@link JoplinContentScripts | contentScript}. For this
+ * reason Joplin provides the built in `editor.execCommand` command.
+ *
+ * `editor.execCommand`  should work with any core command in both the
+ * [CodeMirror](https://codemirror.net/doc/manual.html#execCommand) and
+ * [TinyMCE](https://www.tiny.cloud/docs/api/tinymce/tinymce.editorcommands/#execcommand) editors,
+ * as well as most functions calls directly on a CodeMirror editor object (extensions).
+ *
+ * * [CodeMirror commands](https://codemirror.net/doc/manual.html#commands)
+ * * [TinyMCE core editor commands](https://www.tiny.cloud/docs/advanced/editor-command-identifiers/#coreeditorcommands)
+ *
+ * `editor.execCommand` supports adding arguments for the commands.
+ *
+ * ```typescript
+ * await joplin.commands.execute('editor.execCommand', {
+ *     name: 'madeUpCommand', // CodeMirror and TinyMCE
+ *     args: [], // CodeMirror and TinyMCE
+ *     ui: false, // TinyMCE only
+ *     value: '', // TinyMCE only
+ * });
+ * ```
+ *
+ * [View the example using the CodeMirror editor](https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/codemirror_content_script/src/index.ts)
+ *
  */
 export default class JoplinCommands {
 	/**

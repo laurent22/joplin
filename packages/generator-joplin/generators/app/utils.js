@@ -41,7 +41,7 @@ function mergePackageKey(parentKey, source, dest) {
 }
 
 function mergeIgnoreFile(source, dest) {
-	const output = dest.trim().split('\n').concat(source.trim().split('\n'));
+	const output = dest.trim().split(/\r?\n/).concat(source.trim().split(/\r?\n/));
 
 	return `${output.filter(function(item, pos) {
 		if (!item) return true; // Leave blank lines

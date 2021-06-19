@@ -1,19 +1,22 @@
 const React = require('react');
 const Component = React.Component;
+const Setting = require('@joplin/lib/models/Setting').default;
 const { connect } = require('react-redux');
 const bridge = require('electron').remote.require('./bridge').default;
-const getWindowTitle = require('./getWindowTitle').default;
-
 
 class NavigatorComponent extends Component {
-	constructor(props) {
-		super(props);
-	}
 	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.route) {
-			this.updateWindowTitle(getWindowTitle(newProps.notes, newProps.selectedNoteIds, newProps.selectedFolderId, newProps.folders, newProps.screens, newProps.route));
+			const screenInfo = this.props.screens[newProps.route.routeName];
+			const devMarker = Setting.value('env') === 'dev' ? ' (DEV)' : '';
+			const windowTitle = [`Joplin${devMarker}`];
+			if (screenInfo.title) {
+				windowTitle.push(screenInfo.title());
+			}
+			this.updateWindowTitle(windowTitle.join(' - '));
 		}
 	}
+
 	updateWindowTitle(title) {
 		try {
 			if (bridge().window()) bridge().window().setTitle(title);
@@ -46,10 +49,6 @@ class NavigatorComponent extends Component {
 const Navigator = connect(state => {
 	return {
 		route: state.route,
-		selectedNoteIds: state.selectedNoteIds,
-		selectedFolderId: state.selectedFolderId,
-		folders: state.folders,
-		notes: state.notes,
 	};
 })(NavigatorComponent);
 

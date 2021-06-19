@@ -1,6 +1,6 @@
 {
   "name": "@joplin/renderer",
-  "version": "1.8.1",
+  "version": "2.1.0",
   "description": "The Joplin note renderer, used the mobile and desktop application",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/renderer",
   "main": "index.js",
@@ -24,13 +24,13 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.23",
+    "@joplin/fork-htmlparser2": "^4.1.27",
     "font-awesome-filetypes": "^2.1.0",
     "fs-extra": "^8.1.0",
     "highlight.js": "^10.2.1",
     "html-entities": "^1.2.1",
     "json-stringify-safe": "^5.0.1",
-    "katex": "^0.12.0",
+    "katex": "^0.13.3",
     "markdown-it": "^10.0.0",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-anchor": "^5.2.5",
@@ -45,7 +45,7 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
-    "mermaid": "^8.8.4",
+    "mermaid": "^8.10.2",
     "uslug": "git+https://github.com/laurent22/uslug.git#emoji-support"
   },
   "gitHead": "80c0089d2c52aff608b2bea74389de5a7f12f2e2"

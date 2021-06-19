@@ -27,7 +27,7 @@ module.exports = async function() {
 		// Use stdio: 'pipe' so that execSync doesn't print error directly to stdout
 		branch = execSync('git rev-parse --abbrev-ref HEAD', { stdio: 'pipe' }).toString().trim();
 		hash = execSync('git log --pretty="%h" -1', { stdio: 'pipe' }).toString().trim();
-		// The builds in CI are done from a 'detached HEAD' state, thus the branch name will be 'HEAD' for Travis builds.
+		// The builds in CI are done from a 'detached HEAD' state, thus the branch name will be 'HEAD' for CI builds.
 	} catch (err) {
 		// Don't display error object as it's a "fatal" error, but
 		// not for us, since is it not critical information

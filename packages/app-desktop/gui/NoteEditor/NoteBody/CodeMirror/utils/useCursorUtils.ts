@@ -1,6 +1,31 @@
 import markdownUtils from '@joplin/lib/markdownUtils';
 import Setting from '@joplin/lib/models/Setting';
-
+export function modifyListLines(lines: string[], num: number, listSymbol: string) {
+	const isNotNumbered = num === 1;
+	for (let j = 0; j < lines.length; j++) {
+		const line = lines[j];
+		if (!line && j === lines.length - 1) continue;
+		// Only add the list token if it's not already there
+		// if it is, remove it
+		if (num) {
+			const lineNum = markdownUtils.olLineNumber(line);
+			if (!lineNum && isNotNumbered) {
+				lines[j] = `${num.toString()}. ${line}`;
+				num++;
+			} else {
+				const listToken = markdownUtils.extractListToken(line);
+				lines[j] = line.substr(listToken.length, line.length - listToken.length);
+			}
+		} else {
+			if (!line.startsWith(listSymbol)) {
+				lines[j] = listSymbol + line;
+			} else {
+				lines[j] = line.substr(listSymbol.length, line.length - listSymbol.length);
+			}
+		}
+	}
+	return lines;
+}
 // Helper functions that use the cursor
 export default function useCursorUtils(CodeMirror: any) {
 
@@ -81,28 +106,12 @@ export default function useCursorUtils(CodeMirror: any) {
 			for (let i = 0; i < selectedStrings.length; i++) {
 				const selected = selectedStrings[i];
 
-				let num = markdownUtils.olLineNumber(string1);
+				const num = markdownUtils.olLineNumber(string1);
 
 				const lines = selected.split(/\r?\n/);
 				//  Save the newline character to restore it later
 				const newLines = selected.match(/\r?\n/);
-
-				for (let j = 0; j < lines.length; j++) {
-					const line = lines[j];
-					// Only add the list token if it's not already there
-					// if it is, remove it
-					if (!line.startsWith(string1)) {
-						if (num) {
-							lines[j] = `${num.toString()}. ${line}`;
-							num++;
-						} else {
-							lines[j] = string1 + line;
-						}
-					} else {
-						lines[j] = line.substr(string1.length, line.length - string1.length);
-					}
-				}
-
+				modifyListLines(lines,num,string1);
 				const newLine = newLines !== null ? newLines[0] : '\n';
 				selectedStrings[i] = lines.join(newLine);
 			}

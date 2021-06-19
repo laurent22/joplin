@@ -1,7 +1,7 @@
 const Logger = require('./Logger').default;
 const shim = require('./shim').default;
 const parseXmlString = require('xml2js').parseString;
-const JoplinError = require('./JoplinError');
+const JoplinError = require('./JoplinError').default;
 const URL = require('url-parse');
 const { rtrimSlashes } = require('./path-utils');
 const base64 = require('base-64');
@@ -350,6 +350,13 @@ class WebDavApi {
 		if (!headers['Content-Type']) {
 			if (method === 'PROPFIND') headers['Content-Type'] = 'text/xml';
 			if (method === 'PUT') headers['Content-Type'] = 'text/plain';
+		}
+
+		// React-native has caching enabled by at least on Android (see https://github.com/laurent22/joplin/issues/4706 and the related PR).
+		// The below header disables caching for all versions, including desktop.
+		// This can potentially also help with misconfigured caching on WebDAV server.
+		if (!headers['Cache-Control']) {
+			headers['Cache-Control'] = 'no-store';
 		}
 
 		// On iOS, the network lib appends a If-None-Match header to PROPFIND calls, which is kind of correct because

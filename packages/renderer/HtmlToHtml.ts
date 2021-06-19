@@ -6,6 +6,7 @@ import utils, { ItemIdToUrlHandler } from './utils';
 // import Setting from '@joplin/lib/models/Setting';
 // const { themeStyle } = require('@joplin/lib/theme');
 import InMemoryCache from './InMemoryCache';
+import { RenderResult } from './MarkupToHtml';
 const md5 = require('md5');
 
 // Renderered notes can potentially be quite large (for example
@@ -33,11 +34,6 @@ interface RenderOptions {
 	postMessageSyntax: string;
 	enableLongPress: boolean;
 	itemIdToUrl?: ItemIdToUrlHandler;
-}
-
-interface RenderResult {
-	html: string;
-	pluginAssets: any[];
 }
 
 // https://github.com/es-shims/String.prototype.trimStart/blob/main/implementation.js

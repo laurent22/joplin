@@ -39,8 +39,9 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		this.resourceDir_ = this.destDir_ ? `${this.destDir_}/_resources` : null;
 
 		await shim.fsDriver().mkdir(this.destDir_);
-		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml({
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml(null, {
 			extraRendererRules: contentScriptsToRendererRules(options.plugins),
+			customCss: this.customCss_ || '',
 		});
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
@@ -105,7 +106,6 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, {
 				resources: this.resources_,
 				plainResourceRendering: true,
-				userCss: this.customCss_,
 			});
 			const noteContent = [];
 			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
