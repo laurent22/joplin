@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.1.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.2-beta) (Pre-release) - 2021-06-19T13:24:50Z
+## [server-v2.1.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.3-beta) (Pre-release) - 2021-06-19T14:15:06Z
 
 - New: Add support for uploading multiple items in one request (3b9c02e)
 
