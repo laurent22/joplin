@@ -1,5 +1,16 @@
 # Joplin Android app changelog
 
+## [android-v2.1.1](https://github.com/laurent22/joplin/releases/tag/android-v2.1.1) (Pre-release) - 2021-06-19T16:42:57Z
+
+- New: Add version number to log (525ab01)
+- New: Added feature flags to disable Joplin Server sync optimisations by default, so that it still work with server 2.0 (326fef4)
+- Improved: Allow enabling and disabling feature flags (5b368e3)
+- Improved: Allow uploading items in batch when synchronising with Joplin Server (0222c0f)
+- Improved: Improved first sync speed when synchronising with Joplin Server (4dc1210)
+- Improved: Mask auth token and password in log (0d33955)
+- Improved: Optimise first synchronisation, when items have never been synced before (15ce5cd)
+- Improved: Update Mermaid: 8.8.4 -&gt; 8.10.2 (#5092 by Helmut K. C. Tessarek)
+
 ## [android-v2.0.4](https://github.com/laurent22/joplin/releases/tag/android-v2.0.4) - 2021-06-16T12:15:56Z
 
 - Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)
