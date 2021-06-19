@@ -3,7 +3,7 @@ import { DbConnection } from '../db';
 
 export async function up(db: DbConnection): Promise<any> {
 	await db.schema.alterTable('items', function(table: Knex.CreateTableBuilder) {
-		table.integer('jop_updated_time').defaultTo(0).notNullable();
+		table.bigInteger('jop_updated_time').defaultTo(0).notNullable();
 	});
 
 	while (true) {

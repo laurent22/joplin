@@ -5,6 +5,9 @@ set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIR="$SCRIPT_DIR/../../../../.."
 
+API_BASE_URL="https://test.joplincloud.com"
+# API_BASE_URL="http://api.joplincloud.local:22300"
+
 COMMANDS=($(echo $1 | tr "," "\n"))
 PROFILE_DIR=~/.config/joplindev-testperf
 
@@ -16,7 +19,7 @@ for CMD in "${COMMANDS[@]}"
 do
     if [[ $CMD == "createUsers" ]]; then
 
-		curl --data '{"action": "createTestUsers"}' -H 'Content-Type: application/json' http://api.joplincloud.local:22300/api/debug
+		curl --data '{"action": "createTestUsers"}' -H 'Content-Type: application/json' $API_BASE_URL/api/debug
 
 	# elif [[ $CMD == "createData" ]]; then
 		
@@ -32,7 +35,7 @@ do
 		rm -rf "$PROFILE_DIR"
 		echo "config keychain.supported 0" >> "$CMD_FILE" 
 		echo "config sync.target 9" >> "$CMD_FILE" 
-		echo "config sync.9.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
+		echo "config sync.9.path $API_BASE_URL" >> "$CMD_FILE" 
 		echo "config sync.9.username $USER_EMAIL" >> "$CMD_FILE" 
 		echo "config sync.9.password 123456" >> "$CMD_FILE" 
 	
@@ -50,7 +53,7 @@ done
 
 cd "$ROOT_DIR/packages/app-cli"
 npm start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
-# npm start -- --profile "$PROFILE_DIR" import ~/Desktop/Joplin_17_06_2021.jex
-npm start -- --profile "$PROFILE_DIR" import ~/Desktop/Tout_18_06_2021.jex
+npm start -- --profile "$PROFILE_DIR" import ~/Desktop/Joplin_17_06_2021.jex
+# npm start -- --profile "$PROFILE_DIR" import ~/Desktop/Tout_18_06_2021.jex
 npm start -- --profile "$PROFILE_DIR" sync
 
