@@ -334,6 +334,11 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+export enum SettingStorage {
+	Database = 1,
+	File = 2,
+}
+
 // Redefine a simplified interface to mask internal details
 // and to remove function calls as they would have to be async.
 export interface SettingItem {
@@ -393,6 +398,11 @@ export interface SettingItem {
 	minimum?: number;
 	maximum?: number;
 	step?: number;
+
+	/**
+	 * Either store the setting in the database or in settings.json. Defaults to database.
+	 */
+	storage?: SettingStorage;
 }
 
 export interface SettingSection {
