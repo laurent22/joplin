@@ -1,28 +1,29 @@
 import Slider from '@react-native-community/slider';
 const React = require('react');
-const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert, PermissionsAndroid } = require('react-native');
+const { Platform, Linking, View, Switch, StyleSheet, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid } = require('react-native');
+import Setting, { AppType } from '@joplin/lib/models/Setting';
+import NavService from '@joplin/lib/services/NavService';
+import ReportService from '@joplin/lib/services/ReportService';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import checkPermissions from '../../utils/checkPermissions';
+import time from '@joplin/lib/time';
+import shim from '@joplin/lib/shim';
+import setIgnoreTlsErrors from '../../utils/TlsUtils';
+import { reg } from '@joplin/lib/registry';
+import { State } from '@joplin/lib/reducer';
+const VersionInfo = require('react-native-version-info');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
 const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { Dropdown } = require('../Dropdown.js');
 const { themeStyle } = require('../global-style.js');
-const Setting = require('@joplin/lib/models/Setting').default;
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
-const { reg } = require('@joplin/lib/registry.js');
-const NavService = require('@joplin/lib/services/NavService').default;
-const VersionInfo = require('react-native-version-info').default;
-const ReportService = require('@joplin/lib/services/ReportService').default;
-const time = require('@joplin/lib/time').default;
-const shim = require('@joplin/lib/shim').default;
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
 const RNFS = require('react-native-fs');
-const checkPermissions = require('../../utils/checkPermissions.js').default;
-import setIgnoreTlsErrors from '../../utils/TlsUtils';
 
 class ConfigScreenComponent extends BaseScreenComponent {
-	static navigationOptions() {
+	static navigationOptions(): any {
 		return { header: null };
 	}
 
@@ -49,7 +50,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 
 		this.e2eeConfig_ = () => {
-			NavService.go('EncryptionConfig');
+			void NavService.go('EncryptionConfig');
 		};
 
 		this.saveButton_press = async () => {
@@ -69,7 +70,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 
 		this.syncStatusButtonPress_ = () => {
-			NavService.go('Status');
+			void NavService.go('Status');
 		};
 
 		this.exportDebugButtonPress_ = async () => {
@@ -120,7 +121,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					throw new Error('Permission denied');
 				}
 
-				const copyFiles = async (source, dest) => {
+				const copyFiles = async (source: string, dest: string) => {
 					await shim.fsDriver().mkdir(dest);
 
 					const files = await shim.fsDriver().readDirStats(source);
@@ -148,7 +149,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 
 		this.logButtonPress_ = () => {
-			NavService.go('Log');
+			void NavService.go('Log');
 		};
 	}
 
@@ -175,7 +176,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		const styles = {
+		const styles: any = {
 			body: {
 				flex: 1,
 				justifyContent: 'flex-start',
@@ -263,7 +264,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return this.styles_[themeId];
 	}
 
-	renderHeader(key, title) {
+	renderHeader(key: string, title: string) {
 		const theme = themeStyle(this.props.themeId);
 		return (
 			<View key={key} style={this.styles().headerWrapperStyle}>
@@ -272,7 +273,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	renderButton(key, title, clickHandler, options = null) {
+	renderButton(key: string, title: string, clickHandler: Function, options: any = null) {
 		if (!options) options = {};
 
 		let descriptionComp = null;
@@ -297,7 +298,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	sectionToComponent(key, section, settings) {
+	sectionToComponent(key: string, section: any, settings: any) {
 		const settingComps = [];
 
 		for (let i = 0; i < section.metadatas.length; i++) {
@@ -341,12 +342,32 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	settingToComponent(key, value) {
+	private renderToggle(key: string, label: string, value: any, updateSettingValue: Function, descriptionComp: any = null) {
+		const theme = themeStyle(this.props.themeId);
+
+		return (
+			<View key={key}>
+				<View style={this.containerStyle(false)}>
+					<Text key="label" style={this.styles().switchSettingText}>
+						{label}
+					</Text>
+					<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value: any) => updateSettingValue(key, value)} />
+				</View>
+				{descriptionComp}
+			</View>
+		);
+	}
+
+	private containerStyle(hasDescription: boolean): any {
+		return !hasDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
+	}
+
+	settingToComponent(key: string, value: any) {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
-		const output = null;
+		const output: any = null;
 
-		const updateSettingValue = (key, value) => {
+		const updateSettingValue = (key: string, value: any) => {
 			return shared.updateSettingValue(this, key, value);
 		};
 
@@ -354,7 +375,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const settingDescription = md.description ? md.description() : '';
 
 		const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>;
-		const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
+		const containerStyle = this.containerStyle(!!settingDescription);
 
 		if (md.isEnum) {
 			value = value.toString();
@@ -388,7 +409,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 								color: theme.color,
 								fontSize: theme.fontSize,
 							}}
-							onValueChange={(itemValue) => {
+							onValueChange={(itemValue: any) => {
 								updateSettingValue(key, itemValue);
 							}}
 						/>
@@ -397,17 +418,18 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_BOOL) {
-			return (
-				<View key={key}>
-					<View style={containerStyle}>
-						<Text key="label" style={this.styles().switchSettingText}>
-							{md.label()}
-						</Text>
-						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={value => updateSettingValue(key, value)} />
-					</View>
-					{descriptionComp}
-				</View>
-			);
+			return this.renderToggle(key, md.label(), value, updateSettingValue, descriptionComp);
+			// return (
+			// 	<View key={key}>
+			// 		<View style={containerStyle}>
+			// 			<Text key="label" style={this.styles().switchSettingText}>
+			// 				{md.label()}
+			// 			</Text>
+			// 			<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value:any) => updateSettingValue(key, value)} />
+			// 		</View>
+			// 		{descriptionComp}
+			// 	</View>
+			// );
 		} else if (md.type == Setting.TYPE_INT) {
 			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
 			// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
@@ -431,13 +453,26 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					<Text key="label" style={this.styles().settingText}>
 						{md.label()}
 					</Text>
-					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={value => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
 			// throw new Error('Unsupported setting type: ' + md.type);
 		}
 
+		return output;
+	}
+
+	private renderFeatureFlags(settings: any): any[] {
+		const updateSettingValue = (key: string, value: any) => {
+			console.info('UPDATE', key, value);
+			return shared.updateSettingValue(this, key, value);
+		};
+
+		const output: any[] = [];
+		for (const key of Setting.featureFlagKeys(AppType.Mobile)) {
+			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));
+		}
 		return output;
 	}
 
@@ -464,7 +499,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				const profileExportPrompt = (
 					<View style={this.styles().settingContainer} key="profileExport">
 						<Text style={this.styles().settingText}>Path:</Text>
-						<TextInput style={{ ...this.styles().textInput, paddingRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard" keyboardAppearance={theme.keyboardAppearance}></TextInput>
+						<TextInput style={{ ...this.styles().textInput, paddingRight: 20 }} onChange={(event: any) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard" keyboardAppearance={theme.keyboardAppearance}></TextInput>
 						<Button title="OK" onPress={this.exportProfileButtonPress2_}></Button>
 					</View>
 				);
@@ -472,6 +507,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				settingComps.push(profileExportPrompt);
 			}
 		}
+
+		settingComps.push(this.renderHeader('featureFlags', _('Feature flags')));
+		settingComps.push(<View key="featureFlagsContainer">{this.renderFeatureFlags(settings)}</View>);
 
 		settingComps.push(this.renderHeader('moreInfo', _('More information')));
 
@@ -568,11 +606,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const ConfigScreen = connect(state => {
+const ConfigScreen = connect((state: State) => {
 	return {
 		settings: state.settings,
 		themeId: state.settings.theme,
 	};
 })(ConfigScreenComponent);
 
-module.exports = { ConfigScreen };
+export default ConfigScreen;

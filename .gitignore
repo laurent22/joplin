@@ -687,6 +687,9 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map
+packages/app-mobile/components/screens/ConfigScreen.d.ts
+packages/app-mobile/components/screens/ConfigScreen.js
+packages/app-mobile/components/screens/ConfigScreen.js.map
 packages/app-mobile/components/screens/Note.d.ts
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/Note.js.map

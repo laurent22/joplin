@@ -334,6 +334,12 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+export enum AppType {
+	Desktop = 'desktop',
+	Mobile = 'mobile',
+	Cli = 'cli',
+}
+
 export enum SettingStorage {
 	Database = 1,
 	File = 2,
@@ -377,7 +383,7 @@ export interface SettingItem {
 	/**
 	 * Reserved property. Not used at the moment.
 	 */
-	appTypes?: string[];
+	appTypes?: AppType[];
 
 	/**
 	 * Set this to `true` to store secure data, such as passwords. Any such

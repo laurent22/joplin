@@ -3,7 +3,7 @@ export default class NavService {
 	public static dispatch: Function = () => {};
 	private static handlers_: Function[] = [];
 
-	static async go(routeName: string) {
+	public static async go(routeName: string) {
 		if (this.handlers_.length) {
 			const r = await this.handlers_[this.handlers_.length - 1]();
 			if (r) return r;
@@ -15,7 +15,7 @@ export default class NavService {
 		});
 	}
 
-	static addHandler(handler: Function) {
+	public static addHandler(handler: Function) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];
 			if (h === handler) return;
@@ -24,7 +24,7 @@ export default class NavService {
 		this.handlers_.push(handler);
 	}
 
-	static removeHandler(hanlder: Function) {
+	public static removeHandler(hanlder: Function) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];
 			if (h === hanlder) this.handlers_.splice(i, 1);

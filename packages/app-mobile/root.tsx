@@ -57,7 +57,7 @@ import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
 const { NotesScreen } = require('./components/screens/notes.js');
 const { TagsScreen } = require('./components/screens/tags.js');
-const { ConfigScreen } = require('./components/screens/config.js');
+import ConfigScreen from './components/screens/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
