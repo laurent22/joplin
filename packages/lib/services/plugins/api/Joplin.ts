@@ -44,11 +44,11 @@ export default class Joplin {
 		this.workspace_ = new JoplinWorkspace(store);
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
-		this.views_ = new JoplinViews(implementation.views, plugin, store);
+		this.views_ = new JoplinViews(implementation.joplin.views, plugin, store);
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);
 		this.contentScripts_ = new JoplinContentScripts(plugin);
-		this.clipboard_ = new JoplinClipboard();
+		this.clipboard_ = new JoplinClipboard(implementation.clipboard, implementation.nativeImage);
 	}
 
 	get data(): JoplinData {

@@ -2,10 +2,12 @@ import { ModelType } from "../../BaseModel";
 
 export interface BaseItemEntity {
   id?: string;
-  encryption_applied?: boolean;
+  encryption_applied?: number;
   is_shared?: number;
   share_id?: string;
   type_?: ModelType;
+  updated_time?: number;
+  created_time?: number;
 }
 
 

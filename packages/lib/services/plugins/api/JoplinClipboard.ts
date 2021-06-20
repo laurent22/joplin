@@ -1,28 +1,34 @@
-const { clipboard, nativeImage } = require('electron');
-
 export default class JoplinClipboard {
 
+	private electronClipboard_: any = null;
+	private electronNativeImage_: any = null;
+
+	public constructor(electronClipboard: any, electronNativeImage: any) {
+		this.electronClipboard_ = electronClipboard;
+		this.electronNativeImage_ = electronNativeImage;
+	}
+
 	public async readText(): Promise<string> {
-		return clipboard.readText();
+		return this.electronClipboard_.readText();
 	}
 
 	public async writeText(text: string): Promise<void> {
-		clipboard.writeText(text);
+		this.electronClipboard_.writeText(text);
 	}
 
 	public async readHtml(): Promise<string> {
-		return clipboard.readHTML();
+		return this.electronClipboard_.readHTML();
 	}
 
 	public async writeHtml(html: string): Promise<void> {
-		clipboard.writeHTML(html);
+		this.electronClipboard_.writeHTML(html);
 	}
 
 	/**
 	 * Returns the image in [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format.
 	 */
 	public async readImage(): Promise<string> {
-		const image = clipboard.readImage();
+		const image = this.electronClipboard_.readImage();
 		return image ? image.toDataURL() : '';
 	}
 
@@ -30,7 +36,7 @@ export default class JoplinClipboard {
 	 * Takes an image in [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format.
 	 */
 	public async writeImage(dataUrl: string): Promise<void> {
-		clipboard.writeImage(nativeImage.createFromDataURL(dataUrl));
+		this.electronClipboard_.writeImage(this.electronNativeImage_.createFromDataURL(dataUrl));
 	}
 
 	/**
@@ -39,7 +45,7 @@ export default class JoplinClipboard {
 	 * For example [ 'text/plain', 'text/html' ]
 	 */
 	public async availableFormats(): Promise<string[]> {
-		return clipboard.availableFormats();
+		return this.electronClipboard_.availableFormats();
 	}
 
 }
