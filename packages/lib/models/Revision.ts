@@ -45,7 +45,10 @@ export default class Revision extends BaseItem {
 		if (this.isLegacyPatch(patch)) {
 			return this.applyTextPatchLegacy(text, patch);
 		} else {
-			const result = dmp.patch_apply(JSON.parse(patch), text);
+			// An empty patch should be '[]', but legacy data may be just "".
+			// However an empty string would make JSON.parse fail so we set it
+			// to '[]'.
+			const result = dmp.patch_apply(JSON.parse(patch ? patch : '[]'), text);
 			if (!result || !result.length) throw new Error('Could not apply patch');
 			return result[0];
 		}
