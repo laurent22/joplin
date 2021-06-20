@@ -227,54 +227,6 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	// private async folderChildrenItems(userId: Uuid, folderId: string): Promise<Item[]> {
-	// 	let output: Item[] = [];
-
-	// 	const rows: Item[] = await this
-	// 		.db('user_items')
-	// 		.leftJoin('items', 'items.id', 'user_items.item_id')
-	// 		.select('items.id', 'items.jop_id', 'items.jop_type')
-	// 		.where('items.jop_parent_id', '=', folderId)
-	// 		.where('user_items.user_id', '=', userId);
-
-	// 	for (const row of rows) {
-	// 		output.push(row);
-
-	// 		if (row.jop_type === ModelType.Folder) {
-	// 			const children = await this.folderChildrenItems(userId, row.jop_id);
-	// 			output = output.concat(children);
-	// 		}
-	// 	}
-
-	// 	return output;
-	// }
-
-	// public async shareJoplinFolderAndContent(shareId: Uuid, fromUserId: Uuid, toUserId: Uuid, folderId: string) {
-	// 	const folderItem = await this.loadByJopId(fromUserId, folderId, { fields: ['id'] });
-	// 	if (!folderItem) throw new ErrorNotFound(`Could not find folder "${folderId}" for share "${shareId}"`);
-
-	// 	const items = [folderItem].concat(await this.folderChildrenItems(fromUserId, folderId));
-
-	// 	const alreadySharedItemIds: string[] = await this
-	// 		.db('user_items')
-	// 		.pluck('item_id')
-	// 		.whereIn('item_id', items.map(i => i.id))
-	// 		.where('user_id', '=', toUserId)
-	// 		// .where('share_id', '!=', '');
-
-	// 	await this.withTransaction(async () => {
-	// 		for (const item of items) {
-	// 			if (alreadySharedItemIds.includes(item.id)) continue;
-	// 			await this.models().userItem().add(toUserId, item.id, shareId);
-
-	// 			if (item.jop_type === ModelType.Note) {
-	// 				const resourceIds = await this.models().itemResource().byItemId(item.id);
-	// 				await this.models().share().updateResourceShareStatus(true, shareId, fromUserId, toUserId, resourceIds);
-	// 			}
-	// 		}
-	// 	});
-	// }
-
 	public itemToJoplinItem(itemRow: Item): any {
 		if (itemRow.jop_type <= 0) throw new Error(`Not a Joplin item: ${itemRow.id}`);
 		if (!itemRow.content) throw new Error('Item content is missing');
@@ -410,7 +362,7 @@ export default class ItemModel extends BaseModel<Item> {
 					};
 				}
 			}
-		});
+		}, 'ItemModel::saveFromRawContent');
 
 		return output;
 	}
@@ -636,7 +588,7 @@ export default class ItemModel extends BaseModel<Item> {
 			}
 
 			return item;
-		});
+		}, 'ItemModel::saveForUser');
 	}
 
 	public async save(_item: Item, _options: SaveOptions = {}): Promise<Item> {
