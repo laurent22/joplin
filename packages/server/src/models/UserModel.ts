@@ -5,6 +5,7 @@ import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNo
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import { formatBytes, MB } from '../utils/bytes';
+import { itemIsEncrypted } from '../utils/joplinUtils';
 
 export enum AccountType {
 	Default = 0,
@@ -147,7 +148,8 @@ export default class UserModel extends BaseModel<User> {
 		// If the item is encrypted, we apply a multipler because encrypted
 		// items can be much larger (seems to be up to twice the size but for
 		// safety let's go with 2.2).
-		const maxSize = user.max_item_size * (item.jop_encryption_applied ? 2.2 : 1);
+
+		const maxSize = user.max_item_size * (itemIsEncrypted(item) ? 2.2 : 1);
 		if (maxSize && buffer.byteLength > maxSize) {
 			const itemTitle = joplinItem ? joplinItem.title || '' : '';
 			const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
