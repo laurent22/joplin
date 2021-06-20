@@ -1040,7 +1040,7 @@ msgstr "关于 Joplin"
 
 #: packages/app-desktop/gui/MenuBar.js:401
 msgid "Preferences..."
-msgstr "首选项…"
+msgstr "首选项..."
 
 #: packages/app-desktop/gui/MenuBar.js:411
 #: packages/app-desktop/gui/MenuBar.js:664
@@ -2551,7 +2551,7 @@ msgstr "启用 ^sup^ 语法"
 
 #: packages/lib/models/Setting.js:675
 msgid "Enable deflist syntax"
-msgstr "启用术语表语法"
+msgstr "启用清单语法"
 
 #: packages/lib/models/Setting.js:676
 msgid "Enable abbreviation syntax"
