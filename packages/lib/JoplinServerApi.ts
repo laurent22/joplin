@@ -91,7 +91,7 @@ export default class JoplinServerApi {
 		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
 	}
 
-	private hidePassword(o: any): any {
+	private hidePasswords(o: any): any {
 		if (typeof o === 'string') {
 			try {
 				const output = JSON.parse(o);
@@ -104,6 +104,7 @@ export default class JoplinServerApi {
 		} else {
 			const output = { ...o };
 			if (output.password) output.password = '******';
+			if (output['X-API-AUTH']) output['X-API-AUTH'] = '******';
 			return output;
 		}
 	}
@@ -114,14 +115,14 @@ export default class JoplinServerApi {
 		output.push('-v');
 		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
+			const headers = this.hidePasswords(options.headers);
 			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
-				const headerValue = n === 'X-API-AUTH' ? '******' : options.headers[n];
-				output.push(`${'-H ' + '"'}${n}: ${headerValue}"`);
+				output.push(`${'-H ' + '"'}${n}: ${headers[n]}"`);
 			}
 		}
 		if (options.body) {
-			const serialized = typeof options.body !== 'string' ? JSON.stringify(this.hidePassword(options.body)) : this.hidePassword(options.body);
+			const serialized = typeof options.body !== 'string' ? JSON.stringify(this.hidePasswords(options.body)) : this.hidePasswords(options.body);
 			output.push(`${'--data ' + '\''}${serialized}'`);
 		}
 		output.push(`'${url}'`);

@@ -374,6 +374,38 @@ export default class Folder extends BaseItem {
 		await this.updateResourceShareIds();
 	}
 
+	// Clear the "share_id" property for the items that are associated with a
+	// share that no longer exists.
+	public static async updateNoLongerSharedItems(activeShareIds: string[]) {
+		const tableNameToClasses: Record<string, any> = {
+			'folders': Folder,
+			'notes': Note,
+			'resources': Resource,
+		};
+
+		for (const tableName of ['folders', 'notes', 'resources']) {
+			const ItemClass = tableNameToClasses[tableName];
+
+			const query = activeShareIds.length ? `
+				SELECT id FROM ${tableName}
+				WHERE share_id NOT IN ("${activeShareIds.join('","')}")
+			` : `
+				SELECT id FROM ${tableName}
+				WHERE share_id != ''
+			`;
+
+			const rows = await this.db().selectAll(query);
+
+			for (const row of rows) {
+				await ItemClass.save({
+					id: row.id,
+					share_id: '',
+					updated_time: Date.now(),
+				}, { autoTimestamp: false });
+			}
+		}
+	}
+
 	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
 		const all = folders ? folders : await this.all(options);
 

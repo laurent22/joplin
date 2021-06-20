@@ -326,37 +326,65 @@ describe('models_Folder.sharing', function() {
 
 		await Folder.updateAllShareIds();
 
-		// await NoteResource.updateResourceShareIds();
-
 		{
 			const resource: ResourceEntity = await Resource.load(resourceId);
 			expect(resource.share_id).toBe('');
 		}
 	});
 
-	// it('should not recursively delete when non-owner deletes a shared folder', async () => {
-	// 	const folder = await createFolderTree('', [
-	// 		{
-	// 			title: 'folder 1',
-	// 			children: [
-	// 				{
-	// 					title: 'note 1',
-	// 				},
-	// 			],
-	// 		},
-	// 	]);
+	it('should unshare items that are no longer part of an existing share', async () => {
+		await createFolderTree('', [
+			{
+				title: 'folder 1',
+				share_id: '1',
+				children: [
+					{
+						title: 'note 1',
+					},
+				],
+			},
+			{
+				title: 'folder 2',
+				share_id: '2',
+				children: [
+					{
+						title: 'note 2',
+					},
+				],
+			},
+		]);
 
-	// 	BaseItem.shareService_ = {
-	// 		isSharedFolderOwner: (_folderId: string) => false,
-	// 	} as any;
+		const resourceService = new ResourceService();
 
-	// 	await Folder.save({ id: folder.id, share_id: 'abcd1234' });
-	// 	await Folder.updateAllShareIds();
+		let note1: NoteEntity = await Note.loadByTitle('note 1');
+		let note2: NoteEntity = await Note.loadByTitle('note 2');
+		note1 = await shim.attachFileToNote(note1, testImagePath);
+		note2 = await shim.attachFileToNote(note2, testImagePath);
+		const resourceId1 = (await Note.linkedResourceIds(note1.body))[0];
+		const resourceId2 = (await Note.linkedResourceIds(note2.body))[0];
 
-	// 	await Folder.delete(folder.id);
+		await resourceService.indexNoteResources();
 
-	// 	expect((await Folder.all()).length).toBe(0);
-	// 	expect((await Note.all()).length).toBe(1);
-	// });
+		await Folder.updateAllShareIds();
+
+		await Folder.updateNoLongerSharedItems(['1']);
+
+		// At this point, all items associated with share 2 should have their
+		// share_id cleared, because the share no longer exists. We also
+		// double-check that share 1 hasn't been cleared.
+		expect((await Note.loadByTitle('note 1')).share_id).toBe('1');
+		expect((await Note.loadByTitle('note 2')).share_id).toBe('');
+		expect((await Folder.loadByTitle('folder 1')).share_id).toBe('1');
+		expect((await Folder.loadByTitle('folder 2')).share_id).toBe('');
+		expect((await Resource.load(resourceId1)).share_id).toBe('1');
+		expect((await Resource.load(resourceId2)).share_id).toBe('');
+
+		// If we pass an empty array, it means there are no active share
+		// anymore, so all share_id should be cleared.
+		await Folder.updateNoLongerSharedItems([]);
+		expect((await Note.loadByTitle('note 1')).share_id).toBe('');
+		expect((await Folder.loadByTitle('folder 1')).share_id).toBe('');
+		expect((await Resource.load(resourceId1)).share_id).toBe('');
+	});
 
 });

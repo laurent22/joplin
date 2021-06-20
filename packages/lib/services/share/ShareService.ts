@@ -1,9 +1,12 @@
 import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
+import Logger from '../../Logger';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { State, stateRootKey, StateShare } from './reducer';
+
+const logger = Logger.create('ShareService');
 
 export default class ShareService {
 
@@ -152,6 +155,10 @@ export default class ShareService {
 		return this.shares.filter(s => !!s.note_id).map(s => s.note_id);
 	}
 
+	public get shareInvitations() {
+		return this.state.shareInvitations;
+	}
+
 	public async addShareRecipient(shareId: string, recipientEmail: string) {
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
@@ -216,11 +223,26 @@ export default class ShareService {
 		});
 	}
 
+	private async updateNoLongerSharedItems() {
+		const shareIds = this.shares.map(share => share.id).concat(this.shareInvitations.map(si => si.share.id));
+		await Folder.updateNoLongerSharedItems(shareIds);
+	}
+
 	public async maintenance() {
 		if (this.enabled) {
-			await this.refreshShareInvitations();
-			await this.refreshShares();
-			Setting.setValue('sync.userId', this.api().userId);
+			let hasError = false;
+			try {
+				await this.refreshShareInvitations();
+				await this.refreshShares();
+				Setting.setValue('sync.userId', this.api().userId);
+			} catch (error) {
+				hasError = true;
+				logger.error('Failed to run maintenance:', error);
+			}
+
+			// If there was no errors, it means we have all the share objects,
+			// so we can run the clean up function.
+			if (!hasError) await this.updateNoLongerSharedItems();
 		}
 	}
 
