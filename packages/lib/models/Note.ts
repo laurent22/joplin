@@ -633,7 +633,7 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	static async save(o: NoteEntity, options: any = null) {
+	public static async save(o: NoteEntity, options: any = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently

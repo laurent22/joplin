@@ -17,15 +17,52 @@ export default class Revision extends BaseItem {
 		return BaseModel.TYPE_REVISION;
 	}
 
-	static createTextPatch(oldText: string, newText: string) {
+	public static createTextPatchLegacy(oldText: string, newText: string): string {
 		return dmp.patch_toText(dmp.patch_make(oldText, newText));
 	}
 
-	static applyTextPatch(text: string, patch: string) {
+	public static createTextPatch(oldText: string, newText: string): string {
+		return JSON.stringify(dmp.patch_make(oldText, newText));
+	}
+
+	public static applyTextPatchLegacy(text: string, patch: string): string {
 		patch = dmp.patch_fromText(patch);
 		const result = dmp.patch_apply(patch, text);
 		if (!result || !result.length) throw new Error('Could not apply patch');
 		return result[0];
+	}
+
+	private static isLegacyPatch(patch: string): boolean {
+		return patch && patch.indexOf('@@') === 0;
+	}
+
+	private static isNewPatch(patch: string): boolean {
+		if (!patch) return true;
+		return patch.indexOf('[{') === 0;
+	}
+
+	public static applyTextPatch(text: string, patch: string): string {
+		if (this.isLegacyPatch(patch)) {
+			return this.applyTextPatchLegacy(text, patch);
+		} else {
+			const result = dmp.patch_apply(JSON.parse(patch), text);
+			if (!result || !result.length) throw new Error('Could not apply patch');
+			return result[0];
+		}
+	}
+
+	public static isEmptyRevision(rev: RevisionEntity): boolean {
+		if (this.isLegacyPatch(rev.title_diff) && rev.title_diff) return false;
+		if (this.isLegacyPatch(rev.body_diff) && rev.body_diff) return false;
+
+		if (this.isNewPatch(rev.title_diff) && rev.title_diff && rev.title_diff !== '[]') return false;
+		if (this.isNewPatch(rev.body_diff) && rev.body_diff && rev.body_diff !== '[]') return false;
+
+		const md = rev.metadata_diff ? JSON.parse(rev.metadata_diff) : {};
+		if (md.new && Object.keys(md.new).length) return false;
+		if (md.deleted && Object.keys(md.deleted).length) return false;
+
+		return true;
 	}
 
 	static createObjectPatch(oldObject: any, newObject: any) {

@@ -968,6 +968,9 @@ packages/lib/models/ResourceLocalState.js.map
 packages/lib/models/Revision.d.ts
 packages/lib/models/Revision.js
 packages/lib/models/Revision.js.map
+packages/lib/models/Revision.test.d.ts
+packages/lib/models/Revision.test.js
+packages/lib/models/Revision.test.js.map
 packages/lib/models/Search.d.ts
 packages/lib/models/Search.js
 packages/lib/models/Search.js.map
@@ -1088,6 +1091,9 @@ packages/lib/services/ResourceService.test.js.map
 packages/lib/services/RevisionService.d.ts
 packages/lib/services/RevisionService.js
 packages/lib/services/RevisionService.js.map
+packages/lib/services/RevisionService.test.d.ts
+packages/lib/services/RevisionService.test.js
+packages/lib/services/RevisionService.test.js.map
 packages/lib/services/SettingUtils.d.ts
 packages/lib/services/SettingUtils.js
 packages/lib/services/SettingUtils.js.map
