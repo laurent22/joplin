@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.1.2](https://github.com/laurent22/joplin/releases/tag/android-v2.1.2) (Pre-release) - 2021-06-20T18:36:23Z
+
+- Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes (#5051)
+- Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)
+
 ## [android-v2.1.1](https://github.com/laurent22/joplin/releases/tag/android-v2.1.1) (Pre-release) - 2021-06-19T16:42:57Z
 
 - New: Add version number to log (525ab01)
