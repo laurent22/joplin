@@ -1238,6 +1238,9 @@ packages/lib/services/plugins/api/Global.js.map
 packages/lib/services/plugins/api/Joplin.d.ts
 packages/lib/services/plugins/api/Joplin.js
 packages/lib/services/plugins/api/Joplin.js.map
+packages/lib/services/plugins/api/JoplinClipboard.d.ts
+packages/lib/services/plugins/api/JoplinClipboard.js
+packages/lib/services/plugins/api/JoplinClipboard.js.map
 packages/lib/services/plugins/api/JoplinCommands.d.ts
 packages/lib/services/plugins/api/JoplinCommands.js
 packages/lib/services/plugins/api/JoplinCommands.js.map
