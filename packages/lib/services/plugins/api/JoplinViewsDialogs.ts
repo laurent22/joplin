@@ -5,7 +5,7 @@ import { ButtonSpec, ViewHandle, DialogResult } from './types';
 
 /**
  * Allows creating and managing dialogs. A dialog is modal window that
- * contains a webview and a row of buttons. You can update the update the
+ * contains a webview and a row of buttons. You can update the
  * webview using the `setHtml` method. Dialogs are hidden by default and
  * you need to call `open()` to open them. Once the user clicks on a
  * button, the `open` call will return an object indicating what button was
