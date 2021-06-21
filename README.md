@@ -453,6 +453,8 @@ The filters are implicitly connected by and/or connectives depending on the foll
 - To override this default behaviour, use the `any` filter, in which case the search terms will be connected by "OR" instead.
 - There's an exception for the `notebook` filters which are connected by "OR". The reason being that no note can be in multiple notebooks at once.
 
+Incorrect search filters are interpreted as a phrase search, e.g. misspelled `nootebook:Example` or non-existing `https://joplinapp.org`.
+
 ## Search order
 
 Notes are sorted by "relevance". Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matters how close to each other the terms are. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as many details as possible to replicate the issue.
