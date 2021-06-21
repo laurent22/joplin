@@ -11,7 +11,7 @@ import shim from '@joplin/lib/shim';
 import setIgnoreTlsErrors from '../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
-const VersionInfo = require('react-native-version-info');
+const VersionInfo = require('react-native-version-info').default;
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
 const { _ } = require('@joplin/lib/locale');
