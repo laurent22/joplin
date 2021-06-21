@@ -313,9 +313,9 @@ describe('index_users', function() {
 		// non-admin cannot change max_item_size
 		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
 
-		// non-admin cannot change can_share
-		await models().user().save({ id: user1.id, can_share: 0 });
-		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, can_share: 1 }), ErrorForbidden.httpCode);
+		// non-admin cannot change can_share_folder
+		await models().user().save({ id: user1.id, can_share_folder: 0 });
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, can_share_folder: 1 }), ErrorForbidden.httpCode);
 	});
 
 

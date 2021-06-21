@@ -43,7 +43,7 @@ describe('index_signup', function() {
 		expect(user).toBeTruthy();
 		expect(user.account_type).toBe(AccountType.Basic);
 		expect(user.email_confirmed).toBe(0);
-		expect(user.can_share).toBe(0);
+		expect(user.can_share_folder).toBe(0);
 		expect(user.max_item_size).toBe(10 * MB);
 
 		// Check that the user is logged in

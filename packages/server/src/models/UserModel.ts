@@ -15,7 +15,7 @@ export enum AccountType {
 
 interface AccountTypeProperties {
 	account_type: number;
-	can_share: number;
+	can_share_folder: number;
 	max_item_size: number;
 }
 
@@ -28,17 +28,17 @@ export function accountTypeProperties(accountType: AccountType): AccountTypeProp
 	const types: AccountTypeProperties[] = [
 		{
 			account_type: AccountType.Default,
-			can_share: 1,
+			can_share_folder: 1,
 			max_item_size: 0,
 		},
 		{
 			account_type: AccountType.Basic,
-			can_share: 0,
+			can_share_folder: 0,
 			max_item_size: 10 * MB,
 		},
 		{
 			account_type: AccountType.Pro,
-			can_share: 1,
+			can_share_folder: 1,
 			max_item_size: 200 * MB,
 		},
 	];
@@ -99,7 +99,7 @@ export default class UserModel extends BaseModel<User> {
 		if ('is_admin' in object) user.is_admin = object.is_admin;
 		if ('full_name' in object) user.full_name = object.full_name;
 		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
-		if ('can_share' in object) user.can_share = object.can_share;
+		if ('can_share_folder' in object) user.can_share_folder = object.can_share_folder;
 		if ('account_type' in object) user.account_type = object.account_type;
 		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
 
@@ -129,7 +129,7 @@ export default class UserModel extends BaseModel<User> {
 			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
 			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
 			if ('max_item_size' in resource && !user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
-			if ('can_share' in resource && !user.is_admin && resource.can_share !== previousResource.can_share) throw new ErrorForbidden('non-admin user cannot change can_share');
+			if ('can_share_folder' in resource && !user.is_admin && resource.can_share_folder !== previousResource.can_share_folder) throw new ErrorForbidden('non-admin user cannot change can_share_folder');
 			if ('account_type' in resource && !user.is_admin && resource.account_type !== previousResource.account_type) throw new ErrorForbidden('non-admin user cannot change account_type');
 			if ('must_set_password' in resource && !user.is_admin && resource.must_set_password !== previousResource.must_set_password) throw new ErrorForbidden('non-admin user cannot change must_set_password');
 		}

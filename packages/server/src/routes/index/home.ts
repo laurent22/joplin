@@ -38,7 +38,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 				},
 				{
 					label: 'Can Share Notebook',
-					value: yesOrNo(accountProps.can_share),
+					value: yesOrNo(accountProps.can_share_folder),
 				},
 			],
 		};

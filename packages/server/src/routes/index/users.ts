@@ -37,7 +37,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('full_name' in fields) user.full_name = fields.full_name;
 	if ('is_admin' in fields) user.is_admin = fields.is_admin;
 	if ('max_item_size' in fields) user.max_item_size = fields.max_item_size || 0;
-	if ('can_share' in fields) user.can_share = fields.can_share ? 1 : 0;
+	if ('can_share_folder' in fields) user.can_share_folder = fields.can_share_folder ? 1 : 0;
 
 	if ('account_type' in fields) {
 		user.account_type = Number(fields.account_type);
@@ -62,7 +62,7 @@ function makeUser(isNew: boolean, fields: any): User {
 
 function defaultUser(): User {
 	return {
-		can_share: 1,
+		can_share_folder: 1,
 		max_item_size: 0,
 	};
 }
