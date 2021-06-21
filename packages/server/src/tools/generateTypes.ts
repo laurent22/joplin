@@ -42,6 +42,7 @@ const propertyTypes: Record<string, string> = {
 	'notifications.level': 'NotificationLevel',
 	'shares.type': 'ShareType',
 	'items.content': 'Buffer',
+	'items.jop_updated_time': 'number',
 	'share_users.status': 'ShareUserStatus',
 	'emails.sender_id': 'EmailSender',
 	'emails.sent_time': 'number',

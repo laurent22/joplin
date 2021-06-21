@@ -160,9 +160,10 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
 
-		let finalChanges: DeltaChange[] = this.compressChanges(changes);
-		finalChanges = await this.removeDeletedItems(finalChanges, items);
-		finalChanges = finalChanges.map(c => {
+		let processedChanges = this.compressChanges(changes);
+		processedChanges = await this.removeDeletedItems(processedChanges, items);
+
+		const finalChanges: DeltaChange[] = processedChanges.map(c => {
 			const item = items.find(item => item.id === c.item_id);
 			if (!item) return c;
 			return {

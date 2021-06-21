@@ -357,7 +357,7 @@ export interface Item extends WithDates, WithUuid {
 	jop_share_id?: Uuid;
 	jop_type?: number;
 	jop_encryption_applied?: number;
-	jop_updated_time?: string;
+	jop_updated_time?: number;
 }
 
 export interface UserItem extends WithDates {
