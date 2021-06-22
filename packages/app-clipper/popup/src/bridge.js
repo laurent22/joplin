@@ -1,9 +1,18 @@
 const { randomClipperPort } = require('./randomClipperPort');
 
+function msleep(ms) {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+}
+
 class Bridge {
 
 	constructor() {
 		this.nounce_ = Date.now();
+		this.token_ = null;
 	}
 
 	async init(browser, browserSupportsPromises, store) {
@@ -77,7 +86,82 @@ class Bridge {
 			env: this.env(),
 		});
 
-		this.findClipperServerPort();
+		await this.findClipperServerPort();
+
+		if (this.clipperServerPortStatus_ !== 'found') {
+			console.info('Skipping initialisation because server port was not found');
+			return;
+		}
+
+		await this.restoreState();
+	}
+
+	token() {
+		return this.token_;
+	}
+
+	async onReactAppStarts() {
+		await this.checkAuth();
+		if (!this.token_) return; // Didn't get a token
+
+		const folders = await this.folderTree();
+		this.dispatch({ type: 'FOLDERS_SET', folders: folders.items ? folders.items : folders });
+
+		let tags = [];
+		for (let page = 1; page < 10000; page++) {
+			const result = await this.clipperApiExec('GET', 'tags', { page: page, order_by: 'title', order_dir: 'ASC' });
+			const resultTags = result.items ? result.items : result;
+			const hasMore = ('has_more' in result) && result.has_more;
+			tags = tags.concat(resultTags);
+			if (!hasMore) break;
+		}
+
+		this.dispatch({ type: 'TAGS_SET', tags: tags });
+	}
+
+	async checkAuth() {
+		this.dispatch({ type: 'AUTH_STATE_SET', value: 'starting' });
+
+		const existingToken = await this.storageGet(['token']);
+		this.token_ = existingToken.token;
+
+		const authCheckResponse = await this.clipperApiExec('GET', 'auth/check', { token: this.token_ });
+
+		if (authCheckResponse.valid) {
+			console.info('checkAuth: we already have a valid token - exiting');
+			this.dispatch({ type: 'AUTH_STATE_SET', value: 'accepted' });
+			return;
+		}
+
+		this.token_ = null;
+		await this.storageSet({ token: this.token_ });
+
+		this.dispatch({ type: 'AUTH_STATE_SET', value: 'waiting' });
+
+		const response = await this.clipperApiExec('POST', 'auth');
+		const authToken = response.auth_token;
+
+		console.info('checkAuth: we do not have a token - requesting one using auth_token: ', authToken);
+
+		while (true) {
+			const response = await this.clipperApiExec('GET', 'auth/check', { auth_token: authToken });
+
+			if (response.status === 'rejected') {
+				console.info('checkAuth: Auth request was not accepted', response);
+				this.dispatch({ type: 'AUTH_STATE_SET', value: 'rejected' });
+				break;
+			} else if (response.status === 'accepted') {
+				console.info('checkAuth: Auth request was accepted', response);
+				this.dispatch({ type: 'AUTH_STATE_SET', value: 'accepted' });
+				this.token_ = response.token;
+				await this.storageSet({ token: this.token_ });
+				break;
+			} else if (response.status === 'waiting') {
+				await msleep(1000);
+			} else {
+				throw new Error(`Unknown auth/check status: ${response.status}`);
+			}
+		}
 	}
 
 	async backgroundPage(browser) {
@@ -146,22 +230,6 @@ class Bridge {
 					this.clipperServerPortStatus_ = 'found';
 					this.clipperServerPort_ = state.port;
 					this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'found', port: state.port });
-
-					const folders = await this.folderTree();
-					this.dispatch({ type: 'FOLDERS_SET', folders: folders.items ? folders.items : folders });
-
-					let tags = [];
-					for (let page = 1; page < 10000; page++) {
-						const result = await this.clipperApiExec('GET', 'tags', { page: page, order_by: 'title', order_dir: 'ASC' });
-						const resultTags = result.items ? result.items : result;
-						const hasMore = ('has_more' in result) && result.has_more;
-						tags = tags.concat(resultTags);
-						if (!hasMore) break;
-					}
-
-					this.dispatch({ type: 'TAGS_SET', tags: tags });
-
-					bridge().restoreState();
 					return;
 				}
 			} catch (error) {
@@ -310,6 +378,8 @@ class Bridge {
 		};
 
 		if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
+
+		query = Object.assign(query || {}, { token: this.token_ });
 
 		let queryString = '';
 		if (query) {

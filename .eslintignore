@@ -809,6 +809,9 @@ packages/lib/BaseModel.js.map
 packages/lib/BaseSyncTarget.d.ts
 packages/lib/BaseSyncTarget.js
 packages/lib/BaseSyncTarget.js.map
+packages/lib/ClipperServer.d.ts
+packages/lib/ClipperServer.js
+packages/lib/ClipperServer.js.map
 packages/lib/HtmlToMd.d.ts
 packages/lib/HtmlToMd.js
 packages/lib/HtmlToMd.js.map
@@ -1331,6 +1334,9 @@ packages/lib/services/rest/ApiResponse.js.map
 packages/lib/services/rest/actionApi.desktop.d.ts
 packages/lib/services/rest/actionApi.desktop.js
 packages/lib/services/rest/actionApi.desktop.js.map
+packages/lib/services/rest/routes/auth.d.ts
+packages/lib/services/rest/routes/auth.js
+packages/lib/services/rest/routes/auth.js.map
 packages/lib/services/rest/routes/folders.d.ts
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/folders.js.map

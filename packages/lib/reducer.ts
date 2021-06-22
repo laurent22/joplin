@@ -91,6 +91,7 @@ export interface State {
 	editorNoteStatuses: any;
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
+	needApiAuth: boolean;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -160,6 +161,7 @@ export const defaultState: State = {
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
+	needApiAuth: false,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1137,6 +1139,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				draft.pluginsLegacy = newPluginsLegacy;
 			}
 			break;
+
+		case 'API_NEED_AUTH_SET':
+			draft.needApiAuth = action.value;
+			break;
+
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
