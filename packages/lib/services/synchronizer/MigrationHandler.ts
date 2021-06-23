@@ -16,50 +16,29 @@ const migrations = [
 import Setting from '../../models/Setting';
 const { sprintf } = require('sprintf-js');
 import JoplinError from '../../JoplinError';
-
-interface SyncTargetInfo {
-	version: number;
-}
+import SyncTargetInfoHandler from './SyncTargetInfoHandler';
+import { FileApi } from '../../file-api';
 
 export default class MigrationHandler extends BaseService {
 
-	private api_: any = null;
+	private api_: FileApi = null;
 	private lockHandler_: LockHandler = null;
+	private syncTargetInfoHandler_: SyncTargetInfoHandler = null;
 	private clientType_: string;
 	private clientId_: string;
 
-	constructor(api: any, lockHandler: LockHandler, clientType: string, clientId: string) {
+	constructor(api: FileApi, syncTargetInfoHandler: SyncTargetInfoHandler, lockHandler: LockHandler, clientType: string, clientId: string) {
 		super();
 		this.api_ = api;
+		this.syncTargetInfoHandler_ = syncTargetInfoHandler;
 		this.lockHandler_ = lockHandler;
 		this.clientType_ = clientType;
 		this.clientId_ = clientId;
 	}
 
-	public async fetchSyncTargetInfo(): Promise<SyncTargetInfo> {
-		const syncTargetInfoText = await this.api_.get('info.json');
-
-		// Returns version 0 if the sync target is empty
-		let output: SyncTargetInfo = { version: 0 };
-
-		if (syncTargetInfoText) {
-			output = JSON.parse(syncTargetInfoText);
-			if (!output.version) throw new Error('Missing "version" field in info.json');
-		} else {
-			const oldVersion = await this.api_.get('.sync/version.txt');
-			if (oldVersion) output = { version: 1 };
-		}
-
-		return output;
-	}
-
-	private serializeSyncTargetInfo(info: SyncTargetInfo) {
-		return JSON.stringify(info);
-	}
-
-	async checkCanSync(): Promise<SyncTargetInfo> {
+	public async checkCanSync(): Promise<void> {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
-		const syncTargetInfo = await this.fetchSyncTargetInfo();
+		const syncTargetInfo = await this.syncTargetInfoHandler_.info();
 
 		if (syncTargetInfo.version) {
 			if (syncTargetInfo.version > supportedSyncTargetVersion) {
@@ -68,13 +47,11 @@ export default class MigrationHandler extends BaseService {
 				throw new JoplinError(sprintf('Sync version of the target (%d) is lower than the version supported by the client (%d). Please upgrade the sync target.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedSyncTarget');
 			}
 		}
-
-		return syncTargetInfo;
 	}
 
-	async upgrade(targetVersion: number = 0) {
+	public async upgrade(targetVersion: number = 0) {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
-		const syncTargetInfo = await this.fetchSyncTargetInfo();
+		const syncTargetInfo = await this.syncTargetInfoHandler_.info();
 
 		if (syncTargetInfo.version > supportedSyncTargetVersion) {
 			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
@@ -122,10 +99,10 @@ export default class MigrationHandler extends BaseService {
 					await migration(this.api_);
 					if (autoLockError) throw autoLockError;
 
-					await this.api_.put('info.json', this.serializeSyncTargetInfo({
+					await this.syncTargetInfoHandler_.setInfo({
 						...syncTargetInfo,
 						version: newVersion,
-					}));
+					});
 
 					this.logger().info(`MigrationHandler: Done migrating from version ${fromVersion} to version ${newVersion}`);
 				} catch (error) {

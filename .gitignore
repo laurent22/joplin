@@ -1410,6 +1410,9 @@ packages/lib/services/synchronizer/LockHandler.js.map
 packages/lib/services/synchronizer/MigrationHandler.d.ts
 packages/lib/services/synchronizer/MigrationHandler.js
 packages/lib/services/synchronizer/MigrationHandler.js.map
+packages/lib/services/synchronizer/SyncTargetInfoHandler.d.ts
+packages/lib/services/synchronizer/SyncTargetInfoHandler.js
+packages/lib/services/synchronizer/SyncTargetInfoHandler.js.map
 packages/lib/services/synchronizer/Synchronizer.basics.test.d.ts
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js.map

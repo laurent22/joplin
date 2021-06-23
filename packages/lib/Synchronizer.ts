@@ -21,6 +21,7 @@ import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
+import SyncTargetInfoHandler from './services/synchronizer/SyncTargetInfoHandler';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -73,6 +74,7 @@ export default class Synchronizer {
 	private clientId_: string;
 	private lockHandler_: LockHandler;
 	private migrationHandler_: MigrationHandler;
+	private syncTargetInfoHandler_: SyncTargetInfoHandler;
 	private encryptionService_: EncryptionService = null;
 	private resourceService_: ResourceService = null;
 	private syncTargetIsLocked_: boolean = false;
@@ -125,16 +127,22 @@ export default class Synchronizer {
 		return this.logger_;
 	}
 
-	lockHandler() {
+	public lockHandler() {
 		if (this.lockHandler_) return this.lockHandler_;
 		this.lockHandler_ = new LockHandler(this.api());
 		return this.lockHandler_;
 	}
 
-	migrationHandler() {
+	private migrationHandler() {
 		if (this.migrationHandler_) return this.migrationHandler_;
-		this.migrationHandler_ = new MigrationHandler(this.api(), this.lockHandler(), this.appType_, this.clientId_);
+		this.migrationHandler_ = new MigrationHandler(this.api(), this.syncTargetInfoHandler(), this.lockHandler(), this.appType_, this.clientId_);
 		return this.migrationHandler_;
+	}
+
+	public syncTargetInfoHandler() {
+		if (this.syncTargetInfoHandler_) return this.syncTargetInfoHandler_;
+		this.syncTargetInfoHandler_ = new SyncTargetInfoHandler(this.api());
+		return this.syncTargetInfoHandler_;
 	}
 
 	maxResourceSize() {
@@ -415,7 +423,11 @@ export default class Synchronizer {
 			this.api().setTempDirName(Dirnames.Temp);
 
 			try {
-				const syncTargetInfo = await this.migrationHandler().checkCanSync();
+				const syncTargetInfoService = new SyncTargetInfoHandler(this.api());
+
+				await this.migrationHandler().checkCanSync();
+
+				const syncTargetInfo = await syncTargetInfoService.info();
 
 				this.logger().info('Sync target info:', syncTargetInfo);
 

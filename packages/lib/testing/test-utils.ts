@@ -28,7 +28,6 @@ import NoteTag from '../models/NoteTag';
 import Revision from '../models/Revision';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
-const { FileApi } = require('../file-api.js');
 const FileApiDriverMemory = require('../file-api-driver-memory').default;
 const { FileApiDriverLocal } = require('../file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
@@ -52,6 +51,7 @@ import JoplinServerApi from '../JoplinServerApi';
 import { FolderEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
+import { FileApi } from '../file-api';
 const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
@@ -602,7 +602,7 @@ async function initFileApi() {
 	fileApis_[syncTargetId_] = fileApi;
 }
 
-function fileApi() {
+function fileApi(): FileApi {
 	return fileApis_[syncTargetId_];
 }
 
