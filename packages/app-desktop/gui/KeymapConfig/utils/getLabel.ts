@@ -14,8 +14,6 @@ const getLabel = (commandName: string): string => {
 	switch (commandName) {
 	case 'quit':
 		return _('Quit');
-	case 'insertTemplate':
-		return _('Insert template');
 	case 'zoomActualSize':
 		return _('Actual Size');
 	case 'gotoAnything':

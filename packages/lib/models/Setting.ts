@@ -108,7 +108,6 @@ export interface Constants {
 	resourceDirName: string;
 	resourceDir: string;
 	profileDir: string;
-	templateDir: string;
 	tempDir: string;
 	pluginDataDir: string;
 	cacheDir: string;
@@ -190,7 +189,6 @@ class Setting extends BaseModel {
 		resourceDirName: '',
 		resourceDir: '',
 		profileDir: '',
-		templateDir: '',
 		tempDir: '',
 		pluginDataDir: '',
 		cacheDir: '',

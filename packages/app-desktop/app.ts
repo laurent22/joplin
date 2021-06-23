@@ -41,7 +41,6 @@ const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
-const TemplateUtils = require('@joplin/lib/TemplateUtils');
 const CssUtils = require('@joplin/lib/CssUtils');
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
@@ -62,7 +61,6 @@ const commands = [
 	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/renameTag'),
 	require('./gui/MainScreen/commands/search'),
-	require('./gui/MainScreen/commands/selectTemplate'),
 	require('./gui/MainScreen/commands/setTags'),
 	require('./gui/MainScreen/commands/showModalMessage'),
 	require('./gui/MainScreen/commands/showNoteContentProperties'),
@@ -595,8 +593,6 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
-		await fs.mkdirp(Setting.value('templateDir'), 0o755);
-
 		await this.applySettingsSideEffects();
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
@@ -691,13 +687,6 @@ class Application extends BaseApplication {
 		this.store().dispatch({
 			type: 'LOAD_CUSTOM_CSS',
 			css: cssString,
-		});
-
-		const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-
-		this.store().dispatch({
-			type: 'TEMPLATE_UPDATE_ALL',
-			templates: templates,
 		});
 
 		this.store().dispatch({

@@ -78,7 +78,6 @@ export interface State {
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
 	customCss: string;
-	templates: any[];
 	collapsedFolderIds: string[];
 	clipperServer: StateClipperServer;
 	decryptionWorker: StateDecryptionWorker;
@@ -131,7 +130,6 @@ export const defaultState: State = {
 	hasDisabledSyncItems: false,
 	hasDisabledEncryptionItems: false,
 	customCss: '',
-	templates: [],
 	collapsedFolderIds: [],
 	clipperServer: {
 		startState: 'idle',
@@ -1116,10 +1114,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'LOAD_CUSTOM_CSS':
 			draft.customCss = action.css;
-			break;
-
-		case 'TEMPLATE_UPDATE_ALL':
-			draft.templates = action.templates;
 			break;
 
 		case 'SET_NOTE_TAGS':
