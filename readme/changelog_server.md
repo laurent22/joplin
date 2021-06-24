@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.1.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.6-beta) (Pre-release) - 2021-06-24T10:01:46Z
+
+- Fixed: Fixed accessing main website (Regression) (f868797)
+
 ## [server-v2.1.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.5-beta) (Pre-release) - 2021-06-24T08:26:38Z
 
 - New: Add support for X-API-MIN-VERSION header (51f3c00)
