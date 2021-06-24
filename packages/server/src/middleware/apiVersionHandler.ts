@@ -5,7 +5,7 @@ import { ErrorPreconditionFailed } from '../utils/errors';
 const compareVersions = require('compare-versions');
 
 export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
-	if (!isApiRequest(ctx)) return;
+	if (!isApiRequest(ctx)) return next();
 
 	const appVersion = config().appVersion;
 	const minVersion = ctx.headers['x-api-min-version'];
