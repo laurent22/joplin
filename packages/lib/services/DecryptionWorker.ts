@@ -276,7 +276,7 @@ export default class DecryptionWorker {
 		return finalReport;
 	}
 
-	async start(options: any) {
+	public async start(options: any = null): Promise<any> {
 		this.startCalls_.push(true);
 		let output = null;
 		try {

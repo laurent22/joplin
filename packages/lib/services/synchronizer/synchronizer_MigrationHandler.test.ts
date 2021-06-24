@@ -13,6 +13,7 @@ const { deploySyncTargetSnapshot, testData, checkTestData } = require('../../tes
 import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';
 import SyncTargetInfoHandler from './SyncTargetInfoHandler';
+import { loadMasterKeysFromSettings } from '../e2ee/utils';
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 
@@ -156,7 +157,7 @@ describe('synchronizer_MigrationHandler', function() {
 			// Decrypt the data
 			const masterKey = (await MasterKey.all())[0];
 			Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-			await encryptionService().loadMasterKeysFromSettings();
+			await loadMasterKeysFromSettings(encryptionService());
 			await decryptionWorker().start();
 
 			// Check that the data has not been altered
@@ -172,7 +173,7 @@ describe('synchronizer_MigrationHandler', function() {
 
 			// Enable E2EE and decrypt
 			Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-			await encryptionService().loadMasterKeysFromSettings();
+			await loadMasterKeysFromSettings(encryptionService());
 			await decryptionWorker().start();
 
 			// Should not throw because data is decrypted

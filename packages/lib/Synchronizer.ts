@@ -16,6 +16,7 @@ import BaseModel from './BaseModel';
 import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
+import { enableEncryption, loadMasterKeysFromSettings } from './services/e2ee/utils';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
@@ -928,8 +929,8 @@ export default class Synchronizer {
 								hasAutoEnabledEncryption = true;
 								this.logger().info('One master key was downloaded and none was previously available: automatically enabling encryption');
 								this.logger().info('Using master key: ', content.id);
-								await this.encryptionService().enableEncryption(content);
-								await this.encryptionService().loadMasterKeysFromSettings();
+								await enableEncryption(content);
+								await loadMasterKeysFromSettings(this.encryptionService());
 								this.logger().info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
 							}
 

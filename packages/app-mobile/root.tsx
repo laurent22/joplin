@@ -63,7 +63,7 @@ const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
 const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
-const { EncryptionConfigScreen } = require('./components/screens/encryption-config.js');
+import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('./components/side-menu.js');
@@ -102,6 +102,7 @@ import { clearSharedFilesCache } from './utils/ShareUtils';
 import setIgnoreTlsErrors from './utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
+import { loadMasterKeysFromSettings } from '@joplin/lib/services/e2ee/utils';
 
 let storeDispatch = function(_action: any) {};
 
@@ -148,7 +149,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	}
 
 	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		void DecryptionWorker.instance().scheduleStart();
 		const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
@@ -535,7 +536,7 @@ async function initialize(dispatch: Function) {
 		DecryptionWorker.instance().setLogger(mainLogger);
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		// ----------------------------------------------------------------

@@ -46,7 +46,7 @@ export default class EncryptionService {
 	private chunkSize_ = 5000;
 	private loadedMasterKeys_: Record<string, string> = {};
 	private activeMasterKeyId_: string = null;
-	private defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
+	public defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
 	private defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
 	private logger_ = new Logger();
 
@@ -102,67 +102,6 @@ export default class EncryptionService {
 		return this.logger_;
 	}
 
-	async generateMasterKeyAndEnableEncryption(password: string) {
-		let masterKey = await this.generateMasterKey(password);
-		masterKey = await MasterKey.save(masterKey);
-		await this.enableEncryption(masterKey, password);
-		await this.loadMasterKeysFromSettings();
-		return masterKey;
-	}
-
-	async enableEncryption(masterKey: MasterKeyEntity, password: string = null) {
-		Setting.setValue('encryption.enabled', true);
-		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
-
-		if (password) {
-			const passwordCache = Setting.value('encryption.passwordCache');
-			passwordCache[masterKey.id] = password;
-			Setting.setValue('encryption.passwordCache', passwordCache);
-		}
-
-		// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
-		// it means they come from the sync target and are already encrypted over there.
-		await BaseItem.markAllNonEncryptedForSync();
-	}
-
-	async disableEncryption() {
-		// Allow disabling encryption even if some items are still encrypted, because whether E2EE is enabled or disabled
-		// should not affect whether items will enventually be decrypted or not (DecryptionWorker will still work as
-		// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
-		// will still be received via synchronisation.
-
-		// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
-		// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
-
-		Setting.setValue('encryption.enabled', false);
-		// The only way to make sure everything gets decrypted on the sync target is
-		// to re-sync everything.
-		await BaseItem.forceSyncAll();
-	}
-
-	async loadMasterKeysFromSettings() {
-		const masterKeys = await MasterKey.all();
-		const passwords = Setting.value('encryption.passwordCache');
-		const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
-
-		this.logger().info(`Trying to load ${masterKeys.length} master keys...`);
-
-		for (let i = 0; i < masterKeys.length; i++) {
-			const mk = masterKeys[i];
-			const password = passwords[mk.id];
-			if (this.isMasterKeyLoaded(mk.id)) continue;
-			if (!password) continue;
-
-			try {
-				await this.loadMasterKey_(mk, password, activeMasterKeyId === mk.id);
-			} catch (error) {
-				this.logger().warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
-			}
-		}
-
-		this.logger().info(`Loaded master keys: ${this.loadedMasterKeysCount()}`);
-	}
-
 	loadedMasterKeysCount() {
 		let output = 0;
 		for (const n in this.loadedMasterKeys_) {
@@ -197,7 +136,7 @@ export default class EncryptionService {
 		return !!this.loadedMasterKeys_[id];
 	}
 
-	async loadMasterKey_(model: MasterKeyEntity, password: string, makeActive = false) {
+	public async loadMasterKey(model: MasterKeyEntity, password: string, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
 		this.loadedMasterKeys_[model.id] = await this.decryptMasterKey_(model, password);
 		if (makeActive) this.setActiveMasterKeyId(model.id);
@@ -243,22 +182,6 @@ export default class EncryptionService {
 		const bitArray = sjcl.hash.sha256.hash(string);
 		return sjcl.codec.hex.fromBits(bitArray);
 	}
-
-	// async seedSjcl() {
-	// 	throw new Error('NOT TESTED');
-
-	// 	// Just putting this here in case it becomes needed
-	// 	// Normally seeding random bytes is not needed for our use since
-	// 	// we use shim.randomBytes directly to generate master keys.
-
-	// 	const sjcl = shim.sjclModule;
-	// 	const randomBytes = await shim.randomBytes(1024 / 8);
-	// 	const hexBytes = randomBytes.map(a => {
-	// 		return a.toString(16);
-	// 	});
-	// 	const hexSeed = sjcl.codec.hex.toBits(hexBytes.join(''));
-	// 	sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
-	// }
 
 	async generateApiToken() {
 		return await this.randomHexString(64);

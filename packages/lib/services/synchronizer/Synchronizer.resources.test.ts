@@ -11,6 +11,7 @@ import Resource from '../../models/Resource';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import BaseItem from '../../models/BaseItem';
 import { ModelType } from '../../BaseModel';
+import { loadMasterKeysFromSettings } from '../e2ee/utils';
 
 let insideBeforeEach = false;
 
@@ -158,7 +159,7 @@ describe('Synchronizer.resources', function() {
 
 		await synchronizerStart();
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api(); });
 		fetcher.queueDownload_(resource1.id);

@@ -47,6 +47,7 @@ import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
+import { loadMasterKeysFromSettings } from './services/e2ee/utils';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -425,7 +426,7 @@ export default class BaseApplication {
 			},
 			'encryption.enabled': async () => {
 				if (this.hasGui()) {
-					await EncryptionService.instance().loadMasterKeysFromSettings();
+					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
@@ -809,7 +810,7 @@ export default class BaseApplication {
 		DecryptionWorker.instance().setLogger(globalLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		ResourceFetcher.instance().setFileApi(() => {

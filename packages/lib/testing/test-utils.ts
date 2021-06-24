@@ -67,7 +67,7 @@ const suiteName_ = uuid.createNano();
 const databases_: any[] = [];
 let synchronizers_: any[] = [];
 const fileApis_: any = {};
-const encryptionServices_: any[] = [];
+const encryptionServices_: EncryptionService[] = [];
 const revisionServices_: any[] = [];
 const decryptionWorkers_: any[] = [];
 const resourceServices_: any[] = [];
@@ -495,7 +495,7 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 		masterKey = masterKeys[0];
 	}
 
-	await service.loadMasterKey_(masterKey, '123456', true);
+	await service.loadMasterKey(masterKey, '123456', true);
 
 	return masterKey;
 }

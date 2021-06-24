@@ -6,13 +6,13 @@ import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
+import EncryptionConfigScreen from '../EncryptionConfigScreen';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
-const { EncryptionConfigScreen } = require('../EncryptionConfigScreen.min');
 const { ClipperConfigScreen } = require('../ClipperConfigScreen.min');
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
