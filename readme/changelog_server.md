@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v2.1.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.4-beta) (Pre-release) - 2021-06-24T07:26:03Z
+
+- Improved: Split permission to share note or folder (0c12c7f)
+- Fixed: Fixed handling of max item size for encrypted items (112157e)
+- Fixed: Fixed transaction locking issue when a sub-transaction fails (12aae48)
+
 ## [server-v2.1.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.3-beta) (Pre-release) - 2021-06-19T14:15:06Z
 
 - New: Add support for uploading multiple items in one request (3b9c02e)
