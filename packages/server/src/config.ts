@@ -4,6 +4,7 @@ import * as pathUtils from 'path';
 import { readFile } from 'fs-extra';
 
 export interface EnvVariables {
+
 	APP_NAME?: string;
 
 	APP_BASE_URL?: string;
@@ -19,6 +20,9 @@ export interface EnvVariables {
 	POSTGRES_USER?: string;
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
+	POSTGRES_CONNECTION_STRING?: string;
+	POSTGRES_SSL_CERT_FILEPATH?: string;
+	POSTGRES_REJECT_UNAUTHORIZED?: string;
 
 	MAILER_ENABLED?: string;
 	MAILER_HOST?: string;
@@ -66,13 +70,28 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 
 function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
 	if (env.DB_CLIENT === 'pg') {
+		let databaseConfig: DatabaseConfig = {
+			client: DatabaseConfigClient.PostgreSQL
+		};
+
+		if (env.POSTGRES_CONNECTION_STRING) {
+			databaseConfig.connectionString = env.POSTGRES_CONNECTION_STRING;
+		} else {
+			databaseConfig.name = env.POSTGRES_DATABASE || 'joplin';
+			databaseConfig.user = env.POSTGRES_USER || 'joplin';
+			databaseConfig.password = env.POSTGRES_PASSWORD || 'joplin';
+			databaseConfig.port = env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432;
+			databaseConfig.host = databaseHostFromEnv(runningInDocker, env) || 'localhost';
+		}
+
+		if(databaseConfig.rejectUnauthorized)
+			databaseConfig.rejectUnauthorized = env.POSTGRES_REJECT_UNAUTHORIZED === 'true';
+
+		if(env.POSTGRES_SSL_CERT_FILEPATH)
+			databaseConfig.sslCertFilePath = env.POSTGRES_SSL_CERT_FILEPATH;
+
 		return {
-			client: DatabaseConfigClient.PostgreSQL,
-			name: env.POSTGRES_DATABASE || 'joplin',
-			user: env.POSTGRES_USER || 'joplin',
-			password: env.POSTGRES_PASSWORD || 'joplin',
-			port: env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432,
-			host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
+			...databaseConfig
 		};
 	}
 

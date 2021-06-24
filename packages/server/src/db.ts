@@ -1,9 +1,9 @@
 import { knex, Knex } from 'knex';
-import { DatabaseConfig } from './utils/types';
+import {DatabaseConfig, SslDatabaseConfig} from './utils/types';
 import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
 import Logger from '@joplin/lib/Logger';
-
+import * as fs from 'fs-extra';
 // Make sure bigInteger values are numbers and not strings
 //
 // https://github.com/brianc/node-pg-types
@@ -25,12 +25,16 @@ export const defaultAdminPassword = 'admin';
 export type DbConnection = Knex;
 
 export interface DbConfigConnection {
+	connectionString?: string;
 	host?: string;
 	port?: number;
 	user?: string;
 	database?: string;
 	filename?: string;
 	password?: string;
+	ssl?: SslDatabaseConfig;
+	rejectUnauthorized?: boolean;
+	sslCertFilePath?: string;
 }
 
 export interface KnexDatabaseConfig {
@@ -53,11 +57,22 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	if (dbConfig.client === 'sqlite3') {
 		connection.filename = dbConfig.name;
 	} else {
-		connection.database = dbConfig.name;
-		connection.host = dbConfig.host;
-		connection.port = dbConfig.port;
-		connection.user = dbConfig.user;
-		connection.password = dbConfig.password;
+		if(dbConfig.connectionString){
+			connection.connectionString = dbConfig.connectionString;
+		} else {
+			connection.database = dbConfig.name;
+			connection.host = dbConfig.host;
+			connection.port = dbConfig.port;
+			connection.user = dbConfig.user;
+			connection.password = dbConfig.password;
+		}
+
+		connection.ssl = {};
+		if (dbConfig.sslCertFilePath)
+			connection.ssl.ca = fs.readFileSync(dbConfig.sslCertFilePath);
+
+		if (dbConfig.rejectUnauthorized != null)
+			connection.ssl.rejectUnauthorized = dbConfig.rejectUnauthorized;
 	}
 
 	return {

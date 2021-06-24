@@ -38,12 +38,21 @@ export interface DatabaseConfig {
 	client: DatabaseConfigClient;
 	// For Postgres, this is the actual database name. For SQLite, this is the
 	// path to the SQLite file.
-	name: string;
+	name?: string;
+	connectionString?: string;
 	host?: string;
 	port?: number;
 	user?: string;
 	password?: string;
 	asyncStackTraces?: boolean;
+	sslCertFilePath?: string;
+	rejectUnauthorized?: boolean;
+}
+
+export interface SslDatabaseConfig
+{
+	rejectUnauthorized?: boolean;
+	ca?: Buffer;
 }
 
 export interface MailerConfig {
