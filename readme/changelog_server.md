@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.1.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.5-beta) (Pre-release) - 2021-06-24T08:26:38Z
+
+- New: Add support for X-API-MIN-VERSION header (51f3c00)
+
 ## [server-v2.1.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.4-beta) (Pre-release) - 2021-06-24T07:26:03Z
 
 - Improved: Split permission to share note or folder (0c12c7f)
