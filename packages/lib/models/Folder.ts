@@ -329,7 +329,7 @@ export default class Folder extends BaseItem {
 		// Find all the notes where the share_id is not the same as the
 		// parent share_id because we only need to update those.
 		const rows = await this.db().selectAll(`
-			SELECT notes.id, folders.share_id
+			SELECT notes.id, folders.share_id, notes.parent_id
 			FROM notes
 			LEFT JOIN folders ON notes.parent_id = folders.id
 			WHERE notes.share_id != folders.share_id
@@ -339,6 +339,7 @@ export default class Folder extends BaseItem {
 			await Note.save({
 				id: row.id,
 				share_id: row.share_id || '',
+				parent_id: row.parent_id,
 				updated_time: Date.now(),
 			}, { autoTimestamp: false });
 		}

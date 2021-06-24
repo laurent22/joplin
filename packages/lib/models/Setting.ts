@@ -1117,7 +1117,11 @@ class Setting extends BaseModel {
 				section: 'sync',
 				advanced: true,
 				show: (settings: any) => {
-					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
+					return [
+						SyncTargetRegistry.nameToId('nextcloud'),
+						SyncTargetRegistry.nameToId('webdav'),
+						SyncTargetRegistry.nameToId('joplinServer'),
+					].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
 				appTypes: [AppType.Desktop, AppType.Cli],
@@ -1132,7 +1136,16 @@ class Setting extends BaseModel {
 				section: 'sync',
 				show: (settings: any) => {
 					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
-						[SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
+						[
+							SyncTargetRegistry.nameToId('nextcloud'),
+							SyncTargetRegistry.nameToId('webdav'),
+							SyncTargetRegistry.nameToId('joplinServer'),
+							// Needs to be enabled for Joplin Cloud too because
+							// some companies filter all traffic and swap TLS
+							// certificates, which result in error
+							// UNABLE_TO_GET_ISSUER_CERT_LOCALLY
+							SyncTargetRegistry.nameToId('joplinCloud'),
+						].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
 				label: () => _('Ignore TLS certificate errors'),
