@@ -459,9 +459,6 @@ function useMenu(props: Props) {
 					type: 'separator',
 					visible: shim.isMac() ? false : true,
 				}, {
-					type: 'separator',
-					visible: shim.isMac() ? false : true,
-				}, {
 					label: _('Import'),
 					visible: shim.isMac() ? false : true,
 					submenu: importItems,
@@ -514,8 +511,6 @@ function useMenu(props: Props) {
 						platforms: ['darwin'],
 						accelerator: shim.isMac() && keymapService.getAccelerator('closeWindow'),
 						selector: 'performClose:',
-					}, {
-						type: 'separator',
 					}, {
 						type: 'separator',
 					}, {

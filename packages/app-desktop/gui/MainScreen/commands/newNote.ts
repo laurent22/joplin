@@ -11,11 +11,9 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, template: string = null, isTodo: boolean = false) => {
+		execute: async (_context: CommandContext, body: string = '', isTodo: boolean = false) => {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
-
-			const body = template ? template : '';
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
