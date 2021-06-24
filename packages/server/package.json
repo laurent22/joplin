@@ -24,6 +24,7 @@
     "bcryptjs": "^2.4.3",
     "bulma": "^0.9.1",
     "bulma-prefers-dark": "^0.1.0-beta.0",
+    "compare-versions": "^3.6.0",
     "dayjs": "^1.9.8",
     "formidable": "^1.2.2",
     "fs-extra": "^8.1.0",
