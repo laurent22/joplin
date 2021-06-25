@@ -72,7 +72,7 @@ fi
 # release randomly fail.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" != "1" ]; then
+if [ "$IS_PULL_REQUEST" == "1" ]; then
 	npm run linter-ci ./
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
