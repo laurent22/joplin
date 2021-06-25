@@ -56,26 +56,31 @@ module.exports = async function(params) {
 		console.log('.');
 	}, 60000);
 
-	await electron_notarize.notarize({
-		appBundleId: appId,
-		appPath: appPath,
+	try {
+		await electron_notarize.notarize({
+			appBundleId: appId,
+			appPath: appPath,
 
-		// Apple Developer email address
-		appleId: process.env.APPLE_ID,
+			// Apple Developer email address
+			appleId: process.env.APPLE_ID,
 
-		// App-specific password: https://support.apple.com/en-us/HT204397
-		appleIdPassword: process.env.APPLE_ID_PASSWORD,
+			// App-specific password: https://support.apple.com/en-us/HT204397
+			appleIdPassword: process.env.APPLE_ID_PASSWORD,
 
-		// When Apple ID is attached to multiple providers (eg if the
-		// account has been used to build multiple apps for different
-		// companies), in that case the provider "Team Short Name" (also
-		// known as "ProviderShortname") must be provided.
-		//
-		// Use this to get it:
-		//
-		// xcrun altool --list-providers -u APPLE_ID -p APPLE_ID_PASSWORD
-		ascProvider: process.env.APPLE_ASC_PROVIDER,
-	});
+			// When Apple ID is attached to multiple providers (eg if the
+			// account has been used to build multiple apps for different
+			// companies), in that case the provider "Team Short Name" (also
+			// known as "ProviderShortname") must be provided.
+			//
+			// Use this to get it:
+			//
+			// xcrun altool --list-providers -u APPLE_ID -p APPLE_ID_PASSWORD
+			ascProvider: process.env.APPLE_ASC_PROVIDER,
+		});
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
 
 	clearInterval(waitingIntervalId);
 

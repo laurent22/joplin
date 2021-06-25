@@ -13,8 +13,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -679,7 +683,7 @@ msgstr "옵션"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
 msgid "Invalid"
-msgstr "유효하지 않은"
+msgstr "유효하지 않음"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -846,7 +850,7 @@ msgstr "편집기 전환"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
 msgid "Share notebook..."
-msgstr "노트북 공유…"
+msgstr "노트북 공유..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -1034,7 +1038,7 @@ msgstr "템플릿 새로고침"
 
 #: packages/app-desktop/gui/MenuBar.js:357
 msgid "Note attachments..."
-msgstr "노트 첨부..."
+msgstr "첨부파일..."
 
 #: packages/app-desktop/gui/MenuBar.js:388
 #: packages/app-desktop/gui/MenuBar.js:466
@@ -1098,9 +1102,8 @@ msgid "&Go"
 msgstr "이동(&G)"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "노트북"
+msgstr "노트북(&B)"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -1751,11 +1754,11 @@ msgstr "공유 수신자:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
 msgid "Synchronizing..."
-msgstr "동기화 중…"
+msgstr "동기화 중..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
 msgid "Sharing notebook..."
-msgstr "노트북을 공유하는 중…"
+msgstr "노트북을 공유하는 중..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
@@ -2420,18 +2423,16 @@ msgid "Joplin Server password"
 msgstr "Joplin 서버 암호"
 
 #: packages/lib/models/Setting.js:371
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplin 서버 email"
+msgstr "Joplin 클라우드 email"
 
 #: packages/lib/models/Setting.js:382
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplin 서버 암호"
+msgstr "Joplin 클라우드 암호"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
-msgstr "첨부 파일 다운로드 시 행동"
+msgstr "첨부파일 다운로드 방식"
 
 #: packages/lib/models/Setting.js:395
 msgid ""
@@ -3014,9 +3015,8 @@ msgid "Encrypted items cannot be modified"
 msgstr "암호화된 항목은 변경될 수 없습니다"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin 포럼"
+msgstr "Joplin 클라우드"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3046,9 +3046,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"오류. URL을 확인하시거나, 혹은 사용자명이나 비밀번호를 확인해주세요, 또한 목"
-"표하는 동기화 장소가 접근 가능한지 확인해주세요. 보고된 오류는 다음과 같습니"
-"다:"
+"오류. URL, 사용자 이름, 비밀번호를 확인해주세요. 또한 동기화 장소가 접근 가능"
+"한지 확인해주세요. 보고된 오류는 다음과 같습니다:"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -3063,7 +3062,7 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
-"애플리케이션을 허가할 수 없습니다:\n"
+"애플리케이션이 허가되지 않았습니다:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3147,9 +3146,9 @@ msgid "Cancelling..."
 msgstr "취소하는 중..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "완료됨: %s"
+msgstr "완료됨: %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
@@ -3168,8 +3167,8 @@ msgstr "진행 중"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
-"알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 해주"
-"세요"
+"알려지지 않은 타입이 다운로드되었습니다 - Joplin을 최신 버전으로 업데이트 해"
+"주세요"
 
 #: packages/lib/JoplinServerApi.js:73
 #, javascript-format
@@ -3237,7 +3236,7 @@ msgstr "복구된 노트들"
 #: packages/lib/services/RevisionService.js:238
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "노트 “%s”가 노트북 “%s\"에 성공적으로 복구되었습니다."
+msgstr "노트 \"%s\"가 노트북 \"%s\"에 성공적으로 복구되었습니다."
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
 msgid "There is no data to export."
