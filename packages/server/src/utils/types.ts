@@ -45,7 +45,9 @@ export interface DatabaseConfig {
 	user?: string;
 	password?: string;
 	asyncStackTraces?: boolean;
+	sslCaFilePath?: string;
 	sslCertFilePath?: string;
+	sslCertKeyFilePath?: string;
 	rejectUnauthorized?: boolean;
 }
 
@@ -53,6 +55,8 @@ export interface SslDatabaseConfig
 {
 	rejectUnauthorized?: boolean;
 	ca?: Buffer;
+	key?: Buffer;
+	cert?: Buffer;
 }
 
 export interface MailerConfig {

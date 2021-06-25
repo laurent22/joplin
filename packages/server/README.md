@@ -20,13 +20,22 @@ This will start the server, which will listen on port **22300** on **localhost**
 ## Setup the database
 
 You can setup the container to either use an existing PostgreSQL server, or connect it to a new one using docker-compose
-
 ### Using an existing PostgreSQL server
 
-To use an existing PostgresSQL server, set the following environment variables in the .env file:
+To use an existing PostgresSQL server you must configure some environment variables in the .env file: 
 
+First set the `DB_CLIENT` environment variable to `pg`
 ```conf
 DB_CLIENT=pg
+```
+
+#### Defining the connection
+Use a connection string variable:
+```conf
+POSTGRES_CONNECTION_STRING=postgresql://username:password@your_joplin_postgres_server:5432/joplin
+```
+Or use individual variables:
+```conf
 POSTGRES_PASSWORD=joplin
 POSTGRES_DATABASE=joplin
 POSTGRES_USER=joplin
@@ -34,7 +43,26 @@ POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
 ```
 
-Make sure that the provided database and user exist as the server will not create them.
+*Make sure that the provided database and user exist as the server will not create them.*
+
+#### SSL Options
+In some cases you will need to supply a CA cert to allow connections to be made to a PostgreSQL server. You can do this by mounting the cert into your container and setting `POSTGRES_SSL_CA_FILEPATH` to the path of the CA cert on the container.
+```conf
+POSTGRES_SSL_CA_FILEPATH=/home/data/ca.crt
+```
+
+If you just wish to ignore an invalid SSL certificate you can do this by setting the `POSTGRES_REJECT_UNAUTHORIZED` variable to false.   
+```conf
+POSTGRES_REJECT_UNAUTHORIZED=false
+```
+
+When the server requires client certificate authentication, mount the cert and key files to the container and set the `POSTGRES_SSL_CERT_FILEPATH` and `POSTGRES_SSL_CERT_KEY_FILEPATH`.     
+```conf
+POSTGRES_SSL_CERT_FILEPATH=/home/data/postgresql.crt
+POSTGRES_SSL_CERT_KEY_FILEPATH=/home/data/postgresql.key
+```
+
+For more information on defining SSL parameters on your connection please refer to https://node-postgres.com/features/ssl and https://node-postgres.com/features/ssl.
 
 ### Using docker-compose
 

@@ -33,8 +33,6 @@ export interface DbConfigConnection {
 	filename?: string;
 	password?: string;
 	ssl?: SslDatabaseConfig;
-	rejectUnauthorized?: boolean;
-	sslCertFilePath?: string;
 }
 
 export interface KnexDatabaseConfig {
@@ -68,8 +66,13 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 		}
 
 		connection.ssl = {};
-		if (dbConfig.sslCertFilePath)
+		if (dbConfig.sslCaFilePath)
 			connection.ssl.ca = fs.readFileSync(dbConfig.sslCertFilePath);
+
+		if (dbConfig.sslCertFilePath && dbConfig.sslCertKeyFilePath) {
+			connection.ssl.cert = fs.readFileSync(dbConfig.sslCertFilePath);
+			connection.ssl.key = fs.readFileSync(dbConfig.sslCertKeyFilePath);
+		}
 
 		if (dbConfig.rejectUnauthorized != null)
 			connection.ssl.rejectUnauthorized = dbConfig.rejectUnauthorized;

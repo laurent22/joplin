@@ -21,8 +21,10 @@ export interface EnvVariables {
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
 	POSTGRES_CONNECTION_STRING?: string;
-	POSTGRES_SSL_CERT_FILEPATH?: string;
 	POSTGRES_REJECT_UNAUTHORIZED?: string;
+	POSTGRES_SSL_CA_FILEPATH?: string;
+	POSTGRES_SSL_CERT_FILEPATH?: string;
+	POSTGRES_SSL_CERT_KEY_FILEPATH?: string;
 
 	MAILER_ENABLED?: string;
 	MAILER_HOST?: string;
@@ -84,11 +86,16 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 			databaseConfig.host = databaseHostFromEnv(runningInDocker, env) || 'localhost';
 		}
 
-		if(databaseConfig.rejectUnauthorized)
+		if(env.POSTGRES_REJECT_UNAUTHORIZED)
 			databaseConfig.rejectUnauthorized = env.POSTGRES_REJECT_UNAUTHORIZED === 'true';
 
-		if(env.POSTGRES_SSL_CERT_FILEPATH)
+		if(env.POSTGRES_SSL_CA_FILEPATH)
+			databaseConfig.sslCaFilePath = env.POSTGRES_SSL_CA_FILEPATH;
+
+		if(env.POSTGRES_SSL_CERT_FILEPATH && env.POSTGRES_SSL_CERT_KEY_FILEPATH) {
 			databaseConfig.sslCertFilePath = env.POSTGRES_SSL_CERT_FILEPATH;
+			databaseConfig.sslCaFilePath = env.POSTGRES_SSL_CERT_KEY_FILEPATH;
+		}
 
 		return {
 			...databaseConfig
