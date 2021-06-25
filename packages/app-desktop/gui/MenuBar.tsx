@@ -25,7 +25,6 @@ const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
-const TemplateUtils = require('@joplin/lib/TemplateUtils');
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -301,7 +300,6 @@ function useMenu(props: Props) {
 
 			const importItems = [];
 			const exportItems = [];
-			const templateItems: any[] = [];
 			const ioService = InteropService.instance();
 			const ioModules = ioService.modules();
 			for (let i = 0; i < ioModules.length; i++) {
@@ -365,39 +363,6 @@ function useMenu(props: Props) {
 			const newFolderItem = menuItemDic.newFolder;
 			const newSubFolderItem = menuItemDic.newSubFolder;
 			const printItem = menuItemDic.print;
-
-			templateItems.push({
-				label: _('Create note from template'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate', 'note');
-				},
-			}, {
-				label: _('Create to-do from template'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate', 'todo');
-				},
-			}, {
-				label: _('Insert template'),
-				accelerator: keymapService.getAccelerator('insertTemplate'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate');
-				},
-			}, {
-				label: _('Open template directory'),
-				click: () => {
-					void bridge().openItem(Setting.value('templateDir'));
-				},
-			}, {
-				label: _('Refresh templates'),
-				click: async () => {
-					const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-
-					props.dispatch({
-						type: 'TEMPLATE_UPDATE_ALL',
-						templates: templates,
-					});
-				},
-			});
 
 			let toolsItems: any[] = [];
 
@@ -494,13 +459,6 @@ function useMenu(props: Props) {
 					type: 'separator',
 					visible: shim.isMac() ? false : true,
 				}, {
-					label: _('Templates'),
-					visible: shim.isMac() ? false : true,
-					submenu: templateItems,
-				}, {
-					type: 'separator',
-					visible: shim.isMac() ? false : true,
-				}, {
 					label: _('Import'),
 					visible: shim.isMac() ? false : true,
 					submenu: importItems,
@@ -553,11 +511,6 @@ function useMenu(props: Props) {
 						platforms: ['darwin'],
 						accelerator: shim.isMac() && keymapService.getAccelerator('closeWindow'),
 						selector: 'performClose:',
-					}, {
-						type: 'separator',
-					}, {
-						label: _('Templates'),
-						submenu: templateItems,
 					}, {
 						type: 'separator',
 					}, {
