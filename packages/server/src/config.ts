@@ -94,7 +94,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 
 		if(env.POSTGRES_SSL_CERT_FILEPATH && env.POSTGRES_SSL_CERT_KEY_FILEPATH) {
 			databaseConfig.sslCertFilePath = env.POSTGRES_SSL_CERT_FILEPATH;
-			databaseConfig.sslCaFilePath = env.POSTGRES_SSL_CERT_KEY_FILEPATH;
+			databaseConfig.sslCertKeyFilePath = env.POSTGRES_SSL_CERT_KEY_FILEPATH;
 		}
 
 		return {

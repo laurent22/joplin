@@ -67,7 +67,7 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 
 		connection.ssl = {};
 		if (dbConfig.sslCaFilePath)
-			connection.ssl.ca = fs.readFileSync(dbConfig.sslCertFilePath);
+			connection.ssl.ca = fs.readFileSync(dbConfig.sslCaFilePath);
 
 		if (dbConfig.sslCertFilePath && dbConfig.sslCertKeyFilePath) {
 			connection.ssl.cert = fs.readFileSync(dbConfig.sslCertFilePath);
