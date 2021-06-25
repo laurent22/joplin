@@ -11,18 +11,17 @@ import Note from './models/Note';
 import Resource from './models/Resource';
 import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
-import MasterKey from './models/MasterKey';
 import BaseModel from './BaseModel';
 import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
-import { enableEncryption, loadMasterKeysFromSettings } from './services/e2ee/utils';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
-import SyncTargetInfoHandler from './services/synchronizer/SyncTargetInfoHandler';
+import { localSyncTargetInfo, remoteSyncTargetInfo, setLocalSyncTargetInfo, syncTargetInfoEquals, setRemoteSyncTargetInfo, mergeSyncTargetInfos, activeMasterKey } from './services/synchronizer/syncTargetInfoUtils';
+import { setupAndEnableEncryption, setupAndDisableEncryption } from './services/e2ee/utils';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -75,7 +74,6 @@ export default class Synchronizer {
 	private clientId_: string;
 	private lockHandler_: LockHandler;
 	private migrationHandler_: MigrationHandler;
-	private syncTargetInfoHandler_: SyncTargetInfoHandler;
 	private encryptionService_: EncryptionService = null;
 	private resourceService_: ResourceService = null;
 	private syncTargetIsLocked_: boolean = false;
@@ -136,14 +134,8 @@ export default class Synchronizer {
 
 	private migrationHandler() {
 		if (this.migrationHandler_) return this.migrationHandler_;
-		this.migrationHandler_ = new MigrationHandler(this.api(), this.syncTargetInfoHandler(), this.lockHandler(), this.appType_, this.clientId_);
+		this.migrationHandler_ = new MigrationHandler(this.api(), this.lockHandler(), this.appType_, this.clientId_);
 		return this.migrationHandler_;
-	}
-
-	public syncTargetInfoHandler() {
-		if (this.syncTargetInfoHandler_) return this.syncTargetInfoHandler_;
-		this.syncTargetInfoHandler_ = new SyncTargetInfoHandler(this.api());
-		return this.syncTargetInfoHandler_;
 	}
 
 	maxResourceSize() {
@@ -375,9 +367,6 @@ export default class Synchronizer {
 		this.syncTargetIsLocked_ = false;
 		this.cancelling_ = false;
 
-		const masterKeysBefore = await MasterKey.count();
-		let hasAutoEnabledEncryption = false;
-
 		const synchronizationId = time.unixMs().toString();
 
 		const outputContext = Object.assign({}, lastContext);
@@ -424,18 +413,50 @@ export default class Synchronizer {
 			this.api().setTempDirName(Dirnames.Temp);
 
 			try {
-				const syncTargetInfoService = new SyncTargetInfoHandler(this.api());
+				const remoteInfo = await remoteSyncTargetInfo(this.api());
+				this.logger().info('Sync target info:', remoteInfo);
 
-				await this.migrationHandler().checkCanSync();
-
-				const syncTargetInfo = await syncTargetInfoService.info();
-
-				this.logger().info('Sync target info:', syncTargetInfo);
-
-				if (!syncTargetInfo.version) {
+				if (!remoteInfo.version) {
 					this.logger().info('Sync target is new - setting it up...');
 					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
+				} else {
+					this.logger().info('Sync target is already setup - checking it...');
+					await this.migrationHandler().checkCanSync(remoteInfo);
+
+					const localInfo = localSyncTargetInfo();
+
+					if (!syncTargetInfoEquals(localInfo, remoteInfo)) {
+						// TODO: if e2ee changed - need to enable/disable encryption
+						const newInfo = mergeSyncTargetInfos(localInfo, remoteInfo);
+						await setRemoteSyncTargetInfo(this.api(), newInfo);
+						setLocalSyncTargetInfo(newInfo);
+
+						if (localInfo.e2ee !== remoteInfo.e2ee) {
+							if (newInfo.e2ee) {
+								const mk = activeMasterKey(newInfo);
+								await setupAndEnableEncryption(mk);
+							} else {
+								await setupAndDisableEncryption();
+							}
+						}
+					} else {
+						// Set it to remote anyway so that timestamps are the same
+						setLocalSyncTargetInfo(remoteInfo);
+					}
 				}
+
+				// const syncTargetInfoService = new SyncTargetInfoHandler(this.api());
+
+				// await this.migrationHandler().checkCanSync();
+
+				// const syncTargetInfo = await syncTargetInfoService.info();
+
+				// this.logger().info('Sync target info:', syncTargetInfo);
+
+				// if (!syncTargetInfo.version) {
+				// 	this.logger().info('Sync target is new - setting it up...');
+				// 	await this.migrationHandler().upgrade(Setting.value('syncVersion'));
+				// }
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {
 					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);
@@ -460,6 +481,7 @@ export default class Synchronizer {
 
 			if (syncSteps.indexOf('update_remote') >= 0) {
 				const donePaths: string[] = [];
+
 
 				const completeItemProcessing = (path: string) => {
 					donePaths.push(path);
@@ -924,15 +946,6 @@ export default class Synchronizer {
 							await ItemClass.save(content, options);
 
 							if (creatingOrUpdatingResource) this.dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: content.id });
-
-							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
-								hasAutoEnabledEncryption = true;
-								this.logger().info('One master key was downloaded and none was previously available: automatically enabling encryption');
-								this.logger().info('Using master key: ', content.id);
-								await enableEncryption(content);
-								await loadMasterKeysFromSettings(this.encryptionService());
-								this.logger().info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
-							}
 
 							if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 						} else if (action == 'deleteLocal') {

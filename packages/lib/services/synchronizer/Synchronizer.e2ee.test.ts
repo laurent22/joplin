@@ -10,7 +10,7 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import { ResourceEntity } from '../database/types';
 import Synchronizer from '../../Synchronizer';
-import { disableEncryption, enableEncryption, loadMasterKeysFromSettings } from '../e2ee/utils';
+import { setupAndDisableEncryption, setupAndEnableEncryption, loadMasterKeysFromSettings } from '../e2ee/utils';
 
 let insideBeforeEach = false;
 
@@ -142,7 +142,7 @@ describe('Synchronizer.e2ee', function() {
 		// Then enable encryption and sync again
 		let masterKey = await encryptionService().generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
-		await enableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 
@@ -168,7 +168,7 @@ describe('Synchronizer.e2ee', function() {
 		let allEncrypted = await allSyncTargetItemsEncrypted();
 		expect(allEncrypted).toBe(true);
 
-		await disableEncryption();
+		await setupAndDisableEncryption();
 
 		await synchronizerStart();
 		allEncrypted = await allSyncTargetItemsEncrypted();
@@ -194,7 +194,7 @@ describe('Synchronizer.e2ee', function() {
 		// If we try to disable encryption now, it should throw an error because some items are
 		// currently encrypted. They must be decrypted first so that they can be sent as
 		// plain text to the sync target.
-		// let hasThrown = await checkThrowAsync(async () => await disableEncryption());
+		// let hasThrown = await checkThrowAsync(async () => await setupAndDisableEncryption());
 		// expect(hasThrown).toBe(true);
 
 		// Now supply the password, and decrypt the items
@@ -203,7 +203,7 @@ describe('Synchronizer.e2ee', function() {
 		await decryptionWorker().start();
 
 		// Try to disable encryption again
-		const hasThrown = await checkThrowAsync(async () => await disableEncryption());
+		const hasThrown = await checkThrowAsync(async () => await setupAndDisableEncryption());
 		expect(hasThrown).toBe(false);
 
 		// If we sync now the target should receive the decrypted items
@@ -250,7 +250,7 @@ describe('Synchronizer.e2ee', function() {
 		expect(await allSyncTargetItemsEncrypted()).toBe(false);
 
 		const masterKey = await loadEncryptionMasterKey();
-		await enableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 
 		await synchronizerStart();
@@ -265,7 +265,7 @@ describe('Synchronizer.e2ee', function() {
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
-		await enableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 
@@ -277,7 +277,7 @@ describe('Synchronizer.e2ee', function() {
 		const note1 = await Note.save({ title: 'note' });
 		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
-		await enableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 		expect(await allSyncTargetItemsEncrypted()).toBe(true);
@@ -312,7 +312,7 @@ describe('Synchronizer.e2ee', function() {
 
 		const note = await Note.save({ title: 'ma note' });
 		const masterKey = await loadEncryptionMasterKey();
-		await enableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 

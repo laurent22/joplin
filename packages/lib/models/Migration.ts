@@ -1,10 +1,17 @@
 import BaseModel from '../BaseModel';
+import JoplinDatabase from '../JoplinDatabase';
+import migration40 from '../migrations/40';
 
-const migrationScripts: Record<number, any> = {
+export interface MigrationScript {
+	exec(db: JoplinDatabase): Promise<void>;
+}
+
+const migrationScripts: Record<number, MigrationScript> = {
 	20: require('../migrations/20.js'),
 	27: require('../migrations/27.js'),
 	33: require('../migrations/33.js'),
 	35: require('../migrations/35.js'),
+	40: migration40,
 };
 
 export default class Migration extends BaseModel {

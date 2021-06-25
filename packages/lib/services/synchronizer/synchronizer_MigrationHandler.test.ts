@@ -9,23 +9,16 @@ import { Dirnames } from '../../services/synchronizer/utils/types';
 
 
 import { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } from '../../testing/test-utils';
-const { deploySyncTargetSnapshot, testData, checkTestData } = require('../../testing/syncTargetUtils');
+import { deploySyncTargetSnapshot, testData, checkTestData } from '../../testing/syncTargetUtils';
 import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';
-import SyncTargetInfoHandler from './SyncTargetInfoHandler';
 import { loadMasterKeysFromSettings } from '../e2ee/utils';
+import { remoteSyncTargetInfo } from './syncTargetInfoUtils';
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 
 let lockHandler_: LockHandler = null;
 let migrationHandler_: MigrationHandler = null;
-let syncTargetInfo_: SyncTargetInfoHandler = null;
-
-function syncTargetInfoHandler(): SyncTargetInfoHandler {
-	if (syncTargetInfo_) return syncTargetInfo_;
-	syncTargetInfo_ = new SyncTargetInfoHandler(fileApi());
-	return syncTargetInfo_;
-}
 
 function lockHandler(): LockHandler {
 	if (lockHandler_) return lockHandler_;
@@ -35,7 +28,7 @@ function lockHandler(): LockHandler {
 
 function migrationHandler(clientId: string = 'abcd'): MigrationHandler {
 	if (migrationHandler_) return migrationHandler_;
-	migrationHandler_ = new MigrationHandler(fileApi(), syncTargetInfoHandler(), lockHandler(), 'desktop', clientId);
+	migrationHandler_ = new MigrationHandler(fileApi(), lockHandler(), 'desktop', clientId);
 	return migrationHandler_;
 }
 
@@ -75,7 +68,6 @@ describe('synchronizer_MigrationHandler', function() {
 		previousSyncTargetName = setSyncTargetName('filesystem');
 		lockHandler_ = null;
 		migrationHandler_ = null;
-		syncTargetInfo_ = null;
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
@@ -113,14 +105,14 @@ describe('synchronizer_MigrationHandler', function() {
 		it(`should migrate (${migrationVersion})`, (async () => {
 			await deploySyncTargetSnapshot('normal', migrationVersion - 1);
 
-			const info = await syncTargetInfoHandler().info();
+			const info = await remoteSyncTargetInfo(fileApi());
 			expect(info.version).toBe(migrationVersion - 1);
 
 			// Now, migrate to the new version
 			await migrationHandler().upgrade(migrationVersion);
 
 			// Verify that it has been upgraded
-			const newInfo = await syncTargetInfoHandler().info();
+			const newInfo = await remoteSyncTargetInfo(fileApi());
 			expect(newInfo.version).toBe(migrationVersion);
 			await migrationTests[migrationVersion]();
 
@@ -147,7 +139,7 @@ describe('synchronizer_MigrationHandler', function() {
 			await migrationHandler().upgrade(migrationVersion);
 
 			// Verify that it has been upgraded
-			const newInfo = await syncTargetInfoHandler().info();
+			const newInfo = await remoteSyncTargetInfo(fileApi());
 			expect(newInfo.version).toBe(migrationVersion);
 			await migrationTests[migrationVersion]();
 

@@ -7,7 +7,7 @@ import Folder from '../models/Folder';
 import Note from '../models/Note';
 import Resource from '../models/Resource';
 import SearchEngine from '../services/searchengine/SearchEngine';
-import { enableEncryption, loadMasterKeysFromSettings } from './e2ee/utils';
+import { setupAndEnableEncryption, loadMasterKeysFromSettings } from './e2ee/utils';
 
 describe('services_ResourceService', function() {
 
@@ -139,7 +139,7 @@ describe('services_ResourceService', function() {
 		// Eventually R1 is deleted because service thinks that it was at some point associated with a note, but no longer.
 
 		const masterKey = await loadEncryptionMasterKey();
-		await enableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -151,7 +151,7 @@ describe('services_ResourceService', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
-		await enableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await decryptionWorker().start();
 		{

@@ -921,6 +921,9 @@ packages/lib/markdownUtils2.test.js.map
 packages/lib/markupLanguageUtils.d.ts
 packages/lib/markupLanguageUtils.js
 packages/lib/markupLanguageUtils.js.map
+packages/lib/migrations/40.d.ts
+packages/lib/migrations/40.js
+packages/lib/migrations/40.js.map
 packages/lib/models/Alarm.d.ts
 packages/lib/models/Alarm.js
 packages/lib/models/Alarm.js.map
@@ -1065,6 +1068,9 @@ packages/lib/services/KvStore.js.map
 packages/lib/services/MigrationService.d.ts
 packages/lib/services/MigrationService.js
 packages/lib/services/MigrationService.js.map
+packages/lib/services/MigrationService.test.d.ts
+packages/lib/services/MigrationService.test.js
+packages/lib/services/MigrationService.test.js.map
 packages/lib/services/NavService.d.ts
 packages/lib/services/NavService.js
 packages/lib/services/NavService.js.map
@@ -1425,9 +1431,6 @@ packages/lib/services/synchronizer/LockHandler.js.map
 packages/lib/services/synchronizer/MigrationHandler.d.ts
 packages/lib/services/synchronizer/MigrationHandler.js
 packages/lib/services/synchronizer/MigrationHandler.js.map
-packages/lib/services/synchronizer/SyncTargetInfoHandler.d.ts
-packages/lib/services/synchronizer/SyncTargetInfoHandler.js
-packages/lib/services/synchronizer/SyncTargetInfoHandler.js.map
 packages/lib/services/synchronizer/Synchronizer.basics.test.d.ts
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js.map
@@ -1461,6 +1464,9 @@ packages/lib/services/synchronizer/migrations/1.js.map
 packages/lib/services/synchronizer/migrations/2.d.ts
 packages/lib/services/synchronizer/migrations/2.js
 packages/lib/services/synchronizer/migrations/2.js.map
+packages/lib/services/synchronizer/syncTargetInfoUtils.d.ts
+packages/lib/services/synchronizer/syncTargetInfoUtils.js
+packages/lib/services/synchronizer/syncTargetInfoUtils.js.map
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.d.ts
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js.map
@@ -1479,6 +1485,9 @@ packages/lib/services/synchronizer/utils/types.js.map
 packages/lib/shim.d.ts
 packages/lib/shim.js
 packages/lib/shim.js.map
+packages/lib/testing/syncTargetUtils.d.ts
+packages/lib/testing/syncTargetUtils.js
+packages/lib/testing/syncTargetUtils.js.map
 packages/lib/testing/test-utils-synchronizer.d.ts
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils-synchronizer.js.map

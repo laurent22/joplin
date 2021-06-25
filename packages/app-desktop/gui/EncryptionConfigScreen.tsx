@@ -2,7 +2,7 @@ const React = require('react');
 const { connect } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
 import EncryptionService from '@joplin/lib/services/EncryptionService';
-import { disableEncryption, generateMasterKeyAndEnableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { setupAndDisableEncryption, generateMasterKeyAndEnableEncryption } from '@joplin/lib/services/e2ee/utils';
 import time from '@joplin/lib/time';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
@@ -180,7 +180,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props, any> {
 
 			try {
 				if (isEnabled) {
-					await disableEncryption();
+					await setupAndDisableEncryption();
 				} else {
 					await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), answer);
 				}

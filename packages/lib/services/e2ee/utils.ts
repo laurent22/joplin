@@ -4,12 +4,16 @@ import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
 import { MasterKeyEntity } from '../database/types';
 import EncryptionService from '../EncryptionService';
+import { localSyncTargetInfo, setLocalSyncTargetInfo } from '../synchronizer/syncTargetInfoUtils';
 
 const logger = Logger.create('e2ee/utils');
 
-export async function enableEncryption(masterKey: MasterKeyEntity, password: string = null) {
-	Setting.setValue('encryption.enabled', true);
-	Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
+export async function setupAndEnableEncryption(masterKey: MasterKeyEntity, password: string = null) {
+	setLocalSyncTargetInfo({
+		...localSyncTargetInfo(),
+		e2ee: true,
+		activeMasterKeyId: masterKey.id,
+	});
 
 	if (password) {
 		const passwordCache = Setting.value('encryption.passwordCache');
@@ -22,7 +26,7 @@ export async function enableEncryption(masterKey: MasterKeyEntity, password: str
 	await BaseItem.markAllNonEncryptedForSync();
 }
 
-export async function disableEncryption() {
+export async function setupAndDisableEncryption() {
 	// Allow disabling encryption even if some items are still encrypted, because whether E2EE is enabled or disabled
 	// should not affect whether items will enventually be decrypted or not (DecryptionWorker will still work as
 	// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
@@ -31,7 +35,11 @@ export async function disableEncryption() {
 	// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
 	// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
 
-	Setting.setValue('encryption.enabled', false);
+	setLocalSyncTargetInfo({
+		...localSyncTargetInfo(),
+		e2ee: false,
+	});
+
 	// The only way to make sure everything gets decrypted on the sync target is
 	// to re-sync everything.
 	await BaseItem.forceSyncAll();
@@ -40,15 +48,17 @@ export async function disableEncryption() {
 export async function generateMasterKeyAndEnableEncryption(service: EncryptionService, password: string) {
 	let masterKey = await service.generateMasterKey(password);
 	masterKey = await MasterKey.save(masterKey);
-	await enableEncryption(masterKey, password);
+	await setupAndEnableEncryption(masterKey, password);
 	await loadMasterKeysFromSettings(service);
 	return masterKey;
 }
 
 export async function loadMasterKeysFromSettings(service: EncryptionService) {
+	const syncTargetInfo = localSyncTargetInfo();
+
 	const masterKeys = await MasterKey.all();
 	const passwords = Setting.value('encryption.passwordCache');
-	const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
+	const activeMasterKeyId = syncTargetInfo.activeMasterKeyId || '';
 
 	logger.info(`Trying to load ${masterKeys.length} master keys...`);
 

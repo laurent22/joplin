@@ -1,5 +1,5 @@
 import EncryptionService from '@joplin/lib/services/EncryptionService';
-import { disableEncryption, generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings } from '@joplin/lib/services/e2ee/utils';
+import { setupAndDisableEncryption, generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings } from '@joplin/lib/services/e2ee/utils';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Setting from '@joplin/lib/models/Setting';
@@ -99,7 +99,7 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'disable') {
-			await disableEncryption();
+			await setupAndDisableEncryption();
 			return;
 		}
 

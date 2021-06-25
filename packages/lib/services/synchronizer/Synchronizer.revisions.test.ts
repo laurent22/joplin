@@ -3,7 +3,7 @@ import BaseModel from '../../BaseModel';
 import { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } from '../../testing/test-utils';
 import Note from '../../models/Note';
 import Revision from '../../models/Revision';
-import { enableEncryption, loadMasterKeysFromSettings } from '../e2ee/utils';
+import { setupAndEnableEncryption, loadMasterKeysFromSettings } from '../e2ee/utils';
 
 describe('Synchronizer.revisions', function() {
 
@@ -165,7 +165,7 @@ describe('Synchronizer.revisions', function() {
 
 		await Note.save({ title: 'ma note', updated_time: dateInPast, created_time: dateInPast }, { autoTimestamp: false });
 		const masterKey = await loadEncryptionMasterKey();
-		await enableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 

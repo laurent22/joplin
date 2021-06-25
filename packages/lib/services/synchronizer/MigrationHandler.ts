@@ -16,29 +16,28 @@ const migrations = [
 import Setting from '../../models/Setting';
 const { sprintf } = require('sprintf-js');
 import JoplinError from '../../JoplinError';
-import SyncTargetInfoHandler from './SyncTargetInfoHandler';
 import { FileApi } from '../../file-api';
+import { remoteSyncTargetInfo, setRemoteSyncTargetInfo, setLocalSyncTargetInfo, SyncTargetInfo } from './syncTargetInfoUtils';
 
 export default class MigrationHandler extends BaseService {
 
 	private api_: FileApi = null;
 	private lockHandler_: LockHandler = null;
-	private syncTargetInfoHandler_: SyncTargetInfoHandler = null;
 	private clientType_: string;
 	private clientId_: string;
 
-	constructor(api: FileApi, syncTargetInfoHandler: SyncTargetInfoHandler, lockHandler: LockHandler, clientType: string, clientId: string) {
+	constructor(api: FileApi, lockHandler: LockHandler, clientType: string, clientId: string) {
 		super();
 		this.api_ = api;
-		this.syncTargetInfoHandler_ = syncTargetInfoHandler;
 		this.lockHandler_ = lockHandler;
 		this.clientType_ = clientType;
 		this.clientId_ = clientId;
 	}
 
-	public async checkCanSync(): Promise<void> {
+	public async checkCanSync(syncTargetInfo: SyncTargetInfo = null): Promise<void> {
+		syncTargetInfo = syncTargetInfo || await remoteSyncTargetInfo(this.api_);
+
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
-		const syncTargetInfo = await this.syncTargetInfoHandler_.info();
 
 		if (syncTargetInfo.version) {
 			if (syncTargetInfo.version > supportedSyncTargetVersion) {
@@ -51,10 +50,11 @@ export default class MigrationHandler extends BaseService {
 
 	public async upgrade(targetVersion: number = 0) {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
-		const syncTargetInfo = await this.syncTargetInfoHandler_.info();
 
-		if (syncTargetInfo.version > supportedSyncTargetVersion) {
-			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
+		const info = await remoteSyncTargetInfo(this.api_);
+
+		if (info.version > supportedSyncTargetVersion) {
+			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', info.version, supportedSyncTargetVersion), 'outdatedClient');
 		}
 
 		// if (supportedSyncTargetVersion !== migrations.length - 1) {
@@ -68,8 +68,8 @@ export default class MigrationHandler extends BaseService {
 		// Also if the sync target version is 0, it means it's a new one so we need the
 		// lock folder first before doing anything else.
 		// Temp folder is needed too to get remoteDate() call to work.
-		if (syncTargetInfo.version === 0 || syncTargetInfo.version === 1) {
-			this.logger().info('MigrationHandler: Sync target version is 0 or 1 - creating "locks" and "temp" directory:', syncTargetInfo);
+		if (info.version === 0 || info.version === 1) {
+			this.logger().info('MigrationHandler: Sync target version is 0 or 1 - creating "locks" and "temp" directory:', info);
 			await this.api_.mkdir(Dirnames.Locks);
 			await this.api_.mkdir(Dirnames.Temp);
 		}
@@ -84,7 +84,7 @@ export default class MigrationHandler extends BaseService {
 		this.logger().info('MigrationHandler: Acquired exclusive lock:', exclusiveLock);
 
 		try {
-			for (let newVersion = syncTargetInfo.version + 1; newVersion < migrations.length; newVersion++) {
+			for (let newVersion = info.version + 1; newVersion < migrations.length; newVersion++) {
 				if (targetVersion && newVersion > targetVersion) break;
 
 				const fromVersion = newVersion - 1;
@@ -99,10 +99,14 @@ export default class MigrationHandler extends BaseService {
 					await migration(this.api_);
 					if (autoLockError) throw autoLockError;
 
-					await this.syncTargetInfoHandler_.setInfo({
-						...syncTargetInfo,
+					const newInfo: SyncTargetInfo = {
+						...info,
 						version: newVersion,
-					});
+						updatedTime: Date.now(),
+					};
+
+					await setRemoteSyncTargetInfo(this.api_, newInfo);
+					setLocalSyncTargetInfo(newInfo);
 
 					this.logger().info(`MigrationHandler: Done migrating from version ${fromVersion} to version ${newVersion}`);
 				} catch (error) {

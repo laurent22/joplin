@@ -6,7 +6,7 @@ import EncryptionService from '@joplin/lib/services/EncryptionService';
 import time from '@joplin/lib/time';
 import { _ } from '@joplin/lib/locale';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
-import { disableEncryption, generateMasterKeyAndEnableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { setupAndDisableEncryption, generateMasterKeyAndEnableEncryption } from '@joplin/lib/services/e2ee/utils';
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
 const { BaseScreenComponent } = require('../base-screen.js');
@@ -218,7 +218,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				if (!ok) return;
 
 				try {
-					await disableEncryption();
+					await setupAndDisableEncryption();
 				} catch (error) {
 					await dialogs.error(this, error.message);
 				}

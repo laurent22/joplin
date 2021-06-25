@@ -315,6 +315,13 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
+			'sync.info': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.File,
+			},
+
 			'sync.upgradeState': {
 				value: Setting.SYNC_UPGRADE_STATE_IDLE,
 				type: SettingItemType.Int,
@@ -1642,7 +1649,7 @@ class Setting extends BaseModel {
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
-	static value(key: string) {
+	public static value(key: string) {
 		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
 		// with strict equality and the value is updated only if changed. However if the caller acquire
 		// and object and change a key, the objects will be detected as equal. By returning a copy
@@ -1671,6 +1678,12 @@ class Setting extends BaseModel {
 
 		const md = this.settingMetadata(key);
 		return copyIfNeeded(md.value);
+	}
+
+	// This function returns the default value if the setting key does not exist.
+	public static valueNoThrow(key: string, defaultValue: any) {
+		if (!this.keyExists(key)) return defaultValue;
+		return this.value(key);
 	}
 
 	static isEnum(key: string) {
