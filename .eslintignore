@@ -1397,6 +1397,9 @@ packages/lib/services/searchengine/SearchEngineUtils.test.js.map
 packages/lib/services/searchengine/filterParser.d.ts
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.js.map
+packages/lib/services/searchengine/filterParser.test.d.ts
+packages/lib/services/searchengine/filterParser.test.js
+packages/lib/services/searchengine/filterParser.test.js.map
 packages/lib/services/searchengine/queryBuilder.d.ts
 packages/lib/services/searchengine/queryBuilder.js
 packages/lib/services/searchengine/queryBuilder.js.map

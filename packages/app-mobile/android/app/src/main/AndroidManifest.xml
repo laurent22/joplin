@@ -18,9 +18,6 @@
 		Apps targeting Android 10 (sdk 29) can no longer freely access arbitrary paths on the shared storage.
 		This attribute allows to opt out of this restriction.
 
-		android:allowBackup: used to enable Android Backup which some users need:
-		https://github.com/laurent22/joplin/issues/4020
-
 		android:resizeableActivity: allows user to resize Joplin window
 		https://github.com/laurent22/joplin/issues/3547
 	-->
@@ -29,7 +26,7 @@
 		android:label="@string/app_name"
 		android:icon="@mipmap/ic_launcher"
 		android:roundIcon="@mipmap/ic_launcher_round"
-		android:allowBackup="true"
+		android:allowBackup="false"
 		android:networkSecurityConfig="@xml/network_security_config"
 		android:requestLegacyExternalStorage="true"
 		android:resizeableActivity="true"
