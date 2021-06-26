@@ -7,6 +7,7 @@ import time from '@joplin/lib/time';
 import { _ } from '@joplin/lib/locale';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
 import { setupAndDisableEncryption, generateMasterKeyAndEnableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { activeMasterKeyId, encryptionEnabled } from '@joplin/lib/services/synchronizer/syncTargetInfoUtils';
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('../screen-header.js');
 const { BaseScreenComponent } = require('../base-screen.js');
@@ -302,8 +303,8 @@ const EncryptionConfigScreen = connect((state: any) => {
 		themeId: state.settings.theme,
 		masterKeys: state.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
-		encryptionEnabled: state.settings['encryption.enabled'],
-		activeMasterKeyId: state.settings['encryption.activeMasterKeyId'],
+		encryptionEnabled: encryptionEnabled(),
+		activeMasterKeyId: activeMasterKeyId(),
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
 	};
 })(EncryptionConfigScreenComponent);

@@ -48,6 +48,7 @@ import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 import { loadMasterKeysFromSettings } from './services/e2ee/utils';
+import { encryptionEnabled } from './services/synchronizer/syncTargetInfoUtils';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -424,8 +425,17 @@ export default class BaseApplication {
 					syswidecas.addCAs(f);
 				}
 			},
-			'encryption.enabled': async () => {
+
+			// Note: this used to run when "encryption.enabled" was changed, but
+			// now we run it anytime any property of the sync target info is
+			// changed. This is not optimal but:
+			// - The sync target info rarely changes.
+			// - All the calls below are cheap or do nothing if there's nothing
+			//   to do.
+			'sync.info': async () => {
 				if (this.hasGui()) {
+					appLogger.info('"sync.info" was changed - setting up encryption related code');
+
 					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
@@ -440,6 +450,7 @@ export default class BaseApplication {
 					void reg.scheduleSync();
 				}
 			},
+
 			'sync.interval': async () => {
 				if (this.hasGui()) reg.setupRecurrentSync();
 			},
@@ -447,8 +458,7 @@ export default class BaseApplication {
 
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
 		sideEffects['locale'] = sideEffects['dateFormat'];
-		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
-		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['sync.info'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
@@ -783,7 +793,7 @@ export default class BaseApplication {
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
 			// which can be set by a maintenance script for example.
 			const folderCount = await Folder.count();
-			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			const itShould = encryptionEnabled() && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
 			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 

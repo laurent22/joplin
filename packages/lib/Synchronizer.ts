@@ -22,6 +22,7 @@ import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
 import { localSyncTargetInfo, remoteSyncTargetInfo, setLocalSyncTargetInfo, syncTargetInfoEquals, setRemoteSyncTargetInfo, mergeSyncTargetInfos, activeMasterKey } from './services/synchronizer/syncTargetInfoUtils';
 import { setupAndEnableEncryption, setupAndDisableEncryption } from './services/e2ee/utils';
+import JoplinDatabase from './JoplinDatabase';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -63,7 +64,7 @@ export default class Synchronizer {
 
 	public static verboseMode: boolean = true;
 
-	private db_: any;
+	private db_: JoplinDatabase;
 	private api_: FileApi;
 	private appType_: string;
 	private logger_: Logger = new Logger();
@@ -88,7 +89,7 @@ export default class Synchronizer {
 
 	public dispatch: Function;
 
-	public constructor(db: any, api: FileApi, appType: string) {
+	public constructor(db: JoplinDatabase, api: FileApi, appType: string) {
 		this.db_ = db;
 		this.api_ = api;
 		this.appType_ = appType;
@@ -134,7 +135,7 @@ export default class Synchronizer {
 
 	private migrationHandler() {
 		if (this.migrationHandler_) return this.migrationHandler_;
-		this.migrationHandler_ = new MigrationHandler(this.api(), this.lockHandler(), this.appType_, this.clientId_);
+		this.migrationHandler_ = new MigrationHandler(this.api(), this.db(), this.lockHandler(), this.appType_, this.clientId_);
 		return this.migrationHandler_;
 	}
 
@@ -426,7 +427,6 @@ export default class Synchronizer {
 					const localInfo = localSyncTargetInfo();
 
 					if (!syncTargetInfoEquals(localInfo, remoteInfo)) {
-						// TODO: if e2ee changed - need to enable/disable encryption
 						const newInfo = mergeSyncTargetInfos(localInfo, remoteInfo);
 						await setRemoteSyncTargetInfo(this.api(), newInfo);
 						setLocalSyncTargetInfo(newInfo);

@@ -51,4 +51,8 @@ export default class FileHandler {
 		this.valueJsonCache_ = json;
 	}
 
+	public async clearCache() {
+		this.valueJsonCache_ = null;
+	}
+
 }

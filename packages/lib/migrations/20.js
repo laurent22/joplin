@@ -7,6 +7,8 @@ const { fileExtension } = require('../path-utils');
 const script = {};
 
 script.exec = async function() {
+	if (!Setting.value('resourceDir')) return; // Probably running tests
+
 	const stats = await shim.fsDriver().readDirStats(Setting.value('resourceDir'));
 
 	let queries = [];

@@ -8,6 +8,7 @@ import shim from '../../shim';
 import filterParser from './filterParser';
 import queryBuilder from './queryBuilder';
 import { ItemChangeEntity, NoteEntity } from '../database/types';
+import JoplinDatabase from '../../JoplinDatabase';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -22,7 +23,7 @@ export default class SearchEngine {
 
 	public dispatch: Function = (_o: any) => {};
 	private logger_ = new Logger();
-	private db_: any = null;
+	private db_: JoplinDatabase = null;
 	private isIndexing_ = false;
 	private syncCalls_: any[] = [];
 	private scheduleSyncTablesIID_: any;
@@ -62,7 +63,8 @@ export default class SearchEngine {
 	}
 
 	async rebuildIndex_() {
-		let noteIds: string[] = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+		let noteIds: string[] = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0') as any;
+
 		noteIds = noteIds.map((n: any) => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();

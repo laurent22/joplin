@@ -4,16 +4,12 @@ import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
 import { MasterKeyEntity } from '../database/types';
 import EncryptionService from '../EncryptionService';
-import { localSyncTargetInfo, setLocalSyncTargetInfo } from '../synchronizer/syncTargetInfoUtils';
+import { localSyncTargetInfo, setEncryptionEnabled } from '../synchronizer/syncTargetInfoUtils';
 
 const logger = Logger.create('e2ee/utils');
 
 export async function setupAndEnableEncryption(masterKey: MasterKeyEntity, password: string = null) {
-	setLocalSyncTargetInfo({
-		...localSyncTargetInfo(),
-		e2ee: true,
-		activeMasterKeyId: masterKey.id,
-	});
+	setEncryptionEnabled(true, masterKey.id);
 
 	if (password) {
 		const passwordCache = Setting.value('encryption.passwordCache');
@@ -32,13 +28,7 @@ export async function setupAndDisableEncryption() {
 	// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
 	// will still be received via synchronisation.
 
-	// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
-	// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
-
-	setLocalSyncTargetInfo({
-		...localSyncTargetInfo(),
-		e2ee: false,
-	});
+	setEncryptionEnabled(false);
 
 	// The only way to make sure everything gets decrypted on the sync target is
 	// to re-sync everything.

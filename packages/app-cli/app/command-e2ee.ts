@@ -5,6 +5,7 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
+import { encryptionEnabled } from '@joplin/lib/services/synchronizer/syncTargetInfoUtils';
 const { BaseCommand } = require('./base-command.js');
 const pathUtils = require('@joplin/lib/path-utils');
 const imageType = require('image-type');
@@ -116,7 +117,7 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'status') {
-			this.stdout(_('Encryption is: %s', Setting.value('encryption.enabled') ? _('Enabled') : _('Disabled')));
+			this.stdout(_('Encryption is: %s', encryptionEnabled() ? _('Enabled') : _('Disabled')));
 			return;
 		}
 

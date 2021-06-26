@@ -1,4 +1,6 @@
-export default async function(api: any) {
+import { FileApi } from '../../../file-api';
+
+export default async function(api: FileApi) {
 	await Promise.all([
 		api.mkdir('.resource'),
 		api.mkdir('.sync'),

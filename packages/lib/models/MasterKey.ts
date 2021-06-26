@@ -1,5 +1,6 @@
 import BaseModel from '../BaseModel';
 import { MasterKeyEntity } from '../services/database/types';
+import { masterKeyAll, masterKeyById, saveMasterKey } from '../services/synchronizer/syncTargetInfoUtils';
 import BaseItem from './BaseItem';
 
 export default class MasterKey extends BaseItem {
@@ -16,20 +17,30 @@ export default class MasterKey extends BaseItem {
 	}
 
 	static latest() {
-		return this.modelSelectOne('SELECT * FROM master_keys WHERE created_time >= (SELECT max(created_time) FROM master_keys)');
+		throw new Error('Not implemented');
+		// return this.modelSelectOne('SELECT * FROM master_keys WHERE created_time >= (SELECT max(created_time) FROM master_keys)');
 	}
 
 	static allWithoutEncryptionMethod(masterKeys: MasterKeyEntity[], method: number) {
 		return masterKeys.filter(m => m.encryption_method !== method);
 	}
 
-	static async save(o: MasterKeyEntity, options: any = null) {
-		return super.save(o, options).then(item => {
-			this.dispatch({
-				type: 'MASTERKEY_UPDATE_ONE',
-				item: item,
-			});
-			return item;
+	public static async load(id: string): Promise<MasterKeyEntity> {
+		return masterKeyById(id);
+	}
+
+	public static async all(): Promise<MasterKeyEntity[]> {
+		return masterKeyAll();
+	}
+
+	public static async save(o: MasterKeyEntity): Promise<MasterKeyEntity> {
+		const newMasterKey = saveMasterKey(o);
+
+		this.dispatch({
+			type: 'MASTERKEY_UPDATE_ONE',
+			item: newMasterKey,
 		});
+
+		return newMasterKey;
 	}
 }

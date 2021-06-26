@@ -10,6 +10,7 @@ import dialogs from './dialogs';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../services/bridge';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
+import { activeMasterKeyId, encryptionEnabled } from '@joplin/lib/services/synchronizer/syncTargetInfoUtils';
 const shared = require('@joplin/lib/components/shared/encryption-config-shared.js');
 
 interface Props {
@@ -167,7 +168,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props, any> {
 		}
 
 		const onToggleButtonClick = async () => {
-			const isEnabled = Setting.value('encryption.enabled');
+			const isEnabled = encryptionEnabled();
 
 			let answer = null;
 			if (isEnabled) {
@@ -299,8 +300,8 @@ const mapStateToProps = (state: any) => {
 		themeId: state.settings.theme,
 		masterKeys: state.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
-		encryptionEnabled: state.settings['encryption.enabled'],
-		activeMasterKeyId: state.settings['encryption.activeMasterKeyId'],
+		encryptionEnabled: encryptionEnabled(),
+		activeMasterKeyId: activeMasterKeyId(),
 		shouldReencrypt: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
 	};

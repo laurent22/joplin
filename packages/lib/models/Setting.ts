@@ -196,7 +196,7 @@ class Setting extends BaseModel {
 		cacheDir: '',
 		pluginDir: '',
 		flagOpenDevTools: false,
-		syncVersion: 2,
+		syncVersion: 3,
 		startupDevPlugins: [],
 	};
 
@@ -212,6 +212,7 @@ class Setting extends BaseModel {
 	private static customSections_: SettingSections = {};
 	private static changedKeys_: string[] = [];
 	private static fileHandler_: FileHandler = null;
+	private static settingFilename_: string = 'settings.json';
 
 	static tableName() {
 		return 'settings';
@@ -235,7 +236,15 @@ class Setting extends BaseModel {
 	}
 
 	public static get settingFilePath(): string {
-		return `${this.value('profileDir')}/settings.json`;
+		return `${this.value('profileDir')}/${this.settingFilename_}`;
+	}
+
+	public static get settingFilename(): string {
+		return this.settingFilename_;
+	}
+
+	public static set settingFilename(v: string) {
+		this.settingFilename_ = v;
 	}
 
 	public static get fileHandler(): FileHandler {

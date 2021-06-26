@@ -7,7 +7,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Resource from '@joplin/lib/models/Resource';
 import NoteTag from '@joplin/lib/models/NoteTag';
 import Tag from '@joplin/lib/models/Tag';
-import MasterKey from '@joplin/lib/models/MasterKey';
+// import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
 import { Config } from './types';
 import * as fs from 'fs-extra';
@@ -77,7 +77,7 @@ export async function initializeJoplinUtils(config: Config, models: Models, must
 	BaseItem.loadClass('Resource', Resource);
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
-	BaseItem.loadClass('MasterKey', MasterKey);
+	// BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
 	// mustache_ = new MustacheService(config.viewDir, config.baseUrl);

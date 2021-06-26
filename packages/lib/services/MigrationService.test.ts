@@ -2,7 +2,7 @@ import MasterKey from '../models/MasterKey';
 import Setting from '../models/Setting';
 import { encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import MigrationService from './MigrationService';
-import { SyncTargetInfo } from './synchronizer/syncTargetInfoUtils';
+import { setActiveMasterKeyId, setEncryptionEnabled, SyncTargetInfo } from './synchronizer/syncTargetInfoUtils';
 
 function migrationService() {
 	return new MigrationService();
@@ -20,8 +20,8 @@ describe('MigrationService', function() {
 
 		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey('1'));
 		const mk2 = await MasterKey.save(await encryptionService().generateMasterKey('2'));
-		Setting.setValue('encryption.enabled', true);
-		Setting.setValue('encryption.activeMasterKeyId', mk2.id);
+		setEncryptionEnabled(true);
+		setActiveMasterKeyId(mk2.id);
 
 		await migrationService().runScript(40);
 

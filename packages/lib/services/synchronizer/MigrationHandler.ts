@@ -1,23 +1,30 @@
 import LockHandler, { LockType } from './LockHandler';
 import { Dirnames } from './utils/types';
 import BaseService from '../BaseService';
+import migration1 from './migrations/1';
+import migration2 from './migrations/2';
+import migration3 from './migrations/3';
+
+export type MigrationFunction = (api: FileApi, db: JoplinDatabase)=> Promise<void>;
 
 // To add a new migration:
 // - Add the migration logic in ./migrations/VERSION_NUM.js
 // - Add the file to the array below.
 // - Set Setting.syncVersion to VERSION_NUM in models/Setting.js
 // - Add tests in synchronizer_migrationHandler
-const migrations = [
+const migrations: MigrationFunction[] = [
 	null,
-	require('./migrations/1.js').default,
-	require('./migrations/2.js').default,
+	migration1,
+	migration2,
+	migration3,
 ];
 
 import Setting from '../../models/Setting';
 const { sprintf } = require('sprintf-js');
 import JoplinError from '../../JoplinError';
 import { FileApi } from '../../file-api';
-import { remoteSyncTargetInfo, setRemoteSyncTargetInfo, setLocalSyncTargetInfo, SyncTargetInfo } from './syncTargetInfoUtils';
+import { remoteSyncTargetInfo, setRemoteSyncTargetInfo, setLocalSyncTargetInfo, SyncTargetInfo, mergeSyncTargetInfos, localSyncTargetInfo } from './syncTargetInfoUtils';
+import JoplinDatabase from '../../JoplinDatabase';
 
 export default class MigrationHandler extends BaseService {
 
@@ -25,10 +32,12 @@ export default class MigrationHandler extends BaseService {
 	private lockHandler_: LockHandler = null;
 	private clientType_: string;
 	private clientId_: string;
+	private db_: JoplinDatabase;
 
-	constructor(api: FileApi, lockHandler: LockHandler, clientType: string, clientId: string) {
+	constructor(api: FileApi, db: JoplinDatabase, lockHandler: LockHandler, clientType: string, clientId: string) {
 		super();
 		this.api_ = api;
+		this.db_ = db;
 		this.lockHandler_ = lockHandler;
 		this.clientType_ = clientType;
 		this.clientId_ = clientId;
@@ -51,7 +60,7 @@ export default class MigrationHandler extends BaseService {
 	public async upgrade(targetVersion: number = 0) {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
 
-		const info = await remoteSyncTargetInfo(this.api_);
+		const info = mergeSyncTargetInfos(localSyncTargetInfo(false), await remoteSyncTargetInfo(this.api_));
 
 		if (info.version > supportedSyncTargetVersion) {
 			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', info.version, supportedSyncTargetVersion), 'outdatedClient');
@@ -96,7 +105,7 @@ export default class MigrationHandler extends BaseService {
 
 				try {
 					if (autoLockError) throw autoLockError;
-					await migration(this.api_);
+					await migration(this.api_, this.db_);
 					if (autoLockError) throw autoLockError;
 
 					const newInfo: SyncTargetInfo = {

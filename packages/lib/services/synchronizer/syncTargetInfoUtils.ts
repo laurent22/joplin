@@ -1,6 +1,7 @@
 import { FileApi } from '../../file-api';
 // import Logger from '../../Logger';
 import Setting from '../../models/Setting';
+import uuid from '../../uuid';
 import { MasterKeyEntity } from '../database/types';
 const ArrayUtils = require('../../ArrayUtils');
 
@@ -40,14 +41,24 @@ function unserializeSyncTargetInfo(info: string): SyncTargetInfo {
 // 	return (info as any)[key];
 // }
 
+function defaultSyncTargetInfo(): SyncTargetInfo {
+	return {
+		e2ee: false,
+		activeMasterKeyId: '',
+		masterKeys: {},
+		version: 0,
+		updatedTime: 0,
+	};
+}
+
 export function setLocalSyncTargetInfo(info: SyncTargetInfo) {
 	Setting.setValue('sync.info', serializeSyncTargetInfo(info));
 }
 
-export function localSyncTargetInfo(mustExist: boolean = true): SyncTargetInfo | null {
+export function localSyncTargetInfo(mustExist: boolean = false): SyncTargetInfo | null {
 	const info = Setting.value('sync.info');
 	if (mustExist && !info) throw new Error('Sync info is not set');
-	return unserializeSyncTargetInfo(info);
+	return info ? unserializeSyncTargetInfo(info) : defaultSyncTargetInfo();
 }
 
 function validateInfo(info: SyncTargetInfo) {
@@ -102,7 +113,7 @@ export async function remoteSyncTargetInfo(api: FileApi): Promise<SyncTargetInfo
 	const defaultFields: SyncTargetInfo = {
 		version: 0,
 		e2ee: false,
-		updatedTime: Date.now(),
+		updatedTime: 0,
 		masterKeys: {},
 		activeMasterKeyId: '',
 	};
@@ -139,13 +150,73 @@ export function activeMasterKey(info: SyncTargetInfo): MasterKeyEntity {
 	return info.masterKeys[info.activeMasterKeyId];
 }
 
-export function enableEncryption(enable: boolean = true) {
+export function activeMasterKeyId() {
+	return localSyncTargetInfo().activeMasterKeyId;
+}
+
+export function setActiveMasterKeyId(id: string) {
+	const info = localSyncTargetInfo();
+	if (info.activeMasterKeyId === id) return;
+
 	setLocalSyncTargetInfo({
 		...localSyncTargetInfo(),
-		e2ee: enable,
+		activeMasterKeyId: id,
+		updatedTime: Date.now(),
 	});
 }
 
-export function disableEncryption() {
-	enableEncryption(false);
+export function setEncryptionEnabled(enable: boolean = true, activeMasterKeyId: string = null) {
+	const info = localSyncTargetInfo(false);
+	if (info.e2ee === enable) return;
+
+	const newInfo = {
+		...info,
+		e2ee: enable,
+		updatedTime: Date.now(),
+	};
+
+	if (activeMasterKeyId !== null) newInfo.activeMasterKeyId = activeMasterKeyId;
+
+	setLocalSyncTargetInfo(newInfo);
+}
+
+export function encryptionEnabled() {
+	const info = localSyncTargetInfo(false);
+	return info.e2ee;
+}
+
+export function encryptionDisabled() {
+	return !encryptionEnabled();
+}
+
+export function masterKeyById(id: string): MasterKeyEntity {
+	return localSyncTargetInfo().masterKeys[id];
+}
+
+export function saveMasterKey(mk: MasterKeyEntity): MasterKeyEntity {
+	const info = localSyncTargetInfo();
+
+	const id = mk.id ? mk.id : uuid.create();
+
+	const newMasterKey = {
+		id,
+		...info.masterKeys[id],
+		...mk,
+	};
+
+	setLocalSyncTargetInfo({
+		...info,
+		masterKeys: {
+			...info.masterKeys,
+			[newMasterKey.id]: newMasterKey,
+		},
+		updatedTime: Date.now(),
+	});
+
+	return newMasterKey;
+}
+
+export function masterKeyAll(): MasterKeyEntity[] {
+	const masterKeys = localSyncTargetInfo().masterKeys;
+	return Object.keys(masterKeys).map(id => masterKeys[id]);
 }

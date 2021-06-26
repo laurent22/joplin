@@ -12,6 +12,7 @@ import ResourceFetcher from '../../services/ResourceFetcher';
 import BaseItem from '../../models/BaseItem';
 import { ModelType } from '../../BaseModel';
 import { loadMasterKeysFromSettings } from '../e2ee/utils';
+import { setEncryptionEnabled } from './syncTargetInfoUtils';
 
 let insideBeforeEach = false;
 
@@ -145,7 +146,7 @@ describe('Synchronizer.resources', function() {
 	}));
 
 	it('should encrypt resources', (async () => {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		const masterKey = await loadEncryptionMasterKey();
 
 		const folder1 = await Folder.save({ title: 'folder1' });

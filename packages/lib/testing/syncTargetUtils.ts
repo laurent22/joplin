@@ -7,6 +7,7 @@ import Resource from '../models/Resource';
 import markdownUtils from '../markdownUtils';
 import shim from '../shim';
 import * as fs from 'fs-extra';
+import { setEncryptionEnabled } from '../services/synchronizer/syncTargetInfoUtils';
 
 const snapshotBaseDir = `${supportDir}/syncTargetSnapshots`;
 
@@ -113,7 +114,7 @@ export async function main(syncTargetType: string) {
 	await createTestData(testData);
 
 	if (syncTargetType === 'e2ee') {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 	}
 

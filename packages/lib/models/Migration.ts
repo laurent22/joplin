@@ -1,6 +1,7 @@
 import BaseModel from '../BaseModel';
 import JoplinDatabase from '../JoplinDatabase';
 import migration40 from '../migrations/40';
+import { MigrationEntity } from '../services/database/types';
 
 export interface MigrationScript {
 	exec(db: JoplinDatabase): Promise<void>;
@@ -23,7 +24,7 @@ export default class Migration extends BaseModel {
 		return BaseModel.TYPE_MIGRATION;
 	}
 
-	static migrationsToDo() {
+	public static migrationsToDo(): Promise<MigrationEntity[]> {
 		return this.modelSelectAll('SELECT * FROM migrations ORDER BY number ASC');
 	}
 

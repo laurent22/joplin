@@ -52,6 +52,8 @@ import { FolderEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import { FileApi } from '../file-api';
+import { setEncryptionEnabled } from '../services/synchronizer/syncTargetInfoUtils';
+import MigrationService from '../services/MigrationService';
 const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
@@ -70,7 +72,7 @@ const fileApis_: any = {};
 const encryptionServices_: EncryptionService[] = [];
 const revisionServices_: any[] = [];
 const decryptionWorkers_: any[] = [];
-const resourceServices_: any[] = [];
+const resourceServices_: ResourceService[] = [];
 const resourceFetchers_: any[] = [];
 const kvStores_: KvStore[] = [];
 let currentClient_ = 1;
@@ -168,7 +170,7 @@ BaseItem.loadClass('Folder', Folder);
 BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
-BaseItem.loadClass('MasterKey', MasterKey);
+// BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
 Setting.setConstant('appId', 'net.cozic.joplintest-cli');
@@ -261,6 +263,8 @@ async function switchClient(id: number, options: any = null) {
 	BaseItem.revisionService_ = revisionServices_[id];
 
 	await Setting.reset();
+	Setting.settingFilename = `settings-${id}.json`;
+
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 	Setting.setConstant('pluginDir', pluginDir(id));
@@ -299,6 +303,10 @@ async function clearDatabase(id: number = null) {
 		queries.push(`DELETE FROM sqlite_sequence WHERE name="${n}"`); // Reset autoincremented IDs
 	}
 	await databases_[id].transactionExecBatch(queries);
+
+	// More generally, this function should clear all data, and so that should
+	// include settings.json
+	await clearSettingFile(id);
 }
 
 async function setupDatabase(id: number = null, options: any = null) {
@@ -335,7 +343,18 @@ async function setupDatabase(id: number = null, options: any = null) {
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.setDb(databases_[id]);
+
+	await clearSettingFile(id);
+
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+
+	await MigrationService.instance().run([20, 27,33,35]);
+}
+
+
+async function clearSettingFile(id: number) {
+	Setting.settingFilename = `settings-${id}.json`;
+	await fs.remove(Setting.settingFilePath);
 }
 
 export async function createFolderTree(parentId: string, tree: any[], num: number = 0): Promise<FolderEntity> {
@@ -844,7 +863,7 @@ class TestApp extends BaseApplication {
 		// For now, disable sync and encryption to avoid spurious intermittent failures
 		// caused by them interupting processing and causing delays.
 		Setting.setValue('sync.interval', 0);
-		Setting.setValue('encryption.enabled', false);
+		setEncryptionEnabled(false);
 
 		this.initRedux();
 		Setting.dispatchUpdateAll();

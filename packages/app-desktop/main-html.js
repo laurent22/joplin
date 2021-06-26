@@ -17,7 +17,6 @@ const BaseItem = require('@joplin/lib/models/BaseItem').default;
 const Note = require('@joplin/lib/models/Note').default;
 const Tag = require('@joplin/lib/models/Tag').default;
 const NoteTag = require('@joplin/lib/models/NoteTag').default;
-const MasterKey = require('@joplin/lib/models/MasterKey').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const Revision = require('@joplin/lib/models/Revision').default;
 const Logger = require('@joplin/lib/Logger').default;
@@ -70,7 +69,7 @@ BaseItem.loadClass('Folder', Folder);
 BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
-BaseItem.loadClass('MasterKey', MasterKey);
+// BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
 Setting.setConstant('appId', `net.cozic.joplin${bridge().env() === 'dev' ? 'dev' : ''}-desktop`);

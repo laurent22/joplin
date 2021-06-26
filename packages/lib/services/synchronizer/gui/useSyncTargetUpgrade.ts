@@ -27,6 +27,7 @@ export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {
 			reg.logger().info('useSyncTargetUpgrade: Create migration handler...');
 			const migrationHandler = new MigrationHandler(
 				synchronizer.api(),
+				synchronizer.db(),
 				synchronizer.lockHandler(),
 				Setting.value('appType'),
 				Setting.value('clientId')

@@ -8,7 +8,7 @@ import { Dirnames } from '../../services/synchronizer/utils/types';
 // gulp buildTests -L && node tests-build/support/createSyncTargetSnapshot.js normal && node tests-build/support/createSyncTargetSnapshot.js e2ee
 
 
-import { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } from '../../testing/test-utils';
+import { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, db } from '../../testing/test-utils';
 import { deploySyncTargetSnapshot, testData, checkTestData } from '../../testing/syncTargetUtils';
 import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';
@@ -28,7 +28,7 @@ function lockHandler(): LockHandler {
 
 function migrationHandler(clientId: string = 'abcd'): MigrationHandler {
 	if (migrationHandler_) return migrationHandler_;
-	migrationHandler_ = new MigrationHandler(fileApi(), lockHandler(), 'desktop', clientId);
+	migrationHandler_ = new MigrationHandler(fileApi(), db(), lockHandler(), 'desktop', clientId);
 	return migrationHandler_;
 }
 

@@ -16,15 +16,17 @@ export default class MigrationService extends BaseService {
 		await script.exec(Migration.db());
 	}
 
-	public async run() {
+	public async run(migrationsToSkip: number[] = []) {
 		const migrations = await Migration.migrationsToDo();
 
 		for (const migration of migrations) {
 			this.logger().info(`Running migration: ${migration.number}`);
 
 			try {
+				if (migrationsToSkip.includes(migration.number)) continue;
+
 				await this.runScript(migration.number);
-				await Migration.delete(migration.id);
+				await Migration.delete(migration.id as any);
 			} catch (error) {
 				this.logger().error(`Cannot run migration: ${migration.number}`, error);
 				break;
