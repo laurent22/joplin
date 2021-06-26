@@ -87,7 +87,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 		}
 
 		if(env.POSTGRES_REJECT_UNAUTHORIZED)
-			databaseConfig.rejectUnauthorized = env.POSTGRES_REJECT_UNAUTHORIZED === 'true';
+			databaseConfig.rejectUnauthorized = Number(env.POSTGRES_REJECT_UNAUTHORIZED) === 1;
 
 		if(env.POSTGRES_SSL_CA_FILEPATH)
 			databaseConfig.sslCaFilePath = env.POSTGRES_SSL_CA_FILEPATH;

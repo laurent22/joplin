@@ -51,7 +51,7 @@ export interface DatabaseConfig {
 	rejectUnauthorized?: boolean;
 }
 
-export interface SslDatabaseConfig
+export interface DatabaseConfigSsl
 {
 	rejectUnauthorized?: boolean;
 	ca?: Buffer;
