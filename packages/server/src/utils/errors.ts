@@ -51,6 +51,16 @@ export class ErrorBadRequest extends ApiError {
 
 }
 
+export class ErrorPreconditionFailed extends ApiError {
+	public static httpCode: number = 412;
+
+	public constructor(message: string = 'Precondition Failed') {
+		super(message, ErrorPreconditionFailed.httpCode);
+		Object.setPrototypeOf(this, ErrorPreconditionFailed.prototype);
+	}
+
+}
+
 export class ErrorUnprocessableEntity extends ApiError {
 	public static httpCode: number = 422;
 

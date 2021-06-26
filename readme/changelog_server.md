@@ -1,5 +1,19 @@
 # Joplin Server Changelog
 
+## [server-v2.1.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.6-beta) (Pre-release) - 2021-06-24T10:01:46Z
+
+- Fixed: Fixed accessing main website (Regression) (f868797)
+
+## [server-v2.1.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.5-beta) (Pre-release) - 2021-06-24T08:26:38Z
+
+- New: Add support for X-API-MIN-VERSION header (51f3c00)
+
+## [server-v2.1.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.4-beta) (Pre-release) - 2021-06-24T07:26:03Z
+
+- Improved: Split permission to share note or folder (0c12c7f)
+- Fixed: Fixed handling of max item size for encrypted items (112157e)
+- Fixed: Fixed transaction locking issue when a sub-transaction fails (12aae48)
+
 ## [server-v2.1.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.3-beta) (Pre-release) - 2021-06-19T14:15:06Z
 
 - New: Add support for uploading multiple items in one request (3b9c02e)
