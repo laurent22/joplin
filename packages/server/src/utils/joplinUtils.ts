@@ -24,6 +24,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';
 import MustacheService from '../services/MustacheService';
+import MasterKey from '@joplin/lib/models/MasterKey';
 
 // const logger = Logger.create('JoplinUtils');
 
@@ -77,7 +78,7 @@ export async function initializeJoplinUtils(config: Config, models: Models, must
 	BaseItem.loadClass('Resource', Resource);
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
-	// BaseItem.loadClass('MasterKey', MasterKey);
+	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
 	// mustache_ = new MustacheService(config.viewDir, config.baseUrl);

@@ -1445,6 +1445,9 @@ packages/lib/services/synchronizer/LockHandler.js.map
 packages/lib/services/synchronizer/MigrationHandler.d.ts
 packages/lib/services/synchronizer/MigrationHandler.js
 packages/lib/services/synchronizer/MigrationHandler.js.map
+packages/lib/services/synchronizer/MigrationHandler.test.d.ts
+packages/lib/services/synchronizer/MigrationHandler.test.js
+packages/lib/services/synchronizer/MigrationHandler.test.js.map
 packages/lib/services/synchronizer/Synchronizer.basics.test.d.ts
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js.map
@@ -1487,9 +1490,6 @@ packages/lib/services/synchronizer/syncTargetInfoUtils.js.map
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.d.ts
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js.map
-packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.d.ts
-packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js
-packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js.map
 packages/lib/services/synchronizer/tools.d.ts
 packages/lib/services/synchronizer/tools.js
 packages/lib/services/synchronizer/tools.js.map

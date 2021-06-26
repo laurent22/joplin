@@ -16,7 +16,7 @@ export interface SyncTargetInfo {
 }
 
 function serializeSyncTargetInfo(info: SyncTargetInfo): string {
-	return JSON.stringify(info);
+	return JSON.stringify(info, null, '\t');
 }
 
 function unserializeSyncTargetInfo(info: string): SyncTargetInfo {

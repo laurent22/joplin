@@ -138,6 +138,7 @@ function setSyncTargetName(name: string) {
 }
 
 setSyncTargetName('memory');
+// setSyncTargetName('filesystem');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
 // setSyncTargetName('onedrive');
@@ -153,7 +154,7 @@ const syncDir = `${oldTestDir}/sync/${suiteName_}`;
 // anyway.
 let defaultJestTimeout = 90 * 1000;
 if (isNetworkSyncTarget_) defaultJestTimeout = 60 * 1000 * 10;
-jest.setTimeout(defaultJestTimeout);
+if (typeof jest !== 'undefined') jest.setTimeout(defaultJestTimeout);
 
 const dbLogger = new Logger();
 dbLogger.addTarget(TargetType.Console);
@@ -170,7 +171,7 @@ BaseItem.loadClass('Folder', Folder);
 BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
-// BaseItem.loadClass('MasterKey', MasterKey);
+BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
 Setting.setConstant('appId', 'net.cozic.joplintest-cli');

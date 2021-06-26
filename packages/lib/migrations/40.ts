@@ -12,7 +12,10 @@ const script: MigrationScript = {
 		for (const mk of masterKeys) masterKeyMap[mk.id] = mk;
 
 		const syncInfo: SyncTargetInfo = {
-			version: 2,
+			// When we first setup the local sync target info, we don't know
+			// what's on the remote one, so we set it to 0. During sync, the
+			// version from remote will be fetched.
+			version: 0,
 			e2ee: Setting.valueNoThrow('encryption.enabled', false),
 			masterKeys: masterKeyMap,
 			activeMasterKeyId: Setting.valueNoThrow('encryption.activeMasterKeyId', ''),

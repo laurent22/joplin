@@ -10,7 +10,7 @@ import ItemChange from './ItemChange';
 import ShareService from '../services/share/ShareService';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { encryptionEnabled } from '../services/synchronizer/syncTargetInfoUtils';
-const JoplinError = require('../JoplinError.js');
+import JoplinError from '../JoplinError';
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
 
@@ -49,7 +49,7 @@ export default class BaseItem extends BaseModel {
 		{ type: BaseModel.TYPE_RESOURCE, className: 'Resource' },
 		{ type: BaseModel.TYPE_TAG, className: 'Tag' },
 		{ type: BaseModel.TYPE_NOTE_TAG, className: 'NoteTag' },
-		// { type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' },
+		{ type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' },
 		{ type: BaseModel.TYPE_REVISION, className: 'Revision' },
 	];
 
@@ -698,7 +698,7 @@ export default class BaseItem extends BaseModel {
 		const temp = this.syncItemClassNames();
 		const output = [];
 		for (let i = 0; i < temp.length; i++) {
-			// if (temp[i] === 'MasterKey') continue;
+			if (temp[i] === 'MasterKey') continue;
 			output.push(temp[i]);
 		}
 		return output;

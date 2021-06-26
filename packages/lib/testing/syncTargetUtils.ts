@@ -1,4 +1,4 @@
-import { syncDir, synchronizer, supportDir, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import { syncDir, synchronizer, supportDir, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
@@ -8,6 +8,8 @@ import markdownUtils from '../markdownUtils';
 import shim from '../shim';
 import * as fs from 'fs-extra';
 import { setEncryptionEnabled } from '../services/synchronizer/syncTargetInfoUtils';
+const { shimInit } = require('../shim-init-node');
+const sharp = require('sharp');
 
 const snapshotBaseDir = `${supportDir}/syncTargetSnapshots`;
 
@@ -106,6 +108,8 @@ export async function deploySyncTargetSnapshot(syncTargetType: string, syncVersi
 }
 
 export async function main(syncTargetType: string) {
+	shimInit(sharp);
+
 	const validSyncTargetTypes = ['normal', 'e2ee'];
 	if (!validSyncTargetTypes.includes(syncTargetType)) throw new Error(`Sync target type must be: ${validSyncTargetTypes.join(', ')}`);
 
@@ -117,6 +121,8 @@ export async function main(syncTargetType: string) {
 		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 	}
+
+	await synchronizerStart();
 
 	await synchronizer().start();
 

@@ -457,7 +457,7 @@ async function initialize(dispatch: Function) {
 	BaseItem.loadClass('Resource', Resource);
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
-	// BaseItem.loadClass('MasterKey', MasterKey);
+	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
 	const fsDriver = new FsDriverRN();
