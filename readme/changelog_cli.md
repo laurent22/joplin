@@ -1,5 +1,20 @@
 # Joplin terminal app changelog
 
+## [cli-v2.1.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.1.1) - 2021-06-27T14:08:02Z
+
+- New: Add support for X-API-MIN-VERSION header (51f3c00)
+- New: Added flag to disable local lock when synchronising (7aff6d2)
+- Improved: Allow uploading items in batch when synchronising with Joplin Server (0222c0f)
+- Improved: Also allow disabling TLS errors for Joplin Cloud to go around error UNABLE_TO_GET_ISSUER_CERT_LOCALLY (118a2f9)
+- Improved: Improved first sync speed when synchronising with Joplin Server (4dc1210)
+- Improved: Mask auth token and password in log (0d33955)
+- Improved: Optimise first synchronisation, when items have never been synced before (15ce5cd)
+- Improved: Update Mermaid: 8.8.4 -&gt; 8.10.2 (#5092 by Helmut K. C. Tessarek)
+- Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes (#5051)
+- Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)
+- Fixed: Fixed search when the index contains non-existing notes (5ecac21)
+- Fixed: Handle special type of code block when importing ENEX files (#4965)
+
 ## [cli-v2.0.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.0.1) - 2021-06-16T19:06:28Z
 
 - New: Add new date format YYMMDD (#4954 by Helmut K. C. Tessarek)
