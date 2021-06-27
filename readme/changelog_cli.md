@@ -1,6 +1,6 @@
 # Joplin terminal app changelog
 
-## [cli-v2.1.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.1.1) - 2021-06-27T14:08:02Z
+## [cli-v2.1.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.1.2) - 2021-06-27T15:51:36Z
 
 - New: Add support for X-API-MIN-VERSION header (51f3c00)
 - New: Added flag to disable local lock when synchronising (7aff6d2)
