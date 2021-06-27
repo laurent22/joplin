@@ -802,6 +802,7 @@ function useMenu(props: Props) {
 				// This is for GotoAnything only - should be refactored since this plugin manager is not used otherwise
 				const pluginMenuItems = PluginManager.instance().menuItems();
 				for (const item of pluginMenuItems) {
+					if (!item.parent) continue;
 					const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
 					itemParent.submenu.push(separator());
 					itemParent.submenu.push(item);

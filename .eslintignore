@@ -224,6 +224,9 @@ packages/app-desktop/gui/MainScreen/commands/editAlarm.js.map
 packages/app-desktop/gui/MainScreen/commands/exportPdf.d.ts
 packages/app-desktop/gui/MainScreen/commands/exportPdf.js
 packages/app-desktop/gui/MainScreen/commands/exportPdf.js.map
+packages/app-desktop/gui/MainScreen/commands/gotoAnything.d.ts
+packages/app-desktop/gui/MainScreen/commands/gotoAnything.js
+packages/app-desktop/gui/MainScreen/commands/gotoAnything.js.map
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.d.ts
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.js
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.js.map
