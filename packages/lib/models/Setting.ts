@@ -1261,19 +1261,19 @@ class Setting extends BaseModel {
 				storage: SettingStorage.Database,
 			},
 
-			'featureFlag.syncAccurateTimestamps': {
-				value: false,
-				type: SettingItemType.Bool,
-				public: false,
-				storage: SettingStorage.File,
-			},
+			// 'featureFlag.syncAccurateTimestamps': {
+			// 	value: false,
+			// 	type: SettingItemType.Bool,
+			// 	public: false,
+			// 	storage: SettingStorage.File,
+			// },
 
-			'featureFlag.syncMultiPut': {
-				value: false,
-				type: SettingItemType.Bool,
-				public: false,
-				storage: SettingStorage.File,
-			},
+			// 'featureFlag.syncMultiPut': {
+			// 	value: false,
+			// 	type: SettingItemType.Bool,
+			// 	public: false,
+			// 	storage: SettingStorage.File,
+			// },
 
 		};
 
