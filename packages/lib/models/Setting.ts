@@ -324,11 +324,12 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
+			// This is a local cache of the sync target info.json file. See
+			// SyncTargetInfoUtils.ts for more info.
 			'sync.info': {
 				value: '',
 				type: SettingItemType.String,
 				public: false,
-				storage: SettingStorage.File,
 			},
 
 			'sync.upgradeState': {
