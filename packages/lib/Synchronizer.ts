@@ -11,7 +11,7 @@ import Note from './models/Note';
 import Resource from './models/Resource';
 import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
-import BaseModel from './BaseModel';
+import BaseModel, { ModelType } from './BaseModel';
 import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
@@ -20,9 +20,10 @@ import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
-import { localSyncTargetInfo, remoteSyncTargetInfo, setLocalSyncTargetInfo, syncTargetInfoEquals, setRemoteSyncTargetInfo, mergeSyncTargetInfos, activeMasterKey } from './services/synchronizer/syncTargetInfoUtils';
+import { localSyncTargetInfo, remoteSyncTargetInfo, setLocalSyncTargetInfo, syncTargetInfoEquals, setRemoteSyncTargetInfo, mergeSyncTargetInfos, activeMasterKey, masterKeyById } from './services/synchronizer/syncTargetInfoUtils';
 import { setupAndEnableEncryption, setupAndDisableEncryption } from './services/e2ee/utils';
 import JoplinDatabase from './JoplinDatabase';
+import MasterKey from './models/MasterKey';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -444,19 +445,6 @@ export default class Synchronizer {
 						setLocalSyncTargetInfo(remoteInfo);
 					}
 				}
-
-				// const syncTargetInfoService = new SyncTargetInfoHandler(this.api());
-
-				// await this.migrationHandler().checkCanSync();
-
-				// const syncTargetInfo = await syncTargetInfoService.info();
-
-				// this.logger().info('Sync target info:', syncTargetInfo);
-
-				// if (!syncTargetInfo.version) {
-				// 	this.logger().info('Sync target is new - setting it up...');
-				// 	await this.migrationHandler().upgrade(Setting.value('syncVersion'));
-				// }
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {
 					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);
@@ -574,6 +562,12 @@ export default class Synchronizer {
 								reason = 'local has changes';
 							}
 						}
+
+						// We no longer upload Master Keys however we keep them
+						// in the database for extra safety. In a future
+						// version, once it's confirmed that the new E2EE system
+						// works well, we can delete them.
+						if (local.type_ === ModelType.MasterKey) action = null;
 
 						this.logSyncOperation(action, local, remote, reason);
 
@@ -943,9 +937,28 @@ export default class Synchronizer {
 								await ResourceLocalState.save({ resource_id: content.id, fetch_status: Resource.FETCH_STATUS_IDLE });
 							}
 
-							await ItemClass.save(content, options);
+							if (content.type_ === ModelType.MasterKey) {
+								// Special case for master keys - if we download
+								// one, we only add it to the store if it's not
+								// already there. That can happen for example if
+								// the new E2EE migration was processed at a
+								// time a master key was still on the sync
+								// target. In that case, info.json would not
+								// have it.
+								//
+								// If info.json already has the key we shouldn't
+								// update because the most up to date keys
+								// should always be in info.json now.
+								const existingMasterKey = masterKeyById(content.id);
+								if (!existingMasterKey) {
+									this.logger().info(`Downloaded a master key that was not in info.json - adding it to the store. ID: ${content.id}`);
+									await MasterKey.save(content);
+								}
+							} else {
+								await ItemClass.save(content, options);
 
-							if (creatingOrUpdatingResource) this.dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: content.id });
+								if (creatingOrUpdatingResource) this.dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: content.id });
+							}
 
 							if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 						} else if (action == 'deleteLocal') {

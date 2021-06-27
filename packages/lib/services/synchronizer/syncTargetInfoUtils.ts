@@ -23,24 +23,6 @@ function unserializeSyncTargetInfo(info: string): SyncTargetInfo {
 	return JSON.parse(info);
 }
 
-// export function setLocalSyncTargetInfoProp(key:string, value:any):void {
-// 	const info = localSyncTargetInfo();
-// 	if (!info) throw new Error('Local sync target info has not been set!');
-// 	if (!(key in info)) throw new Error('Invalid sync target info key: ' + key);
-
-// 	setLocalSyncTargetInfo({
-// 		...info,
-// 		[key]: value,
-// 	});
-// }
-
-// export function localSyncTargetInfoProp(key:string):any {
-// 	const info = localSyncTargetInfo();
-// 	if (!info) throw new Error('Local sync target info has not been set!');
-// 	if (!(key in info)) throw new Error('Invalid sync target info key: ' + key);
-// 	return (info as any)[key];
-// }
-
 function defaultSyncTargetInfo(): SyncTargetInfo {
 	return {
 		e2ee: false,
@@ -193,6 +175,8 @@ export function masterKeyById(id: string): MasterKeyEntity {
 	return localSyncTargetInfo().masterKeys[id];
 }
 
+// This function should not be used directly - instead use MasterKey.save(),
+// which will call this function and dispatch a Redux action.
 export function saveMasterKey(mk: MasterKeyEntity): MasterKeyEntity {
 	const info = localSyncTargetInfo();
 

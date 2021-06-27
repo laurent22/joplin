@@ -77,6 +77,10 @@ async function testMigration(migrationVersion: number, maxSyncVersion: number) {
 	expect(newInfo.version).toBe(migrationVersion);
 	await migrationTests[migrationVersion]();
 
+	// If we're not on the latest version, we exit here, because although the
+	// synchronizer can run the migration from one version to another, it cannot
+	// sync the data on an older version (since the code has been changed to
+	// work with the latest version).
 	if (migrationVersion !== maxSyncVersion) return;
 
 	// Now sync with that upgraded target
