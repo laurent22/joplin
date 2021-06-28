@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: 南宫小骏 <jackytsu@vip.qq.com>\n"
 "Language-Team: zh_CN <jackytsu.vip.qq.com>\n"
 "Language: zh_CN\n"
@@ -1955,7 +1957,7 @@ msgstr "仅用于调试目的：将您的配置文件导出到外部 SD 卡。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:406
 msgid "Feature flags"
-msgstr ""
+msgstr "特性标志"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:408
 msgid "More information"
@@ -3088,9 +3090,9 @@ msgid "Cancelling..."
 msgstr "正在取消..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "已完成: %s"
+msgstr "已完成: %s（%s）"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
